@@ -15,6 +15,19 @@ type Listing = {
   location?: string;
 };
 
+type CategoryCard = {
+  key: string;
+  label: string;
+  count: number;
+};
+
+const categoryLabels: Record<string, string> = {
+  general: "General",
+  cars: "Cars",
+  parts: "Parts",
+  electronics: "Electronics",
+};
+
 export default function Home() {
   const [password, setPassword] = useState("");
   const [authorized, setAuthorized] = useState(false);
@@ -45,6 +58,26 @@ export default function Home() {
       alert("Wrong password");
     }
   };
+
+  const activeListings = useMemo(() => {
+    return listings.filter((item) => (item.status || "active") === "active");
+  }, [listings]);
+
+  const categoryCards = useMemo<CategoryCard[]>(() => {
+    const counts = activeListings.reduce<Record<string, number>>((acc, item) => {
+      const key = item.category || "general";
+      acc[key] = (acc[key] || 0) + 1;
+      return acc;
+    }, {});
+
+    return Object.entries(counts)
+      .map(([key, count]) => ({
+        key,
+        label: categoryLabels[key] || key,
+        count,
+      }))
+      .sort((a, b) => b.count - a.count);
+  }, [activeListings]);
 
   const filteredListings = useMemo(() => {
     return listings.filter((item) => {
@@ -195,11 +228,98 @@ export default function Home() {
               </div>
 
               <div className="rounded-2xl bg-black/[0.03] px-4 py-4">
-                <p className="text-sm text-black/45">Store status</p>
-                <p className="mt-1 text-base font-medium">Private live preview</p>
+                <p className="text-sm text-black/45">Visible categories</p>
+                <p className="mt-1 text-3xl font-semibold">{categoryCards.length}</p>
               </div>
             </div>
           </div>
+        </section>
+
+        <section className="mb-8">
+          <div className="mb-5">
+            <p className="text-xs font-medium uppercase tracking-[0.22em] text-black/40">
+              Categories
+            </p>
+            <h2 className="mt-2 text-2xl font-semibold tracking-tight">
+              Available categories
+            </h2>
+          </div>
+
+          {categoryCards.length === 0 ? (
+            <div className="rounded-[32px] border border-dashed border-black/10 bg-white px-6 py-10 text-black/55 shadow-sm">
+              Categories will appear here when listings are added.
+            </div>
+          ) : (
+            <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+              <button
+                onClick={() => setCategoryFilter("all")}
+                className={`rounded-[28px] border p-5 text-left shadow-sm transition ${
+                  categoryFilter === "all"
+                    ? "border-black bg-black text-white"
+                    : "border-black/8 bg-white hover:-translate-y-0.5 hover:shadow-md"
+                }`}
+              >
+                <p
+                  className={`text-xs font-medium uppercase tracking-[0.2em] ${
+                    categoryFilter === "all" ? "text-white/65" : "text-black/40"
+                  }`}
+                >
+                  Category
+                </p>
+                <p className="mt-3 text-2xl font-semibold">All</p>
+                <p
+                  className={`mt-2 text-sm ${
+                    categoryFilter === "all" ? "text-white/75" : "text-black/55"
+                  }`}
+                >
+                  Show every active listing
+                </p>
+              </button>
+
+              {categoryCards.map((category) => {
+                const isActive = categoryFilter === category.key;
+
+                return (
+                  <button
+                    key={category.key}
+                    onClick={() => setCategoryFilter(category.key)}
+                    className={`rounded-[28px] border p-5 text-left shadow-sm transition ${
+                      isActive
+                        ? "border-black bg-black text-white"
+                        : "border-black/8 bg-white hover:-translate-y-0.5 hover:shadow-md"
+                    }`}
+                  >
+                    <p
+                      className={`text-xs font-medium uppercase tracking-[0.2em] ${
+                        isActive ? "text-white/65" : "text-black/40"
+                      }`}
+                    >
+                      Category
+                    </p>
+                    <div className="mt-3 flex items-end justify-between gap-4">
+                      <p className="text-2xl font-semibold">{category.label}</p>
+                      <span
+                        className={`rounded-full px-3 py-1 text-xs font-medium ${
+                          isActive
+                            ? "bg-white/15 text-white"
+                            : "bg-black/[0.05] text-black/60"
+                        }`}
+                      >
+                        {category.count}
+                      </span>
+                    </div>
+                    <p
+                      className={`mt-2 text-sm ${
+                        isActive ? "text-white/75" : "text-black/55"
+                      }`}
+                    >
+                      Click to filter marketplace items
+                    </p>
+                  </button>
+                );
+              })}
+            </div>
+          )}
         </section>
 
         <section className="mb-8 rounded-[32px] border border-black/8 bg-white p-6 shadow-sm sm:p-8">
@@ -227,10 +347,11 @@ export default function Home() {
               className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-black/30"
             >
               <option value="all">All categories</option>
-              <option value="general">General</option>
-              <option value="cars">Cars</option>
-              <option value="parts">Parts</option>
-              <option value="electronics">Electronics</option>
+              {categoryCards.map((category) => (
+                <option key={category.key} value={category.key}>
+                  {category.label}
+                </option>
+              ))}
             </select>
 
             <select
