@@ -1,12 +1,29 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+
+type Listing = {
+  id: number;
+  title: string;
+  description: string;
+  price: string;
+  image?: string | null;
+  status?: "active" | "paused" | "sold";
+  category?: string;
+  condition?: string;
+  location?: string;
+};
 
 export default function Home() {
   const [password, setPassword] = useState("");
   const [authorized, setAuthorized] = useState(false);
-  const [listings, setListings] = useState<any[]>([]);
+  const [listings, setListings] = useState<Listing[]>([]);
+
+  const [search, setSearch] = useState("");
+  const [categoryFilter, setCategoryFilter] = useState("all");
+  const [conditionFilter, setConditionFilter] = useState("all");
+  const [locationFilter, setLocationFilter] = useState("");
 
   const correctPassword = "selqiro123";
 
@@ -28,6 +45,41 @@ export default function Home() {
       alert("Wrong password");
     }
   };
+
+  const filteredListings = useMemo(() => {
+    return listings.filter((item) => {
+      const status = item.status || "active";
+      if (status !== "active") return false;
+
+      const matchesSearch =
+        item.title.toLowerCase().includes(search.toLowerCase()) ||
+        item.description.toLowerCase().includes(search.toLowerCase());
+
+      const matchesCategory =
+        categoryFilter === "all"
+          ? true
+          : (item.category || "general") === categoryFilter;
+
+      const matchesCondition =
+        conditionFilter === "all"
+          ? true
+          : (item.condition || "used") === conditionFilter;
+
+      const matchesLocation =
+        locationFilter.trim() === ""
+          ? true
+          : (item.location || "")
+              .toLowerCase()
+              .includes(locationFilter.toLowerCase());
+
+      return (
+        matchesSearch &&
+        matchesCategory &&
+        matchesCondition &&
+        matchesLocation
+      );
+    });
+  }, [listings, search, categoryFilter, conditionFilter, locationFilter]);
 
   if (!authorized) {
     return (
@@ -82,7 +134,7 @@ export default function Home() {
                   Personal stores
                 </span>
                 <span className="rounded-full border border-black/10 bg-black/[0.03] px-4 py-2">
-                  Simple listing flow
+                  Structured listings
                 </span>
                 <span className="rounded-full border border-black/10 bg-black/[0.03] px-4 py-2">
                   AI-assisted future
@@ -139,7 +191,7 @@ export default function Home() {
             <div className="space-y-4">
               <div className="rounded-2xl bg-black/[0.03] px-4 py-4">
                 <p className="text-sm text-black/45">Active listings</p>
-                <p className="mt-1 text-3xl font-semibold">{listings.length}</p>
+                <p className="mt-1 text-3xl font-semibold">{filteredListings.length}</p>
               </div>
 
               <div className="rounded-2xl bg-black/[0.03] px-4 py-4">
@@ -147,6 +199,57 @@ export default function Home() {
                 <p className="mt-1 text-base font-medium">Private live preview</p>
               </div>
             </div>
+          </div>
+        </section>
+
+        <section className="mb-8 rounded-[32px] border border-black/8 bg-white p-6 shadow-sm sm:p-8">
+          <div className="mb-5">
+            <p className="text-xs font-medium uppercase tracking-[0.22em] text-black/40">
+              Filters
+            </p>
+            <h2 className="mt-2 text-2xl font-semibold tracking-tight">
+              Browse marketplace
+            </h2>
+          </div>
+
+          <div className="grid gap-4 lg:grid-cols-4">
+            <input
+              type="text"
+              placeholder="Search listings..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-black/30"
+            />
+
+            <select
+              value={categoryFilter}
+              onChange={(e) => setCategoryFilter(e.target.value)}
+              className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-black/30"
+            >
+              <option value="all">All categories</option>
+              <option value="general">General</option>
+              <option value="cars">Cars</option>
+              <option value="parts">Parts</option>
+              <option value="electronics">Electronics</option>
+            </select>
+
+            <select
+              value={conditionFilter}
+              onChange={(e) => setConditionFilter(e.target.value)}
+              className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-black/30"
+            >
+              <option value="all">All conditions</option>
+              <option value="new">New</option>
+              <option value="used">Used</option>
+            </select>
+
+            <input
+              type="text"
+              placeholder="Location..."
+              value={locationFilter}
+              onChange={(e) => setLocationFilter(e.target.value)}
+              className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-black/30"
+            />
           </div>
         </section>
 
@@ -160,23 +263,23 @@ export default function Home() {
             </div>
           </div>
 
-          {listings.length === 0 ? (
+          {filteredListings.length === 0 ? (
             <div className="rounded-[32px] border border-dashed border-black/10 bg-white px-6 py-14 text-center shadow-sm">
-              <p className="text-lg font-medium">No active listings yet</p>
+              <p className="text-lg font-medium">No matching active listings</p>
               <p className="mt-2 text-black/55">
-                Add your first item and it will appear here automatically.
+                Try changing filters or add a new listing.
               </p>
 
               <Link
                 href="/sell"
                 className="mt-6 inline-flex rounded-2xl bg-black px-5 py-3 text-sm font-medium text-white transition hover:opacity-90"
               >
-                Create first listing
+                Create listing
               </Link>
             </div>
           ) : (
             <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
-              {listings.map((item) => (
+              {filteredListings.map((item) => (
                 <Link key={item.id} href={`/listing/${item.id}`}>
                   <article className="group overflow-hidden rounded-[30px] border border-black/8 bg-white p-4 shadow-sm transition duration-200 hover:-translate-y-1 hover:shadow-md">
                     <div className="mb-4 overflow-hidden rounded-2xl bg-neutral-100">
@@ -197,6 +300,11 @@ export default function Home() {
                         {item.description}
                       </p>
                       <p className="pt-2 text-2xl font-semibold">{item.price}</p>
+
+                      <div className="pt-2 text-sm text-black/45">
+                        {(item.category || "general")} • {(item.condition || "used")} •{" "}
+                        {item.location || "No location"}
+                      </div>
                     </div>
                   </article>
                 </Link>
