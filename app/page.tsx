@@ -24,6 +24,7 @@ export default function Home() {
   const [categoryFilter, setCategoryFilter] = useState("all");
   const [conditionFilter, setConditionFilter] = useState("all");
   const [locationFilter, setLocationFilter] = useState("");
+  const [nearOnly, setNearOnly] = useState(false);
 
   const [userLocation, setUserLocation] = useState<string | null>(null);
   const [locationStatus, setLocationStatus] = useState<
@@ -52,6 +53,8 @@ export default function Home() {
 
     navigator.geolocation.getCurrentPosition(
       () => {
+        // Praegu lihtne v1 placeholder.
+        // Hiljem saame siia lisada päris linna nime.
         setUserLocation("Near you");
         setLocationStatus("granted");
       },
@@ -74,85 +77,153 @@ export default function Home() {
     return listings.filter((item) => (item.status || "active") === "active");
   }, [listings]);
 
-  const availableCategories = useMemo(() => {
-    const set = new Set(activeListings.map((item) => item.category || "general"));
-    return Array.from(set);
-  }, [activeListings]);
-
-  const availableConditions = useMemo(() => {
-    const set = new Set(activeListings.map((item) => item.condition || "used"));
-    return Array.from(set);
-  }, [activeListings]);
-
   const filteredListings = useMemo(() => {
-  const result = activeListings.filter((item) => {
-    const matchesSearch =
-      item.title.toLowerCase().includes(search.toLowerCase()) ||
-      item.description.toLowerCase().includes(search.toLowerCase());
+    const result = activeListings.filter((item) => {
+      const matchesSearch =
+        item.title.toLowerCase().includes(search.toLowerCase()) ||
+        item.description.toLowerCase().includes(search.toLowerCase());
 
-    const matchesCategory =
-      categoryFilter === "all"
-        ? true
-        : (item.category || "general") === categoryFilter;
+      const matchesCategory =
+        categoryFilter === "all"
+          ? true
+          : (item.category || "general") === categoryFilter;
 
-    const matchesCondition =
-      conditionFilter === "all"
-        ? true
-        : (item.condition || "used") === conditionFilter;
+      const matchesCondition =
+        conditionFilter === "all"
+          ? true
+          : (item.condition || "used") === conditionFilter;
 
-    const matchesLocation =
-      locationFilter.trim() === ""
-        ? true
-        : (item.location || "")
-            .toLowerCase()
-            .includes(locationFilter.toLowerCase());
+      const matchesLocation =
+        locationFilter.trim() === ""
+          ? true
+          : (item.location || "")
+              .toLowerCase()
+              .includes(locationFilter.toLowerCase());
 
-    return (
-      matchesSearch &&
-      matchesCategory &&
-      matchesCondition &&
-      matchesLocation
-    );
-  });
-
-  // 👉 LOCATION BOOST
-  if (userLocation && locationStatus === "granted") {
-    return result.sort((a, b) => {
-      const aMatch =
-        (a.location || "").toLowerCase().includes(userLocation.toLowerCase());
-      const bMatch =
-        (b.location || "").toLowerCase().includes(userLocation.toLowerCase());
-
-      if (aMatch && !bMatch) return -1;
-      if (!aMatch && bMatch) return 1;
-      return 0;
+      return (
+        matchesSearch &&
+        matchesCategory &&
+        matchesCondition &&
+        matchesLocation
+      );
     });
-  }
 
-  return result;
-}, [
-  activeListings,
-  search,
-  categoryFilter,
-  conditionFilter,
-  locationFilter,
-  userLocation,
-  locationStatus,
-]);
+    if (userLocation && locationStatus === "granted") {
+      const nearFiltered = result.filter((item) =>
+        (item.location || "")
+          .toLowerCase()
+          .includes(userLocation.toLowerCase())
+      );
+
+      if (nearOnly) {
+        return nearFiltered;
+      }
+
+      return [...result].sort((a, b) => {
+        const aMatch =
+          (a.location || "").toLowerCase().includes(userLocation.toLowerCase());
+        const bMatch =
+          (b.location || "").toLowerCase().includes(userLocation.toLowerCase());
+
+        if (aMatch && !bMatch) return -1;
+        if (!aMatch && bMatch) return 1;
+        return 0;
+      });
+    }
+
+    return result;
+  }, [
+    activeListings,
+    search,
+    categoryFilter,
+    conditionFilter,
+    locationFilter,
+    userLocation,
+    locationStatus,
+    nearOnly,
+  ]);
 
   const dynamicCategories = useMemo(() => {
-    const set = new Set(
-      filteredListings.map((item) => item.category || "general")
+    const source = activeListings.filter((item) => {
+      const matchesSearch =
+        item.title.toLowerCase().includes(search.toLowerCase()) ||
+        item.description.toLowerCase().includes(search.toLowerCase());
+
+      const matchesCondition =
+        conditionFilter === "all"
+          ? true
+          : (item.condition || "used") === conditionFilter;
+
+      const matchesLocation =
+        locationFilter.trim() === ""
+          ? true
+          : (item.location || "")
+              .toLowerCase()
+              .includes(locationFilter.toLowerCase());
+
+      const matchesNear =
+        nearOnly && userLocation && locationStatus === "granted"
+          ? (item.location || "")
+              .toLowerCase()
+              .includes(userLocation.toLowerCase())
+          : true;
+
+      return matchesSearch && matchesCondition && matchesLocation && matchesNear;
+    });
+
+    return Array.from(
+      new Set(source.map((item) => item.category || "general"))
     );
-    return Array.from(set);
-  }, [filteredListings]);
+  }, [
+    activeListings,
+    search,
+    conditionFilter,
+    locationFilter,
+    nearOnly,
+    userLocation,
+    locationStatus,
+  ]);
 
   const dynamicConditions = useMemo(() => {
-    const set = new Set(
-      filteredListings.map((item) => item.condition || "used")
+    const source = activeListings.filter((item) => {
+      const matchesSearch =
+        item.title.toLowerCase().includes(search.toLowerCase()) ||
+        item.description.toLowerCase().includes(search.toLowerCase());
+
+      const matchesCategory =
+        categoryFilter === "all"
+          ? true
+          : (item.category || "general") === categoryFilter;
+
+      const matchesLocation =
+        locationFilter.trim() === ""
+          ? true
+          : (item.location || "")
+              .toLowerCase()
+              .includes(locationFilter.toLowerCase());
+
+      const matchesNear =
+        nearOnly && userLocation && locationStatus === "granted"
+          ? (item.location || "")
+              .toLowerCase()
+              .includes(userLocation.toLowerCase())
+          : true;
+
+      return matchesSearch && matchesCategory && matchesLocation && matchesNear;
+    });
+
+    return Array.from(
+      new Set(source.map((item) => item.condition || "used"))
     );
-    return Array.from(set);
-  }, [filteredListings]);
+  }, [
+    activeListings,
+    search,
+    categoryFilter,
+    locationFilter,
+    nearOnly,
+    userLocation,
+    locationStatus,
+  ]);
 
   if (!authorized) {
     return (
@@ -277,7 +348,7 @@ export default function Home() {
 
               <div className="rounded-2xl bg-black/[0.03] px-4 py-4">
                 <p className="text-sm text-black/45">Available categories</p>
-                <p className="mt-1 text-3xl font-semibold">{availableCategories.length}</p>
+                <p className="mt-1 text-3xl font-semibold">{dynamicCategories.length}</p>
               </div>
             </div>
           </div>
@@ -293,7 +364,7 @@ export default function Home() {
             </h2>
           </div>
 
-          <div className="grid gap-4 lg:grid-cols-4">
+          <div className="grid gap-4 lg:grid-cols-5">
             <input
               type="text"
               placeholder="Search listings..."
@@ -335,6 +406,15 @@ export default function Home() {
               onChange={(e) => setLocationFilter(e.target.value)}
               className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-black/30"
             />
+
+            <div className="flex items-center gap-2 rounded-2xl border border-black/10 bg-white px-4 py-3">
+              <input
+                type="checkbox"
+                checked={nearOnly}
+                onChange={(e) => setNearOnly(e.target.checked)}
+              />
+              <span className="text-sm">Near you only</span>
+            </div>
           </div>
         </section>
 
