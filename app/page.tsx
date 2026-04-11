@@ -85,36 +85,60 @@ export default function Home() {
   }, [activeListings]);
 
   const filteredListings = useMemo(() => {
-    return activeListings.filter((item) => {
-      const matchesSearch =
-        item.title.toLowerCase().includes(search.toLowerCase()) ||
-        item.description.toLowerCase().includes(search.toLowerCase());
+  const result = activeListings.filter((item) => {
+    const matchesSearch =
+      item.title.toLowerCase().includes(search.toLowerCase()) ||
+      item.description.toLowerCase().includes(search.toLowerCase());
 
-      const matchesCategory =
-        categoryFilter === "all"
-          ? true
-          : (item.category || "general") === categoryFilter;
+    const matchesCategory =
+      categoryFilter === "all"
+        ? true
+        : (item.category || "general") === categoryFilter;
 
-      const matchesCondition =
-        conditionFilter === "all"
-          ? true
-          : (item.condition || "used") === conditionFilter;
+    const matchesCondition =
+      conditionFilter === "all"
+        ? true
+        : (item.condition || "used") === conditionFilter;
 
-      const matchesLocation =
-        locationFilter.trim() === ""
-          ? true
-          : (item.location || "")
-              .toLowerCase()
-              .includes(locationFilter.toLowerCase());
+    const matchesLocation =
+      locationFilter.trim() === ""
+        ? true
+        : (item.location || "")
+            .toLowerCase()
+            .includes(locationFilter.toLowerCase());
 
-      return (
-        matchesSearch &&
-        matchesCategory &&
-        matchesCondition &&
-        matchesLocation
-      );
+    return (
+      matchesSearch &&
+      matchesCategory &&
+      matchesCondition &&
+      matchesLocation
+    );
+  });
+
+  // 👉 LOCATION BOOST
+  if (userLocation && locationStatus === "granted") {
+    return result.sort((a, b) => {
+      const aMatch =
+        (a.location || "").toLowerCase().includes(userLocation.toLowerCase());
+      const bMatch =
+        (b.location || "").toLowerCase().includes(userLocation.toLowerCase());
+
+      if (aMatch && !bMatch) return -1;
+      if (!aMatch && bMatch) return 1;
+      return 0;
     });
-  }, [activeListings, search, categoryFilter, conditionFilter, locationFilter]);
+  }
+
+  return result;
+}, [
+  activeListings,
+  search,
+  categoryFilter,
+  conditionFilter,
+  locationFilter,
+  userLocation,
+  locationStatus,
+]);
 
   const dynamicCategories = useMemo(() => {
     const set = new Set(
