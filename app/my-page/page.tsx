@@ -10,6 +10,11 @@ type Listing = {
   price: string;
   image?: string;
   status?: "active" | "paused" | "sold";
+  category?: string;
+  condition?: string;
+  location?: string;
+  country?: string;
+  city?: string;
 };
 
 export default function MyPage() {
@@ -23,6 +28,10 @@ export default function MyPage() {
   const [editPrice, setEditPrice] = useState("");
   const [editStatus, setEditStatus] = useState<"active" | "paused" | "sold">("active");
   const [editImage, setEditImage] = useState("");
+  const [editCategory, setEditCategory] = useState("general");
+  const [editCondition, setEditCondition] = useState("used");
+  const [editCountry, setEditCountry] = useState("Estonia");
+  const [editCity, setEditCity] = useState("");
 
   useEffect(() => {
     const stored = JSON.parse(localStorage.getItem("listings") || "[]");
@@ -60,6 +69,10 @@ export default function MyPage() {
     setEditPrice(item.price || "");
     setEditStatus((item.status as "active" | "paused" | "sold") || "active");
     setEditImage(item.image || "");
+    setEditCategory(item.category || "general");
+    setEditCondition(item.condition || "used");
+    setEditCountry(item.country || "Estonia");
+    setEditCity(item.city || "");
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
@@ -70,6 +83,10 @@ export default function MyPage() {
     setEditPrice("");
     setEditStatus("active");
     setEditImage("");
+    setEditCategory("general");
+    setEditCondition("used");
+    setEditCountry("Estonia");
+    setEditCity("");
   };
 
   const saveEdit = () => {
@@ -80,6 +97,14 @@ export default function MyPage() {
       return;
     }
 
+    const cleanCountry = editCountry.trim();
+    const cleanCity = editCity.trim();
+
+    const location =
+      cleanCity && cleanCountry
+        ? `${cleanCountry} • ${cleanCity}`
+        : cleanCountry || cleanCity || "";
+
     const updated = listings.map((item) =>
       item.id === editingId
         ? {
@@ -89,6 +114,11 @@ export default function MyPage() {
             price: editPrice,
             status: editStatus,
             image: editImage,
+            category: editCategory,
+            condition: editCondition,
+            country: cleanCountry,
+            city: cleanCity,
+            location,
           }
         : item
     );
@@ -240,6 +270,36 @@ export default function MyPage() {
 
                 <div>
                   <label className="mb-2 block text-sm font-medium text-black/70">
+                    Category
+                  </label>
+                  <select
+                    value={editCategory}
+                    onChange={(e) => setEditCategory(e.target.value)}
+                    className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-black/30"
+                  >
+                    <option value="general">General</option>
+                    <option value="cars">Cars</option>
+                    <option value="parts">Parts</option>
+                    <option value="electronics">Electronics</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="mb-2 block text-sm font-medium text-black/70">
+                    Condition
+                  </label>
+                  <select
+                    value={editCondition}
+                    onChange={(e) => setEditCondition(e.target.value)}
+                    className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-black/30"
+                  >
+                    <option value="new">New</option>
+                    <option value="used">Used</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="mb-2 block text-sm font-medium text-black/70">
                     Status
                   </label>
                   <select
@@ -253,6 +313,38 @@ export default function MyPage() {
                     <option value="paused">Paused</option>
                     <option value="sold">Sold</option>
                   </select>
+                </div>
+
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div>
+                    <label className="mb-2 block text-sm font-medium text-black/70">
+                      Country
+                    </label>
+                    <select
+                      value={editCountry}
+                      onChange={(e) => setEditCountry(e.target.value)}
+                      className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-black/30"
+                    >
+                      <option value="Estonia">Estonia</option>
+                      <option value="Latvia">Latvia</option>
+                      <option value="Lithuania">Lithuania</option>
+                      <option value="Finland">Finland</option>
+                      <option value="Sweden">Sweden</option>
+                      <option value="Germany">Germany</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="mb-2 block text-sm font-medium text-black/70">
+                      City
+                    </label>
+                    <input
+                      type="text"
+                      value={editCity}
+                      onChange={(e) => setEditCity(e.target.value)}
+                      className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-black/30"
+                    />
+                  </div>
                 </div>
 
                 <div>
@@ -312,6 +404,11 @@ export default function MyPage() {
                   </p>
 
                   <p className="mt-4 text-2xl font-semibold">{editPrice || "0€"}</p>
+
+                  <div className="mt-3 text-sm text-black/45">
+                    {editCategory} • {editCondition} • {editCountry}
+                    {editCity ? ` • ${editCity}` : ""}
+                  </div>
                 </div>
               </aside>
             </div>
@@ -431,6 +528,12 @@ export default function MyPage() {
                     </p>
 
                     <p className="mt-4 text-2xl font-semibold">{item.price}</p>
+
+                    <div className="mt-3 text-sm text-black/45">
+                      {item.category || "general"} • {item.condition || "used"} •{" "}
+                      {item.country || "No country"}
+                      {item.city ? ` • ${item.city}` : ""}
+                    </div>
                   </div>
                 </Link>
 
