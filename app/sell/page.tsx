@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { supabase } from "../../lib/supabase";
 
 export default function SellPage() {
   const router = useRouter();
@@ -18,6 +19,8 @@ export default function SellPage() {
 
   const [country, setCountry] = useState("Estonia");
   const [city, setCity] = useState("");
+
+  const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
     const lastCountry = localStorage.getItem("lastCountry");
@@ -38,11 +41,13 @@ export default function SellPage() {
     reader.readAsDataURL(file);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!title || !description || !price) {
       alert("Please fill title, description and price.");
       return;
     }
+
+    setIsSaving(true);
 
     const cleanCity = city.trim();
     const cleanCountry = country.trim();
@@ -52,24 +57,28 @@ export default function SellPage() {
         ? `${cleanCountry} • ${cleanCity}`
         : cleanCountry || cleanCity || "";
 
-    const newListing = {
-      id: Date.now(),
-      title,
-      description,
-      price,
-      image,
-      status,
-      category,
-      condition,
-      country: cleanCountry,
-      city: cleanCity,
-      location,
-    };
+    const { error } = await supabase.from("listings").insert([
+      {
+        title,
+        description,
+        price,
+        image,
+        status,
+        category,
+        condition,
+        country: cleanCountry,
+        city: cleanCity,
+        location,
+      },
+    ]);
 
-    const existing = JSON.parse(localStorage.getItem("listings") || "[]");
-    const updated = [newListing, ...existing];
+    if (error) {
+      console.error("Error saving listing:", error);
+      alert("Saving failed. Please try again.");
+      setIsSaving(false);
+      return;
+    }
 
-    localStorage.setItem("listings", JSON.stringify(updated));
     localStorage.setItem("lastCountry", cleanCountry);
     localStorage.setItem("lastCity", cleanCity);
 
@@ -103,7 +112,7 @@ export default function SellPage() {
             Start selling
           </h1>
           <p className="mt-4 max-w-2xl text-base leading-7 text-black/60 sm:text-lg">
-            Add a clean listing for your store. The form now remembers your last
+            Add a clean listing for your store. The form remembers your last
             location automatically, so adding multiple items is faster.
           </p>
         </header>
@@ -242,9 +251,10 @@ export default function SellPage() {
 
               <button
                 onClick={handleSubmit}
-                className="w-full rounded-2xl bg-black px-5 py-4 text-sm font-medium text-white transition hover:opacity-90"
+                disabled={isSaving}
+                className="w-full rounded-2xl bg-black px-5 py-4 text-sm font-medium text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
               >
-                Publish listing
+                {isSaving ? "Saving..." : "Publish listing"}
               </button>
             </div>
           </section>
@@ -288,14 +298,14 @@ export default function SellPage() {
                   </div>
 
                   <p className="line-clamp-3 text-sm leading-6 text-black/60">
-                    {description || "Your listing description preview will appear here."}
+                    {description ||
+                      "Your listing description preview will appear here."}
                   </p>
 
                   <p className="mt-4 text-2xl font-semibold">{price || "0€"}</p>
 
                   <div className="mt-3 text-sm text-black/45">
-                    {category} • {condition} •{" "}
-                    {country || "No country"}
+                    {category} • {condition} • {country || "No country"}
                     {city ? ` • ${city}` : ""}
                   </div>
                 </div>
@@ -312,10 +322,11 @@ export default function SellPage() {
                   Your last selected country and city are remembered automatically.
                 </p>
                 <p>
-                  This helps when you add multiple listings from the same location.
+                  New listings are now saved to the shared database instead of only
+                  this device.
                 </p>
                 <p>
-                  Later we can connect this with smarter location-based marketplace visibility.
+                  This makes your portal work across phone, computer and live site.
                 </p>
               </div>
             </div>
