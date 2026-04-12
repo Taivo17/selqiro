@@ -2,9 +2,11 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import { supabase } from "../lib/supabase";
 
 type Listing = {
   id: number;
+  created_at?: string;
   title: string;
   description: string;
   price: string;
@@ -13,6 +15,8 @@ type Listing = {
   category?: string;
   condition?: string;
   location?: string;
+  country?: string;
+  city?: string;
 };
 
 export default function Home() {
@@ -38,9 +42,33 @@ export default function Home() {
     if (savedAccess === "granted") {
       setAuthorized(true);
     }
+  }, []);
 
-    const stored = JSON.parse(localStorage.getItem("listings") || "[]");
-    setListings(stored);
+  useEffect(() => {
+    const fetchListings = async () => {
+      const { data, error } = await supabase
+        .from("listings")
+        .select("*")
+        .order("created_at", { ascending: false });
+
+      if (error) {
+        console.error("Error fetching listings from Supabase:", error);
+
+        const stored = JSON.parse(localStorage.getItem("listings") || "[]");
+        setListings(stored);
+        return;
+      }
+
+      if (data && data.length > 0) {
+        setListings(data as Listing[]);
+        return;
+      }
+
+      const stored = JSON.parse(localStorage.getItem("listings") || "[]");
+      setListings(stored);
+    };
+
+    fetchListings();
   }, []);
 
   useEffect(() => {
@@ -53,8 +81,6 @@ export default function Home() {
 
     navigator.geolocation.getCurrentPosition(
       () => {
-        // Praegu lihtne v1 placeholder.
-        // Hiljem saame siia lisada päris linna nime.
         setUserLocation("Near you");
         setLocationStatus("granted");
       },
@@ -271,8 +297,8 @@ export default function Home() {
                 Marketplace
               </h1>
               <p className="mt-4 max-w-xl text-base leading-7 text-black/60 sm:text-lg">
-                Discover active listings from nearby sellers, personal stores and useful finds
-                in one clean marketplace.
+                Discover active listings from nearby sellers, personal stores and
+                useful finds in one clean marketplace.
               </p>
 
               <div className="mt-4 text-sm text-black/60">
@@ -319,10 +345,12 @@ export default function Home() {
 
             <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
               <div>
-                <h2 className="text-3xl font-semibold tracking-tight">Taivo Garage</h2>
+                <h2 className="text-3xl font-semibold tracking-tight">
+                  Taivo Garage
+                </h2>
                 <p className="mt-3 max-w-xl text-black/60">
-                  Personal store for parts, tools and useful finds. A clean profile where
-                  listings feel more like a real mini-shop than random ads.
+                  Personal store for parts, tools and useful finds. A clean profile
+                  where listings feel more like a real mini-shop than random ads.
                 </p>
               </div>
 
@@ -343,12 +371,16 @@ export default function Home() {
             <div className="space-y-4">
               <div className="rounded-2xl bg-black/[0.03] px-4 py-4">
                 <p className="text-sm text-black/45">Active listings</p>
-                <p className="mt-1 text-3xl font-semibold">{filteredListings.length}</p>
+                <p className="mt-1 text-3xl font-semibold">
+                  {filteredListings.length}
+                </p>
               </div>
 
               <div className="rounded-2xl bg-black/[0.03] px-4 py-4">
                 <p className="text-sm text-black/45">Available categories</p>
-                <p className="mt-1 text-3xl font-semibold">{dynamicCategories.length}</p>
+                <p className="mt-1 text-3xl font-semibold">
+                  {dynamicCategories.length}
+                </p>
               </div>
             </div>
           </div>
@@ -462,14 +494,17 @@ export default function Home() {
                     </div>
 
                     <div className="space-y-2">
-                      <h3 className="text-xl font-semibold tracking-tight">{item.title}</h3>
+                      <h3 className="text-xl font-semibold tracking-tight">
+                        {item.title}
+                      </h3>
                       <p className="line-clamp-2 text-sm leading-6 text-black/60">
                         {item.description}
                       </p>
                       <p className="pt-2 text-2xl font-semibold">{item.price}</p>
 
                       <div className="pt-2 text-sm text-black/45">
-                        {(item.category || "general")} • {(item.condition || "used")} •{" "}
+                        {(item.category || "general")} •{" "}
+                        {(item.condition || "used")} •{" "}
                         {item.location || "No location"}
                       </div>
                     </div>
