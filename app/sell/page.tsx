@@ -42,27 +42,30 @@ export default function SellPage() {
   };
 
   const handleSubmit = async () => {
-    if (!title || !description || !price) {
+    if (!title.trim() || !description.trim() || !price.trim()) {
       alert("Please fill title, description and price.");
       return;
     }
 
-    setIsSaving(true);
-
-    const cleanCity = city.trim();
+    const cleanTitle = title.trim();
+    const cleanDescription = description.trim();
+    const cleanPrice = price.trim();
     const cleanCountry = country.trim();
+    const cleanCity = city.trim();
 
     const location =
       cleanCity && cleanCountry
         ? `${cleanCountry} • ${cleanCity}`
         : cleanCountry || cleanCity || "";
 
+    setIsSaving(true);
+
     const { error } = await supabase.from("listings").insert([
       {
-        title,
-        description,
-        price,
-        image,
+        title: cleanTitle,
+        description: cleanDescription,
+        price: cleanPrice,
+        image: image || null,
         status,
         category,
         condition,
@@ -72,10 +75,11 @@ export default function SellPage() {
       },
     ]);
 
+    setIsSaving(false);
+
     if (error) {
       console.error("Error saving listing:", error);
-      alert("Saving failed. Please try again.");
-      setIsSaving(false);
+      alert("Saving failed. Check Supabase connection and try again.");
       return;
     }
 
@@ -83,6 +87,7 @@ export default function SellPage() {
     localStorage.setItem("lastCity", cleanCity);
 
     router.push("/my-page");
+    router.refresh();
   };
 
   return (
@@ -113,7 +118,7 @@ export default function SellPage() {
           </h1>
           <p className="mt-4 max-w-2xl text-base leading-7 text-black/60 sm:text-lg">
             Add a clean listing for your store. The form remembers your last
-            location automatically, so adding multiple items is faster.
+            country and city so adding multiple items is faster.
           </p>
         </header>
 
@@ -319,14 +324,16 @@ export default function SellPage() {
 
               <div className="space-y-3 text-sm leading-6 text-black/60">
                 <p>
-                  Your last selected country and city are remembered automatically.
+                  Listings are now saved to the shared database instead of only
+                  one device.
                 </p>
                 <p>
-                  New listings are now saved to the shared database instead of only
-                  this device.
+                  Your last selected country and city are remembered
+                  automatically.
                 </p>
                 <p>
-                  This makes your portal work across phone, computer and live site.
+                  Next we can update my-page and store views to read the same
+                  shared data everywhere.
                 </p>
               </div>
             </div>
