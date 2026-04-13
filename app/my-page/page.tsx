@@ -2,13 +2,15 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import { supabase } from "../../lib/supabase";
 
 type Listing = {
   id: number;
+  created_at?: string;
   title: string;
   description: string;
   price: string;
-  image?: string;
+  image?: string | null;
   status?: "active" | "paused" | "sold";
   category?: string;
   condition?: string;
@@ -20,46 +22,85 @@ type Listing = {
 export default function MyPage() {
   const [listings, setListings] = useState<Listing[]>([]);
   const [search, setSearch] = useState("");
-  const [filter, setFilter] = useState<"all" | "active" | "paused" | "sold">("all");
+  const [filter, setFilter] = useState<"all" | "active" | "paused" | "sold">(
+    "all"
+  );
+  const [loading, setLoading] = useState(true);
 
   const [editingId, setEditingId] = useState<number | null>(null);
   const [editTitle, setEditTitle] = useState("");
   const [editDescription, setEditDescription] = useState("");
   const [editPrice, setEditPrice] = useState("");
-  const [editStatus, setEditStatus] = useState<"active" | "paused" | "sold">("active");
+  const [editStatus, setEditStatus] = useState<"active" | "paused" | "sold">(
+    "active"
+  );
   const [editImage, setEditImage] = useState("");
   const [editCategory, setEditCategory] = useState("general");
   const [editCondition, setEditCondition] = useState("used");
   const [editCountry, setEditCountry] = useState("Estonia");
   const [editCity, setEditCity] = useState("");
+  const [savingEdit, setSavingEdit] = useState(false);
+
+  const fetchListings = async () => {
+    setLoading(true);
+
+    const { data, error } = await supabase
+      .from("listings")
+      .select("*")
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      console.error("Error fetching listings:", error);
+      alert("Failed to load listings from Supabase.");
+      setLoading(false);
+      return;
+    }
+
+    setListings((data || []) as Listing[]);
+    setLoading(false);
+  };
 
   useEffect(() => {
-    const stored = JSON.parse(localStorage.getItem("listings") || "[]");
-    setListings(stored);
+    fetchListings();
   }, []);
 
-  const saveListings = (updated: Listing[]) => {
-    setListings(updated);
-    localStorage.setItem("listings", JSON.stringify(updated));
+  const updateStatus = async (
+    id: number,
+    status: "active" | "paused" | "sold"
+  ) => {
+    const { error } = await supabase
+      .from("listings")
+      .update({ status })
+      .eq("id", id);
+
+    if (error) {
+      console.error("Error updating status:", error);
+      alert("Failed to update listing status.");
+      return;
+    }
+
+    await fetchListings();
   };
 
-  const updateStatus = (id: number, status: "active" | "paused" | "sold") => {
-    const updated = listings.map((item) =>
-      item.id === id ? { ...item, status } : item
+  const deleteListing = async (id: number) => {
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this listing?"
     );
-    saveListings(updated);
-  };
-
-  const deleteListing = (id: number) => {
-    const confirmed = window.confirm("Are you sure you want to delete this listing?");
     if (!confirmed) return;
 
-    const updated = listings.filter((item) => item.id !== id);
-    saveListings(updated);
+    const { error } = await supabase.from("listings").delete().eq("id", id);
+
+    if (error) {
+      console.error("Error deleting listing:", error);
+      alert("Failed to delete listing.");
+      return;
+    }
 
     if (editingId === id) {
       cancelEdit();
     }
+
+    await fetchListings();
   };
 
   const startEdit = (item: Listing) => {
@@ -67,7 +108,7 @@ export default function MyPage() {
     setEditTitle(item.title || "");
     setEditDescription(item.description || "");
     setEditPrice(item.price || "");
-    setEditStatus((item.status as "active" | "paused" | "sold") || "active");
+    setEditStatus(item.status || "active");
     setEditImage(item.image || "");
     setEditCategory(item.category || "general");
     setEditCondition(item.condition || "used");
@@ -89,10 +130,10 @@ export default function MyPage() {
     setEditCity("");
   };
 
-  const saveEdit = () => {
+  const saveEdit = async () => {
     if (!editingId) return;
 
-    if (!editTitle || !editDescription || !editPrice) {
+    if (!editTitle.trim() || !editDescription.trim() || !editPrice.trim()) {
       alert("Please fill title, description and price.");
       return;
     }
@@ -105,29 +146,39 @@ export default function MyPage() {
         ? `${cleanCountry} • ${cleanCity}`
         : cleanCountry || cleanCity || "";
 
-    const updated = listings.map((item) =>
-      item.id === editingId
-        ? {
-            ...item,
-            title: editTitle,
-            description: editDescription,
-            price: editPrice,
-            status: editStatus,
-            image: editImage,
-            category: editCategory,
-            condition: editCondition,
-            country: cleanCountry,
-            city: cleanCity,
-            location,
-          }
-        : item
-    );
+    setSavingEdit(true);
 
-    saveListings(updated);
+    const { error } = await supabase
+      .from("listings")
+      .update({
+        title: editTitle.trim(),
+        description: editDescription.trim(),
+        price: editPrice.trim(),
+        status: editStatus,
+        image: editImage || null,
+        category: editCategory,
+        condition: editCondition,
+        country: cleanCountry,
+        city: cleanCity,
+        location,
+      })
+      .eq("id", editingId);
+
+    setSavingEdit(false);
+
+    if (error) {
+      console.error("Error saving edit:", error);
+      alert("Failed to save changes.");
+      return;
+    }
+
     cancelEdit();
+    await fetchListings();
   };
 
-  const handleEditImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleEditImageUpload = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const file = event.target.files?.[0];
     if (!file) return;
 
@@ -151,7 +202,9 @@ export default function MyPage() {
     });
   }, [listings, search, filter]);
 
-  const activeCount = listings.filter((item) => (item.status || "active") === "active").length;
+  const activeCount = listings.filter(
+    (item) => (item.status || "active") === "active"
+  ).length;
   const pausedCount = listings.filter((item) => item.status === "paused").length;
   const soldCount = listings.filter((item) => item.status === "sold").length;
 
@@ -187,7 +240,7 @@ export default function MyPage() {
                   Private seller
                 </span>
                 <span className="rounded-full border border-black/10 bg-black/[0.03] px-4 py-2">
-                  Live preview
+                  Shared database
                 </span>
               </div>
             </div>
@@ -361,9 +414,10 @@ export default function MyPage() {
 
                 <button
                   onClick={saveEdit}
-                  className="w-full rounded-2xl bg-black px-5 py-4 text-sm font-medium text-white transition hover:opacity-90"
+                  disabled={savingEdit}
+                  className="w-full rounded-2xl bg-black px-5 py-4 text-sm font-medium text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
                 >
-                  Save changes
+                  {savingEdit ? "Saving..." : "Save changes"}
                 </button>
               </div>
 
@@ -470,10 +524,16 @@ export default function MyPage() {
           <p className="text-xs font-medium uppercase tracking-[0.22em] text-black/40">
             Listings
           </p>
-          <h2 className="mt-2 text-2xl font-semibold tracking-tight">Manage your items</h2>
+          <h2 className="mt-2 text-2xl font-semibold tracking-tight">
+            Manage your items
+          </h2>
         </section>
 
-        {filteredListings.length === 0 ? (
+        {loading ? (
+          <div className="rounded-[32px] border border-black/8 bg-white px-6 py-14 text-center shadow-sm">
+            <p className="text-lg font-medium">Loading listings...</p>
+          </div>
+        ) : filteredListings.length === 0 ? (
           <div className="rounded-[32px] border border-dashed border-black/10 bg-white px-6 py-14 text-center shadow-sm">
             <p className="text-lg font-medium">No matching listings</p>
             <p className="mt-2 text-black/55">
@@ -509,7 +569,9 @@ export default function MyPage() {
                     </div>
 
                     <div className="mb-4 flex items-start justify-between gap-3">
-                      <h3 className="text-xl font-semibold tracking-tight">{item.title}</h3>
+                      <h3 className="text-xl font-semibold tracking-tight">
+                        {item.title}
+                      </h3>
                       <span
                         className={`rounded-full px-3 py-1 text-xs font-medium capitalize ${
                           (item.status || "active") === "active"
