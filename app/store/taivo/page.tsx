@@ -2,43 +2,59 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import { supabase } from "../../../lib/supabase";
 
 type Listing = {
   id: number;
+  created_at?: string;
   title: string;
   description: string;
   price: string;
   image?: string | null;
   status?: "active" | "paused" | "sold";
+  category?: string;
+  condition?: string;
+  location?: string;
+  country?: string;
+  city?: string;
 };
 
 export default function StorePage() {
   const [listings, setListings] = useState<Listing[]>([]);
-  const [search, setSearch] = useState("");
-  const [filter, setFilter] = useState<"active" | "all">("active");
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const stored = JSON.parse(localStorage.getItem("listings") || "[]");
-    setListings(stored);
+    const fetchListings = async () => {
+      setLoading(true);
+
+      const { data, error } = await supabase
+        .from("listings")
+        .select("*")
+        .eq("status", "active")
+        .order("created_at", { ascending: false });
+
+      if (error) {
+        console.error("Error fetching store listings:", error);
+        setLoading(false);
+        return;
+      }
+
+      setListings((data || []) as Listing[]);
+      setLoading(false);
+    };
+
+    fetchListings();
   }, []);
 
-  const filteredListings = useMemo(() => {
-    return listings.filter((item) => {
-      const currentStatus = item.status || "active";
-      const matchesStatus =
-        filter === "all" ? true : currentStatus === "active";
+  const latestListings = useMemo(() => listings.slice(0, 12), [listings]);
 
-      const matchesSearch =
-        item.title.toLowerCase().includes(search.toLowerCase()) ||
-        item.description.toLowerCase().includes(search.toLowerCase());
+  const activeCount = listings.length;
 
-      return matchesStatus && matchesSearch;
-    });
-  }, [listings, search, filter]);
-
-  const activeCount = listings.filter(
-    (item) => !item.status || item.status === "active"
-  ).length;
+  const categoryCount = useMemo(() => {
+    return Array.from(
+      new Set(listings.map((item) => item.category || "general"))
+    ).length;
+  }, [listings]);
 
   return (
     <main className="min-h-screen bg-[#f8f8f6] px-6 py-10 text-black sm:px-8 lg:px-10">
@@ -47,7 +63,7 @@ export default function StorePage() {
           <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between">
             <div className="max-w-3xl">
               <p className="mb-3 text-xs font-medium uppercase tracking-[0.24em] text-black/40">
-                Store page
+                Selqiro Store
               </p>
 
               <div className="flex items-center gap-4">
@@ -67,30 +83,30 @@ export default function StorePage() {
 
               <div className="mt-6 flex flex-wrap gap-3 text-sm text-black/55">
                 <span className="rounded-full border border-black/10 bg-black/[0.03] px-4 py-2">
-                  Seller profile
+                  Personal store
                 </span>
                 <span className="rounded-full border border-black/10 bg-black/[0.03] px-4 py-2">
-                  Public store view
+                  Active listings only
                 </span>
                 <span className="rounded-full border border-black/10 bg-black/[0.03] px-4 py-2">
-                  Searchable listings
+                  Shared database
                 </span>
               </div>
             </div>
 
             <div className="flex flex-wrap gap-3">
               <Link
+                href="/sell"
+                className="rounded-2xl bg-green-500 px-5 py-3 text-sm font-medium text-white shadow-sm transition hover:opacity-90"
+              >
+                + Add listing
+              </Link>
+
+              <Link
                 href="/"
                 className="rounded-2xl border border-black/10 bg-white px-5 py-3 text-sm font-medium transition hover:bg-black/[0.03]"
               >
                 Back to marketplace
-              </Link>
-
-              <Link
-                href="/my-page"
-                className="rounded-2xl bg-black px-5 py-3 text-sm font-medium text-white transition hover:opacity-90"
-              >
-                Manage listings
               </Link>
             </div>
           </div>
@@ -98,48 +114,18 @@ export default function StorePage() {
 
         <section className="mb-8 grid gap-6 md:grid-cols-3">
           <div className="rounded-[30px] border border-black/8 bg-white p-6 shadow-sm">
-            <p className="text-sm text-black/45">Store items</p>
+            <p className="text-sm text-black/45">Active listings</p>
             <p className="mt-2 text-4xl font-semibold">{activeCount}</p>
           </div>
 
           <div className="rounded-[30px] border border-black/8 bg-white p-6 shadow-sm">
-            <p className="text-sm text-black/45">Seller type</p>
-            <p className="mt-2 text-2xl font-semibold">Private seller</p>
+            <p className="text-sm text-black/45">Categories</p>
+            <p className="mt-2 text-4xl font-semibold">{categoryCount}</p>
           </div>
 
           <div className="rounded-[30px] border border-black/8 bg-white p-6 shadow-sm">
             <p className="text-sm text-black/45">Store status</p>
-            <p className="mt-2 text-2xl font-semibold">Open</p>
-          </div>
-        </section>
-
-        <section className="mb-6 rounded-[32px] border border-black/8 bg-white p-6 shadow-sm sm:p-8">
-          <div className="mb-5">
-            <p className="text-xs font-medium uppercase tracking-[0.22em] text-black/40">
-              Browse store
-            </p>
-            <h2 className="mt-2 text-2xl font-semibold tracking-tight">
-              Find items in this store
-            </h2>
-          </div>
-
-          <div className="grid gap-4 md:grid-cols-[1fr_220px]">
-            <input
-              type="text"
-              placeholder="Search this store..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-black/30"
-            />
-
-            <select
-              value={filter}
-              onChange={(e) => setFilter(e.target.value as "active" | "all")}
-              className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-black/30"
-            >
-              <option value="active">Active only</option>
-              <option value="all">Show all</option>
-            </select>
+            <p className="mt-2 text-2xl font-semibold">Live preview</p>
           </div>
         </section>
 
@@ -148,20 +134,31 @@ export default function StorePage() {
             Listings
           </p>
           <h2 className="mt-2 text-2xl font-semibold tracking-tight">
-            Available items
+            Latest items from this store
           </h2>
         </section>
 
-        {filteredListings.length === 0 ? (
+        {loading ? (
+          <div className="rounded-[32px] border border-black/8 bg-white px-6 py-14 text-center shadow-sm">
+            <p className="text-lg font-medium">Loading store listings...</p>
+          </div>
+        ) : latestListings.length === 0 ? (
           <div className="rounded-[32px] border border-dashed border-black/10 bg-white px-6 py-14 text-center shadow-sm">
-            <p className="text-lg font-medium">No matching listings in this store</p>
+            <p className="text-lg font-medium">No active listings yet</p>
             <p className="mt-2 text-black/55">
-              Try another search or change the filter.
+              Add a new listing and it will appear here automatically.
             </p>
+
+            <Link
+              href="/sell"
+              className="mt-6 inline-flex rounded-2xl bg-black px-5 py-3 text-sm font-medium text-white transition hover:opacity-90"
+            >
+              Create listing
+            </Link>
           </div>
         ) : (
           <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
-            {filteredListings.map((item) => (
+            {latestListings.map((item) => (
               <Link key={item.id} href={`/listing/${item.id}`}>
                 <article className="group overflow-hidden rounded-[30px] border border-black/8 bg-white p-4 shadow-sm transition duration-200 hover:-translate-y-1 hover:shadow-md">
                   <div className="mb-4 overflow-hidden rounded-2xl bg-neutral-100">
@@ -176,29 +173,30 @@ export default function StorePage() {
                     )}
                   </div>
 
-                  <div className="mb-3 flex items-start justify-between gap-3">
-                    <h3 className="text-xl font-semibold tracking-tight">
-                      {item.title}
-                    </h3>
+                  <div className="space-y-2">
+                    <div className="flex items-start justify-between gap-3">
+                      <h3 className="text-xl font-semibold tracking-tight">
+                        {item.title}
+                      </h3>
 
-                    <span
-                      className={`rounded-full px-3 py-1 text-xs font-medium capitalize ${
-                        (item.status || "active") === "active"
-                          ? "bg-green-100 text-green-700"
-                          : item.status === "paused"
-                          ? "bg-yellow-100 text-yellow-700"
-                          : "bg-neutral-200 text-neutral-700"
-                      }`}
-                    >
-                      {item.status || "active"}
-                    </span>
+                      <span className="rounded-full bg-green-100 px-3 py-1 text-xs font-medium text-green-700">
+                        {item.status || "active"}
+                      </span>
+                    </div>
+
+                    <p className="line-clamp-2 text-sm leading-6 text-black/60">
+                      {item.description}
+                    </p>
+
+                    <p className="pt-2 text-2xl font-semibold">{item.price}</p>
+
+                    <div className="pt-2 text-sm text-black/45">
+                      {(item.category || "general")} •{" "}
+                      {(item.condition || "used")} •{" "}
+                      {item.country || "No country"}
+                      {item.city ? ` • ${item.city}` : ""}
+                    </div>
                   </div>
-
-                  <p className="line-clamp-2 text-sm leading-6 text-black/60">
-                    {item.description}
-                  </p>
-
-                  <p className="pt-4 text-2xl font-semibold">{item.price}</p>
                 </article>
               </Link>
             ))}
