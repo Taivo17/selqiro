@@ -21,6 +21,8 @@ export default function SellPage() {
   const [city, setCity] = useState("");
 
   const [isSaving, setIsSaving] = useState(false);
+  const [userId, setUserId] = useState<string | null>(null);
+  const [checkingAuth, setCheckingAuth] = useState(true);
 
   useEffect(() => {
     const lastCountry = localStorage.getItem("lastCountry");
@@ -28,6 +30,19 @@ export default function SellPage() {
 
     if (lastCountry) setCountry(lastCountry);
     if (lastCity) setCity(lastCity);
+  }, []);
+
+  useEffect(() => {
+    const loadUser = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      setUserId(user?.id ?? null);
+      setCheckingAuth(false);
+    };
+
+    loadUser();
   }, []);
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -42,6 +57,12 @@ export default function SellPage() {
   };
 
   const handleSubmit = async () => {
+    if (!userId) {
+      alert("Please sign in first.");
+      router.push("/auth");
+      return;
+    }
+
     if (!title.trim() || !description.trim() || !price.trim()) {
       alert("Please fill title, description and price.");
       return;
@@ -62,6 +83,7 @@ export default function SellPage() {
 
     const { error } = await supabase.from("listings").insert([
       {
+        user_id: userId,
         title: cleanTitle,
         description: cleanDescription,
         price: cleanPrice,
@@ -89,6 +111,45 @@ export default function SellPage() {
     router.push("/my-page");
     router.refresh();
   };
+
+  if (checkingAuth) {
+    return (
+      <main className="min-h-screen bg-[#f8f8f6] px-6 py-10 text-black sm:px-8 lg:px-10">
+        <div className="mx-auto max-w-3xl rounded-[32px] border border-black/8 bg-white px-6 py-14 text-center shadow-sm">
+          <p className="text-lg font-medium">Checking account...</p>
+        </div>
+      </main>
+    );
+  }
+
+  if (!userId) {
+    return (
+      <main className="min-h-screen bg-[#f8f8f6] px-6 py-10 text-black sm:px-8 lg:px-10">
+        <div className="mx-auto max-w-3xl rounded-[32px] border border-black/8 bg-white px-6 py-14 text-center shadow-sm">
+          <p className="text-lg font-medium">You need to sign in first</p>
+          <p className="mt-2 text-black/55">
+            Create an account or sign in before publishing listings.
+          </p>
+
+          <div className="mt-6 flex justify-center gap-3">
+            <Link
+              href="/auth"
+              className="rounded-2xl bg-black px-5 py-3 text-sm font-medium text-white transition hover:opacity-90"
+            >
+              Go to auth
+            </Link>
+
+            <Link
+              href="/"
+              className="rounded-2xl border border-black/10 bg-white px-5 py-3 text-sm font-medium transition hover:bg-black/[0.03]"
+            >
+              Back to marketplace
+            </Link>
+          </div>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className="min-h-screen bg-[#f8f8f6] px-6 py-10 text-black sm:px-8 lg:px-10">
@@ -324,16 +385,14 @@ export default function SellPage() {
 
               <div className="space-y-3 text-sm leading-6 text-black/60">
                 <p>
-                  Listings are now saved to the shared database instead of only
-                  one device.
+                  New listings are now connected to the signed-in user account.
                 </p>
                 <p>
                   Your last selected country and city are remembered
                   automatically.
                 </p>
                 <p>
-                  Next we can update my-page and store views to read the same
-                  shared data everywhere.
+                  Next, my-page can show only the listings created by this user.
                 </p>
               </div>
             </div>

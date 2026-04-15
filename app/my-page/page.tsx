@@ -6,6 +6,7 @@ import { supabase } from "../../lib/supabase";
 
 type Listing = {
   id: number;
+  user_id?: string | null;
   created_at?: string;
   title: string;
   description: string;
@@ -26,6 +27,8 @@ export default function MyPage() {
     "all"
   );
   const [loading, setLoading] = useState(true);
+  const [userId, setUserId] = useState<string | null>(null);
+  const [checkingAuth, setCheckingAuth] = useState(true);
 
   const [editingId, setEditingId] = useState<number | null>(null);
   const [editTitle, setEditTitle] = useState("");
@@ -41,17 +44,31 @@ export default function MyPage() {
   const [editCity, setEditCity] = useState("");
   const [savingEdit, setSavingEdit] = useState(false);
 
-  const fetchListings = async () => {
+  useEffect(() => {
+    const loadUser = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      setUserId(user?.id ?? null);
+      setCheckingAuth(false);
+    };
+
+    loadUser();
+  }, []);
+
+  const fetchListings = async (currentUserId: string) => {
     setLoading(true);
 
     const { data, error } = await supabase
       .from("listings")
       .select("*")
+      .eq("user_id", currentUserId)
       .order("created_at", { ascending: false });
 
     if (error) {
-      console.error("Error fetching listings:", error);
-      alert("Failed to load listings from Supabase.");
+      console.error("Error fetching user listings:", error);
+      alert("Failed to load your listings from Supabase.");
       setLoading(false);
       return;
     }
@@ -61,17 +78,26 @@ export default function MyPage() {
   };
 
   useEffect(() => {
-    fetchListings();
-  }, []);
+    if (!userId) {
+      setListings([]);
+      setLoading(false);
+      return;
+    }
+
+    fetchListings(userId);
+  }, [userId]);
 
   const updateStatus = async (
     id: number,
     status: "active" | "paused" | "sold"
   ) => {
+    if (!userId) return;
+
     const { error } = await supabase
       .from("listings")
       .update({ status })
-      .eq("id", id);
+      .eq("id", id)
+      .eq("user_id", userId);
 
     if (error) {
       console.error("Error updating status:", error);
@@ -79,16 +105,22 @@ export default function MyPage() {
       return;
     }
 
-    await fetchListings();
+    await fetchListings(userId);
   };
 
   const deleteListing = async (id: number) => {
+    if (!userId) return;
+
     const confirmed = window.confirm(
       "Are you sure you want to delete this listing?"
     );
     if (!confirmed) return;
 
-    const { error } = await supabase.from("listings").delete().eq("id", id);
+    const { error } = await supabase
+      .from("listings")
+      .delete()
+      .eq("id", id)
+      .eq("user_id", userId);
 
     if (error) {
       console.error("Error deleting listing:", error);
@@ -100,7 +132,7 @@ export default function MyPage() {
       cancelEdit();
     }
 
-    await fetchListings();
+    await fetchListings(userId);
   };
 
   const startEdit = (item: Listing) => {
@@ -131,7 +163,7 @@ export default function MyPage() {
   };
 
   const saveEdit = async () => {
-    if (!editingId) return;
+    if (!editingId || !userId) return;
 
     if (!editTitle.trim() || !editDescription.trim() || !editPrice.trim()) {
       alert("Please fill title, description and price.");
@@ -162,7 +194,8 @@ export default function MyPage() {
         city: cleanCity,
         location,
       })
-      .eq("id", editingId);
+      .eq("id", editingId)
+      .eq("user_id", userId);
 
     setSavingEdit(false);
 
@@ -173,7 +206,7 @@ export default function MyPage() {
     }
 
     cancelEdit();
-    await fetchListings();
+    await fetchListings(userId);
   };
 
   const handleEditImageUpload = (
@@ -208,6 +241,45 @@ export default function MyPage() {
   const pausedCount = listings.filter((item) => item.status === "paused").length;
   const soldCount = listings.filter((item) => item.status === "sold").length;
 
+  if (checkingAuth) {
+    return (
+      <main className="min-h-screen bg-[#f8f8f6] px-6 py-10 text-black sm:px-8 lg:px-10">
+        <div className="mx-auto max-w-4xl rounded-[32px] border border-black/8 bg-white px-6 py-14 text-center shadow-sm">
+          <p className="text-lg font-medium">Checking account...</p>
+        </div>
+      </main>
+    );
+  }
+
+  if (!userId) {
+    return (
+      <main className="min-h-screen bg-[#f8f8f6] px-6 py-10 text-black sm:px-8 lg:px-10">
+        <div className="mx-auto max-w-4xl rounded-[32px] border border-black/8 bg-white px-6 py-14 text-center shadow-sm">
+          <p className="text-lg font-medium">You are not signed in</p>
+          <p className="mt-2 text-black/55">
+            Sign in to view and manage your own listings.
+          </p>
+
+          <div className="mt-6 flex justify-center gap-3">
+            <Link
+              href="/auth"
+              className="rounded-2xl bg-black px-5 py-3 text-sm font-medium text-white transition hover:opacity-90"
+            >
+              Go to auth
+            </Link>
+
+            <Link
+              href="/"
+              className="rounded-2xl border border-black/10 bg-white px-5 py-3 text-sm font-medium transition hover:bg-black/[0.03]"
+            >
+              Back to marketplace
+            </Link>
+          </div>
+        </div>
+      </main>
+    );
+  }
+
   return (
     <main className="min-h-screen bg-[#f8f8f6] px-6 py-10 text-black sm:px-8 lg:px-10">
       <div className="mx-auto max-w-7xl">
@@ -224,10 +296,10 @@ export default function MyPage() {
                 </div>
                 <div>
                   <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl">
-                    Taivo Garage
+                    My listings
                   </h1>
                   <p className="mt-2 text-base text-black/60">
-                    Personal store for parts, tools and useful finds.
+                    These are the listings connected to your signed-in account.
                   </p>
                 </div>
               </div>
@@ -237,7 +309,7 @@ export default function MyPage() {
                   Personal store
                 </span>
                 <span className="rounded-full border border-black/10 bg-black/[0.03] px-4 py-2">
-                  Private seller
+                  User-linked listings
                 </span>
                 <span className="rounded-full border border-black/10 bg-black/[0.03] px-4 py-2">
                   Shared database
@@ -471,7 +543,7 @@ export default function MyPage() {
 
         <section className="mb-8 grid gap-6 md:grid-cols-3">
           <div className="rounded-[30px] border border-black/8 bg-white p-6 shadow-sm">
-            <p className="text-sm text-black/45">All listings</p>
+            <p className="text-sm text-black/45">My listings</p>
             <p className="mt-2 text-4xl font-semibold">{listings.length}</p>
           </div>
 
@@ -531,13 +603,13 @@ export default function MyPage() {
 
         {loading ? (
           <div className="rounded-[32px] border border-black/8 bg-white px-6 py-14 text-center shadow-sm">
-            <p className="text-lg font-medium">Loading listings...</p>
+            <p className="text-lg font-medium">Loading your listings...</p>
           </div>
         ) : filteredListings.length === 0 ? (
           <div className="rounded-[32px] border border-dashed border-black/10 bg-white px-6 py-14 text-center shadow-sm">
-            <p className="text-lg font-medium">No matching listings</p>
+            <p className="text-lg font-medium">No listings for this account</p>
             <p className="mt-2 text-black/55">
-              Try another search or filter, or add a new listing.
+              Create a new listing and it will appear here.
             </p>
 
             <Link
