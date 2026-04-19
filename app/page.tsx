@@ -6,397 +6,178 @@ import { supabase } from "../lib/supabase";
 
 type Listing = {
   id: number;
+  user_id?: string | null;
   created_at?: string;
   title: string;
   description: string;
   price: string;
   image?: string | null;
   status?: "active" | "paused" | "sold";
-  category?: string;
-  condition?: string;
-  location?: string;
-  country?: string;
-  city?: string;
+  category?: string | null;
+  condition?: string | null;
+  location?: string | null;
+  country?: string | null;
+  city?: string | null;
 };
 
-export default function Home() {
-  const [password, setPassword] = useState("");
-  const [authorized, setAuthorized] = useState(false);
-  const [listings, setListings] = useState<Listing[]>([]);
+type ProfileRow = {
+  id: string;
+  store_slug?: string | null;
+  store_name?: string | null;
+};
 
+export default function MarketplacePage() {
+  const [listings, setListings] = useState<Listing[]>([]);
+  const [profilesByUserId, setProfilesByUserId] = useState<
+    Record<string, ProfileRow>
+  >({});
   const [search, setSearch] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("all");
   const [conditionFilter, setConditionFilter] = useState("all");
   const [locationFilter, setLocationFilter] = useState("");
   const [nearOnly, setNearOnly] = useState(false);
-
-  const [userLocation, setUserLocation] = useState<string | null>(null);
-  const [locationStatus, setLocationStatus] = useState<
-    "loading" | "granted" | "denied"
-  >("loading");
-
-  const correctPassword = "selqiro123";
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const savedAccess = localStorage.getItem("selqiro-access");
-    if (savedAccess === "granted") {
-      setAuthorized(true);
-    }
-  }, []);
+    const loadMarketplace = async () => {
+      setLoading(true);
 
-  useEffect(() => {
-    const fetchListings = async () => {
-      const { data, error } = await supabase
+      const { data: listingData, error: listingError } = await supabase
         .from("listings")
         .select("*")
+        .eq("status", "active")
         .order("created_at", { ascending: false });
 
-      if (error) {
-        console.error("Error fetching listings from Supabase:", error);
-
-        const stored = JSON.parse(localStorage.getItem("listings") || "[]");
-        setListings(stored);
+      if (listingError) {
+        console.error("Error loading marketplace listings:", listingError);
+        setListings([]);
+        setProfilesByUserId({});
+        setLoading(false);
         return;
       }
 
-      if (data && data.length > 0) {
-        setListings(data as Listing[]);
+      const loadedListings = (listingData || []) as Listing[];
+      setListings(loadedListings);
+
+      const userIds = Array.from(
+        new Set(
+          loadedListings
+            .map((item) => item.user_id)
+            .filter((value): value is string => Boolean(value))
+        )
+      );
+
+      if (userIds.length === 0) {
+        setProfilesByUserId({});
+        setLoading(false);
         return;
       }
 
-      const stored = JSON.parse(localStorage.getItem("listings") || "[]");
-      setListings(stored);
+      const { data: profileData, error: profileError } = await supabase
+        .from("profiles")
+        .select("id, store_slug, store_name")
+        .in("id", userIds);
+
+      if (profileError) {
+        console.error("Error loading store profiles:", profileError);
+        setProfilesByUserId({});
+        setLoading(false);
+        return;
+      }
+
+      const profileMap: Record<string, ProfileRow> = {};
+      ((profileData || []) as ProfileRow[]).forEach((profile) => {
+        profileMap[profile.id] = profile;
+      });
+
+      setProfilesByUserId(profileMap);
+      setLoading(false);
     };
 
-    fetchListings();
+    loadMarketplace();
   }, []);
 
-  useEffect(() => {
-    if (!authorized) return;
-
-    if (!navigator.geolocation) {
-      setLocationStatus("denied");
-      return;
-    }
-
-    navigator.geolocation.getCurrentPosition(
-      () => {
-        setUserLocation("Near you");
-        setLocationStatus("granted");
-      },
-      () => {
-        setLocationStatus("denied");
-      }
+  const categories = useMemo(() => {
+    const values = Array.from(
+      new Set(
+        listings
+          .map((item) => (item.category || "general").toLowerCase())
+          .filter(Boolean)
+      )
     );
-  }, [authorized]);
+    return values.sort();
+  }, [listings]);
 
-  const handleLogin = () => {
-    if (password === correctPassword) {
-      localStorage.setItem("selqiro-access", "granted");
-      setAuthorized(true);
-    } else {
-      alert("Wrong password");
-    }
-  };
-
-  const activeListings = useMemo(() => {
-    return listings.filter((item) => (item.status || "active") === "active");
+  const conditions = useMemo(() => {
+    const values = Array.from(
+      new Set(
+        listings
+          .map((item) => (item.condition || "used").toLowerCase())
+          .filter(Boolean)
+      )
+    );
+    return values.sort();
   }, [listings]);
 
   const filteredListings = useMemo(() => {
-    const result = activeListings.filter((item) => {
+    return listings.filter((item) => {
+      const title = item.title?.toLowerCase() || "";
+      const description = item.description?.toLowerCase() || "";
+      const country = item.country?.toLowerCase() || "";
+      const city = item.city?.toLowerCase() || "";
+      const location = item.location?.toLowerCase() || "";
+      const category = (item.category || "general").toLowerCase();
+      const condition = (item.condition || "used").toLowerCase();
+
       const matchesSearch =
-        item.title.toLowerCase().includes(search.toLowerCase()) ||
-        item.description.toLowerCase().includes(search.toLowerCase());
+        !search.trim() ||
+        title.includes(search.toLowerCase()) ||
+        description.includes(search.toLowerCase());
 
       const matchesCategory =
-        categoryFilter === "all"
-          ? true
-          : (item.category || "general") === categoryFilter;
+        categoryFilter === "all" ? true : category === categoryFilter;
 
       const matchesCondition =
-        conditionFilter === "all"
-          ? true
-          : (item.condition || "used") === conditionFilter;
+        conditionFilter === "all" ? true : condition === conditionFilter;
 
+      const locationNeedle = locationFilter.trim().toLowerCase();
       const matchesLocation =
-        locationFilter.trim() === ""
-          ? true
-          : (item.location || "")
-              .toLowerCase()
-              .includes(locationFilter.toLowerCase());
+        !locationNeedle ||
+        country.includes(locationNeedle) ||
+        city.includes(locationNeedle) ||
+        location.includes(locationNeedle);
+
+      const matchesNearOnly = nearOnly ? matchesLocation : true;
 
       return (
         matchesSearch &&
         matchesCategory &&
         matchesCondition &&
-        matchesLocation
+        matchesLocation &&
+        matchesNearOnly
       );
     });
-
-    if (userLocation && locationStatus === "granted") {
-      const nearFiltered = result.filter((item) =>
-        (item.location || "")
-          .toLowerCase()
-          .includes(userLocation.toLowerCase())
-      );
-
-      if (nearOnly) {
-        return nearFiltered;
-      }
-
-      return [...result].sort((a, b) => {
-        const aMatch =
-          (a.location || "").toLowerCase().includes(userLocation.toLowerCase());
-        const bMatch =
-          (b.location || "").toLowerCase().includes(userLocation.toLowerCase());
-
-        if (aMatch && !bMatch) return -1;
-        if (!aMatch && bMatch) return 1;
-        return 0;
-      });
-    }
-
-    return result;
   }, [
-    activeListings,
+    listings,
     search,
     categoryFilter,
     conditionFilter,
     locationFilter,
-    userLocation,
-    locationStatus,
     nearOnly,
   ]);
-
-  const dynamicCategories = useMemo(() => {
-    const source = activeListings.filter((item) => {
-      const matchesSearch =
-        item.title.toLowerCase().includes(search.toLowerCase()) ||
-        item.description.toLowerCase().includes(search.toLowerCase());
-
-      const matchesCondition =
-        conditionFilter === "all"
-          ? true
-          : (item.condition || "used") === conditionFilter;
-
-      const matchesLocation =
-        locationFilter.trim() === ""
-          ? true
-          : (item.location || "")
-              .toLowerCase()
-              .includes(locationFilter.toLowerCase());
-
-      const matchesNear =
-        nearOnly && userLocation && locationStatus === "granted"
-          ? (item.location || "")
-              .toLowerCase()
-              .includes(userLocation.toLowerCase())
-          : true;
-
-      return matchesSearch && matchesCondition && matchesLocation && matchesNear;
-    });
-
-    return Array.from(
-      new Set(source.map((item) => item.category || "general"))
-    );
-  }, [
-    activeListings,
-    search,
-    conditionFilter,
-    locationFilter,
-    nearOnly,
-    userLocation,
-    locationStatus,
-  ]);
-
-  const dynamicConditions = useMemo(() => {
-    const source = activeListings.filter((item) => {
-      const matchesSearch =
-        item.title.toLowerCase().includes(search.toLowerCase()) ||
-        item.description.toLowerCase().includes(search.toLowerCase());
-
-      const matchesCategory =
-        categoryFilter === "all"
-          ? true
-          : (item.category || "general") === categoryFilter;
-
-      const matchesLocation =
-        locationFilter.trim() === ""
-          ? true
-          : (item.location || "")
-              .toLowerCase()
-              .includes(locationFilter.toLowerCase());
-
-      const matchesNear =
-        nearOnly && userLocation && locationStatus === "granted"
-          ? (item.location || "")
-              .toLowerCase()
-              .includes(userLocation.toLowerCase())
-          : true;
-
-      return matchesSearch && matchesCategory && matchesLocation && matchesNear;
-    });
-
-    return Array.from(
-      new Set(source.map((item) => item.condition || "used"))
-    );
-  }, [
-    activeListings,
-    search,
-    categoryFilter,
-    locationFilter,
-    nearOnly,
-    userLocation,
-    locationStatus,
-  ]);
-
-  if (!authorized) {
-    return (
-      <main className="min-h-screen bg-[#f8f8f6] px-6 py-16 text-black">
-        <div className="mx-auto max-w-md rounded-[32px] border border-black/10 bg-white p-8 shadow-sm">
-          <p className="mb-3 text-sm uppercase tracking-[0.2em] text-black/40">
-            Selqiro Private Access
-          </p>
-          <h1 className="mb-3 text-3xl font-semibold tracking-tight">
-            Enter project
-          </h1>
-          <p className="mb-6 text-black/60">
-            This preview is protected while the platform is under development.
-          </p>
-
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="Password"
-            className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-black/30"
-          />
-
-          <button
-            onClick={handleLogin}
-            className="mt-4 w-full rounded-2xl bg-black px-4 py-3 text-white transition hover:opacity-90"
-          >
-            Enter
-          </button>
-        </div>
-      </main>
-    );
-  }
 
   return (
     <main className="min-h-screen bg-[#f8f8f6] px-6 py-10 text-black sm:px-8 lg:px-10">
       <div className="mx-auto max-w-7xl">
-        <header className="mb-8 rounded-[36px] border border-black/8 bg-white px-6 py-6 shadow-sm sm:px-8">
-          <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between">
-            <div className="max-w-2xl">
-              <p className="mb-3 text-xs font-medium uppercase tracking-[0.24em] text-black/40">
-                Selqiro
-              </p>
-              <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl">
-                Marketplace
-              </h1>
-              <p className="mt-4 max-w-xl text-base leading-7 text-black/60 sm:text-lg">
-                Discover active listings from nearby sellers, personal stores and
-                useful finds in one clean marketplace.
-              </p>
+        <section className="mb-8 rounded-[36px] border border-black/8 bg-white p-6 shadow-sm sm:p-8">
+          <p className="mb-3 text-xs font-medium uppercase tracking-[0.22em] text-black/40">
+            Filters
+          </p>
+          <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl">
+            Browse marketplace
+          </h1>
 
-              <div className="mt-4 text-sm text-black/60">
-                {locationStatus === "loading" && "Detecting location..."}
-                {locationStatus === "granted" && `📍 ${userLocation}`}
-                {locationStatus === "denied" && "🌍 Showing all locations"}
-              </div>
-
-              <div className="mt-6 flex flex-wrap gap-3 text-sm text-black/55">
-                <span className="rounded-full border border-black/10 bg-black/[0.03] px-4 py-2">
-                  Personal stores
-                </span>
-                <span className="rounded-full border border-black/10 bg-black/[0.03] px-4 py-2">
-                  Structured listings
-                </span>
-                <span className="rounded-full border border-black/10 bg-black/[0.03] px-4 py-2">
-                  AI-assisted future
-                </span>
-              </div>
-            </div>
-
-            <div className="flex flex-wrap gap-3">
-              <Link
-                href="/sell"
-                className="rounded-2xl bg-green-500 px-5 py-3 text-sm font-medium text-white shadow-sm transition hover:opacity-90"
-              >
-                + Start selling
-              </Link>
-              <Link
-                href="/my-page"
-                className="rounded-2xl border border-black/10 bg-white px-5 py-3 text-sm font-medium transition hover:bg-black/[0.03]"
-              >
-                My page
-              </Link>
-            </div>
-          </div>
-        </header>
-
-        <section className="mb-8 grid gap-6 lg:grid-cols-[1.5fr_1fr]">
-          <div className="rounded-[32px] border border-black/8 bg-white p-6 shadow-sm sm:p-8">
-            <p className="mb-3 text-xs font-medium uppercase tracking-[0.22em] text-black/40">
-              Featured store
-            </p>
-
-            <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
-              <div>
-                <h2 className="text-3xl font-semibold tracking-tight">
-                  Taivo Garage
-                </h2>
-                <p className="mt-3 max-w-xl text-black/60">
-                  Personal store for parts, tools and useful finds. A clean profile
-                  where listings feel more like a real mini-shop than random ads.
-                </p>
-              </div>
-
-              <Link
-                href="/store/taivo"
-                className="inline-flex rounded-2xl border border-black/10 bg-white px-5 py-3 text-sm font-medium transition hover:bg-black/[0.03]"
-              >
-                Visit store
-              </Link>
-            </div>
-          </div>
-
-          <div className="rounded-[32px] border border-black/8 bg-white p-6 shadow-sm sm:p-8">
-            <p className="mb-3 text-xs font-medium uppercase tracking-[0.22em] text-black/40">
-              Current state
-            </p>
-
-            <div className="space-y-4">
-              <div className="rounded-2xl bg-black/[0.03] px-4 py-4">
-                <p className="text-sm text-black/45">Active listings</p>
-                <p className="mt-1 text-3xl font-semibold">
-                  {filteredListings.length}
-                </p>
-              </div>
-
-              <div className="rounded-2xl bg-black/[0.03] px-4 py-4">
-                <p className="text-sm text-black/45">Available categories</p>
-                <p className="mt-1 text-3xl font-semibold">
-                  {dynamicCategories.length}
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="mb-8 rounded-[32px] border border-black/8 bg-white p-6 shadow-sm sm:p-8">
-          <div className="mb-5">
-            <p className="text-xs font-medium uppercase tracking-[0.22em] text-black/40">
-              Filters
-            </p>
-            <h2 className="mt-2 text-2xl font-semibold tracking-tight">
-              Browse marketplace
-            </h2>
-          </div>
-
-          <div className="grid gap-4 lg:grid-cols-5">
+          <div className="mt-6 grid gap-4 xl:grid-cols-[1.1fr_0.9fr_0.9fr_1fr_0.95fr]">
             <input
               type="text"
               placeholder="Search listings..."
@@ -411,9 +192,9 @@ export default function Home() {
               className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-black/30"
             >
               <option value="all">All categories</option>
-              {dynamicCategories.map((cat) => (
-                <option key={cat} value={cat}>
-                  {cat}
+              {categories.map((value) => (
+                <option key={value} value={value}>
+                  {value.charAt(0).toUpperCase() + value.slice(1)}
                 </option>
               ))}
             </select>
@@ -424,9 +205,9 @@ export default function Home() {
               className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-black/30"
             >
               <option value="all">All conditions</option>
-              {dynamicConditions.map((cond) => (
-                <option key={cond} value={cond}>
-                  {cond}
+              {conditions.map((value) => (
+                <option key={value} value={value}>
+                  {value.charAt(0).toUpperCase() + value.slice(1)}
                 </option>
               ))}
             </select>
@@ -439,81 +220,111 @@ export default function Home() {
               className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-black/30"
             />
 
-            <div className="flex items-center gap-2 rounded-2xl border border-black/10 bg-white px-4 py-3">
+            <label className="flex items-center gap-3 rounded-2xl border border-black/10 bg-white px-4 py-3">
               <input
                 type="checkbox"
                 checked={nearOnly}
                 onChange={(e) => setNearOnly(e.target.checked)}
+                className="h-5 w-5"
               />
-              <span className="text-sm">Near you only</span>
-            </div>
+              <span className="text-sm text-black/75">Near you only</span>
+            </label>
           </div>
         </section>
 
-        <section>
-          <div className="mb-5 flex items-center justify-between gap-4">
-            <div>
-              <p className="text-xs font-medium uppercase tracking-[0.22em] text-black/40">
-                Listings
-              </p>
-              <h2 className="mt-2 text-2xl font-semibold tracking-tight">
-                Latest items
-              </h2>
-            </div>
+        <section className="mb-5">
+          <p className="text-xs font-medium uppercase tracking-[0.22em] text-black/40">
+            Listings
+          </p>
+          <h2 className="mt-2 text-2xl font-semibold tracking-tight">
+            Latest items
+          </h2>
+        </section>
+
+        {loading ? (
+          <div className="rounded-[32px] border border-black/8 bg-white px-6 py-14 text-center shadow-sm">
+            <p className="text-lg font-medium">Loading marketplace...</p>
           </div>
+        ) : filteredListings.length === 0 ? (
+          <div className="rounded-[32px] border border-dashed border-black/10 bg-white px-6 py-14 text-center shadow-sm">
+            <p className="text-lg font-medium">No matching listings</p>
+            <p className="mt-2 text-black/55">
+              Try changing your filters or search term.
+            </p>
+          </div>
+        ) : (
+          <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
+            {filteredListings.map((item) => {
+              const sellerProfile = item.user_id
+                ? profilesByUserId[item.user_id]
+                : undefined;
 
-          {filteredListings.length === 0 ? (
-            <div className="rounded-[32px] border border-dashed border-black/10 bg-white px-6 py-14 text-center shadow-sm">
-              <p className="text-lg font-medium">No matching active listings</p>
-              <p className="mt-2 text-black/55">
-                Try changing filters or add a new listing.
-              </p>
+              const storeSlug = sellerProfile?.store_slug || "";
+              const storeName = sellerProfile?.store_name || "Seller store";
 
-              <Link
-                href="/sell"
-                className="mt-6 inline-flex rounded-2xl bg-black px-5 py-3 text-sm font-medium text-white transition hover:opacity-90"
-              >
-                Create listing
-              </Link>
-            </div>
-          ) : (
-            <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
-              {filteredListings.map((item) => (
-                <Link key={item.id} href={`/listing/${item.id}`}>
-                  <article className="group overflow-hidden rounded-[30px] border border-black/8 bg-white p-4 shadow-sm transition duration-200 hover:-translate-y-1 hover:shadow-md">
-                    <div className="mb-4 overflow-hidden rounded-2xl bg-neutral-100">
-                      {item.image ? (
-                        <img
-                          src={item.image}
-                          alt={item.title}
-                          className="h-52 w-full object-cover transition duration-300 group-hover:scale-[1.02]"
-                        />
-                      ) : (
-                        <div className="h-52 w-full bg-neutral-100" />
-                      )}
-                    </div>
+              return (
+                <article
+                  key={item.id}
+                  className="overflow-hidden rounded-[30px] border border-black/8 bg-white p-4 shadow-sm transition duration-200 hover:-translate-y-1 hover:shadow-md"
+                >
+                  <Link href={`/listing/${item.id}`}>
+                    <div className="cursor-pointer">
+                      <div className="mb-4 overflow-hidden rounded-2xl bg-neutral-100">
+                        {item.image ? (
+                          <img
+                            src={item.image}
+                            alt={item.title}
+                            className="h-56 w-full object-cover"
+                          />
+                        ) : (
+                          <div className="h-56 w-full bg-neutral-100" />
+                        )}
+                      </div>
 
-                    <div className="space-y-2">
-                      <h3 className="text-xl font-semibold tracking-tight">
+                      <h3 className="text-2xl font-semibold tracking-tight">
                         {item.title}
                       </h3>
-                      <p className="line-clamp-2 text-sm leading-6 text-black/60">
+
+                      <p className="mt-3 line-clamp-2 text-base leading-7 text-black/60">
                         {item.description}
                       </p>
-                      <p className="pt-2 text-2xl font-semibold">{item.price}</p>
 
-                      <div className="pt-2 text-sm text-black/45">
-                        {(item.category || "general")} •{" "}
-                        {(item.condition || "used")} •{" "}
-                        {item.location || "No location"}
+                      <p className="mt-5 text-4xl font-semibold">
+                        {item.price}
+                      </p>
+
+                      <div className="mt-4 text-sm text-black/45">
+                        {item.category || "general"} •{" "}
+                        {item.condition || "used"} •{" "}
+                        {item.country || "No country"}
+                        {item.city ? ` • ${item.city}` : ""}
                       </div>
                     </div>
-                  </article>
-                </Link>
-              ))}
-            </div>
-          )}
-        </section>
+                  </Link>
+
+                  <div className="mt-6 flex items-center justify-between gap-3">
+                    <span className="text-sm text-black/45">
+                      {storeName}
+                    </span>
+
+                    {storeSlug ? (
+                      <Link
+                        href={`/store/${storeSlug}`}
+                        className="rounded-2xl border border-black/10 bg-white px-4 py-2 text-sm font-medium transition hover:bg-black/[0.03]"
+                      >
+                        Visit store
+                      </Link>
+                    ) : (
+                      <span className="rounded-2xl border border-black/8 bg-black/[0.02] px-4 py-2 text-sm text-black/35">
+                        Store unavailable
+                      </span>
+                    )}
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+        )}
       </div>
     </main>
   );
