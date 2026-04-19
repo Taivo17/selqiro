@@ -5,32 +5,31 @@ import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { supabase } from "../../lib/supabase";
 
-type Profile = {
-  id: string;
-  store_name?: string | null;
+type ProfileRow = {
   store_slug?: string | null;
+  store_name?: string | null;
 };
 
 function navClass(active: boolean) {
   return active
     ? "rounded-2xl bg-black px-5 py-3 text-sm font-medium text-white shadow-sm transition"
-    : "rounded-2xl border border-black/10 bg-white px-5 py-3 text-sm font-medium text-black/65 transition hover:bg-black/[0.03]";
+    : "rounded-2xl border border-black/10 bg-white px-5 py-3 text-sm font-medium text-black/70 transition hover:bg-black/[0.03]";
 }
 
 export default function SiteHeader() {
   const pathname = usePathname();
   const router = useRouter();
 
-  const [userEmail, setUserEmail] = useState<string>("");
   const [userId, setUserId] = useState<string | null>(null);
+  const [userEmail, setUserEmail] = useState<string>("");
   const [storeSlug, setStoreSlug] = useState<string>("");
-  const [loading, setLoading] = useState(true);
+  const [loadingAuth, setLoadingAuth] = useState(true);
   const [loggingOut, setLoggingOut] = useState(false);
 
   useEffect(() => {
     let mounted = true;
 
-    const loadSessionAndProfile = async () => {
+    const loadAuth = async () => {
       const {
         data: { user },
       } = await supabase.auth.getUser();
@@ -38,69 +37,56 @@ export default function SiteHeader() {
       if (!mounted) return;
 
       setUserId(user?.id ?? null);
-      setUserEmail(user?.email || "");
+      setUserEmail(user?.email ?? "");
+      setLoadingAuth(false);
 
       if (user?.id) {
         const { data } = await supabase
           .from("profiles")
-          .select("id, store_name, store_slug")
+          .select("store_slug, store_name")
           .eq("id", user.id)
           .maybeSingle();
 
         if (!mounted) return;
 
-        if (data) {
-          const profile = data as Profile;
-          setStoreSlug(profile.store_slug || "");
-        } else {
-          setStoreSlug("");
-        }
+        const profile = data as ProfileRow | null;
+        setStoreSlug(profile?.store_slug || "");
       } else {
         setStoreSlug("");
       }
-
-      setLoading(false);
     };
 
-    loadSessionAndProfile();
+    loadAuth();
 
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(async (_event, session) => {
-      const user = session?.user ?? null;
+      const currentUser = session?.user ?? null;
 
-      if (!mounted) return;
+      setUserId(currentUser?.id ?? null);
+      setUserEmail(currentUser?.email ?? "");
 
-      setUserId(user?.id ?? null);
-      setUserEmail(user?.email || "");
-
-      if (user?.id) {
+      if (currentUser?.id) {
         const { data } = await supabase
           .from("profiles")
-          .select("id, store_name, store_slug")
-          .eq("id", user.id)
+          .select("store_slug, store_name")
+          .eq("id", currentUser.id)
           .maybeSingle();
 
-        if (!mounted) return;
-
-        if (data) {
-          const profile = data as Profile;
-          setStoreSlug(profile.store_slug || "");
-        } else {
-          setStoreSlug("");
-        }
+        const profile = data as ProfileRow | null;
+        setStoreSlug(profile?.store_slug || "");
       } else {
         setStoreSlug("");
       }
 
-      setLoading(false);
+      router.refresh();
     });
 
     return () => {
       mounted = false;
       subscription.unsubscribe();
     };
-  }, []);
+  }, [router]);
 
   const handleLogout = async () => {
     setLoggingOut(true);
@@ -118,111 +104,96 @@ export default function SiteHeader() {
     router.refresh();
   };
 
-  const shortEmail = userEmail ? userEmail.split("@")[0] : "";
+  const isMarketplace = pathname === "/";
+  const isMyPage = pathname.startsWith("/my-page");
+  const isSell = pathname.startsWith("/sell");
+  const isProfile = pathname.startsWith("/profile");
+  const isStore = pathname.startsWith("/store");
 
   return (
-    <header className="sticky top-0 z-40 border-b border-black/8 bg-[#f8f8f6]/95 backdrop-blur">
-      <div className="mx-auto flex max-w-7xl flex-col gap-4 px-6 py-4 sm:px-8 lg:px-10">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <Link href="/" className="text-2xl font-semibold tracking-tight">
-            Selqiro
-          </Link>
-
+    <header className="sticky top-0 z-30 border-b border-black/6 bg-[#f8f8f6]/90 backdrop-blur">
+      <div className="mx-auto flex max-w-7xl flex-col gap-4 px-4 py-4 sm:px-6 lg:px-8">
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <div className="flex flex-wrap items-center gap-3">
-            {loading ? (
-              <span className="rounded-full border border-black/10 bg-white px-4 py-2 text-sm text-black/45">
+            <Link
+              href="/"
+              className="mr-2 text-2xl font-semibold tracking-tight text-black"
+            >
+              Selqiro
+            </Link>
+
+            <nav className="flex flex-wrap gap-2">
+              <Link href="/" className={navClass(isMarketplace)}>
+                Marketplace
+              </Link>
+
+              <Link href="/my-page" className={navClass(isMyPage)}>
+                My page
+              </Link>
+
+              <Link href="/sell" className={navClass(isSell)}>
+                Sell
+              </Link>
+
+              {storeSlug ? (
+                <Link href={`/store/${storeSlug}`} className={navClass(isStore)}>
+                  Store
+                </Link>
+              ) : (
+                <Link href="/profile" className={navClass(isProfile)}>
+                  Store
+                </Link>
+              )}
+            </nav>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-2">
+            {storeSlug && (
+              <Link
+                href={`/store/${storeSlug}`}
+                className="rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm font-medium text-black/70 transition hover:bg-black/[0.03]"
+              >
+                View my store
+              </Link>
+            )}
+
+            <Link
+              href="/profile"
+              className={pathname.startsWith("/profile")
+                ? "rounded-2xl bg-black px-4 py-3 text-sm font-medium text-white transition"
+                : "rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm font-medium text-black/70 transition hover:bg-black/[0.03]"}
+            >
+              Profile
+            </Link>
+
+            {loadingAuth ? (
+              <div className="rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm text-black/45">
                 Loading...
-              </span>
+              </div>
             ) : userId ? (
               <>
-                <span className="rounded-full border border-black/10 bg-white px-4 py-2 text-sm text-black/55">
-                  {shortEmail || "Signed in"}
-                </span>
-
-                <Link
-                  href="/sell"
-                  className="rounded-2xl bg-green-500 px-5 py-3 text-sm font-medium text-white shadow-sm transition hover:opacity-90"
-                >
-                  + Add listing
-                </Link>
+                <div className="rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm text-black/55">
+                  {userEmail || "Signed in"}
+                </div>
 
                 <button
                   onClick={handleLogout}
                   disabled={loggingOut}
-                  className="rounded-2xl border border-black/10 bg-white px-5 py-3 text-sm font-medium transition hover:bg-black/[0.03] disabled:opacity-60"
+                  className="rounded-2xl bg-green-500 px-4 py-3 text-sm font-medium text-white transition hover:opacity-90 disabled:opacity-60"
                 >
                   {loggingOut ? "Logging out..." : "Log out"}
                 </button>
               </>
             ) : (
-              <>
-                <Link
-                  href="/auth"
-                  className="rounded-2xl border border-black/10 bg-white px-5 py-3 text-sm font-medium transition hover:bg-black/[0.03]"
-                >
-                  Sign in
-                </Link>
-
-                <Link
-                  href="/sell"
-                  className="rounded-2xl bg-green-500 px-5 py-3 text-sm font-medium text-white shadow-sm transition hover:opacity-90"
-                >
-                  + Add listing
-                </Link>
-              </>
+              <Link
+                href="/auth"
+                className="rounded-2xl bg-green-500 px-4 py-3 text-sm font-medium text-white transition hover:opacity-90"
+              >
+                Sign in
+              </Link>
             )}
           </div>
         </div>
-
-        <nav className="flex flex-wrap gap-3">
-          <Link href="/" className={navClass(pathname === "/")}>
-            Marketplace
-          </Link>
-
-          {userId && (
-            <>
-              <Link
-                href="/my-page"
-                className={navClass(pathname === "/my-page")}
-              >
-                My page
-              </Link>
-
-              <Link
-                href="/profile"
-                className={navClass(pathname === "/profile")}
-              >
-                Profile
-              </Link>
-            </>
-          )}
-
-          <Link href="/sell" className={navClass(pathname === "/sell")}>
-            Sell
-          </Link>
-
-          {userId && storeSlug ? (
-            <Link
-              href={`/store/${storeSlug}`}
-              className={navClass(pathname === `/store/${storeSlug}`)}
-            >
-              My store
-            </Link>
-          ) : (
-            <Link
-              href="/store/taivo"
-              className={navClass(pathname === "/store/taivo")}
-            >
-              Store
-            </Link>
-          )}
-
-          {!userId && (
-            <Link href="/auth" className={navClass(pathname === "/auth")}>
-              Auth
-            </Link>
-          )}
-        </nav>
       </div>
     </header>
   );

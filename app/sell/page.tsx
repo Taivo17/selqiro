@@ -114,15 +114,23 @@ export default function SellPage() {
     const suggestions: string[] = [];
 
     if (images.length === 0) {
-      suggestions.push("Add 1–3 clear photos first so AI can help identify the item later.");
+      suggestions.push(
+        "Add 1–3 clear photos first so AI can help identify the item later."
+      );
     } else if (images.length === 1) {
-      suggestions.push("A second photo from another angle would improve future AI suggestions.");
+      suggestions.push(
+        "A second photo from another angle would improve future AI suggestions."
+      );
     } else {
-      suggestions.push("Great start. Multiple photos will help future AI detection and search.");
+      suggestions.push(
+        "Great start. Multiple photos will help future AI detection and search."
+      );
     }
 
     if (!title.trim()) {
-      suggestions.push("Later AI can suggest a title based on your photos and selected category.");
+      suggestions.push(
+        "Later AI can suggest a title based on your photos and selected category."
+      );
     }
 
     if (!description.trim()) {
@@ -130,7 +138,9 @@ export default function SellPage() {
     }
 
     if (!price.trim()) {
-      suggestions.push("Later AI can suggest a price range, but you always decide the final price.");
+      suggestions.push(
+        "Later AI can suggest a price range, but you always decide the final price."
+      );
     }
 
     return suggestions.slice(0, 3);
@@ -265,8 +275,9 @@ export default function SellPage() {
             Sell with AI-ready structure
           </h1>
           <p className="mt-4 max-w-3xl text-base leading-7 text-black/60 sm:text-lg">
-            Start with photos, then add the key details. This layout is designed so AI
-            can assist later without changing how people naturally create listings.
+            Start with photos, then add the key details. This layout is designed
+            so AI can assist later without changing how people naturally create
+            listings.
           </p>
         </header>
 
@@ -281,8 +292,9 @@ export default function SellPage() {
                   Add photos first
                 </h2>
                 <p className="mt-2 text-sm leading-6 text-black/60">
-                  Photos should be easy to add because future AI assistance starts from
-                  what the seller shows, not from hidden background tracking.
+                  Photos should be easy to add because future AI assistance
+                  starts from what the seller shows, not from hidden background
+                  tracking.
                 </p>
               </div>
 
@@ -295,7 +307,8 @@ export default function SellPage() {
                   className="block w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm"
                 />
                 <p className="mt-3 text-sm text-black/50">
-                  You can add up to 8 photos. The first photo becomes the main image.
+                  You can add up to 8 photos. The first photo becomes the main
+                  image.
                 </p>
               </div>
 
@@ -352,8 +365,8 @@ export default function SellPage() {
                   AI helper area
                 </h2>
                 <p className="mt-2 text-sm leading-6 text-black/60">
-                  This section is reserved for future AI assistance. AI should support
-                  the seller, not control the seller.
+                  This section is reserved for future AI assistance. AI should
+                  support the seller, not control the seller.
                 </p>
               </div>
 
@@ -379,8 +392,8 @@ export default function SellPage() {
                 </div>
 
                 <div className="mt-4 rounded-2xl border border-dashed border-black/12 bg-white px-4 py-4 text-sm text-black/50">
-                  Later this area can suggest title, category, condition, description,
-                  price range and missing photo angles.
+                  Later this area can suggest title, category, condition,
+                  description, price range and missing photo angles.
                 </div>
               </div>
             </div>
@@ -590,15 +603,16 @@ export default function SellPage() {
 
               <div className="space-y-3 text-sm leading-6 text-black/60">
                 <p>
-                  AI should help based on the listing data and photos the seller chooses
-                  to provide.
+                  AI should help based on the listing data and photos the seller
+                  chooses to provide.
                 </p>
                 <p>
-                  The system should not depend on unnecessary tracking of the user.
+                  The system should not depend on unnecessary tracking of the
+                  user.
                 </p>
                 <p>
-                  This page is intentionally structured now so future AI can be added
-                  without redesigning the whole selling flow.
+                  This page is intentionally structured now so future AI can be
+                  added without redesigning the whole selling flow.
                 </p>
               </div>
             </div>
