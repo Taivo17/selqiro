@@ -21,13 +21,31 @@ export default function SiteHeader() {
   const router = useRouter();
 
   const [userId, setUserId] = useState<string | null>(null);
-  const [userEmail, setUserEmail] = useState<string>("");
-  const [storeSlug, setStoreSlug] = useState<string>("");
+  const [userEmail, setUserEmail] = useState("");
+  const [storeSlug, setStoreSlug] = useState("");
   const [loadingAuth, setLoadingAuth] = useState(true);
   const [loggingOut, setLoggingOut] = useState(false);
 
   useEffect(() => {
     let mounted = true;
+
+    const loadProfileSlug = async (currentUserId: string | null) => {
+      if (!currentUserId) {
+        if (mounted) setStoreSlug("");
+        return;
+      }
+
+      const { data } = await supabase
+        .from("profiles")
+        .select("store_slug, store_name")
+        .eq("id", currentUserId)
+        .maybeSingle();
+
+      if (!mounted) return;
+
+      const profile = data as ProfileRow | null;
+      setStoreSlug(profile?.store_slug || "");
+    };
 
     const loadAuth = async () => {
       const {
@@ -40,20 +58,7 @@ export default function SiteHeader() {
       setUserEmail(user?.email ?? "");
       setLoadingAuth(false);
 
-      if (user?.id) {
-        const { data } = await supabase
-          .from("profiles")
-          .select("store_slug, store_name")
-          .eq("id", user.id)
-          .maybeSingle();
-
-        if (!mounted) return;
-
-        const profile = data as ProfileRow | null;
-        setStoreSlug(profile?.store_slug || "");
-      } else {
-        setStoreSlug("");
-      }
+      await loadProfileSlug(user?.id ?? null);
     };
 
     loadAuth();
@@ -63,30 +68,20 @@ export default function SiteHeader() {
     } = supabase.auth.onAuthStateChange(async (_event, session) => {
       const currentUser = session?.user ?? null;
 
+      if (!mounted) return;
+
       setUserId(currentUser?.id ?? null);
       setUserEmail(currentUser?.email ?? "");
+      setLoadingAuth(false);
 
-      if (currentUser?.id) {
-        const { data } = await supabase
-          .from("profiles")
-          .select("store_slug, store_name")
-          .eq("id", currentUser.id)
-          .maybeSingle();
-
-        const profile = data as ProfileRow | null;
-        setStoreSlug(profile?.store_slug || "");
-      } else {
-        setStoreSlug("");
-      }
-
-      router.refresh();
+      await loadProfileSlug(currentUser?.id ?? null);
     });
 
     return () => {
       mounted = false;
       subscription.unsubscribe();
     };
-  }, [router]);
+  }, []);
 
   const handleLogout = async () => {
     setLoggingOut(true);
@@ -101,7 +96,6 @@ export default function SiteHeader() {
     }
 
     router.push("/auth");
-    router.refresh();
   };
 
   const isMarketplace = pathname === "/";
@@ -159,9 +153,11 @@ export default function SiteHeader() {
 
             <Link
               href="/profile"
-              className={pathname.startsWith("/profile")
-                ? "rounded-2xl bg-black px-4 py-3 text-sm font-medium text-white transition"
-                : "rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm font-medium text-black/70 transition hover:bg-black/[0.03]"}
+              className={
+                pathname.startsWith("/profile")
+                  ? "rounded-2xl bg-black px-4 py-3 text-sm font-medium text-white transition"
+                  : "rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm font-medium text-black/70 transition hover:bg-black/[0.03]"
+              }
             >
               Profile
             </Link>
