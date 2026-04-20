@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { supabase } from "../../lib/supabase";
+import { useAuth } from "../../lib/useAuth";
 
 type Listing = {
   id: number;
@@ -21,14 +22,15 @@ type Listing = {
 };
 
 export default function MyPage() {
+  const { user, loading } = useAuth();
+  const userId = user?.id ?? null;
+
   const [listings, setListings] = useState<Listing[]>([]);
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState<"all" | "active" | "paused" | "sold">(
     "all"
   );
-  const [loading, setLoading] = useState(true);
-  const [userId, setUserId] = useState<string | null>(null);
-  const [checkingAuth, setCheckingAuth] = useState(true);
+  const [loadingListings, setLoadingListings] = useState(true);
 
   const [editingId, setEditingId] = useState<number | null>(null);
   const [editTitle, setEditTitle] = useState("");
@@ -44,21 +46,8 @@ export default function MyPage() {
   const [editCity, setEditCity] = useState("");
   const [savingEdit, setSavingEdit] = useState(false);
 
-  useEffect(() => {
-    const loadUser = async () => {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-
-      setUserId(user?.id ?? null);
-      setCheckingAuth(false);
-    };
-
-    loadUser();
-  }, []);
-
   const fetchListings = async (currentUserId: string) => {
-    setLoading(true);
+    setLoadingListings(true);
 
     const { data, error } = await supabase
       .from("listings")
@@ -69,23 +58,26 @@ export default function MyPage() {
     if (error) {
       console.error("Error fetching user listings:", error);
       alert("Failed to load your listings from Supabase.");
-      setLoading(false);
+      setListings([]);
+      setLoadingListings(false);
       return;
     }
 
     setListings((data || []) as Listing[]);
-    setLoading(false);
+    setLoadingListings(false);
   };
 
   useEffect(() => {
+    if (loading) return;
+
     if (!userId) {
       setListings([]);
-      setLoading(false);
+      setLoadingListings(false);
       return;
     }
 
     fetchListings(userId);
-  }, [userId]);
+  }, [userId, loading]);
 
   const updateStatus = async (
     id: number,
@@ -241,11 +233,11 @@ export default function MyPage() {
   const pausedCount = listings.filter((item) => item.status === "paused").length;
   const soldCount = listings.filter((item) => item.status === "sold").length;
 
-  if (checkingAuth) {
+  if (loading) {
     return (
       <main className="min-h-screen bg-[#f8f8f6] px-6 py-10 text-black sm:px-8 lg:px-10">
         <div className="mx-auto max-w-4xl rounded-[32px] border border-black/8 bg-white px-6 py-14 text-center shadow-sm">
-          <p className="text-lg font-medium">Checking account...</p>
+          <p className="text-lg font-medium">Loading session...</p>
         </div>
       </main>
     );
@@ -601,7 +593,7 @@ export default function MyPage() {
           </h2>
         </section>
 
-        {loading ? (
+        {loadingListings ? (
           <div className="rounded-[32px] border border-black/8 bg-white px-6 py-14 text-center shadow-sm">
             <p className="text-lg font-medium">Loading your listings...</p>
           </div>
