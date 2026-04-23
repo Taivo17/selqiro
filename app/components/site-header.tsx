@@ -4,10 +4,10 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { supabase } from "../../lib/supabase";
+import { useAuth } from "../../lib/useAuth";
 
 type ProfileRow = {
   store_slug?: string | null;
-  store_name?: string | null;
 };
 
 function navClass(active: boolean) {
@@ -19,69 +19,55 @@ function navClass(active: boolean) {
 export default function SiteHeader() {
   const pathname = usePathname();
   const router = useRouter();
+  const { user, loading } = useAuth();
 
-  const [userId, setUserId] = useState<string | null>(null);
-  const [userEmail, setUserEmail] = useState("");
   const [storeSlug, setStoreSlug] = useState("");
-  const [loadingAuth, setLoadingAuth] = useState(true);
+  const [loadingStoreSlug, setLoadingStoreSlug] = useState(false);
   const [loggingOut, setLoggingOut] = useState(false);
+
+  const userId = user?.id ?? null;
+  const userEmail = user?.email ?? "";
 
   useEffect(() => {
     let mounted = true;
 
-    const loadProfileSlug = async (currentUserId: string | null) => {
-      if (!currentUserId) {
-        if (mounted) setStoreSlug("");
+    const loadProfileSlug = async () => {
+      if (!userId) {
+        if (mounted) {
+          setStoreSlug("");
+          setLoadingStoreSlug(false);
+        }
         return;
       }
 
-      const { data } = await supabase
+      setLoadingStoreSlug(true);
+
+      const { data, error } = await supabase
         .from("profiles")
-        .select("store_slug, store_name")
-        .eq("id", currentUserId)
+        .select("store_slug")
+        .eq("id", userId)
         .maybeSingle();
 
       if (!mounted) return;
 
+      if (error) {
+        console.error("Error loading store slug:", error);
+        setStoreSlug("");
+        setLoadingStoreSlug(false);
+        return;
+      }
+
       const profile = data as ProfileRow | null;
       setStoreSlug(profile?.store_slug || "");
+      setLoadingStoreSlug(false);
     };
 
-    const loadAuth = async () => {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-
-      if (!mounted) return;
-
-      setUserId(user?.id ?? null);
-      setUserEmail(user?.email ?? "");
-      setLoadingAuth(false);
-
-      await loadProfileSlug(user?.id ?? null);
-    };
-
-    loadAuth();
-
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (_event, session) => {
-      const currentUser = session?.user ?? null;
-
-      if (!mounted) return;
-
-      setUserId(currentUser?.id ?? null);
-      setUserEmail(currentUser?.email ?? "");
-      setLoadingAuth(false);
-
-      await loadProfileSlug(currentUser?.id ?? null);
-    });
+    loadProfileSlug();
 
     return () => {
       mounted = false;
-      subscription.unsubscribe();
     };
-  }, []);
+  }, [userId]);
 
   const handleLogout = async () => {
     setLoggingOut(true);
@@ -103,6 +89,8 @@ export default function SiteHeader() {
   const isSell = pathname.startsWith("/sell");
   const isProfile = pathname.startsWith("/profile");
   const isStore = pathname.startsWith("/store");
+
+  const showStoreLink = !loadingStoreSlug && !!storeSlug;
 
   return (
     <header className="sticky top-0 z-30 border-b border-black/6 bg-[#f8f8f6]/90 backdrop-blur">
@@ -129,7 +117,7 @@ export default function SiteHeader() {
                 Sell
               </Link>
 
-              {storeSlug ? (
+              {showStoreLink ? (
                 <Link href={`/store/${storeSlug}`} className={navClass(isStore)}>
                   Store
                 </Link>
@@ -142,7 +130,7 @@ export default function SiteHeader() {
           </div>
 
           <div className="flex flex-wrap items-center gap-2">
-            {storeSlug && (
+            {showStoreLink && (
               <Link
                 href={`/store/${storeSlug}`}
                 className="rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm font-medium text-black/70 transition hover:bg-black/[0.03]"
@@ -162,7 +150,7 @@ export default function SiteHeader() {
               Profile
             </Link>
 
-            {loadingAuth ? (
+            {loading ? (
               <div className="rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm text-black/45">
                 Loading...
               </div>
