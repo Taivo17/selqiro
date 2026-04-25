@@ -1,40 +1,57 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
 import { useParams } from "next/navigation";
+import Link from "next/link";
 import { supabase } from "../../../lib/supabase";
 
 type Listing = {
   id: number;
-  created_at?: string;
   title: string;
   description: string;
   price: string;
   image?: string | null;
-  status?: "active" | "paused" | "sold";
   category?: string;
+  subcategory?: string;
   condition?: string;
-  location?: string;
   country?: string;
   city?: string;
+  location?: string;
+  manufacturer?: string;
+  part_number?: string;
+  oem_number?: string;
+  vehicle_brand?: string;
+  vehicle_model?: string;
+  vehicle_year?: string;
+  engine?: string;
+  details?: Record<string, unknown> | null;
+  ai_status?: string;
+  ai_level?: string;
 };
 
-export default function ListingDetailPage() {
+function FieldRow({ label, value }: { label: string; value?: string | null }) {
+  if (!value) return null;
+
+  return (
+    <div className="grid grid-cols-[110px_1fr] gap-3 text-sm sm:grid-cols-[160px_1fr]">
+      <span className="text-black/45">{label}</span>
+      <span className="min-w-0 break-words font-medium text-black/75">
+        {value}
+      </span>
+    </div>
+  );
+}
+
+export default function ListingPage() {
   const params = useParams();
-  const id = Number(params?.id);
+  const id = params?.id;
 
   const [listing, setListing] = useState<Listing | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchListing = async () => {
-      if (!id || Number.isNaN(id)) {
-        setLoading(false);
-        return;
-      }
-
-      setLoading(true);
+    const load = async () => {
+      if (!id) return;
 
       const { data, error } = await supabase
         .from("listings")
@@ -43,7 +60,7 @@ export default function ListingDetailPage() {
         .single();
 
       if (error) {
-        console.error("Error fetching listing:", error);
+        console.error(error);
         setListing(null);
         setLoading(false);
         return;
@@ -53,16 +70,14 @@ export default function ListingDetailPage() {
       setLoading(false);
     };
 
-    fetchListing();
+    load();
   }, [id]);
 
   if (loading) {
     return (
-      <main className="min-h-screen bg-[#f8f8f6] px-6 py-10 text-black sm:px-8 lg:px-10">
-        <div className="mx-auto max-w-6xl">
-          <div className="rounded-[32px] border border-black/8 bg-white px-6 py-14 text-center shadow-sm">
-            <p className="text-lg font-medium">Loading listing...</p>
-          </div>
+      <main className="min-h-screen bg-[#f8f8f6] px-4 py-8 text-black sm:px-6">
+        <div className="mx-auto max-w-5xl rounded-[28px] bg-white p-8 text-center shadow-sm">
+          Loading listing...
         </div>
       </main>
     );
@@ -70,169 +85,133 @@ export default function ListingDetailPage() {
 
   if (!listing) {
     return (
-      <main className="min-h-screen bg-[#f8f8f6] px-6 py-10 text-black sm:px-8 lg:px-10">
-        <div className="mx-auto max-w-6xl">
-          <div className="rounded-[32px] border border-dashed border-black/10 bg-white px-6 py-14 text-center shadow-sm">
-            <p className="text-lg font-medium">Listing not found</p>
-            <p className="mt-2 text-black/55">
-              This item may have been deleted or does not exist.
-            </p>
-
-            <div className="mt-6 flex flex-wrap justify-center gap-3">
-              <Link
-                href="/"
-                className="rounded-2xl bg-black px-5 py-3 text-sm font-medium text-white transition hover:opacity-90"
-              >
-                Back to marketplace
-              </Link>
-
-              <Link
-                href="/my-page"
-                className="rounded-2xl border border-black/10 bg-white px-5 py-3 text-sm font-medium transition hover:bg-black/[0.03]"
-              >
-                Back to my page
-              </Link>
-            </div>
-          </div>
+      <main className="min-h-screen bg-[#f8f8f6] px-4 py-8 text-black sm:px-6">
+        <div className="mx-auto max-w-5xl rounded-[28px] bg-white p-8 text-center shadow-sm">
+          Listing not found
         </div>
       </main>
     );
   }
 
-  const visibleLocation =
-    listing.location ||
-    [listing.country, listing.city].filter(Boolean).join(" • ") ||
-    "No location";
+  const hasTechnicalInfo =
+    Boolean(listing.manufacturer) ||
+    Boolean(listing.part_number) ||
+    Boolean(listing.oem_number);
+
+  const hasVehicleInfo =
+    Boolean(listing.vehicle_brand) ||
+    Boolean(listing.vehicle_model) ||
+    Boolean(listing.vehicle_year) ||
+    Boolean(listing.engine);
+
+  const hasAiInfo = Boolean(listing.ai_status) || Boolean(listing.ai_level);
 
   return (
-    <main className="min-h-screen bg-[#f8f8f6] px-6 py-10 text-black sm:px-8 lg:px-10">
-      <div className="mx-auto max-w-6xl">
-        <div className="mb-6 flex flex-wrap gap-3">
-          <Link
-            href="/"
-            className="rounded-2xl border border-black/10 bg-white px-5 py-3 text-sm font-medium transition hover:bg-black/[0.03]"
-          >
-            Back to marketplace
-          </Link>
+    <main className="min-h-screen overflow-x-hidden bg-[#f8f8f6] px-4 py-6 text-black sm:px-6 sm:py-8">
+      <div className="mx-auto w-full max-w-5xl space-y-5 sm:space-y-6">
+        <Link href="/" className="inline-flex text-sm font-medium text-black/55">
+          ← Back to marketplace
+        </Link>
 
-          <Link
-            href="/store/taivo"
-            className="rounded-2xl border border-black/10 bg-white px-5 py-3 text-sm font-medium transition hover:bg-black/[0.03]"
-          >
-            Visit store
-          </Link>
-
-          <Link
-            href="/my-page"
-            className="rounded-2xl border border-black/10 bg-white px-5 py-3 text-sm font-medium transition hover:bg-black/[0.03]"
-          >
-            My page
-          </Link>
+        <div className="overflow-hidden rounded-[28px] bg-neutral-100 shadow-sm sm:rounded-[32px]">
+          {listing.image ? (
+            <img
+              src={listing.image}
+              alt={listing.title}
+              className="h-[240px] w-full object-cover sm:h-[360px]"
+            />
+          ) : (
+            <div className="h-[240px] w-full sm:h-[360px]" />
+          )}
         </div>
 
-        <div className="grid gap-6 lg:grid-cols-[1.15fr_0.85fr]">
-          <section className="overflow-hidden rounded-[32px] border border-black/8 bg-white shadow-sm">
-            <div className="bg-neutral-100">
-              {listing.image ? (
-                <img
-                  src={listing.image}
-                  alt={listing.title}
-                  className="h-[340px] w-full object-cover sm:h-[460px]"
-                />
-              ) : (
-                <div className="h-[340px] w-full bg-neutral-100 sm:h-[460px]" />
-              )}
-            </div>
-          </section>
+        <section className="overflow-hidden rounded-[28px] bg-white p-5 shadow-sm sm:rounded-[32px] sm:p-6">
+          <p className="mb-3 text-xs font-medium uppercase tracking-[0.22em] text-black/35">
+            Listing details
+          </p>
 
-          <aside className="space-y-6">
-            <div className="rounded-[32px] border border-black/8 bg-white p-6 shadow-sm sm:p-8">
-              <p className="mb-3 text-xs font-medium uppercase tracking-[0.22em] text-black/40">
-                Listing details
-              </p>
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+            <div className="min-w-0">
+              <h1 className="break-words text-3xl font-semibold tracking-tight sm:text-4xl">
+                {listing.title}
+              </h1>
 
-              <div className="mb-4 flex items-start justify-between gap-4">
-                <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">
-                  {listing.title}
-                </h1>
-
-                <span
-                  className={`rounded-full px-3 py-1 text-xs font-medium capitalize ${
-                    (listing.status || "active") === "active"
-                      ? "bg-green-100 text-green-700"
-                      : listing.status === "paused"
-                      ? "bg-yellow-100 text-yellow-700"
-                      : "bg-neutral-200 text-neutral-700"
-                  }`}
-                >
-                  {listing.status || "active"}
-                </span>
-              </div>
-
-              <p className="text-3xl font-semibold sm:text-4xl">
+              <p className="mt-3 break-words text-3xl font-bold">
                 {listing.price}
               </p>
-
-              <div className="mt-5 flex flex-wrap gap-3 text-sm text-black/55">
-                <span className="rounded-full border border-black/10 bg-black/[0.03] px-4 py-2">
-                  {listing.category || "general"}
-                </span>
-                <span className="rounded-full border border-black/10 bg-black/[0.03] px-4 py-2">
-                  {listing.condition || "used"}
-                </span>
-                <span className="rounded-full border border-black/10 bg-black/[0.03] px-4 py-2">
-                  {visibleLocation}
-                </span>
-              </div>
-
-              <div className="mt-8">
-                <h2 className="text-sm font-medium uppercase tracking-[0.18em] text-black/40">
-                  Description
-                </h2>
-                <p className="mt-3 whitespace-pre-wrap text-base leading-7 text-black/70">
-                  {listing.description}
-                </p>
-              </div>
             </div>
 
-            <div className="rounded-[32px] border border-black/8 bg-white p-6 shadow-sm sm:p-8">
-              <p className="mb-3 text-xs font-medium uppercase tracking-[0.22em] text-black/40">
-                Seller
-              </p>
+            <span className="w-fit rounded-full bg-green-100 px-4 py-2 text-sm font-medium text-green-700">
+              Active
+            </span>
+          </div>
 
-              <div className="flex items-center gap-4">
-                <div className="flex h-14 w-14 items-center justify-center rounded-full bg-[#111827] text-lg font-semibold text-white">
-                  T
-                </div>
+          <div className="mt-5 flex flex-wrap gap-2 text-sm text-black/55">
+            {listing.category && (
+              <span className="max-w-full break-words rounded-full border border-black/10 bg-black/[0.02] px-4 py-2">
+                {listing.category}
+              </span>
+            )}
 
-                <div>
-                  <h2 className="text-xl font-semibold tracking-tight">
-                    Taivo Garage
-                  </h2>
-                  <p className="text-sm text-black/60">
-                    Personal store for parts, tools and useful finds.
-                  </p>
-                </div>
-              </div>
+            {listing.condition && (
+              <span className="max-w-full break-words rounded-full border border-black/10 bg-black/[0.02] px-4 py-2">
+                {listing.condition}
+              </span>
+            )}
 
-              <div className="mt-6 flex flex-wrap gap-3">
-                <Link
-                  href="/store/taivo"
-                  className="rounded-2xl bg-black px-5 py-3 text-sm font-medium text-white transition hover:opacity-90"
-                >
-                  Visit store
-                </Link>
+            {listing.location && (
+              <span className="max-w-full break-words rounded-full border border-black/10 bg-black/[0.02] px-4 py-2">
+                {listing.location}
+              </span>
+            )}
+          </div>
+        </section>
 
-                <Link
-                  href="/sell"
-                  className="rounded-2xl border border-black/10 bg-white px-5 py-3 text-sm font-medium transition hover:bg-black/[0.03]"
-                >
-                  Sell similar item
-                </Link>
-              </div>
+        <section className="overflow-hidden rounded-[28px] bg-white p-5 shadow-sm sm:rounded-[32px] sm:p-6">
+          <h2 className="mb-3 text-xs font-medium uppercase tracking-[0.22em] text-black/35">
+            Description
+          </h2>
+
+          <p className="max-w-full whitespace-pre-wrap break-words text-base leading-7 text-black/70">
+            {listing.description}
+          </p>
+        </section>
+
+        {hasTechnicalInfo && (
+          <section className="overflow-hidden rounded-[28px] bg-white p-5 shadow-sm sm:rounded-[32px] sm:p-6">
+            <h2 className="mb-4 text-lg font-semibold">Technical information</h2>
+
+            <div className="space-y-3">
+              <FieldRow label="Manufacturer" value={listing.manufacturer} />
+              <FieldRow label="Part number" value={listing.part_number} />
+              <FieldRow label="OEM" value={listing.oem_number} />
             </div>
-          </aside>
-        </div>
+          </section>
+        )}
+
+        {hasVehicleInfo && (
+          <section className="overflow-hidden rounded-[28px] bg-white p-5 shadow-sm sm:rounded-[32px] sm:p-6">
+            <h2 className="mb-4 text-lg font-semibold">Vehicle compatibility</h2>
+
+            <div className="space-y-3">
+              <FieldRow label="Brand" value={listing.vehicle_brand} />
+              <FieldRow label="Model" value={listing.vehicle_model} />
+              <FieldRow label="Year" value={listing.vehicle_year} />
+              <FieldRow label="Engine" value={listing.engine} />
+            </div>
+          </section>
+        )}
+
+        {hasAiInfo && (
+          <section className="overflow-hidden rounded-[28px] bg-white p-5 shadow-sm sm:rounded-[32px] sm:p-6">
+            <h2 className="mb-4 text-lg font-semibold">AI information</h2>
+
+            <div className="space-y-3">
+              <FieldRow label="Status" value={listing.ai_status} />
+              <FieldRow label="Level" value={listing.ai_level} />
+            </div>
+          </section>
+        )}
       </div>
     </main>
   );
