@@ -13,69 +13,91 @@ type Listing = {
   price: string;
   image?: string | null;
   status?: "active" | "paused" | "sold";
-
   category?: string;
   condition?: string;
   country?: string;
   city?: string;
-
+  location?: string;
   manufacturer?: string;
   part_number?: string;
   oem_number?: string;
-
   vehicle_brand?: string;
   vehicle_model?: string;
   vehicle_year?: string;
   engine?: string;
 };
 
+const inputClass =
+  "w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-base outline-none transition focus:border-black/30 sm:text-sm";
+
+const labelClass = "mb-2 block text-sm font-medium text-black/60";
+
 export default function MyPage() {
   const { user, loading } = useAuth();
   const userId = user?.id ?? null;
 
   const [listings, setListings] = useState<Listing[]>([]);
+  const [search, setSearch] = useState("");
+  const [filter, setFilter] = useState<"all" | "active" | "paused" | "sold">(
+    "all"
+  );
   const [loadingListings, setLoadingListings] = useState(true);
 
   const [editingId, setEditingId] = useState<number | null>(null);
+  const [savingEdit, setSavingEdit] = useState(false);
 
   const [editTitle, setEditTitle] = useState("");
   const [editDescription, setEditDescription] = useState("");
   const [editPrice, setEditPrice] = useState("");
-  const [editStatus, setEditStatus] = useState<"active" | "paused" | "sold">("active");
+  const [editStatus, setEditStatus] = useState<"active" | "paused" | "sold">(
+    "active"
+  );
+  const [editImage, setEditImage] = useState("");
 
   const [editCategory, setEditCategory] = useState("general");
   const [editCondition, setEditCondition] = useState("used");
   const [editCountry, setEditCountry] = useState("Estonia");
   const [editCity, setEditCity] = useState("");
 
-  // 🆕 TECH
   const [editManufacturer, setEditManufacturer] = useState("");
   const [editPartNumber, setEditPartNumber] = useState("");
   const [editOemNumber, setEditOemNumber] = useState("");
 
-  // 🆕 VEHICLE
-  const [editBrand, setEditBrand] = useState("");
-  const [editModel, setEditModel] = useState("");
-  const [editYear, setEditYear] = useState("");
+  const [editVehicleBrand, setEditVehicleBrand] = useState("");
+  const [editVehicleModel, setEditVehicleModel] = useState("");
+  const [editVehicleYear, setEditVehicleYear] = useState("");
   const [editEngine, setEditEngine] = useState("");
 
-  const fetchListings = async (uid: string) => {
+  const fetchListings = async (currentUserId: string) => {
     setLoadingListings(true);
 
-    const { data } = await supabase
+    const { data, error } = await supabase
       .from("listings")
       .select("*")
-      .eq("user_id", uid)
-      .order("id", { ascending: false });
+      .eq("user_id", currentUserId)
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      console.error("Error fetching user listings:", error);
+      setListings([]);
+      setLoadingListings(false);
+      return;
+    }
 
     setListings((data || []) as Listing[]);
     setLoadingListings(false);
   };
 
   useEffect(() => {
-    if (!loading && userId) {
-      fetchListings(userId);
+    if (loading) return;
+
+    if (!userId) {
+      setListings([]);
+      setLoadingListings(false);
+      return;
     }
+
+    fetchListings(userId);
   }, [userId, loading]);
 
   const startEdit = (item: Listing) => {
@@ -85,129 +107,694 @@ export default function MyPage() {
     setEditDescription(item.description || "");
     setEditPrice(item.price || "");
     setEditStatus(item.status || "active");
+    setEditImage(item.image || "");
 
     setEditCategory(item.category || "general");
     setEditCondition(item.condition || "used");
     setEditCountry(item.country || "Estonia");
     setEditCity(item.city || "");
 
-    // 🆕
     setEditManufacturer(item.manufacturer || "");
     setEditPartNumber(item.part_number || "");
     setEditOemNumber(item.oem_number || "");
 
-    setEditBrand(item.vehicle_brand || "");
-    setEditModel(item.vehicle_model || "");
-    setEditYear(item.vehicle_year || "");
+    setEditVehicleBrand(item.vehicle_brand || "");
+    setEditVehicleModel(item.vehicle_model || "");
+    setEditVehicleYear(item.vehicle_year || "");
     setEditEngine(item.engine || "");
+
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const cancelEdit = () => {
     setEditingId(null);
+    setEditTitle("");
+    setEditDescription("");
+    setEditPrice("");
+    setEditStatus("active");
+    setEditImage("");
+    setEditCategory("general");
+    setEditCondition("used");
+    setEditCountry("Estonia");
+    setEditCity("");
+    setEditManufacturer("");
+    setEditPartNumber("");
+    setEditOemNumber("");
+    setEditVehicleBrand("");
+    setEditVehicleModel("");
+    setEditVehicleYear("");
+    setEditEngine("");
+  };
+
+  const handleEditImageUpload = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onloadend = () => setEditImage(reader.result as string);
+    reader.readAsDataURL(file);
   };
 
   const saveEdit = async () => {
     if (!editingId || !userId) return;
 
-    const location =
-      editCity && editCountry
-        ? `${editCountry} • ${editCity}`
-        : editCountry || editCity || "";
+    if (!editTitle.trim() || !editDescription.trim() || !editPrice.trim()) {
+      alert("Please fill title, description and price.");
+      return;
+    }
 
-    await supabase
+    setSavingEdit(true);
+
+    const cleanCountry = editCountry.trim();
+    const cleanCity = editCity.trim();
+
+    const location =
+      cleanCity && cleanCountry
+        ? `${cleanCountry} • ${cleanCity}`
+        : cleanCountry || cleanCity || "";
+
+    const searchText = [
+      editTitle,
+      editDescription,
+      editCategory,
+      editCondition,
+      cleanCountry,
+      cleanCity,
+      editManufacturer,
+      editPartNumber,
+      editOemNumber,
+      editVehicleBrand,
+      editVehicleModel,
+      editVehicleYear,
+      editEngine,
+    ]
+      .map((item) => item.trim())
+      .filter(Boolean)
+      .join(" ");
+
+    const { error } = await supabase
       .from("listings")
       .update({
-        title: editTitle,
-        description: editDescription,
-        price: editPrice,
+        title: editTitle.trim(),
+        description: editDescription.trim(),
+        price: editPrice.trim(),
         status: editStatus,
+        image: editImage || null,
+
         category: editCategory,
         condition: editCondition,
-        country: editCountry,
-        city: editCity,
+        country: cleanCountry,
+        city: cleanCity,
         location,
 
-        manufacturer: editManufacturer,
-        part_number: editPartNumber,
-        oem_number: editOemNumber,
+        manufacturer: editManufacturer.trim(),
+        part_number: editPartNumber.trim(),
+        oem_number: editOemNumber.trim(),
 
-        vehicle_brand: editBrand,
-        vehicle_model: editModel,
-        vehicle_year: editYear,
-        engine: editEngine,
+        vehicle_brand: editVehicleBrand.trim(),
+        vehicle_model: editVehicleModel.trim(),
+        vehicle_year: editVehicleYear.trim(),
+        engine: editEngine.trim(),
+
+        details: {
+          manufacturer: editManufacturer.trim(),
+          partNumber: editPartNumber.trim(),
+          oemNumber: editOemNumber.trim(),
+          vehicleBrand: editVehicleBrand.trim(),
+          vehicleModel: editVehicleModel.trim(),
+          vehicleYear: editVehicleYear.trim(),
+          engine: editEngine.trim(),
+        },
+
+        search_text: searchText,
       })
       .eq("id", editingId)
       .eq("user_id", userId);
 
+    setSavingEdit(false);
+
+    if (error) {
+      console.error("Error saving edit:", error);
+      alert("Failed to save changes.");
+      return;
+    }
+
     cancelEdit();
-    fetchListings(userId);
+    await fetchListings(userId);
   };
 
-  if (loading) return <div className="p-6">Loading...</div>;
+  const updateStatus = async (
+    id: number,
+    status: "active" | "paused" | "sold"
+  ) => {
+    if (!userId) return;
+
+    const { error } = await supabase
+      .from("listings")
+      .update({ status })
+      .eq("id", id)
+      .eq("user_id", userId);
+
+    if (error) {
+      console.error("Error updating status:", error);
+      alert("Failed to update listing status.");
+      return;
+    }
+
+    await fetchListings(userId);
+  };
+
+  const deleteListing = async (id: number) => {
+    if (!userId) return;
+
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this listing?"
+    );
+    if (!confirmed) return;
+
+    const { error } = await supabase
+      .from("listings")
+      .delete()
+      .eq("id", id)
+      .eq("user_id", userId);
+
+    if (error) {
+      console.error("Error deleting listing:", error);
+      alert("Failed to delete listing.");
+      return;
+    }
+
+    if (editingId === id) cancelEdit();
+    await fetchListings(userId);
+  };
+
+  const filteredListings = useMemo(() => {
+    return listings.filter((item) => {
+      const query = search.toLowerCase();
+
+      const matchesSearch =
+        item.title.toLowerCase().includes(query) ||
+        item.description.toLowerCase().includes(query);
+
+      const currentStatus = item.status || "active";
+      const matchesFilter = filter === "all" ? true : currentStatus === filter;
+
+      return matchesSearch && matchesFilter;
+    });
+  }, [listings, search, filter]);
+
+  const activeCount = listings.filter(
+    (item) => (item.status || "active") === "active"
+  ).length;
+
+  const pausedCount = listings.filter((item) => item.status === "paused").length;
+  const soldCount = listings.filter((item) => item.status === "sold").length;
+
+  if (loading) {
+    return (
+      <main className="min-h-screen bg-[#f8f8f6] px-4 py-8 text-black sm:px-6">
+        <div className="mx-auto max-w-4xl rounded-[28px] bg-white p-8 text-center shadow-sm">
+          Loading session...
+        </div>
+      </main>
+    );
+  }
+
+  if (!userId) {
+    return (
+      <main className="min-h-screen bg-[#f8f8f6] px-4 py-8 text-black sm:px-6">
+        <div className="mx-auto max-w-4xl rounded-[28px] bg-white p-8 text-center shadow-sm">
+          <p className="text-lg font-medium">You are not signed in</p>
+          <p className="mt-2 text-black/55">
+            Sign in to view and manage your own listings.
+          </p>
+
+          <div className="mt-6 flex flex-wrap justify-center gap-3">
+            <Link
+              href="/auth"
+              className="rounded-2xl bg-black px-5 py-3 text-sm font-medium text-white"
+            >
+              Go to auth
+            </Link>
+
+            <Link
+              href="/"
+              className="rounded-2xl border border-black/10 bg-white px-5 py-3 text-sm font-medium"
+            >
+              Back to marketplace
+            </Link>
+          </div>
+        </div>
+      </main>
+    );
+  }
 
   return (
-    <main className="min-h-screen bg-[#f8f8f6] p-6">
-      <div className="max-w-5xl mx-auto space-y-6">
+    <main className="min-h-screen overflow-x-hidden bg-[#f8f8f6] px-4 py-6 text-black sm:px-6 sm:py-8">
+      <div className="mx-auto w-full max-w-7xl space-y-6">
+        <header className="rounded-[28px] bg-white p-5 shadow-sm sm:rounded-[32px] sm:p-6">
+          <p className="mb-3 text-xs font-medium uppercase tracking-[0.22em] text-black/35">
+            Selqiro Store
+          </p>
 
-        <h1 className="text-3xl font-semibold">My listings</h1>
+          <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+            <div>
+              <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">
+                My listings
+              </h1>
+              <p className="mt-2 max-w-2xl text-sm leading-6 text-black/55">
+                These are the listings connected to your signed-in account.
+              </p>
+            </div>
+
+            <div className="flex flex-wrap gap-3">
+              <Link
+                href="/sell"
+                className="rounded-2xl bg-green-500 px-5 py-3 text-sm font-medium text-white"
+              >
+                + Add listing
+              </Link>
+
+              <Link
+                href="/"
+                className="rounded-2xl border border-black/10 bg-white px-5 py-3 text-sm font-medium"
+              >
+                Back to marketplace
+              </Link>
+            </div>
+          </div>
+        </header>
 
         {editingId && (
-          <div className="bg-white p-6 rounded-2xl space-y-4 shadow-sm">
-
-            <h2 className="text-2xl font-semibold">Update your item</h2>
-
-            <input value={editTitle} onChange={e=>setEditTitle(e.target.value)} className="input"/>
-            <textarea value={editDescription} onChange={e=>setEditDescription(e.target.value)} className="input"/>
-            <input value={editPrice} onChange={e=>setEditPrice(e.target.value)} className="input"/>
-
-            <select value={editCondition} onChange={e=>setEditCondition(e.target.value)} className="input">
-              <option value="new">New</option>
-              <option value="used">Used</option>
-            </select>
-
-            <input value={editCity} onChange={e=>setEditCity(e.target.value)} className="input"/>
-
-            {/* 🔧 TECH */}
-            <h3 className="text-lg font-semibold mt-4">Technical info</h3>
-
-            <input placeholder="Manufacturer" value={editManufacturer} onChange={e=>setEditManufacturer(e.target.value)} className="input"/>
-            <input placeholder="Part number" value={editPartNumber} onChange={e=>setEditPartNumber(e.target.value)} className="input"/>
-            <input placeholder="OEM number" value={editOemNumber} onChange={e=>setEditOemNumber(e.target.value)} className="input"/>
-
-            {/* 🚗 VEHICLE */}
-            <h3 className="text-lg font-semibold mt-4">Vehicle fitment</h3>
-
-            <input placeholder="Brand" value={editBrand} onChange={e=>setEditBrand(e.target.value)} className="input"/>
-            <input placeholder="Model" value={editModel} onChange={e=>setEditModel(e.target.value)} className="input"/>
-            <input placeholder="Year" value={editYear} onChange={e=>setEditYear(e.target.value)} className="input"/>
-            <input placeholder="Engine" value={editEngine} onChange={e=>setEditEngine(e.target.value)} className="input"/>
-
-            <div className="flex gap-3">
-              <button onClick={saveEdit} className="btn-black">Save</button>
-              <button onClick={cancelEdit} className="btn-white">Cancel</button>
-            </div>
-
-          </div>
-        )}
-
-        {loadingListings ? (
-          <div>Loading...</div>
-        ) : (
-          listings.map(item => (
-            <div key={item.id} className="bg-white p-4 rounded-2xl shadow-sm">
-              <h3 className="text-xl font-semibold">{item.title}</h3>
-              <p>{item.price}</p>
+          <section className="rounded-[28px] bg-white p-5 shadow-sm sm:rounded-[32px] sm:p-6">
+            <div className="mb-6 flex items-start justify-between gap-4">
+              <div>
+                <p className="mb-3 text-xs font-medium uppercase tracking-[0.22em] text-black/35">
+                  Edit listing
+                </p>
+                <h2 className="text-3xl font-semibold tracking-tight">
+                  Update your item
+                </h2>
+              </div>
 
               <button
-                onClick={() => startEdit(item)}
-                className="mt-2 text-sm underline"
+                onClick={cancelEdit}
+                className="rounded-2xl border border-black/10 bg-white px-5 py-3 text-sm font-medium"
               >
-                Edit listing
+                Cancel
               </button>
             </div>
-          ))
+
+            <div className="grid gap-6 lg:grid-cols-[1fr_360px]">
+              <div className="space-y-5">
+                <div>
+                  <label className={labelClass}>Title</label>
+                  <input
+                    value={editTitle}
+                    onChange={(e) => setEditTitle(e.target.value)}
+                    className={inputClass}
+                  />
+                </div>
+
+                <div>
+                  <label className={labelClass}>Description</label>
+                  <textarea
+                    rows={7}
+                    value={editDescription}
+                    onChange={(e) => setEditDescription(e.target.value)}
+                    className={`${inputClass} resize-y`}
+                  />
+                </div>
+
+                <div>
+                  <label className={labelClass}>Price</label>
+                  <input
+                    value={editPrice}
+                    onChange={(e) => setEditPrice(e.target.value)}
+                    className={inputClass}
+                  />
+                </div>
+
+                <div className="grid gap-5 sm:grid-cols-2">
+                  <div>
+                    <label className={labelClass}>Category</label>
+                    <select
+                      value={editCategory}
+                      onChange={(e) => setEditCategory(e.target.value)}
+                      className={inputClass}
+                    >
+                      <option value="general">General</option>
+                      <option value="vehicles">Vehicles</option>
+                      <option value="parts">Parts</option>
+                      <option value="electronics">Electronics</option>
+                      <option value="clothing">Clothing</option>
+                      <option value="real_estate">Real estate</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className={labelClass}>Condition</label>
+                    <select
+                      value={editCondition}
+                      onChange={(e) => setEditCondition(e.target.value)}
+                      className={inputClass}
+                    >
+                      <option value="new">New</option>
+                      <option value="used">Used</option>
+                      <option value="for_parts">For parts</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div>
+                  <label className={labelClass}>Status</label>
+                  <select
+                    value={editStatus}
+                    onChange={(e) =>
+                      setEditStatus(e.target.value as "active" | "paused" | "sold")
+                    }
+                    className={inputClass}
+                  >
+                    <option value="active">Active</option>
+                    <option value="paused">Paused</option>
+                    <option value="sold">Sold</option>
+                  </select>
+                </div>
+
+                <div className="grid gap-5 sm:grid-cols-2">
+                  <div>
+                    <label className={labelClass}>Country</label>
+                    <select
+                      value={editCountry}
+                      onChange={(e) => setEditCountry(e.target.value)}
+                      className={inputClass}
+                    >
+                      <option value="Estonia">Estonia</option>
+                      <option value="Latvia">Latvia</option>
+                      <option value="Lithuania">Lithuania</option>
+                      <option value="Finland">Finland</option>
+                      <option value="Sweden">Sweden</option>
+                      <option value="Germany">Germany</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className={labelClass}>City</label>
+                    <input
+                      value={editCity}
+                      onChange={(e) => setEditCity(e.target.value)}
+                      className={inputClass}
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className={labelClass}>Change image</label>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleEditImageUpload}
+                    className={inputClass}
+                  />
+                </div>
+
+                <section className="rounded-[24px] border border-black/8 bg-black/[0.015] p-5">
+                  <h3 className="mb-5 text-xl font-semibold tracking-tight">
+                    Technical info
+                  </h3>
+
+                  <div className="space-y-5">
+                    <div>
+                      <label className={labelClass}>Manufacturer</label>
+                      <input
+                        value={editManufacturer}
+                        onChange={(e) => setEditManufacturer(e.target.value)}
+                        className={inputClass}
+                      />
+                    </div>
+
+                    <div>
+                      <label className={labelClass}>Part number</label>
+                      <input
+                        value={editPartNumber}
+                        onChange={(e) => setEditPartNumber(e.target.value)}
+                        className={inputClass}
+                      />
+                    </div>
+
+                    <div>
+                      <label className={labelClass}>OEM number</label>
+                      <input
+                        value={editOemNumber}
+                        onChange={(e) => setEditOemNumber(e.target.value)}
+                        className={inputClass}
+                      />
+                    </div>
+                  </div>
+                </section>
+
+                <section className="rounded-[24px] border border-black/8 bg-black/[0.015] p-5">
+                  <h3 className="mb-5 text-xl font-semibold tracking-tight">
+                    Vehicle fitment
+                  </h3>
+
+                  <div className="space-y-5">
+                    <div>
+                      <label className={labelClass}>Brand</label>
+                      <input
+                        value={editVehicleBrand}
+                        onChange={(e) => setEditVehicleBrand(e.target.value)}
+                        className={inputClass}
+                      />
+                    </div>
+
+                    <div>
+                      <label className={labelClass}>Model</label>
+                      <input
+                        value={editVehicleModel}
+                        onChange={(e) => setEditVehicleModel(e.target.value)}
+                        className={inputClass}
+                      />
+                    </div>
+
+                    <div>
+                      <label className={labelClass}>Year</label>
+                      <input
+                        value={editVehicleYear}
+                        onChange={(e) => setEditVehicleYear(e.target.value)}
+                        className={inputClass}
+                      />
+                    </div>
+
+                    <div>
+                      <label className={labelClass}>Engine</label>
+                      <input
+                        value={editEngine}
+                        onChange={(e) => setEditEngine(e.target.value)}
+                        className={inputClass}
+                      />
+                    </div>
+                  </div>
+                </section>
+
+                <button
+                  onClick={saveEdit}
+                  disabled={savingEdit}
+                  className="w-full rounded-2xl bg-black px-5 py-4 text-base font-medium text-white disabled:opacity-60"
+                >
+                  {savingEdit ? "Saving..." : "Save changes"}
+                </button>
+              </div>
+
+              <aside className="h-fit rounded-[28px] border border-black/8 bg-white p-4 shadow-sm">
+                <div className="overflow-hidden rounded-2xl bg-neutral-100">
+                  {editImage ? (
+                    <img
+                      src={editImage}
+                      alt="Preview"
+                      className="h-64 w-full object-cover"
+                    />
+                  ) : (
+                    <div className="flex h-64 items-center justify-center text-sm text-black/40">
+                      No image
+                    </div>
+                  )}
+                </div>
+
+                <div className="mt-5">
+                  <p className="mb-2 text-xs font-medium uppercase tracking-[0.18em] text-black/35">
+                    Preview
+                  </p>
+
+                  <h3 className="break-words text-2xl font-semibold tracking-tight">
+                    {editTitle || "Listing title"}
+                  </h3>
+
+                  <p className="mt-3 break-words text-3xl font-bold">
+                    {editPrice || "0"}
+                  </p>
+
+                  <p className="mt-4 line-clamp-4 break-words text-sm leading-6 text-black/60">
+                    {editDescription || "Listing description preview."}
+                  </p>
+
+                  <div className="mt-5 flex flex-wrap gap-2 text-sm text-black/55">
+                    <span className="rounded-full border border-black/10 px-3 py-2">
+                      {editCategory}
+                    </span>
+                    <span className="rounded-full border border-black/10 px-3 py-2">
+                      {editCondition}
+                    </span>
+                    <span className="rounded-full border border-black/10 px-3 py-2">
+                      {editCountry}
+                      {editCity ? ` • ${editCity}` : ""}
+                    </span>
+                  </div>
+                </div>
+              </aside>
+            </div>
+          </section>
         )}
 
+        <section className="grid gap-4 md:grid-cols-3">
+          <div className="rounded-[28px] bg-white p-5 shadow-sm">
+            <p className="text-sm text-black/45">My listings</p>
+            <p className="mt-2 text-3xl font-semibold">{listings.length}</p>
+          </div>
+
+          <div className="rounded-[28px] bg-white p-5 shadow-sm">
+            <p className="text-sm text-black/45">Active</p>
+            <p className="mt-2 text-3xl font-semibold">{activeCount}</p>
+          </div>
+
+          <div className="rounded-[28px] bg-white p-5 shadow-sm">
+            <p className="text-sm text-black/45">Paused / Sold</p>
+            <p className="mt-2 text-3xl font-semibold">{pausedCount + soldCount}</p>
+          </div>
+        </section>
+
+        <section className="rounded-[28px] bg-white p-5 shadow-sm sm:p-6">
+          <div className="grid gap-4 md:grid-cols-[1fr_220px]">
+            <input
+              type="text"
+              placeholder="Search your listings..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className={inputClass}
+            />
+
+            <select
+              value={filter}
+              onChange={(e) =>
+                setFilter(e.target.value as "all" | "active" | "paused" | "sold")
+              }
+              className={inputClass}
+            >
+              <option value="all">All statuses</option>
+              <option value="active">Active</option>
+              <option value="paused">Paused</option>
+              <option value="sold">Sold</option>
+            </select>
+          </div>
+        </section>
+
+        {loadingListings ? (
+          <div className="rounded-[28px] bg-white p-8 text-center shadow-sm">
+            Loading your listings...
+          </div>
+        ) : filteredListings.length === 0 ? (
+          <div className="rounded-[28px] bg-white p-8 text-center shadow-sm">
+            <p className="text-lg font-medium">No listings for this account</p>
+            <Link
+              href="/sell"
+              className="mt-5 inline-flex rounded-2xl bg-black px-5 py-3 text-sm font-medium text-white"
+            >
+              Create listing
+            </Link>
+          </div>
+        ) : (
+          <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+            {filteredListings.map((item) => (
+              <article
+                key={item.id}
+                className="overflow-hidden rounded-[28px] bg-white p-4 shadow-sm"
+              >
+                <Link href={`/listing/${item.id}`}>
+                  <div className="cursor-pointer">
+                    <div className="mb-4 overflow-hidden rounded-2xl bg-neutral-100">
+                      {item.image ? (
+                        <img
+                          src={item.image}
+                          alt={item.title}
+                          className="h-52 w-full object-cover"
+                        />
+                      ) : (
+                        <div className="h-52 w-full bg-neutral-100" />
+                      )}
+                    </div>
+
+                    <h3 className="break-words text-xl font-semibold tracking-tight">
+                      {item.title}
+                    </h3>
+
+                    <p className="mt-2 line-clamp-2 break-words text-sm leading-6 text-black/60">
+                      {item.description}
+                    </p>
+
+                    <p className="mt-4 break-words text-2xl font-semibold">
+                      {item.price}
+                    </p>
+
+                    <div className="mt-3 text-sm text-black/45">
+                      {item.category || "general"} • {item.condition || "used"} •{" "}
+                      {item.country || "No country"}
+                      {item.city ? ` • ${item.city}` : ""}
+                    </div>
+                  </div>
+                </Link>
+
+                <div className="mt-5 flex flex-wrap gap-2">
+                  <button
+                    onClick={() => updateStatus(item.id, "active")}
+                    className="rounded-xl border border-black/10 bg-white px-3 py-2 text-sm"
+                  >
+                    Active
+                  </button>
+
+                  <button
+                    onClick={() => updateStatus(item.id, "paused")}
+                    className="rounded-xl border border-black/10 bg-white px-3 py-2 text-sm"
+                  >
+                    Pause
+                  </button>
+
+                  <button
+                    onClick={() => updateStatus(item.id, "sold")}
+                    className="rounded-xl border border-black/10 bg-white px-3 py-2 text-sm"
+                  >
+                    Sold
+                  </button>
+
+                  <button
+                    onClick={() => startEdit(item)}
+                    className="rounded-xl border border-black/10 bg-white px-3 py-2 text-sm"
+                  >
+                    Edit
+                  </button>
+
+                  <button
+                    onClick={() => deleteListing(item.id)}
+                    className="rounded-xl border border-red-200 bg-white px-3 py-2 text-sm text-red-600"
+                  >
+                    Delete
+                  </button>
+                </div>
+              </article>
+            ))}
+          </div>
+        )}
       </div>
     </main>
   );
