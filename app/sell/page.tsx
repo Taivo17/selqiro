@@ -22,7 +22,6 @@ export default function SellPage() {
   const [country, setCountry] = useState("Estonia");
   const [city, setCity] = useState("");
 
-  // AI / tehniline info
   const [manufacturer, setManufacturer] = useState("");
   const [partNumber, setPartNumber] = useState("");
   const [oemNumber, setOemNumber] = useState("");
@@ -45,28 +44,49 @@ export default function SellPage() {
     if (!file) return;
 
     const reader = new FileReader();
-
-    reader.onloadend = () => {
-      setImage(reader.result as string);
-    };
-
+    reader.onloadend = () => setImage(reader.result as string);
     reader.readAsDataURL(file);
   };
 
   const createListing = async () => {
     if (!user) return;
 
-    if (!title || !description || !price) {
+    if (!title.trim() || !description.trim() || !price.trim()) {
       alert("Fill required fields");
       return;
     }
 
     setSaving(true);
 
+    const cleanTitle = title.trim();
+    const cleanDescription = description.trim();
+    const cleanPrice = price.trim();
+    const cleanCountry = country.trim();
+    const cleanCity = city.trim();
+
     const location =
-      city && country ? `${country} • ${city}` : country || city || "";
+      cleanCity && cleanCountry
+        ? `${cleanCountry} • ${cleanCity}`
+        : cleanCountry || cleanCity || "";
 
     const details = {
+      manufacturer: manufacturer.trim(),
+      partNumber: partNumber.trim(),
+      oemNumber: oemNumber.trim(),
+      vehicleBrand: vehicleBrand.trim(),
+      vehicleModel: vehicleModel.trim(),
+      vehicleYear: vehicleYear.trim(),
+      engine: engine.trim(),
+    };
+
+    const searchText = [
+      cleanTitle,
+      cleanDescription,
+      category,
+      subcategory,
+      condition,
+      cleanCountry,
+      cleanCity,
       manufacturer,
       partNumber,
       oemNumber,
@@ -74,18 +94,6 @@ export default function SellPage() {
       vehicleModel,
       vehicleYear,
       engine,
-    };
-
-    const searchText = [
-      title,
-      description,
-      category,
-      subcategory,
-      manufacturer,
-      partNumber,
-      oemNumber,
-      vehicleBrand,
-      vehicleModel,
     ]
       .filter(Boolean)
       .join(" ");
@@ -93,27 +101,27 @@ export default function SellPage() {
     const { error } = await supabase.from("listings").insert({
       user_id: user.id,
 
-      title,
-      description,
-      price,
-      image,
+      title: cleanTitle,
+      description: cleanDescription,
+      price: cleanPrice,
+      image: image || null,
 
       category,
-      subcategory,
+      subcategory: subcategory.trim(),
       condition,
 
-      country,
-      city,
+      country: cleanCountry,
+      city: cleanCity,
       location,
 
-      manufacturer,
-      part_number: partNumber,
-      oem_number: oemNumber,
+      manufacturer: manufacturer.trim(),
+      part_number: partNumber.trim(),
+      oem_number: oemNumber.trim(),
 
-      vehicle_brand: vehicleBrand,
-      vehicle_model: vehicleModel,
-      vehicle_year: vehicleYear,
-      engine,
+      vehicle_brand: vehicleBrand.trim(),
+      vehicle_model: vehicleModel.trim(),
+      vehicle_year: vehicleYear.trim(),
+      engine: engine.trim(),
 
       details,
 
@@ -139,135 +147,157 @@ export default function SellPage() {
   };
 
   if (loading) {
-    return <div className="p-6">Loading...</div>;
+    return (
+      <main className="min-h-screen bg-[#f8f8f6] px-6 py-10 text-black">
+        Loading...
+      </main>
+    );
   }
 
   return (
-    <main className="min-h-screen p-6">
-      <div className="max-w-3xl mx-auto space-y-6">
+    <main className="min-h-screen bg-[#f8f8f6] px-6 py-8 text-black">
+      <div className="mx-auto max-w-3xl space-y-6">
+        <Link href="/" className="text-lg font-medium">
+          ← Back
+        </Link>
 
-        <Link href="/">← Back</Link>
+        <h1 className="text-5xl font-semibold tracking-tight">
+          Create listing
+        </h1>
 
-        <h1 className="text-3xl font-semibold">Create listing</h1>
+        <input type="file" accept="image/*" onChange={handleImageUpload} />
 
-        {/* IMAGE */}
-        <input type="file" onChange={handleImageUpload} />
-
-        {/* BASIC */}
         <input
           placeholder="Title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          className="w-full p-3 border rounded-xl"
+          className="w-full rounded-2xl border border-black/20 bg-white p-4 text-lg outline-none"
         />
 
         <textarea
           placeholder="Description"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
-          className="w-full p-3 border rounded-xl"
+          className="min-h-32 w-full rounded-2xl border border-black/20 bg-white p-4 text-lg outline-none"
         />
 
         <input
           placeholder="Price"
           value={price}
           onChange={(e) => setPrice(e.target.value)}
-          className="w-full p-3 border rounded-xl"
+          className="w-full rounded-2xl border border-black/20 bg-white p-4 text-lg outline-none"
         />
 
-        {/* CATEGORY */}
-        <input
-          placeholder="Category"
+        <select
           value={category}
           onChange={(e) => setCategory(e.target.value)}
-          className="w-full p-3 border rounded-xl"
-        />
+          className="w-full rounded-2xl border border-black/20 bg-white p-4 text-lg outline-none"
+        >
+          <option value="general">General</option>
+          <option value="vehicles">Vehicles</option>
+          <option value="parts">Parts</option>
+          <option value="electronics">Electronics</option>
+          <option value="clothing">Clothing</option>
+          <option value="real_estate">Real estate</option>
+        </select>
+
+        <select
+          value={condition}
+          onChange={(e) => setCondition(e.target.value)}
+          className="w-full rounded-2xl border border-black/20 bg-white p-4 text-lg outline-none"
+        >
+          <option value="new">New</option>
+          <option value="used">Used</option>
+          <option value="for_parts">For parts</option>
+        </select>
 
         <input
           placeholder="Subcategory"
           value={subcategory}
           onChange={(e) => setSubcategory(e.target.value)}
-          className="w-full p-3 border rounded-xl"
+          className="w-full rounded-2xl border border-black/20 bg-white p-4 text-lg outline-none"
         />
 
-        {/* LOCATION */}
-        <input
-          placeholder="Country"
+        <select
           value={country}
           onChange={(e) => setCountry(e.target.value)}
-          className="w-full p-3 border rounded-xl"
-        />
+          className="w-full rounded-2xl border border-black/20 bg-white p-4 text-lg outline-none"
+        >
+          <option value="Estonia">Estonia</option>
+          <option value="Latvia">Latvia</option>
+          <option value="Lithuania">Lithuania</option>
+          <option value="Finland">Finland</option>
+          <option value="Sweden">Sweden</option>
+          <option value="Germany">Germany</option>
+        </select>
 
         <input
           placeholder="City"
           value={city}
           onChange={(e) => setCity(e.target.value)}
-          className="w-full p-3 border rounded-xl"
+          className="w-full rounded-2xl border border-black/20 bg-white p-4 text-lg outline-none"
         />
 
-        {/* TECH */}
-        <h2 className="text-xl font-semibold mt-4">Technical info</h2>
+        <h2 className="pt-4 text-3xl font-semibold">Technical info</h2>
 
         <input
           placeholder="Manufacturer"
           value={manufacturer}
           onChange={(e) => setManufacturer(e.target.value)}
-          className="w-full p-3 border rounded-xl"
+          className="w-full rounded-2xl border border-black/20 bg-white p-4 text-lg outline-none"
         />
 
         <input
           placeholder="Part number"
           value={partNumber}
           onChange={(e) => setPartNumber(e.target.value)}
-          className="w-full p-3 border rounded-xl"
+          className="w-full rounded-2xl border border-black/20 bg-white p-4 text-lg outline-none"
         />
 
         <input
           placeholder="OEM number"
           value={oemNumber}
           onChange={(e) => setOemNumber(e.target.value)}
-          className="w-full p-3 border rounded-xl"
+          className="w-full rounded-2xl border border-black/20 bg-white p-4 text-lg outline-none"
         />
 
-        {/* VEHICLE */}
-        <h2 className="text-xl font-semibold mt-4">Vehicle fitment</h2>
+        <h2 className="pt-4 text-3xl font-semibold">Vehicle fitment</h2>
 
         <input
           placeholder="Brand"
           value={vehicleBrand}
           onChange={(e) => setVehicleBrand(e.target.value)}
-          className="w-full p-3 border rounded-xl"
+          className="w-full rounded-2xl border border-black/20 bg-white p-4 text-lg outline-none"
         />
 
         <input
           placeholder="Model"
           value={vehicleModel}
           onChange={(e) => setVehicleModel(e.target.value)}
-          className="w-full p-3 border rounded-xl"
+          className="w-full rounded-2xl border border-black/20 bg-white p-4 text-lg outline-none"
         />
 
         <input
           placeholder="Year"
           value={vehicleYear}
           onChange={(e) => setVehicleYear(e.target.value)}
-          className="w-full p-3 border rounded-xl"
+          className="w-full rounded-2xl border border-black/20 bg-white p-4 text-lg outline-none"
         />
 
         <input
           placeholder="Engine"
           value={engine}
           onChange={(e) => setEngine(e.target.value)}
-          className="w-full p-3 border rounded-xl"
+          className="w-full rounded-2xl border border-black/20 bg-white p-4 text-lg outline-none"
         />
 
         <button
           onClick={createListing}
           disabled={saving}
-          className="w-full p-4 bg-black text-white rounded-xl"
+          className="w-full rounded-2xl bg-black p-5 text-lg font-medium text-white disabled:opacity-60"
         >
           {saving ? "Saving..." : "Publish"}
         </button>
-
       </div>
     </main>
   );
