@@ -18,8 +18,8 @@ function navClass(active: boolean) {
 
 function mobileNavClass(active: boolean) {
   return active
-    ? "rounded-2xl bg-black px-4 py-3 text-sm font-medium text-white shadow-sm transition text-center"
-    : "rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm font-medium text-black/70 transition hover:bg-black/[0.03] text-center";
+    ? "rounded-2xl bg-black px-4 py-3 text-center text-sm font-medium text-white shadow-sm transition"
+    : "rounded-2xl border border-black/10 bg-white px-4 py-3 text-center text-sm font-medium text-black/70 transition hover:bg-black/[0.03]";
 }
 
 export default function SiteHeader() {
@@ -34,6 +34,17 @@ export default function SiteHeader() {
 
   const userId = user?.id ?? null;
   const userEmail = user?.email ?? "";
+
+  const goMarketplaceFresh = () => {
+    setMobileMenuOpen(false);
+
+    if (pathname === "/") {
+      window.location.href = "/";
+      return;
+    }
+
+    router.push("/");
+  };
 
   useEffect(() => {
     let mounted = true;
@@ -108,12 +119,13 @@ export default function SiteHeader() {
       <div className="mx-auto max-w-7xl px-4 py-3 sm:px-6 lg:px-8">
         <div className="flex flex-col gap-3">
           <div className="flex items-center justify-between gap-3">
-            <Link
-              href="/"
+            <button
+              type="button"
+              onClick={goMarketplaceFresh}
               className="shrink-0 text-2xl font-semibold tracking-tight text-black"
             >
               Selqiro
-            </Link>
+            </button>
 
             <button
               type="button"
@@ -125,7 +137,7 @@ export default function SiteHeader() {
             </button>
 
             {!loading && userId ? (
-              <div className="hidden sm:flex items-center gap-2">
+              <div className="hidden items-center gap-2 sm:flex">
                 {showStoreLink && (
                   <Link
                     href={`/store/${storeSlug}`}
@@ -159,7 +171,7 @@ export default function SiteHeader() {
                 </button>
               </div>
             ) : !loading ? (
-              <div className="hidden sm:flex items-center gap-2">
+              <div className="hidden items-center gap-2 sm:flex">
                 <Link
                   href="/auth"
                   className="rounded-2xl bg-green-500 px-4 py-3 text-sm font-medium text-white transition hover:opacity-90"
@@ -168,7 +180,7 @@ export default function SiteHeader() {
                 </Link>
               </div>
             ) : (
-              <div className="hidden sm:flex items-center gap-2">
+              <div className="hidden items-center gap-2 sm:flex">
                 <div className="rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm text-black/45">
                   Loading...
                 </div>
@@ -178,9 +190,13 @@ export default function SiteHeader() {
 
           <div className="hidden sm:block">
             <div className="flex flex-wrap gap-2">
-              <Link href="/" className={navClass(isMarketplace)}>
+              <button
+                type="button"
+                onClick={goMarketplaceFresh}
+                className={navClass(isMarketplace)}
+              >
                 Marketplace
-              </Link>
+              </button>
 
               <Link href="/my-page" className={navClass(isMyPage)}>
                 My page
@@ -206,9 +222,13 @@ export default function SiteHeader() {
             <div className="sm:hidden">
               <div className="rounded-[28px] border border-black/8 bg-white p-3 shadow-sm">
                 <nav className="grid grid-cols-2 gap-2">
-                  <Link href="/" className={mobileNavClass(isMarketplace)}>
+                  <button
+                    type="button"
+                    onClick={goMarketplaceFresh}
+                    className={mobileNavClass(isMarketplace)}
+                  >
                     Marketplace
-                  </Link>
+                  </button>
 
                   <Link href="/my-page" className={mobileNavClass(isMyPage)}>
                     My page
@@ -235,8 +255,8 @@ export default function SiteHeader() {
                     href="/profile"
                     className={
                       isProfile
-                        ? "rounded-2xl bg-black px-4 py-3 text-sm font-medium text-white shadow-sm transition text-center"
-                        : "rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm font-medium text-black/70 transition hover:bg-black/[0.03] text-center"
+                        ? "rounded-2xl bg-black px-4 py-3 text-center text-sm font-medium text-white shadow-sm transition"
+                        : "rounded-2xl border border-black/10 bg-white px-4 py-3 text-center text-sm font-medium text-black/70 transition hover:bg-black/[0.03]"
                     }
                   >
                     Profile
@@ -245,7 +265,7 @@ export default function SiteHeader() {
                   {showStoreLink && (
                     <Link
                       href={`/store/${storeSlug}`}
-                      className="rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm font-medium text-black/70 transition hover:bg-black/[0.03] text-center"
+                      className="rounded-2xl border border-black/10 bg-white px-4 py-3 text-center text-sm font-medium text-black/70 transition hover:bg-black/[0.03]"
                     >
                       My store
                     </Link>
@@ -259,7 +279,7 @@ export default function SiteHeader() {
                     </div>
                   ) : userId ? (
                     <div className="space-y-2">
-                      <div className="rounded-2xl border border-black/10 bg-[#f8f8f6] px-4 py-3 text-sm text-black/55 break-all">
+                      <div className="break-all rounded-2xl border border-black/10 bg-[#f8f8f6] px-4 py-3 text-sm text-black/55">
                         {userEmail || "Signed in"}
                       </div>
 
