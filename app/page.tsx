@@ -173,15 +173,15 @@ export default function MarketplacePage() {
   }, [listings, search, categoryFilter, conditionFilter, locationFilter, nearOnly]);
 
   return (
-    <main className="min-h-screen overflow-x-hidden bg-[#f8f8f6] px-4 py-6 text-black sm:px-8 lg:px-10">
+    <main className="min-h-screen overflow-x-hidden bg-[#f8f8f6] px-4 py-5 text-black sm:px-8 lg:px-10">
       <div className="mx-auto max-w-7xl">
-        <section className="mb-6 rounded-[28px] border border-black/8 bg-white p-5 shadow-sm sm:rounded-[36px] sm:p-8">
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+        <section className="mb-5 rounded-[26px] border border-black/8 bg-white p-4 shadow-sm sm:rounded-[36px] sm:p-8">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <button
                 type="button"
                 onClick={resetFilters}
-                className="mb-3 text-xs font-medium uppercase tracking-[0.22em] text-black/40"
+                className="mb-2 text-xs font-medium uppercase tracking-[0.22em] text-black/40"
               >
                 Filters
               </button>
@@ -195,14 +195,14 @@ export default function MarketplacePage() {
               <button
                 type="button"
                 onClick={resetFilters}
-                className="rounded-2xl border border-black/10 bg-white px-5 py-3 text-sm font-medium transition hover:bg-black/[0.03]"
+                className="w-fit rounded-2xl border border-black/10 bg-white px-5 py-3 text-sm font-medium transition hover:bg-black/[0.03]"
               >
                 Reset filters
               </button>
             )}
           </div>
 
-          <div className="mt-6 grid gap-3 xl:grid-cols-[1.1fr_0.9fr_0.9fr_1fr_0.8fr]">
+          <div className="mt-5 grid gap-3 xl:grid-cols-[1.1fr_0.9fr_0.9fr_1fr_0.8fr]">
             <input
               type="text"
               placeholder="Search listings..."
@@ -257,19 +257,17 @@ export default function MarketplacePage() {
           </div>
         </section>
 
-        <section className="mb-5 flex items-end justify-between gap-4">
+        <section className="mb-4 flex items-end justify-between gap-4">
           <div>
             <p className="text-xs font-medium uppercase tracking-[0.22em] text-black/40">
               Listings
             </p>
-            <h2 className="mt-2 text-2xl font-semibold tracking-tight">
+            <h2 className="mt-1 text-2xl font-semibold tracking-tight">
               Latest items
             </h2>
           </div>
 
-          <p className="text-sm text-black/45">
-            {filteredListings.length} shown
-          </p>
+          <p className="text-sm text-black/45">{filteredListings.length} shown</p>
         </section>
 
         {loading ? (
@@ -292,7 +290,7 @@ export default function MarketplacePage() {
             </button>
           </div>
         ) : (
-          <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
             {filteredListings.map((item) => {
               const sellerProfile = item.user_id
                 ? profilesByUserId[item.user_id]
@@ -304,35 +302,35 @@ export default function MarketplacePage() {
               return (
                 <article
                   key={item.id}
-                  className="overflow-hidden rounded-[28px] border border-black/8 bg-white p-4 shadow-sm transition duration-200 hover:-translate-y-1 hover:shadow-md"
+                  className="overflow-hidden rounded-[24px] border border-black/8 bg-white p-3 shadow-sm transition duration-200 hover:-translate-y-1 hover:shadow-md sm:rounded-[28px] sm:p-4"
                 >
                   <Link href={`/listing/${item.id}`}>
                     <div className="cursor-pointer">
-                      <div className="mb-4 overflow-hidden rounded-2xl bg-neutral-100">
+                      <div className="mb-3 overflow-hidden rounded-2xl bg-neutral-100">
                         {item.image ? (
                           <img
                             src={item.image}
                             alt={item.title}
-                            className="h-56 w-full object-cover"
+                            className="h-44 w-full object-cover sm:h-52"
                           />
                         ) : (
-                          <div className="h-56 w-full bg-neutral-100" />
+                          <div className="h-44 w-full bg-neutral-100 sm:h-52" />
                         )}
                       </div>
 
-                      <h3 className="break-words text-2xl font-semibold tracking-tight">
+                      <h3 className="line-clamp-1 break-words text-xl font-semibold tracking-tight sm:text-2xl">
                         {item.title}
                       </h3>
 
-                      <p className="mt-3 line-clamp-2 break-words text-base leading-7 text-black/60">
+                      <p className="mt-2 line-clamp-2 break-words text-sm leading-6 text-black/60 sm:text-base">
                         {item.description}
                       </p>
 
-                      <p className="mt-5 break-words text-4xl font-semibold">
+                      <p className="mt-3 break-words text-3xl font-semibold sm:text-4xl">
                         {item.price}
                       </p>
 
-                      <div className="mt-4 text-sm text-black/45">
+                      <div className="mt-3 line-clamp-1 text-sm text-black/45">
                         {item.category || "general"} •{" "}
                         {item.condition || "used"} •{" "}
                         {item.country || "No country"}
@@ -341,21 +339,21 @@ export default function MarketplacePage() {
                     </div>
                   </Link>
 
-                  <div className="mt-6 flex items-center justify-between gap-3">
-                    <span className="min-w-0 break-words text-sm text-black/45">
+                  <div className="mt-4 flex items-center justify-between gap-3 border-t border-black/6 pt-3">
+                    <span className="min-w-0 truncate text-sm text-black/45">
                       {storeName}
                     </span>
 
                     {storeSlug ? (
                       <Link
                         href={`/store/${storeSlug}`}
-                        className="shrink-0 rounded-2xl border border-black/10 bg-white px-4 py-2 text-sm font-medium transition hover:bg-black/[0.03]"
+                        className="shrink-0 rounded-xl border border-black/10 bg-white px-3 py-2 text-sm font-medium transition hover:bg-black/[0.03]"
                       >
-                        Visit store
+                        Store
                       </Link>
                     ) : (
-                      <span className="shrink-0 rounded-2xl border border-black/8 bg-black/[0.02] px-4 py-2 text-sm text-black/35">
-                        Store unavailable
+                      <span className="shrink-0 rounded-xl border border-black/8 bg-black/[0.02] px-3 py-2 text-sm text-black/35">
+                        No store
                       </span>
                     )}
                   </div>
