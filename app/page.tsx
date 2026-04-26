@@ -313,7 +313,7 @@ export default function MarketplacePage() {
                             src={item.image}
                             alt={item.title}
                             loading="lazy"
-                            className="h-36 w-full object-contain p-1 sm:h-40"
+                            className="h-40 w-full object-cover sm:h-44"
                           />
                         ) : (
                           <div className="h-36 w-full bg-neutral-100 sm:h-40" />
