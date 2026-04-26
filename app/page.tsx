@@ -28,15 +28,21 @@ type ProfileRow = {
 
 export default function MarketplacePage() {
   const [listings, setListings] = useState<Listing[]>([]);
-  const [profilesByUserId, setProfilesByUserId] = useState<
-    Record<string, ProfileRow>
-  >({});
+  const [profilesByUserId, setProfilesByUserId] = useState<Record<string, ProfileRow>>({});
   const [search, setSearch] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("all");
   const [conditionFilter, setConditionFilter] = useState("all");
   const [locationFilter, setLocationFilter] = useState("");
   const [nearOnly, setNearOnly] = useState(false);
   const [loading, setLoading] = useState(true);
+
+  const resetFilters = () => {
+    setSearch("");
+    setCategoryFilter("all");
+    setConditionFilter("all");
+    setLocationFilter("");
+    setNearOnly(false);
+  };
 
   useEffect(() => {
     const loadMarketplace = async () => {
@@ -98,26 +104,31 @@ export default function MarketplacePage() {
   }, []);
 
   const categories = useMemo(() => {
-    const values = Array.from(
+    return Array.from(
       new Set(
         listings
           .map((item) => (item.category || "general").toLowerCase())
           .filter(Boolean)
       )
-    );
-    return values.sort();
+    ).sort();
   }, [listings]);
 
   const conditions = useMemo(() => {
-    const values = Array.from(
+    return Array.from(
       new Set(
         listings
           .map((item) => (item.condition || "used").toLowerCase())
           .filter(Boolean)
       )
-    );
-    return values.sort();
+    ).sort();
   }, [listings]);
+
+  const filtersActive =
+    search.trim() ||
+    categoryFilter !== "all" ||
+    conditionFilter !== "all" ||
+    locationFilter.trim() ||
+    nearOnly;
 
   const filteredListings = useMemo(() => {
     return listings.filter((item) => {
@@ -129,10 +140,13 @@ export default function MarketplacePage() {
       const category = (item.category || "general").toLowerCase();
       const condition = (item.condition || "used").toLowerCase();
 
+      const searchNeedle = search.trim().toLowerCase();
+      const locationNeedle = locationFilter.trim().toLowerCase();
+
       const matchesSearch =
-        !search.trim() ||
-        title.includes(search.toLowerCase()) ||
-        description.includes(search.toLowerCase());
+        !searchNeedle ||
+        title.includes(searchNeedle) ||
+        description.includes(searchNeedle);
 
       const matchesCategory =
         categoryFilter === "all" ? true : category === categoryFilter;
@@ -140,7 +154,6 @@ export default function MarketplacePage() {
       const matchesCondition =
         conditionFilter === "all" ? true : condition === conditionFilter;
 
-      const locationNeedle = locationFilter.trim().toLowerCase();
       const matchesLocation =
         !locationNeedle ||
         country.includes(locationNeedle) ||
@@ -157,39 +170,51 @@ export default function MarketplacePage() {
         matchesNearOnly
       );
     });
-  }, [
-    listings,
-    search,
-    categoryFilter,
-    conditionFilter,
-    locationFilter,
-    nearOnly,
-  ]);
+  }, [listings, search, categoryFilter, conditionFilter, locationFilter, nearOnly]);
 
   return (
-    <main className="min-h-screen bg-[#f8f8f6] px-6 py-10 text-black sm:px-8 lg:px-10">
+    <main className="min-h-screen overflow-x-hidden bg-[#f8f8f6] px-4 py-6 text-black sm:px-8 lg:px-10">
       <div className="mx-auto max-w-7xl">
-        <section className="mb-8 rounded-[36px] border border-black/8 bg-white p-6 shadow-sm sm:p-8">
-          <p className="mb-3 text-xs font-medium uppercase tracking-[0.22em] text-black/40">
-            Filters
-          </p>
-          <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl">
-            Browse marketplace
-          </h1>
+        <section className="mb-6 rounded-[28px] border border-black/8 bg-white p-5 shadow-sm sm:rounded-[36px] sm:p-8">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <button
+                type="button"
+                onClick={resetFilters}
+                className="mb-3 text-xs font-medium uppercase tracking-[0.22em] text-black/40"
+              >
+                Filters
+              </button>
 
-          <div className="mt-6 grid gap-4 xl:grid-cols-[1.1fr_0.9fr_0.9fr_1fr_0.95fr]">
+              <h1 className="text-3xl font-semibold tracking-tight sm:text-5xl">
+                Browse marketplace
+              </h1>
+            </div>
+
+            {filtersActive && (
+              <button
+                type="button"
+                onClick={resetFilters}
+                className="rounded-2xl border border-black/10 bg-white px-5 py-3 text-sm font-medium transition hover:bg-black/[0.03]"
+              >
+                Reset filters
+              </button>
+            )}
+          </div>
+
+          <div className="mt-6 grid gap-3 xl:grid-cols-[1.1fr_0.9fr_0.9fr_1fr_0.8fr]">
             <input
               type="text"
               placeholder="Search listings..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-black/30"
+              className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-base outline-none transition focus:border-black/30 sm:text-sm"
             />
 
             <select
               value={categoryFilter}
               onChange={(e) => setCategoryFilter(e.target.value)}
-              className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-black/30"
+              className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-base outline-none transition focus:border-black/30 sm:text-sm"
             >
               <option value="all">All categories</option>
               {categories.map((value) => (
@@ -202,7 +227,7 @@ export default function MarketplacePage() {
             <select
               value={conditionFilter}
               onChange={(e) => setConditionFilter(e.target.value)}
-              className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-black/30"
+              className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-base outline-none transition focus:border-black/30 sm:text-sm"
             >
               <option value="all">All conditions</option>
               {conditions.map((value) => (
@@ -217,7 +242,7 @@ export default function MarketplacePage() {
               placeholder="Location..."
               value={locationFilter}
               onChange={(e) => setLocationFilter(e.target.value)}
-              className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-black/30"
+              className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-base outline-none transition focus:border-black/30 sm:text-sm"
             />
 
             <label className="flex items-center gap-3 rounded-2xl border border-black/10 bg-white px-4 py-3">
@@ -227,33 +252,47 @@ export default function MarketplacePage() {
                 onChange={(e) => setNearOnly(e.target.checked)}
                 className="h-5 w-5"
               />
-              <span className="text-sm text-black/75">Near you only</span>
+              <span className="text-sm text-black/75">Near you</span>
             </label>
           </div>
         </section>
 
-        <section className="mb-5">
-          <p className="text-xs font-medium uppercase tracking-[0.22em] text-black/40">
-            Listings
+        <section className="mb-5 flex items-end justify-between gap-4">
+          <div>
+            <p className="text-xs font-medium uppercase tracking-[0.22em] text-black/40">
+              Listings
+            </p>
+            <h2 className="mt-2 text-2xl font-semibold tracking-tight">
+              Latest items
+            </h2>
+          </div>
+
+          <p className="text-sm text-black/45">
+            {filteredListings.length} shown
           </p>
-          <h2 className="mt-2 text-2xl font-semibold tracking-tight">
-            Latest items
-          </h2>
         </section>
 
         {loading ? (
-          <div className="rounded-[32px] border border-black/8 bg-white px-6 py-14 text-center shadow-sm">
+          <div className="rounded-[28px] border border-black/8 bg-white px-6 py-14 text-center shadow-sm">
             <p className="text-lg font-medium">Loading marketplace...</p>
           </div>
         ) : filteredListings.length === 0 ? (
-          <div className="rounded-[32px] border border-dashed border-black/10 bg-white px-6 py-14 text-center shadow-sm">
+          <div className="rounded-[28px] border border-dashed border-black/10 bg-white px-6 py-14 text-center shadow-sm">
             <p className="text-lg font-medium">No matching listings</p>
             <p className="mt-2 text-black/55">
               Try changing your filters or search term.
             </p>
+
+            <button
+              type="button"
+              onClick={resetFilters}
+              className="mt-6 rounded-2xl bg-black px-5 py-3 text-sm font-medium text-white"
+            >
+              Reset filters
+            </button>
           </div>
         ) : (
-          <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
+          <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
             {filteredListings.map((item) => {
               const sellerProfile = item.user_id
                 ? profilesByUserId[item.user_id]
@@ -265,7 +304,7 @@ export default function MarketplacePage() {
               return (
                 <article
                   key={item.id}
-                  className="overflow-hidden rounded-[30px] border border-black/8 bg-white p-4 shadow-sm transition duration-200 hover:-translate-y-1 hover:shadow-md"
+                  className="overflow-hidden rounded-[28px] border border-black/8 bg-white p-4 shadow-sm transition duration-200 hover:-translate-y-1 hover:shadow-md"
                 >
                   <Link href={`/listing/${item.id}`}>
                     <div className="cursor-pointer">
@@ -281,15 +320,15 @@ export default function MarketplacePage() {
                         )}
                       </div>
 
-                      <h3 className="text-2xl font-semibold tracking-tight">
+                      <h3 className="break-words text-2xl font-semibold tracking-tight">
                         {item.title}
                       </h3>
 
-                      <p className="mt-3 line-clamp-2 text-base leading-7 text-black/60">
+                      <p className="mt-3 line-clamp-2 break-words text-base leading-7 text-black/60">
                         {item.description}
                       </p>
 
-                      <p className="mt-5 text-4xl font-semibold">
+                      <p className="mt-5 break-words text-4xl font-semibold">
                         {item.price}
                       </p>
 
@@ -303,19 +342,19 @@ export default function MarketplacePage() {
                   </Link>
 
                   <div className="mt-6 flex items-center justify-between gap-3">
-                    <span className="text-sm text-black/45">
+                    <span className="min-w-0 break-words text-sm text-black/45">
                       {storeName}
                     </span>
 
                     {storeSlug ? (
                       <Link
                         href={`/store/${storeSlug}`}
-                        className="rounded-2xl border border-black/10 bg-white px-4 py-2 text-sm font-medium transition hover:bg-black/[0.03]"
+                        className="shrink-0 rounded-2xl border border-black/10 bg-white px-4 py-2 text-sm font-medium transition hover:bg-black/[0.03]"
                       >
                         Visit store
                       </Link>
                     ) : (
-                      <span className="rounded-2xl border border-black/8 bg-black/[0.02] px-4 py-2 text-sm text-black/35">
+                      <span className="shrink-0 rounded-2xl border border-black/8 bg-black/[0.02] px-4 py-2 text-sm text-black/35">
                         Store unavailable
                       </span>
                     )}
