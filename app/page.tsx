@@ -52,7 +52,8 @@ export default function MarketplacePage() {
         .from("listings")
         .select("*")
         .eq("status", "active")
-        .order("created_at", { ascending: false });
+        .order("created_at", { ascending: false })
+        .limit(30);
 
       if (listingError) {
         console.error("Error loading marketplace listings:", listingError);
@@ -290,7 +291,7 @@ export default function MarketplacePage() {
             </button>
           </div>
         ) : (
-          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
             {filteredListings.map((item) => {
               const sellerProfile = item.user_id
                 ? profilesByUserId[item.user_id]
@@ -302,7 +303,7 @@ export default function MarketplacePage() {
               return (
                 <article
                   key={item.id}
-                  className="overflow-hidden rounded-[24px] border border-black/8 bg-white p-3 shadow-sm transition duration-200 hover:-translate-y-1 hover:shadow-md sm:rounded-[28px] sm:p-4"
+                  className="overflow-hidden rounded-[22px] border border-black/8 bg-white p-3 shadow-sm transition duration-200 hover:-translate-y-1 hover:shadow-md"
                 >
                   <Link href={`/listing/${item.id}`}>
                     <div className="cursor-pointer">
@@ -311,26 +312,27 @@ export default function MarketplacePage() {
                           <img
                             src={item.image}
                             alt={item.title}
-                            className="h-44 w-full object-cover sm:h-52"
+                            loading="lazy"
+                            className="h-36 w-full object-cover sm:h-40"
                           />
                         ) : (
-                          <div className="h-44 w-full bg-neutral-100 sm:h-52" />
+                          <div className="h-36 w-full bg-neutral-100 sm:h-40" />
                         )}
                       </div>
 
-                      <h3 className="line-clamp-1 break-words text-xl font-semibold tracking-tight sm:text-2xl">
+                      <h3 className="line-clamp-1 break-words text-lg font-semibold tracking-tight sm:text-xl">
                         {item.title}
                       </h3>
 
-                      <p className="mt-2 line-clamp-2 break-words text-sm leading-6 text-black/60 sm:text-base">
+                      <p className="mt-2 line-clamp-2 break-words text-sm leading-5 text-black/60">
                         {item.description}
                       </p>
 
-                      <p className="mt-3 break-words text-3xl font-semibold sm:text-4xl">
+                      <p className="mt-3 break-words text-2xl font-semibold sm:text-3xl">
                         {item.price}
                       </p>
 
-                      <div className="mt-3 line-clamp-1 text-sm text-black/45">
+                      <div className="mt-2 line-clamp-1 text-xs text-black/45 sm:text-sm">
                         {item.category || "general"} •{" "}
                         {item.condition || "used"} •{" "}
                         {item.country || "No country"}
@@ -339,20 +341,20 @@ export default function MarketplacePage() {
                     </div>
                   </Link>
 
-                  <div className="mt-4 flex items-center justify-between gap-3 border-t border-black/6 pt-3">
-                    <span className="min-w-0 truncate text-sm text-black/45">
+                  <div className="mt-3 flex items-center justify-between gap-3 border-t border-black/6 pt-3">
+                    <span className="min-w-0 truncate text-xs text-black/45 sm:text-sm">
                       {storeName}
                     </span>
 
                     {storeSlug ? (
                       <Link
                         href={`/store/${storeSlug}`}
-                        className="shrink-0 rounded-xl border border-black/10 bg-white px-3 py-2 text-sm font-medium transition hover:bg-black/[0.03]"
+                        className="shrink-0 rounded-xl border border-black/10 bg-white px-3 py-2 text-xs font-medium transition hover:bg-black/[0.03] sm:text-sm"
                       >
                         Store
                       </Link>
                     ) : (
-                      <span className="shrink-0 rounded-xl border border-black/8 bg-black/[0.02] px-3 py-2 text-sm text-black/35">
+                      <span className="shrink-0 rounded-xl border border-black/8 bg-black/[0.02] px-3 py-2 text-xs text-black/35 sm:text-sm">
                         No store
                       </span>
                     )}
