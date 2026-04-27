@@ -6,6 +6,33 @@ import { useRouter } from "next/navigation";
 import { supabase } from "../../lib/supabase";
 import { useAuth } from "../../lib/useAuth";
 
+async function resizeImage(file: File, maxWidth = 1600, quality = 0.82) {
+  const imageBitmap = await createImageBitmap(file);
+
+  const scale = Math.min(1, maxWidth / imageBitmap.width);
+  const width = Math.round(imageBitmap.width * scale);
+  const height = Math.round(imageBitmap.height * scale);
+
+  const canvas = document.createElement("canvas");
+  canvas.width = width;
+  canvas.height = height;
+
+  const ctx = canvas.getContext("2d");
+  if (!ctx) throw new Error("Could not resize image");
+
+  ctx.drawImage(imageBitmap, 0, 0, width, height);
+
+  const blob = await new Promise<Blob | null>((resolve) =>
+    canvas.toBlob(resolve, "image/jpeg", quality)
+  );
+
+  if (!blob) throw new Error("Could not create resized image");
+
+  return new File([blob], "listing-image.jpg", {
+    type: "image/jpeg",
+  });
+}
+
 export default function SellPage() {
   const router = useRouter();
   const { user, loading } = useAuth();
@@ -64,12 +91,15 @@ export default function SellPage() {
       let thumbUrl = "";
 
       if (file) {
-        const fileExt = file.name.split(".").pop() || "jpg";
-        const fileName = `${user.id}/${Date.now()}.${fileExt}`;
+        const resizedFile = await resizeImage(file);
+        const fileName = `${user.id}/${Date.now()}.jpg`;
 
         const { error: uploadError } = await supabase.storage
           .from("listing-images")
-          .upload(fileName, file, { upsert: false });
+          .upload(fileName, resizedFile, {
+            contentType: "image/jpeg",
+            upsert: false,
+          });
 
         if (uploadError) {
           console.error(uploadError);
@@ -89,6 +119,7 @@ export default function SellPage() {
 
       const cleanCountry = country.trim();
       const cleanCity = city.trim();
+
       const location =
         cleanCountry && cleanCity
           ? `${cleanCountry} • ${cleanCity}`
