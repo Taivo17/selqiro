@@ -146,7 +146,7 @@ export default function StorePage() {
     <main className="min-h-screen overflow-x-hidden bg-[#f8f8f6] px-4 py-5 text-black sm:px-8 lg:px-10">
       <div className="mx-auto max-w-7xl">
         <section className="mb-5 overflow-hidden rounded-[28px] border border-black/8 bg-white shadow-sm sm:rounded-[36px]">
-          <div className="relative h-36 w-full bg-neutral-100 sm:h-56 lg:h-64">
+          <div className="h-36 w-full bg-neutral-100 sm:h-52 lg:h-60">
             {profile.banner_url ? (
               <img
                 src={profile.banner_url}
@@ -159,10 +159,10 @@ export default function StorePage() {
             )}
           </div>
 
-          <div className="px-5 pb-5 sm:px-8 sm:pb-8">
-            <div className="-mt-10 flex flex-col gap-4 sm:-mt-14 lg:flex-row lg:items-end lg:justify-between">
-              <div className="flex items-end gap-4">
-                <div className="h-24 w-24 shrink-0 overflow-hidden rounded-full border-4 border-white bg-white shadow-md sm:h-28 sm:w-28">
+          <div className="px-5 pb-5 pt-0 sm:px-8 sm:pb-8">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-end">
+                <div className="-mt-10 h-24 w-24 shrink-0 overflow-hidden rounded-full border-4 border-white bg-white shadow-md sm:-mt-12 sm:h-28 sm:w-28">
                   {profile.avatar_url ? (
                     <img
                       src={profile.avatar_url}
@@ -190,7 +190,7 @@ export default function StorePage() {
                 </div>
               </div>
 
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap gap-2 sm:pb-1">
                 {isOwner && (
                   <Link
                     href="/sell"
