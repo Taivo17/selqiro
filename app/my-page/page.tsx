@@ -5,6 +5,15 @@ import Link from "next/link";
 import { supabase } from "../../lib/supabase";
 import { useAuth } from "../../lib/useAuth";
 
+type ListingImage = {
+  id: string;
+  thumb_url?: string | null;
+  medium_url?: string | null;
+  original_url?: string | null;
+  is_primary?: boolean | null;
+  sort_order?: number | null;
+};
+
 type Listing = {
   id: number;
   user_id?: string | null;
@@ -25,12 +34,31 @@ type Listing = {
   vehicle_model?: string;
   vehicle_year?: string;
   engine?: string;
+  listing_images?: ListingImage[];
 };
 
 const inputClass =
   "w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-base outline-none transition focus:border-black/30 sm:text-sm";
 
 const labelClass = "mb-2 block text-sm font-medium text-black/60";
+
+function getListingImage(item: Listing) {
+  const sortedImages = [...(item.listing_images || [])].sort((a, b) => {
+    if (a.is_primary && !b.is_primary) return -1;
+    if (!a.is_primary && b.is_primary) return 1;
+    return (a.sort_order || 0) - (b.sort_order || 0);
+  });
+
+  const img = sortedImages[0];
+
+  return (
+    img?.thumb_url ||
+    img?.medium_url ||
+    img?.original_url ||
+    item.image ||
+    ""
+  );
+}
 
 export default function MyPage() {
   const { user, loading } = useAuth();
@@ -53,6 +81,7 @@ export default function MyPage() {
     "active"
   );
   const [editImage, setEditImage] = useState("");
+  const [editFile, setEditFile] = useState<File | null>(null);
 
   const [editCategory, setEditCategory] = useState("general");
   const [editCondition, setEditCondition] = useState("used");
@@ -73,7 +102,9 @@ export default function MyPage() {
 
     const { data, error } = await supabase
       .from("listings")
-      .select("*")
+      .select(
+        "*, listing_images(id, thumb_url, medium_url, original_url, is_primary, sort_order)"
+      )
       .eq("user_id", currentUserId)
       .order("created_at", { ascending: false });
 
@@ -107,7 +138,8 @@ export default function MyPage() {
     setEditDescription(item.description || "");
     setEditPrice(item.price || "");
     setEditStatus(item.status || "active");
-    setEditImage(item.image || "");
+    setEditImage(getListingImage(item));
+    setEditFile(null);
 
     setEditCategory(item.category || "general");
     setEditCondition(item.condition || "used");
@@ -133,6 +165,7 @@ export default function MyPage() {
     setEditPrice("");
     setEditStatus("active");
     setEditImage("");
+    setEditFile(null);
     setEditCategory("general");
     setEditCondition("used");
     setEditCountry("Estonia");
@@ -152,9 +185,55 @@ export default function MyPage() {
     const file = event.target.files?.[0];
     if (!file) return;
 
-    const reader = new FileReader();
-    reader.onloadend = () => setEditImage(reader.result as string);
-    reader.readAsDataURL(file);
+    setEditFile(file);
+    setEditImage(URL.createObjectURL(file));
+  };
+
+  const uploadEditImage = async () => {
+    if (!editFile || !userId || !editingId) {
+      return {
+        originalUrl: editImage || "",
+        mediumUrl: "",
+        thumbUrl: "",
+      };
+    }
+
+    const fileExt = editFile.name.split(".").pop() || "jpg";
+    const fileName = `${userId}/${Date.now()}.${fileExt}`;
+
+    const { error: uploadError } = await supabase.storage
+      .from("listing-images")
+      .upload(fileName, editFile, { upsert: false });
+
+    if (uploadError) throw uploadError;
+
+    const { data } = supabase.storage
+      .from("listing-images")
+      .getPublicUrl(fileName);
+
+    const originalUrl = data.publicUrl;
+    const mediumUrl = `${originalUrl}?width=900&resize=contain`;
+    const thumbUrl = `${originalUrl}?width=400&height=300&resize=cover`;
+
+    await supabase
+      .from("listing_images")
+      .update({ is_primary: false })
+      .eq("listing_id", editingId)
+      .eq("user_id", userId);
+
+    const { error: imageError } = await supabase.from("listing_images").insert({
+      listing_id: editingId,
+      user_id: userId,
+      original_url: originalUrl,
+      medium_url: mediumUrl,
+      thumb_url: thumbUrl,
+      sort_order: 0,
+      is_primary: true,
+    });
+
+    if (imageError) throw imageError;
+
+    return { originalUrl, mediumUrl, thumbUrl };
   };
 
   const saveEdit = async () => {
@@ -167,82 +246,85 @@ export default function MyPage() {
 
     setSavingEdit(true);
 
-    const cleanCountry = editCountry.trim();
-    const cleanCity = editCity.trim();
+    try {
+      const uploadedImage = await uploadEditImage();
 
-    const location =
-      cleanCity && cleanCountry
-        ? `${cleanCountry} • ${cleanCity}`
-        : cleanCountry || cleanCity || "";
+      const cleanCountry = editCountry.trim();
+      const cleanCity = editCity.trim();
 
-    const searchText = [
-      editTitle,
-      editDescription,
-      editCategory,
-      editCondition,
-      cleanCountry,
-      cleanCity,
-      editManufacturer,
-      editPartNumber,
-      editOemNumber,
-      editVehicleBrand,
-      editVehicleModel,
-      editVehicleYear,
-      editEngine,
-    ]
-      .map((item) => item.trim())
-      .filter(Boolean)
-      .join(" ");
+      const location =
+        cleanCity && cleanCountry
+          ? `${cleanCountry} • ${cleanCity}`
+          : cleanCountry || cleanCity || "";
 
-    const { error } = await supabase
-      .from("listings")
-      .update({
-        title: editTitle.trim(),
-        description: editDescription.trim(),
-        price: editPrice.trim(),
-        status: editStatus,
-        image: editImage || null,
+      const searchText = [
+        editTitle,
+        editDescription,
+        editCategory,
+        editCondition,
+        cleanCountry,
+        cleanCity,
+        editManufacturer,
+        editPartNumber,
+        editOemNumber,
+        editVehicleBrand,
+        editVehicleModel,
+        editVehicleYear,
+        editEngine,
+      ]
+        .map((item) => item.trim())
+        .filter(Boolean)
+        .join(" ");
 
-        category: editCategory,
-        condition: editCondition,
-        country: cleanCountry,
-        city: cleanCity,
-        location,
+      const { error } = await supabase
+        .from("listings")
+        .update({
+          title: editTitle.trim(),
+          description: editDescription.trim(),
+          price: editPrice.trim(),
+          status: editStatus,
+          image: uploadedImage.originalUrl || editImage || null,
 
-        manufacturer: editManufacturer.trim(),
-        part_number: editPartNumber.trim(),
-        oem_number: editOemNumber.trim(),
+          category: editCategory,
+          condition: editCondition,
+          country: cleanCountry,
+          city: cleanCity,
+          location,
 
-        vehicle_brand: editVehicleBrand.trim(),
-        vehicle_model: editVehicleModel.trim(),
-        vehicle_year: editVehicleYear.trim(),
-        engine: editEngine.trim(),
-
-        details: {
           manufacturer: editManufacturer.trim(),
-          partNumber: editPartNumber.trim(),
-          oemNumber: editOemNumber.trim(),
-          vehicleBrand: editVehicleBrand.trim(),
-          vehicleModel: editVehicleModel.trim(),
-          vehicleYear: editVehicleYear.trim(),
+          part_number: editPartNumber.trim(),
+          oem_number: editOemNumber.trim(),
+
+          vehicle_brand: editVehicleBrand.trim(),
+          vehicle_model: editVehicleModel.trim(),
+          vehicle_year: editVehicleYear.trim(),
           engine: editEngine.trim(),
-        },
 
-        search_text: searchText,
-      })
-      .eq("id", editingId)
-      .eq("user_id", userId);
+          details: {
+            manufacturer: editManufacturer.trim(),
+            partNumber: editPartNumber.trim(),
+            oemNumber: editOemNumber.trim(),
+            vehicleBrand: editVehicleBrand.trim(),
+            vehicleModel: editVehicleModel.trim(),
+            vehicleYear: editVehicleYear.trim(),
+            engine: editEngine.trim(),
+          },
 
-    setSavingEdit(false);
+          search_text: searchText,
+        })
+        .eq("id", editingId)
+        .eq("user_id", userId);
 
-    if (error) {
+      if (error) throw error;
+
+      cancelEdit();
+      await fetchListings(userId);
+    } catch (error) {
       console.error("Error saving edit:", error);
       alert("Failed to save changes.");
-      return;
+    } finally {
+      setSavingEdit(false);
     }
-
-    cancelEdit();
-    await fetchListings(userId);
   };
 
   const updateStatus = async (
@@ -473,7 +555,9 @@ export default function MyPage() {
                   <select
                     value={editStatus}
                     onChange={(e) =>
-                      setEditStatus(e.target.value as "active" | "paused" | "sold")
+                      setEditStatus(
+                        e.target.value as "active" | "paused" | "sold"
+                      )
                     }
                     className={inputClass}
                   >
@@ -671,7 +755,9 @@ export default function MyPage() {
 
           <div className="rounded-[28px] bg-white p-5 shadow-sm">
             <p className="text-sm text-black/45">Paused / Sold</p>
-            <p className="mt-2 text-3xl font-semibold">{pausedCount + soldCount}</p>
+            <p className="mt-2 text-3xl font-semibold">
+              {pausedCount + soldCount}
+            </p>
           </div>
         </section>
 
@@ -716,83 +802,89 @@ export default function MyPage() {
           </div>
         ) : (
           <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
-            {filteredListings.map((item) => (
-              <article
-                key={item.id}
-                className="overflow-hidden rounded-[28px] bg-white p-4 shadow-sm"
-              >
-                <Link href={`/listing/${item.id}`}>
-                  <div className="cursor-pointer">
-                    <div className="mb-4 overflow-hidden rounded-2xl bg-neutral-100">
-                      {item.image ? (
-                        <img
-                          src={item.image}
-                          alt={item.title}
-                          className="h-52 w-full object-cover"
-                        />
-                      ) : (
-                        <div className="h-52 w-full bg-neutral-100" />
-                      )}
+            {filteredListings.map((item) => {
+              const imageUrl = getListingImage(item);
+
+              return (
+                <article
+                  key={item.id}
+                  className="overflow-hidden rounded-[28px] bg-white p-4 shadow-sm"
+                >
+                  <Link href={`/listing/${item.id}`}>
+                    <div className="cursor-pointer">
+                      <div className="mb-4 overflow-hidden rounded-2xl bg-neutral-100">
+                        {imageUrl ? (
+                          <img
+                            src={imageUrl}
+                            alt={item.title}
+                            loading="lazy"
+                            className="h-52 w-full object-cover"
+                          />
+                        ) : (
+                          <div className="h-52 w-full bg-neutral-100" />
+                        )}
+                      </div>
+
+                      <h3 className="break-words text-xl font-semibold tracking-tight">
+                        {item.title}
+                      </h3>
+
+                      <p className="mt-2 line-clamp-2 break-words text-sm leading-6 text-black/60">
+                        {item.description}
+                      </p>
+
+                      <p className="mt-4 break-words text-2xl font-semibold">
+                        {item.price}
+                      </p>
+
+                      <div className="mt-3 text-sm text-black/45">
+                        {item.category || "general"} •{" "}
+                        {item.condition || "used"} •{" "}
+                        {item.country || "No country"}
+                        {item.city ? ` • ${item.city}` : ""}
+                      </div>
                     </div>
+                  </Link>
 
-                    <h3 className="break-words text-xl font-semibold tracking-tight">
-                      {item.title}
-                    </h3>
+                  <div className="mt-5 flex flex-wrap gap-2">
+                    <button
+                      onClick={() => updateStatus(item.id, "active")}
+                      className="rounded-xl border border-black/10 bg-white px-3 py-2 text-sm"
+                    >
+                      Active
+                    </button>
 
-                    <p className="mt-2 line-clamp-2 break-words text-sm leading-6 text-black/60">
-                      {item.description}
-                    </p>
+                    <button
+                      onClick={() => updateStatus(item.id, "paused")}
+                      className="rounded-xl border border-black/10 bg-white px-3 py-2 text-sm"
+                    >
+                      Pause
+                    </button>
 
-                    <p className="mt-4 break-words text-2xl font-semibold">
-                      {item.price}
-                    </p>
+                    <button
+                      onClick={() => updateStatus(item.id, "sold")}
+                      className="rounded-xl border border-black/10 bg-white px-3 py-2 text-sm"
+                    >
+                      Sold
+                    </button>
 
-                    <div className="mt-3 text-sm text-black/45">
-                      {item.category || "general"} • {item.condition || "used"} •{" "}
-                      {item.country || "No country"}
-                      {item.city ? ` • ${item.city}` : ""}
-                    </div>
+                    <button
+                      onClick={() => startEdit(item)}
+                      className="rounded-xl border border-black/10 bg-white px-3 py-2 text-sm"
+                    >
+                      Edit
+                    </button>
+
+                    <button
+                      onClick={() => deleteListing(item.id)}
+                      className="rounded-xl border border-red-200 bg-white px-3 py-2 text-sm text-red-600"
+                    >
+                      Delete
+                    </button>
                   </div>
-                </Link>
-
-                <div className="mt-5 flex flex-wrap gap-2">
-                  <button
-                    onClick={() => updateStatus(item.id, "active")}
-                    className="rounded-xl border border-black/10 bg-white px-3 py-2 text-sm"
-                  >
-                    Active
-                  </button>
-
-                  <button
-                    onClick={() => updateStatus(item.id, "paused")}
-                    className="rounded-xl border border-black/10 bg-white px-3 py-2 text-sm"
-                  >
-                    Pause
-                  </button>
-
-                  <button
-                    onClick={() => updateStatus(item.id, "sold")}
-                    className="rounded-xl border border-black/10 bg-white px-3 py-2 text-sm"
-                  >
-                    Sold
-                  </button>
-
-                  <button
-                    onClick={() => startEdit(item)}
-                    className="rounded-xl border border-black/10 bg-white px-3 py-2 text-sm"
-                  >
-                    Edit
-                  </button>
-
-                  <button
-                    onClick={() => deleteListing(item.id)}
-                    className="rounded-xl border border-red-200 bg-white px-3 py-2 text-sm text-red-600"
-                  >
-                    Delete
-                  </button>
-                </div>
-              </article>
-            ))}
+                </article>
+              );
+            })}
           </div>
         )}
       </div>
