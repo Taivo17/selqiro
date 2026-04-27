@@ -1,9 +1,11 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { supabase } from "../../lib/supabase";
 import { useAuth } from "../../lib/useAuth";
+
+const PAGE_SIZE = 30;
 
 type ListingImage = {
   id: string;
@@ -96,7 +98,10 @@ export default function MyPage() {
   const [filter, setFilter] = useState<"all" | "active" | "paused" | "sold">(
     "all"
   );
+
   const [loadingListings, setLoadingListings] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
 
   const [editingId, setEditingId] = useState<number | null>(null);
   const [savingEdit, setSavingEdit] = useState(false);
@@ -124,26 +129,56 @@ export default function MyPage() {
   const [editVehicleYear, setEditVehicleYear] = useState("");
   const [editEngine, setEditEngine] = useState("");
 
-  const fetchListings = async (currentUserId: string) => {
-    setLoadingListings(true);
+  const buildListingsQuery = (currentUserId: string, from: number) => {
+    const to = from + PAGE_SIZE - 1;
+    const searchNeedle = search.trim();
 
-    const { data, error } = await supabase
+    let query = supabase
       .from("listings")
       .select(
         "*, listing_images(id, thumb_url, medium_url, original_url, is_primary, sort_order)"
       )
       .eq("user_id", currentUserId)
-      .order("created_at", { ascending: false });
+      .order("created_at", { ascending: false })
+      .range(from, to);
+
+    if (filter !== "all") {
+      query = query.eq("status", filter);
+    }
+
+    if (searchNeedle) {
+      query = query.or(
+        `title.ilike.%${searchNeedle}%,description.ilike.%${searchNeedle}%,search_text.ilike.%${searchNeedle}%`
+      );
+    }
+
+    return query;
+  };
+
+  const fetchListings = async (currentUserId: string, from = 0) => {
+    if (from === 0) setLoadingListings(true);
+
+    const { data, error } = await buildListingsQuery(currentUserId, from);
 
     if (error) {
       console.error("Error fetching user listings:", error);
-      setListings([]);
+      if (from === 0) setListings([]);
       setLoadingListings(false);
+      setLoadingMore(false);
       return;
     }
 
-    setListings((data || []) as Listing[]);
+    const loaded = (data || []) as Listing[];
+
+    if (from === 0) {
+      setListings(loaded);
+    } else {
+      setListings((prev) => [...prev, ...loaded]);
+    }
+
+    setHasMore(loaded.length === PAGE_SIZE);
     setLoadingListings(false);
+    setLoadingMore(false);
   };
 
   useEffect(() => {
@@ -155,8 +190,19 @@ export default function MyPage() {
       return;
     }
 
-    fetchListings(userId);
-  }, [userId, loading]);
+    const timer = setTimeout(() => {
+      fetchListings(userId, 0);
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [userId, loading, search, filter]);
+
+  const loadMore = async () => {
+    if (!userId || loadingMore || !hasMore) return;
+
+    setLoadingMore(true);
+    await fetchListings(userId, listings.length);
+  };
 
   const startEdit = (item: Listing) => {
     setEditingId(item.id);
@@ -348,7 +394,7 @@ export default function MyPage() {
       if (error) throw error;
 
       cancelEdit();
-      await fetchListings(userId);
+      await fetchListings(userId, 0);
     } catch (error) {
       console.error("Error saving edit:", error);
       alert("Failed to save changes.");
@@ -375,7 +421,7 @@ export default function MyPage() {
       return;
     }
 
-    await fetchListings(userId);
+    await fetchListings(userId, 0);
   };
 
   const deleteListing = async (id: number) => {
@@ -399,23 +445,8 @@ export default function MyPage() {
     }
 
     if (editingId === id) cancelEdit();
-    await fetchListings(userId);
+    await fetchListings(userId, 0);
   };
-
-  const filteredListings = useMemo(() => {
-    return listings.filter((item) => {
-      const query = search.toLowerCase();
-
-      const matchesSearch =
-        item.title.toLowerCase().includes(query) ||
-        item.description.toLowerCase().includes(query);
-
-      const currentStatus = item.status || "active";
-      const matchesFilter = filter === "all" ? true : currentStatus === filter;
-
-      return matchesSearch && matchesFilter;
-    });
-  }, [listings, search, filter]);
 
   const activeCount = listings.filter(
     (item) => (item.status || "active") === "active"
@@ -774,17 +805,17 @@ export default function MyPage() {
 
         <section className="grid gap-4 md:grid-cols-3">
           <div className="rounded-[28px] bg-white p-5 shadow-sm">
-            <p className="text-sm text-black/45">My listings</p>
+            <p className="text-sm text-black/45">Loaded listings</p>
             <p className="mt-2 text-3xl font-semibold">{listings.length}</p>
           </div>
 
           <div className="rounded-[28px] bg-white p-5 shadow-sm">
-            <p className="text-sm text-black/45">Active</p>
+            <p className="text-sm text-black/45">Loaded active</p>
             <p className="mt-2 text-3xl font-semibold">{activeCount}</p>
           </div>
 
           <div className="rounded-[28px] bg-white p-5 shadow-sm">
-            <p className="text-sm text-black/45">Paused / Sold</p>
+            <p className="text-sm text-black/45">Loaded paused / sold</p>
             <p className="mt-2 text-3xl font-semibold">
               {pausedCount + soldCount}
             </p>
@@ -820,7 +851,7 @@ export default function MyPage() {
           <div className="rounded-[28px] bg-white p-8 text-center shadow-sm">
             Loading your listings...
           </div>
-        ) : filteredListings.length === 0 ? (
+        ) : listings.length === 0 ? (
           <div className="rounded-[28px] bg-white p-8 text-center shadow-sm">
             <p className="text-lg font-medium">No listings for this account</p>
             <Link
@@ -831,91 +862,106 @@ export default function MyPage() {
             </Link>
           </div>
         ) : (
-          <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
-            {filteredListings.map((item) => {
-              const imageUrl = getListingImage(item);
+          <>
+            <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+              {listings.map((item) => {
+                const imageUrl = getListingImage(item);
 
-              return (
-                <article
-                  key={item.id}
-                  className="overflow-hidden rounded-[28px] bg-white p-4 shadow-sm"
-                >
-                  <Link href={`/listing/${item.id}`}>
-                    <div className="cursor-pointer">
-                      <div className="mb-4 overflow-hidden rounded-2xl bg-neutral-100">
-                        {imageUrl ? (
-                          <img
-                            src={imageUrl}
-                            alt={item.title}
-                            loading="lazy"
-                            className="h-52 w-full object-cover"
-                          />
-                        ) : (
-                          <div className="h-52 w-full bg-neutral-100" />
-                        )}
+                return (
+                  <article
+                    key={item.id}
+                    className="overflow-hidden rounded-[28px] bg-white p-4 shadow-sm"
+                  >
+                    <Link href={`/listing/${item.id}`}>
+                      <div className="cursor-pointer">
+                        <div className="mb-4 overflow-hidden rounded-2xl bg-neutral-100">
+                          {imageUrl ? (
+                            <img
+                              src={imageUrl}
+                              alt={item.title}
+                              loading="lazy"
+                              className="h-52 w-full object-cover"
+                            />
+                          ) : (
+                            <div className="h-52 w-full bg-neutral-100" />
+                          )}
+                        </div>
+
+                        <h3 className="break-words text-xl font-semibold tracking-tight">
+                          {item.title}
+                        </h3>
+
+                        <p className="mt-2 line-clamp-2 break-words text-sm leading-6 text-black/60">
+                          {item.description}
+                        </p>
+
+                        <p className="mt-4 break-words text-2xl font-semibold">
+                          {item.price}
+                        </p>
+
+                        <div className="mt-3 text-sm text-black/45">
+                          {item.category || "general"} •{" "}
+                          {item.condition || "used"} •{" "}
+                          {item.country || "No country"}
+                          {item.city ? ` • ${item.city}` : ""}
+                        </div>
                       </div>
+                    </Link>
 
-                      <h3 className="break-words text-xl font-semibold tracking-tight">
-                        {item.title}
-                      </h3>
+                    <div className="mt-5 flex flex-wrap gap-2">
+                      <button
+                        onClick={() => updateStatus(item.id, "active")}
+                        className="rounded-xl border border-black/10 bg-white px-3 py-2 text-sm"
+                      >
+                        Active
+                      </button>
 
-                      <p className="mt-2 line-clamp-2 break-words text-sm leading-6 text-black/60">
-                        {item.description}
-                      </p>
+                      <button
+                        onClick={() => updateStatus(item.id, "paused")}
+                        className="rounded-xl border border-black/10 bg-white px-3 py-2 text-sm"
+                      >
+                        Pause
+                      </button>
 
-                      <p className="mt-4 break-words text-2xl font-semibold">
-                        {item.price}
-                      </p>
+                      <button
+                        onClick={() => updateStatus(item.id, "sold")}
+                        className="rounded-xl border border-black/10 bg-white px-3 py-2 text-sm"
+                      >
+                        Sold
+                      </button>
 
-                      <div className="mt-3 text-sm text-black/45">
-                        {item.category || "general"} •{" "}
-                        {item.condition || "used"} •{" "}
-                        {item.country || "No country"}
-                        {item.city ? ` • ${item.city}` : ""}
-                      </div>
+                      <button
+                        onClick={() => startEdit(item)}
+                        className="rounded-xl border border-black/10 bg-white px-3 py-2 text-sm"
+                      >
+                        Edit
+                      </button>
+
+                      <button
+                        onClick={() => deleteListing(item.id)}
+                        className="rounded-xl border border-red-200 bg-white px-3 py-2 text-sm text-red-600"
+                      >
+                        Delete
+                      </button>
                     </div>
-                  </Link>
+                  </article>
+                );
+              })}
+            </div>
 
-                  <div className="mt-5 flex flex-wrap gap-2">
-                    <button
-                      onClick={() => updateStatus(item.id, "active")}
-                      className="rounded-xl border border-black/10 bg-white px-3 py-2 text-sm"
-                    >
-                      Active
-                    </button>
-
-                    <button
-                      onClick={() => updateStatus(item.id, "paused")}
-                      className="rounded-xl border border-black/10 bg-white px-3 py-2 text-sm"
-                    >
-                      Pause
-                    </button>
-
-                    <button
-                      onClick={() => updateStatus(item.id, "sold")}
-                      className="rounded-xl border border-black/10 bg-white px-3 py-2 text-sm"
-                    >
-                      Sold
-                    </button>
-
-                    <button
-                      onClick={() => startEdit(item)}
-                      className="rounded-xl border border-black/10 bg-white px-3 py-2 text-sm"
-                    >
-                      Edit
-                    </button>
-
-                    <button
-                      onClick={() => deleteListing(item.id)}
-                      className="rounded-xl border border-red-200 bg-white px-3 py-2 text-sm text-red-600"
-                    >
-                      Delete
-                    </button>
-                  </div>
-                </article>
-              );
-            })}
-          </div>
+            {hasMore && (
+              <div className="mt-8 flex justify-center">
+                <button
+                  type="button"
+                  onClick={loadMore}
+                  disabled={loadingMore}
+                  className="rounded-2xl bg-black px-6 py-3 text-sm font-medium text-white transition hover:opacity-90 disabled:opacity-60"
+                >
+                  {loadingMore ? "Loading..." : "Load more"}
+                </button>
+              </div>
+            )}
+          </>
         )}
       </div>
     </main>
