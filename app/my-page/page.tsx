@@ -60,6 +60,33 @@ function getListingImage(item: Listing) {
   );
 }
 
+async function resizeImage(file: File, maxWidth = 1600, quality = 0.82) {
+  const imageBitmap = await createImageBitmap(file);
+
+  const scale = Math.min(1, maxWidth / imageBitmap.width);
+  const width = Math.round(imageBitmap.width * scale);
+  const height = Math.round(imageBitmap.height * scale);
+
+  const canvas = document.createElement("canvas");
+  canvas.width = width;
+  canvas.height = height;
+
+  const ctx = canvas.getContext("2d");
+  if (!ctx) throw new Error("Could not resize image");
+
+  ctx.drawImage(imageBitmap, 0, 0, width, height);
+
+  const blob = await new Promise<Blob | null>((resolve) =>
+    canvas.toBlob(resolve, "image/jpeg", quality)
+  );
+
+  if (!blob) throw new Error("Could not create resized image");
+
+  return new File([blob], "listing-image.jpg", {
+    type: "image/jpeg",
+  });
+}
+
 export default function MyPage() {
   const { user, loading } = useAuth();
   const userId = user?.id ?? null;
@@ -198,12 +225,15 @@ export default function MyPage() {
       };
     }
 
-    const fileExt = editFile.name.split(".").pop() || "jpg";
-    const fileName = `${userId}/${Date.now()}.${fileExt}`;
+    const resizedFile = await resizeImage(editFile);
+    const fileName = `${userId}/${Date.now()}.jpg`;
 
     const { error: uploadError } = await supabase.storage
       .from("listing-images")
-      .upload(fileName, editFile, { upsert: false });
+      .upload(fileName, resizedFile, {
+        contentType: "image/jpeg",
+        upsert: false,
+      });
 
     if (uploadError) throw uploadError;
 
