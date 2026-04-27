@@ -4,6 +4,8 @@ import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { supabase } from "../lib/supabase";
 
+const PAGE_SIZE = 30;
+
 type ListingImage = {
   id: string;
   thumb_url?: string | null;
@@ -36,6 +38,24 @@ type ProfileRow = {
   store_name?: string | null;
 };
 
+function getListingImage(item: Listing) {
+  const sortedImages = [...(item.listing_images || [])].sort((a, b) => {
+    if (a.is_primary && !b.is_primary) return -1;
+    if (!a.is_primary && b.is_primary) return 1;
+    return (a.sort_order || 0) - (b.sort_order || 0);
+  });
+
+  const img = sortedImages[0];
+
+  return (
+    img?.thumb_url ||
+    img?.medium_url ||
+    img?.original_url ||
+    item.image ||
+    ""
+  );
+}
+
 export default function MarketplacePage() {
   const [listings, setListings] = useState<Listing[]>([]);
   const [profilesByUserId, setProfilesByUserId] = useState<
@@ -47,6 +67,8 @@ export default function MarketplacePage() {
   const [locationFilter, setLocationFilter] = useState("");
   const [nearOnly, setNearOnly] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
 
   const resetFilters = () => {
     setSearch("");
@@ -56,67 +78,82 @@ export default function MarketplacePage() {
     setNearOnly(false);
   };
 
+  const loadProfiles = async (items: Listing[]) => {
+    const userIds = Array.from(
+      new Set(
+        items
+          .map((item) => item.user_id)
+          .filter((value): value is string => Boolean(value))
+      )
+    ).filter((id) => !profilesByUserId[id]);
+
+    if (userIds.length === 0) return;
+
+    const { data: profileData, error: profileError } = await supabase
+      .from("profiles")
+      .select("id, store_slug, store_name")
+      .in("id", userIds);
+
+    if (profileError) {
+      console.error("Error loading store profiles:", profileError);
+      return;
+    }
+
+    const profileMap: Record<string, ProfileRow> = {};
+    ((profileData || []) as ProfileRow[]).forEach((profile) => {
+      profileMap[profile.id] = profile;
+    });
+
+    setProfilesByUserId((prev) => ({ ...prev, ...profileMap }));
+  };
+
+  const loadMarketplace = async (from = 0) => {
+    const to = from + PAGE_SIZE - 1;
+
+    const { data, error } = await supabase
+      .from("listings")
+      .select(
+        "*, listing_images(id, thumb_url, medium_url, original_url, is_primary, sort_order)"
+      )
+      .eq("status", "active")
+      .order("created_at", { ascending: false })
+      .range(from, to);
+
+    if (error) {
+      console.error("Error loading marketplace listings:", error);
+      if (from === 0) setListings([]);
+      return;
+    }
+
+    const loaded = (data || []) as Listing[];
+
+    if (from === 0) {
+      setListings(loaded);
+    } else {
+      setListings((prev) => [...prev, ...loaded]);
+    }
+
+    setHasMore(loaded.length === PAGE_SIZE);
+    await loadProfiles(loaded);
+  };
+
   useEffect(() => {
-    const loadMarketplace = async () => {
+    const initialLoad = async () => {
       setLoading(true);
-
-      const { data: listingData, error: listingError } = await supabase
-        .from("listings")
-        .select(
-          "*, listing_images(id, thumb_url, medium_url, original_url, is_primary, sort_order)"
-        )
-        .eq("status", "active")
-        .order("created_at", { ascending: false })
-        .limit(30);
-
-      if (listingError) {
-        console.error("Error loading marketplace listings:", listingError);
-        setListings([]);
-        setProfilesByUserId({});
-        setLoading(false);
-        return;
-      }
-
-      const loadedListings = (listingData || []) as Listing[];
-      setListings(loadedListings);
-
-      const userIds = Array.from(
-        new Set(
-          loadedListings
-            .map((item) => item.user_id)
-            .filter((value): value is string => Boolean(value))
-        )
-      );
-
-      if (userIds.length === 0) {
-        setProfilesByUserId({});
-        setLoading(false);
-        return;
-      }
-
-      const { data: profileData, error: profileError } = await supabase
-        .from("profiles")
-        .select("id, store_slug, store_name")
-        .in("id", userIds);
-
-      if (profileError) {
-        console.error("Error loading store profiles:", profileError);
-        setProfilesByUserId({});
-        setLoading(false);
-        return;
-      }
-
-      const profileMap: Record<string, ProfileRow> = {};
-      ((profileData || []) as ProfileRow[]).forEach((profile) => {
-        profileMap[profile.id] = profile;
-      });
-
-      setProfilesByUserId(profileMap);
+      await loadMarketplace(0);
       setLoading(false);
     };
 
-    loadMarketplace();
+    initialLoad();
   }, []);
+
+  const loadMore = async () => {
+    if (loadingMore || !hasMore) return;
+
+    setLoadingMore(true);
+    await loadMarketplace(listings.length);
+    setLoadingMore(false);
+  };
 
   const categories = useMemo(() => {
     return Array.from(
@@ -305,95 +342,94 @@ export default function MarketplacePage() {
             </button>
           </div>
         ) : (
-          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-            {filteredListings.map((item) => {
-              const sellerProfile = item.user_id
-                ? profilesByUserId[item.user_id]
-                : undefined;
+          <>
+            <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+              {filteredListings.map((item) => {
+                const sellerProfile = item.user_id
+                  ? profilesByUserId[item.user_id]
+                  : undefined;
 
-              const storeSlug = sellerProfile?.store_slug || "";
-              const storeName = sellerProfile?.store_name || "Seller store";
+                const storeSlug = sellerProfile?.store_slug || "";
+                const storeName = sellerProfile?.store_name || "Seller store";
+                const imageUrl = getListingImage(item);
 
-              const sortedImages = [...(item.listing_images || [])].sort(
-                (a, b) => {
-                  if (a.is_primary && !b.is_primary) return -1;
-                  if (!a.is_primary && b.is_primary) return 1;
-                  return (a.sort_order || 0) - (b.sort_order || 0);
-                }
-              );
+                return (
+                  <article
+                    key={item.id}
+                    className="overflow-hidden rounded-[22px] border border-black/8 bg-white p-3 shadow-sm transition duration-200 hover:-translate-y-1 hover:shadow-md"
+                  >
+                    <Link href={`/listing/${item.id}`}>
+                      <div className="cursor-pointer">
+                        <div className="mb-3 overflow-hidden rounded-2xl bg-neutral-100">
+                          {imageUrl ? (
+                            <img
+                              src={imageUrl}
+                              alt={item.title}
+                              loading="lazy"
+                              className="h-40 w-full object-cover sm:h-44"
+                            />
+                          ) : (
+                            <div className="h-40 w-full bg-neutral-100 sm:h-44" />
+                          )}
+                        </div>
 
-              const primaryImage = sortedImages[0];
+                        <h3 className="line-clamp-1 break-words text-lg font-semibold tracking-tight sm:text-xl">
+                          {item.title}
+                        </h3>
 
-              const imageUrl =
-                primaryImage?.thumb_url ||
-                primaryImage?.medium_url ||
-                primaryImage?.original_url ||
-                item.image ||
-                "";
+                        <p className="mt-2 line-clamp-2 break-words text-sm leading-5 text-black/60">
+                          {item.description}
+                        </p>
 
-              return (
-                <article
-                  key={item.id}
-                  className="overflow-hidden rounded-[22px] border border-black/8 bg-white p-3 shadow-sm transition duration-200 hover:-translate-y-1 hover:shadow-md"
-                >
-                  <Link href={`/listing/${item.id}`}>
-                    <div className="cursor-pointer">
-                      <div className="mb-3 overflow-hidden rounded-2xl bg-neutral-100">
-                        {imageUrl ? (
-                          <img
-                            src={imageUrl}
-                            alt={item.title}
-                            loading="lazy"
-                            className="h-40 w-full object-cover sm:h-44"
-                          />
-                        ) : (
-                          <div className="h-40 w-full bg-neutral-100 sm:h-44" />
-                        )}
+                        <p className="mt-3 break-words text-2xl font-semibold sm:text-3xl">
+                          {item.price}
+                        </p>
+
+                        <div className="mt-2 line-clamp-1 text-xs text-black/45 sm:text-sm">
+                          {item.category || "general"} •{" "}
+                          {item.condition || "used"} •{" "}
+                          {item.country || "No country"}
+                          {item.city ? ` • ${item.city}` : ""}
+                        </div>
                       </div>
+                    </Link>
 
-                      <h3 className="line-clamp-1 break-words text-lg font-semibold tracking-tight sm:text-xl">
-                        {item.title}
-                      </h3>
-
-                      <p className="mt-2 line-clamp-2 break-words text-sm leading-5 text-black/60">
-                        {item.description}
-                      </p>
-
-                      <p className="mt-3 break-words text-2xl font-semibold sm:text-3xl">
-                        {item.price}
-                      </p>
-
-                      <div className="mt-2 line-clamp-1 text-xs text-black/45 sm:text-sm">
-                        {item.category || "general"} •{" "}
-                        {item.condition || "used"} •{" "}
-                        {item.country || "No country"}
-                        {item.city ? ` • ${item.city}` : ""}
-                      </div>
-                    </div>
-                  </Link>
-
-                  <div className="mt-3 flex items-center justify-between gap-3 border-t border-black/6 pt-3">
-                    <span className="min-w-0 truncate text-xs text-black/45 sm:text-sm">
-                      {storeName}
-                    </span>
-
-                    {storeSlug ? (
-                      <Link
-                        href={`/store/${storeSlug}`}
-                        className="shrink-0 rounded-xl border border-black/10 bg-white px-3 py-2 text-xs font-medium transition hover:bg-black/[0.03] sm:text-sm"
-                      >
-                        Store
-                      </Link>
-                    ) : (
-                      <span className="shrink-0 rounded-xl border border-black/8 bg-black/[0.02] px-3 py-2 text-xs text-black/35 sm:text-sm">
-                        No store
+                    <div className="mt-3 flex items-center justify-between gap-3 border-t border-black/6 pt-3">
+                      <span className="min-w-0 truncate text-xs text-black/45 sm:text-sm">
+                        {storeName}
                       </span>
-                    )}
-                  </div>
-                </article>
-              );
-            })}
-          </div>
+
+                      {storeSlug ? (
+                        <Link
+                          href={`/store/${storeSlug}`}
+                          className="shrink-0 rounded-xl border border-black/10 bg-white px-3 py-2 text-xs font-medium transition hover:bg-black/[0.03] sm:text-sm"
+                        >
+                          Store
+                        </Link>
+                      ) : (
+                        <span className="shrink-0 rounded-xl border border-black/8 bg-black/[0.02] px-3 py-2 text-xs text-black/35 sm:text-sm">
+                          No store
+                        </span>
+                      )}
+                    </div>
+                  </article>
+                );
+              })}
+            </div>
+
+            {hasMore && !filtersActive && (
+              <div className="mt-8 flex justify-center">
+                <button
+                  type="button"
+                  onClick={loadMore}
+                  disabled={loadingMore}
+                  className="rounded-2xl bg-black px-6 py-3 text-sm font-medium text-white transition hover:opacity-90 disabled:opacity-60"
+                >
+                  {loadingMore ? "Loading..." : "Load more"}
+                </button>
+              </div>
+            )}
+          </>
         )}
       </div>
     </main>
