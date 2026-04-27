@@ -17,7 +17,6 @@ type ListingImage = {
 
 type ProfileRow = {
   id: string;
-  email?: string | null;
   store_name?: string | null;
   store_slug?: string | null;
   bio?: string | null;
@@ -27,68 +26,43 @@ type ProfileRow = {
 
 type Listing = {
   id: number;
-  user_id?: string | null;
-  created_at?: string | null;
   title: string;
   description: string;
   price: string;
-  image?: string | null;
-  status?: "active" | "paused" | "sold";
+  status?: string;
   category?: string | null;
   condition?: string | null;
   country?: string | null;
   city?: string | null;
-  location?: string | null;
   listing_images?: ListingImage[];
 };
 
 export default function StorePage() {
   const params = useParams();
-  const slugParam = Array.isArray(params?.slug) ? params.slug[0] : params?.slug;
+  const slug = params?.slug as string;
 
-  const { user, loading: authLoading } = useAuth();
-  const currentUserId = user?.id ?? null;
+  const { user } = useAuth();
 
   const [profile, setProfile] = useState<ProfileRow | null>(null);
   const [listings, setListings] = useState<Listing[]>([]);
-  const [pageLoading, setPageLoading] = useState(true);
-  const [notFound, setNotFound] = useState(false);
-
-  const [search, setSearch] = useState("");
-  const [statusFilter, setStatusFilter] = useState<
-    "all" | "active" | "paused" | "sold"
-  >("all");
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    let cancelled = false;
-
-    const loadStore = async () => {
-      setPageLoading(true);
-      setNotFound(false);
-
-      const slug = decodeURIComponent((slugParam || "").trim());
-
-      if (!slug) {
-        setNotFound(true);
-        setPageLoading(false);
-        return;
-      }
-
+    const load = async () => {
       const { data: profileData } = await supabase
         .from("profiles")
         .select("*")
         .eq("store_slug", slug)
-        .maybeSingle();
+        .single();
 
       if (!profileData) {
-        setNotFound(true);
-        setPageLoading(false);
+        setLoading(false);
         return;
       }
 
-      setProfile(profileData as ProfileRow);
+      setProfile(profileData);
 
-      const { data: listingData } = await supabase
+      const { data: listingsData } = await supabase
         .from("listings")
         .select(
           "*, listing_images(id, thumb_url, medium_url, original_url, is_primary, sort_order)"
@@ -96,89 +70,85 @@ export default function StorePage() {
         .eq("user_id", profileData.id)
         .order("created_at", { ascending: false });
 
-      setListings((listingData || []) as Listing[]);
-      setPageLoading(false);
+      setListings((listingsData || []) as Listing[]);
+      setLoading(false);
     };
 
-    loadStore();
-    return () => {
-      cancelled = true;
-    };
-  }, [slugParam]);
+    load();
+  }, [slug]);
 
-  const isOwner =
-    !!currentUserId && !!profile?.id && currentUserId === profile.id;
-
-  const visibleListings = useMemo(() => {
-    return listings.filter((item) => {
-      const status = item.status || "active";
-
-      if (!isOwner && status !== "active") return false;
-
-      const query = search.toLowerCase();
-
-      return (
-        (!query ||
-          item.title.toLowerCase().includes(query) ||
-          item.description.toLowerCase().includes(query)) &&
-        (statusFilter === "all" || status === statusFilter)
-      );
-    });
-  }, [listings, search, statusFilter, isOwner]);
-
-  if (pageLoading || authLoading) {
-    return <div className="p-6">Loading store...</div>;
-  }
-
-  if (notFound || !profile) {
-    return <div className="p-6">Store not found</div>;
-  }
+  if (loading) return <div className="p-6">Loading...</div>;
+  if (!profile) return <div className="p-6">Store not found</div>;
 
   return (
-    <main className="p-6">
-      <h1 className="text-2xl font-semibold mb-4">
-        {profile.store_name}
-      </h1>
+    <main className="min-h-screen bg-[#f8f8f6] px-4 py-6 sm:px-6">
+      <div className="mx-auto max-w-7xl">
 
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        {visibleListings.map((item) => {
-          const sortedImages = [...(item.listing_images || [])].sort(
-            (a, b) => {
-              if (a.is_primary) return -1;
-              if (b.is_primary) return 1;
-              return (a.sort_order || 0) - (b.sort_order || 0);
-            }
-          );
+        {/* HEADER */}
+        <div className="mb-6 rounded-[28px] bg-white p-5 shadow-sm sm:p-8">
+          <h1 className="text-3xl font-semibold sm:text-4xl">
+            {profile.store_name}
+          </h1>
 
-          const primaryImage = sortedImages[0];
+          {profile.bio && (
+            <p className="mt-2 text-black/60">{profile.bio}</p>
+          )}
+        </div>
 
-          const imageUrl =
-            primaryImage?.thumb_url ||
-            primaryImage?.medium_url ||
-            primaryImage?.original_url ||
-            item.image ||
-            "";
+        {/* LISTINGS */}
+        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+          {listings.map((item) => {
+            const sortedImages = [...(item.listing_images || [])].sort(
+              (a, b) => {
+                if (a.is_primary) return -1;
+                if (b.is_primary) return 1;
+                return (a.sort_order || 0) - (b.sort_order || 0);
+              }
+            );
 
-          return (
-            <article key={item.id} className="border rounded-xl p-3">
-              <Link href={`/listing/${item.id}`}>
-                <div>
-                  {imageUrl ? (
-                    <img
-                      src={imageUrl}
-                      className="h-40 w-full object-cover rounded-lg"
-                    />
-                  ) : (
-                    <div className="h-40 bg-gray-100" />
-                  )}
+            const img = sortedImages[0];
 
-                  <h3 className="mt-2 font-semibold">{item.title}</h3>
-                  <p className="text-sm">{item.price}</p>
+            const imageUrl =
+              img?.thumb_url ||
+              img?.medium_url ||
+              img?.original_url ||
+              "";
+
+            return (
+              <Link key={item.id} href={`/listing/${item.id}`}>
+                <div className="cursor-pointer rounded-[24px] border border-black/8 bg-white p-3 shadow-sm transition hover:-translate-y-1 hover:shadow-md">
+
+                  {/* IMAGE */}
+                  <div className="mb-3 overflow-hidden rounded-xl bg-neutral-100">
+                    {imageUrl ? (
+                      <img
+                        src={imageUrl}
+                        className="h-36 w-full object-cover sm:h-40"
+                      />
+                    ) : (
+                      <div className="h-36 w-full bg-neutral-100" />
+                    )}
+                  </div>
+
+                  {/* TITLE */}
+                  <h3 className="line-clamp-1 text-lg font-semibold">
+                    {item.title}
+                  </h3>
+
+                  {/* PRICE */}
+                  <p className="mt-2 text-2xl font-semibold">
+                    {item.price}
+                  </p>
+
+                  {/* META */}
+                  <p className="mt-1 text-xs text-black/50">
+                    {item.category} • {item.condition} • {item.city}
+                  </p>
                 </div>
               </Link>
-            </article>
-          );
-        })}
+            );
+          })}
+        </div>
       </div>
     </main>
   );
