@@ -4,6 +4,15 @@ import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { supabase } from "../lib/supabase";
 
+type ListingImage = {
+  id: string;
+  thumb_url?: string | null;
+  medium_url?: string | null;
+  original_url?: string | null;
+  is_primary?: boolean | null;
+  sort_order?: number | null;
+};
+
 type Listing = {
   id: number;
   user_id?: string | null;
@@ -18,6 +27,7 @@ type Listing = {
   location?: string | null;
   country?: string | null;
   city?: string | null;
+  listing_images?: ListingImage[];
 };
 
 type ProfileRow = {
@@ -28,7 +38,9 @@ type ProfileRow = {
 
 export default function MarketplacePage() {
   const [listings, setListings] = useState<Listing[]>([]);
-  const [profilesByUserId, setProfilesByUserId] = useState<Record<string, ProfileRow>>({});
+  const [profilesByUserId, setProfilesByUserId] = useState<
+    Record<string, ProfileRow>
+  >({});
   const [search, setSearch] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("all");
   const [conditionFilter, setConditionFilter] = useState("all");
@@ -50,7 +62,9 @@ export default function MarketplacePage() {
 
       const { data: listingData, error: listingError } = await supabase
         .from("listings")
-        .select("*")
+        .select(
+          "*, listing_images(id, thumb_url, medium_url, original_url, is_primary, sort_order)"
+        )
         .eq("status", "active")
         .order("created_at", { ascending: false })
         .limit(30);
@@ -300,6 +314,23 @@ export default function MarketplacePage() {
               const storeSlug = sellerProfile?.store_slug || "";
               const storeName = sellerProfile?.store_name || "Seller store";
 
+              const sortedImages = [...(item.listing_images || [])].sort(
+                (a, b) => {
+                  if (a.is_primary && !b.is_primary) return -1;
+                  if (!a.is_primary && b.is_primary) return 1;
+                  return (a.sort_order || 0) - (b.sort_order || 0);
+                }
+              );
+
+              const primaryImage = sortedImages[0];
+
+              const imageUrl =
+                primaryImage?.thumb_url ||
+                primaryImage?.medium_url ||
+                primaryImage?.original_url ||
+                item.image ||
+                "";
+
               return (
                 <article
                   key={item.id}
@@ -308,15 +339,15 @@ export default function MarketplacePage() {
                   <Link href={`/listing/${item.id}`}>
                     <div className="cursor-pointer">
                       <div className="mb-3 overflow-hidden rounded-2xl bg-neutral-100">
-                        {item.image ? (
+                        {imageUrl ? (
                           <img
-                            src={item.image}
+                            src={imageUrl}
                             alt={item.title}
                             loading="lazy"
                             className="h-40 w-full object-cover sm:h-44"
                           />
                         ) : (
-                          <div className="h-36 w-full bg-neutral-100 sm:h-40" />
+                          <div className="h-40 w-full bg-neutral-100 sm:h-44" />
                         )}
                       </div>
 
