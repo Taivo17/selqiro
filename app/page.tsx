@@ -78,6 +78,13 @@ export default function MarketplacePage() {
     setNearOnly(false);
   };
 
+  const filtersActive =
+    search.trim() ||
+    categoryFilter !== "all" ||
+    conditionFilter !== "all" ||
+    locationFilter.trim() ||
+    nearOnly;
+
   const loadProfiles = async (items: Listing[]) => {
     const userIds = Array.from(
       new Set(
@@ -107,10 +114,12 @@ export default function MarketplacePage() {
     setProfilesByUserId((prev) => ({ ...prev, ...profileMap }));
   };
 
-  const loadMarketplace = async (from = 0) => {
+  const buildQuery = (from: number) => {
     const to = from + PAGE_SIZE - 1;
+    const searchNeedle = search.trim();
+    const locationNeedle = locationFilter.trim();
 
-    const { data, error } = await supabase
+    let query = supabase
       .from("listings")
       .select(
         "*, listing_images(id, thumb_url, medium_url, original_url, is_primary, sort_order)"
@@ -118,6 +127,32 @@ export default function MarketplacePage() {
       .eq("status", "active")
       .order("created_at", { ascending: false })
       .range(from, to);
+
+    if (searchNeedle) {
+      query = query.or(
+        `title.ilike.%${searchNeedle}%,description.ilike.%${searchNeedle}%,search_text.ilike.%${searchNeedle}%`
+      );
+    }
+
+    if (categoryFilter !== "all") {
+      query = query.eq("category", categoryFilter);
+    }
+
+    if (conditionFilter !== "all") {
+      query = query.eq("condition", conditionFilter);
+    }
+
+    if (locationNeedle) {
+      query = query.or(
+        `country.ilike.%${locationNeedle}%,city.ilike.%${locationNeedle}%,location.ilike.%${locationNeedle}%`
+      );
+    }
+
+    return query;
+  };
+
+  const loadMarketplace = async (from = 0) => {
+    const { data, error } = await buildQuery(from);
 
     if (error) {
       console.error("Error loading marketplace listings:", error);
@@ -138,14 +173,16 @@ export default function MarketplacePage() {
   };
 
   useEffect(() => {
-    const initialLoad = async () => {
+    const timer = setTimeout(async () => {
       setLoading(true);
+      setListings([]);
+      setProfilesByUserId({});
       await loadMarketplace(0);
       setLoading(false);
-    };
+    }, 300);
 
-    initialLoad();
-  }, []);
+    return () => clearTimeout(timer);
+  }, [search, categoryFilter, conditionFilter, locationFilter, nearOnly]);
 
   const loadMore = async () => {
     if (loadingMore || !hasMore) return;
@@ -174,55 +211,6 @@ export default function MarketplacePage() {
       )
     ).sort();
   }, [listings]);
-
-  const filtersActive =
-    search.trim() ||
-    categoryFilter !== "all" ||
-    conditionFilter !== "all" ||
-    locationFilter.trim() ||
-    nearOnly;
-
-  const filteredListings = useMemo(() => {
-    return listings.filter((item) => {
-      const title = item.title?.toLowerCase() || "";
-      const description = item.description?.toLowerCase() || "";
-      const country = item.country?.toLowerCase() || "";
-      const city = item.city?.toLowerCase() || "";
-      const location = item.location?.toLowerCase() || "";
-      const category = (item.category || "general").toLowerCase();
-      const condition = (item.condition || "used").toLowerCase();
-
-      const searchNeedle = search.trim().toLowerCase();
-      const locationNeedle = locationFilter.trim().toLowerCase();
-
-      const matchesSearch =
-        !searchNeedle ||
-        title.includes(searchNeedle) ||
-        description.includes(searchNeedle);
-
-      const matchesCategory =
-        categoryFilter === "all" ? true : category === categoryFilter;
-
-      const matchesCondition =
-        conditionFilter === "all" ? true : condition === conditionFilter;
-
-      const matchesLocation =
-        !locationNeedle ||
-        country.includes(locationNeedle) ||
-        city.includes(locationNeedle) ||
-        location.includes(locationNeedle);
-
-      const matchesNearOnly = nearOnly ? matchesLocation : true;
-
-      return (
-        matchesSearch &&
-        matchesCategory &&
-        matchesCondition &&
-        matchesLocation &&
-        matchesNearOnly
-      );
-    });
-  }, [listings, search, categoryFilter, conditionFilter, locationFilter, nearOnly]);
 
   return (
     <main className="min-h-screen overflow-x-hidden bg-[#f8f8f6] px-4 py-5 text-black sm:px-8 lg:px-10">
@@ -269,11 +257,29 @@ export default function MarketplacePage() {
               className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-base outline-none transition focus:border-black/30 sm:text-sm"
             >
               <option value="all">All categories</option>
-              {categories.map((value) => (
-                <option key={value} value={value}>
-                  {value.charAt(0).toUpperCase() + value.slice(1)}
-                </option>
-              ))}
+              <option value="general">General</option>
+              <option value="vehicles">Vehicles</option>
+              <option value="parts">Parts</option>
+              <option value="electronics">Electronics</option>
+              <option value="clothing">Clothing</option>
+              <option value="real_estate">Real estate</option>
+              {categories
+                .filter(
+                  (value) =>
+                    ![
+                      "general",
+                      "vehicles",
+                      "parts",
+                      "electronics",
+                      "clothing",
+                      "real_estate",
+                    ].includes(value)
+                )
+                .map((value) => (
+                  <option key={value} value={value}>
+                    {value.charAt(0).toUpperCase() + value.slice(1)}
+                  </option>
+                ))}
             </select>
 
             <select
@@ -282,11 +288,16 @@ export default function MarketplacePage() {
               className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-base outline-none transition focus:border-black/30 sm:text-sm"
             >
               <option value="all">All conditions</option>
-              {conditions.map((value) => (
-                <option key={value} value={value}>
-                  {value.charAt(0).toUpperCase() + value.slice(1)}
-                </option>
-              ))}
+              <option value="new">New</option>
+              <option value="used">Used</option>
+              <option value="for_parts">For parts</option>
+              {conditions
+                .filter((value) => !["new", "used", "for_parts"].includes(value))
+                .map((value) => (
+                  <option key={value} value={value}>
+                    {value.charAt(0).toUpperCase() + value.slice(1)}
+                  </option>
+                ))}
             </select>
 
             <input
@@ -319,14 +330,14 @@ export default function MarketplacePage() {
             </h2>
           </div>
 
-          <p className="text-sm text-black/45">{filteredListings.length} shown</p>
+          <p className="text-sm text-black/45">{listings.length} shown</p>
         </section>
 
         {loading ? (
           <div className="rounded-[28px] border border-black/8 bg-white px-6 py-14 text-center shadow-sm">
             <p className="text-lg font-medium">Loading marketplace...</p>
           </div>
-        ) : filteredListings.length === 0 ? (
+        ) : listings.length === 0 ? (
           <div className="rounded-[28px] border border-dashed border-black/10 bg-white px-6 py-14 text-center shadow-sm">
             <p className="text-lg font-medium">No matching listings</p>
             <p className="mt-2 text-black/55">
@@ -344,7 +355,7 @@ export default function MarketplacePage() {
         ) : (
           <>
             <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-              {filteredListings.map((item) => {
+              {listings.map((item) => {
                 const sellerProfile = item.user_id
                   ? profilesByUserId[item.user_id]
                   : undefined;
@@ -417,7 +428,7 @@ export default function MarketplacePage() {
               })}
             </div>
 
-            {hasMore && !filtersActive && (
+            {hasMore && (
               <div className="mt-8 flex justify-center">
                 <button
                   type="button"
