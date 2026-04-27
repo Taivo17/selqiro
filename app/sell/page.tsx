@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { supabase } from "../../lib/supabase";
@@ -32,6 +32,17 @@ export default function SellPage() {
 
   const [file, setFile] = useState<File | null>(null);
   const [saving, setSaving] = useState(false);
+
+  const previewUrl = useMemo(() => {
+    if (!file) return "";
+    return URL.createObjectURL(file);
+  }, [file]);
+
+  useEffect(() => {
+    return () => {
+      if (previewUrl) URL.revokeObjectURL(previewUrl);
+    };
+  }, [previewUrl]);
 
   useEffect(() => {
     if (!loading && !user) router.push("/auth");
@@ -91,24 +102,19 @@ export default function SellPage() {
           description: description.trim(),
           price: price.trim(),
           image: originalUrl || null,
-
           category,
           subcategory: subcategory.trim(),
           condition,
-
           country: cleanCountry,
           city: cleanCity,
           location,
-
           manufacturer: manufacturer.trim(),
           part_number: partNumber.trim(),
           oem_number: oemNumber.trim(),
-
           vehicle_brand: vehicleBrand.trim(),
           vehicle_model: vehicleModel.trim(),
           vehicle_year: vehicleYear.trim(),
           engine: engine.trim(),
-
           details: {
             manufacturer: manufacturer.trim(),
             partNumber: partNumber.trim(),
@@ -118,7 +124,6 @@ export default function SellPage() {
             vehicleYear: vehicleYear.trim(),
             engine: engine.trim(),
           },
-
           search_text: [
             title,
             description,
@@ -137,7 +142,6 @@ export default function SellPage() {
           ]
             .filter(Boolean)
             .join(" "),
-
           ai_status: "not_started",
           ai_enriched: false,
           ai_level: "none",
@@ -202,6 +206,16 @@ export default function SellPage() {
             onChange={(e) => setFile(e.target.files?.[0] || null)}
             className="w-full rounded-2xl border border-black/10 bg-white p-3 text-sm"
           />
+
+          {previewUrl && (
+            <div className="overflow-hidden rounded-2xl border border-black/10 bg-neutral-100">
+              <img
+                src={previewUrl}
+                alt="Selected preview"
+                className="h-64 w-full object-contain"
+              />
+            </div>
+          )}
 
           <input placeholder="Title" value={title} onChange={(e) => setTitle(e.target.value)} className="w-full rounded-2xl border border-black/10 p-4 outline-none" />
           <textarea placeholder="Description" value={description} onChange={(e) => setDescription(e.target.value)} className="min-h-28 w-full rounded-2xl border border-black/10 p-4 outline-none" />
