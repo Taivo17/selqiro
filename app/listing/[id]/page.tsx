@@ -1,9 +1,18 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import { supabase } from "../../../lib/supabase";
+
+type ListingImage = {
+  id: string;
+  thumb_url?: string | null;
+  medium_url?: string | null;
+  original_url?: string | null;
+  is_primary?: boolean | null;
+  sort_order?: number | null;
+};
 
 type Listing = {
   id: number;
@@ -27,6 +36,7 @@ type Listing = {
   details?: Record<string, unknown> | null;
   ai_status?: string;
   ai_level?: string;
+  listing_images?: ListingImage[];
 };
 
 function FieldRow({ label, value }: { label: string; value?: string | null }) {
@@ -48,6 +58,7 @@ export default function ListingPage() {
 
   const [listing, setListing] = useState<Listing | null>(null);
   const [loading, setLoading] = useState(true);
+  const [fullImageOpen, setFullImageOpen] = useState(false);
 
   useEffect(() => {
     const load = async () => {
@@ -55,7 +66,9 @@ export default function ListingPage() {
 
       const { data, error } = await supabase
         .from("listings")
-        .select("*")
+        .select(
+          "*, listing_images(id, thumb_url, medium_url, original_url, is_primary, sort_order)"
+        )
         .eq("id", id)
         .single();
 
@@ -72,6 +85,28 @@ export default function ListingPage() {
 
     load();
   }, [id]);
+
+  const sortedImages = useMemo(() => {
+    return [...(listing?.listing_images || [])].sort((a, b) => {
+      if (a.is_primary && !b.is_primary) return -1;
+      if (!a.is_primary && b.is_primary) return 1;
+      return (a.sort_order || 0) - (b.sort_order || 0);
+    });
+  }, [listing]);
+
+  const primaryImage = sortedImages[0];
+
+  const mediumImageUrl =
+    primaryImage?.medium_url ||
+    primaryImage?.original_url ||
+    listing?.image ||
+    "";
+
+  const originalImageUrl =
+    primaryImage?.original_url ||
+    primaryImage?.medium_url ||
+    listing?.image ||
+    "";
 
   if (loading) {
     return (
@@ -113,17 +148,21 @@ export default function ListingPage() {
           ← Back to marketplace
         </Link>
 
-        <div className="overflow-hidden rounded-[28px] bg-neutral-100 shadow-sm sm:rounded-[32px]">
-          {listing.image ? (
+        <button
+          type="button"
+          onClick={() => originalImageUrl && setFullImageOpen(true)}
+          className="block w-full overflow-hidden rounded-[28px] bg-neutral-100 shadow-sm sm:rounded-[32px]"
+        >
+          {mediumImageUrl ? (
             <img
-              src={listing.image}
+              src={mediumImageUrl}
               alt={listing.title}
-              className="h-[240px] w-full object-cover sm:h-[360px]"
+              className="h-[260px] w-full object-contain sm:h-[460px]"
             />
           ) : (
-            <div className="h-[240px] w-full sm:h-[360px]" />
+            <div className="h-[260px] w-full sm:h-[460px]" />
           )}
-        </div>
+        </button>
 
         <section className="overflow-hidden rounded-[28px] bg-white p-5 shadow-sm sm:rounded-[32px] sm:p-6">
           <p className="mb-3 text-xs font-medium uppercase tracking-[0.22em] text-black/35">
@@ -213,6 +252,27 @@ export default function ListingPage() {
           </section>
         )}
       </div>
+
+      {fullImageOpen && originalImageUrl && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4"
+          onClick={() => setFullImageOpen(false)}
+        >
+          <button
+            type="button"
+            className="absolute right-4 top-4 rounded-full bg-white px-4 py-2 text-sm font-medium text-black"
+            onClick={() => setFullImageOpen(false)}
+          >
+            Close
+          </button>
+
+          <img
+            src={originalImageUrl}
+            alt={listing.title}
+            className="max-h-[90vh] max-w-[95vw] object-contain"
+          />
+        </div>
+      )}
     </main>
   );
 }
