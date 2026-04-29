@@ -6,6 +6,8 @@ import { useParams } from "next/navigation";
 import { supabase } from "../../../lib/supabase";
 import { useAuth } from "../../../lib/useAuth";
 
+const PAGE_SIZE = 30;
+
 type ListingImage = {
   id: string;
   thumb_url?: string | null;
@@ -39,6 +41,24 @@ type Listing = {
   listing_images?: ListingImage[];
 };
 
+function getListingImage(item: Listing) {
+  const sortedImages = [...(item.listing_images || [])].sort((a, b) => {
+    if (a.is_primary && !b.is_primary) return -1;
+    if (!a.is_primary && b.is_primary) return 1;
+    return (a.sort_order || 0) - (b.sort_order || 0);
+  });
+
+  const img = sortedImages[0];
+
+  return (
+    img?.thumb_url ||
+    img?.medium_url ||
+    img?.original_url ||
+    item.image ||
+    ""
+  );
+}
+
 export default function StorePage() {
   const params = useParams();
   const slug = Array.isArray(params?.slug) ? params.slug[0] : params?.slug;
@@ -48,13 +68,85 @@ export default function StorePage() {
   const [profile, setProfile] = useState<ProfileRow | null>(null);
   const [listings, setListings] = useState<Listing[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadingListings, setLoadingListings] = useState(false);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<
     "all" | "active" | "paused" | "sold"
   >("all");
 
+  const isOwner = !!user?.id && !!profile?.id && user.id === profile.id;
+
+  const buildListingsQuery = (
+    storeUserId: string,
+    from: number,
+    ownerView: boolean
+  ) => {
+    const to = from + PAGE_SIZE - 1;
+    const searchNeedle = search.trim();
+
+    let query = supabase
+      .from("listings")
+      .select(
+        "*, listing_images(id, thumb_url, medium_url, original_url, is_primary, sort_order)"
+      )
+      .eq("user_id", storeUserId)
+      .order("created_at", { ascending: false })
+      .range(from, to);
+
+    if (!ownerView) {
+      query = query.eq("status", "active");
+    } else if (statusFilter !== "all") {
+      query = query.eq("status", statusFilter);
+    }
+
+    if (searchNeedle) {
+      query = query.or(
+        `title.ilike.%${searchNeedle}%,description.ilike.%${searchNeedle}%,search_text.ilike.%${searchNeedle}%`
+      );
+    }
+
+    return query;
+  };
+
+  const loadListings = async (
+    storeUserId: string,
+    from = 0,
+    ownerView = false
+  ) => {
+    if (from === 0) setLoadingListings(true);
+
+    const { data, error } = await buildListingsQuery(
+      storeUserId,
+      from,
+      ownerView
+    );
+
+    if (error) {
+      console.error("Error loading store listings:", error);
+      if (from === 0) setListings([]);
+      setLoadingListings(false);
+      setLoadingMore(false);
+      return;
+    }
+
+    const loaded = (data || []) as Listing[];
+
+    if (from === 0) {
+      setListings(loaded);
+    } else {
+      setListings((prev) => [...prev, ...loaded]);
+    }
+
+    setHasMore(loaded.length === PAGE_SIZE);
+    setLoadingListings(false);
+    setLoadingMore(false);
+  };
+
   useEffect(() => {
-    const load = async () => {
+    const loadProfile = async () => {
       setLoading(true);
 
       const cleanSlug = decodeURIComponent((slug || "").trim());
@@ -81,31 +173,28 @@ export default function StorePage() {
       }
 
       setProfile(profileData as ProfileRow);
-
-      const { data: listingsData, error: listingsError } = await supabase
-        .from("listings")
-        .select(
-          "*, listing_images(id, thumb_url, medium_url, original_url, is_primary, sort_order)"
-        )
-        .eq("user_id", profileData.id)
-        .order("created_at", { ascending: false })
-        .limit(60);
-
-      if (listingsError) {
-        console.error("Error loading store listings:", listingsError);
-        setListings([]);
-        setLoading(false);
-        return;
-      }
-
-      setListings((listingsData || []) as Listing[]);
       setLoading(false);
     };
 
-    load();
+    loadProfile();
   }, [slug]);
 
-  const isOwner = !!user?.id && !!profile?.id && user.id === profile.id;
+  useEffect(() => {
+    if (!profile?.id || authLoading) return;
+
+    const timer = setTimeout(() => {
+      loadListings(profile.id, 0, isOwner);
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [profile?.id, authLoading, isOwner, search, statusFilter]);
+
+  const loadMore = async () => {
+    if (!profile?.id || loadingMore || !hasMore) return;
+
+    setLoadingMore(true);
+    await loadListings(profile.id, listings.length, isOwner);
+  };
 
   const stats = useMemo(() => {
     return {
@@ -115,24 +204,6 @@ export default function StorePage() {
       sold: listings.filter((item) => item.status === "sold").length,
     };
   }, [listings]);
-
-  const visibleListings = useMemo(() => {
-    const query = search.trim().toLowerCase();
-
-    return listings.filter((item) => {
-      const itemStatus = item.status || "active";
-
-      if (!isOwner && itemStatus !== "active") return false;
-      if (statusFilter !== "all" && itemStatus !== statusFilter) return false;
-
-      if (!query) return true;
-
-      return (
-        item.title.toLowerCase().includes(query) ||
-        item.description.toLowerCase().includes(query)
-      );
-    });
-  }, [listings, search, statusFilter, isOwner]);
 
   if (loading || authLoading) {
     return <main className="p-6">Loading store...</main>;
@@ -211,13 +282,13 @@ export default function StorePage() {
 
             <div className="mt-5 flex flex-wrap gap-2 text-sm text-black/55">
               <span className="rounded-full border border-black/10 bg-black/[0.03] px-3 py-2">
-                {stats.active} active
+                {stats.active} loaded active
               </span>
               <span className="rounded-full border border-black/10 bg-black/[0.03] px-3 py-2">
-                {stats.sold} sold
+                {stats.sold} loaded sold
               </span>
               <span className="rounded-full border border-black/10 bg-black/[0.03] px-3 py-2">
-                {stats.total} total
+                {stats.total} loaded
               </span>
               {isOwner && (
                 <span className="rounded-full border border-green-200 bg-green-50 px-3 py-2 text-green-700">
@@ -253,9 +324,12 @@ export default function StorePage() {
                   e.target.value as "all" | "active" | "paused" | "sold"
                 )
               }
-              className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-base outline-none transition focus:border-black/30 sm:text-sm"
+              disabled={!isOwner}
+              className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-base outline-none transition focus:border-black/30 disabled:text-black/40 sm:text-sm"
             >
-              <option value="all">All visible</option>
+              <option value="all">
+                {isOwner ? "All statuses" : "Active listings"}
+              </option>
               <option value="active">Active</option>
               {isOwner && <option value="paused">Paused</option>}
               {isOwner && <option value="sold">Sold</option>}
@@ -273,91 +347,95 @@ export default function StorePage() {
             </h2>
           </div>
 
-          <p className="text-sm text-black/45">{visibleListings.length} shown</p>
+          <p className="text-sm text-black/45">{listings.length} shown</p>
         </section>
 
-        {visibleListings.length === 0 ? (
+        {loadingListings ? (
+          <div className="rounded-[28px] border border-black/8 bg-white px-6 py-14 text-center shadow-sm">
+            <p className="text-lg font-medium">Loading listings...</p>
+          </div>
+        ) : listings.length === 0 ? (
           <div className="rounded-[28px] border border-dashed border-black/10 bg-white px-6 py-14 text-center shadow-sm">
             <p className="text-lg font-medium">No visible listings</p>
           </div>
         ) : (
-          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-            {visibleListings.map((item) => {
-              const sortedImages = [...(item.listing_images || [])].sort(
-                (a, b) => {
-                  if (a.is_primary && !b.is_primary) return -1;
-                  if (!a.is_primary && b.is_primary) return 1;
-                  return (a.sort_order || 0) - (b.sort_order || 0);
-                }
-              );
+          <>
+            <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+              {listings.map((item) => {
+                const imageUrl = getListingImage(item);
 
-              const img = sortedImages[0];
+                return (
+                  <article
+                    key={item.id}
+                    className="overflow-hidden rounded-[22px] border border-black/8 bg-white p-3 shadow-sm transition duration-200 hover:-translate-y-1 hover:shadow-md"
+                  >
+                    <Link href={`/listing/${item.id}`}>
+                      <div className="cursor-pointer">
+                        <div className="mb-3 overflow-hidden rounded-2xl bg-neutral-100">
+                          {imageUrl ? (
+                            <img
+                              src={imageUrl}
+                              alt={item.title}
+                              loading="lazy"
+                              className="h-40 w-full object-cover sm:h-44"
+                            />
+                          ) : (
+                            <div className="h-40 w-full bg-neutral-100 sm:h-44" />
+                          )}
+                        </div>
 
-              const imageUrl =
-                img?.thumb_url ||
-                img?.medium_url ||
-                img?.original_url ||
-                item.image ||
-                "";
+                        <div className="mb-2 flex items-start justify-between gap-2">
+                          <h3 className="line-clamp-1 break-words text-lg font-semibold tracking-tight sm:text-xl">
+                            {item.title}
+                          </h3>
 
-              return (
-                <article
-                  key={item.id}
-                  className="overflow-hidden rounded-[22px] border border-black/8 bg-white p-3 shadow-sm transition duration-200 hover:-translate-y-1 hover:shadow-md"
+                          <span
+                            className={`shrink-0 rounded-full px-2 py-1 text-[11px] font-medium capitalize ${
+                              (item.status || "active") === "active"
+                                ? "bg-green-100 text-green-700"
+                                : item.status === "paused"
+                                ? "bg-yellow-100 text-yellow-700"
+                                : "bg-neutral-200 text-neutral-700"
+                            }`}
+                          >
+                            {item.status || "active"}
+                          </span>
+                        </div>
+
+                        <p className="line-clamp-2 break-words text-sm leading-5 text-black/60">
+                          {item.description}
+                        </p>
+
+                        <p className="mt-3 break-words text-2xl font-semibold sm:text-3xl">
+                          {item.price}
+                        </p>
+
+                        <div className="mt-2 line-clamp-1 text-xs text-black/45 sm:text-sm">
+                          {item.category || "general"} •{" "}
+                          {item.condition || "used"} •{" "}
+                          {item.country || "No country"}
+                          {item.city ? ` • ${item.city}` : ""}
+                        </div>
+                      </div>
+                    </Link>
+                  </article>
+                );
+              })}
+            </div>
+
+            {hasMore && (
+              <div className="mt-8 flex justify-center">
+                <button
+                  type="button"
+                  onClick={loadMore}
+                  disabled={loadingMore}
+                  className="rounded-2xl bg-black px-6 py-3 text-sm font-medium text-white transition hover:opacity-90 disabled:opacity-60"
                 >
-                  <Link href={`/listing/${item.id}`}>
-                    <div className="cursor-pointer">
-                      <div className="mb-3 overflow-hidden rounded-2xl bg-neutral-100">
-                        {imageUrl ? (
-                          <img
-                            src={imageUrl}
-                            alt={item.title}
-                            loading="lazy"
-                            className="h-40 w-full object-cover sm:h-44"
-                          />
-                        ) : (
-                          <div className="h-40 w-full bg-neutral-100 sm:h-44" />
-                        )}
-                      </div>
-
-                      <div className="mb-2 flex items-start justify-between gap-2">
-                        <h3 className="line-clamp-1 break-words text-lg font-semibold tracking-tight sm:text-xl">
-                          {item.title}
-                        </h3>
-
-                        <span
-                          className={`shrink-0 rounded-full px-2 py-1 text-[11px] font-medium capitalize ${
-                            (item.status || "active") === "active"
-                              ? "bg-green-100 text-green-700"
-                              : item.status === "paused"
-                              ? "bg-yellow-100 text-yellow-700"
-                              : "bg-neutral-200 text-neutral-700"
-                          }`}
-                        >
-                          {item.status || "active"}
-                        </span>
-                      </div>
-
-                      <p className="line-clamp-2 break-words text-sm leading-5 text-black/60">
-                        {item.description}
-                      </p>
-
-                      <p className="mt-3 break-words text-2xl font-semibold sm:text-3xl">
-                        {item.price}
-                      </p>
-
-                      <div className="mt-2 line-clamp-1 text-xs text-black/45 sm:text-sm">
-                        {item.category || "general"} •{" "}
-                        {item.condition || "used"} •{" "}
-                        {item.country || "No country"}
-                        {item.city ? ` • ${item.city}` : ""}
-                      </div>
-                    </div>
-                  </Link>
-                </article>
-              );
-            })}
-          </div>
+                  {loadingMore ? "Loading..." : "Load more"}
+                </button>
+              </div>
+            )}
+          </>
         )}
       </div>
     </main>
