@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import { supabase } from "../../../lib/supabase";
@@ -64,10 +64,33 @@ export default function ListingPage() {
   const params = useParams();
   const id = params?.id;
 
+  const hideTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
   const [listing, setListing] = useState<Listing | null>(null);
   const [loading, setLoading] = useState(true);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [fullImageOpen, setFullImageOpen] = useState(false);
+  const [controlsVisible, setControlsVisible] = useState(false);
+
+  const showControlsTemporarily = () => {
+    setControlsVisible(true);
+
+    if (hideTimerRef.current) {
+      clearTimeout(hideTimerRef.current);
+    }
+
+    hideTimerRef.current = setTimeout(() => {
+      setControlsVisible(false);
+    }, 3000);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (hideTimerRef.current) {
+        clearTimeout(hideTimerRef.current);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     const load = async () => {
@@ -138,6 +161,7 @@ export default function ListingPage() {
     setSelectedImageIndex((prev) =>
       prev + 1 >= galleryImages.length ? 0 : prev + 1
     );
+    showControlsTemporarily();
   };
 
   const previousImage = () => {
@@ -145,6 +169,7 @@ export default function ListingPage() {
     setSelectedImageIndex((prev) =>
       prev - 1 < 0 ? galleryImages.length - 1 : prev - 1
     );
+    showControlsTemporarily();
   };
 
   if (loading) {
@@ -188,10 +213,17 @@ export default function ListingPage() {
         </Link>
 
         <section className="overflow-hidden rounded-[28px] bg-white p-3 shadow-sm sm:rounded-[32px] sm:p-4">
-          <div className="relative overflow-hidden rounded-[22px] bg-neutral-100">
+          <div
+            className="relative overflow-hidden rounded-[22px] bg-neutral-100"
+            onMouseMove={showControlsTemporarily}
+            onTouchStart={showControlsTemporarily}
+          >
             <button
               type="button"
-              onClick={() => originalImageUrl && setFullImageOpen(true)}
+              onClick={() => {
+                showControlsTemporarily();
+                if (originalImageUrl) setFullImageOpen(true);
+              }}
               className="block w-full"
             >
               {mediumImageUrl ? (
@@ -210,7 +242,9 @@ export default function ListingPage() {
                 <button
                   type="button"
                   onClick={previousImage}
-                  className="absolute left-3 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-xl shadow-sm"
+                  className={`absolute left-3 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-xl shadow-sm transition-opacity duration-300 ${
+                    controlsVisible ? "opacity-100" : "pointer-events-none opacity-0"
+                  }`}
                 >
                   ‹
                 </button>
@@ -218,12 +252,18 @@ export default function ListingPage() {
                 <button
                   type="button"
                   onClick={nextImage}
-                  className="absolute right-3 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-xl shadow-sm"
+                  className={`absolute right-3 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-xl shadow-sm transition-opacity duration-300 ${
+                    controlsVisible ? "opacity-100" : "pointer-events-none opacity-0"
+                  }`}
                 >
                   ›
                 </button>
 
-                <div className="absolute bottom-3 right-3 rounded-full bg-black/70 px-3 py-1 text-xs font-medium text-white">
+                <div
+                  className={`absolute bottom-3 right-3 rounded-full bg-black/70 px-3 py-1 text-xs font-medium text-white transition-opacity duration-300 ${
+                    controlsVisible ? "opacity-100" : "opacity-0"
+                  }`}
+                >
                   {selectedImageIndex + 1} / {galleryImages.length}
                 </div>
               </>
@@ -240,7 +280,10 @@ export default function ListingPage() {
                   <button
                     key={image.id}
                     type="button"
-                    onClick={() => setSelectedImageIndex(index)}
+                    onClick={() => {
+                      setSelectedImageIndex(index);
+                      showControlsTemporarily();
+                    }}
                     className={`h-20 w-24 shrink-0 overflow-hidden rounded-2xl border bg-neutral-100 ${
                       selectedImageIndex === index
                         ? "border-black"
@@ -356,11 +399,18 @@ export default function ListingPage() {
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4"
           onClick={() => setFullImageOpen(false)}
+          onMouseMove={showControlsTemporarily}
+          onTouchStart={showControlsTemporarily}
         >
           <button
             type="button"
-            className="absolute right-4 top-4 rounded-full bg-white px-4 py-2 text-sm font-medium text-black"
-            onClick={() => setFullImageOpen(false)}
+            className={`absolute right-4 top-4 rounded-full bg-white px-4 py-2 text-sm font-medium text-black transition-opacity duration-300 ${
+              controlsVisible ? "opacity-100" : "opacity-0"
+            }`}
+            onClick={(event) => {
+              event.stopPropagation();
+              setFullImageOpen(false);
+            }}
           >
             Close
           </button>
@@ -369,7 +419,9 @@ export default function ListingPage() {
             <>
               <button
                 type="button"
-                className="absolute left-4 top-1/2 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-2xl text-black"
+                className={`absolute left-4 top-1/2 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-2xl text-black transition-opacity duration-300 ${
+                  controlsVisible ? "opacity-100" : "pointer-events-none opacity-0"
+                }`}
                 onClick={(event) => {
                   event.stopPropagation();
                   previousImage();
@@ -380,7 +432,9 @@ export default function ListingPage() {
 
               <button
                 type="button"
-                className="absolute right-4 top-1/2 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-2xl text-black"
+                className={`absolute right-4 top-1/2 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-2xl text-black transition-opacity duration-300 ${
+                  controlsVisible ? "opacity-100" : "pointer-events-none opacity-0"
+                }`}
                 onClick={(event) => {
                   event.stopPropagation();
                   nextImage();
