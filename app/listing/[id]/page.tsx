@@ -52,12 +52,21 @@ function FieldRow({ label, value }: { label: string; value?: string | null }) {
   );
 }
 
+function sortImages(images: ListingImage[]) {
+  return [...images].sort((a, b) => {
+    if (a.is_primary && !b.is_primary) return -1;
+    if (!a.is_primary && b.is_primary) return 1;
+    return (a.sort_order || 0) - (b.sort_order || 0);
+  });
+}
+
 export default function ListingPage() {
   const params = useParams();
   const id = params?.id;
 
   const [listing, setListing] = useState<Listing | null>(null);
   const [loading, setLoading] = useState(true);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [fullImageOpen, setFullImageOpen] = useState(false);
 
   useEffect(() => {
@@ -80,6 +89,7 @@ export default function ListingPage() {
       }
 
       setListing(data as Listing);
+      setSelectedImageIndex(0);
       setLoading(false);
     };
 
@@ -87,26 +97,55 @@ export default function ListingPage() {
   }, [id]);
 
   const sortedImages = useMemo(() => {
-    return [...(listing?.listing_images || [])].sort((a, b) => {
-      if (a.is_primary && !b.is_primary) return -1;
-      if (!a.is_primary && b.is_primary) return 1;
-      return (a.sort_order || 0) - (b.sort_order || 0);
-    });
+    return sortImages(listing?.listing_images || []);
   }, [listing]);
 
-  const primaryImage = sortedImages[0];
+  const galleryImages = useMemo(() => {
+    if (sortedImages.length > 0) return sortedImages;
+
+    if (listing?.image) {
+      return [
+        {
+          id: "legacy-image",
+          thumb_url: listing.image,
+          medium_url: listing.image,
+          original_url: listing.image,
+          is_primary: true,
+          sort_order: 0,
+        },
+      ];
+    }
+
+    return [];
+  }, [sortedImages, listing]);
+
+  const selectedImage = galleryImages[selectedImageIndex] || galleryImages[0];
 
   const mediumImageUrl =
-    primaryImage?.medium_url ||
-    primaryImage?.original_url ||
-    listing?.image ||
+    selectedImage?.medium_url ||
+    selectedImage?.original_url ||
+    selectedImage?.thumb_url ||
     "";
 
   const originalImageUrl =
-    primaryImage?.original_url ||
-    primaryImage?.medium_url ||
-    listing?.image ||
+    selectedImage?.original_url ||
+    selectedImage?.medium_url ||
+    selectedImage?.thumb_url ||
     "";
+
+  const nextImage = () => {
+    if (galleryImages.length <= 1) return;
+    setSelectedImageIndex((prev) =>
+      prev + 1 >= galleryImages.length ? 0 : prev + 1
+    );
+  };
+
+  const previousImage = () => {
+    if (galleryImages.length <= 1) return;
+    setSelectedImageIndex((prev) =>
+      prev - 1 < 0 ? galleryImages.length - 1 : prev - 1
+    );
+  };
 
   if (loading) {
     return (
@@ -148,21 +187,81 @@ export default function ListingPage() {
           ← Back to marketplace
         </Link>
 
-        <button
-          type="button"
-          onClick={() => originalImageUrl && setFullImageOpen(true)}
-          className="block w-full overflow-hidden rounded-[28px] bg-neutral-100 shadow-sm sm:rounded-[32px]"
-        >
-          {mediumImageUrl ? (
-            <img
-              src={mediumImageUrl}
-              alt={listing.title}
-              className="h-[260px] w-full object-contain sm:h-[460px]"
-            />
-          ) : (
-            <div className="h-[260px] w-full sm:h-[460px]" />
+        <section className="overflow-hidden rounded-[28px] bg-white p-3 shadow-sm sm:rounded-[32px] sm:p-4">
+          <div className="relative overflow-hidden rounded-[22px] bg-neutral-100">
+            <button
+              type="button"
+              onClick={() => originalImageUrl && setFullImageOpen(true)}
+              className="block w-full"
+            >
+              {mediumImageUrl ? (
+                <img
+                  src={mediumImageUrl}
+                  alt={listing.title}
+                  className="h-[260px] w-full object-contain sm:h-[460px]"
+                />
+              ) : (
+                <div className="h-[260px] w-full sm:h-[460px]" />
+              )}
+            </button>
+
+            {galleryImages.length > 1 && (
+              <>
+                <button
+                  type="button"
+                  onClick={previousImage}
+                  className="absolute left-3 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-xl shadow-sm"
+                >
+                  ‹
+                </button>
+
+                <button
+                  type="button"
+                  onClick={nextImage}
+                  className="absolute right-3 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-xl shadow-sm"
+                >
+                  ›
+                </button>
+
+                <div className="absolute bottom-3 right-3 rounded-full bg-black/70 px-3 py-1 text-xs font-medium text-white">
+                  {selectedImageIndex + 1} / {galleryImages.length}
+                </div>
+              </>
+            )}
+          </div>
+
+          {galleryImages.length > 1 && (
+            <div className="mt-3 flex gap-2 overflow-x-auto pb-1">
+              {galleryImages.map((image, index) => {
+                const thumbUrl =
+                  image.thumb_url || image.medium_url || image.original_url || "";
+
+                return (
+                  <button
+                    key={image.id}
+                    type="button"
+                    onClick={() => setSelectedImageIndex(index)}
+                    className={`h-20 w-24 shrink-0 overflow-hidden rounded-2xl border bg-neutral-100 ${
+                      selectedImageIndex === index
+                        ? "border-black"
+                        : "border-black/10"
+                    }`}
+                  >
+                    {thumbUrl ? (
+                      <img
+                        src={thumbUrl}
+                        alt={`${listing.title} ${index + 1}`}
+                        className="h-full w-full object-cover"
+                      />
+                    ) : (
+                      <div className="h-full w-full" />
+                    )}
+                  </button>
+                );
+              })}
+            </div>
           )}
-        </button>
+        </section>
 
         <section className="overflow-hidden rounded-[28px] bg-white p-5 shadow-sm sm:rounded-[32px] sm:p-6">
           <p className="mb-3 text-xs font-medium uppercase tracking-[0.22em] text-black/35">
@@ -266,10 +365,37 @@ export default function ListingPage() {
             Close
           </button>
 
+          {galleryImages.length > 1 && (
+            <>
+              <button
+                type="button"
+                className="absolute left-4 top-1/2 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-2xl text-black"
+                onClick={(event) => {
+                  event.stopPropagation();
+                  previousImage();
+                }}
+              >
+                ‹
+              </button>
+
+              <button
+                type="button"
+                className="absolute right-4 top-1/2 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-2xl text-black"
+                onClick={(event) => {
+                  event.stopPropagation();
+                  nextImage();
+                }}
+              >
+                ›
+              </button>
+            </>
+          )}
+
           <img
             src={originalImageUrl}
             alt={listing.title}
             className="max-h-[90vh] max-w-[95vw] object-contain"
+            onClick={(event) => event.stopPropagation()}
           />
         </div>
       )}
