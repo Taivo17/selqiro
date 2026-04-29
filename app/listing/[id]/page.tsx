@@ -65,6 +65,8 @@ export default function ListingPage() {
   const id = params?.id;
 
   const hideTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const touchStartXRef = useRef(0);
+  const touchStartYRef = useRef(0);
 
   const [listing, setListing] = useState<Listing | null>(null);
   const [loading, setLoading] = useState(true);
@@ -82,6 +84,31 @@ export default function ListingPage() {
     hideTimerRef.current = setTimeout(() => {
       setControlsVisible(false);
     }, 3000);
+  };
+
+  const handleTouchStart = (event: React.TouchEvent) => {
+    showControlsTemporarily();
+
+    const touch = event.touches[0];
+    touchStartXRef.current = touch.clientX;
+    touchStartYRef.current = touch.clientY;
+  };
+
+  const handleTouchEnd = (event: React.TouchEvent) => {
+    const touch = event.changedTouches[0];
+
+    const diffX = touch.clientX - touchStartXRef.current;
+    const diffY = touch.clientY - touchStartYRef.current;
+
+    const isHorizontalSwipe = Math.abs(diffX) > 45 && Math.abs(diffX) > Math.abs(diffY);
+
+    if (!isHorizontalSwipe) return;
+
+    if (diffX < 0) {
+      nextImage();
+    } else {
+      previousImage();
+    }
   };
 
   useEffect(() => {
@@ -214,9 +241,10 @@ export default function ListingPage() {
 
         <section className="overflow-hidden rounded-[28px] bg-white p-3 shadow-sm sm:rounded-[32px] sm:p-4">
           <div
-            className="relative overflow-hidden rounded-[22px] bg-neutral-100"
+            className="relative overflow-hidden rounded-[22px] bg-neutral-100 touch-pan-y"
             onMouseMove={showControlsTemporarily}
-            onTouchStart={showControlsTemporarily}
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
           >
             <button
               type="button"
@@ -231,6 +259,7 @@ export default function ListingPage() {
                   src={mediumImageUrl}
                   alt={listing.title}
                   className="h-[260px] w-full object-contain sm:h-[460px]"
+                  draggable={false}
                 />
               ) : (
                 <div className="h-[260px] w-full sm:h-[460px]" />
@@ -295,6 +324,7 @@ export default function ListingPage() {
                         src={thumbUrl}
                         alt={`${listing.title} ${index + 1}`}
                         className="h-full w-full object-cover"
+                        draggable={false}
                       />
                     ) : (
                       <div className="h-full w-full" />
@@ -397,10 +427,11 @@ export default function ListingPage() {
 
       {fullImageOpen && originalImageUrl && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4 touch-pan-y"
           onClick={() => setFullImageOpen(false)}
           onMouseMove={showControlsTemporarily}
-          onTouchStart={showControlsTemporarily}
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
         >
           <button
             type="button"
@@ -449,6 +480,7 @@ export default function ListingPage() {
             src={originalImageUrl}
             alt={listing.title}
             className="max-h-[90vh] max-w-[95vw] object-contain"
+            draggable={false}
             onClick={(event) => event.stopPropagation()}
           />
         </div>
