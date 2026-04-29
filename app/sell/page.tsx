@@ -6,6 +6,8 @@ import { useRouter } from "next/navigation";
 import { supabase } from "../../lib/supabase";
 import { useAuth } from "../../lib/useAuth";
 
+const MAX_IMAGES = 10;
+
 async function resizeImage(file: File, maxWidth = 1600, quality = 0.82) {
   const imageBitmap = await createImageBitmap(file);
 
@@ -57,23 +59,103 @@ export default function SellPage() {
   const [vehicleYear, setVehicleYear] = useState("");
   const [engine, setEngine] = useState("");
 
-  const [file, setFile] = useState<File | null>(null);
+  const [files, setFiles] = useState<File[]>([]);
   const [saving, setSaving] = useState(false);
 
-  const previewUrl = useMemo(() => {
-    if (!file) return "";
-    return URL.createObjectURL(file);
-  }, [file]);
+  const previewUrls = useMemo(() => {
+    return files.map((file) => URL.createObjectURL(file));
+  }, [files]);
 
   useEffect(() => {
     return () => {
-      if (previewUrl) URL.revokeObjectURL(previewUrl);
+      previewUrls.forEach((url) => URL.revokeObjectURL(url));
     };
-  }, [previewUrl]);
+  }, [previewUrls]);
 
   useEffect(() => {
     if (!loading && !user) router.push("/auth");
   }, [loading, user, router]);
+
+  const handleFiles = (selectedFiles: FileList | null) => {
+    if (!selectedFiles) return;
+
+    const imageFiles = Array.from(selectedFiles).filter((file) =>
+      file.type.startsWith("image/")
+    );
+
+    setFiles((prev) => {
+      const combined = [...prev, ...imageFiles];
+      return combined.slice(0, MAX_IMAGES);
+    });
+  };
+
+  const removeImage = (index: number) => {
+    setFiles((prev) => prev.filter((_, itemIndex) => itemIndex !== index));
+  };
+
+  const moveImage = (index: number, direction: "up" | "down") => {
+    setFiles((prev) => {
+      const next = [...prev];
+      const targetIndex = direction === "up" ? index - 1 : index + 1;
+
+      if (targetIndex < 0 || targetIndex >= next.length) return prev;
+
+      const current = next[index];
+      next[index] = next[targetIndex];
+      next[targetIndex] = current;
+
+      return next;
+    });
+  };
+
+  const uploadListingImages = async (listingId: number) => {
+    if (!user || files.length === 0) return "";
+
+    const rows = [];
+    let firstOriginalUrl = "";
+
+    for (let index = 0; index < files.length; index += 1) {
+      const resizedFile = await resizeImage(files[index]);
+      const fileName = `${user.id}/${listingId}-${Date.now()}-${index}.jpg`;
+
+      const { error: uploadError } = await supabase.storage
+        .from("listing-images")
+        .upload(fileName, resizedFile, {
+          contentType: "image/jpeg",
+          upsert: false,
+        });
+
+      if (uploadError) throw uploadError;
+
+      const { data } = supabase.storage
+        .from("listing-images")
+        .getPublicUrl(fileName);
+
+      const originalUrl = data.publicUrl;
+      const mediumUrl = `${originalUrl}?width=900&resize=contain`;
+      const thumbUrl = `${originalUrl}?width=400&height=300&resize=cover`;
+
+      if (index === 0) firstOriginalUrl = originalUrl;
+
+      rows.push({
+        listing_id: listingId,
+        user_id: user.id,
+        original_url: originalUrl,
+        medium_url: mediumUrl,
+        thumb_url: thumbUrl,
+        sort_order: index,
+        is_primary: index === 0,
+      });
+    }
+
+    const { error: imageError } = await supabase
+      .from("listing_images")
+      .insert(rows);
+
+    if (imageError) throw imageError;
+
+    return firstOriginalUrl;
+  };
 
   const createListing = async () => {
     if (!user) return;
@@ -86,37 +168,6 @@ export default function SellPage() {
     setSaving(true);
 
     try {
-      let originalUrl = "";
-      let mediumUrl = "";
-      let thumbUrl = "";
-
-      if (file) {
-        const resizedFile = await resizeImage(file);
-        const fileName = `${user.id}/${Date.now()}.jpg`;
-
-        const { error: uploadError } = await supabase.storage
-          .from("listing-images")
-          .upload(fileName, resizedFile, {
-            contentType: "image/jpeg",
-            upsert: false,
-          });
-
-        if (uploadError) {
-          console.error(uploadError);
-          alert("Image upload failed");
-          setSaving(false);
-          return;
-        }
-
-        const { data } = supabase.storage
-          .from("listing-images")
-          .getPublicUrl(fileName);
-
-        originalUrl = data.publicUrl;
-        mediumUrl = `${originalUrl}?width=900&resize=contain`;
-        thumbUrl = `${originalUrl}?width=400&height=300&resize=cover`;
-      }
-
       const cleanCountry = country.trim();
       const cleanCity = city.trim();
 
@@ -132,7 +183,7 @@ export default function SellPage() {
           title: title.trim(),
           description: description.trim(),
           price: price.trim(),
-          image: originalUrl || null,
+          image: null,
           category,
           subcategory: subcategory.trim(),
           condition,
@@ -189,23 +240,14 @@ export default function SellPage() {
         return;
       }
 
-      if (originalUrl) {
-        const { error: imageError } = await supabase
-          .from("listing_images")
-          .insert({
-            listing_id: listingData.id,
-            user_id: user.id,
-            original_url: originalUrl,
-            medium_url: mediumUrl,
-            thumb_url: thumbUrl,
-            sort_order: 0,
-            is_primary: true,
-          });
+      const primaryImageUrl = await uploadListingImages(listingData.id);
 
-        if (imageError) {
-          console.error(imageError);
-          alert("Listing saved, but image metadata failed");
-        }
+      if (primaryImageUrl) {
+        await supabase
+          .from("listings")
+          .update({ image: primaryImageUrl })
+          .eq("id", listingData.id)
+          .eq("user_id", user.id);
       }
 
       router.push("/my-page");
@@ -234,25 +276,88 @@ export default function SellPage() {
           <input
             type="file"
             accept="image/*"
-            onChange={(e) => setFile(e.target.files?.[0] || null)}
+            multiple
+            onChange={(e) => handleFiles(e.target.files)}
             className="w-full rounded-2xl border border-black/10 bg-white p-3 text-sm"
           />
 
-          {previewUrl && (
-            <div className="overflow-hidden rounded-2xl border border-black/10 bg-neutral-100">
-              <img
-                src={previewUrl}
-                alt="Selected preview"
-                className="h-64 w-full object-contain"
-              />
+          {previewUrls.length > 0 && (
+            <div className="grid gap-3 sm:grid-cols-2">
+              {previewUrls.map((url, index) => (
+                <div
+                  key={url}
+                  className="overflow-hidden rounded-2xl border border-black/10 bg-neutral-100"
+                >
+                  <img
+                    src={url}
+                    alt={`Selected preview ${index + 1}`}
+                    className="h-48 w-full object-contain"
+                  />
+
+                  <div className="flex flex-wrap items-center gap-2 bg-white p-3">
+                    {index === 0 && (
+                      <span className="rounded-full bg-green-100 px-3 py-1 text-xs font-medium text-green-700">
+                        Primary
+                      </span>
+                    )}
+
+                    <button
+                      type="button"
+                      onClick={() => moveImage(index, "up")}
+                      disabled={index === 0}
+                      className="rounded-xl border border-black/10 px-3 py-1 text-xs disabled:opacity-40"
+                    >
+                      ↑
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => moveImage(index, "down")}
+                      disabled={index === files.length - 1}
+                      className="rounded-xl border border-black/10 px-3 py-1 text-xs disabled:opacity-40"
+                    >
+                      ↓
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => removeImage(index)}
+                      className="rounded-xl border border-red-200 px-3 py-1 text-xs text-red-600"
+                    >
+                      Remove
+                    </button>
+                  </div>
+                </div>
+              ))}
             </div>
           )}
 
-          <input placeholder="Title" value={title} onChange={(e) => setTitle(e.target.value)} className="w-full rounded-2xl border border-black/10 p-4 outline-none" />
-          <textarea placeholder="Description" value={description} onChange={(e) => setDescription(e.target.value)} className="min-h-28 w-full rounded-2xl border border-black/10 p-4 outline-none" />
-          <input placeholder="Price" value={price} onChange={(e) => setPrice(e.target.value)} className="w-full rounded-2xl border border-black/10 p-4 outline-none" />
+          <input
+            placeholder="Title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            className="w-full rounded-2xl border border-black/10 p-4 outline-none"
+          />
 
-          <select value={category} onChange={(e) => setCategory(e.target.value)} className="w-full rounded-2xl border border-black/10 p-4 outline-none">
+          <textarea
+            placeholder="Description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            className="min-h-28 w-full rounded-2xl border border-black/10 p-4 outline-none"
+          />
+
+          <input
+            placeholder="Price"
+            value={price}
+            onChange={(e) => setPrice(e.target.value)}
+            className="w-full rounded-2xl border border-black/10 p-4 outline-none"
+          />
+
+          <select
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            className="w-full rounded-2xl border border-black/10 p-4 outline-none"
+          >
             <option value="general">General</option>
             <option value="vehicles">Vehicles</option>
             <option value="parts">Parts</option>
@@ -261,28 +366,89 @@ export default function SellPage() {
             <option value="real_estate">Real estate</option>
           </select>
 
-          <select value={condition} onChange={(e) => setCondition(e.target.value)} className="w-full rounded-2xl border border-black/10 p-4 outline-none">
+          <select
+            value={condition}
+            onChange={(e) => setCondition(e.target.value)}
+            className="w-full rounded-2xl border border-black/10 p-4 outline-none"
+          >
             <option value="new">New</option>
             <option value="used">Used</option>
             <option value="for_parts">For parts</option>
           </select>
 
-          <input placeholder="Subcategory" value={subcategory} onChange={(e) => setSubcategory(e.target.value)} className="w-full rounded-2xl border border-black/10 p-4 outline-none" />
-          <input placeholder="Country" value={country} onChange={(e) => setCountry(e.target.value)} className="w-full rounded-2xl border border-black/10 p-4 outline-none" />
-          <input placeholder="City" value={city} onChange={(e) => setCity(e.target.value)} className="w-full rounded-2xl border border-black/10 p-4 outline-none" />
+          <input
+            placeholder="Subcategory"
+            value={subcategory}
+            onChange={(e) => setSubcategory(e.target.value)}
+            className="w-full rounded-2xl border border-black/10 p-4 outline-none"
+          />
+
+          <input
+            placeholder="Country"
+            value={country}
+            onChange={(e) => setCountry(e.target.value)}
+            className="w-full rounded-2xl border border-black/10 p-4 outline-none"
+          />
+
+          <input
+            placeholder="City"
+            value={city}
+            onChange={(e) => setCity(e.target.value)}
+            className="w-full rounded-2xl border border-black/10 p-4 outline-none"
+          />
 
           <h2 className="pt-4 text-2xl font-semibold">Technical info</h2>
 
-          <input placeholder="Manufacturer" value={manufacturer} onChange={(e) => setManufacturer(e.target.value)} className="w-full rounded-2xl border border-black/10 p-4 outline-none" />
-          <input placeholder="Part number" value={partNumber} onChange={(e) => setPartNumber(e.target.value)} className="w-full rounded-2xl border border-black/10 p-4 outline-none" />
-          <input placeholder="OEM number" value={oemNumber} onChange={(e) => setOemNumber(e.target.value)} className="w-full rounded-2xl border border-black/10 p-4 outline-none" />
+          <input
+            placeholder="Manufacturer"
+            value={manufacturer}
+            onChange={(e) => setManufacturer(e.target.value)}
+            className="w-full rounded-2xl border border-black/10 p-4 outline-none"
+          />
+
+          <input
+            placeholder="Part number"
+            value={partNumber}
+            onChange={(e) => setPartNumber(e.target.value)}
+            className="w-full rounded-2xl border border-black/10 p-4 outline-none"
+          />
+
+          <input
+            placeholder="OEM number"
+            value={oemNumber}
+            onChange={(e) => setOemNumber(e.target.value)}
+            className="w-full rounded-2xl border border-black/10 p-4 outline-none"
+          />
 
           <h2 className="pt-4 text-2xl font-semibold">Vehicle fitment</h2>
 
-          <input placeholder="Brand" value={vehicleBrand} onChange={(e) => setVehicleBrand(e.target.value)} className="w-full rounded-2xl border border-black/10 p-4 outline-none" />
-          <input placeholder="Model" value={vehicleModel} onChange={(e) => setVehicleModel(e.target.value)} className="w-full rounded-2xl border border-black/10 p-4 outline-none" />
-          <input placeholder="Year" value={vehicleYear} onChange={(e) => setVehicleYear(e.target.value)} className="w-full rounded-2xl border border-black/10 p-4 outline-none" />
-          <input placeholder="Engine" value={engine} onChange={(e) => setEngine(e.target.value)} className="w-full rounded-2xl border border-black/10 p-4 outline-none" />
+          <input
+            placeholder="Brand"
+            value={vehicleBrand}
+            onChange={(e) => setVehicleBrand(e.target.value)}
+            className="w-full rounded-2xl border border-black/10 p-4 outline-none"
+          />
+
+          <input
+            placeholder="Model"
+            value={vehicleModel}
+            onChange={(e) => setVehicleModel(e.target.value)}
+            className="w-full rounded-2xl border border-black/10 p-4 outline-none"
+          />
+
+          <input
+            placeholder="Year"
+            value={vehicleYear}
+            onChange={(e) => setVehicleYear(e.target.value)}
+            className="w-full rounded-2xl border border-black/10 p-4 outline-none"
+          />
+
+          <input
+            placeholder="Engine"
+            value={engine}
+            onChange={(e) => setEngine(e.target.value)}
+            className="w-full rounded-2xl border border-black/10 p-4 outline-none"
+          />
 
           <button
             onClick={createListing}
