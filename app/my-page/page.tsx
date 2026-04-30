@@ -65,6 +65,24 @@ function getListingImage(item: Listing) {
   );
 }
 
+function getStoragePathFromUrl(url?: string | null) {
+  if (!url) return null;
+
+  const marker = "/storage/v1/object/public/listing-images/";
+  const index = url.indexOf(marker);
+
+  if (index === -1) return null;
+
+  const pathWithQuery = url.slice(index + marker.length);
+  const cleanPath = pathWithQuery.split("?")[0];
+
+  try {
+    return decodeURIComponent(cleanPath);
+  } catch {
+    return cleanPath;
+  }
+}
+
 async function resizeImage(file: File, maxWidth = 1600, quality = 0.82) {
   const imageBitmap = await createImageBitmap(file);
 
@@ -290,6 +308,21 @@ export default function MyPage() {
     setEditNewFiles((prev) => prev.filter((_, fileIndex) => fileIndex !== index));
   };
 
+  const deleteStorageFile = async (image: ListingImage) => {
+    const path =
+      getStoragePathFromUrl(image.original_url) ||
+      getStoragePathFromUrl(image.medium_url) ||
+      getStoragePathFromUrl(image.thumb_url);
+
+    if (!path) return;
+
+    const { error } = await supabase.storage.from("listing-images").remove([path]);
+
+    if (error) {
+      console.warn("Storage file delete failed:", error);
+    }
+  };
+
   const deleteEditImage = async (imageId: string) => {
     if (!editingId || !userId) return;
 
@@ -297,6 +330,8 @@ export default function MyPage() {
       alert("A listing should have at least one image.");
       return;
     }
+
+    const imageToDelete = editImages.find((img) => img.id === imageId);
 
     const confirmed = window.confirm("Delete this image?");
     if (!confirmed) return;
@@ -311,6 +346,10 @@ export default function MyPage() {
       console.error(error);
       alert("Failed to delete image.");
       return;
+    }
+
+    if (imageToDelete) {
+      await deleteStorageFile(imageToDelete);
     }
 
     const remaining = editImages.filter((img) => img.id !== imageId);
@@ -578,6 +617,51 @@ export default function MyPage() {
       "Are you sure you want to delete this listing?"
     );
     if (!confirmed) return;
+
+    const { data: imageRows, error: imageLoadError } = await supabase
+      .from("listing_images")
+      .select("id, thumb_url, medium_url, original_url")
+      .eq("listing_id", id)
+      .eq("user_id", userId);
+
+    if (imageLoadError) {
+      console.error("Error loading images before delete:", imageLoadError);
+      alert("Failed to delete listing images.");
+      return;
+    }
+
+    const imagesToDelete = (imageRows || []) as ListingImage[];
+
+    const storagePaths = imagesToDelete
+      .map(
+        (img) =>
+          getStoragePathFromUrl(img.original_url) ||
+          getStoragePathFromUrl(img.medium_url) ||
+          getStoragePathFromUrl(img.thumb_url)
+      )
+      .filter((path): path is string => Boolean(path));
+
+    if (storagePaths.length > 0) {
+      const { error: storageError } = await supabase.storage
+        .from("listing-images")
+        .remove(storagePaths);
+
+      if (storageError) {
+        console.warn("Some storage files were not deleted:", storageError);
+      }
+    }
+
+    const { error: imageDeleteError } = await supabase
+      .from("listing_images")
+      .delete()
+      .eq("listing_id", id)
+      .eq("user_id", userId);
+
+    if (imageDeleteError) {
+      console.error("Error deleting image rows:", imageDeleteError);
+      alert("Failed to delete image rows.");
+      return;
+    }
 
     const { error } = await supabase
       .from("listings")
