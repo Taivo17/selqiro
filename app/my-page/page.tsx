@@ -20,11 +20,13 @@ type ListingImage = {
 type Listing = {
   id: number;
   user_id?: string | null;
+  created_at?: string | null;
   title: string;
   description: string;
   price: string;
   image?: string | null;
   status?: "active" | "paused" | "sold";
+  active_until?: string | null;
   category?: string;
   condition?: string;
   country?: string;
@@ -81,6 +83,16 @@ function getStoragePathFromUrl(url?: string | null) {
   } catch {
     return cleanPath;
   }
+}
+
+function getDaysLeft(activeUntil?: string | null) {
+  if (!activeUntil) return null;
+
+  const now = new Date();
+  const end = new Date(activeUntil);
+  const diff = end.getTime() - now.getTime();
+
+  return Math.ceil(diff / (1000 * 60 * 60 * 24));
 }
 
 async function resizeImage(file: File, maxWidth = 1600, quality = 0.82) {
@@ -595,15 +607,56 @@ export default function MyPage() {
   ) => {
     if (!userId) return;
 
+    const updates: {
+      status: "active" | "paused" | "sold";
+      active_until?: string;
+    } = { status };
+
+    if (status === "active") {
+      const item = listings.find((listing) => listing.id === id);
+      const daysLeft = getDaysLeft(item?.active_until);
+      const expired = daysLeft !== null && daysLeft <= 0;
+
+      if (expired || !item?.active_until) {
+        const newDate = new Date();
+        newDate.setDate(newDate.getDate() + 90);
+        updates.active_until = newDate.toISOString();
+      }
+    }
+
     const { error } = await supabase
       .from("listings")
-      .update({ status })
+      .update(updates)
       .eq("id", id)
       .eq("user_id", userId);
 
     if (error) {
       console.error("Error updating status:", error);
       alert("Failed to update listing status.");
+      return;
+    }
+
+    await fetchListings(userId, 0);
+  };
+
+  const reactivateListing = async (id: number) => {
+    if (!userId) return;
+
+    const newDate = new Date();
+    newDate.setDate(newDate.getDate() + 90);
+
+    const { error } = await supabase
+      .from("listings")
+      .update({
+        status: "active",
+        active_until: newDate.toISOString(),
+      })
+      .eq("id", id)
+      .eq("user_id", userId);
+
+    if (error) {
+      console.error("Error reactivating listing:", error);
+      alert("Failed to reactivate listing.");
       return;
     }
 
@@ -1229,6 +1282,8 @@ export default function MyPage() {
             <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
               {listings.map((item) => {
                 const imageUrl = getListingImage(item);
+                const daysLeft = getDaysLeft(item.active_until);
+                const expired = daysLeft !== null && daysLeft <= 0;
 
                 return (
                   <article
@@ -1271,6 +1326,22 @@ export default function MyPage() {
                       </div>
                     </Link>
 
+                    <div className="mt-4 rounded-2xl border border-black/8 bg-black/[0.02] px-4 py-3 text-sm">
+                      {expired ? (
+                        <div className="font-medium text-red-600">
+                          Expired
+                        </div>
+                      ) : daysLeft !== null ? (
+                        <div className="text-black/60">
+                          {daysLeft} days left
+                        </div>
+                      ) : (
+                        <div className="text-black/45">
+                          No expiration date
+                        </div>
+                      )}
+                    </div>
+
                     <div className="mt-5 flex flex-wrap gap-2">
                       <button
                         onClick={() => updateStatus(item.id, "active")}
@@ -1292,6 +1363,15 @@ export default function MyPage() {
                       >
                         Sold
                       </button>
+
+                      {expired && (
+                        <button
+                          onClick={() => reactivateListing(item.id)}
+                          className="rounded-xl bg-black px-3 py-2 text-sm text-white"
+                        >
+                          Reactivate 90 days
+                        </button>
+                      )}
 
                       <button
                         onClick={() => startEdit(item)}
