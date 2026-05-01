@@ -47,6 +47,32 @@ const inputClass =
 
 const labelClass = "mb-2 block text-sm font-medium text-black/60";
 
+const baseStatusButtonClass =
+  "rounded-xl border px-3 py-2 text-sm font-medium transition";
+
+function getStatusButtonClass(
+  buttonStatus: "active" | "paused" | "sold",
+  currentStatus: "active" | "paused" | "sold",
+  expired: boolean
+) {
+  const effectiveStatus = expired && currentStatus === "active" ? "paused" : currentStatus;
+  const isSelected = buttonStatus === effectiveStatus;
+
+  if (!isSelected) {
+    return `${baseStatusButtonClass} border-black/10 bg-white text-black hover:bg-black/[0.03]`;
+  }
+
+  if (buttonStatus === "active") {
+    return `${baseStatusButtonClass} border-green-200 bg-green-100 text-green-700`;
+  }
+
+  if (buttonStatus === "paused") {
+    return `${baseStatusButtonClass} border-yellow-200 bg-yellow-100 text-yellow-800`;
+  }
+
+  return `${baseStatusButtonClass} border-neutral-300 bg-neutral-900 text-white`;
+}
+
 function sortImages(images: ListingImage[]) {
   return [...images].sort((a, b) => {
     if (a.is_primary && !b.is_primary) return -1;
@@ -814,6 +840,31 @@ export default function MyPage() {
           </div>
         </header>
 
+        <section className="rounded-[28px] bg-white p-5 shadow-sm sm:p-6">
+          <div className="grid gap-4 md:grid-cols-[1fr_220px]">
+            <input
+              type="text"
+              placeholder="Search your listings..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className={inputClass}
+            />
+
+            <select
+              value={filter}
+              onChange={(e) =>
+                setFilter(e.target.value as "all" | "active" | "paused" | "sold")
+              }
+              className={inputClass}
+            >
+              <option value="all">All statuses</option>
+              <option value="active">Active</option>
+              <option value="paused">Paused</option>
+              <option value="sold">Sold</option>
+            </select>
+          </div>
+        </section>
+
         {editingId && (
           <section className="rounded-[28px] bg-white p-5 shadow-sm sm:rounded-[32px] sm:p-6">
             <div className="mb-6 flex items-start justify-between gap-4">
@@ -1200,68 +1251,11 @@ export default function MyPage() {
                   <p className="mt-4 line-clamp-4 break-words text-sm leading-6 text-black/60">
                     {editDescription || "Listing description preview."}
                   </p>
-
-                  <div className="mt-5 flex flex-wrap gap-2 text-sm text-black/55">
-                    <span className="rounded-full border border-black/10 px-3 py-2">
-                      {editCategory}
-                    </span>
-                    <span className="rounded-full border border-black/10 px-3 py-2">
-                      {editCondition}
-                    </span>
-                    <span className="rounded-full border border-black/10 px-3 py-2">
-                      {editCountry}
-                      {editCity ? ` • ${editCity}` : ""}
-                    </span>
-                  </div>
                 </div>
               </aside>
             </div>
           </section>
         )}
-
-        <section className="grid gap-4 md:grid-cols-3">
-          <div className="rounded-[28px] bg-white p-5 shadow-sm">
-            <p className="text-sm text-black/45">Loaded listings</p>
-            <p className="mt-2 text-3xl font-semibold">{listings.length}</p>
-          </div>
-
-          <div className="rounded-[28px] bg-white p-5 shadow-sm">
-            <p className="text-sm text-black/45">Loaded active</p>
-            <p className="mt-2 text-3xl font-semibold">{activeCount}</p>
-          </div>
-
-          <div className="rounded-[28px] bg-white p-5 shadow-sm">
-            <p className="text-sm text-black/45">Loaded paused / sold</p>
-            <p className="mt-2 text-3xl font-semibold">
-              {pausedCount + soldCount}
-            </p>
-          </div>
-        </section>
-
-        <section className="rounded-[28px] bg-white p-5 shadow-sm sm:p-6">
-          <div className="grid gap-4 md:grid-cols-[1fr_220px]">
-            <input
-              type="text"
-              placeholder="Search your listings..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className={inputClass}
-            />
-
-            <select
-              value={filter}
-              onChange={(e) =>
-                setFilter(e.target.value as "all" | "active" | "paused" | "sold")
-              }
-              className={inputClass}
-            >
-              <option value="all">All statuses</option>
-              <option value="active">Active</option>
-              <option value="paused">Paused</option>
-              <option value="sold">Sold</option>
-            </select>
-          </div>
-        </section>
 
         {loadingListings ? (
           <div className="rounded-[28px] bg-white p-8 text-center shadow-sm">
@@ -1284,6 +1278,7 @@ export default function MyPage() {
                 const imageUrl = getListingImage(item);
                 const daysLeft = getDaysLeft(item.active_until);
                 const expired = daysLeft !== null && daysLeft <= 0;
+                const currentStatus = item.status || "active";
 
                 return (
                   <article
@@ -1326,48 +1321,68 @@ export default function MyPage() {
                       </div>
                     </Link>
 
-                    <div className="mt-4 rounded-2xl border border-black/8 bg-black/[0.02] px-4 py-3 text-sm">
-                      {expired ? (
-                        <div className="font-medium text-red-600">
-                          Expired
-                        </div>
+                    <div
+                      className={`mt-4 rounded-2xl border px-4 py-3 text-sm ${
+                        expired && currentStatus === "active"
+                          ? "border-yellow-200 bg-yellow-50 text-yellow-800"
+                          : currentStatus === "sold"
+                          ? "border-neutral-200 bg-neutral-100 text-neutral-700"
+                          : currentStatus === "paused"
+                          ? "border-yellow-200 bg-yellow-50 text-yellow-800"
+                          : "border-green-200 bg-green-50 text-green-700"
+                      }`}
+                    >
+                      {expired && currentStatus === "active" ? (
+                        <div className="font-medium">Expired / paused</div>
+                      ) : currentStatus === "sold" ? (
+                        <div className="font-medium">Sold</div>
+                      ) : currentStatus === "paused" ? (
+                        <div className="font-medium">Paused</div>
                       ) : daysLeft !== null ? (
-                        <div className="text-black/60">
-                          {daysLeft} days left
-                        </div>
+                        <div className="font-medium">{daysLeft} days left</div>
                       ) : (
-                        <div className="text-black/45">
-                          No expiration date
-                        </div>
+                        <div className="font-medium">Active</div>
                       )}
                     </div>
 
                     <div className="mt-5 flex flex-wrap gap-2">
                       <button
                         onClick={() => updateStatus(item.id, "active")}
-                        className="rounded-xl border border-black/10 bg-white px-3 py-2 text-sm"
+                        className={getStatusButtonClass(
+                          "active",
+                          currentStatus,
+                          expired
+                        )}
                       >
                         Active
                       </button>
 
                       <button
                         onClick={() => updateStatus(item.id, "paused")}
-                        className="rounded-xl border border-black/10 bg-white px-3 py-2 text-sm"
+                        className={getStatusButtonClass(
+                          "paused",
+                          currentStatus,
+                          expired
+                        )}
                       >
                         Pause
                       </button>
 
                       <button
                         onClick={() => updateStatus(item.id, "sold")}
-                        className="rounded-xl border border-black/10 bg-white px-3 py-2 text-sm"
+                        className={getStatusButtonClass(
+                          "sold",
+                          currentStatus,
+                          expired
+                        )}
                       >
                         Sold
                       </button>
 
-                      {expired && (
+                      {expired && currentStatus === "active" && (
                         <button
                           onClick={() => reactivateListing(item.id)}
-                          className="rounded-xl bg-black px-3 py-2 text-sm text-white"
+                          className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
                         >
                           Reactivate 90 days
                         </button>
