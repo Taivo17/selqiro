@@ -79,6 +79,7 @@ export default function ListingPage() {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [fullImageOpen, setFullImageOpen] = useState(false);
   const [controlsVisible, setControlsVisible] = useState(false);
+  const [shareCopied, setShareCopied] = useState(false);
 
   const showControlsTemporarily = () => {
     setControlsVisible(true);
@@ -209,6 +210,48 @@ export default function ListingPage() {
     );
 
     showControlsTemporarily();
+  };
+
+  const shareListing = async () => {
+    if (!listing || typeof window === "undefined") return;
+
+    const shareUrl = window.location.href;
+    const shareTitle = listing.title || "Selqiro listing";
+    const shareText = `${listing.title} - ${listing.price}`;
+
+    setShareCopied(false);
+
+    try {
+      if (navigator.share) {
+        await navigator.share({
+          title: shareTitle,
+          text: shareText,
+          url: shareUrl,
+        });
+        return;
+      }
+
+      await navigator.clipboard.writeText(shareUrl);
+      setShareCopied(true);
+
+      setTimeout(() => {
+        setShareCopied(false);
+      }, 2500);
+    } catch (error) {
+      console.error("Share failed:", error);
+
+      try {
+        await navigator.clipboard.writeText(shareUrl);
+        setShareCopied(true);
+
+        setTimeout(() => {
+          setShareCopied(false);
+        }, 2500);
+      } catch (clipboardError) {
+        console.error("Clipboard failed:", clipboardError);
+        alert("Could not share this listing.");
+      }
+    }
   };
 
   if (loading) {
@@ -403,6 +446,14 @@ export default function ListingPage() {
                 Seller store unavailable
               </span>
             )}
+
+            <button
+              type="button"
+              onClick={shareListing}
+              className="rounded-2xl border border-black/10 bg-white px-5 py-3 text-sm font-medium transition hover:bg-black/[0.03]"
+            >
+              {shareCopied ? "Link copied" : "Share listing"}
+            </button>
 
             {sellerProfile?.store_name && (
               <span className="rounded-2xl border border-black/10 bg-white px-5 py-3 text-sm text-black/55">
