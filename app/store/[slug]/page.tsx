@@ -32,6 +32,7 @@ type Listing = {
   price: string;
   image?: string | null;
   status?: "active" | "paused" | "sold";
+  active_until?: string | null;
   category?: string | null;
   condition?: string | null;
   country?: string | null;
@@ -39,16 +40,14 @@ type Listing = {
   listing_images?: ListingImage[];
 };
 
-function sortImages(images: ListingImage[]) {
-  return [...images].sort((a, b) => {
+function getListingImage(item: Listing) {
+  const sortedImages = [...(item.listing_images || [])].sort((a, b) => {
     if (a.is_primary && !b.is_primary) return -1;
     if (!a.is_primary && b.is_primary) return 1;
     return (a.sort_order || 0) - (b.sort_order || 0);
   });
-}
 
-function getListingImage(item: Listing) {
-  const img = sortImages(item.listing_images || [])[0];
+  const img = sortedImages[0];
 
   return (
     img?.thumb_url ||
@@ -57,6 +56,11 @@ function getListingImage(item: Listing) {
     item.image ||
     ""
   );
+}
+
+function isExpired(activeUntil?: string | null) {
+  if (!activeUntil) return false;
+  return new Date(activeUntil).getTime() <= Date.now();
 }
 
 export default function StorePage() {
@@ -68,14 +72,10 @@ export default function StorePage() {
   const [profile, setProfile] = useState<ProfileRow | null>(null);
   const [listings, setListings] = useState<Listing[]>([]);
   const [loading, setLoading] = useState(true);
-
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<
     "all" | "active" | "paused" | "sold"
   >("all");
-
-  const [isFollowing, setIsFollowing] = useState(false);
-  const [followLoading, setFollowLoading] = useState(false);
 
   useEffect(() => {
     const load = async () => {
@@ -106,7 +106,9 @@ export default function StorePage() {
 
       setProfile(profileData as ProfileRow);
 
-      const { data: listingsData, error: listingsError } = await supabase
+      const ownerIsViewing = !!user?.id && user.id === profileData.id;
+
+      let listingsQuery = supabase
         .from("listings")
         .select(
           "*, listing_images(id, thumb_url, medium_url, original_url, is_primary, sort_order)"
@@ -114,6 +116,14 @@ export default function StorePage() {
         .eq("user_id", profileData.id)
         .order("created_at", { ascending: false })
         .limit(60);
+
+      if (!ownerIsViewing) {
+        listingsQuery = listingsQuery
+          .eq("status", "active")
+          .gt("active_until", new Date().toISOString());
+      }
+
+      const { data: listingsData, error: listingsError } = await listingsQuery;
 
       if (listingsError) {
         console.error("Error loading store listings:", listingsError);
@@ -126,70 +136,12 @@ export default function StorePage() {
       setLoading(false);
     };
 
-    load();
-  }, [slug]);
+    if (!authLoading) {
+      load();
+    }
+  }, [slug, user?.id, authLoading]);
 
   const isOwner = !!user?.id && !!profile?.id && user.id === profile.id;
-
-  useEffect(() => {
-    const loadFollowState = async () => {
-      if (!user?.id || !profile?.id || isOwner) {
-        setIsFollowing(false);
-        return;
-      }
-
-      const { data, error } = await supabase
-        .from("store_follows")
-        .select("id")
-        .eq("follower_id", user.id)
-        .eq("store_owner_id", profile.id)
-        .maybeSingle();
-
-      if (error) {
-        console.error("Error loading follow state:", error);
-        setIsFollowing(false);
-        return;
-      }
-
-      setIsFollowing(Boolean(data));
-    };
-
-    loadFollowState();
-  }, [user?.id, profile?.id, isOwner]);
-
-  const toggleFollow = async () => {
-    if (!user?.id || !profile?.id || isOwner || followLoading) return;
-
-    setFollowLoading(true);
-
-    try {
-      if (isFollowing) {
-        const { error } = await supabase
-          .from("store_follows")
-          .delete()
-          .eq("follower_id", user.id)
-          .eq("store_owner_id", profile.id);
-
-        if (error) throw error;
-
-        setIsFollowing(false);
-      } else {
-        const { error } = await supabase.from("store_follows").insert({
-          follower_id: user.id,
-          store_owner_id: profile.id,
-        });
-
-        if (error) throw error;
-
-        setIsFollowing(true);
-      }
-    } catch (error) {
-      console.error("Follow action failed:", error);
-      alert("Follow action failed.");
-    } finally {
-      setFollowLoading(false);
-    }
-  };
 
   const stats = useMemo(() => {
     return {
@@ -205,8 +157,11 @@ export default function StorePage() {
 
     return listings.filter((item) => {
       const itemStatus = item.status || "active";
+      const expired = isExpired(item.active_until);
 
       if (!isOwner && itemStatus !== "active") return false;
+      if (!isOwner && expired) return false;
+
       if (statusFilter !== "all" && itemStatus !== statusFilter) return false;
 
       if (!query) return true;
@@ -265,11 +220,9 @@ export default function StorePage() {
                   <p className="mb-1 text-xs font-medium uppercase tracking-[0.2em] text-black/40">
                     Public store
                   </p>
-
                   <h1 className="break-words text-3xl font-semibold tracking-tight sm:text-5xl">
                     {profile.store_name || "Unnamed store"}
                   </h1>
-
                   <p className="mt-1 break-words text-sm text-black/50 sm:text-base">
                     /store/{profile.store_slug}
                   </p>
@@ -286,34 +239,6 @@ export default function StorePage() {
                   </Link>
                 )}
 
-                {!isOwner && user?.id && (
-                  <button
-                    type="button"
-                    onClick={toggleFollow}
-                    disabled={followLoading}
-                    className={`rounded-2xl px-4 py-2 text-sm font-medium transition disabled:opacity-60 ${
-                      isFollowing
-                        ? "border border-black/10 bg-white text-black"
-                        : "bg-black text-white"
-                    }`}
-                  >
-                    {followLoading
-                      ? "Saving..."
-                      : isFollowing
-                      ? "Following"
-                      : "Follow store"}
-                  </button>
-                )}
-
-                {!isOwner && !user?.id && (
-                  <Link
-                    href="/auth"
-                    className="rounded-2xl bg-black px-4 py-2 text-sm font-medium text-white"
-                  >
-                    Sign in to follow
-                  </Link>
-                )}
-
                 <Link
                   href="/"
                   className="rounded-2xl border border-black/10 bg-white px-4 py-2 text-sm font-medium"
@@ -327,24 +252,15 @@ export default function StorePage() {
               <span className="rounded-full border border-black/10 bg-black/[0.03] px-3 py-2">
                 {stats.active} active
               </span>
-
               <span className="rounded-full border border-black/10 bg-black/[0.03] px-3 py-2">
                 {stats.sold} sold
               </span>
-
               <span className="rounded-full border border-black/10 bg-black/[0.03] px-3 py-2">
                 {stats.total} total
               </span>
-
               {isOwner && (
                 <span className="rounded-full border border-green-200 bg-green-50 px-3 py-2 text-green-700">
                   Owner
-                </span>
-              )}
-
-              {!isOwner && isFollowing && (
-                <span className="rounded-full border border-green-200 bg-green-50 px-3 py-2 text-green-700">
-                  Following
                 </span>
               )}
             </div>
@@ -391,7 +307,6 @@ export default function StorePage() {
             <p className="text-xs font-medium uppercase tracking-[0.22em] text-black/40">
               Listings
             </p>
-
             <h2 className="mt-1 text-2xl font-semibold tracking-tight">
               Items from this store
             </h2>
@@ -408,6 +323,8 @@ export default function StorePage() {
           <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
             {visibleListings.map((item) => {
               const imageUrl = getListingImage(item);
+              const expired = isExpired(item.active_until);
+              const itemStatus = item.status || "active";
 
               return (
                 <article
@@ -434,17 +351,23 @@ export default function StorePage() {
                           {item.title}
                         </h3>
 
-                        <span
-                          className={`shrink-0 rounded-full px-2 py-1 text-[11px] font-medium capitalize ${
-                            (item.status || "active") === "active"
-                              ? "bg-green-100 text-green-700"
-                              : item.status === "paused"
-                              ? "bg-yellow-100 text-yellow-700"
-                              : "bg-neutral-200 text-neutral-700"
-                          }`}
-                        >
-                          {item.status || "active"}
-                        </span>
+                        {isOwner && (
+                          <span
+                            className={`shrink-0 rounded-full px-2 py-1 text-[11px] font-medium capitalize ${
+                              expired && itemStatus === "active"
+                                ? "bg-yellow-100 text-yellow-800"
+                                : itemStatus === "active"
+                                ? "bg-green-100 text-green-700"
+                                : itemStatus === "paused"
+                                ? "bg-yellow-100 text-yellow-700"
+                                : "bg-neutral-200 text-neutral-700"
+                            }`}
+                          >
+                            {expired && itemStatus === "active"
+                              ? "expired"
+                              : itemStatus}
+                          </span>
+                        )}
                       </div>
 
                       <p className="line-clamp-2 break-words text-sm leading-5 text-black/60">
