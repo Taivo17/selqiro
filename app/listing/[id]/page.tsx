@@ -14,8 +14,15 @@ type ListingImage = {
   sort_order?: number | null;
 };
 
+type SellerProfile = {
+  id: string;
+  store_name?: string | null;
+  store_slug?: string | null;
+};
+
 type Listing = {
   id: number;
+  user_id?: string | null;
   title: string;
   description: string;
   price: string;
@@ -65,10 +72,9 @@ export default function ListingPage() {
   const id = params?.id;
 
   const hideTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const touchStartXRef = useRef(0);
-  const touchStartYRef = useRef(0);
 
   const [listing, setListing] = useState<Listing | null>(null);
+  const [sellerProfile, setSellerProfile] = useState<SellerProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [fullImageOpen, setFullImageOpen] = useState(false);
@@ -86,31 +92,6 @@ export default function ListingPage() {
     }, 3000);
   };
 
-  const handleTouchStart = (event: React.TouchEvent) => {
-    showControlsTemporarily();
-
-    const touch = event.touches[0];
-    touchStartXRef.current = touch.clientX;
-    touchStartYRef.current = touch.clientY;
-  };
-
-  const handleTouchEnd = (event: React.TouchEvent) => {
-    const touch = event.changedTouches[0];
-
-    const diffX = touch.clientX - touchStartXRef.current;
-    const diffY = touch.clientY - touchStartYRef.current;
-
-    const isHorizontalSwipe = Math.abs(diffX) > 45 && Math.abs(diffX) > Math.abs(diffY);
-
-    if (!isHorizontalSwipe) return;
-
-    if (diffX < 0) {
-      nextImage();
-    } else {
-      previousImage();
-    }
-  };
-
   useEffect(() => {
     return () => {
       if (hideTimerRef.current) {
@@ -123,6 +104,8 @@ export default function ListingPage() {
     const load = async () => {
       if (!id) return;
 
+      setLoading(true);
+
       const { data, error } = await supabase
         .from("listings")
         .select(
@@ -131,15 +114,36 @@ export default function ListingPage() {
         .eq("id", id)
         .single();
 
-      if (error) {
+      if (error || !data) {
         console.error(error);
         setListing(null);
+        setSellerProfile(null);
         setLoading(false);
         return;
       }
 
-      setListing(data as Listing);
+      const loadedListing = data as Listing;
+
+      setListing(loadedListing);
       setSelectedImageIndex(0);
+
+      if (loadedListing.user_id) {
+        const { data: profileData, error: profileError } = await supabase
+          .from("profiles")
+          .select("id, store_name, store_slug")
+          .eq("id", loadedListing.user_id)
+          .maybeSingle();
+
+        if (profileError) {
+          console.error("Error loading seller profile:", profileError);
+          setSellerProfile(null);
+        } else {
+          setSellerProfile((profileData || null) as SellerProfile | null);
+        }
+      } else {
+        setSellerProfile(null);
+      }
+
       setLoading(false);
     };
 
@@ -183,19 +187,27 @@ export default function ListingPage() {
     selectedImage?.thumb_url ||
     "";
 
+  const sellerStoreUrl = sellerProfile?.store_slug
+    ? `/store/${sellerProfile.store_slug}`
+    : "";
+
   const nextImage = () => {
     if (galleryImages.length <= 1) return;
+
     setSelectedImageIndex((prev) =>
       prev + 1 >= galleryImages.length ? 0 : prev + 1
     );
+
     showControlsTemporarily();
   };
 
   const previousImage = () => {
     if (galleryImages.length <= 1) return;
+
     setSelectedImageIndex((prev) =>
       prev - 1 < 0 ? galleryImages.length - 1 : prev - 1
     );
+
     showControlsTemporarily();
   };
 
@@ -241,10 +253,9 @@ export default function ListingPage() {
 
         <section className="overflow-hidden rounded-[28px] bg-white p-3 shadow-sm sm:rounded-[32px] sm:p-4">
           <div
-            className="relative overflow-hidden rounded-[22px] bg-neutral-100 touch-pan-y"
+            className="relative overflow-hidden rounded-[22px] bg-neutral-100"
             onMouseMove={showControlsTemporarily}
-            onTouchStart={handleTouchStart}
-            onTouchEnd={handleTouchEnd}
+            onTouchStart={showControlsTemporarily}
           >
             <button
               type="button"
@@ -259,7 +270,6 @@ export default function ListingPage() {
                   src={mediumImageUrl}
                   alt={listing.title}
                   className="h-[260px] w-full object-contain sm:h-[460px]"
-                  draggable={false}
                 />
               ) : (
                 <div className="h-[260px] w-full sm:h-[460px]" />
@@ -272,7 +282,9 @@ export default function ListingPage() {
                   type="button"
                   onClick={previousImage}
                   className={`absolute left-3 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-xl shadow-sm transition-opacity duration-300 ${
-                    controlsVisible ? "opacity-100" : "pointer-events-none opacity-0"
+                    controlsVisible
+                      ? "opacity-100"
+                      : "pointer-events-none opacity-0"
                   }`}
                 >
                   ‹
@@ -282,7 +294,9 @@ export default function ListingPage() {
                   type="button"
                   onClick={nextImage}
                   className={`absolute right-3 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-xl shadow-sm transition-opacity duration-300 ${
-                    controlsVisible ? "opacity-100" : "pointer-events-none opacity-0"
+                    controlsVisible
+                      ? "opacity-100"
+                      : "pointer-events-none opacity-0"
                   }`}
                 >
                   ›
@@ -324,7 +338,6 @@ export default function ListingPage() {
                         src={thumbUrl}
                         alt={`${listing.title} ${index + 1}`}
                         className="h-full w-full object-cover"
-                        draggable={false}
                       />
                     ) : (
                       <div className="h-full w-full" />
@@ -373,6 +386,27 @@ export default function ListingPage() {
             {listing.location && (
               <span className="max-w-full break-words rounded-full border border-black/10 bg-black/[0.02] px-4 py-2">
                 {listing.location}
+              </span>
+            )}
+          </div>
+
+          <div className="mt-6 flex flex-wrap gap-3">
+            {sellerStoreUrl ? (
+              <Link
+                href={sellerStoreUrl}
+                className="rounded-2xl bg-black px-5 py-3 text-sm font-medium text-white"
+              >
+                View seller store
+              </Link>
+            ) : (
+              <span className="rounded-2xl border border-black/10 bg-black/[0.02] px-5 py-3 text-sm text-black/45">
+                Seller store unavailable
+              </span>
+            )}
+
+            {sellerProfile?.store_name && (
+              <span className="rounded-2xl border border-black/10 bg-white px-5 py-3 text-sm text-black/55">
+                Seller: {sellerProfile.store_name}
               </span>
             )}
           </div>
@@ -427,11 +461,10 @@ export default function ListingPage() {
 
       {fullImageOpen && originalImageUrl && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4 touch-pan-y"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4"
           onClick={() => setFullImageOpen(false)}
           onMouseMove={showControlsTemporarily}
-          onTouchStart={handleTouchStart}
-          onTouchEnd={handleTouchEnd}
+          onTouchStart={showControlsTemporarily}
         >
           <button
             type="button"
@@ -451,7 +484,9 @@ export default function ListingPage() {
               <button
                 type="button"
                 className={`absolute left-4 top-1/2 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-2xl text-black transition-opacity duration-300 ${
-                  controlsVisible ? "opacity-100" : "pointer-events-none opacity-0"
+                  controlsVisible
+                    ? "opacity-100"
+                    : "pointer-events-none opacity-0"
                 }`}
                 onClick={(event) => {
                   event.stopPropagation();
@@ -464,7 +499,9 @@ export default function ListingPage() {
               <button
                 type="button"
                 className={`absolute right-4 top-1/2 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-2xl text-black transition-opacity duration-300 ${
-                  controlsVisible ? "opacity-100" : "pointer-events-none opacity-0"
+                  controlsVisible
+                    ? "opacity-100"
+                    : "pointer-events-none opacity-0"
                 }`}
                 onClick={(event) => {
                   event.stopPropagation();
@@ -480,7 +517,6 @@ export default function ListingPage() {
             src={originalImageUrl}
             alt={listing.title}
             className="max-h-[90vh] max-w-[95vw] object-contain"
-            draggable={false}
             onClick={(event) => event.stopPropagation()}
           />
         </div>
