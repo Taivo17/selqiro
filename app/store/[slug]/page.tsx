@@ -6,8 +6,6 @@ import { useParams } from "next/navigation";
 import { supabase } from "../../../lib/supabase";
 import { useAuth } from "../../../lib/useAuth";
 
-const PAGE_SIZE = 30;
-
 type ListingImage = {
   id: string;
   thumb_url?: string | null;
@@ -41,14 +39,16 @@ type Listing = {
   listing_images?: ListingImage[];
 };
 
-function getListingImage(item: Listing) {
-  const sortedImages = [...(item.listing_images || [])].sort((a, b) => {
+function sortImages(images: ListingImage[]) {
+  return [...images].sort((a, b) => {
     if (a.is_primary && !b.is_primary) return -1;
     if (!a.is_primary && b.is_primary) return 1;
     return (a.sort_order || 0) - (b.sort_order || 0);
   });
+}
 
-  const img = sortedImages[0];
+function getListingImage(item: Listing) {
+  const img = sortImages(item.listing_images || [])[0];
 
   return (
     img?.thumb_url ||
@@ -68,85 +68,17 @@ export default function StorePage() {
   const [profile, setProfile] = useState<ProfileRow | null>(null);
   const [listings, setListings] = useState<Listing[]>([]);
   const [loading, setLoading] = useState(true);
-  const [loadingListings, setLoadingListings] = useState(false);
-  const [loadingMore, setLoadingMore] = useState(false);
-  const [hasMore, setHasMore] = useState(true);
 
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<
     "all" | "active" | "paused" | "sold"
   >("all");
 
-  const isOwner = !!user?.id && !!profile?.id && user.id === profile.id;
-
-  const buildListingsQuery = (
-    storeUserId: string,
-    from: number,
-    ownerView: boolean
-  ) => {
-    const to = from + PAGE_SIZE - 1;
-    const searchNeedle = search.trim();
-
-    let query = supabase
-      .from("listings")
-      .select(
-        "*, listing_images(id, thumb_url, medium_url, original_url, is_primary, sort_order)"
-      )
-      .eq("user_id", storeUserId)
-      .order("created_at", { ascending: false })
-      .range(from, to);
-
-    if (!ownerView) {
-      query = query.eq("status", "active");
-    } else if (statusFilter !== "all") {
-      query = query.eq("status", statusFilter);
-    }
-
-    if (searchNeedle) {
-      query = query.or(
-        `title.ilike.%${searchNeedle}%,description.ilike.%${searchNeedle}%,search_text.ilike.%${searchNeedle}%`
-      );
-    }
-
-    return query;
-  };
-
-  const loadListings = async (
-    storeUserId: string,
-    from = 0,
-    ownerView = false
-  ) => {
-    if (from === 0) setLoadingListings(true);
-
-    const { data, error } = await buildListingsQuery(
-      storeUserId,
-      from,
-      ownerView
-    );
-
-    if (error) {
-      console.error("Error loading store listings:", error);
-      if (from === 0) setListings([]);
-      setLoadingListings(false);
-      setLoadingMore(false);
-      return;
-    }
-
-    const loaded = (data || []) as Listing[];
-
-    if (from === 0) {
-      setListings(loaded);
-    } else {
-      setListings((prev) => [...prev, ...loaded]);
-    }
-
-    setHasMore(loaded.length === PAGE_SIZE);
-    setLoadingListings(false);
-    setLoadingMore(false);
-  };
+  const [isFollowing, setIsFollowing] = useState(false);
+  const [followLoading, setFollowLoading] = useState(false);
 
   useEffect(() => {
-    const loadProfile = async () => {
+    const load = async () => {
       setLoading(true);
 
       const cleanSlug = decodeURIComponent((slug || "").trim());
@@ -173,27 +105,90 @@ export default function StorePage() {
       }
 
       setProfile(profileData as ProfileRow);
+
+      const { data: listingsData, error: listingsError } = await supabase
+        .from("listings")
+        .select(
+          "*, listing_images(id, thumb_url, medium_url, original_url, is_primary, sort_order)"
+        )
+        .eq("user_id", profileData.id)
+        .order("created_at", { ascending: false })
+        .limit(60);
+
+      if (listingsError) {
+        console.error("Error loading store listings:", listingsError);
+        setListings([]);
+        setLoading(false);
+        return;
+      }
+
+      setListings((listingsData || []) as Listing[]);
       setLoading(false);
     };
 
-    loadProfile();
+    load();
   }, [slug]);
 
+  const isOwner = !!user?.id && !!profile?.id && user.id === profile.id;
+
   useEffect(() => {
-    if (!profile?.id || authLoading) return;
+    const loadFollowState = async () => {
+      if (!user?.id || !profile?.id || isOwner) {
+        setIsFollowing(false);
+        return;
+      }
 
-    const timer = setTimeout(() => {
-      loadListings(profile.id, 0, isOwner);
-    }, 300);
+      const { data, error } = await supabase
+        .from("store_follows")
+        .select("id")
+        .eq("follower_id", user.id)
+        .eq("store_owner_id", profile.id)
+        .maybeSingle();
 
-    return () => clearTimeout(timer);
-  }, [profile?.id, authLoading, isOwner, search, statusFilter]);
+      if (error) {
+        console.error("Error loading follow state:", error);
+        setIsFollowing(false);
+        return;
+      }
 
-  const loadMore = async () => {
-    if (!profile?.id || loadingMore || !hasMore) return;
+      setIsFollowing(Boolean(data));
+    };
 
-    setLoadingMore(true);
-    await loadListings(profile.id, listings.length, isOwner);
+    loadFollowState();
+  }, [user?.id, profile?.id, isOwner]);
+
+  const toggleFollow = async () => {
+    if (!user?.id || !profile?.id || isOwner || followLoading) return;
+
+    setFollowLoading(true);
+
+    try {
+      if (isFollowing) {
+        const { error } = await supabase
+          .from("store_follows")
+          .delete()
+          .eq("follower_id", user.id)
+          .eq("store_owner_id", profile.id);
+
+        if (error) throw error;
+
+        setIsFollowing(false);
+      } else {
+        const { error } = await supabase.from("store_follows").insert({
+          follower_id: user.id,
+          store_owner_id: profile.id,
+        });
+
+        if (error) throw error;
+
+        setIsFollowing(true);
+      }
+    } catch (error) {
+      console.error("Follow action failed:", error);
+      alert("Follow action failed.");
+    } finally {
+      setFollowLoading(false);
+    }
   };
 
   const stats = useMemo(() => {
@@ -204,6 +199,24 @@ export default function StorePage() {
       sold: listings.filter((item) => item.status === "sold").length,
     };
   }, [listings]);
+
+  const visibleListings = useMemo(() => {
+    const query = search.trim().toLowerCase();
+
+    return listings.filter((item) => {
+      const itemStatus = item.status || "active";
+
+      if (!isOwner && itemStatus !== "active") return false;
+      if (statusFilter !== "all" && itemStatus !== statusFilter) return false;
+
+      if (!query) return true;
+
+      return (
+        item.title.toLowerCase().includes(query) ||
+        item.description.toLowerCase().includes(query)
+      );
+    });
+  }, [listings, search, statusFilter, isOwner]);
 
   if (loading || authLoading) {
     return <main className="p-6">Loading store...</main>;
@@ -252,9 +265,11 @@ export default function StorePage() {
                   <p className="mb-1 text-xs font-medium uppercase tracking-[0.2em] text-black/40">
                     Public store
                   </p>
+
                   <h1 className="break-words text-3xl font-semibold tracking-tight sm:text-5xl">
                     {profile.store_name || "Unnamed store"}
                   </h1>
+
                   <p className="mt-1 break-words text-sm text-black/50 sm:text-base">
                     /store/{profile.store_slug}
                   </p>
@@ -271,6 +286,34 @@ export default function StorePage() {
                   </Link>
                 )}
 
+                {!isOwner && user?.id && (
+                  <button
+                    type="button"
+                    onClick={toggleFollow}
+                    disabled={followLoading}
+                    className={`rounded-2xl px-4 py-2 text-sm font-medium transition disabled:opacity-60 ${
+                      isFollowing
+                        ? "border border-black/10 bg-white text-black"
+                        : "bg-black text-white"
+                    }`}
+                  >
+                    {followLoading
+                      ? "Saving..."
+                      : isFollowing
+                      ? "Following"
+                      : "Follow store"}
+                  </button>
+                )}
+
+                {!isOwner && !user?.id && (
+                  <Link
+                    href="/auth"
+                    className="rounded-2xl bg-black px-4 py-2 text-sm font-medium text-white"
+                  >
+                    Sign in to follow
+                  </Link>
+                )}
+
                 <Link
                   href="/"
                   className="rounded-2xl border border-black/10 bg-white px-4 py-2 text-sm font-medium"
@@ -282,17 +325,26 @@ export default function StorePage() {
 
             <div className="mt-5 flex flex-wrap gap-2 text-sm text-black/55">
               <span className="rounded-full border border-black/10 bg-black/[0.03] px-3 py-2">
-                {stats.active} loaded active
+                {stats.active} active
               </span>
+
               <span className="rounded-full border border-black/10 bg-black/[0.03] px-3 py-2">
-                {stats.sold} loaded sold
+                {stats.sold} sold
               </span>
+
               <span className="rounded-full border border-black/10 bg-black/[0.03] px-3 py-2">
-                {stats.total} loaded
+                {stats.total} total
               </span>
+
               {isOwner && (
                 <span className="rounded-full border border-green-200 bg-green-50 px-3 py-2 text-green-700">
                   Owner
+                </span>
+              )}
+
+              {!isOwner && isFollowing && (
+                <span className="rounded-full border border-green-200 bg-green-50 px-3 py-2 text-green-700">
+                  Following
                 </span>
               )}
             </div>
@@ -324,12 +376,9 @@ export default function StorePage() {
                   e.target.value as "all" | "active" | "paused" | "sold"
                 )
               }
-              disabled={!isOwner}
-              className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-base outline-none transition focus:border-black/30 disabled:text-black/40 sm:text-sm"
+              className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-base outline-none transition focus:border-black/30 sm:text-sm"
             >
-              <option value="all">
-                {isOwner ? "All statuses" : "Active listings"}
-              </option>
+              <option value="all">All visible</option>
               <option value="active">Active</option>
               {isOwner && <option value="paused">Paused</option>}
               {isOwner && <option value="sold">Sold</option>}
@@ -342,100 +391,82 @@ export default function StorePage() {
             <p className="text-xs font-medium uppercase tracking-[0.22em] text-black/40">
               Listings
             </p>
+
             <h2 className="mt-1 text-2xl font-semibold tracking-tight">
               Items from this store
             </h2>
           </div>
 
-          <p className="text-sm text-black/45">{listings.length} shown</p>
+          <p className="text-sm text-black/45">{visibleListings.length} shown</p>
         </section>
 
-        {loadingListings ? (
-          <div className="rounded-[28px] border border-black/8 bg-white px-6 py-14 text-center shadow-sm">
-            <p className="text-lg font-medium">Loading listings...</p>
-          </div>
-        ) : listings.length === 0 ? (
+        {visibleListings.length === 0 ? (
           <div className="rounded-[28px] border border-dashed border-black/10 bg-white px-6 py-14 text-center shadow-sm">
             <p className="text-lg font-medium">No visible listings</p>
           </div>
         ) : (
-          <>
-            <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-              {listings.map((item) => {
-                const imageUrl = getListingImage(item);
+          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+            {visibleListings.map((item) => {
+              const imageUrl = getListingImage(item);
 
-                return (
-                  <article
-                    key={item.id}
-                    className="overflow-hidden rounded-[22px] border border-black/8 bg-white p-3 shadow-sm transition duration-200 hover:-translate-y-1 hover:shadow-md"
-                  >
-                    <Link href={`/listing/${item.id}`}>
-                      <div className="cursor-pointer">
-                        <div className="mb-3 overflow-hidden rounded-2xl bg-neutral-100">
-                          {imageUrl ? (
-                            <img
-                              src={imageUrl}
-                              alt={item.title}
-                              loading="lazy"
-                              className="h-40 w-full object-cover sm:h-44"
-                            />
-                          ) : (
-                            <div className="h-40 w-full bg-neutral-100 sm:h-44" />
-                          )}
-                        </div>
-
-                        <div className="mb-2 flex items-start justify-between gap-2">
-                          <h3 className="line-clamp-1 break-words text-lg font-semibold tracking-tight sm:text-xl">
-                            {item.title}
-                          </h3>
-
-                          <span
-                            className={`shrink-0 rounded-full px-2 py-1 text-[11px] font-medium capitalize ${
-                              (item.status || "active") === "active"
-                                ? "bg-green-100 text-green-700"
-                                : item.status === "paused"
-                                ? "bg-yellow-100 text-yellow-700"
-                                : "bg-neutral-200 text-neutral-700"
-                            }`}
-                          >
-                            {item.status || "active"}
-                          </span>
-                        </div>
-
-                        <p className="line-clamp-2 break-words text-sm leading-5 text-black/60">
-                          {item.description}
-                        </p>
-
-                        <p className="mt-3 break-words text-2xl font-semibold sm:text-3xl">
-                          {item.price}
-                        </p>
-
-                        <div className="mt-2 line-clamp-1 text-xs text-black/45 sm:text-sm">
-                          {item.category || "general"} •{" "}
-                          {item.condition || "used"} •{" "}
-                          {item.country || "No country"}
-                          {item.city ? ` • ${item.city}` : ""}
-                        </div>
-                      </div>
-                    </Link>
-                  </article>
-                );
-              })}
-            </div>
-
-            {hasMore && (
-              <div className="mt-8 flex justify-center">
-                <button
-                  type="button"
-                  onClick={loadMore}
-                  disabled={loadingMore}
-                  className="rounded-2xl bg-black px-6 py-3 text-sm font-medium text-white transition hover:opacity-90 disabled:opacity-60"
+              return (
+                <article
+                  key={item.id}
+                  className="overflow-hidden rounded-[22px] border border-black/8 bg-white p-3 shadow-sm transition duration-200 hover:-translate-y-1 hover:shadow-md"
                 >
-                  {loadingMore ? "Loading..." : "Load more"}
-                </button>
-              </div>
-            )}
-          </>
+                  <Link href={`/listing/${item.id}`}>
+                    <div className="cursor-pointer">
+                      <div className="mb-3 overflow-hidden rounded-2xl bg-neutral-100">
+                        {imageUrl ? (
+                          <img
+                            src={imageUrl}
+                            alt={item.title}
+                            loading="lazy"
+                            className="h-40 w-full object-cover sm:h-44"
+                          />
+                        ) : (
+                          <div className="h-40 w-full bg-neutral-100 sm:h-44" />
+                        )}
+                      </div>
+
+                      <div className="mb-2 flex items-start justify-between gap-2">
+                        <h3 className="line-clamp-1 break-words text-lg font-semibold tracking-tight sm:text-xl">
+                          {item.title}
+                        </h3>
+
+                        <span
+                          className={`shrink-0 rounded-full px-2 py-1 text-[11px] font-medium capitalize ${
+                            (item.status || "active") === "active"
+                              ? "bg-green-100 text-green-700"
+                              : item.status === "paused"
+                              ? "bg-yellow-100 text-yellow-700"
+                              : "bg-neutral-200 text-neutral-700"
+                          }`}
+                        >
+                          {item.status || "active"}
+                        </span>
+                      </div>
+
+                      <p className="line-clamp-2 break-words text-sm leading-5 text-black/60">
+                        {item.description}
+                      </p>
+
+                      <p className="mt-3 break-words text-2xl font-semibold sm:text-3xl">
+                        {item.price}
+                      </p>
+
+                      <div className="mt-2 line-clamp-1 text-xs text-black/45 sm:text-sm">
+                        {item.category || "general"} •{" "}
+                        {item.condition || "used"} •{" "}
+                        {item.country || "No country"}
+                        {item.city ? ` • ${item.city}` : ""}
+                      </div>
+                    </div>
+                  </Link>
+                </article>
+              );
+            })}
+          </div>
         )}
       </div>
     </main>
