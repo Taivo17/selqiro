@@ -42,6 +42,18 @@ type Listing = {
   listing_images?: ListingImage[];
 };
 
+type Profile = {
+  id: string;
+  is_premium?: boolean | null;
+  premium_until?: string | null;
+};
+
+type ClaimResponse = {
+  success?: boolean;
+  message?: string;
+  premium_until?: string;
+};
+
 const inputClass =
   "w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-base outline-none transition focus:border-black/30 sm:text-sm";
 
@@ -55,7 +67,8 @@ function getStatusButtonClass(
   currentStatus: "active" | "paused" | "sold",
   expired: boolean
 ) {
-  const effectiveStatus = expired && currentStatus === "active" ? "paused" : currentStatus;
+  const effectiveStatus =
+    expired && currentStatus === "active" ? "paused" : currentStatus;
   const isSelected = buttonStatus === effectiveStatus;
 
   if (!isSelected) {
@@ -121,6 +134,22 @@ function getDaysLeft(activeUntil?: string | null) {
   return Math.ceil(diff / (1000 * 60 * 60 * 24));
 }
 
+function formatDate(value?: string | null) {
+  if (!value) return "";
+
+  return new Date(value).toLocaleDateString(undefined, {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
+}
+
+function isPremiumActive(profile: Profile | null) {
+  if (!profile?.is_premium || !profile.premium_until) return false;
+
+  return new Date(profile.premium_until).getTime() > Date.now();
+}
+
 async function resizeImage(file: File, maxWidth = 1600, quality = 0.82) {
   const imageBitmap = await createImageBitmap(file);
 
@@ -151,6 +180,11 @@ async function resizeImage(file: File, maxWidth = 1600, quality = 0.82) {
 export default function MyPage() {
   const { user, loading } = useAuth();
   const userId = user?.id ?? null;
+
+  const [profile, setProfile] = useState<Profile | null>(null);
+  const [inviteCode, setInviteCode] = useState("");
+  const [claimingInvite, setClaimingInvite] = useState(false);
+  const [claimMessage, setClaimMessage] = useState("");
 
   const [listings, setListings] = useState<Listing[]>([]);
   const [search, setSearch] = useState("");
@@ -188,6 +222,30 @@ export default function MyPage() {
   const [editVehicleModel, setEditVehicleModel] = useState("");
   const [editVehicleYear, setEditVehicleYear] = useState("");
   const [editEngine, setEditEngine] = useState("");
+
+  const premiumActive = isPremiumActive(profile);
+
+  const activeListingsCount = listings.filter(
+    (item) => (item.status || "active") === "active"
+  ).length;
+
+  const freeLimitReached = !premiumActive && activeListingsCount >= 50;
+
+  const fetchProfile = async (currentUserId: string) => {
+    const { data, error } = await supabase
+      .from("profiles")
+      .select("id, is_premium, premium_until")
+      .eq("id", currentUserId)
+      .maybeSingle();
+
+    if (error) {
+      console.error("Error fetching profile:", error);
+      setProfile(null);
+      return;
+    }
+
+    setProfile((data || null) as Profile | null);
+  };
 
   const buildListingsQuery = (currentUserId: string, from: number) => {
     const to = from + PAGE_SIZE - 1;
@@ -245,10 +303,13 @@ export default function MyPage() {
     if (loading) return;
 
     if (!userId) {
+      setProfile(null);
       setListings([]);
       setLoadingListings(false);
       return;
     }
+
+    fetchProfile(userId);
 
     const timer = setTimeout(() => {
       fetchListings(userId, 0);
@@ -256,6 +317,45 @@ export default function MyPage() {
 
     return () => clearTimeout(timer);
   }, [userId, loading, search, filter]);
+
+  const claimPremiumInvite = async () => {
+    if (!userId) return;
+
+    const cleanCode = inviteCode.trim();
+
+    if (!cleanCode) {
+      setClaimMessage("Enter invite code.");
+      return;
+    }
+
+    setClaimingInvite(true);
+    setClaimMessage("");
+
+    try {
+      const { data, error } = await supabase.rpc("claim_premium_invite", {
+        input_code: cleanCode,
+      });
+
+      if (error) throw error;
+
+      const result = data as ClaimResponse;
+
+      if (!result?.success) {
+        setClaimMessage(result?.message || "Invite could not be claimed.");
+        return;
+      }
+
+      setClaimMessage("Premium activated.");
+      setInviteCode("");
+
+      await fetchProfile(userId);
+    } catch (error) {
+      console.error("Premium invite claim failed:", error);
+      setClaimMessage("Premium invite claim failed.");
+    } finally {
+      setClaimingInvite(false);
+    }
+  };
 
   const loadMore = async () => {
     if (!userId || loadingMore || !hasMore) return;
@@ -758,10 +858,6 @@ export default function MyPage() {
     await fetchListings(userId, 0);
   };
 
-  const activeCount = listings.filter(
-    (item) => (item.status || "active") === "active"
-  ).length;
-
   const pausedCount = listings.filter((item) => item.status === "paused").length;
   const soldCount = listings.filter((item) => item.status === "sold").length;
 
@@ -823,12 +919,26 @@ export default function MyPage() {
             </div>
 
             <div className="flex flex-wrap gap-3">
-              <Link
-                href="/sell"
-                className="rounded-2xl bg-green-500 px-5 py-3 text-sm font-medium text-white"
-              >
-                + Add listing
-              </Link>
+              {freeLimitReached ? (
+                <button
+                  type="button"
+                  onClick={() =>
+                    alert(
+                      "Free account limit reached. Pause or sell listings until active listings are under 50, or activate Premium."
+                    )
+                  }
+                  className="rounded-2xl bg-neutral-300 px-5 py-3 text-sm font-medium text-neutral-700"
+                >
+                  + Add listing
+                </button>
+              ) : (
+                <Link
+                  href="/sell"
+                  className="rounded-2xl bg-green-500 px-5 py-3 text-sm font-medium text-white"
+                >
+                  + Add listing
+                </Link>
+              )}
 
               <Link
                 href="/"
@@ -839,6 +949,66 @@ export default function MyPage() {
             </div>
           </div>
         </header>
+
+        <section
+          className={`rounded-[28px] p-5 shadow-sm sm:p-6 ${
+            premiumActive
+              ? "border border-amber-200 bg-gradient-to-br from-amber-50 via-white to-white"
+              : "bg-white"
+          }`}
+        >
+          <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+            <div>
+              <p className="mb-2 text-xs font-medium uppercase tracking-[0.22em] text-black/35">
+                Account
+              </p>
+
+              <h2 className="text-2xl font-semibold tracking-tight">
+                {premiumActive ? "Premium account" : "Free account"}
+              </h2>
+
+              <p className="mt-2 max-w-2xl text-sm leading-6 text-black/55">
+                {premiumActive
+                  ? `Premium active until ${formatDate(profile?.premium_until)}.`
+                  : `Free account can have up to 50 active listings. You currently have ${activeListingsCount} active listings.`}
+              </p>
+
+              {!premiumActive && activeListingsCount >= 50 && (
+                <p className="mt-2 text-sm font-medium text-yellow-700">
+                  Free listing limit reached. Existing listings stay active until
+                  their 90-day expiry, but new listings need Premium or fewer than
+                  50 active listings.
+                </p>
+              )}
+            </div>
+
+            <div className="w-full max-w-md">
+              <label className={labelClass}>Premium invite code</label>
+
+              <div className="flex flex-col gap-3 sm:flex-row">
+                <input
+                  value={inviteCode}
+                  onChange={(e) => setInviteCode(e.target.value)}
+                  placeholder="Enter invite code"
+                  className={inputClass}
+                />
+
+                <button
+                  type="button"
+                  onClick={claimPremiumInvite}
+                  disabled={claimingInvite}
+                  className="rounded-2xl bg-black px-5 py-3 text-sm font-medium text-white disabled:opacity-60"
+                >
+                  {claimingInvite ? "Activating..." : "Activate"}
+                </button>
+              </div>
+
+              {claimMessage && (
+                <p className="mt-2 text-sm text-black/55">{claimMessage}</p>
+              )}
+            </div>
+          </div>
+        </section>
 
         <section className="rounded-[28px] bg-white p-5 shadow-sm sm:p-6">
           <div className="grid gap-4 md:grid-cols-[1fr_220px]">
