@@ -7,6 +7,7 @@ import { useAuth } from "../../lib/useAuth";
 
 const PAGE_SIZE = 30;
 const MAX_IMAGES = 10;
+const ADMIN_EMAIL = "sinu-email@example.com";
 
 type ListingImage = {
   id: string;
@@ -52,6 +53,14 @@ type ClaimResponse = {
   success?: boolean;
   message?: string;
   premium_until?: string;
+};
+
+type InviteResponse = {
+  success?: boolean;
+  message?: string;
+  invite_code?: string;
+  premium_days?: number;
+  expires_at?: string;
 };
 
 const inputClass =
@@ -185,6 +194,8 @@ export default function MyPage() {
   const [inviteCode, setInviteCode] = useState("");
   const [claimingInvite, setClaimingInvite] = useState(false);
   const [claimMessage, setClaimMessage] = useState("");
+  const [generatedCode, setGeneratedCode] = useState("");
+  const [creatingInvite, setCreatingInvite] = useState(false);
 
   const [listings, setListings] = useState<Listing[]>([]);
   const [search, setSearch] = useState("");
@@ -354,6 +365,36 @@ export default function MyPage() {
       setClaimMessage("Premium invite claim failed.");
     } finally {
       setClaimingInvite(false);
+    }
+  };
+
+  const createPremiumInvite = async () => {
+    if (!userId) return;
+
+    setCreatingInvite(true);
+    setGeneratedCode("");
+
+    try {
+      const { data, error } = await supabase.rpc("create_premium_invite", {
+        premium_days_input: 30,
+        expires_in_days_input: 30,
+      });
+
+      if (error) throw error;
+
+      const result = data as InviteResponse;
+
+      if (!result?.success || !result.invite_code) {
+        alert(result?.message || "Failed to create invite.");
+        return;
+      }
+
+      setGeneratedCode(result.invite_code);
+    } catch (error) {
+      console.error("Error creating invite:", error);
+      alert("Failed to create invite.");
+    } finally {
+      setCreatingInvite(false);
     }
   };
 
@@ -1005,6 +1046,27 @@ export default function MyPage() {
 
               {claimMessage && (
                 <p className="mt-2 text-sm text-black/55">{claimMessage}</p>
+              )}
+
+              {user?.email === ADMIN_EMAIL && (
+                <div className="mt-4 rounded-2xl border border-black/10 bg-white p-4">
+                  <p className="mb-2 text-sm font-semibold">Admin</p>
+
+                  <button
+                    type="button"
+                    onClick={createPremiumInvite}
+                    disabled={creatingInvite}
+                    className="rounded-2xl bg-green-600 px-5 py-3 text-sm font-medium text-white disabled:opacity-60"
+                  >
+                    {creatingInvite ? "Creating..." : "Generate premium invite"}
+                  </button>
+
+                  {generatedCode && (
+                    <div className="mt-3 rounded-2xl bg-black px-4 py-3 text-sm font-medium text-white">
+                      Code: {generatedCode}
+                    </div>
+                  )}
+                </div>
               )}
             </div>
           </div>
