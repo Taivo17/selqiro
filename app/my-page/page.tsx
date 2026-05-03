@@ -7,7 +7,7 @@ import { useAuth } from "../../lib/useAuth";
 
 const PAGE_SIZE = 30;
 const MAX_IMAGES = 10;
-const ADMIN_EMAIL = "sinu-email@example.com";
+const ADMIN_EMAIL = "taiwo17@gmail.com";
 
 type ListingImage = {
   id: string;
