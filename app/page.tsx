@@ -369,8 +369,8 @@ export default function MarketplacePage() {
                     key={item.id}
                     className={`overflow-hidden rounded-[22px] border p-3 shadow-sm transition duration-200 hover:-translate-y-1 hover:shadow-md ${
                       sellerIsPremium
-                        ? "border-amber-200/70 bg-gradient-to-br from-amber-50/55 via-white to-white"
-                        : "border-black/8 bg-white"
+                        ? "border-amber-200/70 bg-gradient-to-br from-amber-50/55 via-white to-white hover:shadow-[0_10px_30px_rgba(251,191,36,0.25)] hover:-translate-y-1.5"
+                        : "border-black/8 bg-white hover:-translate-y-1 hover:shadow-md"
                     }`}
                   >
                     <Link href={`/listing/${item.id}`}>
