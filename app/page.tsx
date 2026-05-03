@@ -375,7 +375,7 @@ export default function MarketplacePage() {
                   >
                     <Link href={`/listing/${item.id}`}>
                       <div className="cursor-pointer">
-                        <div className="mb-3 overflow-hidden rounded-2xl bg-neutral-100">
+                        <div className="relative mb-3 overflow-hidden rounded-2xl bg-neutral-100">
                           {imageUrl ? (
                             <img
                               src={imageUrl}
@@ -386,19 +386,17 @@ export default function MarketplacePage() {
                           ) : (
                             <div className="h-40 w-full bg-neutral-100 sm:h-44" />
                           )}
-                        </div>
-
-                        <div className="flex items-start gap-2">
-                          <h3 className="line-clamp-1 min-w-0 break-words text-lg font-semibold tracking-tight sm:text-xl">
-                            {item.title}
-                          </h3>
 
                           {sellerIsPremium && (
-                            <span className="mt-0.5 shrink-0 rounded-full border border-amber-200/80 bg-white/80 px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-amber-700">
+                            <span className="absolute right-2 top-2 rounded-full border border-amber-200/80 bg-white/90 px-2 py-1 text-[9px] font-semibold uppercase tracking-[0.12em] text-amber-700 shadow-sm backdrop-blur">
                               Premium
                             </span>
                           )}
                         </div>
+
+                        <h3 className="line-clamp-1 break-words text-lg font-semibold tracking-tight sm:text-xl">
+                          {item.title}
+                        </h3>
 
                         <p className="mt-2 line-clamp-2 break-words text-sm leading-5 text-black/60">
                           {item.description}

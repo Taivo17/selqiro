@@ -176,6 +176,9 @@ export default function SellPage() {
           ? `${cleanCountry} • ${cleanCity}`
           : cleanCountry || cleanCity || "";
 
+      const activeUntil = new Date();
+      activeUntil.setDate(activeUntil.getDate() + 90);
+
       const { data: listingData, error: listingError } = await supabase
         .from("listings")
         .insert({
@@ -229,6 +232,7 @@ export default function SellPage() {
           ai_level: "none",
           is_featured: false,
           status: "active",
+          active_until: activeUntil.toISOString(),
         })
         .select("id")
         .single();
