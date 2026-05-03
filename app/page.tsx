@@ -37,6 +37,7 @@ type ProfileRow = {
   id: string;
   store_slug?: string | null;
   store_name?: string | null;
+  is_premium?: boolean | null;
 };
 
 function getListingImage(item: Listing) {
@@ -92,7 +93,7 @@ export default function MarketplacePage() {
 
     const { data: profileData, error: profileError } = await supabase
       .from("profiles")
-      .select("id, store_slug, store_name")
+      .select("id, store_slug, store_name, is_premium")
       .in("id", userIds);
 
     if (profileError) {
@@ -360,12 +361,17 @@ export default function MarketplacePage() {
 
                 const storeSlug = sellerProfile?.store_slug || "";
                 const storeName = sellerProfile?.store_name || "Seller store";
+                const sellerIsPremium = Boolean(sellerProfile?.is_premium);
                 const imageUrl = getListingImage(item);
 
                 return (
                   <article
                     key={item.id}
-                    className="overflow-hidden rounded-[22px] border border-black/8 bg-white p-3 shadow-sm transition duration-200 hover:-translate-y-1 hover:shadow-md"
+                    className={`overflow-hidden rounded-[22px] border p-3 shadow-sm transition duration-200 hover:-translate-y-1 hover:shadow-md ${
+                      sellerIsPremium
+                        ? "border-amber-200/70 bg-gradient-to-br from-amber-50/55 via-white to-white"
+                        : "border-black/8 bg-white"
+                    }`}
                   >
                     <Link href={`/listing/${item.id}`}>
                       <div className="cursor-pointer">
@@ -382,9 +388,17 @@ export default function MarketplacePage() {
                           )}
                         </div>
 
-                        <h3 className="line-clamp-1 break-words text-lg font-semibold tracking-tight sm:text-xl">
-                          {item.title}
-                        </h3>
+                        <div className="flex items-start gap-2">
+                          <h3 className="line-clamp-1 min-w-0 break-words text-lg font-semibold tracking-tight sm:text-xl">
+                            {item.title}
+                          </h3>
+
+                          {sellerIsPremium && (
+                            <span className="mt-0.5 shrink-0 rounded-full border border-amber-200/80 bg-white/80 px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-amber-700">
+                              Premium
+                            </span>
+                          )}
+                        </div>
 
                         <p className="mt-2 line-clamp-2 break-words text-sm leading-5 text-black/60">
                           {item.description}
