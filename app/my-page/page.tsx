@@ -994,7 +994,7 @@ export default function MyPage() {
         <section
           className={`rounded-[28px] p-5 shadow-sm sm:p-6 ${
             premiumActive
-              ? "border border-amber-200 bg-gradient-to-br from-amber-50 via-white to-white"
+              ? "border border-amber-200/70 bg-gradient-to-br from-amber-50/60 via-white to-white shadow-[0_6px_20px_rgba(251,191,36,0.15)]"
               : "bg-white"
           }`}
         >
@@ -1005,7 +1005,7 @@ export default function MyPage() {
               </p>
 
               <h2 className="text-2xl font-semibold tracking-tight">
-                {premiumActive ? "Premium account" : "Free account"}
+                {premiumActive ? "Premium account ✨" : "Free account"}
               </h2>
 
               <p className="mt-2 max-w-2xl text-sm leading-6 text-black/55">
