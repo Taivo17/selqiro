@@ -388,7 +388,7 @@ export default function MarketplacePage() {
                           )}
 
                           {sellerIsPremium && (
-                            <span className="absolute right-2 top-2 rounded-full border border-amber-200/80 bg-white/90 px-2 py-1 text-[9px] font-semibold uppercase tracking-[0.12em] text-amber-700 shadow-sm backdrop-blur">
+                            <span className="absolute right-2 top-2 px-2 py-1 text-[9px] font-semibold uppercase tracking-[0.14em] text-black/50 bg-white/30 backdrop-blur-sm rounded-full opacity-70">
                               Premium
                             </span>
                           )}
