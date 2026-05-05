@@ -207,212 +207,32 @@ export default function MyPage() {
   const [loadingMore, setLoadingMore] = useState(false);
   const [hasMore, setHasMore] = useState(true);
 
-  const [editingId, setEdit</button>
+  const [editingId, setEditingId] = useState<number | null>(null);
+  const [savingEdit, setSavingEdit] = useState(false);
 
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
-
-                      <buttoningId] = useState<number | null>(null);
-  const [savingEdit</button>
-
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
-
-                      <button, setSavingEdit</button>
-
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
-
-                      <button] = useState(false);
-
-  const [editTitle, setEdit</button>
-
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
-
-                      <buttonTitle] = useState("");
-  const [editDescription, setEdit</button>
-
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
-
-                      <buttonDescription] = useState("");
-  const [editPrice, setEdit</button>
-
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
-
-                      <buttonPrice] = useState("");
-  const [editStatus, setEdit</button>
-
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
-
-                      <buttonStatus] = useState<"active" | "paused" | "sold">(
+  const [editTitle, setEditTitle] = useState("");
+  const [editDescription, setEditDescription] = useState("");
+  const [editPrice, setEditPrice] = useState("");
+  const [editStatus, setEditStatus] = useState<"active" | "paused" | "sold">(
     "active"
   );
 
-  const [editImages, setEdit</button>
+  const [editImages, setEditImages] = useState<ListingImage[]>([]);
+  const [editNewFiles, setEditNewFiles] = useState<File[]>([]);
 
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
+  const [editCategory, setEditCategory] = useState("general");
+  const [editCondition, setEditCondition] = useState("used");
+  const [editCountry, setEditCountry] = useState("Estonia");
+  const [editCity, setEditCity] = useState("");
 
-                      <buttonImages] = useState<ListingImage[]>([]);
-  const [editNewFiles, setEdit</button>
+  const [editManufacturer, setEditManufacturer] = useState("");
+  const [editPartNumber, setEditPartNumber] = useState("");
+  const [editOemNumber, setEditOemNumber] = useState("");
 
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
-
-                      <buttonNewFiles] = useState<File[]>([]);
-
-  const [editCategory, setEdit</button>
-
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
-
-                      <buttonCategory] = useState("general");
-  const [editCondition, setEdit</button>
-
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
-
-                      <buttonCondition] = useState("used");
-  const [editCountry, setEdit</button>
-
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
-
-                      <buttonCountry] = useState("Estonia");
-  const [editCity, setEdit</button>
-
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
-
-                      <buttonCity] = useState("");
-
-  const [editManufacturer, setEdit</button>
-
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
-
-                      <buttonManufacturer] = useState("");
-  const [editPartNumber, setEdit</button>
-
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
-
-                      <buttonPartNumber] = useState("");
-  const [editOemNumber, setEdit</button>
-
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
-
-                      <buttonOemNumber] = useState("");
-
-  const [editVehicleBrand, setEdit</button>
-
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
-
-                      <buttonVehicleBrand] = useState("");
-  const [editVehicleModel, setEdit</button>
-
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
-
-                      <buttonVehicleModel] = useState("");
-  const [editVehicleYear, setEdit</button>
-
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
-
-                      <buttonVehicleYear] = useState("");
-  const [editEngine, setEdit</button>
-
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
-
-                      <buttonEngine] = useState("");
+  const [editVehicleBrand, setEditVehicleBrand] = useState("");
+  const [editVehicleModel, setEditVehicleModel] = useState("");
+  const [editVehicleYear, setEditVehicleYear] = useState("");
+  const [editEngine, setEditEngine] = useState("");
 
   const premiumActive = isPremiumActive(profile);
 
@@ -585,410 +405,59 @@ export default function MyPage() {
     await fetchListings(userId, listings.length);
   };
 
-  const startEdit</button>
+  const startEdit = (item: Listing) => {
+    setEditingId(item.id);
 
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
+    setEditTitle(item.title || "");
+    setEditDescription(item.description || "");
+    setEditPrice(item.price || "");
+    setEditStatus(item.status || "active");
 
-                      <button = (item: Listing) => {
-    setEdit</button>
+    setEditImages(sortImages(item.listing_images || []));
+    setEditNewFiles([]);
 
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
+    setEditCategory(item.category || "general");
+    setEditCondition(item.condition || "used");
+    setEditCountry(item.country || "Estonia");
+    setEditCity(item.city || "");
 
-                      <buttoningId(item.id);
+    setEditManufacturer(item.manufacturer || "");
+    setEditPartNumber(item.part_number || "");
+    setEditOemNumber(item.oem_number || "");
 
-    setEdit</button>
-
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
-
-                      <buttonTitle(item.title || "");
-    setEdit</button>
-
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
-
-                      <buttonDescription(item.description || "");
-    setEdit</button>
-
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
-
-                      <buttonPrice(item.price || "");
-    setEdit</button>
-
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
-
-                      <buttonStatus(item.status || "active");
-
-    setEdit</button>
-
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
-
-                      <buttonImages(sortImages(item.listing_images || []));
-    setEdit</button>
-
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
-
-                      <buttonNewFiles([]);
-
-    setEdit</button>
-
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
-
-                      <buttonCategory(item.category || "general");
-    setEdit</button>
-
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
-
-                      <buttonCondition(item.condition || "used");
-    setEdit</button>
-
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
-
-                      <buttonCountry(item.country || "Estonia");
-    setEdit</button>
-
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
-
-                      <buttonCity(item.city || "");
-
-    setEdit</button>
-
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
-
-                      <buttonManufacturer(item.manufacturer || "");
-    setEdit</button>
-
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
-
-                      <buttonPartNumber(item.part_number || "");
-    setEdit</button>
-
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
-
-                      <buttonOemNumber(item.oem_number || "");
-
-    setEdit</button>
-
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
-
-                      <buttonVehicleBrand(item.vehicle_brand || "");
-    setEdit</button>
-
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
-
-                      <buttonVehicleModel(item.vehicle_model || "");
-    setEdit</button>
-
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
-
-                      <buttonVehicleYear(item.vehicle_year || "");
-    setEdit</button>
-
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
-
-                      <buttonEngine(item.engine || "");
+    setEditVehicleBrand(item.vehicle_brand || "");
+    setEditVehicleModel(item.vehicle_model || "");
+    setEditVehicleYear(item.vehicle_year || "");
+    setEditEngine(item.engine || "");
 
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const cancelEdit</button>
+  const cancelEdit = () => {
+    setEditingId(null);
+    setSavingEdit(false);
 
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
+    setEditTitle("");
+    setEditDescription("");
+    setEditPrice("");
+    setEditStatus("active");
 
-                      <button = () => {
-    setEdit</button>
+    setEditImages([]);
+    setEditNewFiles([]);
 
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
+    setEditCategory("general");
+    setEditCondition("used");
+    setEditCountry("Estonia");
+    setEditCity("");
 
-                      <buttoningId(null);
-    setSavingEdit</button>
+    setEditManufacturer("");
+    setEditPartNumber("");
+    setEditOemNumber("");
 
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
-
-                      <button(false);
-
-    setEdit</button>
-
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
-
-                      <buttonTitle("");
-    setEdit</button>
-
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
-
-                      <buttonDescription("");
-    setEdit</button>
-
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
-
-                      <buttonPrice("");
-    setEdit</button>
-
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
-
-                      <buttonStatus("active");
-
-    setEdit</button>
-
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
-
-                      <buttonImages([]);
-    setEdit</button>
-
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
-
-                      <buttonNewFiles([]);
-
-    setEdit</button>
-
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
-
-                      <buttonCategory("general");
-    setEdit</button>
-
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
-
-                      <buttonCondition("used");
-    setEdit</button>
-
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
-
-                      <buttonCountry("Estonia");
-    setEdit</button>
-
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
-
-                      <buttonCity("");
-
-    setEdit</button>
-
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
-
-                      <buttonManufacturer("");
-    setEdit</button>
-
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
-
-                      <buttonPartNumber("");
-    setEdit</button>
-
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
-
-                      <buttonOemNumber("");
-
-    setEdit</button>
-
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
-
-                      <buttonVehicleBrand("");
-    setEdit</button>
-
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
-
-                      <buttonVehicleModel("");
-    setEdit</button>
-
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
-
-                      <buttonVehicleYear("");
-    setEdit</button>
-
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
-
-                      <buttonEngine("");
+    setEditVehicleBrand("");
+    setEditVehicleModel("");
+    setEditVehicleYear("");
+    setEditEngine("");
   };
 
   const handleNewImages = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -1010,30 +479,12 @@ export default function MyPage() {
       alert(`Only ${remainingSlots} more image(s) can be added.`);
     }
 
-    setEdit</button>
-
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
-
-                      <buttonNewFiles((prev) => [...prev, ...filesToAdd]);
+    setEditNewFiles((prev) => [...prev, ...filesToAdd]);
     event.target.value = "";
   };
 
   const removeNewImage = (index: number) => {
-    setEdit</button>
-
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
-
-                      <buttonNewFiles((prev) => prev.filter((_, fileIndex) => fileIndex !== index));
+    setEditNewFiles((prev) => prev.filter((_, fileIndex) => fileIndex !== index));
   };
 
   const deleteStorageFile = async (image: ListingImage) => {
@@ -1051,16 +502,7 @@ export default function MyPage() {
     }
   };
 
-  const deleteEdit</button>
-
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
-
-                      <buttonImage = async (imageId: string) => {
+  const deleteEditImage = async (imageId: string) => {
     if (!editingId || !userId) return;
 
     if (editImages.length + editNewFiles.length <= 1) {
@@ -1103,28 +545,10 @@ export default function MyPage() {
       remaining[0] = { ...first, is_primary: true, sort_order: 0 };
     }
 
-    setEdit</button>
-
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
-
-                      <buttonImages(sortImages(remaining));
+    setEditImages(sortImages(remaining));
   };
 
-  const setEdit</button>
-
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
-
-                      <buttonImagePrimary = async (imageId: string) => {
+  const setEditImagePrimary = async (imageId: string) => {
     if (!editingId || !userId) return;
 
     const { error: clearError } = await supabase
@@ -1151,16 +575,7 @@ export default function MyPage() {
       return;
     }
 
-    setEdit</button>
-
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
-
-                      <buttonImages((prev) =>
+    setEditImages((prev) =>
       sortImages(
         prev.map((img) => ({
           ...img,
@@ -1171,26 +586,8 @@ export default function MyPage() {
     );
   };
 
-  const moveEdit</button>
-
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
-
-                      <buttonImage = (imageId: string, direction: "up" | "down") => {
-    setEdit</button>
-
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
-
-                      <buttonImages((prev) => {
+  const moveEditImage = (imageId: string, direction: "up" | "down") => {
+    setEditImages((prev) => {
       const sorted = sortImages(prev);
       const index = sorted.findIndex((img) => img.id === imageId);
       const targetIndex = direction === "up" ? index - 1 : index + 1;
@@ -1260,16 +657,7 @@ export default function MyPage() {
     return (data || []) as ListingImage[];
   };
 
-  const saveEdit</button>
-
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
-
-                      <button = async () => {
+  const saveEdit = async () => {
     if (!editingId || !userId) return;
 
     if (!editTitle.trim() || !editDescription.trim() || !editPrice.trim()) {
@@ -1277,16 +665,7 @@ export default function MyPage() {
       return;
     }
 
-    setSavingEdit</button>
-
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
-
-                      <button(true);
+    setSavingEdit(true);
 
     try {
       const uploadedImages = await uploadNewImages();
@@ -1379,31 +758,13 @@ export default function MyPage() {
 
       if (error) throw error;
 
-      cancelEdit</button>
-
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
-
-                      <button();
+      cancelEdit();
       await fetchListings(userId, 0);
     } catch (error) {
       console.error("Error saving edit:", error);
       alert("Failed to save changes.");
     } finally {
-      setSavingEdit</button>
-
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
-
-                      <button(false);
+      setSavingEdit(false);
     }
   };
 
@@ -1463,30 +824,6 @@ export default function MyPage() {
     if (error) {
       console.error("Error reactivating listing:", error);
       alert("Failed to reactivate listing.");
-      return;
-    }
-
-    await fetchListings(userId, 0);
-  };
-
-  
-  const boostListing = async (id: number) => {
-    if (!userId) return;
-
-    const until = new Date();
-    until.setDate(until.getDate() + 1);
-
-    const { error } = await supabase
-      .from("listings")
-      .update({
-        is_boosted: true,
-        boost_until: until.toISOString(),
-      })
-      .eq("id", id)
-      .eq("user_id", userId);
-
-    if (error) {
-      alert("Boost failed");
       return;
     }
 
@@ -1558,16 +895,7 @@ export default function MyPage() {
       return;
     }
 
-    if (editingId === id) cancelEdit</button>
-
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
-
-                      <button();
+    if (editingId === id) cancelEdit();
     await fetchListings(userId, 0);
   };
 
@@ -1774,16 +1102,7 @@ export default function MyPage() {
             <div className="mb-6 flex items-start justify-between gap-4">
               <div>
                 <p className="mb-3 text-xs font-medium uppercase tracking-[0.22em] text-black/35">
-                  Edit</button>
-
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
-
-                      <button listing
+                  Edit listing
                 </p>
                 <h2 className="text-3xl font-semibold tracking-tight">
                   Update your item
@@ -1791,16 +1110,7 @@ export default function MyPage() {
               </div>
 
               <button
-                onClick={cancelEdit</button>
-
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
-
-                      <button}
+                onClick={cancelEdit}
                 className="rounded-2xl border border-black/10 bg-white px-5 py-3 text-sm font-medium"
               >
                 Cancel
@@ -1813,16 +1123,7 @@ export default function MyPage() {
                   <label className={labelClass}>Title</label>
                   <input
                     value={editTitle}
-                    onChange={(e) => setEdit</button>
-
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
-
-                      <buttonTitle(e.target.value)}
+                    onChange={(e) => setEditTitle(e.target.value)}
                     className={inputClass}
                   />
                 </div>
@@ -1832,16 +1133,7 @@ export default function MyPage() {
                   <textarea
                     rows={7}
                     value={editDescription}
-                    onChange={(e) => setEdit</button>
-
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
-
-                      <buttonDescription(e.target.value)}
+                    onChange={(e) => setEditDescription(e.target.value)}
                     className={`${inputClass} resize-y`}
                   />
                 </div>
@@ -1850,16 +1142,7 @@ export default function MyPage() {
                   <label className={labelClass}>Price</label>
                   <input
                     value={editPrice}
-                    onChange={(e) => setEdit</button>
-
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
-
-                      <buttonPrice(e.target.value)}
+                    onChange={(e) => setEditPrice(e.target.value)}
                     className={inputClass}
                   />
                 </div>
@@ -1921,16 +1204,7 @@ export default function MyPage() {
 
                               <button
                                 type="button"
-                                onClick={() => moveEdit</button>
-
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
-
-                      <buttonImage(img.id, "up")}
+                                onClick={() => moveEditImage(img.id, "up")}
                                 className="rounded-xl border border-black/10 px-3 py-2 text-xs"
                               >
                                 ↑
@@ -1938,16 +1212,7 @@ export default function MyPage() {
 
                               <button
                                 type="button"
-                                onClick={() => moveEdit</button>
-
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
-
-                      <buttonImage(img.id, "down")}
+                                onClick={() => moveEditImage(img.id, "down")}
                                 className="rounded-xl border border-black/10 px-3 py-2 text-xs"
                               >
                                 ↓
@@ -1955,16 +1220,7 @@ export default function MyPage() {
 
                               <button
                                 type="button"
-                                onClick={() => setEdit</button>
-
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
-
-                      <buttonImagePrimary(img.id)}
+                                onClick={() => setEditImagePrimary(img.id)}
                                 className="rounded-xl border border-black/10 px-3 py-2 text-xs"
                               >
                                 Set primary
@@ -1972,16 +1228,7 @@ export default function MyPage() {
 
                               <button
                                 type="button"
-                                onClick={() => deleteEdit</button>
-
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
-
-                      <buttonImage(img.id)}
+                                onClick={() => deleteEditImage(img.id)}
                                 className="rounded-xl border border-red-200 px-3 py-2 text-xs text-red-600"
                               >
                                 Delete
@@ -2036,16 +1283,7 @@ export default function MyPage() {
                     <label className={labelClass}>Category</label>
                     <select
                       value={editCategory}
-                      onChange={(e) => setEdit</button>
-
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
-
-                      <buttonCategory(e.target.value)}
+                      onChange={(e) => setEditCategory(e.target.value)}
                       className={inputClass}
                     >
                       <option value="general">General</option>
@@ -2061,16 +1299,7 @@ export default function MyPage() {
                     <label className={labelClass}>Condition</label>
                     <select
                       value={editCondition}
-                      onChange={(e) => setEdit</button>
-
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
-
-                      <buttonCondition(e.target.value)}
+                      onChange={(e) => setEditCondition(e.target.value)}
                       className={inputClass}
                     >
                       <option value="new">New</option>
@@ -2085,16 +1314,7 @@ export default function MyPage() {
                   <select
                     value={editStatus}
                     onChange={(e) =>
-                      setEdit</button>
-
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
-
-                      <buttonStatus(
+                      setEditStatus(
                         e.target.value as "active" | "paused" | "sold"
                       )
                     }
@@ -2111,16 +1331,7 @@ export default function MyPage() {
                     <label className={labelClass}>Country</label>
                     <select
                       value={editCountry}
-                      onChange={(e) => setEdit</button>
-
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
-
-                      <buttonCountry(e.target.value)}
+                      onChange={(e) => setEditCountry(e.target.value)}
                       className={inputClass}
                     >
                       <option value="Estonia">Estonia</option>
@@ -2136,16 +1347,7 @@ export default function MyPage() {
                     <label className={labelClass}>City</label>
                     <input
                       value={editCity}
-                      onChange={(e) => setEdit</button>
-
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
-
-                      <buttonCity(e.target.value)}
+                      onChange={(e) => setEditCity(e.target.value)}
                       className={inputClass}
                     />
                   </div>
@@ -2161,16 +1363,7 @@ export default function MyPage() {
                       <label className={labelClass}>Manufacturer</label>
                       <input
                         value={editManufacturer}
-                        onChange={(e) => setEdit</button>
-
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
-
-                      <buttonManufacturer(e.target.value)}
+                        onChange={(e) => setEditManufacturer(e.target.value)}
                         className={inputClass}
                       />
                     </div>
@@ -2179,16 +1372,7 @@ export default function MyPage() {
                       <label className={labelClass}>Part number</label>
                       <input
                         value={editPartNumber}
-                        onChange={(e) => setEdit</button>
-
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
-
-                      <buttonPartNumber(e.target.value)}
+                        onChange={(e) => setEditPartNumber(e.target.value)}
                         className={inputClass}
                       />
                     </div>
@@ -2197,16 +1381,7 @@ export default function MyPage() {
                       <label className={labelClass}>OEM number</label>
                       <input
                         value={editOemNumber}
-                        onChange={(e) => setEdit</button>
-
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
-
-                      <buttonOemNumber(e.target.value)}
+                        onChange={(e) => setEditOemNumber(e.target.value)}
                         className={inputClass}
                       />
                     </div>
@@ -2223,16 +1398,7 @@ export default function MyPage() {
                       <label className={labelClass}>Brand</label>
                       <input
                         value={editVehicleBrand}
-                        onChange={(e) => setEdit</button>
-
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
-
-                      <buttonVehicleBrand(e.target.value)}
+                        onChange={(e) => setEditVehicleBrand(e.target.value)}
                         className={inputClass}
                       />
                     </div>
@@ -2241,16 +1407,7 @@ export default function MyPage() {
                       <label className={labelClass}>Model</label>
                       <input
                         value={editVehicleModel}
-                        onChange={(e) => setEdit</button>
-
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
-
-                      <buttonVehicleModel(e.target.value)}
+                        onChange={(e) => setEditVehicleModel(e.target.value)}
                         className={inputClass}
                       />
                     </div>
@@ -2259,16 +1416,7 @@ export default function MyPage() {
                       <label className={labelClass}>Year</label>
                       <input
                         value={editVehicleYear}
-                        onChange={(e) => setEdit</button>
-
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
-
-                      <buttonVehicleYear(e.target.value)}
+                        onChange={(e) => setEditVehicleYear(e.target.value)}
                         className={inputClass}
                       />
                     </div>
@@ -2277,16 +1425,7 @@ export default function MyPage() {
                       <label className={labelClass}>Engine</label>
                       <input
                         value={editEngine}
-                        onChange={(e) => setEdit</button>
-
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
-
-                      <buttonEngine(e.target.value)}
+                        onChange={(e) => setEditEngine(e.target.value)}
                         className={inputClass}
                       />
                     </div>
@@ -2294,38 +1433,11 @@ export default function MyPage() {
                 </section>
 
                 <button
-                  onClick={saveEdit</button>
-
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
-
-                      <button}
-                  disabled={savingEdit</button>
-
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
-
-                      <button}
+                  onClick={saveEdit}
+                  disabled={savingEdit}
                   className="w-full rounded-2xl bg-black px-5 py-4 text-base font-medium text-white disabled:opacity-60"
                 >
-                  {savingEdit</button>
-
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
-
-                      <button ? "Saving..." : "Save changes"}
+                  {savingEdit ? "Saving..." : "Save changes"}
                 </button>
               </div>
 
@@ -2509,28 +1621,10 @@ export default function MyPage() {
                       )}
 
                       <button
-                        onClick={() => startEdit</button>
-
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
-
-                      <button(item)}
+                        onClick={() => startEdit(item)}
                         className="rounded-xl border border-black/10 bg-white px-3 py-2 text-sm"
                       >
-                        Edit</button>
-
-                      <button
-                        onClick={() => boostListing(item.id)}
-                        className="rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
-                      >
-                        Boost 24h
-                      </button>
-
-                      <button
+                        Edit
                       </button>
 
                       <button
