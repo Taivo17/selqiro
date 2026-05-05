@@ -37,7 +37,6 @@ type ProfileRow = {
   id: string;
   store_slug?: string | null;
   store_name?: string | null;
-  is_premium?: boolean | null;
 };
 
 function getListingImage(item: Listing) {
@@ -93,7 +92,7 @@ export default function MarketplacePage() {
 
     const { data: profileData, error: profileError } = await supabase
       .from("profiles")
-      .select("id, store_slug, store_name, is_premium")
+      .select("id, store_slug, store_name")
       .in("id", userIds);
 
     if (profileError) {
@@ -119,7 +118,7 @@ export default function MarketplacePage() {
       )
       .eq("status", "active")
       .gt("active_until", new Date().toISOString())
-      .order("is_boosted", { ascending: false }).order("created_at", { ascending: false })
+      .order("created_at", { ascending: false })
       .range(from, to);
 
     if (error) {
@@ -361,21 +360,16 @@ export default function MarketplacePage() {
 
                 const storeSlug = sellerProfile?.store_slug || "";
                 const storeName = sellerProfile?.store_name || "Seller store";
-                const sellerIs{item.is_boosted && new Date(item.boost_until) > new Date() ? "Featured" : "Premium"} = Boolean(sellerProfile?.is_premium);
                 const imageUrl = getListingImage(item);
 
                 return (
                   <article
                     key={item.id}
-                    className={`overflow-hidden rounded-[22px] border p-3 shadow-sm transition duration-200 hover:-translate-y-1 hover:shadow-md ${
-                      sellerIs{item.is_boosted && new Date(item.boost_until) > new Date() ? "Featured" : "Premium"}
-                        ? "border-amber-200/70 bg-gradient-to-br from-amber-50/55 via-white to-white hover:shadow-[0_18px_45px_rgba(251,191,36,0.35)] hover:-translate-y-2 scale-[1.01]"
-                        : "border-black/8 bg-white hover:-translate-y-1 hover:shadow-md"
-                    }`}
+                    className="overflow-hidden rounded-[22px] border border-black/8 bg-white p-3 shadow-sm transition duration-200 hover:-translate-y-1 hover:shadow-md"
                   >
                     <Link href={`/listing/${item.id}`}>
                       <div className="cursor-pointer">
-                        <div className="relative mb-3 overflow-hidden rounded-2xl bg-neutral-100">
+                        <div className="mb-3 overflow-hidden rounded-2xl bg-neutral-100">
                           {imageUrl ? (
                             <img
                               src={imageUrl}
@@ -385,12 +379,6 @@ export default function MarketplacePage() {
                             />
                           ) : (
                             <div className="h-40 w-full bg-neutral-100 sm:h-44" />
-                          )}
-
-                          {(sellerIs{item.is_boosted && new Date(item.boost_until) > new Date() ? "Featured" : "Premium"} || (item.is_boosted && new Date(item.boost_until) > new Date())) && (
-                            <span className="absolute right-2 top-2 px-2 py-1 text-[9px] font-semibold uppercase tracking-[0.14em] text-black/50 bg-white/30 backdrop-blur-sm rounded-full opacity-70">
-                              {item.is_boosted && new Date(item.boost_until) > new Date() ? "Featured" : "Premium"}
-                            </span>
                           )}
                         </div>
 
