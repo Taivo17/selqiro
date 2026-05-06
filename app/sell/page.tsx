@@ -237,6 +237,15 @@ export default function SellPage() {
         .select("id")
         .single();
 
+      await fetch("/api/ai/enrich-listing", {
+        method: "POST",
+        body: JSON.stringify({
+          listingId: listingData?.id,
+          title,
+          description,
+        }),
+      });
+
       if (listingError || !listingData) {
         console.error(listingError);
         alert("Listing failed");
