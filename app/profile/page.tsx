@@ -291,9 +291,9 @@ export default function ProfilePage() {
                 />
                 <p className="mt-2 text-sm text-black/50">
                   
-                <p className="mt-2 text-xs text-black/45">
+                <span className="mt-2 block text-xs text-black/45">
                   Store slug creates your public store URL and cannot be changed later.
-                </p>
+                </span>
 
                 Public store URL: /store/{storeSlug || generatedSlug || "your-store"}
                 </p>
