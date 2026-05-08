@@ -29,6 +29,7 @@ export default function ProfilePage() {
 
   const [storeName, setStoreName] = useState("");
   const [storeSlug, setStoreSlug] = useState("");
+  const [slugLocked, setSlugLocked] = useState(false);
   const [bio, setBio] = useState("");
   const [avatarUrl, setAvatarUrl] = useState("");
   const [bannerUrl, setBannerUrl] = useState("");
@@ -69,6 +70,7 @@ export default function ProfilePage() {
         const profile = data as Profile;
         setStoreName(profile.store_name || "");
         setStoreSlug(profile.store_slug || "");
+      setSlugLocked(Boolean(profile.store_slug));
         setBio(profile.bio || "");
         setAvatarUrl(profile.avatar_url || "");
         setBannerUrl(profile.banner_url || "");
@@ -112,6 +114,19 @@ export default function ProfilePage() {
 
     const cleanStoreName = storeName.trim();
     const cleanSlug = slugify(storeSlug || generatedSlug);
+
+    const existingSlug = await supabase
+      .from("profiles")
+      .select("id")
+      .eq("store_slug", cleanSlug)
+      .neq("id", userId)
+      .maybeSingle();
+
+    if (existingSlug.data) {
+      alert("Store slug already exists.");
+      setSaving(false);
+      return;
+    }
     const cleanBio = bio.trim();
 
     if (!cleanStoreName) {
@@ -270,11 +285,17 @@ export default function ProfilePage() {
                   type="text"
                   placeholder={generatedSlug || "example-store"}
                   value={storeSlug}
+                    disabled={slugLocked}
                   onChange={(e) => setStoreSlug(slugify(e.target.value))}
                   className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-black/30"
                 />
                 <p className="mt-2 text-sm text-black/50">
-                  Public store URL: /store/{storeSlug || generatedSlug || "your-store"}
+                  
+                <p className="mt-2 text-xs text-black/45">
+                  Store slug creates your public store URL and cannot be changed later.
+                </p>
+
+                Public store URL: /store/{storeSlug || generatedSlug || "your-store"}
                 </p>
               </div>
 
