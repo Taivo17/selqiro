@@ -381,7 +381,7 @@ export default function MarketplacePage() {
                               src={imageUrl}
                               alt={item.title}
                               loading="lazy"
-                              className="h-40 w-full object-cover sm:h-44"
+                              className="aspect-[4/3] h-auto w-full object-cover sm:aspect-[16/10]"
                             />
                           ) : (
                             <div className="h-40 w-full bg-neutral-100 sm:h-44" />

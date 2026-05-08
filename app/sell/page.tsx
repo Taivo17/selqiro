@@ -161,7 +161,7 @@ export default function SellPage() {
     if (!user) return;
 
     if (!title.trim() || !description.trim() || !price.trim()) {
-      alert("Fill required fields");
+      alert("Fill required fields: title, description and price.");
       return;
     }
 
@@ -346,21 +346,24 @@ export default function SellPage() {
           )}
 
           <input
-            placeholder="Title"
+            placeholder="Title *"
+                  maxLength={80}
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             className="w-full rounded-2xl border border-black/10 p-4 outline-none"
           />
 
           <textarea
-            placeholder="Description"
+            placeholder="Description *"
+                  maxLength={1000}
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             className="min-h-28 w-full rounded-2xl border border-black/10 p-4 outline-none"
           />
 
           <input
-            placeholder="Price"
+            placeholder="Price *"
+                  maxLength={40}
             value={price}
             onChange={(e) => setPrice(e.target.value)}
             className="w-full rounded-2xl border border-black/10 p-4 outline-none"
@@ -391,6 +394,7 @@ export default function SellPage() {
 
           <input
             placeholder="Subcategory"
+                  maxLength={60}
             value={subcategory}
             onChange={(e) => setSubcategory(e.target.value)}
             className="w-full rounded-2xl border border-black/10 p-4 outline-none"
@@ -405,6 +409,7 @@ export default function SellPage() {
 
           <input
             placeholder="City"
+                  maxLength={80}
             value={city}
             onChange={(e) => setCity(e.target.value)}
             className="w-full rounded-2xl border border-black/10 p-4 outline-none"
@@ -414,6 +419,7 @@ export default function SellPage() {
 
           <input
             placeholder="Manufacturer"
+                  maxLength={80}
             value={manufacturer}
             onChange={(e) => setManufacturer(e.target.value)}
             className="w-full rounded-2xl border border-black/10 p-4 outline-none"
@@ -421,6 +427,7 @@ export default function SellPage() {
 
           <input
             placeholder="Part number"
+                  maxLength={80}
             value={partNumber}
             onChange={(e) => setPartNumber(e.target.value)}
             className="w-full rounded-2xl border border-black/10 p-4 outline-none"
@@ -428,6 +435,7 @@ export default function SellPage() {
 
           <input
             placeholder="OEM number"
+                  maxLength={80}
             value={oemNumber}
             onChange={(e) => setOemNumber(e.target.value)}
             className="w-full rounded-2xl border border-black/10 p-4 outline-none"
@@ -437,6 +445,7 @@ export default function SellPage() {
 
           <input
             placeholder="Brand"
+                  maxLength={80}
             value={vehicleBrand}
             onChange={(e) => setVehicleBrand(e.target.value)}
             className="w-full rounded-2xl border border-black/10 p-4 outline-none"
@@ -444,6 +453,7 @@ export default function SellPage() {
 
           <input
             placeholder="Model"
+                  maxLength={80}
             value={vehicleModel}
             onChange={(e) => setVehicleModel(e.target.value)}
             className="w-full rounded-2xl border border-black/10 p-4 outline-none"
@@ -451,6 +461,7 @@ export default function SellPage() {
 
           <input
             placeholder="Year"
+                  maxLength={20}
             value={vehicleYear}
             onChange={(e) => setVehicleYear(e.target.value)}
             className="w-full rounded-2xl border border-black/10 p-4 outline-none"
@@ -458,6 +469,7 @@ export default function SellPage() {
 
           <input
             placeholder="Engine"
+                  maxLength={80}
             value={engine}
             onChange={(e) => setEngine(e.target.value)}
             className="w-full rounded-2xl border border-black/10 p-4 outline-none"
