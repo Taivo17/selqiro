@@ -332,7 +332,8 @@ export default function ListingPage() {
           <div
             className="relative overflow-hidden rounded-[22px] bg-neutral-100"
             onMouseMove={showControlsTemporarily}
-            onTouchStart={showControlsTemporarily}
+            onTouchStart={handleGalleryTouchStart}
+            onTouchEnd={handleGalleryTouchEnd}
           >
             <button
               type="button"
