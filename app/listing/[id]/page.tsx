@@ -77,6 +77,7 @@ export default function ListingPage() {
   const [sellerProfile, setSellerProfile] = useState<SellerProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [touchStartX, setTouchStartX] = useState<number | null>(null);
   const [fullImageOpen, setFullImageOpen] = useState(false);
   const [controlsVisible, setControlsVisible] = useState(false);
   const [shareCopied, setShareCopied] = useState(false);
@@ -284,6 +285,39 @@ export default function ListingPage() {
     Boolean(listing.vehicle_model) ||
     Boolean(listing.vehicle_year) ||
     Boolean(listing.engine);
+
+  const handleGalleryTouchStart = (
+    event: React.TouchEvent<HTMLDivElement>
+  ) => {
+    showControlsTemporarily();
+    setTouchStartX(event.touches[0].clientX);
+  };
+
+  const handleGalleryTouchEnd = (
+    event: React.TouchEvent<HTMLDivElement>
+  ) => {
+    showControlsTemporarily();
+
+    if (touchStartX === null || galleryImages.length <= 1) return;
+
+    const touchEndX = event.changedTouches[0].clientX;
+    const diff = touchStartX - touchEndX;
+    const threshold = 45;
+
+    if (Math.abs(diff) > threshold) {
+      if (diff > 0) {
+        setSelectedImageIndex((prev) =>
+          prev + 1 >= galleryImages.length ? 0 : prev + 1
+        );
+      } else {
+        setSelectedImageIndex((prev) =>
+          prev - 1 < 0 ? galleryImages.length - 1 : prev - 1
+        );
+      }
+    }
+
+    setTouchStartX(null);
+  };
 
   const hasAiInfo = Boolean(listing.ai_status) || Boolean(listing.ai_level);
 
