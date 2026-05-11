@@ -550,7 +550,8 @@ export default function ListingPage() {
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4"
           onClick={() => setFullImageOpen(false)}
           onMouseMove={showControlsTemporarily}
-          onTouchStart={showControlsTemporarily}
+          onTouchStart={handleGalleryTouchStart}
+          onTouchEnd={handleGalleryTouchEnd}
         >
           <button
             type="button"
