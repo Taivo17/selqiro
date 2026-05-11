@@ -25,7 +25,7 @@ export async function POST(req: Request) {
             {
               type: "input_text",
               text:
-                "Analyze marketplace listing photos. Return JSON only. Detect object, category, possible brand, possible model, suggested_title, confidence from 0 to 1. Allowed categories: vehicles, parts, electronics, clothing, real_estate, general. Example JSON: {\"object\":\"Mercedes-Benz SUV\",\"category\":\"vehicles\",\"brand\":\"Mercedes-Benz\",\"model\":\"GL-Class\",\"suggested_title\":\"Mercedes-Benz GL-Class\",\"confidence\":0.92}",
+                "Analyze marketplace listing photos. Return JSON only. Detect object, category, subcategory, possible brand, possible model, suggested_title, confidence from 0 to 1. Allowed categories: vehicles, parts, electronics, clothing, real_estate, general. If no category fits well, use general and put the more specific item type into subcategory. Example JSON: {\"object\":\"Mercedes-Benz SUV\",\"category\":\"vehicles\",\"brand\":\"Mercedes-Benz\",\"model\":\"GL-Class\",\"suggested_title\":\"Mercedes-Benz GL-Class\",\"confidence\":0.92}",
             },
             ...imageUrls.map((url) => ({
               type: "input_image" as const,
@@ -37,10 +37,12 @@ export async function POST(req: Request) {
     });
 
     const text = response.output_text || "{}";
+    const jsonMatch = text.match(/\{[\s\S]*\}/);
+    const parsed = JSON.parse(jsonMatch ? jsonMatch[0] : text);
 
     return Response.json({
       success: true,
-      result: JSON.parse(text),
+      result: parsed,
     });
   } catch (error) {
     console.error(error);

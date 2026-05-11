@@ -188,7 +188,7 @@ export default function SellPage() {
 
     try {
       const resizedFiles = await Promise.all(
-        files.slice(0, 3).map((file) => resizeImage(file, 900, 0.72))
+        files.slice(0, 2).map((file) => resizeImage(file, 720, 0.65))
       );
 
       const imageUrls = await Promise.all(
@@ -208,7 +208,7 @@ export default function SellPage() {
       const data = await response.json();
 
       if (!data.success || !data.result) {
-        alert("AI analyze failed.");
+        alert("AI could not analyze this time. Please try again.");
         return;
       }
 
