@@ -35,6 +35,23 @@ async function resizeImage(file: File, maxWidth = 1600, quality = 0.82) {
   });
 }
 
+function fileToDataUrl(file: File) {
+  return new Promise<string>((resolve, reject) => {
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      if (typeof reader.result === "string") {
+        resolve(reader.result);
+      } else {
+        reject(new Error("Could not read image"));
+      }
+    };
+
+    reader.onerror = () => reject(reader.error);
+    reader.readAsDataURL(file);
+  });
+}
+
 export default function SellPage() {
   const router = useRouter();
   const { user, loading } = useAuth();
@@ -61,6 +78,9 @@ export default function SellPage() {
 
   const [files, setFiles] = useState<File[]>([]);
   const [saving, setSaving] = useState(false);
+
+  const [aiLoading, setAiLoading] = useState(false);
+  const [aiResult, setAiResult] = useState<any>(null);
 
   const previewUrls = useMemo(() => {
     return files.map((file) => URL.createObjectURL(file));
@@ -155,6 +175,68 @@ export default function SellPage() {
     if (imageError) throw imageError;
 
     return firstOriginalUrl;
+  };
+
+
+  const analyzePhotosWithAI = async () => {
+    if (files.length === 0) {
+      alert("Add photos first.");
+      return;
+    }
+
+    setAiLoading(true);
+
+    try {
+      const resizedFiles = await Promise.all(
+        files.slice(0, 3).map((file) => resizeImage(file, 900, 0.72))
+      );
+
+      const imageUrls = await Promise.all(
+        resizedFiles.map((file) => fileToDataUrl(file))
+      );
+
+      const response = await fetch("/api/ai/analyze-listing", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          imageUrls,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!data.success || !data.result) {
+        alert("AI analyze failed.");
+        return;
+      }
+
+      const result = data.result;
+
+      setAiResult(result);
+
+      if (result.suggested_title) {
+        setTitle(result.suggested_title);
+      }
+
+      if (result.category) {
+        setCategory(result.category);
+      }
+
+      if (result.brand) {
+        setVehicleBrand(result.brand);
+      }
+
+      if (result.model) {
+        setVehicleModel(result.model);
+      }
+    } catch (error) {
+      console.error(error);
+      alert("AI analyze failed.");
+    } finally {
+      setAiLoading(false);
+    }
   };
 
   const createListing = async () => {
@@ -295,6 +377,54 @@ export default function SellPage() {
           />
 
           {previewUrls.length > 0 && (
+            <>
+              <button
+                type="button"
+                onClick={analyzePhotosWithAI}
+                disabled={aiLoading}
+                className="w-full rounded-2xl border border-black/10 bg-black px-4 py-4 text-sm font-medium text-white transition hover:opacity-90 disabled:opacity-60"
+              >
+                {aiLoading
+                  ? "AI analyzing photos..."
+                  : "Analyze photos with AI"}
+              </button>
+
+              {aiResult && (
+                <div className="rounded-2xl border border-black/10 bg-black/[0.02] p-4 text-sm">
+                  <p className="font-semibold text-black">
+                    AI detected:{" "}
+                    {aiResult.object || "Unknown object"}
+                  </p>
+
+                  <div className="mt-2 flex flex-wrap gap-2 text-black/65">
+                    {aiResult.category && (
+                      <span className="rounded-full border border-black/10 bg-white px-3 py-1">
+                        Category: {aiResult.category}
+                      </span>
+                    )}
+
+                    {aiResult.brand && (
+                      <span className="rounded-full border border-black/10 bg-white px-3 py-1">
+                        Brand: {aiResult.brand}
+                      </span>
+                    )}
+
+                    {aiResult.model && (
+                      <span className="rounded-full border border-black/10 bg-white px-3 py-1">
+                        Model: {aiResult.model}
+                      </span>
+                    )}
+
+                    {typeof aiResult.confidence === "number" && (
+                      <span className="rounded-full border border-green-200 bg-green-50 px-3 py-1 text-green-700">
+                        Confidence:{" "}
+                        {Math.round(aiResult.confidence * 100)}%
+                      </span>
+                    )}
+                  </div>
+                </div>
+              )}
+
             <div className="grid gap-3 sm:grid-cols-2">
               {previewUrls.map((url, index) => (
                 <div
@@ -343,6 +473,7 @@ export default function SellPage() {
                 </div>
               ))}
             </div>
+            </>
           )}
 
           <input
