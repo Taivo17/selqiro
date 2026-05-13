@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { supabase } from "../../lib/supabase";
 import { useAuth } from "../../lib/useAuth";
+import { CATEGORY_TREE } from "../../lib/categories";
+import { getCategoryFields } from "../../lib/categoryFields";
 
 const PAGE_SIZE = 30;
 const MAX_IMAGES = 10;
@@ -29,6 +31,8 @@ type Listing = {
   status?: "active" | "paused" | "sold";
   active_until?: string | null;
   category?: string;
+  subcategory?: string;
+  details?: Record<string, unknown> | null;
   condition?: string;
   country?: string;
   city?: string;
@@ -221,6 +225,9 @@ export default function MyPage() {
   const [editNewFiles, setEditNewFiles] = useState<File[]>([]);
 
   const [editCategory, setEditCategory] = useState("general");
+  const [editSubcategory, setEditSubcategory] = useState("");
+  const [editDetailCategory, setEditDetailCategory] = useState("");
+  const [editDynamicFields, setEditDynamicFields] = useState<Record<string, string>>({});
   const [editCondition, setEditCondition] = useState("used");
   const [editCountry, setEditCountry] = useState("Estonia");
   const [editCity, setEditCity] = useState("");
@@ -233,6 +240,16 @@ export default function MyPage() {
   const [editVehicleModel, setEditVehicleModel] = useState("");
   const [editVehicleYear, setEditVehicleYear] = useState("");
   const [editEngine, setEditEngine] = useState("");
+
+  const editSelectedCategory = CATEGORY_TREE.find(
+    (item) => item.value === editCategory
+  );
+  const editSubcategoryOptions = editSelectedCategory?.children || [];
+  const editSelectedSubcategory = editSubcategoryOptions.find(
+    (item) => item.value === editSubcategory
+  );
+  const editDetailCategoryOptions = (editSelectedSubcategory as any)?.children || [];
+  const editActiveFields = getCategoryFields(editDetailCategory || editSubcategory);
 
   const premiumActive = isPremiumActive(profile);
 
@@ -416,7 +433,36 @@ export default function MyPage() {
     setEditImages(sortImages(item.listing_images || []));
     setEditNewFiles([]);
 
+    const itemDetails = (item.details || {}) as Record<string, unknown>;
+
     setEditCategory(item.category || "general");
+    setEditSubcategory(item.subcategory || "");
+    setEditDetailCategory(
+      typeof itemDetails.detailCategory === "string"
+        ? itemDetails.detailCategory
+        : ""
+    );
+
+    const dynamicValues: Record<string, string> = {};
+    Object.entries(itemDetails).forEach(([key, value]) => {
+      if (
+        typeof value === "string" &&
+        ![
+          "manufacturer",
+          "partNumber",
+          "oemNumber",
+          "vehicleBrand",
+          "vehicleModel",
+          "vehicleYear",
+          "engine",
+          "detailCategory",
+        ].includes(key)
+      ) {
+        dynamicValues[key] = value;
+      }
+    });
+    setEditDynamicFields(dynamicValues);
+
     setEditCondition(item.condition || "used");
     setEditCountry(item.country || "Estonia");
     setEditCity(item.city || "");
@@ -446,6 +492,9 @@ export default function MyPage() {
     setEditNewFiles([]);
 
     setEditCategory("general");
+    setEditSubcategory("");
+    setEditDetailCategory("");
+    setEditDynamicFields({});
     setEditCondition("used");
     setEditCountry("Estonia");
     setEditCity("");
@@ -712,6 +761,9 @@ export default function MyPage() {
         editVehicleModel,
         editVehicleYear,
         editEngine,
+        editSubcategory,
+        editDetailCategory,
+        ...Object.values(editDynamicFields),
       ]
         .map((item) => item.trim())
         .filter(Boolean)
@@ -727,6 +779,7 @@ export default function MyPage() {
           image: primaryImage,
 
           category: editCategory,
+          subcategory: editSubcategory.trim(),
           condition: editCondition,
           country: cleanCountry,
           city: cleanCity,
@@ -749,6 +802,8 @@ export default function MyPage() {
             vehicleModel: editVehicleModel.trim(),
             vehicleYear: editVehicleYear.trim(),
             engine: editEngine.trim(),
+            detailCategory: editDetailCategory,
+            ...editDynamicFields,
           },
 
           search_text: searchText,
@@ -1283,15 +1338,19 @@ export default function MyPage() {
                     <label className={labelClass}>Category</label>
                     <select
                       value={editCategory}
-                      onChange={(e) => setEditCategory(e.target.value)}
+                      onChange={(e) => {
+                        setEditCategory(e.target.value);
+                        setEditSubcategory("");
+                        setEditDetailCategory("");
+                        setEditDynamicFields({});
+                      }}
                       className={inputClass}
                     >
-                      <option value="general">General</option>
-                      <option value="vehicles">Vehicles</option>
-                      <option value="parts">Parts</option>
-                      <option value="electronics">Electronics</option>
-                      <option value="clothing">Clothing</option>
-                      <option value="real_estate">Real estate</option>
+                      {CATEGORY_TREE.map((item) => (
+                        <option key={item.value} value={item.value}>
+                          {item.label}
+                        </option>
+                      ))}
                     </select>
                   </div>
 
@@ -1308,6 +1367,55 @@ export default function MyPage() {
                     </select>
                   </div>
                 </div>
+
+                {editSubcategoryOptions.length > 0 && (
+                  <div className="grid gap-5 sm:grid-cols-2">
+                    <div>
+                      <label className={labelClass}>Subcategory</label>
+                      <select
+                        value={editSubcategory}
+                        onChange={(e) => {
+                          setEditSubcategory(e.target.value);
+                          setEditDetailCategory("");
+                          setEditDynamicFields({});
+                        }}
+                        className={inputClass}
+                      >
+                        <option value="">Select subcategory</option>
+
+                        {editSubcategoryOptions.map((item) => (
+                          <option key={item.value} value={item.value}>
+                            {item.label}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    {editDetailCategoryOptions.length > 0 && (
+                      <div>
+                        <label className={labelClass}>Detailed category</label>
+                        <select
+                          value={editDetailCategory}
+                          onChange={(e) => {
+                            setEditDetailCategory(e.target.value);
+                            setEditDynamicFields({});
+                          }}
+                          className={inputClass}
+                        >
+                          <option value="">Select detailed category</option>
+
+                          {editDetailCategoryOptions.map(
+                            (item: { value: string; label: string }) => (
+                              <option key={item.value} value={item.value}>
+                                {item.label}
+                              </option>
+                            )
+                          )}
+                        </select>
+                      </div>
+                    )}
+                  </div>
+                )}
 
                 <div>
                   <label className={labelClass}>Status</label>
@@ -1353,84 +1461,31 @@ export default function MyPage() {
                   </div>
                 </div>
 
-                <section className="rounded-[24px] border border-black/8 bg-black/[0.015] p-5">
-                  <h3 className="mb-5 text-xl font-semibold tracking-tight">
-                    Technical info
-                  </h3>
+                {editActiveFields.length > 0 && (
+                  <section className="rounded-[24px] border border-black/8 bg-black/[0.015] p-5">
+                    <h3 className="mb-5 text-xl font-semibold tracking-tight">
+                      Category specific details
+                    </h3>
 
-                  <div className="space-y-5">
-                    <div>
-                      <label className={labelClass}>Manufacturer</label>
-                      <input
-                        value={editManufacturer}
-                        onChange={(e) => setEditManufacturer(e.target.value)}
-                        className={inputClass}
-                      />
+                    <div className="space-y-5">
+                      {editActiveFields.map((field) => (
+                        <div key={field.key}>
+                          <label className={labelClass}>{field.label}</label>
+                          <input
+                            value={editDynamicFields[field.key] || ""}
+                            onChange={(e) =>
+                              setEditDynamicFields((prev) => ({
+                                ...prev,
+                                [field.key]: e.target.value,
+                              }))
+                            }
+                            className={inputClass}
+                          />
+                        </div>
+                      ))}
                     </div>
-
-                    <div>
-                      <label className={labelClass}>Part number</label>
-                      <input
-                        value={editPartNumber}
-                        onChange={(e) => setEditPartNumber(e.target.value)}
-                        className={inputClass}
-                      />
-                    </div>
-
-                    <div>
-                      <label className={labelClass}>OEM number</label>
-                      <input
-                        value={editOemNumber}
-                        onChange={(e) => setEditOemNumber(e.target.value)}
-                        className={inputClass}
-                      />
-                    </div>
-                  </div>
-                </section>
-
-                <section className="rounded-[24px] border border-black/8 bg-black/[0.015] p-5">
-                  <h3 className="mb-5 text-xl font-semibold tracking-tight">
-                    Vehicle fitment
-                  </h3>
-
-                  <div className="space-y-5">
-                    <div>
-                      <label className={labelClass}>Brand</label>
-                      <input
-                        value={editVehicleBrand}
-                        onChange={(e) => setEditVehicleBrand(e.target.value)}
-                        className={inputClass}
-                      />
-                    </div>
-
-                    <div>
-                      <label className={labelClass}>Model</label>
-                      <input
-                        value={editVehicleModel}
-                        onChange={(e) => setEditVehicleModel(e.target.value)}
-                        className={inputClass}
-                      />
-                    </div>
-
-                    <div>
-                      <label className={labelClass}>Year</label>
-                      <input
-                        value={editVehicleYear}
-                        onChange={(e) => setEditVehicleYear(e.target.value)}
-                        className={inputClass}
-                      />
-                    </div>
-
-                    <div>
-                      <label className={labelClass}>Engine</label>
-                      <input
-                        value={editEngine}
-                        onChange={(e) => setEditEngine(e.target.value)}
-                        className={inputClass}
-                      />
-                    </div>
-                  </div>
-                </section>
+                  </section>
+                )}
 
                 <button
                   onClick={saveEdit}

@@ -59,6 +59,41 @@ function FieldRow({ label, value }: { label: string; value?: string | null }) {
   );
 }
 
+function formatDetailLabel(key: string) {
+  return key
+    .replace(/_/g, " ")
+    .replace(/([a-z])([A-Z])/g, "$1 $2")
+    .replace(/\b\w/g, (char) => char.toUpperCase());
+}
+
+function getVisibleDetails(details?: Record<string, unknown> | null) {
+  if (!details) return [];
+
+  const hiddenKeys = new Set([
+    "detailCategory",
+    "manufacturer",
+    "partNumber",
+    "oemNumber",
+    "vehicleBrand",
+    "vehicleModel",
+    "vehicleYear",
+    "engine",
+  ]);
+
+  return Object.entries(details)
+    .filter(([key, value]) => {
+      if (hiddenKeys.has(key)) return false;
+      if (value === null || value === undefined) return false;
+      if (typeof value === "string" && !value.trim()) return false;
+      return true;
+    })
+    .map(([key, value]) => ({
+      key,
+      label: formatDetailLabel(key),
+      value: String(value),
+    }));
+}
+
 function sortImages(images: ListingImage[]) {
   return [...images].sort((a, b) => {
     if (a.is_primary && !b.is_primary) return -1;
@@ -319,6 +354,9 @@ export default function ListingPage() {
     setTouchStartX(null);
   };
 
+  const visibleDetails = getVisibleDetails(listing.details);
+  const hasDetailsInfo = visibleDetails.length > 0;
+
   const hasAiInfo = Boolean(listing.ai_status) || Boolean(listing.ai_level);
 
   return (
@@ -507,6 +545,22 @@ export default function ListingPage() {
             {listing.description}
           </p>
         </section>
+
+        {hasDetailsInfo && (
+          <section className="overflow-hidden rounded-[28px] bg-white p-5 shadow-sm sm:rounded-[32px] sm:p-6">
+            <h2 className="mb-4 text-lg font-semibold">Details</h2>
+
+            <div className="space-y-3">
+              {visibleDetails.map((item) => (
+                <FieldRow
+                  key={item.key}
+                  label={item.label}
+                  value={item.value}
+                />
+              ))}
+            </div>
+          </section>
+        )}
 
         {hasTechnicalInfo && (
           <section className="overflow-hidden rounded-[28px] bg-white p-5 shadow-sm sm:rounded-[32px] sm:p-6">
