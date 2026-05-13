@@ -5,6 +5,8 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { supabase } from "../../lib/supabase";
 import { useAuth } from "../../lib/useAuth";
+import { CATEGORY_TREE } from "../../lib/categories";
+import { getCategoryFields } from "../../lib/categoryFields";
 
 const MAX_IMAGES = 10;
 
@@ -62,6 +64,7 @@ export default function SellPage() {
 
   const [category, setCategory] = useState("general");
   const [subcategory, setSubcategory] = useState("");
+  const [detailCategory, setDetailCategory] = useState("");
   const [condition, setCondition] = useState("used");
 
   const [country, setCountry] = useState("Estonia");
@@ -76,11 +79,30 @@ export default function SellPage() {
   const [vehicleYear, setVehicleYear] = useState("");
   const [engine, setEngine] = useState("");
 
+  const [dynamicFields, setDynamicFields] = useState<Record<string, string>>({});
+
   const [files, setFiles] = useState<File[]>([]);
   const [saving, setSaving] = useState(false);
 
   const [aiLoading, setAiLoading] = useState(false);
   const [aiResult, setAiResult] = useState<any>(null);
+
+
+  const selectedCategory = CATEGORY_TREE.find(
+    (item) => item.value === category
+  );
+
+  const subcategoryOptions = selectedCategory?.children || [];
+  const selectedSubcategory = subcategoryOptions.find(
+    (item) => item.value === subcategory
+  );
+  const detailCategoryOptions = (selectedSubcategory as any)?.children || [];
+
+  const activeFields = getCategoryFields(detailCategory || subcategory);
+
+  const showVehicleFields = false;
+  const showTechnicalFields = false;
+
 
   const previewUrls = useMemo(() => {
     return files.map((file) => URL.createObjectURL(file));
@@ -224,12 +246,26 @@ export default function SellPage() {
         setCategory(result.category);
       }
 
+      if (result.subcategory) {
+        setSubcategory(result.subcategory);
+      }
+
+      if (result.detailCategory) {
+        setDetailCategory(result.detailCategory);
+      } else {
+        setDetailCategory("");
+      }
+
       if (result.brand) {
         setVehicleBrand(result.brand);
       }
 
       if (result.model) {
         setVehicleModel(result.model);
+      }
+
+      if (result.fields && typeof result.fields === "object") {
+        setDynamicFields(result.fields);
       }
     } catch (error) {
       console.error(error);
@@ -290,6 +326,8 @@ export default function SellPage() {
             vehicleModel: vehicleModel.trim(),
             vehicleYear: vehicleYear.trim(),
             engine: engine.trim(),
+            detailCategory,
+            ...dynamicFields,
           },
           search_text: [
             title,
@@ -502,15 +540,18 @@ export default function SellPage() {
 
           <select
             value={category}
-            onChange={(e) => setCategory(e.target.value)}
+            onChange={(e) => {
+              setCategory(e.target.value);
+              setSubcategory("");
+              setDetailCategory("");
+            }}
             className="w-full rounded-2xl border border-black/10 p-4 outline-none"
           >
-            <option value="general">General</option>
-            <option value="vehicles">Vehicles</option>
-            <option value="parts">Parts</option>
-            <option value="electronics">Electronics</option>
-            <option value="clothing">Clothing</option>
-            <option value="real_estate">Real estate</option>
+            {CATEGORY_TREE.map((item) => (
+              <option key={item.value} value={item.value}>
+                {item.label}
+              </option>
+            ))}
           </select>
 
           <select
@@ -523,13 +564,48 @@ export default function SellPage() {
             <option value="for_parts">For parts</option>
           </select>
 
-          <input
-            placeholder="Subcategory"
-                  maxLength={60}
-            value={subcategory}
-            onChange={(e) => setSubcategory(e.target.value)}
-            className="w-full rounded-2xl border border-black/10 p-4 outline-none"
-          />
+          {subcategoryOptions.length > 0 ? (
+            <select
+              value={subcategory}
+              onChange={(e) => {
+                setSubcategory(e.target.value);
+                setDetailCategory("");
+              }}
+              className="w-full rounded-2xl border border-black/10 p-4 outline-none"
+            >
+              <option value="">Select subcategory</option>
+
+              {subcategoryOptions.map((item) => (
+                <option key={item.value} value={item.value}>
+                  {item.label}
+                </option>
+              ))}
+            </select>
+          ) : (
+            <input
+              placeholder="Subcategory"
+              maxLength={60}
+              value={subcategory}
+              onChange={(e) => setSubcategory(e.target.value)}
+              className="w-full rounded-2xl border border-black/10 p-4 outline-none"
+            />
+          )}
+
+          {detailCategoryOptions.length > 0 && (
+            <select
+              value={detailCategory}
+              onChange={(e) => setDetailCategory(e.target.value)}
+              className="w-full rounded-2xl border border-black/10 p-4 outline-none"
+            >
+              <option value="">Select detailed category</option>
+
+              {detailCategoryOptions.map((item: { value: string; label: string }) => (
+                <option key={item.value} value={item.value}>
+                  {item.label}
+                </option>
+              ))}
+            </select>
+          )}
 
           <input
             placeholder="Country"
@@ -546,6 +622,8 @@ export default function SellPage() {
             className="w-full rounded-2xl border border-black/10 p-4 outline-none"
           />
 
+          {showTechnicalFields && (
+            <>
           <h2 className="pt-4 text-2xl font-semibold">Technical info</h2>
 
           <input
@@ -572,6 +650,11 @@ export default function SellPage() {
             className="w-full rounded-2xl border border-black/10 p-4 outline-none"
           />
 
+            </>
+          )}
+
+          {showVehicleFields && (
+            <>
           <h2 className="pt-4 text-2xl font-semibold">Vehicle fitment</h2>
 
           <input
@@ -605,6 +688,33 @@ export default function SellPage() {
             onChange={(e) => setEngine(e.target.value)}
             className="w-full rounded-2xl border border-black/10 p-4 outline-none"
           />
+
+            </>
+          )}
+
+
+          {activeFields.length > 0 && (
+            <div className="space-y-4 pt-6">
+              <h2 className="text-2xl font-semibold">
+                Category specific details
+              </h2>
+
+              {activeFields.map((field) => (
+                <input
+                  key={field.key}
+                  placeholder={field.label}
+                  value={dynamicFields[field.key] || ""}
+                  onChange={(e) =>
+                    setDynamicFields((prev) => ({
+                      ...prev,
+                      [field.key]: e.target.value,
+                    }))
+                  }
+                  className="w-full rounded-2xl border border-black/10 p-4 outline-none"
+                />
+              ))}
+            </div>
+          )}
 
           <button
             onClick={createListing}

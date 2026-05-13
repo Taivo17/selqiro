@@ -1,19 +1,19 @@
 import OpenAI from "openai";
-import { supabase } from "@/lib/supabase";
+import { createClient } from "@supabase/supabase-js";
+
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY!,
+});
+
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!
+);
 
 export async function POST(req: Request) {
-  const apiKey = process.env.OPENAI_API_KEY;
-
-  if (!apiKey) {
-    console.error("Missing OPENAI_API_KEY");
-    return Response.json({ success: false, message: "Missing OPENAI_API_KEY" });
-  }
-
-  const openai = new OpenAI({ apiKey });
-
-  const { listingId, title, description } = await req.json();
-
   try {
+    const { listingId, title, description } = await req.json();
+
     const prompt = `
 Improve this listing for SEO and translate to English.
 
@@ -37,14 +37,21 @@ Return only valid JSON:
     const text = completion.choices[0].message.content || "{}";
     const parsed = JSON.parse(text);
 
-    await supabase
+    const { error } = await supabase
       .from("listings")
       .update({
         seo_title: parsed.seo_title,
         seo_description: parsed.seo_description,
         description_en: parsed.description_en,
+        ai_status: "completed",
+        ai_enriched: true,
       })
       .eq("id", listingId);
+
+    if (error) {
+      console.error(error);
+      return Response.json({ success: false });
+    }
 
     return Response.json({ success: true });
   } catch (e) {
