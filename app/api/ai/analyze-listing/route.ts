@@ -88,13 +88,17 @@ Response shape:
 Rules:
 - Use only category, subcategory and detailCategory values from the allowed tree.
 - If there is no detail category for the selected subcategory, use an empty string for detailCategory.
-- Fill fields only when reasonably visible or strongly likely.
-- Do not invent VIN, serial numbers, registration numbers, IMEI or exact technical specs.
-- For vehicles, do not guess exact year, engine, power or mileage unless clearly visible.
-- For tools/electronics, detect visible brand/model when possible.
-- If unsure, use "general" and put the best object name into object and suggested_title.
+- Prefer fewer accurate fields over many guessed fields.
+- Leave a field empty if you are not confident.
+- Fill fields only when the value is clearly visible, readable, or very strongly likely from the image.
+- Do not invent VIN, serial numbers, registration numbers, IMEI, exact years, exact engine data, power, mileage, dimensions or technical specs.
+- For vehicles, you may identify visible brand/model/body type, but do not guess exact year, engine, power or mileage unless clearly visible.
+- For tools/electronics, detect visible brand/model/type when possible, but leave model empty if not readable.
+- For unknown or unclear items, use "general", keep detailCategory empty, and put the best visible object name into object and suggested_title.
 - fields must use only field keys from the selected category schema.
-- Keep suggested_title natural and short.
+- Keep suggested_title natural, short and useful.
+- Confidence should reflect how certain you are about the category and object identification, not how many fields you filled.
+- If confidence is below 0.72, return only safe basic fields such as object, category, subcategory and suggested_title.
 
 Examples:
 {

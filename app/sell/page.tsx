@@ -250,7 +250,12 @@ export default function SellPage() {
         setSubcategory(result.subcategory);
       }
 
-      if (result.detailCategory) {
+      const confidence =
+        typeof result.confidence === "number"
+          ? result.confidence
+          : 0;
+
+      if (confidence >= 0.72 && result.detailCategory) {
         setDetailCategory(result.detailCategory);
       } else {
         setDetailCategory("");
@@ -264,8 +269,14 @@ export default function SellPage() {
         setVehicleModel(result.model);
       }
 
-      if (result.fields && typeof result.fields === "object") {
+      if (
+        confidence >= 0.72 &&
+        result.fields &&
+        typeof result.fields === "object"
+      ) {
         setDynamicFields(result.fields);
+      } else {
+        setDynamicFields({});
       }
     } catch (error) {
       console.error(error);
