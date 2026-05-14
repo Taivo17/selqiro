@@ -24,6 +24,12 @@ type ProfileRow = {
   banner_url?: string | null;
 };
 
+type StoreCategory = {
+  id: string;
+  name: string;
+  sort_order?: number | null;
+};
+
 type Listing = {
   id: number;
   user_id?: string | null;
@@ -41,6 +47,9 @@ type Listing = {
   search_text?: string | null;
   details?: Record<string, unknown> | null;
   listing_images?: ListingImage[];
+  listing_store_categories?: {
+    store_category_id: string;
+  }[];
 };
 
 function getListingImage(item: Listing) {
@@ -74,6 +83,8 @@ export default function StorePage() {
 
   const [profile, setProfile] = useState<ProfileRow | null>(null);
   const [listings, setListings] = useState<Listing[]>([]);
+  const [storeCategories, setStoreCategories] = useState<StoreCategory[]>([]);
+  const [selectedStoreCategoryId, setSelectedStoreCategoryId] = useState("all");
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<
@@ -108,13 +119,28 @@ export default function StorePage() {
       }
 
       setProfile(profileData as ProfileRow);
+      setSelectedStoreCategoryId("all");
+
+      const { data: categoryData, error: categoryError } = await supabase
+        .from("store_categories")
+        .select("id, name, sort_order")
+        .eq("user_id", profileData.id)
+        .order("sort_order", { ascending: true })
+        .order("created_at", { ascending: true });
+
+      if (categoryError) {
+        console.error("Error loading store sections:", categoryError);
+        setStoreCategories([]);
+      } else {
+        setStoreCategories((categoryData || []) as StoreCategory[]);
+      }
 
       const ownerIsViewing = !!user?.id && user.id === profileData.id;
 
       let listingsQuery = supabase
         .from("listings")
         .select(
-          "*, listing_images(id, thumb_url, medium_url, original_url, is_primary, sort_order)"
+          "*, listing_images(id, thumb_url, medium_url, original_url, is_primary, sort_order), listing_store_categories(store_category_id)"
         )
         .eq("user_id", profileData.id)
         .order("created_at", { ascending: false })
@@ -167,6 +193,16 @@ export default function StorePage() {
 
       if (statusFilter !== "all" && itemStatus !== statusFilter) return false;
 
+      if (
+        selectedStoreCategoryId !== "all" &&
+        !item.listing_store_categories?.some(
+          (category) =>
+            category.store_category_id === selectedStoreCategoryId
+        )
+      ) {
+        return false;
+      }
+
       const searchTokens = query.split(/\s+/).filter(Boolean);
       if (searchTokens.length === 0) return true;
 
@@ -192,7 +228,7 @@ export default function StorePage() {
         combinedSearchText.includes(token)
       );
     });
-  }, [listings, search, statusFilter, isOwner]);
+  }, [listings, search, statusFilter, selectedStoreCategoryId, isOwner]);
 
   if (loading || authLoading) {
     return <main className="p-6">Loading store...</main>;
@@ -295,6 +331,43 @@ export default function StorePage() {
             </div>
           </div>
         </section>
+
+        {storeCategories.length > 0 && (
+          <section className="mb-5 rounded-[26px] border border-black/8 bg-white p-4 shadow-sm sm:rounded-[32px] sm:p-6">
+            <p className="mb-3 text-xs font-medium uppercase tracking-[0.22em] text-black/40">
+              Store sections
+            </p>
+
+            <div className="flex flex-wrap gap-2 overflow-x-auto pb-1 sm:overflow-visible">
+              <button
+                type="button"
+                onClick={() => setSelectedStoreCategoryId("all")}
+                className={`shrink-0 rounded-2xl px-4 py-3 text-sm font-medium transition ${
+                  selectedStoreCategoryId === "all"
+                    ? "bg-black text-white"
+                    : "border border-black/10 bg-white text-black hover:bg-black/[0.03]"
+                }`}
+              >
+                All
+              </button>
+
+              {storeCategories.map((category) => (
+                <button
+                  key={category.id}
+                  type="button"
+                  onClick={() => setSelectedStoreCategoryId(category.id)}
+                  className={`shrink-0 rounded-2xl px-4 py-3 text-sm font-medium transition ${
+                    selectedStoreCategoryId === category.id
+                      ? "bg-black text-white"
+                      : "border border-black/10 bg-white text-black hover:bg-black/[0.03]"
+                  }`}
+                >
+                  {category.name}
+                </button>
+              ))}
+            </div>
+          </section>
+        )}
 
         <section className="mb-5 rounded-[26px] border border-black/8 bg-white p-4 shadow-sm sm:rounded-[32px] sm:p-6">
           <div className="grid gap-3 md:grid-cols-[1fr_220px]">

@@ -46,12 +46,22 @@ type Listing = {
   vehicle_year?: string;
   engine?: string;
   listing_images?: ListingImage[];
+  listing_store_categories?: {
+    store_category_id: string;
+  }[];
 };
 
 type Profile = {
   id: string;
   is_premium?: boolean | null;
   premium_until?: string | null;
+};
+
+type StoreCategory = {
+  id: string;
+  user_id: string;
+  name: string;
+  sort_order?: number | null;
 };
 
 type ClaimResponse = {
@@ -202,6 +212,10 @@ export default function MyPage() {
   const [generatedCode, setGeneratedCode] = useState("");
   const [creatingInvite, setCreatingInvite] = useState(false);
 
+  const [storeCategories, setStoreCategories] = useState<StoreCategory[]>([]);
+  const [newStoreCategoryName, setNewStoreCategoryName] = useState("");
+  const [savingStoreCategory, setSavingStoreCategory] = useState(false);
+
   const [listings, setListings] = useState<Listing[]>([]);
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState<"all" | "active" | "paused" | "sold">(
@@ -229,6 +243,7 @@ export default function MyPage() {
   const [editSubcategory, setEditSubcategory] = useState("");
   const [editDetailCategory, setEditDetailCategory] = useState("");
   const [editDynamicFields, setEditDynamicFields] = useState<Record<string, string>>({});
+  const [editStoreCategoryId, setEditStoreCategoryId] = useState("");
   const [editCondition, setEditCondition] = useState("used");
   const [editCountry, setEditCountry] = useState("Estonia");
   const [editCity, setEditCity] = useState("");
@@ -260,6 +275,78 @@ export default function MyPage() {
 
   const freeLimitReached = !premiumActive && activeListingsCount >= 50;
 
+  const fetchStoreCategories = async (currentUserId: string) => {
+    const { data, error } = await supabase
+      .from("store_categories")
+      .select("id, user_id, name, sort_order")
+      .eq("user_id", currentUserId)
+      .order("sort_order", { ascending: true })
+      .order("created_at", { ascending: true });
+
+    if (error) {
+      console.error("Error fetching store sections:", error);
+      setStoreCategories([]);
+      return;
+    }
+
+    setStoreCategories((data || []) as StoreCategory[]);
+  };
+
+  const createStoreCategory = async () => {
+    if (!userId) return;
+
+    const cleanName = newStoreCategoryName.trim();
+
+    if (!cleanName) {
+      alert("Enter category name.");
+      return;
+    }
+
+    setSavingStoreCategory(true);
+
+    try {
+      const { error } = await supabase.from("store_categories").insert({
+        user_id: userId,
+        name: cleanName,
+        sort_order: storeCategories.length,
+      });
+
+      if (error) throw error;
+
+      setNewStoreCategoryName("");
+      await fetchStoreCategories(userId);
+    } catch (error) {
+      console.error("Error creating store section:", error);
+      alert("Failed to create store section.");
+    } finally {
+      setSavingStoreCategory(false);
+    }
+  };
+
+  const deleteStoreCategory = async (categoryId: string) => {
+    if (!userId) return;
+
+    const confirmed = window.confirm(
+      "Delete this store section? Listings will remain, but this store section link will be removed."
+    );
+
+    if (!confirmed) return;
+
+    const { error } = await supabase
+      .from("store_categories")
+      .delete()
+      .eq("id", categoryId)
+      .eq("user_id", userId);
+
+    if (error) {
+      console.error("Error deleting store section:", error);
+      alert("Failed to delete store section.");
+      return;
+    }
+
+    await fetchStoreCategories(userId);
+  };
+
   const fetchProfile = async (currentUserId: string) => {
     const { data, error } = await supabase
       .from("profiles")
@@ -281,7 +368,7 @@ export default function MyPage() {
     let query = supabase
       .from("listings")
       .select(
-        "*, listing_images(id, thumb_url, medium_url, original_url, is_primary, sort_order)"
+        "*, listing_images(id, thumb_url, medium_url, original_url, is_primary, sort_order), listing_store_categories(store_category_id)"
       )
       .eq("user_id", currentUserId)
       .order("created_at", { ascending: false })
@@ -364,6 +451,7 @@ export default function MyPage() {
     }
 
     fetchProfile(userId);
+    fetchStoreCategories(userId);
 
     const timer = setTimeout(() => {
       fetchListings(userId, 0);
@@ -488,6 +576,9 @@ export default function MyPage() {
       }
     });
     setEditDynamicFields(dynamicValues);
+    setEditStoreCategoryId(
+      item.listing_store_categories?.[0]?.store_category_id || ""
+    );
 
     setEditCondition(item.condition || "used");
     setEditCountry(item.country || "Estonia");
@@ -521,6 +612,7 @@ export default function MyPage() {
     setEditSubcategory("");
     setEditDetailCategory("");
     setEditDynamicFields({});
+    setEditStoreCategoryId("");
     setEditCondition("used");
     setEditCountry("Estonia");
     setEditCity("");
@@ -839,6 +931,22 @@ export default function MyPage() {
 
       if (error) throw error;
 
+      await supabase
+        .from("listing_store_categories")
+        .delete()
+        .eq("listing_id", editingId);
+
+      if (editStoreCategoryId) {
+        const { error: storeCategoryError } = await supabase
+          .from("listing_store_categories")
+          .insert({
+            listing_id: editingId,
+            store_category_id: editStoreCategoryId,
+          });
+
+        if (storeCategoryError) throw storeCategoryError;
+      }
+
       cancelEdit();
       await fetchListings(userId, 0);
     } catch (error) {
@@ -1154,6 +1262,69 @@ export default function MyPage() {
         </section>
 
         <section className="rounded-[28px] bg-white p-5 shadow-sm sm:p-6">
+          <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
+            <div>
+              <p className="mb-2 text-xs font-medium uppercase tracking-[0.22em] text-black/35">
+                Store sections
+              </p>
+              <h2 className="text-2xl font-semibold tracking-tight">
+                Your store layout
+              </h2>
+              <p className="mt-2 max-w-2xl text-sm leading-6 text-black/55">
+                These categories are only for your own store. Marketplace
+                categories stay separate.
+              </p>
+            </div>
+
+            <div className="w-full max-w-xl">
+              <div className="flex flex-col gap-3 sm:flex-row">
+                <input
+                  value={newStoreCategoryName}
+                  onChange={(e) => setNewStoreCategoryName(e.target.value)}
+                  placeholder="Example: Vegetables, Rugs, Earrings"
+                  className={inputClass}
+                />
+
+                <button
+                  type="button"
+                  onClick={createStoreCategory}
+                  disabled={savingStoreCategory}
+                  className="rounded-2xl bg-black px-5 py-3 text-sm font-medium text-white disabled:opacity-60"
+                >
+                  {savingStoreCategory ? "Adding..." : "Add category"}
+                </button>
+              </div>
+
+              {storeCategories.length > 0 ? (
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {storeCategories.map((category) => (
+                    <span
+                      key={category.id}
+                      className="inline-flex items-center gap-2 rounded-full border border-black/10 bg-white px-3 py-2 text-sm"
+                    >
+                      {category.name}
+
+                      <button
+                        type="button"
+                        onClick={() => deleteStoreCategory(category.id)}
+                        className="text-black/35 hover:text-red-600"
+                        aria-label={`Delete ${category.name}`}
+                      >
+                        ×
+                      </button>
+                    </span>
+                  ))}
+                </div>
+              ) : (
+                <p className="mt-3 text-sm text-black/45">
+                  No store sections yet.
+                </p>
+              )}
+            </div>
+          </div>
+        </section>
+
+        <section className="rounded-[28px] bg-white p-5 shadow-sm sm:p-6">
           <div className="grid gap-4 md:grid-cols-[1fr_220px]">
             <input
               type="text"
@@ -1440,6 +1611,25 @@ export default function MyPage() {
                         </select>
                       </div>
                     )}
+                  </div>
+                )}
+
+                {storeCategories.length > 0 && (
+                  <div>
+                    <label className={labelClass}>Store section</label>
+                    <select
+                      value={editStoreCategoryId}
+                      onChange={(e) => setEditStoreCategoryId(e.target.value)}
+                      className={inputClass}
+                    >
+                      <option value="">No store section</option>
+
+                      {storeCategories.map((category) => (
+                        <option key={category.id} value={category.id}>
+                          {category.name}
+                        </option>
+                      ))}
+                    </select>
                   </div>
                 )}
 
