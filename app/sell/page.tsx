@@ -10,6 +10,12 @@ import { getCategoryFields } from "../../lib/categoryFields";
 
 const MAX_IMAGES = 10;
 
+type StoreCategory = {
+  id: string;
+  name: string;
+  sort_order?: number | null;
+};
+
 async function resizeImage(file: File, maxWidth = 1600, quality = 0.82) {
   const imageBitmap = await createImageBitmap(file);
 
@@ -80,6 +86,8 @@ export default function SellPage() {
   const [engine, setEngine] = useState("");
 
   const [dynamicFields, setDynamicFields] = useState<Record<string, string>>({});
+  const [storeCategories, setStoreCategories] = useState<StoreCategory[]>([]);
+  const [storeCategoryId, setStoreCategoryId] = useState("");
 
   const [files, setFiles] = useState<File[]>([]);
   const [saving, setSaving] = useState(false);
@@ -117,6 +125,29 @@ export default function SellPage() {
   useEffect(() => {
     if (!loading && !user) router.push("/auth");
   }, [loading, user, router]);
+
+  useEffect(() => {
+    const loadStoreCategories = async () => {
+      if (!user?.id) return;
+
+      const { data, error } = await supabase
+        .from("store_categories")
+        .select("id, name, sort_order")
+        .eq("user_id", user.id)
+        .order("sort_order", { ascending: true })
+        .order("created_at", { ascending: true });
+
+      if (error) {
+        console.error("Error loading store sections:", error);
+        setStoreCategories([]);
+        return;
+      }
+
+      setStoreCategories((data || []) as StoreCategory[]);
+    };
+
+    loadStoreCategories();
+  }, [user?.id]);
 
   const handleFiles = (selectedFiles: FileList | null) => {
     if (!selectedFiles) return;
@@ -386,6 +417,17 @@ export default function SellPage() {
         return;
       }
 
+      if (storeCategoryId) {
+        const { error: storeCategoryError } = await supabase
+          .from("listing_store_categories")
+          .insert({
+            listing_id: listingData.id,
+            store_category_id: storeCategoryId,
+          });
+
+        if (storeCategoryError) throw storeCategoryError;
+      }
+
       const primaryImageUrl = await uploadListingImages(listingData.id);
 
       if (primaryImageUrl) {
@@ -615,6 +657,22 @@ export default function SellPage() {
               {detailCategoryOptions.map((item: { value: string; label: string }) => (
                 <option key={item.value} value={item.value}>
                   {item.label}
+                </option>
+              ))}
+            </select>
+          )}
+
+          {storeCategories.length > 0 && (
+            <select
+              value={storeCategoryId}
+              onChange={(e) => setStoreCategoryId(e.target.value)}
+              className="w-full rounded-2xl border border-black/10 p-4 outline-none"
+            >
+              <option value="">No store section</option>
+
+              {storeCategories.map((category) => (
+                <option key={category.id} value={category.id}>
+                  {category.name}
                 </option>
               ))}
             </select>
