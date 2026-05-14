@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { supabase } from "../lib/supabase";
+import { CATEGORY_TREE } from "../lib/categories";
 
 const PAGE_SIZE = 30;
 
@@ -30,6 +31,7 @@ type Listing = {
   location?: string | null;
   country?: string | null;
   city?: string | null;
+  subcategory?: string | null;
   search_text?: string | null;
   details?: Record<string, unknown> | null;
   listing_images?: ListingImage[];
@@ -41,6 +43,17 @@ type ProfileRow = {
   store_name?: string | null;
   is_premium?: boolean | null;
 };
+
+function parsePrice(value?: string | null) {
+  if (!value) return null;
+
+  const normalized = value
+    .replace(",", ".")
+    .replace(/[^0-9.]/g, "");
+
+  const parsed = Number(normalized);
+  return Number.isFinite(parsed) ? parsed : null;
+}
 
 function getListingImage(item: Listing) {
   const sortedImages = [...(item.listing_images || [])].sort((a, b) => {
@@ -67,9 +80,14 @@ export default function MarketplacePage() {
   >({});
   const [search, setSearch] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("all");
+  const [subcategoryFilter, setSubcategoryFilter] = useState("all");
+  const [detailCategoryFilter, setDetailCategoryFilter] = useState("all");
   const [conditionFilter, setConditionFilter] = useState("all");
+  const [priceMin, setPriceMin] = useState("");
+  const [priceMax, setPriceMax] = useState("");
   const [locationFilter, setLocationFilter] = useState("");
   const [nearOnly, setNearOnly] = useState(false);
+  const [showMoreFilters, setShowMoreFilters] = useState(false);
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
   const [hasMore, setHasMore] = useState(true);
@@ -77,9 +95,14 @@ export default function MarketplacePage() {
   const resetFilters = () => {
     setSearch("");
     setCategoryFilter("all");
+    setSubcategoryFilter("all");
+    setDetailCategoryFilter("all");
     setConditionFilter("all");
+    setPriceMin("");
+    setPriceMax("");
     setLocationFilter("");
     setNearOnly(false);
+    setShowMoreFilters(false);
   };
 
   const loadProfiles = async (items: Listing[]) => {
@@ -170,6 +193,53 @@ export default function MarketplacePage() {
     ).sort();
   }, [listings]);
 
+  const selectedCategory = CATEGORY_TREE.find(
+    (item) => item.value === categoryFilter
+  );
+
+  const subcategoryOptions = useMemo(() => {
+    if (!selectedCategory?.children || categoryFilter === "all") return [];
+
+    const usedSubcategories = new Set(
+      listings
+        .filter((item) => (item.category || "general") === categoryFilter)
+        .map((item) => item.subcategory || "")
+        .filter(Boolean)
+    );
+
+    return selectedCategory.children.filter((item) =>
+      usedSubcategories.has(item.value)
+    );
+  }, [selectedCategory, categoryFilter, listings]);
+
+  const selectedSubcategory = subcategoryOptions.find(
+    (item) => item.value === subcategoryFilter
+  );
+
+  const detailCategoryOptions = useMemo(() => {
+    if (!selectedSubcategory || subcategoryFilter === "all") return [];
+
+    const usedDetailCategories = new Set(
+      listings
+        .filter(
+          (item) =>
+            (item.category || "general") === categoryFilter &&
+            (item.subcategory || "") === subcategoryFilter
+        )
+        .map((item) =>
+          typeof item.details?.detailCategory === "string"
+            ? item.details.detailCategory
+            : ""
+        )
+        .filter(Boolean)
+    );
+
+    return ((selectedSubcategory as any).children || []).filter(
+      (item: { value: string; label: string }) =>
+        usedDetailCategories.has(item.value)
+    );
+  }, [selectedSubcategory, categoryFilter, subcategoryFilter, listings]);
+
   const conditions = useMemo(() => {
     return Array.from(
       new Set(
@@ -183,7 +253,11 @@ export default function MarketplacePage() {
   const filtersActive =
     search.trim() ||
     categoryFilter !== "all" ||
+    subcategoryFilter !== "all" ||
+    detailCategoryFilter !== "all" ||
     conditionFilter !== "all" ||
+    priceMin.trim() ||
+    priceMax.trim() ||
     locationFilter.trim() ||
     nearOnly;
 
@@ -199,10 +273,18 @@ export default function MarketplacePage() {
       const city = item.city?.toLowerCase() || "";
       const location = item.location?.toLowerCase() || "";
       const category = (item.category || "general").toLowerCase();
+      const subcategory = (item.subcategory || "").toLowerCase();
+      const detailCategory =
+        typeof item.details?.detailCategory === "string"
+          ? item.details.detailCategory.toLowerCase()
+          : "";
       const condition = (item.condition || "used").toLowerCase();
+      const priceValue = parsePrice(item.price);
 
       const searchNeedle = search.trim().toLowerCase();
       const locationNeedle = locationFilter.trim().toLowerCase();
+      const minPrice = priceMin.trim() ? Number(priceMin.trim()) : null;
+      const maxPrice = priceMax.trim() ? Number(priceMax.trim()) : null;
 
       const searchTokens = searchNeedle.split(/\s+/).filter(Boolean);
       const combinedSearchText = [
@@ -219,6 +301,20 @@ export default function MarketplacePage() {
       const matchesCategory =
         categoryFilter === "all" ? true : category === categoryFilter;
 
+      const matchesSubcategory =
+        subcategoryFilter === "all" ? true : subcategory === subcategoryFilter;
+
+      const matchesDetailCategory =
+        detailCategoryFilter === "all"
+          ? true
+          : detailCategory === detailCategoryFilter;
+
+      const matchesPriceMin =
+        minPrice === null || priceValue === null ? true : priceValue >= minPrice;
+
+      const matchesPriceMax =
+        maxPrice === null || priceValue === null ? true : priceValue <= maxPrice;
+
       const matchesCondition =
         conditionFilter === "all" ? true : condition === conditionFilter;
 
@@ -233,6 +329,10 @@ export default function MarketplacePage() {
       return (
         matchesSearch &&
         matchesCategory &&
+        matchesSubcategory &&
+        matchesDetailCategory &&
+        matchesPriceMin &&
+        matchesPriceMax &&
         matchesCondition &&
         matchesLocation &&
         matchesNearOnly
@@ -242,7 +342,11 @@ export default function MarketplacePage() {
     listings,
     search,
     categoryFilter,
+    subcategoryFilter,
+    detailCategoryFilter,
     conditionFilter,
+    priceMin,
+    priceMax,
     locationFilter,
     nearOnly,
   ]);
@@ -277,7 +381,7 @@ export default function MarketplacePage() {
             )}
           </div>
 
-          <div className="mt-5 grid gap-3 xl:grid-cols-[1.1fr_0.9fr_0.9fr_1fr_0.8fr]">
+          <div className="mt-5 grid gap-3 xl:grid-cols-[1.1fr_0.8fr_0.8fr_1fr_0.8fr]">
             <input
               type="text"
               placeholder="Search listings..."
@@ -286,31 +390,23 @@ export default function MarketplacePage() {
               className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-base outline-none transition focus:border-black/30 sm:text-sm"
             />
 
-            <select
-              value={categoryFilter}
-              onChange={(e) => setCategoryFilter(e.target.value)}
+            <input
+              type="number"
+              inputMode="numeric"
+              placeholder="Price from"
+              value={priceMin}
+              onChange={(e) => setPriceMin(e.target.value)}
               className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-base outline-none transition focus:border-black/30 sm:text-sm"
-            >
-              <option value="all">All categories</option>
-              {categories.map((value) => (
-                <option key={value} value={value}>
-                  {value.charAt(0).toUpperCase() + value.slice(1)}
-                </option>
-              ))}
-            </select>
+            />
 
-            <select
-              value={conditionFilter}
-              onChange={(e) => setConditionFilter(e.target.value)}
+            <input
+              type="number"
+              inputMode="numeric"
+              placeholder="Price to"
+              value={priceMax}
+              onChange={(e) => setPriceMax(e.target.value)}
               className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-base outline-none transition focus:border-black/30 sm:text-sm"
-            >
-              <option value="all">All conditions</option>
-              {conditions.map((value) => (
-                <option key={value} value={value}>
-                  {value.charAt(0).toUpperCase() + value.slice(1)}
-                </option>
-              ))}
-            </select>
+            />
 
             <input
               type="text"
@@ -330,6 +426,81 @@ export default function MarketplacePage() {
               <span className="text-sm text-black/75">Near you</span>
             </label>
           </div>
+
+          <div className="mt-3">
+            <button
+              type="button"
+              onClick={() => setShowMoreFilters((value) => !value)}
+              className="rounded-2xl border border-black/10 bg-white px-5 py-3 text-sm font-medium transition hover:bg-black/[0.03]"
+            >
+              {showMoreFilters ? "Hide more filters" : "More filters"}
+            </button>
+          </div>
+
+          {showMoreFilters && (
+            <div className="mt-3 grid gap-3 xl:grid-cols-4">
+              <select
+                value={categoryFilter}
+                onChange={(e) => {
+                  setCategoryFilter(e.target.value);
+                  setSubcategoryFilter("all");
+                  setDetailCategoryFilter("all");
+                }}
+                className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-base outline-none transition focus:border-black/30 sm:text-sm"
+              >
+                <option value="all">All categories</option>
+                {categories.map((value) => (
+                  <option key={value} value={value}>
+                    {value.charAt(0).toUpperCase() + value.slice(1)}
+                  </option>
+                ))}
+              </select>
+
+              <select
+                value={subcategoryFilter}
+                onChange={(e) => {
+                  setSubcategoryFilter(e.target.value);
+                  setDetailCategoryFilter("all");
+                }}
+                disabled={subcategoryOptions.length === 0}
+                className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-base outline-none transition focus:border-black/30 disabled:opacity-50 sm:text-sm"
+              >
+                <option value="all">All subcategories</option>
+                {subcategoryOptions.map((item) => (
+                  <option key={item.value} value={item.value}>
+                    {item.label}
+                  </option>
+                ))}
+              </select>
+
+              <select
+                value={detailCategoryFilter}
+                onChange={(e) => setDetailCategoryFilter(e.target.value)}
+                disabled={detailCategoryOptions.length === 0}
+                className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-base outline-none transition focus:border-black/30 disabled:opacity-50 sm:text-sm"
+              >
+                <option value="all">All detailed categories</option>
+                {detailCategoryOptions.map((item: { value: string; label: string }) => (
+                  <option key={item.value} value={item.value}>
+                    {item.label}
+                  </option>
+                ))}
+              </select>
+
+              <select
+                value={conditionFilter}
+                onChange={(e) => setConditionFilter(e.target.value)}
+                className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-base outline-none transition focus:border-black/30 sm:text-sm"
+              >
+                <option value="all">All conditions</option>
+                {conditions.map((value) => (
+                  <option key={value} value={value}>
+                    {value.charAt(0).toUpperCase() + value.slice(1)}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
         </section>
 
         <section className="mb-4 flex items-end justify-between gap-4">
