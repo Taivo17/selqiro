@@ -30,6 +30,8 @@ type Listing = {
   location?: string | null;
   country?: string | null;
   city?: string | null;
+  search_text?: string | null;
+  details?: Record<string, unknown> | null;
   listing_images?: ListingImage[];
 };
 
@@ -189,6 +191,10 @@ export default function MarketplacePage() {
     return listings.filter((item) => {
       const title = item.title?.toLowerCase() || "";
       const description = item.description?.toLowerCase() || "";
+      const searchText = item.search_text?.toLowerCase() || "";
+      const detailsText = Object.values(item.details || {})
+        .map((value) => String(value || "").toLowerCase())
+        .join(" ");
       const country = item.country?.toLowerCase() || "";
       const city = item.city?.toLowerCase() || "";
       const location = item.location?.toLowerCase() || "";
@@ -198,10 +204,17 @@ export default function MarketplacePage() {
       const searchNeedle = search.trim().toLowerCase();
       const locationNeedle = locationFilter.trim().toLowerCase();
 
+      const searchTokens = searchNeedle.split(/\s+/).filter(Boolean);
+      const combinedSearchText = [
+        title,
+        description,
+        searchText,
+        detailsText,
+      ].join(" ");
+
       const matchesSearch =
-        !searchNeedle ||
-        title.includes(searchNeedle) ||
-        description.includes(searchNeedle);
+        searchTokens.length === 0 ||
+        searchTokens.every((token) => combinedSearchText.includes(token));
 
       const matchesCategory =
         categoryFilter === "all" ? true : category === categoryFilter;

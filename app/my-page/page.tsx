@@ -37,6 +37,7 @@ type Listing = {
   country?: string;
   city?: string;
   location?: string;
+  search_text?: string | null;
   manufacturer?: string;
   part_number?: string;
   oem_number?: string;
@@ -277,8 +278,6 @@ export default function MyPage() {
 
   const buildListingsQuery = (currentUserId: string, from: number) => {
     const to = from + PAGE_SIZE - 1;
-    const searchNeedle = search.trim();
-
     let query = supabase
       .from("listings")
       .select(
@@ -292,11 +291,6 @@ export default function MyPage() {
       query = query.eq("status", filter);
     }
 
-    if (searchNeedle) {
-      query = query.or(
-        `title.ilike.%${searchNeedle}%,description.ilike.%${searchNeedle}%,search_text.ilike.%${searchNeedle}%`
-      );
-    }
 
     return query;
   };
@@ -314,7 +308,39 @@ export default function MyPage() {
       return;
     }
 
-    const loaded = (data || []) as Listing[];
+    let loaded = (data || []) as Listing[];
+
+    const searchTokens = search
+      .trim()
+      .toLowerCase()
+      .split(/\s+/)
+      .filter(Boolean);
+
+    if (searchTokens.length > 0) {
+      loaded = loaded.filter((item) => {
+        const detailsText = Object.values(item.details || {})
+          .map((value) => String(value || "").toLowerCase())
+          .join(" ");
+
+        const combinedSearchText = [
+          item.title || "",
+          item.description || "",
+          item.search_text || "",
+          detailsText,
+          item.category || "",
+          item.subcategory || "",
+          item.condition || "",
+          item.country || "",
+          item.city || "",
+        ]
+          .join(" ")
+          .toLowerCase();
+
+        return searchTokens.every((token) =>
+          combinedSearchText.includes(token)
+        );
+      });
+    }
 
     if (from === 0) {
       setListings(loaded);

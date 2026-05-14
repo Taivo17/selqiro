@@ -37,6 +37,9 @@ type Listing = {
   condition?: string | null;
   country?: string | null;
   city?: string | null;
+  subcategory?: string | null;
+  search_text?: string | null;
+  details?: Record<string, unknown> | null;
   listing_images?: ListingImage[];
 };
 
@@ -164,11 +167,29 @@ export default function StorePage() {
 
       if (statusFilter !== "all" && itemStatus !== statusFilter) return false;
 
-      if (!query) return true;
+      const searchTokens = query.split(/\s+/).filter(Boolean);
+      if (searchTokens.length === 0) return true;
 
-      return (
-        item.title.toLowerCase().includes(query) ||
-        item.description.toLowerCase().includes(query)
+      const detailsText = Object.values(item.details || {})
+        .map((value) => String(value || "").toLowerCase())
+        .join(" ");
+
+      const combinedSearchText = [
+        item.title || "",
+        item.description || "",
+        item.search_text || "",
+        detailsText,
+        item.category || "",
+        item.subcategory || "",
+        item.condition || "",
+        item.country || "",
+        item.city || "",
+      ]
+        .join(" ")
+        .toLowerCase();
+
+      return searchTokens.every((token) =>
+        combinedSearchText.includes(token)
       );
     });
   }, [listings, search, statusFilter, isOwner]);

@@ -345,6 +345,7 @@ export default function SellPage() {
             description,
             category,
             subcategory,
+            detailCategory,
             condition,
             country,
             city,
@@ -355,6 +356,7 @@ export default function SellPage() {
             vehicleModel,
             vehicleYear,
             engine,
+            ...Object.values(dynamicFields),
           ]
             .filter(Boolean)
             .join(" "),
