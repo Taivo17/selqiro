@@ -10,6 +10,25 @@ import { getCategoryFields } from "../../lib/categoryFields";
 
 const MAX_IMAGES = 10;
 
+const LONG_TEXT_FIELD_KEYS = new Set([
+  "equipment",
+  "included_accessories",
+  "available_parts",
+  "compatibility",
+  "certification_documents",
+  "notes",
+]);
+
+function getFieldMaxLength(key: string) {
+  if (key.includes("year")) return 20;
+  if (key.includes("power")) return 40;
+  if (key.includes("fuel")) return 40;
+  if (key.includes("mileage")) return 40;
+  if (LONG_TEXT_FIELD_KEYS.has(key)) return 1000;
+  return 80;
+}
+
+
 type StoreCategory = {
   id: string;
   name: string;
@@ -770,20 +789,41 @@ export default function SellPage() {
                 Category specific details
               </h2>
 
-              {activeFields.map((field) => (
-                <input
-                  key={field.key}
-                  placeholder={field.label}
-                  value={dynamicFields[field.key] || ""}
-                  onChange={(e) =>
-                    setDynamicFields((prev) => ({
-                      ...prev,
-                      [field.key]: e.target.value,
-                    }))
-                  }
-                  className="w-full rounded-2xl border border-black/10 p-4 outline-none"
-                />
-              ))}
+              {activeFields.map((field) => {
+                const maxLength = getFieldMaxLength(field.key);
+                const isLongText = LONG_TEXT_FIELD_KEYS.has(field.key);
+                const value = dynamicFields[field.key] || "";
+
+                return isLongText ? (
+                  <textarea
+                    key={field.key}
+                    placeholder={field.label}
+                    maxLength={maxLength}
+                    value={value}
+                    onChange={(e) =>
+                      setDynamicFields((prev) => ({
+                        ...prev,
+                        [field.key]: e.target.value,
+                      }))
+                    }
+                    className="min-h-28 w-full resize-y break-words rounded-2xl border border-black/10 p-4 outline-none"
+                  />
+                ) : (
+                  <input
+                    key={field.key}
+                    placeholder={field.label}
+                    maxLength={maxLength}
+                    value={value}
+                    onChange={(e) =>
+                      setDynamicFields((prev) => ({
+                        ...prev,
+                        [field.key]: e.target.value,
+                      }))
+                    }
+                    className="w-full rounded-2xl border border-black/10 p-4 outline-none"
+                  />
+                );
+              })}
             </div>
           )}
 

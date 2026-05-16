@@ -78,6 +78,25 @@ type InviteResponse = {
   expires_at?: string;
 };
 
+
+const LONG_TEXT_FIELD_KEYS = new Set([
+  "equipment",
+  "included_accessories",
+  "available_parts",
+  "compatibility",
+  "certification_documents",
+  "notes",
+]);
+
+function getFieldMaxLength(key: string) {
+  if (key.includes("year")) return 20;
+  if (key.includes("power")) return 40;
+  if (key.includes("fuel")) return 40;
+  if (key.includes("mileage")) return 40;
+  if (LONG_TEXT_FIELD_KEYS.has(key)) return 1000;
+  return 80;
+}
+
 const inputClass =
   "w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-base outline-none transition focus:border-black/30 sm:text-sm";
 
@@ -1684,21 +1703,46 @@ export default function MyPage() {
                     </h3>
 
                     <div className="space-y-5">
-                      {editActiveFields.map((field) => (
-                        <div key={field.key}>
-                          <label className={labelClass}>{field.label}</label>
-                          <input
-                            value={editDynamicFields[field.key] || ""}
-                            onChange={(e) =>
-                              setEditDynamicFields((prev) => ({
-                                ...prev,
-                                [field.key]: e.target.value,
-                              }))
-                            }
-                            className={inputClass}
-                          />
-                        </div>
-                      ))}
+                      {editActiveFields.map((field) => {
+                        const maxLength = getFieldMaxLength(field.key);
+                        const isLongText = LONG_TEXT_FIELD_KEYS.has(field.key);
+                        const value = editDynamicFields[field.key] || "";
+
+                        return (
+                          <div key={field.key}>
+                            <label className={labelClass}>
+                              {field.label}
+                            </label>
+
+                            {isLongText ? (
+                              <textarea
+                                rows={5}
+                                maxLength={maxLength}
+                                value={value}
+                                onChange={(e) =>
+                                  setEditDynamicFields((prev) => ({
+                                    ...prev,
+                                    [field.key]: e.target.value,
+                                  }))
+                                }
+                                className={`${inputClass} resize-y break-words`}
+                              />
+                            ) : (
+                              <input
+                                maxLength={maxLength}
+                                value={value}
+                                onChange={(e) =>
+                                  setEditDynamicFields((prev) => ({
+                                    ...prev,
+                                    [field.key]: e.target.value,
+                                  }))
+                                }
+                                className={inputClass}
+                              />
+                            )}
+                          </div>
+                        );
+                      })}
                     </div>
                   </section>
                 )}
