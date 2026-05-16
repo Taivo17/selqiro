@@ -193,6 +193,15 @@ function isPremiumActive(profile: Profile | null) {
   return new Date(profile.premium_until).getTime() > Date.now();
 }
 
+function parsePriceAmount(value: string) {
+  const normalized = value
+    .replace(",", ".")
+    .replace(/[^0-9.]/g, "");
+
+  const parsed = Number(normalized);
+  return Number.isFinite(parsed) ? parsed : null;
+}
+
 async function resizeImage(file: File, maxWidth = 1600, quality = 0.82) {
   const imageBitmap = await createImageBitmap(file);
 
@@ -912,6 +921,7 @@ export default function MyPage() {
           title: editTitle.trim(),
           description: editDescription.trim(),
           price: editPrice.trim(),
+          price_amount: parsePriceAmount(editPrice),
           status: editStatus,
           image: primaryImage,
 

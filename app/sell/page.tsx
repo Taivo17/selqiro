@@ -35,6 +35,15 @@ type StoreCategory = {
   sort_order?: number | null;
 };
 
+function parsePriceAmount(value: string) {
+  const normalized = value
+    .replace(",", ".")
+    .replace(/[^0-9.]/g, "");
+
+  const parsed = Number(normalized);
+  return Number.isFinite(parsed) ? parsed : null;
+}
+
 async function resizeImage(file: File, maxWidth = 1600, quality = 0.82) {
   const imageBitmap = await createImageBitmap(file);
 
@@ -365,6 +374,7 @@ export default function SellPage() {
           title: title.trim(),
           description: description.trim(),
           price: price.trim(),
+          price_amount: parsePriceAmount(price),
           image: null,
           category,
           subcategory: subcategory.trim(),

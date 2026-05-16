@@ -23,6 +23,7 @@ type Listing = {
   title: string;
   description: string;
   price: string;
+  price_amount?: number | null;
   image?: string | null;
   status?: "active" | "paused" | "sold";
   active_until?: string | null;
@@ -43,6 +44,15 @@ type ProfileRow = {
   store_name?: string | null;
   is_premium?: boolean | null;
 };
+
+function parsePriceAmount(value: string) {
+  const normalized = value
+    .replace(",", ".")
+    .replace(/[^0-9.]/g, "");
+
+  const parsed = Number(normalized);
+  return Number.isFinite(parsed) ? parsed : null;
+}
 
 function parsePrice(value?: string | null) {
   if (!value) return null;
@@ -137,7 +147,7 @@ export default function MarketplacePage() {
   const loadMarketplace = async (from = 0) => {
     const to = from + PAGE_SIZE - 1;
 
-    const { data, error } = await supabase
+    let query = supabase
       .from("listings")
       .select(
         "*, listing_images(id, thumb_url, medium_url, original_url, is_primary, sort_order)"
@@ -146,6 +156,60 @@ export default function MarketplacePage() {
       .gt("active_until", new Date().toISOString())
       .order("created_at", { ascending: false })
       .range(from, to);
+
+    if (categoryFilter !== "all") {
+      query = query.eq("category", categoryFilter);
+    }
+
+    if (subcategoryFilter !== "all") {
+      query = query.eq("subcategory", subcategoryFilter);
+    }
+
+    if (conditionFilter !== "all") {
+      query = query.eq("condition", conditionFilter);
+    }
+
+    const minPrice = priceMin.trim() ? Number(priceMin.trim()) : null;
+    const maxPrice = priceMax.trim() ? Number(priceMax.trim()) : null;
+
+    if (minPrice !== null && Number.isFinite(minPrice)) {
+      query = query.gte("price_amount", minPrice);
+    }
+
+    if (maxPrice !== null && Number.isFinite(maxPrice)) {
+      query = query.lte("price_amount", maxPrice);
+    }
+
+    // detail category still filtered client-side for now
+
+    const searchNeedle = search.trim();
+
+    if (searchNeedle) {
+      const searchTokens = searchNeedle
+        .toLowerCase()
+        .replace(/[^\p{L}\p{N}]+/gu, " ")
+        .trim()
+        .split(/\s+/)
+        .filter(Boolean);
+
+      if (searchTokens.length > 0) {
+        const prefixQuery = searchTokens
+          .map((token) => `${token}:*`)
+          .join(" & ");
+
+        query = query.filter("search_vector", "fts(simple)", prefixQuery);
+      }
+    }
+
+    const locationNeedle = locationFilter.trim();
+
+    if (locationNeedle) {
+      query = query.or(
+        `country.ilike.%${locationNeedle}%,city.ilike.%${locationNeedle}%,location.ilike.%${locationNeedle}%`
+      );
+    }
+
+    const { data, error } = await query;
 
     if (error) {
       console.error("Error loading marketplace listings:", error);
@@ -173,7 +237,16 @@ export default function MarketplacePage() {
     };
 
     initialLoad();
-  }, []);
+  }, [
+    search,
+    categoryFilter,
+    subcategoryFilter,
+    detailCategoryFilter,
+    conditionFilter,
+    locationFilter,
+    priceMin,
+    priceMax,
+  ]);
 
   const loadMore = async () => {
     if (loadingMore || !hasMore) return;
@@ -279,7 +352,10 @@ export default function MarketplacePage() {
           ? item.details.detailCategory.toLowerCase()
           : "";
       const condition = (item.condition || "used").toLowerCase();
-      const priceValue = parsePrice(item.price);
+      const priceValue =
+        typeof item.price_amount === "number"
+          ? item.price_amount
+          : parsePrice(item.price);
 
       const searchNeedle = search.trim().toLowerCase();
       const locationNeedle = locationFilter.trim().toLowerCase();
@@ -327,14 +403,7 @@ export default function MarketplacePage() {
       const matchesNearOnly = nearOnly ? matchesLocation : true;
 
       return (
-        matchesSearch &&
-        matchesCategory &&
-        matchesSubcategory &&
         matchesDetailCategory &&
-        matchesPriceMin &&
-        matchesPriceMax &&
-        matchesCondition &&
-        matchesLocation &&
         matchesNearOnly
       );
     });
