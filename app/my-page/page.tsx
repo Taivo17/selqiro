@@ -137,6 +137,19 @@ function sortImages(images: ListingImage[]) {
   });
 }
 
+function buildPrefixSearchQuery(value: string) {
+  const tokens = value
+    .toLowerCase()
+    .replace(/[^\p{L}\p{N}]+/gu, " ")
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean);
+
+  if (tokens.length === 0) return "";
+
+  return tokens.map((token) => `${token}:*`).join(" & ");
+}
+
 function getListingImage(item: Listing) {
   const img = sortImages(item.listing_images || [])[0];
 
@@ -406,6 +419,11 @@ export default function MyPage() {
       query = query.eq("status", filter);
     }
 
+    const searchQuery = buildPrefixSearchQuery(search);
+
+    if (searchQuery) {
+      query = query.filter("search_vector", "fts(simple)", searchQuery);
+    }
 
     return query;
   };

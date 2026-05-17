@@ -52,6 +52,19 @@ type Listing = {
   }[];
 };
 
+function buildPrefixSearchQuery(value: string) {
+  const tokens = value
+    .toLowerCase()
+    .replace(/[^\p{L}\p{N}]+/gu, " ")
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean);
+
+  if (tokens.length === 0) return "";
+
+  return tokens.map((token) => `${token}:*`).join(" & ");
+}
+
 function getListingImage(item: Listing) {
   const sortedImages = [...(item.listing_images || [])].sort((a, b) => {
     if (a.is_primary && !b.is_primary) return -1;
@@ -87,13 +100,22 @@ export default function StorePage() {
   const [selectedStoreCategoryId, setSelectedStoreCategoryId] = useState("all");
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<
     "all" | "active" | "paused" | "sold"
   >("all");
 
   useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(search);
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [search]);
+
+  useEffect(() => {
     const load = async () => {
-      setLoading(true);
+      if (!profile) setLoading(true);
 
       const cleanSlug = decodeURIComponent((slug || "").trim());
 
@@ -152,6 +174,16 @@ export default function StorePage() {
           .gt("active_until", new Date().toISOString());
       }
 
+      const searchQuery = buildPrefixSearchQuery(debouncedSearch);
+
+      if (searchQuery) {
+        listingsQuery = listingsQuery.filter(
+          "search_vector",
+          "fts(simple)",
+          searchQuery
+        );
+      }
+
       const { data: listingsData, error: listingsError } = await listingsQuery;
 
       if (listingsError) {
@@ -168,7 +200,7 @@ export default function StorePage() {
     if (!authLoading) {
       load();
     }
-  }, [slug, user?.id, authLoading]);
+  }, [slug, user?.id, authLoading, debouncedSearch]);
 
   const isOwner = !!user?.id && !!profile?.id && user.id === profile.id;
 
