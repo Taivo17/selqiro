@@ -904,6 +904,7 @@ export default function MyPage() {
   };
 
   const saveEdit = async () => {
+    if (savingEdit) return;
     if (!editingId || !userId) return;
 
     if (!editTitle.trim() || !editDescription.trim() || !editPrice.trim()) {
