@@ -468,15 +468,6 @@ export default function SellPage() {
         .select("id")
         .single();
 
-      await fetch("/api/ai/enrich-listing", {
-        method: "POST",
-        body: JSON.stringify({
-          listingId: listingData?.id,
-          title,
-          description,
-        }),
-      });
-
       if (listingError || !listingData) {
         console.error(listingError);
         alert("Listing failed");
@@ -494,6 +485,17 @@ export default function SellPage() {
 
         if (storeCategoryError) throw storeCategoryError;
       }
+
+      fetch("/api/ai/enrich-listing", {
+        method: "POST",
+        body: JSON.stringify({
+          listingId: listingData.id,
+          title,
+          description,
+        }),
+      }).catch((error) => {
+        console.error("AI enrich background request failed:", error);
+      });
 
       const primaryImageUrl = await uploadListingImages(listingData.id);
 
