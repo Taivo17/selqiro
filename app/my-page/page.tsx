@@ -446,37 +446,6 @@ export default function MyPage() {
 
     let loaded = (data || []) as Listing[];
 
-    const searchTokens = debouncedSearch
-      .trim()
-      .toLowerCase()
-      .split(/\s+/)
-      .filter(Boolean);
-
-    if (searchTokens.length > 0) {
-      loaded = loaded.filter((item) => {
-        const detailsText = Object.values(item.details || {})
-          .map((value) => String(value || "").toLowerCase())
-          .join(" ");
-
-        const combinedSearchText = [
-          item.title || "",
-          item.description || "",
-          item.search_text || "",
-          detailsText,
-          item.category || "",
-          item.subcategory || "",
-          item.condition || "",
-          item.country || "",
-          item.city || "",
-        ]
-          .join(" ")
-          .toLowerCase();
-
-        return searchTokens.every((token) =>
-          combinedSearchText.includes(token)
-        );
-      });
-    }
 
     if (from === 0) {
       setListings(loaded);
