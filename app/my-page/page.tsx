@@ -9,6 +9,27 @@ import { getCategoryFields } from "../../lib/categoryFields";
 
 const PAGE_SIZE = 30;
 const MAX_IMAGES = 10;
+const MAX_SOURCE_IMAGE_SIZE_MB = 25;
+const MAX_SOURCE_IMAGE_SIZE_BYTES = MAX_SOURCE_IMAGE_SIZE_MB * 1024 * 1024;
+const ALLOWED_IMAGE_TYPES = new Set([
+  "image/jpeg",
+  "image/png",
+  "image/webp",
+]);
+
+function validateSourceImageFile(file: File) {
+  if (!ALLOWED_IMAGE_TYPES.has(file.type)) {
+    return "Only JPG, PNG and WEBP images are allowed.";
+  }
+
+  if (file.size > MAX_SOURCE_IMAGE_SIZE_BYTES) {
+    return `Image is too large. Maximum source image size is ${MAX_SOURCE_IMAGE_SIZE_MB}MB.`;
+  }
+
+  return "";
+}
+
+
 const ADMIN_EMAIL = "taiwo17@gmail.com";
 
 type ListingImage = {
@@ -671,6 +692,24 @@ export default function MyPage() {
     const selected = Array.from(event.target.files || []);
     if (selected.length === 0) return;
 
+    const validFiles: File[] = [];
+
+    for (const file of selected) {
+      const validationError = validateSourceImageFile(file);
+
+      if (validationError) {
+        alert(`${file.name}: ${validationError}`);
+        continue;
+      }
+
+      validFiles.push(file);
+    }
+
+    if (validFiles.length === 0) {
+      event.target.value = "";
+      return;
+    }
+
     const currentTotal = editImages.length + editNewFiles.length;
     const remainingSlots = MAX_IMAGES - currentTotal;
 
@@ -680,9 +719,9 @@ export default function MyPage() {
       return;
     }
 
-    const filesToAdd = selected.slice(0, remainingSlots);
+    const filesToAdd = validFiles.slice(0, remainingSlots);
 
-    if (selected.length > remainingSlots) {
+    if (validFiles.length > remainingSlots) {
       alert(`Only ${remainingSlots} more image(s) can be added.`);
     }
 

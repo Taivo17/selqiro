@@ -9,6 +9,27 @@ import { CATEGORY_TREE } from "../../lib/categories";
 import { getCategoryFields } from "../../lib/categoryFields";
 
 const MAX_IMAGES = 10;
+const MAX_SOURCE_IMAGE_SIZE_MB = 25;
+const MAX_SOURCE_IMAGE_SIZE_BYTES = MAX_SOURCE_IMAGE_SIZE_MB * 1024 * 1024;
+const ALLOWED_IMAGE_TYPES = new Set([
+  "image/jpeg",
+  "image/png",
+  "image/webp",
+]);
+
+function validateSourceImageFile(file: File) {
+  if (!ALLOWED_IMAGE_TYPES.has(file.type)) {
+    return "Only JPG, PNG and WEBP images are allowed.";
+  }
+
+  if (file.size > MAX_SOURCE_IMAGE_SIZE_BYTES) {
+    return `Image is too large. Maximum source image size is ${MAX_SOURCE_IMAGE_SIZE_MB}MB.`;
+  }
+
+  return "";
+}
+
+
 
 const LONG_TEXT_FIELD_KEYS = new Set([
   "equipment",
@@ -180,12 +201,29 @@ export default function SellPage() {
   const handleFiles = (selectedFiles: FileList | null) => {
     if (!selectedFiles) return;
 
-    const imageFiles = Array.from(selectedFiles).filter((file) =>
-      file.type.startsWith("image/")
-    );
+    const selected = Array.from(selectedFiles);
+    const validFiles: File[] = [];
+
+    for (const file of selected) {
+      const validationError = validateSourceImageFile(file);
+
+      if (validationError) {
+        alert(`${file.name}: ${validationError}`);
+        continue;
+      }
+
+      validFiles.push(file);
+    }
+
+    if (validFiles.length === 0) return;
 
     setFiles((prev) => {
-      const combined = [...prev, ...imageFiles];
+      const combined = [...prev, ...validFiles];
+
+      if (combined.length > MAX_IMAGES) {
+        alert(`Maximum ${MAX_IMAGES} images allowed.`);
+      }
+
       return combined.slice(0, MAX_IMAGES);
     });
   };
