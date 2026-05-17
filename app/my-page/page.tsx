@@ -259,6 +259,7 @@ export default function MyPage() {
 
   const [listings, setListings] = useState<Listing[]>([]);
   const [search, setSearch] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
   const [filter, setFilter] = useState<"all" | "active" | "paused" | "sold">(
     "all"
   );
@@ -429,7 +430,9 @@ export default function MyPage() {
   };
 
   const fetchListings = async (currentUserId: string, from = 0) => {
-    if (from === 0) setLoadingListings(true);
+    if (from === 0 && listings.length === 0) {
+      setLoadingListings(true);
+    }
 
     const { data, error } = await buildListingsQuery(currentUserId, from);
 
@@ -443,7 +446,7 @@ export default function MyPage() {
 
     let loaded = (data || []) as Listing[];
 
-    const searchTokens = search
+    const searchTokens = debouncedSearch
       .trim()
       .toLowerCase()
       .split(/\s+/)
@@ -487,6 +490,14 @@ export default function MyPage() {
   };
 
   useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(search);
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [search]);
+
+  useEffect(() => {
     if (loading) return;
 
     if (!userId) {
@@ -504,7 +515,7 @@ export default function MyPage() {
     }, 300);
 
     return () => clearTimeout(timer);
-  }, [userId, loading, search, filter]);
+  }, [userId, loading, debouncedSearch, filter]);
 
   const claimPremiumInvite = async () => {
     if (!userId) return;
