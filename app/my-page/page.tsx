@@ -280,6 +280,7 @@ export default function MyPage() {
 
   const [editImages, setEditImages] = useState<ListingImage[]>([]);
   const [editNewFiles, setEditNewFiles] = useState<File[]>([]);
+  const [editPreviewUrls, setEditPreviewUrls] = useState<string[]>([]);
 
   const [editCategory, setEditCategory] = useState("general");
   const [editSubcategory, setEditSubcategory] = useState("");
@@ -298,6 +299,19 @@ export default function MyPage() {
   const [editVehicleModel, setEditVehicleModel] = useState("");
   const [editVehicleYear, setEditVehicleYear] = useState("");
   const [editEngine, setEditEngine] = useState("");
+
+
+  useEffect(() => {
+    const urls = editNewFiles.map((file) =>
+      URL.createObjectURL(file)
+    );
+
+    setEditPreviewUrls(urls);
+
+    return () => {
+      urls.forEach((url) => URL.revokeObjectURL(url));
+    };
+  }, [editNewFiles]);
 
   const editSelectedCategory = CATEGORY_TREE.find(
     (item) => item.value === editCategory
@@ -1527,7 +1541,7 @@ export default function MyPage() {
 
                       <div className="grid gap-4 sm:grid-cols-2">
                         {editNewFiles.map((file, index) => {
-                          const previewUrl = URL.createObjectURL(file);
+                          const previewUrl = editPreviewUrls[index];
 
                           return (
                             <div
@@ -1779,7 +1793,7 @@ export default function MyPage() {
                     />
                   ) : editNewFiles[0] ? (
                     <img decoding="async"
-                      src={URL.createObjectURL(editNewFiles[0])}
+                      src={editPreviewUrls[0]}
                       alt="Preview"
                       className="h-64 w-full object-cover"
                     />
