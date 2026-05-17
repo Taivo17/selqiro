@@ -236,6 +236,30 @@ function parsePriceAmount(value: string) {
   return Number.isFinite(parsed) ? parsed : null;
 }
 
+
+async function runWithConcurrency<T, R>(
+  items: T[],
+  limit: number,
+  worker: (item: T, index: number) => Promise<R>
+) {
+  const results: R[] = [];
+  let nextIndex = 0;
+
+  async function runWorker() {
+    while (nextIndex < items.length) {
+      const currentIndex = nextIndex;
+      nextIndex += 1;
+      results[currentIndex] = await worker(items[currentIndex], currentIndex);
+    }
+  }
+
+  await Promise.all(
+    Array.from({ length: Math.min(limit, items.length) }, () => runWorker())
+  );
+
+  return results;
+}
+
 async function resizeImage(file: File, maxWidth = 1600, quality = 0.82) {
   const imageBitmap = await createImageBitmap(file);
 
@@ -859,37 +883,40 @@ export default function MyPage() {
     if (!editingId || !userId || editNewFiles.length === 0) return [];
 
     const existingCount = editImages.length;
-    const newRows = [];
 
-    for (let index = 0; index < editNewFiles.length; index += 1) {
-      const resizedFile = await resizeImage(editNewFiles[index]);
-      const fileName = `${userId}/${editingId}-${Date.now()}-${index}.jpg`;
+    const newRows = await runWithConcurrency(
+      editNewFiles,
+      3,
+      async (file, index) => {
+        const resizedFile = await resizeImage(file);
+        const fileName = `${userId}/${editingId}-${Date.now()}-${index}.jpg`;
 
-      const { error: uploadError } = await supabase.storage
-        .from("listing-images")
-        .upload(fileName, resizedFile, {
-          contentType: "image/jpeg",
-          upsert: false,
-        });
+        const { error: uploadError } = await supabase.storage
+          .from("listing-images")
+          .upload(fileName, resizedFile, {
+            contentType: "image/jpeg",
+            upsert: false,
+          });
 
-      if (uploadError) throw uploadError;
+        if (uploadError) throw uploadError;
 
-      const { data } = supabase.storage
-        .from("listing-images")
-        .getPublicUrl(fileName);
+        const { data } = supabase.storage
+          .from("listing-images")
+          .getPublicUrl(fileName);
 
-      const originalUrl = data.publicUrl;
+        const originalUrl = data.publicUrl;
 
-      newRows.push({
-        listing_id: editingId,
-        user_id: userId,
-        original_url: originalUrl,
-        medium_url: `${originalUrl}?width=900&resize=contain`,
-        thumb_url: `${originalUrl}?width=400&height=300&resize=cover`,
-        sort_order: existingCount + index,
-        is_primary: existingCount === 0 && index === 0,
-      });
-    }
+        return {
+          listing_id: editingId,
+          user_id: userId,
+          original_url: originalUrl,
+          medium_url: `${originalUrl}?width=900&resize=contain`,
+          thumb_url: `${originalUrl}?width=400&height=300&resize=cover`,
+          sort_order: existingCount + index,
+          is_primary: existingCount === 0 && index === 0,
+        };
+      }
+    );
 
     if (newRows.length === 0) return [];
 

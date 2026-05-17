@@ -65,6 +65,30 @@ function parsePriceAmount(value: string) {
   return Number.isFinite(parsed) ? parsed : null;
 }
 
+
+async function runWithConcurrency<T, R>(
+  items: T[],
+  limit: number,
+  worker: (item: T, index: number) => Promise<R>
+) {
+  const results: R[] = [];
+  let nextIndex = 0;
+
+  async function runWorker() {
+    while (nextIndex < items.length) {
+      const currentIndex = nextIndex;
+      nextIndex += 1;
+      results[currentIndex] = await worker(items[currentIndex], currentIndex);
+    }
+  }
+
+  await Promise.all(
+    Array.from({ length: Math.min(limit, items.length) }, () => runWorker())
+  );
+
+  return results;
+}
+
 async function resizeImage(file: File, maxWidth = 1600, quality = 0.82) {
   const imageBitmap = await createImageBitmap(file);
 
@@ -250,11 +274,8 @@ export default function SellPage() {
   const uploadListingImages = async (listingId: number) => {
     if (!user || files.length === 0) return "";
 
-    const rows = [];
-    let firstOriginalUrl = "";
-
-    for (let index = 0; index < files.length; index += 1) {
-      const resizedFile = await resizeImage(files[index]);
+    const rows = await runWithConcurrency(files, 3, async (file, index) => {
+      const resizedFile = await resizeImage(file);
       const fileName = `${user.id}/${listingId}-${Date.now()}-${index}.jpg`;
 
       const { error: uploadError } = await supabase.storage
@@ -271,21 +292,17 @@ export default function SellPage() {
         .getPublicUrl(fileName);
 
       const originalUrl = data.publicUrl;
-      const mediumUrl = `${originalUrl}?width=900&resize=contain`;
-      const thumbUrl = `${originalUrl}?width=400&height=300&resize=cover`;
 
-      if (index === 0) firstOriginalUrl = originalUrl;
-
-      rows.push({
+      return {
         listing_id: listingId,
         user_id: user.id,
         original_url: originalUrl,
-        medium_url: mediumUrl,
-        thumb_url: thumbUrl,
+        medium_url: `${originalUrl}?width=900&resize=contain`,
+        thumb_url: `${originalUrl}?width=400&height=300&resize=cover`,
         sort_order: index,
         is_primary: index === 0,
-      });
-    }
+      };
+    });
 
     const { error: imageError } = await supabase
       .from("listing_images")
@@ -293,7 +310,7 @@ export default function SellPage() {
 
     if (imageError) throw imageError;
 
-    return firstOriginalUrl;
+    return rows[0]?.original_url || "";
   };
 
 
