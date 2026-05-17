@@ -630,7 +630,7 @@ export default function MarketplacePage() {
                       <div className="cursor-pointer">
                         <div className="relative mb-3 overflow-hidden rounded-2xl bg-neutral-100">
                           {imageUrl ? (
-                            <img
+                            <img decoding="async"
                               src={imageUrl}
                               alt={item.title}
                               loading="lazy"

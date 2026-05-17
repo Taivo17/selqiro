@@ -1465,7 +1465,7 @@ export default function MyPage() {
                             className="overflow-hidden rounded-2xl border border-black/10 bg-white"
                           >
                             {imageUrl ? (
-                              <img
+                              <img decoding="async"
                                 src={imageUrl}
                                 alt="Listing image"
                                 className="h-40 w-full object-cover"
@@ -1534,7 +1534,7 @@ export default function MyPage() {
                               key={`${file.name}-${index}`}
                               className="overflow-hidden rounded-2xl border border-black/10 bg-white"
                             >
-                              <img
+                              <img decoding="async"
                                 src={previewUrl}
                                 alt="New image preview"
                                 className="h-40 w-full object-cover"
@@ -1767,7 +1767,7 @@ export default function MyPage() {
               <aside className="h-fit rounded-[28px] border border-black/8 bg-white p-4 shadow-sm">
                 <div className="overflow-hidden rounded-2xl bg-neutral-100">
                   {editImages[0] ? (
-                    <img
+                    <img decoding="async"
                       src={
                         editImages[0].medium_url ||
                         editImages[0].thumb_url ||
@@ -1778,7 +1778,7 @@ export default function MyPage() {
                       className="h-64 w-full object-cover"
                     />
                   ) : editNewFiles[0] ? (
-                    <img
+                    <img decoding="async"
                       src={URL.createObjectURL(editNewFiles[0])}
                       alt="Preview"
                       className="h-64 w-full object-cover"
@@ -1844,7 +1844,7 @@ export default function MyPage() {
                       <div className="cursor-pointer">
                         <div className="mb-4 overflow-hidden rounded-2xl bg-neutral-100">
                           {imageUrl ? (
-                            <img
+                            <img decoding="async"
                               src={imageUrl}
                               alt={item.title}
                               loading="lazy"

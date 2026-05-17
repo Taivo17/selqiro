@@ -382,7 +382,7 @@ export default function ListingPage() {
               className="block w-full"
             >
               {mediumImageUrl ? (
-                <img
+                <img decoding="async"
                   src={mediumImageUrl}
                   alt={listing.title}
                   className="h-[260px] w-full object-contain sm:h-[460px]"
@@ -450,7 +450,7 @@ export default function ListingPage() {
                     }`}
                   >
                     {thumbUrl ? (
-                      <img
+                      <img decoding="async"
                         src={thumbUrl}
                         alt={`${listing.title} ${index + 1}`}
                         className="h-full w-full object-cover"
@@ -654,7 +654,7 @@ export default function ListingPage() {
             </>
           )}
 
-          <img
+          <img decoding="async"
             src={originalImageUrl}
             alt={listing.title}
             className="max-h-[90vh] max-w-[95vw] object-contain"

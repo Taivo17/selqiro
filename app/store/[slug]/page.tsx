@@ -276,7 +276,7 @@ export default function StorePage() {
         <section className="mb-5 overflow-hidden rounded-[28px] border border-black/8 bg-white shadow-sm sm:rounded-[36px]">
           <div className="h-36 w-full bg-neutral-100 sm:h-52 lg:h-60">
             {profile.banner_url ? (
-              <img
+              <img decoding="async"
                 src={profile.banner_url}
                 alt={profile.store_name || "Store banner"}
                 loading="lazy"
@@ -292,7 +292,7 @@ export default function StorePage() {
               <div className="flex flex-col gap-4 sm:flex-row sm:items-end">
                 <div className="-mt-10 h-24 w-24 shrink-0 overflow-hidden rounded-full border-4 border-white bg-white shadow-md sm:-mt-12 sm:h-28 sm:w-28">
                   {profile.avatar_url ? (
-                    <img
+                    <img decoding="async"
                       src={profile.avatar_url}
                       alt={profile.store_name || "Store avatar"}
                       loading="lazy"
@@ -461,7 +461,7 @@ export default function StorePage() {
                     <div className="cursor-pointer">
                       <div className="mb-3 overflow-hidden rounded-2xl bg-neutral-100">
                         {imageUrl ? (
-                          <img
+                          <img decoding="async"
                             src={imageUrl}
                             alt={item.title}
                             loading="lazy"
