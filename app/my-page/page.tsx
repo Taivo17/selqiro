@@ -76,6 +76,8 @@ type Profile = {
   id: string;
   is_premium?: boolean | null;
   premium_until?: string | null;
+  home_country?: string | null;
+  home_city?: string | null;
 };
 
 type StoreCategory = {
@@ -298,6 +300,10 @@ export default function MyPage() {
   const [generatedCode, setGeneratedCode] = useState("");
   const [creatingInvite, setCreatingInvite] = useState(false);
 
+  const [homeCountry, setHomeCountry] = useState("Estonia");
+  const [homeCity, setHomeCity] = useState("");
+  const [savingHomeLocation, setSavingHomeLocation] = useState(false);
+
   const [storeCategories, setStoreCategories] = useState<StoreCategory[]>([]);
   const [newStoreCategoryName, setNewStoreCategoryName] = useState("");
   const [savingStoreCategory, setSavingStoreCategory] = useState(false);
@@ -451,7 +457,7 @@ export default function MyPage() {
   const fetchProfile = async (currentUserId: string) => {
     const { data, error } = await supabase
       .from("profiles")
-      .select("id, is_premium, premium_until")
+      .select("id, is_premium, premium_until, home_country, home_city")
       .eq("id", currentUserId)
       .maybeSingle();
 
@@ -462,6 +468,14 @@ export default function MyPage() {
     }
 
     setProfile((data || null) as Profile | null);
+
+    if (data?.home_country) {
+      setHomeCountry(data.home_country);
+    }
+
+    if (data?.home_city) {
+      setHomeCity(data.home_city);
+    }
   };
 
   const buildListingsQuery = (currentUserId: string, from: number) => {
@@ -581,6 +595,30 @@ export default function MyPage() {
       setClaimMessage("Premium invite claim failed.");
     } finally {
       setClaimingInvite(false);
+    }
+  };
+
+
+  const saveHomeLocation = async () => {
+    if (!userId) return;
+
+    setSavingHomeLocation(true);
+
+    try {
+      const { error } = await supabase
+        .from("profiles")
+        .update({
+          home_country: homeCountry.trim(),
+          home_city: homeCity.trim(),
+        })
+        .eq("id", userId);
+
+      if (error) throw error;
+    } catch (error) {
+      console.error("Error saving home location:", error);
+      alert("Failed to save home location.");
+    } finally {
+      setSavingHomeLocation(false);
     }
   };
 
@@ -1287,6 +1325,57 @@ export default function MyPage() {
             </div>
           </div>
         </header>
+
+        <section className="rounded-[28px] bg-white p-5 shadow-sm sm:p-6">
+          <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+            <div>
+              <p className="mb-2 text-xs font-medium uppercase tracking-[0.22em] text-black/35">
+                Near you
+              </p>
+
+              <h2 className="text-2xl font-semibold tracking-tight">
+                Your local area
+              </h2>
+
+              <p className="mt-2 max-w-2xl text-sm leading-6 text-black/55">
+                Marketplace can prioritize listings near your location.
+              </p>
+            </div>
+
+            <div className="w-full max-w-2xl">
+              <div className="grid gap-3 sm:grid-cols-[1fr_1fr_auto]">
+                <select
+                  value={homeCountry}
+                  onChange={(e) => setHomeCountry(e.target.value)}
+                  className={inputClass}
+                >
+                  <option value="Estonia">Estonia</option>
+                  <option value="Latvia">Latvia</option>
+                  <option value="Lithuania">Lithuania</option>
+                  <option value="Finland">Finland</option>
+                  <option value="Sweden">Sweden</option>
+                  <option value="Germany">Germany</option>
+                </select>
+
+                <input
+                  value={homeCity}
+                  onChange={(e) => setHomeCity(e.target.value)}
+                  placeholder="City"
+                  className={inputClass}
+                />
+
+                <button
+                  type="button"
+                  onClick={saveHomeLocation}
+                  disabled={savingHomeLocation}
+                  className="rounded-2xl bg-black px-5 py-3 text-sm font-medium text-white disabled:opacity-60"
+                >
+                  {savingHomeLocation ? "Saving..." : "Save"}
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
 
         <section
           className={`rounded-[28px] p-5 shadow-sm sm:p-6 ${
