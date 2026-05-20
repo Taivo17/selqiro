@@ -289,6 +289,31 @@ async function resizeImage(file: File, maxWidth = 1600, quality = 0.82) {
   });
 }
 
+
+async function geocodeCity(country: string, city: string) {
+  const response = await fetch("/api/location/geocode", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      country,
+      city,
+    }),
+  });
+
+  const data = await response.json();
+
+  if (!data.success) {
+    return null;
+  }
+
+  return {
+    lat: data.lat,
+    lng: data.lng,
+  };
+}
+
 export default function MyPage() {
   const { user, loading } = useAuth();
   const userId = user?.id ?? null;
@@ -605,11 +630,18 @@ export default function MyPage() {
     setSavingHomeLocation(true);
 
     try {
+      const coords = await geocodeCity(
+        homeCountry.trim(),
+        homeCity.trim()
+      );
+
       const { error } = await supabase
         .from("profiles")
         .update({
           home_country: homeCountry.trim(),
           home_city: homeCity.trim(),
+          home_lat: coords?.lat || null,
+          home_lng: coords?.lng || null,
         })
         .eq("id", userId);
 

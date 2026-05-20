@@ -32,6 +32,8 @@ type Listing = {
   location?: string | null;
   country?: string | null;
   city?: string | null;
+  listing_lat?: number | null;
+  listing_lng?: number | null;
   subcategory?: string | null;
   search_text?: string | null;
   details?: Record<string, unknown> | null;
@@ -43,6 +45,10 @@ type ProfileRow = {
   store_slug?: string | null;
   store_name?: string | null;
   is_premium?: boolean | null;
+  home_country?: string | null;
+  home_city?: string | null;
+  home_lat?: number | null;
+  home_lng?: number | null;
 };
 
 function parsePriceAmount(value: string) {
@@ -63,6 +69,28 @@ function parsePrice(value?: string | null) {
 
   const parsed = Number(normalized);
   return Number.isFinite(parsed) ? parsed : null;
+}
+
+function calculateDistanceKm(
+  lat1: number,
+  lng1: number,
+  lat2: number,
+  lng2: number
+) {
+  const toRad = (value: number) => (value * Math.PI) / 180;
+  const earthRadiusKm = 6371;
+
+  const dLat = toRad(lat2 - lat1);
+  const dLng = toRad(lng2 - lng1);
+
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(toRad(lat1)) *
+      Math.cos(toRad(lat2)) *
+      Math.sin(dLng / 2) *
+      Math.sin(dLng / 2);
+
+  return earthRadiusKm * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 }
 
 function getListingImage(item: Listing) {
@@ -88,6 +116,7 @@ export default function MarketplacePage() {
   const [profilesByUserId, setProfilesByUserId] = useState<
     Record<string, ProfileRow>
   >({});
+  const [currentProfile, setCurrentProfile] = useState<ProfileRow | null>(null);
   const [search, setSearch] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("all");
   const [subcategoryFilter, setSubcategoryFilter] = useState("all");
@@ -113,6 +142,30 @@ export default function MarketplacePage() {
     setLocationFilter("");
     setNearOnly(false);
     setShowMoreFilters(false);
+  };
+
+  const loadCurrentProfile = async () => {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    if (!user?.id) {
+      setCurrentProfile(null);
+      return;
+    }
+
+    const { data, error } = await supabase
+      .from("profiles")
+      .select("id, home_country, home_city, home_lat, home_lng")
+      .eq("id", user.id)
+      .maybeSingle();
+
+    if (error) {
+      console.error("Error loading current profile:", error);
+      return;
+    }
+
+    setCurrentProfile((data || null) as ProfileRow | null);
   };
 
   const loadProfiles = async (items: Listing[]) => {
@@ -203,7 +256,9 @@ export default function MarketplacePage() {
 
     const locationNeedle = locationFilter.trim();
 
-    if (locationNeedle) {
+    if (nearOnly && currentProfile?.home_country) {
+      query = query.eq("country", currentProfile.home_country);
+    } else if (locationNeedle) {
       query = query.or(
         `country.ilike.%${locationNeedle}%,city.ilike.%${locationNeedle}%,location.ilike.%${locationNeedle}%`
       );
@@ -236,6 +291,7 @@ export default function MarketplacePage() {
       setLoading(false);
     };
 
+    loadCurrentProfile();
     initialLoad();
   }, [
     search,
@@ -244,6 +300,11 @@ export default function MarketplacePage() {
     detailCategoryFilter,
     conditionFilter,
     locationFilter,
+    nearOnly,
+    currentProfile?.home_country,
+    currentProfile?.home_city,
+    currentProfile?.home_lat,
+    currentProfile?.home_lng,
     priceMin,
     priceMax,
   ]);
@@ -335,7 +396,7 @@ export default function MarketplacePage() {
     nearOnly;
 
   const filteredListings = useMemo(() => {
-    return listings.filter((item) => {
+    const filtered = listings.filter((item) => {
       const title = item.title?.toLowerCase() || "";
       const description = item.description?.toLowerCase() || "";
       const searchText = item.search_text?.toLowerCase() || "";
@@ -394,19 +455,60 @@ export default function MarketplacePage() {
       const matchesCondition =
         conditionFilter === "all" ? true : condition === conditionFilter;
 
-      const matchesLocation =
-        !locationNeedle ||
-        country.includes(locationNeedle) ||
-        city.includes(locationNeedle) ||
-        location.includes(locationNeedle);
-
-      const matchesNearOnly = nearOnly ? matchesLocation : true;
-
-      return (
-        matchesDetailCategory &&
-        matchesNearOnly
-      );
+      return matchesDetailCategory;
     });
+
+    const homeLat = currentProfile?.home_lat;
+    const homeLng = currentProfile?.home_lng;
+    const homeCity = currentProfile?.home_city || "";
+
+    if (
+      nearOnly &&
+      typeof homeLat === "number" &&
+      typeof homeLng === "number"
+    ) {
+      return [...filtered].sort((a, b) => {
+        const aHasCoords =
+          typeof a.listing_lat === "number" &&
+          typeof a.listing_lng === "number";
+
+        const bHasCoords =
+          typeof b.listing_lat === "number" &&
+          typeof b.listing_lng === "number";
+
+        if (!aHasCoords && !bHasCoords) return 0;
+        if (!aHasCoords) return 1;
+        if (!bHasCoords) return -1;
+
+        const aCity = (a.city || "").toLowerCase();
+        const bCity = (b.city || "").toLowerCase();
+        const normalizedHomeCity = homeCity.toLowerCase();
+
+        const aSameCity = aCity === normalizedHomeCity;
+        const bSameCity = bCity === normalizedHomeCity;
+
+        if (aSameCity && !bSameCity) return -1;
+        if (!aSameCity && bSameCity) return 1;
+
+        const aDistance = calculateDistanceKm(
+          homeLat,
+          homeLng,
+          a.listing_lat!,
+          a.listing_lng!
+        );
+
+        const bDistance = calculateDistanceKm(
+          homeLat,
+          homeLng,
+          b.listing_lat!,
+          b.listing_lng!
+        );
+
+        return aDistance - bDistance;
+      });
+    }
+
+    return filtered;
   }, [
     listings,
     search,
@@ -418,6 +520,9 @@ export default function MarketplacePage() {
     priceMax,
     locationFilter,
     nearOnly,
+    currentProfile?.home_city,
+    currentProfile?.home_lat,
+    currentProfile?.home_lng,
   ]);
 
   return (
@@ -492,7 +597,11 @@ export default function MarketplacePage() {
                 onChange={(e) => setNearOnly(e.target.checked)}
                 className="h-5 w-5"
               />
-              <span className="text-sm text-black/75">Near you</span>
+              <span className="text-sm text-black/75">
+                {nearOnly && currentProfile?.home_city
+                  ? `Near you: ${currentProfile.home_city}`
+                  : "Near you"}
+              </span>
             </label>
           </div>
 

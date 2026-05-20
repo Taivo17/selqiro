@@ -133,6 +133,31 @@ function fileToDataUrl(file: File) {
   });
 }
 
+
+async function geocodeCity(country: string, city: string) {
+  const response = await fetch("/api/location/geocode", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      country,
+      city,
+    }),
+  });
+
+  const data = await response.json();
+
+  if (!data.success) {
+    return null;
+  }
+
+  return {
+    lat: data.lat,
+    lng: data.lng,
+  };
+}
+
 export default function SellPage() {
   const router = useRouter();
   const { user, loading } = useAuth();
@@ -422,6 +447,11 @@ export default function SellPage() {
       const activeUntil = new Date();
       activeUntil.setDate(activeUntil.getDate() + 90);
 
+      const coords = await geocodeCity(
+        cleanCountry,
+        cleanCity
+      );
+
       const { data: listingData, error: listingError } = await supabase
         .from("listings")
         .insert({
@@ -437,6 +467,8 @@ export default function SellPage() {
           country: cleanCountry,
           city: cleanCity,
           location,
+          listing_lat: coords?.lat || null,
+          listing_lng: coords?.lng || null,
           manufacturer: manufacturer.trim(),
           part_number: partNumber.trim(),
           oem_number: oemNumber.trim(),
