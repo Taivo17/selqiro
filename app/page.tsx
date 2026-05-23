@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { supabase } from "../lib/supabase";
 import { CATEGORY_TREE } from "../lib/categories";
@@ -159,6 +159,7 @@ export default function MarketplacePage() {
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
   const [hasMore, setHasMore] = useState(true);
+  const loadMoreRef = useRef<HTMLDivElement | null>(null);
 
   const resetFilters = () => {
     setSearch("");
@@ -367,6 +368,29 @@ export default function MarketplacePage() {
     await loadMarketplace(listings.length);
     setLoadingMore(false);
   };
+
+
+  useEffect(() => {
+    const target = loadMoreRef.current;
+    if (!target) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0];
+
+        if (entry.isIntersecting && hasMore && !loading && !loadingMore) {
+          loadMore();
+        }
+      },
+      {
+        rootMargin: "700px",
+      }
+    );
+
+    observer.observe(target);
+
+    return () => observer.disconnect();
+  }, [hasMore, loading, loadingMore, listings.length]);
 
   const categories = useMemo(() => {
     return Array.from(
@@ -873,8 +897,8 @@ export default function MarketplacePage() {
               })}
             </div>
 
-            {hasMore && !filtersActive && (
-              <div className="mt-8 flex justify-center">
+            {hasMore && (
+              <div ref={loadMoreRef} className="mt-8 flex justify-center">
                 <button
                   type="button"
                   onClick={loadMore}
