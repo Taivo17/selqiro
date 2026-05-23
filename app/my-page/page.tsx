@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { supabase } from "../../lib/supabase";
 import { useAuth } from "../../lib/useAuth";
@@ -343,6 +343,7 @@ export default function MyPage() {
   const [loadingListings, setLoadingListings] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
   const [hasMore, setHasMore] = useState(true);
+  const loadMoreRef = useRef<HTMLDivElement | null>(null);
 
   const [editingId, setEditingId] = useState<number | null>(null);
   const [savingEdit, setSavingEdit] = useState(false);
@@ -690,6 +691,34 @@ export default function MyPage() {
     setLoadingMore(true);
     await fetchListings(userId, listings.length);
   };
+
+  useEffect(() => {
+    const target = loadMoreRef.current;
+    if (!target) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0];
+
+        if (
+          entry.isIntersecting &&
+          userId &&
+          hasMore &&
+          !loadingListings &&
+          !loadingMore
+        ) {
+          loadMore();
+        }
+      },
+      {
+        rootMargin: "700px",
+      }
+    );
+
+    observer.observe(target);
+
+    return () => observer.disconnect();
+  }, [userId, hasMore, loadingListings, loadingMore, listings.length]);
 
   const startEdit = (item: Listing) => {
     setEditingId(item.id);
@@ -2165,7 +2194,7 @@ export default function MyPage() {
             </div>
 
             {hasMore && (
-              <div className="mt-8 flex justify-center">
+              <div ref={loadMoreRef} className="mt-8 flex justify-center">
                 <button
                   type="button"
                   onClick={loadMore}
