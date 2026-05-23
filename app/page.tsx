@@ -93,6 +93,30 @@ function calculateDistanceKm(
   return earthRadiusKm * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 }
 
+async function geocodeCity(country: string, city: string) {
+  const response = await fetch("/api/location/geocode", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      country,
+      city,
+    }),
+  });
+
+  const data = await response.json();
+
+  if (!data.success) {
+    return null;
+  }
+
+  return {
+    lat: data.lat,
+    lng: data.lng,
+  };
+}
+
 function getListingImage(item: Listing) {
   const sortedImages = [...(item.listing_images || [])].sort((a, b) => {
     if (a.is_primary && !b.is_primary) return -1;
@@ -125,6 +149,11 @@ export default function MarketplacePage() {
   const [priceMin, setPriceMin] = useState("");
   const [priceMax, setPriceMax] = useState("");
   const [locationFilter, setLocationFilter] = useState("");
+  const [searchNearCity, setSearchNearCity] = useState("");
+  const [searchNearCoords, setSearchNearCoords] = useState<{
+    lat: number;
+    lng: number;
+  } | null>(null);
   const [nearOnly, setNearOnly] = useState(false);
   const [showMoreFilters, setShowMoreFilters] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -284,6 +313,28 @@ export default function MarketplacePage() {
     await loadProfiles(loaded);
   };
 
+
+  useEffect(() => {
+    const loadSearchNearCoords = async () => {
+      if (!searchNearCity.trim()) {
+        setSearchNearCoords(null);
+        return;
+      }
+
+      const country =
+        currentProfile?.home_country || "Estonia";
+
+      const coords = await geocodeCity(
+        country,
+        searchNearCity.trim()
+      );
+
+      setSearchNearCoords(coords);
+    };
+
+    loadSearchNearCoords();
+  }, [searchNearCity, currentProfile?.home_country]);
+
   useEffect(() => {
     const initialLoad = async () => {
       setLoading(true);
@@ -396,6 +447,17 @@ export default function MarketplacePage() {
     nearOnly;
 
   const filteredListings = useMemo(() => {
+    const searchCenterLat =
+      searchNearCoords?.lat ?? currentProfile?.home_lat;
+
+    const searchCenterLng =
+      searchNearCoords?.lng ?? currentProfile?.home_lng;
+
+    const searchCenterCity =
+      searchNearCity.trim() ||
+      currentProfile?.home_city ||
+      "";
+
     const filtered = listings.filter((item) => {
       const title = item.title?.toLowerCase() || "";
       const description = item.description?.toLowerCase() || "";
@@ -464,8 +526,8 @@ export default function MarketplacePage() {
 
     if (
       nearOnly &&
-      typeof homeLat === "number" &&
-      typeof homeLng === "number"
+      typeof searchCenterLat === "number" &&
+      typeof searchCenterLng === "number"
     ) {
       return [...filtered].sort((a, b) => {
         const aHasCoords =
@@ -482,7 +544,8 @@ export default function MarketplacePage() {
 
         const aCity = (a.city || "").toLowerCase();
         const bCity = (b.city || "").toLowerCase();
-        const normalizedHomeCity = homeCity.toLowerCase();
+        const normalizedHomeCity =
+          searchCenterCity.toLowerCase();
 
         const aSameCity = aCity === normalizedHomeCity;
         const bSameCity = bCity === normalizedHomeCity;
@@ -491,15 +554,15 @@ export default function MarketplacePage() {
         if (!aSameCity && bSameCity) return 1;
 
         const aDistance = calculateDistanceKm(
-          homeLat,
-          homeLng,
+          searchCenterLat,
+          searchCenterLng,
           a.listing_lat!,
           a.listing_lng!
         );
 
         const bDistance = calculateDistanceKm(
-          homeLat,
-          homeLng,
+          searchCenterLat,
+          searchCenterLng,
           b.listing_lat!,
           b.listing_lng!
         );
@@ -523,6 +586,9 @@ export default function MarketplacePage() {
     currentProfile?.home_city,
     currentProfile?.home_lat,
     currentProfile?.home_lng,
+    searchNearCity,
+    searchNearCoords?.lat,
+    searchNearCoords?.lng,
   ]);
 
   return (
@@ -584,9 +650,14 @@ export default function MarketplacePage() {
 
             <input
               type="text"
-              placeholder="Location..."
-              value={locationFilter}
-              onChange={(e) => setLocationFilter(e.target.value)}
+              placeholder="Search near city..."
+              value={searchNearCity}
+              onChange={(e) => {
+                setSearchNearCity(e.target.value);
+                if (e.target.value.trim()) {
+                  setNearOnly(true);
+                }
+              }}
               className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-base outline-none transition focus:border-black/30 sm:text-sm"
             />
 
@@ -598,7 +669,9 @@ export default function MarketplacePage() {
                 className="h-5 w-5"
               />
               <span className="text-sm text-black/75">
-                {nearOnly && currentProfile?.home_city
+                {searchNearCity.trim()
+                  ? `Near: ${searchNearCity}`
+                  : nearOnly && currentProfile?.home_city
                   ? `Near you: ${currentProfile.home_city}`
                   : "Near you"}
               </span>

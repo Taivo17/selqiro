@@ -162,6 +162,8 @@ export default function SellPage() {
   const router = useRouter();
   const { user, loading } = useAuth();
 
+  const [profileLoaded, setProfileLoaded] = useState(false);
+
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
@@ -219,6 +221,36 @@ export default function SellPage() {
       previewUrls.forEach((url) => URL.revokeObjectURL(url));
     };
   }, [previewUrls]);
+
+
+  useEffect(() => {
+    const loadProfileDefaults = async () => {
+      if (!user?.id || profileLoaded) return;
+
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("home_country, home_city")
+        .eq("id", user.id)
+        .maybeSingle();
+
+      if (error) {
+        console.error("Error loading profile defaults:", error);
+        return;
+      }
+
+      if (data?.home_country) {
+        setCountry(data.home_country);
+      }
+
+      if (data?.home_city) {
+        setCity(data.home_city);
+      }
+
+      setProfileLoaded(true);
+    };
+
+    loadProfileDefaults();
+  }, [user?.id, profileLoaded]);
 
   useEffect(() => {
     if (!loading && !user) router.push("/auth");
