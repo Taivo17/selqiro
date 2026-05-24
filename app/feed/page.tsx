@@ -26,7 +26,7 @@ type FeedListing = {
   city?: string | null;
   image?: string | null;
   listing_images?: ListingImage[];
-  profiles?: {
+  seller_profile?: {
     store_name?: string | null;
     store_slug?: string | null;
     avatar_url?: string | null;
@@ -112,7 +112,7 @@ export default function FeedPage() {
       const { data, error } = await supabase
         .from("listings")
         .select(
-          "id, user_id, created_at, title, description, price, category, condition, country, city, image, listing_images(thumb_url, medium_url, original_url, is_primary, sort_order), profiles(store_name, store_slug, avatar_url)"
+          "id, user_id, created_at, title, description, price, category, condition, country, city, image, listing_images(thumb_url, medium_url, original_url, is_primary, sort_order)"
         )
         .in("user_id", followedIds)
         .eq("status", "active")
@@ -127,7 +127,35 @@ export default function FeedPage() {
         return;
       }
 
-      setItems((data || []) as FeedListing[]);
+      const loadedListings = (data || []) as FeedListing[];
+
+      const userIds = Array.from(
+        new Set(
+          loadedListings
+            .map((item) => item.user_id)
+            .filter(Boolean)
+        )
+      );
+
+      const { data: profileRows, error: profileError } = await supabase
+        .from("profiles")
+        .select("id, store_name, store_slug, avatar_url")
+        .in("id", userIds);
+
+      if (profileError) {
+        console.error("Error loading feed profiles:", profileError);
+      }
+
+      const profileMap = new Map(
+        (profileRows || []).map((profile) => [profile.id, profile])
+      );
+
+      const enrichedListings = loadedListings.map((item) => ({
+        ...item,
+        seller_profile: profileMap.get(item.user_id) || null,
+      }));
+
+      setItems(enrichedListings);
       setLoading(false);
     };
 
@@ -205,8 +233,8 @@ export default function FeedPage() {
           <div className="space-y-4">
             {items.map((item) => {
               const imageUrl = getListingImage(item);
-              const storeName = item.profiles?.store_name || "Store";
-              const storeSlug = item.profiles?.store_slug || "";
+              const storeName = item.seller_profile?.store_name || "Store";
+              const storeSlug = item.seller_profile?.store_slug || "";
 
               return (
                 <article
@@ -216,9 +244,9 @@ export default function FeedPage() {
                   <div className="mb-4 flex items-center justify-between gap-3">
                     <div className="flex min-w-0 items-center gap-3">
                       <div className="h-11 w-11 shrink-0 overflow-hidden rounded-full bg-black text-white">
-                        {item.profiles?.avatar_url ? (
+                        {item.seller_profile?.avatar_url ? (
                           <img
-                            src={item.profiles.avatar_url}
+                            src={item.seller_profile.avatar_url}
                             alt={storeName}
                             loading="lazy"
                             className="h-full w-full object-cover"
