@@ -99,6 +99,10 @@ export default function StorePage() {
   const [storeCategories, setStoreCategories] = useState<StoreCategory[]>([]);
   const [selectedStoreCategoryId, setSelectedStoreCategoryId] = useState("all");
   const [loading, setLoading] = useState(true);
+  const [followersCount, setFollowersCount] = useState(0);
+  const [isFollowing, setIsFollowing] = useState(false);
+  const [followLoading, setFollowLoading] = useState(false);
+
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<
@@ -140,8 +144,30 @@ export default function StorePage() {
         return;
       }
 
+
       setProfile(profileData as ProfileRow);
       setSelectedStoreCategoryId("all");
+
+      const { count } = await supabase
+        .from("store_follows")
+        .select("*", { count: "exact", head: true })
+        .eq("store_owner_id", profileData.id);
+
+      setFollowersCount(count || 0);
+
+      if (user?.id && user.id !== profileData.id) {
+        const { data: followData } = await supabase
+          .from("store_follows")
+          .select("id")
+          .eq("follower_id", user.id)
+          .eq("store_owner_id", profileData.id)
+          .maybeSingle();
+
+        setIsFollowing(!!followData);
+      } else {
+        setIsFollowing(false);
+      }
+
 
       const { data: categoryData, error: categoryError } = await supabase
         .from("store_categories")
@@ -201,6 +227,44 @@ export default function StorePage() {
       load();
     }
   }, [slug, user?.id, authLoading, debouncedSearch]);
+
+
+  const toggleFollow = async () => {
+    if (!user?.id || !profile?.id || followLoading) return;
+
+    setFollowLoading(true);
+
+    try {
+      if (isFollowing) {
+        const { error } = await supabase
+          .from("store_follows")
+          .delete()
+          .eq("follower_id", user.id)
+          .eq("store_owner_id", profile.id);
+
+        if (error) throw error;
+
+        setIsFollowing(false);
+        setFollowersCount((prev) => Math.max(0, prev - 1));
+      } else {
+        const { error } = await supabase
+          .from("store_follows")
+          .insert({
+            follower_id: user.id,
+            store_owner_id: profile.id,
+          });
+
+        if (error) throw error;
+
+        setIsFollowing(true);
+        setFollowersCount((prev) => prev + 1);
+      }
+    } catch (error) {
+      console.error("Follow error:", error);
+    } finally {
+      setFollowLoading(false);
+    }
+  };
 
   const isOwner = !!user?.id && !!profile?.id && user.id === profile.id;
 
@@ -328,6 +392,25 @@ export default function StorePage() {
                   </Link>
                 )}
 
+                {!isOwner && (
+                  <button
+                    type="button"
+                    onClick={toggleFollow}
+                    disabled={followLoading}
+                    className={`rounded-2xl px-4 py-2 text-sm font-medium transition ${
+                      isFollowing
+                        ? "border border-black/10 bg-white text-black"
+                        : "bg-black text-white"
+                    }`}
+                  >
+                    {followLoading
+                      ? "Loading..."
+                      : isFollowing
+                      ? "Following"
+                      : "Follow"}
+                  </button>
+                )}
+
                 <Link
                   href="/"
                   className="rounded-2xl border border-black/10 bg-white px-4 py-2 text-sm font-medium"
@@ -346,6 +429,10 @@ export default function StorePage() {
               </span>
               <span className="rounded-full border border-black/10 bg-black/[0.03] px-3 py-2">
                 {stats.total} total
+              </span>
+
+              <span className="rounded-full border border-black/10 bg-black/[0.03] px-3 py-2">
+                {followersCount} followers
               </span>
               {isOwner && (
                 <span className="rounded-full border border-green-200 bg-green-50 px-3 py-2 text-green-700">
