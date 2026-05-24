@@ -107,6 +107,7 @@ export default function SiteHeader() {
   };
 
   const isMarketplace = pathname === "/";
+  const isFeed = pathname.startsWith("/feed");
   const isMyPage = pathname.startsWith("/my-page");
   const isSell = pathname.startsWith("/sell");
   const isProfile = pathname.startsWith("/profile");
@@ -198,6 +199,10 @@ export default function SiteHeader() {
                 Marketplace
               </button>
 
+              <Link href="/feed" className={navClass(isFeed)}>
+                Feed
+              </Link>
+
               <Link href="/my-page" className={navClass(isMyPage)}>
                 My page
               </Link>
@@ -229,6 +234,10 @@ export default function SiteHeader() {
                   >
                     Marketplace
                   </button>
+
+                  <Link href="/feed" className={mobileNavClass(isFeed)}>
+                    Feed
+                  </Link>
 
                   <Link href="/my-page" className={mobileNavClass(isMyPage)}>
                     My page
