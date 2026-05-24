@@ -413,21 +413,49 @@ export default function SellPage() {
         setTitle(result.suggested_title);
       }
 
-      if (result.category) {
-        setCategory(result.category);
-      }
+      const suggestedCategory =
+        typeof result.category === "string" ? result.category : "";
 
-      if (result.subcategory) {
-        setSubcategory(result.subcategory);
-      }
+      const validCategory = CATEGORY_TREE.find(
+        (item) => item.value === suggestedCategory
+      );
+
+      const suggestedSubcategory =
+        typeof result.subcategory === "string" ? result.subcategory : "";
+
+      const validSubcategory = validCategory?.children?.find(
+        (item) => item.value === suggestedSubcategory
+      );
 
       const confidence =
         typeof result.confidence === "number"
           ? result.confidence
           : 0;
 
-      if (confidence >= 0.72 && result.detailCategory) {
-        setDetailCategory(result.detailCategory);
+      const suggestedDetailCategory =
+        typeof result.detailCategory === "string"
+          ? result.detailCategory
+          : "";
+
+      const validDetailCategory = (validSubcategory as any)?.children?.find(
+        (item: { value: string; label: string }) =>
+          item.value === suggestedDetailCategory
+      );
+
+      if (validCategory) {
+        setCategory(validCategory.value);
+      } else {
+        setCategory("general");
+      }
+
+      if (validSubcategory) {
+        setSubcategory(validSubcategory.value);
+      } else {
+        setSubcategory("");
+      }
+
+      if (confidence >= 0.72 && validDetailCategory) {
+        setDetailCategory(validDetailCategory.value);
       } else {
         setDetailCategory("");
       }

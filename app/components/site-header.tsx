@@ -31,6 +31,7 @@ export default function SiteHeader() {
   const [loadingStoreSlug, setLoadingStoreSlug] = useState(false);
   const [loggingOut, setLoggingOut] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [hasNewFeedItems, setHasNewFeedItems] = useState(false);
 
   const userId = user?.id ?? null;
   const userEmail = user?.email ?? "";
@@ -87,6 +88,58 @@ export default function SiteHeader() {
     };
   }, [userId]);
 
+
+  useEffect(() => {
+    if (!userId) {
+      setHasNewFeedItems(false);
+      return;
+    }
+
+    const checkFeedUpdates = async () => {
+      const lastViewed =
+        localStorage.getItem("feed_last_viewed_at") || "";
+
+      const { data: follows } = await supabase
+        .from("store_follows")
+        .select("store_owner_id")
+        .eq("follower_id", userId);
+
+      const followedIds = (follows || [])
+        .map((row) => row.store_owner_id)
+        .filter(Boolean);
+
+      if (followedIds.length === 0) {
+        setHasNewFeedItems(false);
+        return;
+      }
+
+      let query = supabase
+        .from("listings")
+        .select("id, created_at")
+        .in("user_id", followedIds)
+        .eq("status", "active")
+        .gt("active_until", new Date().toISOString())
+        .order("created_at", { ascending: false })
+        .limit(1);
+
+      if (lastViewed) {
+        query = query.gt("created_at", lastViewed);
+      }
+
+      const { data } = await query;
+
+      setHasNewFeedItems((data || []).length > 0);
+    };
+
+    checkFeedUpdates();
+
+    const interval = setInterval(() => {
+      checkFeedUpdates();
+    }, 60000);
+
+    return () => clearInterval(interval);
+  }, [userId]);
+
   useEffect(() => {
     setMobileMenuOpen(false);
   }, [pathname]);
@@ -114,6 +167,17 @@ export default function SiteHeader() {
   const isStore = pathname.startsWith("/store");
 
   const showStoreLink = !loadingStoreSlug && !!storeSlug;
+
+  useEffect(() => {
+    if (pathname.startsWith("/feed")) {
+      localStorage.setItem(
+        "feed_last_viewed_at",
+        new Date().toISOString()
+      );
+
+      setHasNewFeedItems(false);
+    }
+  }, [pathname]);
 
   return (
     <header className="sticky top-0 z-30 border-b border-black/6 bg-[#f8f8f6]/95 backdrop-blur">
@@ -200,7 +264,13 @@ export default function SiteHeader() {
               </button>
 
               <Link href="/feed" className={navClass(isFeed)}>
-                Feed
+                <span className="relative inline-flex items-center gap-2">
+                  Feed
+
+                  {hasNewFeedItems && (
+                    <span className="h-2.5 w-2.5 rounded-full bg-green-400" />
+                  )}
+                </span>
               </Link>
 
               <Link href="/my-page" className={navClass(isMyPage)}>
@@ -236,7 +306,13 @@ export default function SiteHeader() {
                   </button>
 
                   <Link href="/feed" className={mobileNavClass(isFeed)}>
-                    Feed
+                    <span className="inline-flex items-center justify-center gap-2">
+                      Feed
+
+                      {hasNewFeedItems && (
+                        <span className="h-2.5 w-2.5 rounded-full bg-green-400" />
+                      )}
+                    </span>
                   </Link>
 
                   <Link href="/my-page" className={mobileNavClass(isMyPage)}>
