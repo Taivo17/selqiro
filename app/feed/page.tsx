@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { supabase } from "../../lib/supabase";
 import { useAuth } from "../../lib/useAuth";
@@ -69,14 +69,19 @@ function timeAgo(value?: string | null) {
   return new Date(value).toLocaleDateString();
 }
 
+const PAGE_SIZE = 30;
+
 export default function FeedPage() {
   const { user, loading: authLoading } = useAuth();
 
   const [items, setItems] = useState<FeedListing[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
 
-  useEffect(() => {
-    const loadFeed = async () => {
+  const loadMoreRef = useRef<HTMLDivElement | null>(null);
+
+  const loadFeed = async (from = 0) => {
       if (authLoading) return;
 
       if (!user?.id) {
@@ -85,7 +90,9 @@ export default function FeedPage() {
         return;
       }
 
-      setLoading(true);
+      if (from === 0) {
+        setLoading(true);
+      }
 
       const { data: follows, error: followsError } = await supabase
         .from("store_follows")
@@ -118,7 +125,7 @@ export default function FeedPage() {
         .eq("status", "active")
         .gt("active_until", new Date().toISOString())
         .order("created_at", { ascending: false })
-        .limit(80);
+        .range(from, from + PAGE_SIZE - 1);
 
       if (error) {
         console.error("Error loading feed:", error);
@@ -155,12 +162,56 @@ export default function FeedPage() {
         seller_profile: profileMap.get(item.user_id) || null,
       }));
 
-      setItems(enrichedListings);
+      if (from === 0) {
+        setItems(enrichedListings);
+      } else {
+        setItems((prev) => [...prev, ...enrichedListings]);
+      }
+
+      setHasMore(loadedListings.length === PAGE_SIZE);
+
       setLoading(false);
+      setLoadingMore(false);
     };
 
-    loadFeed();
+  useEffect(() => {
+    loadFeed(0);
   }, [user?.id, authLoading]);
+
+
+  const loadMore = async () => {
+    if (loadingMore || !hasMore) return;
+
+    setLoadingMore(true);
+    await loadFeed(items.length);
+  };
+
+  useEffect(() => {
+    const target = loadMoreRef.current;
+    if (!target) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0];
+
+        if (
+          entry.isIntersecting &&
+          hasMore &&
+          !loading &&
+          !loadingMore
+        ) {
+          loadMore();
+        }
+      },
+      {
+        rootMargin: "700px",
+      }
+    );
+
+    observer.observe(target);
+
+    return () => observer.disconnect();
+  }, [hasMore, loading, loadingMore, items.length]);
 
   if (authLoading || loading) {
     return (
@@ -207,12 +258,23 @@ export default function FeedPage() {
               </p>
             </div>
 
-            <Link
-              href="/"
-              className="w-fit rounded-2xl border border-black/10 bg-white px-5 py-3 text-sm font-medium"
-            >
-              Marketplace
-            </Link>
+            <div className="flex flex-wrap gap-2">
+              <button
+                type="button"
+                onClick={() => loadFeed(0)}
+                disabled={loading}
+                className="w-fit rounded-2xl bg-black px-5 py-3 text-sm font-medium text-white disabled:opacity-60"
+              >
+                Refresh feed
+              </button>
+
+              <Link
+                href="/"
+                className="w-fit rounded-2xl border border-black/10 bg-white px-5 py-3 text-sm font-medium"
+              >
+                Marketplace
+              </Link>
+            </div>
           </div>
         </header>
 
@@ -230,6 +292,7 @@ export default function FeedPage() {
             </Link>
           </div>
         ) : (
+          <>
           <div className="space-y-4">
             {items.map((item) => {
               const imageUrl = getListingImage(item);
@@ -320,6 +383,20 @@ export default function FeedPage() {
               );
             })}
           </div>
+
+          {hasMore && (
+            <div ref={loadMoreRef} className="mt-8 flex justify-center">
+              <button
+                type="button"
+                onClick={loadMore}
+                disabled={loadingMore}
+                className="rounded-2xl bg-black px-6 py-3 text-sm font-medium text-white transition hover:opacity-90 disabled:opacity-60"
+              >
+                {loadingMore ? "Loading..." : "Load more"}
+              </button>
+            </div>
+          )}
+          </>
         )}
       </div>
     </main>
