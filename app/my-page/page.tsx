@@ -339,6 +339,7 @@ export default function MyPage() {
   const [filter, setFilter] = useState<"all" | "active" | "paused" | "sold">(
     "all"
   );
+  const [storeSectionFilter, setStoreSectionFilter] = useState("all");
 
   const [loadingListings, setLoadingListings] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
@@ -506,10 +507,15 @@ export default function MyPage() {
 
   const buildListingsQuery = (currentUserId: string, from: number) => {
     const to = from + PAGE_SIZE - 1;
+    const storeCategorySelect =
+      storeSectionFilter !== "all"
+        ? "listing_store_categories!inner(store_category_id)"
+        : "listing_store_categories(store_category_id)";
+
     let query = supabase
       .from("listings")
       .select(
-        "*, listing_images(id, thumb_url, medium_url, original_url, is_primary, sort_order), listing_store_categories(store_category_id)"
+        `*, listing_images(id, thumb_url, medium_url, original_url, is_primary, sort_order), ${storeCategorySelect}`
       )
       .eq("user_id", currentUserId)
       .order("created_at", { ascending: false })
@@ -517,6 +523,13 @@ export default function MyPage() {
 
     if (filter !== "all") {
       query = query.eq("status", filter);
+    }
+
+    if (storeSectionFilter !== "all") {
+      query = query.eq(
+        "listing_store_categories.store_category_id",
+        storeSectionFilter
+      );
     }
 
     const searchQuery = buildPrefixSearchQuery(search);
@@ -583,7 +596,7 @@ export default function MyPage() {
     }, 300);
 
     return () => clearTimeout(timer);
-  }, [userId, loading, debouncedSearch, filter]);
+  }, [userId, loading, debouncedSearch, filter, storeSectionFilter]);
 
   const claimPremiumInvite = async () => {
     if (!userId) return;
@@ -1605,6 +1618,37 @@ export default function MyPage() {
               <option value="sold">Sold</option>
             </select>
           </div>
+
+          {storeCategories.length > 0 && (
+            <div className="mt-4 flex flex-wrap gap-2">
+              <button
+                type="button"
+                onClick={() => setStoreSectionFilter("all")}
+                className={`rounded-2xl border px-4 py-3 text-sm font-medium transition ${
+                  storeSectionFilter === "all"
+                    ? "border-black bg-black text-white"
+                    : "border-black/10 bg-white text-black hover:bg-black/[0.03]"
+                }`}
+              >
+                All sections
+              </button>
+
+              {storeCategories.map((category) => (
+                <button
+                  key={category.id}
+                  type="button"
+                  onClick={() => setStoreSectionFilter(category.id)}
+                  className={`rounded-2xl border px-4 py-3 text-sm font-medium transition ${
+                    storeSectionFilter === category.id
+                      ? "border-black bg-black text-white"
+                      : "border-black/10 bg-white text-black hover:bg-black/[0.03]"
+                  }`}
+                >
+                  {category.name}
+                </button>
+              ))}
+            </div>
+          )}
         </section>
 
         {editingId && (
