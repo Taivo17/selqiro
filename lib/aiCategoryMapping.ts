@@ -124,6 +124,21 @@ export function resolveAiCategoryPath(result: any): AiCategoryPath {
     };
   }
 
+  if (
+    textIncludes(rawText, [
+      "helmet",
+      "racing helmet",
+      "motorcycle helmet",
+      "motocross helmet",
+    ])
+  ) {
+    return {
+      category: "vehicles",
+      subcategory: "vehicle_parts",
+      detailCategory: "riding_racing_gear",
+    };
+  }
+
   if (textIncludes(rawText, ["motorcycle", "motorbike", "scooter"])) {
     return {
       category: "vehicles",
@@ -180,6 +195,23 @@ export function resolveAiCategoryPath(result: any): AiCategoryPath {
       category: "vehicles",
       subcategory: "cars",
       detailCategory: "passenger_cars",
+    };
+  }
+
+  if (
+    textIncludes(rawText, [
+      "potato",
+      "potatoes",
+      "vegetable",
+      "fresh potatoes",
+      "farm produce",
+      "produce",
+    ])
+  ) {
+    return {
+      category: "home_garden",
+      subcategory: "crops_produce",
+      detailCategory: "",
     };
   }
 

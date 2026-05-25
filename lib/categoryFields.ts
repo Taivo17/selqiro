@@ -356,6 +356,105 @@ export const CATEGORY_FIELDS: Record<string, CategoryField[]> = {
     { key: "condition", label: "Condition" },
   ],
 
+
+  agricultural_attachments_implements: [
+    { key: "implement_type", label: "Implement type" },
+    { key: "brand", label: "Brand" },
+    { key: "model", label: "Model" },
+    { key: "working_width", label: "Working width" },
+    { key: "attachment_type", label: "Attachment type" },
+    { key: "compatible_machine", label: "Compatible machine" },
+    { key: "pto_required", label: "PTO required" },
+    { key: "hydraulics_required", label: "Hydraulics required" },
+    { key: "condition", label: "Condition" },
+  ],
+
+  agricultural_heavy_machinery_spare_parts: [
+    { key: "part_name", label: "Part name" },
+    { key: "manufacturer", label: "Manufacturer" },
+    { key: "part_number", label: "Part number" },
+    { key: "compatible_machine", label: "Compatible machine" },
+    { key: "fits_brand", label: "Fits brand" },
+    { key: "fits_model", label: "Fits model" },
+    { key: "condition", label: "Condition" },
+  ],
+
+  riding_racing_gear: [
+    { key: "gear_type", label: "Gear type" },
+    { key: "brand", label: "Brand" },
+    { key: "size", label: "Size" },
+    { key: "discipline", label: "Discipline" },
+    { key: "certification", label: "Certification" },
+    { key: "material", label: "Material" },
+    { key: "condition", label: "Condition" },
+  ],
+
+  plants_seedlings: [
+    { key: "plant_type", label: "Plant type" },
+    { key: "variety", label: "Variety" },
+    { key: "quantity", label: "Quantity" },
+    { key: "pot_size", label: "Pot size" },
+    { key: "growth_stage", label: "Growth stage" },
+    { key: "organic", label: "Organic" },
+  ],
+
+  seeds: [
+    { key: "seed_type", label: "Seed type" },
+    { key: "variety", label: "Variety" },
+    { key: "quantity", label: "Quantity" },
+    { key: "package_weight", label: "Package weight" },
+    { key: "sowing_season", label: "Sowing season" },
+    { key: "organic", label: "Organic" },
+  ],
+
+  crops_produce: [
+    { key: "produce_type", label: "Produce type" },
+    { key: "variety", label: "Variety" },
+    { key: "quantity", label: "Quantity" },
+    { key: "unit", label: "Unit" },
+    { key: "harvest_date", label: "Harvest date" },
+    { key: "organic", label: "Organic" },
+  ],
+
+  farm_supplies: [
+    { key: "supply_type", label: "Supply type" },
+    { key: "brand", label: "Brand" },
+    { key: "quantity", label: "Quantity" },
+    { key: "material", label: "Material" },
+    { key: "intended_use", label: "Intended use" },
+    { key: "condition", label: "Condition" },
+  ],
+
+  animal_feed: [
+    { key: "feed_type", label: "Feed type" },
+    { key: "animal_type", label: "Animal type" },
+    { key: "quantity", label: "Quantity" },
+    { key: "package_weight", label: "Package weight" },
+    { key: "ingredients", label: "Ingredients" },
+    { key: "expiry_date", label: "Expiry date" },
+  ],
+
+  greenhouses: [
+    { key: "greenhouse_type", label: "Greenhouse type" },
+    { key: "material", label: "Material" },
+    { key: "length", label: "Length" },
+    { key: "width", label: "Width" },
+    { key: "height", label: "Height" },
+    { key: "frame_material", label: "Frame material" },
+    { key: "condition", label: "Condition" },
+  ],
+
+  workwear: [
+    { key: "workwear_type", label: "Workwear type" },
+    { key: "gender", label: "Gender" },
+    { key: "size", label: "Size" },
+    { key: "industry", label: "Industry" },
+    { key: "season", label: "Season" },
+    { key: "visibility_class", label: "Visibility class" },
+    { key: "protection_class", label: "Protection class" },
+    { key: "condition", label: "Condition" },
+  ],
+
   phones: [
     { key: "brand", label: "Brand" },
     { key: "model", label: "Model" },
