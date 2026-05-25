@@ -691,6 +691,10 @@ export default function SellPage() {
                       </span>
                     )}
                   </div>
+
+                  <p className="mt-3 text-xs leading-5 text-black/45">
+                    AI can make mistakes. Please check the selected category before publishing.
+                  </p>
                 </div>
               )}
 

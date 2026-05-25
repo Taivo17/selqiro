@@ -47,6 +47,14 @@ export const CATEGORY_TREE = [
           { value: "excavators", label: "Excavators" },
           { value: "forestry_machinery", label: "Forestry machinery" },
           { value: "construction_machinery", label: "Construction machinery" },
+          {
+            value: "agricultural_attachments_implements",
+            label: "Agricultural attachments & implements"
+          },
+          {
+            value: "agricultural_heavy_machinery_spare_parts",
+            label: "Agricultural & Heavy Machinery Spare Parts"
+          },
         ],
       },
       {
@@ -101,6 +109,7 @@ export const CATEGORY_TREE = [
           { value: "tires", label: "Tires" },
           { value: "wheels_rims", label: "Wheels / Rims" },
           { value: "accessories", label: "Accessories" },
+          { value: "riding_racing_gear", label: "Riding & racing gear" },
           { value: "spare_parts", label: "Other spare parts" },
           { value: "vehicle_for_parts", label: "Complete vehicle for parts" },
         ],
@@ -140,6 +149,7 @@ export const CATEGORY_TREE = [
       { value: "men", label: "Men" },
       { value: "women", label: "Women" },
       { value: "kids", label: "Kids" },
+      { value: "workwear", label: "Workwear" },
       { value: "shoes", label: "Shoes" },
       { value: "watches", label: "Watches" },
       { value: "bags", label: "Bags" },
@@ -164,6 +174,12 @@ export const CATEGORY_TREE = [
       { value: "furniture", label: "Furniture" },
       { value: "appliances", label: "Appliances" },
       { value: "garden_tools", label: "Garden tools" },
+      { value: "plants_seedlings", label: "Plants & seedlings" },
+      { value: "seeds", label: "Seeds" },
+      { value: "crops_produce", label: "Crops & produce" },
+      { value: "farm_supplies", label: "Farm supplies" },
+      { value: "animal_feed", label: "Animal feed" },
+      { value: "greenhouses", label: "Greenhouses" },
       { value: "decor", label: "Decor" },
       { value: "lighting", label: "Lighting" },
     ],

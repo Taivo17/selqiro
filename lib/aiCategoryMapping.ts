@@ -83,6 +83,71 @@ export function resolveAiCategoryPath(result: any): AiCategoryPath {
     };
   }
 
+  if (
+    textIncludes(rawText, [
+      "truck",
+      "commercial truck",
+      "lorry",
+      "dump truck",
+      "cargo truck",
+      "old truck",
+    ])
+  ) {
+    return {
+      category: "vehicles",
+      subcategory: "trucks_commercial",
+      detailCategory: "trucks",
+    };
+  }
+
+  if (textIncludes(rawText, ["semi truck", "tractor unit"])) {
+    return {
+      category: "vehicles",
+      subcategory: "trucks_commercial",
+      detailCategory: "semi_trucks",
+    };
+  }
+
+  if (textIncludes(rawText, ["van", "minibus"])) {
+    return {
+      category: "vehicles",
+      subcategory: "cars",
+      detailCategory: "vans_minibuses",
+    };
+  }
+
+  if (textIncludes(rawText, ["pickup", "pickup truck"])) {
+    return {
+      category: "vehicles",
+      subcategory: "cars",
+      detailCategory: "pickup_trucks",
+    };
+  }
+
+  if (textIncludes(rawText, ["motorcycle", "motorbike", "scooter"])) {
+    return {
+      category: "vehicles",
+      subcategory: "motorcycles",
+      detailCategory: "sport_bikes",
+    };
+  }
+
+  if (textIncludes(rawText, ["atv", "utv", "quad"])) {
+    return {
+      category: "vehicles",
+      subcategory: "motorcycles",
+      detailCategory: "atv_utv",
+    };
+  }
+
+  if (textIncludes(rawText, ["snowmobile"])) {
+    return {
+      category: "vehicles",
+      subcategory: "motorcycles",
+      detailCategory: "snowmobiles",
+    };
+  }
+
   if (textIncludes(rawText, ["suv", "off-road", "offroad"])) {
     return {
       category: "vehicles",
@@ -96,6 +161,31 @@ export function resolveAiCategoryPath(result: any): AiCategoryPath {
       category: "vehicles",
       subcategory: "cars",
       detailCategory: "racing_vehicles",
+    };
+  }
+
+  if (
+    textIncludes(rawText, [
+      "agricultural attachment",
+      "agricultural implement",
+      "farm implement",
+      "tractor attachment",
+      "potato harvester",
+      "potato digger",
+      "plough",
+      "plow",
+      "cultivator",
+      "harrow",
+      "rake",
+      "agricultural rake",
+      "hay rake",
+      "mower attachment",
+    ])
+  ) {
+    return {
+      category: "vehicles",
+      subcategory: "agricultural_heavy_machinery",
+      detailCategory: "agricultural_attachments_implements",
     };
   }
 
