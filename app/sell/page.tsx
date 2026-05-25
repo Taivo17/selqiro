@@ -7,6 +7,7 @@ import { supabase } from "../../lib/supabase";
 import { useAuth } from "../../lib/useAuth";
 import { CATEGORY_TREE } from "../../lib/categories";
 import { getCategoryFields } from "../../lib/categoryFields";
+import { resolveAiCategoryPath } from "../../lib/aiCategoryMapping";
 
 const MAX_IMAGES = 10;
 const MAX_SOURCE_IMAGE_SIZE_MB = 25;
@@ -413,15 +414,15 @@ export default function SellPage() {
         setTitle(result.suggested_title);
       }
 
-      const suggestedCategory =
-        typeof result.category === "string" ? result.category : "";
+      const aiCategoryPath = resolveAiCategoryPath(result);
+
+      const suggestedCategory = aiCategoryPath.category;
 
       const validCategory = CATEGORY_TREE.find(
         (item) => item.value === suggestedCategory
       );
 
-      const suggestedSubcategory =
-        typeof result.subcategory === "string" ? result.subcategory : "";
+      const suggestedSubcategory = aiCategoryPath.subcategory;
 
       const validSubcategory = validCategory?.children?.find(
         (item) => item.value === suggestedSubcategory
@@ -432,10 +433,7 @@ export default function SellPage() {
           ? result.confidence
           : 0;
 
-      const suggestedDetailCategory =
-        typeof result.detailCategory === "string"
-          ? result.detailCategory
-          : "";
+      const suggestedDetailCategory = aiCategoryPath.detailCategory;
 
       const validDetailCategory = (validSubcategory as any)?.children?.find(
         (item: { value: string; label: string }) =>

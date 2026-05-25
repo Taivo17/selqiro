@@ -41,6 +41,145 @@ function getAllowedFieldKeys(category: string, subcategory: string, detailCatego
   return getCategoryFields(key).map((field) => field.key);
 }
 
+function normalizeCategorySelection(
+  inputCategory: string,
+  inputSubcategory: string,
+  inputDetailCategory: string,
+  objectName: string
+) {
+  const values = [
+    inputCategory,
+    inputSubcategory,
+    inputDetailCategory,
+    objectName,
+  ]
+    .map((value) => String(value || "").toLowerCase().trim())
+    .filter(Boolean);
+
+  const findPathByValue = (target: string) => {
+    for (const category of CATEGORY_TREE as readonly CategoryNode[]) {
+      if (category.value === target) {
+        return {
+          category: category.value,
+          subcategory: "",
+          detailCategory: "",
+        };
+      }
+
+      for (const subcategory of category.children || []) {
+        if (subcategory.value === target) {
+          return {
+            category: category.value,
+            subcategory: subcategory.value,
+            detailCategory: "",
+          };
+        }
+
+        for (const detail of subcategory.children || []) {
+          if (detail.value === target) {
+            return {
+              category: category.value,
+              subcategory: subcategory.value,
+              detailCategory: detail.value,
+            };
+          }
+        }
+      }
+    }
+
+    return null;
+  };
+
+  const aliasMap: Record<string, string> = {
+    car_battery: "batteries",
+    battery: "batteries",
+    batteries: "batteries",
+    vehicle_battery: "batteries",
+    auto_battery: "batteries",
+
+    starter: "starters_alternators",
+    alternator: "starters_alternators",
+
+    brake: "brakes",
+    brakes: "brakes",
+    brake_pads: "brakes",
+
+    tire: "tires",
+    tyres: "tires",
+    tyre: "tires",
+    tires: "tires",
+
+    rim: "wheels_rims",
+    rims: "wheels_rims",
+    wheel: "wheels_rims",
+    wheels: "wheels_rims",
+
+    headlight: "lights_lamps",
+    headlights: "lights_lamps",
+    tail_light: "lights_lamps",
+    lamp: "lights_lamps",
+    lights: "lights_lamps",
+
+    bumper: "body_parts",
+    door: "body_parts",
+    hood: "body_parts",
+    fender: "body_parts",
+
+    exhaust: "exhaust_parts",
+    radiator: "cooling_heating",
+    turbo: "engines_engine_parts",
+    engine: "engines_engine_parts",
+    gearbox: "transmission_drivetrain",
+    transmission: "transmission_drivetrain",
+  };
+
+  for (const value of values) {
+    const normalized = value.replace(/[^a-z0-9]+/g, "_").replace(/^_+|_+$/g, "");
+
+    const directPath = findPathByValue(normalized);
+    if (directPath) return directPath;
+
+    const aliasTarget = aliasMap[normalized];
+    if (aliasTarget) {
+      const aliasPath = findPathByValue(aliasTarget);
+      if (aliasPath) return aliasPath;
+    }
+  }
+
+  const joined = values.join(" ");
+
+  if (
+    joined.includes("battery") ||
+    joined.includes("aku") ||
+    joined.includes("accu")
+  ) {
+    return {
+      category: "vehicles",
+      subcategory: "vehicle_parts",
+      detailCategory: "batteries",
+    };
+  }
+
+  if (
+    joined.includes("vehicle_parts") ||
+    joined.includes("car part") ||
+    joined.includes("auto part") ||
+    joined.includes("spare part")
+  ) {
+    return {
+      category: "vehicles",
+      subcategory: "vehicle_parts",
+      detailCategory: "spare_parts",
+    };
+  }
+
+  return {
+    category: "general",
+    subcategory: "",
+    detailCategory: "",
+  };
+}
+
 export async function POST(req: Request) {
   try {
     const body = await req.json();
@@ -146,9 +285,16 @@ Examples:
     const jsonMatch = text.match(/\{[\s\S]*\}/);
     const parsed = JSON.parse(jsonMatch ? jsonMatch[0] : text);
 
-    const category = String(parsed.category || "general");
-    const subcategory = String(parsed.subcategory || "");
-    const detailCategory = String(parsed.detailCategory || "");
+    const normalizedCategory = normalizeCategorySelection(
+      String(parsed.category || ""),
+      String(parsed.subcategory || ""),
+      String(parsed.detailCategory || ""),
+      String(parsed.object || parsed.suggested_title || "")
+    );
+
+    const category = normalizedCategory.category;
+    const subcategory = normalizedCategory.subcategory;
+    const detailCategory = normalizedCategory.detailCategory;
     const allowedFields = getAllowedFieldKeys(category, subcategory, detailCategory);
 
     const cleanedFields: Record<string, string> = {};
