@@ -357,6 +357,126 @@ export const CATEGORY_FIELDS: Record<string, CategoryField[]> = {
   ],
 
 
+
+  engines_engine_parts: [
+    { key: "part_name", label: "Part name" },
+    { key: "brand", label: "Brand" },
+    { key: "engine_type", label: "Engine type" },
+    { key: "fits_brand", label: "Fits brand" },
+    { key: "fits_model", label: "Fits model" },
+    { key: "part_number", label: "Part number" },
+    { key: "condition", label: "Condition" },
+  ],
+
+  transmission_drivetrain: [
+    { key: "part_name", label: "Part name" },
+    { key: "gearbox_type", label: "Gearbox type" },
+    { key: "drivetrain_type", label: "Drivetrain type" },
+    { key: "fits_brand", label: "Fits brand" },
+    { key: "fits_model", label: "Fits model" },
+    { key: "part_number", label: "Part number" },
+    { key: "condition", label: "Condition" },
+  ],
+
+  suspension_steering: [
+    { key: "part_name", label: "Part name" },
+    { key: "side_position", label: "Side / position" },
+    { key: "fits_brand", label: "Fits brand" },
+    { key: "fits_model", label: "Fits model" },
+    { key: "part_number", label: "Part number" },
+    { key: "condition", label: "Condition" },
+  ],
+
+  brakes: [
+    { key: "brake_type", label: "Brake type" },
+    { key: "side_position", label: "Side / position" },
+    { key: "fits_brand", label: "Fits brand" },
+    { key: "fits_model", label: "Fits model" },
+    { key: "part_number", label: "Part number" },
+    { key: "condition", label: "Condition" },
+  ],
+
+  electrical_parts: [
+    { key: "part_name", label: "Part name" },
+    { key: "voltage", label: "Voltage" },
+    { key: "fits_brand", label: "Fits brand" },
+    { key: "fits_model", label: "Fits model" },
+    { key: "part_number", label: "Part number" },
+    { key: "condition", label: "Condition" },
+  ],
+
+  batteries: [
+    { key: "battery_type", label: "Battery type" },
+    { key: "capacity", label: "Capacity" },
+    { key: "voltage", label: "Voltage" },
+    { key: "cca", label: "CCA" },
+    { key: "brand", label: "Brand" },
+    { key: "model", label: "Model" },
+    { key: "condition", label: "Condition" },
+  ],
+
+  starters_alternators: [
+    { key: "part_type", label: "Part type" },
+    { key: "voltage", label: "Voltage" },
+    { key: "power_rating", label: "Power rating" },
+    { key: "fits_brand", label: "Fits brand" },
+    { key: "fits_model", label: "Fits model" },
+    { key: "part_number", label: "Part number" },
+    { key: "condition", label: "Condition" },
+  ],
+
+  body_parts: [
+    { key: "body_part_type", label: "Body part type" },
+    { key: "side_position", label: "Side / position" },
+    { key: "color", label: "Color" },
+    { key: "fits_brand", label: "Fits brand" },
+    { key: "fits_model", label: "Fits model" },
+    { key: "condition", label: "Condition" },
+  ],
+
+  lights_lamps: [
+    { key: "light_type", label: "Light type" },
+    { key: "technology", label: "Technology" },
+    { key: "side_position", label: "Side / position" },
+    { key: "fits_brand", label: "Fits brand" },
+    { key: "fits_model", label: "Fits model" },
+    { key: "condition", label: "Condition" },
+  ],
+
+  interior_parts: [
+    { key: "interior_part_type", label: "Interior part type" },
+    { key: "material", label: "Material" },
+    { key: "color", label: "Color" },
+    { key: "fits_brand", label: "Fits brand" },
+    { key: "fits_model", label: "Fits model" },
+    { key: "condition", label: "Condition" },
+  ],
+
+  exhaust_parts: [
+    { key: "exhaust_part_type", label: "Exhaust part type" },
+    { key: "material", label: "Material" },
+    { key: "fits_brand", label: "Fits brand" },
+    { key: "fits_model", label: "Fits model" },
+    { key: "condition", label: "Condition" },
+  ],
+
+  cooling_heating: [
+    { key: "part_type", label: "Part type" },
+    { key: "coolant_type", label: "Coolant type" },
+    { key: "fits_brand", label: "Fits brand" },
+    { key: "fits_model", label: "Fits model" },
+    { key: "condition", label: "Condition" },
+  ],
+
+  fuel_system: [
+    { key: "fuel_system_part", label: "Fuel system part" },
+    { key: "fuel_type", label: "Fuel type" },
+    { key: "fits_brand", label: "Fits brand" },
+    { key: "fits_model", label: "Fits model" },
+    { key: "part_number", label: "Part number" },
+    { key: "condition", label: "Condition" },
+  ],
+
   agricultural_attachments_implements: [
     { key: "implement_type", label: "Implement type" },
     { key: "brand", label: "Brand" },
