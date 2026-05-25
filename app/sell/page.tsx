@@ -196,6 +196,10 @@ export default function SellPage() {
   const [aiLoading, setAiLoading] = useState(false);
   const [aiResult, setAiResult] = useState<any>(null);
 
+  const [aiSelectedCategory, setAiSelectedCategory] = useState("");
+  const [aiSelectedSubcategory, setAiSelectedSubcategory] = useState("");
+  const [aiSelectedDetailCategory, setAiSelectedDetailCategory] = useState("");
+
 
   const selectedCategory = CATEGORY_TREE.find(
     (item) => item.value === category
@@ -440,6 +444,10 @@ export default function SellPage() {
           item.value === suggestedDetailCategory
       );
 
+      setAiSelectedCategory(suggestedCategory);
+      setAiSelectedSubcategory(suggestedSubcategory);
+      setAiSelectedDetailCategory(suggestedDetailCategory);
+
       if (validCategory) {
         setCategory(validCategory.value);
       } else {
@@ -612,6 +620,39 @@ export default function SellPage() {
           .update({ image: primaryImageUrl })
           .eq("id", listingData.id)
           .eq("user_id", user.id);
+      }
+
+      const categoryChanged =
+        aiSelectedCategory !== category ||
+        aiSelectedSubcategory !== subcategory ||
+        aiSelectedDetailCategory !== detailCategory;
+
+      if (
+        aiResult &&
+        categoryChanged
+      ) {
+        await supabase
+          .from("ai_category_corrections")
+          .insert({
+            user_id: user.id,
+            listing_id: listingData.id,
+
+            ai_object: aiResult.object || "",
+            ai_suggested_title: aiResult.suggested_title || "",
+
+            ai_category: aiSelectedCategory || "",
+            ai_subcategory: aiSelectedSubcategory || "",
+            ai_detail_category: aiSelectedDetailCategory || "",
+
+            final_category: category || "",
+            final_subcategory: subcategory || "",
+            final_detail_category: detailCategory || "",
+
+            ai_confidence:
+              typeof aiResult.confidence === "number"
+                ? aiResult.confidence
+                : null,
+          });
       }
 
       router.push("/my-page");
