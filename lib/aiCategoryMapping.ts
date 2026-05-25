@@ -166,6 +166,25 @@ export function resolveAiCategoryPath(result: any): AiCategoryPath {
 
   if (
     textIncludes(rawText, [
+      "passenger car",
+      "sports car",
+      "sedan",
+      "hatchback",
+      "coupe",
+      "subaru passenger car",
+      "porsche sports car",
+      "car with spoiler",
+    ])
+  ) {
+    return {
+      category: "vehicles",
+      subcategory: "cars",
+      detailCategory: "passenger_cars",
+    };
+  }
+
+  if (
+    textIncludes(rawText, [
       "agricultural attachment",
       "agricultural implement",
       "farm implement",

@@ -233,11 +233,16 @@ Rules:
 - Do not invent VIN, serial numbers, registration numbers, IMEI, exact years, exact engine data, power, mileage, dimensions or technical specs.
 - For vehicles, you may identify visible brand/model/body type, but do not guess exact year, engine, power or mileage unless clearly visible.
 - For tools/electronics, detect visible brand/model/type when possible, but leave model empty if not readable.
-- For unknown or unclear items, use "general", keep detailCategory empty, and put the best visible object name into object and suggested_title.
+- Always choose the closest matching category path from the allowed category tree.
+- Prefer a nearby existing category over falling back to "general".
+- Use "general" only if the object truly does not fit anywhere in the category tree.
+- For vehicles, machinery, tools, electronics, clothing and household items, always select the closest matching subcategory and detailCategory whenever reasonably possible.
+- It is acceptable to slightly approximate the detailCategory if the exact match does not exist.
+- Do not leave subcategory empty for common recognizable objects such as cars, trucks, motorcycles, tools, electronics, machinery, clothing or household items.
 - fields must use only field keys from the selected category schema.
 - Keep suggested_title natural, short and useful.
 - Confidence should reflect how certain you are about the category and object identification, not how many fields you filled.
-- If confidence is below 0.72, return only safe basic fields such as object, category, subcategory and suggested_title.
+- Even with lower confidence, still choose the nearest valid category path whenever reasonably possible.
 
 Examples:
 {
