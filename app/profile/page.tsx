@@ -12,6 +12,9 @@ type Profile = {
   bio?: string | null;
   avatar_url?: string | null;
   banner_url?: string | null;
+
+  is_premium?: boolean | null;
+  premium_until?: string | null;
 };
 
 function slugify(value: string) {
@@ -33,6 +36,9 @@ export default function ProfilePage() {
   const [bio, setBio] = useState("");
   const [avatarUrl, setAvatarUrl] = useState("");
   const [bannerUrl, setBannerUrl] = useState("");
+
+  const [isPremium, setIsPremium] = useState(false);
+  const [premiumUntil, setPremiumUntil] = useState("");
 
   const [checkingAuth, setCheckingAuth] = useState(true);
   const [loadingProfile, setLoadingProfile] = useState(true);
@@ -74,6 +80,12 @@ export default function ProfilePage() {
         setBio(profile.bio || "");
         setAvatarUrl(profile.avatar_url || "");
         setBannerUrl(profile.banner_url || "");
+
+        setIsPremium(Boolean(profile.is_premium));
+
+        if (profile.premium_until) {
+          setPremiumUntil(profile.premium_until);
+        }
       }
 
       setLoadingProfile(false);
@@ -388,6 +400,64 @@ export default function ProfilePage() {
                   </p>
                 </div>
               </div>
+            </div>
+
+
+            <div
+              className={`rounded-[32px] border p-6 shadow-sm sm:p-8 ${
+                isPremium
+                  ? "border-yellow-200 bg-gradient-to-br from-yellow-50 via-white to-amber-50"
+                  : "border-black/8 bg-white"
+              }`}
+            >
+              <p className="mb-3 text-xs font-medium uppercase tracking-[0.22em] text-black/40">
+                Membership
+              </p>
+
+              <div className="flex items-center justify-between gap-3">
+                <div>
+                  <h3 className="text-2xl font-semibold tracking-tight">
+                    {isPremium ? "Premium account" : "Free account"}
+                  </h3>
+
+                  <p className="mt-2 text-sm leading-6 text-black/60">
+                    {isPremium
+                      ? "Premium AI, profile personalization and future business tools enabled."
+                      : "Upgrade later for Premium AI and advanced profile personalization."}
+                  </p>
+
+                  <div className="mt-4 flex flex-wrap gap-2 text-xs">
+                    <span className="rounded-full border border-black/10 bg-white px-3 py-2">
+                      AI limit: {isPremium ? "150/day" : "10/day"}
+                    </span>
+
+                    {isPremium && premiumUntil && (
+                      <span className="rounded-full border border-yellow-200 bg-yellow-100 px-3 py-2 text-yellow-800">
+                        Active until{" "}
+                        {new Date(premiumUntil).toLocaleDateString()}
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+                {isPremium && (
+                  <div className="rounded-2xl bg-black px-4 py-3 text-sm font-medium text-white">
+                    PREMIUM
+                  </div>
+                )}
+              </div>
+
+              {isPremium && (
+                <div className="mt-5 rounded-2xl border border-yellow-200 bg-white/80 p-4 text-sm text-black/70">
+                  Future Premium personalization:
+                  <ul className="mt-3 space-y-2">
+                    <li>• Dynamic profile colors from banner and avatar</li>
+                    <li>• Enhanced store identity</li>
+                    <li>• Advanced AI listing tools</li>
+                    <li>• Future business features</li>
+                  </ul>
+                </div>
+              )}
             </div>
 
             <div className="rounded-[32px] border border-black/8 bg-white p-6 shadow-sm sm:p-8">
