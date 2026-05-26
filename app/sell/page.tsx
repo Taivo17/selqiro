@@ -196,6 +196,9 @@ export default function SellPage() {
   const [aiLoading, setAiLoading] = useState(false);
   const [aiResult, setAiResult] = useState<any>(null);
 
+  const [remainingAiUsage, setRemainingAiUsage] = useState<number | null>(null);
+  const [dailyAiLimit, setDailyAiLimit] = useState<number | null>(null);
+
   const [aiSelectedCategory, setAiSelectedCategory] = useState("");
   const [aiSelectedSubcategory, setAiSelectedSubcategory] = useState("");
   const [aiSelectedDetailCategory, setAiSelectedDetailCategory] = useState("");
@@ -481,12 +484,32 @@ export default function SellPage() {
 
       const data = await response.json();
 
+      if (!response.ok) {
+        alert(
+          data?.error ||
+            "AI could not analyze this time. Please try again."
+        );
+        return;
+      }
+
       if (!data.success || !data.result) {
         alert("AI could not analyze this time. Please try again.");
         return;
       }
 
       const result = data.result;
+
+      setRemainingAiUsage(
+        typeof data.remaining === "number"
+          ? data.remaining
+          : null
+      );
+
+      setDailyAiLimit(
+        typeof data.limit === "number"
+          ? data.limit
+          : null
+      );
 
       setAiResult(result);
 
@@ -774,6 +797,21 @@ export default function SellPage() {
                   ? "AI analyzing photos..."
                   : "Analyze photos with AI"}
               </button>
+
+              {remainingAiUsage !== null && dailyAiLimit !== null && (
+                <div className="rounded-2xl border border-black/10 bg-black/[0.02] px-4 py-3 text-sm text-black/65">
+                  AI analyses remaining today:{" "}
+                  <span className="font-semibold text-black">
+                    {remainingAiUsage} / {dailyAiLimit}
+                  </span>
+
+                  {dailyAiLimit === 10 && remainingAiUsage <= 3 && (
+                    <p className="mt-2 text-xs text-black/55">
+                      Upgrade to Premium for 150 AI analyses per day.
+                    </p>
+                  )}
+                </div>
+              )}
 
               {aiResult && (
                 <div
