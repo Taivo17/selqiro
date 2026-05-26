@@ -211,6 +211,77 @@ export default function SellPage() {
   );
   const detailCategoryOptions = (selectedSubcategory as any)?.children || [];
 
+
+  const aiSuggestions = useMemo(() => {
+    const suggestions: string[] = [];
+
+    if (files.length < 3) {
+      suggestions.push("Add more photos for better visibility.");
+    }
+
+    if (
+      category === "vehicles" &&
+      !vehicleYear.trim()
+    ) {
+      suggestions.push("Add vehicle year.");
+    }
+
+    if (
+      subcategory === "vehicle_parts" &&
+      !partNumber.trim()
+    ) {
+      suggestions.push("Add part number or compatibility.");
+    }
+
+    if (
+      detailCategory === "batteries" &&
+      !dynamicFields.capacity
+    ) {
+      suggestions.push("Add battery capacity and voltage.");
+    }
+
+    if (
+      detailCategory === "tires" &&
+      !dynamicFields.diameter
+    ) {
+      suggestions.push("Add tire dimensions.");
+    }
+
+    if (
+      category === "real_estate" &&
+      !dynamicFields.area
+    ) {
+      suggestions.push("Add property area.");
+    }
+
+    if (
+      category === "clothing_fashion" &&
+      !dynamicFields.size
+    ) {
+      suggestions.push("Add size information.");
+    }
+
+    if (
+      typeof aiResult?.confidence === "number" &&
+      aiResult.confidence < 0.75
+    ) {
+      suggestions.push(
+        "AI confidence is low. Consider adding clearer photos."
+      );
+    }
+
+    return suggestions;
+  }, [
+    files.length,
+    category,
+    subcategory,
+    detailCategory,
+    vehicleYear,
+    partNumber,
+    dynamicFields,
+    aiResult,
+  ]);
+
   const activeFields = getCategoryFields(detailCategory || subcategory);
 
   const showVehicleFields = false;
@@ -760,6 +831,26 @@ export default function SellPage() {
                         AI confidence is low. Please manually verify category and details.
                       </div>
                     )}
+                </div>
+              )}
+
+              {aiSuggestions.length > 0 && (
+                <div className="rounded-2xl border border-blue-200 bg-blue-50/60 p-4 text-sm">
+                  <p className="font-semibold text-blue-900">
+                    Suggested improvements
+                  </p>
+
+                  <ul className="mt-3 space-y-2 text-blue-900/80">
+                    {aiSuggestions.map((suggestion) => (
+                      <li
+                        key={suggestion}
+                        className="flex items-start gap-2"
+                      >
+                        <span>•</span>
+                        <span>{suggestion}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               )}
 
