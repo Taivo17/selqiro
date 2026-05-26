@@ -1,10 +1,16 @@
 import OpenAI from "openai";
+import { createClient } from "@supabase/supabase-js";
 import { CATEGORY_TREE } from "../../../../lib/categories";
 import { getCategoryFields } from "../../../../lib/categoryFields";
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
+
+const supabaseAdmin = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!
+);
 
 type CategoryNode = {
   value: string;
@@ -185,6 +191,67 @@ export async function POST(req: Request) {
     const body = await req.json();
     const imageUrls: string[] = body.imageUrls || [];
 
+    const authHeader = req.headers.get("authorization");
+
+    if (!authHeader) {
+      return Response.json(
+        { success: false, error: "Unauthorized" },
+        { status: 401 }
+      );
+    }
+
+    const token = authHeader.replace("Bearer ", "");
+
+    const {
+      data: { user },
+      error: authError,
+    } = await supabaseAdmin.auth.getUser(token);
+
+    if (authError || !user) {
+      return Response.json(
+        { success: false, error: "Unauthorized" },
+        { status: 401 }
+      );
+    }
+
+    const { data: profile } = await supabaseAdmin
+      .from("profiles")
+      .select("is_premium, premium_until")
+      .eq("id", user.id)
+      .maybeSingle();
+
+    const premiumActive =
+      !!profile?.is_premium &&
+      !!profile?.premium_until &&
+      new Date(profile.premium_until).getTime() > Date.now();
+
+    const dailyLimit = premiumActive ? 150 : 10;
+
+    const today = new Date().toISOString().slice(0, 10);
+
+    const { data: usageRow } = await supabaseAdmin
+      .from("ai_usage_daily")
+      .select("id, analyze_count")
+      .eq("user_id", user.id)
+      .eq("usage_date", today)
+      .maybeSingle();
+
+    const currentUsage = usageRow?.analyze_count || 0;
+
+    if (currentUsage >= dailyLimit) {
+      return Response.json(
+        {
+          success: false,
+          error: premiumActive
+            ? "Premium AI daily limit reached."
+            : "Free AI daily limit reached.",
+          remaining: 0,
+          limit: dailyLimit,
+        },
+        { status: 429 }
+      );
+    }
+
     if (imageUrls.length === 0) {
       return Response.json(
         { success: false, error: "No images provided" },
@@ -312,8 +379,28 @@ Examples:
       }
     }
 
+    if (usageRow?.id) {
+      await supabaseAdmin
+        .from("ai_usage_daily")
+        .update({
+          analyze_count: currentUsage + 1,
+          updated_at: new Date().toISOString(),
+        })
+        .eq("id", usageRow.id);
+    } else {
+      await supabaseAdmin
+        .from("ai_usage_daily")
+        .insert({
+          user_id: user.id,
+          usage_date: today,
+          analyze_count: 1,
+        });
+    }
+
     return Response.json({
       success: true,
+      remaining: Math.max(0, dailyLimit - currentUsage - 1),
+      limit: dailyLimit,
       result: {
         object: String(parsed.object || ""),
         category,

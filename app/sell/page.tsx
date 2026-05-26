@@ -464,10 +464,15 @@ export default function SellPage() {
         resizedFiles.map((file) => fileToDataUrl(file))
       );
 
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+
       const response = await fetch("/api/ai/analyze-listing", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${session?.access_token || ""}`,
         },
         body: JSON.stringify({
           imageUrls,
