@@ -2,6 +2,7 @@ import OpenAI from "openai";
 import { createClient } from "@supabase/supabase-js";
 import { CATEGORY_TREE } from "../../../../lib/categories";
 import { getCategoryFields } from "../../../../lib/categoryFields";
+import { hasPremiumAccess } from "../../../../lib/accountAccess";
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -220,10 +221,10 @@ export async function POST(req: Request) {
       .eq("id", user.id)
       .maybeSingle();
 
-    const premiumActive =
-      !!profile?.is_premium &&
-      !!profile?.premium_until &&
-      new Date(profile.premium_until).getTime() > Date.now();
+    const premiumActive = hasPremiumAccess(
+      user.email,
+      profile || undefined
+    );
 
     const dailyLimit = premiumActive ? 150 : 10;
 

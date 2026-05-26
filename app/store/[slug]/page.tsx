@@ -22,6 +22,7 @@ type ProfileRow = {
   bio?: string | null;
   avatar_url?: string | null;
   banner_url?: string | null;
+  is_premium?: boolean | null;
 };
 
 type StoreCategory = {
@@ -132,7 +133,7 @@ export default function StorePage() {
 
       const { data: profileData, error: profileError } = await supabase
         .from("profiles")
-        .select("id, store_name, store_slug, bio, avatar_url, banner_url")
+        .select("id, store_name, store_slug, bio, avatar_url, banner_url, is_premium")
         .eq("store_slug", cleanSlug)
         .maybeSingle();
 
@@ -337,7 +338,28 @@ export default function StorePage() {
   return (
     <main className="min-h-screen overflow-x-hidden bg-[#f8f8f6] px-4 py-5 text-black sm:px-8 lg:px-10">
       <div className="mx-auto max-w-7xl">
-        <section className="mb-5 overflow-hidden rounded-[28px] border border-black/8 bg-white shadow-sm sm:rounded-[36px]">
+        <section
+          className={`relative mb-5 overflow-hidden rounded-[28px] border shadow-sm sm:rounded-[36px] ${
+            profile.is_premium
+              ? "border-yellow-200 bg-white"
+              : "border-black/8 bg-white"
+          }`}
+        >
+          {profile.is_premium && profile.banner_url && (
+            <div className="absolute inset-0 opacity-25 blur-3xl">
+              <img
+                src={profile.banner_url}
+                alt=""
+                className="h-full w-full scale-110 object-cover"
+              />
+            </div>
+          )}
+
+          {profile.is_premium && (
+            <div className="absolute inset-0 bg-gradient-to-br from-white/70 via-white/85 to-yellow-50/70" />
+          )}
+
+          <div className="relative">
           <div className="h-36 w-full bg-neutral-100 sm:h-52 lg:h-60">
             {profile.banner_url ? (
               <img decoding="async"
@@ -434,6 +456,12 @@ export default function StorePage() {
               <span className="rounded-full border border-black/10 bg-black/[0.03] px-3 py-2">
                 {followersCount} followers
               </span>
+              {profile.is_premium && (
+                <span className="rounded-full border border-yellow-200 bg-yellow-50 px-3 py-2 text-yellow-800">
+                  Premium
+                </span>
+              )}
+
               {isOwner && (
                 <span className="rounded-full border border-green-200 bg-green-50 px-3 py-2 text-green-700">
                   Owner
@@ -448,6 +476,7 @@ export default function StorePage() {
                 <p>This store has not added a public description yet.</p>
               )}
             </div>
+          </div>
           </div>
         </section>
 
