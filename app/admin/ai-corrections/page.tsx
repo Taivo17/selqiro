@@ -2,6 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { supabase } from "../../../lib/supabase";
+import { useAuth } from "../../../lib/useAuth";
+
+const ADMIN_EMAIL = "taiwo17@gmail.com";
 
 type Correction = {
   id: number;
@@ -37,11 +40,21 @@ function buildAliasSuggestion(item: Correction) {
 }
 
 export default function AiCorrectionsPage() {
+  const { user, loading: authLoading } = useAuth();
+
   const [items, setItems] = useState<Correction[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const load = async () => {
+      if (authLoading) return;
+
+      if (user?.email !== ADMIN_EMAIL) {
+        setItems([]);
+        setLoading(false);
+        return;
+      }
+
       const { data, error } = await supabase
         .from("ai_category_corrections")
         .select("*")
@@ -60,7 +73,7 @@ export default function AiCorrectionsPage() {
     };
 
     load();
-  }, []);
+  }, [user?.email, authLoading]);
 
   const copyText = async (text: string) => {
     try {
@@ -87,9 +100,16 @@ export default function AiCorrectionsPage() {
           </p>
         </header>
 
-        {loading ? (
+        {authLoading || loading ? (
           <div className="rounded-[28px] bg-white p-8 text-center shadow-sm">
             Loading corrections...
+          </div>
+        ) : user?.email !== ADMIN_EMAIL ? (
+          <div className="rounded-[28px] bg-white p-8 text-center shadow-sm">
+            <p className="text-lg font-medium">Not authorized</p>
+            <p className="mt-2 text-black/55">
+              This admin page is not available for this account.
+            </p>
           </div>
         ) : items.length === 0 ? (
           <div className="rounded-[28px] bg-white p-8 text-center shadow-sm">
