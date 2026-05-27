@@ -196,6 +196,7 @@ export default function SellPage() {
   const [saving, setSaving] = useState(false);
   const [draftLoaded, setDraftLoaded] = useState(false);
   const [draftRestored, setDraftRestored] = useState(false);
+  const [userEditedDraft, setUserEditedDraft] = useState(false);
 
   const [aiLoading, setAiLoading] = useState(false);
   const [aiResult, setAiResult] = useState<any>(null);
@@ -365,6 +366,8 @@ export default function SellPage() {
   const handleFiles = (selectedFiles: FileList | null) => {
     if (!selectedFiles) return;
 
+    setUserEditedDraft(true);
+
     const selected = Array.from(selectedFiles);
     const validFiles: File[] = [];
 
@@ -460,6 +463,7 @@ export default function SellPage() {
       return;
     }
 
+    setUserEditedDraft(true);
     setAiLoading(true);
 
     try {
@@ -625,6 +629,7 @@ export default function SellPage() {
     setAiSelectedDetailCategory("");
 
     setDraftRestored(false);
+    setUserEditedDraft(false);
   };
 
   const createListing = async () => {
@@ -804,7 +809,7 @@ export default function SellPage() {
 
 
   useEffect(() => {
-    if (!draftLoaded) return;
+    if (!draftLoaded || !userEditedDraft) return;
 
     const draft = {
       title,
@@ -835,6 +840,18 @@ export default function SellPage() {
       aiSelectedDetailCategory,
     };
 
+    const hasDraftContent =
+      Boolean(title.trim()) ||
+      Boolean(description.trim()) ||
+      Boolean(price.trim()) ||
+      Boolean(city.trim()) ||
+      Boolean(aiResult);
+
+    if (!hasDraftContent) {
+      localStorage.removeItem(DRAFT_STORAGE_KEY);
+      return;
+    }
+
     localStorage.setItem(
       DRAFT_STORAGE_KEY,
       JSON.stringify(draft)
@@ -862,6 +879,7 @@ export default function SellPage() {
     aiSelectedCategory,
     aiSelectedSubcategory,
     aiSelectedDetailCategory,
+    userEditedDraft,
   ]);
 
   useEffect(() => {
@@ -874,6 +892,22 @@ export default function SellPage() {
 
     try {
       const draft = JSON.parse(raw);
+
+      const hasDraftContent =
+        Boolean(draft.title?.trim()) ||
+        Boolean(draft.description?.trim()) ||
+        Boolean(draft.price?.trim()) ||
+        Boolean(draft.subcategory?.trim()) ||
+        Boolean(draft.detailCategory?.trim()) ||
+        Boolean(draft.city?.trim()) ||
+        Boolean(draft.aiResult);
+
+      if (!hasDraftContent) {
+        localStorage.removeItem(DRAFT_STORAGE_KEY);
+        setDraftRestored(false);
+        setDraftLoaded(true);
+        return;
+      }
 
       setTitle(draft.title || "");
       setDescription(draft.description || "");
@@ -908,6 +942,7 @@ export default function SellPage() {
       );
 
       setDraftRestored(true);
+      setUserEditedDraft(true);
     } catch (error) {
       console.error("Draft restore failed", error);
     } finally {
@@ -1146,7 +1181,10 @@ export default function SellPage() {
             placeholder="Title *"
                   maxLength={80}
             value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            onChange={(e) => {
+              setUserEditedDraft(true);
+              setTitle(e.target.value);
+            }}
             className="w-full rounded-2xl border border-black/10 p-4 outline-none"
           />
 
@@ -1154,7 +1192,10 @@ export default function SellPage() {
             placeholder="Description *"
                   maxLength={1000}
             value={description}
-            onChange={(e) => setDescription(e.target.value)}
+            onChange={(e) => {
+              setUserEditedDraft(true);
+              setDescription(e.target.value);
+            }}
             className="min-h-28 w-full rounded-2xl border border-black/10 p-4 outline-none"
           />
 
@@ -1162,7 +1203,10 @@ export default function SellPage() {
             placeholder="Price *"
                   maxLength={40}
             value={price}
-            onChange={(e) => setPrice(e.target.value)}
+            onChange={(e) => {
+              setUserEditedDraft(true);
+              setPrice(e.target.value);
+            }}
             className="w-full rounded-2xl border border-black/10 p-4 outline-none"
           />
 
@@ -1262,7 +1306,10 @@ export default function SellPage() {
             placeholder="City"
                   maxLength={80}
             value={city}
-            onChange={(e) => setCity(e.target.value)}
+            onChange={(e) => {
+              setUserEditedDraft(true);
+              setCity(e.target.value);
+            }}
             className="w-full rounded-2xl border border-black/10 p-4 outline-none"
           />
 
