@@ -22,6 +22,9 @@ type ProfileRow = {
   bio?: string | null;
   avatar_url?: string | null;
   banner_url?: string | null;
+  banner_dominant_color?: string | null;
+  avatar_dominant_color?: string | null;
+
   is_premium?: boolean | null;
 };
 
@@ -133,7 +136,7 @@ export default function StorePage() {
 
       const { data: profileData, error: profileError } = await supabase
         .from("profiles")
-        .select("id, store_name, store_slug, bio, avatar_url, banner_url, is_premium")
+        .select("id, store_name, store_slug, bio, avatar_url, banner_url, banner_dominant_color, avatar_dominant_color, is_premium")
         .eq("store_slug", cleanSlug)
         .maybeSingle();
 
@@ -341,26 +344,57 @@ export default function StorePage() {
         <section
           className={`relative mb-5 overflow-hidden rounded-[28px] border shadow-sm sm:rounded-[36px] ${
             profile.is_premium
-              ? "border-yellow-200 bg-white"
+              ? "border-yellow-200 bg-white shadow-[0_12px_50px_rgba(251,191,36,0.18)]"
               : "border-black/8 bg-white"
           }`}
         >
-          {profile.is_premium && profile.banner_url && (
-            <div className="absolute inset-0 opacity-25 blur-3xl">
-              <img
-                src={profile.banner_url}
-                alt=""
-                className="h-full w-full scale-110 object-cover"
+
+                    {profile.is_premium && (
+            <>
+              <div
+                className="absolute inset-0"
+                style={{
+                  background: `
+                    radial-gradient(
+                      circle at left bottom,
+                      ${(profile.avatar_dominant_color || "#3b82f6")}99 0%,
+                      ${(profile.avatar_dominant_color || "#3b82f6")}55 22%,
+                      transparent 46%
+                    ),
+                    linear-gradient(
+                      to bottom,
+                      rgba(255,255,255,0.00) 0%,
+                      rgba(255,255,255,0.08) 34%,
+                      rgba(255,255,255,0.42) 58%,
+                      rgba(255,255,255,0.78) 100%
+                    ),
+                    linear-gradient(
+                      135deg,
+                      transparent 0%,
+                      transparent 58%,
+                      ${(profile.banner_dominant_color || "#f59e0b")}22 82%,
+                      ${(profile.banner_dominant_color || "#f59e0b")}44 100%
+                    )
+                  `,
+                }}
               />
-            </div>
+
+              <div
+                className="absolute inset-0"
+                style={{
+                  backdropFilter: "blur(0.45px)",
+                  WebkitBackdropFilter: "blur(0.45px)",
+                  maskImage:
+                    "linear-gradient(to bottom, transparent 0%, transparent 42%, rgba(0,0,0,0.42) 76%, rgba(0,0,0,0.85) 100%)",
+                  WebkitMaskImage:
+                    "linear-gradient(to bottom, transparent 0%, transparent 42%, rgba(0,0,0,0.42) 76%, rgba(0,0,0,0.85) 100%)",
+                }}
+              />
+            </>
           )}
 
-          {profile.is_premium && (
-            <div className="absolute inset-0 bg-gradient-to-br from-white/70 via-white/85 to-yellow-50/70" />
-          )}
-
-          <div className="relative">
-          <div className="h-36 w-full bg-neutral-100 sm:h-52 lg:h-60">
+          <div className="relative z-10">
+          <div className={`h-36 w-full sm:h-52 lg:h-60 ${profile.is_premium ? "bg-transparent" : "bg-neutral-100"}`}>
             {profile.banner_url ? (
               <img decoding="async"
                 src={profile.banner_url}
@@ -373,7 +407,35 @@ export default function StorePage() {
             )}
           </div>
 
-          <div className="px-5 pb-5 pt-0 sm:px-8 sm:pb-8">
+          <div
+            className="px-5 pb-5 pt-0 sm:px-8 sm:pb-8"
+            style={
+              profile.is_premium && profile.banner_url
+                ? {
+                    backgroundImage: `
+                      radial-gradient(
+                        circle at left bottom,
+                        ${(profile.avatar_dominant_color || "#3b82f6")}99 0%,
+                        ${(profile.avatar_dominant_color || "#3b82f6")}55 24%,
+                        transparent 52%
+                      ),
+                      linear-gradient(
+                        135deg,
+                        ${(profile.banner_dominant_color || "#f59e0b")}24 0%,
+                        rgba(255,255,255,0.62) 42%,
+                        ${(profile.banner_dominant_color || "#f59e0b")}38 100%
+                      ),
+                      linear-gradient(
+                        to bottom,
+                        rgba(255,255,255,0.28) 0%,
+                        rgba(255,255,255,0.72) 55%,
+                        rgba(255,255,255,0.90) 100%
+                      )
+                    `,
+                  }
+                : undefined
+            }
+          >
             <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
               <div className="flex flex-col gap-4 sm:flex-row sm:items-end">
                 <div className="-mt-10 h-24 w-24 shrink-0 overflow-hidden rounded-full border-4 border-white bg-white shadow-md sm:-mt-12 sm:h-28 sm:w-28">

@@ -12,10 +12,54 @@ type Profile = {
   bio?: string | null;
   avatar_url?: string | null;
   banner_url?: string | null;
+  banner_dominant_color?: string | null;
 
   is_premium?: boolean | null;
   premium_until?: string | null;
 };
+
+
+function rgbToHex(r: number, g: number, b: number) {
+  return (
+    "#" +
+    [r, g, b]
+      .map((x) => x.toString(16).padStart(2, "0"))
+      .join("")
+  );
+}
+
+async function extractDominantColor(file: File) {
+  const bitmap = await createImageBitmap(file);
+
+  const canvas = document.createElement("canvas");
+  canvas.width = 40;
+  canvas.height = 40;
+
+  const ctx = canvas.getContext("2d");
+  if (!ctx) return "#d4d4d4";
+
+  ctx.drawImage(bitmap, 0, 0, 40, 40);
+
+  const imageData = ctx.getImageData(0, 0, 40, 40).data;
+
+  let r = 0;
+  let g = 0;
+  let b = 0;
+  let count = 0;
+
+  for (let i = 0; i < imageData.length; i += 4) {
+    r += imageData[i];
+    g += imageData[i + 1];
+    b += imageData[i + 2];
+    count++;
+  }
+
+  return rgbToHex(
+    Math.round(r / count),
+    Math.round(g / count),
+    Math.round(b / count)
+  );
+}
 
 function slugify(value: string) {
   return value
@@ -36,6 +80,7 @@ export default function ProfilePage() {
   const [bio, setBio] = useState("");
   const [avatarUrl, setAvatarUrl] = useState("");
   const [bannerUrl, setBannerUrl] = useState("");
+  const [bannerDominantColor, setBannerDominantColor] = useState("");
 
   const [isPremium, setIsPremium] = useState(false);
   const [premiumUntil, setPremiumUntil] = useState("");
@@ -80,6 +125,7 @@ export default function ProfilePage() {
         setBio(profile.bio || "");
         setAvatarUrl(profile.avatar_url || "");
         setBannerUrl(profile.banner_url || "");
+        setBannerDominantColor(profile.banner_dominant_color || "");
 
         setIsPremium(Boolean(profile.is_premium));
 
@@ -107,14 +153,20 @@ export default function ProfilePage() {
     reader.readAsDataURL(file);
   };
 
-  const handleBannerUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleBannerUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const file = event.target.files?.[0];
     if (!file) return;
+
+    const dominantColor = await extractDominantColor(file);
+    setBannerDominantColor(dominantColor);
 
     const reader = new FileReader();
     reader.onloadend = () => {
       setBannerUrl(reader.result as string);
     };
+
     reader.readAsDataURL(file);
   };
 
@@ -161,6 +213,7 @@ export default function ProfilePage() {
       bio: cleanBio || null,
       avatar_url: avatarUrl || null,
       banner_url: bannerUrl || null,
+      banner_dominant_color: bannerDominantColor || null,
     };
 
     const { error } = await supabase.from("profiles").upsert(payload);
@@ -359,7 +412,26 @@ export default function ProfilePage() {
           </section>
 
           <aside className="space-y-6">
-            <div className="overflow-hidden rounded-[32px] border border-black/8 bg-white shadow-sm">
+            <div
+              className="overflow-hidden rounded-[32px] border border-black/8 shadow-sm"
+              style={
+                isPremium && bannerDominantColor
+                  ? {
+                      background: `linear-gradient(
+                        135deg,
+                        ${bannerDominantColor}66 0%,
+                        ${bannerDominantColor}33 20%,
+                        white 50%,
+                        ${bannerDominantColor}2A 80%,
+                        ${bannerDominantColor}55 100%
+                      )`,
+                      boxShadow: `0 10px 40px ${bannerDominantColor}22`
+                    }
+                  : {
+                      background: "white",
+                    }
+              }
+            >
               <div className="h-44 bg-neutral-200">
                 {bannerUrl ? (
                   <img
