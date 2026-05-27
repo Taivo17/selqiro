@@ -9,6 +9,8 @@ import { CATEGORY_TREE } from "../../lib/categories";
 import { getCategoryFields } from "../../lib/categoryFields";
 import { resolveAiCategoryPath } from "../../lib/aiCategoryMapping";
 
+const DRAFT_STORAGE_KEY = "sell_listing_draft_v1";
+
 const MAX_IMAGES = 10;
 const MAX_SOURCE_IMAGE_SIZE_MB = 25;
 const MAX_SOURCE_IMAGE_SIZE_BYTES = MAX_SOURCE_IMAGE_SIZE_MB * 1024 * 1024;
@@ -192,6 +194,8 @@ export default function SellPage() {
 
   const [files, setFiles] = useState<File[]>([]);
   const [saving, setSaving] = useState(false);
+  const [draftLoaded, setDraftLoaded] = useState(false);
+  const [draftRestored, setDraftRestored] = useState(false);
 
   const [aiLoading, setAiLoading] = useState(false);
   const [aiResult, setAiResult] = useState<any>(null);
@@ -590,6 +594,39 @@ export default function SellPage() {
     }
   };
 
+
+  const clearDraft = () => {
+    localStorage.removeItem(DRAFT_STORAGE_KEY);
+
+    setTitle("");
+    setDescription("");
+    setPrice("");
+
+    setCategory("general");
+    setSubcategory("");
+    setDetailCategory("");
+    setCondition("used");
+
+    setManufacturer("");
+    setPartNumber("");
+    setOemNumber("");
+
+    setVehicleBrand("");
+    setVehicleModel("");
+    setVehicleYear("");
+    setEngine("");
+
+    setDynamicFields({});
+    setStoreCategoryId("");
+
+    setAiResult(null);
+    setAiSelectedCategory("");
+    setAiSelectedSubcategory("");
+    setAiSelectedDetailCategory("");
+
+    setDraftRestored(false);
+  };
+
   const createListing = async () => {
     if (!user) return;
 
@@ -754,6 +791,8 @@ export default function SellPage() {
           });
       }
 
+      localStorage.removeItem(DRAFT_STORAGE_KEY);
+
       router.push("/my-page");
     } catch (error) {
       console.error(error);
@@ -762,6 +801,119 @@ export default function SellPage() {
       setSaving(false);
     }
   };
+
+
+  useEffect(() => {
+    if (!draftLoaded) return;
+
+    const draft = {
+      title,
+      description,
+      price,
+      category,
+      subcategory,
+      detailCategory,
+      condition,
+      country,
+      city,
+
+      manufacturer,
+      partNumber,
+      oemNumber,
+
+      vehicleBrand,
+      vehicleModel,
+      vehicleYear,
+      engine,
+
+      dynamicFields,
+      storeCategoryId,
+
+      aiResult,
+      aiSelectedCategory,
+      aiSelectedSubcategory,
+      aiSelectedDetailCategory,
+    };
+
+    localStorage.setItem(
+      DRAFT_STORAGE_KEY,
+      JSON.stringify(draft)
+    );
+  }, [
+    title,
+    description,
+    price,
+    category,
+    subcategory,
+    detailCategory,
+    condition,
+    country,
+    city,
+    manufacturer,
+    partNumber,
+    oemNumber,
+    vehicleBrand,
+    vehicleModel,
+    vehicleYear,
+    engine,
+    dynamicFields,
+    storeCategoryId,
+    aiResult,
+    aiSelectedCategory,
+    aiSelectedSubcategory,
+    aiSelectedDetailCategory,
+  ]);
+
+  useEffect(() => {
+    const raw = localStorage.getItem(DRAFT_STORAGE_KEY);
+
+    if (!raw) {
+      setDraftLoaded(true);
+      return;
+    }
+
+    try {
+      const draft = JSON.parse(raw);
+
+      setTitle(draft.title || "");
+      setDescription(draft.description || "");
+      setPrice(draft.price || "");
+
+      setCategory(draft.category || "general");
+      setSubcategory(draft.subcategory || "");
+      setDetailCategory(draft.detailCategory || "");
+      setCondition(draft.condition || "used");
+
+      setCountry(draft.country || "Estonia");
+      setCity(draft.city || "");
+
+      setManufacturer(draft.manufacturer || "");
+      setPartNumber(draft.partNumber || "");
+      setOemNumber(draft.oemNumber || "");
+
+      setVehicleBrand(draft.vehicleBrand || "");
+      setVehicleModel(draft.vehicleModel || "");
+      setVehicleYear(draft.vehicleYear || "");
+      setEngine(draft.engine || "");
+
+      setDynamicFields(draft.dynamicFields || {});
+      setStoreCategoryId(draft.storeCategoryId || "");
+
+      setAiResult(draft.aiResult || null);
+
+      setAiSelectedCategory(draft.aiSelectedCategory || "");
+      setAiSelectedSubcategory(draft.aiSelectedSubcategory || "");
+      setAiSelectedDetailCategory(
+        draft.aiSelectedDetailCategory || ""
+      );
+
+      setDraftRestored(true);
+    } catch (error) {
+      console.error("Draft restore failed", error);
+    } finally {
+      setDraftLoaded(true);
+    }
+  }, []);
 
   if (loading) return <main className="p-6">Loading...</main>;
 
@@ -777,6 +929,23 @@ export default function SellPage() {
         </h1>
 
         <div className="mt-6 space-y-4">
+          {draftRestored && (
+            <div className="rounded-2xl border border-blue-200 bg-blue-50/70 p-4 text-sm text-blue-900">
+              <p className="font-semibold">Draft restored</p>
+              <p className="mt-1 text-blue-900/70">
+                Your unfinished listing was restored on this device.
+                Photos are not restored, so please add photos again before publishing.
+              </p>
+
+              <button
+                type="button"
+                onClick={clearDraft}
+                className="mt-3 rounded-xl bg-white px-4 py-2 text-sm font-medium text-blue-900 shadow-sm"
+              >
+                Clear draft / start new listing
+              </button>
+            </div>
+          )}
           <div className="space-y-3">
             <div className="grid gap-3 sm:grid-cols-2">
               <label className="flex cursor-pointer items-center justify-center rounded-2xl border border-black/10 bg-white p-4 text-sm font-medium transition hover:bg-black/[0.03]">
