@@ -203,14 +203,6 @@ export default function SiteHeader() {
 
             {!loading && userId ? (
               <div className="hidden items-center gap-2 sm:flex">
-                {showStoreLink && (
-                  <Link
-                    href={`/store/${storeSlug}`}
-                    className="rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm font-medium text-black/70 transition hover:bg-black/[0.03]"
-                  >
-                    View my store
-                  </Link>
-                )}
 
                 <Link
                   href="/profile"
@@ -346,15 +338,6 @@ export default function SiteHeader() {
                   >
                     Profile
                   </Link>
-
-                  {showStoreLink && (
-                    <Link
-                      href={`/store/${storeSlug}`}
-                      className="rounded-2xl border border-black/10 bg-white px-4 py-3 text-center text-sm font-medium text-black/70 transition hover:bg-black/[0.03]"
-                    >
-                      My store
-                    </Link>
-                  )}
                 </nav>
 
                 <div className="mt-3 border-t border-black/6 pt-3">
