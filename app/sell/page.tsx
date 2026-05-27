@@ -777,13 +777,38 @@ export default function SellPage() {
         </h1>
 
         <div className="mt-6 space-y-4">
-          <input
-            type="file"
-            accept="image/*"
-            multiple
-            onChange={(e) => handleFiles(e.target.files)}
-            className="w-full rounded-2xl border border-black/10 bg-white p-3 text-sm"
-          />
+          <div className="space-y-3">
+            <div className="grid gap-3 sm:grid-cols-2">
+              <label className="flex cursor-pointer items-center justify-center rounded-2xl border border-black/10 bg-white p-4 text-sm font-medium transition hover:bg-black/[0.03]">
+                <input
+                  type="file"
+                  accept="image/*"
+                  capture="environment"
+                  multiple
+                  onChange={(e) => handleFiles(e.target.files)}
+                  className="hidden"
+                />
+
+                Take photo
+              </label>
+
+              <label className="flex cursor-pointer items-center justify-center rounded-2xl border border-black/10 bg-white p-4 text-sm font-medium transition hover:bg-black/[0.03]">
+                <input
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  onChange={(e) => handleFiles(e.target.files)}
+                  className="hidden"
+                />
+
+                Choose from gallery
+              </label>
+            </div>
+
+            <p className="text-xs text-black/50">
+              Add up to 10 photos. On mobile, you can take a photo or choose from gallery.
+            </p>
+          </div>
 
           {previewUrls.length > 0 && (
             <>
