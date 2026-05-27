@@ -32,6 +32,7 @@ export default function SiteHeader() {
   const [loggingOut, setLoggingOut] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [hasNewFeedItems, setHasNewFeedItems] = useState(false);
+  const [hasUnreadMessages, setHasUnreadMessages] = useState(false);
 
   const userId = user?.id ?? null;
   const userEmail = user?.email ?? "";
@@ -143,6 +144,60 @@ export default function SiteHeader() {
   useEffect(() => {
     setMobileMenuOpen(false);
   }, [pathname]);
+
+  useEffect(() => {
+    if (!userId) {
+      setHasUnreadMessages(false);
+      return;
+    }
+
+    const checkUnreadMessages = async () => {
+      const { data: participants } = await supabase
+        .from("conversation_participants")
+        .select("conversation_id, last_read_at")
+        .eq("user_id", userId);
+
+      if (!participants || participants.length === 0) {
+        setHasUnreadMessages(false);
+        return;
+      }
+
+      for (const participant of participants) {
+        let query = supabase
+          .from("messages")
+          .select("id")
+          .eq("conversation_id", participant.conversation_id)
+          .neq("sender_id", userId)
+          .limit(1);
+
+        if (participant.last_read_at) {
+          query = query.gt("created_at", participant.last_read_at);
+        }
+
+        const { data } = await query;
+
+        if ((data || []).length > 0) {
+          if (!pathname.startsWith("/messages/")) {
+            setHasUnreadMessages(true);
+          } else {
+            setHasUnreadMessages(false);
+          }
+
+          return;
+        }
+      }
+
+      setHasUnreadMessages(false);
+    };
+
+    checkUnreadMessages();
+
+    const interval = setInterval(() => {
+      checkUnreadMessages();
+    }, 60000);
+
+    return () => clearInterval(interval);
+  }, [userId, pathname]);
 
   const handleLogout = async () => {
     setLoggingOut(true);
@@ -273,7 +328,13 @@ export default function SiteHeader() {
                 href="/messages"
                 className={navClass(pathname.startsWith("/messages"))}
               >
-                Messages
+                <span className="relative inline-flex items-center gap-2">
+                  Messages
+
+                  {hasUnreadMessages && (
+                    <span className="h-2.5 w-2.5 rounded-full bg-green-400" />
+                  )}
+                </span>
               </Link>
 
               <Link href="/sell" className={navClass(isSell)}>
@@ -322,7 +383,13 @@ export default function SiteHeader() {
                     href="/messages"
                     className={mobileNavClass(pathname.startsWith("/messages"))}
                   >
-                    Messages
+                    <span className="inline-flex items-center justify-center gap-2">
+                      Messages
+
+                      {hasUnreadMessages && (
+                        <span className="h-2.5 w-2.5 rounded-full bg-green-400" />
+                      )}
+                    </span>
                   </Link>
 
                   <Link href="/sell" className={mobileNavClass(isSell)}>
