@@ -780,6 +780,7 @@ export default function SellPage() {
           <input
             type="file"
             accept="image/*"
+            capture="environment"
             multiple
             onChange={(e) => handleFiles(e.target.files)}
             className="w-full rounded-2xl border border-black/10 bg-white p-3 text-sm"
