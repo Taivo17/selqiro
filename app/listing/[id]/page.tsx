@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { supabase } from "../../../lib/supabase";
+import { useAuth } from "../../../lib/useAuth";
 
 type ListingImage = {
   id: string;
@@ -105,6 +106,9 @@ function sortImages(images: ListingImage[]) {
 export default function ListingPage() {
   const params = useParams();
   const id = params?.id;
+
+  const router = useRouter();
+  const { user } = useAuth();
 
   const hideTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -288,6 +292,88 @@ export default function ListingPage() {
         alert("Could not share this listing.");
       }
     }
+  };
+
+
+  const contactSeller = async () => {
+    if (!user?.id || !listing?.user_id) {
+      router.push("/auth");
+      return;
+    }
+
+    if (user.id === listing.user_id) {
+      return;
+    }
+
+    // check existing conversation
+    const { data: existingParticipants } = await supabase
+      .from("conversation_participants")
+      .select("conversation_id")
+      .eq("user_id", user.id);
+
+    const conversationIds = (existingParticipants || [])
+      .map((row: any) => row.conversation_id)
+      .filter(Boolean);
+
+    if (conversationIds.length > 0) {
+      const { data: existingConversation } = await supabase
+        .from("conversations")
+        .select("id")
+        .eq("listing_id", listing.id)
+        .in("id", conversationIds)
+        .maybeSingle();
+
+      if (existingConversation?.id) {
+        router.push(`/messages/${existingConversation.id}`);
+        return;
+      }
+    }
+
+    // create new conversation
+    const { data: conversation, error: conversationError } = await supabase
+      .from("conversations")
+      .insert({
+        listing_id: listing.id,
+
+        listing_title_snapshot: listing.title,
+        listing_image_snapshot:
+          listing.image || selectedImage?.thumb_url || "",
+        listing_price_snapshot: listing.price,
+
+        created_by: user.id,
+      })
+      .select("id")
+      .single();
+
+    if (conversationError || !conversation) {
+      console.error(conversationError);
+      alert("Could not start conversation.");
+      return;
+    }
+
+    await supabase
+      .from("conversation_participants")
+      .insert([
+        {
+          conversation_id: conversation.id,
+          user_id: user.id,
+          last_read_at: new Date().toISOString(),
+        },
+        {
+          conversation_id: conversation.id,
+          user_id: listing.user_id,
+        },
+      ]);
+
+    await supabase
+      .from("messages")
+      .insert({
+        conversation_id: conversation.id,
+        sender_id: user.id,
+        message: `Hi! I am interested in: ${listing.title}`,
+      });
+
+    router.push(`/messages/${conversation.id}`);
   };
 
   if (loading) {
@@ -519,6 +605,14 @@ export default function ListingPage() {
                 Seller store unavailable
               </span>
             )}
+
+            <button
+              type="button"
+              onClick={contactSeller}
+              className="rounded-2xl bg-green-500 px-5 py-3 text-sm font-medium text-white transition hover:opacity-90"
+            >
+              Contact seller
+            </button>
 
             <button
               type="button"

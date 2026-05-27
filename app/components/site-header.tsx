@@ -269,6 +269,13 @@ export default function SiteHeader() {
                 My page
               </Link>
 
+              <Link
+                href="/messages"
+                className={navClass(pathname.startsWith("/messages"))}
+              >
+                Messages
+              </Link>
+
               <Link href="/sell" className={navClass(isSell)}>
                 Sell
               </Link>
@@ -309,6 +316,13 @@ export default function SiteHeader() {
 
                   <Link href="/my-page" className={mobileNavClass(isMyPage)}>
                     My page
+                  </Link>
+
+                  <Link
+                    href="/messages"
+                    className={mobileNavClass(pathname.startsWith("/messages"))}
+                  >
+                    Messages
                   </Link>
 
                   <Link href="/sell" className={mobileNavClass(isSell)}>
