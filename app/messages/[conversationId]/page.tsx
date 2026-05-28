@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import { supabase } from "../../../lib/supabase";
 import { useAuth } from "../../../lib/useAuth";
 
@@ -19,11 +19,24 @@ type Message = {
   sender_id?: string | null;
   message: string;
   created_at: string;
+
+  listing_id?: number | null;
+  listing_title?: string | null;
+  listing_image?: string | null;
+  listing_price?: string | null;
+};
+
+type SellerProfile = {
+  store_name?: string | null;
+  store_slug?: string | null;
 };
 
 export default function ConversationPage() {
   const params = useParams();
+  const searchParams = useSearchParams();
+
   const conversationId = Number(params?.conversationId);
+  const attachListingId = searchParams.get("listing");
 
   const { user, loading } = useAuth();
 
@@ -31,7 +44,18 @@ export default function ConversationPage() {
 
   const [conversation, setConversation] = useState<Conversation | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
+  const [sellerProfile, setSellerProfile] = useState<SellerProfile | null>(null);
   const [text, setText] = useState("");
+
+  const attachmentRemovedRef = useRef(false);
+  const [attachmentRemoved, setAttachmentRemoved] = useState(false);
+
+  const [attachedListing, setAttachedListing] = useState<{
+    id?: number | null;
+    title?: string | null;
+    image?: string | null;
+    price?: string | null;
+  } | null>(null);
   const [pageLoading, setPageLoading] = useState(true);
   const [sending, setSending] = useState(false);
 
@@ -53,6 +77,48 @@ export default function ConversationPage() {
     }
 
     setConversation(conversationData as Conversation);
+
+    if (attachListingId && !attachmentRemovedRef.current) {
+      const { data: listingData } = await supabase
+        .from("listings")
+        .select("id, title, price, image, listing_images(thumb_url, medium_url, original_url, is_primary, sort_order)")
+        .eq("id", attachListingId)
+        .maybeSingle();
+
+      if (listingData) {
+        const images = ((listingData as any).listing_images || []).sort(
+          (a: any, b: any) => {
+            if (a.is_primary && !b.is_primary) return -1;
+            if (!a.is_primary && b.is_primary) return 1;
+            return (a.sort_order || 0) - (b.sort_order || 0);
+          }
+        );
+
+        const firstImage = images[0];
+
+        setAttachedListing({
+          id: (listingData as any).id,
+          title: (listingData as any).title,
+          image:
+            (listingData as any).image ||
+            firstImage?.thumb_url ||
+            firstImage?.medium_url ||
+            firstImage?.original_url ||
+            "",
+          price: (listingData as any).price,
+        });
+      }
+    }
+
+    if ((conversationData as any).seller_id) {
+      const { data: sellerData } = await supabase
+        .from("profiles")
+        .select("store_name, store_slug")
+        .eq("id", (conversationData as any).seller_id)
+        .maybeSingle();
+
+      setSellerProfile((sellerData || null) as SellerProfile | null);
+    }
 
     const { data: messageRows, error: messageError } = await supabase
       .from("messages")
@@ -87,7 +153,7 @@ export default function ConversationPage() {
     }, 5000);
 
     return () => clearInterval(interval);
-  }, [user?.id, conversationId]);
+  }, [user?.id, conversationId, attachListingId]);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -104,6 +170,11 @@ export default function ConversationPage() {
       conversation_id: conversationId,
       sender_id: user.id,
       message: cleanText,
+
+      listing_id: attachedListing?.id || null,
+      listing_title: attachedListing?.title || null,
+      listing_image: attachedListing?.image || null,
+      listing_price: attachedListing?.price || null,
     });
 
     if (error) {
@@ -119,6 +190,9 @@ export default function ConversationPage() {
       .eq("id", conversationId);
 
     setText("");
+    attachmentRemovedRef.current = true;
+    setAttachmentRemoved(true);
+    setAttachedListing(null);
     setSending(false);
     loadConversation();
   };
@@ -151,31 +225,47 @@ export default function ConversationPage() {
         </Link>
 
         <section className="rounded-[28px] bg-white p-4 shadow-sm">
-          <div className="flex gap-4">
-            <div className="h-20 w-24 shrink-0 overflow-hidden rounded-2xl bg-neutral-100">
-              {conversation.listing_image_snapshot ? (
-                <img
-                  src={conversation.listing_image_snapshot}
-                  alt=""
-                  className="h-full w-full object-cover"
-                />
-              ) : null}
-            </div>
+          <div className="flex flex-wrap items-start justify-between gap-4">
+            <div className="flex min-w-0 gap-4">
+              <div className="h-20 w-24 shrink-0 overflow-hidden rounded-2xl bg-neutral-100">
+                {conversation.listing_image_snapshot ? (
+                  <img
+                    src={conversation.listing_image_snapshot}
+                    alt=""
+                    className="h-full w-full object-cover"
+                  />
+                ) : null}
+              </div>
 
-            <div className="min-w-0">
-              <p className="text-xs font-medium uppercase tracking-[0.22em] text-black/35">
-                Listing conversation
-              </p>
-
-              <h1 className="mt-1 line-clamp-2 text-2xl font-semibold tracking-tight">
-                {conversation.listing_title_snapshot || "Conversation"}
-              </h1>
-
-              {conversation.listing_price_snapshot && (
-                <p className="mt-1 text-sm text-black/55">
-                  {conversation.listing_price_snapshot}
+              <div className="min-w-0">
+                <p className="text-xs font-medium uppercase tracking-[0.22em] text-black/35">
+                  Conversation
                 </p>
-              )}
+
+                <h1 className="mt-1 line-clamp-2 text-2xl font-semibold tracking-tight">
+                  {sellerProfile?.store_name || "Store"}
+                </h1>
+
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {conversation.listing_id && (
+                    <Link
+                      href={`/listing/${conversation.listing_id}`}
+                      className="rounded-xl border border-black/10 bg-black/[0.02] px-3 py-2 text-sm font-medium text-black/70 transition hover:bg-black/[0.04]"
+                    >
+                      View listing
+                    </Link>
+                  )}
+
+                  {sellerProfile?.store_slug && (
+                    <Link
+                      href={`/store/${sellerProfile.store_slug}`}
+                      className="rounded-xl border border-black/10 bg-black/[0.02] px-3 py-2 text-sm font-medium text-black/70 transition hover:bg-black/[0.04]"
+                    >
+                      View store
+                    </Link>
+                  )}
+                </div>
+              </div>
             </div>
           </div>
         </section>
@@ -185,30 +275,90 @@ export default function ConversationPage() {
             {messages.map((item) => {
               const mine = item.sender_id === user?.id;
 
+              const hasListingAttachment =
+                Boolean(item.listing_id);
+
               return (
                 <div
                   key={item.id}
                   className={`flex ${mine ? "justify-end" : "justify-start"}`}
                 >
-                  <div
-                    className={`max-w-[82%] rounded-2xl px-4 py-3 text-sm leading-6 ${
-                      mine
-                        ? "bg-black text-white"
-                        : "bg-black/[0.04] text-black"
-                    }`}
-                  >
-                    <p className="whitespace-pre-wrap break-words">
-                      {item.message}
-                    </p>
-
-                    <p
-                      className={`mt-2 text-[11px] ${
-                        mine ? "text-white/55" : "text-black/35"
+                  {hasListingAttachment ? (
+                    <div
+                      className={`max-w-[82%] rounded-2xl p-3 shadow-sm ${
+                        mine
+                          ? "bg-black text-white"
+                          : "bg-white border border-black/10 text-black"
                       }`}
                     >
-                      {new Date(item.created_at).toLocaleString()}
-                    </p>
-                  </div>
+                      {item.message && (
+                        <p className="mb-3 whitespace-pre-wrap break-words text-sm leading-6">
+                          {item.message}
+                        </p>
+                      )}
+
+                      <div className="rounded-2xl bg-white p-3 text-black">
+                        <div className="flex gap-3">
+                          {item.listing_image && (
+                            <img
+                              src={item.listing_image}
+                              alt=""
+                              className="h-16 w-20 rounded-xl object-cover"
+                            />
+                          )}
+
+                          <div className="min-w-0">
+                            <p className="line-clamp-2 text-sm font-semibold">
+                              {item.listing_title}
+                            </p>
+
+                            {item.listing_price && (
+                              <p className="mt-1 text-xs text-black/55">
+                                {item.listing_price}
+                              </p>
+                            )}
+
+                            {item.listing_id && (
+                              <Link
+                                href={`/listing/${item.listing_id}`}
+                                className="mt-2 inline-flex rounded-lg border border-black/10 bg-black/[0.02] px-3 py-1 text-xs font-medium text-black/70"
+                              >
+                                View listing
+                              </Link>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+
+                      <p
+                        className={`mt-2 text-[11px] ${
+                          mine ? "text-white/55" : "text-black/35"
+                        }`}
+                      >
+                        {new Date(item.created_at).toLocaleString()}
+                      </p>
+                    </div>
+                  ) : (
+                    <div
+                      className={`max-w-[82%] rounded-2xl px-4 py-3 text-sm leading-6 ${
+                        mine
+                          ? "bg-black text-white"
+                          : "bg-black/[0.04] text-black"
+                      }`}
+                    >
+                      <p className="whitespace-pre-wrap break-words">
+                        {item.message}
+                      </p>
+
+                      <p
+                        className={`mt-2 text-[11px] ${
+                          mine ? "text-white/55" : "text-black/35"
+                        }`}
+                      >
+                        {new Date(item.created_at).toLocaleString()}
+                      </p>
+                    </div>
+                  )}
                 </div>
               );
             })}
@@ -218,10 +368,54 @@ export default function ConversationPage() {
         </section>
 
         <section className="sticky bottom-4 rounded-[28px] bg-white p-3 shadow-lg">
+          {attachedListing && (
+            <div className="mb-3 rounded-2xl border border-black/10 bg-black/[0.02] p-3">
+              <div className="flex items-center gap-3">
+                {attachedListing.image && (
+                  <img
+                    src={attachedListing.image}
+                    alt=""
+                    className="h-14 w-16 rounded-xl object-cover"
+                  />
+                )}
+
+                <div className="min-w-0 flex-1">
+                  <p className="line-clamp-1 text-sm font-semibold">
+                    {attachedListing.title}
+                  </p>
+
+                  {attachedListing.price && (
+                    <p className="mt-1 text-xs text-black/55">
+                      {attachedListing.price}
+                    </p>
+                  )}
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    attachmentRemovedRef.current = true;
+                    setAttachmentRemoved(true);
+                    setAttachedListing(null);
+                  }}
+                  className="rounded-xl border border-black/10 bg-white px-3 py-2 text-xs font-medium text-black/60"
+                >
+                  Remove
+                </button>
+              </div>
+            </div>
+          )}
+
           <div className="flex gap-2">
             <textarea
               value={text}
               onChange={(event) => setText(event.target.value)}
+              onKeyDown={(event) => {
+                if (event.key === "Enter" && !event.shiftKey) {
+                  event.preventDefault();
+                  sendMessage();
+                }
+              }}
               placeholder="Write a message..."
               rows={2}
               className="min-h-12 flex-1 resize-none rounded-2xl border border-black/10 px-4 py-3 text-sm outline-none"

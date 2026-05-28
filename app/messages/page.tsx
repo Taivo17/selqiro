@@ -8,6 +8,9 @@ import { useAuth } from "../../lib/useAuth";
 type Conversation = {
   id: number;
 
+  buyer_id?: string | null;
+  seller_id?: string | null;
+
   listing_title_snapshot?: string | null;
   listing_image_snapshot?: string | null;
   listing_price_snapshot?: string | null;
@@ -20,12 +23,21 @@ type Message = {
   created_at: string;
 };
 
+type OtherProfile = {
+  store_name?: string | null;
+  store_slug?: string | null;
+};
+
 export default function MessagesPage() {
   const { user, loading } = useAuth();
 
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [latestMessages, setLatestMessages] = useState<
     Record<number, Message | null>
+  >({});
+
+  const [otherProfiles, setOtherProfiles] = useState<
+    Record<number, OtherProfile | null>
   >({});
 
   const [pageLoading, setPageLoading] = useState(true);
@@ -70,12 +82,45 @@ export default function MessagesPage() {
         return;
       }
 
-      setConversations((conversationRows || []) as Conversation[]);
+      const uniqueConversations = [];
+      const seenPairs = new Set();
+
+      for (const conversation of (conversationRows || [])) {
+        const buyer = conversation.buyer_id || "";
+        const seller = conversation.seller_id || "";
+
+        const pairKey = [buyer, seller].sort().join("-");
+
+        if (seenPairs.has(pairKey)) {
+          continue;
+        }
+
+        seenPairs.add(pairKey);
+        uniqueConversations.push(conversation);
+      }
+
+      setConversations(uniqueConversations as Conversation[]);
 
       const latestMap: Record<number, Message | null> = {};
+      const profileMap: Record<number, OtherProfile | null> = {};
 
       await Promise.all(
         (conversationRows || []).map(async (conversation: any) => {
+          const otherUserId =
+            conversation.buyer_id === user.id
+              ? conversation.seller_id
+              : conversation.buyer_id;
+
+          if (otherUserId) {
+            const { data: profileData } = await supabase
+              .from("profiles")
+              .select("store_name, store_slug")
+              .eq("id", otherUserId)
+              .maybeSingle();
+
+            profileMap[conversation.id] =
+              (profileData as OtherProfile | null) || null;
+          }
           const { data: messageRow } = await supabase
             .from("messages")
             .select("message, created_at")
@@ -90,6 +135,7 @@ export default function MessagesPage() {
       );
 
       setLatestMessages(latestMap);
+      setOtherProfiles(profileMap);
       setPageLoading(false);
     };
 
@@ -155,14 +201,24 @@ export default function MessagesPage() {
                       <div className="flex items-start justify-between gap-3">
                         <div className="min-w-0">
                           <p className="line-clamp-1 text-lg font-semibold">
-                            {conversation.listing_title_snapshot ||
+                            {otherProfiles[conversation.id]?.store_name ||
                               "Conversation"}
                           </p>
 
-                          {conversation.listing_price_snapshot && (
-                            <p className="mt-1 text-sm text-black/55">
-                              {conversation.listing_price_snapshot}
-                            </p>
+                          {conversation.listing_title_snapshot && (
+                            <div className="mt-2 inline-flex items-center gap-2 rounded-xl border border-black/10 bg-black/[0.02] px-3 py-2 text-xs text-black/60">
+                              {conversation.listing_image_snapshot && (
+                                <img
+                                  src={conversation.listing_image_snapshot}
+                                  alt=""
+                                  className="h-6 w-6 rounded-lg object-cover"
+                                />
+                              )}
+
+                              <span className="line-clamp-1">
+                                {conversation.listing_title_snapshot}
+                              </span>
+                            </div>
                           )}
                         </div>
 

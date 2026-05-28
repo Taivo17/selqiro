@@ -305,28 +305,34 @@ export default function ListingPage() {
       return;
     }
 
-    // check existing conversation
-    const { data: existingParticipants } = await supabase
-      .from("conversation_participants")
-      .select("conversation_id")
-      .eq("user_id", user.id);
+    // reuse existing buyer/seller conversation
+    const { data: existingConversations } = await supabase
+      .from("conversations")
+      .select("id, buyer_id, seller_id")
+      .or(
+        `and(buyer_id.eq.${user.id},seller_id.eq.${listing.user_id}),and(buyer_id.eq.${listing.user_id},seller_id.eq.${user.id})`
+      )
+      .order("updated_at", { ascending: false })
+      .limit(1);
 
-    const conversationIds = (existingParticipants || [])
-      .map((row: any) => row.conversation_id)
-      .filter(Boolean);
+    const existingConversation = existingConversations?.[0];
 
-    if (conversationIds.length > 0) {
-      const { data: existingConversation } = await supabase
+    if (existingConversation?.id) {
+
+      await supabase
         .from("conversations")
-        .select("id")
-        .eq("listing_id", listing.id)
-        .in("id", conversationIds)
-        .maybeSingle();
+        .update({
+          updated_at: new Date().toISOString(),
+          listing_id: listing.id,
+          listing_title_snapshot: listing.title,
+          listing_image_snapshot:
+            listing.image || selectedImage?.thumb_url || "",
+          listing_price_snapshot: listing.price,
+        })
+        .eq("id", existingConversation.id);
 
-      if (existingConversation?.id) {
-        router.push(`/messages/${existingConversation.id}`);
-        return;
-      }
+      router.push(`/messages/${existingConversation.id}?listing=${listing.id}`);
+      return;
     }
 
     // create new conversation
@@ -341,6 +347,8 @@ export default function ListingPage() {
         listing_price_snapshot: listing.price,
 
         created_by: user.id,
+        buyer_id: user.id,
+        seller_id: listing.user_id,
       })
       .select("id")
       .single();
@@ -365,15 +373,7 @@ export default function ListingPage() {
         },
       ]);
 
-    await supabase
-      .from("messages")
-      .insert({
-        conversation_id: conversation.id,
-        sender_id: user.id,
-        message: `Hi! I am interested in: ${listing.title}`,
-      });
-
-    router.push(`/messages/${conversation.id}`);
+    router.push(`/messages/${conversation.id}?listing=${listing.id}`);
   };
 
   if (loading) {
