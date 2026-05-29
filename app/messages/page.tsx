@@ -21,11 +21,13 @@ type Conversation = {
 type Message = {
   message: string;
   created_at: string;
+  sender_id?: string | null;
 };
 
 type OtherProfile = {
   store_name?: string | null;
   store_slug?: string | null;
+  avatar_url?: string | null;
 };
 
 export default function MessagesPage() {
@@ -38,6 +40,10 @@ export default function MessagesPage() {
 
   const [otherProfiles, setOtherProfiles] = useState<
     Record<number, OtherProfile | null>
+  >({});
+
+  const [unreadConversations, setUnreadConversations] = useState<
+    Record<number, boolean>
   >({});
 
   const [pageLoading, setPageLoading] = useState(true);
@@ -103,6 +109,7 @@ export default function MessagesPage() {
 
       const latestMap: Record<number, Message | null> = {};
       const profileMap: Record<number, OtherProfile | null> = {};
+      const unreadMap: Record<number, boolean> = {};
 
       await Promise.all(
         (conversationRows || []).map(async (conversation: any) => {
@@ -114,7 +121,7 @@ export default function MessagesPage() {
           if (otherUserId) {
             const { data: profileData } = await supabase
               .from("profiles")
-              .select("store_name, store_slug")
+              .select("store_name, store_slug, avatar_url")
               .eq("id", otherUserId)
               .maybeSingle();
 
@@ -123,7 +130,7 @@ export default function MessagesPage() {
           }
           const { data: messageRow } = await supabase
             .from("messages")
-            .select("message, created_at")
+            .select("message, created_at, sender_id")
             .eq("conversation_id", conversation.id)
             .order("created_at", { ascending: false })
             .limit(1)
@@ -131,11 +138,36 @@ export default function MessagesPage() {
 
           latestMap[conversation.id] =
             (messageRow as Message | null) || null;
+
+          const participant = (participantRows || []).find(
+            (row: any) => row.conversation_id === conversation.id
+          );
+
+          let unreadQuery = supabase
+            .from("messages")
+            .select("id")
+            .eq("conversation_id", conversation.id)
+            .neq("sender_id", user.id)
+            .limit(1);
+
+          if ((participant as any)?.last_read_at) {
+            unreadQuery = unreadQuery.gt(
+              "created_at",
+              (participant as any).last_read_at
+            );
+          }
+
+          const { data: unreadRows } = await unreadQuery;
+
+          unreadMap[conversation.id] =
+            (unreadRows || []).length > 0 &&
+            messageRow?.sender_id !== user.id;
         })
       );
 
       setLatestMessages(latestMap);
       setOtherProfiles(profileMap);
+      setUnreadConversations(unreadMap);
       setPageLoading(false);
     };
 
@@ -179,22 +211,36 @@ export default function MessagesPage() {
           <div className="space-y-3">
             {conversations.map((conversation) => {
               const latest = latestMessages[conversation.id];
+              const isUnread = unreadConversations[conversation.id];
 
               return (
                 <Link
                   key={conversation.id}
                   href={`/messages/${conversation.id}`}
-                  className="block rounded-[28px] bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
+                  className={`block rounded-[28px] p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md ${
+                    isUnread
+                      ? "bg-black text-white"
+                      : "bg-white text-black"
+                  }`}
                 >
                   <div className="flex gap-4">
                     <div className="h-20 w-24 shrink-0 overflow-hidden rounded-2xl bg-neutral-100">
-                      {conversation.listing_image_snapshot ? (
-                        <img
-                          src={conversation.listing_image_snapshot}
-                          alt=""
-                          className="h-full w-full object-cover"
-                        />
-                      ) : null}
+                      <div className="flex h-full w-full items-center justify-center overflow-hidden bg-black text-sm font-semibold text-white">
+                        {otherProfiles[conversation.id]?.avatar_url ? (
+                          <img
+                            src={otherProfiles[conversation.id]?.avatar_url || ""}
+                            alt=""
+                            className="h-full w-full object-cover"
+                          />
+                        ) : (
+                          (otherProfiles[conversation.id]?.store_name || "Store")
+                            .split(" ")
+                            .map((part) => part[0])
+                            .join("")
+                            .slice(0, 2)
+                            .toUpperCase()
+                        )}
+                      </div>
                     </div>
 
                     <div className="min-w-0 flex-1">
@@ -222,12 +268,22 @@ export default function MessagesPage() {
                           )}
                         </div>
 
-                        <span className="shrink-0 rounded-full border border-black/10 bg-black/[0.02] px-3 py-1 text-xs text-black/45">
-                          Open
+                        <span
+                          className={`shrink-0 rounded-full px-3 py-1 text-xs ${
+                            isUnread
+                              ? "bg-green-400 text-black"
+                              : "border border-black/10 bg-black/[0.02] text-black/45"
+                          }`}
+                        >
+                          {isUnread ? "New" : "Open"}
                         </span>
                       </div>
 
-                      <p className="mt-3 line-clamp-2 text-sm text-black/60">
+                      <p
+                        className={`mt-3 line-clamp-2 text-sm ${
+                          isUnread ? "font-medium text-white/80" : "text-black/60"
+                        }`}
+                      >
                         {latest?.message || "No messages yet"}
                       </p>
                     </div>

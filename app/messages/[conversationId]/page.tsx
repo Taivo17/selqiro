@@ -8,6 +8,8 @@ import { useAuth } from "../../../lib/useAuth";
 
 type Conversation = {
   id: number;
+  buyer_id?: string | null;
+  seller_id?: string | null;
   listing_id?: number | null;
   listing_title_snapshot?: string | null;
   listing_image_snapshot?: string | null;
@@ -29,6 +31,7 @@ type Message = {
 type SellerProfile = {
   store_name?: string | null;
   store_slug?: string | null;
+  avatar_url?: string | null;
 };
 
 export default function ConversationPage() {
@@ -110,11 +113,16 @@ export default function ConversationPage() {
       }
     }
 
-    if ((conversationData as any).seller_id) {
+    const otherUserId =
+      (conversationData as any).buyer_id === user.id
+        ? (conversationData as any).seller_id
+        : (conversationData as any).buyer_id;
+
+    if (otherUserId) {
       const { data: sellerData } = await supabase
         .from("profiles")
-        .select("store_name, store_slug")
-        .eq("id", (conversationData as any).seller_id)
+        .select("store_name, store_slug, avatar_url")
+        .eq("id", otherUserId)
         .maybeSingle();
 
       setSellerProfile((sellerData || null) as SellerProfile | null);
@@ -224,18 +232,32 @@ export default function ConversationPage() {
           ← Back to messages
         </Link>
 
-        <section className="rounded-[28px] bg-white p-4 shadow-sm">
+        <section className="sticky top-24 z-20 rounded-[28px] bg-white/95 p-4 shadow-sm backdrop-blur">
           <div className="flex flex-wrap items-start justify-between gap-4">
             <div className="flex min-w-0 gap-4">
-              <div className="h-20 w-24 shrink-0 overflow-hidden rounded-2xl bg-neutral-100">
-                {conversation.listing_image_snapshot ? (
+              <Link
+                href={
+                  sellerProfile?.store_slug
+                    ? `/store/${sellerProfile.store_slug}`
+                    : "#"
+                }
+                className="flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-black text-sm font-semibold text-white"
+              >
+                {sellerProfile?.avatar_url ? (
                   <img
-                    src={conversation.listing_image_snapshot}
+                    src={sellerProfile.avatar_url}
                     alt=""
                     className="h-full w-full object-cover"
                   />
-                ) : null}
-              </div>
+                ) : (
+                  (sellerProfile?.store_name || "Store")
+                    .split(" ")
+                    .map((part) => part[0])
+                    .join("")
+                    .slice(0, 2)
+                    .toUpperCase()
+                )}
+              </Link>
 
               <div className="min-w-0">
                 <p className="text-xs font-medium uppercase tracking-[0.22em] text-black/35">
