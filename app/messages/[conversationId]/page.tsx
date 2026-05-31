@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { useParams, useSearchParams } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { supabase } from "../../../lib/supabase";
 import { useAuth } from "../../../lib/useAuth";
 
@@ -36,6 +36,7 @@ type SellerProfile = {
 
 export default function ConversationPage() {
   const params = useParams();
+  const router = useRouter();
   const searchParams = useSearchParams();
 
   const conversationId = Number(params?.conversationId);
@@ -144,6 +145,10 @@ export default function ConversationPage() {
 
     setMessages((messageRows || []) as Message[]);
 
+    window.setTimeout(() => {
+      bottomRef.current?.scrollIntoView({ behavior: "auto", block: "end" });
+    }, 150);
+
     await supabase
       .from("conversation_participants")
       .update({ last_read_at: new Date().toISOString() })
@@ -164,8 +169,37 @@ export default function ConversationPage() {
   }, [user?.id, conversationId, attachListingId]);
 
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+    if (messages.length === 0) return;
+
+    const timeout = window.setTimeout(() => {
+      bottomRef.current?.scrollIntoView({ behavior: "auto", block: "end" });
+    }, 50);
+
+    return () => window.clearTimeout(timeout);
   }, [messages.length]);
+
+
+  const deleteConversation = async () => {
+    const confirmed = window.confirm(
+      "Delete conversation?\n\nThis action cannot be undone."
+    );
+
+    if (!confirmed) return;
+
+    const { error } = await supabase
+      .from("conversation_participants")
+      .update({ deleted_at: new Date().toISOString() })
+      .eq("conversation_id", conversationId)
+      .eq("user_id", user?.id);
+
+    if (error) {
+      console.error(error);
+      alert("Could not delete conversation.");
+      return;
+    }
+
+    router.push("/messages");
+  };
 
   const sendMessage = async () => {
     const cleanText = text.trim();
@@ -192,9 +226,20 @@ export default function ConversationPage() {
       return;
     }
 
+    const now = new Date().toISOString();
+
+    await supabase
+      .rpc("restore_conversation_for_participants", {
+        target_conversation_id: conversationId,
+      });
+
+    await supabase.rpc("restore_conversation_for_participants", {
+      target_conversation_id: conversationId,
+    });
+
     await supabase
       .from("conversations")
-      .update({ updated_at: new Date().toISOString() })
+      .update({ updated_at: now })
       .eq("id", conversationId);
 
     setText("");
@@ -289,6 +334,13 @@ export default function ConversationPage() {
                 </div>
               </div>
             </div>
+            <button
+              type="button"
+              onClick={deleteConversation}
+              className="rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-sm font-medium text-red-700"
+            >
+              Delete
+            </button>
           </div>
         </section>
 
@@ -385,7 +437,7 @@ export default function ConversationPage() {
               );
             })}
 
-            <div ref={bottomRef} />
+            <div className="h-28" ref={bottomRef} />
           </div>
         </section>
 

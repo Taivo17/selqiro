@@ -320,6 +320,11 @@ export default function ListingPage() {
     if (existingConversation?.id) {
 
       await supabase
+        .from("conversation_participants")
+        .update({ deleted_at: null })
+        .eq("conversation_id", existingConversation.id);
+
+      await supabase
         .from("conversations")
         .update({
           updated_at: new Date().toISOString(),

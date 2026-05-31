@@ -56,8 +56,9 @@ export default function MessagesPage() {
 
       const { data: participantRows, error } = await supabase
         .from("conversation_participants")
-        .select("conversation_id")
-        .eq("user_id", user.id);
+        .select("conversation_id, deleted_at, last_read_at")
+        .eq("user_id", user.id)
+        .is("deleted_at", null);
 
       if (error) {
         console.error(error);
@@ -88,24 +89,7 @@ export default function MessagesPage() {
         return;
       }
 
-      const uniqueConversations = [];
-      const seenPairs = new Set();
-
-      for (const conversation of (conversationRows || [])) {
-        const buyer = conversation.buyer_id || "";
-        const seller = conversation.seller_id || "";
-
-        const pairKey = [buyer, seller].sort().join("-");
-
-        if (seenPairs.has(pairKey)) {
-          continue;
-        }
-
-        seenPairs.add(pairKey);
-        uniqueConversations.push(conversation);
-      }
-
-      setConversations(uniqueConversations as Conversation[]);
+      setConversations((conversationRows || []) as Conversation[]);
 
       const latestMap: Record<number, Message | null> = {};
       const profileMap: Record<number, OtherProfile | null> = {};
