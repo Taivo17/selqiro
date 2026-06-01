@@ -198,6 +198,10 @@ export default function ConversationPage() {
       return;
     }
 
+    await supabase.rpc("archive_conversation_if_all_deleted", {
+      target_conversation_id: conversationId,
+    });
+
     router.push("/messages");
   };
 
@@ -227,11 +231,6 @@ export default function ConversationPage() {
     }
 
     const now = new Date().toISOString();
-
-    await supabase
-      .rpc("restore_conversation_for_participants", {
-        target_conversation_id: conversationId,
-      });
 
     await supabase.rpc("restore_conversation_for_participants", {
       target_conversation_id: conversationId,

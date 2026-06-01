@@ -312,6 +312,7 @@ export default function ListingPage() {
       .or(
         `and(buyer_id.eq.${user.id},seller_id.eq.${listing.user_id}),and(buyer_id.eq.${listing.user_id},seller_id.eq.${user.id})`
       )
+      .is("archived_at", null)
       .order("updated_at", { ascending: false })
       .limit(1);
 
