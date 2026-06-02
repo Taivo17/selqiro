@@ -84,6 +84,7 @@ export default function ConversationPage() {
 
   const bottomRef = useRef<HTMLDivElement | null>(null);
   const imageInputRef = useRef<HTMLInputElement | null>(null);
+  const conversationMenuRef = useRef<HTMLDivElement | null>(null);
   const hasScrolledToInitialBottomRef = useRef(false);
   const shouldStickToBottomRef = useRef(true);
   const previousMessageCountRef = useRef(0);
@@ -107,6 +108,7 @@ export default function ConversationPage() {
   const [selectedImageFile, setSelectedImageFile] = useState<File | null>(null);
   const [selectedImagePreview, setSelectedImagePreview] = useState<string | null>(null);
   const [openImageUrl, setOpenImageUrl] = useState<string | null>(null);
+  const [conversationMenuOpen, setConversationMenuOpen] = useState(false);
 
   const loadConversation = async () => {
     if (!user?.id || !conversationId) return;
@@ -276,9 +278,33 @@ export default function ConversationPage() {
   }, [messages.length]);
 
 
+  useEffect(() => {
+    if (!conversationMenuOpen) return;
+
+    const closeMenu = (event: MouseEvent | TouchEvent) => {
+      const target = event.target as Node | null;
+
+      if (
+        conversationMenuRef.current &&
+        target &&
+        !conversationMenuRef.current.contains(target)
+      ) {
+        setConversationMenuOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", closeMenu);
+    document.addEventListener("touchstart", closeMenu);
+
+    return () => {
+      document.removeEventListener("mousedown", closeMenu);
+      document.removeEventListener("touchstart", closeMenu);
+    };
+  }, [conversationMenuOpen]);
+
   const deleteConversation = async () => {
     const confirmed = window.confirm(
-      "Delete conversation?\n\nThis action cannot be undone."
+      "Delete conversation?\n\nThe conversation will be removed from your inbox.\n\nThe other participant can still see the conversation until they delete it."
     );
 
     if (!confirmed) return;
@@ -472,34 +498,33 @@ export default function ConversationPage() {
                   {sellerProfile?.store_name || "Store"}
                 </h1>
 
-                <div className="mt-3 hidden flex-wrap gap-2 sm:flex">
-                  {conversation.listing_id && (
-                    <Link
-                      href={`/listing/${conversation.listing_id}`}
-                      className="rounded-xl border border-black/10 bg-black/[0.02] px-3 py-2 text-sm font-medium text-black/70 transition hover:bg-black/[0.04]"
-                    >
-                      View listing
-                    </Link>
-                  )}
-
-                  {sellerProfile?.store_slug && (
-                    <Link
-                      href={`/store/${sellerProfile.store_slug}`}
-                      className="rounded-xl border border-black/10 bg-black/[0.02] px-3 py-2 text-sm font-medium text-black/70 transition hover:bg-black/[0.04]"
-                    >
-                      View store
-                    </Link>
-                  )}
-                </div>
               </div>
             </div>
-            <button
-              type="button"
-              onClick={deleteConversation}
-              className="hidden rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-sm font-medium text-red-700 sm:inline-flex"
-            >
-              Delete
-            </button>
+            <div ref={conversationMenuRef} className="relative shrink-0">
+              <button
+                type="button"
+                onClick={() => setConversationMenuOpen((value) => !value)}
+                className="flex h-10 w-10 items-center justify-center rounded-xl border border-black/10 bg-white text-sm font-semibold text-black/65"
+                aria-label="Conversation options"
+              >
+                i
+              </button>
+
+              {conversationMenuOpen && (
+                <div className="absolute right-0 z-[9999] mt-2 w-48 rounded-2xl border border-black/10 bg-white p-2 shadow-lg">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setConversationMenuOpen(false);
+                      deleteConversation();
+                    }}
+                    className="w-full rounded-xl px-3 py-2 text-left text-sm font-medium text-red-700 hover:bg-red-50"
+                  >
+                    Delete conversation
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
         </section>
 
