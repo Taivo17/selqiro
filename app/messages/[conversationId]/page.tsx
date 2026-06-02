@@ -84,6 +84,9 @@ export default function ConversationPage() {
 
   const bottomRef = useRef<HTMLDivElement | null>(null);
   const imageInputRef = useRef<HTMLInputElement | null>(null);
+  const hasScrolledToInitialBottomRef = useRef(false);
+  const shouldStickToBottomRef = useRef(true);
+  const previousMessageCountRef = useRef(0);
 
   const [conversation, setConversation] = useState<Conversation | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
@@ -207,10 +210,6 @@ export default function ConversationPage() {
 
     setMessages(signedMessages);
 
-    window.setTimeout(() => {
-      bottomRef.current?.scrollIntoView({ behavior: "auto", block: "end" });
-    }, 150);
-
     await supabase
       .from("conversation_participants")
       .update({ last_read_at: new Date().toISOString() })
@@ -231,13 +230,49 @@ export default function ConversationPage() {
   }, [user?.id, conversationId, attachListingId]);
 
   useEffect(() => {
+    const updateStickToBottom = () => {
+      const distanceFromBottom =
+        document.documentElement.scrollHeight -
+        (window.scrollY + window.innerHeight);
+
+      shouldStickToBottomRef.current = distanceFromBottom < 220;
+    };
+
+    updateStickToBottom();
+    window.addEventListener("scroll", updateStickToBottom, { passive: true });
+
+    return () => window.removeEventListener("scroll", updateStickToBottom);
+  }, []);
+
+  useEffect(() => {
     if (messages.length === 0) return;
 
-    const timeout = window.setTimeout(() => {
-      bottomRef.current?.scrollIntoView({ behavior: "auto", block: "end" });
-    }, 50);
+    const previousMessageCount = previousMessageCountRef.current;
+    const isInitialLoad = !hasScrolledToInitialBottomRef.current;
+    const hasNewMessages = messages.length > previousMessageCount;
 
-    return () => window.clearTimeout(timeout);
+    previousMessageCountRef.current = messages.length;
+
+    if (isInitialLoad) {
+      const timeout = window.setTimeout(() => {
+        window.scrollTo({
+          top: document.documentElement.scrollHeight,
+          behavior: "auto",
+        });
+
+        hasScrolledToInitialBottomRef.current = true;
+      }, 250);
+
+      return () => window.clearTimeout(timeout);
+    }
+
+    if (hasNewMessages && shouldStickToBottomRef.current) {
+      const timeout = window.setTimeout(() => {
+        bottomRef.current?.scrollIntoView({ behavior: "auto", block: "end" });
+      }, 80);
+
+      return () => window.clearTimeout(timeout);
+    }
   }, [messages.length]);
 
 
@@ -369,6 +404,7 @@ export default function ConversationPage() {
 
     setSelectedImageFile(null);
     setSelectedImagePreview(null);
+    shouldStickToBottomRef.current = true;
     setSending(false);
     loadConversation();
   };
@@ -400,16 +436,16 @@ export default function ConversationPage() {
           ← Back to messages
         </Link>
 
-        <section className="sticky top-24 z-20 rounded-[28px] bg-white/95 p-4 shadow-sm backdrop-blur">
+        <section className="sticky top-20 z-20 rounded-[28px] bg-white/95 p-3 shadow-sm backdrop-blur sm:top-24 sm:p-4">
           <div className="flex flex-wrap items-start justify-between gap-4">
-            <div className="flex min-w-0 gap-4">
+            <div className="flex min-w-0 items-center gap-3 sm:items-start sm:gap-4">
               <Link
                 href={
                   sellerProfile?.store_slug
                     ? `/store/${sellerProfile.store_slug}`
                     : "#"
                 }
-                className="flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-black text-sm font-semibold text-white"
+                className="flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-black text-xs font-semibold text-white sm:h-20 sm:w-20 sm:text-sm"
               >
                 {sellerProfile?.avatar_url ? (
                   <img
@@ -428,15 +464,15 @@ export default function ConversationPage() {
               </Link>
 
               <div className="min-w-0">
-                <p className="text-xs font-medium uppercase tracking-[0.22em] text-black/35">
+                <p className="hidden text-xs font-medium uppercase tracking-[0.22em] text-black/35 sm:block">
                   Conversation
                 </p>
 
-                <h1 className="mt-1 line-clamp-2 text-2xl font-semibold tracking-tight">
+                <h1 className="line-clamp-1 text-xl font-semibold tracking-tight sm:mt-1 sm:line-clamp-2 sm:text-2xl">
                   {sellerProfile?.store_name || "Store"}
                 </h1>
 
-                <div className="mt-3 flex flex-wrap gap-2">
+                <div className="mt-3 hidden flex-wrap gap-2 sm:flex">
                   {conversation.listing_id && (
                     <Link
                       href={`/listing/${conversation.listing_id}`}
@@ -460,7 +496,7 @@ export default function ConversationPage() {
             <button
               type="button"
               onClick={deleteConversation}
-              className="rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-sm font-medium text-red-700"
+              className="hidden rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-sm font-medium text-red-700 sm:inline-flex"
             >
               Delete
             </button>
