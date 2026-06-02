@@ -26,6 +26,9 @@ type Message = {
   listing_title?: string | null;
   listing_image?: string | null;
   listing_price?: string | null;
+
+  image_url?: string | null;
+  image_path?: string | null;
 };
 
 type SellerProfile = {
@@ -33,6 +36,41 @@ type SellerProfile = {
   store_slug?: string | null;
   avatar_url?: string | null;
 };
+
+async function resizeImageForMessage(file: File): Promise<Blob> {
+  const imageBitmap = await createImageBitmap(file);
+
+  const maxSize = 1600;
+  const scale = Math.min(1, maxSize / Math.max(imageBitmap.width, imageBitmap.height));
+  const width = Math.round(imageBitmap.width * scale);
+  const height = Math.round(imageBitmap.height * scale);
+
+  const canvas = document.createElement("canvas");
+  canvas.width = width;
+  canvas.height = height;
+
+  const context = canvas.getContext("2d");
+  if (!context) {
+    throw new Error("Could not prepare image.");
+  }
+
+  context.drawImage(imageBitmap, 0, 0, width, height);
+
+  return new Promise((resolve, reject) => {
+    canvas.toBlob(
+      (blob) => {
+        if (!blob) {
+          reject(new Error("Could not resize image."));
+          return;
+        }
+
+        resolve(blob);
+      },
+      "image/webp",
+      0.82
+    );
+  });
+}
 
 export default function ConversationPage() {
   const params = useParams();
@@ -45,6 +83,7 @@ export default function ConversationPage() {
   const { user, loading } = useAuth();
 
   const bottomRef = useRef<HTMLDivElement | null>(null);
+  const imageInputRef = useRef<HTMLInputElement | null>(null);
 
   const [conversation, setConversation] = useState<Conversation | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
@@ -62,6 +101,9 @@ export default function ConversationPage() {
   } | null>(null);
   const [pageLoading, setPageLoading] = useState(true);
   const [sending, setSending] = useState(false);
+  const [selectedImageFile, setSelectedImageFile] = useState<File | null>(null);
+  const [selectedImagePreview, setSelectedImagePreview] = useState<string | null>(null);
+  const [openImageUrl, setOpenImageUrl] = useState<string | null>(null);
 
   const loadConversation = async () => {
     if (!user?.id || !conversationId) return;
@@ -143,7 +185,27 @@ export default function ConversationPage() {
       return;
     }
 
-    setMessages((messageRows || []) as Message[]);
+    const signedMessages = await Promise.all(
+      ((messageRows || []) as Message[]).map(async (message) => {
+        if (!message.image_path) return message;
+
+        const { data: signedData, error: signedError } = await supabase.storage
+          .from("messages")
+          .createSignedUrl(message.image_path, 60 * 10);
+
+        if (signedError) {
+          console.error(signedError);
+          return message;
+        }
+
+        return {
+          ...message,
+          image_url: signedData?.signedUrl || null,
+        };
+      })
+    );
+
+    setMessages(signedMessages);
 
     window.setTimeout(() => {
       bottomRef.current?.scrollIntoView({ behavior: "auto", block: "end" });
@@ -205,22 +267,77 @@ export default function ConversationPage() {
     router.push("/messages");
   };
 
+  const handleImageSelected = (file: File | null) => {
+    if (!file) return;
+
+    const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
+
+    if (!allowedTypes.includes(file.type)) {
+      alert("Please choose a JPG, PNG or WEBP image.");
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      alert("Image is too large. Maximum size is 5 MB.");
+      return;
+    }
+
+    if (selectedImagePreview) {
+      URL.revokeObjectURL(selectedImagePreview);
+    }
+
+    setSelectedImageFile(file);
+    setSelectedImagePreview(URL.createObjectURL(file));
+  };
+
   const sendMessage = async () => {
     const cleanText = text.trim();
 
-    if (!user?.id || !conversationId || !cleanText || sending) return;
+    if (!user?.id || !conversationId || (!cleanText && !selectedImageFile) || sending) return;
 
     setSending(true);
+
+    let imagePath: string | null = null;
+
+    if (selectedImageFile) {
+      try {
+        const resizedBlob = await resizeImageForMessage(selectedImageFile);
+        const fileName = `${conversationId}/${crypto.randomUUID()}.webp`;
+
+        const { error: uploadError } = await supabase.storage
+          .from("messages")
+          .upload(fileName, resizedBlob, {
+            contentType: "image/webp",
+            upsert: false,
+          });
+
+        if (uploadError) {
+          console.error(uploadError);
+          alert("Could not upload image.");
+          setSending(false);
+          return;
+        }
+
+        imagePath = fileName;
+      } catch (imageError) {
+        console.error(imageError);
+        alert("Could not prepare image.");
+        setSending(false);
+        return;
+      }
+    }
 
     const { error } = await supabase.from("messages").insert({
       conversation_id: conversationId,
       sender_id: user.id,
-      message: cleanText,
+      message: cleanText || "",
 
       listing_id: attachedListing?.id || null,
       listing_title: attachedListing?.title || null,
       listing_image: attachedListing?.image || null,
       listing_price: attachedListing?.price || null,
+
+      image_path: imagePath,
     });
 
     if (error) {
@@ -245,6 +362,13 @@ export default function ConversationPage() {
     attachmentRemovedRef.current = true;
     setAttachmentRemoved(true);
     setAttachedListing(null);
+
+    if (selectedImagePreview) {
+      URL.revokeObjectURL(selectedImagePreview);
+    }
+
+    setSelectedImageFile(null);
+    setSelectedImagePreview(null);
     setSending(false);
     loadConversation();
   };
@@ -419,9 +543,25 @@ export default function ConversationPage() {
                           : "bg-black/[0.04] text-black"
                       }`}
                     >
-                      <p className="whitespace-pre-wrap break-words">
-                        {item.message}
-                      </p>
+                      {item.image_url && (
+                        <button
+                          type="button"
+                          onClick={() => setOpenImageUrl(item.image_url || null)}
+                          className="mb-3 block"
+                        >
+                          <img
+                            src={item.image_url}
+                            alt=""
+                            className="max-h-[360px] rounded-2xl object-contain"
+                          />
+                        </button>
+                      )}
+
+                      {item.message && (
+                        <p className="whitespace-pre-wrap break-words">
+                          {item.message}
+                        </p>
+                      )}
 
                       <p
                         className={`mt-2 text-[11px] ${
@@ -479,7 +619,49 @@ export default function ConversationPage() {
             </div>
           )}
 
+          {selectedImagePreview && (
+            <div className="mb-3 flex items-center gap-3 rounded-2xl border border-black/10 bg-black/[0.02] p-3">
+              <img
+                src={selectedImagePreview}
+                alt=""
+                className="h-20 w-24 rounded-xl object-cover"
+              />
+
+              <button
+                type="button"
+                onClick={() => {
+                  URL.revokeObjectURL(selectedImagePreview);
+                  setSelectedImageFile(null);
+                  setSelectedImagePreview(null);
+                }}
+                className="rounded-xl border border-black/10 bg-white px-3 py-2 text-xs font-medium text-black/60"
+              >
+                Remove photo
+              </button>
+            </div>
+          )}
+
+          <input
+            ref={imageInputRef}
+            type="file"
+            accept="image/jpeg,image/png,image/webp"
+            className="hidden"
+            onChange={(event) => {
+              handleImageSelected(event.target.files?.[0] || null);
+              event.target.value = "";
+            }}
+          />
+
           <div className="flex gap-2">
+            <button
+              type="button"
+              onClick={() => imageInputRef.current?.click()}
+              disabled={sending}
+              className="rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm font-medium text-black/65 disabled:opacity-50"
+            >
+              Photo
+            </button>
+
             <textarea
               value={text}
               onChange={(event) => setText(event.target.value)}
@@ -497,7 +679,7 @@ export default function ConversationPage() {
             <button
               type="button"
               onClick={sendMessage}
-              disabled={sending || !text.trim()}
+              disabled={sending || (!text.trim() && !selectedImageFile)}
               className="rounded-2xl bg-green-500 px-5 py-3 text-sm font-medium text-white disabled:opacity-50"
             >
               {sending ? "Sending..." : "Send"}
@@ -505,6 +687,31 @@ export default function ConversationPage() {
           </div>
         </section>
       </div>
+
+      {openImageUrl && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4"
+          onClick={() => setOpenImageUrl(null)}
+        >
+          <button
+            type="button"
+            className="absolute right-4 top-4 rounded-full bg-white px-4 py-2 text-sm font-medium text-black"
+            onClick={(event) => {
+              event.stopPropagation();
+              setOpenImageUrl(null);
+            }}
+          >
+            Close
+          </button>
+
+          <img
+            src={openImageUrl}
+            alt=""
+            className="max-h-[90vh] max-w-[95vw] rounded-2xl object-contain"
+            onClick={(event) => event.stopPropagation()}
+          />
+        </div>
+      )}
     </main>
   );
 }
