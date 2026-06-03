@@ -92,6 +92,9 @@ export default function ConversationPage() {
   const [conversation, setConversation] = useState<Conversation | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
   const [sellerProfile, setSellerProfile] = useState<SellerProfile | null>(null);
+  const [otherUserId, setOtherUserId] = useState<string | null>(null);
+  const [isBlocked, setIsBlocked] = useState(false);
+  const [blockedByMe, setBlockedByMe] = useState(false);
   const [text, setText] = useState("");
 
   const attachmentRemovedRef = useRef(false);
@@ -166,7 +169,21 @@ export default function ConversationPage() {
         ? (conversationData as any).seller_id
         : (conversationData as any).buyer_id;
 
+    setOtherUserId(otherUserId || null);
+
     if (otherUserId) {
+      const { data: blockRows } = await supabase
+        .from("user_blocks")
+        .select("id, blocker_id")
+        .or(
+          `and(blocker_id.eq.${user.id},blocked_id.eq.${otherUserId}),and(blocker_id.eq.${otherUserId},blocked_id.eq.${user.id})`
+        )
+        .limit(1);
+
+      const blocks = blockRows || [];
+      setIsBlocked(blocks.length > 0);
+      setBlockedByMe(blocks.some((block: any) => block.blocker_id === user.id));
+
       const { data: sellerData } = await supabase
         .from("profiles")
         .select("store_name, store_slug, avatar_url")
@@ -351,8 +368,58 @@ export default function ConversationPage() {
     setSelectedImagePreview(URL.createObjectURL(file));
   };
 
+  const blockUser = async () => {
+    if (!user?.id || !otherUserId) return;
+
+    const confirmed = window.confirm(
+      "Block this user?\n\nYou will not be able to send messages to each other.\n\nYou will no longer see this user's listings in your marketplace view."
+    );
+
+    if (!confirmed) return;
+
+    const { error } = await supabase.from("user_blocks").upsert({
+      blocker_id: user.id,
+      blocked_id: otherUserId,
+    });
+
+    if (error) {
+      console.error(error);
+      alert("Could not block user.");
+      return;
+    }
+
+    setIsBlocked(true);
+    setBlockedByMe(true);
+    setConversationMenuOpen(false);
+  };
+
+  const unblockUser = async () => {
+    if (!user?.id || !otherUserId) return;
+
+    const { error } = await supabase
+      .from("user_blocks")
+      .delete()
+      .eq("blocker_id", user.id)
+      .eq("blocked_id", otherUserId);
+
+    if (error) {
+      console.error(error);
+      alert("Could not unblock user.");
+      return;
+    }
+
+    setIsBlocked(false);
+    setBlockedByMe(false);
+    setConversationMenuOpen(false);
+  };
+
   const sendMessage = async () => {
     const cleanText = text.trim();
+
+    if (isBlocked) {
+      alert("Messaging is disabled because one of you has blocked the other user.");
+      return;
+    }
 
     if (!user?.id || !conversationId || (!cleanText && !selectedImageFile) || sending) return;
 
@@ -511,14 +578,40 @@ export default function ConversationPage() {
               </button>
 
               {conversationMenuOpen && (
-                <div className="absolute right-0 z-[9999] mt-2 w-48 rounded-2xl border border-black/10 bg-white p-2 shadow-lg">
+                <div className="absolute right-0 z-[9999] mt-2 w-56 rounded-2xl border border-black/10 bg-white p-2 shadow-lg">
+                  {blockedByMe ? (
+                    <button
+                      type="button"
+                      onClick={unblockUser}
+                      className="w-full rounded-xl px-3 py-2 text-left text-sm font-medium text-black/70 hover:bg-black/[0.04]"
+                    >
+                      Unblock user
+                    </button>
+                  ) : isBlocked ? (
+                    <button
+                      type="button"
+                      disabled
+                      className="w-full rounded-xl px-3 py-2 text-left text-sm font-medium text-black/45"
+                    >
+                      User blocked
+                    </button>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={blockUser}
+                      className="w-full rounded-xl px-3 py-2 text-left text-sm font-medium text-black/70 hover:bg-black/[0.04]"
+                    >
+                      Block user
+                    </button>
+                  )}
+
                   <button
                     type="button"
                     onClick={() => {
                       setConversationMenuOpen(false);
                       deleteConversation();
                     }}
-                    className="w-full rounded-xl px-3 py-2 text-left text-sm font-medium text-red-700 hover:bg-red-50"
+                    className="mt-1 w-full rounded-xl px-3 py-2 text-left text-sm font-medium text-red-700 hover:bg-red-50"
                   >
                     Delete conversation
                   </button>
@@ -713,11 +806,17 @@ export default function ConversationPage() {
             }}
           />
 
+          {isBlocked && (
+            <div className="mb-3 rounded-2xl border border-red-200 bg-red-50 p-3 text-sm text-red-800">
+              Messaging is disabled because one of you has blocked the other user.
+            </div>
+          )}
+
           <div className="flex gap-2">
             <button
               type="button"
               onClick={() => imageInputRef.current?.click()}
-              disabled={sending}
+              disabled={sending || isBlocked}
               className="rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm font-medium text-black/65 disabled:opacity-50"
             >
               Photo
@@ -732,15 +831,16 @@ export default function ConversationPage() {
                   sendMessage();
                 }
               }}
-              placeholder="Write a message..."
+              placeholder={isBlocked ? "Messaging is disabled" : "Write a message..."}
               rows={2}
-              className="min-h-12 flex-1 resize-none rounded-2xl border border-black/10 px-4 py-3 text-sm outline-none"
+              disabled={isBlocked}
+              className="min-h-12 flex-1 resize-none rounded-2xl border border-black/10 px-4 py-3 text-sm outline-none disabled:bg-black/[0.03]"
             />
 
             <button
               type="button"
               onClick={sendMessage}
-              disabled={sending || (!text.trim() && !selectedImageFile)}
+              disabled={sending || isBlocked || (!text.trim() && !selectedImageFile)}
               className="rounded-2xl bg-green-500 px-5 py-3 text-sm font-medium text-white disabled:opacity-50"
             >
               {sending ? "Sending..." : "Send"}
