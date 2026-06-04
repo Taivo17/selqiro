@@ -120,6 +120,7 @@ export default function ListingPage() {
   const [fullImageOpen, setFullImageOpen] = useState(false);
   const [controlsVisible, setControlsVisible] = useState(false);
   const [shareCopied, setShareCopied] = useState(false);
+  const [sellerBlocked, setSellerBlocked] = useState(false);
 
   const showControlsTemporarily = () => {
     setControlsVisible(true);
@@ -165,6 +166,25 @@ export default function ListingPage() {
 
       const loadedListing = data as Listing;
 
+      if (user?.id && loadedListing.user_id && user.id !== loadedListing.user_id) {
+        const { data: blockRows } = await supabase
+          .from("user_blocks")
+          .select("id")
+          .or(
+            `and(blocker_id.eq.${user.id},blocked_id.eq.${loadedListing.user_id}),and(blocker_id.eq.${loadedListing.user_id},blocked_id.eq.${user.id})`
+          )
+          .limit(1);
+
+        if ((blockRows || []).length > 0) {
+          setSellerBlocked(true);
+          setListing(null);
+          setSellerProfile(null);
+          setLoading(false);
+          return;
+        }
+      }
+
+      setSellerBlocked(false);
       setListing(loadedListing);
       setSelectedImageIndex(0);
 
@@ -189,7 +209,7 @@ export default function ListingPage() {
     };
 
     load();
-  }, [id]);
+  }, [id, user?.id]);
 
   const sortedImages = useMemo(() => {
     return sortImages(listing?.listing_images || []);
@@ -305,6 +325,19 @@ export default function ListingPage() {
       return;
     }
 
+    const { data: blockRows } = await supabase
+      .from("user_blocks")
+      .select("id")
+      .or(
+        `and(blocker_id.eq.${user.id},blocked_id.eq.${listing.user_id}),and(blocker_id.eq.${listing.user_id},blocked_id.eq.${user.id})`
+      )
+      .limit(1);
+
+    if ((blockRows || []).length > 0) {
+      alert("This user is not available.");
+      return;
+    }
+
     // reuse existing buyer/seller conversation
     const { data: existingConversations } = await supabase
       .from("conversations")
@@ -396,7 +429,7 @@ export default function ListingPage() {
     return (
       <main className="min-h-screen bg-[#f8f8f6] px-4 py-8 text-black sm:px-6">
         <div className="mx-auto max-w-5xl rounded-[28px] bg-white p-8 text-center shadow-sm">
-          Listing not found
+          {sellerBlocked ? "This listing is not available." : "Listing not found"}
         </div>
       </main>
     );

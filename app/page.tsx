@@ -141,6 +141,7 @@ export default function MarketplacePage() {
     Record<string, ProfileRow>
   >({});
   const [currentProfile, setCurrentProfile] = useState<ProfileRow | null>(null);
+  const [blockedUserIds, setBlockedUserIds] = useState<Set<string>>(new Set());
   const [search, setSearch] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("all");
   const [subcategoryFilter, setSubcategoryFilter] = useState("all");
@@ -189,6 +190,20 @@ export default function MarketplacePage() {
       .select("id, home_country, home_city, home_lat, home_lng")
       .eq("id", user.id)
       .maybeSingle();
+
+    const { data: blockRows } = await supabase
+      .from("user_blocks")
+      .select("blocker_id, blocked_id")
+      .or(`blocker_id.eq.${user.id},blocked_id.eq.${user.id}`);
+
+    const blockedIds = new Set<string>();
+
+    (blockRows || []).forEach((row: any) => {
+      if (row.blocker_id === user.id && row.blocked_id) blockedIds.add(row.blocked_id);
+      if (row.blocked_id === user.id && row.blocker_id) blockedIds.add(row.blocker_id);
+    });
+
+    setBlockedUserIds(blockedIds);
 
     if (error) {
       console.error("Error loading current profile:", error);
@@ -302,7 +317,9 @@ export default function MarketplacePage() {
       return;
     }
 
-    const loaded = (data || []) as Listing[];
+    const loaded = ((data || []) as Listing[]).filter(
+      (item) => !item.user_id || !blockedUserIds.has(item.user_id)
+    );
 
     if (from === 0) {
       setListings(loaded);

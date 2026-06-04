@@ -87,6 +87,16 @@ type StoreCategory = {
   sort_order?: number | null;
 };
 
+type BlockedUser = {
+  id: number;
+  blocked_id: string;
+  profiles?: {
+    store_name?: string | null;
+    store_slug?: string | null;
+    avatar_url?: string | null;
+  } | null;
+};
+
 type ClaimResponse = {
   success?: boolean;
   message?: string;
@@ -333,6 +343,9 @@ export default function MyPage() {
   const [newStoreCategoryName, setNewStoreCategoryName] = useState("");
   const [savingStoreCategory, setSavingStoreCategory] = useState(false);
 
+  const [blockedUsers, setBlockedUsers] = useState<BlockedUser[]>([]);
+  const [loadingBlockedUsers, setLoadingBlockedUsers] = useState(false);
+
   const [listings, setListings] = useState<Listing[]>([]);
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
@@ -424,6 +437,45 @@ export default function MyPage() {
     }
 
     setStoreCategories((data || []) as StoreCategory[]);
+  };
+
+
+  const fetchBlockedUsers = async (currentUserId: string) => {
+    setLoadingBlockedUsers(true);
+
+    const { data, error } = await supabase
+      .from("user_blocks")
+      .select("id, blocked_id, profiles:blocked_id(store_name, store_slug, avatar_url)")
+      .eq("blocker_id", currentUserId)
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      console.error("Error fetching blocked users:", error);
+      setBlockedUsers([]);
+      setLoadingBlockedUsers(false);
+      return;
+    }
+
+    setBlockedUsers((data || []) as BlockedUser[]);
+    setLoadingBlockedUsers(false);
+  };
+
+  const unblockUserFromList = async (blockedId: string) => {
+    if (!userId) return;
+
+    const { error } = await supabase
+      .from("user_blocks")
+      .delete()
+      .eq("blocker_id", userId)
+      .eq("blocked_id", blockedId);
+
+    if (error) {
+      console.error("Error unblocking user:", error);
+      alert("Failed to unblock user.");
+      return;
+    }
+
+    await fetchBlockedUsers(userId);
   };
 
   const createStoreCategory = async () => {
@@ -590,6 +642,7 @@ export default function MyPage() {
 
     fetchProfile(userId);
     fetchStoreCategories(userId);
+    fetchBlockedUsers(userId);
 
     const timer = setTimeout(() => {
       fetchListings(userId, 0);
@@ -1590,6 +1643,88 @@ export default function MyPage() {
                 <p className="mt-3 text-sm text-black/45">
                   No store sections yet.
                 </p>
+              )}
+            </div>
+          </div>
+        </section>
+
+        <section className="rounded-[28px] bg-white p-5 shadow-sm sm:p-6">
+          <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
+            <div>
+              <p className="mb-2 text-xs font-medium uppercase tracking-[0.22em] text-black/35">
+                Blocked users
+              </p>
+              <h2 className="text-2xl font-semibold tracking-tight">
+                Users you have blocked
+              </h2>
+              <p className="mt-2 max-w-2xl text-sm leading-6 text-black/55">
+                Blocked users cannot message you. Their listings are hidden from your marketplace view.
+              </p>
+            </div>
+
+            <div className="w-full max-w-xl">
+              {loadingBlockedUsers ? (
+                <p className="text-sm text-black/45">Loading blocked users...</p>
+              ) : blockedUsers.length === 0 ? (
+                <p className="text-sm text-black/45">
+                  You have not blocked any users.
+                </p>
+              ) : (
+                <div className="space-y-3">
+                  {blockedUsers.map((blocked) => {
+                    const profile = blocked.profiles;
+                    const name = profile?.store_name || "Blocked user";
+
+                    return (
+                      <div
+                        key={blocked.id}
+                        className="flex items-center justify-between gap-3 rounded-2xl border border-black/10 bg-black/[0.02] p-3"
+                      >
+                        <div className="flex min-w-0 items-center gap-3">
+                          <div className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-black text-xs font-semibold text-white">
+                            {profile?.avatar_url ? (
+                              <img
+                                src={profile.avatar_url}
+                                alt=""
+                                className="h-full w-full object-cover"
+                              />
+                            ) : (
+                              name
+                                .split(" ")
+                                .map((part) => part[0])
+                                .join("")
+                                .slice(0, 2)
+                                .toUpperCase()
+                            )}
+                          </div>
+
+                          <div className="min-w-0">
+                            <p className="line-clamp-1 text-sm font-semibold">
+                              {name}
+                            </p>
+
+                            {profile?.store_slug && (
+                              <Link
+                                href={`/store/${profile.store_slug}`}
+                                className="mt-1 inline-flex text-xs font-medium text-black/45 hover:text-black"
+                              >
+                                View store
+                              </Link>
+                            )}
+                          </div>
+                        </div>
+
+                        <button
+                          type="button"
+                          onClick={() => unblockUserFromList(blocked.blocked_id)}
+                          className="shrink-0 rounded-xl border border-black/10 bg-white px-3 py-2 text-sm font-medium text-black/70 hover:bg-black/[0.03]"
+                        >
+                          Unblock
+                        </button>
+                      </div>
+                    );
+                  })}
+                </div>
               )}
             </div>
           </div>

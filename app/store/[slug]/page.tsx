@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { supabase } from "../../../lib/supabase";
@@ -107,6 +107,12 @@ export default function StorePage() {
   const [isFollowing, setIsFollowing] = useState(false);
   const [followLoading, setFollowLoading] = useState(false);
 
+  const storeMenuRef = useRef<HTMLDivElement | null>(null);
+
+  const [storeMenuOpen, setStoreMenuOpen] = useState(false);
+  const [isBlocked, setIsBlocked] = useState(false);
+  const [blockedByMe, setBlockedByMe] = useState(false);
+
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<
@@ -168,8 +174,32 @@ export default function StorePage() {
           .maybeSingle();
 
         setIsFollowing(!!followData);
+
+        const { data: blockRows } = await supabase
+          .from("user_blocks")
+          .select("id, blocker_id")
+          .or(
+            `and(blocker_id.eq.${user.id},blocked_id.eq.${profileData.id}),and(blocker_id.eq.${profileData.id},blocked_id.eq.${user.id})`
+          );
+
+        const blocks = blockRows || [];
+
+        setIsBlocked(blocks.length > 0);
+        setBlockedByMe(
+          blocks.some((row: any) => row.blocker_id === user.id)
+        );
+
+        if (blocks.length > 0) {
+          setProfile(null);
+          setListings([]);
+          setLoading(false);
+          return;
+        }
+
       } else {
         setIsFollowing(false);
+        setIsBlocked(false);
+        setBlockedByMe(false);
       }
 
 
@@ -233,6 +263,30 @@ export default function StorePage() {
   }, [slug, user?.id, authLoading, debouncedSearch]);
 
 
+  useEffect(() => {
+    if (!storeMenuOpen) return;
+
+    const closeMenu = (event: MouseEvent | TouchEvent) => {
+      const target = event.target as Node | null;
+
+      if (
+        storeMenuRef.current &&
+        target &&
+        !storeMenuRef.current.contains(target)
+      ) {
+        setStoreMenuOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", closeMenu);
+    document.addEventListener("touchstart", closeMenu);
+
+    return () => {
+      document.removeEventListener("mousedown", closeMenu);
+      document.removeEventListener("touchstart", closeMenu);
+    };
+  }, [storeMenuOpen]);
+
   const toggleFollow = async () => {
     if (!user?.id || !profile?.id || followLoading) return;
 
@@ -268,6 +322,52 @@ export default function StorePage() {
     } finally {
       setFollowLoading(false);
     }
+  };
+
+
+  const blockUser = async () => {
+    if (!user?.id || !profile?.id) return;
+
+    const confirmed = window.confirm(
+      "Block this user?\n\nYou will no longer see this user's listings in your marketplace view."
+    );
+
+    if (!confirmed) return;
+
+    const { error } = await supabase.from("user_blocks").upsert({
+      blocker_id: user.id,
+      blocked_id: profile.id,
+    });
+
+    if (error) {
+      console.error(error);
+      alert("Could not block user.");
+      return;
+    }
+
+    setIsBlocked(true);
+    setBlockedByMe(true);
+    setStoreMenuOpen(false);
+  };
+
+  const unblockUser = async () => {
+    if (!user?.id || !profile?.id) return;
+
+    const { error } = await supabase
+      .from("user_blocks")
+      .delete()
+      .eq("blocker_id", user.id)
+      .eq("blocked_id", profile.id);
+
+    if (error) {
+      console.error(error);
+      alert("Could not unblock user.");
+      return;
+    }
+
+    setIsBlocked(false);
+    setBlockedByMe(false);
+    setStoreMenuOpen(false);
   };
 
   const isOwner = !!user?.id && !!profile?.id && user.id === profile.id;
@@ -501,6 +601,48 @@ export default function StorePage() {
                 >
                   Marketplace
                 </Link>
+
+                {!isOwner && user?.id && (
+                  <div ref={storeMenuRef} className="relative">
+                    <button
+                      type="button"
+                      onClick={() => setStoreMenuOpen((v) => !v)}
+                      className="flex h-10 w-10 items-center justify-center rounded-xl border border-black/10 bg-white text-sm font-semibold text-black/65"
+                    >
+                      i
+                    </button>
+
+                    {storeMenuOpen && (
+                      <div className="absolute right-0 z-50 mt-2 w-52 rounded-2xl border border-black/10 bg-white p-2 shadow-lg">
+                        {blockedByMe ? (
+                          <button
+                            type="button"
+                            onClick={unblockUser}
+                            className="w-full rounded-xl px-3 py-2 text-left text-sm font-medium text-black/70 hover:bg-black/[0.04]"
+                          >
+                            Unblock user
+                          </button>
+                        ) : isBlocked ? (
+                          <button
+                            type="button"
+                            disabled
+                            className="w-full rounded-xl px-3 py-2 text-left text-sm font-medium text-black/45"
+                          >
+                            User blocked
+                          </button>
+                        ) : (
+                          <button
+                            type="button"
+                            onClick={blockUser}
+                            className="w-full rounded-xl px-3 py-2 text-left text-sm font-medium text-black/70 hover:bg-black/[0.04]"
+                          >
+                            Block user
+                          </button>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
 

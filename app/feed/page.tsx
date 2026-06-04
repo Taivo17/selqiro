@@ -106,9 +106,22 @@ export default function FeedPage() {
         return;
       }
 
+      const { data: blockRows } = await supabase
+        .from("user_blocks")
+        .select("blocker_id, blocked_id")
+        .or(`blocker_id.eq.${user.id},blocked_id.eq.${user.id}`);
+
+      const blockedIds = new Set<string>();
+
+      (blockRows || []).forEach((row: any) => {
+        if (row.blocker_id === user.id && row.blocked_id) blockedIds.add(row.blocked_id);
+        if (row.blocked_id === user.id && row.blocker_id) blockedIds.add(row.blocker_id);
+      });
+
       const followedIds = (follows || [])
         .map((row) => row.store_owner_id)
-        .filter(Boolean);
+        .filter(Boolean)
+        .filter((id) => !blockedIds.has(id));
 
       if (followedIds.length === 0) {
         setItems([]);
