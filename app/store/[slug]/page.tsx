@@ -113,6 +113,10 @@ export default function StorePage() {
   const [isBlocked, setIsBlocked] = useState(false);
   const [blockedByMe, setBlockedByMe] = useState(false);
 
+  const [reportOpen, setReportOpen] = useState(false);
+  const [reportReason, setReportReason] = useState("scam");
+  const [reportDetails, setReportDetails] = useState("");
+
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<
@@ -324,6 +328,33 @@ export default function StorePage() {
     }
   };
 
+
+
+  const reportUser = async () => {
+    if (!user?.id || !profile?.id) return;
+
+    const { error } = await supabase
+      .from("reports")
+      .insert({
+        reporter_id: user.id,
+        reported_user_id: profile.id,
+        report_type: "user",
+        reason: reportReason,
+        details: reportDetails.trim() || null,
+      });
+
+    if (error) {
+      console.error(error);
+      alert("Could not submit report.");
+      return;
+    }
+
+    setReportOpen(false);
+    setReportReason("scam");
+    setReportDetails("");
+
+    alert("Thank you. Your report has been submitted for review.");
+  };
 
   const blockUser = async () => {
     if (!user?.id || !profile?.id) return;
@@ -614,6 +645,19 @@ export default function StorePage() {
 
                     {storeMenuOpen && (
                       <div className="absolute right-0 z-50 mt-2 w-52 rounded-2xl border border-black/10 bg-white p-2 shadow-lg">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setStoreMenuOpen(false);
+                            setReportOpen(true);
+                          }}
+                          className="w-full rounded-xl px-3 py-2 text-left text-sm font-medium text-black/70 hover:bg-black/[0.04]"
+                        >
+                          Report user
+                        </button>
+
+                        <div className="my-1 border-t border-black/10" />
+
                         {blockedByMe ? (
                           <button
                             type="button"
@@ -683,6 +727,65 @@ export default function StorePage() {
           </div>
           </div>
         </section>
+
+
+        {reportOpen && (
+          <div
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 p-4"
+            onClick={() => setReportOpen(false)}
+          >
+            <div
+              className="w-full max-w-md rounded-[28px] bg-white p-5 shadow-xl"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <h3 className="text-xl font-semibold">
+                Report user
+              </h3>
+
+              <p className="mt-2 text-sm text-black/55">
+                Tell us why you are reporting this user.
+              </p>
+
+              <select
+                value={reportReason}
+                onChange={(e) => setReportReason(e.target.value)}
+                className="mt-4 w-full rounded-2xl border border-black/10 px-4 py-3"
+              >
+                <option value="scam">Scam or fraud</option>
+                <option value="harassment">Harassment</option>
+                <option value="spam">Spam</option>
+                <option value="fake_account">Fake account</option>
+                <option value="suspicious_behavior">Suspicious behavior</option>
+                <option value="other">Other</option>
+              </select>
+
+              <textarea
+                value={reportDetails}
+                onChange={(e) => setReportDetails(e.target.value)}
+                placeholder="Optional details..."
+                className="mt-3 h-28 w-full resize-none rounded-2xl border border-black/10 px-4 py-3"
+              />
+
+              <div className="mt-4 flex justify-end gap-2">
+                <button
+                  type="button"
+                  onClick={() => setReportOpen(false)}
+                  className="rounded-2xl border border-black/10 px-4 py-3"
+                >
+                  Cancel
+                </button>
+
+                <button
+                  type="button"
+                  onClick={reportUser}
+                  className="rounded-2xl bg-black px-4 py-3 text-white"
+                >
+                  Submit report
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
         {storeCategories.length > 0 && (
           <section className="mb-5 rounded-[26px] border border-black/8 bg-white p-4 shadow-sm sm:rounded-[32px] sm:p-6">

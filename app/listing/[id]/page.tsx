@@ -111,6 +111,7 @@ export default function ListingPage() {
   const { user } = useAuth();
 
   const hideTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const listingMenuRef = useRef<HTMLDivElement | null>(null);
 
   const [listing, setListing] = useState<Listing | null>(null);
   const [sellerProfile, setSellerProfile] = useState<SellerProfile | null>(null);
@@ -121,6 +122,10 @@ export default function ListingPage() {
   const [controlsVisible, setControlsVisible] = useState(false);
   const [shareCopied, setShareCopied] = useState(false);
   const [sellerBlocked, setSellerBlocked] = useState(false);
+  const [listingMenuOpen, setListingMenuOpen] = useState(false);
+  const [reportOpen, setReportOpen] = useState(false);
+  const [reportReason, setReportReason] = useState("scam");
+  const [reportDetails, setReportDetails] = useState("");
 
   const showControlsTemporarily = () => {
     setControlsVisible(true);
@@ -210,6 +215,30 @@ export default function ListingPage() {
 
     load();
   }, [id, user?.id]);
+
+  useEffect(() => {
+    if (!listingMenuOpen) return;
+
+    const closeMenu = (event: MouseEvent | TouchEvent) => {
+      const target = event.target as Node | null;
+
+      if (
+        listingMenuRef.current &&
+        target &&
+        !listingMenuRef.current.contains(target)
+      ) {
+        setListingMenuOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", closeMenu);
+    document.addEventListener("touchstart", closeMenu);
+
+    return () => {
+      document.removeEventListener("mousedown", closeMenu);
+      document.removeEventListener("touchstart", closeMenu);
+    };
+  }, [listingMenuOpen]);
 
   const sortedImages = useMemo(() => {
     return sortImages(listing?.listing_images || []);
@@ -314,6 +343,37 @@ export default function ListingPage() {
     }
   };
 
+
+
+  const reportListing = async () => {
+    if (!user?.id || !listing?.id) {
+      router.push("/auth");
+      return;
+    }
+
+    const { error } = await supabase
+      .from("reports")
+      .insert({
+        reporter_id: user.id,
+        reported_user_id: listing.user_id || null,
+        listing_id: listing.id,
+        report_type: "listing",
+        reason: reportReason,
+        details: reportDetails.trim() || null,
+      });
+
+    if (error) {
+      console.error(error);
+      alert("Could not submit report.");
+      return;
+    }
+
+    setReportOpen(false);
+    setReportReason("scam");
+    setReportDetails("");
+
+    alert("Thank you. Your report has been submitted for review.");
+  };
 
   const contactSeller = async () => {
     if (!user?.id || !listing?.user_id) {
@@ -661,6 +721,34 @@ export default function ListingPage() {
               {shareCopied ? "Link copied" : "Share listing"}
             </button>
 
+            {user?.id && user.id !== listing.user_id && (
+              <div ref={listingMenuRef} className="relative">
+                <button
+                  type="button"
+                  onClick={() => setListingMenuOpen((value) => !value)}
+                  className="flex h-11 w-11 items-center justify-center rounded-xl border border-black/10 bg-white text-sm font-semibold text-black/65"
+                  aria-label="Listing options"
+                >
+                  i
+                </button>
+
+                {listingMenuOpen && (
+                  <div className="absolute bottom-full right-0 z-[9999] mb-2 w-52 rounded-2xl border border-black/10 bg-white p-2 shadow-lg">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setListingMenuOpen(false);
+                        setReportOpen(true);
+                      }}
+                      className="w-full rounded-xl px-3 py-2 text-left text-sm font-medium text-black/70 hover:bg-black/[0.04]"
+                    >
+                      Report listing
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
+
             {sellerProfile?.store_name && (
               <span className="rounded-2xl border border-black/10 bg-white px-5 py-3 text-sm text-black/55">
                 Seller: {sellerProfile.store_name}
@@ -731,6 +819,65 @@ export default function ListingPage() {
           </section>
         )}
       </div>
+
+
+      {reportOpen && (
+        <div
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 p-4"
+          onClick={() => setReportOpen(false)}
+        >
+          <div
+            className="w-full max-w-md rounded-[28px] bg-white p-5 shadow-xl"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <h3 className="text-xl font-semibold">
+              Report listing
+            </h3>
+
+            <p className="mt-2 text-sm text-black/55">
+              Tell us why you are reporting this listing.
+            </p>
+
+            <select
+              value={reportReason}
+              onChange={(event) => setReportReason(event.target.value)}
+              className="mt-4 w-full rounded-2xl border border-black/10 px-4 py-3"
+            >
+              <option value="scam">Scam or fraud</option>
+              <option value="prohibited_item">Prohibited item</option>
+              <option value="counterfeit_item">Counterfeit item</option>
+              <option value="misleading_listing">Misleading listing</option>
+              <option value="illegal_content">Illegal content</option>
+              <option value="other">Other</option>
+            </select>
+
+            <textarea
+              value={reportDetails}
+              onChange={(event) => setReportDetails(event.target.value)}
+              placeholder="Optional details..."
+              className="mt-3 h-28 w-full resize-none rounded-2xl border border-black/10 px-4 py-3"
+            />
+
+            <div className="mt-4 flex justify-end gap-2">
+              <button
+                type="button"
+                onClick={() => setReportOpen(false)}
+                className="rounded-2xl border border-black/10 px-4 py-3"
+              >
+                Cancel
+              </button>
+
+              <button
+                type="button"
+                onClick={reportListing}
+                className="rounded-2xl bg-black px-4 py-3 text-white"
+              >
+                Submit report
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {fullImageOpen && originalImageUrl && (
         <div
