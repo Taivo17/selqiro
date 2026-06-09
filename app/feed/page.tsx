@@ -4,6 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { supabase } from "../../lib/supabase";
 import { useAuth } from "../../lib/useAuth";
+import { getTranslation } from "../../lib/i18n/useTranslation";
+import { getCategoryLabel } from "../../lib/categories";
 
 type ListingImage = {
   thumb_url?: string | null;
@@ -11,6 +13,19 @@ type ListingImage = {
   original_url?: string | null;
   is_primary?: boolean | null;
   sort_order?: number | null;
+};
+
+type ListingTranslation = {
+  language: string;
+  title: string;
+  description?: string | null;
+  ai_summary?: string | null;
+  status?: string | null;
+};
+
+type CurrentProfile = {
+  id: string;
+  language?: string | null;
 };
 
 type FeedListing = {
@@ -26,12 +41,31 @@ type FeedListing = {
   city?: string | null;
   image?: string | null;
   listing_images?: ListingImage[];
+  listing_translations?: ListingTranslation[];
   seller_profile?: {
     store_name?: string | null;
     store_slug?: string | null;
     avatar_url?: string | null;
   } | null;
 };
+
+function getTranslatedListingText(
+  item: FeedListing,
+  language: string | null | undefined
+) {
+  const lang = language || "en";
+
+  const translation = (item.listing_translations || []).find(
+    (row) =>
+      row.language === lang &&
+      (!row.status || row.status === "published" || row.status === "active")
+  );
+
+  return {
+    title: translation?.title || item.title,
+    description: translation?.description || item.description,
+  };
+}
 
 function getListingImage(item: FeedListing) {
   const sortedImages = [...(item.listing_images || [])].sort((a, b) => {
@@ -78,6 +112,7 @@ export default function FeedPage() {
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
   const [hasMore, setHasMore] = useState(true);
+  const [currentProfile, setCurrentProfile] = useState<CurrentProfile | null>(null);
 
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
 
@@ -93,6 +128,14 @@ export default function FeedPage() {
       if (from === 0) {
         setLoading(true);
       }
+
+      const { data: currentProfileData } = await supabase
+        .from("profiles")
+        .select("id, language")
+        .eq("id", user.id)
+        .maybeSingle();
+
+      setCurrentProfile((currentProfileData || null) as CurrentProfile | null);
 
       const { data: follows, error: followsError } = await supabase
         .from("store_follows")
@@ -132,7 +175,7 @@ export default function FeedPage() {
       const { data, error } = await supabase
         .from("listings")
         .select(
-          "id, user_id, created_at, title, description, price, category, condition, country, city, image, listing_images(thumb_url, medium_url, original_url, is_primary, sort_order)"
+          "id, user_id, created_at, title, description, price, category, condition, country, city, image, listing_images(thumb_url, medium_url, original_url, is_primary, sort_order), listing_translations(language, title, description, ai_summary, status)"
         )
         .in("user_id", followedIds)
         .eq("status", "active")
@@ -226,6 +269,22 @@ export default function FeedPage() {
     return () => observer.disconnect();
   }, [hasMore, loading, loadingMore, items.length]);
 
+  const language = currentProfile?.language || "en";
+  const t = (key: any) => getTranslation(language, key);
+
+  const categoryLabel = (value: string, fallback?: string | null) =>
+    getCategoryLabel(value, fallback || value, language);
+
+  const conditionLabel = (value?: string | null) => {
+    const condition = value || "used";
+
+    if (condition === "new") return t("condition.new");
+    if (condition === "used") return t("condition.used");
+    if (condition === "for_parts") return t("condition.for_parts");
+
+    return condition;
+  };
+
   if (authLoading || loading) {
     return (
       <main className="min-h-screen bg-[#f8f8f6] px-4 py-6 text-black sm:px-8">
@@ -240,7 +299,7 @@ export default function FeedPage() {
     return (
       <main className="min-h-screen bg-[#f8f8f6] px-4 py-6 text-black sm:px-8">
         <div className="mx-auto max-w-5xl rounded-[28px] bg-white p-8 text-center shadow-sm">
-          <p className="text-lg font-medium">Sign in to view your feed</p>
+          <p className="text-lg font-medium">{t("feed.signInToView")}</p>
           <Link
             href="/auth"
             className="mt-5 inline-flex rounded-2xl bg-black px-5 py-3 text-sm font-medium text-white"
@@ -257,17 +316,17 @@ export default function FeedPage() {
       <div className="mx-auto max-w-5xl">
         <header className="mb-5 rounded-[28px] bg-white p-5 shadow-sm sm:p-7">
           <p className="mb-2 text-xs font-medium uppercase tracking-[0.22em] text-black/35">
-            Feed
+            {t("navigation.feed")}
           </p>
 
           <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <h1 className="text-3xl font-semibold tracking-tight sm:text-5xl">
-                New from stores you follow
+                {t("feed.title")}
               </h1>
 
               <p className="mt-2 max-w-2xl text-sm leading-6 text-black/55">
-                Latest listings from stores you follow.
+                {t("feed.subtitle")}
               </p>
             </div>
 
@@ -278,14 +337,14 @@ export default function FeedPage() {
                 disabled={loading}
                 className="w-fit rounded-2xl bg-black px-5 py-3 text-sm font-medium text-white disabled:opacity-60"
               >
-                Refresh feed
+                {t("feed.refreshFeed")}
               </button>
 
               <Link
                 href="/"
                 className="w-fit rounded-2xl border border-black/10 bg-white px-5 py-3 text-sm font-medium"
               >
-                Marketplace
+                {t("navigation.marketplace")}
               </Link>
             </div>
           </div>
@@ -293,7 +352,7 @@ export default function FeedPage() {
 
         {items.length === 0 ? (
           <div className="rounded-[28px] border border-dashed border-black/10 bg-white p-8 text-center shadow-sm">
-            <p className="text-lg font-medium">Your feed is empty</p>
+            <p className="text-lg font-medium">{t("feed.emptyTitle")}</p>
             <p className="mt-2 text-black/55">
               Follow stores to see their newest listings here.
             </p>
@@ -309,7 +368,8 @@ export default function FeedPage() {
           <div className="space-y-4">
             {items.map((item) => {
               const imageUrl = getListingImage(item);
-              const storeName = item.seller_profile?.store_name || "Store";
+              const storeName = item.seller_profile?.store_name || t("listing.store");
+              const translated = getTranslatedListingText(item, language);
               const storeSlug = item.seller_profile?.store_slug || "";
 
               return (
@@ -339,7 +399,7 @@ export default function FeedPage() {
                           {storeName}
                         </p>
                         <p className="text-xs text-black/45">
-                          added a listing • {timeAgo(item.created_at)}
+                          {t("feed.addedListing")} • {timeAgo(item.created_at)}
                         </p>
                       </div>
                     </div>
@@ -349,7 +409,7 @@ export default function FeedPage() {
                         href={`/store/${storeSlug}`}
                         className="shrink-0 rounded-xl border border-black/10 px-3 py-2 text-xs font-medium"
                       >
-                        Store
+                        {t("listing.store")}
                       </Link>
                     )}
                   </div>
@@ -360,7 +420,7 @@ export default function FeedPage() {
                         {imageUrl ? (
                           <img
                             src={imageUrl}
-                            alt={item.title}
+                            alt={translated.title}
                             loading="lazy"
                             decoding="async"
                             className="aspect-[4/3] w-full object-cover"
@@ -372,11 +432,11 @@ export default function FeedPage() {
 
                       <div>
                         <h2 className="line-clamp-2 break-words text-2xl font-semibold tracking-tight">
-                          {item.title}
+                          {translated.title}
                         </h2>
 
                         <p className="mt-2 line-clamp-2 break-words text-sm leading-6 text-black/60">
-                          {item.description}
+                          {translated.description}
                         </p>
 
                         <p className="mt-4 break-words text-3xl font-semibold">
@@ -384,9 +444,9 @@ export default function FeedPage() {
                         </p>
 
                         <p className="mt-3 text-sm text-black/45">
-                          {item.category || "general"} •{" "}
-                          {item.condition || "used"} •{" "}
-                          {item.country || "No country"}
+                          {categoryLabel(item.category || "general", t("listing.general"))} •{" "}
+                          {conditionLabel(item.condition)} •{" "}
+                          {item.country || t("listing.noCountry")}
                           {item.city ? ` • ${item.city}` : ""}
                         </p>
                       </div>
@@ -405,7 +465,7 @@ export default function FeedPage() {
                 disabled={loadingMore}
                 className="rounded-2xl bg-black px-6 py-3 text-sm font-medium text-white transition hover:opacity-90 disabled:opacity-60"
               >
-                {loadingMore ? "Loading..." : "Load more"}
+                {loadingMore ? t("common.loading") : t("marketplace.loadMore")}
               </button>
             </div>
           )}

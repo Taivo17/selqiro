@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { supabase } from "../../../lib/supabase";
 import { useAuth } from "../../../lib/useAuth";
+import { getTranslation } from "../../../lib/i18n/useTranslation";
 
 type ListingImage = {
   id: string;
@@ -32,6 +33,11 @@ type StoreCategory = {
   id: string;
   name: string;
   sort_order?: number | null;
+};
+
+type CurrentProfile = {
+  id: string;
+  language?: string | null;
 };
 
 type Listing = {
@@ -106,6 +112,7 @@ export default function StorePage() {
   const [followersCount, setFollowersCount] = useState(0);
   const [isFollowing, setIsFollowing] = useState(false);
   const [followLoading, setFollowLoading] = useState(false);
+  const [currentProfile, setCurrentProfile] = useState<CurrentProfile | null>(null);
 
   const storeMenuRef = useRef<HTMLDivElement | null>(null);
 
@@ -134,6 +141,18 @@ export default function StorePage() {
   useEffect(() => {
     const load = async () => {
       if (!profile) setLoading(true);
+
+      if (user?.id) {
+        const { data: currentProfileData } = await supabase
+          .from("profiles")
+          .select("id, language")
+          .eq("id", user.id)
+          .maybeSingle();
+
+        setCurrentProfile((currentProfileData || null) as CurrentProfile | null);
+      } else {
+        setCurrentProfile(null);
+      }
 
       const cleanSlug = decodeURIComponent((slug || "").trim());
 
@@ -461,12 +480,15 @@ export default function StorePage() {
     });
   }, [listings, search, statusFilter, selectedStoreCategoryId, isOwner]);
 
+  const language = currentProfile?.language || "en";
+  const t = (key: any) => getTranslation(language, key);
+
   if (loading || authLoading) {
-    return <main className="p-6">Loading store...</main>;
+    return <main className="p-6">{t("storePage.loadingStore")}</main>;
   }
 
   if (!profile) {
-    return <main className="p-6">Store not found</main>;
+    return <main className="p-6">{t("storePage.storeNotFound")}</main>;
   }
 
   return (
@@ -586,7 +608,7 @@ export default function StorePage() {
 
                 <div className="min-w-0 pb-1">
                   <p className="mb-1 text-xs font-medium uppercase tracking-[0.2em] text-black/40">
-                    Public store
+                    {t("storePage.publicStore")}
                   </p>
                   <h1 className="break-words text-3xl font-semibold tracking-tight sm:text-5xl">
                     {profile.store_name || "Unnamed store"}
@@ -603,7 +625,7 @@ export default function StorePage() {
                     href="/sell"
                     className="rounded-2xl bg-green-500 px-4 py-2 text-sm font-medium text-white"
                   >
-                    + Add listing
+                    {t("storePage.addListing")}
                   </Link>
                 )}
 
@@ -619,10 +641,10 @@ export default function StorePage() {
                     }`}
                   >
                     {followLoading
-                      ? "Loading..."
+                      ? t("storePage.loading")
                       : isFollowing
-                      ? "Following"
-                      : "Follow"}
+                      ? t("storePage.following")
+                      : t("storePage.follow")}
                   </button>
                 )}
 
@@ -630,7 +652,7 @@ export default function StorePage() {
                   href="/"
                   className="rounded-2xl border border-black/10 bg-white px-4 py-2 text-sm font-medium"
                 >
-                  Marketplace
+                  {t("navigation.marketplace")}
                 </Link>
 
                 {!isOwner && user?.id && (
@@ -692,17 +714,17 @@ export default function StorePage() {
 
             <div className="mt-5 flex flex-wrap gap-2 text-sm text-black/55">
               <span className="rounded-full border border-black/10 bg-black/[0.03] px-3 py-2">
-                {stats.active} active
+                {stats.active} {t("storePage.active")}
               </span>
               <span className="rounded-full border border-black/10 bg-black/[0.03] px-3 py-2">
-                {stats.sold} sold
+                {stats.sold} {t("storePage.sold")}
               </span>
               <span className="rounded-full border border-black/10 bg-black/[0.03] px-3 py-2">
-                {stats.total} total
+                {stats.total} {t("storePage.total")}
               </span>
 
               <span className="rounded-full border border-black/10 bg-black/[0.03] px-3 py-2">
-                {followersCount} followers
+                {followersCount} {t("storePage.followers")}
               </span>
               {profile.is_premium && (
                 <span className="rounded-full border border-yellow-200 bg-yellow-50 px-3 py-2 text-yellow-800">
@@ -712,7 +734,7 @@ export default function StorePage() {
 
               {isOwner && (
                 <span className="rounded-full border border-green-200 bg-green-50 px-3 py-2 text-green-700">
-                  Owner
+                  {t("storePage.owner")}
                 </span>
               )}
             </div>
@@ -790,7 +812,7 @@ export default function StorePage() {
         {storeCategories.length > 0 && (
           <section className="mb-5 rounded-[26px] border border-black/8 bg-white p-4 shadow-sm sm:rounded-[32px] sm:p-6">
             <p className="mb-3 text-xs font-medium uppercase tracking-[0.22em] text-black/40">
-              Store sections
+              {t("storePage.storeSections")}
             </p>
 
             <div className="flex gap-2 overflow-x-auto pb-1 sm:flex-wrap sm:overflow-visible">
@@ -803,7 +825,7 @@ export default function StorePage() {
                     : "border border-black/10 bg-white text-black hover:bg-black/[0.03]"
                 }`}
               >
-                All
+                {t("storePage.all")}
               </button>
 
               {storeCategories.map((category) => (
@@ -828,7 +850,7 @@ export default function StorePage() {
           <div className="grid gap-3 md:grid-cols-[1fr_220px]">
             <input
               type="text"
-              placeholder="Search store listings..."
+              placeholder={t("storePage.searchStoreListings")}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-base outline-none transition focus:border-black/30 sm:text-sm"
@@ -843,7 +865,7 @@ export default function StorePage() {
               }
               className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-base outline-none transition focus:border-black/30 sm:text-sm"
             >
-              <option value="all">All visible</option>
+              <option value="all">{t("storePage.allVisible")}</option>
               <option value="active">Active</option>
               {isOwner && <option value="paused">Paused</option>}
               {isOwner && <option value="sold">Sold</option>}
@@ -854,14 +876,14 @@ export default function StorePage() {
         <section className="mb-4 flex items-end justify-between gap-4">
           <div>
             <p className="text-xs font-medium uppercase tracking-[0.22em] text-black/40">
-              Listings
+              {t("storePage.listings")}
             </p>
             <h2 className="mt-1 text-2xl font-semibold tracking-tight">
-              Items from this store
+              {t("storePage.itemsFromThisStore")}
             </h2>
           </div>
 
-          <p className="text-sm text-black/45">{visibleListings.length} shown</p>
+          <p className="text-sm text-black/45">{visibleListings.length} {t("storePage.shown")}</p>
         </section>
 
         {visibleListings.length === 0 ? (

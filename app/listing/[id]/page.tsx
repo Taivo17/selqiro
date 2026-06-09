@@ -532,7 +532,7 @@ export default function ListingPage() {
     return (
       <main className="min-h-screen bg-[#f8f8f6] px-4 py-8 text-black sm:px-6">
         <div className="mx-auto max-w-5xl rounded-[28px] bg-white p-8 text-center shadow-sm">
-          Loading listing...
+          {getTranslation(currentProfile?.language || "en", "listingPage.loadingListing")}
         </div>
       </main>
     );
@@ -622,7 +622,7 @@ export default function ListingPage() {
     <main className="min-h-screen overflow-x-hidden bg-[#f8f8f6] px-4 py-6 text-black sm:px-6 sm:py-8">
       <div className="mx-auto w-full max-w-5xl space-y-5 sm:space-y-6">
         <Link href="/" className="inline-flex text-sm font-medium text-black/55">
-          ← Back to marketplace
+          ← {t("listingPage.backToMarketplace")}
         </Link>
 
         <section className="overflow-hidden rounded-[28px] bg-white p-3 shadow-sm sm:rounded-[32px] sm:p-4">
@@ -726,7 +726,7 @@ export default function ListingPage() {
 
         <section className="overflow-hidden rounded-[28px] bg-white p-5 shadow-sm sm:rounded-[32px] sm:p-6">
           <p className="mb-3 text-xs font-medium uppercase tracking-[0.22em] text-black/35">
-            Listing details
+            {t("listingPage.listingDetails")}
           </p>
 
           <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
@@ -741,7 +741,7 @@ export default function ListingPage() {
             </div>
 
             <span className="w-fit rounded-full bg-green-100 px-4 py-2 text-sm font-medium text-green-700">
-              Active
+              {t("listingPage.active")}
             </span>
           </div>
 
@@ -771,11 +771,11 @@ export default function ListingPage() {
                 href={sellerStoreUrl}
                 className="rounded-2xl bg-black px-5 py-3 text-sm font-medium text-white"
               >
-                View seller store
+                {t("listingPage.viewSellerStore")}
               </Link>
             ) : (
               <span className="rounded-2xl border border-black/10 bg-black/[0.02] px-5 py-3 text-sm text-black/45">
-                Seller store unavailable
+                {t("listingPage.sellerStoreUnavailable")}
               </span>
             )}
 
@@ -784,7 +784,7 @@ export default function ListingPage() {
               onClick={contactSeller}
               className="rounded-2xl bg-green-500 px-5 py-3 text-sm font-medium text-white transition hover:opacity-90"
             >
-              Contact seller
+              {t("listingPage.contactSeller")}
             </button>
 
             <button
@@ -792,7 +792,7 @@ export default function ListingPage() {
               onClick={shareListing}
               className="rounded-2xl border border-black/10 bg-white px-5 py-3 text-sm font-medium transition hover:bg-black/[0.03]"
             >
-              {shareCopied ? "Link copied" : "Share listing"}
+              {shareCopied ? t("listingPage.linkCopied") : t("listingPage.shareListing")}
             </button>
 
             {user?.id && user.id !== listing.user_id && (
@@ -816,7 +816,7 @@ export default function ListingPage() {
                       }}
                       className="w-full rounded-xl px-3 py-2 text-left text-sm font-medium text-black/70 hover:bg-black/[0.04]"
                     >
-                      Report listing
+                      {t("listingPage.reportListing")}
                     </button>
                   </div>
                 )}
@@ -825,7 +825,7 @@ export default function ListingPage() {
 
             {sellerProfile?.store_name && (
               <span className="rounded-2xl border border-black/10 bg-white px-5 py-3 text-sm text-black/55">
-                Seller: {sellerProfile.store_name}
+                {t("listingPage.seller")}: {sellerProfile.store_name}
               </span>
             )}
           </div>
@@ -833,7 +833,7 @@ export default function ListingPage() {
 
         <section className="overflow-hidden rounded-[28px] bg-white p-5 shadow-sm sm:rounded-[32px] sm:p-6">
           <h2 className="mb-3 text-xs font-medium uppercase tracking-[0.22em] text-black/35">
-            Description
+            {t("listingPage.description")}
           </h2>
 
           <p className="max-w-full whitespace-pre-wrap break-words text-base leading-7 text-black/70">
@@ -862,9 +862,9 @@ export default function ListingPage() {
             <h2 className="mb-4 text-lg font-semibold">Technical information</h2>
 
             <div className="space-y-3">
-              <FieldRow label="Manufacturer" value={listing.manufacturer} />
-              <FieldRow label="Part number" value={listing.part_number} />
-              <FieldRow label="OEM" value={listing.oem_number} />
+              <FieldRow label={t("listingPage.manufacturer")} value={listing.manufacturer} />
+              <FieldRow label={t("listingPage.partNumber")} value={listing.part_number} />
+              <FieldRow label={t("listingPage.oem")} value={listing.oem_number} />
             </div>
           </section>
         )}
@@ -874,10 +874,10 @@ export default function ListingPage() {
             <h2 className="mb-4 text-lg font-semibold">Vehicle compatibility</h2>
 
             <div className="space-y-3">
-              <FieldRow label="Brand" value={listing.vehicle_brand} />
-              <FieldRow label="Model" value={listing.vehicle_model} />
-              <FieldRow label="Year" value={listing.vehicle_year} />
-              <FieldRow label="Engine" value={listing.engine} />
+              <FieldRow label={t("listingPage.brand")} value={listing.vehicle_brand} />
+              <FieldRow label={t("listingPage.model")} value={listing.vehicle_model} />
+              <FieldRow label={t("listingPage.year")} value={listing.vehicle_year} />
+              <FieldRow label={t("listingPage.engine")} value={listing.engine} />
             </div>
           </section>
         )}
@@ -887,8 +887,22 @@ export default function ListingPage() {
             <h2 className="mb-4 text-lg font-semibold">AI information</h2>
 
             <div className="space-y-3">
-              <FieldRow label="Status" value={listing.ai_status} />
-              <FieldRow label="Level" value={listing.ai_level} />
+              <FieldRow
+                label={t("listingPage.status")}
+                value={
+                  listing.ai_status === "completed"
+                    ? t("listingPage.completed")
+                    : listing.ai_status
+                }
+              />
+              <FieldRow
+                label={t("listingPage.level")}
+                value={
+                  listing.ai_level === "none"
+                    ? t("listingPage.none")
+                    : listing.ai_level
+                }
+              />
             </div>
           </section>
         )}
@@ -905,11 +919,11 @@ export default function ListingPage() {
             onClick={(event) => event.stopPropagation()}
           >
             <h3 className="text-xl font-semibold">
-              Report listing
+              {t("listingPage.reportListing")}
             </h3>
 
             <p className="mt-2 text-sm text-black/55">
-              Tell us why you are reporting this listing.
+              {t("listingPage.tellUsWhyListing")}
             </p>
 
             <select
@@ -938,7 +952,7 @@ export default function ListingPage() {
                 onClick={() => setReportOpen(false)}
                 className="rounded-2xl border border-black/10 px-4 py-3"
               >
-                Cancel
+                {t("common.cancel")}
               </button>
 
               <button
@@ -946,7 +960,7 @@ export default function ListingPage() {
                 onClick={reportListing}
                 className="rounded-2xl bg-black px-4 py-3 text-white"
               >
-                Submit report
+                {t("listingPage.submitReport")}
               </button>
             </div>
           </div>
@@ -971,7 +985,7 @@ export default function ListingPage() {
               setFullImageOpen(false);
             }}
           >
-            Close
+            {t("listingPage.close")}
           </button>
 
           {galleryImages.length > 1 && (

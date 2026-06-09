@@ -6,6 +6,7 @@ import { supabase } from "../../lib/supabase";
 import { useAuth } from "../../lib/useAuth";
 import { CATEGORY_TREE } from "../../lib/categories";
 import { getCategoryFields } from "../../lib/categoryFields";
+import { getTranslation } from "../../lib/i18n/useTranslation";
 
 const PAGE_SIZE = 30;
 const MAX_IMAGES = 10;
@@ -1394,11 +1395,13 @@ export default function MyPage() {
   const pausedCount = listings.filter((item) => item.status === "paused").length;
   const soldCount = listings.filter((item) => item.status === "sold").length;
 
+  const t = (key: any) => getTranslation(language || "en", key);
+
   if (loading) {
     return (
       <main className="min-h-screen bg-[#f8f8f6] px-4 py-8 text-black sm:px-6">
         <div className="mx-auto max-w-4xl rounded-[28px] bg-white p-8 text-center shadow-sm">
-          Loading session...
+          {t("myPage.loadingSession")}
         </div>
       </main>
     );
@@ -1408,9 +1411,9 @@ export default function MyPage() {
     return (
       <main className="min-h-screen bg-[#f8f8f6] px-4 py-8 text-black sm:px-6">
         <div className="mx-auto max-w-4xl rounded-[28px] bg-white p-8 text-center shadow-sm">
-          <p className="text-lg font-medium">You are not signed in</p>
+          <p className="text-lg font-medium">{t("myPage.notSignedIn")}</p>
           <p className="mt-2 text-black/55">
-            Sign in to view and manage your own listings.
+            {t("myPage.signInToManage")}
           </p>
 
           <div className="mt-6 flex flex-wrap justify-center gap-3">
@@ -1418,14 +1421,14 @@ export default function MyPage() {
               href="/auth"
               className="rounded-2xl bg-black px-5 py-3 text-sm font-medium text-white"
             >
-              Go to auth
+              {t("myPage.goToAuth")}
             </Link>
 
             <Link
               href="/"
               className="rounded-2xl border border-black/10 bg-white px-5 py-3 text-sm font-medium"
             >
-              Back to marketplace
+              {t("myPage.backToMarketplace")}
             </Link>
           </div>
         </div>
@@ -1438,16 +1441,16 @@ export default function MyPage() {
       <div className="mx-auto w-full max-w-7xl space-y-6">
         <header className="rounded-[28px] bg-white p-5 shadow-sm sm:rounded-[32px] sm:p-6">
           <p className="mb-3 text-xs font-medium uppercase tracking-[0.22em] text-black/35">
-            Selqiro Store
+            {t("myPage.selqiroStore")}
           </p>
 
           <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
             <div>
               <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">
-                My listings
+                {t("myPage.myListings")}
               </h1>
               <p className="mt-2 max-w-2xl text-sm leading-6 text-black/55">
-                These are the listings connected to your signed-in account.
+                {t("myPage.myListingsSubtitle")}
               </p>
             </div>
 
@@ -1462,14 +1465,14 @@ export default function MyPage() {
                   }
                   className="rounded-2xl bg-neutral-300 px-5 py-3 text-sm font-medium text-neutral-700"
                 >
-                  + Add listing
+                  {t("myPage.addListing")}
                 </button>
               ) : (
                 <Link
                   href="/sell"
                   className="rounded-2xl bg-green-500 px-5 py-3 text-sm font-medium text-white"
                 >
-                  + Add listing
+                  {t("myPage.addListing")}
                 </Link>
               )}
 
@@ -1477,7 +1480,7 @@ export default function MyPage() {
                 href="/"
                 className="rounded-2xl border border-black/10 bg-white px-5 py-3 text-sm font-medium"
               >
-                Back to marketplace
+                {t("myPage.backToMarketplace")}
               </Link>
             </div>
           </div>
@@ -1487,15 +1490,15 @@ export default function MyPage() {
           <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
             <div>
               <p className="mb-2 text-xs font-medium uppercase tracking-[0.22em] text-black/35">
-                Near you
+                {t("myPage.nearYou")}
               </p>
 
               <h2 className="text-2xl font-semibold tracking-tight">
-                Your local area
+                {t("myPage.yourLocalArea")}
               </h2>
 
               <p className="mt-2 max-w-2xl text-sm leading-6 text-black/55">
-                Marketplace can prioritize listings near your location.
+                {t("myPage.localAreaSubtitle")}
               </p>
             </div>
 
@@ -1517,7 +1520,7 @@ export default function MyPage() {
                 <input
                   value={homeCity}
                   onChange={(e) => setHomeCity(e.target.value)}
-                  placeholder="City"
+                  placeholder={t("common.city")}
                   className={inputClass}
                 />
 
@@ -1527,7 +1530,7 @@ export default function MyPage() {
                   disabled={savingHomeLocation}
                   className="rounded-2xl bg-black px-5 py-3 text-sm font-medium text-white disabled:opacity-60"
                 >
-                  {savingHomeLocation ? "Saving..." : "Save"}
+                  {savingHomeLocation ? t("myPage.saving") : t("myPage.save")}
                 </button>
               </div>
             </div>
@@ -1538,15 +1541,15 @@ export default function MyPage() {
           <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
             <div>
               <p className="mb-2 text-xs font-medium uppercase tracking-[0.22em] text-black/35">
-                Language
+                {t("myPage.language")}
               </p>
 
               <h2 className="text-2xl font-semibold tracking-tight">
-                Your language
+                {t("myPage.yourLanguage")}
               </h2>
 
               <p className="mt-2 max-w-2xl text-sm leading-6 text-black/55">
-                Selqiro will use this language for categories, interface text and AI assistance.
+                {t("myPage.languageSubtitle")}
               </p>
             </div>
 
@@ -1584,17 +1587,17 @@ export default function MyPage() {
           <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
             <div>
               <p className="mb-2 text-xs font-medium uppercase tracking-[0.22em] text-black/35">
-                Account
+                {t("myPage.account")}
               </p>
 
               <h2 className="text-2xl font-semibold tracking-tight">
-                {premiumActive ? "Premium account ✨" : "Free account"}
+                {premiumActive ? t("myPage.premiumAccount") : t("myPage.freeAccount")}
               </h2>
 
               <p className="mt-2 max-w-2xl text-sm leading-6 text-black/55">
                 {premiumActive
-                  ? `Premium active until ${formatDate(profile?.premium_until)}.`
-                  : `Free account can have up to 50 active listings. You currently have ${activeListingsCount} active listings.`}
+                  ? t("myPage.premiumActiveUntil").replace("{date}", formatDate(profile?.premium_until))
+                  : t("myPage.freeAccountLimit").replace("{count}", String(activeListingsCount))}
               </p>
 
               {!premiumActive && activeListingsCount >= 50 && (
@@ -1607,13 +1610,13 @@ export default function MyPage() {
             </div>
 
             <div className="w-full max-w-md">
-              <label className={labelClass}>Premium invite code</label>
+              <label className={labelClass}>{t("myPage.premiumInviteCode")}</label>
 
               <div className="flex flex-col gap-3 sm:flex-row">
                 <input
                   value={inviteCode}
                   onChange={(e) => setInviteCode(e.target.value)}
-                  placeholder="Enter invite code"
+                  placeholder={t("myPage.enterInviteCode")}
                   className={inputClass}
                 />
 
@@ -1623,7 +1626,7 @@ export default function MyPage() {
                   disabled={claimingInvite}
                   className="rounded-2xl bg-black px-5 py-3 text-sm font-medium text-white disabled:opacity-60"
                 >
-                  {claimingInvite ? "Activating..." : "Activate"}
+                  {claimingInvite ? t("myPage.activating") : t("myPage.activate")}
                 </button>
               </div>
 
@@ -1633,7 +1636,7 @@ export default function MyPage() {
 
               {user?.email === ADMIN_EMAIL && (
                 <div className="mt-4 rounded-2xl border border-black/10 bg-white p-4">
-                  <p className="mb-2 text-sm font-semibold">Admin</p>
+                  <p className="mb-2 text-sm font-semibold">{t("myPage.admin")}</p>
 
                   <button
                     type="button"
@@ -1641,12 +1644,12 @@ export default function MyPage() {
                     disabled={creatingInvite}
                     className="rounded-2xl bg-green-600 px-5 py-3 text-sm font-medium text-white disabled:opacity-60"
                   >
-                    {creatingInvite ? "Creating..." : "Generate premium invite"}
+                    {creatingInvite ? t("myPage.creating") : t("myPage.generatePremiumInvite")}
                   </button>
 
                   {generatedCode && (
                     <div className="mt-3 rounded-2xl bg-black px-4 py-3 text-sm font-medium text-white">
-                      Code: {generatedCode}
+                      {t("myPage.code")}: {generatedCode}
                     </div>
                   )}
                 </div>
@@ -1659,14 +1662,13 @@ export default function MyPage() {
           <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
             <div>
               <p className="mb-2 text-xs font-medium uppercase tracking-[0.22em] text-black/35">
-                Store sections
+                {t("myPage.storeSections")}
               </p>
               <h2 className="text-2xl font-semibold tracking-tight">
-                Your store layout
+                {t("myPage.yourStoreLayout")}
               </h2>
               <p className="mt-2 max-w-2xl text-sm leading-6 text-black/55">
-                These categories are only for your own store. Marketplace
-                categories stay separate.
+                {t("myPage.storeLayoutSubtitle")}
               </p>
             </div>
 
@@ -1675,7 +1677,7 @@ export default function MyPage() {
                 <input
                   value={newStoreCategoryName}
                   onChange={(e) => setNewStoreCategoryName(e.target.value)}
-                  placeholder="Example: Vegetables, Rugs, Earrings"
+                  placeholder={t("myPage.storeCategoryExample")}
                   className={inputClass}
                 />
 
@@ -1685,7 +1687,7 @@ export default function MyPage() {
                   disabled={savingStoreCategory}
                   className="rounded-2xl bg-black px-5 py-3 text-sm font-medium text-white disabled:opacity-60"
                 >
-                  {savingStoreCategory ? "Adding..." : "Add category"}
+                  {savingStoreCategory ? t("myPage.adding") : t("myPage.addCategory")}
                 </button>
               </div>
 
@@ -1711,7 +1713,7 @@ export default function MyPage() {
                 </div>
               ) : (
                 <p className="mt-3 text-sm text-black/45">
-                  No store sections yet.
+                  {t("myPage.noStoreSectionsYet")}
                 </p>
               )}
             </div>
@@ -1722,28 +1724,28 @@ export default function MyPage() {
           <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
             <div>
               <p className="mb-2 text-xs font-medium uppercase tracking-[0.22em] text-black/35">
-                Blocked users
+                {t("myPage.blockedUsers")}
               </p>
               <h2 className="text-2xl font-semibold tracking-tight">
-                Users you have blocked
+                {t("myPage.usersYouBlocked")}
               </h2>
               <p className="mt-2 max-w-2xl text-sm leading-6 text-black/55">
-                Blocked users cannot message you. Their listings are hidden from your marketplace view.
+                {t("myPage.blockedUsers")} cannot message you. Their listings are hidden from your marketplace view.
               </p>
             </div>
 
             <div className="w-full max-w-xl">
               {loadingBlockedUsers ? (
-                <p className="text-sm text-black/45">Loading blocked users...</p>
+                <p className="text-sm text-black/45">{t("myPage.loadingBlockedUsers")}</p>
               ) : blockedUsers.length === 0 ? (
                 <p className="text-sm text-black/45">
-                  You have not blocked any users.
+                  {t("myPage.noBlockedUsers")}
                 </p>
               ) : (
                 <div className="space-y-3">
                   {blockedUsers.map((blocked) => {
                     const profile = blocked.profiles;
-                    const name = profile?.store_name || "Blocked user";
+                    const name = profile?.store_name || t("myPage.blockedUser");
 
                     return (
                       <div
@@ -1761,7 +1763,7 @@ export default function MyPage() {
                             ) : (
                               name
                                 .split(" ")
-                                .map((part) => part[0])
+                                .map((part: string) => part[0])
                                 .join("")
                                 .slice(0, 2)
                                 .toUpperCase()
@@ -1778,7 +1780,7 @@ export default function MyPage() {
                                 href={`/store/${profile.store_slug}`}
                                 className="mt-1 inline-flex text-xs font-medium text-black/45 hover:text-black"
                               >
-                                View store
+                                {t("myPage.viewStore")}
                               </Link>
                             )}
                           </div>
@@ -1789,7 +1791,7 @@ export default function MyPage() {
                           onClick={() => unblockUserFromList(blocked.blocked_id)}
                           className="shrink-0 rounded-xl border border-black/10 bg-white px-3 py-2 text-sm font-medium text-black/70 hover:bg-black/[0.03]"
                         >
-                          Unblock
+                          {t("myPage.unblock")}
                         </button>
                       </div>
                     );
@@ -1804,7 +1806,7 @@ export default function MyPage() {
           <div className="grid gap-4 md:grid-cols-[1fr_220px]">
             <input
               type="text"
-              placeholder="Search your listings..."
+              placeholder={t("myPage.searchYourListings")}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className={inputClass}
@@ -1817,10 +1819,10 @@ export default function MyPage() {
               }
               className={inputClass}
             >
-              <option value="all">All statuses</option>
-              <option value="active">Active</option>
-              <option value="paused">Paused</option>
-              <option value="sold">Sold</option>
+              <option value="all">{t("myPage.allStatuses")}</option>
+              <option value="active">{t("myPage.active")}</option>
+              <option value="paused">{t("myPage.paused")}</option>
+              <option value="sold">{t("myPage.sold")}</option>
             </select>
           </div>
 
@@ -1835,7 +1837,7 @@ export default function MyPage() {
                     : "border-black/10 bg-white text-black hover:bg-black/[0.03]"
                 }`}
               >
-                All sections
+                {t("myPage.allSections")}
               </button>
 
               {storeCategories.map((category) => (
@@ -1990,7 +1992,7 @@ export default function MyPage() {
                                 onClick={() => deleteEditImage(img.id)}
                                 className="rounded-xl border border-red-200 px-3 py-2 text-xs text-red-600"
                               >
-                                Delete
+                                {t("myPage.delete")}
                               </button>
                             </div>
                           </div>
@@ -2151,9 +2153,9 @@ export default function MyPage() {
                     }
                     className={inputClass}
                   >
-                    <option value="active">Active</option>
-                    <option value="paused">Paused</option>
-                    <option value="sold">Sold</option>
+                    <option value="active">{t("myPage.active")}</option>
+                    <option value="paused">{t("myPage.paused")}</option>
+                    <option value="sold">{t("myPage.sold")}</option>
                   </select>
                 </div>
 
@@ -2348,9 +2350,9 @@ export default function MyPage() {
                         </p>
 
                         <div className="mt-3 text-sm text-black/45">
-                          {item.category || "general"} •{" "}
-                          {item.condition || "used"} •{" "}
-                          {item.country || "No country"}
+                          {item.category || t("myPage.general")} •{" "}
+                          {item.condition || t("myPage.used")} •{" "}
+                          {item.country || t("myPage.noCountry")}
                           {item.city ? ` • ${item.city}` : ""}
                         </div>
                       </div>
@@ -2370,13 +2372,13 @@ export default function MyPage() {
                       {expired && currentStatus === "active" ? (
                         <div className="font-medium">Expired / paused</div>
                       ) : currentStatus === "sold" ? (
-                        <div className="font-medium">Sold</div>
+                        <div className="font-medium">{t("myPage.sold")}</div>
                       ) : currentStatus === "paused" ? (
                         <div className="font-medium">Paused</div>
                       ) : daysLeft !== null ? (
-                        <div className="font-medium">{daysLeft} days left</div>
+                        <div className="font-medium">{t("myPage.daysLeft").replace("{count}", String(daysLeft))}</div>
                       ) : (
-                        <div className="font-medium">Active</div>
+                        <div className="font-medium">{t("myPage.active")}</div>
                       )}
                     </div>
 
@@ -2389,7 +2391,7 @@ export default function MyPage() {
                           expired
                         )}
                       >
-                        Active
+                        {t("myPage.active")}
                       </button>
 
                       <button
@@ -2400,7 +2402,7 @@ export default function MyPage() {
                           expired
                         )}
                       >
-                        Pause
+                        {t("myPage.pause")}
                       </button>
 
                       <button
@@ -2411,7 +2413,7 @@ export default function MyPage() {
                           expired
                         )}
                       >
-                        Sold
+                        {t("myPage.sold")}
                       </button>
 
                       {expired && currentStatus === "active" && (
@@ -2427,14 +2429,14 @@ export default function MyPage() {
                         onClick={() => startEdit(item)}
                         className="rounded-xl border border-black/10 bg-white px-3 py-2 text-sm"
                       >
-                        Edit
+                        {t("myPage.edit")}
                       </button>
 
                       <button
                         onClick={() => deleteListing(item.id)}
                         className="rounded-xl border border-red-200 bg-white px-3 py-2 text-sm text-red-600"
                       >
-                        Delete
+                        {t("myPage.delete")}
                       </button>
                     </div>
                   </article>

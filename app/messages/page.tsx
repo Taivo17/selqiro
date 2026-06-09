@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { supabase } from "../../lib/supabase";
 import { useAuth } from "../../lib/useAuth";
+import { getTranslation } from "../../lib/i18n/useTranslation";
 
 type Conversation = {
   id: number;
@@ -30,6 +31,11 @@ type OtherProfile = {
   avatar_url?: string | null;
 };
 
+type CurrentProfile = {
+  id: string;
+  language?: string | null;
+};
+
 export default function MessagesPage() {
   const { user, loading } = useAuth();
 
@@ -47,12 +53,21 @@ export default function MessagesPage() {
   >({});
 
   const [pageLoading, setPageLoading] = useState(true);
+  const [currentProfile, setCurrentProfile] = useState<CurrentProfile | null>(null);
 
   useEffect(() => {
     const load = async () => {
       if (!user?.id) return;
 
       setPageLoading(true);
+
+      const { data: currentProfileData } = await supabase
+        .from("profiles")
+        .select("id, language")
+        .eq("id", user.id)
+        .maybeSingle();
+
+      setCurrentProfile((currentProfileData || null) as CurrentProfile | null);
 
       const { data: participantRows, error } = await supabase
         .from("conversation_participants")
@@ -158,11 +173,14 @@ export default function MessagesPage() {
     load();
   }, [user?.id]);
 
+  const language = currentProfile?.language || "en";
+  const t = (key: any) => getTranslation(language, key);
+
   if (loading || pageLoading) {
     return (
       <main className="min-h-screen bg-[#f8f8f6] px-4 py-6">
         <div className="mx-auto max-w-5xl rounded-[28px] bg-white p-8 text-center shadow-sm">
-          Loading messages...
+          {t("messagesPage.loadingMessages")}
         </div>
       </main>
     );
@@ -173,22 +191,22 @@ export default function MessagesPage() {
       <div className="mx-auto max-w-5xl">
         <header className="mb-5 rounded-[32px] bg-white p-6 shadow-sm">
           <p className="mb-2 text-xs font-medium uppercase tracking-[0.22em] text-black/35">
-            Inbox
+            {t("messagesPage.inbox")}
           </p>
 
           <h1 className="text-4xl font-semibold tracking-tight">
-            Messages
+            {t("messagesPage.messages")}
           </h1>
         </header>
 
         {conversations.length === 0 ? (
           <div className="rounded-[28px] bg-white p-10 text-center shadow-sm">
             <p className="text-lg font-medium">
-              No conversations yet
+              {t("messagesPage.noConversationsTitle")}
             </p>
 
             <p className="mt-2 text-black/55">
-              Contact sellers from listings to start messaging.
+              {t("messagesPage.noConversationsSubtitle")}
             </p>
           </div>
         ) : (
@@ -217,9 +235,9 @@ export default function MessagesPage() {
                             className="h-full w-full object-cover"
                           />
                         ) : (
-                          (otherProfiles[conversation.id]?.store_name || "Store")
+                          (otherProfiles[conversation.id]?.store_name || t("listing.store"))
                             .split(" ")
-                            .map((part) => part[0])
+                            .map((part: string) => part[0])
                             .join("")
                             .slice(0, 2)
                             .toUpperCase()
@@ -232,7 +250,7 @@ export default function MessagesPage() {
                         <div className="min-w-0">
                           <p className="line-clamp-1 text-lg font-semibold">
                             {otherProfiles[conversation.id]?.store_name ||
-                              "Conversation"}
+                              t("messagesPage.conversation")}
                           </p>
 
                           {conversation.listing_title_snapshot && (
@@ -259,7 +277,7 @@ export default function MessagesPage() {
                               : "border border-black/10 bg-black/[0.02] text-black/45"
                           }`}
                         >
-                          {isUnread ? "New" : "Open"}
+                          {isUnread ? t("messagesPage.new") : t("messagesPage.open")}
                         </span>
                       </div>
 
@@ -268,7 +286,7 @@ export default function MessagesPage() {
                           isUnread ? "font-medium text-white/80" : "text-black/60"
                         }`}
                       >
-                        {latest?.message || "No messages yet"}
+                        {latest?.message || t("messagesPage.noMessagesYet")}
                       </p>
                     </div>
                   </div>

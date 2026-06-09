@@ -9,7 +9,7 @@ export default function AuthPage() {
   const router = useRouter();
 
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [password, setParool] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handleSignUp = async () => {
@@ -78,17 +78,17 @@ export default function AuthPage() {
             href="/"
             className="rounded-2xl border border-black/10 bg-white px-5 py-3 text-sm font-medium transition hover:bg-black/[0.03]"
           >
-            Back to marketplace
+            Tagasi turule
           </Link>
         </div>
 
         <div className="rounded-[32px] border border-black/8 bg-white p-8 shadow-sm">
           <p className="mb-3 text-xs font-medium uppercase tracking-[0.24em] text-black/40">
-            Selqiro account
+            Selqiro konto
           </p>
 
           <h1 className="text-3xl font-semibold tracking-tight">
-            Sign up / Sign in
+            Loo konto / Logi sisse
           </h1>
 
           <p className="mt-3 text-black/60">
@@ -98,7 +98,7 @@ export default function AuthPage() {
           <div className="mt-8 space-y-4">
             <div>
               <label className="mb-2 block text-sm font-medium text-black/70">
-                Email
+                E-post
               </label>
               <input
                 type="email"
@@ -111,13 +111,13 @@ export default function AuthPage() {
 
             <div>
               <label className="mb-2 block text-sm font-medium text-black/70">
-                Password
+                Parool
               </label>
               <input
                 type="password"
-                placeholder="Password"
+                placeholder="Parool"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e) => setParool(e.target.value)}
                 className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-black/30"
               />
             </div>
@@ -129,7 +129,7 @@ export default function AuthPage() {
               disabled={loading}
               className="rounded-2xl bg-black px-5 py-3 text-sm font-medium text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
             >
-              {loading ? "Please wait..." : "Create account"}
+              {loading ? "Palun oota..." : "Loo konto"}
             </button>
 
             <button
@@ -137,14 +137,14 @@ export default function AuthPage() {
               disabled={loading}
               className="rounded-2xl border border-black/10 bg-white px-5 py-3 text-sm font-medium transition hover:bg-black/[0.03] disabled:cursor-not-allowed disabled:opacity-60"
             >
-              {loading ? "Please wait..." : "Sign in"}
+              {loading ? "Palun oota..." : "Logi sisse"}
             </button>
 
             <button
               onClick={handleLogout}
               className="mt-2 text-sm text-black/50 transition hover:text-black"
             >
-              Log out
+              Logi välja
             </button>
           </div>
         </div>
