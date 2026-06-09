@@ -3,7 +3,11 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { supabase } from "../lib/supabase";
-import { CATEGORY_TREE } from "../lib/categories";
+import {
+  CATEGORY_TREE,
+  getCategoryLabel,
+} from "../lib/categories";
+import { getTranslation } from "../lib/i18n/useTranslation";
 
 const PAGE_SIZE = 30;
 
@@ -38,6 +42,15 @@ type Listing = {
   search_text?: string | null;
   details?: Record<string, unknown> | null;
   listing_images?: ListingImage[];
+  listing_translations?: ListingTranslation[];
+};
+
+type ListingTranslation = {
+  language: string;
+  title: string;
+  description?: string | null;
+  ai_summary?: string | null;
+  status?: string | null;
 };
 
 type ProfileRow = {
@@ -49,6 +62,7 @@ type ProfileRow = {
   home_city?: string | null;
   home_lat?: number | null;
   home_lng?: number | null;
+  language?: string | null;
 };
 
 function parsePriceAmount(value: string) {
@@ -114,6 +128,25 @@ async function geocodeCity(country: string, city: string) {
   return {
     lat: data.lat,
     lng: data.lng,
+  };
+}
+
+function getTranslatedListingText(
+  item: Listing,
+  language: string | null | undefined
+) {
+  const lang = language || "en";
+
+  const translation = (item.listing_translations || []).find(
+    (row) =>
+      row.language === lang &&
+      (!row.status || row.status === "published" || row.status === "active")
+  );
+
+  return {
+    title: translation?.title || item.title,
+    description: translation?.description || item.description,
+    aiSummary: translation?.ai_summary || null,
   };
 }
 
@@ -187,7 +220,7 @@ export default function MarketplacePage() {
 
     const { data, error } = await supabase
       .from("profiles")
-      .select("id, home_country, home_city, home_lat, home_lng")
+      .select("id, home_country, home_city, home_lat, home_lng, language")
       .eq("id", user.id)
       .maybeSingle();
 
@@ -248,7 +281,7 @@ export default function MarketplacePage() {
     let query = supabase
       .from("listings")
       .select(
-        "*, listing_images(id, thumb_url, medium_url, original_url, is_primary, sort_order)"
+        "*, listing_images(id, thumb_url, medium_url, original_url, is_primary, sort_order), listing_translations(language, title, description, ai_summary, status)"
       )
       .eq("status", "active")
       .gt("active_until", new Date().toISOString())
@@ -476,6 +509,27 @@ export default function MarketplacePage() {
     ).sort();
   }, [listings]);
 
+  const language = currentProfile?.language || "en";
+
+  const t = (key: any) => getTranslation(language, key);
+
+  const categoryLabel = (value: string, fallback?: string | null) =>
+    getCategoryLabel(
+      value,
+      fallback || value || t("listing.general"),
+      language
+    );
+
+  const conditionLabel = (value?: string | null) => {
+    const condition = value || "used";
+
+    if (condition === "new") return t("condition.new");
+    if (condition === "used") return t("condition.used");
+    if (condition === "for_parts") return t("condition.for_parts");
+
+    return condition;
+  };
+
   const filtersActive =
     search.trim() ||
     categoryFilter !== "all" ||
@@ -647,7 +701,7 @@ export default function MarketplacePage() {
               </button>
 
               <h1 className="text-3xl font-semibold tracking-tight sm:text-5xl">
-                Browse marketplace
+                {t("marketplace.browseMarketplace")}
               </h1>
             </div>
 
@@ -665,7 +719,7 @@ export default function MarketplacePage() {
           <div className="mt-5 grid gap-3 xl:grid-cols-[1.1fr_0.8fr_0.8fr_1fr_0.8fr]">
             <input
               type="text"
-              placeholder="Search listings..."
+              placeholder={t("marketplace.searchListings")}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-base outline-none transition focus:border-black/30 sm:text-sm"
@@ -674,7 +728,7 @@ export default function MarketplacePage() {
             <input
               type="number"
               inputMode="numeric"
-              placeholder="Price from"
+              placeholder={t("marketplace.priceFrom")}
               value={priceMin}
               onChange={(e) => setPriceMin(e.target.value)}
               className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-base outline-none transition focus:border-black/30 sm:text-sm"
@@ -683,7 +737,7 @@ export default function MarketplacePage() {
             <input
               type="number"
               inputMode="numeric"
-              placeholder="Price to"
+              placeholder={t("marketplace.priceTo")}
               value={priceMax}
               onChange={(e) => setPriceMax(e.target.value)}
               className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-base outline-none transition focus:border-black/30 sm:text-sm"
@@ -691,7 +745,7 @@ export default function MarketplacePage() {
 
             <input
               type="text"
-              placeholder="Search near city..."
+              placeholder={t("marketplace.searchNearCity")}
               value={searchNearCity}
               onChange={(e) => {
                 setSearchNearCity(e.target.value);
@@ -711,10 +765,10 @@ export default function MarketplacePage() {
               />
               <span className="text-sm text-black/75">
                 {searchNearCity.trim()
-                  ? `Near: ${searchNearCity}`
+                  ? `${t("marketplace.near")}: ${searchNearCity}`
                   : nearOnly && currentProfile?.home_city
-                  ? `Near you: ${currentProfile.home_city}`
-                  : "Near you"}
+                  ? `${t("marketplace.nearYou")}: ${currentProfile.home_city}`
+                  : t("marketplace.nearYou")}
               </span>
             </label>
           </div>
@@ -725,7 +779,7 @@ export default function MarketplacePage() {
               onClick={() => setShowMoreFilters((value) => !value)}
               className="rounded-2xl border border-black/10 bg-white px-5 py-3 text-sm font-medium transition hover:bg-black/[0.03]"
             >
-              {showMoreFilters ? "Hide more filters" : "More filters"}
+              {showMoreFilters ? t("marketplace.hideMoreFilters") : t("marketplace.moreFilters")}
             </button>
           </div>
 
@@ -740,10 +794,10 @@ export default function MarketplacePage() {
                 }}
                 className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-base outline-none transition focus:border-black/30 sm:text-sm"
               >
-                <option value="all">All categories</option>
+                <option value="all">{t("marketplace.allCategories")}</option>
                 {categories.map((value) => (
                   <option key={value} value={value}>
-                    {value.charAt(0).toUpperCase() + value.slice(1)}
+                    {categoryLabel(value, value)}
                   </option>
                 ))}
               </select>
@@ -757,10 +811,10 @@ export default function MarketplacePage() {
                 disabled={subcategoryOptions.length === 0}
                 className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-base outline-none transition focus:border-black/30 disabled:opacity-50 sm:text-sm"
               >
-                <option value="all">All subcategories</option>
+                <option value="all">{t("marketplace.allSubcategories")}</option>
                 {subcategoryOptions.map((item) => (
                   <option key={item.value} value={item.value}>
-                    {item.label}
+                    {categoryLabel(item.value, item.label)}
                   </option>
                 ))}
               </select>
@@ -771,10 +825,10 @@ export default function MarketplacePage() {
                 disabled={detailCategoryOptions.length === 0}
                 className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-base outline-none transition focus:border-black/30 disabled:opacity-50 sm:text-sm"
               >
-                <option value="all">All detailed categories</option>
+                <option value="all">{t("marketplace.allDetailedCategories")}</option>
                 {detailCategoryOptions.map((item: { value: string; label: string }) => (
                   <option key={item.value} value={item.value}>
-                    {item.label}
+                    {categoryLabel(item.value, item.label)}
                   </option>
                 ))}
               </select>
@@ -784,10 +838,10 @@ export default function MarketplacePage() {
                 onChange={(e) => setConditionFilter(e.target.value)}
                 className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-base outline-none transition focus:border-black/30 sm:text-sm"
               >
-                <option value="all">All conditions</option>
+                <option value="all">{t("marketplace.allConditions")}</option>
                 {conditions.map((value) => (
                   <option key={value} value={value}>
-                    {value.charAt(0).toUpperCase() + value.slice(1)}
+                    {categoryLabel(value, value)}
                   </option>
                 ))}
               </select>
@@ -801,20 +855,22 @@ export default function MarketplacePage() {
               Listings
             </p>
             <h2 className="mt-1 text-2xl font-semibold tracking-tight">
-              Latest items
+              {t("marketplace.latestItems")}
             </h2>
           </div>
 
-          <p className="text-sm text-black/45">{filteredListings.length} shown</p>
+          <p className="text-sm text-black/45">
+            {filteredListings.length} {t("marketplace.shown")}
+          </p>
         </section>
 
         {loading ? (
           <div className="rounded-[28px] border border-black/8 bg-white px-6 py-14 text-center shadow-sm">
-            <p className="text-lg font-medium">Loading marketplace...</p>
+            <p className="text-lg font-medium">{t("marketplace.loadingMarketplace")}</p>
           </div>
         ) : filteredListings.length === 0 ? (
           <div className="rounded-[28px] border border-dashed border-black/10 bg-white px-6 py-14 text-center shadow-sm">
-            <p className="text-lg font-medium">No matching listings</p>
+            <p className="text-lg font-medium">{t("marketplace.noMatchingListings")}</p>
             <p className="mt-2 text-black/55">
               Try changing your filters or search term.
             </p>
@@ -836,9 +892,10 @@ export default function MarketplacePage() {
                   : undefined;
 
                 const storeSlug = sellerProfile?.store_slug || "";
-                const storeName = sellerProfile?.store_name || "Seller store";
+                const storeName = sellerProfile?.store_name || t("listing.sellerStore");
                 const sellerIsPremium = Boolean(sellerProfile?.is_premium);
                 const imageUrl = getListingImage(item);
+                const translated = getTranslatedListingText(item, language);
 
                 return (
                   <article
@@ -855,7 +912,7 @@ export default function MarketplacePage() {
                           {imageUrl ? (
                             <img decoding="async"
                               src={imageUrl}
-                              alt={item.title}
+                              alt={translated.title}
                               loading="lazy"
                               className="aspect-[4/3] h-auto w-full object-cover sm:aspect-[16/10]"
                             />
@@ -871,11 +928,11 @@ export default function MarketplacePage() {
                         </div>
 
                         <h3 className="line-clamp-1 break-words text-lg font-semibold tracking-tight sm:text-xl">
-                          {item.title}
+                          {translated.title}
                         </h3>
 
                         <p className="mt-2 line-clamp-2 break-words text-sm leading-5 text-black/60">
-                          {item.description}
+                          {translated.description}
                         </p>
 
                         <p className="mt-3 break-words text-2xl font-semibold sm:text-3xl">
@@ -883,9 +940,9 @@ export default function MarketplacePage() {
                         </p>
 
                         <div className="mt-2 line-clamp-1 text-xs text-black/45 sm:text-sm">
-                          {item.category || "general"} •{" "}
-                          {item.condition || "used"} •{" "}
-                          {item.country || "No country"}
+                          {categoryLabel(item.category || "general", t("listing.general"))} •{" "}
+                          {conditionLabel(item.condition)} •{" "}
+                          {item.country || t("listing.noCountry")}
                           {item.city ? ` • ${item.city}` : ""}
                         </div>
                       </div>

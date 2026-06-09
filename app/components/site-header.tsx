@@ -5,9 +5,11 @@ import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { supabase } from "../../lib/supabase";
 import { useAuth } from "../../lib/useAuth";
+import { getTranslation } from "../../lib/i18n/useTranslation";
 
 type ProfileRow = {
   store_slug?: string | null;
+  language?: string | null;
 };
 
 function navClass(active: boolean) {
@@ -28,6 +30,8 @@ export default function SiteHeader() {
   const { user, loading } = useAuth();
 
   const [storeSlug, setStoreSlug] = useState("");
+  const [language, setLanguage] = useState("en");
+  const [languageLoaded, setLanguageLoaded] = useState(false);
   const [loadingStoreSlug, setLoadingStoreSlug] = useState(false);
   const [loggingOut, setLoggingOut] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -55,6 +59,8 @@ export default function SiteHeader() {
       if (!userId) {
         if (mounted) {
           setStoreSlug("");
+          setLanguage("en");
+          setLanguageLoaded(true);
           setLoadingStoreSlug(false);
         }
         return;
@@ -64,7 +70,7 @@ export default function SiteHeader() {
 
       const { data, error } = await supabase
         .from("profiles")
-        .select("store_slug")
+        .select("store_slug, language")
         .eq("id", userId)
         .maybeSingle();
 
@@ -79,6 +85,8 @@ export default function SiteHeader() {
 
       const profile = data as ProfileRow | null;
       setStoreSlug(profile?.store_slug || "");
+      setLanguage(profile?.language || "en");
+      setLanguageLoaded(true);
       setLoadingStoreSlug(false);
     };
 
@@ -234,6 +242,9 @@ export default function SiteHeader() {
     }
   }, [pathname]);
 
+  const t = (key: any) => getTranslation(languageLoaded ? language : "en", key);
+
+
   return (
     <header className="sticky top-0 z-30 border-b border-black/6 bg-[#f8f8f6]/95 backdrop-blur">
       <div className="mx-auto max-w-7xl px-4 py-3 sm:px-6 lg:px-8">
@@ -307,12 +318,12 @@ export default function SiteHeader() {
                 onClick={goMarketplaceFresh}
                 className={navClass(isMarketplace)}
               >
-                Marketplace
+                {t("navigation.marketplace")}
               </button>
 
               <Link href="/feed" className={navClass(isFeed)}>
                 <span className="relative inline-flex items-center gap-2">
-                  Feed
+                  {t("navigation.feed")}
 
                   {hasNewFeedItems && (
                     <span className="h-2.5 w-2.5 rounded-full bg-green-400" />
@@ -321,7 +332,7 @@ export default function SiteHeader() {
               </Link>
 
               <Link href="/my-page" className={navClass(isMyPage)}>
-                My page
+                {t("navigation.myPage")}
               </Link>
 
               <Link
@@ -329,7 +340,7 @@ export default function SiteHeader() {
                 className={navClass(pathname.startsWith("/messages"))}
               >
                 <span className="relative inline-flex items-center gap-2">
-                  Messages
+                  {t("navigation.messages")}
 
                   {hasUnreadMessages && (
                     <span className="h-2.5 w-2.5 rounded-full bg-green-400" />
@@ -338,16 +349,16 @@ export default function SiteHeader() {
               </Link>
 
               <Link href="/sell" className={navClass(isSell)}>
-                Sell
+                {t("navigation.sell")}
               </Link>
 
               {showStoreLink ? (
                 <Link href={`/store/${storeSlug}`} className={navClass(isStore)}>
-                  Store
+                  {t("navigation.store")}
                 </Link>
               ) : (
                 <Link href="/profile" className={navClass(isProfile)}>
-                  Store
+                  {t("navigation.store")}
                 </Link>
               )}
             </div>
@@ -362,12 +373,12 @@ export default function SiteHeader() {
                     onClick={goMarketplaceFresh}
                     className={mobileNavClass(isMarketplace)}
                   >
-                    Marketplace
+                    {t("navigation.marketplace")}
                   </button>
 
                   <Link href="/feed" className={mobileNavClass(isFeed)}>
                     <span className="inline-flex items-center justify-center gap-2">
-                      Feed
+                      {t("navigation.feed")}
 
                       {hasNewFeedItems && (
                         <span className="h-2.5 w-2.5 rounded-full bg-green-400" />
@@ -376,7 +387,7 @@ export default function SiteHeader() {
                   </Link>
 
                   <Link href="/my-page" className={mobileNavClass(isMyPage)}>
-                    My page
+                    {t("navigation.myPage")}
                   </Link>
 
                   <Link
@@ -384,7 +395,7 @@ export default function SiteHeader() {
                     className={mobileNavClass(pathname.startsWith("/messages"))}
                   >
                     <span className="inline-flex items-center justify-center gap-2">
-                      Messages
+                      {t("navigation.messages")}
 
                       {hasUnreadMessages && (
                         <span className="h-2.5 w-2.5 rounded-full bg-green-400" />
@@ -393,7 +404,7 @@ export default function SiteHeader() {
                   </Link>
 
                   <Link href="/sell" className={mobileNavClass(isSell)}>
-                    Sell
+                    {t("navigation.sell")}
                   </Link>
 
                   {showStoreLink ? (
@@ -401,11 +412,11 @@ export default function SiteHeader() {
                       href={`/store/${storeSlug}`}
                       className={mobileNavClass(isStore)}
                     >
-                      Store
+                      {t("navigation.store")}
                     </Link>
                   ) : (
                     <Link href="/profile" className={mobileNavClass(isProfile)}>
-                      Store
+                      {t("navigation.store")}
                     </Link>
                   )}
 

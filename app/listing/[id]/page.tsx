@@ -5,6 +5,13 @@ import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { supabase } from "../../../lib/supabase";
 import { useAuth } from "../../../lib/useAuth";
+import {
+  getCategoryLabel,
+} from "../../../lib/categories";
+import {
+  getFieldLabel,
+} from "../../../lib/categoryFields";
+import { getTranslation } from "../../../lib/i18n/useTranslation";
 
 type ListingImage = {
   id: string;
@@ -19,6 +26,11 @@ type SellerProfile = {
   id: string;
   store_name?: string | null;
   store_slug?: string | null;
+};
+
+type CurrentProfile = {
+  id: string;
+  language?: string | null;
 };
 
 type Listing = {
@@ -45,7 +57,35 @@ type Listing = {
   ai_status?: string;
   ai_level?: string;
   listing_images?: ListingImage[];
+  listing_translations?: ListingTranslation[];
 };
+
+type ListingTranslation = {
+  language: string;
+  title: string;
+  description?: string | null;
+  ai_summary?: string | null;
+  status?: string | null;
+};
+
+function getTranslatedListingText(
+  item: Listing,
+  language: string | null | undefined
+) {
+  const lang = language || "en";
+
+  const translation = (item.listing_translations || []).find(
+    (row) =>
+      row.language === lang &&
+      (!row.status || row.status === "published" || row.status === "active")
+  );
+
+  return {
+    title: translation?.title || item.title,
+    description: translation?.description || item.description,
+    aiSummary: translation?.ai_summary || null,
+  };
+}
 
 function FieldRow({ label, value }: { label: string; value?: string | null }) {
   if (!value) return null;
@@ -115,6 +155,7 @@ export default function ListingPage() {
 
   const [listing, setListing] = useState<Listing | null>(null);
   const [sellerProfile, setSellerProfile] = useState<SellerProfile | null>(null);
+  const [currentProfile, setCurrentProfile] = useState<CurrentProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [touchStartX, setTouchStartX] = useState<number | null>(null);
@@ -156,10 +197,22 @@ export default function ListingPage() {
       const { data, error } = await supabase
         .from("listings")
         .select(
-          "*, listing_images(id, thumb_url, medium_url, original_url, is_primary, sort_order)"
+          "*, listing_images(id, thumb_url, medium_url, original_url, is_primary, sort_order), listing_translations(language, title, description, ai_summary, status)"
         )
         .eq("id", id)
         .single();
+
+      if (user?.id) {
+        const { data: currentProfileData } = await supabase
+          .from("profiles")
+          .select("id, language")
+          .eq("id", user.id)
+          .maybeSingle();
+
+        setCurrentProfile((currentProfileData || null) as CurrentProfile | null);
+      } else {
+        setCurrentProfile(null);
+      }
 
       if (error || !data) {
         console.error(error);
@@ -306,7 +359,7 @@ export default function ListingPage() {
 
     const shareUrl = window.location.href;
     const shareTitle = listing.title || "Selqiro listing";
-    const shareText = `${listing.title} - ${listing.price}`;
+    const shareText = `${translated.title} - ${listing.price}`;
 
     setShareCopied(false);
 
@@ -539,7 +592,28 @@ export default function ListingPage() {
     setTouchStartX(null);
   };
 
-  const visibleDetails = getVisibleDetails(listing.details);
+  const language = currentProfile?.language || "en";
+  const t = (key: any) => getTranslation(language, key);
+
+  const translated = getTranslatedListingText(listing, language);
+
+  const categoryLabel = (value: string, fallback?: string | null) =>
+    getCategoryLabel(value, fallback || value, language);
+
+  const conditionLabel = (value?: string | null) => {
+    const condition = value || "used";
+
+    if (condition === "new") return t("condition.new");
+    if (condition === "used") return t("condition.used");
+    if (condition === "for_parts") return t("condition.for_parts");
+
+    return condition;
+  };
+
+  const visibleDetails = getVisibleDetails(listing.details).map((item) => ({
+    ...item,
+    label: getFieldLabel(item.key, item.label, language),
+  }));
   const hasDetailsInfo = visibleDetails.length > 0;
 
   const hasAiInfo = Boolean(listing.ai_status) || Boolean(listing.ai_level);
@@ -569,7 +643,7 @@ export default function ListingPage() {
               {mediumImageUrl ? (
                 <img decoding="async"
                   src={mediumImageUrl}
-                  alt={listing.title}
+                  alt={translated.title}
                   className="h-[260px] w-full object-contain sm:h-[460px]"
                 />
               ) : (
@@ -637,7 +711,7 @@ export default function ListingPage() {
                     {thumbUrl ? (
                       <img decoding="async"
                         src={thumbUrl}
-                        alt={`${listing.title} ${index + 1}`}
+                        alt={`${translated.title} ${index + 1}`}
                         className="h-full w-full object-cover"
                       />
                     ) : (
@@ -658,7 +732,7 @@ export default function ListingPage() {
           <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
             <div className="min-w-0">
               <h1 className="break-words text-3xl font-semibold tracking-tight sm:text-4xl">
-                {listing.title}
+                {translated.title}
               </h1>
 
               <p className="mt-3 break-words text-3xl font-bold">
@@ -674,13 +748,13 @@ export default function ListingPage() {
           <div className="mt-5 flex flex-wrap gap-2 text-sm text-black/55">
             {listing.category && (
               <span className="max-w-full break-words rounded-full border border-black/10 bg-black/[0.02] px-4 py-2">
-                {listing.category}
+                {categoryLabel(listing.category, listing.category)}
               </span>
             )}
 
             {listing.condition && (
               <span className="max-w-full break-words rounded-full border border-black/10 bg-black/[0.02] px-4 py-2">
-                {listing.condition}
+                {conditionLabel(listing.condition)}
               </span>
             )}
 
@@ -763,7 +837,7 @@ export default function ListingPage() {
           </h2>
 
           <p className="max-w-full whitespace-pre-wrap break-words text-base leading-7 text-black/70">
-            {listing.description}
+            {translated.description}
           </p>
         </section>
 
@@ -936,7 +1010,7 @@ export default function ListingPage() {
 
           <img decoding="async"
             src={originalImageUrl}
-            alt={listing.title}
+            alt={translated.title}
             className="max-h-[90vh] max-w-[95vw] object-contain"
             onClick={(event) => event.stopPropagation()}
           />

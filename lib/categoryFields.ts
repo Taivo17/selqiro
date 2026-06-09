@@ -1138,3 +1138,55 @@ export const CATEGORY_FIELDS: Record<string, CategoryField[]> = {
 export function getCategoryFields(subcategory: string) {
   return CATEGORY_FIELDS[subcategory] || [];
 }
+
+export const FIELD_LABELS = {
+  et: {
+    brand: "Mark",
+    model: "Mudel",
+    year: "Aasta",
+    generation: "Põlvkond / kere kood",
+    fuel: "Kütus",
+    engine: "Mootor",
+    power: "Võimsus",
+    gearbox: "Käigukast",
+    drivetrain: "Vedav sild",
+    mileage: "Läbisõit",
+    vin: "VIN",
+    registration_number: "Registreerimisnumber",
+    body_type: "Keretüüp",
+    doors: "Uste arv",
+    seats: "Istekohti",
+    color: "Värv",
+    condition: "Seisukord",
+    length: "Pikkus",
+    width: "Laius",
+    height: "Kõrgus",
+    weight: "Kaal",
+    material: "Materjal",
+    quantity: "Kogus",
+    manufacturer: "Tootja",
+    part_number: "Osa number",
+    serial_number: "Seerianumber",
+    capacity: "Mahutavus",
+    voltage: "Pinge",
+    storage: "Mälumaht",
+    ram: "RAM",
+    processor: "Protsessor",
+    screen_size: "Ekraani suurus",
+    operating_system: "Operatsioonisüsteem",
+    battery_health: "Aku seisukord",
+    included_accessories: "Kaasasolevad tarvikud",
+  },
+} as const;
+
+export function getFieldLabel(
+  key: string,
+  fallback: string,
+  language: string | null | undefined
+) {
+  if (language === "et") {
+    return FIELD_LABELS.et[key as keyof typeof FIELD_LABELS.et] || fallback;
+  }
+
+  return fallback;
+}

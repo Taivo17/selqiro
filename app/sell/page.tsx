@@ -5,9 +5,17 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { supabase } from "../../lib/supabase";
 import { useAuth } from "../../lib/useAuth";
-import { CATEGORY_TREE } from "../../lib/categories";
-import { getCategoryFields } from "../../lib/categoryFields";
+import {
+  CATEGORY_TREE,
+  getCategoryLabel,
+} from "../../lib/categories";
+
+import {
+  getCategoryFields,
+  getFieldLabel,
+} from "../../lib/categoryFields";
 import { resolveAiCategoryPath } from "../../lib/aiCategoryMapping";
+import { getTranslation } from "../../lib/i18n/useTranslation";
 
 const DRAFT_STORAGE_KEY = "sell_listing_draft_v1";
 
@@ -166,6 +174,7 @@ export default function SellPage() {
   const { user, loading } = useAuth();
 
   const [profileLoaded, setProfileLoaded] = useState(false);
+  const [profileLanguage, setProfileLanguage] = useState("en");
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -218,6 +227,16 @@ export default function SellPage() {
     (item) => item.value === subcategory
   );
   const detailCategoryOptions = (selectedSubcategory as any)?.children || [];
+
+  const categoryLabel = (
+    value: string,
+    fallback: string
+  ) => getCategoryLabel(value, fallback, profileLanguage);
+
+  const fieldLabel = (
+    key: string,
+    fallback: string
+  ) => getFieldLabel(key, fallback, profileLanguage);
 
 
   const aiSuggestions = useMemo(() => {
@@ -290,6 +309,8 @@ export default function SellPage() {
     aiResult,
   ]);
 
+  const t = (key: any) => getTranslation(profileLanguage, key);
+
   const activeFields = getCategoryFields(detailCategory || subcategory);
 
   const showVehicleFields = false;
@@ -313,7 +334,7 @@ export default function SellPage() {
 
       const { data, error } = await supabase
         .from("profiles")
-        .select("home_country, home_city")
+        .select("home_country, home_city, language")
         .eq("id", user.id)
         .maybeSingle();
 
@@ -328,6 +349,10 @@ export default function SellPage() {
 
       if (data?.home_city) {
         setCity(data.home_city);
+      }
+
+      if (data?.language) {
+        setProfileLanguage(data.language);
       }
 
       setProfileLoaded(true);
@@ -718,6 +743,7 @@ export default function SellPage() {
           ai_enriched: false,
           ai_level: "none",
           is_featured: false,
+          listing_language: profileLanguage,
           status: "active",
           active_until: activeUntil.toISOString(),
         })
@@ -1178,7 +1204,7 @@ export default function SellPage() {
           )}
 
           <input
-            placeholder="Title *"
+            placeholder={`${t("sellPage.title")} *`}
                   maxLength={80}
             value={title}
             onChange={(e) => {
@@ -1189,7 +1215,7 @@ export default function SellPage() {
           />
 
           <textarea
-            placeholder="Description *"
+            placeholder={`${t("sellPage.description")} *`}
                   maxLength={1000}
             value={description}
             onChange={(e) => {
@@ -1200,7 +1226,7 @@ export default function SellPage() {
           />
 
           <input
-            placeholder="Price *"
+            placeholder={`${t("sellPage.price")} *`}
                   maxLength={40}
             value={price}
             onChange={(e) => {
@@ -1221,7 +1247,7 @@ export default function SellPage() {
           >
             {CATEGORY_TREE.map((item) => (
               <option key={item.value} value={item.value}>
-                {item.label}
+                {categoryLabel(item.value, item.label)}
               </option>
             ))}
           </select>
@@ -1231,9 +1257,9 @@ export default function SellPage() {
             onChange={(e) => setCondition(e.target.value)}
             className="w-full rounded-2xl border border-black/10 p-4 outline-none"
           >
-            <option value="new">New</option>
-            <option value="used">Used</option>
-            <option value="for_parts">For parts</option>
+            <option value="new">{t("sellPage.new")}</option>
+            <option value="used">{t("sellPage.used")}</option>
+            <option value="for_parts">{t("sellPage.forParts")}</option>
           </select>
 
           {subcategoryOptions.length > 0 ? (
@@ -1249,7 +1275,7 @@ export default function SellPage() {
 
               {subcategoryOptions.map((item) => (
                 <option key={item.value} value={item.value}>
-                  {item.label}
+                  {categoryLabel(item.value, item.label)}
                 </option>
               ))}
             </select>
@@ -1273,7 +1299,7 @@ export default function SellPage() {
 
               {detailCategoryOptions.map((item: { value: string; label: string }) => (
                 <option key={item.value} value={item.value}>
-                  {item.label}
+                  {categoryLabel(item.value, item.label)}
                 </option>
               ))}
             </select>
@@ -1285,7 +1311,7 @@ export default function SellPage() {
               onChange={(e) => setStoreCategoryId(e.target.value)}
               className="w-full rounded-2xl border border-black/10 p-4 outline-none"
             >
-              <option value="">No store section</option>
+              <option value="">{t("sellPage.noStoreSection")}</option>
 
               {storeCategories.map((category) => (
                 <option key={category.id} value={category.id}>
@@ -1296,14 +1322,14 @@ export default function SellPage() {
           )}
 
           <input
-            placeholder="Country"
+            placeholder={t("sellPage.country")}
             value={country}
             onChange={(e) => setCountry(e.target.value)}
             className="w-full rounded-2xl border border-black/10 p-4 outline-none"
           />
 
           <input
-            placeholder="City"
+            placeholder={t("sellPage.city")}
                   maxLength={80}
             value={city}
             onChange={(e) => {
@@ -1398,7 +1424,7 @@ export default function SellPage() {
                 return isLongText ? (
                   <textarea
                     key={field.key}
-                    placeholder={field.label}
+                    placeholder={fieldLabel(field.key, field.label)}
                     maxLength={maxLength}
                     value={value}
                     onChange={(e) =>
@@ -1412,7 +1438,7 @@ export default function SellPage() {
                 ) : (
                   <input
                     key={field.key}
-                    placeholder={field.label}
+                    placeholder={fieldLabel(field.key, field.label)}
                     maxLength={maxLength}
                     value={value}
                     onChange={(e) =>
@@ -1433,7 +1459,7 @@ export default function SellPage() {
             disabled={saving}
             className="w-full rounded-2xl bg-black p-4 font-medium text-white disabled:opacity-60"
           >
-            {saving ? "Saving..." : "Publish"}
+            {saving ? t("sellPage.saving") : t("sellPage.publish")}
           </button>
         </div>
       </div>

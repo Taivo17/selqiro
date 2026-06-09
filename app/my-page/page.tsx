@@ -78,6 +78,7 @@ type Profile = {
   premium_until?: string | null;
   home_country?: string | null;
   home_city?: string | null;
+  language?: string | null;
 };
 
 type StoreCategory = {
@@ -338,6 +339,8 @@ export default function MyPage() {
   const [homeCountry, setHomeCountry] = useState("Estonia");
   const [homeCity, setHomeCity] = useState("");
   const [savingHomeLocation, setSavingHomeLocation] = useState(false);
+  const [language, setLanguage] = useState("en");
+  const [savingLanguage, setSavingLanguage] = useState(false);
 
   const [storeCategories, setStoreCategories] = useState<StoreCategory[]>([]);
   const [newStoreCategoryName, setNewStoreCategoryName] = useState("");
@@ -536,7 +539,7 @@ export default function MyPage() {
   const fetchProfile = async (currentUserId: string) => {
     const { data, error } = await supabase
       .from("profiles")
-      .select("id, is_premium, premium_until, home_country, home_city")
+      .select("id, is_premium, premium_until, home_country, home_city, language")
       .eq("id", currentUserId)
       .maybeSingle();
 
@@ -554,6 +557,10 @@ export default function MyPage() {
 
     if (data?.home_city) {
       setHomeCity(data.home_city);
+    }
+
+    if (data?.language) {
+      setLanguage(data.language);
     }
   };
 
@@ -718,6 +725,29 @@ export default function MyPage() {
       alert("Failed to save home location.");
     } finally {
       setSavingHomeLocation(false);
+    }
+  };
+
+
+  const saveLanguage = async () => {
+    if (!userId) return;
+
+    setSavingLanguage(true);
+
+    try {
+      const { error } = await supabase
+        .from("profiles")
+        .update({ language })
+        .eq("id", userId);
+
+      if (error) throw error;
+
+      await fetchProfile(userId);
+    } catch (error) {
+      console.error("Error saving language:", error);
+      alert("Failed to save language.");
+    } finally {
+      setSavingLanguage(false);
     }
   };
 
@@ -1498,6 +1528,46 @@ export default function MyPage() {
                   className="rounded-2xl bg-black px-5 py-3 text-sm font-medium text-white disabled:opacity-60"
                 >
                   {savingHomeLocation ? "Saving..." : "Save"}
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="rounded-[28px] bg-white p-5 shadow-sm sm:p-6">
+          <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+            <div>
+              <p className="mb-2 text-xs font-medium uppercase tracking-[0.22em] text-black/35">
+                Language
+              </p>
+
+              <h2 className="text-2xl font-semibold tracking-tight">
+                Your language
+              </h2>
+
+              <p className="mt-2 max-w-2xl text-sm leading-6 text-black/55">
+                Selqiro will use this language for categories, interface text and AI assistance.
+              </p>
+            </div>
+
+            <div className="w-full max-w-md">
+              <div className="grid gap-3 sm:grid-cols-[1fr_auto]">
+                <select
+                  value={language}
+                  onChange={(e) => setLanguage(e.target.value)}
+                  className={inputClass}
+                >
+                  <option value="en">English</option>
+                  <option value="et">Eesti</option>
+                </select>
+
+                <button
+                  type="button"
+                  onClick={saveLanguage}
+                  disabled={savingLanguage}
+                  className="rounded-2xl bg-black px-5 py-3 text-sm font-medium text-white disabled:opacity-60"
+                >
+                  {savingLanguage ? "Saving..." : "Save"}
                 </button>
               </div>
             </div>
