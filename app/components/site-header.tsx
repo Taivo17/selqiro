@@ -10,6 +10,15 @@ import { getTranslation } from "../../lib/i18n/useTranslation";
 type ProfileRow = {
   store_slug?: string | null;
   language?: string | null;
+  active_identity_id?: string | null;
+  store_name?: string | null;
+};
+
+type IdentityRow = {
+  id: string;
+  type: "private" | "business";
+  display_name: string;
+  avatar_url?: string | null;
 };
 
 function navClass(active: boolean) {
@@ -37,6 +46,7 @@ export default function SiteHeader() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [hasNewFeedItems, setHasNewFeedItems] = useState(false);
   const [hasUnreadMessages, setHasUnreadMessages] = useState(false);
+  const [activeIdentity, setActiveIdentity] = useState<IdentityRow | null>(null);
 
   const userId = user?.id ?? null;
   const userEmail = user?.email ?? "";
@@ -60,6 +70,7 @@ export default function SiteHeader() {
         if (mounted) {
           setStoreSlug("");
           setLanguage("en");
+          setActiveIdentity(null);
           setLanguageLoaded(true);
           setLoadingStoreSlug(false);
         }
@@ -70,7 +81,7 @@ export default function SiteHeader() {
 
       const { data, error } = await supabase
         .from("profiles")
-        .select("store_slug, language")
+        .select("store_slug, language, active_identity_id, store_name")
         .eq("id", userId)
         .maybeSingle();
 
@@ -86,6 +97,43 @@ export default function SiteHeader() {
       const profile = data as ProfileRow | null;
       setStoreSlug(profile?.store_slug || "");
       setLanguage(profile?.language || "en");
+
+      let resolvedIdentity: IdentityRow | null = null;
+
+      if (profile?.active_identity_id) {
+        const { data: identityData } = await supabase
+          .from("identities")
+          .select("id, type, display_name, avatar_url")
+          .eq("id", profile.active_identity_id)
+          .maybeSingle();
+
+        if (identityData) {
+          resolvedIdentity = identityData as IdentityRow;
+        }
+      }
+
+      if (!resolvedIdentity) {
+        const { data: privateIdentityData } = await supabase
+          .from("identities")
+          .select("id, type, display_name, avatar_url")
+          .eq("type", "private")
+          .eq("user_id", userId)
+          .maybeSingle();
+
+        if (privateIdentityData) {
+          resolvedIdentity = privateIdentityData as IdentityRow;
+        }
+      }
+
+      setActiveIdentity(
+        resolvedIdentity || {
+          id: "fallback-private",
+          type: "private",
+          display_name: profile?.store_name || userEmail?.split("@")[0] || "Kasutaja",
+          avatar_url: null,
+        }
+      );
+
       setLanguageLoaded(true);
       setLoadingStoreSlug(false);
     };
@@ -285,6 +333,18 @@ export default function SiteHeader() {
                   {userEmail || "Signed in"}
                 </div>
 
+                {activeIdentity && (
+                  <div className="rounded-2xl border border-black/10 bg-white px-4 py-2 text-sm text-black/70">
+                    <span className="block text-[10px] uppercase tracking-[0.18em] text-black/35">
+                      Tegutsen kui
+                    </span>
+                    <span className="flex items-center gap-2 font-medium text-black">
+                      {activeIdentity.type === "business" ? "🏢" : "👤"}
+                      {activeIdentity.display_name}
+                    </span>
+                  </div>
+                )}
+
                 <button
                   onClick={handleLogout}
                   disabled={loggingOut}
@@ -442,6 +502,18 @@ export default function SiteHeader() {
                       <div className="break-all rounded-2xl border border-black/10 bg-[#f8f8f6] px-4 py-3 text-sm text-black/55">
                         {userEmail || "Signed in"}
                       </div>
+
+                      {activeIdentity && (
+                        <div className="rounded-2xl border border-black/10 bg-[#f8f8f6] px-4 py-3 text-sm text-black/70">
+                          <span className="block text-[10px] uppercase tracking-[0.18em] text-black/35">
+                            Tegutsen kui
+                          </span>
+                          <span className="flex items-center gap-2 font-medium text-black">
+                            {activeIdentity.type === "business" ? "🏢" : "👤"}
+                            {activeIdentity.display_name}
+                          </span>
+                        </div>
+                      )}
 
                       <button
                         onClick={handleLogout}
