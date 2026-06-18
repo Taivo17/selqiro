@@ -18,6 +18,10 @@ type ListingImage = {
 
 type ProfileRow = {
   id: string;
+  identity_id?: string | null;
+  identity_type?: string | null;
+  business_account_id?: string | null;
+  legacy_user_id?: string | null;
   store_name?: string | null;
   store_slug?: string | null;
   bio?: string | null;
@@ -38,6 +42,7 @@ type StoreCategory = {
 type CurrentProfile = {
   id: string;
   language?: string | null;
+  active_identity_id?: string | null;
 };
 
 type Listing = {
@@ -145,7 +150,7 @@ export default function StorePage() {
       if (user?.id) {
         const { data: currentProfileData } = await supabase
           .from("profiles")
-          .select("id, language")
+          .select("id, language, active_identity_id")
           .eq("id", user.id)
           .maybeSingle();
 
@@ -164,9 +169,9 @@ export default function StorePage() {
       }
 
       const { data: profileData, error: profileError } = await supabase
-        .from("profiles")
-        .select("id, store_name, store_slug, bio, avatar_url, banner_url, banner_dominant_color, avatar_dominant_color, is_premium")
-        .eq("store_slug", cleanSlug)
+        .rpc("get_store_by_slug", {
+          store_slug_input: cleanSlug,
+        })
         .maybeSingle();
 
       if (profileError || !profileData) {
@@ -178,22 +183,45 @@ export default function StorePage() {
       }
 
 
-      setProfile(profileData as ProfileRow);
+      const storeData = profileData as any;
+      const storeIdentityId = storeData.identity_id as string | null;
+      const storeLegacyUserId = storeData.legacy_user_id as string | null;
+      const storeOwnerKey = storeIdentityId || storeLegacyUserId;
+
+      setProfile({
+        id: storeData.legacy_user_id || storeData.identity_id,
+        identity_id: storeData.identity_id,
+        identity_type: storeData.identity_type,
+        business_account_id: storeData.business_account_id,
+        legacy_user_id: storeData.legacy_user_id,
+        store_name: storeData.display_name,
+        store_slug: storeData.slug,
+        bio: storeData.bio,
+        avatar_url: storeData.avatar_url,
+        banner_url: storeData.banner_url,
+        banner_dominant_color: storeData.banner_dominant_color,
+        avatar_dominant_color: null,
+        is_premium: storeData.is_premium,
+      } as ProfileRow);
       setSelectedStoreCategoryId("all");
 
       const { count } = await supabase
         .from("store_follows")
         .select("*", { count: "exact", head: true })
-        .eq("store_owner_id", profileData.id);
+        .eq("store_owner_id", storeOwnerKey);
 
       setFollowersCount(count || 0);
 
-      if (user?.id && user.id !== profileData.id) {
+      const viewerActiveIdentityId = currentProfile?.active_identity_id || null;
+      const viewerIsStoreOwner =
+        !!storeIdentityId && viewerActiveIdentityId === storeIdentityId;
+
+      if (user?.id && !viewerIsStoreOwner) {
         const { data: followData } = await supabase
           .from("store_follows")
           .select("id")
-          .eq("follower_id", user.id)
-          .eq("store_owner_id", profileData.id)
+          .eq("follower_id", user?.id || "")
+          .eq("store_owner_id", storeOwnerKey)
           .maybeSingle();
 
         setIsFollowing(!!followData);
@@ -202,14 +230,14 @@ export default function StorePage() {
           .from("user_blocks")
           .select("id, blocker_id")
           .or(
-            `and(blocker_id.eq.${user.id},blocked_id.eq.${profileData.id}),and(blocker_id.eq.${profileData.id},blocked_id.eq.${user.id})`
+            `and(blocker_id.eq.${user?.id || ''},blocked_id.eq.${storeOwnerKey}),and(blocker_id.eq.${storeOwnerKey},blocked_id.eq.${user?.id || ''})`
           );
 
         const blocks = blockRows || [];
 
         setIsBlocked(blocks.length > 0);
         setBlockedByMe(
-          blocks.some((row: any) => row.blocker_id === user.id)
+          blocks.some((row: any) => row.blocker_id === user?.id)
         );
 
         if (blocks.length > 0) {
@@ -229,7 +257,7 @@ export default function StorePage() {
       const { data: categoryData, error: categoryError } = await supabase
         .from("store_categories")
         .select("id, name, sort_order")
-        .eq("user_id", profileData.id)
+        .eq("identity_id", storeIdentityId)
         .order("sort_order", { ascending: true })
         .order("created_at", { ascending: true });
 
@@ -240,14 +268,14 @@ export default function StorePage() {
         setStoreCategories((categoryData || []) as StoreCategory[]);
       }
 
-      const ownerIsViewing = !!user?.id && user.id === profileData.id;
+      const ownerIsViewing = viewerIsStoreOwner;
 
       let listingsQuery = supabase
         .from("listings")
         .select(
           "*, listing_images(id, thumb_url, medium_url, original_url, is_primary, sort_order), listing_store_categories(store_category_id)"
         )
-        .eq("user_id", profileData.id)
+        .eq("identity_id", storeIdentityId)
         .order("created_at", { ascending: false })
         .limit(60);
 
@@ -320,7 +348,7 @@ export default function StorePage() {
         const { error } = await supabase
           .from("store_follows")
           .delete()
-          .eq("follower_id", user.id)
+          .eq("follower_id", user?.id || "")
           .eq("store_owner_id", profile.id);
 
         if (error) throw error;
@@ -420,7 +448,10 @@ export default function StorePage() {
     setStoreMenuOpen(false);
   };
 
-  const isOwner = !!user?.id && !!profile?.id && user.id === profile.id;
+  const isOwner =
+    !!currentProfile?.active_identity_id &&
+    !!profile?.identity_id &&
+    currentProfile.active_identity_id === profile.identity_id;
 
   const stats = useMemo(() => {
     return {

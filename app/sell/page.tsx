@@ -16,6 +16,7 @@ import {
 } from "../../lib/categoryFields";
 import { resolveAiCategoryPath } from "../../lib/aiCategoryMapping";
 import { getTranslation } from "../../lib/i18n/useTranslation";
+import LocationAutocomplete from "../components/LocationAutocomplete";
 
 const DRAFT_STORAGE_KEY = "sell_listing_draft_v1";
 
@@ -175,6 +176,7 @@ export default function SellPage() {
 
   const [profileLoaded, setProfileLoaded] = useState(false);
   const [profileLanguage, setProfileLanguage] = useState("en");
+  const [activeIdentityId, setActiveIdentityId] = useState<string | null>(null);
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -187,6 +189,8 @@ export default function SellPage() {
 
   const [country, setCountry] = useState("Estonia");
   const [city, setCity] = useState("");
+
+  const [selectedLocation, setSelectedLocation] = useState<any>(null);
 
   const [manufacturer, setManufacturer] = useState("");
   const [partNumber, setPartNumber] = useState("");
@@ -334,7 +338,7 @@ export default function SellPage() {
 
       const { data, error } = await supabase
         .from("profiles")
-        .select("home_country, home_city, language")
+        .select("language, active_identity_id")
         .eq("id", user.id)
         .maybeSingle();
 
@@ -343,16 +347,27 @@ export default function SellPage() {
         return;
       }
 
-      if (data?.home_country) {
-        setCountry(data.home_country);
-      }
+    const { data: identityRows, error: identityError } = await supabase.rpc(
+      "get_my_active_identity_profile_details"
+    );
 
-      if (data?.home_city) {
-        setCity(data.home_city);
-      }
+    const identityProfile = Array.isArray(identityRows)
+      ? identityRows[0]
+      : identityRows;
+
+    if (identityError) {
+      console.error("Error loading sell identity location:", identityError);
+    }
+
+    setCountry(identityProfile?.country || "Estonia");
+    setCity(identityProfile?.city || "");
 
       if (data?.language) {
         setProfileLanguage(data.language);
+      }
+
+      if (data?.active_identity_id) {
+        setActiveIdentityId(data.active_identity_id);
       }
 
       setProfileLoaded(true);
@@ -367,12 +382,15 @@ export default function SellPage() {
 
   useEffect(() => {
     const loadStoreCategories = async () => {
-      if (!user?.id) return;
+      if (!user?.id || !activeIdentityId) {
+        setStoreCategories([]);
+        return;
+      }
 
       const { data, error } = await supabase
         .from("store_categories")
         .select("id, name, sort_order")
-        .eq("user_id", user.id)
+        .eq("identity_id", activeIdentityId)
         .order("sort_order", { ascending: true })
         .order("created_at", { ascending: true });
 
@@ -386,7 +404,7 @@ export default function SellPage() {
     };
 
     loadStoreCategories();
-  }, [user?.id]);
+  }, [user?.id, activeIdentityId]);
 
   const handleFiles = (selectedFiles: FileList | null) => {
     if (!selectedFiles) return;
@@ -665,6 +683,11 @@ export default function SellPage() {
       return;
     }
 
+    if (!activeIdentityId) {
+      alert("Aktiivset identiteeti ei leitud. Palun vali ülevalt, kellena tegutsed.");
+      return;
+    }
+
     setSaving(true);
 
     try {
@@ -679,15 +702,20 @@ export default function SellPage() {
       const activeUntil = new Date();
       activeUntil.setDate(activeUntil.getDate() + 90);
 
-      const coords = await geocodeCity(
-        cleanCountry,
-        cleanCity
-      );
+      const coords = selectedLocation
+        ? {
+            lat: selectedLocation.lat,
+            lng: selectedLocation.lng,
+          }
+        : await geocodeCity(cleanCountry, cleanCity);
 
       const { data: listingData, error: listingError } = await supabase
         .from("listings")
         .insert({
           user_id: user.id,
+          identity_id: activeIdentityId,
+          created_by_user_id: user.id,
+          updated_by_user_id: user.id,
           title: title.trim(),
           description: description.trim(),
           price: price.trim(),
@@ -1328,16 +1356,27 @@ export default function SellPage() {
             className="w-full rounded-2xl border border-black/10 p-4 outline-none"
           />
 
-          <input
-            placeholder={t("sellPage.city")}
-                  maxLength={80}
+          <LocationAutocomplete
+            country={country}
             value={city}
-            onChange={(e) => {
+            placeholder={t("sellPage.city")}
+            onTextChange={(value) => {
               setUserEditedDraft(true);
-              setCity(e.target.value);
+              setCity(value);
+              setSelectedLocation(null);
             }}
-            className="w-full rounded-2xl border border-black/10 p-4 outline-none"
+            onSelect={(location) => {
+              setUserEditedDraft(true);
+              setSelectedLocation(location);
+              setCountry(location.country || country);
+              setCity(location.city || location.display_name);
+            }}
           />
+
+          <p className="text-xs leading-5 text-black/50">
+            Täpsem asukoht aitab kuulutust nearby otsingus paremini leida.
+            Eraisikuna soovitame lisada linna või piirkonna, mitte täpset koduaadressi.
+          </p>
 
           {showTechnicalFields && (
             <>

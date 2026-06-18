@@ -23,6 +23,12 @@ type ListingImage = {
 type Listing = {
   id: number;
   user_id?: string | null;
+  identity_id?: string | null;
+  seller_name?: string | null;
+  seller_slug?: string | null;
+  seller_type?: string | null;
+  is_premium?: boolean | null;
+  distance_km?: number | null;
   created_at?: string;
   title: string;
   description: string;
@@ -220,9 +226,17 @@ export default function MarketplacePage() {
 
     const { data, error } = await supabase
       .from("profiles")
-      .select("id, home_country, home_city, home_lat, home_lng, language")
+      .select("id, language")
       .eq("id", user.id)
       .maybeSingle();
+
+    const { data: locationRows, error: locationError } = await supabase.rpc(
+      "get_marketplace_identity_location"
+    );
+
+    const identityLocation = Array.isArray(locationRows)
+      ? locationRows[0]
+      : locationRows;
 
     const { data: blockRows } = await supabase
       .from("user_blocks")
@@ -243,7 +257,17 @@ export default function MarketplacePage() {
       return;
     }
 
-    setCurrentProfile((data || null) as ProfileRow | null);
+    if (locationError) {
+      console.error("Error loading marketplace identity location:", locationError);
+    }
+
+    setCurrentProfile({
+      ...((data || {}) as ProfileRow),
+      home_country: identityLocation?.country || null,
+      home_city: identityLocation?.city || null,
+      home_lat: identityLocation?.lat || null,
+      home_lng: identityLocation?.lng || null,
+    } as ProfileRow);
   };
 
   const loadProfiles = async (items: Listing[]) => {
@@ -332,7 +356,7 @@ export default function MarketplacePage() {
       }
     }
 
-    const locationNeedle = locationFilter.trim();
+    const locationNeedle = nearOnly ? "" : locationFilter.trim();
 
     if (nearOnly && currentProfile?.home_country) {
       query = query.eq("country", currentProfile.home_country);
@@ -342,7 +366,31 @@ export default function MarketplacePage() {
       );
     }
 
-    const { data, error } = await query;
+    const nearbyCenterLat =
+      nearOnly
+        ? searchNearCoords?.lat ?? currentProfile?.home_lat ?? null
+        : null;
+
+    const nearbyCenterLng =
+      nearOnly
+        ? searchNearCoords?.lng ?? currentProfile?.home_lng ?? null
+        : null;
+
+    const useNearbyRpc =
+      typeof nearbyCenterLat === "number" &&
+      typeof nearbyCenterLng === "number";
+
+    const { data, error } = useNearbyRpc
+      ? await supabase.rpc("get_marketplace_listings_nearby", {
+          center_lat: nearbyCenterLat,
+          center_lng: nearbyCenterLng,
+          result_limit: PAGE_SIZE,
+          result_offset: from,
+        })
+      : await supabase.rpc("get_marketplace_listings", {
+          result_limit: PAGE_SIZE,
+          result_offset: from,
+        });
 
     if (error) {
       console.error("Error loading marketplace listings:", error);
@@ -350,18 +398,52 @@ export default function MarketplacePage() {
       return;
     }
 
-    const loaded = ((data || []) as Listing[]).filter(
+    const loaded = ((data || []) as any[]).map((row) => ({
+      id: row.listing_id,
+      user_id: row.user_id,
+      identity_id: row.identity_id,
+      seller_name: row.seller_name,
+      seller_slug: row.seller_slug,
+      seller_type: row.seller_type,
+      is_premium: row.is_premium,
+      distance_km: row.distance_km ?? null,
+
+      title: row.title,
+      description: row.description,
+      price: row.price,
+      price_amount: row.price_amount,
+      image: row.image,
+
+      category: row.category,
+      subcategory: row.subcategory,
+      condition: row.condition,
+
+      country: row.country,
+      city: row.city,
+      location: row.location,
+      listing_lat: row.listing_lat,
+      listing_lng: row.listing_lng,
+
+      search_text: row.search_text,
+      details: row.details,
+
+      active_until: row.active_until,
+      created_at: row.created_at,
+      listing_images: [],
+      listing_translations: [],
+    })) as Listing[];
+
+    const visible = loaded.filter(
       (item) => !item.user_id || !blockedUserIds.has(item.user_id)
     );
 
     if (from === 0) {
-      setListings(loaded);
+      setListings(visible);
     } else {
-      setListings((prev) => [...prev, ...loaded]);
+      setListings((prev) => [...prev, ...visible]);
     }
 
-    setHasMore(loaded.length === PAGE_SIZE);
-    await loadProfiles(loaded);
+    setHasMore(visible.length === PAGE_SIZE);
   };
 
 
@@ -612,7 +694,28 @@ export default function MarketplacePage() {
       const matchesCondition =
         conditionFilter === "all" ? true : condition === conditionFilter;
 
-      return matchesDetailCategory;
+      const matchesLocation =
+        !locationNeedle ||
+        country.includes(locationNeedle) ||
+        city.includes(locationNeedle) ||
+        location.includes(locationNeedle);
+
+      const matchesNearCity =
+        !nearOnly ||
+        !searchCenterCity ||
+        city === searchCenterCity.toLowerCase();
+
+      return (
+        matchesSearch &&
+        matchesCategory &&
+        matchesSubcategory &&
+        matchesDetailCategory &&
+        matchesPriceMin &&
+        matchesPriceMax &&
+        matchesCondition &&
+        matchesLocation &&
+        (searchCenterLat && searchCenterLng ? true : matchesNearCity)
+      );
     });
 
     const homeLat = currentProfile?.home_lat;
@@ -886,20 +989,16 @@ export default function MarketplacePage() {
         ) : (
           <>
             <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-              {filteredListings.map((item) => {
-                const sellerProfile = item.user_id
-                  ? profilesByUserId[item.user_id]
-                  : undefined;
-
-                const storeSlug = sellerProfile?.store_slug || "";
-                const storeName = sellerProfile?.store_name || t("listing.sellerStore");
-                const sellerIsPremium = Boolean(sellerProfile?.is_premium);
+              {filteredListings.map((item, index) => {
+                const storeSlug = item.seller_slug || "";
+                const storeName = item.seller_name || t("listing.sellerStore");
+                const sellerIsPremium = Boolean(item.is_premium);
                 const imageUrl = getListingImage(item);
                 const translated = getTranslatedListingText(item, language);
 
                 return (
                   <article
-                    key={item.id}
+                    key={`${item.id}-${index}`}
                     className={`overflow-hidden rounded-[22px] border p-3 shadow-sm transition duration-200 hover:-translate-y-1 hover:shadow-md ${
                       sellerIsPremium
                         ? "border-amber-200/70 bg-gradient-to-br from-amber-50/55 via-white to-white hover:shadow-[0_18px_45px_rgba(251,191,36,0.35)] hover:-translate-y-2 scale-[1.01]"

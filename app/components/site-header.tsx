@@ -19,6 +19,7 @@ type IdentityRow = {
   type: "private" | "business";
   display_name: string;
   avatar_url?: string | null;
+  slug?: string | null;
 };
 
 function navClass(active: boolean) {
@@ -47,6 +48,8 @@ export default function SiteHeader() {
   const [hasNewFeedItems, setHasNewFeedItems] = useState(false);
   const [hasUnreadMessages, setHasUnreadMessages] = useState(false);
   const [activeIdentity, setActiveIdentity] = useState<IdentityRow | null>(null);
+  const [identities, setIdentities] = useState<IdentityRow[]>([]);
+  const [identityMenuOpen, setIdentityMenuOpen] = useState(false);
 
   const userId = user?.id ?? null;
   const userEmail = user?.email ?? "";
@@ -98,41 +101,44 @@ export default function SiteHeader() {
       setStoreSlug(profile?.store_slug || "");
       setLanguage(profile?.language || "en");
 
-      let resolvedIdentity: IdentityRow | null = null;
+      const { data: identityRows } = await supabase.rpc("get_my_identities");
+      const identityIds = ((identityRows || []) as IdentityRow[]).map((item) => item.id);
 
-      if (profile?.active_identity_id) {
-        const { data: identityData } = await supabase
-          .from("identities")
-          .select("id, type, display_name, avatar_url")
-          .eq("id", profile.active_identity_id)
-          .maybeSingle();
+      let profileSlugs: Record<string, string> = {};
 
-        if (identityData) {
-          resolvedIdentity = identityData as IdentityRow;
-        }
+      if (identityIds.length > 0) {
+        const { data: profileRows } = await supabase
+          .from("identity_profiles")
+          .select("identity_id, slug")
+          .in("identity_id", identityIds);
+
+        profileSlugs = Object.fromEntries(
+          (profileRows || []).map((row: any) => [row.identity_id, row.slug])
+        );
       }
 
-      if (!resolvedIdentity) {
-        const { data: privateIdentityData } = await supabase
-          .from("identities")
-          .select("id, type, display_name, avatar_url")
-          .eq("type", "private")
-          .eq("user_id", userId)
-          .maybeSingle();
+      const loadedIdentities = ((identityRows || []) as IdentityRow[]).map((item) => ({
+        ...item,
+        slug: profileSlugs[item.id] || null,
+      }));
+      setIdentities(loadedIdentities);
 
-        if (privateIdentityData) {
-          resolvedIdentity = privateIdentityData as IdentityRow;
-        }
-      }
+      const resolvedIdentity =
+        loadedIdentities.find((identity) => identity.id === profile?.active_identity_id) ||
+        loadedIdentities[0] ||
+        null;
 
-      setActiveIdentity(
+      const finalIdentity =
         resolvedIdentity || {
           id: "fallback-private",
           type: "private",
           display_name: profile?.store_name || userEmail?.split("@")[0] || "Kasutaja",
           avatar_url: null,
-        }
-      );
+          slug: profile?.store_slug || null,
+        };
+
+      setActiveIdentity(finalIdentity);
+      setStoreSlug(finalIdentity.slug || profile?.store_slug || "");
 
       setLanguageLoaded(true);
       setLoadingStoreSlug(false);
@@ -255,6 +261,38 @@ export default function SiteHeader() {
     return () => clearInterval(interval);
   }, [userId, pathname]);
 
+  const handleIdentityChange = async (identity: IdentityRow) => {
+    if (!userId) return;
+
+    const { error } = await supabase
+      .from("profiles")
+      .update({ active_identity_id: identity.id })
+      .eq("id", userId);
+
+    if (error) {
+      alert(error.message);
+      return;
+    }
+
+    const { data: freshSlug } = await supabase.rpc(
+      "get_identity_profile_slug",
+      { p_identity_id: identity.id }
+    );
+
+    const targetSlug = freshSlug || identity.slug || "";
+
+    setActiveIdentity({ ...identity, slug: targetSlug });
+    setStoreSlug(targetSlug);
+    setIdentityMenuOpen(false);
+
+    if (pathname.startsWith("/store/")) {
+      window.location.href = targetSlug ? `/store/${targetSlug}` : "/profile";
+      return;
+    }
+
+    window.location.href = pathname || "/";
+  };
+
   const handleLogout = async () => {
     setLoggingOut(true);
 
@@ -277,7 +315,24 @@ export default function SiteHeader() {
   const isProfile = pathname.startsWith("/profile");
   const isStore = pathname.startsWith("/store");
 
-  const showStoreLink = !loadingStoreSlug && !!storeSlug;
+  const activeStoreSlug = activeIdentity?.slug || storeSlug || "";
+  const showStoreLink = !loadingStoreSlug;
+
+  const goToActiveStore = async () => {
+    const { data, error } = await supabase
+      .rpc("get_my_active_identity_profile")
+      .maybeSingle();
+
+    const slug = (data as any)?.slug || activeStoreSlug;
+
+
+    if (slug) {
+      window.location.href = `/store/${slug}`;
+      return;
+    }
+
+    window.location.href = "/profile";
+  };
 
   useEffect(() => {
     if (pathname.startsWith("/feed")) {
@@ -334,14 +389,55 @@ export default function SiteHeader() {
                 </div>
 
                 {activeIdentity && (
-                  <div className="rounded-2xl border border-black/10 bg-white px-4 py-2 text-sm text-black/70">
-                    <span className="block text-[10px] uppercase tracking-[0.18em] text-black/35">
-                      Tegutsen kui
-                    </span>
-                    <span className="flex items-center gap-2 font-medium text-black">
-                      {activeIdentity.type === "business" ? "🏢" : "👤"}
-                      {activeIdentity.display_name}
-                    </span>
+                  <div className="relative">
+                    <button
+                      type="button"
+                      onClick={() => setIdentityMenuOpen((prev) => !prev)}
+                      className="rounded-2xl border border-black/10 bg-white px-4 py-2 text-left text-sm text-black/70 transition hover:bg-black/[0.03]"
+                    >
+                      <span className="block text-[10px] uppercase tracking-[0.18em] text-black/35">
+                        Tegutsen kui
+                      </span>
+                      <span className="flex items-center gap-2 font-medium text-black">
+                        {activeIdentity.type === "business" ? "🏢" : "👤"}
+                        {activeIdentity.display_name}
+                        <span className="text-black/35">⌄</span>
+                      </span>
+                    </button>
+
+                    {identityMenuOpen && (
+                      <div className="absolute right-0 z-50 mt-2 w-64 rounded-3xl border border-black/10 bg-white p-2 shadow-lg">
+                        {identities.map((identity) => (
+                          <button
+                            key={identity.id}
+                            type="button"
+                            onClick={() => handleIdentityChange(identity)}
+                            className="flex w-full items-center justify-between rounded-2xl px-3 py-3 text-left text-sm transition hover:bg-black/[0.03]"
+                          >
+                            <span>
+                              <span className="font-medium text-black">
+                                {identity.type === "business" ? "🏢" : "👤"}{" "}
+                                {identity.display_name}
+                              </span>
+                              <span className="mt-1 block text-xs text-black/45">
+                                {identity.type === "business" ? "Ettevõte" : "Eraisik"}
+                              </span>
+                            </span>
+
+                            {activeIdentity.id === identity.id && (
+                              <span className="text-xs text-green-600">✓</span>
+                            )}
+                          </button>
+                        ))}
+
+                        <Link
+                          href="/profile"
+                          className="mt-1 block rounded-2xl border border-black/10 px-3 py-3 text-sm font-medium text-black/70 transition hover:bg-black/[0.03]"
+                        >
+                          + Loo ettevõtte profiil
+                        </Link>
+                      </div>
+                    )}
                   </div>
                 )}
 
@@ -412,15 +508,13 @@ export default function SiteHeader() {
                 {t("navigation.sell")}
               </Link>
 
-              {showStoreLink ? (
-                <Link href={`/store/${storeSlug}`} className={navClass(isStore)}>
-                  {t("navigation.store")}
-                </Link>
-              ) : (
-                <Link href="/profile" className={navClass(isProfile)}>
-                  {t("navigation.store")}
-                </Link>
-              )}
+              <button
+                type="button"
+                onClick={goToActiveStore}
+                className={navClass(isStore)}
+              >
+                {t("navigation.store")}
+              </button>
             </div>
           </div>
 
@@ -467,18 +561,13 @@ export default function SiteHeader() {
                     {t("navigation.sell")}
                   </Link>
 
-                  {showStoreLink ? (
-                    <Link
-                      href={`/store/${storeSlug}`}
-                      className={mobileNavClass(isStore)}
-                    >
-                      {t("navigation.store")}
-                    </Link>
-                  ) : (
-                    <Link href="/profile" className={mobileNavClass(isProfile)}>
-                      {t("navigation.store")}
-                    </Link>
-                  )}
+                  <button
+                    type="button"
+                    onClick={goToActiveStore}
+                    className={mobileNavClass(isStore)}
+                  >
+                    {t("navigation.store")}
+                  </button>
 
                   <Link
                     href="/profile"

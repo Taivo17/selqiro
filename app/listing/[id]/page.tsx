@@ -31,11 +31,13 @@ type SellerProfile = {
 type CurrentProfile = {
   id: string;
   language?: string | null;
+  active_identity_id?: string | null;
 };
 
 type Listing = {
   id: number;
   user_id?: string | null;
+  identity_id?: string | null;
   title: string;
   description: string;
   price: string;
@@ -205,7 +207,7 @@ export default function ListingPage() {
       if (user?.id) {
         const { data: currentProfileData } = await supabase
           .from("profiles")
-          .select("id, language")
+          .select("id, language, active_identity_id")
           .eq("id", user.id)
           .maybeSingle();
 
@@ -246,19 +248,30 @@ export default function ListingPage() {
       setListing(loadedListing);
       setSelectedImageIndex(0);
 
-      if (loadedListing.user_id) {
-        const { data: profileData, error: profileError } = await supabase
-          .from("profiles")
-          .select("id, store_name, store_slug")
-          .eq("id", loadedListing.user_id)
-          .maybeSingle();
-
-        if (profileError) {
-          console.error("Error loading seller profile:", profileError);
-          setSellerProfile(null);
-        } else {
-          setSellerProfile((profileData || null) as SellerProfile | null);
+      const { data: sellerRows, error: sellerError } = await supabase.rpc(
+        "get_listing_details",
+        {
+          p_listing_id: loadedListing.id,
         }
+      );
+
+      const sellerData = Array.isArray(sellerRows)
+        ? sellerRows[0]
+        : sellerRows;
+
+      if (sellerError) {
+        console.error("Error loading listing seller identity:", sellerError);
+        setSellerProfile(null);
+      } else if (sellerData?.seller_slug || sellerData?.seller_name) {
+        setSellerProfile({
+          id:
+            sellerData.identity_id ||
+            loadedListing.identity_id ||
+            loadedListing.user_id ||
+            "",
+          store_name: sellerData.seller_name || null,
+          store_slug: sellerData.seller_slug || null,
+        });
       } else {
         setSellerProfile(null);
       }
@@ -429,12 +442,27 @@ export default function ListingPage() {
   };
 
   const contactSeller = async () => {
-    if (!user?.id || !listing?.user_id) {
+    if (!user?.id || !listing?.user_id || !listing?.identity_id) {
       router.push("/auth");
       return;
     }
 
-    if (user.id === listing.user_id) {
+    const { data: freshProfile } = await supabase
+      .from("profiles")
+      .select("active_identity_id")
+      .eq("id", user.id)
+      .maybeSingle();
+
+    const buyerIdentityId = (freshProfile as any)?.active_identity_id || null;
+    const sellerIdentityId = listing.identity_id;
+
+    if (!buyerIdentityId || !sellerIdentityId) {
+      alert("Could not identify active profile.");
+      return;
+    }
+
+    if (user.id === listing.user_id || buyerIdentityId === sellerIdentityId) {
+      alert("Sa ei saa enda teisele identiteedile sõnumit saata.");
       return;
     }
 
@@ -451,12 +479,12 @@ export default function ListingPage() {
       return;
     }
 
-    // reuse existing buyer/seller conversation
+    // Reuse existing identity-to-identity conversation
     const { data: existingConversations } = await supabase
       .from("conversations")
-      .select("id, buyer_id, seller_id")
+      .select("id, buyer_identity_id, seller_identity_id")
       .or(
-        `and(buyer_id.eq.${user.id},seller_id.eq.${listing.user_id}),and(buyer_id.eq.${listing.user_id},seller_id.eq.${user.id})`
+        `and(buyer_identity_id.eq.${buyerIdentityId},seller_identity_id.eq.${sellerIdentityId}),and(buyer_identity_id.eq.${sellerIdentityId},seller_identity_id.eq.${buyerIdentityId})`
       )
       .is("archived_at", null)
       .order("updated_at", { ascending: false })
@@ -465,7 +493,6 @@ export default function ListingPage() {
     const existingConversation = existingConversations?.[0];
 
     if (existingConversation?.id) {
-
       await supabase
         .from("conversation_participants")
         .update({ deleted_at: null })
@@ -487,7 +514,7 @@ export default function ListingPage() {
       return;
     }
 
-    // create new conversation
+    // Create new identity-based conversation
     const { data: conversation, error: conversationError } = await supabase
       .from("conversations")
       .insert({
@@ -499,8 +526,12 @@ export default function ListingPage() {
         listing_price_snapshot: listing.price,
 
         created_by: user.id,
+
         buyer_id: user.id,
         seller_id: listing.user_id,
+
+        buyer_identity_id: buyerIdentityId,
+        seller_identity_id: sellerIdentityId,
       })
       .select("id")
       .single();
@@ -517,11 +548,13 @@ export default function ListingPage() {
         {
           conversation_id: conversation.id,
           user_id: user.id,
+          identity_id: buyerIdentityId,
           last_read_at: new Date().toISOString(),
         },
         {
           conversation_id: conversation.id,
           user_id: listing.user_id,
+          identity_id: sellerIdentityId,
         },
       ]);
 

@@ -7,6 +7,7 @@ import { useAuth } from "../../lib/useAuth";
 import { CATEGORY_TREE } from "../../lib/categories";
 import { getCategoryFields } from "../../lib/categoryFields";
 import { getTranslation } from "../../lib/i18n/useTranslation";
+import LocationAutocomplete from "../components/LocationAutocomplete";
 
 const PAGE_SIZE = 30;
 const MAX_IMAGES = 10;
@@ -75,6 +76,7 @@ type Listing = {
 
 type Profile = {
   id: string;
+  active_identity_id?: string | null;
   is_premium?: boolean | null;
   premium_until?: string | null;
   home_country?: string | null;
@@ -85,6 +87,7 @@ type Profile = {
 type StoreCategory = {
   id: string;
   user_id: string;
+  identity_id?: string | null;
   name: string;
   sort_order?: number | null;
 };
@@ -339,6 +342,7 @@ export default function MyPage() {
 
   const [homeCountry, setHomeCountry] = useState("Estonia");
   const [homeCity, setHomeCity] = useState("");
+  const [selectedHomeLocation, setSelectedHomeLocation] = useState<any>(null);
   const [savingHomeLocation, setSavingHomeLocation] = useState(false);
   const [language, setLanguage] = useState("en");
   const [savingLanguage, setSavingLanguage] = useState(false);
@@ -385,6 +389,7 @@ export default function MyPage() {
   const [editCondition, setEditCondition] = useState("used");
   const [editCountry, setEditCountry] = useState("Estonia");
   const [editCity, setEditCity] = useState("");
+  const [selectedEditLocation, setSelectedEditLocation] = useState<any>(null);
 
   const [editManufacturer, setEditManufacturer] = useState("");
   const [editPartNumber, setEditPartNumber] = useState("");
@@ -427,10 +432,22 @@ export default function MyPage() {
   const freeLimitReached = !premiumActive && activeListingsCount >= 50;
 
   const fetchStoreCategories = async (currentUserId: string) => {
+    const { data: profileData, error: profileError } = await supabase
+      .from("profiles")
+      .select("active_identity_id")
+      .eq("id", currentUserId)
+      .maybeSingle();
+
+    if (profileError || !profileData?.active_identity_id) {
+      console.error("Error fetching active identity for store sections:", profileError);
+      setStoreCategories([]);
+      return;
+    }
+
     const { data, error } = await supabase
       .from("store_categories")
-      .select("id, user_id, name, sort_order")
-      .eq("user_id", currentUserId)
+      .select("id, user_id, identity_id, name, sort_order")
+      .eq("identity_id", profileData.active_identity_id)
       .order("sort_order", { ascending: true })
       .order("created_at", { ascending: true });
 
@@ -495,8 +512,19 @@ export default function MyPage() {
     setSavingStoreCategory(true);
 
     try {
+      const { data: profileData, error: profileError } = await supabase
+        .from("profiles")
+        .select("active_identity_id")
+        .eq("id", userId)
+        .maybeSingle();
+
+      if (profileError || !profileData?.active_identity_id) {
+        throw profileError || new Error("Missing active identity.");
+      }
+
       const { error } = await supabase.from("store_categories").insert({
         user_id: userId,
+        identity_id: profileData.active_identity_id,
         name: cleanName,
         sort_order: storeCategories.length,
       });
@@ -540,7 +568,7 @@ export default function MyPage() {
   const fetchProfile = async (currentUserId: string) => {
     const { data, error } = await supabase
       .from("profiles")
-      .select("id, is_premium, premium_until, home_country, home_city, language")
+      .select("id, active_identity_id, is_premium, premium_until, language")
       .eq("id", currentUserId)
       .maybeSingle();
 
@@ -552,61 +580,45 @@ export default function MyPage() {
 
     setProfile((data || null) as Profile | null);
 
-    if (data?.home_country) {
-      setHomeCountry(data.home_country);
-    }
-
-    if (data?.home_city) {
-      setHomeCity(data.home_city);
-    }
-
     if (data?.language) {
       setLanguage(data.language);
     }
-  };
 
-  const buildListingsQuery = (currentUserId: string, from: number) => {
-    const to = from + PAGE_SIZE - 1;
-    const storeCategorySelect =
-      storeSectionFilter !== "all"
-        ? "listing_store_categories!inner(store_category_id)"
-        : "listing_store_categories(store_category_id)";
-
-    let query = supabase
-      .from("listings")
-      .select(
-        `*, listing_images(id, thumb_url, medium_url, original_url, is_primary, sort_order), ${storeCategorySelect}`
-      )
-      .eq("user_id", currentUserId)
-      .order("created_at", { ascending: false })
-      .range(from, to);
-
-    if (filter !== "all") {
-      query = query.eq("status", filter);
-    }
-
-    if (storeSectionFilter !== "all") {
-      query = query.eq(
-        "listing_store_categories.store_category_id",
-        storeSectionFilter
+    if (data?.active_identity_id) {
+      const { data: identityRows, error: identityError } = await supabase.rpc(
+        "get_my_active_identity_profile_details"
       );
+
+      const identityProfile = Array.isArray(identityRows)
+        ? identityRows[0]
+        : identityRows;
+
+      if (identityError) {
+        console.error("Error loading active identity location:", identityError);
+      }
+
+      setHomeCountry(identityProfile?.country || "Estonia");
+      setHomeCity(identityProfile?.city || "");
     }
-
-    const searchQuery = buildPrefixSearchQuery(search);
-
-    if (searchQuery) {
-      query = query.filter("search_vector", "fts(simple)", searchQuery);
-    }
-
-    return query;
   };
 
-  const fetchListings = async (currentUserId: string, from = 0) => {
+  const buildListingsQuery = async (from: number) => {
+    return supabase.rpc("get_my_identity_listings", {
+      result_limit: PAGE_SIZE,
+      result_offset: from,
+      status_filter: filter,
+      search_query: search,
+      store_category_filter:
+        storeSectionFilter === "all" ? null : storeSectionFilter,
+    });
+  };
+
+  const fetchListings = async (from = 0) => {
     if (from === 0 && listings.length === 0) {
       setLoadingListings(true);
     }
 
-    const { data, error } = await buildListingsQuery(currentUserId, from);
+    const { data, error } = await buildListingsQuery(from);
 
     if (error) {
       console.error("Error fetching user listings:", error);
@@ -653,7 +665,7 @@ export default function MyPage() {
     fetchBlockedUsers(userId);
 
     const timer = setTimeout(() => {
-      fetchListings(userId, 0);
+      fetchListings(0);
     }, 300);
 
     return () => clearTimeout(timer);
@@ -705,20 +717,25 @@ export default function MyPage() {
     setSavingHomeLocation(true);
 
     try {
-      const coords = await geocodeCity(
-        homeCountry.trim(),
-        homeCity.trim()
-      );
+      const cleanCountry = selectedHomeLocation?.country || homeCountry.trim();
+      const cleanCity = selectedHomeLocation?.city || homeCity.trim();
 
-      const { error } = await supabase
-        .from("profiles")
-        .update({
-          home_country: homeCountry.trim(),
-          home_city: homeCity.trim(),
-          home_lat: coords?.lat || null,
-          home_lng: coords?.lng || null,
-        })
-        .eq("id", userId);
+      const coords = selectedHomeLocation
+        ? {
+            lat: selectedHomeLocation.lat,
+            lng: selectedHomeLocation.lng,
+          }
+        : await geocodeCity(cleanCountry, cleanCity);
+
+      const { error } = await supabase.rpc(
+        "update_my_active_identity_location",
+        {
+          p_country: cleanCountry,
+          p_city: cleanCity,
+          p_lat: coords?.lat || null,
+          p_lng: coords?.lng || null,
+        }
+      );
 
       if (error) throw error;
     } catch (error) {
@@ -786,7 +803,7 @@ export default function MyPage() {
     if (!userId || loadingMore || !hasMore) return;
 
     setLoadingMore(true);
-    await fetchListings(userId, listings.length);
+    await fetchListings(listings.length);
   };
 
   useEffect(() => {
@@ -817,7 +834,7 @@ export default function MyPage() {
     return () => observer.disconnect();
   }, [userId, hasMore, loadingListings, loadingMore, listings.length]);
 
-  const startEdit = (item: Listing) => {
+  const startEdit = async (item: Listing) => {
     setEditingId(item.id);
 
     setEditTitle(item.title || "");
@@ -825,7 +842,24 @@ export default function MyPage() {
     setEditPrice(item.price || "");
     setEditStatus(item.status || "active");
 
-    setEditImages(sortImages(item.listing_images || []));
+    let initialImages = sortImages(item.listing_images || []);
+
+    if (initialImages.length === 0 && userId) {
+      const { data: loadedImages, error: imageLoadError } = await supabase
+        .from("listing_images")
+        .select("id, thumb_url, medium_url, original_url, is_primary, sort_order")
+        .eq("listing_id", item.id)
+        .eq("user_id", userId)
+        .order("sort_order", { ascending: true });
+
+      if (imageLoadError) {
+        console.error("Error loading listing images for edit:", imageLoadError);
+      } else {
+        initialImages = sortImages((loadedImages || []) as ListingImage[]);
+      }
+    }
+
+    setEditImages(initialImages);
     setEditNewFiles([]);
 
     const itemDetails = (item.details || {}) as Record<string, unknown>;
@@ -864,6 +898,7 @@ export default function MyPage() {
     setEditCondition(item.condition || "used");
     setEditCountry(item.country || "Estonia");
     setEditCity(item.city || "");
+    setSelectedEditLocation(null);
 
     setEditManufacturer(item.manufacturer || "");
     setEditPartNumber(item.part_number || "");
@@ -897,6 +932,7 @@ export default function MyPage() {
     setEditCondition("used");
     setEditCountry("Estonia");
     setEditCity("");
+    setSelectedEditLocation(null);
 
     setEditManufacturer("");
     setEditPartNumber("");
@@ -1154,11 +1190,28 @@ export default function MyPage() {
           .eq("user_id", userId);
       }
 
-      const primaryImage =
+      let primaryImage =
         allImages[0]?.original_url ||
         allImages[0]?.medium_url ||
         allImages[0]?.thumb_url ||
         null;
+
+      if (!primaryImage) {
+        const { data: existingPrimaryImage } = await supabase
+          .from("listing_images")
+          .select("original_url, medium_url, thumb_url")
+          .eq("listing_id", editingId)
+          .eq("user_id", userId)
+          .order("sort_order", { ascending: true })
+          .limit(1)
+          .maybeSingle();
+
+        primaryImage =
+          existingPrimaryImage?.original_url ||
+          existingPrimaryImage?.medium_url ||
+          existingPrimaryImage?.thumb_url ||
+          null;
+      }
 
       const cleanCountry = editCountry.trim();
       const cleanCity = editCity.trim();
@@ -1167,6 +1220,13 @@ export default function MyPage() {
         cleanCity && cleanCountry
           ? `${cleanCountry} • ${cleanCity}`
           : cleanCountry || cleanCity || "";
+
+      const editCoords = selectedEditLocation
+        ? {
+            lat: selectedEditLocation.lat,
+            lng: selectedEditLocation.lng,
+          }
+        : await geocodeCity(cleanCountry, cleanCity);
 
       const searchText = [
         editTitle,
@@ -1206,6 +1266,8 @@ export default function MyPage() {
           country: cleanCountry,
           city: cleanCity,
           location,
+          listing_lat: editCoords?.lat || null,
+          listing_lng: editCoords?.lng || null,
 
           manufacturer: editManufacturer.trim(),
           part_number: editPartNumber.trim(),
@@ -1252,7 +1314,7 @@ export default function MyPage() {
       }
 
       cancelEdit();
-      await fetchListings(userId, 0);
+      await fetchListings(0);
     } catch (error) {
       console.error("Error saving edit:", error);
       alert("Failed to save changes.");
@@ -1296,7 +1358,7 @@ export default function MyPage() {
       return;
     }
 
-    await fetchListings(userId, 0);
+    await fetchListings(0);
   };
 
   const reactivateListing = async (id: number) => {
@@ -1320,7 +1382,7 @@ export default function MyPage() {
       return;
     }
 
-    await fetchListings(userId, 0);
+    await fetchListings(0);
   };
 
   const deleteListing = async (id: number) => {
@@ -1389,7 +1451,7 @@ export default function MyPage() {
     }
 
     if (editingId === id) cancelEdit();
-    await fetchListings(userId, 0);
+    await fetchListings(0);
   };
 
   const pausedCount = listings.filter((item) => item.status === "paused").length;
@@ -1517,11 +1579,19 @@ export default function MyPage() {
                   <option value="Germany">Germany</option>
                 </select>
 
-                <input
+                <LocationAutocomplete
+                  country={homeCountry}
                   value={homeCity}
-                  onChange={(e) => setHomeCity(e.target.value)}
                   placeholder={t("common.city")}
-                  className={inputClass}
+                  onTextChange={(value) => {
+                    setHomeCity(value);
+                    setSelectedHomeLocation(null);
+                  }}
+                  onSelect={(location) => {
+                    setSelectedHomeLocation(location);
+                    setHomeCountry(location.country || homeCountry);
+                    setHomeCity(location.city || location.display_name);
+                  }}
                 />
 
                 <button
@@ -2178,10 +2248,19 @@ export default function MyPage() {
 
                   <div>
                     <label className={labelClass}>City</label>
-                    <input
+                    <LocationAutocomplete
+                      country={editCountry}
                       value={editCity}
-                      onChange={(e) => setEditCity(e.target.value)}
-                      className={inputClass}
+                      placeholder="City or area"
+                      onTextChange={(value) => {
+                        setEditCity(value);
+                        setSelectedEditLocation(null);
+                      }}
+                      onSelect={(location) => {
+                        setSelectedEditLocation(location);
+                        setEditCountry(location.country || editCountry);
+                        setEditCity(location.city || location.display_name);
+                      }}
                     />
                   </div>
                 </div>

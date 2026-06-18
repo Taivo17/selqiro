@@ -10,6 +10,8 @@ type Conversation = {
   id: number;
   buyer_id?: string | null;
   seller_id?: string | null;
+  buyer_identity_id?: string | null;
+  seller_identity_id?: string | null;
   listing_id?: number | null;
   listing_title_snapshot?: string | null;
   listing_image_snapshot?: string | null;
@@ -19,6 +21,7 @@ type Conversation = {
 type Message = {
   id: number;
   sender_id?: string | null;
+  sender_identity_id?: string | null;
   message: string;
   created_at: string;
 
@@ -93,6 +96,8 @@ export default function ConversationPage() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [sellerProfile, setSellerProfile] = useState<SellerProfile | null>(null);
   const [otherUserId, setOtherUserId] = useState<string | null>(null);
+  const [activeIdentityId, setActiveIdentityId] = useState<string | null>(null);
+  const [otherIdentityId, setOtherIdentityId] = useState<string | null>(null);
   const [isBlocked, setIsBlocked] = useState(false);
   const [blockedByMe, setBlockedByMe] = useState(false);
   const [text, setText] = useState("");
@@ -116,6 +121,22 @@ export default function ConversationPage() {
   const loadConversation = async () => {
     if (!user?.id || !conversationId) return;
 
+    const { data: profileData } = await supabase
+      .from("profiles")
+      .select("active_identity_id")
+      .eq("id", user.id)
+      .maybeSingle();
+
+    const currentIdentityId = (profileData as any)?.active_identity_id || null;
+    setActiveIdentityId(currentIdentityId);
+
+    if (!currentIdentityId) {
+      setConversation(null);
+      setMessages([]);
+      setPageLoading(false);
+      return;
+    }
+
     const { data: conversationData, error: conversationError } = await supabase
       .from("conversations")
       .select("*")
@@ -130,7 +151,20 @@ export default function ConversationPage() {
       return;
     }
 
-    setConversation(conversationData as Conversation);
+    const loadedConversation = conversationData as Conversation;
+
+    const isParticipant =
+      loadedConversation.buyer_identity_id === currentIdentityId ||
+      loadedConversation.seller_identity_id === currentIdentityId;
+
+    if (!isParticipant) {
+      setConversation(null);
+      setMessages([]);
+      setPageLoading(false);
+      return;
+    }
+
+    setConversation(loadedConversation);
 
     if (attachListingId && !attachmentRemovedRef.current) {
       const { data: listingData } = await supabase
@@ -164,6 +198,13 @@ export default function ConversationPage() {
       }
     }
 
+    const otherIdentity =
+      loadedConversation.buyer_identity_id === currentIdentityId
+        ? loadedConversation.seller_identity_id
+        : loadedConversation.buyer_identity_id;
+
+    setOtherIdentityId(otherIdentity || null);
+
     const otherUserId =
       (conversationData as any).buyer_id === user.id
         ? (conversationData as any).seller_id
@@ -183,14 +224,24 @@ export default function ConversationPage() {
       const blocks = blockRows || [];
       setIsBlocked(blocks.length > 0);
       setBlockedByMe(blocks.some((block: any) => block.blocker_id === user.id));
+    }
 
+    if (otherIdentity) {
       const { data: sellerData } = await supabase
-        .from("profiles")
-        .select("store_name, store_slug, avatar_url")
-        .eq("id", otherUserId)
+        .rpc("get_identity_profile_public", {
+          p_identity_id: otherIdentity,
+        })
         .maybeSingle();
 
-      setSellerProfile((sellerData || null) as SellerProfile | null);
+      setSellerProfile(
+        sellerData
+          ? {
+              store_name: (sellerData as any).display_name || null,
+              store_slug: (sellerData as any).slug || null,
+              avatar_url: (sellerData as any).avatar_url || null,
+            }
+          : null
+      );
     }
 
     const { data: messageRows, error: messageError } = await supabase
@@ -233,7 +284,7 @@ export default function ConversationPage() {
       .from("conversation_participants")
       .update({ last_read_at: new Date().toISOString() })
       .eq("conversation_id", conversationId)
-      .eq("user_id", user.id);
+      .eq("identity_id", currentIdentityId);
 
     setPageLoading(false);
   };
@@ -330,7 +381,7 @@ export default function ConversationPage() {
       .from("conversation_participants")
       .update({ deleted_at: new Date().toISOString() })
       .eq("conversation_id", conversationId)
-      .eq("user_id", user?.id);
+      .eq("identity_id", activeIdentityId || "");
 
     if (error) {
       console.error(error);
@@ -421,7 +472,7 @@ export default function ConversationPage() {
       return;
     }
 
-    if (!user?.id || !conversationId || (!cleanText && !selectedImageFile) || sending) return;
+    if (!user?.id || !activeIdentityId || !conversationId || (!cleanText && !selectedImageFile) || sending) return;
 
     setSending(true);
 
@@ -458,6 +509,7 @@ export default function ConversationPage() {
     const { error } = await supabase.from("messages").insert({
       conversation_id: conversationId,
       sender_id: user.id,
+      sender_identity_id: activeIdentityId,
       message: cleanText || "",
 
       listing_id: attachedListing?.id || null,
@@ -624,7 +676,7 @@ export default function ConversationPage() {
         <section className="min-h-[460px] rounded-[28px] bg-white p-4 shadow-sm">
           <div className="space-y-3">
             {messages.map((item) => {
-              const mine = item.sender_id === user?.id;
+              const mine = item.sender_identity_id === activeIdentityId;
 
               const hasListingAttachment =
                 Boolean(item.listing_id);

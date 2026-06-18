@@ -4,6 +4,23 @@ import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { supabase } from "../../lib/supabase";
 
+type Identity = {
+  id: string;
+  type: "private" | "business";
+  display_name: string;
+};
+
+type IdentityProfile = {
+  id: string;
+  identity_id: string;
+  display_name: string;
+  slug: string | null;
+  bio?: string | null;
+  avatar_url?: string | null;
+  banner_url?: string | null;
+  banner_dominant_color?: string | null;
+};
+
 type Profile = {
   id: string;
   email?: string | null;
@@ -26,6 +43,57 @@ function rgbToHex(r: number, g: number, b: number) {
       .map((x) => x.toString(16).padStart(2, "0"))
       .join("")
   );
+}
+
+async function resizeImageToWebp(file: File, maxSize: number, quality = 0.86): Promise<Blob> {
+  const bitmap = await createImageBitmap(file);
+  const scale = Math.min(1, maxSize / Math.max(bitmap.width, bitmap.height));
+
+  const canvas = document.createElement("canvas");
+  canvas.width = Math.round(bitmap.width * scale);
+  canvas.height = Math.round(bitmap.height * scale);
+
+  const ctx = canvas.getContext("2d");
+  if (!ctx) throw new Error("Canvas not available");
+
+  ctx.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+
+  return new Promise((resolve, reject) => {
+    canvas.toBlob(
+      (blob) => {
+        if (!blob) reject(new Error("Image conversion failed"));
+        else resolve(blob);
+      },
+      "image/webp",
+      quality
+    );
+  });
+}
+
+async function uploadIdentityImage(
+  userId: string,
+  identityId: string,
+  file: File,
+  kind: "avatar" | "banner"
+) {
+  const maxSize = kind === "avatar" ? 512 : 2000;
+  const blob = await resizeImageToWebp(file, maxSize);
+  const path = `${userId}/${identityId}/${kind}-${Date.now()}.webp`;
+
+  const { error } = await supabase.storage
+    .from("identity-media")
+    .upload(path, blob, {
+      contentType: "image/webp",
+      upsert: true,
+    });
+
+  if (error) throw error;
+
+  const { data } = supabase.storage
+    .from("identity-media")
+    .getPublicUrl(path);
+
+  return data.publicUrl;
 }
 
 async function extractDominantColor(file: File) {
@@ -74,6 +142,9 @@ export default function ProfilePage() {
   const [userId, setUserId] = useState<string | null>(null);
   const [userEmail, setUserEmail] = useState<string>("");
 
+  const [activeIdentityId, setActiveIdentityId] = useState<string | null>(null);
+  const [identityProfileId, setIdentityProfileId] = useState<string | null>(null);
+
   const [storeName, setStoreName] = useState("");
   const [storeSlug, setStoreSlug] = useState("");
   const [slugLocked, setSlugLocked] = useState(false);
@@ -81,6 +152,8 @@ export default function ProfilePage() {
   const [avatarUrl, setAvatarUrl] = useState("");
   const [bannerUrl, setBannerUrl] = useState("");
   const [bannerDominantColor, setBannerDominantColor] = useState("");
+  const [avatarFile, setAvatarFile] = useState<File | null>(null);
+  const [bannerFile, setBannerFile] = useState<File | null>(null);
 
   const [isPremium, setIsPremium] = useState(false);
   const [premiumUntil, setPremiumUntil] = useState("");
@@ -88,6 +161,12 @@ export default function ProfilePage() {
   const [checkingAuth, setCheckingAuth] = useState(true);
   const [loadingProfile, setLoadingProfile] = useState(true);
   const [saving, setSaving] = useState(false);
+
+  const [businessName, setBusinessName] = useState("");
+  const [businessDescription, setBusinessDescription] = useState("");
+  const [creatingBusiness, setCreatingBusiness] = useState(false);
+  const [businessMessage, setBusinessMessage] = useState("");
+  const [identities, setIdentities] = useState<Identity[]>([]);
 
   useEffect(() => {
     const loadUserAndProfile = async () => {
@@ -107,7 +186,7 @@ export default function ProfilePage() {
 
       const { data, error } = await supabase
         .from("profiles")
-        .select("*")
+        .select("id, email, is_premium, premium_until, active_identity_id")
         .eq("id", user.id)
         .maybeSingle();
 
@@ -117,16 +196,48 @@ export default function ProfilePage() {
         return;
       }
 
-      if (data) {
-        const profile = data as Profile;
-        setStoreName(profile.store_name || "");
-        setStoreSlug(profile.store_slug || "");
-      setSlugLocked(Boolean(profile.store_slug));
-        setBio(profile.bio || "");
-        setAvatarUrl(profile.avatar_url || "");
-        setBannerUrl(profile.banner_url || "");
-        setBannerDominantColor(profile.banner_dominant_color || "");
+      const { data: identityRows } = await supabase
+        .rpc("get_my_identities");
 
+      const loadedIdentities = (identityRows || []) as Identity[];
+      setIdentities(loadedIdentities);
+
+      const profile = data as Profile & { active_identity_id?: string | null };
+
+      const resolvedActiveIdentityId =
+        profile?.active_identity_id ||
+        loadedIdentities[0]?.id ||
+        null;
+
+      setActiveIdentityId(resolvedActiveIdentityId);
+
+      if (resolvedActiveIdentityId) {
+        const { data: identityProfileRows, error: identityProfileError } =
+          await supabase.rpc("get_my_active_identity_profile");
+
+        const identityProfileData = Array.isArray(identityProfileRows)
+          ? identityProfileRows[0]
+          : identityProfileRows;
+
+        if (identityProfileError) {
+          console.error("Error loading identity profile:", identityProfileError);
+        }
+
+        if (identityProfileData) {
+          const identityProfile = identityProfileData as IdentityProfile;
+
+          setIdentityProfileId(identityProfile.id);
+          setStoreName(identityProfile.display_name || "");
+          setStoreSlug(identityProfile.slug || "");
+          setSlugLocked(Boolean(identityProfile.slug));
+          setBio(identityProfile.bio || "");
+          setAvatarUrl(identityProfile.avatar_url || "");
+          setBannerUrl(identityProfile.banner_url || "");
+          setBannerDominantColor(identityProfile.banner_dominant_color || "");
+        }
+      }
+
+      if (data) {
         setIsPremium(Boolean(profile.is_premium));
 
         if (profile.premium_until) {
@@ -146,11 +257,8 @@ export default function ProfilePage() {
     const file = event.target.files?.[0];
     if (!file) return;
 
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setAvatarUrl(reader.result as string);
-    };
-    reader.readAsDataURL(file);
+    setAvatarFile(file);
+    setAvatarUrl(URL.createObjectURL(file));
   };
 
   const handleBannerUpload = async (
@@ -159,15 +267,124 @@ export default function ProfilePage() {
     const file = event.target.files?.[0];
     if (!file) return;
 
+    setBannerFile(file);
+
     const dominantColor = await extractDominantColor(file);
     setBannerDominantColor(dominantColor);
+    setBannerUrl(URL.createObjectURL(file));
+  };
 
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setBannerUrl(reader.result as string);
-    };
+  const handleCreateBusiness = async () => {
+    if (!userId) {
+      alert("Palun logi kõigepealt sisse.");
+      return;
+    }
 
-    reader.readAsDataURL(file);
+    const cleanName = businessName.trim();
+    const cleanDescription = businessDescription.trim();
+
+    if (!cleanName) {
+      alert("Sisesta ettevõtte nimi.");
+      return;
+    }
+
+    setCreatingBusiness(true);
+    setBusinessMessage("");
+
+    const baseSlug = slugify(cleanName) || "business";
+    const cleanSlug = `${baseSlug}-${Math.random().toString(36).slice(2, 6)}`;
+
+    const { data: businessData, error: businessError } = await supabase
+      .from("business_accounts")
+      .insert({
+        owner_user_id: userId,
+        name: cleanName,
+        slug: cleanSlug,
+        description: cleanDescription || null,
+        created_by: userId,
+        updated_by: userId,
+      })
+      .select("id")
+      .single();
+
+    if (businessError || !businessData) {
+      console.error("Error creating business:", businessError);
+      alert(`Ettevõtte loomine ebaõnnestus: ${businessError?.message || "unknown error"}`);
+      setCreatingBusiness(false);
+      return;
+    }
+
+    const businessId = businessData.id;
+
+    const { error: memberError } = await supabase
+      .from("business_members")
+      .insert({
+        business_account_id: businessId,
+        user_id: userId,
+        role: "owner",
+        status: "active",
+        invited_by: userId,
+      });
+
+    if (memberError) {
+      console.error("Error creating business member:", memberError);
+      alert(`Ettevõtte liikme loomine ebaõnnestus: ${memberError?.message || "unknown error"}`);
+      setCreatingBusiness(false);
+      return;
+    }
+
+    const { data: identityData, error: identityError } = await supabase
+      .from("identities")
+      .insert({
+        type: "business",
+        business_account_id: businessId,
+        display_name: cleanName,
+        created_by: userId,
+        updated_by: userId,
+      })
+      .select("id")
+      .single();
+
+    if (identityError || !identityData) {
+      console.error("Error creating business identity:", identityError);
+      alert(`Ettevõtte identiteedi loomine ebaõnnestus: ${identityError?.message || "unknown error"}`);
+      setCreatingBusiness(false);
+      return;
+    }
+
+    const businessIdentityId = identityData.id;
+
+    const { error: identityProfileError } = await supabase
+      .from("identity_profiles")
+      .insert({
+        identity_id: businessIdentityId,
+        display_name: cleanName,
+        slug: cleanSlug,
+        bio: cleanDescription || null,
+        created_by_user_id: userId,
+        updated_by_user_id: userId,
+      });
+
+    if (identityProfileError) {
+      console.error("Error creating identity profile:", identityProfileError);
+      alert(`Ettevõtte avaliku profiili loomine ebaõnnestus: ${identityProfileError?.message || "unknown error"}`);
+      setCreatingBusiness(false);
+      return;
+    }
+
+    setBusinessName("");
+    setBusinessDescription("");
+    setIdentities((current) => [
+      ...current,
+      {
+        id: businessIdentityId,
+        type: "business",
+        display_name: cleanName,
+      },
+    ]);
+
+    setBusinessMessage("Ettevõtte profiil loodud. Järgmisena lisame identiteedi vahetamise.");
+    setCreatingBusiness(false);
   };
 
   const handleSave = async () => {
@@ -179,11 +396,16 @@ export default function ProfilePage() {
     const cleanStoreName = storeName.trim();
     const cleanSlug = slugify(storeSlug || generatedSlug);
 
+    if (!activeIdentityId) {
+      alert("Aktiivset identiteeti ei leitud.");
+      return;
+    }
+
     const existingSlug = await supabase
-      .from("profiles")
+      .from("identity_profiles")
       .select("id")
-      .eq("store_slug", cleanSlug)
-      .neq("id", userId)
+      .eq("slug", cleanSlug)
+      .neq("identity_id", activeIdentityId)
       .maybeSingle();
 
     if (existingSlug.data) {
@@ -205,20 +427,42 @@ export default function ProfilePage() {
 
     setSaving(true);
 
-    const payload = {
-      id: userId,
-      email: userEmail || null,
-      store_name: cleanStoreName,
-      store_slug: cleanSlug,
-      bio: cleanBio || null,
-      avatar_url: avatarUrl || null,
-      banner_url: bannerUrl || null,
-      banner_dominant_color: bannerDominantColor || null,
-    };
+    let savedAvatarUrl = avatarUrl || null;
+    let savedBannerUrl = bannerUrl || null;
 
-    const { error } = await supabase.from("profiles").upsert(payload);
+    try {
+      if (avatarFile) {
+        savedAvatarUrl = await uploadIdentityImage(
+          userId,
+          activeIdentityId,
+          avatarFile,
+          "avatar"
+        );
+      }
 
-    setSaving(false);
+      if (bannerFile) {
+        savedBannerUrl = await uploadIdentityImage(
+          userId,
+          activeIdentityId,
+          bannerFile,
+          "banner"
+        );
+      }
+    } catch (uploadError) {
+      console.error("Error uploading profile media:", uploadError);
+      alert("Profile image upload failed.");
+      setSaving(false);
+      return;
+    }
+
+    const { error } = await supabase.rpc("save_my_active_identity_profile", {
+      p_display_name: cleanStoreName,
+      p_slug: cleanSlug,
+      p_bio: cleanBio || "",
+      p_avatar_url: savedAvatarUrl || "",
+      p_banner_url: savedBannerUrl || "",
+      p_banner_dominant_color: bannerDominantColor || "",
+    });
 
     if (error) {
       console.error("Error saving profile:", error);
@@ -232,7 +476,12 @@ export default function ProfilePage() {
       return;
     }
 
+    setAvatarFile(null);
+    setBannerFile(null);
+    setAvatarUrl(savedAvatarUrl || "");
+    setBannerUrl(savedBannerUrl || "");
     setStoreSlug(cleanSlug);
+    setSlugLocked(true);
     alert("Profile saved.");
   };
 
@@ -318,11 +567,11 @@ export default function ProfilePage() {
             Store profile
           </p>
           <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl">
-            Build your public store
+Build your active identity profile
           </h1>
           <p className="mt-4 max-w-2xl text-base leading-7 text-black/60 sm:text-lg">
-            Set your public store name, custom address, short bio, avatar and banner.
-            This will become the foundation of your public seller page.
+            Muuda selle identiteedi avalikku profiili. Kui valid ülevalt teise identiteedi,
+            siis muudad selle identiteedi store'i ja avalikku profiili.
           </p>
         </header>
 
@@ -530,6 +779,81 @@ export default function ProfilePage() {
                   </ul>
                 </div>
               )}
+            </div>
+
+            <div className="rounded-[32px] border border-black/8 bg-white p-6 shadow-sm sm:p-8">
+              <p className="mb-3 text-xs font-medium uppercase tracking-[0.22em] text-black/40">
+                Identiteedid
+              </p>
+
+              <h3 className="text-2xl font-semibold tracking-tight">
+                Sinu identiteedid
+              </h3>
+
+              <div className="mt-4 space-y-2">
+                {identities.length === 0 ? (
+                  <p className="rounded-2xl bg-black/[0.03] px-4 py-3 text-sm text-black/55">
+                    Identiteete ei leitud.
+                  </p>
+                ) : (
+                  identities.map((identity) => (
+                    <div
+                      key={identity.id}
+                      className="flex items-center justify-between rounded-2xl border border-black/10 bg-white px-4 py-3"
+                    >
+                      <div>
+                        <p className="text-sm font-semibold text-black">
+                          {identity.type === "business" ? "🏢" : "👤"}{" "}
+                          {identity.display_name}
+                        </p>
+                        <p className="mt-1 text-xs text-black/45">
+                          {identity.type === "business" ? "Ettevõte" : "Eraisik"}
+                        </p>
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
+
+              <h3 className="mt-8 text-2xl font-semibold tracking-tight">
+                Loo ettevõtte profiil
+              </h3>
+
+              <p className="mt-2 text-sm leading-6 text-black/60">
+                Sama Selqiro konto all saad tegutseda eraisikuna või ettevõttena.
+              </p>
+
+              <div className="mt-5 space-y-3">
+                <input
+                  type="text"
+                  placeholder="Ettevõtte nimi"
+                  value={businessName}
+                  onChange={(e) => setBusinessName(e.target.value)}
+                  className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm outline-none transition focus:border-black/30"
+                />
+
+                <textarea
+                  rows={3}
+                  placeholder="Lühikirjeldus"
+                  value={businessDescription}
+                  onChange={(e) => setBusinessDescription(e.target.value)}
+                  className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm outline-none transition focus:border-black/30"
+                />
+
+                <button
+                  onClick={handleCreateBusiness}
+                  disabled={creatingBusiness}
+                  className="w-full rounded-2xl bg-black px-5 py-3 text-sm font-medium text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
+                >
+                  {creatingBusiness ? "Loon..." : "Loo ettevõtte profiil"}
+                </button>
+
+                {businessMessage && (
+                  <p className="rounded-2xl bg-green-50 px-4 py-3 text-sm text-green-700">
+                    {businessMessage}
+                  </p>
+                )}
+              </div>
             </div>
 
             <div className="rounded-[32px] border border-black/8 bg-white p-6 shadow-sm sm:p-8">

@@ -11,6 +11,8 @@ type Conversation = {
 
   buyer_id?: string | null;
   seller_id?: string | null;
+  buyer_identity_id?: string | null;
+  seller_identity_id?: string | null;
 
   listing_title_snapshot?: string | null;
   listing_image_snapshot?: string | null;
@@ -23,6 +25,7 @@ type Message = {
   message: string;
   created_at: string;
   sender_id?: string | null;
+  sender_identity_id?: string | null;
 };
 
 type OtherProfile = {
@@ -34,6 +37,7 @@ type OtherProfile = {
 type CurrentProfile = {
   id: string;
   language?: string | null;
+  active_identity_id?: string | null;
 };
 
 export default function MessagesPage() {
@@ -63,16 +67,27 @@ export default function MessagesPage() {
 
       const { data: currentProfileData } = await supabase
         .from("profiles")
-        .select("id, language")
+        .select("id, language, active_identity_id")
         .eq("id", user.id)
         .maybeSingle();
 
       setCurrentProfile((currentProfileData || null) as CurrentProfile | null);
 
+      const activeIdentityId = (currentProfileData as any)?.active_identity_id || null;
+
+      if (!activeIdentityId) {
+        setConversations([]);
+        setLatestMessages({});
+        setOtherProfiles({});
+        setUnreadConversations({});
+        setPageLoading(false);
+        return;
+      }
+
       const { data: participantRows, error } = await supabase
         .from("conversation_participants")
         .select("conversation_id, deleted_at, last_read_at")
-        .eq("user_id", user.id)
+        .eq("identity_id", activeIdentityId)
         .is("deleted_at", null);
 
       if (error) {
@@ -112,24 +127,31 @@ export default function MessagesPage() {
 
       await Promise.all(
         (conversationRows || []).map(async (conversation: any) => {
-          const otherUserId =
-            conversation.buyer_id === user.id
-              ? conversation.seller_id
-              : conversation.buyer_id;
+          const activeIdentityId = (currentProfileData as any)?.active_identity_id || null;
 
-          if (otherUserId) {
+          const otherIdentityId =
+            conversation.buyer_identity_id === activeIdentityId
+              ? conversation.seller_identity_id
+              : conversation.buyer_identity_id;
+
+          if (otherIdentityId) {
             const { data: profileData } = await supabase
-              .from("profiles")
-              .select("store_name, store_slug, avatar_url")
-              .eq("id", otherUserId)
+              .rpc("get_identity_profile_public", {
+                p_identity_id: otherIdentityId,
+              })
               .maybeSingle();
 
-            profileMap[conversation.id] =
-              (profileData as OtherProfile | null) || null;
+            profileMap[conversation.id] = profileData
+              ? {
+                  store_name: (profileData as any).display_name || null,
+                  store_slug: (profileData as any).slug || null,
+                  avatar_url: (profileData as any).avatar_url || null,
+                }
+              : null;
           }
           const { data: messageRow } = await supabase
             .from("messages")
-            .select("message, created_at, sender_id")
+            .select("message, created_at, sender_id, sender_identity_id")
             .eq("conversation_id", conversation.id)
             .order("created_at", { ascending: false })
             .limit(1)
@@ -146,7 +168,7 @@ export default function MessagesPage() {
             .from("messages")
             .select("id")
             .eq("conversation_id", conversation.id)
-            .neq("sender_id", user.id)
+            .neq("sender_identity_id", (currentProfileData as any)?.active_identity_id || "")
             .limit(1);
 
           if ((participant as any)?.last_read_at) {
@@ -160,7 +182,7 @@ export default function MessagesPage() {
 
           unreadMap[conversation.id] =
             (unreadRows || []).length > 0 &&
-            messageRow?.sender_id !== user.id;
+            messageRow?.sender_identity_id !== ((currentProfileData as any)?.active_identity_id || "");
         })
       );
 

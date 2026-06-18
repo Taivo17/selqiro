@@ -36,7 +36,8 @@ export async function POST(request: Request) {
 
     const url = new URL("https://nominatim.openstreetmap.org/search");
     url.searchParams.set("format", "json");
-    url.searchParams.set("limit", "1");
+    url.searchParams.set("limit", "10");
+    url.searchParams.set("countrycodes", country.toLowerCase() === "estonia" ? "ee" : "");
     url.searchParams.set("city", city);
     url.searchParams.set("country", country);
 
@@ -54,7 +55,27 @@ export async function POST(request: Request) {
     }
 
     const results = await response.json();
-    const first = Array.isArray(results) ? results[0] : null;
+    const rows = Array.isArray(results) ? results : [];
+
+    const cityNeedle = city.toLowerCase();
+
+    const first =
+      rows.find((row: any) => {
+        const address = row?.address || {};
+        const names = [
+          address.city,
+          address.town,
+          address.village,
+          address.hamlet,
+          address.municipality,
+          address.county,
+          row?.display_name,
+        ]
+          .filter(Boolean)
+          .map((value) => String(value).toLowerCase());
+
+        return names.some((value) => value.includes(cityNeedle));
+      }) || rows[0] || null;
 
     if (!first?.lat || !first?.lon) {
       return NextResponse.json(
