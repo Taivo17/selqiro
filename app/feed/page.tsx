@@ -26,6 +26,7 @@ type ListingTranslation = {
 type CurrentProfile = {
   id: string;
   language?: string | null;
+  active_identity_id?: string | null;
 };
 
 type FeedListing = {
@@ -131,16 +132,19 @@ export default function FeedPage() {
 
       const { data: currentProfileData } = await supabase
         .from("profiles")
-        .select("id, language")
+        .select("id, language, active_identity_id")
         .eq("id", user.id)
         .maybeSingle();
 
       setCurrentProfile((currentProfileData || null) as CurrentProfile | null);
 
+      const activeIdentityId =
+        (currentProfileData as any)?.active_identity_id;
+
       const { data: follows, error: followsError } = await supabase
         .from("store_follows")
-        .select("store_owner_id")
-        .eq("follower_id", user.id);
+        .select("store_identity_id")
+        .eq("follower_identity_id", activeIdentityId);
 
       if (followsError) {
         console.error("Error loading follows:", followsError);
@@ -162,7 +166,7 @@ export default function FeedPage() {
       });
 
       const followedIds = (follows || [])
-        .map((row) => row.store_owner_id)
+        .map((row) => row.store_identity_id)
         .filter(Boolean)
         .filter((id) => !blockedIds.has(id));
 
@@ -177,7 +181,7 @@ export default function FeedPage() {
         .select(
           "id, user_id, created_at, title, description, price, category, condition, country, city, image, listing_images(thumb_url, medium_url, original_url, is_primary, sort_order), listing_translations(language, title, description, ai_summary, status)"
         )
-        .in("user_id", followedIds)
+        .in("identity_id", followedIds)
         .eq("status", "active")
         .gt("active_until", new Date().toISOString())
         .order("created_at", { ascending: false })

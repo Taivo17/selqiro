@@ -147,15 +147,19 @@ export default function StorePage() {
     const load = async () => {
       if (!profile) setLoading(true);
 
+      let loadedCurrentProfile: CurrentProfile | null = null;
+
       if (user?.id) {
-        const { data: currentProfileData } = await supabase
+        const { data: profileRow } = await supabase
           .from("profiles")
           .select("id, language, active_identity_id")
           .eq("id", user.id)
           .maybeSingle();
 
-        setCurrentProfile((currentProfileData || null) as CurrentProfile | null);
+        loadedCurrentProfile = (profileRow || null) as CurrentProfile | null;
+        setCurrentProfile(loadedCurrentProfile);
       } else {
+        loadedCurrentProfile = null;
         setCurrentProfile(null);
       }
 
@@ -205,27 +209,23 @@ export default function StorePage() {
       } as ProfileRow);
       setSelectedStoreCategoryId("all");
 
-      const { count } = await supabase
-        .from("store_follows")
-        .select("*", { count: "exact", head: true })
-        .eq("store_owner_id", storeOwnerKey);
+      const viewerActiveIdentityId =
+        loadedCurrentProfile?.active_identity_id || null;
 
-      setFollowersCount(count || 0);
-
-      const viewerActiveIdentityId = currentProfile?.active_identity_id || null;
       const viewerIsStoreOwner =
         !!storeIdentityId && viewerActiveIdentityId === storeIdentityId;
 
+      const { data: followState } = await supabase
+        .rpc("get_identity_store_follow_status_v2", {
+          p_follower_identity_id: viewerActiveIdentityId,
+          p_store_identity_id: storeIdentityId,
+        })
+        .maybeSingle();
+
+      setIsFollowing(Boolean((followState as any)?.is_following));
+      setFollowersCount(Number((followState as any)?.followers_count || 0));
+
       if (user?.id && !viewerIsStoreOwner) {
-        const { data: followData } = await supabase
-          .from("store_follows")
-          .select("id")
-          .eq("follower_id", user?.id || "")
-          .eq("store_owner_id", storeOwnerKey)
-          .maybeSingle();
-
-        setIsFollowing(!!followData);
-
         const { data: blockRows } = await supabase
           .from("user_blocks")
           .select("id, blocker_id")
@@ -248,7 +248,6 @@ export default function StorePage() {
         }
 
       } else {
-        setIsFollowing(false);
         setIsBlocked(false);
         setBlockedByMe(false);
       }
@@ -311,7 +310,7 @@ export default function StorePage() {
     if (!authLoading) {
       load();
     }
-  }, [slug, user?.id, authLoading, debouncedSearch]);
+  }, [slug, user?.id, authLoading, debouncedSearch, currentProfile?.active_identity_id]);
 
 
   useEffect(() => {
@@ -339,35 +338,26 @@ export default function StorePage() {
   }, [storeMenuOpen]);
 
   const toggleFollow = async () => {
-    if (!user?.id || !profile?.id || followLoading) return;
+    if (!user?.id || !profile?.identity_id || followLoading) return;
 
     setFollowLoading(true);
 
     try {
-      if (isFollowing) {
-        const { error } = await supabase
-          .from("store_follows")
-          .delete()
-          .eq("follower_id", user?.id || "")
-          .eq("store_owner_id", profile.id);
+      const { data, error } = await supabase.rpc(
+        "toggle_store_follow_identity",
+        {
+          p_store_identity_id: profile.identity_id,
+        }
+      );
 
-        if (error) throw error;
+      if (error) throw error;
 
-        setIsFollowing(false);
-        setFollowersCount((prev) => Math.max(0, prev - 1));
-      } else {
-        const { error } = await supabase
-          .from("store_follows")
-          .insert({
-            follower_id: user.id,
-            store_owner_id: profile.id,
-          });
+      const nowFollowing = Boolean(data);
 
-        if (error) throw error;
-
-        setIsFollowing(true);
-        setFollowersCount((prev) => prev + 1);
-      }
+      setIsFollowing(nowFollowing);
+      setFollowersCount((prev) =>
+        nowFollowing ? prev + 1 : Math.max(0, prev - 1)
+      );
     } catch (error) {
       console.error("Follow error:", error);
     } finally {
