@@ -285,6 +285,11 @@ export default function SiteHeader() {
     setStoreSlug(targetSlug);
     setIdentityMenuOpen(false);
 
+    if (pathname.startsWith("/messages/")) {
+      window.location.href = "/messages";
+      return;
+    }
+
     if (pathname.startsWith("/store/")) {
       window.location.href = targetSlug ? `/store/${targetSlug}` : "/profile";
       return;
@@ -593,14 +598,33 @@ export default function SiteHeader() {
                       </div>
 
                       {activeIdentity && (
-                        <div className="rounded-2xl border border-black/10 bg-[#f8f8f6] px-4 py-3 text-sm text-black/70">
-                          <span className="block text-[10px] uppercase tracking-[0.18em] text-black/35">
+                        <div className="rounded-2xl border border-black/10 bg-[#f8f8f6] p-3 text-sm text-black/70">
+                          <span className="block text-[10px] uppercase tracking-[0.18em] text-black/35 mb-2">
                             Tegutsen kui
                           </span>
-                          <span className="flex items-center gap-2 font-medium text-black">
-                            {activeIdentity.type === "business" ? "🏢" : "👤"}
-                            {activeIdentity.display_name}
-                          </span>
+
+                          <div className="space-y-2">
+                            {identities.map((identity) => (
+                              <button
+                                key={identity.id}
+                                type="button"
+                                onClick={() => {
+                                  setMobileMenuOpen(false);
+                                  handleIdentityChange(identity);
+                                }}
+                                className="flex w-full items-center justify-between rounded-xl border border-black/8 bg-white px-3 py-2 text-left"
+                              >
+                                <span>
+                                  {identity.type === "business" ? "🏢" : "👤"}{" "}
+                                  {identity.display_name}
+                                </span>
+
+                                {activeIdentity.id === identity.id && (
+                                  <span className="text-green-600">✓</span>
+                                )}
+                              </button>
+                            ))}
+                          </div>
                         </div>
                       )}
 
