@@ -32,6 +32,7 @@ type CurrentProfile = {
 type FeedListing = {
   id: number;
   user_id: string;
+  identity_id?: string | null;
   created_at?: string | null;
   title: string;
   description: string;
@@ -179,7 +180,7 @@ export default function FeedPage() {
       const { data, error } = await supabase
         .from("listings")
         .select(
-          "id, user_id, created_at, title, description, price, category, condition, country, city, image, listing_images(thumb_url, medium_url, original_url, is_primary, sort_order), listing_translations(language, title, description, ai_summary, status)"
+          "id, user_id, identity_id, created_at, title, description, price, category, condition, country, city, image, listing_images(thumb_url, medium_url, original_url, is_primary, sort_order), listing_translations(language, title, description, ai_summary, status)"
         )
         .in("identity_id", followedIds)
         .eq("status", "active")
@@ -196,30 +197,66 @@ export default function FeedPage() {
 
       const loadedListings = (data || []) as FeedListing[];
 
-      const userIds = Array.from(
-        new Set(
-          loadedListings
-            .map((item) => item.user_id)
-            .filter(Boolean)
-        )
-      );
+      let visibleListings = loadedListings;
 
-      const { data: profileRows, error: profileError } = await supabase
-        .from("profiles")
-        .select("id, store_name, store_slug, avatar_url")
-        .in("id", userIds);
+      if (user?.id) {
+        const { data: blockRows, error: blockError } = await supabase
+          .from("user_blocks")
+          .select("blocker_id, blocked_id")
+          .or(
+            `blocker_id.eq.${user.id},blocked_id.eq.${user.id}`
+          );
 
-      if (profileError) {
-        console.error("Error loading feed profiles:", profileError);
+        if (blockError) {
+          console.error("Error loading feed blocks:", blockError);
+        }
+
+        const blockedUserIds = new Set(
+          (blockRows || []).map((row: any) =>
+            row.blocker_id === user.id ? row.blocked_id : row.blocker_id
+          )
+        );
+
+        visibleListings = loadedListings.filter(
+          (item) => !blockedUserIds.has(item.user_id)
+        );
       }
 
-      const profileMap = new Map(
-        (profileRows || []).map((profile) => [profile.id, profile])
+      const identityIds = Array.from(
+        new Set(
+          visibleListings
+            .map((item) => item.identity_id)
+            .filter(Boolean)
+        )
+      ) as string[];
+
+      const { data: identityRows, error: identityError } = await supabase.rpc(
+        "get_feed_identity_profiles",
+        {
+          p_identity_ids: identityIds,
+        }
       );
 
-      const enrichedListings = loadedListings.map((item) => ({
+      if (identityError) {
+        console.error("Error loading feed identity profiles:", identityError);
+      }
+
+      const identityMap = new Map(
+        (identityRows || []).map((identity: any) => [
+          identity.identity_id,
+          {
+            store_name: identity.display_name,
+            store_slug: identity.slug,
+            avatar_url: identity.avatar_url,
+          },
+        ])
+      );
+
+      const enrichedListings = visibleListings.map((item) => ({
         ...item,
-        seller_profile: profileMap.get(item.user_id) || null,
+        seller_profile: item.identity_id
+          ? identityMap.get(item.identity_id) || null
+          : null,
       }));
 
       if (from === 0) {

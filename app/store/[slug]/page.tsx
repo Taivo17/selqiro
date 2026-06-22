@@ -394,22 +394,34 @@ export default function StorePage() {
   };
 
   const blockUser = async () => {
-    if (!user?.id || !profile?.id) return;
+    if (!user?.id || !profile?.identity_id) return;
 
     const confirmed = window.confirm(
-      "Block this user?\n\nYou will no longer see this user's listings in your marketplace view."
+      `Block this user?
+
+You will no longer see this user's listings in your marketplace view.`
     );
 
     if (!confirmed) return;
 
-    const { error } = await supabase.from("user_blocks").upsert({
-      blocker_id: user.id,
-      blocked_id: profile.id,
+    const { data, error } = await supabase.rpc("block_store_identity_owner", {
+      p_store_identity_id: profile.identity_id,
     });
 
     if (error) {
       console.error(error);
       alert("Could not block user.");
+      return;
+    }
+
+    if (data === "own_identity") {
+      alert("See identiteet kuulub sinu kontole. Oma identiteete ei saa blokeerida.");
+      setStoreMenuOpen(false);
+      return;
+    }
+
+    if (data !== "blocked") {
+      alert("Could not identify store owner.");
       return;
     }
 
