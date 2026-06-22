@@ -368,21 +368,17 @@ export default function StorePage() {
 
 
   const reportUser = async () => {
-    if (!user?.id || !profile?.id) return;
+    if (!user?.id || !profile?.identity_id) return;
 
-    const { error } = await supabase
-      .from("reports")
-      .insert({
-        reporter_id: user.id,
-        reported_user_id: profile.id,
-        report_type: "user",
-        reason: reportReason,
-        details: reportDetails.trim() || null,
-      });
+    const { error } = await supabase.rpc("submit_identity_report", {
+      p_reported_identity_id: profile.identity_id,
+      p_reason: reportReason,
+      p_details: reportDetails.trim() || null,
+    });
 
     if (error) {
-      console.error(error);
-      alert("Could not submit report.");
+      console.error("Report submit error:", error);
+      alert(`Could not submit report: ${error.message || "Unknown error"}`);
       return;
     }
 
@@ -393,7 +389,7 @@ export default function StorePage() {
     alert("Thank you. Your report has been submitted for review.");
   };
 
-  const blockUser = async () => {
+const blockUser = async () => {
     if (!user?.id || !profile?.identity_id) return;
 
     const confirmed = window.confirm(
