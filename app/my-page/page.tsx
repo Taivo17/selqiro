@@ -3,10 +3,13 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { supabase } from "../../lib/supabase";
+import { useLocation } from "./hooks/useLocation";
 import { useAuth } from "../../lib/useAuth";
 import { CATEGORY_TREE } from "../../lib/categories";
 import { getCategoryFields } from "../../lib/categoryFields";
 import { getTranslation } from "../../lib/i18n/useTranslation";
+
+import LocationCard from "./components/LocationCard";
 import LocationAutocomplete from "../components/LocationAutocomplete";
 
 const PAGE_SIZE = 30;
@@ -334,16 +337,23 @@ export default function MyPage() {
   const userId = user?.id ?? null;
 
   const [profile, setProfile] = useState<Profile | null>(null);
+  const [identityPlan, setIdentityPlan] = useState<"free" | "premium" | "business">("free");
   const [inviteCode, setInviteCode] = useState("");
   const [claimingInvite, setClaimingInvite] = useState(false);
   const [claimMessage, setClaimMessage] = useState("");
   const [generatedCode, setGeneratedCode] = useState("");
   const [creatingInvite, setCreatingInvite] = useState(false);
 
-  const [homeCountry, setHomeCountry] = useState("Estonia");
-  const [homeCity, setHomeCity] = useState("");
-  const [selectedHomeLocation, setSelectedHomeLocation] = useState<any>(null);
-  const [savingHomeLocation, setSavingHomeLocation] = useState(false);
+  const {
+    homeCountry,
+    setHomeCountry,
+    homeCity,
+    setHomeCity,
+    selectedHomeLocation,
+    setSelectedHomeLocation,
+    savingHomeLocation,
+    saveHomeLocation,
+  } = useLocation(userId);
   const [language, setLanguage] = useState("en");
   const [savingLanguage, setSavingLanguage] = useState(false);
 
@@ -423,7 +433,7 @@ export default function MyPage() {
   const editDetailCategoryOptions = (editSelectedSubcategory as any)?.children || [];
   const editActiveFields = getCategoryFields(editDetailCategory || editSubcategory);
 
-  const premiumActive = isPremiumActive(profile);
+  const premiumActive = identityPlan === "premium" || identityPlan === "business";
 
   const activeListingsCount = listings.filter(
     (item) => (item.status || "active") === "active"
@@ -585,6 +595,19 @@ export default function MyPage() {
     }
 
     if (data?.active_identity_id) {
+      const { data: planData, error: planError } = await supabase
+        .from("identity_profiles")
+        .select("plan")
+        .eq("identity_id", data.active_identity_id)
+        .maybeSingle();
+
+      if (!planError) {
+        const nextPlan = planData?.plan;
+        setIdentityPlan(
+          nextPlan === "premium" || nextPlan === "business" ? nextPlan : "free"
+        );
+      }
+
       const { data: identityRows, error: identityError } = await supabase.rpc(
         "get_my_active_identity_profile_details"
       );
@@ -707,42 +730,6 @@ export default function MyPage() {
       setClaimMessage("Premium invite claim failed.");
     } finally {
       setClaimingInvite(false);
-    }
-  };
-
-
-  const saveHomeLocation = async () => {
-    if (!userId) return;
-
-    setSavingHomeLocation(true);
-
-    try {
-      const cleanCountry = selectedHomeLocation?.country || homeCountry.trim();
-      const cleanCity = selectedHomeLocation?.city || homeCity.trim();
-
-      const coords = selectedHomeLocation
-        ? {
-            lat: selectedHomeLocation.lat,
-            lng: selectedHomeLocation.lng,
-          }
-        : await geocodeCity(cleanCountry, cleanCity);
-
-      const { error } = await supabase.rpc(
-        "update_my_active_identity_location",
-        {
-          p_country: cleanCountry,
-          p_city: cleanCity,
-          p_lat: coords?.lat || null,
-          p_lng: coords?.lng || null,
-        }
-      );
-
-      if (error) throw error;
-    } catch (error) {
-      console.error("Error saving home location:", error);
-      alert("Failed to save home location.");
-    } finally {
-      setSavingHomeLocation(false);
     }
   };
 
@@ -1548,66 +1535,20 @@ export default function MyPage() {
           </div>
         </header>
 
-        <section className="rounded-[28px] bg-white p-5 shadow-sm sm:p-6">
-          <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
-            <div>
-              <p className="mb-2 text-xs font-medium uppercase tracking-[0.22em] text-black/35">
-                {t("myPage.nearYou")}
-              </p>
+        <LocationCard
+        homeCountry={homeCountry}
+        homeCity={homeCity}
+        selectedHomeLocation={selectedHomeLocation}
+        savingHomeLocation={savingHomeLocation}
+        inputClass={inputClass}
+        onCountryChange={setHomeCountry}
+        onCityChange={setHomeCity}
+        onSelectedHomeLocationChange={setSelectedHomeLocation}
+        onSave={saveHomeLocation}
+        t={t}
+      />
 
-              <h2 className="text-2xl font-semibold tracking-tight">
-                {t("myPage.yourLocalArea")}
-              </h2>
-
-              <p className="mt-2 max-w-2xl text-sm leading-6 text-black/55">
-                {t("myPage.localAreaSubtitle")}
-              </p>
-            </div>
-
-            <div className="w-full max-w-2xl">
-              <div className="grid gap-3 sm:grid-cols-[1fr_1fr_auto]">
-                <select
-                  value={homeCountry}
-                  onChange={(e) => setHomeCountry(e.target.value)}
-                  className={inputClass}
-                >
-                  <option value="Estonia">Estonia</option>
-                  <option value="Latvia">Latvia</option>
-                  <option value="Lithuania">Lithuania</option>
-                  <option value="Finland">Finland</option>
-                  <option value="Sweden">Sweden</option>
-                  <option value="Germany">Germany</option>
-                </select>
-
-                <LocationAutocomplete
-                  country={homeCountry}
-                  value={homeCity}
-                  placeholder={t("common.city")}
-                  onTextChange={(value) => {
-                    setHomeCity(value);
-                    setSelectedHomeLocation(null);
-                  }}
-                  onSelect={(location) => {
-                    setSelectedHomeLocation(location);
-                    setHomeCountry(location.country || homeCountry);
-                    setHomeCity(location.city || location.display_name);
-                  }}
-                />
-
-                <button
-                  type="button"
-                  onClick={saveHomeLocation}
-                  disabled={savingHomeLocation}
-                  className="rounded-2xl bg-black px-5 py-3 text-sm font-medium text-white disabled:opacity-60"
-                >
-                  {savingHomeLocation ? t("myPage.saving") : t("myPage.save")}
-                </button>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="rounded-[28px] bg-white p-5 shadow-sm sm:p-6">
+      <section className="rounded-[28px] bg-white p-5 shadow-sm sm:p-6">
           <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
             <div>
               <p className="mb-2 text-xs font-medium uppercase tracking-[0.22em] text-black/35">
@@ -1666,7 +1607,9 @@ export default function MyPage() {
 
               <p className="mt-2 max-w-2xl text-sm leading-6 text-black/55">
                 {premiumActive
-                  ? t("myPage.premiumActiveUntil").replace("{date}", formatDate(profile?.premium_until))
+                  ? identityPlan === "business"
+                    ? "Business account active."
+                    : t("myPage.premiumAccount")
                   : t("myPage.freeAccountLimit").replace("{count}", String(activeListingsCount))}
               </p>
 
