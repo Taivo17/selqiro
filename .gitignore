@@ -39,3 +39,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Local/manual backup files created during refactors
+*.backup-*
+*.backup
+*.bak
