@@ -376,3 +376,27 @@ The card should feel natural in every country.
 A listing card should help the user decide quickly without breaking trust.
 
 It should feel simple on the surface and powerful underneath.
+
+---
+
+## Layout decision
+
+Product cards can adapt by device.
+
+Desktop:
+- grid card layout is accepted for V2 Launch
+- larger product image can be used
+- card should remain clean and not overloaded
+
+Mobile:
+- horizontal card layout is preferred
+- image on the left
+- title, price, location and distance on the right
+- this makes browsing faster and more readable on small screens
+
+Future:
+- desktop list layout may be added later as an optional user preference
+- launch should not be delayed by building multiple card modes
+
+Decision:
+One strong desktop grid layout and one strong mobile horizontal layout are enough for launch.

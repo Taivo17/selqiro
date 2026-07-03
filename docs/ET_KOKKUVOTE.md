@@ -1161,3 +1161,89 @@ Põhimõte:
 Ärme ehita liiga palju korraga.
 
 Ehita kõigepealt see, mis teeb Selqiro kasulikuks esimesest päevast.
+
+---
+
+# 45. Kuulutuse vaadatavus ja statistika
+
+Launchis näeb kuulutuse täpset statistikat ainult kuulutuse omanik.
+
+Avalik kasutaja ei näe:
+
+- täpset vaatamiste arvu
+- täpset salvestamiste arvu
+- täpset kontaktivajutuste arvu
+
+Omanik võib hiljem näha:
+
+- vaatamised
+- salvestamised
+- sõnumid
+- kontaktivajutused
+- telefonikõned, kui seda toetame
+- Discovery / esiletõstmise tulemused
+
+Põhjus:
+
+Alguses võivad numbrid olla väikesed ja see võib jätta hea kuulutuse kohta vale mulje.
+
+Kasutaja peaks otsustama kuulutuse üle sisu, hinna, asukoha, usalduse ja sobivuse järgi, mitte selle järgi, kas teised on seda palju vaadanud.
+
+Tulevikus võib kaaluda pehmeid avalikke signaale:
+
+- Populaarne
+- Täna tähelepanu saanud
+- Paljud kasutajad uurivad seda
+
+Aga täpsed avalikud numbrid ei kuulu Launchi.
+
+---
+
+# 46. Kuulutuse detailvaate "Näita rohkem"
+
+Kuulutuse detailvaates näidatakse alguses kõige olulisemat infot:
+
+- pildid
+- pealkiri
+- hind
+- asukoht
+- müüja
+- lühikirjeldus
+- kõige olulisemad detailid
+- kontaktinupp
+
+Kui kasutaja vajutab "Näita rohkem", avaneb kogu kuulutuse info:
+
+- täispikk kirjeldus
+- kõik tehnilised detailid
+- lisaväljad
+- kategooriapõhine lisainfo
+- müüja lisatud täielik info
+
+Põhimõte:
+
+Alguses näita olulist.
+Sügavam info ava siis, kui kasutaja seda soovib.
+
+---
+
+# 47. Kuulutuse detailvaate esiletõstmised
+
+Kuulutuse detailvaade võib näidata all kontekstuaalseid esiletõstmisi.
+
+Näiteks muruniiduki kuulutuse all:
+
+- esiletõstetud sarnased muruniidukid
+- lähedal olevad esiletõstetud muruniiduki remonditeenused
+- tavapärased sarnased kuulutused
+- sama müüja teised kuulutused
+
+See annab väärtust nii kasutajale kui ka esiletõstmise ostjale.
+
+Oluline reegel:
+
+Esiletõstetud sisu peab olema seotud kuulutuse sisuga.
+
+Kui kasutaja vaatab muruniidukit, ei tohi sinna juhuslikult kuvada restorani reklaami.
+
+Esiletõstmine peab tunduma abina, mitte häiriva reklaamina.

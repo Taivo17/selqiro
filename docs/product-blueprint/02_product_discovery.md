@@ -337,3 +337,29 @@ I need to learn how this marketplace works.
 Product Discovery is not a filter system.
 
 It is a guided path from curiosity to a useful listing.
+
+---
+
+## Visual layout decision
+
+Current Product Discovery visual direction is accepted.
+
+Desktop:
+- default layout can use a clean product grid
+- cards may show larger images
+- browsing should feel visual and calm
+- grid layout is preferred for V2 Launch
+
+Mobile:
+- default layout should use compact horizontal cards
+- image on the left
+- text and key details on the right
+- this supports faster scrolling and easier comparison on small screens
+
+Future:
+- desktop list view may be added later as an optional view mode
+- V2 Launch does not require both grid and list views
+
+Decision:
+Keep desktop grid layout for launch.
+Use mobile horizontal list cards for launch.

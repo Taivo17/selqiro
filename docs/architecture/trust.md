@@ -494,3 +494,30 @@ Selqiro helps me look credible if I act honestly.
 Trust is not a badge.
 
 Trust is the result of consistent, fair and transparent platform behavior.
+
+---
+
+## Public visibility metrics
+
+Exact public view counts should not be shown during launch.
+
+Reason:
+
+- low early numbers can make good listings feel weak
+- users may overvalue popularity instead of relevance
+- public counters can create unnecessary pressure
+- marketplace should first build trust and usefulness
+
+Listing owners may see detailed performance analytics.
+
+Public visitors should see a clean listing page.
+
+Future soft signals may be added after real usage grows.
+
+Examples:
+
+- Popular
+- Getting attention today
+- Recently viewed by many users
+
+Exact metrics remain owner/admin analytics unless there is a strong product reason to expose them later.

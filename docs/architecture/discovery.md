@@ -600,3 +600,33 @@ This site is full of ads.
 Discovery is how Selqiro creates curiosity without breaking trust.
 
 Selqiro should sell useful discovery opportunities, not intrusive advertising.
+
+---
+
+## Discovery on listing detail pages
+
+Listing detail pages are important discovery surfaces.
+
+When a user opens a listing, Selqiro has strong context about what the user is interested in.
+
+This allows useful contextual discovery.
+
+Examples:
+
+- featured similar listings
+- featured nearby services
+- related business profiles
+- future Knowledge content
+- future Brand Space content
+
+Rule:
+
+Featured content on detail pages must be related to the listing context.
+
+Paid discovery must not become random advertising.
+
+If a user views a lawn mower, show relevant garden or repair services.
+
+Do not show unrelated restaurant or generic ads.
+
+This protects user trust and increases value for advertisers.

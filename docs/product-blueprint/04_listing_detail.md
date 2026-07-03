@@ -426,3 +426,199 @@ It should feel helpful.
 Listing Detail is not only a product page.
 
 It is the place where curiosity becomes action.
+
+---
+
+## Listing visibility metrics
+
+Launch decision:
+
+Detailed listing statistics are visible only to the listing owner.
+
+Public visitors should not see exact view counts during launch.
+
+Owner can later see:
+
+- listing views
+- saves
+- contact clicks
+- messages
+- phone clicks if supported
+- discovery performance later
+
+Public visitors should not see:
+
+- exact view count
+- exact save count
+- exact contact count
+
+Reason:
+
+Early marketplace numbers may be small and could create the wrong impression.
+
+A new listing should not look weak only because it has few views.
+
+Users should judge listings by relevance, trust, price, content and location, not by public popularity counters.
+
+Future option:
+
+When Selqiro has enough real activity, public soft signals may be considered.
+
+Examples:
+
+- Popular
+- Getting attention today
+- Many users are viewing this
+
+But exact public metrics are not part of launch.
+
+Decision:
+
+Launch uses owner-only detailed metrics.
+Public listing view remains clean.
+
+---
+
+## Show more behavior
+
+Launch decision:
+
+The listing detail page should initially show only the most important information.
+
+Visible first:
+
+- main images
+- title
+- price
+- location
+- seller identity
+- short description
+- most important details
+- contact action
+
+The "Show more" action should expand the full listing information.
+
+It should reveal:
+
+- full description
+- full technical details
+- additional attributes
+- extended seller-provided information
+- any category-specific fields
+
+Reason:
+
+Users should quickly understand the listing without being overwhelmed.
+
+Users who want more information can open the full detail.
+
+This keeps the first view clean while still preserving complete information.
+
+Rule:
+
+Show important first.
+Reveal full detail on demand.
+
+---
+
+## Related and featured sections
+
+The listing detail page should not end after the main listing information.
+
+It should show useful next steps.
+
+Recommended sections:
+
+1. Featured similar listings
+2. Featured nearby services related to the listing
+3. Normal similar listings
+4. Other content from same seller when useful
+
+Example:
+
+A lawn mower listing may show:
+
+- featured similar lawn mowers
+- nearby lawn mower repair services
+- normal similar lawn mower listings
+- seller's other garden equipment
+
+This creates value for:
+
+- the user
+- featured listing owners
+- nearby service providers
+- Selqiro discovery system
+
+---
+
+## Contextual featured content on detail page
+
+Featured content on listing detail pages must be contextual.
+
+If the user is viewing a lawn mower, featured services should be related to:
+
+- lawn mower repair
+- garden equipment service
+- garden services
+- transport if relevant
+
+Do not show unrelated featured content.
+
+Example of wrong behavior:
+
+User views lawn mower.
+Page shows boosted restaurant.
+
+This would reduce trust.
+
+Example of correct behavior:
+
+User views lawn mower.
+Page shows nearby lawn mower repair service.
+
+This adds value.
+
+---
+
+## Featured content and trust
+
+Featured similar listings and featured services should be clearly marked.
+
+They should not look like hidden organic recommendations.
+
+Possible labels:
+
+- Featured
+- Esiletõstetud
+- Recommended nearby
+- Sinu lähedal esiletõstetud
+
+Exact wording can be refined during UI design.
+
+Important rule:
+
+Featured content must be useful and contextual.
+
+Paid visibility must not break trust.
+
+---
+
+## Detail page discovery value
+
+The detail page is a strong discovery surface.
+
+When a user opens a listing, they already show intent.
+
+This makes contextual featured content more valuable than random ads.
+
+Examples:
+
+- similar featured products
+- nearby featured services
+- related business profile
+- future Knowledge content
+- future Brand Space content
+
+This should feel like help, not advertising.
+

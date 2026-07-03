@@ -319,3 +319,31 @@ Verified business should only be used when verification is real.
 Privacy is part of trust.
 
 Trust should be calm and not make the platform feel suspicious by default.
+
+## LISTING_METRICS
+
+Launch decision:
+Exact listing statistics are visible only to the listing owner.
+
+Public users do not see exact view counts, save counts or contact counts during launch.
+
+Reason:
+Early marketplace metrics may be small and could create the wrong impression.
+
+Future:
+Soft public signals such as "Popular" or "Getting attention today" can be considered after Selqiro has enough real usage.
+
+## LISTING_DETAIL_DISCOVERY
+
+Listing detail pages should show contextual discovery.
+
+After main listing info, show:
+- featured similar listings
+- featured nearby services related to the listing
+- normal similar listings when useful
+
+Featured content must be contextual.
+
+Do not show unrelated paid content on detail pages.
+
+"Show more" expands the full listing information, including full description and technical details.
