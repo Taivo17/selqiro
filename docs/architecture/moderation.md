@@ -541,3 +541,27 @@ I can review this calmly with enough context.
 Moderation protects trust.
 
 Trust is more valuable than short-term revenue.
+
+---
+
+## Message privacy in moderation
+
+Moderation must respect private messages.
+
+Private messages are not reviewed by default.
+
+Message content is reviewed only when there is a specific case:
+
+- conversation report
+- support request
+- fraud concern
+- safety issue
+- legal request
+
+Admin should not casually browse private messages.
+
+Every access to message content should be logged.
+
+AI may help review reported content, but only inside the specific case and according to privacy rules.
+
+Privacy remains part of trust.

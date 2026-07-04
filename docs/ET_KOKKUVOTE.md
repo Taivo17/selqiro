@@ -2240,3 +2240,114 @@ Parem sõnastus:
 Kui Energy on juba kasutatud aktiivse teenuse jaoks, ei pruugi tagastus alati olla võimalik.
 
 See on õiglasem, inimlikum ja jätab ruumi klienditoe otsustele.
+
+---
+
+# 82. Privaatsõnumite põhimõte
+
+Selqiro ei loe kasutajate privaatsõnumeid vaikimisi.
+
+See peab olema üks Selqiro avalikult leitavaid põhimõtteid.
+
+Kasutaja peab aru saama:
+
+- Selqiro ei luura kasutajate järel
+- admin ei saa niisama sõnumeid lugeda
+- AI ei loe sõnumeid, kui kasutaja ei palu AI abi
+- sõnumeid ei kasutata reklaamiks
+- sõnumeid ei kasutata üldiseks analüütikaks
+
+Privaatsus on Selqiro usalduse osa.
+
+---
+
+# 83. Millal Selqiro võib sõnumeid vaadata
+
+Sõnumite sisu võib vaadata ainult konkreetse juhtumi lahendamiseks.
+
+Näited:
+
+- kasutaja raporteerib vestluse
+- kasutaja küsib supportilt abi
+- on tõsine pettusekahtlus
+- on turva- või ohutusjuhtum
+- on seaduslik ametlik nõue
+
+See ei tähenda üldist jälgimist.
+
+Iga ligipääs peab olema:
+
+- põhjendatud
+- piiratud
+- seotud konkreetse juhtumiga
+- logitud
+
+---
+
+# 84. Vestluse raporteerimine
+
+Kui kasutaja raporteerib vestluse, peab Selqiro selgelt ütlema:
+
+Kui raporteerid selle vestluse, jagad asjakohase vestluse sisu Selqiro toega ülevaatamiseks.
+
+Selqiro kasutab seda ainult selle juhtumi lahendamiseks.
+
+See on aus ja arusaadav.
+
+Üks kasutaja ei anna luba piiramatult kõiki teise kasutaja andmeid vaadata.
+
+Ligipääs on ainult konkreetse raporteeritud vestluse ja juhtumi jaoks.
+
+---
+
+# 85. AI ja sõnumid
+
+AI ei loe privaatsõnumeid vaikimisi.
+
+AI võib aidata ainult siis, kui kasutaja ise seda soovib.
+
+Näited:
+
+- aita mul kirjutada viisakas vastus
+- tee mulle vestlusest kokkuvõte
+- aita raporteerida see sõnum
+- selgita, mida müüja küsis
+
+AI abi peab olema kasutaja kutsutud.
+
+Selqiro AI ei tohi vaikimisi privaatsõnumeid analüüsida.
+
+---
+
+# 86. Admini ligipääs sõnumitele
+
+Admin ei näe privaatsõnumite sisu tavalises adminivaates.
+
+Admin võib näha ainult tehnilist või juhtumiga seotud metaandmeid, näiteks:
+
+- vestluse ID
+- osapooled
+- seotud kuulutus või teenus
+- raporteeritud staatus
+- blokeeringu staatus
+- viimane aktiivsus
+
+Sõnumite sisu avaneb ainult konkreetse juhtumi kaudu.
+
+Kõik sellised ligipääsud tuleb logida.
+
+---
+
+# 87. Kasutajale nähtav privaatsuse selgitus
+
+Tulevikus peab Selqiros olema kasutajale arusaadav privaatsuse leht või põhimõtete leht.
+
+Seal peab lihtsas keeles olema kirjas:
+
+- me ei loe sinu privaatsõnumeid vaikimisi
+- AI ei loe sinu sõnumeid ilma sinu soovita
+- kui raporteerid vestluse, vaatame selle juhtumi lahendamiseks asjakohast sisu
+- õigusliku nõude või tõsise ohu korral võib olla vajalik piiratud ligipääs
+- kõik ligipääsud on piiratud ja logitud
+
+See aitab kasutajal mõista, et Selqiro austab privaatsust, kuid saab vajadusel sekkuda pettuse, ohu või seadusliku nõude korral.

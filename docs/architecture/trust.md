@@ -594,3 +594,24 @@ Use quiet trust signals first:
 - verified business later
 
 Public ratings and reviews can be introduced later when enough real interactions exist.
+
+---
+
+## Trust through message privacy
+
+User trust depends on private communication staying private.
+
+Selqiro should clearly communicate:
+
+- private messages are not read by default
+- private messages are not used for advertising
+- AI does not read messages unless user asks for help
+- reported conversations may be reviewed for safety/support
+- legal or serious safety cases may require limited review
+- all access is restricted and logged
+
+This should be visible in user-facing Selqiro principles and Privacy Policy.
+
+Privacy is not only legal compliance.
+
+Privacy is a product value.

@@ -615,3 +615,21 @@ Use fair refund wording:
 If Energy has already been used for an active service, refund may not always be possible.
 
 Energy/payment UX should not be redesigned unless implementation exposes a major issue.
+
+## MESSAGE_PRIVACY
+
+Selqiro does not read private messages by default.
+
+Admin/support/developers should not casually access message content.
+
+Message content can be accessed only case-by-case:
+- user reports conversation
+- user asks support for help
+- fraud/safety case
+- valid legal request
+
+AI does not read private messages unless the user explicitly asks AI for help.
+
+Access must be limited, justified and logged.
+
+This should be user-facing in Selqiro principles and privacy policy.

@@ -403,3 +403,18 @@ Missing Energy
 Add missing Energy and continue
 
 This is required for Today's Story, featured discovery, service highlighting and temporary service location paid access.
+
+## Message privacy scope decision
+
+V2 Launch must respect privacy-first messaging.
+
+Launch should support:
+
+- private messages by default
+- report conversation
+- block user
+- case-based moderation access concept
+- audit log concept for message access
+- user-facing explanation that reported conversations may be reviewed
+
+Launch does not need full advanced legal workflow, but architecture must not allow casual admin browsing of private messages.

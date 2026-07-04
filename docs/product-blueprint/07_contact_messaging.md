@@ -400,3 +400,36 @@ Where did this chat come from?
 Messaging is not just communication.
 
 It is the bridge between discovery and real-world action.
+
+---
+
+## Privacy-first message access decision
+
+Selqiro does not read private messages by default.
+
+Admin, support, AI and developers should not casually access message content.
+
+Message content may be accessed only through a case-based reason, such as:
+
+- user reports a conversation
+- user asks support for help
+- fraud investigation
+- serious safety concern
+- valid legal request
+
+Access must be:
+
+- limited
+- justified
+- logged
+- connected to a case
+
+AI does not read private messages unless the user explicitly asks AI for help.
+
+When a user reports a conversation, Selqiro should clearly explain:
+
+By reporting this conversation, you share relevant conversation content with Selqiro support for review.
+
+Selqiro uses this only to review the case.
+
+This keeps messaging private while allowing support and safety work when needed.
