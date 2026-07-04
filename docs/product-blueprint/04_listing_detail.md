@@ -622,3 +622,30 @@ Examples:
 
 This should feel like help, not advertising.
 
+
+---
+
+## Optional field display on detail page
+
+Detail pages should hide empty optional fields.
+
+If a seller or provider has not added a field, the public page should not show an empty label or empty section.
+
+Examples:
+
+- no service price
+- no technical details
+- no additional description
+- no gallery
+- no opening hours
+- no documents
+- no extra attributes
+
+Owner tools may suggest completing missing fields.
+
+Public visitors should see only meaningful information.
+
+Rule:
+
+Show what exists.
+Hide what is empty.

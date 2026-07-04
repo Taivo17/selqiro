@@ -1654,3 +1654,45 @@ Ajutine asukoht ja esiletõstmine jäävad eraldi mõisteteks.
 Ajutine asukoht näitab, kus teenus hetkel saadaval on.
 
 Esiletõstmine annab rohkem nähtavust sobivas piirkonnas ja kategoorias.
+
+---
+
+# 62. Teenuse hind ja tühjad väljad
+
+Teenuse puhul peab hinna lisamine olema vabatahtlik.
+
+Paljude teenuste puhul ei saa ausat hinda näidata enne, kui on teada:
+
+- mida klient vajab
+- kus töö asub
+- kui suur töö on
+- kas on vaja eritehnikat
+- kas olukord on kiireloomuline
+
+Näited:
+
+- puksiirabi
+- ehitustööd
+- remont
+- torutööd
+- transport
+- eritellimusel tootmine
+
+Teenuse hinna kuvamise võimalused võivad olla:
+
+- alates hind
+- hinnavahemik
+- hind kokkuleppel
+- hinda ei kuvata
+
+Kui hinna väli on tühi, siis avalikus vaates seda ei näidata.
+
+Üldine reegel:
+
+Kui valikuline väli on tühi, siis seda avalikus vaates ei kuvata.
+
+See kehtib ka kirjelduste, tehniliste detailide, piltide, lahtiolekuaegade, lisainfo ja teiste valikuliste väljade kohta.
+
+Avalik profiil peab jääma puhas.
+
+Omaniku vaates võib Selqiro soovitada, mida võiks veel lisada.

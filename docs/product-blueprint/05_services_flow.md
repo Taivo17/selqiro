@@ -448,3 +448,43 @@ Someone nearby can help me.
 Nearby Services is not a business directory.
 
 It is a local problem-solving layer inside Selqiro.
+
+---
+
+## Service price behavior
+
+Service price is optional.
+
+Many services cannot show a fixed price before the provider knows:
+
+- what the customer needs
+- where the job is located
+- how much work is required
+- whether special equipment is needed
+- whether the situation is urgent
+
+Examples:
+
+- tow truck service
+- construction work
+- plumbing
+- repair work
+- custom manufacturing
+- transport
+
+Allowed price display options:
+
+- starting price
+- price range
+- price by agreement
+- no visible price
+
+If the service price field is empty, the public service view should not show an empty price area.
+
+Rule:
+
+Do not show empty fields.
+
+Only show information that the provider has actually added.
+
+This keeps the profile clean and avoids misleading users.

@@ -400,3 +400,25 @@ Future:
 
 Decision:
 One strong desktop grid layout and one strong mobile horizontal layout are enough for launch.
+
+---
+
+## Optional field display
+
+Listing and service cards should not show empty fields.
+
+If optional information is missing, the card should simply omit it.
+
+Examples:
+
+- no price
+- no condition
+- no extra subtitle
+- no opening hours
+- no secondary metadata
+
+The card should remain visually stable and clean.
+
+Rule:
+
+Missing optional information should not make the card look broken.

@@ -961,3 +961,34 @@ The update should be compact and useful.
 
 It should not turn the profile into a noisy feed.
 
+
+---
+
+## Optional fields in public profile
+
+Brand Space and profile modules should hide empty optional fields.
+
+If a field has no value, it should not appear in the public view.
+
+Examples of optional fields:
+
+- service price
+- opening hours
+- extra description
+- gallery
+- updates
+- technical details
+- service area notes
+- product showcase details
+- documents
+- videos
+
+Reason:
+
+A profile should feel complete even when it uses only a few modules.
+
+Do not show empty boxes, empty labels or placeholder sections to public visitors.
+
+The owner view can show missing fields as profile improvement suggestions.
+
+Public view should stay clean.

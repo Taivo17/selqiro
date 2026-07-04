@@ -457,3 +457,16 @@ Instead:
 Avoid exact public GPS by default.
 
 Use area-level availability.
+
+## OPTIONAL_FIELDS
+
+Service price is optional.
+
+If a provider does not add price, public view should not show an empty price field.
+
+General rule:
+Show what exists.
+Hide what is empty.
+
+Owner view may suggest completing missing fields.
+Public view must stay clean.
