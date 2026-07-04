@@ -347,3 +347,26 @@ Featured content must be contextual.
 Do not show unrelated paid content on detail pages.
 
 "Show more" expands the full listing information, including full description and technical details.
+
+## BRAND_SPACE_PRESETS
+
+Brand Space uses one shared foundation with presets and enabled modules.
+
+Launch presets:
+- Simple Seller
+- Service Provider / Local Business
+- Local Producer / Professional Seller
+
+Preset is only a starting configuration, not a limitation.
+
+Modules can be enabled later.
+
+Important modules:
+- Listings
+- Services
+- Product Showcase
+- Updates
+- Contact
+- Trust basics
+
+Future enterprise modules are not required for Launch.

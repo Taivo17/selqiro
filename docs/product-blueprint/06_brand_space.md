@@ -465,3 +465,301 @@ Reason:
 Selqiro should first prove marketplace, nearby services, discovery and community value.
 
 A full webshop can be added later if real user behavior shows that businesses need it.
+
+---
+
+## Launch profile presets
+
+Brand Space should use one shared foundation, but different launch presets.
+
+A preset is not a limitation.
+
+A preset is a starting configuration.
+
+The identity can later enable more modules.
+
+Principle:
+
+Preset starts the profile.
+Modules grow the profile.
+
+---
+
+## Preset 1: Simple Seller
+
+Purpose:
+
+For users who mainly sell personal items.
+
+Default modules:
+
+- Core Profile
+- Listings
+- Contact through messaging
+- Basic trust signals
+
+Example:
+
+A private person selling a lawn mower, bicycle, car or furniture.
+
+The public profile should stay simple.
+
+It should not show unused business modules.
+
+Optional later modules:
+
+- Product showcase / portfolio
+- Updates
+- Services if user becomes a service provider
+
+---
+
+## Preset 2: Service Provider / Local Business
+
+Purpose:
+
+For users who offer services or represent a local business.
+
+Default modules:
+
+- Core Profile
+- Services
+- Location / service area
+- Contact
+- Opening hours
+- Updates
+- Basic trust signals
+- Listings if needed
+
+Example:
+
+Tow truck service, auto repair, construction service, cleaning service, garden service.
+
+This profile should help users quickly understand:
+
+- what the business does
+- where it operates
+- how to contact it
+- whether it looks trustworthy
+
+---
+
+## Preset 3: Local Producer / Professional Seller
+
+Purpose:
+
+For small manufacturers, workshops, professional sellers and creators.
+
+Default modules:
+
+- Core Profile
+- Product Showcase
+- Listings
+- Services if needed
+- Updates
+- Contact
+- Basic trust signals
+
+Example:
+
+Furniture maker, craft producer, local equipment seller, workshop.
+
+This profile can show product examples without forcing every item to be a normal marketplace listing.
+
+---
+
+## Product Showcase module
+
+Product Showcase is different from a normal listing.
+
+Normal listing:
+A specific item for sale.
+
+Product Showcase:
+An example, product line, portfolio item or official product presentation.
+
+This is important for:
+
+- local producers
+- craft makers
+- professional sellers
+- future brands
+- future manufacturers
+
+Example:
+
+A furniture maker shows examples of tables and cabinets.
+
+They may also have normal listings for used tools or ready-made items.
+
+Both can exist in the same profile.
+
+---
+
+## Updates module
+
+Updates is a lightweight fresh information module.
+
+Examples:
+
+- Today at 14:00 we are available in Tallinn, Gonsiori street.
+- New service available.
+- Seasonal offer.
+- New product example.
+- We are hiring two workers.
+- Workshop closed this Friday.
+
+Updates can be shown:
+
+- on the business profile
+- to followers
+- in relevant local service searches
+- in future discovery areas
+
+Updates must stay useful and relevant.
+
+They should not become noisy social media spam.
+
+---
+
+## Module combination
+
+Modules can be combined.
+
+Examples:
+
+Personal seller:
+- Core Profile
+- Listings
+
+Personal seller with hobby craft:
+- Core Profile
+- Listings
+- Product Showcase
+
+Tow truck company:
+- Core Profile
+- Services
+- Updates
+- Contact
+- Location
+
+Furniture producer:
+- Core Profile
+- Product Showcase
+- Listings
+- Updates
+- Contact
+
+Service company hiring workers:
+- Core Profile
+- Services
+- Updates
+- Jobs later
+
+The same foundation supports all of these.
+
+---
+
+## Avoiding complexity
+
+Profile creation must stay simple.
+
+User should not choose from twenty modules at the start.
+
+Recommended onboarding question:
+
+What do you want to use Selqiro for?
+
+Options:
+
+1. Sell as a private person
+2. Offer services or represent a business
+3. Show or sell products professionally
+
+Based on this, Selqiro starts with a suitable preset.
+
+More modules can be enabled later.
+
+---
+
+## Future enterprise modules
+
+Large global companies may later need:
+
+- official product catalog
+- dealers
+- service centers
+- downloads
+- manuals
+- support
+- training
+- videos
+- press/news
+- multi-location management
+- Brand analytics
+- integrations
+- commerce
+
+These are not required for V2 Launch.
+
+Architecture should not block them.
+
+---
+
+## Final rule
+
+One Brand Space foundation.
+
+Different presets.
+
+Expandable modules.
+
+Simple for small users.
+
+Powerful enough for future brands.
+
+---
+
+## Simple Seller naming decision
+
+The first launch preset should be called Simple Seller internally.
+
+User-facing Estonian name:
+
+Müüja
+
+Reason:
+
+The preset should not force the user into a private-person box.
+
+A simple seller may be:
+
+- private person
+- hobby seller
+- small business
+- craft maker
+- occasional seller
+- local person selling used items
+
+The preset only means:
+
+This profile starts with a simple selling setup.
+
+It does not decide the user's legal or business status.
+
+If the seller later needs:
+- invoices
+- business billing
+- services
+- Product Showcase
+- Updates
+- accounting details
+
+those can be added through modules or billing settings.
+
+Rule:
+
+The user defines who they are in their profile.
+
+The preset only defines the starting structure.

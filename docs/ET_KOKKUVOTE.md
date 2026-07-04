@@ -1247,3 +1247,95 @@ Esiletõstetud sisu peab olema seotud kuulutuse sisuga.
 Kui kasutaja vaatab muruniidukit, ei tohi sinna juhuslikult kuvada restorani reklaami.
 
 Esiletõstmine peab tunduma abina, mitte häiriva reklaamina.
+
+---
+
+# 48. Profiili / Brand Space Launch presetid
+
+Selqiros ei tehta eraldi süsteemi eraisikule, teenusepakkujale ja suurele ettevõttele.
+
+Kõigil on sama Brand Space vundament.
+
+Erinevus tuleb sellest, milline algne profiilitüüp valitakse ja millised moodulid on sisse lülitatud.
+
+Põhimõte:
+
+Preset alustab profiili.
+Moodulid kasvatavad profiili.
+
+Launchis on kolm algset profiilitüüpi:
+
+1. Müüja
+2. Teenusepakkuja / kohalik ettevõte
+3. Kohalik tootja / professionaalne müüja
+
+Müüja vajab lihtsat profiili ja müügikuulutusi.
+
+Teenusepakkuja vajab teenuseid, asukohta, kontaktivõimalust ja uuendusi.
+
+Kohalik tootja vajab tootenäidiseid, kuulutusi ja võimalust näidata professionaalsemat profiili.
+
+Suurte globaalsete ettevõtete lisamoodulid tulevad hiljem.
+
+---
+
+# 49. Product Showcase ja Updates moodul
+
+Product Showcase ei ole sama mis tavaline müügikuulutus.
+
+Müügikuulutus:
+konkreetne asi müügiks.
+
+Product Showcase:
+tootenäidis, portfoolio või tootesarja tutvustus.
+
+Näiteks mööblitootja saab näidata mööbli näidiseid, isegi kui iga asi ei ole kohe tavaline müügikuulutus.
+
+Updates ehk Värske info on moodul, millega ettevõte saab anda lühikesi kasulikke uuendusi.
+
+Näited:
+
+- Täna kell 14 olen Tallinnas Gonsiori tänaval.
+- Uus teenus saadaval.
+- Hooajaline pakkumine.
+- Otsime kahte töötajat.
+- Töökoda on reedel suletud.
+
+Updates peab jääma kasulikuks ja mitte muutuma häirivaks sotsiaalmeedia vooluks.
+
+---
+
+# 50. Müüja profiilitüübi nimetus
+
+Algne mõte oli nimetada esimene lihtne profiilitüüp "eraisikust müüjaks".
+
+Otsus:
+
+Kasutajale nähtav nimetus peaks olema:
+
+Müüja
+
+Põhjus:
+
+"Eraisikust müüja" on liiga kitsas ja paneb kasutaja kohe lahtrisse.
+
+Sama lihtsat profiili võib kasutada:
+
+- eraisik
+- hobi-müüja
+- väikeettevõtja
+- käsitöö tegija
+- inimene, kes müüb üksikuid kasutatud asju
+- väike tegija, kes ei vaja kohe suurt ettevõtteprofiili
+
+See profiilitüüp tähendab ainult, et kasutaja alustab lihtsa müügiprofiiliga.
+
+See ei otsusta tema juriidilist staatust.
+
+Kui müüja vajab hiljem arveid, raamatupidamise infot, teenuseid, tootenäidiseid või uuenduste moodulit, saab neid lisada.
+
+Põhimõte:
+
+Kasutaja kirjutab oma profiilis ise, kes ta on ja mida ta teeb.
+
+Profiilitüüp määrab ainult algse lihtsa struktuuri.
