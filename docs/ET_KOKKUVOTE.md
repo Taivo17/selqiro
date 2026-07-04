@@ -2074,3 +2074,95 @@ Sõnumid avanevad aktiivse identiteedi järgi.
 Kui kasutaja tegutseb kui Milline Vedu, siis avaneb Milline Vedu sõnumite postkast.
 
 Kui kasutaja vahetab identiteeti, muutub ka sõnumite kontekst.
+
+---
+
+# 75. Energy ostmine: paketid ja puuduv Energy
+
+Energy ostmiseks on kaks erinevat olukorda.
+
+## 1. Energy leht
+
+Kui kasutaja avab Energy lehe, saab ta osta pakette.
+
+Näiteks:
+
+- Starter
+- Professional
+- Business
+
+Suurem pakett võib anda parema Energy ühikuhinna.
+
+See sobib siis, kui ettevõte soovib Energy’t ette varuda.
+
+## 2. Tasulise tegevuse sees
+
+Kui kasutaja teeb konkreetset tasulist tegevust, arvutab Selqiro automaatselt, kui palju Energy’t on puudu.
+
+Näide:
+
+Today's Story vajab 5000 Energy’t.
+
+Ettevõtte walletis on 1200 Energy’t.
+
+Puudu on 3800 Energy’t.
+
+Selqiro näitab:
+
+Lisa 3800 Energy ja jätka.
+
+Kasutaja ei pea ise arvutama ega valima juhuslikku paketti.
+
+Pärast makset lisatakse Energy walletisse ja kasutaja jõuab tagasi sama tegevuse juurde.
+
+Põhimõte:
+
+Kasutaja ei kaota pooleliolevat tegevust.
+
+---
+
+# 76. Puuduva Energy ja suurema paketi valik
+
+Kui Energy’t on puudu, võib Selqiro pakkuda kahte võimalust.
+
+Näide:
+
+Puudu on 330 Energy’t.
+
+Valikud:
+
+- Lisa täpselt 330 Energy ja jätka
+- Osta 500 Energy parema ühikuhinnaga
+
+See annab kasutajale valiku.
+
+Kui ta tahab ainult praeguse tegevuse lõpetada, valib täpse puuduva Energy.
+
+Kui ta plaanib hiljem veel esiletõstmisi või muid funktsioone kasutada, võib valida suurema paketi.
+
+---
+
+# 77. Energy reserveerimine ja kulutamine
+
+Kõik tasulised tegevused ei käitu samamoodi.
+
+Kui tegevus aktiveerub kohe, võib Energy kohe kuluda.
+
+Näide:
+
+Tavaline kuulutuse esiletõstmine.
+
+Kui sisu vajab ülevaatust, tuleb Energy kõigepealt reserveerida.
+
+Näide:
+
+Today's Story.
+
+Loogika:
+
+- Energy reserveeritakse
+- sisu läheb ülevaatusse
+- kui kinnitatakse, muutub Energy kulutatuks
+- kui lükatakse tagasi, Energy vabastatakse või tagastatakse vastavalt reeglitele
+
+See on õiglane ettevõtte suhtes ja kaitseb Selqiro usaldust.

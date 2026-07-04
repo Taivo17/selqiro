@@ -844,3 +844,89 @@ Highlighting:
 how much extra discovery visibility it receives
 
 This keeps pricing understandable and useful.
+
+---
+
+## Missing Energy purchase decision
+
+Energy purchase has two modes.
+
+Energy page:
+Users buy Energy packages.
+
+Paid action flow:
+Selqiro calculates missing Energy automatically.
+
+Example:
+
+Required Energy:
+5000
+
+Current balance:
+1200
+
+Missing:
+3800
+
+User sees:
+
+Add missing Energy and continue.
+
+This is clearer than "custom amount".
+
+The user should not need to calculate the required amount manually.
+
+---
+
+## Larger package option
+
+When missing Energy is shown, Selqiro may also offer a larger Energy package.
+
+Example:
+
+Missing:
+330 Energy
+
+Options:
+- Add exactly 330 Energy and continue
+- Buy 500 Energy with better unit price
+
+This gives the business flexibility.
+
+Exact missing Energy is best for completing the current action.
+
+Larger package is useful when the business plans more activity.
+
+---
+
+## Minimum Energy purchase
+
+Selqiro may define a configurable minimum Energy purchase amount.
+
+Reason:
+
+Very small payments are inefficient.
+
+If missing Energy is below minimum purchase threshold, the system can offer the minimum package.
+
+This threshold must be configurable, not hardcoded.
+
+---
+
+## Reserve before moderation
+
+If a paid action requires moderation, Energy should be reserved before final spending.
+
+Examples:
+
+- Today's Story
+- high-visibility campaign
+- moderated discovery content
+
+If content is approved:
+reserved Energy becomes spent.
+
+If content is rejected:
+Energy is released or refunded according to policy.
+
+This protects both Selqiro and the business.

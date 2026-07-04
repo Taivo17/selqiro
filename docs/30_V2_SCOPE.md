@@ -385,3 +385,21 @@ Future:
 - AI-assisted job writing
 
 Do not build a full recruitment platform for launch.
+
+## Energy purchase UX decision
+
+V2 Launch Energy system should support:
+
+- package purchase from Energy page
+- missing Energy purchase inside paid action flow
+
+Paid action flow should calculate missing Energy automatically.
+
+Example:
+
+Required Energy
+Current balance
+Missing Energy
+Add missing Energy and continue
+
+This is required for Today's Story, featured discovery, service highlighting and temporary service location paid access.

@@ -575,3 +575,21 @@ Jobs are not required for V2 Launch unless simple to add.
 
 Future:
 job alerts near me, featured jobs, simple application flow.
+
+## ENERGY_PAYMENT_FLOW
+
+Energy purchase has two UX modes.
+
+Energy page:
+Buy packages such as Starter / Professional / Business.
+
+Inside paid action:
+Selqiro calculates missing Energy automatically and offers "Add missing Energy and continue".
+
+Do not call this "custom amount" in the main UX.
+
+If paid action requires moderation, reserve Energy first.
+Spend only after approval.
+Refund/release if rejected according to policy.
+
+Webhook confirmation from payment provider is source of truth.

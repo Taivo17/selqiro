@@ -696,3 +696,48 @@ Merit integration can come later.
 The launch requirement is:
 
 Business can pay and obtain a usable document for accounting.
+
+---
+
+## Exact missing Energy payment
+
+When a user is inside a paid action, Selqiro can create a payment for exactly the missing Energy amount.
+
+Example:
+
+Today's Story requires 5000 Energy.
+Wallet has 1200 Energy.
+Missing amount is 3800 Energy.
+
+Selqiro may create payment for 3800 Energy.
+
+This payment is linked to the original action.
+
+Payment record should include:
+
+- billing entity
+- wallet
+- actor user
+- active identity
+- Energy amount purchased
+- money amount
+- currency
+- payment provider id
+- reference to original paid action
+- receipt or invoice link
+
+After successful payment, the user returns to the original action.
+
+---
+
+## Package purchase vs action-based purchase
+
+Package purchase:
+User buys Energy from Energy page.
+
+Action-based purchase:
+User buys exactly missing Energy during a paid action.
+
+Both create normal payment records and Energy purchase transactions.
+
+The difference is UX context, not ledger structure.
