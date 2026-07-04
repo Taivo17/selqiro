@@ -470,3 +470,27 @@ Hide what is empty.
 
 Owner view may suggest completing missing fields.
 Public view must stay clean.
+
+## SERVICE_PROVIDER_PROFILE_FINAL
+
+Service provider profile visual direction is accepted for launch.
+
+Profile uses:
+- cover image
+- logo/avatar
+- business name
+- short description
+- Quick Update if active
+- temporary location if active
+- service cards
+- service detail modal
+- Follow instead of Save
+- no public ratings at launch
+
+Service CTA:
+Use "Küsi abi", "Võta ühendust" or "Sõnum".
+Avoid "Telli nüüd" unless true instant ordering exists.
+
+Service card opens modal with more details and contact action.
+
+Hide empty optional fields.

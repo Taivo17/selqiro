@@ -992,3 +992,189 @@ Do not show empty boxes, empty labels or placeholder sections to public visitors
 The owner view can show missing fields as profile improvement suggestions.
 
 Public view should stay clean.
+
+---
+
+## Service provider profile final visual decisions
+
+The service provider profile visual direction is accepted for V2 Launch.
+
+The profile should include:
+
+- cover image
+- logo or avatar
+- business name
+- short description
+- service area
+- primary contact action
+- follow action
+- Quick Update if active
+- temporary service location if active
+- service cards
+- service detail modal
+- simple trust signals
+- no public ratings during launch
+
+---
+
+## Follow instead of save
+
+On profiles and Brand Space pages, the user action should be "Follow", not "Save".
+
+Reason:
+
+A profile is not the same as a listing.
+
+Following a profile means the user may later see:
+
+- quick updates
+- useful business updates
+- availability
+- new services
+- future news from that identity
+
+Listing pages can still use Save/Favorite.
+
+Profile pages should use Follow.
+
+---
+
+## Service provider call to action
+
+Service provider profiles should use service-appropriate action labels.
+
+For tow truck and help-oriented services, launch should prefer:
+
+- Küsi abi
+- Võta ühendust
+- Sõnum
+
+Avoid "Telli nüüd" unless the service truly supports immediate ordering.
+
+Reason:
+
+Many services require clarification before accepting the job.
+
+Examples:
+
+- tow truck service
+- repair work
+- construction work
+- transport
+- plumbing
+- custom service
+
+The provider may need to know the situation before giving price or confirming work.
+
+---
+
+## Service cards visual decision
+
+Service cards should be visual and simple.
+
+Recommended card:
+
+- image
+- service name
+- short description
+- optional price if added
+- key signal if useful
+
+The service card should be easy for the provider to create.
+
+Provider can add:
+
+- service image
+- service name
+- short text
+- optional price or starting price
+- optional details
+
+If price is empty, do not show price.
+
+---
+
+## Service detail modal
+
+Clicking a service card should open a larger service detail view.
+
+The user should not lose the profile context.
+
+Recommended behavior:
+
+- click service card
+- modal opens over profile
+- background dims
+- service details are shown
+- user can close with X
+- clicking outside can close
+- service image is larger
+- description and details are visible
+- contact action is available
+
+This works similarly to opening a larger image.
+
+It keeps the user inside the profile.
+
+---
+
+## Service list loading
+
+If a profile has many services, the first view should show only a reasonable number.
+
+Example:
+
+- first 4 services on desktop
+- first few services on mobile
+
+More services can load as the user scrolls or opens the services section.
+
+The profile should not be overloaded at the top.
+
+"View all services" can exist, but the preferred browsing behavior is smooth continuation, not forcing the user into a separate page too early.
+
+---
+
+## Public ratings at launch
+
+Public ratings and reviews should not be shown during launch if there is not enough real data.
+
+Do not show empty 0.0 ratings or empty review blocks publicly.
+
+Reason:
+
+Empty ratings can make a new but legitimate provider look weak.
+
+Launch should use quiet trust signals instead.
+
+Examples:
+
+- profile complete
+- active recently
+- responds quickly
+- joined Selqiro
+- confirmed profile later
+- verified business later
+
+Ratings and reviews can be added later when there is enough real usage.
+
+---
+
+## Quick Update placement
+
+Quick Update should appear near the top of the service provider profile.
+
+It should be visible only when active.
+
+If no active Quick Update exists, the module is hidden.
+
+Quick Update should not turn into a noisy feed.
+
+For service providers, Quick Update can show:
+
+- current availability
+- temporary service location
+- free time slot
+- seasonal offer
+- important short announcement
+

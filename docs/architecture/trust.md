@@ -571,3 +571,26 @@ Controls:
 Honest availability creates value.
 
 Misleading availability damages trust.
+
+---
+
+## Service profile ratings at launch
+
+Do not show public ratings or empty review blocks on service provider profiles during launch.
+
+Reason:
+
+Launch has little real review data.
+
+Empty or low-volume rating systems can reduce trust instead of increasing it.
+
+Use quiet trust signals first:
+
+- profile complete
+- active recently
+- responds quickly
+- joined Selqiro
+- confirmed profile later
+- verified business later
+
+Public ratings and reviews can be introduced later when enough real interactions exist.

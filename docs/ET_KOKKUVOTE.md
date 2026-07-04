@@ -1696,3 +1696,118 @@ See kehtib ka kirjelduste, tehniliste detailide, piltide, lahtiolekuaegade, lisa
 Avalik profiil peab jääma puhas.
 
 Omaniku vaates võib Selqiro soovitada, mida võiks veel lisada.
+
+---
+
+# 63. Teenusepakkuja profiili Launch-vaade
+
+Teenusepakkuja profiili Launch-vaate põhimõte on paigas.
+
+Profiil sisaldab:
+
+- kaanepilt
+- logo või avatar
+- ettevõtte nimi
+- lühikirjeldus
+- tegevuspiirkond
+- peamine kontaktinupp
+- jälgimise nupp
+- Kiire teade, kui see on aktiivne
+- ajutine teenindusasukoht, kui see on aktiivne
+- pakutavad teenused
+- teenuse detaili avamine suuremas vaates
+- lihtsad usaldussignaalid
+
+Profiili puhul kasutame nuppu:
+
+Jälgi
+
+mitte:
+
+Salvesta
+
+Põhjus:
+
+Kuulutust salvestatakse.
+Ettevõtet või profiili jälgitakse.
+
+Jälgimine tähendab, et kasutaja võib tulevikus näha selle profiili Kiireid teateid, uuendusi ja olulist infot.
+
+---
+
+# 64. Teenuse kaardid ja detailvaade
+
+Pakutavad teenused peaksid profiilis olema visuaalsed kaardid.
+
+Teenuse kaart sisaldab:
+
+- pilt
+- teenuse nimi
+- lühikirjeldus
+- hind, kui see on lisatud
+- olulisem info, kui see on olemas
+
+Kui kasutaja klikib teenuse kaardil, avaneb suurem detailvaade ehk modal.
+
+See töötab sarnaselt suure pildi avamisele:
+
+- taust muutub hämaramaks
+- teenuse detail avaneb profiili peale
+- kasutaja saab sulgeda X-iga või klikkides kõrvale
+- näeb suuremat pilti
+- näeb pikemat kirjeldust
+- näeb teenuse detaile
+- saab võtta ühendust
+
+See hoiab kasutaja profiili sees ja ei vii teda segadusse.
+
+---
+
+# 65. Teenusepakkuja nupud
+
+Teenuse puhul ei kasuta Launchis automaatselt nuppu "Telli nüüd".
+
+Paljud teenused vajavad enne täpsustamist:
+
+- mida klient vajab
+- kus töö asub
+- kui palju tööd on
+- kas vaja on eritehnikat
+- kas olukord on kiire
+
+Puksiiri puhul on parem:
+
+Küsi abi
+
+või
+
+Võta ühendust
+
+või
+
+Sõnum
+
+"Telli nüüd" sobib ainult siis, kui teenus toetab päriselt kohest tellimist.
+
+---
+
+# 66. Hinnangud Launchis
+
+Teenusepakkuja profiilis ei näita Launchis avalikke hinnanguid ega tühja arvustuste plokki.
+
+Põhjus:
+
+Alguses ei ole piisavalt päris kasutajate hinnanguid.
+
+Tühi 0.0 hinnang või tühi arvustuste kast võib jätta vale mulje.
+
+Launchis kasutame vaikseid usaldussignaale:
+
+- profiil täidetud
+- aktiivne hiljuti
+- vastab kiiresti
+- liitunud Selqiroga
+- hiljem kinnitatud profiil
+- hiljem verified business
+
+Avalikud hinnangud ja arvustused saab lisada hiljem, kui päris kasutust on piisavalt.

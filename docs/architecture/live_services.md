@@ -298,3 +298,20 @@ Do not mix them into one noisy public feed.
 ## Final rule
 
 Live Services should make mobile service providers more useful without making Selqiro complicated for normal users.
+
+---
+
+## Public service profile simplicity
+
+Even if a service provider later uses multiple mobile units, the public profile must remain simple.
+
+Do not show every unit update as profile news.
+
+Public profile should show:
+
+- Quick Update if owner chooses to publish one
+- compact availability summary when relevant
+- services
+- contact action
+
+Detailed unit management belongs to business tools, not the public profile.
