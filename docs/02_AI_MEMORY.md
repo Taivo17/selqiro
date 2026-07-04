@@ -521,3 +521,33 @@ Updates and Quick Update are one system:
 - Updates = history
 - Quick Update = active highlighted update at top
 - if no active update, hide Quick Update box
+
+## MY_AREA
+
+User-facing Estonian name:
+Minu ala
+
+My Area is private management workspace.
+
+Public Profile = what others see.
+My Area = where owner manages identity, profile, listings, services, updates, Energy, billing and settings.
+
+Active identity must always be visible.
+
+Show only relevant sections based on enabled modules and permissions.
+
+Main sections:
+- Overview
+- Profile
+- Listings
+- Services
+- Product Showcase
+- Updates
+- Messages
+- Energy
+- Billing
+- Settings
+- Blocked users
+- Admin if permitted
+
+My Area should stay simple for small users and expand for businesses.

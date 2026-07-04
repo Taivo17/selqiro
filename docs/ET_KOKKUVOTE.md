@@ -1908,3 +1908,80 @@ Põhimõte:
 
 Üks uuenduste süsteem.
 Aktiivne oluline uuendus saab olla Kiire teade.
+
+---
+
+# 70. Minu ala
+
+Avalik profiil ja Minu ala on kaks erinevat asja.
+
+Avalik profiil:
+seda näevad teised kasutajad.
+
+Minu ala:
+seal haldab kasutaja enda tegevust.
+
+Minu ala alla kuuluvad:
+
+- ülevaade
+- profiili haldus
+- kuulutused
+- teenused
+- tootenäidised
+- uuendused
+- sõnumid
+- Energy
+- arveldus
+- seaded
+- keel ja asukoht
+- blokeeritud kasutajad
+- admin, kui kasutajal on õigused
+
+Aktiivne identiteet peab Minu alas alati nähtav olema.
+
+Näide:
+
+Tegutsen kui: Milline Vedu
+
+E-mail ei pea kogu aeg nähtav olema.
+
+Oluline on, kelle nimel kasutaja tegutseb.
+
+---
+
+# 71. Minu ala peab olema lihtne
+
+Minu ala ei tohi väikesele kasutajale tunduda keeruline.
+
+Müüja näeb peamiselt:
+
+- kuulutused
+- sõnumid
+- profiil
+- seaded
+
+Teenusepakkuja näeb lisaks:
+
+- teenused
+- Kiire teade
+- ajutine teenindusasukoht
+
+Kohalik tootja näeb lisaks:
+
+- tootenäidised
+- uuendused
+
+Ettevõte näeb hiljem:
+
+- Energy
+- arveldus
+- maksed
+- arved
+- rollid
+- analüütika
+
+Põhimõte:
+
+Näita ainult seda, mida kasutaja vajab.
+
+Keerukus avaneb ainult siis, kui kasutaja vajab rohkem võimalusi.
