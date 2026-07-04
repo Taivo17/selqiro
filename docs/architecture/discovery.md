@@ -968,3 +968,28 @@ General service:
 - Võta ühendust
 
 Use "Telli nüüd" only when a service truly supports immediate ordering.
+
+---
+
+## Updates as discovery input
+
+Profile updates can become discovery input when they are relevant.
+
+Not every update should enter discovery.
+
+Examples:
+
+General update:
+Visible on profile and to followers.
+
+Temporary service location:
+Can appear in relevant local service discovery during its active time.
+
+Fresh stock update:
+Can appear in relevant product or local discovery later.
+
+Rule:
+
+Only useful and contextual updates should affect discovery.
+
+Updates must not become spam or irrelevant advertising.

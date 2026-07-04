@@ -315,3 +315,42 @@ Public profile should show:
 - contact action
 
 Detailed unit management belongs to business tools, not the public profile.
+
+---
+
+## Quick Update and Updates relationship
+
+Quick Update should not be a separate unrelated system.
+
+It is the active highlighted version of the profile update system.
+
+The profile can have updates.
+
+One currently active, time-sensitive update can be shown as Quick Update near the top of the profile.
+
+For live services:
+
+- normal update may inform followers
+- temporary service location update can affect relevant service search
+- mobile unit details remain operational, not a public noisy feed
+
+Public profile remains simple.
+
+---
+
+## Universal profile header for service providers
+
+Service providers should use the same profile header foundation as other profiles.
+
+Do not make the entire profile header service-specific.
+
+Use universal contact action in the header.
+
+Service-specific actions such as "Küsi abi" can appear in:
+
+- service detail modal
+- temporary location card
+- Quick Update card
+- specific service flow
+
+This keeps the profile system reusable.

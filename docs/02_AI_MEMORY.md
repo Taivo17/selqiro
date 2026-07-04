@@ -494,3 +494,30 @@ Avoid "Telli nüüd" unless true instant ordering exists.
 Service card opens modal with more details and contact action.
 
 Hide empty optional fields.
+
+## UNIFIED_PROFILE_HEADER_AND_UPDATES
+
+All profile types should use the same public header foundation.
+
+Header:
+- cover image
+- avatar/logo
+- name
+- short description
+- location/area
+- trust signals
+- primary contact action
+- Follow action
+
+Profile differences come from modules below the header.
+
+Use "Jälgi" for profiles, not "Salvesta".
+
+Use universal top action such as "Kirjuta" or "Võta ühendust".
+
+Service-specific action "Küsi abi" can appear inside service detail modal, Quick Update or temporary location card, not necessarily as the global profile header action.
+
+Updates and Quick Update are one system:
+- Updates = history
+- Quick Update = active highlighted update at top
+- if no active update, hide Quick Update box

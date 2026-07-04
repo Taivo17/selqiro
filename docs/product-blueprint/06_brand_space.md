@@ -1178,3 +1178,240 @@ For service providers, Quick Update can show:
 - seasonal offer
 - important short announcement
 
+
+---
+
+## Unified profile header decision
+
+All profile types should use the same public header foundation.
+
+This applies to:
+
+- sellers
+- service providers
+- local producers
+- professional sellers
+- future brands
+- future organizations
+
+The header should not change fundamentally by profile type.
+
+Common public header includes:
+
+- cover image
+- logo or avatar
+- name
+- short description
+- location or operating area
+- simple trust signals
+- primary contact action
+- follow action
+
+The profile should feel consistent across Selqiro.
+
+Different profile types become unique through their enabled modules below the header.
+
+Examples:
+
+Seller:
+- listings first
+
+Service provider:
+- services first
+- quick update if active
+- temporary service location if active
+
+Local producer:
+- product showcase first
+- listings if available
+- updates if active
+
+Future brand:
+- product showcase
+- news/updates
+- support
+- documents
+- dealers later
+
+Principle:
+
+Same header foundation.
+Different modules underneath.
+
+---
+
+## Universal profile actions
+
+The profile header should use clear universal actions.
+
+Recommended primary action:
+
+- Kirjuta
+- Võta ühendust
+
+Recommended secondary action:
+
+- Jälgi
+
+Avoid making the top-level profile action too service-specific.
+
+For example:
+
+"Küsi abi" may be useful for tow truck service details, but it should not replace the universal profile contact action for all profiles.
+
+Service-specific calls to action can appear inside:
+
+- service detail modal
+- Quick Update
+- temporary service location card
+- specific service card
+
+Profile header remains consistent.
+
+---
+
+## Follow action
+
+Profile pages should use "Jälgi", not "Salvesta".
+
+Reason:
+
+A listing can be saved.
+
+A profile is followed.
+
+Following means the user may later see:
+
+- quick updates
+- useful profile updates
+- availability
+- new services
+- new product showcases
+- future announcements from that identity
+
+This applies to sellers, service providers, producers and future brands.
+
+---
+
+## About / information panel
+
+The profile information panel should appear in a consistent place.
+
+For desktop, it can appear in the right-side area.
+
+For mobile, it appears below the header or after the main profile actions.
+
+The panel can show useful profile information such as:
+
+- who this profile is
+- what they offer
+- operating area
+- experience
+- key trust signals
+- relevant facts
+
+The wording may adapt by profile type.
+
+Examples:
+
+- About seller
+- About service provider
+- About producer
+- About company
+
+But placement and structure should stay consistent.
+
+---
+
+## Updates and Quick Update unified model
+
+Updates and Quick Update should be one system.
+
+Updates are the profile's update history.
+
+Quick Update is the currently active highlighted update shown near the top of the profile.
+
+If there is no active update, the Quick Update module is hidden.
+
+This avoids empty boxes and keeps the profile clean.
+
+Examples:
+
+Update history:
+- Fresh tomatoes available today
+- Workshop closed Friday
+- New service available
+- Tow truck in Tallinn until 16:00
+
+Quick Update:
+The latest active and time-sensitive update can appear near the top of the profile.
+
+Principle:
+
+One update system.
+Latest active update can be promoted as Quick Update.
+
+---
+
+## Update types
+
+Updates can support different types.
+
+Possible types:
+
+- general update
+- current availability
+- temporary service location
+- fresh stock
+- seasonal offer
+- job announcement
+- important notice
+
+Not every update affects search.
+
+Temporary service location is special because it can affect relevant service discovery.
+
+Example:
+
+A tow truck update with location and valid-until time can be used in tow truck search near that area.
+
+A general update only appears on profile and to followers.
+
+---
+
+## Public profile simplicity
+
+Do not make the public profile too busy.
+
+The public view should only show modules that contain real content.
+
+Empty modules are hidden.
+
+The owner view can suggest improvements.
+
+Public visitors should see a complete and calm profile even when the profile uses only a few modules.
+
+---
+
+## Final profile layout decision
+
+The profile layout direction is accepted.
+
+Do not redesign the whole profile structure unless a major problem is found.
+
+Future work should refine:
+
+- button wording
+- spacing
+- module order
+- mobile layout
+- exact text labels
+
+Core layout remains:
+
+Header
+Quick Update if active
+Main modules
+Information panel
+Updates history
+Contact path

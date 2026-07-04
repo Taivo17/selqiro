@@ -1811,3 +1811,100 @@ Launchis kasutame vaikseid usaldussignaale:
 - hiljem verified business
 
 Avalikud hinnangud ja arvustused saab lisada hiljem, kui päris kasutust on piisavalt.
+
+---
+
+# 67. Ühtne profiili ülemine osa
+
+Kõik profiilitüübid kasutavad sama profiili ülemist vundamenti.
+
+See kehtib:
+
+- müüjale
+- teenusepakkujale
+- kohalikule tootjale
+- professionaalsele müüjale
+- tulevikus suurele brändile
+
+Ülemine osa sisaldab:
+
+- kaanepilt
+- logo või avatar
+- nimi
+- lühikirjeldus
+- asukoht või tegevuspiirkond
+- usaldussignaalid
+- peamine kontaktinupp
+- Jälgi nupp
+
+Erinevus profiilitüüpide vahel tuleb allpool olevatest moodulitest.
+
+Müüjal on esikohal kuulutused.
+
+Teenusepakkujal on esikohal teenused.
+
+Kohalikul tootjal on esikohal tootenäidised.
+
+Suur bränd saab tulevikus lisada rohkem mooduleid.
+
+Põhimõte:
+
+Sama profiili vundament kõigile.
+Erinevad moodulid vastavalt vajadusele.
+
+---
+
+# 68. Profiili tegevusnupud
+
+Profiili üldine ülemine kontaktinupp peaks olema universaalne.
+
+Sobivad nimetused:
+
+- Kirjuta
+- Võta ühendust
+
+Profiilil kasutame:
+
+Jälgi
+
+mitte:
+
+Salvesta
+
+Põhjus:
+
+Kuulutust salvestatakse.
+Profiili jälgitakse.
+
+Teenusepõhised nupud nagu "Küsi abi" võivad olla konkreetse teenuse detailvaates, Kiire teates või ajutise asukoha kaardis.
+
+Kogu profiili ülemine osa jääb kõigil sama loogikaga.
+
+---
+
+# 69. Uuendused ja Kiire teade
+
+Uuendused ja Kiire teade on sama süsteemi kaks vaadet.
+
+Uuendused on profiili teadete ajalugu.
+
+Kiire teade on kõige värskem aktiivne ja oluline uuendus, mis kuvatakse profiili ülaosas.
+
+Kui aktiivset uuendust ei ole, siis Kiire teate kasti ei näidata.
+
+Näited uuendustest:
+
+- Värsked tomatid saadaval täna.
+- Töökoda on reedel suletud.
+- Puksiir Tallinnas kuni 16:00.
+- Uus teenus saadaval.
+- Otsime kahte töötajat.
+
+Ajutine teenindusasukoht on eriline uuendus, sest see võib mõjutada teenuse leidmist vastavas piirkonnas ja kategoorias.
+
+Tavaline uuendus on nähtav profiilis ja jälgijatele.
+
+Põhimõte:
+
+Üks uuenduste süsteem.
+Aktiivne oluline uuendus saab olla Kiire teade.
