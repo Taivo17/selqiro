@@ -630,3 +630,69 @@ Every transaction is traceable.
 Selqiro should not build a bank or accounting system.
 
 Selqiro should build a reliable Energy ledger and integrate with trusted payment and accounting systems.
+
+---
+
+## Launch-critical payment decision
+
+Payment provider integration must be part of V2 Launch if paid Energy features are available.
+
+Updated decision:
+
+Energy purchases and payment confirmation are Launch-critical.
+
+Launch should include:
+
+- payment provider checkout or payment flow
+- payment provider webhook
+- Selqiro payment record
+- Energy purchase transaction
+- wallet balance update
+- payment history
+- receipt or invoice link
+- admin payment visibility
+
+Launch does not need full accounting automation.
+
+But Launch must allow a business to pay for Energy and receive a usable payment document from the payment provider.
+
+---
+
+## Minimum launch payment flow
+
+Minimum required flow:
+
+1. User chooses Energy package or needs Energy inside paid action.
+2. Selqiro creates payment session with payment provider.
+3. User pays.
+4. Payment provider sends webhook.
+5. Selqiro verifies webhook.
+6. Selqiro creates payment record.
+7. Selqiro creates Energy transaction.
+8. Wallet balance is updated.
+9. User can continue original action.
+
+Frontend success alone is not enough.
+
+Webhook is source of truth.
+
+---
+
+## Launch business payment document
+
+For Launch, business users should be able to access at least:
+
+- payment receipt or invoice from payment provider
+- payment date
+- payment amount
+- currency
+- Energy amount purchased
+- billing entity if available
+
+Full country-specific accounting export can come later.
+
+Merit integration can come later.
+
+The launch requirement is:
+
+Business can pay and obtain a usable document for accounting.

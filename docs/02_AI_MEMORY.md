@@ -418,3 +418,23 @@ Paid access allows updates to one active temporary location, not many simultaneo
 When the provider updates location, previous active temporary location is replaced.
 
 Service highlighting is separate but can increase visibility of the active temporary location in relevant local discovery.
+
+## LAUNCH_ENERGY_PAYMENTS_CORRECTION
+
+Energy and payment core must be part of V2 Launch.
+
+Reason:
+Selqiro revenue depends on paid optional capabilities from the beginning.
+
+Launch must support:
+- Energy purchase
+- payment provider webhook
+- Energy wallet
+- Energy ledger
+- Energy spending for Today's Story / featured discovery / service highlighting
+- basic payment history
+- receipt or invoice link
+
+Launch does not need full Merit integration or complete accounting automation.
+
+But paid discovery must not launch without reliable Energy ledger and payment confirmation.

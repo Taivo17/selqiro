@@ -887,3 +887,38 @@ Controls:
 Do not build full live GPS tracking for launch.
 
 Architecture should allow stronger validation later if needed.
+
+---
+
+## Launch-paid discovery requirement
+
+If Today's Story, featured discovery or service highlighting are available at Launch, Energy purchase and spending must also be available at Launch.
+
+Discovery revenue depends on Energy.
+
+Do not allow manual or untracked paid visibility.
+
+Every paid discovery action must be connected to:
+
+- billing entity
+- Energy wallet
+- Energy spend transaction
+- payment record if Energy was purchased
+- reservation or placement record
+
+This protects trust, support and accounting.
+
+---
+
+## Launch discovery payment rule
+
+A paid discovery placement is confirmed only after:
+
+- required Energy exists in wallet
+- Energy spend is recorded
+- placement/reservation is created
+- moderation requirements are satisfied where applicable
+
+If payment fails, placement is not confirmed.
+
+If moderation rejects content, refund or correction policy applies.

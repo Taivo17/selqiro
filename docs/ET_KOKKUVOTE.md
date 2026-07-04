@@ -1491,3 +1491,52 @@ Puksiir on ajutiselt Tallinnas ja kasutab teenuse esiletõstmist.
 Kasutaja otsib Tallinnas puksiiri.
 
 Puksiir võib ilmuda esiletõstetud puksiirteenuste hulgas.
+
+---
+
+# 57. Energy ja maksed peavad olema Launchis valmis
+
+Täpsustatud otsus:
+
+Energy ja maksete minimaalne tuum peab olema V2 Launchis olemas.
+
+Põhjus:
+
+Selqiro esimene tulumudel sõltub lisaväärtustest, näiteks:
+
+- Today's Story
+- esiletõstetud avastamine
+- teenuse esiletõstmine
+- ajutise teenindusasukoha tasuline kasutamine
+- hiljem AI lisavõimekused
+- hiljem Knowledge Gateway päringud
+
+Launchis peab olemas olema:
+
+- Energy wallet
+- Energy saldo
+- Energy tehingute ajalugu
+- Energy ostmine
+- makseteenuse pakkuja ühendus
+- makse õnnestumise webhook
+- Energy lisamine pärast kinnitatud makset
+- Energy kulutamine tasulistele funktsioonidele
+- makseajalugu
+- receipt või arve link
+- admin vaade maksete ja Energy kontrolliks
+
+Launchis ei pea veel olemas olema:
+
+- täielik Merit integratsioon
+- kõigi riikide e-arved
+- väga keeruline subscription süsteem
+- täielik maksude automaatika igas riigis
+
+Põhimõte:
+
+Tasulist esiletõstmist ei tohi käivitada ilma usaldusväärse Energy ledgerita.
+
+Iga Energy liikumine peab olema tehinguna salvestatud.
+
+Raha ostab Energy’t.
+Energy kasutatakse Selqiro sees.

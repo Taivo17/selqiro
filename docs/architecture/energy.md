@@ -714,3 +714,103 @@ Together:
 - current location + highlighted service can create stronger local visibility
 
 This creates value without turning location updates into random advertising.
+
+---
+
+## Launch-critical Energy decision
+
+Energy foundation must be available for V2 Launch.
+
+Reason:
+
+Selqiro's first revenue features depend on Energy.
+
+Launch-paid features may include:
+
+- Today's Story
+- featured discovery
+- service highlighting
+- paid temporary service location access
+- future AI actions
+- future Knowledge Gateway actions
+
+Minimum Launch Energy system:
+
+- wallet
+- balance
+- transaction ledger
+- purchase transaction
+- spend transaction
+- refund/adjustment foundation
+- billing entity connection
+- actor user tracking
+- active identity attribution
+- admin visibility
+
+Important rule:
+
+Do not launch paid discovery without a reliable Energy ledger.
+
+Energy balance must never be changed silently.
+
+Every movement must create a transaction.
+
+---
+
+## Launch Energy purchase flow
+
+Launch must allow users and businesses to buy Energy.
+
+Minimum flow:
+
+User starts paid action.
+Selqiro checks wallet balance.
+If balance is insufficient, user can add Energy.
+Payment provider processes payment.
+Webhook confirms payment success.
+Selqiro adds Energy to wallet.
+User returns to the same action.
+User can complete the paid action.
+
+The user should not lose context during payment.
+
+Example:
+
+Business wants Today's Story.
+Energy required: 900.
+Wallet balance: 620.
+Missing: 280.
+
+Selqiro shows:
+Add Energy and continue.
+
+After payment:
+Energy is added.
+Today's Story reservation flow continues.
+
+---
+
+## Launch Energy spending
+
+Launch spending must support at least:
+
+- Today's Story reservation
+- featured discovery or service highlighting
+- paid temporary service location access if available
+
+Spending creates Energy transaction.
+
+Transaction must store:
+
+- wallet
+- billing entity
+- actor user
+- active identity
+- amount
+- balance after
+- reference type
+- reference id
+- description
+- timestamp
+
+This is required for support, trust and accounting.

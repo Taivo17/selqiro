@@ -309,3 +309,53 @@ Launch should not require:
 - external registry verification
 
 Trust should start quietly and grow with real platform usage.
+
+---
+
+## Launch scope correction: Energy and payments
+
+Earlier scope treated full payment automation as something that could come after core V2.
+
+Updated decision:
+
+Energy and payment core must be available for V2 Launch.
+
+Reason:
+
+Selqiro revenue depends on optional value-added capabilities from the beginning.
+
+Launch should support paid use of:
+
+- Today's Story
+- featured discovery
+- service highlighting
+- temporary service location paid access
+- future Energy-based AI actions
+- future Knowledge Gateway actions
+
+Launch must include:
+
+- Energy wallet foundation
+- Energy transaction ledger
+- Energy purchase flow
+- payment provider integration
+- payment success webhook
+- Energy balance update after successful payment
+- Energy spending for launch-paid features
+- basic payment history
+- receipt or invoice link from payment provider
+- admin visibility into payments and Energy transactions
+
+Launch does not need:
+
+- full Merit integration
+- full accounting automation
+- all-country e-invoice support
+- complex subscription system
+- advanced tax automation in every market
+
+Decision:
+
+Energy and payments are Launch-critical.
+
+Full accounting integrations can come later.
