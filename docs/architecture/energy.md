@@ -814,3 +814,33 @@ Transaction must store:
 - timestamp
 
 This is required for support, trust and accounting.
+
+---
+
+## Energy and future live services
+
+Future Live Services can use Energy through active mobile unit packages.
+
+Possible package dimensions:
+
+- number of active mobile units
+- duration
+- highlighting status
+
+Examples:
+
+- 1 active unit for 1 day
+- 5 active units for 14 days
+- 10 active units for 30 days
+
+Longer duration should be cheaper per day.
+
+Temporary location and highlighting remain separate:
+
+Temporary location:
+where the service is currently available
+
+Highlighting:
+how much extra discovery visibility it receives
+
+This keeps pricing understandable and useful.

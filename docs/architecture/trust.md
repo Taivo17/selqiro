@@ -549,3 +549,25 @@ Honest quick updates should help providers.
 
 Misleading quick updates should hurt long-term trust.
 
+
+---
+
+## Trust and live service availability
+
+Live service availability affects trust.
+
+If a provider repeatedly marks units as available in areas where they are not actually available, trust should decrease.
+
+Controls:
+
+- update history
+- one active location per unit
+- automatic expiration
+- user reports
+- admin review
+- future trust impact
+- future validation if needed
+
+Honest availability creates value.
+
+Misleading availability damages trust.

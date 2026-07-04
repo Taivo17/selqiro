@@ -922,3 +922,49 @@ A paid discovery placement is confirmed only after:
 If payment fails, placement is not confirmed.
 
 If moderation rejects content, refund or correction policy applies.
+
+---
+
+## Live service discovery
+
+Future live service availability should support service discovery.
+
+Example:
+
+A tow truck company has multiple mobile units.
+
+If one unit is currently available in Tallinn, the provider can appear in relevant Tallinn tow truck searches.
+
+This should not create noisy public feeds.
+
+Public discovery should show simple useful availability:
+
+- currently available nearby
+- nearest area
+- valid until
+- contact action
+
+Detailed fleet/unit management belongs to business tools.
+
+---
+
+## Service CTA wording
+
+Discovery surfaces should use service-appropriate calls to action.
+
+For services that require clarification, avoid "Order now".
+
+Examples:
+
+Tow truck:
+- Küsi abi
+- Võta ühendust
+
+Repair:
+- Küsi pakkumist
+- Kirjuta
+
+General service:
+- Võta ühendust
+
+Use "Telli nüüd" only when a service truly supports immediate ordering.

@@ -868,3 +868,96 @@ A user searches tow truck near Tallinn.
 The provider may appear in featured nearby tow truck services.
 
 This is useful for both the user and the provider.
+
+---
+
+## Service provider profile visual decision
+
+Service provider profile should support a professional but calm public view.
+
+Recommended structure:
+
+- cover image
+- logo or avatar
+- business name
+- short description
+- primary service area
+- simple trust signals
+- main contact action
+- quick update if active
+- services
+- updates
+- images
+
+Launch should not show public ratings if there is not enough real review data.
+
+Instead, launch trust signals can include:
+
+- verified or confirmed profile later
+- active recently
+- responds quickly
+- joined Selqiro
+- complete profile
+
+The profile should feel useful and trustworthy without pretending to have mature review data too early.
+
+---
+
+## Service provider action wording
+
+For many services, "Order now" is too strong for launch.
+
+Example:
+
+A tow truck service often needs extra information before accepting work:
+
+- where the vehicle is
+- where it should be transported
+- what vehicle it is
+- whether the vehicle is on road or in ditch
+- whether winching is needed
+- whether special equipment is needed
+
+Therefore, launch should prefer softer and more accurate action labels.
+
+Recommended labels:
+
+- Võta ühendust
+- Küsi abi
+- Kirjuta
+- Küsi teenust
+
+For tow truck and emergency-like services, "Küsi abi" is a good option.
+
+Avoid "Telli nüüd" unless the service truly supports immediate ordering.
+
+---
+
+## Quick Update in service provider profile
+
+Quick Update should appear near the top of the profile, directly under the main profile information.
+
+If no active quick update exists, no empty box is shown.
+
+A quick update may show:
+
+- message
+- related service
+- location if relevant
+- valid until time
+- contact action
+
+Example:
+
+Kiire teade
+
+Puksiir Tallinnas, Gonsiori tänava piirkonnas.
+
+Vaba kuni 16:00.
+
+Küsi abi
+
+The update should be compact and useful.
+
+It should not turn the profile into a noisy feed.
+

@@ -1540,3 +1540,117 @@ Iga Energy liikumine peab olema tehinguna salvestatud.
 
 Raha ostab Energy’t.
 Energy kasutatakse Selqiro sees.
+
+---
+
+# 58. Teenusepakkuja profiil ja tegevusnupud
+
+Teenusepakkuja profiil peab olema professionaalne, aga lihtne.
+
+Puksiiri või sarnase teenuse puhul ei sobi Launchis hästi nupp "Telli nüüd", sest enne teenuse kinnitamist on vaja täpsustada:
+
+- kus auto on
+- kuhu see viia
+- mis sõiduk see on
+- kas auto on kraavis või tee peal
+- kas vaja on vintsi
+- kas vaja on eritehnikat
+
+Seetõttu on parem kasutada:
+
+- Küsi abi
+- Võta ühendust
+- Kirjuta
+- Küsi teenust
+
+Puksiiri puhul on eriti sobiv:
+
+Küsi abi
+
+---
+
+# 59. Liikuvad teenused tulevikus
+
+Launchis piisab lihtsast mudelist:
+
+- üks Kiire teade
+- üks aktiivne ajutine teenindusasukoht
+
+Tulevikus võib lisanduda Live Services ehk Liikuvad teenused moodul.
+
+See sobib näiteks puksiirifirmadele, kellel on mitu autot ja juhti.
+
+Ettevõttel võib olla mitu liikuvat üksust:
+
+- Puksiir 1
+- Puksiir 2
+- Puksiir 3
+
+Igal üksusel võib olla:
+
+- staatus
+- ajutine asukoht
+- kehtivuse aeg
+- määratud juht
+
+Avalikus profiilis ei näidata iga juhi asukohta uudisvoona.
+
+Kasutajale näidatakse lihtsat infot:
+
+Praegu saadaval:
+3 puksiiri Tallinna piirkonnas.
+Lähim: Gonsiori tänava piirkond.
+
+See on kasutajale arusaadav ega tee profiili kirjuks.
+
+---
+
+# 60. Rollid liikuvate teenuste jaoks
+
+Tulevikus võib ettevõttel olla mitu kasutajat erinevate õigustega.
+
+Näiteks:
+
+Omanik:
+- haldab ettevõtet
+- haldab Energy’t
+- näeb arveldust
+- haldab töötajaid
+
+Haldaja:
+- haldab teenuseid ja üksusi
+- ei pruugi näha arveldust
+
+Juht:
+- saab muuta ainult enda puksiiri asukohta ja staatust
+- ei saa muuta ettevõtte profiili
+- ei saa muuta Energy’t
+- ei saa muuta teisi juhte
+
+See võimaldab kasutada Selqirot töövahendina ilma, et igale töötajale antakse liiga palju õigusi.
+
+---
+
+# 61. Live Services ja Energy
+
+Tulevikus võib liikuvate üksuste nähtavus olla Energy põhine.
+
+Näiteks:
+
+- 1 aktiivne üksus
+- 5 aktiivset üksust
+- 10 aktiivset üksust
+
+Perioodid:
+
+- 1 päev
+- 14 päeva
+- 30 päeva
+
+Pikem periood on ühe päeva kohta soodsam.
+
+Ajutine asukoht ja esiletõstmine jäävad eraldi mõisteteks.
+
+Ajutine asukoht näitab, kus teenus hetkel saadaval on.
+
+Esiletõstmine annab rohkem nähtavust sobivas piirkonnas ja kategoorias.

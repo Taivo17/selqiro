@@ -438,3 +438,22 @@ Launch must support:
 Launch does not need full Merit integration or complete accounting automation.
 
 But paid discovery must not launch without reliable Energy ledger and payment confirmation.
+
+## LIVE_SERVICES
+
+Launch only needs simple Quick Update and one active temporary service location.
+
+Future Live Services module can support businesses with multiple mobile units, such as tow trucks.
+
+Public profile should not show every driver update as a noisy feed.
+
+Instead:
+- profile shows compact availability summary
+- search/discovery uses active unit locations
+- driver role can update only assigned unit
+- owner/manager can manage units
+- Energy can price active mobile units by duration and count
+
+Avoid exact public GPS by default.
+
+Use area-level availability.
