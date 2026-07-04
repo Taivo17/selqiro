@@ -2253,7 +2253,7 @@ Kasutaja peab aru saama:
 
 - Selqiro ei luura kasutajate järel
 - admin ei saa niisama sõnumeid lugeda
-- AI ei loe sõnumeid, kui kasutaja ei palu AI abi
+- AI ei loe privaatsõnumeid Launchis üldse
 - sõnumeid ei kasutata reklaamiks
 - sõnumeid ei kasutata üldiseks analüütikaks
 
@@ -2302,22 +2302,29 @@ Ligipääs on ainult konkreetse raporteeritud vestluse ja juhtumi jaoks.
 
 # 85. AI ja sõnumid
 
-AI ei loe privaatsõnumeid vaikimisi.
+Launchis AI ei loe privaatsõnumeid ka kasutaja loal.
 
-AI võib aidata ainult siis, kui kasutaja ise seda soovib.
+See on teadlik otsus.
 
-Näited:
+Põhjus:
 
-- aita mul kirjutada viisakas vastus
-- tee mulle vestlusest kokkuvõte
-- aita raporteerida see sõnum
-- selgita, mida müüja küsis
+Selqiro esimene privaatsuse lubadus peab olema lihtne ja arusaadav.
 
-AI abi peab olema kasutaja kutsutud.
+Privaatsõnumid jäävad privaatsõnumiteks.
 
-Selqiro AI ei tohi vaikimisi privaatsõnumeid analüüsida.
+Launchis ei tee me funktsiooni, kus AI aitab privaatsõnumeid kirjutada, kokku võtta või analüüsida.
 
----
+Tulevikus võib seda eraldi kaaluda ainult siis, kui:
+
+- kasutaja seda selgelt soovib
+- funktsioon on täiesti opt-in
+- kasutajale selgitatakse täpselt, mida AI näeb
+- privaatsuspoliitika on selleks valmis
+- kasutajate usaldus ja tagasiside toetab seda
+
+Praegu on lihtsam ja parem sõnum:
+
+AI ei loe sinu privaatsõnumeid.
 
 # 86. Admini ligipääs sõnumitele
 
@@ -2351,3 +2358,26 @@ Seal peab lihtsas keeles olema kirjas:
 - kõik ligipääsud on piiratud ja logitud
 
 See aitab kasutajal mõista, et Selqiro austab privaatsust, kuid saab vajadusel sekkuda pettuse, ohu või seadusliku nõude korral.
+
+
+---
+
+# 88. AI sõnumiabiga ootame
+
+Otsus:
+
+Launchis ei lisa me võimalust, et AI loeb või analüüsib privaatsõnumeid isegi kasutaja loal.
+
+Seda võib tulevikus uuesti hinnata.
+
+Põhjus:
+
+Kasutajad peavad kõigepealt tundma, et Selqiro austab privaatsust.
+
+Kui hiljem lisame AI abi sõnumites, peab see olema täiesti vabatahtlik, selgelt selgitatud ja kasutaja kontrolli all.
+
+Launchis on sõnum lihtne:
+
+Selqiro ei loe sinu privaatsõnumeid.
+AI ei loe sinu privaatsõnumeid.
+Admin ei loe sinu privaatsõnumeid ilma konkreetse juhtumita.

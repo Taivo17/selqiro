@@ -562,6 +562,6 @@ Admin should not casually browse private messages.
 
 Every access to message content should be logged.
 
-AI may help review reported content, but only inside the specific case and according to privacy rules.
+During V2 Launch, AI should not analyze private message content. Reported private messages are reviewed by human support/moderation only. Future AI assistance requires a separate privacy decision.
 
 Privacy remains part of trust.

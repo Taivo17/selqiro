@@ -157,22 +157,29 @@ The other side should be informed through Privacy Policy and Terms that reported
 
 ## AI and private messages
 
-AI should not read private messages by default.
+Launch decision:
 
-AI may help with messages only when the user explicitly requests help.
+AI does not read private messages during V2 Launch.
 
-Examples:
+This also means AI message assistance is not included at launch, even if a user asks for it.
 
-- help write a polite reply
-- summarize this conversation for me
-- help report this message
-- help explain what the seller asked
+Reason:
 
-AI assistance must be user-invited.
+Selqiro should first prove privacy-first messaging and observe user expectations before allowing AI into private conversations.
 
-AI should not silently analyze private conversations.
+Future option:
 
----
+AI-assisted message writing or summarizing may be considered later as an explicit opt-in feature.
+
+If added later, it must be:
+
+- clearly user-initiated
+- limited to selected conversation content
+- explained before use
+- not enabled by default
+- governed by a clear privacy policy
+
+Until then, private message content is handled only through human support/moderation cases when required.
 
 ## Admin tools
 
@@ -240,7 +247,7 @@ It should say clearly:
 
 - we do not read your private messages by default
 - we do not use private messages for advertising
-- AI does not read your messages unless you ask it to help
+- AI does not read your private messages during launch
 - if you report a conversation, relevant content may be reviewed
 - if there is fraud, safety concern or legal requirement, limited review may happen
 - access is logged and restricted

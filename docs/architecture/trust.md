@@ -605,7 +605,7 @@ Selqiro should clearly communicate:
 
 - private messages are not read by default
 - private messages are not used for advertising
-- AI does not read messages unless user asks for help
+- AI does not read private messages during launch
 - reported conversations may be reviewed for safety/support
 - legal or serious safety cases may require limited review
 - all access is restricted and logged

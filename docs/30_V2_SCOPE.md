@@ -418,3 +418,18 @@ Launch should support:
 - user-facing explanation that reported conversations may be reviewed
 
 Launch does not need full advanced legal workflow, but architecture must not allow casual admin browsing of private messages.
+
+
+## AI access to private messages scope decision
+
+V2 Launch does not include AI access to private messages.
+
+This applies even when the user asks for AI help.
+
+Reason:
+
+Selqiro's privacy promise must be simple at launch.
+
+Private messages stay private.
+
+Future opt-in AI message assistance can be reconsidered later after user feedback, privacy review and clear UX design.

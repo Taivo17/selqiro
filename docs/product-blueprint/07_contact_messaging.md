@@ -296,20 +296,32 @@ Do not overload Launch.
 
 ## AI assistance
 
-AI may help users write messages, but should not be intrusive.
+Launch decision:
 
-Examples:
+AI assistance inside private conversations is not included in V2 Launch.
 
-- help write polite first message
-- help ask seller useful questions
-- help summarize a long conversation later
-- help business answer common questions later
+AI should not read or summarize private messages during launch, even if the user asks.
 
-AI should not send messages automatically without user confirmation.
+Reason:
 
-User remains in control.
+Selqiro's first messaging promise should be simple:
 
----
+Private messages stay private.
+
+Future option:
+
+AI-assisted message writing, summarizing or reporting may be considered later as an explicit opt-in feature.
+
+If added later, it must be clearly explained and user-initiated.
+
+For launch, messaging stays simple:
+
+- inbox
+- conversation
+- text input
+- send button
+- report
+- block
 
 ## Notifications
 
@@ -424,7 +436,7 @@ Access must be:
 - logged
 - connected to a case
 
-AI does not read private messages unless the user explicitly asks AI for help.
+AI does not read private messages during V2 Launch. Future opt-in AI assistance may be considered later.
 
 When a user reports a conversation, Selqiro should clearly explain:
 

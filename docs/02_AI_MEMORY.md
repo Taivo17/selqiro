@@ -628,8 +628,22 @@ Message content can be accessed only case-by-case:
 - fraud/safety case
 - valid legal request
 
-AI does not read private messages unless the user explicitly asks AI for help.
+During V2 Launch, AI does not access private message content at all. Future opt-in AI assistance may be considered later after a separate privacy review.
 
 Access must be limited, justified and logged.
 
 This should be user-facing in Selqiro principles and privacy policy.
+
+
+## AI_MESSAGE_ACCESS_LAUNCH_DECISION
+
+Launch decision:
+AI does not read private messages during V2 Launch, even with user permission.
+
+Reason:
+Selqiro's first privacy promise should be simple and clear.
+
+Private messages stay private.
+
+Future:
+AI-assisted message writing, summarizing or reporting may be considered later as an explicit opt-in feature after user trust, UX and privacy policy are clear.
