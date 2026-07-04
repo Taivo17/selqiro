@@ -593,3 +593,25 @@ Spend only after approval.
 Refund/release if rejected according to policy.
 
 Webhook confirmation from payment provider is source of truth.
+
+## ENERGY_PAYMENT_FLOW_LOCKED
+
+Energy Payment Flow is locked for V2 Launch.
+
+Use:
+- "Lisa puuduv Energy ja jätka"
+- "Jätka turvalisse maksesse"
+
+Do not show Selqiro as collecting card data.
+
+Payment happens through trusted payment provider.
+
+Launch does not need save-card UX.
+
+For Today's Story and other moderated actions:
+Energy is reserved until review decision.
+
+Use fair refund wording:
+If Energy has already been used for an active service, refund may not always be possible.
+
+Energy/payment UX should not be redesigned unless implementation exposes a major issue.

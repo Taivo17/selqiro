@@ -741,3 +741,31 @@ User buys exactly missing Energy during a paid action.
 Both create normal payment records and Energy purchase transactions.
 
 The difference is UX context, not ledger structure.
+
+---
+
+## Locked launch payment UX wording
+
+Final payment UX wording for launch:
+
+Use:
+
+Jätka turvalisse maksesse
+
+This should lead to trusted payment provider checkout.
+
+Do not present Selqiro as directly collecting card data.
+
+Launch should not include a "save card" option unless payment provider handles it in a trusted and compliant way and the UX is intentionally enabled later.
+
+For V2 Launch, keep payment simple and trust-focused.
+
+Payment provider checkout handles payment.
+
+Selqiro records:
+
+- payment record
+- Energy purchase transaction
+- wallet balance update
+- receipt or invoice link
+- reference to original paid action when applicable

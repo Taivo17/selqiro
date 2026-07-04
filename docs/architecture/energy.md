@@ -930,3 +930,28 @@ If content is rejected:
 Energy is released or refunded according to policy.
 
 This protects both Selqiro and the business.
+
+---
+
+## Locked launch Energy payment UX
+
+Energy Payment Flow is accepted for V2 Launch.
+
+Locked decisions:
+
+- Energy page uses packages.
+- Paid action flow calculates missing Energy automatically.
+- Main action text should be "Add missing Energy and continue" / "Lisa puuduv Energy ja jätka".
+- Payment button should communicate secure provider flow.
+- Use "Jätka turvalisse maksesse" in Estonian UI.
+- Selqiro does not store card data.
+- Payment provider webhook is source of truth.
+- User must return to the same paid action after successful payment.
+- If action requires moderation, Energy is reserved until review decision.
+- If action activates immediately, Energy can be spent immediately.
+
+Refund wording should stay fair:
+
+If Energy has already been used for an active service, refund may not always be possible.
+
+Avoid absolute wording unless policy is legally finalized.

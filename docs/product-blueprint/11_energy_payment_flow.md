@@ -270,3 +270,92 @@ The user should always understand:
 - how much they have
 - how much is missing
 - what happens after payment
+
+---
+
+## Final launch UX wording decisions
+
+Energy Payment Flow visual direction is accepted for V2 Launch.
+
+Final wording decisions:
+
+### Payment button
+
+Use:
+
+Jätka turvalisse maksesse
+
+Instead of:
+
+Ava makse
+
+Reason:
+
+The user should clearly understand that payment happens in a secure payment provider environment.
+
+---
+
+### Card data
+
+Selqiro does not collect or store card data.
+
+Launch payment should use trusted payment provider checkout.
+
+The UI should clearly communicate:
+
+Payment is handled securely by payment provider.
+
+Selqiro does not store card details.
+
+---
+
+### Refund wording
+
+Avoid harsh refund wording.
+
+Do not say:
+
+Energy cannot be refunded after use.
+
+Better wording:
+
+If Energy has already been used for an active service, refund may not always be possible.
+
+Reason:
+
+This is more fair, more human and leaves room for support decisions.
+
+---
+
+### Today's Story reservation wording
+
+For moderated paid actions, especially Today's Story, use clear reserve wording.
+
+Recommended text:
+
+Energy is reserved until the review decision.
+
+If approved:
+Energy is spent and the story becomes active.
+
+If rejected:
+Energy is released or refunded according to policy.
+
+---
+
+## Final launch decision
+
+Energy Payment Flow is locked for launch as:
+
+1. User starts paid action.
+2. Selqiro checks required Energy.
+3. If Energy is missing, Selqiro calculates missing Energy.
+4. User can add missing Energy and continue.
+5. User may choose larger package with better unit price.
+6. Payment happens through trusted payment provider.
+7. Webhook confirms payment.
+8. Energy is added to wallet.
+9. User returns to the same action.
+10. Energy is spent or reserved depending on the action.
+
+This flow should not be redesigned unless implementation exposes a major issue.

@@ -993,3 +993,23 @@ Rule:
 Only useful and contextual updates should affect discovery.
 
 Updates must not become spam or irrelevant advertising.
+
+---
+
+## Today's Story payment and review wording
+
+Today's Story may require moderation before activation.
+
+Energy should be reserved until review decision.
+
+User-facing meaning:
+
+Your Energy is reserved while the story is reviewed.
+
+If approved:
+Today's Story becomes active and Energy is spent.
+
+If rejected:
+Energy is released or refunded according to policy, or the business may be allowed to correct the content.
+
+This protects both Selqiro trust and business fairness.

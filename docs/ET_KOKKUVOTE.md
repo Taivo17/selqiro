@@ -2166,3 +2166,77 @@ Loogika:
 - kui lükatakse tagasi, Energy vabastatakse või tagastatakse vastavalt reeglitele
 
 See on õiglane ettevõtte suhtes ja kaitseb Selqiro usaldust.
+
+---
+
+# 78. Energy maksevoog on Launchiks lukus
+
+Energy maksevoo põhimõte on Launchiks paigas.
+
+Kui kasutaja või ettevõte alustab tasulist tegevust, näiteks Today's Story või esiletõstmine, kontrollib Selqiro Energy saldot.
+
+Kui Energy’t ei piisa, arvutab Selqiro automaatselt puuduva Energy.
+
+Kasutaja näeb:
+
+Lisa puuduv Energy ja jätka.
+
+Kasutaja ei pea ise arvutama, kui palju Energy’t on vaja.
+
+Lisaks võib Selqiro pakkuda suuremat paketti parema ühikuhinnaga.
+
+---
+
+# 79. Turvaline makse
+
+Makse nupu tekst peaks olema:
+
+Jätka turvalisse maksesse
+
+Mitte:
+
+Ava makse
+
+Põhjus:
+
+Kasutaja peab aru saama, et makse toimub turvalises makseteenuse keskkonnas.
+
+Selqiro ei salvesta kaardiandmeid.
+
+Launchis ei ole vaja "salvesta kaart" võimalust.
+
+Makse õnnestumist kinnitab makseteenuse webhook.
+
+Frontend edu ei ole piisav.
+
+---
+
+# 80. Energy reserveerimine ülevaatuse korral
+
+Kui tasuline tegevus aktiveerub kohe, näiteks tavaline kuulutuse esiletõstmine, võib Energy kohe kuluda.
+
+Kui tasuline tegevus vajab ülevaatust, näiteks Today's Story, siis Energy kõigepealt reserveeritakse.
+
+Kasutajale tuleb selgelt öelda:
+
+Energy reserveeritakse kuni ülevaatuse otsuseni.
+
+Kui sisu kinnitatakse, muutub Energy kulutatuks ja tegevus aktiveerub.
+
+Kui sisu lükatakse tagasi, Energy vabastatakse või tagastatakse vastavalt reeglitele.
+
+---
+
+# 81. Tagastuse sõnastus
+
+Tagastuse sõnastus ei tohiks olla liiga karm.
+
+Vältida võiks lauset:
+
+Energy’t ei saa pärast kasutamist tagastada.
+
+Parem sõnastus:
+
+Kui Energy on juba kasutatud aktiivse teenuse jaoks, ei pruugi tagastus alati olla võimalik.
+
+See on õiglasem, inimlikum ja jätab ruumi klienditoe otsustele.
