@@ -370,3 +370,51 @@ Important modules:
 - Trust basics
 
 Future enterprise modules are not required for Launch.
+
+## QUICK_UPDATES_AND_TEMPORARY_LOCATIONS
+
+Brand Space should support a Quick Update module.
+
+Quick Update is for current useful information:
+- temporary service location
+- fresh availability
+- seasonal offer
+- free time slot
+- important short announcement
+
+If no active update exists, no empty module is shown.
+
+Service providers can use temporary service location.
+
+Launch concept:
+- one free temporary service location per day
+- additional temporary locations use Energy
+- temporary location can gain more visibility if tied to service highlighting
+- all temporary updates expire automatically and are logged
+
+Service highlighting duration pricing:
+- 1 day highest cost per day
+- 14 days medium cost per day
+- 30 days lowest cost per day
+
+Misleading temporary locations reduce trust and can be moderated.
+
+## TEMPORARY_LOCATION_PRICING_UPDATE
+
+Temporary service location Energy model is duration-based.
+
+Launch:
+- one free temporary location update per day
+- paid 1 day access
+- paid 14 day access
+- paid 30 day access
+
+Longer access is cheaper per day.
+
+30 days should be the most cost-effective.
+
+Paid access allows updates to one active temporary location, not many simultaneous locations.
+
+When the provider updates location, previous active temporary location is replaced.
+
+Service highlighting is separate but can increase visibility of the active temporary location in relevant local discovery.

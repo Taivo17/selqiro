@@ -763,3 +763,108 @@ Rule:
 The user defines who they are in their profile.
 
 The preset only defines the starting structure.
+
+---
+
+## Quick Update module
+
+Quick Update is a lightweight module for time-sensitive profile information.
+
+It can be used by sellers, service providers and local producers.
+
+Examples:
+
+- Tow truck available in Tallinn until 16:00.
+- Fresh tomatoes available today.
+- Free repair slots today from 16:00 to 19:00.
+- New product batch arrived.
+- Workshop closed this Friday.
+
+If there is no active quick update, the module is not shown publicly.
+
+---
+
+## Temporary service location in profile
+
+Service providers can use Quick Update as temporary service location.
+
+Example:
+
+Tow truck available in Tallinn, Gonsiori street area until 16:00.
+
+This should appear:
+
+- on the provider profile
+- to followers
+- in relevant service discovery if location and category match
+
+Temporary location should not make unrelated content appear in unrelated searches.
+
+---
+
+## Quick Update simplicity
+
+Launch version should be simple.
+
+Recommended launch rules:
+
+- one active quick update per identity
+- one free temporary service location per day for service providers
+- additional temporary service locations can use Energy
+- update expires automatically
+- update can be linked to a service
+- update may include location and valid-until time
+
+Do not turn this into a full social media feed at Launch.
+
+Quick Update is for useful current information.
+
+
+---
+
+## Updated Quick Update temporary location model
+
+Temporary service location should support period-based access.
+
+Launch behavior:
+
+- every service provider may have one free temporary location update per day
+- paid access can allow temporary location updates during a selected period
+- 1 day access
+- 14 day access
+- 30 day access
+
+The 30 day option should be the most cost-effective for active service providers.
+
+Important rule:
+
+Only one temporary service location should be active at a time per service.
+
+If the provider updates the location, the previous active temporary location is replaced.
+
+This supports real mobile services without allowing one provider to appear in many cities at the same time.
+
+Example:
+
+Tow truck:
+- 12:00 Tallinn
+- 15:00 Tartu
+- 19:00 Paide
+
+At each moment, only the current active temporary location is used for discovery.
+
+---
+
+## Quick Update and service highlighting
+
+If a service provider also uses service highlighting, the active temporary location can receive stronger visibility in relevant local service discovery.
+
+Example:
+
+Tow truck is temporarily in Tallinn and has active service highlighting.
+
+A user searches tow truck near Tallinn.
+
+The provider may appear in featured nearby tow truck services.
+
+This is useful for both the user and the provider.

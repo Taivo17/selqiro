@@ -1339,3 +1339,155 @@ Põhimõte:
 Kasutaja kirjutab oma profiilis ise, kes ta on ja mida ta teeb.
 
 Profiilitüüp määrab ainult algse lihtsa struktuuri.
+
+---
+
+# 51. Kiire teade ja ajutine teenindusasukoht
+
+Profiilil võib olla Kiire teade.
+
+See on lühike ajaliselt oluline info.
+
+Näited:
+
+- Puksiir täna Tallinnas Gonsiori tänava piirkonnas kuni 16:00.
+- Täna saadaval värsked tomatid.
+- Täna vabad ajad rehvivahetuseks.
+- Uus kaup saabus.
+- Töökoda on reedel suletud.
+
+Kui aktiivset kiiret teadet ei ole, siis seda kasti profiilis ei näidata.
+
+Teenusepakkuja saab kasutada kiiret teadet ajutise teenindusasukoha jaoks.
+
+Näiteks puksiirifirma, kelle põhipiirkond on Järvamaa, saab lisada:
+
+Puksiir Tallinnas, Gonsiori tänava piirkonnas kuni 16:00.
+
+Sellisel juhul võib tema teenus ilmuda Tallinnas asjakohases puksiiriteenuse otsingus.
+
+Oluline reegel:
+
+Ajutine asukoht peab sobima asukoha, aja ja teenuse kategooriaga.
+
+Puksiiri ei näidata suvaliselt restoranide või diivanite vahel.
+
+---
+
+# 52. Ajutise asukoha Energy loogika
+
+Launchi põhimõte:
+
+- üks ajutine teenindusasukoht päevas võib olla tasuta
+- järgmised ajutised asukohad kasutavad Energy’t
+- ajutine asukoht koos teenuse esiletõstmisega annab rohkem nähtavust
+- kõik ajutised asukohad aeguvad automaatselt
+- kõik lisamised logitakse
+
+See annab ausale teenusepakkujale kasuliku tööriista, aga vähendab süsteemi ärakasutamist.
+
+Kui puksiir kasutab ajutisi asukohti päriselt töövahendina, siis on mõistlik, et see kasutab Energy’t.
+
+---
+
+# 53. Teenuse esiletõstmise kestus
+
+Teenuse esiletõstmine võiks olla soodsam, kui seda kasutatakse pikemalt.
+
+Põhimõte:
+
+- 1 päev = kõige kallim ühe päeva kohta
+- 14 päeva = keskmine ühe päeva hind
+- 30 päeva = kõige soodsam ühe päeva hind
+
+See motiveerib tõsiseid teenusepakkujaid kasutama stabiilset nähtavust.
+
+Lühike esiletõstmine jääb võimalikuks, kuid maksab ühe päeva kohta rohkem.
+
+---
+
+# 54. Usaldus ja kiire info
+
+Kui teenusepakkuja annab kiiretes teadetes valesid asukohti või valet saadavust, vähendab see usaldust.
+
+Jälgijad võivad lõpetada jälgimise.
+
+Kasutajad võivad teenusepakkujat mitte valida.
+
+Selqiro peaks siiski hoidma ajalugu ja võimaldama reportimist.
+
+Usaldusväärselt kasutatud Kiire teade kasvatab teenusepakkuja väärtust.
+
+Eksitavalt kasutatud Kiire teade võib hiljem vähendada nähtavust või minna admini ülevaatusse.
+
+---
+
+# 55. Ajutise teenindusasukoha uuendatud Energy loogika
+
+Ajutise teenindusasukoha Energy loogika peaks olema perioodipõhine.
+
+Launchi põhimõte:
+
+- üks tasuta ajutise asukoha uuendus päevas
+- tasuline 1 päeva ligipääs
+- tasuline 14 päeva ligipääs
+- tasuline 30 päeva ligipääs
+
+Mida pikem periood, seda soodsam ühe päeva kohta.
+
+30 päeva peaks olema kõige kasulikum aktiivsele teenusepakkujale, kes kasutab ajutist asukohta töövahendina.
+
+Näiteks:
+
+- puksiir
+- liikuv remonditeenus
+- torumees
+- liikuv hooajaline müüja
+- tulevikus muud live-teenused
+
+Oluline reegel:
+
+Tasuline ligipääs ei tähenda, et teenusepakkuja saab olla korraga nähtav mitmes linnas.
+
+Tal on üks aktiivne ajutine teenindusasukoht korraga.
+
+Kui ta uuendab asukohta, asendatakse eelmine aktiivne asukoht.
+
+Näide:
+
+12:00 Tallinn
+15:00 Tartu
+19:00 Paide
+
+Süsteem kasutab igal hetkel ainult aktiivset asukohta.
+
+See vähendab kuritarvitamist ja säilitab usalduse.
+
+---
+
+# 56. Ajutine asukoht ja teenuse esiletõstmine
+
+Ajutine teenindusasukoht ja teenuse esiletõstmine on seotud, aga erinevad asjad.
+
+Ajutine asukoht ütleb:
+
+kus teenus on praegu saadaval.
+
+Esiletõstmine annab:
+
+rohkem nähtavust sobivas piirkonnas ja kategoorias.
+
+Kui teenusepakkujal on mõlemad:
+
+- aktiivne ajutine asukoht
+- aktiivne teenuse esiletõstmine
+
+siis võib ta ilmuda vastavas piirkonnas esiletõstetud teenuste hulgas.
+
+Näide:
+
+Puksiir on ajutiselt Tallinnas ja kasutab teenuse esiletõstmist.
+
+Kasutaja otsib Tallinnas puksiiri.
+
+Puksiir võib ilmuda esiletõstetud puksiirteenuste hulgas.

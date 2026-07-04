@@ -622,3 +622,95 @@ Pay or you cannot continue.
 Energy is Selqiro's capability economy.
 
 It should increase what users can achieve without restricting their ability to participate.
+
+---
+
+## Energy and temporary service locations
+
+Temporary service locations can use Energy when they create extra business value.
+
+Launch principle:
+
+- one temporary service location per day can be free
+- additional temporary service locations require Energy
+- highlighted temporary service location requires Energy or active service highlighting
+
+Reason:
+
+Temporary location can create real local visibility.
+
+If used heavily as a business tool, it should consume Energy.
+
+This prevents abuse and creates a fair value-based revenue model.
+
+---
+
+## Energy and service highlighting duration
+
+Service highlighting can use duration-based Energy pricing.
+
+Recommended principle:
+
+- 1 day highlight has highest cost per day
+- 14 day highlight has lower cost per day
+- 30 day highlight has best cost per day
+
+Reason:
+
+Longer highlighting is more predictable and valuable for serious service providers.
+
+Short-term highlighting remains available but costs more per day.
+
+This encourages stable participation and reduces constant short-term manipulation.
+
+
+---
+
+## Updated Energy model for temporary service locations
+
+Temporary service location Energy use should be duration-based.
+
+Launch principle:
+
+- one free temporary service location update per day
+- 1 day paid access
+- 14 day paid access
+- 30 day paid access
+
+The longer period should have a lower cost per day.
+
+The 30 day option should be the most cost-effective.
+
+This fits service providers who use temporary location as a real business tool.
+
+Examples:
+- tow truck
+- mobile repair
+- plumber
+- mobile seasonal seller
+- future live service providers
+
+Important rule:
+
+Paid access allows the provider to update one active temporary service location, not to be visible in many cities at the same time.
+
+When location is updated, the previous active location is replaced.
+
+This keeps the system useful and prevents abuse.
+
+---
+
+## Temporary location vs highlighting
+
+Temporary location access and service highlighting are separate Energy concepts.
+
+Temporary location access:
+- allows current service location updates
+
+Service highlighting:
+- increases visibility in relevant discovery surfaces
+
+Together:
+- current location + highlighted service can create stronger local visibility
+
+This creates value without turning location updates into random advertising.

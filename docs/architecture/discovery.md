@@ -630,3 +630,260 @@ If a user views a lawn mower, show relevant garden or repair services.
 Do not show unrelated restaurant or generic ads.
 
 This protects user trust and increases value for advertisers.
+
+---
+
+## Service highlighting duration
+
+Service highlighting should support different duration levels.
+
+Recommended pricing principle:
+
+- 1 day highlight: highest cost per day
+- 14 day highlight: medium cost per day
+- 30 day highlight: lowest cost per day
+
+Reason:
+
+Longer highlighting should be more cost-effective for serious service providers.
+
+This encourages stable business visibility instead of constant short-term manipulation.
+
+Short-term highlighting remains available for urgent campaigns or temporary availability.
+
+---
+
+## Temporary service location
+
+Temporary service location is a special type of quick update for service providers.
+
+Example:
+
+Tow truck provider normally operates in Järvamaa.
+
+Temporary location:
+
+Tow truck available in Tallinn, Gonsiori street area until 16:00.
+
+This can make the service visible in Tallinn for relevant service searches during the active time window.
+
+Temporary location must include:
+
+- related service
+- location
+- valid until time
+- short message
+- optional contact action
+
+---
+
+## Temporary service location visibility
+
+Temporary location visibility must depend on:
+
+- location
+- time
+- service category
+- relevance
+
+Example:
+
+A tow truck temporary location in Tallinn can appear for:
+
+- tow truck search
+- roadside assistance
+- car-related services
+- relevant vehicle-related contexts
+
+It should not appear in unrelated searches such as furniture, restaurants or general marketplace browsing.
+
+---
+
+## Free and Energy-based temporary locations
+
+Launch principle:
+
+Each service provider may have one free temporary service location per day.
+
+Additional temporary service locations can require Energy.
+
+Temporary service location with active highlighting can receive more visibility in relevant local service discovery.
+
+This keeps the tool useful but reduces abuse.
+
+---
+
+## Highlighted temporary location
+
+If a service provider has active service highlighting, temporary service locations can receive enhanced visibility.
+
+Example:
+
+User searches tow truck in Tallinn.
+
+A highlighted tow truck provider has active temporary location in Tallinn until 16:00.
+
+It may appear in:
+
+- relevant service results
+- featured nearby service area
+- profile quick update
+- followers' updates
+
+This creates real value for the provider and the user.
+
+---
+
+## Abuse prevention for temporary locations
+
+Temporary locations can be abused if a provider marks many places where they are not actually available.
+
+Basic controls:
+
+- one free temporary service location per day
+- additional temporary locations require Energy
+- each update expires automatically
+- all updates are logged
+- misleading updates can be reported
+- repeated abuse can reduce trust or visibility
+- admin review can be triggered for suspicious patterns
+
+Do not build full live GPS tracking for Launch.
+
+Architecture should support stronger validation later if needed.
+
+---
+
+## Trust effect of updates
+
+Quick updates and temporary service locations are visible to followers and relevant users.
+
+If a provider repeatedly posts unreliable availability, users may unfollow or stop using that provider.
+
+This creates natural trust pressure.
+
+However, Selqiro should not rely only on social pressure.
+
+The platform must keep update history and allow reports and moderation.
+
+Trust is a business asset.
+
+Providers who use quick updates honestly should gain value.
+
+Providers who misuse them should lose visibility over time.
+
+
+---
+
+## Updated temporary service location pricing decision
+
+Temporary service location Energy model should be duration-based, not per extra location only.
+
+This supersedes earlier simple wording about charging mainly by number of additional locations.
+
+Launch principle:
+
+- one free temporary service location update per day
+- paid temporary location access can be purchased for a time period
+- 1 day has the highest cost per day
+- 14 days has a lower cost per day
+- 30 days has the best cost per day
+
+Reason:
+
+Some service providers use location updates as a real work tool.
+
+Examples:
+- tow truck
+- mobile repair service
+- plumber
+- taxi-like service later
+- mobile equipment service
+
+For these providers, longer access should be more cost-effective.
+
+This encourages honest professional use instead of constant short-term micro-purchases.
+
+---
+
+## One active temporary location at a time
+
+Paid temporary location access should not mean that a provider can appear in many cities at the same time.
+
+Recommended rule:
+
+A service provider may have one active temporary service location at a time per service.
+
+When they update the location, the previous active temporary location is replaced.
+
+Example:
+
+12:00 Tallinn, Gonsiori street
+↓
+15:00 Tartu, Ringtee
+↓
+19:00 Paide
+
+The provider is not simultaneously visible in all three places.
+
+This protects trust and prevents abuse.
+
+---
+
+## Temporary location period options
+
+Possible period options:
+
+- free: one temporary location update per day
+- 1 day access
+- 14 day access
+- 30 day access
+
+The 30 day option should be the most cost-effective per day.
+
+This supports serious service providers who use Selqiro as a daily work tool.
+
+---
+
+## Temporary location and highlighting
+
+Temporary location access and service highlighting are related but separate.
+
+Temporary location:
+- tells Selqiro where the service is currently available
+
+Service highlighting:
+- increases discovery visibility
+
+If a provider has both:
+- active temporary service location
+- active service highlighting
+
+then the service may receive stronger visibility in the relevant local area and category.
+
+Example:
+
+A tow truck has active temporary location in Tallinn until 16:00 and active highlighting.
+
+User searches tow truck near Tallinn.
+
+The provider can appear in featured nearby tow truck services.
+
+---
+
+## Abuse prevention
+
+Temporary location access should remain trust-based but controlled.
+
+Controls:
+
+- one active temporary location at a time
+- location updates are logged
+- updates expire or are replaced
+- misleading location updates can be reported
+- repeated misuse can reduce trust or visibility
+- admin review can be triggered by suspicious patterns
+
+Do not build full live GPS tracking for launch.
+
+Architecture should allow stronger validation later if needed.

@@ -521,3 +521,31 @@ Examples:
 - Recently viewed by many users
 
 Exact metrics remain owner/admin analytics unless there is a strong product reason to expose them later.
+
+---
+
+## Trust and quick updates
+
+Quick updates and temporary service locations affect trust.
+
+If a provider posts unreliable availability, users may lose trust.
+
+Examples of misuse:
+
+- posting temporary location where provider is not available
+- repeatedly changing locations only to appear in more searches
+- marking urgent availability without real service capacity
+
+Trust protections:
+
+- update history
+- automatic expiration
+- user reports
+- admin review
+- repeated misuse can reduce visibility later
+- future trust score can consider reliability of updates
+
+Honest quick updates should help providers.
+
+Misleading quick updates should hurt long-term trust.
+
