@@ -359,3 +359,29 @@ Decision:
 Energy and payments are Launch-critical.
 
 Full accounting integrations can come later.
+
+---
+
+## Jobs scope decision
+
+Jobs are not required for V2 Launch unless implementation is simple.
+
+Architecture should support jobs later.
+
+Initial Jobs model:
+
+- employer-side job postings
+- business identity publishes job
+- no personal "looking for work" listings initially
+- simple job detail
+- contact or apply action
+
+Future:
+
+- job alerts near me
+- featured jobs
+- simple applications
+- applicants management
+- AI-assisted job writing
+
+Do not build a full recruitment platform for launch.

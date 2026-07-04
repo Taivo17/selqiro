@@ -1415,3 +1415,36 @@ Main modules
 Information panel
 Updates history
 Contact path
+
+---
+
+## Jobs module
+
+Jobs can be a future Brand Space module.
+
+Initial model:
+
+A business publishes job opportunities.
+
+The public profile can show:
+
+- active jobs
+- latest job openings
+- view all jobs
+
+If no jobs exist, the Jobs module is hidden publicly.
+
+Jobs should be simple at first.
+
+A job posting may include:
+
+- job title
+- location
+- short description
+- salary if provided
+- employment type if provided
+- contact or apply action
+
+Do not build a full recruitment platform for launch.
+
+Jobs are another profile module that can be enabled when needed.

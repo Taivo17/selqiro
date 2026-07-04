@@ -551,3 +551,27 @@ Main sections:
 - Admin if permitted
 
 My Area should stay simple for small users and expand for businesses.
+
+## JOBS
+
+Initial Jobs model should be employer-side.
+
+A business is looking for a worker.
+
+Do not start with personal "looking for work" listings.
+
+Jobs should be simple:
+- title
+- company
+- location
+- optional salary
+- optional employment type
+- description
+- contact/apply action
+
+Jobs are a Brand Space module and a future My Area section.
+
+Jobs are not required for V2 Launch unless simple to add.
+
+Future:
+job alerts near me, featured jobs, simple application flow.

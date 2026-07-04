@@ -501,3 +501,82 @@ The user should not feel overwhelmed.
 My Area is the owner's workspace.
 
 It should reveal complexity only when the user needs it.
+
+---
+
+## Jobs management
+
+Jobs can be a future My Area section for business identities.
+
+My Area / Jobs may support:
+
+- add job
+- edit job
+- pause job
+- close job
+- archive job
+- view job messages
+- future applicants
+
+Initial job management should stay simple.
+
+The business should be able to publish:
+
+- job title
+- location
+- description
+- optional salary
+- optional employment type
+- contact or apply action
+
+If no job module is enabled, normal users should not see job management.
+
+---
+
+## Overview vs full management
+
+My Area overview should stay compact.
+
+It should show only short summaries:
+
+- a few listings
+- a few services
+- active quick update
+- important messages
+- Energy if relevant
+
+Full management opens from "View all" or section navigation.
+
+Examples:
+
+Overview:
+Sinu kuulutused
+
+Full view:
+Minu ala / Kuulutused
+with search, status filter, own sections and editing tools.
+
+Overview:
+Sinu teenused
+
+Full view:
+Minu ala / Teenused
+with edit, active/paused status and add service.
+
+Do not overload the overview page.
+
+The overview is a dashboard, not the full management interface.
+
+---
+
+## Messages access
+
+Messages must be accessible globally.
+
+The top navigation should always include message access.
+
+Clicking messages opens the inbox for the active identity.
+
+If active identity changes, message context changes.
+
+My Area can include a messages section, but the top navigation is the fast access point from every page.

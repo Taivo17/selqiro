@@ -1985,3 +1985,92 @@ Põhimõte:
 Näita ainult seda, mida kasutaja vajab.
 
 Keerukus avaneb ainult siis, kui kasutaja vajab rohkem võimalusi.
+
+---
+
+# 72. Töökuulutused
+
+Töökuulutused tulevad Selqirosse tulevikus lihtsa mudelina.
+
+Algne loogika:
+
+Ettevõte otsib töötajat.
+
+Mitte:
+
+Eraisik lisab kuulutuse, et otsib tööd.
+
+See hoiab süsteemi lihtsa ja usaldusväärse.
+
+Töökuulutus võiks sisaldada:
+
+- ametinimetus
+- ettevõte
+- asukoht
+- lühikirjeldus
+- palk, kui ettevõte soovib lisada
+- töö tüüp, kui vaja
+- Kandideeri või Võta ühendust nupp
+
+Kui palk puudub, siis tühja palgavälja ei näidata.
+
+Töökohad oleksid ettevõtte profiili ehk Brand Space moodul.
+
+Kui ettevõttel töökohti ei ole, siis avalikus profiilis seda plokki ei kuvata.
+
+Minu alas tekib tulevikus töökohtade haldus ainult nendele identiteetidele, kellel on töö moodul sisse lülitatud.
+
+Launchis ei pea töökuulutused olema kohustuslikud, kui see teeb arenduse liiga suureks.
+
+Arhitektuur peab neid aga toetama.
+
+---
+
+# 73. Minu ala ülevaade ja täishaldus
+
+Minu ala esimene vaade on ülevaade.
+
+Seal näidatakse lühidalt:
+
+- sinu kuulutused
+- sinu teenused
+- kiired teated
+- sõnumid
+- Energy, kui vaja
+- profiili täitmise soovitused
+
+Kui kasutaja vajutab "Vaata kõiki", avaneb vastava osa täishaldus.
+
+Näiteks:
+
+Minu ala / Kuulutused
+
+Seal saab:
+
+- otsida oma kuulutuste hulgast
+- filtreerida staatuse järgi
+- kasutada enda rubriike
+- muuta kuulutusi
+- lisada kuulutusi
+
+Teenuste puhul on eraldi:
+
+Minu ala / Teenused
+
+Seal saab teenuseid lisada ja muuta.
+
+Teenuste jaoks ei ole Launchis vaja enda rubriike.
+
+---
+
+# 74. Sõnumid peavad olema alati kättesaadavad
+
+Sõnumid peavad olema ülevalt menüüst alati kättesaadavad.
+
+Kasutaja peab pääsema sõnumitesse ükskõik millisel lehel ta parasjagu on.
+
+Sõnumid avanevad aktiivse identiteedi järgi.
+
+Kui kasutaja tegutseb kui Milline Vedu, siis avaneb Milline Vedu sõnumite postkast.
+
+Kui kasutaja vahetab identiteeti, muutub ka sõnumite kontekst.
