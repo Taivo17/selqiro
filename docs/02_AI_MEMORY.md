@@ -729,3 +729,50 @@ Each module should have:
 - permissions later
 
 Admin must stay case-based and privacy-respecting.
+
+## ADMIN_AI_TRIAGE
+
+Admin should be modular and AI-assisted.
+
+AI does first-pass triage:
+- green = safe/simple
+- yellow = uncertain, escalate
+- red = high-risk, urgent review
+
+AI can help with:
+- reports
+- Today's Story review
+- support questions
+- suspicious content
+- repeated system issues
+- multi-country admin workload
+
+AI Signals should detect recurring problems such as payment errors, upload failures, localization confusion.
+
+AI reduces admin workload but sensitive decisions remain human-controlled.
+
+## MULTILINGUAL_ADMIN_AND_CASE_OWNERSHIP
+
+Admin cases should support original text + AI translation for non-private content.
+
+Original is source of truth.
+
+AI translation is a working aid.
+
+Admin can write reply in working language and have it translated to user language.
+
+Store both original admin reply and translated user-facing reply.
+
+Private messages exception:
+AI does not translate or analyze private messages during V2 Launch.
+
+Case ownership:
+Admin clicks "Take case"; case becomes assigned/locked.
+Other admins see who is handling it.
+Lock can expire or case can be reassigned.
+
+Future routing:
+manual, round robin, balanced, country, language, risk, module.
+
+AI Signals:
+detect recurring problems like payment errors, upload timeouts, localization confusion, repeated support issues.

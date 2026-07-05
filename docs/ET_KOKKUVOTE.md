@@ -2731,3 +2731,232 @@ Kõik need peavad sobituma sama admini vundamendi külge.
 Admin ei tohi muutuda segaseks suureks kontrollpaneeliks.
 
 Admini eesmärk on kaitsta usaldust ja aidata lahendada konkreetseid juhtumeid.
+
+---
+
+# 103. AI abistab admini, aga ei asenda vastutust
+
+Kui Selqiro kasvab paljudesse riikidesse, ei saa admin kõike käsitsi üle vaadata.
+
+AI peab aitama teha esmast sorteerimist.
+
+AI võib vaadata esimesena:
+
+- raportid
+- Today's Story sisud
+- kahtlased kuulutused
+- teenuseprofiilid
+- korduvad support küsimused
+- makseprobleemid
+- tehnilised vead
+- keele või tõlke probleemid
+
+AI jagab juhtumid lihtsustatult:
+
+Green:
+madal risk või selge juhtum.
+
+Yellow:
+kahtlane või ebaselge juhtum, vajab inimese ülevaatust.
+
+Red:
+kõrge risk, kiire admini tähelepanu.
+
+AI ei tee tundlikes asjades lõplikku otsust.
+
+Inimene otsustab siis, kui mängus on:
+
+- kasutaja usaldus
+- maksed
+- ettevõtte maine
+- privaatsus
+- õiguslik risk
+- Today's Story
+- konto või identiteedi piiramine
+
+---
+
+# 104. AI Signals
+
+AI Signals on tuleviku admin moodul, mis aitab leida korduvaid probleeme.
+
+Näited:
+
+- mitu kasutajat raporteerib makse vea
+- piltide üleslaadimine jääb paljudel seisma
+- kasutajad katkestavad Energy ostu samas kohas
+- sama tõlkeprobleem kordub ühes keeles
+- palju kasutajaid küsib sama support küsimust
+
+AI peaks sellised mustrid adminile nähtavaks tegema.
+
+See aitab parandada portaali enne, kui väike probleem muutub suureks.
+
+---
+
+# 105. Multi-country admin
+
+Kui Selqiro töötab paljudes riikides, peab admin nägema koormust riikide kaupa.
+
+Näiteks:
+
+- Eesti
+- Soome
+- Jaapan
+- Brasiilia
+- Saksamaa
+
+Iga riigi kohta võiks näha:
+
+- avatud juhtumid
+- AI poolt lahendatud osa
+- inimese ülevaatust vajavad juhtumid
+- keele või lokaliseerimise probleemid
+- maksete või supporti probleemid
+
+See aitab hallata globaalset portaali ilma, et kõik läheks käsitsi üle jõu.
+
+---
+
+# 106. Admini eesmärk
+
+Admin ei ole koht kasutajate jälgimiseks.
+
+Admin on koht, kus lahendatakse juhtumeid ja kaitstakse usaldust.
+
+AI aitab adminil näha, mis vajab tähelepanu.
+
+Admin teeb otsused seal, kus otsus päriselt loeb.
+
+Põhimõte:
+
+AI vähendab halduskoormust.
+
+Inimene vastutab tundlike otsuste eest.
+
+---
+
+# 107. Mitmekeelne admin
+
+Selqiro on globaalne platvorm ja admin peab saama töötada erinevate riikide ning keeltega.
+
+Kui juhtum tuleb näiteks jaapani, portugali, saksa või mõnes muus keeles, peaks admin nägema:
+
+- originaalteksti
+- AI tõlget admini töökeelde
+- AI kokkuvõtet
+- riskitaset
+- soovitatud järgmist sammu
+
+Originaaltekst peab alati nähtav olema.
+
+Originaal on tõe allikas.
+
+AI tõlge on ainult töövahend.
+
+Privaatsõnumite puhul AI Launchis tõlget ega analüüsi ei tee.
+
+---
+
+# 108. Admini vastuse tõlkimine kasutaja keelde
+
+Admin võib kirjutada vastuse enda töökeeles.
+
+Näiteks eesti või inglise keeles.
+
+Kui kasutaja keel on teine, võib Selqiro tõlkida admini vastuse kasutaja keelde.
+
+Enne saatmist näeb admin:
+
+- enda originaalvastust
+- AI tõlget kasutaja keelde
+- sihtkeelt
+- võimalust tõlget vajadusel muuta
+
+Kasutaja näeb vastust enda keeles.
+
+Kasutaja ei pea nägema admini töökeelt.
+
+Süsteem peaks säilitama mõlemad:
+
+- admini originaalvastus
+- kasutajale saadetud tõlge
+
+See on vajalik auditiks ja vaidluste korral.
+
+---
+
+# 109. Case ownership ehk juhtumi omanik
+
+Kui adminne on mitu, ei tohi kaks admini sama juhtumit korraga lahendada.
+
+Selleks peab juhtumil olema omanik või lukustus.
+
+Töövoog:
+
+1. Juhtum ilmub järjekorda.
+2. Admin vajutab "Võtan käsile".
+3. Juhtum määratakse sellele adminile.
+4. Teised adminid näevad, et juhtum on juba töös.
+5. Admin lahendab, lükkab tagasi, eskaleerib või määrab ümber.
+
+Kui admin ei tegutse mõnda aega, võib lukustus aeguda ja juhtum läheb tagasi järjekorda.
+
+See väldib topeltvastuseid ja vastuolulisi otsuseid.
+
+---
+
+# 110. Juhtumite jagamine adminide vahel
+
+Launchis võib tööjaotus olla lihtne:
+
+admin valib järjekorrast juhtumi ja võtab selle käsile.
+
+Tulevikus saab lisada automaatse jaotuse:
+
+- round robin
+- koormuse järgi
+- riigi järgi
+- keele järgi
+- riski järgi
+- mooduli järgi
+
+Näiteks:
+
+- maksejuhtumid lähevad finance/support tiimile
+- Today's Story juhtumid lähevad moderation tiimile
+- Jaapani juhtumid lähevad jaapani keelt oskavale tiimile
+- kõrge risk läheb kogenumale adminile
+
+Launchis ei pea seda üle ehitama.
+
+Arhitektuur peab lihtsalt lubama seda hiljem lisada.
+
+---
+
+# 111. AI Signals korduvate probleemide jaoks
+
+Kui paljud kasutajad kogevad sama probleemi, ei tohiks admin näha ainult kümneid eraldi juhtumeid.
+
+AI peaks tuvastama mustri ja looma signaali.
+
+Näited:
+
+- mitmel kasutajal ei tööta makse
+- mitmel kasutajal jääb pildi üleslaadimine seisma
+- kasutajad katkestavad Energy ostu samas kohas
+- ühes keeles ei saada nupu tekstist aru
+- mitu kasutajat raporteerib sama kuulutust
+
+AI Signal peaks näitama:
+
+- probleemi kokkuvõte
+- mõjutatud funktsioon
+- mõjutatud kasutajate arv
+- riigid või keeled
+- tõsidus
+- trend
+- soovitatud järgmine samm
+- seotud juhtumid
+
+See aitab adminil ja arendusel parandada süsteemi, mitte ainult üksikuid sümptomeid.

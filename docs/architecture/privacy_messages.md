@@ -299,3 +299,21 @@ Private messages are private by default.
 Access is exceptional, limited, justified and logged.
 
 Privacy is part of Selqiro's trust.
+
+---
+
+## Translation and private messages
+
+V2 Launch rule:
+
+AI must not translate private message content.
+
+Even if a private conversation is reported, AI should not process the private message content during launch.
+
+Human support/moderation may review relevant content through case-based access if allowed.
+
+This keeps the privacy promise simple:
+
+AI does not read private messages.
+
+Future opt-in AI translation or summary for private messages requires a separate privacy and product decision.

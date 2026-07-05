@@ -678,3 +678,185 @@ Dashboard should answer:
 What needs attention today?
 
 It should not show every possible admin tool at once.
+
+---
+
+## Admin dashboard visual direction
+
+The admin dashboard visual direction is accepted as a modular overview.
+
+The dashboard should prioritize:
+
+- what needs attention today
+- AI escalations
+- open reports
+- Today's Story reviews
+- support cases
+- payment or Energy issues
+- system alerts
+- recent admin actions
+- audit log summary
+
+The dashboard should not show every possible admin tool at once.
+
+It should guide admin to the highest priority cases.
+
+---
+
+## AI first-pass review
+
+Admin UX should support AI first-pass review.
+
+AI can help sort issues before they reach human admin.
+
+Examples:
+
+- safe content can be approved or routed automatically when policy allows
+- common support questions can receive AI-guided answers
+- suspicious or unclear content goes to human review
+- repeated product issues become AI Signals
+
+Human admin should see why AI escalated something.
+
+Admin should not need to guess.
+
+---
+
+## AI escalation queue
+
+The admin dashboard can include an AI escalation queue.
+
+Examples:
+
+- Today's Story flagged by AI
+- listing possible scam
+- service profile unclear claim
+- support case AI could not resolve
+- payment dispute needs human review
+
+Each escalation should include:
+
+- risk level
+- reason
+- affected user/identity
+- related object
+- time
+- action button
+
+---
+
+## Multi-country admin view
+
+As Selqiro grows, admin dashboard should support country-level operations.
+
+Admin should be able to see:
+
+- open cases by country
+- AI-handled percentage
+- human review queue
+- country-specific workload
+- language-related issues
+- localized support pressure
+
+This is important for global scaling.
+
+---
+
+## Recurring issue detection
+
+Admin should not learn about every product problem manually.
+
+If several users report or experience the same problem, AI should detect the pattern and notify admin.
+
+Examples:
+
+- payment checkout error
+- image upload timeout
+- translation issue
+- broken form
+- repeated confusion in Energy purchase flow
+
+This turns support messages into product improvement signals.
+
+---
+
+## Multilingual admin UX
+
+Admin case detail should support multilingual work.
+
+For non-private content, show:
+
+- original text
+- AI translation
+- AI summary
+- detected language
+- risk level
+- recommended action
+
+Original text must remain visible.
+
+AI translation is only a working aid.
+
+Private message content is not translated or analyzed by AI during V2 Launch.
+
+---
+
+## Admin reply translation UX
+
+Admin can write a reply in their working language.
+
+If the user uses another language, Selqiro can translate the reply.
+
+Before sending, admin should see:
+
+- original admin text
+- translated user-facing text
+- target language
+- edit option
+
+User receives the translated reply.
+
+System stores both original and translated versions.
+
+---
+
+## Case ownership UX
+
+Admin cases should support ownership and locking.
+
+User flow:
+
+1. Case appears in queue.
+2. Admin clicks "Take case".
+3. Case is assigned and locked.
+4. Other admins see that someone is handling it.
+5. Admin resolves, dismisses, escalates or reassigns.
+
+This prevents two admins from working on the same case at the same time.
+
+---
+
+## AI Signals UX
+
+Admin dashboard should later include AI Signals.
+
+AI Signals group repeated problems.
+
+Examples:
+
+- payment checkout failing for many users
+- image upload timeout
+- translation issue in Japanese UI
+- users abandoning Energy purchase at same step
+
+AI Signals should show:
+
+- issue summary
+- affected feature
+- number of users
+- severity
+- trend
+- suggested action
+- related cases
+
+This helps admin see product problems, not only individual complaints.
