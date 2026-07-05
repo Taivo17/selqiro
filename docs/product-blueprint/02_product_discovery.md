@@ -473,3 +473,24 @@ Rule:
 
 Local search starts near the user.
 Global search must not pretend that physical distance is always meaningful.
+
+---
+
+## Approximate distance display
+
+Product Discovery should show distance from the user, but distance precision depends on seller location precision.
+
+If seller is a private/simple seller, distance should usually be approximate.
+
+Examples:
+
+- Paide piirkond · ~12 km
+- umbes 12 km sinust
+
+If seller is a business with public address, exact distance can be shown more directly.
+
+Avoid forcing private sellers to publish exact address.
+
+Cards should stay compact.
+
+Detailed location privacy explanation belongs to listing detail or tooltip.

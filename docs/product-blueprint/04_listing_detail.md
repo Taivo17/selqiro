@@ -649,3 +649,34 @@ Rule:
 
 Show what exists.
 Hide what is empty.
+
+---
+
+## Location privacy on listing detail
+
+Listing detail must respect seller privacy.
+
+For private sellers and simple sellers, exact address should not be shown by default.
+
+Recommended public display:
+
+Paide piirkond, Eesti
+umbes 12 km sinust
+
+Show a calm note:
+
+Asukoht on ligikaudne. Täpne koht lepitakse kokku müüjaga.
+
+For businesses, exact address can be shown if the business has chosen to publish it.
+
+Examples:
+
+Business:
+Paide, Kesk 12 · 3.2 km sinust
+
+Private seller:
+Paide piirkond · umbes 12 km sinust
+
+Rule:
+
+Distance from user is useful, but precision must match the seller's chosen location privacy.

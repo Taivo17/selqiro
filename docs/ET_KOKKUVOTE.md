@@ -3237,3 +3237,66 @@ Global otsingus võib olulisem olla:
 Teenused jäävad Launchis local-first loogikale.
 
 Global sobib rohkem toodetele, brändidele, tootenäidistele ja tulevikus Knowledge sisule.
+
+---
+
+# 124. Asukoha privaatsus ja kaugus sinust
+
+Selqiro on local-first platvorm, seega kaugus kasutajast on oluline.
+
+Samas ei tohiks eraisikust või väikemüüjast müüjat suunata avaldama täpset kodust aadressi.
+
+Eraisiku või lihtsa müüja puhul on soovitatav näidata:
+
+- linn
+- piirkond
+- ligikaudne kaugus
+
+Näide:
+
+Paide piirkond · umbes 12 km sinust
+
+Või:
+
+Paide piirkond, Eesti
+umbes 12 km sinust
+
+Detailvaates võib lisada rahuliku selgituse:
+
+Asukoht on ligikaudne. Täpne koht lepitakse kokku müüjaga.
+
+---
+
+# 125. Ettevõtte asukoht
+
+Ettevõte võib soovi korral näidata täpset aadressi.
+
+See sobib näiteks:
+
+- poele
+- töökojale
+- kontorile
+- teeninduspunktile
+- avalikule äriaadressile
+
+Näide:
+
+Paide, Kesk 12 · 3.2 km sinust
+
+Aga ka ettevõte võib valida ainult teeninduspiirkonna, kui täpne aadress ei ole vajalik.
+
+---
+
+# 126. Kuulutuse loomisel asukoha soovitus
+
+Kuulutuse lisamisel võiks Selqiro eraisikule öelda:
+
+Privaatsuse huvides lisa linn või piirkond, mitte täpne kodune aadress.
+
+Ettevõttele võib öelda:
+
+Kui soovid, lisa avalik äriaadress, et kliendid leiaksid sind lihtsamalt.
+
+Põhimõte:
+
+Selqiro aitab leida lähedal olevaid võimalusi, aga ei sunni erakasutajat täpset asukohta avaldama.

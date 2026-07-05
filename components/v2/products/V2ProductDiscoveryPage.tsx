@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 
 type ActivePanel = "price" | "location" | "filters" | "sort" | null;
@@ -21,7 +22,7 @@ const featuredProducts: ProductCard[] = [
     seller: "Milline Vedu",
     category: "Aiatehnika",
     location: "Imavere",
-    distance: "18 km",
+    distance: "~18 km",
     price: "4562 €",
     meta: "Kasutatud · heas korras",
     badge: "Esiletõstetud",
@@ -31,7 +32,7 @@ const featuredProducts: ProductCard[] = [
     seller: "Taivo Garaaž",
     category: "Aed",
     location: "Paide",
-    distance: "0.8 km",
+    distance: "~0.8 km",
     price: "320 €",
     meta: "Bensiin · töökorras",
     badge: "Esiletõstetud",
@@ -41,7 +42,7 @@ const featuredProducts: ProductCard[] = [
     seller: "Garaaž test",
     category: "Sõidukid",
     location: "Türi",
-    distance: "24 km",
+    distance: "~24 km",
     price: "6000 €",
     meta: "Kasutatud · diisel",
     badge: "Hea hind",
@@ -54,7 +55,7 @@ const products: ProductCard[] = [
     seller: "Garaaž test",
     category: "Sõidukid",
     location: "Türi",
-    distance: "28 km",
+    distance: "~28 km",
     price: "99000 €",
     meta: "Kasutatud · maastur",
   },
@@ -63,7 +64,7 @@ const products: ProductCard[] = [
     seller: "Test",
     category: "Sõidukid",
     location: "Tallinn",
-    distance: "82 km",
+    distance: "~82 km",
     price: "600000 €",
     meta: "Super sport · roheline",
   },
@@ -72,7 +73,7 @@ const products: ProductCard[] = [
     seller: "test Sindi",
     category: "Sõidukid",
     location: "Sindi",
-    distance: "94 km",
+    distance: "~94 km",
     price: "8967 €",
     meta: "Kasutatud · veoauto",
   },
@@ -81,7 +82,7 @@ const products: ProductCard[] = [
     seller: "Tööriistad Paide",
     category: "Tööriistad",
     location: "Paide",
-    distance: "1.2 km",
+    distance: "~1.2 km",
     price: "45 €",
     meta: "Heas korras",
   },
@@ -90,7 +91,7 @@ const products: ProductCard[] = [
     seller: "Kodu",
     category: "Mööbel",
     location: "Paide",
-    distance: "0.6 km",
+    distance: "~0.6 km",
     price: "150 €",
     meta: "Kasutatud · puhas",
   },
@@ -99,7 +100,7 @@ const products: ProductCard[] = [
     seller: "Telefonid",
     category: "Elektroonika",
     location: "Paide",
-    distance: "0.8 km",
+    distance: "~0.8 km",
     price: "320 €",
     meta: "Aku 86%",
   },
@@ -157,6 +158,13 @@ function ProductCardView({
             <span className="text-neutral-400">{product.distance}</span>
           </p>
         </div>
+
+        <Link
+          href="/v2/listing/demo"
+          className="mt-4 inline-flex rounded-full border border-neutral-200 bg-white px-4 py-2 text-xs font-black shadow-sm transition hover:border-neutral-300"
+        >
+          Ava kuulutus
+        </Link>
       </div>
     </article>
   );

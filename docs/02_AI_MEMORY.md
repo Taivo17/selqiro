@@ -858,3 +858,22 @@ Location change should remain possible, but launch UI should keep it simple.
 Global search is a separate mode and should not rely mainly on distance.
 
 Country-specific search can come later when multi-country usage grows.
+
+## LOCATION_PRIVACY
+
+Selqiro is local-first, but private sellers should not be encouraged to publish exact home address.
+
+Private/simple seller default:
+- city/area
+- approximate distance
+- wording like "Paide piirkond · umbes 12 km sinust"
+
+Business default:
+- may show exact public address if chosen
+
+Listing detail should show a calm note:
+"Asukoht on ligikaudne. Täpne koht lepitakse kokku müüjaga."
+
+Distance precision must match location precision.
+
+Do not treat approximate location as suspicious.
