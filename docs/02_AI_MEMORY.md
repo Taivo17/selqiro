@@ -776,3 +776,50 @@ manual, round robin, balanced, country, language, risk, module.
 
 AI Signals:
 detect recurring problems like payment errors, upload timeouts, localization confusion, repeated support issues.
+
+## V2_BUILD_PLAN
+
+Decision:
+Build Selqiro V2 as a clean new V2 layer inside the existing repo.
+
+Do not endlessly patch old large files.
+Do not start a totally new repo from zero.
+
+Reuse:
+- Supabase
+- auth
+- existing database where suitable
+- working API/RPC logic
+- existing messaging logic where useful
+- existing admin foundation where useful
+
+Rebuild:
+- UI
+- layout
+- navigation
+- profiles
+- discovery
+- listing cards/details
+- My Area
+- services UI
+- Energy UI
+- admin UI visual layer
+
+V2 can initially live under /v2 routes.
+
+Development rule:
+one module at a time, build, test, commit.
+
+Build phases:
+1. V2 shell/navigation
+2. design system components
+3. product discovery
+4. listing detail
+5. public profile / Brand Space
+6. My Area
+7. services and quick updates
+8. messaging visual refresh
+9. Energy/payments
+10. admin/moderation
+11. jobs later
+12. launch QA

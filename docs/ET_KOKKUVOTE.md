@@ -2960,3 +2960,136 @@ AI Signal peaks näitama:
 - seotud juhtumid
 
 See aitab adminil ja arendusel parandada süsteemi, mitte ainult üksikuid sümptomeid.
+
+---
+
+# 112. V2 ehitusotsus
+
+Selqiro V2 ehitatakse uue puhta V2 kihina olemasoleva repo sees.
+
+Me ei tee lõputut vana koodi lappimist.
+
+Me ei alusta ka täiesti uut projekti nullist.
+
+Parim tee on vahepealne:
+
+uus V2 kasutajakogemus
++
+sama olemasolev repo
++
+olemasolev töötav vundament seal, kus see on mõistlik.
+
+---
+
+# 113. Mida jätame alles
+
+V2 kasutab edasi seda, mis juba töötab ja on kasulik.
+
+Näiteks:
+
+- Supabase projekt
+- autentimine
+- olemasolevad andmetabelid, kui sobivad
+- toimivad RPC funktsioonid
+- toimiv listing/search loogika, kui sobib
+- toimiv messaging loogika
+- olemasolevad API route’id
+- location/geocode/search
+- olemasolev deploy ja keskkond
+
+Me ei ehita backendit uuesti ainult selleks, et uuesti ehitada.
+
+---
+
+# 114. Mida ehitame uuesti
+
+V2 jaoks ehitame puhtamalt kasutajaliidese ja komponendid.
+
+Näiteks:
+
+- uus layout
+- header ja navigatsioon
+- avaleht / discovery
+- Product Discovery
+- Listing Card
+- Listing Detail
+- avalik profiil / Brand Space
+- Minu ala
+- teenuste UI
+- Kiire teade
+- Energy UI
+- maksevoog
+- admini UI visuaalne kiht
+- ühised disainikomponendid
+
+See annab uue puhta kogemuse ilma, et kaotaksime olemasolevat töötavat vundamenti.
+
+---
+
+# 115. V2 ehitusjärjekord
+
+Soovitatud järjekord:
+
+1. V2 shell ja navigatsioon
+2. disainisüsteemi komponendid
+3. Product Discovery
+4. Listing Detail
+5. avalik profiil / Brand Space
+6. Minu ala
+7. teenused ja Kiire teade
+8. sõnumite visuaalne värskendus
+9. Energy ja maksed
+10. admin ja moderatsioon
+11. töökuulutused hiljem
+12. Launch QA
+
+Kõik ehitatakse väikeste sammudega.
+
+Iga samm:
+
+- väike muudatus
+- build
+- brauseritest
+- dokumentatsioon vajadusel
+- commit
+- push
+
+---
+
+# 116. Miks mitte täiesti uus repo
+
+Täiesti uus repo tundub alguses puhtam, aga tooks palju lisatööd:
+
+- auth uuesti
+- Supabase ühendused uuesti
+- env failid
+- deploy
+- API route’id
+- storage
+- olemasolevad andmed
+- sõnumid
+- admin
+- AI
+- geocode
+
+See võib alguses tunduda kiirem, aga hiljem tekitaks palju dubleerimist.
+
+Seetõttu teeme V2 olemasolevas repos.
+
+---
+
+# 117. Kõige tähtsam V2 arendusreegel
+
+Me ei tee enam suuri kogu faili ümberkirjutamisi.
+
+Teeme ühe mooduli korraga.
+
+Põhimõte:
+
+üks moodul
+build
+test
+commit
+järgmine moodul
+
+See hoiab arenduse kontrollitava ja sobib paremini projekti keerukusega.
