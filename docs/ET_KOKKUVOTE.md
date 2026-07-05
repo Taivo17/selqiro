@@ -3093,3 +3093,70 @@ commit
 järgmine moodul
 
 See hoiab arenduse kontrollitava ja sobib paremini projekti keerukusega.
+
+---
+
+# 118. V2 avalehe moodulite järjekord
+
+V2 avalehe moodulite järjekord on järgmine:
+
+1. Täna tähelepanu keskmes
+2. Alusta otsingut: Tooted, Teenused, Töökohad
+3. Täna avastamiseks
+4. Esiletõstetud tooted sinu lähedal
+5. Esiletõstetud teenused sinu lähedal
+6. Daily Discovery hiljem
+
+Põhimõte:
+
+Kõigepealt tekitame huvi.
+
+Seejärel kasutaja valib suuna.
+
+Siis näitame kasulikke avastusi.
+
+---
+
+# 119. Avalehe liikumine ja vaheldumine
+
+Avaleht peaks tunduma elav, aga mitte närviline.
+
+Me ei tee pidevalt automaatselt liikuvat karusselli.
+
+Põhjused:
+
+- see võib tunduda reklaamina
+- see võib kasutajat häirida
+- mobiilis võib see olla ebamugav
+- tekst võib liikuda enne, kui kasutaja jõuab lugeda
+- ligipääsetavuse mõttes on pidev liikumine halb
+
+Parem lahendus:
+
+- kasutaja saab horisontaalseid plokke ise kerida
+- sisu võib muutuda, kui kasutaja tuleb hiljem esilehele tagasi
+- järjekord võib vahelduda sessioonide vahel
+- Today's Story võib vahetuda rahulikult riigi ja maailma loogikaga
+- nähtav sisu ei tohiks muutuda siis, kui kasutaja seda parajasti loeb või sellega suhtleb
+
+Selqiro peaks tunduma elus, mitte lärmakas.
+
+---
+
+# 120. Esilehe esiletõstmiste õiglus
+
+Esilehe esiletõstetud sisu peab vahelduma õiglaselt ja asjakohaselt.
+
+Arvesse tuleb võtta:
+
+- asukoht
+- rubriigi sobivus
+- makstud nähtavuse reeglid
+- värskus
+- kasutaja kontekst
+- näitamiste õiglus
+- usaldus ja moderatsiooni staatus
+
+Me ei kasuta lihtsalt juhuslikku järjekorda, kui see muudab nähtavuse ebaõiglaseks.
+
+Esilehe discovery peab jääma kasutajale kasulikuks.

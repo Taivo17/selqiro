@@ -823,3 +823,23 @@ Build phases:
 10. admin/moderation
 11. jobs later
 12. launch QA
+
+## V2_HOMEPAGE_MODULE_ORDER
+
+V2 homepage order:
+1. Today's Story
+2. Start search direction: Products, Services, Jobs
+3. Today to discover
+4. Featured products near user
+5. Featured services near user
+6. Daily Discovery later
+
+Homepage should feel alive but not restless.
+
+Avoid constant auto-moving carousels.
+
+Use manual horizontal scroll, session/page-refresh variation and fair rotation.
+
+Do not change visible content while user is actively reading or interacting.
+
+Featured content rotation must consider location, relevance, fairness, paid rules and trust.

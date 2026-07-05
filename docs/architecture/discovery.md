@@ -1013,3 +1013,72 @@ If rejected:
 Energy is released or refunded according to policy, or the business may be allowed to correct the content.
 
 This protects both Selqiro trust and business fairness.
+
+---
+
+## Homepage discovery module order
+
+V2 homepage module order decision:
+
+1. Today's Story / Täna tähelepanu keskmes
+2. Start search direction: Products, Services, Jobs
+3. Today to discover / Täna avastamiseks
+4. Featured products near user
+5. Featured services near user
+6. Daily Discovery later
+
+This follows the principle:
+
+First create curiosity.
+Then let the user choose direction.
+Then show useful discoveries.
+
+---
+
+## Homepage motion and refresh behavior
+
+Homepage should feel alive but not restless.
+
+Avoid constant automatic moving carousels.
+
+Reasons:
+
+- they can feel like ads
+- they distract users
+- they reduce readability
+- they can be annoying on mobile
+- they may create accessibility problems
+
+Preferred behavior:
+
+- horizontal sections can be manually scrolled by user
+- content can refresh when user returns to homepage
+- content order can rotate between sessions
+- Today's Story can change slowly according to country/worldwide logic
+- do not change visible content while user is actively reading or interacting with the section
+
+Goal:
+
+Selqiro should feel alive, not noisy.
+
+---
+
+## Fairness for featured homepage content
+
+Featured homepage content should rotate fairly and contextually.
+
+Rotation should consider:
+
+- location
+- category relevance
+- paid placement rules
+- freshness
+- user context
+- impression fairness
+- trust and moderation state
+
+Do not use pure random order if it creates unfair visibility.
+
+Do not show irrelevant featured content only to fill space.
+
+Homepage discovery must remain useful.
