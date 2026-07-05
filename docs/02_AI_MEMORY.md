@@ -699,3 +699,33 @@ Admin selects wallet:
 
 User can see admin-added Energy in Energy history.
 Internal admin notes remain private.
+
+## MODULAR_ADMIN
+
+Admin should be modular.
+
+Use admin shell + admin modules.
+
+Do not build one giant admin page.
+
+Each feature that needs admin support should add a module:
+- reports
+- identities
+- listings
+- services
+- Today's Story
+- Energy/payments
+- jobs later
+- Knowledge later
+- Live Services later
+
+Each module should have:
+- overview
+- list/queue
+- detail view
+- actions
+- notes
+- audit history
+- permissions later
+
+Admin must stay case-based and privacy-respecting.

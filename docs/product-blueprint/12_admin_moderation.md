@@ -614,3 +614,67 @@ Large Energy grants or deductions may require second admin approval.
 Launch does not require this if the team is small.
 
 Architecture should not block it.
+
+---
+
+## Modular admin decision
+
+Admin should be built as modular blocks.
+
+Do not create one giant admin page.
+
+Admin should have a shared shell and separate modules.
+
+Examples:
+
+- Reports
+- Identities
+- Listings
+- Services
+- Today's Story
+- Discovery
+- Energy
+- Payments
+- Audit Log
+- Jobs later
+- Knowledge later
+- Live Services later
+
+Each module should have:
+
+- overview
+- list or queue
+- detail view
+- actions
+- admin notes
+- audit history
+- permissions later
+- related objects
+
+When Selqiro adds a new feature, it should add an admin module if admin support is needed.
+
+This allows Selqiro to grow without rebuilding admin from scratch.
+
+---
+
+## Admin dashboard blocks
+
+Admin dashboard should use blocks.
+
+Possible blocks:
+
+- Open reports
+- Today's Story waiting review
+- Flagged listings
+- Flagged services
+- Energy / payment issues
+- Recent admin actions
+- Support cases later
+
+New features may add dashboard blocks later.
+
+Dashboard should answer:
+
+What needs attention today?
+
+It should not show every possible admin tool at once.

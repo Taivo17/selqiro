@@ -2627,3 +2627,107 @@ Sisemine admini märkus ei pea kasutajale nähtav olema.
 Kasutajale kuvatav selgitus võib olla lihtsam.
 
 Kõik admini Energy muudatused peavad olema audit logis.
+
+---
+
+# 99. Admin peab olema moodulitena
+
+Adminit ei ehitata ühe suure lehena, kuhu lisatakse järjest uusi asju.
+
+Admin peab olema moodulitena.
+
+Põhimõte:
+
+Admin Shell
++
+Admin moodulid
+
+Näiteks:
+
+- raportid
+- identiteedid
+- kuulutused
+- teenused
+- Today's Story ülevaatus
+- Discovery
+- Energy
+- maksed
+- audit log
+- töökuulutused tulevikus
+- Knowledge tulevikus
+- Live Services tulevikus
+
+Kui Selqirosse lisandub uus funktsioon, siis vajadusel lisandub ka uus admin moodul.
+
+Me ei ehita kogu adminit ümber.
+
+---
+
+# 100. Admin mooduli ülesehitus
+
+Iga admin moodul peaks olema sarnase loogikaga.
+
+Moodulis võiks olla:
+
+- ülevaade
+- nimekiri või järjekord
+- filtrid
+- detailvaade
+- tegevused
+- admini märkmed
+- audit ajalugu
+- seotud objektid
+- õigused tulevikus
+
+Näide:
+
+Raportite moodul näitab raportite järjekorda, raporti detaili, seotud kuulutust või teenust, raporteerijat, raporteeritud identiteeti ja admini tegevusi.
+
+Today's Story moodul näitab ülevaatust ootavaid lugusid, ettevõtet, kuupäeva, Energy reserveeringut ja kinnita / paranda / tagasi lükka tegevusi.
+
+---
+
+# 101. Admin dashboard
+
+Admini avaleht peab olema plokkidena.
+
+Seal ei pea olema kõik tööriistad korraga.
+
+Seal peaks olema see, mis vajab tähelepanu täna.
+
+Näited:
+
+- avatud raportid
+- Today's Story ülevaatused
+- probleemsed kuulutused
+- probleemsed teenused
+- Energy või makse probleemid
+- viimased admini tegevused
+- support juhtumid tulevikus
+
+Kui lisame uue funktsiooni, saab see vajadusel lisada oma admin ploki.
+
+See hoiab admini lihtsa ja laiendatavana.
+
+---
+
+# 102. Admini kasvamine tulevikus
+
+Tulevikus võivad lisanduda uued admin moodulid:
+
+- töökuulutused
+- Knowledge Gateway
+- Live Services
+- brändi kinnitamine
+- raamatupidamise ekspordid
+- Country Pioneer ülevaatus
+- pettuse mustrid
+- vaidlused ja apellatsioonid
+- töötajate rollid
+- õiguslikud päringud
+
+Kõik need peavad sobituma sama admini vundamendi külge.
+
+Admin ei tohi muutuda segaseks suureks kontrollpaneeliks.
+
+Admini eesmärk on kaitsta usaldust ja aidata lahendada konkreetseid juhtumeid.
