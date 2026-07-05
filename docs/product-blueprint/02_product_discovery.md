@@ -363,3 +363,113 @@ Future:
 Decision:
 Keep desktop grid layout for launch.
 Use mobile horizontal list cards for launch.
+
+---
+
+## Default location and sorting decision
+
+Selqiro's default product discovery logic should be local-first.
+
+Default behavior:
+
+- start from the user's selected or detected location
+- show nearby relevant results first
+- expand the search area automatically when nearby results are limited
+- keep browsing simple
+
+Default visible sorting should not be "Newest first".
+
+Default should be:
+
+Sinu lähedal
+
+This means smart nearby ranking, not only raw distance.
+
+Ranking can consider:
+
+- distance
+- relevance
+- freshness
+- listing quality
+- trust signals
+- category match
+
+A newer high-quality listing slightly further away may appear before an old low-quality listing very close by.
+
+---
+
+## Location change
+
+Selqiro should keep the ability to change location.
+
+The user may later choose:
+
+- another city
+- another country
+- profile default location
+- current location if allowed
+
+However, V2 Launch should not overload the interface with too many location options.
+
+Recommended visible control:
+
+Minu lähedal: Paide
+
+or
+
+Minu lähedal
+Paide
+Muuda
+
+The detailed city/country selector can be opened only when the user wants to change location.
+
+---
+
+## Country-specific search
+
+Country-specific search should be supported by architecture, but does not need to be a primary launch control.
+
+At launch, a user can effectively search another country by changing their selected location/profile location.
+
+Later, when Selqiro has meaningful activity in many countries, a clearer country search option can be added.
+
+Example future option:
+
+Search in:
+- Estonia
+- Finland
+- Japan
+- Germany
+- Global
+
+Do not overbuild this before real usage shows demand.
+
+---
+
+## Global product discovery
+
+Global discovery is different from local discovery.
+
+In local discovery, "near me" matters most.
+
+In global discovery, physical distance may not be the best ranking signal.
+
+Global ranking may consider:
+
+- relevance
+- country
+- seller trust
+- price
+- freshness
+- shipping/export possibility later
+- original currency
+- user preference
+
+Global discovery should be an explicit user choice, especially for products and brands.
+
+Services should remain local-first at launch.
+
+Rule:
+
+Local search starts near the user.
+Global search must not pretend that physical distance is always meaningful.

@@ -843,3 +843,18 @@ Use manual horizontal scroll, session/page-refresh variation and fair rotation.
 Do not change visible content while user is actively reading or interacting.
 
 Featured content rotation must consider location, relevance, fairness, paid rules and trust.
+
+## PRODUCT_DISCOVERY_LOCATION_SORTING
+
+Default product discovery sorting is "Sinu lähedal", not "Uuemad ees".
+
+"Sinu lähedal" means smart nearby ranking:
+distance + relevance + freshness + quality + trust.
+
+Selqiro starts from user's selected location and expands automatically when nearby results are limited.
+
+Location change should remain possible, but launch UI should keep it simple.
+
+Global search is a separate mode and should not rely mainly on distance.
+
+Country-specific search can come later when multi-country usage grows.

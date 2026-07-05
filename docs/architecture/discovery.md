@@ -1082,3 +1082,51 @@ Do not use pure random order if it creates unfair visibility.
 Do not show irrelevant featured content only to fill space.
 
 Homepage discovery must remain useful.
+
+---
+
+## Local-first search principle
+
+Selqiro discovery should be local-first by default.
+
+Default product and service discovery starts near the user's selected location.
+
+If nearby content is limited, Selqiro expands the area automatically.
+
+This preserves Selqiro's core idea:
+
+Find useful opportunities near me.
+
+---
+
+## Global discovery distinction
+
+Global discovery should be treated as a separate discovery mode.
+
+It is most useful for:
+
+- products
+- brands
+- product showcases
+- manufacturer profiles
+- future Knowledge content
+
+It is less suitable for normal local services.
+
+In global discovery, ranking should not rely mainly on physical distance.
+
+Use relevance, country, trust, freshness and user intent instead.
+
+---
+
+## Location controls and simplicity
+
+Launch UI should not show too many location controls.
+
+Keep the visible experience simple:
+
+- Minu lähedal
+- selected city/location
+- change option when needed
+
+Advanced country and global search controls can be added later when usage requires them.

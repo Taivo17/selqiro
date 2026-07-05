@@ -3160,3 +3160,80 @@ Arvesse tuleb võtta:
 Me ei kasuta lihtsalt juhuslikku järjekorda, kui see muudab nähtavuse ebaõiglaseks.
 
 Esilehe discovery peab jääma kasutajale kasulikuks.
+
+---
+
+# 121. Product Discovery vaikimisi järjestus
+
+Toodete ja teenuste otsingus peab Selqiro vaikimisi jääma local-first loogikale.
+
+Vaikimisi järjestus ei ole "Uuemad ees".
+
+Vaikimisi järjestus on:
+
+Sinu lähedal
+
+See ei tähenda ainult kõige lühemat kaugust.
+
+See tähendab tarka järjestust, mis arvestab:
+
+- kaugust
+- otsingu sobivust
+- kuulutuse värskust
+- kuulutuse kvaliteeti
+- müüja või profiili usaldussignaale
+- rubriigi sobivust
+
+Selqiro alustab kasutaja valitud asukohast ja laiendab ringi automaatselt, kui lähedal olevaid tulemusi jääb väheks.
+
+---
+
+# 122. Asukoha muutmine
+
+Vanas versioonis saab muuta asukohta, linna või riiki.
+
+See võimalus peab arhitektuuris alles jääma.
+
+Launchis ei peaks seda liiga suurelt esile tõstma, et kasutaja ei peaks kohe mõtlema paljude valikute peale.
+
+Lihtne nähtav lahendus:
+
+Minu lähedal: Paide
+
+või
+
+Minu lähedal
+Paide
+Muuda
+
+Kui kasutaja soovib, saab ta hiljem muuta linna või riiki.
+
+---
+
+# 123. Global otsing
+
+Global otsing peab olema eraldi mõiste.
+
+Local otsingus on kõige tähtsam:
+
+- lähedus
+- sobivus
+- kasutaja piirkond
+
+Global otsingus ei ole kaugus alati kõige mõistlikum järjestuse alus.
+
+Näiteks kasutaja võib soovida otsida toodet kindlast riigist, isegi kui see ei ole talle füüsiliselt lähim.
+
+Global otsingus võib olulisem olla:
+
+- riik
+- sobivus
+- hind
+- usaldus
+- värskus
+- originaalvaluuta
+- tarne või ekspordi võimalus tulevikus
+
+Teenused jäävad Launchis local-first loogikale.
+
+Global sobib rohkem toodetele, brändidele, tootenäidistele ja tulevikus Knowledge sisule.
