@@ -1,6 +1,6 @@
 import "./globals.css";
 import type { Metadata } from "next";
-import SiteHeader from "./components/site-header";
+import SiteHeaderGate from "./components/site-header-gate";
 
 export const metadata: Metadata = {
   title: "Selqiro",
@@ -15,7 +15,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="bg-[#f8f8f6] text-black antialiased">
-        <SiteHeader />
+        <SiteHeaderGate />
         {children}
       </body>
     </html>
