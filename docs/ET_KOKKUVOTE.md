@@ -2381,3 +2381,249 @@ Launchis on sõnum lihtne:
 Selqiro ei loe sinu privaatsõnumeid.
 AI ei loe sinu privaatsõnumeid.
 Admin ei loe sinu privaatsõnumeid ilma konkreetse juhtumita.
+
+---
+
+# 89. Admin ja moderatsioon
+
+Launchiks peab Selqirol olema lihtne, aga usaldusväärne admini ja moderatsiooni süsteem.
+
+Admin ei ole avalik toode.
+
+Admin on kontrollikiht, mis aitab kaitsta:
+
+- kasutajaid
+- müüjaid
+- teenusepakkujaid
+- ettevõtteid
+- tasulist esiletõstmist
+- usaldust
+- privaatsust
+- platvormi kvaliteeti
+
+Launchis peab admin toetama vähemalt:
+
+- raportite ülevaatus
+- identiteetide ülevaade
+- kuulutuste ülevaade
+- teenuste ülevaade
+- Today's Story ülevaatus
+- Energy ja maksete baasiline nähtavus
+- admini märkmed
+- audit logi vundament
+
+---
+
+# 90. Raportid
+
+Raportid ei tähenda automaatset karistust.
+
+Raport on signaal, et admin peab midagi üle vaatama.
+
+Raportil peaks olema:
+
+- raporteerija
+- raporteeritud identiteet
+- seotud objekt
+- põhjus
+- kirjeldus
+- aeg
+- staatus
+
+Staatuse näited:
+
+- open
+- reviewing
+- actioned
+- dismissed
+
+Admin otsustab juhtumi põhjal.
+
+---
+
+# 91. Today's Story ülevaatus
+
+Today's Story on väga nähtav koht ja vajab tugevamat kontrolli.
+
+Admin peab nägema:
+
+- kes tellis
+- milline sisu
+- mis riik või global
+- milline kuupäev
+- Energy nõue
+- Energy reserveerimise staatus
+- pilt/video
+- AI kontrolli tulemus tulevikus
+- varasemad parandused
+- admini otsus
+
+Today's Story ei tohi avalduda ainult sellepärast, et selle eest maksti.
+
+Kui sisu rikub reegleid, tuleb see tagasi lükata või parandusse saata.
+
+Usaldus on tähtsam kui üks makse.
+
+---
+
+# 92. Admin ja privaatsõnumid
+
+Admin ei näe privaatsõnumite sisu tavalises adminivaates.
+
+Admin võib näha ainult metaandmeid:
+
+- vestluse ID
+- osapooled
+- seotud kuulutus või teenus
+- raporti staatus
+- blokeeringu staatus
+- viimane aktiivsus
+
+Sõnumi sisu saab vaadata ainult konkreetse juhtumi kaudu:
+
+- raporteeritud vestlus
+- support juhtum
+- pettusekahtlus
+- turvajuhtum
+- seaduslik nõue
+
+Kõik ligipääsud peavad olema logitud.
+
+---
+
+# 93. Energy ja maksete adminivaade
+
+Admin peab nägema Energy ja maksete infot supporti jaoks.
+
+Näiteks:
+
+- makse staatus
+- Energy ost
+- Energy kulutamine
+- wallet saldo
+- seotud billing entity
+- seotud tasuline funktsioon
+- ebaõnnestunud maksed
+- tagastused
+- adjustmentid
+
+Admin ei tohiks saldot otse muuta.
+
+Kui on vaja parandust, peab tekkima eraldi Energy adjustment tehing.
+
+Kõik peab jääma jälgitavaks.
+
+---
+
+# 94. Audit log
+
+Kõik olulised admini tegevused peavad olema logitud.
+
+Näited:
+
+- kuulutuse peitmine
+- kuulutuse taastamine
+- teenuse peitmine
+- identiteedi peitmine
+- Today's Story kinnitamine
+- Today's Story tagasi lükkamine
+- raporti lahendamine
+- privaatsõnumi sisu vaatamine juhtumi kaudu
+- Energy korrigeerimine
+
+Audit log on väga oluline siis, kui Selqiro kasvab ja meeskonda tuleb juurde inimesi.
+
+---
+
+# 95. Admini põhimõte
+
+Admini eesmärk ei ole kasutajaid jälgida.
+
+Admini eesmärk on kaitsta usaldust.
+
+Admini ligipääs peab olema:
+
+- piiratud
+- põhjendatud
+- seotud konkreetse juhtumiga
+- logitud
+
+Selqiro peab olema turvaline, aga mitte pealetükkiv.
+
+---
+
+# 96. Admini Energy lisamine ja korrigeerimine
+
+Adminil peab olema võimalus vajadusel Energy’t lisada või eemaldada.
+
+Näited:
+
+- tehniline viga
+- ebaõnnestunud tasuline tegevus
+- klienditoe otsus
+- heatahte kompensatsioon
+- preemia
+- Country Pioneer
+- beta testija preemia
+- pettuse või tagastuse juhtum
+- käsitsi korrigeerimine
+
+Oluline reegel:
+
+Admin ei muuda Energy saldot otse.
+
+Iga muudatus peab looma Energy tehingu.
+
+Tehingusse peab jääma:
+
+- kelle walletit muudeti
+- millise identiteediga see seostub
+- milline admin tegi muudatuse
+- summa
+- põhjus
+- sisemine märkus
+- vajadusel support juhtumi viide
+- aeg
+- saldo pärast muudatust
+
+See hoiab Energy süsteemi usaldusväärsena.
+
+---
+
+# 97. Energy preemia kasutajale või ettevõttele
+
+Admin võib anda Energy’t ka positiivse panuse eest.
+
+Näited:
+
+- kasutaja aitas testida Selqirot
+- esimene päris kasutaja uuest riigist
+- kogukonna kasvu toetamine
+- tehnilise vea kompenseerimine
+- klienditoe heatahe
+
+Preemiaid ei tohiks jagada liiga kergekäeliselt, et Energy väärtus ei muutuks tühiseks.
+
+Energy preemia peab jääma eriliseks ja tähenduslikuks.
+
+---
+
+# 98. Admini Energy muudatused ja nähtavus
+
+Kasutaja peaks nägema Energy ajaloos, kui Selqiro lisas talle Energy’t.
+
+Näiteks:
+
+Energy lisatud Selqiro toe poolt.
+Põhjus: tehniline parandus.
+
+Või:
+
+Energy lisatud.
+Põhjus: Country Pioneer tunnustus.
+
+Sisemine admini märkus ei pea kasutajale nähtav olema.
+
+Kasutajale kuvatav selgitus võib olla lihtsam.
+
+Kõik admini Energy muudatused peavad olema audit logis.

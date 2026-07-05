@@ -769,3 +769,31 @@ Selqiro records:
 - wallet balance update
 - receipt or invoice link
 - reference to original paid action when applicable
+
+---
+
+## Admin Energy adjustments and accounting
+
+Admin Energy adjustments may affect accounting or business reporting.
+
+Examples:
+
+- goodwill Energy
+- technical correction
+- refund replacement
+- fraud reversal
+- recognition reward
+
+Every adjustment must be traceable.
+
+Admin adjustment should create:
+
+- Energy transaction
+- audit log entry
+- optional support case reference
+
+If the adjustment relates to a payment or invoice, the relation should be stored.
+
+Do not change Energy balance without ledger history.
+
+Business users should be able to see admin-added Energy in their Energy history, but internal admin notes remain private.

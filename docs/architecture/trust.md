@@ -615,3 +615,21 @@ This should be visible in user-facing Selqiro principles and Privacy Policy.
 Privacy is not only legal compliance.
 
 Privacy is a product value.
+
+---
+
+## Trust and admin Energy adjustments
+
+Admin Energy adjustments affect trust.
+
+Users and businesses must be able to trust that Energy balances are explainable.
+
+Rules:
+
+- no silent balance edits
+- every adjustment creates a transaction
+- every adjustment has a reason
+- every adjustment is audit logged
+- large future adjustments may require stronger permissions
+
+Energy is part of Selqiro's financial trust layer.

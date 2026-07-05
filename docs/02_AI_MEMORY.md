@@ -647,3 +647,55 @@ Private messages stay private.
 
 Future:
 AI-assisted message writing, summarizing or reporting may be considered later as an explicit opt-in feature after user trust, UX and privacy policy are clear.
+
+## ADMIN_MODERATION_FLOW
+
+Admin Launch foundation:
+- reports queue
+- identity overview
+- listing overview
+- service overview
+- Today's Story review
+- Energy/payment visibility
+- audit log foundation
+- message privacy case concept
+
+Admin must not casually browse private messages.
+
+Message content can only be accessed through a case:
+- reported conversation
+- support request
+- fraud/safety case
+- legal request
+
+Admin actions should be logged.
+
+Today's Story cannot be published only because it was paid.
+Trust comes first.
+
+Admin should be case-based, privacy-respecting and structured.
+
+## ADMIN_ENERGY_ADJUSTMENTS
+
+Admin must be able to add or remove Energy when needed.
+
+Use cases:
+- technical correction
+- failed paid action
+- goodwill
+- reward / recognition
+- Country Pioneer
+- beta tester
+- fraud reversal
+
+Admin must not directly edit balance.
+
+Every admin Energy change creates an Energy transaction and audit log.
+
+Admin selects wallet:
+- personal wallet
+- business wallet
+- identity-related wallet
+
+User can see admin-added Energy in Energy history.
+Internal admin notes remain private.

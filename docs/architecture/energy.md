@@ -955,3 +955,143 @@ Refund wording should stay fair:
 If Energy has already been used for an active service, refund may not always be possible.
 
 Avoid absolute wording unless policy is legally finalized.
+
+---
+
+## Admin Energy grants and adjustments
+
+Admins must be able to add or remove Energy when needed.
+
+Use cases:
+
+- technical error correction
+- failed paid action
+- goodwill compensation
+- reward / recognition
+- Country Pioneer reward
+- beta tester reward
+- manual correction
+- fraud reversal
+- support case resolution
+
+Important rule:
+
+Admin must never edit wallet balance directly.
+
+Every admin Energy change must create an Energy transaction.
+
+---
+
+## Admin adjustment transaction
+
+Admin adjustment must include:
+
+- wallet id
+- billing entity id
+- affected identity if relevant
+- affected account if relevant
+- admin user id
+- amount
+- transaction type
+- balance after
+- reason
+- admin note
+- related support case if available
+- timestamp
+
+Possible transaction types:
+
+- admin_grant
+- admin_deduction
+- correction
+- goodwill
+- recognition
+- fraud_reversal
+- support_adjustment
+
+This keeps the Energy ledger trustworthy.
+
+---
+
+## Positive Energy grants
+
+Admins may grant Energy for positive reasons.
+
+Examples:
+
+- user helped test Selqiro
+- first real user from a new country
+- community growth reward
+- correction after technical problem
+- support goodwill
+
+Energy grants should be rare and meaningful.
+
+Do not create inflation by granting Energy too casually.
+
+---
+
+## Admin deduction
+
+Admins may need to remove Energy in rare cases.
+
+Examples:
+
+- fraud
+- payment reversal
+- duplicated grant
+- technical correction
+- abuse
+
+Admin deduction must be logged with clear reason.
+
+If deduction affects business billing, the case should be documented carefully.
+
+---
+
+## Permissions
+
+Energy adjustments are sensitive.
+
+Not every admin should have permission to adjust Energy.
+
+Future permission examples:
+
+- view Energy ledger
+- grant Energy
+- deduct Energy
+- approve large adjustment
+- view billing entity
+- export Energy history
+
+Large adjustments may later require second approval.
+
+Launch can start simpler, but architecture must support permission control.
+
+---
+
+## User-facing history
+
+If Energy is added or removed by admin, the user should be able to see it in Energy history.
+
+Example:
+
+Energy added by Selqiro support
+Reason: technical correction
+
+Or:
+
+Energy added
+Reason: Country Pioneer recognition
+
+Do not expose private admin notes to the user.
+
+Public/user-facing explanation can be simpler than internal admin note.
+
+---
+
+## Final rule
+
+Admin Energy changes are allowed.
+
+But they must always be transparent in the ledger, justified by reason and visible in audit history.

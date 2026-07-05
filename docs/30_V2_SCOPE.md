@@ -433,3 +433,28 @@ Selqiro's privacy promise must be simple at launch.
 Private messages stay private.
 
 Future opt-in AI message assistance can be reconsidered later after user feedback, privacy review and clear UX design.
+
+## Admin and moderation scope decision
+
+V2 Launch must include admin and moderation foundation.
+
+Launch should support:
+- reports queue
+- identity overview
+- listing overview
+- service overview
+- Today's Story review foundation
+- Energy/payment visibility foundation
+- audit log foundation
+- message privacy case concept
+
+Launch does not need:
+- full staff permission system
+- full legal workflow
+- full fraud engine
+- full appeal system
+- complete reputation system
+
+Admin exists to protect trust.
+
+Admin access must be limited, justified and logged.
