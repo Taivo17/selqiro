@@ -1,3 +1,9 @@
+"use client";
+
+import { useState } from "react";
+
+type ActivePanel = "price" | "location" | "filters" | "sort" | null;
+
 type ProductCard = {
   title: string;
   seller: string;
@@ -99,7 +105,15 @@ const products: ProductCard[] = [
   },
 ];
 
-function ProductCardView({ product, compact = false }: { product: ProductCard; compact?: boolean }) {
+const sortOptions = ["Sinu lähedal", "Uuemad ees", "Odavamad ees", "Kallimad ees"];
+
+function ProductCardView({
+  product,
+  compact = false,
+}: {
+  product: ProductCard;
+  compact?: boolean;
+}) {
   return (
     <article
       className={[
@@ -148,15 +162,205 @@ function ProductCardView({ product, compact = false }: { product: ProductCard; c
   );
 }
 
-function ToolbarButton({ label }: { label: string }) {
+function ToolbarButton({
+  label,
+  active,
+  onClick,
+}: {
+  label: string;
+  active?: boolean;
+  onClick: () => void;
+}) {
   return (
-    <button className="rounded-full border border-neutral-200 bg-white px-4 py-3 text-sm font-bold shadow-sm transition hover:border-neutral-300">
+    <button
+      onClick={onClick}
+      className={[
+        "rounded-full border px-4 py-3 text-sm font-bold shadow-sm transition",
+        active
+          ? "border-black bg-black text-white"
+          : "border-neutral-200 bg-white text-black hover:border-neutral-300",
+      ].join(" ")}
+    >
       {label}
     </button>
   );
 }
 
+function FilterPanel({
+  activePanel,
+  sortLabel,
+  onClose,
+  onSortChange,
+}: {
+  activePanel: ActivePanel;
+  sortLabel: string;
+  onClose: () => void;
+  onSortChange: (value: string) => void;
+}) {
+  if (!activePanel) return null;
+
+  return (
+    <div className="mt-4 rounded-[28px] border border-black/5 bg-[#fbfbfa] p-5 shadow-sm">
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <p className="text-xs font-bold uppercase tracking-[0.24em] text-emerald-600">
+            Ajutine paneel
+          </p>
+
+          <h3 className="mt-2 text-2xl font-black">
+            {activePanel === "price" && "Hind"}
+            {activePanel === "location" && "Asukoht"}
+            {activePanel === "filters" && "Täpsusta otsingut"}
+            {activePanel === "sort" && "Järjestus"}
+          </h3>
+        </div>
+
+        <button
+          onClick={onClose}
+          className="rounded-full border border-neutral-200 bg-white px-4 py-2 text-sm font-bold"
+        >
+          Sulge
+        </button>
+      </div>
+
+      {activePanel === "price" ? (
+        <div className="mt-5 grid gap-4 md:grid-cols-[1fr_1fr_auto] md:items-end">
+          <label className="block">
+            <span className="text-sm font-bold text-neutral-700">Hind alates</span>
+            <input
+              placeholder="0"
+              className="mt-2 h-12 w-full rounded-2xl border border-neutral-200 bg-white px-4 text-sm outline-none focus:border-neutral-400"
+            />
+          </label>
+
+          <label className="block">
+            <span className="text-sm font-bold text-neutral-700">Hind kuni</span>
+            <input
+              placeholder="500"
+              className="mt-2 h-12 w-full rounded-2xl border border-neutral-200 bg-white px-4 text-sm outline-none focus:border-neutral-400"
+            />
+          </label>
+
+          <p className="rounded-2xl bg-white px-4 py-3 text-sm font-semibold text-neutral-600">
+            Muutub kohe
+          </p>
+        </div>
+      ) : null}
+
+      {activePanel === "location" ? (
+        <div className="mt-5 grid gap-4 md:grid-cols-3">
+          <button className="rounded-2xl border border-black bg-black px-4 py-4 text-left text-sm font-bold text-white">
+            Minu lähedal: Paide
+            <span className="mt-1 block text-xs font-medium text-white/60">
+              Vaikimisi
+            </span>
+          </button>
+
+          <button className="rounded-2xl border border-neutral-200 bg-white px-4 py-4 text-left text-sm font-bold">
+            Muuda linna
+            <span className="mt-1 block text-xs font-medium text-neutral-500">
+              Hiljem avaneb linnavalik
+            </span>
+          </button>
+
+          <button className="rounded-2xl border border-neutral-200 bg-white px-4 py-4 text-left text-sm font-bold">
+            Global
+            <span className="mt-1 block text-xs font-medium text-neutral-500">
+              Eraldi režiim hiljem
+            </span>
+          </button>
+        </div>
+      ) : null}
+
+      {activePanel === "filters" ? (
+        <div className="mt-5 grid gap-5 md:grid-cols-3">
+          <div className="rounded-2xl bg-white p-4">
+            <h4 className="font-black">Seisukord</h4>
+            <div className="mt-3 space-y-2 text-sm text-neutral-600">
+              <label className="flex items-center gap-2">
+                <input type="checkbox" /> Uus
+              </label>
+              <label className="flex items-center gap-2">
+                <input type="checkbox" /> Kasutatud
+              </label>
+              <label className="flex items-center gap-2">
+                <input type="checkbox" /> Vajab remonti
+              </label>
+            </div>
+          </div>
+
+          <div className="rounded-2xl bg-white p-4">
+            <h4 className="font-black">Kategooria</h4>
+            <div className="mt-3 space-y-2 text-sm text-neutral-600">
+              <label className="flex items-center gap-2">
+                <input type="checkbox" /> Sõidukid
+              </label>
+              <label className="flex items-center gap-2">
+                <input type="checkbox" /> Aed
+              </label>
+              <label className="flex items-center gap-2">
+                <input type="checkbox" /> Tööriistad
+              </label>
+            </div>
+          </div>
+
+          <div className="rounded-2xl bg-white p-4">
+            <h4 className="font-black">Lisavalikud</h4>
+            <div className="mt-3 space-y-2 text-sm text-neutral-600">
+              <label className="flex items-center gap-2">
+                <input type="checkbox" /> Ainult pildiga
+              </label>
+              <label className="flex items-center gap-2">
+                <input type="checkbox" /> Ettevõttelt
+              </label>
+              <label className="flex items-center gap-2">
+                <input type="checkbox" /> Esiletõstetud
+              </label>
+            </div>
+          </div>
+        </div>
+      ) : null}
+
+      {activePanel === "sort" ? (
+        <div className="mt-5 grid gap-3 md:grid-cols-4">
+          {sortOptions.map((option) => (
+            <button
+              key={option}
+              onClick={() => onSortChange(option)}
+              className={[
+                "rounded-2xl border px-4 py-4 text-left text-sm font-bold transition",
+                sortLabel === option
+                  ? "border-black bg-black text-white"
+                  : "border-neutral-200 bg-white hover:border-neutral-300",
+              ].join(" ")}
+            >
+              {option}
+              {option === "Sinu lähedal" ? (
+                <span className="mt-1 block text-xs font-medium opacity-70">
+                  Vaikimisi
+                </span>
+              ) : null}
+            </button>
+          ))}
+        </div>
+      ) : null}
+
+      <p className="mt-5 text-sm leading-6 text-neutral-500">
+        Skeleton: hiljem muudab iga valik tulemusi kohe. Eraldi “Rakenda filtrid”
+        nuppu ei tule.
+      </p>
+    </div>
+  );
+}
+
 export default function V2ProductDiscoveryPage() {
+  const [activePanel, setActivePanel] = useState<ActivePanel>(null);
+  const [sortLabel, setSortLabel] = useState("Sinu lähedal");
+
+  const togglePanel = (panel: ActivePanel) => {
+    setActivePanel((current) => (current === panel ? null : panel));
+  };
+
   return (
     <div className="space-y-8">
       <section className="rounded-[34px] border border-black/5 bg-white p-6 shadow-sm md:p-8">
@@ -193,14 +397,41 @@ export default function V2ProductDiscoveryPage() {
             className="h-12 rounded-full border border-neutral-200 bg-white px-5 text-sm outline-none transition placeholder:text-neutral-400 focus:border-neutral-400"
           />
 
-          <ToolbarButton label="Hind" />
-          <ToolbarButton label="Minu lähedal: Paide" />
-          <ToolbarButton label="Filtrid" />
-          <ToolbarButton label="Sinu lähedal" />
+          <ToolbarButton
+            label="Hind"
+            active={activePanel === "price"}
+            onClick={() => togglePanel("price")}
+          />
+
+          <ToolbarButton
+            label="Minu lähedal: Paide"
+            active={activePanel === "location"}
+            onClick={() => togglePanel("location")}
+          />
+
+          <ToolbarButton
+            label="Filtrid"
+            active={activePanel === "filters"}
+            onClick={() => togglePanel("filters")}
+          />
+
+          <ToolbarButton
+            label={sortLabel}
+            active={activePanel === "sort"}
+            onClick={() => togglePanel("sort")}
+          />
         </div>
 
+        <FilterPanel
+          activePanel={activePanel}
+          sortLabel={sortLabel}
+          onClose={() => setActivePanel(null)}
+          onSortChange={setSortLabel}
+        />
+
         <p className="mt-4 text-sm leading-6 text-neutral-500">
-          Vaikimisi järjestus on “Sinu lähedal”. Soovi korral saab hiljem valida uuemad, odavamad või global otsingu.
+          Vaikimisi järjestus on “Sinu lähedal”. Soovi korral saab hiljem valida
+          uuemad, odavamad või global otsingu.
         </p>
       </section>
 
