@@ -7,7 +7,7 @@ type V2ShellProps = {
 
 const navItems = [
   { label: "Avaleht", href: "/v2" },
-  { label: "Tooted", href: "/v2" },
+  { label: "Tooted", href: "/v2/products" },
   { label: "Teenused", href: "/v2" },
   { label: "Töö", href: "/v2" },
   { label: "Uudised", href: "/v2" },
