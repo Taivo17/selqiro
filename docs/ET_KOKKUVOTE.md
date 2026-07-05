@@ -3300,3 +3300,32 @@ Kui soovid, lisa avalik äriaadress, et kliendid leiaksid sind lihtsamalt.
 Põhimõte:
 
 Selqiro aitab leida lähedal olevaid võimalusi, aga ei sunni erakasutajat täpset asukohta avaldama.
+
+---
+
+# 127. Avaliku profiili moodulite paigutus
+
+Avalikus profiilis kasutame desktopis kahe veeru loogikat.
+
+Vasakul põhisisu:
+
+- Kiire teade
+- Tootenäidised
+- Müügis praegu
+- Pakutavad teenused
+
+Paremal toetav info:
+
+- teave profiili kohta
+- asukoht
+- viimased uuendused
+
+See teeb lehe visuaalselt paremini täidetuks ja hoiab põhilise sisu selgelt vasakul.
+
+Kiire teade ja Uuendused on sama süsteemi kaks vaadet.
+
+Kiire teade on aktiivne oluline teade üleval.
+
+Paremal Uuenduste plokis on varasemad või viimased teated.
+
+Mobiilis võivad need plokid minna üksteise alla.

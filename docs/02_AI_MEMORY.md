@@ -877,3 +877,21 @@ Listing detail should show a calm note:
 Distance precision must match location precision.
 
 Do not treat approximate location as suspicious.
+
+## PUBLIC_PROFILE_MODULE_PLACEMENT
+
+Desktop public profile layout:
+Left/main column:
+- Quick Update
+- Product Showcase
+- Listings
+- Services
+
+Right/supporting column:
+- profile information
+- location
+- latest updates
+
+Latest updates should be on the right on desktop, like the reference layout.
+Quick Update remains prominent near top.
+On mobile, sections can stack.

@@ -1448,3 +1448,30 @@ A job posting may include:
 Do not build a full recruitment platform for launch.
 
 Jobs are another profile module that can be enabled when needed.
+
+---
+
+## Public profile desktop module placement
+
+Desktop public profile layout should use a two-column structure when screen size allows.
+
+Left / main column:
+- Quick Update if active
+- Product Showcase
+- Listings
+- Services
+
+Right / supporting column:
+- profile information
+- location
+- latest updates
+
+Reason:
+
+This keeps main commercial content clear while using the right side for context and trust.
+
+Updates and Quick Update remain one system:
+- Quick Update = active important update shown prominently
+- Updates panel = latest update history shown in supporting column
+
+On mobile, the supporting column can stack below the main profile content.

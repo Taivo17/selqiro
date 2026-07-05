@@ -188,7 +188,7 @@ export default function V2ListingDetailPage() {
               </div>
 
               <Link
-                href="/v2"
+                href="/v2/profile/milline-vedu"
                 className="mt-5 inline-flex w-full justify-center rounded-full border border-neutral-200 bg-white px-5 py-3 text-sm font-black"
               >
                 Vaata profiili
