@@ -1237,3 +1237,24 @@ If no relevant highlighted services exist, show nothing.
 Paid visibility does not override relevance.
 
 A service can be farther away if it strongly matches the product context, but closer relevant services should be preferred.
+
+---
+
+## Services discovery order
+
+Services discovery should prioritize useful paid visibility without hiding search.
+
+Order:
+
+1. compact search
+2. featured services near user
+3. quick updates / temporary service locations
+4. organic services near user
+
+Search affects all areas.
+
+Featured services must still match the query/category/context.
+
+Quick updates are shown only when they are time-relevant and contextual.
+
+Paid visibility does not override relevance.

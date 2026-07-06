@@ -552,3 +552,26 @@ Related services in Product Discovery should prefer:
 A more distant service may be shown if it is strongly related and no closer suitable highlighted service exists.
 
 Do not show unrelated highlighted services just because they are paid.
+
+---
+
+## Product Discovery search placement
+
+Product Discovery should use the same search placement logic as Services Discovery.
+
+Recommended layout:
+
+- page title and location summary
+- compact search and filter controls in the same top section
+- featured products
+- related highlighted services
+- organic product results
+
+Reason:
+
+Products and Services should feel consistent.
+
+The user learns one discovery pattern and can use it across product and service pages.
+
+Do not place the search controls in a separate large block unless there is a strong reason.
+

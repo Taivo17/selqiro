@@ -982,3 +982,30 @@ If no related highlighted service exists, hide the strip.
 Prefer closer services, but a farther service can appear if it strongly matches and no close match exists.
 
 Do not show unrelated paid services.
+
+## V2_SERVICES_DISCOVERY_ORDER
+
+Services page order:
+1. Compact search
+2. Featured services near user
+3. Quick updates / temporary service locations
+4. Organic services near user
+
+Search affects all three:
+featured, quick updates, organic results.
+
+Featured services must match query/category/context.
+Quick updates must be time-relevant and contextual.
+Paid visibility does not override relevance.
+
+## PRODUCT_DISCOVERY_SEARCH_PLACEMENT
+
+Product Discovery search controls should be in the same top section as the title/location summary, matching Services Discovery.
+
+Order:
+1. title + location summary + compact search/filter controls
+2. featured products
+3. related highlighted services
+4. organic products
+
+Keep Products and Services discovery patterns consistent.

@@ -61,6 +61,38 @@ const featuredServices: Service[] = [
   },
 ];
 
+const quickUpdates: Service[] = [
+  {
+    title: "Puksiir Tallinnas kuni 16:00",
+    provider: "Paide Puksiirabi",
+    description:
+      "Ajutine teenindusasukoht Gonsiori piirkonnas. Sobib puksiiri ja autoabi otsinguga.",
+    area: "Tallinn, Gonsiori piirkond",
+    distance: "kehtib kuni 16:00",
+    badge: "Kiire teade",
+    cta: "Küsi abi",
+    details: [
+      "Tavapärane piirkond on Järvamaa.",
+      "Aktiivne ajutine asukoht teeb teenuse nähtavaks Tallinnas.",
+      "Kui aeg lõpeb, kaob ajutine asukoht otsingust.",
+    ],
+  },
+  {
+    title: "Täna vaba aeg aiatehnika hoolduseks",
+    provider: "Milline Vedu",
+    description:
+      "Täna saab veel ühe muruniiduki või murutraktori hoolduse aja kokku leppida.",
+    area: "Paide piirkond",
+    distance: "~12 km",
+    badge: "Kiire teade",
+    cta: "Kirjuta",
+    details: [
+      "Kiire teade on seotud teenuse ja piirkonnaga.",
+      "Kui teade aegub, jääb see hiljem uuenduste ajalukku.",
+    ],
+  },
+];
+
 const normalServices: Service[] = [
   {
     title: "Elektritööd",
@@ -124,6 +156,40 @@ function PlaceholderImage({ className = "" }: { className?: string }) {
   );
 }
 
+function SectionHeader({
+  eyebrow,
+  title,
+  helper,
+  action,
+}: {
+  eyebrow: string;
+  title: string;
+  helper?: string;
+  action?: string;
+}) {
+  return (
+    <div className="mb-5 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+      <div>
+        <p className="text-xs font-bold uppercase tracking-[0.26em] text-neutral-400">
+          {eyebrow}
+        </p>
+        <h2 className="mt-2 text-3xl font-black">{title}</h2>
+        {helper ? (
+          <p className="mt-2 max-w-2xl text-sm leading-6 text-neutral-500">
+            {helper}
+          </p>
+        ) : null}
+      </div>
+
+      {action ? (
+        <button className="hidden rounded-full border border-neutral-200 bg-white px-4 py-2 text-sm font-bold shadow-sm md:inline-flex">
+          {action}
+        </button>
+      ) : null}
+    </div>
+  );
+}
+
 function ServiceCard({
   service,
   onOpen,
@@ -175,6 +241,42 @@ function ServiceCard({
         className="mt-5 w-full rounded-full bg-black px-5 py-3 text-sm font-black text-white"
       >
         Vaata teenust
+      </button>
+    </article>
+  );
+}
+
+function QuickUpdateCard({
+  service,
+  onOpen,
+}: {
+  service: Service;
+  onOpen: (service: Service) => void;
+}) {
+  return (
+    <article className="min-w-[280px] rounded-[24px] border border-emerald-100 bg-white p-5 shadow-sm md:min-w-[360px]">
+      <span className="rounded-full bg-emerald-50 px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.16em] text-emerald-700">
+        {service.badge}
+      </span>
+
+      <h3 className="mt-3 text-lg font-black">{service.title}</h3>
+      <p className="mt-1 text-sm font-semibold text-neutral-500">
+        {service.provider}
+      </p>
+      <p className="mt-3 text-sm leading-6 text-neutral-600">
+        {service.description}
+      </p>
+
+      <div className="mt-4 rounded-2xl bg-[#fbfbfa] p-4">
+        <p className="text-sm font-black">{service.area}</p>
+        <p className="mt-1 text-xs text-neutral-500">{service.distance}</p>
+      </div>
+
+      <button
+        onClick={() => onOpen(service)}
+        className="mt-4 w-full rounded-full bg-black px-5 py-3 text-sm font-black text-white"
+      >
+        {service.cta}
       </button>
     </article>
   );
@@ -233,7 +335,7 @@ function ServiceModal({
 
           <div className="rounded-2xl bg-[#fbfbfa] p-4">
             <p className="text-xs font-bold uppercase tracking-[0.18em] text-neutral-400">
-              Kaugus
+              Kaugus / aeg
             </p>
             <p className="mt-1 font-black">{service.distance}</p>
           </div>
@@ -263,11 +365,6 @@ function ServiceModal({
             Sõnum
           </button>
         </div>
-
-        <p className="mt-4 text-center text-xs leading-5 text-neutral-400">
-          Teenuse detail avaneb modalina, et kasutaja ei kaotaks profiili või
-          teenuste lehe konteksti.
-        </p>
       </article>
     </div>
   );
@@ -278,34 +375,29 @@ export default function V2ServicesPage() {
 
   return (
     <div className="space-y-8">
-      <section className="rounded-[34px] border border-black/5 bg-white p-6 shadow-sm md:p-8">
-        <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+      <section className="rounded-[34px] border border-black/5 bg-white p-5 shadow-sm md:p-6">
+        <div className="mb-5 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
           <div>
             <p className="text-xs font-bold uppercase tracking-[0.26em] text-emerald-600">
-              Services Discovery
-            </p>
-            <h1 className="mt-3 text-4xl font-black tracking-tight md:text-5xl">
               Teenused
+            </p>
+            <h1 className="mt-2 text-4xl font-black tracking-tight md:text-5xl">
+              Leia teenus enda lähedalt
             </h1>
-            <p className="mt-3 max-w-2xl text-base leading-7 text-neutral-600">
-              Leia teenusepakkujaid enda lähedalt. Teenuste puhul on hind
-              vabatahtlik ja täpne info selgub tihti pärast vajaduse täpsustamist.
+            <p className="mt-3 max-w-3xl text-sm leading-6 text-neutral-600">
+              Otsing mõjutab esiletõstetud teenuseid, kiireid teateid ja tavalisi
+              tulemusi. Teenuste hind on vabatahtlik.
             </p>
           </div>
 
-          <div className="rounded-[24px] bg-neutral-950 p-5 text-white lg:w-[360px]">
-            <p className="text-xs font-bold uppercase tracking-[0.2em] text-white/50">
+          <div className="rounded-[22px] bg-neutral-950 px-5 py-4 text-white md:w-[300px]">
+            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/45">
               Asukoht
             </p>
-            <p className="mt-2 text-xl font-black">Paide, Eesti</p>
-            <p className="mt-2 text-sm leading-6 text-white/65">
-              Teenused on Launchis local-first. Global sobib hiljem rohkem toodetele ja brändidele.
-            </p>
+            <p className="mt-1 text-xl font-black">Paide, Eesti</p>
           </div>
         </div>
-      </section>
 
-      <section className="rounded-[34px] border border-black/5 bg-white p-5 shadow-sm md:p-6">
         <div className="grid gap-3 lg:grid-cols-[1fr_auto_auto_auto]">
           <input
             placeholder="Otsi teenust..."
@@ -324,53 +416,15 @@ export default function V2ServicesPage() {
             Sinu lähedal
           </button>
         </div>
-
-        <p className="mt-4 text-sm leading-6 text-neutral-500">
-          Skeleton: teenuste filtrid töötavad hiljem sama ajutise paneeli loogikaga nagu toodetes.
-        </p>
-      </section>
-
-      <section className="rounded-[34px] border border-emerald-100 bg-emerald-50 p-6 shadow-sm md:p-8">
-        <div className="grid gap-5 lg:grid-cols-[1fr_360px] lg:items-center">
-          <div>
-            <p className="text-xs font-black uppercase tracking-[0.22em] text-emerald-600">
-              Kiire teade · ajutine teenindusasukoht
-            </p>
-            <h2 className="mt-3 text-3xl font-black">
-              Puksiir Tallinnas, Gonsiori piirkonnas kuni 16:00
-            </h2>
-            <p className="mt-3 max-w-2xl text-sm leading-6 text-neutral-600">
-              Teenusepakkuja tavapärane piirkond võib olla Järvamaa, aga aktiivne
-              ajutine asukoht teeb teenuse nähtavaks Tallinnas, kui kategooria ja aeg sobivad.
-            </p>
-          </div>
-
-          <div className="rounded-[24px] bg-white p-5 shadow-sm">
-            <p className="text-xs font-bold uppercase tracking-[0.2em] text-neutral-400">
-              Hetke asukoht
-            </p>
-            <p className="mt-2 text-xl font-black">Gonsiori piirkond</p>
-            <p className="mt-2 text-sm text-neutral-500">Kehtib kuni 16:00</p>
-            <button className="mt-5 w-full rounded-full bg-black px-5 py-3 text-sm font-black text-white">
-              Küsi abi
-            </button>
-          </div>
-        </div>
       </section>
 
       <section className="rounded-[34px] border border-emerald-100 bg-emerald-50/50 p-6 shadow-sm md:p-8">
-        <div className="mb-5 flex items-end justify-between gap-4">
-          <div>
-            <p className="text-xs font-bold uppercase tracking-[0.26em] text-emerald-600">
-              Sinu lähedal
-            </p>
-            <h2 className="mt-2 text-3xl font-black">Esiletõstetud teenused</h2>
-          </div>
-
-          <button className="hidden rounded-full border border-emerald-200 bg-white px-4 py-2 text-sm font-bold text-emerald-800 shadow-sm md:inline-flex">
-            Vaata kõiki
-          </button>
-        </div>
+        <SectionHeader
+          eyebrow="Sinu lähedal"
+          title="Esiletõstetud teenused"
+          helper="Esiletõstetud teenused on esimesena nähtavad, kui need sobivad otsingu, piirkonna ja kategooriaga."
+          action="Vaata kõiki"
+        />
 
         <div className="grid gap-4 md:grid-cols-3">
           {featuredServices.map((service) => (
@@ -382,6 +436,27 @@ export default function V2ServicesPage() {
           ))}
         </div>
       </section>
+
+      {quickUpdates.length > 0 ? (
+        <section className="rounded-[34px] border border-black/5 bg-white p-6 shadow-sm md:p-8">
+          <SectionHeader
+            eyebrow="Aktiivne info"
+            title="Kiired teated sinu lähedal"
+            helper="Siin näeme ajaliselt olulisi teenusteateid ja ajutisi teeninduskohti, mis sobivad otsinguga."
+            action="Vaata kõiki"
+          />
+
+          <div className="-mx-2 flex gap-4 overflow-x-auto px-2 pb-2">
+            {quickUpdates.map((service) => (
+              <QuickUpdateCard
+                key={service.title}
+                service={service}
+                onOpen={setSelectedService}
+              />
+            ))}
+          </div>
+        </section>
+      ) : null}
 
       <section className="rounded-[34px] border border-black/5 bg-white p-6 shadow-sm md:p-8">
         <div className="mb-5 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">

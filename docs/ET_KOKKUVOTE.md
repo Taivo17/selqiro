@@ -3600,3 +3600,62 @@ Makstud esiletõstmine ei tohi asendada asjakohasust.
 Kui kasutaja otsib muruniidukit, ei näita me seal puksiiri ainult sellepärast, et puksiir on esiletõstetud.
 
 Teenuse sobivus tootega on kohustuslik.
+
+---
+
+# 137. V2 teenuste lehe järjestus
+
+V2 teenuste lehe järjestus on:
+
+1. kompaktne otsing ja asukoha valik
+2. esiletõstetud teenused sinu lähedal
+3. kiired teated / ajutised teenindusasukohad
+4. tavalised teenused sinu lähedal
+
+Põhjus:
+
+- otsing on kohe nähtav
+- esiletõstetud teenused saavad rohkem väärtust
+- kiired teated on kontekstuaalsed ja kasulikud
+- tavalised tulemused jäävad selgelt alla
+
+Otsing mõjutab kõiki kolme osa:
+
+- esiletõstetud teenused
+- kiired teated
+- tavalised tulemused
+
+Näide:
+
+Kasutaja otsib juuksurit.
+
+Selqiro näitab:
+
+- esiletõstetud juuksurid lähedal
+- juuksurite kiired teated või vabad ajad
+- kõik sobivad juuksurid lähedal
+
+Kui täpset esiletõstetud teenust ei ole, võib näidata lähedast seotud kategooriat ainult siis, kui see on kasutajale päriselt kasulik.
+
+Makstud nähtavus ei tohi asendada asjakohasust.
+
+---
+
+# 138. Toodete otsingu paigutus
+
+Toodete otsingukast ja filtrid peaksid olema samas ülemises plokis nagu teenuste lehel.
+
+Järjekord:
+
+1. lehe pealkiri ja asukoha info
+2. kompaktne otsing / hind / asukoht / filtrid / järjestus
+3. esiletõstetud tooted
+4. kasulikud seotud teenused
+5. tavalised tooted
+
+Põhjus:
+
+Toodete ja teenuste discovery peaks kasutajale tunduma sama loogikaga.
+
+Kasutaja õpib ühe mustri ära ja saab seda kasutada nii toodete kui teenuste puhul.
+

@@ -434,34 +434,29 @@ export default function V2ProductDiscoveryPage() {
 
   return (
     <div className="space-y-8">
-      <section className="rounded-[34px] border border-black/5 bg-white p-6 shadow-sm md:p-8">
-        <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+      <section className="rounded-[34px] border border-black/5 bg-white p-5 shadow-sm md:p-6">
+        <div className="mb-5 flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
           <div>
             <p className="text-xs font-bold uppercase tracking-[0.26em] text-emerald-600">
               Product Discovery
             </p>
-            <h1 className="mt-3 text-4xl font-black tracking-tight md:text-5xl">
+            <h1 className="mt-2 text-4xl font-black tracking-tight md:text-5xl">
               Tooted
             </h1>
-            <p className="mt-3 max-w-2xl text-base leading-7 text-neutral-600">
+            <p className="mt-3 max-w-3xl text-sm leading-6 text-neutral-600">
               Leia tooteid enda lähedalt. Selqiro alustab sinu valitud asukohast,
-              näitab lähimaid ja sobivaid tulemusi ning laiendab ringi automaatselt.
+              näitab lähimaid tulemusi ja laiendab ringi automaatselt.
             </p>
           </div>
 
-          <div className="rounded-[24px] bg-neutral-950 p-5 text-white lg:w-[360px]">
-            <p className="text-xs font-bold uppercase tracking-[0.2em] text-white/50">
+          <div className="rounded-[22px] bg-neutral-950 px-5 py-4 text-white md:w-[300px]">
+            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/45">
               Asukoht
             </p>
-            <p className="mt-2 text-xl font-black">Paide, Eesti</p>
-            <p className="mt-2 text-sm leading-6 text-white/65">
-              Selqiro alustab lähedalt ja laiendab ringi automaatselt.
-            </p>
+            <p className="mt-1 text-xl font-black">Paide, Eesti</p>
           </div>
         </div>
-      </section>
 
-      <section className="rounded-[34px] border border-black/5 bg-white p-5 shadow-sm md:p-6">
         <div className="grid gap-3 lg:grid-cols-[1fr_auto_auto_auto_auto]">
           <input
             placeholder="Otsi toodet..."
@@ -502,7 +497,7 @@ export default function V2ProductDiscoveryPage() {
 
         <p className="mt-4 text-sm leading-6 text-neutral-500">
           Vaikimisi järjestus on “Sinu lähedal”. Soovi korral saab hiljem valida
-          uuemad, odavamad või global otsingu.
+          uuemad, odavamad või kallimad ees. Global otsing on eraldi asukoharežiim.
         </p>
       </section>
 

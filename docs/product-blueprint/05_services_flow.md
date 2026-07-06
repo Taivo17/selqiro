@@ -550,3 +550,41 @@ Visibility must depend on:
 - highlighting status if any
 
 Do not show unrelated temporary services in unrelated contexts.
+
+---
+
+## V2 Services discovery order
+
+V2 Services discovery should use this order:
+
+1. Compact service search and location controls
+2. Featured services near user
+3. Quick updates / temporary service locations matching the search
+4. Organic services near user
+
+Reason:
+
+- search remains immediately available
+- featured services get valuable visibility
+- quick updates are contextual and useful
+- organic results stay clear below
+
+The search query should affect all three result areas:
+
+- featured services
+- quick updates
+- organic services
+
+Example:
+
+User searches hairdresser.
+
+Selqiro should show:
+
+- featured hairdressers nearby
+- hairdresser quick updates or open times if available
+- all matching hairdressers nearby
+
+If no exact featured match exists, Selqiro may show a nearby related category only if it is clearly useful.
+
+Do not show unrelated paid services just because they are highlighted.
