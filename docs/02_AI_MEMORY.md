@@ -895,3 +895,37 @@ Right/supporting column:
 Latest updates should be on the right on desktop, like the reference layout.
 Quick Update remains prominent near top.
 On mobile, sections can stack.
+
+## V2_HEADER_ACCOUNT_VISIBILITY
+
+V2 header should show active identity and account access.
+
+Logged in:
+- Sõnumid
+- Minu ala
+- Tegutsen kui: active identity
+- Logi välja
+
+Email does not need to be constantly visible in the header.
+
+Email belongs in account settings or future account dropdown.
+
+My Area:
+Updates are managed content and can appear in the main flow with listings/services/product showcases.
+
+## MY_AREA_IDENTITY_PREVIEW
+
+My Area should show active identity visually but compactly.
+
+Use:
+- small avatar/logo in global V2 header
+- compact identity preview in My Area overview
+- small public profile preview in "Vaata avalikku profiili" card
+
+Do not use full public profile header inside My Area.
+
+Reason:
+My Area is private management workspace, not public profile view.
+
+Email does not need to be always visible.
+Active identity must be visible.

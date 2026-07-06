@@ -519,3 +519,36 @@ The old working portal remains usable during development.
 V2 replaces current views only after each part is tested.
 
 This gives Selqiro the clean structure of a rebuild without the risk of losing the working foundation.
+
+---
+
+## V2 header account visibility decision
+
+V2 header should always provide clear account access.
+
+Logged-in header should show:
+
+- Messages
+- My Area
+- Active identity
+- Log out
+
+The user's email does not need to be constantly visible in the header.
+
+The active identity is more important because actions in Selqiro happen through identity.
+
+Email belongs in:
+
+- account settings
+- security settings
+- future account dropdown
+
+Logged-out header should show:
+
+- Log in / Create account
+
+Exact mobile placement can be refined later.
+
+Important rule:
+
+The user should always understand who they are acting as and how to leave the session.

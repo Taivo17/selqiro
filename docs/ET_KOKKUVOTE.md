@@ -3329,3 +3329,78 @@ Kiire teade on aktiivne oluline teade üleval.
 Paremal Uuenduste plokis on varasemad või viimased teated.
 
 Mobiilis võivad need plokid minna üksteise alla.
+
+---
+
+# 128. V2 ülemine riba: identiteet ja logi välja
+
+V2 ülemisel real peab kasutajal olema alati selge ligipääs kontoga seotud tegevustele.
+
+Kui kasutaja on sisse logitud, peaks üleval olema:
+
+- Sõnumid
+- Minu ala
+- Tegutsen kui: aktiivne identiteet
+- Logi välja
+
+Sisse logimise e-mail ei pea kogu aeg nähtav olema.
+
+Olulisem on aktiivne identiteet, sest Selqiros tegutseb kasutaja identiteedi alt.
+
+E-mail võiks olla nähtav:
+
+- konto seadetes
+- turvaseadetes
+- tulevases konto menüüs
+
+Kui kasutaja ei ole sisse logitud, peab üleval olema:
+
+Logi sisse / Loo konto
+
+Põhimõte:
+
+Kasutaja peab alati aru saama, kelle nimel ta tegutseb ja kuidas kontost väljuda.
+
+---
+
+# 129. Uuendused Minu alas
+
+Minu alas sobivad Uuendused / Viimased teated põhivoogu koos kuulutuste, teenuste ja tootenäidistega.
+
+Avalikus profiilis võivad viimased teated olla paremal toetava infona.
+
+Minu alas on need aga hallatav sisu.
+
+Seetõttu on loogiline, et Minu alas on Uuendused samas haldusreas nagu:
+
+- kuulutused
+- teenused
+- tootenäidised
+
+See paigutus jääb praegu sobivaks.
+
+---
+
+# 130. Minu ala identiteedi visuaalne eelvaade
+
+Minu alas peab olema visuaalselt arusaadav, millist identiteeti kasutaja haldab.
+
+Lahendus:
+
+- ülemises ribas väike avatar/logo aktiivse identiteedi kõrval
+- Minu ala ülemises plokis kompaktne identiteedi eelvaade
+- "Vaata avalikku profiili" kaardis väike avaliku profiili eelvaade
+
+Täis avaliku profiili suurt päist Minu alasse ei kopeeri.
+
+Põhjus:
+
+Minu ala on haldusvaade.
+
+Avalik profiil on see, mida teised kasutajad näevad.
+
+Kasutaja peab aru saama, et ta haldab seda identiteeti, aga vaade ei tohi segi minna avaliku profiiliga.
+
+E-mail ei pea olema kogu aeg nähtav.
+
+Olulisem on aktiivne identiteet.

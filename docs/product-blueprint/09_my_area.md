@@ -580,3 +580,95 @@ Clicking messages opens the inbox for the active identity.
 If active identity changes, message context changes.
 
 My Area can include a messages section, but the top navigation is the fast access point from every page.
+
+---
+
+## Header login/logout and identity
+
+My Area should rely on the global V2 header for account access.
+
+Header should show active identity at all times.
+
+Example:
+
+Tegutsen kui: Milline Vedu
+
+The login email does not need to be constantly visible.
+
+Email can be shown in account settings.
+
+When logged in, header should provide Log out access.
+
+When logged out, header should provide Log in / Create account access.
+
+---
+
+## Updates placement in My Area
+
+In My Area, Updates / Viimased teated belong in the main management flow.
+
+Reason:
+
+In public profile, updates can be supporting information.
+
+In My Area, updates are managed content.
+
+Therefore they can appear alongside:
+
+- listings
+- services
+- product showcases
+
+This is different from public profile layout, where latest updates can sit in the right supporting column on desktop.
+
+---
+
+## Identity visual preview in My Area
+
+My Area should make the active identity visually clear.
+
+Recommended approach:
+
+- global header shows active identity with small avatar/logo
+- My Area overview shows compact identity preview
+- public profile card shows a small public profile preview
+
+Do not use the full public profile header inside My Area.
+
+Reason:
+
+My Area is a management workspace, not the public profile page.
+
+The user should understand:
+
+I am managing this identity.
+
+But the view should not be confused with what public visitors see.
+
+---
+
+## Header identity preview
+
+V2 header may show a small avatar/logo next to active identity.
+
+Do not show full cover image in the global header.
+
+The header must stay compact and practical.
+
+Email does not need to be constantly visible.
+
+Active identity is more important in daily use.
+
+---
+
+## Public profile preview card
+
+The "Vaata avalikku profiili" card in My Area can include:
+
+- small cover preview
+- avatar/logo
+- identity name
+
+This makes it visually clear which public profile will open.
+
+This is especially useful when one account has multiple identities.
