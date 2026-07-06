@@ -293,7 +293,7 @@ export default function V2ListingDetailPage() {
               Sinu lähedal
             </p>
             <h2 className="mt-2 text-3xl font-black">
-              Seotud teenused
+              Selle tootega seotud teenused
             </h2>
           </div>
 

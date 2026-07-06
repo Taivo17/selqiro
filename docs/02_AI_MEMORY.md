@@ -929,3 +929,56 @@ My Area is private management workspace, not public profile view.
 
 Email does not need to be always visible.
 Active identity must be visible.
+
+## V2_SERVICES_SKELETON
+
+V2 Services page includes:
+- local-first services discovery
+- Quick Update / temporary service location
+- featured services
+- nearby services
+- service cards
+- service detail modal
+
+Service card opens modal to keep context.
+
+Service price optional.
+
+Temporary service location can make a service visible in relevant local discovery during active time window.
+
+## DISCOVERY_WORDING_LOCATION_NEARBY
+
+Do not mix "Minu lähedal" and "Sinu lähedal" in controls.
+
+Use:
+- control: "Asukoht: Paide"
+- sorting: "Sinu lähedal"
+- section heading: "Sinu lähedal"
+
+Reason:
+Location is a setting.
+Nearby/relevant is ranking.
+Near you is a user-facing section heading.
+
+Default visible sorting label is Near you. Internally, ranking may still consider freshness, quality and trust.
+
+## PRODUCT_DISCOVERY_RELATED_SERVICES
+
+Product Discovery can show a narrow related services strip.
+
+Heading:
+Kasulikud teenused selle otsingu juurde
+
+Listing detail heading:
+Selle tootega seotud teenused
+
+Show only services that are:
+- highlighted / paid visibility
+- related to the product search/category
+- useful to the user
+
+If no related highlighted service exists, hide the strip.
+
+Prefer closer services, but a farther service can appear if it strongly matches and no close match exists.
+
+Do not show unrelated paid services.

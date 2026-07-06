@@ -488,3 +488,65 @@ Do not show empty fields.
 Only show information that the provider has actually added.
 
 This keeps the profile clean and avoids misleading users.
+
+---
+
+## V2 Services skeleton
+
+V2 Services skeleton introduces:
+
+- services discovery page
+- local-first service search
+- Quick Update / temporary service location block
+- featured services
+- nearby services
+- service card
+- service detail modal
+
+Service card opens a modal instead of navigating away.
+
+Reason:
+
+The user should keep context while seeing more details.
+
+Service detail modal can show:
+
+- image
+- service name
+- provider
+- area
+- distance
+- optional price
+- description
+- key details
+- contact action
+
+Service price remains optional.
+
+If price is missing, public UI should not show an empty price field.
+
+---
+
+## Temporary service location in services discovery
+
+Services discovery should support temporary service location.
+
+Example:
+
+Tow truck provider normally operates in Järvamaa.
+
+Active temporary location:
+
+Gonsiori area, Tallinn until 16:00.
+
+This can make the service visible in relevant Tallinn tow truck discovery.
+
+Visibility must depend on:
+
+- service category
+- location
+- time
+- trust
+- highlighting status if any
+
+Do not show unrelated temporary services in unrelated contexts.

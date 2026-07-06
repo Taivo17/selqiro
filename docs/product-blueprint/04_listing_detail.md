@@ -680,3 +680,28 @@ Paide piirkond · umbes 12 km sinust
 Rule:
 
 Distance from user is useful, but precision must match the seller's chosen location privacy.
+
+---
+
+## Related services on listing detail
+
+Listing detail may show services related to the specific product.
+
+Recommended heading:
+
+Selle tootega seotud teenused
+
+Example:
+
+A lawn tractor listing may show:
+
+- garden equipment maintenance
+- transport
+- repair
+- spare parts
+
+Only show services that are relevant to the product.
+
+If no related highlighted or useful services exist, hide the section.
+
+The section should help the buyer, not distract from the listing.

@@ -1130,3 +1130,110 @@ Keep the visible experience simple:
 - change option when needed
 
 Advanced country and global search controls can be added later when usage requires them.
+
+---
+
+## Discovery wording decision: location vs nearby
+
+Avoid mixing "Minu lähedal" and "Sinu lähedal" in controls.
+
+Recommended wording:
+
+Control:
+Asukoht: Paide
+
+Sorting:
+Sinu lähedal
+
+Section heading:
+Sinu lähedal
+
+Reason:
+
+"Asukoht" is a setting.
+"Sinu lähedal" describes ranking.
+"Sinu lähedal" works well as user-facing content heading.
+
+This also translates better:
+
+- Location: Paide
+- Near you
+- Near you
+
+Default ranking is not pure distance.
+
+It considers:
+
+- distance
+- relevance
+- freshness
+- quality
+- trust
+
+
+---
+
+## Visible discovery label: Sinu lähedal
+
+The visible default sorting label should be:
+
+Sinu lähedal
+
+Reason:
+
+It is short, clear and user-friendly.
+
+Avoid showing wording like "nearby and relevant" in the main UI because it may make users feel that the platform is deciding what is suitable for them.
+
+Internal ranking can still consider:
+
+- distance
+- freshness
+- listing quality
+- trust signals
+- category match
+
+But the user-facing label should stay simple.
+
+Control wording:
+
+- Asukoht: Paide
+- Sinu lähedal
+
+Section wording:
+
+- Sinu lähedal
+- Esiletõstetud tooted sinu lähedal
+- Teenused sinu lähedal
+
+---
+
+## Related services inside product discovery
+
+Product pages can include a related services strip.
+
+This is not the same as Quick Updates.
+
+Product Discovery related services should be:
+
+- contextual
+- category-related
+- highlighted / paid if used for monetization
+- preferably near the user
+- hidden when no useful match exists
+
+Example:
+
+Product query:
+lawn mower
+
+Related highlighted services:
+- garden equipment repair
+- transport
+- parts and maintenance
+
+If no relevant highlighted services exist, show nothing.
+
+Paid visibility does not override relevance.
+
+A service can be farther away if it strongly matches the product context, but closer relevant services should be preferred.

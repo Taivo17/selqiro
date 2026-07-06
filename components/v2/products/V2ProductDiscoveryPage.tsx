@@ -106,6 +106,38 @@ const products: ProductCard[] = [
   },
 ];
 
+type RelatedService = {
+  title: string;
+  provider: string;
+  description: string;
+  meta: string;
+  badge?: string;
+};
+
+const relatedServices: RelatedService[] = [
+  {
+    title: "Aiatehnika hooldus",
+    provider: "Milline Vedu",
+    description: "Murutraktorite, niidukite ja väiketehnika hooldus.",
+    meta: "Seotud: murutraktorid · ~12 km",
+    badge: "Esiletõstetud",
+  },
+  {
+    title: "Transport kokkuleppel",
+    provider: "Kohalik transport",
+    description: "Suurema tehnika kohaletoomine või vedu kokkuleppel.",
+    meta: "Seotud: aiatehnika · ~18 km",
+    badge: "Esiletõstetud",
+  },
+  {
+    title: "Varuosad ja nõustamine",
+    provider: "Roheline Tehnika",
+    description: "Aitame valida sobiva varuosa või hoolduslahenduse.",
+    meta: "Seotud: hooldus ja remont · ~28 km",
+    badge: "Esiletõstetud",
+  },
+];
+
 const sortOptions = ["Sinu lähedal", "Uuemad ees", "Odavamad ees", "Kallimad ees"];
 
 function ProductCardView({
@@ -166,6 +198,37 @@ function ProductCardView({
           Ava kuulutus
         </Link>
       </div>
+    </article>
+  );
+}
+
+function RelatedServiceCardView({ service }: { service: RelatedService }) {
+  return (
+    <article className="min-w-[250px] rounded-[22px] border border-black/5 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md md:min-w-[280px]">
+      <div className="flex items-start justify-between gap-3">
+        <span className="rounded-full bg-emerald-50 px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.16em] text-emerald-700">
+          {service.badge || "Teenus"}
+        </span>
+
+        <button className="rounded-full border border-neutral-200 bg-white px-2.5 py-1 text-xs font-bold text-neutral-500">
+          ♡
+        </button>
+      </div>
+
+      <h3 className="mt-3 text-base font-black">{service.title}</h3>
+      <p className="mt-1 text-sm font-semibold text-neutral-500">
+        {service.provider}
+      </p>
+      <p className="mt-2 text-sm leading-6 text-neutral-600">
+        {service.description}
+      </p>
+      <p className="mt-3 text-xs font-semibold text-neutral-400">
+        {service.meta}
+      </p>
+
+      <button className="mt-4 rounded-full border border-neutral-200 bg-white px-4 py-2 text-xs font-black shadow-sm">
+        Vaata teenust
+      </button>
     </article>
   );
 }
@@ -258,7 +321,7 @@ function FilterPanel({
       {activePanel === "location" ? (
         <div className="mt-5 grid gap-4 md:grid-cols-3">
           <button className="rounded-2xl border border-black bg-black px-4 py-4 text-left text-sm font-bold text-white">
-            Minu lähedal: Paide
+            Asukoht: Paide
             <span className="mt-1 block text-xs font-medium text-white/60">
               Vaikimisi
             </span>
@@ -412,7 +475,7 @@ export default function V2ProductDiscoveryPage() {
           />
 
           <ToolbarButton
-            label="Minu lähedal: Paide"
+            label="Asukoht: Paide"
             active={activePanel === "location"}
             onClick={() => togglePanel("location")}
           />
@@ -467,6 +530,35 @@ export default function V2ProductDiscoveryPage() {
           ))}
         </div>
       </section>
+
+      {relatedServices.length > 0 ? (
+        <section className="rounded-[34px] border border-black/5 bg-white p-6 shadow-sm md:p-8">
+          <div className="mb-5 flex items-end justify-between gap-4">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[0.26em] text-neutral-400">
+                Seotud abi
+              </p>
+              <h2 className="mt-2 text-2xl font-black tracking-tight md:text-3xl">
+                Kasulikud teenused selle otsingu juurde
+              </h2>
+              <p className="mt-2 max-w-2xl text-sm leading-6 text-neutral-500">
+                Kuvame ainult otsingu või tootekategooriaga seotud esiletõstetud
+                teenuseid. Kui sobivaid teenuseid ei ole, seda riba ei näidata.
+              </p>
+            </div>
+
+            <button className="hidden rounded-full border border-neutral-200 bg-white px-4 py-2 text-sm font-bold shadow-sm md:inline-flex">
+              Vaata kõiki
+            </button>
+          </div>
+
+          <div className="-mx-2 flex gap-3 overflow-x-auto px-2 pb-2">
+            {relatedServices.map((service) => (
+              <RelatedServiceCardView key={service.title} service={service} />
+            ))}
+          </div>
+        </section>
+      ) : null}
 
       <section className="rounded-[34px] border border-black/5 bg-white p-6 shadow-sm md:p-8">
         <div className="mb-5 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">

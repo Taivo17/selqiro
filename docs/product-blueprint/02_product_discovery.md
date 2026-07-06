@@ -494,3 +494,61 @@ Avoid forcing private sellers to publish exact address.
 Cards should stay compact.
 
 Detailed location privacy explanation belongs to listing detail or tooltip.
+
+---
+
+## Related highlighted services in Product Discovery
+
+Product Discovery may show a narrow related services strip.
+
+Purpose:
+
+Help the user with services that are useful for the current product search.
+
+Example:
+
+User searches for lawn mower.
+
+Related services may include:
+
+- garden equipment repair
+- transport
+- spare parts
+- maintenance advice
+
+This strip should show only services that are:
+
+- highlighted / paid visibility
+- related to the product search or category
+- useful in the current context
+- preferably near the user
+
+If no related highlighted services exist, do not show the strip.
+
+Do not fill the strip with unrelated services.
+
+The strip should be helpful, not noisy.
+
+Recommended heading:
+
+Kasulikud teenused selle otsingu juurde
+
+Reason:
+
+The user immediately understands why these services are shown.
+
+---
+
+## Related services ranking
+
+Related services in Product Discovery should prefer:
+
+1. strong category match
+2. active highlighted status
+3. closer location
+4. trust signals
+5. freshness or current availability if relevant
+
+A more distant service may be shown if it is strongly related and no closer suitable highlighted service exists.
+
+Do not show unrelated highlighted services just because they are paid.

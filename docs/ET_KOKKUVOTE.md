@@ -3404,3 +3404,199 @@ Kasutaja peab aru saama, et ta haldab seda identiteeti, aga vaade ei tohi segi m
 E-mail ei pea olema kogu aeg nähtav.
 
 Olulisem on aktiivne identiteet.
+
+---
+
+# 131. V2 teenuste skeleton
+
+V2 teenuste leht sisaldab:
+
+- teenuste otsing
+- Minu lähedal loogika
+- Kiire teade / ajutine teenindusasukoht
+- esiletõstetud teenused
+- teenused sinu lähedal
+- teenusekaart
+- teenuse detaili modal
+
+Teenusekaart ei pea kasutajat kohe uuele lehele viima.
+
+Klikk avab suurema detailvaate ehk modali.
+
+Seal saab näha:
+
+- teenuse pilti
+- teenuse nime
+- teenusepakkujat
+- piirkonda
+- kaugust
+- hinda, kui see on lisatud
+- kirjeldust
+- lisainfot
+- kontaktinuppu
+
+Teenuse hind on vabatahtlik.
+
+Kui hinda ei ole lisatud, ei kuvata tühja hinnavälja.
+
+---
+
+# 132. Ajutine teenindusasukoht teenuste lehel
+
+Teenuste discovery peab toetama ajutist teenindusasukohta.
+
+Näide:
+
+Puksiirifirma tegutseb tavaliselt Järvamaal.
+
+Ta lisab ajutise asukoha:
+
+Gonsiori piirkond, Tallinn kuni 16:00.
+
+Sel juhul võib teenus ilmuda Tallinnas asjakohases puksiiriotsingus.
+
+Nähtavus sõltub:
+
+- teenuse kategooriast
+- asukohast
+- ajast
+- usaldusest
+- esiletõstmisest, kui see on aktiivne
+
+Ajutine asukoht ei tohi teha teenust nähtavaks ebaolulistes kohtades.
+
+---
+
+# 133. Asukoha ja lähedal loogika sõnastus
+
+V2-s ei tohiks nuppudes segamini kasutada:
+
+Minu lähedal
+
+ja
+
+Sinu lähedal
+
+Parim lahendus:
+
+Nupus:
+Asukoht: Paide
+
+Järjestuses:
+Sinu lähedal
+
+Ploki pealkirjas:
+Sinu lähedal
+
+Põhjus:
+
+"Asukoht" on valik või seadistus.
+
+"Sinu lähedal" kirjeldab järjestust.
+
+"Sinu lähedal" sobib sisubloki pealkirjaks, sest see räägib kasutajale loomulikult.
+
+See sobib paremini ka teistesse keeltesse.
+
+Näiteks inglise keeles:
+
+Location: Paide
+Near you
+Near you
+
+Vaikimisi järjestus ei ole ainult kaugus.
+
+See arvestab:
+
+- kaugust
+- sobivust
+- värskust
+- kvaliteeti
+- usaldust
+
+
+---
+
+# 134. Nähtav järjestuse sõnastus
+
+Järjestuse nähtav nimetus peaks olema:
+
+Sinu lähedal
+
+Mitte:
+
+Lähedal ja sobiv
+
+Põhjus:
+
+"Sinu lähedal" on lühike ja kasutajale üheselt arusaadav.
+
+"Lähedal ja sobiv" võib tekitada küsimuse, et miks portaal otsustab, mis kasutajale sobib.
+
+Süsteem võib sisemiselt siiski arvestada:
+
+- kaugust
+- värskust
+- kuulutuse kvaliteeti
+- usaldussignaale
+- rubriigi sobivust
+
+Aga kasutajale nähtav sõnastus jääb lihtsaks.
+
+Nupud:
+
+Asukoht: Paide
+Sinu lähedal
+
+Plokid:
+
+Sinu lähedal
+Esiletõstetud tooted sinu lähedal
+Teenused sinu lähedal
+
+---
+
+# 135. Toodete juures seotud teenused
+
+Toodete vaates võib olla kitsas seotud teenuste riba.
+
+Pealkiri:
+
+Kasulikud teenused selle otsingu juurde
+
+Näide:
+
+Kasutaja otsib muruniidukit.
+
+Siis võib näidata:
+
+- aiatehnika hooldus
+- murutraktori transport
+- varuosad ja nõustamine
+- remont
+
+Selles ribas näitame ainult teenuseid, mis on:
+
+- tootega või otsinguga seotud
+- esiletõstetud
+- kasutajale päriselt kasulikud
+
+Kui tootega haakuvaid esiletõstetud teenuseid ei ole, siis seda riba ei näita.
+
+Teenusepakkujale annab see lisaväärtust, sest esiletõstmine võib tuua nähtavust ka seotud toodete otsingus.
+
+---
+
+# 136. Seotud teenuste asukoha loogika
+
+Seotud teenuste kuvamisel eelistame lähedal olevaid teenuseid.
+
+Kui lähedal ei ole sobivat esiletõstetud teenust, võib näidata kaugemal olevat teenust, kui see haakub tootega väga hästi.
+
+Oluline reegel:
+
+Makstud esiletõstmine ei tohi asendada asjakohasust.
+
+Kui kasutaja otsib muruniidukit, ei näita me seal puksiiri ainult sellepärast, et puksiir on esiletõstetud.
+
+Teenuse sobivus tootega on kohustuslik.
