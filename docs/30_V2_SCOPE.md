@@ -458,3 +458,24 @@ Launch does not need:
 Admin exists to protect trust.
 
 Admin access must be limited, justified and logged.
+
+## Welcome Energy launch decision
+
+V2 Launch should support Welcome Energy if implementation is simple.
+
+Welcome Energy:
+
+- is granted to new users
+- creates an Energy transaction
+- appears in Energy history
+- is configurable
+- is not cash
+- can be used to try paid features
+
+Recommended initial amount:
+
+100 Energy
+
+Final amount can be adjusted before launch.
+
+Abuse prevention must be considered.

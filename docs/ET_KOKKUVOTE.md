@@ -3659,3 +3659,123 @@ Toodete ja teenuste discovery peaks kasutajale tunduma sama loogikaga.
 
 Kasutaja õpib ühe mustri ära ja saab seda kasutada nii toodete kui teenuste puhul.
 
+
+---
+
+# 139. V2 Energy skeleton
+
+V2 Energy vaade sisaldab:
+
+- Energy walleti ülevaade
+- Energy paketid
+- puuduv Energy ja jätkamise näide
+- reserveeritud Energy näide
+- Energy ajalugu
+- turvalise makse selgitus
+- arvelduse ja receipt’i koht
+- admini adjustmenti põhimõtte selgitus
+
+See on praegu UX skeleton.
+
+Päris makseteenuse ühendus tuleb hiljem.
+
+Makset ei tohi ühendada enne, kui wallet, ledger ja webhook loogika on valmis.
+
+---
+
+# 140. Energy vaate sõnastuse täpsustus
+
+V2 Energy vaate paigutus on sobiv.
+
+Väikesed sõnastuse otsused:
+
+- "Puuduv Energy" plokk peab tunduma seotud konkreetse tasulise tegevusega.
+- Parem pealkiri on "Kui Energy’t jääb puudu".
+- Reserveeritud Energy plokki näidatakse siis, kui kasutajal on aktiivne ülevaatust ootav tegevus.
+- Kasutajale nähtavas Energy vaates ei kasuta sõna "Admin adjustment".
+- Parem sõnastus on "Selqiro tugi", "Parandused" või "Preemiad".
+
+Kasutaja peab aru saama:
+
+- Energy pakette saab osta tavaliselt Energy lehelt.
+- Puuduv Energy ilmub siis, kui ta jätkab konkreetset tasulist tegevust.
+- Reserveeritud Energy ilmub siis, kui tegevus ootab ülevaatust.
+- Kui Selqiro tugi lisab Energy’t, on see nähtav Energy ajaloos.
+
+---
+
+# 141. Tervitus Energy uuele liitujale
+
+Uuele Selqiro kasutajale võiks anda kingitusena väikese koguse Energy’t.
+
+Nimetus:
+
+Tervitus Energy
+
+Eesmärk:
+
+kasutaja saab proovida Selqiro tasulisi lisavõimalusi enne, kui ta Energy’t ostab.
+
+Näiteks:
+
+- kuulutuse esiletõstmine
+- teenuse esiletõstmine
+- väiksem discovery nähtavus
+- tulevikus mõni muu Energy põhine lisavõimalus
+
+Soovitus Launchiks:
+
+100 Energy
+
+Täpne kogus peab olema seadistatav.
+
+---
+
+# 142. Tervitus Energy reeglid
+
+Tervitus Energy ei tohi lihtsalt vaikselt saldole ilmuda.
+
+See peab olema Energy tehing.
+
+Tehingu tüüp:
+
+welcome_grant
+
+Kasutaja näeb seda Energy ajaloos.
+
+Näide:
+
+Tervitus Energy
+Uue liituja kingitus
++100 Energy
+
+Tervitus Energy ei ole raha.
+
+Seda ei saa rahaks vahetada.
+
+Seda kasutatakse Selqiro sees lisavõimaluste proovimiseks.
+
+---
+
+# 143. Tervitus Energy kuritarvitamise vältimine
+
+Tervitus Energy võib tekitada kuritarvitamise riski, kui keegi loob palju kontosid.
+
+Võimalikud kontrollid:
+
+- üks boonus konto kohta
+- e-maili kinnitus
+- esimese identiteedi loomine
+- tulevikus telefonikinnitus
+- profiili täitmise nõue
+- riigi või kampaania järgi seadistatav kogus
+- pettuse jälgimine
+- võimalus boonus välja lülitada
+
+Boonus peab olema piisav, et kasutaja saab proovida Selqiro väärtust, aga mitte nii suur, et kontode massiline loomine muutub atraktiivseks.
+
+Põhimõte:
+
+Tervitus Energy aitab kasutajal väärtust kogeda.
+
+Kui väärtus on nähtav, on Energy ostmine hiljem loomulikum.

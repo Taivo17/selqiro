@@ -552,3 +552,24 @@ Exact mobile placement can be refined later.
 Important rule:
 
 The user should always understand who they are acting as and how to leave the session.
+
+---
+
+## V2 Energy skeleton
+
+V2 Energy skeleton includes:
+
+- Energy wallet overview
+- package purchase view
+- missing Energy example
+- reserved Energy example
+- Energy history
+- secure payment explanation
+- billing/receipt placeholder
+- admin adjustment explanation
+
+This is UX skeleton only.
+
+Stripe/payment provider integration comes later.
+
+Do not connect real payments until wallet, ledger and webhook design are ready.

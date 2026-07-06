@@ -395,9 +395,12 @@ export default function V2MyAreaPage() {
                 Energy kuulub valitud walletile. Hiljem saab siin osta Energy’t ja
                 vaadata tehingute ajalugu.
               </p>
-              <button className="mt-5 w-full rounded-full border border-neutral-200 bg-white px-5 py-3 text-sm font-black shadow-sm">
+              <a
+                href="/v2/energy"
+                className="mt-5 inline-flex w-full justify-center rounded-full border border-neutral-200 bg-white px-5 py-3 text-sm font-black shadow-sm"
+              >
                 Vaata Energy
-              </button>
+              </a>
             </section>
 
             <section className="rounded-[30px] border border-blue-100 bg-blue-50 p-6">

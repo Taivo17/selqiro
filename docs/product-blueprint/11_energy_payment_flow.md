@@ -359,3 +359,71 @@ Energy Payment Flow is locked for launch as:
 10. Energy is spent or reserved depending on the action.
 
 This flow should not be redesigned unless implementation exposes a major issue.
+
+---
+
+## V2 Energy page wording refinement
+
+The V2 Energy page structure is accepted.
+
+Small wording decisions:
+
+- Missing Energy block should be contextual.
+- Use wording like "Kui Energy’t jääb puudu" rather than making it look like a normal always-active Energy page action.
+- Reserved Energy should be shown when there is an active reserved action.
+- User-facing Energy page should not use admin-facing wording like "Admin adjustment".
+- Use user-facing wording such as "Selqiro tugi", "Parandused" or "Preemiad".
+
+User should understand:
+
+- Energy packages can be bought normally.
+- Missing Energy appears when continuing a paid action.
+- Reserved Energy appears when something is waiting for review.
+- Support-added Energy appears in history.
+
+---
+
+## Welcome Energy UX
+
+New users may receive Welcome Energy.
+
+User-facing name:
+
+Tervitus Energy
+
+Purpose:
+
+Help the user try Selqiro paid features before buying Energy.
+
+Example:
+
+Uue liituja kingitus
++100 Energy
+
+This should appear in Energy history.
+
+The Energy page can mention Welcome Energy as an onboarding benefit.
+
+Important:
+
+Welcome Energy is not cash.
+
+It is a Selqiro platform credit.
+
+It can be used to test value-added features such as highlighting.
+
+---
+
+## Welcome Energy and conversion
+
+Welcome Energy should help users understand the value of Energy.
+
+Flow:
+
+New user joins.
+Selqiro grants Welcome Energy.
+User tries a small paid feature.
+User sees whether it works.
+When Energy is used, user may buy more.
+
+This supports revenue without forcing payment before the user understands the benefit.

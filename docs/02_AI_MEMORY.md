@@ -1009,3 +1009,42 @@ Order:
 4. organic products
 
 Keep Products and Services discovery patterns consistent.
+
+## V2_ENERGY_SKELETON
+
+V2 Energy route:
+/v2/energy
+
+Includes:
+- wallet balance
+- package purchase skeleton
+- missing Energy flow
+- reserved Energy
+- Energy history
+- secure payment explanation
+- billing/receipt placeholder
+- admin adjustment explanation
+
+No real payment integration yet.
+
+## WELCOME_ENERGY
+
+New users should receive Welcome Energy if possible.
+
+User-facing name:
+Tervitus Energy
+
+Recommended starting amount:
+100 Energy, configurable.
+
+Purpose:
+Let users try paid value-added features like highlighting before buying Energy.
+
+Rules:
+- ledger transaction required
+- type: welcome_grant
+- visible in Energy history
+- not cash
+- not silently added
+- abuse-aware
+- one grant per account/eligible user

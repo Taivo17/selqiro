@@ -1095,3 +1095,106 @@ Public/user-facing explanation can be simpler than internal admin note.
 Admin Energy changes are allowed.
 
 But they must always be transparent in the ledger, justified by reason and visible in audit history.
+
+---
+
+## Welcome Energy
+
+Selqiro should support Welcome Energy for new users.
+
+Purpose:
+
+Let a new user try paid value-added features before buying Energy.
+
+Examples:
+
+- listing highlighting
+- service highlighting
+- small discovery boost
+- temporary location trial later if appropriate
+
+Recommended launch concept:
+
+Tervitus Energy
+
+Example amount:
+
+100 Energy
+
+The exact amount must be configurable.
+
+---
+
+## Welcome Energy rules
+
+Welcome Energy should not be added silently.
+
+It must create an Energy transaction.
+
+Transaction type:
+
+welcome_grant
+
+The transaction should include:
+
+- wallet id
+- user/account id
+- identity id if relevant
+- amount
+- reason
+- timestamp
+- balance after
+
+User should see it in Energy history.
+
+Example:
+
+Tervitus Energy
+Uue liituja kingitus
++100 Energy
+
+---
+
+## Abuse prevention
+
+Welcome Energy can create abuse risk if users create many accounts.
+
+Controls may include:
+
+- one grant per account
+- email verification required
+- first identity creation required
+- optional phone verification later
+- optional profile completion requirement later
+- configurable country/launch campaign limits
+- fraud monitoring
+- ability to disable or adjust amount
+
+Welcome Energy should be generous enough to try Selqiro, but not so large that abuse becomes attractive.
+
+---
+
+## Promotional Energy
+
+Welcome Energy is promotional Energy.
+
+Rules:
+
+- cannot be withdrawn as money
+- cannot be transferred to another account unless policy later allows
+- may have expiration if needed
+- can be used only inside Selqiro
+- should appear in the ledger
+- may have limits for high-visibility moderated features if needed
+
+Do not describe Welcome Energy as cash.
+
+It is a platform credit for trying Selqiro features.
+
+---
+
+## Final rule
+
+New users may receive Welcome Energy.
+
+Every grant must be ledger-based, configurable and abuse-aware.
