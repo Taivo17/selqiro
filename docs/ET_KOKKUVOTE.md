@@ -3803,3 +3803,94 @@ Päris õigused, päris järjekorrad ja tundlike andmete ligipääsukontroll tul
 Admin route peab enne launchi olema õigustega kaitstud.
 
 Admin ei tohi olla koht, kus saab kasutajate privaatsõnumeid niisama sirvida.
+
+---
+
+# 145. V2 skeleton checkpoint
+
+V2 esimene skeleton-faas on valmis.
+
+Olemas on järgmised V2 vaated:
+
+- /v2
+- /v2/products
+- /v2/listing/[id]
+- /v2/profile/[slug]
+- /v2/my-area
+- /v2/services
+- /v2/energy
+- /v2/admin
+
+Need vaated ei ole veel päris andmetega lõplikult ühendatud.
+
+Need on V2 puhas raam ja moodulite asetus.
+
+---
+
+# 146. Mis on V2 skeletonis paigas
+
+Paigas on:
+
+- V2 header
+- aktiivne identiteet
+- sõnumite ligipääs
+- Minu ala ligipääs
+- Logi välja nupp
+- Product Discovery
+- kuulutuse detail
+- avalik profiil
+- Minu ala
+- teenuste leht
+- Energy vaade
+- admin dashboard
+- asukoha privaatsuse põhimõte
+- seotud teenuste loogika
+- esiletõstmise väärtuse loogika
+- Tervitus Energy
+- admini case-põhine loogika
+
+---
+
+# 147. Mis ei ole veel tehtud
+
+Veel ei ole tehtud:
+
+- päris Supabase andmete ühendamine
+- päris listing query
+- päris profiili andmed
+- päris teenuste andmed
+- päris Energy ledger
+- päris makseteenuse checkout
+- webhook
+- admini päris õigused
+- päris moderatsiooni järjekorrad
+- lõplik mobiilidisain
+- lõplik visuaalne lihv
+- täielik QA
+
+---
+
+# 148. Järgmine soovitus
+
+Praegu ei lisa rohkem suuri skeleton lehti.
+
+Järgmine mõistlik etapp on andmete ühendamine väikeste sammudega.
+
+Soovitatud järjekord:
+
+1. aktiivne identiteet V2 headeris
+2. Product Discovery päris andmed
+3. Listing Detail päris andmed
+4. Avaliku profiili päris andmed
+5. Minu ala päris andmed
+6. Teenuste päris andmed
+7. Energy ledger ja maksed
+8. Admin päris andmed hiljem
+
+Põhimõte jääb:
+
+üks väike samm
+build
+test
+commit
+järgmine samm

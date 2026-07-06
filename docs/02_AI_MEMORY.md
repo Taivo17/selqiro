@@ -1067,3 +1067,24 @@ Includes:
 
 Admin must be permission-protected before launch.
 No casual private message access.
+
+## V2_SKELETON_CHECKPOINT
+
+First V2 skeleton phase is complete.
+
+Created routes:
+- /v2
+- /v2/products
+- /v2/listing/[id]
+- /v2/profile/[slug]
+- /v2/my-area
+- /v2/services
+- /v2/energy
+- /v2/admin
+
+These are skeletons, not fully connected to real data.
+
+Next recommended phase:
+connect real data gradually, starting with active identity and Product Discovery.
+
+Do not add more large skeleton pages before checkpoint/testing.
