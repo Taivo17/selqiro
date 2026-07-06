@@ -3779,3 +3779,27 @@ Põhimõte:
 Tervitus Energy aitab kasutajal väärtust kogeda.
 
 Kui väärtus on nähtav, on Energy ostmine hiljem loomulikum.
+
+---
+
+# 144. V2 Admin skeleton
+
+V2 Admin vaade sisaldab:
+
+- modulaarne admin dashboard
+- juhtumite järjekord
+- valitud juhtumi detail
+- AI esmane sorteerimine
+- AI Signals korduvate probleemide jaoks
+- Energy ja maksete adjustmenti põhimõte
+- audit logi eelvaade
+- originaaltekst + AI tõlge adminile
+- "Võtan käsile" ehk juhtumi omanik
+
+See on praegu UX skeleton.
+
+Päris õigused, päris järjekorrad ja tundlike andmete ligipääsukontroll tulevad hiljem.
+
+Admin route peab enne launchi olema õigustega kaitstud.
+
+Admin ei tohi olla koht, kus saab kasutajate privaatsõnumeid niisama sirvida.

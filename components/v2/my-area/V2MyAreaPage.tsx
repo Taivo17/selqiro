@@ -273,6 +273,7 @@ export default function V2MyAreaPage() {
           <SidebarItem label="Arveldus" />
           <SidebarItem label="Seaded" />
           <SidebarItem label="Blokeeritud kasutajad" />
+          <SidebarItem label="Admin" />
         </div>
       </aside>
 
@@ -424,6 +425,22 @@ export default function V2MyAreaPage() {
               <p className="mt-2 text-sm leading-6 text-neutral-600">
                 Siia tulevad maksed, receipt’id, billing entity ja ettevõtte arved.
               </p>
+            </section>
+
+            <section className="rounded-[30px] border border-black/5 bg-white p-6 shadow-sm">
+              <p className="text-xs font-bold uppercase tracking-[0.24em] text-neutral-400">
+                Admin
+              </p>
+              <h2 className="mt-2 text-xl font-black">Ligipääs olemas</h2>
+              <p className="mt-2 text-sm leading-6 text-neutral-600">
+                Admini moodul on nähtav ainult kasutajale, kellel on õigused.
+              </p>
+              <a
+                href="/v2/admin"
+                className="mt-5 inline-flex w-full justify-center rounded-full bg-black px-5 py-3 text-sm font-black text-white"
+              >
+                Ava admin
+              </a>
             </section>
           </aside>
         </section>

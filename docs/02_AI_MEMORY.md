@@ -1048,3 +1048,22 @@ Rules:
 - not silently added
 - abuse-aware
 - one grant per account/eligible user
+
+## V2_ADMIN_SKELETON
+
+V2 admin route:
+/v2/admin
+
+Includes:
+- modular dashboard
+- case queue
+- case detail
+- AI triage
+- AI Signals
+- Energy/payment adjustment concept
+- audit log preview
+- multilingual original + AI translation example
+- case ownership / Take case
+
+Admin must be permission-protected before launch.
+No casual private message access.

@@ -573,3 +573,25 @@ This is UX skeleton only.
 Stripe/payment provider integration comes later.
 
 Do not connect real payments until wallet, ledger and webhook design are ready.
+
+---
+
+## V2 Admin skeleton
+
+V2 Admin skeleton includes:
+
+- modular admin dashboard
+- case queue
+- selected case detail
+- AI triage overview
+- AI Signals
+- Energy/payment adjustment explanation
+- audit log preview
+- multilingual original + AI translation example
+- case ownership / Take case concept
+
+This is UX skeleton only.
+
+Real permissions, real queues and sensitive data access controls come later.
+
+Admin route should be permission-protected before launch.
