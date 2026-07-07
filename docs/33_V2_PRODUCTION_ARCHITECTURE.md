@@ -704,3 +704,40 @@ Still skeleton:
 Next step:
 
 Add pagination and filter input flow through feature model.
+
+---
+
+## First V2 Listing Detail data connection
+
+V2 Listing Detail now starts using the listing entity API.
+
+Added:
+
+- src/features/listing-detail/model/useListingDetail.ts
+- src/features/listing-detail/components/ListingDetailPage.tsx
+
+Updated:
+
+- components/v2/listing/V2ListingDetailPage.tsx now wraps the feature component
+- app/v2/listing/[id]/page.tsx passes route id to the feature component
+- getListingById enriches seller name/slug from identity_profiles when possible
+
+Rules followed:
+
+- UI does not call Supabase directly
+- feature hook calls listing entity API
+- listing entity API owns Supabase access
+- loading, error and empty states exist
+
+Current scope:
+
+Listing detail uses real listing data.
+
+Still later:
+
+- real contact action
+- save listing
+- related featured listings
+- related services
+- full translation handling
+- exact public/private location precision model

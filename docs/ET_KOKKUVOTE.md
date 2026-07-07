@@ -4211,3 +4211,43 @@ Supabase / RPC
 Praegu ühendame ainult tavalised tulemused.
 
 Esiletõstetud tooted, seotud teenused, filtrite mõju ja automaatne juurde laadimine jäävad järgmisteks sammudeks.
+
+---
+
+# 163. Listing Detail esimene päris andmeühendus
+
+V2 kuulutuse detailvaade kasutab nüüd listing entity API-t.
+
+Lisatud:
+
+- useListingDetail
+- ListingDetailPage
+
+Route /v2/listing/[id] annab kuulutuse id edasi feature komponendile.
+
+getListingById rikastab võimalusel müüja nime ja slug’i identity_profiles tabelist.
+
+Oluline:
+
+UI ei tee otse Supabase päringut.
+
+Töövoog:
+
+ListingDetailPage
+↓
+useListingDetail
+↓
+getListingById
+↓
+listing entity API
+↓
+Supabase
+
+Hiljem lisame:
+
+- päris kontaktitegevuse
+- salvestamise
+- seotud esiletõstetud kuulutused
+- seotud teenused
+- tõlked
+- täpsema asukoha privaatsusmudeli

@@ -25,5 +25,21 @@ export async function getListingById(
     return null;
   }
 
-  return mapListingDetailRow(data as Parameters<typeof mapListingDetailRow>[0]);
+  const row = data as any;
+
+  if (row.identity_id) {
+    const { data: profileData, error: profileError } =
+      await supabaseBrowserClient
+        .from("identity_profiles")
+        .select("display_name, slug")
+        .eq("identity_id", row.identity_id)
+        .maybeSingle();
+
+    if (!profileError && profileData) {
+      row.seller_name = row.seller_name || (profileData as any).display_name;
+      row.seller_slug = row.seller_slug || (profileData as any).slug;
+    }
+  }
+
+  return mapListingDetailRow(row as Parameters<typeof mapListingDetailRow>[0]);
 }

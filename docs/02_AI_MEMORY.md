@@ -1212,3 +1212,17 @@ UI does not call Supabase directly.
 Only organic results connected for now.
 
 Featured products, related services, filters and pagination remain later.
+
+## V2_LISTING_DETAIL_FIRST_DATA_CONNECTION
+
+Connected /v2/listing/[id] to listing entity API.
+
+New feature files:
+- useListingDetail
+- ListingDetailPage
+
+Route passes id to feature component.
+
+getListingById enriches seller name/slug from identity_profiles when possible.
+
+UI does not query Supabase directly.
