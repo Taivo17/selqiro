@@ -14,6 +14,7 @@ export type ProductListingCard = {
   locationLabel: string;
   distanceLabel: string | null;
   sellerName: string;
+  sellerAvatarUrl: string | null;
   sellerSlug: string | null;
   sellerType: string | null;
   isHighlighted: boolean;

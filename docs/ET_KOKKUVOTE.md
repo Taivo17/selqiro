@@ -4264,3 +4264,65 @@ Pärast V2 kuulutuse detailvaate pärisandmetega ühendamist parandame kaks asja
 See loogika jääb listing entity kihti.
 
 UI komponent ei hakka ise müüja andmeid ega hinna vormindust otsustama.
+
+---
+
+# 165. Müüja logo kuulutuse detailvaates
+
+V2 kuulutuse detailvaates toetame müüja logo või avatari.
+
+Loogika:
+
+- listing entity sisaldab sellerAvatarUrl välja
+- getListingById rikastab selle identity_profiles.avatar_url kaudu, kui võimalik
+- UI ei tee ise eraldi müüja logo päringut
+- kui logo puudub, näitame müüja nime esimest tähte
+
+See hoiab andmeloogika listing entity kihis ja UI jääb puhtaks.
+
+---
+
+# 166. Product Discovery ja kuulutuse detaili müüja ühtlustus
+
+Tekkis olukord, kus Product Discovery kaardil oli müüja üks, aga kuulutuse detailvaates teine.
+
+Põhjus:
+
+- Product Discovery kasutas marketplace RPC müüja välju
+- kuulutuse detail kasutas otse listings tabelit ja kukkus legacy profiles fallback’i peale
+
+Parandus:
+
+Kuulutuse detail võtab võimalusel marketplace snapshot’i müüja info.
+
+Seejärel rikastab ta müüja logo ja nime identity_profiles kaudu.
+
+Legacy profiles fallback tuleb alles viimasena.
+
+Nii näitab Product Discovery kaart ja detailvaade sama müüja identiteeti.
+
+Hiljem oleks parem teha eraldi RPC:
+
+get_marketplace_listing_by_id
+
+Siis ei pea detailvaade marketplace list snapshot’i kasutama.
+
+---
+
+# 167. Müüja logo avaliku profiili RPC kaudu
+
+Kui V2 kuulutuse detailvaates on olemas seller_slug, kasutame müüja logo ja avaliku profiili info leidmiseks get_store_by_slug RPC-d.
+
+Järjekord:
+
+1. marketplace snapshot
+2. get_store_by_slug seller_slug järgi
+3. identity_profiles slug järgi
+4. identity_profiles identity_id järgi
+5. legacy profiles fallback
+
+Põhjus:
+
+Vana avaliku poe/profiili loogika kasutab get_store_by_slug RPC-d ja sealt tuleb avaliku profiili avatar_url.
+
+Nii on kuulutuse detailvaate müüja info kooskõlas avaliku profiili andmetega.

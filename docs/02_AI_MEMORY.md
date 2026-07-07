@@ -1233,3 +1233,40 @@ Listing detail polish:
 - numeric price strings like "99000" should display with currency, e.g. "99 000 €"
 - getListingById enriches seller name/slug from identity_profiles first, then profiles fallback
 - keep price formatting and seller enrichment inside listing entity layer
+
+## V2_LISTING_SELLER_AVATAR
+
+Listing detail supports sellerAvatarUrl.
+
+getListingById enriches it from identity_profiles.avatar_url when possible.
+
+Listing detail UI shows:
+- seller logo/avatar if available
+- first letter fallback if no avatar exists
+
+## V2_LISTING_SELLER_CONSISTENCY_FIX
+
+Product Discovery and Listing Detail seller mismatch fixed.
+
+Listing Detail now:
+1. loads direct listing row
+2. applies marketplace snapshot seller fields if available
+3. enriches by seller_slug from identity_profiles
+4. enriches by identity_id from identity_profiles
+5. falls back to legacy profiles only last
+
+Future:
+create dedicated get_marketplace_listing_by_id RPC.
+
+## V2_LISTING_SELLER_AVATAR_PUBLIC_RPC
+
+If V2 listing detail has seller_slug, enrich seller visual data through get_store_by_slug.
+
+Order:
+1. marketplace snapshot
+2. get_store_by_slug
+3. identity_profiles by slug
+4. identity_profiles by identity_id
+5. profiles fallback
+
+This is needed because public avatar/logo may come from the public store/profile RPC.

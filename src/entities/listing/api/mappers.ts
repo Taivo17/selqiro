@@ -1,14 +1,24 @@
-import type { ListingImage, ProductListingCard, ProductListingDetail } from "../model/types";
+import type {
+  ListingImage,
+  ProductListingCard,
+  ProductListingDetail,
+} from "../model/types";
 import { getPrimaryListingImageUrl, sortListingImages } from "../model/image";
-import { formatDistanceLabel, formatLocationLabel, formatPriceLabel } from "../model/format";
+import {
+  formatDistanceLabel,
+  formatLocationLabel,
+  formatPriceLabel,
+} from "../model/format";
 
-type MarketplaceListingRpcRow = {
-  listing_id?: string | null;
-  id?: string | null;
+export type MarketplaceListingRow = {
+  listing_id?: string | number | null;
+  id?: string | number | null;
   user_id?: string | null;
   identity_id?: string | null;
   seller_name?: string | null;
   seller_slug?: string | null;
+  seller_avatar_url?: string | null;
+  avatar_url?: string | null;
   seller_type?: string | null;
   is_premium?: boolean | null;
   distance_km?: number | null;
@@ -30,10 +40,14 @@ type MarketplaceListingRpcRow = {
   listing_images?: ListingImage[] | null;
 };
 
+function normalizeId(value?: string | number | null): string {
+  return value === null || typeof value === "undefined" ? "" : String(value);
+}
+
 export function mapMarketplaceListingRow(
-  row: MarketplaceListingRpcRow
+  row: MarketplaceListingRow
 ): ProductListingCard {
-  const id = row.listing_id || row.id || "";
+  const id = normalizeId(row.listing_id || row.id);
 
   return {
     id,
@@ -60,6 +74,7 @@ export function mapMarketplaceListingRow(
     }),
     distanceLabel: formatDistanceLabel(row.distance_km ?? null),
     sellerName: row.seller_name || "Müüja",
+    sellerAvatarUrl: row.seller_avatar_url || row.avatar_url || null,
     sellerSlug: row.seller_slug || null,
     sellerType: row.seller_type || null,
     isHighlighted: Boolean(row.is_premium),
@@ -67,9 +82,7 @@ export function mapMarketplaceListingRow(
   };
 }
 
-export function mapListingDetailRow(
-  row: MarketplaceListingRpcRow
-): ProductListingDetail {
+export function mapListingDetailRow(row: MarketplaceListingRow): ProductListingDetail {
   const card = mapMarketplaceListingRow(row);
   const images = sortListingImages(row.listing_images || []);
 

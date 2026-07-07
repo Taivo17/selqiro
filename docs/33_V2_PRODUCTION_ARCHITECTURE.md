@@ -756,3 +756,63 @@ Reason:
 Product Discovery RPC returns seller and price fields, but direct listing detail query may need enrichment.
 
 The formatting and seller enrichment remain inside the listing entity layer, not UI components.
+
+---
+
+## Listing seller avatar support
+
+V2 listing detail now supports seller avatar/logo.
+
+Rules:
+
+- seller avatar URL belongs in listing entity mapped data
+- UI does not query seller logo directly
+- getListingById enriches seller avatar from identity_profiles when available
+- if avatar is missing, UI shows a simple initial fallback
+
+This keeps seller visual data inside the listing entity layer.
+
+---
+
+## Listing detail seller consistency fix
+
+A mismatch appeared between Product Discovery seller name and Listing Detail seller name.
+
+Cause:
+
+- Product Discovery used marketplace RPC seller fields.
+- Listing Detail used direct listings table lookup and then legacy profile fallback.
+
+Fix:
+
+Listing Detail now first applies a marketplace listing snapshot for seller fields when available.
+
+Then it enriches seller logo/avatar from identity_profiles by seller_slug or identity_id.
+
+Fallback to legacy profiles only happens after identity profile enrichment.
+
+This keeps Product Discovery card and Listing Detail seller identity consistent.
+
+Later improvement:
+
+Create a dedicated RPC such as get_marketplace_listing_by_id so Listing Detail does not need to read a marketplace snapshot from the listing feed.
+
+---
+
+## Listing detail seller avatar via public store RPC
+
+Listing detail seller avatar enrichment now uses the existing public store/profile RPC when seller_slug is available.
+
+Preferred enrichment order:
+
+1. marketplace snapshot
+2. get_store_by_slug by seller_slug
+3. identity_profiles by slug
+4. identity_profiles by identity_id
+5. legacy profiles fallback
+
+Reason:
+
+The old public store/profile flow already resolves public avatar_url, banner_url and display name through get_store_by_slug.
+
+This keeps Listing Detail consistent with public profile/store data.

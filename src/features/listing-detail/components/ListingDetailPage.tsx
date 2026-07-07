@@ -235,7 +235,19 @@ export default function ListingDetailPage({ listingId }: { listingId: string }) 
               </p>
 
               <div className="mt-4 flex items-center gap-4">
-                <div className="h-14 w-14 rounded-full bg-neutral-200" />
+                {listing.sellerAvatarUrl ? (
+                  <img
+                    src={listing.sellerAvatarUrl}
+                    alt=""
+                    className="h-14 w-14 rounded-full object-cover"
+                    loading="lazy"
+                  />
+                ) : (
+                  <div className="flex h-14 w-14 items-center justify-center rounded-full bg-neutral-200 text-lg font-black text-neutral-500">
+                    {listing.sellerName.slice(0, 1).toUpperCase()}
+                  </div>
+                )}
+
                 <div>
                   <h2 className="font-black">{listing.sellerName}</h2>
                   <p className="text-sm text-neutral-500">
