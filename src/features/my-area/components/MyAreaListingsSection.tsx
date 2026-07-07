@@ -83,13 +83,12 @@ function MyAreaListingRow({ listing }: { listing: MyIdentityListingCard }) {
           Vaata
         </Link>
 
-        <button
-          disabled
-          title="Kuulutuse muutmine tuleb järgmises etapis"
-          className="rounded-full border border-neutral-200 bg-neutral-50 px-3 py-2 text-xs font-black text-neutral-400 shadow-sm"
+        <Link
+          href={`/v2/my-area/listings/${listing.id}/edit`}
+          className="inline-flex justify-center rounded-full border border-neutral-200 bg-white px-3 py-2 text-xs font-black shadow-sm"
         >
-          Muuda hiljem
-        </button>
+          Muuda
+        </Link>
       </div>
     </div>
   );

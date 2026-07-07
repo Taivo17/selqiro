@@ -991,3 +991,31 @@ Saving comes later.
 Image editing comes after basic text/status edit is stable.
 
 AI category assist comes after manual edit is reliable.
+
+---
+
+## V2 Listing Edit read-only route
+
+V2 Listing Edit first route has been added.
+
+Route:
+
+/v2/my-area/listings/[id]/edit
+
+Current scope:
+
+- loads listing
+- checks authentication
+- checks active identity / ownership
+- shows read-only edit shell
+- shows existing images
+- shows basic fields
+- shows details
+- save button is disabled
+- image editing is disabled
+
+No production data is changed yet.
+
+Next phase:
+
+Add basic field save for title, description, price, condition and status.

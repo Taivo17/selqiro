@@ -4539,3 +4539,31 @@ Esimene samm on:
 - loading/error/empty state
 
 Alles pärast seda lisame salvestamise.
+
+---
+
+# 177. V2 kuulutuse muutmise esimene route
+
+Loodud on V2 edit route:
+
+/v2/my-area/listings/[id]/edit
+
+Praegu see ei salvesta midagi.
+
+See teeb:
+
+- laadib kuulutuse
+- kontrollib sisselogimist
+- kontrollib aktiivset identiteeti / omanikku
+- näitab read-only edit vaadet
+- näitab olemasolevaid pilte
+- näitab põhiandmeid
+- näitab detaile
+- salvestamise nupp on disabled
+- piltide muutmine on disabled
+
+See on ohutu esimene samm.
+
+Järgmine etapp:
+
+põhiandmete salvestamine.

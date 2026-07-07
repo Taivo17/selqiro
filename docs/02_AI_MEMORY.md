@@ -1393,3 +1393,19 @@ Image editing is separate from basic listing edit.
 No dead buttons.
 
 Editing changes production content, so each phase must be small and tested.
+
+## V2_LISTING_EDIT_READ_ONLY_ROUTE
+
+Created /v2/my-area/listings/[id]/edit.
+
+Current behavior:
+- read-only edit shell
+- owner check
+- loading/error/not found/forbidden states
+- save disabled
+- image edit disabled
+
+No data is changed yet.
+
+Next:
+basic save for title/description/price/condition/status.
