@@ -1197,3 +1197,18 @@ Old marketplace RPCs used:
 
 Next step:
 connect /v2/products to getProductListings without putting Supabase calls in UI components.
+
+## V2_PRODUCT_DISCOVERY_FIRST_DATA_CONNECTION
+
+Connected V2 Product Discovery organic results to listing entity API.
+
+New feature files:
+- useProductDiscoveryListings
+- ProductListingCard
+- ProductResultsSection
+
+UI does not call Supabase directly.
+
+Only organic results connected for now.
+
+Featured products, related services, filters and pagination remain later.

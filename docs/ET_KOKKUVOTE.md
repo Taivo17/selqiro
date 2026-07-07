@@ -4179,3 +4179,35 @@ Vana marketplace'i koodi kasutame ainult tööpõhimõtte allikana.
 Supabase ja RPC päringud ei lähe otse UI komponentidesse.
 
 Järgmine samm on ühendada /v2/products getProductListings mooduliga nii, et UI jääb puhas.
+
+---
+
+# 162. Product Discovery esimene päris andmeühendus
+
+V2 Product Discovery tavaliste tulemuste plokk hakkab kasutama listing entity API-t.
+
+Lisatud:
+
+- useProductDiscoveryListings
+- ProductListingCard
+- ProductResultsSection
+
+Oluline:
+
+UI komponent ei tee otse Supabase päringut.
+
+Töövoog:
+
+ProductResultsSection
+↓
+useProductDiscoveryListings
+↓
+getProductListings
+↓
+listing entity API
+↓
+Supabase / RPC
+
+Praegu ühendame ainult tavalised tulemused.
+
+Esiletõstetud tooted, seotud teenused, filtrite mõju ja automaatne juurde laadimine jäävad järgmisteks sammudeks.

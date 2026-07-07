@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import ProductResultsSection from "../../../src/features/product-discovery/components/ProductResultsSection";
 
 type ActivePanel = "price" | "location" | "filters" | "sort" | null;
 
@@ -555,30 +556,7 @@ export default function V2ProductDiscoveryPage() {
         </section>
       ) : null}
 
-      <section className="rounded-[34px] border border-black/5 bg-white p-6 shadow-sm md:p-8">
-        <div className="mb-5 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
-          <div>
-            <p className="text-xs font-bold uppercase tracking-[0.26em] text-neutral-400">
-              Tulemused
-            </p>
-            <h2 className="mt-2 text-3xl font-black">Viimased kuulutused</h2>
-          </div>
-
-          <p className="text-sm font-semibold text-neutral-500">30 näidatud</p>
-        </div>
-
-        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-          {products.map((product) => (
-            <ProductCardView key={product.title} product={product} />
-          ))}
-        </div>
-
-        <div className="mt-8 rounded-[26px] border border-dashed border-neutral-200 bg-[#fbfbfa] p-5 text-center">
-          <p className="text-sm font-bold text-neutral-700">
-            Tulemused laadivad automaatselt juurde, kui kasutaja jõuab lõppu.
-          </p>
-        </div>
-      </section>
+      <ProductResultsSection />
     </div>
   );
 }

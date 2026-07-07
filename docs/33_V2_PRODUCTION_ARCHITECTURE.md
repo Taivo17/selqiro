@@ -669,3 +669,38 @@ Rules followed:
 Next step:
 
 Connect /v2/products to getProductListings through a small feature-level data component or hook.
+
+---
+
+## First V2 Product Discovery data connection
+
+V2 Product Discovery now starts using the listing entity API for the organic results section.
+
+Added:
+
+- src/features/product-discovery/model/useProductDiscoveryListings.ts
+- src/features/product-discovery/components/ProductListingCard.tsx
+- src/features/product-discovery/components/ProductResultsSection.tsx
+
+Rules followed:
+
+- UI does not call Supabase directly
+- ProductResultsSection uses a feature hook
+- feature hook uses listing entity API
+- listing entity API owns Supabase/RPC access
+- loading, error and empty states exist
+
+Current scope:
+
+Only organic product results are connected.
+
+Still skeleton:
+
+- featured products
+- related highlighted services
+- filters actually affecting results
+- pagination / infinite loading
+
+Next step:
+
+Add pagination and filter input flow through feature model.
