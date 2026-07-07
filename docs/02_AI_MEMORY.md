@@ -1369,3 +1369,27 @@ My Area listings:
 
 Quality-first rule:
 No silent dead buttons.
+
+## V2_LISTING_EDIT_PLAN
+
+V2 listing edit must be built carefully in phases.
+
+Do not copy old My Page edit code directly.
+
+Route:
+- /v2/my-area/listings/[id]/edit
+
+Phase order:
+1. read-only edit route skeleton with owner check
+2. basic fields save
+3. location edit
+4. category/details edit
+5. store category assignment
+6. image manager
+7. AI assist
+
+Image editing is separate from basic listing edit.
+
+No dead buttons.
+
+Editing changes production content, so each phase must be small and tested.

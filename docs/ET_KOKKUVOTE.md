@@ -4482,3 +4482,60 @@ Näide Minu ala kuulutustes:
 Põhimõte:
 
 kasutaja ei tohi vajutada nuppu, mis näeb töötav välja, aga ei tee midagi.
+
+---
+
+# 174. V2 kuulutuse muutmise plaan
+
+Kuulutuse muutmine on tundlikum kui vaatamine, sest see muudab päris avalikku sisu.
+
+Seetõttu ei tee me seda ühe suure sammuna.
+
+V2 edit route:
+
+/v2/my-area/listings/[id]/edit
+
+Plaan:
+
+1. edit route skeleton ja omaniku kontroll
+2. põhiandmete muutmine
+3. asukoha muutmine
+4. kategooria ja detailide muutmine
+5. poe/profiili kategooria määramine
+6. piltide haldus
+7. AI kategooria assist
+
+Vana My Page edit-koodi ei kopeeri otse.
+
+Kasutame vana koodi tööpõhimõtte allikana, aga ehitame V2 jaoks väiksemateks mooduliteks.
+
+---
+
+# 175. Kuulutuse muutmise kvaliteedireegel
+
+Kui mingi edit-funktsioon ei ole valmis, ei näita seda aktiivse nupuna.
+
+Näiteks:
+
+- "Muuda hiljem"
+- "Piltide muutmine hiljem"
+- "AI soovitus hiljem"
+
+Kasutaja ei tohi arvata, et nupp töötab, kui see tegelikult veel ei tööta.
+
+---
+
+# 176. Esimene edit implementation samm
+
+Esimene koodisamm ei ole veel salvestamine.
+
+Esimene samm on:
+
+- /v2/my-area/listings/[id]/edit route
+- getEditableListingById
+- useEditableListing
+- read-only ListingEditPage
+- owner check
+- loading/error/empty state
+
+Alles pärast seda lisame salvestamise.

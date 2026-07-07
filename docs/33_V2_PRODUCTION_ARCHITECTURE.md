@@ -969,3 +969,25 @@ In My Area listings:
 Reason:
 
 Quality-first launch means users should not click buttons that silently do nothing.
+
+---
+
+## V2 Listing Edit direction
+
+Listing edit must be built in phases.
+
+Do not copy the old large My Page edit implementation directly.
+
+Editing affects live production content and should be more conservative than read-only pages.
+
+Recommended route:
+
+/v2/my-area/listings/[id]/edit
+
+First implementation should be read-only owner-checked edit shell.
+
+Saving comes later.
+
+Image editing comes after basic text/status edit is stable.
+
+AI category assist comes after manual edit is reliable.
