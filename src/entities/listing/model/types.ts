@@ -41,3 +41,9 @@ export type ProductListingDetail = ProductListingCard & {
   createdAt: string | null;
   activeUntil: string | null;
 };
+
+export type MyIdentityListingCard = ProductListingCard & {
+  status: "active" | "paused" | "sold" | string;
+  activeUntil: string | null;
+  daysLeft: number | null;
+};

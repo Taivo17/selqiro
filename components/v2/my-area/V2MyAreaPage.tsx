@@ -1,3 +1,4 @@
+import MyAreaListingsSection from "../../../src/features/my-area/components/MyAreaListingsSection";
 type SummaryCard = {
   title: string;
   value: string;
@@ -331,13 +332,7 @@ export default function V2MyAreaPage() {
               </div>
             </ModuleCard>
 
-            <ModuleCard
-              eyebrow="Kuulutused"
-              title="Sinu kuulutused"
-              action="Vaata kõiki"
-            >
-              <RowList items={listings} />
-            </ModuleCard>
+            <MyAreaListingsSection />
 
             <ModuleCard
               eyebrow="Teenused"

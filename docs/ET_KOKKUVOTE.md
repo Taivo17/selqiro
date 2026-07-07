@@ -4406,3 +4406,59 @@ Parandus:
 Põhimõte:
 
 kuulutuste rida võib olla horisontaalselt scrollitav, aga kogu leht ei tohi kaasa liikuda.
+
+---
+
+# 171. Minu ala "Sinu kuulutused" päris andmed
+
+V2 Minu ala "Sinu kuulutused" plokk kasutab nüüd päris aktiivse identiteedi kuulutusi.
+
+Lisatud:
+
+- getMyIdentityListings
+- useMyAreaListings
+- MyAreaListingsSection
+
+Kasutame olemasolevat get_my_identity_listings RPC-d, aga mitte otse UI komponendis.
+
+Töövoog:
+
+MyAreaListingsSection
+↓
+useMyAreaListings
+↓
+getMyIdentityListings
+↓
+listing entity API
+↓
+Supabase RPC
+
+Praegu on ühendatud ainult ülevaate plokk.
+
+Hiljem lisame:
+
+- kuulutuse muutmine
+- piltide muutmine
+- staatuse muutmine
+- kustutamine / taastamine
+- store kategooria määramine
+- pagination / laadi juurde
+
+---
+
+# 172. Minu ala kuulutuste rea joondus
+
+Minu ala "Sinu kuulutused" ridades peavad hind, staatus ja tegevused olema joondatud.
+
+Desktopis kasutame veerge:
+
+- kuulutuse info
+- hind
+- staatus
+- tegevused
+
+Põhjus:
+
+Kui pealkirjad on erineva pikkusega, ei tohi hind ja "Aktiivne" märk liikuda eri kohtadesse.
+
+Mobiilis võib rida loomulikult stackida.

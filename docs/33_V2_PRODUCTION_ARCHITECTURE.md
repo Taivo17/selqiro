@@ -897,3 +897,57 @@ Rules:
 Reason:
 
 Profile modules can have horizontal card rows, but scrolling must stay inside the row, not move the whole page.
+
+---
+
+## V2 My Area listings connection
+
+The V2 My Area "Sinu kuulutused" section now uses real active identity listing data.
+
+Added:
+
+- src/entities/listing/api/getMyIdentityListings.ts
+- src/features/my-area/model/useMyAreaListings.ts
+- src/features/my-area/components/MyAreaListingsSection.tsx
+
+Logic:
+
+- My Area listings use get_my_identity_listings RPC
+- RPC is wrapped inside listing entity API
+- UI does not call Supabase directly
+- loading, error, empty and success states exist
+- edit/delete actions remain later
+
+Current scope:
+
+Only the My Area listings overview is connected.
+
+Still later:
+
+- edit listing modal
+- image editing
+- status change actions
+- delete/restore
+- store category assignment
+- pagination / load more
+
+---
+
+## My Area listings row alignment
+
+My Area listing rows should use fixed desktop columns.
+
+Recommended desktop layout:
+
+- listing image/title/info
+- price
+- status
+- actions
+
+Reason:
+
+Prices, status badges and action buttons must not jump to different positions based on title length.
+
+Mobile can stack naturally.
+
+Desktop should stay aligned and easy to scan.

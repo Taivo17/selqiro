@@ -1325,3 +1325,35 @@ Use:
 - cards flex-none fixed width
 
 Do not allow profile listing carousel to create body-level horizontal scroll.
+
+## V2_MY_AREA_LISTINGS_CONNECTED
+
+V2 My Area "Sinu kuulutused" connected to real data.
+
+New files:
+- getMyIdentityListings
+- useMyAreaListings
+- MyAreaListingsSection
+
+Uses get_my_identity_listings RPC through listing entity API.
+
+UI does not call Supabase directly.
+
+Still later:
+- edit
+- delete/restore
+- status changes
+- store category assignment
+- pagination
+
+## V2_MY_AREA_LISTING_ROW_ALIGNMENT
+
+My Area listing rows use fixed desktop columns:
+- listing info
+- price
+- status
+- actions
+
+This prevents price/status/buttons from appearing in different places per row.
+
+Mobile can stack.
