@@ -551,3 +551,36 @@ Use the old portal as a working reference.
 Use the V2 skeleton as a UX reference.
 
 Ship fewer features if needed, but make the shipped features stable.
+
+---
+
+## Launch exception: AI image category assist
+
+AI image category assist is allowed in V2 Launch.
+
+Reason:
+
+It is useful, visible and user-confirmed.
+
+It does not create hidden ranking or irreversible decisions.
+
+Allowed launch behavior:
+
+- analyze listing photos
+- suggest category
+- suggest title
+- suggest brand/model if confident
+- suggest service category in service mode
+- user confirms or changes result
+
+Not allowed:
+
+- AI final category without confirmation
+- AI-created categories outside category tree
+- AI private message reading
+- AI hidden ranking by quality
+- AI auto-publishing
+
+AI category assist must have manual fallback.
+
+If AI fails, the user can still create the listing or service manually.

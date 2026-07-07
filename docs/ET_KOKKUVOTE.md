@@ -3993,3 +3993,104 @@ Alles siis lisame keerulisemaid asju.
 Põhimõte:
 
 vähem, aga kindlamalt.
+
+---
+
+# 154. AI pildi tuvastus ja kategooria soovitus
+
+AI pildi tuvastus ja kategooria soovitus kuulub V2 Launchi.
+
+See on oluline funktsioon, sest aitab kasutajal kuulutust või teenust kiiremini lisada.
+
+Põhimõte:
+
+AI aitab.
+
+Kasutaja kinnitab.
+
+AI ei tee lõplikku otsust kasutaja eest.
+
+---
+
+# 155. AI toote kuulutuse lisamisel
+
+Toote kuulutuse puhul töövoog:
+
+1. kasutaja lisab pildi
+2. AI tuvastab objekti
+3. AI pakub kategooriat ja alamkategooriat
+4. AI võib pakkuda pealkirja
+5. AI võib pakkuda brändi või mudelit, kui on kindel
+6. kasutaja kinnitab või muudab
+7. alles siis salvestatakse kuulutus
+
+Kui AI eksib või ei ole kindel, saab kasutaja kategooria käsitsi valida.
+
+Käsitsi kategooria valik peab alati alles jääma.
+
+---
+
+# 156. AI teenuse lisamisel
+
+Teenuse puhul saab kasutada sama põhimõtet, aga AI peab töötama teenuse režiimis.
+
+Teenuse kategooriat ei tohiks valida ainult pildi põhjal.
+
+Teenuse puhul arvestame:
+
+- pilti
+- teenuse pealkirja
+- lühikirjeldust
+- aktiivset identiteeti
+
+Näide:
+
+Puksiirauto pilt toote režiimis võib tähendada sõidukit.
+
+Puksiirauto pilt teenuse režiimis tähendab pigem puksiiriteenust.
+
+Seetõttu peab AI teadma, kas kasutaja lisab toodet või teenust.
+
+---
+
+# 157. AI kategooria mapping
+
+AI ei tohi vabalt leiutada kategooriate nimesid.
+
+AI peab valima olemasoleva kategooriapuu väärtuste seast.
+
+Töövoog:
+
+AI vastus
+↓
+normaliseerimine
+↓
+alias mapping
+↓
+kontroll kategooriapuust
+↓
+kui ei sobi, fallback
+↓
+kasutaja kinnitab või muudab
+
+See teeb süsteemi stabiilsemaks.
+
+---
+
+# 158. AI õpib hiljem parandustest
+
+Tulevikus võib Selqiro salvestada AI soovituse ja kasutaja lõpliku valiku.
+
+Näide:
+
+AI soovitas:
+vehicles > accessories
+
+Kasutaja valis:
+vehicles > riding_gear
+
+Kui sama parandus kordub palju, saab sellest teha uue alias’e või prompt hint’i.
+
+Launchis ei pea see automaatselt süsteemi muutma.
+
+Alguses võib koguda andmeid ja hiljem teha parandusi kontrollitult.

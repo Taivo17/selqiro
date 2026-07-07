@@ -479,3 +479,26 @@ Recommended initial amount:
 Final amount can be adjusted before launch.
 
 Abuse prevention must be considered.
+
+## AI image category assist scope decision
+
+V2 Launch includes AI image category assist.
+
+Included:
+
+- product photo analysis
+- product category suggestion
+- title suggestion
+- brand/model suggestion when confident
+- service category suggestion in service mode
+- user confirmation
+
+Excluded from launch:
+
+- AI final category without confirmation
+- AI hidden ranking
+- AI private message processing
+- AI auto-publishing
+- AI trust scoring
+
+Manual category selection must always work.

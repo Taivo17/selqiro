@@ -588,3 +588,30 @@ Selqiro should show:
 If no exact featured match exists, Selqiro may show a nearby related category only if it is clearly useful.
 
 Do not show unrelated paid services just because they are highlighted.
+
+---
+
+## AI category assist for services
+
+Service creation may use AI image category assist.
+
+AI should work in service mode.
+
+The same image can mean different things depending on mode.
+
+Example:
+
+Tow truck image:
+- product mode: vehicle
+- service mode: towing service
+
+Therefore service AI should use:
+
+- uploaded image
+- service title if entered
+- service description if entered
+- active identity context
+
+User must confirm or change suggested service category.
+
+If AI is unsure, show manual category selection.

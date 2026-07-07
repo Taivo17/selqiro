@@ -1117,3 +1117,28 @@ small, stable, understandable.
 If feature may create instability or confusion, defer it.
 
 Quality is more important than speed.
+
+## AI_IMAGE_CATEGORY_ASSIST_LAUNCH
+
+AI image category assist is included in V2 Launch.
+
+It is user-confirmed, not automatic final decision.
+
+Product listing:
+image -> AI suggests category/title/brand/model -> user confirms or edits.
+
+Service:
+image + title/description/context -> AI suggests service category -> user confirms or edits.
+
+Use mode:
+- product_listing
+- service
+- product_showcase later
+- job/event later
+
+AI must choose from category tree values.
+Use normalization + alias mapping + validation.
+
+Manual category selection must always be available.
+
+If AI fails or is unsure, user chooses manually.

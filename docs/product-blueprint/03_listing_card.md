@@ -422,3 +422,19 @@ The card should remain visually stable and clean.
 Rule:
 
 Missing optional information should not make the card look broken.
+
+---
+
+## AI category assist during listing creation
+
+When user uploads product images, Selqiro may use AI to suggest category and title.
+
+This happens before the listing becomes public.
+
+User must confirm or change the suggestion.
+
+The listing card later displays the confirmed category, not an unconfirmed AI guess.
+
+AI category suggestion should reduce listing creation friction.
+
+It should not replace user control.
