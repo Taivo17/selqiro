@@ -4129,3 +4129,29 @@ v2-shell
 Järgmine samm:
 
 aktiivse identiteedi moodul ja V2 headeri ühendamine selle kaudu.
+
+---
+
+# 160. Esimene V2 production andmemoodul: aktiivne identiteet
+
+Esimene päris V2 production andmemoodul on aktiivne identiteet ülemises ribas.
+
+Loodud loogika:
+
+- getMyIdentities
+- getActiveIdentity
+- setActiveIdentity
+- V2IdentityBadge
+- V2AccountActions
+
+Vana SiteHeaderi koodi ei kopeeritud otse.
+
+Aktiivse identiteedi laadimine on viidud identity entity moodulisse.
+
+V2Shell kasutab nüüd eraldi V2AccountActions komponenti.
+
+E-mail ei ole ülemises ribas pidevalt nähtav.
+
+Aktiivne identiteet on nähtav.
+
+See on näide, kuidas edaspidi V2 production mooduleid ehitame.

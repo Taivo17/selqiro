@@ -1159,3 +1159,21 @@ Do not copy old SiteHeader directly.
 
 Next production step:
 create active identity entity API and V2 identity badge using that API.
+
+## V2_ACTIVE_IDENTITY_MODULE
+
+First production data module:
+active identity in V2 header.
+
+Created:
+- getMyIdentities
+- getActiveIdentity
+- setActiveIdentity
+- V2IdentityBadge
+- V2AccountActions
+
+Old SiteHeader was not copied.
+
+V2Shell now uses V2AccountActions.
+
+Active identity is loaded through src/entities/identity API.

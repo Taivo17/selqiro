@@ -617,3 +617,28 @@ v2-shell
 Next planned production step:
 
 Create active identity data module and connect V2 header through that module.
+
+---
+
+## First production data module: active identity
+
+The first V2 production data module connects active identity to the V2 shell.
+
+Implemented production structure:
+
+- src/entities/identity/api/getMyIdentities.ts
+- src/entities/identity/api/getActiveIdentity.ts
+- src/entities/identity/api/setActiveIdentity.ts
+- src/features/v2-shell/components/V2IdentityBadge.tsx
+- src/features/v2-shell/components/V2AccountActions.tsx
+
+Rules followed:
+
+- old SiteHeader was not copied
+- active identity logic moved into identity entity API
+- V2 shell uses feature component
+- V2 route layout no longer owns identity data loading
+- user email remains hidden from header
+- active identity is visible
+
+This is the model for future production modules.

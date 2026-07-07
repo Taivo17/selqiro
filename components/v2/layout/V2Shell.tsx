@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
+import V2AccountActions from "../../../src/features/v2-shell/components/V2AccountActions";
 
 type V2ShellProps = {
   children: ReactNode;
@@ -36,36 +37,7 @@ export default function V2Shell({ children }: V2ShellProps) {
             </nav>
           </div>
 
-          <div className="flex items-center gap-2">
-            <Link
-              href="/messages"
-              className="hidden rounded-full border border-neutral-200 bg-white px-4 py-2 text-sm font-medium shadow-sm transition hover:border-neutral-300 md:inline-flex"
-            >
-              Sõnumid
-            </Link>
-
-            <Link
-              href="/v2/my-area"
-              className="hidden rounded-full border border-neutral-200 bg-white px-4 py-2 text-sm font-medium shadow-sm transition hover:border-neutral-300 md:inline-flex"
-            >
-              Minu ala
-            </Link>
-
-            <button className="flex items-center gap-3 rounded-full border border-neutral-200 bg-white px-3 py-2 text-left text-sm shadow-sm transition hover:border-neutral-300">
-              <span className="h-9 w-9 shrink-0 rounded-full bg-gradient-to-br from-neutral-100 to-neutral-300" />
-
-              <span>
-                <span className="block text-[10px] uppercase tracking-[0.18em] text-neutral-400">
-                  Tegutsen kui
-                </span>
-                <span className="font-semibold">Milline Vedu</span>
-              </span>
-            </button>
-
-            <button className="rounded-full bg-emerald-600 px-4 py-2 text-sm font-bold text-white shadow-sm transition hover:bg-emerald-700">
-              Logi välja
-            </button>
-          </div>
+          <V2AccountActions />
         </div>
 
         <div className="border-t border-black/5 bg-white px-5 py-3 md:hidden">
