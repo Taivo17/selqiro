@@ -4358,3 +4358,51 @@ Veel skeletonina jäävad:
 - uuendused
 
 See on väike ja kontrollitud andmeühendus.
+
+---
+
+# 169. Avaliku profiili "Müügis praegu" päris andmed
+
+V2 avaliku profiili "Müügis praegu" plokk kasutab nüüd päris kuulutusi.
+
+Lisatud:
+
+- getListingsBySeller
+- usePublicProfileListings
+- PublicProfileListingsSection
+
+Loogika:
+
+- avalik profiil annab identityId või legacyUserId
+- listing entity laeb selle müüja aktiivsed kuulutused
+- kuvatakse ainult active kuulutused
+- aegunud kuulutusi avalikus vaates ei näidata
+- UI-l on loading, error, empty ja success seisud
+
+Supabase päring jääb listing entity kihti.
+
+Avaliku profiili UI ei tee otse Supabase päringut.
+
+Veel skeletonina jäävad:
+
+- tootenäidised
+- teenused
+- uuendused
+
+---
+
+# 170. Avaliku profiili horisontaalse scrolli piiramine
+
+Avaliku profiili horisontaalsed kaardiread ei tohi kogu lehte külgsuunas liigutada.
+
+Parandus:
+
+- põhigrid kasutab minmax(0, 1fr)
+- vasak põhiveerg kasutab min-w-0
+- horisontaalne kaardirida on eraldi overflow-x-auto konteineris
+- kaardid on kindla laiusega flex-none
+- mooduli section võib kasutada overflow-hidden
+
+Põhimõte:
+
+kuulutuste rida võib olla horisontaalselt scrollitav, aga kogu leht ei tohi kaasa liikuda.

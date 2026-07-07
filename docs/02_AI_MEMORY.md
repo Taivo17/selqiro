@@ -1290,3 +1290,38 @@ Still skeleton:
 - listings
 - services
 - updates
+
+## V2_PUBLIC_PROFILE_LISTINGS_CONNECTED
+
+Public profile "Müügis praegu" now uses real listings.
+
+New files:
+- getListingsBySeller
+- usePublicProfileListings
+- PublicProfileListingsSection
+
+Listings query:
+- identity_id if available
+- fallback user_id if legacyUserId
+- status active
+- active_until > now
+- order created_at desc
+- limit 12
+
+Still skeleton:
+- showcases
+- services
+- updates
+
+## PUBLIC_PROFILE_HORIZONTAL_SCROLL_FIX
+
+Public profile horizontal card rows must be contained.
+
+Use:
+- grid minmax(0,1fr)
+- main content min-w-0
+- section overflow-hidden
+- scroll wrapper max-w-full overflow-x-auto overscroll-x-contain
+- cards flex-none fixed width
+
+Do not allow profile listing carousel to create body-level horizontal scroll.

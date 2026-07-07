@@ -1,6 +1,7 @@
 "use client";
 
 import { usePublicProfile } from "../model/usePublicProfile";
+import PublicProfileListingsSection from "./PublicProfileListingsSection";
 
 type ProfileItem = {
   title: string;
@@ -145,10 +146,12 @@ function ItemCard({ item }: { item: ProfileItem }) {
 
 function HorizontalModule({ items }: { items: ProfileItem[] }) {
   return (
-    <div className="-mx-2 flex gap-4 overflow-x-auto px-2 pb-2">
-      {items.map((item) => (
-        <ItemCard key={item.title} item={item} />
-      ))}
+    <div className="w-full max-w-full overflow-x-auto overscroll-x-contain pb-2">
+      <div className="flex w-max gap-4 px-1">
+        {items.map((item) => (
+          <ItemCard key={item.title} item={item} />
+        ))}
+      </div>
     </div>
   );
 }
@@ -272,8 +275,8 @@ export default function PublicProfilePage({ slug }: { slug: string }) {
         </div>
       </section>
 
-      <section className="grid gap-8 lg:grid-cols-[1fr_360px]">
-        <div className="space-y-8">
+      <section className="grid min-w-0 gap-8 lg:grid-cols-[minmax(0,1fr)_360px]">
+        <div className="min-w-0 space-y-8">
           <section className="rounded-[34px] border border-emerald-100 bg-emerald-50/50 p-6 shadow-sm md:p-8">
             <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
               <div>
@@ -303,14 +306,7 @@ export default function PublicProfilePage({ slug }: { slug: string }) {
             <HorizontalModule items={showcases} />
           </section>
 
-          <section className="rounded-[34px] border border-black/5 bg-white p-6 shadow-sm md:p-8">
-            <ModuleHeader
-              eyebrow="Kuulutused"
-              title="Müügis praegu"
-              action="Vaata kõiki"
-            />
-            <HorizontalModule items={listings} />
-          </section>
+          <PublicProfileListingsSection profile={profile} />
 
           <section className="rounded-[34px] border border-black/5 bg-white p-6 shadow-sm md:p-8">
             <ModuleHeader

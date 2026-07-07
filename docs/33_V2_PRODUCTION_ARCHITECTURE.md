@@ -850,3 +850,50 @@ Still skeleton:
 - listings
 - services
 - updates
+
+---
+
+## V2 Public Profile listings connection
+
+The public profile "Müügis praegu" section now uses real listing data.
+
+Added:
+
+- src/entities/listing/api/getListingsBySeller.ts
+- src/features/public-profile/model/usePublicProfileListings.ts
+- src/features/public-profile/components/PublicProfileListingsSection.tsx
+
+Logic:
+
+- public profile entity provides identityId / legacyUserId
+- listing entity loads public active listings for that seller
+- UI displays loading, error, empty and success states
+- Supabase access stays inside listing entity API
+
+Current scope:
+
+Only "Müügis praegu" is connected.
+
+Still skeleton:
+
+- product showcases
+- services
+- updates
+
+---
+
+## Public profile horizontal scroll containment
+
+Public profile horizontal modules must not create page-level horizontal scrolling.
+
+Rules:
+
+- grid main column should use minmax(0, 1fr)
+- left content column should use min-w-0
+- horizontal card rows should be inside max-w-full overflow-x-auto containers
+- cards should be flex-none with explicit width
+- section can use overflow-hidden to keep visual boundaries stable
+
+Reason:
+
+Profile modules can have horizontal card rows, but scrolling must stay inside the row, not move the whole page.
