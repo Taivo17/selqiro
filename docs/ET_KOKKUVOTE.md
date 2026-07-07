@@ -4462,3 +4462,23 @@ Põhjus:
 Kui pealkirjad on erineva pikkusega, ei tohi hind ja "Aktiivne" märk liikuda eri kohtadesse.
 
 Mobiilis võib rida loomulikult stackida.
+
+---
+
+# 173. Poolikud tegevused ei tohi näida töötavat
+
+V2-s ei tohiks näidata poolikut funktsiooni täiesti aktiivse nupuna.
+
+Kui tegevus ei ole veel valmis, peab see olema:
+
+- disabled
+- või selgelt märgitud kui "hiljem"
+
+Näide Minu ala kuulutustes:
+
+- "Vaata" töötab ja avab kuulutuse detaili
+- "Muuda" ei ole veel valmis, seega kuvame "Muuda hiljem"
+
+Põhimõte:
+
+kasutaja ei tohi vajutada nuppu, mis näeb töötav välja, aga ei tee midagi.

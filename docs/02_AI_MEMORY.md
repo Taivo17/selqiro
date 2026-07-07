@@ -1357,3 +1357,15 @@ My Area listing rows use fixed desktop columns:
 This prevents price/status/buttons from appearing in different places per row.
 
 Mobile can stack.
+
+## V2_DISABLED_UNFINISHED_ACTIONS
+
+Do not show unfinished actions as active.
+
+Example:
+My Area listings:
+- Vaata works
+- Muuda is disabled as "Muuda hiljem" until edit flow is built
+
+Quality-first rule:
+No silent dead buttons.

@@ -951,3 +951,21 @@ Prices, status badges and action buttons must not jump to different positions ba
 Mobile can stack naturally.
 
 Desktop should stay aligned and easy to scan.
+
+---
+
+## Disabled unfinished actions
+
+V2 UI should not show unfinished actions as fully active.
+
+If an action is not implemented yet, it should be visibly disabled or clearly marked as coming later.
+
+Example:
+
+In My Area listings:
+- "Vaata" works and opens listing detail
+- "Muuda" is not implemented yet, so it is shown as disabled "Muuda hiljem"
+
+Reason:
+
+Quality-first launch means users should not click buttons that silently do nothing.
