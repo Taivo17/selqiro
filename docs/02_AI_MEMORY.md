@@ -1270,3 +1270,23 @@ Order:
 5. profiles fallback
 
 This is needed because public avatar/logo may come from the public store/profile RPC.
+
+## V2_PUBLIC_PROFILE_FIRST_DATA_CONNECTION
+
+Connected /v2/profile/[slug] to profile entity API.
+
+Uses get_store_by_slug through getPublicProfileBySlug.
+
+Real data:
+- displayName
+- avatarUrl
+- bannerUrl
+- bio
+- location
+- identityType
+
+Still skeleton:
+- showcases
+- listings
+- services
+- updates

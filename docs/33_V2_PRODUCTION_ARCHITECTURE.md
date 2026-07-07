@@ -816,3 +816,37 @@ Reason:
 The old public store/profile flow already resolves public avatar_url, banner_url and display name through get_store_by_slug.
 
 This keeps Listing Detail consistent with public profile/store data.
+
+---
+
+## First V2 Public Profile data connection
+
+V2 Public Profile now starts using the profile entity API.
+
+Added:
+
+- src/entities/profile/model/types.ts
+- src/entities/profile/api/getPublicProfileBySlug.ts
+- src/features/public-profile/model/usePublicProfile.ts
+- src/features/public-profile/components/PublicProfilePage.tsx
+
+Updated:
+
+- components/v2/profile/V2PublicProfilePage.tsx wraps the feature component
+- app/v2/profile/[slug]/page.tsx passes route slug to the feature component
+
+Current scope:
+
+- real public profile name
+- real avatar/logo
+- real banner
+- real bio
+- real location label
+- real identity type
+
+Still skeleton:
+
+- product showcases
+- listings
+- services
+- updates

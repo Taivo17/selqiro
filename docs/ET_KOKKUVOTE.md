@@ -4326,3 +4326,35 @@ Põhjus:
 Vana avaliku poe/profiili loogika kasutab get_store_by_slug RPC-d ja sealt tuleb avaliku profiili avatar_url.
 
 Nii on kuulutuse detailvaate müüja info kooskõlas avaliku profiili andmetega.
+
+---
+
+# 168. Avaliku profiili esimene päris andmeühendus
+
+V2 avalik profiil /v2/profile/[slug] kasutab nüüd profile entity API-t.
+
+Lisatud:
+
+- getPublicProfileBySlug
+- usePublicProfile
+- PublicProfilePage
+
+Kasutame olemasolevat get_store_by_slug RPC-d.
+
+Päris andmetest kuvatakse nüüd:
+
+- profiili nimi
+- avatar/logo
+- kaanepilt
+- bio/kirjeldus
+- asukoha label
+- identiteedi tüüp
+
+Veel skeletonina jäävad:
+
+- tootenäidised
+- kuulutused
+- teenused
+- uuendused
+
+See on väike ja kontrollitud andmeühendus.
