@@ -3894,3 +3894,102 @@ build
 test
 commit
 järgmine samm
+
+---
+
+# 149. V2 production arhitektuuri otsus
+
+Pärast V2 skeleton checkpointi ei ühenda me kohe kõiki V2 vaateid päris andmetega.
+
+Kõigepealt paneme paika puhta production-arhitektuuri.
+
+Otsus:
+
+- kasutame sama repot
+- ehitame uue puhta V2 production-kihi
+- vana portaal jääb tööpõhimõtte allikaks
+- vana koodi suuri faile ei kopeeri otse
+- V2 skeleton on UX ja moodulite paigutuse reference
+- päris V2 kood peab olema puhtam ja väiksemateks mooduliteks jagatud
+
+Eesmärk ei ole ainult midagi kiiresti tööle saada.
+
+Eesmärk on ehitada Selqiro nii, et seda oleks võimalik hallata, parandada ja kasvatada.
+
+---
+
+# 150. Kvaliteet enne kiirust
+
+Selqiro V2 eesmärk on kvaliteet.
+
+Kui mõni funktsioon võib töökindlust vähendada, tekitada segadust või muuta koodi liiga keeruliseks, siis lükkame selle hilisemaks.
+
+Parem on launchida vähem funktsioone, aga teha need hästi.
+
+Esimene avalik versioon peab tõestama, et Selqiro töötab kindlalt.
+
+---
+
+# 151. Mida launchis ei kiirusta
+
+Launchis ei lisa keerulist nähtamatut loogikat, kui see ei ole hädavajalik.
+
+Näiteks ei kiirusta:
+
+- profiili kvaliteedi järgi järjestamine
+- kuulutuse kvaliteedi järgi keeruline järjestamine
+- AI-põhine nähtamatu sisusortimine
+- AI privaatsõnumites
+- keeruline reputatsioonisüsteem
+- automaatne pettuseotsustaja
+- mitme juhi live service tracking
+
+Arhitektuur võib neid tulevikus toetada.
+
+Aga esimene eesmärk on, et olemasolev põhifunktsionaalsus töötaks tõrgeteta.
+
+---
+
+# 152. V2 koodi ehitamise reegel
+
+Iga päris V2 funktsioon peab olema jagatud loogilisteks osadeks.
+
+Soovitud kihid:
+
+- data / API
+- entity types
+- feature logic
+- UI components
+- route composition
+
+Ei tee enam nii, et üks suur page.tsx sisaldab kõike.
+
+Route peab olema väike.
+
+Andmepäringud ei tohiks olla visuaalsetes komponentides laiali.
+
+See teeb koodi loetavamaks ja tulevikus lihtsamini hallatavaks.
+
+---
+
+# 153. Lihtne ja töökindel launch
+
+Launchi eesmärk:
+
+- autentimine töötab
+- aktiivne identiteet töötab
+- kuulutused töötavad
+- kuulutuse detail töötab
+- profiil töötab
+- Minu ala töötab
+- sõnumid töötavad
+- teenused töötavad
+- Energy ledger töötab
+- makse kinnitus töötab
+- admini minimaalne moderatsioon töötab
+
+Alles siis lisame keerulisemaid asju.
+
+Põhimõte:
+
+vähem, aga kindlamalt.

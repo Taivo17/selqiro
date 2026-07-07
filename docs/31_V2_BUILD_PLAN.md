@@ -595,3 +595,58 @@ This is UX skeleton only.
 Real permissions, real queues and sensitive data access controls come later.
 
 Admin route should be permission-protected before launch.
+
+---
+
+## Production architecture update
+
+After the V2 skeleton checkpoint, the next phase is not direct data binding.
+
+Next phase:
+
+V2 production architecture foundation.
+
+Reason:
+
+The skeleton is useful for route and layout decisions, but production code must be cleaner than the old implementation.
+
+Rules:
+
+- old code is reference, not copy source
+- V2 skeleton is UX reference, not final production architecture
+- data access should move into entity/server modules
+- routes should stay small
+- UI components should not contain scattered Supabase queries
+- quality is more important than speed
+
+Do not connect large amounts of data into skeleton pages before establishing production architecture rules.
+
+---
+
+## Simplicity-first launch
+
+V2 Launch should avoid complex hidden logic unless clearly reliable.
+
+Do not launch:
+
+- complex ranking by profile quality
+- complex ranking by listing quality
+- AI-driven content ranking
+- AI private message processing
+- advanced reputation scoring
+- advanced fraud automation
+- multi-driver live service tracking
+
+These can come later.
+
+Launch focus:
+
+- stable browsing
+- stable listing detail
+- stable identity
+- stable profile
+- stable messaging
+- stable services
+- stable Energy ledger
+- stable payment confirmation
+- basic admin moderation

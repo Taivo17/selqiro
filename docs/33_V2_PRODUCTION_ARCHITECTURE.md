@@ -1,0 +1,553 @@
+# Selqiro V2 Production Architecture
+
+## Purpose
+
+This document defines how Selqiro V2 production code should be built after the skeleton phase.
+
+The goal is not only to make the portal work.
+
+The goal is to build Selqiro so that:
+
+- the code is clean
+- the system is reliable
+- the product is maintainable by a small team
+- future developers can understand the logic quickly
+- Taivo can manage and update the portal without unnecessary complexity
+- the architecture can grow toward millions of users
+- launch features work without fragile hidden complexity
+
+Quality is more important than speed.
+
+---
+
+## Core decision
+
+V2 production code will be built cleanly inside the existing repository.
+
+The old portal remains available as a working reference.
+
+The V2 skeleton remains available as UX and layout reference.
+
+But production V2 code should not copy old large files directly.
+
+Use old code to understand:
+
+- what works
+- which tables exist
+- which RPC functions exist
+- what user flows are already proven
+- which edge cases already appeared
+
+Do not copy old file structure or large mixed components into V2.
+
+---
+
+## Why not direct refactor
+
+The existing portal works, but many responsibilities are mixed in larger files.
+
+Examples of mixed responsibilities in old code include:
+
+- UI
+- Supabase queries
+- active identity logic
+- messaging state
+- profile state
+- listing state
+- storage handling
+- admin/support logic
+
+V2 should avoid repeating this.
+
+V2 should separate:
+
+- data access
+- business logic
+- feature logic
+- UI components
+- route composition
+
+---
+
+## Architecture direction
+
+Use a modular monolith.
+
+Do not use microservices at launch.
+
+Reason:
+
+Selqiro is still early.
+
+A modular monolith is easier to build, test, deploy and understand.
+
+Microservices would add operational complexity too early.
+
+The architecture should still be clean enough that parts can be separated later if needed.
+
+---
+
+## Recommended source structure
+
+Production V2 should gradually move toward this structure:
+
+src/
+  shared/
+    ui/
+    lib/
+    config/
+    formatting/
+    i18n/
+    supabase/
+    auth/
+
+  entities/
+    identity/
+    listing/
+    service/
+    profile/
+    message/
+    energy/
+    payment/
+    admin/
+
+  features/
+    product-discovery/
+    listing-detail/
+    public-profile/
+    my-area/
+    services-discovery/
+    energy-wallet/
+    admin-dashboard/
+    messaging/
+
+  server/
+    auth/
+    data/
+    actions/
+    permissions/
+
+app/
+  v2/
+    page.tsx
+    products/page.tsx
+    listing/[id]/page.tsx
+    profile/[slug]/page.tsx
+    my-area/page.tsx
+    services/page.tsx
+    energy/page.tsx
+    admin/page.tsx
+
+app/v2 routes should mostly compose feature modules.
+
+They should not contain large business logic.
+
+---
+
+## Route responsibility
+
+Route files should be small.
+
+Good route:
+
+- loads page shell
+- calls feature page component
+- passes params if needed
+
+Bad route:
+
+- contains Supabase queries
+- contains large business logic
+- contains large UI sections
+- handles many unrelated concerns
+
+Rule:
+
+If a route grows large, move logic to a feature or entity module.
+
+---
+
+## Entity modules
+
+Entities represent core Selqiro objects.
+
+Examples:
+
+- identity
+- profile
+- listing
+- service
+- message
+- energy
+- payment
+- admin case
+
+Each entity may have:
+
+- types
+- API/data access
+- mappers
+- validation
+- small business rules
+
+Example:
+
+src/entities/listing/
+  types.ts
+  api/getListings.ts
+  api/getListingById.ts
+  mappers.ts
+
+---
+
+## Feature modules
+
+Features represent user-facing workflows.
+
+Examples:
+
+- Product Discovery
+- Listing Detail
+- Public Profile
+- My Area
+- Services Discovery
+- Energy Wallet
+- Admin Dashboard
+
+A feature can use several entities.
+
+Example:
+
+Product Discovery uses:
+
+- listings
+- profiles
+- services
+- location
+- highlighting
+
+Feature modules may contain:
+
+- page component
+- view components
+- filters
+- empty states
+- loading states
+
+---
+
+## Data access rule
+
+Do not scatter Supabase calls across UI components.
+
+Preferred:
+
+UI component
+↓
+feature component / hook
+↓
+entity API module
+↓
+Supabase/RPC
+
+This makes the code easier to test and understand.
+
+Exception:
+
+Temporary skeletons may use mock data.
+
+Production code should move data access into entity/server modules.
+
+---
+
+## Stable launch first
+
+Launch should prefer simple stable logic over complex smart logic.
+
+Do not add complexity just because architecture can support it.
+
+Launch goal:
+
+Everything that exists should work reliably.
+
+Avoid features that are likely to create confusing behavior, unstable results or hidden maintenance burden.
+
+---
+
+## Ranking simplicity
+
+Do not launch complex ranking based on profile quality, listing quality, behavior prediction, AI scoring or similar hidden logic.
+
+Architecture may allow these later.
+
+Launch visible sorting should stay simple.
+
+Examples:
+
+- Sinu lähedal
+- Uuemad ees
+- Odavamad ees
+- Kallimad ees
+
+Internal ordering can use basic safe rules:
+
+- active listings first
+- valid listings only
+- paid highlighting where relevant
+- distance if location exists
+- created_at as fallback
+- simple category match
+
+Do not launch a black-box ranking system.
+
+Reason:
+
+Users should not feel that Selqiro decides what is suitable for them without clarity.
+
+Complex ranking can be added later after enough real data and testing.
+
+---
+
+## Highlighting rule
+
+Paid highlighting can improve visibility.
+
+But paid visibility must not override relevance.
+
+Example:
+
+If user searches for lawn mower, highlighted garden equipment services may appear.
+
+A highlighted tow truck should not appear unless it is contextually relevant.
+
+This keeps trust.
+
+---
+
+## AI launch rule
+
+AI can be used where it is clearly safe and useful.
+
+AI should not be added where reliability, privacy or user trust could be harmed.
+
+Launch AI can help with:
+
+- listing text improvement when user asks
+- product categorization if user confirms
+- admin triage for non-private content
+- support suggestions if safe
+
+Launch AI should not:
+
+- read private messages
+- make final moderation decisions
+- silently rank all users/content
+- perform critical payment decisions
+- replace human review in sensitive cases
+
+If AI may create confusion or risk, defer it.
+
+---
+
+## Feature reliability classes
+
+### Class A — Launch-critical
+
+These must be very reliable before public launch:
+
+- authentication
+- active identity
+- browsing listings
+- listing detail
+- creating/editing listing
+- messages
+- public profile
+- basic My Area
+- Energy ledger
+- payments/webhook
+- basic admin moderation
+
+If these are unstable, do not launch.
+
+### Class B — Revenue/value features
+
+Important, but can be introduced carefully:
+
+- listing highlighting
+- service highlighting
+- temporary service location
+- Today’s Story
+- Welcome Energy
+- related highlighted services
+
+These must have clear ledger/audit behavior.
+
+### Class C — Later/advanced features
+
+Can be designed now, but should not block launch:
+
+- complex ranking
+- profile quality scoring
+- listing quality scoring
+- AI support automation
+- AI private message assistance
+- global advanced search
+- multi-driver live service tracking
+- reputation system
+- full appeals system
+- advanced fraud scoring
+
+Architecture should not block them.
+
+But do not rush them.
+
+---
+
+## Quality gate
+
+A feature should only move from idea to launch if:
+
+- the behavior is clear
+- user-facing wording is clear
+- failure behavior is known
+- build passes
+- basic manual test passes
+- data access is not scattered
+- errors are handled
+- empty state exists
+- permissions are considered
+- audit/ledger exists if money or Energy is involved
+- documentation is updated
+
+If these are not true, the feature should stay later.
+
+---
+
+## Definition of Done for V2 production work
+
+Every production V2 step should include:
+
+1. small scoped change
+2. clear route or module affected
+3. typed data model where needed
+4. data access isolated
+5. UI component kept readable
+6. loading state if data is loaded
+7. empty state if list can be empty
+8. error state if request can fail
+9. build green
+10. browser check
+11. docs updated if decision changed
+12. commit pushed
+
+Do not merge large unclear changes.
+
+---
+
+## Work style rule
+
+Because Taivo manages the project hands-on, work must be easy to follow.
+
+Each task should be:
+
+- small
+- explainable
+- reversible
+- build-tested
+- committed separately
+
+Avoid instructions that require too many simultaneous file changes unless necessary.
+
+---
+
+## 10 million user direction
+
+The 10 million user goal should influence architecture, but not create premature complexity.
+
+Prepare for scale through:
+
+- clean modular code
+- stable database schema
+- indexes
+- pagination
+- server-side filtering
+- image storage/CDN
+- caching later
+- background jobs later
+- audit logs
+- permissions
+- monitoring
+- rate limiting
+- simple reliable flows
+
+Do not overbuild distributed systems before real usage requires them.
+
+---
+
+## Old code usage rule
+
+Old code is reference, not foundation.
+
+Allowed:
+
+- inspect old logic
+- reuse proven SQL/RPC ideas
+- reuse working Supabase table knowledge
+- reuse translations where useful
+- reuse simple helpers if clean
+
+Not allowed:
+
+- copy large old page files into V2
+- copy mixed UI/data logic without refactor
+- spread Supabase queries everywhere again
+- bring old backup files into production structure
+- keep temporary skeleton mock data as production
+
+---
+
+## Skeleton role
+
+The V2 skeleton phase is useful.
+
+Skeleton role:
+
+- validate route structure
+- validate module order
+- validate UX logic
+- validate product decisions
+- guide implementation
+
+Skeleton is not final production architecture.
+
+Production implementation must cleanly separate data, features and UI.
+
+---
+
+## Conservative launch principle
+
+If a feature might create instability, confusion or hidden maintenance burden, defer it.
+
+Better:
+
+small and reliable
+
+Than:
+
+large and fragile
+
+Launch should prove that Selqiro works.
+
+Advanced intelligence can come later.
+
+---
+
+## Final rule
+
+Build Selqiro V2 as a clean, modular, reliable production system.
+
+Use the old portal as a working reference.
+
+Use the V2 skeleton as a UX reference.
+
+Ship fewer features if needed, but make the shipped features stable.

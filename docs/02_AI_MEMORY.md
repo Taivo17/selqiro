@@ -1088,3 +1088,32 @@ Next recommended phase:
 connect real data gradually, starting with active identity and Product Discovery.
 
 Do not add more large skeleton pages before checkpoint/testing.
+
+## V2_PRODUCTION_ARCHITECTURE_DECISION
+
+After V2 skeleton checkpoint:
+Do not directly connect data into skeleton pages yet.
+
+First define clean V2 production architecture.
+
+Decision:
+- same repo
+- new clean V2 production layer
+- old portal is reference only
+- V2 skeleton is UX reference only
+- production code separates data, feature logic and UI
+
+Avoid launching complex hidden logic:
+- profile quality ranking
+- listing quality ranking
+- AI content ranking
+- private message AI
+- advanced fraud automation
+- live multi-driver services
+
+Launch principle:
+small, stable, understandable.
+
+If feature may create instability or confusion, defer it.
+
+Quality is more important than speed.

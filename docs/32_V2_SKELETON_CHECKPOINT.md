@@ -350,3 +350,35 @@ The first V2 skeleton phase is complete.
 All major V2 product areas now have a route and layout foundation.
 
 Continue with small, testable steps.
+
+---
+
+## Post-checkpoint production direction
+
+The first skeleton phase is complete.
+
+Next work should not simply connect real data into skeleton components.
+
+Before data connection, establish production architecture:
+
+- clean module structure
+- entity data access
+- feature components
+- small route files
+- conservative launch rules
+
+The skeleton validates product layout.
+
+Production implementation must be cleaner and more maintainable.
+
+---
+
+## Quality before speed
+
+Selqiro V2 should prioritize quality.
+
+If a feature is risky or may reduce reliability, defer it.
+
+The first public version should contain fewer but stronger features.
+
+Advanced features can be added after the platform proves stable.
