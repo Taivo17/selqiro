@@ -1226,3 +1226,10 @@ Route passes id to feature component.
 getListingById enriches seller name/slug from identity_profiles when possible.
 
 UI does not query Supabase directly.
+
+## V2_LISTING_DETAIL_DATA_POLISH
+
+Listing detail polish:
+- numeric price strings like "99000" should display with currency, e.g. "99 000 €"
+- getListingById enriches seller name/slug from identity_profiles first, then profiles fallback
+- keep price formatting and seller enrichment inside listing entity layer

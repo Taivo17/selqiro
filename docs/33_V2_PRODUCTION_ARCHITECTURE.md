@@ -741,3 +741,18 @@ Still later:
 - related services
 - full translation handling
 - exact public/private location precision model
+
+---
+
+## Listing detail data polish
+
+After connecting V2 listing detail to real data, two small production polish fixes were added:
+
+- numeric price strings are formatted with currency
+- listing detail enriches seller name/slug from identity_profiles or legacy profiles when direct listing row does not contain seller fields
+
+Reason:
+
+Product Discovery RPC returns seller and price fields, but direct listing detail query may need enrichment.
+
+The formatting and seller enrichment remain inside the listing entity layer, not UI components.

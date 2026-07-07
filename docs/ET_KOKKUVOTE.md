@@ -4251,3 +4251,16 @@ Hiljem lisame:
 - seotud teenused
 - tõlked
 - täpsema asukoha privaatsusmudeli
+
+---
+
+# 164. Listing detail andmete väike lihv
+
+Pärast V2 kuulutuse detailvaate pärisandmetega ühendamist parandame kaks asja:
+
+- numbriline hind peab kuvama valuutaga, näiteks "99 000 €"
+- kui detailvaate otsepäring ei anna müüja nime, rikastame seda identity_profiles või profiles kaudu
+
+See loogika jääb listing entity kihti.
+
+UI komponent ei hakka ise müüja andmeid ega hinna vormindust otsustama.
