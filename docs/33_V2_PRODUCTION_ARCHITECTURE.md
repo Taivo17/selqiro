@@ -642,3 +642,30 @@ Rules followed:
 - active identity is visible
 
 This is the model for future production modules.
+
+---
+
+## Listing entity production foundation
+
+Listing entity production foundation has started.
+
+Created:
+
+- src/entities/listing/model/types.ts
+- src/entities/listing/model/image.ts
+- src/entities/listing/model/format.ts
+- src/entities/listing/api/mappers.ts
+- src/entities/listing/api/getProductListings.ts
+- src/entities/listing/api/getListingById.ts
+
+Rules followed:
+
+- old marketplace page is used as reference only
+- Supabase/RPC access is isolated into entity API
+- V2 UI should use ProductListingCard and ProductListingDetail types
+- listing image selection logic is separated from UI
+- price, distance and location formatting are separated from UI
+
+Next step:
+
+Connect /v2/products to getProductListings through a small feature-level data component or hook.

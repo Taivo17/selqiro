@@ -1177,3 +1177,23 @@ Old SiteHeader was not copied.
 V2Shell now uses V2AccountActions.
 
 Active identity is loaded through src/entities/identity API.
+
+## LISTING_ENTITY_FOUNDATION
+
+Listing entity foundation created under src/entities/listing.
+
+Includes:
+- ProductListingCard
+- ProductListingDetail
+- getProductListings
+- getListingById
+- listing image sorting/primary selection
+- price/location/distance formatting
+- mappers
+
+Old marketplace RPCs used:
+- get_marketplace_listings
+- get_marketplace_listings_nearby
+
+Next step:
+connect /v2/products to getProductListings without putting Supabase calls in UI components.

@@ -4155,3 +4155,27 @@ E-mail ei ole ülemises ribas pidevalt nähtav.
 Aktiivne identiteet on nähtav.
 
 See on näide, kuidas edaspidi V2 production mooduleid ehitame.
+
+---
+
+# 161. Listing entity production vundament
+
+V2 production-koodi jaoks alustasime listing entity mooduliga.
+
+Loodud:
+
+- ProductListingCard
+- ProductListingDetail
+- getProductListings
+- getListingById
+- piltide sortimise ja primary image loogika
+- hinna vormindus
+- kauguse vormindus
+- asukoha vormindus
+- mapperid
+
+Vana marketplace'i koodi kasutame ainult tööpõhimõtte allikana.
+
+Supabase ja RPC päringud ei lähe otse UI komponentidesse.
+
+Järgmine samm on ühendada /v2/products getProductListings mooduliga nii, et UI jääb puhas.
