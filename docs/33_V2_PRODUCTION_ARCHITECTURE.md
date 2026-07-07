@@ -584,3 +584,36 @@ Not allowed:
 AI category assist must have manual fallback.
 
 If AI fails, the user can still create the listing or service manually.
+
+---
+
+## Initial production source structure
+
+V2 production source structure has started under:
+
+src/
+
+Initial folders:
+
+- src/shared/supabase
+- src/shared/auth
+- src/entities/identity
+- src/features/v2-shell
+
+Purpose:
+
+Create a clean place for production V2 logic before connecting real data.
+
+This avoids putting new data logic directly into skeleton UI components.
+
+First entity:
+
+identity
+
+First feature:
+
+v2-shell
+
+Next planned production step:
+
+Create active identity data module and connect V2 header through that module.

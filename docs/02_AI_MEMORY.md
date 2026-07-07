@@ -1142,3 +1142,20 @@ Use normalization + alias mapping + validation.
 Manual category selection must always be available.
 
 If AI fails or is unsure, user chooses manually.
+
+## V2_PRODUCTION_SOURCE_STRUCTURE_STARTED
+
+Production V2 source structure starts under src/.
+
+Initial modules:
+- src/shared/supabase
+- src/shared/auth
+- src/entities/identity
+- src/features/v2-shell
+
+Old code remains reference only.
+
+Do not copy old SiteHeader directly.
+
+Next production step:
+create active identity entity API and V2 identity badge using that API.

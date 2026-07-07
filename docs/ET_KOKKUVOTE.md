@@ -4094,3 +4094,38 @@ Kui sama parandus kordub palju, saab sellest teha uue alias’e või prompt hint
 Launchis ei pea see automaatselt süsteemi muutma.
 
 Alguses võib koguda andmeid ja hiljem teha parandusi kontrollitult.
+
+---
+
+# 159. V2 production kaustastruktuuri algus
+
+V2 production-koodi jaoks alustame puhta src/ struktuuriga.
+
+Alguses:
+
+- src/shared/supabase
+- src/shared/auth
+- src/entities/identity
+- src/features/v2-shell
+
+Eesmärk:
+
+enne päris andmete ühendamist luua puhas koht, kuhu V2 production-loogika hakkab minema.
+
+Vana SiteHeaderi koodi ei kopeeri otse.
+
+Vana kood on tööpõhimõtte allikas.
+
+Uus V2 production-kood peab olema väiksemateks osadeks jagatud.
+
+Esimene päris entity:
+
+identity
+
+Esimene päris feature:
+
+v2-shell
+
+Järgmine samm:
+
+aktiivse identiteedi moodul ja V2 headeri ühendamine selle kaudu.
