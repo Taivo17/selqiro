@@ -1,29 +1,83 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import type { MyIdentityListingCard } from "../../../entities/listing/model/types";
+import {
+  updateListingStatus,
+  type ListingStatus,
+} from "../../../entities/listing/api/updateListingStatus";
 import { useMyAreaListings } from "../model/useMyAreaListings";
 
+function normalizeStatus(status: string): ListingStatus {
+  if (status === "paused" || status === "sold") return status;
+
+  return "active";
+}
+
 function statusLabel(status: string) {
-  if (status === "active") return "Aktiivne";
-  if (status === "paused") return "Pausil";
-  if (status === "sold") return "Müüdud";
+  if (status === "active") return "active";
+  if (status === "paused") return "paused";
+  if (status === "sold") return "sold";
 
   return status;
 }
 
 function statusClass(status: string) {
-  if (status === "active") return "bg-emerald-50 text-emerald-700";
-  if (status === "paused") return "bg-amber-50 text-amber-700";
-  if (status === "sold") return "bg-neutral-100 text-neutral-700";
+  if (status === "active") {
+    return "border-emerald-100 bg-emerald-50 text-emerald-700";
+  }
 
-  return "bg-neutral-100 text-neutral-700";
+  if (status === "paused") {
+    return "border-amber-100 bg-amber-50 text-amber-700";
+  }
+
+  if (status === "sold") {
+    return "border-neutral-200 bg-neutral-100 text-neutral-600";
+  }
+
+  return "border-neutral-200 bg-neutral-100 text-neutral-700";
 }
 
-function MyAreaListingRow({ listing }: { listing: MyIdentityListingCard }) {
+function MyAreaListingRow({
+  listing,
+  onStatusChanged,
+}: {
+  listing: MyIdentityListingCard;
+  onStatusChanged: (listingId: string, status: ListingStatus) => void;
+}) {
+  const [savingStatus, setSavingStatus] = useState(false);
+  const currentStatus = normalizeStatus(listing.status);
+
+  async function handleStatusChange(nextStatus: ListingStatus) {
+    if (nextStatus === currentStatus || savingStatus) return;
+
+    setSavingStatus(true);
+
+    try {
+      await updateListingStatus({
+        listingId: listing.id,
+        status: nextStatus,
+      });
+
+      onStatusChanged(listing.id, nextStatus);
+    } catch (error) {
+      alert(
+        error instanceof Error
+          ? error.message
+          : "Staatuse muutmine ebaõnnestus."
+      );
+    } finally {
+      setSavingStatus(false);
+    }
+  }
+
   return (
-    <div className="grid gap-3 py-4 first:pt-0 last:pb-0 md:grid-cols-[minmax(0,1fr)_120px_100px_120px] md:items-center">
-      <div className="flex min-w-0 items-center gap-4">
+    <div className="grid gap-3 py-4 first:pt-0 last:pb-0 md:grid-cols-[minmax(0,1fr)_105px_112px] md:items-center">
+      <Link
+        href={listing.href}
+        className="-m-2 flex min-w-0 items-center gap-4 rounded-2xl p-2 transition hover:bg-neutral-50"
+      >
         {listing.imageUrl ? (
           <img
             src={listing.imageUrl}
@@ -50,7 +104,7 @@ function MyAreaListingRow({ listing }: { listing: MyIdentityListingCard }) {
             </p>
           ) : null}
         </div>
-      </div>
+      </Link>
 
       <div className="flex items-center justify-between gap-3 md:block md:text-right">
         <span className="text-xs font-bold uppercase tracking-[0.16em] text-neutral-400 md:hidden">
@@ -61,27 +115,29 @@ function MyAreaListingRow({ listing }: { listing: MyIdentityListingCard }) {
         </p>
       </div>
 
-      <div className="flex items-center justify-between gap-3 md:justify-center">
-        <span className="text-xs font-bold uppercase tracking-[0.16em] text-neutral-400 md:hidden">
-          Staatus
-        </span>
-        <span
-          className={[
-            "inline-flex justify-center rounded-full px-3 py-1 text-xs font-black",
-            statusClass(listing.status),
-          ].join(" ")}
-        >
-          {statusLabel(listing.status)}
-        </span>
-      </div>
+      <div className="grid gap-2">
+        <div className="flex items-center justify-between gap-3 md:block">
+          <span className="text-xs font-bold uppercase tracking-[0.16em] text-neutral-400 md:hidden">
+            Staatus
+          </span>
 
-      <div className="grid grid-cols-2 gap-2 md:grid-cols-1">
-        <Link
-          href={listing.href}
-          className="inline-flex justify-center rounded-full border border-neutral-200 bg-white px-3 py-2 text-xs font-black shadow-sm"
-        >
-          Vaata
-        </Link>
+          <select
+            value={currentStatus}
+            disabled={savingStatus}
+            onChange={(event) =>
+              handleStatusChange(event.target.value as ListingStatus)
+            }
+            className={[
+              "w-full cursor-pointer appearance-none rounded-full border px-3 py-2 text-center text-xs font-black outline-none transition disabled:cursor-wait disabled:opacity-60",
+              statusClass(currentStatus),
+            ].join(" ")}
+            title="Muuda kuulutuse staatust"
+          >
+            <option value="active">active</option>
+            <option value="paused">paused</option>
+            <option value="sold">sold</option>
+          </select>
+        </div>
 
         <Link
           href={`/v2/my-area/listings/${listing.id}/edit`}
@@ -100,7 +156,7 @@ function LoadingRows() {
       {Array.from({ length: 5 }).map((_, index) => (
         <div
           key={index}
-          className="grid gap-3 py-4 first:pt-0 md:grid-cols-[minmax(0,1fr)_120px_100px_120px] md:items-center"
+          className="grid gap-3 py-4 first:pt-0 md:grid-cols-[minmax(0,1fr)_105px_112px] md:items-center"
         >
           <div className="flex items-center gap-4">
             <div className="h-16 w-20 rounded-2xl bg-neutral-100" />
@@ -111,8 +167,10 @@ function LoadingRows() {
           </div>
 
           <div className="h-5 rounded-full bg-neutral-100" />
-          <div className="h-6 rounded-full bg-neutral-100" />
-          <div className="h-8 rounded-full bg-neutral-100" />
+          <div className="grid gap-2">
+            <div className="h-8 rounded-full bg-neutral-100" />
+            <div className="h-8 rounded-full bg-neutral-100" />
+          </div>
         </div>
       ))}
     </div>
@@ -121,6 +179,24 @@ function LoadingRows() {
 
 export default function MyAreaListingsSection() {
   const { listings, loading, error } = useMyAreaListings();
+  const [displayListings, setDisplayListings] = useState<MyIdentityListingCard[]>([]);
+
+  useEffect(() => {
+    setDisplayListings(listings);
+  }, [listings]);
+
+  function handleStatusChanged(listingId: string, status: ListingStatus) {
+    setDisplayListings((current) =>
+      current.map((listing) =>
+        listing.id === listingId
+          ? {
+              ...listing,
+              status,
+            }
+          : listing
+      )
+    );
+  }
 
   return (
     <section className="rounded-[30px] border border-black/5 bg-white p-6 shadow-sm">
@@ -137,10 +213,9 @@ export default function MyAreaListingsSection() {
         </button>
       </div>
 
-      <div className="mb-2 hidden grid-cols-[minmax(0,1fr)_120px_100px_120px] px-1 text-xs font-black uppercase tracking-[0.16em] text-neutral-400 md:grid">
+      <div className="mb-2 hidden grid-cols-[minmax(0,1fr)_105px_112px] px-1 text-xs font-black uppercase tracking-[0.16em] text-neutral-400 md:grid">
         <span>Kuulutus</span>
         <span className="text-right">Hind</span>
-        <span className="text-center">Staatus</span>
         <span className="text-center">Tegevused</span>
       </div>
 
@@ -155,7 +230,7 @@ export default function MyAreaListingsSection() {
         </div>
       ) : null}
 
-      {!loading && !error && listings.length === 0 ? (
+      {!loading && !error && displayListings.length === 0 ? (
         <div className="rounded-[22px] border border-dashed border-neutral-200 bg-[#fbfbfa] p-6 text-center">
           <h3 className="font-black">Sul ei ole veel kuulutusi</h3>
           <p className="mt-2 text-sm leading-6 text-neutral-500">
@@ -164,10 +239,14 @@ export default function MyAreaListingsSection() {
         </div>
       ) : null}
 
-      {!loading && !error && listings.length > 0 ? (
+      {!loading && !error && displayListings.length > 0 ? (
         <div className="divide-y divide-black/5">
-          {listings.map((listing) => (
-            <MyAreaListingRow key={listing.id} listing={listing} />
+          {displayListings.map((listing) => (
+            <MyAreaListingRow
+              key={listing.id}
+              listing={listing}
+              onStatusChanged={handleStatusChanged}
+            />
           ))}
         </div>
       ) : null}

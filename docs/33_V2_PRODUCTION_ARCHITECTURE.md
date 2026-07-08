@@ -1063,3 +1063,18 @@ Listing edit should not expose raw ISO timestamps to users.
 activeUntil is displayed through a small formatting helper.
 
 Database value remains unchanged.
+
+---
+
+## V2 My Area listing action layout
+
+My Area listing rows should not waste a separate column for "View".
+
+The listing image/title/meta area opens the public listing.
+
+The right action column contains:
+
+- status selector
+- edit link
+
+This preserves horizontal room for listing content.

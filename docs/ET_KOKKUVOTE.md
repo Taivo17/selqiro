@@ -4618,3 +4618,18 @@ Varem oli näide:
 Nüüd kuvatakse see lühikese kuupäeva ja kellaajana.
 
 See on ainult kuvamise parandus, mitte andmemudeli muutus.
+
+---
+
+# 180. Minu ala kuulutuste rea tegevuste paigutus
+
+Minu ala kuulutuste reas eemaldasime eraldi "Vaata" nupu.
+
+Kuulutuse pilt ja tekstiosa avavad avaliku kuulutuse vaate.
+
+Paremas veerus on nüüd:
+
+- staatus
+- Muuda
+
+See annab kuulutuse pealkirjale ja infole rohkem ruumi.

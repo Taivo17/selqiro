@@ -1449,3 +1449,13 @@ Listing edit activeUntil is now formatted for display using Intl.DateTimeFormat.
 This is display-only.
 
 No database format change.
+
+## V2_MY_AREA_LISTING_ACTION_LAYOUT
+
+My Area listing rows use compact actions.
+
+- image/title/meta opens public listing
+- no separate Vaata button
+- status dropdown is above edit button
+- edit button stays below status
+- this gives listing text more room
