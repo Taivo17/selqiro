@@ -4649,3 +4649,25 @@ Parandatud on ka paused/sold omanikuvaate müüja fallback:
 
 - kui marketplace snapshot puudub, kasutatakse aktiivse identiteedi profiili
 - paused/sold kuulutus ei kuku enam vale legacy müüja peale
+
+---
+
+# 182. V2 edit-vaatest staatuse muutmine eemaldatud
+
+Kuulutuse staatuse muutmine toimub nüüd Minu ala kuulutuste nimekirjas.
+
+Edit-vaade ei muuda enam status välja.
+
+Edit-vaates jäävad põhiandmete muutmiseks:
+
+- pealkiri
+- hind
+- seisukord
+- kirjeldus
+
+Põhjus:
+
+- active / paused / sold on haldustegevus
+- My Area on haldusvaade
+- edit-vaade on kuulutuse sisu muutmiseks
+- edit-save ei tohi kogemata My Area staatust üle kirjutada

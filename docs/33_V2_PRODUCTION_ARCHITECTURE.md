@@ -1092,3 +1092,16 @@ Rules:
 - detail view: owner may open own paused/sold listing
 - public direct link should not expose paused/sold listing as active public content
 - inactive owner detail view must use active identity seller fallback if marketplace snapshot is missing
+
+---
+
+## V2 Listing status management location
+
+Listing status is a management action, not a content edit action.
+
+Rules:
+
+- My Area listing row manages active / paused / sold
+- Listing edit manages title, description, price and condition
+- updateListingBasics must not update status
+- this avoids stale edit forms overwriting listing status

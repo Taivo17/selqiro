@@ -1469,3 +1469,19 @@ Visibility decision:
 - listing detail allows owner to open own paused/sold listing
 - public viewer should not see paused/sold listing as a normal active listing
 - inactive owner listing detail uses active identity seller fallback when marketplace snapshot is missing
+
+## V2_LISTING_EDIT_STATUS_REMOVED
+
+Listing status editing moved out of edit view.
+
+Status is managed in My Area listing rows.
+
+Listing edit now saves:
+- title
+- description
+- price
+- condition
+
+It no longer sends status in updateListingBasics.
+
+This prevents edit-save from accidentally overwriting active/paused/sold state.

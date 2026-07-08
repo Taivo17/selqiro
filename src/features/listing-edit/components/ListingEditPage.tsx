@@ -290,7 +290,7 @@ export default function ListingEditPage({ listingId }: { listingId: string }) {
               {basicsForm.form.title || listing.title}
             </h1>
             <p className="mt-3 max-w-3xl text-sm leading-6 text-neutral-600">
-              Muuta saab pealkirja, kirjeldust, hinda, seisukorda ja staatust.
+              Muuta saab pealkirja, kirjeldust, hinda ja seisukorda.
               Pildid, kategooria ja asukoht tulevad järgmistes etappides.
             </p>
           </div>
@@ -367,21 +367,6 @@ export default function ListingEditPage({ listingId }: { listingId: string }) {
                 value={basicsForm.form.price}
                 onChange={(value) => basicsForm.setField("price", value)}
                 placeholder="Näiteks 120 €"
-              />
-              <SelectField
-                label="Staatus"
-                value={basicsForm.form.status}
-                onChange={(value) =>
-                  basicsForm.setField(
-                    "status",
-                    value as "active" | "paused" | "sold"
-                  )
-                }
-                options={[
-                  { value: "active", label: "Aktiivne" },
-                  { value: "paused", label: "Pausil" },
-                  { value: "sold", label: "Müüdud" },
-                ]}
               />
               <SelectField
                 label="Seisukord"

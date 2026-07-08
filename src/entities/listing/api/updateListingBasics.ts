@@ -1,8 +1,6 @@
 import { supabaseBrowserClient } from "../../../shared/supabase/browserClient";
 import { buildListingSearchText } from "../model/buildListingSearchText";
 
-export type ListingBasicsStatus = "active" | "paused" | "sold";
-
 export type UpdateListingBasicsInput = {
   listingId: string;
   userId: string | null;
@@ -11,7 +9,6 @@ export type UpdateListingBasicsInput = {
   description: string;
   price: string;
   condition: string;
-  status: ListingBasicsStatus;
   category: string | null;
   subcategory: string | null;
   details: Record<string, unknown>;
@@ -66,10 +63,6 @@ function validateInput(input: UpdateListingBasicsInput) {
 
   if (input.description.length > 5000) {
     throw new Error("Kirjeldus on liiga pikk.");
-  }
-
-  if (!["active", "paused", "sold"].includes(input.status)) {
-    throw new Error("Vigane staatus.");
   }
 }
 
@@ -134,7 +127,6 @@ export async function updateListingBasics(
     price,
     price_amount: priceAmount,
     condition: input.condition || null,
-    status: input.status,
     search_text: buildListingSearchText({
       title,
       description,

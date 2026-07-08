@@ -1,10 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import {
-  updateListingBasics,
-  type ListingBasicsStatus,
-} from "../../../entities/listing/api/updateListingBasics";
+import { updateListingBasics } from "../../../entities/listing/api/updateListingBasics";
 import type { ProductListingDetail } from "../../../entities/listing/model/types";
 
 export type ListingBasicsForm = {
@@ -12,16 +9,7 @@ export type ListingBasicsForm = {
   description: string;
   price: string;
   condition: string;
-  status: ListingBasicsStatus;
 };
-
-function normalizeStatus(value?: string | null): ListingBasicsStatus {
-  if (value === "paused" || value === "sold") {
-    return value;
-  }
-
-  return "active";
-}
 
 function buildInitialForm(
   listing: ProductListingDetail | null
@@ -34,7 +22,6 @@ function buildInitialForm(
         ? listing.priceLabel
         : "",
     condition: listing?.condition || "used",
-    status: normalizeStatus(listing?.status),
   };
 }
 
@@ -101,7 +88,6 @@ export function useListingBasicsForm(input: {
         description: form.description,
         price: form.price,
         condition: form.condition,
-        status: form.status,
         category: listing.category,
         subcategory: listing.subcategory,
         details: listing.details,
