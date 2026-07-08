@@ -4699,3 +4699,28 @@ Veel hiljem:
 - uue pildi üleslaadimine
 - pildi kustutamine
 - piltide täielik järjekorra muutmine
+
+---
+
+# 184. V2 edit-vaates pildi kustutamine
+
+V2 kuulutuse edit-vaates saab nüüd olemasolevat pilti kustutada.
+
+Loogika:
+
+- kustutamine toimub Supabase RPC kaudu
+- RPC kontrollib, kas kasutaja on kuulutuse omanik
+- viimast pilti ei saa kustutada
+- kui kustutatakse primary pilt, saab järgmine pilt automaatselt primary pildiks
+- piltide sort_order väärtused korrastatakse uuesti
+- listings.image fallback uuendatakse uue esimese pildi järgi
+- storage cleanup käivitub alles pärast DB kustutuse õnnestumist
+
+Testitud olukorrad:
+
+- mitte-primary pildi kustutamine
+- primary pildi kustutamine
+- viimase pildi kustutamise keelamine
+- vaadete kooskõla edit, Minu ala, products ja detailvaates
+
+Uue pildi üleslaadimine tuleb eraldi järgmises etapis.

@@ -1501,3 +1501,22 @@ Rules:
 - other images become is_primary false and sorted after it
 - listings.image fallback is updated after image order update
 - upload/delete/full reorder are separate later steps
+
+## V2_LISTING_EDIT_DELETE_IMAGE
+
+V2 listing edit can delete existing listing images.
+
+Implementation:
+- delete_listing_image_v2 Supabase RPC
+- owner check in database function
+- last image cannot be deleted
+- deleting primary image promotes next image automatically
+- listing_images order is normalized after delete
+- listings.image fallback is updated
+- storage cleanup runs after DB delete succeeds
+
+Tested:
+- delete non-primary image
+- delete primary image
+- prevent deleting last image
+- edit/My Area/products/detail views stay consistent

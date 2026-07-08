@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useEditableListing } from "../model/useEditableListing";
 import { useListingBasicsForm } from "../model/useListingBasicsForm";
 import { setListingPrimaryImage } from "../../../entities/listing/api/setListingPrimaryImage";
+import { deleteListingImage } from "../../../entities/listing/api/deleteListingImage";
 import type { ListingImage, ProductListingDetail } from "../../../entities/listing/model/types";
 
 function getImageUrl(image: ListingImage): string | null {
@@ -219,6 +220,7 @@ export default function ListingEditPage({ listingId }: { listingId: string }) {
   });
 
   const [primarySavingId, setPrimarySavingId] = useState<string | null>(null);
+  const [deletingImageId, setDeletingImageId] = useState<string | null>(null);
   const [imageError, setImageError] = useState<string | null>(null);
 
   async function handleSetPrimaryImage(image: ListingImage) {
@@ -245,6 +247,40 @@ export default function ListingEditPage({ listingId }: { listingId: string }) {
       );
     } finally {
       setPrimarySavingId(null);
+    }
+  }
+
+  async function handleDeleteImage(image: ListingImage) {
+    const listingIdForUpdate = listing?.id;
+    const imageIdForUpdate = image.id ? String(image.id) : "";
+
+    if (!listingIdForUpdate || !imageIdForUpdate) return;
+
+    if ((listing?.images.length || 0) <= 1) {
+      setImageError("Viimast pilti ei saa kustutada.");
+      return;
+    }
+
+    const confirmed = window.confirm("Kas kustutada see pilt kuulutuselt?");
+
+    if (!confirmed) return;
+
+    setDeletingImageId(imageIdForUpdate);
+    setImageError(null);
+
+    try {
+      await deleteListingImage({
+        listingId: listingIdForUpdate,
+        imageId: imageIdForUpdate,
+      });
+
+      window.location.reload();
+    } catch (error) {
+      setImageError(
+        error instanceof Error ? error.message : "Pildi kustutamine ebaõnnestus."
+      );
+    } finally {
+      setDeletingImageId(null);
     }
   }
 
@@ -408,6 +444,34 @@ export default function ListingEditPage({ listingId }: { listingId: string }) {
               </div>
             ) : null}
 
+            {listing.images.length > 1 ? (
+              <div className="mt-3 flex flex-wrap gap-2">
+                {listing.images.map((image, index) => {
+                  const imageId = image.id ? String(image.id) : "";
+
+                  if (!imageId) return null;
+
+                  return (
+                    <button
+                      key={`delete-${imageId}`}
+                      type="button"
+                      onClick={() => handleDeleteImage(image)}
+                      disabled={deletingImageId === imageId}
+                      className="rounded-full border border-red-100 bg-red-50 px-4 py-2 text-xs font-black text-red-700 transition hover:bg-red-100 disabled:cursor-wait disabled:opacity-60"
+                    >
+                      {deletingImageId === imageId
+                        ? "Kustutan..."
+                        : `Kustuta pilt ${index + 1}`}
+                    </button>
+                  );
+                })}
+              </div>
+            ) : (
+              <p className="mt-3 text-sm leading-6 text-neutral-400">
+                Viimast pilti ei saa kustutada.
+              </p>
+            )}
+
             {imageError ? (
               <p className="mt-3 rounded-2xl bg-red-50 p-3 text-sm leading-6 text-red-800">
                 {imageError}
@@ -418,7 +482,7 @@ export default function ListingEditPage({ listingId }: { listingId: string }) {
               disabled
               className="mt-5 rounded-full border border-neutral-200 bg-neutral-50 px-5 py-3 text-sm font-black text-neutral-400"
             >
-              Pildi lisamine ja kustutamine hiljem
+              Pildi lisamine hiljem
             </button>
           </section>
 

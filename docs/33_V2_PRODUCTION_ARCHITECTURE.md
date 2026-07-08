@@ -1123,3 +1123,21 @@ Primary image changes must go through RPC:
 - listings.image fallback is updated after listing_images update
 
 Direct client update to listing_images should be avoided for this operation because RLS/table rules made it unreliable.
+
+---
+
+## V2 Listing Edit delete image
+
+Image deletion is handled through Supabase RPC.
+
+Rules:
+
+- user must own listing
+- image must belong to listing
+- last image cannot be deleted
+- deleting primary image promotes the next image
+- listing_images remains the source of truth
+- listings.image is updated as fallback/snapshot
+- storage cleanup is attempted only after DB delete succeeds
+
+Upload remains separate because it has more moving parts.
