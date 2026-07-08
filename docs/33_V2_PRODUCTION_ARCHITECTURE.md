@@ -1053,3 +1053,13 @@ Architecture:
 - UI shows dirty, saving, saved and error states
 
 This keeps editing small and testable.
+
+---
+
+## V2 Listing Edit date display
+
+Listing edit should not expose raw ISO timestamps to users.
+
+activeUntil is displayed through a small formatting helper.
+
+Database value remains unchanged.

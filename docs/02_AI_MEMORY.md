@@ -1441,3 +1441,11 @@ The edit UI now has:
 - error state
 
 Owner check remains required before saving.
+
+## V2_LISTING_EDIT_DATE_FORMAT
+
+Listing edit activeUntil is now formatted for display using Intl.DateTimeFormat.
+
+This is display-only.
+
+No database format change.

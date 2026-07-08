@@ -162,6 +162,22 @@ function MessageState({
   );
 }
 
+
+function formatDateTimeLabel(value: string | null | undefined): string {
+  if (!value) return "Puudub";
+
+  const date = new Date(value);
+
+  if (Number.isNaN(date.getTime())) {
+    return value;
+  }
+
+  return new Intl.DateTimeFormat("et-EE", {
+    dateStyle: "medium",
+    timeStyle: "short",
+  }).format(date);
+}
+
 function DetailsPreview({ listing }: { listing: ProductListingDetail }) {
   const details = Object.entries(listing.details || {}).slice(0, 8);
 
@@ -380,7 +396,7 @@ export default function ListingEditPage({ listingId }: { listingId: string }) {
               <FieldPreview label="Kategooria" value={listing.category} />
               <FieldPreview label="Alamkategooria" value={listing.subcategory} />
               <FieldPreview label="Asukoht" value={listing.locationLabel} />
-              <FieldPreview label="Aegub" value={listing.activeUntil} />
+              <FieldPreview label="Aegub" value={formatDateTimeLabel(listing.activeUntil)} />
             </div>
           </section>
 

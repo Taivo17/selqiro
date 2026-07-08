@@ -4604,3 +4604,17 @@ UI näitab nüüd:
 - veateadet
 
 See on esimene turvaline edit-funktsioon.
+
+---
+
+# 179. V2 edit-vaate aegumise kuupäev loetavaks
+
+Kuulutuse edit-vaates kuvame aegumise kuupäeva nüüd inimesele loetaval kujul.
+
+Varem oli näide:
+
+2026-09-18T19:56:28.089+00:00
+
+Nüüd kuvatakse see lühikese kuupäeva ja kellaajana.
+
+See on ainult kuvamise parandus, mitte andmemudeli muutus.
