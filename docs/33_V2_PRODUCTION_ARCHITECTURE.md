@@ -1019,3 +1019,37 @@ No production data is changed yet.
 Next phase:
 
 Add basic field save for title, description, price, condition and status.
+
+---
+
+## V2 Listing Edit basic save
+
+V2 Listing Edit now supports safe basic field saving.
+
+Editable fields:
+
+- title
+- description
+- price
+- condition
+- status
+
+The update is intentionally limited.
+
+Not included yet:
+
+- image editing
+- category editing
+- location editing
+- dynamic details editing
+- AI category assist
+
+Architecture:
+
+- UI uses useListingBasicsForm
+- data update goes through listing entity API updateListingBasics
+- search_text is rebuilt with buildListingSearchText
+- owner check is done before update
+- UI shows dirty, saving, saved and error states
+
+This keeps editing small and testable.

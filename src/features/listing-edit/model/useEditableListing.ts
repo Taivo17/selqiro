@@ -11,6 +11,7 @@ import type { ProductListingDetail } from "../../../entities/listing/model/types
 export type EditableListingState = {
   listing: ProductListingDetail | null;
   activeIdentity: IdentitySummary | null;
+  userId: string | null;
   loading: boolean;
   error: string | null;
   status: EditableListingAccessStatus | "loading";
@@ -22,6 +23,7 @@ export function useEditableListing(listingId: string): EditableListingState {
   const [state, setState] = useState<EditableListingState>({
     listing: null,
     activeIdentity: null,
+    userId: null,
     loading: true,
     error: null,
     status: "loading",
@@ -39,6 +41,7 @@ export function useEditableListing(listingId: string): EditableListingState {
         setState({
           listing: null,
           activeIdentity: null,
+          userId: null,
           loading: false,
           error: null,
           status: "not_authenticated",
@@ -49,6 +52,7 @@ export function useEditableListing(listingId: string): EditableListingState {
       setState({
         listing: null,
         activeIdentity: null,
+        userId: user.id,
         loading: true,
         error: null,
         status: "loading",
@@ -71,6 +75,7 @@ export function useEditableListing(listingId: string): EditableListingState {
         setState({
           listing: result.listing,
           activeIdentity,
+          userId: user.id,
           loading: false,
           error: null,
           status: result.status,
@@ -81,6 +86,7 @@ export function useEditableListing(listingId: string): EditableListingState {
         setState({
           listing: null,
           activeIdentity: null,
+          userId: user.id,
           loading: false,
           error:
             error instanceof Error

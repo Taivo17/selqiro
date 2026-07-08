@@ -4567,3 +4567,40 @@ See on ohutu esimene samm.
 Järgmine etapp:
 
 põhiandmete salvestamine.
+
+---
+
+# 178. V2 kuulutuse muutmise põhiandmete salvestus
+
+V2 edit-vaates töötab nüüd põhiandmete muutmine ja salvestamine.
+
+Muudetavad väljad:
+
+- pealkiri
+- kirjeldus
+- hind
+- seisukord
+- staatus
+
+Veel ei muuda:
+
+- pilte
+- kategooriat
+- asukohta
+- detailvälju
+- AI soovitusi
+
+Lisatud moodulid:
+
+- buildListingSearchText
+- updateListingBasics
+- useListingBasicsForm
+
+UI näitab nüüd:
+
+- kas on muudatusi
+- salvestamise olekut
+- salvestatud kinnitust
+- veateadet
+
+See on esimene turvaline edit-funktsioon.

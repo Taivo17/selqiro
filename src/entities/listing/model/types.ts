@@ -40,6 +40,7 @@ export type ProductListingDetail = ProductListingCard & {
   images: ListingImage[];
   createdAt: string | null;
   activeUntil: string | null;
+  status: string | null;
 };
 
 export type MyIdentityListingCard = ProductListingCard & {

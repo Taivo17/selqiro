@@ -37,6 +37,7 @@ export type MarketplaceListingRow = {
   details?: Record<string, unknown> | null;
   active_until?: string | null;
   created_at?: string | null;
+  status?: string | null;
   listing_images?: ListingImage[] | null;
 };
 
@@ -97,5 +98,6 @@ export function mapListingDetailRow(row: MarketplaceListingRow): ProductListingD
     images,
     createdAt: row.created_at || null,
     activeUntil: row.active_until || null,
+    status: row.status || null,
   };
 }

@@ -1409,3 +1409,35 @@ No data is changed yet.
 
 Next:
 basic save for title/description/price/condition/status.
+
+## V2_LISTING_EDIT_BASIC_SAVE
+
+V2 listing edit basic save is working.
+
+Editable fields:
+- title
+- description
+- price
+- condition
+- status
+
+Still not editable:
+- images
+- category
+- location
+- dynamic details
+- AI assist
+
+Implemented with small modules:
+- buildListingSearchText
+- updateListingBasics
+- useListingBasicsForm
+
+The edit UI now has:
+- dirty state
+- save button
+- saving state
+- saved confirmation
+- error state
+
+Owner check remains required before saving.

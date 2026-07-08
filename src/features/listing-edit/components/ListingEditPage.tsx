@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEditableListing } from "../model/useEditableListing";
+import { useListingBasicsForm } from "../model/useListingBasicsForm";
 import type { ListingImage, ProductListingDetail } from "../../../entities/listing/model/types";
 
 function getImageUrl(image: ListingImage): string | null {
@@ -33,6 +34,88 @@ function FieldPreview({
       </p>
       <p className="mt-1 font-black">{value || "Puudub"}</p>
     </div>
+  );
+}
+
+
+function TextField({
+  label,
+  value,
+  onChange,
+  placeholder,
+}: {
+  label: string;
+  value: string;
+  onChange: (value: string) => void;
+  placeholder?: string;
+}) {
+  return (
+    <label className="block rounded-2xl bg-[#fbfbfa] p-4">
+      <span className="text-xs font-bold uppercase tracking-[0.18em] text-neutral-400">
+        {label}
+      </span>
+      <input
+        value={value}
+        onChange={(event) => onChange(event.target.value)}
+        placeholder={placeholder}
+        className="mt-2 w-full bg-transparent text-base font-black outline-none placeholder:text-neutral-300"
+      />
+    </label>
+  );
+}
+
+function SelectField({
+  label,
+  value,
+  onChange,
+  options,
+}: {
+  label: string;
+  value: string;
+  onChange: (value: string) => void;
+  options: Array<{ value: string; label: string }>;
+}) {
+  return (
+    <label className="block rounded-2xl bg-[#fbfbfa] p-4">
+      <span className="text-xs font-bold uppercase tracking-[0.18em] text-neutral-400">
+        {label}
+      </span>
+      <select
+        value={value}
+        onChange={(event) => onChange(event.target.value)}
+        className="mt-2 w-full bg-transparent text-base font-black outline-none"
+      >
+        {options.map((option) => (
+          <option key={option.value} value={option.value}>
+            {option.label}
+          </option>
+        ))}
+      </select>
+    </label>
+  );
+}
+
+function TextAreaField({
+  label,
+  value,
+  onChange,
+}: {
+  label: string;
+  value: string;
+  onChange: (value: string) => void;
+}) {
+  return (
+    <label className="block rounded-2xl bg-[#fbfbfa] p-4">
+      <span className="text-xs font-bold uppercase tracking-[0.18em] text-neutral-400">
+        {label}
+      </span>
+      <textarea
+        value={value}
+        onChange={(event) => onChange(event.target.value)}
+        rows={6}
+        className="mt-3 w-full resize-none bg-transparent text-base leading-7 outline-none placeholder:text-neutral-300"
+      />
+    </label>
   );
 }
 
@@ -108,8 +191,14 @@ function DetailsPreview({ listing }: { listing: ProductListingDetail }) {
 }
 
 export default function ListingEditPage({ listingId }: { listingId: string }) {
-  const { listing, activeIdentity, loading, error, status } =
+  const { listing, activeIdentity, userId, loading, error, status } =
     useEditableListing(listingId);
+
+  const basicsForm = useListingBasicsForm({
+    listing,
+    userId,
+    activeIdentityId: activeIdentity?.id || null,
+  });
 
   if (loading || status === "loading") {
     return <LoadingState />;
@@ -182,11 +271,11 @@ export default function ListingEditPage({ listingId }: { listingId: string }) {
               Kuulutuse muutmine
             </p>
             <h1 className="mt-3 text-4xl font-black tracking-tight">
-              {listing.title}
+              {basicsForm.form.title || listing.title}
             </h1>
             <p className="mt-3 max-w-3xl text-sm leading-6 text-neutral-600">
-              See on esimene V2 edit-vaate skeleton. Omaniku kontroll töötab,
-              aga salvestamine ja piltide muutmine tulevad järgmistes etappides.
+              Muuta saab pealkirja, kirjeldust, hinda, seisukorda ja staatust.
+              Pildid, kategooria ja asukoht tulevad järgmistes etappides.
             </p>
           </div>
 
@@ -252,10 +341,42 @@ export default function ListingEditPage({ listingId }: { listingId: string }) {
             </p>
 
             <div className="mt-5 grid gap-3 sm:grid-cols-2">
-              <FieldPreview label="Pealkiri" value={listing.title} />
-              <FieldPreview label="Hind" value={listing.priceLabel} />
-              <FieldPreview label="Staatus" value={listing.isHighlighted ? "Esiletõstetud" : "Tavaline"} />
-              <FieldPreview label="Seisukord" value={listing.condition} />
+              <TextField
+                label="Pealkiri"
+                value={basicsForm.form.title}
+                onChange={(value) => basicsForm.setField("title", value)}
+              />
+              <TextField
+                label="Hind"
+                value={basicsForm.form.price}
+                onChange={(value) => basicsForm.setField("price", value)}
+                placeholder="Näiteks 120 €"
+              />
+              <SelectField
+                label="Staatus"
+                value={basicsForm.form.status}
+                onChange={(value) =>
+                  basicsForm.setField(
+                    "status",
+                    value as "active" | "paused" | "sold"
+                  )
+                }
+                options={[
+                  { value: "active", label: "Aktiivne" },
+                  { value: "paused", label: "Pausil" },
+                  { value: "sold", label: "Müüdud" },
+                ]}
+              />
+              <SelectField
+                label="Seisukord"
+                value={basicsForm.form.condition}
+                onChange={(value) => basicsForm.setField("condition", value)}
+                options={[
+                  { value: "new", label: "Uus" },
+                  { value: "used", label: "Kasutatud" },
+                  { value: "damaged", label: "Vajab remonti" },
+                ]}
+              />
               <FieldPreview label="Kategooria" value={listing.category} />
               <FieldPreview label="Alamkategooria" value={listing.subcategory} />
               <FieldPreview label="Asukoht" value={listing.locationLabel} />
@@ -268,9 +389,11 @@ export default function ListingEditPage({ listingId }: { listingId: string }) {
               Kirjeldus
             </p>
 
-            <p className="mt-4 text-base leading-8 text-neutral-700">
-              {listing.description || "Kirjeldust ei ole lisatud."}
-            </p>
+            <TextAreaField
+              label="Kirjeldus"
+              value={basicsForm.form.description}
+              onChange={(value) => basicsForm.setField("description", value)}
+            />
           </section>
 
           <section className="rounded-[34px] border border-black/5 bg-white p-6 shadow-sm md:p-8">
@@ -289,11 +412,28 @@ export default function ListingEditPage({ listingId }: { listingId: string }) {
             </p>
 
             <button
-              disabled
-              className="mt-5 w-full rounded-full bg-neutral-200 px-5 py-3 text-sm font-black text-neutral-500"
+              onClick={basicsForm.save}
+              disabled={!basicsForm.canSave}
+              className="mt-5 w-full rounded-full bg-black px-5 py-3 text-sm font-black text-white disabled:bg-neutral-200 disabled:text-neutral-500"
             >
-              Salvesta hiljem
+              {basicsForm.saving
+                ? "Salvestan..."
+                : basicsForm.dirty
+                  ? "Salvesta muudatused"
+                  : "Muudatusi pole"}
             </button>
+
+            {basicsForm.saveError ? (
+              <p className="mt-3 rounded-2xl bg-red-50 p-3 text-sm leading-6 text-red-800">
+                {basicsForm.saveError}
+              </p>
+            ) : null}
+
+            {basicsForm.saved ? (
+              <p className="mt-3 rounded-2xl bg-emerald-50 p-3 text-sm font-bold text-emerald-700">
+                Salvestatud.
+              </p>
+            ) : null}
 
             <Link
               href={`/v2/listing/${listing.id}`}
@@ -315,11 +455,10 @@ export default function ListingEditPage({ listingId }: { listingId: string }) {
               Järgmine etapp
             </p>
             <h2 className="mt-2 text-xl font-black text-blue-950">
-              Põhiandmete salvestamine
+              Pildid, asukoht ja kategooria
             </h2>
             <p className="mt-2 text-sm leading-6 text-blue-900">
-              Järgmises etapis lisame turvalise salvestuse pealkirjale,
-              kirjeldusele, hinnale, seisukorrale ja staatusele.
+              Need lisame eraldi moodulitena, et edit-vaade jääks töökindlaks.
             </p>
           </section>
         </aside>
