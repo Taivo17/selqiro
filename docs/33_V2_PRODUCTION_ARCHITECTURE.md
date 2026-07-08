@@ -1105,3 +1105,21 @@ Rules:
 - Listing edit manages title, description, price and condition
 - updateListingBasics must not update status
 - this avoids stale edit forms overwriting listing status
+
+---
+
+## V2 Listing Edit primary image
+
+Primary image source of truth is listing_images.
+
+listings.image is only a fallback/snapshot for cards and legacy surfaces.
+
+Primary image changes must go through RPC:
+
+- set_listing_primary_image_v2
+- owner check happens in database function
+- selected image gets is_primary true and sort_order 0
+- other images are made non-primary and sorted after it
+- listings.image fallback is updated after listing_images update
+
+Direct client update to listing_images should be avoided for this operation because RLS/table rules made it unreliable.

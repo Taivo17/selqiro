@@ -4671,3 +4671,31 @@ Põhjus:
 - My Area on haldusvaade
 - edit-vaade on kuulutuse sisu muutmiseks
 - edit-save ei tohi kogemata My Area staatust üle kirjutada
+
+---
+
+# 183. V2 edit-vaates põhipildi valimine
+
+V2 kuulutuse edit-vaates saab nüüd valida, milline olemasolev pilt on esimene/põhipilt.
+
+Probleem:
+
+- kliendist otse listing_images tabeli uuendamine ei olnud töökindel
+- RLS või tabeli õigused lubasid lugeda, aga mitte piisavalt kindlalt uuendada
+- listings.image fallback võis muutuda, kuid listing_images järjekord jäi samaks
+
+Lahendus:
+
+- põhipildi muutmine toimub Supabase RPC kaudu
+- RPC kontrollib, kas kasutaja on kuulutuse omanik
+- valitud pilt saab is_primary = true ja sort_order = 0
+- ülejäänud pildid saavad is_primary = false ja uue sort_order väärtuse
+- listings.image fallback uuendatakse pärast listing_images järjekorra muutmist
+
+See on esimene turvaline osa V2 pildihaldusest.
+
+Veel hiljem:
+
+- uue pildi üleslaadimine
+- pildi kustutamine
+- piltide täielik järjekorra muutmine

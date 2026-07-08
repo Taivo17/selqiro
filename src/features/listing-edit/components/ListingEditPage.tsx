@@ -1,8 +1,10 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { useEditableListing } from "../model/useEditableListing";
 import { useListingBasicsForm } from "../model/useListingBasicsForm";
+import { setListingPrimaryImage } from "../../../entities/listing/api/setListingPrimaryImage";
 import type { ListingImage, ProductListingDetail } from "../../../entities/listing/model/types";
 
 function getImageUrl(image: ListingImage): string | null {
@@ -216,6 +218,36 @@ export default function ListingEditPage({ listingId }: { listingId: string }) {
     activeIdentityId: activeIdentity?.id || null,
   });
 
+  const [primarySavingId, setPrimarySavingId] = useState<string | null>(null);
+  const [imageError, setImageError] = useState<string | null>(null);
+
+  async function handleSetPrimaryImage(image: ListingImage) {
+    const listingIdForUpdate = listing?.id;
+    const imageIdForUpdate = image.id ? String(image.id) : "";
+
+    if (!listingIdForUpdate || !imageIdForUpdate) return;
+
+    setPrimarySavingId(imageIdForUpdate);
+    setImageError(null);
+
+    try {
+      await setListingPrimaryImage({
+        listingId: listingIdForUpdate,
+        imageId: imageIdForUpdate,
+      });
+
+      window.location.reload();
+    } catch (error) {
+      setImageError(
+        error instanceof Error
+          ? error.message
+          : "Põhipildi muutmine ebaõnnestus."
+      );
+    } finally {
+      setPrimarySavingId(null);
+    }
+  }
+
   if (loading || status === "loading") {
     return <LoadingState />;
   }
@@ -343,11 +375,50 @@ export default function ListingEditPage({ listingId }: { listingId: string }) {
                 : null}
             </div>
 
+            {listing.images.length > 1 ? (
+              <div className="mt-4 flex flex-wrap gap-2">
+                {listing.images.map((image, index) => {
+                  const imageId = image.id ? String(image.id) : "";
+                  const isPrimary = Boolean(image.is_primary);
+
+                  if (!imageId) return null;
+
+                  return (
+                    <button
+                      key={imageId}
+                      type="button"
+                      onClick={() => handleSetPrimaryImage(image)}
+                      disabled={primarySavingId === imageId}
+                      className={[
+                        "rounded-full border px-4 py-2 text-xs font-black transition",
+                        isPrimary
+                          ? "border-emerald-100 bg-emerald-50 text-emerald-700"
+                          : "border-neutral-200 bg-white text-neutral-700 shadow-sm hover:bg-neutral-50",
+                        primarySavingId === imageId ? "opacity-60" : "",
+                      ].join(" ")}
+                    >
+                      {isPrimary
+                        ? `Pilt ${index + 1} · esimene`
+                        : primarySavingId === imageId
+                          ? "Muudan..."
+                          : `Tee pilt ${index + 1} esimeseks`}
+                    </button>
+                  );
+                })}
+              </div>
+            ) : null}
+
+            {imageError ? (
+              <p className="mt-3 rounded-2xl bg-red-50 p-3 text-sm leading-6 text-red-800">
+                {imageError}
+              </p>
+            ) : null}
+
             <button
               disabled
               className="mt-5 rounded-full border border-neutral-200 bg-neutral-50 px-5 py-3 text-sm font-black text-neutral-400"
             >
-              Piltide muutmine hiljem
+              Pildi lisamine ja kustutamine hiljem
             </button>
           </section>
 

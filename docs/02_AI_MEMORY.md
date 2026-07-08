@@ -1485,3 +1485,19 @@ Listing edit now saves:
 It no longer sends status in updateListingBasics.
 
 This prevents edit-save from accidentally overwriting active/paused/sold state.
+
+## V2_LISTING_EDIT_PRIMARY_IMAGE
+
+V2 listing edit can set an existing listing image as primary.
+
+Final implementation uses Supabase RPC set_listing_primary_image_v2.
+
+Reason:
+- client-side direct listing_images update was unreliable with current RLS/table rules
+- RPC can perform owner check and update image order server-side
+
+Rules:
+- selected image becomes is_primary true and sort_order 0
+- other images become is_primary false and sorted after it
+- listings.image fallback is updated after image order update
+- upload/delete/full reorder are separate later steps
