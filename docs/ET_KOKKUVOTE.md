@@ -4633,3 +4633,19 @@ Paremas veerus on nüüd:
 - Muuda
 
 See annab kuulutuse pealkirjale ja infole rohkem ruumi.
+
+---
+
+# 181. V2 kuulutuse detailvaate inactive omanikuvaade
+
+Otsustasime V2 nähtavuse reegli:
+
+- avalik profiil näitab ainult active ja mitte aegunud kuulutusi
+- Minu ala näitab active, paused ja sold kuulutusi
+- omanik saab enda paused/sold kuulutust detailvaates avada
+- avalik kasutaja ei näe paused/sold kuulutust tavapärase aktiivse kuulutusena
+
+Parandatud on ka paused/sold omanikuvaate müüja fallback:
+
+- kui marketplace snapshot puudub, kasutatakse aktiivse identiteedi profiili
+- paused/sold kuulutus ei kuku enam vale legacy müüja peale

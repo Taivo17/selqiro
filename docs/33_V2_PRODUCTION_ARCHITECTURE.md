@@ -1078,3 +1078,17 @@ The right action column contains:
 - edit link
 
 This preserves horizontal room for listing content.
+
+---
+
+## V2 Listing visibility model
+
+Public profile is a storefront, not a management view.
+
+Rules:
+
+- public profile: active + not expired listings only
+- My Area: all owner listings, including active, paused and sold
+- detail view: owner may open own paused/sold listing
+- public direct link should not expose paused/sold listing as active public content
+- inactive owner detail view must use active identity seller fallback if marketplace snapshot is missing

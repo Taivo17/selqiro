@@ -1459,3 +1459,13 @@ My Area listing rows use compact actions.
 - status dropdown is above edit button
 - edit button stays below status
 - this gives listing text more room
+
+## V2_LISTING_VISIBILITY_DECISION
+
+Visibility decision:
+
+- public profile shows active + not expired listings only
+- My Area shows active, paused and sold listings for management
+- listing detail allows owner to open own paused/sold listing
+- public viewer should not see paused/sold listing as a normal active listing
+- inactive owner listing detail uses active identity seller fallback when marketplace snapshot is missing
