@@ -1216,3 +1216,18 @@ Rules:
 - vertical movement should not trigger image change
 - tap/reveal behavior remains separate from image order
 - image ordering source remains listing_images
+
+---
+
+## V2 Listing detail mobile gallery pointer handling
+
+Mobile gallery must support both vertical page scroll and horizontal image swipe.
+
+Rules:
+
+- overlay may be present while controls are hidden
+- overlay must use touch-action: pan-y
+- do not reveal controls on pointermove for touch overlay
+- detect swipe on pointer down/up
+- vertical movement should not trigger image change
+- image order source remains listing_images

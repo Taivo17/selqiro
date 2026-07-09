@@ -4828,3 +4828,27 @@ Käitumine:
 - pisipildile vajutus töötab edasi
 
 See teeb galerii kasutatavaks ka mobiilis ilma, et peaks tingimata väikeseid noolenuppe vajutama.
+
+---
+
+# 192. V2 detailvaate mobiilgalerii touch ja scroll
+
+Parandasime V2 kuulutuse detailvaate mobiilgalerii käitumist.
+
+Probleem:
+
+- vertikaalne scroll töötas
+- aga kui nooled kadusid, siis mobiilis ei tulnud nooled tagasi
+- vasak/parem swipe ei vahetanud pilti
+
+Parandus:
+
+- peidetud noolte ajal jääb suure pildi peale nähtamatu overlay
+- overlay on olemas ka mobiilis
+- overlay kasutab touch-action: pan-y, et vertikaalne scroll jääks lubatuks
+- pointer down/up mõõdab horisontaalset liikumist
+- vasakule swipe näitab järgmist pilti
+- paremale swipe näitab eelmist pilti
+- tap või hiire liikumine toob nooled tagasi
+
+Desktopis jääb hover/reveal loogika alles.

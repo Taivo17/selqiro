@@ -1579,3 +1579,16 @@ Rules:
 - right swipe = previous image
 - vertical scroll is ignored
 - tap reveals gallery arrows
+
+## V2_LISTING_DETAIL_MOBILE_GALLERY_POINTER_FIX
+
+V2 listing detail mobile gallery uses pointer events.
+
+Rules:
+- hidden controls render a transparent overlay also on mobile
+- overlay uses touch-action pan-y to preserve vertical scroll
+- pointer down/up detects horizontal swipe
+- left swipe = next image
+- right swipe = previous image
+- tap/reveal shows arrows again
+- avoid pointermove reveal on mobile overlay because it can unmount overlay before pointerup

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef, useState, type TouchEvent } from "react";
+import { useEffect, useRef, useState, type PointerEvent, type TouchEvent } from "react";
 import { useListingDetail } from "../model/useListingDetail";
 import type {
   ListingImage,
@@ -145,6 +145,8 @@ export default function ListingDetailPage({ listingId }: { listingId: string }) 
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [galleryControlsVisible, setGalleryControlsVisible] = useState(true);
   const [galleryControlsPulse, setGalleryControlsPulse] = useState(0);
+  const galleryPointerStartXRef = useRef<number | null>(null);
+  const galleryPointerStartYRef = useRef<number | null>(null);
   const touchStartXRef = useRef<number | null>(null);
   const touchStartYRef = useRef<number | null>(null);
   const { listing, loading, error } = useListingDetail(listingId);
@@ -154,6 +156,49 @@ export default function ListingDetailPage({ listingId }: { listingId: string }) 
 
     setGalleryControlsVisible(true);
     setGalleryControlsPulse((value) => value + 1);
+  }
+
+  function handleGalleryPointerDown(event: PointerEvent<HTMLDivElement>) {
+    if (event.pointerType === "mouse") {
+      revealGalleryControls();
+      return;
+    }
+
+    galleryPointerStartXRef.current = event.clientX;
+    galleryPointerStartYRef.current = event.clientY;
+  }
+
+  function handleGalleryPointerUp(event: PointerEvent<HTMLDivElement>) {
+    const startX = galleryPointerStartXRef.current;
+    const startY = galleryPointerStartYRef.current;
+
+    galleryPointerStartXRef.current = null;
+    galleryPointerStartYRef.current = null;
+
+    if (event.pointerType === "mouse" || startX === null || startY === null) {
+      revealGalleryControls();
+      return;
+    }
+
+    const deltaX = event.clientX - startX;
+    const deltaY = event.clientY - startY;
+    const horizontalMove = Math.abs(deltaX);
+    const verticalMove = Math.abs(deltaY);
+
+    if (horizontalMove >= 55 && horizontalMove > verticalMove * 1.25) {
+      if (deltaX < 0) {
+        showNextImage();
+      } else {
+        showPreviousImage();
+      }
+    }
+
+    revealGalleryControls();
+  }
+
+  function handleGalleryPointerCancel() {
+    galleryPointerStartXRef.current = null;
+    galleryPointerStartYRef.current = null;
   }
 
   function handleGalleryTouchStart(event: TouchEvent<HTMLDivElement>) {
@@ -298,11 +343,11 @@ export default function ListingDetailPage({ listingId }: { listingId: string }) 
                     role="button"
                     tabIndex={0}
                     aria-label="Näita galerii nuppe"
-                    className="absolute inset-0 z-10 hidden cursor-default bg-transparent focus:outline-none md:block"
+                    className="absolute inset-0 z-10 cursor-default bg-transparent focus:outline-none"
+                    style={{ touchAction: "pan-y" }}
                     onMouseMove={revealGalleryControls}
                     onPointerMove={revealGalleryControls}
-                    onTouchStart={handleGalleryTouchStart}
-                onTouchEnd={handleGalleryTouchEnd}
+    
                     onFocus={revealGalleryControls}
                   />
                 ) : null}
