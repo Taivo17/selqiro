@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import type { ProductListingCard as ProductListingCardType } from "../../../entities/listing/model/types";
 
 export default function ProductListingCard({
@@ -6,8 +9,19 @@ export default function ProductListingCard({
 }: {
   listing: ProductListingCardType;
 }) {
+  const router = useRouter();
+  const listingHref = `/v2/listing/${listing.id}`;
+
+  function openListingFromCard(event: { target: EventTarget | null }) {
+    const target = event.target as HTMLElement | null;
+
+    if (target?.closest("button, a, input, select, textarea")) return;
+
+    router.push(listingHref);
+  }
+
   return (
-    <article className="group rounded-[26px] border border-black/5 bg-white p-3 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
+    <article onClick={openListingFromCard} role="link" tabIndex={0} onKeyDown={(event) => { if (event.key !== "Enter" && event.key !== " ") return; const target = event.target as HTMLElement | null; if (target?.closest("button, a, input, select, textarea")) return; event.preventDefault(); router.push(listingHref); }} className="group rounded-[26px] border border-black/5 bg-white p-3 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md cursor-pointer">
       {listing.imageUrl ? (
         <img
           src={listing.imageUrl}
@@ -61,13 +75,6 @@ export default function ProductListingCard({
             ) : null}
           </p>
         </div>
-
-        <Link
-          href={listing.href}
-          className="mt-4 inline-flex rounded-full border border-neutral-200 bg-white px-4 py-2 text-xs font-black shadow-sm transition hover:border-neutral-300"
-        >
-          Ava kuulutus
-        </Link>
       </div>
     </article>
   );

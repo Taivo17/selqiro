@@ -279,12 +279,15 @@ export default function ListingDetailPage({ listingId }: { listingId: string }) 
 
         <div className="grid min-w-0 gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(320px,420px)]">
           <div className="min-w-0">
-            <div className="relative overflow-hidden rounded-[26px]">
+            <div
+                className="relative overflow-hidden rounded-[26px]"
+                style={{ touchAction: "pan-y" }}
+              >
               {mainImageUrl ? (
                 <img
                   src={mainImageUrl}
                   alt=""
-                  className="h-[280px] w-full rounded-[26px] object-cover object-[center_40%] md:h-[460px]"
+                  className="h-[280px] w-full touch-pan-y rounded-[26px] object-cover object-[center_40%] md:h-[460px]"
                 />
               ) : (
                 <PlaceholderImage className="h-[280px] md:h-[460px]" />
@@ -295,7 +298,7 @@ export default function ListingDetailPage({ listingId }: { listingId: string }) 
                     role="button"
                     tabIndex={0}
                     aria-label="Näita galerii nuppe"
-                    className="absolute inset-0 z-10 cursor-default bg-transparent focus:outline-none"
+                    className="absolute inset-0 z-10 hidden cursor-default bg-transparent focus:outline-none md:block"
                     onMouseMove={revealGalleryControls}
                     onPointerMove={revealGalleryControls}
                     onTouchStart={handleGalleryTouchStart}

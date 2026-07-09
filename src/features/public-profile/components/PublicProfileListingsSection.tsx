@@ -1,13 +1,25 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import type { PublicProfile } from "../../../entities/profile/model/types";
 import type { ProductListingCard } from "../../../entities/listing/model/types";
 import { usePublicProfileListings } from "../model/usePublicProfileListings";
 
 function ProfileListingCard({ listing }: { listing: ProductListingCard }) {
+  const router = useRouter();
+  const listingHref = `/v2/listing/${listing.id}`;
+
+  function openListingFromCard(event: { target: EventTarget | null }) {
+    const target = event.target as HTMLElement | null;
+
+    if (target?.closest("button, a, input, select, textarea")) return;
+
+    router.push(listingHref);
+  }
+
   return (
-    <article className="w-[230px] flex-none rounded-[24px] border border-black/5 bg-white p-3 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
+    <article onClick={openListingFromCard} role="link" tabIndex={0} onKeyDown={(event) => { if (event.key !== "Enter" && event.key !== " ") return; const target = event.target as HTMLElement | null; if (target?.closest("button, a, input, select, textarea")) return; event.preventDefault(); router.push(listingHref); }} className="w-[230px] flex-none rounded-[24px] border border-black/5 bg-white p-3 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md cursor-pointer">
       {listing.imageUrl ? (
         <img
           src={listing.imageUrl}
@@ -37,13 +49,6 @@ function ProfileListingCard({ listing }: { listing: ProductListingCard }) {
 
       <div className="mt-3 flex items-end justify-between gap-3">
         <p className="text-lg font-black">{listing.priceLabel}</p>
-
-        <Link
-          href={listing.href}
-          className="rounded-full border border-neutral-200 bg-white px-3 py-2 text-xs font-black shadow-sm"
-        >
-          Ava
-        </Link>
       </div>
     </article>
   );
