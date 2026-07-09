@@ -1556,3 +1556,14 @@ Important:
 - thumbnail click changes selected main image
 - previous/next buttons change selected main image
 - thumbnails wrap into grid rows to avoid horizontal page overflow
+
+## V2_LISTING_DETAIL_GALLERY_REVEAL_OVERLAY
+
+V2 listing detail gallery arrows auto-hide and reappear reliably.
+
+Final fix:
+- when arrows are hidden, render transparent overlay over main image
+- overlay listens to mouse/pointer/touch/focus
+- interaction reveals arrows
+- visible arrow layer has higher z-index than overlay
+- when arrows are visible, overlay is not rendered

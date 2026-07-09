@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useListingDetail } from "../model/useListingDetail";
 import type {
   ListingImage,
@@ -143,7 +143,36 @@ function EmptyState() {
 export default function ListingDetailPage({ listingId }: { listingId: string }) {
   const [showMore, setShowMore] = useState(false);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [galleryControlsVisible, setGalleryControlsVisible] = useState(true);
+  const [galleryControlsPulse, setGalleryControlsPulse] = useState(0);
   const { listing, loading, error } = useListingDetail(listingId);
+
+  function revealGalleryControls() {
+    if (!listing || listing.images.length <= 1) return;
+
+    setGalleryControlsVisible(true);
+    setGalleryControlsPulse((value) => value + 1);
+  }
+
+  useEffect(() => {
+    if (!listing || listing.images.length <= 1) {
+      setGalleryControlsVisible(false);
+      return;
+    }
+
+    setGalleryControlsVisible(true);
+
+    const timer = window.setTimeout(() => {
+      setGalleryControlsVisible(false);
+    }, 3000);
+
+    return () => window.clearTimeout(timer);
+  }, [
+    listing?.id,
+    listing?.images.length,
+    selectedImageIndex,
+    galleryControlsPulse,
+  ]);
 
   if (loading) return <LoadingState />;
   if (error) return <ErrorState error={error} />;
@@ -218,7 +247,20 @@ export default function ListingDetailPage({ listingId }: { listingId: string }) 
                 <PlaceholderImage className="h-[280px] md:h-[460px]" />
               )}
 
-              {galleryImages.length > 1 ? (
+              {galleryImages.length > 1 && !galleryControlsVisible ? (
+                  <div
+                    role="button"
+                    tabIndex={0}
+                    aria-label="Näita galerii nuppe"
+                    className="absolute inset-0 z-10 cursor-default bg-transparent focus:outline-none"
+                    onMouseMove={revealGalleryControls}
+                    onPointerMove={revealGalleryControls}
+                    onTouchStart={revealGalleryControls}
+                    onFocus={revealGalleryControls}
+                  />
+                ) : null}
+
+                {galleryImages.length > 1 && galleryControlsVisible ? (
                 <div className="absolute inset-x-4 top-1/2 flex -translate-y-1/2 justify-between">
                   <button
                     type="button"

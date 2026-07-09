@@ -4792,3 +4792,23 @@ Parandus:
 - layout kasutab minmax/min-w-0 kaitset
 
 Piltide järjekorra allikas jääb listing_images: is_primary ja sort_order.
+
+---
+
+# 190. V2 detailvaate galerii nooled ilmuvad uuesti liikumisel
+
+Täpsustasime V2 kuulutuse detailvaate galerii nooleloogikat.
+
+Probleem:
+
+- nooled kadusid 3 sekundi järel
+- hiire liigutamine suure pildi peal ei toonud nooli tagasi
+
+Parandus:
+
+- kui nooled on peidus, lisatakse suure pildi peale nähtamatu overlay
+- overlay püüab mouse/pointer/touch/focus tegevuse kinni
+- kasutaja tegevus teeb nooled uuesti nähtavaks
+- kui nooled on nähtaval, on overlay eemaldatud ja noolenupud klikitavad
+
+See hoiab pildi puhta, aga võimaldab juhtelemendid kohe tagasi tuua.

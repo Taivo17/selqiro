@@ -1190,3 +1190,16 @@ Gallery rules:
 - selected image state is UI-only
 - listing_images remains source of truth for ordering
 - parent layout uses minmax/min-w-0 to avoid overflow
+
+---
+
+## V2 Listing detail gallery reveal overlay
+
+Auto-hidden gallery controls need a reliable reveal target.
+
+Rule:
+
+- if controls are hidden, render transparent overlay over main image
+- overlay reveals controls on user interaction
+- if controls are visible, remove overlay so arrow buttons are clickable
+- selected image state remains UI-only
