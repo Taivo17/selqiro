@@ -1520,3 +1520,14 @@ Tested:
 - delete primary image
 - prevent deleting last image
 - edit/My Area/products/detail views stay consistent
+
+## V2_LISTING_IMAGE_UI_COMPACT
+
+Listing edit image actions were moved under each thumbnail.
+
+Each image card now has:
+- ✓ Esimene / Esimeseks
+- Kustuta
+- Viimane pilt when only one image remains
+
+This replaces separate long action rows and keeps image management usable with up to 10 images.

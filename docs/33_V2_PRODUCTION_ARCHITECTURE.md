@@ -1141,3 +1141,16 @@ Rules:
 - storage cleanup is attempted only after DB delete succeeds
 
 Upload remains separate because it has more moving parts.
+
+---
+
+## V2 Listing image management UI
+
+Image management actions should live near the image they affect.
+
+UI rule:
+
+- each thumbnail card owns its primary/delete actions
+- avoid separate global action rows like "Tee pilt 7 esimeseks"
+- keep text labels for accessibility and clarity
+- upload/delete/primary logic remains separate APIs

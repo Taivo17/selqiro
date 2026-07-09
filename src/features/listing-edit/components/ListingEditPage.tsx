@@ -6,6 +6,7 @@ import { useEditableListing } from "../model/useEditableListing";
 import { useListingBasicsForm } from "../model/useListingBasicsForm";
 import { setListingPrimaryImage } from "../../../entities/listing/api/setListingPrimaryImage";
 import { deleteListingImage } from "../../../entities/listing/api/deleteListingImage";
+import { uploadListingImage } from "../../../entities/listing/api/uploadListingImage";
 import type { ListingImage, ProductListingDetail } from "../../../entities/listing/model/types";
 
 function getImageUrl(image: ListingImage): string | null {
@@ -221,6 +222,7 @@ export default function ListingEditPage({ listingId }: { listingId: string }) {
 
   const [primarySavingId, setPrimarySavingId] = useState<string | null>(null);
   const [deletingImageId, setDeletingImageId] = useState<string | null>(null);
+  const [uploadingImage, setUploadingImage] = useState(false);
   const [imageError, setImageError] = useState<string | null>(null);
 
   async function handleSetPrimaryImage(image: ListingImage) {
@@ -281,6 +283,35 @@ export default function ListingEditPage({ listingId }: { listingId: string }) {
       );
     } finally {
       setDeletingImageId(null);
+    }
+  }
+
+  async function handleUploadImage(file: File | null) {
+    const listingIdForUpdate = listing?.id;
+
+    if (!listingIdForUpdate || !file || uploadingImage) return;
+
+    if ((listing?.images.length || 0) >= 10) {
+      setImageError("Kuulutusele saab lisada kuni 10 pilti.");
+      return;
+    }
+
+    setUploadingImage(true);
+    setImageError(null);
+
+    try {
+      await uploadListingImage({
+        listingId: listingIdForUpdate,
+        file,
+      });
+
+      window.location.reload();
+    } catch (error) {
+      setImageError(
+        error instanceof Error ? error.message : "Pildi lisamine ebaõnnestus."
+      );
+    } finally {
+      setUploadingImage(false);
     }
   }
 
@@ -394,83 +425,69 @@ export default function ListingEditPage({ listingId }: { listingId: string }) {
               <PlaceholderImage className="mt-5 h-80" />
             )}
 
-            <div className="mt-4 flex gap-3 overflow-x-auto pb-2">
-              {listing.images.length > 0
-                ? listing.images.map((image, index) => {
-                    const url = getImageUrl(image);
+            <div className="mt-4 grid gap-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5">
+              {listing.images.map((image, index) => {
+                const imageId = image.id ? String(image.id) : "";
+                const isPrimary = Boolean(image.is_primary);
+                const imageUrl =
+                  image.thumb_url || image.medium_url || image.original_url || "";
 
-                    return url ? (
-                      <img
-                        key={image.id || index}
-                        src={url}
-                        alt=""
-                        className="h-20 w-24 shrink-0 rounded-[18px] object-cover"
-                      />
-                    ) : null;
-                  })
-                : null}
+                if (!imageId || !imageUrl) return null;
+
+                return (
+                  <div
+                    key={imageId}
+                    className="rounded-[22px] border border-black/5 bg-white p-2 shadow-sm"
+                  >
+                    <img
+                      src={imageUrl}
+                      alt=""
+                      className="h-24 w-full rounded-[16px] object-cover"
+                      loading="lazy"
+                    />
+
+                    <div className="mt-2 grid gap-2">
+                      <button
+                        type="button"
+                        onClick={() => handleSetPrimaryImage(image)}
+                        disabled={primarySavingId === imageId}
+                        className={[
+                          "rounded-full border px-3 py-2 text-xs font-black transition disabled:cursor-wait disabled:opacity-60",
+                          isPrimary
+                            ? "border-emerald-100 bg-emerald-50 text-emerald-700"
+                            : "border-neutral-200 bg-white text-neutral-700 hover:bg-neutral-50",
+                        ].join(" ")}
+                      >
+                        {isPrimary
+                          ? "✓ Esimene"
+                          : primarySavingId === imageId
+                            ? "Muudan..."
+                            : "Esimeseks"}
+                      </button>
+
+                      {listing.images.length > 1 ? (
+                        <button
+                          type="button"
+                          onClick={() => handleDeleteImage(image)}
+                          disabled={deletingImageId === imageId}
+                          className="rounded-full border border-red-100 bg-red-50 px-3 py-2 text-xs font-black text-red-700 transition hover:bg-red-100 disabled:cursor-wait disabled:opacity-60"
+                        >
+                          {deletingImageId === imageId ? "Kustutan..." : "Kustuta"}
+                        </button>
+                      ) : (
+                        <button
+                          type="button"
+                          disabled
+                          className="rounded-full border border-neutral-100 bg-neutral-50 px-3 py-2 text-xs font-black text-neutral-300"
+                        >
+                          Viimane pilt
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
             </div>
-
-            {listing.images.length > 1 ? (
-              <div className="mt-4 flex flex-wrap gap-2">
-                {listing.images.map((image, index) => {
-                  const imageId = image.id ? String(image.id) : "";
-                  const isPrimary = Boolean(image.is_primary);
-
-                  if (!imageId) return null;
-
-                  return (
-                    <button
-                      key={imageId}
-                      type="button"
-                      onClick={() => handleSetPrimaryImage(image)}
-                      disabled={primarySavingId === imageId}
-                      className={[
-                        "rounded-full border px-4 py-2 text-xs font-black transition",
-                        isPrimary
-                          ? "border-emerald-100 bg-emerald-50 text-emerald-700"
-                          : "border-neutral-200 bg-white text-neutral-700 shadow-sm hover:bg-neutral-50",
-                        primarySavingId === imageId ? "opacity-60" : "",
-                      ].join(" ")}
-                    >
-                      {isPrimary
-                        ? `Pilt ${index + 1} · esimene`
-                        : primarySavingId === imageId
-                          ? "Muudan..."
-                          : `Tee pilt ${index + 1} esimeseks`}
-                    </button>
-                  );
-                })}
-              </div>
-            ) : null}
-
-            {listing.images.length > 1 ? (
-              <div className="mt-3 flex flex-wrap gap-2">
-                {listing.images.map((image, index) => {
-                  const imageId = image.id ? String(image.id) : "";
-
-                  if (!imageId) return null;
-
-                  return (
-                    <button
-                      key={`delete-${imageId}`}
-                      type="button"
-                      onClick={() => handleDeleteImage(image)}
-                      disabled={deletingImageId === imageId}
-                      className="rounded-full border border-red-100 bg-red-50 px-4 py-2 text-xs font-black text-red-700 transition hover:bg-red-100 disabled:cursor-wait disabled:opacity-60"
-                    >
-                      {deletingImageId === imageId
-                        ? "Kustutan..."
-                        : `Kustuta pilt ${index + 1}`}
-                    </button>
-                  );
-                })}
-              </div>
-            ) : (
-              <p className="mt-3 text-sm leading-6 text-neutral-400">
-                Viimast pilti ei saa kustutada.
-              </p>
-            )}
 
             {imageError ? (
               <p className="mt-3 rounded-2xl bg-red-50 p-3 text-sm leading-6 text-red-800">
@@ -478,12 +495,40 @@ export default function ListingEditPage({ listingId }: { listingId: string }) {
               </p>
             ) : null}
 
-            <button
-              disabled
-              className="mt-5 rounded-full border border-neutral-200 bg-neutral-50 px-5 py-3 text-sm font-black text-neutral-400"
-            >
-              Pildi lisamine hiljem
-            </button>
+            <div className="mt-5">
+              {(listing.images.length || 0) >= 10 ? (
+                <button
+                  disabled
+                  className="rounded-full border border-neutral-200 bg-neutral-50 px-5 py-3 text-sm font-black text-neutral-400"
+                >
+                  Maksimum 10 pilti lisatud
+                </button>
+              ) : (
+                <label
+                  className={[
+                    "inline-flex cursor-pointer rounded-full border border-neutral-200 bg-white px-5 py-3 text-sm font-black shadow-sm transition hover:bg-neutral-50",
+                    uploadingImage ? "pointer-events-none opacity-60" : "",
+                  ].join(" ")}
+                >
+                  {uploadingImage ? "Laadin pilti..." : "Lisa pilt"}
+                  <input
+                    type="file"
+                    accept="image/jpeg,image/png,image/webp"
+                    disabled={uploadingImage}
+                    className="sr-only"
+                    onChange={(event) => {
+                      const file = event.currentTarget.files?.[0] || null;
+                      event.currentTarget.value = "";
+                      void handleUploadImage(file);
+                    }}
+                  />
+                </label>
+              )}
+
+              <p className="mt-2 text-xs leading-5 text-neutral-400">
+                Lubatud JPG, PNG ja WEBP. Maksimaalne suurus 10 MB.
+              </p>
+            </div>
           </section>
 
           <section className="rounded-[34px] border border-black/5 bg-white p-6 shadow-sm md:p-8">

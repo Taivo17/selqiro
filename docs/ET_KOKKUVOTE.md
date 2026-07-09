@@ -4724,3 +4724,24 @@ Testitud olukorrad:
 - vaadete kooskõla edit, Minu ala, products ja detailvaates
 
 Uue pildi üleslaadimine tuleb eraldi järgmises etapis.
+
+---
+
+# 186. V2 pildihalduse UI kompaktsemaks
+
+V2 kuulutuse edit-vaates tõstsime pilditegevused iga pildi alla.
+
+Varem olid eraldi pikad read:
+
+- Tee pilt X esimeseks
+- Kustuta pilt X
+
+10 pildiga muutus see liiga müraseks.
+
+Nüüd on iga thumbnail oma väike kaart:
+
+- ✓ Esimene või Esimeseks
+- Kustuta
+- kui alles on ainult üks pilt, näitab “Viimane pilt”
+
+See teeb pildihalduse arusaadavamaks ja hoiab UI kompaktse.
