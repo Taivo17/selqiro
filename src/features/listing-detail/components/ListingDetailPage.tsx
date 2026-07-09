@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef, useState, type PointerEvent, type TouchEvent } from "react";
+import { useEffect, useRef, useState, type PointerEvent } from "react";
 import { useListingDetail } from "../model/useListingDetail";
 import type {
   ListingImage,
@@ -87,9 +87,13 @@ function LoadingState() {
       <div className="grid min-w-0 gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(320px,420px)]">
         <div className="min-w-0">
           <PlaceholderImage className="h-[280px] md:h-[460px]" />
-          <div className="mt-4 grid grid-cols-3 gap-3 sm:grid-cols-4 md:grid-cols-5">
+
+          <div className="mt-4 flex max-w-full gap-3 overflow-x-auto pb-3 pr-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             {Array.from({ length: 5 }).map((_, index) => (
-              <PlaceholderImage key={index} className="h-20 rounded-[18px]" />
+              <PlaceholderImage
+                key={index}
+                className="h-20 w-24 flex-none rounded-[18px]"
+              />
             ))}
           </div>
         </div>
@@ -145,10 +149,10 @@ export default function ListingDetailPage({ listingId }: { listingId: string }) 
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [galleryControlsVisible, setGalleryControlsVisible] = useState(true);
   const [galleryControlsPulse, setGalleryControlsPulse] = useState(0);
-  const galleryPointerStartXRef = useRef<number | null>(null);
-  const galleryPointerStartYRef = useRef<number | null>(null);
-  const touchStartXRef = useRef<number | null>(null);
-  const touchStartYRef = useRef<number | null>(null);
+
+  const pointerStartXRef = useRef<number | null>(null);
+  const pointerStartYRef = useRef<number | null>(null);
+
   const { listing, loading, error } = useListingDetail(listingId);
 
   function revealGalleryControls() {
@@ -156,90 +160,6 @@ export default function ListingDetailPage({ listingId }: { listingId: string }) 
 
     setGalleryControlsVisible(true);
     setGalleryControlsPulse((value) => value + 1);
-  }
-
-  function handleGalleryPointerDown(event: PointerEvent<HTMLDivElement>) {
-    if (event.pointerType === "mouse") {
-      revealGalleryControls();
-      return;
-    }
-
-    galleryPointerStartXRef.current = event.clientX;
-    galleryPointerStartYRef.current = event.clientY;
-  }
-
-  function handleGalleryPointerUp(event: PointerEvent<HTMLDivElement>) {
-    const startX = galleryPointerStartXRef.current;
-    const startY = galleryPointerStartYRef.current;
-
-    galleryPointerStartXRef.current = null;
-    galleryPointerStartYRef.current = null;
-
-    if (event.pointerType === "mouse" || startX === null || startY === null) {
-      revealGalleryControls();
-      return;
-    }
-
-    const deltaX = event.clientX - startX;
-    const deltaY = event.clientY - startY;
-    const horizontalMove = Math.abs(deltaX);
-    const verticalMove = Math.abs(deltaY);
-
-    if (horizontalMove >= 55 && horizontalMove > verticalMove * 1.25) {
-      if (deltaX < 0) {
-        showNextImage();
-      } else {
-        showPreviousImage();
-      }
-    }
-
-    revealGalleryControls();
-  }
-
-  function handleGalleryPointerCancel() {
-    galleryPointerStartXRef.current = null;
-    galleryPointerStartYRef.current = null;
-  }
-
-  function handleGalleryTouchStart(event: TouchEvent<HTMLDivElement>) {
-    const touch = event.touches[0];
-
-    if (!touch) return;
-
-    touchStartXRef.current = touch.clientX;
-    touchStartYRef.current = touch.clientY;
-  }
-
-  function handleGalleryTouchEnd(event: TouchEvent<HTMLDivElement>) {
-    const touch = event.changedTouches[0];
-    const startX = touchStartXRef.current;
-    const startY = touchStartYRef.current;
-
-    touchStartXRef.current = null;
-    touchStartYRef.current = null;
-
-    if (!touch || startX === null || startY === null) {
-      revealGalleryControls();
-      return;
-    }
-
-    const deltaX = touch.clientX - startX;
-    const deltaY = touch.clientY - startY;
-    const horizontalMove = Math.abs(deltaX);
-    const verticalMove = Math.abs(deltaY);
-
-    if (horizontalMove < 50 || horizontalMove < verticalMove * 1.25) {
-      revealGalleryControls();
-      return;
-    }
-
-    if (deltaX < 0) {
-      showNextImage();
-    } else {
-      showPreviousImage();
-    }
-
-    revealGalleryControls();
   }
 
   useEffect(() => {
@@ -305,6 +225,49 @@ export default function ListingDetailPage({ listingId }: { listingId: string }) 
     );
   }
 
+  function handleGalleryPointerDown(event: PointerEvent<HTMLDivElement>) {
+    if (event.pointerType === "mouse") {
+      revealGalleryControls();
+      return;
+    }
+
+    pointerStartXRef.current = event.clientX;
+    pointerStartYRef.current = event.clientY;
+  }
+
+  function handleGalleryPointerUp(event: PointerEvent<HTMLDivElement>) {
+    const startX = pointerStartXRef.current;
+    const startY = pointerStartYRef.current;
+
+    pointerStartXRef.current = null;
+    pointerStartYRef.current = null;
+
+    if (event.pointerType === "mouse" || startX === null || startY === null) {
+      revealGalleryControls();
+      return;
+    }
+
+    const deltaX = event.clientX - startX;
+    const deltaY = event.clientY - startY;
+    const horizontalMove = Math.abs(deltaX);
+    const verticalMove = Math.abs(deltaY);
+
+    if (horizontalMove >= 55 && horizontalMove > verticalMove * 1.25) {
+      if (deltaX < 0) {
+        showNextImage();
+      } else {
+        showPreviousImage();
+      }
+    }
+
+    revealGalleryControls();
+  }
+
+  function handleGalleryPointerCancel() {
+    pointerStartXRef.current = null;
+    pointerStartYRef.current = null;
+  }
+
   return (
     <div className="space-y-8">
       <section className="overflow-hidden rounded-[34px] border border-black/5 bg-white p-5 shadow-sm md:p-8">
@@ -325,9 +288,14 @@ export default function ListingDetailPage({ listingId }: { listingId: string }) 
         <div className="grid min-w-0 gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(320px,420px)]">
           <div className="min-w-0">
             <div
-                className="relative overflow-hidden rounded-[26px]"
-                style={{ touchAction: "pan-y" }}
-              >
+              className="relative overflow-hidden rounded-[26px]"
+              style={{ touchAction: "pan-y" }}
+              onMouseMove={revealGalleryControls}
+              onPointerDown={handleGalleryPointerDown}
+              onPointerUp={handleGalleryPointerUp}
+              onPointerCancel={handleGalleryPointerCancel}
+              onFocus={revealGalleryControls}
+            >
               {mainImageUrl ? (
                 <img
                   src={mainImageUrl}
@@ -339,21 +307,22 @@ export default function ListingDetailPage({ listingId }: { listingId: string }) 
               )}
 
               {galleryImages.length > 1 && !galleryControlsVisible ? (
-                  <div
-                    role="button"
-                    tabIndex={0}
-                    aria-label="Näita galerii nuppe"
-                    className="absolute inset-0 z-10 cursor-default bg-transparent focus:outline-none"
-                    style={{ touchAction: "pan-y" }}
-                    onMouseMove={revealGalleryControls}
-                    onPointerMove={revealGalleryControls}
-    
-                    onFocus={revealGalleryControls}
-                  />
-                ) : null}
+                <div
+                  role="button"
+                  tabIndex={0}
+                  aria-label="Näita galerii nuppe"
+                  className="absolute inset-0 z-10 cursor-default bg-transparent focus:outline-none"
+                  style={{ touchAction: "pan-y" }}
+                  onMouseMove={revealGalleryControls}
+                  onPointerDown={handleGalleryPointerDown}
+                  onPointerUp={handleGalleryPointerUp}
+                  onPointerCancel={handleGalleryPointerCancel}
+                  onFocus={revealGalleryControls}
+                />
+              ) : null}
 
-                {galleryImages.length > 1 && galleryControlsVisible ? (
-                <div className="absolute inset-x-4 top-1/2 flex -translate-y-1/2 justify-between">
+              {galleryImages.length > 1 && galleryControlsVisible ? (
+                <div className="absolute inset-x-4 top-1/2 z-20 flex -translate-y-1/2 justify-between transition-opacity duration-300">
                   <button
                     type="button"
                     onClick={showPreviousImage}
@@ -375,7 +344,10 @@ export default function ListingDetailPage({ listingId }: { listingId: string }) 
               ) : null}
             </div>
 
-            <div className="mt-4 grid max-w-full grid-cols-3 gap-3 sm:grid-cols-4 md:grid-cols-5">
+            <div
+              className="mt-4 flex max-w-full gap-3 overflow-x-auto overscroll-x-contain pb-3 pr-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+              style={{ touchAction: "pan-x" }}
+            >
               {galleryImages.length > 0
                 ? galleryImages.map((image, index) => {
                     const url = image.thumbUrl || image.largeUrl || "";
@@ -385,9 +357,12 @@ export default function ListingDetailPage({ listingId }: { listingId: string }) 
                       <button
                         key={`${url}-${index}`}
                         type="button"
-                        onClick={() => setSelectedImageIndex(index)}
+                        onClick={() => {
+                          setSelectedImageIndex(index);
+                          revealGalleryControls();
+                        }}
                         className={[
-                          "h-20 w-full rounded-[18px] border p-0.5 transition",
+                          "h-20 w-24 flex-none rounded-[18px] border p-0.5 transition md:w-28",
                           isSelected
                             ? "border-emerald-400 bg-emerald-50"
                             : "border-transparent hover:border-neutral-200",
@@ -405,7 +380,7 @@ export default function ListingDetailPage({ listingId }: { listingId: string }) 
                 : Array.from({ length: 4 }).map((_, index) => (
                     <PlaceholderImage
                       key={index}
-                      className="h-20 w-full rounded-[18px]"
+                      className="h-20 w-24 flex-none rounded-[18px] md:w-28"
                     />
                   ))}
             </div>

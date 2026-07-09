@@ -1592,3 +1592,20 @@ Rules:
 - right swipe = previous image
 - tap/reveal shows arrows again
 - avoid pointermove reveal on mobile overlay because it can unmount overlay before pointerup
+
+## V2_LISTING_DETAIL_HORIZONTAL_THUMB_STRIP
+
+V2 listing detail gallery uses horizontal thumbnail strip.
+
+Decision:
+- prefer old-version style thumbnail strip over multi-row grid
+- grid took too much space on mobile
+- horizontal strip is compact and works on desktop/mobile
+
+Rules:
+- main image stays above
+- thumbnails are in one horizontal scroll row
+- thumbnail click changes selected main image
+- arrows remain available and auto-hide
+- mobile vertical scroll over main image must work
+- image order source remains listing_images is_primary + sort_order

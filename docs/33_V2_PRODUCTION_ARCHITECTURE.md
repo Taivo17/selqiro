@@ -1231,3 +1231,18 @@ Rules:
 - detect swipe on pointer down/up
 - vertical movement should not trigger image change
 - image order source remains listing_images
+
+---
+
+## V2 Listing detail horizontal thumbnail strip
+
+Listing detail gallery should use a compact horizontal thumbnail strip.
+
+Rules:
+
+- thumbnail row scrolls horizontally inside gallery column
+- thumbnails are fixed width and flex-none
+- row must not widen the page
+- thumbnail click changes selected image
+- arrow controls remain optional navigation
+- image ordering source remains listing_images

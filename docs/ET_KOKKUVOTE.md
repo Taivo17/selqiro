@@ -4852,3 +4852,27 @@ Parandus:
 - tap või hiire liikumine toob nooled tagasi
 
 Desktopis jääb hover/reveal loogika alles.
+
+---
+
+# 193. V2 detailvaate pisipildid horisontaalseks ribaks
+
+Muutsime V2 kuulutuse detailvaate pildigalerii tagasi vana versiooni loogikale lähemale.
+
+Põhjus:
+
+- mitmerealine thumbnail-grid võttis mobiilis liiga palju ruumi
+- vana versiooni horisontaalselt scrollitav pisipildiriba oli kompaktsem
+- desktopis ja mobiilis on üks scrollitav pisipildiriba lihtsam ja tuttavam
+
+Käitumine:
+
+- suur pilt jääb üleval
+- väikesed pildid on suure pildi all horisontaalses scrollitavas reas
+- väike pilt on klikitav ja vahetab suure pildi
+- nooltega saab endiselt pilte vahetada
+- nooled peituvad automaatselt
+- mobiilis pildi pealt vertikaalne scroll töötab edasi
+- mobiilis väikeste piltide rida on näpuga vasakule/paremale scrollitav
+
+Piltide järjekorra allikas jääb listing_images: is_primary ja sort_order.
