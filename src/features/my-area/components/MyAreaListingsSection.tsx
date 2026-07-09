@@ -82,11 +82,11 @@ function MyAreaListingRow({
           <img
             src={listing.imageUrl}
             alt=""
-            className="h-16 w-20 shrink-0 rounded-2xl object-cover"
+            className="h-16 w-28 shrink-0 rounded-2xl object-cover object-[center_42%]"
             loading="lazy"
           />
         ) : (
-          <div className="h-16 w-20 shrink-0 rounded-2xl bg-gradient-to-br from-neutral-100 to-neutral-200" />
+          <div className="h-16 w-28 shrink-0 rounded-2xl bg-gradient-to-br from-neutral-100 to-neutral-200" />
         )}
 
         <div className="min-w-0">

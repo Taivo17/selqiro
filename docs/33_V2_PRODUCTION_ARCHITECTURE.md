@@ -1154,3 +1154,21 @@ UI rule:
 - avoid separate global action rows like "Tee pilt 7 esimeseks"
 - keep text labels for accessibility and clarity
 - upload/delete/primary logic remains separate APIs
+
+---
+
+## V2 Listing image upload input handling
+
+When using file inputs, copy FileList before resetting input value.
+
+Rule:
+
+- const files = Array.from(input.files || [])
+- then reset input.value
+- pass File[] to upload handler
+
+This prevents browsers from clearing the live FileList before upload begins.
+
+Card image presentation should avoid excessive crop:
+- use wider thumbnail ratio where possible
+- use object-position tuning for product/listing images

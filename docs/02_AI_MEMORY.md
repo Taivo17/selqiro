@@ -1531,3 +1531,16 @@ Each image card now has:
 - Viimane pilt when only one image remains
 
 This replaces separate long action rows and keeps image management usable with up to 10 images.
+
+## V2_LISTING_UPLOAD_INPUT_AND_IMAGE_FOCUS
+
+Fixed V2 listing edit image upload input.
+
+Important:
+- copy FileList to File[] before clearing input.value
+- otherwise selected files may disappear before upload handler reads them
+
+Also tuned listing image presentation:
+- My Area listing thumbnails use a wider ratio
+- product discovery card images use object-position center 42%
+- goal is to reduce unwanted top crop on vehicle photos

@@ -4745,3 +4745,26 @@ Nüüd on iga thumbnail oma väike kaart:
 - kui alles on ainult üks pilt, näitab “Viimane pilt”
 
 See teeb pildihalduse arusaadavamaks ja hoiab UI kompaktse.
+
+---
+
+# 188. V2 pildi upload input ja kaardipiltide fookus
+
+Parandasime V2 edit-vaate pildi lisamise.
+
+Probleem:
+
+- file input tühjendati enne, kui upload handler valitud failid kindlalt ära luges
+- tulemuseks oli olukord, kus kasutaja valis pildi, aga upload ei käivitunud
+
+Parandus:
+
+- FileList kopeeritakse kohe tavaliseks array'ks
+- alles siis tühjendatakse input value
+- mitme pildi upload jääb järjestikuseks ja kasutab olemasolevat uploadListingImage API-t
+
+Lisaks häälestasime pildikaartide kuvamist:
+
+- Minu ala kuulutuse pisipilt sai laiema kuvasuhte
+- toote kaartide pildifookus nihkus veidi ülespoole
+- eesmärk on vältida sõidukite ülemise osa liigset äralõikamist

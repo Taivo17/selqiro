@@ -130,6 +130,7 @@ function EmptyState() {
 
 export default function ListingDetailPage({ listingId }: { listingId: string }) {
   const [showMore, setShowMore] = useState(false);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const { listing, loading, error } = useListingDetail(listingId);
 
   if (loading) return <LoadingState />;

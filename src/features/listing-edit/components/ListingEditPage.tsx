@@ -286,29 +286,49 @@ export default function ListingEditPage({ listingId }: { listingId: string }) {
     }
   }
 
-  async function handleUploadImage(file: File | null) {
+  async function handleUploadImages(files: File[]) {
     const listingIdForUpdate = listing?.id;
+    const selectedFiles = files;
 
-    if (!listingIdForUpdate || !file || uploadingImage) return;
+    if (!listingIdForUpdate || selectedFiles.length === 0 || uploadingImage) return;
 
-    if ((listing?.images.length || 0) >= 10) {
+    const currentImageCount = listing?.images.length || 0;
+    const remainingSlots = 10 - currentImageCount;
+
+    if (remainingSlots <= 0) {
       setImageError("Kuulutusele saab lisada kuni 10 pilti.");
+      return;
+    }
+
+    if (selectedFiles.length > remainingSlots) {
+      setImageError(`Saad lisada veel ${remainingSlots} pilti.`);
       return;
     }
 
     setUploadingImage(true);
     setImageError(null);
 
+    let uploadedCount = 0;
+
     try {
-      await uploadListingImage({
-        listingId: listingIdForUpdate,
-        file,
-      });
+      for (const file of selectedFiles) {
+        await uploadListingImage({
+          listingId: listingIdForUpdate,
+          file,
+        });
+
+        uploadedCount += 1;
+      }
 
       window.location.reload();
     } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "Pildi lisamine ebaõnnestus.";
+
       setImageError(
-        error instanceof Error ? error.message : "Pildi lisamine ebaõnnestus."
+        uploadedCount > 0
+          ? `${uploadedCount} pilti lisatud, aga järgmise pildi lisamine ebaõnnestus: ${message}`
+          : message
       );
     } finally {
       setUploadingImage(false);
@@ -510,23 +530,24 @@ export default function ListingEditPage({ listingId }: { listingId: string }) {
                     uploadingImage ? "pointer-events-none opacity-60" : "",
                   ].join(" ")}
                 >
-                  {uploadingImage ? "Laadin pilti..." : "Lisa pilt"}
+                  {uploadingImage ? "Laadin pilte..." : "Lisa pildid"}
                   <input
                     type="file"
                     accept="image/jpeg,image/png,image/webp"
+                    multiple
                     disabled={uploadingImage}
                     className="sr-only"
                     onChange={(event) => {
-                      const file = event.currentTarget.files?.[0] || null;
+                      const files = Array.from(event.currentTarget.files || []);
                       event.currentTarget.value = "";
-                      void handleUploadImage(file);
+                      void handleUploadImages(files);
                     }}
                   />
                 </label>
               )}
 
               <p className="mt-2 text-xs leading-5 text-neutral-400">
-                Lubatud JPG, PNG ja WEBP. Maksimaalne suurus 10 MB.
+                Lubatud JPG, PNG ja WEBP. Võid valida mitu pilti korraga. Maksimaalne suurus 10 MB pildi kohta.
               </p>
             </div>
           </section>

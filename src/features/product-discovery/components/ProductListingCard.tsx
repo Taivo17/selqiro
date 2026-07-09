@@ -12,7 +12,7 @@ export default function ProductListingCard({
         <img
           src={listing.imageUrl}
           alt=""
-          className="h-44 w-full rounded-[20px] object-cover"
+          className="h-44 w-full rounded-[20px] object-cover object-[center_42%]"
           loading="lazy"
         />
       ) : (
