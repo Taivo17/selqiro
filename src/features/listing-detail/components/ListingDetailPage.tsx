@@ -3,7 +3,10 @@
 import Link from "next/link";
 import { useState } from "react";
 import { useListingDetail } from "../model/useListingDetail";
-import type { ListingImage, ProductListingDetail } from "../../../entities/listing/model/types";
+import type {
+  ListingImage,
+  ProductListingDetail,
+} from "../../../entities/listing/model/types";
 
 function getLargeImageUrl(image: ListingImage): string | null {
   return image.medium_url || image.original_url || image.thumb_url || null;
@@ -29,7 +32,11 @@ function stringifyDetailValue(value: unknown): string {
     return "";
   }
 
-  if (typeof value === "string" || typeof value === "number" || typeof value === "boolean") {
+  if (
+    typeof value === "string" ||
+    typeof value === "number" ||
+    typeof value === "boolean"
+  ) {
     return String(value);
   }
 
@@ -48,7 +55,9 @@ function formatDetailLabel(label: string): string {
     .trim();
 }
 
-function buildDetailRows(listing: ProductListingDetail): Array<[string, string]> {
+function buildDetailRows(
+  listing: ProductListingDetail
+): Array<[string, string]> {
   const baseRows: Array<[string, string | null]> = [
     ["Kategooria", listing.category],
     ["Alamkategooria", listing.subcategory],
@@ -58,7 +67,10 @@ function buildDetailRows(listing: ProductListingDetail): Array<[string, string]>
   ];
 
   const detailRows = Object.entries(listing.details || {})
-    .map(([key, value]) => [formatDetailLabel(key), stringifyDetailValue(value)] as [string, string])
+    .map(
+      ([key, value]) =>
+        [formatDetailLabel(key), stringifyDetailValue(value)] as [string, string]
+    )
     .filter(([, value]) => Boolean(value));
 
   return [
@@ -71,13 +83,13 @@ function buildDetailRows(listing: ProductListingDetail): Array<[string, string]>
 
 function LoadingState() {
   return (
-    <section className="rounded-[34px] border border-black/5 bg-white p-5 shadow-sm md:p-8">
-      <div className="grid gap-8 lg:grid-cols-[1.25fr_0.75fr]">
-        <div>
+    <section className="overflow-hidden rounded-[34px] border border-black/5 bg-white p-5 shadow-sm md:p-8">
+      <div className="grid min-w-0 gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(320px,420px)]">
+        <div className="min-w-0">
           <PlaceholderImage className="h-[280px] md:h-[460px]" />
-          <div className="mt-4 flex gap-3">
+          <div className="mt-4 grid grid-cols-3 gap-3 sm:grid-cols-4 md:grid-cols-5">
             {Array.from({ length: 5 }).map((_, index) => (
-              <PlaceholderImage key={index} className="h-20 min-w-24 rounded-[18px]" />
+              <PlaceholderImage key={index} className="h-20 rounded-[18px]" />
             ))}
           </div>
         </div>
@@ -137,15 +149,48 @@ export default function ListingDetailPage({ listingId }: { listingId: string }) 
   if (error) return <ErrorState error={error} />;
   if (!listing) return <EmptyState />;
 
+  const galleryImages = listing.images
+    .map((image, index) => ({
+      index,
+      largeUrl: getLargeImageUrl(image),
+      thumbUrl: getThumbImageUrl(image),
+    }))
+    .filter((image) => Boolean(image.largeUrl || image.thumbUrl));
+
+  const normalizedSelectedIndex =
+    galleryImages.length > 0
+      ? Math.min(selectedImageIndex, galleryImages.length - 1)
+      : 0;
+
+  const selectedGalleryImage = galleryImages[normalizedSelectedIndex] || null;
+
   const mainImageUrl =
-    listing.images.map(getLargeImageUrl).find(Boolean) || listing.imageUrl;
-  const thumbUrls = listing.images.map(getThumbImageUrl).filter(Boolean) as string[];
+    selectedGalleryImage?.largeUrl ||
+    selectedGalleryImage?.thumbUrl ||
+    listing.imageUrl;
+
   const detailRows = buildDetailRows(listing);
   const visibleDetails = showMore ? detailRows : detailRows.slice(0, 6);
 
+  function showPreviousImage() {
+    if (galleryImages.length <= 1) return;
+
+    setSelectedImageIndex((current) =>
+      current <= 0 ? galleryImages.length - 1 : current - 1
+    );
+  }
+
+  function showNextImage() {
+    if (galleryImages.length <= 1) return;
+
+    setSelectedImageIndex((current) =>
+      current >= galleryImages.length - 1 ? 0 : current + 1
+    );
+  }
+
   return (
     <div className="space-y-8">
-      <section className="rounded-[34px] border border-black/5 bg-white p-5 shadow-sm md:p-8">
+      <section className="overflow-hidden rounded-[34px] border border-black/5 bg-white p-5 shadow-sm md:p-8">
         <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
           <Link
             href="/v2/products"
@@ -160,35 +205,79 @@ export default function ListingDetailPage({ listingId }: { listingId: string }) 
           </p>
         </div>
 
-        <div className="grid gap-8 lg:grid-cols-[1.25fr_0.75fr]">
-          <div>
-            {mainImageUrl ? (
-              <img
-                src={mainImageUrl}
-                alt=""
-                className="h-[280px] w-full rounded-[26px] object-cover md:h-[460px]"
-              />
-            ) : (
-              <PlaceholderImage className="h-[280px] md:h-[460px]" />
-            )}
+        <div className="grid min-w-0 gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(320px,420px)]">
+          <div className="min-w-0">
+            <div className="relative overflow-hidden rounded-[26px]">
+              {mainImageUrl ? (
+                <img
+                  src={mainImageUrl}
+                  alt=""
+                  className="h-[280px] w-full rounded-[26px] object-cover object-[center_40%] md:h-[460px]"
+                />
+              ) : (
+                <PlaceholderImage className="h-[280px] md:h-[460px]" />
+              )}
 
-            <div className="mt-4 flex gap-3 overflow-x-auto pb-1">
-              {thumbUrls.length > 0
-                ? thumbUrls.map((url, index) => (
-                    <img
-                      key={`${url}-${index}`}
-                      src={url}
-                      alt=""
-                      className="h-20 min-w-24 rounded-[18px] object-cover"
-                    />
-                  ))
+              {galleryImages.length > 1 ? (
+                <div className="absolute inset-x-4 top-1/2 flex -translate-y-1/2 justify-between">
+                  <button
+                    type="button"
+                    onClick={showPreviousImage}
+                    className="flex h-11 w-11 items-center justify-center rounded-full bg-white/90 text-2xl font-black shadow-sm backdrop-blur transition hover:bg-white"
+                    aria-label="Eelmine pilt"
+                  >
+                    ‹
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={showNextImage}
+                    className="flex h-11 w-11 items-center justify-center rounded-full bg-white/90 text-2xl font-black shadow-sm backdrop-blur transition hover:bg-white"
+                    aria-label="Järgmine pilt"
+                  >
+                    ›
+                  </button>
+                </div>
+              ) : null}
+            </div>
+
+            <div className="mt-4 grid max-w-full grid-cols-3 gap-3 sm:grid-cols-4 md:grid-cols-5">
+              {galleryImages.length > 0
+                ? galleryImages.map((image, index) => {
+                    const url = image.thumbUrl || image.largeUrl || "";
+                    const isSelected = index === normalizedSelectedIndex;
+
+                    return (
+                      <button
+                        key={`${url}-${index}`}
+                        type="button"
+                        onClick={() => setSelectedImageIndex(index)}
+                        className={[
+                          "h-20 w-full rounded-[18px] border p-0.5 transition",
+                          isSelected
+                            ? "border-emerald-400 bg-emerald-50"
+                            : "border-transparent hover:border-neutral-200",
+                        ].join(" ")}
+                        aria-label={`Näita pilt ${index + 1}`}
+                      >
+                        <img
+                          src={url}
+                          alt=""
+                          className="h-full w-full rounded-[15px] object-cover object-[center_40%]"
+                        />
+                      </button>
+                    );
+                  })
                 : Array.from({ length: 4 }).map((_, index) => (
-                    <PlaceholderImage key={index} className="h-20 min-w-24 rounded-[18px]" />
+                    <PlaceholderImage
+                      key={index}
+                      className="h-20 w-full rounded-[18px]"
+                    />
                   ))}
             </div>
           </div>
 
-          <aside className="space-y-4">
+          <aside className="min-w-0 space-y-4">
             <div className="rounded-[28px] border border-black/5 bg-[#fbfbfa] p-6">
               <div className="flex items-start justify-between gap-4">
                 <div>
@@ -302,7 +391,10 @@ export default function ListingDetailPage({ listingId }: { listingId: string }) 
           {visibleDetails.length > 0 ? (
             <div className="mt-5 grid gap-3 sm:grid-cols-2">
               {visibleDetails.map(([label, value]) => (
-                <div key={`${label}-${value}`} className="rounded-2xl bg-[#fbfbfa] p-4">
+                <div
+                  key={`${label}-${value}`}
+                  className="rounded-2xl bg-[#fbfbfa] p-4"
+                >
                   <p className="text-xs font-bold uppercase tracking-[0.16em] text-neutral-400">
                     {label}
                   </p>

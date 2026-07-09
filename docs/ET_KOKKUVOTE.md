@@ -4768,3 +4768,27 @@ Lisaks häälestasime pildikaartide kuvamist:
 - Minu ala kuulutuse pisipilt sai laiema kuvasuhte
 - toote kaartide pildifookus nihkus veidi ülespoole
 - eesmärk on vältida sõidukite ülemise osa liigset äralõikamist
+
+---
+
+# 189. V2 detailvaate pisipildid mitmele reale
+
+Parandasime V2 kuulutuse detailvaate pildigalerii.
+
+Põhjus:
+
+- V2 route kasutas wrapperit components/v2/listing/V2ListingDetailPage.tsx
+- detaili feature-komponent oli endiselt vana loogikaga
+- pisipildid olid tavalised img elemendid ühe flex reana
+- pildile vajutamine ei saanud suurt pilti muuta
+
+Parandus:
+
+- V2 wrapper kasutab nüüd feature ListingDetailPage komponenti
+- ListingDetailPage asendatud klikitava galeriiga
+- thumbnailid on responsive gridis ja lähevad mitmele reale
+- thumbnail on button ja muudab suure pildi
+- lisatud eelmine/järgmine pilt nupud
+- layout kasutab minmax/min-w-0 kaitset
+
+Piltide järjekorra allikas jääb listing_images: is_primary ja sort_order.

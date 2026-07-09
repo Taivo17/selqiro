@@ -1172,3 +1172,21 @@ This prevents browsers from clearing the live FileList before upload begins.
 Card image presentation should avoid excessive crop:
 - use wider thumbnail ratio where possible
 - use object-position tuning for product/listing images
+
+---
+
+## V2 Listing detail component ownership
+
+V2 listing route imports components/v2/listing/V2ListingDetailPage.
+
+That wrapper should delegate to the feature component:
+
+src/features/listing-detail/components/ListingDetailPage
+
+Gallery rules:
+
+- thumbnails wrap into grid rows
+- thumbnail is button and changes selected main image
+- selected image state is UI-only
+- listing_images remains source of truth for ordering
+- parent layout uses minmax/min-w-0 to avoid overflow

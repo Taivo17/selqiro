@@ -1544,3 +1544,15 @@ Also tuned listing image presentation:
 - My Area listing thumbnails use a wider ratio
 - product discovery card images use object-position center 42%
 - goal is to reduce unwanted top crop on vehicle photos
+
+## V2_LISTING_DETAIL_THUMBNAIL_GRID
+
+V2 listing detail uses clickable thumbnail grid.
+
+Important:
+- route app/v2/listing/[id] uses components/v2/listing/V2ListingDetailPage
+- wrapper delegates to src/features/listing-detail/components/ListingDetailPage
+- thumbnails are buttons, not passive img elements
+- thumbnail click changes selected main image
+- previous/next buttons change selected main image
+- thumbnails wrap into grid rows to avoid horizontal page overflow
