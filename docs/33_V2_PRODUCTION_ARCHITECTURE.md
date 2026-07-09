@@ -1203,3 +1203,16 @@ Rule:
 - overlay reveals controls on user interaction
 - if controls are visible, remove overlay so arrow buttons are clickable
 - selected image state remains UI-only
+
+---
+
+## V2 Listing detail mobile gallery
+
+Mobile gallery should support swipe.
+
+Rules:
+
+- horizontal swipe changes selected image
+- vertical movement should not trigger image change
+- tap/reveal behavior remains separate from image order
+- image ordering source remains listing_images

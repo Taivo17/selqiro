@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState, type TouchEvent } from "react";
 import { useListingDetail } from "../model/useListingDetail";
 import type {
   ListingImage,
@@ -145,6 +145,8 @@ export default function ListingDetailPage({ listingId }: { listingId: string }) 
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [galleryControlsVisible, setGalleryControlsVisible] = useState(true);
   const [galleryControlsPulse, setGalleryControlsPulse] = useState(0);
+  const touchStartXRef = useRef<number | null>(null);
+  const touchStartYRef = useRef<number | null>(null);
   const { listing, loading, error } = useListingDetail(listingId);
 
   function revealGalleryControls() {
@@ -152,6 +154,47 @@ export default function ListingDetailPage({ listingId }: { listingId: string }) 
 
     setGalleryControlsVisible(true);
     setGalleryControlsPulse((value) => value + 1);
+  }
+
+  function handleGalleryTouchStart(event: TouchEvent<HTMLDivElement>) {
+    const touch = event.touches[0];
+
+    if (!touch) return;
+
+    touchStartXRef.current = touch.clientX;
+    touchStartYRef.current = touch.clientY;
+  }
+
+  function handleGalleryTouchEnd(event: TouchEvent<HTMLDivElement>) {
+    const touch = event.changedTouches[0];
+    const startX = touchStartXRef.current;
+    const startY = touchStartYRef.current;
+
+    touchStartXRef.current = null;
+    touchStartYRef.current = null;
+
+    if (!touch || startX === null || startY === null) {
+      revealGalleryControls();
+      return;
+    }
+
+    const deltaX = touch.clientX - startX;
+    const deltaY = touch.clientY - startY;
+    const horizontalMove = Math.abs(deltaX);
+    const verticalMove = Math.abs(deltaY);
+
+    if (horizontalMove < 50 || horizontalMove < verticalMove * 1.25) {
+      revealGalleryControls();
+      return;
+    }
+
+    if (deltaX < 0) {
+      showNextImage();
+    } else {
+      showPreviousImage();
+    }
+
+    revealGalleryControls();
   }
 
   useEffect(() => {
@@ -255,7 +298,8 @@ export default function ListingDetailPage({ listingId }: { listingId: string }) 
                     className="absolute inset-0 z-10 cursor-default bg-transparent focus:outline-none"
                     onMouseMove={revealGalleryControls}
                     onPointerMove={revealGalleryControls}
-                    onTouchStart={revealGalleryControls}
+                    onTouchStart={handleGalleryTouchStart}
+                onTouchEnd={handleGalleryTouchEnd}
                     onFocus={revealGalleryControls}
                   />
                 ) : null}

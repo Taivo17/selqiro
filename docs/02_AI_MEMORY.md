@@ -1567,3 +1567,15 @@ Final fix:
 - interaction reveals arrows
 - visible arrow layer has higher z-index than overlay
 - when arrows are visible, overlay is not rendered
+
+## V2_LISTING_DETAIL_MOBILE_SWIPE
+
+V2 listing detail gallery supports mobile swipe.
+
+Rules:
+- touch start stores x/y
+- touch end compares x/y movement
+- left swipe = next image
+- right swipe = previous image
+- vertical scroll is ignored
+- tap reveals gallery arrows

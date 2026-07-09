@@ -4812,3 +4812,19 @@ Parandus:
 - kui nooled on nähtaval, on overlay eemaldatud ja noolenupud klikitavad
 
 See hoiab pildi puhta, aga võimaldab juhtelemendid kohe tagasi tuua.
+
+---
+
+# 191. V2 detailvaate galerii mobiili swipe
+
+Lisatud V2 kuulutuse detailvaate galeriile mobiili swipe tugi.
+
+Käitumine:
+
+- vasakule swipe näitab järgmist pilti
+- paremale swipe näitab eelmist pilti
+- tavaline puudutus toob nooled tagasi nähtavale
+- vertikaalne scroll ei tohiks pilti vahetada, sest kontrollime ka Y-liikumist
+- pisipildile vajutus töötab edasi
+
+See teeb galerii kasutatavaks ka mobiilis ilma, et peaks tingimata väikeseid noolenuppe vajutama.
