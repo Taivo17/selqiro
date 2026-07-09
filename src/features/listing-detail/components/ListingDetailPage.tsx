@@ -16,6 +16,10 @@ function getThumbImageUrl(image: ListingImage): string | null {
   return image.thumb_url || image.medium_url || image.original_url || null;
 }
 
+function getFullImageUrl(image: ListingImage): string | null {
+  return image.original_url || image.medium_url || image.thumb_url || null;
+}
+
 function PlaceholderImage({ className = "" }: { className?: string }) {
   return (
     <div
@@ -147,11 +151,13 @@ function EmptyState() {
 export default function ListingDetailPage({ listingId }: { listingId: string }) {
   const [showMore, setShowMore] = useState(false);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
   const [galleryControlsVisible, setGalleryControlsVisible] = useState(true);
   const [galleryControlsPulse, setGalleryControlsPulse] = useState(0);
 
   const pointerStartXRef = useRef<number | null>(null);
   const pointerStartYRef = useRef<number | null>(null);
+  const pointerMovedRef = useRef(false);
 
   const { listing, loading, error } = useListingDetail(listingId);
 
@@ -191,6 +197,7 @@ export default function ListingDetailPage({ listingId }: { listingId: string }) 
       index,
       largeUrl: getLargeImageUrl(image),
       thumbUrl: getThumbImageUrl(image),
+      fullUrl: getFullImageUrl(image),
     }))
     .filter((image) => Boolean(image.largeUrl || image.thumbUrl));
 
@@ -202,6 +209,12 @@ export default function ListingDetailPage({ listingId }: { listingId: string }) 
   const selectedGalleryImage = galleryImages[normalizedSelectedIndex] || null;
 
   const mainImageUrl =
+    selectedGalleryImage?.largeUrl ||
+    selectedGalleryImage?.thumbUrl ||
+    listing.imageUrl;
+
+  const lightboxImageUrl =
+    selectedGalleryImage?.fullUrl ||
     selectedGalleryImage?.largeUrl ||
     selectedGalleryImage?.thumbUrl ||
     listing.imageUrl;
@@ -231,6 +244,7 @@ export default function ListingDetailPage({ listingId }: { listingId: string }) 
       return;
     }
 
+    pointerMovedRef.current = false;
     pointerStartXRef.current = event.clientX;
     pointerStartYRef.current = event.clientY;
   }
@@ -253,6 +267,8 @@ export default function ListingDetailPage({ listingId }: { listingId: string }) 
     const verticalMove = Math.abs(deltaY);
 
     if (horizontalMove >= 55 && horizontalMove > verticalMove * 1.25) {
+      pointerMovedRef.current = true;
+
       if (deltaX < 0) {
         showNextImage();
       } else {
@@ -288,8 +304,18 @@ export default function ListingDetailPage({ listingId }: { listingId: string }) 
         <div className="grid min-w-0 gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(320px,420px)]">
           <div className="min-w-0">
             <div
-              className="relative overflow-hidden rounded-[26px]"
+              className="relative cursor-zoom-in overflow-hidden rounded-[26px]"
               style={{ touchAction: "pan-y" }}
+              onClick={() => {
+                if (pointerMovedRef.current) {
+                  pointerMovedRef.current = false;
+                  return;
+                }
+
+                if (mainImageUrl) {
+                  setLightboxOpen(true);
+                }
+              }}
               onMouseMove={revealGalleryControls}
               onPointerDown={handleGalleryPointerDown}
               onPointerUp={handleGalleryPointerUp}
@@ -325,7 +351,10 @@ export default function ListingDetailPage({ listingId }: { listingId: string }) 
                 <div className="absolute inset-x-4 top-1/2 z-20 flex -translate-y-1/2 justify-between transition-opacity duration-300">
                   <button
                     type="button"
-                    onClick={showPreviousImage}
+                    onClick={(event) => {
+                    event.stopPropagation();
+                    showPreviousImage();
+                  }}
                     className="flex h-11 w-11 items-center justify-center rounded-full bg-white/90 text-2xl font-black shadow-sm backdrop-blur transition hover:bg-white"
                     aria-label="Eelmine pilt"
                   >
@@ -334,7 +363,10 @@ export default function ListingDetailPage({ listingId }: { listingId: string }) 
 
                   <button
                     type="button"
-                    onClick={showNextImage}
+                    onClick={(event) => {
+                    event.stopPropagation();
+                    showNextImage();
+                  }}
                     className="flex h-11 w-11 items-center justify-center rounded-full bg-white/90 text-2xl font-black shadow-sm backdrop-blur transition hover:bg-white"
                     aria-label="Järgmine pilt"
                   >
@@ -522,6 +554,62 @@ export default function ListingDetailPage({ listingId }: { listingId: string }) 
           </p>
         </div>
       </section>
+      {lightboxOpen && lightboxImageUrl ? (
+        <div
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 p-4"
+          onClick={() => setLightboxOpen(false)}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Suur pilt"
+        >
+          <button
+            type="button"
+            onClick={(event) => {
+              event.stopPropagation();
+              setLightboxOpen(false);
+            }}
+            className="absolute right-4 top-4 flex h-11 w-11 items-center justify-center rounded-full bg-white/90 text-2xl font-black shadow-sm transition hover:bg-white"
+            aria-label="Sulge pilt"
+          >
+            ×
+          </button>
+
+          {galleryImages.length > 1 ? (
+            <button
+              type="button"
+              onClick={(event) => {
+                event.stopPropagation();
+                showPreviousImage();
+              }}
+              className="absolute left-4 top-1/2 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-3xl font-black shadow-sm transition hover:bg-white"
+              aria-label="Eelmine pilt"
+            >
+              ‹
+            </button>
+          ) : null}
+
+          <img
+            src={lightboxImageUrl}
+            alt=""
+            className="max-h-[88vh] max-w-[92vw] rounded-[18px] object-contain shadow-2xl"
+            onClick={(event) => event.stopPropagation()}
+          />
+
+          {galleryImages.length > 1 ? (
+            <button
+              type="button"
+              onClick={(event) => {
+                event.stopPropagation();
+                showNextImage();
+              }}
+              className="absolute right-4 top-1/2 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-3xl font-black shadow-sm transition hover:bg-white"
+              aria-label="Järgmine pilt"
+            >
+              ›
+            </button>
+          ) : null}
+        </div>
+      ) : null}
     </div>
   );
 }

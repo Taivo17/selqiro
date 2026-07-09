@@ -1246,3 +1246,17 @@ Rules:
 - thumbnail click changes selected image
 - arrow controls remain optional navigation
 - image ordering source remains listing_images
+
+---
+
+## V2 Listing detail image lightbox
+
+Listing detail main image can open a larger lightbox view.
+
+Rules:
+
+- lightbox is UI-only
+- selected image state is shared with gallery
+- backdrop and close button close lightbox
+- arrows can change selected image
+- gallery image order remains listing_images

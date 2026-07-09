@@ -4876,3 +4876,22 @@ Käitumine:
 - mobiilis väikeste piltide rida on näpuga vasakule/paremale scrollitav
 
 Piltide järjekorra allikas jääb listing_images: is_primary ja sort_order.
+
+---
+
+# 194. V2 detailvaate suure pildi lightbox
+
+Lisatud V2 kuulutuse detailvaatele suure pildi vaade.
+
+Käitumine:
+
+- suurele pildile vajutades avaneb pilt tumedal taustal suuremalt
+- X sulgeb suure pildi vaate
+- taustale vajutamine sulgeb suure pildi vaate
+- lightbox vaates saab noolega liikuda eelmise/järgmise pildi juurde
+- tavalise galerii nooled ja pisipiltide horisontaalne riba töötavad edasi
+
+Oluline:
+
+- swipe ei ava kogemata lightboxi
+- piltide järjekorra allikas jääb listing_images: is_primary ja sort_order

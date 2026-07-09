@@ -1609,3 +1609,15 @@ Rules:
 - arrows remain available and auto-hide
 - mobile vertical scroll over main image must work
 - image order source remains listing_images is_primary + sort_order
+
+## V2_LISTING_DETAIL_IMAGE_LIGHTBOX
+
+V2 listing detail supports image lightbox.
+
+Rules:
+- clicking main image opens large image overlay
+- backdrop click closes overlay
+- close button closes overlay
+- overlay arrows change selected image
+- swipe should not accidentally open lightbox
+- image order source remains listing_images is_primary + sort_order
