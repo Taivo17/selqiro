@@ -90,7 +90,7 @@ function LoadingState() {
     <section className="overflow-hidden rounded-[34px] border border-black/5 bg-white p-5 shadow-sm md:p-8">
       <div className="grid min-w-0 gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(320px,420px)]">
         <div className="min-w-0">
-          <PlaceholderImage className="h-[280px] md:h-[460px]" />
+          <PlaceholderImage className="aspect-[4/3] w-full" />
 
           <div className="mt-4 flex max-w-full gap-3 overflow-x-auto pb-3 pr-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             {Array.from({ length: 5 }).map((_, index) => (
@@ -326,10 +326,10 @@ export default function ListingDetailPage({ listingId }: { listingId: string }) 
                 <img
                   src={mainImageUrl}
                   alt=""
-                  className="h-[280px] w-full touch-pan-y rounded-[26px] object-cover object-[center_40%] md:h-[460px]"
+                  className="aspect-[4/3] w-full rounded-[26px] bg-neutral-100 object-contain object-center"
                 />
               ) : (
-                <PlaceholderImage className="h-[280px] md:h-[460px]" />
+                <PlaceholderImage className="aspect-[4/3] w-full" />
               )}
 
               {galleryImages.length > 1 && !galleryControlsVisible ? (

@@ -4933,3 +4933,25 @@ Muutsime ainult V2 toodete vaate mobiilset pildiproportsiooni:
 - pildile ja tekstile vajutamine avab kuulutuse edasi
 
 Detailvaate piltide järjekorra allikas jääb listing_images: is_primary ja sort_order.
+
+---
+
+# 194. V2 detailpilt toote kaardiga sama loogika järgi
+
+Muutsime V2 kuulutuse detailvaate suure pildi kuvamist.
+
+Põhjus:
+
+- tooted vaates on auto/pilt paremini tervikuna nähtav
+- detailvaates võis suur pilt object-cover tõttu servad ära lõigata
+- mobiilis võiks detailpildi suurus olla toote kaardiga sarnasem
+
+Parandus:
+
+- detailvaate suur pilt kasutab 4/3 kuvasuhet
+- object-cover asemel kasutame object-contain
+- pildile lisatud hele taust, et kogu pilt oleks nähtav
+- väikeste piltide horisontaalne riba jäi samaks
+- piltide järjekorra allikas jääb listing_images: is_primary ja sort_order
+
+See teeb avatud kuulutuse pildi mobiilis rahulikumaks ja sarnasemaks tooted vaate kaardiga.

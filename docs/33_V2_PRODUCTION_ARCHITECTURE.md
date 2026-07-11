@@ -1287,3 +1287,17 @@ Rules:
 - detail gallery behavior should remain stable
 - image/text card click opens listing detail
 - image ordering source remains listing_images
+
+---
+
+## V2 Listing detail main image sizing
+
+Listing detail main image should not crop important vehicle content on mobile.
+
+Rules:
+
+- use 4/3 visual ratio for the main image
+- prefer object-contain for listing detail main image
+- use neutral background behind contained images
+- thumbnails remain horizontal scroll strip
+- image ordering source remains listing_images

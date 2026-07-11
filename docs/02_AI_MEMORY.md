@@ -1644,3 +1644,14 @@ Product cards:
 - mobile image should be closer to old version
 - use 4:3-ish ratio to reduce excessive cropping
 - image/text click still opens listing detail
+
+## V2_LISTING_DETAIL_MAIN_IMAGE_CONTAIN
+
+V2 listing detail main image should show the full vehicle/image on mobile.
+
+Decision:
+- match product card feel more closely
+- use aspect 4/3
+- use object-contain instead of object-cover for the detail main image
+- keep horizontal thumbnail strip
+- image order source remains listing_images is_primary + sort_order
