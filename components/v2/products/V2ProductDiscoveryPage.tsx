@@ -191,13 +191,6 @@ function ProductCardView({
             <span className="text-neutral-400">{product.distance}</span>
           </p>
         </div>
-
-        <Link
-          href="/v2/listing/demo"
-          className="mt-4 inline-flex rounded-full border border-neutral-200 bg-white px-4 py-2 text-xs font-black shadow-sm transition hover:border-neutral-300"
-        >
-          Ava kuulutus
-        </Link>
       </div>
     </article>
   );

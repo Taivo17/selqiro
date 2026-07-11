@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import type { KeyboardEvent } from "react";
 import { useRouter } from "next/navigation";
 import type { ProductListingCard as ProductListingCardType } from "../../../entities/listing/model/types";
 
@@ -12,28 +12,49 @@ export default function ProductListingCard({
   const router = useRouter();
   const listingHref = `/v2/listing/${listing.id}`;
 
+  function openListing() {
+    router.push(listingHref);
+  }
+
   function openListingFromCard(event: { target: EventTarget | null }) {
     const target = event.target as HTMLElement | null;
 
     if (target?.closest("button, a, input, select, textarea")) return;
 
-    router.push(listingHref);
+    openListing();
+  }
+
+  function handleKeyDown(event: KeyboardEvent<HTMLElement>) {
+    if (event.key !== "Enter" && event.key !== " ") return;
+
+    const target = event.target as HTMLElement | null;
+
+    if (target?.closest("button, a, input, select, textarea")) return;
+
+    event.preventDefault();
+    openListing();
   }
 
   return (
-    <article onClick={openListingFromCard} role="link" tabIndex={0} onKeyDown={(event) => { if (event.key !== "Enter" && event.key !== " ") return; const target = event.target as HTMLElement | null; if (target?.closest("button, a, input, select, textarea")) return; event.preventDefault(); router.push(listingHref); }} className="group rounded-[26px] border border-black/5 bg-white p-3 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md cursor-pointer">
-      {listing.imageUrl ? (
-        <img
-          src={listing.imageUrl}
-          alt=""
-          className="h-44 w-full rounded-[20px] object-cover object-[center_42%]"
-          loading="lazy"
-        />
-      ) : (
-        <div className="h-44 w-full rounded-[20px] bg-gradient-to-br from-neutral-100 to-neutral-200" />
-      )}
+    <article
+      onClick={openListingFromCard}
+      role="link"
+      tabIndex={0}
+      onKeyDown={handleKeyDown}
+      className="group flex h-full cursor-pointer flex-col rounded-[26px] border border-black/5 bg-white p-3 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-emerald-500/30"
+    >
+      <div className="aspect-[16/10] w-full overflow-hidden rounded-[20px] bg-gradient-to-br from-neutral-100 to-neutral-200">
+        {listing.imageUrl ? (
+          <img
+            src={listing.imageUrl}
+            alt=""
+            className="h-full w-full object-cover object-[center_38%] transition duration-300 group-hover:scale-[1.02]"
+            loading="lazy"
+          />
+        ) : null}
+      </div>
 
-      <div className="mt-4">
+      <div className="mt-4 flex flex-1 flex-col">
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">
             {listing.isHighlighted ? (
@@ -47,7 +68,11 @@ export default function ProductListingCard({
             </h3>
           </div>
 
-          <button className="shrink-0 rounded-full border border-neutral-200 bg-white px-2.5 py-1 text-xs font-bold text-neutral-600">
+          <button
+            type="button"
+            aria-label="Salvesta kuulutus"
+            className="shrink-0 rounded-full border border-neutral-200 bg-white px-2.5 py-1 text-xs font-bold text-neutral-600 transition hover:bg-neutral-50"
+          >
             ♡
           </button>
         </div>
@@ -62,7 +87,7 @@ export default function ProductListingCard({
           {listing.category || "Kategooria puudub"} · {listing.sellerName}
         </p>
 
-        <div className="mt-3 flex items-end justify-between gap-3">
+        <div className="mt-auto flex items-end justify-between gap-3 pt-4">
           <p className="text-xl font-black">{listing.priceLabel}</p>
 
           <p className="text-right text-xs text-neutral-500">

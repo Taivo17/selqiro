@@ -5,13 +5,13 @@ import { useProductDiscoveryListings } from "../model/useProductDiscoveryListing
 
 function LoadingGrid() {
   return (
-    <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+    <div className="grid items-stretch gap-5 md:grid-cols-2 xl:grid-cols-3">
       {Array.from({ length: 6 }).map((_, index) => (
         <article
           key={index}
           className="rounded-[26px] border border-black/5 bg-white p-3 shadow-sm"
         >
-          <div className="h-44 rounded-[20px] bg-gradient-to-br from-neutral-100 to-neutral-200" />
+          <div className="aspect-[16/10] rounded-[20px] bg-gradient-to-br from-neutral-100 to-neutral-200" />
           <div className="mt-4 h-5 w-3/4 rounded-full bg-neutral-100" />
           <div className="mt-3 h-4 w-1/2 rounded-full bg-neutral-100" />
           <div className="mt-6 h-7 w-1/3 rounded-full bg-neutral-100" />
@@ -62,19 +62,12 @@ export default function ProductResultsSection() {
       ) : null}
 
       {!loading && !error && listings.length > 0 ? (
-        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        <div className="grid items-stretch gap-5 md:grid-cols-2 xl:grid-cols-3">
           {listings.map((listing) => (
             <ProductListingCard key={listing.id} listing={listing} />
           ))}
         </div>
       ) : null}
-
-      <div className="mt-8 rounded-[26px] border border-dashed border-neutral-200 bg-[#fbfbfa] p-5 text-center">
-        <p className="text-sm font-bold text-neutral-700">
-          Järgmine samm: lisame pagination / automaatse juurde laadimise V2 feature
-          loogikasse, mitte UI sisse.
-        </p>
-      </div>
     </section>
   );
 }
