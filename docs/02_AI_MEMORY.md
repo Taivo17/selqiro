@@ -1621,3 +1621,14 @@ Rules:
 - overlay arrows change selected image
 - swipe should not accidentally open lightbox
 - image order source remains listing_images is_primary + sort_order
+
+## V2_LISTING_EDIT_IMAGE_PREVIEW_AND_BADGES
+
+V2 listing edit image manager rules:
+
+- edit main image preview should avoid crop
+- use object-contain for edit preview
+- prefer original_url for edit preview where possible
+- thumbnail number badges like "Pilt 2" are not needed
+- keep only "✓ Esimene" marker for primary image
+- keep Esimeseks/Kustuta actions under thumbnails

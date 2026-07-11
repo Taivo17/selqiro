@@ -1260,3 +1260,17 @@ Rules:
 - backdrop and close button close lightbox
 - arrows can change selected image
 - gallery image order remains listing_images
+
+---
+
+## V2 Listing edit image preview
+
+Edit view and public detail view have different image goals.
+
+Rules:
+
+- edit preview should show as much of the uploaded image as possible
+- object-contain is acceptable in edit view
+- public detail can use more polished cover layout
+- thumbnail number badges are unnecessary in edit image manager
+- primary marker should remain visible

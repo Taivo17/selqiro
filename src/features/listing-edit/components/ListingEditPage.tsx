@@ -10,7 +10,7 @@ import { uploadListingImage } from "../../../entities/listing/api/uploadListingI
 import type { ListingImage, ProductListingDetail } from "../../../entities/listing/model/types";
 
 function getImageUrl(image: ListingImage): string | null {
-  return image.medium_url || image.original_url || image.thumb_url || null;
+  return image.original_url || image.medium_url || image.thumb_url || null;
 }
 
 function PlaceholderImage({ className = "" }: { className?: string }) {
@@ -439,13 +439,13 @@ export default function ListingEditPage({ listingId }: { listingId: string }) {
               <img
                 src={mainImageUrl}
                 alt=""
-                className="mt-5 h-80 w-full rounded-[26px] object-cover"
+                className="h-[260px] w-full rounded-[26px] bg-neutral-100 object-contain object-center md:h-[400px]"
               />
             ) : (
               <PlaceholderImage className="mt-5 h-80" />
             )}
 
-            <div className="mt-4 grid gap-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5">
+            <div className="mt-4 grid max-w-full grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5">
               {listing.images.map((image, index) => {
                 const imageId = image.id ? String(image.id) : "";
                 const isPrimary = Boolean(image.is_primary);
@@ -457,22 +457,45 @@ export default function ListingEditPage({ listingId }: { listingId: string }) {
                 return (
                   <div
                     key={imageId}
-                    className="rounded-[22px] border border-black/5 bg-white p-2 shadow-sm"
+                    className="min-w-0 rounded-[22px] border border-black/5 bg-white p-2 shadow-sm"
                   >
-                    <img
-                      src={imageUrl}
-                      alt=""
-                      className="h-24 w-full rounded-[16px] object-cover"
-                      loading="lazy"
-                    />
+                    <button
+                      type="button"
+                      onClick={() => handleSetPrimaryImage(image)}
+                      disabled={isPrimary || primarySavingId === imageId}
+                      className="group relative block h-24 w-full overflow-hidden rounded-[16px] bg-neutral-100 disabled:cursor-default"
+                      aria-label={
+                        isPrimary
+                          ? `Pilt ${index + 1} on esimene`
+                          : `Tee pilt ${index + 1} esimeseks`
+                      }
+                    >
+                      <img
+                        src={imageUrl}
+                        alt=""
+                        className="h-full w-full object-cover object-[center_36%] transition duration-300 group-hover:scale-[1.02]"
+                        loading="lazy"
+                      />
+
+                      <span
+                        className={[
+                          "absolute left-2 top-2 rounded-full px-2 py-1 text-[10px] font-black shadow-sm",
+                          isPrimary
+                            ? "bg-emerald-50 text-emerald-700"
+                            : "hidden",
+                        ].join(" ")}
+                      >
+                        {isPrimary ? "✓ Esimene" : ""}
+                      </span>
+                    </button>
 
                     <div className="mt-2 grid gap-2">
                       <button
                         type="button"
                         onClick={() => handleSetPrimaryImage(image)}
-                        disabled={primarySavingId === imageId}
+                        disabled={isPrimary || primarySavingId === imageId}
                         className={[
-                          "rounded-full border px-3 py-2 text-xs font-black transition disabled:cursor-wait disabled:opacity-60",
+                          "rounded-full border px-3 py-2 text-xs font-black transition disabled:cursor-default disabled:opacity-60",
                           isPrimary
                             ? "border-emerald-100 bg-emerald-50 text-emerald-700"
                             : "border-neutral-200 bg-white text-neutral-700 hover:bg-neutral-50",

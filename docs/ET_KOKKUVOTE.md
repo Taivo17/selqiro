@@ -4895,3 +4895,20 @@ Oluline:
 
 - swipe ei ava kogemata lightboxi
 - piltide järjekorra allikas jääb listing_images: is_primary ja sort_order
+
+---
+
+# 196. V2 edit-vaate pildi eelvaade ja badge'id
+
+Parandasime V2 kuulutuse edit-vaate pildiplokki.
+
+Muudatused:
+
+- suur eelvaade kasutab object-contain loogikat
+- edit-vaates eelistame võimalusel original_url pilti
+- eesmärk on vältida pildi ülemise osa äralõikamist
+- väikestelt piltidelt eemaldati numbrimärgid nagu “Pilt 2”
+- alles jääb ainult esimese pildi “✓ Esimene” märgis
+- Esimeseks ja Kustuta tegevused jäävad pildi alla alles
+
+Avaliku detailvaate pildigalerii jäi muutmata.
