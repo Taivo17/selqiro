@@ -4955,3 +4955,23 @@ Parandus:
 - piltide järjekorra allikas jääb listing_images: is_primary ja sort_order
 
 See teeb avatud kuulutuse pildi mobiilis rahulikumaks ja sarnasemaks tooted vaate kaardiga.
+
+---
+
+# 194. V2 lightbox pildi swipe ja noolede peitumine
+
+Parandasime ainult avatud suure pildi lightbox vaadet.
+
+Tavaline kuulutuse detailvaate pildiosa jäi muutmata:
+- suur pilt üleval
+- väikesed pildid all
+- väikesed pildid vahetavad suurt pilti
+
+Lightbox muudatus:
+- avatud suurel pildil vasakule swipe näitab järgmist pilti
+- avatud suurel pildil paremale swipe näitab eelmist pilti
+- nooled on alguses nähtaval
+- umbes 3 sekundi järel nooled peituvad
+- pildi puudutamine või hiire liigutamine toob nooled tagasi
+- X sulgemisnupp jääb nähtavaks
+- nooltega pildi vahetamine töötab edasi

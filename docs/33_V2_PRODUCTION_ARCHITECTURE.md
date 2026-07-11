@@ -1301,3 +1301,16 @@ Rules:
 - use neutral background behind contained images
 - thumbnails remain horizontal scroll strip
 - image ordering source remains listing_images
+
+---
+
+## V2 listing detail lightbox controls
+
+Lightbox is separate from normal detail gallery.
+
+Rules:
+- do not change normal gallery when tuning lightbox
+- lightbox uses separate control visibility state
+- pointer swipe works on opened image
+- arrows auto-hide after inactivity
+- close button remains visible

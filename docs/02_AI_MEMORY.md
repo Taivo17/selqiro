@@ -1655,3 +1655,20 @@ Decision:
 - use object-contain instead of object-cover for the detail main image
 - keep horizontal thumbnail strip
 - image order source remains listing_images is_primary + sort_order
+
+## V2_LIGHTBOX_SWIPE_AND_AUTO_HIDE_ARROWS
+
+V2 listing detail normal gallery should remain unchanged.
+
+Only lightbox behavior changed:
+- modal image supports pointer swipe
+- left swipe = next image
+- right swipe = previous image
+- lightbox arrows have separate visibility state
+- arrows hide after about 3 seconds
+- interaction with modal image reveals arrows again
+- close X is always visible
+
+Implementation caution:
+- replace whole lightbox block from lightboxOpen start to return-wrapper tail
+- do not stop at first nested ") : null}" inside previous/next buttons

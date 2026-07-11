@@ -152,12 +152,16 @@ export default function ListingDetailPage({ listingId }: { listingId: string }) 
   const [showMore, setShowMore] = useState(false);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [lightboxControlsVisible, setLightboxControlsVisible] = useState(true);
+  const [lightboxControlsPulse, setLightboxControlsPulse] = useState(0);
   const [galleryControlsVisible, setGalleryControlsVisible] = useState(true);
   const [galleryControlsPulse, setGalleryControlsPulse] = useState(0);
 
   const pointerStartXRef = useRef<number | null>(null);
   const pointerStartYRef = useRef<number | null>(null);
   const pointerMovedRef = useRef(false);
+  const lightboxPointerStartXRef = useRef<number | null>(null);
+  const lightboxPointerStartYRef = useRef<number | null>(null);
 
   const { listing, loading, error } = useListingDetail(listingId);
 
@@ -186,6 +190,27 @@ export default function ListingDetailPage({ listingId }: { listingId: string }) 
     listing?.images.length,
     selectedImageIndex,
     galleryControlsPulse,
+  ]);
+
+  useEffect(() => {
+    if (!lightboxOpen || !listing || listing.images.length <= 1) {
+      setLightboxControlsVisible(false);
+      return;
+    }
+
+    setLightboxControlsVisible(true);
+
+    const timer = window.setTimeout(() => {
+      setLightboxControlsVisible(false);
+    }, 3000);
+
+    return () => window.clearTimeout(timer);
+  }, [
+    lightboxOpen,
+    listing?.id,
+    listing?.images.length,
+    selectedImageIndex,
+    lightboxControlsPulse,
   ]);
 
   if (loading) return <LoadingState />;
@@ -282,6 +307,62 @@ export default function ListingDetailPage({ listingId }: { listingId: string }) 
   function handleGalleryPointerCancel() {
     pointerStartXRef.current = null;
     pointerStartYRef.current = null;
+  }
+
+  function revealLightboxControls() {
+    if (!listing || listing.images.length <= 1) return;
+
+    setLightboxControlsVisible(true);
+    setLightboxControlsPulse((value) => value + 1);
+  }
+
+  function handleLightboxPointerDown(event: PointerEvent<HTMLDivElement>) {
+    event.stopPropagation();
+
+    if (event.pointerType === "mouse") {
+      revealLightboxControls();
+      return;
+    }
+
+    lightboxPointerStartXRef.current = event.clientX;
+    lightboxPointerStartYRef.current = event.clientY;
+  }
+
+  function handleLightboxPointerUp(event: PointerEvent<HTMLDivElement>) {
+    event.stopPropagation();
+
+    const startX = lightboxPointerStartXRef.current;
+    const startY = lightboxPointerStartYRef.current;
+
+    lightboxPointerStartXRef.current = null;
+    lightboxPointerStartYRef.current = null;
+
+    if (event.pointerType === "mouse" || startX === null || startY === null) {
+      revealLightboxControls();
+      return;
+    }
+
+    const deltaX = event.clientX - startX;
+    const deltaY = event.clientY - startY;
+    const horizontalMove = Math.abs(deltaX);
+    const verticalMove = Math.abs(deltaY);
+
+    if (horizontalMove >= 55 && horizontalMove > verticalMove * 1.25) {
+      if (deltaX < 0) {
+        showNextImage();
+      } else {
+        showPreviousImage();
+      }
+    }
+
+    revealLightboxControls();
+  }
+
+  function handleLightboxPointerCancel(event: PointerEvent<HTMLDivElement>) {
+    event.stopPropagation();
+
+    lightboxPointerStartXRef.current = null;
+    lightboxPointerStartYRef.current = null;
   }
 
   return (
@@ -558,6 +639,7 @@ export default function ListingDetailPage({ listingId }: { listingId: string }) 
         <div
           className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 p-4"
           onClick={() => setLightboxOpen(false)}
+          onMouseMove={revealLightboxControls}
           role="dialog"
           aria-modal="true"
           aria-label="Suur pilt"
@@ -568,46 +650,59 @@ export default function ListingDetailPage({ listingId }: { listingId: string }) 
               event.stopPropagation();
               setLightboxOpen(false);
             }}
-            className="absolute right-4 top-4 flex h-11 w-11 items-center justify-center rounded-full bg-white/90 text-2xl font-black shadow-sm transition hover:bg-white"
+            className="absolute right-4 top-4 z-30 flex h-11 w-11 items-center justify-center rounded-full bg-white/90 text-2xl font-black shadow-sm transition hover:bg-white"
             aria-label="Sulge pilt"
           >
             ×
           </button>
 
-          {galleryImages.length > 1 ? (
-            <button
-              type="button"
-              onClick={(event) => {
-                event.stopPropagation();
-                showPreviousImage();
-              }}
-              className="absolute left-4 top-1/2 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-3xl font-black shadow-sm transition hover:bg-white"
-              aria-label="Eelmine pilt"
-            >
-              ‹
-            </button>
-          ) : null}
-
-          <img
-            src={lightboxImageUrl}
-            alt=""
-            className="max-h-[88vh] max-w-[92vw] rounded-[18px] object-contain shadow-2xl"
+          <div
+            className="relative max-h-[88vh] max-w-[92vw]"
+            style={{ touchAction: "pan-y" }}
             onClick={(event) => event.stopPropagation()}
-          />
+            onMouseMove={revealLightboxControls}
+            onPointerDown={handleLightboxPointerDown}
+            onPointerUp={handleLightboxPointerUp}
+            onPointerCancel={handleLightboxPointerCancel}
+            onFocus={revealLightboxControls}
+          >
+            <img
+              src={lightboxImageUrl}
+              alt=""
+              draggable={false}
+              className="max-h-[88vh] max-w-[92vw] select-none rounded-[18px] object-contain shadow-2xl"
+            />
 
-          {galleryImages.length > 1 ? (
-            <button
-              type="button"
-              onClick={(event) => {
-                event.stopPropagation();
-                showNextImage();
-              }}
-              className="absolute right-4 top-1/2 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-3xl font-black shadow-sm transition hover:bg-white"
-              aria-label="Järgmine pilt"
-            >
-              ›
-            </button>
-          ) : null}
+            {galleryImages.length > 1 && lightboxControlsVisible ? (
+              <div className="pointer-events-none absolute inset-x-3 top-1/2 z-20 flex -translate-y-1/2 justify-between sm:inset-x-4">
+                <button
+                  type="button"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    showPreviousImage();
+                    revealLightboxControls();
+                  }}
+                  className="pointer-events-auto flex h-12 w-12 items-center justify-center rounded-full bg-white/90 text-3xl font-black shadow-sm transition hover:bg-white"
+                  aria-label="Eelmine pilt"
+                >
+                  ‹
+                </button>
+
+                <button
+                  type="button"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    showNextImage();
+                    revealLightboxControls();
+                  }}
+                  className="pointer-events-auto flex h-12 w-12 items-center justify-center rounded-full bg-white/90 text-3xl font-black shadow-sm transition hover:bg-white"
+                  aria-label="Järgmine pilt"
+                >
+                  ›
+                </button>
+              </div>
+            ) : null}
+          </div>
         </div>
       ) : null}
     </div>
