@@ -4912,3 +4912,24 @@ Muudatused:
 - Esimeseks ja Kustuta tegevused jäävad pildi alla alles
 
 Avaliku detailvaate pildigalerii jäi muutmata.
+
+---
+
+# 193. V2 toodete mobiilkaardi pildiproportsioon
+
+Otsustasime mitte muuta V2 kuulutuse detailvaate galeriiloogikat.
+
+Põhjus:
+
+- detailvaates peab jääma alles senine suure pildi avamise ja piltide sirvimise loogika
+- vana detailvaate pildiloogika on desktopis parem
+- mobiilis ei olnud vaja kogu detailgaleriid ümber teha
+
+Muutsime ainult V2 toodete vaate mobiilset pildiproportsiooni:
+
+- kaardipilt on mobiilis rohkem 4:3
+- eesmärk on näidata objekti terviklikumalt
+- pilt ei tohiks sõidukit/eset nii palju ära lõigata
+- pildile ja tekstile vajutamine avab kuulutuse edasi
+
+Detailvaate piltide järjekorra allikas jääb listing_images: is_primary ja sort_order.

@@ -1274,3 +1274,16 @@ Rules:
 - public detail can use more polished cover layout
 - thumbnail number badges are unnecessary in edit image manager
 - primary marker should remain visible
+
+---
+
+## V2 Products mobile image ratio
+
+Do not change listing detail gallery when tuning product card images.
+
+Rules:
+
+- product card mobile image ratio can be adjusted independently
+- detail gallery behavior should remain stable
+- image/text card click opens listing detail
+- image ordering source remains listing_images

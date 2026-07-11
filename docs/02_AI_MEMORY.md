@@ -1632,3 +1632,15 @@ V2 listing edit image manager rules:
 - thumbnail number badges like "Pilt 2" are not needed
 - keep only "✓ Esimene" marker for primary image
 - keep Esimeseks/Kustuta actions under thumbnails
+
+## V2_PRODUCTS_MOBILE_IMAGE_RATIO_ONLY
+
+Decision:
+- do not rewrite V2 listing detail gallery logic
+- keep detail image open/enlarge/scroll behavior
+- only tune product card image ratio on mobile
+
+Product cards:
+- mobile image should be closer to old version
+- use 4:3-ish ratio to reduce excessive cropping
+- image/text click still opens listing detail

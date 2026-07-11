@@ -43,12 +43,12 @@ export default function ProductListingCard({
       onKeyDown={handleKeyDown}
       className="group flex h-full cursor-pointer flex-col rounded-[26px] border border-black/5 bg-white p-3 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-emerald-500/30"
     >
-      <div className="aspect-[16/10] w-full overflow-hidden rounded-[20px] bg-gradient-to-br from-neutral-100 to-neutral-200">
+      <div className="w-full overflow-hidden rounded-[20px] bg-gradient-to-br from-neutral-100 to-neutral-200 aspect-[4/3] md:aspect-[16/10]">
         {listing.imageUrl ? (
           <img
             src={listing.imageUrl}
             alt=""
-            className="h-full w-full object-cover object-[center_38%] transition duration-300 group-hover:scale-[1.02]"
+            className="w-full object-cover transition duration-300 group-hover:scale-[1.02] aspect-[4/3] md:aspect-[16/10] object-[center_42%]"
             loading="lazy"
           />
         ) : null}
