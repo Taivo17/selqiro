@@ -1672,3 +1672,14 @@ Only lightbox behavior changed:
 Implementation caution:
 - replace whole lightbox block from lightboxOpen start to return-wrapper tail
 - do not stop at first nested ") : null}" inside previous/next buttons
+
+## V2_PRODUCTS_CARD_IMAGE_CROP_NO_GRAY_BARS
+
+V2 product cards should not use object-contain if it creates gray bars.
+
+Decision:
+- product card image should use object-cover
+- keep rounded corners
+- use a slightly wider/lower desktop aspect ratio
+- tune crop with object-position instead of contain
+- do not change image source/order logic

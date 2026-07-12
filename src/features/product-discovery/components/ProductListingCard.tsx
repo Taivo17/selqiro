@@ -48,7 +48,7 @@ export default function ProductListingCard({
           <img
             src={listing.imageUrl}
             alt=""
-            className="w-full object-cover transition duration-300 group-hover:scale-[1.02] aspect-[4/3] md:aspect-[16/10] object-[center_42%]"
+            className="w-full object-cover transition duration-300 group-hover:scale-[1.02] aspect-[4/3] md:aspect-[16/10] object-[center_42%] md:object-cover md:object-[center_42%] rounded-[26px]"
             loading="lazy"
           />
         ) : null}

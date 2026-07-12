@@ -1314,3 +1314,16 @@ Rules:
 - pointer swipe works on opened image
 - arrows auto-hide after inactivity
 - close button remains visible
+
+---
+
+## V2 Products card crop
+
+Product discovery card images should fill their visual frame.
+
+Rules:
+
+- avoid object-contain if it creates gray/empty side bars
+- prefer object-cover with tuned object-position
+- keep rounded card/image corners
+- do not change listing image source or ordering logic

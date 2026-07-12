@@ -4975,3 +4975,23 @@ Lightbox muudatus:
 - pildi puudutamine või hiire liigutamine toob nooled tagasi
 - X sulgemisnupp jääb nähtavaks
 - nooltega pildi vahetamine töötab edasi
+
+---
+
+# 196. V2 toodete kaardi pildicrop ilma hallide äärteta
+
+Parandasime V2 toodete kaardi desktop pildiala.
+
+Eelmine contain-lahendus näitas objekti tervikuna, aga tekitas hallid ääred ja ei sobinud visuaalselt.
+
+Uus lahendus:
+
+- eemaldatud desktop object-contain
+- eemaldatud hall neutraalne taust pildi ümbert
+- tagasi object-cover loogika
+- desktop pildiala on veidi madalam/laiem
+- fookus on natuke ülespoole seatud
+- pildi ümarad nurgad jäävad alles
+- pildile ja tekstile klikkimine avab endiselt kuulutuse
+
+Pildi allika ja järjekorra loogikat ei muudetud.
