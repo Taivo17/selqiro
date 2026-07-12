@@ -1701,3 +1701,22 @@ Rules:
 Implementation note:
 - overwrite MyAreaListingsSection if small string replacements fail
 - ensure render uses visibleListings, not displayListings directly
+
+## V2_MY_AREA_LISTINGS_SEARCH_FILTERS
+
+V2 My Area listings now support owner-management search/filtering.
+
+Rules:
+- search input debounced 300ms
+- status filter: all/active/paused/sold
+- store category filter uses active identity store_categories
+- getMyIdentityListings gets searchQuery/statusFilter/storeCategoryFilter
+- management limit is 500
+- view-all preview remains 5 rows
+- status change remains inline
+- image/text opens public detail
+- edit opens /v2/my-area/listings/[id]/edit
+
+Next related work:
+- add/edit/delete owner store categories
+- assign listings to store categories in edit view

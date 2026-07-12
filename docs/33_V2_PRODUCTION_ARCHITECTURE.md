@@ -1341,3 +1341,17 @@ Rules:
 - no separate route is needed for first version
 - hook can load a larger owner-management batch
 - status controls and edit route remain row-level actions
+
+---
+
+## V2 My Area listing search and filters
+
+Owner listing management must support large inventories.
+
+Rules:
+
+- use server-side getMyIdentityListings filters where possible
+- searchQuery, statusFilter and storeCategoryFilter are first-class hook inputs
+- preview/expanded UI remains local state
+- store categories are active-identity scoped
+- category management and listing-category assignment are separate follow-up modules

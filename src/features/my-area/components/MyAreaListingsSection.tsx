@@ -1,15 +1,21 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { MyIdentityListingCard } from "../../../entities/listing/model/types";
 import {
   updateListingStatus,
   type ListingStatus,
 } from "../../../entities/listing/api/updateListingStatus";
-import { useMyAreaListings } from "../model/useMyAreaListings";
+import {
+  useMyAreaListings,
+  type MyAreaListingsStatusFilter,
+} from "../model/useMyAreaListings";
+import { useMyAreaStoreCategories } from "../model/useMyAreaStoreCategories";
 
 const LISTING_PREVIEW_LIMIT = 5;
+const LISTING_MANAGEMENT_LIMIT = 500;
+const ALL_CATEGORIES = "all";
 
 function normalizeStatus(status: string): ListingStatus {
   if (status === "paused" || status === "sold") return status;
@@ -35,9 +41,11 @@ function statusClass(status: string) {
 
 function MyAreaListingRow({
   listing,
+  statusFilter,
   onStatusChanged,
 }: {
   listing: MyIdentityListingCard;
+  statusFilter: MyAreaListingsStatusFilter;
   onStatusChanged: (listingId: string, status: ListingStatus) => void;
 }) {
   const [savingStatus, setSavingStatus] = useState(false);
@@ -65,6 +73,9 @@ function MyAreaListingRow({
       setSavingStatus(false);
     }
   }
+
+  const willDisappearAfterStatusChange =
+    statusFilter !== "all" && statusFilter !== currentStatus;
 
   return (
     <div className="grid gap-3 py-4 first:pt-0 last:pb-0 md:grid-cols-[minmax(0,1fr)_105px_112px] md:items-center">
@@ -95,6 +106,12 @@ function MyAreaListingRow({
               {listing.daysLeft > 0
                 ? `${listing.daysLeft} päeva aktiivne`
                 : "Aegunud või vajab uuendamist"}
+            </p>
+          ) : null}
+
+          {willDisappearAfterStatusChange ? (
+            <p className="mt-1 text-xs text-amber-600">
+              Staatus ei vasta praegusele filtrile.
             </p>
           ) : null}
         </div>
@@ -172,11 +189,40 @@ function LoadingRows() {
 }
 
 export default function MyAreaListingsSection() {
-  const { listings, loading, error } = useMyAreaListings();
+  const [searchInput, setSearchInput] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [statusFilter, setStatusFilter] =
+    useState<MyAreaListingsStatusFilter>("all");
+  const [selectedCategoryId, setSelectedCategoryId] = useState(ALL_CATEGORIES);
   const [displayListings, setDisplayListings] = useState<
     MyIdentityListingCard[]
   >([]);
   const [showAll, setShowAll] = useState(false);
+
+  const storeCategoryFilter =
+    selectedCategoryId === ALL_CATEGORIES ? null : selectedCategoryId;
+
+  const { listings, loading, error } = useMyAreaListings({
+    limit: LISTING_MANAGEMENT_LIMIT,
+    offset: 0,
+    statusFilter,
+    searchQuery: debouncedSearch,
+    storeCategoryFilter,
+  });
+
+  const {
+    categories,
+    loading: categoriesLoading,
+    error: categoriesError,
+  } = useMyAreaStoreCategories();
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      setDebouncedSearch(searchInput.trim());
+    }, 300);
+
+    return () => window.clearTimeout(timer);
+  }, [searchInput]);
 
   useEffect(() => {
     setDisplayListings(listings);
@@ -189,16 +235,38 @@ export default function MyAreaListingsSection() {
 
   const canToggleListings = displayListings.length > LISTING_PREVIEW_LIMIT;
 
+  const filtersActive = useMemo(
+    () =>
+      Boolean(searchInput.trim()) ||
+      statusFilter !== "all" ||
+      selectedCategoryId !== ALL_CATEGORIES,
+    [searchInput, statusFilter, selectedCategoryId]
+  );
+
+  function clearFilters() {
+    setSearchInput("");
+    setDebouncedSearch("");
+    setStatusFilter("all");
+    setSelectedCategoryId(ALL_CATEGORIES);
+    setShowAll(false);
+  }
+
   function handleStatusChanged(listingId: string, status: ListingStatus) {
     setDisplayListings((current) =>
-      current.map((listing) =>
-        listing.id === listingId
-          ? {
-              ...listing,
-              status,
-            }
-          : listing
-      )
+      current
+        .map((listing) =>
+          listing.id === listingId
+            ? {
+                ...listing,
+                status,
+              }
+            : listing
+        )
+        .filter((listing) => {
+          if (statusFilter === "all") return true;
+
+          return normalizeStatus(listing.status) === statusFilter;
+        })
     );
   }
 
@@ -223,6 +291,91 @@ export default function MyAreaListingsSection() {
         ) : null}
       </div>
 
+      <div className="mb-5 rounded-[24px] border border-neutral-100 bg-[#fbfbfa] p-4">
+        <div className="grid gap-3 md:grid-cols-[minmax(0,1fr)_180px_auto]">
+          <input
+            value={searchInput}
+            onChange={(event) => setSearchInput(event.target.value)}
+            placeholder="Otsi oma kuulutusi..."
+            className="min-h-11 rounded-full border border-neutral-200 bg-white px-4 text-sm font-semibold outline-none transition placeholder:text-neutral-400 focus:border-neutral-400"
+          />
+
+          <select
+            value={statusFilter}
+            onChange={(event) =>
+              setStatusFilter(event.target.value as MyAreaListingsStatusFilter)
+            }
+            className="min-h-11 rounded-full border border-neutral-200 bg-white px-4 text-sm font-black outline-none transition focus:border-neutral-400"
+          >
+            <option value="all">Kõik staatused</option>
+            <option value="active">active</option>
+            <option value="paused">paused</option>
+            <option value="sold">sold</option>
+          </select>
+
+          {filtersActive ? (
+            <button
+              type="button"
+              onClick={clearFilters}
+              className="min-h-11 rounded-full border border-neutral-200 bg-white px-4 text-sm font-black shadow-sm"
+            >
+              Tühjenda
+            </button>
+          ) : null}
+        </div>
+
+        {categories.length > 0 ? (
+          <div className="mt-3 flex flex-wrap gap-2">
+            <button
+              type="button"
+              onClick={() => setSelectedCategoryId(ALL_CATEGORIES)}
+              className={[
+                "rounded-full px-4 py-2 text-sm font-black transition",
+                selectedCategoryId === ALL_CATEGORIES
+                  ? "bg-black text-white"
+                  : "border border-neutral-200 bg-white text-neutral-700",
+              ].join(" ")}
+            >
+              Kõik rubriigid
+            </button>
+
+            {categories.map((category) => (
+              <button
+                key={category.id}
+                type="button"
+                onClick={() => setSelectedCategoryId(category.id)}
+                className={[
+                  "rounded-full px-4 py-2 text-sm font-black transition",
+                  selectedCategoryId === category.id
+                    ? "bg-black text-white"
+                    : "border border-neutral-200 bg-white text-neutral-700",
+                ].join(" ")}
+              >
+                {category.name}
+              </button>
+            ))}
+          </div>
+        ) : null}
+
+        {categoriesLoading ? (
+          <p className="mt-3 text-xs font-semibold text-neutral-400">
+            Rubriike laetakse...
+          </p>
+        ) : null}
+
+        {categoriesError ? (
+          <p className="mt-3 text-xs font-semibold text-amber-700">
+            Rubriike ei saanud laadida: {categoriesError}
+          </p>
+        ) : null}
+
+        <p className="mt-3 text-xs font-semibold text-neutral-400">
+          {loading
+            ? "Otsin kuulutusi..."
+            : `${displayListings.length} tulemust praeguste filtritega`}
+        </p>
+      </div>
+
       <div className="mb-2 hidden grid-cols-[minmax(0,1fr)_105px_112px] px-1 text-xs font-black uppercase tracking-[0.16em] text-neutral-400 md:grid">
         <span>Kuulutus</span>
         <span className="text-right">Hind</span>
@@ -242,9 +395,9 @@ export default function MyAreaListingsSection() {
 
       {!loading && !error && displayListings.length === 0 ? (
         <div className="rounded-[22px] border border-dashed border-neutral-200 bg-[#fbfbfa] p-6 text-center">
-          <h3 className="font-black">Sul ei ole veel kuulutusi</h3>
+          <h3 className="font-black">Ühtegi kuulutust ei leitud</h3>
           <p className="mt-2 text-sm leading-6 text-neutral-500">
-            Kui lisad toote, ilmub see siia haldamiseks.
+            Muuda otsingut, staatust või rubriiki.
           </p>
         </div>
       ) : null}
@@ -255,6 +408,7 @@ export default function MyAreaListingsSection() {
             <MyAreaListingRow
               key={listing.id}
               listing={listing}
+              statusFilter={statusFilter}
               onStatusChanged={handleStatusChanged}
             />
           ))}

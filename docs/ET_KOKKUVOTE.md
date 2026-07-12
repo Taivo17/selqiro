@@ -5018,3 +5018,27 @@ Andmeloogika:
 - staatuse muutmine jääb tööle
 - pilt/tekst viib avalikku kuulutuse vaatesse
 - Muuda viib edit-vaatesse
+
+---
+
+# 198. V2 Minu ala kuulutuste otsing ja filtrid
+
+Lisatud V2 Minu ala kuulutuste plokki otsing ja filtrid.
+
+Käitumine:
+
+- kasutaja saab otsida oma kuulutusi otsingusõnaga
+- olemas on staatuse filter: kõik / active / paused / sold
+- kui aktiivsel identiteedil on store_categories rubriigid, saab kuulutusi nende järgi filtreerida
+- filtrite all näidatakse tulemuste arvu
+- filtrid saab korraga tühjendada
+- “Vaata kõiki (N)” ja “Näita vähem” jäävad tööle
+- staatuse inline muutmine jääb tööle
+- pilt/tekst avab avaliku kuulutuse
+- Muuda avab edit-vaate
+
+Andmeloogika:
+
+- useMyAreaListings võtab vastu searchQuery, statusFilter ja storeCategoryFilter
+- haldusvaates laetakse kuni 500 tulemust
+- store_categories laaditakse aktiivse identiteedi järgi
