@@ -4995,3 +4995,26 @@ Uus lahendus:
 - pildile ja tekstile klikkimine avab endiselt kuulutuse
 
 Pildi allika ja järjekorra loogikat ei muudetud.
+
+---
+
+# 197. V2 Minu ala kuulutuste “Vaata kõiki”
+
+Parandasime V2 Minu ala kuulutuste ploki “Vaata kõiki” nupu.
+
+Eelmine katse ei muutnud tegelikku nuppu, sest sektsioonis jäi alles staatiline “Vaata kõiki” nupp ja nimekiri renderdas endiselt kõik `displayListings` read.
+
+Uus käitumine:
+
+- “Sinu kuulutused” näitab ülevaates alguses 5 kuulutust
+- kui kuulutusi on rohkem kui 5, kuvatakse “Vaata kõiki (N)”
+- nupule vajutades kuvatakse kõik laetud kuulutused
+- laiendatud vaates muutub nupp tekstiks “Näita vähem”
+- “Näita vähem” viib tagasi 5 kuulutuse eelvaatesse
+
+Andmeloogika:
+
+- useMyAreaListings laeb kuni 80 kuulutust
+- staatuse muutmine jääb tööle
+- pilt/tekst viib avalikku kuulutuse vaatesse
+- Muuda viib edit-vaatesse

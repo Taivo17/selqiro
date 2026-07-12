@@ -1327,3 +1327,17 @@ Rules:
 - prefer object-cover with tuned object-position
 - keep rounded card/image corners
 - do not change listing image source or ordering logic
+
+---
+
+## V2 My Area listing preview/expanded state
+
+My Area overview stays compact but allows full owner management.
+
+Rules:
+
+- listing section preview limit is 5 rows
+- "Vaata kõiki" expands to all loaded rows
+- no separate route is needed for first version
+- hook can load a larger owner-management batch
+- status controls and edit route remain row-level actions

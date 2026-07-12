@@ -1683,3 +1683,21 @@ Decision:
 - use a slightly wider/lower desktop aspect ratio
 - tune crop with object-position instead of contain
 - do not change image source/order logic
+
+## V2_MY_AREA_LISTINGS_VIEW_ALL
+
+V2 My Area listings section has a working local view-all toggle.
+
+Rules:
+- preview limit is 5 rows
+- if loaded listings > 5, show "Vaata kõiki (N)"
+- click toggles all loaded rows
+- expanded state shows "Näita vähem"
+- hook loads up to 80 owner listings
+- status change remains inline
+- listing image/text opens public detail
+- edit button opens edit route
+
+Implementation note:
+- overwrite MyAreaListingsSection if small string replacements fail
+- ensure render uses visibleListings, not displayListings directly

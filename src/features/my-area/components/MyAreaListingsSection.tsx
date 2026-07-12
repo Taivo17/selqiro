@@ -9,18 +9,12 @@ import {
 } from "../../../entities/listing/api/updateListingStatus";
 import { useMyAreaListings } from "../model/useMyAreaListings";
 
+const LISTING_PREVIEW_LIMIT = 5;
+
 function normalizeStatus(status: string): ListingStatus {
   if (status === "paused" || status === "sold") return status;
 
   return "active";
-}
-
-function statusLabel(status: string) {
-  if (status === "active") return "active";
-  if (status === "paused") return "paused";
-  if (status === "sold") return "sold";
-
-  return status;
 }
 
 function statusClass(status: string) {
@@ -179,11 +173,21 @@ function LoadingRows() {
 
 export default function MyAreaListingsSection() {
   const { listings, loading, error } = useMyAreaListings();
-  const [displayListings, setDisplayListings] = useState<MyIdentityListingCard[]>([]);
+  const [displayListings, setDisplayListings] = useState<
+    MyIdentityListingCard[]
+  >([]);
+  const [showAll, setShowAll] = useState(false);
 
   useEffect(() => {
     setDisplayListings(listings);
+    setShowAll(false);
   }, [listings]);
+
+  const visibleListings = showAll
+    ? displayListings
+    : displayListings.slice(0, LISTING_PREVIEW_LIMIT);
+
+  const canToggleListings = displayListings.length > LISTING_PREVIEW_LIMIT;
 
   function handleStatusChanged(listingId: string, status: ListingStatus) {
     setDisplayListings((current) =>
@@ -208,9 +212,15 @@ export default function MyAreaListingsSection() {
           <h2 className="mt-2 text-2xl font-black">Sinu kuulutused</h2>
         </div>
 
-        <button className="rounded-full border border-neutral-200 bg-white px-4 py-2 text-sm font-black shadow-sm">
-          Vaata kõiki
-        </button>
+        {canToggleListings ? (
+          <button
+            type="button"
+            onClick={() => setShowAll((current) => !current)}
+            className="rounded-full border border-neutral-200 bg-white px-4 py-2 text-sm font-black shadow-sm"
+          >
+            {showAll ? "Näita vähem" : `Vaata kõiki (${displayListings.length})`}
+          </button>
+        ) : null}
       </div>
 
       <div className="mb-2 hidden grid-cols-[minmax(0,1fr)_105px_112px] px-1 text-xs font-black uppercase tracking-[0.16em] text-neutral-400 md:grid">
@@ -241,7 +251,7 @@ export default function MyAreaListingsSection() {
 
       {!loading && !error && displayListings.length > 0 ? (
         <div className="divide-y divide-black/5">
-          {displayListings.map((listing) => (
+          {visibleListings.map((listing) => (
             <MyAreaListingRow
               key={listing.id}
               listing={listing}

@@ -29,7 +29,7 @@ export function useMyAreaListings(): MyAreaListingsState {
 
       try {
         const listings = await getMyIdentityListings({
-          limit: 12,
+          limit: 80,
           offset: 0,
           statusFilter: "all",
         });
