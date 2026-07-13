@@ -1756,3 +1756,20 @@ Rules:
 - store categories remain separate from the global Selqiro category tree
 - loading, error and empty states are required
 - next step is root category creation
+
+## V2_STORE_CATEGORY_COMPACT_LAYOUT_AND_IDENTITY_TEST
+
+Rules:
+
+- store category root cards use compact padding and `text-base` names
+- category names wrap naturally and are not truncated in owner management
+- category cards do not use a fixed height
+- the category count badge uses nowrap
+- active identity isolation was browser-tested
+- Milline Vedu and Taivo Garaaž show different owner categories
+- listing category filters change with the active identity
+- V2 does not yet have its own identity switcher
+- current identity-switch testing uses the legacy portal
+- future V2 identity switching must refresh category management and listing category filters together
+- store category name length is not yet constrained in the database
+- audit existing names before adding the create action and database name constraints

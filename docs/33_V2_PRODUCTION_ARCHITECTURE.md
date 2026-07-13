@@ -1442,3 +1442,32 @@ Development sequence:
 6. listing assignment
 
 Do not combine all management actions into one large implementation step.
+
+---
+
+## V2 store category card density and active identity refresh
+
+Owner category management should remain compact even when an identity has many categories.
+
+Display rules:
+
+- root category cards use compact padding
+- root names use a readable base font
+- long category names wrap instead of being silently truncated
+- management cards do not use fixed heights
+- category counts stay on one line where possible
+- direct children remain visually nested under their root
+
+Active identity rule:
+
+- category data is scoped to the current active identity
+- listing category filters use the same active identity scope
+- a future V2 identity switcher must trigger a shared active identity refresh
+- category management and listing filters must not retain the previous identity's data
+- identity switching should not require independent manual refreshes for each feature
+
+Naming constraint status:
+
+- `store_categories.name` is currently unrestricted `text`
+- database length and sibling-name uniqueness constraints are not implemented yet
+- existing category names must be audited before introducing those constraints

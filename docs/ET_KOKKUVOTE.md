@@ -5114,3 +5114,37 @@ Brauseritest:
 - kuvatud tulemus oli `2 ülemrubriiki · 0 alamrubriiki`
 - kuulutuste plokk ja ülejäänud Minu ala jäid tööle
 - `npm run build` korras
+
+---
+
+# 201. V2 poe rubriigikaardi kompaktsem paigutus ja identiteeditest
+
+Muutsime V2 Minu ala poe rubriigikaardi kompaktsemaks.
+
+Visuaalsed muudatused:
+
+- ülemrubriigi kaardi padding vähendati
+- rubriigi nime font vähendati `text-lg` pealt `text-base` peale
+- rubriigikaardi ümardus tehti kompaktsemaks
+- alamrubriikide plokk ja read tehti väiksemaks
+- ülem- ja alamrubriikide arvu märk ei murdu enam tarbetult mitmele reale
+- pikad nimed võivad loomulikult järgmisele reale murduda
+- rubriiginime ei lõigata haldusvaates ära
+- kaartidel ei ole fikseeritud kõrgust
+
+Brauseritest:
+
+- Milline Vedu identiteet kuvab 2 ülemrubriiki
+- Taivo Garaaž identiteet kuvab 6 ülemrubriiki
+- identiteedi vahetamisel kuvatakse erinevad rubriigid
+- kuulutuste rubriigifilter muutub sama aktiivse identiteedi järgi
+- teiste identiteetide ja kontode rubriike ei segata
+- pikem nimi `ALFA-ROMEO 164 VARUOSAD` kuvatakse arusaadavalt kahel real
+- `npm run build` korras
+
+Oluline:
+
+- V2 identiteedivahetaja ei ole veel valmis
+- testis muudeti aktiivset identiteeti vana portaali kaudu
+- tulevane V2 identiteedivahetaja peab värskendama kõiki aktiivse identiteedi mooduleid
+- rubriigi nime maksimaalne pikkus ei ole veel andmebaasis piiratud
