@@ -1355,3 +1355,54 @@ Rules:
 - preview/expanded UI remains local state
 - store categories are active-identity scoped
 - category management and listing-category assignment are separate follow-up modules
+
+---
+
+## V2 store category hierarchy architecture
+
+Store categories are owner-defined profile/store organization.
+
+They are not part of the global Selqiro product category tree.
+
+Source of truth:
+
+- `store_categories`
+
+Hierarchy model:
+
+- adjacency list using `parent_id`
+- root category has `parent_id = null`
+- child category references another `store_categories.id`
+
+Launch UI rule:
+
+- V2 exposes two levels only
+- root category
+- direct child category
+
+Long-term rule:
+
+- the database model remains capable of deeper hierarchy
+- adding another level later must not require replacing the table structure
+- UI depth and database capability are separate concerns
+
+Database protections:
+
+- parent and child identity must match
+- child identity cannot be null
+- a category cannot reference itself
+- recursive cycles are forbidden
+- deleting a parent with children uses `ON DELETE RESTRICT`
+- existing flat categories remain valid root categories
+
+Listing assignment remains separate:
+
+- `listing_store_categories` links listings to owner-defined store categories
+- assigning categories to listings is a later feature step
+- global marketplace category and owner store category must not be mixed into one business concept
+
+Current RLS note:
+
+- current management policy primarily checks `auth.uid() = user_id`
+- future business staff/member permissions require a dedicated identity-membership RLS revision
+- this hierarchy migration does not change existing RLS behavior

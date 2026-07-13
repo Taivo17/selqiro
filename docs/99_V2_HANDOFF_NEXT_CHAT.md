@@ -72,3 +72,29 @@ Oluline otsus:
 Kontroll enne töö alustamist:
 npm run build
 git status --short
+
+---
+
+## 2026-07-13 store category hierarchy checkpoint
+
+Completed:
+
+- `store_categories.parent_id` added
+- self-referencing foreign key uses `ON DELETE RESTRICT`
+- hierarchy index added
+- same-identity validation added
+- self-parent and recursive cycles blocked
+- existing 13 categories remain root categories
+- rollback test completed with no test data left behind
+
+Architecture decision:
+
+- V2 UI supports root + child categories
+- database remains extensible to deeper levels later
+- store categories remain separate from the global marketplace category tree
+
+Next step:
+
+- update the V2 store category type/loading layer to include `parent_id`
+- display the existing root categories in a dedicated My Area management card
+- do not add create/edit/delete in the same first UI step

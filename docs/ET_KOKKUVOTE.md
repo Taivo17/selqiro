@@ -5042,3 +5042,44 @@ Andmeloogika:
 - useMyAreaListings võtab vastu searchQuery, statusFilter ja storeCategoryFilter
 - haldusvaates laetakse kuni 500 tulemust
 - store_categories laaditakse aktiivse identiteedi järgi
+
+---
+
+# 199. V2 poe rubriikide hierarhia andmebaasivundament
+
+Lisasime poe enda rubriikidele hierarhilise andmemudeli.
+
+Oluline:
+
+- poe rubriigid on kasutaja enda identiteedi rubriigid
+- need ei ole seotud Selqiro üldise tootekategooriate puuga
+- `store_categories` tabelisse lisati `parent_id`
+- olemasolevad rubriigid jäid juurrubriikideks, mille `parent_id` on null
+- V2 kasutajaliides toetab esialgu kahte taset:
+  - ülemrubriik
+  - alamrubriik
+- andmebaasimudel võimaldab tulevikus vajadusel rohkem tasemeid
+
+Andmebaasi kaitsed:
+
+- vanem ja laps peavad kuuluma samale identiteedile
+- rubriik ei saa olla iseenda vanem
+- hierarhias ei saa tekitada tsüklit
+- lastega ülemrubriiki ei saa kustutada
+- puu laadimiseks lisati identity/parent/sort indeks
+- `identity_id` jäeti olemasolevate legacy-andmete tõttu praegu nullable väljaks
+- alamrubriigil peab olema identiteet
+
+Migratsioon:
+
+- `supabase/migrations/20260713133000_add_store_category_hierarchy.sql`
+
+Kontroll:
+
+- migratsioon käivitati production Supabase andmebaasis edukalt
+- parent_id, foreign key, indeks ja trigger kontrolliti
+- rollback-test läbis juur-, alam- ja sügavama taseme loomise
+- keelatud iseendale viitamine ja tsükkel blokeeriti
+- testandmed eemaldati rollback'iga
+- pärast testi oli andmebaasis 13 rubriiki ja 0 alamrubriiki
+- `npm run build` korras

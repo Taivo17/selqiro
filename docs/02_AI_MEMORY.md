@@ -1720,3 +1720,23 @@ Rules:
 Next related work:
 - add/edit/delete owner store categories
 - assign listings to store categories in edit view
+
+## V2_STORE_CATEGORY_HIERARCHY_FOUNDATION
+
+Rules:
+
+- owner-defined store categories use `store_categories`
+- store categories are separate from Selqiro global marketplace categories
+- store categories are scoped by `identity_id`
+- hierarchy uses self-referencing `store_categories.parent_id`
+- existing flat categories are root categories with `parent_id = null`
+- V2 UI supports exactly two levels for now:
+  - root category
+  - child category
+- database architecture may support deeper levels later
+- parent and child must belong to the same identity
+- self-parent and hierarchy cycles are forbidden
+- deleting a category with children is restricted
+- child categories require a non-null identity
+- `listing_store_categories` remains the listing-to-owner-category link table
+- current store category RLS is still based primarily on `user_id`; future staff/business membership support requires a separate RLS review
