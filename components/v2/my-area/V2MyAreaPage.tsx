@@ -1,4 +1,5 @@
 import MyAreaListingsSection from "../../../src/features/my-area/components/MyAreaListingsSection";
+import StoreCategoryManagementCard from "../../../src/features/store-category-management/components/StoreCategoryManagementCard";
 type SummaryCard = {
   title: string;
   value: string;
@@ -333,6 +334,8 @@ export default function V2MyAreaPage() {
             </ModuleCard>
 
             <MyAreaListingsSection />
+
+            <StoreCategoryManagementCard />
 
             <ModuleCard
               eyebrow="Teenused"

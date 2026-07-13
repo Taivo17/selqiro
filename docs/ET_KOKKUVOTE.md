@@ -5083,3 +5083,34 @@ Kontroll:
 - testandmed eemaldati rollback'iga
 - pärast testi oli andmebaasis 13 rubriiki ja 0 alamrubriiki
 - `npm run build` korras
+
+---
+
+# 200. V2 poe rubriikide hierarhiline kuvamine Minu alas
+
+Lisasime V2 Minu alasse aktiivse identiteedi poe rubriikide halduskaardi esimese, ainult vaatamiseks mõeldud versiooni.
+
+Tehtud:
+
+- `useMyAreaStoreCategories` laadib nüüd ka `parent_id`
+- lisati eraldi `StoreCategoryManagementCard`
+- kaart kuvab juurrubriigid ja nende otsesed alamrubriigid
+- juurrubriigid järjestatakse `sort_order` ja nime järgi
+- alamrubriigid järjestatakse samuti `sort_order` ja nime järgi
+- kaart näitab ülem- ja alamrubriikide arvu
+- laadimise, vea ja tühja seisu vaated on olemas
+- sügavama taseme rubriike ei näidata V2 kahetasandilises haldusvaates
+- rubriigid on selgelt eristatud Selqiro üldisest tootekategooriate puust
+
+Praegune piirang:
+
+- kaart on ainult vaatamiseks
+- lisamine, muutmine ja kustutamine tulevad eraldi väikeste sammudena
+
+Brauseritest:
+
+- `/v2/my-area` avanes
+- aktiivse identiteedi kaks olemasolevat rubriiki kuvati juurrubriikidena
+- kuvatud tulemus oli `2 ülemrubriiki · 0 alamrubriiki`
+- kuulutuste plokk ja ülejäänud Minu ala jäid tööle
+- `npm run build` korras

@@ -1740,3 +1740,19 @@ Rules:
 - child categories require a non-null identity
 - `listing_store_categories` remains the listing-to-owner-category link table
 - current store category RLS is still based primarily on `user_id`; future staff/business membership support requires a separate RLS review
+
+## V2_STORE_CATEGORY_HIERARCHY_DISPLAY
+
+Rules:
+
+- V2 My Area has a dedicated `StoreCategoryManagementCard`
+- the first version is read-only
+- `useMyAreaStoreCategories` loads `id`, `name`, `sort_order` and `parent_id`
+- only categories belonging to the active identity are loaded
+- root categories have `parent_id = null`
+- direct children are displayed under their root category
+- V2 management UI displays two levels only
+- deeper database levels are not rendered in this view
+- store categories remain separate from the global Selqiro category tree
+- loading, error and empty states are required
+- next step is root category creation

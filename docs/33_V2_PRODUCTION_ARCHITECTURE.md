@@ -1406,3 +1406,39 @@ Current RLS note:
 - current management policy primarily checks `auth.uid() = user_id`
 - future business staff/member permissions require a dedicated identity-membership RLS revision
 - this hierarchy migration does not change existing RLS behavior
+
+---
+
+## V2 store category management display
+
+The first V2 store category management module is read-only.
+
+Structure:
+
+- feature UI:
+  `src/features/store-category-management/components/StoreCategoryManagementCard.tsx`
+- loading hook:
+  `src/features/my-area/model/useMyAreaStoreCategories.ts`
+- composition:
+  `components/v2/my-area/V2MyAreaPage.tsx`
+
+Display rules:
+
+- query categories by active `identity_id`
+- load `parent_id` as part of the category model
+- roots are rows where `parent_id` is null
+- direct children are grouped below their root
+- sort roots and children by `sort_order`, with name as fallback
+- V2 UI renders two levels only
+- database support for deeper levels remains independent from launch UI depth
+
+Development sequence:
+
+1. hierarchy display
+2. root category creation
+3. child category creation
+4. rename
+5. delete
+6. listing assignment
+
+Do not combine all management actions into one large implementation step.

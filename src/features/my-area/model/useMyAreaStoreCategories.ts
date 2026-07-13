@@ -7,6 +7,7 @@ export type MyAreaStoreCategory = {
   id: string;
   name: string;
   sort_order?: number | null;
+  parent_id: string | null;
 };
 
 export type MyAreaStoreCategoriesState = {
@@ -78,7 +79,7 @@ export function useMyAreaStoreCategories(): MyAreaStoreCategoriesState {
 
         const { data, error } = await supabaseBrowserClient
           .from("store_categories")
-          .select("id, name, sort_order")
+          .select("id, name, sort_order, parent_id")
           .eq("identity_id", activeIdentityId)
           .order("sort_order", { ascending: true })
           .order("name", { ascending: true });
