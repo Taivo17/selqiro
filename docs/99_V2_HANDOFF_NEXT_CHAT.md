@@ -98,3 +98,26 @@ Next step:
 - update the V2 store category type/loading layer to include `parent_id`
 - display the existing root categories in a dedicated My Area management card
 - do not add create/edit/delete in the same first UI step
+
+---
+
+## 2026-07-13 store category name integrity checkpoint
+
+Completed:
+
+- `store_categories.identity_id` is now required
+- names are normalized before write
+- name length is limited to 1–60 characters
+- root sibling names are unique within an identity
+- child sibling names are unique within an identity and parent
+- same names remain allowed for different identities and different parents
+- production migration and rollback test completed successfully
+- existing 13 categories remain intact
+
+Next exact step:
+
+- add V2 root category creation
+- create with `parent_id = null`
+- show a 60-character UI limit and counter
+- refresh the management card and listing category filters after creation
+- do not add child creation, rename or delete in the same step

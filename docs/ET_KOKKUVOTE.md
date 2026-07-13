@@ -5148,3 +5148,60 @@ Oluline:
 - testis muudeti aktiivset identiteeti vana portaali kaudu
 - tulevane V2 identiteedivahetaja peab värskendama kõiki aktiivse identiteedi mooduleid
 - rubriigi nime maksimaalne pikkus ei ole veel andmebaasis piiratud
+
+---
+
+# 202. V2 poe rubriikide nime- ja identiteedikaitse
+
+Lisasime `store_categories` tabelile tootmiskindlad nime- ja identiteedireeglid.
+
+Migratsioon:
+
+- `supabase/migrations/20260713152000_add_store_category_name_integrity.sql`
+
+Rakendatud reeglid:
+
+- `identity_id` on nüüd kohustuslik
+- rubriigi nimi puhastatakse enne salvestamist
+- alguse ja lõpu tühikud eemaldatakse
+- mitu järjestikust tühikut muudetakse üheks
+- nimi peab olema 1–60 tähemärki
+- sama identiteedi juurrubriikide nimed peavad olema unikaalsed
+- nime võrdlus ei sõltu suur- ja väiketähtedest
+- sama vanema all ei saa olla kahte samanimelist alamrubriiki
+- eri identiteetidel võib olla sama nimega rubriik
+- eri ülemrubriikide all võib olla sama nimega alamrubriik
+
+Enne migratsiooni tehtud audit:
+
+- rubriike kokku: 13
+- pikim olemasolev nimi: 23 tähemärki
+- üle 60 tähemärgi pikkuseid nimesid: 0
+- tühje nimesid: 0
+- identiteedita rubriike: 0
+- duplikaatgruppe sama identiteedi ja vanema piires: 0
+
+Kontroll:
+
+- identity_id NOT NULL kontroll läbitud
+- nime CHECK constraint olemas
+- nime normaliseerimise trigger olemas
+- juurrubriikide unikaalne indeks olemas
+- alamrubriikide unikaalne indeks olemas
+- normaliseerimata nimesid: 0
+- vigase pikkusega nimesid: 0
+- identiteedita rubriike: 0
+
+Rollback-test:
+
+- nime automaatne puhastamine töötas
+- sama taseme duplikaatnimi blokeeriti
+- eri ülemrubriikide all sama alamrubriigi nimi oli lubatud
+- eri identiteetidel sama juurrubriigi nimi oli lubatud
+- tühi nimi blokeeriti
+- 61 tähemärgi pikkune nimi blokeeriti
+- identiteedita rubriik blokeeriti
+- pärast rollback-testi oli alles 13 rubriiki
+- test-ridu jäi alles 0
+- alamrubriike jäi alles 0
+- `npm run build` korras

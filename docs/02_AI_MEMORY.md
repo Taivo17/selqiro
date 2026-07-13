@@ -1773,3 +1773,22 @@ Rules:
 - future V2 identity switching must refresh category management and listing category filters together
 - store category name length is not yet constrained in the database
 - audit existing names before adding the create action and database name constraints
+
+## V2_STORE_CATEGORY_NAME_INTEGRITY
+
+Rules:
+
+- `store_categories.identity_id` is NOT NULL
+- store category names are normalized before database write
+- trim leading and trailing whitespace
+- collapse repeated whitespace to one space
+- category name length is 1–60 characters
+- root names are case-insensitively unique within one identity
+- child names are case-insensitively unique within one identity and parent
+- different identities may use the same category name
+- different parents may contain children with the same name
+- UI must use the same 60-character limit and show clear validation
+- database constraints remain the final source of truth
+- production migration:
+  `20260713152000_add_store_category_name_integrity.sql`
+- rollback test finished with 13 existing categories, 0 test rows and 0 child categories

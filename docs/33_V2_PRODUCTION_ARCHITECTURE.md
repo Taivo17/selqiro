@@ -1471,3 +1471,49 @@ Naming constraint status:
 - `store_categories.name` is currently unrestricted `text`
 - database length and sibling-name uniqueness constraints are not implemented yet
 - existing category names must be audited before introducing those constraints
+
+---
+
+## V2 store category naming integrity
+
+Store category naming rules are enforced at database level.
+
+Canonicalization:
+
+- trim the name
+- collapse repeated whitespace
+- preserve user-entered letter case for display
+- compare sibling uniqueness case-insensitively
+
+Validation:
+
+- minimum length: 1 character
+- maximum length: 60 characters
+- every store category must have `identity_id`
+
+Uniqueness scopes:
+
+Root category:
+
+- unique by `identity_id + lower(name)`
+- applies where `parent_id is null`
+
+Child category:
+
+- unique by `identity_id + parent_id + lower(name)`
+- applies where `parent_id is not null`
+
+Consequences:
+
+- different identities can use the same category names
+- different root categories can contain children with the same name
+- one sibling group cannot contain case-only or whitespace-only duplicates
+- UI validation improves usability, but database constraints are authoritative
+
+Creation and rename operations must handle:
+
+- empty-name validation
+- 60-character limit
+- duplicate-name database errors
+- active identity ownership
+- database-normalized returned values
