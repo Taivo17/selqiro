@@ -5205,3 +5205,58 @@ Rollback-test:
 - test-ridu jäi alles 0
 - alamrubriike jäi alles 0
 - `npm run build` korras
+
+---
+
+# 203. V2 poe juurrubriigi loomise turvaline RPC ja RLS
+
+Lisasime V2 poe juurrubriigi loomise andmebaasivundamendi.
+
+Migratsioonid:
+
+- `supabase/migrations/20260714113000_add_create_store_root_category_rpc.sql`
+- `supabase/migrations/20260714114500_harden_store_category_rls.sql`
+
+Lisatud funktsioonid:
+
+- `public.current_user_has_identity_access(uuid)`
+- `public.create_my_store_root_category_v2(text)`
+
+Juurrubriigi loomise RPC reeglid:
+
+- funktsiooni saab käivitada ainult autentitud kasutaja
+- anonüümne kasutaja ei saa funktsiooni käivitada
+- klient saadab ainult rubriigi nime
+- klient ei saada `identity_id` väärtust
+- klient ei saada `parent_id` väärtust
+- RPC loeb aktiivse identiteedi `profiles.active_identity_id` kaudu
+- RPC kontrollib aktiivse identiteedi tegelikku kasutusõigust
+- privaatne identiteet peab kuuluma kasutajale
+- ettevõtte identiteedi puhul peab kasutaja olema aktiivne `business_members` liige
+- loodava juurrubriigi `parent_id` on alati null
+- `sort_order` arvutatakse olemasolevate juurrubriikide järel
+- nimi normaliseeritakse andmebaasis
+- tühi ja üle 60 tähemärgi pikkune nimi blokeeritakse
+- sama identiteedi samanimeline juurrubriik blokeeritakse
+- RPC tagastab andmebaasi poolt salvestatud rea
+
+RLS-i tugevdamine:
+
+- vana otsekirjutamise tee jäi oma identiteedi jaoks tööle
+- kirjutamisel peab `user_id = auth.uid()`
+- lisaks peab kasutajal olema ligipääs rea `identity_id` väärtusele
+- teise kasutaja või ligipääsmatu identiteedi alla kirjutamine blokeeritakse
+- RLS kasutab identiteedi ligipääsu kontrollimiseks sama keskset helper-funktsiooni
+
+Kontroll:
+
+- identiteedi ligipääsu helper-funktsioon olemas
+- juurrubriigi loomise RPC olemas
+- `authenticated` saab loomise RPC-d käivitada
+- `anon` ei saa loomise RPC-d käivitada
+- RPC autentitud rollback-test läbitud
+- RLS oma aktiivse identiteedi otsekirjutamise test läbitud
+- RLS teise identiteedi alla kirjutamise blokeerimise test läbitud
+- kõik testread eemaldati rollback'iga
+- pärast teste jäi alles 0 test-rida
+- `npm run build` korras

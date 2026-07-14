@@ -121,3 +121,34 @@ Next exact step:
 - show a 60-character UI limit and counter
 - refresh the management card and listing category filters after creation
 - do not add child creation, rename or delete in the same step
+
+---
+
+## 2026-07-14 secure store root category RPC checkpoint
+
+Completed:
+
+- secure root-category creation RPC added
+- client supplies only the category name
+- active identity is resolved in the database
+- private ownership and business membership are validated
+- anonymous execution is disabled
+- store category RLS now also validates identity access
+- own active-identity legacy direct writes remain functional
+- cross-identity direct writes are blocked
+- RPC and RLS rollback tests completed with no test rows remaining
+
+Known follow-up:
+
+- the current V2 `setActiveIdentity` client API needs a secure RPC before
+  a final V2 identity switcher is exposed
+
+Next exact step:
+
+- create store-category entity API for root creation
+- extend the My Area category hook with a create action
+- add a compact `Lisa ülemrubriik` form
+- UI maximum length is 60 characters
+- show a character counter
+- refresh both category management and listing category filters after success
+- do not add child creation, rename or delete in the same step

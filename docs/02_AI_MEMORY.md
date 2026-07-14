@@ -1792,3 +1792,31 @@ Rules:
 - production migration:
   `20260713152000_add_store_category_name_integrity.sql`
 - rollback test finished with 13 existing categories, 0 test rows and 0 child categories
+
+## V2_STORE_ROOT_CATEGORY_CREATE_SECURITY
+
+Rules:
+
+- root category creation RPC is:
+  `public.create_my_store_root_category_v2(text)`
+- V2 client sends only the category name
+- client must never provide category `identity_id`
+- client must never provide root category `parent_id`
+- RPC resolves the active identity from `profiles.active_identity_id`
+- RPC uses `auth.uid()` as the acting user
+- active identity access is checked through:
+  `public.current_user_has_identity_access(uuid)`
+- private identity access requires `identities.user_id = auth.uid()`
+- business identity access requires active `business_members` membership
+- root creation always stores `parent_id = null`
+- root sort order is appended after current root categories
+- database-normalized row is returned to the client
+- duplicate root names return a database uniqueness error
+- authenticated users can execute the create RPC
+- anonymous users cannot execute the create RPC
+- direct table writes require:
+  `auth.uid() = user_id`
+  and access to the row identity
+- legacy direct writes remain compatible only for an accessible identity
+- cross-identity direct writes are blocked by RLS
+- next step is V2 entity API, hook action and root-category form

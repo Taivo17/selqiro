@@ -1517,3 +1517,60 @@ Creation and rename operations must handle:
 - duplicate-name database errors
 - active identity ownership
 - database-normalized returned values
+
+---
+
+## V2 secure root store category creation
+
+V2 store category writes use database RPCs.
+
+Preferred flow:
+
+UI component
+→ feature hook
+→ store-category entity API
+→ Supabase RPC
+→ database validation and authorization
+
+Root creation RPC:
+
+- `create_my_store_root_category_v2(text)`
+
+Client contract:
+
+- client supplies only `p_name`
+- client does not choose `identity_id`
+- client does not choose `user_id`
+- client does not choose `parent_id`
+- client does not calculate authoritative `sort_order`
+
+Server contract:
+
+- actor comes from `auth.uid()`
+- active identity comes from `profiles.active_identity_id`
+- identity access is verified in the database
+- root category uses `parent_id = null`
+- normalized database row is returned
+- database constraints remain authoritative
+
+Identity access helper:
+
+- `current_user_has_identity_access(uuid)`
+- private identity: active identity owned by current user
+- business identity: current user has active business membership
+- inactive identities are not accepted
+
+Defense in depth:
+
+- V2 writes use the RPC
+- `store_categories` RLS also validates identity access
+- direct legacy writes cannot use an inaccessible identity
+- anonymous roles cannot execute category creation
+- client-side validation is usability only, not authorization
+
+Current compatibility note:
+
+- `store_categories.user_id` currently records the acting/creating user
+- future multi-staff business category management may require a dedicated
+  identity-level permission and ownership model
+- do not weaken current RLS before that model is designed
