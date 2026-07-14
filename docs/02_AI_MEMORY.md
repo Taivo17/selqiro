@@ -1848,3 +1848,33 @@ Rules:
 - created category stayed scoped to Taivo Garaaž
 - next step is child-category creation
 - do not add rename or delete in the same child-creation step
+
+## V2_STORE_CHILD_CATEGORY_CREATE_RPC
+
+Rules:
+
+- child category creation RPC is:
+  `public.create_my_store_child_category_v2(uuid, text)`
+- client supplies:
+  - `p_parent_id`
+  - `p_name`
+- client does not supply:
+  - `identity_id`
+  - `user_id`
+  - `sort_order`
+- RPC resolves active identity from `profiles.active_identity_id`
+- RPC validates active identity access in the database
+- selected parent must exist
+- selected parent must belong to the active identity
+- selected parent must be a root category
+- V2 child creation RPC supports exactly two UI levels
+- third-level creation is rejected by this RPC
+- database adjacency-list architecture remains capable of deeper levels later
+- sibling sort order is calculated server-side
+- duplicate child name under the same parent is rejected
+- same child name under another root is allowed
+- authenticated role can execute the RPC
+- anonymous role cannot execute the RPC
+- rollback test completed with zero remaining test rows
+- next step is child-category entity API, hook action and compact per-root UI
+- do not add rename or delete in the same UI step

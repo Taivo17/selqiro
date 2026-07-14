@@ -5314,3 +5314,67 @@ Brauseritest:
 - Milline Vedu kuvab jätkuvalt ainult oma kahte rubriiki
 - identiteetide andmed jäid eraldatuks
 - `npm run build` korras
+
+---
+
+# 205. V2 alamrubriigi loomise turvaline RPC
+
+Lisasime V2 poe alamrubriigi loomise turvalise andmebaasi-RPC.
+
+Migratsioon:
+
+- `supabase/migrations/20260714123000_add_create_store_child_category_rpc.sql`
+
+Lisatud RPC:
+
+- `public.create_my_store_child_category_v2(uuid, text)`
+
+Kliendi sisend:
+
+- valitud ülemrubriigi ID
+- alamrubriigi nimi
+
+Klient ei määra:
+
+- `identity_id`
+- `user_id`
+- `sort_order`
+
+Andmebaasi reeglid:
+
+- kasutaja peab olema autentitud
+- aktiivne identiteet loetakse `profiles.active_identity_id` kaudu
+- kasutajal peab olema aktiivsele identiteedile tegelik ligipääs
+- valitud ülemrubriik peab eksisteerima
+- valitud ülemrubriik peab kuuluma aktiivsele identiteedile
+- valitud ülemrubriik peab olema juurrubriik
+- V2 RPC lubab ainult kahe taseme struktuuri:
+  - ülemrubriik
+  - otsene alamrubriik
+- kolmanda taseme lisamine selle RPC kaudu blokeeritakse
+- alamrubriigi `sort_order` arvutatakse sama ülemrubriigi olemasolevate laste järel
+- nimi normaliseeritakse andmebaasis
+- nimi peab olema 1–60 tähemärki
+- sama vanema all samanimeline alamrubriik blokeeritakse
+- sama nimega alamrubriik eri ülemrubriikide all on lubatud
+- loodud andmebaasirida tagastatakse kliendile
+
+Õigused:
+
+- `authenticated` saab RPC-d käivitada
+- `anon` ei saa RPC-d käivitada
+
+Rollback-test:
+
+- otsene alamrubriik loodi edukalt
+- nimi normaliseeriti
+- sama vanema duplikaatnimi blokeeriti
+- sama nimi teise ülemrubriigi all oli lubatud
+- kolmanda taseme loomine blokeeriti
+- teise identiteedi vanema kasutamine blokeeriti
+- olematu vanema kasutamine blokeeriti
+- pärast rollback'i jäi alamrubriigi test-ridu 0
+- kolmanda taseme test-ridu jäi 0
+- teise identiteedi test-ridu jäi 0
+- puuduva vanema test-ridu jäi 0
+- `npm run build` korras

@@ -1650,3 +1650,59 @@ Later improvements:
   coordination becomes larger
 - the future secure V2 identity switcher must invalidate all active-identity
   data, including store categories
+
+---
+
+## V2 secure child store category creation
+
+Child category creation follows the same layered flow as root creation:
+
+UI
+→ feature hook
+→ store-category entity API
+→ `create_my_store_child_category_v2`
+→ database authorization and validation
+
+Client contract:
+
+- send root category ID
+- send child category name
+- do not send identity ID
+- do not send acting user ID
+- do not calculate authoritative sort order
+
+Server contract:
+
+- actor is `auth.uid()`
+- active identity comes from the authenticated user's profile
+- active identity access is checked server-side
+- parent category is locked and validated
+- parent must belong to the active identity
+- parent must be a root category
+- created category inherits the active identity
+- server calculates the next sibling sort order
+- normalized created row is returned
+
+Two-level V2 rule:
+
+- launch management UI supports root and direct child only
+- the V2 child RPC rejects a child category as the selected parent
+- the underlying adjacency-list table may support additional levels through
+  a future separately designed feature
+- launch UI restrictions must not require replacing the database model later
+
+Sibling uniqueness:
+
+- duplicate names are rejected within the same parent
+- the same child name can exist under another root
+- the same names can exist under another identity
+- database constraints remain authoritative
+
+Required UI behavior:
+
+- each root card may open one compact child creation form
+- maximum name length is 60 characters
+- character counter is shown
+- only one child creation operation should be active at a time
+- successful creation invalidates all mounted store-category views
+- management hierarchy and listing category filters refresh together

@@ -187,3 +187,32 @@ Next exact step:
 - database verifies parent belongs to the active accessible identity
 - V2 UI remains limited to two levels
 - do not add rename or delete in the same step
+
+---
+
+## 2026-07-14 secure child category RPC checkpoint
+
+Completed:
+
+- secure child-category RPC added
+- authenticated execution enabled
+- anonymous execution disabled
+- parent existence is validated
+- parent must belong to the active identity
+- parent must be a root category
+- third-level creation is blocked by the V2 RPC
+- sibling sort order is calculated server-side
+- duplicate sibling names are blocked
+- same child name under different roots remains allowed
+- cross-identity parent usage is blocked
+- rollback test completed with no remaining test rows
+
+Next exact step:
+
+- add child-category entity API
+- extend `useMyAreaStoreCategories` with child creation
+- add a compact „Lisa alamrubriik” action to each root card
+- open the form only for the selected root
+- use the same 60-character limit and counter
+- refresh management hierarchy and listing filters after success
+- do not add rename or delete in the same step
