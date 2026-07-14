@@ -1706,3 +1706,64 @@ Required UI behavior:
 - only one child creation operation should be active at a time
 - successful creation invalidates all mounted store-category views
 - management hierarchy and listing category filters refresh together
+
+---
+
+## V2 child store category creation UI
+
+Child creation follows:
+
+`StoreCategoryManagementCard`
+→ `StoreCategoryChildCreateForm`
+→ `useMyAreaStoreCategories`
+→ `createMyStoreChildCategory`
+→ secure database RPC
+
+UI rules:
+
+- creation belongs visually inside the selected root card
+- only one child form can be open at a time
+- child form uses the shared 60-character naming rule
+- success and validation messages remain local to the affected root
+- child cards do not expose a further child-creation action
+- successful mutations invalidate all mounted category views
+
+---
+
+## V2 hierarchical listing category filter direction
+
+Owner and public listing filters must represent the category hierarchy.
+
+Initial state:
+
+- show `Kõik rubriigid`
+- show root categories
+- do not show every child as an unrelated flat filter
+
+Root interaction:
+
+- clicking a root selects it
+- clicking a root reveals its direct children
+- only one root group is expanded at a time
+- root selection includes listings assigned directly to the root
+- root selection also includes listings assigned to descendants
+
+Child interaction:
+
+- clicking a child keeps its root visually open
+- child selection narrows results to the selected child scope
+- V2 two-level UI means the child currently has no visible descendants
+
+Data rule:
+
+- do not duplicate listing-category links merely to support parent filtering
+- a listing assigned to a child does not also need a stored parent link
+- category ancestry is resolved by the query
+- backend scope resolution should be recursive so deeper future trees do not
+  require replacing the filter architecture
+
+Shared UI direction:
+
+- My Area and public profile should reuse the same hierarchy-filter foundation
+- My Area and public profile may use different listing visibility queries
+- public profile must continue to hide paused, sold and expired listings

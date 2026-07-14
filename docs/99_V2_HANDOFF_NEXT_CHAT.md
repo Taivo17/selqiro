@@ -216,3 +216,31 @@ Next exact step:
 - use the same 60-character limit and counter
 - refresh management hierarchy and listing filters after success
 - do not add rename or delete in the same step
+
+---
+
+## 2026-07-14 V2 child category creation UI checkpoint
+
+Completed:
+
+- child-category entity API added
+- My Area hook supports child creation
+- compact per-root child creation form added
+- only one form opens at a time
+- 60-character validation and counter added
+- duplicate sibling names show a clear error
+- successful child creation refreshes hierarchy and listing filters
+- V2 UI does not expose third-level creation
+
+Browser-tested:
+
+- SÕIDUAUTOD, VEOAUTOD and MAASTURID were added under AUTOD MÜÜGIKS
+- duplicate child creation was rejected
+- hierarchy updated without manual page refresh
+
+Next exact work:
+
+1. make listing category filtering hierarchy-aware in the database
+2. root selection must include the root and descendants
+3. replace the flat My Area category pills with a compact hierarchical filter
+4. later reuse the same filter foundation on the public profile

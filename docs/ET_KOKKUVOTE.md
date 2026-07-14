@@ -5378,3 +5378,48 @@ Rollback-test:
 - teise identiteedi test-ridu jäi 0
 - puuduva vanema test-ridu jäi 0
 - `npm run build` korras
+
+---
+
+# 206. V2 alamrubriigi lisamine Minu alas
+
+Lisasime V2 Minu ala poe rubriigihaldusse alamrubriigi loomise kasutajaliidese.
+
+Tehtud:
+
+- lisati alamrubriigi entity API
+- My Area rubriikide hook toetab alamrubriigi loomist
+- iga ülemrubriigi kaardil on „+ Lisa alamrubriik”
+- korraga avaneb ainult ühe ülemrubriigi alamrubriigi vorm
+- vorm näitab, millise ülemrubriigi alla uus rubriik lisatakse
+- nime maksimaalne pikkus on 60 tähemärki
+- vormis on märgiloendur
+- tühja sisendiga lisamisnupp on keelatud
+- lisamise ajal kuvatakse „Lisan...”
+- edukal lisamisel kuvatakse roheline kinnitusteade
+- vea korral kuvatakse punane arusaadav teade
+- sama vanema alla samanimeline alamrubriik blokeeritakse
+- alamrubriigi juures ei kuvata kolmanda taseme lisamisvormi
+- pärast lisamist värskenduvad rubriigihaldus ja kuulutuste rubriigifilter ilma lehe refresh'ita
+
+Brauseritest:
+
+- „AUTOD MÜÜGIKS” alla lisati alamrubriigid
+  - SÕIDUAUTOD
+  - VEOAUTOD
+  - MAASTURID
+- alamrubriigid kuvati õige ülemrubriigi sees
+- alamrubriikide arv kuvati ülemrubriigi kaardil
+- sama nime uuesti lisamine blokeeriti
+- duplikaadi kohta kuvati selge veateade
+- kuulutuste filter värskendus ilma käsitsi refresh'ita
+- kolmanda taseme loomise nuppu alamrubriigi juures ei ole
+- `npm run build` korras
+
+Järgmine UX-parandus:
+
+- kuulutuste rubriigifilter ei tohi kuvada ülem- ja alamrubriike ühe lameda nimekirjana
+- alguses kuvatakse ülemrubriigid
+- ülemrubriigi valimine kuvab kõik selle haru kuulutused
+- valitud ülemrubriigi alamrubriigid avanevad selle all
+- alamrubriigi valimine kitsendab tulemuse sellele rubriigile

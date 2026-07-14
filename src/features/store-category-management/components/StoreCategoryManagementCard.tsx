@@ -10,6 +10,7 @@ import {
   useMyAreaStoreCategories,
   type MyAreaStoreCategory,
 } from "../../my-area/model/useMyAreaStoreCategories";
+import StoreCategoryChildCreateForm from "./StoreCategoryChildCreateForm";
 
 function compareCategories(
   first: MyAreaStoreCategory,
@@ -84,12 +85,20 @@ export default function StoreCategoryManagementCard() {
     loading,
     error,
     creatingRootCategory,
+    creatingChildParentId,
     createRootCategory,
+    createChildCategory,
   } = useMyAreaStoreCategories();
 
   const [newRootName, setNewRootName] = useState("");
   const [createError, setCreateError] = useState<string | null>(null);
   const [createSuccess, setCreateSuccess] = useState<string | null>(null);
+  const [childFormParentId, setChildFormParentId] =
+    useState<string | null>(null);
+  const [childSuccess, setChildSuccess] = useState<{
+    parentId: string;
+    message: string;
+  } | null>(null);
 
   async function handleCreateRootCategory(
     event: FormEvent<HTMLFormElement>
@@ -127,6 +136,28 @@ export default function StoreCategoryManagementCard() {
           : "Ülemrubriiki ei saanud lisada."
       );
     }
+  }
+
+  function openChildForm(parentId: string) {
+    setChildFormParentId(parentId);
+    setChildSuccess(null);
+  }
+
+  function closeChildForm() {
+    setChildFormParentId(null);
+  }
+
+  async function handleCreateChildCategory(
+    parentId: string,
+    name: string
+  ) {
+    const createdCategory = await createChildCategory(parentId, name);
+
+    setChildFormParentId(null);
+    setChildSuccess({
+      parentId,
+      message: `Alamrubriik „${createdCategory.name}“ lisatud.`,
+    });
   }
 
   const {
@@ -284,6 +315,39 @@ export default function StoreCategoryManagementCard() {
                     ))}
                   </div>
                 ) : null}
+                <div className="mt-3 border-t border-neutral-200 pt-3">
+                  {childFormParentId === rootCategory.id ? (
+                    <StoreCategoryChildCreateForm
+                      parentName={rootCategory.name}
+                      creating={
+                        creatingChildParentId === rootCategory.id
+                      }
+                      onCreate={(name) =>
+                        handleCreateChildCategory(
+                          rootCategory.id,
+                          name
+                        )
+                      }
+                      onCancel={closeChildForm}
+                    />
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => openChildForm(rootCategory.id)}
+                      disabled={Boolean(creatingChildParentId)}
+                      className="rounded-full border border-neutral-200 bg-white px-3 py-2 text-xs font-black text-neutral-700 shadow-sm disabled:cursor-not-allowed disabled:opacity-40"
+                    >
+                      + Lisa alamrubriik
+                    </button>
+                  )}
+
+                  {childSuccess?.parentId === rootCategory.id &&
+                  childFormParentId !== rootCategory.id ? (
+                    <p className="mt-2 rounded-lg border border-emerald-100 bg-emerald-50 px-2.5 py-2 text-xs font-semibold leading-5 text-emerald-800">
+                      {childSuccess.message}
+                    </p>
+                  ) : null}
+                </div>
               </article>
             );
           })}

@@ -1878,3 +1878,32 @@ Rules:
 - rollback test completed with zero remaining test rows
 - next step is child-category entity API, hook action and compact per-root UI
 - do not add rename or delete in the same UI step
+
+## V2_STORE_CHILD_CATEGORY_CREATE_UI
+
+Rules:
+
+- each root category card has a compact `+ Lisa alamrubriik` action
+- only one child creation form is open at a time
+- child creation uses:
+  `src/entities/store-category/api/createMyStoreChildCategory.ts`
+- feature state is managed by `useMyAreaStoreCategories`
+- child form is:
+  `StoreCategoryChildCreateForm.tsx`
+- client sends parent ID and child name only
+- maximum child name length is 60 characters
+- empty input is disabled
+- duplicate sibling names show a clear error
+- successful creation dispatches the shared store-category invalidation event
+- hierarchy display and listing filters reload without page refresh
+- V2 UI does not expose third-level creation
+- browser-tested with SÕIDUAUTOD, VEOAUTOD and MAASTURID under AUTOD MÜÜGIKS
+
+Next filter behavior:
+
+- listing category filters must not remain flat
+- initially show root categories
+- selecting a root filters by the root and all descendants
+- selecting a child narrows to that child
+- selected root reveals its direct children
+- only one root group should be expanded at a time

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { createMyStoreChildCategory } from "../../../entities/store-category/api/createMyStoreChildCategory";
 import { createMyStoreRootCategory } from "../../../entities/store-category/api/createMyStoreRootCategory";
 import type { StoreCategory } from "../../../entities/store-category/model/types";
 import { supabaseBrowserClient } from "../../../shared/supabase/browserClient";
@@ -15,7 +16,12 @@ export type MyAreaStoreCategoriesState = {
   loading: boolean;
   error: string | null;
   creatingRootCategory: boolean;
+  creatingChildParentId: string | null;
   createRootCategory: (name: string) => Promise<MyAreaStoreCategory>;
+  createChildCategory: (
+    parentId: string,
+    name: string
+  ) => Promise<MyAreaStoreCategory>;
 };
 
 function notifyStoreCategoriesChanged() {
@@ -36,6 +42,8 @@ export function useMyAreaStoreCategories(): MyAreaStoreCategoriesState {
   });
 
   const [creatingRootCategory, setCreatingRootCategory] = useState(false);
+  const [creatingChildParentId, setCreatingChildParentId] =
+    useState<string | null>(null);
 
   useEffect(() => {
     let mounted = true;
@@ -165,9 +173,34 @@ export function useMyAreaStoreCategories(): MyAreaStoreCategoriesState {
     }
   }
 
+  async function createChildCategory(
+    parentId: string,
+    name: string
+  ) {
+    if (creatingChildParentId) {
+      throw new Error("Alamrubriigi lisamine juba käib.");
+    }
+
+    setCreatingChildParentId(parentId);
+
+    try {
+      const createdCategory = await createMyStoreChildCategory({
+        parentId,
+        name,
+      });
+
+      notifyStoreCategoriesChanged();
+      return createdCategory;
+    } finally {
+      setCreatingChildParentId(null);
+    }
+  }
+
   return {
     ...state,
     creatingRootCategory,
+    creatingChildParentId,
     createRootCategory,
+    createChildCategory,
   };
 }
