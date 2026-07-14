@@ -5260,3 +5260,57 @@ Kontroll:
 - kõik testread eemaldati rollback'iga
 - pärast teste jäi alles 0 test-rida
 - `npm run build` korras
+
+---
+
+# 204. V2 uue ülemrubriigi lisamine Minu alas
+
+Lisasime V2 Minu ala poe rubriikide kaardile uue ülemrubriigi loomise.
+
+Kasutajaliides:
+
+- lisati väli „Uus ülemrubriik”
+- lisati nupp „Lisa ülemrubriik”
+- sisendi maksimaalne pikkus on 60 tähemärki
+- kuvatakse märgiloendur, näiteks `11/60`
+- tühja sisendiga nupp on keelatud
+- salvestamise ajal kuvatakse „Lisan...”
+- edukal lisamisel kuvatakse roheline kinnitusteade
+- vea korral kuvatakse punane selgitav teade
+- sama nimega ülemrubriigi lisamine blokeeritakse
+- andmebaasi duplikaadiviga tõlgitakse kasutajale arusaadavaks tekstiks
+
+Arhitektuur:
+
+- lisati `src/entities/store-category/model/types.ts`
+- lisati `src/entities/store-category/api/createMyStoreRootCategory.ts`
+- UI ei kutsu Supabase RPC-d otse
+- feature hook kasutab store-category entity API-d
+- entity API kasutab `create_my_store_root_category_v2` RPC-d
+- klient saadab ainult rubriigi nime
+- klient ei saada `identity_id`, `user_id`, `parent_id` ega `sort_order`
+- lõplik identiteedi kontroll ja valideerimine toimub andmebaasis
+- loodud rubriigi normaliseeritud väärtus tagastatakse RPC-st
+
+Värskendamine:
+
+- pärast edukat loomist saadetakse lokaalne
+  `selqiro:store-categories-changed` sündmus
+- rubriikide halduskaart laadib andmed uuesti
+- kuulutuste rubriigifilter laadib andmed uuesti
+- käsitsi browser refresh ei ole vajalik
+
+Brauseritest:
+
+- tühja sisendiga nupp oli keelatud
+- loendur algas väärtusega `0/60`
+- üle 60 tähemärgi sisestada ei saanud
+- Taivo Garaaž identiteedile lisati „Aiasaadused”
+- Taivo Garaaži ülemrubriikide arv muutus 6 pealt 7 peale
+- uus rubriik ilmus ka kuulutuste rubriigifiltrisse
+- sama nime uuesti lisamine kuvati veana
+- duplikaatrida ei loodud
+- Milline Vedu identiteedile uut rubriiki ei lisatud
+- Milline Vedu kuvab jätkuvalt ainult oma kahte rubriiki
+- identiteetide andmed jäid eraldatuks
+- `npm run build` korras

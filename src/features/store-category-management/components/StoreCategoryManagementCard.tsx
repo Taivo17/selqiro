@@ -1,5 +1,11 @@
 "use client";
 
+import { useState } from "react";
+import type { FormEvent } from "react";
+import {
+  normalizeStoreCategoryName,
+  STORE_CATEGORY_NAME_MAX_LENGTH,
+} from "../../../entities/store-category/model/types";
 import {
   useMyAreaStoreCategories,
   type MyAreaStoreCategory,
@@ -73,7 +79,55 @@ function LoadingCategories() {
 }
 
 export default function StoreCategoryManagementCard() {
-  const { categories, loading, error } = useMyAreaStoreCategories();
+  const {
+    categories,
+    loading,
+    error,
+    creatingRootCategory,
+    createRootCategory,
+  } = useMyAreaStoreCategories();
+
+  const [newRootName, setNewRootName] = useState("");
+  const [createError, setCreateError] = useState<string | null>(null);
+  const [createSuccess, setCreateSuccess] = useState<string | null>(null);
+
+  async function handleCreateRootCategory(
+    event: FormEvent<HTMLFormElement>
+  ) {
+    event.preventDefault();
+
+    const cleanName = normalizeStoreCategoryName(newRootName);
+
+    setCreateError(null);
+    setCreateSuccess(null);
+
+    if (!cleanName) {
+      setCreateError("Sisesta rubriigi nimi.");
+      return;
+    }
+
+    if (cleanName.length > STORE_CATEGORY_NAME_MAX_LENGTH) {
+      setCreateError(
+        `Rubriigi nimi võib olla kuni ${STORE_CATEGORY_NAME_MAX_LENGTH} tähemärki.`
+      );
+      return;
+    }
+
+    try {
+      const createdCategory = await createRootCategory(cleanName);
+
+      setNewRootName("");
+      setCreateSuccess(
+        `Ülemrubriik „${createdCategory.name}“ lisatud.`
+      );
+    } catch (creationError) {
+      setCreateError(
+        creationError instanceof Error
+          ? creationError.message
+          : "Ülemrubriiki ei saanud lisada."
+      );
+    }
+  }
 
   const {
     roots,
@@ -108,10 +162,61 @@ export default function StoreCategoryManagementCard() {
         ) : null}
       </div>
 
-      <div className="mt-4 rounded-2xl border border-blue-100 bg-blue-50 px-4 py-3 text-sm leading-6 text-blue-900">
-        Praegu on see plokk ainult vaatamiseks. Uue ülemrubriigi lisamine
-        tuleb järgmise väikese sammuna.
-      </div>
+      <form
+        onSubmit={handleCreateRootCategory}
+        className="mt-4 rounded-2xl border border-neutral-200 bg-[#fbfbfa] p-4"
+      >
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
+          <label className="min-w-0 flex-1">
+            <span className="mb-2 block text-xs font-black uppercase tracking-[0.16em] text-neutral-500">
+              Uus ülemrubriik
+            </span>
+
+            <input
+              value={newRootName}
+              onChange={(event) => {
+                setNewRootName(event.target.value);
+                setCreateError(null);
+                setCreateSuccess(null);
+              }}
+              maxLength={STORE_CATEGORY_NAME_MAX_LENGTH}
+              placeholder="Näiteks Varuosad"
+              disabled={creatingRootCategory}
+              className="w-full rounded-2xl border border-neutral-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-neutral-400 disabled:cursor-not-allowed disabled:opacity-60"
+            />
+          </label>
+
+          <button
+            type="submit"
+            disabled={creatingRootCategory || !newRootName.trim()}
+            className="rounded-full bg-black px-5 py-3 text-sm font-black text-white transition disabled:cursor-not-allowed disabled:opacity-40"
+          >
+            {creatingRootCategory ? "Lisan..." : "Lisa ülemrubriik"}
+          </button>
+        </div>
+
+        <div className="mt-2 flex items-start justify-between gap-3">
+          <p className="text-xs leading-5 text-neutral-500">
+            Rubriik lisatakse aktiivse identiteedi poe ülesehitusse.
+          </p>
+
+          <span className="shrink-0 text-xs font-black text-neutral-400">
+            {newRootName.length}/{STORE_CATEGORY_NAME_MAX_LENGTH}
+          </span>
+        </div>
+
+        {createError ? (
+          <p className="mt-3 rounded-xl border border-red-100 bg-red-50 px-3 py-2 text-sm font-semibold text-red-800">
+            {createError}
+          </p>
+        ) : null}
+
+        {createSuccess ? (
+          <p className="mt-3 rounded-xl border border-emerald-100 bg-emerald-50 px-3 py-2 text-sm font-semibold text-emerald-800">
+            {createSuccess}
+          </p>
+        ) : null}
+      </form>
 
       {loading ? <LoadingCategories /> : null}
 

@@ -1574,3 +1574,79 @@ Current compatibility note:
 - future multi-staff business category management may require a dedicated
   identity-level permission and ownership model
 - do not weaken current RLS before that model is designed
+
+---
+
+## V2 root store category creation feature
+
+Root category creation follows the production module flow:
+
+`StoreCategoryManagementCard`
+→ `useMyAreaStoreCategories`
+→ `createMyStoreRootCategory`
+→ `create_my_store_root_category_v2`
+→ database authorization and validation
+
+Module responsibilities:
+
+### Store-category model
+
+Owns:
+
+- `StoreCategory` type
+- name maximum length
+- client-side name normalization helper
+
+### Store-category entity API
+
+Owns:
+
+- RPC invocation
+- RPC result mapping
+- database error mapping
+- entity-level input validation
+
+### My Area store-category hook
+
+Owns:
+
+- loading state
+- category collection
+- create-in-progress state
+- root creation action
+- category invalidation event handling
+
+### Management UI
+
+Owns:
+
+- input state
+- character counter
+- disabled and saving states
+- success and error messages
+- rendering the hierarchy
+
+Refresh architecture:
+
+- successful mutations dispatch
+  `selqiro:store-categories-changed`
+- category hook instances listen for that event
+- management display and listing filters reload together
+- the event is local browser-state invalidation, not an authorization mechanism
+- database authorization remains inside the RPC and RLS
+
+Root creation rules:
+
+- root means `parent_id = null`
+- only the name is client input
+- active identity is resolved server-side
+- authoritative sort order is calculated server-side
+- normalized stored row is returned
+- identity isolation was browser-tested across multiple identities
+
+Later improvements:
+
+- a shared query cache may replace the local event mechanism if V2 data
+  coordination becomes larger
+- the future secure V2 identity switcher must invalidate all active-identity
+  data, including store categories

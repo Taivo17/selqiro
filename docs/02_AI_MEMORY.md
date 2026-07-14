@@ -1820,3 +1820,31 @@ Rules:
 - legacy direct writes remain compatible only for an accessible identity
 - cross-identity direct writes are blocked by RLS
 - next step is V2 entity API, hook action and root-category form
+
+## V2_STORE_ROOT_CATEGORY_CREATE_UI
+
+Rules:
+
+- V2 My Area supports creating root store categories
+- entity type and limits are in:
+  `src/entities/store-category/model/types.ts`
+- root creation API is:
+  `src/entities/store-category/api/createMyStoreRootCategory.ts`
+- client-side maximum name length is 60 characters
+- UI shows a character counter
+- empty input keeps the create button disabled
+- UI normalizes whitespace for usability
+- database normalization and constraints remain authoritative
+- entity API calls `create_my_store_root_category_v2`
+- client sends only `p_name`
+- RPC resolves user and active identity in the database
+- successful creation dispatches:
+  `selqiro:store-categories-changed`
+- all mounted `useMyAreaStoreCategories` instances reload after the event
+- management card and listing category filters refresh without page reload
+- duplicate root names show:
+  `Selle nimega ülemrubriik on juba olemas.`
+- browser-tested with Milline Vedu and Taivo Garaaž
+- created category stayed scoped to Taivo Garaaž
+- next step is child-category creation
+- do not add rename or delete in the same child-creation step

@@ -152,3 +152,38 @@ Next exact step:
 - show a character counter
 - refresh both category management and listing category filters after success
 - do not add child creation, rename or delete in the same step
+
+---
+
+## 2026-07-14 V2 root category creation checkpoint
+
+Completed:
+
+- V2 root-category creation entity API added
+- My Area store-category hook now supports root creation
+- compact root-category form added
+- 60-character input limit and counter added
+- empty input is disabled
+- saving, success and error states added
+- duplicate root names show a clear error
+- management card refreshes after creation
+- listing category filters refresh after creation
+- no manual page refresh is needed
+- active-identity isolation was browser-tested
+
+Browser test:
+
+- „Aiasaadused” was created for Taivo Garaaž
+- Taivo Garaaž root count changed from 6 to 7
+- duplicate „Aiasaadused” was rejected
+- Milline Vedu remained at 2 root categories
+- no category leaked between identities
+
+Next exact step:
+
+- add direct child-category creation
+- each root card gets a compact „Lisa alamrubriik” action
+- child RPC receives parent ID and name
+- database verifies parent belongs to the active accessible identity
+- V2 UI remains limited to two levels
+- do not add rename or delete in the same step
