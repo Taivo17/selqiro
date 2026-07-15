@@ -5423,3 +5423,67 @@ Järgmine UX-parandus:
 - ülemrubriigi valimine kuvab kõik selle haru kuulutused
 - valitud ülemrubriigi alamrubriigid avanevad selle all
 - alamrubriigi valimine kitsendab tulemuse sellele rubriigile
+
+---
+
+# 207. V2 kuulutuste hierarhiline poe-rubriigi filter
+
+Muutsime `get_my_identity_listings` RPC poe-rubriigi filtri
+hierarhiateadlikuks.
+
+Migratsioon:
+
+- `supabase/migrations/20260714140000_add_hierarchical_store_category_filter.sql`
+
+Lisatud andmebaasifunktsioon:
+
+- `public.get_store_category_scope_ids(uuid, uuid)`
+
+Rubriigiscope'i reeglid:
+
+- scope algab valitud rubriigist
+- scope sisaldab valitud rubriiki
+- scope sisaldab rekursiivselt kõiki selle järglasi
+- scope sisaldab ainult sama identiteedi rubriike
+- rekursioonis on tsüklikaitse
+- helper-funktsioon ei ole otse `authenticated` ega `anon` rollile käivitatav
+
+`get_my_identity_listings` muudatus:
+
+- RPC signatuur jäi samaks
+- klient saadab endiselt ühe `store_category_filter` UUID
+- null tähendab kõiki rubriike
+- ülemrubriigi UUID tähendab ülemrubriiki ja kõiki selle järglasi
+- alamrubriigi UUID tähendab alamrubriiki ja selle võimalikke järglasi
+- aktiivne identiteet loetakse kasutaja profiilist
+- aktiivse identiteedi ligipääs kontrollitakse andmebaasis
+- otsing, staatusefilter, sortimine, limit ja offset jäid tööle
+
+Oluline andmereegel:
+
+- alamrubriigiga seotud kuulutusele ei salvestata ainult filtri pärast
+  dubleerivat ülemrubriigi seost
+- ülemrubriigi filter leiab alamrubriigi kuulutuse rekursiivse scope'i kaudu
+
+Kontroll:
+
+- recursive category scope helper olemas
+- `get_my_identity_listings` RPC olemas
+- hierarhiline scope on RPC-ga ühendatud
+- aktiivse identiteedi ligipääsukontroll on RPC-ga ühendatud
+- `authenticated` saab listings RPC-d käivitada
+- sisemist scope helperit ei saa otse käivitada `authenticated`
+- sisemist scope helperit ei saa käivitada `anon`
+
+Rollback-test:
+
+- testkuulutus seoti ajutiselt ainult alamrubriigiga
+- filtreerimata omanikuvaade leidis kuulutuse
+- alamrubriigi filter leidis kuulutuse
+- ülemrubriigi filter leidis alamrubriigiga seotud kuulutuse
+- mitteseotud ülemrubriik kuulutust ei leidnud
+- kõik test-rubriigid eemaldati rollback'iga
+- juurrubriigi test-ridu jäi 0
+- alamrubriigi test-ridu jäi 0
+- mitteseotud juurrubriigi test-ridu jäi 0
+- `npm run build` korras

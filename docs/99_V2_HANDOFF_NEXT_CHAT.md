@@ -244,3 +244,32 @@ Next exact work:
 2. root selection must include the root and descendants
 3. replace the flat My Area category pills with a compact hierarchical filter
 4. later reuse the same filter foundation on the public profile
+
+---
+
+## 2026-07-15 hierarchical store-category listing filter checkpoint
+
+Completed:
+
+- recursive category-scope helper added
+- `get_my_identity_listings` category filter is now hierarchical
+- RPC signature remains unchanged
+- root category selection includes descendant-assigned listings
+- child category selection narrows to the child scope
+- unrelated category branches do not match
+- active identity access is checked inside the listings RPC
+- no duplicate parent listing-category link is required
+- rollback test completed with no remaining test data
+
+Next exact step:
+
+- create a reusable hierarchical store-category filter component
+- replace flat category pills in `MyAreaListingsSection`
+- initially show `Kõik rubriigid` and root categories
+- selecting a root selects its full branch and opens direct children
+- selecting a child narrows to that child
+- only one root group is expanded at a time
+- selected child keeps its root expanded
+- clearing filters resets category selection and expanded group
+- do not modify the listings hook or entity API in this UI step
+- later reuse the same filter foundation on the public profile

@@ -1767,3 +1767,51 @@ Shared UI direction:
 - My Area and public profile should reuse the same hierarchy-filter foundation
 - My Area and public profile may use different listing visibility queries
 - public profile must continue to hide paused, sold and expired listings
+
+---
+
+## Hierarchical store-category scope for listing queries
+
+Store-category ancestry is resolved server-side.
+
+Data flow:
+
+UI selected category ID
+→ listing feature hook
+→ listing entity API
+→ `get_my_identity_listings`
+→ recursive category scope
+→ listing/category relation lookup
+
+Scope semantics:
+
+- no selected category:
+  all listings matching the other filters
+- selected root:
+  root plus every descendant
+- selected child:
+  child plus every descendant below it
+
+Architecture rules:
+
+- the client sends one category ID
+- the client does not fetch or construct descendant ID arrays
+- the database owns ancestry traversal
+- scope is restricted by active identity
+- cycles are guarded during recursive traversal
+- the existing RPC signature remains stable
+
+Listing assignment rule:
+
+- store only the category or categories explicitly selected for the listing
+- do not add parent links automatically only for discovery/filter behavior
+- parent filtering is derived from hierarchy
+- this avoids duplicate links and inconsistent ancestry data
+
+Future compatibility:
+
+- V2 UI currently exposes two levels
+- recursive server-side scope remains compatible with deeper future trees
+- public profile filtering should reuse the same category-scope principle
+- public profile listing visibility remains a separate concern:
+  only active and non-expired listings are public

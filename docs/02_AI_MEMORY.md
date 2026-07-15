@@ -1907,3 +1907,27 @@ Next filter behavior:
 - selecting a child narrows to that child
 - selected root reveals its direct children
 - only one root group should be expanded at a time
+
+## V2_HIERARCHICAL_STORE_CATEGORY_LISTING_FILTER
+
+Rules:
+
+- owner listing filter RPC remains:
+  `get_my_identity_listings(integer, integer, text, text, uuid)`
+- frontend still sends one selected store category UUID
+- null category filter means all categories
+- selected root category includes:
+  - listings assigned directly to the root
+  - listings assigned to all descendants
+- selected child category includes that child and possible future descendants
+- category scope is resolved recursively in the database
+- recursive helper is:
+  `get_store_category_scope_ids(uuid, uuid)`
+- scope is always restricted to the active identity
+- client must not calculate descendant category IDs
+- listing-to-category links must not be duplicated only to support root filtering
+- one child assignment is enough for root filtering
+- `get_my_identity_listings` now verifies access to the stored active identity
+- RPC signature, hook contract and listing entity API did not change
+- rollback test confirmed root/child/unrelated branch behavior
+- next step is replacing flat My Area category pills with hierarchical filter UI
