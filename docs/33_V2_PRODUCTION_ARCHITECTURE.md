@@ -1875,3 +1875,46 @@ Shared component direction:
 - My Area queries may include active, paused and sold owner listings
 - public profile queries must continue to expose only active,
   non-expired listings
+
+---
+
+## Secure store-category rename operation
+
+Store-category rename uses:
+
+UI
+→ feature hook
+→ store-category entity API
+→ `rename_my_store_category_v2`
+→ database authorization and validation
+
+Rename contract:
+
+- accept category ID and new name
+- resolve actor from `auth.uid()`
+- resolve active identity from the authenticated user's profile
+- verify access to the active identity
+- verify that the category belongs to that identity
+- update only the category name
+- return the normalized updated category row
+
+Hierarchy invariants:
+
+- renaming a root keeps it as a root
+- renaming a child keeps the same parent
+- rename does not move a category
+- rename does not change order
+- rename does not change ownership or identity
+
+UI direction:
+
+- root and child cards use the same inline rename interaction
+- only one category should be edited at a time
+- edit mode shows:
+  - input
+  - 60-character counter
+  - Salvesta
+  - Tühista
+- success refreshes every mounted store-category view
+- duplicate and validation errors are shown near the edited category
+- moving categories is a separate future feature

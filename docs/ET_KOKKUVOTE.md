@@ -5546,3 +5546,76 @@ Brauseritest:
 - pärast puhast dev-serveri restarti ei kordunud
   `Failed to fetch` veatsükkel
 - `npm run build` korras
+
+---
+
+# 209. V2 poe rubriigi turvaline ümbernimetamise RPC
+
+Lisasime turvalise andmebaasi-RPC, millega saab ümber nimetada
+aktiivsele identiteedile kuuluva ülem- või alamrubriigi.
+
+Migratsioon:
+
+- `supabase/migrations/20260717140000_add_rename_store_category_rpc.sql`
+
+Lisatud RPC:
+
+- `public.rename_my_store_category_v2(uuid, text)`
+
+Kliendi sisend:
+
+- muudetava rubriigi ID
+- uus nimi
+
+RPC ei muuda:
+
+- `parent_id`
+- `identity_id`
+- `user_id`
+- `sort_order`
+- rubriigi ID-d
+
+Turvareeglid:
+
+- kasutaja peab olema autentitud
+- aktiivne identiteet loetakse `profiles.active_identity_id` kaudu
+- kasutajal peab olema aktiivsele identiteedile ligipääs
+- muudetav rubriik peab kuuluma aktiivsele identiteedile
+- teise identiteedi rubriiki ei saa ümber nimetada
+- anonüümne kasutaja ei saa RPC-d käivitada
+
+Nimereeglid:
+
+- nimi puhastatakse alguse ja lõpu tühikutest
+- korduvad tühikud muudetakse üheks
+- nimi peab olema 1–60 tähemärki
+- sama identiteedi samanimeline ülemrubriik blokeeritakse
+- sama vanema samanimeline alamrubriik blokeeritakse
+- sama alamrubriigi nimi erinevate ülemrubriikide all on lubatud
+
+Kontroll:
+
+- rename-RPC on andmebaasis olemas
+- `authenticated` saab RPC-d käivitada
+- `anon` ei saa RPC-d käivitada
+- identiteedi ligipääsukontroll on funktsiooniga ühendatud
+- funktsioon muudab ainult nime
+
+Rollback-test:
+
+- ülemrubriigi nimi muudeti edukalt
+- alamrubriigi nimi muudeti edukalt
+- nimed normaliseeriti
+- `parent_id` säilis
+- `identity_id` säilis
+- `user_id` säilis
+- `sort_order` säilis
+- duplikaatne ülemrubriigi nimi blokeeriti
+- duplikaatne alamrubriigi nimi sama vanema all blokeeriti
+- sama alamrubriigi nimi teise vanema all oli lubatud
+- tühi nimi blokeeriti
+- üle 60 tähemärgi nimi blokeeriti
+- teise identiteedi rubriigi muutmine blokeeriti
+- olematu rubriigi muutmine blokeeriti
+- pärast rollback'i jäi test-ridu 0
+- `npm run build` korras

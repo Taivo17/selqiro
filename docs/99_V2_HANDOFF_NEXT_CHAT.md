@@ -319,3 +319,32 @@ Next exact step:
 - use the existing 60-character normalization and uniqueness rules
 - add rename entity API and one inline rename UI
 - do not add delete in the same step
+
+---
+
+## 2026-07-17 secure store-category rename RPC checkpoint
+
+Completed:
+
+- secure category rename RPC added
+- root and child categories are supported
+- active identity ownership is validated
+- anonymous execution is disabled
+- only the category name is changed
+- hierarchy position and sort order remain unchanged
+- normalization and sibling uniqueness are enforced
+- rollback test completed with no remaining test data
+
+Current UI status:
+
+- category rename buttons and inline editor are not implemented yet
+
+Next exact step:
+
+- add store-category rename entity API
+- extend `useMyAreaStoreCategories` with rename state/action
+- add a compact `Muuda nime` action to root and child cards
+- allow only one active inline editor
+- use the existing 60-character limit and counter
+- refresh hierarchy and listing filters after success
+- do not add delete in the same step

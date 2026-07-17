@@ -1962,3 +1962,30 @@ Rules:
 - no duplicate parent listing-category relation is required
 - component is intended for later reuse on the public profile
 - public profile visibility rules remain separate from My Area visibility
+
+## V2_STORE_CATEGORY_RENAME_RPC
+
+Rules:
+
+- store category rename RPC is:
+  `public.rename_my_store_category_v2(uuid, text)`
+- the RPC can rename a root or child category
+- client supplies:
+  - category ID
+  - new name
+- category must belong to the authenticated user's active identity
+- rename changes only `name`
+- rename must not change:
+  - category ID
+  - parent ID
+  - identity ID
+  - user ID
+  - sort order
+- database normalization and 60-character limit remain authoritative
+- root sibling-name uniqueness remains enforced
+- child sibling-name uniqueness remains enforced
+- same child name under another root remains allowed
+- anonymous execution is disabled
+- rollback test completed with zero remaining test rows
+- rename UI has not yet been implemented
+- next step is one inline rename form shared by root and child cards
