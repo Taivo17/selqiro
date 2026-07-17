@@ -12,6 +12,7 @@ import {
   type MyAreaListingsStatusFilter,
 } from "../model/useMyAreaListings";
 import { useMyAreaStoreCategories } from "../model/useMyAreaStoreCategories";
+import StoreCategoryHierarchyFilter from "../../store-category-filter/components/StoreCategoryHierarchyFilter";
 
 const LISTING_PREVIEW_LIMIT = 5;
 const LISTING_MANAGEMENT_LIMIT = 500;
@@ -324,38 +325,17 @@ export default function MyAreaListingsSection() {
           ) : null}
         </div>
 
-        {categories.length > 0 ? (
-          <div className="mt-3 flex flex-wrap gap-2">
-            <button
-              type="button"
-              onClick={() => setSelectedCategoryId(ALL_CATEGORIES)}
-              className={[
-                "rounded-full px-4 py-2 text-sm font-black transition",
-                selectedCategoryId === ALL_CATEGORIES
-                  ? "bg-black text-white"
-                  : "border border-neutral-200 bg-white text-neutral-700",
-              ].join(" ")}
-            >
-              Kõik rubriigid
-            </button>
-
-            {categories.map((category) => (
-              <button
-                key={category.id}
-                type="button"
-                onClick={() => setSelectedCategoryId(category.id)}
-                className={[
-                  "rounded-full px-4 py-2 text-sm font-black transition",
-                  selectedCategoryId === category.id
-                    ? "bg-black text-white"
-                    : "border border-neutral-200 bg-white text-neutral-700",
-                ].join(" ")}
-              >
-                {category.name}
-              </button>
-            ))}
-          </div>
-        ) : null}
+          {categories.length > 0 ? (
+            <StoreCategoryHierarchyFilter
+              categories={categories}
+              selectedCategoryId={selectedCategoryId}
+              allCategoryId={ALL_CATEGORIES}
+              onSelectCategory={(categoryId) => {
+                setSelectedCategoryId(categoryId);
+                setShowAll(false);
+              }}
+            />
+          ) : null}
 
         {categoriesLoading ? (
           <p className="mt-3 text-xs font-semibold text-neutral-400">

@@ -273,3 +273,49 @@ Next exact step:
 - clearing filters resets category selection and expanded group
 - do not modify the listings hook or entity API in this UI step
 - later reuse the same filter foundation on the public profile
+
+---
+
+## 2026-07-17 My Area hierarchical category filter checkpoint
+
+Completed:
+
+- reusable hierarchical category filter component added
+- flat My Area category pill list removed
+- initial filter state shows roots only
+- selecting a root opens direct children
+- root selection filters the complete descendant branch
+- child selection narrows to the child scope
+- selected child keeps its root open
+- only one root branch is expanded
+- all-categories and clear-filters close the hierarchy
+- listing hook and entity API contracts remain unchanged
+- build and browser tests completed
+
+Recovery note:
+
+- during development, stale Next.js Fast Refresh state caused:
+  - useEffect dependency-size warning
+  - repeated Failed to fetch messages
+- source code was not the cause
+- stopping dev, deleting `.next`, building and restarting dev resolved it
+- do not run `npm run build` while `npm run dev` is using the same `.next`
+  directory
+
+Important current files:
+
+- `src/features/store-category-filter/components/StoreCategoryHierarchyFilter.tsx`
+- `src/features/my-area/components/MyAreaListingsSection.tsx`
+- `src/features/my-area/model/useMyAreaListings.ts`
+- `src/entities/listing/api/getMyIdentityListings.ts`
+- `supabase/migrations/20260714140000_add_hierarchical_store_category_filter.sql`
+
+Next exact step:
+
+- add secure store-category rename RPC
+- rename may apply to a root or child
+- category must belong to the authenticated user's active identity
+- renaming must not change `parent_id`
+- use the existing 60-character normalization and uniqueness rules
+- add rename entity API and one inline rename UI
+- do not add delete in the same step

@@ -1815,3 +1815,63 @@ Future compatibility:
 - public profile filtering should reuse the same category-scope principle
 - public profile listing visibility remains a separate concern:
   only active and non-expired listings are public
+
+---
+
+## V2 hierarchical store-category filter component
+
+The listing category hierarchy now has a reusable presentation component:
+
+- `StoreCategoryHierarchyFilter`
+
+Data inputs:
+
+- complete active-identity store category collection
+- selected category ID
+- all-categories sentinel value
+- selection callback
+
+The component owns:
+
+- grouping direct children under roots
+- root and child sorting
+- currently expanded root
+- root/child visual selection
+- accessible expanded-state attributes
+- one-expanded-branch behavior
+
+The listing feature owns:
+
+- selected category state
+- resetting category state
+- passing the selected UUID to the listing hook
+- resetting preview expansion when a filter changes
+
+The listing hook and entity API own:
+
+- loading owner listings
+- forwarding the selected UUID to the database RPC
+- loading and error state
+
+The database owns:
+
+- active identity authorization
+- recursive category ancestry
+- root-plus-descendant scope resolution
+- listing/category relation matching
+
+Interaction rules:
+
+- root click selects the root branch and expands children
+- child click selects the child and keeps the root expanded
+- all-categories selection closes the hierarchy
+- clear-filters resets the hierarchy through selected-state changes
+- the UI must not calculate descendant category IDs
+
+Shared component direction:
+
+- the same hierarchy-filter foundation should later be reused on public
+  profiles
+- My Area queries may include active, paused and sold owner listings
+- public profile queries must continue to expose only active,
+  non-expired listings

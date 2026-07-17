@@ -1931,3 +1931,34 @@ Rules:
 - RPC signature, hook contract and listing entity API did not change
 - rollback test confirmed root/child/unrelated branch behavior
 - next step is replacing flat My Area category pills with hierarchical filter UI
+
+## V2_MY_AREA_HIERARCHICAL_STORE_CATEGORY_FILTER_UI
+
+Rules:
+
+- My Area listing category filters are hierarchical
+- reusable component:
+  `src/features/store-category-filter/components/StoreCategoryHierarchyFilter.tsx`
+- integration:
+  `src/features/my-area/components/MyAreaListingsSection.tsx`
+- initial state shows:
+  - Kõik rubriigid
+  - root categories
+- child categories are not displayed as unrelated flat pills
+- selecting a root:
+  - selects the complete branch scope
+  - expands its direct children
+- selecting a child:
+  - narrows the query to that child scope
+  - keeps its root expanded
+- only one root group is expanded at a time
+- selecting another root closes the previous group
+- selecting all categories closes the expanded group
+- clearing filters resets the selected category and expanded group
+- selected category ID remains one UUID
+- `useMyAreaListings` contract did not change
+- `getMyIdentityListings` contract did not change
+- descendant resolution remains server-side
+- no duplicate parent listing-category relation is required
+- component is intended for later reuse on the public profile
+- public profile visibility rules remain separate from My Area visibility

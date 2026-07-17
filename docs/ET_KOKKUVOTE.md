@@ -5487,3 +5487,62 @@ Rollback-test:
 - alamrubriigi test-ridu jäi 0
 - mitteseotud juurrubriigi test-ridu jäi 0
 - `npm run build` korras
+
+---
+
+# 208. V2 Minu ala hierarhiline poe-rubriigi filter
+
+Asendasime Minu ala kuulutuste lameda rubriigifiltri hierarhilise filtriga.
+
+Lisatud komponent:
+
+- `src/features/store-category-filter/components/StoreCategoryHierarchyFilter.tsx`
+
+Uuendatud ühendus:
+
+- `src/features/my-area/components/MyAreaListingsSection.tsx`
+
+Kasutajaliidese reeglid:
+
+- alguses kuvatakse „Kõik rubriigid” ja ülemrubriigid
+- alamrubriike ei kuvata alguses eraldi lameda nimekirjana
+- ülemrubriigi valimine valib kogu rubriigiharu
+- valitud ülemrubriigi otsesed alamrubriigid avanevad selle kaardi sees
+- korraga on avatud ainult üks ülemrubriigi haru
+- alamrubriigi valimine hoiab selle ülemrubriigi avatuna
+- valitud alamrubriik kitsendab tulemuse selle rubriigi scope'ile
+- teise ülemrubriigi valimine sulgeb eelmise haru
+- „Kõik rubriigid” sulgeb avatud haru
+- „Tühjenda” taastab otsingu, staatuse ja rubriigi algseisu
+- pikad rubriiginimed võivad loomulikult mitmele reale murduda
+- mobiilis kuvatakse ülemrubriigid ühes veerus
+
+Filtriloogika:
+
+- klient saadab jätkuvalt ühe valitud rubriigi UUID
+- hook'i ja listing entity API lepingut ei muudetud
+- ülemrubriigi valik hõlmab andmebaasis ülemrubriiki ja selle järglasi
+- alamrubriigi valik hõlmab alamrubriigi scope'i
+- klient ei arvuta ise alamrubriikide ID-de loendit
+- kuulutusele ei lisata dubleerivat ülemrubriigi seost ainult filtreerimise jaoks
+
+Brauseritest:
+
+- ülemrubriigid kuvati algseisus ilma lahtiste alamrubriikideta
+- ülemrubriigi valimine avas selle alamrubriigid
+- ülemrubriigi filter laadis kogu haru kuulutused
+- alamrubriigi valimine kitsendas tulemuse
+- valitud alamrubriigi ülemrubriik jäi avatuks
+- teise ülemrubriigi valimine sulges eelmise haru
+- „Kõik rubriigid” taastas kõik kuulutused
+- „Tühjenda” taastas kõik filtrid
+- kuulutuste otsing jäi tööle
+- staatusefilter jäi tööle
+- „Vaata kõiki” jäi tööle
+- kuulutuse staatuse muutmine jäi tööle
+- kuulutuse „Muuda” jäi tööle
+- pärast puhast dev-serveri restarti ei kordunud
+  `useEffect changed size between renders`
+- pärast puhast dev-serveri restarti ei kordunud
+  `Failed to fetch` veatsükkel
+- `npm run build` korras
