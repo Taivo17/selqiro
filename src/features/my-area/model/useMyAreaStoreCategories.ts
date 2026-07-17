@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { createMyStoreChildCategory } from "../../../entities/store-category/api/createMyStoreChildCategory";
+import { renameMyStoreCategory } from "../../../entities/store-category/api/renameMyStoreCategory";
 import { createMyStoreRootCategory } from "../../../entities/store-category/api/createMyStoreRootCategory";
 import type { StoreCategory } from "../../../entities/store-category/model/types";
 import { supabaseBrowserClient } from "../../../shared/supabase/browserClient";
@@ -17,9 +18,14 @@ export type MyAreaStoreCategoriesState = {
   error: string | null;
   creatingRootCategory: boolean;
   creatingChildParentId: string | null;
+  renamingCategoryId: string | null;
   createRootCategory: (name: string) => Promise<MyAreaStoreCategory>;
   createChildCategory: (
     parentId: string,
+    name: string
+  ) => Promise<MyAreaStoreCategory>;
+  renameCategory: (
+    categoryId: string,
     name: string
   ) => Promise<MyAreaStoreCategory>;
 };
@@ -43,6 +49,8 @@ export function useMyAreaStoreCategories(): MyAreaStoreCategoriesState {
 
   const [creatingRootCategory, setCreatingRootCategory] = useState(false);
   const [creatingChildParentId, setCreatingChildParentId] =
+    useState<string | null>(null);
+  const [renamingCategoryId, setRenamingCategoryId] =
     useState<string | null>(null);
 
   useEffect(() => {
@@ -196,11 +204,36 @@ export function useMyAreaStoreCategories(): MyAreaStoreCategoriesState {
     }
   }
 
+  async function renameCategory(
+    categoryId: string,
+    name: string
+  ) {
+    if (renamingCategoryId) {
+      throw new Error("Rubriigi nime muutmine juba käib.");
+    }
+
+    setRenamingCategoryId(categoryId);
+
+    try {
+      const updatedCategory = await renameMyStoreCategory({
+        categoryId,
+        name,
+      });
+
+      notifyStoreCategoriesChanged();
+      return updatedCategory;
+    } finally {
+      setRenamingCategoryId(null);
+    }
+  }
+
   return {
     ...state,
     creatingRootCategory,
     creatingChildParentId,
+    renamingCategoryId,
     createRootCategory,
     createChildCategory,
+    renameCategory,
   };
 }

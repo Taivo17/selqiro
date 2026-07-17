@@ -348,3 +348,30 @@ Next exact step:
 - use the existing 60-character limit and counter
 - refresh hierarchy and listing filters after success
 - do not add delete in the same step
+
+---
+
+## 2026-07-17 V2 store-category rename UI checkpoint
+
+Completed:
+
+- root rename UI added
+- child rename UI added
+- shared inline rename control added
+- only one category can be edited at once
+- 60-character limit and counter added
+- cancel, saving, success and error states added
+- hierarchy position remains unchanged
+- category management and listing filters refresh after rename
+- build and browser tests completed
+
+Next exact step:
+
+- add secure category deletion RPC
+- child categories may be deleted
+- roots may be deleted only when they have no children
+- listings must remain intact
+- only listing/category links are removed
+- deletion must be restricted to the active accessible identity
+- selected deleted filters must reset to all categories
+- do not add automatic cascading child deletion

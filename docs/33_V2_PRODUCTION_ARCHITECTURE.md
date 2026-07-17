@@ -1918,3 +1918,41 @@ UI direction:
 - success refreshes every mounted store-category view
 - duplicate and validation errors are shown near the edited category
 - moving categories is a separate future feature
+
+---
+
+## V2 store-category inline rename UI
+
+Rename flow:
+
+`StoreCategoryRenameControl`
+→ `useMyAreaStoreCategories`
+→ `renameMyStoreCategory`
+→ `rename_my_store_category_v2`
+→ database authorization and validation
+
+UI responsibilities:
+
+- display the current name
+- open one inline editor
+- enforce the shared 60-character input limit
+- show saving and validation states
+- support cancel
+- show a local success or error message
+
+Feature-hook responsibilities:
+
+- track `renamingCategoryId`
+- prevent simultaneous category mutations
+- invoke the entity API
+- invalidate mounted store-category views after success
+
+Database responsibilities:
+
+- verify active identity access
+- normalize the new name
+- enforce sibling uniqueness
+- modify only `name`
+- preserve hierarchy and ordering
+
+Delete remains a separate operation because it changes relations between categories and listings.

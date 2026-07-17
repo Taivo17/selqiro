@@ -1989,3 +1989,24 @@ Rules:
 - rollback test completed with zero remaining test rows
 - rename UI has not yet been implemented
 - next step is one inline rename form shared by root and child cards
+
+## V2_STORE_CATEGORY_RENAME_UI
+
+Rules:
+
+- store category rename entity API:
+  `src/entities/store-category/api/renameMyStoreCategory.ts`
+- shared rename UI:
+  `StoreCategoryRenameControl.tsx`
+- root and child categories both support inline rename
+- only one category can be edited at a time
+- edit form shows the current name
+- maximum length is 60 characters
+- unchanged names cannot be submitted
+- cancel does not modify the category
+- rename changes only the category name
+- parent, identity, owner and sort order remain unchanged
+- successful rename dispatches the shared category invalidation event
+- management hierarchy and listing filters refresh together
+- delete is not implemented yet
+- next step is secure store-category deletion

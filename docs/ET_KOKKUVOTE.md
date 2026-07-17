@@ -5619,3 +5619,48 @@ Rollback-test:
 - olematu rubriigi muutmine blokeeriti
 - pärast rollback'i jäi test-ridu 0
 - `npm run build` korras
+
+---
+
+# 210. V2 poe rubriikide ümbernimetamine Minu alas
+
+Lisasime V2 Minu ala poe rubriikide haldusse ülem- ja alamrubriikide ümbernimetamise kasutajaliidese.
+
+Tehtud:
+
+- lisati `renameMyStoreCategory` entity API
+- `useMyAreaStoreCategories` toetab ümbernimetamist
+- hook jälgib aktiivselt muudetava rubriigi ID-d
+- lisati jagatud `StoreCategoryRenameControl`
+- „Muuda nime” on olemas ülemrubriigil
+- „Muuda nime” on olemas alamrubriigil
+- korraga saab muuta ainult ühte rubriiki
+- vorm avaneb otse rubriigi kaardi sees
+- vormis kuvatakse olemasolev nimi
+- nime maksimaalne pikkus on 60 tähemärki
+- kuvatakse märgiloendur
+- muutmata nimega salvestamine on keelatud
+- vormis on „Salvesta” ja „Tühista”
+- salvestamise ajal kuvatakse „Salvestan...”
+- duplikaatnimi kuvab arusaadava veateate
+- edukas muutmine värskendab rubriigihaldust
+- edukas muutmine värskendab kuulutuste hierarhilist filtrit
+- käsitsi lehe refresh ei ole vajalik
+
+Hierarhia reeglid:
+
+- ülemrubriigi ümbernimetamisel jäävad alamrubriigid selle alla
+- alamrubriigi ümbernimetamisel jääb selle `parent_id` samaks
+- nime muutmine ei muuda rubriigi järjekorda
+- nime muutmine ei muuda identiteeti ega omanikku
+
+Brauseritest:
+
+- ülemrubriigi nime muutmine töötas
+- alamrubriigi nime muutmine töötas
+- tühistamine töötas
+- ainult üks inline-editor oli korraga avatud
+- uus nimi ilmus rubriigihalduses ilma refresh'ita
+- uus nimi ilmus kuulutuste filtris ilma refresh'ita
+- ülem- ja alamrubriikide lisamisvormid jäid tööle
+- `npm run build` korras

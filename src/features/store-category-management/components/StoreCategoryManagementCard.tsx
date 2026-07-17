@@ -11,6 +11,7 @@ import {
   type MyAreaStoreCategory,
 } from "../../my-area/model/useMyAreaStoreCategories";
 import StoreCategoryChildCreateForm from "./StoreCategoryChildCreateForm";
+import StoreCategoryRenameControl from "./StoreCategoryRenameControl";
 
 function compareCategories(
   first: MyAreaStoreCategory,
@@ -86,8 +87,10 @@ export default function StoreCategoryManagementCard() {
     error,
     creatingRootCategory,
     creatingChildParentId,
+    renamingCategoryId,
     createRootCategory,
     createChildCategory,
+    renameCategory,
   } = useMyAreaStoreCategories();
 
   const [newRootName, setNewRootName] = useState("");
@@ -99,6 +102,19 @@ export default function StoreCategoryManagementCard() {
     parentId: string;
     message: string;
   } | null>(null);
+  const [editingCategoryId, setEditingCategoryId] =
+    useState<string | null>(null);
+  const [renameSuccess, setRenameSuccess] = useState<{
+    categoryId: string;
+    message: string;
+  } | null>(null);
+
+  const categoryActionBusy =
+    creatingRootCategory ||
+    Boolean(creatingChildParentId) ||
+    Boolean(renamingCategoryId) ||
+    Boolean(childFormParentId) ||
+    Boolean(editingCategoryId);
 
   async function handleCreateRootCategory(
     event: FormEvent<HTMLFormElement>
@@ -139,6 +155,8 @@ export default function StoreCategoryManagementCard() {
   }
 
   function openChildForm(parentId: string) {
+    setEditingCategoryId(null);
+    setRenameSuccess(null);
     setChildFormParentId(parentId);
     setChildSuccess(null);
   }
@@ -157,6 +175,33 @@ export default function StoreCategoryManagementCard() {
     setChildSuccess({
       parentId,
       message: `Alamrubriik „${createdCategory.name}“ lisatud.`,
+    });
+  }
+
+  function openRenameForm(categoryId: string) {
+    setChildFormParentId(null);
+    setChildSuccess(null);
+    setEditingCategoryId(categoryId);
+    setRenameSuccess(null);
+  }
+
+  function closeRenameForm() {
+    setEditingCategoryId(null);
+  }
+
+  async function handleRenameCategory(
+    categoryId: string,
+    name: string
+  ) {
+    const updatedCategory = await renameCategory(
+      categoryId,
+      name
+    );
+
+    setEditingCategoryId(null);
+    setRenameSuccess({
+      categoryId,
+      message: `Rubriigi nimi muudetud: „${updatedCategory.name}“.`,
     });
   }
 
@@ -212,14 +257,14 @@ export default function StoreCategoryManagementCard() {
               }}
               maxLength={STORE_CATEGORY_NAME_MAX_LENGTH}
               placeholder="Näiteks Varuosad"
-              disabled={creatingRootCategory}
+              disabled={categoryActionBusy}
               className="w-full rounded-2xl border border-neutral-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-neutral-400 disabled:cursor-not-allowed disabled:opacity-60"
             />
           </label>
 
           <button
             type="submit"
-            disabled={creatingRootCategory || !newRootName.trim()}
+            disabled={categoryActionBusy || !newRootName.trim()}
             className="rounded-full bg-black px-5 py-3 text-sm font-black text-white transition disabled:cursor-not-allowed disabled:opacity-40"
           >
             {creatingRootCategory ? "Lisan..." : "Lisa ülemrubriik"}
@@ -280,38 +325,67 @@ export default function StoreCategoryManagementCard() {
                 key={rootCategory.id}
                 className="rounded-2xl border border-neutral-200 bg-[#fbfbfa] p-3"
               >
-                <div className="flex items-start justify-between gap-3">
-                  <div className="min-w-0">
-                    <span className="inline-flex rounded-full bg-white px-2.5 py-1 text-[11px] font-black uppercase tracking-[0.14em] text-neutral-500">
-                      Ülemrubriik
-                    </span>
-
-                    <h3 className="mt-2 break-words text-base font-black leading-5">
-                      {rootCategory.name}
-                    </h3>
-                  </div>
-
-                  {children.length > 0 ? (
-                    <span className="shrink-0 rounded-full bg-white px-2.5 py-1 text-xs font-black text-neutral-500">
-                      {children.length}
-                    </span>
-                  ) : null}
-                </div>
+                <StoreCategoryRenameControl
+                  category={rootCategory}
+                  level="root"
+                  editing={editingCategoryId === rootCategory.id}
+                  saving={renamingCategoryId === rootCategory.id}
+                  disabled={categoryActionBusy}
+                  successMessage={
+                    renameSuccess?.categoryId === rootCategory.id
+                      ? renameSuccess.message
+                      : null
+                  }
+                  trailing={
+                    children.length > 0 ? (
+                      <span className="shrink-0 rounded-full bg-white px-2.5 py-1 text-xs font-black text-neutral-500">
+                        {children.length}
+                      </span>
+                    ) : null
+                  }
+                  onStartEdit={() =>
+                    openRenameForm(rootCategory.id)
+                  }
+                  onSave={(name) =>
+                    handleRenameCategory(
+                      rootCategory.id,
+                      name
+                    )
+                  }
+                  onCancel={closeRenameForm}
+                />
 
                 {children.length > 0 ? (
                   <div className="mt-3 space-y-2 border-l-2 border-neutral-200 pl-3">
                     {children.map((childCategory) => (
-                      <div
+                      <StoreCategoryRenameControl
                         key={childCategory.id}
-                        className="rounded-xl border border-neutral-200 bg-white px-3 py-2"
-                      >
-                        <p className="break-words text-sm font-black">
-                          {childCategory.name}
-                        </p>
-                        <p className="mt-1 text-[11px] font-bold uppercase tracking-[0.14em] text-neutral-400">
-                          Alamrubriik
-                        </p>
-                      </div>
+                        category={childCategory}
+                        level="child"
+                        editing={
+                          editingCategoryId === childCategory.id
+                        }
+                        saving={
+                          renamingCategoryId === childCategory.id
+                        }
+                        disabled={categoryActionBusy}
+                        successMessage={
+                          renameSuccess?.categoryId ===
+                          childCategory.id
+                            ? renameSuccess.message
+                            : null
+                        }
+                        onStartEdit={() =>
+                          openRenameForm(childCategory.id)
+                        }
+                        onSave={(name) =>
+                          handleRenameCategory(
+                            childCategory.id,
+                            name
+                          )
+                        }
+                        onCancel={closeRenameForm}
+                      />
                     ))}
                   </div>
                 ) : null}
@@ -334,7 +408,7 @@ export default function StoreCategoryManagementCard() {
                     <button
                       type="button"
                       onClick={() => openChildForm(rootCategory.id)}
-                      disabled={Boolean(creatingChildParentId)}
+                      disabled={categoryActionBusy}
                       className="rounded-full border border-neutral-200 bg-white px-3 py-2 text-xs font-black text-neutral-700 shadow-sm disabled:cursor-not-allowed disabled:opacity-40"
                     >
                       + Lisa alamrubriik
