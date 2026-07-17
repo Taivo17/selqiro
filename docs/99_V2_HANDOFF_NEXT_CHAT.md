@@ -375,3 +375,36 @@ Next exact step:
 - deletion must be restricted to the active accessible identity
 - selected deleted filters must reset to all categories
 - do not add automatic cascading child deletion
+
+---
+
+## 2026-07-17 secure store-category delete RPC checkpoint
+
+Completed:
+
+- secure store-category delete RPC added
+- child deletion is supported
+- childless root deletion is supported
+- roots with children are protected
+- automatic cascading child deletion is not allowed
+- listings remain intact
+- only listing/category links are removed
+- removed relation count is returned
+- active identity access is validated
+- anonymous and cross-identity deletion are blocked
+- rollback test completed with no remaining test categories or relations
+
+Current UI status:
+
+- category delete buttons and confirmation UI are not implemented yet
+
+Next exact step:
+
+- add `deleteMyStoreCategory` entity API
+- extend `useMyAreaStoreCategories` with deletion state/action
+- add a compact delete action to root and child controls
+- disable root deletion while it has children
+- require an explicit confirmation step
+- explain that listings remain but category links are removed
+- after success, refresh management hierarchy and listing filters
+- reset a deleted selected filter to `Kõik rubriigid`

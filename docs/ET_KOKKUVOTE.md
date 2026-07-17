@@ -5664,3 +5664,73 @@ Brauseritest:
 - uus nimi ilmus kuulutuste filtris ilma refresh'ita
 - ülem- ja alamrubriikide lisamisvormid jäid tööle
 - `npm run build` korras
+
+---
+
+# 211. V2 poe rubriigi turvaline kustutamise RPC
+
+Lisasime turvalise andmebaasi-RPC, millega saab kustutada aktiivsele identiteedile kuuluva poe rubriigi.
+
+Migratsioon:
+
+- `supabase/migrations/20260717215000_add_delete_store_category_rpc.sql`
+
+Lisatud RPC:
+
+- `public.delete_my_store_category_v2(uuid)`
+
+Kustutamisreeglid:
+
+- alamrubriiki saab kustutada
+- lasteta ülemrubriiki saab kustutada
+- lastega ülemrubriigi kustutamine blokeeritakse
+- alamrubriike ei kustutata koos ülemrubriigiga automaatselt
+- rubriigi kustutamine ei kustuta kuulutusi
+- eemaldatakse ainult kustutatud rubriigi kuulutusseosed
+- kuulutusseosed eemaldatakse RPC-s selgelt enne rubriigi kustutamist
+- foreign key `listing_store_categories.store_category_id` kasutab lisaks `ON DELETE CASCADE`
+- foreign key `store_categories.parent_id` kasutab `ON DELETE RESTRICT`
+
+Turvareeglid:
+
+- kasutaja peab olema autentitud
+- aktiivne identiteet loetakse `profiles.active_identity_id` kaudu
+- kasutajal peab olema aktiivsele identiteedile tegelik ligipääs
+- kustutatav rubriik peab kuuluma aktiivsele identiteedile
+- teise identiteedi rubriiki kustutada ei saa
+- anonüümne kasutaja ei saa RPC-d käivitada
+- olematu rubriigi kustutamine blokeeritakse
+
+RPC tagastab:
+
+- kustutatud rubriigi ID
+- kustutatud rubriigi nime
+- kustutatud rubriigi parent ID
+- taseme: `root` või `child`
+- eemaldatud kuulutusseoste arvu
+
+Andmebaasi audit enne muudatust:
+
+- rubriike kokku: 19
+- ülemrubriike: 16
+- alamrubriike: 3
+- alamrubriikidega ülemrubriike: 1
+- kuulutustega seotud rubriike: 12
+- kuulutuse-rubriigi seoseid kokku: 66
+
+Rollback-test:
+
+- testkuulutus seoti ajutiselt ülem- ja alamrubriigiga
+- lastega ülemrubriigi kustutamine blokeeriti
+- blokeeritud kustutamine ei eemaldanud kuulutusseoseid
+- alamrubriigi kustutamine õnnestus
+- alamrubriigi üks kuulutusseos eemaldati
+- kuulutus jäi pärast alamrubriigi kustutamist alles
+- pärast lapse eemaldamist õnnestus ülemrubriigi kustutamine
+- ülemrubriigi üks kuulutusseos eemaldati
+- kuulutus jäi pärast ülemrubriigi kustutamist alles
+- teise identiteedi rubriigi kustutamine blokeeriti
+- olematu rubriigi kustutamine blokeeriti
+- pärast rollback'i jäi testkategooriaid 0
+- pärast rollback'i jäi testseoseid 0
+- `npm run build` korras

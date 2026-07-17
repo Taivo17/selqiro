@@ -1956,3 +1956,54 @@ Database responsibilities:
 - preserve hierarchy and ordering
 
 Delete remains a separate operation because it changes relations between categories and listings.
+
+---
+
+## Secure store-category deletion
+
+Deletion flow:
+
+UI confirmation
+→ `useMyAreaStoreCategories`
+→ store-category entity API
+→ `delete_my_store_category_v2`
+→ database authorization and relation cleanup
+
+Allowed operations:
+
+- delete one child category
+- delete one root category that has no children
+
+Forbidden operations:
+
+- deleting a root that still has children
+- automatic cascading deletion of child categories
+- deleting a category from another identity
+- deleting listings together with a category
+
+Relation behavior:
+
+- listings remain intact
+- only `listing_store_categories` rows for the deleted category are removed
+- RPC explicitly counts and deletes those relations
+- the foreign key also provides cascade cleanup as defense in depth
+
+RPC result:
+
+- deleted category identity
+- deleted display name
+- former parent ID
+- deleted level
+- removed listing-link count
+
+Required UI behavior:
+
+- deletion requires explicit confirmation
+- confirmation names the category being deleted
+- confirmation explains that listings remain
+- confirmation explains how many listing links may be removed when known
+- roots with children show deletion as disabled with an explanation
+- child categories and childless roots can expose the delete action
+- successful deletion invalidates all mounted category views
+- a deleted selected listing filter must reset to all categories
+- only one category mutation may run at a time

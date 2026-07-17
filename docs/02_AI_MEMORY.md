@@ -2010,3 +2010,27 @@ Rules:
 - management hierarchy and listing filters refresh together
 - delete is not implemented yet
 - next step is secure store-category deletion
+
+## V2_STORE_CATEGORY_DELETE_RPC
+
+Rules:
+
+- store category deletion RPC:
+  `public.delete_my_store_category_v2(uuid)`
+- child categories may be deleted
+- root categories may be deleted only when they have no children
+- child categories must never be silently cascade-deleted with a root
+- listings themselves must never be deleted with a store category
+- only `listing_store_categories` relations are removed
+- RPC returns the number of removed listing/category relations
+- deletion is limited to the authenticated user's active accessible identity
+- anonymous execution is disabled
+- cross-identity deletion is forbidden
+- missing-category deletion is forbidden
+- listing/category links are explicitly removed before deleting the category
+- database foreign keys additionally enforce:
+  - child protection with `ON DELETE RESTRICT`
+  - listing-link cleanup with `ON DELETE CASCADE`
+- rollback test completed with zero remaining category and relation rows
+- delete UI has not yet been implemented
+- next step is confirmed deletion UI for root and child cards
