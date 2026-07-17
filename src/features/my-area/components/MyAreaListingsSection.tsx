@@ -218,6 +218,30 @@ export default function MyAreaListingsSection() {
   } = useMyAreaStoreCategories();
 
   useEffect(() => {
+    if (
+      categoriesLoading ||
+      selectedCategoryId === ALL_CATEGORIES
+    ) {
+      return;
+    }
+
+    const selectedCategoryStillExists =
+      categories.some(
+        (category) =>
+          category.id === selectedCategoryId
+      );
+
+    if (!selectedCategoryStillExists) {
+      setSelectedCategoryId(ALL_CATEGORIES);
+      setShowAll(false);
+    }
+  }, [
+    categories,
+    categoriesLoading,
+    selectedCategoryId,
+  ]);
+
+  useEffect(() => {
     const timer = window.setTimeout(() => {
       setDebouncedSearch(searchInput.trim());
     }, 300);

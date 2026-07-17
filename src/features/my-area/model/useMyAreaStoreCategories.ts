@@ -2,6 +2,10 @@
 
 import { useEffect, useState } from "react";
 import { createMyStoreChildCategory } from "../../../entities/store-category/api/createMyStoreChildCategory";
+import {
+  deleteMyStoreCategory,
+  type DeletedStoreCategory,
+} from "../../../entities/store-category/api/deleteMyStoreCategory";
 import { renameMyStoreCategory } from "../../../entities/store-category/api/renameMyStoreCategory";
 import { createMyStoreRootCategory } from "../../../entities/store-category/api/createMyStoreRootCategory";
 import type { StoreCategory } from "../../../entities/store-category/model/types";
@@ -19,6 +23,7 @@ export type MyAreaStoreCategoriesState = {
   creatingRootCategory: boolean;
   creatingChildParentId: string | null;
   renamingCategoryId: string | null;
+  deletingCategoryId: string | null;
   createRootCategory: (name: string) => Promise<MyAreaStoreCategory>;
   createChildCategory: (
     parentId: string,
@@ -28,6 +33,9 @@ export type MyAreaStoreCategoriesState = {
     categoryId: string,
     name: string
   ) => Promise<MyAreaStoreCategory>;
+  deleteCategory: (
+    categoryId: string
+  ) => Promise<DeletedStoreCategory>;
 };
 
 function notifyStoreCategoriesChanged() {
@@ -51,6 +59,8 @@ export function useMyAreaStoreCategories(): MyAreaStoreCategoriesState {
   const [creatingChildParentId, setCreatingChildParentId] =
     useState<string | null>(null);
   const [renamingCategoryId, setRenamingCategoryId] =
+    useState<string | null>(null);
+  const [deletingCategoryId, setDeletingCategoryId] =
     useState<string | null>(null);
 
   useEffect(() => {
@@ -227,13 +237,35 @@ export function useMyAreaStoreCategories(): MyAreaStoreCategoriesState {
     }
   }
 
+  async function deleteCategory(
+    categoryId: string
+  ) {
+    if (deletingCategoryId) {
+      throw new Error("Rubriigi kustutamine juba käib.");
+    }
+
+    setDeletingCategoryId(categoryId);
+
+    try {
+      const deletedCategory =
+        await deleteMyStoreCategory(categoryId);
+
+      notifyStoreCategoriesChanged();
+      return deletedCategory;
+    } finally {
+      setDeletingCategoryId(null);
+    }
+  }
+
   return {
     ...state,
     creatingRootCategory,
     creatingChildParentId,
     renamingCategoryId,
+    deletingCategoryId,
     createRootCategory,
     createChildCategory,
     renameCategory,
+    deleteCategory,
   };
 }

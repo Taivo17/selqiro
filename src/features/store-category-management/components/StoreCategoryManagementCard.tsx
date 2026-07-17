@@ -11,6 +11,7 @@ import {
   type MyAreaStoreCategory,
 } from "../../my-area/model/useMyAreaStoreCategories";
 import StoreCategoryChildCreateForm from "./StoreCategoryChildCreateForm";
+import StoreCategoryDeleteControl from "./StoreCategoryDeleteControl";
 import StoreCategoryRenameControl from "./StoreCategoryRenameControl";
 
 function compareCategories(
@@ -88,9 +89,11 @@ export default function StoreCategoryManagementCard() {
     creatingRootCategory,
     creatingChildParentId,
     renamingCategoryId,
+    deletingCategoryId,
     createRootCategory,
     createChildCategory,
     renameCategory,
+    deleteCategory,
   } = useMyAreaStoreCategories();
 
   const [newRootName, setNewRootName] = useState("");
@@ -108,13 +111,19 @@ export default function StoreCategoryManagementCard() {
     categoryId: string;
     message: string;
   } | null>(null);
+  const [deleteConfirmCategoryId, setDeleteConfirmCategoryId] =
+    useState<string | null>(null);
+  const [deleteSuccess, setDeleteSuccess] =
+    useState<string | null>(null);
 
   const categoryActionBusy =
     creatingRootCategory ||
     Boolean(creatingChildParentId) ||
     Boolean(renamingCategoryId) ||
+    Boolean(deletingCategoryId) ||
     Boolean(childFormParentId) ||
-    Boolean(editingCategoryId);
+    Boolean(editingCategoryId) ||
+    Boolean(deleteConfirmCategoryId);
 
   async function handleCreateRootCategory(
     event: FormEvent<HTMLFormElement>
@@ -157,6 +166,8 @@ export default function StoreCategoryManagementCard() {
   function openChildForm(parentId: string) {
     setEditingCategoryId(null);
     setRenameSuccess(null);
+    setDeleteConfirmCategoryId(null);
+    setDeleteSuccess(null);
     setChildFormParentId(parentId);
     setChildSuccess(null);
   }
@@ -181,6 +192,8 @@ export default function StoreCategoryManagementCard() {
   function openRenameForm(categoryId: string) {
     setChildFormParentId(null);
     setChildSuccess(null);
+    setDeleteConfirmCategoryId(null);
+    setDeleteSuccess(null);
     setEditingCategoryId(categoryId);
     setRenameSuccess(null);
   }
@@ -203,6 +216,37 @@ export default function StoreCategoryManagementCard() {
       categoryId,
       message: `Rubriigi nimi muudetud: „${updatedCategory.name}“.`,
     });
+  }
+
+  function openDeleteConfirm(categoryId: string) {
+    setChildFormParentId(null);
+    setChildSuccess(null);
+    setEditingCategoryId(null);
+    setRenameSuccess(null);
+    setDeleteSuccess(null);
+    setDeleteConfirmCategoryId(categoryId);
+  }
+
+  function closeDeleteConfirm() {
+    setDeleteConfirmCategoryId(null);
+  }
+
+  async function handleDeleteCategory(
+    categoryId: string
+  ) {
+    const deletedCategory =
+      await deleteCategory(categoryId);
+
+    setDeleteConfirmCategoryId(null);
+
+    const removedLinksText =
+      deletedCategory.removedListingLinks === 1
+        ? "Eemaldati 1 kuulutuse seos."
+        : `Eemaldati ${deletedCategory.removedListingLinks} kuulutuse seost.`;
+
+    setDeleteSuccess(
+      `Rubriik „${deletedCategory.name}“ kustutatud. ${removedLinksText} Kuulutused jäid alles.`
+    );
   }
 
   const {
@@ -294,6 +338,12 @@ export default function StoreCategoryManagementCard() {
         ) : null}
       </form>
 
+      {deleteSuccess ? (
+        <p className="mt-4 rounded-xl border border-emerald-100 bg-emerald-50 px-3 py-2 text-sm font-semibold leading-6 text-emerald-800">
+          {deleteSuccess}
+        </p>
+      ) : null}
+
       {loading ? <LoadingCategories /> : null}
 
       {!loading && error ? (
@@ -343,6 +393,33 @@ export default function StoreCategoryManagementCard() {
                       </span>
                     ) : null
                   }
+                  footer={
+                    <StoreCategoryDeleteControl
+                      category={rootCategory}
+                      level="root"
+                      childCount={children.length}
+                      confirming={
+                        deleteConfirmCategoryId ===
+                        rootCategory.id
+                      }
+                      deleting={
+                        deletingCategoryId ===
+                        rootCategory.id
+                      }
+                      disabled={
+                        categoryActionBusy &&
+                        deleteConfirmCategoryId !==
+                          rootCategory.id
+                      }
+                      onStart={() =>
+                        openDeleteConfirm(rootCategory.id)
+                      }
+                      onCancel={closeDeleteConfirm}
+                      onConfirm={() =>
+                        handleDeleteCategory(rootCategory.id)
+                      }
+                    />
+                  }
                   onStartEdit={() =>
                     openRenameForm(rootCategory.id)
                   }
@@ -374,6 +451,37 @@ export default function StoreCategoryManagementCard() {
                           childCategory.id
                             ? renameSuccess.message
                             : null
+                        }
+                        footer={
+                          <StoreCategoryDeleteControl
+                            category={childCategory}
+                            level="child"
+                            childCount={0}
+                            confirming={
+                              deleteConfirmCategoryId ===
+                              childCategory.id
+                            }
+                            deleting={
+                              deletingCategoryId ===
+                              childCategory.id
+                            }
+                            disabled={
+                              categoryActionBusy &&
+                              deleteConfirmCategoryId !==
+                                childCategory.id
+                            }
+                            onStart={() =>
+                              openDeleteConfirm(
+                                childCategory.id
+                              )
+                            }
+                            onCancel={closeDeleteConfirm}
+                            onConfirm={() =>
+                              handleDeleteCategory(
+                                childCategory.id
+                              )
+                            }
+                          />
                         }
                         onStartEdit={() =>
                           openRenameForm(childCategory.id)

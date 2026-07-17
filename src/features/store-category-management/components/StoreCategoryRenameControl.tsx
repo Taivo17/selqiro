@@ -16,6 +16,7 @@ type StoreCategoryRenameControlProps = {
   disabled: boolean;
   successMessage?: string | null;
   trailing?: ReactNode;
+  footer?: ReactNode;
   onStartEdit: () => void;
   onSave: (name: string) => Promise<void>;
   onCancel: () => void;
@@ -29,6 +30,7 @@ export default function StoreCategoryRenameControl({
   disabled,
   successMessage,
   trailing,
+  footer,
   onStartEdit,
   onSave,
   onCancel,
@@ -193,6 +195,10 @@ export default function StoreCategoryRenameControl({
         <p className="mt-2 rounded-lg border border-emerald-100 bg-emerald-50 px-2.5 py-2 text-xs font-semibold leading-5 text-emerald-800">
           {successMessage}
         </p>
+      ) : null}
+
+      {footer ? (
+        <div className="mt-2">{footer}</div>
       ) : null}
     </div>
   );

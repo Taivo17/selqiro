@@ -5734,3 +5734,58 @@ Rollback-test:
 - pärast rollback'i jäi testkategooriaid 0
 - pärast rollback'i jäi testseoseid 0
 - `npm run build` korras
+
+---
+
+# 212. V2 poe rubriikide kustutamine Minu alas
+
+Lisasime V2 Minu ala poe rubriigihaldusse turvalise kustutamise kasutajaliidese.
+
+Lisatud moodulid ja ühendused:
+
+- `src/entities/store-category/api/deleteMyStoreCategory.ts`
+- `src/features/store-category-management/components/StoreCategoryDeleteControl.tsx`
+- `useMyAreaStoreCategories` toetab kustutamist
+- `StoreCategoryManagementCard` kuvab kustutamistegevused
+- `StoreCategoryRenameControl` toetab eraldi tegevuste footer-ala
+- `MyAreaListingsSection` taastab puuduva valitud rubriigi korral filtri väärtusele „Kõik rubriigid”
+
+Kasutajaliidese reeglid:
+
+- alamrubriigil on tegevus „Kustuta”
+- lasteta ülemrubriigil on tegevus „Kustuta”
+- alamrubriikidega ülemrubriigi kustutamine on keelatud
+- keelatud tegevuse juures kuvatakse eemaldamist vajavate alamrubriikide arv
+- kustutamine nõuab eraldi kinnitamist
+- kinnituses kuvatakse kustutatava rubriigi nimi
+- kinnituses selgitatakse, et kuulutused jäävad alles
+- kinnituses selgitatakse, et eemaldatakse ainult rubriigi seosed kuulutustega
+- kasutaja saab valida „Jah, kustuta” või „Tühista”
+- kustutamise ajal kuvatakse „Kustutan...”
+- korraga saab toimuda ainult üks rubriigi muutmise tegevus
+
+Pärast kustutamist:
+
+- rubriik eemaldatakse haldusvaatest
+- rubriik eemaldatakse kuulutuste hierarhilisest filtrist
+- rubriikide koguarv värskendub
+- eemaldatud kuulutusseoste arv kuvatakse kasutajale
+- kuulutused ise jäävad alles
+- käsitsi lehe refresh ei ole vajalik
+- kui kustutatud rubriik oli kuulutuste filtris valitud, taastub filter automaatselt valikule „Kõik rubriigid”
+
+Brauseritest:
+
+- lasteta ülemrubriigi kinnituskast avanes
+- „Tühista” jättis rubriigi alles
+- lasteta ülemrubriigi kustutamine õnnestus
+- edukas teade kuvas kustutatud rubriigi nime
+- edukas teade kuvas eemaldatud kuulutusseoste arvu
+- kuulutuste allesjäämise teade kuvati
+- alamrubriikide kustutamisnupud töötasid
+- lastega ülemrubriigi kustutamine oli keelatud
+- lastega ülemrubriigi juures kuvati „Eemalda esmalt 3 alamrubriiki”
+- lisamine jäi tööle
+- ümbernimetamine jäi tööle
+- hierarhiline kuulutuste filter jäi tööle
+- `npm run build` korras

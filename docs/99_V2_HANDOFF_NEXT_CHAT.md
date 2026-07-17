@@ -408,3 +408,51 @@ Next exact step:
 - explain that listings remain but category links are removed
 - after success, refresh management hierarchy and listing filters
 - reset a deleted selected filter to `Kõik rubriigid`
+
+---
+
+## 2026-07-17 V2 store-category delete UI checkpoint
+
+Completed:
+
+- delete entity API added
+- category hook supports deletion
+- shared delete confirmation control added
+- child categories can be deleted
+- childless roots can be deleted
+- roots with children show a disabled delete action and explanation
+- deletion requires explicit confirmation
+- listings remain intact
+- removed listing-link count is shown after success
+- management hierarchy refreshes automatically
+- listing category filters refresh automatically
+- stale deleted category selection resets to „Kõik rubriigid”
+- build and browser tests completed
+
+V2 store-category management now supports:
+
+- root creation
+- direct child creation
+- root and child rename
+- safe root and child deletion
+- two-level management UI
+- recursive database hierarchy filtering
+- hierarchical My Area listing filter
+
+Not implemented yet:
+
+- drag-and-drop or manual ordering
+- moving a child between roots
+- deeper-than-two-level management UI
+- public profile category filtering
+
+Next exact step:
+
+- add store-category assignment to the V2 listing edit page
+- load categories for the active identity
+- show roots and children hierarchically
+- allow selecting one or more categories
+- store only explicit `listing_store_categories` links
+- do not add duplicate parent links for child selections
+- validate category ownership in the database
+- save category relations separately from listing basic fields

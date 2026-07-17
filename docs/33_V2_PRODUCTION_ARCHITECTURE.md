@@ -2007,3 +2007,54 @@ Required UI behavior:
 - successful deletion invalidates all mounted category views
 - a deleted selected listing filter must reset to all categories
 - only one category mutation may run at a time
+
+---
+
+## V2 store-category deletion UI
+
+Deletion flow:
+
+`StoreCategoryDeleteControl`
+→ `StoreCategoryManagementCard`
+→ `useMyAreaStoreCategories`
+→ `deleteMyStoreCategory`
+→ `delete_my_store_category_v2`
+→ database authorization and relation cleanup
+
+UI responsibilities:
+
+- expose deletion for child categories
+- expose deletion for childless root categories
+- disable root deletion when children exist
+- explain why deletion is disabled
+- require explicit confirmation
+- name the affected category
+- explain that listings remain
+- expose cancel and deleting states
+- show the removed listing-link count after success
+
+Feature-hook responsibilities:
+
+- track `deletingCategoryId`
+- prevent concurrent category mutations
+- invoke the entity API
+- invalidate every mounted category view after success
+
+Listing-filter behavior:
+
+- category views reload after deletion
+- a selected category that no longer exists must reset to all categories
+- the reset must also close the expanded hierarchy branch
+- the client must not keep a stale deleted category UUID as an active filter
+
+Database responsibilities:
+
+- authorize against the authenticated user's active identity
+- reject cross-identity deletion
+- reject deletion of a root with children
+- remove listing/category relations
+- preserve all listings
+- return the deleted category metadata and relation count
+
+No automatic child deletion is allowed.
+Moving or reordering categories remains a separate future feature.

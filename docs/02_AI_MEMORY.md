@@ -2034,3 +2034,34 @@ Rules:
 - rollback test completed with zero remaining category and relation rows
 - delete UI has not yet been implemented
 - next step is confirmed deletion UI for root and child cards
+
+## V2_STORE_CATEGORY_DELETE_UI
+
+Rules:
+
+- delete entity API:
+  `src/entities/store-category/api/deleteMyStoreCategory.ts`
+- shared confirmation UI:
+  `StoreCategoryDeleteControl.tsx`
+- child categories can be deleted
+- childless root categories can be deleted
+- root categories with children cannot be deleted
+- child categories are never silently cascade-deleted with a root
+- deletion always requires explicit confirmation
+- confirmation names the category
+- confirmation explains that listings remain
+- only listing/category relations are removed
+- deletion result includes removed listing-link count
+- `useMyAreaStoreCategories` tracks `deletingCategoryId`
+- successful deletion dispatches the shared category invalidation event
+- category management and listing filters refresh together
+- if the selected listing filter no longer exists, it resets to all categories
+- only one category mutation or confirmation can be active at a time
+- browser tests completed successfully
+- store-category launch management now supports:
+  - root creation
+  - child creation
+  - rename
+  - safe deletion
+  - hierarchical owner listing filtering
+- category ordering remains a later feature
