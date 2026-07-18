@@ -490,3 +490,34 @@ Next exact step:
 - save categories separately from listing basic fields
 - allow saving an empty selection
 - reload current assignment after success
+
+---
+
+## 2026-07-18 listing category assignment client checkpoint
+
+Completed:
+
+- current listing category IDs can be loaded
+- assignments can be saved through the secure RPC
+- independent assignment state hook added
+- dirty, clear, reset, saving, success and error states exist
+- read-only assignment card added to the listing edit view
+- child assignment path display verified in browser
+- no duplicate parent relation was shown
+- build completed successfully
+
+Current UI status:
+
+- existing assignments are visible
+- category selection and assignment saving are not yet exposed
+
+Next exact step:
+
+- replace the read-only content with a hierarchical multi-select
+- show root categories with direct children
+- allow multiple explicit selections
+- do not auto-select a parent when a child is selected
+- add separate `Salvesta rubriigid` and `Taasta` actions
+- allow clearing all assignments
+- show dirty, saving, success and error states
+- keep listing basics save unchanged

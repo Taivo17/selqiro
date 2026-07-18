@@ -2107,3 +2107,41 @@ RPC result:
 - normalized selected category IDs
 - assigned category count
 - removed previous-link count
+
+---
+
+## V2 listing store-category client assignment layer
+
+Client architecture:
+
+`ListingStoreCategoryAssignmentCard`
+→ `useListingStoreCategoryAssignment`
+→ listing entity APIs
+→ secure assignment RPC
+
+Entity APIs:
+
+- `getListingStoreCategoryIds`
+  loads current explicit relation IDs
+- `setListingStoreCategories`
+  replaces the explicit relation set through the RPC
+
+Hook responsibilities:
+
+- retain the last saved category set
+- retain the current selected category set
+- detect unsaved changes independently of array order
+- support selecting, clearing and resetting
+- expose separate loading and saving states
+- reload local saved state from the RPC result after success
+
+Presentation responsibilities:
+
+- combine relation IDs with the active identity category tree
+- display root names directly
+- display child names with their root path
+- distinguish missing or stale category references
+- keep this operation independent of listing basics and images
+
+The current card is read-only for connection verification.
+The next UI version adds hierarchical explicit selection and a separate save action.

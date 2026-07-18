@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import ListingStoreCategoryAssignmentCard from "./ListingStoreCategoryAssignmentCard";
 import { useEditableListing } from "../model/useEditableListing";
 import { useListingBasicsForm } from "../model/useListingBasicsForm";
 import { setListingPrimaryImage } from "../../../entities/listing/api/setListingPrimaryImage";
@@ -409,8 +410,9 @@ export default function ListingEditPage({ listingId }: { listingId: string }) {
               {basicsForm.form.title || listing.title}
             </h1>
             <p className="mt-3 max-w-3xl text-sm leading-6 text-neutral-600">
-              Muuta saab pealkirja, kirjeldust, hinda ja seisukorda.
-              Pildid, kategooria ja asukoht tulevad järgmistes etappides.
+              Muuta saab põhiandmeid ja pilte. Poe-rubriikide
+              olemasolev määrang on allpool nähtav; valiku muutmine
+              lisatakse järgmises sammus.
             </p>
           </div>
 
@@ -608,6 +610,10 @@ export default function ListingEditPage({ listingId }: { listingId: string }) {
               <FieldPreview label="Aegub" value={formatDateTimeLabel(listing.activeUntil)} />
             </div>
           </section>
+
+          <ListingStoreCategoryAssignmentCard
+            listingId={String(listing.id)}
+          />
 
           <section className="rounded-[34px] border border-black/5 bg-white p-6 shadow-sm md:p-8">
             <p className="text-xs font-bold uppercase tracking-[0.24em] text-neutral-400">

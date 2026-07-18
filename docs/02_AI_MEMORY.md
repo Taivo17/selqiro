@@ -2090,3 +2090,24 @@ Rules:
 - rollback test completed with zero remaining test categories and links
 - assignment UI has not yet been implemented
 - next step is hierarchical multi-select assignment in the V2 listing edit view
+
+## V2_LISTING_STORE_CATEGORY_ASSIGNMENT_CLIENT_LAYER
+
+Rules:
+
+- current assignment loader:
+  `getListingStoreCategoryIds.ts`
+- current assignment saver:
+  `setListingStoreCategories.ts`
+- assignment state hook:
+  `useListingStoreCategoryAssignment.ts`
+- read-only edit card:
+  `ListingStoreCategoryAssignmentCard.tsx`
+- only explicit listing/category links are loaded and displayed
+- child links are displayed with their parent path
+- parent links are not inferred or stored automatically
+- assignment save remains separate from listing basic-field save
+- empty category selection is valid
+- hook supports dirty, reset, clear, saving, success and error state
+- read-only browser connection has been verified
+- next step is hierarchical explicit multi-selection and separate save controls

@@ -5859,3 +5859,49 @@ Rollback-test:
 - pärast rollback'i jäi test-rubriike 0
 - pärast rollback'i jäi testseoseid 0
 - `npm run build` korras
+
+---
+
+# 214. V2 kuulutuse poe-rubriikide assignment-andmekiht
+
+Lisasime V2 kuulutuse edit-vaatesse poe-rubriikide seoste kliendipoolse andmekihi ja read-only kontrollvaate.
+
+Lisatud failid:
+
+- `src/entities/listing/api/getListingStoreCategoryIds.ts`
+- `src/entities/listing/api/setListingStoreCategories.ts`
+- `src/features/listing-edit/model/useListingStoreCategoryAssignment.ts`
+- `src/features/listing-edit/components/ListingStoreCategoryAssignmentCard.tsx`
+
+Uuendatud fail:
+
+- `src/features/listing-edit/components/ListingEditPage.tsx`
+
+Andmekihi reeglid:
+
+- olemasolevad otsesed `listing_store_categories` seosed laaditakse kuulutuse ID järgi
+- rubriigi-ID-d normaliseeritakse ja duplikaadid eemaldatakse
+- salvestamine kasutab turvalist `set_my_listing_store_categories_v2` RPC-d
+- valik võib sisaldada ühte või mitut rubriiki
+- tühi valik on lubatud
+- salvestamine on eraldi kuulutuse põhiandmete salvestamisest
+- hook jälgib laadimist, salvestamist, vigu, edu ja muutmata/muudetud olekut
+
+Read-only kontrollvaade:
+
+- asub Põhiandmete ja Kirjelduse vahel
+- kuvab määratud rubriikide arvu
+- ülemrubriik kuvatakse nime järgi
+- alamrubriik kuvatakse teena `Ülemrubriik → Alamrubriik`
+- automaatselt tuletatud ülemrubriiki eraldi seosena ei kuvata
+- tühja määrangu jaoks on eraldi tühi olek
+- valiku muutmine ei ole selles checkpoint'is veel kasutajale avatud
+
+Brauseritest:
+
+- kuulutuse üks olemasolev alamrubriigi seos laaditi
+- kuvati `1 määratud`
+- kuvati tee `AUTODE MÜÜK → SÕIDUAUTOD`
+- dubleerivat ülemrubriigi seost ei kuvatud
+- edit-vaate põhiandmed ja kirjeldus jäid tööle
+- `npm run build` korras
