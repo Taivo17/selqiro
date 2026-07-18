@@ -5789,3 +5789,73 @@ Brauseritest:
 - ümbernimetamine jäi tööle
 - hierarhiline kuulutuste filter jäi tööle
 - `npm run build` korras
+
+---
+
+# 213. V2 kuulutuse poe-rubriikide atomaarne määramise RPC
+
+Lisasime turvalise andmebaasi-RPC, millega saab asendada V2 kuulutuse kõik poe-rubriigi seosed ühe atomaarse toiminguna.
+
+Migratsioon:
+
+- `supabase/migrations/20260718103000_add_set_listing_store_categories_rpc.sql`
+
+Lisatud RPC:
+
+- `public.set_my_listing_store_categories_v2(text, uuid[])`
+
+RPC sisend:
+
+- kuulutuse ID tekstina
+- valitud poe-rubriikide UUID massiiv
+
+Turvareeglid:
+
+- kasutaja peab olema autentitud
+- aktiivne identiteet loetakse `profiles.active_identity_id` kaudu
+- kasutajal peab olema aktiivsele identiteedile ligipääs
+- kuulutus peab kuuluma aktiivsele identiteedile
+- kõik valitud rubriigid peavad kuuluma samale aktiivsele identiteedile
+- teise identiteedi kuulutust muuta ei saa
+- teise identiteedi rubriiki määrata ei saa
+- olematu või aegunud rubriigi ID blokeerib terve muudatuse
+- vigane kuulutuse ID blokeeritakse
+
+Seostekomplekti reeglid:
+
+- olemasolevad `listing_store_categories` seosed asendatakse tervikuna
+- toiming toimub ühe andmebaasitransaktsiooni sees
+- ebaõnnestumise korral taastub eelmine seostekomplekt automaatselt
+- `NULL` rubriigi-ID-d eemaldatakse sisendist
+- korduvad rubriigi-ID-d eemaldatakse sisendist
+- tühi massiiv eemaldab kuulutuselt kõik poe-rubriigi seosed
+- salvestatakse ainult otseselt valitud rubriigid
+- alamrubriigi valimisel ei lisata automaatselt ülemrubriigi seost
+- kuulutust ennast ei muudeta ega kustutata
+
+RPC tagastab:
+
+- kuulutuse ID
+- normaliseeritud valitud rubriikide ID-d
+- salvestatud rubriikide arvu
+- eemaldatud varasemate seoste arvu
+
+Rollback-test:
+
+- kuulutusele määrati ainult alamrubriik
+- alamrubriigi ülemrubriiki automaatselt ei lisatud
+- kuulutusele määrati korraga kaks rubriiki
+- duplikaat-ID puhastati
+- `NULL` ID puhastati
+- vana seostekomplekt asendati
+- võõra identiteedi rubriik blokeeriti
+- ebaõnnestunud võõra rubriigi määramine ei muutnud olemasolevaid seoseid
+- olematu rubriik blokeeriti
+- ebaõnnestunud olematu rubriigi määramine ei muutnud olemasolevaid seoseid
+- vigane kuulutuse ID blokeeriti
+- teise identiteedi kuulutuse muutmine blokeeriti
+- tühi massiiv eemaldas kõik poe-rubriigi seosed
+- kuulutus jäi kogu testi vältel alles
+- pärast rollback'i jäi test-rubriike 0
+- pärast rollback'i jäi testseoseid 0
+- `npm run build` korras

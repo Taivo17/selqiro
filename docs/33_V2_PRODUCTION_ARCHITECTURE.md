@@ -2058,3 +2058,52 @@ Database responsibilities:
 
 No automatic child deletion is allowed.
 Moving or reordering categories remains a separate future feature.
+
+---
+
+## Secure listing store-category assignment
+
+Assignment flow:
+
+hierarchical listing-category selector
+→ listing-category feature hook
+→ listing entity API
+→ `set_my_listing_store_categories_v2`
+→ atomic `listing_store_categories` replacement
+
+Operation boundary:
+
+- listing basic-field save remains a separate operation
+- status management remains in My Area
+- image management remains separate
+- store-category assignment has its own saving, success and error states
+
+Database responsibilities:
+
+- resolve the authenticated user
+- resolve and authorize the active identity
+- lock and verify the listing
+- verify every selected category
+- normalize duplicate and null category IDs
+- replace the complete relation set atomically
+- roll back the deletion if any insertion or validation fails
+
+Data rules:
+
+- store only categories explicitly selected by the owner
+- do not duplicate parent links for selected children
+- hierarchy is derived from `store_categories.parent_id`
+- parent filtering is handled by recursive query scope, not duplicated relations
+- an empty selected set is valid and removes all store-category relations
+
+Current identity rule:
+
+- V2 assignment requires `listings.identity_id`
+- legacy user-only listings must be migrated to identity ownership before using this RPC
+
+RPC result:
+
+- listing ID
+- normalized selected category IDs
+- assigned category count
+- removed previous-link count

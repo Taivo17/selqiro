@@ -456,3 +456,37 @@ Next exact step:
 - do not add duplicate parent links for child selections
 - validate category ownership in the database
 - save category relations separately from listing basic fields
+
+---
+
+## 2026-07-18 secure listing store-category assignment RPC checkpoint
+
+Completed:
+
+- secure listing/category assignment RPC added
+- complete explicit assignment set is replaced atomically
+- empty array removes all category links
+- duplicate and null IDs are normalized
+- active identity access is verified
+- listing identity ownership is verified
+- every category identity is verified
+- failed validation preserves existing relations
+- child assignment does not add a duplicate parent link
+- rollback test completed with no remaining test categories or relations
+
+Current UI status:
+
+- listing edit does not yet show or save store-category assignments
+
+Next exact step:
+
+- add entity API for loading a listing's current category IDs
+- add entity API for calling `set_my_listing_store_categories_v2`
+- add a dedicated listing-category assignment hook
+- create a hierarchical multi-select component
+- show roots with their direct children
+- allow selecting one or more explicit categories
+- show unsaved-change state
+- save categories separately from listing basic fields
+- allow saving an empty selection
+- reload current assignment after success

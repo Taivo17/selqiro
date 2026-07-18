@@ -2065,3 +2065,28 @@ Rules:
   - safe deletion
   - hierarchical owner listing filtering
 - category ordering remains a later feature
+
+## V2_LISTING_STORE_CATEGORY_ASSIGNMENT_RPC
+
+Rules:
+
+- listing store-category assignment RPC:
+  `public.set_my_listing_store_categories_v2(text, uuid[])`
+- assignment is separate from `updateListingBasics`
+- client sends:
+  - listing ID
+  - complete explicit category ID set
+- RPC atomically replaces all existing listing/category links
+- empty array removes all store-category links
+- duplicate IDs are removed
+- null IDs are ignored
+- all categories must belong to the active accessible identity
+- listing must belong to the same active identity
+- cross-identity listing or category assignment is forbidden
+- failed validation must preserve the previous assignment set
+- child selection must not automatically add its parent
+- only explicitly selected category links are stored
+- listing content and listing status are not changed
+- rollback test completed with zero remaining test categories and links
+- assignment UI has not yet been implemented
+- next step is hierarchical multi-select assignment in the V2 listing edit view
