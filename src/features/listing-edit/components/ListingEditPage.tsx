@@ -410,9 +410,8 @@ export default function ListingEditPage({ listingId }: { listingId: string }) {
               {basicsForm.form.title || listing.title}
             </h1>
             <p className="mt-3 max-w-3xl text-sm leading-6 text-neutral-600">
-              Muuta saab põhiandmeid ja pilte. Poe-rubriikide
-              olemasolev määrang on allpool nähtav; valiku muutmine
-              lisatakse järgmises sammus.
+              Muuta saab põhiandmeid, pilte ja poe-rubriike.
+              Poe-rubriikide valik salvestatakse põhiandmetest eraldi.
             </p>
           </div>
 
@@ -686,10 +685,10 @@ export default function ListingEditPage({ listingId }: { listingId: string }) {
               Järgmine etapp
             </p>
             <h2 className="mt-2 text-xl font-black text-blue-950">
-              Pildid, asukoht ja kategooria
+              Asukoht ja üldkategooria
             </h2>
             <p className="mt-2 text-sm leading-6 text-blue-900">
-              Need lisame eraldi moodulitena, et edit-vaade jääks töökindlaks.
+              Poe-rubriigid on nüüd hallatavad. Asukoha ja Selqiro üldkategooria muutmine tuleb hiljem.
             </p>
           </section>
         </aside>

@@ -5905,3 +5905,70 @@ Brauseritest:
 - dubleerivat ülemrubriigi seost ei kuvatud
 - edit-vaate põhiandmed ja kirjeldus jäid tööle
 - `npm run build` korras
+
+---
+
+# 215. V2 kuulutuse poe-rubriikide hierarhiline mitmikvalik
+
+Lisasime V2 kuulutuse edit-vaatesse aktiivse identiteedi poe-rubriikide päris muutmise ja salvestamise.
+
+Lisatud komponent:
+
+- `src/features/listing-edit/components/ListingStoreCategorySelector.tsx`
+
+Uuendatud moodulid:
+
+- `ListingStoreCategoryAssignmentCard.tsx`
+- `useListingStoreCategoryAssignment.ts`
+- `ListingEditPage.tsx`
+
+Valiku reeglid:
+
+- kuvatakse aktiivse identiteedi ülemrubriigid
+- ülemrubriigi all kuvatakse selle otsesed alamrubriigid
+- ülemrubriik ja alamrubriik on sõltumatud valikud
+- alamrubriigi valimine ei vali automaatselt ülemrubriiki
+- ülemrubriigi valimine ei vali automaatselt alamrubriike
+- korraga saab valida null, ühe või mitu rubriiki
+- salvestatakse ainult kasutaja otseselt valitud rubriigid
+- tühi valik on lubatud ja eemaldab kõik poe-rubriigi seosed
+- sügavamaid tasemeid andmebaas toetab, kuid V2 UI kuvab praegu kaks taset
+
+Salvestamise kasutajaliides:
+
+- valitud rubriikide arv kuvatakse kaardi ülaosas
+- muutunud valiku korral kuvatakse salvestamata olek
+- `Salvesta rubriigid` salvestab valiku eraldi toiminguna
+- `Taasta` taastab viimati salvestatud valiku
+- `Tühjenda valik` eemaldab kõik märgistused enne salvestamist
+- salvestamise ajal kuvatakse `Salvestan...`
+- edukas salvestamine kuvab rohelise kinnituse
+- vead kuvatakse rubriigikaardi sees
+- valikut ei saa salvestada enne olemasolevate seoste täielikku laadimist
+- aegunud või puuduva rubriigiseose korral blokeeritakse ebaturvaline salvestamine
+
+Arhitektuur:
+
+- poe-rubriikide salvestamine on eraldi kuulutuse põhiandmete salvestamisest
+- poe-rubriikide salvestamine ei muuda pealkirja, kirjeldust, hinda, staatust ega pilte
+- seosed salvestatakse turvalise `set_my_listing_store_categories_v2` RPC kaudu
+- `listing_store_categories` jääb kuulutuse poe-rubriikide ainsaks tõeallikaks
+
+Brauseritest:
+
+- olemasolev alamrubriigi valik laaditi korrektselt
+- alamrubriigi valik ei märkinud ülemrubriiki
+- ülemrubriigi valik ei märkinud alamrubriike
+- mitu ülem- ja alamrubriiki sai korraga valida
+- `Taasta` töötas
+- `Tühjenda valik` töötas
+- rubriikide eraldi salvestamine töötas
+- salvestamise järel kuvati roheline teade
+- lehe refresh säilitas salvestatud valiku
+- tühja valiku salvestamine eemaldas kõik poe-rubriigi seosed
+- kuulutuse põhiandmed ja pildid ei muutunud
+- Minu ala alamrubriigi filter leidis kuulutuse
+- Minu ala ülemrubriigi filter leidis alamrubriiki määratud kuulutuse
+- teise haru filter kuulutust ei kuvanud
+- teise identiteedi rubriike valikusse ei ilmunud
+- `npm run build` korras

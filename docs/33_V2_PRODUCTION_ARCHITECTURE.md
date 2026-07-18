@@ -2145,3 +2145,58 @@ Presentation responsibilities:
 
 The current card is read-only for connection verification.
 The next UI version adds hierarchical explicit selection and a separate save action.
+
+---
+
+## V2 listing store-category hierarchical assignment UI
+
+UI flow:
+
+`ListingStoreCategorySelector`
+→ `ListingStoreCategoryAssignmentCard`
+→ `useListingStoreCategoryAssignment`
+→ `setListingStoreCategories`
+→ `set_my_listing_store_categories_v2`
+→ `listing_store_categories`
+
+Selector responsibilities:
+
+- render root categories
+- group direct children under their root
+- keep every root and child selection independent
+- display selected and unselected states clearly
+- support multiple explicit selections
+- avoid implicit parent or child mutations
+- warn when deeper unsupported UI levels exist
+
+Assignment-card responsibilities:
+
+- combine active-identity categories with current listing relation IDs
+- expose the selected count
+- expose unsaved-change state
+- provide clear, reset and save actions
+- display loading, saving, success and error states
+- prevent saving before the existing assignment set has loaded
+- prevent saving stale missing category references
+
+Hook responsibilities:
+
+- retain the last saved normalized category set
+- retain the current selected normalized category set
+- compare sets independently of array order
+- support toggle, clear and reset actions
+- save the complete selected set atomically
+- replace saved local state from the RPC result
+
+Operation boundaries:
+
+- listing basics remain a separate save operation
+- image management remains separate
+- listing status remains managed from My Area
+- store-category assignment changes only `listing_store_categories`
+
+Data principle:
+
+- only explicit relations are stored
+- parent filtering includes descendants through recursive database scope
+- parent relations are not duplicated merely to support filtering

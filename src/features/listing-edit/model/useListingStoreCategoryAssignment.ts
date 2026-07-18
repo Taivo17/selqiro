@@ -17,6 +17,7 @@ export type ListingStoreCategoryAssignmentState = {
   selectedCategoryIds: string[];
   loading: boolean;
   saving: boolean;
+  loaded: boolean;
   error: string | null;
   success: string | null;
   dirty: boolean;
@@ -76,6 +77,7 @@ export function useListingStoreCategoryAssignment({
 
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [loaded, setLoaded] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] =
     useState<string | null>(null);
@@ -90,6 +92,7 @@ export function useListingStoreCategoryAssignment({
       setSelectedCategoryIds([]);
       setLoading(false);
       setSaving(false);
+      setLoaded(false);
       setError(null);
       setSuccess(null);
 
@@ -100,6 +103,7 @@ export function useListingStoreCategoryAssignment({
 
     async function loadAssignment() {
       setLoading(true);
+      setLoaded(false);
       setError(null);
       setSuccess(null);
 
@@ -116,12 +120,14 @@ export function useListingStoreCategoryAssignment({
 
         setSavedCategoryIds(normalizedCategoryIds);
         setSelectedCategoryIds(normalizedCategoryIds);
+        setLoaded(true);
         setLoading(false);
       } catch (loadError) {
         if (!mounted) return;
 
         setSavedCategoryIds([]);
         setSelectedCategoryIds([]);
+        setLoaded(false);
         setLoading(false);
         setError(
           loadError instanceof Error
@@ -198,6 +204,16 @@ export function useListingStoreCategoryAssignment({
       throw validationError;
     }
 
+    if (!loaded) {
+      const notLoadedError =
+        new Error(
+          "Kuulutuse praeguseid rubriigiseoseid ei ole laaditud."
+        );
+
+      setError(notLoadedError.message);
+      throw notLoadedError;
+    }
+
     if (loading) {
       const loadingError =
         new Error("Rubriikide seoseid alles laetakse.");
@@ -261,6 +277,7 @@ export function useListingStoreCategoryAssignment({
     selectedCategoryIds,
     loading,
     saving,
+    loaded,
     error,
     success,
     dirty,

@@ -521,3 +521,44 @@ Next exact step:
 - allow clearing all assignments
 - show dirty, saving, success and error states
 - keep listing basics save unchanged
+
+---
+
+## 2026-07-18 V2 listing store-category assignment UI checkpoint
+
+Completed:
+
+- hierarchical listing category selector added
+- roots and direct children are grouped together
+- root and child selections are independent
+- multiple explicit categories can be selected
+- current saved selections load automatically
+- dirty state is visible
+- clear and restore actions work
+- category assignment has its own save action
+- empty assignment is supported
+- save uses the secure atomic RPC
+- refresh preserves the saved assignment
+- listing basics and images remain unchanged
+- My Area hierarchical filters use the saved relations correctly
+- build and browser tests completed
+
+V2 owner store-category functionality now supports:
+
+- root creation
+- child creation
+- rename
+- safe deletion
+- hierarchical owner listing filtering
+- listing assignment from the edit view
+
+Next exact step:
+
+- add hierarchical store-category filtering to the V2 public profile
+- initially show root categories
+- expand a root to show its direct children
+- selecting a root must show listings from the full descendant branch
+- selecting a child must narrow results to that child
+- public viewers must see only active and publicly valid listings
+- paused and sold listings must remain hidden from other viewers
+- preserve relevance and public-profile layout

@@ -2111,3 +2111,31 @@ Rules:
 - hook supports dirty, reset, clear, saving, success and error state
 - read-only browser connection has been verified
 - next step is hierarchical explicit multi-selection and separate save controls
+
+## V2_LISTING_STORE_CATEGORY_ASSIGNMENT_UI
+
+Rules:
+
+- hierarchical selector:
+  `ListingStoreCategorySelector.tsx`
+- assignment card:
+  `ListingStoreCategoryAssignmentCard.tsx`
+- assignment state:
+  `useListingStoreCategoryAssignment.ts`
+- root and child categories are independent explicit selections
+- selecting a child must not automatically select its parent
+- selecting a root must not automatically select its children
+- zero, one or multiple explicit categories are allowed
+- empty saved selection removes all listing store-category links
+- assignment is saved separately from listing basics
+- assignment is saved through `set_my_listing_store_categories_v2`
+- `listing_store_categories` is the assignment source of truth
+- the hook must finish loading current relations before saving is enabled
+- stale or missing selected category references must block unsafe saving
+- `Taasta` restores the last saved set
+- `Tühjenda valik` changes local selection but does not save automatically
+- successful save replaces local saved state with the RPC result
+- current management UI supports two levels
+- database hierarchy may support deeper levels later
+- browser tests completed successfully
+- next logical feature is hierarchical store-category filtering on the V2 public profile
