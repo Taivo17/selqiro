@@ -5972,3 +5972,77 @@ Brauseritest:
 - teise haru filter kuulutust ei kuvanud
 - teise identiteedi rubriike valikusse ei ilmunud
 - `npm run build` korras
+
+---
+
+# 216. V2 avaliku profiili hierarhiline poe-rubriikide filter
+
+Lisasime V2 avaliku profiili kuulutuste sektsiooni kompaktse hierarhilise poe-rubriikide filtri.
+
+Lisatud failid:
+
+- `src/entities/store-category/api/getPublicStoreCategories.ts`
+- `src/entities/store-category/model/getStoreCategoryScopeIds.ts`
+- `src/features/public-profile/model/usePublicProfileStoreCategories.ts`
+- `src/features/public-profile/components/PublicProfileStoreCategoryFilter.tsx`
+
+Uuendatud failid:
+
+- `src/entities/listing/api/getListingsBySeller.ts`
+- `src/features/public-profile/model/usePublicProfileListings.ts`
+- `src/features/public-profile/components/PublicProfileListingsSection.tsx`
+
+Identiteedireeglid:
+
+- avaliku profiili rubriigid laaditakse vaadatava profiili `identityId` järgi
+- sisselogitud külastaja aktiivset identiteeti ei kasutata avaliku profiili rubriikide allikana
+- aktiivse identiteedi vahetamine ei muuda parajasti vaadatava teise profiili rubriike
+- teise profiili avamisel taastatakse filter valikule „Kõik kuulutused”
+- aegunud või eemaldatud valitud rubriik lähtestatakse turvaliselt
+
+Filtri kasutajaliides:
+
+- alguses kuvatakse ainult „Kõik kuulutused” ja ülemrubriigid
+- alamrubriike alguses ei kuvata
+- ülemrubriigi valimine filtreerib kohe kogu selle haru kuulutused
+- ülemrubriigi valimine avab selle otsesed alamrubriigid
+- korraga on avatud ainult üks ülemrubriigi haru
+- sama aktiivse ülemrubriigi teine klikk sulgeb alamrubriigid, kuid jätab harufiltri aktiivseks
+- alamrubriigi valimine kitsendab tulemuse sellele alamrubriigile
+- lasteta ülemrubriik filtreerib tulemused ilma tühja alamrubriikide plokki avamata
+- „Kõik kuulutused” eemaldab filtri ja sulgeb avatud haru
+- tühja filtreeritud tulemuse jaoks kuvatakse rubriigipõhine tühi olek
+
+Andmekiht:
+
+- avaliku profiili rubriigid loetakse `store_categories` tabelist vaadatava `identity_id` järgi
+- valitud rubriigi haru arvutatakse rekursiivselt `parent_id` kaudu
+- ülemrubriigi scope sisaldab valitud ülemrubriiki ja kõiki järglasi
+- alamrubriigi scope sisaldab valitud alamrubriiki ja võimalikke tulevasi järglasi
+- UI kuvab praegu kaks taset, kuid scope-arvutus toetab sügavamaid tasemeid
+- filtriga kuulutuste päring kasutab `listing_store_categories` sisemist seost
+- filtri puudumisel ei lisata relation join’i
+- vigane või tühi aktiivne scope tagastab turvaliselt null tulemust ega muutu kõikide kuulutuste päringuks
+- päringu dependency kasutab stabiilset scope-võtit, et vältida korduvat fetch-tsüklit
+
+Avaliku nähtavuse reeglid:
+
+- kuvatakse ainult `active` staatusega kuulutused
+- `active_until` peab olema tulevikus
+- `paused`, `sold` ja aegunud kuulutusi avalikus profiilis ei kuvata
+- poe-rubriikide filter ei nõrgenda olemasolevat avaliku nähtavuse piiri
+- ülemrubriigi filtreerimiseks ei salvestata kuulutusele dubleerivat parent-seost
+
+Brauseritest:
+
+- algvaates kuvati ainult ülemrubriigid
+- alamrubriike alguses ei kuvatud
+- `AUTODE MÜÜK` valimine avas kolm alamrubriiki
+- ülemrubriigi valik muutis kuulutuste tulemust
+- alamrubriigi valik kitsendas tulemust
+- teise ülemrubriigi valik sulges eelmise haru
+- „Kõik kuulutused” taastas täieliku tulemuse
+- avaliku profiili paigutus jäi kompaktseks
+- vaadatava profiili rubriigid ei sõltunud külastaja aktiivsest identiteedist
+- terminalis ei tekkinud korduvat päringutsüklit
+- `npm run build` korras

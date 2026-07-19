@@ -2200,3 +2200,59 @@ Data principle:
 - only explicit relations are stored
 - parent filtering includes descendants through recursive database scope
 - parent relations are not duplicated merely to support filtering
+
+---
+
+## V2 public-profile hierarchical store-category filtering
+
+Public filter flow:
+
+`PublicProfileStoreCategoryFilter`
+→ selected category state in `PublicProfileListingsSection`
+→ `getStoreCategoryScopeIds`
+→ `usePublicProfileListings`
+→ `getListingsBySeller`
+→ `listing_store_categories`
+→ publicly visible listings
+
+Category ownership boundary:
+
+- the viewed public profile supplies the category `identity_id`
+- the current viewer active identity is irrelevant to this category query
+- changing the viewer active identity must not change the viewed profile tree
+- switching the viewed profile clears the previous category selection
+
+Scope semantics:
+
+- `null` means all publicly visible listings
+- a root category resolves to the root and every descendant
+- a child resolves to the child and every possible descendant
+- an invalid or stale category resolves to an empty scope
+- an empty explicit scope returns no listings
+- recursive scope supports future deeper category levels
+
+Query behavior:
+
+- without a category filter, no category relation join is required
+- with a category filter, use an inner `listing_store_categories` relation
+- a listing matches when it has at least one explicit relation inside the scope
+- parent filtering works through scope expansion
+- parent relations are not automatically duplicated on listings
+
+Public visibility boundary:
+
+- listing identity must match the viewed profile
+- listing status must be `active`
+- listing expiration must be in the future
+- paused, sold and expired listings remain invisible
+- category filtering must never weaken these rules
+
+UI behavior:
+
+- render all-listings and root pills initially
+- open direct children only for the active root
+- selecting a root immediately applies the branch filter
+- selecting a child applies a narrower filter
+- selecting another root closes the previous branch
+- selecting all closes the branch and removes the filter
+- current UI renders two visible levels while the data scope remains recursive

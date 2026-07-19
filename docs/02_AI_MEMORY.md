@@ -2139,3 +2139,35 @@ Rules:
 - database hierarchy may support deeper levels later
 - browser tests completed successfully
 - next logical feature is hierarchical store-category filtering on the V2 public profile
+
+## V2_PUBLIC_PROFILE_STORE_CATEGORY_FILTER
+
+Rules:
+
+- public category loader:
+  `getPublicStoreCategories.ts`
+- recursive category scope:
+  `getStoreCategoryScopeIds.ts`
+- public category hook:
+  `usePublicProfileStoreCategories.ts`
+- public filter component:
+  `PublicProfileStoreCategoryFilter.tsx`
+- filter state belongs in `PublicProfileListingsSection`
+- public profile categories must come from the viewed profile `identityId`
+- never use `useMyAreaStoreCategories` for a public profile
+- viewer active identity must not affect the viewed profile category tree
+- initial state shows only all-listings and root categories
+- selecting a root filters the complete descendant branch
+- selecting a child narrows to that child branch
+- root and child filtering use explicit listing/category relations
+- parent links must not be duplicated merely to support branch filtering
+- recursive scope supports future deeper levels
+- current public filter UI displays two levels
+- null scope means no category filter
+- empty explicit scope must fail closed and return no listings
+- selected category resets when the viewed profile changes
+- stale selected category resets safely
+- only active and non-expired listings are public
+- paused, sold and expired listings remain hidden
+- use a stable primitive scope key in effects to prevent fetch loops
+- browser tests completed successfully

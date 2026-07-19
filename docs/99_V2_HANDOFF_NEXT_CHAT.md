@@ -562,3 +562,44 @@ Next exact step:
 - public viewers must see only active and publicly valid listings
 - paused and sold listings must remain hidden from other viewers
 - preserve relevance and public-profile layout
+
+---
+
+## 2026-07-19 V2 public profile category filter checkpoint
+
+Completed:
+
+- public store categories load by the viewed profile identity
+- public category data does not depend on the viewer active identity
+- recursive category branch scope added
+- public listing query supports category relation filtering
+- existing active and expiration visibility rules remain enforced
+- compact public category filter added
+- only root categories are visible initially
+- selecting a root opens its direct children and applies the full branch filter
+- selecting a child narrows the result
+- selecting another root closes the previous branch
+- all-listings clears the filter and closes the branch
+- stale selection and profile changes reset safely
+- request-loop protection uses a stable scope key
+- build and browser tests completed
+
+V2 store-category functionality now supports:
+
+- owner root creation
+- owner child creation
+- owner rename
+- owner safe deletion
+- owner My Area hierarchical filtering
+- listing category assignment from the edit view
+- public profile hierarchical filtering
+
+Next exact step:
+
+- add the V2 identity switcher to the site header
+- load all private and business identities accessible to the signed-in user
+- show the current active identity
+- switch through the existing active-identity API
+- refresh every identity-scoped V2 owner module after switching
+- do not let identity switching alter an already viewed public profile
+- preserve public-profile identity isolation

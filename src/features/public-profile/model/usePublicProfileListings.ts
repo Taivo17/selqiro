@@ -11,14 +11,57 @@ export type PublicProfileListingsState = {
   error: string | null;
 };
 
+function normalizeScopeIds(
+  value: string[] | null
+): string[] | null {
+  if (value === null) {
+    return null;
+  }
+
+  return Array.from(
+    new Set(
+      value
+        .map((categoryId) =>
+          categoryId.trim()
+        )
+        .filter(Boolean)
+    )
+  ).sort((first, second) =>
+    first.localeCompare(second)
+  );
+}
+
+const ALL_CATEGORIES_SCOPE_KEY =
+  "__all_public_store_categories__";
+
 export function usePublicProfileListings(
-  profile: PublicProfile | null
+  profile: PublicProfile | null,
+  storeCategoryScopeIds:
+    | string[]
+    | null = null
 ): PublicProfileListingsState {
-  const [state, setState] = useState<PublicProfileListingsState>({
-    listings: [],
-    loading: Boolean(profile),
-    error: null,
-  });
+  const normalizedScopeIds =
+    normalizeScopeIds(
+      storeCategoryScopeIds
+    );
+
+  /*
+   * The effect depends on a stable primitive instead
+   * of an array reference. This prevents a parent
+   * component from causing a request loop by creating
+   * an equivalent array on every render.
+   */
+  const categoryScopeKey =
+    normalizedScopeIds === null
+      ? ALL_CATEGORIES_SCOPE_KEY
+      : normalizedScopeIds.join(",");
+
+  const [state, setState] =
+    useState<PublicProfileListingsState>({
+      listings: [],
+      loading: Boolean(profile),
+      error: null,
+    });
 
   useEffect(() => {
     let mounted = true;
@@ -30,8 +73,17 @@ export function usePublicProfileListings(
           loading: false,
           error: null,
         });
+
         return;
       }
+
+      const resolvedScopeIds =
+        categoryScopeKey ===
+        ALL_CATEGORIES_SCOPE_KEY
+          ? null
+          : categoryScopeKey
+            ? categoryScopeKey.split(",")
+            : [];
 
       setState({
         listings: [],
@@ -40,15 +92,24 @@ export function usePublicProfileListings(
       });
 
       try {
-        const listings = await getListingsBySeller({
-          identityId: profile.identityId,
-          legacyUserId: profile.legacyUserId,
-          sellerName: profile.displayName,
-          sellerSlug: profile.slug,
-          sellerAvatarUrl: profile.avatarUrl,
-          sellerType: profile.identityType,
-          limit: 12,
-        });
+        const listings =
+          await getListingsBySeller({
+            identityId:
+              profile.identityId,
+            legacyUserId:
+              profile.legacyUserId,
+            sellerName:
+              profile.displayName,
+            sellerSlug:
+              profile.slug,
+            sellerAvatarUrl:
+              profile.avatarUrl,
+            sellerType:
+              profile.identityType,
+            storeCategoryScopeIds:
+              resolvedScopeIds,
+            limit: 12,
+          });
 
         if (!mounted) return;
 
@@ -57,26 +118,26 @@ export function usePublicProfileListings(
           loading: false,
           error: null,
         });
-      } catch (error) {
+      } catch (loadError) {
         if (!mounted) return;
 
         setState({
           listings: [],
           loading: false,
           error:
-            error instanceof Error
-              ? error.message
-              : "Failed to load profile listings",
+            loadError instanceof Error
+              ? loadError.message
+              : "Profiili kuulutusi ei saanud laadida.",
         });
       }
     }
 
-    loadListings();
+    void loadListings();
 
     return () => {
       mounted = false;
     };
-  }, [profile]);
+  }, [profile, categoryScopeKey]);
 
   return state;
 }
