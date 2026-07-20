@@ -53,7 +53,16 @@ export async function getEditableListingById(input: {
     Boolean(row.identity_id) &&
     row.identity_id === activeIdentityId;
 
+  /*
+   * user_id is only a fallback for genuine legacy
+   * listings that do not yet have identity ownership.
+   *
+   * Once identity_id exists, the active identity must
+   * match it even when both identities belong to the
+   * same authenticated account.
+   */
   const legacyUserOwnsListing =
+    !row.identity_id &&
     Boolean(userId) &&
     Boolean(row.user_id) &&
     row.user_id === userId;

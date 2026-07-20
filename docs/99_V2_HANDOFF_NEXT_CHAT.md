@@ -603,3 +603,46 @@ Next exact step:
 - refresh every identity-scoped V2 owner module after switching
 - do not let identity switching alter an already viewed public profile
 - preserve public-profile identity isolation
+
+---
+
+## 2026-07-20 V2 identity switcher checkpoint
+
+Completed:
+
+- secure active-identity switch RPC
+- direct profile-write validation trigger
+- authenticated and anonymous privileges verified
+- private and business identity rollback tests completed
+- foreign and null identity selection blocked
+- original identity restored after rollback test
+- V2 identity entity API moved to secure RPC
+- V2 header identity dropdown added
+- loading, active and error states added
+- identity-scoped owner routes reload after switching
+- public profile route and viewed identity remain isolated
+- listing read and write ownership rules aligned
+- legacy user ownership applies only when `identity_id` is null
+- wrong active identity immediately shows forbidden edit state
+- redundant identity-profile slug lookup removed
+- recursive `business_members` warning removed
+- build and browser tests completed successfully
+
+Current checkpoint files:
+
+- `supabase/migrations/20260720170000_add_secure_active_identity_switch.sql`
+- `src/entities/identity/api/getMyIdentities.ts`
+- `src/entities/identity/api/setActiveIdentity.ts`
+- `src/entities/listing/api/getEditableListingById.ts`
+- `src/entities/listing/api/getListingById.ts`
+- `src/features/v2-shell/model/useV2IdentitySwitcher.ts`
+- `src/features/v2-shell/components/V2IdentityBadge.tsx`
+
+Next exact step:
+
+- extend the V2 listing edit view with location editing and Selqiro global category editing
+- keep global category separate from owner-defined store categories
+- validate identity-first ownership before loading and saving
+- make location and global-category writes use a secure server/database boundary
+- preserve existing listing store-category assignments
+- do not weaken public listing visibility or active-identity isolation

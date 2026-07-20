@@ -6046,3 +6046,87 @@ Brauseritest:
 - vaadatava profiili rubriigid ei sõltunud külastaja aktiivsest identiteedist
 - terminalis ei tekkinud korduvat päringutsüklit
 - `npm run build` korras
+
+---
+
+# 217. V2 turvaline identiteedivahetus
+
+Lisasime V2 päisesse turvalise aktiivse identiteedi vahetamise era- ja ettevõtteidentiteetide vahel.
+
+Andmebaas:
+
+- lisatud migratsioon `20260720170000_add_secure_active_identity_switch.sql`
+- lisatud RPC `set_my_active_identity_v2(uuid)`
+- lisatud trigger `validate_profile_active_identity_before_write`
+- trigger kaitseb ka vana portaali otsest `profiles.active_identity_id` uuendamist
+- RPC tuvastab kasutaja ainult `auth.uid()` kaudu
+- klient ei saada enam kasutaja ID-d
+- valida saab ainult aktiivse identiteedi
+- privaatne identiteet peab kuuluma kasutajale
+- ettevõtteidentiteet nõuab aktiivset ettevõtteliikmesust
+- anonüümne RPC täitmine on keelatud
+- sama identiteedi kordusvalik on idempotentne ja tagastab `changed=false`
+- võõras, passiivne ja tühi identiteet blokeeritakse
+
+V2 entity API:
+
+- `setActiveIdentity.ts` kasutab ainult `set_my_active_identity_v2` RPC-d
+- otsene `profiles.update` eemaldati V2 entity API-st
+- `userId` eemaldati identiteedivahetuse sisendist
+- RPC vastusest kaardistatakse valitud identiteedi nimi, tüüp, avatar ja slug
+- vigane või ootamatu RPC vastus blokeeritakse
+
+V2 päis:
+
+- lisatud `useV2IdentitySwitcher`
+- staatiline identiteedibadge asendati kompaktse rippmenüüga
+- menüüs kuvatakse kõik kasutajale ligipääsetavad aktiivsed identiteedid
+- aktiivne identiteet on märgistatud
+- identiteedivahetuse ajal kuvatakse laadimisolek
+- menüü sulgub pärast edukat vahetamist
+- väljaspool menüüd klikkimine ja Escape sulgevad menüü
+- päise nimi ja avatar uuenevad kohe RPC vastuse põhjal
+- väljastatakse sündmus `selqiro:active-identity-changed`
+
+Lehtede värskendamine:
+
+- `/v2/my-area` laaditakse identiteedivahetusel uuesti
+- `/v2/energy` laaditakse identiteedivahetusel uuesti
+- `/v2/listing/*` omaniku- ja muutmisvaated laaditakse uuesti
+- avalikku `/v2/profile/[slug]` lehte identiteedivahetusel automaatselt ei muudeta
+- avaliku profiili URL, profiiliandmed, rubriigid ja kuulutused jäävad URL-is valitud identiteedi omadeks
+
+Kuulutuse identity-first omandireegel:
+
+- kui kuulutusel on `identity_id`, peab see vastama aktiivsele identiteedile
+- sama konto teine identiteet ei ole automaatselt kuulutuse omanik
+- `user_id` fallback kehtib ainult pärandkuulutustele, millel `identity_id` puudub
+- sama reeglit kasutavad nii kuulutuse detailvaade, edit-vaate laadimine kui ka salvestamine
+- vale aktiivse identiteediga edit-vorm ei avane
+- keelatud olek kuvatakse enne salvestuskatset
+- õige identiteedi taastamisel avaneb edit-vorm uuesti
+
+Identiteetide laadimine:
+
+- `get_my_identities` RPC tagastab juba identiteedi slug’i
+- redundantne brauseripäring `identity_profiles` tabelisse eemaldati
+- sellega eemaldati `business_members` RLS-i lõputu rekursiooni hoiatus
+- identiteetide laadimine ei tekita enam korduvaid terminalihoiatusi
+
+Kontrollid:
+
+- authenticated RPC EXECUTE õigus: korras
+- anon RPC EXECUTE õigus: puudub
+- aktiivse identiteedi trigger: korras
+- `current_user_has_identity_access` ühendus: korras
+- eraidentiteedi vahetamine: korras
+- ettevõtteidentiteedi vahetamine: korras
+- võõra identiteedi blokeerimine: korras
+- otsese legacy-update’i valideerimine: korras
+- rollback taastas algse aktiivse identiteedi
+- V2 päise brauseritest: korras
+- Minu ala identiteedieraldus: korras
+- kuulutuse edit-vaate identiteedieraldus: korras
+- avaliku profiili isolatsioon: korras
+- `business_members` rekursioonihoiatus eemaldatud
+- `npm run build`: korras

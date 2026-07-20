@@ -64,7 +64,18 @@ function viewerOwnsListing(row: MutableListingRow, viewer: CurrentViewer): boole
     return true;
   }
 
-  if (row.user_id && row.user_id === viewer.userId) {
+  /*
+   * Legacy user ownership applies only when the
+   * listing has no identity_id. Identity-owned
+   * listings belong to the currently active identity,
+   * not automatically to every identity under the
+   * same account.
+   */
+  if (
+    !row.identity_id &&
+    row.user_id &&
+    row.user_id === viewer.userId
+  ) {
     return true;
   }
 

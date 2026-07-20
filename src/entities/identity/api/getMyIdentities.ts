@@ -1,5 +1,8 @@
 import { supabaseBrowserClient } from "../../../shared/supabase/browserClient";
-import type { IdentitySummary, IdentityType } from "../model/types";
+import type {
+  IdentitySummary,
+  IdentityType,
+} from "../model/types";
 
 type IdentityRpcRow = {
   id?: string | null;
@@ -11,59 +14,66 @@ type IdentityRpcRow = {
   slug?: string | null;
 };
 
-type IdentityProfileSlugRow = {
-  identity_id: string;
-  slug?: string | null;
-};
-
-function normalizeIdentityType(value?: string | null): IdentityType {
-  return value === "business" ? "business" : "private";
+function normalizeIdentityType(
+  value?: string | null
+): IdentityType {
+  return value === "business"
+    ? "business"
+    : "private";
 }
 
-export async function getMyIdentities(): Promise<IdentitySummary[]> {
-  const { data: identityRows, error: identitiesError } =
-    await supabaseBrowserClient.rpc("get_my_identities");
+export async function getMyIdentities(): Promise<
+  IdentitySummary[]
+> {
+  /*
+   * get_my_identities already returns the public
+   * profile slug together with every accessible
+   * identity.
+   *
+   * Do not query identity_profiles separately here.
+   * Besides being redundant, that browser-side query
+   * may enter recursive business-membership RLS.
+   */
+  const { data, error } =
+    await supabaseBrowserClient.rpc(
+      "get_my_identities"
+    );
 
-  if (identitiesError) {
-    throw new Error(identitiesError.message || "Failed to load identities");
+  if (error) {
+    throw new Error(
+      error.message ||
+        "Identiteete ei saanud laadida."
+    );
   }
 
-  const identities = ((identityRows || []) as IdentityRpcRow[])
-    .filter((item) => item.id)
-    .map((item) => ({
-      id: item.id as string,
-      type: normalizeIdentityType(item.type || item.identity_type),
-      displayName: item.display_name || item.store_name || "Identiteet",
-      avatarUrl: item.avatar_url || null,
-      slug: item.slug || null,
-    }));
+  return (
+    (data || []) as IdentityRpcRow[]
+  )
+    .filter(
+      (
+        item
+      ): item is IdentityRpcRow & {
+        id: string;
+      } => Boolean(item.id)
+    )
+    .map((item) => {
+      const displayName =
+        (
+          item.display_name ||
+          item.store_name ||
+          "Identiteet"
+        ).trim() || "Identiteet";
 
-  const identityIds = identities.map((item) => item.id);
-
-  if (identityIds.length === 0) {
-    return identities;
-  }
-
-  const { data: profileRows, error: profileError } =
-    await supabaseBrowserClient
-      .from("identity_profiles")
-      .select("identity_id, slug")
-      .in("identity_id", identityIds);
-
-  if (profileError) {
-    console.warn("V2 identity slug lookup failed:", profileError.message);
-    return identities;
-  }
-
-  const slugByIdentityId = Object.fromEntries(
-    ((profileRows || []) as IdentityProfileSlugRow[]).map((row) => [
-      row.identity_id,
-      row.slug || null,
-    ])
-  );
-
-  return identities.map((identity) => ({
-    ...identity,
-    slug: identity.slug || slugByIdentityId[identity.id] || null,
-  }));
+      return {
+        id: item.id,
+        type: normalizeIdentityType(
+          item.type ||
+            item.identity_type
+        ),
+        displayName,
+        avatarUrl:
+          item.avatar_url || null,
+        slug: item.slug || null,
+      };
+    });
 }

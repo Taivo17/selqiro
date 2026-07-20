@@ -2171,3 +2171,58 @@ Rules:
 - paused, sold and expired listings remain hidden
 - use a stable primitive scope key in effects to prevent fetch loops
 - browser tests completed successfully
+
+## V2_SECURE_IDENTITY_SWITCHING
+
+Core files:
+
+- database migration:
+  `20260720170000_add_secure_active_identity_switch.sql`
+- secure switch API:
+  `src/entities/identity/api/setActiveIdentity.ts`
+- identity list API:
+  `src/entities/identity/api/getMyIdentities.ts`
+- switcher hook:
+  `src/features/v2-shell/model/useV2IdentitySwitcher.ts`
+- header dropdown:
+  `src/features/v2-shell/components/V2IdentityBadge.tsx`
+
+Security rules:
+
+- active identity switching must use `set_my_active_identity_v2`
+- the client must not provide a user ID
+- authenticated user is resolved through `auth.uid()`
+- target identity must be active
+- target identity must be privately owned or available through active business membership
+- anon execution must remain disabled
+- direct legacy updates of `profiles.active_identity_id` remain protected by the validation trigger
+- same-identity selection is idempotent
+- do not restore direct `profiles.update` inside the V2 entity API
+
+Identity loading:
+
+- `get_my_identities` already returns slug
+- do not add a second browser query to `identity_profiles`
+- the redundant query caused recursive `business_members` RLS evaluation
+- identity summaries should be mapped directly from the RPC response
+
+Route behavior:
+
+- reload active-identity owner routes after a successful change
+- current owner routes include My Area, Energy and listing owner/edit pages
+- do not redirect or replace the currently viewed public profile
+- public profile data remains keyed by URL slug and viewed profile identity
+
+Listing ownership:
+
+- identity-owned listings require active identity equality
+- user ID ownership is only a legacy fallback when `listing.identity_id` is null
+- the same identity-first rule must be used for detail visibility, edit loading and writes
+- do not let another identity under the same account edit an identity-owned listing
+- wrong identity must show forbidden state before a save attempt
+
+Refresh event:
+
+- event name:
+  `selqiro:active-identity-changed`
+- event detail contains the selected identity and `changed`

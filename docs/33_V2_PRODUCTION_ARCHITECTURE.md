@@ -2256,3 +2256,67 @@ UI behavior:
 - selecting another root closes the previous branch
 - selecting all closes the branch and removes the filter
 - current UI renders two visible levels while the data scope remains recursive
+
+---
+
+## V2 secure active-identity switching
+
+Canonical switch flow:
+
+`V2IdentityBadge`
+→ `useV2IdentitySwitcher`
+→ `setActiveIdentity`
+→ `set_my_active_identity_v2`
+→ validated update of `profiles.active_identity_id`
+
+Database boundary:
+
+- RPC resolves the authenticated user through `auth.uid()`
+- RPC validates the target active identity
+- RPC validates private ownership or active business membership
+- RPC serializes concurrent switches through a profile-row lock
+- RPC returns the selected identity summary and whether the value changed
+- authenticated role may execute the RPC
+- anon role may not execute the RPC
+
+Legacy compatibility:
+
+- a trigger validates every authenticated direct update of `profiles.active_identity_id`
+- the old application may continue using its direct update path
+- inaccessible and empty identities remain blocked
+- trusted postgres/backend operations without an end-user JWT remain possible
+
+V2 client boundary:
+
+- `setActiveIdentity` accepts only `identityId`
+- V2 code must not write `profiles.active_identity_id` directly
+- V2 code must not trust a client-supplied user ID
+- successful RPC response becomes the immediate active identity state
+
+Identity list loading:
+
+- `get_my_identities` is the authoritative accessible-identity list
+- slug is read from the RPC response
+- no secondary `identity_profiles` browser query is required
+- this avoids recursive business-membership RLS evaluation
+
+Owner-route refresh:
+
+- My Area and other active-identity owner modules require a full refresh after a real switch
+- listing detail and edit pages require a refresh because ownership can change
+- public profile pages remain tied to their route slug and are not automatically reloaded or redirected
+
+Listing ownership precedence:
+
+1. when `listing.identity_id` exists, ownership requires equality with the active identity
+2. when `listing.identity_id` is null, legacy `listing.user_id` may be used
+3. account ownership alone never overrides an existing listing identity
+
+This precedence must remain consistent across:
+
+- editable-listing loading
+- listing-detail owner visibility
+- basic listing updates
+- listing images
+- listing status
+- store-category assignment
