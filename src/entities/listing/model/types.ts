@@ -36,6 +36,8 @@ export type ProductListingDetail = ProductListingCard & {
   country: string | null;
   city: string | null;
   rawLocation: string | null;
+  listingLat: number | null;
+  listingLng: number | null;
   details: Record<string, unknown>;
   images: ListingImage[];
   createdAt: string | null;

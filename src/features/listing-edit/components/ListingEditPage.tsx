@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import ListingStoreCategoryAssignmentCard from "./ListingStoreCategoryAssignmentCard";
+import ListingClassificationLocationCard from "./ListingClassificationLocationCard";
 import { useEditableListing } from "../model/useEditableListing";
 import { useListingBasicsForm } from "../model/useListingBasicsForm";
 import { setListingPrimaryImage } from "../../../entities/listing/api/setListingPrimaryImage";
@@ -184,7 +185,11 @@ function formatDateTimeLabel(value: string | null | undefined): string {
 }
 
 function DetailsPreview({ listing }: { listing: ProductListingDetail }) {
-  const details = Object.entries(listing.details || {}).slice(0, 8);
+  const details = Object.entries(
+    listing.details || {}
+  )
+    .filter(([key]) => key !== "detailCategory")
+    .slice(0, 8);
 
   if (details.length === 0) {
     return (
@@ -603,12 +608,13 @@ export default function ListingEditPage({ listingId }: { listingId: string }) {
                   { value: "damaged", label: "Vajab remonti" },
                 ]}
               />
-              <FieldPreview label="Kategooria" value={listing.category} />
-              <FieldPreview label="Alamkategooria" value={listing.subcategory} />
-              <FieldPreview label="Asukoht" value={listing.locationLabel} />
               <FieldPreview label="Aegub" value={formatDateTimeLabel(listing.activeUntil)} />
             </div>
           </section>
+
+          <ListingClassificationLocationCard
+            listing={listing}
+          />
 
           <ListingStoreCategoryAssignmentCard
             listingId={String(listing.id)}
@@ -685,10 +691,10 @@ export default function ListingEditPage({ listingId }: { listingId: string }) {
               Järgmine etapp
             </p>
             <h2 className="mt-2 text-xl font-black text-blue-950">
-              Asukoht ja üldkategooria
+              Salvestamise jaotus
             </h2>
             <p className="mt-2 text-sm leading-6 text-blue-900">
-              Poe-rubriigid on nüüd hallatavad. Asukoha ja Selqiro üldkategooria muutmine tuleb hiljem.
+              Põhiandmed salvestatakse tegevuste nupust. Selqiro kategooria ja asukoht ning poe-rubriigid salvestatakse eraldi kaartidelt.
             </p>
           </section>
         </aside>

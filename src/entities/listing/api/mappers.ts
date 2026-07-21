@@ -34,6 +34,8 @@ export type MarketplaceListingRow = {
   country?: string | null;
   city?: string | null;
   location?: string | null;
+  listing_lat?: string | number | null;
+  listing_lng?: string | number | null;
   details?: Record<string, unknown> | null;
   active_until?: string | null;
   created_at?: string | null;
@@ -43,6 +45,27 @@ export type MarketplaceListingRow = {
 
 function normalizeId(value?: string | number | null): string {
   return value === null || typeof value === "undefined" ? "" : String(value);
+}
+
+function normalizeCoordinate(
+  value?: string | number | null
+): number | null {
+  if (
+    value === null ||
+    typeof value === "undefined" ||
+    value === ""
+  ) {
+    return null;
+  }
+
+  const parsedValue =
+    typeof value === "number"
+      ? value
+      : Number(value);
+
+  return Number.isFinite(parsedValue)
+    ? parsedValue
+    : null;
 }
 
 export function mapMarketplaceListingRow(
@@ -94,6 +117,12 @@ export function mapListingDetailRow(row: MarketplaceListingRow): ProductListingD
     country: row.country || null,
     city: row.city || null,
     rawLocation: row.location || null,
+    listingLat: normalizeCoordinate(
+      row.listing_lat
+    ),
+    listingLng: normalizeCoordinate(
+      row.listing_lng
+    ),
     details: row.details || {},
     images,
     createdAt: row.created_at || null,
