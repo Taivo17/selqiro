@@ -6130,3 +6130,20 @@ Kontrollid:
 - avaliku profiili isolatsioon: korras
 - `business_members` rekursioonihoiatus eemaldatud
 - `npm run build`: korras
+
+# V2 avaliku profiili kompaktne ja laiendatud sisu
+
+Avaliku profiili mobiilivaadet muudeti kasutajale paremini jälgitavaks.
+
+Käitumine:
+
+- järjekord on Tootenäidised, Teenused ja Müügis praegu
+- vaikimisi on sisu horisontaalses kompaktses eelvaates
+- Vaata kõiki avab sisu vertikaalse loendina
+- nupp muutub tekstiks Vaata vähem
+- Vaata vähem taastab kompaktse horisontaalse vaate
+- kuulutuste filtrite kasutamine ei sulge Vaata kõiki vaadet
+- filtreeritud nulltulemus jätab filtrid alles
+- kuulutuste plokk puudub, kui profiilil ei ole ühtegi aktiivset kuulutust
+- tootenäidiste ja teenuste plokid puuduvad, kui neis ei ole päris sisu
+- ajutised tootenäidiste ja teenuste näidisandmed eemaldati

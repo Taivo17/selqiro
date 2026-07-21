@@ -2320,3 +2320,21 @@ This precedence must remain consistent across:
 - listing images
 - listing status
 - store-category assignment
+
+---
+
+## Public profile compact and expanded modules
+
+Public profile content must remain easy to scan on mobile.
+
+Rules:
+
+- compact content is a horizontal preview
+- expanded content is a vertical responsive grid
+- view state is independent from listing category filters
+- filter changes must not reset the expanded state
+- only profile sections with real content are rendered
+- zero total listings hides the complete listing section
+- zero filtered listings keeps the section and filters visible
+- mock showcase and service content must not appear as production profile data
+- product showcases and services can reuse the same compact/expanded component after their real entity APIs are connected

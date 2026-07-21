@@ -2226,3 +2226,22 @@ Refresh event:
 - event name:
   `selqiro:active-identity-changed`
 - event detail contains the selected identity and `changed`
+
+## V2_PUBLIC_PROFILE_EXPANDABLE_CONTENT
+
+V2 avaliku profiili sisumoodulid kasutavad kompaktset ja laiendatud olekut.
+
+Reeglid:
+
+- profiili põhijärjekord on Tootenäidised, Teenused, Müügis praegu
+- kompaktne olek kuvab mobiilis horisontaalse eelvaate
+- Vaata kõiki avab vertikaalse kaardivaate
+- avatud olekus on nupu tekst Vaata vähem
+- Vaata vähem taastab horisontaalse eelvaate
+- kuulutuste poe-rubriigi filtrid ei sulge avatud Vaata kõiki olekut
+- valitud filtris null tulemust jätab filtrid nähtavaks
+- kui profiilil pole üldse aktiivseid kuulutusi, kuulutuste moodulit ei renderdata
+- tootenäidiste ja teenuste moodulid renderdatakse ainult siis, kui neil on päris sisu
+- vanad avaliku profiili mock-tootenäidised ja mock-teenused on eemaldatud
+- avalik profiil laeb praegu kuni 80 aktiivset kuulutust
+- suuremate mahtude jaoks tuleb hiljem päris lehekülgede või Laadi veel loogika

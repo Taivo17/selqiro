@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { usePublicProfile } from "../model/usePublicProfile";
 import PublicProfileListingsSection from "./PublicProfileListingsSection";
 
@@ -10,59 +11,9 @@ type ProfileItem = {
   badge?: string;
 };
 
-const showcases: ProfileItem[] = [
-  {
-    title: "Aiatehnika näidised",
-    meta: "Hooldatud murutraktorid ja niidukid",
-    badge: "Tootenäidis",
-  },
-  {
-    title: "Transpordilahendused",
-    meta: "Haagised, tööriistad ja varuosad",
-    badge: "Tootenäidis",
-  },
-  {
-    title: "Kohalik töökoja valik",
-    meta: "Näited sellest, mida pakume",
-    badge: "Portfoolio",
-  },
-];
+const showcases: ProfileItem[] = [];
 
-const listings: ProfileItem[] = [
-  {
-    title: "Cub Cadet murutraktor",
-    meta: "Aiatehnika · Paide piirkond",
-    price: "4562 €",
-  },
-  {
-    title: "BMW 5 Series",
-    meta: "Sõidukid · Türi piirkond",
-    price: "6000 €",
-  },
-  {
-    title: "Biltema ketassaag",
-    meta: "Tööriistad · Paide piirkond",
-    price: "45 €",
-  },
-];
-
-const services: ProfileItem[] = [
-  {
-    title: "Aiatehnika hooldus",
-    meta: "Murutraktorid, niidukid ja väike tehnika",
-    badge: "Teenus",
-  },
-  {
-    title: "Transport kokkuleppel",
-    meta: "Võimalik kohalik transport ja kohaletoomine",
-    badge: "Teenus",
-  },
-  {
-    title: "Nõustamine enne ostu",
-    meta: "Aitame valida sobiva masina",
-    badge: "Teenus",
-  },
-];
+const services: ProfileItem[] = [];
 
 const updates: ProfileItem[] = [
   {
@@ -75,36 +26,13 @@ const updates: ProfileItem[] = [
   },
 ];
 
-function ModuleHeader({
-  eyebrow,
-  title,
-  action,
+const PROFILE_ITEM_PREVIEW_LIMIT = 3;
+
+function PlaceholderImage({
+  className = "",
 }: {
-  eyebrow: string;
-  title: string;
-  action?: string;
+  className?: string;
 }) {
-  return (
-    <div className="mb-5 flex items-end justify-between gap-4">
-      <div>
-        <p className="text-xs font-bold uppercase tracking-[0.26em] text-neutral-400">
-          {eyebrow}
-        </p>
-        <h2 className="mt-2 text-2xl font-black tracking-tight md:text-3xl">
-          {title}
-        </h2>
-      </div>
-
-      {action ? (
-        <button className="hidden rounded-full border border-neutral-200 bg-white px-4 py-2 text-sm font-bold shadow-sm transition hover:border-neutral-300 md:inline-flex">
-          {action}
-        </button>
-      ) : null}
-    </div>
-  );
-}
-
-function PlaceholderImage({ className = "" }: { className?: string }) {
   return (
     <div
       className={[
@@ -115,10 +43,29 @@ function PlaceholderImage({ className = "" }: { className?: string }) {
   );
 }
 
-function ItemCard({ item }: { item: ProfileItem }) {
+function ItemCard({
+  item,
+  expanded,
+}: {
+  item: ProfileItem;
+  expanded: boolean;
+}) {
   return (
-    <article className="min-w-[230px] rounded-[24px] border border-black/5 bg-white p-3 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
-      <PlaceholderImage className="h-28" />
+    <article
+      className={[
+        "min-w-0 rounded-[24px] border border-black/5 bg-white p-3 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md",
+        expanded
+          ? "w-full"
+          : "w-[78vw] max-w-[290px] flex-none sm:w-[260px]",
+      ].join(" ")}
+    >
+      <PlaceholderImage
+        className={
+          expanded
+            ? "aspect-[4/3]"
+            : "h-36"
+        }
+      />
 
       <div className="mt-3 flex items-center justify-between gap-3">
         {item.badge ? (
@@ -127,32 +74,125 @@ function ItemCard({ item }: { item: ProfileItem }) {
           </span>
         ) : (
           <span className="text-[10px] font-black uppercase tracking-[0.16em] text-neutral-400">
-            Kuulutus
+            Profiili sisu
           </span>
         )}
 
-        <button className="rounded-full border border-neutral-200 bg-white px-2.5 py-1 text-xs font-bold text-neutral-500">
+        <button
+          type="button"
+          className="rounded-full border border-neutral-200 bg-white px-2.5 py-1 text-xs font-bold text-neutral-500"
+        >
           ♡
         </button>
       </div>
 
-      <h3 className="mt-2 line-clamp-2 text-base font-black">{item.title}</h3>
-      <p className="mt-1 text-sm leading-5 text-neutral-500">{item.meta}</p>
+      <h3 className="mt-2 line-clamp-2 text-base font-black">
+        {item.title}
+      </h3>
 
-      {item.price ? <p className="mt-3 text-lg font-black">{item.price}</p> : null}
+      <p className="mt-1 text-sm leading-5 text-neutral-500">
+        {item.meta}
+      </p>
+
+      {item.price ? (
+        <p className="mt-3 text-lg font-black">
+          {item.price}
+        </p>
+      ) : null}
     </article>
   );
 }
 
-function HorizontalModule({ items }: { items: ProfileItem[] }) {
+function PublicProfileItemsSection({
+  eyebrow,
+  title,
+  items,
+}: {
+  eyebrow: string;
+  title: string;
+  items: ProfileItem[];
+}) {
+  const [showAll, setShowAll] =
+    useState(false);
+
+  if (items.length === 0) {
+    return null;
+  }
+
+  const visibleItems = showAll
+    ? items
+    : items.slice(
+        0,
+        PROFILE_ITEM_PREVIEW_LIMIT
+      );
+
+  const canToggleItems =
+    showAll ||
+    items.length >
+      PROFILE_ITEM_PREVIEW_LIMIT;
+
   return (
-    <div className="w-full max-w-full overflow-x-auto overscroll-x-contain pb-2">
-      <div className="flex w-max gap-4 px-1">
-        {items.map((item) => (
-          <ItemCard key={item.title} item={item} />
-        ))}
+    <section className="overflow-hidden rounded-[34px] border border-black/5 bg-white p-6 shadow-sm md:p-8">
+      <div className="mb-5 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <p className="text-xs font-bold uppercase tracking-[0.26em] text-neutral-400">
+            {eyebrow}
+          </p>
+
+          <h2 className="mt-2 text-2xl font-black tracking-tight md:text-3xl">
+            {title}
+          </h2>
+        </div>
+
+        {canToggleItems ? (
+          <button
+            type="button"
+            aria-expanded={showAll}
+            onClick={() =>
+              setShowAll(
+                (current) =>
+                  !current
+              )
+            }
+            className="inline-flex w-full justify-center rounded-full border border-neutral-200 bg-white px-4 py-2.5 text-sm font-black shadow-sm transition hover:border-neutral-300 sm:w-auto"
+          >
+            {showAll
+              ? "Vaata vähem"
+              : `Vaata kõiki (${items.length})`}
+          </button>
+        ) : null}
       </div>
-    </div>
+
+      {showAll ? (
+        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+          {visibleItems.map(
+            (item) => (
+              <ItemCard
+                key={item.title}
+                item={item}
+                expanded
+              />
+            )
+          )}
+        </div>
+      ) : (
+        <div className="w-full max-w-full overflow-x-auto overscroll-x-contain pb-2">
+          <div className="flex w-max gap-4 px-1">
+            {visibleItems.map(
+              (item) => (
+                <ItemCard
+                  key={item.title}
+                  item={item}
+                  expanded={
+                    false
+                  }
+                />
+              )
+            )}
+          </div>
+        </div>
+      )}
+    </section>
   );
 }
 
@@ -296,26 +336,23 @@ export default function PublicProfilePage({ slug }: { slug: string }) {
               </button>
             </div>
           </section>
+          <PublicProfileItemsSection
+            key={`showcases-${profile.slug}`}
+            eyebrow="Tootenäidised"
+            title="Mida see profiil pakub"
+            items={showcases}
+          />
 
-          <section className="rounded-[34px] border border-black/5 bg-white p-6 shadow-sm md:p-8">
-            <ModuleHeader
-              eyebrow="Tootenäidised"
-              title="Mida see profiil pakub"
-              action="Vaata kõiki"
-            />
-            <HorizontalModule items={showcases} />
-          </section>
+          <PublicProfileItemsSection
+            key={`services-${profile.slug}`}
+            eyebrow="Teenused"
+            title="Pakutavad teenused"
+            items={services}
+          />
 
-          <PublicProfileListingsSection profile={profile} />
-
-          <section className="rounded-[34px] border border-black/5 bg-white p-6 shadow-sm md:p-8">
-            <ModuleHeader
-              eyebrow="Teenused"
-              title="Pakutavad teenused"
-              action="Vaata kõiki"
-            />
-            <HorizontalModule items={services} />
-          </section>
+          <PublicProfileListingsSection
+            profile={profile}
+          />
         </div>
 
         <aside className="space-y-5 lg:sticky lg:top-28 lg:self-start">

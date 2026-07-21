@@ -108,7 +108,7 @@ export function usePublicProfileListings(
               profile.identityType,
             storeCategoryScopeIds:
               resolvedScopeIds,
-            limit: 12,
+            limit: 80,
           });
 
         if (!mounted) return;
