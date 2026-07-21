@@ -296,8 +296,8 @@ export default function MyAreaListingsSection() {
   }
 
   return (
-    <section className="rounded-[30px] border border-black/5 bg-white p-6 shadow-sm">
-      <div className="mb-5 flex items-end justify-between gap-4">
+    <section className="min-w-0 overflow-hidden rounded-[30px] border border-black/5 bg-white p-6 shadow-sm">
+      <div className="mb-5 flex flex-col items-start gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="text-xs font-bold uppercase tracking-[0.24em] text-neutral-400">
             Kuulutused
@@ -309,7 +309,7 @@ export default function MyAreaListingsSection() {
           <button
             type="button"
             onClick={() => setShowAll((current) => !current)}
-            className="rounded-full border border-neutral-200 bg-white px-4 py-2 text-sm font-black shadow-sm"
+            className="inline-flex w-full justify-center rounded-full border border-neutral-200 bg-white px-4 py-2 text-sm font-black shadow-sm sm:w-auto"
           >
             {showAll ? "Näita vähem" : `Vaata kõiki (${displayListings.length})`}
           </button>

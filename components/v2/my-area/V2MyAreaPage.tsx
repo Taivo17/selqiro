@@ -223,22 +223,22 @@ function IdentityMiniPreview({ dark = false }: { dark?: boolean }) {
   return (
     <div
       className={[
-        "overflow-hidden rounded-[22px] border",
+        "w-full min-w-0 overflow-hidden rounded-[22px] border",
         dark ? "border-white/10 bg-white/10" : "border-black/5 bg-[#fbfbfa]",
       ].join(" ")}
     >
       <div className="h-20 bg-gradient-to-br from-neutral-900 via-neutral-700 to-emerald-900" />
 
       <div className="px-4 pb-4">
-        <div className="-mt-8 flex items-end gap-3">
+        <div className="-mt-8 flex min-w-0 items-end gap-3">
           <div className="h-16 w-16 shrink-0 rounded-full border-4 border-white bg-white shadow-sm">
             <div className="h-full w-full rounded-full bg-gradient-to-br from-neutral-100 to-neutral-300" />
           </div>
 
-          <div className="pb-1">
+          <div className="min-w-0 pb-1">
             <p
               className={[
-                "text-xs font-bold uppercase tracking-[0.18em]",
+                "break-words text-[10px] font-bold uppercase tracking-[0.14em] sm:text-xs sm:tracking-[0.18em]",
                 dark ? "text-white/45" : "text-neutral-400",
               ].join(" ")}
             >
@@ -246,7 +246,7 @@ function IdentityMiniPreview({ dark = false }: { dark?: boolean }) {
             </p>
             <p
               className={[
-                "text-lg font-black",
+                "truncate text-lg font-black",
                 dark ? "text-white" : "text-neutral-950",
               ].join(" ")}
             >
@@ -261,7 +261,7 @@ function IdentityMiniPreview({ dark = false }: { dark?: boolean }) {
 
 export default function V2MyAreaPage() {
   return (
-    <div className="grid gap-8 lg:grid-cols-[260px_1fr]">
+    <div className="grid min-w-0 gap-8 lg:grid-cols-[260px_minmax(0,1fr)]">
       <aside className="hidden lg:block">
         <div className="sticky top-28 space-y-2 rounded-[30px] border border-black/5 bg-white p-4 shadow-sm">
           <SidebarItem label="Ülevaade" active />
@@ -279,10 +279,10 @@ export default function V2MyAreaPage() {
         </div>
       </aside>
 
-      <div className="space-y-8">
-        <section className="rounded-[34px] border border-black/5 bg-white p-6 shadow-sm md:p-8">
-          <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
-            <div>
+      <div className="min-w-0 space-y-8">
+        <section className="min-w-0 overflow-hidden rounded-[34px] border border-black/5 bg-white p-6 shadow-sm md:p-8">
+          <div className="flex min-w-0 flex-col gap-5 md:flex-row md:items-center md:justify-between">
+            <div className="min-w-0">
               <p className="text-xs font-bold uppercase tracking-[0.26em] text-emerald-600">
                 Minu ala
               </p>
@@ -295,7 +295,7 @@ export default function V2MyAreaPage() {
               </p>
             </div>
 
-            <div className="rounded-[24px] bg-neutral-950 p-4 text-white md:w-[360px]">
+            <div className="w-full min-w-0 rounded-[24px] bg-neutral-950 p-4 text-white md:w-[360px] md:shrink-0">
               <p className="mb-3 text-xs font-bold uppercase tracking-[0.2em] text-white/50">
                 Tegutsen kui
               </p>
@@ -310,7 +310,7 @@ export default function V2MyAreaPage() {
           </div>
         </section>
 
-        <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+        <section className="grid min-w-0 gap-4 md:grid-cols-2 xl:grid-cols-4">
           {summaryCards.map((card) => (
             <SummaryCardView key={card.title} card={card} />
           ))}

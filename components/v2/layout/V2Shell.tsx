@@ -44,9 +44,9 @@ export default function V2Shell({
     shouldShowV2MobileNavigation(pathname);
 
   return (
-    <div className="min-h-[100dvh] bg-[#f7f8f6] text-neutral-950">
+    <div className="min-h-[100dvh] w-full overflow-x-clip bg-[#f7f8f6] text-neutral-950">
       <header className="sticky top-0 z-40 border-b border-black/5 bg-white/90 backdrop-blur-xl">
-        <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3 sm:px-5 sm:py-4">
+        <div className="mx-auto flex w-full min-w-0 max-w-7xl items-center justify-between gap-3 px-4 py-3 sm:px-5 sm:py-4">
           <div className="flex min-w-0 items-center gap-8">
             <Link
               href="/v2"
@@ -81,7 +81,7 @@ export default function V2Shell({
 
       <main
         className={[
-          "mx-auto min-w-0 max-w-7xl px-4 pt-6 sm:px-5 sm:pt-8",
+          "mx-auto w-full min-w-0 max-w-7xl px-4 pt-6 sm:px-5 sm:pt-8",
           showMobileNavigation
             ? "pb-32 md:pb-8"
             : "pb-8",
