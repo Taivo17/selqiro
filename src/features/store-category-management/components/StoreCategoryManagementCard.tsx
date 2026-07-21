@@ -70,7 +70,7 @@ function buildCategoryView(categories: MyAreaStoreCategory[]) {
 
 function LoadingCategories() {
   return (
-    <div className="mt-5 grid gap-3 md:grid-cols-2">
+    <div className="mt-5 grid min-w-0 grid-cols-[minmax(0,1fr)] gap-3 md:grid-cols-2">
       {[0, 1, 2, 3].map((item) => (
         <div
           key={item}
@@ -257,7 +257,7 @@ export default function StoreCategoryManagementCard() {
   } = buildCategoryView(categories);
 
   return (
-    <section className="rounded-[30px] border border-black/5 bg-white p-6 shadow-sm">
+    <section className="min-w-0 overflow-hidden rounded-[30px] border border-black/5 bg-white p-6 shadow-sm">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="text-xs font-bold uppercase tracking-[0.24em] text-neutral-400">
@@ -284,7 +284,7 @@ export default function StoreCategoryManagementCard() {
 
       <form
         onSubmit={handleCreateRootCategory}
-        className="mt-4 rounded-2xl border border-neutral-200 bg-[#fbfbfa] p-4"
+        className="mt-4 min-w-0 overflow-hidden rounded-2xl border border-neutral-200 bg-[#fbfbfa] p-4"
       >
         <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
           <label className="min-w-0 flex-1">
@@ -309,7 +309,7 @@ export default function StoreCategoryManagementCard() {
           <button
             type="submit"
             disabled={categoryActionBusy || !newRootName.trim()}
-            className="rounded-full bg-black px-5 py-3 text-sm font-black text-white transition disabled:cursor-not-allowed disabled:opacity-40"
+            className="inline-flex w-full justify-center rounded-full bg-black px-5 py-3 text-sm font-black text-white transition disabled:cursor-not-allowed disabled:opacity-40 sm:w-auto"
           >
             {creatingRootCategory ? "Lisan..." : "Lisa ülemrubriik"}
           </button>
@@ -365,7 +365,7 @@ export default function StoreCategoryManagementCard() {
       ) : null}
 
       {!loading && !error && roots.length > 0 ? (
-        <div className="mt-5 grid gap-3 md:grid-cols-2">
+        <div className="mt-5 grid min-w-0 grid-cols-[minmax(0,1fr)] gap-3 md:grid-cols-2">
           {roots.map((rootCategory) => {
             const children =
               childrenByParent.get(rootCategory.id) || [];

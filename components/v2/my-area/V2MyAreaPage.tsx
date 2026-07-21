@@ -164,17 +164,17 @@ function ModuleCard({
   children: React.ReactNode;
 }) {
   return (
-    <section className="rounded-[30px] border border-black/5 bg-white p-6 shadow-sm">
-      <div className="mb-5 flex items-end justify-between gap-4">
+    <section className="min-w-0 overflow-hidden rounded-[30px] border border-black/5 bg-white p-6 shadow-sm">
+      <div className="mb-5 flex min-w-0 flex-col items-start gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="text-xs font-bold uppercase tracking-[0.24em] text-neutral-400">
             {eyebrow}
           </p>
-          <h2 className="mt-2 text-2xl font-black">{title}</h2>
+          <h2 className="mt-2 break-words text-2xl font-black">{title}</h2>
         </div>
 
         {action ? (
-          <button className="rounded-full border border-neutral-200 bg-white px-4 py-2 text-sm font-black shadow-sm">
+          <button className="inline-flex w-full justify-center rounded-full border border-neutral-200 bg-white px-4 py-2 text-sm font-black shadow-sm sm:w-auto">
             {action}
           </button>
         ) : null}
@@ -187,11 +187,11 @@ function ModuleCard({
 
 function RowList({ items }: { items: RowItem[] }) {
   return (
-    <div className="divide-y divide-black/5">
+    <div className="min-w-0 divide-y divide-black/5">
       {items.map((item) => (
         <div
           key={item.title}
-          className="flex flex-col gap-3 py-4 first:pt-0 last:pb-0 md:flex-row md:items-center md:justify-between"
+          className="flex min-w-0 flex-col gap-3 py-4 first:pt-0 last:pb-0 md:flex-row md:items-center md:justify-between"
         >
           <div className="flex min-w-0 items-center gap-4">
             <div className="h-14 w-16 shrink-0 rounded-2xl bg-gradient-to-br from-neutral-100 to-neutral-200" />
@@ -201,7 +201,7 @@ function RowList({ items }: { items: RowItem[] }) {
             </div>
           </div>
 
-          <div className="flex items-center gap-3 md:justify-end">
+          <div className="flex min-w-0 flex-wrap items-center gap-2 md:justify-end">
             {item.value ? <p className="font-black">{item.value}</p> : null}
             {item.status ? (
               <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-black text-emerald-700">
@@ -261,7 +261,7 @@ function IdentityMiniPreview({ dark = false }: { dark?: boolean }) {
 
 export default function V2MyAreaPage() {
   return (
-    <div className="grid min-w-0 gap-8 lg:grid-cols-[260px_minmax(0,1fr)]">
+    <div className="grid min-w-0 grid-cols-[minmax(0,1fr)] gap-8 lg:grid-cols-[260px_minmax(0,1fr)]">
       <aside className="hidden lg:block">
         <div className="sticky top-28 space-y-2 rounded-[30px] border border-black/5 bg-white p-4 shadow-sm">
           <SidebarItem label="Ülevaade" active />
@@ -310,24 +310,24 @@ export default function V2MyAreaPage() {
           </div>
         </section>
 
-        <section className="grid min-w-0 gap-4 md:grid-cols-2 xl:grid-cols-4">
+        <section className="grid min-w-0 grid-cols-[minmax(0,1fr)] gap-4 md:grid-cols-2 xl:grid-cols-4">
           {summaryCards.map((card) => (
             <SummaryCardView key={card.title} card={card} />
           ))}
         </section>
 
-        <section className="grid gap-8 xl:grid-cols-[1fr_360px]">
-          <div className="space-y-8">
+        <section className="grid min-w-0 grid-cols-[minmax(0,1fr)] gap-8 xl:grid-cols-[minmax(0,1fr)_360px]">
+          <div className="min-w-0 space-y-8">
             <ModuleCard
               eyebrow="Kiire teade"
               title="Aktiivne uuendus"
               action="Muuda"
             >
-              <div className="rounded-[24px] border border-emerald-100 bg-emerald-50 p-5">
-                <h3 className="text-xl font-black">
+              <div className="min-w-0 rounded-[24px] border border-emerald-100 bg-emerald-50 p-5">
+                <h3 className="break-words text-xl font-black">
                   Täna saadaval hooldatud murutraktor
                 </h3>
-                <p className="mt-2 text-sm leading-6 text-neutral-600">
+                <p className="mt-2 break-words text-sm leading-6 text-neutral-600">
                   Kuvatakse avalikus profiilis Kiire teate plokina ja Uuenduste ajaloos.
                 </p>
               </div>
@@ -362,7 +362,7 @@ export default function V2MyAreaPage() {
             </ModuleCard>
           </div>
 
-          <aside className="space-y-5">
+          <aside className="min-w-0 space-y-5">
             <section className="rounded-[30px] border border-black/5 bg-white p-6 shadow-sm">
               <p className="text-xs font-bold uppercase tracking-[0.24em] text-neutral-400">
                 Profiil

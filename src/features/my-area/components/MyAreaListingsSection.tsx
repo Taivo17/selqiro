@@ -79,20 +79,20 @@ function MyAreaListingRow({
     statusFilter !== "all" && statusFilter !== currentStatus;
 
   return (
-    <div className="grid gap-3 py-4 first:pt-0 last:pb-0 md:grid-cols-[minmax(0,1fr)_105px_112px] md:items-center">
+    <div className="grid w-full min-w-0 grid-cols-[minmax(0,1fr)] gap-3 py-4 first:pt-0 last:pb-0 md:grid-cols-[minmax(0,1fr)_105px_112px] md:items-center">
       <Link
         href={listing.href}
-        className="-m-2 flex min-w-0 items-center gap-4 rounded-2xl p-2 transition hover:bg-neutral-50"
+        className="flex w-full min-w-0 items-center gap-3 rounded-2xl p-2 transition hover:bg-neutral-50 sm:gap-4"
       >
         {listing.imageUrl ? (
           <img
             src={listing.imageUrl}
             alt=""
-            className="h-16 w-28 shrink-0 rounded-2xl object-cover object-[center_42%]"
+            className="h-16 w-24 shrink-0 rounded-2xl sm:w-28 object-cover object-[center_42%]"
             loading="lazy"
           />
         ) : (
-          <div className="h-16 w-28 shrink-0 rounded-2xl bg-gradient-to-br from-neutral-100 to-neutral-200" />
+          <div className="h-16 w-24 shrink-0 rounded-2xl sm:w-28 bg-gradient-to-br from-neutral-100 to-neutral-200" />
         )}
 
         <div className="min-w-0">
@@ -118,17 +118,17 @@ function MyAreaListingRow({
         </div>
       </Link>
 
-      <div className="flex items-center justify-between gap-3 md:block md:text-right">
+      <div className="flex min-w-0 items-center justify-between gap-3 md:block md:text-right">
         <span className="text-xs font-bold uppercase tracking-[0.16em] text-neutral-400 md:hidden">
           Hind
         </span>
-        <p className="whitespace-nowrap text-base font-black">
+        <p className="max-w-full truncate text-base font-black">
           {listing.priceLabel}
         </p>
       </div>
 
-      <div className="grid gap-2">
-        <div className="flex items-center justify-between gap-3 md:block">
+      <div className="grid min-w-0 grid-cols-[minmax(0,1fr)] gap-2">
+        <div className="grid min-w-0 grid-cols-[auto_minmax(0,1fr)] items-center gap-3 md:block">
           <span className="text-xs font-bold uppercase tracking-[0.16em] text-neutral-400 md:hidden">
             Staatus
           </span>
@@ -140,7 +140,7 @@ function MyAreaListingRow({
               handleStatusChange(event.target.value as ListingStatus)
             }
             className={[
-              "w-full cursor-pointer appearance-none rounded-full border px-3 py-2 text-center text-xs font-black outline-none transition disabled:cursor-wait disabled:opacity-60",
+              "w-full min-w-0 max-w-full cursor-pointer appearance-none rounded-full border px-3 py-2 text-center text-xs font-black outline-none transition disabled:cursor-wait disabled:opacity-60",
               statusClass(currentStatus),
             ].join(" ")}
             title="Muuda kuulutuse staatust"
@@ -153,7 +153,7 @@ function MyAreaListingRow({
 
         <Link
           href={`/v2/my-area/listings/${listing.id}/edit`}
-          className="inline-flex justify-center rounded-full border border-neutral-200 bg-white px-3 py-2 text-xs font-black shadow-sm"
+          className="inline-flex w-full justify-center rounded-full border border-neutral-200 bg-white px-3 py-2 text-xs font-black shadow-sm"
         >
           Muuda
         </Link>
@@ -317,7 +317,7 @@ export default function MyAreaListingsSection() {
       </div>
 
       <div className="mb-5 rounded-[24px] border border-neutral-100 bg-[#fbfbfa] p-4">
-        <div className="grid gap-3 md:grid-cols-[minmax(0,1fr)_180px_auto]">
+        <div className="grid min-w-0 grid-cols-[minmax(0,1fr)] gap-3 md:grid-cols-[minmax(0,1fr)_180px_auto]">
           <input
             value={searchInput}
             onChange={(event) => setSearchInput(event.target.value)}
