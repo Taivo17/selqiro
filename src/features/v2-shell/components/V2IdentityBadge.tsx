@@ -238,7 +238,7 @@ export default function V2IdentityBadge({
             (current) => !current
           )
         }
-        className="flex max-w-[190px] items-center gap-2 rounded-full border border-neutral-200 bg-white px-2.5 py-2 text-left text-sm shadow-sm transition hover:border-neutral-300 disabled:cursor-wait disabled:opacity-70 sm:max-w-[250px] sm:gap-3 sm:px-3"
+        className="flex max-w-[145px] items-center gap-2 rounded-full border border-neutral-200 bg-white px-2.5 py-2 text-left text-sm shadow-sm transition hover:border-neutral-300 disabled:cursor-wait disabled:opacity-70 sm:max-w-[250px] sm:gap-3 sm:px-3"
       >
         <IdentityAvatar
           identity={activeIdentity}
@@ -250,7 +250,7 @@ export default function V2IdentityBadge({
             Tegutsen kui
           </span>
 
-          <span className="block max-w-[100px] truncate font-semibold sm:max-w-[160px]">
+          <span className="block max-w-[64px] truncate font-semibold sm:max-w-[160px]">
             {label}
           </span>
         </span>
