@@ -2245,3 +2245,52 @@ Reeglid:
 - vanad avaliku profiili mock-tootenäidised ja mock-teenused on eemaldatud
 - avalik profiil laeb praegu kuni 80 aktiivset kuulutust
 - suuremate mahtude jaoks tuleb hiljem päris lehekülgede või Laadi veel loogika
+
+## 2026-07-26 — V2 product showcase image management checkpoint
+
+Implemented and browser-tested:
+
+- V2 My Area now has real active-identity-scoped product showcase management.
+- A product showcase is first saved as a draft and the form remains open.
+- Users can upload up to 10 JPG, PNG or WEBP images from desktop or mobile.
+- The maximum source image size is 10 MB per image.
+- Images can be deleted and a different primary image can be selected.
+- Publishing is rejected unless the showcase has at least one image.
+- External URL fields were removed from the management form.
+- Product showcase cards do not expose a clickable external link.
+- Existing legacy `image_url` and `external_url` values remain preserved.
+- Database migrations `20260723173859` and `20260723184319`
+  were applied successfully to the linked production database.
+- Local database reset, application build and browser testing succeeded.
+
+Current boundaries:
+
+- Product showcases are portfolio/profile content, not marketplace listings.
+- Product showcases do not need a separate global search at launch.
+- Published product showcases still need to be connected to real public-profile data.
+- Permanent showcase deletion must remove the row, image rows and Storage files.
+- Draft and archived showcases remain owner-only.
+
+Locked content-activity policy:
+
+- marketplace listings are active for 90 days;
+- services and product showcases are active for 365 days;
+- a substantive owner edit restarts the activity period from the edit time;
+- an explicit confirmation can restart the period before expiry;
+- the original `created_at` and first `published_at` must remain unchanged;
+- confirmation without content changes must not change `updated_at`;
+- paused, sold, draft or archived content must not be published automatically;
+- expired content disappears publicly but remains available in My Area;
+- renewing activity must not make content appear newly created or boost ranking.
+
+Before adding activity lifecycle fields, commit and push the current
+product-showcase image-management checkpoint.
+
+The next isolated product-showcase lifecycle patch should add:
+
+- `last_confirmed_at`;
+- `active_until`;
+- a 365-day server-side confirmation rule;
+- automatic renewal after substantive edits to published content;
+- an explicit owner confirmation RPC;
+- preservation of the original first-publication timestamp.

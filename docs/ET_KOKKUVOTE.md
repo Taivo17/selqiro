@@ -6147,3 +6147,39 @@ Käitumine:
 - kuulutuste plokk puudub, kui profiilil ei ole ühtegi aktiivset kuulutust
 - tootenäidiste ja teenuste plokid puuduvad, kui neis ei ole päris sisu
 - ajutised tootenäidiste ja teenuste näidisandmed eemaldati
+
+## 2026-07-26 — V2 tootenäidiste pildihalduse checkpoint
+
+Valmis ja brauseris kontrollitud:
+
+- tootenäidise saab luua mustandina;
+- pärast mustandi salvestamist jääb vorm avatuks;
+- telefonist ja arvutist saab lisada kuni 10 JPG-, PNG- või WEBP-pilti;
+- ühe pildi suuruse piir on 10 MB;
+- pilte saab kustutada ja põhipilti vahetada;
+- ilma vähemalt ühe pildita ei saa tootenäidist avaldada;
+- väline veebiaadress eemaldati haldusvormist ja seda ei kuvata klikitava lingina;
+- olemasolevad vanad `image_url` ja `external_url` väärtused säilitatakse;
+- migratsioonid `20260723173859` ja `20260723184319` on tootmisbaasis rakendatud;
+- build, kohalik andmebaasi reset ja brauseritest õnnestusid.
+
+Veel tegemata:
+
+- terve tootenäidise jäädav kustutamine koos Storage’i failidega;
+- avaldatud tootenäidiste ühendamine avaliku profiili pärisandmetega;
+- tootenäidiste aktiivsus- ja aegumisloogika.
+
+Lukustatud aktiivsuse põhimõte:
+
+- müügikuulutus on aktiivne 90 päeva;
+- teenus ja tootenäidis on aktiivsed 365 päeva;
+- avaliku sisu sisuline muutmine alustab uut aktiivsusperioodi muutmise hetkest;
+- eraldi aktiivsuse kinnitamine alustab uut perioodi kinnitamise hetkest;
+- `created_at` ja esimene `published_at` ei muutu;
+- ainult aktiivsuse kinnitamine ei muuda `updated_at` väärtust;
+- peatatud, müüdud, mustandis või arhiveeritud sisu ei avaldata automaatselt;
+- aegunud sisu kaob avalikust vaatest, kuid jääb omaniku Minu alasse alles;
+- aktiivsuse pikendamine ei tõsta sisu otsingus uuesti uueks.
+
+Järgmine väike patch on tootenäidiste `last_confirmed_at` ja
+`active_until` vundament koos 365-päevase kinnitamisloogikaga.

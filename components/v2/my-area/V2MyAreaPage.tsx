@@ -1,4 +1,5 @@
 import MyAreaListingsSection from "../../../src/features/my-area/components/MyAreaListingsSection";
+import ProductShowcaseManagementCard from "../../../src/features/product-showcase-management/components/ProductShowcaseManagementCard";
 import StoreCategoryManagementCard from "../../../src/features/store-category-management/components/StoreCategoryManagementCard";
 type SummaryCard = {
   title: string;
@@ -80,18 +81,6 @@ const services: RowItem[] = [
   },
 ];
 
-const showcases: RowItem[] = [
-  {
-    title: "Aiatehnika näidised",
-    meta: "Hooldatud murutraktorid ja niidukid",
-    status: "Nähtav",
-  },
-  {
-    title: "Transpordilahendused",
-    meta: "Haagised, tööriistad ja varuosad",
-    status: "Nähtav",
-  },
-];
 
 const updates: RowItem[] = [
   {
@@ -268,7 +257,7 @@ export default function V2MyAreaPage() {
           <SidebarItem label="Profiil" />
           <SidebarItem label="Kuulutused" count="14" />
           <SidebarItem label="Teenused" count="3" />
-          <SidebarItem label="Tootenäidised" count="2" />
+          <SidebarItem label="Tootenäidised" />
           <SidebarItem label="Uuendused" count="2" />
           <SidebarItem label="Sõnumid" count="2" />
           <SidebarItem label="Energy" />
@@ -345,13 +334,7 @@ export default function V2MyAreaPage() {
               <RowList items={services} />
             </ModuleCard>
 
-            <ModuleCard
-              eyebrow="Tootenäidised"
-              title="Sinu tootenäidised"
-              action="Vaata kõiki"
-            >
-              <RowList items={showcases} />
-            </ModuleCard>
+            <ProductShowcaseManagementCard />
 
             <ModuleCard
               eyebrow="Uuendused"

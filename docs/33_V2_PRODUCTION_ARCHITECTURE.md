@@ -2338,3 +2338,135 @@ Rules:
 - zero filtered listings keeps the section and filters visible
 - mock showcase and service content must not appear as production profile data
 - product showcases and services can reuse the same compact/expanded component after their real entity APIs are connected
+
+## V2 product showcase media and content activity lifecycle
+
+### Product showcase role
+
+Product showcases are identity-owned public-profile portfolio content.
+
+They are separate from:
+
+- marketplace listings;
+- marketplace search;
+- services;
+- Selqiro global product categories;
+- identity-owned store categories.
+
+A product showcase can represent a completed job, a product example,
+previous experience or other portfolio content without claiming that the
+item is currently for sale.
+
+### Product showcase image architecture
+
+The first production image-management implementation uses these rules:
+
+- a showcase is saved as a draft before images are uploaded;
+- the stable showcase ID scopes all related image operations;
+- images are stored through the dedicated showcase image data model;
+- an identity can manage only showcases belonging to its active identity;
+- a showcase supports at most 10 images;
+- accepted source formats are JPG, PNG and WEBP;
+- the maximum source file size is 10 MB;
+- one image is selected as the primary image;
+- deleting or changing the primary image is handled through server RPCs;
+- publishing is rejected unless at least one image exists;
+- legacy `image_url` remains available for compatibility;
+- legacy `external_url` values remain preserved but are not exposed as
+  clickable links in the current V2 interface.
+
+Permanent showcase deletion is a separate future operation. It must remove:
+
+1. the identity-owned showcase row;
+2. all related image rows;
+3. all related Storage objects.
+
+Database rows and Storage files must not be allowed to become orphaned.
+
+Published showcase data still needs a separate public-profile query and UI
+connection. Draft and archived showcases must remain owner-only.
+
+### Locked content activity contract
+
+Content activity represents the latest owner confirmation that public
+information is still current.
+
+The lifecycle must keep these meanings separate:
+
+- `created_at` is the original creation time and never resets;
+- `published_at` is the first publication time and never resets;
+- `updated_at` records a substantive content change;
+- `last_confirmed_at` records the latest owner freshness confirmation;
+- `active_until` defines public visibility expiry.
+
+Activity periods:
+
+- marketplace listing: 90 days;
+- service: 365 days;
+- product showcase: 365 days.
+
+All activity timestamps must be calculated server-side using database time.
+
+For published content, a substantive owner edit must set:
+
+- `updated_at = now()`;
+- `last_confirmed_at = now()`;
+- `active_until = now() + the content activity period`.
+
+An explicit freshness confirmation without a content edit must set:
+
+- `last_confirmed_at = now()`;
+- `active_until = now() + the content activity period`;
+
+and must not change `updated_at`.
+
+The new period always starts from the confirmation or edit time. Remaining
+days from the previous period are not accumulated.
+
+### Status and expiry separation
+
+Publication status and expiry are separate concepts.
+
+An expired item does not require a background job to rewrite its status.
+Public queries exclude content whose `active_until` is not in the future.
+
+Owner views may continue to show the stored publication status together with
+a calculated state such as:
+
+- active;
+- expiring soon;
+- expired and requiring confirmation.
+
+Editing must not automatically publish:
+
+- paused listings;
+- sold listings;
+- draft showcases;
+- archived showcases;
+- hidden or otherwise non-public services.
+
+Reactivation of expired content must be explicit where an edit would make
+previously invisible content public again.
+
+### Ranking and freshness safety
+
+Renewing activity must not:
+
+- change the original creation time;
+- change the first publication time;
+- add a new-content badge;
+- move content to the top as if newly created;
+- grant an advertising or ranking advantage.
+
+The activity lifecycle exists only to keep public information current.
+
+The owner UI should later provide:
+
+- an advance warning 30 days before expiry;
+- a stronger warning 7 days before expiry;
+- individual confirmation controls;
+- selection-based bulk confirmation;
+- expired-content recovery without data loss.
+
+The first isolated lifecycle implementation should be added to product
+showcases before the same pattern is applied to services and listings.
