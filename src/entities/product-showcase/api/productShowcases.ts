@@ -22,6 +22,8 @@ type ProductShowcaseRow = {
   status?: string | null;
   sort_order?: string | number | null;
   published_at?: string | null;
+  last_confirmed_at?: string | null;
+  active_until?: string | null;
   created_at?: string | null;
   updated_at?: string | null;
 };
@@ -160,6 +162,10 @@ function mapProductShowcaseRow(
     status: normalizeStatus(row.status),
     sortOrder: normalizeSortOrder(row.sort_order),
     publishedAt: row.published_at || null,
+    lastConfirmedAt:
+      row.last_confirmed_at || null,
+    activeUntil:
+      row.active_until || null,
     createdAt: String(row.created_at),
     updatedAt: String(row.updated_at),
   };
@@ -316,6 +322,8 @@ export async function getMyProductShowcases(input: {
           "status",
           "sort_order",
           "published_at",
+          "last_confirmed_at",
+          "active_until",
           "created_at",
           "updated_at",
         ].join(",")

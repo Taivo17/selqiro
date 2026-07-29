@@ -2507,3 +2507,23 @@ Storage boundary:
 - `product-showcase-images` is still a public bucket;
 - RLS protects database rows and discovery paths, not an already known direct public object URL;
 - a future private-bucket design must use signed URLs and must be implemented as a separate migration plus application rollout.
+
+### Implemented product-showcase owner activity UI — 2026-07-29
+
+The owner management view now consumes the production lifecycle fields `last_confirmed_at` and `active_until`.
+
+Client rules:
+
+- activity state is calculated from the server-provided expiry timestamp;
+- hydration-safe time evaluation starts after the component mounts;
+- the comparison clock refreshes once per minute;
+- active content has more than 30 days remaining;
+- warning content has 8–30 days remaining;
+- urgent content has 1–7 days remaining;
+- expired or invalid published content is not counted as publicly active;
+- draft and archived content has no public-activity presentation;
+- the UI calculation does not mutate lifecycle data or influence ranking.
+
+A short-lived 366-day label can appear immediately after a status RPC because the client clock can predate the newly generated server timestamp by a few seconds. A refresh resolves the presentation to 365 days. This does not represent an incorrect database interval.
+
+Permanent deletion remains a separate security-sensitive workflow. It must remove the owner-authorized showcase row, dependent image rows and corresponding Storage objects without exposing a partial-delete state.

@@ -13,7 +13,12 @@ import {
   type ProductShowcase,
   type ProductShowcaseStatus,
 } from "../../../entities/product-showcase/model/types";
+import {
+  getProductShowcaseActivity,
+  isProductShowcasePubliclyActive,
+} from "../../../entities/product-showcase/model/activity";
 import { useMyProductShowcases } from "../model/useMyProductShowcases";
+import ProductShowcaseActivityStatus from "./ProductShowcaseActivityStatus";
 import ProductShowcaseImageManager from "./ProductShowcaseImageManager";
 
 type ShowcaseForm = {
@@ -38,14 +43,46 @@ function buildForm(
   };
 }
 
+function getShowcaseActivityState(
+  showcase: ProductShowcase,
+  activityNow: number | null
+) {
+  if (
+    showcase.status !== "published" ||
+    activityNow === null
+  ) {
+    return null;
+  }
+
+  return getProductShowcaseActivity(
+    showcase,
+    activityNow
+  ).state;
+}
+
 function statusLabel(
-  status: ProductShowcaseStatus
+  showcase: ProductShowcase,
+  activityNow: number | null
 ): string {
-  if (status === "published") {
+  const activityState =
+    getShowcaseActivityState(
+      showcase,
+      activityNow
+    );
+
+  if (activityState === "expired") {
+    return "Aegunud";
+  }
+
+  if (activityState === "invalid") {
+    return "Vajab kontrolli";
+  }
+
+  if (showcase.status === "published") {
     return "Avalik";
   }
 
-  if (status === "archived") {
+  if (showcase.status === "archived") {
     return "Arhiveeritud";
   }
 
@@ -53,13 +90,27 @@ function statusLabel(
 }
 
 function statusClass(
-  status: ProductShowcaseStatus
+  showcase: ProductShowcase,
+  activityNow: number | null
 ): string {
-  if (status === "published") {
+  const activityState =
+    getShowcaseActivityState(
+      showcase,
+      activityNow
+    );
+
+  if (
+    activityState === "expired" ||
+    activityState === "invalid"
+  ) {
+    return "border-red-100 bg-red-50 text-red-700";
+  }
+
+  if (showcase.status === "published") {
     return "border-emerald-100 bg-emerald-50 text-emerald-700";
   }
 
-  if (status === "archived") {
+  if (showcase.status === "archived") {
     return "border-neutral-200 bg-neutral-100 text-neutral-500";
   }
 
@@ -113,13 +164,23 @@ export default function ProductShowcaseManagementCard() {
   const [successMessage, setSuccessMessage] =
     useState<string | null>(null);
 
+  const [
+    activityNow,
+    setActivityNow,
+  ] = useState<number | null>(null);
+
   const actionBusy =
     savingShowcaseId !== null ||
     changingStatusShowcaseId !== null;
 
   const publishedCount = showcases.filter(
     (showcase) =>
-      showcase.status === "published"
+      activityNow === null
+        ? showcase.status === "published"
+        : isProductShowcasePubliclyActive(
+            showcase,
+            activityNow
+          )
   ).length;
 
   const draftCount = showcases.filter(
@@ -131,6 +192,23 @@ export default function ProductShowcaseManagementCard() {
     (showcase) =>
       showcase.status === "archived"
   ).length;
+
+  useEffect(() => {
+    function updateActivityNow() {
+      setActivityNow(Date.now());
+    }
+
+    updateActivityNow();
+
+    const intervalId = window.setInterval(
+      updateActivityNow,
+      60_000
+    );
+
+    return () => {
+      window.clearInterval(intervalId);
+    };
+  }, []);
 
   useEffect(() => {
     setFormOpen(false);
@@ -666,13 +744,15 @@ export default function ProductShowcaseManagementCard() {
                         className={[
                           "inline-flex rounded-full border px-2.5 py-1 text-[11px] font-black",
                           statusClass(
-                            showcase.status
-                          ),
+                              showcase,
+                              activityNow
+                            ),
                         ].join(" ")}
                       >
                         {statusLabel(
-                          showcase.status
-                        )}
+                            showcase,
+                            activityNow
+                          )}
                       </span>
 
                       <h3 className="mt-2 break-words text-lg font-black">
@@ -697,6 +777,11 @@ export default function ProductShowcaseManagementCard() {
                     </p>
                   )}
 
+
+                  <ProductShowcaseActivityStatus
+                    showcase={showcase}
+                    now={activityNow}
+                  />
 
                   <div className="mt-4 flex min-w-0 flex-wrap gap-2">
                     <button

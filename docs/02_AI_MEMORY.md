@@ -2328,3 +2328,24 @@ Known boundary:
 - the current `product-showcase-images` bucket remains public;
 - database and API visibility are protected, but an already known direct public object URL is not revoked;
 - private storage and signed URLs belong to a later isolated migration and application patch.
+
+## 2026-07-29 — Product-showcase owner activity status UI
+
+Implemented and browser-tested:
+
+- `ProductShowcase` now exposes `lastConfirmedAt` and `activeUntil`;
+- the owner management API selects and maps the lifecycle fields;
+- published showcase cards derive their display state from the server-provided `activeUntil`;
+- states are active, 30-day warning, 7-day urgent warning, expired and invalid;
+- expired published showcases remain visible to the owner but are excluded from the public-count badge;
+- draft and archived showcases do not display an activity notice;
+- the client activity clock starts after mount and updates once per minute;
+- no lifecycle display action changes creation time, first-publication time or ranking.
+
+Known harmless presentation edge case:
+
+- immediately archiving and republishing may temporarily display 366 days because the RPC timestamp is a few seconds later than the current client comparison timestamp and remaining days use ceiling;
+- a refresh displays 365 days;
+- the database interval remains exactly 365 days.
+
+The next isolated product-showcase patch is permanent deletion of an archived showcase, including database rows and Storage objects.

@@ -20,6 +20,8 @@ export type ProductShowcase = {
   status: ProductShowcaseStatus;
   sortOrder: number;
   publishedAt: string | null;
+  lastConfirmedAt: string | null;
+  activeUntil: string | null;
   createdAt: string;
   updatedAt: string;
 };

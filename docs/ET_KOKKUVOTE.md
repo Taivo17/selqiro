@@ -6227,3 +6227,26 @@ Järgmine eraldatud UI-etapp:
 - lisada 30 päeva ning 7 päeva eelhoiatused;
 - lisada nupp aktiivsuse kinnitamiseks;
 - kuvada aegunud sisu Minu alas taastatavana, kuid mitte avalikus profiilis.
+
+## 2026-07-29 – V2 tootenäidiste aktiivsuse omanikuvaade
+
+Valmis ja brauseris kontrollitud:
+
+- tootenäidise mudel ja API laadivad väljad `last_confirmed_at` ning `active_until`;
+- avaldatud tootenäidise kaardil kuvatakse aktiivsuse olek, tähtaeg ja järelejäänud päevad;
+- üle 30 päeva jäänud sisu kuvatakse olekuga `Aktiivne`;
+- 8–30 päeva jäänud sisu kuvatakse olekuga `Aegub varsti`;
+- 1–7 päeva jäänud sisu kuvatakse tugevama hoiatusega `Aegub peagi`;
+- aegunud sisu kuvatakse omanikule olekuga `Aegunud`, kuid see ei lähe avalike tootenäidiste loendurisse;
+- mustandil ja arhiveeritud tootenäidisel aktiivsuse teadet ei kuvata;
+- kliendipoolne aktiivsuse kell värskendub kord minutis;
+- tegevusnupud, pildihaldus, arhiveerimine ja uuesti avaldamine töötavad edasi.
+
+Teadaolev kahjutu kuvamisnüanss:
+
+- kohe pärast `Arhiveeri` ja `Avalda` toimingut võib kasutajaliides näidata hetkeks 366 päeva;
+- põhjus on see, et RPC määrab tähtaja paar sekundit pärast komponendi viimast võrdlusaega ja päevad ümardatakse üles;
+- lehe värskendamisel kuvatakse 365 päeva;
+- andmebaasis on aktiivsusperiood korrektselt 365 päeva ning andmeviga ei ole.
+
+Järgmine eraldatud etapp on arhiveeritud tootenäidise turvaline jäädav kustutamine koos pildikirjete ja Storage-failide puhastamisega.
