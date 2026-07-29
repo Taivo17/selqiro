@@ -2294,3 +2294,37 @@ The next isolated product-showcase lifecycle patch should add:
 - automatic renewal after substantive edits to published content;
 - an explicit owner confirmation RPC;
 - preservation of the original first-publication timestamp.
+
+## 2026-07-28 — Product showcase activity lifecycle is live
+
+Migration `20260726150000_add_product_showcase_activity_lifecycle.sql` is applied to the linked production database and must no longer be edited. Any follow-up database change requires a new migration.
+
+Authoritative product-showcase lifecycle rules:
+
+- published product showcases are active for 365 days;
+- first publication initializes `published_at`, `last_confirmed_at` and `active_until`;
+- the original `published_at` must remain unchanged;
+- a substantive edit to still-active published content restarts the 365-day period from the edit time;
+- a real gallery insert, update or delete counts as a substantive edit;
+- editing already expired content updates its content timestamp but must not silently make it public again;
+- explicit owner confirmation uses `confirm_my_product_showcase_activity_v2`;
+- confirmation changes `last_confirmed_at` and `active_until`, but not `updated_at`;
+- draft and archived content must never become public because of an edit or confirmation side effect;
+- expired content remains available to an authorized identity owner but is hidden from public and unrelated authenticated readers;
+- activity renewal must not alter creation time, first-publication time or search ranking.
+
+Production verification completed:
+
+- clean local database reset;
+- structural SQL checks;
+- lifecycle behavior tests;
+- anonymous, unrelated-authenticated and owner RLS tests;
+- successful application build;
+- successful linked dry-run and production push;
+- successful production schema dump/object verification.
+
+Known boundary:
+
+- the current `product-showcase-images` bucket remains public;
+- database and API visibility are protected, but an already known direct public object URL is not revoked;
+- private storage and signed URLs belong to a later isolated migration and application patch.

@@ -2470,3 +2470,40 @@ The owner UI should later provide:
 
 The first isolated lifecycle implementation should be added to product
 showcases before the same pattern is applied to services and listings.
+
+### Implemented product-showcase lifecycle checkpoint — 2026-07-28
+
+The linked production database now contains the product-showcase activity lifecycle introduced by migration `20260726150000_add_product_showcase_activity_lifecycle.sql`.
+
+Data model:
+
+- `product_showcases.last_confirmed_at timestamptz`;
+- `product_showcases.active_until timestamptz`;
+- published rows must have a valid activity interval;
+- existing published rows received a fresh transition period of 365 days.
+
+Server-side lifecycle:
+
+- `set_product_showcase_content_activity_v2()` preserves first publication time and renews still-active published content after substantive edits;
+- `touch_product_showcase_after_image_change_v2()` handles real gallery inserts, updates and deletes;
+- `confirm_my_product_showcase_activity_v2(uuid)` performs explicit owner confirmation without changing `updated_at`;
+- expired content edits do not silently reactivate public visibility.
+
+Visibility:
+
+- anonymous readers see only `status = 'published'` rows whose `active_until` is in the future;
+- unrelated authenticated readers have the same public boundary;
+- authorized identity members retain owner access to active, expired, draft and archived rows;
+- public image-row access follows the parent showcase activity boundary;
+- the separate identity-member image policy preserves owner access.
+
+Performance:
+
+- `product_showcases_identity_activity_idx` supports identity, status, expiry and profile-order access patterns;
+- activity confirmation does not change ranking or make old content appear newly created.
+
+Storage boundary:
+
+- `product-showcase-images` is still a public bucket;
+- RLS protects database rows and discovery paths, not an already known direct public object URL;
+- a future private-bucket design must use signed URLs and must be implemented as a separate migration plus application rollout.

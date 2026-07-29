@@ -6183,3 +6183,47 @@ Lukustatud aktiivsuse põhimõte:
 
 Järgmine väike patch on tootenäidiste `last_confirmed_at` ja
 `active_until` vundament koos 365-päevase kinnitamisloogikaga.
+
+## 2026-07-28 – V2 tootenäidiste aktiivsuse elutsükkel tootmises
+
+Valmis ja tootmisbaasis rakendatud:
+
+- migratsioon `20260726150000_add_product_showcase_activity_lifecycle.sql`;
+- `product_showcases` tabelis on `last_confirmed_at` ja `active_until`;
+- avaldatud tootenäidis on aktiivne 365 päeva;
+- esmakordne avaldamine alustab aktiivsusperioodi;
+- aktiivse avaldatud sisu sisuline muutmine alustab muutmise hetkest uut 365-päevast perioodi;
+- aktiivse galerii muutmine alustab samuti uut 365-päevast perioodi;
+- aegunud sisu muutmine ei tee seda automaatselt uuesti avalikuks;
+- aegunud avaldatud sisu saab uuesti aktiivseks kinnitada RPC-ga `confirm_my_product_showcase_activity_v2`;
+- aktiivsuse kinnitamine ei muuda `updated_at` väärtust;
+- algne `published_at` säilib;
+- aegunud tootenäidis ja selle andmebaasi pildikirjed kaovad avalikust vaatest, kuid jäävad omanikule nähtavaks;
+- olemasolevad avaldatud tootenäidised said üleminekul uue 365-päevase perioodi.
+
+Kontrollitud:
+
+- kohalik `supabase db reset`;
+- migratsiooni struktuur ja õigused;
+- esmakordne avaldamine ja 365-päevane periood;
+- sisumuudatuse ning galeriimuudatuse automaatne pikendamine;
+- aegunud sisu vaikimisi mitteaktiveerimine;
+- selgesõnaline aktiivsuse kinnitamine;
+- anonüümse, võõra kasutaja ja omaniku RLS-käitumine;
+- rakenduse tootmisbuild;
+- tootmisbaasi dry-run;
+- päris tootmismigratsioon;
+- tootmisskeemi järelkontroll.
+
+Alles jääv piirang:
+
+- `product-showcase-images` Storage-bucket on praegu avalik;
+- aegunud sisu ei leita enam profiili ega API kaudu, kuid varem teadaolev otsene avalik pildi URL võib jätkuvalt avaneda;
+- täielik URL-tasemel sulgemine vajab hiljem privaatset bucket’it ja allkirjastatud URL-e.
+
+Järgmine eraldatud UI-etapp:
+
+- kuvada omanikule aktiivsuse tähtaeg ja olek;
+- lisada 30 päeva ning 7 päeva eelhoiatused;
+- lisada nupp aktiivsuse kinnitamiseks;
+- kuvada aegunud sisu Minu alas taastatavana, kuid mitte avalikus profiilis.

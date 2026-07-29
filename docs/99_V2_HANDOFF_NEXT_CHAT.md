@@ -646,3 +646,31 @@ Next exact step:
 - make location and global-category writes use a secure server/database boundary
 - preserve existing listing store-category assignments
 - do not weaken public listing visibility or active-identity isolation
+
+## 2026-07-28 — Product-showcase lifecycle production checkpoint
+
+Completed:
+
+- product-showcase image management checkpoint was already committed as `f45e1af`;
+- migration `20260726150000_add_product_showcase_activity_lifecycle.sql` was created;
+- local reset, structural checks, behavior tests and RLS tests passed;
+- application build passed;
+- linked dry-run passed;
+- the migration was applied successfully to production;
+- local and remote migration histories both contain `20260726150000`;
+- production schema dump confirmed every expected field, function, trigger, constraint, index and policy.
+
+Important:
+
+- never edit `20260726150000_add_product_showcase_activity_lifecycle.sql` after its production application;
+- any database correction must use a new migration;
+- the migration file and this documentation checkpoint still need to be committed and pushed to GitHub;
+- the public Storage bucket remains a known future security boundary.
+
+Next safe actions:
+
+1. run `git diff --check`;
+2. review the staged scope;
+3. commit and push the lifecycle migration plus documentation;
+4. verify a clean Git status;
+5. begin the isolated owner-UI patch for expiry labels, warnings and explicit activity confirmation.
