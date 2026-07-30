@@ -6277,3 +6277,41 @@ Kontrollid:
 - tootmisskeemi järelkontroll kinnitas kõik RPC-d, õigused, triggerid, veerud, piirangud ja poliitikad.
 
 Selles checkpoint'is ei ole veel kasutajaliidese kustutamisnuppu. Järgmine eraldatud etapp on serveripoolne API, mis kasutab serverivõtit Storage-failide eemaldamiseks ja kutsub seejärel lõpliku kustutamise RPC-d.
+
+## 2026-07-30 – V2 tootenäidise jäädava kustutamise serveri-API
+
+Valmis ja täieliku kohaliku E2E-testiga kontrollitud:
+
+- lisatud `POST /api/product-showcases/delete`;
+- route nõuab `Authorization: Bearer` kasutaja access-tokenit;
+- kasutaja JWT kontrollitakse serveris Supabase Authi kaudu;
+- kustutamise ettevalmistamise ja lõpetamise RPC-d töötavad kasutaja JWT õigustes;
+- Storage-failid eemaldatakse ainult usaldatud serverikeskkonnas service-role võtmega;
+- brauser ei saa ise anda kustutatavate failide nimekirja;
+- server kasutab ainult andmebaasi koostatud kustutamismanifesti;
+- iga Storage’i tee kontrollitakse enne privilegeeritud kustutamist;
+- tee peab kuuluma oodatud tootenäidise kausta;
+- Storage’i eemaldamine toimub piiratud suurusega partiidena;
+- vastused kasutavad `no-store` cache-poliitikat ja sisaldavad päringu ID-d;
+- samaaegse korduskatse lõplik juba-kustutatud seis käsitletakse idempotentse õnnestumisena.
+
+Kontrollitud turvapiirid:
+
+- puuduv autentimine;
+- vigane JSON;
+- puuduv tootenäidise ID;
+- vigane UUID;
+- kehtetu access-token;
+- mustandi jäädava kustutamise keeld.
+
+Täielik E2E-test kontrollis:
+
+- päris kohaliku Auth-kasutaja loomist ja sisselogimist;
+- aktiivse identiteedi omandit;
+- arhiveeritud tootenäidise kustutamist HTTP route’i kaudu;
+- registreeritud galeriiobjekti eemaldamist;
+- teise üleslaadija kasutaja-ID kaustas oleva orvuks jäänud objekti eemaldamist;
+- pildiridade ja tootenäidise rea lõplikku kustutamist;
+- kõigi ajutiste testiandmete puhastamist.
+
+Järgmine isoleeritud etapp on omaniku kasutajaliidese kustutamisnupp, tugev kinnitusvaade ja haldushooki ühendamine serveri-API-ga.

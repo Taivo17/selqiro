@@ -2548,3 +2548,30 @@ Production invariants:
 Storage objects must be removed through the Storage API, not by direct SQL against `storage.objects`. Cross-member business-identity cleanup requires a trusted server environment because browser Storage deletion is scoped to the uploader's own path.
 
 The service/secret key must never be included in a client bundle. The next layer is an authenticated Next.js server route that validates the user's session, prepares the deletion, removes every manifest path with the server client and finalizes the database deletion.
+
+### Implemented trusted product-showcase deletion orchestration — 2026-07-30
+
+Permanent product-showcase deletion now has a trusted Next.js server layer above the production database foundation.
+
+Request boundary:
+
+1. The browser submits only the archived showcase ID and its current user access token.
+2. The server verifies the token through Supabase Auth.
+3. A user-scoped Supabase client calls the preparation RPC so `auth.uid()`, active identity and membership checks remain authoritative.
+4. The server accepts only the Storage manifest returned by the database.
+5. Every manifest path is validated against the requested showcase folder before privileged deletion.
+6. A server-only service-role client removes the Storage objects in bounded batches.
+7. The user-scoped client calls the final RPC with the database-issued UUID deletion token.
+8. A narrow service-role existence check resolves a concurrent already-completed deletion as idempotent success.
+
+Security invariants:
+
+- the service-role key is never exposed to the browser;
+- client input cannot select arbitrary Storage objects;
+- database RPCs are not replaced with service-role ownership decisions;
+- malformed, unauthenticated and non-archived requests fail before destructive work;
+- partial Storage cleanup remains retryable through the database deletion lock;
+- route responses use `Cache-Control: no-store`;
+- server errors expose a request ID but not privileged internal details.
+
+The route has passed a complete local Auth, HTTP, database and real Storage API E2E test, including cleanup of an object stored below another uploader's user-ID directory.

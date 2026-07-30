@@ -2376,3 +2376,34 @@ Production migration:
 - production schema dump verified columns, constraint, index, functions, grants, triggers and Storage policy.
 
 Never expose a service-role or secret key to the browser. The next isolated patch must implement the Storage cleanup in a trusted Next.js server route and only then expose the owner deletion control.
+
+## 2026-07-30 — Product-showcase deletion server API
+
+The trusted server-side orchestration for permanent product-showcase deletion is implemented and locally E2E-tested.
+
+Implemented boundary:
+
+- `POST /api/product-showcases/delete`;
+- the route requires a user Bearer token;
+- the token is verified against the Supabase Auth server;
+- preparation and finalization RPCs run with the user's JWT;
+- the service-role client is limited to trusted Auth verification, Storage cleanup and a narrow post-finalization existence check;
+- the browser never supplies privileged Storage paths;
+- only database-generated manifest paths are accepted;
+- every path must match the expected showcase folder;
+- responses are non-cacheable and contain a request ID;
+- concurrent completion is handled idempotently when another request already removed the database row.
+
+Validated locally:
+
+- production build and route registration;
+- no service-role environment reference in the static client bundle;
+- unauthenticated and malformed-request guards;
+- real Auth sign-in;
+- draft deletion rejection;
+- archived showcase deletion;
+- registered and orphaned cross-member Storage cleanup;
+- image-row and showcase-row removal;
+- complete fixture cleanup.
+
+The next patch may connect this endpoint to the owner hook and expose a permanent-delete control only for archived showcases.

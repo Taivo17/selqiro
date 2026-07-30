@@ -710,3 +710,39 @@ Next isolated patch:
 7. show `Kustuta jäädavalt` only for archived showcases with a strong confirmation step.
 
 Do not call the three deletion RPCs directly from a browser workflow that would require exposing a privileged Storage key.
+
+## 2026-07-30 – Product-showcase server deletion API checkpoint
+
+Completed:
+
+- trusted route `POST /api/product-showcases/delete`;
+- server-side access-token verification;
+- user-JWT-scoped preparation and finalization RPC calls;
+- server-only service-role Storage removal;
+- strict database-manifest path validation;
+- bounded Storage delete batches;
+- non-cacheable structured responses with request IDs;
+- retry-safe handling of partial and concurrent deletion states.
+
+Validation passed:
+
+- application production build;
+- route registration;
+- client-bundle service-key marker check;
+- missing-auth, malformed JSON, missing-ID, invalid-UUID and invalid-token tests;
+- real local Auth-user E2E test;
+- draft deletion rejection;
+- archived showcase deletion;
+- registered and cross-uploader orphan Storage cleanup;
+- database row deletion;
+- complete test-fixture cleanup.
+
+Next isolated patch:
+
+1. add a browser API wrapper that obtains the current access token;
+2. expose `deleteShowcase` and `deletingShowcaseId` from `useMyProductShowcases`;
+3. remove the deleted item from local state after success;
+4. show `Kustuta jäädavalt` only for archived showcases;
+5. require an explicit destructive confirmation;
+6. disable all card actions while deletion is running;
+7. browser-test success, cancellation and retryable error states.
