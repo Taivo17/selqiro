@@ -674,3 +674,39 @@ Next safe actions:
 3. commit and push the lifecycle migration plus documentation;
 4. verify a clean Git status;
 5. begin the isolated owner-UI patch for expiry labels, warnings and explicit activity confirmation.
+
+## 2026-07-30 – Product-showcase deletion production checkpoint
+
+Completed and pushed to the linked production database:
+
+- migration `20260729183000_add_product_showcase_delete_rpcs.sql`;
+- archived-only permanent-deletion preparation;
+- idempotent UUID deletion lock;
+- showcase and gallery mutation guards;
+- Storage upload guard;
+- complete Storage cleanup manifest;
+- safe cancellation before cleanup;
+- mandatory completion after partial cleanup;
+- final showcase and image-row deletion.
+
+Validation completed:
+
+- local reset;
+- structural checks;
+- database behavior checks;
+- real local Storage API test, including a path belonging to another uploader;
+- application build;
+- production dry-run and push;
+- production schema-dump object verification.
+
+Next isolated patch:
+
+1. add a trusted Next.js server endpoint for the complete deletion orchestration;
+2. authenticate the requesting user on the server;
+3. call the preparation RPC using the user's session;
+4. delete all returned Storage paths using the server-only service/secret client;
+5. call the final deletion RPC with the database-issued UUID token;
+6. expose the workflow to the owner hook;
+7. show `Kustuta jäädavalt` only for archived showcases with a strong confirmation step.
+
+Do not call the three deletion RPCs directly from a browser workflow that would require exposing a privileged Storage key.

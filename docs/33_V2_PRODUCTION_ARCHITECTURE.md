@@ -2527,3 +2527,24 @@ Client rules:
 A short-lived 366-day label can appear immediately after a status RPC because the client clock can predate the newly generated server timestamp by a few seconds. A refresh resolves the presentation to 365 days. This does not represent an incorrect database interval.
 
 Permanent deletion remains a separate security-sensitive workflow. It must remove the owner-authorized showcase row, dependent image rows and corresponding Storage objects without exposing a partial-delete state.
+
+### Implemented product-showcase permanent-deletion foundation — 2026-07-30
+
+Permanent deletion is a coordinated database-and-Storage workflow rather than a direct client-side table delete.
+
+Production invariants:
+
+1. Only an active-identity archived showcase can be prepared.
+2. Preparation places a UUID deletion token and timestamp on the showcase.
+3. A deletion token freezes parent content, status changes and all gallery mutations.
+4. Archived or deleting showcases reject new Storage uploads and image-row insertion.
+5. The preparation manifest includes registered gallery paths and orphaned objects beneath the showcase folder.
+6. Database deletion is rejected while any corresponding Storage object remains.
+7. Cancellation is permitted only before registered Storage cleanup begins.
+8. Once cleanup is partial, the workflow must be retried to completion.
+9. Final deletion removes the parent and dependent image rows transactionally.
+10. Ownership and active-identity access are revalidated inside each security-definer RPC.
+
+Storage objects must be removed through the Storage API, not by direct SQL against `storage.objects`. Cross-member business-identity cleanup requires a trusted server environment because browser Storage deletion is scoped to the uploader's own path.
+
+The service/secret key must never be included in a client bundle. The next layer is an authenticated Next.js server route that validates the user's session, prepares the deletion, removes every manifest path with the server client and finalizes the database deletion.

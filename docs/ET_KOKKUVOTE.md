@@ -6250,3 +6250,30 @@ Teadaolev kahjutu kuvamisnüanss:
 - andmebaasis on aktiivsusperiood korrektselt 365 päeva ning andmeviga ei ole.
 
 Järgmine eraldatud etapp on arhiveeritud tootenäidise turvaline jäädav kustutamine koos pildikirjete ja Storage-failide puhastamisega.
+
+## 2026-07-30 – V2 tootenäidise jäädava kustutamise turvakiht
+
+Tootmisbaasis rakendatud ja kontrollitud:
+
+- jäädavalt saab kustutada ainult arhiveeritud tootenäidist;
+- kustutamise ettevalmistamise RPC lukustab tootenäidise UUID-tokeniga;
+- ettevalmistamine tagastab kõik galerii ja võimalike orvuks jäänud Storage-objektide teed;
+- sama poolelioleva kustutamise korduv ettevalmistamine tagastab sama tokeni;
+- lukustatud tootenäidise sisu, staatust ja galeriid ei saa paralleelselt muuta;
+- arhiveeritud või kustutamisel olevale tootenäidisele ei saa uusi pilte üles laadida;
+- lõplik RPC keeldub andmebaasiridu kustutamast, kuni Storage-kaustas on veel objekte;
+- kustutamise saab enne failide eemaldamise alustamist turvaliselt tühistada;
+- osalise Storage-puhastuse järel ei saa katkist tootenäidist uuesti avada, vaid kustutamine tuleb lõpule viia;
+- lõplik kustutamine eemaldab tootenäidise ja kõik seotud pildiread;
+- test kontrollis ka teise ettevõtteliikme kasutaja-ID kaustas oleva faili eemaldamist serverivõtmega.
+
+Kontrollid:
+
+- kohalik andmebaas taastati nullist;
+- struktuuri- ja käitumistestid läbisid kontrolli;
+- päris kohaliku Storage API käitumistest õnnestus;
+- tootmise kuivproov õnnestus;
+- migratsioon `20260729183000` rakendati tootmisbaasi;
+- tootmisskeemi järelkontroll kinnitas kõik RPC-d, õigused, triggerid, veerud, piirangud ja poliitikad.
+
+Selles checkpoint'is ei ole veel kasutajaliidese kustutamisnuppu. Järgmine eraldatud etapp on serveripoolne API, mis kasutab serverivõtit Storage-failide eemaldamiseks ja kutsub seejärel lõpliku kustutamise RPC-d.

@@ -2349,3 +2349,30 @@ Known harmless presentation edge case:
 - the database interval remains exactly 365 days.
 
 The next isolated product-showcase patch is permanent deletion of an archived showcase, including database rows and Storage objects.
+
+## 2026-07-30 — Product-showcase permanent deletion foundation
+
+The secure database foundation for permanent product-showcase deletion is live in production.
+
+Locked behavior:
+
+- only archived showcases may enter permanent deletion;
+- preparation creates an idempotent database-issued UUID deletion token;
+- a pending token freezes showcase content, status and gallery mutations;
+- new Storage uploads and gallery rows are rejected for archived or deleting showcases;
+- preparation returns registered image paths and orphaned Storage objects below the showcase folder;
+- final deletion is rejected while any corresponding Storage object remains;
+- cancellation is allowed only before registered Storage cleanup starts;
+- partial cleanup must be completed rather than unlocking a broken showcase;
+- final deletion removes the showcase and dependent image rows in one database transaction;
+- all RPCs resolve ownership again from the authenticated user's active identity.
+
+Production migration:
+
+- `20260729183000_add_product_showcase_delete_rpcs.sql`;
+- locally reset and behavior-tested;
+- tested through the real local Storage API;
+- dry-run and production push succeeded;
+- production schema dump verified columns, constraint, index, functions, grants, triggers and Storage policy.
+
+Never expose a service-role or secret key to the browser. The next isolated patch must implement the Storage cleanup in a trusted Next.js server route and only then expose the owner deletion control.
