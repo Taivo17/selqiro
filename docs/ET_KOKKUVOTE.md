@@ -6315,3 +6315,32 @@ Täielik E2E-test kontrollis:
 - kõigi ajutiste testiandmete puhastamist.
 
 Järgmine isoleeritud etapp on omaniku kasutajaliidese kustutamisnupp, tugev kinnitusvaade ja haldushooki ühendamine serveri-API-ga.
+
+## 2026-07-31 – V2 tootenäidise jäädava kustutamise kasutajaliides
+
+Valmis ja brauseris kontrollitud:
+
+- jäädava kustutamise nupp kuvatakse ainult arhiveeritud tootenäidisel;
+- avalikku ega mustandis tootenäidist ei saa haldusvaatest jäädavalt kustutada;
+- kasutaja peab enne kustutamist sisestama tootenäidise täpse pealkirja;
+- pealkiri peab pärast väliste tühikute eemaldamist kattuma täpselt, sealhulgas suur- ja väiketähtede osas;
+- vale või puuduv pealkiri jätab lõpliku kustutamise nupu blokeerituks;
+- kinnituse tühistamine ei muuda tootenäidist, pilte ega staatust;
+- kinnituse ja kustutamise ajal on teised tootenäidiste haldustoimingud blokeeritud;
+- brauseri API-wrapper lisab kasutaja access-tokeni olemasolevale serveri-route'ile;
+- haldushook ei luba salvestamisel, staatuse muutmisel ja kustutamisel kattuda;
+- edukalt kustutatud tootenäidis eemaldatakse kohe kohalikust olekust;
+- koguarv ja arhiveeritud tootenäidiste arv uuenevad kohe;
+- kasutajale kuvatakse õnnestumise teade;
+- lehe värskendamise järel kustutatud tootenäidis enam tagasi ei ilmu.
+
+Brauseris kontrolliti:
+
+- nupu õiget nähtavust eri staatuste korral;
+- kinnituse avamist;
+- vale nime blokeerimist;
+- tühistamist;
+- päris arhiveeritud tootenäidise ja selle piltide lõplikku kustutamist;
+- tulemuse püsimist pärast lehe värskendamist.
+
+Selles patch'is ei muudetud andmebaasi ega serveri-route'i. Turvaline serveri-API ja Storage'i puhastus olid valmis eelmises checkpoint'is.

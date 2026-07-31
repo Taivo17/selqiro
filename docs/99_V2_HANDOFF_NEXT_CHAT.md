@@ -746,3 +746,45 @@ Next isolated patch:
 5. require an explicit destructive confirmation;
 6. disable all card actions while deletion is running;
 7. browser-test success, cancellation and retryable error states.
+
+## 2026-07-31 – Product-showcase permanent deletion UI checkpoint
+
+Completed:
+
+- browser API-wrapper for the trusted permanent-delete route;
+- authenticated Bearer-token forwarding;
+- management-hook deletion state and mutual operation locking;
+- immediate local removal after successful deletion;
+- archived-only `Kustuta jäädavalt` control;
+- exact-title destructive confirmation;
+- safe cancellation;
+- inline deletion error handling;
+- immediate owner count and success-message updates.
+
+Validated in the browser:
+
+- no delete control for published or draft showcases;
+- delete control visible for archived showcases;
+- confirmation opens correctly;
+- wrong title cannot start deletion;
+- cancellation performs no mutation;
+- real archived showcase deletion succeeds;
+- the card disappears immediately;
+- the deleted showcase remains absent after reload.
+
+The product-showcase deletion flow is now complete across:
+
+- database locking and deletion RPCs;
+- Storage cleanup protection;
+- trusted server orchestration;
+- authenticated browser API;
+- owner management UI.
+
+Next isolated product-showcase patch:
+
+1. load published and currently active product showcases for a real public profile;
+2. load their ordered gallery images;
+3. render the compact and expanded public-profile showcase section;
+4. exclude draft, archived, invalid and expired content;
+5. test both anonymous and authenticated public-profile views;
+6. preserve the existing public-profile category and expanded-view state boundaries.

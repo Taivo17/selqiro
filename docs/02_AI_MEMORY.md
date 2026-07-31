@@ -2407,3 +2407,24 @@ Validated locally:
 - complete fixture cleanup.
 
 The next patch may connect this endpoint to the owner hook and expose a permanent-delete control only for archived showcases.
+
+## 2026-07-31 — Product-showcase permanent deletion UI
+
+The owner-facing permanent deletion flow is implemented and browser-tested.
+
+Implemented client boundary:
+
+- the permanent-delete control is rendered only for archived showcases;
+- deletion requires the exact showcase title;
+- cancellation performs no mutation;
+- malformed or incomplete confirmation cannot start deletion;
+- all overlapping save, status and delete operations are blocked;
+- the browser wrapper obtains the current Supabase session token;
+- the wrapper sends only the showcase ID to the trusted deletion route;
+- the hook removes the deleted showcase from local state after server success;
+- stale in-flight loading cannot restore the deleted row;
+- success feedback and owner counts update immediately.
+
+The title confirmation is a destructive-action UX safeguard only. Authorization, active-identity ownership, archived status, manifest generation, Storage cleanup and final deletion remain authoritative on the server and in the database.
+
+Manual browser validation passed for opening, cancelling, invalid confirmation, successful deletion and persistence after reload.

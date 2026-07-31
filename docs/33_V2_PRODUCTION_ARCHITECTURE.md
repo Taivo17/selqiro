@@ -2575,3 +2575,31 @@ Security invariants:
 - server errors expose a request ID but not privileged internal details.
 
 The route has passed a complete local Auth, HTTP, database and real Storage API E2E test, including cleanup of an object stored below another uploader's user-ID directory.
+
+### Implemented product-showcase deletion owner UI — 2026-07-31
+
+The trusted server deletion workflow now has an owner-facing management UI.
+
+Client sequence:
+
+1. The permanent-delete control is shown only when the local entity status is `archived`.
+2. The owner opens an inline destructive confirmation panel.
+3. The owner must enter the normalized showcase title exactly.
+4. The browser retrieves the current authenticated session token.
+5. The browser sends only the showcase UUID to `POST /api/product-showcases/delete`.
+6. The trusted server and database perform all authoritative authorization and deletion checks.
+7. After successful completion, the management hook removes the showcase from local state.
+8. The owner receives success feedback without requiring a full page reload.
+
+Client safety invariants:
+
+- title confirmation is never treated as authorization;
+- the browser cannot submit Storage paths or a deletion token;
+- draft and published showcases have no permanent-delete control;
+- the server still rejects any non-archived showcase even if client code is bypassed;
+- saving, status changes and deletion are mutually exclusive;
+- confirmation cannot be cancelled while final deletion is running;
+- a failed deletion leaves the confirmation open and displays the server-safe error beside the affected showcase;
+- a successful deletion cannot be reintroduced by an older in-flight list request.
+
+The complete flow has passed manual browser testing in addition to the previously completed Auth, HTTP, database and Storage E2E test.

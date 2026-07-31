@@ -19,6 +19,7 @@ import {
 } from "../../../entities/product-showcase/model/activity";
 import { useMyProductShowcases } from "../model/useMyProductShowcases";
 import ProductShowcaseActivityStatus from "./ProductShowcaseActivityStatus";
+import ProductShowcaseDeleteControl from "./ProductShowcaseDeleteControl";
 import ProductShowcaseImageManager from "./ProductShowcaseImageManager";
 
 type ShowcaseForm = {
@@ -139,9 +140,11 @@ export default function ProductShowcaseManagementCard() {
     error,
     savingShowcaseId,
     changingStatusShowcaseId,
+    deletingShowcaseId,
     refresh,
     saveShowcase,
     changeStatus,
+    deleteShowcase,
     clearError,
   } = useMyProductShowcases();
 
@@ -165,13 +168,20 @@ export default function ProductShowcaseManagementCard() {
     useState<string | null>(null);
 
   const [
+    confirmingDeleteShowcaseId,
+    setConfirmingDeleteShowcaseId,
+  ] = useState<string | null>(null);
+
+  const [
     activityNow,
     setActivityNow,
   ] = useState<number | null>(null);
 
   const actionBusy =
     savingShowcaseId !== null ||
-    changingStatusShowcaseId !== null;
+    changingStatusShowcaseId !== null ||
+    deletingShowcaseId !== null ||
+    confirmingDeleteShowcaseId !== null;
 
   const publishedCount = showcases.filter(
     (showcase) =>
@@ -218,6 +228,9 @@ export default function ProductShowcaseManagementCard() {
     });
     setFormError(null);
     setSuccessMessage(null);
+    setConfirmingDeleteShowcaseId(
+      null
+    );
   }, [activeIdentityId]);
 
   useEffect(() => {
@@ -361,6 +374,78 @@ export default function ProductShowcaseManagementCard() {
           ? saveError.message
           : "Tootenäidist ei saanud salvestada."
       );
+    }
+  }
+
+  function openDeleteConfirmation(
+    showcase: ProductShowcase
+  ) {
+    if (actionBusy) {
+      return;
+    }
+
+    setFormOpen(false);
+    setEditingShowcaseId(null);
+    setForm({
+      ...EMPTY_FORM,
+    });
+    setFormError(null);
+    setSuccessMessage(null);
+    clearError();
+
+    setConfirmingDeleteShowcaseId(
+      showcase.id
+    );
+  }
+
+  function closeDeleteConfirmation() {
+    if (deletingShowcaseId !== null) {
+      return;
+    }
+
+    setConfirmingDeleteShowcaseId(
+      null
+    );
+
+    clearError();
+  }
+
+  async function handleDeleteShowcase(
+    showcase: ProductShowcase
+  ): Promise<void> {
+    if (
+      showcase.status !==
+      "archived"
+    ) {
+      throw new Error(
+        "Tootenäidis tuleb enne jäädavat kustutamist arhiveerida."
+      );
+    }
+
+    setSuccessMessage(null);
+    setFormError(null);
+    clearError();
+
+    try {
+      await deleteShowcase(
+        showcase.id
+      );
+
+      setConfirmingDeleteShowcaseId(
+        null
+      );
+
+      setSuccessMessage(
+        `Tootenäidis „${showcase.title}” kustutati jäädavalt.`
+      );
+    } catch (deleteError) {
+      /*
+       * Hooki üldine veateade eemaldatakse,
+       * sest kinnituse komponent näitab vea
+       * kustutatava tootenäidise juures.
+       */
+      clearError();
+      throw deleteError;
     }
   }
 
@@ -864,6 +949,35 @@ export default function ProductShowcaseManagementCard() {
                           : "Arhiveeri"}
                       </button>
                     )}
+
+                      {showcase.status ===
+                      "archived" ? (
+                        <ProductShowcaseDeleteControl
+                          showcase={showcase}
+                          confirming={
+                            confirmingDeleteShowcaseId ===
+                            showcase.id
+                          }
+                          deleting={
+                            deletingShowcaseId ===
+                            showcase.id
+                          }
+                          disabled={actionBusy}
+                          onStart={() =>
+                            openDeleteConfirmation(
+                              showcase
+                            )
+                          }
+                          onCancel={
+                            closeDeleteConfirmation
+                          }
+                          onConfirm={() =>
+                            handleDeleteShowcase(
+                              showcase
+                            )
+                          }
+                        />
+                      ) : null}
                   </div>
                 </div>
               </article>

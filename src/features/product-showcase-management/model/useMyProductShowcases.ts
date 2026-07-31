@@ -13,6 +13,10 @@ import {
   saveMyProductShowcase,
   setMyProductShowcaseStatus,
 } from "../../../entities/product-showcase/api/productShowcases";
+import {
+  deleteMyArchivedProductShowcase,
+  type DeleteMyArchivedProductShowcaseResult,
+} from "../../../entities/product-showcase/api/deleteMyArchivedProductShowcase";
 import type {
   ProductShowcase,
   ProductShowcaseStatus,
@@ -29,6 +33,7 @@ export type MyProductShowcasesState = {
   error: string | null;
   savingShowcaseId: string | "new" | null;
   changingStatusShowcaseId: string | null;
+  deletingShowcaseId: string | null;
   refresh: () => Promise<void>;
   saveShowcase: (
     input: SaveProductShowcaseInput
@@ -37,6 +42,9 @@ export type MyProductShowcasesState = {
     showcaseId: string,
     status: ProductShowcaseStatus
   ) => Promise<ProductShowcase>;
+  deleteShowcase: (
+    showcaseId: string
+  ) => Promise<DeleteMyArchivedProductShowcaseResult>;
   clearError: () => void;
 };
 
@@ -134,9 +142,16 @@ export function useMyProductShowcases(): MyProductShowcasesState {
     setChangingStatusShowcaseId,
   ] = useState<string | null>(null);
 
+  const [
+    deletingShowcaseId,
+    setDeletingShowcaseId,
+  ] = useState<string | null>(null);
+
   const loadRequestRef = useRef(0);
   const savingRef = useRef(false);
   const statusChangingRef =
+    useRef(false);
+  const deletingRef =
     useRef(false);
 
   const loadShowcases =
@@ -281,9 +296,13 @@ export function useMyProductShowcases(): MyProductShowcasesState {
       );
     }
 
-    if (savingRef.current) {
+    if (
+      savingRef.current ||
+      statusChangingRef.current ||
+      deletingRef.current
+    ) {
       throw new Error(
-        "Tootenäidise salvestamine juba käib."
+        "Teine tootenäidise toiming juba käib."
       );
     }
 
@@ -345,9 +364,13 @@ export function useMyProductShowcases(): MyProductShowcasesState {
       );
     }
 
-    if (statusChangingRef.current) {
+    if (
+      savingRef.current ||
+      statusChangingRef.current ||
+      deletingRef.current
+    ) {
       throw new Error(
-        "Tootenäidise staatuse muutmine juba käib."
+        "Teine tootenäidise toiming juba käib."
       );
     }
 
@@ -402,6 +425,106 @@ export function useMyProductShowcases(): MyProductShowcasesState {
     }
   }
 
+
+  async function deleteShowcase(
+    showcaseId: string
+  ): Promise<
+    DeleteMyArchivedProductShowcaseResult
+  > {
+    if (!state.activeIdentityId) {
+      throw new Error(
+        "Aktiivne identiteet puudub."
+      );
+    }
+
+    if (
+      savingRef.current ||
+      statusChangingRef.current ||
+      deletingRef.current
+    ) {
+      throw new Error(
+        "Teine tootenäidise toiming juba käib."
+      );
+    }
+
+    const showcase =
+      state.showcases.find(
+        (item) =>
+          item.id === showcaseId
+      );
+
+    if (!showcase) {
+      throw new Error(
+        "Tootenäidist ei leitud."
+      );
+    }
+
+    if (
+      showcase.status !==
+      "archived"
+    ) {
+      throw new Error(
+        "Tootenäidis tuleb enne jäädavat kustutamist arhiveerida."
+      );
+    }
+
+    deletingRef.current = true;
+
+    setDeletingShowcaseId(
+      showcaseId
+    );
+
+    setState((current) => ({
+      ...current,
+      error: null,
+    }));
+
+    try {
+      const result =
+        await deleteMyArchivedProductShowcase({
+          showcaseId,
+        });
+
+      /*
+       * Prevent an older in-flight load from restoring
+       * the item after the server has deleted it.
+       */
+      loadRequestRef.current += 1;
+
+      setState((current) => ({
+        ...current,
+        showcases:
+          current.showcases.filter(
+            (item) =>
+              item.id !== showcaseId
+          ),
+        error: null,
+      }));
+
+      return result;
+    } catch (error) {
+      const resolvedError =
+        resolveError(
+          error,
+          "Tootenäidist ei saanud jäädavalt kustutada."
+        );
+
+      setState((current) => ({
+        ...current,
+        error:
+          resolvedError.message,
+      }));
+
+      throw resolvedError;
+    } finally {
+      deletingRef.current = false;
+
+      setDeletingShowcaseId(
+        null
+      );
+    }
+  }
+
   function clearError() {
     setState((current) => ({
       ...current,
@@ -413,9 +536,11 @@ export function useMyProductShowcases(): MyProductShowcasesState {
     ...state,
     savingShowcaseId,
     changingStatusShowcaseId,
+    deletingShowcaseId,
     refresh: loadShowcases,
     saveShowcase,
     changeStatus,
+    deleteShowcase,
     clearError,
   };
 }
