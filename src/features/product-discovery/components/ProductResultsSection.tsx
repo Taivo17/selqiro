@@ -2,6 +2,9 @@
 
 import ProductListingCard from "./ProductListingCard";
 import { useProductDiscoveryListings } from "../model/useProductDiscoveryListings";
+import {
+  useListingReturnRestoration,
+} from "../../listing-navigation/model/useListingReturnRestoration";
 
 function LoadingGrid() {
   return (
@@ -22,7 +25,22 @@ function LoadingGrid() {
 }
 
 export default function ProductResultsSection() {
-  const { listings, loading, error } = useProductDiscoveryListings();
+  const {
+    listings,
+    loading,
+    error,
+  } =
+    useProductDiscoveryListings();
+
+  useListingReturnRestoration({
+    source: "products",
+    ready:
+      !loading &&
+      !error,
+    listingIds: listings.map(
+      (listing) => listing.id
+    ),
+  });
 
   return (
     <section className="rounded-[34px] border border-black/5 bg-white p-6 shadow-sm md:p-8">

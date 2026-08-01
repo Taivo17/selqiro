@@ -2636,3 +2636,30 @@ Public UI invariants:
 - fullscreen navigation supports keyboard and pointer input;
 - body scrolling is restored on every lightbox cleanup path;
 - long descriptions are measured with a null-safe `ResizeObserver` flow before showing the expansion control.
+
+### Implemented listing return-navigation foundation — 2026-08-01
+
+Listing detail navigation now has a shared tab-local return-context boundary.
+
+Stored return fields:
+
+- context version and unique token;
+- trusted same-origin source route;
+- source type;
+- listing ID;
+- absolute `scrollY`;
+- listing-card viewport offset;
+- creation timestamp with a short validity window.
+
+Restoration rules:
+
+1. Save the context immediately before client-side detail navigation.
+2. Mark the source browser-history entry with the same token.
+3. Restore only when the current route, source type and history token match.
+4. Wait until the source listing collection has completed loading.
+5. Prefer aligning the original card to its former viewport offset.
+6. Fall back to the saved absolute scroll position when the card is unavailable.
+7. Repeat alignment across short render delays to tolerate asynchronous layout changes.
+8. Clear the context after successful restoration.
+
+The storage boundary is `sessionStorage`; no navigation history is written to Supabase or analytics. The design is extensible to public-profile UI state without coupling listing entities to profile components.

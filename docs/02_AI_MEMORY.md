@@ -2455,3 +2455,19 @@ Presentation boundary:
 - clamp long expanded descriptions and expose `Vaata rohkem` only when measured overflow exists.
 
 Manual validation passed for published/draft/archived filtering, authenticated and anonymous profile views, gallery selection, fullscreen navigation, long-description expansion and narrow mobile layout.
+
+## 2026-08-01 — Product listing return-position foundation
+
+The V2 product-discovery listing flow now preserves the browsing position when a visitor opens a listing and returns.
+
+Implementation:
+
+- `ProductListingCard` stores a tab-local return context before routing to `/v2/listing/[id]`;
+- the source history entry receives a unique return token;
+- the context records source URL, listing ID, absolute scroll position and the card's viewport offset;
+- `ProductResultsSection` waits for the asynchronous listing load before restoration;
+- the shared restoration hook aligns the original card over several render delays and then clears the context;
+- `ListingDetailPage` uses history back when a matching context exists and retains `/v2/products` as the direct-entry fallback;
+- the detail action label remains source-aware for the upcoming public-profile integration.
+
+This mechanism is intentionally privacy-light: it uses only `sessionStorage`, does not reach the database and does not persist across browser tabs or sessions.

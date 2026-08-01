@@ -6367,3 +6367,19 @@ Valmis ning brauseris kontrollitud:
 - nii sisse logitud kui ka anonüümne avalik profiil kuvavad sama lubatud avaliku sisu.
 
 Production build ja TypeScripti kontroll õnnestusid pärast kirjelduse mõõtmise null-kontrolli tugevdamist.
+
+## 2026-08-01 – Toodete vaatest kuulutusse ja tagasi samasse kohta
+
+Valmis ning brauseris kontrollitud:
+
+- `/v2/products` kuulutuse avamisel salvestatakse ajutine tagasipöördumise kontekst;
+- kontekst sisaldab lähteaadressi, kuulutuse ID-d, lehe kerimiskohta ja kaardi asukohta vaateaknas;
+- tagasipöördumise andmed asuvad ainult sama brauserivahekaardi `sessionStorage`-is;
+- brauseri tagasi-nupp taastab sama kuulutuse kaardi ligikaudu samasse nähtavasse kohta;
+- kuulutuse detailvaate nupp „Tagasi toodete juurde” kasutab sama taastamisvoogu;
+- otse avatud kuulutusel jääb turvaliseks varuvariandiks toodete leht;
+- asünkroonselt uuesti laaditavate kaartide tõttu korrigeeritakse kerimiskohta mitmes järjestikuses renderdusfaasis;
+- tagasipöördumise token seotakse lähtelehe ajalookirjega, et tavaline toodete lehele liikumine ei kasutaks vana kerimiskohta;
+- pärast edukat taastamist ajutine kontekst kustutatakse.
+
+Production build õnnestus. Manuaalne test läbis nii detailvaate tagasi-nupu kui brauseri tagasi-nupu voo.

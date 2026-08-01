@@ -823,3 +823,24 @@ Recommended next isolated feature patch:
 2. define a minimal public service read model;
 3. connect only valid active services without changing the completed product-showcase boundary;
 4. preserve the existing public-profile responsive and privacy rules.
+
+## 2026-08-01 – Listing return-navigation checkpoint
+
+Completed and browser-tested:
+
+- shared tab-local listing return context;
+- source history-token validation;
+- products-page card marker and return-context capture;
+- asynchronous products-page position restoration;
+- detail-page contextual back action;
+- direct-entry fallback to `/v2/products`;
+- successful production build;
+- browser back and visible „Tagasi toodete juurde” action both restore the products browsing position.
+
+Current next patch:
+
+1. connect public-profile listing cards to the same return-context foundation;
+2. store and restore public-profile `Vaata kõiki`, selected store category and expanded category branch;
+3. preserve the compact horizontal listing row's `scrollLeft`;
+4. confirm that the detail action changes to „Tagasi profiilile” for this source;
+5. browser-test both compact and expanded public-profile listing flows before commit.

@@ -1,8 +1,14 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState, type PointerEvent } from "react";
 import { useListingDetail } from "../model/useListingDetail";
+import {
+  getListingReturnBackLabel,
+  markListingReturnFallbackNavigation,
+  readListingReturnContext,
+} from "../../listing-navigation/model/listingReturnContext";
 import type {
   ListingImage,
   ProductListingDetail,
@@ -114,36 +120,108 @@ function LoadingState() {
   );
 }
 
-function ErrorState({ error }: { error: string }) {
+function ListingReturnBackButton({
+  listingId,
+  className,
+}: {
+  listingId: string;
+  className: string;
+}) {
+  const router = useRouter();
+
+  const [
+    label,
+    setLabel,
+  ] = useState(
+    "← Tagasi toodete juurde"
+  );
+
+  useEffect(() => {
+    setLabel(
+      getListingReturnBackLabel(
+        readListingReturnContext(
+          listingId
+        )
+      )
+    );
+  }, [listingId]);
+
+  function handleBack() {
+    const context =
+      readListingReturnContext(
+        listingId
+      );
+
+    if (!context) {
+      router.push(
+        "/v2/products"
+      );
+      return;
+    }
+
+    if (
+      window.history.length > 1
+    ) {
+      router.back();
+      return;
+    }
+
+    markListingReturnFallbackNavigation(
+      context
+    );
+
+    router.push(
+      context.sourceUrl
+    );
+  }
+
+  return (
+    <button
+      type="button"
+      onClick={handleBack}
+      className={className}
+    >
+      {label}
+    </button>
+  );
+}
+
+function ErrorState({
+  error,
+  listingId,
+}: {
+  error: string;
+  listingId: string;
+}) {
   return (
     <section className="rounded-[34px] border border-red-100 bg-red-50 p-8">
       <h1 className="text-3xl font-black text-red-950">
         Kuulutust ei saanud laadida
       </h1>
       <p className="mt-3 text-sm leading-6 text-red-800">{error}</p>
-      <Link
-        href="/v2/products"
+      <ListingReturnBackButton
+        listingId={listingId}
         className="mt-6 inline-flex rounded-full bg-black px-5 py-3 text-sm font-black text-white"
-      >
-        Tagasi toodete juurde
-      </Link>
+      />
     </section>
   );
 }
 
-function EmptyState() {
+function EmptyState({
+  listingId,
+}: {
+  listingId: string;
+}) {
   return (
     <section className="rounded-[34px] border border-black/5 bg-white p-8 text-center shadow-sm">
       <h1 className="text-3xl font-black">Kuulutust ei leitud</h1>
       <p className="mt-3 text-sm leading-6 text-neutral-500">
         See kuulutus võib olla eemaldatud, aegunud või mitte avalik.
       </p>
-      <Link
-        href="/v2/products"
+      <ListingReturnBackButton
+        listingId={listingId}
         className="mt-6 inline-flex rounded-full bg-black px-5 py-3 text-sm font-black text-white"
-      >
-        Tagasi toodete juurde
-      </Link>
+      />
     </section>
   );
 }
@@ -214,8 +292,22 @@ export default function ListingDetailPage({ listingId }: { listingId: string }) 
   ]);
 
   if (loading) return <LoadingState />;
-  if (error) return <ErrorState error={error} />;
-  if (!listing) return <EmptyState />;
+  if (error) {
+    return (
+      <ErrorState
+        error={error}
+        listingId={listingId}
+      />
+    );
+  }
+
+  if (!listing) {
+    return (
+      <EmptyState
+        listingId={listingId}
+      />
+    );
+  }
 
   const galleryImages = listing.images
     .map((image, index) => ({
@@ -369,12 +461,10 @@ export default function ListingDetailPage({ listingId }: { listingId: string }) 
     <div className="space-y-8">
       <section className="overflow-hidden rounded-[34px] border border-black/5 bg-white p-5 shadow-sm md:p-8">
         <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
-          <Link
-            href="/v2/products"
+          <ListingReturnBackButton
+            listingId={listingId}
             className="rounded-full border border-neutral-200 bg-white px-4 py-2 text-sm font-bold shadow-sm"
-          >
-            ← Tagasi toodete juurde
-          </Link>
+          />
 
           <p className="text-sm font-semibold text-neutral-500">
             {listing.category || "Toode"}

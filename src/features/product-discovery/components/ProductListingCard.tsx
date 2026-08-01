@@ -1,7 +1,13 @@
 "use client";
 
-import type { KeyboardEvent } from "react";
+import {
+  useRef,
+  type KeyboardEvent,
+} from "react";
 import { useRouter } from "next/navigation";
+import {
+  saveListingReturnContext,
+} from "../../listing-navigation/model/listingReturnContext";
 import type { ProductListingCard as ProductListingCardType } from "../../../entities/listing/model/types";
 
 export default function ProductListingCard({
@@ -10,9 +16,25 @@ export default function ProductListingCard({
   listing: ProductListingCardType;
 }) {
   const router = useRouter();
-  const listingHref = `/v2/listing/${listing.id}`;
+
+  const cardRef =
+    useRef<HTMLElement>(null);
+
+  const listingHref =
+    `/v2/listing/${listing.id}`;
 
   function openListing() {
+    const cardViewportTop =
+      cardRef.current
+        ?.getBoundingClientRect()
+        .top ?? 0;
+
+    saveListingReturnContext({
+      source: "products",
+      listingId: listing.id,
+      cardViewportTop,
+    });
+
     router.push(listingHref);
   }
 
@@ -37,6 +59,8 @@ export default function ProductListingCard({
 
   return (
     <article
+      ref={cardRef}
+      data-listing-card-id={listing.id}
       onClick={openListingFromCard}
       role="link"
       tabIndex={0}
