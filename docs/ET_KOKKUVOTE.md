@@ -6344,3 +6344,26 @@ Brauseris kontrolliti:
 - tulemuse püsimist pärast lehe värskendamist.
 
 Selles patch'is ei muudetud andmebaasi ega serveri-route'i. Turvaline serveri-API ja Storage'i puhastus olid valmis eelmises checkpoint'is.
+
+## 2026-08-01 – V2 avaliku profiili tootenäidised ja interaktiivne galerii
+
+Valmis ning brauseris kontrollitud:
+
+- avalik profiil laadib päris tootenäidised profiili identiteedi järgi;
+- avalikult kuvatakse ainult staatusega `published` tootenäidised, mille `active_until` on tulevikus;
+- mustandid, arhiveeritud, aegunud, vigase aktiivsusajaga ja pildita tootenäidised jäävad avalikust vaatest välja;
+- tootenäidised ja nende galerii laaditakse kahe piiratud koondpäringuga, mitte eraldi päringuga iga kaardi kohta;
+- avalik päring ei küsi üleslaadija kasutaja ID-d, Storage'i sisemist teed ega tootenäidise välist URL-i;
+- profiili tootenäidiste plokk peidetakse täielikult, kui avalikku sisu pole;
+- kompaktne vaade kuvab kuni viis horisontaalselt keritavat kaarti;
+- laiendatud vaade kuvab kõik tootenäidised responsive ruudustikus;
+- mitme pildiga tootenäidisel saab pilti valida pisipiltidest;
+- valitud pilti saab avada täisekraangaleriis;
+- täisekraangaleriis töötavad eelmine/järgmine nupud, klaviatuuri nooled, `Escape`, taustale vajutamine ja kerimise lukustus;
+- galerii nooled peituvad umbes kolme sekundi tegevusetuse järel ning ilmuvad kasutaja tegevuse korral uuesti;
+- pikk kirjeldus on vaikimisi piiratud ja avaneb nupuga „Vaata rohkem“;
+- kirjelduse nupp kuvatakse ainult siis, kui tekst tegelikult ei mahu;
+- kitsas mobiilipaigutus, pisipiltide horisontaalne kerimine ja alumise navigatsiooni koosmõju on kontrollitud;
+- nii sisse logitud kui ka anonüümne avalik profiil kuvavad sama lubatud avaliku sisu.
+
+Production build ja TypeScripti kontroll õnnestusid pärast kirjelduse mõõtmise null-kontrolli tugevdamist.

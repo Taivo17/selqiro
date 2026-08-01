@@ -788,3 +788,38 @@ Next isolated product-showcase patch:
 4. exclude draft, archived, invalid and expired content;
 5. test both anonymous and authenticated public-profile views;
 6. preserve the existing public-profile category and expanded-view state boundaries.
+
+## 2026-08-01 – Public-profile product-showcase checkpoint
+
+Completed:
+
+- dedicated public product-showcase and image model;
+- active published showcase query;
+- one batched gallery query;
+- public-field minimization;
+- public-profile loading hook;
+- removal of the former empty showcase placeholder;
+- compact horizontal showcase preview;
+- responsive expanded showcase grid;
+- selectable gallery thumbnails;
+- fullscreen gallery with keyboard and pointer navigation;
+- three-second inactivity hiding for gallery arrows;
+- long-description `Vaata rohkem / Näita vähem` behavior;
+- desktop, narrow viewport, authenticated and anonymous browser validation;
+- successful production build.
+
+The product-showcase feature is now complete across:
+
+- owner creation and editing;
+- Storage-backed image management;
+- publication activity lifecycle;
+- secure permanent deletion;
+- active public-profile visibility;
+- interactive public gallery browsing.
+
+Recommended next isolated feature patch:
+
+1. inspect the remaining placeholder service section on the public profile;
+2. define a minimal public service read model;
+3. connect only valid active services without changing the completed product-showcase boundary;
+4. preserve the existing public-profile responsive and privacy rules.

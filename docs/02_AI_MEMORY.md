@@ -2428,3 +2428,30 @@ Implemented client boundary:
 The title confirmation is a destructive-action UX safeguard only. Authorization, active-identity ownership, archived status, manifest generation, Storage cleanup and final deletion remain authoritative on the server and in the database.
 
 Manual browser validation passed for opening, cancelling, invalid confirmation, successful deletion and persistence after reload.
+
+## 2026-08-01 — Public-profile product showcases are live
+
+The product-showcase public-profile boundary is implemented and manually browser-tested.
+
+Data boundary:
+
+- query by `PublicProfile.identityId`;
+- require `status = published`;
+- require `active_until` later than the request timestamp;
+- rely on RLS as the authoritative visibility boundary and repeat critical visibility validation in the mapper;
+- load showcase rows and all matching gallery rows with two bounded queries;
+- omit uploader identity, Storage object path and external URL from the public select;
+- omit malformed rows, expired rows and showcases without a usable public image.
+
+Presentation boundary:
+
+- hide the entire section when there is no public content;
+- show up to five cards in the compact horizontal preview;
+- expose all cards in a responsive expanded grid;
+- allow every available gallery image to become the selected card image;
+- open the selected original image in an accessible fullscreen dialog;
+- support pointer controls, thumbnails, keyboard arrows, Escape, backdrop close and body-scroll locking;
+- hide previous/next controls after about three seconds of inactivity and restore them after interaction;
+- clamp long expanded descriptions and expose `Vaata rohkem` only when measured overflow exists.
+
+Manual validation passed for published/draft/archived filtering, authenticated and anonymous profile views, gallery selection, fullscreen navigation, long-description expansion and narrow mobile layout.

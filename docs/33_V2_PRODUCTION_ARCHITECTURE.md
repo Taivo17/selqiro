@@ -2603,3 +2603,36 @@ Client safety invariants:
 - a successful deletion cannot be reintroduced by an older in-flight list request.
 
 The complete flow has passed manual browser testing in addition to the previously completed Auth, HTTP, database and Storage E2E test.
+
+### Implemented public product-showcase profile read model — 2026-08-01
+
+Public profile product-showcase reads now use a dedicated minimal model rather than the owner-management entity.
+
+Read sequence:
+
+1. Resolve the public profile and its stable identity UUID.
+2. Query `product_showcases` for the identity, `published` status and `active_until > request time`.
+3. Map and validate UUIDs, dates, status and identity ownership on the client boundary.
+4. Query all matching `product_showcase_images` rows in one bounded request.
+5. Sort each gallery by primary flag, sort order, creation time and ID.
+6. Drop any showcase that has no usable public image.
+7. Render the resulting immutable public model.
+
+Privacy and scalability properties:
+
+- the public select excludes `uploaded_by_user_id`, `storage_path` and `external_url`;
+- no owner mutation APIs are imported into the public-profile feature;
+- gallery loading does not create an N+1 query pattern;
+- showcase and image result sizes are bounded;
+- database RLS remains authoritative for anonymous and authenticated viewers;
+- client-side validation is defense in depth, not authorization.
+
+Public UI invariants:
+
+- no section is rendered for an empty public result;
+- compact cards are horizontally contained and do not widen the page;
+- expanded cards use a one-column mobile and two-column wider layout;
+- the selected card image and fullscreen image remain synchronized;
+- fullscreen navigation supports keyboard and pointer input;
+- body scrolling is restored on every lightbox cleanup path;
+- long descriptions are measured with a null-safe `ResizeObserver` flow before showing the expansion control.

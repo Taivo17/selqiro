@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { usePublicProfile } from "../model/usePublicProfile";
 import PublicProfileListingsSection from "./PublicProfileListingsSection";
+import PublicProfileProductShowcasesSection from "./PublicProfileProductShowcasesSection";
 
 type ProfileItem = {
   title: string;
@@ -11,7 +12,6 @@ type ProfileItem = {
   badge?: string;
 };
 
-const showcases: ProfileItem[] = [];
 
 const services: ProfileItem[] = [];
 
@@ -336,11 +336,9 @@ export default function PublicProfilePage({ slug }: { slug: string }) {
               </button>
             </div>
           </section>
-          <PublicProfileItemsSection
+          <PublicProfileProductShowcasesSection
             key={`showcases-${profile.slug}`}
-            eyebrow="Tootenäidised"
-            title="Mida see profiil pakub"
-            items={showcases}
+            profile={profile}
           />
 
           <PublicProfileItemsSection
