@@ -2706,3 +2706,20 @@ Behavioral rules:
 6. No database or persistent profile preference is used for this transient presentation state.
 
 This keeps the public page easier to scan on narrow screens while preserving the previously implemented return-navigation contract.
+
+### Public product-showcase pointer-swipe boundary — 2026-08-02
+
+The public product-showcase gallery now uses a local Pointer Events gesture boundary.
+
+Gesture rules:
+
+1. Record the pointer start coordinates only for non-mouse pointers and multi-image galleries.
+2. Accept a swipe only when horizontal movement reaches the minimum threshold and clearly dominates vertical movement.
+3. Use `touch-action: pan-y` so vertical document scrolling remains native.
+4. In expanded card mode, update the selected image without opening the lightbox.
+5. Suppress the synthetic post-swipe click for a short interval.
+6. In the lightbox, reuse the existing previous/next image functions and reschedule control auto-hide.
+7. Do not attach card-level image swipe capture in the compact horizontal showcase row.
+8. Preserve thumbnail, keyboard, arrow-button and modal-close navigation as independent accessible controls.
+
+This is transient presentation behavior only. It does not add persistence, analytics, database writes or new public data fields.

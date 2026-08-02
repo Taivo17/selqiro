@@ -5,6 +5,7 @@ import {
   useMemo,
   useRef,
   useState,
+  type PointerEvent,
 } from "react";
 import type {
   PublicProductShowcase,
@@ -19,6 +20,12 @@ import {
 const SHOWCASE_PREVIEW_LIMIT = 5;
 const LIGHTBOX_CONTROLS_HIDE_DELAY_MS =
   3000;
+
+const SHOWCASE_SWIPE_MIN_DISTANCE =
+  55;
+
+const SHOWCASE_SWIPE_AXIS_RATIO =
+  1.25;
 
 function LoadingShowcases() {
   return (
@@ -102,6 +109,21 @@ function ShowcaseInteractiveGallery({
   const lightboxControlsTimerRef =
     useRef<number | null>(null);
 
+  const cardPointerStartXRef =
+    useRef<number | null>(null);
+
+  const cardPointerStartYRef =
+    useRef<number | null>(null);
+
+  const cardSwipeHandledRef =
+    useRef(false);
+
+  const lightboxPointerStartXRef =
+    useRef<number | null>(null);
+
+  const lightboxPointerStartYRef =
+    useRef<number | null>(null);
+
   const selectedImageIndex =
     Math.max(
       0,
@@ -171,6 +193,215 @@ function ShowcaseInteractiveGallery({
   function keepLightboxControlsVisible() {
     clearLightboxControlsTimer();
     setLightboxControlsVisible(true);
+  }
+
+  function isHorizontalShowcaseSwipe(
+    deltaX: number,
+    deltaY: number
+  ): boolean {
+    const horizontalMove =
+      Math.abs(deltaX);
+
+    const verticalMove =
+      Math.abs(deltaY);
+
+    return (
+      horizontalMove >=
+        SHOWCASE_SWIPE_MIN_DISTANCE &&
+      horizontalMove >
+        verticalMove *
+          SHOWCASE_SWIPE_AXIS_RATIO
+    );
+  }
+
+  function resetShowcaseCardPointer() {
+    cardPointerStartXRef.current =
+      null;
+
+    cardPointerStartYRef.current =
+      null;
+  }
+
+  function handleShowcaseCardPointerDown(
+    event:
+      PointerEvent<HTMLButtonElement>
+  ) {
+    if (
+      event.pointerType === "mouse" ||
+      !expanded ||
+      showcase.images.length <= 1
+    ) {
+      return;
+    }
+
+    cardSwipeHandledRef.current =
+      false;
+
+    cardPointerStartXRef.current =
+      event.clientX;
+
+    cardPointerStartYRef.current =
+      event.clientY;
+  }
+
+  function handleShowcaseCardPointerUp(
+    event:
+      PointerEvent<HTMLButtonElement>
+  ) {
+    const startX =
+      cardPointerStartXRef.current;
+
+    const startY =
+      cardPointerStartYRef.current;
+
+    resetShowcaseCardPointer();
+
+    if (
+      event.pointerType === "mouse" ||
+      !expanded ||
+      startX === null ||
+      startY === null ||
+      showcase.images.length <= 1
+    ) {
+      return;
+    }
+
+    const deltaX =
+      event.clientX - startX;
+
+    const deltaY =
+      event.clientY - startY;
+
+    if (
+      !isHorizontalShowcaseSwipe(
+        deltaX,
+        deltaY
+      )
+    ) {
+      return;
+    }
+
+    /*
+     * Puutejärgne click ei tohi pärast
+     * pildipühkimist lightbox'i avada.
+     */
+    cardSwipeHandledRef.current =
+      true;
+
+    event.preventDefault();
+
+    /*
+     * Mõni brauser ei väljasta pärast
+     * pühkimist click-sündmust. Sellisel
+     * juhul ei tohi blokeerimisviide jääda
+     * järgmise tavavajutuseni aktiivseks.
+     */
+    window.setTimeout(() => {
+      cardSwipeHandledRef.current =
+        false;
+    }, 500);
+
+    if (deltaX < 0) {
+      showNextImage();
+    } else {
+      showPreviousImage();
+    }
+  }
+
+  function handleShowcaseCardPointerCancel() {
+    resetShowcaseCardPointer();
+
+    cardSwipeHandledRef.current =
+      false;
+  }
+
+  function resetShowcaseLightboxPointer() {
+    lightboxPointerStartXRef.current =
+      null;
+
+    lightboxPointerStartYRef.current =
+      null;
+  }
+
+  function handleShowcaseLightboxPointerDown(
+    event:
+      PointerEvent<HTMLDivElement>
+  ) {
+    event.stopPropagation();
+
+    scheduleLightboxControlsHide();
+
+    if (
+      event.pointerType === "mouse" ||
+      showcase.images.length <= 1
+    ) {
+      return;
+    }
+
+    lightboxPointerStartXRef.current =
+      event.clientX;
+
+    lightboxPointerStartYRef.current =
+      event.clientY;
+  }
+
+  function handleShowcaseLightboxPointerUp(
+    event:
+      PointerEvent<HTMLDivElement>
+  ) {
+    event.stopPropagation();
+
+    const startX =
+      lightboxPointerStartXRef.current;
+
+    const startY =
+      lightboxPointerStartYRef.current;
+
+    resetShowcaseLightboxPointer();
+
+    if (
+      event.pointerType === "mouse" ||
+      startX === null ||
+      startY === null ||
+      showcase.images.length <= 1
+    ) {
+      scheduleLightboxControlsHide();
+      return;
+    }
+
+    const deltaX =
+      event.clientX - startX;
+
+    const deltaY =
+      event.clientY - startY;
+
+    if (
+      isHorizontalShowcaseSwipe(
+        deltaX,
+        deltaY
+      )
+    ) {
+      event.preventDefault();
+
+      if (deltaX < 0) {
+        showNextImage();
+      } else {
+        showPreviousImage();
+      }
+    }
+
+    scheduleLightboxControlsHide();
+  }
+
+  function handleShowcaseLightboxPointerCancel(
+    event:
+      PointerEvent<HTMLDivElement>
+  ) {
+    event.stopPropagation();
+
+    resetShowcaseLightboxPointer();
+
+    scheduleLightboxControlsHide();
   }
 
   function selectImage(
@@ -327,9 +558,35 @@ function ShowcaseInteractiveGallery({
       <button
         type="button"
         onClick={() => {
+          if (
+            cardSwipeHandledRef.current
+          ) {
+            cardSwipeHandledRef.current =
+              false;
+
+            return;
+          }
+
           setLightboxControlsVisible(true);
           setLightboxOpen(true);
         }}
+        onPointerDown={
+          handleShowcaseCardPointerDown
+        }
+        onPointerUp={
+          handleShowcaseCardPointerUp
+        }
+        onPointerCancel={
+          handleShowcaseCardPointerCancel
+        }
+        style={
+          expanded &&
+          showcase.images.length > 1
+            ? {
+                touchAction: "pan-y",
+              }
+            : undefined
+        }
         aria-label={
           `Ava tootenäidise „${showcase.title}” pilt suurelt`
         }
@@ -349,6 +606,7 @@ function ShowcaseInteractiveGallery({
               }`
             }
             loading="lazy"
+            draggable={false}
             className="h-full w-full object-cover transition duration-300 group-hover:scale-[1.015]"
             onError={(event) => {
               event.currentTarget.style.display =
@@ -473,7 +731,21 @@ function ShowcaseInteractiveGallery({
               </button>
             </div>
 
-            <div className="relative flex min-h-0 flex-1 items-center justify-center overflow-hidden rounded-[22px] bg-black">
+            <div
+              className="relative flex min-h-0 flex-1 items-center justify-center overflow-hidden rounded-[22px] bg-black"
+              style={{
+                touchAction: "pan-y",
+              }}
+              onPointerDown={
+                handleShowcaseLightboxPointerDown
+              }
+              onPointerUp={
+                handleShowcaseLightboxPointerUp
+              }
+              onPointerCancel={
+                handleShowcaseLightboxPointerCancel
+              }
+            >
               <img
                 src={selectedFullUrl}
                 alt={
@@ -481,7 +753,8 @@ function ShowcaseInteractiveGallery({
                     selectedImageIndex + 1
                   }`
                 }
-                className="max-h-full max-w-full object-contain"
+                draggable={false}
+                className="max-h-full max-w-full select-none object-contain"
                 onError={(event) => {
                   event.currentTarget.style.display =
                     "none";

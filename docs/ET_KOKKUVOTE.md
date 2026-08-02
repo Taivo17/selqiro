@@ -6416,3 +6416,20 @@ Valmis ning brauseris kontrollitud:
 - kitsas mobiilivaade ning sektsioonide vastastikune avamine ja sulgemine läbivad manuaalse testi.
 
 Production build õnnestus.
+
+## 2026-08-02 – Avaliku profiili tootenäidiste galerii puutepühkimine
+
+Rakendatud ja production build'iga kontrollitud:
+
+- laiendatud tootenäidise kaardi põhipildil saab puuteseadmega liikuda vasakule ja paremale;
+- täisekraangaleriis saab puuteseadmega liikuda vasakule ja paremale;
+- vasakule pühkimine avab järgmise ning paremale pühkimine eelmise pildi;
+- pühkimine nõuab vähemalt 55-pikslist horisontaalset liikumist ja horisontaaltelg peab vertikaalsest liikumisest selgelt domineerima;
+- `touchAction: "pan-y"` säilitab lehe tavapärase vertikaalse kerimise;
+- kompaktses horisontaalses tootenäidiste reas jääb pühkimine kaartide vahel liikumiseks;
+- pühkimise järel blokeeritakse juhuslik täisekraangalerii avamine;
+- ühe pildiga galerii pühkimisele ei reageeri;
+- pisipildid, noolenupud, klaviatuuri vasak/parem juhtimine, `Escape` ja täisekraani sulgemine säilisid;
+- noolenupud peituvad endiselt ligikaudu kolme sekundi järel.
+
+Muudatus push'iti `main` harusse, et kontrollida päris telefoni puutežeste Verceli keskkonnas. Reaalse telefoni vasakule/paremale pühkimise kinnitus on veel ootel.
