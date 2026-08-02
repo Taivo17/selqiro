@@ -3,9 +3,13 @@
 import {
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from "react";
-import type { ReactNode } from "react";
+import type {
+  ReactNode,
+  RefObject,
+} from "react";
 import { useRouter } from "next/navigation";
 import type { PublicProfile } from "../../../entities/profile/model/types";
 import type { ProductListingCard } from "../../../entities/listing/model/types";
@@ -13,19 +17,49 @@ import { getStoreCategoryScopeIds } from "../../../entities/store-category/model
 import { usePublicProfileListings } from "../model/usePublicProfileListings";
 import { usePublicProfileStoreCategories } from "../model/usePublicProfileStoreCategories";
 import PublicProfileStoreCategoryFilter from "./PublicProfileStoreCategoryFilter";
+import {
+  getCurrentRelativeUrl,
+  isListingReturnNavigation,
+  readListingReturnContext,
+  saveListingReturnContext,
+} from "../../listing-navigation/model/listingReturnContext";
+import {
+  useListingReturnRestoration,
+} from "../../listing-navigation/model/useListingReturnRestoration";
 
 const LISTING_PREVIEW_LIMIT = 4;
 
 function ProfileListingCard({
   listing,
   expanded,
+  onOpen,
 }: {
   listing: ProductListingCard;
   expanded: boolean;
+  onOpen: (input: {
+    listingId: string;
+    cardViewportTop: number;
+  }) => void;
 }) {
   const router = useRouter();
+
+  const cardRef =
+    useRef<HTMLElement>(null);
+
   const listingHref =
     `/v2/listing/${listing.id}`;
+
+  function openListing() {
+    onOpen({
+      listingId: listing.id,
+      cardViewportTop:
+        cardRef.current
+          ?.getBoundingClientRect()
+          .top ?? 0,
+    });
+
+    router.push(listingHref);
+  }
 
   function openListingFromCard(event: {
     target: EventTarget | null;
@@ -41,11 +75,13 @@ function ProfileListingCard({
       return;
     }
 
-    router.push(listingHref);
+    openListing();
   }
 
   return (
     <article
+      ref={cardRef}
+      data-listing-card-id={listing.id}
       onClick={openListingFromCard}
       role="link"
       tabIndex={0}
@@ -69,7 +105,7 @@ function ProfileListingCard({
         }
 
         event.preventDefault();
-        router.push(listingHref);
+        openListing();
       }}
       className={[
         "min-w-0 cursor-pointer rounded-[24px] border border-black/5 bg-white p-3 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md",
@@ -133,11 +169,17 @@ function ProfileListingCard({
 
 function HorizontalScrollArea({
   children,
+  scrollRef,
 }: {
   children: ReactNode;
+  scrollRef?:
+    RefObject<HTMLDivElement | null>;
 }) {
   return (
-    <div className="w-full max-w-full overflow-x-auto overscroll-x-contain pb-2">
+    <div
+      ref={scrollRef}
+      className="w-full max-w-full overflow-x-auto overscroll-x-contain pb-2"
+    >
       <div className="flex w-max gap-4 px-1">
         {children}
       </div>
@@ -226,6 +268,19 @@ export default function PublicProfileListingsSection({
   const [showAll, setShowAll] =
     useState(false);
 
+  const horizontalScrollRef =
+    useRef<HTMLDivElement>(null);
+
+  const profileReturnKey = [
+    profile.identityId || "",
+    profile.slug,
+  ].join("\u001f");
+
+  const [
+    preparedProfileReturnKey,
+    setPreparedProfileReturnKey,
+  ] = useState<string | null>(null);
+
   const {
     categories,
     loading: categoriesLoading,
@@ -265,18 +320,55 @@ export default function PublicProfileListingsSection({
   );
 
   /*
-   * Teise avaliku profiili avamisel ei tohi
-   * eelmise profiili filter ega laiendatud
-   * vaade alles jääda.
+   * Sama ajalookirje kaudu kuulutusest tagasi
+   * tulles taastame enne andmepäringu lõplikku
+   * valmimist profiili kuulutuste UI oleku.
+   *
+   * Tavalise profiilivahetuse korral lähtume
+   * alati kompaktsest ja filtreerimata vaatest.
    */
   useEffect(() => {
-    setSelectedCategoryId(null);
-    setExpandedRootId(null);
-    setShowAll(false);
-  }, [
-    profile.identityId,
-    profile.slug,
-  ]);
+    const returnContext =
+      readListingReturnContext();
+
+    if (
+      returnContext &&
+      returnContext.source ===
+        "public-profile" &&
+      returnContext.sourceUrl ===
+        getCurrentRelativeUrl() &&
+      isListingReturnNavigation(
+        returnContext
+      )
+    ) {
+      const returnState =
+        returnContext.publicProfileState;
+
+      setSelectedCategoryId(
+        returnState
+          ?.selectedCategoryId ??
+          null
+      );
+
+      setExpandedRootId(
+        returnState
+          ?.expandedRootId ??
+          null
+      );
+
+      setShowAll(
+        returnState?.showAll === true
+      );
+    } else {
+      setSelectedCategoryId(null);
+      setExpandedRootId(null);
+      setShowAll(false);
+    }
+
+    setPreparedProfileReturnKey(
+      profileReturnKey
+    );
+  }, [profileReturnKey]);
 
   /*
    * Rubriigipuu muutumisel eemaldame
@@ -316,6 +408,49 @@ export default function PublicProfileListingsSection({
     categoriesLoading,
     selectedCategoryId,
   ]);
+
+  const selectedCategoryReady =
+    !selectedCategoryId ||
+    categories.some(
+      (category) =>
+        category.id ===
+        selectedCategoryId
+    );
+
+  useListingReturnRestoration({
+    source: "public-profile",
+    ready:
+      preparedProfileReturnKey ===
+        profileReturnKey &&
+      !categoriesLoading &&
+      selectedCategoryReady &&
+      !loading &&
+      !error,
+    listingIds: listings.map(
+      (listing) => listing.id
+    ),
+    horizontalScrollRef,
+  });
+
+  function handleOpenListing(input: {
+    listingId: string;
+    cardViewportTop: number;
+  }) {
+    saveListingReturnContext({
+      source: "public-profile",
+      listingId: input.listingId,
+      cardViewportTop:
+        input.cardViewportTop,
+      publicProfileState: {
+        showAll,
+        selectedCategoryId,
+        expandedRootId,
+        horizontalScrollLeft:
+          horizontalScrollRef.current
+            ?.scrollLeft ?? 0,
+      },
+    });
+  }
 
   function handleSelectAll() {
     setSelectedCategoryId(null);
@@ -499,12 +634,19 @@ export default function PublicProfileListingsSection({
                   key={listing.id}
                   listing={listing}
                   expanded
+                  onOpen={
+                    handleOpenListing
+                  }
                 />
               )
             )}
           </div>
         ) : (
-          <HorizontalScrollArea>
+          <HorizontalScrollArea
+            scrollRef={
+              horizontalScrollRef
+            }
+          >
             {visibleListings.map(
               (listing) => (
                 <ProfileListingCard
@@ -512,6 +654,9 @@ export default function PublicProfileListingsSection({
                   listing={listing}
                   expanded={
                     false
+                  }
+                  onOpen={
+                    handleOpenListing
                   }
                 />
               )

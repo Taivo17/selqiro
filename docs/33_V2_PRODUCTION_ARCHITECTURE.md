@@ -2663,3 +2663,25 @@ Restoration rules:
 8. Clear the context after successful restoration.
 
 The storage boundary is `sessionStorage`; no navigation history is written to Supabase or analytics. The design is extensible to public-profile UI state without coupling listing entities to profile components.
+
+### Public-profile listing return-state extension — 2026-08-01
+
+The tab-local listing return context now has an optional public-profile state payload:
+
+- `showAll`;
+- `selectedCategoryId`;
+- `expandedRootId`;
+- `horizontalScrollLeft`.
+
+Public-profile restoration sequence:
+
+1. Validate the same-origin profile URL and matching history token.
+2. Restore the category and expanded/compact UI state.
+3. Resolve the category scope IDs.
+4. Wait until the listing request associated with the current `categoryScopeKey` has settled.
+5. Render the correct filtered listing collection.
+6. Restore horizontal row position when the compact view is active.
+7. Align the original listing card to its previous viewport position.
+8. Clear the temporary return context.
+
+The public listing data hook stores an internal `resolvedScopeKey`. A render whose requested category key differs from the resolved key is exposed as loading, even before React runs the new request effect. This prevents stale query results from triggering premature scroll restoration.

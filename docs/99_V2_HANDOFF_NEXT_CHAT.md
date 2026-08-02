@@ -844,3 +844,25 @@ Current next patch:
 3. preserve the compact horizontal listing row's `scrollLeft`;
 4. confirm that the detail action changes to „Tagasi profiilile” for this source;
 5. browser-test both compact and expanded public-profile listing flows before commit.
+
+## 2026-08-01 – Public-profile listing return checkpoint
+
+Completed and browser-tested:
+
+- public-profile listing cards use the shared listing return context;
+- the detail action becomes „Tagasi profiilile” for this source;
+- browser back and the visible detail action restore the previous profile position;
+- expanded „Vaata kõiki” state is restored;
+- selected store root or child category is restored;
+- the expanded root branch is restored;
+- compact horizontal listing-row position is restored;
+- category request settlement is guarded by `resolvedScopeKey`;
+- filtered, unfiltered and compact return flows pass manual testing;
+- production build passes.
+
+Recommended next isolated patches:
+
+1. coordinate public-profile expanded sections so opening listings compacts product showcases and opening product showcases compacts listings;
+2. defer the full store-category controls until the user opens „Vaata kõiki” on mobile;
+3. add left/right touch swipe to public product-showcase galleries;
+4. browser-test narrow mobile layouts before each checkpoint.

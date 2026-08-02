@@ -2,6 +2,13 @@ export type ListingReturnSource =
   | "products"
   | "public-profile";
 
+export type PublicProfileListingReturnState = {
+  showAll: boolean;
+  selectedCategoryId: string | null;
+  expandedRootId: string | null;
+  horizontalScrollLeft: number;
+};
+
 export type ListingReturnContext = {
   version: 1;
   token: string;
@@ -10,6 +17,9 @@ export type ListingReturnContext = {
   listingId: string;
   scrollY: number;
   cardViewportTop: number;
+  publicProfileState:
+    | PublicProfileListingReturnState
+    | null;
   createdAt: number;
 };
 
@@ -122,6 +132,78 @@ function normalizeFiniteNumber(
     : null;
 }
 
+function normalizeNullableIdentifier(
+  value: unknown
+): string | null | undefined {
+  if (
+    value === null ||
+    value === undefined
+  ) {
+    return null;
+  }
+
+  if (typeof value !== "string") {
+    return undefined;
+  }
+
+  const cleanValue = value.trim();
+
+  if (!cleanValue) {
+    return null;
+  }
+
+  if (cleanValue.length > 160) {
+    return undefined;
+  }
+
+  return cleanValue;
+}
+
+function normalizePublicProfileState(
+  value: unknown
+): PublicProfileListingReturnState | null {
+  if (
+    !isRecord(value) ||
+    typeof value.showAll !== "boolean"
+  ) {
+    return null;
+  }
+
+  const selectedCategoryId =
+    normalizeNullableIdentifier(
+      value.selectedCategoryId
+    );
+
+  const expandedRootId =
+    normalizeNullableIdentifier(
+      value.expandedRootId
+    );
+
+  const horizontalScrollLeft =
+    normalizeFiniteNumber(
+      value.horizontalScrollLeft
+    );
+
+  if (
+    selectedCategoryId === undefined ||
+    expandedRootId === undefined ||
+    horizontalScrollLeft === null
+  ) {
+    return null;
+  }
+
+  return {
+    showAll: value.showAll,
+    selectedCategoryId,
+    expandedRootId,
+    horizontalScrollLeft:
+      Math.max(
+        0,
+        horizontalScrollLeft
+      ),
+  };
+}
+
 function normalizeSourceUrl(
   value: unknown,
   source: ListingReturnSource
@@ -228,6 +310,13 @@ function normalizeContext(
       value.createdAt
     );
 
+  const publicProfileState =
+    source === "public-profile"
+      ? normalizePublicProfileState(
+          value.publicProfileState
+        )
+      : null;
+
   if (
     !token ||
     token.length > 160 ||
@@ -261,6 +350,7 @@ function normalizeContext(
       scrollY
     ),
     cardViewportTop,
+    publicProfileState,
     createdAt,
   };
 }
@@ -285,6 +375,9 @@ saveListingReturnContext(input: {
   source: ListingReturnSource;
   listingId: string;
   cardViewportTop: number;
+  publicProfileState?:
+    | PublicProfileListingReturnState
+    | null;
 }): ListingReturnContext | null {
   if (
     typeof window === "undefined"
@@ -309,6 +402,13 @@ saveListingReturnContext(input: {
     return null;
   }
 
+  const publicProfileState =
+    input.source === "public-profile"
+      ? normalizePublicProfileState(
+          input.publicProfileState
+        )
+      : null;
+
   const context:
     ListingReturnContext = {
       version: 1,
@@ -327,6 +427,7 @@ saveListingReturnContext(input: {
         )
           ? input.cardViewportTop
           : 0,
+      publicProfileState,
       createdAt: Date.now(),
     };
 

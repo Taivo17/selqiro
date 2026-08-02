@@ -2471,3 +2471,19 @@ Implementation:
 - the detail action label remains source-aware for the upcoming public-profile integration.
 
 This mechanism is intentionally privacy-light: it uses only `sessionStorage`, does not reach the database and does not persist across browser tabs or sessions.
+
+## 2026-08-01 — Public-profile listing return state is restored
+
+The shared listing return-navigation foundation now supports public-profile browsing.
+
+Stored public-profile return state:
+
+- expanded or compact listings mode;
+- selected store-category ID;
+- expanded root-category ID;
+- compact horizontal row `scrollLeft`;
+- listing ID, absolute page scroll and listing-card viewport offset.
+
+`PublicProfileListingsSection` restores the UI state before enabling position restoration. The public listings hook tracks `resolvedScopeKey` so a stale result set from the previous category cannot satisfy the restoration readiness check during the render before the new effect starts.
+
+Both browser history back and the detail action labelled `Tagasi profiilile` restore the previous browsing context. The storage remains tab-local `sessionStorage` only.

@@ -11,6 +11,11 @@ export type PublicProfileListingsState = {
   error: string | null;
 };
 
+type PublicProfileListingsInternalState =
+  PublicProfileListingsState & {
+    resolvedScopeKey: string | null;
+  };
+
 function normalizeScopeIds(
   value: string[] | null
 ): string[] | null {
@@ -57,10 +62,11 @@ export function usePublicProfileListings(
       : normalizedScopeIds.join(",");
 
   const [state, setState] =
-    useState<PublicProfileListingsState>({
+    useState<PublicProfileListingsInternalState>({
       listings: [],
       loading: Boolean(profile),
       error: null,
+      resolvedScopeKey: null,
     });
 
   useEffect(() => {
@@ -72,6 +78,8 @@ export function usePublicProfileListings(
           listings: [],
           loading: false,
           error: null,
+          resolvedScopeKey:
+            categoryScopeKey,
         });
 
         return;
@@ -89,6 +97,8 @@ export function usePublicProfileListings(
         listings: [],
         loading: true,
         error: null,
+        resolvedScopeKey:
+          categoryScopeKey,
       });
 
       try {
@@ -117,6 +127,8 @@ export function usePublicProfileListings(
           listings,
           loading: false,
           error: null,
+          resolvedScopeKey:
+            categoryScopeKey,
         });
       } catch (loadError) {
         if (!mounted) return;
@@ -128,6 +140,8 @@ export function usePublicProfileListings(
             loadError instanceof Error
               ? loadError.message
               : "Profiili kuulutusi ei saanud laadida.",
+          resolvedScopeKey:
+            categoryScopeKey,
         });
       }
     }
@@ -139,5 +153,31 @@ export function usePublicProfileListings(
     };
   }, [profile, categoryScopeKey]);
 
-  return state;
+  /*
+   * React käivitab uue rubriigipäringu efekti
+   * alles pärast renderdust. Selle ühe
+   * renderdusakna jooksul võivad eelmise
+   * rubriigi tulemused olla veel state'is.
+   *
+   * Tagasipöördumise taastamine ei tohi neid
+   * vanu tulemusi pidada uue rubriigi valmis
+   * andmeteks.
+   */
+  const scopeSettled =
+    state.resolvedScopeKey ===
+    categoryScopeKey;
+
+  if (!scopeSettled) {
+    return {
+      listings: [],
+      loading: true,
+      error: null,
+    };
+  }
+
+  return {
+    listings: state.listings,
+    loading: state.loading,
+    error: state.error,
+  };
 }

@@ -3,6 +3,7 @@
 import {
   useEffect,
   useRef,
+  type RefObject,
 } from "react";
 import {
   clearListingReturnContext,
@@ -44,6 +45,8 @@ useListingReturnRestoration(input: {
   source: ListingReturnSource;
   ready: boolean;
   listingIds: string[];
+  horizontalScrollRef?:
+    RefObject<HTMLDivElement | null>;
 }) {
   const restorationStartedRef =
     useRef(false);
@@ -118,6 +121,21 @@ useListingReturnRestoration(input: {
     function alignReturnPosition() {
       if (cancelled) {
         return;
+      }
+
+      const horizontalScrollElement =
+        input.horizontalScrollRef?.current;
+
+      if (
+        horizontalScrollElement &&
+        restorationContext.publicProfileState &&
+        !restorationContext
+          .publicProfileState.showAll
+      ) {
+        horizontalScrollElement.scrollLeft =
+          restorationContext
+            .publicProfileState
+            .horizontalScrollLeft;
       }
 
       const card =
@@ -243,6 +261,7 @@ useListingReturnRestoration(input: {
   }, [
     input.ready,
     input.source,
+    input.horizontalScrollRef,
     listingIdsKey,
   ]);
 }

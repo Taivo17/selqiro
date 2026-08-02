@@ -6383,3 +6383,20 @@ Valmis ning brauseris kontrollitud:
 - pärast edukat taastamist ajutine kontekst kustutatakse.
 
 Production build õnnestus. Manuaalne test läbis nii detailvaate tagasi-nupu kui brauseri tagasi-nupu voo.
+
+## 2026-08-01 – Avaliku profiili kuulutusest tagasi samasse sirvimiskohta
+
+Valmis ning brauseris kontrollitud:
+
+- avalikult profiililt kuulutuse avamisel salvestatakse sama vahekaardi ajutine tagasipöördumise kontekst;
+- kuulutuse detailvaate nupp kuvab selle lähtekoha puhul teksti „Tagasi profiilile”;
+- nii detailvaate tagasi-nupp kui brauseri tagasi-nupp taastavad profiili kuulutuste varasema sirvimiskoha;
+- taastatakse „Vaata kõiki” avatud olek;
+- taastatakse valitud poe ülem- või alamrubriik;
+- taastatakse avatuks jäetud ülemrubriigi haru;
+- kompaktses horisontaalses kuulutusreas taastatakse ka `scrollLeft`;
+- taastamine ootab õige rubriigipäringu lõplikku valmimist;
+- `resolvedScopeKey` välistab olukorra, kus eelmise rubriigi tulemusi peetakse uue filtri valmis andmeteks;
+- filtreerimata, filtreeritud ja kompaktne horisontaalne voog läbivad manuaalse testi.
+
+Production build õnnestus. Tagasipöördumise andmed jäävad ainult `sessionStorage`-isse ega lähe andmebaasi.
