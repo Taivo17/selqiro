@@ -2725,3 +2725,29 @@ Gesture rules:
 This is transient presentation behavior only. It does not add persistence, analytics, database writes or new public data fields.
 
 Real-device verification on the Vercel deployment confirmed that the pointer boundary behaves correctly on a phone: horizontal swipes change images, vertical movement keeps native page scrolling, and normal taps remain available for opening the lightbox.
+
+### Public showcase gallery component boundary — 2026-08-02
+
+The public product-showcase presentation is now split across two focused components.
+
+`PublicProfileProductShowcasesSection` owns:
+
+1. public showcase data loading;
+2. compact versus expanded section layout;
+3. card collection rendering;
+4. title, category and description presentation;
+5. long-description overflow measurement;
+6. parent-controlled section expansion.
+
+`PublicProfileProductShowcaseGallery` owns:
+
+1. gallery-selected image state;
+2. main image and thumbnail rendering;
+3. previous/next navigation;
+4. full-screen lightbox lifecycle;
+5. keyboard and modal-close behavior;
+6. body scroll locking;
+7. control auto-hide timing;
+8. pointer-swipe gesture handling.
+
+The boundary is presentation-only. It does not change public data minimization, API contracts, database state, storage paths or navigation state.

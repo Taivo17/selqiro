@@ -909,3 +909,24 @@ Real-device verification on the Vercel deployment confirmed:
 - existing arrow controls still hide after roughly three seconds.
 
 The public showcase touch-swipe checkpoint is complete. The next feature patch may start from commit `2eab36b` plus this documentation confirmation commit.
+
+## 2026-08-02 – Public showcase gallery extraction checkpoint
+
+Completed and browser-tested:
+
+- extracted `PublicProfileProductShowcaseGallery.tsx`;
+- retained the section data and card-content boundary in `PublicProfileProductShowcasesSection.tsx`;
+- preserved compact and expanded layouts;
+- preserved thumbnails, full-screen lightbox, keyboard controls and Escape;
+- preserved touch swipe and vertical scrolling;
+- preserved the roughly three-second arrow auto-hide;
+- preserved long-description „Vaata rohkem” behavior;
+- preserved the mutually exclusive public-profile section expansion;
+- production build passes.
+
+Recommended next architecture patch:
+
+1. extract the long-description measurement and toggle UI into a small focused component;
+2. keep card layout and data mapping in the section;
+3. avoid changing visual behavior during the extraction;
+4. browser-test long, short and empty descriptions before checkpointing.

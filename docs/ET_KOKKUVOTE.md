@@ -6433,3 +6433,18 @@ Rakendatud, production build'iga ja päris telefonis kontrollitud:
 - noolenupud peituvad endiselt ligikaudu kolme sekundi järel.
 
 Muudatus on `main` harus ja Verceli päris telefonivaates kontrollitud. Vasakule ja paremale pühkimine töötab nii laiendatud kaardigaleriis kui täisekraanvaates; vertikaalne kerimine, tavavajutus ja umbes kolmesekundiline noolte peitumine töötavad samuti korrektselt.
+
+## 2026-08-02 – Avaliku profiili tootenäidiste galerii eraldati oma komponenti
+
+Arhitektuurisprindi muudatus on valmis ja brauseris kontrollitud:
+
+- loodi `PublicProfileProductShowcaseGallery.tsx`;
+- galerii valitud pildi olek, pisipildid, eelmine/järgmine juhtimine ja täisekraanvaade liiguvad nüüd oma komponenti;
+- samasse komponenti jäid klaviatuuri nooled, `Escape`, keha kerimise lukustus, noolte automaatne peitumine ja puutepühkimine;
+- pühkimisjärgse juhusliku täisekraanvaate avamise tõkestus säilis;
+- `PublicProfileProductShowcasesSection.tsx` vastutab nüüd sektsiooni andmete, paigutuse, kaartide ja kirjelduste eest;
+- pika kirjelduse „Vaata rohkem” loogika jäi sektsiooni komponendi vastutusse;
+- kasutajale nähtav käitumine ei muutunud;
+- kompaktne ja laiendatud vaade, pisipildid, täisekraanvaade, pühkimine, klaviatuur ja sektsioonide vastastikune sulgemine läbivad manuaalse testi.
+
+Production build õnnestus. Andmebaasi, avalikke päringuid ega püsivat olekut ei muudetud.

@@ -2515,3 +2515,21 @@ Important behavior:
 - thumbnails, arrow buttons, keyboard navigation, Escape handling and the three-second control auto-hide remain intact.
 
 Production build passes. Taivo verified the Vercel deployment on a real phone: left/right swipe works in the expanded card gallery and full-screen lightbox, vertical scrolling remains natural, normal tap still opens the lightbox, and the existing three-second arrow auto-hide remains correct. The mobile swipe interaction is fully verified.
+
+## 2026-08-02 — Public showcase gallery component extracted
+
+The public product-showcase gallery was extracted from `PublicProfileProductShowcasesSection.tsx` into `PublicProfileProductShowcaseGallery.tsx`.
+
+The gallery component now owns:
+
+- selected-image state and URL resolution;
+- thumbnails and previous/next image navigation;
+- full-screen lightbox state and body scroll lock;
+- keyboard ArrowLeft, ArrowRight and Escape handling;
+- three-second lightbox control auto-hide;
+- expanded-card and lightbox touch swipe;
+- suppression of the synthetic post-swipe lightbox click.
+
+The section component continues to own data loading, compact/expanded layout, card rendering, title/category/description content, long-description measurement and the shared expanded-section contract.
+
+This was a behavior-preserving architecture patch. Production build and manual browser checks pass.
