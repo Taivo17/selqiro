@@ -252,8 +252,14 @@ function LoadingCards({
 
 export default function PublicProfileListingsSection({
   profile,
+  showAll,
+  onShowAllChange,
 }: {
   profile: PublicProfile;
+  showAll: boolean;
+  onShowAllChange: (
+    showAll: boolean
+  ) => void;
 }) {
   const [
     selectedCategoryId,
@@ -264,9 +270,6 @@ export default function PublicProfileListingsSection({
     expandedRootId,
     setExpandedRootId,
   ] = useState<string | null>(null);
-
-  const [showAll, setShowAll] =
-    useState(false);
 
   const horizontalScrollRef =
     useRef<HTMLDivElement>(null);
@@ -356,19 +359,22 @@ export default function PublicProfileListingsSection({
           null
       );
 
-      setShowAll(
+      onShowAllChange(
         returnState?.showAll === true
       );
     } else {
       setSelectedCategoryId(null);
       setExpandedRootId(null);
-      setShowAll(false);
+      onShowAllChange(false);
     }
 
     setPreparedProfileReturnKey(
       profileReturnKey
     );
-  }, [profileReturnKey]);
+  }, [
+    onShowAllChange,
+    profileReturnKey,
+  ]);
 
   /*
    * Rubriigipuu muutumisel eemaldame
@@ -407,6 +413,29 @@ export default function PublicProfileListingsSection({
     categories,
     categoriesLoading,
     selectedCategoryId,
+  ]);
+
+  /*
+   * Kompaktses vaates on rubriigid peidetud.
+   * Sulgemisel lähtume uuesti kõigist
+   * kuulutustest, et peidetud filter ei jääks
+   * eelvaadet mõjutama.
+   */
+  useEffect(() => {
+    if (
+      showAll ||
+      preparedProfileReturnKey !==
+        profileReturnKey
+    ) {
+      return;
+    }
+
+    setSelectedCategoryId(null);
+    setExpandedRootId(null);
+  }, [
+    showAll,
+    preparedProfileReturnKey,
+    profileReturnKey,
   ]);
 
   const selectedCategoryReady =
@@ -529,7 +558,8 @@ export default function PublicProfileListingsSection({
   const canToggleListings =
     showAll ||
     listings.length >
-      LISTING_PREVIEW_LIMIT;
+      LISTING_PREVIEW_LIMIT ||
+    categories.length > 0;
 
   return (
     <section className="overflow-hidden rounded-[34px] border border-black/5 bg-white p-6 shadow-sm md:p-8">
@@ -549,9 +579,8 @@ export default function PublicProfileListingsSection({
             type="button"
             aria-expanded={showAll}
             onClick={() =>
-              setShowAll(
-                (current) =>
-                  !current
+              onShowAllChange(
+                !showAll
               )
             }
             className="inline-flex w-full justify-center rounded-full border border-neutral-200 bg-white px-4 py-2.5 text-sm font-black shadow-sm transition hover:border-neutral-300 sm:w-auto"
@@ -563,28 +592,30 @@ export default function PublicProfileListingsSection({
         ) : null}
       </div>
 
-      <PublicProfileStoreCategoryFilter
-        categories={categories}
-        loading={
-          categoriesLoading
-        }
-        error={categoriesError}
-        selectedCategoryId={
-          selectedCategoryId
-        }
-        expandedRootId={
-          expandedRootId
-        }
-        onSelectAll={
-          handleSelectAll
-        }
-        onSelectRoot={
-          handleSelectRoot
-        }
-        onSelectChild={
-          handleSelectChild
-        }
-      />
+      {showAll ? (
+        <PublicProfileStoreCategoryFilter
+          categories={categories}
+          loading={
+            categoriesLoading
+          }
+          error={categoriesError}
+          selectedCategoryId={
+            selectedCategoryId
+          }
+          expandedRootId={
+            expandedRootId
+          }
+          onSelectAll={
+            handleSelectAll
+          }
+          onSelectRoot={
+            handleSelectRoot
+          }
+          onSelectChild={
+            handleSelectChild
+          }
+        />
+      ) : null}
 
       {loading ? (
         <LoadingCards

@@ -1,6 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import {
+  useCallback,
+  useState,
+} from "react";
 import { usePublicProfile } from "../model/usePublicProfile";
 import PublicProfileListingsSection from "./PublicProfileListingsSection";
 import PublicProfileProductShowcasesSection from "./PublicProfileProductShowcasesSection";
@@ -27,6 +30,17 @@ const updates: ProfileItem[] = [
 ];
 
 const PROFILE_ITEM_PREVIEW_LIMIT = 3;
+
+type ExpandedPublicProfileSection =
+  | "showcases"
+  | "listings"
+  | null;
+
+type ExpandedPublicProfileState = {
+  slug: string;
+  section:
+    ExpandedPublicProfileSection;
+};
 
 function PlaceholderImage({
   className = "",
@@ -234,6 +248,46 @@ function EmptyState() {
 export default function PublicProfilePage({ slug }: { slug: string }) {
   const { profile, loading, error } = usePublicProfile(slug);
 
+  const [
+    expandedProfileState,
+    setExpandedProfileState,
+  ] =
+    useState<ExpandedPublicProfileState>({
+      slug,
+      section: null,
+    });
+
+  const expandedSection =
+    expandedProfileState.slug === slug
+      ? expandedProfileState.section
+      : null;
+
+  const handleShowcasesExpandedChange =
+    useCallback(
+      (nextExpanded: boolean) => {
+        setExpandedProfileState({
+          slug,
+          section: nextExpanded
+            ? "showcases"
+            : null,
+        });
+      },
+      [slug]
+    );
+
+  const handleListingsShowAllChange =
+    useCallback(
+      (nextShowAll: boolean) => {
+        setExpandedProfileState({
+          slug,
+          section: nextShowAll
+            ? "listings"
+            : null,
+        });
+      },
+      [slug]
+    );
+
   if (loading) return <LoadingState />;
   if (error) return <ErrorState error={error} />;
   if (!profile) return <EmptyState />;
@@ -339,6 +393,13 @@ export default function PublicProfilePage({ slug }: { slug: string }) {
           <PublicProfileProductShowcasesSection
             key={`showcases-${profile.slug}`}
             profile={profile}
+            expanded={
+              expandedSection ===
+              "showcases"
+            }
+            onExpandedChange={
+              handleShowcasesExpandedChange
+            }
           />
 
           <PublicProfileItemsSection
@@ -350,6 +411,13 @@ export default function PublicProfilePage({ slug }: { slug: string }) {
 
           <PublicProfileListingsSection
             profile={profile}
+            showAll={
+              expandedSection ===
+              "listings"
+            }
+            onShowAllChange={
+              handleListingsShowAllChange
+            }
           />
         </div>
 

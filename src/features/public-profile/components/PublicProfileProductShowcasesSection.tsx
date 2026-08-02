@@ -795,8 +795,14 @@ function ShowcaseCard({
 export default function
 PublicProfileProductShowcasesSection({
   profile,
+  expanded,
+  onExpandedChange,
 }: {
   profile: PublicProfile;
+  expanded: boolean;
+  onExpandedChange: (
+    expanded: boolean
+  ) => void;
 }) {
   const {
     showcases,
@@ -806,16 +812,6 @@ PublicProfileProductShowcasesSection({
     usePublicProfileProductShowcases(
       profile
     );
-
-  const [expanded, setExpanded] =
-    useState(false);
-
-  useEffect(() => {
-    setExpanded(false);
-  }, [
-    profile.identityId,
-    profile.slug,
-  ]);
 
   const previewShowcases =
     useMemo(
@@ -863,8 +859,8 @@ PublicProfileProductShowcasesSection({
             type="button"
             aria-expanded={expanded}
             onClick={() =>
-              setExpanded(
-                (current) => !current
+              onExpandedChange(
+                !expanded
               )
             }
             className="shrink-0 rounded-full border border-neutral-200 bg-white px-4 py-2 text-sm font-black shadow-sm transition hover:border-neutral-300"

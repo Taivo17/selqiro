@@ -2487,3 +2487,15 @@ Stored public-profile return state:
 `PublicProfileListingsSection` restores the UI state before enabling position restoration. The public listings hook tracks `resolvedScopeKey` so a stale result set from the previous category cannot satisfy the restoration readiness check during the render before the new effect starts.
 
 Both browser history back and the detail action labelled `Tagasi profiilile` restore the previous browsing context. The storage remains tab-local `sessionStorage` only.
+
+## 2026-08-02 — Public-profile expanded sections are coordinated
+
+`PublicProfilePage` now owns one shared expanded-section state for the two large public-profile content areas:
+
+- `showcases`;
+- `listings`;
+- or no expanded section.
+
+`PublicProfileProductShowcasesSection` and `PublicProfileListingsSection` are controlled components. Opening either section automatically compacts the other. The listing store-category controls render only while listings are expanded, reducing immediate page height on mobile.
+
+When listings are compacted outside the listing-return restoration flow, the hidden selected category and expanded root are cleared so the compact preview is not silently filtered. Existing public-profile listing return restoration can still reopen listings and restore the saved category, expanded branch, card position and horizontal row position.

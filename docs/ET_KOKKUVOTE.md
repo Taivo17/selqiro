@@ -6400,3 +6400,19 @@ Valmis ning brauseris kontrollitud:
 - filtreerimata, filtreeritud ja kompaktne horisontaalne voog läbivad manuaalse testi.
 
 Production build õnnestus. Tagasipöördumise andmed jäävad ainult `sessionStorage`-isse ega lähe andmebaasi.
+
+## 2026-08-02 – Avaliku profiili mahukad sektsioonid on vastastikku välistavad
+
+Valmis ning brauseris kontrollitud:
+
+- avaliku profiili tootenäidiste ja kuulutuste laiendatud olekut juhib nüüd ühine lehe taseme olek;
+- korraga saab olla laiendatud ainult tootenäidiste või kuulutuste sektsioon;
+- tootenäidiste „Vaata lähemalt” sulgeb avatud kuulutuste „Vaata kõiki” vaate;
+- kuulutuste „Vaata kõiki” muudab laiendatud tootenäidised kompaktseks;
+- poe rubriikide juhtnupud kuvatakse alles kuulutuste laiendatud vaates;
+- kuulutuste kompaktseks sulgemisel lähtestatakse peidetud rubriigifilter, et eelvaade näitaks taas kõiki kuulutusi;
+- kuulutuste avamisnupp jääb kättesaadavaks ka väheste kuulutuste korral, kui profiilil on poe rubriike;
+- olemasolev kuulutusest tagasi profiilile taastamine saab kuulutuste sektsiooni uuesti avada ning säilitab valitud rubriigi ja sirvimiskoha;
+- kitsas mobiilivaade ning sektsioonide vastastikune avamine ja sulgemine läbivad manuaalse testi.
+
+Production build õnnestus.

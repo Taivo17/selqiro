@@ -2685,3 +2685,24 @@ Public-profile restoration sequence:
 8. Clear the temporary return context.
 
 The public listing data hook stores an internal `resolvedScopeKey`. A render whose requested category key differs from the resolved key is exposed as loading, even before React runs the new request effect. This prevents stale query results from triggering premature scroll restoration.
+
+### Coordinated public-profile expansion state — 2026-08-02
+
+The public profile now owns a single expansion state instead of allowing independent large child sections to remain open simultaneously.
+
+State boundary:
+
+- `PublicProfilePage` owns the active expanded section;
+- product showcases receive controlled `expanded` and `onExpandedChange` props;
+- listings receive controlled `showAll` and `onShowAllChange` props.
+
+Behavioral rules:
+
+1. Opening product showcases closes expanded listings.
+2. Opening listings closes expanded product showcases.
+3. Store-category controls are mounted only in expanded listings mode.
+4. Compact listings mode clears hidden category state after the profile return state has been prepared.
+5. Listing-return restoration remains authoritative and may reopen listings before card-position restoration.
+6. No database or persistent profile preference is used for this transient presentation state.
+
+This keeps the public page easier to scan on narrow screens while preserving the previously implemented return-navigation contract.

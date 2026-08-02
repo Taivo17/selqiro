@@ -866,3 +866,23 @@ Recommended next isolated patches:
 2. defer the full store-category controls until the user opens „Vaata kõiki” on mobile;
 3. add left/right touch swipe to public product-showcase galleries;
 4. browser-test narrow mobile layouts before each checkpoint.
+
+## 2026-08-02 – Public-profile exclusive expanded sections checkpoint
+
+Completed and browser-tested:
+
+- one shared expanded-section state on the public profile;
+- product showcases and listings can no longer remain expanded together;
+- opening either large section compacts the other;
+- store-category controls remain hidden in compact listings mode;
+- compacting listings clears the hidden category filter;
+- listing-return restoration can still reopen the listings section and restore its saved UI state;
+- desktop and narrow mobile interaction tests pass;
+- production build passes.
+
+Recommended next isolated patch:
+
+1. add horizontal touch swipe to public product-showcase card galleries and the full-screen lightbox;
+2. preserve thumbnail, keyboard and arrow-button navigation;
+3. keep the existing three-second arrow auto-hide behavior;
+4. browser-test touch behavior at a narrow mobile width before checkpointing.
