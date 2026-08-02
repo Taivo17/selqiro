@@ -887,9 +887,9 @@ Recommended next isolated patch:
 3. keep the existing three-second arrow auto-hide behavior;
 4. browser-test touch behavior at a narrow mobile width before checkpointing.
 
-## 2026-08-02 – Public showcase touch swipe deployment checkpoint
+## 2026-08-02 – Public showcase touch swipe mobile verification checkpoint
 
-Implemented and pushed for real-device verification:
+Implemented, pushed and verified on a real phone:
 
 - horizontal swipe on expanded public showcase card galleries;
 - horizontal swipe inside the full-screen lightbox;
@@ -899,13 +899,13 @@ Implemented and pushed for real-device verification:
 - existing thumbnails, buttons, keyboard controls and three-second arrow auto-hide are preserved;
 - production build passes.
 
-Pending verification on the Vercel deployment:
+Real-device verification on the Vercel deployment confirmed:
 
-1. swipe left and right on an expanded multi-image showcase card;
-2. swipe left and right in the full-screen lightbox;
-3. confirm vertical scrolling does not change the selected image;
-4. confirm a normal tap still opens the lightbox;
-5. confirm compact-row horizontal scrolling remains natural;
-6. confirm single-image showcases do not react to swipe navigation.
+- left and right swipe works on an expanded multi-image showcase card;
+- left and right swipe works in the full-screen lightbox;
+- vertical scrolling does not change the selected image;
+- a normal tap still opens the lightbox;
+- compact-row horizontal scrolling remains natural;
+- existing arrow controls still hide after roughly three seconds.
 
-After Taivo confirms the real-phone test, update the checkpoint from deployed-for-test to mobile-verified before starting the next feature patch.
+The public showcase touch-swipe checkpoint is complete. The next feature patch may start from commit `2eab36b` plus this documentation confirmation commit.

@@ -2723,3 +2723,5 @@ Gesture rules:
 8. Preserve thumbnail, keyboard, arrow-button and modal-close navigation as independent accessible controls.
 
 This is transient presentation behavior only. It does not add persistence, analytics, database writes or new public data fields.
+
+Real-device verification on the Vercel deployment confirmed that the pointer boundary behaves correctly on a phone: horizontal swipes change images, vertical movement keeps native page scrolling, and normal taps remain available for opening the lightbox.

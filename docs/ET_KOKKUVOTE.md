@@ -2,7 +2,7 @@
 
 See dokument on omaniku/tootejuhi vaade Selqiro praegusele suunale.
 
-Ingliskeelsed dokumendid on projekti tehniline ja AI mälu.  
+Ingliskeelsed dokumendid on projekti tehniline ja AI mälu.
 See kokkuvõte on selleks, et oleks lihtne eesti keeles üle vaadata, kuhu Selqiro liigub ja miks me selliseid otsuseid tegime.
 
 ---
@@ -22,7 +22,7 @@ Selqiro on platvorm, mis aitab inimesel lahendada päris elu probleeme, ühendad
 
 Põhimõte:
 
-Selqiro ei küsi esmalt, millist funktsiooni inimene kasutada tahab.  
+Selqiro ei küsi esmalt, millist funktsiooni inimene kasutada tahab.
 Selqiro aitab inimesel leida lahenduse sellele, mida ta päriselt vajab.
 
 Näide:
@@ -50,7 +50,7 @@ Globaalne platvorm, mis tundub igas riigis kohalik.
 
 Põhimõte:
 
-Me ei ehita Eesti portaali.  
+Me ei ehita Eesti portaali.
 Me ehitame maailma portaali, mis töötab igas riigis sama loogikaga, kuid tundub kasutajale kohalik.
 
 Näited:
@@ -97,7 +97,7 @@ Launchis ei pea veel valmis olema:
 
 Põhimõte:
 
-Kõigepealt ehitame portaali, mida inimesed tahavad kasutada.  
+Kõigepealt ehitame portaali, mida inimesed tahavad kasutada.
 Siis lisame järjest sügavamaid teadmisi, Energy teenuseid ja professionaalseid tööriistu.
 
 ---
@@ -125,7 +125,7 @@ Marketplace peab olema:
 
 Põhimõte:
 
-Marketplace peab olema võimalikult avatud.  
+Marketplace peab olema võimalikult avatud.
 Me ei taha alguses piirata liiga tugevalt kuulutuste lisamist, sest portaali väärtus kasvab koos sisu ja kogukonnaga.
 
 Kuulutuste limiit peaks olema seadistatav, mitte koodi sisse kivisse raiutud.
@@ -155,7 +155,7 @@ Nearby Services peab alguses olema ettevõtetele tasuta liitumiseks.
 
 Miks?
 
-Sest teenuste osa töötab ainult siis, kui seal on palju ettevõtteid.  
+Sest teenuste osa töötab ainult siis, kui seal on palju ettevõtteid.
 Kogukonna ja võrgustiku kasv on alguses olulisem kui varajane piiramine.
 
 Tulu tuleb hiljem:
@@ -186,7 +186,7 @@ Identiteedid:
 - Milline Vedu
 - Taivo Garaaž
 
-Konto on privaatne.  
+Konto on privaatne.
 Identiteet on avalik.
 
 Kasutaja peab alati nägema, kelle nimel ta tegutseb.
@@ -195,7 +195,7 @@ Näide:
 
 Tegutsed kui: Milline Vedu
 
-E-mail ei pea olema kogu aeg nähtav.  
+E-mail ei pea olema kogu aeg nähtav.
 Aktiivne identiteet peab olema nähtav.
 
 Sõnumid, kuulutused, teenused ja Brand Space peavad kõik olema identiteedipõhised.
@@ -276,7 +276,7 @@ Põhimõte:
 
 Commerce-ready, not webshop-first.
 
-Kõigepealt vaatame, milliseks Selqiro päriselt kujuneb.  
+Kõigepealt vaatame, milliseks Selqiro päriselt kujuneb.
 Kui ettevõtted ja kasutajad seda vajavad, lisame e-poe hiljem.
 
 ---
@@ -329,7 +329,7 @@ Seal võib olla:
 
 Põhimõte:
 
-Today's Story ei ole lihtsalt reklaam.  
+Today's Story ei ole lihtsalt reklaam.
 See on päeva lugu.
 
 Kui kasutaja klikib, avaneb suurem vaade rohkema infoga.
@@ -400,7 +400,7 @@ Kui järjest palju päevi on broneeritud, tõuseb Energy nõue.
 
 Kui nõudlust ei ole, püsib madalam.
 
-Me ei tee odavamaks lihtsalt sellepärast, et keegi broneerib kaugele tulevikku.  
+Me ei tee odavamaks lihtsalt sellepärast, et keegi broneerib kaugele tulevikku.
 See tekitaks augu, kus ettevõte saaks odavalt terve kuu ette ära võtta.
 
 Broneering on tõsine ettevõtte otsus.
@@ -440,7 +440,7 @@ Energy
 
 Põhimõte:
 
-Energy ei ole vajalik tavaliseks osalemiseks.  
+Energy ei ole vajalik tavaliseks osalemiseks.
 Energy annab lisavõimekust.
 
 Energy võib kuluda:
@@ -538,7 +538,7 @@ Põhjus:
 
 Raportite premeerimine võib tekitada vale motivatsiooni.
 
-Energy recognition peab olema haruldane ja tähenduslik.  
+Energy recognition peab olema haruldane ja tähenduslik.
 See on tänu, mitte palk.
 
 ---
@@ -558,7 +558,7 @@ Country Pioneer võib tulevikus saada:
 - tunnustuse
 - võib-olla muud eelised
 
-Aga Pioneer ei tohi põhineda lihtsalt profiilis valitud riigil.  
+Aga Pioneer ei tohi põhineda lihtsalt profiilis valitud riigil.
 Vastasel juhul saaks seda lihtsasti kuritarvitada.
 
 Vaja on usaldusväärset signaali, et tegemist on päriselt uue riigi kogukonna algusega.
@@ -639,7 +639,7 @@ Selqiro on värav õigete teadmiste juurde.
 
 Põhimõte:
 
-AI serves knowledge.  
+AI serves knowledge.
 AI does not own knowledge.
 
 ---
@@ -662,7 +662,7 @@ Seetõttu:
 
 Põhimõte:
 
-Selqiro ei müü vastuseid.  
+Selqiro ei müü vastuseid.
 Selqiro müüb usaldust.
 
 ---
@@ -751,7 +751,7 @@ Mõistlik järjekord:
 
 Põhimõte:
 
-Selqiro ei ehita ise raamatupidamistarkvara.  
+Selqiro ei ehita ise raamatupidamistarkvara.
 Selqiro integreerub raamatupidamise süsteemidega.
 
 ---
@@ -773,7 +773,7 @@ Alguses on parem kasutada vaikseid trust signaale:
 
 Põhimõte:
 
-Trust ei ole ainult badge.  
+Trust ei ole ainult badge.
 Trust on järjepidev õiglane platvormikäitumine.
 
 ---
@@ -786,7 +786,7 @@ AI võib aidata esimese kontrollijana, aga AI ei tohiks olla lõplik otsustaja t
 
 Today's Story vajab tugevamat kontrolli kui tavaline kuulutus, sest see on väga nähtav koht.
 
-Reportid ei tähenda automaatset karistust.  
+Reportid ei tähenda automaatset karistust.
 Reportid on signaalid, mida admin vajadusel vaatab.
 
 Revenue ei tohi ületada moderation reegleid.
@@ -808,7 +808,7 @@ Sõnumil peab olema kontekst:
 - millise ettevõtte kohta
 - millise töökoha kohta tulevikus
 
-Kasutaja võib sirvida ilma kontota.  
+Kasutaja võib sirvida ilma kontota.
 Konto loomist küsitakse siis, kui selleks on põhjus, näiteks müüjale kirjutamine.
 
 ---
@@ -832,7 +832,7 @@ Ligipääs peab olema põhjendatud:
 
 Põhimõte:
 
-AI sees ei ole kasutajaid.  
+AI sees ei ole kasutajaid.
 AI näeb ainult seda, mida on konkreetse ülesande jaoks vaja.
 
 ---
@@ -987,7 +987,7 @@ Võib teha lühikese kokkuvõtte ja anda lingi allikale.
 
 Põhimõte:
 
-Selqiro ei näita rohkem infot.  
+Selqiro ei näita rohkem infot.
 Selqiro aitab kiiremini leida väärtuslikku infot.
 
 ---
@@ -1010,7 +1010,7 @@ AI Translation may contain inaccuracies
 
 Põhimõte:
 
-Originaal kuulub autorile.  
+Originaal kuulub autorile.
 AI aitab lugejat.
 
 ---
@@ -1023,7 +1023,7 @@ Kui ostja vaatab teisest riigist, võib näidata ligikaudset teisendust.
 
 Näide:
 
-¥380 000  
+¥380 000
 ≈ 2 350 €
 
 Originaalhind jääb alati alles.
@@ -6419,7 +6419,7 @@ Production build õnnestus.
 
 ## 2026-08-02 – Avaliku profiili tootenäidiste galerii puutepühkimine
 
-Rakendatud ja production build'iga kontrollitud:
+Rakendatud, production build'iga ja päris telefonis kontrollitud:
 
 - laiendatud tootenäidise kaardi põhipildil saab puuteseadmega liikuda vasakule ja paremale;
 - täisekraangaleriis saab puuteseadmega liikuda vasakule ja paremale;
@@ -6432,4 +6432,4 @@ Rakendatud ja production build'iga kontrollitud:
 - pisipildid, noolenupud, klaviatuuri vasak/parem juhtimine, `Escape` ja täisekraani sulgemine säilisid;
 - noolenupud peituvad endiselt ligikaudu kolme sekundi järel.
 
-Muudatus push'iti `main` harusse, et kontrollida päris telefoni puutežeste Verceli keskkonnas. Reaalse telefoni vasakule/paremale pühkimise kinnitus on veel ootel.
+Muudatus on `main` harus ja Verceli päris telefonivaates kontrollitud. Vasakule ja paremale pühkimine töötab nii laiendatud kaardigaleriis kui täisekraanvaates; vertikaalne kerimine, tavavajutus ja umbes kolmesekundiline noolte peitumine töötavad samuti korrektselt.

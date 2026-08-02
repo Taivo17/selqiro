@@ -2500,7 +2500,7 @@ Both browser history back and the detail action labelled `Tagasi profiilile` res
 
 When listings are compacted outside the listing-return restoration flow, the hidden selected category and expanded root are cleared so the compact preview is not silently filtered. Existing public-profile listing return restoration can still reopen listings and restore the saved category, expanded branch, card position and horizontal row position.
 
-## 2026-08-02 — Public product-showcase touch swipe deployed for device verification
+## 2026-08-02 — Public product-showcase touch swipe verified on a real phone
 
 `PublicProfileProductShowcasesSection` now supports Pointer Events based horizontal swipe navigation in both the expanded card gallery and the full-screen lightbox.
 
@@ -2514,4 +2514,4 @@ Important behavior:
 - single-image galleries ignore swipe navigation;
 - thumbnails, arrow buttons, keyboard navigation, Escape handling and the three-second control auto-hide remain intact.
 
-Production build passes and the arrow auto-hide was manually checked. The commit is intentionally deployed before final completion so Taivo can verify real-device swipe behavior through Vercel. Do not mark the mobile swipe interaction fully verified until that phone test is confirmed.
+Production build passes. Taivo verified the Vercel deployment on a real phone: left/right swipe works in the expanded card gallery and full-screen lightbox, vertical scrolling remains natural, normal tap still opens the lightbox, and the existing three-second arrow auto-hide remains correct. The mobile swipe interaction is fully verified.
