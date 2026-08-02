@@ -2552,3 +2552,19 @@ The description component now owns:
 The section component continues to own data loading, compact/expanded layout, card composition, title/category presentation and the connection to the gallery component.
 
 This was a behavior-preserving architecture patch. Production build and manual browser checks pass.
+
+## 2026-08-02 — V2 service display foundation
+
+The first real V2 services data slice is implemented.
+
+New boundaries:
+
+- `src/entities/service/model/types.ts` defines the service row model, status union and price-type union;
+- `src/entities/service/api/getMyServices.ts` reads only the active identity's service rows from `public.services`;
+- `src/features/service-management/model/useMyServices.ts` resolves the active identity, protects against stale requests and reloads after identity changes;
+- `src/features/service-management/components/MyServicesSection.tsx` owns owner-facing loading, error, empty, count and row presentation;
+- `components/v2/my-area/V2MyAreaPage.tsx` no longer contains the static service mock list.
+
+The display layer supports draft, published and archived states plus fixed, from, hourly and contact price presentation. It intentionally does not yet contain create, edit, status mutation, image management or public-profile service loading.
+
+Manual browser verification passed with an identity that currently has zero services. Production build passes.

@@ -2775,3 +2775,33 @@ Public product-showcase text presentation now has a dedicated component boundary
 6. parent-controlled section expansion.
 
 The boundary is presentation-only and does not change API contracts, public data minimization, database state, storage paths or navigation state.
+
+### V2 service owner-display boundary — 2026-08-02
+
+The owner-facing V2 service display now follows the entity → feature model → feature component boundary.
+
+`src/entities/service/model/types.ts` owns:
+
+1. service status and price-type unions;
+2. the normalized owner-facing `Service` entity shape.
+
+`src/entities/service/api/getMyServices.ts` owns:
+
+1. UUID and row normalization;
+2. explicit field selection from `public.services`;
+3. active-identity filtering;
+4. deterministic owner ordering;
+5. bounded result size;
+6. database error translation.
+
+`src/features/service-management/model/useMyServices.ts` owns:
+
+1. authentication and active-identity resolution;
+2. loading, error and service collection state;
+3. stale-request protection;
+4. active-identity change reloads;
+5. manual refresh.
+
+`MyServicesSection` owns owner-facing presentation states and compact versus full list display.
+
+The database contract remains the existing `public.services` table with RLS. This patch adds no migration and performs no direct service mutation.

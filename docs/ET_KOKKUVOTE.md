@@ -6464,3 +6464,22 @@ Arhitektuurisprindi teine komponentide eraldamise samm on valmis ja brauseris ko
 - lühikese, pika ja tühja kirjelduse, mobiilivaate, galerii ning sektsioonide avamise käsitestid läbivad.
 
 Production build õnnestus. Andmebaasi, avalikke päringuid ega püsivat olekut ei muudetud.
+
+## 2026-08-02 – V2 teenuste pärisandmete kuvamise vundament
+
+Teenuste esimene funktsionaalne etapp on valmis ja brauseris kontrollitud:
+
+- loodi teenuse tüübimudel `src/entities/service/model/types.ts`;
+- loodi aktiivse identiteedi teenuste lugemis-API `getMyServices.ts`;
+- loodi identiteedivahetusele reageeriv hook `useMyServices.ts`;
+- loodi Minu ala päris teenuste sektsioon `MyServicesSection.tsx`;
+- `V2MyAreaPage.tsx` staatilised näidisteenused eemaldati;
+- teenuste sektsioon kuvab nüüd aktiivse identiteedi tegelikke teenuseid;
+- lisati laadimis-, vea-, puuduva identiteedi ja tühja loendi olekud;
+- teenuste staatuste, hindade, asukoha, kategooria ja kirjelduse kuvamine on valmis;
+- rohkem kui kolme teenuse korral on olemas „Vaata kõiki / Näita vähem” juhtimine;
+- sidebar’i eksitav staatiline teenuste loendur eemaldati;
+- ülemine staatiline kokkuvõttekaart ei esita enam valet teenuste arvu;
+- brauseris kontrolliti nullteenustega identiteedi tühiolekut ja paigutuse säilimist.
+
+Selles etapis ei lisatud teenuse loomist, muutmist, staatuse muutmist, piltide haldust ega avaliku profiili teenuseid. Production build õnnestus.

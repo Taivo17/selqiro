@@ -1,4 +1,5 @@
 import MyAreaListingsSection from "../../../src/features/my-area/components/MyAreaListingsSection";
+import MyServicesSection from "../../../src/features/service-management/components/MyServicesSection";
 import ProductShowcaseManagementCard from "../../../src/features/product-showcase-management/components/ProductShowcaseManagementCard";
 import StoreCategoryManagementCard from "../../../src/features/store-category-management/components/StoreCategoryManagementCard";
 type SummaryCard = {
@@ -24,8 +25,8 @@ const summaryCards: SummaryCard[] = [
   },
   {
     title: "Teenused",
-    value: "3",
-    helper: "Aktiivsed teenused",
+    value: "—",
+    helper: "Päris teenused on allpool",
     action: "Vaata teenuseid",
   },
   {
@@ -62,25 +63,6 @@ const listings: RowItem[] = [
     value: "45 €",
   },
 ];
-
-const services: RowItem[] = [
-  {
-    title: "Aiatehnika hooldus",
-    meta: "Murutraktorid, niidukid ja väike tehnika",
-    status: "Aktiivne",
-  },
-  {
-    title: "Transport kokkuleppel",
-    meta: "Kohalik transport ja kohaletoomine",
-    status: "Aktiivne",
-  },
-  {
-    title: "Nõustamine enne ostu",
-    meta: "Aitame valida sobiva masina",
-    status: "Aktiivne",
-  },
-];
-
 
 const updates: RowItem[] = [
   {
@@ -207,7 +189,6 @@ function RowList({ items }: { items: RowItem[] }) {
   );
 }
 
-
 function IdentityMiniPreview({ dark = false }: { dark?: boolean }) {
   return (
     <div
@@ -256,7 +237,7 @@ export default function V2MyAreaPage() {
           <SidebarItem label="Ülevaade" active />
           <SidebarItem label="Profiil" />
           <SidebarItem label="Kuulutused" count="14" />
-          <SidebarItem label="Teenused" count="3" />
+          <SidebarItem label="Teenused" />
           <SidebarItem label="Tootenäidised" />
           <SidebarItem label="Uuendused" count="2" />
           <SidebarItem label="Sõnumid" count="2" />
@@ -326,13 +307,7 @@ export default function V2MyAreaPage() {
 
             <StoreCategoryManagementCard />
 
-            <ModuleCard
-              eyebrow="Teenused"
-              title="Sinu teenused"
-              action="Vaata kõiki"
-            >
-              <RowList items={services} />
-            </ModuleCard>
+            <MyServicesSection />
 
             <ProductShowcaseManagementCard />
 

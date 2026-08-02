@@ -952,3 +952,27 @@ Recommended next isolated feature track:
 2. inspect the existing `services` schema and current placeholder UI before coding;
 3. implement service display/load first;
 4. then add create, edit, status lifecycle, images and public-profile integration in separate testable patches.
+
+## 2026-08-02 – V2 service display foundation checkpoint
+
+Completed and browser-tested:
+
+- added the V2 `Service` entity model;
+- added active-identity-scoped service loading;
+- added a stale-request-safe `useMyServices` hook;
+- replaced the My Area service mock list with `MyServicesSection`;
+- added service status and price presentation;
+- added loading, error, missing-identity and empty-list states;
+- added compact preview and „Vaata kõiki / Näita vähem” behavior;
+- removed the misleading static service count from the sidebar;
+- retained listings, store categories and product showcases unchanged;
+- production build passes;
+- manual browser check confirms the correct zero-service empty state.
+
+Recommended next isolated patch:
+
+1. add service create/update input types and a `saveMyService` entity API wrapper around `save_my_service_v2`;
+2. extend `useMyServices` with a guarded save mutation;
+3. add only the first create-form UI in My Area;
+4. keep status changes, images, deletion and public-profile services for later patches;
+5. test creation under one active identity and verify another identity cannot see the draft.
