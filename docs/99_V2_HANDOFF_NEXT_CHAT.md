@@ -930,3 +930,25 @@ Recommended next architecture patch:
 2. keep card layout and data mapping in the section;
 3. avoid changing visual behavior during the extraction;
 4. browser-test long, short and empty descriptions before checkpointing.
+
+## 2026-08-02 – Public showcase description extraction checkpoint
+
+Completed and browser-tested:
+
+- extracted `PublicProfileProductShowcaseDescription.tsx`;
+- moved overflow measurement, `ResizeObserver`, line clamping and expand/collapse state into the new component;
+- retained data loading, layout and card composition in `PublicProfileProductShowcasesSection.tsx`;
+- preserved short, long and empty-description behavior;
+- preserved mobile responsiveness;
+- preserved the separated gallery, lightbox, keyboard and touch-swipe behavior;
+- preserved mutually exclusive public-profile section expansion;
+- production build passes.
+
+The focused public-profile architecture sprint is complete after extracting both the gallery and description responsibilities.
+
+Recommended next isolated feature track:
+
+1. begin the real V2 services foundation;
+2. inspect the existing `services` schema and current placeholder UI before coding;
+3. implement service display/load first;
+4. then add create, edit, status lifecycle, images and public-profile integration in separate testable patches.

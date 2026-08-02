@@ -2533,3 +2533,22 @@ The gallery component now owns:
 The section component continues to own data loading, compact/expanded layout, card rendering, title/category/description content, long-description measurement and the shared expanded-section contract.
 
 This was a behavior-preserving architecture patch. Production build and manual browser checks pass.
+
+## 2026-08-02 — Public showcase description component extracted
+
+The public product-showcase description behavior was extracted from `PublicProfileProductShowcasesSection.tsx` into `PublicProfileProductShowcaseDescription.tsx`.
+
+The description component now owns:
+
+- open and closed description state;
+- the paragraph element ref;
+- initial overflow measurement through `requestAnimationFrame`;
+- responsive overflow tracking through `ResizeObserver`;
+- null-safe current-element checks;
+- compact three-line and expanded six-line clamping;
+- the “Vaata rohkem” and “Näita vähem” controls;
+- state reset when the showcase, description or section expansion changes.
+
+The section component continues to own data loading, compact/expanded layout, card composition, title/category presentation and the connection to the gallery component.
+
+This was a behavior-preserving architecture patch. Production build and manual browser checks pass.

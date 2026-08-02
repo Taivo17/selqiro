@@ -2751,3 +2751,27 @@ The public product-showcase presentation is now split across two focused compone
 8. pointer-swipe gesture handling.
 
 The boundary is presentation-only. It does not change public data minimization, API contracts, database state, storage paths or navigation state.
+
+### Public showcase description component boundary — 2026-08-02
+
+Public product-showcase text presentation now has a dedicated component boundary.
+
+`PublicProfileProductShowcaseDescription` owns:
+
+1. description expansion state;
+2. DOM measurement state and refs;
+3. initial animation-frame measurement;
+4. responsive `ResizeObserver` measurement;
+5. compact and expanded line-clamp selection;
+6. the accessible expand/collapse control.
+
+`PublicProfileProductShowcasesSection` continues to own:
+
+1. public showcase data loading;
+2. compact versus expanded section layout;
+3. card collection and card composition;
+4. title and category presentation;
+5. gallery and description component composition;
+6. parent-controlled section expansion.
+
+The boundary is presentation-only and does not change API contracts, public data minimization, database state, storage paths or navigation state.

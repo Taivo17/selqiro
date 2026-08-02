@@ -6448,3 +6448,19 @@ Arhitektuurisprindi muudatus on valmis ja brauseris kontrollitud:
 - kompaktne ja laiendatud vaade, pisipildid, täisekraanvaade, pühkimine, klaviatuur ja sektsioonide vastastikune sulgemine läbivad manuaalse testi.
 
 Production build õnnestus. Andmebaasi, avalikke päringuid ega püsivat olekut ei muudetud.
+
+## 2026-08-02 – Avaliku profiili tootenäidise kirjeldus eraldati oma komponenti
+
+Arhitektuurisprindi teine komponentide eraldamise samm on valmis ja brauseris kontrollitud:
+
+- loodi `PublicProfileProductShowcaseDescription.tsx`;
+- kirjelduse avatud ja suletud olek asub nüüd oma komponendis;
+- samasse komponenti liiguvad tegeliku teksti ületäitumise mõõtmine, `requestAnimationFrame` ja `ResizeObserver`;
+- kompaktse vaate kolme rea ning laiendatud vaate kuue rea piirangud säilisid;
+- „Vaata rohkem” ja „Näita vähem” juhtimine säilis muutmata;
+- `PublicProfileProductShowcasesSection.tsx` vastutab nüüd andmete, sektsiooni paigutuse, kaartide ning galerii ja kirjelduse ühendamise eest;
+- varem eraldatud galerii komponent jäi muutmata;
+- kasutajale nähtav käitumine ei muutunud;
+- lühikese, pika ja tühja kirjelduse, mobiilivaate, galerii ning sektsioonide avamise käsitestid läbivad.
+
+Production build õnnestus. Andmebaasi, avalikke päringuid ega püsivat olekut ei muudetud.
