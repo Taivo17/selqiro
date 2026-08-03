@@ -976,3 +976,27 @@ Recommended next isolated patch:
 3. add only the first create-form UI in My Area;
 4. keep status changes, images, deletion and public-profile services for later patches;
 5. test creation under one active identity and verify another identity cannot see the draft.
+
+## 2026-08-03 – Service category foundation checkpoint
+
+Completed and production-applied:
+
+- added `public.service_categories`;
+- seeded 11 roots and 54 direct children;
+- added stable category codes and localized labels;
+- added public read-only RLS;
+- added root/child validation helpers;
+- added a `services` category-pair validation trigger;
+- verified valid, root-only, mismatched, unknown and empty category cases locally;
+- verified the migration in linked production history;
+- verified the production schema after push;
+- production build passes.
+
+Next isolated patch:
+
+1. add a `ServiceCategory` entity model;
+2. add a public read API for active categories;
+3. add a loading hook;
+4. add a reusable two-level selector;
+5. show the selector in My Area without service mutation;
+6. only after selector verification, connect `save_my_service_v2` and create the first draft service form.

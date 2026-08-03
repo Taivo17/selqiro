@@ -6483,3 +6483,22 @@ Teenuste esimene funktsionaalne etapp on valmis ja brauseris kontrollitud:
 - brauseris kontrolliti nullteenustega identiteedi tühiolekut ja paigutuse säilimist.
 
 Selles etapis ei lisatud teenuse loomist, muutmist, staatuse muutmist, piltide haldust ega avaliku profiili teenuseid. Production build õnnestus.
+
+## 2026-08-03 – Teenuste globaalne rubriigipuu
+
+Teenuste rubriigivundament on loodud, lokaalselt kontrollitud ja tootmisandmebaasi rakendatud:
+
+- loodi globaalne `public.service_categories` tabel;
+- rubriigid on Selqiro üldine taksonoomia, mitte identiteedi enda poe rubriigid;
+- kasutajaliidese V2 esimene versioon kasutab kahte taset: ülemrubriik ja alamrubriik;
+- andmebaasi self-reference mudel võimaldab hiljem sügavamaid tasemeid;
+- lisati 11 aktiivset ülemrubriiki ja 54 aktiivset alamrubriiki;
+- teenustele salvestatakse stabiilsed masinloetavad koodid, mitte kuvatavad nimetused;
+- anonüümne ja autenditud kasutaja saavad aktiivseid rubriike lugeda;
+- tavaline kasutaja ei saa globaalset taksonoomiat muuta;
+- lisati root- ja child-koodi paari valideeriv funktsioon;
+- lisati `services` tabeli trigger, mis tõkestab tundmatud ja valesse ülemrubriiki kuuluvad alamrubriigid;
+- mustandteenus võib ajutiselt olla ilma rubriigita;
+- olemasolevat teenuste lugemisvaadet ega muid V2 mooduleid ei muudetud.
+
+Kohalik andmebaasi reset, struktuuri- ja käitumiskontroll, production build, linked dry run, tootmismigratsioon, migratsiooniajalugu ning production-skeemi kontroll läbisid.

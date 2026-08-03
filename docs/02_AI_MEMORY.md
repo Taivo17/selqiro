@@ -2568,3 +2568,22 @@ New boundaries:
 The display layer supports draft, published and archived states plus fixed, from, hourly and contact price presentation. It intentionally does not yet contain create, edit, status mutation, image management or public-profile service loading.
 
 Manual browser verification passed with an identity that currently has zero services. Production build passes.
+
+## 2026-08-03 — Global service category foundation
+
+Selqiro services now have a global database-backed taxonomy in `public.service_categories`.
+
+Architecture rules:
+
+- service categories are global Selqiro discovery categories;
+- they are separate from identity-owned `store_categories`;
+- stable `code` values are stored in `services.category` and `services.subcategory`;
+- Estonian and English labels can change without rewriting service rows;
+- the V2 UI supports root plus direct child selection;
+- the self-referencing database model remains extensible to deeper levels;
+- active categories are publicly readable;
+- ordinary users cannot mutate the taxonomy;
+- a database trigger rejects unknown roots, orphan children and mismatched root/child pairs;
+- both category fields may remain null for an unfinished draft.
+
+Initial seed: 11 roots and 54 children. The migration is applied to production.

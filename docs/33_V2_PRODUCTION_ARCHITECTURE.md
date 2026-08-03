@@ -2805,3 +2805,24 @@ The owner-facing V2 service display now follows the entity → feature model →
 `MyServicesSection` owns owner-facing presentation states and compact versus full list display.
 
 The database contract remains the existing `public.services` table with RLS. This patch adds no migration and performs no direct service mutation.
+
+### Global service taxonomy — 2026-08-03
+
+`public.service_categories` is the canonical global taxonomy for services.
+
+It is intentionally separate from `public.store_categories`:
+
+- `service_categories` supports platform-wide service discovery, filtering, AI suggestions and related-service grouping;
+- `store_categories` remains identity-scoped and organizes one profile's marketplace listings.
+
+The service taxonomy uses stable text codes with localized labels. `parent_code` is a self-reference. V2 renders exactly two levels, while the persistence model allows future deeper trees.
+
+Integrity is enforced in the database:
+
+1. the selected root must be active and have `parent_code is null`;
+2. an optional child must be active and belong to the selected root;
+3. a child cannot exist without a root;
+4. both values may be null for an incomplete draft;
+5. `trg_services_validate_category_pair_v2` applies the rule to inserts and category updates.
+
+Public clients have read-only access to active taxonomy rows. Mutation remains migration/admin controlled.
