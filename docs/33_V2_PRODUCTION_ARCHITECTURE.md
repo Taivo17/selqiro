@@ -2826,3 +2826,29 @@ Integrity is enforced in the database:
 5. `trg_services_validate_category_pair_v2` applies the rule to inserts and category updates.
 
 Public clients have read-only access to active taxonomy rows. Mutation remains migration/admin controlled.
+
+### Service category client boundary — 2026-08-03
+
+The global service taxonomy is consumed through a dedicated entity and feature boundary.
+
+`service-category/model/types.ts` owns:
+
+1. stable category and selection shapes;
+2. code validation;
+3. deterministic ordering;
+4. projection of the self-referencing taxonomy into the two-level V2 tree;
+5. detection of deeper and orphaned rows.
+
+`getServiceCategories.ts` owns the bounded read-only query of active global taxonomy rows.
+
+`useServiceCategories.ts` owns loading, error, refresh and stale-request protection.
+
+`ServiceCategorySelector` owns:
+
+1. root and optional direct-child controls;
+2. automatic child clearing when the root changes;
+3. invalid-value recovery;
+4. loading, error and empty states;
+5. responsive one-column/two-column presentation.
+
+The selector emits stable database codes. It performs no mutation and is designed to be reused by service create and edit forms.

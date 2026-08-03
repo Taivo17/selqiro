@@ -8,6 +8,11 @@ import type {
   Service,
   ServiceStatus,
 } from "../../../entities/service/model/types";
+import {
+  EMPTY_SERVICE_CATEGORY_SELECTION,
+  type ServiceCategorySelection,
+} from "../../../entities/service-category/model/types";
+import ServiceCategorySelector from "../../service-category-selection/components/ServiceCategorySelector";
 import { useMyServices } from "../model/useMyServices";
 
 const SERVICE_PREVIEW_LIMIT = 3;
@@ -212,8 +217,18 @@ export default function MyServicesSection() {
     setShowAll,
   ] = useState(false);
 
+  const [
+    categoryPreview,
+    setCategoryPreview,
+  ] = useState<ServiceCategorySelection>({
+    ...EMPTY_SERVICE_CATEGORY_SELECTION,
+  });
+
   useEffect(() => {
     setShowAll(false);
+    setCategoryPreview({
+      ...EMPTY_SERVICE_CATEGORY_SELECTION,
+    });
   }, [activeIdentityId]);
 
   const publishedCount =
@@ -311,6 +326,31 @@ export default function MyServicesSection() {
             </span>
           ) : null}
         </div>
+      ) : null}
+
+      {!loading &&
+      !error &&
+      activeIdentityId ? (
+        <section className="mt-5 rounded-[22px] border border-neutral-200 bg-[#fbfbfa] p-4 sm:p-5">
+          <p className="text-xs font-black uppercase tracking-[0.18em] text-emerald-700">
+            Teenuse lisamise ettevalmistus
+          </p>
+
+          <h3 className="mt-2 text-lg font-black">
+            Vali tulevase teenuse rubriik
+          </h3>
+
+          <p className="mt-2 max-w-2xl text-sm leading-6 text-neutral-600">
+            See valik loeb Selqiro globaalset teenuste rubriigipuud.
+            Valikut ei salvestata ja teenust veel ei looda.
+          </p>
+
+          <ServiceCategorySelector
+            value={categoryPreview}
+            onChange={setCategoryPreview}
+            className="mt-4"
+          />
+        </section>
       ) : null}
 
       {loading ? (

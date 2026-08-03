@@ -2587,3 +2587,27 @@ Architecture rules:
 - both category fields may remain null for an unfinished draft.
 
 Initial seed: 11 roots and 54 children. The migration is applied to production.
+
+## 2026-08-03 — V2 service category selector
+
+The global service taxonomy now has a reusable client-side read and selection boundary.
+
+New files:
+
+- `src/entities/service-category/model/types.ts`;
+- `src/entities/service-category/api/getServiceCategories.ts`;
+- `src/features/service-category-selection/model/useServiceCategories.ts`;
+- `src/features/service-category-selection/components/ServiceCategorySelector.tsx`.
+
+Rules:
+
+- only active global taxonomy rows are loaded;
+- V2 exposes root plus direct-child selection;
+- stable codes are emitted, while Estonian labels are rendered;
+- changing the root always clears the child;
+- child selection is optional;
+- stale loads are ignored;
+- the selector is currently read-only and does not call `save_my_service_v2`;
+- deeper and orphaned taxonomy rows are excluded from the two-level V2 selector.
+
+Manual browser verification passed with `transport_roadside → towing`. Production build passes.

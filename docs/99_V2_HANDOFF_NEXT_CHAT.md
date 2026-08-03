@@ -1000,3 +1000,28 @@ Next isolated patch:
 4. add a reusable two-level selector;
 5. show the selector in My Area without service mutation;
 6. only after selector verification, connect `save_my_service_v2` and create the first draft service form.
+
+## 2026-08-03 – Service category selector checkpoint
+
+Completed and browser-tested:
+
+- added the global service-category entity model;
+- added active-category read API;
+- added stale-request-safe category loading hook;
+- added reusable two-level `ServiceCategorySelector`;
+- connected a read-only selector preview to My Area services;
+- verified root selection, child selection and current-selection label;
+- verified root change clears the old child;
+- verified `Transport ja autoabi → Puksiirabi`;
+- kept the patch free of service and taxonomy mutations;
+- production build passes.
+
+Next isolated patch:
+
+1. add `SaveServiceInput` and a `saveMyService` wrapper around `save_my_service_v2`;
+2. extend `useMyServices` with a guarded create mutation;
+3. replace the read-only preview with the first service draft form;
+4. require a root category in the UI while keeping the database compatible with older incomplete drafts;
+5. create only drafts;
+6. leave edit, status changes, images, deletion and public-profile services for later patches;
+7. browser-test persistence and active-identity isolation before commit.

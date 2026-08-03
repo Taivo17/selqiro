@@ -6502,3 +6502,23 @@ Teenuste rubriigivundament on loodud, lokaalselt kontrollitud ja tootmisandmebaa
 - olemasolevat teenuste lugemisvaadet ega muid V2 mooduleid ei muudetud.
 
 Kohalik andmebaasi reset, struktuuri- ja käitumiskontroll, production build, linked dry run, tootmismigratsioon, migratsiooniajalugu ning production-skeemi kontroll läbisid.
+
+## 2026-08-03 – V2 teenuste kahetasandiline rubriigivalik
+
+Teenuste globaalse rubriigipuu esimene rakenduskiht on valmis ja brauseris kontrollitud:
+
+- loodi `ServiceCategory` ja `ServiceCategorySelection` entity mudel;
+- loodi aktiivsete globaalsete rubriikide read-only API;
+- loodi vananenud päringu tulemusi vältiv rubriikide laadimishook;
+- loodi korduvkasutatav `ServiceCategorySelector`;
+- valik kuvab täpselt kahte V2 taset: ülemrubriik ja otsene alamrubriik;
+- ülemrubriigi muutmisel puhastatakse eelmine alamrubriik;
+- alamrubriik on valikuline;
+- vigane, puuduva ülemaga või sügavama taseme väärtus ei jõua V2 valikusse;
+- lisati laadimis-, vea- ja tühiolek;
+- Minu ala teenuste sektsioonis ühendati read-only proovivalik;
+- valikut ei salvestata ja teenust selles etapis ei looda;
+- brauseris kontrolliti valikut „Transport ja autoabi → Puksiirabi”;
+- tootmisbuild õnnestus.
+
+Teenuse loomine ühendatakse sama komponendiga järgmises eraldiseisvas patch'is.
