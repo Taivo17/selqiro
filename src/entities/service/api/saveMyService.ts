@@ -407,6 +407,120 @@ export async function saveMyService(
   const normalized =
     normalizeSaveInput(input);
 
+  let preservedImageUrl:
+    | string
+    | null = null;
+  let preservedServiceLat:
+    | number
+    | null = null;
+  let preservedServiceLng:
+    | number
+    | null = null;
+
+  if (normalized.serviceId) {
+    const {
+      data: currentData,
+      error: currentError,
+    } =
+      await supabaseBrowserClient
+        .from("services")
+        .select(
+          [
+            "image_url",
+            "service_lat",
+            "service_lng",
+          ].join(",")
+        )
+        .eq(
+          "id",
+          normalized.serviceId
+        )
+        .maybeSingle();
+
+    if (currentError) {
+      throw new Error(
+        getSaveErrorMessage(
+          currentError,
+          "Teenuse olemasolevaid andmeid ei saanud kontrollida."
+        )
+      );
+    }
+
+    const currentRow =
+      (currentData || null) as {
+        image_url?:
+          | string
+          | null;
+        service_lat?:
+          | number
+          | string
+          | null;
+        service_lng?:
+          | number
+          | string
+          | null;
+      } | null;
+
+    if (!currentRow) {
+      throw new Error(
+        "Muudetavat teenuse mustandit ei leitud."
+      );
+    }
+
+    preservedImageUrl =
+      currentRow.image_url
+        ?.trim() || null;
+
+    const parsedLat =
+      currentRow.service_lat ===
+        null ||
+      currentRow.service_lat ===
+        undefined
+        ? null
+        : Number(
+            currentRow.service_lat
+          );
+
+    const parsedLng =
+      currentRow.service_lng ===
+        null ||
+      currentRow.service_lng ===
+        undefined
+        ? null
+        : Number(
+            currentRow.service_lng
+          );
+
+    if (
+      (
+        parsedLat === null
+      ) !== (
+        parsedLng === null
+      ) ||
+      (
+        parsedLat !== null &&
+        !Number.isFinite(
+          parsedLat
+        )
+      ) ||
+      (
+        parsedLng !== null &&
+        !Number.isFinite(
+          parsedLng
+        )
+      )
+    ) {
+      throw new Error(
+        "Teenuse olemasolevad asukoha koordinaadid ei ole korrektsed."
+      );
+    }
+
+    preservedServiceLat =
+      parsedLat;
+    preservedServiceLng =
+      parsedLng;
+  }
+
   const { data, error } =
     await supabaseBrowserClient.rpc(
       "save_my_service_v2",
@@ -421,7 +535,8 @@ export async function saveMyService(
           normalized.category,
         p_subcategory:
           normalized.subcategory,
-        p_image_url: null,
+        p_image_url:
+          preservedImageUrl,
         p_price_amount:
           normalized.priceAmount,
         p_currency:
@@ -434,8 +549,10 @@ export async function saveMyService(
           normalized.city,
         p_location:
           normalized.location,
-        p_service_lat: null,
-        p_service_lng: null,
+        p_service_lat:
+          preservedServiceLat,
+        p_service_lng:
+          preservedServiceLng,
       }
     );
 

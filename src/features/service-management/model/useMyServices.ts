@@ -291,6 +291,37 @@ export function useMyServices(): MyServicesState {
       );
     }
 
+    const serviceId =
+      input.serviceId?.trim() ||
+      null;
+
+    const existingService =
+      serviceId
+        ? state.services.find(
+            (service) =>
+              service.id === serviceId
+          ) || null
+        : null;
+
+    if (
+      serviceId &&
+      !existingService
+    ) {
+      throw new Error(
+        "Teenuse mustandit ei leitud aktiivse identiteedi alt."
+      );
+    }
+
+    if (
+      existingService &&
+      existingService.status !==
+        "draft"
+    ) {
+      throw new Error(
+        "Muuta saab ainult teenuse mustandit."
+      );
+    }
+
     if (savingRef.current) {
       throw new Error(
         "Teenuse salvestamine juba käib."
@@ -298,7 +329,7 @@ export function useMyServices(): MyServicesState {
     }
 
     const operationId =
-      input.serviceId?.trim() ||
+      serviceId ||
       "new";
 
     savingRef.current = true;
@@ -321,6 +352,16 @@ export function useMyServices(): MyServicesState {
       ) {
         throw new Error(
           "Andmebaas tagastas vale identiteedi teenuse."
+        );
+      }
+
+      if (
+        existingService &&
+        savedService.status !==
+          "draft"
+      ) {
+        throw new Error(
+          "Andmebaas tagastas muutmisel ootamatu teenuse staatuse."
         );
       }
 

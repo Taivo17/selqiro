@@ -259,8 +259,24 @@ export default function MyServicesSection() {
     setShowAll,
   ] = useState(false);
 
+  const [
+    editingServiceId,
+    setEditingServiceId,
+  ] = useState<string | null>(
+    null
+  );
+
+  const [
+    editSuccessMessage,
+    setEditSuccessMessage,
+  ] = useState<string | null>(
+    null
+  );
+
   useEffect(() => {
     setShowAll(false);
+    setEditingServiceId(null);
+    setEditSuccessMessage(null);
   }, [activeIdentityId]);
 
   const publishedCount =
@@ -310,12 +326,14 @@ export default function MyServicesSection() {
           </h2>
 
           <p className="mt-2 max-w-2xl break-words text-sm leading-6 text-neutral-600">
-            Siin kuvatakse aktiivse identiteedi päris teenused.
-            Loomine ja muutmine lisatakse eraldi sammudena.
+            Siin saad luua ja muuta aktiivse identiteedi teenuse mustandeid.
+            Avaldamine, pildid ja kustutamine lisatakse eraldi sammudena.
           </p>
         </div>
 
         {canToggle &&
+        editingServiceId ===
+          null &&
         !loading &&
         !error ? (
           <button
@@ -363,19 +381,35 @@ export default function MyServicesSection() {
       {!loading &&
       !error &&
       activeIdentityId ? (
-        <ServiceDraftCreateForm
-          activeIdentityId={
-            activeIdentityId
-          }
-          saving={
-            savingServiceId ===
-            "new"
-          }
-          onCreate={saveService}
-          onClearError={
-            clearError
-          }
-        />
+        <>
+          {editingServiceId ===
+          null ? (
+            <ServiceDraftCreateForm
+              activeIdentityId={
+                activeIdentityId
+              }
+              saving={
+                savingServiceId ===
+                "new"
+              }
+              onSave={
+                saveService
+              }
+              onClearError={
+                clearError
+              }
+            />
+          ) : null}
+
+          {editSuccessMessage ? (
+            <p
+              role="status"
+              className="mt-4 rounded-xl border border-emerald-100 bg-emerald-50 px-3 py-2.5 text-sm font-semibold leading-6 text-emerald-800"
+            >
+              {editSuccessMessage}
+            </p>
+          ) : null}
+        </>
       ) : null}
 
       {loading ? (
@@ -439,13 +473,85 @@ export default function MyServicesSection() {
         <div className="mt-5 space-y-3">
           {visibleServices.map(
             (service) => (
-              <ServiceRow
-                key={service.id}
-                service={service}
-                categoryLabelByCode={
-                  categoryLabelByCode
-                }
-              />
+              <div
+                  key={service.id}
+                  className="min-w-0"
+                >
+                  <ServiceRow
+                    service={service}
+                    categoryLabelByCode={
+                      categoryLabelByCode
+                    }
+                  />
+
+                  {service.status ===
+                    "draft" &&
+                  editingServiceId ===
+                    null ? (
+                    <div className="mt-2 flex justify-end">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setEditingServiceId(
+                            service.id
+                          );
+                          setEditSuccessMessage(
+                            null
+                          );
+                          clearError();
+                        }}
+                        disabled={
+                          savingServiceId !==
+                          null
+                        }
+                        className="rounded-full border border-neutral-200 bg-white px-4 py-2 text-xs font-black text-neutral-700 shadow-sm transition hover:border-neutral-300 disabled:cursor-wait disabled:opacity-50"
+                      >
+                        Muuda
+                      </button>
+                    </div>
+                  ) : null}
+
+                  {service.status ===
+                    "draft" &&
+                  activeIdentityId &&
+                  editingServiceId ===
+                    service.id ? (
+                    <ServiceDraftCreateForm
+                      activeIdentityId={
+                        activeIdentityId
+                      }
+                      service={
+                        service
+                      }
+                      saving={
+                        savingServiceId ===
+                        service.id
+                      }
+                      onSave={
+                        saveService
+                      }
+                      onClearError={
+                        clearError
+                      }
+                      onCancelEdit={() => {
+                        setEditingServiceId(
+                          null
+                        );
+                        clearError();
+                      }}
+                      onEdited={(
+                        updatedService
+                      ) => {
+                        setEditingServiceId(
+                          null
+                        );
+                        setEditSuccessMessage(
+                          `Teenus „${updatedService.title}” salvestatud.`
+                        );
+                      }}
+                    />
+                  ) : null}
+                </div>
             )
           )}
         </div>

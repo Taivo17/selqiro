@@ -2645,3 +2645,21 @@ Rules:
 - public-profile showcase description behavior is unchanged.
 
 Manual browser verification passed.
+
+## 2026-08-04 — V2 service draft editing
+
+Existing service drafts can now be edited through the same validated form used for creation.
+
+Rules and boundaries:
+
+- the edit UI is exposed only for `draft` services;
+- the form is initialized from the selected service and submits its existing ID;
+- `useMyServices.saveService` rejects IDs outside the active identity list and rejects non-draft services;
+- the returned row must still belong to the active identity and remain a draft;
+- only one create or edit write can run at a time;
+- successful edits are locally upserted without a page reload;
+- cancel closes the form without persistence;
+- image URL and coordinate values, which are outside the current form, are read and preserved before calling the save RPC;
+- lifecycle transitions, service images, deletion and public rendering remain later patches.
+
+Manual browser verification passed for draft editing. Published and archived service behavior was not manually testable yet because lifecycle UI has not been implemented.

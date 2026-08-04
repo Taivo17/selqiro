@@ -2886,3 +2886,20 @@ The owner management card treats image geometry and textual content independentl
 A long `product_showcases.description` may contain up to the database limit, but it must not control the image-column height. Desktop cards therefore use a fixed 140 px media frame with top alignment, while the management description is a four-line preview.
 
 The canonical full description remains unchanged and is exposed by the edit workflow. This is a presentation-only boundary; no product-showcase data or public-profile behavior changed.
+
+### Service draft editing boundary — 2026-08-04
+
+Service editing reuses the existing `save_my_service_v2` command boundary instead of adding a second write path.
+
+The feature layer must prove all of the following before an existing service ID is sent:
+
+1. an active identity exists;
+2. the ID belongs to a service already loaded for that active identity;
+3. the service is in `draft` status;
+4. no other service write is in progress.
+
+After the RPC returns, the client verifies identity ownership and that the status remains `draft`, then performs a deterministic local upsert.
+
+The current form does not own service image or coordinate fields. The API therefore reads and preserves those values during an edit so a partial form cannot silently erase data owned by later modules.
+
+Published and archived editing is intentionally unavailable. Status lifecycle remains a separate command and UI patch.

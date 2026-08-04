@@ -6555,3 +6555,21 @@ Pika tootenäidise kirjeldusega halduskaart ei venita enam pilti kogu tekstiveer
 - lühikeste kirjelduste, staatuse, tegevusnuppude ja mobiilivaate loogikat ei muudetud.
 
 Brauseritest kinnitas, et pika tekstiga kaart on taas kompaktne ja pilt ei veni.
+
+## 2026-08-04 – V2 teenuse mustandi muutmine
+
+Olemasoleva teenuse mustandi muutmise etapp on valmis ja brauseris kontrollitud:
+
+- mustandteenuse kaardile lisati nupp „Muuda”;
+- muutmisvorm kasutab sama valideerimist ja globaalset rubriigivalikut nagu loomise vorm;
+- vorm täidetakse teenuse olemasolevate väärtustega;
+- salvestamisel saadetakse `save_my_service_v2` RPC-le olemasolev teenuse ID;
+- hook kontrollib, et teenus leidub aktiivse identiteedi nimekirjas ja selle staatus on `draft`;
+- andmebaasist tagastatud teenuse identiteeti ja mustandistaatust kontrollitakse uuesti;
+- muutmise ajal on avatud ainult üks teenusevorm ning uue teenuse loomise kaart on peidetud;
+- tühistamine sulgeb vormi ilma teenust muutmata;
+- edukas salvestamine uuendab kaarti kohe ilma lehe värskendamiseta;
+- vormis veel puuduvad pildi- ja koordinaadiväljad säilitatakse muutmisel;
+- avaldamine, arhiveerimine, pildihaldus, kustutamine ja avaliku profiili teenused jäid eraldi etappidesse.
+
+Brauseritest kinnitas mustandi väärtuste muutmise, eduteate, säiliva mustandistaatuse ja lehe värskendamise järel püsivad andmed. Avaldatud ning arhiveeritud teenuse käsitsi kontroll jäi lifecycle-etappi, sest nende staatuste kasutajaliidest ei ole veel lisatud.

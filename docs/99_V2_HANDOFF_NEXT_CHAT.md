@@ -1060,3 +1060,27 @@ Completed and browser-tested:
 - clamped the management description to four lines;
 - retained the full text in the existing edit form;
 - production build passes.
+
+## 2026-08-04 – Service draft editing checkpoint
+
+Completed and browser-tested:
+
+- added a draft-only „Muuda” action;
+- reused the create form for prefilled editing;
+- submitted the existing service ID through `save_my_service_v2`;
+- guarded active-identity ownership and draft status before and after the write;
+- prevented parallel create/edit writes;
+- added cancel and immediate local card refresh;
+- preserved image and coordinate fields outside the current form;
+- kept lifecycle, images, deletion and public services outside this patch;
+- production build passes.
+
+Manual testing covered draft editing and persistence. Published and archived services could not yet be tested because service lifecycle controls do not exist.
+
+Next isolated service patch:
+
+1. add the service lifecycle mutation around `set_my_service_status_v2`;
+2. add Draft → Publish and Published → Archive controls;
+3. add Archived → Draft restoration;
+4. keep deletion, images and public-profile rendering separate;
+5. verify public read behavior only after lifecycle controls are complete.

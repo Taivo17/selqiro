@@ -25,11 +25,16 @@ import ServiceCategorySelector from "../../service-category-selection/components
 
 type ServiceDraftCreateFormProps = {
   activeIdentityId: string;
+  service?: Service | null;
   saving: boolean;
-  onCreate: (
+  onSave: (
     input: SaveServiceInput
   ) => Promise<Service>;
   onClearError: () => void;
+  onCancelEdit?: () => void;
+  onEdited?: (
+    service: Service
+  ) => void;
 };
 
 type ServiceDraftForm = {
@@ -59,6 +64,42 @@ function createEmptyForm():
     country: "Estonia",
     city: "",
     location: "",
+  };
+}
+
+function createServiceForm(
+  service?: Service | null
+): ServiceDraftForm {
+  if (!service) {
+    return createEmptyForm();
+  }
+
+  return {
+    title: service.title,
+    description:
+      service.description,
+    categorySelection: {
+      category:
+        service.category || "",
+      subcategory:
+        service.subcategory || "",
+    },
+    priceType:
+      service.priceType,
+    priceAmount:
+      service.priceAmount === null
+        ? ""
+        : String(
+            service.priceAmount
+          ),
+    currency:
+      service.currency || "EUR",
+    country:
+      service.country || "Estonia",
+    city:
+      service.city || "",
+    location:
+      service.location || "",
   };
 }
 
@@ -94,10 +135,15 @@ function parsePriceAmount(
 
 export default function ServiceDraftCreateForm({
   activeIdentityId,
+  service = null,
   saving,
-  onCreate,
+  onSave,
   onClearError,
+  onCancelEdit,
+  onEdited,
 }: ServiceDraftCreateFormProps) {
+  const editing =
+    service !== null;
   const [
     formOpen,
     setFormOpen,
@@ -107,7 +153,10 @@ export default function ServiceDraftCreateForm({
     form,
     setForm,
   ] = useState<ServiceDraftForm>(
-    createEmptyForm
+    () =>
+      createServiceForm(
+        service
+      )
   );
 
   const [
@@ -127,11 +176,16 @@ export default function ServiceDraftCreateForm({
   useEffect(() => {
     setFormOpen(false);
     setForm(
-      createEmptyForm()
+      createServiceForm(
+        service
+      )
     );
     setFormError(null);
     setSuccessMessage(null);
-  }, [activeIdentityId]);
+  }, [
+    activeIdentityId,
+    service,
+  ]);
 
   function openForm() {
     setForm(
@@ -150,10 +204,16 @@ export default function ServiceDraftCreateForm({
 
     setFormOpen(false);
     setForm(
-      createEmptyForm()
+      createServiceForm(
+        service
+      )
     );
     setFormError(null);
     onClearError();
+
+    if (editing) {
+      onCancelEdit?.();
+    }
   }
 
   function updatePriceType(
@@ -304,9 +364,10 @@ export default function ServiceDraftCreateForm({
     }
 
     try {
-      const createdService =
-        await onCreate({
-          serviceId: null,
+      const savedService =
+        await onSave({
+          serviceId:
+            service?.id || null,
           title,
           description,
           category:
@@ -328,23 +389,32 @@ export default function ServiceDraftCreateForm({
             location || null,
         });
 
+      if (editing) {
+        onEdited?.(
+          savedService
+        );
+        return;
+      }
+
       setForm(
         createEmptyForm()
       );
       setFormOpen(false);
       setSuccessMessage(
-        `Teenus „${createdService.title}” lisati mustandina.`
+        `Teenus „${savedService.title}” lisati mustandina.`
       );
     } catch (error) {
       setFormError(
         error instanceof Error
           ? error.message
-          : "Teenust ei saanud lisada."
+          : editing
+            ? "Teenuse mustandit ei saanud salvestada."
+            : "Teenust ei saanud lisada."
       );
     }
   }
 
-  if (!formOpen) {
+  if (!editing && !formOpen) {
     return (
       <section className="mt-5 rounded-[22px] border border-neutral-200 bg-[#fbfbfa] p-4 sm:p-5">
         <div className="flex min-w-0 flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -394,11 +464,15 @@ export default function ServiceDraftCreateForm({
       <div className="flex min-w-0 flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div className="min-w-0">
           <p className="text-xs font-black uppercase tracking-[0.18em] text-emerald-700">
-            Uus teenus
+            {editing
+              ? "Teenuse mustand"
+              : "Uus teenus"}
           </p>
 
           <h3 className="mt-2 text-lg font-black">
-            Lisa teenus mustandina
+            {editing
+              ? "Muuda teenuse mustandit"
+              : "Lisa teenus mustandina"}
           </h3>
 
           <p className="mt-2 max-w-2xl text-sm leading-6 text-neutral-600">
@@ -702,8 +776,10 @@ export default function ServiceDraftCreateForm({
           className="rounded-full bg-black px-5 py-3 text-sm font-black text-white transition disabled:cursor-not-allowed disabled:opacity-40"
         >
           {saving
-            ? "Lisan..."
-            : "Lisa mustand"}
+              ? "Salvestan..."
+              : editing
+                ? "Salvesta muudatused"
+                : "Lisa mustand"}
         </button>
 
         <button
