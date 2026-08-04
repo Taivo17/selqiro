@@ -9,7 +9,11 @@ import {
 import { useAuth } from "../../../../lib/useAuth";
 import { getActiveIdentity } from "../../../entities/identity/api/getActiveIdentity";
 import { getMyServices } from "../../../entities/service/api/getMyServices";
-import type { Service } from "../../../entities/service/model/types";
+import { saveMyService } from "../../../entities/service/api/saveMyService";
+import type {
+  SaveServiceInput,
+  Service,
+} from "../../../entities/service/model/types";
 
 const ACTIVE_IDENTITY_CHANGED_EVENT =
   "selqiro:active-identity-changed";
@@ -21,7 +25,15 @@ export type MyServicesState = {
   services: Service[];
   loading: boolean;
   error: string | null;
+  savingServiceId:
+    | string
+    | "new"
+    | null;
   refresh: () => Promise<void>;
+  saveService: (
+    input: SaveServiceInput
+  ) => Promise<Service>;
+  clearError: () => void;
 };
 
 function normalizeActiveIdentityId(
@@ -63,6 +75,20 @@ function sortServices(
   );
 }
 
+function upsertService(
+  services: Service[],
+  nextService: Service
+): Service[] {
+  return sortServices([
+    ...services.filter(
+      (service) =>
+        service.id !==
+        nextService.id
+    ),
+    nextService,
+  ]);
+}
+
 function resolveError(
   error: unknown,
   fallback: string
@@ -99,6 +125,18 @@ export function useMyServices(): MyServicesState {
     loading: true,
     error: null,
   });
+
+  const [
+    savingServiceId,
+    setSavingServiceId,
+  ] = useState<
+    string |
+    "new" |
+    null
+  >(null);
+
+  const savingRef =
+    useRef(false);
 
   const loadRequestRef =
     useRef(0);
@@ -241,8 +279,85 @@ export function useMyServices(): MyServicesState {
     };
   }, [loadServices]);
 
+  async function saveService(
+    input: SaveServiceInput
+  ): Promise<Service> {
+    const activeIdentityId =
+      state.activeIdentityId;
+
+    if (!activeIdentityId) {
+      throw new Error(
+        "Aktiivne identiteet puudub."
+      );
+    }
+
+    if (savingRef.current) {
+      throw new Error(
+        "Teenuse salvestamine juba käib."
+      );
+    }
+
+    const operationId =
+      input.serviceId?.trim() ||
+      "new";
+
+    savingRef.current = true;
+    setSavingServiceId(
+      operationId
+    );
+
+    setState((current) => ({
+      ...current,
+      error: null,
+    }));
+
+    try {
+      const savedService =
+        await saveMyService(input);
+
+      if (
+        savedService.identityId !==
+        activeIdentityId
+      ) {
+        throw new Error(
+          "Andmebaas tagastas vale identiteedi teenuse."
+        );
+      }
+
+      setState((current) => ({
+        ...current,
+        services:
+          upsertService(
+            current.services,
+            savedService
+          ),
+        error: null,
+      }));
+
+      return savedService;
+    } catch (error) {
+      throw resolveError(
+        error,
+        "Teenust ei saanud salvestada."
+      );
+    } finally {
+      savingRef.current = false;
+      setSavingServiceId(null);
+    }
+  }
+
+  function clearError() {
+    setState((current) => ({
+      ...current,
+      error: null,
+    }));
+  }
+
   return {
     ...state,
+    savingServiceId,
     refresh: loadServices,
+    saveService,
+    clearError,
   };
 }

@@ -2611,3 +2611,23 @@ Rules:
 - deeper and orphaned taxonomy rows are excluded from the two-level V2 selector.
 
 Manual browser verification passed with `transport_roadside → towing`. Production build passes.
+
+## 2026-08-04 — V2 service draft creation
+
+The first writable service-management slice is complete.
+
+Architecture and behavior:
+
+- `SaveServiceInput` and shared limits live in the service entity model;
+- `saveMyService` is the sole client wrapper for `save_my_service_v2`;
+- create calls pass `serviceId: null`;
+- the wrapper validates normalized fields and asserts that a newly returned service is a draft;
+- `useMyServices.saveService` prevents concurrent writes and verifies active-identity ownership before updating local state;
+- the create form reuses `ServiceCategorySelector`;
+- root category is required in the create UI and direct child is optional;
+- contact, fixed, from and hourly price types are supported;
+- image URL and coordinates remain null in this slice;
+- service cards resolve stable taxonomy codes to Estonian labels;
+- edit, publish/archive, images, deletion and public-profile rendering remain separate patches.
+
+Manual verification created `Murutraktorite hooldus ja remont` as a draft and displayed the expected counters, taxonomy labels, Paide location and hourly price.

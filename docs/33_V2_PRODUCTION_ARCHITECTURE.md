@@ -2852,3 +2852,29 @@ The global service taxonomy is consumed through a dedicated entity and feature b
 5. responsive one-column/two-column presentation.
 
 The selector emits stable database codes. It performs no mutation and is designed to be reused by service create and edit forms.
+
+### Service draft creation boundary — 2026-08-04
+
+Service creation now follows the established entity → feature → UI boundary.
+
+`service/model/types.ts` owns the writable input shape and field limits.
+
+`saveMyService.ts` owns:
+
+1. normalization and client-side integrity checks;
+2. the `save_my_service_v2` RPC contract;
+3. database error translation;
+4. mapping the returned database row through the shared service mapper;
+5. verification that a create operation returned a draft.
+
+`useMyServices.ts` owns:
+
+1. active-identity presence checks;
+2. single-flight write protection;
+3. returned identity verification;
+4. local upsert and deterministic sorting;
+5. the public mutation busy state.
+
+`ServiceDraftCreateForm.tsx` owns create-only form state and validation. The form deliberately excludes images, coordinates, editing, lifecycle transitions and deletion.
+
+The management list resolves stored category codes through the global taxonomy read boundary rather than displaying machine codes.

@@ -7,7 +7,7 @@ import {
   type ServiceStatus,
 } from "../model/types";
 
-type ServiceRow = {
+export type ServiceRow = {
   id?: string | null;
   identity_id?: string | null;
   title?: string | null;
@@ -148,7 +148,7 @@ function normalizePriceType(
     : "contact";
 }
 
-function mapServiceRow(
+export function mapServiceRow(
   row: ServiceRow
 ): Service {
   return {

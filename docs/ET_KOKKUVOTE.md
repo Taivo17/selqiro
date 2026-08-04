@@ -6522,3 +6522,23 @@ Teenuste globaalse rubriigipuu esimene rakenduskiht on valmis ja brauseris kontr
 - tootmisbuild õnnestus.
 
 Teenuse loomine ühendatakse sama komponendiga järgmises eraldiseisvas patch'is.
+
+## 2026-08-04 – V2 teenuse loomine mustandina
+
+Teenuse loomise esimene kirjutav etapp on valmis ja brauseris kontrollitud:
+
+- lisati `SaveServiceInput` ning teenuse väljade ühised piirangud;
+- lisati `saveMyService`, mis kasutab olemasolevat `save_my_service_v2` RPC-d;
+- uus teenus luuakse ainult aktiivsele identiteedile ja alati olekus `draft`;
+- API kontrollib pärast salvestamist tagastatud ID-d, aktiivset identiteeti ja uue teenuse mustandistaatust;
+- `useMyServices` sai paralleelsalvestamist tõkestava `saveService` mutatsiooni;
+- salvestatud teenus lisatakse kohe kohalikku nimekirja ja loenduritesse;
+- read-only rubriigieelvaade asendati päris `ServiceDraftCreateForm` vormiga;
+- vorm kasutab globaalset kahe taseme `ServiceCategorySelector` komponenti;
+- ülemrubriik on loomisel kohustuslik ja alamrubriik valikuline;
+- toetatud hinnatüübid on kokkuleppel, fikseeritud, alates ja tunnitasu;
+- asukohaväljal tuletatakse eraisikule meelde, et kodu täpset aadressi ei sisestataks;
+- teenuse kaardil kuvatakse tehniliste koodide asemel rubriikide eestikeelsed nimetused;
+- pildid, muutmine, staatuse muutmine, kustutamine ja avaliku profiili teenused jäid eraldi etappidesse.
+
+Brauseris loodi edukalt teenus „Murutraktorite hooldus ja remont”. Loendur näitas ühte mustandit, kaart kuvati inimloetava rubriigi, Paide asukoha ja tunnitasuga ning teenus jäi omaniku haldusvaatesse.

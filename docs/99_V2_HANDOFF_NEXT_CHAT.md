@@ -1025,3 +1025,27 @@ Next isolated patch:
 5. create only drafts;
 6. leave edit, status changes, images, deletion and public-profile services for later patches;
 7. browser-test persistence and active-identity isolation before commit.
+
+## 2026-08-04 – Service draft creation checkpoint
+
+Completed and browser-tested:
+
+- added service save input and shared field limits;
+- added `saveMyService` RPC wrapper;
+- added guarded `useMyServices.saveService`;
+- replaced the category preview with the first real service draft form;
+- required a root category in the create UI;
+- supported optional child category and four price types;
+- created a draft under the active identity;
+- immediately updated counters and the owner list;
+- displayed localized category labels, location and price;
+- kept images, editing, lifecycle, deletion and public services outside this patch;
+- production build passes.
+
+Next isolated service patch:
+
+1. add editing for an existing service draft;
+2. reuse the same validated fields and category selector;
+3. lock the form to one service operation at a time;
+4. verify active-identity isolation and persistence;
+5. leave publish/archive controls for the following lifecycle patch.

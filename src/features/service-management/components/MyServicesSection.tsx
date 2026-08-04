@@ -2,17 +2,15 @@
 
 import {
   useEffect,
+  useMemo,
   useState,
 } from "react";
 import type {
   Service,
   ServiceStatus,
 } from "../../../entities/service/model/types";
-import {
-  EMPTY_SERVICE_CATEGORY_SELECTION,
-  type ServiceCategorySelection,
-} from "../../../entities/service-category/model/types";
-import ServiceCategorySelector from "../../service-category-selection/components/ServiceCategorySelector";
+import { useServiceCategories } from "../../service-category-selection/model/useServiceCategories";
+import ServiceDraftCreateForm from "./ServiceDraftCreateForm";
 import { useMyServices } from "../model/useMyServices";
 
 const SERVICE_PREVIEW_LIMIT = 3;
@@ -99,11 +97,27 @@ function priceLabel(
 }
 
 function serviceMeta(
-  service: Service
+  service: Service,
+  categoryLabelByCode:
+    Map<string, string>
 ): string {
+  const rootLabel =
+    service.category
+      ? categoryLabelByCode.get(
+          service.category
+        ) || null
+      : null;
+
+  const childLabel =
+    service.subcategory
+      ? categoryLabelByCode.get(
+          service.subcategory
+        ) || null
+      : null;
+
   const categoryLabel = [
-    service.category,
-    service.subcategory,
+    rootLabel,
+    childLabel,
   ]
     .filter(Boolean)
     .join(" · ");
@@ -147,8 +161,11 @@ function LoadingServices() {
 
 function ServiceRow({
   service,
+  categoryLabelByCode,
 }: {
   service: Service;
+  categoryLabelByCode:
+    Map<string, string>;
 }) {
   return (
     <article className="grid min-w-0 gap-4 rounded-[22px] border border-neutral-200 bg-[#fbfbfa] p-4 sm:grid-cols-[96px_minmax(0,1fr)_auto] sm:items-center">
@@ -186,7 +203,10 @@ function ServiceRow({
         </h3>
 
         <p className="mt-1 break-words text-xs font-bold uppercase tracking-[0.12em] text-neutral-400">
-          {serviceMeta(service)}
+          {serviceMeta(
+            service,
+            categoryLabelByCode
+          )}
         </p>
 
         {service.description ? (
@@ -209,26 +229,38 @@ export default function MyServicesSection() {
     services,
     loading,
     error,
+    savingServiceId,
     refresh,
+    saveService,
+    clearError,
   } = useMyServices();
+
+  const {
+    categories:
+      serviceCategories,
+  } = useServiceCategories();
+
+  const categoryLabelByCode =
+    useMemo(
+      () =>
+        new Map(
+          serviceCategories.map(
+            (category) => [
+              category.code,
+              category.labelEt,
+            ]
+          )
+        ),
+      [serviceCategories]
+    );
 
   const [
     showAll,
     setShowAll,
   ] = useState(false);
 
-  const [
-    categoryPreview,
-    setCategoryPreview,
-  ] = useState<ServiceCategorySelection>({
-    ...EMPTY_SERVICE_CATEGORY_SELECTION,
-  });
-
   useEffect(() => {
     setShowAll(false);
-    setCategoryPreview({
-      ...EMPTY_SERVICE_CATEGORY_SELECTION,
-    });
   }, [activeIdentityId]);
 
   const publishedCount =
@@ -331,26 +363,19 @@ export default function MyServicesSection() {
       {!loading &&
       !error &&
       activeIdentityId ? (
-        <section className="mt-5 rounded-[22px] border border-neutral-200 bg-[#fbfbfa] p-4 sm:p-5">
-          <p className="text-xs font-black uppercase tracking-[0.18em] text-emerald-700">
-            Teenuse lisamise ettevalmistus
-          </p>
-
-          <h3 className="mt-2 text-lg font-black">
-            Vali tulevase teenuse rubriik
-          </h3>
-
-          <p className="mt-2 max-w-2xl text-sm leading-6 text-neutral-600">
-            See valik loeb Selqiro globaalset teenuste rubriigipuud.
-            Valikut ei salvestata ja teenust veel ei looda.
-          </p>
-
-          <ServiceCategorySelector
-            value={categoryPreview}
-            onChange={setCategoryPreview}
-            className="mt-4"
-          />
-        </section>
+        <ServiceDraftCreateForm
+          activeIdentityId={
+            activeIdentityId
+          }
+          saving={
+            savingServiceId ===
+            "new"
+          }
+          onCreate={saveService}
+          onClearError={
+            clearError
+          }
+        />
       ) : null}
 
       {loading ? (
@@ -417,6 +442,9 @@ export default function MyServicesSection() {
               <ServiceRow
                 key={service.id}
                 service={service}
+                categoryLabelByCode={
+                  categoryLabelByCode
+                }
               />
             )
           )}
