@@ -6542,3 +6542,16 @@ Teenuse loomise esimene kirjutav etapp on valmis ja brauseris kontrollitud:
 - pildid, muutmine, staatuse muutmine, kustutamine ja avaliku profiili teenused jäid eraldi etappidesse.
 
 Brauseris loodi edukalt teenus „Murutraktorite hooldus ja remont”. Loendur näitas ühte mustandit, kaart kuvati inimloetava rubriigi, Paide asukoha ja tunnitasuga ning teenus jäi omaniku haldusvaatesse.
+
+## 2026-08-04 – Minu ala tootenäidise kaardi paigutusparandus
+
+Pika tootenäidise kirjeldusega halduskaart ei venita enam pilti kogu tekstiveeru kõrguseks:
+
+- desktopi pildiala on fikseeritud 140 piksli kõrgusele;
+- grid joondab pildi ja sisu kaardi ülaossa;
+- pildi `object-cover` proportsioonid säilisid;
+- kirjeldus kuvatakse halduskaardil nelja rea eelvaatena;
+- täielik kirjeldus säilib andmebaasis ja on endiselt avatav nupu „Muuda” kaudu;
+- lühikeste kirjelduste, staatuse, tegevusnuppude ja mobiilivaate loogikat ei muudetud.
+
+Brauseritest kinnitas, et pika tekstiga kaart on taas kompaktne ja pilt ei veni.

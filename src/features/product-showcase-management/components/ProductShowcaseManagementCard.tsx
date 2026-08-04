@@ -805,9 +805,9 @@ export default function ProductShowcaseManagementCard() {
             return (
               <article
                 key={showcase.id}
-                className="grid min-w-0 gap-4 rounded-[22px] border border-neutral-200 bg-[#fbfbfa] p-4 md:grid-cols-[140px_minmax(0,1fr)]"
+                className="grid min-w-0 gap-4 rounded-[22px] border border-neutral-200 bg-[#fbfbfa] p-4 md:grid-cols-[140px_minmax(0,1fr)] md:items-start"
               >
-                <div className="h-28 min-w-0 overflow-hidden rounded-[18px] bg-gradient-to-br from-neutral-100 to-neutral-200 md:h-full md:min-h-28">
+                <div className="h-28 min-w-0 overflow-hidden rounded-[18px] bg-gradient-to-br from-neutral-100 to-neutral-200 md:h-[140px] md:self-start">
                   {showcase.imageUrl ? (
                     <img
                       src={showcase.imageUrl}
@@ -853,7 +853,7 @@ export default function ProductShowcaseManagementCard() {
                   </div>
 
                   {showcase.description ? (
-                    <p className="mt-2 break-words text-sm leading-6 text-neutral-600">
+                    <p className="line-clamp-4 mt-2 break-words text-sm leading-6 text-neutral-600">
                       {showcase.description}
                     </p>
                   ) : (

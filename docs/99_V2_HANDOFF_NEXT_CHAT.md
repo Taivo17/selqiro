@@ -1049,3 +1049,14 @@ Next isolated service patch:
 3. lock the form to one service operation at a time;
 4. verify active-identity isolation and persistence;
 5. leave publish/archive controls for the following lifecycle patch.
+
+## 2026-08-04 – My Area showcase card layout fix
+
+Completed and browser-tested:
+
+- stopped a long showcase description from stretching the management image;
+- fixed desktop media height at 140 px;
+- top-aligned the media and content columns;
+- clamped the management description to four lines;
+- retained the full text in the existing edit form;
+- production build passes.

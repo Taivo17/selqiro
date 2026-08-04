@@ -2878,3 +2878,11 @@ Service creation now follows the established entity → feature → UI boundary.
 `ServiceDraftCreateForm.tsx` owns create-only form state and validation. The form deliberately excludes images, coordinates, editing, lifecycle transitions and deletion.
 
 The management list resolves stored category codes through the global taxonomy read boundary rather than displaying machine codes.
+
+### Product-showcase management preview geometry — 2026-08-04
+
+The owner management card treats image geometry and textual content independently.
+
+A long `product_showcases.description` may contain up to the database limit, but it must not control the image-column height. Desktop cards therefore use a fixed 140 px media frame with top alignment, while the management description is a four-line preview.
+
+The canonical full description remains unchanged and is exposed by the edit workflow. This is a presentation-only boundary; no product-showcase data or public-profile behavior changed.

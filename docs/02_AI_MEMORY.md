@@ -2631,3 +2631,17 @@ Architecture and behavior:
 - edit, publish/archive, images, deletion and public-profile rendering remain separate patches.
 
 Manual verification created `Murutraktorite hooldus ja remont` as a draft and displayed the expected counters, taxonomy labels, Paide location and hourly price.
+
+## 2026-08-04 — My Area showcase card stretch fix
+
+`ProductShowcaseManagementCard` no longer stretches its image column to match an arbitrarily long description.
+
+Rules:
+
+- desktop preview image height is fixed at 140 px;
+- grid items align to the top;
+- the management-card description is clamped to four lines;
+- full content remains available through the existing edit form;
+- public-profile showcase description behavior is unchanged.
+
+Manual browser verification passed.
