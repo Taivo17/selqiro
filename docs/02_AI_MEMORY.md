@@ -2731,3 +2731,27 @@ Command rules:
 - deleting the last image is valid and clears `services.image_url`.
 
 Anon cannot execute these functions. The local authenticated E2E suite passed before the migration was applied to production. Browser upload and management UI are not implemented yet.
+
+## 2026-08-05 — V2 service image data layer
+
+Service-image data access is separated from UI code:
+
+- model: `src/entities/service/model/image.ts`;
+- browser API: `src/entities/service/api/serviceImages.ts`;
+- authenticated delete route: `app/api/v2/service-images/delete/route.ts`.
+
+Important invariants:
+
+- browser code never receives the service-role key;
+- uploads use the existing content-image validation rules;
+- Storage paths are rooted under authenticated user ID and service ID;
+- database registration uses `add_my_service_image_v2`;
+- upload compensation may remove the new Storage object only before successful RPC registration;
+- after the RPC commit, mapping or response-validation failures must not delete the object, because the database already references it;
+- primary-image changes use `set_my_service_primary_image_v2`;
+- delete requests send only service ID and image ID;
+- the server obtains the trusted Storage path from `delete_my_service_image_v2`;
+- the owner RPC runs with the caller token, while Storage cleanup alone uses the service-role client;
+- a failed Storage cleanup is explicit and does not disguise the successful database deletion.
+
+Next step is a draft-only responsive service-image manager connected to the service-management view.

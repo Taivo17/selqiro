@@ -2957,3 +2957,28 @@ The command boundary proves:
 `delete_my_service_image_v2` deliberately returns the deleted `storage_path` and URL manifest rather than deleting the Storage object inside PostgreSQL. The browser data layer must remove the object after the database command succeeds. If registration fails after an upload, the browser data layer must compensate by removing the newly uploaded object.
 
 The service-image gallery is optional, so deletion of the final image is allowed and clears the denormalized primary-image cache.
+
+### Service-image browser/server data boundary — 2026-08-05
+
+Service-image mutation uses two deliberately asymmetric multi-step flows.
+
+Upload flow:
+
+1. validate the browser file;
+2. upload it to `service-images`;
+3. derive its public URL;
+4. register it through `add_my_service_image_v2`;
+5. compensate by deleting the Storage object only when registration has not committed.
+
+The `databaseRegistered` boundary prevents a post-commit mapper or response-validation error from deleting an object that is already referenced by `service_images` and possibly by `services.image_url`.
+
+Delete flow:
+
+1. browser sends only service ID and image ID with its access token;
+2. the Node route validates the token;
+3. a user-scoped Supabase client calls `delete_my_service_image_v2`;
+4. the RPC returns the trusted Storage path after ownership and draft-state checks;
+5. the route validates the returned path shape;
+6. a service-role client removes only that Storage object.
+
+Database deletion is authoritative. Storage cleanup failure is returned as `storageCleanupFailed`, producing an orphaned object rather than a broken database reference. A later cleanup job can safely remove such orphans.

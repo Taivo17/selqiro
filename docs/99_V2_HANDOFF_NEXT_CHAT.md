@@ -1166,3 +1166,31 @@ Next isolated patch:
 7. add a draft-only responsive `ServiceImageManager`;
 8. update service cards locally without a page reload;
 9. keep public-profile service rendering and service discovery separate.
+
+## 2026-08-05 – Service-image data-layer checkpoint
+
+Completed:
+
+- added the service-image TypeScript model and row mapper;
+- added deterministic image sorting;
+- added image loading;
+- added validated Storage upload and RPC registration;
+- hardened pre-commit upload compensation;
+- added primary-image mutation;
+- added an authenticated server delete route;
+- kept the service-role key server-only;
+- prevented client-provided Storage paths;
+- exposed Storage cleanup failure separately;
+- production build passes.
+
+Next isolated patch:
+
+1. create a draft-only `ServiceImageManager`;
+2. load images when the manager opens;
+3. allow selecting multiple JPG/PNG/WEBP files within the remaining ten-image limit;
+4. display responsive thumbnails and the current primary image;
+5. set a primary image without reloading the page;
+6. allow deleting the final optional image;
+7. warn when database deletion succeeded but Storage cleanup failed;
+8. update the parent service card's `imageUrl` immediately;
+9. keep published and archived service cards read-only.

@@ -6631,3 +6631,24 @@ Teenusepiltide serveripoolne kirjutuskiht on valmis, lokaalse autentitud E2E tes
 - brauseri üleslaadimise ja pildihalduse UI jäi järgmisse eraldiseisvasse etappi.
 
 Kohalik E2E test kontrollis 10 pildi lisamist, 11. pildi tagasilükkamist, arhiveeritud teenuse kaitset, põhipildi vahetamist, põhipildi kustutamise fallback'i, Storage'i manifesti ning viimase pildi eemaldamist. Production build, linked dry run, tootmismigratsioon, migratsiooniajalugu, post-push dry run ja production-skeemi kontroll läbisid.
+
+## 2026-08-05 – V2 teenusepiltide TypeScripti andmekiht
+
+Teenusepiltide browser- ja serveriandmekiht on loodud:
+
+- lisati `ServiceImage` ja `ServiceImageRow` mudelid;
+- lisati andmebaasiridade range mapper ning deterministlik sortimine;
+- lisati teenusepiltide laadimine;
+- lisati JPG-, PNG- ja WEBP-failide kontroll ning 10 MB failipiirang;
+- failid laaditakse `service-images` bucket'isse teega `<user-id>/<service-id>/<fail>`;
+- lisamine registreeritakse `add_my_service_image_v2` RPC kaudu;
+- enne edukat RPC commit'i koristatakse ebaõnnestunud üleslaadimise Storage'i objekt;
+- pärast edukat RPC commit'i Storage'i objekti enam kompenseerivalt ei kustutata, et andmebaasirida ei jääks puuduvale failile viitama;
+- põhipilti muudetakse `set_my_service_primary_image_v2` RPC kaudu;
+- kustutamine käib autenditud Next.js route'i kaudu;
+- route kutsub omaniku RPC-d kasutaja Bearer-tokeniga ja kasutab `service_role` klienti ainult RPC tagastatud Storage'i objekti eemaldamiseks;
+- klient ei saa Storage'i teed kustutamisroute'ile ette anda;
+- Storage'i koristamise ebaõnnestumine tagastatakse eraldi `storageCleanupFailed` lipuna;
+- production build läbis.
+
+Teenusepiltide haldusliidest selles etapis veel ei lisatud.
