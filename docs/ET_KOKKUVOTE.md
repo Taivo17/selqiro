@@ -6592,3 +6592,22 @@ Teenuse olekute elutsükkel on valmis ja brauseris täielikult kontrollitud:
 - pildid, kustutamine, avaliku profiili teenusevaade ja teenuste otsing jäid eraldi etappidesse.
 
 Brauseritest läbis kogu ahela: mustand avaldati, avalik teenus arhiveeriti ja arhiveeritud teenus taastati mustandiks. Iga sammu järel kontrolliti olekumärki, tegevusnuppe, loendureid ja püsivust pärast lehe värskendamist.
+
+## 2026-08-05 – Turvaline V2 teenusepiltide vundament
+
+Teenusepiltide andmebaasi- ja Storage-vundament on loodud, lokaalselt kontrollitud ning tootmisandmebaasi rakendatud:
+
+- loodi identity-owned `public.service_images` tabel;
+- iga pildirida seotakse teenuse, identiteedi ja üleslaadijaga;
+- piltidel on `original_url`, tulevaste tuletiste `medium_url` ja `thumb_url`, Storage'i tee, järjestus ning põhipildi märge;
+- teenusel saab olla maksimaalselt üks `is_primary = true` pilt;
+- trigger tõkestab pildi sidumise teise identiteedi teenusega;
+- anonüümne lugemine on lubatud ainult avaldatud teenuse piltidele;
+- identiteedi liikmed saavad lugeda ka enda mustandi ja arhiveeritud teenuse pilte;
+- tabelisse kirjutamine jääb tulevaste SECURITY DEFINER RPC-de kaudu tehtavaks;
+- loodi avalik `service-images` bucket 10 MB failipiirangu ning JPG, PNG ja WEBP tüüpidega;
+- Storage'i üleslaadimine, loetlemine ja kustutamine on lubatud ainult sisse logitud kasutaja enda tee all ning ainult aktiivse identiteedi mustandteenusele;
+- teenuse pilt jääb vabatahtlikuks ja lifecycle ei nõua avaldamiseks pilti;
+- selles etapis ei lisatud veel pildi registreerimise, põhipildi valimise ega kustutamise RPC-sid ega kasutajaliidest.
+
+Kohalik reset, struktuuri-, RLS-, Storage- ja õiguste kontroll, production build, linked dry run, tootmismigratsioon, migratsiooniajalugu, production-skeem ning bucket'i seaded läbisid kontrolli.

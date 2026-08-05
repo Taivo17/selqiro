@@ -2919,3 +2919,22 @@ Before the RPC call, the feature verifies that the service is present in the act
 The database remains authoritative for ownership, accepted statuses and `published_at`. The UI transition matrix prevents confusing arbitrary jumps but does not replace server authorization.
 
 Public reading, image management, deletion and service discovery are separate architectural boundaries.
+
+### Service image persistence boundary — 2026-08-05
+
+`public.service_images` is the canonical gallery table for services. `services.image_url` remains the denormalized primary-image cache used by compact cards and future discovery reads.
+
+The image foundation follows these boundaries:
+
+1. image rows are identity-owned and reference both the service and uploader;
+2. a trigger rejects cross-identity parent/image combinations;
+3. one partial unique index permits only one primary image per service;
+4. public table reads require a published parent service;
+5. owner reads use identity membership;
+6. direct table writes are unavailable to anon and authenticated clients;
+7. Storage writes require the authenticated user's path, active identity ownership and a draft parent service;
+8. bucket validation limits uploads to JPEG, PNG or WEBP and 10 MB.
+
+The bucket is public for efficient image delivery, while object mutation remains authorization-controlled. The next command boundary must register uploaded objects through SECURITY DEFINER RPCs, synchronize `services.image_url`, enforce the ten-image limit and select deterministic fallback primaries after deletion.
+
+A service is allowed to exist and be published without an image.

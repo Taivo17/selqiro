@@ -2685,3 +2685,26 @@ Implementation rules:
 - counters and cards update after a successful server response without reload.
 
 Manual browser verification passed for publish, archive and restore-to-draft, including persistence after refresh. Images, deletion, public-profile service rendering and service discovery remain later slices.
+
+## 2026-08-05 — Secure V2 service image foundation
+
+Services now have a dedicated identity-owned image persistence boundary.
+
+Database contract:
+
+- `public.service_images` stores service gallery rows;
+- each row contains `service_id`, `identity_id`, uploader ID, original/medium/thumb URLs, Storage path, order and primary state;
+- one partial unique index allows at most one primary image per service;
+- an identity-integrity trigger proves the image identity matches the parent service;
+- anonymous reads are limited to images whose parent service is published;
+- authenticated identity members may read their own service image rows;
+- ordinary clients have no direct table write privilege.
+
+Storage contract:
+
+- bucket: `service-images`;
+- public delivery, 10 MB maximum, JPEG/PNG/WEBP;
+- object path: authenticated user ID / service ID / filename;
+- insert, select and delete are limited to the current user's path and an active-identity service in `draft` status.
+
+Service images remain optional. This foundation intentionally does not yet include image RPCs or management UI.

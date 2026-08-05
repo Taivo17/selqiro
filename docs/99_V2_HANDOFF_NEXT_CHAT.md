@@ -1110,3 +1110,31 @@ Next isolated service patch:
 4. display category, subcategory, description preview, price and privacy-safe location;
 5. coordinate service expansion with the existing product-showcase and listing sections;
 6. keep service images, deletion and global service discovery separate.
+
+## 2026-08-05 – Service image foundation checkpoint
+
+Completed and production-applied:
+
+- added `public.service_images`;
+- added service, identity and uploader ownership fields;
+- added deterministic ordering and a single-primary constraint;
+- added cross-identity integrity validation;
+- added public-published and owner-identity read policies;
+- removed ordinary direct table writes;
+- added the `service-images` public bucket;
+- configured 10 MB and JPEG/PNG/WEBP limits;
+- added active-identity draft-only Storage upload, list and delete policies;
+- verified local schema, RLS, bucket and privilege behavior;
+- verified linked production migration history, public/storage schema and bucket settings;
+- production build passes.
+
+Next isolated patch:
+
+1. add `add_my_service_image_v2`;
+2. enforce a server-side maximum of 10 images;
+3. add `set_my_service_primary_image_v2`;
+4. add `delete_my_service_image_v2`;
+5. synchronize `services.image_url`;
+6. allow deleting the last image because service images are optional;
+7. reindex remaining rows and choose a deterministic fallback primary;
+8. keep the browser upload UI for the following patch.
