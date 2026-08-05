@@ -1084,3 +1084,29 @@ Next isolated service patch:
 3. add Archived → Draft restoration;
 4. keep deletion, images and public-profile rendering separate;
 5. verify public read behavior only after lifecycle controls are complete.
+
+## 2026-08-05 – Service lifecycle checkpoint
+
+Completed and browser-tested:
+
+- added `setMyServiceStatus` around `set_my_service_status_v2`;
+- added guarded `changeStatus` to `useMyServices`;
+- implemented Draft → Publish;
+- implemented Published → Archive;
+- implemented Archived → Draft restoration;
+- prevented parallel create, edit and status operations;
+- updated cards and counters without reload;
+- kept the edit action draft-only;
+- added lifecycle success, error and busy feedback;
+- verified all three transitions and persistence after refresh;
+- production build passes;
+- no migration was required.
+
+Next isolated service patch:
+
+1. add the public-profile service read model and API;
+2. load only `published` services for the profile identity;
+3. replace the empty public-profile service placeholder with a responsive section;
+4. display category, subcategory, description preview, price and privacy-safe location;
+5. coordinate service expansion with the existing product-showcase and listing sections;
+6. keep service images, deletion and global service discovery separate.

@@ -43,6 +43,76 @@ function statusClass(
   return "border-amber-100 bg-amber-50 text-amber-700";
 }
 
+function nextServiceStatus(
+  status: ServiceStatus
+): ServiceStatus {
+  if (status === "draft") {
+    return "published";
+  }
+
+  if (status === "published") {
+    return "archived";
+  }
+
+  return "draft";
+}
+
+function lifecycleActionLabel(
+  status: ServiceStatus
+): string {
+  if (status === "draft") {
+    return "Avalda";
+  }
+
+  if (status === "published") {
+    return "Arhiveeri";
+  }
+
+  return "Taasta mustandiks";
+}
+
+function lifecycleBusyLabel(
+  status: ServiceStatus
+): string {
+  if (status === "draft") {
+    return "Avaldan...";
+  }
+
+  if (status === "published") {
+    return "Arhiveerin...";
+  }
+
+  return "Taastan...";
+}
+
+function lifecycleActionClass(
+  status: ServiceStatus
+): string {
+  if (status === "draft") {
+    return "border-emerald-600 bg-emerald-600 text-white hover:bg-emerald-700";
+  }
+
+  if (status === "published") {
+    return "border-neutral-300 bg-white text-neutral-700 hover:bg-neutral-100";
+  }
+
+  return "border-amber-200 bg-amber-50 text-amber-800 hover:bg-amber-100";
+}
+
+function lifecycleSuccessMessage(
+  service: Service
+): string {
+  if (service.status === "published") {
+    return `Teenus „${service.title}” on nüüd avalik.`;
+  }
+
+  if (service.status === "archived") {
+    return `Teenus „${service.title}” arhiveeriti.`;
+  }
+
+  return `Teenus „${service.title}” taastati mustandiks.`;
+}
+
 function formatCurrency(
   amount: number,
   currency: string
@@ -230,8 +300,10 @@ export default function MyServicesSection() {
     loading,
     error,
     savingServiceId,
+    changingStatusServiceId,
     refresh,
     saveService,
+    changeStatus,
     clearError,
   } = useMyServices();
 
@@ -273,10 +345,26 @@ export default function MyServicesSection() {
     null
   );
 
+  const [
+    statusSuccessMessage,
+    setStatusSuccessMessage,
+  ] = useState<string | null>(
+    null
+  );
+
+  const [
+    statusErrorMessage,
+    setStatusErrorMessage,
+  ] = useState<string | null>(
+    null
+  );
+
   useEffect(() => {
     setShowAll(false);
     setEditingServiceId(null);
     setEditSuccessMessage(null);
+    setStatusSuccessMessage(null);
+    setStatusErrorMessage(null);
   }, [activeIdentityId]);
 
   const publishedCount =
@@ -313,6 +401,42 @@ export default function MyServicesSection() {
       SERVICE_PREVIEW_LIMIT ||
     showAll;
 
+  const actionBusy =
+    savingServiceId !== null ||
+    changingStatusServiceId !==
+      null;
+
+  async function handleStatusChange(
+    service: Service
+  ) {
+    setEditSuccessMessage(null);
+    setStatusSuccessMessage(null);
+    setStatusErrorMessage(null);
+    clearError();
+
+    try {
+      const updatedService =
+        await changeStatus(
+          service.id,
+          nextServiceStatus(
+            service.status
+          )
+        );
+
+      setStatusSuccessMessage(
+        lifecycleSuccessMessage(
+          updatedService
+        )
+      );
+    } catch (error) {
+      setStatusErrorMessage(
+        error instanceof Error
+          ? error.message
+          : "Teenuse staatust ei saanud muuta."
+      );
+    }
+  }
+
   return (
     <section className="min-w-0 overflow-hidden rounded-[30px] border border-black/5 bg-white p-5 shadow-sm sm:p-6">
       <div className="flex min-w-0 flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
@@ -326,13 +450,15 @@ export default function MyServicesSection() {
           </h2>
 
           <p className="mt-2 max-w-2xl break-words text-sm leading-6 text-neutral-600">
-            Siin saad luua ja muuta aktiivse identiteedi teenuse mustandeid.
-            Avaldamine, pildid ja kustutamine lisatakse eraldi sammudena.
+            Siin saad luua, muuta, avaldada ja arhiveerida aktiivse identiteedi teenuseid.
+            Pildid, kustutamine ja avaliku profiili teenusevaade lisatakse eraldi sammudena.
           </p>
         </div>
 
         {canToggle &&
         editingServiceId ===
+          null &&
+        changingStatusServiceId ===
           null &&
         !loading &&
         !error ? (
@@ -407,6 +533,24 @@ export default function MyServicesSection() {
               className="mt-4 rounded-xl border border-emerald-100 bg-emerald-50 px-3 py-2.5 text-sm font-semibold leading-6 text-emerald-800"
             >
               {editSuccessMessage}
+            </p>
+          ) : null}
+
+          {statusSuccessMessage ? (
+            <p
+              role="status"
+              className="mt-4 rounded-xl border border-emerald-100 bg-emerald-50 px-3 py-2.5 text-sm font-semibold leading-6 text-emerald-800"
+            >
+              {statusSuccessMessage}
+            </p>
+          ) : null}
+
+          {statusErrorMessage ? (
+            <p
+              role="alert"
+              className="mt-4 rounded-xl border border-red-100 bg-red-50 px-3 py-2.5 text-sm font-semibold leading-6 text-red-800"
+            >
+              {statusErrorMessage}
             </p>
           ) : null}
         </>
@@ -484,29 +628,62 @@ export default function MyServicesSection() {
                     }
                   />
 
-                  {service.status ===
-                    "draft" &&
-                  editingServiceId ===
+                  {editingServiceId ===
                     null ? (
-                    <div className="mt-2 flex justify-end">
+                    <div className="mt-2 flex flex-wrap justify-end gap-2">
+                      {service.status ===
+                      "draft" ? (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setEditingServiceId(
+                              service.id
+                            );
+                            setEditSuccessMessage(
+                              null
+                            );
+                            setStatusSuccessMessage(
+                              null
+                            );
+                            setStatusErrorMessage(
+                              null
+                            );
+                            clearError();
+                          }}
+                          disabled={
+                            actionBusy
+                          }
+                          className="rounded-full border border-neutral-200 bg-white px-4 py-2 text-xs font-black text-neutral-700 shadow-sm transition hover:border-neutral-300 disabled:cursor-wait disabled:opacity-50"
+                        >
+                          Muuda
+                        </button>
+                      ) : null}
+
                       <button
                         type="button"
-                        onClick={() => {
-                          setEditingServiceId(
-                            service.id
-                          );
-                          setEditSuccessMessage(
-                            null
-                          );
-                          clearError();
-                        }}
-                        disabled={
-                          savingServiceId !==
-                          null
+                        onClick={() =>
+                          void handleStatusChange(
+                            service
+                          )
                         }
-                        className="rounded-full border border-neutral-200 bg-white px-4 py-2 text-xs font-black text-neutral-700 shadow-sm transition hover:border-neutral-300 disabled:cursor-wait disabled:opacity-50"
+                        disabled={
+                          actionBusy
+                        }
+                        className={[
+                          "rounded-full border px-4 py-2 text-xs font-black shadow-sm transition disabled:cursor-wait disabled:opacity-50",
+                          lifecycleActionClass(
+                            service.status
+                          ),
+                        ].join(" ")}
                       >
-                        Muuda
+                        {changingStatusServiceId ===
+                        service.id
+                          ? lifecycleBusyLabel(
+                              service.status
+                            )
+                          : lifecycleActionLabel(
+                              service.status
+                            )}
                       </button>
                     </div>
                   ) : null}
@@ -535,6 +712,12 @@ export default function MyServicesSection() {
                       }
                       onCancelEdit={() => {
                         setEditingServiceId(
+                          null
+                        );
+                        setStatusSuccessMessage(
+                          null
+                        );
+                        setStatusErrorMessage(
                           null
                         );
                         clearError();

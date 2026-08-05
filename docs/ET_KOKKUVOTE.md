@@ -6573,3 +6573,22 @@ Olemasoleva teenuse mustandi muutmise etapp on valmis ja brauseris kontrollitud:
 - avaldamine, arhiveerimine, pildihaldus, kustutamine ja avaliku profiili teenused jäid eraldi etappidesse.
 
 Brauseritest kinnitas mustandi väärtuste muutmise, eduteate, säiliva mustandistaatuse ja lehe värskendamise järel püsivad andmed. Avaldatud ning arhiveeritud teenuse käsitsi kontroll jäi lifecycle-etappi, sest nende staatuste kasutajaliidest ei ole veel lisatud.
+
+## 2026-08-05 – V2 teenuse olekute elutsükkel
+
+Teenuse olekute elutsükkel on valmis ja brauseris täielikult kontrollitud:
+
+- lisati `setMyServiceStatus`, mis kasutab ainult `set_my_service_status_v2` RPC-d;
+- lubatud olekusiirded on `draft → published`, `published → archived` ja `archived → draft`;
+- hook kontrollib enne kirjutamist aktiivset identiteeti, teenuse omandit, praegust olekut ja lubatud järgmist olekut;
+- samaaegne loomine, muutmine või teine olekumuutus on tõkestatud;
+- pärast RPC-d kontrollitakse tagastatud teenuse ID-d, identiteeti ja olekut;
+- avaldamise korral kontrollitakse ka `published_at` olemasolu;
+- olekupõhised tegevused on „Avalda”, „Arhiveeri” ja „Taasta mustandiks”;
+- „Muuda” jääb nähtavaks ainult mustandteenusele;
+- kaardi olek, tegevusnupud ja loendurid uuenevad kohe ilma lehe värskendamiseta;
+- õnnestumis- ja veateated kuvatakse teenuste sektsioonis;
+- uut migratsiooni ei olnud vaja, sest tabel, olekud ja turvaline RPC olid tootmisbaasis juba olemas;
+- pildid, kustutamine, avaliku profiili teenusevaade ja teenuste otsing jäid eraldi etappidesse.
+
+Brauseritest läbis kogu ahela: mustand avaldati, avalik teenus arhiveeriti ja arhiveeritud teenus taastati mustandiks. Iga sammu järel kontrolliti olekumärki, tegevusnuppe, loendureid ja püsivust pärast lehe värskendamist.

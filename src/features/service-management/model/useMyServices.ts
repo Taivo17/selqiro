@@ -10,9 +10,11 @@ import { useAuth } from "../../../../lib/useAuth";
 import { getActiveIdentity } from "../../../entities/identity/api/getActiveIdentity";
 import { getMyServices } from "../../../entities/service/api/getMyServices";
 import { saveMyService } from "../../../entities/service/api/saveMyService";
+import { setMyServiceStatus } from "../../../entities/service/api/setMyServiceStatus";
 import type {
   SaveServiceInput,
   Service,
+  ServiceStatus,
 } from "../../../entities/service/model/types";
 
 const ACTIVE_IDENTITY_CHANGED_EVENT =
@@ -29,9 +31,16 @@ export type MyServicesState = {
     | string
     | "new"
     | null;
+  changingStatusServiceId:
+    | string
+    | null;
   refresh: () => Promise<void>;
   saveService: (
     input: SaveServiceInput
+  ) => Promise<Service>;
+  changeStatus: (
+    serviceId: string,
+    status: ServiceStatus
   ) => Promise<Service>;
   clearError: () => void;
 };
@@ -89,6 +98,15 @@ function upsertService(
   ]);
 }
 
+const NEXT_SERVICE_STATUS: Record<
+  ServiceStatus,
+  ServiceStatus
+> = {
+  draft: "published",
+  published: "archived",
+  archived: "draft",
+};
+
 function resolveError(
   error: unknown,
   fallback: string
@@ -136,6 +154,16 @@ export function useMyServices(): MyServicesState {
   >(null);
 
   const savingRef =
+    useRef(false);
+
+  const [
+    changingStatusServiceId,
+    setChangingStatusServiceId,
+  ] = useState<string | null>(
+    null
+  );
+
+  const statusChangingRef =
     useRef(false);
 
   const loadRequestRef =
@@ -322,9 +350,12 @@ export function useMyServices(): MyServicesState {
       );
     }
 
-    if (savingRef.current) {
+    if (
+      savingRef.current ||
+      statusChangingRef.current
+    ) {
       throw new Error(
-        "Teenuse salvestamine juba käib."
+        "Teine teenuse toiming juba käib."
       );
     }
 
@@ -387,6 +418,118 @@ export function useMyServices(): MyServicesState {
     }
   }
 
+  async function changeStatus(
+    serviceId: string,
+    status: ServiceStatus
+  ): Promise<Service> {
+    const activeIdentityId =
+      state.activeIdentityId;
+
+    if (!activeIdentityId) {
+      throw new Error(
+        "Aktiivne identiteet puudub."
+      );
+    }
+
+    const cleanServiceId =
+      serviceId.trim();
+
+    const existingService =
+      state.services.find(
+        (service) =>
+          service.id ===
+          cleanServiceId
+      ) || null;
+
+    if (!existingService) {
+      throw new Error(
+        "Teenust ei leitud aktiivse identiteedi alt."
+      );
+    }
+
+    const expectedStatus =
+      NEXT_SERVICE_STATUS[
+        existingService.status
+      ];
+
+    if (status !== expectedStatus) {
+      throw new Error(
+        "Valitud teenuse olekumuutus ei ole lubatud."
+      );
+    }
+
+    if (
+      savingRef.current ||
+      statusChangingRef.current
+    ) {
+      throw new Error(
+        "Teine teenuse toiming juba käib."
+      );
+    }
+
+    statusChangingRef.current = true;
+    setChangingStatusServiceId(
+      cleanServiceId
+    );
+
+    setState((current) => ({
+      ...current,
+      error: null,
+    }));
+
+    try {
+      const updatedService =
+        await setMyServiceStatus({
+          serviceId:
+            cleanServiceId,
+          status,
+        });
+
+      if (
+        updatedService.identityId !==
+        activeIdentityId
+      ) {
+        throw new Error(
+          "Andmebaas tagastas vale identiteedi teenuse."
+        );
+      }
+
+      if (
+        updatedService.id !==
+          existingService.id ||
+        updatedService.status !==
+          expectedStatus
+      ) {
+        throw new Error(
+          "Andmebaas tagastas ootamatu teenuse staatuse."
+        );
+      }
+
+      setState((current) => ({
+        ...current,
+        services:
+          upsertService(
+            current.services,
+            updatedService
+          ),
+        error: null,
+      }));
+
+      return updatedService;
+    } catch (error) {
+      throw resolveError(
+        error,
+        "Teenuse staatust ei saanud muuta."
+      );
+    } finally {
+      statusChangingRef.current =
+        false;
+      setChangingStatusServiceId(
+        null
+      );
+    }
+  }
+
   function clearError() {
     setState((current) => ({
       ...current,
@@ -397,8 +540,10 @@ export function useMyServices(): MyServicesState {
   return {
     ...state,
     savingServiceId,
+    changingStatusServiceId,
     refresh: loadServices,
     saveService,
+    changeStatus,
     clearError,
   };
 }

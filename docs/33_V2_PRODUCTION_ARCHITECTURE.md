@@ -2903,3 +2903,19 @@ After the RPC returns, the client verifies identity ownership and that the statu
 The current form does not own service image or coordinate fields. The API therefore reads and preserves those values during an edit so a partial form cannot silently erase data owned by later modules.
 
 Published and archived editing is intentionally unavailable. Status lifecycle remains a separate command and UI patch.
+
+### Service lifecycle command boundary — 2026-08-05
+
+Service lifecycle transitions use the existing security-definer `set_my_service_status_v2` RPC. Browser code does not update the `services` table directly.
+
+The client feature applies a deliberately narrow transition matrix:
+
+1. `draft` may transition only to `published`;
+2. `published` may transition only to `archived`;
+3. `archived` may transition only to `draft`.
+
+Before the RPC call, the feature verifies that the service is present in the active identity's loaded collection and that no create, edit or lifecycle write is already in progress. After the RPC returns, identity ownership, service ID and resulting status are verified before the local collection is updated.
+
+The database remains authoritative for ownership, accepted statuses and `published_at`. The UI transition matrix prevents confusing arbitrary jumps but does not replace server authorization.
+
+Public reading, image management, deletion and service discovery are separate architectural boundaries.

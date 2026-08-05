@@ -2663,3 +2663,25 @@ Rules and boundaries:
 - lifecycle transitions, service images, deletion and public rendering remain later patches.
 
 Manual browser verification passed for draft editing. Published and archived service behavior was not manually testable yet because lifecycle UI has not been implemented.
+
+## 2026-08-05 — V2 service lifecycle
+
+Service management now supports the complete constrained status loop:
+
+- `draft → published`;
+- `published → archived`;
+- `archived → draft`.
+
+Implementation rules:
+
+- `setMyServiceStatus` is the only entity command for lifecycle writes and calls `set_my_service_status_v2`;
+- the client validates service UUID and requested status;
+- `useMyServices.changeStatus` proves active-identity ownership from the loaded identity-scoped collection;
+- the requested status must equal the single allowed next status for the current service state;
+- create, edit and lifecycle writes share a mutual-exclusion boundary;
+- returned service identity, ID and status are verified before local upsert;
+- published results must contain `publishedAt`;
+- edit controls remain draft-only;
+- counters and cards update after a successful server response without reload.
+
+Manual browser verification passed for publish, archive and restore-to-draft, including persistence after refresh. Images, deletion, public-profile service rendering and service discovery remain later slices.
