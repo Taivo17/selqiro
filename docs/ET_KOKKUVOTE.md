@@ -6677,3 +6677,18 @@ Lisaks muudeti Minu ala teenuse- ja tootenäidiste kaardid kitsal ekraanil kompa
 - tahvli- ja desktopipaigutus säilis.
 
 Production build läbis ning teenusepiltide lisamine, põhipildi vahetamine, kustutamine ja kitsas mobiilivaade kontrolliti brauseris.
+
+## 2026-08-05 – Mobiilse teenusepildi valija deploy-parandus
+
+Android/Xiaomi telefonis avanes galerii, kuid valitud pilt ei jõudnud enne parandust teenusepiltide töötlemisse. Paranduse deploy-versioon:
+
+- lubab süsteemsel fotovalijal avada kõik pildivormingud `accept="image/*"` kaudu;
+- ei nulli File input'i kohe pärast galerii sulgemist;
+- nullib valiku enne järgmist avamist ja pärast faili töötlemise lõppu;
+- tuvastab JPG-, PNG- ja WEBP-faili tüübi ka faililaiendi järgi;
+- proovib HEIC/HEIF faili brauseris JPG-ks teisendada;
+- vähendab väga suure mobiilifoto pikema külje kuni 3200 pikslini;
+- kuvab teisendusvea korral selge platvormineutraalse teate;
+- production build läbis.
+
+See checkpoint push'ib paranduse GitHubi, et Vercel saaks luua uue production deployment'i. Telefonitest tehakse pärast uue deployment'i valmimist.

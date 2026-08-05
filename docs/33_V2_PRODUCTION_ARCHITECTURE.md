@@ -3000,3 +3000,17 @@ Responsive management cards use a mobile-first two-column layout:
 - breakpoint restoration for tablet and desktop.
 
 The responsive change is presentation-only and does not alter service or product-showcase persistence contracts.
+
+### Mobile file-picker boundary — 2026-08-05
+
+System gallery selection and Storage upload are separate lifecycle phases. The source `<input type="file">` must retain its selected files until browser-side preparation has completed.
+
+The compatible sequence is:
+
+1. clear the old input value immediately before opening the picker;
+2. receive and copy the new `FileList`;
+3. prepare and validate each copied file;
+4. upload/register the prepared file;
+5. clear the input after the operation finishes.
+
+This avoids invalidating Android content-backed file handles too early while still allowing the same photo to be selected again. MIME inference and optional HEIC/HEIF conversion belong in the entity API, not in the React presentation component.

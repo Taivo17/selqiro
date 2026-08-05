@@ -198,23 +198,357 @@ function getImageErrorMessage(
   );
 }
 
+const APPLE_HIGH_EFFICIENCY_IMAGE_TYPES =
+  new Set([
+    "image/heic",
+    "image/heif",
+    "image/heic-sequence",
+    "image/heif-sequence",
+  ]);
+
+const STANDARD_IMAGE_TYPE_BY_EXTENSION:
+  Record<string, string> = {
+    jpg: "image/jpeg",
+    jpeg: "image/jpeg",
+    png: "image/png",
+    webp: "image/webp",
+  };
+
+function fileExtension(
+  fileName: string
+): string {
+  return (
+    fileName
+      .split(".")
+      .pop()
+      ?.trim()
+      .toLowerCase() || ""
+  );
+}
+
+function isAppleHighEfficiencyImage(
+  file: File
+): boolean {
+  const type =
+    file.type
+      .trim()
+      .toLowerCase();
+
+  const extension =
+    fileExtension(
+      file.name
+    );
+
+  return (
+    APPLE_HIGH_EFFICIENCY_IMAGE_TYPES
+      .has(type) ||
+    extension === "heic" ||
+    extension === "heif"
+  );
+}
+
+function withKnownStandardImageType(
+  file: File
+): File {
+  const extension =
+    fileExtension(
+      file.name
+    );
+
+  const inferredType =
+    STANDARD_IMAGE_TYPE_BY_EXTENSION[
+      extension
+    ];
+
+  if (
+    !inferredType ||
+    file.type === inferredType
+  ) {
+    return file;
+  }
+
+  return new File(
+    [
+      file,
+    ],
+    file.name,
+    {
+      type:
+        inferredType,
+      lastModified:
+        file.lastModified,
+    }
+  );
+}
+
+function imageFileBaseName(
+  fileName: string
+): string {
+  const withoutExtension =
+    fileName.replace(
+      /\.[^/.]+$/,
+      ""
+    );
+
+  const cleanName =
+    withoutExtension
+      .trim()
+      .replace(
+        /[^a-zA-Z0-9_-]+/g,
+        "-"
+      )
+      .replace(
+        /^[-_]+|[-_]+$/g,
+        ""
+      );
+
+  return (
+    cleanName ||
+    `mobile-photo-${Date.now()}`
+  );
+}
+
+async function loadBrowserImage(
+  file: File
+): Promise<{
+  image: HTMLImageElement;
+  objectUrl: string;
+}> {
+  const objectUrl =
+    URL.createObjectURL(
+      file
+    );
+
+  const image =
+    new Image();
+
+  try {
+    await new Promise<void>(
+      (
+        resolve,
+        reject
+      ) => {
+        image.onload =
+          () => resolve();
+
+        image.onerror =
+          () => {
+            reject(
+              new Error(
+                "Apple'i pildifaili ei saanud brauseris avada."
+              )
+            );
+          };
+
+        image.src =
+          objectUrl;
+      }
+    );
+
+    return {
+      image,
+      objectUrl,
+    };
+  } catch (error) {
+    URL.revokeObjectURL(
+      objectUrl
+    );
+
+    throw error;
+  }
+}
+
+async function canvasToJpegBlob(
+  canvas: HTMLCanvasElement
+): Promise<Blob> {
+  const blob =
+    await new Promise<
+      Blob | null
+    >((resolve) => {
+      canvas.toBlob(
+        resolve,
+        "image/jpeg",
+        0.88
+      );
+    });
+
+  if (!blob) {
+    throw new Error(
+      "Apple'i pildifaili JPG-ks teisendamine ebaõnnestus."
+    );
+  }
+
+  return blob;
+}
+
+async function convertAppleImageToJpeg(
+  file: File
+): Promise<File> {
+  const {
+    image,
+    objectUrl,
+  } =
+    await loadBrowserImage(
+      file
+    );
+
+  try {
+    const sourceWidth =
+      image.naturalWidth;
+
+    const sourceHeight =
+      image.naturalHeight;
+
+    if (
+      !sourceWidth ||
+      !sourceHeight
+    ) {
+      throw new Error(
+        "Apple'i pildifaili mõõtmeid ei saanud lugeda."
+      );
+    }
+
+    /*
+     * Suure eraldusvõimega telefoni HEIC/HEIF-fotod võivad
+     * mobiilibrauseri mälu kiiresti täita. Teenuse
+     * veebipildi jaoks piisab 3200 px pikemast küljest.
+     */
+    const maximumDimension =
+      3200;
+
+    const scale =
+      Math.min(
+        1,
+        maximumDimension /
+          Math.max(
+            sourceWidth,
+            sourceHeight
+          )
+      );
+
+    const targetWidth =
+      Math.max(
+        1,
+        Math.round(
+          sourceWidth *
+          scale
+        )
+      );
+
+    const targetHeight =
+      Math.max(
+        1,
+        Math.round(
+          sourceHeight *
+          scale
+        )
+      );
+
+    const canvas =
+      document.createElement(
+        "canvas"
+      );
+
+    canvas.width =
+      targetWidth;
+
+    canvas.height =
+      targetHeight;
+
+    const context =
+      canvas.getContext(
+        "2d"
+      );
+
+    if (!context) {
+      throw new Error(
+        "Brauser ei võimalda pildi teisendamist."
+      );
+    }
+
+    context.drawImage(
+      image,
+      0,
+      0,
+      targetWidth,
+      targetHeight
+    );
+
+    const blob =
+      await canvasToJpegBlob(
+        canvas
+      );
+
+    return new File(
+      [
+        blob,
+      ],
+      `${imageFileBaseName(
+        file.name
+      )}.jpg`,
+      {
+        type:
+          "image/jpeg",
+        lastModified:
+          file.lastModified ||
+          Date.now(),
+      }
+    );
+  } finally {
+    URL.revokeObjectURL(
+      objectUrl
+    );
+  }
+}
+
+async function prepareServiceImageFile(
+  file: File
+): Promise<File> {
+  if (
+    isAppleHighEfficiencyImage(
+      file
+    )
+  ) {
+    try {
+      return await convertAppleImageToJpeg(
+        file
+      );
+    } catch (error) {
+      const detail =
+        error instanceof Error &&
+        error.message
+          ? ` ${error.message}`
+          : "";
+
+      throw new Error(
+        `HEIC/HEIF pilti ei saanud brauseris JPG-ks teisendada.${detail} ` +
+        "Proovi telefoni kaamera seadetes kasutada JPEG/JPG vormingut või vali JPG/PNG/WEBP fail."
+      );
+    }
+  }
+
+  return withKnownStandardImageType(
+    file
+  );
+}
+
 function extensionFromFile(
   file: File
 ): string {
   const fromName =
-    file.name
-      .split(".")
-      .pop()
-      ?.toLowerCase();
+    fileExtension(
+      file.name
+    );
 
   if (
-    fromName &&
     [
       "jpg",
       "jpeg",
       "png",
       "webp",
-    ].includes(fromName)
+    ].includes(
+      fromName
+    )
   ) {
     return fromName === "jpeg"
       ? "jpg"
@@ -379,8 +713,13 @@ export async function uploadServiceImage(
       "Teenuse ID"
     );
 
+  const preparedFile =
+    await prepareServiceImageFile(
+      input.file
+    );
+
   validateContentImageFile(
-    input.file
+    preparedFile
   );
 
   const {
@@ -406,7 +745,7 @@ export async function uploadServiceImage(
     buildServiceImageStoragePath({
       userId: user.id,
       serviceId,
-      file: input.file,
+      file: preparedFile,
     });
 
   const { error: uploadError } =
@@ -417,13 +756,13 @@ export async function uploadServiceImage(
       )
       .upload(
         storagePath,
-        input.file,
+        preparedFile,
         {
           cacheControl:
             "31536000",
           upsert: false,
           contentType:
-            input.file.type,
+            preparedFile.type,
         }
       );
 

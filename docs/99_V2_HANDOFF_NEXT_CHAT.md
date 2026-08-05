@@ -1222,3 +1222,25 @@ Next isolated patch:
 4. use the same exclusive expanded-section coordination as product showcases and listings;
 5. add responsive service cards and long-description handling;
 6. keep service discovery `/v2/services` separate from profile-owned service presentation.
+
+## 2026-08-05 – Mobile service-image picker deploy checkpoint
+
+Prepared for production deployment:
+
+- Android/Xiaomi was confirmed as the affected device;
+- broadened the system gallery accept filter;
+- delayed File input reset until processing completes;
+- added same-file reselection support;
+- added standard MIME inference from filename extensions;
+- added best-effort HEIC/HEIF-to-JPEG preparation;
+- generalized all user-facing wording away from iPhone-specific assumptions;
+- production build passes.
+
+After Vercel reports the new commit as Ready, retest on the Xiaomi phone:
+
+1. open a draft service image manager;
+2. choose a recent gallery photo;
+3. press the gallery confirmation action;
+4. verify the button changes to an upload state;
+5. verify the image appears;
+6. capture the visible error message if it still fails.

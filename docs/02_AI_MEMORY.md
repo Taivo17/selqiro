@@ -2774,3 +2774,18 @@ UI rules:
 My Area service and product-showcase cards use compact two-column mobile geometry with the thumbnail on the left and content on the right. Mobile action areas use adaptive grids; larger breakpoints keep their existing layouts.
 
 The user manually verified the narrow mobile layout and service-image interactions before checkpointing.
+
+## 2026-08-05 — Mobile service-image picker compatibility
+
+The affected device is Android/Xiaomi, not iPhone. Do not infer the user's phone platform without confirmation.
+
+Mobile picker compatibility rules:
+
+- use `accept="image/*"` for the system gallery;
+- copy `FileList` first, but do not clear the input before asynchronous file processing;
+- clear the previous value before reopening so the same file can be selected again;
+- clear it again only after processing finishes;
+- infer standard MIME types from `.jpg`, `.jpeg`, `.png` and `.webp` extensions when Android supplies an empty or unusual type;
+- treat HEIC/HEIF conversion as best-effort and keep user-facing wording platform-neutral.
+
+A local build does not create a Vercel deployment. The change must be committed and pushed to `main` before mobile production testing.

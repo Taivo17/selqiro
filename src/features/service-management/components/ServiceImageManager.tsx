@@ -337,13 +337,12 @@ export default function ServiceImageManager({
         input.files || []
       );
 
-    input.value = "";
-
     if (
       selectedFiles.length === 0 ||
       uploading ||
       disabled
     ) {
+      input.value = "";
       return;
     }
 
@@ -357,6 +356,7 @@ export default function ServiceImageManager({
           : `Saad lisada veel ${remainingSlots} pilti.`
       );
 
+      input.value = "";
       return;
     }
 
@@ -421,6 +421,7 @@ export default function ServiceImageManager({
       );
     } finally {
       setUploading(false);
+      input.value = "";
     }
   }
 
@@ -800,7 +801,15 @@ export default function ServiceImageManager({
                 <input
                   type="file"
                   multiple
-                  accept="image/jpeg,image/png,image/webp"
+                  accept="image/*"
+                  onClick={(event) => {
+                    /*
+                     * Nullime vana valiku enne süsteemse
+                     * fotovalija avamist, et sama pilti
+                     * saaks pärast ebaõnnestumist uuesti valida.
+                     */
+                    event.currentTarget.value = "";
+                  }}
                   disabled={
                     controlsDisabled ||
                     remainingSlots === 0
@@ -823,7 +832,7 @@ export default function ServiceImageManager({
               </label>
 
               <p className="text-xs leading-5 text-neutral-500">
-                Lubatud JPG, PNG ja WEBP. Maksimaalne suurus 10 MB pildi kohta.
+                Lubatud JPG, PNG ja WEBP. HEIC/HEIF foto proovitakse enne üleslaadimist JPG-ks teisendada. Maksimaalne suurus 10 MB pildi kohta.
               </p>
             </div>
           ) : null}
