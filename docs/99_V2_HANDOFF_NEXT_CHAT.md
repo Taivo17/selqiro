@@ -1138,3 +1138,31 @@ Next isolated patch:
 6. allow deleting the last image because service images are optional;
 7. reindex remaining rows and choose a deterministic fallback primary;
 8. keep the browser upload UI for the following patch.
+
+## 2026-08-05 – Service image RPC checkpoint
+
+Completed and production-applied:
+
+- added authenticated service-image registration;
+- enforced active-identity ownership and draft-only mutation;
+- enforced a server-side ten-image maximum;
+- added deterministic primary-image selection and ordering;
+- synchronized `services.image_url`;
+- added deletion manifest output for Storage cleanup;
+- allowed removal of the final optional image;
+- verified RPC privileges and SECURITY DEFINER status;
+- passed a local authenticated E2E test;
+- verified linked production migration history and dumped production function definitions;
+- production build passes.
+
+Next isolated patch:
+
+1. add the `ServiceImage` TypeScript model and row mapper;
+2. load identity-owned service images in deterministic order;
+3. upload JPG/PNG/WEBP files to `service-images`;
+4. compensate by deleting the Storage object if registration fails;
+5. set the primary image through the RPC;
+6. delete the database row first and then remove the returned Storage object;
+7. add a draft-only responsive `ServiceImageManager`;
+8. update service cards locally without a page reload;
+9. keep public-profile service rendering and service discovery separate.

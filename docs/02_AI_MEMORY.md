@@ -2708,3 +2708,26 @@ Storage contract:
 - insert, select and delete are limited to the current user's path and an active-identity service in `draft` status.
 
 Service images remain optional. This foundation intentionally does not yet include image RPCs or management UI.
+
+## 2026-08-05 — Secure V2 service image RPCs
+
+The production database now exposes three authenticated service-image commands:
+
+- `add_my_service_image_v2`;
+- `set_my_service_primary_image_v2`;
+- `delete_my_service_image_v2`.
+
+Command rules:
+
+- the caller must be authenticated;
+- the service must belong to the active identity;
+- identity membership is checked explicitly;
+- the parent service must be a draft;
+- uploaded object paths must be rooted under user ID / service ID;
+- the add command enforces a hard maximum of ten images under a parent-row lock;
+- the first image becomes primary and initializes `services.image_url`;
+- setting a primary image moves it to sort order zero and keeps exactly one primary row;
+- deletion returns the Storage path and URL manifest, compacts ordering and selects a deterministic fallback;
+- deleting the last image is valid and clears `services.image_url`.
+
+Anon cannot execute these functions. The local authenticated E2E suite passed before the migration was applied to production. Browser upload and management UI are not implemented yet.

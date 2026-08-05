@@ -6611,3 +6611,23 @@ Teenusepiltide andmebaasi- ja Storage-vundament on loodud, lokaalselt kontrollit
 - selles etapis ei lisatud veel pildi registreerimise, põhipildi valimise ega kustutamise RPC-sid ega kasutajaliidest.
 
 Kohalik reset, struktuuri-, RLS-, Storage- ja õiguste kontroll, production build, linked dry run, tootmismigratsioon, migratsiooniajalugu, production-skeem ning bucket'i seaded läbisid kontrolli.
+
+## 2026-08-05 – Turvalised V2 teenusepiltide RPC-d
+
+Teenusepiltide serveripoolne kirjutuskiht on valmis, lokaalse autentitud E2E testi läbinud ja tootmisandmebaasi rakendatud:
+
+- lisati `add_my_service_image_v2`;
+- lisati `set_my_service_primary_image_v2`;
+- lisati `delete_my_service_image_v2`;
+- kõik kolm RPC-d töötavad ainult sisse logitud kasutajale ja aktiivse identiteedi teenusele;
+- pildihaldus on lubatud ainult `draft` olekus teenusel;
+- Storage'i tee peab algama autentitud kasutaja ja teenuse ID-ga;
+- server jõustab maksimaalselt 10 pilti teenuse kohta;
+- esimene pilt muutub automaatselt põhipildiks;
+- põhipildi muutmine viib valitud pildi järjestuse algusesse ja sünkroonib `services.image_url` väärtuse;
+- kustutamine tagastab Storage'i tee ja URL-id, järjestab allesjäänud pildid ümber ning valib deterministliku uue põhipildi;
+- viimase pildi kustutamine on lubatud ning see tühjendab `services.image_url` väärtuse;
+- anon-rollil ei ole RPC-de käivitamisõigust;
+- brauseri üleslaadimise ja pildihalduse UI jäi järgmisse eraldiseisvasse etappi.
+
+Kohalik E2E test kontrollis 10 pildi lisamist, 11. pildi tagasilükkamist, arhiveeritud teenuse kaitset, põhipildi vahetamist, põhipildi kustutamise fallback'i, Storage'i manifesti ning viimase pildi eemaldamist. Production build, linked dry run, tootmismigratsioon, migratsiooniajalugu, post-push dry run ja production-skeemi kontroll läbisid.

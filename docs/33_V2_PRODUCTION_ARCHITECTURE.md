@@ -2938,3 +2938,22 @@ The image foundation follows these boundaries:
 The bucket is public for efficient image delivery, while object mutation remains authorization-controlled. The next command boundary must register uploaded objects through SECURITY DEFINER RPCs, synchronize `services.image_url`, enforce the ten-image limit and select deterministic fallback primaries after deletion.
 
 A service is allowed to exist and be published without an image.
+
+### Service image command boundary — 2026-08-05
+
+All ordinary service-image table writes are mediated by three SECURITY DEFINER RPCs. Each command locks the parent `services` row before counting or reordering images, which serializes concurrent writes for the same service and protects the ten-image limit.
+
+The command boundary proves:
+
+1. authenticated caller;
+2. active identity;
+3. identity membership;
+4. parent-service ownership;
+5. draft-only mutation;
+6. user/service Storage path scope;
+7. deterministic primary-image and ordering invariants;
+8. synchronized `services.image_url` cache.
+
+`delete_my_service_image_v2` deliberately returns the deleted `storage_path` and URL manifest rather than deleting the Storage object inside PostgreSQL. The browser data layer must remove the object after the database command succeeds. If registration fails after an upload, the browser data layer must compensate by removing the newly uploaded object.
+
+The service-image gallery is optional, so deletion of the final image is allowed and clears the denormalized primary-image cache.
