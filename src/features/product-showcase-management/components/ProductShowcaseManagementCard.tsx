@@ -478,7 +478,7 @@ export default function ProductShowcaseManagementCard() {
   }
 
   return (
-    <section className="min-w-0 overflow-hidden rounded-[30px] border border-black/5 bg-white p-5 shadow-sm sm:p-6">
+    <section className="min-w-0 overflow-hidden rounded-[26px] border border-black/5 bg-white p-4 shadow-sm sm:rounded-[30px] sm:p-6">
       <div className="flex min-w-0 flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div className="min-w-0">
           <p className="text-xs font-bold uppercase tracking-[0.24em] text-neutral-400">
@@ -805,9 +805,9 @@ export default function ProductShowcaseManagementCard() {
             return (
               <article
                 key={showcase.id}
-                className="grid min-w-0 gap-4 rounded-[22px] border border-neutral-200 bg-[#fbfbfa] p-4 md:grid-cols-[140px_minmax(0,1fr)] md:items-start"
+                className="grid min-w-0 grid-cols-[88px_minmax(0,1fr)] items-start gap-3 rounded-[20px] border border-neutral-200 bg-[#fbfbfa] p-3 sm:grid-cols-[112px_minmax(0,1fr)] sm:gap-4 sm:rounded-[22px] sm:p-4 md:grid-cols-[140px_minmax(0,1fr)]"
               >
-                <div className="h-28 min-w-0 overflow-hidden rounded-[18px] bg-gradient-to-br from-neutral-100 to-neutral-200 md:h-[140px] md:self-start">
+                <div className="h-24 min-w-0 overflow-hidden rounded-[16px] bg-gradient-to-br from-neutral-100 to-neutral-200 sm:h-28 sm:rounded-[18px] md:h-[140px] md:self-start">
                   {showcase.imageUrl ? (
                     <img
                       src={showcase.imageUrl}
@@ -827,7 +827,7 @@ export default function ProductShowcaseManagementCard() {
                     <div className="min-w-0">
                       <span
                         className={[
-                          "inline-flex rounded-full border px-2.5 py-1 text-[11px] font-black",
+                          "inline-flex rounded-full border px-2 py-0.5 text-[10px] font-black sm:px-2.5 sm:py-1 sm:text-[11px]",
                           statusClass(
                               showcase,
                               activityNow
@@ -840,12 +840,12 @@ export default function ProductShowcaseManagementCard() {
                           )}
                       </span>
 
-                      <h3 className="mt-2 break-words text-lg font-black">
+                      <h3 className="mt-1.5 line-clamp-2 break-words text-base font-black leading-5 sm:mt-2 sm:text-lg sm:leading-6">
                         {showcase.title}
                       </h3>
 
                       {showcase.category ? (
-                        <p className="mt-1 break-words text-xs font-bold uppercase tracking-[0.14em] text-neutral-400">
+                        <p className="mt-1 line-clamp-2 break-words text-[10px] font-bold uppercase leading-4 tracking-[0.1em] text-neutral-400 sm:text-xs sm:tracking-[0.14em]">
                           {showcase.category}
                         </p>
                       ) : null}
@@ -853,11 +853,11 @@ export default function ProductShowcaseManagementCard() {
                   </div>
 
                   {showcase.description ? (
-                    <p className="line-clamp-4 mt-2 break-words text-sm leading-6 text-neutral-600">
+                    <p className="mt-1.5 line-clamp-3 break-words text-xs leading-5 text-neutral-600 sm:mt-2 sm:line-clamp-4 sm:text-sm sm:leading-6">
                       {showcase.description}
                     </p>
                   ) : (
-                    <p className="mt-2 text-sm text-neutral-400">
+                    <p className="mt-1.5 text-xs leading-5 text-neutral-400 sm:mt-2 sm:text-sm">
                       Kirjeldus puudub.
                     </p>
                   )}
@@ -868,7 +868,7 @@ export default function ProductShowcaseManagementCard() {
                     now={activityNow}
                   />
 
-                  <div className="mt-4 flex min-w-0 flex-wrap gap-2">
+                  <div className="mt-3 grid min-w-0 grid-cols-[repeat(auto-fit,minmax(76px,1fr))] gap-2 [&>button]:w-full sm:mt-4 sm:flex sm:flex-wrap sm:[&>button]:w-auto">
                     <button
                       type="button"
                       onClick={() =>

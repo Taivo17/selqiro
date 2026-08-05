@@ -2755,3 +2755,22 @@ Important invariants:
 - a failed Storage cleanup is explicit and does not disguise the successful database deletion.
 
 Next step is a draft-only responsive service-image manager connected to the service-management view.
+
+## 2026-08-05 — V2 service image management and compact mobile cards
+
+Draft-service image management is now connected to the My Area service cards.
+
+UI rules:
+
+- render the manager only for `draft` services;
+- load the gallery lazily when the manager opens;
+- use only the service-image entity API, never direct Supabase access in the component;
+- support multiple validated files within the remaining ten-image capacity;
+- update the parent service card's `imageUrl` locally after primary-image and deletion operations;
+- allow deletion of the final optional image;
+- surface `storageCleanupFailed` separately from database success;
+- lock sibling service writes while an image mutation is active.
+
+My Area service and product-showcase cards use compact two-column mobile geometry with the thumbnail on the left and content on the right. Mobile action areas use adaptive grids; larger breakpoints keep their existing layouts.
+
+The user manually verified the narrow mobile layout and service-image interactions before checkpointing.

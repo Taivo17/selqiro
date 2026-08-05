@@ -11,6 +11,7 @@ import type {
 } from "../../../entities/service/model/types";
 import { useServiceCategories } from "../../service-category-selection/model/useServiceCategories";
 import ServiceDraftCreateForm from "./ServiceDraftCreateForm";
+import ServiceImageManager from "./ServiceImageManager";
 import { useMyServices } from "../model/useMyServices";
 
 const SERVICE_PREVIEW_LIMIT = 3;
@@ -238,8 +239,8 @@ function ServiceRow({
     Map<string, string>;
 }) {
   return (
-    <article className="grid min-w-0 gap-4 rounded-[22px] border border-neutral-200 bg-[#fbfbfa] p-4 sm:grid-cols-[96px_minmax(0,1fr)_auto] sm:items-center">
-      <div className="h-24 min-w-0 overflow-hidden rounded-[18px] bg-gradient-to-br from-neutral-100 to-neutral-200">
+    <article className="grid min-w-0 grid-cols-[88px_minmax(0,1fr)] items-start gap-3 rounded-[20px] border border-neutral-200 bg-[#fbfbfa] p-3 sm:grid-cols-[96px_minmax(0,1fr)_auto] sm:items-center sm:gap-4 sm:rounded-[22px] sm:p-4">
+      <div className="h-24 min-w-0 overflow-hidden rounded-[16px] bg-gradient-to-br from-neutral-100 to-neutral-200 sm:rounded-[18px]">
         {service.imageUrl ? (
           <img
             src={service.imageUrl}
@@ -257,7 +258,7 @@ function ServiceRow({
       <div className="min-w-0">
         <span
           className={[
-            "inline-flex rounded-full border px-2.5 py-1 text-[11px] font-black",
+            "inline-flex rounded-full border px-2 py-0.5 text-[10px] font-black sm:px-2.5 sm:py-1 sm:text-[11px]",
             statusClass(
               service.status
             ),
@@ -268,11 +269,11 @@ function ServiceRow({
           )}
         </span>
 
-        <h3 className="mt-2 break-words text-lg font-black">
+        <h3 className="mt-1.5 line-clamp-2 break-words text-base font-black leading-5 sm:mt-2 sm:text-lg sm:leading-6">
           {service.title}
         </h3>
 
-        <p className="mt-1 break-words text-xs font-bold uppercase tracking-[0.12em] text-neutral-400">
+        <p className="mt-1 line-clamp-2 break-words text-[10px] font-bold uppercase leading-4 tracking-[0.1em] text-neutral-400 sm:text-xs sm:tracking-[0.12em]">
           {serviceMeta(
             service,
             categoryLabelByCode
@@ -280,13 +281,13 @@ function ServiceRow({
         </p>
 
         {service.description ? (
-          <p className="mt-2 line-clamp-2 break-words text-sm leading-6 text-neutral-600">
+          <p className="mt-1.5 line-clamp-2 break-words text-xs leading-5 text-neutral-600 sm:mt-2 sm:text-sm sm:leading-6">
             {service.description}
           </p>
         ) : null}
       </div>
 
-      <p className="break-words text-sm font-black text-neutral-800 sm:max-w-[150px] sm:text-right">
+      <p className="col-start-2 break-words text-sm font-black text-neutral-800 sm:col-start-auto sm:max-w-[150px] sm:text-right">
         {priceLabel(service)}
       </p>
     </article>
@@ -304,6 +305,7 @@ export default function MyServicesSection() {
     refresh,
     saveService,
     changeStatus,
+    updateServiceImageUrl,
     clearError,
   } = useMyServices();
 
@@ -359,12 +361,20 @@ export default function MyServicesSection() {
     null
   );
 
+  const [
+    imageBusyServiceId,
+    setImageBusyServiceId,
+  ] = useState<string | null>(
+    null
+  );
+
   useEffect(() => {
     setShowAll(false);
     setEditingServiceId(null);
     setEditSuccessMessage(null);
     setStatusSuccessMessage(null);
     setStatusErrorMessage(null);
+    setImageBusyServiceId(null);
   }, [activeIdentityId]);
 
   const publishedCount =
@@ -404,6 +414,8 @@ export default function MyServicesSection() {
   const actionBusy =
     savingServiceId !== null ||
     changingStatusServiceId !==
+      null ||
+    imageBusyServiceId !==
       null;
 
   async function handleStatusChange(
@@ -438,7 +450,7 @@ export default function MyServicesSection() {
   }
 
   return (
-    <section className="min-w-0 overflow-hidden rounded-[30px] border border-black/5 bg-white p-5 shadow-sm sm:p-6">
+    <section className="min-w-0 overflow-hidden rounded-[26px] border border-black/5 bg-white p-4 shadow-sm sm:rounded-[30px] sm:p-6">
       <div className="flex min-w-0 flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div className="min-w-0">
           <p className="text-xs font-bold uppercase tracking-[0.24em] text-neutral-400">
@@ -451,7 +463,7 @@ export default function MyServicesSection() {
 
           <p className="mt-2 max-w-2xl break-words text-sm leading-6 text-neutral-600">
             Siin saad luua, muuta, avaldada ja arhiveerida aktiivse identiteedi teenuseid.
-            Pildid, kustutamine ja avaliku profiili teenusevaade lisatakse eraldi sammudena.
+            Mustandteenuse pilte saab hallata otse teenusekaardilt. Kustutamine ja avaliku profiili teenusevaade lisatakse eraldi sammudena.
           </p>
         </div>
 
@@ -628,9 +640,47 @@ export default function MyServicesSection() {
                     }
                   />
 
+                  {service.status ===
+                    "draft" ? (
+                    <ServiceImageManager
+                      service={
+                        service
+                      }
+                      disabled={
+                        actionBusy &&
+                        imageBusyServiceId !==
+                          service.id
+                      }
+                      onImageUrlChange={(
+                        imageUrl
+                      ) => {
+                        updateServiceImageUrl(
+                          service.id,
+                          imageUrl
+                        );
+                      }}
+                      onBusyChange={(
+                        busy
+                      ) => {
+                        setImageBusyServiceId(
+                          (current) => {
+                            if (busy) {
+                              return service.id;
+                            }
+
+                            return current ===
+                              service.id
+                              ? null
+                              : current;
+                          }
+                        );
+                      }}
+                    />
+                  ) : null}
+
                   {editingServiceId ===
                     null ? (
-                    <div className="mt-2 flex flex-wrap justify-end gap-2">
+                    <div className="mt-2 grid grid-cols-[repeat(auto-fit,minmax(120px,1fr))] gap-2 [&>button]:w-full sm:flex sm:flex-wrap sm:justify-end sm:[&>button]:w-auto">
                       {service.status ===
                       "draft" ? (
                         <button

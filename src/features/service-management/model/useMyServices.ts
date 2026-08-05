@@ -42,6 +42,10 @@ export type MyServicesState = {
     serviceId: string,
     status: ServiceStatus
   ) => Promise<Service>;
+  updateServiceImageUrl: (
+    serviceId: string,
+    imageUrl: string | null
+  ) => void;
   clearError: () => void;
 };
 
@@ -530,6 +534,33 @@ export function useMyServices(): MyServicesState {
     }
   }
 
+  function updateServiceImageUrl(
+    serviceId: string,
+    imageUrl: string | null
+  ) {
+    const cleanServiceId =
+      serviceId.trim();
+
+    if (!cleanServiceId) {
+      return;
+    }
+
+    setState((current) => ({
+      ...current,
+      services:
+        current.services.map(
+          (service) =>
+            service.id ===
+            cleanServiceId
+              ? {
+                  ...service,
+                  imageUrl,
+                }
+              : service
+        ),
+    }));
+  }
+
   function clearError() {
     setState((current) => ({
       ...current,
@@ -544,6 +575,7 @@ export function useMyServices(): MyServicesState {
     refresh: loadServices,
     saveService,
     changeStatus,
+    updateServiceImageUrl,
     clearError,
   };
 }

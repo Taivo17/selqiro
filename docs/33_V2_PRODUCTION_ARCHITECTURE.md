@@ -2982,3 +2982,21 @@ Delete flow:
 6. a service-role client removes only that Storage object.
 
 Database deletion is authoritative. Storage cleanup failure is returned as `storageCleanupFailed`, producing an orphaned object rather than a broken database reference. A later cleanup job can safely remove such orphans.
+
+### Service-image management UI boundary — 2026-08-05
+
+`ServiceImageManager` is a draft-only presentation/controller layer. It imports the service-image entity API and model, but it does not import a Supabase client or access database tables directly.
+
+The parent `useMyServices` hook exposes a narrow local-cache mutation, `updateServiceImageUrl(serviceId, imageUrl)`. This keeps the service card synchronized after image operations without issuing an unrelated full reload.
+
+Busy-state coordination is identity-section scoped: while an image mutation is active, other service writes are disabled. This prevents status publication from racing with an unfinished image upload or deletion.
+
+Responsive management cards use a mobile-first two-column layout:
+
+- fixed compact media column;
+- `minmax(0,1fr)` content column;
+- clamped long text;
+- adaptive button grids;
+- breakpoint restoration for tablet and desktop.
+
+The responsive change is presentation-only and does not alter service or product-showcase persistence contracts.

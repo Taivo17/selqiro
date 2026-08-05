@@ -1194,3 +1194,31 @@ Next isolated patch:
 7. warn when database deletion succeeded but Storage cleanup failed;
 8. update the parent service card's `imageUrl` immediately;
 9. keep published and archived service cards read-only.
+
+## 2026-08-05 – Service-image management checkpoint
+
+Completed and browser-tested:
+
+- added draft-only `ServiceImageManager`;
+- added lazy image loading;
+- added multi-file upload within the ten-image limit;
+- added responsive thumbnails and primary-image preview;
+- added primary-image mutation without a page reload;
+- added ordinary, primary and final-image deletion;
+- added explicit Storage cleanup warnings;
+- synchronized service-card `imageUrl` locally;
+- coordinated image-operation busy state with other service writes;
+- compacted My Area service cards on narrow screens;
+- compacted My Area product-showcase cards on narrow screens;
+- preserved tablet and desktop layouts;
+- production build passes;
+- narrow mobile view was manually verified.
+
+Next isolated patch:
+
+1. expose published services on the public profile;
+2. add a dedicated public-service entity API and hook;
+3. render only publicly visible services;
+4. use the same exclusive expanded-section coordination as product showcases and listings;
+5. add responsive service cards and long-description handling;
+6. keep service discovery `/v2/services` separate from profile-owned service presentation.

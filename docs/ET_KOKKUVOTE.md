@@ -6652,3 +6652,28 @@ Teenusepiltide browser- ja serveriandmekiht on loodud:
 - production build läbis.
 
 Teenusepiltide haldusliidest selles etapis veel ei lisatud.
+
+## 2026-08-05 – V2 teenusepiltide haldus ja kompaktsed mobiilikaardid
+
+Mustandteenuste pildihaldus on Minu ala teenusekaardiga ühendatud ja telefonis kontrollitud:
+
+- teenuse pildid laaditakse alles halduri avamisel;
+- lisada saab korraga mitu JPG-, PNG- või WEBP-faili;
+- serveri kümne pildi piirangule lisati kasutajaliidese allesjäänud kohtade kontroll;
+- esimene pilt muutub automaatselt põhipildiks;
+- põhipilti saab vahetada ilma lehe värskendamiseta;
+- tavalise, põhipildi ja viimase pildi saab eemaldada;
+- põhipildi muutmine ja kustutamine uuendavad teenusekaardi `imageUrl` väärtuse kohalikus olekus;
+- Storage'i koristusvea korral kuvatakse eraldi hoiatus;
+- pildihaldus kuvatakse ainult `draft` olekus teenusele;
+- pilditoimingu ajal lukustatakse sama teenuste ploki muud kirjutustoimingud.
+
+Lisaks muudeti Minu ala teenuse- ja tootenäidiste kaardid kitsal ekraanil kompaktseks:
+
+- pilt asub vasakul ja põhisisu paremal;
+- pealkiri, kategooria, kirjeldus ja staatusemärgid kasutavad mobiilis väiksemat geomeetriat;
+- hind jääb teenuse tekstiveergu;
+- tegevusnupud kasutavad automaatselt saadaolevat laiust;
+- tahvli- ja desktopipaigutus säilis.
+
+Production build läbis ning teenusepiltide lisamine, põhipildi vahetamine, kustutamine ja kitsas mobiilivaade kontrolliti brauseris.
