@@ -1244,3 +1244,25 @@ After Vercel reports the new commit as Ready, retest on the Xiaomi phone:
 4. verify the button changes to an upload state;
 5. verify the image appears;
 6. capture the visible error message if it still fails.
+
+## 2026-08-08 – Public profile services checkpoint
+
+Completed:
+
+- public service model, API and hook;
+- public service image loading and primary-image fallback;
+- read-only public profile service cards;
+- category, subcategory, location, description and price display;
+- exclusive expanded-section coordination with showcases and listings;
+- desktop and narrow-mobile browser tests;
+- production build.
+
+No database migration was needed.
+
+Known follow-up:
+
+1. add a dedicated `PublicProfileServiceGallery` modeled on the existing product-showcase gallery;
+2. support previous/next navigation, image counter, keyboard controls, lightbox and mobile swipe;
+3. preserve the current description component;
+4. after gallery testing, align the preview image/card geometry of services and public listings to the product-showcase section;
+5. keep `/v2/services` discovery work separate.

@@ -2789,3 +2789,26 @@ Mobile picker compatibility rules:
 - treat HEIC/HEIF conversion as best-effort and keep user-facing wording platform-neutral.
 
 A local build does not create a Vercel deployment. The change must be committed and pushed to `main` before mobile production testing.
+
+## 2026-08-08 — Public profile service browsing
+
+Public service browsing is now a separate read-only boundary:
+
+- `src/entities/service/model/public.ts`
+- `src/entities/service/api/getPublicServices.ts`
+- `src/features/public-profile/model/usePublicProfileServices.ts`
+- `src/features/public-profile/components/PublicProfileServiceDescription.tsx`
+- `src/features/public-profile/components/PublicProfileServicesSection.tsx`
+
+Rules:
+
+- query by public profile `identityId`;
+- request and map only `published` services;
+- never expose service coordinates, uploader IDs or Storage paths in the public model;
+- load public `service_images` separately and sort primary first;
+- keep legacy `services.image_url` only as a fallback;
+- an image is optional for public service visibility;
+- coordinate expanded public-profile sections through `showcases | services | listings | null`;
+- do not mix the service discovery page `/v2/services` into this profile-specific feature.
+
+Browser testing passed on desktop and narrow mobile layouts. The next service-profile step is image browsing: card image switching, lightbox, keyboard controls and mobile swipe. After that, align service and listing preview image geometry to the product-showcase cards.

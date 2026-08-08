@@ -7,18 +7,9 @@ import {
 import { usePublicProfile } from "../model/usePublicProfile";
 import PublicProfileListingsSection from "./PublicProfileListingsSection";
 import PublicProfileProductShowcasesSection from "./PublicProfileProductShowcasesSection";
+import PublicProfileServicesSection from "./PublicProfileServicesSection";
 
-type ProfileItem = {
-  title: string;
-  meta: string;
-  price?: string;
-  badge?: string;
-};
-
-
-const services: ProfileItem[] = [];
-
-const updates: ProfileItem[] = [
+const updates = [
   {
     title: "Täna lisandus uus murutraktor",
     meta: "Uuendatud 24 min tagasi",
@@ -29,10 +20,9 @@ const updates: ProfileItem[] = [
   },
 ];
 
-const PROFILE_ITEM_PREVIEW_LIMIT = 3;
-
 type ExpandedPublicProfileSection =
   | "showcases"
+  | "services"
   | "listings"
   | null;
 
@@ -41,174 +31,6 @@ type ExpandedPublicProfileState = {
   section:
     ExpandedPublicProfileSection;
 };
-
-function PlaceholderImage({
-  className = "",
-}: {
-  className?: string;
-}) {
-  return (
-    <div
-      className={[
-        "rounded-[22px] bg-gradient-to-br from-neutral-100 to-neutral-200",
-        className,
-      ].join(" ")}
-    />
-  );
-}
-
-function ItemCard({
-  item,
-  expanded,
-}: {
-  item: ProfileItem;
-  expanded: boolean;
-}) {
-  return (
-    <article
-      className={[
-        "min-w-0 rounded-[24px] border border-black/5 bg-white p-3 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md",
-        expanded
-          ? "w-full"
-          : "w-[78vw] max-w-[290px] flex-none sm:w-[260px]",
-      ].join(" ")}
-    >
-      <PlaceholderImage
-        className={
-          expanded
-            ? "aspect-[4/3]"
-            : "h-36"
-        }
-      />
-
-      <div className="mt-3 flex items-center justify-between gap-3">
-        {item.badge ? (
-          <span className="rounded-full bg-emerald-50 px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.16em] text-emerald-700">
-            {item.badge}
-          </span>
-        ) : (
-          <span className="text-[10px] font-black uppercase tracking-[0.16em] text-neutral-400">
-            Profiili sisu
-          </span>
-        )}
-
-        <button
-          type="button"
-          className="rounded-full border border-neutral-200 bg-white px-2.5 py-1 text-xs font-bold text-neutral-500"
-        >
-          ♡
-        </button>
-      </div>
-
-      <h3 className="mt-2 line-clamp-2 text-base font-black">
-        {item.title}
-      </h3>
-
-      <p className="mt-1 text-sm leading-5 text-neutral-500">
-        {item.meta}
-      </p>
-
-      {item.price ? (
-        <p className="mt-3 text-lg font-black">
-          {item.price}
-        </p>
-      ) : null}
-    </article>
-  );
-}
-
-function PublicProfileItemsSection({
-  eyebrow,
-  title,
-  items,
-}: {
-  eyebrow: string;
-  title: string;
-  items: ProfileItem[];
-}) {
-  const [showAll, setShowAll] =
-    useState(false);
-
-  if (items.length === 0) {
-    return null;
-  }
-
-  const visibleItems = showAll
-    ? items
-    : items.slice(
-        0,
-        PROFILE_ITEM_PREVIEW_LIMIT
-      );
-
-  const canToggleItems =
-    showAll ||
-    items.length >
-      PROFILE_ITEM_PREVIEW_LIMIT;
-
-  return (
-    <section className="overflow-hidden rounded-[34px] border border-black/5 bg-white p-6 shadow-sm md:p-8">
-      <div className="mb-5 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-        <div>
-          <p className="text-xs font-bold uppercase tracking-[0.26em] text-neutral-400">
-            {eyebrow}
-          </p>
-
-          <h2 className="mt-2 text-2xl font-black tracking-tight md:text-3xl">
-            {title}
-          </h2>
-        </div>
-
-        {canToggleItems ? (
-          <button
-            type="button"
-            aria-expanded={showAll}
-            onClick={() =>
-              setShowAll(
-                (current) =>
-                  !current
-              )
-            }
-            className="inline-flex w-full justify-center rounded-full border border-neutral-200 bg-white px-4 py-2.5 text-sm font-black shadow-sm transition hover:border-neutral-300 sm:w-auto"
-          >
-            {showAll
-              ? "Vaata vähem"
-              : `Vaata kõiki (${items.length})`}
-          </button>
-        ) : null}
-      </div>
-
-      {showAll ? (
-        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-          {visibleItems.map(
-            (item) => (
-              <ItemCard
-                key={item.title}
-                item={item}
-                expanded
-              />
-            )
-          )}
-        </div>
-      ) : (
-        <div className="w-full max-w-full overflow-x-auto overscroll-x-contain pb-2">
-          <div className="flex w-max gap-4 px-1">
-            {visibleItems.map(
-              (item) => (
-                <ItemCard
-                  key={item.title}
-                  item={item}
-                  expanded={
-                    false
-                  }
-                />
-              )
-            )}
-          </div>
-        </div>
-      )}
-    </section>
-  );
-}
 
 function LoadingState() {
   return (
@@ -269,6 +91,19 @@ export default function PublicProfilePage({ slug }: { slug: string }) {
           slug,
           section: nextExpanded
             ? "showcases"
+            : null,
+        });
+      },
+      [slug]
+    );
+
+  const handleServicesExpandedChange =
+    useCallback(
+      (nextExpanded: boolean) => {
+        setExpandedProfileState({
+          slug,
+          section: nextExpanded
+            ? "services"
             : null,
         });
       },
@@ -402,11 +237,16 @@ export default function PublicProfilePage({ slug }: { slug: string }) {
             }
           />
 
-          <PublicProfileItemsSection
+          <PublicProfileServicesSection
             key={`services-${profile.slug}`}
-            eyebrow="Teenused"
-            title="Pakutavad teenused"
-            items={services}
+            profile={profile}
+            expanded={
+              expandedSection ===
+              "services"
+            }
+            onExpandedChange={
+              handleServicesExpandedChange
+            }
           />
 
           <PublicProfileListingsSection

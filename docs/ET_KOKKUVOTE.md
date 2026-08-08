@@ -6692,3 +6692,27 @@ Android/Xiaomi telefonis avanes galerii, kuid valitud pilt ei jõudnud enne para
 - production build läbis.
 
 See checkpoint push'ib paranduse GitHubi, et Vercel saaks luua uue production deployment'i. Telefonitest tehakse pärast uue deployment'i valmimist.
+
+## 2026-08-08 – Avaldatud teenused avalikul profiilil
+
+Avalikule V2 profiilile lisati identiteedipõhine read-only teenuste sirvimine.
+
+Valmis:
+
+- eraldi avalik teenusemudel, mis ei väljasta kasutaja ID-d, Storage'i sisemist teed ega täpseid koordinaate;
+- avalik API pärib ainult `published` teenuseid ja kontrollib staatust ka kliendipoolses mapperis;
+- teenusepildid loetakse `service_images` tabelist, järjestatakse põhipildi, `sort_order` ja loomise aja järgi ning vana `services.image_url` jääb varuvariandiks;
+- eraldi hook avaliku profiili identiteedi teenuste laadimiseks;
+- teenuse rubriigi ja alamrubriigi eestikeelsed nimetused;
+- asukoha, kirjelduse ning `fixed`, `from`, `hourly` ja `contact` hinnatüübi kuvamine;
+- pika kirjelduse „Vaata rohkem / Näita vähem” juhtimine;
+- teenuste eelvaaterida ja laiendatud adaptiivne ruudustik;
+- teenused liideti eksklusiivsesse `showcases / services / listings` laiendamisolekusse;
+- desktop- ja kitsas mobiilivaade läbisid brauseritesti;
+- mustand- ja arhiveeritud teenused avalikul profiilil ei kuvata;
+- andmebaasimigratsiooni polnud vaja, sest olemasolev RLS lubab anonüümset lugemist ainult avaldatud teenustele ja nende piltidele.
+
+Praegune teadlik piir:
+
+- teenuse avalikul kaardil ei saa veel pilte vahetada, suureks avada ega mobiilis pühkida;
+- teenuste ja „Müügis praegu” pildiakna geomeetria ühtlustatakse hiljem tootenäidiste pildialaga, pärast teenuste galerii valmimist.

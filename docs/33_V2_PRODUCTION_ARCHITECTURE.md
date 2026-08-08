@@ -3014,3 +3014,18 @@ The compatible sequence is:
 5. clear the input after the operation finishes.
 
 This avoids invalidating Android content-backed file handles too early while still allowing the same photo to be selected again. MIME inference and optional HEIC/HEIF conversion belong in the entity API, not in the React presentation component.
+
+### Public profile services — 2026-08-08
+
+Published services are read directly through the browser Supabase client under existing RLS. No public service RPC is required at this stage.
+
+The public boundary uses two reads:
+
+1. `services`, filtered by `identity_id` and `status = published`;
+2. `service_images`, restricted to the returned service IDs and the same identity.
+
+The mapper repeats identity, status, UUID, date, URL and price normalization rather than treating RLS as the only validation layer. The public TypeScript model intentionally omits exact coordinates, uploader identity and Storage paths.
+
+Public profile expansion is exclusive across product showcases, services and listings. The service section remains independent from the global `/v2/services` discovery architecture.
+
+Gallery interaction is intentionally deferred to a separate component-level checkpoint. This keeps the read-only data boundary stable before adding lightbox, swipe and image navigation state.
