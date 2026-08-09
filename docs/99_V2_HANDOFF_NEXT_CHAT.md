@@ -1266,3 +1266,37 @@ Known follow-up:
 3. preserve the current description component;
 4. after gallery testing, align the preview image/card geometry of services and public listings to the product-showcase section;
 5. keep `/v2/services` discovery work separate.
+
+## 2026-08-08 – Public service gallery checkpoint
+
+Completed and desktop-tested:
+
+- added `PublicProfileServiceGallery.tsx`;
+- connected it to `PublicProfileServicesSection.tsx`;
+- added full-screen viewing for public service images;
+- added multi-image counters and expanded thumbnails;
+- added thumbnail, arrow and keyboard navigation;
+- added mobile swipe in expanded cards and lightbox;
+- preserved post-swipe click suppression;
+- preserved the legacy `services.image_url` fallback;
+- preserved product-showcase gallery behavior;
+- kept existing compact and expanded media heights;
+- production build passes.
+
+This checkpoint does not include database or API
+changes.
+
+Immediate production validation after Vercel is
+ready:
+
+1. open the public profile on a phone;
+2. expand the services section;
+3. swipe a multi-image service card;
+4. open the service lightbox;
+5. swipe and close the lightbox;
+6. confirm the product-showcase gallery still works.
+
+After mobile validation, the next visual candidate is
+a separate shared-media-geometry patch for product
+showcases, services and public listings. Do not mix
+that layout change into this gallery checkpoint.

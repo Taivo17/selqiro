@@ -3029,3 +3029,40 @@ The mapper repeats identity, status, UUID, date, URL and price normalization rat
 Public profile expansion is exclusive across product showcases, services and listings. The service section remains independent from the global `/v2/services` discovery architecture.
 
 Gallery interaction is intentionally deferred to a separate component-level checkpoint. This keeps the read-only data boundary stable before adding lightbox, swipe and image navigation state.
+
+### Public service gallery component boundary — 2026-08-08
+
+The public service presentation is split across
+focused component boundaries.
+
+`PublicProfileServicesSection` owns:
+
+1. public service data loading;
+2. category-label resolution;
+3. compact versus expanded section layout;
+4. service-card collection rendering;
+5. title, location, description and price content;
+6. parent-controlled section expansion.
+
+`PublicProfileServiceGallery` owns:
+
+1. service-image selection state;
+2. primary image and thumbnail rendering;
+3. legacy `services.image_url` fallback resolution;
+4. previous and next image navigation;
+5. full-screen lightbox lifecycle;
+6. keyboard and modal-close behavior;
+7. body scroll locking;
+8. control auto-hide timing;
+9. expanded-card and lightbox touch swipe;
+10. suppression of the synthetic click after swipe.
+
+The boundary is presentation-only. It does not change
+public data minimization, service-image query
+contracts, database state, RLS, Storage object paths
+or navigation state.
+
+The card media dimensions remain intentionally
+unchanged in this checkpoint: compact `h-36` and
+expanded `h-48 sm:h-52`. Cross-section image-geometry
+alignment remains a separate later layout patch.

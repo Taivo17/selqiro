@@ -16,6 +16,7 @@ import {
   usePublicProfileServices,
 } from "../model/usePublicProfileServices";
 import PublicProfileServiceDescription from "./PublicProfileServiceDescription";
+import PublicProfileServiceGallery from "./PublicProfileServiceGallery";
 
 const SERVICE_PREVIEW_LIMIT = 5;
 
@@ -182,27 +183,10 @@ function ServiceCard({
           : "w-[270px] flex-none",
       ].join(" ")}
     >
-      <div
-        className={[
-          "min-w-0 overflow-hidden rounded-[20px] bg-gradient-to-br from-neutral-100 to-neutral-200",
-          expanded
-            ? "h-48 sm:h-52"
-            : "h-36",
-        ].join(" ")}
-      >
-        {service.imageUrl ? (
-          <img
-            src={service.imageUrl}
-            alt=""
-            loading="lazy"
-            className="h-full w-full object-cover"
-            onError={(event) => {
-              event.currentTarget.style.display =
-                "none";
-            }}
-          />
-        ) : null}
-      </div>
+      <PublicProfileServiceGallery
+        service={service}
+        expanded={expanded}
+      />
 
       <div className="mt-3 flex min-w-0 items-center justify-between gap-3">
         <span className="max-w-full truncate rounded-full bg-emerald-50 px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.12em] text-emerald-700">

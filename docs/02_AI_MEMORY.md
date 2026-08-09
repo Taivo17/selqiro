@@ -2812,3 +2812,34 @@ Rules:
 - do not mix the service discovery page `/v2/services` into this profile-specific feature.
 
 Browser testing passed on desktop and narrow mobile layouts. The next service-profile step is image browsing: card image switching, lightbox, keyboard controls and mobile swipe. After that, align service and listing preview image geometry to the product-showcase cards.
+
+## 2026-08-08 — Public profile service gallery
+
+Public service image browsing now lives in
+`PublicProfileServiceGallery.tsx`.
+
+The gallery owns:
+
+- selected service-image state and URL resolution;
+- legacy `service.imageUrl` fallback handling;
+- compact and expanded main-image rendering;
+- expanded-card thumbnails;
+- full-screen lightbox lifecycle;
+- previous and next image navigation;
+- keyboard ArrowLeft, ArrowRight and Escape handling;
+- body scroll locking;
+- three-second lightbox-control auto-hide;
+- mobile pointer-swipe handling;
+- post-swipe click suppression.
+
+`PublicProfileServicesSection` continues to own public
+service loading, category labels, card content,
+compact versus expanded layout and the shared
+expanded-section contract.
+
+This change is presentation-only. It does not alter
+the public service API, database schema, RLS, Storage
+paths or service lifecycle. Production build and
+desktop browser checks pass. Production mobile
+validation is pending the Vercel deployment created
+by this checkpoint.

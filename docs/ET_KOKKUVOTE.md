@@ -6716,3 +6716,36 @@ Praegune teadlik piir:
 
 - teenuse avalikul kaardil ei saa veel pilte vahetada, suureks avada ega mobiilis pühkida;
 - teenuste ja „Müügis praegu” pildiakna geomeetria ühtlustatakse hiljem tootenäidiste pildialaga, pärast teenuste galerii valmimist.
+
+## 2026-08-08 – Avaliku profiili teenusegalerii
+
+Avaliku profiili teenusekaartide pildiala sai eraldatud
+`PublicProfileServiceGallery` komponenti.
+
+Valmis käitumine:
+
+- kompaktse teenusekaardi pildiala jäi kõrgusega `h-36`;
+- laiendatud teenusekaardi pildiala jäi kõrgusega
+  `h-48 sm:h-52`;
+- teenuse põhipilt avaneb täisekraanvaates;
+- mitme pildi korral kuvatakse pildiloendur;
+- laiendatud kaardil kuvatakse valitavad pisipildid;
+- pilte saab vahetada pisipiltide, nuppude,
+  klaviatuuri noolte ja puutepühkimisega;
+- `Escape`, sulgemisnupp ja taust sulgevad
+  täisekraanvaate;
+- pühkimisjärgne sünteetiline vajutus ei ava
+  kogemata täisekraanvaadet;
+- vana `services.image_url` jääb varuvariandiks,
+  kui seotud `service_images` ridu ei ole.
+
+`PublicProfileServicesSection` vastutab endiselt
+teenuste laadimise, sektsiooni paigutuse, kaartide
+teksti ja laiendamislepingu eest. Galerii vastutab
+ainult teenuse piltide interaktsiooni eest.
+
+Production build ja desktopi manuaalne brauseritest
+õnnestusid. Telefonitest tehakse pärast GitHubi push'i
+ja Verceli deployment'i. Andmebaasi, migratsioone,
+avalikke päringulepinguid ega Storage'i reegleid ei
+muudetud.
