@@ -80,13 +80,16 @@ function shouldReloadIdentityScopedRoute(
   }
 
   /*
-   * Listing ownership and edit permissions depend on
-   * the active identity, including the public listing
-   * detail when the current viewer is its owner.
+   * Listing ownership and owner-only content previews
+   * depend on the active identity. Switching identity
+   * must reload these detail routes.
    */
   if (
     pathname.startsWith(
       "/v2/listing/"
+    ) ||
+    pathname.startsWith(
+      "/v2/showcase/"
     )
   ) {
     return true;

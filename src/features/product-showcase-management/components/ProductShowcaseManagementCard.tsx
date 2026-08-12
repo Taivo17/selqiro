@@ -4,7 +4,15 @@ import {
   useEffect,
   useState,
   type FormEvent,
+  type MouseEvent,
 } from "react";
+import Link from "next/link";
+import {
+  saveMyAreaContentReturnContext,
+} from "../../my-area-navigation/model/myAreaContentReturnContext";
+import {
+  useMyAreaContentReturnRestoration,
+} from "../../my-area-navigation/model/useMyAreaContentReturnRestoration";
 import {
   PRODUCT_SHOWCASE_CATEGORY_MAX_LENGTH,
   PRODUCT_SHOWCASE_DESCRIPTION_MAX_LENGTH,
@@ -176,6 +184,42 @@ export default function ProductShowcaseManagementCard() {
     activityNow,
     setActivityNow,
   ] = useState<number | null>(null);
+
+  useMyAreaContentReturnRestoration({
+    contentType: "showcase",
+    ready: !loading && !error,
+    contentIds: showcases.map(
+      (showcase) => showcase.id
+    ),
+  });
+
+  function handleOpenShowcase(
+    event: MouseEvent<HTMLAnchorElement>,
+    showcaseId: string
+  ) {
+    if (
+      event.button !== 0 ||
+      event.metaKey ||
+      event.ctrlKey ||
+      event.shiftKey ||
+      event.altKey
+    ) {
+      return;
+    }
+
+    const card =
+      event.currentTarget.closest(
+        "[data-my-area-content-card]"
+      ) as HTMLElement | null;
+
+    saveMyAreaContentReturnContext({
+      contentType: "showcase",
+      contentId: showcaseId,
+      cardViewportTop:
+        card?.getBoundingClientRect()
+          .top ?? 0,
+    });
+  }
 
   const actionBusy =
     savingShowcaseId !== null ||
@@ -802,25 +846,42 @@ export default function ProductShowcaseManagementCard() {
               changingStatusShowcaseId ===
               showcase.id;
 
+            const detailHref =
+              `/v2/showcase/${showcase.id}?from=my-area`;
+
+
             return (
               <article
                 key={showcase.id}
+                data-my-area-content-card=""
+                data-my-area-content-type="showcase"
+                data-my-area-content-id={showcase.id}
                 className="grid min-w-0 grid-cols-[88px_minmax(0,1fr)] items-start gap-3 rounded-[20px] border border-neutral-200 bg-[#fbfbfa] p-3 sm:grid-cols-[112px_minmax(0,1fr)] sm:gap-4 sm:rounded-[22px] sm:p-4 md:grid-cols-[140px_minmax(0,1fr)]"
               >
-                <div className="h-24 min-w-0 overflow-hidden rounded-[16px] bg-gradient-to-br from-neutral-100 to-neutral-200 sm:h-28 sm:rounded-[18px] md:h-[140px] md:self-start">
+                <Link
+                  href={detailHref}
+                  onClick={(event) =>
+                    handleOpenShowcase(
+                      event,
+                      showcase.id
+                    )
+                  }
+                  aria-label={`Vaata tootenäidist „${showcase.title}”`}
+                  className="group h-24 min-w-0 overflow-hidden rounded-[16px] bg-gradient-to-br from-neutral-100 to-neutral-200 outline-none ring-offset-2 transition focus-visible:ring-2 focus-visible:ring-black sm:h-28 sm:rounded-[18px] md:h-[140px] md:self-start"
+                >
                   {showcase.imageUrl ? (
                     <img
                       src={showcase.imageUrl}
                       alt=""
                       loading="lazy"
-                      className="h-full w-full object-cover"
+                      className="h-full w-full object-cover transition duration-300 group-hover:scale-[1.015]"
                       onError={(event) => {
                         event.currentTarget.style.display =
                           "none";
                       }}
                     />
                   ) : null}
-                </div>
+                </Link>
 
                 <div className="min-w-0">
                   <div className="flex min-w-0 flex-wrap items-start justify-between gap-3">
@@ -840,27 +901,49 @@ export default function ProductShowcaseManagementCard() {
                           )}
                       </span>
 
-                      <h3 className="mt-1.5 line-clamp-2 break-words text-base font-black leading-5 sm:mt-2 sm:text-lg sm:leading-6">
-                        {showcase.title}
-                      </h3>
+                      <Link
+                        href={detailHref}
+                        onClick={(event) =>
+                          handleOpenShowcase(
+                            event,
+                            showcase.id
+                          )
+                        }
+                        className="block rounded-lg outline-none ring-offset-2 transition hover:text-neutral-600 focus-visible:ring-2 focus-visible:ring-black"
+                      >
+                        <h3 className="mt-1.5 line-clamp-2 break-words text-base font-black leading-5 sm:mt-2 sm:text-lg sm:leading-6">
+                          {showcase.title}
+                        </h3>
 
-                      {showcase.category ? (
-                        <p className="mt-1 line-clamp-2 break-words text-[10px] font-bold uppercase leading-4 tracking-[0.1em] text-neutral-400 sm:text-xs sm:tracking-[0.14em]">
-                          {showcase.category}
-                        </p>
-                      ) : null}
+                        {showcase.category ? (
+                          <p className="mt-1 line-clamp-2 break-words text-[10px] font-bold uppercase leading-4 tracking-[0.1em] text-neutral-400 sm:text-xs sm:tracking-[0.14em]">
+                            {showcase.category}
+                          </p>
+                        ) : null}
+                      </Link>
                     </div>
                   </div>
 
-                  {showcase.description ? (
-                    <p className="mt-1.5 line-clamp-3 break-words text-xs leading-5 text-neutral-600 sm:mt-2 sm:line-clamp-4 sm:text-sm sm:leading-6">
-                      {showcase.description}
-                    </p>
-                  ) : (
-                    <p className="mt-1.5 text-xs leading-5 text-neutral-400 sm:mt-2 sm:text-sm">
-                      Kirjeldus puudub.
-                    </p>
-                  )}
+                  <Link
+                    href={detailHref}
+                    onClick={(event) =>
+                      handleOpenShowcase(
+                        event,
+                        showcase.id
+                      )
+                    }
+                    className="block rounded-lg outline-none ring-offset-2 transition hover:text-neutral-800 focus-visible:ring-2 focus-visible:ring-black"
+                  >
+                    {showcase.description ? (
+                      <p className="mt-1.5 line-clamp-3 break-words text-xs leading-5 text-neutral-600 sm:mt-2 sm:line-clamp-4 sm:text-sm sm:leading-6">
+                        {showcase.description}
+                      </p>
+                    ) : (
+                      <p className="mt-1.5 text-xs leading-5 text-neutral-400 sm:mt-2 sm:text-sm">
+                        Kirjeldus puudub.
+                      </p>
+                    )}
+                  </Link>
 
 
                   <ProductShowcaseActivityStatus

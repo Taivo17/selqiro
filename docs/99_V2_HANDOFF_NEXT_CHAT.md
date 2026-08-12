@@ -1300,3 +1300,39 @@ After mobile validation, the next visual candidate is
 a separate shared-media-geometry patch for product
 showcases, services and public listings. Do not mix
 that layout change into this gallery checkpoint.
+
+## 2026-08-12 – My Area product showcase detail checkpoint
+
+Completed and browser-tested:
+
+- added `/v2/showcase/[id]`;
+- added owner-only product-showcase detail loading;
+- reused the existing product-showcase gallery;
+- made My Area showcase image clickable;
+- made title and category clickable;
+- made short description clickable;
+- kept every management action outside the links;
+- made the detail route active-identity scoped;
+- hid mobile bottom navigation on the detail route;
+- added shared My Area owner-content return context;
+- restored the same card to its previous viewport
+  position after returning;
+- verified production build;
+- verified visible Back to My Area behavior.
+
+No database, migration, RPC, RLS or Storage change is
+part of this checkpoint.
+
+Next recommended implementation:
+
+1. create `/v2/service/[id]`;
+2. add owner-scoped service detail loading;
+3. make service image, title and short description
+   clickable in My Area;
+4. keep service management controls separate;
+5. reuse `MyAreaContentType = "service"` and the
+   existing return-state foundation;
+6. browser-test before documentation and commit.
+
+After service detail parity, return to the separate
+public-profile card-geometry alignment task.

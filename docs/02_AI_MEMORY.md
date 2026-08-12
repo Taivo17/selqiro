@@ -2843,3 +2843,47 @@ paths or service lifecycle. Production build and
 desktop browser checks pass. Production mobile
 validation is pending the Vercel deployment created
 by this checkpoint.
+
+## 2026-08-12 — My Area product showcase detail preview
+
+My Area product showcase cards now separate viewing
+from management.
+
+Viewing links:
+
+- image;
+- title and category;
+- short description.
+
+Management controls remain outside those links:
+
+- edit;
+- publish or hide;
+- archive or restore to draft;
+- permanent deletion controls.
+
+The owner detail route is `/v2/showcase/[id]`.
+`ProductShowcaseDetailPage` reads the active identity,
+loads the exact owner-scoped showcase through
+`getMyProductShowcaseDetail`, and reuses the public
+product-showcase gallery for image browsing.
+
+Shared return-state files:
+
+- `myAreaContentReturnContext.ts`;
+- `useMyAreaContentReturnRestoration.ts`.
+
+They use tab-local session storage plus a history
+token. The stored anchor includes content type,
+content ID, source URL, scroll Y and the card's
+viewport-top position. Restoration waits for My Area
+content loading, then realigns the same card through
+several timed passes and ResizeObserver updates.
+
+The shared content-type contract already includes
+`showcase` and `service`, so the same foundation can
+be reused by the next service-detail step.
+
+No database, migration, RPC, RLS or Storage change
+was required. Production build and browser tests
+pass.

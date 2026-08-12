@@ -3066,3 +3066,58 @@ The card media dimensions remain intentionally
 unchanged in this checkpoint: compact `h-36` and
 expanded `h-48 sm:h-52`. Cross-section image-geometry
 alignment remains a separate later layout patch.
+
+### My Area owner content detail and return-state boundary — 2026-08-12
+
+The first owner-content detail route is
+`/v2/showcase/[id]`.
+
+Responsibilities are separated as follows.
+
+`ProductShowcaseManagementCard` owns:
+
+1. owner collection rendering;
+2. separate image, title and description links;
+3. management controls outside navigation links;
+4. capturing the return anchor before navigation;
+5. initiating My Area return restoration after data
+   loading.
+
+`ProductShowcaseDetailPage` owns:
+
+1. authenticated and active-identity loading;
+2. owner-scoped draft, published and archived access;
+3. full detail presentation;
+4. reuse of the shared public gallery;
+5. browser-history return;
+6. explicit `/v2/my-area` fallback return intent.
+
+`myAreaContentReturnContext` owns:
+
+1. tab-local return-state serialization;
+2. source-route validation;
+3. content-type and content-ID validation;
+4. history-entry token marking;
+5. fallback-return intent;
+6. stale-context expiry and cleanup.
+
+`useMyAreaContentReturnRestoration` owns:
+
+1. waiting for owner content to be ready;
+2. locating the exact card with data attributes;
+3. restoring the card's previous viewport position;
+4. compensating for late dynamic layout changes;
+5. temporary manual browser scroll restoration;
+6. final cleanup.
+
+The return-state mechanism is navigation UX state,
+not analytics. It remains browser-tab local and is
+not sent to Selqiro's database.
+
+`MyAreaContentType` includes both `showcase` and
+`service`; the service detail route should reuse this
+boundary instead of introducing another return-state
+implementation.
+
+No production database contract changed in this
+checkpoint.

@@ -58,6 +58,7 @@ export function shouldShowV2MobileNavigation(
    */
   const hiddenPrefixes = [
     "/v2/listing/",
+    "/v2/showcase/",
     "/v2/my-area/listings/",
     "/v2/admin",
   ];

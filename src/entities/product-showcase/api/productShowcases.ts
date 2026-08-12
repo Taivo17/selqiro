@@ -1,4 +1,7 @@
 import { supabaseBrowserClient } from "../../../shared/supabase/browserClient";
+import type {
+  PublicProductShowcaseImage,
+} from "../model/public";
 import {
   PRODUCT_SHOWCASE_CATEGORY_MAX_LENGTH,
   PRODUCT_SHOWCASE_DESCRIPTION_MAX_LENGTH,
@@ -477,4 +480,312 @@ export async function setMyProductShowcaseStatus(
   }
 
   return showcase;
+}
+
+type MyProductShowcaseDetailImageRow = {
+  id?: string | null;
+  showcase_id?: string | null;
+  original_url?: string | null;
+  medium_url?: string | null;
+  thumb_url?: string | null;
+  sort_order?: number | string | null;
+  is_primary?: boolean | null;
+  created_at?: string | null;
+};
+
+export type MyProductShowcaseDetail =
+  ProductShowcase & {
+    images:
+      PublicProductShowcaseImage[];
+  };
+
+function normalizeDetailImageUrl(
+  value: string | null | undefined
+): string | null {
+  const cleanValue =
+    value?.trim() || "";
+
+  if (!cleanValue) {
+    return null;
+  }
+
+  try {
+    const parsedUrl =
+      new URL(cleanValue);
+
+    if (
+      parsedUrl.protocol !== "http:" &&
+      parsedUrl.protocol !== "https:"
+    ) {
+      return null;
+    }
+
+    return parsedUrl.toString();
+  } catch {
+    return null;
+  }
+}
+
+function mapDetailImageRow(
+  row: MyProductShowcaseDetailImageRow,
+  expectedShowcaseId: string
+): PublicProductShowcaseImage | null {
+  const id =
+    row.id?.trim() || "";
+
+  const showcaseId =
+    row.showcase_id?.trim() || "";
+
+  const originalUrl =
+    normalizeDetailImageUrl(
+      row.original_url
+    ) ||
+    normalizeDetailImageUrl(
+      row.medium_url
+    ) ||
+    normalizeDetailImageUrl(
+      row.thumb_url
+    );
+
+  if (
+    !id ||
+    !showcaseId ||
+    showcaseId !==
+      expectedShowcaseId ||
+    !originalUrl
+  ) {
+    return null;
+  }
+
+  return {
+    id,
+    showcaseId,
+    originalUrl,
+    mediumUrl:
+      normalizeDetailImageUrl(
+        row.medium_url
+      ),
+    thumbUrl:
+      normalizeDetailImageUrl(
+        row.thumb_url
+      ),
+    sortOrder:
+      normalizeSortOrder(
+        row.sort_order
+      ),
+    isPrimary:
+      row.is_primary === true,
+    createdAt:
+      row.created_at || null,
+  };
+}
+
+function compareDetailImages(
+  first: PublicProductShowcaseImage,
+  second: PublicProductShowcaseImage
+): number {
+  if (
+    first.isPrimary !==
+    second.isPrimary
+  ) {
+    return first.isPrimary
+      ? -1
+      : 1;
+  }
+
+  if (
+    first.sortOrder !==
+    second.sortOrder
+  ) {
+    return (
+      first.sortOrder -
+      second.sortOrder
+    );
+  }
+
+  return (
+    first.createdAt || ""
+  ).localeCompare(
+    second.createdAt || ""
+  );
+}
+
+function buildLegacyDetailImage(
+  showcase: ProductShowcase
+): PublicProductShowcaseImage[] {
+  if (!showcase.imageUrl) {
+    return [];
+  }
+
+  return [
+    {
+      id: `legacy-${showcase.id}`,
+      showcaseId: showcase.id,
+      originalUrl:
+        showcase.imageUrl,
+      mediumUrl: null,
+      thumbUrl: null,
+      sortOrder: 0,
+      isPrimary: true,
+      createdAt:
+        showcase.createdAt,
+    },
+  ];
+}
+
+export async function
+getMyProductShowcaseDetail(input: {
+  showcaseId: string;
+  identityId: string;
+}): Promise<
+  MyProductShowcaseDetail | null
+> {
+  const showcaseId =
+    normalizeUuid(
+      input.showcaseId,
+      "Tootenäidise ID ei ole korrektne."
+    );
+
+  const identityId =
+    normalizeUuid(
+      input.identityId,
+      "Aktiivse identiteedi ID ei ole korrektne."
+    );
+
+  const {
+    data: showcaseData,
+    error: showcaseError,
+  } =
+    await supabaseBrowserClient
+      .from("product_showcases")
+      .select(
+        [
+          "id",
+          "identity_id",
+          "title",
+          "description",
+          "category",
+          "image_url",
+          "external_url",
+          "status",
+          "sort_order",
+          "published_at",
+          "last_confirmed_at",
+          "active_until",
+          "created_at",
+          "updated_at",
+        ].join(",")
+      )
+      .eq("id", showcaseId)
+      .eq(
+        "identity_id",
+        identityId
+      )
+      .maybeSingle();
+
+  if (showcaseError) {
+    throw new Error(
+      getOperationErrorMessage(
+        showcaseError,
+        "Tootenäidist ei saanud laadida."
+      )
+    );
+  }
+
+  if (!showcaseData) {
+    return null;
+  }
+
+  const showcase =
+    mapProductShowcaseRow(
+      showcaseData as
+        ProductShowcaseRow
+    );
+
+  if (
+    showcase.id !== showcaseId ||
+    showcase.identityId !==
+      identityId
+  ) {
+    throw new Error(
+      "Andmebaas tagastas ootamatu tootenäidise."
+    );
+  }
+
+  const {
+    data: imageData,
+    error: imageError,
+  } =
+    await supabaseBrowserClient
+      .from(
+        "product_showcase_images"
+      )
+      .select(
+        [
+          "id",
+          "showcase_id",
+          "original_url",
+          "medium_url",
+          "thumb_url",
+          "sort_order",
+          "is_primary",
+          "created_at",
+        ].join(",")
+      )
+      .eq(
+        "showcase_id",
+        showcaseId
+      )
+      .eq(
+        "identity_id",
+        identityId
+      )
+      .order("is_primary", {
+        ascending: false,
+      })
+      .order("sort_order", {
+        ascending: true,
+      })
+      .order("created_at", {
+        ascending: true,
+      })
+      .limit(10);
+
+  if (imageError) {
+    throw new Error(
+      getOperationErrorMessage(
+        imageError,
+        "Tootenäidise pilte ei saanud laadida."
+      )
+    );
+  }
+
+  const images = (
+    (
+      imageData || []
+    ) as MyProductShowcaseDetailImageRow[]
+  )
+    .map((row) =>
+      mapDetailImageRow(
+        row,
+        showcaseId
+      )
+    )
+    .filter(
+      (
+        image
+      ): image is PublicProductShowcaseImage =>
+        image !== null
+    )
+    .sort(compareDetailImages);
+
+  return {
+    ...showcase,
+    images:
+      images.length > 0
+        ? images
+        : buildLegacyDetailImage(
+            showcase
+          ),
+  };
 }

@@ -6749,3 +6749,41 @@ Production build ja desktopi manuaalne brauseritest
 ja Verceli deployment'i. Andmebaasi, migratsioone,
 avalikke päringulepinguid ega Storage'i reegleid ei
 muudetud.
+
+## 2026-08-12 – Minu ala tootenäidise detail-eelvaade
+
+Minu ala tootenäidise halduskaart sai vaatamise ja
+haldamise vahel selge piiri.
+
+Valmis käitumine:
+
+- tootenäidise pilt avab omaniku detail-eelvaate;
+- pealkiri ja rubriik avavad sama detail-eelvaate;
+- lühikirjeldus avab sama detail-eelvaate;
+- Muuda, Avalda, Peida, Arhiveeri, Taasta mustandiks
+  ja kustutamise kontroll jäävad vaatamislinkidest
+  eraldi;
+- detailmarsruut on `/v2/showcase/[id]`;
+- Minu alast avamisel kasutatakse `from=my-area`
+  tagasipöördumise konteksti;
+- mustandit, avaldatud ja arhiveeritud tootenäidist
+  saab aktiivse identiteedi omanik detailvaates
+  kontrollida;
+- detailvaade kasutab olemasolevat tootenäidise
+  galeriid;
+- aktiivse identiteedi vahetamine laadib
+  identiteedist sõltuva detailroute'i uuesti;
+- mobiili alumine navigatsioon on detailvaates
+  peidetud.
+
+Lisati ühine Minu ala sisu tagasipöördumise alus.
+See salvestab samas brauserivahekaardis sisu ID,
+kaardi asukoha ekraanil, scrollipositsiooni ja
+ajalooseisundi tunnuse. Tagasi jõudes joondatakse
+sama kaart pärast dünaamiliste sektsioonide
+laadimist uuesti, mistõttu kaart taastub samale
+ekraanikõrgusele.
+
+Muudatus ei lisa andmebaasi, migratsiooni, RPC,
+RLS-i ega Storage'i muudatusi. Production build ja
+manuaalne brauseritest õnnestusid.
