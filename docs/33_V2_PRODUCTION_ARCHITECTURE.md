@@ -3163,3 +3163,36 @@ boundary.
 This checkpoint reuses the existing browser-tab
 return-state architecture and does not change any
 database contract.
+
+### Public-profile content card geometry — 2026-08-13
+
+Public-profile product showcases, services and
+listings now share one presentation geometry
+contract while retaining separate data and behavior
+components.
+
+Shared geometry:
+
+1. compact card width: 250 px;
+2. compact image height: `h-36`;
+3. expanded image height: `h-52 sm:h-56`;
+4. expanded grid: two columns from `sm`;
+5. content-section shell: 30 px radius with
+   `p-5 sm:p-6`.
+
+The product-showcase implementation is the current
+visual reference. Service and listing components
+were aligned to it through class-level changes only.
+
+Behavior boundaries remain independent:
+
+- service gallery owns service swipe, thumbnail and
+  lightbox behavior;
+- listing section owns category filtering,
+  navigation and profile-return restoration;
+- listing detail owns its large gallery and
+  thumbnail strip.
+
+The geometry change does not alter queries, models,
+routing contracts, database schema, authorization or
+storage behavior.

@@ -6823,3 +6823,36 @@ teenuste loend ja seejärel taastatakse õige kaart.
 Muudatus ei lisa andmebaasi, migratsiooni, RPC,
 RLS-i ega Storage'i muudatusi. Production build ja
 manuaalsed brauseritestid õnnestusid.
+
+## 2026-08-13 – Avaliku profiili kaartide geomeetria
+
+Avaliku profiili tootenäidiste, teenuste ja
+„Müügis praegu” kaartide pildi- ning kaardigeomeetria
+on ühtlustatud. Visuaalseks etaloniks jäi
+tootenäidise kaart.
+
+Valmis muudatused:
+
+- teenuse kompaktkaart kasutab nüüd 250 px laiust;
+- kuulutuse kompaktkaart kasutab nüüd 250 px laiust;
+- kõigi kolme sisutüübi kompaktpilt on sama kõrgusega;
+- teenuse avatud galerii kasutab `h-52 sm:h-56`
+  kõrgust;
+- kuulutuse avatud pildiala kasutab sama kõrgust;
+- teenuse, tootenäidise ja kuulutuse avatud vaade
+  kasutab kahte veergu;
+- „Müügis praegu” sektsiooni kest kasutab sama
+  ümardust ja padding'ut nagu teised sisusektsioonid;
+- kitsas vaates säilib horisontaalne sirvimine ja
+  osaliselt nähtav järgmine kaart;
+- kuulutuse detailvaade ning põhipildi all olevad
+  pisipildid jäid muutmata;
+- teenusegalerii, kuulutuse avamine ja
+  tagasipöördumine jäid muutmata.
+
+Production build, desktopi kompakt- ja avatud vaated
+ning arvutis simuleeritud kitsas vaade on kontrollitud.
+Päris telefoni production-test tehakse pärast push'i.
+
+Muudatus ei puuduta andmebaasi, migratsioone, RPC-sid,
+RLS-i ega Storage'i.

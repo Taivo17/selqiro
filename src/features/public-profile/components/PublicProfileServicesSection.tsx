@@ -141,7 +141,7 @@ function LoadingServices() {
         {[0, 1, 2].map((item) => (
           <div
             key={item}
-            className="w-[270px] flex-none rounded-[24px] border border-black/5 bg-white p-3 shadow-sm"
+            className="w-[250px] flex-none rounded-[24px] border border-black/5 bg-white p-3 shadow-sm"
           >
             <div className="h-36 animate-pulse rounded-[20px] bg-neutral-100" />
             <div className="mt-3 h-4 w-28 animate-pulse rounded-full bg-neutral-100" />
@@ -180,7 +180,7 @@ function ServiceCard({
         "min-w-0 rounded-[24px] border border-black/5 bg-white p-3 shadow-sm",
         expanded
           ? "w-full"
-          : "w-[270px] flex-none",
+          : "w-[250px] flex-none",
       ].join(" ")}
     >
       <PublicProfileServiceGallery

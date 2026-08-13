@@ -111,7 +111,7 @@ function ProfileListingCard({
         "min-w-0 cursor-pointer rounded-[24px] border border-black/5 bg-white p-3 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md",
         expanded
           ? "w-full"
-          : "w-[78vw] max-w-[290px] flex-none sm:w-[260px]",
+          : "w-[250px] flex-none",
       ].join(" ")}
     >
       {listing.imageUrl ? (
@@ -121,7 +121,7 @@ function ProfileListingCard({
           className={[
             "w-full rounded-[20px] object-cover",
             expanded
-              ? "aspect-[4/3]"
+              ? "h-52 sm:h-56"
               : "h-36",
           ].join(" ")}
           loading="lazy"
@@ -131,7 +131,7 @@ function ProfileListingCard({
           className={[
             "rounded-[20px] bg-gradient-to-br from-neutral-100 to-neutral-200",
             expanded
-              ? "aspect-[4/3]"
+              ? "h-52 sm:h-56"
               : "h-36",
           ].join(" ")}
         />
@@ -198,14 +198,14 @@ function LoadingCard({
         "min-w-0 rounded-[24px] border border-black/5 bg-white p-3 shadow-sm",
         expanded
           ? "w-full"
-          : "w-[78vw] max-w-[290px] flex-none sm:w-[260px]",
+          : "w-[250px] flex-none",
       ].join(" ")}
     >
       <div
         className={[
           "rounded-[20px] bg-gradient-to-br from-neutral-100 to-neutral-200",
           expanded
-            ? "aspect-[4/3]"
+            ? "h-52 sm:h-56"
             : "h-36",
         ].join(" ")}
       />
@@ -223,7 +223,7 @@ function LoadingCards({
 }) {
   if (expanded) {
     return (
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+      <div className="grid min-w-0 gap-4 sm:grid-cols-2">
         {Array.from({
           length: 6,
         }).map((_, index) => (
@@ -562,7 +562,7 @@ export default function PublicProfileListingsSection({
     categories.length > 0;
 
   return (
-    <section className="overflow-hidden rounded-[34px] border border-black/5 bg-white p-6 shadow-sm md:p-8">
+    <section className="min-w-0 overflow-hidden rounded-[30px] border border-black/5 bg-white p-5 shadow-sm sm:p-6">
       <div className="mb-5 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="text-xs font-bold uppercase tracking-[0.26em] text-neutral-400">
@@ -658,7 +658,7 @@ export default function PublicProfileListingsSection({
       visibleListings.length >
         0 ? (
         showAll ? (
-          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+          <div className="grid min-w-0 gap-4 sm:grid-cols-2">
             {visibleListings.map(
               (listing) => (
                 <ProfileListingCard

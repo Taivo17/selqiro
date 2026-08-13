@@ -573,7 +573,7 @@ export default function PublicProfileServiceGallery({
   const imageAreaClass = [
     "group relative block w-full overflow-hidden rounded-[20px] bg-gradient-to-br from-neutral-100 to-neutral-200 outline-none ring-offset-2 transition focus-visible:ring-2 focus-visible:ring-black",
     expanded
-      ? "h-48 sm:h-52"
+      ? "h-52 sm:h-56"
       : "h-36",
   ].join(" ");
 

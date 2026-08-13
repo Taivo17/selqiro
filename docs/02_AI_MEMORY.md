@@ -2925,3 +2925,34 @@ three-card preview.
 No database, migration, RPC, RLS or Storage change
 was required. Production build and browser tests
 pass.
+
+## 2026-08-13 — Public profile card geometry alignment
+
+The product-showcase card remains the visual geometry
+reference for public-profile content sections.
+
+Aligned contracts:
+
+- compact showcase, service and listing cards use
+  a 250 px width;
+- compact images keep the shared `h-36` height;
+- expanded showcase, service and listing images use
+  `h-52 sm:h-56`;
+- expanded content grids use two columns from `sm`;
+- the listings section shell now matches the
+  showcase and service section radius and padding.
+
+Preserved behavior:
+
+- narrow horizontal card browsing;
+- partially visible next card;
+- service gallery gestures and lightbox;
+- listing navigation and return restoration;
+- public store-category filtering;
+- listing detail gallery and its thumbnail strip.
+
+Desktop compact and expanded views and a narrow
+desktop viewport were browser-tested. A real-device
+production check remains pending until after push.
+
+No database contract changed.

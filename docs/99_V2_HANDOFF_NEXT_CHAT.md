@@ -1372,3 +1372,39 @@ Next recommended implementation:
 4. later implement the planned mobile profile
    accordion where only the first available content
    section is open.
+
+## 2026-08-13 – Public profile card geometry checkpoint
+
+Completed and locally browser-tested:
+
+- aligned compact showcase, service and listing card
+  widths to 250 px;
+- aligned compact image heights;
+- aligned expanded service and listing image heights
+  to the showcase reference;
+- aligned expanded grids to two columns;
+- aligned the listings section shell with the other
+  content sections;
+- preserved narrow horizontal browsing;
+- preserved service gallery behavior;
+- preserved listing navigation, filtering and
+  profile-return restoration;
+- deliberately left the listing detail thumbnail
+  strip unchanged;
+- verified production build;
+- verified desktop compact and expanded layouts;
+- verified a narrow desktop viewport.
+
+After deployment, verify the same public profile on
+a real phone. The phone check should cover compact
+horizontal browsing, partial next-card visibility,
+expanded two-column behavior where applicable and
+the absence of page-level horizontal overflow.
+
+Next larger design work remains separate:
+
+1. content-type color tones;
+2. mobile public-profile accordion with only the
+   first available section open;
+3. denser mobile information packaging;
+4. broader visual polish.
