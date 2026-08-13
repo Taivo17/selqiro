@@ -4,7 +4,18 @@ import {
   useEffect,
   useMemo,
   useState,
+  type MouseEvent,
 } from "react";
+import Link from "next/link";
+import {
+  getCurrentMyAreaRelativeUrl,
+  isMyAreaContentReturnNavigation,
+  readMyAreaContentReturnContext,
+  saveMyAreaContentReturnContext,
+} from "../../my-area-navigation/model/myAreaContentReturnContext";
+import {
+  useMyAreaContentReturnRestoration,
+} from "../../my-area-navigation/model/useMyAreaContentReturnRestoration";
 import type {
   Service,
   ServiceStatus,
@@ -233,27 +244,45 @@ function LoadingServices() {
 function ServiceRow({
   service,
   categoryLabelByCode,
+  onOpenService,
 }: {
   service: Service;
   categoryLabelByCode:
     Map<string, string>;
+  onOpenService: (
+    event: MouseEvent<HTMLAnchorElement>,
+    serviceId: string
+  ) => void;
 }) {
+  const detailHref =
+    `/v2/service/${service.id}?from=my-area`;
+
   return (
     <article className="grid min-w-0 grid-cols-[88px_minmax(0,1fr)] items-start gap-3 rounded-[20px] border border-neutral-200 bg-[#fbfbfa] p-3 sm:grid-cols-[96px_minmax(0,1fr)_auto] sm:items-center sm:gap-4 sm:rounded-[22px] sm:p-4">
-      <div className="h-24 min-w-0 overflow-hidden rounded-[16px] bg-gradient-to-br from-neutral-100 to-neutral-200 sm:rounded-[18px]">
+      <Link
+        href={detailHref}
+        onClick={(event) =>
+          onOpenService(
+            event,
+            service.id
+          )
+        }
+        aria-label={`Vaata teenust „${service.title}”`}
+        className="group h-24 min-w-0 overflow-hidden rounded-[16px] bg-gradient-to-br from-neutral-100 to-neutral-200 outline-none ring-offset-2 transition focus-visible:ring-2 focus-visible:ring-black sm:rounded-[18px]"
+      >
         {service.imageUrl ? (
           <img
             src={service.imageUrl}
             alt=""
             loading="lazy"
-            className="h-full w-full object-cover"
+            className="h-full w-full object-cover transition duration-300 group-hover:scale-[1.015]"
             onError={(event) => {
               event.currentTarget.style.display =
                 "none";
             }}
           />
         ) : null}
-      </div>
+      </Link>
 
       <div className="min-w-0">
         <span
@@ -269,22 +298,48 @@ function ServiceRow({
           )}
         </span>
 
-        <h3 className="mt-1.5 line-clamp-2 break-words text-base font-black leading-5 sm:mt-2 sm:text-lg sm:leading-6">
-          {service.title}
-        </h3>
+        <Link
+          href={detailHref}
+          onClick={(event) =>
+            onOpenService(
+              event,
+              service.id
+            )
+          }
+          className="block rounded-lg outline-none ring-offset-2 transition hover:text-neutral-600 focus-visible:ring-2 focus-visible:ring-black"
+        >
+          <h3 className="mt-1.5 line-clamp-2 break-words text-base font-black leading-5 sm:mt-2 sm:text-lg sm:leading-6">
+            {service.title}
+          </h3>
 
-        <p className="mt-1 line-clamp-2 break-words text-[10px] font-bold uppercase leading-4 tracking-[0.1em] text-neutral-400 sm:text-xs sm:tracking-[0.12em]">
-          {serviceMeta(
-            service,
-            categoryLabelByCode
-          )}
-        </p>
-
-        {service.description ? (
-          <p className="mt-1.5 line-clamp-2 break-words text-xs leading-5 text-neutral-600 sm:mt-2 sm:text-sm sm:leading-6">
-            {service.description}
+          <p className="mt-1 line-clamp-2 break-words text-[10px] font-bold uppercase leading-4 tracking-[0.1em] text-neutral-400 sm:text-xs sm:tracking-[0.12em]">
+            {serviceMeta(
+              service,
+              categoryLabelByCode
+            )}
           </p>
-        ) : null}
+        </Link>
+
+        <Link
+          href={detailHref}
+          onClick={(event) =>
+            onOpenService(
+              event,
+              service.id
+            )
+          }
+          className="block rounded-lg outline-none ring-offset-2 transition hover:text-neutral-800 focus-visible:ring-2 focus-visible:ring-black"
+        >
+          {service.description ? (
+            <p className="mt-1.5 line-clamp-2 break-words text-xs leading-5 text-neutral-600 sm:mt-2 sm:text-sm sm:leading-6">
+              {service.description}
+            </p>
+          ) : (
+            <p className="mt-1.5 text-xs leading-5 text-neutral-400 sm:mt-2 sm:text-sm">
+              Kirjeldus puudub.
+            </p>
+          )}
+        </Link>
       </div>
 
       <p className="col-start-2 break-words text-sm font-black text-neutral-800 sm:col-start-auto sm:max-w-[150px] sm:text-right">
@@ -333,6 +388,43 @@ export default function MyServicesSection() {
     setShowAll,
   ] = useState(false);
 
+
+  useMyAreaContentReturnRestoration({
+    contentType: "service",
+    ready: !loading && !error,
+    contentIds: services.map(
+      (service) => service.id
+    ),
+  });
+
+  function handleOpenService(
+    event: MouseEvent<HTMLAnchorElement>,
+    serviceId: string
+  ) {
+    if (
+      event.button !== 0 ||
+      event.metaKey ||
+      event.ctrlKey ||
+      event.shiftKey ||
+      event.altKey
+    ) {
+      return;
+    }
+
+    const card =
+      event.currentTarget.closest(
+        "[data-my-area-content-card]"
+      ) as HTMLElement | null;
+
+    saveMyAreaContentReturnContext({
+      contentType: "service",
+      contentId: serviceId,
+      cardViewportTop:
+        card?.getBoundingClientRect()
+          .top ?? 0,
+    });
+  }
+
   const [
     editingServiceId,
     setEditingServiceId,
@@ -376,6 +468,47 @@ export default function MyServicesSection() {
     setStatusErrorMessage(null);
     setImageBusyServiceId(null);
   }, [activeIdentityId]);
+
+
+  useEffect(() => {
+    if (loading || error) {
+      return;
+    }
+
+    const returnContext =
+      readMyAreaContentReturnContext();
+
+    if (
+      !returnContext ||
+      returnContext.contentType !==
+        "service" ||
+      returnContext.sourceUrl !==
+        getCurrentMyAreaRelativeUrl() ||
+      !isMyAreaContentReturnNavigation(
+        returnContext
+      )
+    ) {
+      return;
+    }
+
+    const targetIndex =
+      services.findIndex(
+        (service) =>
+          service.id ===
+          returnContext.contentId
+      );
+
+    if (
+      targetIndex >=
+      SERVICE_PREVIEW_LIMIT
+    ) {
+      setShowAll(true);
+    }
+  }, [
+    loading,
+    error,
+    services,
+  ]);
 
   const publishedCount =
     services.filter(
@@ -463,7 +596,7 @@ export default function MyServicesSection() {
 
           <p className="mt-2 max-w-2xl break-words text-sm leading-6 text-neutral-600">
             Siin saad luua, muuta, avaldada ja arhiveerida aktiivse identiteedi teenuseid.
-            Mustandteenuse pilte saab hallata otse teenusekaardilt. Kustutamine ja avaliku profiili teenusevaade lisatakse eraldi sammudena.
+            Mustandteenuse pilte saab hallata otse teenusekaardilt. Pildi, pealkirja või kirjelduse kaudu saad avada teenuse detail-eelvaate.
           </p>
         </div>
 
@@ -631,12 +764,18 @@ export default function MyServicesSection() {
             (service) => (
               <div
                   key={service.id}
+                  data-my-area-content-card=""
+                  data-my-area-content-type="service"
+                  data-my-area-content-id={service.id}
                   className="min-w-0"
                 >
                   <ServiceRow
                     service={service}
                     categoryLabelByCode={
                       categoryLabelByCode
+                    }
+                    onOpenService={
+                      handleOpenService
                     }
                   />
 

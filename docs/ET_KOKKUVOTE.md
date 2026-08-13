@@ -6787,3 +6787,39 @@ ekraanikõrgusele.
 Muudatus ei lisa andmebaasi, migratsiooni, RPC,
 RLS-i ega Storage'i muudatusi. Production build ja
 manuaalne brauseritest õnnestusid.
+
+## 2026-08-13 – Minu ala teenuse detail-eelvaade
+
+Minu ala teenusekaardil on vaatamine ja haldamine
+nüüd selgelt eraldatud.
+
+Valmis käitumine:
+
+- teenuse pilt avab omaniku detail-eelvaate;
+- pealkiri koos rubriigi ja asukohaga avab sama vaate;
+- lühikirjeldus avab sama vaate;
+- hind jääb vaatamislinkidest välja;
+- Muuda, Avalda, Arhiveeri, Taasta mustandiks ja
+  teenusepiltide haldus jäävad vaatamislinkidest
+  eraldi;
+- detailmarsruut on `/v2/service/[id]`;
+- mustandit, avaldatud ja arhiveeritud teenust saab
+  aktiivse identiteedi omanik detailvaates kontrollida;
+- detailvaade kuvab kogu kirjelduse, rubriigi,
+  hinnainfo, asukoha, staatuse ja avaldamise aja;
+- detailvaade kasutab olemasolevat teenusegaleriid;
+- aktiivse identiteedi vahetamine laadib
+  identiteedist sõltuva detailroute'i uuesti;
+- mobiili alumine navigatsioon on detailvaates
+  peidetud.
+
+Teenused kasutavad sama Minu ala tagasipöördumise
+alust nagu tootenäidised. Tagasi tulles taastatakse
+sama teenusekaart eelmisele ekraanikõrgusele. Kui
+teenus oli esimese kolme kaardi järel peidetud,
+avatakse tagasitulekul automaatselt uuesti kogu
+teenuste loend ja seejärel taastatakse õige kaart.
+
+Muudatus ei lisa andmebaasi, migratsiooni, RPC,
+RLS-i ega Storage'i muudatusi. Production build ja
+manuaalsed brauseritestid õnnestusid.

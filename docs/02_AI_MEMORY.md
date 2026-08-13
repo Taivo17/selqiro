@@ -2887,3 +2887,41 @@ be reused by the next service-detail step.
 No database, migration, RPC, RLS or Storage change
 was required. Production build and browser tests
 pass.
+
+## 2026-08-13 — My Area service detail preview
+
+My Area service cards now use the same view-versus-
+management boundary as listings and product
+showcases.
+
+Viewing links:
+
+- image;
+- title, category and location metadata;
+- short description.
+
+Price and all management controls remain outside
+those links:
+
+- edit;
+- publish;
+- archive or restore to draft;
+- service image management.
+
+The owner route is `/v2/service/[id]`.
+`ServiceDetailPage` loads the active identity and
+uses `getMyServiceDetail` to read the exact
+owner-scoped service plus its image collection.
+Draft, published and archived services are available
+to the owner. The existing public service gallery is
+reused for image browsing.
+
+Service cards reuse the shared My Area return-state
+foundation with `contentType = "service"`. Return
+restoration also reopens the complete service list
+when the target service was beyond the initial
+three-card preview.
+
+No database, migration, RPC, RLS or Storage change
+was required. Production build and browser tests
+pass.

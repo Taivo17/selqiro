@@ -90,6 +90,9 @@ function shouldReloadIdentityScopedRoute(
     ) ||
     pathname.startsWith(
       "/v2/showcase/"
+    ) ||
+    pathname.startsWith(
+      "/v2/service/"
     )
   ) {
     return true;

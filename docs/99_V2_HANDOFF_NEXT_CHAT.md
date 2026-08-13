@@ -1336,3 +1336,39 @@ Next recommended implementation:
 
 After service detail parity, return to the separate
 public-profile card-geometry alignment task.
+
+## 2026-08-13 – My Area service detail checkpoint
+
+Completed and browser-tested:
+
+- added `/v2/service/[id]`;
+- added owner-only service detail loading;
+- reused the existing service gallery;
+- made the My Area service image clickable;
+- made title, category and location metadata clickable;
+- made the short description clickable;
+- kept price and every management action outside
+  the links;
+- made the detail route active-identity scoped;
+- hid mobile bottom navigation on the detail route;
+- reused the shared My Area return context;
+- restored the same service card to its previous
+  viewport position;
+- reopened the complete service list when returning
+  to a card beyond the three-card preview;
+- verified production build and browser behavior.
+
+No database, migration, RPC, RLS or Storage change is
+part of this checkpoint.
+
+Next recommended implementation:
+
+1. align public-profile showcase, service and listing
+   card image geometry and vertical rhythm;
+2. keep all three content sections visually aligned
+   on desktop;
+3. preserve horizontal card browsing on narrow
+   screens;
+4. later implement the planned mobile profile
+   accordion where only the first available content
+   section is open.

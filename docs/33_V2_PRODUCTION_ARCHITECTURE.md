@@ -3121,3 +3121,45 @@ implementation.
 
 No production database contract changed in this
 checkpoint.
+
+### My Area service owner-detail parity — 2026-08-13
+
+The owner service detail route is
+`/v2/service/[id]`.
+
+Responsibilities are separated as follows.
+
+`MyServicesSection` owns:
+
+1. rendering the active identity's service collection;
+2. separate image, title/meta and description links;
+3. management controls outside navigation links;
+4. capturing the service return anchor;
+5. restoring the exact service card after data load;
+6. reopening the full service list when the return
+   target is beyond the preview limit.
+
+`ServiceDetailPage` owns:
+
+1. authenticated and active-identity loading;
+2. owner-scoped draft, published and archived access;
+3. full service detail presentation;
+4. reuse of `PublicProfileServiceGallery`;
+5. browser-history return;
+6. explicit `/v2/my-area` fallback return intent.
+
+`getMyServiceDetail` owns:
+
+1. validating service and identity IDs;
+2. selecting one service restricted by both IDs;
+3. loading its service-image collection;
+4. validating image ownership boundaries;
+5. mapping owner images into the gallery contract.
+
+The route is included in the identity-scoped reload
+boundary and in the mobile-navigation hidden-route
+boundary.
+
+This checkpoint reuses the existing browser-tab
+return-state architecture and does not change any
+database contract.

@@ -6,6 +6,12 @@ import {
   type ServicePriceType,
   type ServiceStatus,
 } from "../model/types";
+import type {
+  PublicServiceImage,
+} from "../model/public";
+import {
+  getServiceImages,
+} from "./serviceImages";
 
 export type ServiceRow = {
   id?: string | null;
@@ -333,4 +339,122 @@ export async function getMyServices(input: {
   return (
     (data || []) as ServiceRow[]
   ).map(mapServiceRow);
+}
+
+export type MyServiceDetail =
+  Service & {
+    images:
+      PublicServiceImage[];
+  };
+
+export async function getMyServiceDetail(input: {
+  serviceId: string;
+  identityId: string;
+}): Promise<MyServiceDetail | null> {
+  const serviceId = normalizeUuid(
+    input.serviceId,
+    "Teenuse ID ei ole korrektne."
+  );
+
+  const identityId = normalizeUuid(
+    input.identityId,
+    "Aktiivse identiteedi ID ei ole korrektne."
+  );
+
+  const {
+    data: serviceData,
+    error: serviceError,
+  } =
+    await supabaseBrowserClient
+      .from("services")
+      .select(
+        [
+          "id",
+          "identity_id",
+          "title",
+          "description",
+          "category",
+          "subcategory",
+          "image_url",
+          "price_amount",
+          "currency",
+          "price_type",
+          "country",
+          "city",
+          "location",
+          "service_lat",
+          "service_lng",
+          "status",
+          "sort_order",
+          "published_at",
+          "created_at",
+          "updated_at",
+        ].join(",")
+      )
+      .eq("id", serviceId)
+      .eq(
+        "identity_id",
+        identityId
+      )
+      .maybeSingle();
+
+  if (serviceError) {
+    throw new Error(
+      getServiceLoadErrorMessage(
+        serviceError
+      )
+    );
+  }
+
+  if (!serviceData) {
+    return null;
+  }
+
+  const service = mapServiceRow(
+    serviceData as ServiceRow
+  );
+
+  if (
+    service.id !== serviceId ||
+    service.identityId !== identityId
+  ) {
+    throw new Error(
+      "Andmebaas tagastas ootamatu teenuse."
+    );
+  }
+
+  const ownerImages =
+    await getServiceImages(
+      serviceId
+    );
+
+  for (const image of ownerImages) {
+    if (
+      image.serviceId !== serviceId ||
+      image.identityId !== identityId
+    ) {
+      throw new Error(
+        "Andmebaas tagastas ootamatu teenusepildi."
+      );
+    }
+  }
+
+  const images:
+    PublicServiceImage[] =
+    ownerImages.map((image) => ({
+      id: image.id,
+      serviceId: image.serviceId,
+      originalUrl:
+        image.originalUrl,
+      mediumUrl: image.mediumUrl,
+      thumbUrl: image.thumbUrl,
+      sortOrder: image.sortOrder,
+      isPrimary: image.isPrimary,
+      createdAt: image.createdAt,
+    }));
+
+  return {
+    ...service,
+    images,
+  };
 }
