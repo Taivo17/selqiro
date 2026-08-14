@@ -65,7 +65,7 @@ export default function ProductListingCard({
       role="link"
       tabIndex={0}
       onKeyDown={handleKeyDown}
-      className="group flex h-full cursor-pointer flex-col rounded-[26px] border border-black/5 bg-white p-3 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-emerald-500/30"
+      className="group flex h-full cursor-pointer flex-col rounded-[26px] border border-black/5 bg-white p-3 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-amber-500/30"
     >
       <div className="w-full overflow-hidden rounded-[20px] bg-gradient-to-br from-neutral-100 to-neutral-200 aspect-[4/3] md:aspect-[16/10]">
         {listing.imageUrl ? (

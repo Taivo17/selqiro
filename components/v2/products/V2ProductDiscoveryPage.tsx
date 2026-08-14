@@ -200,7 +200,7 @@ function RelatedServiceCardView({ service }: { service: RelatedService }) {
   return (
     <article className="min-w-[250px] rounded-[22px] border border-black/5 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md md:min-w-[280px]">
       <div className="flex items-start justify-between gap-3">
-        <span className="rounded-full bg-emerald-50 px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.16em] text-emerald-700">
+        <span className="rounded-full border border-teal-200 bg-teal-100 px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.16em] text-teal-700">
           {service.badge || "Teenus"}
         </span>
 
@@ -220,7 +220,7 @@ function RelatedServiceCardView({ service }: { service: RelatedService }) {
         {service.meta}
       </p>
 
-      <button className="mt-4 rounded-full border border-neutral-200 bg-white px-4 py-2 text-xs font-black shadow-sm">
+      <button className="mt-4 rounded-full border border-teal-200 bg-white px-4 py-2 text-xs font-black text-teal-700 shadow-sm transition hover:bg-teal-100">
         Vaata teenust
       </button>
     </article>
@@ -242,7 +242,7 @@ function ToolbarButton({
       className={[
         "rounded-full border px-4 py-3 text-sm font-bold shadow-sm transition",
         active
-          ? "border-black bg-black text-white"
+          ? "border-amber-300 bg-amber-100 text-amber-950"
           : "border-neutral-200 bg-white text-black hover:border-neutral-300",
       ].join(" ")}
     >
@@ -265,10 +265,10 @@ function FilterPanel({
   if (!activePanel) return null;
 
   return (
-    <div className="mt-4 rounded-[28px] border border-black/5 bg-[#fbfbfa] p-5 shadow-sm">
+    <div className="mt-4 rounded-[28px] border border-amber-200 bg-amber-50/70 p-5 shadow-sm">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <p className="text-xs font-bold uppercase tracking-[0.24em] text-emerald-600">
+          <p className="text-xs font-black uppercase tracking-[0.20em] text-amber-700">
             Ajutine paneel
           </p>
 
@@ -314,9 +314,9 @@ function FilterPanel({
 
       {activePanel === "location" ? (
         <div className="mt-5 grid gap-4 md:grid-cols-3">
-          <button className="rounded-2xl border border-black bg-black px-4 py-4 text-left text-sm font-bold text-white">
+          <button className="rounded-2xl border border-amber-300 bg-amber-100 px-4 py-4 text-left text-sm font-bold text-amber-950">
             Asukoht: Paide
-            <span className="mt-1 block text-xs font-medium text-white/60">
+            <span className="mt-1 block text-xs font-medium text-amber-800/70">
               Vaikimisi
             </span>
           </button>
@@ -395,7 +395,7 @@ function FilterPanel({
               className={[
                 "rounded-2xl border px-4 py-4 text-left text-sm font-bold transition",
                 sortLabel === option
-                  ? "border-black bg-black text-white"
+                  ? "border-amber-300 bg-amber-100 text-amber-950"
                   : "border-neutral-200 bg-white hover:border-neutral-300",
               ].join(" ")}
             >
@@ -431,7 +431,7 @@ export default function V2ProductDiscoveryPage() {
       <section className="rounded-[34px] border border-black/5 bg-white p-5 shadow-sm md:p-6">
         <div className="mb-5 flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <p className="text-xs font-bold uppercase tracking-[0.26em] text-emerald-600">
+            <p className="inline-flex rounded-full border border-amber-200 bg-amber-100 px-3 py-1.5 text-[11px] font-black uppercase tracking-[0.18em] text-amber-800">
               Product Discovery
             </p>
             <h1 className="mt-2 text-4xl font-black tracking-tight md:text-5xl">
@@ -454,7 +454,7 @@ export default function V2ProductDiscoveryPage() {
         <div className="grid gap-3 lg:grid-cols-[1fr_auto_auto_auto_auto]">
           <input
             placeholder="Otsi toodet..."
-            className="h-12 rounded-full border border-neutral-200 bg-white px-5 text-sm outline-none transition placeholder:text-neutral-400 focus:border-neutral-400"
+            className="h-12 rounded-full border border-neutral-200 bg-white px-5 text-sm outline-none transition placeholder:text-neutral-400 focus:border-amber-400 focus:ring-2 focus:ring-amber-500/20"
           />
 
           <ToolbarButton
@@ -495,16 +495,16 @@ export default function V2ProductDiscoveryPage() {
         </p>
       </section>
 
-      <section className="rounded-[34px] border border-emerald-100 bg-emerald-50/50 p-6 shadow-sm md:p-8">
+      <section className="relative overflow-hidden rounded-[34px] border border-amber-200 bg-amber-50 p-6 shadow-sm before:pointer-events-none before:absolute before:inset-x-0 before:top-0 before:h-1.5 before:bg-amber-500 before:content-[''] md:p-8">
         <div className="mb-5 flex items-end justify-between gap-4">
           <div>
-            <p className="text-xs font-bold uppercase tracking-[0.26em] text-emerald-600">
+            <p className="inline-flex rounded-full border border-amber-200 bg-amber-100 px-3 py-1.5 text-[11px] font-black uppercase tracking-[0.18em] text-amber-800">
               Sinu lähedal
             </p>
             <h2 className="mt-2 text-3xl font-black">Esiletõstetud tooted</h2>
           </div>
 
-          <button className="hidden rounded-full border border-emerald-200 bg-white px-4 py-2 text-sm font-bold text-emerald-800 shadow-sm md:inline-flex">
+          <button className="hidden rounded-full border border-amber-200 bg-white px-4 py-2 text-sm font-black text-amber-800 shadow-sm transition hover:bg-amber-100 md:inline-flex">
             Vaata kõiki
           </button>
         </div>
@@ -521,10 +521,10 @@ export default function V2ProductDiscoveryPage() {
       </section>
 
       {relatedServices.length > 0 ? (
-        <section className="rounded-[34px] border border-black/5 bg-white p-6 shadow-sm md:p-8">
+        <section className="relative overflow-hidden rounded-[34px] border border-teal-200 bg-teal-50 p-6 shadow-sm before:pointer-events-none before:absolute before:inset-x-0 before:top-0 before:h-1.5 before:bg-teal-500 before:content-[''] md:p-8">
           <div className="mb-5 flex items-end justify-between gap-4">
             <div>
-              <p className="text-xs font-bold uppercase tracking-[0.26em] text-neutral-400">
+              <p className="inline-flex rounded-full border border-teal-200 bg-teal-100 px-3 py-1.5 text-[11px] font-black uppercase tracking-[0.18em] text-teal-700">
                 Seotud abi
               </p>
               <h2 className="mt-2 text-2xl font-black tracking-tight md:text-3xl">
@@ -536,7 +536,7 @@ export default function V2ProductDiscoveryPage() {
               </p>
             </div>
 
-            <button className="hidden rounded-full border border-neutral-200 bg-white px-4 py-2 text-sm font-bold shadow-sm md:inline-flex">
+            <button className="hidden rounded-full border border-teal-200 bg-white px-4 py-2 text-sm font-black text-teal-700 shadow-sm transition hover:bg-teal-100 md:inline-flex">
               Vaata kõiki
             </button>
           </div>

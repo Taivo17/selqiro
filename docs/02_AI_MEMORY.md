@@ -2985,3 +2985,40 @@ application should be audited separately.
 
 No data, routing, gallery or navigation contract
 changed.
+
+## 2026-08-14 — V2 product discovery semantic colors
+
+`/v2/products` now follows the stable semantic
+content-type palette:
+
+- marketplace products/listings: amber;
+- related services: teal;
+- product showcases/portfolio: indigo elsewhere.
+
+Applied presentation boundaries:
+
+- the hero remains mostly neutral;
+- product result shells, type pills, active controls
+  and actions carry amber;
+- the related-services strip carries teal;
+- inner cards remain white;
+- functional status and error colors remain separate.
+
+Behavior and scalability boundaries were preserved:
+
+- no search, location, sorting or RPC behavior changed;
+- `getProductListings` still requests 30 rows from
+  offset 0;
+- nearby and general marketplace RPC calls remain;
+- listing detail navigation and return restoration
+  remain unchanged.
+
+Important current-state note: `/v2/products` is
+hybrid. Featured products and related services are
+still local design data, while `ProductResultsSection`
+uses live marketplace listings.
+
+Next: apply teal consistently to `/v2/services`, then
+audit incomplete V2 functionality. AI-assisted V2
+listing creation is the first major functional
+priority after the color system.

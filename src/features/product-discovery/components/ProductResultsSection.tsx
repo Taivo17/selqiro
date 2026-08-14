@@ -43,10 +43,10 @@ export default function ProductResultsSection() {
   });
 
   return (
-    <section className="rounded-[34px] border border-black/5 bg-white p-6 shadow-sm md:p-8">
+    <section className="relative overflow-hidden rounded-[34px] border border-amber-200 bg-amber-50 p-6 shadow-sm before:pointer-events-none before:absolute before:inset-x-0 before:top-0 before:h-1.5 before:bg-amber-500 before:content-[''] md:p-8">
       <div className="mb-5 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
         <div>
-          <p className="text-xs font-bold uppercase tracking-[0.26em] text-neutral-400">
+          <p className="inline-flex rounded-full border border-amber-200 bg-amber-100 px-3 py-1.5 text-[11px] font-black uppercase tracking-[0.18em] text-amber-800">
             Tulemused
           </p>
           <h2 className="mt-2 text-3xl font-black">Tooted sinu lähedal</h2>

@@ -6897,3 +6897,51 @@ pärast push'i.
 
 Muudatus ei puuduta andmebaasi, route'e, andmekihti,
 RLS-i ega Storage'it.
+
+## 2026-08-14 – V2 toodete discovery värvisüsteem
+
+V2 toodete discovery kasutab nüüd avaliku profiiliga
+sama semantilist sisutüüpide värvisüsteemi:
+
+- müügikuulutused ja tooted kasutavad amber-oranži;
+- toodete juurde kuvatav seotud teenuste riba kasutab
+  teal-rohelist;
+- indigo jääb tootenäidiste ja portfoolio tähiseks.
+
+Muudetud said:
+
+- toodete sisutüübisildid;
+- aktiivsed toolbar'i ja sortimise valikud;
+- asukohavaliku aktiivne olek;
+- filtriploki dekoratiivne taust;
+- esiletõstetud toodete sektsioon;
+- päris kuulutuste tulemuste sektsioon;
+- seotud teenuste sektsioon;
+- kuulutusekaardi klaviatuurifookus.
+
+Hero põhistruktuur ja sisukaardid jäävad valgeks või
+neutraalseks. Funktsionaalsed edu-, vea- ja
+esiletõstmisvärvid jäid eraldi olekuvärvideks.
+
+Andme- ja käitumisleping jäi muutmata:
+
+- päris tulemused laaditakse endiselt olemasoleva
+  V2 listing entity API kaudu;
+- päringu piir on endiselt 30 tulemust alates
+  offset'ist 0;
+- nearby ja üldise turu RPC-d jäid muutmata;
+- kuulutuse detaili avamine ja toodete vaatesse
+  tagasipöördumine jäid muutmata.
+
+Praegune `/v2/products` on hübriidvaade:
+esiletõstetud tooted ja seotud teenused on veel
+näidisandmed, alumine tulemuste sektsioon kasutab
+päris kuulutusi.
+
+Production build ja desktopi brauseritest läbivad.
+Päris telefoni production-test tehakse pärast push'i.
+
+Järgmine värvietapp on `/v2/services` teal-identiteet.
+Pärast värvisüsteemi lõpetamist liigume V2
+funktsionaalsuse auditi ning AI-abiga kuulutuse
+lisamise juurde.

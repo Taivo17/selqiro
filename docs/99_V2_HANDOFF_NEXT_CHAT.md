@@ -1444,3 +1444,46 @@ The next design step should not automatically be an
 accordion. First evaluate other compact mobile
 information-packaging improvements or audit the
 marketplace color-system reuse.
+
+## 2026-08-14 – V2 product discovery colors checkpoint
+
+Completed and locally browser-tested:
+
+- changed product/listing discovery identity to amber;
+- changed the related-services strip to teal;
+- changed active product controls from black to amber;
+- retained a mostly neutral product-page hero;
+- retained white product, service and listing cards;
+- retained functional status and error colors;
+- retained live listing queries and bounded result
+  loading;
+- retained listing detail navigation and return-state
+  restoration;
+- verified production build;
+- verified that products and services are visually
+  distinct in desktop browser testing.
+
+Current truth:
+
+- `/v2/products` featured products are still local
+  design data;
+- its related-services strip is still local design
+  data;
+- its lower product-results section uses live
+  marketplace listings;
+- `/v2/services` is still a design-oriented page and
+  needs a separate teal patch before functional data
+  integration.
+
+After deployment, verify `/v2/products` on a real
+phone for contrast, filter states, horizontal
+overflow, live listing opening and return position.
+
+Next ordered work:
+
+1. apply teal identity consistently to `/v2/services`;
+2. checkpoint and phone-test the completed color
+   system;
+3. audit incomplete V2 functional surfaces;
+4. start V2 AI-assisted listing creation as the first
+   major functional milestone.

@@ -3235,3 +3235,39 @@ new close/open state model was added.
 Future market, services and work discovery surfaces
 should reuse these semantic content-type tokens where
 appropriate, following a separate source audit.
+
+### Discovery semantic color boundary — 2026-08-14
+
+V2 discovery surfaces extend the public-profile
+semantic content-type contract:
+
+1. marketplace products and active listings — amber;
+2. services and related service assistance — teal;
+3. product showcases and portfolio examples — indigo.
+
+The palette is applied only to presentation layers:
+
+- result-section shell;
+- top accent;
+- explicit content-type pill;
+- active filter or sorting state;
+- matching section action;
+- accessible focus accent.
+
+Data-aware components, RPC calls, result limits,
+location behavior and navigation contracts remain
+independent of these decorative tokens.
+
+`/v2/products` remains a hybrid composition:
+
+- local design arrays currently render featured
+  products and related services;
+- `ProductResultsSection` renders live marketplace
+  listing data;
+- live results use the existing bounded listing API
+  and RPC pagination inputs.
+
+This design checkpoint deliberately does not connect
+the remaining design arrays to live data and does not
+add listing creation or AI behavior. Those are
+separate functional milestones.
