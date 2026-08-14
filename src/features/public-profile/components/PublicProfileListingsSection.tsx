@@ -562,10 +562,10 @@ export default function PublicProfileListingsSection({
     categories.length > 0;
 
   return (
-    <section className="min-w-0 overflow-hidden rounded-[30px] border border-black/5 bg-white p-5 shadow-sm sm:p-6">
+    <section className="relative min-w-0 overflow-hidden rounded-[30px] border border-amber-200 bg-amber-50 p-5 shadow-sm before:pointer-events-none before:absolute before:inset-x-0 before:top-0 before:h-1.5 before:bg-amber-500 before:content-[''] sm:p-6">
       <div className="mb-5 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="text-xs font-bold uppercase tracking-[0.26em] text-neutral-400">
+          <p className="inline-flex rounded-full border border-amber-200 bg-amber-100 px-3 py-1.5 text-[11px] font-black uppercase tracking-[0.18em] text-amber-800">
             Kuulutused
           </p>
 
@@ -583,7 +583,7 @@ export default function PublicProfileListingsSection({
                 !showAll
               )
             }
-            className="inline-flex w-full justify-center rounded-full border border-neutral-200 bg-white px-4 py-2.5 text-sm font-black shadow-sm transition hover:border-neutral-300 sm:w-auto"
+            className="inline-flex w-full justify-center rounded-full border border-amber-200 bg-white px-4 py-2.5 text-sm font-black text-amber-800 shadow-sm transition hover:border-amber-300 hover:bg-amber-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500/30 sm:w-auto"
           >
             {showAll
               ? "Vaata vähem"

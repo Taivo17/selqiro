@@ -1408,3 +1408,39 @@ Next larger design work remains separate:
    first available section open;
 3. denser mobile information packaging;
 4. broader visual polish.
+
+## 2026-08-13 – Public profile section tones checkpoint
+
+Completed and locally browser-tested:
+
+- added an indigo identity to product showcases;
+- added a teal identity to services;
+- added an amber identity to active listings;
+- added a persistent top accent to each section;
+- converted section-type labels to tinted pills;
+- aligned section action buttons with each tone;
+- retained white inner content cards;
+- retained all shared card geometry;
+- retained horizontal browsing and expanded grids;
+- retained showcase and service galleries;
+- retained listing category filters, navigation and
+  profile-return restoration;
+- retained the existing expanded-section state model.
+
+Product decision:
+
+- do not add a new accordion or separate section
+  closing behavior now;
+- keep the current section behavior;
+- later reuse the same semantic content-type color
+  system on marketplace/discovery surfaces.
+
+After deployment, verify the public profile on a real
+phone. Check section contrast, horizontal browsing,
+buttons, galleries, listing filters and the absence of
+page-level horizontal overflow.
+
+The next design step should not automatically be an
+accordion. First evaluate other compact mobile
+information-packaging improvements or audit the
+marketplace color-system reuse.

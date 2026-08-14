@@ -6856,3 +6856,44 @@ Päris telefoni production-test tehakse pärast push'i.
 
 Muudatus ei puuduta andmebaasi, migratsioone, RPC-sid,
 RLS-i ega Storage'i.
+
+## 2026-08-13 – Avaliku profiili sisutüüpide värvitoonid
+
+Avaliku profiili kolm peamist sisusektsiooni said
+selgelt eristatava, kuid heleda visuaalse identiteedi:
+
+- tootenäidised kasutavad indigo-sinist tooni;
+- teenused kasutavad teal-rohelist tooni;
+- „Müügis praegu” kuulutused kasutavad amber-oranži
+  tooni.
+
+Iga sektsioon kasutab nüüd:
+
+- väga heledat toonitud tausta;
+- sama värvi piiri;
+- 6 px värvilist ülaserva;
+- toonitud pillikujulist sektsioonisilti;
+- toonitud outline-tegevusnuppu;
+- valgeid sisukaarte hea loetavuse säilitamiseks.
+
+Eristus ei sõltu ainult värvist: tekstilised sildid
+„Tootenäidised”, „Teenused” ja „Kuulutused” jäävad
+alati nähtavaks.
+
+Kaartide geomeetria, horisontaalne sirvimine,
+galeriid, kuulutuste filter, detailvaated,
+tagasipöördumine ning olemasolev sektsioonide
+avamise ja sulgemise loogika jäid muutmata.
+
+Kasutaja otsus: eraldi accordion'i või uut
+sektsioonide sulgemise loogikat praegu ei lisata.
+Tulevikus peab turu eri sisutüüpide disain kasutama
+sama semantilist värvisüsteemi, et kasutaja saaks
+asukoha sisutüübi järgi kohe aru.
+
+Production build ja desktopi brauserivaade on
+kontrollitud. Päris telefoni production-test tehakse
+pärast push'i.
+
+Muudatus ei puuduta andmebaasi, route'e, andmekihti,
+RLS-i ega Storage'it.

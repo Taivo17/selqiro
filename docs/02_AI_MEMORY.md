@@ -2956,3 +2956,32 @@ desktop viewport were browser-tested. A real-device
 production check remains pending until after push.
 
 No database contract changed.
+
+## 2026-08-13 — Semantic content-type color system
+
+Public-profile content sections now use a stable
+semantic color identity:
+
+- product showcases: indigo;
+- services: teal;
+- marketplace listings / “Müügis praegu”: amber.
+
+The section-level treatment consists of a light
+tinted background, matching border, 6 px top accent,
+tinted eyebrow pill and matching outline action
+button. Inner content cards remain white.
+
+Do not rely on color alone: the textual section type
+label remains part of the design contract.
+
+Preserve the existing section expansion coordination.
+The user decided not to add a new accordion or new
+section-closing behavior at this stage.
+
+Future marketplace and discovery design should reuse
+the same semantic content-type color system rather
+than inventing unrelated colors. Exact market-page
+application should be audited separately.
+
+No data, routing, gallery or navigation contract
+changed.

@@ -3196,3 +3196,42 @@ Behavior boundaries remain independent:
 The geometry change does not alter queries, models,
 routing contracts, database schema, authorization or
 storage behavior.
+
+### Semantic content-type presentation tokens — 2026-08-13
+
+The V2 public profile establishes a semantic visual
+identity for the three current content types:
+
+1. product showcases — indigo;
+2. services — teal;
+3. active marketplace listings — amber.
+
+Each public-profile section uses four coordinated
+presentation layers:
+
+- a light tinted section background;
+- a matching section border;
+- a persistent 6 px top accent;
+- a matching eyebrow pill and action-button accent.
+
+Inner content cards remain white and continue using
+the shared card geometry contract. The semantic
+identity is intentionally applied at section level,
+not inside gallery gesture wrappers or data-aware
+components.
+
+Accessibility contract:
+
+- color is supplementary;
+- the explicit content-type label remains visible;
+- main headings remain high-contrast black;
+- functional error and status colors remain
+  independent of the decorative section palette.
+
+The current expansion coordination in
+`PublicProfilePage` is preserved. No accordion or
+new close/open state model was added.
+
+Future market, services and work discovery surfaces
+should reuse these semantic content-type tokens where
+appropriate, following a separate source audit.

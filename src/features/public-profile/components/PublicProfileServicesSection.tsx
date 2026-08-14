@@ -295,10 +295,10 @@ export default function PublicProfileServicesSection({
   }
 
   return (
-    <section className="min-w-0 overflow-hidden rounded-[30px] border border-black/5 bg-white p-5 shadow-sm sm:p-6">
+    <section className="relative min-w-0 overflow-hidden rounded-[30px] border border-teal-200 bg-teal-50 p-5 shadow-sm before:pointer-events-none before:absolute before:inset-x-0 before:top-0 before:h-1.5 before:bg-teal-500 before:content-[''] sm:p-6">
       <div className="mb-5 flex min-w-0 items-end justify-between gap-4">
         <div className="min-w-0">
-          <p className="text-xs font-bold uppercase tracking-[0.26em] text-neutral-400">
+          <p className="inline-flex rounded-full border border-teal-200 bg-teal-100 px-3 py-1.5 text-[11px] font-black uppercase tracking-[0.18em] text-teal-700">
             Teenused
           </p>
 
@@ -318,7 +318,7 @@ export default function PublicProfileServicesSection({
                 !expanded
               )
             }
-            className="shrink-0 rounded-full border border-neutral-200 bg-white px-4 py-2 text-sm font-black shadow-sm transition hover:border-neutral-300"
+            className="shrink-0 rounded-full border border-teal-200 bg-white px-4 py-2 text-sm font-black text-teal-700 shadow-sm transition hover:border-teal-300 hover:bg-teal-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500/30"
           >
             {expanded
               ? "Näita vähem"
