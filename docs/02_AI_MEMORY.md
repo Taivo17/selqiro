@@ -3022,3 +3022,34 @@ Next: apply teal consistently to `/v2/services`, then
 audit incomplete V2 functionality. AI-assisted V2
 listing creation is the first major functional
 priority after the color system.
+
+## 2026-08-14 — V2 services discovery teal identity
+
+`/v2/services` now uses teal consistently across the
+hero, search focus, active nearby control, featured
+services, quick updates, normal results, type pills,
+section actions and the service detail modal.
+
+Inner service cards remain white and primary card
+actions remain black.
+
+Behavior is unchanged:
+
+- `featuredServices`, `quickUpdates` and
+  `normalServices` are still local design arrays;
+- card opening still uses local `selectedService`
+  state;
+- the modal interaction is unchanged;
+- no API, route, database or discovery query was
+  added.
+
+The V2 semantic content-type palette is now complete
+at presentation level:
+
+- showcase / portfolio: indigo;
+- service: teal;
+- marketplace listing/product: amber.
+
+Next major work is not more decorative color work.
+Audit incomplete V2 functionality, then prioritize
+AI-assisted V2 listing creation.

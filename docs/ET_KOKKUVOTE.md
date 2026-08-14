@@ -6945,3 +6945,51 @@ Järgmine värvietapp on `/v2/services` teal-identiteet.
 Pärast värvisüsteemi lõpetamist liigume V2
 funktsionaalsuse auditi ning AI-abiga kuulutuse
 lisamise juurde.
+
+## 2026-08-14 – V2 teenuste discovery teal-värvisüsteem
+
+V2 teenuste discovery kasutab nüüd kogu lehel sama
+teal-rohelist sisutüübi identiteeti.
+
+Teal-identiteet rakendati:
+
+- hero „Teenused” pill-sildile;
+- teenuseotsingu fookusele;
+- vaikimisi aktiivsele „Sinu lähedal” valikule;
+- esiletõstetud teenuste sektsioonile;
+- kiirete teadete sektsioonile;
+- tavaliste teenusetulemuste sektsioonile;
+- sektsioonide ülaribadele, pill-siltidele ja
+  „Vaata kõiki” tegevusnuppudele;
+- teenusekaartide tüübimärkidele;
+- kiire teate kaardi piirile;
+- teenuse detailmodaali piirile ja tüübimärgile.
+
+Kõik sisukaardid jäid valgeks. Peamised kaardi
+tegevusnupud jäid mustaks, et tegevushierarhia oleks
+selge.
+
+Käitumisleping jäi muutmata:
+
+- `featuredServices`, `quickUpdates` ja
+  `normalServices` on endiselt kohalikud
+  näidisandmed;
+- kaartide avamine kasutab endiselt lokaalset
+  `selectedService` olekut;
+- detailmodaal ja selle sulgemine jäid muutmata;
+- route'e, API-sid, Supabase'i ega andmebaasi ei
+  muudetud.
+
+Production build ja desktopi brauseritest läbivad.
+Päris telefoni production-test tehakse pärast push'i.
+
+Sellega on V2 põhivaadete semantiline värvisüsteem
+disainitasemel valmis:
+
+- tootenäidised / portfoolio — indigo;
+- teenused — teal;
+- müügikuulutused / turu tooted — amber.
+
+Järgmine suurem etapp on V2 puuduva funktsionaalsuse
+audit. Esimene suur prioriteet on AI-abiga kuulutuse
+lisamine V2-s.

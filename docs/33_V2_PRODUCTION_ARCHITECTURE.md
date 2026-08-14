@@ -3271,3 +3271,35 @@ This design checkpoint deliberately does not connect
 the remaining design arrays to live data and does not
 add listing creation or AI behavior. Those are
 separate functional milestones.
+
+### Completed V2 presentation color contract — 2026-08-14
+
+The semantic content-type presentation contract is
+now applied across the current V2 public-profile and
+discovery designs:
+
+1. product showcases and portfolio examples — indigo;
+2. services and service assistance — teal;
+3. marketplace listings and products for sale — amber.
+
+The service discovery page applies teal to:
+
+- explicit type labels;
+- section shells and 6 px top accents;
+- active nearby control;
+- input focus;
+- matching section actions;
+- the service detail modal boundary.
+
+White cards and black primary actions remain neutral
+content and action layers.
+
+Current service discovery remains presentation-only
+data composition. The local service arrays and modal
+state are not a production discovery data layer.
+Connecting public service records, search, filters,
+distance ordering and pagination is a separate
+functional architecture milestone.
+
+This checkpoint changes no database, route, RPC,
+storage, identity or query contract.

@@ -1487,3 +1487,44 @@ Next ordered work:
 3. audit incomplete V2 functional surfaces;
 4. start V2 AI-assisted listing creation as the first
    major functional milestone.
+
+## 2026-08-14 – V2 semantic color system complete
+
+Completed and locally browser-tested:
+
+- public-profile showcases use indigo;
+- public-profile services use teal;
+- public-profile active listings use amber;
+- `/v2/products` uses amber for products/listings;
+- the related-services strip on `/v2/products` uses
+  teal;
+- `/v2/services` uses teal across hero, sections,
+  cards and modal boundaries;
+- white content cards and functional status colors
+  remain separate;
+- production builds pass.
+
+Current functional truth:
+
+- `/v2/products` is hybrid: live lower listing
+  results plus local featured-product and
+  related-service design arrays;
+- `/v2/services` is still based on local design
+  arrays and local modal state;
+- the semantic color system is complete only at the
+  presentation level.
+
+After deployment, verify `/v2/services` on a real
+phone for section contrast, active nearby state,
+horizontal quick-update scrolling, modal behavior and
+page-level horizontal overflow.
+
+Next ordered work:
+
+1. complete the phone test for service colors;
+2. audit incomplete V2 routes, controls and data
+   connections;
+3. make V2 AI-assisted listing creation the first
+   major functional milestone;
+4. then connect real service discovery data in small,
+   bounded and scalable steps.
