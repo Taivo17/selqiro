@@ -3303,3 +3303,39 @@ functional architecture milestone.
 
 This checkpoint changes no database, route, RPC,
 storage, identity or query contract.
+
+### V2 discovery navigation contract — 2026-08-15
+
+The V2 shell now treats product, service and future
+job browsing as one discovery destination on mobile.
+
+Mobile contract:
+
+1. the bottom navigation remains a five-column grid;
+2. the discovery item is named `Leia`;
+3. its default route is `/v2/products`;
+4. active route families include:
+   - `/v2/products`;
+   - `/v2/services`;
+   - future `/v2/jobs`;
+5. deeper listing, showcase and service detail
+   routes remain outside the bottom-navigation shell.
+
+Page-level contract:
+
+- products and services render the shared
+  `src/features/v2-shell/components/
+  V2DiscoveryTypeSwitcher.tsx`;
+- products use amber active styling;
+- services use teal active styling;
+- jobs have no live route and are rendered as an
+  accessible disabled `Tulekul` state;
+- the selector is directly visible and does not use
+  a popup, drawer or bottom sheet.
+
+The shared selector is presentation and navigation
+only. It does not own search state, filters, results,
+pagination, service records or listing records.
+
+This checkpoint changes no database, RPC, storage,
+identity, search-index or API contract.

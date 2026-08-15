@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 type DiscoveryItem = {
   eyebrow: string;
   title: string;
@@ -11,16 +13,25 @@ const startCards = [
     title: "Tooted",
     description: "Otsin tooteid enda lähedalt või kaugemalt.",
     action: "Vaata tooteid",
+    href: "/v2/products",
+    actionClassName:
+      "border-amber-200 bg-amber-50 text-amber-900 hover:bg-amber-100",
   },
   {
     title: "Teenused",
     description: "Otsin teenusepakkujat enda lähedalt.",
     action: "Leia teenus",
+    href: "/v2/services",
+    actionClassName:
+      "border-teal-200 bg-teal-50 text-teal-900 hover:bg-teal-100",
   },
   {
     title: "Töökohad",
     description: "Tulevikus ettevõtete tööpakkumised sinu piirkonnas.",
     action: "Tulekul",
+    href: null,
+    actionClassName:
+      "border-neutral-200 bg-neutral-100 text-neutral-400",
   },
 ];
 
@@ -249,9 +260,27 @@ export default function V2HomePage() {
                 <p className="mt-2 min-h-[54px] text-sm leading-6 text-neutral-600">
                   {card.description}
                 </p>
-                <button className="mt-4 rounded-full border border-neutral-200 bg-white px-4 py-2 text-sm font-bold">
-                  {card.action}
-                </button>
+                {card.href ? (
+                  <Link
+                    href={card.href}
+                    className={[
+                      "mt-4 inline-flex rounded-full border px-4 py-2 text-sm font-bold transition",
+                      card.actionClassName,
+                    ].join(" ")}
+                  >
+                    {card.action}
+                  </Link>
+                ) : (
+                  <span
+                    aria-disabled="true"
+                    className={[
+                      "mt-4 inline-flex cursor-not-allowed rounded-full border px-4 py-2 text-sm font-bold",
+                      card.actionClassName,
+                    ].join(" ")}
+                  >
+                    {card.action}
+                  </span>
+                )}
               </article>
             ))}
           </div>

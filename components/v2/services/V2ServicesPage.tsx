@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import V2DiscoveryTypeSwitcher from "../../../src/features/v2-shell/components/V2DiscoveryTypeSwitcher";
 
 type Service = {
   title: string;
@@ -375,6 +376,8 @@ export default function V2ServicesPage() {
 
   return (
     <div className="space-y-8">
+      <V2DiscoveryTypeSwitcher active="services" />
+
       <section className="rounded-[34px] border border-black/5 bg-white p-5 shadow-sm md:p-6">
         <div className="mb-5 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
           <div>

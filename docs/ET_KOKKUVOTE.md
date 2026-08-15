@@ -6993,3 +6993,47 @@ disainitasemel valmis:
 Järgmine suurem etapp on V2 puuduva funktsionaalsuse
 audit. Esimene suur prioriteet on AI-abiga kuulutuse
 lisamine V2-s.
+
+## 2026-08-15 – V2 Leia-navigeerimine
+
+V2 mobiili põhimenüü kasutab nüüd senise „Turg”
+asemel laiemat „Leia” sihtkohta:
+
+- alumises navis säilis viis kohta:
+  Avaleht, Leia, Müü, Sõnumid ja Minu ala;
+- Leia kasutab ostukoti asemel luubiikooni;
+- Leia avab vaikimisi `/v2/products`;
+- Leia on aktiivne nii `/v2/products`,
+  `/v2/services` kui ka tulevasel `/v2/jobs`
+  discovery-harul;
+- kuulutuse, teenuse ja tootenäidise detailvaadete
+  senine alumise navi peitmine jäi muutmata.
+
+Avalehe otsingukaardid on nüüd selge käitumisega:
+
+- „Vaata tooteid” avab `/v2/products`;
+- „Leia teenus” avab `/v2/services`;
+- „Tulekul” on mitteklikitatav tulevikuseisund.
+
+Lisati jagatud
+`V2DiscoveryTypeSwitcher`, mida kasutavad nii
+toodete kui teenuste discovery-leht.
+
+Switcher kuvab alati:
+
+- Tooted — aktiivsena amber;
+- Teenused — aktiivsena teal;
+- Töö — nähtav, kuid „Tulekul” ja mitteklikitatav.
+
+Popup-menüüd ega täiendavat bottom sheet'i ei
+lisatud. Otsingu, filtrite, tulemuste, teenuste
+näidisandmete, detailmodaali, müügivoo, sõnumite ja
+identiteedivahetuse käitumist ei muudetud.
+
+Production build ning kohalik lai ja kitsas
+brauseritest läbivad. Production-telefoni kontroll
+tehakse pärast deployment'i.
+
+Järgmine suurem etapp on V2 puuduva funktsionaalsuse
+audit. Esimene suur prioriteet on AI-abiga kuulutuse
+lisamine V2-s.

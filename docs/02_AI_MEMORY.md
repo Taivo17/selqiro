@@ -3053,3 +3053,33 @@ at presentation level:
 Next major work is not more decorative color work.
 Audit incomplete V2 functionality, then prioritize
 AI-assisted V2 listing creation.
+
+## 2026-08-15 — V2 Find navigation
+
+The V2 mobile bottom navigation keeps five slots but
+the former `Turg` destination is now `Leia`.
+
+Current contract:
+
+- `Leia` links to `/v2/products` by default;
+- it is active on product, service and future jobs
+  discovery branches;
+- its icon is a magnifying glass;
+- listing, showcase and service detail routes keep
+  the existing hidden-bottom-navigation behavior;
+- home product and service actions are real links;
+- the home jobs action remains disabled;
+- product and service discovery pages share
+  `V2DiscoveryTypeSwitcher`;
+- products use amber active styling;
+- services use teal active styling;
+- jobs remain visible as non-interactive `Tulekul`.
+
+Do not replace the visible switcher with a popup or
+bottom sheet. Preserve the five-slot mobile geometry.
+
+No product search, service data, modal, sell,
+messages, identity or database behavior changed.
+
+Next major work: audit incomplete V2 functionality,
+then prioritize AI-assisted V2 listing creation.

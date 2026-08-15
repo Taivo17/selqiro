@@ -1528,3 +1528,44 @@ Next ordered work:
    major functional milestone;
 4. then connect real service discovery data in small,
    bounded and scalable steps.
+
+## 2026-08-15 – V2 Leia navigation checkpoint
+
+Completed and locally browser-tested:
+
+- mobile `Turg` was renamed to `Leia`;
+- the bag icon was replaced with a search icon;
+- the five-slot mobile navigation geometry and
+  safe-area handling remain intact;
+- `Leia` is active on product and service discovery;
+- home product and service actions now navigate;
+- home jobs remains a disabled future action;
+- products and services share a visible
+  `Tooted / Teenused / Töö` selector;
+- product active state is amber;
+- service active state is teal;
+- jobs is non-interactive and marked `Tulekul`;
+- existing product results, service demo data,
+  service modal and detail-route nav hiding remain
+  intact;
+- production build passes;
+- wide and narrow local browser tests pass.
+
+After deployment, verify on a real phone:
+
+1. home product and service links;
+2. bottom-nav Leia icon, label and active dot;
+3. product/service switching;
+4. jobs disabled state;
+5. no page-level horizontal overflow;
+6. existing product results and service modal.
+
+Next ordered work:
+
+1. close the production phone check;
+2. audit incomplete V2 routes, controls and data
+   connections;
+3. make AI-assisted V2 listing creation the first
+   major functional milestone;
+4. connect other real discovery data in small,
+   scalable steps.

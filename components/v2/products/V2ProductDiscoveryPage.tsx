@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import ProductResultsSection from "../../../src/features/product-discovery/components/ProductResultsSection";
+import V2DiscoveryTypeSwitcher from "../../../src/features/v2-shell/components/V2DiscoveryTypeSwitcher";
 
 type ActivePanel = "price" | "location" | "filters" | "sort" | null;
 
@@ -428,6 +429,8 @@ export default function V2ProductDiscoveryPage() {
 
   return (
     <div className="space-y-8">
+      <V2DiscoveryTypeSwitcher active="products" />
+
       <section className="rounded-[34px] border border-black/5 bg-white p-5 shadow-sm md:p-6">
         <div className="mb-5 flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
           <div>

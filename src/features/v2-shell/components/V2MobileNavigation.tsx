@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export type V2MobileNavigationItemId =
   | "home"
-  | "market"
+  | "find"
   | "sell"
   | "messages"
   | "my-area";
@@ -23,8 +23,8 @@ const navigationItems: V2MobileNavigationItem[] = [
     href: "/v2",
   },
   {
-    id: "market",
-    label: "Turg",
+    id: "find",
+    label: "Leia",
     href: "/v2/products",
   },
   {
@@ -77,10 +77,11 @@ function navigationItemIsActive(
     return pathname === "/v2";
   }
 
-  if (itemId === "market") {
+  if (itemId === "find") {
     return (
       pathname.startsWith("/v2/products") ||
-      pathname.startsWith("/v2/services")
+      pathname.startsWith("/v2/services") ||
+      pathname.startsWith("/v2/jobs")
     );
   }
 
@@ -131,11 +132,11 @@ function NavigationIcon({
     );
   }
 
-  if (itemId === "market") {
+  if (itemId === "find") {
     return (
       <svg {...commonProps}>
-        <path d="M4 9h16l-1 11H5L4 9Z" />
-        <path d="M8 9V7a4 4 0 0 1 8 0v2" />
+        <circle cx="10.5" cy="10.5" r="6.5" />
+        <path d="m15.5 15.5 4.5 4.5" />
       </svg>
     );
   }
