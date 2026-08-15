@@ -1569,3 +1569,47 @@ Next ordered work:
    major functional milestone;
 4. connect other real discovery data in small,
    scalable steps.
+
+## 2026-08-15 – V2 listing-create foundation checkpoint
+
+Completed and locally browser-tested:
+
+- added `/v2/sell`;
+- added the `listing-create` feature boundary;
+- added image-first local selection;
+- added camera and gallery inputs;
+- added a 10-image limit;
+- added JPG, PNG and WEBP validation;
+- added a 25 MB source-file limit;
+- added local previews;
+- added image ordering and removal;
+- marked the first image as the future primary image;
+- added optional title and description;
+- added `empty / ai / user` field provenance;
+- added a pure AI merge helper that protects user
+  values;
+- production build passes;
+- narrow local browser testing passes.
+
+Important current boundary:
+
+- `/v2/sell` does not call AI yet;
+- it does not upload images;
+- it does not create a draft;
+- it does not save or publish;
+- mobile `Müü` still opens the working `/sell` route;
+- legacy real publication was regression-tested and
+  remains working.
+
+Next ordered work:
+
+1. prepare the first selected images for AI in the
+   browser;
+2. extend `/api/ai/analyze-listing` to accept optional
+   title and description;
+3. ask AI for a suggested description as well as
+   title, category and dynamic fields;
+4. merge AI output without overwriting user text;
+5. render validated category suggestions;
+6. checkpoint and test before adding database draft
+   persistence.

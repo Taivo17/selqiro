@@ -3083,3 +3083,41 @@ messages, identity or database behavior changed.
 
 Next major work: audit incomplete V2 functionality,
 then prioritize AI-assisted V2 listing creation.
+
+## 2026-08-15 — V2 listing-create foundation
+
+A separate `/v2/sell` route now owns the first V2
+marketplace-listing creation foundation.
+
+Current behavior:
+
+- image-first local form;
+- camera and gallery selection;
+- up to 10 selected JPG, PNG or WEBP files;
+- source-file validation up to 25 MB;
+- local previews, ordering and removal;
+- first image marked as the future primary image;
+- optional title and description before AI;
+- field provenance is `empty`, `ai` or `user`;
+- future AI merge rules must never silently replace
+  `user` fields.
+
+This checkpoint deliberately performs no AI request,
+Storage upload, listing insert, draft creation or
+publication.
+
+Keep the central mobile `Müü` destination on the
+working legacy `/sell` route until the V2 flow can
+safely replace it. `/v2/sell` is directly testable and
+is already included in the mobile active-route logic.
+
+Next isolated checkpoint:
+
+1. extract reusable browser image preparation;
+2. extend the authenticated analyze request with
+   optional title and description;
+3. return a suggested description;
+4. apply AI values through provenance-aware merge
+   rules;
+5. validate every category result against the Selqiro
+   category tree.

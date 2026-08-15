@@ -7037,3 +7037,56 @@ tehakse pärast deployment'i.
 Järgmine suurem etapp on V2 puuduva funktsionaalsuse
 audit. Esimene suur prioriteet on AI-abiga kuulutuse
 lisamine V2-s.
+
+## 2026-08-15 – V2 kuulutuse lisamise vormialus
+
+Lisati eraldatud V2 kuulutuse loomise route:
+
+- `/v2/sell`.
+
+Uus vormialus on pildipõhine ja toetab praegu:
+
+- telefoni kaamera valikut;
+- galerii valikut;
+- mitme pildi lisamist;
+- kuni 10 pilti;
+- JPG-, PNG- ja WEBP-algfailide kontrolli;
+- kuni 25 MB algfaili kontrolli;
+- kohalikke pildieelvaateid;
+- piltide järjestamist;
+- pildi eemaldamist;
+- esimese pildi tulevase põhipildina tähistamist;
+- valikulist pealkirja;
+- valikulist kirjeldust.
+
+Pealkirja ja kirjelduse jaoks lisati väljade päritolu
+mudel:
+
+- `empty` — väli on tühi;
+- `ai` — välja täitis AI;
+- `user` — kasutaja sisestas või muutis väärtust.
+
+AI ühendamiseks on olemas merge-reegel, mille järgi
+kasutaja väärtust ei kirjutata vaikides üle.
+Tühja või AI-päritolu välja saab tulevane AI analüüs
+täita või värskendada.
+
+Selles checkpoint'is ei tehta veel:
+
+- AI päringut;
+- piltide serverisse laadimist;
+- kuulutuse mustandi loomist;
+- andmebaasi salvestamist;
+- automaatset avaldamist.
+
+Mobiili keskne „Müü” nupp jääb seni töötava `/sell`
+voo peale. `/v2/sell` on eraldi testitav aadress ning
+vana voog saab jätkuvalt kuulutusi päriselt avaldada.
+
+Production build ja kohalik kitsas vaade läbivad.
+Kasutaja kinnitas piltide lisamise, järjestamise,
+eemaldamise ning pealkirja ja kirjelduse sisestamise.
+
+Järgmine eraldatud etapp on piltide ettevalmistamine
+AI jaoks ning autentitud analüüsipäringu laiendamine
+valikulise pealkirja ja kirjeldusega.

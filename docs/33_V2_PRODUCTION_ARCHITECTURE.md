@@ -3339,3 +3339,44 @@ pagination, service records or listing records.
 
 This checkpoint changes no database, RPC, storage,
 identity, search-index or API contract.
+
+### V2 listing-create client foundation — 2026-08-15
+
+The V2 marketplace listing-create feature now has a
+dedicated route and feature boundary:
+
+- `app/v2/sell/page.tsx`;
+- `components/v2/sell/V2SellPage.tsx`;
+- `src/features/listing-create`.
+
+The first client-only checkpoint owns:
+
+- source-image selection and validation;
+- a 10-image local limit;
+- local object-URL previews;
+- local ordering and removal;
+- future-primary-image ordering;
+- optional title and description context;
+- field provenance for AI-safe merging.
+
+Field provenance contract:
+
+1. `empty` can receive an AI value;
+2. `ai` can be refreshed by a later AI analysis;
+3. `user` cannot be silently overwritten;
+4. AI never publishes automatically.
+
+The first checkpoint intentionally creates no
+database row and no Storage object. This avoids
+orphaned uploads and premature public data while the
+secure active-identity draft contract is still
+separate work.
+
+The production `/sell` route remains the mobile
+default. The V2 shell already recognizes `/v2/sell`
+as the sell branch, but cutover must happen only after
+AI, draft persistence, images and publication are
+complete and tested.
+
+This checkpoint changes no database, RPC, RLS,
+Storage or existing legacy publication contract.
