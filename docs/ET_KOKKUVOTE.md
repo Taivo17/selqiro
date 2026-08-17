@@ -7194,3 +7194,91 @@ sisupõhise tasulise nähtavuse rolli.
 
 See checkpoint dokumenteerib otsused ega lisa veel
 reklaami-, kampaania- või Energy andmebaasitabeleid.
+
+## 2026-08-17 – Identity-põhine Energy wallet ja append-only ledger
+
+Lisati esimene päris Energy andmebaasialus:
+
+- `supabase/migrations/20260817130000_add_energy_wallet_foundation.sql`.
+
+Wallet kuulub Selqiro identiteedile, mitte otse
+kasutajakontole. Seetõttu:
+
+- eraisiku aktiivsel identiteedil on oma wallet;
+- ettevõtte identiteedil on ühine wallet;
+- ettevõtte volitatud liikmed kasutavad ettevõtte
+  identiteedi wallet'it;
+- aktiivse identiteedi vahetamisel vahetub ka Energy
+  kontekst.
+
+`energy_wallets` hoiab eraldi:
+
+- `available_paid`;
+- `available_bonus`;
+- `reserved_paid`;
+- `reserved_bonus`.
+
+See eraldab ostetud, boonus- ja poolelioleva toimingu
+jaoks reserveeritud Energy.
+
+`energy_ledger_entries` on append-only sündmuste
+ajalugu. Toetatavad sündmusetüübid on:
+
+- `paid_grant`;
+- `bonus_grant`;
+- `reserve`;
+- `commit`;
+- `release`;
+- `adjustment`.
+
+Olemasolevat ledger'i rida ei saa muuta ega kustutada.
+Parandus peab tulema uue sündmusena.
+
+Igal sündmusel on stabiilne `operation_key`.
+Unikaalsed indeksid blokeerivad:
+
+- sama toimingu sama sündmuse topeltlisamise;
+- sama toimingu jaoks korraga nii `commit` kui
+  `release` lõpptulemuse.
+
+Lisati aktiivse identiteedi turvalised RPC-d:
+
+- `ensure_my_energy_wallet_v2`;
+- `get_my_energy_wallet_v2`;
+- `get_my_energy_ledger_v2`.
+
+Wallet'i loomine on idempotentne. Kasutaja ei anna
+RPC-le ise identiteedi ID-d; andmebaas kasutab
+`require_my_active_identity_v2()` tulemust.
+
+Omaniku ajalugu tagastab ainult `public_metadata`.
+`internal_metadata` jääb serveri, maksepakkuja,
+AI-kulu ja admini sisemiste andmete jaoks.
+
+Tabelite otsekirjutus on authenticated kasutajalt
+eemaldatud. Service role saab tulevikus kasutada
+turvalisi Energy operatsioone.
+
+Kohalikult läbisid:
+
+- production build;
+- täielik Supabase `db reset`;
+- migratsioonide rakendamine;
+- wallet'i idempotentsuse SQL test;
+- omaniku saldo- ja ajaloo-RPC test;
+- duplikaatsündmuse blokeerimise test;
+- append-only mutatsioonikaitse test.
+
+Selles checkpoint'is ei lisatud veel:
+
+- tervitus-Energy grant'i;
+- reserve / commit / release toimingufunktsioone;
+- AI Energy hinda;
+- Premium-põhise AI piiri eemaldamist;
+- Energy UI pärisandmeid;
+- makseid;
+- reklaami või esiletõstmise kampaaniaid.
+
+Production-andmebaasi migratsiooni see checkpoint
+automaatselt ei rakenda. Migratsioon lisatakse
+versioonihaldusse eraldi turvaliseks deploy'ks.

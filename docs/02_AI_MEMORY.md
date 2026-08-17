@@ -3183,3 +3183,51 @@ Featured content:
 Do not implement a second mid-page standalone ad in
 V1. Featured placements provide the in-content paid
 visibility.
+
+## 2026-08-17 — Energy wallet foundation
+
+The first real Energy database foundation now exists
+as migration:
+
+`20260817130000_add_energy_wallet_foundation.sql`.
+
+Stable contract:
+
+- one wallet per Selqiro identity;
+- private and business identities have separate
+  wallet scopes;
+- business members share the authorized business
+  identity wallet;
+- paid, bonus and reserved balances are separate;
+- financial history is append-only;
+- `operation_key` is the idempotency boundary;
+- one operation cannot receive both a commit and a
+  release final event;
+- owner reads are scoped through the authenticated
+  active identity;
+- users cannot write wallet or ledger rows directly;
+- internal metadata is never returned by the owner
+  history RPC.
+
+Added RPCs:
+
+- `ensure_my_energy_wallet_v2`;
+- `get_my_energy_wallet_v2`;
+- `get_my_energy_ledger_v2`.
+
+Local Supabase reset and SQL contract tests passed.
+
+Not implemented yet:
+
+- welcome Energy;
+- reserve / commit / release mutation RPCs;
+- AI Energy charging;
+- removal of legacy Premium daily limits;
+- real Energy UI;
+- payment provider integration.
+
+Next isolated checkpoint should add a once-per-user
+welcome bonus grant to the user's original private
+identity wallet. It must be idempotent and must not
+grant new welcome Energy for every additional
+identity.

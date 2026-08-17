@@ -1674,3 +1674,50 @@ Next ordered work:
    checkpoint;
 6. implement campaigns only after the Energy base is
    stable.
+
+## 2026-08-17 – Energy wallet foundation checkpoint
+
+Completed locally:
+
+- added identity-scoped `energy_wallets`;
+- added separate paid, bonus and reserved balances;
+- added append-only `energy_ledger_entries`;
+- added stable operation idempotency keys;
+- blocked duplicate ledger event types;
+- blocked more than one final commit/release event;
+- blocked ledger updates and deletes;
+- added wallet/identity consistency validation;
+- added active-identity wallet summary RPC;
+- added bounded owner-visible ledger history RPC;
+- kept internal metadata out of owner history;
+- denied authenticated direct table writes;
+- production build passes;
+- full local Supabase reset passes;
+- SQL contract tests pass.
+
+Current migration:
+
+`supabase/migrations/20260817130000_add_energy_wallet_foundation.sql`
+
+Important boundary:
+
+- no welcome Energy yet;
+- no wallet mutation RPC yet;
+- no reserve / commit / release behavior yet;
+- no AI charging yet;
+- legacy Premium AI limits remain untouched;
+- `/v2/energy` still shows placeholder data;
+- production Supabase has not been migrated by this
+  local checkpoint alone.
+
+Next ordered work:
+
+1. add a once-per-user welcome Energy entitlement;
+2. grant it to the user's original private identity
+   wallet;
+3. lock wallet and append the bonus ledger event
+   atomically;
+4. expose the real wallet balance in `/v2/energy`;
+5. add reserve / commit / release operations;
+6. replace Premium AI limits with Energy;
+7. continue V2 AI listing analysis.

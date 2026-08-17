@@ -3535,3 +3535,113 @@ Start conservatively:
 This contract is architectural only. No campaign,
 Energy-ledger or advertising schema is created by this
 documentation checkpoint.
+
+### Energy wallet and append-only ledger foundation — 2026-08-17
+
+#### Ownership
+
+Energy is identity-scoped.
+
+`energy_wallets.identity_id` is unique, producing one
+wallet per Selqiro identity.
+
+This supports:
+
+- one private-identity wallet;
+- shared business-identity wallets for authorized
+  members;
+- active-identity switching without mixing balances.
+
+Welcome Energy remains a user-level entitlement and
+must later be granted only once to the user's original
+private identity wallet.
+
+#### Balance model
+
+The wallet stores four non-negative integer balances:
+
+- `available_paid`;
+- `available_bonus`;
+- `reserved_paid`;
+- `reserved_bonus`.
+
+Purchased and promotional value are not merged.
+Reserved value is not available for another
+operation.
+
+The wallet row is a current-balance projection.
+Financial history is the append-only ledger.
+
+#### Ledger model
+
+`energy_ledger_entries` records deltas for all four
+balance buckets.
+
+Initial event types:
+
+- `paid_grant`;
+- `bonus_grant`;
+- `reserve`;
+- `commit`;
+- `release`;
+- `adjustment`.
+
+The ledger is append-only:
+
+- update is rejected;
+- delete is rejected;
+- corrections require a new adjustment event.
+
+`operation_key` is the idempotency key.
+
+The schema prevents:
+
+- duplicate event types for the same wallet and
+  operation;
+- more than one final event (`commit` or `release`)
+  for the same wallet and operation.
+
+`public_metadata` is owner-visible.
+`internal_metadata` is server-only and is excluded
+from owner-history RPC output.
+
+#### Access boundary
+
+The schema reuses:
+
+- `require_my_active_identity_v2()`;
+- `current_user_has_identity_access()`.
+
+Authenticated users can read only through active-
+identity owner RPCs:
+
+- `get_my_energy_wallet_v2`;
+- `get_my_energy_ledger_v2`.
+
+The internal idempotent helper
+`ensure_my_energy_wallet_v2` is executable only by
+service role and by trusted SECURITY DEFINER calls.
+
+Direct authenticated table writes are not granted.
+
+#### Current implementation boundary
+
+The schema does not yet implement a financial
+mutation operation that changes wallet balances.
+
+The next mutation layer must atomically:
+
+1. lock the wallet row;
+2. validate the operation key;
+3. update the balance projection;
+4. append the matching ledger event;
+5. return the authoritative wallet summary.
+
+Welcome grant, reserve, commit and release must be
+separate audited checkpoints.
+
+The current migration was validated with a complete
+local Supabase reset and SQL contract tests.
+
+Committing this migration does not itself deploy it to
+the production Supabase database.
