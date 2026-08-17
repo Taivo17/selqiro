@@ -1721,3 +1721,52 @@ Next ordered work:
 5. add reserve / commit / release operations;
 6. replace Premium AI limits with Energy;
 7. continue V2 AI listing analysis.
+
+## 2026-08-17 – Admin test Energy checkpoint
+
+Completed locally:
+
+- added
+  `20260817150000_add_admin_test_energy_seed.sql`;
+- grants each active admin user one 5000 bonus-Energy
+  development seed;
+- uses the wallet of the identity active on first
+  application;
+- revalidates private ownership or active business
+  membership;
+- uses a user-scoped operation key;
+- blocks duplicate grants after identity changes;
+- leaves paid Energy unchanged;
+- appends one `bonus_grant` ledger event;
+- seed function is service-role-only;
+- authenticated and anon have no execute permission;
+- SECURITY DEFINER contract verified;
+- full local Supabase reset passes;
+- SQL idempotency and authorization tests pass;
+- production build passes.
+
+Important boundary:
+
+- migration is committed but not automatically applied
+  to production Supabase by Git/Vercel;
+- admin will see the real 5000 Energy only after
+  production migrations are applied and `/v2/energy`
+  is connected to real RPC data;
+- `/v2/energy` still shows placeholder data;
+- general welcome Energy does not exist yet;
+- reserve / commit / release do not exist yet;
+- AI charging does not exist yet;
+- legacy Premium AI limits remain untouched.
+
+Next ordered work:
+
+1. apply the two Energy migrations to production
+   Supabase through a controlled migration step;
+2. connect `/v2/energy` to
+   `get_my_energy_wallet_v2` and
+   `get_my_energy_ledger_v2`;
+3. verify the admin's 5000 bonus-Energy in production;
+4. add general once-per-user welcome Energy;
+5. add reserve / commit / release;
+6. replace Premium AI limits with Energy;
+7. continue V2 AI listing analysis.

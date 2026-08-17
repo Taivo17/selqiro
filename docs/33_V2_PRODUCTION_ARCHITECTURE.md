@@ -3645,3 +3645,78 @@ local Supabase reset and SQL contract tests.
 
 Committing this migration does not itself deploy it to
 the production Supabase database.
+
+### Admin test Energy seed — 2026-08-17
+
+The admin test seed is an operational development
+grant, not a marketplace package or purchase.
+
+#### Entitlement
+
+The entitlement is user-scoped:
+
+`admin-test-energy:v1:<admin-user-id>`.
+
+This prevents a second grant when an administrator
+switches from a private identity to a business
+identity or creates additional identities.
+
+#### Destination wallet
+
+The first successful application grants 5000
+`available_bonus` Energy to the wallet of the
+administrator's current active identity.
+
+The function revalidates:
+
+- active `admin_users` status;
+- active identity status;
+- private identity ownership; or
+- active business membership.
+
+The resulting wallet remains identity-scoped even
+though the entitlement is user-scoped.
+
+#### Financial event
+
+The operation atomically:
+
+1. verifies the user-level entitlement;
+2. ensures the identity wallet exists;
+3. locks the wallet row;
+4. checks idempotency again;
+5. increases `available_bonus`;
+6. appends one `bonus_grant` ledger event.
+
+Purchased Energy is never changed.
+
+#### Security boundary
+
+`grant_active_admin_test_energy_v2()` is:
+
+- SECURITY DEFINER;
+- revoked from public, anon and authenticated;
+- executable by service role only.
+
+The migration invokes the function once so active
+administrators already present in the target
+environment receive the seed after migration.
+
+Future administrators can be seeded by an explicit
+trusted service-role operation. The client must never
+call this function directly.
+
+#### Scope boundary
+
+This seed is not:
+
+- general welcome Energy;
+- a recurring allowance;
+- a subscription benefit;
+- a price signal;
+- a payment;
+- an AI usage limit.
+
+The current UI still contains placeholder Energy data.
+Production schema deployment and real UI reads remain
+separate checkpoints.

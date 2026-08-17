@@ -3231,3 +3231,45 @@ welcome bonus grant to the user's original private
 identity wallet. It must be idempotent and must not
 grant new welcome Energy for every additional
 identity.
+
+## 2026-08-17 — Admin test Energy seed
+
+Added migration:
+
+`20260817150000_add_admin_test_energy_seed.sql`.
+
+Stable contract:
+
+- each active admin user can receive one 5000 Energy
+  development grant;
+- the grant is bonus Energy, never paid Energy;
+- the destination is the wallet of the identity active
+  when the grant is first applied;
+- private identity ownership or active business
+  membership is revalidated;
+- the idempotency key is user-scoped:
+  `admin-test-energy:v1:<user-id>`;
+- changing active identity does not create another
+  grant;
+- the ledger event is `bonus_grant` with feature
+  `admin_test_energy`;
+- authenticated and anon roles cannot execute the seed
+  function;
+- service role can execute it;
+- the function is SECURITY DEFINER;
+- existing active admins are seeded when the migration
+  is applied.
+
+The 5000 amount is test support only. It is not an
+Energy price, paid balance or general welcome-credit
+policy.
+
+Local reset and SQL contract tests passed.
+
+Not implemented yet:
+
+- real `/v2/energy` data;
+- general welcome Energy;
+- reserve / commit / release operations;
+- AI Energy charging;
+- production migration application.

@@ -7282,3 +7282,70 @@ Selles checkpoint'is ei lisatud veel:
 Production-andmebaasi migratsiooni see checkpoint
 automaatselt ei rakenda. Migratsioon lisatakse
 versioonihaldusse eraldi turvaliseks deploy'ks.
+
+## 2026-08-17 – Admini ühekordne test-Energy seed
+
+Lisati migratsioon:
+
+- `supabase/migrations/20260817150000_add_admin_test_energy_seed.sql`.
+
+Migratsioon annab igale migratsiooni rakendamise ajal
+aktiivsele adminile ühe korra 5000 boonus-Energy't.
+
+Põhimõtted:
+
+- admin tuvastatakse `admin_users` tabeli aktiivse
+  kirje kaudu;
+- Energy läheb selle identiteedi wallet'ile, mis on
+  admini jaoks seedi esmakordsel rakendamisel aktiivne;
+- privaatse identiteedi puhul peab identiteet kuuluma
+  samale kasutajale;
+- ettevõtte identiteedi puhul peab kasutajal olema
+  aktiivne liikmelisus;
+- Energy lisatakse `available_bonus` saldole;
+- `available_paid` ei muutu;
+- ledger'i sündmus on `bonus_grant`;
+- feature on `admin_test_energy`;
+- operation key on kasutajapõhine:
+  `admin-test-energy:v1:<user-id>`.
+
+Kasutajapõhine unikaalne indeks tagab, et sama admin
+ei saa uut test-Energy toetust ka siis, kui tema
+aktiivne identiteet hiljem muutub.
+
+Funktsioon
+`grant_active_admin_test_energy_v2()` on:
+
+- `SECURITY DEFINER`;
+- käivitatav ainult `service_role` poolt;
+- `authenticated` ja `anon` rollidele keelatud;
+- idempotentne.
+
+Migratsioon käivitab seedi automaatselt üks kord, et
+juba olemasolevad aktiivsed adminid saaksid testimiseks
+Energy't kohe pärast production-migratsiooni
+rakendamist.
+
+5000 Energy on arendus- ja testitoetus:
+
+- see ei ole ostetud Energy;
+- see ei määra tulevast Energy hinnastamist;
+- seda ei anta tavakasutajatele;
+- see ei asenda tulevast piiratud tervitus-Energy
+  lepingut.
+
+Kohalikult läbisid:
+
+- production build;
+- täielik Supabase `db reset`;
+- admini ühekordse granti test;
+- korduskäivituse idempotentsuse test;
+- tavakasutaja välistamise test;
+- funktsiooni õiguste test;
+- `SECURITY DEFINER` kontroll.
+
+Selles checkpoint'is ei ühendatud veel `/v2/energy`
+vaadet päris saldo ega ledger'i andmetega.
+
+Production-andmebaasi migratsiooni checkpoint ise
+automaatselt ei rakenda.
