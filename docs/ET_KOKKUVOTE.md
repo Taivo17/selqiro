@@ -7090,3 +7090,107 @@ eemaldamise ning pealkirja ja kirjelduse sisestamise.
 Järgmine eraldatud etapp on piltide ettevalmistamine
 AI jaoks ning autentitud analüüsipäringu laiendamine
 valikulise pealkirja ja kirjeldusega.
+
+## 2026-08-17 – Energy, reklaami ja esiletõstmise lihtne leping
+
+Selqiro vana Free / Premium / Business osalusmudel on
+asendatud Energy-põhise suunaga.
+
+Põhimõte:
+
+- kõik kontod osalevad marketplace'is võrdsetel
+  alustel;
+- tavaline kuulutamine, otsimine, teenuste pakkumine
+  ja suhtlus ei vaja Energy't;
+- Energy annab valikulisi lisavõimalusi;
+- tulevased Starter, Professional, Business ja
+  Enterprise paketid annavad eelkõige rohkem Energy't,
+  parema ühikuhinna või ettevõtte tööriistu;
+- uus kasutaja võib saada piiratud, rahaks
+  mittevahetatavat tervitus-Energy't;
+- vana Premium-põhine AI päevapiir tuleb enne V2 AI
+  analüüsi avalikku kasutamist eemaldada.
+
+Esimene reklaami- ja esiletõstmise leping peab jääma
+lihtsaks:
+
+- üks ühine kampaaniasüsteem;
+- kaks paigutust: `top_ad` ja `featured`;
+- üks fikseeritud Energy hind;
+- üks fikseeritud periood, alguses näiteks 7 päeva;
+- reklaamitakse juba olemasolevat avalikku Selqiro
+  sisu;
+- eraldi bänneripilti ega vabalt sisestatavat
+  reklaamteksti V1-s ei ole;
+- admini põhitoimingud on kinnita, lükka tagasi,
+  peata ja lõpeta.
+
+### Reklaam
+
+Reklaam on kitsas horisontaalne riba avalehe või
+discovery-lehe ülemises osas.
+
+Reeglid:
+
+- korraga kuvatakse üks reklaam;
+- reklaam ei ole sticky;
+- reklaam ei vilgu, animeeru ega vahetu taimeriga;
+- reklaam ei kata sisu ega nõua sulgemist;
+- uus sobiv reklaam võib valituks osutuda lehe
+  avamisel, lehele tagasi tulles, refresh'il või
+  turukonteksti muutmisel;
+- lihtne sessioonipõhine segatud järjekord näitab
+  võimalusel kõik sobivad kampaaniad enne kordusi;
+- sama kampaaniat ei korrata kohe, kui alternatiive
+  leidub;
+- esimese versiooni sihtimine kasutab kasutaja valitud
+  turupiirkonda, mitte vabalt joonistatavat
+  kilomeetriraadiust.
+
+Reklaam kasutab olemasolevat põhipilti väikese
+ruudu- või 4 : 3 pisipildina. Profiilireklaam kasutab
+avatari või logo. Eraldi laia reklaamipildi lisamist
+ei nõuta.
+
+Reklaamiriba sisaldab:
+
+- silti „Reklaam”;
+- reklaamija nime;
+- piirkonda;
+- sisutüübi märgist;
+- pealkirja ja sobivat metaandmet;
+- ühte tegevusnuppu.
+
+### Esiletõstetud sisu
+
+Esiletõstetud kuulutus või teenus:
+
+- kuvatakse eraldi „Esiletõstetud” rubriigis;
+- jääb samal ajal orgaaniliste tulemuste jaoks
+  sobivaks;
+- võib hiljem ilmuda ühe tasulise vahekaardina
+  orgaaniliste tulemuste vahel;
+- peab läbima sama staatuse, sisutüübi, kategooria,
+  piirkonna ja otsingurelevantsuse kontrolli;
+- ei pääse tasu tõttu valesse kategooriasse või
+  piirkonda;
+- saab märgise
+  „Esiletõstetud · tasuline nähtavus”.
+
+Ühe tulemuste loendi sees kuvatakse sama objekt ainult
+üks kord. Kui objekt paigutatakse tasulisse
+vahepositsiooni, jäetakse selle teine orgaaniline
+koopia samalt tulemuste lehelt ära.
+
+Kui sama objekt on sellel lehevaatamisel valitud nii
+ülemiseks reklaamiks kui esiletõstetud paigutuseks,
+valitakse teise paigutuse jaoks võimalusel teine
+kampaania.
+
+Esimeses versioonis lisatakse ainult üks ülemine
+reklaamikoht. Eraldi teist lehe keskosa reklaami ei
+lisata, sest esiletõstetud kaardid täidavad
+sisupõhise tasulise nähtavuse rolli.
+
+See checkpoint dokumenteerib otsused ega lisa veel
+reklaami-, kampaania- või Energy andmebaasitabeleid.

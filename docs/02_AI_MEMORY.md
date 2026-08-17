@@ -3121,3 +3121,65 @@ Next isolated checkpoint:
    rules;
 5. validate every category result against the Selqiro
    category tree.
+
+## 2026-08-17 — Energy monetization, ads and featured content
+
+The old Free / Premium / Business marketplace-access
+model is superseded.
+
+Stable direction:
+
+- all accounts participate in the marketplace on
+  equal terms;
+- Energy pays only for optional value-added
+  capabilities;
+- welcome Energy may provide a limited trial;
+- paid and bonus Energy must eventually be accounted
+  for separately;
+- legacy Premium-based AI daily limits must be
+  replaced before V2 AI-assisted listing analysis is
+  shipped.
+
+Advertising V1 stays deliberately simple:
+
+- one campaign system;
+- placement types `top_ad` and `featured`;
+- one fixed Energy price and one fixed duration;
+- promote an existing published listing, service,
+  showcase or profile;
+- no separate banner upload;
+- no custom free-form advertising creative;
+- one calm in-flow top ad slot;
+- no sticky, timer rotation, autoplay, overlay or
+  dismiss requirement.
+
+Top-ad rotation:
+
+- a different eligible campaign may be selected on a
+  new eligible page view, return navigation, refresh
+  or market-context change;
+- never rotate while the user is reading the page;
+- use a session-level shuffled queue / round-robin;
+- avoid immediate repeats when alternatives exist.
+
+The top ad reuses the existing primary image as a
+small square or 4 : 3 thumbnail. Profile ads use an
+avatar or logo.
+
+Featured content:
+
+- remains eligible for normal organic results;
+- may also appear in a dedicated featured section;
+- may later receive one low-frequency insertion among
+  organic results;
+- must pass normal status, type, category, location
+  and relevance filters;
+- is labelled
+  `Esiletõstetud · tasuline nähtavus`;
+- is rendered only once inside one result list;
+- is deduplicated against the top ad on the same page
+  where possible.
+
+Do not implement a second mid-page standalone ad in
+V1. Featured placements provide the in-content paid
+visibility.

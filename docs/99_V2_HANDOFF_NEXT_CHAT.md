@@ -1613,3 +1613,64 @@ Next ordered work:
 5. render validated category suggestions;
 6. checkpoint and test before adding database draft
    persistence.
+
+## 2026-08-17 – Energy, ads and featured visibility decision
+
+Documented product direction:
+
+- marketplace participation remains free and equal;
+- Energy unlocks optional capabilities;
+- limited welcome Energy may demonstrate AI value;
+- legacy Premium-based AI limits must not be carried
+  into V2 AI-assisted listing analysis;
+- Energy ledger work is required before the AI
+  analysis patch is shipped.
+
+Advertising V1:
+
+- one campaign system;
+- one compact top-ad slot;
+- placement type `top_ad`;
+- existing published Selqiro content only;
+- existing primary image reused as a small thumbnail;
+- no separate banner image;
+- no timer rotation;
+- a new ad may be selected on page open, return,
+  refresh or market-context change;
+- session-level shuffled queue / round-robin;
+- no immediate repeat when alternatives exist;
+- no sticky, overlay, autoplay, flashing or
+  dismiss-required behavior.
+
+Featured visibility:
+
+- placement type `featured`;
+- dedicated featured sections remain;
+- promoted content remains eligible for organic
+  results;
+- one low-frequency insertion among organic results
+  may be added later;
+- the same relevance, category, location and status
+  filters still apply;
+- one object is rendered once per result list;
+- badge:
+  `Esiletõstetud · tasuline nähtavus`;
+- deduplicate the same object against the top ad on
+  the same page where possible.
+
+Do not build a second standalone mid-page ad in V1.
+Featured cards provide the in-content monetization.
+
+No implementation was added in this checkpoint.
+
+Next ordered work:
+
+1. design and audit the minimal Energy ledger and
+   wallet transaction boundary;
+2. remove Premium-based AI daily-limit logic;
+3. add limited welcome Energy;
+4. charge V2 listing AI analysis through Energy;
+5. continue V2 listing creation after the Energy
+   checkpoint;
+6. implement campaigns only after the Energy base is
+   stable.

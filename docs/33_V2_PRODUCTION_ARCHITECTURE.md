@@ -3380,3 +3380,158 @@ complete and tested.
 
 This checkpoint changes no database, RPC, RLS,
 Storage or existing legacy publication contract.
+
+### Energy, advertising and featured visibility contract — 2026-08-17
+
+#### Marketplace access
+
+Marketplace participation is not tier-gated.
+
+Normal listing publication, organic discovery,
+service publication, profile visibility and messaging
+must not depend on Premium or Business access.
+
+Paid differentiation is based on:
+
+- Energy balance;
+- optional AI operations;
+- optional promoted visibility;
+- future business and operational tools.
+
+Future package names such as Starter, Professional,
+Business and Enterprise are Energy or tooling bundles,
+not privileged marketplace-ranking classes.
+
+#### Energy boundary
+
+Before V2 AI-assisted listing analysis is shipped,
+the legacy Premium-based daily-limit branch must be
+replaced by an Energy transaction boundary.
+
+The future transaction pattern is:
+
+1. validate wallet and balance;
+2. reserve Energy;
+3. run the optional operation;
+4. commit the debit on success;
+5. release or refund the reservation on a technical
+   failure;
+6. retain separate technical abuse and rate limits.
+
+Paid and bonus Energy require separate accounting
+semantics.
+
+#### Campaign model
+
+V1 should use one small campaign model with placement
+types:
+
+- `top_ad`;
+- `featured`.
+
+Both placements initially use:
+
+- one existing published Selqiro object;
+- one market scope;
+- one fixed duration;
+- one fixed Energy price;
+- simple lifecycle states such as pending, active,
+  paused, rejected and ended;
+- the same basic admin moderation queue.
+
+Do not introduce an auction, CPC, CPM, freely chosen
+radius, auto-optimization, multiple creative
+variants or a separate ad wallet in V1.
+
+#### Top-ad placement
+
+The top ad is a compact, neutral, horizontal strip in
+the normal page flow.
+
+It must:
+
+- be clearly labelled `Reklaam`;
+- use the existing listing, service or showcase
+  primary image as a small square or 4 : 3 thumbnail;
+- use avatar or logo for a profile campaign;
+- use a fallback icon if no image exists;
+- show advertiser, market context, content-type chip,
+  title and relevant meta;
+- expose one CTA;
+- never be sticky, animated, blinking, autoplaying,
+  overlaid or dismiss-required.
+
+V1 does not require a separate wide banner upload.
+Optional crop or focal-point controls may come later.
+
+A campaign can change only on a new eligible page
+view, return navigation, refresh or explicit market
+context change. It cannot rotate on a timer, while
+scrolling or on every filter interaction.
+
+A simple session-level shuffled queue / round-robin
+should:
+
+- show eligible campaigns before repeats where
+  possible;
+- avoid an immediate repeat when alternatives exist;
+- require no cross-site behavioural tracking.
+
+Start with one top-ad slot. Do not add a second
+standalone mid-page ad in V1.
+
+#### Featured placement
+
+A featured listing or service must remain eligible for
+the normal organic result set.
+
+It may also appear:
+
+- in a dedicated featured section;
+- later, at low frequency, in one paid insertion slot
+  after the first organic result block.
+
+Payment supplements visibility but never bypasses:
+
+- content type;
+- publication status;
+- category;
+- market / location;
+- search relevance;
+- safety and quality rules.
+
+The visible badge is:
+
+`Esiletõstetud · tasuline nähtavus`.
+
+Within one result list, the promoted object is
+rendered once:
+
+- either at its natural organic position with the
+  badge;
+- or in a paid insertion slot while suppressing its
+  duplicate organic copy on that page.
+
+If the same object is selected for both `top_ad` and a
+featured placement on one page, choose another
+eligible campaign for one placement where possible.
+
+Product showcases remain portfolio/profile objects,
+not marketplace sale listings. They may be used in a
+top ad or a suitable showcase/profile placement but
+must not be mixed into ordinary sale-listing results.
+
+#### Initial frequency
+
+Start conservatively:
+
+- one top ad;
+- dedicated featured sections;
+- at most one featured insertion after the first
+  block of organic results;
+- never two paid insertions consecutively;
+- expand only from real usage evidence.
+
+This contract is architectural only. No campaign,
+Energy-ledger or advertising schema is created by this
+documentation checkpoint.
