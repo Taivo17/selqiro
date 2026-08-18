@@ -1,7 +1,22 @@
+"use client";
+
+import Link from "next/link";
+import { useEnergySummary } from "../../../src/features/energy-wallet/model/useEnergySummary";
 import MyAreaListingsSection from "../../../src/features/my-area/components/MyAreaListingsSection";
 import MyServicesSection from "../../../src/features/service-management/components/MyServicesSection";
 import ProductShowcaseManagementCard from "../../../src/features/product-showcase-management/components/ProductShowcaseManagementCard";
 import StoreCategoryManagementCard from "../../../src/features/store-category-management/components/StoreCategoryManagementCard";
+const energyFormatter =
+  new Intl.NumberFormat("et-EE");
+
+function formatEnergy(
+  value: number
+): string {
+  return energyFormatter.format(
+    value
+  );
+}
+
 type SummaryCard = {
   title: string;
   value: string;
@@ -37,7 +52,7 @@ const summaryCards: SummaryCard[] = [
   },
   {
     title: "Energy",
-    value: "156",
+    value: "—",
     helper: "Saadaval walletis",
     action: "Vaata Energy",
   },
@@ -189,7 +204,13 @@ function RowList({ items }: { items: RowItem[] }) {
   );
 }
 
-function IdentityMiniPreview({ dark = false }: { dark?: boolean }) {
+function IdentityMiniPreview({
+  dark = false,
+  identityName,
+}: {
+  dark?: boolean;
+  identityName: string;
+}) {
   return (
     <div
       className={[
@@ -220,7 +241,7 @@ function IdentityMiniPreview({ dark = false }: { dark?: boolean }) {
                 dark ? "text-white" : "text-neutral-950",
               ].join(" ")}
             >
-              Milline Vedu
+              {identityName}
             </p>
           </div>
         </div>
@@ -230,6 +251,55 @@ function IdentityMiniPreview({ dark = false }: { dark?: boolean }) {
 }
 
 export default function V2MyAreaPage() {
+  const {
+    identity: activeIdentity,
+    wallet: energyWallet,
+    loading: energyLoading,
+    error: energyError,
+  } = useEnergySummary();
+
+  const activeIdentityName =
+    activeIdentity?.displayName ||
+    (
+      energyLoading
+        ? "Laen..."
+        : "Aktiivne identiteet"
+    );
+
+  const publicProfileHref =
+    activeIdentity?.slug
+      ? `/v2/profile/${activeIdentity.slug}`
+      : "/v2/my-area";
+
+  const energyValue =
+    energyLoading
+      ? "…"
+      : energyWallet
+        ? formatEnergy(
+            energyWallet.availableTotal
+          )
+        : "—";
+
+  const energyHelper =
+    energyLoading
+      ? "Laen walletit..."
+      : energyError
+        ? "Andmeid ei saanud laadida"
+        : energyWallet
+          ? "Saadaval walletis"
+          : "Wallet puudub";
+
+  const summaryCardsWithEnergy =
+    summaryCards.map((card) =>
+      card.title === "Energy"
+        ? {
+            ...card,
+            value: energyValue,
+            helper: energyHelper,
+          }
+        : card
+    );
+
   return (
     <div className="grid min-w-0 grid-cols-[minmax(0,1fr)] gap-8 lg:grid-cols-[260px_minmax(0,1fr)]">
       <aside className="hidden lg:block">
@@ -270,7 +340,12 @@ export default function V2MyAreaPage() {
                 Tegutsen kui
               </p>
 
-              <IdentityMiniPreview dark />
+              <IdentityMiniPreview
+                dark
+                identityName={
+                  activeIdentityName
+                }
+              />
 
               <p className="mt-3 text-sm leading-6 text-white/65">
                 See on Minu ala vaade. Avalikku profiili näevad teised kasutajad
@@ -281,7 +356,7 @@ export default function V2MyAreaPage() {
         </section>
 
         <section className="grid min-w-0 grid-cols-[minmax(0,1fr)] gap-4 md:grid-cols-2 xl:grid-cols-4">
-          {summaryCards.map((card) => (
+          {summaryCardsWithEnergy.map((card) => (
             <SummaryCardView key={card.title} card={card} />
           ))}
         </section>
@@ -327,7 +402,11 @@ export default function V2MyAreaPage() {
               </p>
               <h2 className="mt-2 text-xl font-black">Avalik profiil</h2>
               <div className="mt-5">
-                <IdentityMiniPreview />
+                <IdentityMiniPreview
+                  identityName={
+                    activeIdentityName
+                  }
+                />
               </div>
 
               <p className="mt-4 text-sm leading-6 text-neutral-600">
@@ -335,29 +414,38 @@ export default function V2MyAreaPage() {
                 tootenäidised, kuulutused, teenused ja uuendused.
               </p>
 
-              <a
-                href="/v2/profile/milline-vedu"
+              <Link
+                href={publicProfileHref}
                 className="mt-5 inline-flex w-full justify-center rounded-full bg-black px-5 py-3 text-sm font-black text-white"
               >
                 Vaata avalikku profiili
-              </a>
+              </Link>
             </section>
 
             <section className="rounded-[30px] border border-black/5 bg-white p-6 shadow-sm">
               <p className="text-xs font-bold uppercase tracking-[0.24em] text-neutral-400">
                 Energy
               </p>
-              <h2 className="mt-2 text-xl font-black">156 Energy</h2>
+              <h2 className="mt-2 break-words text-xl font-black">
+                {energyLoading
+                  ? "Laen Energy’t..."
+                  : energyWallet
+                    ? `${formatEnergy(
+                        energyWallet.availableTotal
+                      )} Energy`
+                    : "Energy pole saadaval"}
+              </h2>
               <p className="mt-2 text-sm leading-6 text-neutral-600">
-                Energy kuulub valitud walletile. Hiljem saab siin osta Energy’t ja
-                vaadata tehingute ajalugu.
+                {energyError
+                  ? "Energy andmeid ei saanud laadida. Ava Energy vaade ja proovi uuesti."
+                  : "Energy kuulub aktiivse identiteedi walletile. Boonus- ja ostetud Energy on eraldi."}
               </p>
-              <a
+              <Link
                 href="/v2/energy"
                 className="mt-5 inline-flex w-full justify-center rounded-full border border-neutral-200 bg-white px-5 py-3 text-sm font-black shadow-sm"
               >
                 Vaata Energy
-              </a>
+              </Link>
             </section>
 
             <section className="rounded-[30px] border border-blue-100 bg-blue-50 p-6">
@@ -391,12 +479,12 @@ export default function V2MyAreaPage() {
               <p className="mt-2 text-sm leading-6 text-neutral-600">
                 Admini moodul on nähtav ainult kasutajale, kellel on õigused.
               </p>
-              <a
+              <Link
                 href="/v2/admin"
                 className="mt-5 inline-flex w-full justify-center rounded-full bg-black px-5 py-3 text-sm font-black text-white"
               >
                 Ava admin
-              </a>
+              </Link>
             </section>
           </aside>
         </section>

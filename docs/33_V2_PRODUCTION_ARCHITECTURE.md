@@ -3720,3 +3720,39 @@ This seed is not:
 The current UI still contains placeholder Energy data.
 Production schema deployment and real UI reads remain
 separate checkpoints.
+
+## V2 Energy read architecture — 2026-08-18
+
+### Active-identity data flow
+
+```text
+authenticated user
+→ active identity
+→ get_my_energy_wallet_v2
+→ identity-owned Energy wallet
+```
+
+Täielik `/v2/energy` vaade loeb lisaks:
+
+```text
+get_my_energy_ledger_v2(limit=50, offset=0)
+→ owner-visible append-only ledger entries
+```
+
+Minu ala kasutab eraldi `useEnergySummary` hook'i, mis loeb ainult aktiivse identiteedi ja walleti. See väldib ledger'i laadimist ülevaatekaardi jaoks.
+
+### Client boundaries
+
+- `src/entities/energy/model/types.ts` kirjeldab walleti, ledger'i ja sündmuste tüübid.
+- `src/entities/energy/api/getMyEnergyWallet.ts` valideerib RPC vastused ning koondsaldode vastavuse saldoämbritele.
+- `src/features/energy-wallet/model/useEnergyWallet.ts` ühendab aktiivse identiteedi, walleti ja ledger'i.
+- `src/features/energy-wallet/model/useEnergySummary.ts` teenindab Minu ala kerget saldokokkuvõtet.
+- `src/features/energy-wallet/components/EnergyWalletPage.tsx` kuvab päris saldo, ajaloo, laadimise, vea ja tühja ajaloo olekud.
+
+### Security and mutation boundary
+
+See checkpoint on read-only kasutajaliidese ühendus. Klient ei muuda walleti ridu ega ledger'it otse. Tulevased grant/reserve/commit/release/adjustment toimingud peavad jääma serveripoolsete idempotentsete RPC-de taha.
+
+### Navigation reliability
+
+Minu ala sisemised profiili-, Energy- ja adminilingid kasutavad Next `Link` komponenti. See hoiab navigatsiooni App Routeri ajaloos ja väldib brauseri Back korral aegunud täisdokumendi laadimisoleku taastamist.

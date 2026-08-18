@@ -1770,3 +1770,27 @@ Next ordered work:
 5. add reserve / commit / release;
 6. replace Premium AI limits with Energy;
 7. continue V2 AI listing analysis.
+
+## Handoff checkpoint — V2 päris Energy wallet (2026-08-18)
+
+### Valmis
+
+- Production Energy wallet ja admini ühekordne 5000 boonus-Energy seed on rakendatud ning kontrollitud.
+- `/v2/energy` kuvab aktiivse identiteedi päris saadaoleva, boonus-, ostetud ja reserveeritud saldo ning ledger'i ajaloo.
+- Minu ala mõlemad Energy kohad kuvavad sama aktiivse identiteedi päris walleti kogusaldot.
+- Minu ala identiteedieelvaade ja avaliku profiili link järgivad aktiivset identiteeti.
+- Brauseri Back probleem Energy ja avaliku profiili vaadetest Minu alasse naasmisel on lahendatud Next `Link` navigatsiooniga.
+- Manuaalne arvutivaate test on kasutaja poolt kinnitatud.
+
+### Teadlikult veel tegemata
+
+- Energy ostmine ja makseintegratsioon.
+- Tervitus-Energy tavakasutajale.
+- Reserve / commit / release toimingud.
+- AI kasutuse Energy-põhine arvestus.
+- Admini Energy paranduse UI ja turvaline correction RPC.
+- Reklaamide ja esiletõstmise Energy-kulu.
+
+### Soovitatud järgmine tehniline samm
+
+Ehita väikese eraldatud checkpoint'ina serveripoolne idempotentne Energy `reserve / commit / release` leping. Alles pärast selle testimist ühenda V2 kuulutuse AI analüüs Energy kuluga.

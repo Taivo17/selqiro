@@ -7349,3 +7349,13 @@ vaadet päris saldo ega ledger'i andmetega.
 
 Production-andmebaasi migratsiooni checkpoint ise
 automaatselt ei rakenda.
+
+## 2026-08-18 — V2 päris Energy wallet ja Minu ala kokkuvõte
+
+- Productionis kasutusele võetud identity-põhine Energy wallet ja append-only ledger on nüüd ühendatud V2 kasutajaliidesega.
+- `/v2/energy` loeb `get_my_energy_wallet_v2` ja `get_my_energy_ledger_v2` RPC kaudu aktiivse identiteedi päris saldot ning kuni 50 viimast kasutajale nähtavat ledger'i sündmust.
+- Vaade eristab boonus-, ostetud ja reserveeritud Energy't. Energy ostmine ja maksenupud on teadlikult välja lülitatud kuni makse-, webhook'i ja admini paranduse voo valmimiseni.
+- Minu ala ülevaatekaart ja külgkaart kasutavad kerget wallet-only kokkuvõtte hook'i ega laadi eraldi kogu ledger'it.
+- Aktiivse identiteedi vahetamisel laaditakse õige wallet uuesti sündmuse `selqiro:active-identity-changed` kaudu.
+- Minu ala sisemised profiili-, Energy- ja adminilingid kasutavad Next `Link` komponenti, et brauseri Back ei taastaks lehte vanasse `Laen...` olekusse.
+- Manuaalselt kontrollitud arvutivaates: Taivo Garaaž näitab 5000 boonus-Energy't, Minu ala näitab sama saldot ning brauseri Back töötab Energy ja avaliku profiili vaadetest tagasi tulles ilma resetita.

@@ -3273,3 +3273,13 @@ Not implemented yet:
 - reserve / commit / release operations;
 - AI Energy charging;
 - production migration application.
+
+## 2026-08-18 — Energy walleti V2 kasutajaliidese leping
+
+- Üks Energy wallet kuulub ühele identiteedile, mitte üldiselt kasutajakontole.
+- Walleti saldoämbrid jäävad eraldi: `available_paid`, `available_bonus`, `reserved_paid`, `reserved_bonus`.
+- Ledger on append-only; kasutajaliides loeb ainult kasutajale mõeldud `public_metadata` välja ega kuva `internal_metadata` sisu.
+- `/v2/energy` on täielik saldo- ja ajaloo vaade. Minu ala peab kasutama eraldi kerget wallet-only kokkuvõtet, et mitte laadida iga ülevaate avamisel kogu ledger'it.
+- Identiteedi vahetamine peab värskendama nii Energy põhivaadet kui Minu ala kokkuvõtet.
+- V2 sisemised navigatsioonid peavad kasutama Next `Link` või App Routerit; plain `<a>` võib brauseri Back korral taastada aegunud laadimisoleku.
+- Energy ostmist ei tohi kuvada toimivana enne makseintegratsiooni, idempotentse webhook'i ja turvalise admini paranduse voo valmimist.
