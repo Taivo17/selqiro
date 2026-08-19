@@ -7369,3 +7369,12 @@ automaatselt ei rakenda.
 - Ebapiisav saldo, võõra identiteedi toiming ja vastandliku lõpptulemuse katse katkestavad kogu andmebaasitehingu.
 - Brauseri `authenticated` rollil puudub mutatsiooni-RPC-de execute õigus; neid võib kutsuda ainult serveri `service_role`.
 - Kohalik migratsiooni reset ja SQL lepingutest läbisid. Testid kinnitasid idempotentsuse, bucketite täpse liikumise ning walleti ja append-only ledger'i kooskõla.
+
+## 2026-08-19 — Energy reserve / commit / release production rollout
+
+- Migratsioon `20260818130000_add_energy_reservation_operations.sql` rakendati linked production Supabase projekti `vyjletlmwoiwxsnsunlm`.
+- Remote migratsiooniajalugu kinnitas versiooni `20260818130000 -> 20260818130000` ning järel-dry-run ei leidnud ühtegi ootel migratsiooni.
+- Productionis on nüüd service-role-only RPC-d `reserve_user_energy_v2`, `commit_user_energy_v2` ja `release_user_energy_v2`.
+- Rollout muutis ainult skeemi ja serverilepingut. See ei loonud kasutaja walletisse testreserveeringut ega võtnud kelleltki Energy't.
+- Brauser ega V2 kuulutuse AI ei kasuta mutatsiooni-RPC-sid veel. Järgmine tehniline etapp on serveri TypeScript wrapper, mis kontrollib kasutaja tokeni ja kutsub RPC-sid ainult service-role kliendi kaudu.
+- See production rollout asendab varasema dokumentatsiooni local-only staatuse.

@@ -1819,3 +1819,32 @@ Ehita väikese eraldatud checkpoint'ina serveripoolne idempotentne Energy `reser
 ### Järgmine samm
 
 Tee esmalt read-only production migration audit. Kui audit leiab oodatult ainult Energy reservation operations migratsiooni, rakenda see eraldi kontrollitud db push'iga ja kinnita funktsioonide õigused ning remote migratsiooniajalugu.
+
+## Handoff checkpoint — Energy reservation production rollout (2026-08-19)
+
+### Productionis valmis
+
+- Migratsioon `20260818130000_add_energy_reservation_operations.sql` on linked production Supabase projektis rakendatud.
+- Remote ajalugu kinnitab `20260818130000 -> 20260818130000`.
+- Järel-dry-run ei leidnud ühtegi ootel migratsiooni.
+- Productionis on service-role-only reserve / commit / release Energy RPC-d.
+- Git tööpuu jäi rollout'i järel puhtaks.
+- Rollout ei muutnud kasutajate Energy saldosid ega käivitanud testreserveeringuid.
+
+### See asendab varasema local-only staatuse
+
+2026-08-18 Energy reservation operations handoff'i osa „Valmis lokaalselt” on nüüd production rollout'iga lõpule viidud.
+
+### Järgmine eraldatud checkpoint
+
+Ehita serveri TypeScript mutation wrapper ilma AI-route'i veel muutmata:
+
+- server-only Supabase admin client;
+- Bearer-tokeni valideerimine;
+- tüübitud reserve/commit/release sisendid ja väljundid;
+- keskne Energy feature/price contract;
+- serveri loodud operation key;
+- turvaline SQL vea kaardistus;
+- wrapperi unit/contract testid või kontrollskript.
+
+Alles pärast wrapperi build'i ja checkpoint'i ühenda `/api/ai/analyze-listing` vooga `reserve → OpenAI → commit/release`.

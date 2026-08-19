@@ -3819,3 +3819,37 @@ Kohalik SQL test kontrollis:
 - commit/release korduskatseid;
 - vastandlike lõpptulemuste blokeerimist;
 - walleti saldo võrdumist ledger'i delta projektsiooniga.
+
+## Energy reservation production status — 2026-08-19
+
+### Rollout evidence
+
+```text
+Supabase project: vyjletlmwoiwxsnsunlm
+Migration: 20260818130000_add_energy_reservation_operations.sql
+Remote history: 20260818130000 -> 20260818130000
+Post-push dry-run: no pending migrations
+```
+
+Productionis on nüüd andmebaasikiht:
+
+- `reserve_user_energy_v2`
+- `commit_user_energy_v2`
+- `release_user_energy_v2`
+
+RPC-d on ainult `service_role` jaoks. `authenticated` brauseriklient ei saa neid otse käivitada.
+
+### Next server TypeScript layer
+
+Järgmine serverikiht peab:
+
+1. valideerima request'i Bearer-tokeni `auth.getUser(token)` kaudu;
+2. võtma kasutaja ID ainult valideeritud auth-vastusest;
+3. valima feature'i ja Energy hinna kesksest serverikonfiguratsioonist;
+4. looma serveripoolse, korduskatsetel stabiilse operation key;
+5. kutsuma service-role kliendiga reserve/commit/release RPC-sid;
+6. kaardistama andmebaasi vead tüübitud serverivigadeks;
+7. hoidma `internal_metadata` serverisisesena;
+8. mitte avaldama service-role võtit ega sisemist metadata't brauserile.
+
+Esimene wrapperi checkpoint peab jääma kasutajaliidesest ja OpenAI kutsest eraldi. Selle eesmärk on kontrollida tüüpe, auth-piiri ja RPC vastuste kaardistamist enne AI arvelduse ühendamist.

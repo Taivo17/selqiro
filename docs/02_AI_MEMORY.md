@@ -3294,3 +3294,13 @@ Not implemented yet:
 - Commit'i järel release ning release'i järel commit on keelatud.
 - Klient ei tohi Energy mutation-RPC-sid otse käivitada. Server kontrollib kasutaja tokeni ja edastab RPC-le usaldusväärse user ID.
 - Public metadata on kasutajale nähtav; sisemine tehniline metadata jääb `internal_metadata` väljale.
+
+## 2026-08-19 — Production Energy mutation boundary
+
+- Productionis on valmis serveripoolne Energy olekumasin `reserve → commit | release`.
+- Brauser ei tohi saada `SUPABASE_SERVICE_ROLE_KEY` väärtust ega kutsuda Energy mutation-RPC-sid otse.
+- Tulevane serveri wrapper peab tuletama kasutaja ID kontrollitud Bearer-tokenist; kliendi saadetud user ID, identity ID, wallet ID või Energy hind ei ole usaldusväärne sisend.
+- Operation key luuakse serveris ja sama loogilise tegevuse korduskatsetel kasutatakse sama võtit.
+- Feature'i Energy hind tuleb kesksest serverikonfiguratsioonist, mitte kliendi request body-st.
+- Välist teenust kasutav voog on `reserve → väline töö → commit`; tehnilise vea korral `release`.
+- AI kuulutuse analüüs ei ole veel Energy arvestusega ühendatud. Production rollout ise ei muutnud ühegi kasutaja saldot.
