@@ -7359,3 +7359,13 @@ automaatselt ei rakenda.
 - Aktiivse identiteedi vahetamisel laaditakse õige wallet uuesti sündmuse `selqiro:active-identity-changed` kaudu.
 - Minu ala sisemised profiili-, Energy- ja adminilingid kasutavad Next `Link` komponenti, et brauseri Back ei taastaks lehte vanasse `Laen...` olekusse.
 - Manuaalselt kontrollitud arvutivaates: Taivo Garaaž näitab 5000 boonus-Energy't, Minu ala näitab sama saldot ning brauseri Back töötab Energy ja avaliku profiili vaadetest tagasi tulles ilma resetita.
+
+## 2026-08-18 — Energy reserve / commit / release serverileping
+
+- Lisatud service-role-only Energy mutatsioonid `reserve_user_energy_v2`, `commit_user_energy_v2` ja `release_user_energy_v2`.
+- Reserveering valib uue toimingu jaoks serveri kinnitatud kasutaja aktiivse identiteedi walleti, lukustab walleti ja kasutab enne boonus-Energy't ning seejärel ostetud Energy't.
+- Sama globaalne `operation_key` ei saa reserveerida Energy't kaks korda ega saada korraga nii commit- kui release-lõpptulemust.
+- Commit ja release seotakse algse reserveeringu walleti ning paid/bonus jaotusega ka siis, kui kasutaja vahetas vahepeal aktiivset identiteeti.
+- Ebapiisav saldo, võõra identiteedi toiming ja vastandliku lõpptulemuse katse katkestavad kogu andmebaasitehingu.
+- Brauseri `authenticated` rollil puudub mutatsiooni-RPC-de execute õigus; neid võib kutsuda ainult serveri `service_role`.
+- Kohalik migratsiooni reset ja SQL lepingutest läbisid. Testid kinnitasid idempotentsuse, bucketite täpse liikumise ning walleti ja append-only ledger'i kooskõla.

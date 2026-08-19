@@ -3756,3 +3756,66 @@ See checkpoint on read-only kasutajaliidese ühendus. Klient ei muuda walleti ri
 ### Navigation reliability
 
 Minu ala sisemised profiili-, Energy- ja adminilingid kasutavad Next `Link` komponenti. See hoiab navigatsiooni App Routeri ajaloos ja väldib brauseri Back korral aegunud täisdokumendi laadimisoleku taastamist.
+
+## Energy mutation architecture — 2026-08-18
+
+### Server-only mutation boundary
+
+```text
+authenticated browser
+→ Selqiro server route verifies bearer token
+→ service_role RPC with verified user_id
+→ Energy wallet transaction
+```
+
+Brauseri `authenticated` rollil puudub execute õigus funktsioonidele:
+
+- `reserve_user_energy_v2`
+- `commit_user_energy_v2`
+- `release_user_energy_v2`
+
+### Reservation state machine
+
+```text
+none
+  → reserve
+      → commit
+      or
+      → release
+```
+
+Ühel operation key'l on globaalselt kuni üks reserve-sündmus ja kuni üks lõppsündmus. Osalised unikaalsed indeksid välistavad paralleelse topeltreserveerimise ning commit/release topelttulemuse.
+
+### Atomic reserve
+
+Reserve:
+
+1. valideerib user ID, operation key, feature'i, summa ja metadata;
+2. võtab operation key advisory transaction lock'i;
+3. lahendab ja kontrollib kasutaja aktiivse identiteedi;
+4. loob vajadusel identity walleti;
+5. lukustab walleti `FOR UPDATE`;
+6. arvutab jaotuse boonus enne ostetud Energy't;
+7. liigutab Energy available bucketitest reserved bucketitesse;
+8. lisab samas tehingus append-only reserve ledger event'i.
+
+### Atomic finalization
+
+Commit ja release leiavad algse reserveeringu operation key kaudu, mitte kasutaja hetkel aktiivse identiteedi kaudu.
+
+- Commit vähendab reserveeritud paid/bonus bucketeid ning ei tagasta available saldot.
+- Release vähendab reserveeritud bucketeid ja taastab täpselt algse paid/bonus jaotuse.
+- Vastandlik või korduv lõpptulemus on vastavalt blokeeritud või idempotentselt tagastatud.
+
+### Verified local contract
+
+Kohalik SQL test kontrollis:
+
+- bonus-first reserveerimist;
+- operation key idempotentsust ja payload konflikti;
+- ebapiisava saldo täielikku rollback'i;
+- võõra kasutaja ligipääsu blokeerimist;
+- aktiivse identiteedi vahetamist reserve ja finalization vahel;
+- commit/release korduskatseid;
+- vastandlike lõpptulemuste blokeerimist;
+- walleti saldo võrdumist ledger'i delta projektsiooniga.

@@ -1794,3 +1794,28 @@ Next ordered work:
 ### Soovitatud järgmine tehniline samm
 
 Ehita väikese eraldatud checkpoint'ina serveripoolne idempotentne Energy `reserve / commit / release` leping. Alles pärast selle testimist ühenda V2 kuulutuse AI analüüs Energy kuluga.
+
+## Handoff checkpoint — Energy reservation operations (2026-08-18)
+
+### Valmis lokaalselt
+
+- Lisatud migratsioon `20260818130000_add_energy_reservation_operations.sql`.
+- Service-role-only reserve / commit / release RPC-d on loodud.
+- Reserve kasutab boonus-Energy't enne ostetud Energy't.
+- Operation key on globaalselt idempotentne ning ühel toimingul võib olla ainult üks lõpptulemus.
+- Commit ja release järgivad algset reserveeringut ka aktiivse identiteedi vahetamise järel.
+- Authenticated roll ei saa mutatsiooni-RPC-sid otse käivitada.
+- Kohalik `supabase db reset`, production build ja ulatuslik SQL lepingutest läbisid.
+
+### Veel tegemata
+
+- Migratsiooni production readiness audit.
+- Migratsiooni production Supabase'i rakendamine ja read-only järelkontroll.
+- Serveri TypeScript wrapper või API-route Energy mutation RPC-de kutsumiseks.
+- V2 AI kuulutuse analüüsi ühendamine vooga `reserve → AI → commit/release`.
+- Energy hinna ja feature contract'i keskne serverikonfiguratsioon.
+- Kasutajale nähtavad poolelioleva reserveeringu ja tehnilise release'i teated.
+
+### Järgmine samm
+
+Tee esmalt read-only production migration audit. Kui audit leiab oodatult ainult Energy reservation operations migratsiooni, rakenda see eraldi kontrollitud db push'iga ja kinnita funktsioonide õigused ning remote migratsiooniajalugu.

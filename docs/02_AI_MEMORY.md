@@ -3283,3 +3283,14 @@ Not implemented yet:
 - Identiteedi vahetamine peab värskendama nii Energy põhivaadet kui Minu ala kokkuvõtet.
 - V2 sisemised navigatsioonid peavad kasutama Next `Link` või App Routerit; plain `<a>` võib brauseri Back korral taastada aegunud laadimisoleku.
 - Energy ostmist ei tohi kuvada toimivana enne makseintegratsiooni, idempotentse webhook'i ja turvalise admini paranduse voo valmimist.
+
+## 2026-08-18 — Energy reserve / commit / release püsiv leping
+
+- Kõik tasulised või kulupõhised serveritoimingud peavad kasutama järjekorda `reserve → väline töö → commit`, tehnilise ebaõnnestumise korral `release`.
+- Uue reserveeringu puhul kulutatakse boonus-Energy enne ostetud Energy't.
+- Reserveeringu `operation_key` peab olema serveri loodud, globaalselt kordumatu ja sama loogilise tegevuse korduskatsetel sama.
+- Commit ja release peavad kasutama algse reserveeringu operation key'd; neid ei tohi siduda kliendi hetkel aktiivse identiteediga.
+- Ühel operation key'l võib olla üks reserve ja maksimaalselt üks lõpptulemus: commit või release.
+- Commit'i järel release ning release'i järel commit on keelatud.
+- Klient ei tohi Energy mutation-RPC-sid otse käivitada. Server kontrollib kasutaja tokeni ja edastab RPC-le usaldusväärse user ID.
+- Public metadata on kasutajale nähtav; sisemine tehniline metadata jääb `internal_metadata` väljale.
