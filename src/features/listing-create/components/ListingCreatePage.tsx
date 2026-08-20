@@ -229,17 +229,17 @@ ListingCreatePage() {
               </p>
 
               <h1 className="mt-3 break-words text-4xl font-black tracking-tight sm:text-5xl">
-                Lisa kuulutus pildist
+                Lisa uus kuulutus
               </h1>
 
               <p className="mt-3 max-w-3xl text-sm leading-6 text-neutral-600 sm:text-base">
-                Kõigepealt lisa pildid.
-                Pealkirja ja kirjelduse
-                võid enne AI analüüsi
-                kas tühjaks jätta või ise
-                täita. Sinu kirjutatud
-                teksti AI hiljem vaikides
-                üle ei kirjuta.
+                Kirjuta esmalt pealkiri ja
+                kirjeldus, kui tead, mida
+                müüd. AI kasutab sinu teksti
+                õige kategooria leidmiseks
+                ega kirjuta seda vaikides üle.
+                Kui ese on tundmatu, võid
+                väljad tühjaks jätta.
               </p>
             </div>
 
@@ -262,213 +262,23 @@ ListingCreatePage() {
       </section>
 
       <section className="rounded-[30px] border border-black/5 bg-white p-5 shadow-sm sm:p-6">
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-          <div>
-            <p className="text-xs font-black uppercase tracking-[0.22em] text-amber-700">
-              Samm 1
-            </p>
-
-            <h2 className="mt-2 text-2xl font-black tracking-tight">
-              Lisa pildid
-            </h2>
-
-            <p className="mt-2 max-w-2xl text-sm leading-6 text-neutral-600">
-              Vali kuni
-              {" "}
-              {LISTING_CREATE_IMAGE_LIMIT}
-              {" "}
-              pilti. Esimene pilt on
-              tulevane põhipilt.
-            </p>
-          </div>
-
-          <span className="w-fit rounded-full bg-amber-100 px-3 py-1.5 text-xs font-black text-amber-900">
-            {files.length}/
-            {LISTING_CREATE_IMAGE_LIMIT}
-            {" "}
-            valitud
-          </span>
-        </div>
-
-        <div className="mt-5 grid gap-3 sm:grid-cols-2">
-          <label className="flex min-h-14 cursor-pointer items-center justify-center rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-center text-sm font-black text-amber-950 transition hover:bg-amber-100">
-            <input
-              type="file"
-              accept="image/jpeg,image/png,image/webp"
-              capture="environment"
-              multiple
-              onChange={
-                handleFileSelection
-              }
-              className="hidden"
-            />
-
-            Tee pilt
-          </label>
-
-          <label className="flex min-h-14 cursor-pointer items-center justify-center rounded-2xl border border-neutral-200 bg-white px-4 py-3 text-center text-sm font-black transition hover:bg-neutral-50">
-            <input
-              type="file"
-              accept="image/jpeg,image/png,image/webp"
-              multiple
-              onChange={
-                handleFileSelection
-              }
-              className="hidden"
-            />
-
-            Vali galeriist
-          </label>
-        </div>
-
-        <p className="mt-3 text-xs leading-5 text-neutral-500">
-          Lubatud on JPG, PNG ja WEBP.
-          Ühe algfaili maksimaalne suurus
-          on
-          {" "}
-          {LISTING_CREATE_MAX_SOURCE_IMAGE_SIZE_MB}
-          {" "}
-          MB.
-        </p>
-
-        {imageError ? (
-          <p
-            role="alert"
-            className="mt-4 rounded-2xl border border-red-100 bg-red-50 px-4 py-3 text-sm font-semibold leading-6 text-red-800"
-          >
-            {imageError}
-          </p>
-        ) : null}
-
-        {files.length === 0 ? (
-          <div className="mt-5 rounded-[24px] border border-dashed border-neutral-200 bg-[#fbfbfa] p-6 text-center">
-            <p className="font-black">
-              Pilte ei ole veel valitud
-            </p>
-
-            <p className="mt-2 text-sm leading-6 text-neutral-500">
-              AI analüüs vajab vähemalt
-              ühte pilti. Pealkiri ja
-              kirjeldus on enne analüüsi
-              valikulised.
-            </p>
-          </div>
-        ) : (
-          <div className="mt-5 grid min-w-0 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {files.map(
-              (file, index) => (
-                <article
-                  key={[
-                    file.name,
-                    file.size,
-                    file.lastModified,
-                    index,
-                  ].join("-")}
-                  className="min-w-0 overflow-hidden rounded-[22px] border border-black/5 bg-[#fbfbfa]"
-                >
-                  <div className="relative aspect-[4/3] bg-neutral-100">
-                    {previewUrls[index] ? (
-                      <img
-                        src={
-                          previewUrls[index]
-                        }
-                        alt={
-                          file.name ||
-                          `Valitud pilt ${index + 1}`
-                        }
-                        className="h-full w-full object-contain"
-                      />
-                    ) : null}
-
-                    {index === 0 ? (
-                      <span className="absolute left-3 top-3 rounded-full bg-amber-400 px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.12em] text-amber-950 shadow-sm">
-                        Põhipilt
-                      </span>
-                    ) : null}
-                  </div>
-
-                  <div className="p-3">
-                    <p className="truncate text-sm font-black">
-                      {file.name ||
-                        `Pilt ${index + 1}`}
-                    </p>
-
-                    <p className="mt-1 text-xs text-neutral-500">
-                      {formatFileSize(
-                        file.size
-                      )}
-                    </p>
-
-                    <div className="mt-3 grid grid-cols-3 gap-2">
-                      <button
-                        type="button"
-                        onClick={() =>
-                          moveImage(
-                            index,
-                            "up"
-                          )
-                        }
-                        disabled={
-                          index === 0
-                        }
-                        aria-label="Liiguta pilt ettepoole"
-                        className="rounded-xl border border-neutral-200 bg-white px-2 py-2 text-xs font-black disabled:cursor-not-allowed disabled:opacity-35"
-                      >
-                        ←
-                      </button>
-
-                      <button
-                        type="button"
-                        onClick={() =>
-                          moveImage(
-                            index,
-                            "down"
-                          )
-                        }
-                        disabled={
-                          index ===
-                          files.length - 1
-                        }
-                        aria-label="Liiguta pilt tahapoole"
-                        className="rounded-xl border border-neutral-200 bg-white px-2 py-2 text-xs font-black disabled:cursor-not-allowed disabled:opacity-35"
-                      >
-                        →
-                      </button>
-
-                      <button
-                        type="button"
-                        onClick={() =>
-                          removeImage(index)
-                        }
-                        className="rounded-xl border border-red-100 bg-red-50 px-2 py-2 text-xs font-black text-red-700"
-                      >
-                        Eemalda
-                      </button>
-                    </div>
-                  </div>
-                </article>
-              )
-            )}
-          </div>
-        )}
-      </section>
-
-      <section className="rounded-[30px] border border-black/5 bg-white p-5 shadow-sm sm:p-6">
         <div>
           <p className="text-xs font-black uppercase tracking-[0.22em] text-amber-700">
-            Samm 2
+            Samm 1
           </p>
 
           <h2 className="mt-2 text-2xl font-black tracking-tight">
-            Lisa soovi korral tekst
+            Kirjuta pealkiri ja kirjeldus
           </h2>
 
           <p className="mt-2 max-w-3xl text-sm leading-6 text-neutral-600">
-            Need väljad on enne AI
-            analüüsi valikulised.
-            Iga sinu sisestatud sõna annab
-            AI-le täpsema vihje õige
-            kategooria leidmiseks.
+            Soovitame need väljad ise
+            täita. Sinu tekst aitab AI-l
+            leida täpsema kategooria.
+            Kui sa ei tea, mis esemega on
+            tegu, jäta väljad tühjaks ja
+            AI pakub pildi põhjal lühikese
+            pealkirja ja kirjelduse.
           </p>
         </div>
 
@@ -551,6 +361,200 @@ ListingCreatePage() {
         </div>
       </section>
 
+      <section className="rounded-[30px] border border-black/5 bg-white p-5 shadow-sm sm:p-6">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <p className="text-xs font-black uppercase tracking-[0.22em] text-amber-700">
+              Samm 2
+            </p>
+
+            <h2 className="mt-2 text-2xl font-black tracking-tight">
+              Lisa pildid
+            </h2>
+
+            <p className="mt-2 max-w-2xl text-sm leading-6 text-neutral-600">
+              Vali kuni
+              {" "}
+              {LISTING_CREATE_IMAGE_LIMIT}
+              {" "}
+              pilti. Esimene pilt on
+              põhipilt ja AI analüüsib
+              ainult seda pilti. Vali
+              esimeseks võimalikult
+              informatiivne foto.
+            </p>
+          </div>
+
+          <span className="w-fit rounded-full bg-amber-100 px-3 py-1.5 text-xs font-black text-amber-900">
+            {files.length}/
+            {LISTING_CREATE_IMAGE_LIMIT}
+            {" "}
+            valitud
+          </span>
+        </div>
+
+        <div className="mt-5 grid gap-3 sm:grid-cols-2">
+          <label className="flex min-h-14 cursor-pointer items-center justify-center rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-center text-sm font-black text-amber-950 transition hover:bg-amber-100">
+            <input
+              type="file"
+              accept="image/jpeg,image/png,image/webp"
+              capture="environment"
+              multiple
+              onChange={
+                handleFileSelection
+              }
+              className="hidden"
+            />
+
+            Tee pilt
+          </label>
+
+          <label className="flex min-h-14 cursor-pointer items-center justify-center rounded-2xl border border-neutral-200 bg-white px-4 py-3 text-center text-sm font-black transition hover:bg-neutral-50">
+            <input
+              type="file"
+              accept="image/jpeg,image/png,image/webp"
+              multiple
+              onChange={
+                handleFileSelection
+              }
+              className="hidden"
+            />
+
+            Vali galeriist
+          </label>
+        </div>
+
+        <p className="mt-3 text-xs leading-5 text-neutral-500">
+          Lubatud on JPG, PNG ja WEBP.
+          Ühe algfaili maksimaalne suurus
+          on
+          {" "}
+          {LISTING_CREATE_MAX_SOURCE_IMAGE_SIZE_MB}
+          {" "}
+          MB.
+        </p>
+
+        {imageError ? (
+          <p
+            role="alert"
+            className="mt-4 rounded-2xl border border-red-100 bg-red-50 px-4 py-3 text-sm font-semibold leading-6 text-red-800"
+          >
+            {imageError}
+          </p>
+        ) : null}
+
+        {files.length === 0 ? (
+          <div className="mt-5 rounded-[24px] border border-dashed border-neutral-200 bg-[#fbfbfa] p-6 text-center">
+            <p className="font-black">
+              Pilte ei ole veel valitud
+            </p>
+
+            <p className="mt-2 text-sm leading-6 text-neutral-500">
+              AI analüüs vajab vähemalt
+              ühte pilti ja kasutab ainult
+              esimest ehk põhipilti.
+            </p>
+          </div>
+        ) : (
+          <div className="mt-5 grid min-w-0 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {files.map(
+              (file, index) => (
+                <article
+                  key={[
+                    file.name,
+                    file.size,
+                    file.lastModified,
+                    index,
+                  ].join("-")}
+                  className="min-w-0 overflow-hidden rounded-[22px] border border-black/5 bg-[#fbfbfa]"
+                >
+                  <div className="relative aspect-[4/3] bg-neutral-100">
+                    {previewUrls[index] ? (
+                      <img
+                        src={
+                          previewUrls[index]
+                        }
+                        alt={
+                          file.name ||
+                          `Valitud pilt ${index + 1}`
+                        }
+                        className="h-full w-full object-contain"
+                      />
+                    ) : null}
+
+                    {index === 0 ? (
+                      <span className="absolute left-3 top-3 rounded-full bg-amber-400 px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.12em] text-amber-950 shadow-sm">
+                        Põhipilt · AI analüüsib
+                      </span>
+                    ) : null}
+                  </div>
+
+                  <div className="p-3">
+                    <p className="truncate text-sm font-black">
+                      {file.name ||
+                        `Pilt ${index + 1}`}
+                    </p>
+
+                    <p className="mt-1 text-xs text-neutral-500">
+                      {formatFileSize(
+                        file.size
+                      )}
+                    </p>
+
+                    <div className="mt-3 grid grid-cols-3 gap-2">
+                      <button
+                        type="button"
+                        onClick={() =>
+                          moveImage(
+                            index,
+                            "up"
+                          )
+                        }
+                        disabled={
+                          index === 0
+                        }
+                        aria-label="Liiguta pilt ettepoole"
+                        className="rounded-xl border border-neutral-200 bg-white px-2 py-2 text-xs font-black disabled:cursor-not-allowed disabled:opacity-35"
+                      >
+                        ←
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() =>
+                          moveImage(
+                            index,
+                            "down"
+                          )
+                        }
+                        disabled={
+                          index ===
+                          files.length - 1
+                        }
+                        aria-label="Liiguta pilt tahapoole"
+                        className="rounded-xl border border-neutral-200 bg-white px-2 py-2 text-xs font-black disabled:cursor-not-allowed disabled:opacity-35"
+                      >
+                        →
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() =>
+                          removeImage(index)
+                        }
+                        className="rounded-xl border border-red-100 bg-red-50 px-2 py-2 text-xs font-black text-red-700"
+                      >
+                        Eemalda
+                      </button>
+                    </div>
+                  </div>
+                </article>
+              )
+            )}
+          </div>
+        )}
+      </section>
+
       <section className="rounded-[30px] border border-violet-200 bg-violet-50 p-5 shadow-sm sm:p-6">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
           <div className="min-w-0">
@@ -559,20 +563,20 @@ ListingCreatePage() {
             </p>
 
             <h2 className="mt-2 text-2xl font-black tracking-tight text-violet-950">
-              Ühenda AI analüüs
+              AI analüüs · 25 Energy
             </h2>
 
             <p className="mt-3 max-w-3xl text-sm leading-6 text-violet-950/75">
               {files.length === 0
-                ? "AI analüüsi käivitamiseks lisa vähemalt üks pilt."
+                ? "AI analüüsi käivitamiseks lisa vähemalt üks pilt. AI kasutab ainult esimest pilti."
                 : hasTextContext
-                  ? "Pildid ja sinu tekst on AI-le kontekstina valmis. AI saab kasutada mõlemat õige kategooria leidmiseks."
-                  : "Pildid on kiire AI analüüsi jaoks valmis. AI saab tühjad pealkirja ja kirjelduse väljad ise välja pakkuda."}
+                  ? "Pealkiri, kirjeldus ja esimene pilt on AI-le kontekstina valmis. Põhiülesanne on leida õige Selqiro kategooriatee."
+                  : "Esimene pilt on AI analüüsiks valmis. Kui pealkiri ja kirjeldus on tühjad, võib AI pakkuda nende jaoks lühikese teksti."}
             </p>
           </div>
 
           <span className="w-fit shrink-0 rounded-full border border-violet-200 bg-white px-3 py-1.5 text-xs font-black text-violet-800">
-            Veel ei saada AI-le
+            25 Energy · veel ei saada AI-le
           </span>
         </div>
 

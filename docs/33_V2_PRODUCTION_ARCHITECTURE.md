@@ -3907,3 +3907,26 @@ Avalikud vastused kasutavad ohutuid koode ja sõnumeid. PostgREST/SQL detailid j
 ### Ühendamata osa
 
 Wrapper ei ole veel ühendatud `/api/ai/analyze-listing` route'i, OpenAI päringu ega V2 müügivormiga. Järgmine checkpoint peab muutma ainult AI route'i serverivoo ja jätma kasutajaliidese eraldi sammu.
+
+## V2 listing-create text-first UI boundary — 2026-08-20
+
+### Render order
+
+```text
+1. title + description
+2. image selection and ordering
+3. AI analysis preview
+```
+
+### Initial AI input contract
+
+```text
+title: optional user context
+description: optional user context
+image: only the current first / primary image
+price shown in UI: 25 Energy
+```
+
+This checkpoint changes only the listing-create UI and its feature documentation. It does not call `/api/ai/analyze-listing`, does not read the server price environment variable and does not reserve or commit Energy.
+
+The current form provenance rules remain in force: user-owned text is not silently overwritten; future AI output may fill empty or AI-owned fields. The next route checkpoint must preserve this boundary while connecting `reserve → OpenAI → commit | release`.

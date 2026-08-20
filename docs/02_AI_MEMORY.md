@@ -3314,3 +3314,12 @@ Not implemented yet:
 - `model.ts` valideerib operation key, RPC oleku, UUID-d, täisarvud, paid/bonus summa, wallet'i koondsaldod, metadata JSON-kuju ja SQL vead.
 - `mutations.ts` ekspordib `reserveEnergy`, `commitEnergy` ja `releaseEnergy`.
 - AI analüüsi voogu ei ole veel muudetud. Järgmine samm peab säilitama sama operation key korduskatsetel ja kasutama voogu `reserve → OpenAI → commit | release`.
+
+## 2026-08-20 — V2 listing AI text-first UX checkpoint
+
+- V2 müügivorm algab pealkirja ja kirjeldusega ning pildid tulevad teise sammuna.
+- Kasutaja enda pealkiri ja kirjeldus on AI jaoks kontekst, kuid AI ei kirjuta neid vaikides üle.
+- Kui tekstiväljad on tühjad, võib AI tulevikus täita ainult tühjad väljad.
+- AI kasutab avaversioonis ainult esimest / põhipilti.
+- Pildi ümberjärjestamisel liigub AI analüüsitava pildi tähendus koos esimesele kohale tõstetud pildiga.
+- Kasutajale kuvatakse testhind 25 Energy, kuid praegune checkpoint on ainult UX ja ei kuluta Energy't.

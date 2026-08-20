@@ -1878,3 +1878,32 @@ Alles pärast wrapperi build'i ja checkpoint'i ühenda `/api/ai/analyze-listing`
 4. vabasta reserveering ainult tehnilise ebaõnnestumise korral;
 5. ära vabasta reserveeringut kasutaja sisendist või AI tulemuse sisulisest ebakindlusest tingitud tavapärase tulemuse korral;
 6. eemalda vana Premium/daily-limit loogika alles samas kontrollitud route checkpoint'is.
+
+## Handoff checkpoint — V2 listing create text-first layout (2026-08-20)
+
+### Valmis
+
+- `/v2/sell` samm 1 on pealkiri ja kirjeldus.
+- Samm 2 on pildid.
+- Esimene pilt on märgitud `Põhipilt · AI analüüsib`.
+- Kasutajale öeldakse, et AI kasutab ainult esimest pilti ja see peaks olema võimalikult informatiivne.
+- AI plokk näitab `AI analüüs · 25 Energy`.
+- Desktop-, kitsas desktop- ja mobiililaadne vaade on visuaalselt kontrollitud.
+- Typecheck, production build ja `/v2/sell` HTTP smoke test läbisid.
+
+### Teadlikult veel tegemata
+
+- AI nupp ei käivita veel päringut.
+- `SELQIRO_ENERGY_COST_LISTING_AI_ANALYSIS=25` ei ole veel route checkpoint'is seadistatud.
+- Vana Premium / daily-limit AI route on veel muutmata.
+- Ühegi kasutaja Energy saldot ei ole muudetud.
+
+### Järgmine eraldatud etapp
+
+1. lisa lokaalsesse serverikeskkonda testhind 25;
+2. saada AI-le ainult esimene / põhipilt;
+3. lisa pealkiri ja kirjeldus request'i kontekstiks;
+4. lisa stabiilne operation key;
+5. ühenda `verify actor → reserve → OpenAI → commit | release`;
+6. mõõda tokenid, providerikulu, kestus ja outcome sisemisse metadata'sse;
+7. eemalda vana Premium / daily-limit loogika samas kontrollitud route checkpoint'is.

@@ -7387,3 +7387,12 @@ automaatselt ei rakenda.
 - Esimene keskne feature on `listing_ai_analysis`. Selle hind tuleb ainult serveri keskkonnamuutujast `SELQIRO_ENERGY_COST_LISTING_AI_ANALYSIS`.
 - Selles checkpoint'is ei valitud kommertshinda ega ühendatud wrapperit AI route'i või kasutajaliidesega.
 - TypeScript typecheck, production build ja puhta Energy mudeli runtime-testid läbisid.
+
+## 2026-08-20 — V2 kuulutuse lisamine on text-first
+
+- `/v2/sell` vormi järjestus on nüüd: pealkiri ja kirjeldus → pildid → AI analüüs.
+- Kasutajale soovitatakse pealkiri ja kirjeldus ise täita, sest AI põhiülesanne on leida õige Selqiro kategooriatee.
+- Tundmatu eseme korral võib kasutaja tekstiväljad tühjaks jätta; tulevane AI võib pakkuda lühikese pealkirja ja kirjelduse.
+- AI avaversioon analüüsib ainult esimest ehk põhipilti. Kasutajale öeldakse selgelt, et esimene pilt peaks olema võimalikult informatiivne.
+- AI plokk kuvab 25 Energy testhinda, kuid ei käivita veel AI route'i ega Energy reserveeringut.
+- Desktop-, kitsas desktop- ja mobiililaadne vaade kontrolliti visuaalselt; horisontaalset overflow'd ega blokeerivat paigutusviga ei leitud.
