@@ -3930,3 +3930,66 @@ price shown in UI: 25 Energy
 This checkpoint changes only the listing-create UI and its feature documentation. It does not call `/api/ai/analyze-listing`, does not read the server price environment variable and does not reserve or commit Energy.
 
 The current form provenance rules remain in force: user-owned text is not silently overwritten; future AI output may fill empty or AI-owned fields. The next route checkpoint must preserve this boundary while connecting `reserve → OpenAI → commit | release`.
+
+## V2 listing AI Energy route — 2026-08-20
+
+### Versioned boundary
+
+```text
+browser
+  → X-Selqiro-AI-Contract: v2-energy-1
+  → Bearer token
+  → contractVersion + UUID v4 + optional text + one primary image
+
+server route
+  → verifyEnergyActorFromRequest
+  → normalize and hash request
+  → reserveEnergy(listing_ai_analysis)
+  → OpenAI Responses API
+  → normalize category and allowed fields
+  → commitEnergy | releaseEnergy
+```
+
+The server owns the Energy feature key, Energy amount, operation-key prefix, category tree, model contract and internal ledger metadata. The browser cannot provide user ID, identity ID, wallet ID, bucket allocation or price.
+
+### Idempotency
+
+```text
+new operation
+→ reserve + provider call + commit
+
+same committed operation
+→ return stored result snapshot
+
+same active operation
+→ 409 ai_analysis_in_progress
+
+stale reserved operation
+→ release and require a new operation UUID
+
+same UUID with different request hash
+→ 409 ai_operation_conflict
+```
+
+### Cost instrumentation
+
+The route records provider usage only in append-only internal ledger metadata:
+
+```text
+response ID
+returned model
+input tokens
+cached input tokens
+cache-write tokens when available
+output tokens
+total tokens
+duration
+estimated provider cost
+pricing version
+```
+
+The estimate uses a versioned calibration constant and must be recalculated if the configured model or provider price changes. It is not exposed in the normal browser response.
+
+### Rollout boundary
+
+The legacy caller without the V2 contract header continues to use the old Premium/daily-limit branch. The V2 form is still disconnected, so this checkpoint deploys server capability without automatically charging users. Before enabling the V2 button in production, configure `SELQIRO_ENERGY_COST_LISTING_AI_ANALYSIS=25` in the deployment environment.

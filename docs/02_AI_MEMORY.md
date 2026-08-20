@@ -3323,3 +3323,15 @@ Not implemented yet:
 - AI kasutab avaversioonis ainult esimest / põhipilti.
 - Pildi ümberjärjestamisel liigub AI analüüsitava pildi tähendus koos esimesele kohale tõstetud pildiga.
 - Kasutajale kuvatakse testhind 25 Energy, kuid praegune checkpoint on ainult UX ja ei kuluta Energy't.
+
+## 2026-08-20 — Listing AI Energy route contract
+
+- V2 contract version on `v2-energy-1` ja selle valib request header `X-Selqiro-AI-Contract`.
+- Body peab sisaldama sama contract version'it, UUID v4 idempotency key'd, valikulist pealkirja ja kirjeldust ning ühte ettevalmistatud põhipildi URL-i või data URL-i.
+- Server loob operation key kuju `energy:listing_ai_analysis:<uuid>`; browser ei määra feature'it ega Energy hinda.
+- Tööjärjekord on `verify actor → validate → reserve → OpenAI → normalize → commit`; tehnilise vea korral tehakse release.
+- Mudel on praeguses kalibreerimislepingus `gpt-4.1-mini-2025-04-14`, pilt `low` detailiga ja `store: false`.
+- Commit metadata säilitab kompaktse AI tulemuse, et sama operation key vastuse kadumisel saaks tulemuse ilma uue providerikutseta taastada.
+- Kulumõõdikud sisaldavad input-, cached input-, output- ja total token'eid, kestust, response ID-d, mudelit ja hinnangulist providerikulu.
+- Hinnanguline kulu on testimise telemeetria, mitte lõplik kasutajahind.
+- V2 client ei ole veel ühendatud. Järgmine UI samm peab genereerima ühe UUID ühe nupuvajutuse kohta ning kasutama sama UUID-d ainult sama request'i retry puhul.

@@ -1907,3 +1907,38 @@ Alles pärast wrapperi build'i ja checkpoint'i ühenda `/api/ai/analyze-listing`
 5. ühenda `verify actor → reserve → OpenAI → commit | release`;
 6. mõõda tokenid, providerikulu, kestus ja outcome sisemisse metadata'sse;
 7. eemalda vana Premium / daily-limit loogika samas kontrollitud route checkpoint'is.
+
+## Handoff checkpoint — V2 listing AI Energy route (2026-08-20)
+
+### Valmis
+
+- Versioneeritud `v2-energy-1` route haru.
+- Bearer auth ja server-owned Energy feature/price.
+- 25 Energy lokaalne testhind.
+- Üks põhipilt, `low` detail, pealkiri ja kirjeldus kontekstina.
+- Reserve / commit / release serverivoog.
+- UUID v4 operation key ja request hash.
+- Commit'itud tulemuse idempotentne taastamine.
+- Aktiivse topeltpäringu ning aegunud reserveeringu käsitlus.
+- Tokeni-, kestuse- ja providerikulu telemeetria sisemises ledger metadata's.
+- Legacy `/sell` voog säilitatud.
+- Typecheck, build, mudeli runtime-testid ja unauthenticated HTTP smoke-testid läbitud.
+
+### Teadlikult veel tegemata
+
+- `ListingCreatePage` ei saada veel AI request'i.
+- Production/Vercel keskkonda ei ole veel lisatud `SELQIRO_ENERGY_COST_LISTING_AI_ANALYSIS=25`.
+- Autenditud päris OpenAI + Energy katset ei ole tehtud.
+- Vana Premium/daily-limit haru ei ole veel eemaldatud.
+- AI tulemust ei kuvata veel V2 kategooria- ja detailväljade UI-s.
+
+### Järgmine eraldatud etapp
+
+1. lisa V2 browserile põhipildi säästlik ettevalmistus;
+2. loo ühe nupuvajutuse kohta UUID v4 ja säilita see sama request'i retry jaoks;
+3. saada header, Bearer-token, pealkiri, kirjeldus ja ainult esimene pilt;
+4. kuva reserveerimise/analüüsi/edu/vea olek;
+5. ühenda AI soovitus provenance-reegliga ainult tühja või AI-owned välja;
+6. kuva kasutajale soovitatud kategooriatee kinnitamiseks ja muutmiseks;
+7. tee kontrollitud autenditud lokaalne katse ning kinnita wallet 5000 → 4975, commit-event ja kulumetadata;
+8. alles seejärel lisa production env ning tee Verceli test.

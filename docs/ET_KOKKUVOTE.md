@@ -7396,3 +7396,14 @@ automaatselt ei rakenda.
 - AI avaversioon analüüsib ainult esimest ehk põhipilti. Kasutajale öeldakse selgelt, et esimene pilt peaks olema võimalikult informatiivne.
 - AI plokk kuvab 25 Energy testhinda, kuid ei käivita veel AI route'i ega Energy reserveeringut.
 - Desktop-, kitsas desktop- ja mobiililaadne vaade kontrolliti visuaalselt; horisontaalset overflow'd ega blokeerivat paigutusviga ei leitud.
+
+## 2026-08-20 — V2 kuulutuse AI Energy route
+
+- `/api/ai/analyze-listing` sisaldab nüüd versioneeritud V2 Energy haru, mille leping valitakse headeriga `X-Selqiro-AI-Contract: v2-energy-1`.
+- V2 haru kontrollib Bearer-tokenit, reserveerib serveri hinnalepingu järgi 25 Energy, saadab OpenAI-le pealkirja, kirjelduse ja ainult ühe põhipildi ning lõpetab toimingu commit'i või tehnilise vea korral release'iga.
+- AI põhiülesanne on valida õige Selqiro kategooriatee. Kasutaja tekst on kontekst, mitte juhis, ja AI soovitused on mõeldud tühjade väljade täitmiseks.
+- Pildi detailitaseme algne säästurežiim on `low`; mudelile saadetakse täpselt üks põhipilt.
+- Energy ledger'i sisemisse metadata'sse salvestatakse request hash, normaliseeritud tulemuse snapshot, tokenid, kestus ja hinnanguline providerikulu. Pildi data URL-i ega kasutaja täisteksti ledger'isse ei salvestata.
+- Sama operation key kordus saab taastada commit'itud tulemuse ilma uue OpenAI päringu ja Energy kuluta. Aktiivne topeltpäring ning aegunud reserveering on eraldi käsitletud.
+- Vana `/sell` Premium/daily-limit voog jäi ajutiselt alles. V2 kasutajaliidese AI nupp ei ole selles checkpoint'is veel route'iga ühendatud.
+- Lokaalne testhind on `.env.local` failis 25 Energy; fail on Gitist välistatud. Production deployment'i keskkonnamuutuja tuleb lisada enne V2 AI nupu production-testimist.
