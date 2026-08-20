@@ -7378,3 +7378,12 @@ automaatselt ei rakenda.
 - Rollout muutis ainult skeemi ja serverilepingut. See ei loonud kasutaja walletisse testreserveeringut ega võtnud kelleltki Energy't.
 - Brauser ega V2 kuulutuse AI ei kasuta mutatsiooni-RPC-sid veel. Järgmine tehniline etapp on serveri TypeScript wrapper, mis kontrollib kasutaja tokeni ja kutsub RPC-sid ainult service-role kliendi kaudu.
 - See production rollout asendab varasema dokumentatsiooni local-only staatuse.
+
+## 2026-08-20 — Server-only Energy mutation wrapper
+
+- Lisatud on `src/server/energy/` serverikiht, mis kapseldab productioni `reserve_user_energy_v2`, `commit_user_energy_v2` ja `release_user_energy_v2` RPC-d.
+- Wrapper valideerib Bearer-tokeni `auth.getUser(token)` kaudu ning kasutab Energy muutmisel ainult kontrollitud kasutaja ID-d.
+- Klient ei saa määrata usaldusväärse sisendina user ID-d, identity ID-d, wallet ID-d, paid/bonus jaotust ega Energy hinda.
+- Esimene keskne feature on `listing_ai_analysis`. Selle hind tuleb ainult serveri keskkonnamuutujast `SELQIRO_ENERGY_COST_LISTING_AI_ANALYSIS`.
+- Selles checkpoint'is ei valitud kommertshinda ega ühendatud wrapperit AI route'i või kasutajaliidesega.
+- TypeScript typecheck, production build ja puhta Energy mudeli runtime-testid läbisid.

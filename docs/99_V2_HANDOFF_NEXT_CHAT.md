@@ -1848,3 +1848,33 @@ Ehita serveri TypeScript mutation wrapper ilma AI-route'i veel muutmata:
 - wrapperi unit/contract testid või kontrollskript.
 
 Alles pärast wrapperi build'i ja checkpoint'i ühenda `/api/ai/analyze-listing` vooga `reserve → OpenAI → commit/release`.
+
+## Handoff checkpoint — server-only Energy mutation wrapper (2026-08-20)
+
+### Valmis
+
+- Loodud on `src/server/energy/` server-only kiht.
+- Bearer-token kontrollitakse Supabase Auth kaudu.
+- Service-role klient on kapseldatud eraldi admin client faili.
+- Feature ja Energy hind lahendatakse serveris.
+- Operation key luuakse serveris.
+- Reserve / commit / release RPC vastused valideeritakse rangelt.
+- SQL vead kaardistatakse ohututeks serverivigadeks.
+- Typecheck, build ja Energy mudeli runtime-testid läbisid.
+
+### Teadlikult veel tegemata
+
+- `SELQIRO_ENERGY_COST_LISTING_AI_ANALYSIS` väärtust ei ole valitud.
+- `/api/ai/analyze-listing` kasutab endiselt vana Premium/daily-limit loogikat.
+- Wrapperit ei kutsuta veel ühestki route'ist ega client component'ist.
+- Kasutaja Energy saldot ei ole selle checkpoint'i testidega muudetud.
+
+### Järgmine eraldatud etapp
+
+1. otsusta esimene testhind kuulutuse AI analüüsile;
+2. lisa hind lokaalsesse serverikeskkonda ja hiljem deployment secret'ina;
+3. refaktoreeri `/api/ai/analyze-listing` voogu:
+   `verify actor → reserve → OpenAI → commit`;
+4. vabasta reserveering ainult tehnilise ebaõnnestumise korral;
+5. ära vabasta reserveeringut kasutaja sisendist või AI tulemuse sisulisest ebakindlusest tingitud tavapärase tulemuse korral;
+6. eemalda vana Premium/daily-limit loogika alles samas kontrollitud route checkpoint'is.

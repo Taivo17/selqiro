@@ -3853,3 +3853,57 @@ Järgmine serverikiht peab:
 8. mitte avaldama service-role võtit ega sisemist metadata't brauserile.
 
 Esimene wrapperi checkpoint peab jääma kasutajaliidesest ja OpenAI kutsest eraldi. Selle eesmärk on kontrollida tüüpe, auth-piiri ja RPC vastuste kaardistamist enne AI arvelduse ühendamist.
+
+## Server-only Energy mutation wrapper — 2026-08-20
+
+### Failid
+
+```text
+src/server/energy/adminClient.ts
+src/server/energy/auth.ts
+src/server/energy/featureContract.ts
+src/server/energy/model.ts
+src/server/energy/mutations.ts
+src/server/energy/README.md
+```
+
+### Usalduspiir
+
+```text
+browser
+  → Bearer-token + feature'i tegevussisend
+
+server route
+  → auth.getUser(token)
+  → VerifiedEnergyActor
+  → serveri feature/price contract
+  → service-role reserve / commit / release RPC
+```
+
+Brauser ei määra autoriteetselt:
+
+- kasutaja ID-d;
+- aktiivse identiteedi ID-d;
+- wallet ID-d;
+- Energy hinda;
+- paid/bonus jaotust;
+- service-role võtit;
+- sisemist ledger metadata't.
+
+### Esimene feature contract
+
+```text
+feature: listing_ai_analysis
+ledger feature: listing_ai_analysis
+price env: SELQIRO_ENERGY_COST_LISTING_AI_ANALYSIS
+```
+
+Keskkonnamuutuja peab olema positiivne safe integer. Kuni see puudub, katkestab wrapper tegevuse server configuration veaga. See on tahtlik, sest kommertshinda ei tohi juhuslikult koodi sisse peita.
+
+### Veapiir
+
+Avalikud vastused kasutavad ohutuid koode ja sõnumeid. PostgREST/SQL detailid jäävad ainult `internalMessage` väljale serverilogimiseks. Tulemuse mapper kontrollib ka paid/bonus summat ja wallet'i koondsaldode kooskõla.
+
+### Ühendamata osa
+
+Wrapper ei ole veel ühendatud `/api/ai/analyze-listing` route'i, OpenAI päringu ega V2 müügivormiga. Järgmine checkpoint peab muutma ainult AI route'i serverivoo ja jätma kasutajaliidese eraldi sammu.

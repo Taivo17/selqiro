@@ -3304,3 +3304,13 @@ Not implemented yet:
 - Feature'i Energy hind tuleb kesksest serverikonfiguratsioonist, mitte kliendi request body-st.
 - Välist teenust kasutav voog on `reserve → väline töö → commit`; tehnilise vea korral `release`.
 - AI kuulutuse analüüs ei ole veel Energy arvestusega ühendatud. Production rollout ise ei muutnud ühegi kasutaja saldot.
+
+## 2026-08-20 — Energy wrapperi rakenduspiir
+
+- Energy mutation wrapper asub `src/server/energy/` all ja on kasutajaliidesest eraldatud.
+- `adminClient.ts` on ainus uue kihi fail, mis loeb `SUPABASE_SERVICE_ROLE_KEY` väärtust.
+- `auth.ts` loob Bearer-tokenist kontrollitud `VerifiedEnergyActor` objekti; route ei tohi kliendi saadetud user ID-d usaldada.
+- `featureContract.ts` määrab serveripoolse feature key ja loeb Energy hinna keskkonnast. Null-, vaikimisi- ega request body hind ei ole lubatud.
+- `model.ts` valideerib operation key, RPC oleku, UUID-d, täisarvud, paid/bonus summa, wallet'i koondsaldod, metadata JSON-kuju ja SQL vead.
+- `mutations.ts` ekspordib `reserveEnergy`, `commitEnergy` ja `releaseEnergy`.
+- AI analüüsi voogu ei ole veel muudetud. Järgmine samm peab säilitama sama operation key korduskatsetel ja kasutama voogu `reserve → OpenAI → commit | release`.
