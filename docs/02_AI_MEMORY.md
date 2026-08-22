@@ -3335,3 +3335,15 @@ Not implemented yet:
 - Kulumõõdikud sisaldavad input-, cached input-, output- ja total token'eid, kestust, response ID-d, mudelit ja hinnangulist providerikulu.
 - Hinnanguline kulu on testimise telemeetria, mitte lõplik kasutajahind.
 - V2 client ei ole veel ühendatud. Järgmine UI samm peab genereerima ühe UUID ühe nupuvajutuse kohta ning kasutama sama UUID-d ainult sama request'i retry puhul.
+
+<!-- SELQIRO_LAUNCH_CATEGORIES_AND_EE_HORSE_POLICY_20260822 -->
+## Püsiv otsus: kategooriad, hobusekuulutused ja loomade heaolu
+
+- Launch-kategooriapuu: 15 põhirubriiki, 187 sõlme, 164 lõpurubriiki; 163 tavalisel lõpurubriigil on väljaskeem ja `general` jääb globaalseks fallback'iks.
+- Ratsutamine ja hobutarbed on `sports_outdoor > equestrian_horse_supplies` all; hobuse- ja loomaveohaagised on `vehicles > trailers > horse_livestock_trailers` all.
+- Elushobuse pakkumine tuleb eraldi sisutüübina, mitte tavalise listing'u detailväljana.
+- Eesti hobusepiloodis peavad `market_country_code` ja `horse_location_country_code` olema `EE`. Kasutaja IP-d ega hetke asukohta ei kasutata lubamise alusena.
+- Esialgsed tehinguliigid: müük, tasuta üleandmine, rent/kasutusse andmine, kaasratsaniku otsing ja hobuse otsing.
+- Müüja vastutab kuulutuse andmete, dokumentide, omandi või volituse, registritoimingute ja tehingu õigsuse eest. V1 kasutab müüja kinnitusi; passi- ega ID-dokumenti ei kontrollita vaikimisi enne iga avaldamist.
+- V1 ei korralda piiriülest transporti, registritoiminguid, hobuse ostumakset, deposiiti ega oksjonit.
+- Kõikides riikides on keelatud eluslooma tapmise eesmärgiga pakkumine, otsimine, kokkuost, vahendamine või transport, sealhulgas varjatud sõnastusega sama eesmärk.

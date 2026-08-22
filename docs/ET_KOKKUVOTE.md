@@ -7407,3 +7407,12 @@ automaatselt ei rakenda.
 - Sama operation key kordus saab taastada commit'itud tulemuse ilma uue OpenAI päringu ja Energy kuluta. Aktiivne topeltpäring ning aegunud reserveering on eraldi käsitletud.
 - Vana `/sell` Premium/daily-limit voog jäi ajutiselt alles. V2 kasutajaliidese AI nupp ei ole selles checkpoint'is veel route'iga ühendatud.
 - Lokaalne testhind on `.env.local` failis 25 Energy; fail on Gitist välistatud. Production deployment'i keskkonnamuutuja tuleb lisada enne V2 AI nupu production-testimist.
+
+<!-- SELQIRO_LAUNCH_CATEGORIES_AND_EE_HORSE_POLICY_20260822 -->
+## Launch-rubriikide laiendus ja Eesti hobusekuulutuste otsus
+
+Selqiro üldine marketplace'i kategooriapuu on laiendatud 15 põhirubriigi, 187 sõlme ja 164 lõpurubriigini. Lisatud on laste- ja beebitarbed, lemmikloomatarbed, raamatud/muusika/meedia, hobid/mänguasjad/käsitöö, kontori- ja äritehnika, kodu ja aia sagedased alamrubriigid, kohaliku haru „Muu...” fallback'id ning ratsutamise ja hobutarvete täpne alamstruktuur. Hobuse- ja loomaveohaagised asuvad sõidukite haagiste harus. Elushobuste kategooriat selle checkpoint'iga veel ei lisatud.
+
+Hobusekuulutused ehitatakse järgmise eraldatud tootefunktsioonina, mitte tavalise kaubakuulutuse erandina. Esimene piloot avatakse Eesti turule: hobuse tegelik asukohariik ja kuulutuse tururiik peavad olema Eesti (EE). Lubamine ei põhine IP-aadressil, kodakondsusel ega kasutaja hetke asukohal. Teised riigid avatakse hiljem ükshaaval riigipõhise poliitikakihi kaudu.
+
+Selqiro üldine sisupoliitika keelab mis tahes avaliku sisu, mille eesmärk on eluslooma pakkumine, otsimine, kokkuost, vahendamine või transport tapmiseks, tapamajja saatmiseks, lihaks, nahaks, karusnahaks või muuks tapmise tulemusena saadavaks tooteks kasutamiseks. See on Selqiro enda sisureegel, mitte väide, et kõik sellised tehingud oleksid seadusega keelatud.

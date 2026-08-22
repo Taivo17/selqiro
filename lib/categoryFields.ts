@@ -114,6 +114,179 @@ const trailerFields: CategoryField[] = [
   { key: "inspection_valid_until", label: "Inspection valid until" },
 ];
 
+const genericMarketplaceFields: CategoryField[] = [
+  { key: "item_type", label: "Item type" },
+  { key: "brand", label: "Brand" },
+  { key: "model", label: "Model" },
+  { key: "material", label: "Material" },
+  { key: "color", label: "Color" },
+  { key: "size", label: "Size" },
+  { key: "dimensions", label: "Dimensions" },
+  { key: "condition", label: "Condition" },
+  { key: "quantity", label: "Quantity" },
+  { key: "included_accessories", label: "Included accessories" },
+];
+
+const babyEquipmentFields: CategoryField[] = [
+  { key: "item_type", label: "Item type" },
+  { key: "brand", label: "Brand" },
+  { key: "model", label: "Model" },
+  { key: "age_range", label: "Age range" },
+  { key: "safety_standard", label: "Safety standard" },
+  { key: "material", label: "Material" },
+  { key: "color", label: "Color" },
+  { key: "dimensions", label: "Dimensions" },
+  { key: "condition", label: "Condition" },
+  { key: "included_accessories", label: "Included accessories" },
+];
+
+const petSupplyFields: CategoryField[] = [
+  { key: "item_type", label: "Item type" },
+  { key: "animal_type", label: "Animal type" },
+  { key: "brand", label: "Brand" },
+  { key: "size", label: "Size" },
+  { key: "material", label: "Material" },
+  { key: "capacity", label: "Capacity" },
+  { key: "condition", label: "Condition" },
+  { key: "quantity", label: "Quantity" },
+  { key: "included_accessories", label: "Included accessories" },
+];
+
+const mediaItemFields: CategoryField[] = [
+  { key: "media_type", label: "Media type" },
+  { key: "title", label: "Title" },
+  { key: "creator", label: "Author / creator" },
+  { key: "language", label: "Language" },
+  { key: "publication_year", label: "Publication year" },
+  { key: "format", label: "Format" },
+  { key: "genre", label: "Genre" },
+  { key: "condition", label: "Condition" },
+  { key: "quantity", label: "Quantity" },
+];
+
+const musicalInstrumentFields: CategoryField[] = [
+  { key: "instrument_type", label: "Instrument type" },
+  { key: "brand", label: "Brand" },
+  { key: "model", label: "Model" },
+  { key: "material", label: "Material" },
+  { key: "size", label: "Size" },
+  { key: "condition", label: "Condition" },
+  { key: "included_accessories", label: "Included accessories" },
+  { key: "serial_number", label: "Serial number" },
+];
+
+const hobbyItemFields: CategoryField[] = [
+  { key: "hobby_type", label: "Hobby type" },
+  { key: "brand", label: "Brand" },
+  { key: "age_range", label: "Age range" },
+  { key: "material", label: "Material" },
+  { key: "dimensions", label: "Dimensions" },
+  { key: "skill_level", label: "Skill level" },
+  { key: "condition", label: "Condition" },
+  { key: "quantity", label: "Quantity" },
+  { key: "included_accessories", label: "Included accessories" },
+];
+
+const officeEquipmentFields: CategoryField[] = [
+  { key: "equipment_type", label: "Equipment type" },
+  { key: "brand", label: "Brand" },
+  { key: "model", label: "Model" },
+  { key: "connection_type", label: "Connection type" },
+  { key: "power_source", label: "Power source" },
+  { key: "dimensions", label: "Dimensions" },
+  { key: "condition", label: "Condition" },
+  { key: "included_accessories", label: "Included accessories" },
+  { key: "serial_number", label: "Serial number" },
+];
+
+const householdItemFields: CategoryField[] = [
+  { key: "item_type", label: "Item type" },
+  { key: "brand", label: "Brand" },
+  { key: "material", label: "Material" },
+  { key: "color", label: "Color" },
+  { key: "size", label: "Size" },
+  { key: "dimensions", label: "Dimensions" },
+  { key: "capacity", label: "Capacity" },
+  { key: "condition", label: "Condition" },
+  { key: "quantity", label: "Quantity" },
+];
+
+const heatingFuelFields: CategoryField[] = [
+  { key: "fuel_type", label: "Fuel type" },
+  { key: "wood_type", label: "Wood type" },
+  { key: "quantity", label: "Quantity" },
+  { key: "unit", label: "Unit" },
+  { key: "moisture_level", label: "Moisture level" },
+  { key: "packaging", label: "Packaging" },
+  { key: "delivery_available", label: "Delivery available" },
+];
+
+const heatingEquipmentFields: CategoryField[] = [
+  { key: "equipment_type", label: "Equipment type" },
+  { key: "brand", label: "Brand" },
+  { key: "model", label: "Model" },
+  { key: "fuel_type", label: "Fuel type" },
+  { key: "power", label: "Power" },
+  { key: "dimensions", label: "Dimensions" },
+  { key: "condition", label: "Condition" },
+  { key: "included_accessories", label: "Included accessories" },
+];
+
+const equestrianTackFields: CategoryField[] = [
+  { key: "item_type", label: "Item type" },
+  { key: "brand", label: "Brand" },
+  { key: "model", label: "Model" },
+  { key: "discipline", label: "Discipline" },
+  { key: "horse_size", label: "Horse size" },
+  { key: "seat_size", label: "Seat size" },
+  { key: "material", label: "Material" },
+  { key: "color", label: "Color" },
+  { key: "condition", label: "Condition" },
+  { key: "included_accessories", label: "Included accessories" },
+];
+
+const equestrianWearFields: CategoryField[] = [
+  { key: "item_type", label: "Item type" },
+  { key: "brand", label: "Brand" },
+  { key: "size", label: "Size" },
+  { key: "gender", label: "Gender" },
+  { key: "discipline", label: "Discipline" },
+  { key: "safety_standard", label: "Safety standard" },
+  { key: "material", label: "Material" },
+  { key: "color", label: "Color" },
+  { key: "condition", label: "Condition" },
+];
+
+const horseTextileFields: CategoryField[] = [
+  { key: "item_type", label: "Item type" },
+  { key: "brand", label: "Brand" },
+  { key: "horse_size", label: "Horse size" },
+  { key: "blanket_weight", label: "Blanket weight" },
+  { key: "material", label: "Material" },
+  { key: "color", label: "Color" },
+  { key: "condition", label: "Condition" },
+];
+
+const horseCareFields: CategoryField[] = [
+  { key: "item_type", label: "Item type" },
+  { key: "brand", label: "Brand" },
+  { key: "horse_size", label: "Horse size" },
+  { key: "material", label: "Material" },
+  { key: "quantity", label: "Quantity" },
+  { key: "condition", label: "Condition" },
+  { key: "included_accessories", label: "Included accessories" },
+];
+
+const stableEquipmentFields: CategoryField[] = [
+  { key: "item_type", label: "Item type" },
+  { key: "brand", label: "Brand" },
+  { key: "material", label: "Material" },
+  { key: "dimensions", label: "Dimensions" },
+  { key: "capacity", label: "Capacity" },
+  { key: "quantity", label: "Quantity" },
+  { key: "condition", label: "Condition" },
+];
+
 export const CATEGORY_FIELDS: Record<string, CategoryField[]> = {
   passenger_cars: carFields,
   suv_offroad: carFields,
@@ -1133,6 +1306,66 @@ export const CATEGORY_FIELDS: Record<string, CategoryField[]> = {
     { key: "condition", label: "Condition" },
     { key: "quantity", label: "Quantity" },
   ],
+  other_electronics: genericMarketplaceFields,
+  other_clothing_fashion: genericMarketplaceFields,
+  other_tools_industrial: genericMarketplaceFields,
+
+  kitchenware: householdItemFields,
+  home_textiles: householdItemFields,
+  household_supplies: householdItemFields,
+  bathroom: householdItemFields,
+  heating_fuels: heatingFuelFields,
+  heating_equipment: heatingEquipmentFields,
+  outdoor_furniture: householdItemFields,
+  other_home_garden: genericMarketplaceFields,
+
+  other_sports_outdoor: genericMarketplaceFields,
+  other_antiques_collectibles: genericMarketplaceFields,
+  other_building_materials: genericMarketplaceFields,
+
+  strollers_prams: babyEquipmentFields,
+  child_car_seats: babyEquipmentFields,
+  nursery_furniture: babyEquipmentFields,
+  baby_feeding_care: babyEquipmentFields,
+  baby_safety_accessories: babyEquipmentFields,
+  other_children_baby: babyEquipmentFields,
+
+  dog_supplies: petSupplyFields,
+  cat_supplies: petSupplyFields,
+  aquariums_terrariums: petSupplyFields,
+  cages_housing: petSupplyFields,
+  pet_transport_grooming: petSupplyFields,
+  other_pet_supplies: petSupplyFields,
+
+  books: mediaItemFields,
+  magazines_comics: mediaItemFields,
+  music_movies: mediaItemFields,
+  musical_instruments: musicalInstrumentFields,
+  instrument_accessories: genericMarketplaceFields,
+  other_books_media: mediaItemFields,
+
+  toys: hobbyItemFields,
+  board_games_puzzles: hobbyItemFields,
+  arts_crafts: hobbyItemFields,
+  model_rc_hobbies: hobbyItemFields,
+  sewing_knitting: hobbyItemFields,
+  other_hobbies_toys: hobbyItemFields,
+
+  office_equipment: officeEquipmentFields,
+  printers_scanners: officeEquipmentFields,
+  office_furniture: householdItemFields,
+  retail_warehouse_equipment: officeEquipmentFields,
+  presentation_equipment: officeEquipmentFields,
+  other_office_business: genericMarketplaceFields,
+  saddles_accessories: equestrianTackFields,
+  bridles_halters_tack: equestrianTackFields,
+  rider_clothing_safety: equestrianWearFields,
+  horse_blankets_textiles: horseTextileFields,
+  horse_grooming_care: horseCareFields,
+  stable_paddock_equipment: stableEquipmentFields,
+  driving_carriage_equipment: equestrianTackFields,
+  other_equestrian_supplies: genericMarketplaceFields,
+  horse_livestock_trailers: trailerFields,
 };
 
 export function getCategoryFields(subcategory: string) {
@@ -1176,6 +1409,52 @@ export const FIELD_LABELS = {
     operating_system: "Operatsioonisüsteem",
     battery_health: "Aku seisukord",
     included_accessories: "Kaasasolevad tarvikud",
+    inspection_valid_until: "Ülevaatus kehtib kuni",
+    type: "Tüüp",
+    dimensions: "Mõõdud",
+    district: "Piirkond / linnaosa",
+    area: "Pindala",
+    rooms: "Tube",
+    floor: "Korrus",
+    total_floors: "Korruseid kokku",
+    year_built: "Ehitusaasta",
+    heating_type: "Kütte tüüp",
+    energy_class: "Energiaklass",
+    furnished: "Möbleeritud",
+    parking: "Parkimine",
+    size: "Suurus",
+    gender: "Sugu",
+    season: "Hooaeg",
+    authenticity: "Autentsus",
+    certification: "Sertifikaat",
+
+    item_type: "Eseme tüüp",
+    age_range: "Vanusevahemik",
+    safety_standard: "Ohutusstandard",
+    animal_type: "Loomaliik",
+    media_type: "Meedia tüüp",
+    title: "Pealkiri",
+    creator: "Autor / looja",
+    language: "Keel",
+    publication_year: "Väljaandmise aasta",
+    format: "Formaat",
+    genre: "Žanr",
+    instrument_type: "Muusikariista tüüp",
+    hobby_type: "Hobi tüüp",
+    skill_level: "Oskustase",
+    equipment_type: "Seadme tüüp",
+    connection_type: "Ühenduse tüüp",
+    power_source: "Toiteallikas",
+    fuel_type: "Kütuse tüüp",
+    wood_type: "Puiduliik",
+    unit: "Ühik",
+    moisture_level: "Niiskustase",
+    packaging: "Pakend",
+    delivery_available: "Kohaletoimetamine võimalik",
+    discipline: "Ratsutamisala",
+    horse_size: "Hobuse suurus",
+    seat_size: "Istme suurus",
+    blanket_weight: "Teki paksus / täidis",
   },
 } as const;
 

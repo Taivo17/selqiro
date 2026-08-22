@@ -3993,3 +3993,46 @@ The estimate uses a versioned calibration constant and must be recalculated if t
 ### Rollout boundary
 
 The legacy caller without the V2 contract header continues to use the old Premium/daily-limit branch. The V2 form is still disconnected, so this checkpoint deploys server capability without automatically charging users. Before enabling the V2 button in production, configure `SELQIRO_ENERGY_COST_LISTING_AI_ANALYSIS=25` in the deployment environment.
+
+<!-- SELQIRO_LAUNCH_CATEGORIES_AND_EE_HORSE_POLICY_20260822 -->
+## Launch-kategooriad ja tulevane hobusepakkumiste domeen
+
+### Kategooriapuu checkpoint
+
+- 15 põhirubriiki
+- 187 kategooriasõlme
+- 164 lõpurubriiki
+- 163 tavalisel lõpurubriigil on detailväljade skeem
+- `general` on teadlik globaalne fallback
+- kategooriaväärtused on unikaalsed ja kõigil sõlmedel on eestikeelne silt
+
+### Hobusepakkumiste arhitektuuriline piir
+
+Hobusepakkumine peab olema eraldi domeen või selgelt eristatav sisuvariant, mitte tavalise `listings` rea juhuslik JSON-erand. Esimene turupoliitika:
+
+```text
+policy_version = ee-horse-v1
+market_country_code = EE
+horse_location_country_code = EE
+cross_border_flow = false
+payment_flow = false
+auction_flow = false
+```
+
+Lubamine põhineb hobuse tegelikul asukohariigil ja kuulutuse tururiigil. Seda ei seota kasutaja IP, GPS-i, kodakondsuse ega hetke asukohaga. Tulevane riigipõhine konfiguratsioon peab võimaldama riike ükshaaval aktiveerida.
+
+Esialgsed pakkumise liigid:
+
+```text
+sale
+free_transfer
+lease
+co_rider
+wanted
+```
+
+Avaldamisel nõutakse kasutaja kinnitusi omandi või volituse, hobuse nõuetekohase identifitseerimise, andmete õigsuse, registri- ja üleandmiskohustuste ning vähemalt 18-aastaseks olemise või seadusliku esindaja nõusoleku kohta. Selqiro ei märgi dokumente „kontrollituks”, kui neid pole päriselt üle vaadatud.
+
+Eluslooma tapmise eesmärgiga sisu on liigist ja riigist sõltumata keelatud. Reegel peab kehtima kuulutustele, ostusoovidele, teenustele, reklaamidele, profiilitekstidele ja muule avalikule sisule. Veterinaarne eutanaasia, päästmine/ümberpaigutamine ja tavapärane loomavedu ei kuulu keelu alla, kui eesmärk ei ole tapmine.
+
+See checkpoint dokumenteerib arhitektuuriotsuse; hobusepakkumiste tabelit, migratsiooni, RPC-sid, UI-d ega modereerimisvoogu pole veel loodud.

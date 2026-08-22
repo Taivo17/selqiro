@@ -1942,3 +1942,19 @@ Alles pärast wrapperi build'i ja checkpoint'i ühenda `/api/ai/analyze-listing`
 6. kuva kasutajale soovitatud kategooriatee kinnitamiseks ja muutmiseks;
 7. tee kontrollitud autenditud lokaalne katse ning kinnita wallet 5000 → 4975, commit-event ja kulumetadata;
 8. alles seejärel lisa production env ning tee Verceli test.
+
+<!-- SELQIRO_LAUNCH_CATEGORIES_AND_EE_HORSE_POLICY_20260822 -->
+## Järgmine eraldatud töö: Eesti hobusepakkumiste foundation
+
+Praegune checkpoint sisaldab laiendatud launch-kategooriapuud ja ratsutamise/hobutarvete rubriike. Elushobuse kuulutusi see veel ei ava.
+
+Järgmine samm peab algama read-only auditiga, mis kaardistab olemasoleva `listings` tabeli, staatused, asukoha väljad, RLS/RPC mustrid, pildid, detailvaate ja modereerimise. Pärast auditit otsustada, kas kasutada eraldi `horse_offers` tabelit või rangelt eristatud sisutüüpi koos oma serverilepinguga. Eelistus on eraldi domeen, et riigipoliitika, deklaratsioonid, modereerimine ja tulevased riigid ei saastaks tavakuulutuse lepingut.
+
+Eesti V1 piir:
+- tururiik EE;
+- hobune asub Eestis;
+- kasutaja IP/hetke asukohta ei kasutata;
+- müük, tasuta üleandmine, rent, kaasratsaniku otsing ja hobuse otsing;
+- puudub Selqiro makse, deposiit, oksjon ja piiriülene transpordivoog;
+- müüja vastutab andmete ja dokumentide eest;
+- Selqiro üldine eluslooma tapmise eesmärgiga sisu keeld kehtib kõikjal.
