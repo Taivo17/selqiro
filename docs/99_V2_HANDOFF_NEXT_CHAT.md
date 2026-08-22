@@ -1958,3 +1958,31 @@ Eesti V1 piir:
 - puudub Selqiro makse, deposiit, oksjon ja piiriülene transpordivoog;
 - müüja vastutab andmete ja dokumentide eest;
 - Selqiro üldine eluslooma tapmise eesmärgiga sisu keeld kehtib kõikjal.
+
+<!-- SELQIRO_PUBLICATION_POLICY_ACCEPTANCE_FOUNDATION_V1 -->
+## Checkpoint: publication policy acceptance foundation
+
+Expected commit subject: `Add publication policy acceptance foundation`
+
+Completed locally before checkpoint:
+- migration `20260822130000_add_publication_policy_acceptance_foundation.sql`;
+- `marketplace-general-v1` and `ee-horse-v1`;
+- versioned immutable policy documents;
+- append-only, user-owned, idempotent acceptance history;
+- reusable policy-status, acceptance and server-side require RPCs;
+- local Supabase reset and transactional SQL contract tests;
+- TypeScript typecheck, production build, `/sell` and `/v2/sell` smoke tests.
+
+Important boundary:
+- no `horse_offers` or `horse_offer_images` table yet;
+- no horse-offer UI yet;
+- no universal admin prepublication review;
+- AI moderation remains off;
+- production database has not been migrated.
+
+Next isolated step:
+1. create the corrected Estonia-only `horse_offers` and `horse_offer_images` foundation;
+2. add per-offer factual confirmation snapshots and submission content hash;
+3. publish low-risk offers immediately after deterministic checks and required-policy acceptance;
+4. keep a risk-based hold/moderation path and post-publication notice-and-action flow;
+5. test locally before documentation, checkpoint and any production rollout.

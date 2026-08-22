@@ -7416,3 +7416,14 @@ Selqiro üldine marketplace'i kategooriapuu on laiendatud 15 põhirubriigi, 187 
 Hobusekuulutused ehitatakse järgmise eraldatud tootefunktsioonina, mitte tavalise kaubakuulutuse erandina. Esimene piloot avatakse Eesti turule: hobuse tegelik asukohariik ja kuulutuse tururiik peavad olema Eesti (EE). Lubamine ei põhine IP-aadressil, kodakondsusel ega kasutaja hetke asukohal. Teised riigid avatakse hiljem ükshaaval riigipõhise poliitikakihi kaudu.
 
 Selqiro üldine sisupoliitika keelab mis tahes avaliku sisu, mille eesmärk on eluslooma pakkumine, otsimine, kokkuost, vahendamine või transport tapmiseks, tapamajja saatmiseks, lihaks, nahaks, karusnahaks või muuks tapmise tulemusena saadavaks tooteks kasutamiseks. See on Selqiro enda sisureegel, mitte väide, et kõik sellised tehingud oleksid seadusega keelatud.
+
+<!-- SELQIRO_PUBLICATION_POLICY_ACCEPTANCE_FOUNDATION_V1 -->
+## Versioonitud avaldamisreeglite vundament — 22.08.2026
+
+- Lisatud on `publication_policy_documents` ja append-only `user_publication_policy_acceptances`.
+- Esimesed aktiivsed reeglikomplektid on `marketplace-general-v1` ning Eesti hobusepakkumiste `ee-horse-v1`.
+- Enne tavapärase avaliku sisu esimest avaldamist nõustub kasutaja kehtiva üldreeglite versiooniga. Hobusepakkumine vajab lisaks kehtiva Eesti hobusepakkumiste reeglistiku nõustumist.
+- Nõustumine on kasutajapõhine, idempotentne ja seotud täpse dokumendi ID, versiooni ning sisu räsiga; aktiivne identiteet talletatakse nõustumise hetke kontekstina.
+- Poliitika metaandmed lukustavad launch-mudeli: madala riskiga kohene avaldamine, riskipõhine eelkontroll, avaldamisjärgne kontroll, teavita-ja-tegutse voog ning AI modereerimine algselt `off`.
+- Selles etapis ei loodud veel `horse_offers` tabelit ega kasutajaliidest. Production-andmebaasi ei muudetud.
+- Järgmine eraldatud samm on parandatud Eesti `horse_offers` vundament koos iga pakkumise faktiliste kinnituste ning kohese madala riskiga avaldamisega.

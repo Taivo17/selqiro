@@ -3347,3 +3347,18 @@ Not implemented yet:
 - Müüja vastutab kuulutuse andmete, dokumentide, omandi või volituse, registritoimingute ja tehingu õigsuse eest. V1 kasutab müüja kinnitusi; passi- ega ID-dokumenti ei kontrollita vaikimisi enne iga avaldamist.
 - V1 ei korralda piiriülest transporti, registritoiminguid, hobuse ostumakset, deposiiti ega oksjonit.
 - Kõikides riikides on keelatud eluslooma tapmise eesmärgiga pakkumine, otsimine, kokkuost, vahendamine või transport, sealhulgas varjatud sõnastusega sama eesmärk.
+
+<!-- SELQIRO_PUBLICATION_POLICY_ACCEPTANCE_FOUNDATION_V1 -->
+## Avaldamisreeglid ja modereerimise launch-leping — 22.08.2026
+
+Selqiro kasutab versioonitud avaldamisreegleid. Tavapärase avaliku sisu esimese avaldamise värav on `marketplace-general-v1`; Eesti hobusepakkumine nõuab lisaks `ee-horse-v1` reeglite kehtiva versiooni kinnitamist. Nõustumisajalugu on append-only, kasutajapõhine ja seotud täpse `policy_document_id`, `policy_version` ning `content_hash` väärtusega. Identity on nõustumise kontekst, mitte nõustumise omanik.
+
+Launch-modereerimine:
+- universaalset admini eelkontrolli ei ole;
+- madala riskiga sisu avaldatakse kohe;
+- riskisignaal võib peatada sisu enne avaldamist;
+- rikkumisele või kasutaja teatele reageeritakse järelkontrolliga;
+- AI modereerimise algrežiim on `off`;
+- AI-d laiendatakse hiljem ainult mõõdetud riskijuhtudes, kui kasu ja tulud katavad kulud.
+
+Hobusepakkumiste tabelid, pakkumisepõhised faktilised kinnitused ja UI tulevad järgmise eraldatud etapina. Production-andmebaasi ei ole selle checkpoint'iga veel migreeritud.

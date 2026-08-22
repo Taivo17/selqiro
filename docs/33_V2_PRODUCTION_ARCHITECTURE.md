@@ -4036,3 +4036,58 @@ Avaldamisel nõutakse kasutaja kinnitusi omandi või volituse, hobuse nõuetekoh
 Eluslooma tapmise eesmärgiga sisu on liigist ja riigist sõltumata keelatud. Reegel peab kehtima kuulutustele, ostusoovidele, teenustele, reklaamidele, profiilitekstidele ja muule avalikule sisule. Veterinaarne eutanaasia, päästmine/ümberpaigutamine ja tavapärane loomavedu ei kuulu keelu alla, kui eesmärk ei ole tapmine.
 
 See checkpoint dokumenteerib arhitektuuriotsuse; hobusepakkumiste tabelit, migratsiooni, RPC-sid, UI-d ega modereerimisvoogu pole veel loodud.
+
+<!-- SELQIRO_PUBLICATION_POLICY_ACCEPTANCE_FOUNDATION_V1 -->
+## Versioned publication-policy acceptance foundation
+
+Migration: `20260822130000_add_publication_policy_acceptance_foundation.sql`
+
+### Data model
+
+`publication_policy_documents`
+- immutable `policy_key + policy_version + country_code + locale` document versions;
+- exact `content_hash`;
+- active/effective lifecycle and content-type applicability;
+- technical moderation/publication metadata;
+- same-version content mutation is blocked.
+
+`user_publication_policy_acceptances`
+- append-only acceptance history owned by `user_id`;
+- optional active-identity snapshot for audit context;
+- exact document ID, version and content hash snapshot;
+- idempotent uniqueness per user and exact policy document;
+- no update or delete path for the authenticated client.
+
+### Reusable RPC boundary
+
+- `get_required_publication_policies_v1`
+- `accept_publication_policy_v1`
+- `get_my_publication_policy_acceptances_v1`
+- `get_my_required_publication_policy_status_v1`
+- `has_my_current_publication_policy_acceptance_v1`
+- `require_my_current_publication_policy_acceptance_v1`
+
+Publication mutations must call the reusable require/gate contract server-side. UI-only gating is insufficient.
+
+### Active V1 policies
+
+`marketplace-general-v1`
+- general marketplace use and publication rules.
+
+`ee-horse-v1`
+- additional Estonia-only horse-offer rules;
+- `market_country_code=EE`;
+- horse-location country must be `EE` in the future horse-offer mutation;
+- no default passport upload or ID-document check;
+- seller remains responsible for statements, documents and transaction duties.
+
+### Launch moderation contract
+
+- `immediate_low_risk_publication=true`
+- `universal_admin_prepublication_review=false`
+- `risk_based_prepublication_review=true`
+- `post_publication_review=true`
+- `notice_and_action=true`
+- `ai_moderation_mode=off`
+
+This migration deliberately does not create `horse_offers`, `horse_offer_images`, payment, deposit, auction, registry or transport workflows. Production Supabase remains unchanged until a separate reviewed rollout.
