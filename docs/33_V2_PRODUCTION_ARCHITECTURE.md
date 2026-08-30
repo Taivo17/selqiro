@@ -4091,3 +4091,38 @@ Publication mutations must call the reusable require/gate contract server-side. 
 - `ai_moderation_mode=off`
 
 This migration deliberately does not create `horse_offers`, `horse_offer_images`, payment, deposit, auction, registry or transport workflows. Production Supabase remains unchanged until a separate reviewed rollout.
+
+<!-- SELQIRO_EE_HORSE_OFFER_DATABASE_FOUNDATION_20260830 -->
+## Eesti hobusepakkumiste andmebaasivundament
+
+Migratsioon: `20260830170000_add_ee_horse_offer_foundation.sql`
+
+### Kasutajakogemuse piir
+
+Hobusepakkumise tehniline domeen on eraldatud, kuid kasutajale ei looda eraldi lisamisvoogu. V2 kasutab jätkuvalt sama `/v2/sell` vormi. Kui valitud kategooria tähistab elushobuse pakkumist, lisab vorm hobusepõhised väljad ja enne avaldamist pakkumisepõhised kinnitused.
+
+### Andmemudel
+
+- `horse_offers` — identiteedipõhine Eesti hobusepakkumise põhikirje;
+- `horse_offer_images` — järjestatud ja ühe põhipildiga pildileping;
+- `horse_offer_publication_events` — muutmatu avaldamissnapshot täpse reeglinõustumise, kinnituste, sisu, SHA-256 räsi, riskisignaalide ja otsusega.
+
+`publication_policy_documents` ja `user_publication_policy_acceptances` jäävad versioonitud portaali- ja hobusereeglite ainsaks tõeallikaks. Pakkumisepõhised faktilised kinnitused ei asenda reeglitega nõustumist ning salvestatakse iga avaldamiskatse kontekstis uuesti.
+
+### Launchi moderatsioonipiir
+
+Andmemudel toetab kahte tulemust:
+
+- madala riskiga sisu: `published`;
+- deterministliku riskisignaaliga sisu: `held_for_review`.
+
+Kõigile hobusepakkumistele üldist admini eelkontrolli ei rakendata. AI-modereerimist see checkpoint ei lisa.
+
+### Turvalisus ja teadlikult tegemata töö
+
+- `anon` ja `authenticated` ei saa domeenitabelitesse otse kirjutada ega neid otse lugeda;
+- RLS on sisse lülitatud ning tavakasutaja õigused eemaldatud;
+- omanikupõhised draft/RPC lepingud, avalikud read-RPC-d, Storage bucket ja kasutajaliides tulevad eraldi etappidena;
+- production-andmebaasi selles checkpoint'is ei muudetud.
+
+Kohalik build, täielik Supabase reset ja tehinguline SQL-lepingutest läbisid.

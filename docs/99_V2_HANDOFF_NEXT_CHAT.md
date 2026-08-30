@@ -1986,3 +1986,41 @@ Next isolated step:
 3. publish low-risk offers immediately after deterministic checks and required-policy acceptance;
 4. keep a risk-based hold/moderation path and post-publication notice-and-action flow;
 5. test locally before documentation, checkpoint and any production rollout.
+
+<!-- SELQIRO_EE_HORSE_OFFER_DATABASE_FOUNDATION_20260830 -->
+## 2026-08-30 — Eesti hobusepakkumiste andmebaasivundament
+
+Completed locally from checkpoint `b901aa6`:
+
+- migration `20260830170000_add_ee_horse_offer_foundation.sql`;
+- transactional test `20260830170000_ee_horse_offer_foundation_test.sql`;
+- `horse_offers`, `horse_offer_images`, and `horse_offer_publication_events`;
+- Estonia-only market/location constraints;
+- separate versioned-policy acceptance evidence and per-offer factual-confirmation snapshots;
+- explicit `publisher_confirms_age_18_or_over` confirmation key;
+- SHA-256 content snapshot verification;
+- immediate low-risk `published` and risk-based `held_for_review` data states;
+- identity/image integrity, one-primary-image protection, search indexes, RLS and locked direct privileges.
+
+Validation passed:
+
+- `npm run build`;
+- complete local Supabase reset;
+- SQL structure, behavior, security, append-only and rollback checks.
+
+Important boundaries:
+
+- the user experience remains the shared `/v2/sell` listing form;
+- a live-horse category will later reveal horse-specific fields and confirmations;
+- no owner/public horse-offer RPCs yet;
+- no horse image Storage bucket or upload flow yet;
+- no horse-offer UI yet;
+- production Supabase is unchanged;
+- do not edit the migration after a future production application; corrections must use a new migration.
+
+Next exact step:
+
+1. review and commit/push the migration, test, and documentation;
+2. run a separate linked production dry-run and controlled rollout;
+3. verify remote migration history and schema objects;
+4. only then add owner draft/read RPCs as the next isolated code patch.

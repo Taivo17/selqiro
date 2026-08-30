@@ -7427,3 +7427,16 @@ Selqiro üldine sisupoliitika keelab mis tahes avaliku sisu, mille eesmärk on e
 - Poliitika metaandmed lukustavad launch-mudeli: madala riskiga kohene avaldamine, riskipõhine eelkontroll, avaldamisjärgne kontroll, teavita-ja-tegutse voog ning AI modereerimine algselt `off`.
 - Selles etapis ei loodud veel `horse_offers` tabelit ega kasutajaliidest. Production-andmebaasi ei muudetud.
 - Järgmine eraldatud samm on parandatud Eesti `horse_offers` vundament koos iga pakkumise faktiliste kinnituste ning kohese madala riskiga avaldamisega.
+
+<!-- SELQIRO_EE_HORSE_OFFER_DATABASE_FOUNDATION_20260830 -->
+## Eesti hobusepakkumiste andmebaasivundament — 30.08.2026
+
+- Loodi migratsioon `20260830170000_add_ee_horse_offer_foundation.sql` ja selle tehinguline SQL-test.
+- Lisati eraldi `horse_offers`, `horse_offer_images` ja muutmatu `horse_offer_publication_events` andmebaasileping.
+- Kasutaja jaoks jääb hobusekuulutuse lisamine samasse V2 `/v2/sell` vormi nagu teiste kuulutuste lisamine. Hobuse kategooria valimisel tulevad hiljem juurde hobuse väljad ja enne avaldamist kohustuslikud pakkumisepõhised kinnitused.
+- Kinnituste hulgas on selge vähemalt 18-aastaseks olemise kinnitus. Konkreetse hobuse pakkumisel lisanduvad omandi või volituse, identifitseerimise ja passi olemasolu kinnitused; `wanted` tüübil neid kolme ei nõuta.
+- Versioonitud üld- ja hobusereeglite nõustumine jääb eraldi kasutajapõhiseks lepinguks. Iga pakkumise avaldamissündmus talletab lisaks täpse sisu, kinnitused, reeglitõendid, SHA-256 räsi, riskisignaalid ja otsuse.
+- Madala riskiga mudel toetab kohest avaldamist. Riskisignaaliga sisu saab minna olekusse `held_for_review`; kõikidele pakkumistele üldist admini eelkontrolli ei lisatud.
+- Tavakasutajatele ei antud otsest ligipääsu hobusepakkumiste tabelitele. Omaniku RPC-d, avalikud lugemislepingud, Storage ja kasutajaliides tulevad eraldi väikeste etappidena.
+- Production-andmebaasi ei muudetud.
+- Kohalik production build, Supabase reset ja SQL-lepingutest läbisid.

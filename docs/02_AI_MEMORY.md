@@ -3362,3 +3362,19 @@ Launch-modereerimine:
 - AI-d laiendatakse hiljem ainult mõõdetud riskijuhtudes, kui kasu ja tulud katavad kulud.
 
 Hobusepakkumiste tabelid, pakkumisepõhised faktilised kinnitused ja UI tulevad järgmise eraldatud etapina. Production-andmebaasi ei ole selle checkpoint'iga veel migreeritud.
+
+<!-- SELQIRO_EE_HORSE_OFFER_DATABASE_FOUNDATION_20260830 -->
+## EE_HORSE_OFFER_DATABASE_FOUNDATION
+
+Migration: `20260830170000_add_ee_horse_offer_foundation.sql`
+
+- Added the Estonia-only `horse_offers`, `horse_offer_images`, and append-only `horse_offer_publication_events` data foundation.
+- Horse offers remain a separate database and publication-security domain, but the user-facing creation flow stays inside the shared V2 `/v2/sell` listing form.
+- Selecting a live-horse offer in the shared form will later reveal horse-specific fields and per-offer confirmations, including the explicit 18+ confirmation.
+- Versioned portal-rule acceptance remains in `publication_policy_documents` and `user_publication_policy_acceptances`; the new publication-event model is for the exact per-offer content, factual confirmations, policy evidence, content hash, risk signals, and decision snapshot.
+- The schema supports immediate low-risk publication and a deterministic `held_for_review` path. Universal admin prepublication review is not restored.
+- Ordinary `anon` and `authenticated` roles have no direct table access. Owner/public RPCs and the Storage bucket are intentionally not part of this migration.
+- Local validation passed: production build, complete local Supabase reset, transactional SQL contract test, privilege checks, identity isolation, snapshot/hash validation, and rollback cleanup.
+- Production Supabase was not changed in this checkpoint.
+
+Next isolated step: review and commit this foundation, then perform a separately controlled production rollout before adding owner draft/read RPCs or shared-form UI integration.
