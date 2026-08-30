@@ -4171,3 +4171,78 @@ The user should experience the same calm listing-creation flow as for other list
 4. Add the publication-policy gate and per-offer confirmations, including 18+.
 5. Connect draft persistence and publication in separate tested steps.
 6. Add horse image handling only after the shared form and draft contract are stable.
+
+<!-- SELQIRO_V2_LIVE_ANIMAL_CAPABILITY_20260830 -->
+## Shared V2 live-animal capability boundary
+
+The V2 listing-create experience uses one route and one shared form:
+
+`/v2/sell`
+→ typed content selection
+→ optional controlled live-animal capability
+→ species-specific fields
+→ offer-type-specific confirmations
+→ secure species/country publication contract
+
+### Capability registry
+
+`src/features/listing-create/model/liveAnimalOfferCapabilities.ts` is the
+small UI-capability registry for controlled live-animal creation modes.
+
+A capability is identified by:
+
+- listing-create content type;
+- animal species;
+- market country;
+- enabled state;
+- user-facing labels and selected-state guidance.
+
+The registry is not a substitute for database authorization or publication
+policy enforcement. It only decides which reviewed creation mode may appear in
+the client UI.
+
+### Current launch boundary
+
+Only the following capability is enabled:
+
+- content type: `horse_offer`;
+- species: `horse`;
+- market country: `EE`.
+
+Unsupported species and countries remain absent from the UI until all of these
+exist:
+
+1. reviewed country policy;
+2. species-specific fields;
+3. moderation and safety contract;
+4. secure draft and publication contract;
+5. required policy documents and confirmations;
+6. browser and database tests.
+
+### Domain rule
+
+The production `horse_offers` domain stays horse-specific. Future dog, cat or
+other-animal support may add separate controlled domains or another reviewed
+domain pattern, but the shared `/v2/sell` experience must not be replaced or
+copied.
+
+### State preservation
+
+Changing the local content type must not reset ordinary shared form state.
+Manual browser testing confirmed that title and description remain intact while
+switching between ordinary listing and horse offer.
+
+### Current non-goals
+
+This checkpoint does not add:
+
+- horse offer-type selection;
+- horse fields;
+- policy acceptance UI;
+- per-offer confirmations;
+- horse draft persistence;
+- horse image upload;
+- publication mutation;
+- dog, cat or another-country functionality.
+
+The next isolated patch adds only the typed horse offer-type model and selector.

@@ -7,12 +7,17 @@ import {
   type ChangeEvent,
 } from "react";
 import { useAuth } from "../../../../lib/useAuth";
+import ListingCreateContentTypeSelector from "./ListingCreateContentTypeSelector";
 import {
   createListingCreateTextField,
   listingCreateFieldSourceLabel,
   updateListingCreateTextFieldByUser,
   type ListingCreateFieldSource,
 } from "../model/fieldProvenance";
+import {
+  DEFAULT_LISTING_CREATE_CONTENT_TYPE,
+  type ListingCreateContentType,
+} from "../model/contentType";
 import {
   appendListingCreateImages,
   LISTING_CREATE_IMAGE_LIMIT,
@@ -102,6 +107,13 @@ ListingCreatePage() {
     user,
     loading,
   } = useAuth();
+
+  const [
+    contentType,
+    setContentType,
+  ] = useState<ListingCreateContentType>(
+    DEFAULT_LISTING_CREATE_CONTENT_TYPE
+  );
 
   const [
     files,
@@ -219,7 +231,12 @@ ListingCreatePage() {
     );
 
   return (
-    <div className="min-w-0 space-y-6">
+    <div
+      className="min-w-0 space-y-6"
+      data-listing-create-content-type={
+        contentType
+      }
+    >
       <section className="overflow-hidden rounded-[34px] border border-amber-200 bg-amber-50 shadow-sm">
         <div className="border-t-4 border-amber-400 p-6 sm:p-8">
           <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
@@ -260,6 +277,11 @@ ListingCreatePage() {
           </p>
         </div>
       </section>
+
+      <ListingCreateContentTypeSelector
+        value={contentType}
+        onChange={setContentType}
+      />
 
       <section className="rounded-[30px] border border-black/5 bg-white p-5 shadow-sm sm:p-6">
         <div>

@@ -2064,3 +2064,42 @@ Next exact step:
 2. document the smallest horse-mode integration boundary;
 3. implement only typed horse-mode detection first;
 4. keep saving, publication-policy acceptance, confirmations, images and final publication in later isolated patches.
+
+<!-- SELQIRO_V2_LIVE_ANIMAL_CAPABILITY_20260830 -->
+## 2026-08-30 — V2 shared live-animal capability checkpoint
+
+Current Git base before this checkpoint:
+
+- `224e584 Document EE horse production rollout`
+
+Implemented and validated:
+
+- one shared `/v2/sell` creation journey;
+- typed `listing | horse_offer` content boundary;
+- small live-animal capability registry by species and market country;
+- only `horse + EE` enabled;
+- ordinary listing remains the default;
+- horse mode stays on the same route;
+- selected-state explanation appears only in horse mode;
+- switching back hides the horse-mode explanation;
+- title and description remain intact across content-type switching;
+- desktop and narrow-mobile layout checks passed;
+- production build passed;
+- no persistence, publication, policy acceptance or production-database change.
+
+Important boundaries:
+
+- do not expose dogs, cats or another market country yet;
+- do not generalize the production `horse_offers` domain;
+- do not copy the shared listing-create form for future animal species;
+- capability visibility is client UX only; database policy and authorization
+  remain authoritative.
+
+Next exact step:
+
+1. add typed horse offer types:
+   `sale | free_transfer | lease | co_rider | wanted`;
+2. render the selector only while the enabled `horse + EE` capability is active;
+3. keep title and description state intact;
+4. do not add horse fields, confirmations, persistence, images or publication
+   in the same patch.

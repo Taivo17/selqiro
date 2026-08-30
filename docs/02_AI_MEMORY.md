@@ -3402,3 +3402,29 @@ Next isolated step: review and commit this foundation, then perform a separately
 - Backend separation is an authorization, policy, audit and country-rule boundary; it is not a separate user-facing listing-creation journey.
 - Never edit either production-applied migration. Any correction must use a new migration.
 - Next isolated work: read-only audit of the current V2 listing-create modules, followed by the first small shared-form horse-mode patch.
+
+<!-- SELQIRO_V2_LIVE_ANIMAL_CAPABILITY_20260830 -->
+## V2_LIVE_ANIMAL_CAPABILITY_FOUNDATION
+
+2026-08-30 checkpoint:
+
+- `/v2/sell` remains the single user-facing listing-create route.
+- The shared form now has a typed local content boundary:
+  `listing | horse_offer`.
+- Controlled live-animal availability is resolved through
+  `liveAnimalOfferCapabilities.ts`.
+- The capability key combines content type, animal species and market country.
+- Only `horse + EE` is currently enabled.
+- Dogs, cats, other animals and other countries are not exposed before their
+  policy, fields, moderation and publication contracts are ready.
+- The production `horse_offers` domain remains horse-specific; it is not
+  generalized speculatively.
+- Selecting `Hobusepakkumine` stays inside the same form and activates a local
+  horse-mode state and explanation.
+- Ordinary listing title and description state survives switching between
+  ordinary listing and horse offer.
+- Desktop and narrow-mobile layouts were browser-tested.
+- This checkpoint does not save, upload, accept policies, create confirmations
+  or publish content.
+- Next isolated step: add the typed horse offer-type selector
+  (`sale | free_transfer | lease | co_rider | wanted`) without persistence.

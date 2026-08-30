@@ -1,28 +1,49 @@
 # V2 listing create
 
-This feature owns the V2 marketplace listing creation flow.
+This feature owns the shared V2 marketplace listing creation flow.
 
-Current first checkpoint:
+Current checkpoint:
 
-- `/v2/sell` route exists;
-- the flow is text-first: title and description are shown before images;
-- up to 10 JPG, PNG or WEBP source images can be selected;
-- source files are validated before use;
-- images can be reordered or removed locally;
-- the first image is the future primary image and the only image planned for the initial AI analysis;
-- the UI explicitly tells the user to place the most informative image first;
-- title and description are recommended before AI analysis but may remain empty for an unknown object;
-- title and description already track field provenance:
-  `empty`, `ai` or `user`;
-- user-owned text is protected from future silent AI overwrite;
-- no database row, Storage object, AI request or publication is created yet;
-- the current working `/sell` route remains the mobile default until
-  the V2 flow is complete enough to replace it.
+- `/v2/sell` remains the single user-facing listing-create route;
+- the form has a typed local content boundary:
+  `listing | horse_offer`;
+- `listing` is the default and preserves the existing ordinary-listing flow;
+- controlled live-animal options come from a small species-and-country
+  capability registry;
+- only `horse + EE` is enabled;
+- the visible option remains `Hobusepakkumine`;
+- selecting it activates horse mode inside the same form;
+- no unsupported animal or country is exposed in the UI;
+- future species and countries are added by appending a reviewed capability
+  and connecting a species-specific fields/confirmations module;
+- future additions must not require copying or replacing the shared
+  `ListingCreatePage`;
+- the production `horse_offers` domain remains horse-specific and is not
+  renamed or generalized speculatively;
+- no dog, cat or other-pet table, policy, field set, moderation rule or
+  publication contract is created by this checkpoint;
+- no horse fields, confirmations, database row, Storage object, policy
+  acceptance, AI request or publication mutation is created by this
+  checkpoint;
+- horse supplies and horse/livestock trailers remain ordinary product
+  categories and must never activate live-animal mode;
+- the existing text-first title/description flow, field provenance and local
+  image selection remain unchanged;
+- the current working `/sell` route remains the mobile default until the V2
+  flow is complete enough to replace it.
+
+Long-term extension pattern:
+
+1. add a reviewed species-and-country capability;
+2. add the species-specific fields module;
+3. add common and species-specific confirmation modules;
+4. add the country policy and secure backend publication contract;
+5. expose the option only after all required parts are ready.
 
 Next isolated checkpoint:
 
-1. configure the local test price as 25 Energy;
-2. extract shared preparation for the first / primary AI image;
-3. extend the authenticated AI request with title, description and a stable operation key;
-4. connect `reserve → OpenAI → commit | release`;
-5. return a suggested description and merge AI text only into empty or AI-owned fields.
+1. add typed horse offer types:
+   `sale | free_transfer | lease | co_rider | wanted`;
+2. render only the offer-type selector and local state in the shared form;
+3. keep persistence, policy acceptance, confirmations, image upload and
+   publication behavior outside that step.

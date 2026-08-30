@@ -7456,3 +7456,31 @@ Kasutajakogemuse otsus ei muutu: hobusekuulutus lisatakse samas `/v2/sell` vormi
 Eraldi backend ei tähenda eraldi kasutajale nähtavat lisamisvoogu. Selle eesmärk on hoida riigireeglid, kinnitused, audit, riskikontroll ja tulevane teiste riikide avamine tavakuulutuste loogikast selgelt eraldatud.
 
 Järgmine väike samm on olemasoleva V2 kuulutuse lisamise koodi read-only audit ja seejärel hobuse režiimi esimene tüübipõhine ühendus ilma salvestusloogikat veel muutmata.
+
+<!-- SELQIRO_V2_LIVE_ANIMAL_CAPABILITY_20260830 -->
+## V2 eluslooma pakkumise laiendatav kasutajaliidese vundament
+
+`/v2/sell` jääb üheks ühiseks kuulutuse lisamise vormiks. Kasutaja ei lähe
+hobusepakkumise ega tulevaste loomaliikide jaoks eraldi lisamislehele.
+
+Vormi juurde lisati väike loomaliigi ja tururiigi capability-register. Praegu
+on seal lubatud ainult:
+
+- loomaliik: hobune;
+- tururiik: Eesti (`EE`);
+- nähtav valik: `Hobusepakkumine`.
+
+Koera, kassi, teisi loomaliike ega teisi riike kasutajale veel ei kuvata.
+Nende lisamine toimub hiljem ükshaaval alles siis, kui vastava looma ja riigi
+reeglid, väljad, modereerimine, kinnitused ja turvaline avaldamisleping on
+valmis.
+
+Hobusepakkumise valimine ei vii kasutajat teisele lehele. See lülitab sama
+vormi hobuserežiimi. Brauseritest kinnitas, et tavalise kuulutuse ja
+hobusepakkumise vahel vahetamine ei kustuta sisestatud pealkirja ega kirjeldust
+ning valikud töötavad nii desktopis kui mobiilivaates.
+
+Selles etapis ei lisatud veel hobuse pakkumise liiki, hobuse andmevälju,
+nõustumiste checkbox'e, salvestamist, pilte ega avaldamist. Järgmine väike samm
+on ainult hobuse pakkumise liigi valik:
+müük, tasuta üleandmine, rent, kaasratsanik või otsin hobust.
