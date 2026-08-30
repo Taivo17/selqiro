@@ -4126,3 +4126,48 @@ Kõigile hobusepakkumistele üldist admini eelkontrolli ei rakendata. AI-moderee
 - production-andmebaasi selles checkpoint'is ei muudetud.
 
 Kohalik build, täielik Supabase reset ja tehinguline SQL-lepingutest läbisid.
+
+<!-- SELQIRO_EE_HORSE_PRODUCTION_ROLLOUT_20260830 -->
+## EE horse-offer production rollout checkpoint
+
+Production rollout completed on 2026-08-30.
+
+### Applied migration chain
+
+The linked production database applied the dependency chain in timestamp order:
+
+1. `20260822130000_add_publication_policy_acceptance_foundation.sql`
+2. `20260830170000_add_ee_horse_offer_foundation.sql`
+
+A public-schema dump was created before the push. After the push:
+
+- local and remote migration histories matched;
+- linked dry-run reported no pending migrations;
+- the production schema dump confirmed the policy, acceptance, horse-offer, horse-image and append-only publication-event tables.
+
+### Immutable production boundary
+
+Both applied migration files are immutable history. Do not patch, rename or reuse their timestamps. Future corrections require a new migration and a new local/production verification cycle.
+
+### Shared creation UX boundary
+
+The separate `horse_offers` database domain does not create a separate user-facing add flow.
+
+The V2 contract is:
+
+`/v2/sell`
+→ shared listing-create experience
+→ live-horse selection activates horse mode
+→ horse fields and offer-type-specific factual confirmations appear
+→ the form calls the horse-offer contract instead of the generic listing contract
+
+The user should experience the same calm listing-creation flow as for other listings. The visible difference is only the information and confirmations required for a controlled live-horse offer.
+
+### Next implementation sequence
+
+1. Audit the current `/v2/sell`, listing-create feature and category-selection modules without changing behavior.
+2. Add a typed horse-mode/category boundary without a mutation.
+3. Add horse-specific fields in the same form.
+4. Add the publication-policy gate and per-offer confirmations, including 18+.
+5. Connect draft persistence and publication in separate tested steps.
+6. Add horse image handling only after the shared form and draft contract are stable.

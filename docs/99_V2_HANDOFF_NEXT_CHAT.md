@@ -2024,3 +2024,43 @@ Next exact step:
 2. run a separate linked production dry-run and controlled rollout;
 3. verify remote migration history and schema objects;
 4. only then add owner draft/read RPCs as the next isolated code patch.
+
+<!-- SELQIRO_EE_HORSE_PRODUCTION_ROLLOUT_20260830 -->
+## 2026-08-30 — EE horse-offer production foundation checkpoint
+
+Completed:
+
+- Git checkpoint `2693620 Add EE horse offer foundation` pushed to `origin/main`;
+- application production build passed;
+- local Supabase reset passed;
+- transactional horse-offer SQL contract test passed;
+- production public-schema backup created before rollout;
+- publication-policy acceptance foundation applied to linked production;
+- EE horse-offer foundation applied to linked production;
+- local and remote migration histories aligned;
+- linked dry-run reports the remote database is up to date;
+- production schema dump confirmed all five expected foundation tables.
+
+Production-confirmed tables:
+
+- `publication_policy_documents`
+- `user_publication_policy_acceptances`
+- `horse_offers`
+- `horse_offer_images`
+- `horse_offer_publication_events`
+
+Important boundary:
+
+- no horse-offer UI is connected yet;
+- do not edit the two production-applied migration files;
+- no separate horse-listing creation route should be introduced;
+- the user-facing flow remains the existing shared `/v2/sell` form;
+- live-horse selection reveals horse fields and offer-type-specific confirmations before publication;
+- the separate backend domain exists for policy, audit, security and future country expansion.
+
+Next exact step:
+
+1. inspect the current `app/v2/sell`, V2 sell wrapper, `src/features/listing-create`, category model and existing listing-create APIs;
+2. document the smallest horse-mode integration boundary;
+3. implement only typed horse-mode detection first;
+4. keep saving, publication-policy acceptance, confirmations, images and final publication in later isolated patches.

@@ -7440,3 +7440,19 @@ Selqiro üldine sisupoliitika keelab mis tahes avaliku sisu, mille eesmärk on e
 - Tavakasutajatele ei antud otsest ligipääsu hobusepakkumiste tabelitele. Omaniku RPC-d, avalikud lugemislepingud, Storage ja kasutajaliides tulevad eraldi väikeste etappidena.
 - Production-andmebaasi ei muudetud.
 - Kohalik production build, Supabase reset ja SQL-lepingutest läbisid.
+
+<!-- SELQIRO_EE_HORSE_PRODUCTION_ROLLOUT_20260830 -->
+## Eesti hobusepakkumiste production-vundament — 30.08.2026
+
+Productionisse rakendati kontrollitud järjekorras:
+
+- versioonitud avaldamisreeglite ja nõustumiste vundament;
+- Eesti hobusepakkumiste eraldi turvaline andmebaasivundament.
+
+Enne rakendamist loodi productioni `public` skeemi varukoopia. Pärast rakendamist kinnitasid migratsiooniajalugu, kuivkäivitus ja skeemidump, et remote-andmebaas on ajakohane ning vajalikud reegli-, nõustumis-, hobusepakkumise-, pildi- ja avaldamissündmuste tabelid on olemas.
+
+Kasutajakogemuse otsus ei muutu: hobusekuulutus lisatakse samas `/v2/sell` vormis nagu teised kuulutused. Kui kasutaja valib elushobuse pakkumise, ilmuvad samasse vormi hobusepõhised väljad ja enne avaldamist kohustuslikud lisakinnitused, sealhulgas vähemalt 18-aastaseks olemise kinnitus. Pakkumise liigist sõltuvalt küsitakse ka omaniku või volitatud esindaja, identifitseerimise ja passi kinnitusi.
+
+Eraldi backend ei tähenda eraldi kasutajale nähtavat lisamisvoogu. Selle eesmärk on hoida riigireeglid, kinnitused, audit, riskikontroll ja tulevane teiste riikide avamine tavakuulutuste loogikast selgelt eraldatud.
+
+Järgmine väike samm on olemasoleva V2 kuulutuse lisamise koodi read-only audit ja seejärel hobuse režiimi esimene tüübipõhine ühendus ilma salvestusloogikat veel muutmata.

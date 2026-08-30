@@ -3378,3 +3378,27 @@ Migration: `20260830170000_add_ee_horse_offer_foundation.sql`
 - Production Supabase was not changed in this checkpoint.
 
 Next isolated step: review and commit this foundation, then perform a separately controlled production rollout before adding owner draft/read RPCs or shared-form UI integration.
+
+<!-- SELQIRO_EE_HORSE_PRODUCTION_ROLLOUT_20260830 -->
+## EE_HORSE_OFFER_PRODUCTION_FOUNDATION
+
+2026-08-30 production checkpoint:
+
+- Git checkpoint: `2693620 Add EE horse offer foundation`.
+- Linked Supabase production applied, in order:
+  - `20260822130000_add_publication_policy_acceptance_foundation.sql`
+  - `20260830170000_add_ee_horse_offer_foundation.sql`
+- A public-schema backup was created before the push.
+- Local and remote migration histories now match.
+- Linked `db push --dry-run` reports that the remote database is up to date.
+- Production schema verification confirmed:
+  - `publication_policy_documents`
+  - `user_publication_policy_acceptances`
+  - `horse_offers`
+  - `horse_offer_images`
+  - `horse_offer_publication_events`
+- The production foundation does not yet add horse-offer UI.
+- User experience remains one shared `/v2/sell` flow. Selecting the live-horse content type activates horse-specific fields and per-offer confirmations before publication.
+- Backend separation is an authorization, policy, audit and country-rule boundary; it is not a separate user-facing listing-creation journey.
+- Never edit either production-applied migration. Any correction must use a new migration.
+- Next isolated work: read-only audit of the current V2 listing-create modules, followed by the first small shared-form horse-mode patch.
