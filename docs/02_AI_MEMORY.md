@@ -3428,3 +3428,26 @@ Next isolated step: review and commit this foundation, then perform a separately
   or publish content.
 - Next isolated step: add the typed horse offer-type selector
   (`sale | free_transfer | lease | co_rider | wanted`) without persistence.
+
+<!-- SELQIRO_V2_HORSE_OFFER_TYPE_SELECTOR_20260831 -->
+## V2_HORSE_OFFER_TYPE_SELECTOR
+
+2026-08-31 checkpoint:
+
+- The shared `/v2/sell` form exposes a typed horse-offer subtype model:
+  `sale | free_transfer | lease | co_rider | wanted`.
+- User-facing choices are `Müük`, `Tasuta üleandmine`, `Rent`,
+  `Kaasratsaniku otsing` and `Otsin hobust`.
+- No subtype is selected silently.
+- The selector is visible only in the enabled `horse + EE` mode.
+- The selected subtype is local UI state only.
+- Switching to an ordinary listing hides the selector; returning to horse mode
+  restores the previous selection.
+- Shared title and description remain intact while switching modes.
+- `wanted` is the only subtype that does not require an already identified
+  specific horse; later fields and confirmations must branch from this rule.
+- Production build, desktop browser test and narrow-mobile browser test passed.
+- This checkpoint does not save a draft, upload images, accept policies,
+  create factual confirmations or publish an offer.
+- Next isolated step: add the first typed horse-field model and local UI while
+  keeping concrete-horse fields separate from the smaller `wanted` field set.

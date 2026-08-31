@@ -2103,3 +2103,44 @@ Next exact step:
 3. keep title and description state intact;
 4. do not add horse fields, confirmations, persistence, images or publication
    in the same patch.
+
+<!-- SELQIRO_V2_HORSE_OFFER_TYPE_SELECTOR_20260831 -->
+## 2026-08-31 — V2 horse-offer type selector checkpoint
+
+Base before this checkpoint:
+
+- `6899ddb Add V2 live-animal offer capability`
+
+Implemented and validated:
+
+- typed `HorseOfferType` model;
+- canonical values `sale | free_transfer | lease | co_rider | wanted`;
+- separate `HorseOfferTypeSelector` component;
+- selector visible only in enabled `horse + EE` mode;
+- no silent default subtype;
+- `wanted` marked as not requiring a specific horse;
+- selected subtype restored after a temporary switch to ordinary listing;
+- shared title and description preserved;
+- static contract check passed;
+- production build passed;
+- all five choices, desktop layout and narrow-mobile layout were browser-tested;
+- no new browser-console errors were observed.
+
+Not included:
+
+- horse fields;
+- confirmations;
+- policy acceptance;
+- draft persistence;
+- images;
+- publication;
+- database or production changes.
+
+Next exact step:
+
+1. define the first typed horse-field state;
+2. add a small horse-fields component inside the shared `/v2/sell` form;
+3. show concrete-horse identity fields only for
+   `sale | free_transfer | lease | co_rider`;
+4. give `wanted` a smaller search-criteria branch;
+5. keep persistence, confirmations, images and publication outside that patch.

@@ -8,6 +8,7 @@ import {
 } from "react";
 import { useAuth } from "../../../../lib/useAuth";
 import ListingCreateContentTypeSelector from "./ListingCreateContentTypeSelector";
+import HorseOfferTypeSelector from "./HorseOfferTypeSelector";
 import {
   createListingCreateTextField,
   listingCreateFieldSourceLabel,
@@ -18,6 +19,13 @@ import {
   DEFAULT_LISTING_CREATE_CONTENT_TYPE,
   type ListingCreateContentType,
 } from "../model/contentType";
+import {
+  getLiveAnimalOfferCapability,
+  LIVE_ANIMAL_SPECIES,
+} from "../model/liveAnimalOfferCapabilities";
+import {
+  type HorseOfferType,
+} from "../model/horseOfferType";
 import {
   appendListingCreateImages,
   LISTING_CREATE_IMAGE_LIMIT,
@@ -113,6 +121,13 @@ ListingCreatePage() {
     setContentType,
   ] = useState<ListingCreateContentType>(
     DEFAULT_LISTING_CREATE_CONTENT_TYPE
+  );
+
+  const [
+    horseOfferType,
+    setHorseOfferType,
+  ] = useState<HorseOfferType | null>(
+    null
   );
 
   const [
@@ -230,11 +245,26 @@ ListingCreatePage() {
       description.value.trim()
     );
 
+  const liveAnimalCapability =
+    getLiveAnimalOfferCapability(
+      contentType
+    );
+
+  const horseMode =
+    liveAnimalCapability?.species ===
+    LIVE_ANIMAL_SPECIES.horse;
+
   return (
     <div
       className="min-w-0 space-y-6"
       data-listing-create-content-type={
         contentType
+      }
+      data-horse-offer-type={
+        horseMode
+          ? horseOfferType ||
+            "unselected"
+          : undefined
       }
     >
       <section className="overflow-hidden rounded-[34px] border border-amber-200 bg-amber-50 shadow-sm">
@@ -282,6 +312,15 @@ ListingCreatePage() {
         value={contentType}
         onChange={setContentType}
       />
+
+      {horseMode ? (
+        <HorseOfferTypeSelector
+          value={horseOfferType}
+          onChange={
+            setHorseOfferType
+          }
+        />
+      ) : null}
 
       <section className="rounded-[30px] border border-black/5 bg-white p-5 shadow-sm sm:p-6">
         <div>

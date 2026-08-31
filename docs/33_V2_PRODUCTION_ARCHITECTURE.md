@@ -4246,3 +4246,38 @@ This checkpoint does not add:
 - dog, cat or another-country functionality.
 
 The next isolated patch adds only the typed horse offer-type model and selector.
+
+<!-- SELQIRO_V2_HORSE_OFFER_TYPE_SELECTOR_20260831 -->
+## V2 horse-offer subtype boundary
+
+The enabled `horse + EE` creation capability contains a typed subtype layer.
+
+Canonical values:
+
+- `sale`
+- `free_transfer`
+- `lease`
+- `co_rider`
+- `wanted`
+
+The values match the production `horse_offers.offer_type` contract, but the
+current selector is local UI state and does not call the database. No subtype
+is selected automatically.
+
+`wanted` does not describe an already selected concrete horse. It must not
+inherit fields or confirmations asserting ownership, identification or passport
+availability for a particular horse. The other four subtypes describe a
+concrete horse. This distinction belongs in the typed model and future
+confirmation builder, not in scattered component conditions.
+
+State rules:
+
+- ordinary-listing mode hides the subtype selector;
+- returning to horse mode restores the selected subtype;
+- switching modes does not clear shared title or description;
+- no route change occurs.
+
+This checkpoint adds no horse fields, policy acceptance, confirmations, draft
+persistence, image upload, publication mutation or production database change.
+The next patch should add a small typed horse-field model and one focused fields
+component, with concrete-horse fields separate from `wanted` search criteria.

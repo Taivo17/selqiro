@@ -7484,3 +7484,30 @@ Selles etapis ei lisatud veel hobuse pakkumise liiki, hobuse andmevälju,
 nõustumiste checkbox'e, salvestamist, pilte ega avaldamist. Järgmine väike samm
 on ainult hobuse pakkumise liigi valik:
 müük, tasuta üleandmine, rent, kaasratsanik või otsin hobust.
+
+<!-- SELQIRO_V2_HORSE_OFFER_TYPE_SELECTOR_20260831 -->
+## Hobusepakkumise liigi valik ühises V2 lisamisvormis
+
+Samas `/v2/sell` vormis saab hobuserežiimis valida ühe viiest pakkumise liigist:
+
+- Müük
+- Tasuta üleandmine
+- Rent
+- Kaasratsaniku otsing
+- Otsin hobust
+
+Ühtegi valikut ei märgita kasutaja eest automaatselt. Valik on praegu ainult
+kohalik kasutajaliidese olek ning ei salvesta ega avalda veel midagi.
+
+Tavalise kuulutuse juurde lülitudes peidetakse hobusepakkumise liigi osa.
+Hobuserežiimi naastes taastub varem valitud liik. Pealkiri ja kirjeldus jäävad
+kuulutuse liigi vahetamisel alles.
+
+`Otsin hobust` on teistest liikidest eristatud, sest seal ei ole veel
+konkreetset pakutavat hobust. Selle puhul ei tohi tulevikus nõuda konkreetse
+hobuse omandi, identifitseerimise ega passi kinnitusi. Müük, tasuta üleandmine,
+rent ja kaasratsaniku otsing on konkreetse hobusega seotud vood.
+
+Build ning desktopi- ja mobiilibrauseritest läbisid. Järgmine väike samm on
+hobuse andmeväljade tüübistatud kohalik vormiosa; salvestamine, kinnitused,
+pildid ja avaldamine jäävad hilisematesse eraldi etappidesse.
