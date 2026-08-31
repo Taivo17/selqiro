@@ -2144,3 +2144,53 @@ Next exact step:
    `sale | free_transfer | lease | co_rider`;
 4. give `wanted` a smaller search-criteria branch;
 5. keep persistence, confirmations, images and publication outside that patch.
+
+<!-- SELQIRO_V2_HORSE_BASIC_AI_TEXT_FLOW_20260831 -->
+## 2026-08-31 — V2 horse basic fields, AI flow and neutral wording
+
+Current Git base before this checkpoint:
+
+- `8f9ea86 Add V2 horse offer type selector`
+
+Implemented:
+
+- first typed horse basic-field state;
+- separate `HorseOfferBasicFields` component;
+- concrete horse branch with six basic fields;
+- smaller `wanted` branch with preferred sex and breed only;
+- horse fields moved after shared text, image and optional AI stages;
+- separate `ListingCreateAiAnalysisCard`;
+- ordinary-listing and controlled-live-animal AI guidance modes;
+- no duplicate global category selector for horse offers;
+- isolated `listingCreateTextGuidance` model;
+- neutral ordinary-listing examples;
+- offer-type-specific horse examples;
+- removal of BMW/E39/auto-part default wording;
+- mode and offer-type switching preserve user-entered title and description.
+
+Validated:
+
+- static contract checks passed;
+- production build passed;
+- ordinary and horse guidance displayed correctly;
+- horse sale fields displayed correctly;
+- ordinary listing remained neutral;
+- manual browser regression tests passed;
+- no database or production mutation occurred.
+
+Current uncommitted files before documentation:
+
+- `src/features/listing-create/README.md`
+- `src/features/listing-create/components/ListingCreateContentTypeSelector.tsx`
+- `src/features/listing-create/components/ListingCreatePage.tsx`
+- `src/features/listing-create/components/HorseOfferBasicFields.tsx`
+- `src/features/listing-create/components/ListingCreateAiAnalysisCard.tsx`
+- `src/features/listing-create/model/horseOfferFields.ts`
+- `src/features/listing-create/model/listingCreateTextGuidance.ts`
+
+Next exact step after commit:
+
+1. add typed discipline, training-level and suitability fields;
+2. provide a smaller preference-oriented branch for `wanted`;
+3. keep health, behavior, price, location, confirmations, persistence, images
+   and publication in later isolated patches.

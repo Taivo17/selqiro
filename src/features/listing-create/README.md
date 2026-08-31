@@ -2,47 +2,100 @@
 
 This feature owns the shared V2 marketplace listing creation flow.
 
-Current checkpoint:
+Current shared flow:
 
-- `/v2/sell` remains the single user-facing listing-create route;
-- the form has a typed local content boundary:
-  `listing | horse_offer`;
-- `listing` is the default and preserves the ordinary-listing flow;
-- controlled live-animal options come from the species-and-country capability
-  registry;
+1. choose ordinary listing or an enabled controlled live-animal offer;
+2. for `horse + EE`, choose the horse offer type;
+3. enter optional title and description;
+4. add and order images;
+5. optionally request AI analysis;
+6. review or enter the content-type-specific fields;
+7. later complete location, price, policy acceptance, factual confirmations and
+   publication.
+
+Current controlled capability:
+
 - only `horse + EE` is enabled;
-- selecting `Hobusepakkumine` activates horse mode inside the same form;
-- horse mode now exposes a typed local offer-type selector:
+- horse offer types are:
   `sale | free_transfer | lease | co_rider | wanted`;
 - no horse offer type is silently preselected;
-- `wanted` is marked as not requiring a specific already-identified horse;
-- the selected offer type remains local UI state only;
-- switching to an ordinary listing hides the horse offer-type selector without
-  clearing shared title, description or image state;
-- no unsupported animal or country is exposed in the UI;
-- the production `horse_offers` domain remains horse-specific;
-- no horse fields, confirmations, database row, Storage object, policy
-  acceptance, AI request or publication mutation is created by this checkpoint;
+- no separate global marketplace category selector is required for a horse
+  offer;
+- horse discovery placement is derived later from controlled content type,
+  species, market country and offer type;
 - horse supplies and horse/livestock trailers remain ordinary product
-  categories and must never activate live-animal mode;
-- the current working `/sell` route remains the mobile default until the V2
-  flow is complete enough to replace it.
+  categories and never activate horse mode.
+
+Text-first contract:
+
+- ordinary listings use neutral, category-independent title and description guidance;
+- horse mode uses horse-oriented guidance instead of product examples;
+- horse title and description placeholders adapt to the selected offer type;
+- `wanted` wording describes the horse being sought rather than a concrete
+  horse already offered;
+- changing content type or horse offer type does not overwrite existing user
+  text;
+- empty text remains allowed so AI can later suggest a short title and
+  description;
+- user-authored text remains protected by field provenance.
+
+AI contract:
+
+- ordinary listings use AI primarily to suggest a valid Selqiro category path;
+- controlled live-animal offers already have their content type and species
+  chosen by the user;
+- horse-mode AI may check for a visible mismatch and suggest only missing
+  title, description or visible horse data;
+- AI never accepts publication policies or factual confirmations for the user;
+- future AI merge logic for horse fields must update only empty or explicitly
+  AI-owned fields;
+- manual use of the form remains possible without AI.
+
+Horse basic-field checkpoint:
+
+- concrete-horse flows
+  (`sale | free_transfer | lease | co_rider`) show:
+  - horse name
+  - birth year
+  - sex
+  - breed
+  - color
+  - height in centimetres
+- `wanted` shows only:
+  - preferred sex
+  - preferred breed
+- the horse fields appear after the shared text, image and optional AI stages;
+- hidden local values may survive temporary mode changes;
+- a future persistence mapper must send only fields relevant to the active
+  offer type;
+- no draft, database row, Storage object, policy acceptance, confirmation or
+  publication mutation is created by this checkpoint.
+
+Future animal expansion:
+
+- the shared `/v2/sell` route remains;
+- new species and countries are exposed only through reviewed capabilities;
+- the user confirms the species manually or confirms an AI suggestion;
+- unsupported species/country combinations remain blocked and absent from the
+  selectable UI;
+- the production `horse_offers` domain remains horse-specific.
 
 Browser test required before checkpoint:
 
-1. horse mode shows all five offer types;
-2. no offer type is selected initially;
-3. every option can be selected;
-4. switching to ordinary listing hides the selector;
-5. switching back restores the selected horse offer type;
-6. title and description remain intact;
-7. desktop and narrow-mobile layouts remain usable;
-8. browser console has no new errors.
+1. ordinary listing uses neutral wording that does not suggest one preferred product category;
+2. each horse offer type shows suitable horse-oriented examples;
+3. `wanted` wording does not imply an already owned concrete horse;
+4. changing offer type does not overwrite entered title or description;
+5. ordinary listing keeps category-oriented AI guidance;
+6. horse mode says AI does not choose an ordinary product category;
+7. horse basic fields remain after the AI card;
+8. desktop and narrow-mobile layouts remain usable;
+9. browser console has no new errors.
 
-Next isolated checkpoint after this one:
+Next isolated checkpoint:
 
-1. add the first horse-specific local field model;
-2. render only the fields shared by concrete horse offers;
-3. let `wanted` use its own smaller field set;
-4. keep persistence, policy acceptance, confirmations, images and publication
-   outside that step.
+1. document and commit the aligned horse basic-field and AI flow;
+2. add the next horse-use fields separately:
+   discipline, training level and suitability;
+3. keep location, price, confirmations, persistence, images and publication
+   outside that next patch.

@@ -3451,3 +3451,35 @@ Next isolated step: review and commit this foundation, then perform a separately
   create factual confirmations or publish an offer.
 - Next isolated step: add the first typed horse-field model and local UI while
   keeping concrete-horse fields separate from the smaller `wanted` field set.
+
+<!-- SELQIRO_V2_HORSE_BASIC_AI_TEXT_FLOW_20260831 -->
+## V2_HORSE_BASIC_FIELDS_AND_AI_FLOW
+
+2026-08-31 checkpoint:
+
+- `/v2/sell` remains one shared listing-create route.
+- The controlled `horse + EE` flow does not ask the user to select a duplicate
+  global marketplace category.
+- Horse discovery placement will later be derived from content type, species,
+  market country and horse offer type.
+- Shared form order is:
+  content type → horse offer type → title/description → images → optional AI
+  analysis → horse-specific fields.
+- Ordinary listings use neutral, category-independent examples.
+- BMW, E39 and other auto-part-specific default examples were removed.
+- Horse title/description guidance adapts to:
+  `sale | free_transfer | lease | co_rider | wanted`.
+- User-authored title and description are never reset merely because the mode
+  or horse offer type changes.
+- Ordinary-listing AI remains category-oriented.
+- Horse-mode AI does not choose an ordinary product category; it may later
+  detect a visible mismatch and suggest only empty title, description or
+  visible horse fields.
+- AI never accepts publication policies or factual confirmations for the user.
+- Concrete-horse flows show the first six basic fields:
+  horse name, birth year, sex, breed, color and height.
+- `wanted` shows only preferred sex and preferred breed.
+- Static contract checks, production build and manual browser tests passed.
+- No draft persistence, image upload, policy acceptance, confirmation or
+  publication mutation is part of this checkpoint.
+- Next isolated field patch: discipline, training level and suitability.

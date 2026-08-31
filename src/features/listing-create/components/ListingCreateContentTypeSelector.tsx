@@ -24,7 +24,7 @@ const STANDARD_LISTING_OPTION = {
   value: LISTING_CREATE_CONTENT_TYPES.listing,
   label: "Tavaline kuulutus",
   description:
-    "Ese, sõiduk, varuosa või muu tavapärane pakkumine.",
+    "Siia sobivad kõik tavapärased müügi- ja pakkumiskuulutused.",
 } as const;
 
 export default function

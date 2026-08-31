@@ -4281,3 +4281,89 @@ This checkpoint adds no horse fields, policy acceptance, confirmations, draft
 persistence, image upload, publication mutation or production database change.
 The next patch should add a small typed horse-field model and one focused fields
 component, with concrete-horse fields separate from `wanted` search criteria.
+
+<!-- SELQIRO_V2_HORSE_BASIC_AI_TEXT_FLOW_20260831 -->
+## V2 controlled horse creation flow: text, AI and basic fields
+
+The shared `/v2/sell` form now distinguishes two classification contracts.
+
+### Ordinary marketplace listing
+
+- user may enter title and description;
+- user adds images;
+- optional AI primarily suggests a valid Selqiro category path;
+- manual category selection must remain available;
+- default examples are neutral and category-independent.
+
+### Controlled horse offer
+
+- user explicitly selects `horse_offer`;
+- the enabled capability resolves species `horse` and market `EE`;
+- user explicitly selects the horse offer type;
+- no duplicate global marketplace category selector is shown;
+- public discovery placement is derived later from controlled structured data;
+- optional AI may check a visible content mismatch and suggest only missing
+  text or visible horse data;
+- AI cannot accept rules, attest age, ownership, identification, passport
+  availability, information accuracy or the slaughter-purpose prohibition.
+
+### Shared form order
+
+1. content type;
+2. horse offer type when horse mode is active;
+3. title and description;
+4. images, with the first image as future AI input;
+5. optional AI analysis;
+6. horse-specific fields;
+7. later: price, location, policy acceptance, factual confirmations and
+   publication.
+
+This order keeps the V2 text-first contract while preserving one calm form.
+
+### Horse text guidance
+
+Text guidance is isolated in
+`src/features/listing-create/model/listingCreateTextGuidance.ts`.
+
+It owns:
+
+- neutral ordinary-listing wording;
+- horse-mode hero and section guidance;
+- offer-type-specific title and description placeholders;
+- `wanted` wording that does not imply an already owned concrete horse.
+
+Guidance changes presentation only. It must never reset user-authored fields.
+
+### Horse basic fields
+
+`HorseOfferBasicFieldState` owns the first local horse field state.
+
+Concrete horse types (`sale`, `free_transfer`, `lease`, `co_rider`) show:
+
+- horse name;
+- birth year;
+- sex;
+- breed;
+- color;
+- height in centimetres.
+
+`wanted` shows only preferred sex and preferred breed.
+
+Hidden local values may survive temporary UI switching, but the future
+persistence mapper must send only fields relevant to the active offer type.
+
+### Current non-goals
+
+This checkpoint adds no:
+
+- database write;
+- draft save;
+- Storage upload;
+- Energy charge;
+- policy acceptance;
+- factual confirmation;
+- publication mutation;
+- production database change.
+
+The next isolated UI patch adds discipline, training level and suitability
+without mixing location, price, confirmations or persistence into it.

@@ -7511,3 +7511,39 @@ rent ja kaasratsaniku otsing on konkreetse hobusega seotud vood.
 Build ning desktopi- ja mobiilibrauseritest läbisid. Järgmine väike samm on
 hobuse andmeväljade tüübistatud kohalik vormiosa; salvestamine, kinnitused,
 pildid ja avaldamine jäävad hilisematesse eraldi etappidesse.
+
+<!-- SELQIRO_V2_HORSE_BASIC_AI_TEXT_FLOW_20260831 -->
+## Hobuse põhiandmed, AI voog ja neutraalsed tavakuulutuse näited
+
+Ühine `/v2/sell` vorm kasutab nüüd järgmist järjekorda:
+
+1. kuulutuse liik;
+2. hobusepakkumise liik;
+3. pealkiri ja kirjeldus;
+4. pildid;
+5. valikuline AI analüüs;
+6. hobusepõhised andmeväljad.
+
+Hobusepakkumisel ei küsita kasutajalt sama asja teist korda globaalse
+rubriigivalikuna. Hilisem avalik paigutus tuletatakse kontrollitud sisutüübist,
+loomaliigist, Eesti tururiigist ja pakkumise liigist.
+
+Tavakuulutuse näited muudeti neutraalseks. BMW, E39 ja tagatule näited eemaldati,
+et Selqiro ei jätaks muljet autoosade portaalist. Hobuserežiimis kohanduvad
+pealkirja ja kirjelduse juhised müügi, tasuta üleandmise, rendi,
+kaasratsaniku otsingu või hobuse otsingu järgi. Pakkumise liigi vahetamine ei
+kustuta kasutaja sisestatud teksti.
+
+Tavalise kuulutuse AI põhiülesanne on hiljem soovitada Selqiro kategooriateed.
+Hobusepakkumise sisutüüp ja liik on kasutaja poolt juba valitud, mistõttu AI ei
+paiguta seda tavalisse kaubarubriiki. AI võib tulevikus soovitada ainult tühja
+pealkirja, kirjeldust või nähtavaid hobuse andmeid. AI ei nõustu reeglitega ega
+märgi kasutaja eest faktilisi kinnitusi.
+
+Konkreetse hobuse pakkumisel kuvatakse hobuse nimi, sünniaasta, sugu, tõug,
+värvus ja turjakõrgus. „Otsin hobust” puhul kuvatakse praegu ainult eelistatud
+sugu ja tõug.
+
+Build, staatilised kontrollid ja brauseritest läbisid. Selles etapis ei
+salvestata ega avaldata veel midagi. Järgmine väike samm on kasutusala,
+väljaõppe taseme ja sobivuse väljade lisamine.

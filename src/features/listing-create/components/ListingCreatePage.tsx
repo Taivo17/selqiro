@@ -9,6 +9,11 @@ import {
 import { useAuth } from "../../../../lib/useAuth";
 import ListingCreateContentTypeSelector from "./ListingCreateContentTypeSelector";
 import HorseOfferTypeSelector from "./HorseOfferTypeSelector";
+import HorseOfferBasicFields from "./HorseOfferBasicFields";
+import ListingCreateAiAnalysisCard from "./ListingCreateAiAnalysisCard";
+import {
+  getListingCreateTextGuidance,
+} from "../model/listingCreateTextGuidance";
 import {
   createListingCreateTextField,
   listingCreateFieldSourceLabel,
@@ -26,6 +31,9 @@ import {
 import {
   type HorseOfferType,
 } from "../model/horseOfferType";
+import {
+  createHorseOfferBasicFieldState,
+} from "../model/horseOfferFields";
 import {
   appendListingCreateImages,
   LISTING_CREATE_IMAGE_LIMIT,
@@ -128,6 +136,13 @@ ListingCreatePage() {
     setHorseOfferType,
   ] = useState<HorseOfferType | null>(
     null
+  );
+
+  const [
+    horseOfferFields,
+    setHorseOfferFields,
+  ] = useState(
+    createHorseOfferBasicFieldState
   );
 
   const [
@@ -254,6 +269,12 @@ ListingCreatePage() {
     liveAnimalCapability?.species ===
     LIVE_ANIMAL_SPECIES.horse;
 
+  const textGuidance =
+    getListingCreateTextGuidance(
+      contentType,
+      horseOfferType
+    );
+
   return (
     <div
       className="min-w-0 space-y-6"
@@ -280,13 +301,7 @@ ListingCreatePage() {
               </h1>
 
               <p className="mt-3 max-w-3xl text-sm leading-6 text-neutral-600 sm:text-base">
-                Kirjuta esmalt pealkiri ja
-                kirjeldus, kui tead, mida
-                müüd. AI kasutab sinu teksti
-                õige kategooria leidmiseks
-                ega kirjuta seda vaikides üle.
-                Kui ese on tundmatu, võid
-                väljad tühjaks jätta.
+                {textGuidance.heroDescription}
               </p>
             </div>
 
@@ -333,13 +348,7 @@ ListingCreatePage() {
           </h2>
 
           <p className="mt-2 max-w-3xl text-sm leading-6 text-neutral-600">
-            Soovitame need väljad ise
-            täita. Sinu tekst aitab AI-l
-            leida täpsema kategooria.
-            Kui sa ei tea, mis esemega on
-            tegu, jäta väljad tühjaks ja
-            AI pakub pildi põhjal lühikese
-            pealkirja ja kirjelduse.
+            {textGuidance.sectionDescription}
           </p>
         </div>
 
@@ -370,7 +379,9 @@ ListingCreatePage() {
                 )
               }
               maxLength={140}
-              placeholder="Näiteks BMW E39 vasak tagatuli"
+              placeholder={
+                textGuidance.titlePlaceholder
+              }
               className="mt-3 w-full bg-transparent text-base font-black outline-none placeholder:text-neutral-300"
             />
 
@@ -410,7 +421,9 @@ ListingCreatePage() {
               }
               maxLength={5000}
               rows={6}
-              placeholder="Näiteks vasak tagatuli, kasutatud, sobib BMW E39 sedaanile..."
+              placeholder={
+                textGuidance.descriptionPlaceholder
+              }
               className="mt-3 w-full resize-y bg-transparent text-sm leading-7 outline-none placeholder:text-neutral-300"
             />
 
@@ -616,65 +629,29 @@ ListingCreatePage() {
         )}
       </section>
 
-      <section className="rounded-[30px] border border-violet-200 bg-violet-50 p-5 shadow-sm sm:p-6">
-        <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
-          <div className="min-w-0">
-            <p className="text-xs font-black uppercase tracking-[0.22em] text-violet-700">
-              Järgmine eraldatud etapp
-            </p>
+      <ListingCreateAiAnalysisCard
+        contentType={contentType}
+        hasImage={files.length > 0}
+        hasTextContext={hasTextContext}
+      />
 
-            <h2 className="mt-2 text-2xl font-black tracking-tight text-violet-950">
-              AI analüüs · 25 Energy
-            </h2>
-
-            <p className="mt-3 max-w-3xl text-sm leading-6 text-violet-950/75">
-              {files.length === 0
-                ? "AI analüüsi käivitamiseks lisa vähemalt üks pilt. AI kasutab ainult esimest pilti."
-                : hasTextContext
-                  ? "Pealkiri, kirjeldus ja esimene pilt on AI-le kontekstina valmis. Põhiülesanne on leida õige Selqiro kategooriatee."
-                  : "Esimene pilt on AI analüüsiks valmis. Kui pealkiri ja kirjeldus on tühjad, võib AI pakkuda nende jaoks lühikese teksti."}
-            </p>
-          </div>
-
-          <span className="w-fit shrink-0 rounded-full border border-violet-200 bg-white px-3 py-1.5 text-xs font-black text-violet-800">
-            25 Energy · veel ei saada AI-le
-          </span>
-        </div>
-
-        <div className="mt-5 grid gap-3 md:grid-cols-3">
-          <div className="rounded-2xl border border-violet-100 bg-white/80 p-4">
-            <p className="text-sm font-black text-violet-950">
-              Tühi väli
-            </p>
-
-            <p className="mt-1 text-xs leading-5 text-violet-950/65">
-              AI võib selle täita.
-            </p>
-          </div>
-
-          <div className="rounded-2xl border border-violet-100 bg-white/80 p-4">
-            <p className="text-sm font-black text-violet-950">
-              AI soovitus
-            </p>
-
-            <p className="mt-1 text-xs leading-5 text-violet-950/65">
-              Uus analüüs võib seda
-              värskendada.
-            </p>
-          </div>
-
-          <div className="rounded-2xl border border-violet-100 bg-white/80 p-4">
-            <p className="text-sm font-black text-violet-950">
-              Sinu tekst
-            </p>
-
-            <p className="mt-1 text-xs leading-5 text-violet-950/65">
-              AI ei kirjuta seda
-              vaikides üle.
-            </p>
-          </div>
-        </div>
-      </section>
+      {horseMode && horseOfferType ? (
+        <HorseOfferBasicFields
+          offerType={horseOfferType}
+          value={horseOfferFields}
+          onChange={(
+            field,
+            nextValue
+          ) =>
+            setHorseOfferFields(
+              (current) => ({
+                ...current,
+                [field]: nextValue,
+              })
+            )
+          }
+        />
+      ) : null}
     </div>
   );
 }
