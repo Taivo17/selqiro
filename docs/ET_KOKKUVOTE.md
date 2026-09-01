@@ -7547,3 +7547,41 @@ sugu ja tõug.
 Build, staatilised kontrollid ja brauseritest läbisid. Selles etapis ei
 salvestata ega avaldata veel midagi. Järgmine väike samm on kasutusala,
 väljaõppe taseme ja sobivuse väljade lisamine.
+
+<!-- SELQIRO_V2_HORSE_USE_FIELDS_20260901 -->
+## Hobuse kasutusala, väljaõpe ja sobivus
+
+Ühisesse `/v2/sell` hobusepakkumise vormi lisati eraldi kasutusala ja sobivuse
+moodul.
+
+Konkreetse hobuse pakkumised — müük, tasuta üleandmine, rent ja kaasratsaniku
+otsing — küsivad praegu valikulise infona:
+
+- kasutusala või distsipliini;
+- väljaõppe taset;
+- sobivust.
+
+„Otsin hobust” haru kasutab eraldi eelistuste välju:
+
+- soovitud kasutusala või distsipliin;
+- soovitud väljaõppe tase;
+- kellele ja milleks hobust otsitakse.
+
+Konkreetse hobuse kirjeldused ja otsingukuulutuse eelistused hoitakse eraldi
+lokaalses olekus. Ühe haru väärtusi ei kopeerita teise. Ajutisel pakkumise liigi
+vahetamisel võivad mõlema haru sisestused alles jääda, kuid tulevane
+salvestuskiht tohib saata ainult aktiivse pakkumise liigiga seotud väljad.
+
+Paigutuse paranduses muudeti väljade kaardid täislaiaks plokkelementideks ja
+desktopi grid ülaserva joondatuks. Seetõttu ei veni ühe rea kasutusala väli enam
+textarea kõrguseks ning täislaiad „Sobivus” ja „Kellele ja milleks hobust otsid?”
+väljad püsivad tervikliku kaardi sees. Mobiilis paiknevad väljad ühes veerus ja
+horisontaalset ülevoolu ei teki.
+
+Staatilised kontrollid, production build, desktopi- ja mobiilitest läbisid.
+Selles etapis ei salvestata ega avaldata midagi ning production-andmebaasi ei
+muudetud.
+
+Järgmine väike UI-samm on tervise- ja käitumisinfo eraldi
+avaldajapoolsete kirjeldusväljadena. Selqiro ei tohi jätta muljet, et ta on
+tervist, käitumist, omandiõigust või dokumente ise kontrollinud.

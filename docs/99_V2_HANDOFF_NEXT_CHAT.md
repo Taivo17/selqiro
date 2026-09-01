@@ -2194,3 +2194,52 @@ Next exact step after commit:
 2. provide a smaller preference-oriented branch for `wanted`;
 3. keep health, behavior, price, location, confirmations, persistence, images
    and publication in later isolated patches.
+
+<!-- SELQIRO_V2_HORSE_USE_FIELDS_20260901 -->
+## 2026-09-01 — V2 horse use fields checkpoint
+
+Current stable Git base before this checkpoint:
+
+- `7281947 Add V2 horse basic fields and AI flow`
+
+Implemented but not yet committed:
+
+- `HorseOfferUseFieldState`;
+- separate concrete-horse and `wanted` preference state branches;
+- `HorseOfferUseFields`;
+- discipline/use field;
+- training-level field;
+- suitability field;
+- wanted-specific preference wording;
+- `ListingCreatePage` composition after horse basic fields;
+- layout correction for inline-label overflow and grid stretching;
+- listing-create README update.
+
+Current changed files:
+
+- `src/features/listing-create/README.md`
+- `src/features/listing-create/components/ListingCreatePage.tsx`
+- `src/features/listing-create/components/HorseOfferUseFields.tsx`
+- `src/features/listing-create/model/horseOfferUseFields.ts`
+
+Validation completed:
+
+- static contract check passed;
+- layout contract check passed;
+- production build passed after both implementation and layout correction;
+- desktop concrete-horse branch tested;
+- desktop wanted branch tested;
+- narrow-mobile full flow tested;
+- cards stack into one column without horizontal overflow;
+- concrete and wanted local values remain separate;
+- ordinary listing hides horse-only fields;
+- title, description and image state remain outside the new module;
+- no production/database mutation occurred.
+
+Next exact step after documentation commit:
+
+1. add typed health and behavior disclosure fields;
+2. use seller-provided disclosure wording;
+3. do not imply Selqiro verified health, behavior, ownership or documents;
+4. keep price, location, confirmations, persistence and publication in later
+   isolated patches.

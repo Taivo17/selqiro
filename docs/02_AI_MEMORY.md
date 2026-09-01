@@ -3483,3 +3483,37 @@ Next isolated step: review and commit this foundation, then perform a separately
 - No draft persistence, image upload, policy acceptance, confirmation or
   publication mutation is part of this checkpoint.
 - Next isolated field patch: discipline, training level and suitability.
+
+<!-- SELQIRO_V2_HORSE_USE_FIELDS_20260901 -->
+## V2_HORSE_USE_FIELDS
+
+2026-09-01 checkpoint:
+
+- The shared `/v2/sell` horse flow now includes a separate typed use-field
+  module after horse basic fields.
+- Concrete-horse offer types (`sale`, `free_transfer`, `lease`, `co_rider`)
+  show:
+  - discipline or current use;
+  - training level;
+  - suitability.
+- `wanted` uses a separate preference branch:
+  - preferred discipline or use;
+  - preferred training level;
+  - intended rider/use and suitability preferences.
+- Concrete-horse disclosures and wanted search preferences are separate local
+  state branches and are never copied into each other.
+- Temporary switching between horse offer types may preserve both local
+  branches, but the future persistence mapper must submit only the branch
+  relevant to the active offer type.
+- The form order remains:
+  title/description → images → optional AI → horse basic fields → horse use
+  fields.
+- Layout fix:
+  - field cards are block-level and full width;
+  - grid rows use `items-start`;
+  - single-line inputs do not stretch to adjacent textarea height;
+  - full-width textarea cards remain inside their borders.
+- Production build, desktop tests and narrow-mobile tests passed.
+- No database write, draft save, Storage mutation, Energy charge, confirmation
+  or publication behavior was added.
+- Next isolated patch: health and behavior disclosure fields.

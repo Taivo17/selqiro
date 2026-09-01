@@ -4367,3 +4367,98 @@ This checkpoint adds no:
 
 The next isolated UI patch adds discipline, training level and suitability
 without mixing location, price, confirmations or persistence into it.
+
+<!-- SELQIRO_V2_HORSE_USE_FIELDS_20260901 -->
+## V2 horse use fields
+
+Horse use information is isolated from horse basic identity fields.
+
+### Module boundary
+
+- model:
+  `src/features/listing-create/model/horseOfferUseFields.ts`
+- UI:
+  `src/features/listing-create/components/HorseOfferUseFields.tsx`
+- composition:
+  `src/features/listing-create/components/ListingCreatePage.tsx`
+
+The UI and model contain no Supabase, RPC, Storage, policy-acceptance or
+publication mutation.
+
+### State contract
+
+`HorseOfferUseFieldState` contains two semantic branches:
+
+1. `specific`
+   - `discipline`
+   - `trainingLevel`
+   - `suitability`
+2. `wanted`
+   - `preferredDiscipline`
+   - `preferredTrainingLevel`
+   - `intendedUse`
+
+A concrete horse disclosure is not interchangeable with a wanted-ad
+preference. The UI may preserve hidden local values during temporary switching,
+but persistence must map only the active offer-type branch.
+
+### Concrete-horse UI
+
+Used by:
+
+- `sale`
+- `free_transfer`
+- `lease`
+- `co_rider`
+
+Fields:
+
+- use or discipline;
+- training level;
+- suitability for a rider/user and purpose.
+
+### Wanted UI
+
+Used by `wanted`.
+
+Fields are phrased as search preferences:
+
+- preferred use or discipline;
+- preferred training level;
+- intended rider/use and suitability preferences.
+
+The wording must not imply that a concrete horse has already been selected or
+verified.
+
+### Layout contract
+
+- all field-card labels are `block` and `w-full`;
+- two-column desktop grids use `items-start`;
+- single-line inputs keep their natural compact height;
+- full-width textareas stay inside one complete card;
+- narrow mobile stacks every field into one column;
+- no page-level horizontal scrolling is introduced.
+
+### Safety boundary
+
+This checkpoint adds local form state only. It does not add:
+
+- draft persistence;
+- database mapping;
+- image mutation;
+- Energy charging;
+- publication-policy acceptance;
+- seller factual confirmations;
+- publication.
+
+The existing production `horse_offers` contract already has eventual
+`discipline`, `training_level` and `suitability` fields. Client integration must
+still use a separately reviewed typed mapper and server/RPC boundary.
+
+Next isolated UI module:
+
+- health notes;
+- behavior notes;
+- clear seller-provided disclosure wording;
+- no medical verification claims;
+- no persistence or publication in the same patch.

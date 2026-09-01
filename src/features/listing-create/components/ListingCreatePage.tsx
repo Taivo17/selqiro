@@ -10,6 +10,7 @@ import { useAuth } from "../../../../lib/useAuth";
 import ListingCreateContentTypeSelector from "./ListingCreateContentTypeSelector";
 import HorseOfferTypeSelector from "./HorseOfferTypeSelector";
 import HorseOfferBasicFields from "./HorseOfferBasicFields";
+import HorseOfferUseFields from "./HorseOfferUseFields";
 import ListingCreateAiAnalysisCard from "./ListingCreateAiAnalysisCard";
 import {
   getListingCreateTextGuidance,
@@ -34,6 +35,9 @@ import {
 import {
   createHorseOfferBasicFieldState,
 } from "../model/horseOfferFields";
+import {
+  createHorseOfferUseFieldState,
+} from "../model/horseOfferUseFields";
 import {
   appendListingCreateImages,
   LISTING_CREATE_IMAGE_LIMIT,
@@ -143,6 +147,13 @@ ListingCreatePage() {
     setHorseOfferFields,
   ] = useState(
     createHorseOfferBasicFieldState
+  );
+
+  const [
+    horseOfferUseFields,
+    setHorseOfferUseFields,
+  ] = useState(
+    createHorseOfferUseFieldState
   );
 
   const [
@@ -647,6 +658,41 @@ ListingCreatePage() {
               (current) => ({
                 ...current,
                 [field]: nextValue,
+              })
+            )
+          }
+        />
+      ) : null}
+
+      {horseMode && horseOfferType ? (
+        <HorseOfferUseFields
+          offerType={horseOfferType}
+          value={horseOfferUseFields}
+          onSpecificChange={(
+            field,
+            nextValue
+          ) =>
+            setHorseOfferUseFields(
+              (current) => ({
+                ...current,
+                specific: {
+                  ...current.specific,
+                  [field]: nextValue,
+                },
+              })
+            )
+          }
+          onWantedChange={(
+            field,
+            nextValue
+          ) =>
+            setHorseOfferUseFields(
+              (current) => ({
+                ...current,
+                wanted: {
+                  ...current.wanted,
+                  [field]: nextValue,
+                },
               })
             )
           }
