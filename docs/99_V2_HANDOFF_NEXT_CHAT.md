@@ -2243,3 +2243,52 @@ Next exact step after documentation commit:
 3. do not imply Selqiro verified health, behavior, ownership or documents;
 4. keep price, location, confirmations, persistence and publication in later
    isolated patches.
+
+<!-- SELQIRO_V2_HORSE_DISCLOSURE_FIELDS_20260901 -->
+## 2026-09-01 — V2 horse health and behavior fields checkpoint
+
+Stable Git base before this checkpoint:
+
+- `eb9119f Add V2 horse use fields`
+
+Implemented but not yet committed:
+
+- `HorseOfferDisclosureFieldState`;
+- separate concrete-horse and `wanted` preference state branches;
+- `HorseOfferDisclosureFields`;
+- seller-provided health notes;
+- seller-provided behavior observations;
+- wanted-specific health preferences;
+- wanted-specific behavior preferences;
+- explicit non-verification and veterinary-assessment wording;
+- composition after `HorseOfferUseFields`;
+- removal of the stale “health and behavior fields will be added later” note;
+- listing-create README update.
+
+Current changed files:
+
+- `src/features/listing-create/README.md`
+- `src/features/listing-create/components/HorseOfferDisclosureFields.tsx`
+- `src/features/listing-create/components/HorseOfferUseFields.tsx`
+- `src/features/listing-create/components/ListingCreatePage.tsx`
+- `src/features/listing-create/model/horseOfferDisclosureFields.ts`
+
+Validation completed:
+
+- static contract check passed;
+- production build passed before and after the stale-note correction;
+- desktop concrete-horse branch tested;
+- desktop wanted branch tested;
+- narrow-mobile concrete-horse branch tested with entered text;
+- local character counters and one-column stacking verified;
+- concrete disclosures and wanted preferences remain separate;
+- ordinary listing hides horse-only fields;
+- no production/database mutation occurred.
+
+Next exact work after documentation commit:
+
+1. define offer-type-aware price and budget semantics;
+2. keep `free_transfer` fixed to free;
+3. do not copy seller-price semantics into `wanted`;
+4. keep location, confirmations, persistence and publication in later isolated
+   patches.

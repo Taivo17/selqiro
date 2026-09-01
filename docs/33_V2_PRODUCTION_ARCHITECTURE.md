@@ -4462,3 +4462,93 @@ Next isolated UI module:
 - clear seller-provided disclosure wording;
 - no medical verification claims;
 - no persistence or publication in the same patch.
+
+<!-- SELQIRO_V2_HORSE_DISCLOSURE_FIELDS_20260901 -->
+## V2 horse health and behavior disclosure fields
+
+Health and behavior information is isolated from horse basic fields and use
+fields.
+
+### Module boundary
+
+- model:
+  `src/features/listing-create/model/horseOfferDisclosureFields.ts`
+- UI:
+  `src/features/listing-create/components/HorseOfferDisclosureFields.tsx`
+- composition:
+  `src/features/listing-create/components/ListingCreatePage.tsx`
+
+The model and UI contain no Supabase, RPC, Storage, Energy, policy-acceptance
+or publication mutation.
+
+### State contract
+
+`HorseOfferDisclosureFieldState` contains two semantic branches:
+
+1. `specific`
+   - `healthNotes`
+   - `behaviorNotes`
+2. `wanted`
+   - `healthPreferences`
+   - `behaviorPreferences`
+
+A seller disclosure about a concrete horse is not interchangeable with a
+wanted-ad preference. Temporary UI switching may preserve both local branches,
+but a future persistence mapper must submit only the branch relevant to the
+active offer type.
+
+### Concrete-horse wording contract
+
+Concrete-horse fields are explicitly publisher-provided:
+
+- `Avaldaja teada olev terviseinfo`
+- `Avaldaja tähelepanekud käitumise kohta`
+
+Selqiro must not imply that it:
+
+- verified the horse's health;
+- verified behavior;
+- confirmed a diagnosis;
+- confirmed suitability;
+- replaced an independent veterinary assessment.
+
+### Wanted wording contract
+
+The `wanted` branch asks only for search preferences:
+
+- health-related preferences;
+- behavior-related preferences.
+
+The wording must not imply that a concrete horse has already been selected,
+inspected or verified.
+
+### Layout contract
+
+- desktop uses an `items-start` two-column grid;
+- narrow mobile stacks fields into one column;
+- textarea cards are block-level and full width;
+- counters stay inside the card;
+- no page-level horizontal overflow is introduced.
+
+### Safety boundary
+
+This checkpoint adds local UI state only. It does not add:
+
+- draft persistence;
+- database mapping;
+- image mutation;
+- Energy charging;
+- policy acceptance;
+- seller factual confirmations;
+- publication.
+
+The production `horse_offers` contract already has eventual `health_notes` and
+`behavior_notes` fields. Client integration still requires a separately
+reviewed typed mapper and secure server/RPC boundary.
+
+Next isolated UI work:
+
+- define offer-type-aware price semantics;
+- keep `free_transfer` free;
+- avoid treating a wanted-ad budget as a seller price;
+- keep location, confirmations, persistence and publication separate.

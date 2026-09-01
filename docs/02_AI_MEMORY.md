@@ -3517,3 +3517,32 @@ Next isolated step: review and commit this foundation, then perform a separately
 - No database write, draft save, Storage mutation, Energy charge, confirmation
   or publication behavior was added.
 - Next isolated patch: health and behavior disclosure fields.
+
+<!-- SELQIRO_V2_HORSE_DISCLOSURE_FIELDS_20260901 -->
+## V2_HORSE_DISCLOSURE_FIELDS
+
+2026-09-01 checkpoint:
+
+- The shared `/v2/sell` horse flow now includes a separate typed health and
+  behavior disclosure module after the horse use fields.
+- Concrete-horse offer types (`sale`, `free_transfer`, `lease`, `co_rider`)
+  show seller-provided:
+  - health notes;
+  - behavior observations.
+- `wanted` uses a separate preference branch:
+  - health-related preferences;
+  - behavior-related preferences.
+- Concrete-horse disclosures and wanted preferences are separate local-state
+  branches and are never copied into each other.
+- UI wording explicitly states:
+  - the information comes from the publisher;
+  - Selqiro did not verify health, behavior, diagnoses or suitability;
+  - health notes do not replace an independent veterinary assessment.
+- The former use-field note saying health and behavior fields would be added
+  later was removed after the new module became visible.
+- Desktop and narrow-mobile layouts were tested.
+- Production build and static contract checks passed.
+- No database write, draft persistence, Storage mutation, Energy charge,
+  policy acceptance, factual confirmation or publication behavior was added.
+- Next isolated patch: define and add offer-type-aware price/budget fields
+  without persistence or publication.

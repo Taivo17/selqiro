@@ -11,6 +11,7 @@ import ListingCreateContentTypeSelector from "./ListingCreateContentTypeSelector
 import HorseOfferTypeSelector from "./HorseOfferTypeSelector";
 import HorseOfferBasicFields from "./HorseOfferBasicFields";
 import HorseOfferUseFields from "./HorseOfferUseFields";
+import HorseOfferDisclosureFields from "./HorseOfferDisclosureFields";
 import ListingCreateAiAnalysisCard from "./ListingCreateAiAnalysisCard";
 import {
   getListingCreateTextGuidance,
@@ -38,6 +39,9 @@ import {
 import {
   createHorseOfferUseFieldState,
 } from "../model/horseOfferUseFields";
+import {
+  createHorseOfferDisclosureFieldState,
+} from "../model/horseOfferDisclosureFields";
 import {
   appendListingCreateImages,
   LISTING_CREATE_IMAGE_LIMIT,
@@ -154,6 +158,13 @@ ListingCreatePage() {
     setHorseOfferUseFields,
   ] = useState(
     createHorseOfferUseFieldState
+  );
+
+  const [
+    horseOfferDisclosureFields,
+    setHorseOfferDisclosureFields,
+  ] = useState(
+    createHorseOfferDisclosureFieldState
   );
 
   const [
@@ -687,6 +698,43 @@ ListingCreatePage() {
             nextValue
           ) =>
             setHorseOfferUseFields(
+              (current) => ({
+                ...current,
+                wanted: {
+                  ...current.wanted,
+                  [field]: nextValue,
+                },
+              })
+            )
+          }
+        />
+      ) : null}
+
+      {horseMode && horseOfferType ? (
+        <HorseOfferDisclosureFields
+          offerType={horseOfferType}
+          value={
+            horseOfferDisclosureFields
+          }
+          onSpecificChange={(
+            field,
+            nextValue
+          ) =>
+            setHorseOfferDisclosureFields(
+              (current) => ({
+                ...current,
+                specific: {
+                  ...current.specific,
+                  [field]: nextValue,
+                },
+              })
+            )
+          }
+          onWantedChange={(
+            field,
+            nextValue
+          ) =>
+            setHorseOfferDisclosureFields(
               (current) => ({
                 ...current,
                 wanted: {

@@ -259,10 +259,10 @@ HorseOfferUseFields({
       )}
 
       <p className="mt-4 rounded-[20px] border border-neutral-200 bg-[#fbfbfa] px-4 py-3 text-xs leading-5 text-neutral-500">
-        Tervise- ja käitumisinfo lisandub
-        hiljem eraldi väljadena. Selles
-        checkpoint&apos;is midagi ei
-        salvestata ega avaldata.
+        Kasutus- ja sobivusväljad on selles
+        checkpoint&apos;is ainult lokaalne
+        vormiolek. Midagi ei salvestata ega
+        avaldata.
       </p>
     </section>
   );

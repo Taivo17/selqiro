@@ -79,14 +79,30 @@ Horse use fields:
   - preferred training level
   - intended rider/use and suitability preferences
 - switching between concrete and wanted branches does not copy one branch's
-  semantic values into the other;
+  semantic values into the other.
+
+Horse health and behavior fields:
+
+- concrete-horse disclosures and wanted preferences again use separate local
+  state branches;
+- concrete-horse flows show seller-provided:
+  - health notes
+  - behavior notes
+- `wanted` shows:
+  - health-related preferences
+  - behavior-related preferences
+- UI wording must clearly say the information is seller-provided;
+- Selqiro must not imply that it verified health, behavior, diagnoses or
+  suitability;
+- health notes do not replace independent veterinary assessment;
+- switching between concrete and wanted branches does not copy disclosure
+  semantics into search-preference semantics.
+
+Current state and persistence boundary:
+
 - hidden local values may survive temporary UI switching;
 - a future persistence mapper must send only fields relevant to the active
   offer type;
-- health and behavior disclosures remain a later separate module.
-
-Current safety boundary:
-
 - horse fields appear after the shared text, image and optional AI stages;
 - no draft, database row, Storage object, Energy charge, policy acceptance,
   factual confirmation or publication mutation is created by this checkpoint;
@@ -104,20 +120,20 @@ Future animal expansion:
 
 Browser test required before checkpoint:
 
-1. no horse use fields appear before a horse offer type is selected;
-2. each concrete-horse offer type shows discipline, training level and
-   suitability;
-3. `wanted` shows only the three preference-oriented use fields;
-4. concrete and wanted use-field values remain separate while switching;
+1. concrete-horse offer types show health and behavior disclosure fields;
+2. disclosure wording states that the information comes from the publisher;
+3. `wanted` shows only health and behavior preferences;
+4. concrete disclosures and wanted preferences remain separate while
+   switching;
 5. changing to ordinary listing hides all horse-only UI;
-6. returning to horse mode restores the selected type and local values;
-7. shared title and description remain intact;
-8. desktop and narrow-mobile layouts remain usable;
+6. returning to horse mode restores local values;
+7. desktop and narrow-mobile layouts remain usable;
+8. no page-level horizontal scrolling is introduced;
 9. browser console has no new errors.
 
 Next isolated checkpoint:
 
-1. document and commit the horse use-field module;
-2. add health and behavior disclosures in a separate patch;
-3. keep location, price, confirmations, persistence, images and publication
-   outside that next patch.
+1. document and commit the health and behavior disclosure module;
+2. add price fields in a separate patch;
+3. keep location, confirmations, persistence, images and publication outside
+   that next patch.

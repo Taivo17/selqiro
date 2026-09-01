@@ -7585,3 +7585,41 @@ muudetud.
 Järgmine väike UI-samm on tervise- ja käitumisinfo eraldi
 avaldajapoolsete kirjeldusväljadena. Selqiro ei tohi jätta muljet, et ta on
 tervist, käitumist, omandiõigust või dokumente ise kontrollinud.
+
+<!-- SELQIRO_V2_HORSE_DISCLOSURE_FIELDS_20260901 -->
+## Hobuse tervise- ja käitumisinfo väljad
+
+Ühisesse `/v2/sell` hobusepakkumise vormi lisati eraldi tervise ja käitumise
+moodul.
+
+Konkreetse hobuse pakkumised — müük, tasuta üleandmine, rent ja kaasratsaniku
+otsing — küsivad praegu valikulise avaldajapoolse infona:
+
+- avaldaja teada olevat terviseinfot;
+- avaldaja tähelepanekuid käitumise kohta.
+
+„Otsin hobust” haru kasutab eraldi otsingueelistusi:
+
+- tervisega seotud eelistused;
+- käitumisega seotud eelistused.
+
+Konkreetse hobuse kirjeldused ja otsingukuulutuse eelistused hoitakse eraldi
+lokaalses olekus. Ühe haru väärtusi ei kopeerita teise.
+
+Kasutajaliides ütleb selgelt, et:
+
+- info pärineb avaldajalt;
+- Selqiro ei ole kinnitanud hobuse tervist, käitumist, diagnoose ega sobivust;
+- terviseinfo ei asenda sõltumatut veterinaarset hinnangut.
+
+Pärast uue mooduli lisamist eemaldati ka eelmisest „Kasutus ja sobivus” kaardist
+aegunud teade, mille järgi tervise- ja käitumisväljad pidid alles hiljem
+lisanduma.
+
+Staatiline lepingukontroll, production build, desktopi- ja mobiilitest läbisid.
+Selles etapis ei salvestata ega avaldata midagi ning production-andmebaasi ei
+muudetud.
+
+Järgmine eraldatud samm on pakkumise liigist sõltuv hinna või eelarve
+kasutajakogemus. Tasuta üleandmine peab jääma tasuta ning „Otsin hobust” eelarvet
+ei tohi käsitleda müüja hinnana.
