@@ -12,6 +12,7 @@ import HorseOfferTypeSelector from "./HorseOfferTypeSelector";
 import HorseOfferBasicFields from "./HorseOfferBasicFields";
 import HorseOfferUseFields from "./HorseOfferUseFields";
 import HorseOfferDisclosureFields from "./HorseOfferDisclosureFields";
+import HorseOfferPriceFields from "./HorseOfferPriceFields";
 import ListingCreateAiAnalysisCard from "./ListingCreateAiAnalysisCard";
 import {
   getListingCreateTextGuidance,
@@ -42,6 +43,10 @@ import {
 import {
   createHorseOfferDisclosureFieldState,
 } from "../model/horseOfferDisclosureFields";
+import {
+  applyHorseOfferPriceFieldChange,
+  createHorseOfferPriceFieldState,
+} from "../model/horseOfferPriceFields";
 import {
   appendListingCreateImages,
   LISTING_CREATE_IMAGE_LIMIT,
@@ -165,6 +170,13 @@ ListingCreatePage() {
     setHorseOfferDisclosureFields,
   ] = useState(
     createHorseOfferDisclosureFieldState
+  );
+
+  const [
+    horseOfferPriceFields,
+    setHorseOfferPriceFields,
+  ] = useState(
+    createHorseOfferPriceFieldState
   );
 
   const [
@@ -742,6 +754,22 @@ ListingCreatePage() {
                   [field]: nextValue,
                 },
               })
+            )
+          }
+        />
+      ) : null}
+
+      {horseMode && horseOfferType ? (
+        <HorseOfferPriceFields
+          offerType={horseOfferType}
+          value={horseOfferPriceFields}
+          onChange={(change) =>
+            setHorseOfferPriceFields(
+              (current) =>
+                applyHorseOfferPriceFieldChange(
+                  current,
+                  change
+                )
             )
           }
         />

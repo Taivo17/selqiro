@@ -10,7 +10,7 @@ Current shared flow:
 4. add and order images;
 5. optionally request AI analysis;
 6. review or enter the content-type-specific fields;
-7. later complete location, price, policy acceptance, factual confirmations and
+7. later complete location, policy acceptance, factual confirmations and
    publication.
 
 Current controlled capability:
@@ -98,16 +98,46 @@ Horse health and behavior fields:
 - switching between concrete and wanted branches does not copy disclosure
   semantics into search-preference semantics.
 
+Horse price and budget fields:
+
+- each commercial meaning uses a separate local branch:
+  - sale price;
+  - lease fee;
+  - co-rider fee;
+  - wanted-ad budget;
+- `free_transfer` has no editable amount and is always free;
+- sale supports:
+  - fixed amount;
+  - from amount;
+  - contact/agreement;
+- lease and co-rider support the same fee modes plus a visible period:
+  - day;
+  - week;
+  - month;
+  - agreed period;
+- `wanted` uses:
+  - maximum budget;
+  - flexible budget;
+- wanted budget wording must never be presented as a seller price;
+- switching between offer types preserves each branch independently;
+- EE pilot currency is currently fixed to EUR in the UI;
+- a future persistence review must map seller prices, recurring periods and
+  wanted budgets explicitly;
+- do not silently encode wanted budget as an ordinary seller price;
+- do not silently encode the recurring period into free text.
+
 Current state and persistence boundary:
 
 - hidden local values may survive temporary UI switching;
 - a future persistence mapper must send only fields relevant to the active
-  offer type;
+  offer type and current price mode;
 - horse fields appear after the shared text, image and optional AI stages;
 - no draft, database row, Storage object, Energy charge, policy acceptance,
   factual confirmation or publication mutation is created by this checkpoint;
 - the production `horse_offers` domain remains the authoritative persistence
-  contract for later integration.
+  contract for later integration;
+- any schema extension for wanted-budget meaning or recurring price period must
+  be reviewed in a separate migration.
 
 Future animal expansion:
 
@@ -120,20 +150,22 @@ Future animal expansion:
 
 Browser test required before checkpoint:
 
-1. concrete-horse offer types show health and behavior disclosure fields;
-2. disclosure wording states that the information comes from the publisher;
-3. `wanted` shows only health and behavior preferences;
-4. concrete disclosures and wanted preferences remain separate while
-   switching;
-5. changing to ordinary listing hides all horse-only UI;
-6. returning to horse mode restores local values;
-7. desktop and narrow-mobile layouts remain usable;
-8. no page-level horizontal scrolling is introduced;
-9. browser console has no new errors.
+1. sale shows fixed, from and agreement modes;
+2. sale amount appears only for fixed/from;
+3. free transfer shows a non-editable free state;
+4. lease and co-rider show their own amount and period fields;
+5. sale, lease and co-rider values remain separate while switching;
+6. wanted shows maximum budget or flexible budget;
+7. wanted amount never appears as a seller price;
+8. changing to ordinary listing hides all horse-only UI;
+9. returning to horse mode restores local values;
+10. desktop and narrow-mobile layouts remain usable;
+11. no page-level horizontal scrolling is introduced;
+12. browser console has no new errors.
 
 Next isolated checkpoint:
 
-1. document and commit the health and behavior disclosure module;
-2. add price fields in a separate patch;
-3. keep location, confirmations, persistence, images and publication outside
-   that next patch.
+1. document and commit the horse price/budget UI module;
+2. define the first location fields in a separate patch;
+3. keep confirmations, persistence, images and publication outside that next
+   patch.

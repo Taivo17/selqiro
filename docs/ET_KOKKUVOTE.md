@@ -7623,3 +7623,48 @@ muudetud.
 Järgmine eraldatud samm on pakkumise liigist sõltuv hinna või eelarve
 kasutajakogemus. Tasuta üleandmine peab jääma tasuta ning „Otsin hobust” eelarvet
 ei tohi käsitleda müüja hinnana.
+
+<!-- SELQIRO_V2_HORSE_PRICE_FIELDS_20260902 -->
+## Hobusepakkumise hind, tasu ja ostueelarve
+
+Ühisesse `/v2/sell` hobusepakkumise vormi lisati pakkumise liigist sõltuv hinna
+ja eelarve moodul.
+
+Erinevad tähendused hoitakse eraldi lokaalses olekus:
+
+- müügihind;
+- renditasu;
+- kaasratsaniku tasu;
+- hobuse otsija ostueelarve.
+
+Müügi puhul saab valida kindla summa, alates-summa või kokkuleppe. Rendil ja
+kaasratsaniku otsingul saab lisaks summale määrata tasu perioodi: päev, nädal,
+kuu või kokkulepitud periood. Tasuta üleandmisel summavälja ei ole ning vorm
+näitab selgelt `Hind: tasuta`.
+
+„Otsin hobust” haru kasutab müüja hinnast eraldi ostueelarvet. Kasutaja saab
+määrata maksimaalse eelarve või valida paindliku eelarve. Kasutajaliides ütleb
+selgelt, et see on otsija eelarve, mitte müüja hind.
+
+Pakkumise liikide vahel liikudes säilib iga haru enda väärtus. Müügihinda,
+renditasu, kaasratsaniku tasu ja ostueelarvet ei kopeerita üksteiseks. Eesti
+piloodi valuuta on selles etapis EUR.
+
+Desktopi- ja kitsas mobiilivaade testiti. Summa- ja perioodiväljade kuvamine,
+valikute vahetamine, väärtuste säilimine ning paigutus töötasid ilma märgatud
+vigadeta. Production build ja staatilised kontrollid läbisid.
+
+Selles etapis ei salvestata ega avaldata midagi ning production-andmebaasi ei
+muudetud. Enne andmebaasiga ühendamist tuleb eraldi serveri- ja
+andmebaasilepingus lahendada:
+
+- rendi ja kaasratsaniku tasu periood;
+- „Otsin hobust” ostueelarve eraldi tähendus;
+- ainult aktiivse pakkumisliigi väärtuste saatmine.
+
+Ostueelarvet ei tohi vaikides salvestada tavaliseks müügihinnaks ning perioodi
+ei tohi peita vabateksti sisse.
+
+Järgmine eraldatud samm on Eesti hobusepiloodi privaatsust hoidev asukohavorm.
+Riik jääb EE, kasutajalt küsitakse sobivat piirkonna või linna infot ning
+eraisiku täpset aadressi ei nõuta ega näidata vaikimisi avalikult.

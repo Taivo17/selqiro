@@ -3546,3 +3546,36 @@ Next isolated step: review and commit this foundation, then perform a separately
   policy acceptance, factual confirmation or publication behavior was added.
 - Next isolated patch: define and add offer-type-aware price/budget fields
   without persistence or publication.
+
+<!-- SELQIRO_V2_HORSE_PRICE_FIELDS_20260902 -->
+## V2_HORSE_PRICE_AND_BUDGET_FIELDS
+
+2026-09-02 checkpoint:
+
+- The shared `/v2/sell` horse flow now contains an offer-type-aware price and
+  budget module after the health and behavior fields.
+- Commercial meanings remain in separate typed local-state branches:
+  - sale price;
+  - lease fee;
+  - co-rider fee;
+  - wanted-ad buyer budget.
+- Sale supports `fixed`, `from` and `contact` modes.
+- Lease and co-rider fees support `fixed`, `from` and `contact`, with a
+  separate period value: day, week, month or agreed period.
+- `free_transfer` has no editable amount and is always shown as free.
+- `wanted` uses maximum-budget or flexible-budget semantics and is explicitly
+  described as the buyer's budget, not a seller price.
+- Switching offer types preserves each branch independently and does not copy
+  sale, lease, co-rider or wanted values into another commercial meaning.
+- The EE pilot UI currently fixes currency to EUR.
+- Desktop and narrow-mobile browser tests completed without observed errors;
+  field visibility, mode switching, value preservation and layout were
+  checked.
+- Production build and static contract checks passed.
+- No draft persistence, database write, Storage mutation, Energy charge,
+  policy acceptance, factual confirmation or publication behavior was added.
+- Persistence remains intentionally blocked until a typed mapper defines the
+  active branch and the database contract explicitly represents recurring fee
+  periods and wanted-budget semantics.
+- Next isolated UI patch: add the first privacy-safe EE horse location fields,
+  without confirmations, persistence or publication.

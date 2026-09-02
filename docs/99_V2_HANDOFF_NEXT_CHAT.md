@@ -2292,3 +2292,59 @@ Next exact work after documentation commit:
 3. do not copy seller-price semantics into `wanted`;
 4. keep location, confirmations, persistence and publication in later isolated
    patches.
+
+<!-- SELQIRO_V2_HORSE_PRICE_FIELDS_20260902 -->
+## 2026-09-02 — V2 horse price and budget fields checkpoint
+
+Stable Git base before this checkpoint:
+
+- `7730d25 Add V2 horse disclosure fields`
+
+Implemented but not yet committed:
+
+- `HorseOfferPriceFieldState` and typed change reducer;
+- separate sale, lease, co-rider and wanted commercial branches;
+- sale fixed/from/contact modes;
+- free transfer with no editable amount and a fixed free state;
+- lease fee with period;
+- co-rider fee with period;
+- wanted maximum or flexible buyer budget;
+- explicit wording that wanted budget is not a seller price;
+- EE-pilot EUR UI contract;
+- composition after health and behavior fields;
+- listing-create README contract update.
+
+Current changed code files:
+
+- `src/features/listing-create/README.md`
+- `src/features/listing-create/components/HorseOfferPriceFields.tsx`
+- `src/features/listing-create/components/ListingCreatePage.tsx`
+- `src/features/listing-create/model/horseOfferPriceFields.ts`
+
+Validation completed:
+
+- static model/component/form-order contract passed;
+- production build passed;
+- desktop sale, free-transfer, lease, co-rider and wanted branches tested;
+- fixed/from/contact and maximum/flexible visibility tested;
+- separate branch value preservation tested;
+- narrow-mobile layout tested without observed horizontal overflow;
+- no browser errors were observed;
+- ordinary-listing and previous horse-field flow remained usable;
+- no production/database mutation occurred.
+
+Important persistence blocker:
+
+- current horse database fields can represent sale and free-transfer price
+  semantics;
+- recurring lease/co-rider period and wanted buyer-budget meaning require an
+  explicit reviewed database/RPC contract before this UI is connected;
+- never overload wanted budget as seller price or encode period only in text.
+
+Next exact work after this checkpoint is committed:
+
+1. add typed local EE horse location state;
+2. keep market country and horse actual-location country locked to EE;
+3. collect privacy-safe city/region or approximate area information;
+4. avoid requiring or publicly exposing an exact private address;
+5. keep confirmations, persistence and publication in later isolated patches.

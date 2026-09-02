@@ -4552,3 +4552,108 @@ Next isolated UI work:
 - keep `free_transfer` free;
 - avoid treating a wanted-ad budget as a seller price;
 - keep location, confirmations, persistence and publication separate.
+
+<!-- SELQIRO_V2_HORSE_PRICE_FIELDS_20260902 -->
+## V2 horse price and budget semantics
+
+The horse create flow keeps commercial meaning separate from visual form
+composition and from eventual persistence.
+
+### Module boundary
+
+- model:
+  `src/features/listing-create/model/horseOfferPriceFields.ts`
+- UI:
+  `src/features/listing-create/components/HorseOfferPriceFields.tsx`
+- composition:
+  `src/features/listing-create/components/ListingCreatePage.tsx`
+
+The new model and UI contain no Supabase, RPC, Storage, Energy,
+policy-acceptance or publication mutation.
+
+### Typed local-state branches
+
+`HorseOfferPriceFieldState` owns four independent branches:
+
+1. `sale`
+   - mode: `fixed | from | contact`
+   - amount
+   - currency: `EUR`
+2. `lease`
+   - mode: `fixed | from | contact`
+   - amount
+   - recurring/agreed period
+   - currency: `EUR`
+3. `coRider`
+   - mode: `fixed | from | contact`
+   - amount
+   - recurring/agreed period
+   - currency: `EUR`
+4. `wanted`
+   - mode: maximum budget or flexible budget
+   - buyer budget amount
+   - currency: `EUR`
+
+Temporary UI switching may preserve all four local branches. A future mapper
+must submit only the branch that matches the active offer type and must ignore
+an amount when the selected mode does not use one.
+
+### Offer-type contract
+
+- `sale` represents a seller price.
+- `free_transfer` is always free and has no editable amount.
+- `lease` represents a lease fee and requires period semantics when a numeric
+  fee is used.
+- `co_rider` represents a co-rider fee and requires period semantics when a
+  numeric fee is used.
+- `wanted` represents the buyer's search budget and is not a seller price.
+
+UI labels and future public formatting must retain these distinctions.
+
+### Persistence boundary
+
+The production horse foundation already supports `price_amount`,
+`price_type = fixed | from | contact | free` and `currency`. This is sufficient
+for sale and free-transfer semantics, but it does not explicitly represent:
+
+- a lease or co-rider fee period;
+- a wanted-ad buyer budget and its budget mode.
+
+Do not connect this UI by silently:
+
+- writing a wanted budget into ordinary seller-price semantics;
+- concatenating the recurring period into free text;
+- submitting hidden values from an inactive branch;
+- coercing an empty or contact-mode amount into zero.
+
+Before persistence integration, use a separately reviewed migration and typed
+server/RPC mapper. The preferred long-term direction is explicit structured
+fields for recurring fee period and buyer-budget semantics rather than an
+untyped text convention.
+
+### Input and normalization rule
+
+The browser keeps the amount as a constrained decimal string so the user can
+edit naturally. A future trusted mapper must:
+
+- normalize comma or dot decimal input;
+- reject invalid, negative or out-of-range amounts;
+- map contact/flexible modes to a null amount;
+- keep the EE pilot currency contract explicit;
+- let database constraints remain authoritative.
+
+### Safety boundary
+
+This checkpoint adds only local UI state. It does not add:
+
+- draft persistence;
+- database or schema changes;
+- image mutation;
+- Energy charging;
+- policy acceptance;
+- seller confirmations;
+- publication.
+
+Next isolated work is privacy-safe horse location UI for the EE pilot. Market
+country and horse location country remain EE; exact private location must not
+be exposed by default.
