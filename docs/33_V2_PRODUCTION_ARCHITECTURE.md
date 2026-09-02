@@ -4657,3 +4657,115 @@ This checkpoint adds only local UI state. It does not add:
 Next isolated work is privacy-safe horse location UI for the EE pilot. Market
 country and horse location country remain EE; exact private location must not
 be exposed by default.
+
+<!-- SELQIRO_V2_HORSE_LOCATION_FIELDS_20260902 -->
+## V2 horse location UI and stale-safe autocomplete
+
+The first Estonia horse pilot represents location through a small UI model,
+keeps actual-horse and wanted-search meanings separate, and reuses the shared
+location search without exposing exact location data.
+
+### Module boundary
+
+- local field model:
+  `src/features/listing-create/model/horseOfferLocationFields.ts`
+- horse location UI:
+  `src/features/listing-create/components/HorseOfferLocationFields.tsx`
+- shared autocomplete:
+  `app/components/LocationAutocomplete.tsx`
+- create-flow composition:
+  `src/features/listing-create/components/ListingCreatePage.tsx`
+
+The horse model and UI contain no Supabase, RPC, Storage, policy-acceptance or
+publication mutation.
+
+### Location meaning
+
+`HorseOfferLocationFieldState` owns two independent branches:
+
+1. `specific`
+   - applies to sale, free transfer, lease and co-rider offers;
+   - means the actual location of the concrete horse.
+2. `wanted`
+   - applies only to the wanted offer type;
+   - means the area from which the buyer wants to find a horse.
+
+Both branches currently contain:
+
+- fixed country code `EE`;
+- city or municipality;
+- county or region.
+
+A future persistence mapper must submit only the active branch. It must not map
+`wanted` search-area values into the concrete horse's `city`, `region`,
+`location_text`, `horse_lat` or `horse_lng` fields without a separately defined
+wanted-search-area contract.
+
+### Privacy boundary
+
+The first UI intentionally does not request or hold:
+
+- exact street address;
+- exact owner-entered location text;
+- latitude;
+- longitude.
+
+Public location must stay at city or region precision by default. Exact
+location and coordinates remain a private future capability and must not be
+introduced through a visual autocomplete convenience.
+
+### Shared autocomplete contract
+
+`LocationAutocomplete` now accepts:
+
+- default scope `all`, preserving existing consumers;
+- optional scope `locality`, used by the horse form.
+
+The locality scope:
+
+- accepts locality and administrative place types;
+- ranks exact matches before prefix and substring matches;
+- removes duplicate locality results;
+- excludes business, street, house-number and square suggestions from the
+  horse location dropdown.
+
+The request lifecycle uses both cancellation and response versioning:
+
+1. input change invalidates the current request;
+2. the previous `AbortController` is aborted;
+3. old suggestions are cleared before waiting for the new request;
+4. a late response is ignored unless its request ID is still current;
+5. clearing the input keeps the dropdown closed.
+
+This dual guard is intentional because cancellation alone is not a complete
+correctness boundary across every fetch timing and runtime condition.
+
+### Best-effort prefix behavior
+
+The external search provider may not return a locality for every incomplete
+prefix. The UI therefore does not promise that two characters always produce a
+suggestion. Current accepted behavior is:
+
+- a complete or sufficiently specific locality name produces a correct result
+  after debounce and network latency;
+- incorrect old-query results must never remain visible;
+- manual city and region entry always remains available.
+
+Improving partial-prefix recall would require a separately reviewed search API,
+locality dataset, ranking or caching change. It is not part of this horse UI
+checkpoint.
+
+### Validation status
+
+The checkpoint passed:
+
+- production build;
+- static source and form-order checks;
+- desktop browser tests;
+- narrow-mobile browser tests;
+- concrete/wanted value-isolation tests;
+- Türi, Rakvere, Tartu, input-clearing and stale-response tests;
+- browser-console review.
+
+No database, production, persistence, confirmation or publication behavior was
+changed.

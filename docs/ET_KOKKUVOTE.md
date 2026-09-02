@@ -7668,3 +7668,37 @@ ei tohi peita vabateksti sisse.
 Järgmine eraldatud samm on Eesti hobusepiloodi privaatsust hoidev asukohavorm.
 Riik jääb EE, kasutajalt küsitakse sobivat piirkonna või linna infot ning
 eraisiku täpset aadressi ei nõuta ega näidata vaikimisi avalikult.
+
+<!-- SELQIRO_V2_HORSE_LOCATION_FIELDS_20260902 -->
+## 2026-09-02 — V2 hobuse asukohaväljade checkpoint
+
+Valmis ja brauseris kontrollitud:
+
+- ühisesse `/v2/sell` vormi lisandus hobuse asukohamoodul;
+- müügi, tasuta üleandmise, rendi ja kaasratsaniku haru küsivad konkreetse
+  hobuse tegelikku asukohta;
+- `Otsin hobust` kasutab eraldi soovitud otsingupiirkonna olekut;
+- kahe haru väärtusi ei kopeerita vaikides omavahel;
+- Eesti piloodis on riik lukustatud väärtusele `Eesti / EE`;
+- kasutajale nähtavad väljad on linn või vald ning maakond või piirkond;
+- täpset aadressi ega koordinaate selles etapis ei küsita;
+- hobusevorm kasutab olemasolevat asukohaotsingut locality-režiimis;
+- äri-, tänava-, majanumbri- ja väljakuvasteid hobuse asukohavalikus enam ei
+  näidata;
+- asukohaotsingu vana päringu võidujooks parandati:
+  - vana valikuloend kaob kohe uue teksti sisestamisel;
+  - eelmine päring katkestatakse;
+  - hilinenud vana vastus jäetakse päringuversiooni järgi tähelepanuta;
+  - tühjendatud väli ei avane vana vastuse tõttu uuesti;
+- Türi, Rakvere ja Tartu täisnimega otsing andis väikese viite järel õige
+  asukohavaste ning varasemaid Tallinna või ettevõtte vasteid ei jäänud;
+- pooliku nime korral ei pruugi väline otsing alati asukohavastet tagastada.
+  See on praeguses checkpoint'is lubatud best-effort käitumine, sest käsitsi
+  sisestamine säilib ja vale aegunud tulemust ei näidata;
+- desktopi- ja mobiilibrauseri testid läbisid kontrolli;
+- production build ja staatilised lepingukontrollid läbisid;
+- midagi ei salvestata ega avaldata ning production-andmebaasi ei muudetud.
+
+Järgmine eraldatud töö algab publication-policy ja hobusepakkumise faktiliste
+kinnituste read-only auditiga. Alles pärast auditit lisatakse kinnituste lokaalne
+UI, ilma salvestamise ja avaldamiseta.

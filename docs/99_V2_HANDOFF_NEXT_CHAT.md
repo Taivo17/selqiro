@@ -2348,3 +2348,51 @@ Next exact work after this checkpoint is committed:
 3. collect privacy-safe city/region or approximate area information;
 4. avoid requiring or publicly exposing an exact private address;
 5. keep confirmations, persistence and publication in later isolated patches.
+
+<!-- SELQIRO_V2_HORSE_LOCATION_FIELDS_20260902 -->
+## 2026-09-02 V2 horse location UI checkpoint
+
+Completed and browser-tested:
+
+- a dedicated horse location module was added to the shared `/v2/sell` flow;
+- concrete-horse offers show `Hobuse tegelik asukoht`;
+- `wanted` shows `Kust hobust otsid?`;
+- concrete and wanted location values stay in separate typed local branches;
+- country is fixed to `Eesti / EE`;
+- visible fields are city or municipality plus county or region;
+- exact address and coordinates are not requested;
+- the shared autocomplete now supports `all | locality` scopes;
+- the horse form uses `locality` scope and excludes business, street,
+  house-number and square results;
+- old dropdown values are cleared immediately when the query changes;
+- older requests are aborted and late stale responses are ignored;
+- clearing the input cannot reopen an older result set;
+- completed locality names return the correct suggestion after a short debounce
+  and provider delay;
+- incomplete prefixes may have no suggestion, which is accepted because manual
+  entry remains available and wrong stale results are no longer displayed;
+- desktop and narrow-mobile tests passed;
+- production build passed;
+- production and the database were not changed;
+- no persistence, policy acceptance, factual confirmation or publication was
+  added.
+
+Checkpoint files:
+
+- `app/components/LocationAutocomplete.tsx`
+- `src/features/listing-create/model/horseOfferLocationFields.ts`
+- `src/features/listing-create/components/HorseOfferLocationFields.tsx`
+- `src/features/listing-create/components/ListingCreatePage.tsx`
+- `src/features/listing-create/README.md`
+
+Next exact step:
+
+1. commit and push this location UI checkpoint;
+2. begin with a read-only audit of:
+   - publication-policy status and acceptance APIs;
+   - the existing `ee-horse-v1` policy document contract;
+   - offer-type-aware horse factual confirmations;
+   - the boundary between reusable policy acceptance and per-offer facts;
+3. only after the audit, add a small typed confirmation UI module;
+4. keep draft persistence and publication outside that first confirmation UI
+   patch.

@@ -3579,3 +3579,46 @@ Next isolated step: review and commit this foundation, then perform a separately
   periods and wanted-budget semantics.
 - Next isolated UI patch: add the first privacy-safe EE horse location fields,
   without confirmations, persistence or publication.
+
+<!-- SELQIRO_V2_HORSE_LOCATION_FIELDS_20260902 -->
+## V2_HORSE_LOCATION_FIELDS
+
+2026-09-02 checkpoint:
+
+- The shared `/v2/sell` horse flow now contains a dedicated location module
+  after the offer-type-aware price or budget section.
+- Concrete-horse offers (`sale`, `free_transfer`, `lease`, `co_rider`) use a
+  typed `specific` branch for the horse's actual location.
+- `wanted` uses a separate typed branch for the buyer's desired search area.
+- Switching offer type preserves both local branches independently and never
+  copies a wanted search area into an actual horse location or vice versa.
+- The first pilot fixes the country to `Eesti / EE` and exposes only city or
+  municipality plus county or region.
+- Exact address text, latitude and longitude remain absent from this UI and
+  outside the local location state.
+- The city field reuses the existing location-search API through the shared
+  `LocationAutocomplete` component.
+- `LocationAutocomplete` now supports an optional `locality` scope. Horse
+  location uses it to exclude business, street, house-number and square
+  results and to keep only matching locality-level suggestions.
+- The autocomplete request lifecycle is stale-safe:
+  - changing text immediately clears the old dropdown;
+  - an older request is aborted;
+  - request versioning also ignores a late older response;
+  - clearing the field prevents an earlier response from reopening results.
+- Browser testing confirmed that completed locality names such as Türi,
+  Rakvere and Tartu return the correct locality after the debounce and network
+  delay, without stale Tallinn or business results.
+- Incomplete prefixes do not always receive a provider locality result. This
+  is accepted as best-effort autocomplete behavior for this checkpoint because
+  manual city and region entry remains available and incorrect stale results
+  are no longer shown.
+- Desktop and narrow-mobile branch switching, value isolation, selected-region
+  filling, clearing behavior and layout were browser-tested without observed
+  errors.
+- Production build and static contract checks passed.
+- No draft persistence, database write, policy acceptance, factual
+  confirmation, publication or production-database change was added.
+- Next isolated step: perform a read-only audit of the existing publication
+  policy and horse factual-confirmation contracts before adding confirmation
+  UI.
