@@ -2396,3 +2396,57 @@ Next exact step:
 3. only after the audit, add a small typed confirmation UI module;
 4. keep draft persistence and publication outside that first confirmation UI
    patch.
+
+<!-- SELQIRO_V2_HORSE_PUBLICATION_GATE_UI -->
+## 2026-09-03 — V2 horse publication-gate UI checkpoint
+
+Base checkpoint before this patch: `a24320f Add V2 horse location fields`.
+
+Completed in the shared `/v2/sell` flow:
+
+- added `src/features/listing-create/model/horseOfferPublicationGate.ts`;
+- added `src/features/listing-create/components/HorseOfferPublicationGate.tsx`;
+- composed the gate after `HorseOfferLocationFields`;
+- added two policy requirement cards keyed by `marketplace-general` and
+  `horse-offer-ee`;
+- added four common factual confirmations for every horse offer;
+- added three additional concrete-horse confirmations;
+- kept `wanted` on the four-common-confirmation branch;
+- added typed `0/7 … 7/7` and `0/4 … 4/4` local progress;
+- reset confirmations whenever the horse offer type changes;
+- preserved the same horse offer state while ordinary-listing mode temporarily
+  hides the horse UI;
+- documented the immutable publication-event contract in the listing-create
+  README.
+
+Browser-tested:
+
+- concrete-horse unchecked and `7/7` completed states on desktop;
+- `wanted` unchecked and `4/4` completed states on desktop and mobile;
+- policy cards, wanted omission explanation and publication-not-connected
+  wording;
+- checkbox interaction and responsive stacking;
+- offer-type reset and ordinary/horse mode state preservation;
+- no page-level horizontal overflow or new console error observed.
+
+Validation:
+
+- static source and form-order contract passed;
+- production build passed;
+- no policy-status read, policy-acceptance write, horse save, publication
+  mutation, migration or production change was added.
+
+Next exact isolated step:
+
+1. inspect the existing V2 entity/API patterns for small authenticated
+   read-only hooks;
+2. add a publication-policy status model and API wrapper around
+   `get_my_required_publication_policy_status_v1`;
+3. load the two required horse policies for `horse_offer`, country `EE`, locale
+   `et-EE`;
+4. render loading, accepted, not-accepted and retryable error states in the
+   existing policy cards;
+5. guard stale responses when active identity, authentication or horse mode
+   changes;
+6. do not add `accept_publication_policy_v1`, horse draft persistence, image
+   upload or publication mutation in that checkpoint.

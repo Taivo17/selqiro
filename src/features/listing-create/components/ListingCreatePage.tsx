@@ -14,6 +14,7 @@ import HorseOfferUseFields from "./HorseOfferUseFields";
 import HorseOfferDisclosureFields from "./HorseOfferDisclosureFields";
 import HorseOfferPriceFields from "./HorseOfferPriceFields";
 import HorseOfferLocationFields from "./HorseOfferLocationFields";
+import HorseOfferPublicationGate from "./HorseOfferPublicationGate";
 import ListingCreateAiAnalysisCard from "./ListingCreateAiAnalysisCard";
 import {
   getListingCreateTextGuidance,
@@ -52,6 +53,10 @@ import {
   applyHorseOfferLocationFieldChange,
   createHorseOfferLocationFieldState,
 } from "../model/horseOfferLocationFields";
+import {
+  applyHorseOfferPublicationConfirmationChange,
+  createHorseOfferPublicationConfirmationState,
+} from "../model/horseOfferPublicationGate";
 import {
   appendListingCreateImages,
   LISTING_CREATE_IMAGE_LIMIT,
@@ -189,6 +194,13 @@ ListingCreatePage() {
     setHorseOfferLocationFields,
   ] = useState(
     createHorseOfferLocationFieldState
+  );
+
+  const [
+    horseOfferPublicationConfirmations,
+    setHorseOfferPublicationConfirmations,
+  ] = useState(
+    createHorseOfferPublicationConfirmationState
   );
 
   const [
@@ -377,9 +389,14 @@ ListingCreatePage() {
       {horseMode ? (
         <HorseOfferTypeSelector
           value={horseOfferType}
-          onChange={
-            setHorseOfferType
-          }
+          onChange={(nextOfferType) => {
+            setHorseOfferType(
+              nextOfferType
+            );
+            setHorseOfferPublicationConfirmations(
+              createHorseOfferPublicationConfirmationState()
+            );
+          }}
         />
       ) : null}
 
@@ -797,6 +814,25 @@ ListingCreatePage() {
                 applyHorseOfferLocationFieldChange(
                   current,
                   change
+                )
+            )
+          }
+        />
+      ) : null}
+
+      {horseMode && horseOfferType ? (
+        <HorseOfferPublicationGate
+          offerType={horseOfferType}
+          value={
+            horseOfferPublicationConfirmations
+          }
+          onChange={(key, checked) =>
+            setHorseOfferPublicationConfirmations(
+              (current) =>
+                applyHorseOfferPublicationConfirmationChange(
+                  current,
+                  key,
+                  checked
                 )
             )
           }

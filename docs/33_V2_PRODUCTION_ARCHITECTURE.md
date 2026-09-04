@@ -4769,3 +4769,79 @@ The checkpoint passed:
 
 No database, production, persistence, confirmation or publication behavior was
 changed.
+
+<!-- SELQIRO_V2_HORSE_PUBLICATION_GATE_UI -->
+## V2 horse publication-gate UI contract
+
+The shared listing-create route composes the first horse publication gate after
+price and location fields. The gate is a feature-level presentation boundary,
+not an authorization or persistence boundary.
+
+### Two separate evidence classes
+
+Horse publication must keep these concepts separate:
+
+1. **Versioned policy acceptance**
+   - applies to the user and exact active policy document;
+   - current EE horse publication requires `marketplace-general` and
+     `horse-offer-ee`;
+   - authority is the exact `policy_document_id`, `policy_version` and
+     `content_hash` accepted through the publication-policy foundation;
+   - the server-side guard remains
+     `require_my_current_publication_policy_acceptance_v1`.
+2. **Per-submission factual confirmations**
+   - apply to one concrete publication attempt;
+   - are represented by stable confirmation keys;
+   - must be captured again in the immutable
+     `horse_offer_publication_events.confirmation_snapshot` for every
+     publication attempt;
+   - must never be inferred from a previously accepted portal-rule document.
+
+### Current UI behavior
+
+`HorseOfferPublicationGate` receives only the active `HorseOfferType`, typed
+local confirmation state and an `onChange` callback. It contains no Supabase,
+RPC, Storage, save or publication call.
+
+Required confirmation sets:
+
+- common for every horse offer:
+  `publisher_confirms_age_18_or_over`,
+  `publisher_confirms_information_accurate`,
+  `publisher_accepts_transaction_responsibility`,
+  `publisher_confirms_not_for_slaughter`;
+- additionally for `sale`, `free_transfer`, `lease` and `co_rider`:
+  `publisher_is_owner_or_authorized`,
+  `publisher_confirms_horse_identified`,
+  `publisher_confirms_passport_available`;
+- `wanted` uses the common set only.
+
+The local progress indicator is intentionally non-authoritative. A completed
+local state must not enable publication or claim that the policy gate has been
+satisfied. Offer-type changes reset all local confirmation values because the
+meaningful publication contract changed. Merely hiding horse mode does not
+mutate the retained horse-form state.
+
+### Required future layering
+
+The next checkpoint may add read-only policy state through this flow:
+
+`HorseOfferPublicationGate`
+→ feature hook
+→ publication-policy entity/API module
+→ `get_my_required_publication_policy_status_v1`
+→ Supabase RPC.
+
+That read-only layer must expose loading, accepted, not-accepted and error
+states, must ignore stale responses after identity or mode changes, and must not
+call `accept_publication_policy_v1`.
+
+A later explicit acceptance action must submit the exact document ID, version
+and hash returned by the status query. A still later publication mutation must
+re-check current policy acceptance server-side, accept only the confirmation
+set required for the active offer type, generate the canonical content hash and
+append one immutable `horse_offer_publication_events` record before changing the
+public offer state.
+
+Client-side completion is usability feedback only. Database constraints and
+server guards remain authoritative.

@@ -3622,3 +3622,63 @@ Next isolated step: review and commit this foundation, then perform a separately
 - Next isolated step: perform a read-only audit of the existing publication
   policy and horse factual-confirmation contracts before adding confirmation
   UI.
+
+<!-- SELQIRO_V2_HORSE_PUBLICATION_GATE_UI -->
+## 2026-09-03 — V2 horse publication-gate UI checkpoint
+
+The shared `/v2/sell` horse flow now renders an UI-only
+`HorseOfferPublicationGate` after `HorseOfferLocationFields`.
+
+Implemented contract:
+
+- two required publication-policy cards are identified by stable policy keys:
+  `marketplace-general` and `horse-offer-ee`;
+- the UI does not invent an acceptance state and currently marks both policy
+  cards as not connected;
+- all horse offer types use the four exact common confirmation keys:
+  `publisher_confirms_age_18_or_over`,
+  `publisher_confirms_information_accurate`,
+  `publisher_accepts_transaction_responsibility` and
+  `publisher_confirms_not_for_slaughter`;
+- concrete-horse offer types (`sale`, `free_transfer`, `lease`, `co_rider`)
+  additionally use `publisher_is_owner_or_authorized`,
+  `publisher_confirms_horse_identified` and
+  `publisher_confirms_passport_available`;
+- `wanted` intentionally uses the four common confirmations only and does not
+  ask the user to confirm ownership, identification or passport details for a
+  horse that has not yet been selected;
+- progress is `0/7 … 7/7` for concrete-horse offers and `0/4 … 4/4` for
+  `wanted`;
+- completion means only that the current local checkboxes are marked; the UI
+  continues to state that publication is not connected;
+- changing the horse offer type resets every local confirmation, preventing
+  confirmations from silently carrying into another offer contract;
+- temporarily switching to the ordinary-listing mode hides the horse gate but
+  preserves the selected horse offer type and its local state when returning;
+- AI must never mark policy acceptance or factual confirmations for the user.
+
+Safety and persistence boundary:
+
+- no policy-status RPC is called yet;
+- `accept_publication_policy_v1` is not called;
+- no horse draft is saved;
+- no immutable `horse_offer_publication_events` row is created;
+- no publication mutation, database migration or production change is included;
+- later authority remains server-side validation of the exact active policy
+  version and content hash plus a per-submission immutable confirmation and
+  content snapshot.
+
+Browser validation completed on desktop and narrow mobile for concrete-horse
+and `wanted` branches, unchecked and completed progress states, native checkbox
+interaction, offer-type reset behavior, ordinary/horse mode preservation and
+responsive stacking without page-level horizontal overflow. Production build
+passed.
+
+Next exact isolated step:
+
+1. add a read-only publication-policy status data layer around
+   `get_my_required_publication_policy_status_v1`;
+2. show loading, accepted, not-accepted and error states for the two required
+   policies without adding an acceptance mutation;
+3. keep horse draft persistence, policy acceptance writes and publication in
+   later independent checkpoints.

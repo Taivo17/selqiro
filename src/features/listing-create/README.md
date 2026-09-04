@@ -10,7 +10,9 @@ Current shared flow:
 4. add and order images;
 5. optionally request AI analysis;
 6. review or enter the content-type-specific fields;
-7. later complete policy acceptance, factual confirmations and publication.
+7. review the UI-only publication gate and mark offer-type-specific local
+   confirmations;
+8. later connect exact policy acceptance, persistence and publication.
 
 Current controlled capability:
 
@@ -158,14 +160,52 @@ Horse location fields:
   mapped to the concrete horse location fields;
 - no location value is saved or published by this checkpoint.
 
+Horse publication-gate UI contract:
+
+- the gate appears after `HorseOfferLocationFields` for every selected horse
+  offer type;
+- it displays the two policy requirements by stable policy key:
+  - `marketplace-general`;
+  - `horse-offer-ee`;
+- this first UI patch does not load acceptance status and does not call
+  `accept_publication_policy_v1`;
+- all offer types require these exact local confirmation keys:
+  - `publisher_confirms_age_18_or_over`;
+  - `publisher_confirms_information_accurate`;
+  - `publisher_accepts_transaction_responsibility`;
+  - `publisher_confirms_not_for_slaughter`;
+- concrete-horse flows additionally require:
+  - `publisher_is_owner_or_authorized`;
+  - `publisher_confirms_horse_identified`;
+  - `publisher_confirms_passport_available`;
+- `wanted` intentionally omits the three concrete-horse confirmations;
+- changing the horse offer type resets all local confirmation checkboxes, so a
+  confirmation is never carried into a materially different offer contract;
+- switching temporarily to an ordinary listing only hides the horse gate; when
+  the same horse offer type is shown again, its local confirmation state remains;
+- AI must never mark a policy acceptance or factual confirmation for the user;
+- local progress indicates only whether the currently visible required
+  checkboxes have been marked; it must not claim that publication is ready;
+- no save, policy-acceptance or publication action is rendered by this patch;
+- the authoritative later publication mutation must validate current policy
+  acceptance server-side and create an immutable `horse_offer_publication_events`
+  snapshot containing exact acceptance evidence, the active confirmation set,
+  content hash, risk signals and the publication decision;
+- a future persistence mapper must include only confirmations required for the
+  active offer type, so hidden concrete-horse values are never submitted for
+  `wanted`.
+
 Current state and persistence boundary:
 
 - hidden local values may survive temporary UI switching;
 - a future persistence mapper must send only fields relevant to the active
   offer type and current price mode;
 - horse fields appear after the shared text, image and optional AI stages;
-- no draft, database row, Storage object, Energy charge, policy acceptance,
-  factual confirmation or publication mutation is created by this checkpoint;
+- factual-confirmation checkboxes are local UI state only and are not
+  authoritative acceptance evidence;
+- no draft, database row, Storage object, Energy charge, policy-acceptance
+  record, immutable publication event or publication mutation is created by
+  this checkpoint;
 - the production `horse_offers` domain remains the authoritative persistence
   contract for later integration;
 - any schema extension for wanted-budget meaning or recurring price period must
@@ -182,38 +222,39 @@ Future animal expansion:
 
 Browser test required before checkpoint:
 
-1. every concrete-horse type shows `Hobuse tegelik asukoht`;
-2. `wanted` shows `Kust hobust otsid?`;
-3. concrete and wanted branches preserve separate city and region values;
-4. changing from `wanted` to a concrete-horse type never copies the wanted
-   search area;
-5. country is visibly fixed to `Eesti / EE`;
-6. type `Türi` quickly and slowly; the dropdown must not show Tallinn or an
-   older `Tü` result under the completed query;
-7. type `Rakvere`; business results such as names beginning with `Ra` must not
-   appear, and a matching locality result should be preferred;
-8. type `Tartu`, wait for results, then clear the field; the dropdown must close
-   immediately and remain closed;
-9. changing any query must hide the previous query's suggestions while the new
-   request is waiting;
-10. selecting a suggestion fills the city or municipality and available region;
-11. manual city and region entry remains possible when no locality suggestion
-    is available;
-12. changing selected city text clears a stale region from the earlier
-    autocomplete choice;
-13. no exact address, latitude or longitude field is displayed;
-14. changing to ordinary listing hides all horse-only location UI;
-15. returning to horse mode restores the local branch values;
-16. existing basic, use, health/behavior and price branches still work;
-17. desktop and narrow-mobile layouts remain usable without page-level
+1. every concrete-horse type shows `Reeglid ja kinnitused` after the location
+   card;
+2. sale, free transfer, lease and co-rider flows each show seven required local
+   confirmation checkboxes;
+3. `wanted` shows only the four common checkboxes and the explicit explanation
+   that owner, identification and passport confirmations are omitted;
+4. the four common checkbox labels and three concrete-horse labels match their
+   backend confirmation keys semantically;
+5. the progress count starts at `0/7` for a concrete horse and `0/4` for
+   `wanted`, then changes correctly as boxes are checked and unchecked;
+6. the completed local state says only that local confirmations are marked and
+   still says that publication is not connected;
+7. changing from any horse offer type to another resets every local
+   confirmation checkbox to prevent stale confirmations;
+8. switching to an ordinary listing hides the complete horse publication gate;
+9. returning to horse mode with the same selected horse offer type restores the
+   local confirmation state;
+10. both required policy cards are visible, but there is no control that records
+    policy acceptance;
+11. there is no save, submit, review or publish action in the new card;
+12. existing text, images, AI, basic, use, disclosure, price and location UI
+    still works;
+13. desktop and narrow-mobile layouts remain usable without page-level
     horizontal scrolling;
-18. browser console has no new errors.
+14. keyboard focus and native checkbox toggling work;
+15. browser console has no new errors.
 
 Next isolated checkpoint:
 
-1. browser-test this corrected horse location UI module;
+1. browser-test this UI-only horse publication gate;
 2. document the verified checkpoint in the main project documents;
-3. commit and push the complete location UI as one isolated change;
-4. inspect the publication-policy and factual-confirmation boundary before the
-   following implementation patch;
-5. keep persistence and publication mutations outside this UI checkpoint.
+3. commit and push the gate UI as one isolated change;
+4. then add a read-only publication-policy status data layer before enabling any
+   policy-acceptance mutation;
+5. keep horse draft persistence, image upload and publication mutation outside
+   this checkpoint.

@@ -7702,3 +7702,59 @@ Valmis ja brauseris kontrollitud:
 Järgmine eraldatud töö algab publication-policy ja hobusepakkumise faktiliste
 kinnituste read-only auditiga. Alles pärast auditit lisatakse kinnituste lokaalne
 UI, ilma salvestamise ja avaldamiseta.
+
+<!-- SELQIRO_V2_HORSE_PUBLICATION_GATE_UI -->
+## 2026-09-03 — Hobusepakkumise reeglite ja kinnituste UI
+
+Ühises `/v2/sell` kuulutuse lisamise vormis on nüüd hobusepakkumise lõpus eraldi
+„Reeglid ja kinnitused” osa. Kasutaja ei lähe teisele lisamislehele: hobusevorm
+jätkub samas voos pärast hobuse asukohta.
+
+Kasutajale näidatakse kahte avaldamiseks vajalikku reeglistikku:
+
+- Selqiro üldised kasutus- ja avaldamisreeglid;
+- Eesti hobusepakkumise avaldamise reeglid.
+
+Praeguses checkpoint'is on need ainult nõuete selgitus. Süsteem ei loe veel
+kasutaja päris nõustumise olekut ega registreeri uut nõustumist.
+
+Kõigi hobusepakkumiste puhul peab kasutaja ise kinnitama:
+
+- ta on vähemalt 18-aastane;
+- esitatud info on tema parima teadmise järgi õige;
+- ta vastutab pakkumise või otsingukuulutuse ja võimaliku tehingu eest;
+- pakkumine ega hobuse otsing ei ole tapmise eesmärgil.
+
+Müügi, tasuta üleandmise, rendi ja kaasratsaniku otsingu puhul lisanduvad kolm
+konkreetse hobuse kinnitust:
+
+- avaldaja on omanik või omaniku volitatud esindaja;
+- hobune on nõuetekohaselt identifitseeritud;
+- hobusel on nõuetekohane pass.
+
+„Otsin hobust” kuulutuses neid kolme kinnitust ei küsita, sest kasutaja ei esita
+veel ühte konkreetset hobust. Seetõttu on konkreetsel hobusel seitse kinnitust ja
+otsingukuulutusel neli.
+
+Kinnituste loendur ja linnukesed on praegu ainult lokaalne vormiolek. Isegi kui
+kõik linnukesed on märgitud, ütleb vorm endiselt selgelt, et avaldamine pole
+ühendatud. AI ei tohi ühtegi nõustumist ega faktilist kinnitust kasutaja eest
+märkida.
+
+Hobusepakkumise liigi muutmisel nullitakse kinnitused, et ühe pakkumise kohta
+antud kinnitus ei kanduks vaikides teise lepingusse. Tavakuulutuse ajutine
+valimine peidab hobuse osa, kuid sama hobusepakkumise juurde tagasi tulles säilib
+selle lokaalne vormiolek.
+
+Desktopi ja mobiili brauseritest läbisid nii konkreetsed hobusepakkumised kui ka
+„Otsin hobust” haru, märkimata ja täielikult märgitud olekud ning responsiivne
+paigutus. Production build läbis kontrolli.
+
+Selles etapis ei lisatud reeglitega nõustumise salvestamist, hobuse mustandi
+salvestamist, piltide üleslaadimist, avaldamist, uut andmebaasimigratsiooni ega
+production-muudatust.
+
+Järgmine väike samm on ainult olemasoleva nõustumise oleku lugemine: vorm peab
+serverist saama teada, kas kasutaja on kahe kehtiva reeglistiku täpse versiooni
+ja sisuräsiga juba nõustunud. Uue nõustumise kirjutamine ja kuulutuse avaldamine
+jäävad eraldi hilisematesse etappidesse.
