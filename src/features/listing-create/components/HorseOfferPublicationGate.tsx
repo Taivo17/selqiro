@@ -17,8 +17,7 @@ import {
 type HorseOfferPublicationGateProps = {
   offerType: HorseOfferType;
   value: HorseOfferPublicationConfirmationState;
-  onChange: (
-    key: HorseOfferPublicationConfirmationKey,
+  onConfirmAllChange: (
     checked: boolean
   ) => void;
 };
@@ -123,42 +122,26 @@ function getCommonConfirmations(
   ];
 }
 
-function ConfirmationRow({
+function ConfirmationStatement({
   definition,
-  checked,
-  onChange,
+  index,
 }: {
   definition: ConfirmationDefinition;
-  checked: boolean;
-  onChange: (
-    key: HorseOfferPublicationConfirmationKey,
-    checked: boolean
-  ) => void;
+  index: number;
 }) {
   return (
-    <label
-      className={[
-        "flex cursor-pointer items-start gap-3 rounded-[18px] border p-4 transition",
-        checked
-          ? "border-amber-300 bg-amber-50"
-          : "border-neutral-200 bg-white hover:border-neutral-300",
-      ].join(" ")}
+    <li
+      className="flex items-start gap-3 rounded-[18px] border border-neutral-200 bg-white p-4"
       data-horse-confirmation-key={
         definition.key
       }
     >
-      <input
-        type="checkbox"
-        name={definition.key}
-        checked={checked}
-        onChange={(event) =>
-          onChange(
-            definition.key,
-            event.target.checked
-          )
-        }
-        className="mt-1 h-5 w-5 shrink-0 accent-amber-500"
-      />
+      <span
+        aria-hidden="true"
+        className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-amber-200 bg-amber-50 text-xs font-black text-amber-900"
+      >
+        {index}
+      </span>
 
       <span className="min-w-0">
         <span className="block text-sm font-black leading-6 text-neutral-950">
@@ -169,7 +152,7 @@ function ConfirmationRow({
           {definition.description}
         </span>
       </span>
-    </label>
+    </li>
   );
 }
 
@@ -177,7 +160,7 @@ export default function
 HorseOfferPublicationGate({
   offerType,
   value,
-  onChange,
+  onConfirmAllChange,
 }: HorseOfferPublicationGateProps) {
   const requiresSpecificHorse =
     horseOfferTypeRequiresSpecificHorse(
@@ -195,9 +178,8 @@ HorseOfferPublicationGate({
       value
     );
 
-  const remainingCount =
-    progress.requiredCount -
-    progress.confirmedCount;
+  const aggregateChecked =
+    progress.complete;
 
   return (
     <section
@@ -313,64 +295,67 @@ HorseOfferPublicationGate({
               </p>
 
               <h3 className="mt-2 text-lg font-black">
-                Märgi ainult see, mida saad
-                ise kinnitada
+                Loe kõik väited läbi
               </h3>
             </div>
 
             <span className="w-fit shrink-0 rounded-full border border-neutral-200 bg-white px-3 py-1.5 text-xs font-black text-neutral-700">
-              {progress.confirmedCount}/
               {progress.requiredCount}
               {" "}
-              märgitud
+              väidet
             </span>
           </div>
 
-          <p className="mt-4 text-xs font-black uppercase tracking-[0.14em] text-neutral-500">
-            Kõigi hobusepakkumiste kinnitused
+          <p
+            id="horse-offer-confirmation-help"
+            className="mt-3 text-sm leading-6 text-neutral-600"
+          >
+            Loe kõik allolevad väited läbi.
+            Seejärel saad need ühe linnukesega
+            kinnitada.
           </p>
 
-          <div className="mt-3 space-y-3">
+          <p className="mt-4 text-xs font-black uppercase tracking-[0.14em] text-neutral-500">
+            Kõigi hobusepakkumiste väited
+          </p>
+
+          <ol className="mt-3 space-y-3">
             {commonConfirmations.map(
-              (definition) => (
-                <ConfirmationRow
+              (definition, index) => (
+                <ConfirmationStatement
                   key={definition.key}
                   definition={definition}
-                  checked={
-                    value[definition.key]
-                  }
-                  onChange={onChange}
+                  index={index + 1}
                 />
               )
             )}
-          </div>
+          </ol>
 
           {requiresSpecificHorse ? (
             <>
               <p className="mt-5 text-xs font-black uppercase tracking-[0.14em] text-neutral-500">
-                Konkreetse hobuse lisakinnitused
+                Konkreetse hobuse lisaväited
               </p>
 
-              <div className="mt-3 space-y-3">
+              <ol className="mt-3 space-y-3">
                 {SPECIFIC_CONFIRMATIONS.map(
-                  (definition) => (
-                    <ConfirmationRow
+                  (definition, index) => (
+                    <ConfirmationStatement
                       key={
                         definition.key
                       }
                       definition={
                         definition
                       }
-                      checked={
-                        value[
-                          definition.key
-                        ]
+                      index={
+                        commonConfirmations.length
+                        + index
+                        + 1
                       }
-                      onChange={onChange}
                     />
                   )
                 )}
-              </div>
+              </ol>
             </>
           ) : (
             <p
@@ -384,6 +369,47 @@ HorseOfferPublicationGate({
               kinnitusi.
             </p>
           )}
+
+          <label
+            className={[
+              "mt-5 flex cursor-pointer items-start gap-3 rounded-[20px] border p-4 transition sm:p-5",
+              aggregateChecked
+                ? "border-amber-300 bg-amber-50"
+                : "border-neutral-300 bg-white hover:border-amber-300",
+            ].join(" ")}
+            data-horse-confirmation-aggregate="all-required"
+            data-horse-confirmation-required-count={
+              progress.requiredCount
+            }
+          >
+            <input
+              type="checkbox"
+              name="horse-offer-publication-confirm-all"
+              checked={aggregateChecked}
+              onChange={(event) =>
+                onConfirmAllChange(
+                  event.target.checked
+                )
+              }
+              aria-describedby="horse-offer-confirmation-help"
+              className="mt-1 h-5 w-5 shrink-0 accent-amber-500"
+            />
+
+            <span className="min-w-0">
+              <span className="block text-sm font-black leading-6 text-neutral-950">
+                {requiresSpecificHorse
+                  ? "Kinnitan kõik seitse ülaltoodud väidet."
+                  : "Kinnitan kõik neli ülaltoodud väidet."}
+              </span>
+
+              <span className="mt-1 block text-xs leading-5 text-neutral-500">
+                Ühe linnukesega kinnitad kõik
+                selle pakkumise liigile kehtivad
+                väited. AI ei saa seda sinu eest
+                teha.
+              </span>
+            </span>
+          </label>
         </fieldset>
       </div>
 
@@ -398,9 +424,9 @@ HorseOfferPublicationGate({
         ].join(" ")}
       >
         <span className="font-semibold leading-6">
-          {progress.complete
-            ? "Kõik selle pakkumise lokaalsed kinnitused on märgitud."
-            : `Märkimata on ${remainingCount} nõutud kinnitust.`}
+          {aggregateChecked
+            ? "Kõik selle pakkumise väited on kinnitatud."
+            : `Loe ${progress.requiredCount} väidet läbi ja kinnita need ühe linnukesega.`}
         </span>
 
         <span className="shrink-0 text-xs font-black uppercase tracking-[0.12em]">
@@ -409,9 +435,9 @@ HorseOfferPublicationGate({
       </div>
 
       <p className="mt-4 rounded-[20px] border border-neutral-200 bg-[#fbfbfa] px-4 py-3 text-xs leading-5 text-neutral-500">
-        Need linnukesed on selles
+        See kinnitus on selles
         checkpoint&apos;is ainult lokaalne
-        vormiolek. Neid ei salvestata,
+        vormiolek. Seda ei salvestata,
         reeglitega nõustumist ei
         registreerita, muutumatut
         avaldamissündmust ei looda ning

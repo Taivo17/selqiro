@@ -167,33 +167,39 @@ Horse publication-gate UI contract:
 - it displays the two policy requirements by stable policy key:
   - `marketplace-general`;
   - `horse-offer-ee`;
-- this first UI patch does not load acceptance status and does not call
+- this checkpoint still does not load acceptance status and does not call
   `accept_publication_policy_v1`;
-- all offer types require these exact local confirmation keys:
+- all seven stable factual-confirmation keys remain explicit in typed state and
+  keep their one-to-one backend meaning;
+- the UI renders the active offer type's statements as a readable list and uses
+  exactly one aggregate confirmation checkbox;
+- selecting the aggregate checkbox expands to every required key for the active
+  offer type; clearing it resets all seven typed values to false;
+- every horse offer uses these four common keys:
   - `publisher_confirms_age_18_or_over`;
   - `publisher_confirms_information_accurate`;
   - `publisher_accepts_transaction_responsibility`;
   - `publisher_confirms_not_for_slaughter`;
-- concrete-horse flows additionally require:
+- concrete-horse flows additionally use:
   - `publisher_is_owner_or_authorized`;
   - `publisher_confirms_horse_identified`;
   - `publisher_confirms_passport_available`;
-- `wanted` intentionally omits the three concrete-horse confirmations;
-- changing the horse offer type resets all local confirmation checkboxes, so a
-  confirmation is never carried into a materially different offer contract;
-- switching temporarily to an ordinary listing only hides the horse gate; when
-  the same horse offer type is shown again, its local confirmation state remains;
-- AI must never mark a policy acceptance or factual confirmation for the user;
-- local progress indicates only whether the currently visible required
-  checkboxes have been marked; it must not claim that publication is ready;
+- `wanted` shows four statements and intentionally omits the three
+  concrete-horse statements;
+- concrete-horse flows show seven statements but still require only one user
+  checkbox interaction;
+- changing the horse offer type resets the aggregate confirmation and every
+  expanded key, so evidence never carries into another offer contract;
+- switching temporarily to an ordinary listing only hides the horse gate; the
+  same horse offer state remains available when returning;
+- AI must never mark policy acceptance or the aggregate factual confirmation;
+- the aggregate completion state is usability feedback only and must not claim
+  that publication is ready;
 - no save, policy-acceptance or publication action is rendered by this patch;
 - the authoritative later publication mutation must validate current policy
   acceptance server-side and create an immutable `horse_offer_publication_events`
-  snapshot containing exact acceptance evidence, the active confirmation set,
-  content hash, risk signals and the publication decision;
-- a future persistence mapper must include only confirmations required for the
-  active offer type, so hidden concrete-horse values are never submitted for
-  `wanted`.
+  snapshot containing each required key separately, exact acceptance evidence,
+  content hash, risk signals and the publication decision.
 
 Current state and persistence boundary:
 
@@ -201,8 +207,8 @@ Current state and persistence boundary:
 - a future persistence mapper must send only fields relevant to the active
   offer type and current price mode;
 - horse fields appear after the shared text, image and optional AI stages;
-- factual-confirmation checkboxes are local UI state only and are not
-  authoritative acceptance evidence;
+- the aggregate factual-confirmation checkbox and its expanded typed key
+  state are local UI state only and are not authoritative acceptance evidence;
 - no draft, database row, Storage object, Energy charge, policy-acceptance
   record, immutable publication event or publication mutation is created by
   this checkpoint;
@@ -222,39 +228,38 @@ Future animal expansion:
 
 Browser test required before checkpoint:
 
-1. every concrete-horse type shows `Reeglid ja kinnitused` after the location
-   card;
-2. sale, free transfer, lease and co-rider flows each show seven required local
-   confirmation checkboxes;
-3. `wanted` shows only the four common checkboxes and the explicit explanation
-   that owner, identification and passport confirmations are omitted;
-4. the four common checkbox labels and three concrete-horse labels match their
-   backend confirmation keys semantically;
-5. the progress count starts at `0/7` for a concrete horse and `0/4` for
-   `wanted`, then changes correctly as boxes are checked and unchecked;
-6. the completed local state says only that local confirmations are marked and
-   still says that publication is not connected;
-7. changing from any horse offer type to another resets every local
-   confirmation checkbox to prevent stale confirmations;
-8. switching to an ordinary listing hides the complete horse publication gate;
-9. returning to horse mode with the same selected horse offer type restores the
-   local confirmation state;
-10. both required policy cards are visible, but there is no control that records
-    policy acceptance;
-11. there is no save, submit, review or publish action in the new card;
-12. existing text, images, AI, basic, use, disclosure, price and location UI
+1. every concrete-horse type shows seven visible factual statements and exactly
+   one aggregate checkbox;
+2. `wanted` shows four visible factual statements, one aggregate checkbox and
+   the explanation that owner, identification and passport statements are
+   omitted;
+3. no individual statement has its own checkbox;
+4. checking the aggregate control changes the concrete-horse state directly
+   from unconfirmed to complete and back again;
+5. checking the aggregate control changes `wanted` directly from unconfirmed to
+   complete and back again;
+6. every visible statement remains readable and retains its semantic backend key
+   through `data-horse-confirmation-key`;
+7. the completed local state still says that publication is not connected;
+8. changing from any horse offer type to another resets the aggregate checkbox;
+9. switching to an ordinary listing hides the complete horse publication gate;
+10. returning to horse mode with the same offer type restores the retained local
+    state;
+11. both policy cards remain visible, but no policy-status read or acceptance
+    action is connected;
+12. there is no save, submit, review or publish action in the gate;
+13. existing text, images, AI, basic, use, disclosure, price and location UI
     still works;
-13. desktop and narrow-mobile layouts remain usable without page-level
+14. desktop and narrow-mobile layouts remain usable without page-level
     horizontal scrolling;
-14. keyboard focus and native checkbox toggling work;
-15. browser console has no new errors.
+15. keyboard focus and native aggregate-checkbox toggling work;
+16. browser console has no new errors.
 
 Next isolated checkpoint:
 
-1. browser-test this UI-only horse publication gate;
-2. document the verified checkpoint in the main project documents;
-3. commit and push the gate UI as one isolated change;
-4. then add a read-only publication-policy status data layer before enabling any
-   policy-acceptance mutation;
-5. keep horse draft persistence, image upload and publication mutation outside
-   this checkpoint.
+1. browser-test the aggregate confirmation UX;
+2. update the four main project documents after the browser result is confirmed;
+3. commit and push this UX simplification as one isolated change;
+4. then return to the already-audited read-only policy-status connection;
+5. keep policy acceptance, horse persistence and publication mutation outside
+   both checkpoints.

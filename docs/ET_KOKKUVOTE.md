@@ -7758,3 +7758,44 @@ Järgmine väike samm on ainult olemasoleva nõustumise oleku lugemine: vorm pea
 serverist saama teada, kas kasutaja on kahe kehtiva reeglistiku täpse versiooni
 ja sisuräsiga juba nõustunud. Uue nõustumise kirjutamine ja kuulutuse avaldamine
 jäävad eraldi hilisematesse etappidesse.
+
+<!-- SELQIRO_V2_HORSE_AGGREGATE_CONFIRMATION_UI -->
+## 2026-09-04 — Hobusepakkumise kinnitused ühe linnukesega
+
+Hobusepakkumise avaldamisvärava kasutajakogemus on nüüd lihtsam. Kõik vajalikud
+väited jäävad kasutajale eraldi nähtavaks, kuid iga väite juurde ei ole enam vaja
+teha eraldi linnukest.
+
+Konkreetse hobuse müügi, tasuta üleandmise, rendi või kaasratsaniku otsingu puhul
+kuvatakse seitse väidet. Hobuse otsingukuulutuse puhul kuvatakse neli üldist
+väidet, sest veel valimata hobuse omandit, identifitseerimist ega passi ei saa
+kinnitada.
+
+Pärast kõigi väidete lugemist kinnitab kasutaja aktiivse pakkumise kogu komplekti
+ühe linnukesega. Kasutajale ei näidata tehnilisi mõisteid nagu sisemised võtmed
+või koondolek. Valmisoleku tekst ütleb lihtsalt, et kõik selle pakkumise väited on
+kinnitatud, kuid vorm märgib endiselt selgelt, et päris avaldamine pole ühendatud.
+
+Tehniliselt jäävad kinnitused siiski eraldi:
+
+- konkreetsel hobusel säilib seitse stabiilset kinnituse võtit;
+- otsingukuulutusel säilib neli üldist võtit;
+- ühe linnukese märkimine seab aktiivse pakkumise kõik nõutud võtmed tõeseks;
+- linnukese eemaldamine nullib aktiivse komplekti;
+- pakkumise liigi muutmine nullib kinnitused, et need ei kanduks vaikides teise
+  pakkumise lepingusse;
+- tulevane muutumatu avaldamissündmus peab säilitama iga kinnituse eraldi, mitte
+  ainult ühe üldise jah/ei väärtuse.
+
+Reeglistikega nõustumine on endiselt eraldi tegevus. Selles etapis ei loeta veel
+kasutaja päris nõustumise olekut, ei salvestata nõustumist, ei salvestata hobuse
+mustandit, ei avaldata kuulutust ega muudeta andmebaasi või productionit.
+
+Kitsas mobiilivaade, seitsme väite loetavus, üks linnuke, märgitud olek ja
+responsiivne paigutus läbisid kasutaja brauseritesti. Staatilised kontrollid ja
+production build läbisid samuti kontrolli.
+
+Järgmine väike samm on ühendada ainult kahe nõutud reeglistiku read-only oleku
+lugemine. Vorm peab näitama laadimist, juba nõustutud olekut, nõustumata olekut ja
+veateadet, kuid selles järgmises etapis ei tohi veel uut nõustumist salvestada ega
+hobusepakkumist avaldada.

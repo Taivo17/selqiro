@@ -54,7 +54,7 @@ import {
   createHorseOfferLocationFieldState,
 } from "../model/horseOfferLocationFields";
 import {
-  applyHorseOfferPublicationConfirmationChange,
+  applyHorseOfferPublicationConfirmationGroupChange,
   createHorseOfferPublicationConfirmationState,
 } from "../model/horseOfferPublicationGate";
 import {
@@ -826,14 +826,12 @@ ListingCreatePage() {
           value={
             horseOfferPublicationConfirmations
           }
-          onChange={(key, checked) =>
+          onConfirmAllChange={(checked) =>
             setHorseOfferPublicationConfirmations(
-              (current) =>
-                applyHorseOfferPublicationConfirmationChange(
-                  current,
-                  key,
-                  checked
-                )
+              applyHorseOfferPublicationConfirmationGroupChange(
+                horseOfferType,
+                checked
+              )
             )
           }
         />

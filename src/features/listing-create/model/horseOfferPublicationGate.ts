@@ -95,15 +95,27 @@ export function getHorseOfferRequiredPublicationConfirmationKeys(
   return HORSE_OFFER_COMMON_PUBLICATION_CONFIRMATION_KEYS;
 }
 
-export function applyHorseOfferPublicationConfirmationChange(
-  current: HorseOfferPublicationConfirmationState,
-  key: HorseOfferPublicationConfirmationKey,
+export function applyHorseOfferPublicationConfirmationGroupChange(
+  offerType: HorseOfferType,
   checked: boolean
 ): HorseOfferPublicationConfirmationState {
-  return {
-    ...current,
-    [key]: checked,
-  };
+  const next =
+    createHorseOfferPublicationConfirmationState();
+
+  if (!checked) {
+    return next;
+  }
+
+  for (
+    const key of
+      getHorseOfferRequiredPublicationConfirmationKeys(
+        offerType
+      )
+  ) {
+    next[key] = true;
+  }
+
+  return next;
 }
 
 export function getHorseOfferPublicationConfirmationProgress(

@@ -3682,3 +3682,53 @@ Next exact isolated step:
    policies without adding an acceptance mutation;
 3. keep horse draft persistence, policy acceptance writes and publication in
    later independent checkpoints.
+
+<!-- SELQIRO_V2_HORSE_AGGREGATE_CONFIRMATION_UI -->
+## 2026-09-04 — V2 horse aggregate factual-confirmation checkpoint
+
+This checkpoint supersedes the earlier per-statement checkbox presentation in
+the shared `/v2/sell` horse publication gate.
+
+User-facing behavior:
+
+- every required factual statement remains separately visible and readable;
+- concrete-horse offers display seven statements;
+- `wanted` displays the four common statements only;
+- the user confirms the complete active statement set with exactly one
+  aggregate checkbox;
+- the wording avoids internal terms such as technical keys or aggregate state;
+- the completed message says that all statements for the current offer are
+  confirmed, while publication remains explicitly not connected.
+
+Typed internal behavior remains granular:
+
+- the aggregate checkbox sets every confirmation key required by the current
+  offer type to `true` or resets every required key to `false`;
+- concrete-horse offers retain all seven stable confirmation keys;
+- `wanted` retains the four common stable keys only;
+- changing the horse offer type resets the aggregate checkbox and all underlying
+  confirmation values;
+- temporarily hiding horse mode by switching to ordinary-listing mode preserves
+  the current horse form state;
+- the future immutable `horse_offer_publication_events.confirmation_snapshot`
+  must still store the individual confirmation keys, not one undifferentiated
+  boolean.
+
+Policy acceptance remains a separate versioned evidence class. This checkpoint
+does not load policy status, call `accept_publication_policy_v1`, save a horse
+draft, create a publication event, publish content, change the database or touch
+production.
+
+Desktop and narrow-mobile browser tests were confirmed by the user. The seven
+statements, one aggregate checkbox, checked state, status message and responsive
+stacking remained usable without page-level horizontal overflow. Static source
+checks and the production build passed.
+
+Next exact isolated step:
+
+1. add a read-only publication-policy status entity/API layer around
+   `get_my_required_publication_policy_status_v1`;
+2. load the two required documents for `horse_offer`, country `EE`, locale
+   `et-EE`;
+3. render loading, accepted, not-accepted and retryable error states;
+4. keep policy acceptance writes, horse saving and publication disabled.

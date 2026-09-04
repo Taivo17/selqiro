@@ -4845,3 +4845,68 @@ public offer state.
 
 Client-side completion is usability feedback only. Database constraints and
 server guards remain authoritative.
+
+<!-- SELQIRO_V2_HORSE_AGGREGATE_CONFIRMATION_UI -->
+## V2 horse aggregate factual-confirmation presentation
+
+The publication gate may present multiple required factual statements with one
+user action, while the domain and audit model continue to retain every statement
+as a separate stable confirmation key.
+
+### Presentation contract
+
+For the active horse offer type:
+
+- render every required statement separately;
+- render exactly one aggregate confirmation checkbox after the complete list;
+- do not allow AI or a default value to mark that checkbox for the user;
+- use ordinary user-facing wording rather than exposing implementation terms;
+- keep policy acceptance cards visually and semantically separate from factual
+  offer confirmations;
+- a checked aggregate box is local form feedback only and must not claim that
+  publication is authorized or complete.
+
+### Typed state contract
+
+The single checkbox is a projection over typed per-key state, not a replacement
+for it.
+
+- Common keys for every horse offer remain:
+  `publisher_confirms_age_18_or_over`,
+  `publisher_confirms_information_accurate`,
+  `publisher_accepts_transaction_responsibility` and
+  `publisher_confirms_not_for_slaughter`.
+- Concrete-horse offers additionally retain:
+  `publisher_is_owner_or_authorized`,
+  `publisher_confirms_horse_identified` and
+  `publisher_confirms_passport_available`.
+- `wanted` uses the common set only.
+- Checking the aggregate control applies the same boolean to every key returned
+  by `getHorseOfferRequiredPublicationConfirmationKeys`.
+- Changing `HorseOfferType` clears the full confirmation state so one contract's
+  declaration cannot silently carry into another.
+- Temporarily hiding the horse branch must not destroy unrelated retained form
+  state.
+
+### Persistence and audit contract
+
+The later save/publication boundary must never persist only an
+`all_confirmed=true` field. Every publication attempt must reconstruct and
+validate the exact required key set for the active offer type and write the
+individual values into the append-only
+`horse_offer_publication_events.confirmation_snapshot`.
+
+Versioned portal-rule acceptance remains separately recorded against exact
+policy document, version and content hash. Client-side aggregate completion does
+not satisfy the server-side publication-policy guard.
+
+The next read-only policy-status checkpoint should follow:
+
+`HorseOfferPublicationGate`
+→ feature hook
+→ publication-policy entity API
+→ `get_my_required_publication_policy_status_v1`
+→ Supabase RPC.
+
+It must handle loading, accepted, not-accepted, error and stale-response states
+without introducing an acceptance, save or publication mutation.

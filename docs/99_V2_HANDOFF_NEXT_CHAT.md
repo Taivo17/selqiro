@@ -2450,3 +2450,53 @@ Next exact isolated step:
    changes;
 6. do not add `accept_publication_policy_v1`, horse draft persistence, image
    upload or publication mutation in that checkpoint.
+
+<!-- SELQIRO_V2_HORSE_AGGREGATE_CONFIRMATION_UI -->
+## 2026-09-04 — V2 horse aggregate confirmation checkpoint
+
+Base commit: `45502a1 Add V2 horse publication gate UI`.
+
+Uncommitted checkpoint completed on top of that commit:
+
+- replaced seven or four separate factual-confirmation checkboxes with exactly
+  one aggregate checkbox;
+- kept all seven concrete-horse statements separately visible;
+- kept all four `wanted` statements separately visible;
+- preserved seven stable internal confirmation keys and offer-type-aware key
+  selection;
+- checking or clearing the aggregate checkbox updates the complete required key
+  set for the active offer type;
+- preserved offer-type reset behavior;
+- preserved ordinary-listing temporary-hide behavior;
+- polished user-facing copy to remove technical-key and aggregate-state wording;
+- kept both required policy cards separate from factual confirmations;
+- kept policy status, acceptance, saving, publication and database mutations
+  absent.
+
+Browser validation confirmed by the user:
+
+- narrow-mobile concrete-horse statement list remains readable;
+- one aggregate checkbox fits without horizontal overflow;
+- the checked state and completion message are clear;
+- responsive stacking remains intact;
+- the existing reset and branch behavior passed manual testing.
+
+Validation:
+
+- implementation result reports source, copy, static, build and scope checks as
+  PASS;
+- production build passes again during documentation;
+- only the four expected listing-create files are modified before docs;
+- final staged scope must contain those four files plus the four project docs.
+
+Next exact isolated step after commit:
+
+1. inspect current authenticated read-only entity/API patterns;
+2. add a publication-policy status type and mapper;
+3. wrap `get_my_required_publication_policy_status_v1` outside the UI component;
+4. request status for `horse_offer`, `EE`, `et-EE`;
+5. render loading, accepted, not-accepted and retryable error states in the two
+   existing policy cards;
+6. guard stale responses during auth, active-identity or horse-mode changes;
+7. do not add `accept_publication_policy_v1`, horse draft persistence, image
+   upload or publication mutation in that patch.
