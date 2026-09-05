@@ -3732,3 +3732,38 @@ Next exact isolated step:
    `et-EE`;
 3. render loading, accepted, not-accepted and retryable error states;
 4. keep policy acceptance writes, horse saving and publication disabled.
+
+<!-- SELQIRO_V2_HORSE_POLICY_STATUS_READ_ONLY_2026_09_05 -->
+## V2_HORSE_POLICY_STATUS_READ_ONLY
+
+Checkpoint: 2026-09-05.
+
+The shared `/v2/sell` horse publication gate now reads the authenticated user's required publication-policy status through `get_my_required_publication_policy_status_v1`.
+
+Locked scope:
+
+- content type: `horse_offer`;
+- country: `EE`;
+- locale: `et-EE`;
+- expected active documents: `marketplace-general-v1` and `ee-horse-v1`.
+
+Architecture:
+
+- `HorseOfferPublicationGate`
+  → `useHorseOfferPublicationPolicyStatus`
+  → publication-policy entity API
+  → Supabase RPC;
+- UI receives the exact policy document ID, version, content hash, full body, summary and acceptance state;
+- loading, ready, empty and error states are explicit;
+- stale responses are ignored and retry remains read-only.
+
+Important separation:
+
+- versioned portal-rule acceptance is user-level append-only evidence;
+- per-offer factual confirmations remain a separate offer snapshot;
+- one user-facing aggregate checkbox maps to seven internal keys for a concrete-horse offer and four common keys for `wanted`;
+- checking the per-offer aggregate confirmation does not accept either policy.
+
+This checkpoint does not call `accept_publication_policy_v1`, does not save a horse offer, does not publish, and does not change the database.
+
+Next isolated step: connect explicit acceptance of only missing active policy documents after a read-only contract review. Pass the exact server-returned document ID, version and content hash. Show the full policy text before acceptance. Keep horse save/publication absent.

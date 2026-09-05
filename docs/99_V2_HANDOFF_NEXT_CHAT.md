@@ -2500,3 +2500,38 @@ Next exact isolated step after commit:
 6. guard stale responses during auth, active-identity or horse-mode changes;
 7. do not add `accept_publication_policy_v1`, horse draft persistence, image
    upload or publication mutation in that patch.
+
+<!-- SELQIRO_V2_HORSE_POLICY_STATUS_READ_ONLY_2026_09_05 -->
+## 2026-09-05 – V2 horse publication-policy read-only checkpoint
+
+Last committed base before this patch:
+
+- `17a6533 Simplify V2 horse publication confirmation`.
+
+Implemented and browser-tested:
+
+- required policy status is loaded in `/v2/sell` through `get_my_required_publication_policy_status_v1`;
+- scope is `horse_offer / EE / et-EE`;
+- the UI shows both active required policy documents, their exact versions and „Nõustutud” or „Nõustumata” state;
+- loading, empty, error, stale-response and retry behavior are handled;
+- the per-offer aggregate checkbox remains independent from versioned policy acceptance;
+- concrete-horse offers retain seven internal factual confirmation keys;
+- `wanted` retains the four common keys and omits ownership, identification and passport statements;
+- desktop and mobile browser tests passed;
+- no policy acceptance, horse save, publication or database mutation was added.
+
+Expected uncommitted source scope for this checkpoint:
+
+- `src/entities/publication-policy/**`;
+- `src/features/listing-create/model/useHorseOfferPublicationPolicyStatus.ts`;
+- `src/features/listing-create/components/HorseOfferPublicationGate.tsx`;
+- `src/features/listing-create/README.md`;
+- the four living project documents.
+
+Next exact work:
+
+1. begin with a read-only inspection of `accept_publication_policy_v1` and its current error/idempotency contract;
+2. add a way to open/read the full active rule text;
+3. add one explicit user action that accepts every currently missing required document using each document's exact ID, version and hash;
+4. reload policy status after each successful acceptance and handle partial failure safely;
+5. do not connect horse-offer saving, image upload, publication, Energy or a database migration in the same patch.

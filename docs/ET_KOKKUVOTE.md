@@ -7799,3 +7799,28 @@ Järgmine väike samm on ühendada ainult kahe nõutud reeglistiku read-only ole
 lugemine. Vorm peab näitama laadimist, juba nõustutud olekut, nõustumata olekut ja
 veateadet, kuid selles järgmises etapis ei tohi veel uut nõustumist salvestada ega
 hobusepakkumist avaldada.
+
+<!-- SELQIRO_V2_HORSE_POLICY_STATUS_READ_ONLY_2026_09_05 -->
+## 2026-09-05 – V2 hobusepakkumise reeglistike read-only oleku checkpoint
+
+Valmis ja brauseris kontrollitud:
+
+- `/v2/sell` hobuserežiimi „Reeglid ja kinnitused” kaart loeb kasutaja nõutud reeglistike oleku läbi `get_my_required_publication_policy_status_v1` RPC;
+- päringu ulatus on `horse_offer + EE + et-EE`;
+- UI kuvab serverist tulnud reeglistiku pealkirja, kokkuvõtte, täpse versiooni ja oleku „Nõustutud” või „Nõustumata”;
+- olemas on laadimise, õnnestumise, tühja vastuse, vea ja read-only korduskatse olek;
+- Eesti piloodis kuvatakse kaks nõutud dokumenti: `marketplace-general-v1` ja `ee-horse-v1`;
+- pakkumisepõhine üks koondkinnitus jäi reeglistiku nõustumisest eraldi lokaalseks vormiolekuks;
+- konkreetse hobuse seitse väidet ja `wanted` haru neli väidet säilitavad oma tehnilised võtmed;
+- pakkumise liigi vahetamine lähtestab koondkinnituse ning ajutine tavakuulutuse režiimi vahetus säilitab hobuse vormi muu oleku;
+- desktopi ja mobiili paigutus, koondkinnituse sisse/välja lülitamine ning „Nõustumata” olek kontrolliti brauseris;
+- kasutaja uut reeglitega nõustumist ei salvestata;
+- hobusepakkumist ei salvestata ega avaldata;
+- production-andmebaasi ei muudetud.
+
+Järgmine eraldatud samm:
+
+- vaadata read-only korras üle `accept_publication_policy_v1` täpne kliendi- ja vealeping;
+- ühendada ainult puuduvate aktiivsete reeglistike teadlik nõustumine, kasutades serverist saadud `policy_document_id`, `policy_version` ja `content_hash` väärtusi;
+- võimaldada kasutajal enne nõustumist täistekst avada;
+- hoida hobuse salvestamine ja avaldamine jätkuvalt ühendamata.

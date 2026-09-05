@@ -4910,3 +4910,50 @@ The next read-only policy-status checkpoint should follow:
 
 It must handle loading, accepted, not-accepted, error and stale-response states
 without introducing an acceptance, save or publication mutation.
+
+<!-- SELQIRO_V2_HORSE_POLICY_STATUS_READ_ONLY_2026_09_05 -->
+## V2 horse publication-policy status: read-only connection
+
+The first live data connection inside the V2 horse publication gate is deliberately read-only.
+
+Data flow:
+
+`HorseOfferPublicationGate`
+→ `useHorseOfferPublicationPolicyStatus`
+→ `src/entities/publication-policy`
+→ `get_my_required_publication_policy_status_v1`
+
+Request scope:
+
+- `p_content_type = 'horse_offer'`;
+- `p_country_code = 'EE'`;
+- `p_locale = 'et-EE'`.
+
+The entity boundary retains the exact server response required by a later safe acceptance mutation:
+
+- `policy_document_id`;
+- `policy_key`;
+- `policy_version`;
+- `content_hash`;
+- localized title, summary and full body;
+- metadata;
+- accepted state and acceptance timestamp.
+
+UI contract:
+
+- explicit loading, ready, empty and error phases;
+- stale/out-of-order responses do not replace the current scope;
+- retry repeats only the read operation;
+- the active general and EE horse documents are shown separately;
+- status labels are based on server acceptance evidence, not local checkbox state.
+
+Security and domain boundary:
+
+- policy acceptance and per-offer factual confirmations are different records;
+- the single aggregate offer checkbox is only a usability control over stable internal confirmation keys;
+- local aggregate confirmation must never be treated as policy acceptance;
+- this checkpoint contains no policy-acceptance mutation, horse-owner save mutation, publication mutation or database change.
+
+Browser verification passed on desktop and narrow mobile widths. Both required policies correctly rendered as „Nõustumata” for a user without current acceptance, while the per-offer aggregate checkbox continued to work independently.
+
+Next architecture step: inspect and then connect `accept_publication_policy_v1` for missing documents only. The UI must expose the full active text before explicit acceptance and send the exact document ID, version and hash returned by the status RPC. A partial failure must be recoverable and reloading status must remain authoritative. Horse save and publication stay outside that patch.

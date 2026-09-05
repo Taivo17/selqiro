@@ -10,9 +10,10 @@ Current shared flow:
 4. add and order images;
 5. optionally request AI analysis;
 6. review or enter the content-type-specific fields;
-7. review the UI-only publication gate and mark offer-type-specific local
-   confirmations;
-8. later connect exact policy acceptance, persistence and publication.
+7. review the account-backed read-only policy status and mark the
+   offer-type-specific local factual confirmation;
+8. later open and accept the exact policy text, then connect persistence and
+   publication in separate checkpoints.
 
 Current controlled capability:
 
@@ -157,20 +158,38 @@ Horse location fields:
 - exact location text and coordinates remain private, absent from this UI and
   outside the current local state;
 - wanted search-area persistence is not yet defined and must not be silently
-  mapped to the concrete horse location fields;
-- no location value is saved or published by this checkpoint.
-
+  mapped to the concrete horse location <!-- SELQIRO_V2_HORSE_POLICY_STATUS_READ_ONLY -->
 Horse publication-gate UI contract:
 
 - the gate appears after `HorseOfferLocationFields` for every selected horse
   offer type;
-- it displays the two policy requirements by stable policy key:
+- it requires these two stable policy keys:
   - `marketplace-general`;
   - `horse-offer-ee`;
-- this checkpoint still does not load acceptance status and does not call
-  `accept_publication_policy_v1`;
-- all seven stable factual-confirmation keys remain explicit in typed state and
-  keep their one-to-one backend meaning;
+- the current user policy state is loaded read-only through:
+  `get_my_required_publication_policy_status_v1`;
+- the RPC call uses the fixed first-pilot scope:
+  - `p_content_type = horse_offer`;
+  - `p_country_code = EE`;
+  - `p_locale = et-EE`;
+- data access follows the production boundary:
+  `HorseOfferPublicationGate` -> `useHorseOfferPublicationPolicyStatus` ->
+  `getMyRequiredPublicationPolicyStatus` -> Supabase RPC;
+- the typed entity result retains the policy document ID, key, version, country,
+  locale, title, summary, full body text, exact content hash, metadata and the
+  authenticated user's acceptance ID/time;
+- the UI renders explicit `loading`, `ready`, `empty` and retryable `error`
+  states;
+- a loaded policy card is marked `Nõustutud` only when the RPC returns
+  `accepted = true`; otherwise it is marked `Nõustumata`;
+- missing required policy rows are not treated as acceptance and the UI offers a
+  read-only retry;
+- a request sequence guard ignores late results after retry or unmount, including
+  when the user temporarily leaves horse mode;
+- policy acceptance remains user-owned; the active identity is context and does
+  not turn this read into an identity-owned acceptance mutation;
+- all seven stable factual-confirmation keys remain explicit in typed local
+  state and keep their one-to-one backend meaning;
 - the UI renders the active offer type's statements as a readable list and uses
   exactly one aggregate confirmation checkbox;
 - selecting the aggregate checkbox expands to every required key for the active
@@ -186,19 +205,19 @@ Horse publication-gate UI contract:
   - `publisher_confirms_passport_available`;
 - `wanted` shows four statements and intentionally omits the three
   concrete-horse statements;
-- concrete-horse flows show seven statements but still require only one user
-  checkbox interaction;
-- changing the horse offer type resets the aggregate confirmation and every
-  expanded key, so evidence never carries into another offer contract;
-- switching temporarily to an ordinary listing only hides the horse gate; the
-  same horse offer state remains available when returning;
+- changing the horse offer type resets the aggregate factual confirmation and
+  every expanded key;
+- switching temporarily to an ordinary listing hides the horse gate and cancels
+  the relevance of any late status response, while the separate horse form state
+  remains available when returning;
 - AI must never mark policy acceptance or the aggregate factual confirmation;
-- the aggregate completion state is usability feedback only and must not claim
-  that publication is ready;
-- no save, policy-acceptance or publication action is rendered by this patch;
-- the authoritative later publication mutation must validate current policy
-  acceptance server-side and create an immutable `horse_offer_publication_events`
-  snapshot containing each required key separately, exact acceptance evidence,
+- this checkpoint does not call `accept_publication_policy_v1`, save a horse
+  draft, upload horse images, create a publication event or publish an offer;
+- the authoritative later acceptance mutation must submit the exact loaded
+  document ID, version and content hash, and the later publication mutation must
+  validate current acceptance server-side.
+
+ evidence,
   content hash, risk signals and the publication decision.
 
 Current state and persistence boundary:
@@ -228,38 +247,40 @@ Future animal expansion:
 
 Browser test required before checkpoint:
 
-1. every concrete-horse type shows seven visible factual statements and exactly
-   one aggregate checkbox;
-2. `wanted` shows four visible factual statements, one aggregate checkbox and
-   the explanation that owner, identification and passport statements are
-   omitted;
-3. no individual statement has its own checkbox;
-4. checking the aggregate control changes the concrete-horse state directly
-   from unconfirmed to complete and back again;
-5. checking the aggregate control changes `wanted` directly from unconfirmed to
-   complete and back again;
-6. every visible statement remains readable and retains its semantic backend key
-   through `data-horse-confirmation-key`;
-7. the completed local state still says that publication is not connected;
-8. changing from any horse offer type to another resets the aggregate checkbox;
-9. switching to an ordinary listing hides the complete horse publication gate;
-10. returning to horse mode with the same offer type restores the retained local
-    state;
-11. both policy cards remain visible, but no policy-status read or acceptance
-    action is connected;
-12. there is no save, submit, review or publish action in the gate;
+1. open `/v2/sell`, select `Hobusepakkumine` and choose a concrete-horse offer
+   type;
+2. the policy area may briefly show `Kontrollin`, then both required cards must
+   settle to either `Nõustutud` or `Nõustumata` from the authenticated account;
+3. neither card may remain on the old static `Nõutud` / `not-connected` state;
+4. each settled card shows the active policy version and preserves its title and
+   summary from the RPC response;
+5. no policy is marked accepted merely because the factual aggregate checkbox is
+   checked;
+6. the factual side still shows seven statements and exactly one checkbox for a
+   concrete horse;
+7. `wanted` still shows four statements, one checkbox and the explanation that
+   owner, identification and passport statements are omitted;
+8. changing horse offer type still resets the aggregate factual confirmation;
+9. switching to an ordinary listing hides the complete horse gate; returning to
+   horse mode reloads the policy status without losing the separate horse form
+   values;
+10. reloading the browser produces the same account-backed policy status;
+11. there is no control that records a new policy acceptance and no save,
+    submit, review or publish action in the gate;
+12. the `Proovi uuesti` action is shown only for an empty, incomplete or failed
+    policy-status response and performs another read-only request;
 13. existing text, images, AI, basic, use, disclosure, price and location UI
     still works;
 14. desktop and narrow-mobile layouts remain usable without page-level
     horizontal scrolling;
-15. keyboard focus and native aggregate-checkbox toggling work;
-16. browser console has no new errors.
+15. the browser console has no new error during the normal successful load.
 
 Next isolated checkpoint:
 
-1. browser-test the aggregate confirmation UX;
+1. browser-test the read-only policy-status connection;
 2. update the four main project documents after the browser result is confirmed;
-3. commit and push this UX simplification as one isolated change;
-4. then return to the already-audited read-only policy-status connection;
-5. keep policy acceptance, horse persistence and publication mutation outside
-   both checkpoints.
+3. commit and push this read-only connection as one isolated change;
+4. only after that, design the full policy-text view and the controlled
+   `accept_publication_policy_v1` mutation;
+5. keep horse draft persistence, image upload and publication mutation outside
+   this checkpoint.
