@@ -3813,3 +3813,21 @@ Next isolated work:
   contract before connecting a write;
 - keep image upload and publication mutation outside the first horse-draft
   persistence checkpoint.
+
+<!-- SELQIRO_EE_HORSE_OWNER_DRAFT_SAVE_RPC_V1 -->
+## EE_HORSE_OWNER_DRAFT_SAVE_RPC_V1
+
+2026-09-06 local database checkpoint:
+
+- New migration: `20260906150000_add_ee_horse_offer_owner_draft_save.sql`.
+- New rollback SQL contract test: `20260906150000_ee_horse_offer_owner_draft_save_test.sql`.
+- Added authenticated `save_my_horse_offer_draft_v1`.
+- The RPC resolves the actor with `auth.uid()` and the authoritative owner scope with `require_my_active_identity_v2()`; the browser does not choose an identity ID.
+- The first pilot remains fixed to Estonia and EUR and requires an active `horse-offer-ee` policy that supports the selected offer type.
+- The RPC creates a new draft or updates only an existing `draft`/`rejected` offer owned by the active identity. Re-saving a rejected offer returns it to `draft` and clears stale publication-lifecycle fields.
+- Concrete-horse and `wanted` payloads are mutually exclusive. Sale, free transfer, lease, co-rider and wanted price/budget semantics are validated independently.
+- Branch-specific data uses a server-constructed `horse_offers.details` object with `schema_version = 1`; it stores a recurring fee period for lease/co-rider or wanted preferences, buyer budget and search area.
+- Draft saving does not require policy acceptance, does not store per-offer factual publication confirmations, does not mutate images, does not create a publication event, does not publish and does not spend Energy.
+- Production is unchanged at this checkpoint.
+- Local static checks, production build, full local Supabase reset and authenticated rollback SQL tests passed.
+- Next: commit and push this migration checkpoint, then apply it through a separately controlled linked-production backup, dry-run, push and schema verification. Only after production verification should the V2 client draft-save API/hook/UI be connected.

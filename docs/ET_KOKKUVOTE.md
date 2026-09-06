@@ -7864,3 +7864,16 @@ Selles etapis ei salvestata hobusepakkumist, ei laadita üles pilte, ei kasutata
 Energy't ega avaldata kuulutust. Järgmine eraldatud samm on olemasoleva hobuse
 draft-save RPC read-only audit ja praeguse vormi väljade täpne kaardistus; pildid
 ning avaldamine jäävad hilisemateks eraldi sammudeks.
+
+<!-- SELQIRO_EE_HORSE_OWNER_DRAFT_SAVE_RPC_V1 -->
+## Hobusepakkumise mustandi turvaline salvestusleping — 06.09.2026
+
+Lokaalselt on valmis esimene hobusepakkumise päris salvestusmutatsioon `save_my_horse_offer_draft_v1`.
+
+RPC määrab kasutaja ja aktiivse identiteedi serveris. Brauser ei saa valida võõrast identiteeti ega kirjutada otse `horse_offers` tabelisse. Esimene piloot jääb Eesti turule ja eurole ning salvestada saab ainult valitud aktiivse identiteedi uut mustandit või tema olemasolevat `draft`/`rejected` pakkumist.
+
+Konkreetse hobuse andmed ja hobuse otsingukuulutuse eelistused on rangelt lahus. Müügihind, tasuta üleandmine, rendi või kaasratsaniku perioodiline tasu ning otsija ostueelarve säilitavad erineva tähenduse. Harupõhine lisainfo salvestatakse serveri loodud versioonitud `details` objekti, mitte brauseri suvalise JSON-ina.
+
+Mustandi salvestamine ei tähenda avaldamist. Selles etapis ei nõuta veel avaldamisreeglitega nõustumist, ei salvestata pakkumispõhiseid kinnitusi, ei laadita pilte, ei looda avaldamissündmust ega kasutata Energy't.
+
+Täielik kohalik Supabase reset, SQL-lepingutestid, turvakontrollid ja production build läbisid. Production-andmebaasi ei ole veel muudetud. Järgmine samm on commit/push ning eraldi kontrollitud production-rollout koos eelvarukoopia, kuivkäivituse ja järelkontrolliga.

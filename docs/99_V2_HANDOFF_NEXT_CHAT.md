@@ -2585,3 +2585,46 @@ Järgmine täpne samm pärast selle checkpoint'i commit/push'i:
    otsingupiirkonda;
 4. otsusta auditi põhjal esimese väikese draft-save patch'i ulatus;
 5. ära ühenda samasse patch'i pildi üleslaadimist ega avaldamismutatsiooni.
+
+<!-- SELQIRO_EE_HORSE_OWNER_DRAFT_SAVE_RPC_V1 -->
+## 2026-09-06 — EE horse-offer owner draft-save RPC local checkpoint
+
+Completed locally and staged:
+
+- migration `20260906150000_add_ee_horse_offer_owner_draft_save.sql`;
+- rollback contract test `20260906150000_ee_horse_offer_owner_draft_save_test.sql`;
+- authenticated `save_my_horse_offer_draft_v1`;
+- active identity resolved and authorized in the database;
+- Estonia/EUR and active horse-policy capability guards;
+- separate concrete-horse and wanted payload contracts;
+- validated sale, free-transfer, recurring fee and wanted-budget semantics;
+- versioned server-built details payload;
+- creation of a new draft and guarded update of the same identity's draft/rejected offer;
+- rejected-to-draft reset with stale publication lifecycle fields cleared;
+- no policy-acceptance requirement for private draft saving;
+- no factual publication confirmations stored in drafts;
+- no image, publication-event, publication or Energy mutation.
+
+Validation passed:
+
+- static migration contract;
+- application production build;
+- complete local Supabase reset;
+- authenticated SQL behavior and authorization tests inside rollback transactions;
+- exact two-file implementation scope before documentation.
+
+Production status:
+
+- unchanged;
+- migration is not yet applied remotely;
+- do not connect the browser draft-save flow until the linked production rollout is verified.
+
+Next exact steps:
+
+1. commit and push this six-file checkpoint;
+2. run a separately controlled production preflight;
+3. create a timestamped linked `public` schema backup;
+4. confirm the linked dry-run contains only migration `20260906150000`;
+5. apply and verify the migration;
+6. document and commit the production rollout;
+7. start with a read-only audit of the current listing-create state-to-RPC mapping before adding the client save action.

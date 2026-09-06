@@ -5028,3 +5028,75 @@ server validation against every current UI branch, including concrete horse vs
 and all optional disclosure/use fields. Only after that mapping is explicit may
 a small owner-draft persistence patch be designed. Image upload and publication
 remain separate later checkpoints.
+
+<!-- SELQIRO_EE_HORSE_OWNER_DRAFT_SAVE_RPC_V1 -->
+## EE horse-offer owner draft-save RPC v1
+
+Local database implementation completed on 2026-09-06.
+
+### Server-owned write boundary
+
+The first horse-offer persistence mutation is:
+
+`save_my_horse_offer_draft_v1`
+
+The write path is intentionally database-owned:
+
+`V2 listing-create UI later`
+→ typed feature model
+→ horse-offer entity API
+→ `save_my_horse_offer_draft_v1`
+→ authenticated active-identity authorization
+→ `horse_offers`
+
+The client must not send an authoritative identity ID. The RPC derives the actor from `auth.uid()` and resolves the current authorized identity through `require_my_active_identity_v2()`.
+
+### Draft capability and country contract
+
+The RPC:
+
+- accepts only the Estonia pilot boundary: market country `EE`, horse location country `EE`, currency `EUR`;
+- requires an active `horse-offer-ee` policy for `et-EE` whose metadata supports the selected offer type;
+- does not require the authenticated user to have accepted the publication policies merely to save a private draft;
+- creates a new identity-owned draft when no offer ID is supplied;
+- updates only the same active identity's `draft` or `rejected` offer;
+- returns a rejected offer to `draft` and clears stale publication lifecycle pointers/timestamps;
+- cannot edit a held, published, paused, closed or archived offer.
+
+### Branch semantics
+
+Concrete-horse and wanted-search data remain separate.
+
+Concrete offer types use the dedicated horse columns. Lease and co-rider store the normalized recurring fee period in the server-built `details` object.
+
+`wanted` keeps concrete horse identity, disclosure and actual-location columns empty. Its preferred sex, breed, discipline, training level, intended use, health/behavior preferences, buyer budget and search area are stored in the versioned server-built details object.
+
+The first details contract is:
+
+- `schema_version = 1`;
+- `branch = specific` or `branch = wanted`;
+- no arbitrary browser-provided details JSON.
+
+### Deliberate exclusions
+
+This migration does not:
+
+- accept publication policies;
+- persist the aggregate factual confirmation or its expanded keys;
+- upload or register horse images;
+- create an immutable publication event;
+- publish an offer;
+- mutate Energy;
+- connect a client UI.
+
+The migration and rollback SQL contract test passed locally after a complete Supabase reset. Production remains unchanged until a separate controlled rollout.
+
+### Next sequence
+
+1. Commit and push the migration and documentation checkpoint.
+2. Back up the linked production `public` schema.
+3. Run a linked migration dry-run and confirm only `20260906150000` is pending.
+4. Apply the migration.
+5. Verify local/remote migration history, a clean post-push dry-run and the exact production function definition/privileges.
+6. Document the production rollout in a new checkpoint.
+7. Connect the V2 typed draft payload, entity API, hook and explicit `Salvesta mustand` UI in separate browser-tested steps.
