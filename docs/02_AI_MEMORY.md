@@ -3767,3 +3767,49 @@ Important separation:
 This checkpoint does not call `accept_publication_policy_v1`, does not save a horse offer, does not publish, and does not change the database.
 
 Next isolated step: connect explicit acceptance of only missing active policy documents after a read-only contract review. Pass the exact server-returned document ID, version and content hash. Show the full policy text before acceptance. Keep horse save/publication absent.
+
+<!-- SELQIRO_V2_HORSE_POLICY_ACCEPTANCE_CONNECTED_V1 -->
+## V2_HORSE_POLICY_ACCEPTANCE_CONNECTED
+
+Date: 2026-09-06
+
+Completed and browser-confirmed:
+
+- the shared `/v2/sell` horse publication gate reads the two required active
+  policy documents through `get_my_required_publication_policy_status_v1`;
+- every policy card keeps the exact active document body, version and content
+  hash available, and the full text remains expandable before and after
+  acceptance;
+- a user who is missing current acceptance gets one aggregate policy checkbox
+  and one `Salvesta nõustumine` action;
+- the policy checkbox remains separate from the one aggregate per-offer factual
+  confirmation checkbox;
+- `accept_publication_policy_v1` is called once per missing active document with
+  the exact `policy_document_id`, `policy_version` and `content_hash` returned by
+  the authoritative status response;
+- acceptance is owned by the authenticated user account; active identity is
+  only server-resolved audit context;
+- the hook guards duplicate clicks, refreshes authoritative status after every
+  successful document and after any failure, and does not silently accept a
+  policy whose snapshot changed during the operation;
+- append-only/idempotent acceptance supports safe retry after partial success;
+- a real authenticated browser test confirmed `Nõustumata` -> `Nõustutud`,
+  persistence after reload, expandable full text, concrete-horse seven-statement
+  confirmation, wanted four-statement confirmation, and responsive desktop and
+  mobile behavior.
+
+Current boundary:
+
+- no horse draft save;
+- no horse image upload;
+- no Energy mutation;
+- no publication-event creation or publication mutation;
+- no database-schema change in this client checkpoint.
+
+Next isolated work:
+
+- audit `save_my_horse_offer_draft_v1` read-only;
+- map every current shared-form branch to the exact existing persistence
+  contract before connecting a write;
+- keep image upload and publication mutation outside the first horse-draft
+  persistence checkpoint.

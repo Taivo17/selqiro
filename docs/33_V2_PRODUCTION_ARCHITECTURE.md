@@ -4957,3 +4957,74 @@ Security and domain boundary:
 Browser verification passed on desktop and narrow mobile widths. Both required policies correctly rendered as „Nõustumata” for a user without current acceptance, while the per-offer aggregate checkbox continued to work independently.
 
 Next architecture step: inspect and then connect `accept_publication_policy_v1` for missing documents only. The UI must expose the full active text before explicit acceptance and send the exact document ID, version and hash returned by the status RPC. A partial failure must be recoverable and reloading status must remain authoritative. Horse save and publication stay outside that patch.
+
+<!-- SELQIRO_V2_HORSE_POLICY_ACCEPTANCE_CONNECTED_V1 -->
+## V2 horse publication-policy acceptance connection
+
+Checkpoint date: 2026-09-06
+
+The shared horse flow now connects versioned publication-policy acceptance while
+keeping horse-offer persistence and publication outside the checkpoint.
+
+Layered flow:
+
+`HorseOfferPublicationGate`
+→ `useHorseOfferPublicationPolicyStatus`
+→ publication-policy entity API
+→ `accept_publication_policy_v1`
+→ append-only authenticated-user acceptance history.
+
+Contract:
+
+- `get_my_required_publication_policy_status_v1('horse_offer', 'EE', 'et-EE')`
+  remains the authoritative read model;
+- the client retains the complete body plus exact document ID, version and
+  content hash returned by that read model;
+- the user reviews all currently missing documents and confirms them with one
+  aggregate policy checkbox;
+- the feature executes one acceptance RPC call per document, never a fabricated
+  client-side batch contract;
+- each call submits the exact loaded snapshot and uses the publication-gate
+  source; the server validates active status, exact version and exact hash;
+- authenticated user account owns the acceptance; identity is audit context and
+  is not the acceptance owner;
+- after each success and after every failure, status is re-read from the server;
+- if any required snapshot changed after review, the operation stops and the new
+  text must be reviewed rather than accepted from stale consent;
+- partial success is safe because the database contract is append-only and
+  idempotent; retry targets only documents still reported missing.
+
+UX separation:
+
+- policy acceptance uses one aggregate checkbox;
+- the active horse offer uses a different aggregate factual checkbox;
+- concrete-horse offers expose seven factual statements;
+- `wanted` exposes only the four common statements;
+- policy acceptance never marks offer facts, and offer-type changes never revoke
+  valid account-level policy acceptance.
+
+Verified browser behavior:
+
+- both required documents moved from `Nõustumata` to `Nõustutud`;
+- accepted state survived reload;
+- full text remained expandable after acceptance;
+- desktop and narrow-mobile layouts remained usable without observed page-level
+  horizontal overflow;
+- no new error was found in the tested normal flow.
+
+Persistence boundary:
+
+- this checkpoint writes only policy acceptance;
+- it does not call the horse owner draft-save RPC;
+- it does not upload horse images;
+- it does not spend Energy;
+- it does not create the immutable horse publication event or publish content;
+- it does not change the database schema.
+
+Next architecture checkpoint must start with a read-only audit of
+`save_my_horse_offer_draft_v1`. The audit must compare the RPC signature and
+server validation against every current UI branch, including concrete horse vs
+`wanted`, price vs budget semantics, fee periods, actual location vs search area,
+and all optional disclosure/use fields. Only after that mapping is explicit may
+a small owner-draft persistence patch be designed. Image upload and publication
+remain separate later checkpoints.

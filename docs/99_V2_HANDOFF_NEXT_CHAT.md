@@ -2535,3 +2535,53 @@ Next exact work:
 3. add one explicit user action that accepts every currently missing required document using each document's exact ID, version and hash;
 4. reload policy status after each successful acceptance and handle partial failure safely;
 5. do not connect horse-offer saving, image upload, publication, Energy or a database migration in the same patch.
+
+<!-- SELQIRO_V2_HORSE_POLICY_ACCEPTANCE_CONNECTED_V1 -->
+## 2026-09-06 – V2 hobuse reeglistike nõustumise ühenduse checkpoint
+
+Valmis ja kasutaja poolt desktopis ning mobiilis brauseriga kontrollitud:
+
+- `/v2/sell` hobusevoog loeb kaks aktiivset nõutud reeglistikku serverist;
+- mõlema reeglistiku täistekst on avatav nii enne kui ka pärast nõustumist;
+- puuduva nõustumise korral on üks reeglistike koondlinnuke ja üks
+  `Salvesta nõustumine` nupp;
+- pakkumise faktiliste väidete koondlinnuke jääb reeglinõustumisest eraldi;
+- iga puuduva aktiivse dokumendi kohta tehakse üks
+  `accept_publication_policy_v1` RPC-kutse;
+- kutsesse lähevad täpselt status-päringust saadud dokumendi ID, versioon ja sisu
+  räsi;
+- olekut värskendatakse pärast iga edu ja iga vea järel;
+- muutunud dokumendi snapshot'i ei nõustuta vana kinnituse alusel;
+- nõustumine salvestub autentitud kasutajakontole append-only ajaloona ning püsis
+  pärast lehe värskendamist;
+- konkreetse hobuse harul on seitse nähtavat faktilist väidet ja `wanted` harul
+  neli, mõlemal üks eraldi koondlinnuke;
+- testitud tavavoos ei leitud uut brauseriviga ega mobiili horisontaalset
+  leheületust.
+
+Checkpoint'i lähtekood:
+
+- `src/entities/publication-policy/model/types.ts`;
+- `src/entities/publication-policy/api/acceptPublicationPolicy.ts`;
+- `src/features/listing-create/model/useHorseOfferPublicationPolicyStatus.ts`;
+- `src/features/listing-create/components/HorseOfferPublicationGate.tsx`;
+- `src/features/listing-create/README.md`.
+
+Piir säilib:
+
+- hobusepakkumist ei salvestata;
+- pilte ei laadita üles;
+- Energy't ei kasutata;
+- muutumatut avaldamissündmust ei looda ja pakkumist ei avaldata;
+- production-andmebaasi skeemi ei muudeta.
+
+Järgmine täpne samm pärast selle checkpoint'i commit/push'i:
+
+1. tee read-only audit olemasolevale `save_my_horse_offer_draft_v1` RPC-le;
+2. kaardista praeguse ühise vormi iga haru ja väli serveri täpse sisendlepingu
+   vastu;
+3. kontrolli eraldi konkreetse hobuse ning `wanted` tähendusi, müügihinda vs
+   ostueelarvet, rendi/kaasratsaniku perioodi ning tegelikku asukohta vs
+   otsingupiirkonda;
+4. otsusta auditi põhjal esimese väikese draft-save patch'i ulatus;
+5. ära ühenda samasse patch'i pildi üleslaadimist ega avaldamismutatsiooni.

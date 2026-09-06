@@ -1,6 +1,10 @@
 "use client";
 
 import {
+  useEffect,
+  useState,
+} from "react";
+import {
   horseOfferTypeRequiresSpecificHorse,
 } from "../model/horseOfferFields";
 import {
@@ -273,6 +277,18 @@ function PolicyRequirementCard({
                 : ""}
             </p>
           ) : null}
+
+          {policy && phase === "ready" ? (
+            <details className="mt-3 rounded-[14px] border border-neutral-200 bg-[#fbfbfa] px-3 py-2">
+              <summary className="cursor-pointer select-none text-xs font-black leading-5 text-neutral-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-700">
+                Ava täistekst
+              </summary>
+
+              <div className="mt-3 whitespace-pre-wrap border-t border-neutral-200 pt-3 text-xs leading-6 text-neutral-700">
+                {policy.bodyText}
+              </div>
+            </details>
+          ) : null}
         </div>
 
         <span
@@ -330,6 +346,9 @@ HorseOfferPublicationGate({
 }: HorseOfferPublicationGateProps) {
   const policyStatus =
     useHorseOfferPublicationPolicyStatus();
+  const [policyAcceptanceConfirmed,
+    setPolicyAcceptanceConfirmed] =
+    useState(false);
 
   const requiresSpecificHorse =
     horseOfferTypeRequiresSpecificHorse(
@@ -363,6 +382,38 @@ HorseOfferPublicationGate({
       })
     );
 
+  const missingPolicies =
+    expectedPolicies
+      .map(({ policy }) => policy)
+      .filter(
+        (policy):
+          policy is PublicationPolicyStatus =>
+          Boolean(policy && !policy.accepted)
+      );
+
+  const missingPolicyReviewKey =
+    missingPolicies
+      .map((policy) =>
+        [
+          policy.policyDocumentId,
+          policy.policyVersion,
+          policy.contentHash,
+        ].join(":")
+      )
+      .join("|");
+
+  useEffect(() => {
+    if (policyStatus.phase !== "ready") {
+      setPolicyAcceptanceConfirmed(false);
+      return;
+    }
+
+    setPolicyAcceptanceConfirmed(false);
+  }, [
+    policyStatus.phase,
+    missingPolicyReviewKey,
+  ]);
+
   const acceptedPolicyCount =
     expectedPolicies.filter(
       ({ policy }) => policy?.accepted
@@ -373,9 +424,22 @@ HorseOfferPublicationGate({
       ({ policy }) => !policy
     ).length;
 
+  const unexpectedPolicyCount =
+    policyStatus.policies.filter(
+      (policy) =>
+        !POLICY_REQUIREMENTS.some(
+          (requirement) =>
+            requirement.key
+            === policy.policyKey
+        )
+    ).length;
+
   const incompleteReadyResponse =
     policyStatus.phase === "ready"
-    && missingPolicyCount > 0;
+    && (
+      missingPolicyCount > 0
+      || unexpectedPolicyCount > 0
+    );
 
   const showPolicyRetry =
     policyStatus.phase === "error"
@@ -442,13 +506,14 @@ HorseOfferPublicationGate({
             nõustuma kehtivate reeglitega
             ja andma pakkumise liigile
             vastavad faktilised kinnitused.
-            AI ei saa neid sinu eest
-            märkida.
+            Reeglite nõustumine salvestatakse
+            kasutajakontole; AI ei saa seda
+            sinu eest teha.
           </p>
         </div>
 
         <span className="w-fit shrink-0 rounded-full border border-amber-200 bg-amber-50 px-3 py-1.5 text-xs font-black text-amber-900">
-          Read-only · ei salvesta
+          Nõustumine · pakkumist ei salvesta
         </span>
       </div>
 
@@ -465,8 +530,9 @@ HorseOfferPublicationGate({
           <p className="mt-2 text-sm leading-6 text-neutral-600">
             Sinu senine nõustumise olek
             loetakse turvaliselt kontolt.
-            Selles etapis uusi nõustumisi
-            ei salvestata.
+            Ava aktiivsete reeglistike
+            täistekst ning salvesta ainult
+            praegu puuduvad nõustumised.
           </p>
 
           <div className="mt-4 space-y-3">
@@ -515,13 +581,129 @@ HorseOfferPublicationGate({
             {policySummary}
           </p>
 
+          {policyStatus.phase === "ready"
+          && !incompleteReadyResponse
+          && missingPolicies.length > 0 ? (
+            <div className="mt-4 rounded-[18px] border border-amber-200 bg-amber-50 p-4">
+              <p className="text-sm font-black leading-6 text-amber-950">
+                {missingPolicies.length === 1
+                  ? "Üks reeglistik vajab nõustumist."
+                  : `${missingPolicies.length} reeglistikku vajavad nõustumist.`}
+              </p>
+
+              <p className="mt-1 text-xs leading-5 text-amber-900/80">
+                Ava ülal iga nõustumata
+                reeglistiku täistekst. Ühe
+                kinnituse ja ühe nupuga
+                salvestatakse iga puuduv
+                dokument eraldi täpse
+                versiooni ning sisu räsiga.
+              </p>
+
+              <label
+                className={[
+                  "mt-4 flex cursor-pointer items-start gap-3 rounded-[16px] border bg-white p-4 transition",
+                  policyAcceptanceConfirmed
+                    ? "border-amber-400"
+                    : "border-amber-200 hover:border-amber-300",
+                  policyStatus.isAccepting
+                    ? "cursor-wait opacity-70"
+                    : "",
+                ].join(" ")}
+              >
+                <input
+                  type="checkbox"
+                  name="horse-offer-publication-policy-confirm-all"
+                  checked={
+                    policyAcceptanceConfirmed
+                  }
+                  disabled={
+                    policyStatus.isAccepting
+                  }
+                  onChange={(event) =>
+                    setPolicyAcceptanceConfirmed(
+                      event.target.checked
+                    )
+                  }
+                  className="mt-1 h-5 w-5 shrink-0 accent-amber-500"
+                />
+
+                <span className="min-w-0">
+                  <span className="block text-sm font-black leading-6 text-neutral-950">
+                    Kinnitan, et olen
+                    nõustumist vajavad
+                    reeglistikud läbi lugenud
+                    ja nõustun nende kehtivate
+                    versioonidega.
+                  </span>
+
+                  <span className="mt-1 block text-xs leading-5 text-neutral-500">
+                    Nõustumine kuulub sinu
+                    kasutajakontole. Aktiivne
+                    identiteet salvestatakse
+                    ainult auditikontekstina.
+                  </span>
+                </span>
+              </label>
+
+              <button
+                type="button"
+                disabled={
+                  !policyAcceptanceConfirmed
+                  || policyStatus.isAccepting
+                }
+                onClick={() => {
+                  setPolicyAcceptanceConfirmed(
+                    false
+                  );
+                  void policyStatus
+                    .acceptMissingPolicies(
+                      missingPolicies
+                    );
+                }}
+                className="mt-3 w-full rounded-full bg-amber-500 px-5 py-3 text-sm font-black text-amber-950 transition hover:bg-amber-400 disabled:cursor-not-allowed disabled:opacity-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-700"
+              >
+                {policyStatus.isAccepting
+                  ? `Salvestan ${Math.min(
+                      policyStatus
+                        .acceptanceCompletedCount
+                        + 1,
+                      policyStatus
+                        .acceptanceTotalCount
+                    )}/${policyStatus
+                      .acceptanceTotalCount}`
+                  : "Salvesta nõustumine"}
+              </button>
+
+              {policyStatus
+                .acceptanceErrorMessage ? (
+                <p
+                  role="alert"
+                  className="mt-3 rounded-[14px] border border-rose-200 bg-rose-50 px-3 py-2 text-xs font-semibold leading-5 text-rose-900"
+                >
+                  {policyStatus
+                    .acceptanceErrorMessage}
+                </p>
+              ) : null}
+            </div>
+          ) : null}
+
+          {policyStatus.acceptanceMessage ? (
+            <p
+              role="status"
+              aria-live="polite"
+              className="mt-4 rounded-[18px] border border-emerald-200 bg-emerald-50 px-4 py-3 text-xs font-semibold leading-5 text-emerald-900"
+            >
+              {policyStatus.acceptanceMessage}
+            </p>
+          ) : null}
+
           <p className="mt-3 rounded-[18px] border border-neutral-200 bg-white px-4 py-3 text-xs leading-5 text-neutral-500">
-            Hilisem nõustumis- ja
-            avaldamisoperatsioon peab
-            serveris kontrollima kehtiva
-            dokumendi täpset versiooni ja
-            sisu räsi. Ainult selle kaardi
-            kuvamisest ei piisa.
+            Server võtab vastu ainult aktiivse
+            dokumendi täpse ID, versiooni ja
+            sisu räsi. Muutunud reeglistikku ei
+            nõustuta vaikides ning see tuleb
+            uuesti avada ja kinnitada.
           </p>
         </section>
 
@@ -678,11 +860,11 @@ HorseOfferPublicationGate({
       </div>
 
       <p className="mt-4 rounded-[20px] border border-neutral-200 bg-[#fbfbfa] px-4 py-3 text-xs leading-5 text-neutral-500">
-        Reeglistike olek laaditakse selles
-        checkpoint&apos;is ainult lugemiseks.
-        Uut nõustumist ei salvestata,
-        hobusepakkumist ei salvestata,
-        muutumatut avaldamissündmust ei
+        Selles checkpoint&apos;is salvestatakse
+        ainult autentitud kasutaja nõustumine
+        aktiivsete reeglistike täpsete
+        versioonidega. Hobusepakkumist, pilte
+        ega muutumatut avaldamissündmust ei
         looda ning kuulutust ei avaldata.
       </p>
     </section>

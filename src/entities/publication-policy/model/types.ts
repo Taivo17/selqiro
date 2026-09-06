@@ -19,3 +19,16 @@ export type GetMyRequiredPublicationPolicyStatusInput = {
   countryCode: string | null;
   locale: string;
 };
+
+export type PublicationPolicyAcceptance = {
+  acceptanceId: string;
+  policyDocumentId: string;
+  acceptedAt: string;
+};
+
+export type AcceptPublicationPolicyInput = {
+  policyDocumentId: string;
+  policyVersion: string;
+  contentHash: string;
+  identityId?: string | null;
+};

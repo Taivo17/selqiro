@@ -7824,3 +7824,43 @@ Järgmine eraldatud samm:
 - ühendada ainult puuduvate aktiivsete reeglistike teadlik nõustumine, kasutades serverist saadud `policy_document_id`, `policy_version` ja `content_hash` väärtusi;
 - võimaldada kasutajal enne nõustumist täistekst avada;
 - hoida hobuse salvestamine ja avaldamine jätkuvalt ühendamata.
+
+<!-- SELQIRO_V2_HORSE_POLICY_ACCEPTANCE_CONNECTED_V1 -->
+## 2026-09-06 – Hobusepakkumise reeglinõustumise ühendus
+
+Hobusepakkumise ühises `/v2/sell` vormis töötab nüüd päris kasutajakontole
+salvestuv reeglinõustumine.
+
+Kasutajakogemus:
+
+- Selqiro näitab kahte nõutud reeglistikku: üldised kasutamise ja avaldamise
+  reeglid ning Eesti hobusepakkumise avaldamise reeglid;
+- mõlema reeglistiku täisteksti saab avada;
+- kui aktiivse versiooniga pole veel nõustutud, kinnitab kasutaja mõlemad ühe
+  koondlinnukese ja ühe salvestusnupuga;
+- hobusepakkumise enda faktilised väited jäävad teiseks eraldi koondlinnukeseks;
+- konkreetse hobuse pakkumisel on seitse väidet, hobuse otsingukuulutusel neli;
+- pärast edukat salvestamist kuvatakse mõlemad reeglistikud `Nõustutud` olekus ja
+  sama olek säilib lehe värskendamisel;
+- täistekst jääb avatavaks ka pärast nõustumist.
+
+Turvaline tehniline leping:
+
+- nõustumine toimub ainult praegu puuduva aktiivse dokumendiga;
+- iga dokument salvestatakse eraldi RPC-kutsega;
+- serverile saadetakse täpselt loetud dokumendi ID, versioon ja sisu räsi;
+- server kontrollib, et dokument on endiselt aktiivne ja snapshot pole muutunud;
+- nõustumine kuulub autentitud kasutajakontole, identiteet on ainult auditi
+  kontekst;
+- append-only ja idempotentne ajalugu võimaldab osalise vea järel turvaliselt
+  jätkata;
+- olekut loetakse pärast iga edu või viga uuesti serverist.
+
+Brauseritest kinnitas desktopis ja mobiilis nõustumata oleku, täisteksti avamise,
+ühe koondnõustumise, nõustutud oleku, püsimise pärast reload'i ning `wanted` ja
+konkreetse hobuse erinevad faktilised väited. Testides vigu ei leitud.
+
+Selles etapis ei salvestata hobusepakkumist, ei laadita üles pilte, ei kasutata
+Energy't ega avaldata kuulutust. Järgmine eraldatud samm on olemasoleva hobuse
+draft-save RPC read-only audit ja praeguse vormi väljade täpne kaardistus; pildid
+ning avaldamine jäävad hilisemateks eraldi sammudeks.
