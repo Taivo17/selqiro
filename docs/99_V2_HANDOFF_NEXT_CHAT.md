@@ -2665,3 +2665,59 @@ Next exact step:
 3. define the typed client payload mapping for all five horse offer types;
 4. connect only owner draft saving;
 5. keep images, confirmations persistence, publication and Energy outside that first client patch.
+
+<!-- SELQIRO_V2_HORSE_DRAFT_SAVE_CLIENT_CONTRACT_V1 -->
+## 2026-09-07 — V2 hobuse mustandi typed kliendilepingu checkpoint
+
+Stabiilne lähtepunkt enne checkpoint'i:
+
+- `2891ef6 Document EE horse draft save production rollout`;
+- `main` ja `origin/main` olid sünkroonis;
+- productionis oli `save_my_horse_offer_draft_v1` juba rakendatud ja kontrollitud.
+
+Selle checkpoint'iga lisati ja commit'iti:
+
+- `src/entities/horse-offer/model/types.ts`;
+- `src/entities/horse-offer/api/saveMyHorseOfferDraft.ts`;
+- `src/features/listing-create/model/horseOfferDraftSave.ts`;
+- typed kliendilepingu piirikirjeldus listing-create README-s;
+- käesolevad neli checkpoint-dokumendi uuendust.
+
+Valmis leping:
+
+- vormisnapshot mapitakse serveri täpsesse parameetrikomplekti;
+- konkreetse hobuse ja `wanted` harud ei leki teineteise payload'i;
+- müüja hind, tasuta üleandmine, korduv tasu ja otsija eelarve säilitavad eri
+  tähendused;
+- rendi ja kaasratsaniku periood saadetakse eraldi struktureeritud väljana;
+- tegelik asukoht ja otsingupiirkond jäävad eri harudesse;
+- praegune UI saadab ainult Eesti linna/valla ning maakonna/piirkonna;
+- täpne asukohatekst ja koordinaadid jäävad nulliks;
+- brauser ei saada üldist `details` JSON-i;
+- vastus peab olema täpselt üks `draft` rida ning tagastab järgmisteks salvestusteks
+  kasutatava `offerId` väärtuse.
+
+Piir säilib:
+
+- `ListingCreatePage.tsx` ei muutunud;
+- `Salvesta mustand` nuppu ega hook'i veel ei ole;
+- hobusepilte ei laadita üles ega registreerita;
+- reeglinõustumist ega faktilisi avaldamiskinnitusi mustandisse ei salvestata;
+- review'd, avaldamist ega Energy't ei käivitata;
+- andmebaasi ega productionit ei muudeta;
+- production build läbis;
+- nähtava UI puudumise tõttu ei olnud brauseritest selles checkpoint'is vajalik.
+
+Järgmine täpne samm:
+
+1. tee read-only ülevaade `ListingCreatePage` praegusest state'ist ja tegevusala
+   paigutusest;
+2. lisa väike feature-level horse draft-save mutation state;
+3. lisa ainult hobuse aktiivses harus üks kasutaja vajutatav `Salvesta mustand`;
+4. loo esimese vajutusega draft ja säilita tagastatud `offerId` lokaalses state'is;
+5. järgmine vajutus peab uuendama sama drafti, mitte looma uut rida;
+6. lisa ühe paralleelse kutse piirang ning saving/saved/error tagasiside;
+7. testi eraldi concrete ja `wanted` haru, hinna/eelarve vead, korduva salvestuse
+   sama ID ning aktiivse identiteedi serveripoolne piir;
+8. ära ühenda samasse patch'i pilte, reeglinõustumist, kinnituste salvestust,
+   review'd, avaldamist ega Energy't.

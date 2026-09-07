@@ -3852,3 +3852,38 @@ Rollout evidence:
 
 - `/Users/taivo/Downloads/selqiro-recovery/v2-horse-owner-draft-save-production-rollout-20260907-110828/result.txt`
 - `/Users/taivo/Downloads/selqiro-recovery/v2-horse-owner-draft-save-production-rollout-20260907-110828/production-public-after-horse-owner-draft-save.sql`
+
+<!-- SELQIRO_V2_HORSE_DRAFT_SAVE_CLIENT_CONTRACT_V1 -->
+## V2_HORSE_DRAFT_SAVE_TYPED_CLIENT_CONTRACT
+
+2026-09-07 checkpoint:
+
+- The production `save_my_horse_offer_draft_v1` RPC now has a typed V2 browser
+  boundary.
+- `src/entities/horse-offer/model/types.ts` owns the exact draft input and the
+  minimal returned draft model.
+- `src/entities/horse-offer/api/saveMyHorseOfferDraft.ts` is the only browser
+  wrapper that calls the horse owner draft-save RPC.
+- `src/features/listing-create/model/horseOfferDraftSave.ts` converts the current
+  form snapshot into the exact RPC payload.
+- The mapper sends only the active semantic branch:
+  - concrete horse data for `sale | free_transfer | lease | co_rider`;
+  - wanted preferences, budget and search area for `wanted`.
+- Seller price and wanted budget remain separate.
+- Lease and co-rider fee periods remain explicit structured values.
+- The EE pilot sends only the visible city/municipality and region values;
+  `locationText`, latitude and longitude remain null.
+- The browser does not send an arbitrary `details` JSON object.
+- The RPC result is accepted only when exactly one row is returned with status
+  `draft`; the returned offer ID is available for a later update call.
+- `ListingCreatePage.tsx` is intentionally unchanged and no user-facing draft
+  save action exists yet.
+- Draft saving remains separate from policy acceptance, factual publication
+  confirmations, horse images, review/publication and Energy.
+- No database or production mutation is performed by this source checkpoint.
+- Production build passed; no browser test was required because visible UI did
+  not change.
+
+Next exact client checkpoint: add one explicit user-triggered horse draft-save
+flow through a feature-level mutation boundary, preserve the returned offer ID
+for subsequent saves, and keep image upload and publication outside that patch.

@@ -5144,3 +5144,88 @@ Rollout evidence:
 
 - `/Users/taivo/Downloads/selqiro-recovery/v2-horse-owner-draft-save-production-rollout-20260907-110828/result.txt`
 - `/Users/taivo/Downloads/selqiro-recovery/v2-horse-owner-draft-save-production-rollout-20260907-110828/production-public-after-horse-owner-draft-save.sql`
+
+<!-- SELQIRO_V2_HORSE_DRAFT_SAVE_CLIENT_CONTRACT_V1 -->
+## V2 horse-offer typed draft-save client boundary
+
+Checkpoint date: 2026-09-07.
+
+The production owner RPC is now represented by a layered V2 client contract:
+
+`HorseOfferDraftFormSnapshot`
+→ `buildHorseOfferDraftSaveInput`
+→ `SaveMyHorseOfferDraftInput`
+→ `saveMyHorseOfferDraft`
+→ `save_my_horse_offer_draft_v1`
+→ identity-owned `horse_offers` row with status `draft`
+→ `SavedHorseOfferDraft`.
+
+The composition stops before the page layer in this checkpoint. The shared
+`/v2/sell` form does not call the mutation yet.
+
+### Module ownership
+
+- `src/entities/horse-offer/model/types.ts`
+  - stable offer, price, sex, recurring-period and wanted-budget unions;
+  - the exact camelCase entity input;
+  - a minimal validated saved-draft result.
+- `src/entities/horse-offer/api/saveMyHorseOfferDraft.ts`
+  - the single browser RPC invocation;
+  - snake_case parameter mapping;
+  - database error propagation through a dedicated error type;
+  - strict one-row and `draft`-status response validation.
+- `src/features/listing-create/model/horseOfferDraftSave.ts`
+  - projection from active form state into the entity input;
+  - form-oriented numeric validation;
+  - branch isolation;
+  - no Supabase access.
+
+### Branch semantics
+
+Concrete-horse offer types send the visible concrete-horse basics, use fields,
+disclosures, seller price contract and actual Estonia area. Every wanted-only
+field is sent as null/default.
+
+`wanted` sends preferred sex/breed, use and training preferences, intended use,
+health and behavior preferences, maximum/flexible budget, and the Estonia search
+area. Concrete-horse columns and seller price are sent as null/contact.
+
+Temporarily retained values from an inactive UI branch never cross the client
+payload boundary.
+
+### Price and location semantics
+
+- `sale` uses its own fixed/from/contact seller-price branch;
+- `free_transfer` is always `free` with no amount;
+- `lease` and `co_rider` keep their own seller-fee values and require a separate
+  recurring fee period;
+- `wanted` uses a separate maximum/contact budget contract and is never encoded
+  as seller price;
+- the pilot market and location country are fixed to `EE` and currency to `EUR`;
+- only city/municipality and region are sent from the current UI;
+- exact location text and coordinates remain null.
+
+### Security and side-effect boundary
+
+The client does not choose the authoritative identity. Authentication, active
+identity, ownership, EE policy and draft lifecycle validation remain in the
+RPC. The client does not submit a free-form `details` object.
+
+This draft operation does not:
+
+- accept publication policies;
+- persist per-publication factual confirmations;
+- upload or register images;
+- create an immutable publication event;
+- submit for review or publish;
+- mutate Energy;
+- change database schema.
+
+### Next composition checkpoint
+
+Add a focused feature-level mutation state and one explicit `Salvesta mustand`
+action to the horse branch of `ListingCreatePage`. The first successful create
+must retain the returned `offerId`; later clicks must update the same owner draft.
+Use one in-flight request guard and visible idle/saving/saved/error states. Do not
+combine image upload, policy acceptance, factual-confirmation persistence,
+review submission, publication or Energy into that patch.

@@ -7898,3 +7898,38 @@ Mustandi salvestamise piir:
 - ei kasuta Energy't.
 
 Järgmine samm on dokumentatsiooni commit/push ning seejärel `/v2/sell` mustandi salvestamise typed kliendiühendus.
+
+<!-- SELQIRO_V2_HORSE_DRAFT_SAVE_CLIENT_CONTRACT_V1 -->
+## 2026-09-07 — Hobuse mustandi typed kliendileping
+
+V2 ühise `/v2/sell` hobusevormi jaoks on nüüd olemas päris production-RPC-ga
+sobiv typed kliendikiht, kuid vorm ise ei salvesta veel midagi.
+
+Lisatud kihid:
+
+- `SaveMyHorseOfferDraftInput` ja minimaalne `SavedHorseOfferDraft` mudel;
+- üks entity API wrapper `saveMyHorseOfferDraft`;
+- üks vormi payload-mapper `buildHorseOfferDraftSaveInput`.
+
+Mapper hoiab tähendused lahus:
+
+- müük, tasuta üleandmine, rent ja kaasratsanik saadavad ainult konkreetse hobuse
+  aktiivsed väljad;
+- `wanted` saadab ainult otsingueelistused, eraldi ostueelarve ja otsingupiirkonna;
+- müüja hind ei muutu otsija eelarveks;
+- rendi/kaasratsaniku periood ei kao vabateksti;
+- tegeliku hobuse asukoht ei muutu `wanted` otsingupiirkonnaks;
+- mitteaktiivse haru lokaalsed väärtused ei lähe serverisse;
+- täpset aadressi ega koordinaate praegusest vormist ei saadeta;
+- suvalist `details` JSON-i brauser ei koosta.
+
+Server peab tagastama täpselt ühe `draft` rea. Tagastatud `offerId` võimaldab
+järgmises UI-etapis sama mustandit uuendada.
+
+Selles checkpoint'is ei lisatud veel salvestusnuppu ega muud nähtavat UI-d.
+Pilte, reeglinõustumist, pakkumise faktilisi kinnitusi, review'd, avaldamist ega
+Energy't ei puudutatud. Andmebaasi ja productionit ei muudetud. Build läbis.
+
+Järgmine eraldatud töö on ühendada üks selge kasutaja vajutatav
+`Salvesta mustand` tegevus koos laadimise, õnnestumise, vea ja sama `offerId`
+säilitamisega. Pildid ning avaldamine jäävad hilisematesse checkpoint'idesse.

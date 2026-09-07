@@ -321,3 +321,20 @@ Next isolated checkpoint:
    shared form state to its exact persistence contract;
 5. keep image upload and publication mutation outside that first persistence
    checkpoint.
+
+<!-- SELQIRO_HORSE_DRAFT_SAVE_CLIENT_CONTRACT_V1 -->
+## Horse draft save typed client contract
+
+The authenticated Estonia horse-offer draft RPC now has a typed browser-side boundary, but the listing form does not call it yet.
+
+Current modules:
+
+- `src/entities/horse-offer/model/types.ts` defines the exact camelCase input and the minimal saved-draft result;
+- `src/entities/horse-offer/api/saveMyHorseOfferDraft.ts` is the only browser RPC wrapper for `save_my_horse_offer_draft_v1`;
+- `src/features/listing-create/model/horseOfferDraftSave.ts` maps the current title, description and branch-specific horse form state into the RPC contract;
+- concrete-horse fields and wanted search criteria are mutually cleared in the outgoing payload;
+- the wanted budget remains separate from seller price;
+- exact location text and coordinates remain absent from this UI contract;
+- policy acceptance, factual publication confirmations, images, publication and Energy remain outside draft saving.
+
+This checkpoint intentionally adds no `Salvesta mustand` button and does not change `ListingCreatePage.tsx`. The next isolated client patch may add an explicit user-triggered save action with loading, success and error states and must retain the returned horse-offer ID for later updates.
