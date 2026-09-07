@@ -3831,3 +3831,24 @@ Next isolated work:
 - Production is unchanged at this checkpoint.
 - Local static checks, production build, full local Supabase reset and authenticated rollback SQL tests passed.
 - Next: commit and push this migration checkpoint, then apply it through a separately controlled linked-production backup, dry-run, push and schema verification. Only after production verification should the V2 client draft-save API/hook/UI be connected.
+
+
+<!-- SELQIRO_EE_HORSE_OWNER_DRAFT_SAVE_PRODUCTION_ROLLOUT_V1 -->
+## EE_HORSE_OWNER_DRAFT_SAVE_PRODUCTION_ROLLOUT_V1
+
+2026-09-07 production checkpoint:
+
+- Linked Supabase project: `vyjletlmwoiwxsnsunlm`.
+- Productionis rakendati migratsioon `20260906150000_add_ee_horse_offer_owner_draft_save.sql`.
+- Productionis on nüüd autentitud RPC `save_my_horse_offer_draft_v1`.
+- Enne push'i oli migratsioon ainult lokaalne; pärast push'i on local ja remote ajalugu sünkroonis ning linked dry-run on tühi.
+- Production public-schema järelkontroll kinnitas RPC deklaratsiooni, `SECURITY DEFINER` piiri, autentitud käivitusõiguse, anonüümse käivitusõiguse puudumise ja kõrvalmutatsioonide puudumise.
+- Mustandi salvestus loob või uuendab ainult aktiivsele identiteedile kuuluvat Eesti hobusepakkumise mustandit ning hoiab `specific` ja `wanted` andmesemantika eraldi.
+- Mustandi salvestus ei nõua reeglitega nõustumist, ei salvesta pakkumisepõhiseid avaldamiskinnitusi, ei halda pilte, ei avalda kuulutust ega tarbi Energy't.
+- Klient ei ole veel RPC-ga ühendatud.
+- Järgmine eraldatud samm on `/v2/sell` kliendi read-only audit, seejärel typed entity API ja mustandi salvestamise ühendus ilma pildi- või avaldamisvoogu lisamata.
+
+Rollout evidence:
+
+- `/Users/taivo/Downloads/selqiro-recovery/v2-horse-owner-draft-save-production-rollout-20260907-110828/result.txt`
+- `/Users/taivo/Downloads/selqiro-recovery/v2-horse-owner-draft-save-production-rollout-20260907-110828/production-public-after-horse-owner-draft-save.sql`

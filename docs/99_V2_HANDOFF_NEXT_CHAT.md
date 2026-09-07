@@ -2628,3 +2628,40 @@ Next exact steps:
 5. apply and verify the migration;
 6. document and commit the production rollout;
 7. start with a read-only audit of the current listing-create state-to-RPC mapping before adding the client save action.
+
+
+<!-- SELQIRO_EE_HORSE_OWNER_DRAFT_SAVE_PRODUCTION_ROLLOUT_V1 -->
+## 2026-09-07 — EE horse owner draft-save production checkpoint
+
+Completed:
+
+- migration `20260906150000_add_ee_horse_offer_owner_draft_save.sql` was applied to linked production project `vyjletlmwoiwxsnsunlm`;
+- `save_my_horse_offer_draft_v1` is present in the production schema;
+- pre-push state was local-only;
+- post-push migration history is local+remote;
+- post-push dry-run has no pending migrations;
+- production schema contract verification passed;
+- Git worktree remained clean;
+- no policy-acceptance, horse-draft-data test mutation, image, publication, Energy or client mutation was performed by the rollout verification.
+
+Important:
+
+- do not rerun the rollout as if the migration were pending;
+- do not edit the applied migration;
+- any database correction must be a new migration;
+- V2 `/v2/sell` still does not save horse drafts;
+- policy acceptance and per-offer confirmations remain separate from draft saving;
+- images and publication remain separate later operations.
+
+Evidence:
+
+- rollout result: `/Users/taivo/Downloads/selqiro-recovery/v2-horse-owner-draft-save-production-rollout-20260907-110828/result.txt`;
+- post-push production schema: `/Users/taivo/Downloads/selqiro-recovery/v2-horse-owner-draft-save-production-rollout-20260907-110828/production-public-after-horse-owner-draft-save.sql`.
+
+Next exact step:
+
+1. commit and push this documentation checkpoint;
+2. begin a read-only audit of the shared `/v2/sell` state and entity/API boundaries;
+3. define the typed client payload mapping for all five horse offer types;
+4. connect only owner draft saving;
+5. keep images, confirmations persistence, publication and Energy outside that first client patch.

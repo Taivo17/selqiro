@@ -7877,3 +7877,24 @@ Konkreetse hobuse andmed ja hobuse otsingukuulutuse eelistused on rangelt lahus.
 Mustandi salvestamine ei tähenda avaldamist. Selles etapis ei nõuta veel avaldamisreeglitega nõustumist, ei salvestata pakkumispõhiseid kinnitusi, ei laadita pilte, ei looda avaldamissündmust ega kasutata Energy't.
 
 Täielik kohalik Supabase reset, SQL-lepingutestid, turvakontrollid ja production build läbisid. Production-andmebaasi ei ole veel muudetud. Järgmine samm on commit/push ning eraldi kontrollitud production-rollout koos eelvarukoopia, kuivkäivituse ja järelkontrolliga.
+
+
+<!-- SELQIRO_EE_HORSE_OWNER_DRAFT_SAVE_PRODUCTION_ROLLOUT_V1 -->
+## Eesti hobusepakkumise mustandi salvestuse production checkpoint
+
+2026-09-07 rakendati productionisse migratsioon `20260906150000_add_ee_horse_offer_owner_draft_save.sql`.
+
+Productionis on nüüd olemas `save_my_horse_offer_draft_v1`, millega saab autentitud kasutaja aktiivse identiteedi alla luua või uuendada Eesti hobusepakkumise mustandit. Migratsiooniajalugu on lokaalse projektiga sünkroonis, uusi ootel migratsioone ei ole ning production-skeemi kontroll läbis.
+
+See ei tähenda veel, et V2 vorm päriselt salvestab. Kliendiühendus tuleb järgmise eraldatud sammuna.
+
+Mustandi salvestamise piir:
+
+- eristab konkreetse hobuse pakkumist ja hobuse otsingukuulutust;
+- ei nõua mustandi jaoks reeglitega nõustumist;
+- ei salvesta avaldamise faktilisi kinnitusi;
+- ei laadi ega halda pilte;
+- ei avalda kuulutust;
+- ei kasuta Energy't.
+
+Järgmine samm on dokumentatsiooni commit/push ning seejärel `/v2/sell` mustandi salvestamise typed kliendiühendus.

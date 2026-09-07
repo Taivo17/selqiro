@@ -5100,3 +5100,47 @@ The migration and rollback SQL contract test passed locally after a complete Sup
 5. Verify local/remote migration history, a clean post-push dry-run and the exact production function definition/privileges.
 6. Document the production rollout in a new checkpoint.
 7. Connect the V2 typed draft payload, entity API, hook and explicit `Salvesta mustand` UI in separate browser-tested steps.
+
+
+<!-- SELQIRO_EE_HORSE_OWNER_DRAFT_SAVE_PRODUCTION_ROLLOUT_V1 -->
+## EE horse owner draft-save production rollout
+
+Production state as of 2026-09-07:
+
+- project ref: `vyjletlmwoiwxsnsunlm`;
+- applied migration: `20260906150000_add_ee_horse_offer_owner_draft_save.sql`;
+- production RPC: `save_my_horse_offer_draft_v1`;
+- migration history: local and remote synchronized;
+- post-push linked dry-run: no pending migrations;
+- production schema verification: passed.
+
+The owner draft-save boundary is now available in production, but the V2 client is intentionally not connected yet.
+
+Required client architecture for the next patch:
+
+`ListingCreatePage`
+→ focused horse draft-save feature hook
+→ horse-offer entity API
+→ `save_my_horse_offer_draft_v1`
+→ database authorization and validation.
+
+Client rules:
+
+- the browser must not write `horse_offers` directly;
+- the server resolves the authenticated actor and active identity;
+- a new draft sends no offer ID;
+- an existing editable draft sends its UUID and updates the same row;
+- only `draft` or `rejected` owner rows are editable through this RPC;
+- `specific` and `wanted` fields remain separate;
+- draft saving must not require policy acceptance;
+- aggregate factual confirmation state remains local until a later publication snapshot;
+- horse images remain a separate operation;
+- publication and Energy remain absent;
+- returned database data becomes the authoritative saved draft state.
+
+Do not modify the production-applied migration. Any correction must use a new migration.
+
+Rollout evidence:
+
+- `/Users/taivo/Downloads/selqiro-recovery/v2-horse-owner-draft-save-production-rollout-20260907-110828/result.txt`
+- `/Users/taivo/Downloads/selqiro-recovery/v2-horse-owner-draft-save-production-rollout-20260907-110828/production-public-after-horse-owner-draft-save.sql`
