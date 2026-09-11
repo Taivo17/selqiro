@@ -338,3 +338,57 @@ Current modules:
 - policy acceptance, factual publication confirmations, images, publication and Energy remain outside draft saving.
 
 This checkpoint intentionally adds no `Salvesta mustand` button and does not change `ListingCreatePage.tsx`. The next isolated client patch may add an explicit user-triggered save action with loading, success and error states and must retain the returned horse-offer ID for later updates.
+
+<!-- SELQIRO_HORSE_DRAFT_SAVE_ACTION_V1 -->
+## Horse draft explicit save action
+
+The shared `/v2/sell` horse branch now has one explicit user-triggered draft
+save action after `HorseOfferLocationFields` and before the publication gate.
+
+Flow:
+
+- `ListingCreatePage` passes the current active horse form snapshot to
+  `useHorseOfferDraftSave`;
+- the hook calls `buildHorseOfferDraftSaveInput` and then the single entity API
+  `saveMyHorseOfferDraft`;
+- the first successful save sends `offerId = null`, stores the returned offer ID
+  only in the mounted form session, and creates one private owner draft;
+- later clicks send that same returned offer ID and update the same draft;
+- changing the form after success clears the visible saved state through a
+  form-revision fingerprint, without discarding the retained offer ID;
+- one synchronous in-flight guard prevents duplicate requests;
+- the visible states are `idle`, `saving`, `saved` and `error`;
+- raw server errors are not shown to the user;
+- there is no automatic save and no reload rehydration yet.
+
+Boundary:
+
+- selected images remain local and are not uploaded or registered;
+- policy acceptance is unchanged;
+- factual publication confirmations are not stored in the draft;
+- no review, immutable publication event or publication is started;
+- no Energy operation is started;
+- no database migration or production schema change belongs to this UI patch.
+
+<!-- SELQIRO_HORSE_DRAFT_SAVE_SECONDARY_UX_V1 -->
+## Horse draft save UX priority
+
+The explicit horse draft save remains available, but it is intentionally a
+compact optional secondary action rather than a separate required form stage.
+
+- the user-facing action is `Salvesta hilisemaks`;
+- it does not compete visually with the future primary `Avalda kuulutus` action;
+- a user who completes all required fields can eventually publish directly
+  without first creating a visible draft;
+- there is no automatic save and no mandatory draft workflow;
+- the server-side draft capability remains useful for an intentional pause,
+  recovery and later updates to the same private draft;
+- policy acceptance, factual publication confirmations, images, publication and
+  Energy remain outside this action.
+
+Product direction: horse offers keep their specialized creation and publication
+contract, but after publication they must use the shared listing lifecycle and
+user surfaces. They should appear with other listings in search, public profile
+and My Area management, use the common activity-period policy, and support the
+active identity's owner-defined store categories through a clear shared
+read/management contract without duplicating the `horse_offers` source of truth.

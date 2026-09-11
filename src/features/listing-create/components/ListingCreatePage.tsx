@@ -14,6 +14,7 @@ import HorseOfferUseFields from "./HorseOfferUseFields";
 import HorseOfferDisclosureFields from "./HorseOfferDisclosureFields";
 import HorseOfferPriceFields from "./HorseOfferPriceFields";
 import HorseOfferLocationFields from "./HorseOfferLocationFields";
+import HorseOfferDraftSaveAction from "./HorseOfferDraftSaveAction";
 import HorseOfferPublicationGate from "./HorseOfferPublicationGate";
 import ListingCreateAiAnalysisCard from "./ListingCreateAiAnalysisCard";
 import {
@@ -57,6 +58,9 @@ import {
   applyHorseOfferPublicationConfirmationGroupChange,
   createHorseOfferPublicationConfirmationState,
 } from "../model/horseOfferPublicationGate";
+import {
+  useHorseOfferDraftSave,
+} from "../model/useHorseOfferDraftSave";
 import {
   appendListingCreateImages,
   LISTING_CREATE_IMAGE_LIMIT,
@@ -304,13 +308,6 @@ ListingCreatePage() {
     );
   }
 
-  if (loading) {
-    return <LoadingState />;
-  }
-
-  if (!user) {
-    return <LoginState />;
-  }
 
   const hasTextContext =
     Boolean(title.value.trim()) ||
@@ -332,6 +329,36 @@ ListingCreatePage() {
       contentType,
       horseOfferType
     );
+
+  const horseOfferDraftSave =
+    useHorseOfferDraftSave(
+      horseMode && horseOfferType
+        ? {
+            offerType: horseOfferType,
+            title: title.value,
+            description:
+              description.value,
+            basicFields:
+              horseOfferFields,
+            useFields:
+              horseOfferUseFields,
+            disclosureFields:
+              horseOfferDisclosureFields,
+            priceFields:
+              horseOfferPriceFields,
+            locationFields:
+              horseOfferLocationFields,
+          }
+        : null
+    );
+
+  if (loading) {
+    return <LoadingState />;
+  }
+
+  if (!user) {
+    return <LoginState />;
+  }
 
   return (
     <div
@@ -817,6 +844,23 @@ ListingCreatePage() {
                 )
             )
           }
+        />
+      ) : null}
+
+      {horseMode && horseOfferType ? (
+        <HorseOfferDraftSaveAction
+          phase={horseOfferDraftSave.phase}
+          hasSavedDraft={
+            horseOfferDraftSave.hasSavedDraft
+          }
+          hasUnsavedChanges={
+            horseOfferDraftSave
+              .hasUnsavedChanges
+          }
+          errorMessage={
+            horseOfferDraftSave.errorMessage
+          }
+          onSave={horseOfferDraftSave.save}
         />
       ) : null}
 

@@ -7933,3 +7933,36 @@ Energy't ei puudutatud. Andmebaasi ja productionit ei muudetud. Build läbis.
 Järgmine eraldatud töö on ühendada üks selge kasutaja vajutatav
 `Salvesta mustand` tegevus koos laadimise, õnnestumise, vea ja sama `offerId`
 säilitamisega. Pildid ning avaldamine jäävad hilisematesse checkpoint'idesse.
+
+<!-- SELQIRO_V2_HORSE_OPTIONAL_DRAFT_SAVE_ACTION_V1 -->
+## 2026-09-11 — hobuse mustandi salvestamine on valikuline kõrvaltegevus
+
+V2 ühises `/v2/sell` vormis saab hobusepakkumise kasutaja nüüd soovi korral
+vajutada `Salvesta hilisemaks`. See ei ole kohustuslik samm ega eraldi
+mustandivoog. Kui kuulutuse vajalikud väljad on täidetud, peab lõplik põhitee
+olema otse `Avalda kuulutus`.
+
+Valmis käitumine:
+
+- kompaktne plokk `Jätkad hiljem?` märgisega `Valikuline`;
+- esimene vajutus loob kasutaja aktiivse identiteedi privaatse hobuse mustandi;
+- järgmine vajutus uuendab sama avatud vormiseansi mustandit;
+- pärast salvestust kuvatakse `Mustand on salvestatud`;
+- uue muudatuse järel kuvatakse, et vormis on salvestamata muudatusi, ning nupp
+  muutub tekstiks `Salvesta muudatused`;
+- topeltpäringut takistab ühe aktiivse salvestuse kaitse;
+- aegunud vastus ei jäta muudetud vormile eksitavat rohelist eduolekut;
+- React hook kutsutakse alati samas järjekorras, ka auth/loading oleku muutudes.
+
+Kasutaja kinnitas toimimise desktopis ja mobiilis. Mobiilis on tegevus täislaiuse
+nupuga kompaktne, desktopis jääb tekst ja nupp ühele reale.
+
+See tegevus ei salvesta pilte, reeglitega nõustumist ega pakkumise faktilisi
+kinnitusi ning ei avalda kuulutust ega kasuta Energy't. Productioni skeemi ega
+seadistust ei muudetud.
+
+Edasine suund on publish-first. Enne päris `Avalda kuulutus` ühendamist tehakse
+read-only audit, mis seob hobuse erilise lisamis-/avaldamislepingu ühise
+kuulutuse elutsükli, otsingu, avaliku profiili, Minu ala halduse, aktiivsusaja ja
+kasutaja enda rubriikidega. `horse_offers` jääb hobuseandmete tõeallikaks; ühist
+kasutajapinda ei ehitata dubleeriva teise kuulutusrea abil.

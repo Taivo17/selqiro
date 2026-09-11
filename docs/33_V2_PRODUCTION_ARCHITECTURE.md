@@ -5229,3 +5229,95 @@ must retain the returned `offerId`; later clicks must update the same owner draf
 Use one in-flight request guard and visible idle/saving/saved/error states. Do not
 combine image upload, policy acceptance, factual-confirmation persistence,
 review submission, publication or Energy into that patch.
+
+<!-- SELQIRO_V2_HORSE_OPTIONAL_DRAFT_SAVE_ACTION_V1 -->
+## Optional horse draft save and publish-first boundary
+
+Checkpoint date: 2026-09-11.
+
+The shared horse creation form now composes the draft capability as:
+
+`ListingCreatePage`
+→ `useHorseOfferDraftSave`
+→ `buildHorseOfferDraftSaveInput`
+→ `saveMyHorseOfferDraft`
+→ `save_my_horse_offer_draft_v1`
+→ identity-owned `horse_offers` draft.
+
+### User experience contract
+
+The draft action is a recovery/pause tool, not the primary creation path.
+
+- visible wording: `Jätkad hiljem?` and `Valikuline`;
+- first action: `Salvesta hilisemaks`;
+- after a saved draft is edited: `Salvesta muudatused`;
+- no automatic save;
+- no required draft wizard step;
+- future valid-form primary action: `Avalda kuulutus`.
+
+The compact action is rendered only for a selected horse-offer branch, after
+`HorseOfferLocationFields` and before `HorseOfferPublicationGate`. Ordinary
+listing creation does not receive this horse-specific action.
+
+### Request and state contract
+
+`useHorseOfferDraftSave` owns:
+
+- mounted-session `offerId` retention;
+- create-on-first-save and update-on-later-save behavior;
+- a single in-flight guard;
+- `idle | saving | saved | error` presentation state;
+- the last successfully saved form-revision fingerprint;
+- stale success/error suppression when the current form no longer matches the
+  request revision;
+- user-facing mapping of payload and RPC errors.
+
+The hook is invoked before all top-level conditional early returns. Rendering
+may remain conditional, but hook invocation order cannot depend on loading,
+authentication or content-type state.
+
+### Side-effect boundary
+
+Draft save stores only the current textual and structured horse form payload.
+It does not:
+
+- upload or register horse images;
+- accept publication policies;
+- store the per-attempt factual confirmation snapshot;
+- create an immutable publication event;
+- publish or submit for review;
+- mutate Energy;
+- modify schema or production configuration.
+
+### Shared post-publication lifecycle target
+
+Horse creation and publication remain specialized, while the user-facing
+post-publication lifecycle must be shared with other listings:
+
+- discoverable in the general listing/search surfaces subject to the same
+  relevance and visibility rules;
+- visible on the identity's public profile;
+- manageable together with other listings in My Area;
+- compatible with the common active-period policy;
+- assignable to the active identity's `store_categories`;
+- manageable through shared status/edit actions where semantics match.
+
+`horse_offers` remains the horse-specific authoritative record. The integration
+must use a stable shared read/management projection or index and must not copy
+horse data into an unrelated `listings.details` JSON source of truth.
+
+### Next architecture checkpoint
+
+Before adding another mutation, audit:
+
+1. generic listing public and owner read contracts;
+2. active/paused/sold/expiry semantics and horse status mapping;
+3. store-category relation ownership and filtering;
+4. public profile and My Area card/detail identifiers;
+5. horse image Storage/RPC capabilities;
+6. immutable horse publication-event validation;
+7. the smallest trusted publish-first orchestration required by one
+   `Avalda kuulutus` action.
+
+The audit should recommend one incremental implementation order without enabling
+publication, image upload or a new projection in the audit itself.

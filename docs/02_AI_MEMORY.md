@@ -3887,3 +3887,40 @@ Rollout evidence:
 Next exact client checkpoint: add one explicit user-triggered horse draft-save
 flow through a feature-level mutation boundary, preserve the returned offer ID
 for subsequent saves, and keep image upload and publication outside that patch.
+
+<!-- SELQIRO_V2_HORSE_OPTIONAL_DRAFT_SAVE_ACTION_V1 -->
+## V2_HORSE_OPTIONAL_DRAFT_SAVE_ACTION
+
+2026-09-11 checkpoint:
+
+- The shared `/v2/sell` horse branch now exposes one explicit optional draft
+  save action after the horse location fields and before the publication gate.
+- The action is intentionally compact and secondary:
+  `Jätkad hiljem?`, `Valikuline`, `Salvesta hilisemaks`.
+- A completed horse offer must later be publishable directly through the primary
+  `Avalda kuulutus` action; no visible mandatory draft stage is allowed.
+- There is no autosave.
+- The first successful save keeps the returned `offerId` only in the mounted
+  form session. Later explicit saves update that same private draft.
+- One in-flight guard prevents duplicate requests.
+- UI phases are `idle`, `saving`, `saved` and `error`.
+- A form-revision fingerprint prevents stale success feedback after the user
+  changes the form while or after a request completes.
+- The custom hook is called unconditionally before the page's loading and login
+  early returns, preventing React hook-order changes when auth state settles.
+- Desktop and mobile browser behavior was confirmed by the user: first save,
+  saved state, changed-form state, second save and compact responsive layout all
+  worked without a hook-order error.
+- This action does not upload images, accept policies, persist factual
+  publication confirmations, publish, spend Energy, alter database schema or
+  change production configuration.
+- The `horse_offers` domain remains the horse-specific source of truth. After
+  publication, horse offers must join the shared listing lifecycle and user
+  surfaces through a deliberate read/management contract rather than a second
+  independent copy of the same content.
+
+Next exact step: perform a read-only audit of the existing generic listing
+lifecycle, My Area/store-category contracts, horse image foundation and horse
+publication-event foundation. Use that audit to define the smallest publish-first
+orchestration and the shared listing projection before enabling real horse
+publication.

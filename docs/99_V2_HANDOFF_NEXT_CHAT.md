@@ -2721,3 +2721,65 @@ Järgmine täpne samm:
    sama ID ning aktiivse identiteedi serveripoolne piir;
 8. ära ühenda samasse patch'i pilte, reeglinõustumist, kinnituste salvestust,
    review'd, avaldamist ega Energy't.
+
+<!-- SELQIRO_V2_HORSE_OPTIONAL_DRAFT_SAVE_ACTION_V1 -->
+## 2026-09-11 — valikulise hobuse mustandisalvestuse checkpoint
+
+Lähtepunkt:
+
+- commit `c6c9485 Add V2 horse draft save client contract`;
+- `main` ja `origin/main` olid sünkroonis;
+- productionis oli `save_my_horse_offer_draft_v1` juba rakendatud;
+- typed payload mapper ja entity API olid olemas, kuid vorm ei kutsunud neid.
+
+Selle checkpoint'iga on valmis:
+
+- `HorseOfferDraftSaveAction`;
+- `useHorseOfferDraftSave`;
+- üks vormitaseme ühendus `ListingCreatePage` komponendis;
+- asukoha järel ja reeglite/avaldamisvärava ees paiknev tegevus;
+- esimese salvestuse create ja sama vormiseansi järgmiste salvestuste update;
+- tagastatud `offerId` säilitamine ainult avatud vormiseansis;
+- üks-paralleelpäring kaitse;
+- `idle`, `saving`, `saved`, `error` olekud;
+- vormirevisjoni põhine aegunud eduoleku kaitse;
+- parandatud React hook-order: custom hook kutsutakse enne loading/login
+  early-return'e;
+- kompaktne publish-first UX: `Jätkad hiljem?`, `Valikuline`,
+  `Salvesta hilisemaks` / `Salvesta muudatused`.
+
+Kasutaja kinnitas desktopi ja mobiili brauseritestides:
+
+- esimene salvestus õnnestus;
+- salvestatud olek kuvati;
+- vormi muutmine näitas salvestamata muudatust;
+- teine salvestus töötas;
+- mobiilirida jäi kompaktseks;
+- React hook-order viga ei kordunud.
+
+Oluline piir:
+
+- mustand on valikuline kõrvaltegevus, mitte kohustuslik etapp;
+- tulevane põhitegevus on `Avalda kuulutus`;
+- pilte ei laadita üles;
+- reeglinõustumist ega pakkumispõhiseid kinnitusi mustandisse ei salvestata;
+- avaldamist ega Energy't ei käivitata;
+- andmebaasi ja productionit selle source-checkpoint'iga ei muudeta.
+
+Arhitektuuriline siht:
+
+- hobuse lisamis- ja avaldamisleping jääb kontrollitud `horse_offers` domeeni;
+- pärast avaldamist peab objekt kasutaja jaoks käituma nagu muu kuulutus;
+- see peab jõudma ühisesse otsingusse, avalikule profiilile ja Minu ala
+  haldusesse, kasutama ühist aktiivsusperioodi ning toetama identiteedi enda
+  `store_categories` rubriike;
+- seda ei tohi lahendada teise sõltumatu tõeallika või juhusliku
+  `listings.details` JSON-erandiga.
+
+Järgmine eraldatud samm:
+
+- read-only audit ühise kuulutuse elutsükli, Minu ala/rubriigi lepingute,
+  hobusepiltide ja publication-event vundamendi kohta;
+- audit peab defineerima minimaalse publish-first serveriorkestratsiooni ja
+  ühise read/management projektsiooni;
+- audit ise ei tohi midagi salvestada, avaldada ega productionis muuta.
