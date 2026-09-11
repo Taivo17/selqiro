@@ -3942,3 +3942,12 @@ The internal view `public.marketplace_item_projection_v1` defines the first comm
 The view is internal and read-only. Direct `anon` and `authenticated` access is revoked. It is not a universal search engine: high-volume public search may use source-specific indexed branches and return the same projection shape. This preserves search scalability and avoids unindexed full-view scans.
 
 This checkpoint does not add publishing, public visibility, My Area integration, store-category relations or client code. The next isolated step is an owner-scoped read RPC over the shared contract.
+
+<!-- SELQIRO_OWNER_MARKETPLACE_ITEMS_RPC_V1 -->
+## Owner marketplace-item read RPC foundation
+
+The new authenticated read-only RPC `public.get_my_marketplace_items_v1` reads the active identity through `public.marketplace_item_projection_v1` and returns the shared `content_type + content_id` identity together with source and lifecycle statuses.
+
+The legacy `get_my_identity_listings` contract remains unchanged until the typed discriminated-union client is added. This checkpoint changes no My Area UI, status mutation, publication flow, Energy behavior or production database.
+
+Owner filters are status, search, store category, bounded limit and offset. Store-category filtering currently matches only existing generic `listing_store_categories` relations. Horse offers remain visible without a category filter but are not treated as category-assigned until a separate polymorphic marketplace-item category relation exists.

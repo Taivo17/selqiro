@@ -2801,3 +2801,12 @@ Locked decisions:
 No UI, publication, Energy, image or store-category mutation is part of this checkpoint.
 
 After local migration/test review and commit/push, the next exact step is a bounded owner read RPC for My Area. Do not connect the UI and do not add the horse publication mutation in the same patch.
+
+<!-- SELQIRO_OWNER_MARKETPLACE_ITEMS_RPC_V1 -->
+## Owner marketplace-item read RPC local checkpoint
+
+The next local database checkpoint adds `get_my_marketplace_items_v1` over `marketplace_item_projection_v1` while preserving `get_my_identity_listings` unchanged.
+
+The rollback test covers active-identity isolation, generic and horse rows, shared status mapping, search, recursive generic store-category filtering, foreign-category isolation, privileges and bounded pagination. All fixtures are rolled back.
+
+No client or My Area UI is changed in this checkpoint. After local review and commit/push, apply the migration through a separate controlled production preflight and rollout. Only after production verification should the typed discriminated-union client wrapper be added.

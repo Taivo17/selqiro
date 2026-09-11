@@ -7979,3 +7979,12 @@ Vaade säilitab algse staatuse ja lisab ühise elutsükli staatuse. Tavakuulutus
 Vaade ei ole kirjutatav ega uus tõeallikas. Anonüümse ja autentitud brauseri otseligipääs on keelatud. Tulevane suure koormusega avalik otsing võib kasutada kummagi tõeallika enda indekseid ja tagastada sama väljade kuju, et vältida kogu ühise vaate indekseerimata läbivaatamist.
 
 Selles etapis ei lisata avaldamist, Minu ala ühendust, avalikku otsingut, profiilivaadet ega hobuse rubriigiseost. Järgmine väike samm on aktiivse identiteedi piiratud omaniku lugemis-RPC.
+
+<!-- SELQIRO_OWNER_MARKETPLACE_ITEMS_RPC_V1 -->
+## Omaniku ühine kuulutuste lugemisleping
+
+Lisatakse uus ainult lugemiseks mõeldud `get_my_marketplace_items_v1` RPC, mis toob aktiivse identiteedi tavakuulutused ja hobusepakkumised ühise `marketplace_item_projection_v1` kuju kaudu. Ühine võti on `content_type + content_id`; tavakuulutuse ja hobusepakkumise enda tabelid jäävad jätkuvalt ainsateks tõeallikateks.
+
+Vana `get_my_identity_listings` jääb muutmata, kuni eraldi järgmises etapis lisatakse uus tüübiteadlik kliendimudel. Selles checkpoint'is ei muudeta Minu ala kasutajaliidest, staatuse muutmist, rubriigiseoseid, avaldamist, Energy't ega production-andmebaasi.
+
+Rubriigifilter kasutab praegu olemasolevaid tavakuulutuse `listing_store_categories` seoseid. Hobusepakkumised on rubriigifiltrita omanikuvaates loetavad, kuid neid ei märgita vaikides tavakuulutuse rubriiki; hobuste rubriigiseos tuleb hiljem eraldi polümorfse marketplace-item lepingu kaudu.

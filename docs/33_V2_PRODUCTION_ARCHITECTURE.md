@@ -5366,3 +5366,25 @@ Not included:
 - status mutations.
 
 Next implementation: add a bounded owner-scoped `get_my_marketplace_items_v1` read RPC before changing My Area UI.
+
+<!-- SELQIRO_OWNER_MARKETPLACE_ITEMS_RPC_V1 -->
+## Shared owner marketplace-item read contract
+
+Migration `20260911220000_add_owner_marketplace_item_read_rpc.sql` adds `public.get_my_marketplace_items_v1(integer, integer, text, text, uuid)`.
+
+Contract:
+
+- canonical generic source remains `public.listings`;
+- canonical horse source remains `public.horse_offers`;
+- the RPC reads the internal `public.marketplace_item_projection_v1` view;
+- the shared identity is `content_type + content_id`;
+- `source_status` remains authoritative for domain-specific actions;
+- `lifecycle_status` provides the shared owner-management status (`sold` maps to `closed`, `published` maps to `active` in the projection);
+- active identity is resolved server-side with `require_my_active_identity_v2()`;
+- result limits are bounded to 500 and offsets to 1,000,000;
+- anonymous execution and direct client access to the projection remain blocked;
+- the existing `get_my_identity_listings` RPC remains untouched for compatibility.
+
+The store-category parameter reuses `get_store_category_scope_ids`. Until a polymorphic category relation is introduced, a category filter matches only generic listings with explicit `listing_store_categories` links. This is an honest temporary boundary, not a silent horse-to-listing shadow relation.
+
+This checkpoint does not connect the TypeScript client or My Area UI and adds no mutation.
