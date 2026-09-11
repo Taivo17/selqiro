@@ -2783,3 +2783,21 @@ Järgmine eraldatud samm:
 - audit peab defineerima minimaalse publish-first serveriorkestratsiooni ja
   ühise read/management projektsiooni;
 - audit ise ei tohi midagi salvestada, avaldada ega productionis muuta.
+
+<!-- SELQIRO_MARKETPLACE_ITEM_PROJECTION_V1 -->
+## 2026-09-11 — shared marketplace-item projection foundation
+
+The next database checkpoint adds `public.marketplace_item_projection_v1` as an internal `UNION ALL` read model over canonical `listings` and `horse_offers`.
+
+Locked decisions:
+
+- never create a shadow generic listing row for each horse offer;
+- shared key is `content_type + content_id`;
+- preserve canonical source status and expose a separate normalized lifecycle status;
+- keep exact horse location, coordinates, confirmations and moderation fields outside the shared card projection;
+- revoke direct browser-role access;
+- allow source-specific indexed public-search branches to return the common shape for scale.
+
+No UI, publication, Energy, image or store-category mutation is part of this checkpoint.
+
+After local migration/test review and commit/push, the next exact step is a bounded owner read RPC for My Area. Do not connect the UI and do not add the horse publication mutation in the same patch.

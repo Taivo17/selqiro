@@ -3924,3 +3924,21 @@ lifecycle, My Area/store-category contracts, horse image foundation and horse
 publication-event foundation. Use that audit to define the smallest publish-first
 orchestration and the shared listing projection before enabling real horse
 publication.
+
+<!-- SELQIRO_MARKETPLACE_ITEM_PROJECTION_V1 -->
+## Shared marketplace-item read projection foundation
+
+Canonical ordinary listings remain in `public.listings`. Canonical horse offers remain in `public.horse_offers`; no shadow `listings` row is created for a horse offer.
+
+The internal view `public.marketplace_item_projection_v1` defines the first common read shape:
+
+- shared identity: `content_type + content_id`;
+- `content_id` is text so bigint listing IDs and UUID horse-offer IDs align without changing either canonical key;
+- `source_status` preserves the domain status;
+- `lifecycle_status` maps ordinary `sold` to shared `closed` and horse `published` to shared `active`;
+- card-safe title, description, price, primary image, category/location, activity and search fields are aligned;
+- exact horse location, coordinates, confirmations, moderation notes and unreviewed `details` are excluded.
+
+The view is internal and read-only. Direct `anon` and `authenticated` access is revoked. It is not a universal search engine: high-volume public search may use source-specific indexed branches and return the same projection shape. This preserves search scalability and avoids unindexed full-view scans.
+
+This checkpoint does not add publishing, public visibility, My Area integration, store-category relations or client code. The next isolated step is an owner-scoped read RPC over the shared contract.

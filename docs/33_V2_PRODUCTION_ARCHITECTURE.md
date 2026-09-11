@@ -5321,3 +5321,48 @@ Before adding another mutation, audit:
 
 The audit should recommend one incremental implementation order without enabling
 publication, image upload or a new projection in the audit itself.
+
+<!-- SELQIRO_MARKETPLACE_ITEM_PROJECTION_V1 -->
+## Shared marketplace-item projection contract
+
+Selqiro now has an internal normalized read contract for ordinary listings and controlled horse offers:
+
+`public.marketplace_item_projection_v1`
+
+Architecture boundary:
+
+- `public.listings` remains the canonical source for ordinary listings;
+- `public.horse_offers` remains the canonical source for horse-specific data, policy state and publication events;
+- the projection is a `UNION ALL` view, not a writable table and not a second source of truth;
+- the shared key is `(content_type, content_id)`;
+- bigint listing IDs and UUID horse IDs are serialized to text only at the read boundary;
+- raw domain status is retained beside a normalized lifecycle status;
+- public/private surface RPCs must still apply their own authorization and visibility rules.
+
+Normalized lifecycle mapping in V1:
+
+- ordinary listing `active` → `active`;
+- ordinary listing `paused` → `paused`;
+- ordinary listing `sold` → `closed`;
+- horse offer `published` → `active`;
+- other horse statuses retain their canonical names.
+
+Privacy boundary:
+
+- horse `location_text`, exact coordinates, confirmation fields, review notes and raw `details` are not projected;
+- direct browser-role SELECT is revoked;
+- future client access must use bounded RPCs.
+
+Scalability boundary:
+
+The projection defines the common row shape, but high-volume public search is allowed to query each canonical source with its own indexes and `UNION ALL` the already-filtered branches. The projection must not force an unindexed scan across all content.
+
+Not included:
+
+- horse publication mutation;
+- owner/public RPCs;
+- client integration;
+- horse store-category assignment;
+- status mutations.
+
+Next implementation: add a bounded owner-scoped `get_my_marketplace_items_v1` read RPC before changing My Area UI.

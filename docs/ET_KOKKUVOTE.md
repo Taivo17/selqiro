@@ -7966,3 +7966,16 @@ read-only audit, mis seob hobuse erilise lisamis-/avaldamislepingu ühise
 kuulutuse elutsükli, otsingu, avaliku profiili, Minu ala halduse, aktiivsusaja ja
 kasutaja enda rubriikidega. `horse_offers` jääb hobuseandmete tõeallikaks; ühist
 kasutajapinda ei ehitata dubleeriva teise kuulutusrea abil.
+
+<!-- SELQIRO_MARKETPLACE_ITEM_PROJECTION_V1 -->
+## Ühine kuulutuse lugemisprojektsioon
+
+Tavakuulutuse tõeallikaks jääb `public.listings` ja hobusepakkumise tõeallikaks `public.horse_offers`. Hobusepakkumise kõrvale ei looda varjatud teist tavakuulutuse rida.
+
+Sisemine vaade `public.marketplace_item_projection_v1` ühtlustab ainult lugemiseks vajalikud ühised väljad. Ühine võti on `content_type + content_id`; tavakuulutuse bigint-ID ja hobuse UUID muudetakse tekstiks ainult lugemispiiril.
+
+Vaade säilitab algse staatuse ja lisab ühise elutsükli staatuse. Tavakuulutuse `sold` muutub ühises lepingus `closed`-iks ning hobuse `published` muutub `active`-ks. Täpne hobuse asukoht, koordinaadid, kinnitused, modereerimisinfo ja toored detailid vaatesse ei lähe.
+
+Vaade ei ole kirjutatav ega uus tõeallikas. Anonüümse ja autentitud brauseri otseligipääs on keelatud. Tulevane suure koormusega avalik otsing võib kasutada kummagi tõeallika enda indekseid ja tagastada sama väljade kuju, et vältida kogu ühise vaate indekseerimata läbivaatamist.
+
+Selles etapis ei lisata avaldamist, Minu ala ühendust, avalikku otsingut, profiilivaadet ega hobuse rubriigiseost. Järgmine väike samm on aktiivse identiteedi piiratud omaniku lugemis-RPC.
