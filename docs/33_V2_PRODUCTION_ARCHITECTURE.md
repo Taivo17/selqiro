@@ -5388,3 +5388,32 @@ Contract:
 The store-category parameter reuses `get_store_category_scope_ids`. Until a polymorphic category relation is introduced, a category filter matches only generic listings with explicit `listing_store_categories` links. This is an honest temporary boundary, not a silent horse-to-listing shadow relation.
 
 This checkpoint does not connect the TypeScript client or My Area UI and adds no mutation.
+
+<!-- SELQIRO_MARKETPLACE_ITEM_OWNER_READ_PRODUCTION_ROLLOUT_20260911 -->
+## Marketplace-item shared owner-read production checkpoint — 2026-09-11
+
+Production has the first shared read boundary that can represent ordinary listings and horse offers without merging their canonical write models:
+
+- canonical ordinary listing source: `public.listings`;
+- canonical controlled horse source: `public.horse_offers`;
+- read-only shared projection: `public.marketplace_item_projection_v1`;
+- authenticated owner read RPC: `public.get_my_marketplace_items_v1`;
+- stable polymorphic key: `content_type + content_id`;
+- legacy owner RPC retained: `public.get_my_identity_listings`.
+
+Applied migration order:
+
+1. `20260911203000_add_marketplace_item_projection_foundation.sql`;
+2. `20260911220000_add_owner_marketplace_item_read_rpc.sql`.
+
+The linked production history contains both versions locally and remotely, a post-push dry-run reports no pending migrations, and a tolerant read-only production schema audit passed. The original rollout's final exact-text matcher was a verification false negative after the database push had already succeeded; operationally, migration history and a fresh schema audit are authoritative before any retry or rollback decision.
+
+This checkpoint changes only the database read contract. It does not create a duplicate generic listing row for horse offers and does not yet alter client reads, My Area rendering, owner status writes, store-category relations, public discovery, public profiles or horse publication orchestration.
+
+Implementation order from this checkpoint:
+
+1. add a typed entity API and row mapper for `get_my_marketplace_items_v1`;
+2. connect the owner feature hook to the shared read contract while preserving existing UI behavior;
+3. add content-type-aware routes and actions in separate patches;
+4. extend status and store-category mutations polymorphically only after their contracts are audited and tested;
+5. keep the horse publication write path canonical to `horse_offers` and append-only publication events.

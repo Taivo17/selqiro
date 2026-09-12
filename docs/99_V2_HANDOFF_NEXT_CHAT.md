@@ -2810,3 +2810,35 @@ The next local database checkpoint adds `get_my_marketplace_items_v1` over `mark
 The rollback test covers active-identity isolation, generic and horse rows, shared status mapping, search, recursive generic store-category filtering, foreign-category isolation, privileges and bounded pagination. All fixtures are rolled back.
 
 No client or My Area UI is changed in this checkpoint. After local review and commit/push, apply the migration through a separate controlled production preflight and rollout. Only after production verification should the typed discriminated-union client wrapper be added.
+
+<!-- SELQIRO_MARKETPLACE_ITEM_OWNER_READ_PRODUCTION_ROLLOUT_20260911 -->
+## 2026-09-11 production checkpoint: shared marketplace-item owner read
+
+Completed and verified in linked production project `vyjletlmwoiwxsnsunlm`:
+
+- `20260911203000_add_marketplace_item_projection_foundation.sql`;
+- `20260911220000_add_owner_marketplace_item_read_rpc.sql`;
+- `public.marketplace_item_projection_v1`;
+- `public.get_my_marketplace_items_v1`;
+- shared key `content_type + content_id`;
+- legacy `public.get_my_identity_listings` preserved;
+- both migrations local + remote;
+- no pending linked migrations;
+- fresh production schema contract verification passed;
+- production build passed;
+- worktree remained clean after verification.
+
+Do not run the production rollout again. Its first final check was a strict schema-dump parser false negative after both migrations had already been applied. A separate tolerant read-only verifier confirmed the deployed projection and RPC.
+
+Current code checkpoint before this documentation commit is `ddaec90 Add owner marketplace item read RPC`.
+
+Next exact isolated patch:
+
+1. inspect the current `getMyIdentityListings` entity API, listing model and `useMyAreaListings` hook;
+2. add typed owner marketplace-item types, a row mapper and a browser RPC wrapper for `get_my_marketplace_items_v1`;
+3. preserve the current My Area UI and all mutations in that first client patch;
+4. represent IDs as `contentType + contentId`, never assume every item has a numeric listing ID;
+5. run build and static contract checks, then browser-test ordinary listings before committing;
+6. connect horse rows to My Area rendering only in the following small patch.
+
+Do not change status mutation, store-category assignment, public profile/search, horse publication, images or Energy in the first client-connection patch.

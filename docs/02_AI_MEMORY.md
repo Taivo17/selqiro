@@ -3951,3 +3951,19 @@ The new authenticated read-only RPC `public.get_my_marketplace_items_v1` reads t
 The legacy `get_my_identity_listings` contract remains unchanged until the typed discriminated-union client is added. This checkpoint changes no My Area UI, status mutation, publication flow, Energy behavior or production database.
 
 Owner filters are status, search, store category, bounded limit and offset. Store-category filtering currently matches only existing generic `listing_store_categories` relations. Horse offers remain visible without a category filter but are not treated as category-assigned until a separate polymorphic marketplace-item category relation exists.
+
+<!-- SELQIRO_MARKETPLACE_ITEM_OWNER_READ_PRODUCTION_ROLLOUT_20260911 -->
+## 2026-09-11 — Marketplace-item owner read production rollout
+
+The linked production project `vyjletlmwoiwxsnsunlm` applied these migrations in order:
+
+1. `20260911203000_add_marketplace_item_projection_foundation.sql`
+2. `20260911220000_add_owner_marketplace_item_read_rpc.sql`
+
+Production now contains the read-only `public.marketplace_item_projection_v1` contract and authenticated owner RPC `public.get_my_marketplace_items_v1`. The shared identity is `content_type + content_id`. Canonical generic listings remain in `public.listings`; canonical horse offers remain in `public.horse_offers`. A horse offer does not receive a duplicate generic `listings` truth row.
+
+`public.get_my_identity_listings` remains available for legacy compatibility. Post-rollout read-only verification confirmed both migrations as local-and-remote, no pending migrations, the production schema contract, a passing production build and a clean worktree.
+
+The first rollout script had already applied both migrations when its overly strict `pg_dump` text matcher reported a false-negative final status. The tolerant read-only verifier subsequently confirmed the deployed objects. Do not repeat the production push or perform a blind rollback because of the earlier parser result.
+
+This rollout did not connect the new RPC to TypeScript, did not change My Area UI, and did not change status, store-category, publication or Energy mutations. Next isolated step: add the typed owner marketplace-item client read contract before changing the owner UI.

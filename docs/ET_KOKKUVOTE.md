@@ -7988,3 +7988,19 @@ Lisatakse uus ainult lugemiseks mõeldud `get_my_marketplace_items_v1` RPC, mis 
 Vana `get_my_identity_listings` jääb muutmata, kuni eraldi järgmises etapis lisatakse uus tüübiteadlik kliendimudel. Selles checkpoint'is ei muudeta Minu ala kasutajaliidest, staatuse muutmist, rubriigiseoseid, avaldamist, Energy't ega production-andmebaasi.
 
 Rubriigifilter kasutab praegu olemasolevaid tavakuulutuse `listing_store_categories` seoseid. Hobusepakkumised on rubriigifiltrita omanikuvaates loetavad, kuid neid ei märgita vaikides tavakuulutuse rubriiki; hobuste rubriigiseos tuleb hiljem eraldi polümorfse marketplace-item lepingu kaudu.
+
+<!-- SELQIRO_MARKETPLACE_ITEM_OWNER_READ_PRODUCTION_ROLLOUT_20260911 -->
+## 2026-09-11 — ühine omaniku marketplace-item lugemine productionis
+
+Productionisse rakendati õiges järjekorras kaks migratsiooni:
+
+1. `20260911203000_add_marketplace_item_projection_foundation.sql`;
+2. `20260911220000_add_owner_marketplace_item_read_rpc.sql`.
+
+Productionis on nüüd read-only `public.marketplace_item_projection_v1` ja omaniku autentitud lugemis-RPC `public.get_my_marketplace_items_v1`. Tavalise kuulutuse tõeallikas jääb `public.listings` ning hobusepakkumise tõeallikas `public.horse_offers`. Neid ühendab lugemisel võti `content_type + content_id`; hobusepakkumise jaoks ei looda dubleerivat tavalise kuulutuse rida.
+
+Vana `public.get_my_identity_listings` jäi ühilduvuse jaoks alles. Järelkontroll kinnitas, et mõlemad migratsioonid on lokaalses ja remote ajaloos, ootel migratsioone pole, productioni skeemileping on korras, build läbib ning tööpuu jäi puhtaks.
+
+Esimese rollout-skripti lõpus olnud `FAIL` oli liiga range `pg_dump` tekstivõrdluse valehäire pärast seda, kui mõlemad migratsioonid olid juba edukalt rakendunud. Eraldi tolerantne read-only kontroll kinnitas productioni objektid. Seetõttu ei tohi vana tulemuse tõttu push'i korrata ega pimesi rollback'i teha.
+
+Selle checkpoint'iga ei muudetud klienti, Minu ala UI-d, staatuse muutmist, rubriigiseoseid, avaldamist ega Energy't. Järgmine väike samm on ühise omaniku lugemis-RPC typed TypeScripti klient ja mapper; hobusepakkumise kuvamine Minu alas tuleb sellele järgneva eraldi patch'ina.
