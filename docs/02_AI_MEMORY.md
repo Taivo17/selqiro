@@ -3994,3 +3994,17 @@ This checkpoint does not import the new API into `useMyAreaListings`, does not r
 - Manual browser verification confirmed that the existing ordinary-listing UI and filters still behave as before.
 - Known follow-up: after opening a listing from an expanded `Vaata kõiki` view, browser Back currently recreates the section in its five-row preview state instead of restoring the expanded state and previous scroll position.
 - Next isolated step: define and audit content-type-aware My Area routes, actions and row presentation before exposing `horse_offer` rows.
+
+<!-- SELQIRO_V2_MY_AREA_MARKETPLACE_ITEM_ROW_ACTION_CONTRACT_V1 -->
+## 2026-09-12 My Area marketplace-item row action contract
+
+A feature-level owner-management row contract now exists under `src/features/my-area/model`:
+
+- `myAreaMarketplaceItemRow.ts` defines a discriminated `listing | horse_offer` row model;
+- `mapMyAreaMarketplaceItemRow.ts` is a pure exhaustive mapper from the shared `OwnerMarketplaceItem` read model;
+- ordinary listing rows receive encoded detail/edit routes and the explicit owner status actions `active`, `paused`, and `sold`;
+- horse-offer rows deliberately receive `detailHref = null`, `editHref = null`, `canChangeStatus = false`, and an empty status-action set until horse-specific owner routes and mutations exist.
+
+This row contract is presentation and capability metadata only. It does not authorize writes and it does not merge the canonical listing and horse-offer write paths. The hook and UI are not connected in this checkpoint, horse rows are not rendered, and status, store-category, publication, Energy, database, and production behavior remain unchanged.
+
+Next isolated step: perform a read-only audit of the exact hook/UI field and action assumptions, then connect the content-type-aware row model without enabling any new mutation. Existing ordinary-listing behavior must remain unchanged; horse rows may only expose actions whose dedicated contracts actually exist.

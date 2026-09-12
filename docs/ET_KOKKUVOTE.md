@@ -8040,3 +8040,28 @@ Teadaolev hilisem pisiparandus:
 - hiljem tuleb eraldi return-context parandusega taastada laiendatud olek, aktiivsed filtrid ja kerimiskoht.
 
 Järgmine eraldatud samm on content-type-teadlike Minu ala marsruutide ja tegevuste read-only audit enne hobusepakkumiste ridade kuvamist.
+
+<!-- SELQIRO_V2_MY_AREA_MARKETPLACE_ITEM_ROW_ACTION_CONTRACT_V1 -->
+## 2026-09-12 — Minu ala marketplace-item rea tegevusleping
+
+Lisatud on kaks väikest feature-taseme moodulit:
+
+- `myAreaMarketplaceItemRow.ts` määrab Minu ala ühise `listing | horse_offer` rea tüübi;
+- `mapMyAreaMarketplaceItemRow.ts` teisendab ühise omaniku lugemismudeli puhtalt ja ammendavalt Minu ala reamudeliks.
+
+Tavakuulutuse real on nüüd lepingus selgelt olemas:
+
+- avaliku detaili marsruut;
+- omaniku muutmisvaate marsruut;
+- lubatud staatuse tegevused `active`, `paused`, `sold`.
+
+Hobusepakkumise real on praegu teadlikult:
+
+- detailimarsruut puudu (`null`);
+- muutmismarsruut puudu (`null`);
+- staatuse muutmine keelatud;
+- lubatud staatuse tegevuste loend tühi.
+
+See väldib olukorda, kus hobusepakkumisele kuvatakse töötavana tavakuulutuse nupp või kutsutakse valet mutatsiooni. Reamudel on ainult kuvamise ja võimekuste leping; serveripoolsed domeenimutatsioonid jäävad autoriteetseks.
+
+Selles checkpoint'is ei ühendatud uut mudelit veel hook'i ega kasutajaliidesega. Hobuse ridu Minu alas veel ei kuvata ning andmebaasi, productionit, staatuse-, rubriigi-, avaldamise- ega Energy loogikat ei muudetud. Järgmine samm algab hook'i ja UI täpse read-only auditiga.

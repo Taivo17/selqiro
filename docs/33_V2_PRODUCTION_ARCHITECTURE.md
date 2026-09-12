@@ -5463,3 +5463,33 @@ Architecture rules confirmed by this checkpoint:
 - the database and linked production schema are unchanged.
 
 A known owner-navigation follow-up remains separate: My Area currently stores `Vaata kõiki`, filters and scroll position only in local component state. Returning from a listing detail therefore resets the section to its compact five-row preview. A later isolated return-context patch should restore expanded state, active filters and scroll position without coupling that behavior to the shared read migration.
+
+<!-- SELQIRO_V2_MY_AREA_MARKETPLACE_ITEM_ROW_ACTION_CONTRACT_V1 -->
+## My Area marketplace-item row action boundary
+
+The shared owner entity model and the My Area presentation/action model are separate layers:
+
+`OwnerMarketplaceItem`
+→ pure `mapMyAreaMarketplaceItemRow`
+→ `MyAreaMarketplaceItemRow`
+→ future My Area hook/UI connection.
+
+The row model is discriminated by `contentType` and makes capabilities explicit rather than inferring them from ID shape or route strings.
+
+For `listing` rows:
+
+- `contentId` is URL-encoded before route construction;
+- public detail route: `/v2/listing/[id]`;
+- owner edit route: `/v2/my-area/listings/[id]/edit`;
+- allowed owner status actions: `active`, `paused`, `sold`.
+
+For `horse_offer` rows in the current architecture checkpoint:
+
+- public detail route is absent;
+- owner edit route is absent;
+- status mutation is disabled;
+- allowed status actions are empty.
+
+These null/false/empty values are intentional capability boundaries, not unfinished buttons. The UI must not synthesize a route or call the ordinary-listing mutation for a horse offer. Server-side domain APIs remain authoritative for every write.
+
+The mapper has no Supabase access or side effects and uses an exhaustive `contentType` branch. This checkpoint does not connect the mapper to `useMyAreaListings`, does not change `MyAreaListingsSection`, and does not modify database or production state.

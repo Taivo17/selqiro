@@ -2897,3 +2897,32 @@ Next exact step:
 2. run a read-only audit of content-type-aware My Area routes and lifecycle actions;
 3. add horse-offer row presentation only after the route/action contract is explicit;
 4. keep the return-navigation restoration as a separate focused patch.
+
+<!-- SELQIRO_V2_MY_AREA_MARKETPLACE_ITEM_ROW_ACTION_CONTRACT_V1 -->
+## 2026-09-12 My Area marketplace-item row action contract checkpoint
+
+Completed and build-verified:
+
+- added `src/features/my-area/model/myAreaMarketplaceItemRow.ts`;
+- added `src/features/my-area/model/mapMyAreaMarketplaceItemRow.ts`;
+- defined a feature-level discriminated row model for `listing | horse_offer`;
+- ordinary listings have explicit detail/edit routes and `active | paused | sold` owner status actions;
+- horse offers have explicit null routes and disabled status actions until dedicated contracts exist;
+- mapper is pure, exhaustive, side-effect-free, and URL-encodes `contentId` for listing routes.
+
+Intentionally unchanged:
+
+- `useMyAreaListings` is not connected to the new row mapper;
+- `MyAreaListingsSection` is unchanged;
+- horse rows are not yet rendered;
+- existing ordinary-listing status mutation is unchanged and remains listing-only;
+- store-category, publication, image, Energy, database, and linked production behavior are unchanged.
+
+Next exact step:
+
+1. run a read-only audit of the current hook return type, UI field usage, row keys, navigation, status controls, filters, preview/expanded behavior, and store-category assumptions;
+2. define the smallest content-type-aware hook/UI connection around `MyAreaMarketplaceItemRow`;
+3. preserve ordinary listing rendering and actions exactly;
+4. never call ordinary listing status/edit APIs for `horse_offer`;
+5. expose horse rows only with the capabilities present in the row contract, unless dedicated horse owner routes or mutations are added in their own later checkpoint;
+6. build and browser-test before commit.
