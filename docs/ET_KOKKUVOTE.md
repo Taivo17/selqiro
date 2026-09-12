@@ -8004,3 +8004,18 @@ Vana `public.get_my_identity_listings` jäi ühilduvuse jaoks alles. Järelkontr
 Esimese rollout-skripti lõpus olnud `FAIL` oli liiga range `pg_dump` tekstivõrdluse valehäire pärast seda, kui mõlemad migratsioonid olid juba edukalt rakendunud. Eraldi tolerantne read-only kontroll kinnitas productioni objektid. Seetõttu ei tohi vana tulemuse tõttu push'i korrata ega pimesi rollback'i teha.
 
 Selle checkpoint'iga ei muudetud klienti, Minu ala UI-d, staatuse muutmist, rubriigiseoseid, avaldamist ega Energy't. Järgmine väike samm on ühise omaniku lugemis-RPC typed TypeScripti klient ja mapper; hobusepakkumise kuvamine Minu alas tuleb sellele järgneva eraldi patch'ina.
+
+<!-- SELQIRO_OWNER_MARKETPLACE_ITEM_CLIENT_CONTRACT_V1 -->
+## 2026-09-12 — typed omaniku marketplace-item klient
+
+Lisatud on uus ainult lugemiseks mõeldud TypeScripti entity piir `src/entities/marketplace-item`:
+
+- mudel eristab `listing` ja `horse_offer` sisu `contentType` järgi;
+- ühine stabiilne võti on `contentType + contentId`;
+- `contentId` on string, sest tavakuulutuse bigint-ID ja hobusepakkumise UUID on erineva kujuga;
+- mapper kontrollib RPC vastuse kohustuslikke välju ning teisendab snake_case väljad kliendimudelisse;
+- `getMyMarketplaceItems` kutsub read-only `get_my_marketplace_items_v1` RPC-d ja toetab piiratud pagination'i, staatuse-, otsingu- ning rubriigifiltrit.
+
+Selles checkpoint'is ei ühendatud uut API-t veel `useMyAreaListings` hook'iga ega muudetud Minu ala kasutajaliidest. Hobusepakkumisi veel ridades ei kuvata ning staatuse-, rubriigi-, avaldamise-, pildi- ja Energy mutatsioonid jäid muutmata. Andmebaasi ega productionit ei muudetud.
+
+Järgmine väike töö algab olemasoleva hook'i ja UI-adapteri read-only auditiga. Seejärel ühendatakse ühine omaniku lugemisleping nii, et tavakuulutuste praegune kuvamine ja käitumine säilib; hobuse ridade kuvamine tuleb eraldi järgnevas patch'is.

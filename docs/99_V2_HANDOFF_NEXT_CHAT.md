@@ -2842,3 +2842,32 @@ Next exact isolated patch:
 6. connect horse rows to My Area rendering only in the following small patch.
 
 Do not change status mutation, store-category assignment, public profile/search, horse publication, images or Energy in the first client-connection patch.
+
+<!-- SELQIRO_OWNER_MARKETPLACE_ITEM_CLIENT_CONTRACT_V1 -->
+## Typed owner marketplace-item client checkpoint
+
+Completed locally:
+
+- `OwnerMarketplaceItem` discriminated union for `listing | horse_offer`;
+- stable `contentType + contentId` key;
+- string source IDs across bigint listing IDs and UUID horse-offer IDs;
+- validated RPC row mapper;
+- read-only `getMyMarketplaceItems` browser wrapper;
+- bounded pagination and status/search/store-category filter inputs;
+- production build and static contract checks.
+
+Unchanged in this checkpoint:
+
+- `useMyAreaListings` still uses the legacy ordinary-listing API;
+- `MyAreaListingsSection` and all owner-facing routes remain unchanged;
+- horse rows are not rendered yet;
+- status, store-category, publication, image and Energy mutations remain untouched;
+- database and linked production remain unchanged.
+
+Next exact step:
+
+1. perform a read-only audit of `useMyAreaListings`, `MyAreaListingsSection`, current listing row types, navigation helpers and status mutation assumptions;
+2. define the smallest adapter that lets the hook read `getMyMarketplaceItems` while preserving the existing ordinary-listing UI;
+3. do not render horse rows or alter routes/actions in that same connection patch;
+4. build and browser-test ordinary listing loading, search, filters and navigation before commit;
+5. add horse-row rendering only in the following isolated checkpoint.

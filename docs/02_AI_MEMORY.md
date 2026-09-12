@@ -3967,3 +3967,17 @@ Production now contains the read-only `public.marketplace_item_projection_v1` co
 The first rollout script had already applied both migrations when its overly strict `pg_dump` text matcher reported a false-negative final status. The tolerant read-only verifier subsequently confirmed the deployed objects. Do not repeat the production push or perform a blind rollback because of the earlier parser result.
 
 This rollout did not connect the new RPC to TypeScript, did not change My Area UI, and did not change status, store-category, publication or Energy mutations. Next isolated step: add the typed owner marketplace-item client read contract before changing the owner UI.
+
+<!-- SELQIRO_OWNER_MARKETPLACE_ITEM_CLIENT_CONTRACT_V1 -->
+## Typed owner marketplace-item client contract
+
+The owner read boundary now has a typed browser client under `src/entities/marketplace-item`:
+
+- `model/types.ts` defines a `listing | horse_offer` discriminated union;
+- the stable client identity is `contentType + contentId` and every source ID is represented as a string;
+- `api/mappers.ts` validates and maps the RPC snake_case row into the typed model;
+- `api/getMyMarketplaceItems.ts` wraps `get_my_marketplace_items_v1` with bounded limit/offset and status, search and store-category filters.
+
+The client keeps both `sourceStatus` and shared `lifecycleStatus`. Domain-specific writes must continue to use the canonical listing or horse-offer mutation contract; the shared read model is not permission to merge write paths.
+
+This checkpoint does not import the new API into `useMyAreaListings`, does not render horse rows and changes no status mutation, store-category mutation, publication flow, Energy behavior, database or production state. The next step begins with a read-only hook/UI adapter audit and then connects the owner hook while preserving the current ordinary-listing UI.

@@ -5417,3 +5417,23 @@ Implementation order from this checkpoint:
 3. add content-type-aware routes and actions in separate patches;
 4. extend status and store-category mutations polymorphically only after their contracts are audited and tested;
 5. keep the horse publication write path canonical to `horse_offers` and append-only publication events.
+
+<!-- SELQIRO_OWNER_MARKETPLACE_ITEM_CLIENT_CONTRACT_V1 -->
+## Typed owner marketplace-item client boundary
+
+The production owner-read RPC now has a dedicated TypeScript entity boundary:
+
+- entity root: `src/entities/marketplace-item`;
+- model: `model/types.ts`;
+- RPC row mapper: `api/mappers.ts`;
+- browser read API: `api/getMyMarketplaceItems.ts`;
+- RPC: `public.get_my_marketplace_items_v1`;
+- content variants: `listing` and `horse_offer`;
+- stable client key: `contentType + contentId`;
+- `contentId` is always a string because generic listing IDs and horse-offer UUIDs have different database shapes.
+
+The model is a discriminated union by `contentType`. It preserves `sourceStatus` for domain-specific actions and `lifecycleStatus` for shared owner-management presentation. The mapper rejects unknown content types or lifecycle statuses and validates required row fields before data reaches a feature hook.
+
+`getMyMarketplaceItems` is read-only. It normalizes limit to 1–500, offset to a non-negative integer and forwards status, search and store-category filters. Supabase access remains in the entity API rather than the UI.
+
+The first client checkpoint deliberately has no runtime connection: `useMyAreaListings`, `MyAreaListingsSection`, routes and every mutation remain unchanged. The next isolated stage must first audit the existing hook/UI adapter, then connect the shared read API while keeping ordinary listing rows visually and behaviorally unchanged. Horse-specific rendering and content-type-aware actions remain a later separate patch.
