@@ -1,7 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getMyIdentityListings } from "../../../entities/listing/api/getMyIdentityListings";
+import {
+  getMyAreaOrdinaryListings,
+} from "./getMyAreaOrdinaryListings";
 import type { MyIdentityListingCard } from "../../../entities/listing/model/types";
 
 export type MyAreaListingsStatusFilter = "all" | "active" | "paused" | "sold";
@@ -46,7 +48,7 @@ export function useMyAreaListings(
       });
 
       try {
-        const listings = await getMyIdentityListings({
+        const listings = await getMyAreaOrdinaryListings({
           limit,
           offset,
           statusFilter,

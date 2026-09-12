@@ -2871,3 +2871,29 @@ Next exact step:
 3. do not render horse rows or alter routes/actions in that same connection patch;
 4. build and browser-test ordinary listing loading, search, filters and navigation before commit;
 5. add horse-row rendering only in the following isolated checkpoint.
+
+<!-- SELQIRO_V2_MY_AREA_MARKETPLACE_ITEM_READ_CONNECTION_V1 -->
+
+## 2026-09-12 My Area owner marketplace-item read connection checkpoint
+
+Completed and browser-verified:
+
+- added `getMyAreaOrdinaryListings` as a local compatibility adapter;
+- connected `useMyAreaListings` to the typed `getMyMarketplaceItems` owner read;
+- filtered the first connection to `contentType === "listing"`;
+- preserved the exact `MyIdentityListingCard` contract consumed by the current My Area UI;
+- preserved ordinary search, status filter, hierarchical store-category filter, five-row preview, status mutation, detail navigation and edit navigation;
+- left horse-offer rendering, status actions and routes outside this checkpoint;
+- made no database, production, publication, store-category or Energy mutation.
+
+Known non-blocking follow-up:
+
+- after opening a late item from `Vaata kõiki`, browser Back returns to the compact five-row preview rather than restoring the expanded state and the previously opened row position;
+- this behavior existed in the local-state view model and is not a regression in the marketplace-item read connection.
+
+Next exact step:
+
+1. commit this compatibility connection;
+2. run a read-only audit of content-type-aware My Area routes and lifecycle actions;
+3. add horse-offer row presentation only after the route/action contract is explicit;
+4. keep the return-navigation restoration as a separate focused patch.

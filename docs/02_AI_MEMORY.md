@@ -3981,3 +3981,16 @@ The owner read boundary now has a typed browser client under `src/entities/marke
 The client keeps both `sourceStatus` and shared `lifecycleStatus`. Domain-specific writes must continue to use the canonical listing or horse-offer mutation contract; the shared read model is not permission to merge write paths.
 
 This checkpoint does not import the new API into `useMyAreaListings`, does not render horse rows and changes no status mutation, store-category mutation, publication flow, Energy behavior, database or production state. The next step begins with a read-only hook/UI adapter audit and then connects the owner hook while preserving the current ordinary-listing UI.
+
+<!-- SELQIRO_V2_MY_AREA_MARKETPLACE_ITEM_READ_CONNECTION_V1 -->
+
+## 2026-09-12 V2 My Area owner marketplace-item read connection
+
+- `useMyAreaListings` loads owner content through the typed `getMyMarketplaceItems` client via the local `getMyAreaOrdinaryListings` compatibility adapter.
+- The first connection deliberately keeps only `contentType === "listing"` and maps the shared owner read model to the exact existing `MyIdentityListingCard` contract.
+- Ordinary listing lifecycle presentation continues to use `sourceStatus`; existing search, status filtering, store-category filtering, five-row preview, status mutation, detail route and edit route remain unchanged.
+- Horse-offer rows are deliberately not rendered in this checkpoint.
+- No database, production, publication, store-category, Energy or horse-offer mutation changed.
+- Manual browser verification confirmed that the existing ordinary-listing UI and filters still behave as before.
+- Known follow-up: after opening a listing from an expanded `Vaata kõiki` view, browser Back currently recreates the section in its five-row preview state instead of restoring the expanded state and previous scroll position.
+- Next isolated step: define and audit content-type-aware My Area routes, actions and row presentation before exposing `horse_offer` rows.

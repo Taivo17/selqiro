@@ -8019,3 +8019,24 @@ Lisatud on uus ainult lugemiseks mõeldud TypeScripti entity piir `src/entities/
 Selles checkpoint'is ei ühendatud uut API-t veel `useMyAreaListings` hook'iga ega muudetud Minu ala kasutajaliidest. Hobusepakkumisi veel ridades ei kuvata ning staatuse-, rubriigi-, avaldamise-, pildi- ja Energy mutatsioonid jäid muutmata. Andmebaasi ega productionit ei muudetud.
 
 Järgmine väike töö algab olemasoleva hook'i ja UI-adapteri read-only auditiga. Seejärel ühendatakse ühine omaniku lugemisleping nii, et tavakuulutuste praegune kuvamine ja käitumine säilib; hobuse ridade kuvamine tuleb eraldi järgnevas patch'is.
+
+<!-- SELQIRO_V2_MY_AREA_MARKETPLACE_ITEM_READ_CONNECTION_V1 -->
+
+## 2026-09-12 — Minu ala ühise marketplace-item omanikuvaate lugemisühendus
+
+Valmis ja brauseris kontrollitud:
+
+- `useMyAreaListings` loeb omaniku sisu nüüd typed `getMyMarketplaceItems` kliendilepingu kaudu;
+- vahekiht `getMyAreaOrdinaryListings` laseb esimeses etapis edasi ainult `contentType === "listing"` read;
+- ühine lugemismudel teisendatakse täpselt olemasolevaks `MyIdentityListingCard` kaardilepinguks;
+- tavakuulutuse staatuse kuvamine kasutab jätkuvalt `sourceStatus` välja;
+- otsing, staatusefilter, omaniku rubriigifilter, viie rea eelvaade, staatuse muutmine, detailvaade ja muutmisvaade jäid samaks;
+- hobusepakkumisi selles checkpoint'is veel ei kuvata;
+- andmebaasi, productionit, avaldamist, rubriigiseoseid ega Energy't ei muudetud.
+
+Teadaolev hilisem pisiparandus:
+
+- kui kasutaja avab `Vaata kõiki` vaates nimekirja lõpust kuulutuse ja liigub brauseri Back-nupuga tagasi, taastub praegu viie rea eelvaade;
+- hiljem tuleb eraldi return-context parandusega taastada laiendatud olek, aktiivsed filtrid ja kerimiskoht.
+
+Järgmine eraldatud samm on content-type-teadlike Minu ala marsruutide ja tegevuste read-only audit enne hobusepakkumiste ridade kuvamist.

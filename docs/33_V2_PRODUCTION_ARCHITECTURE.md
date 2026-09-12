@@ -5437,3 +5437,29 @@ The model is a discriminated union by `contentType`. It preserves `sourceStatus`
 `getMyMarketplaceItems` is read-only. It normalizes limit to 1–500, offset to a non-negative integer and forwards status, search and store-category filters. Supabase access remains in the entity API rather than the UI.
 
 The first client checkpoint deliberately has no runtime connection: `useMyAreaListings`, `MyAreaListingsSection`, routes and every mutation remain unchanged. The next isolated stage must first audit the existing hook/UI adapter, then connect the shared read API while keeping ordinary listing rows visually and behaviorally unchanged. Horse-specific rendering and content-type-aware actions remain a later separate patch.
+
+<!-- SELQIRO_V2_MY_AREA_MARKETPLACE_ITEM_READ_CONNECTION_V1 -->
+
+## V2 My Area owner marketplace-item read connection
+
+The canonical owner read boundary is now the discriminated marketplace-item client contract backed by `get_my_marketplace_items_v1`.
+
+The first My Area connection uses a deliberately narrow compatibility adapter:
+
+`getMyMarketplaceItems`
+→ filter `contentType === "listing"`
+→ map to the exact existing `MyIdentityListingCard`
+→ existing `useMyAreaListings`
+→ unchanged ordinary-listing UI.
+
+Architecture rules confirmed by this checkpoint:
+
+- `contentType + contentId` remains the shared identity for polymorphic owner content;
+- `contentId` remains a string at the shared boundary;
+- ordinary-listing lifecycle presentation uses `sourceStatus`;
+- the shared read model does not force a duplicate generic listing row for a horse offer;
+- existing listing-only status, edit and public-detail actions remain unchanged until a content-type-aware action layer is designed;
+- the first connection does not render horse offers and does not alter any mutation;
+- the database and linked production schema are unchanged.
+
+A known owner-navigation follow-up remains separate: My Area currently stores `Vaata kõiki`, filters and scroll position only in local component state. Returning from a listing detail therefore resets the section to its compact five-row preview. A later isolated return-context patch should restore expanded state, active filters and scroll position without coupling that behavior to the shared read migration.
