@@ -5560,3 +5560,32 @@ Architecture rules:
 - No shadow `listings` row is created for a horse offer.
 
 The first client patch after this production checkpoint must stay read-only: add the typed entity model, row mapper and RPC wrapper under the horse-offer entity boundary. Route composition, editing, publication orchestration and lifecycle mutations remain separate later checkpoints.
+
+<!-- SELQIRO_OWNER_HORSE_OFFER_DETAIL_CLIENT_CONTRACT_V1 -->
+
+## Owner horse-offer detail typed client boundary
+
+The production owner-detail RPC `public.get_my_horse_offer_v1(uuid)` is consumed through the horse-offer entity layer rather than directly from UI components.
+
+Client structure:
+
+- `src/entities/horse-offer/model/types.ts`
+  - owns `OwnerHorseOfferDetail`, ordered safe image metadata and the owner-visible lifecycle status union;
+- `src/entities/horse-offer/api/mappers.ts`
+  - maps `unknown` RPC rows field by field;
+  - verifies the `horse_offer` discriminant and the shared `content_id = offer_id` identity;
+  - validates numeric, enum, object and image-array values;
+  - intentionally omits Storage paths, uploader IDs and internal publication-event references;
+- `src/entities/horse-offer/api/getMyHorseOffer.ts`
+  - validates the UUID input;
+  - performs one browser RPC call;
+  - returns one typed owner detail or `null`;
+  - rejects malformed payloads and unexpected multi-row responses.
+
+Architecture rules:
+
+- canonical horse data remains in `public.horse_offers`;
+- UI must not read the horse tables directly;
+- detail read and future mutations stay separate contracts;
+- the first client checkpoint is read-only and has no hook, route or UI connection;
+- edit, publication, lifecycle, category and image operations require later isolated server contracts and checkpoints.

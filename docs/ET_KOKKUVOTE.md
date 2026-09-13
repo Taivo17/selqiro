@@ -8107,3 +8107,20 @@ Valmis ja productionis kontrollitud:
 - kliendi route'i, detailvaadet ega muutmistoiminguid selles checkpoint'is ei lisatud.
 
 Järgmine väike samm on typed omaniku detail-lugemise kliendileping: horse-offer entity tüüp, range mapper ja `get_my_horse_offer_v1` brauseri RPC-wrapper. UI, muutmine, avaldamine ja staatusetoimingud jäävad eraldi hilisematesse checkpoint'idesse.
+
+<!-- SELQIRO_OWNER_HORSE_OFFER_DETAIL_CLIENT_CONTRACT_V1 -->
+
+## 2026-09-13 — hobusepakkumise omaniku detaili typed kliendileping
+
+Valmis sai hobusepakkumise omaniku detailvaate andmekihi esimene kliendipoolne checkpoint:
+
+- lisati tüübid `OwnerHorseOfferDetail`, `OwnerHorseOfferImage` ja `OwnerHorseOfferStatus`;
+- lisati range mapper, mis kontrollib serverist tulevat rida välja kaupa;
+- lisati read-only `getMyHorseOffer(offerId)` wrapper productioni RPC-le `get_my_horse_offer_v1`;
+- ühine identifikaator jääb `content_type + content_id`;
+- puuduva või teisele identiteedile kuuluva pakkumise tühi tulemus muutub kliendis `null` väärtuseks;
+- piltidest tuuakse kliendile ainult ohutu järjestatud metaandmestik;
+- Storage'i sisemisi radu, üleslaadija ID-d ega publication-event'i sisemist viidet kliendimudelisse ei lisatud;
+- mapperi käitumistest ja production build läbisid.
+
+Selles etapis ei ühendatud veel hook'i, route'i ega kasutajaliidest ning ei lisatud ühtegi muutvat tegevust. Järgmine samm on omaniku hobusepakkumise detailroute'i ja hook'i read-only audit ning seejärel eraldi väike ühenduspatch.

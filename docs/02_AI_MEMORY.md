@@ -4049,3 +4049,29 @@ Next isolated step: perform a read-only audit of the exact hook/UI field and act
 - No client route or edit/publication/status mutation was added in this checkpoint.
 
 Next isolated step: audit the existing horse-offer entity boundary, then add a typed owner horse-offer detail model, mapper and browser RPC wrapper for `get_my_horse_offer_v1` without connecting UI or any write action yet.
+
+<!-- SELQIRO_OWNER_HORSE_OFFER_DETAIL_CLIENT_CONTRACT_V1 -->
+
+## 2026-09-13 — owner horse-offer detail typed client contract
+
+Completed:
+
+- added `OwnerHorseOfferDetail`, `OwnerHorseOfferImage` and `OwnerHorseOfferStatus` to the horse-offer entity model;
+- added a strict unknown-to-domain mapper for the production owner RPC `get_my_horse_offer_v1`;
+- added the read-only browser wrapper `getMyHorseOffer(offerId)`;
+- the shared identity remains `content_type + content_id`, with `horse_offer` as the discriminant;
+- an empty RPC result maps to `null`;
+- the mapper rejects mismatched `content_id` / `offer_id`, unsupported enum values, malformed numbers and malformed image rows;
+- internal Storage paths, uploader IDs and publication-event internals are not represented in the client model;
+- isolated mapper behavior tests, diff checks and the production build passed.
+
+Boundary:
+
+- the new API is not connected to a hook, route or My Area UI yet;
+- no edit, publication, status, store-category, image or Energy mutation was added;
+- no database or production change was made in this client checkpoint.
+
+Next exact step:
+
+- run a read-only audit for the owner horse-offer detail hook and route connection;
+- then connect the typed read contract without enabling edit or lifecycle mutations in the same patch.

@@ -3001,3 +3001,32 @@ Next exact isolated step:
 6. do not connect a route, owner detail page, edit form, publication mutation, status action, images mutation, store-category mutation or Energy action in the same patch.
 
 The existing My Area horse rows remain read-only until a separate route and action contract is designed.
+
+<!-- SELQIRO_OWNER_HORSE_OFFER_DETAIL_CLIENT_CONTRACT_V1 -->
+
+## 2026-09-13 owner horse-offer detail client checkpoint
+
+Current stable state:
+
+- production contains the owner-only read RPC `get_my_horse_offer_v1`;
+- the browser client now has a typed owner-detail model, strict mapper and read-only RPC wrapper;
+- empty owner-detail results return `null`;
+- shared marketplace identity is preserved as `content_type + content_id`;
+- safe ordered images are mapped without Storage paths or uploader IDs;
+- mapper behavior tests and the production build passed;
+- no hook, owner route, edit form or mutation was connected;
+- database and production remained unchanged during the client patch.
+
+Files:
+
+- `src/entities/horse-offer/model/types.ts`
+- `src/entities/horse-offer/api/mappers.ts`
+- `src/entities/horse-offer/api/getMyHorseOffer.ts`
+
+Next exact work:
+
+1. perform a read-only audit of the existing owner-detail hooks, routes and page composition;
+2. define the smallest owner horse-offer detail route contract;
+3. connect `getMyHorseOffer` through a feature hook;
+4. add loading, forbidden/not-found and read-only success states;
+5. do not add edit, status, publication, category or image mutations in that same first connection patch.

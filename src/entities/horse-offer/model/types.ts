@@ -93,3 +93,77 @@ export type SavedHorseOfferDraft = {
   createdAt: string;
   updatedAt: string;
 };
+
+// SELQIRO_OWNER_HORSE_OFFER_DETAIL_CLIENT_V1
+export const OWNER_HORSE_OFFER_CONTENT_TYPE =
+  "horse_offer" as const;
+
+export const OWNER_HORSE_OFFER_STATUSES = [
+  "draft",
+  "published",
+  "held_for_review",
+  "paused",
+  "closed",
+  "rejected",
+  "archived",
+] as const;
+
+export type OwnerHorseOfferStatus =
+  (typeof OWNER_HORSE_OFFER_STATUSES)[number];
+
+export type OwnerHorseOfferImage = {
+  id: string;
+  url: string;
+  originalUrl: string;
+  mediumUrl: string | null;
+  thumbUrl: string | null;
+  isPrimary: boolean;
+  sortOrder: number;
+};
+
+export type OwnerHorseOfferDetail = {
+  contentType:
+    typeof OWNER_HORSE_OFFER_CONTENT_TYPE;
+  contentId: string;
+  offerId: string;
+  identityId: string;
+  offerType: HorseOfferDraftOfferType;
+  status: OwnerHorseOfferStatus;
+  marketCountryCode:
+    typeof EE_HORSE_OFFER_MARKET_COUNTRY_CODE;
+  horseLocationCountryCode:
+    typeof EE_HORSE_OFFER_MARKET_COUNTRY_CODE;
+  title: string;
+  description: string;
+  priceAmount: number | null;
+  priceType: HorseOfferDraftPriceType;
+  currency: typeof EE_HORSE_OFFER_CURRENCY;
+  imageUrl: string | null;
+  horseName: string | null;
+  birthYear: number | null;
+  sex: HorseOfferDraftSex | null;
+  breed: string | null;
+  color: string | null;
+  heightCm: number | null;
+  discipline: string | null;
+  trainingLevel: string | null;
+  suitability: string | null;
+  healthNotes: string | null;
+  behaviorNotes: string | null;
+  city: string | null;
+  region: string | null;
+  locationText: string | null;
+  horseLat: number | null;
+  horseLng: number | null;
+  details: Record<string, unknown>;
+  publishedAt: string | null;
+  heldAt: string | null;
+  pausedAt: string | null;
+  closedAt: string | null;
+  rejectedAt: string | null;
+  archivedAt: string | null;
+  activeUntil: string | null;
+  createdAt: string;
+  updatedAt: string;
+  images: OwnerHorseOfferImage[];
+};
