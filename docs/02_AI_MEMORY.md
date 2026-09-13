@@ -4093,3 +4093,26 @@ The authenticated active-identity owner now has a dedicated read-only horse-offe
 - edit, publication, status, store-category, image and Energy mutations remain absent.
 
 Production build and owner-browser validation passed. The next isolated step is a read-only audit of the Minu ala horse-row navigation boundary, followed by connecting only row detail navigation while preserving ordinary listing routes and mutation rules.
+
+<!-- SELQIRO_MY_AREA_HORSE_OWNER_DETAIL_NAVIGATION_V1 -->
+## V2_MY_AREA_HORSE_OWNER_DETAIL_NAVIGATION
+
+Checkpoint:
+
+- `src/features/my-area/components/MyAreaHorseOfferRow.tsx` uses one `next/link` navigation boundary for the image and primary text.
+- The destination is `/v2/my-area/horse-offers/${encodeURIComponent(item.contentId)}`.
+- The owner row keeps price, status and the read-only explanation outside the link.
+- `horse_offer` remains read-only in My Area: no edit action, publication action or lifecycle/status mutation is exposed.
+- Ordinary `listing` rows preserve their existing public detail, edit and status behavior.
+- The owner detail route displays canonical owner data through the existing `get_my_horse_offer_v1` client contract.
+- Wide and narrow browser checks passed; the staged code patch remained unchanged.
+- No database, production, category, image, Energy or publication mutation was made.
+
+Known follow-up:
+
+- restore My Area expanded/view-all state and scroll position after returning from detail.
+
+Next exact direction:
+
+- perform a read-only owner horse-offer management audit;
+- then implement edit, publication and lifecycle operations as separate controlled checkpoints.

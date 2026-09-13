@@ -8142,3 +8142,26 @@ Valmis on hobusepakkumise omaniku eraldi detailvaade:
 Selles etapis ei lisatud muutmist, avaldamist, staatuse muutmist, rubriigiseoseid, pildihaldust, Energy kasutust ega andmebaasi- või productionimuudatust.
 
 Build ja brauseritest läbisid. Minu ala hobuseread ei ava uut detailroute'i veel. Järgmine väike samm algab rea navigeerimise ja tagasipöördumise read-only auditiga ning ühendab seejärel ainult detaili avamise.
+
+<!-- SELQIRO_MY_AREA_HORSE_OWNER_DETAIL_NAVIGATION_V1 -->
+## 2026-09-13 – Minu ala hobuserea omaniku detailnavigeerimise checkpoint
+
+Valmis ja brauseris kontrollitud:
+
+- Minu ala `horse_offer` rida avab nüüd hobusepakkumise omaniku read-only detailvaate pildi või põhiteksti kaudu.
+- Route on `/v2/my-area/horse-offers/[id]` ja identifikaator tuleb ühisest marketplace-item võtmeosast `item.contentId`; URL-is kasutatakse `encodeURIComponent` kaitset.
+- Hind, staatus ja parempoolne ainult-vaate selgitus jäävad lingist välja, mistõttu rida säilitab kompaktse haldusloendi geomeetria.
+- Hobusepakkumisele ei lisatud veel muutmist, avaldamist ega staatuse tegevusi.
+- Tavakuulutuse detail-, edit- ja staatusehaldus jäid muutmata.
+- Omaniku detailvaates kontrolliti sama pakkumise pealkirja, hinda, liiki, asukohta, pilte ning olemasolevaid hobusevälju; vaade jäi ainult lugemiseks.
+- Desktopi ja kitsa vaate brauseritest läbis ning staged diff jäi testi ajal muutumatuks.
+- Andmebaasi, productionit, rubriigiseoseid, pilte ega Energy't ei muudetud.
+
+Teadlik hilisem parandus:
+
+- Minu ala `Vaata kõiki` ja brauseri Back võivad taastada viie rea eelvaate, mitte sama avatud olekut ja scrollipositsiooni. See jääb eraldi return-context patch'iks.
+
+Järgmine eraldatud töö:
+
+- alustada read-only auditiga, mis määrab hobusepakkumise omaniku muutmise, avaldamise ja elutsükli mutatsioonide täpse järjekorra;
+- mitte ühendada edit-, publication- ja status-mutatsioone üheks suureks patch'iks.

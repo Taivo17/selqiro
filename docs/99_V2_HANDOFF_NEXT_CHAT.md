@@ -3061,3 +3061,40 @@ Next exact step:
 4. preserve ordinary listing `/v2/listing/[id]`, edit and inline status behavior;
 5. add no horse mutations;
 6. build, browser-test desktop/mobile and checkpoint separately.
+
+<!-- SELQIRO_MY_AREA_HORSE_OWNER_DETAIL_NAVIGATION_V1 -->
+## 2026-09-13 – My Area horse row owner-detail navigation checkpoint
+
+Current pre-commit base:
+
+- `4a3b4e9 Add owner horse offer read-only detail route`
+
+Implemented staged code:
+
+- `src/features/my-area/components/MyAreaHorseOfferRow.tsx`;
+- the horse image/placeholder and primary text open `/v2/my-area/horse-offers/[id]`;
+- the route ID comes from `item.contentId` and is URL-encoded;
+- price, status badge and `Ainult vaade` explanation remain outside the link;
+- horse edit, publication and status actions remain absent;
+- ordinary listing detail/edit/status behavior is unchanged.
+
+Manual browser evidence:
+
+- owner horse detail opens from the row;
+- the correct offer title, price, type, location and available detail fields are shown;
+- the route is read-only;
+- desktop and narrow layouts work;
+- browser Back returns to My Area;
+- ordinary listing detail, edit and status UI still work;
+- no status or content was mutated during testing.
+
+Known follow-up:
+
+- after `Vaata kõiki`, returning from detail can still restore the five-row preview instead of the prior expanded/scroll state;
+- solve this later as a dedicated My Area return-context patch.
+
+Checkpoint commit message:
+
+- `Connect My Area horse owner detail navigation`
+
+After this checkpoint, start a read-only audit of owner horse-offer edit, publication-policy acceptance, publication and lifecycle mutation boundaries. Keep the first writing patch smaller than the full management flow.

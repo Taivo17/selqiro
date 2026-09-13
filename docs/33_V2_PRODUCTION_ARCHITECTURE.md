@@ -5617,3 +5617,50 @@ The hook owns loading, error, not-found, retry and stale-result cancellation. UI
 This checkpoint contains no edit, publication, lifecycle/status, store-category, image, Energy, database or production mutation. Generic listing detail and edit routes remain unchanged.
 
 `MyAreaHorseOfferRow` is not linked to this route yet. The next patch must first audit navigation and return-context behavior, then connect only horse-row detail navigation while preserving ordinary listing detail/edit/status behavior.
+
+<!-- SELQIRO_MY_AREA_HORSE_OWNER_DETAIL_NAVIGATION_V1 -->
+## Owner horse-offer row → owner-detail navigation contract
+
+The My Area marketplace-item surface now connects `horse_offer` rows to the authenticated owner detail route without weakening the controlled horse-offer domain boundary.
+
+### Navigation contract
+
+- source component: `src/features/my-area/components/MyAreaHorseOfferRow.tsx`;
+- destination: `/v2/my-area/horse-offers/[id]`;
+- canonical route ID source: `item.contentId`;
+- URL encoding: `encodeURIComponent(item.contentId)`;
+- clickable surface: row image or placeholder plus the primary text block;
+- price, lifecycle badge and read-only explanation stay outside the link.
+
+The shared marketplace-item identity remains `content_type + content_id`. The route does not infer a numeric generic-listing ID and does not create a duplicate row in `public.listings`.
+
+### Read-only boundary
+
+This checkpoint deliberately keeps the horse row and detail route read-only:
+
+- no edit route is exposed;
+- no publish action is exposed;
+- no status selector is exposed;
+- no store-category assignment is changed;
+- no image mutation is added;
+- no Energy operation is added.
+
+The ordinary listing branch keeps its existing `/v2/listing/[id]`, `/v2/my-area/listings/[id]/edit` and listing-only status actions.
+
+### Validation
+
+The patch passed:
+
+- the production build;
+- a wide-layout owner-flow browser test;
+- a narrow-layout browser test;
+- ordinary-listing detail/edit/status regression checks;
+- staged-diff integrity verification.
+
+### Deferred return-context contract
+
+My Area view-all/filter/scroll restoration is not part of this navigation checkpoint. Returning with the browser Back action may still restore the five-row overview preview. A later isolated return-context patch should preserve the expanded state, filters and relevant row/scroll position without coupling that state to the horse-offer mutation work.
+
+### Next controlled sequence
+
+Begin with a read-only audit of owner horse-offer edit, policy acceptance, publication and lifecycle mutation contracts. Add each write boundary separately after the existing owner-detail read contract.

@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import type {
   MyAreaHorseOfferMarketplaceItemRow,
 } from "../model/myAreaMarketplaceItemRow";
@@ -42,8 +44,13 @@ export default function MyAreaHorseOfferRow({
     item.title || "Pealkirjata hobusepakkumine";
 
   const readOnlyExplanation =
-    "Detail, muutmine ja staatuse tegevused "
-    + "lisanduvad eraldi.";
+    "Detail on ainult vaatamiseks. Muutmine ja "
+    + "staatuse tegevused lisanduvad eraldi.";
+
+  const detailHref =
+    `/v2/my-area/horse-offers/${
+      encodeURIComponent(item.contentId)
+    }`;
 
   return (
     <article
@@ -56,7 +63,16 @@ export default function MyAreaHorseOfferRow({
       data-content-id={item.contentId}
       data-content-type="horse_offer"
     >
-      <div className="flex min-w-0 items-center gap-3 md:pl-2">
+      <Link
+        className={[
+          "group flex min-w-0 items-center gap-3",
+          "rounded-xl md:pl-2",
+          "focus-visible:outline-none",
+          "focus-visible:ring-2 focus-visible:ring-zinc-900",
+          "focus-visible:ring-offset-2",
+        ].join(" ")}
+        href={detailHref}
+      >
         {item.imageUrl ? (
           <img
             alt=""
@@ -95,7 +111,10 @@ export default function MyAreaHorseOfferRow({
           </div>
 
           <h3
-            className="truncate text-base font-semibold text-zinc-950"
+            className={[
+              "truncate text-base font-semibold text-zinc-950",
+              "transition-colors group-hover:text-zinc-700",
+            ].join(" ")}
             title={title}
           >
             {title}
@@ -116,7 +135,7 @@ export default function MyAreaHorseOfferRow({
             </p>
           ) : null}
         </div>
-      </div>
+      </Link>
 
       <p className="whitespace-nowrap text-sm font-semibold text-zinc-900 md:text-right">
         {item.priceLabel}
