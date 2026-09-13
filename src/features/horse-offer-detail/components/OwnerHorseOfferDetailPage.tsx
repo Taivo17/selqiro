@@ -565,6 +565,20 @@ export default function OwnerHorseOfferDetailPage({
               pildihaldus vajavad oma serveri- ja
               kasutajaliidese lepingut.
             </p>
+
+            <Link
+              href={`/v2/my-area/horse-offers/${encodeURIComponent(
+                detail.offerId
+              )}/edit`}
+              className="mt-5 inline-flex rounded-full bg-white px-5 py-3 text-sm font-semibold text-zinc-950 transition hover:bg-zinc-100"
+            >
+              Ava muutmisvaade
+            </Link>
+
+            <p className="mt-3 text-xs leading-5 text-zinc-400">
+              Väljad avanevad esialgu ainult
+              lugemiseks ja salvestamist ei käivitata.
+            </p>
           </div>
         </aside>
       </div>

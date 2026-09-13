@@ -3098,3 +3098,47 @@ Checkpoint commit message:
 - `Connect My Area horse owner detail navigation`
 
 After this checkpoint, start a read-only audit of owner horse-offer edit, publication-policy acceptance, publication and lifecycle mutation boundaries. Keep the first writing patch smaller than the full management flow.
+
+
+<!-- SELQIRO_V2_OWNER_HORSE_EDIT_READ_ONLY_CHECKPOINT_20260913 -->
+## Latest handoff — 2026-09-13 owner horse-offer read-only edit form
+
+This entry supersedes the older next-step instructions above. Do not return to Architecture Sprint 1, LocationCard, the V2 skeleton phase or the earlier owner-detail/navigation implementation.
+
+### Source and checkpoint
+
+- Parent checkpoint: `649d9da Connect My Area horse owner detail navigation`.
+- Checkpoint commit message: `Add owner horse offer read-only edit form`.
+- Read the actual commit hash and push status from the current Git state and the checkpoint runner's result; this document cannot contain its own future commit hash.
+- Six source files add the private `/v2/my-area/horse-offers/[id]/edit` route, wrapper, feature page, hydration mapper, form hook and detail-page navigation link.
+- This is an existing-data, read-only form. Saving and every publication/lifecycle/image/Energy action remain absent.
+- Four documentation files are included in the same checkpoint.
+
+### Test evidence and limits
+
+The original build and user-confirmed wide/narrow browser test passed. The source staged-diff SHA-256 is `f7a326dec1a88a0ee680a146fc7355e0ac0b873e97090493270a7f7d7b26af2d`. The recovery snapshot matched that patch byte-for-byte and contained no unstaged changes. It did not run new tests. The checkpoint runner requires a fresh passing build and exact source/documentation scope before commit/push.
+
+The user did not have an `Otsin hobust` / wanted draft. Do not label that branch browser-tested, and do not invent a fixture or claim a production write. Ordinary listing navigation/edit UI and the narrow horse edit view were covered by the original checklist.
+
+### Next coherent capability after a confirmed clean commit/push
+
+Inspect the current horse entity save wrapper, shared form state and field components, create-form payload builder, draft-save SQL contract and relevant tests. Then implement draft-only owner editing and saving through `save_my_horse_offer_draft_v1` as one scoped feature:
+
+- use the existing offer ID; never create a replacement draft during owner editing;
+- permit saving only a currently authorized draft; keep non-draft statuses read-only;
+- preserve seller-price versus buyer-budget and actual-location versus search-area semantics;
+- audit hydration-to-save round trips and preserve stored values outside the edited fields;
+- provide dirty, saving, success and error states with a single in-flight operation and stale-result guards;
+- verify save persistence, owner/identity isolation, rejected/non-draft writes and ordinary-listing regression;
+- test the wanted branch explicitly when a suitable safe fixture is available;
+- do not add publication, policy acceptance, images, store categories, lifecycle writes or Energy to that patch.
+
+The runner may collect the relevant current source files into its result ZIP after the checkpoint to avoid a separate collection round. That source export is read-only and is not itself an audit or test of the next feature.
+
+### Product and workflow invariants
+
+Keep publish-first creation: `Salvesta hilisemaks` is optional, not a mandatory visible draft stage. `horse_offers` remains canonical; shared marketplace reads use `content_type + content_id` without a shadow ordinary listing.
+
+Group related low-risk work into meaningful checkpoints instead of unnecessary per-file conversation rounds. Keep actual-source inspection, build, relevant browser tests, documentation and exact-scope commit/push. Security-sensitive database/authorization changes, publication, image/Storage deletion and Energy/payments require independently controlled validation.
+
+My Area `Vaata kõiki`, filters and scroll restoration after Back remain a separate deferred task.

@@ -8165,3 +8165,23 @@ Järgmine eraldatud töö:
 
 - alustada read-only auditiga, mis määrab hobusepakkumise omaniku muutmise, avaldamise ja elutsükli mutatsioonide täpse järjekorra;
 - mitte ühendada edit-, publication- ja status-mutatsioone üheks suureks patch'iks.
+
+
+<!-- SELQIRO_V2_OWNER_HORSE_EDIT_READ_ONLY_CHECKPOINT_20260913 -->
+## 2026-09-13 — Hobusepakkumise omaniku ainult lugemiseks mõeldud muutmisvorm
+
+Omaniku hobusepakkumise detailvaatest saab nüüd avada sama pakkumise muutmisvormi:
+
+`/v2/my-area/horse-offers/[id]/edit`
+
+Vorm laadib olemasoleva pealkirja, kirjelduse, hobuseandmed, kasutuse/väljaõppe, tervise- ja käitumisinfo, hinna või otsija eelarve ning asukoha või otsingupiirkonna. Olemasolevad pildid kuvatakse tagastatud järjestuses. Konkreetse hobuse andmed ja `Otsin hobust` eelistused jäävad eraldi tähendusega väljadeks.
+
+See etapp on endiselt ainult lugemiseks: väljad on lukustatud ning salvestamine, avaldamine, staatuse muutmine, reeglitega nõustumine, rubriigiseosed, pilditoimingud ja Energy tegevused ei ole ühendatud. Hobuseandmete tõeallikas jääb `horse_offers`; tavakuulutuse koopiat ei looda.
+
+Algne kuuefailine muudatus läbis build'i ja kasutaja kinnitatud arvuti/kitsa vaate brauseritesti. Taastamiseks saadetud ZIP-is oli täpselt sama testitud muudatus ning stage'imata muudatusi ei olnud. ZIP-i kogumine ise ei olnud uus build ega brauseritest. `Otsin hobust` haru ei olnud brauseris kontrollitud, sest sobivat mustandit polnud. Dokumenteerimise ja commit/push'i skript nõuab enne commit'i värsket edukat build'i.
+
+Järgmine terviklik funktsioon on olemasoleva mustandi muutmine ja salvestamine sama pakkumise ID-ga. Enne ühendamist tuleb võrrelda päris vormi- ja salvestuslepingut, et muutmata või vormis mittekuvatud andmeid ei kustutataks vaikimisi. Avaldamine, staatused ja pildihaldus jäävad eraldi töödeks.
+
+Töötempot võib tõsta, ühendades sama väikese funktsiooni API, hook'i, kasutajaliidese, testid ja dokumentatsiooni üheks checkpoint'iks. Kvaliteedikontrollid jäävad alles; turvatundlikke andmebaasi-, avaldamis-, kustutamis- ning Energy/maksete muudatusi ei ühendata kiiruse nimel.
+
+Kuulutuse lisamise põhitee jääb otse `Avalda kuulutus`; `Salvesta hilisemaks` on vabatahtlik. Minu ala `Vaata kõiki` ja tagasipöördumise kerimiskoha taastamine jääb eraldi hilisemaks paranduseks.

@@ -5664,3 +5664,36 @@ My Area view-all/filter/scroll restoration is not part of this navigation checkp
 ### Next controlled sequence
 
 Begin with a read-only audit of owner horse-offer edit, policy acceptance, publication and lifecycle mutation contracts. Add each write boundary separately after the existing owner-detail read contract.
+
+
+<!-- SELQIRO_V2_OWNER_HORSE_EDIT_READ_ONLY_CHECKPOINT_20260913 -->
+## Owner horse-offer read-only edit-form boundary — 2026-09-13
+
+### Implemented layers
+
+`app/v2/my-area/horse-offers/[id]/edit/page.tsx`
+→ `components/v2/my-area/V2HorseOfferEditPage.tsx`
+→ `src/features/horse-offer-edit/components/OwnerHorseOfferEditPage.tsx`
+→ `useOwnerHorseOfferEditForm`
+→ existing `useOwnerHorseOfferDetail` / `getMyHorseOffer`
+→ existing owner read RPC `get_my_horse_offer_v1`.
+
+The feature uses the canonical horse-offer UUID, not a generic numeric listing ID. Authorization stays in the existing owner-read server contract. No new database or authorization rule is introduced here.
+
+`horseOfferEditHydration.ts` owns the pure owner-detail-to-form mapping. It reuses the shared listing-create horse state factories and separates concrete-horse facts from wanted preferences. `details.wanted.budget` stays a buyer budget; `details.wanted.search_area` stays a search area. `details.recurring_fee.period` remains structured. Current EE/EUR form defaults are reused, not generalized to unsupported markets.
+
+The feature page composes the existing basic, use, disclosure, price and location field components inside a disabled fieldset. Title/description are additionally read-only. The image section only renders the ordered owner image metadata. Navigation and read retry are available; mutation actions are not.
+
+### Write boundary remains closed
+
+There is no save import or mutation in this edit feature. Publication, policy acceptance, lifecycle status, store categories, image upload/deletion/primary selection and Energy remain outside this checkpoint. Existing My Area row navigation and ordinary listing management are not changed.
+
+Do not treat this hydration state as a complete persistence snapshot. Before the draft-save connection, audit round-trip behavior against the actual existing RPC and mapper, especially values not represented in the form, private location/coordinates, structured details and fallback defaults. Unsupported stored values must not be silently erased or reinterpreted. Draft-only write authorization must remain server-enforced; other statuses stay read-only until their own mutation contracts exist.
+
+### Validation and following work
+
+The original six-file patch passed build and user-confirmed desktop/narrow-browser checks. Its recovery snapshot still matches the tested staged diff. `wanted` was optional in that browser checklist and was not tested because no wanted draft existed. Recovery collection did not rerun build or browser tests; the checkpoint runner reruns build before commit.
+
+The next logical capability may combine an existing draft-save API connection, guarded feature hook, editable fields, dirty/saving/success/error states, targeted tests and documentation. This is one cohesive change, not permission to merge unrelated or security-sensitive operations. Publication, destructive Storage work, database/authorization changes and Energy/payments keep separately validated boundaries.
+
+The prior My Area `Vaata kõiki` / Back / scroll-restoration issue stays deferred.

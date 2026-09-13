@@ -4116,3 +4116,28 @@ Next exact direction:
 
 - perform a read-only owner horse-offer management audit;
 - then implement edit, publication and lifecycle operations as separate controlled checkpoints.
+
+
+<!-- SELQIRO_V2_OWNER_HORSE_EDIT_READ_ONLY_CHECKPOINT_20260913 -->
+## 2026-09-13 — Owner horse-offer read-only edit form
+
+The owner edit-route foundation follows `649d9da` (My Area horse owner-detail navigation):
+
+- route: `/v2/my-area/horse-offers/[id]/edit`;
+- thin route and V2 wrapper compose `OwnerHorseOfferEditPage`;
+- `useOwnerHorseOfferEditForm` reuses `useOwnerHorseOfferDetail` and `getMyHorseOffer`;
+- `hydrateOwnerHorseOfferEditForm` maps owner data into the existing shared horse form fields;
+- specific-horse fields and `details.wanted` preferences, budget and search area stay separate;
+- lease/co-rider periods are read from `details.recurring_fee`;
+- the form is inside a disabled fieldset; text inputs are read-only and save is disabled;
+- existing safe image metadata is displayed in returned order without image actions;
+- the owner detail offers `Ava muutmisvaade` with an explicit read-only explanation;
+- loading, not-found, retryable read errors and return navigation are present;
+- no save, publication, policy acceptance, status, store-category, image or Energy mutation is added;
+- canonical horse data remains in `horse_offers`, without a duplicate `listings` row.
+
+Validation provenance: the original source patch passed build and the user's wide/narrow browser test. Its staged SHA-256 was `f7a326dec1a88a0ee680a146fc7355e0ac0b873e97090493270a7f7d7b26af2d`. The 2026-09-13 recovery snapshot has the same six-file patch and no unstaged differences. Collection itself was not a new build or browser test. The user had no `wanted` draft, so that branch is NOT browser-verified. The documentation/checkpoint runner requires a fresh successful build before creating the commit.
+
+Next coherent feature: draft-only owner editing and save through the existing `save_my_horse_offer_draft_v1` contract. Inspect the current save wrapper, payload builder, shared field modules and SQL before enabling writes. Hydration is currently a presentation mapping, NOT a lossless update payload: preserve unedited stored fields and explicitly review defaults, private location fields and structured details before reuse. Never reuse generic listing writes or draft saving for published horse offers.
+
+Workflow update: group tightly related low-risk API/hook/UI/tests/docs into one logical checkpoint. Keep authorization/database changes, publication, destructive image/Storage actions and Energy/payments independently controlled. Preserve a green build, relevant browser tests, scoped commit/push and a clean checkpoint. My Area view-all/scroll restoration remains a separate follow-up.
