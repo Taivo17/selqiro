@@ -3030,3 +3030,34 @@ Next exact work:
 3. connect `getMyHorseOffer` through a feature hook;
 4. add loading, forbidden/not-found and read-only success states;
 5. do not add edit, status, publication, category or image mutations in that same first connection patch.
+
+<!-- SELQIRO_V2_OWNER_HORSE_OFFER_READ_ONLY_DETAIL_ROUTE_20260913 -->
+## 2026-09-13 owner horse-offer read-only detail route checkpoint
+
+Completed and browser-tested:
+
+- added `/v2/my-area/horse-offers/[id]`;
+- added a thin route and V2 wrapper;
+- added `useOwnerHorseOfferDetail`;
+- connected the route to `getMyHorseOffer` and `get_my_horse_offer_v1`;
+- added loading, not-found, retryable error and success states;
+- added a private owner detail presentation for title, type, status, price, location, images and horse-specific fields;
+- confirmed active-identity isolation;
+- confirmed generic listing detail and edit routes still work;
+- confirmed there are no edit, publication, status, store-category, image or Energy mutations;
+- production build passed;
+- database and production schema were unchanged.
+
+Current boundary:
+
+- Minu ala horse rows remain read-only and are not yet linked to the route;
+- horse edit, publication and lifecycle actions remain unavailable.
+
+Next exact step:
+
+1. read-only audit `MyAreaHorseOfferRow`, `MyAreaListingsSection`, owner return context and route navigation;
+2. define the smallest content-type-aware row-navigation patch;
+3. connect only the horse row's image/title/detail action to `/v2/my-area/horse-offers/[id]`;
+4. preserve ordinary listing `/v2/listing/[id]`, edit and inline status behavior;
+5. add no horse mutations;
+6. build, browser-test desktop/mobile and checkpoint separately.

@@ -4075,3 +4075,21 @@ Next exact step:
 
 - run a read-only audit for the owner horse-offer detail hook and route connection;
 - then connect the typed read contract without enabling edit or lifecycle mutations in the same patch.
+
+<!-- SELQIRO_V2_OWNER_HORSE_OFFER_READ_ONLY_DETAIL_ROUTE_20260913 -->
+## V2_OWNER_HORSE_OFFER_READ_ONLY_DETAIL_ROUTE
+
+The authenticated active-identity owner now has a dedicated read-only horse-offer detail route:
+
+- route: `/v2/my-area/horse-offers/[id]`;
+- canonical owner read: `public.get_my_horse_offer_v1`;
+- browser entity API: `getMyHorseOffer`;
+- feature hook: `useOwnerHorseOfferDetail`;
+- states: loading, success, not-found and retryable error;
+- the page displays owner-safe horse fields and ordered images without mutation controls;
+- the route remains separate from the generic bigint listing detail route;
+- the active-identity boundary remains authoritative in the RPC;
+- Minu ala horse rows are not linked to this route yet;
+- edit, publication, status, store-category, image and Energy mutations remain absent.
+
+Production build and owner-browser validation passed. The next isolated step is a read-only audit of the Minu ala horse-row navigation boundary, followed by connecting only row detail navigation while preserving ordinary listing routes and mutation rules.

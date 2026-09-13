@@ -5589,3 +5589,31 @@ Architecture rules:
 - detail read and future mutations stay separate contracts;
 - the first client checkpoint is read-only and has no hook, route or UI connection;
 - edit, publication, lifecycle, category and image operations require later isolated server contracts and checkpoints.
+
+<!-- SELQIRO_V2_OWNER_HORSE_OFFER_READ_ONLY_DETAIL_ROUTE_20260913 -->
+## Owner horse-offer read-only detail route
+
+The controlled `horse_offer` domain now has a private owner detail surface without creating a duplicate generic `listings` row.
+
+### Route and layers
+
+- `app/v2/my-area/horse-offers/[id]/page.tsx`;
+- `components/v2/my-area/V2HorseOfferDetailPage.tsx`;
+- `src/features/horse-offer-detail/components/OwnerHorseOfferDetailPage.tsx`;
+- `src/features/horse-offer-detail/model/useOwnerHorseOfferDetail.ts`;
+- `src/entities/horse-offer/api/getMyHorseOffer.ts`;
+- `public.get_my_horse_offer_v1`.
+
+The route parameter is the canonical horse-offer UUID and must not be coerced into the generic bigint listing ID shape. The data path is:
+
+`route → feature page → useOwnerHorseOfferDetail → getMyHorseOffer → get_my_horse_offer_v1`.
+
+The hook owns loading, error, not-found, retry and stale-result cancellation. UI components do not call Supabase directly.
+
+### Security and read-only boundary
+
+`get_my_horse_offer_v1` resolves the authenticated user's active identity and returns only the matching identity-owned horse offer. A missing or inaccessible offer uses the same calm not-found owner state.
+
+This checkpoint contains no edit, publication, lifecycle/status, store-category, image, Energy, database or production mutation. Generic listing detail and edit routes remain unchanged.
+
+`MyAreaHorseOfferRow` is not linked to this route yet. The next patch must first audit navigation and return-context behavior, then connect only horse-row detail navigation while preserving ordinary listing detail/edit/status behavior.

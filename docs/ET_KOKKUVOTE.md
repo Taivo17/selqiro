@@ -8124,3 +8124,21 @@ Valmis sai hobusepakkumise omaniku detailvaate andmekihi esimene kliendipoolne c
 - mapperi käitumistest ja production build läbisid.
 
 Selles etapis ei ühendatud veel hook'i, route'i ega kasutajaliidest ning ei lisatud ühtegi muutvat tegevust. Järgmine samm on omaniku hobusepakkumise detailroute'i ja hook'i read-only audit ning seejärel eraldi väike ühenduspatch.
+
+<!-- SELQIRO_V2_OWNER_HORSE_OFFER_READ_ONLY_DETAIL_ROUTE_20260913 -->
+## 2026-09-13 – hobusepakkumise omaniku read-only detailvaade
+
+Valmis on hobusepakkumise omaniku eraldi detailvaade:
+
+- route on `/v2/my-area/horse-offers/[id]`;
+- detail loetakse typed `getMyHorseOffer` kliendilepingu kaudu;
+- omaniku ja aktiivse identiteedi kontroll jääb `get_my_horse_offer_v1` RPC-sse;
+- olemas on laadimise, vea, uuesti proovimise ja „ei leitud” olek;
+- vaade näitab pealkirja, liiki, staatust, hinda, asukohta, pilte ja hobusepõhiseid andmeid;
+- vaade on märgitud ainult omanikule nähtava lugemisvaatena;
+- tavakuulutuse detail- ja muutmisroute jäid muutmata;
+- teise aktiivse identiteedi pakkumist ei saa selle route'i kaudu avada.
+
+Selles etapis ei lisatud muutmist, avaldamist, staatuse muutmist, rubriigiseoseid, pildihaldust, Energy kasutust ega andmebaasi- või productionimuudatust.
+
+Build ja brauseritest läbisid. Minu ala hobuseread ei ava uut detailroute'i veel. Järgmine väike samm algab rea navigeerimise ja tagasipöördumise read-only auditiga ning ühendab seejärel ainult detaili avamise.
