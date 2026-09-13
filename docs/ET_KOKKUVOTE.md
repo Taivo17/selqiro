@@ -8088,3 +8088,22 @@ Lisatud on `get_my_horse_offer_v1(uuid)`, mis loeb ühe hobusepakkumise ainult s
 Omanikuvaade saab tulevase detaili- ja muutmisvormi jaoks kõik hobusepakkumise sisuväljad, omaniku privaatsema asukohainfo, elutsükli ajatemplid, `details` haruandmed ning järjestatud pildid. Brauserile ei tagastata Storage'i radu, üleslaadija ID-sid ega sisemist publication-event viidet.
 
 See samm on ainult lugemisvundament. Minu ala hobuserida jääb praegu read-only kujule ning detailroute'i, muutmist, avaldamist, staatuse muutmist, rubriigiseost ega Energy tegevust ei lisata. Järgmine väike samm on typed kliendimudel, mapper ja RPC-wrapper.
+
+<!-- SELQIRO_OWNER_HORSE_OFFER_DETAIL_READ_PRODUCTION_V1 -->
+## 2026-09-13 hobusepakkumise omaniku detail-lugemise production checkpoint
+
+Valmis ja productionis kontrollitud:
+
+- lähtekoodi checkpoint `c866cde` (`Add owner horse offer detail read`) on GitHubis;
+- migratsioon `20260913113000_add_owner_horse_offer_detail_read.sql` on linked productionis rakendatud;
+- local ja remote migratsiooniajalugu on sünkroonis ning ootel migratsioone ei ole;
+- productionis on read-only RPC `public.get_my_horse_offer_v1(uuid)`;
+- kasutaja ja aktiivne identiteet lahendatakse serveris, klient annab ainult hobusepakkumise ID;
+- hobusepakkumise tõeallikas jääb `public.horse_offers` ning hobuse jaoks ei looda varjatud dubleerivat tavakuulutuse rida;
+- omanikuvaade saab järjestatud turvalise pildiinfo, kuid ei saa Storage'i radu, üleslaadija ID-d ega sisemist publication-event viidet;
+- `PUBLIC` käivitusõigus on eemaldatud ja `anon` rollil puudub otsene käivitusgrant;
+- värske production skeemidump, RPC leping, build ja puhas tööpuu läbisid järelkontrolli;
+- järelkontroll oli read-only ning ei muutnud hobusepakkumisi, pilte, reeglitega nõustumisi, avaldamissündmusi, avaldamist, staatust, rubriike ega Energy't;
+- kliendi route'i, detailvaadet ega muutmistoiminguid selles checkpoint'is ei lisatud.
+
+Järgmine väike samm on typed omaniku detail-lugemise kliendileping: horse-offer entity tüüp, range mapper ja `get_my_horse_offer_v1` brauseri RPC-wrapper. UI, muutmine, avaldamine ja staatusetoimingud jäävad eraldi hilisematesse checkpoint'idesse.

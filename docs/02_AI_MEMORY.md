@@ -4034,3 +4034,18 @@ Next isolated step: perform a read-only audit of the exact hook/UI field and act
 - No route, client wrapper, edit mutation, publication mutation, lifecycle mutation, store-category mutation, Energy mutation or production rollout was added.
 - Local reset, rollback SQL contract test and production build must pass before commit.
 - Next isolated patch: typed horse-owner detail model, mapper and browser RPC wrapper; do not connect a route in the same patch.
+
+<!-- SELQIRO_OWNER_HORSE_OFFER_DETAIL_READ_PRODUCTION_V1 -->
+## 2026-09-13 owner horse-offer detail read production checkpoint
+
+- Source checkpoint `c866cde` (`Add owner horse offer detail read`) is committed and pushed to `origin/main`.
+- Migration `20260913113000_add_owner_horse_offer_detail_read.sql` is applied to the linked production project `vyjletlmwoiwxsnsunlm`.
+- Local and remote migration histories both contain `20260913113000`; the post-rollout linked dry-run reports no pending migrations.
+- Production now exposes the read-only owner RPC `public.get_my_horse_offer_v1(uuid)`.
+- The RPC resolves the authenticated actor and active identity server-side and reads the canonical `public.horse_offers` domain instead of creating a duplicate generic listing row.
+- The owner detail contract includes the ordered safe image payload needed by a future owner detail/edit surface while keeping Storage paths, uploader IDs and the internal current publication-event reference out of the result.
+- `PUBLIC` execute is revoked, `anon` has no direct execute grant, and only the intended authenticated/service roles receive execution access.
+- Production verification passed against a fresh schema dump. The verification run was read-only and confirmed that horse offers, horse images, policy acceptances, publication events, publication state, lifecycle status, store-category relations and Energy were not mutated.
+- No client route or edit/publication/status mutation was added in this checkpoint.
+
+Next isolated step: audit the existing horse-offer entity boundary, then add a typed owner horse-offer detail model, mapper and browser RPC wrapper for `get_my_horse_offer_v1` without connecting UI or any write action yet.

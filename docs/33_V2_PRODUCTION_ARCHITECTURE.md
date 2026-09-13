@@ -5540,3 +5540,23 @@ Owner result rules:
 - do not expose `current_publication_event_id`; it remains an internal publication-integrity pointer.
 
 This is a read-only foundation. A later typed client contract may consume it, followed by a separate read-only owner detail route. Draft editing continues to use `save_my_horse_offer_draft_v1`; publication and lifecycle mutations remain separate future contracts.
+
+<!-- SELQIRO_OWNER_HORSE_OFFER_DETAIL_READ_PRODUCTION_V1 -->
+## Owner horse-offer detail read contract in production
+
+Production migration `20260913113000_add_owner_horse_offer_detail_read.sql` adds `public.get_my_horse_offer_v1(uuid)` as the authenticated owner-side read boundary for one horse offer.
+
+Architecture rules:
+
+- `public.horse_offers` remains the canonical horse-domain source of truth.
+- The shared marketplace-item projection remains the compact cross-type list/management read model; it does not replace the domain-specific owner detail contract.
+- The client supplies only the horse-offer content ID. The database resolves `auth.uid()` and the active identity through the existing identity authority.
+- A horse offer is returned only when it belongs to the caller's current accessible active identity.
+- The RPC is read-only, `STABLE`, `SECURITY DEFINER`, and uses a fixed search path.
+- Ordered horse images are returned as safe owner-facing metadata. Internal Storage paths, uploader IDs and the current publication-event ID are not exposed.
+- Direct table privileges for `horse_offers` and `horse_offer_images` remain closed to ordinary browser roles.
+- `PUBLIC` execution is revoked; `anon` has no direct execute grant; authenticated and service execution remain explicit.
+- The contract does not publish, pause, close, reject or archive an offer and does not change confirmations, policy acceptance, store categories or Energy.
+- No shadow `listings` row is created for a horse offer.
+
+The first client patch after this production checkpoint must stay read-only: add the typed entity model, row mapper and RPC wrapper under the horse-offer entity boundary. Route composition, editing, publication orchestration and lifecycle mutations remain separate later checkpoints.

@@ -2972,3 +2972,32 @@ Next exact step after local verification, documentation commit/push and controll
 2. add a row mapper for the RPC result;
 3. add a read-only browser wrapper;
 4. do not connect the Minu ala row or create an edit route in that same first client patch.
+
+<!-- SELQIRO_OWNER_HORSE_OFFER_DETAIL_READ_PRODUCTION_V1 -->
+## 2026-09-13 owner horse-offer detail read production checkpoint
+
+Completed:
+
+- source commit `c866cde` (`Add owner horse offer detail read`) is on `main` and `origin/main`;
+- migration `20260913113000_add_owner_horse_offer_detail_read.sql` is applied to linked production project `vyjletlmwoiwxsnsunlm`;
+- local and remote migration histories are synchronized;
+- linked post-rollout dry-run reports no pending migrations;
+- fresh production schema verification passed;
+- production RPC: `public.get_my_horse_offer_v1(uuid)`;
+- owner authority is resolved server-side from the authenticated user and active identity;
+- canonical source remains `public.horse_offers`;
+- ordered image metadata is included without Storage paths, uploader IDs or internal publication-event linkage;
+- ordinary direct table access remains closed;
+- the verification run was read-only and confirmed no horse data, publication, lifecycle, store-category, policy-acceptance or Energy mutation;
+- client routes and write actions remain unchanged.
+
+Next exact isolated step:
+
+1. perform a read-only audit of the current `src/entities/horse-offer` types and APIs;
+2. add a typed owner detail discriminated model for the existing horse-offer variants;
+3. add a strict RPC row mapper for `get_my_horse_offer_v1`;
+4. add one browser RPC wrapper that accepts only the horse-offer ID;
+5. run static contract checks and `npm run build`;
+6. do not connect a route, owner detail page, edit form, publication mutation, status action, images mutation, store-category mutation or Energy action in the same patch.
+
+The existing My Area horse rows remain read-only until a separate route and action contract is designed.
