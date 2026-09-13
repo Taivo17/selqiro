@@ -8079,3 +8079,12 @@ Minu ala omanikuvaade loeb nüüd ühist `get_my_marketplace_items_v1` lepingut 
 - Varasem `Vaata kõiki` → detail → brauseri Back oleku taastamise pisiviga jääb eraldi hilisemaks paranduseks.
 
 Järgmine samm algab read-only auditiga, mis määratleb hobusepakkumise omaniku detaili-, muutmis-, avaldamis- ja elutsükli tegevuslepingud enne esimese päris tegevuse lisamist.
+
+<!-- SELQIRO_HORSE_OWNER_DETAIL_READ_V1 -->
+## Turvaline hobusepakkumise omaniku detailvaate lugemisleping
+
+Lisatud on `get_my_horse_offer_v1(uuid)`, mis loeb ühe hobusepakkumise ainult siis, kui see kuulub sisselogitud kasutaja aktiivsele identiteedile. Identiteeti ei anta brauserist kaasa, vaid see lahendatakse andmebaasis.
+
+Omanikuvaade saab tulevase detaili- ja muutmisvormi jaoks kõik hobusepakkumise sisuväljad, omaniku privaatsema asukohainfo, elutsükli ajatemplid, `details` haruandmed ning järjestatud pildid. Brauserile ei tagastata Storage'i radu, üleslaadija ID-sid ega sisemist publication-event viidet.
+
+See samm on ainult lugemisvundament. Minu ala hobuserida jääb praegu read-only kujule ning detailroute'i, muutmist, avaldamist, staatuse muutmist, rubriigiseost ega Energy tegevust ei lisata. Järgmine väike samm on typed kliendimudel, mapper ja RPC-wrapper.

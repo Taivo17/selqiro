@@ -2953,3 +2953,22 @@ Next exact step:
 2. run a read-only audit of horse owner detail/edit/publication/lifecycle contracts;
 3. choose the first dedicated horse action without reusing generic listing routes or mutations;
 4. keep store-category assignment and lifecycle writes separate, small and independently tested.
+
+<!-- SELQIRO_HORSE_OWNER_DETAIL_READ_V1 -->
+## 2026-09-13 owner horse-offer detail read checkpoint
+
+Current checkpoint adds the first secure single-item owner read for canonical horse offers:
+
+- migration: `20260913113000_add_owner_horse_offer_detail_read.sql`;
+- RPC: `get_my_horse_offer_v1(uuid)`;
+- authorization: authenticated active identity resolved server-side;
+- owner output: complete editable fields, `details`, private owner location, lifecycle timestamps and ordered safe image metadata;
+- excluded browser fields: Storage paths, uploader IDs and internal publication-event pointer;
+- no client, route, edit, publish, lifecycle, category or Energy mutation.
+
+Next exact step after local verification, documentation commit/push and controlled production rollout:
+
+1. add a typed horse-owner detail entity model;
+2. add a row mapper for the RPC result;
+3. add a read-only browser wrapper;
+4. do not connect the Minu ala row or create an edit route in that same first client patch.

@@ -5517,3 +5517,26 @@ Implementation boundaries:
 The horse row stays inventory-dense. It uses the same practical media footprint as ordinary rows, reserves more horizontal room for title/metadata and applies only a desktop 8 px media inset for visual alignment. This is presentation-only and does not change lifecycle state, publication state, categories, Energy, database schema or production data.
 
 Before any horse-row action is enabled, define dedicated horse owner contracts for detail, editing, publication and lifecycle state transitions. Do not route a horse UUID through generic bigint listing routes and do not call `updateListingStatus` for `horse_offer`.
+
+<!-- SELQIRO_HORSE_OWNER_DETAIL_READ_V1 -->
+## Secure owner horse-offer detail read boundary
+
+The owner list and owner detail are separate contracts. `get_my_marketplace_items_v1` remains the bounded shared owner list surface, while `get_my_horse_offer_v1(uuid)` returns one canonical `horse_offers` row for the authenticated user's active identity.
+
+Authorization rules:
+
+- actor comes from `auth.uid()`;
+- active identity is resolved by `require_my_active_identity_v2()`;
+- the client sends only the horse-offer UUID;
+- another active identity receives no row;
+- direct browser access to `horse_offers` and `horse_offer_images` remains revoked.
+
+Owner result rules:
+
+- preserve the shared identity pair `content_type = horse_offer` and `content_id = offer UUID text`;
+- expose complete owner-editable horse fields, `details`, private owner location values and lifecycle timestamps;
+- aggregate images in deterministic primary/order/time/ID order;
+- expose image IDs and safe URLs, but not Storage paths or uploader IDs;
+- do not expose `current_publication_event_id`; it remains an internal publication-integrity pointer.
+
+This is a read-only foundation. A later typed client contract may consume it, followed by a separate read-only owner detail route. Draft editing continues to use `save_my_horse_offer_draft_v1`; publication and lifecycle mutations remain separate future contracts.

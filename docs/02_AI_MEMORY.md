@@ -4020,3 +4020,17 @@ Next isolated step: perform a read-only audit of the exact hook/UI field and act
 - Production build and read-only desktop browser verification passed. The browser test confirmed horse rows were visible and no status, store-category, publication or Energy mutation was called.
 - The existing My Area return-context issue remains deferred: after `Vaata kõiki`, opening a late row and using browser Back can restore the five-row preview instead of the prior expanded position.
 - Next isolated step: begin with a read-only audit of horse owner detail, edit, publication and lifecycle action contracts before enabling any horse-row action.
+
+<!-- SELQIRO_HORSE_OWNER_DETAIL_READ_V1 -->
+## 2026-09-13 — Secure owner horse-offer detail read contract
+
+- Added database migration `20260913113000_add_owner_horse_offer_detail_read.sql`.
+- Added authenticated read-only RPC `get_my_horse_offer_v1(uuid)`.
+- The RPC resolves the active identity in the database through `require_my_active_identity_v2()` and never accepts a client-provided identity ID.
+- Canonical source remains `horse_offers`; the shared owner identity remains `content_type + content_id`.
+- The owner result contains the complete editable horse-offer fields, private owner location fields, versioned `details`, lifecycle timestamps and deterministically ordered image metadata.
+- Image Storage paths, uploader IDs and `current_publication_event_id` are intentionally not returned to the browser.
+- Direct authenticated/anonymous table reads remain revoked.
+- No route, client wrapper, edit mutation, publication mutation, lifecycle mutation, store-category mutation, Energy mutation or production rollout was added.
+- Local reset, rollback SQL contract test and production build must pass before commit.
+- Next isolated patch: typed horse-owner detail model, mapper and browser RPC wrapper; do not connect a route in the same patch.
