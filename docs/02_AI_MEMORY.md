@@ -4008,3 +4008,15 @@ A feature-level owner-management row contract now exists under `src/features/my-
 This row contract is presentation and capability metadata only. It does not authorize writes and it does not merge the canonical listing and horse-offer write paths. The hook and UI are not connected in this checkpoint, horse rows are not rendered, and status, store-category, publication, Energy, database, and production behavior remain unchanged.
 
 Next isolated step: perform a read-only audit of the exact hook/UI field and action assumptions, then connect the content-type-aware row model without enabling any new mutation. Existing ordinary-listing behavior must remain unchanged; horse rows may only expose actions whose dedicated contracts actually exist.
+
+<!-- SELQIRO_V2_MY_AREA_CONTENT_TYPE_AWARE_ROWS_20260913 -->
+## V2 My Area content-type-aware owner rows checkpoint — 2026-09-13
+
+- The canonical owner read remains `get_my_marketplace_items_v1` through the typed marketplace-item entity boundary.
+- My Area now consumes both `listing` and `horse_offer` rows while preserving the existing `MyIdentityListingCard` hook contract through a typed row mapper and type guard.
+- Ordinary listing behavior is unchanged: image/title opens `/v2/listing/[id]`, edit opens `/v2/my-area/listings/[id]/edit`, and `active / paused / sold` remains the existing listing-only status action.
+- Horse offers now appear in the same My Area list as compact read-only rows. They do not synthesize a generic listing ID, generic detail route, generic edit route or listing-status mutation.
+- The horse row shows the offer label, title, offer/location metadata, price and source status. Desktop media alignment uses an 8 px inset so horse media aligns with ordinary listing thumbnails without increasing row height.
+- Production build and read-only desktop browser verification passed. The browser test confirmed horse rows were visible and no status, store-category, publication or Energy mutation was called.
+- The existing My Area return-context issue remains deferred: after `Vaata kõiki`, opening a late row and using browser Back can restore the five-row preview instead of the prior expanded position.
+- Next isolated step: begin with a read-only audit of horse owner detail, edit, publication and lifecycle action contracts before enabling any horse-row action.

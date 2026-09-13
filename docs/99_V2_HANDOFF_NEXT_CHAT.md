@@ -2926,3 +2926,30 @@ Next exact step:
 4. never call ordinary listing status/edit APIs for `horse_offer`;
 5. expose horse rows only with the capabilities present in the row contract, unless dedicated horse owner routes or mutations are added in their own later checkpoint;
 6. build and browser-test before commit.
+
+<!-- SELQIRO_V2_MY_AREA_CONTENT_TYPE_AWARE_ROWS_20260913 -->
+## 2026-09-13 — My Area content-type-aware rows checkpoint
+
+Completed and browser-tested:
+
+- owner read uses `get_my_marketplace_items_v1`;
+- My Area can consume `listing` and `horse_offer` projection rows;
+- ordinary listing JSX, detail, edit and `active / paused / sold` actions remain unchanged;
+- horse offers appear in the same list as compact read-only rows;
+- horse UUIDs are not coerced into generic listing IDs;
+- horse detail, edit and status actions remain disabled until dedicated contracts exist;
+- horse image/placeholder alignment was adjusted by 8 px on desktop without enlarging the row;
+- production build passed;
+- read-only browser test passed with visible horse rows;
+- no status, store-category, publication, Energy, database or production mutation occurred.
+
+Known deferred UX issue:
+
+- after expanding `Vaata kõiki`, opening a row near the end and returning with browser Back may restore the five-row preview instead of the prior expanded/scroll position.
+
+Next exact step:
+
+1. keep this checkpoint committed and the worktree clean;
+2. run a read-only audit of horse owner detail/edit/publication/lifecycle contracts;
+3. choose the first dedicated horse action without reusing generic listing routes or mutations;
+4. keep store-category assignment and lifecycle writes separate, small and independently tested.

@@ -8065,3 +8065,17 @@ Hobusepakkumise real on praegu teadlikult:
 See väldib olukorda, kus hobusepakkumisele kuvatakse töötavana tavakuulutuse nupp või kutsutakse valet mutatsiooni. Reamudel on ainult kuvamise ja võimekuste leping; serveripoolsed domeenimutatsioonid jäävad autoriteetseks.
 
 Selles checkpoint'is ei ühendatud uut mudelit veel hook'i ega kasutajaliidesega. Hobuse ridu Minu alas veel ei kuvata ning andmebaasi, productionit, staatuse-, rubriigi-, avaldamise- ega Energy loogikat ei muudetud. Järgmine samm algab hook'i ja UI täpse read-only auditiga.
+
+<!-- SELQIRO_V2_MY_AREA_CONTENT_TYPE_AWARE_ROWS_20260913 -->
+## 2026-09-13 — Hobusepakkumised Minu ala kuulutuste loendis
+
+Minu ala omanikuvaade loeb nüüd ühist `get_my_marketplace_items_v1` lepingut ning suudab samas kuulutuste loendis eristada tavakuulutusi ja hobusepakkumisi.
+
+- Tavakuulutuse senine käitumine säilis: pilt ja tekst avavad detaili, „Muuda” avab muutmisvaate ning staatust saab hallata senise `active / paused / sold` tegevusega.
+- Hobusepakkumine kuvatakse praegu kompaktse ainult-vaade reana. Sellele ei tekitata vale tavakuulutuse ID-d, detailimarsruuti, muutmismarsruuti ega tavakuulutuse staatusemuutust.
+- Hobusereal on nähtavad pakkumise märk, pealkiri, pakkumise liik/asukoht, hind ja olek.
+- Rea kõrgust ei suurendatud. Pildi või placeholder'i ala nihutati desktopis 8 px paremale, et see joonduks tavakuulutuste piltidega.
+- Production build ja read-only brauseritest läbisid. Testi ajal ei muudetud staatust, rubriigiseoseid, avaldamist, Energy't, andmebaasi ega productionit.
+- Varasem `Vaata kõiki` → detail → brauseri Back oleku taastamise pisiviga jääb eraldi hilisemaks paranduseks.
+
+Järgmine samm algab read-only auditiga, mis määratleb hobusepakkumise omaniku detaili-, muutmis-, avaldamis- ja elutsükli tegevuslepingud enne esimese päris tegevuse lisamist.

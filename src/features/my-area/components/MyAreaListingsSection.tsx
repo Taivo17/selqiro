@@ -13,6 +13,10 @@ import {
 } from "../model/useMyAreaListings";
 import { useMyAreaStoreCategories } from "../model/useMyAreaStoreCategories";
 import StoreCategoryHierarchyFilter from "../../store-category-filter/components/StoreCategoryHierarchyFilter";
+import MyAreaHorseOfferRow from "./MyAreaHorseOfferRow";
+import {
+  isMyAreaHorseOfferMarketplaceItemRow,
+} from "../model/myAreaMarketplaceItemRow";
 
 const LISTING_PREVIEW_LIMIT = 5;
 const LISTING_MANAGEMENT_LIMIT = 500;
@@ -408,14 +412,25 @@ export default function MyAreaListingsSection() {
 
       {!loading && !error && displayListings.length > 0 ? (
         <div className="divide-y divide-black/5">
-          {visibleListings.map((listing) => (
+          {visibleListings.map((listing) => {
+      if (isMyAreaHorseOfferMarketplaceItemRow(listing)) {
+        return (
+          <MyAreaHorseOfferRow
+            key={listing.key}
+            item={listing}
+          />
+        );
+      }
+
+      return (
             <MyAreaListingRow
               key={listing.id}
               listing={listing}
               statusFilter={statusFilter}
               onStatusChanged={handleStatusChanged}
             />
-          ))}
+          );
+    })}
         </div>
       ) : null}
     </section>

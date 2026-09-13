@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 import {
-  getMyAreaOrdinaryListings,
-} from "./getMyAreaOrdinaryListings";
+  getMyAreaMarketplaceItemRows,
+} from "./getMyAreaMarketplaceItemRows";
 import type { MyIdentityListingCard } from "../../../entities/listing/model/types";
 
 export type MyAreaListingsStatusFilter = "all" | "active" | "paused" | "sold";
@@ -48,7 +48,7 @@ export function useMyAreaListings(
       });
 
       try {
-        const listings = await getMyAreaOrdinaryListings({
+        const listings = await getMyAreaMarketplaceItemRows({
           limit,
           offset,
           statusFilter,

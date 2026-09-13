@@ -5493,3 +5493,27 @@ For `horse_offer` rows in the current architecture checkpoint:
 These null/false/empty values are intentional capability boundaries, not unfinished buttons. The UI must not synthesize a route or call the ordinary-listing mutation for a horse offer. Server-side domain APIs remain authoritative for every write.
 
 The mapper has no Supabase access or side effects and uses an exhaustive `contentType` branch. This checkpoint does not connect the mapper to `useMyAreaListings`, does not change `MyAreaListingsSection`, and does not modify database or production state.
+
+<!-- SELQIRO_V2_MY_AREA_CONTENT_TYPE_AWARE_ROWS_20260913 -->
+## My Area content-type-aware owner-row connection — 2026-09-13
+
+The owner workspace now reads the shared `marketplace_item_projection_v1` through `get_my_marketplace_items_v1` and maps its discriminated `content_type + content_id` result into a My Area row contract.
+
+Current supported owner-row variants:
+
+- `listing`: preserves the established detail route, edit route and listing-only status mutation.
+- `horse_offer`: renders a compact read-only management row with no generic listing shadow row, no generic listing ID coercion, no generic detail/edit route and no call to the listing status mutation.
+
+Implementation boundaries:
+
+- entity read: `src/entities/marketplace-item`;
+- My Area loader: `getMyAreaMarketplaceItemRows`;
+- pure row mapper: `mapMyAreaMarketplaceItemRow`;
+- typed row/action contract: `MyAreaMarketplaceItemRow`;
+- hook remains compatible with the existing `MyIdentityListingCard` consumer contract;
+- UI narrows horse rows through `isMyAreaHorseOfferMarketplaceItemRow`;
+- `MyAreaHorseOfferRow` owns only read-only horse presentation.
+
+The horse row stays inventory-dense. It uses the same practical media footprint as ordinary rows, reserves more horizontal room for title/metadata and applies only a desktop 8 px media inset for visual alignment. This is presentation-only and does not change lifecycle state, publication state, categories, Energy, database schema or production data.
+
+Before any horse-row action is enabled, define dedicated horse owner contracts for detail, editing, publication and lifecycle state transitions. Do not route a horse UUID through generic bigint listing routes and do not call `updateListingStatus` for `horse_offer`.
