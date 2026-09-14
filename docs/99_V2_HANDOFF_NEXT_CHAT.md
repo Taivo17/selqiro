@@ -3142,3 +3142,37 @@ Keep publish-first creation: `Salvesta hilisemaks` is optional, not a mandatory 
 Group related low-risk work into meaningful checkpoints instead of unnecessary per-file conversation rounds. Keep actual-source inspection, build, relevant browser tests, documentation and exact-scope commit/push. Security-sensitive database/authorization changes, publication, image/Storage deletion and Energy/payments require independently controlled validation.
 
 My Area `Vaata kõiki`, filters and scroll restoration after Back remain a separate deferred task.
+
+
+<!-- SELQIRO_OWNER_HORSE_DRAFT_UPDATE_CONTRACT_20260913 -->
+## Latest direction — owner draft update server contract, 2026-09-13
+
+This supersedes the older instruction to unlock the owner form using the existing
+create-form mapper and `save_my_horse_offer_draft_v1` directly.
+
+The last confirmed base remains `5f59250 Add owner horse offer read-only edit form`.
+The next source checkpoint adds migration `20260913190000`, its rollback test and
+`docs/architecture/horse-offer-draft-update-v1.md`, plus these four documentation
+updates. Read the runner result/Git state for whether this source was later committed.
+
+New contracts are `get_my_horse_offer_edit_snapshot_v1` and
+`update_my_horse_offer_draft_v1`. They use a server-incremented bigint edit revision
+as decimal text and preserve unedited values through a closed scalar patch.
+Local rollback tests, existing save/read regression suites and build passed; the
+local migration/test data were rolled back. Production is NOT applied, UI remains
+read-only, and no new browser test was performed.
+
+Next sequence:
+1. Review the result ZIP and exact seven-file scope, then commit/push this source.
+2. Perform a separately controlled production preflight, migration and verification.
+3. Audit/coordinate the existing optional same-session draft update path: legacy
+   writes advance revision but do not check it. Retire/restrict that old update
+   path through a controlled migration/release before exposing owner editing.
+4. Connect the atomic edit snapshot, revision-string client, changed-field mapper,
+   guarded hook and editable UI as one cohesive feature once the write contracts
+   are deployed and the legacy transition is safe. Keep offer type locked.
+5. Preserve unknown displayed/stored values; do not send all hydration defaults.
+   Conflicts retain unsaved user input and must not be auto-retried with a new revision.
+
+Do not add publication, images, Energy, category assignments or My Area scroll
+restoration to this feature. Publish-first creation and optional save-later stay.

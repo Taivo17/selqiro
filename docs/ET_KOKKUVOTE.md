@@ -8185,3 +8185,25 @@ Järgmine terviklik funktsioon on olemasoleva mustandi muutmine ja salvestamine 
 Töötempot võib tõsta, ühendades sama väikese funktsiooni API, hook'i, kasutajaliidese, testid ja dokumentatsiooni üheks checkpoint'iks. Kvaliteedikontrollid jäävad alles; turvatundlikke andmebaasi-, avaldamis-, kustutamis- ning Energy/maksete muudatusi ei ühendata kiiruse nimel.
 
 Kuulutuse lisamise põhitee jääb otse `Avalda kuulutus`; `Salvesta hilisemaks` on vabatahtlik. Minu ala `Vaata kõiki` ja tagasipöördumise kerimiskoha taastamine jääb eraldi hilisemaks paranduseks.
+
+
+<!-- SELQIRO_OWNER_HORSE_DRAFT_UPDATE_CONTRACT_20260913 -->
+## 2026-09-13 — Hobusemustandi turvalise uuendamise serverileping
+
+Ainult-vaate muutmisvormi checkpoint `5f59250` on lõpetatud. Salvestuse lähteaudit
+näitas, et vana loomisfunktsiooni otse kasutamine võiks kirjutada üle vormis
+mittekuvatud andmeid ning ei kontrolliks vahepealseid muudatusi.
+
+Uus eraldi serverileping uuendab ainult olemasolevat aktiivse identiteedi mustandit.
+Vorm saab hiljem andmed koos andmeversiooniga; vananenud versiooniga salvestus
+lükatakse tagasi. Muutmata väljad, privaatne asukohainfo ja kõrvalised detailid
+säilivad. Hobuse pakkumise liik, avaldamine, olek, pildid ja Energy ei muutu.
+
+Vana salvestusfunktsioon jäi selles etapis muutmata. Selle enda kirjutused ei ole
+veel versioonikontrolliga; enne uue muutmisvormi avamist tuleb ka „Salvesta
+hilisemaks” korduvsalvestus ohutult uue lepinguga ühendada ja vana uuendustee piirata.
+
+Kohalikud uue lepingu ning vana salvestuse/lugemise regressioonitestid ja build
+läbisid. Testiks lisatud skeem ja testandmed pöörati tagasi. Productionisse midagi
+ei rakendatud ning kasutajaliides jäi ainult vaatamiseks. Järgmine samm on tulemuse
+ülevaatus, lähtekoodi commit/push ja eraldi kontrollitud productioni etapp.

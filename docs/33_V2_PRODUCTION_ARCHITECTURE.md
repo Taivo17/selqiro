@@ -5697,3 +5697,31 @@ The original six-file patch passed build and user-confirmed desktop/narrow-brows
 The next logical capability may combine an existing draft-save API connection, guarded feature hook, editable fields, dirty/saving/success/error states, targeted tests and documentation. This is one cohesive change, not permission to merge unrelated or security-sensitive operations. Publication, destructive Storage work, database/authorization changes and Energy/payments keep separately validated boundaries.
 
 The prior My Area `Vaata kõiki` / Back / scroll-restoration issue stays deferred.
+
+
+<!-- SELQIRO_OWNER_HORSE_DRAFT_UPDATE_CONTRACT_20260913 -->
+## Owner horse draft update and version boundary — 2026-09-13
+
+The audited `5f59250` edit form stays read-only. The previous plan to directly reuse
+the create/resubmit RPC is superseded by the update-only contract documented in
+`docs/architecture/horse-offer-draft-update-v1.md`.
+
+- `horse_offers.edit_revision` is the server-maintained optimistic version; it is
+  serialized as text and must never be parsed as a JavaScript Number.
+- `get_my_horse_offer_edit_snapshot_v1` returns the existing owner-safe detail and
+  its matching revision in one SQL statement; separate detail/revision fetches
+  are not permitted for editor initialization.
+- `update_my_horse_offer_draft_v1` requires an existing UUID, expected revision and
+  closed scalar patch; authority is resolved server-side and ownership is in the
+  row-lock predicate. Only exact draft status is writable.
+- Missing keys preserve values; optional explicit null clears only that field.
+  Branch-specific JSON leaves are changed without replacing unrelated metadata.
+- Offer kind, country/currency, lifecycle, private coordinates, images, policies,
+  categories and Energy remain outside the mutation allowlist.
+- Existing timestamp and search-vector triggers remain in place; revision changes
+  also observe legacy/trusted writers. This does not make legacy writes themselves
+  revision-checked. Coordinate their retirement before exposing the new editor.
+
+Local transactional contract/regression checks and build passed. The migration and
+all test fixtures were rolled back, with pre/post catalog and row-count checks.
+No client, browser-flow or production deployment was performed in this checkpoint.

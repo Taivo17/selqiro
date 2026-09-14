@@ -4141,3 +4141,32 @@ Validation provenance: the original source patch passed build and the user's wid
 Next coherent feature: draft-only owner editing and save through the existing `save_my_horse_offer_draft_v1` contract. Inspect the current save wrapper, payload builder, shared field modules and SQL before enabling writes. Hydration is currently a presentation mapping, NOT a lossless update payload: preserve unedited stored fields and explicitly review defaults, private location fields and structured details before reuse. Never reuse generic listing writes or draft saving for published horse offers.
 
 Workflow update: group tightly related low-risk API/hook/UI/tests/docs into one logical checkpoint. Keep authorization/database changes, publication, destructive image/Storage actions and Energy/payments independently controlled. Preserve a green build, relevant browser tests, scoped commit/push and a clean checkpoint. My Area view-all/scroll restoration remains a separate follow-up.
+
+
+<!-- SELQIRO_OWNER_HORSE_DRAFT_UPDATE_CONTRACT_20260913 -->
+## 2026-09-13 — Revision-checked owner horse draft update foundation
+
+Base is committed/pushed `5f59250`. The actual source audit supersedes the earlier
+suggestion to reuse `save_my_horse_offer_draft_v1` unchanged for owner editing.
+That legacy RPC accepts draft/rejected, replaces details and clears lifecycle data;
+the create mapper and read-only hydration are not lossless update payloads.
+
+New migration `20260913190000_add_owner_horse_offer_draft_update.sql` adds an
+`edit_revision` bigint maintained on all horse updates, one owner-safe atomic edit
+snapshot RPC and one update-only, exact-draft, revision-checked patch RPC.
+Omitted fields and unrelated details keys are preserved. Private location and
+publication/lifecycle/image/Energy fields cannot be changed through the patch.
+The existing read/save RPC definitions and visible UI remain unchanged.
+
+See `docs/architecture/horse-offer-draft-update-v1.md` for the exact allowlist,
+error behavior, test boundaries and required legacy-writer transition. Legacy
+writes advance revision but are not themselves CAS-protected; before enabling an
+owner editor, coordinate the optional same-session save path and retire/restrict
+legacy updates through a controlled release. Do not claim global lost-update
+protection merely because this new endpoint exists.
+
+Local rollback SQL tests (new update plus two existing regression suites) and the
+application build passed in the checkpoint runner. The complete temporary migration
+and fixtures were rolled back; this is not a persistent local or production rollout.
+No browser test was performed: the application source/UI did not change. Source is
+prepared for a scoped commit after result review; production remains a separate step.
