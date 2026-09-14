@@ -4170,3 +4170,35 @@ application build passed in the checkpoint runner. The complete temporary migrat
 and fixtures were rolled back; this is not a persistent local or production rollout.
 No browser test was performed: the application source/UI did not change. Source is
 prepared for a scoped commit after result review; production remains a separate step.
+
+
+<!-- SELQIRO_HORSE_DRAFT_UPDATE_PRODUCTION_20260914 -->
+## 2026-09-14 — Owner horse draft update deployed; editor remains read-only
+
+Source checkpoint `fae9914` is committed and pushed. The user's 20:08–20:11
+production rollout applied `20260913190000_add_owner_horse_offer_draft_update.sql`
+to linked project `vyjletlmwoiwxsnsunlm`. All 18 local/remote migration versions
+matched afterward and the final dry-run reported no pending migrations. This
+supersedes the earlier local-only/pending-production status for this contract.
+
+The rollout verified the revision column/check/trigger, four function bodies,
+signatures, search paths, owners and explicit grants. Its public DDL comparison,
+excluding only verified additions and comments, matched the pre-rollout baseline.
+Existing save/read RPC bodies stayed unchanged. Do not edit this applied migration.
+
+The source worktree stayed clean at `fae9914`; no UI/source edits, application-data
+test writes or new build/SQL/browser/deploy tests were performed in that rollout.
+The real local three-suite SQL test and build passed at 09:32; its migration and
+fixtures were rolled back. Runtime RPC calls, role inheritance and browser/deploy
+behavior are not established by the production schema verification.
+
+`save_my_horse_offer_draft_v1` is still not revision-checked. It can overwrite newer
+content when a stale legacy session writes last. Before exposing the owner editor,
+coordinate the optional create-form repeat-save path and retire/restrict legacy
+updates through a separately tested release. First creation must remain usable.
+Use the atomic edit snapshot, decimal-string revision and changed-field patch;
+never silently replace a conflict token or reuse hydration as a full update.
+
+Current state and environment reference: `docs/99_V2_HANDOFF_NEXT_CHAT.md` at the top.
+The rollout result ZIP is `horse-draft-production-rollout-20260914-200826-q4ulosn_.zip`.
+Its SHA-256 is `9599e642a855c6c2bbc746947eca91ebbe2c977c8f444a501a8238b9dde0a420`.

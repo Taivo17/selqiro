@@ -1,3 +1,83 @@
+<!-- SELQIRO_HORSE_DRAFT_UPDATE_PRODUCTION_20260914 -->
+# Selqiro — current handoff, 2026-09-14 production rollout
+
+Read this current section before the historical entries below. Older “next task”
+and “not applied” statements do not override this checkpoint. Project DNA,
+publish-first creation, equal participation/Energy and privacy decisions remain.
+
+## Verified state and evidence boundary
+
+- Source: `fae9914cca81cc1d21733274f5887e4e14bd2d05`, pushed to `origin/main`.
+- At the user's 20:08–20:11 rollout: worktree clean, remote equal, no source/docs
+  changes or new commit. This documentation checkpoint follows that source;
+  obtain its own commit hash/push result from Git and the documentation runner ZIP.
+- Production: `20260913190000` applied to `vyjletlmwoiwxsnsunlm`; all 18 migration
+  versions paired after apply; final dry-run has no pending migrations.
+- New revision column/check/trigger and four function contracts/explicit grants
+  verified; other compared public DDL and existing save/read bodies preserved.
+- Local tests/build: real 09:32 run passed all three rollback suites (64 new-suite
+  assertions) and build. Test migration/fixtures were rolled back locally.
+- Browser: previous user-confirmed wide/narrow read-only form test; wanted had no
+  draft and remains browser-untested. No new runtime RPC or deployment verification.
+- Current owner edit route `/v2/my-area/horse-offers/[id]/edit` is still read-only.
+  Schema installation is not permission to expose saving or publication.
+
+Rollout evidence: `horse-draft-production-rollout-20260914-200826-q4ulosn_.zip`.
+SHA-256: `9599e642a855c6c2bbc746947eca91ebbe2c977c8f444a501a8238b9dde0a420`.
+Private schema copies are under `~/Downloads/selqiro-recovery/horse-draft-production-rollout-20260914-200826-q4ulosn_/`:
+`pre-public-schema.sql` and `post-public-schema.sql`. They are NOT data backups.
+The shared ZIP contains schema reports/hashes, not full schema or application rows.
+
+## One next development task (after this documentation commit is confirmed)
+
+Resolve the legacy repeat-save transition before exposing owner editing. Inspect
+current `useHorseOfferDraftSave.ts`, `horseOfferDraftSave.ts`,
+`saveMyHorseOfferDraft.ts`, their type/caller contracts and both save/update SQL
+contracts. Design one safe first-create and revision-checked repeat-save contract,
+preserving stored values and valid user actions without silently changing offer type.
+Any server restriction needs its own local tests and controlled production rollout.
+Do not break the existing creation flow by restricting the legacy endpoint before
+the compatible client path exists. Do not treat this note as an approved SQL design.
+
+The legacy `save_my_horse_offer_draft_v1` still accepts draft/rejected updates and
+has no expected revision. Its writes now increment revision but can still overwrite
+newer content when a stale legacy session writes last. No global lost-update claim.
+The new writer is exact-draft, existing-ID and closed-patch only. Use one atomic
+snapshot, preserve revision as decimal text, retain user input on conflicts and
+never automatically fetch a new revision just to retry the same old form.
+
+Relevant source roots: `src/entities/horse-offer/`,
+`src/features/listing-create/`, `src/features/horse-offer-edit/` and
+`docs/architecture/horse-offer-draft-update-v1.md`. The result ZIP exports selected
+current source; request only missing files, not another whole-chat recollection.
+Publication, images/Storage deletion, lifecycle, categories, Energy and My Area
+`Vaata kõiki`/Back/scroll restoration remain separate. `horse_offers` stays canonical;
+no duplicate generic listing. “Salvesta hilisemaks” stays optional.
+
+## Verified environment — do not rediscover or guess
+
+Mac: Darwin arm64; observed Python 3.9.6 and Node v24.16.0. Project `~/selqiro`.
+No repository `supabase/config.toml`: absence is valid; do not run init/reset.
+Linked project comes from the existing `.temp/project-ref`, checked against the
+exact production project above. Do not export credentials or connection strings.
+Supabase is not on PATH. Verified existing CLI runtime is 2.117.0, invoked at
+`~/.npm/_npx/aa8e5c70f9d8d161/node_modules/@supabase/cli-darwin-arm64/bin/supabase`;
+matching `bin/supabase-go` is pinned. `cli-pin.json` in the rollout evidence contains
+all five exact hashes. No npm/npx/latest installation is needed; cache changes
+require a new check, not blind reuse. This is snapshot pinning, not vendor signing.
+Local database: `supabase_db_selqiro`, project label `selqiro`, image
+`public.ecr.aws/supabase/postgres:17.6.1.104`; use only a verified local Unix socket
+and exact container ID for future local SQL tests. Healthy status must be rechecked.
+
+Do NOT rerun completed apply, preflight, CLI-inspector, local-repair or source-commit
+runners. Do NOT remove the production attempt journal to bypass its protection.
+Never edit the now applied `20260913190000` migration. Preserve the current handoff
+and a short result ZIP at each coherent checkpoint; distinguish prepared scripts
+from actual executions, and local tests from production/browser/deploy evidence.
+
+---
+## Historical entries — earlier next tasks and states are not current
+
 # Selqiro V2 handoff järgmise vestluse jaoks
 
 Viimane stabiilne seis:

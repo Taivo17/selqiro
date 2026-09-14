@@ -8207,3 +8207,34 @@ Kohalikud uue lepingu ning vana salvestuse/lugemise regressioonitestid ja build
 läbisid. Testiks lisatud skeem ja testandmed pöörati tagasi. Productionisse midagi
 ei rakendatud ning kasutajaliides jäi ainult vaatamiseks. Järgmine samm on tulemuse
 ülevaatus, lähtekoodi commit/push ja eraldi kontrollitud productioni etapp.
+
+
+<!-- SELQIRO_HORSE_DRAFT_UPDATE_PRODUCTION_20260914 -->
+## 2026-09-14 — Hobusemustandi uuendamisleping on productionis
+
+Kell 20:08–20:11 käivitatud kontrollitud etapp rakendas migratsiooni
+`20260913190000_add_owner_horse_offer_draft_update.sql` päris Supabase'i projekti.
+Lähtekood jäi puhtale ja push'itud commit'ile `fae9914`. Kõik 18 migratsiooni olid
+järelkontrollis kohaliku ja productioni ajaloo vahel kooskõlas; viimane kuivproov
+näitas, et ootel migratsioone pole. Varasem „productionisse rakendamata” seis on
+selle lepingu puhul nüüd ajalooline.
+
+Andmebaasis on andmeversioon, seda kasvatav trigger ja neli uut funktsiooni.
+Järelkontroll kinnitas kavandatud struktuuri, funktsioonide sisu ja otseseid õigusi
+ning ülejäänud võrreldud public-skeemi säilimise. Varasem puuduvate tabelite teade
+oli kontrollskripti tuvastamisviga, mitte kadunud tabelid.
+
+See ei avanud veel muutmisvormi salvestamiseks. Vana „Salvesta hilisemaks”
+korduvsalvestus ei kontrolli andmeversiooni ning tuleb enne uue muutmisvormi
+lubamist turvaliselt uue lepinguga kooskõlla viia. Kuulutuse lisamise põhitee jääb
+„Avalda kuulutus”; mustandi salvestamine on vabatahtlik.
+
+Productioni etapis ei tehtud testkuulutuste kirjutusi ega korratud build'i,
+SQL-teste või brauseriteste. Päris kohalik SQL-test ja build läbisid varem samal
+hommikul; kohalik testmigratsioon pöörati tagasi. Productioni uute funktsioonide
+kasutajapäringuid ega Verceli deploy'd see struktuurikontroll ei kinnita.
+Skeemikoopiad jäid arvutisse ega ole kuulutuste andmekirjete varukoopiad.
+
+Järgmise vestluse hetkeseis ja üks järgmine töö asuvad nüüd
+`docs/99_V2_HANDOFF_NEXT_CHAT.md` alguses. Lõpetatud rakendamis-, eelkontrolli-,
+parandus- ja commit-skripte ei korrata. Rakendatud migratsiooni ei muudeta.

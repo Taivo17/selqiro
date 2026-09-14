@@ -5725,3 +5725,42 @@ the create/resubmit RPC is superseded by the update-only contract documented in
 Local transactional contract/regression checks and build passed. The migration and
 all test fixtures were rolled back, with pre/post catalog and row-count checks.
 No client, browser-flow or production deployment was performed in this checkpoint.
+
+
+<!-- SELQIRO_HORSE_DRAFT_UPDATE_PRODUCTION_20260914 -->
+## 2026-09-14 — Production installation of owner draft-update v1
+
+The controlled rollout from source `fae9914` applied migration `20260913190000`
+to `vyjletlmwoiwxsnsunlm`. Post-rollout history contains 18 paired local/remote
+versions; post-dry-run has no pending migration. Source and Git worktree were
+unchanged and remote equality was verified during that user run.
+
+Installed additions: `horse_offers.edit_revision` (bigint, default 1, not null,
+check >= 1), `trg_horse_offers_edit_revision_v1` and these functions:
+- `advance_horse_offer_edit_revision_v1()`;
+- `apply_horse_offer_draft_patch_v1(public.horse_offers, jsonb)`;
+- `get_my_horse_offer_edit_snapshot_v1(uuid)`;
+- `update_my_horse_offer_draft_v1(uuid, bigint, jsonb)`.
+
+The rollout compared function signatures/bodies/search_path/owners and explicit
+ACLs to the reviewed migration. The two owner RPCs have authenticated/service-role
+execute grants; authorization remains server-side. The helper boundary stays
+closed to anon/authenticated. Existing save/read bodies and other compared public
+DDL were unchanged. The normalized public invariant contained 1185 statements
+and SHA-256 `8c698d4a0dfd9932a60e44f32f84fb6632706ac628d176a41a065c596f1c079d`.
+
+Pre-schema SHA-256: `e62c9372f77febc58236dd11f1e9d91a8dd81d85cd722e7e7522fef592867b12`.
+Post-schema SHA-256: `014872091409064d819041f06e35e228f789891a2030c62095ecd3cda3a56c28`.
+Full schema files remain private in the user's rollout report directory. They are
+schema copies, not application-data backups. This check did not cover Storage,
+cluster-role inheritance, runtime RPC writes or browser/deployment behavior.
+
+The earlier table-detection stop was a confirmed `CREATE TABLE IF NOT EXISTS`
+parser false negative, not absent production tables. No table reconstruction was
+needed. The existing pinned native Supabase CLI 2.117.0 completed the rollout.
+
+The owner edit form is NOT enabled by installing these functions. A separate
+legacy-writer transition must protect both entry points before writable UI ships;
+the old save RPC is not made CAS-safe by the new revision trigger alone.
+Publication, images, lifecycle, store categories and Energy stay outside this step.
+Future database corrections require a new migration, never edits to this one.
