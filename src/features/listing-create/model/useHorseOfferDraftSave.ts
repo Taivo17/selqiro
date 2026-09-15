@@ -1,263 +1,67 @@
 "use client";
 
-import {
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
-import {
-  HorseOfferDraftSaveError,
-  saveMyHorseOfferDraft,
-} from "../../../entities/horse-offer/api/saveMyHorseOfferDraft";
-import {
-  type SavedHorseOfferDraft,
-} from "../../../entities/horse-offer/model/types";
-import {
-  HorseOfferDraftPayloadError,
-  buildHorseOfferDraftSaveInput,
-  type HorseOfferDraftFormSnapshot,
-} from "./horseOfferDraftSave";
+import { useCallback, useEffect, useState, useSyncExternalStore } from "react";
+import { supabaseBrowserClient } from "../../../shared/supabase/browserClient";
+import { saveMyHorseOfferDraft } from "../../../entities/horse-offer/api/saveMyHorseOfferDraft";
+import { updateMyHorseOfferDraft } from "../../../entities/horse-offer/api/updateMyHorseOfferDraft";
+import { getHorseDraftActor } from "../../../entities/horse-offer/api/getHorseDraftActor";
+import { ACTIVE_IDENTITY_CHANGED_EVENT } from "../../v2-shell/model/useV2IdentitySwitcher";
+import { HorseDraftSession } from "./horseDraftSession";
+import { buildHorseDraftChanges } from "./horseDraftChanges";
+import { HorseOfferDraftPayloadError, buildHorseOfferDraftSaveInput, type HorseOfferDraftFormSnapshot } from "./horseOfferDraftSave";
 
-export type HorseOfferDraftSavePhase =
-  | "idle"
-  | "saving"
-  | "saved"
-  | "error";
-
-export type HorseOfferDraftSaveSnapshot =
-  Omit<
-    HorseOfferDraftFormSnapshot,
-    "offerId"
-  >;
-
-type HorseOfferDraftRequestState = {
-  phase:
-    | "idle"
-    | "saving"
-    | "saved"
-    | "error";
-  revision: string | null;
-  errorMessage: string | null;
-};
-
-export type HorseOfferDraftSaveController = {
-  phase: HorseOfferDraftSavePhase;
-  offerId: string | null;
-  hasSavedDraft: boolean;
-  hasUnsavedChanges: boolean;
-  errorMessage: string | null;
-  save: () => Promise<
-    SavedHorseOfferDraft | null
-  >;
-};
-
-function createHorseOfferDraftRevision(
-  snapshot: HorseOfferDraftSaveSnapshot
-): string {
-  return JSON.stringify(snapshot);
-}
-
-function getPayloadErrorMessage(
-  field: HorseOfferDraftPayloadError["field"]
-): string {
-  if (field === "birthYear") {
-    return "Kontrolli hobuse sünniaastat.";
-  }
-
-  if (field === "heightCm") {
-    return "Kontrolli hobuse turjakõrgust.";
-  }
-
-  if (
-    field === "priceAmount"
-    || field === "wantedBudgetAmount"
-  ) {
-    return "Kontrolli hinna või eelarve summat.";
-  }
-
-  if (field === "recurringFeePeriod") {
-    return "Vali rendi või kaasratsaniku tasu periood.";
-  }
-
-  return "Eesti hobusepiloodis peab asukoha riik olema Eesti.";
-}
-
-function getDraftSaveErrorMessage(
-  error: unknown
-): string {
-  if (error instanceof HorseOfferDraftPayloadError) {
-    return getPayloadErrorMessage(error.field);
-  }
-
-  if (error instanceof HorseOfferDraftSaveError) {
-    const normalized = [
-      error.code || "",
-      error.message,
-    ]
-      .join(" ")
-      .toLowerCase();
-
-    if (normalized.includes("not_authenticated")) {
-      return "Mustandi salvestamiseks logi uuesti sisse.";
-    }
-
-    if (
-      normalized.includes("active_identity")
-      || normalized.includes("identity_forbidden")
-    ) {
-      return "Mustandi salvestamiseks vali ligipääsetav aktiivne identiteet.";
-    }
-
-    if (
-      normalized.includes("not_found_or_forbidden")
-      || normalized.includes("horse_offer_not_editable")
-    ) {
-      return "Seda hobuse mustandit ei saa enam selle identiteediga muuta.";
-    }
-
-    if (
-      normalized.includes("market_not_enabled")
-      || normalized.includes("policy")
-      || normalized.includes("cross_border")
-    ) {
-      return "Hobusepakkumise mustand ei vasta praeguse Eesti piloodi tingimustele.";
-    }
-  }
-
-  return "Mustandi salvestamine ebaõnnestus. Kontrolli ühendust ja proovi uuesti.";
-}
-
-export function useHorseOfferDraftSave(
-  snapshot: HorseOfferDraftSaveSnapshot | null
-): HorseOfferDraftSaveController {
-  const mountedRef = useRef(true);
-  const inFlightRef = useRef(false);
-  const [offerId, setOfferId] =
-    useState<string | null>(null);
-  const [lastSavedRevision, setLastSavedRevision] =
-    useState<string | null>(null);
-  const [requestState, setRequestState] =
-    useState<HorseOfferDraftRequestState>({
-      phase: "idle",
-      revision: null,
-      errorMessage: null,
-    });
-
+export type HorseOfferDraftSaveSnapshot = Omit<HorseOfferDraftFormSnapshot, "offerId">;
+export type HorseOfferDraftSavePhase = "idle" | "saving" | "saved" | "error" | "blocked";
+export function useHorseOfferDraftSave(userId: string, snapshot: HorseOfferDraftSaveSnapshot | null) {
+  const [session] = useState(() => new HorseDraftSession(userId, {
+    actor: getHorseDraftActor, create: saveMyHorseOfferDraft, update: updateMyHorseOfferDraft,
+  }));
+  const state = useSyncExternalStore(session.subscribe, session.getSnapshot, session.getSnapshot);
+  const [payloadError, setPayloadError] = useState<string | null>(null);
   useEffect(() => {
-    mountedRef.current = true;
-
-    return () => {
-      mountedRef.current = false;
-    };
-  }, []);
-
-  const currentRevision = snapshot
-    ? createHorseOfferDraftRevision(snapshot)
-    : null;
-
-  let phase: HorseOfferDraftSavePhase =
-    "idle";
-
-  if (requestState.phase === "saving") {
-    phase = "saving";
-  } else if (
-    requestState.phase === "error"
-    && requestState.revision ===
-      currentRevision
-  ) {
-    phase = "error";
-  } else if (
-    currentRevision !== null
-    && lastSavedRevision ===
-      currentRevision
-  ) {
-    phase = "saved";
-  }
-
-  const save = useCallback(async () => {
-    if (
-      !snapshot
-      || currentRevision === null
-      || inFlightRef.current
-    ) {
-      return null;
-    }
-
-    const requestedSnapshot = snapshot;
-    const requestedRevision = currentRevision;
-
-    inFlightRef.current = true;
-    setRequestState({
-      phase: "saving",
-      revision: requestedRevision,
-      errorMessage: null,
+    session.activate();
+    const refresh = () => { void session.refreshContext(); };
+    window.addEventListener(ACTIVE_IDENTITY_CHANGED_EVENT, refresh);
+    window.addEventListener("focus", refresh);
+    const { data: { subscription } } = supabaseBrowserClient.auth.onAuthStateChange((_event, nextSession) => {
+      // Synchronous only: no Supabase calls while the auth callback owns its lock.
+      session.authChanged(nextSession?.user.id ?? null);
     });
-
-    try {
-      const input =
-        buildHorseOfferDraftSaveInput({
-          ...requestedSnapshot,
-          offerId,
-        });
-
-      const savedDraft =
-        await saveMyHorseOfferDraft(input);
-
-      if (mountedRef.current) {
-        setOfferId(savedDraft.offerId);
-        setLastSavedRevision(
-          requestedRevision
-        );
-        setRequestState({
-          phase: "saved",
-          revision: requestedRevision,
-          errorMessage: null,
-        });
-      }
-
-      return savedDraft;
-    } catch (error: unknown) {
-      console.error(
-        "Horse offer draft save failed:",
-        error
-      );
-
-      if (mountedRef.current) {
-        setRequestState({
-          phase: "error",
-          revision: requestedRevision,
-          errorMessage:
-            getDraftSaveErrorMessage(error),
-        });
-      }
-
-      return null;
-    } finally {
-      inFlightRef.current = false;
+    refresh();
+    return () => {
+      session.deactivate();
+      window.removeEventListener(ACTIVE_IDENTITY_CHANGED_EVENT, refresh);
+      window.removeEventListener("focus", refresh);
+      subscription.unsubscribe();
+    };
+  }, [session]);
+  let dirty = state.baseline !== null;
+  if (snapshot && state.baseline) {
+    try { dirty = Object.keys(buildHorseDraftChanges(state.baseline, buildHorseOfferDraftSaveInput(snapshot))).length > 0; }
+    catch { dirty = true; }
+  }
+  const phase: HorseOfferDraftSavePhase = state.busy ? "saving"
+    : state.stop || state.context !== "ready" ? "blocked"
+    : payloadError || state.message ? "error"
+    : state.baseline && !dirty && snapshot ? "saved" : "idle";
+  const save = useCallback(async () => {
+    if (!snapshot || !session.canSave()) return;
+    setPayloadError(null);
+    try { await session.save(buildHorseOfferDraftSaveInput(snapshot)); }
+    catch (error) {
+      setPayloadError(error instanceof HorseOfferDraftPayloadError
+        ? "Kontrolli sünniaastat, turjakõrgust, hinda või eelarvet ja tasu perioodi."
+        : "Kontrolli vormi välju. Andmeid ei saadetud.");
     }
-  }, [
-    currentRevision,
-    offerId,
-    snapshot,
-  ]);
-
-  const hasSavedDraft = offerId !== null;
-  const hasUnsavedChanges =
-    hasSavedDraft
-    && currentRevision !== null
-    && lastSavedRevision !==
-      currentRevision;
-
+  }, [snapshot, session]);
   return {
-    phase,
-    offerId,
-    hasSavedDraft,
-    hasUnsavedChanges,
-    errorMessage:
-      phase === "error"
-        ? requestState.errorMessage
-        : null,
-    save,
+    phase, hasSavedDraft: state.draft !== null, hasUnsavedChanges: dirty,
+    offerId: state.draft?.offerId || state.recoveryId, editRevision: state.draft?.editRevision ?? null,
+    typeLocked: state.busy || state.lockedType !== null,
+    contextChecking: state.context === "checking",
+    canRecheck: !state.busy && !state.stop && state.context === "blocked",
+    errorMessage: state.message || payloadError,
+    recheck: () => { void session.refreshContext(); }, save,
   };
 }
+export type HorseOfferDraftSaveController = ReturnType<typeof useHorseOfferDraftSave>;

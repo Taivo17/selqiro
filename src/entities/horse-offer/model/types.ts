@@ -84,6 +84,8 @@ export type SaveMyHorseOfferDraftInput = {
 };
 
 export type SavedHorseOfferDraft = {
+  editRevision: string;
+  createdByUserId: string;
   offerId: string;
   identityId: string;
   offerType: HorseOfferDraftOfferType;

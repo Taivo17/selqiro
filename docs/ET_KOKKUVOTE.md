@@ -8238,3 +8238,48 @@ Skeemikoopiad jäid arvutisse ega ole kuulutuste andmekirjete varukoopiad.
 Järgmise vestluse hetkeseis ja üks järgmine töö asuvad nüüd
 `docs/99_V2_HANDOFF_NEXT_CHAT.md` alguses. Lõpetatud rakendamis-, eelkontrolli-,
 parandus- ja commit-skripte ei korrata. Rakendatud migratsiooni ei muudeta.
+
+
+<!-- SELQIRO_HORSE_DRAFT_REPEAT_SAVE_CLIENT_V1 -->
+## Hobusemustandi korduvsalvestuse klient — 2026-09-14
+
+„Salvesta hilisemaks” esimene salvestus loob mustandi. Järgmised salvestused
+kasutavad sama ID-d, viimase kinnitatud vastuse andmeversiooni ja ainult muutunud
+välju. Pealkirja parandamine ei saada privaatse asukoha asemele null-väärtusi.
+Salvestatud pakkumise liiki selles vormis ei teisendata. Identiteedivahetusel jääb
+sisestus alles, kuid vale identiteediga salvestamine blokeeritakse; konto vahetus
+või väljalogimine eemaldab eelmise konto vormi. Teadmata tulemuse või konflikti
+korral ei saadeta päringut automaatselt uuesti. Mustandit saab kontrollida eraldi
+aknas. Pilte see tegevus endiselt ei salvesta.
+
+Andmebaasi ega omaniku muutmisvaadet ei muudeta. Vana serveri uuendustee tuleb
+pärast uue kliendi kontrollimist ja kasutuselevõttu eraldi sulgeda. Esmase loomise
+täielik identiteedi- ja korduskatsekaitse vajab veel serverilepingut. Mustandi
+salvestamine jääb vabatahtlikuks ning avaldamine põhitegevuseks.
+
+Käivitaja lisab ainult kliendi, testid ja dokumendid, teeb automatiseeritud testid
+ning build'i ja jätab muudatuse stage'ituks, mitte commit'ituks. Brauseritest ja
+commit/push vajavad eraldi kinnitust; nende tegelik seis on tulemuste ZIP-is.
+
+
+<!-- SELQIRO_REPEAT_SAVE_BROWSER_COPY_20260915 -->
+## 2026-09-15 — Korduvsalvestuse brauserikontroll ja abitekstide täpsustus
+
+Kasutaja kinnitas, et „Otsin hobust” muudatused säilivad pärast salvestamist ning
+kitsas vaade on korras. Identiteeditestis oli B all salvestamine keelatud ja hoiatus
+nähtav; A juurde naastes sai jätkata ning kasutaja sõnul säilis muudatus. Need on
+kasutaja kinnitatud kontrollid, mitte eraldi serveripoolne ID- või loendusaudit.
+
+Nelja jagatud hobuseväljade komponendi vananenud „ainult lokaalne / midagi ei
+salvestata” abitekstid asendatakse väljade tähendust ja privaatsust selgitava tekstiga.
+Salvestusloogikat ei muudeta. Salvestamise tagasiside jääb „Jätkad hiljem?” plokki.
+Pilte mustandisalvestus endiselt ei salvesta ja Minu ala editor jääb ainult vaatamiseks.
+
+Varasem päris build ja 53 Node-kontrolli läbisid paigaldamisel. Lõpetamisskript lisab
+neli tekstikontrolli, kordab teste ja build'i ning küsib alles pärast lühikest
+vaatekontrolli COMMIT PUSH kinnitust. Tegelik lõpptulemus tuleb uuest ZIP-ist.
+Uusi andmebaasi-, avaldamis-, pildi- ega Energy toiminguid siin ei tehta.
+
+Pärast kliendi commit/push'i on järgmine samm juurutuse kontroll; alles seejärel
+vana serveri kaitseta uuendustee eraldi lõpetamine ja esmasalvestuse kaitsete töö.
+Omaniku editori avamine ei kuulu sellesse checkpoint'i.

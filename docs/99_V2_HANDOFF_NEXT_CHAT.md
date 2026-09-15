@@ -1,3 +1,123 @@
+<!-- SELQIRO_REPEAT_SAVE_BROWSER_COPY_20260915 -->
+# Selqiro — current handoff, 2026-09-15 repeat-save completion
+
+Read this section before older entries. Project DNA and the verified environment
+below remain. Do not return to old CLI/preflight/local-repair or owner-read work.
+
+## Current evidence, not assumed completion
+
+Base commit: `4a910a9c72ca8d244a71c304789b6fb930eee6bd`, previously pushed.
+The 2026-09-14 22:10 installer produced 23 staged files, not a commit. Its real
+build and 53 Node checks passed; API transport was fake, not browser integration.
+The user subsequently confirmed wanted persistence and narrow layout; on 15.09
+at 21:05 the A→B→A identity test was confirmed. B's save action is disabled with
+a context warning, A's is enabled again, and the user reports preservation. The
+screenshots are not independent UUID/count verification or a full concurrency test.
+
+The completion adds text-only changes in four shared components and four copy
+regression tests, plus these documentation notes. Total planned client checkpoint:
+27 changed files. Save/auth/session/RPC code is identical to the installed version.
+Read result.txt/git-head.txt from the completion ZIP for its actual build, browser
+confirmation, commit, push and clean state. This document cannot contain its own
+future commit hash. Do not assume a prepared completion script has run.
+
+Production migration `20260913190000` was applied and verified on 14.09 at 20:08–20:11.
+This client/copy completion has NO database or migration commands. Local persistent
+schema was not advanced by the earlier rollback tests. Owner editor stays read-only;
+refresh of /v2/sell does not resume a draft's in-memory session. Images are not saved.
+
+## One next task
+
+When the completion ZIP confirms commit/push and a clean tree, verify the deployment
+of that exact client commit before designing the separately controlled server legacy
+update retirement. If completion is stopped, review its last result first; do not
+start a new feature or blindly repeat an earlier installer. Existing source is in
+the result ZIP, so request only genuinely missing context.
+
+Remaining boundaries: old server clients can still write without CAS; first creation
+has no atomic expected-identity input or durable idempotency. No global lost-update
+or duplicate-creation guarantee. Conflict/ambiguous responses keep user input but
+must not fetch a new revision just to resend stale input. Publication, image/Storage,
+status lifecycle, store categories, Energy and My Area Back/scroll are separate.
+
+## Do not rerun / testing limits
+
+Do not rerun the completed client installer, collectors, rollout, preflight, CLI,
+SQL repair or earlier commit scripts. Keep the production attempt journal and the
+applied migration immutable. This latest text correction is not new proof of server
+isolation, other offer-type browser branches, logout integration or deployment.
+Final small copy/ordinary-view checks are user confirmations recorded by the runner;
+no new draft write is required for that check. Preserve necessary unsaved input
+before refreshing or stopping a browser session.
+
+---
+## Earlier checkpoint entries — historical state follows
+
+<!-- SELQIRO_HORSE_DRAFT_REPEAT_SAVE_CLIENT_V1 -->
+# Selqiro — current client checkpoint, prepared 2026-09-14
+
+Read this section before older next-task entries. Source base is pushed commit
+4a910a9c72ca8d244a71c304789b6fb930eee6bd. This client installer's actual Git state,
+tests and build are in result.txt and source-manifest.txt in its result ZIP. A
+source change or staged patch is NOT a new commit or deployed client.
+
+## One next action
+
+Review the client installer's result and complete manual browser checks for sale
+and wanted first/repeat saves, same UUID, persisted values, identity blocking,
+type lock, image-local-only wording and narrow/ordinary-listing regression. Then
+finish the scoped documentation/test confirmation and commit/push. No owner editor
+exposure and no new SQL now. After deployment is verified, separately design and
+test legacy-update retirement and first-create identity/idempotency safeguards.
+
+## Current boundary
+
+The shared /v2/sell page now composes an authenticated-user-keyed form. First save
+uses the legacy RPC for creation only. Subsequent saves use the installed revision
+RPC with changed scalar fields. The exact submitted baseline is paired with the
+same write's revision; no silent conflict-token refresh. Same-user identity changes
+preserve input; wrong context blocks saving. Unknown create/update outcomes and
+conflicts block further same-form mutations. Other offer types need a new form.
+This session cannot resume after navigation and is NOT durable idempotency.
+
+Production 20260913190000 was applied and structurally verified at 20:08–20:11 on
+2026-09-14; 18 histories aligned and final dry-run was clear. Do NOT rerun it or
+edit that migration. Last source collection at 20:53 had 71 exact files, clean
+4a910a9 and no missing imports. Collection was not a fresh remote/database check.
+The owner editor remains read-only. Old loaded clients still have an unsafe legacy
+update endpoint until a separate server restriction. First creation still has a
+cross-tab identity race and response-loss/remount risk: client prechecks cannot
+close those server-contract gaps. No global lost-update safety claim.
+
+The installer runs only Node unit/contract checks and npm run build, not SQL or
+authenticated RPC tests. Fake-transport and static UI checks are not React/browser
+verification. The user must verify browser behavior before commit. The installer
+does not start a browser/dev server or make database calls; manual save tests are
+real private-draft writes on the app's configured Supabase project. Do not test
+on valuable content and do not publish, change policies, charge Energy or upload.
+
+Relevant modules: src/entities/horse-offer/api/ and model/draft*.ts;
+src/features/listing-create/model/horseDraft*.ts and useHorseOfferDraftSave.ts;
+ListingCreatePage/Form/TextFields/ImageFields and HorseOfferDraftSaveAction.
+Contract: docs/architecture/horse-draft-repeat-save-client-v1.md.
+
+## Environment and retained evidence
+
+Mac project ~/selqiro, Python 3.9.6, Node v24.16.0. Stop npm run dev before build.
+No dependency changes/install, Docker or Supabase CLI are needed for this client
+patch. Verified native CLI 2.117.0 and local Docker details remain in the previous
+checkpoint below; do not rediscover/reinstall them. No repository config.toml is
+required. Keep prior result ZIPs and the production attempt journal.
+
+Preserve Project DNA, simple publish-first UX, equal participation/Energy, privacy,
+canonical horse_offers and source audit/build/browser/scoped commit workflow.
+My Area Back/scroll, public horse publishing/lifecycle, images and categories remain
+separate work. Completed collection/CLI/SQL/preflight/apply/docs scripts must not
+be rerun. Do not add another patch on top of a failed build.
+
+---
+## Previous checkpoints (historical evidence; not the current next action)
+
 <!-- SELQIRO_HORSE_DRAFT_UPDATE_PRODUCTION_20260914 -->
 # Selqiro — current handoff, 2026-09-14 production rollout
 

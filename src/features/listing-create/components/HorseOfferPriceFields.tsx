@@ -487,10 +487,8 @@ HorseOfferPriceFields({
       />
 
       <p className="mt-4 rounded-[20px] border border-neutral-200 bg-[#fbfbfa] px-4 py-3 text-xs leading-5 text-neutral-500">
-        Eesti hobusepiloodis on valuuta
-        praegu EUR. Selles checkpoint&apos;is
-        on hind ja eelarve ainult lokaalne
-        vormiolek ning midagi ei salvestata.
+        Hind ja otsija eelarve on eri tähendusega.
+        Valuuta on Eesti hobusepiloodis EUR.
       </p>
     </section>
   );

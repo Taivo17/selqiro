@@ -259,10 +259,8 @@ HorseOfferUseFields({
       )}
 
       <p className="mt-4 rounded-[20px] border border-neutral-200 bg-[#fbfbfa] px-4 py-3 text-xs leading-5 text-neutral-500">
-        Kasutus- ja sobivusväljad on selles
-        checkpoint&apos;is ainult lokaalne
-        vormiolek. Midagi ei salvestata ega
-        avaldata.
+        Kasutus- ja sobivusväljad kirjeldavad pakutavat hobust või otsija eelistusi.
+        Need ei ole Selqiro kontrollitud hinnangud.
       </p>
     </section>
   );

@@ -307,9 +307,8 @@ HorseOfferBasicFields({
       </div>
 
       <p className="mt-4 rounded-[20px] border border-neutral-200 bg-[#fbfbfa] px-4 py-3 text-xs leading-5 text-neutral-500">
-        Need väljad on selles checkpoint&apos;is
-        ainult lokaalne vormiolek. Midagi ei
-        salvestata ega avaldata.
+        Konkreetse hobuse andmed kirjeldavad pakutavat hobust.
+        Otsingukuulutuse väljad kirjeldavad soovitud hobuse eelistusi.
       </p>
     </section>
   );

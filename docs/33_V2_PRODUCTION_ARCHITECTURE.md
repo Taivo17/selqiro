@@ -5764,3 +5764,55 @@ legacy-writer transition must protect both entry points before writable UI ships
 the old save RPC is not made CAS-safe by the new revision trigger alone.
 Publication, images, lifecycle, store categories and Energy stay outside this step.
 Future database corrections require a new migration, never edits to this one.
+
+
+<!-- SELQIRO_HORSE_DRAFT_REPEAT_SAVE_CLIENT_V1 -->
+## Compatible horse draft repeat-save client — 2026-09-14
+
+ListingCreatePage is now only the auth boundary. A keyed ListingCreateForm composes
+the shared horse fields, extracted text/image sections and useHorseOfferDraftSave.
+The hook subscribes to one user-scoped HorseDraftSession with cached immutable
+state snapshots. This pure controller owns the in-flight lock, actor binding, last
+acknowledged payload/revision and conflict/unknown-result gates. It has no global
+cache and no automatic write retry. Auth callbacks do not await Supabase work.
+
+getHorseDraftActor reads the verified user and exact stored active_identity_id,
+without a display fallback. It is a precheck, not atomic server authorization.
+saveMyHorseOfferDraft accepts creation only; its existing RPC argument mapping is
+unchanged. updateMyHorseOfferDraft validates ID/revision/result and sends a closed
+scalar patch. horseDraftChanges excludes private coordinates/location text, full
+details, type, status, images, policy acceptance, lifecycle, categories and Energy.
+Server-side normalization may produce a no-op, preserving the returned revision.
+
+Source tests use a fake Supabase boundary; they cannot prove runtime RLS or React
+behavior. The actual installer build and manual sale/wanted/identity/type-lock
+regression results must be reviewed before commit. Full contract and remaining
+risks: docs/architecture/horse-draft-repeat-save-client-v1.md.
+
+Production 20260913190000 remains installed and unchanged. The owner editor remains
+read-only. After compatible-client validation/deployment, separately retire legacy
+updates and resolve first-create identity/idempotency risks with server tests.
+
+
+<!-- SELQIRO_REPEAT_SAVE_BROWSER_COPY_20260915 -->
+## 2026-09-15 — Shared horse-field text and client validation boundary
+
+Four shared components (HorseOfferBasicFields, HorseOfferUseFields,
+HorseOfferLocationFields and HorseOfferPriceFields) no longer state that everything
+is only local and unsaved. They describe data meaning without coupling themselves
+to an editable or read-only page. Wanted preferences/search area/budget remain
+separate from concrete-horse facts/location/seller price. No new props, event
+handlers, API calls, data mapping or save behavior are introduced by this cleanup.
+
+The user's browser evidence covers wanted persistence, narrow layout and A→B→A
+identity gating/preservation. Owner read-only hydration was shown separately.
+Screenshots do not independently establish UUID/counts, SQL concurrency or every
+browser branch. The original 53 Node tests use fake transport, not mounted React
+integration; the completion adds four copy/transpilation checks. Confirm fresh
+build, visual check, commit and deployment separately using actual result evidence.
+
+The client-first transition remains compatible with the installed server. Old
+loaded clients can still update via the legacy RPC; this must be retired only in
+a separate controlled server release after client deployment is verified. The
+first-create expected-identity and durable-idempotency gaps are still open. No
+owner-editor saving is enabled and no applied migration is edited.

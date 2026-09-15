@@ -4202,3 +4202,49 @@ never silently replace a conflict token or reuse hydration as a full update.
 Current state and environment reference: `docs/99_V2_HANDOFF_NEXT_CHAT.md` at the top.
 The rollout result ZIP is `horse-draft-production-rollout-20260914-200826-q4ulosn_.zip`.
 Its SHA-256 is `9599e642a855c6c2bbc746947eca91ebbe2c977c8f444a501a8238b9dde0a420`.
+
+
+<!-- SELQIRO_HORSE_DRAFT_REPEAT_SAVE_CLIENT_V1 -->
+## Horse draft repeat-save client v1 — 2026-09-14
+
+The compatible client separates first creation from same-ID repeat updates. The
+legacy browser wrapper refuses non-null offerId. The new create response must
+contain the exact initial revision, creator, identity, market and type; that same
+write's submitted form is the baseline. Repeat saves use decimal-string revision
+and scalar changed-field patches through update_my_horse_offer_draft_v1. No fresh
+read token is paired with old input. Conflict and unknown outcomes freeze further
+mutations without discarding the visible input; unknown first creation is not
+automatically retried. These guards are session-local, not durable idempotency.
+
+The private form is keyed by authenticated user. Same-user identity changes retain
+input and block the wrong context; logout/account changes discard that user's form.
+Saved/uncertain offer types are locked. Images remain unsaved and this is explicit.
+The optional save is secondary; publish-first remains the product direction.
+
+No SQL is changed. Old loaded clients can still issue unsafe legacy updates until
+a separate server retirement. First creation still lacks atomic expected identity
+and durable idempotency. Do not expose the owner editor or claim global lost-update
+protection. Runtime/build/browser/commit evidence is recorded in the installer and
+subsequent checkpoint results, not inferred from this entry.
+
+
+<!-- SELQIRO_REPEAT_SAVE_BROWSER_COPY_20260915 -->
+## 2026-09-15 — Repeat-save browser evidence and shared helper copy
+
+The user reported that wanted changes persist after saving and the narrow view is
+usable. The later A→B→A test was explicitly confirmed: B shows a disabled save
+button with the context warning; returning to A restores the save action and the
+user reports the change is preserved. The screenshots establish UI states, not an
+independent server UUID/count audit or a global race-condition proof.
+
+The installed client had 53 passing fake-transport Node checks and a real build
+at the user's 2026-09-14 22:10 run. Four old local-only/no-save footers remained in
+shared basic/use/location/price components. Only those helper texts are corrected;
+field state, event handlers, save/auth logic and SQL remain unchanged. Four copy
+regression checks extend the suite to 57. Fresh build/test and final visual/commit
+results must be read from the completion runner, not inferred from this entry.
+
+Helper components now explain field meaning and privacy without claiming that all
+views save or that nothing saves. The create save-action owns saving feedback;
+the owner editor stays read-only. No server legacy-writer retirement, first-create
+expected-identity/idempotency, publication, images or Energy work is included.

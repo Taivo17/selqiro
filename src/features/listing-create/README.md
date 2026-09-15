@@ -1,3 +1,21 @@
+# Current horse draft client contract
+
+The repeat-save client v1 supersedes the older checkpoint descriptions below.
+The auth-only page composes a user-keyed form. First creation retains the same
+response's revision; repeats use update_my_horse_offer_draft_v1 and changed fields.
+No full create payload is used for updates. Conflicts and uncertain outcomes freeze
+mutations; identity changes preserve input but block the wrong context. Auth user
+changes reset the private form. Saved/uncertain offer types are not convertible.
+Images remain local only. The owner editor stays read-only.
+
+See docs/architecture/horse-draft-repeat-save-client-v1.md and the current top of
+docs/99_V2_HANDOFF_NEXT_CHAT.md for scope, test evidence and server risks. Run
+`node --test tests/horse-draft-repeat-save.test.cjs` then `npm run build`; manual
+sale/wanted/identity/narrow-view regression is required before commit.
+
+---
+## Historical feature checkpoints
+
 # V2 listing create
 
 This feature owns the shared V2 marketplace listing creation flow.

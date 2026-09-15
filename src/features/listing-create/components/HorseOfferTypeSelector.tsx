@@ -8,6 +8,7 @@ import {
 
 type HorseOfferTypeSelectorProps = {
   value: HorseOfferType | null;
+  disabled?: boolean;
   onChange: (
     value: HorseOfferType
   ) => void;
@@ -17,6 +18,7 @@ export default function
 HorseOfferTypeSelector({
   value,
   onChange,
+  disabled = false,
 }: HorseOfferTypeSelectorProps) {
   const selectedOption =
     getHorseOfferTypeOption(value);
@@ -28,7 +30,7 @@ HorseOfferTypeSelector({
         value || "unselected"
       }
     >
-      <fieldset>
+      <fieldset disabled={disabled}>
         <legend className="text-xs font-black uppercase tracking-[0.22em] text-amber-700">
           Hobusepakkumise liik
         </legend>
@@ -38,10 +40,9 @@ HorseOfferTypeSelector({
         </h2>
 
         <p className="mt-2 max-w-3xl text-sm leading-6 text-neutral-600">
-          Vali üks pakkumise liik. See
-          määrab hiljem vajalikud
-          hobuseväljad ja enne avaldamist
-          kuvatavad kinnitused.
+          {disabled
+            ? "Selle salvestuse pakkumiseliik on lukus. Teise liigi jaoks ava eraldi uus vorm; olemasolevat mustandit ei teisendata."
+            : "Vali pakkumise liik. See määrab hobuseväljad ja enne avaldamist nõutavad kinnitused."}
         </p>
 
         <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">

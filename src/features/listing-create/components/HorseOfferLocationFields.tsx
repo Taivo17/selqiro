@@ -245,8 +245,8 @@ HorseOfferLocationFields({
 
       <p className="mt-4 rounded-[20px] border border-neutral-200 bg-[#fbfbfa] px-4 py-3 text-xs leading-5 text-neutral-500">
         {wanted
-          ? "Otsingupiirkonda hoitakse konkreetse hobuse asukohast eraldi ning seda ei tohi hiljem vaikides hobuse tegeliku asukohana salvestada. Selles checkpoint'is midagi ei salvestata ega avaldata."
-          : "Täpset aadressi ega koordinaate selles vormietapis ei küsita. Avalik asukoht peab jääma linna või piirkonna tasemele. Selles checkpoint'is midagi ei salvestata ega avaldata."}
+          ? "Otsingupiirkond kirjeldab, kust hobust otsitakse. See ei ole ühe konkreetse hobuse tegelik asukoht."
+          : "Täpset aadressi ega koordinaate siin ei kuvata ega küsita. Avalik asukoht jääb linna või piirkonna tasemele."}
       </p>
     </section>
   );
