@@ -5816,3 +5816,76 @@ loaded clients can still update via the legacy RPC; this must be retired only in
 a separate controlled server release after client deployment is verified. The
 first-create expected-identity and durable-idempotency gaps are still open. No
 owner-editor saving is enabled and no applied migration is edited.
+
+
+<!-- SELQIRO_HORSE_LEGACY_RETIREMENT_LOCAL_20260916 -->
+## 2026-09-16 — Legacy horse update retirement: local candidate
+
+The compatible client is committed/pushed at `86e62d6`; the user's 16 Sep screenshots
+show Ready/Production and the updated form on the real Vercel domain. These are
+visual deployment checks, not a new database test or API alias-to-deployment proof.
+
+Candidate `20260916200000_retire_legacy_horse_draft_updates.sql` preserves the old
+37-argument first-create contract but rejects non-null offer IDs and removes its
+unsafe UPDATE branch. Revision-checked update/snapshot/trigger contracts remain
+unchanged. Existing listings, accounts, identities and applied migrations are not
+rewritten or deleted. The owner editor remains read-only.
+
+This entry is written only after the local runner's rollback suites, 57 explicit-TAP
+client tests and build succeed; inspect its result ZIP for actual dated evidence,
+staging and later commit status. Test schema/data are rolled back, not persistently
+installed locally. The candidate is NOT applied to production. Historical old-writer
+success tests run before retirement only; the post-retirement suite retains trusted
+writer revision invalidation. Contract: `docs/architecture/horse-legacy-draft-update-retirement-v1.md`.
+
+Before any production rollout, validate a bounded cutover/drain with two connections.
+A sequential rollback suite is not proof that already-running old function bodies
+have ended. First-create expected-identity/durable-idempotency remain separate open
+contracts. No owner-editor unlock, publication, images, Energy or global safety claim.
+
+
+<!-- SELQIRO_LEGACY_CUTOVER_LOCAL_PASS_20260916 -->
+## 2026-09-16 — legacy retirement cutover validation boundary
+
+The real user run `horse-legacy-cutover-local-20260916-220202-jlzrwn9t`
+passed at 22:02 (+03:00), using PostgreSQL 17.6 and multiple persistent psql
+connections in ONE empty, marked, disposable local database. Its result ZIP SHA-256:
+`4b3a73556c8330b6d1b4838397ea2e6601c8d647b4acc06c592065e04a049d51`.
+Executed external runner `horse-legacy-cutover-local-v2-capabilities` SHA-256:
+`17ae0502d576e747211b150af98d1d9cef5b8e6b2e8e81ded1efae06e6de3196`.
+All 51 manifest entries match; its 40 assertion labels include six synthetic
+observer-input faults, not 40 distinct full production end-to-end tests.
+
+The exact horse SQL and retirement candidate were exercised. Auth/identity/policy
+dependencies were an explicit synthetic fixture, not a cloned Supabase application.
+An invocation started before replacement can still finish its OLD body. The early
+negative control reproduced a late legacy overwrite of newer SYNTHETIC content.
+Bounded waiting stayed closed until old active AND idle-in-transaction work ended;
+it did not kill sessions. A genuinely later transaction did not prolong that wait.
+Prepared SQL callers used the replacement and refused old-ID updates. Two concurrent
+same-revision CAS writes produced one success and one 40001 conflict; revision
+advanced once and preserved the winner. Real tracking stayed ON. Live observation
+of an owned idle transaction passed; malformed/hidden/disabled/prepared observation
+inputs were synthetic fault injection, NOT a live tracking-off or two-phase test.
+
+Only this run's database was removed. Before/after original database catalog,
+selected row hashes/counts and database-list hash matched. No original application
+schema/data changes, permission grants, tracking changes or production commands.
+The earlier full local rollback/regression, 57 TAP Node tests (fake API transport)
+and real build remain the 20:37-20:38 evidence, not rerun by the cutover experiment.
+The nine-file staged source package and base 86e62d6 stayed unchanged in the test.
+
+Checkpoint completion adds only this evidence to five existing documents and does
+not edit the tested migration or SQL tests. Its actual commit/build/push state must
+be read from its result report and current Git, not assumed from this document.
+The new migration `20260916200000` is NOT production-applied by source completion.
+The production-applied `20260913190000` remains immutable. Owner editor stays read-only.
+
+Next after reviewed source commit/push: design the bounded production write-pause /
+old-transaction-drain protocol and perform a separate read-only production preflight.
+Replace-then-drain is NOT an ingress pause and did not prevent the negative-control
+overwrite during draining. These local tests are not approval of an online lossless
+production cutover; no APPLY until that separate contract, fresh checks and consent.
+First-create atomic expected identity and durable idempotency remain open separately.
+No publication, images, Energy, lifecycle, category, or UI unlocking is included.
+Do not rerun completed local/diagnostic/cutover runners or delete their attempt journal.

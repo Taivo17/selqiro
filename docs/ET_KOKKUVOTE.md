@@ -8283,3 +8283,54 @@ Uusi andmebaasi-, avaldamis-, pildi- ega Energy toiminguid siin ei tehta.
 Pärast kliendi commit/push'i on järgmine samm juurutuse kontroll; alles seejärel
 vana serveri kaitseta uuendustee eraldi lõpetamine ja esmasalvestuse kaitsete töö.
 Omaniku editori avamine ei kuulu sellesse checkpoint'i.
+
+
+<!-- SELQIRO_HORSE_LEGACY_RETIREMENT_LOCAL_20260916 -->
+## 2026-09-16 — Vana hobusemustandi uuendustee sulgemise kohalik kandidaat
+
+Uus klient on commit'il `86e62d6` ning kasutaja kontrollis selle productioni kuvamist.
+Järgmine kitsas serverikandidaat jätab esimese mustandiloomise tööle, kuid keeldub vana
+funktsiooni kaudu olemasoleva ID uuendamisest. Korduvsalvestus kasutab senist uut
+andmeversiooniga funktsiooni. Testkuulutusi, kontosid ega identiteete ei kustutata.
+
+See dokument lisatakse pärast kohalike rollback-testide, 57 klienditesti ja build'i
+läbimist. Täpne tulemus ja stage'imise seis on skripti ZIP-is. Testiks lisatud skeem
+ja kirjed pööratakse tagasi; productionisse uut migratsiooni ei rakendata ja commit/push'i
+selles käivitajas ei tehta. Olemasolev productioni migratsioon jääb puutumata.
+
+Enne päris rakendamist on vaja eraldi kahe ühendusega üleminekukontrolli: vana juba
+käivitatud päring ei kao lihtsalt funktsiooni definitsiooni vahetamisega. Omaniku
+muutmisvorm jääb lukku. Esmase loomise identiteedi atomaarne kontroll ja kordusloomise
+püsiv vältimine on endiselt eraldi tööd. Pildid, avaldamine ja Energy ei muutu.
+
+
+<!-- SELQIRO_LEGACY_CUTOVER_LOCAL_PASS_20260916 -->
+## 2026-09-16 — vana uuendustee päris mitme ühendusega katse läbis
+
+Kasutaja 22:02 kohaliku PostgreSQL 17.6 katse tulemus on PASS. Katse toimus ühes
+uues tühjas märgistatud testbaasis. Hobusefunktsioonid ja uus piirang olid täpsed
+lähtefailid; autentimise, identiteedi ja reeglite sõltuvused olid sünteetilised.
+Vana juba alanud väljakutse võis lõpetada pärast funktsiooni asendamist. Negatiivne
+kontroll näitas hilist ülekirjutamist ainult sünteetilisel testkirjel. Ootevärav ei
+lubanud jätkata enne vanade, sealhulgas jõude avatud tehingute lõppu. Ühtegi ühendust
+ei tapetud. Kahe samaaegse sama revisjoniga uuenduse puhul läbis üks ja teine sai
+versioonikonflikti; võitja sisu säilis ja revisjon suurenes ühe võrra.
+
+Testbaas eemaldati; algse kohaliku baasi kontrollitud kataloog, ridade räsid ja
+loendurid ning baaside nimekirja räsi jäid samaks. Jälgimine jäi sisse; õigusi ei
+antud ega seadistusi muudetud. Kuus vigase vaatlusvastuse kontrolli olid sünteetilised,
+mitte päris väljalülitatud jälgimise või kahefaasilise tehingu katsed. Kõik 51
+manifestikirjet vastavad. ZIP-i SHA-256:
+`4b3a73556c8330b6d1b4838397ea2e6601c8d647b4acc06c592065e04a049d51`.
+
+Üheksa faili jäid katse ajal stage'ituks commit'i 86e62d6 peale. Varasemad päris
+SQL-regressioon, 57 TAP Node-testi ja build on eraldi 20:37-20:38 tõend. Lõpetamise
+skript täiendab ainult viit olemasolevat dokumenti, hoides SQL-i ja teste muutmata;
+commit/push ja värske build kinnitatakse alles selle skripti tulemuses.
+Productioni uus migratsioon 20260916200000 ei ole selle sammuga rakendatud.
+Järgmine töö pärast kinnitatud commit'i on eraldi productioni kirjutuspausi,
+vanade tehingute lõpuni ootamise ja eelkontrolli leping. Üksnes replace→drain ei
+peata uusi kirjutusi ega taga ülekirjutuse puudumist ootamise ajal. Omaniku editor
+jääb ainult lugemiseks. Esmase loomise identiteedi- ja püsiva kordusloomiskaitse,
+avaldamise, piltide, Energy ning elutsükli tööd jäävad eraldi. Testkuulutusi, kontosid,
+identiteete ega katse päevikut ei kustutata. Läbitud katseid ei korrata.

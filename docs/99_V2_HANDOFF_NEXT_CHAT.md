@@ -1,3 +1,131 @@
+<!-- SELQIRO_LEGACY_CUTOVER_SOURCE_FINISH_20260916 -->
+# Selqiro — current handoff: legacy retirement source completion
+
+Read this CURRENT section before historical next tasks below. Evidence dates are
+16 September 2026 (+03:00). This document cannot contain its own future commit hash.
+
+## Actual source and test state
+
+Base: `86e62d6e2ceff7b3dcefd164c9ac596c998f9cab` on main, compatible repeat-save client.
+The nine-file legacy-retirement package passed real local SQL rollback/regression,
+57 explicit-TAP Node tests (fake API transport), and build at 20:37-20:38. It was
+staged, not committed. At 22:02 the separately executed real multi-connection
+cutover experiment passed with the same staged bytes. Its disposable test database
+was removed; original app database and database catalog checks matched. No new
+production SQL or fresh remote Git check occurred in either local test run.
+
+Reviewed evidence:
+- `horse-legacy-retirement-local-20260916-203753-9ezi23ko.zip` SHA-256
+  `280d09f0ac234cc5abf20a107f9e5092cced764790fb7b1268b913a43c700558`;
+- `horse-legacy-cutover-local-20260916-220202-jlzrwn9t.zip` SHA-256
+  `4b3a73556c8330b6d1b4838397ea2e6601c8d647b4acc06c592065e04a049d51`.
+
+Source finisher amends only these four usual docs plus the existing retirement
+contract. The migration and three SQL test files are unchanged. Final scope stays
+NINE paths. Read the latest `horse-legacy-retirement-finish-*` result for actual
+build/commit/push/clean state. Do not infer execution merely from this planned text.
+Expected commit message: `Retire legacy horse draft updates after local validation`.
+If stopped, review exact staged/unstaged state; no reset, deletion or broad restaging.
+
+## One next task AFTER reviewed committed/pushed source
+
+Design the controlled production cutover/write-pause and bounded old-transaction
+drain contract, then do its separate read-only preflight against the exact committed
+source. Do NOT apply from the source completion. The existing production CLI pin
+and environment notes below remain applicable, but connection/permissions/state
+must be freshly verified before any production rollout.
+
+Important finding: an already running old function can finish after replacement.
+In the negative control it overwrote newer SYNTHETIC content while drain was pending.
+Replace→drain alone is not an ingress pause and is not a no-loss online-cutover proof.
+The local experiment used exact horse functions but synthetic auth/identity/policy
+fixture dependencies. It tested old calls before a row lock and waiting on a row
+lock, idle transactions, cached SQL and a true two-writer CAS race. Tracking stayed
+ON. Six deliberately corrupted observer responses were synthetic only; no live
+tracking-off connection or prepared two-phase transaction was created.
+
+Production `20260913190000` remains previously applied (14 Sep); never edit it.
+Candidate `20260916200000` is NOT production-applied by this source finisher.
+No persistent local revision/retirement installation was added to the original
+postgres app database. Owner editor remains read-only. First-create atomic expected
+identity and durable idempotency remain separate launch risks. Publication, images,
+Energy, lifecycle, categories and My Area Back/scroll are not changed. Client
+86e62d6 Ready/Production and live-domain rendering remain accepted user visual proof;
+prior identity A→B→A, wanted and narrow browser checks need not be repeated now.
+
+## Verified environment and do-not-rerun boundary
+
+Mac arm64; Python 3.9.6; Node v24.16.0. Use explicit TAP for Node summaries. Stop dev
+before build. The local PostgreSQL postgres role OID is text `"16384"`; it can create
+a test DB and read stats but cannot SET track_activities. No grant/elevation is needed.
+Local target remains existing healthy supabase_db_selqiro, project selqiro,
+public.ecr.aws/supabase/postgres:17.6.1.104; pin its local Unix Docker socket and ID.
+No guessed config.toml, init/reset, latest package install or production URL fallback.
+Keep `~/Downloads/selqiro-recovery/horse-legacy-cutover-86e62d6-attempt.json` and all
+result ZIPs. Successful cutover journal state is COMPLETE; do not delete to rerun.
+Completed retirement-local, cutover v1/v2, capabilities diagnostics, client
+finishers/installers/collectors and earlier production scripts are not next actions.
+Project DNA, privacy, optional save-later/publish-first and Energy participation
+principles remain unchanged. Test listings/accounts/identities are NOT deleted.
+
+---
+## Historical entries below — superseded next-task instructions
+
+<!-- SELQIRO_HORSE_LEGACY_RETIREMENT_LOCAL_20260916 -->
+# Selqiro — current handoff, 2026-09-16 legacy writer local candidate
+
+Read this section before historical next-task entries below.
+
+## Verified baseline
+
+Source `86e62d6e2ceff7b3dcefd164c9ac596c998f9cab`, main, committed/pushed and clean
+in the user's 15 Sep completion. 57 tests/build passed then; A→B→A, wanted and narrow
+manual evidence is accepted. 16 Sep Vercel/listing screenshots confirm Ready/Production
+and updated real-domain rendering (not an API alias proof). Do not repeat completed
+client, copy, inspector, preflight, apply or commit runners.
+
+Production `20260913190000` was applied on 14 Sep; never edit it. Local revision-layer
+installation is not assumed: earlier local migrations were rollback tests.
+
+## Current local candidate and evidence boundary
+
+The new runner prepares nine files at this source base: retirement migration,
+BEFORE/AFTER compatibility fragments, post-retirement update regression, architecture
+contract and four usual docs. This section is written after the user's actual local
+SQL rollback checks, 57 explicit-TAP Node tests and build pass. Read result.txt and
+source-manifest.json for actual time/scope. Files are staged, NOT automatically
+committed/pushed. No production application, persistent local migration or UI change.
+Owner editor remains read-only. User test listings/accounts/identities remain intact.
+
+## One exact next action
+
+Review the local result ZIP and candidate. Before production authorization, complete
+and review the two-connection bounded cutover/drain validation for already-started
+old invocations. Do not treat sequential rollback success as completion of that step.
+The new function rejects non-null p_offer_id; null-ID create stays compatible. The
+new CAS writer, snapshot and revision trigger are unchanged. No global lost-update
+claim until the old in-flight boundary is resolved. Then source commit and separately
+approved fresh production preflight/apply follow; never apply directly from this note.
+
+First-create expected identity and durable idempotency are open, separate contracts.
+No owner editor, publication, Storage, Energy, lifecycle, categories or Back/scroll
+work is included. The remaining future-tense content-type helper is deferred UI copy.
+
+## Environment and workflow
+
+Project ~/selqiro; observed Mac arm64, Python 3.9.6, Node v24.16.0. Explicit TAP avoids
+the earlier default reporter mismatch. Stop dev before build. No package installation.
+No supabase/config.toml is required. Local Docker target must freshly match
+supabase_db_selqiro, project label selqiro and image public.ecr.aws/supabase/postgres:17.6.1.104,
+using a pinned absolute Unix socket and full container ID. No remote DB URL or CLI in
+this local runner. Existing pinned production CLI 2.117.0 details remain below.
+No reset, automatic restore or deletion of user edits. Keep output ZIP and attempt journals.
+Documentation/handoff are part of each coherent checkpoint. Preserve Project DNA,
+publish-first optional saving, equal participation/Energy and privacy.
+
+---
+## Historical entries — superseded next tasks follow
+
 <!-- SELQIRO_REPEAT_SAVE_BROWSER_COPY_20260915 -->
 # Selqiro — current handoff, 2026-09-15 repeat-save completion
 
