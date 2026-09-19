@@ -4321,3 +4321,51 @@ production cutover; no APPLY until that separate contract, fresh checks and cons
 First-create atomic expected identity and durable idempotency remain open separately.
 No publication, images, Energy, lifecycle, category, or UI unlocking is included.
 Do not rerun completed local/diagnostic/cutover runners or delete their attempt journal.
+
+
+<!-- SELQIRO_HORSE_LEGACY_PRODUCTION_COMPLETE_20260919 -->
+## 2026-09-19 — legacy horse draft updater retired in production; operation complete
+
+This dated result supersedes historical "retirement pending", "pause preparation"
+and RESUME_INTENT next-task instructions. Source base is
+`3e61c14a9cd3d2609f001a51f20ee02f6690dabc`; the docs checkpoint does not change code.
+
+Migration `20260916200000_retire_legacy_horse_draft_updates.sql` was applied once
+on 17 September around 21:01 (+03:00), through the pinned Supabase CLI. The temporary
+horse-row write pause was removed in that run. The old final schema comparator
+incorrectly omitted the migration's intended COMMENT ON FUNCTION change; this was
+a verification bug, not a reason to replay or modify the applied migration.
+Saved-schema inspection confirmed only the exact legacy function body and its
+exact comment changed, with no residual statement differences.
+
+Actual final verification: `horse-cutover-verification-20260919-082523-_vqh681n.zip`,
+SHA-256 `e084a6e40cc4c1757c4a953dda66a901670aebcb4eba768114c6ea68aec9a954`.
+Fresh read-only observations at 08:26:01 and 08:26:35 (+03:00) confirmed:
+- all 19 source migration versions in real production history, none pending;
+- the retired legacy body and six stored migration statements match the source;
+- neither temporary pause object exists; no transaction predates the recorded fence;
+- fresh schema comparison permits only the exact legacy body and COMMENT change;
+  both dumps contain 1328 statements and there are zero residual differences;
+- clean main at 3e61c14 and freshly verified remote equality in that user run.
+
+One local records/0010.json COMPLETE entry was appended only after these checks.
+Its SHA-256 is `f55027469829ba55bf27eaed1bb8dd0877880e34524a583724336b65af8c74c2`.
+All ten older operation records and three local test journals stayed unchanged.
+The verifier made no production writes or source edits; build/SQL/browser tests
+were not rerun. Full schema bytes remain private on the Mac and are not row backups.
+
+Server contract now: legacy save accepts first creation with null offer ID only;
+existing draft changes use update_my_horse_offer_draft_v1 with the exact matching
+revision and a closed scalar changed-field patch. Trusted writes still advance
+revision; no claim is made that all privileged writers are CAS-only. First-create
+atomic expected-identity and durable idempotency remain separate launch gaps.
+
+The owner editor remains READ ONLY. After this four-doc checkpoint is reviewed,
+audit/design existing-draft owner editing against the atomic
+get_my_horse_offer_edit_snapshot_v1 response and the existing revision-checked API.
+Do not pair old detail values with a separately fetched revision, unlock the old
+hydration blindly, or reuse the create RPC. Preserve unedited/private data, handle
+unsupported values and conflicts, and keep offer type and non-draft status locked.
+Images, publication, policy acceptance, lifecycle, categories and Energy are excluded.
+Completed production/apply/verification and local test scripts must not be rerun;
+preserve their ZIPs, the complete operation directory and the three test journals.

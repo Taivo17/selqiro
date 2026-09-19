@@ -8334,3 +8334,51 @@ peata uusi kirjutusi ega taga ülekirjutuse puudumist ootamise ajal. Omaniku edi
 jääb ainult lugemiseks. Esmase loomise identiteedi- ja püsiva kordusloomiskaitse,
 avaldamise, piltide, Energy ning elutsükli tööd jäävad eraldi. Testkuulutusi, kontosid,
 identiteete ega katse päevikut ei kustutata. Läbitud katseid ei korrata.
+
+
+<!-- SELQIRO_HORSE_LEGACY_PRODUCTION_COMPLETE_20260919 -->
+## 2026-09-19 — vana kaitseta hobusemustandi uuendustee on productionis suletud
+
+See tulemus asendab varasemad selle töö „rakendamata”, „pausi ettevalmistamine” ja
+„lõppkontroll pooleli” sissekanded. Lähtekoodi alus on commit `3e61c14`.
+
+Migratsioon `20260916200000_retire_legacy_horse_draft_updates.sql` rakendati
+17. septembril umbes kell 21:01 ühe tavalise Supabase CLI käsuga. Hobuseridade
+ajutine kirjutuspaus eemaldati samas jooksus pärast kontrollitud tehingute lõppu.
+Viimane skeemivõrdlus peatus siis käivitaja puuduse tõttu: võrdlus arvestas
+funktsiooni koodi, kuid mitte sama migratsiooni kavandatud kirjeldava kommentaari
+muutust. Salvestatud skeemide kontroll tõendas, et muid erinevusi ei olnud.
+
+19. septembri kell 08:25–08:26 eraldi lõpetav lugemiskontroll kinnitas värskelt
+õige funktsioonikeha ja tegeliku ajaloo, kõik 19 rakendatud migratsiooni, tühja
+kuivproovi ning ajutise pausi puudumise. Uues skeemivõrdluses oli kummalgi poolel
+1328 SQL-lauset ja pärast kahe täpselt lubatud muutuse eraldamist 0 jääkerinevust.
+Operatsioonipäevikusse lisati üks kohalik COMPLETE-kirje; kümmet varasemat kirjet
+ja kolme lõpetatud katsete päevikut ei muudetud.
+
+Kontrollitud tõend:
+`horse-cutover-verification-20260919-082523-_vqh681n.zip`
+SHA-256: `e084a6e40cc4c1757c4a953dda66a901670aebcb4eba768114c6ea68aec9a954`.
+
+Esimese mustandi loomine jääb võimalikuks. Olemasolevat mustandit vana funktsiooni
+kaudu enam üle kirjutada ei saa; korduvsalvestus kasutab sama ID-d, täpset
+andmeversiooni ja ainult muudetud välju. See ei lahenda veel esimese loomise
+identiteedivahetuse ja vastuse kadumisest tekkiva kordusloomise kõiki riske.
+
+Lõpetav kontroll productionisse ei kirjutanud ega korranud migratsiooni,
+build'i, SQL-, Node- või brauseriteste. Selle jooksu ajal oli `main` puhas ja
+GitHubiga sama. Skeemikoopiad jäävad Maci; need ei ole kuulutuste andmevarukoopiad.
+
+Nüüd kinnistatakse tulemus neljas projektdokumendis. See dokumenteerimissamm ei
+muuda rakendust ega andmebaasi; selle värske build'i, commit'i ja push'i tegelik
+tulemus tuleb lugeda lõpetamisskripti raportist.
+
+Pärast dokumenteerimise kinnitatud lõppu on järgmine töö olemasoleva mustandi
+omanikupoolse muutmise lähteaudit ja täpne leping: andmed ning andmeversioon peavad
+tulema ühest lugemisest, salvestus peab säilitama muutmata andmed ja konfliktis
+kasutaja sisestuse. Minu ala muutmisvorm on praegu endiselt ainult lugemiseks.
+Pilti, avaldamist, olekuid, rubriike ja Energy't sellesse sammu ei ühendata.
+Kuulutusi ega kontosid ei kustutata; „Salvesta hilisemaks” jääb vabatahtlikuks.
+
+Lõpetatud rakendus-, pausi-, taastumis- ja kontrollskripte enam ei käivitata.
+Rakendatud migratsioone, operatsioonikausta ega katsete päevikuid ei muudeta.

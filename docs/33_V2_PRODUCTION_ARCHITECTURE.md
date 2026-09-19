@@ -5889,3 +5889,66 @@ production cutover; no APPLY until that separate contract, fresh checks and cons
 First-create atomic expected identity and durable idempotency remain open separately.
 No publication, images, Energy, lifecycle, category, or UI unlocking is included.
 Do not rerun completed local/diagnostic/cutover runners or delete their attempt journal.
+
+
+<!-- SELQIRO_HORSE_LEGACY_PRODUCTION_COMPLETE_20260919 -->
+## Production legacy-writer retirement — verified 2026-09-19
+
+This is the completed rollout state, superseding earlier pending-rollout entries.
+Source base: `3e61c14a9cd3d2609f001a51f20ee02f6690dabc`.
+Production project: `vyjletlmwoiwxsnsunlm`.
+Applied migration: `20260916200000_retire_legacy_horse_draft_updates.sql`;
+SHA-256 `d79344d09c2ef23914cc2405262cf1a8e6bd1bcabc8da7944c33a30faf5d4c84`.
+The migration and earlier applied migrations are immutable.
+
+### Completed transition and authoritative writes
+
+The 17 September 21:01 (+03:00) rollout installed an exception-only, ALWAYS,
+statement-level write guard on horse_offers, dispatched the exact migration once,
+checked body plus real migration history, established a post-replacement fence
+and drained earlier transactions before removing its own guard. This was a
+horse-row pause, not a portal-wide maintenance mode. No application-row test writes
+were made by the rollout. The guard is no longer installed.
+
+save_my_horse_offer_draft_v1 preserves the existing null-ID first-create contract.
+Non-null p_offer_id is rejected; it cannot overwrite or replace an existing draft.
+Existing draft edits use update_my_horse_offer_draft_v1 with expected edit_revision
+and a scalar patch. horse_offers remains canonical; no generic listing is duplicated.
+The revision trigger, atomic edit snapshot, existing authorization and update
+contract were not replaced by retirement.
+
+### Verification and evidence scope
+
+The final verification-only run was 19 September 08:25-08:26 (+03:00).
+Its result ZIP is horse-cutover-verification-20260919-082523-_vqh681n.zip,
+SHA-256 e084a6e40cc4c1757c4a953dda66a901670aebcb4eba768114c6ea68aec9a954.
+Two actual read-only metadata responses confirmed exact new body/history, all 19
+versions, no pause and zero pre-fence transactions. The final dry-run was empty.
+A fresh private public-schema dump matched the approved body-plus-comment
+comparison: 1328 statements per dump; zero residual additions/removals.
+Normalized multiset SHA-256:
+8666beb34076339096c99645d092d69fe04195ba1bb1d9cf2117864e7965f469.
+
+The previous body-only comparator was too narrow: COMMENT ON FUNCTION is an
+intentional schema change in this migration. Only that exact same function's old/new
+comment was added to the allowlist, not all comments or unrelated differences.
+No corrective production migration or history repair was needed.
+
+Only a local COMPLETE record was added after final verification; ten existing
+records and three earlier COMPLETE test journals were preserved. This documents
+dated evidence, not a promise about a later live database state. Private schema
+dumps were not sent in the result ZIP and do not back up application rows.
+The verifier did not rerun SQL, Node, browser, build or deployment tests.
+Earlier real local tests remain separate; isolated auth/identity/policy and
+history-gap fixtures were synthetic and are not a full production integration test.
+
+### Next boundary
+
+Owner editing is not enabled by this rollout. Its next source audit must use an
+atomic detail+revision snapshot and changed-field update of the same existing ID.
+Preserve unedited nested/private data; refuse unsupported mappings rather than
+normalizing unknown values into destructive defaults. Handle identity/auth changes,
+stale responses, conflicts and uncertain saves without silent replay. Keep other
+statuses, images, offer type, publication, categories, lifecycle and Energy outside
+the draft edit patch. First-create expected-identity/idempotency is still a separate
+server/launch contract, not solved by retiring legacy updates.

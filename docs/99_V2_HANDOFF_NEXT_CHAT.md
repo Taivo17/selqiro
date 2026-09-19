@@ -1,3 +1,98 @@
+<!-- SELQIRO_HORSE_LEGACY_PRODUCTION_COMPLETE_20260919 -->
+# Selqiro — current handoff: production retirement COMPLETE
+
+Read this section FIRST. It supersedes historical pending-rollout, write-pause,
+recovery and RESUME_INTENT next steps below. Evidence times are +03:00.
+
+## Confirmed current state
+
+Source base: `3e61c14a9cd3d2609f001a51f20ee02f6690dabc`, main.
+Migration `20260916200000_retire_legacy_horse_draft_updates.sql` was applied ONCE
+on 17 September around 21:01, through normal pinned Supabase CLI db push.
+Its temporary horse-row write guard was removed. The old final comparator rejected
+the intended function COMMENT change; offline inspection established no other diff.
+Do NOT treat that old error as a pending migration or a still-installed pause.
+
+Latest actual result: `horse-cutover-verification-20260919-082523-_vqh681n.zip`.
+SHA-256: `e084a6e40cc4c1757c4a953dda66a901670aebcb4eba768114c6ea68aec9a954`.
+Final server observation: 19 September 08:26:35 (+03:00).
+- 19 remote migration versions exactly match the source; no pending migration.
+- Legacy null-ID creation remains; non-null-ID legacy updates are retired.
+- Exact new body AND six real stored migration statements match committed SQL.
+- Both temporary pause objects are absent; zero pre-fence transactions.
+- Fresh public-schema comparison: only exact legacy body + same-function COMMENT;
+  1328 statements per dump, zero residual additions/removals.
+- User run freshly verified clean 3e61c14 and equal Git remote.
+- Local operation is COMPLETE with 11 chained records; the first ten are unchanged.
+  records/0010.json SHA-256:
+  `f55027469829ba55bf27eaed1bb8dd0877880e34524a583724336b65af8c74c2`.
+- The verifier made no production/source writes and reran no build/SQL/Node/browser.
+  Its full private schema is a schema copy, NOT an application-row backup.
+
+The current change is documentation ONLY: four conventional docs, one fresh build,
+explicit COMMIT PUSH, then clean/equal checks. This text cannot contain its own future
+commit hash. Read the returned horse-retirement-rollout-docs-* ZIP for that actual
+commit/build/push result; do not infer completion from this planned document.
+
+## One next task AFTER the reviewed docs commit
+
+Audit/design the existing-draft owner editor before exposing writes. Use the actual
+source exports, especially:
+- src/features/horse-offer-edit/model/horseOfferEditHydration.ts
+- src/features/horse-offer-edit/model/useOwnerHorseOfferEditForm.ts
+- src/features/horse-offer-edit/components/OwnerHorseOfferEditPage.tsx
+- src/entities/horse-offer/api/getMyHorseOffer.ts and mappers.ts
+- src/entities/horse-offer/api/updateMyHorseOfferDraft.ts
+- src/features/listing-create/model/horseDraftChanges.ts and horseDraftSession.ts
+- the applied atomic snapshot/update migration `20260913190000`.
+
+Use get_my_horse_offer_edit_snapshot_v1 for ONE detail+revision snapshot. A normal
+detail read followed by a newer revision is unsafe. Current display hydration is
+not automatically a lossless edit contract. Existing draft updates must preserve
+unmodified stored values, unsupported nested data and private location; send only
+deliberately changed allowed scalar fields to update_my_horse_offer_draft_v1.
+Keep ID/type and non-draft statuses locked. Handle identity/auth changes, conflict,
+out-of-order responses and uncertain saves without silent retry or lost input.
+Do not use legacy save for existing drafts or simply remove the disabled fieldset.
+Owner editor remains read-only until its own reviewed/tested client checkpoint.
+
+First-create atomic expected identity and durable idempotency remain separate launch
+requirements, not solved by this rollout. Images, publication, policy acceptance,
+lifecycle, categories, Energy and My Area Back/scroll are outside this next edit task.
+Keep canonical horse_offers and publish-first UX; optional save-later is not a required
+visible stage. Preserve prior accepted A→B→A, wanted and narrow UI evidence without
+calling it a new UUID/count audit. Test listings/accounts need not be deleted.
+
+## Do not repeat completed operations
+
+Do not rerun legacy cutover/apply/UTC repair/schema inspector/verification scripts
+or the completed local SQL, cutover, pause and recovery tests.
+Do not edit applied migrations `20260913190000` or `20260916200000`.
+Preserve all result ZIPs, private reports and:
+`~/Downloads/selqiro-recovery/horse-production-cutover-20260916200000-operation`
+with records/0000.json through 0010.json and its original private schema.
+Preserve the three COMPLETE test journals:
+- horse-legacy-cutover-86e62d6-attempt.json
+- horse-write-pause-3e61c14-attempt.json
+- horse-pause-recovery-3e61c14-attempt.json
+No manual history repair, pause removal, account deletion or migration replay.
+
+## Environment and continuity
+
+Mac arm64, Python 3.9.6, Node v24.16.0 in prior measured evidence. Explicit TAP when
+parsing Node test summaries. Stop this project's dev process before build.
+Existing Supabase CLI 2.117.0 is cache/hash-pinned; no blind npx/latest install,
+init/reset or invented config.toml. No CLI/Docker/database commands in the docs step.
+Source exports contain 88 selected files, not the complete repository. Inspect
+actual files before coding; collect only genuinely missing context. No broad new
+collection is required for this documentation checkpoint.
+The fresh remote/production checks above are dated user-run evidence, not a live
+query performed by a later chat. Historical Project DNA remains; old AI_BOOT,
+Architecture Sprint 1, LocationCard and Premium tasks do not override this state.
+
+---
+## Historical entries — superseded next-step instructions
+
 <!-- SELQIRO_LEGACY_CUTOVER_SOURCE_FINISH_20260916 -->
 # Selqiro — current handoff: legacy retirement source completion
 
