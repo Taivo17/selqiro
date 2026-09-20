@@ -1,15 +1,10 @@
+import V2Shell from "../layout/V2Shell";
 import OwnerHorseOfferEditPage from "../../../src/features/horse-offer-edit/components/OwnerHorseOfferEditPage";
 
-type V2HorseOfferEditPageProps = {
-  offerId: string;
-};
-
-export default function V2HorseOfferEditPage({
-  offerId,
-}: V2HorseOfferEditPageProps) {
+export default function V2HorseOfferEditPage({ offerId }: { offerId: string }) {
   return (
-    <OwnerHorseOfferEditPage
-      offerId={offerId}
-    />
+    <V2Shell>
+      <OwnerHorseOfferEditPage offerId={offerId} />
+    </V2Shell>
   );
 }

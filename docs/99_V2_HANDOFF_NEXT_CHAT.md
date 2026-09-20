@@ -1,3 +1,223 @@
+<!-- SELQIRO_OWNER_HORSE_EDITOR_BROWSER_ACCEPTED_20260919 -->
+# Current handoff — owner horse editor and views, browser accepted
+
+## Source checkpoint and actual status
+
+Parent: `8914dc1332e02cf385071223d2373ac3d2e14608`.
+Intended commit: `Add owner horse draft editing and corrected owner views`.
+This entry belongs to the 29-file combined checkpoint. The finisher requests a
+fresh build and explicit COMMIT PUSH; read its result and actual Git for the final
+hash, clean worktree and remote equality. Do not infer those from this document.
+No application/test/contract/SQL bytes change during the finishing step; only the
+four current documentation files receive this acceptance record.
+
+The user-run source evidence is:
+`owner-horse-view-fix-20260919-224843-v8mrs085.zip`
+SHA-256 `de2b2f4d5afeaf5fe2992b75eabc6c2737ed57dedf49f7918aa9df3442413a5e`.
+161 archive entries, 158 root-manifest hashes and two nested evidence manifests;
+the latter match the earlier original reports. All 123 exported sources match,
+and the tested 29-file staged patch reconstructs exactly. User run: 166 Node PASS
+and real build PASS; no commit/push yet at that 22:49 source capture.
+
+## Browser acceptance (user report, not automated browser execution)
+
+Latest user: “Otsin hobust test korras. id vahetuse test korras, kitsas vaade korras”.
+Wanted detail correctly shows the saved 5000 EUR budget and Rapla search area;
+existing V2 header/identity control is present in detail/edit. Editor A-B-A hides
+and blocks under B and preserves unsaved input on return. Narrow layout is accepted.
+Earlier user reports confirm same-ID sale/wanted persistence and refusal to save
+the stale second of two editors. Save/auth/session logic was not changed by the
+view fix. No need to repeat these merely to create a documentation/commit checkpoint.
+166 Node checks use actual modules and synthetic API/hooks/JSX, NOT React DOM or
+live database writes. Other-account/logout, all non-draft statuses, live network
+failure and broad ordinary-route regressions are not implied browser PASS results.
+Deployment after the upcoming push is not independently verified by the finisher.
+
+## Implemented and remaining boundaries
+
+Atomic detail+text revision read; update-only scalar patch; draft/type/owner guards;
+no replacement row, full-details overwrite or new legacy create call in editor.
+Only exact horse edit routes skip identity-triggered reload. Conflict/uncertain
+write keeps input. Confirmed ACK with failed reread offers read retry only.
+Wanted detail uses details.wanted; sales use seller fields. Both wrappers own one
+V2Shell. Images are still read-only. Publication/status/Storage/categories/Energy
+are not connected by this checkpoint.
+
+IMPORTANT: v1 My Area list does not return wanted budget/search-area. Its labels
+`Eelarve detailvaates` and `Otsingupiirkond detailvaates` are an explicit interim
+boundary, not complete list values. A minor repeated city/region label remains in
+the editor selected-area summary, not in detail; no stored data correction needed.
+
+## One next task after verified clean commit/push
+
+Audit/design the smallest compatible owner-list read-contract extension carrying
+wanted budget mode/amount/currency and coarse search-area summary. Start with the
+already exported projection, owner RPC, entity mapper and My Area row modules.
+Preserve owner authorization, filters/order/limits and ordinary listing behavior.
+No N+1 detail fetches, raw private details, client form-cache truth, seller-field
+copies or changed source-of-truth. Any needed new SQL is a separately controlled
+server checkpoint; never edit already applied migrations. No new source collector
+is needed unless the exact next audit exposes a genuinely missing dependency.
+
+## Completed database work — never replay
+
+20260916200000 was applied Sept17 and fully verified Sept19 08:26 (+03). At that
+verification all 19 migrations were present, pause absent, no pending files and
+only the reviewed function body plus COMMENT changed. Operation journal COMPLETE
+with 11 records; three local test journals COMPLETE. This client finisher makes no
+new DB observation or journal write. Keep all operation/test journals and reports.
+Do not rerun old apply, UTC repair, pause/recovery, schema inspector, verification,
+rollout documentation, editor installer, view collector or correction scripts.
+First-create identity/idempotency, images/publication/lifecycle/store assignment,
+My Area return context, Energy and launch QA remain separately scoped work.
+
+---
+## Historical handoffs below — not current next-step instructions
+
+<!-- SELQIRO_OWNER_HORSE_VIEW_CORRECTION_20260919 -->
+# Current handoff — 2026-09-19 owner detail/header correction
+
+## Current state and one next action
+
+Last committed/pushed HEAD: `8914dc1332e02cf385071223d2373ac3d2e14608`.
+The 09:56 editor installer left exactly 20 files staged, no commit; 129 client
+checks and real build passed. The 22:16 collector confirmed that exact worktree
+and local origin/main reference; it did not query Git remote or DB.
+
+This newer CLIENT-ONLY correction adds detail wanted presentation and the existing
+shared shell on owner detail/edit. Read the runner result for actual build/stage
+status. Successful runner output has 29 files staged in the combined checkpoint,
+166 checks (129 previous + 37 view checks), and no commit/push. Until executed,
+this is a prepared package, not an installed or browser-passed feature.
+
+ONE NEXT ACTION after a successful run: targeted browser validation of the saved
+wanted detail plus the now-visible editor identity A-B-A and header/narrow layout.
+Return the new ZIP and results; do not repeat old installer/collector/DB scripts.
+Then finish the combined source checkpoint with separate consent. List-summary
+SQL is the next independent backend-read step, not part of this installer.
+
+## What is fixed and what is still incomplete
+
+Owner detail now reads `details.wanted.budget`, `search_area` and preferences, not
+seller price/horse facts. Both wrappers own exactly one V2Shell. Child components
+no longer add nested main elements. Existing auth/write/session/identity reload
+logic is preserved. Sales keep seller price and actual coarse location.
+
+IMPORTANT: current v1 My Area list RPC does NOT return wanted budget/search-area.
+Its wanted rows now truthfully say `Eelarve detailvaates` and `Otsingupiirkond
+detailvaates`. Values are NOT yet displayed on the list itself. No N+1 requests,
+private raw details fetch, cached form substitute, or seller-column copy exists.
+A separate additive minimized owner-read contract must close that remaining gap.
+Do not call this a complete list-value fix or alter applied SQL to fake one.
+
+## Evidence and safeguards
+
+Input collector ZIP: owner-horse-view-context-20260919-221624-vad9z7td.zip
+SHA-256: 1460172d95485a134de24b536df061dada5b85364f8ca73fd1461fb27b93f624
+33 safe entries / 32 manifest hashes, 24 source hashes; before/after Git equal.
+Previous editor ZIP: owner-horse-draft-editor-20260919-095617-wzhta24b.zip
+SHA-256: cced7a0cb5205aa453bee72da6dd76aeee89874953657f919d0eeb88b8b73f43
+130 entries / 129 manifest hashes, 98 sources; merged input has 119 unique sources.
+
+Browser results already reported: wanted title and editor budget/area persist;
+sale price/area work; second stale editor save refused; old narrow view works.
+Identity check was blocked by absent header and is NOT yet a browser PASS.
+New tests use synthetic data/hooks/JSX interpretation, NOT React DOM or production.
+The old conflict/save tests need not be manually repeated merely for this view fix.
+
+Production migration 20260916200000 was applied Sept17 and verified Sept19 08:26.
+All 19 versions present; write pause absent; operation journal COMPLETE (11 records),
+three test journals COMPLETE. This run does not contact DB or change those records.
+Do not rerun apply, UTC repair, schema inspector, verification-only or docs runners.
+No new SQL, image, status, publication, Energy, account or data-deletion activity.
+Stop npm run dev before this correction's npm run build; Docker is not needed.
+
+---
+## Historical handoffs below are not current next instructions
+
+<!-- SELQIRO_OWNER_HORSE_DRAFT_EDITOR_CLIENT_20260919 -->
+# Current checkpoint — 2026-09-19 owner horse draft editor client
+
+## Current source and one next action
+
+Last committed/pushed source: `8914dc1332e02cf385071223d2373ac3d2e14608`.
+This entry belongs to the NEW client package and cannot name its future commit.
+The installer stages 20 scoped files after 129 Node checks and npm build pass;
+read its actual result for stage/build evidence. No commit/push is performed.
+The next action is the targeted browser checklist followed by result review,
+then a separately confirmed scoped commit/push. Do not repeat the completed DB
+rollout, another source collection, or an old installer.
+
+## Implemented client contract
+
+Existing draft route: `/v2/my-area/horse-offers/<uuid>/edit`.
+My Area row -> owner detail -> `Muuda mustandit` (non-drafts stay read-only).
+One `get_my_horse_offer_edit_snapshot_v1` read gives owner detail plus matching
+text revision. `OwnerHorseDraftSession` is update-only and instance-scoped by
+user/offer. It compares a retained baseline with local edits and uses existing
+`updateMyHorseOfferDraft` with a scalar patch and exact revision.
+
+Unknown structured shapes are read-only. Wanted unknown sex is explicit.
+Private precise location blocks locality editing, not unrelated fields.
+Fields lock during write/reread. ACK + read failure retries only read.
+Conflict/unknown result preserves input and requires explicit discard/reload;
+no automatic revision refresh or write retry. Other validation errors can be
+retried explicitly with the same revision. No create/replacement draft path.
+
+Only exact horse edit UUID routes skip identity-switch reload; their own
+context/auth guards now own this behavior. A→B→A keeps local input and original
+revision; B cannot save. Logout/account/route change invalidates old form/results.
+Visible Back/reset/discard is guarded; native SPA navigation is NOT guaranteed
+lossless. No localStorage/sessionStorage, autosave or private draft telemetry.
+
+## Tests and boundaries
+
+57 existing create checks are run with one obsolete read-only-editor static
+assertion replaced by the new keyed/delegated boundary assertion.
+72 new checks cover actual parser/model/session modules, fake API responses,
+concurrency/identity/error cases and static/transpilation UI wiring.
+These are NOT React rendering or authenticated SQL/browser tests. The actual
+Next build and user browser checklist remain separate evidence.
+Browser checklist: existing sale same-ID reread+refresh; wanted budget/area;
+two edit tabs same revision -> second conflict; editor identity A→B→A;
+readonly non-draft if available, images unchanged, narrow/ordinary/create flows.
+Do not invent available statuses or modify production rows with SQL for fixtures.
+
+No new migration, public horse publication, images/storage writes, status,
+category, policy acceptance, Energy, account deletion or testdata cleanup.
+First-create atomic expected identity and durable idempotency remain open.
+My Area filters/view-all/scroll return context remains deferred.
+
+## Completed production foundation — do not replay
+
+`20260916200000` was applied 17.09 and fully verified 19.09 at 08:26 (+03).
+All 19 production migrations were present, pause absent, no pending migration,
+only expected legacy body+COMMENT changed. Operation journal is COMPLETE with
+11 records; all earlier records and three test journals remain unchanged.
+The 8914dc1 docs checkpoint passed build/commit/push; its deployment was not
+independently checked and this installer does not deploy or contact the DB.
+No applied SQL file or production/test journal is edited by this client patch.
+
+Preserve `~/Downloads/selqiro-recovery/horse-production-cutover-20260916200000-operation`
+and its records/private schema plus the three COMPLETE local test journals.
+Do not run legacy apply/UTC/schema/verification/local-pause/recovery/documentation
+scripts again. The new client installer uses existing Node/TypeScript/Next;
+Docker and Supabase CLI are not needed. Stop npm run dev before npm run build.
+
+## Important files
+
+- `src/entities/horse-offer/api/getMyHorseOfferEditSnapshot.ts`
+- `src/features/horse-offer-edit/model/ownerHorseDraftForm.ts`
+- `src/features/horse-offer-edit/model/ownerHorseDraftSession.ts`
+- `src/features/horse-offer-edit/model/useOwnerHorseOfferEditForm.ts`
+- `src/features/horse-offer-edit/components/OwnerHorseOfferEditor.tsx`
+- `src/features/v2-shell/model/identityRouteReload.ts`
+- `tests/owner-horse-draft-editor.test.cjs`
+- `docs/architecture/owner-horse-draft-editor-client-v1.md`
+
+---
+## Historical handoff entries below (not current next-step instructions)
+
 <!-- SELQIRO_HORSE_LEGACY_PRODUCTION_COMPLETE_20260919 -->
 # Selqiro — current handoff: production retirement COMPLETE
 

@@ -85,6 +85,11 @@ function getPriceCurrencySuffix(
 function getPriceLabel(
   item: OwnerMarketplaceItem
 ): string {
+  // The v1 list RPC does not return wanted budget/search_area. Never infer them.
+  if (item.contentType === "horse_offer" && item.contentVariant === "wanted") {
+    return "Eelarve detailvaates";
+  }
+
   if (item.priceType === "free") {
     return "Tasuta";
   }
@@ -128,6 +133,10 @@ function getPriceLabel(
 function getLocationLabel(
   item: OwnerMarketplaceItem
 ): string {
+  if (item.contentType === "horse_offer" && item.contentVariant === "wanted") {
+    return "Otsingupiirkond detailvaates";
+  }
+
   return (
     normalizeOptionalText(
       item.locationLabel

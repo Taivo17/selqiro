@@ -222,13 +222,13 @@ test('React page keeps every form field under user key; old private form does no
  assert.match(page,/<ListingCreateForm key=\{user.id\} userId=\{user.id\}/);assert.match(page,/if \(!user\) return <LoginState/);
  const hook=fs.readFileSync(path.join(root,feature+'useHorseOfferDraftSave.ts'),'utf8');assert.match(hook,/removeEventListener/);assert.match(hook,/subscription.unsubscribe/);
 });
-test('all candidate TSX modules transpile; owner editor remains read-only',()=>{
+test('create TSX modules transpile; owner editor delegates without a create path',()=>{
  for(const name of ['ListingCreatePage','ListingCreateForm','ListingCreateTextFields','ListingCreateImageFields','HorseOfferDraftSaveAction','HorseOfferTypeSelector']){
   const file=path.join(root,'src/features/listing-create/components',name+'.tsx');
   const result=ts.transpileModule(fs.readFileSync(file,'utf8'),{fileName:file,reportDiagnostics:true,compilerOptions:{jsx:ts.JsxEmit.ReactJSX,target:ts.ScriptTarget.ES2017}});
   assert.deepEqual(result.diagnostics.filter(x=>x.category===ts.DiagnosticCategory.Error),[]);
  }
- const edit=fs.readFileSync(path.join(root,'src/features/horse-offer-edit/components/OwnerHorseOfferEditPage.tsx'),'utf8');assert.match(edit,/<fieldset[\s\S]*?disabled/);assert.doesNotMatch(edit,/updateMyHorseOfferDraft|saveMyHorseOfferDraft/);
+ const edit=fs.readFileSync(path.join(root,'src/features/horse-offer-edit/components/OwnerHorseOfferEditPage.tsx'),'utf8');assert.match(edit,/<OwnerHorseOfferEditor key=/);assert.doesNotMatch(edit,/updateMyHorseOfferDraft|saveMyHorseOfferDraft/);
 });
 test('strict core typecheck with explicit fake browser transport declaration',()=>{
   const options={strict:true,noEmit:true,skipLibCheck:true,target:ts.ScriptTarget.ES2017,

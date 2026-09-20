@@ -417,11 +417,9 @@ HorseOfferPriceFields({
         ) : null}
 
         <p className="mt-4 rounded-[20px] border border-neutral-200 bg-[#fbfbfa] px-4 py-3 text-xs leading-5 text-neutral-500">
-          Tulevane andmeleping peab
-          eelarve tähenduse hoidma müüja
-          hinnast eraldi. Seda ei tohi
-          vaikides salvestada tavalise
-          müügihinnana.
+          Ostueelarve kirjeldab otsija võimalusi,
+          mitte müüja hinda. Eelarve säilib
+          otsingukuulutuse eraldi andmena.
         </p>
       </section>
     );

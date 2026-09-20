@@ -8382,3 +8382,103 @@ Kuulutusi ega kontosid ei kustutata; „Salvesta hilisemaks” jääb vabatahtli
 
 Lõpetatud rakendus-, pausi-, taastumis- ja kontrollskripte enam ei käivitata.
 Rakendatud migratsioone, operatsioonikausta ega katsete päevikuid ei muudeta.
+
+
+<!-- SELQIRO_OWNER_HORSE_DRAFT_EDITOR_CLIENT_20260919 -->
+## 2026-09-19 — Minu alast uuesti avatud hobusemustandi muutmine
+
+Lähtepunkt on `8914dc1`. Vana kaitseta salvestustee sulgemine on productionis
+lõpetatud ja dokumenteeritud. Seda andmebaasietappi ei korrata.
+
+See kliendimuudatus ühendab olemasoleva mustandi muutmise: Minu ala hobuserea
+pildilt või pealkirjalt avatakse pakkumise vaade ning sealt „Muuda mustandit”.
+Andmed ja nende täpne andmeversioon loetakse koos. Salvestamine kasutab sama ID-d
+ja muudab ainult kasutaja muudetud lubatud välju; uut kuulutuse koopiat ei looda.
+
+„Otsin hobust” eelistused, eelarve ja otsingupiirkond jäävad müügihinnast ning
+konkreetse hobuse asukohast eraldi. Salvestatud „pole teada” sugu ei muutu lihtsalt
+vormi avamise tõttu eelistuse puudumiseks. Tundmatu andmekuju puhul kirjutusi ei
+avata. Täpse privaatse asukohaga pakkumise linna/piirkonna muutmine on piiratud,
+aga näiteks pealkirja või hinna parandamine säilitab privaatse asukoha.
+
+Salvestamise ja värskete andmete laadimise ajal on väljad lukus. Kui kirjutus on
+kinnitatud, kuid uus lugemine ebaõnnestub, pakutakse lugemise kordamist, mitte
+teist kirjutust. Kahe sama algversiooniga avatud vormi konflikt ei kirjuta esimese
+salvestaja tulemust üle. Teadmata tulemuse või konflikti korral säilib sisestus;
+serveriandmetega asendamine on eraldi selgelt kinnitatav tegevus.
+
+Sellel täpsel editorirajal ei tehta identiteedivahetusel enam täisvärskendust.
+Vale aktiivse identiteedi all ei saa salvestada; algse identiteedi juurde naastes
+jääb sama vorm ja andmeversioon alles. Konto vahetus või väljalogimine eemaldab
+vana konto sisestuse. Muude Minu ala lehtede käitumine jääb endiseks.
+
+See on ainult mustandi tekstide ja andmete muutmine. Pakkumise liik, staatus,
+pildid, avaldamine, reeglinõustumised, rubriigid ja Energy ei muutu. Mitte-mustand
+on endiselt ainult vaatamiseks. Esmase loomise tugevamad identiteedi- ja
+kordusloomiskaitsed jäävad eraldi töödeks.
+
+Paigaldaja kontrollib 129 Node-kontrolli ja teeb ühe päris kohaliku build'i.
+Testides kasutatakse simuleeritud API-d; need ei asenda uut brauseritesti.
+Enne commit/push'i tuleb kontrollida olemasoleva mustandi salvestuse püsimist,
+otsingumustandit, kahe vahekaardi konflikti, uue editori identiteedivahetust ning
+arvuti/kitsast vaadet ja tavakuulutuse regressiooni. Paigaldaja ise commit'i ei tee.
+Salvestamata sisestus on ainult avatud vormi mälus, mitte brauseri püsisalvestuses.
+
+
+<!-- SELQIRO_OWNER_HORSE_VIEW_CORRECTION_20260919 -->
+## 19.09.2026 — Hobuse omanikuvaate andmed ja ühine päis
+
+Kasutaja test kinnitas, et „Otsin hobust” pealkiri, eelarve ja otsingupiirkond
+salvestuvad; viimane eelarve/asukoht oli editoris alles, kuid detail näitas müüja
+hinna ja konkreetse hobuse asukoha välju. Samuti puudus detailis/editoris ühine päis.
+Müügi hind/asukoht, kahe vormi vanema salvestuse tõrjumine ja kitsas vaade töötasid.
+Identiteedikatse jäi puuduva päise tõttu tegemata, mitte kasutaja vea tõttu.
+
+Parandus loeb detailis ostja eelarvet, otsingupiirkonda ja eelistusi õigetest
+salvestatud väljadest ning ühendab mõlemad lehed olemasoleva ühise V2-päisega.
+Ühe lehe kohta on üks päis ja üks põhisisu main-element. Salvestamise, õiguste ja
+andmeversiooni loogika ei muutu. Vigase andmekuju puhul ei oletata hinda/asukohta.
+
+Nimekirja praegune serveripäring neid otsija välju üldse ei tagasta. Seepärast on
+seal ajutiselt aus viide „Eelarve detailvaates / Otsingupiirkond detailvaates”,
+mitte eksitav „Hind kokkuleppel / Asukoht täpsustamata”. Numbriline eelarve ja
+otsingupiirkonna väärtus NIMEKIRJAS vajavad veel eraldi väikest lugemislepingu
+laiendust. Parandus ei kopeeri eelarvet müügihinnaks ega tee iga rea kohta lisapäringut.
+
+Selles kliendiparanduses puuduvad andmebaasikäsud, migratsioonid ja commit/push.
+Koos varasema paketiga on pärast edukat testi/build'i 29 faili stage'itud. Uus
+37 kontrolli lisandub senisele 129-le; simuleeritud API/hook/JSX kontrollid ei
+asenda brauserit. Järgmine on salvestatud wanted-detaili, nähtava päise, editori
+A–B–A identiteedikaitse ja kitsa vaate sihitud katse. Enne commit'i vaatame tulemuse
+üle; seejärel tuleb nimekirja andmeleping eraldi serverietapina.
+
+
+<!-- SELQIRO_OWNER_HORSE_EDITOR_BROWSER_ACCEPTED_20260919 -->
+## 2026-09-19 — Hobusemustandi muutmine ja omanikuvaade läbisid brauserikontrolli
+
+Minu alast saab avada olemasoleva hobusemustandi, muuta lubatud välju ja salvestada
+sama pakkumise ID-ga. Salvestus kasutab loetud andmeversiooni; muutmata andmeid ei
+kirjutata vormi vaikimisi väärtustega üle. Avaldamist, pilte ega staatust see ei muuda.
+
+Kasutaja kinnitas pärast kuvamisparandust: „Otsin hobust” detailis on salvestatud
+5000-eurone ostueelarve ja Rapla maakond; identiteedi vahetamise test on korras;
+kitsas vaade on korras. Päis on nüüd ka detailis ja editoris. Teise identiteedi all
+peitub vorm ning algse juurde naastes säilib sisestus. Varem kinnitati ka müügihinna
+ja asukoha säilimine ning vanema avatud vormi salvestuse tõrjumine.
+
+Viimane paranduse jooks läbis 166 automatiseeritud kontrolli ja päris build'i.
+Automaatkontrollide API/hook/JSX-vastused on sünteetilised, mitte brauseritestid.
+Lõpetamissamm täiendab ainult nelja põhidokumenti, teeb värske build'i ja küsib
+commit/push'i kinnitust. Tegelik uus commit ja puhas lõppseis tuleb võtta skripti
+lõpptulemusest, mitte eeldada selle sissekande olemasolu põhjal.
+
+Minu ala nimekirjas on otsingupakkumise summa ja piirkonna asemel veel selge viide
+detailvaatele. Praegune serveri nimekirjapäring neid andmeid ei tagasta. Järgmine
+eraldi töö on selle lugemislepingu väike laiendus; eelarvet ei muudeta müügihinnaks,
+otsingupiirkonda hobuse pärisasukohaks ega lisata igale reale eraldi detailipäringut.
+Vormi asukohakokkuvõttes võib võrdne linna ja maakonna tekst korduda; see väike
+esitlusviimistlus ei tähenda salvestatud andmete kadumist.
+
+Andmebaasi lõpetatud üleminekut ei korrata ja päevikuid ei muudeta. Hobuse avaldamine,
+pildihaldus, staatused, rubriigid, Energy ning Minu ala tagasipöördumise kontekst
+jäävad omaette järgmisteks töödeks. Portaali lisamisvoog jääb publish-first.

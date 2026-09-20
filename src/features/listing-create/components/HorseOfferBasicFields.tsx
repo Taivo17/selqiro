@@ -232,6 +232,10 @@ HorseOfferBasicFields({
                 : "Pole eelistust"}
             </option>
 
+            {!requiresSpecificHorse && value.sex === "unknown" ? (
+              <option value="unknown">Pole teada (salvestatud väärtus)</option>
+            ) : null}
+
             {sexOptions.map((option) => (
               <option
                 key={option.value}

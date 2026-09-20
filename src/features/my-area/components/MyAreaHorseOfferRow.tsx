@@ -44,8 +44,9 @@ export default function MyAreaHorseOfferRow({
     item.title || "Pealkirjata hobusepakkumine";
 
   const readOnlyExplanation =
-    "Detail on ainult vaatamiseks. Muutmine ja "
-    + "staatuse tegevused lisanduvad eraldi.";
+    item.sourceStatus === "draft"
+      ? "Ava salvestatud andmed. Mustandit saad muuta detailvaatest."
+      : "Ava salvestatud andmed. See pakkumine ei ole muudetav mustand.";
 
   const detailHref =
     `/v2/my-area/horse-offers/${
@@ -137,7 +138,7 @@ export default function MyAreaHorseOfferRow({
         </div>
       </Link>
 
-      <p className="whitespace-nowrap text-sm font-semibold text-zinc-900 md:text-right">
+      <p className="break-words text-sm font-semibold text-zinc-900 md:text-right">
         {item.priceLabel}
       </p>
 
@@ -155,7 +156,7 @@ export default function MyAreaHorseOfferRow({
           className="text-center text-[11px] text-zinc-400 md:text-right"
           title={readOnlyExplanation}
         >
-          Ainult vaade
+          {item.sourceStatus === "draft" ? "Muutmine detailis" : "Ainult vaade"}
         </span>
       </div>
     </article>

@@ -6,6 +6,7 @@ import {
   useState,
 } from "react";
 import { usePathname } from "next/navigation";
+import { shouldReloadIdentityScopedRoute } from "../model/identityRouteReload";
 import type { IdentitySummary } from "../../../entities/identity/model/types";
 import { useV2IdentitySwitcher } from "../model/useV2IdentitySwitcher";
 
@@ -56,55 +57,6 @@ function IdentityAvatar({
   );
 }
 
-function shouldReloadIdentityScopedRoute(
-  pathname: string | null
-): boolean {
-  if (!pathname) return false;
-
-  if (
-    pathname === "/v2/my-area" ||
-    pathname.startsWith(
-      "/v2/my-area/"
-    )
-  ) {
-    return true;
-  }
-
-  if (
-    pathname === "/v2/energy" ||
-    pathname.startsWith(
-      "/v2/energy/"
-    )
-  ) {
-    return true;
-  }
-
-  /*
-   * Listing ownership and owner-only content previews
-   * depend on the active identity. Switching identity
-   * must reload these detail routes.
-   */
-  if (
-    pathname.startsWith(
-      "/v2/listing/"
-    ) ||
-    pathname.startsWith(
-      "/v2/showcase/"
-    ) ||
-    pathname.startsWith(
-      "/v2/service/"
-    )
-  ) {
-    return true;
-  }
-
-  /*
-   * Public profile content remains keyed by its URL
-   * slug. Switching the viewer identity must not
-   * replace or navigate away from that public profile.
-   */
-  return false;
-}
 
 export default function V2IdentityBadge({
   userId,

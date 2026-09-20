@@ -5952,3 +5952,159 @@ stale responses, conflicts and uncertain saves without silent replay. Keep other
 statuses, images, offer type, publication, categories, lifecycle and Energy outside
 the draft edit patch. First-create expected-identity/idempotency is still a separate
 server/launch contract, not solved by retiring legacy updates.
+
+
+<!-- SELQIRO_OWNER_HORSE_DRAFT_EDITOR_CLIENT_20260919 -->
+## Existing horse draft editing client — 2026-09-19
+
+Base source: `8914dc1`. No new migration or permission change. Existing production
+`20260913190000` and retired legacy updates under `20260916200000` are prerequisites
+already verified in the completed rollout; neither is replayed here.
+
+### Layering
+
+`OwnerHorseOfferEditPage` is the authentication/UUID gate and keys
+`OwnerHorseOfferEditor` by user ID plus canonical offer UUID.
+`useOwnerHorseOfferEditForm` wires auth, identity, focus and beforeunload events to
+one `OwnerHorseDraftSession`; effect cleanup invalidates reads and unsubscribes.
+The session uses only actor/read/update dependencies and keeps immutable cached
+snapshots. UI fields/images/composition are separate small modules.
+
+`getMyHorseOfferEditSnapshot` invokes only `get_my_horse_offer_edit_snapshot_v1`.
+It accepts 0/1 rows, validates revision as bigint decimal text and verifies both
+returned IDs and identity UUID. The existing owner-safe detail mapper is reused.
+`ownerHorseDraftForm` validates supported schema/branch/budget/period shapes before
+using display hydration. It fixes stored wanted unknown sex in the editor model,
+without modifying the ordinary creation mapper. Unsupported shapes remain read-only.
+`buildOwnerHorseDraftChanges` compares active scalar input projections of the SAME
+baseline and current form, validates changed values and sends a closed patch.
+No raw details object, private coordinate, lifecycle or identity field is sent.
+
+### State and failure contracts
+
+- One synchronous in-flight write guard precedes the first await.
+- Identity epochs invalidate actor/read results, not the historical fact of a
+  possibly committed dispatched write. A late valid ACK is retained for read-only
+  reconciliation under the original user/identity, not rebound to another actor.
+- Acknowledged write rereads the atomic snapshot; stale/backwards data are refused.
+  A later whole snapshot is displayed with a notice; no field merge with old input.
+- Failed post-ACK read allows only read retry. Conflict, unknown transport/ACK or
+  non-draft rejection preserves input and blocks another write until explicit reload.
+- Known validation rejection allows explicit same-revision retry. Server remains
+  authoritative for policy capability, active-identity ownership and constraints.
+- Non-draft status, offer type, EE market and EUR currency cannot be changed here.
+- Locality is locked if any precise private location field is non-null.
+
+### Identity/navigation integration
+
+`identityRouteReload.ts` preserves the prior route predicate except for the exact
+`/v2/my-area/horse-offers/<uuid>/edit` path (optional trailing slash).
+Other My Area, Energy and owner detail routes still reload. `/v2/sell` is untouched.
+Wrong-context fields are hidden but retained only in the same user's mounted
+session. Rechecking an existing editor context does not fetch a new revision.
+Logout/another account purges the session; user/offer keys prevent route reuse.
+Visible Back/reset/discard actions require confirmation. Native SPA Back and
+other navigation not intercepted by this feature may discard unsaved input;
+refresh/close warnings are browser-dependent and do not make drafts durable.
+
+### Scope and validation
+
+Owner detail now labels the draft link `Muuda mustandit`; other statuses link to
+read-only fields. My Area row behavior, scroll/filter return state and generic
+listing management stay untouched. Image metadata is displayed without actions.
+No publication, new policy acceptance, image/storage operation, status mutation,
+store category, Energy or first-create identity/idempotency change is included.
+
+Node tests use actual selected TS modules and fake API responses; UI wiring tests
+are static/transpilation checks, not React rendering or authenticated E2E.
+The local installer runs both suites and npm build, then stages only this package.
+Manual existing-draft persistence, two-tab conflict, editor A→B→A, narrow and
+ordinary-flow regression checks must be reviewed before commit/push.
+
+
+<!-- SELQIRO_OWNER_HORSE_VIEW_CORRECTION_20260919 -->
+## Owner horse read presentation and shell wiring — 2026-09-19
+
+The actual layout chain has no V2/my-area/horse owner layout or template. Root
+layout supplies SiteHeaderGate; working V2 pages compose V2Shell locally. Both
+V2HorseOfferDetailPage and V2HorseOfferEditPage now compose that existing shell
+once. Do not add a second global shell, identity selector, or nested main landmark.
+The exact UUID edit path continues to skip identity full-reload; other owner
+paths retain their existing reload contract. Save/auth hooks and session are not
+rewritten for a rendering defect.
+
+`entities/horse-offer/model/ownerPresentation.ts` is a pure owner-read presentation
+adapter over OwnerHorseOfferDetail, not a persistence mapper. Specific horse fields
+remain specific. Recognized schema-version-1 wanted objects expose buyer budget,
+search-area coarse locality, preferences, and preference-oriented disclosures.
+Missing/unsupported budget is never read from top-level seller price; missing/
+unsupported search area is never read from actual horse location. Unknown shapes
+show an explicit warning, not a guessed financial or location value. Equal locality
+and region text is displayed once without geocoding or changing stored data.
+No arbitrary details objects, private address, coordinates, or verification claim
+are rendered. The original read object stays unchanged.
+
+Owner detail UI is split into presentation model, labels/date helpers, reusable
+description-list cards and the composing page. Shared helper copy no longer claims
+that an already stored budget belongs to a future data contract.
+
+### Actual list-contract limitation — NOT solved with per-row reads
+
+`marketplace_item_projection_v1` selects seller price, actual horse city/region,
+not `details.wanted`. `get_my_marketplace_items_v1` returns the same explicit narrow
+columns. The types and mapper cannot derive missing budget/search area. This patch
+uses explicit detail-only list labels for wanted; real amount/area remains visible
+in owner detail/editor only. Ordinary listing mapping is unchanged. Non-draft
+horse actions remain read-only; draft row guidance points to editing in detail.
+
+Next server work must use a new additive, owner-authorized bounded read contract
+or versioned projection/RPC, returning only semantic wanted summary fields. Prefer
+one response with discriminated summary over per-row detail RPCs, browser raw-table
+reads or cached editor data. Preserve active-identity rules, pagination/order,
+status/category behavior and seller/wanted semantics; review search-area search
+coverage separately. This patch neither implements nor applies that SQL.
+
+### Verification scope
+
+User evidence: editor installer 129 checks/build PASS; collector no edits/network.
+New correction: 37 pure/element-composition/static checks plus unchanged 129 tests;
+actual shared shell/account/identity button UI is interpreted with synthetic hooks,
+not a browser. User build and targeted identity A-B-A are still needed. Database
+migrations (19), operation COMPLETE journal, old test journals, write APIs and
+session/revision logic remain byte-identical. Commit/push remains a separate gate.
+
+
+<!-- SELQIRO_OWNER_HORSE_EDITOR_BROWSER_ACCEPTED_20260919 -->
+## Existing-draft editor: accepted client checkpoint — 2026-09-19
+
+The update-only owner editor uses an atomic owner-safe snapshot with its matching
+opaque text revision, a retained form baseline and only deliberate scalar changes.
+It preserves unedited/private data, keeps type locked and accepts only drafts.
+ACK plus failed reread retries reading, not writing; stale or uncertain writes do
+not silently refresh a revision and overwrite newer content. These contracts are
+unchanged in the owner-detail/header correction.
+
+Both horse owner wrappers now compose the existing V2Shell once. The editor's
+exact UUID route handles identity changes without the old full reload: hide and
+block under B; preserve in-memory input and revision on return to A. Other My Area
+reload behavior remains unchanged. Wanted detail presentation reads buyer budget,
+search area and preferences from details.wanted, never seller price/location.
+
+User confirms wanted detail, A-B-A and narrow layout. Earlier sale/wanted reopen
+and second stale-editor refusal were user-reported; there is no new independent
+browser/SQL verification by the finishing script. Uploaded evidence has 166 passing
+Node cases using actual modules with synthetic transport/hooks/JSX, and a real
+Next build. The finisher makes one new build; no source or migration change.
+
+Remaining read-contract gap: the bounded My Area v1 projection/RPC omits wanted
+summary fields. Current labels explicitly refer to detail. Next design must add
+only owner-authorized summary fields in a separately validated compatible read
+contract, retaining filters, ordering, bounds and ordinary-listing behavior.
+Never solve the gap with per-card detail queries, full details/private location
+exposure, duplicated seller columns or client state as authoritative data.
+
+Known minor UI note: identical city and region may repeat in the editor's area
+summary; detail already deduplicates. It is not a data-loss defect and is not
+changed in the accepted checkpoint. Non-draft/real-network/logout/ordinary-route
+launch regression coverage must not be inferred from the narrow user test report.
+Publication, images, lifecycle, store assignment and Energy remain excluded.

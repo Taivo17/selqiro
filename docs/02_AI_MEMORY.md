@@ -4369,3 +4369,103 @@ unsupported values and conflicts, and keep offer type and non-draft status locke
 Images, publication, policy acceptance, lifecycle, categories and Energy are excluded.
 Completed production/apply/verification and local test scripts must not be rerun;
 preserve their ZIPs, the complete operation directory and the three test journals.
+
+
+<!-- SELQIRO_OWNER_HORSE_DRAFT_EDITOR_CLIENT_20260919 -->
+## 2026-09-19 — Existing owner horse draft editor client
+
+Base: `8914dc1`; production legacy-update retirement is already COMPLETE.
+The client editor now reads `get_my_horse_offer_edit_snapshot_v1` and updates only
+an existing draft through `updateMyHorseOfferDraft`. It never creates a replacement
+horse offer, uses the retired legacy update or writes a generic listing.
+
+Data and revision come from one atomic read. Revision remains decimal text.
+The immutable loaded snapshot, corresponding form baseline and current input are
+separate. Patches compare the same baseline and include only changed active scalar
+fields; changing price/budget mode also includes its required amount/clear.
+Unknown structured shapes do not become editable display defaults. Stored wanted
+`unknown` sex is represented explicitly. Private precise location locks locality
+editing without preventing title/other permitted changes; exact location stays intact.
+
+The per-user/per-offer session has no create dependency or browser persistence.
+Fields are locked during writes and rereads. Acknowledged save plus failed read is
+a read-retry state, never a reason to repeat the write. Conflict/unknown result
+retains input and blocks writes until an explicit discard-and-reload decision.
+A newer post-save snapshot replaces data and version together, with a notice.
+
+Only the exact UUID horse editor route avoids the identity switcher's full reload.
+The editor revalidates context itself. Same-user A→B→A preserves input and original
+revision; B cannot save. Account/logout changes purge this form; stale responses
+cannot populate another user/offer. The entity/RPC remains authorization authority.
+The client precheck is not an atomic cross-tab identity lock.
+
+No image writes, publication, policy acceptance, lifecycle, categories or Energy
+are added. Other owner routes retain their previous reload behavior. Visible Back,
+reset and discard actions ask before losing local edits; beforeunload is best-effort,
+not durable persistence or a complete SPA/navigation guard.
+
+Installer runs 129 Node checks (57 create-regressions, 72 editor checks) with fake
+API transport and a real local npm build before staging. One obsolete static
+read-only-editor assertion is replaced by a keyed/delegated editor boundary check.
+Actual browser verification and commit/push are separate gates; use result logs,
+not this source entry, as evidence of executed tests. See the new client contract.
+
+
+<!-- SELQIRO_OWNER_HORSE_VIEW_CORRECTION_20260919 -->
+## 2026-09-19 — Owner horse view correction, client-only
+
+Source base is committed `8914dc1` plus the 20 staged editor files. The user ran
+129 checks and a real build. Browser feedback confirmed title persistence, seller
+price/location, stale second-editor rejection and narrow layout. Wanted budget/
+search-area persist in the editor but were absent from the owner detail/list.
+Identity testing was BLOCKED by the missing V2 shell, not passed.
+
+The 22:16 read-only collector returned 24 exact sources and unchanged local Git.
+It confirms the v1 list projection/RPC does NOT return wanted budget/search-area.
+The owner detail DOES return canonical `details.wanted`. This patch fixes owner
+detail display and adds the existing V2Shell once per horse wrapper. The shell
+owns the sole main landmark; auth/save/revision and route-reload logic are unchanged.
+Wanted preferences stay preferences, budget stays budget, search area stays search
+area. Exact/private location and arbitrary JSON are not rendered.
+
+Until the separately controlled read-model extension, the list must say
+`Eelarve detailvaates` / `Otsingupiirkond detailvaates`, not fabricate missing data
+or say price agreed/location unset. This is an explicit interim disclosure, NOT
+completion of wanted values in list rows. No N+1 detail loads or form-state cache.
+Next after this client check: scoped source completion, then a minimal additive
+owner list read contract returning wanted summary fields in one bounded response.
+Do not copy budget/search area to seller-price/horse-location columns or edit an
+already applied migration. No public/index/search semantics are silently changed.
+
+The correction adds 37 read-view checks to the 129 client checks. They use actual
+TS modules, synthetic rows/hooks/JSX interpretation, not React DOM or SQL. Fresh
+Mac build and targeted wanted/detail/header identity/narrow browser validation
+are separate gates. No DB commands, package installs, commit/push, deployment,
+production-journal edits, images, status, publication or Energy changes here.
+
+
+<!-- SELQIRO_OWNER_HORSE_EDITOR_BROWSER_ACCEPTED_20260919 -->
+## 2026-09-19 — Existing horse draft editor and owner views accepted
+
+The combined 29-file client checkpoint follows `8914dc1`. User browser acceptance
+now supersedes the earlier missing-header blocker: wanted detail shows the saved
+5000 EUR buyer budget and Rapla search area; the shared header is visible; the
+editor A-B-A identity test and narrow layout pass. The existing same-ID sale/wanted
+persistence and stale second-editor refusal are earlier user-reported evidence,
+not newly repeated SQL tests. Save/auth/session code was unchanged by the view fix.
+
+The exact 22:48 view-fix result passed 166 Node checks (synthetic API/hooks/JSX) and
+a real application build, leaving 29 files staged. The checkpoint finisher only
+adds these four documentation records, builds and requests COMMIT PUSH. Read its
+result for actual commit/hash/push; this text cannot contain its future commit.
+
+Next independent task after a clean checkpoint: a minimized, bounded owner-list
+read contract for wanted budget and search area. V1 returns neither. Interim list
+labels point to detail; do not claim actual list values are implemented. Preserve
+horse_offers as canonical and buyer/seller semantics; no N+1, raw private JSON,
+form-cache truth source or copying wanted values into seller columns.
+
+No new publication, lifecycle, image/Storage, category, Energy or migration work
+belongs to this finish. Production retirement 20260916200000 remains previously
+applied/verified with a COMPLETE operation journal; do not replay it. First-create
+identity/idempotency, My Area return context and launch QA remain separate tasks.
