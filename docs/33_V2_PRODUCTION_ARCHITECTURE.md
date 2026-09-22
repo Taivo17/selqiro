@@ -6108,3 +6108,54 @@ summary; detail already deduplicates. It is not a data-loss defect and is not
 changed in the accepted checkpoint. Non-draft/real-network/logout/ordinary-route
 launch regression coverage must not be inferred from the narrow user test report.
 Publication, images, lifecycle, store assignment and Energy remain excluded.
+
+
+<!-- SELQIRO_WANTED_OWNER_READ_ISOLATED_ACCEPTED_20260922 -->
+## 2026-09-22 — Additive wanted owner-summary read, selected-schema SQL acceptance
+
+Migration: `20260920150000_add_owner_marketplace_wanted_summary.sql`.
+Contract: `docs/architecture/listing-purpose-and-owner-summary-v1.md`.
+This is a server-source checkpoint on `1ae842f`, NOT production application.
+
+`get_my_marketplace_items_v2(integer,integer,text,text,uuid)` materializes the
+existing owner-authorized V1 page with ordinality, enriches only wanted horse rows
+by canonical UUID plus matching identity and restores V1 order. It appends one
+versioned JSONB wanted_summary; all 25 V1 output columns remain unchanged.
+`project_horse_wanted_owner_summary_v1(jsonb)` is immutable, invoker-security,
+private to the owner RPC. Authenticated/service_role may execute only the RPC;
+PUBLIC/anon cannot. Existing table/view grants, writers, lifecycle and policy
+acceptance are unchanged. No extra schema/data state or duplicate listings.
+
+Summary output is an allowlist: version, budget and coarse search_area. Invalid
+sections become explicit null, not fabricated flexible budgets, zero money or
+seller-field fallbacks. Valid maximum and flexible budgets retain distinct modes.
+The future client validates version/shape and deduplicates identical area labels
+only for presentation. No extra detail query per row. V1 pagination, search and
+store-category semantics remain authoritative; this does not add search by wanted
+budget/area or horse category assignment. Public search scalability requires its
+own query-plan/load evidence; this is only a bounded owner-management enrichment.
+
+Validation accepted Sept22 11:26–11:30 (+03): exact unchanged test batch on captured
+selected real schema in a NEW network-isolated helper. 13 tables, one view, one
+sequence, 22 functions, logical constraints/indexes/triggers, ACL/RLS, selected
+schema/role/default privileges matched before and after. The restricted postgres
+actor remained non-superuser. 133 exact PASS notices and both completion markers,
+exit 0, no helper restart/crash observed, 13 empty tables and candidate absent after
+rollback; own helper removed. Original seven catalog sections/ten table digests
+and selected logical schema matched after the run. Sequence values are not claimed
+to rewind; the helper is discarded. No original test replay.
+
+Evidence: `wanted-selected-schema-test-20260922-112615-yvgblt0g.zip`,
+SHA-256 `303fbefa07177fc88a936a2f18d0b078c9fe5d332d120d81f5d23cb5b0ee81fe`.
+Not included: the complete Supabase services/extensions/locale/GUC context, Auth
+HTTP, production runtime, browser or load tests. Original Sept21 SIGSEGV cause is
+not established. Do not call that original run successful or the engine repaired.
+
+Source completion requires new build and exact seven-file commit/push, with no
+DB commands. Current client stays on V1; owner editing/saving and corrected detail
+remain working, not reverted to read-only. Next: independent production read-only
+preflight, separately approved additive migration rollout, then one typed
+entity/mapper/My Area presentation patch with browser verification. No write pause
+is planned for this additive read; do not reuse the legacy-writer cutover runners.
+Launch remains a simple classified-ad/service-contact platform; do not introduce
+orders, transaction mediation or booking machinery through this summary work.

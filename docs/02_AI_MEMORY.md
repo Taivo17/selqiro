@@ -4469,3 +4469,41 @@ No new publication, lifecycle, image/Storage, category, Energy or migration work
 belongs to this finish. Production retirement 20260916200000 remains previously
 applied/verified with a COMPLETE operation journal; do not replay it. First-create
 identity/idempotency, My Area return context and launch QA remain separate tasks.
+
+
+<!-- SELQIRO_WANTED_OWNER_READ_ISOLATED_ACCEPTED_20260922 -->
+## 2026-09-22 — Minimized wanted owner-list read: isolated SQL accepted
+
+Stable parent is `1ae842fbfcc8a8d52f3f44eae8913049a2482c38` (owner draft editing and corrected
+owner views, committed/pushed Sept20). The additive server-source package adds
+`get_my_marketplace_items_v2` and a private wanted-summary projection helper.
+All 25 V1 columns, ownership, filters, bounds and page order are retained; only
+`wanted_summary` is appended. Buyer budget/search area stay separate from seller
+price/object location. No N+1 detail reads, full details exposure or shadow rows.
+The browser still calls V1; actual wanted list values are NOT connected yet.
+
+Accepted SQL evidence: `wanted-selected-schema-test-20260922-112615-yvgblt0g.zip`,
+SHA-256 `303fbefa07177fc88a936a2f18d0b078c9fe5d332d120d81f5d23cb5b0ee81fe`. Actual Mac run Sept22
+11:26–11:30 (+03): exact original wanted batch, 133 PASS notices and both final
+markers, exit 0. The NEW isolated helper used captured real selected schema and
+ACL/RLS, not auth/identity/V1 stubs. Rollback restored selected schema/privileges
+and 13 empty tables; candidate functions absent; helper removed. Original selected
+baseline and logical schema stayed unchanged. No original database write or test
+replay, production, build, fresh remote check or repository change in that run.
+This is NOT a full Supabase/Auth HTTP/browser/load test. The Sept21 original
+signal-11 incident remains unexplained; that original interrupted run is not PASS.
+
+This seven-file source checkpoint updates four current documents plus the new
+contract document, preserves migration/test bytes, requires a fresh build and
+explicit COMMIT PUSH. Read runner result/Git for actual completion. Next after
+reviewed clean commit: separate read-only production preflight; no apply until
+separate consent; connect the client only after verified deployment of this read.
+Do not replay completed tests, retirement operations or their COMPLETE journals.
+
+User-approved product direction: launch is publish/find/contact/agree, not
+user-to-user transaction processing, escrow or complex booking. Selqiro's own
+optional Energy purchases remain separate. Normal participation is not Energy-gated.
+Use one simple adaptive form; future generic purposes are sell/want-to-buy and
+offer-rental/want-to-rent, with real-estate wording adapted to üür. This read package
+does not implement those ordinary-listing purposes. User-facing simplicity must
+not hide budget/location semantics or require unnecessary detail-page clicks.

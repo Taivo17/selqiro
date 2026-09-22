@@ -1,3 +1,90 @@
+<!-- SELQIRO_WANTED_OWNER_READ_ISOLATED_ACCEPTED_20260922 -->
+# Current handoff — 2026-09-22 wanted owner-summary SQL accepted
+
+## Current source and one next action
+
+Parent checkpoint: `1ae842fbfcc8a8d52f3f44eae8913049a2482c38`,
+`Add owner horse draft editing and corrected owner views`, pushed Sept20.
+Latest observed Git at Sept22 11:30 (+03): same parent, exactly three untracked
+candidate files, no staged/unstaged tracked changes; remote was NOT freshly queried.
+
+This document is prepared for the seven-file source checkpoint
+`Add minimized wanted owner marketplace summary read`.
+The finisher changes documentation only, preserves candidate SQL/test, runs build,
+stages exactly seven files and requests COMMIT PUSH. It has no Docker/Supabase/SQL.
+Read its result and actual Git for the new commit, clean tree and remote equality;
+this entry cannot name its own future commit. Cancellation/failure keeps work.
+
+ONE NEXT ACTION after a successful reviewed source checkpoint:
+perform a separate read-only production preflight for the additive migration
+`20260920150000`. No production apply or UI change is authorized by this source step.
+Before source completion, finish only the current source-checkpoint runner; do not
+start that production step from an old handoff or replay a completed local test.
+
+## Accepted actual evidence, not a new run by the finisher
+
+`wanted-selected-schema-test-20260922-112615-yvgblt0g.zip`
+SHA-256 `303fbefa07177fc88a936a2f18d0b078c9fe5d332d120d81f5d23cb5b0ee81fe`.
+Actual Mac run Sept22 11:26–11:30 (+03): exact full wanted SQL on captured selected
+real schema and privileges inside a new isolated helper, 133 PASS notices, two end
+markers, exit 0. Owner/auth/identity functions were real captured definitions,
+not stubs; rows were synthetic. Before/after logical schema/privileges match,
+13 empty tables and candidate functions absent after rollback; helper removed.
+Original selected baseline (seven catalog sections/ten tables) and logical schema
+unchanged. No original database write/replay, production, repo writes, build,
+client tests or browser test in that isolated run. Original interrupted Sept21
+run remains incomplete; signal-11 root cause is not established.
+
+Fixture limit: selected logical schema, not full Supabase. Original DB locale,
+all extension services, per-role GUCs, Auth HTTP, statistics, real application rows
+and complete cluster state were not reproduced. No large-search performance claim.
+Prior 166 synthetic transport/hooks/JSX checks and user browser acceptance for
+owner edits, conflict refusal, wanted detail, identity A-B-A and narrow layout are
+historical evidence only; do not rerun them merely for this source commit.
+
+## Exact scope and product boundary
+
+Seven files: two new migration/test files, new
+`docs/architecture/listing-purpose-and-owner-summary-v1.md`, and the four usual
+current documents. Five documentation files may change; SQL/test bytes stay exact.
+Existing 19 tracked migrations remain byte-identical; the new file is the 20th
+source migration only. New V2 RPC and private helper are not persistently installed
+in the original local database and have not been applied to production.
+
+Browser still uses `get_my_marketplace_items_v1`: wanted budget/search-area remain
+explicit detail links on My Area list. Correct wanted detail and editable owner
+drafts from 1ae842f remain intact. Next client later uses the owner-authorized,
+bounded V2 summary, not per-row detail RPCs, raw private JSON, form-cache truth or
+copies into seller-price/actual-location fields.
+
+Launch: publish/find/contact/agree. Generic sell/want-to-buy and offer-rental/
+want-to-rent are approved direction, not implemented in this read patch. No
+user-to-user checkout, payments, escrow, orders or complex booking. Selqiro Energy
+purchases are a separate optional-capability economy, not participation permission.
+Keep the user experience simple, local-first and privacy-respecting.
+
+## Verified environment and completed work — never replay
+
+Only historical environment findings; this source finisher does not contact DB:
+local `supabase_db_selqiro`, project selqiro, PG image 17.6.1.104; actual binaries
+`/usr/lib/postgresql/bin`, support files `/usr/lib/postgresql/share/postgresql`.
+Isolated helper setup is now proven for this selected schema: network none,
+no original mounts/ports, temporary independent pgsodium key, no original key copy.
+Production project's previously verified ref: `vyjletlmwoiwxsnsunlm`;
+existing CLI 2.117.0 was pinned in earlier rollout, not reverified by this finisher.
+Do not install blindly via npx/latest or invent supabase/config.toml.
+
+Legacy retirement 20260916200000: applied Sept17, fully verified Sept19; COMPLETE
+operation journal with 11 entries, three COMPLETE test journals. No journal edits.
+Do not rerun the wanted local installer, recovery diagnostic, isolated probes v1–v4,
+schema collector, full isolated test, or old retirement apply/repair/verification
+runners. Preserve the result archives and operation journals.
+First-create identity/idempotency safeguards, horse images/publication/lifecycle,
+store assignment, My Area return context, Energy and launch QA stay separate tasks.
+
+---
+## Historical handoffs below — not current next-step instructions
+
 <!-- SELQIRO_OWNER_HORSE_EDITOR_BROWSER_ACCEPTED_20260919 -->
 # Current handoff — owner horse editor and views, browser accepted
 

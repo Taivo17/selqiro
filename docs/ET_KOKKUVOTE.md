@@ -8482,3 +8482,40 @@ esitlusviimistlus ei tähenda salvestatud andmete kadumist.
 Andmebaasi lõpetatud üleminekut ei korrata ja päevikuid ei muudeta. Hobuse avaldamine,
 pildihaldus, staatused, rubriigid, Energy ning Minu ala tagasipöördumise kontekst
 jäävad omaette järgmisteks töödeks. Portaali lisamisvoog jääb publish-first.
+
+
+<!-- SELQIRO_WANTED_OWNER_READ_ISOLATED_ACCEPTED_20260922 -->
+## 2026-09-22 — Ostusoovi nimekirja lugemisosa terviktest läbis
+
+Viimane kindel lähtekoodi alus on `1ae842f`: hobuse mustandi muutmine ja parandatud
+omanikuvaated on olemas. Minu ala nimekirjas ei näidata veel ostusoovi summat ega
+otsingupiirkonda otse, sest kasutajaliides kasutab endiselt senist V1 päringut.
+Uus V2 lugemisleping lisab ainult vajaliku kokkuvõtte. Ostueelarve ei ole müügihind
+ja otsingupiirkond ei ole hobuse tegelik asukoht. Iga rea jaoks eraldi päringut ei tehta.
+
+22. septembril kell 11:26–11:30 läbis muutmata wanted-SQL-test päris PostgreSQL-is
+kõik 133 kontrollteadet ning mõlemad lõppmarkerid. Katse oli uues eraldatud
+abikonteineris, kus kasutati kogutud päris tabeli-, funktsiooni- ja õigusekirjeldusi
+ning ainult katse enda proovikirjeid. Tagasipööre säilitas kontrollitud skeemi ja
+õigused, 13 tabelit jäid tühjaks ning ajutised funktsioonid kadusid. Abikonteiner
+eemaldati. Algse Selqiro baasi kontrollvalim ja valitud skeem jäid muutmata.
+
+Tõend: `wanted-selected-schema-test-20260922-112615-yvgblt0g.zip`,
+SHA-256 `303fbefa07177fc88a936a2f18d0b078c9fe5d332d120d81f5d23cb5b0ee81fe`.
+See ei olnud kogu Supabase'i, productioni ega brauseri test. Eelmise päeva algse
+andmebaasikrahhi põhjus pole tõendatud; algset katkestatud jooksu ei nimetata edukaks.
+Sama testi algse baasi peal uuesti ei käivitata.
+
+Järgneb lähtekoodi seitsmefaililine checkpoint: neli põhidokumenti, lugemislepingu
+dokument ja muutmata migratsiooni-/testifail. Lõpetaja teeb värske build'i ning
+küsib COMMIT PUSH. Tegelik valmimine ja uus commit võetakse tulemuste ZIP-ist.
+Andmebaasi selles sammus ei muudeta. Seejärel tuleb eraldi productioni ainult
+lugemise eelkontroll, eraldi kinnitatud rakendamine ning alles siis nimekirja
+ühendamine uue vastusega. Senine salvestamine, detailvaade, pildid ja Energy ei muutu.
+
+Kinnitatud käivitamissiht: kasutaja saab pakkumise või soovi avaldada, otsida,
+teenust lisada/leida ja ühendust võtta. Pooled võivad Selqiro sõnumites kokku
+leppida, kuid portaal ei vahenda alguses nendevahelisi tehinguid ega paku keerulist
+broneerimist. Selqiro enda Energy-ostud on sellest eraldi. „Müün”, „Soovin osta”,
+„Annan rendile” ja „Soovin rentida” on ühise lihtsa vormi arendussuund; kinnisvaral
+sobib üürimise sõnastus. Neid tavakuulutuste uusi valikuid see lugemispakett veel ei ava.
