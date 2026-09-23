@@ -1,3 +1,20 @@
+<!-- SELQIRO_WANTED_OWNER_READ_PRODUCTION_VERIFIED_20260923 -->
+# Deployment status — 2026-09-23
+
+Migration `20260920150000` is APPLIED_VERIFIED in production
+`vyjletlmwoiwxsnsunlm` (20/20 history, exact recorded SQL, no pending dry-run).
+Evidence: `wanted-owner-production-rollout-20260923-095611-ncu89gqs.zip`,
+SHA-256 `bbe1e603ac5f60a8cc40779d9ad51be8f31060c2c17df6a5f5ef65a1435132a0`.
+Source was clean `53615de14bd6c16859fcaa33cdb1e48a17dbf928` at 09:58:51 (+03).
+Both new functions/ACLs were verified; v1 and existing writers remain unchanged.
+The browser still uses v1. The next feature is the typed v2 list connection and
+visible budget/search-area tests, not another deployment or original DB test.
+This status supersedes pending source/preflight/deployment wording below; the
+technical and product contract remains unchanged. Read docs-finisher output for
+its actual commit/build/push. SQL/browser/deployment tests are not rerun by it.
+
+---
+
 # Listing purposes and minimal wanted owner-list summary
 
 Date: 2026-09-20; validation updated 2026-09-22. Base source: `1ae842fbfcc8a8d52f3f44eae8913049a2482c38`.

@@ -6159,3 +6159,58 @@ entity/mapper/My Area presentation patch with browser verification. No write pau
 is planned for this additive read; do not reuse the legacy-writer cutover runners.
 Launch remains a simple classified-ad/service-contact platform; do not introduce
 orders, transaction mediation or booking machinery through this summary work.
+
+
+<!-- SELQIRO_WANTED_OWNER_READ_PRODUCTION_VERIFIED_20260923 -->
+## Deployed minimized wanted owner-summary read — 2026-09-23
+
+Actual production rollout: `wanted-owner-production-rollout-20260923-095611-ncu89gqs.zip`,
+SHA-256 `bbe1e603ac5f60a8cc40779d9ad51be8f31060c2c17df6a5f5ef65a1435132a0`.
+User run Sept23 09:56-09:58 (+03), finished 09:58:51: one explicitly approved
+application of `20260920150000`, CLI exit 0, 20 local/20 remote versions paired,
+exact recorded migration SQL, two new function contracts/ACLs verified, post dry-run
+with nothing pending. Source remained clean `53615de`; remote equality was checked
+in that run. This document does not claim a new live database observation.
+
+### Server contract now present
+
+- `project_horse_wanted_owner_summary_v1(jsonb)`: private IMMUTABLE invoker helper;
+  explicit field allowlist, only version/budget/coarse search-area, null unsupported
+  sections, no full details/private location/health/preference payload.
+- `get_my_marketplace_items_v2(integer,integer,text,text,uuid)`: STABLE SECURITY
+  DEFINER owner RPC, existing v1-authorized bounded page plus wanted summary,
+  same ordering/filter semantics, no user-supplied identity authority.
+- V1, table grants, schema outside those additions, writers, publication, images,
+  store-category assignment and Energy were not changed by the migration.
+
+Post metadata confirms exact signatures/bodies/comments/owners/ACLs. The helper's
+EXECUTE is closed to all three API roles; the RPC is closed to anon and available
+to authenticated/service_role. The recorded migration SQL is the committed source.
+Before/after observed role/default-grant and v1 contracts match.
+
+Private post dump: 460781 bytes, SHA-256
+`fd14af1eee4db6e5e17d72a3548903292df45941a8393750721106dcb271d95d`.
+The on-Mac comparison validated ten added DDL statements; the remaining 1328
+statements retain invariant
+`8666beb34076339096c99645d092d69fe04195ba1bb1d9cf2117864e7965f469`.
+Full dumps stay on the Mac and are not row-data backups. Chat-side review checked
+metadata/history and report consistency, not absent complete dump bytes.
+
+### Next client boundary (not implemented by documentation)
+
+The current `getMyMarketplaceItems.ts` still invokes v1; change it only with typed
+`wanted_summary` validation and row presentation in the same isolated client patch.
+Validate version, object shapes, money mode/amount/currency and coarse area before
+display. Preserve the distinction between valid flexible budget and unsupported
+summary; never fall back to seller price or actual horse location for wanted.
+Deduplicate identical city/region only for display; do not rewrite stored values.
+Preserve non-wanted rendering, pagination/order, filters and identity invalidation.
+Existing v1 search predicates do not search the new budget/search-area summary;
+this UI connection must not pretend otherwise or post-filter a limited page.
+Targeted tests cover valid maximum/flexible/zero budget, missing/invalid sections,
+non-wanted rows, identity boundaries and narrow layout. Test the visible list
+against existing drafts, without requiring re-save or production test SQL.
+
+This docs-only checkpoint makes no runtime code change. Existing editor/wanted
+detail remains working; first-create safeguards, images, publication/lifecycle,
+store assignment, general listing purposes and public-search scale remain separate.

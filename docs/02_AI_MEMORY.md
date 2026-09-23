@@ -4507,3 +4507,35 @@ Use one simple adaptive form; future generic purposes are sell/want-to-buy and
 offer-rental/want-to-rent, with real-estate wording adapted to üür. This read package
 does not implement those ordinary-listing purposes. User-facing simplicity must
 not hide budget/location semantics or require unnecessary detail-page clicks.
+
+
+<!-- SELQIRO_WANTED_OWNER_READ_PRODUCTION_VERIFIED_20260923 -->
+## 2026-09-23 — Wanted owner-summary read deployed and verified
+
+Actual production rollout: `wanted-owner-production-rollout-20260923-095611-ncu89gqs.zip`,
+SHA-256 `bbe1e603ac5f60a8cc40779d9ad51be8f31060c2c17df6a5f5ef65a1435132a0`.
+User run Sept23 09:56-09:58 (+03), finished 09:58:51: one explicitly approved
+application of `20260920150000`, CLI exit 0, 20 local/20 remote versions paired,
+exact recorded migration SQL, two new function contracts/ACLs verified, post dry-run
+with nothing pending. Source remained clean `53615de`; remote equality was checked
+in that run. This document does not claim a new live database observation.
+
+`get_my_marketplace_items_v2` is installed. It keeps the existing 25 v1 columns and
+adds minimized `wanted_summary`; v1 itself is unchanged. The private pure helper
+`project_horse_wanted_owner_summary_v1` cannot be executed directly by anon,
+authenticated or service_role. V2 RPC EXECUTE: anon=false, authenticated=true,
+service_role=true. Existing horse table access, writers and revision rules remain.
+
+The browser still calls v1. Owner draft editing, wanted detail, stale-write refusal
+and identity switching remain available, not reset to the old read-only phase.
+ONE NEXT FEATURE after this documentation checkpoint: typed v2 owner-list loading,
+strict summary mapping and My Area budget/search-area display with targeted tests.
+One bounded request, no per-row detail fetch, raw details exposure or saved shadow
+listing. Invalid summary sections are not zero/flexible-budget assumptions.
+
+The 133-check real isolated SQL suite and 166 synthetic client checks remain prior
+evidence; rollout did not rerun SQL/build/browser or verify frontend deployment.
+The new docs-only finisher builds and requests COMMIT PUSH; read its result for
+its new Git hash/status. It does not connect to any database or replay the rollout.
+The three-record apply journal is COMPLETE and must be preserved. All earlier
+retirement COMPLETE journals remain untouched. No generic buy/rent form is added.

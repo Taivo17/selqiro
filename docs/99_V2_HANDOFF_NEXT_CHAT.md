@@ -1,3 +1,79 @@
+<!-- SELQIRO_WANTED_OWNER_READ_PRODUCTION_VERIFIED_20260923 -->
+# Current handoff — 2026-09-23 wanted owner-summary deployed
+
+## Current state and one next step
+
+Actual production rollout: `wanted-owner-production-rollout-20260923-095611-ncu89gqs.zip`,
+SHA-256 `bbe1e603ac5f60a8cc40779d9ad51be8f31060c2c17df6a5f5ef65a1435132a0`.
+User run Sept23 09:56-09:58 (+03), finished 09:58:51: one explicitly approved
+application of `20260920150000`, CLI exit 0, 20 local/20 remote versions paired,
+exact recorded migration SQL, two new function contracts/ACLs verified, post dry-run
+with nothing pending. Source remained clean `53615de`; remote equality was checked
+in that run. This document does not claim a new live database observation.
+
+The previous pending-preflight/apply instructions below are historical and superseded.
+Do not rerun wanted tests, preflight or APPLY. The additive production operation is
+COMPLETE; no pause or history repair is needed. Source commit: `53615de14bd6c16859fcaa33cdb1e48a17dbf928`.
+This entry belongs to the docs-only checkpoint
+`Document wanted owner-summary production rollout`.
+Read the finisher's result/current Git for its actual hash, build, push and clean
+state; this document cannot contain its own future commit hash.
+
+ONE NEXT ACTION after successful reviewed docs completion: implement the typed V2
+owner-list connection, including summary mapper, My Area display, targeted tests
+and documentation. Inspect the already exported current source, not old snippets.
+No fresh collection is needed unless actual files have changed or a dependency
+is missing. Do not add another server migration or switch only an RPC name.
+
+## User-visible target
+
+My Area wanted row should show `Eelarve kuni 5 000 €` and its coarse search area
+without opening detail. A valid flexible budget stays flexible; unsupported or
+missing summary must not become a seller price, zero budget or invented location.
+Duplicate city/region labels are joined once only for presentation. Existing
+sales/free/lease/co-rider and ordinary listing behavior must remain unchanged.
+One bounded owner query, no N+1 detail calls, no raw details and no duplicate
+listing truth source. `horse_offers` is canonical. Preserve pagination/order,
+status/category/search semantics and active-identity invalidation.
+
+## Actual evidence and what has not been tested
+
+The real Sept22 isolated full SQL batch passed 133 checks, both end markers and
+rollback; helper removed. This is selected real schema plus synthetic rows, not
+full Supabase. The original Sept21 SIGSEGV cause is not established; do not replay
+that test on the original database. Prior 166 synthetic client checks and accepted
+sale/wanted/edit-conflict/identity/narrow browser tests are not new tests here.
+Sept23 rollout performed no application-row query/write, local DB operation,
+source edit, build, browser or frontend deployment verification. Full schema dumps
+remain private on the Mac. Metadata/history and report hashes were reviewed.
+
+The current browser still uses `get_my_marketplace_items_v1`; budget/search area
+in the list remain detail links until the next client patch. The existing owner
+editor, wanted detail and CAS saves remain functional, not read-only skeletons.
+New v2 owner RPC exists; private helper stays closed to every API role. Existing
+v1 and writer contracts are unchanged. Public discovery is not connected by this.
+
+## Environment and preserved records
+
+Repo `$HOME/selqiro`, GitHub `Taivo17/selqiro`, main/origin-main. Production
+`vyjletlmwoiwxsnsunlm`; 20 applied versions through `20260920150000`.
+Verified rollout used existing CLI 2.117.0, not npm/npx/latest installation.
+No need to invent config.toml, init/reset or reinstall the local database.
+Preserve `$HOME/Downloads/selqiro-recovery/` and the exact completed apply journal:
+`wanted-owner-read-vyjletlmwoiwxsnsunlm-20260920150000-apply.jsonl`
+(three records, final COMPLETE). Earlier retirement/test journals are untouched.
+New docs finisher only reads this journal and result ZIP, updates five docs,
+builds and requests COMMIT PUSH; it has no database command or journal write.
+
+Keep launch simple: publish/find/contact/agree, no user-to-user checkout or complex
+booking. Energy optional platform capabilities are separate from participation.
+General buy/rent/want-to-rent intent is approved direction, not this client patch.
+First-create expected-identity/idempotency, horse images/publication/lifecycle,
+store categories and My Area return context remain separate scoped tasks.
+
+---
+## Historical handoffs below — not current instructions
+
 <!-- SELQIRO_WANTED_OWNER_READ_ISOLATED_ACCEPTED_20260922 -->
 # Current handoff — 2026-09-22 wanted owner-summary SQL accepted
 

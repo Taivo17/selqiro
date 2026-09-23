@@ -8519,3 +8519,35 @@ leppida, kuid portaal ei vahenda alguses nendevahelisi tehinguid ega paku keerul
 broneerimist. Selqiro enda Energy-ostud on sellest eraldi. „Müün”, „Soovin osta”,
 „Annan rendile” ja „Soovin rentida” on ühise lihtsa vormi arendussuund; kinnisvaral
 sobib üürimise sõnastus. Neid tavakuulutuste uusi valikuid see lugemispakett veel ei ava.
+
+
+<!-- SELQIRO_WANTED_OWNER_READ_PRODUCTION_VERIFIED_20260923 -->
+## 2026-09-23 — Ostusoovi kokkuvõtte lugemine on productionis valmis
+
+23. septembri 09:56-09:58 jooks rakendas ühe kinnitatud migratsiooni
+`20260920150000_add_owner_marketplace_wanted_summary.sql`. Rakendamiskäsk lõppes
+edukalt. Kõik 20 migratsiooni on nüüd productioni ajaloos olemas; järelkuivproov
+näitas, et ootel migratsioone ei ole. Uute funktsioonide lepingud ja õigused ning
+ülejäänud public-skeemi säilimine kontrolliti kasutaja Macis. Lähtekood jäi puhtalt
+commit'ile `53615de`, mille võrdsust GitHubi main-haruga jooksus kontrolliti.
+
+Tõend: `wanted-owner-production-rollout-20260923-095611-ncu89gqs.zip`.
+See ei ole uus brauseritest. Rollout ei muutnud kuulutuste sisu, salvestamist,
+revisjone, pilte, reegleid, avaldamist ega Energy't. Varasem mustandi muutmine,
+otsingukuulutuse detail ja identiteedivahetus jäävad tööle.
+
+Uus lugemine annab omaniku nimekirja jaoks ainult ostueelarve ja otsingupiirkonna
+vajaliku kokkuvõtte. Kogu privaatset details-sisu ei saadeta nimekirjale.
+Ostueelarve ei muutu müügihinnaks ja otsingupiirkond ei muutu hobuse asukohaks.
+
+Järgmine kasutajale nähtav töö on ühendada Minu ala nimekiri selle vastusega:
+„Eelarve kuni 5 000 €” ja sobiv otsingupiirkond otse rea juures, ilma detaili
+avamise või kuulutuse uuesti salvestamiseta. Praegune klient kasutab veel V1
+lugemist; selle dokumenteerimisega kuva ei muutu. Kliendimuudatus saab oma
+vormingu-, identiteedi- ja kitsa vaate kontrolli. Ühe rea jaoks eraldi päringuid
+tegema ei hakata ning vigasest/puuduvast kokkuvõttest ei mõelda väärtusi välja.
+
+Käesolev viie dokumendi lõpetaja teeb värske build'i ning küsib COMMIT PUSH.
+Andmebaasi ja SQL-teste ei käivitata; uut commit'i näitab lõpetaja tulemus.
+Rakendamise päevik on COMPLETE ja jääb muutmata. Vanu katseid ega APPLY-t ei korrata.
+Portaali põhimõte jääb lihtsaks: avaldan, leian, võtan ühendust ja lepime kokku.
