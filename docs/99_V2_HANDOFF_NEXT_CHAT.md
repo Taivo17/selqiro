@@ -1,3 +1,131 @@
+<!-- SELQIRO_WANTED_LIST_ACCEPTED_AND_KUULUTUSED_DECISION_20260924 -->
+# Current handoff — 2026-09-24 owner-list accepted; Kuulutused next
+
+## Current state and ONE next action
+
+The wanted-list client is installed on base
+`4f44a881f264e3392c37b6a11adee24e0b4800ef` and manually accepted by the user.
+Actual installer: `wanted-owner-list-client-20260924-095341-5cwr5sa3.zip`, SHA-256
+`77c7e457506b7f37d4e9af56c146d1e52325dc1a313e1af342b62957af25e822`.
+Its Sept24 09:53:50 (+03) result has 245 passing module checks, successful build,
+17 files staged, no unstaged changes; that installer did not commit or push.
+User then confirmed the requested wanted/detail, sale/ordinary, identity and
+narrow-browser checks. The screenshots show 5000 EUR / Rapla maakond consistently.
+
+This entry belongs to `Connect wanted summaries to My Area listing rows`.
+Read the NEW finisher result for its actual commit hash, fresh build, push and
+clean state; this document cannot contain its own future hash. Only after that
+result is successful is this source checkpoint complete. The finisher leaves
+runtime/test source unchanged and adds these five documentation entries.
+
+ONE NEXT ACTION after reviewed successful completion: implement the user-approved
+V2 `Tooted` -> `Kuulutused` wording change from the result's `wording-context/`
+sources and coverage report. Keep this a separate logical commit. No database
+work, old test replay or broad collection is needed unless a dependency is missing.
+Do not repeat the already accepted list browser tests merely to finish the commit.
+
+## Approved wording boundary — NOT yet implemented by this finish
+
+Use `Kuulutused` for general menus/tabs/headings, `Otsi kuulutusi…`,
+`Esiletõstetud kuulutused`, `Tagasi kuulutuste juurde` and equivalent plural forms.
+Remove redundant `PRODUCT DISCOVERY`. Neutral create action: `Lisa kuulutus`,
+short mobile label `Lisa`. Preserve the existing /sell destination and explain
+only implemented capabilities; no enabling unfinished create modes by renaming.
+Keep `Teenused` separate and genuine `Tootenäidised` terminology intact.
+No blind text replacement; inspect each context and any translation strings.
+URLs (/v2/products included), component identifiers, API/DB names, queries,
+identity behavior, return context and publication restrictions remain unchanged.
+This does NOT publish horses, connect public horse search or add general buy/rent.
+
+## Evidence, environment and remaining boundaries
+
+Production migration `20260920150000` was applied/verified Sept23 09:58 (+03),
+20/20 history and no pending dry-run. No fresh production observation is made by
+this finish. Current typed list uses v2; owner editor, CAS saves and wanted detail
+remain functional. Frontend deployment must be verified separately after push.
+245 Node checks used real modules with simulated API/hooks/JSX, not a browser.
+133 isolated SQL checks remain prior actual PostgreSQL evidence. The original
+local SIGSEGV cause is unproven; do not replay its test on the original database.
+
+Repo `$HOME/selqiro`; GitHub `Taivo17/selqiro`, main/origin-main. Mac Python 3.9+;
+stop dev before build. Docker/Supabase/SQL/install are not used by this finisher.
+Keep Downloads/selqiro-recovery and all completed production/test journals.
+No APPLY, reset, restore, journal edit or automatic retry on unexpected state.
+The result exports selected source, not a full repository or user-data backup.
+
+Launch stays simple: publish/find/contact/agree, no mediated transactions or
+complex bookings. First-create safeguards, horse images/publication/lifecycle,
+store assignment, public discovery and scalable general buy/rent remain scoped
+follow-up work, not consequences of this naming decision.
+
+---
+## Historical handoffs below — not current instructions
+
+<!-- SELQIRO_WANTED_OWNER_LIST_CLIENT_20260923 -->
+# Current handoff — wanted owner-list client, browser review next
+
+## Current checkpoint and one next action
+
+Base source: `4f44a881f264e3392c37b6a11adee24e0b4800ef`, parent `53615de`.
+Docs-only user run completed 2026-09-23 10:30:28 (+03): build passed, five documents
+/ 212 additions committed and pushed, worktree clean, remote equality verified.
+Evidence: `wanted-owner-rollout-docs-20260923-102927-qsyouzu_.zip`, SHA-256
+`a037f736b45044b4f15f5933d9e9a0ef4039660e8400d4f01ef574c3d0b7ab1b`.
+
+This entry accompanies the client-only `selqiro-connect-wanted-owner-list-client.py`.
+Use its actual result for installed source hashes, 245 Node checks, build and
+staged scope. This document is not proof that the script or browser has run.
+Installer does not commit or push. Production frontend is not switched by stage.
+
+ONE NEXT ACTION after successful installer result: targeted browser review of
+`/v2/my-area` using existing wanted/sale/ordinary listings, header identity switch
+and narrow layout; return result ZIP plus findings before a separate scoped finish.
+Do not install another patch or manually commit before that review.
+
+## Implemented client scope
+
+Entity API uses `get_my_marketplace_items_v2`, same five inputs and bounds/order.
+Strict minimized version-1 summary parsing owns budget and coarse search area.
+Wanted rows show `Eelarve kuni 5 000 €`, `Eelarve on paindlik` and deduplicated
+area. Missing/unsupported sections independently retain detail-view wording;
+valid empty area says `Otsingupiirkond lisamata`. Never use seller-field fallbacks,
+copy budget into generic priceAmount, or fetch full details for every row.
+Shared ownerMoney extraction preserves previous owner-detail formatting.
+The desktop heading is `Hind / eelarve`; wanted area text wraps in its row.
+
+Owner editor, CAS save, existing owner detail, generic listing actions, list
+filter/order/page semantics and identity refresh remain unchanged. New summary
+fields are not searched automatically by V1 predicates. No extra server query,
+new DB migration, public-read exposure, publication, images or Energy change.
+
+## Evidence boundaries and environment
+
+Production `20260920150000` is APPLIED_VERIFIED from 2026-09-23 09:58 (+03):
+20/20 history, exact recorded SQL, functions/ACLs and remaining public DDL checked,
+no pending dry-run. That is prior evidence, NOT rerun by this installer.
+The apply journal has three records ending COMPLETE; keep it and older journals.
+Never repeat APPLY/preflight/diagnostics or edit an already applied migration.
+133 isolated SQL checks remain prior actual PostgreSQL evidence; original local
+SIGSEGV cause remains unproven. Do not replay the failed test on the original DB.
+
+New 245 Node checks cover actual modules and synthetic transport/hooks/JSX, not
+React DOM/browser or runtime production RPCs. Actual whole-project build must run
+on the Mac. Prior accepted editor/browser tests are not a new list test.
+After browser review: document results and finish this client commit/push; verify
+the exact frontend deployment separately. Working tree is not clean while staged.
+
+Repo `$HOME/selqiro`, main/origin-main, GitHub `Taivo17/selqiro`; production project
+`vyjletlmwoiwxsnsunlm`. No Docker/Supabase/SQL/install or operational-journal writes
+in this client installer. Stop `npm run dev` before build; restart only after it.
+Do not restore/reset/delete files on failure. Return the result ZIP for review.
+
+Launch remains publish/find/contact/agree without mediated transactions or complex
+booking. General buy/rent intentions, first-create safeguards, horse image and
+publication/lifecycle flows, store categories and return context stay separate.
+
+---
+## Historical handoffs below — not current instructions
+
 <!-- SELQIRO_WANTED_OWNER_READ_PRODUCTION_VERIFIED_20260923 -->
 # Current handoff — 2026-09-23 wanted owner-summary deployed
 

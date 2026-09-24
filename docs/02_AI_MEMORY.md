@@ -4539,3 +4539,63 @@ The new docs-only finisher builds and requests COMMIT PUSH; read its result for
 its new Git hash/status. It does not connect to any database or replay the rollout.
 The three-record apply journal is COMPLETE and must be preserved. All earlier
 retirement COMPLETE journals remain untouched. No generic buy/rent form is added.
+
+
+<!-- SELQIRO_WANTED_OWNER_LIST_CLIENT_20260923 -->
+## 2026-09-23 — Typed wanted owner-list client connection
+
+Base: `4f44a881f264e3392c37b6a11adee24e0b4800ef` (docs rollout completed
+10:30 +03, clean and pushed). Production migration `20260920150000` was applied
+and verified at 09:58 +03; no new DB command belongs to this client checkpoint.
+
+`getMyMarketplaceItems` now reads `get_my_marketplace_items_v2` with unchanged
+bounded parameters. The entity parser keeps only supported version-1 budget and
+coarse search-area fields. Null/invalid sections stay unavailable independently;
+missing data never becomes flexible, zero/free, seller price or horse location.
+No raw details or per-row reads are introduced. Only horse wanted rows use the
+summary; generic and specific-horse presentation retains its existing semantics.
+
+My Area shows maximum/flexible budget and deduplicated coarse search area. Valid
+empty area says `Otsingupiirkond lisamata`; unavailable sections retain detail-view
+wording and the existing row link. Budget is not copied to seller `priceAmount`;
+area is not copied to horse `city`/`region`. Owner detail and list share the extracted
+money formatter with unchanged detail behavior. The mixed column is `Hind / eelarve`.
+Filters/order/pagination and identity-route invalidation remain unchanged; new
+summary fields are not new search predicates or client-side limited-page filters.
+
+Validation: installer runs 245 Node checks (166 prior + 79 new, synthetic transport,
+hooks/JSX, actual TS modules and strict core checks), then a fresh Next build.
+Use its actual result for PASS, staged scope and hashes. Browser, commit/push and
+frontend deployment are NOT completed by the installer. Next: targeted list wanted,
+ordinary/sale, active-identity and narrow-view browser review, then scoped completion.
+Existing CAS editor, first creation, publication/images/Energy are not changed.
+
+
+<!-- SELQIRO_WANTED_LIST_ACCEPTED_AND_KUULUTUSED_DECISION_20260924 -->
+## 2026-09-24 — Wanted owner-list browser acceptance and naming decision
+
+The user confirmed all four requested list checks: wanted budget/search area
+matches the owner detail, sale/ordinary rows and actions remain correct,
+identity A -> B -> A isolates lists, and narrow layout is usable. Screenshots
+explicitly show `Eelarve kuni 5 000 €` / `Rapla maakond` in list and detail;
+identity and narrow checks are user reports, not newly automated browser runs.
+Actual installer evidence: `wanted-owner-list-client-20260924-095341-5cwr5sa3.zip`,
+SHA-256 `77c7e457506b7f37d4e9af56c146d1e52325dc1a313e1af342b62957af25e822`.
+Its 245 actual-module checks used synthetic transport/hooks/JSX; real Next build
+passed on the Mac. No SQL or browser replay belongs to the separate finisher.
+Use the finisher's result for its fresh build, commit, push and clean state.
+
+USER-APPROVED NAMING: the general marketplace label is `Kuulutused`, not `Tooted`.
+Live horses are not described as products. Use `Otsi kuulutusi`, `Esiletõstetud
+kuulutused` and `Tagasi kuulutuste juurde` in general listing contexts. Keep
+`Teenused` separate and preserve real manufacturer/product-showcase terminology
+including `Tootenäidised`. Remove redundant `PRODUCT DISCOVERY` copy. The neutral
+creation label is `Lisa kuulutus` (short mobile `Lisa`), without changing its
+current destination or enabling unfinished capabilities. No blind global replace.
+
+This finish records the decision; it does NOT implement the wording changes.
+First finish the accepted 17-file list patch, then inspect the collected current
+V2 shell/home/discovery/detail sources and apply one separate wording-only patch.
+Preserve URLs (including /v2/products and current /sell action), API names,
+identifiers, DB tables/functions, search logic and all existing feature gates.
+Naming does not connect horses to public search or implement general buy/rent.

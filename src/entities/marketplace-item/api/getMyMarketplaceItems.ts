@@ -41,7 +41,7 @@ export async function getMyMarketplaceItems(
 ): Promise<OwnerMarketplaceItem[]> {
   const { data, error } =
     await supabaseBrowserClient.rpc(
-      "get_my_marketplace_items_v1",
+      "get_my_marketplace_items_v2",
       {
         p_result_limit: normalizeLimit(
           input.limit

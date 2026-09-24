@@ -386,7 +386,7 @@ export default function MyAreaListingsSection() {
 
       <div className="mb-2 hidden grid-cols-[minmax(0,1fr)_105px_112px] px-1 text-xs font-black uppercase tracking-[0.16em] text-neutral-400 md:grid">
         <span>Kuulutus</span>
-        <span className="text-right">Hind</span>
+        <span className="text-right">Hind / eelarve</span>
         <span className="text-center">Tegevused</span>
       </div>
 

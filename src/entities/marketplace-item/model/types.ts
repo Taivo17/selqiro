@@ -1,3 +1,5 @@
+import type { OwnerWantedSummary } from "./ownerWantedSummary";
+
 export const MARKETPLACE_ITEM_CONTENT_TYPES = [
   "listing",
   "horse_offer",
@@ -55,6 +57,7 @@ export type OwnerListingMarketplaceItem =
 export type OwnerHorseOfferMarketplaceItem =
   OwnerMarketplaceItemBase & {
     contentType: "horse_offer";
+    wantedSummary: OwnerWantedSummary | null;
   };
 
 export type OwnerMarketplaceItem =

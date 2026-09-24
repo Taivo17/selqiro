@@ -118,7 +118,7 @@ test('editor blocked identity presentation does not display saved title and fiel
  const nodes=tree('components/v2/my-area/V2HorseOfferEditPage.tsx',{pathname:'/v2/my-area/horse-offers/'+ID+'/edit',editorState:{state,session:{canEdit:()=>false,contextMessage:()=> 'Õige identiteet vajalik'},confirmLeave:()=>true}});
  assert.doesNotMatch(text(nodes),/Test title|Test description/);assert.match(text(nodes),/Õige identiteet vajalik/);assert.equal(all(nodes).filter(n=>n.type==='main').length,1);
 });
-test('list read model explicitly says detail-only, without copying nonexistent budget/location',()=>{
+test('missing list summary stays detail-only, without inventing budget/location',()=>{
  const mapper=load('src/features/my-area/model/mapMyAreaMarketplaceItemRow.ts').mapMyAreaMarketplaceItemRow;
  const item={contentType:'horse_offer',contentVariant:'wanted',contentId:ID,title:'Wanted',sourceStatus:'draft',lifecycleStatus:'draft',priceAmount:null,priceType:'contact',priceText:null,currency:'EUR',locationLabel:null,city:null,region:null,activeUntil:null};
  const before=plain(item);const row=mapper(item);assert.equal(row.priceLabel,'Eelarve detailvaates');assert.equal(row.locationLabel,'Otsingupiirkond detailvaates');assert.equal(row.priceAmount,null);assert.deepEqual(plain(item),before);

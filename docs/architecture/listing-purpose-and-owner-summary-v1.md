@@ -1,3 +1,40 @@
+<!-- SELQIRO_WANTED_LIST_ACCEPTED_AND_KUULUTUSED_DECISION_20260924 -->
+# Client acceptance and naming — 2026-09-24
+
+The 17-file typed v2 owner-list patch has actual installer evidence: 245 module
+checks and Next build PASS, then user-confirmed wanted/detail, sale/ordinary,
+identity A -> B -> A and narrow-browser acceptance. Module transport/hooks/JSX
+were simulated; browser acceptance is the user's report. Finish result supplies
+its new commit/build/push/clean state. Frontend deployment is not yet verified.
+The finisher changes only five docs, not tested application or SQL source.
+
+User-approved umbrella: `Kuulutused`, replacing `Tooted` in general listing UI.
+Services and genuine product showcases remain distinct. The NEXT separate patch
+changes inspected visible labels only, preserving route/API/DB identifiers and
+all intent, auth, return-context and publication behavior. It is not implemented
+by this status entry. No new migration or public-horse exposure follows from it.
+
+---
+
+<!-- SELQIRO_WANTED_OWNER_LIST_CLIENT_20260923 -->
+# Client status — 2026-09-23
+
+The typed client connection is implemented on source base `4f44a88`. Read its
+installer result and browser/completion evidence for actual testing/deployment.
+The installer stages local source only; no commit/push or DB command is included.
+It supersedes the historical "browser still uses v1" wording below for installed
+local source, not for a frontend deployment that has not yet been verified.
+
+`getMyMarketplaceItems` calls v2 once with unchanged inputs. The version-1 summary
+is parsed by a whitelist; budget and search area may be unavailable independently.
+Only wanted horse rows use it. They never fall back to seller price/horse location;
+valid empty area is distinct from unavailable area. Identical area labels are
+shown once. Summary values do not become new search predicates or generic prices.
+Owner money display shares the unchanged extracted detail formatter. See current
+handoff for targeted browser review and separate completion; do not rerun SQL.
+
+---
+
 <!-- SELQIRO_WANTED_OWNER_READ_PRODUCTION_VERIFIED_20260923 -->
 # Deployment status — 2026-09-23
 

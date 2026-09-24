@@ -6214,3 +6214,87 @@ against existing drafts, without requiring re-save or production test SQL.
 This docs-only checkpoint makes no runtime code change. Existing editor/wanted
 detail remains working; first-create safeguards, images, publication/lifecycle,
 store assignment, general listing purposes and public-search scale remain separate.
+
+
+<!-- SELQIRO_WANTED_OWNER_LIST_CLIENT_20260923 -->
+## Typed minimized owner-list client — 2026-09-23
+
+Current base: `4f44a88`, after the completed production read rollout and documentation.
+No migration, SQL test, apply, history or operational-journal change in this patch.
+
+Read path:
+`useMyAreaListings` -> `getMyAreaMarketplaceItemRows` -> `getMyMarketplaceItems`
+-> `get_my_marketplace_items_v2` -> entity mapper -> row mapper -> horse row.
+The API still supplies the same five bounded/paginated filter inputs. V2 server
+continues to use V1 authorization, filters and ordered page selection. There is
+no silent V1 fallback, row-by-row detail fetching, browser identity parameter,
+raw details, or additional filtering of an already limited result page.
+
+`ownerWantedSummary.ts` owns the version-1 allowlisted model/parser. Only the horse
+wanted branch retains it. Envelope version must be numeric 1; sections validate
+independently. Budget is maximum with a finite JSON number within 0..9999999999.99
+and at most two decimal digits, or contact with explicit null amount, always EUR.
+Search area is EE with explicit string/null city/region, at most 160 Unicode code
+points per trimmed label. Missing required output fields or invalid values are
+unsupported, not guessed. Unknown keys are not copied into the mapped state.
+SQL normalizes valid missing stored fields to explicit nulls before this parser.
+
+`myAreaWantedSummary.ts` builds display labels. A malformed/missing section points
+to the existing detail view. A valid empty area is distinguishable from unsupported
+area. Identical city/region labels are shown once without rewriting stored values.
+`ownerMoney.ts` extracts the existing detail money formatter unchanged, including
+explicit grouping; both list and detail use it. Seller amounts remain separate.
+My Area horse row wraps wanted area text, while non-wanted metadata keeps its
+existing truncation. The mixed desktop heading is `Hind / eelarve`. No action is
+added to the row; draft management is still reached through the existing detail.
+
+Existing lifecycle/card keys, generic status/edit actions, V1 search/category
+semantics, list effect cleanup and identity-route reload remain intact. Main list
+still reloads on header identity switch; owner editor retains its controlled
+unsaved-context behavior. This patch does not broaden cross-tab invalidation.
+
+Tests cover max/flexible/zero/invalid budget, area bounds and deduplication,
+unknown versions, independent unavailable sections, whitelisting, empty/invalid
+list response, bounded one-RPC parameters, returned order, no automatic retry,
+actual input adapter and late-response cleanup, row JSX and shared detail money.
+Node tests use synthetic transport/hook/JSX fixtures, not React DOM or production.
+Installer runs the four suites (245 checks) and actual project build before stage.
+Only the user's subsequent browser test and separate completion establish release
+readiness. The checklist needs no listing-content write or new fixture; switching
+identity uses the existing active-identity setting operation.
+
+
+<!-- SELQIRO_WANTED_LIST_ACCEPTED_AND_KUULUTUSED_DECISION_20260924 -->
+## 2026-09-24 — Accepted owner-list client; separate vocabulary patch
+
+The 17-file V2 owner-list client was installed and built on base `4f44a88`.
+The 2026-09-24 09:53 (+03) installer result records 245 passing actual-module
+checks (synthetic API transport, hooks and JSX), a successful Next build, exact
+staged scope and no DB command. The user subsequently confirmed wanted list /
+detail consistency, sale/ordinary preservation, identity A -> B -> A and narrow
+layout. These are accepted manual results, not automatic or deployment tests.
+Finishing changes only the five existing checkpoint docs; twelve tested runtime/
+test files remain byte-identical. It builds, then asks for COMMIT PUSH. The
+actual resulting hash and remote/clean state belong to its result report.
+
+The minimized v2 summary stays read-only and bounded: no per-row detail fetch,
+raw details leak, copied seller price/location, extra search predicate or second
+horse truth source. The production migration `20260920150000` is prior applied
+and verified evidence from Sept23 09:58 (+03), with 20/20 history. Do not replay
+SQL/APPLY or edit completed journals. The list frontend deployment is unverified.
+
+The user approved `Kuulutused` as the visible umbrella for general listings,
+including horses and wanted/rental intents. This is a vocabulary decision, not a
+schema rename or public-read contract. `Teenused` and genuine `Tootenäidised`
+remain distinct. Change only inspected user-facing labels, headings, search/
+empty/error/back copy and neutral creation labels; remove redundant PRODUCT
+DISCOVERY. Keep route URLs, component/API identifiers, auth, ranking, filters,
+return-context behavior and publication gates unchanged. Do not globally replace
+product/showcase terms or alter user-entered titles/descriptions.
+
+The finisher collects allowlisted tracked V2 source and bounded local-import
+context read-only for the following patch. Collection is not implementation,
+semantic coverage proof, code execution or a new UI test. Review any excluded,
+unresolved or limit-truncated entries before writing. Browser-check desktop and
+narrow nav, discovery, listing return navigation and preserved service/showcase
+labels after the later wording change, then commit that change separately.

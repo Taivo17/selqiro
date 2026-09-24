@@ -1,3 +1,4 @@
+import { getMyAreaWantedSummaryLabels } from "./myAreaWantedSummary";
 import type {
   OwnerMarketplaceItem,
 } from "../../../entities/marketplace-item/model/types";
@@ -85,11 +86,6 @@ function getPriceCurrencySuffix(
 function getPriceLabel(
   item: OwnerMarketplaceItem
 ): string {
-  // The v1 list RPC does not return wanted budget/search_area. Never infer them.
-  if (item.contentType === "horse_offer" && item.contentVariant === "wanted") {
-    return "Eelarve detailvaates";
-  }
-
   if (item.priceType === "free") {
     return "Tasuta";
   }
@@ -133,10 +129,6 @@ function getPriceLabel(
 function getLocationLabel(
   item: OwnerMarketplaceItem
 ): string {
-  if (item.contentType === "horse_offer" && item.contentVariant === "wanted") {
-    return "Otsingupiirkond detailvaates";
-  }
-
   return (
     normalizeOptionalText(
       item.locationLabel
@@ -202,11 +194,16 @@ function buildCardFields(
         )
       : null;
 
+  // Wanted uses only the validated summary, never seller-price/location fallbacks.
+  const wanted = item.contentType === "horse_offer" && item.contentVariant === "wanted"
+    ? getMyAreaWantedSummaryLabels(item.wantedSummary)
+    : null;
+
   return {
     id: item.contentId,
     title: item.title,
     description: item.description,
-    priceLabel: getPriceLabel(item),
+    priceLabel: wanted?.priceLabel ?? getPriceLabel(item),
     priceAmount: item.priceAmount,
     currency: item.currency,
     imageUrl: item.imageUrl,
@@ -222,7 +219,7 @@ function buildCardFields(
       item.contentType === "horse_offer"
         ? null
         : item.condition,
-    locationLabel: getLocationLabel(item),
+    locationLabel: wanted?.locationLabel ?? getLocationLabel(item),
     distanceLabel: null,
     sellerName: "",
     sellerAvatarUrl: null,

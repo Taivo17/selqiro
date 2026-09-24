@@ -8551,3 +8551,62 @@ Käesolev viie dokumendi lõpetaja teeb värske build'i ning küsib COMMIT PUSH.
 Andmebaasi ja SQL-teste ei käivitata; uut commit'i näitab lõpetaja tulemus.
 Rakendamise päevik on COMPLETE ja jääb muutmata. Vanu katseid ega APPLY-t ei korrata.
 Portaali põhimõte jääb lihtsaks: avaldan, leian, võtan ühendust ja lepime kokku.
+
+
+<!-- SELQIRO_WANTED_OWNER_LIST_CLIENT_20260923 -->
+## 2026-09-23 — Ostusoovi eelarve ja piirkond otse Minu ala nimekirjas
+
+Alus on puhas ja GitHubi saadetud `4f44a88`, mille dokumenteerimisjooks lõppes
+23. septembril kell 10:30. Uus lugemisleping rakendati productionis juba kell 09:58.
+Selles kliendietapis andmebaasi enam ei muudeta ega SQL-teste korrata.
+
+Minu ala nimekiri ühendatakse uue vastusega. Olemasoleva „Otsin hobust” rea juures
+saab näha näiteks „Eelarve kuni 5 000 €” ja „Rapla maakond”, ilma kuulutust uuesti
+salvestamata. Paindlik eelarve jääb paindlikuks. Ostja eelarvet ei esitata müügihinnana
+ning otsingupiirkonda ei käsitleta konkreetse hobuse tegeliku asukohana.
+
+Puuduvatest või vigastest andmetest midagi välja ei mõelda: vastav tekst suunab
+jätkuvalt detailvaatesse. Ühesugust linna ja maakonna teksti näidatakse ühe korra.
+Kehtiv tühi piirkond kuvatakse lisamata piirkonnana. Kogu privaatset kuulutuse
+lisainfot nimekirjale ei laadita; kasutatakse üht piiratud päringut.
+
+Müügi- ja muud hobusepakkumised ning tavakuulutuste tegevused säilivad. Olemasolev
+mustandi muutmine, salvestuskonflikti kaitse ja identiteedivahetus jäävad alles.
+Avaldamist, pilte, staatuseid ega Energy loogikat selles etapis ei muudeta.
+
+Paigaldaja teeb 245 kliendikontrolli ja päris projekti build'i ning stage'ib ainult
+määratud failid. Tulemust kinnitab tema ZIP. Brauseritest, commit ja push on veel
+järgmine samm. Brauseris kontrollida olemasolevat ostusoovi, müügikuulutust,
+identiteedivahetust ja kitsast vaadet. Testiks pole uut kuulutust ega kuulutuse salvestust vaja.
+Piirkonna/eelarve otsingufiltreid see ühendus ei lisa; senine otsing jääb samaks.
+
+
+<!-- SELQIRO_WANTED_LIST_ACCEPTED_AND_KUULUTUSED_DECISION_20260924 -->
+## 2026-09-24 — Ostusoovi nimekiri testitud; üldnimetuseks Kuulutused
+
+Kasutaja kinnitas, et Minu ala ostusoovi nimekiri töötab: real ja detailis on
+ühtlaselt „Eelarve kuni 5 000 €” ning „Rapla maakond”. Kinnitati ka müügi- ja
+tavakuulutuste säilimine, identiteedi A -> B -> A vahetus ning kitsas vaade.
+Ekraanipildid näitavad eelarve/piirkonna vastavust; muud tegevused põhinevad
+kasutaja kinnitusel, mitte selle lõpetaja automaatsel brauseritestil.
+24. septembri 09:53 jooksus läbisid 245 kliendikontrolli ja tegelik Next build.
+17 faili on selle tõendi järgi stage'itud, commit/push veel tegemata.
+Lõpetaja uuendab viit dokumenti, teeb build'i ja küsib COMMIT PUSH. Uut commit'i
+ning puhast ja GitHubiga võrdset lõppseisu näitab tema tulemuste ZIP.
+
+Kasutaja kinnitas üldnimetuse muutmise: „Tooted” asemel „Kuulutused”. Hobust ega
+muud eluslooma ei nimetata tooteks. Järgmine eraldi sõnastusparandus hõlmab
+menüüsid, avalehe ja kuulutuste vaate pealkirju, otsingut, esiletõstetud kuulutusi
+ja sobivaid tagasilingi/tühja vaate tekste. Tarbetu „PRODUCT DISCOVERY” eemaldame.
+Üldise lisamistegevuse nimetus on „Lisa kuulutus”, mobiilis lühidalt „Lisa”.
+
+„Teenused” jääb eraldi ja päris ettevõtte „Tootenäidised” säilib. Veebiaadresse,
+API- ja andmebaasinimesid, otsingut ega salvestus-/avaldamisloogikat ei muudeta.
+Mobiili lisamisnupu siht jääb praeguseks /sell; nimemuutus ei ava uusi võimekusi.
+Lõpetaja kogub järgmise paranduse vajalikku lähtekoodi ainult lugemiseks; ta ise
+nimetusi veel ei asenda. Nii jääb testitud nimekirjaparandus eraldi commit'iks.
+
+Productioni lugemisleping on varasemalt rakendatud ja kontrollitud. SQL-i ega
+APPLY-t ei korrata; päevikuid ei muudeta. Veebijuurutust tuleb kontrollida eraldi.
+Portaali käivitamise eesmärk on lihtne kuulutamine, leidmine ja kontakti võtmine,
+mitte portaali vahendatud tehingud või keeruline broneerimine.

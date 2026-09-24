@@ -1,3 +1,4 @@
+import { formatOwnerHorseMoney as money } from "./ownerMoney";
 import type { OwnerHorseOfferDetail } from "./types";
 
 export type HorseDetailField = { label: string; value: string | number | null };
@@ -23,9 +24,6 @@ const SEX: Record<string, string> = {
   mare: "Mära", gelding: "Ruun", stallion: "Täkk", unknown: "Täpsustamata",
 };
 const sexLabel = (value: unknown) => typeof value === "string" ? SEX[value] || null : null;
-const money = (value: number, currency: string) => new Intl.NumberFormat("et-EE", {
-  style: "currency", currency, useGrouping: true, minimumFractionDigits: 0, maximumFractionDigits: 2,
-}).format(value);
 
 function location(city: unknown, region: unknown): string | null {
   // Identical locality/region text appears only once. Do not guess its administrative level.

@@ -1,3 +1,4 @@
+import { parseOwnerWantedSummary } from "../model/ownerWantedSummary";
 import {
   MARKETPLACE_ITEM_CONTENT_TYPES,
   OWNER_MARKETPLACE_ITEM_LIFECYCLE_STATUSES,
@@ -33,6 +34,7 @@ export type OwnerMarketplaceItemRow = {
   created_at?: unknown;
   sort_at?: unknown;
   search_text?: unknown;
+  wanted_summary?: unknown;
 };
 
 function requireString(
@@ -140,6 +142,10 @@ function parseLifecycleStatus(
 export function mapOwnerMarketplaceItemRow(
   row: OwnerMarketplaceItemRow
 ): OwnerMarketplaceItem {
+  if (row === null || typeof row !== "object" || Array.isArray(row)) {
+    throw new Error("Omaniku kuulutuste vastuses on vigane rida.");
+  }
+
   const contentType = parseContentType(
     row.content_type
   );
@@ -241,6 +247,9 @@ export function mapOwnerMarketplaceItemRow(
   return {
     ...base,
     contentType,
+    wantedSummary: base.contentVariant === "wanted"
+      ? parseOwnerWantedSummary(row.wanted_summary)
+      : null,
   };
 }
 

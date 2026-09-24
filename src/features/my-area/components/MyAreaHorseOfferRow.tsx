@@ -35,6 +35,7 @@ function getStatusClasses(
 export default function MyAreaHorseOfferRow({
   item,
 }: MyAreaHorseOfferRowProps) {
+  const isWanted = item.contentVariant === "wanted";
   const meta = [
     item.subcategory,
     item.locationLabel,
@@ -56,7 +57,7 @@ export default function MyAreaHorseOfferRow({
   return (
     <article
       className={[
-        "grid gap-3 border-t border-zinc-200 py-3.5",
+        "grid min-w-0 grid-cols-[minmax(0,1fr)] gap-3 border-t border-zinc-200 py-3.5",
         "first:border-t-0",
         "md:grid-cols-[minmax(0,1fr)_90px_120px]",
         "md:items-center",
@@ -123,7 +124,9 @@ export default function MyAreaHorseOfferRow({
 
           {meta ? (
             <p
-              className="mt-0.5 truncate text-sm text-zinc-500"
+              className={isWanted
+                ? "mt-0.5 break-words text-sm text-zinc-500"
+                : "mt-0.5 truncate text-sm text-zinc-500"}
               title={meta}
             >
               {meta}
@@ -138,7 +141,7 @@ export default function MyAreaHorseOfferRow({
         </div>
       </Link>
 
-      <p className="break-words text-sm font-semibold text-zinc-900 md:text-right">
+      <p className="min-w-0 break-words text-sm font-semibold text-zinc-900 md:text-right">
         {item.priceLabel}
       </p>
 
