@@ -198,7 +198,7 @@ export default function ListingCreateForm({ userId }: { userId: string }) {
               </p>
 
               <h1 className="mt-3 break-words text-4xl font-black tracking-tight sm:text-5xl">
-                Lisa uus kuulutus
+                Lisa kuulutus
               </h1>
 
               <p className="mt-3 max-w-3xl text-sm leading-6 text-neutral-600 sm:text-base">
@@ -217,7 +217,7 @@ export default function ListingCreateForm({ userId }: { userId: string }) {
           <p className="mt-5 rounded-2xl border border-amber-200 bg-white/70 px-4 py-3 text-xs leading-5 text-amber-950/75">
             V2 hobusevormi teksti ja andmeid saab soovi korral salvestada
             privaatse mustandina. Pilte veel ei laadita üles ega salvestata
-            ning kuulutust siin veel ei avaldata. Mobiili „Müü” nupp avab
+            ning kuulutust siin veel ei avaldata. Mobiili „Lisa” nupp avab
             seni töötava /sell voo.
           </p>
         </div>

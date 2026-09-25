@@ -631,5 +631,5 @@ getListingReturnBackLabel(
   return context?.source ===
     "public-profile"
     ? "← Tagasi profiilile"
-    : "← Tagasi toodete juurde";
+    : "← Tagasi kuulutuste juurde";
 }

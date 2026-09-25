@@ -18,7 +18,7 @@ const desktopNavigationItems = [
     href: "/v2",
   },
   {
-    label: "Tooted",
+    label: "Kuulutused",
     href: "/v2/products",
   },
   {

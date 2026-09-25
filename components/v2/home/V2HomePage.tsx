@@ -10,9 +10,9 @@ type DiscoveryItem = {
 
 const startCards = [
   {
-    title: "Tooted",
-    description: "Otsin tooteid enda lähedalt või kaugemalt.",
-    action: "Vaata tooteid",
+    title: "Kuulutused",
+    description: "Otsin kuulutusi enda lähedalt või kaugemalt.",
+    action: "Vaata kuulutusi",
     href: "/v2/products",
     actionClassName:
       "border-amber-200 bg-amber-50 text-amber-900 hover:bg-amber-100",
@@ -37,7 +37,7 @@ const startCards = [
 
 const todayDiscoveries: DiscoveryItem[] = [
   {
-    eyebrow: "Esiletõstetud toode",
+    eyebrow: "Esiletõstetud kuulutus",
     title: "Muruniiduk Husqvarna LC 140",
     meta: "Paide · Aiatehnika",
     price: "120 €",
@@ -68,31 +68,31 @@ const todayDiscoveries: DiscoveryItem[] = [
 
 const featuredProducts: DiscoveryItem[] = [
   {
-    eyebrow: "Toode",
+    eyebrow: "Kuulutus",
     title: "Cub Cadet murutraktor",
     meta: "Imavere · 18 km",
     price: "4562 €",
   },
   {
-    eyebrow: "Toode",
+    eyebrow: "Kuulutus",
     title: "BMW 5 Series",
     meta: "Türi · 24 km",
     price: "6000 €",
   },
   {
-    eyebrow: "Toode",
+    eyebrow: "Kuulutus",
     title: "iPhone 12 64GB",
     meta: "Paide · 0.8 km",
     price: "320 €",
   },
   {
-    eyebrow: "Toode",
+    eyebrow: "Kuulutus",
     title: "Diivanvoodi",
     meta: "Paide · 0.6 km",
     price: "150 €",
   },
   {
-    eyebrow: "Toode",
+    eyebrow: "Kuulutus",
     title: "Maastikuratas Scott",
     meta: "Paide · 0.7 km",
     price: "280 €",
@@ -299,7 +299,7 @@ export default function V2HomePage() {
       <section className="rounded-[34px] border border-black/5 bg-white p-6 shadow-sm md:p-8">
         <SectionHeader
           eyebrow="Sinu lähedal"
-          title="Esiletõstetud tooted"
+          title="Esiletõstetud kuulutused"
           action="Vaata kõiki"
         />
         <HorizontalRow items={featuredProducts} />

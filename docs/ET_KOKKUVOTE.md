@@ -8610,3 +8610,47 @@ Productioni lugemisleping on varasemalt rakendatud ja kontrollitud. SQL-i ega
 APPLY-t ei korrata; päevikuid ei muudeta. Veebijuurutust tuleb kontrollida eraldi.
 Portaali käivitamise eesmärk on lihtne kuulutamine, leidmine ja kontakti võtmine,
 mitte portaali vahendatud tehingud või keeruline broneerimine.
+
+
+<!-- SELQIRO_KUULUTUSED_WORDING_UI_20260924 -->
+## 24.09.2026 — Kuulutused, mitte Tooted
+
+Testitud Minu ala nimekirjaparandus lõpetati commit'iga `869be7b`: build ja push
+läbisid, tööpuu oli puhas. Selle tegelik lõppkontroll oli 24.09.2026 kell 11:03 (+03).
+„Otsin hobust” nimekirjarea ostueelarve ja otsingupiirkond on nüüd kliendikoodis
+ühendatud. Verceli juurutuse tulemust see tõend eraldi ei kinnita.
+
+Järgmine, eraldi sõnastusparandus kasutab V2 üldnimetusena „Kuulutused”. Otsingus
+on „Otsi kuulutusi…”, esiletõstetud osas „Esiletõstetud kuulutused” ning tagasilingil
+„Tagasi kuulutuste juurde”. Üldine lisamistekst on „Lisa kuulutus”, mobiilis „Lisa”.
+Teenused ja ettevõtete päris tootenäidised jäävad oma nimetustega alles.
+
+See muudab ainult 10 mooduli nähtavat sõnastust ja eemaldab liigse ingliskeelse
+Product Discovery sildi. Aadressid ja andmebaas jäävad samaks; hobuste avaldamist,
+avalikku otsingut, makseid ega uusi ostu-/rendivooge selle sammuga ei lisata.
+Paigaldaja jätab 16 faili stage'i ja ootab brauserikontrolli; commit/push tuleb
+hiljem. Loe tegelikku testide/build'i tulemust paigaldaja raportist, mitte siit.
+
+
+<!-- SELQIRO_KUULUTUSED_WORDING_ACCEPTED_20260925 -->
+## 25.09.2026 — „Kuulutused” sõnastuse brauserikontroll läbis
+
+Kasutaja kinnitas: „testides on korras”. Üldine menüü, vaheleht ja pealkiri on
+„Kuulutused”, otsing „Otsi kuulutusi…”, esiletõstetud ja lähedal olevate tulemuste
+pealkirjad kasutavad sama sõna. Mõlemad tagasilingid („Tagasi kuulutuste juurde”
+ja „Tagasi profiilile”) säilivad õiges kontekstis. Mobiilinupp on „Lisa” ning
+lisamisvormi pealkiri „Lisa kuulutus”. Teenused ja päris Tootenäidised säilisid.
+Kitsas vaade ning navigeerimise toimimine on kasutaja kinnitatud, mitte uus
+assistendi automaatne brauseritest.
+
+25.09 kell 10:33 lõppenud paigaldaja tegi edukalt päris kohaliku build'i ning
+39 moodulikontrolli. 16 faili olid stage'itud, commit/push veel tegemata.
+Lõpetaja jätab testitud rakenduskoodi ja testifaili muutmata, lisab viide
+dokumenti selle kinnituse ning teeb pärast build'i ja COMMIT PUSH kinnitust
+ühe piiratud commit'i. Uus commit, puhas tööpuu ja kaugseis tulevad jooksu
+tegelikust raportist. Verceli juurutuse kontroll jääb eraldi.
+
+Veebiaadressid, salvestamine, identiteedid, omaniku mustandimuutmine, pildid,
+avaldamine ja Energy ei muutu. Nimemuutus ei lisa ostu-/renditehinguid ega
+hobuste avalikku otsingut. Arenduse abitekstide ja näidisplokkide eemaldamine
+kasutajavaatelt on enne käivitamist eraldi töö, mitte selle lõpetamise lisaparandus.

@@ -133,7 +133,7 @@ function ListingReturnBackButton({
     label,
     setLabel,
   ] = useState(
-    "← Tagasi toodete juurde"
+    "← Tagasi kuulutuste juurde"
   );
 
   useEffect(() => {
@@ -467,7 +467,7 @@ export default function ListingDetailPage({ listingId }: { listingId: string }) 
           />
 
           <p className="text-sm font-semibold text-neutral-500">
-            {listing.category || "Toode"}
+            {listing.category || "Kuulutus"}
             {listing.subcategory ? ` · ${listing.subcategory}` : ""}
           </p>
         </div>

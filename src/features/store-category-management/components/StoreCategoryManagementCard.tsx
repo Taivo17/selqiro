@@ -270,8 +270,8 @@ export default function StoreCategoryManagementCard() {
 
           <p className="mt-2 max-w-2xl text-sm leading-6 text-neutral-600">
             Need rubriigid kuuluvad ainult aktiivse identiteedi enda
-            profiilile. Need ei ole seotud Selqiro üldise tootekategooriate
-            puuga.
+            profiilile. Need ei ole seotud Selqiro üldise
+            kategooriapuuga.
           </p>
         </div>
 

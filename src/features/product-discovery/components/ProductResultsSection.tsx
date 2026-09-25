@@ -49,7 +49,7 @@ export default function ProductResultsSection() {
           <p className="inline-flex rounded-full border border-amber-200 bg-amber-100 px-3 py-1.5 text-[11px] font-black uppercase tracking-[0.18em] text-amber-800">
             Tulemused
           </p>
-          <h2 className="mt-2 text-3xl font-black">Tooted sinu lähedal</h2>
+          <h2 className="mt-2 text-3xl font-black">Kuulutused sinu lähedal</h2>
           <p className="mt-2 max-w-3xl text-sm leading-6 text-neutral-500">
             See plokk kasutab nüüd V2 listing entity API-t. Esiletõstetud ja
             seotud teenused jäävad praegu eraldi skeletoniks.

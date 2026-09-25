@@ -29,7 +29,7 @@ const navigationItems: V2MobileNavigationItem[] = [
   },
   {
     id: "sell",
-    label: "Müü",
+    label: "Lisa",
     href: "/sell",
     emphasized: true,
   },
@@ -219,7 +219,7 @@ function SellNavigationItem({
   return (
     <Link
       href={item.href}
-      aria-label="Lisa uus kuulutus"
+      aria-label="Lisa kuulutus"
       className="relative -mt-7 flex min-h-[82px] min-w-0 flex-col items-center justify-end gap-1 px-1 text-center"
     >
       <span className="flex h-14 w-14 items-center justify-center rounded-full bg-emerald-600 text-white shadow-[0_10px_28px_rgba(5,150,105,0.35)] ring-4 ring-white transition active:scale-95">

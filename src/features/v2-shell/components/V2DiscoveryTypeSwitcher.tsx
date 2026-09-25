@@ -35,7 +35,7 @@ V2DiscoveryTypeSwitcher({
               : "border-transparent text-neutral-600 hover:border-amber-200 hover:bg-amber-50 hover:text-amber-900 focus-visible:ring-amber-500/30",
           ].join(" ")}
         >
-          Tooted
+          Kuulutused
         </Link>
 
         <Link

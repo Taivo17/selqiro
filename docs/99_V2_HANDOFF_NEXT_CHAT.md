@@ -1,3 +1,114 @@
+<!-- SELQIRO_KUULUTUSED_WORDING_ACCEPTED_20260925 -->
+# Current handoff — 2026-09-25 Kuulutused browser accepted
+
+## Current state — use the latest finish result for commit/push
+
+Base: `869be7b83d22d2376ca8038df326fbf5be2944ac`, parent `4f44a88`,
+`Connect wanted summaries to My Area listing rows`.
+Reviewed user installer: `kuulutused-wording-20260925-103306-93y390ug.zip`,
+SHA-256 `d505b01fba1f912114c5e70eec49205cf492ae9056bdfe4d5f87fcef705dfdb3`.
+It ended 25 Sept 10:33:14 (+03), real local build PASS, 39 Node checks PASS,
+16 files staged / none unstaged / not committed. Base remote equality was
+checked in that run; archive review is not a fresh remote check.
+User later confirmed "testides on korras" with desktop/mobile screenshots.
+
+This entry accompanies `selqiro-finish-kuulutused-wording.py`, commit message
+`Use Kuulutused wording across V2 listing surfaces`. It changes only five docs,
+keeps ten tested application modules and the test file byte-for-byte, and uses
+the existing 16-path checkpoint. No new feature or DB work is included.
+Read `kuulutused-wording-finish-…zip` for the actual new commit, build, push and
+clean-tree result. Do not infer completion merely from this document's presence.
+
+## ONE next action
+
+If the finish has not run: run only that prepared finisher, stop dev first,
+confirm COMMIT PUSH after the successful build, and return its result ZIP.
+If the finish succeeded: review that result, then verify that the exact new
+commit is the active frontend deployment. Do not rerun the naming installer,
+old finishers, SQL suites, diagnostics or production APPLY operations.
+A later source-only audit of general listing purposes can start after this
+checkpoint; it is not authorized by merely staging this documentation.
+
+## Preserved product boundaries and later work
+
+Kuulutused is the generic label; Teenused and actual Tootenäidised stay separate.
+URLs/API/DB names, /v2/products, /sell mobile target and return/scroll behavior
+remain unchanged. The wanted owner list/detail/editor keep working; owner draft
+editing is no longer globally read-only. Its draft-only/revision/identity guards
+remain intact. Horse public search/publication, images, lifecycle, category links
+and first-create expected-identity/durable-idempotency safeguards remain separate.
+General buy/rent offer-versus-request persistence is not implemented by naming.
+Launch is publish/find/contact/agree without marketplace payments or complex
+booking; this does not silently cancel the separate optional Energy revenue plan.
+
+Before public launch, remove developer/skeleton explanations from user-facing
+pages and connect or honestly hide unsupported controls/content. The current
+screenshots still show such text in organic discovery and V2 creation. This is
+an explicit deferred UX task, not an extra change inside the accepted rename.
+
+## Evidence limits and environment
+
+39 new checks use real modules with synthetic hooks/JSX. Prior 245 client and
+133 isolated PostgreSQL checks remain prior evidence, not rerun. Browser checks
+are user-reported. Deployment is not independently verified by the finisher.
+Production `20260920150000` was applied/verified 23 Sept (20/20 history); no new
+production or persistent-local-schema operation here. Original local SQL crash
+root cause remains unproven; do not replay its suite on the original database.
+
+Mac repository `~/selqiro`, Python 3.9+, existing npm/Node, main/origin-main,
+GitHub `Taivo17/selqiro`. Stop npm run dev with Ctrl+C before build; Docker and
+Supabase are not used. Preserve Downloads results and completed operation/test
+journals. Unexpected state: stop and return ZIP, no reset/restore/manual restage.
+Selected source export is not a complete repository or backup of user data.
+
+---
+## Historical handoffs below — not current instructions
+
+<!-- SELQIRO_KUULUTUSED_WORDING_UI_20260924 -->
+# Current handoff — 2026-09-24 Kuulutused wording candidate
+
+## Verified source base
+
+Latest reviewed user finish: `wanted-list-finish-wording-20260924-110254-q8y9do9d.zip`,
+SHA-256 `05233fc1a6019a8134fb669534af3bb360d5c5d0d334e982d13c4d08fc7986f7`.
+Commit `869be7b83d22d2376ca8038df326fbf5be2944ac`, parent `4f44a88`, message
+`Connect wanted summaries to My Area listing rows`; fresh build/push/clean/remote
+checks passed in the user's 24 Sept 11:03:36 (+03) run. Its 17-file client checkpoint
+is complete. Prior 245 module checks and user wanted/detail/sale/ordinary/identity/
+narrow approval were not rerun by the finish. Deployment is not independently verified.
+
+## Current candidate and ONE next action
+
+`selqiro-rename-v2-products-to-kuulutused.py` installs a separate 16-file candidate:
+10 existing copy-only modules, one new 39-check test suite, four current docs and
+one wording contract. Read its actual result for tests/build/stage state; this
+entry does not claim that installation or browser checks have already passed.
+No commit/push or database command is available in the installer.
+
+ONE NEXT ACTION after installer PASS: user checks local V2 menu/home/discovery,
+listing back-to-list/profile behavior and mobile Lisa label with unchanged /sell
+link. Verify Teenused/Tootenäidised remain. Return result ZIP and findings before
+finishing this wording checkpoint; no broad recollection or old SQL replay needed.
+
+## Invariants and environment
+
+Kuulutused is the approved general content label. Real product showcases, service
+labels, horse sale types, rules and user-authored values must not be blindly renamed.
+URLs/API/DB identifiers, `products` source keys, return/scroll semantics, access,
+save/identity logic, public visibility, images and Energy stay unchanged.
+Public horse search, generic wanted/rental forms and transactional/booking features
+are NOT enabled. Existing discovery placeholders remain separate future work.
+Production migration `20260920150000` remains prior applied/verified Sept23 09:58,
+20/20 history; this client-only step does not contact the database.
+
+Mac repo `~/selqiro`; stop dev before build. Use existing Node/TypeScript/npm;
+no install, Docker/Supabase, reset, restore, journal changes or automatic retries.
+Do not rerun completed finish/install/apply/SQL/diagnostic scripts. Keep the
+Downloads result ZIPs and recovery journals. Source exports are not a full repo.
+
+---
+## Historical handoffs below — not current instructions
+
 <!-- SELQIRO_WANTED_LIST_ACCEPTED_AND_KUULUTUSED_DECISION_20260924 -->
 # Current handoff — 2026-09-24 owner-list accepted; Kuulutused next
 

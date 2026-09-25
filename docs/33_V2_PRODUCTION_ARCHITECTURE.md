@@ -6298,3 +6298,55 @@ semantic coverage proof, code execution or a new UI test. Review any excluded,
 unresolved or limit-truncated entries before writing. Browser-check desktop and
 narrow nav, discovery, listing return navigation and preserved service/showcase
 labels after the later wording change, then commit that change separately.
+
+
+<!-- SELQIRO_KUULUTUSED_WORDING_UI_20260924 -->
+## 2026-09-24 — V2 Kuulutused presentation vocabulary
+
+This is a presentation-only change on committed/pushed owner-list base
+`869be7b83d22d2376ca8038df326fbf5be2944ac`; see
+`docs/architecture/kuulutused-wording-v1.md` for exact scope and exclusions.
+Menus, discovery/home headings, search placeholder, category fallback and listing
+return labels use Kuulutused. Store-category help uses neutral category wording.
+The create heading/accessible label is Lisa kuulutus; mobile shorthand is Lisa.
+
+Existing `/v2/products`, `/sell`, source key `products`, storage/history keys,
+component names and import/data flow stay intact. Only one static decorative
+Product Discovery paragraph is removed. No new category capability, public horse
+read, ranking/filter logic, listing purpose field or paid visibility is implemented.
+The existing mixed skeleton/live discovery sections are not made production-ready
+by changing their headings; those capabilities need their own launch review.
+
+The candidate adds 39 module checks with synthetic hooks/data/JSX (not browser DOM).
+The installer runs those checks and a real local build before staging only the
+16-file candidate. User browser review precedes a separate commit/push.
+
+
+<!-- SELQIRO_KUULUTUSED_WORDING_ACCEPTED_20260925 -->
+## 2026-09-25 — Accepted V2 listing terminology checkpoint
+
+The reviewed naming candidate changes exactly 27 occurrences in ten existing
+modules plus a 39-check test file and five documents (16 paths total).
+Installer evidence: `kuulutused-wording-20260925-103306-93y390ug.zip`, SHA-256
+`d505b01fba1f912114c5e70eec49205cf492ae9056bdfe4d5f87fcef705dfdb3`.
+All 238 manifest hashes / 239 ZIP entries and 205 exported sources matched;
+the staged patch reconstructed against the exact base in a temporary Git index.
+This review did not contact the user's live Git, database or deployment.
+
+Actual Mac evidence, 25 Sept 10:33:14 (+03): build exit 0; 39/39 Node tests,
+zero fail/cancel/skip/todo; 16 staged paths, no unstaged diff, HEAD `869be7b`.
+The user subsequently accepted desktop/narrow wording and back-navigation tests.
+Test transports/hooks/JSX are synthetic; real browser evidence is the user's
+manual confirmation, not an automated DOM test. Vercel remains unverified.
+
+`selqiro-finish-kuulutused-wording.py` preserves the eleven application/test
+files and all unrelated source. Only the existing five documentation files
+receive exact acceptance additions. A fresh build, full index/source/migration
+scope check and explicit COMMIT PUSH precede the same 16-path commit. No new
+migration, DB query, Storage action, operational-journal change or install.
+Applied migration `20260920150000` remains prior verified production evidence.
+
+The /v2/products route, internal products keys, entity types and return-context
+behavior remain stable. /sell is still the mobile add destination. A label change
+does not imply general buy/rent persistence, public horse search or publication.
+Do not silently upgrade visible discovery/filter placeholders during this finish.

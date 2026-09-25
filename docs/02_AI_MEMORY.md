@@ -4599,3 +4599,46 @@ V2 shell/home/discovery/detail sources and apply one separate wording-only patch
 Preserve URLs (including /v2/products and current /sell action), API names,
 identifiers, DB tables/functions, search logic and all existing feature gates.
 Naming does not connect horses to public search or implement general buy/rent.
+
+
+<!-- SELQIRO_KUULUTUSED_WORDING_UI_20260924 -->
+## 2026-09-24 — General V2 content is called Kuulutused
+
+User-approved terminology: general marketplace listings are `Kuulutused`, not
+`Tooted`. This includes future wanted/rental listings and the controlled horse
+content without describing live animals as products. `Teenused` stays separate;
+real business `Tootenäidised` and actual producer/product descriptions remain.
+Neutral create wording is `Lisa kuulutus`, mobile `Lisa`, at the same destinations.
+
+The wording-only candidate follows completed owner-list commit `869be7b`.
+Ten existing modules change 27 exact copy occurrences (including removal of the
+redundant Product Discovery badge); no URL, API identifier, query, save, identity,
+publication, image, Energy or user-entered value is changed. In particular the
+mobile create link still opens `/sell`, not unfinished `/v2/sell` publication.
+Use the installer report and later user browser result for actual validation.
+The previous 245 client checks and 133 isolated SQL checks are historical evidence.
+
+
+<!-- SELQIRO_KUULUTUSED_WORDING_ACCEPTED_20260925 -->
+## 2026-09-25 — Kuulutused wording accepted
+
+User confirmed the targeted browser checklist: "testides on korras". Screenshots
+show Kuulutused, the search/featured/organic labels, both listing/profile back
+labels, mobile Lisa, Lisa kuulutus, and preserved Teenused / Tootenäidised.
+Navigation behavior and narrow layout are user-reported, not a new automated
+browser or production deployment test.
+
+Reviewed installer `kuulutused-wording-20260925-103306-93y390ug.zip` ended at
+10:33:14 (+03): exact 16 staged files on `869be7b`, 39 Node checks and real local
+Next build PASS. No commit/push then. The 39 checks use actual source modules
+with synthetic hooks/JSX; prior 245 client / 133 isolated SQL checks were not rerun.
+The completion runner preserves all application/test bytes, adds acceptance to
+five docs, builds, and asks COMMIT PUSH for one exact checkpoint. Its result,
+not this prewritten entry, establishes the new hash, push, clean tree and build.
+
+General listing language stays Kuulutused; genuine product showcases and services
+keep their meaning. Routes/API/DB names, /sell target, return logic, identity,
+owner editor, publication, images and Energy are unchanged. Launch remains
+publish/find/contact/agree, not mediated transactions or complex booking.
+Remaining placeholder content and developer-facing UI explanations are separate
+pre-launch work. This naming checkpoint does not implement their capabilities.

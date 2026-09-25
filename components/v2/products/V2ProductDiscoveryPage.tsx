@@ -434,14 +434,11 @@ export default function V2ProductDiscoveryPage() {
       <section className="rounded-[34px] border border-black/5 bg-white p-5 shadow-sm md:p-6">
         <div className="mb-5 flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <p className="inline-flex rounded-full border border-amber-200 bg-amber-100 px-3 py-1.5 text-[11px] font-black uppercase tracking-[0.18em] text-amber-800">
-              Product Discovery
-            </p>
             <h1 className="mt-2 text-4xl font-black tracking-tight md:text-5xl">
-              Tooted
+              Kuulutused
             </h1>
             <p className="mt-3 max-w-3xl text-sm leading-6 text-neutral-600">
-              Leia tooteid enda lähedalt. Selqiro alustab sinu valitud asukohast,
+              Leia kuulutusi enda lähedalt. Selqiro alustab sinu valitud asukohast,
               näitab lähimaid tulemusi ja laiendab ringi automaatselt.
             </p>
           </div>
@@ -456,7 +453,7 @@ export default function V2ProductDiscoveryPage() {
 
         <div className="grid gap-3 lg:grid-cols-[1fr_auto_auto_auto_auto]">
           <input
-            placeholder="Otsi toodet..."
+            placeholder="Otsi kuulutusi…"
             className="h-12 rounded-full border border-neutral-200 bg-white px-5 text-sm outline-none transition placeholder:text-neutral-400 focus:border-amber-400 focus:ring-2 focus:ring-amber-500/20"
           />
 
@@ -504,7 +501,7 @@ export default function V2ProductDiscoveryPage() {
             <p className="inline-flex rounded-full border border-amber-200 bg-amber-100 px-3 py-1.5 text-[11px] font-black uppercase tracking-[0.18em] text-amber-800">
               Sinu lähedal
             </p>
-            <h2 className="mt-2 text-3xl font-black">Esiletõstetud tooted</h2>
+            <h2 className="mt-2 text-3xl font-black">Esiletõstetud kuulutused</h2>
           </div>
 
           <button className="hidden rounded-full border border-amber-200 bg-white px-4 py-2 text-sm font-black text-amber-800 shadow-sm transition hover:bg-amber-100 md:inline-flex">
@@ -534,7 +531,7 @@ export default function V2ProductDiscoveryPage() {
                 Kasulikud teenused selle otsingu juurde
               </h2>
               <p className="mt-2 max-w-2xl text-sm leading-6 text-neutral-500">
-                Kuvame ainult otsingu või tootekategooriaga seotud esiletõstetud
+                Kuvame ainult otsingu või kuulutuse kategooriaga seotud esiletõstetud
                 teenuseid. Kui sobivaid teenuseid ei ole, seda riba ei näidata.
               </p>
             </div>
