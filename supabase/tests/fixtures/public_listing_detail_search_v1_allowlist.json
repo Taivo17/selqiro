@@ -1,0 +1,2717 @@
+{
+  "schema_version": 1,
+  "scope": "ordinary_listings",
+  "source_hashes": {
+    "lib/categories.ts": "2b3bb98a9cbc2a718a42018a69553c0e202d26105ab71d80b5846b5f500f3ebf",
+    "lib/categoryFields.ts": "87bd9cacf3bbc0f31ab8c3625de8f9f32558cf6190ee7f4c84e7d0f232d6cc9f",
+    "app/sell/page.tsx": "df0fe599a2c0b2588e9083e98960f37fa7e74508299571841f70945067ea6b51"
+  },
+  "excluded_configured_keys": {
+    "vin": "unique vehicle identifier, outside first keyword scope",
+    "vin_serial": "unique identifier, outside first keyword scope",
+    "registration_number": "registration identifier, outside first keyword scope",
+    "serial_number": "unique item identifier, outside first keyword scope",
+    "imei_serial": "device identifier, outside first keyword scope",
+    "serial_markings": "unique markings, outside first keyword scope",
+    "certification_documents": "document references, outside first keyword scope",
+    "online_account_included": "account-related text, outside first keyword scope",
+    "district": "separate public locality contract; do not infer precise address",
+    "listing_type": "not an authoritative listing purpose; purpose remains separate"
+  },
+  "value_types": [
+    "string",
+    "number"
+  ],
+  "limits_characters": {
+    "title": 4096,
+    "description": 32768,
+    "per_detail_value": 1024
+  },
+  "paths": [
+    {
+      "category": "vehicles",
+      "subcategory": "cars",
+      "detail_category": "passenger_cars",
+      "keys": [
+        "brand",
+        "model",
+        "year",
+        "generation",
+        "fuel",
+        "engine",
+        "power",
+        "gearbox",
+        "drivetrain",
+        "mileage",
+        "body_type",
+        "doors",
+        "seats",
+        "color",
+        "inspection_valid_until"
+      ]
+    },
+    {
+      "category": "vehicles",
+      "subcategory": "cars",
+      "detail_category": "suv_offroad",
+      "keys": [
+        "brand",
+        "model",
+        "year",
+        "generation",
+        "fuel",
+        "engine",
+        "power",
+        "gearbox",
+        "drivetrain",
+        "mileage",
+        "body_type",
+        "doors",
+        "seats",
+        "color",
+        "inspection_valid_until"
+      ]
+    },
+    {
+      "category": "vehicles",
+      "subcategory": "cars",
+      "detail_category": "vans_minibuses",
+      "keys": [
+        "brand",
+        "model",
+        "year",
+        "generation",
+        "fuel",
+        "engine",
+        "power",
+        "gearbox",
+        "drivetrain",
+        "mileage",
+        "body_type",
+        "doors",
+        "seats",
+        "color",
+        "inspection_valid_until"
+      ]
+    },
+    {
+      "category": "vehicles",
+      "subcategory": "cars",
+      "detail_category": "pickup_trucks",
+      "keys": [
+        "brand",
+        "model",
+        "year",
+        "generation",
+        "fuel",
+        "engine",
+        "power",
+        "gearbox",
+        "drivetrain",
+        "mileage",
+        "body_type",
+        "doors",
+        "seats",
+        "color",
+        "inspection_valid_until"
+      ]
+    },
+    {
+      "category": "vehicles",
+      "subcategory": "cars",
+      "detail_category": "motorhomes_campers",
+      "keys": [
+        "brand",
+        "model",
+        "year",
+        "generation",
+        "fuel",
+        "engine",
+        "power",
+        "gearbox",
+        "drivetrain",
+        "mileage",
+        "body_type",
+        "doors",
+        "seats",
+        "color",
+        "inspection_valid_until",
+        "sleeping_places",
+        "length",
+        "gross_weight",
+        "equipment"
+      ]
+    },
+    {
+      "category": "vehicles",
+      "subcategory": "cars",
+      "detail_category": "racing_vehicles",
+      "keys": [
+        "brand",
+        "model",
+        "year",
+        "generation",
+        "fuel",
+        "engine",
+        "power",
+        "gearbox",
+        "drivetrain",
+        "mileage",
+        "body_type",
+        "doors",
+        "seats",
+        "color",
+        "inspection_valid_until",
+        "discipline",
+        "roll_cage",
+        "homologation",
+        "track_street_legal"
+      ]
+    },
+    {
+      "category": "vehicles",
+      "subcategory": "motorcycles",
+      "detail_category": "sport_bikes",
+      "keys": [
+        "brand",
+        "model",
+        "year",
+        "engine_size",
+        "power",
+        "fuel",
+        "mileage",
+        "transmission",
+        "type",
+        "inspection_valid_until"
+      ]
+    },
+    {
+      "category": "vehicles",
+      "subcategory": "motorcycles",
+      "detail_category": "cruisers",
+      "keys": [
+        "brand",
+        "model",
+        "year",
+        "engine_size",
+        "power",
+        "fuel",
+        "mileage",
+        "transmission",
+        "type",
+        "inspection_valid_until"
+      ]
+    },
+    {
+      "category": "vehicles",
+      "subcategory": "motorcycles",
+      "detail_category": "touring",
+      "keys": [
+        "brand",
+        "model",
+        "year",
+        "engine_size",
+        "power",
+        "fuel",
+        "mileage",
+        "transmission",
+        "type",
+        "inspection_valid_until"
+      ]
+    },
+    {
+      "category": "vehicles",
+      "subcategory": "motorcycles",
+      "detail_category": "enduro_mx",
+      "keys": [
+        "brand",
+        "model",
+        "year",
+        "engine_size",
+        "power",
+        "fuel",
+        "mileage",
+        "transmission",
+        "type",
+        "inspection_valid_until"
+      ]
+    },
+    {
+      "category": "vehicles",
+      "subcategory": "motorcycles",
+      "detail_category": "scooters",
+      "keys": [
+        "brand",
+        "model",
+        "year",
+        "engine_size",
+        "power",
+        "fuel",
+        "mileage",
+        "transmission",
+        "type",
+        "inspection_valid_until"
+      ]
+    },
+    {
+      "category": "vehicles",
+      "subcategory": "motorcycles",
+      "detail_category": "atv_utv",
+      "keys": [
+        "brand",
+        "model",
+        "year",
+        "engine_size",
+        "power",
+        "fuel",
+        "mileage",
+        "transmission",
+        "type",
+        "inspection_valid_until",
+        "drivetrain",
+        "winch",
+        "road_legal"
+      ]
+    },
+    {
+      "category": "vehicles",
+      "subcategory": "motorcycles",
+      "detail_category": "snowmobiles",
+      "keys": [
+        "brand",
+        "model",
+        "year",
+        "engine_size",
+        "power",
+        "mileage",
+        "track_length",
+        "electric_start"
+      ]
+    },
+    {
+      "category": "vehicles",
+      "subcategory": "trucks_commercial",
+      "detail_category": "trucks",
+      "keys": [
+        "brand",
+        "model",
+        "year",
+        "fuel",
+        "engine",
+        "power",
+        "gearbox",
+        "mileage",
+        "seats",
+        "axle_configuration",
+        "gross_weight",
+        "empty_weight",
+        "payload",
+        "load_space_length",
+        "load_space_width",
+        "load_space_height",
+        "tachograph",
+        "inspection_valid_until"
+      ]
+    },
+    {
+      "category": "vehicles",
+      "subcategory": "trucks_commercial",
+      "detail_category": "semi_trucks",
+      "keys": [
+        "brand",
+        "model",
+        "year",
+        "fuel",
+        "engine",
+        "power",
+        "gearbox",
+        "mileage",
+        "seats",
+        "axle_configuration",
+        "gross_weight",
+        "empty_weight",
+        "payload",
+        "load_space_length",
+        "load_space_width",
+        "load_space_height",
+        "tachograph",
+        "inspection_valid_until"
+      ]
+    },
+    {
+      "category": "vehicles",
+      "subcategory": "trucks_commercial",
+      "detail_category": "buses",
+      "keys": [
+        "brand",
+        "model",
+        "year",
+        "fuel",
+        "engine",
+        "power",
+        "gearbox",
+        "mileage",
+        "seats",
+        "axle_configuration",
+        "gross_weight",
+        "empty_weight",
+        "payload",
+        "load_space_length",
+        "load_space_width",
+        "load_space_height",
+        "tachograph",
+        "inspection_valid_until"
+      ]
+    },
+    {
+      "category": "vehicles",
+      "subcategory": "trucks_commercial",
+      "detail_category": "commercial_trailers",
+      "keys": [
+        "brand",
+        "model",
+        "year",
+        "trailer_type",
+        "length",
+        "width",
+        "height",
+        "gross_weight",
+        "empty_weight",
+        "payload",
+        "axles",
+        "brake_type",
+        "inspection_valid_until"
+      ]
+    },
+    {
+      "category": "vehicles",
+      "subcategory": "agricultural_heavy_machinery",
+      "detail_category": "tractors",
+      "keys": [
+        "brand",
+        "model",
+        "year",
+        "machine_type",
+        "engine",
+        "power",
+        "working_hours",
+        "fuel",
+        "drivetrain_tracks",
+        "weight",
+        "attachment_type",
+        "hydraulics",
+        "seats"
+      ]
+    },
+    {
+      "category": "vehicles",
+      "subcategory": "agricultural_heavy_machinery",
+      "detail_category": "harvesters",
+      "keys": [
+        "brand",
+        "model",
+        "year",
+        "machine_type",
+        "engine",
+        "power",
+        "working_hours",
+        "fuel",
+        "drivetrain_tracks",
+        "weight",
+        "attachment_type",
+        "hydraulics",
+        "header_width",
+        "crop_type"
+      ]
+    },
+    {
+      "category": "vehicles",
+      "subcategory": "agricultural_heavy_machinery",
+      "detail_category": "excavators",
+      "keys": [
+        "brand",
+        "model",
+        "year",
+        "machine_type",
+        "engine",
+        "power",
+        "working_hours",
+        "fuel",
+        "drivetrain_tracks",
+        "weight",
+        "attachment_type",
+        "hydraulics",
+        "operating_weight",
+        "bucket_size",
+        "lift_capacity",
+        "reach"
+      ]
+    },
+    {
+      "category": "vehicles",
+      "subcategory": "agricultural_heavy_machinery",
+      "detail_category": "forestry_machinery",
+      "keys": [
+        "brand",
+        "model",
+        "year",
+        "machine_type",
+        "engine",
+        "power",
+        "working_hours",
+        "fuel",
+        "drivetrain_tracks",
+        "weight",
+        "attachment_type",
+        "hydraulics",
+        "operating_weight",
+        "lift_capacity"
+      ]
+    },
+    {
+      "category": "vehicles",
+      "subcategory": "agricultural_heavy_machinery",
+      "detail_category": "construction_machinery",
+      "keys": [
+        "brand",
+        "model",
+        "year",
+        "machine_type",
+        "engine",
+        "power",
+        "working_hours",
+        "fuel",
+        "drivetrain_tracks",
+        "weight",
+        "attachment_type",
+        "hydraulics",
+        "operating_weight",
+        "bucket_size",
+        "lift_capacity"
+      ]
+    },
+    {
+      "category": "vehicles",
+      "subcategory": "agricultural_heavy_machinery",
+      "detail_category": "agricultural_attachments_implements",
+      "keys": [
+        "implement_type",
+        "brand",
+        "model",
+        "working_width",
+        "attachment_type",
+        "compatible_machine",
+        "pto_required",
+        "hydraulics_required",
+        "condition"
+      ]
+    },
+    {
+      "category": "vehicles",
+      "subcategory": "agricultural_heavy_machinery",
+      "detail_category": "agricultural_heavy_machinery_spare_parts",
+      "keys": [
+        "part_name",
+        "manufacturer",
+        "part_number",
+        "compatible_machine",
+        "fits_brand",
+        "fits_model",
+        "condition"
+      ]
+    },
+    {
+      "category": "vehicles",
+      "subcategory": "marine",
+      "detail_category": "boats",
+      "keys": [
+        "brand",
+        "model",
+        "year",
+        "type",
+        "length",
+        "width",
+        "material",
+        "engine_type",
+        "engine_power",
+        "fuel",
+        "engine_hours",
+        "cabins",
+        "trailer_included"
+      ]
+    },
+    {
+      "category": "vehicles",
+      "subcategory": "marine",
+      "detail_category": "yachts",
+      "keys": [
+        "brand",
+        "model",
+        "year",
+        "type",
+        "length",
+        "width",
+        "material",
+        "engine_type",
+        "engine_power",
+        "fuel",
+        "engine_hours",
+        "cabins",
+        "trailer_included"
+      ]
+    },
+    {
+      "category": "vehicles",
+      "subcategory": "marine",
+      "detail_category": "jet_skis",
+      "keys": [
+        "brand",
+        "model",
+        "year",
+        "type",
+        "length",
+        "width",
+        "material",
+        "engine_type",
+        "engine_power",
+        "fuel",
+        "engine_hours",
+        "cabins",
+        "trailer_included"
+      ]
+    },
+    {
+      "category": "vehicles",
+      "subcategory": "marine",
+      "detail_category": "boat_trailers",
+      "keys": [
+        "brand",
+        "model",
+        "year",
+        "trailer_type",
+        "length",
+        "width",
+        "height",
+        "gross_weight",
+        "empty_weight",
+        "payload",
+        "axles",
+        "brake_type",
+        "inspection_valid_until"
+      ]
+    },
+    {
+      "category": "vehicles",
+      "subcategory": "marine",
+      "detail_category": "outboard_motors",
+      "keys": [
+        "brand",
+        "model",
+        "year",
+        "power",
+        "fuel",
+        "shaft_length"
+      ]
+    },
+    {
+      "category": "vehicles",
+      "subcategory": "aviation",
+      "detail_category": "airplanes",
+      "keys": [
+        "brand",
+        "model",
+        "year",
+        "aircraft_type",
+        "engine",
+        "power",
+        "flight_hours",
+        "seats",
+        "range",
+        "maintenance_status"
+      ]
+    },
+    {
+      "category": "vehicles",
+      "subcategory": "aviation",
+      "detail_category": "helicopters",
+      "keys": [
+        "brand",
+        "model",
+        "year",
+        "aircraft_type",
+        "engine",
+        "power",
+        "flight_hours",
+        "seats",
+        "range",
+        "maintenance_status"
+      ]
+    },
+    {
+      "category": "vehicles",
+      "subcategory": "aviation",
+      "detail_category": "ultralights",
+      "keys": [
+        "brand",
+        "model",
+        "year",
+        "aircraft_type",
+        "engine",
+        "flight_hours",
+        "seats"
+      ]
+    },
+    {
+      "category": "vehicles",
+      "subcategory": "aviation",
+      "detail_category": "drones",
+      "keys": [
+        "brand",
+        "model",
+        "camera",
+        "flight_time",
+        "range",
+        "battery_count",
+        "condition"
+      ]
+    },
+    {
+      "category": "vehicles",
+      "subcategory": "aviation",
+      "detail_category": "aircraft_parts",
+      "keys": [
+        "part_name",
+        "manufacturer",
+        "part_number",
+        "compatible_aircraft",
+        "condition"
+      ]
+    },
+    {
+      "category": "vehicles",
+      "subcategory": "trailers",
+      "detail_category": "light_trailers",
+      "keys": [
+        "brand",
+        "model",
+        "year",
+        "trailer_type",
+        "length",
+        "width",
+        "height",
+        "gross_weight",
+        "empty_weight",
+        "payload",
+        "axles",
+        "brake_type",
+        "inspection_valid_until"
+      ]
+    },
+    {
+      "category": "vehicles",
+      "subcategory": "trailers",
+      "detail_category": "car_trailers",
+      "keys": [
+        "brand",
+        "model",
+        "year",
+        "trailer_type",
+        "length",
+        "width",
+        "height",
+        "gross_weight",
+        "empty_weight",
+        "payload",
+        "axles",
+        "brake_type",
+        "inspection_valid_until"
+      ]
+    },
+    {
+      "category": "vehicles",
+      "subcategory": "trailers",
+      "detail_category": "cargo_trailers",
+      "keys": [
+        "brand",
+        "model",
+        "year",
+        "trailer_type",
+        "length",
+        "width",
+        "height",
+        "gross_weight",
+        "empty_weight",
+        "payload",
+        "axles",
+        "brake_type",
+        "inspection_valid_until"
+      ]
+    },
+    {
+      "category": "vehicles",
+      "subcategory": "trailers",
+      "detail_category": "caravans",
+      "keys": [
+        "brand",
+        "model",
+        "year",
+        "trailer_type",
+        "length",
+        "width",
+        "height",
+        "gross_weight",
+        "empty_weight",
+        "payload",
+        "axles",
+        "brake_type",
+        "inspection_valid_until",
+        "sleeping_places",
+        "heating",
+        "kitchen",
+        "toilet_shower",
+        "awning"
+      ]
+    },
+    {
+      "category": "vehicles",
+      "subcategory": "trailers",
+      "detail_category": "horse_livestock_trailers",
+      "keys": [
+        "brand",
+        "model",
+        "year",
+        "trailer_type",
+        "length",
+        "width",
+        "height",
+        "gross_weight",
+        "empty_weight",
+        "payload",
+        "axles",
+        "brake_type",
+        "inspection_valid_until"
+      ]
+    },
+    {
+      "category": "vehicles",
+      "subcategory": "vehicle_parts",
+      "detail_category": "engines_engine_parts",
+      "keys": [
+        "part_name",
+        "brand",
+        "engine_type",
+        "fits_brand",
+        "fits_model",
+        "part_number",
+        "condition"
+      ]
+    },
+    {
+      "category": "vehicles",
+      "subcategory": "vehicle_parts",
+      "detail_category": "transmission_drivetrain",
+      "keys": [
+        "part_name",
+        "gearbox_type",
+        "drivetrain_type",
+        "fits_brand",
+        "fits_model",
+        "part_number",
+        "condition"
+      ]
+    },
+    {
+      "category": "vehicles",
+      "subcategory": "vehicle_parts",
+      "detail_category": "suspension_steering",
+      "keys": [
+        "part_name",
+        "side_position",
+        "fits_brand",
+        "fits_model",
+        "part_number",
+        "condition"
+      ]
+    },
+    {
+      "category": "vehicles",
+      "subcategory": "vehicle_parts",
+      "detail_category": "brakes",
+      "keys": [
+        "brake_type",
+        "side_position",
+        "fits_brand",
+        "fits_model",
+        "part_number",
+        "condition"
+      ]
+    },
+    {
+      "category": "vehicles",
+      "subcategory": "vehicle_parts",
+      "detail_category": "electrical_parts",
+      "keys": [
+        "part_name",
+        "voltage",
+        "fits_brand",
+        "fits_model",
+        "part_number",
+        "condition"
+      ]
+    },
+    {
+      "category": "vehicles",
+      "subcategory": "vehicle_parts",
+      "detail_category": "batteries",
+      "keys": [
+        "battery_type",
+        "capacity",
+        "voltage",
+        "cca",
+        "brand",
+        "model",
+        "condition"
+      ]
+    },
+    {
+      "category": "vehicles",
+      "subcategory": "vehicle_parts",
+      "detail_category": "starters_alternators",
+      "keys": [
+        "part_type",
+        "voltage",
+        "power_rating",
+        "fits_brand",
+        "fits_model",
+        "part_number",
+        "condition"
+      ]
+    },
+    {
+      "category": "vehicles",
+      "subcategory": "vehicle_parts",
+      "detail_category": "body_parts",
+      "keys": [
+        "body_part_type",
+        "side_position",
+        "color",
+        "fits_brand",
+        "fits_model",
+        "condition"
+      ]
+    },
+    {
+      "category": "vehicles",
+      "subcategory": "vehicle_parts",
+      "detail_category": "lights_lamps",
+      "keys": [
+        "light_type",
+        "technology",
+        "side_position",
+        "fits_brand",
+        "fits_model",
+        "condition"
+      ]
+    },
+    {
+      "category": "vehicles",
+      "subcategory": "vehicle_parts",
+      "detail_category": "interior_parts",
+      "keys": [
+        "interior_part_type",
+        "material",
+        "color",
+        "fits_brand",
+        "fits_model",
+        "condition"
+      ]
+    },
+    {
+      "category": "vehicles",
+      "subcategory": "vehicle_parts",
+      "detail_category": "exhaust_parts",
+      "keys": [
+        "exhaust_part_type",
+        "material",
+        "fits_brand",
+        "fits_model",
+        "condition"
+      ]
+    },
+    {
+      "category": "vehicles",
+      "subcategory": "vehicle_parts",
+      "detail_category": "cooling_heating",
+      "keys": [
+        "part_type",
+        "coolant_type",
+        "fits_brand",
+        "fits_model",
+        "condition"
+      ]
+    },
+    {
+      "category": "vehicles",
+      "subcategory": "vehicle_parts",
+      "detail_category": "fuel_system",
+      "keys": [
+        "fuel_system_part",
+        "fuel_type",
+        "fits_brand",
+        "fits_model",
+        "part_number",
+        "condition"
+      ]
+    },
+    {
+      "category": "vehicles",
+      "subcategory": "vehicle_parts",
+      "detail_category": "tires",
+      "keys": [
+        "width",
+        "profile",
+        "diameter",
+        "season",
+        "brand",
+        "model",
+        "load_index",
+        "speed_index",
+        "tread_depth",
+        "quantity",
+        "dot_year"
+      ]
+    },
+    {
+      "category": "vehicles",
+      "subcategory": "vehicle_parts",
+      "detail_category": "wheels_rims",
+      "keys": [
+        "diameter",
+        "width",
+        "bolt_pattern",
+        "offset",
+        "center_bore",
+        "brand",
+        "model",
+        "material",
+        "quantity",
+        "condition"
+      ]
+    },
+    {
+      "category": "vehicles",
+      "subcategory": "vehicle_parts",
+      "detail_category": "accessories",
+      "keys": [
+        "accessory_type",
+        "brand",
+        "model",
+        "fits_brand",
+        "fits_model",
+        "part_number",
+        "condition"
+      ]
+    },
+    {
+      "category": "vehicles",
+      "subcategory": "vehicle_parts",
+      "detail_category": "riding_racing_gear",
+      "keys": [
+        "gear_type",
+        "brand",
+        "size",
+        "discipline",
+        "certification",
+        "material",
+        "condition"
+      ]
+    },
+    {
+      "category": "vehicles",
+      "subcategory": "vehicle_parts",
+      "detail_category": "spare_parts",
+      "keys": [
+        "part_name",
+        "manufacturer",
+        "part_number",
+        "oem_number",
+        "fits_brand",
+        "fits_model",
+        "fits_generation",
+        "fits_year_from",
+        "fits_year_to",
+        "fits_engine",
+        "fits_gearbox",
+        "side_position",
+        "condition"
+      ]
+    },
+    {
+      "category": "vehicles",
+      "subcategory": "vehicle_parts",
+      "detail_category": "vehicle_for_parts",
+      "keys": [
+        "brand",
+        "model",
+        "year",
+        "generation",
+        "fuel",
+        "engine",
+        "gearbox",
+        "drivetrain",
+        "mileage",
+        "condition",
+        "available_parts"
+      ]
+    },
+    {
+      "category": "electronics",
+      "subcategory": "phones",
+      "detail_category": "",
+      "keys": [
+        "brand",
+        "model",
+        "storage",
+        "ram",
+        "color",
+        "sim_type",
+        "battery_health",
+        "screen_condition",
+        "network_lock",
+        "included_accessories"
+      ]
+    },
+    {
+      "category": "electronics",
+      "subcategory": "computers",
+      "detail_category": "",
+      "keys": [
+        "brand",
+        "model",
+        "processor",
+        "ram",
+        "storage",
+        "graphics_card",
+        "screen_size",
+        "operating_system",
+        "battery_health",
+        "included_accessories"
+      ]
+    },
+    {
+      "category": "electronics",
+      "subcategory": "tv_audio",
+      "detail_category": "",
+      "keys": [
+        "brand",
+        "model",
+        "screen_size",
+        "display_type",
+        "resolution",
+        "smart_tv",
+        "audio_type",
+        "power_output",
+        "connections",
+        "remote_included"
+      ]
+    },
+    {
+      "category": "electronics",
+      "subcategory": "cameras",
+      "detail_category": "",
+      "keys": [
+        "brand",
+        "model",
+        "camera_type",
+        "lens_included",
+        "sensor_size",
+        "megapixels",
+        "shutter_count",
+        "video_resolution",
+        "battery_count",
+        "memory_card_included"
+      ]
+    },
+    {
+      "category": "electronics",
+      "subcategory": "gaming",
+      "detail_category": "",
+      "keys": [
+        "brand",
+        "model",
+        "platform",
+        "storage",
+        "controller_count",
+        "game_count",
+        "included_accessories"
+      ]
+    },
+    {
+      "category": "electronics",
+      "subcategory": "smart_home",
+      "detail_category": "",
+      "keys": [
+        "brand",
+        "model",
+        "device_type",
+        "compatibility",
+        "connection_type",
+        "power_type",
+        "app_support",
+        "included_accessories"
+      ]
+    },
+    {
+      "category": "electronics",
+      "subcategory": "components",
+      "detail_category": "",
+      "keys": [
+        "component_type",
+        "brand",
+        "model",
+        "socket_compatibility",
+        "capacity",
+        "speed",
+        "power_rating",
+        "condition"
+      ]
+    },
+    {
+      "category": "electronics",
+      "subcategory": "electronics_accessories",
+      "detail_category": "",
+      "keys": [
+        "accessory_type",
+        "brand",
+        "model",
+        "compatibility",
+        "connection_type",
+        "color",
+        "condition",
+        "quantity"
+      ]
+    },
+    {
+      "category": "electronics",
+      "subcategory": "other_electronics",
+      "detail_category": "",
+      "keys": [
+        "item_type",
+        "brand",
+        "model",
+        "material",
+        "color",
+        "size",
+        "dimensions",
+        "condition",
+        "quantity",
+        "included_accessories"
+      ]
+    },
+    {
+      "category": "real_estate",
+      "subcategory": "apartments",
+      "detail_category": "",
+      "keys": [
+        "property_type",
+        "rooms",
+        "area",
+        "floor",
+        "total_floors",
+        "year_built",
+        "condition",
+        "heating_type",
+        "energy_class",
+        "balcony",
+        "furnished",
+        "parking",
+        "storage_room",
+        "bathroom_count"
+      ]
+    },
+    {
+      "category": "real_estate",
+      "subcategory": "houses",
+      "detail_category": "",
+      "keys": [
+        "house_type",
+        "rooms",
+        "living_area",
+        "land_area",
+        "floors",
+        "year_built",
+        "condition",
+        "heating_type",
+        "energy_class",
+        "garage",
+        "sauna",
+        "terrace",
+        "water_supply",
+        "sewer_connection"
+      ]
+    },
+    {
+      "category": "real_estate",
+      "subcategory": "land",
+      "detail_category": "",
+      "keys": [
+        "land_type",
+        "area",
+        "purpose",
+        "detailed_plan",
+        "electricity",
+        "water",
+        "sewer",
+        "road_access"
+      ]
+    },
+    {
+      "category": "real_estate",
+      "subcategory": "commercial_property",
+      "detail_category": "",
+      "keys": [
+        "property_type",
+        "area",
+        "floor",
+        "purpose",
+        "parking",
+        "loading_access",
+        "heating",
+        "security"
+      ]
+    },
+    {
+      "category": "real_estate",
+      "subcategory": "garages",
+      "detail_category": "",
+      "keys": [
+        "area",
+        "electricity",
+        "heating",
+        "security",
+        "water"
+      ]
+    },
+    {
+      "category": "real_estate",
+      "subcategory": "vacation_property",
+      "detail_category": "",
+      "keys": [
+        "property_type",
+        "rooms",
+        "area",
+        "beds",
+        "sauna",
+        "pool",
+        "beach_access",
+        "seasonal_year_round"
+      ]
+    },
+    {
+      "category": "clothing_fashion",
+      "subcategory": "men",
+      "detail_category": "",
+      "keys": [
+        "category_type",
+        "brand",
+        "size",
+        "fit",
+        "color",
+        "material",
+        "condition",
+        "season",
+        "authenticity",
+        "included_accessories"
+      ]
+    },
+    {
+      "category": "clothing_fashion",
+      "subcategory": "women",
+      "detail_category": "",
+      "keys": [
+        "category_type",
+        "brand",
+        "size",
+        "fit",
+        "color",
+        "material",
+        "condition",
+        "season",
+        "authenticity",
+        "included_accessories"
+      ]
+    },
+    {
+      "category": "clothing_fashion",
+      "subcategory": "kids",
+      "detail_category": "",
+      "keys": [
+        "category_type",
+        "brand",
+        "size_age",
+        "gender",
+        "color",
+        "material",
+        "condition",
+        "season"
+      ]
+    },
+    {
+      "category": "clothing_fashion",
+      "subcategory": "workwear",
+      "detail_category": "",
+      "keys": [
+        "workwear_type",
+        "gender",
+        "size",
+        "industry",
+        "season",
+        "visibility_class",
+        "protection_class",
+        "condition"
+      ]
+    },
+    {
+      "category": "clothing_fashion",
+      "subcategory": "shoes",
+      "detail_category": "",
+      "keys": [
+        "gender",
+        "brand",
+        "model",
+        "size",
+        "color",
+        "material",
+        "condition",
+        "season",
+        "heel_height",
+        "authenticity",
+        "original_box_included"
+      ]
+    },
+    {
+      "category": "clothing_fashion",
+      "subcategory": "watches",
+      "detail_category": "",
+      "keys": [
+        "brand",
+        "model",
+        "movement_type",
+        "case_material",
+        "case_size",
+        "water_resistance",
+        "condition",
+        "box_papers_included",
+        "authenticity"
+      ]
+    },
+    {
+      "category": "clothing_fashion",
+      "subcategory": "bags",
+      "detail_category": "",
+      "keys": [
+        "brand",
+        "model",
+        "material",
+        "color",
+        "size",
+        "condition",
+        "authenticity",
+        "dust_bag_box_included"
+      ]
+    },
+    {
+      "category": "clothing_fashion",
+      "subcategory": "jewelry",
+      "detail_category": "",
+      "keys": [
+        "jewelry_type",
+        "brand",
+        "material",
+        "gemstone",
+        "size",
+        "weight",
+        "condition",
+        "authenticity",
+        "certificate_included"
+      ]
+    },
+    {
+      "category": "clothing_fashion",
+      "subcategory": "other_clothing_fashion",
+      "detail_category": "",
+      "keys": [
+        "item_type",
+        "brand",
+        "model",
+        "material",
+        "color",
+        "size",
+        "dimensions",
+        "condition",
+        "quantity",
+        "included_accessories"
+      ]
+    },
+    {
+      "category": "tools_industrial",
+      "subcategory": "power_tools",
+      "detail_category": "",
+      "keys": [
+        "tool_type",
+        "brand",
+        "model",
+        "power_source",
+        "voltage",
+        "power_rating",
+        "battery_included",
+        "battery_count",
+        "charger_included",
+        "condition",
+        "included_accessories"
+      ]
+    },
+    {
+      "category": "tools_industrial",
+      "subcategory": "hand_tools",
+      "detail_category": "",
+      "keys": [
+        "tool_type",
+        "brand",
+        "material",
+        "size",
+        "condition",
+        "set_single",
+        "included_accessories"
+      ]
+    },
+    {
+      "category": "tools_industrial",
+      "subcategory": "workshop_equipment",
+      "detail_category": "",
+      "keys": [
+        "equipment_type",
+        "brand",
+        "model",
+        "power_source",
+        "voltage",
+        "capacity",
+        "dimensions",
+        "weight",
+        "condition",
+        "included_accessories"
+      ]
+    },
+    {
+      "category": "tools_industrial",
+      "subcategory": "industrial_equipment",
+      "detail_category": "",
+      "keys": [
+        "equipment_type",
+        "brand",
+        "model",
+        "power_source",
+        "voltage",
+        "capacity",
+        "working_pressure",
+        "weight",
+        "dimensions",
+        "condition"
+      ]
+    },
+    {
+      "category": "tools_industrial",
+      "subcategory": "safety_equipment",
+      "detail_category": "",
+      "keys": [
+        "equipment_type",
+        "brand",
+        "size",
+        "certification",
+        "condition",
+        "expiration_date",
+        "included_accessories"
+      ]
+    },
+    {
+      "category": "tools_industrial",
+      "subcategory": "other_tools_industrial",
+      "detail_category": "",
+      "keys": [
+        "item_type",
+        "brand",
+        "model",
+        "material",
+        "color",
+        "size",
+        "dimensions",
+        "condition",
+        "quantity",
+        "included_accessories"
+      ]
+    },
+    {
+      "category": "home_garden",
+      "subcategory": "furniture",
+      "detail_category": "",
+      "keys": [
+        "furniture_type",
+        "brand",
+        "material",
+        "color",
+        "dimensions",
+        "assembly_required",
+        "condition",
+        "included_accessories"
+      ]
+    },
+    {
+      "category": "home_garden",
+      "subcategory": "appliances",
+      "detail_category": "",
+      "keys": [
+        "appliance_type",
+        "brand",
+        "model",
+        "energy_class",
+        "power_source",
+        "capacity",
+        "dimensions",
+        "condition",
+        "warranty_remaining",
+        "included_accessories"
+      ]
+    },
+    {
+      "category": "home_garden",
+      "subcategory": "garden_tools",
+      "detail_category": "",
+      "keys": [
+        "tool_type",
+        "brand",
+        "model",
+        "power_source",
+        "voltage",
+        "battery_included",
+        "condition",
+        "included_accessories"
+      ]
+    },
+    {
+      "category": "home_garden",
+      "subcategory": "plants_seedlings",
+      "detail_category": "",
+      "keys": [
+        "plant_type",
+        "variety",
+        "quantity",
+        "pot_size",
+        "growth_stage",
+        "organic"
+      ]
+    },
+    {
+      "category": "home_garden",
+      "subcategory": "seeds",
+      "detail_category": "",
+      "keys": [
+        "seed_type",
+        "variety",
+        "quantity",
+        "package_weight",
+        "sowing_season",
+        "organic"
+      ]
+    },
+    {
+      "category": "home_garden",
+      "subcategory": "crops_produce",
+      "detail_category": "",
+      "keys": [
+        "produce_type",
+        "variety",
+        "quantity",
+        "unit",
+        "harvest_date",
+        "organic"
+      ]
+    },
+    {
+      "category": "home_garden",
+      "subcategory": "farm_supplies",
+      "detail_category": "",
+      "keys": [
+        "supply_type",
+        "brand",
+        "quantity",
+        "material",
+        "intended_use",
+        "condition"
+      ]
+    },
+    {
+      "category": "home_garden",
+      "subcategory": "animal_feed",
+      "detail_category": "",
+      "keys": [
+        "feed_type",
+        "animal_type",
+        "quantity",
+        "package_weight",
+        "ingredients",
+        "expiry_date"
+      ]
+    },
+    {
+      "category": "home_garden",
+      "subcategory": "greenhouses",
+      "detail_category": "",
+      "keys": [
+        "greenhouse_type",
+        "material",
+        "length",
+        "width",
+        "height",
+        "frame_material",
+        "condition"
+      ]
+    },
+    {
+      "category": "home_garden",
+      "subcategory": "decor",
+      "detail_category": "",
+      "keys": [
+        "decor_type",
+        "material",
+        "color",
+        "style",
+        "dimensions",
+        "condition"
+      ]
+    },
+    {
+      "category": "home_garden",
+      "subcategory": "lighting",
+      "detail_category": "",
+      "keys": [
+        "lighting_type",
+        "brand",
+        "power_source",
+        "bulb_type",
+        "color_temperature",
+        "smart_lighting_support",
+        "condition",
+        "included_accessories"
+      ]
+    },
+    {
+      "category": "home_garden",
+      "subcategory": "kitchenware",
+      "detail_category": "",
+      "keys": [
+        "item_type",
+        "brand",
+        "material",
+        "color",
+        "size",
+        "dimensions",
+        "capacity",
+        "condition",
+        "quantity"
+      ]
+    },
+    {
+      "category": "home_garden",
+      "subcategory": "home_textiles",
+      "detail_category": "",
+      "keys": [
+        "item_type",
+        "brand",
+        "material",
+        "color",
+        "size",
+        "dimensions",
+        "capacity",
+        "condition",
+        "quantity"
+      ]
+    },
+    {
+      "category": "home_garden",
+      "subcategory": "household_supplies",
+      "detail_category": "",
+      "keys": [
+        "item_type",
+        "brand",
+        "material",
+        "color",
+        "size",
+        "dimensions",
+        "capacity",
+        "condition",
+        "quantity"
+      ]
+    },
+    {
+      "category": "home_garden",
+      "subcategory": "bathroom",
+      "detail_category": "",
+      "keys": [
+        "item_type",
+        "brand",
+        "material",
+        "color",
+        "size",
+        "dimensions",
+        "capacity",
+        "condition",
+        "quantity"
+      ]
+    },
+    {
+      "category": "home_garden",
+      "subcategory": "heating_fuels",
+      "detail_category": "",
+      "keys": [
+        "fuel_type",
+        "wood_type",
+        "quantity",
+        "unit",
+        "moisture_level",
+        "packaging",
+        "delivery_available"
+      ]
+    },
+    {
+      "category": "home_garden",
+      "subcategory": "heating_equipment",
+      "detail_category": "",
+      "keys": [
+        "equipment_type",
+        "brand",
+        "model",
+        "fuel_type",
+        "power",
+        "dimensions",
+        "condition",
+        "included_accessories"
+      ]
+    },
+    {
+      "category": "home_garden",
+      "subcategory": "outdoor_furniture",
+      "detail_category": "",
+      "keys": [
+        "item_type",
+        "brand",
+        "material",
+        "color",
+        "size",
+        "dimensions",
+        "capacity",
+        "condition",
+        "quantity"
+      ]
+    },
+    {
+      "category": "home_garden",
+      "subcategory": "other_home_garden",
+      "detail_category": "",
+      "keys": [
+        "item_type",
+        "brand",
+        "model",
+        "material",
+        "color",
+        "size",
+        "dimensions",
+        "condition",
+        "quantity",
+        "included_accessories"
+      ]
+    },
+    {
+      "category": "sports_outdoor",
+      "subcategory": "gym_equipment",
+      "detail_category": "",
+      "keys": [
+        "equipment_type",
+        "brand",
+        "model",
+        "weight_resistance",
+        "dimensions",
+        "foldable",
+        "condition",
+        "included_accessories"
+      ]
+    },
+    {
+      "category": "sports_outdoor",
+      "subcategory": "bicycles",
+      "detail_category": "",
+      "keys": [
+        "bike_type",
+        "brand",
+        "model",
+        "frame_size",
+        "wheel_size",
+        "material",
+        "gear_count",
+        "suspension",
+        "brake_type",
+        "condition",
+        "included_accessories"
+      ]
+    },
+    {
+      "category": "sports_outdoor",
+      "subcategory": "winter_sports",
+      "detail_category": "",
+      "keys": [
+        "equipment_type",
+        "brand",
+        "model",
+        "size",
+        "binding_included",
+        "boot_size",
+        "condition",
+        "included_accessories"
+      ]
+    },
+    {
+      "category": "sports_outdoor",
+      "subcategory": "camping",
+      "detail_category": "",
+      "keys": [
+        "equipment_type",
+        "brand",
+        "capacity",
+        "weight",
+        "dimensions",
+        "season_rating",
+        "condition",
+        "included_accessories"
+      ]
+    },
+    {
+      "category": "sports_outdoor",
+      "subcategory": "fishing",
+      "detail_category": "",
+      "keys": [
+        "equipment_type",
+        "brand",
+        "model",
+        "length",
+        "power_rating",
+        "reel_included",
+        "line_included",
+        "condition",
+        "included_accessories"
+      ]
+    },
+    {
+      "category": "sports_outdoor",
+      "subcategory": "other_sports_outdoor",
+      "detail_category": "",
+      "keys": [
+        "item_type",
+        "brand",
+        "model",
+        "material",
+        "color",
+        "size",
+        "dimensions",
+        "condition",
+        "quantity",
+        "included_accessories"
+      ]
+    },
+    {
+      "category": "sports_outdoor",
+      "subcategory": "equestrian_horse_supplies",
+      "detail_category": "saddles_accessories",
+      "keys": [
+        "item_type",
+        "brand",
+        "model",
+        "discipline",
+        "horse_size",
+        "seat_size",
+        "material",
+        "color",
+        "condition",
+        "included_accessories"
+      ]
+    },
+    {
+      "category": "sports_outdoor",
+      "subcategory": "equestrian_horse_supplies",
+      "detail_category": "bridles_halters_tack",
+      "keys": [
+        "item_type",
+        "brand",
+        "model",
+        "discipline",
+        "horse_size",
+        "seat_size",
+        "material",
+        "color",
+        "condition",
+        "included_accessories"
+      ]
+    },
+    {
+      "category": "sports_outdoor",
+      "subcategory": "equestrian_horse_supplies",
+      "detail_category": "rider_clothing_safety",
+      "keys": [
+        "item_type",
+        "brand",
+        "size",
+        "gender",
+        "discipline",
+        "safety_standard",
+        "material",
+        "color",
+        "condition"
+      ]
+    },
+    {
+      "category": "sports_outdoor",
+      "subcategory": "equestrian_horse_supplies",
+      "detail_category": "horse_blankets_textiles",
+      "keys": [
+        "item_type",
+        "brand",
+        "horse_size",
+        "blanket_weight",
+        "material",
+        "color",
+        "condition"
+      ]
+    },
+    {
+      "category": "sports_outdoor",
+      "subcategory": "equestrian_horse_supplies",
+      "detail_category": "horse_grooming_care",
+      "keys": [
+        "item_type",
+        "brand",
+        "horse_size",
+        "material",
+        "quantity",
+        "condition",
+        "included_accessories"
+      ]
+    },
+    {
+      "category": "sports_outdoor",
+      "subcategory": "equestrian_horse_supplies",
+      "detail_category": "stable_paddock_equipment",
+      "keys": [
+        "item_type",
+        "brand",
+        "material",
+        "dimensions",
+        "capacity",
+        "quantity",
+        "condition"
+      ]
+    },
+    {
+      "category": "sports_outdoor",
+      "subcategory": "equestrian_horse_supplies",
+      "detail_category": "driving_carriage_equipment",
+      "keys": [
+        "item_type",
+        "brand",
+        "model",
+        "discipline",
+        "horse_size",
+        "seat_size",
+        "material",
+        "color",
+        "condition",
+        "included_accessories"
+      ]
+    },
+    {
+      "category": "sports_outdoor",
+      "subcategory": "equestrian_horse_supplies",
+      "detail_category": "other_equestrian_supplies",
+      "keys": [
+        "item_type",
+        "brand",
+        "model",
+        "material",
+        "color",
+        "size",
+        "dimensions",
+        "condition",
+        "quantity",
+        "included_accessories"
+      ]
+    },
+    {
+      "category": "antiques_collectibles",
+      "subcategory": "art",
+      "detail_category": "",
+      "keys": [
+        "art_type",
+        "artist",
+        "title",
+        "year_period",
+        "material",
+        "dimensions",
+        "signed",
+        "certificate_included",
+        "condition",
+        "frame_included"
+      ]
+    },
+    {
+      "category": "antiques_collectibles",
+      "subcategory": "vintage",
+      "detail_category": "",
+      "keys": [
+        "item_type",
+        "brand_maker",
+        "year_era",
+        "material",
+        "origin_country",
+        "condition",
+        "restored"
+      ]
+    },
+    {
+      "category": "antiques_collectibles",
+      "subcategory": "coins",
+      "detail_category": "",
+      "keys": [
+        "country",
+        "year",
+        "currency",
+        "material",
+        "denomination",
+        "mint_mark",
+        "condition_grading",
+        "certificate_included"
+      ]
+    },
+    {
+      "category": "antiques_collectibles",
+      "subcategory": "military",
+      "detail_category": "",
+      "keys": [
+        "item_type",
+        "country",
+        "era",
+        "original_reproduction",
+        "material",
+        "condition",
+        "certificate_included"
+      ]
+    },
+    {
+      "category": "antiques_collectibles",
+      "subcategory": "memorabilia",
+      "detail_category": "",
+      "keys": [
+        "item_type",
+        "related_person_event",
+        "year_era",
+        "signed",
+        "certificate_included",
+        "condition"
+      ]
+    },
+    {
+      "category": "antiques_collectibles",
+      "subcategory": "other_antiques_collectibles",
+      "detail_category": "",
+      "keys": [
+        "item_type",
+        "brand",
+        "model",
+        "material",
+        "color",
+        "size",
+        "dimensions",
+        "condition",
+        "quantity",
+        "included_accessories"
+      ]
+    },
+    {
+      "category": "building_materials",
+      "subcategory": "lumber",
+      "detail_category": "",
+      "keys": [
+        "material_type",
+        "wood_type",
+        "length",
+        "width",
+        "thickness",
+        "moisture_level",
+        "treatment_type",
+        "quantity",
+        "condition"
+      ]
+    },
+    {
+      "category": "building_materials",
+      "subcategory": "concrete",
+      "detail_category": "",
+      "keys": [
+        "material_type",
+        "strength_class",
+        "weight",
+        "bag_size",
+        "quantity",
+        "condition"
+      ]
+    },
+    {
+      "category": "building_materials",
+      "subcategory": "insulation",
+      "detail_category": "",
+      "keys": [
+        "insulation_type",
+        "material",
+        "thickness",
+        "coverage_area",
+        "fire_rating",
+        "quantity",
+        "condition"
+      ]
+    },
+    {
+      "category": "building_materials",
+      "subcategory": "roofing",
+      "detail_category": "",
+      "keys": [
+        "roofing_type",
+        "material",
+        "color",
+        "dimensions",
+        "coverage_area",
+        "quantity",
+        "condition"
+      ]
+    },
+    {
+      "category": "building_materials",
+      "subcategory": "plumbing",
+      "detail_category": "",
+      "keys": [
+        "plumbing_type",
+        "material",
+        "diameter",
+        "length",
+        "compatibility",
+        "pressure_rating",
+        "condition",
+        "quantity"
+      ]
+    },
+    {
+      "category": "building_materials",
+      "subcategory": "other_building_materials",
+      "detail_category": "",
+      "keys": [
+        "item_type",
+        "brand",
+        "model",
+        "material",
+        "color",
+        "size",
+        "dimensions",
+        "condition",
+        "quantity",
+        "included_accessories"
+      ]
+    },
+    {
+      "category": "children_baby",
+      "subcategory": "strollers_prams",
+      "detail_category": "",
+      "keys": [
+        "item_type",
+        "brand",
+        "model",
+        "age_range",
+        "safety_standard",
+        "material",
+        "color",
+        "dimensions",
+        "condition",
+        "included_accessories"
+      ]
+    },
+    {
+      "category": "children_baby",
+      "subcategory": "child_car_seats",
+      "detail_category": "",
+      "keys": [
+        "item_type",
+        "brand",
+        "model",
+        "age_range",
+        "safety_standard",
+        "material",
+        "color",
+        "dimensions",
+        "condition",
+        "included_accessories"
+      ]
+    },
+    {
+      "category": "children_baby",
+      "subcategory": "nursery_furniture",
+      "detail_category": "",
+      "keys": [
+        "item_type",
+        "brand",
+        "model",
+        "age_range",
+        "safety_standard",
+        "material",
+        "color",
+        "dimensions",
+        "condition",
+        "included_accessories"
+      ]
+    },
+    {
+      "category": "children_baby",
+      "subcategory": "baby_feeding_care",
+      "detail_category": "",
+      "keys": [
+        "item_type",
+        "brand",
+        "model",
+        "age_range",
+        "safety_standard",
+        "material",
+        "color",
+        "dimensions",
+        "condition",
+        "included_accessories"
+      ]
+    },
+    {
+      "category": "children_baby",
+      "subcategory": "baby_safety_accessories",
+      "detail_category": "",
+      "keys": [
+        "item_type",
+        "brand",
+        "model",
+        "age_range",
+        "safety_standard",
+        "material",
+        "color",
+        "dimensions",
+        "condition",
+        "included_accessories"
+      ]
+    },
+    {
+      "category": "children_baby",
+      "subcategory": "other_children_baby",
+      "detail_category": "",
+      "keys": [
+        "item_type",
+        "brand",
+        "model",
+        "age_range",
+        "safety_standard",
+        "material",
+        "color",
+        "dimensions",
+        "condition",
+        "included_accessories"
+      ]
+    },
+    {
+      "category": "pet_supplies",
+      "subcategory": "dog_supplies",
+      "detail_category": "",
+      "keys": [
+        "item_type",
+        "animal_type",
+        "brand",
+        "size",
+        "material",
+        "capacity",
+        "condition",
+        "quantity",
+        "included_accessories"
+      ]
+    },
+    {
+      "category": "pet_supplies",
+      "subcategory": "cat_supplies",
+      "detail_category": "",
+      "keys": [
+        "item_type",
+        "animal_type",
+        "brand",
+        "size",
+        "material",
+        "capacity",
+        "condition",
+        "quantity",
+        "included_accessories"
+      ]
+    },
+    {
+      "category": "pet_supplies",
+      "subcategory": "aquariums_terrariums",
+      "detail_category": "",
+      "keys": [
+        "item_type",
+        "animal_type",
+        "brand",
+        "size",
+        "material",
+        "capacity",
+        "condition",
+        "quantity",
+        "included_accessories"
+      ]
+    },
+    {
+      "category": "pet_supplies",
+      "subcategory": "cages_housing",
+      "detail_category": "",
+      "keys": [
+        "item_type",
+        "animal_type",
+        "brand",
+        "size",
+        "material",
+        "capacity",
+        "condition",
+        "quantity",
+        "included_accessories"
+      ]
+    },
+    {
+      "category": "pet_supplies",
+      "subcategory": "pet_transport_grooming",
+      "detail_category": "",
+      "keys": [
+        "item_type",
+        "animal_type",
+        "brand",
+        "size",
+        "material",
+        "capacity",
+        "condition",
+        "quantity",
+        "included_accessories"
+      ]
+    },
+    {
+      "category": "pet_supplies",
+      "subcategory": "other_pet_supplies",
+      "detail_category": "",
+      "keys": [
+        "item_type",
+        "animal_type",
+        "brand",
+        "size",
+        "material",
+        "capacity",
+        "condition",
+        "quantity",
+        "included_accessories"
+      ]
+    },
+    {
+      "category": "books_music_media",
+      "subcategory": "books",
+      "detail_category": "",
+      "keys": [
+        "media_type",
+        "title",
+        "creator",
+        "language",
+        "publication_year",
+        "format",
+        "genre",
+        "condition",
+        "quantity"
+      ]
+    },
+    {
+      "category": "books_music_media",
+      "subcategory": "magazines_comics",
+      "detail_category": "",
+      "keys": [
+        "media_type",
+        "title",
+        "creator",
+        "language",
+        "publication_year",
+        "format",
+        "genre",
+        "condition",
+        "quantity"
+      ]
+    },
+    {
+      "category": "books_music_media",
+      "subcategory": "music_movies",
+      "detail_category": "",
+      "keys": [
+        "media_type",
+        "title",
+        "creator",
+        "language",
+        "publication_year",
+        "format",
+        "genre",
+        "condition",
+        "quantity"
+      ]
+    },
+    {
+      "category": "books_music_media",
+      "subcategory": "musical_instruments",
+      "detail_category": "",
+      "keys": [
+        "instrument_type",
+        "brand",
+        "model",
+        "material",
+        "size",
+        "condition",
+        "included_accessories"
+      ]
+    },
+    {
+      "category": "books_music_media",
+      "subcategory": "instrument_accessories",
+      "detail_category": "",
+      "keys": [
+        "item_type",
+        "brand",
+        "model",
+        "material",
+        "color",
+        "size",
+        "dimensions",
+        "condition",
+        "quantity",
+        "included_accessories"
+      ]
+    },
+    {
+      "category": "books_music_media",
+      "subcategory": "other_books_media",
+      "detail_category": "",
+      "keys": [
+        "media_type",
+        "title",
+        "creator",
+        "language",
+        "publication_year",
+        "format",
+        "genre",
+        "condition",
+        "quantity"
+      ]
+    },
+    {
+      "category": "hobbies_toys_crafts",
+      "subcategory": "toys",
+      "detail_category": "",
+      "keys": [
+        "hobby_type",
+        "brand",
+        "age_range",
+        "material",
+        "dimensions",
+        "skill_level",
+        "condition",
+        "quantity",
+        "included_accessories"
+      ]
+    },
+    {
+      "category": "hobbies_toys_crafts",
+      "subcategory": "board_games_puzzles",
+      "detail_category": "",
+      "keys": [
+        "hobby_type",
+        "brand",
+        "age_range",
+        "material",
+        "dimensions",
+        "skill_level",
+        "condition",
+        "quantity",
+        "included_accessories"
+      ]
+    },
+    {
+      "category": "hobbies_toys_crafts",
+      "subcategory": "arts_crafts",
+      "detail_category": "",
+      "keys": [
+        "hobby_type",
+        "brand",
+        "age_range",
+        "material",
+        "dimensions",
+        "skill_level",
+        "condition",
+        "quantity",
+        "included_accessories"
+      ]
+    },
+    {
+      "category": "hobbies_toys_crafts",
+      "subcategory": "model_rc_hobbies",
+      "detail_category": "",
+      "keys": [
+        "hobby_type",
+        "brand",
+        "age_range",
+        "material",
+        "dimensions",
+        "skill_level",
+        "condition",
+        "quantity",
+        "included_accessories"
+      ]
+    },
+    {
+      "category": "hobbies_toys_crafts",
+      "subcategory": "sewing_knitting",
+      "detail_category": "",
+      "keys": [
+        "hobby_type",
+        "brand",
+        "age_range",
+        "material",
+        "dimensions",
+        "skill_level",
+        "condition",
+        "quantity",
+        "included_accessories"
+      ]
+    },
+    {
+      "category": "hobbies_toys_crafts",
+      "subcategory": "other_hobbies_toys",
+      "detail_category": "",
+      "keys": [
+        "hobby_type",
+        "brand",
+        "age_range",
+        "material",
+        "dimensions",
+        "skill_level",
+        "condition",
+        "quantity",
+        "included_accessories"
+      ]
+    },
+    {
+      "category": "office_business",
+      "subcategory": "office_equipment",
+      "detail_category": "",
+      "keys": [
+        "equipment_type",
+        "brand",
+        "model",
+        "connection_type",
+        "power_source",
+        "dimensions",
+        "condition",
+        "included_accessories"
+      ]
+    },
+    {
+      "category": "office_business",
+      "subcategory": "printers_scanners",
+      "detail_category": "",
+      "keys": [
+        "equipment_type",
+        "brand",
+        "model",
+        "connection_type",
+        "power_source",
+        "dimensions",
+        "condition",
+        "included_accessories"
+      ]
+    },
+    {
+      "category": "office_business",
+      "subcategory": "office_furniture",
+      "detail_category": "",
+      "keys": [
+        "item_type",
+        "brand",
+        "material",
+        "color",
+        "size",
+        "dimensions",
+        "capacity",
+        "condition",
+        "quantity"
+      ]
+    },
+    {
+      "category": "office_business",
+      "subcategory": "retail_warehouse_equipment",
+      "detail_category": "",
+      "keys": [
+        "equipment_type",
+        "brand",
+        "model",
+        "connection_type",
+        "power_source",
+        "dimensions",
+        "condition",
+        "included_accessories"
+      ]
+    },
+    {
+      "category": "office_business",
+      "subcategory": "presentation_equipment",
+      "detail_category": "",
+      "keys": [
+        "equipment_type",
+        "brand",
+        "model",
+        "connection_type",
+        "power_source",
+        "dimensions",
+        "condition",
+        "included_accessories"
+      ]
+    },
+    {
+      "category": "office_business",
+      "subcategory": "other_office_business",
+      "detail_category": "",
+      "keys": [
+        "item_type",
+        "brand",
+        "model",
+        "material",
+        "color",
+        "size",
+        "dimensions",
+        "condition",
+        "quantity",
+        "included_accessories"
+      ]
+    }
+  ]
+}

@@ -1,3 +1,172 @@
+<!-- SELQIRO_PUBLIC_DETAIL_KEYWORDS_SOURCE_ACCEPTED_20260926 -->
+## 2026-09-26 — public detail keywords: real isolated test accepted
+
+Base: `4eb7333e508ef8e6bec472698df4d156298e5b95`
+(`Add public listing search read foundation`). The reviewed local run ended at
+2026-09-26 18:56:33 +03:00. Evidence:
+`public-listing-detail-keywords-local-20260926-185525-oeibgkr3.zip`, SHA-256
+`800495c6f3843da974b5269357c60e93a61fae25691191674ecc39ee5914a7ad`.
+
+All 261 expected SQL assertions passed on real PostgreSQL 17.6 in a NEW networkless
+helper using the reviewed five-table synthetic fixture and restrictive grants.
+The whole test batch matches both exact migrations and ONLY the new detail suite;
+the earlier 66 checks were preserved, not rerun. Helper catalog/privileges and all
+five empty tables matched before/after rollback; the same verified helper was
+removed. The original local application DB and production were not contacted.
+The actual Selqiro build passed. HEAD stayed `4eb7333`; eight exact files were
+staged, with no unstaged changes, no commit/push and no fresh remote query.
+
+Review verified 66 archive entries / 65 manifest hashes and CRC, the exact supplied
+runner, eight payloads, five byte-preserving documentation additions, 252 source
+baseline hashes and 255 final source hashes. A real temporary Git index reproduced
+the exact staged patch and all available source bytes. This was artifact review,
+not another SQL/build/browser/production run.
+
+The new source keeps named category fields as free text and indexes only approved
+top-level string/number values at 163 exact category paths (312 distinct keys,
+maximum 19 keys per path). Arrays, booleans, nested JSON, unknown fields, private
+location/coordinates, raw AI and configured identifier/document exclusions are
+not searched through details. No category names or key names are injected.
+`Audi A4 automaat` cross-field AND, numeric text, all allowed paths, negative
+privacy/shape cases, existing public visibility/blocks/counts/pagination, fixture
+writer index maintenance and planner usability passed in the isolated suite.
+No translation, synonyms, prefix/typo matching, unit conversion or numeric ranges
+are claimed. Index text windows remain 4096 title / 32768 description / 1024 per
+allowed detail value; source texts are not rewritten.
+
+The completion runner amends only five documents, verifies the exact eight-path
+scope and all 22 migration files, requires a fresh passing build, and gates
+commit/push with `COMMIT PUSH`. The SQL migration, SQL test and allowlist JSON are
+preserved byte-for-byte. Actual commit/hash/push status comes from its returned
+result, not this document's preparation. Normal Git hooks/CI can run; deployment
+is not certified by a source push.
+
+Next after reviewed source completion: a separate READ-ONLY production preflight
+for `20260926120000` and `20260926180000`. Verify actual history/schema, effective
+roles/grants, default grants, public-source compatibility, bounded-text coverage,
+existing index dependencies, table size and lock-safe index rollout. Use minimized
+metadata/aggregate observations; do not export listing/user text or execute test
+writes. Do not APPLY automatically or repair history. Ordinary transactional
+CREATE INDEX can block writes; actual table/lock findings determine the later
+explicitly approved rollout. Do not change the frozen immutable helper without a
+new function/index version or an explicitly controlled rebuild. Exact counts,
+large offsets and broad matches remain cost limits; no load, HTTP or production
+role-inheritance test is claimed by 261 correctness assertions.
+
+The typed search client and compact open/close filters are NOT connected yet.
+Ordinary listing search is this contract's scope; it does not publish or add horses
+to public results. The existing owner horse editor, wanted list/detail, publication
+boundaries, images, Energy and routes stay unchanged. Preserve all completed
+operation journals. Do not rerun completed installers, SQL suites, APPLY or finish
+scripts. If a runner stops, review its ZIP before retrying; do not reset/restore.
+
+---
+
+
+<!-- SELQIRO_PUBLIC_DETAIL_KEYWORD_EXTENSION_20260926 -->
+## 2026-09-26 — bounded public-detail keyword search candidate
+
+Base source checkpoint: `4eb7333e508ef8e6bec472698df4d156298e5b95`,
+`Add public listing search read foundation`. The source-finish evidence from 17:51
+passed build, exact eight-path commit/push and final clean/remote equality checks.
+All 281 archive manifest hashes and all 252 exported source hashes were reviewed.
+That source finish did not run SQL or apply the search foundation to production.
+
+### This candidate, not a deployed capability
+
+The separately dated migration
+`20260926180000_add_public_listing_detail_keywords.sql` follows the unchanged
+`20260926120000_add_public_listing_search.sql`. It adds a pure frozen immutable
+`public_listing_search_document_v1` helper and an active-listing GIN expression
+index, then updates only the keyword source and query-local planning configuration
+of `search_public_listings_v1`. Its card shape, ordinary-listing scope, public
+eligibility, account-block semantics, category/condition/public city-country
+filters, counts and newest-first pagination remain the existing contract.
+
+The existing category fields remain free text. Category selection remains separate
+from listing purpose. There are no new dropdowns, UI controls, save paths, horse
+publication, images, Energy changes, bookings or marketplace transactions.
+
+### Reviewed searchable content
+
+The frozen registry in
+`supabase/tests/fixtures/public_listing_detail_search_v1_allowlist.json` records
+163 exact category paths and 312 distinct allowed keys from the reviewed
+`lib/categories.ts` and `lib/categoryFields.ts`. It follows the existing create
+form's `getCategoryFields(detailCategory || subcategory)` selection, but validates
+the full parent path. Unknown, incomplete or inconsistent paths contribute no
+detail text; public title/description still work. No category names or field names
+are injected as keyword values. This includes ordinary equipment/supplies paths,
+not live horses or other live-animal offers.
+
+Only top-level strings and numbers at allowed keys contribute. Arrays, nested
+objects, boolean values and nulls are not reinterpreted. No recursive details JSON,
+old search_text/search_vector, raw AI, private coordinates/location or unknown
+keys are used. The helper reads no tables and only transforms supplied arguments;
+its explicit anon/authenticated/service execution grants expose no stored data.
+Existing table grants and RLS are unchanged by the migration.
+
+Configured exclusions are intentional, not a statement that all these fields were
+previously private: VIN, serial/IMEI/registration/marking identifiers, document
+references, online-account text, the district field and legacy listing_type remain
+outside the new detail-keyword scope. CamelCase legacy aliases and duplicated
+standalone vehicle columns are not guessed. Words explicitly published in the
+title/description remain searchable regardless of these detail-key exclusions.
+
+Search stays `simple` + plain-word AND, not stemming, translation, typo correction,
+prefix matching, numeric ranges, unit conversion or a synonym service. For example,
+`Audi A4 automaat` can match values across title, description and allowed detail
+keys when those words actually exist; `automatic` is not silently translated.
+
+### Bounded indexing and scale limits
+
+The index document includes at most the first 4,096 characters of the title,
+32,768 of the description and 1,024 of each allowed detail value. The largest
+reviewed field set contains 19 keys. Original saved strings are never truncated or
+rewritten. Existing unusually long content outside these windows is not matched;
+review that compatibility boundary before production rollout. These limits keep
+index work bounded without adding a new rejection rule to ordinary writers.
+
+GIN uses the identical helper expression and an immutable `status='active'`
+predicate. Expiry, active identity/profile and block visibility stay in the query.
+`force_custom_plan` is scoped to the search function so optional inputs are planned
+using the current call's values, and is restored on return. This is not a global
+PostgreSQL tuning change or a promise that every query selects the index.
+
+Changing the frozen helper/registry later requires a versioned replacement index or
+an explicitly controlled rebuild; replacing an immutable helper in place without
+rebuilding its dependent index is forbidden. The current migration uses ordinary
+transactional CREATE INDEX; it can block writes in a future rollout. A separate
+production preflight must assess actual table size/locks, data compatibility,
+permissions and both pending migrations. No production command exists here.
+
+The new suite tests 261 assertions, including all 163 registry paths, hidden-field
+negative cases, malformed shapes, cross-field AND, representative categories,
+blocks/counts/pagination, expression-index maintenance by a fixture writer, and
+planner usability with a test-local disabled sequential scan. That plan check is
+not a latency benchmark or proof of the actual production RPC plan. Exact counts,
+large offsets and broad result sets remain cost risks. Representative-volume query
+plans/timings, concurrency and HTTP/role integration remain release checks before
+claiming launch readiness or millions of concurrent searches.
+
+### Execution boundary and next action
+
+The new runner only uses a fresh networkless helper with the already-reviewed
+PostgreSQL 17.6 image. It does not connect to the original local DB or production,
+copy account/listing data, read real keys, install/pull packages, access operation
+journals, change the UI, commit or push. It initializes the existing five-table synthetic
+fixture in the new helper. It then loads both source migrations and only the new
+extension suite inside one outer rollback transaction, and compares the helper
+catalog/privileges/empty rows after rollback. The earlier 66-assertion test is preserved, not replayed.
+Only verified helper cleanup permits the eight source/test/document writes,
+fresh build and exact staging. Inspect the returned result for actual PASS/FAIL;
+preparation checks are not the user's Docker/SQL/build run.
+
+Next after a reviewed local PASS: separately finish this exact source checkpoint;
+then perform an approved production preflight/rollout before connecting the typed
+client and compact open/close mobile filters. Do not repeat completed finish/apply
+scripts or expose unsupported UI promises. The existing owner editor and wanted
+list/detail remain working, not reverted to read-only.
 <!-- SELQIRO_PUBLIC_SEARCH_SOURCE_ACCEPTED_MVP_20260926 -->
 # Public listing search v1 — accepted local source boundary, 2026-09-26
 

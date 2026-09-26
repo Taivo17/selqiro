@@ -8754,3 +8754,86 @@ Järgmine konkreetne töö pärast lõpetamise ülevaatust: avalike lisaväljade
 märksõnaotsingu piiratud täiendus koos privaatsuskatsete ning indeksi/päringukulu
 plaaniga. Varasemat installerit ega 66 testi ei korrata. Productioni eelkontroll,
 rakendamine ja uue otsingupaneeli ühendamine jäävad eraldi kontrollitud sammudeks.
+
+
+<!-- SELQIRO_PUBLIC_DETAIL_KEYWORDS_ET_20260926 -->
+## 2026-09-26 — lihtsa otsingu avalike lisaväljade kandidaat
+
+Lähtealus `4eb7333` on commit'itud ja push'itud; 17:51 lõpetamise ZIP-i build,
+puhas tööpuu, kaugseis ning 252 allikat on üle vaadatud. Productioni otsingut ega
+kasutajaliidest see varasem lähteetapp ei muutnud.
+
+Uus eraldi migratsioon `20260926180000_add_public_listing_detail_keywords.sql`
+lisab pealkirja ja kirjelduse kõrvale kategooria lubatud avalike lisaväljade
+märksõnad. Kategooriate väljad jäävad vabatekstiks. Näiteks mark, mudel, käigukast,
+materjal ja suurus saavad otsingus osaleda siis, kui vastav väli kuulub kuulutuse
+tegeliku rubriigi lubatud loendisse. Kogu details JSON-i, privaatset asukohta,
+AI toorandmeid ega tundmatuid võtmeid otsingusse ei viida. VIN, seeria-/registri-
+numbrid ja mõned muud piiratud väljad jäävad selle esimese täienduse ulatusest välja.
+Algseid kuulutusi ega sisestatud väärtusi ümber ei kirjutata.
+
+Üks külmutatud loend katab 163 rubriigiteed ja 312 erinevat võtmenime, mitte 312
+uut kasutajale nähtavat filtrit. Otsing kasutab sõnu, mitte automaatset tõlget,
+kirjaveaparandust või arvuliste vahemike mõistmist. 110 kW ei tähenda vahemikku
+100–150 kW. Sõnad automaat ja automatic ei ole veel automaatselt sama.
+
+Lisandub GIN-indeks sama piiritletud otsingusisu jaoks. Indekseerimise piirid on
+pealkirjal 4096, kirjeldusel 32768 ja igal lisaväljal 1024 märki; algtekst säilib
+tervikuna. Indeks ei tõenda veel suure koormuse jõudlust. Päris mahu, päringuplaani,
+loendamise ja lehekülgede kulu tuleb enne käivitamisvalmiduse väidet mõõta.
+
+Uus 261 kontrolliga SQL-test töötab ainult uues võrguta abikonteineris, sama juba
+olemasoleva kontrollitud image'iga. Algset kohalikku baasi, productionit, kasutajate
+andmeid ega päris võtmeid ei kasutata. Vana 66 kontrolliga testi ei korrata.
+Täpne testi, rollback'i, abikonteineri eemaldamise ja build'i tulemus on uues raportis.
+Edu järel jääb kaheksa faili stage'ituks, mitte commit'ituks. Avaldamine, hobused,
+omaniku toimiv muutmisvorm, pildid ja Energy jäävad muutmata.
+
+Järgmine samm: üle vaadata uue testi tulemus ning eraldi lõpetada lähtecommit.
+Alles kontrollitud productioni paigalduse järel ühendame kasutajaliidese: üks
+märksõnakast, rubriik ning kerimisel kättesaadav avatav/suletav filtrite paneel.
+Kõiki kategooriavalikuid ega kõiki täppisfiltreid praegu ei ehita.
+
+
+<!-- SELQIRO_PUBLIC_DETAIL_KEYWORDS_SOURCE_ACCEPTED_20260926 -->
+## 26.09.2026 — lisaväljade märksõnaotsingu päris kohalik test on üle vaadatud
+
+Kasutaja 18:55–18:56 jooksus läbisid kõik 261 uut SQL-kontrolli, abibaasi
+skeemi/õiguste ja viie tühja tabeli tagasipööramise kontroll, ainult loodud
+abikonteineri eemaldamine ning Selqiro build. Test toimus päris PostgreSQL 17.6
+mootoril UUES võrguta abikonteineris sünteetiliste andmetega. Algse kohaliku
+andmebaasi ega productioniga ei ühendatud ning päris kasutajate andmeid ei kopeeritud.
+
+Tõend: `public-listing-detail-keywords-local-20260926-185525-oeibgkr3.zip`.
+SHA-256: `800495c6f3843da974b5269357c60e93a61fae25691191674ecc39ee5914a7ad`.
+Ülevaatus kontrollis kõiki 65 manifestiräsi, 66 arhiivifaili, täpset käivitajat,
+kaheksat kandidaati, lähteräse ja SQL-partiid ning rekonstrueeris stage'itud
+muudatuse ajutise Git-indexiga. See ei olnud uus SQL- ega build'i jooks.
+HEAD jäi `4eb7333`; kaheksa faili olid stage'itud, kuid commit ja push tegemata.
+Värsket kaugserveri päringut see kohalik test ei teinud.
+
+Kasutaja jaoks jäävad rubriigi lisaväljad praegu vabatekstiks. Otsing suudab testitud
+lepingus leida sõnu ka lubatud avalikest margi-, mudeli-, käigukasti-, materjali-,
+suuruse- ja muudest kategooriapõhistest väljadest. Näiteks `Audi A4 automaat` läbis
+päris SQL-testi, ilma et kõiki sõnu oleks vaja kirjeldusse kopeerida. Kinnitatud
+163 kategooriateed ei tähenda 163 uut filtrikasti. Tundmatut või privaatset JSON-sisu
+ning AI toorvastuseid ei kaasata. Keeletõlget, sünonüüme, kirjavigade parandust ja
+arvuvahemikke see esimene otsing ei tõlgenda.
+
+Järgmine lõpetaja lisab tulemuse viiele dokumendile, jätab kolm SQL-/JSON-faili
+muutmata, nõuab värsket build'i ning küsib enne commit'i ja push'i `COMMIT PUSH`.
+Täpne uus commit ja kaugserveri seis selguvad selle tulemus-ZIP-ist.
+Selles lähteetapis productionit ega kasutajaliidest ei muudeta. Vana 66 kontrolliga
+SQL-testi ega äsjast 261 kontrolliga testi ei korrata.
+
+Pärast lähtecommit'i ülevaatust tuleb kahe otsingumigratsiooni eraldi productioni
+ainult lugemise eelkontroll. Enne hilisemat selgesõnaliselt lubatud rakendamist tuleb
+hinnata tegelikku skeemi, õigusi, tabeli mahtu, lukkusid ja indeksi loomise mõju.
+Indeks otsib pealkirja esimesest 4096, kirjelduse 32768 ja iga lubatud lisavälja
+1024 märgist; salvestatud tekste ei muudeta. Pikkade tekstide ühilduvus vajab
+kontrolli. Läbitud testid ei tõenda veel suurt koormust ega kogu productioni tööd.
+
+Otsingupaneel ja uus otsing pole veel kasutajaliidesega ühendatud. Kavandatud
+kompaktne „Täpsusta otsingut” avamine/sulgemine jääb järgmise kliendietapi osaks.
+Töötavad hobusemustandi muutmine, otsingukuulutuste Minu ala nimekiri ja detail,
+pildid, Energy ning avaldamispiirid säilivad. Vanad operatsioonipäevikud jäävad alles.
