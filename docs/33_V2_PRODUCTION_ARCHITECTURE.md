@@ -6350,3 +6350,131 @@ The /v2/products route, internal products keys, entity types and return-context
 behavior remain stable. /sell is still the mobile add destination. A label change
 does not imply general buy/rent persistence, public horse search or publication.
 Do not silently upgrade visible discovery/filter placeholders during this finish.
+
+
+<!-- SELQIRO_PUBLIC_LISTING_SEARCH_SOURCE_CANDIDATE_20260926 -->
+## 2026-09-26 — Public search source candidate, not a UI or production rollout
+
+The 11:38 read-only collector passed at clean `2fd7145...`: 152 sources exported,
+304 scanned, zero reported missing/import candidates. No remote or database query.
+Review verified 170 ZIP entries/169 manifest hashes and all exported SHA/Git blobs.
+The 25 September evening Ready/Production and live Kuulutused screenshots are
+accepted as narrow user-run deployment evidence for `2fd7145`, not a new launch test.
+
+Source audit found V2 only loads the first 30 unfiltered items. V1 builds but never
+executes its filtered query before calling an unfiltered marketplace RPC. Neither
+must be reused as a complete filtered search. Category is the global CATEGORY_TREE;
+root/subcategory and details.detailCategory, separate from owner store_categories.
+V1 car gearbox is free text; motorcycles use transmission. No normalized automatic
+filter is inferred. Legacy listings lack a canonical currency column; no EUR or
+cross-currency price-order assumption is introduced.
+
+Candidate `20260926120000_add_public_listing_search.sql` adds one public stable,
+minimal ordinary-listing search function. Public title/description words, literal
+category path, condition and city/country text apply before count/newest pagination.
+No raw details/location/coordinates/account IDs; no premium-ranked results. Existing
+account blocks apply before count. No old function/table/policy/data is changed.
+
+The local runner writes this entry only after 66 SQL assertions and rollback pass
+in a new networkless PostgreSQL 17.6 core helper with synthetic auth/restrictive ACLs
+and five baseline table declarations. It does not connect to the original local DB
+or production. This is not full Supabase/Auth/HTTP/runtime inheritance/performance
+proof. Consult the returned report for build/staging status, not this future text.
+No commit, push or production application occurs in that runner. Existing owner
+editing/wanted lists and all application UI remain unchanged.
+
+Approved UX: compact sticky search text + Filtrid; initially closed mobile tall
+panel/desktop side panel; automatic selections; X/Vaata tulemusi close without
+reverting. No network request just for opening/closing. Debounce input and reject
+stale results. Preserve unchanged-query position; changed query closes at results
+start; detail return restores query/page/card position. Only supported filters and
+real counts. Eemalda täpsustused retains query/category. No floating duplicate of
+mobile Lisa navigation. Browser focus/Escape/scroll lock/keyboard QA is still needed.
+
+Purpose remains distinct from category: Müün, Soovin osta, Annan rendile,
+Soovin rentida; property uses üürile/üürida. Only supported category/country
+combinations may be exposed. Manual taxonomy must not require AI. Initial launch
+is classifieds/contact/agreement, not platform transactions or advanced booking.
+
+Next: review isolated report, then separate source checkpoint and read-only
+production preflight/approved additive rollout before typed search UI. Price,
+proximity, normalized car fields, generic purpose writes and public horses remain
+separate scoped contracts. Do not rerun old installers, tests or applied migrations.
+See `docs/architecture/public-listing-search-v1.md` for exact boundaries.
+
+
+<!-- SELQIRO_PUBLIC_SEARCH_SOURCE_ACCEPTED_MVP_20260926 -->
+## 2026-09-26 — Public search source validation accepted; simple launch search approved
+
+Accepted local evidence: `public-listing-search-local-20260926-161832-ol_3bwuc.zip`,
+SHA-256 `2b52361f6376f45fcfa0d7563bef76cbcf426edb23daf7de078d98b25ef8cbb2`.
+The user's run ended 26 September 16:19:20 (+03): real PostgreSQL 17.6 in a NEW
+networkless helper passed all 66 assertions; catalog/ACL/empty-five-table rollback
+and removal of only that verified helper passed. The local build passed. Eight
+files remained staged, not committed, at `2fd7145f03cb333fec315b520b3b9cba97e54540`.
+The archive review checked all 64 entries/63 manifest hashes, the exact runner,
+eight candidate bytes and 248 original source hashes. This is historical evidence,
+not a new SQL/build run. The synthetic auth/restrictive-ACL fixture is NOT the full
+Supabase environment, production roles/HTTP, a performance benchmark or live data.
+The original local database and production were not contacted by that test runner.
+
+This source finisher preserves the migration, SQL suite and fixture byte-for-byte;
+it only adds acceptance/decision text to the five existing documentation paths.
+It checks the eight-file Git scope, runs a fresh build, and requires COMMIT PUSH
+before committing/pushing. Read the finish result for actual commit/push/build and
+remote status; this document cannot contain its own future commit ID. There is no
+SQL, Docker, Supabase, installation, application-source or operation-journal command.
+Configured Git hooks/CI can run. Production migration/deployment are not certified.
+
+User-approved launch direction: one useful keyword search with a few general
+filters; retain separate named category-specific free-text inputs for now. Do not
+convert every category to select menus or build every attribute filter before
+launch. Input shape and search UI are different decisions. Future enum/numeric
+fields can be added selectively, preserving old values and original text.
+
+CURRENT v1 searches title/description ONLY, with separate taxonomy, condition and
+public city/country filters. It does not search brand/model/gearbox or other detail
+values. The existing negative gearbox test is intentionally retained. The approved
+FOLLOW-UP is category-aware inclusion of explicitly reviewed PUBLIC scalar detail
+values in keyword search. Never index whole details, raw location, coordinates,
+internal notes or AI payloads; even match/count differences must not expose them.
+Do not advertise detail-value search until its implementation and tests pass.
+Keywords are not numeric ranges and do not promise typo/synonym/prefix recognition.
+
+Keep compact accessible search + an open/close Filtrid panel, including while
+scrolling on mobile. Changes apply automatically with bounded input debounce;
+X/Vaata tulemusi only close. Open/close alone does not query or discard criteria.
+Preserve unchanged-search scroll; changed search returns to results start, and
+detail Back restores query/page/card context. Eemalda täpsustused retains keyword
+and category. Show real server-filtered counts/results, never only a filtered first
+page. Actual keyboard/focus/mobile-scroll and stale-response QA remain UI work.
+Purpose stays separate from category: sale, purchase request, rental offer/request,
+with property-specific wording only when supported. Launch connects people for
+contact/agreement, without portal-mediated transactions or complex bookings.
+Horse rules, draft editing, budget/location semantics, images and Energy stay intact.
+
+NEXT after successful finish review: audit the already collected category-field,
+persistence and public-display code and prepare one bounded public-detail keyword
+extension with privacy/regression tests and a justified indexing/query-cost plan.
+Do not repeat the 66-test installer or apply the current migration automatically.
+Separate production preflight/approval and verified contracts still precede UI use.
+
+### Query-cost boundary
+
+The present source computes the public title/description vector and materializes
+matches for an exact count. Page/query limits are not proof of affordable work at
+scale. Review the next allowlisted document expression and index together; do not
+reuse the old overbroad vector. Measure plans and representative volume separately
+before enabling public traffic. Avoid adding external search infrastructure or
+complex ranking merely to deliver the initial keyword experience. No millions-of-
+concurrent-searches claim follows from the isolated correctness suite.
+
+### Evidence scope is not application behavior
+
+The helper's exact five baseline declarations and synthetic auth make assertions
+repeatable but do not establish production role inheritance or public HTTP access.
+The new RPC preserves current active/expiry/identity/block semantics, not a universal
+public-visibility audit. Currency-aware numeric comparisons, proximity, generic
+purpose persistence, public horse search and category-specific numeric filters
+remain separate unsupported capabilities. The existing working owner editor is
+NOT returned to read-only by this search source checkpoint.

@@ -8654,3 +8654,103 @@ Veebiaadressid, salvestamine, identiteedid, omaniku mustandimuutmine, pildid,
 avaldamine ja Energy ei muutu. Nimemuutus ei lisa ostu-/renditehinguid ega
 hobuste avalikku otsingut. Arenduse abitekstide ja näidisplokkide eemaldamine
 kasutajavaatelt on enne käivitamist eraldi töö, mitte selle lõpetamise lisaparandus.
+
+
+<!-- SELQIRO_PUBLIC_LISTING_SEARCH_SOURCE_CANDIDATE_20260926 -->
+## 26.09.2026 — Kuulutuste serveriotsingu esimene lähtekandidaat
+
+Parandatud koguja lõpetas puhtal `2fd7145...` seisul: 152 lähtefaili, 304 skannitud
+faili, teatatud impordilünki ega puuduvaid kandidaate ei ole. ZIP-i 170 faili ja
+169 manifestikirjet ning kõik eksporditud lähtefailide räsid kontrolliti üle.
+Koguja ei teinud uut kaugserveri, DB ega brauseri kontrolli. 25.09 õhtune Verceli
+Ready/Production ja live „Kuulutused” kontroll jääb kasutaja varasemaks tõendiks.
+
+Leid: praegune V2 laadib ainult esimese 30 kuulutuse lehe. V1 filtritega koostatud
+päringut ei käivitata, tegelikult kutsutakse filtriteta funktsiooni. Seda käitumist
+ei kanta V2 otsingusse. Uus lugemisfunktsioon filtreerib enne lehekülje võtmist.
+
+Esimene leping toetab avaliku pealkirja/kirjelduse sõnu, globaalset rubriigiteed,
+seisukorda ja linna/riigi teksti. Tagastatakse tegelik vastearv, kindel uuemate-esmalt
+järjestus ja piiratud leheküljed. Mustandeid, suvalisi details-välju, täpset asukohta
+ning konto ID-sid ei väljastata. Vanu funktsioone, tabeliõigusi ega andmeid ei muudeta.
+
+Auto käigukast on vanas vormis vaba tekst; „Automaat” otsing vajab ühtset väärtuste
+lepingut. Tavakuulutuse andmebaasis puudub selge valuutaveerg: hinnafiltrit ega eri
+valuutade hinnajärjestust ei lisata oletuse põhjal. Algne hinnatekst säilib.
+
+See kirje lisatakse ainult pärast uue isoleeritud helperi 66 SQL-kontrolli ja
+rollback'i läbimist. Fikstuuris on viis baseline tabelit ning sünteetiline auth ja
+piiravad katseõigused. See pole terve Supabase'i ega productioni test. Algset
+kohalikku DB-d ja productionit ei ühendata. Build'i ja stagingu tegelik seis on
+jooksu raportis; commit/push ning productioni rakendamine jäävad eraldi.
+
+Telefoni otsingu siht: kompaktne püsiv otsinguriba ja Filtrid nupp, vaikimisi suletud
+paneel; valikud rakenduvad ise; rist ja Vaata tulemusi sulgevad ega tühista valikuid.
+Muutmata otsinguga jääb kerimiskoht alles. Muudetud otsinguga paneeli sulgedes
+liigutakse tulemuste algusse. Detailist tagasi tulles taastuvad otsing ja asukoht
+nimekirjas. Suurt otsingukasti ega konkureerivat hõljuvat nuppu ei lisata.
+
+Rubriik, kuulutuse eesmärk ja profiili oma rubriigid on erinevad. Müün / Soovin osta /
+Annan rendile / Soovin rentida; kinnisvaras üürile/üürida. Kasutajale avatakse ainult
+päriselt töötavad riigi/kategooria valikud. Alguses kuuluta/leia/võta ühendust/lepi
+kokku, mitte Selqiro vahendatud tehingud ega keerukas broneerimine. Käsitsi rubriigi
+valimiseks pole AI-d vaja. Otsing ise ei kasuta Energy't.
+
+Järgmine on tulemuse ülevaatus ja eraldi lähtekoodi checkpoint; seejärel serveri
+productioni eelkontroll/rakendamine ning alles siis päris otsingupaneeli ühendamine.
+Olemasolevad hobuse muutmine, wanted-vaated, pildid ja kasutajaliides jäävad puutumata.
+
+
+<!-- SELQIRO_PUBLIC_SEARCH_SOURCE_ACCEPTED_MVP_20260926 -->
+## 26.09.2026 — Otsingu testitud lähtealus ja lihtsa otsingu kinnitatud suund
+
+26. septembri 16:19 lõppenud kohalik katse läbis kõik 66 SQL-kontrolli uues
+võrguta PostgreSQL 17.6 abikonteineris. Tagasipööramine taastas kontrollitud
+kataloogi ja õigused; viis katsetabelit jäid tühjaks. Eemaldati ainult selle
+jooksu abikonteiner. Build läbis. Algset kohalikku Selqiro baasi ja productionit
+ei ühendatud. Sünteetilise autentimisega test pole kogu Supabase'i, päris
+kasutajate, HTTP ega suure koormuse kontroll.
+
+Tõend: `public-listing-search-local-20260926-161832-ol_3bwuc.zip`;
+SHA-256 `2b52361f6376f45fcfa0d7563bef76cbcf426edb23daf7de078d98b25ef8cbb2`.
+Jooks jättis kaheksa faili stage'ituks commit'i `2fd7145` peale. Lõpetamisskript
+säilitab testitud SQL-i ja katsefiksuuri muutmata, täiendab viit dokumenti ning
+teeb pärast värsket edukat build'i ja kinnitust COMMIT PUSH eraldi lähtekoodi
+commit'i. Tegeliku lõpetamise, push'i ja Git-seisu tõend on uus tulemus-ZIP.
+Andmebaasi ei rakendata, kasutajaliidest ei muudeta; Git hook/CI võib käivituda.
+
+Kasutaja kinnitas lihtsa käivitamissuuna: üks märksõnakast ja mõned üldfiltrid.
+Praegused kategooriate eraldi vabatekstiväljad jäävad alles. Kõigi kategooriate
+valikmenüüsid ja täppisfiltreid enne käivitamist ei ehitata. Tulevikus saab
+vajalikke valikuid või arvulisi välju lisada valdkonna kaupa, vana infot kaotamata.
+
+Praegune testitud otsing otsib AINULT pealkirja ja kirjelduse sõnu. Rubriik,
+seisukord ja avaliku linna/riigi tekst on eraldi filtrid. Mark, mudel ja käigukast
+pole eraldi lisaväljadest veel märksõnaotsingusse ühendatud. Järgmine piiritletud
+arendus peab kaasama ainult läbivaadatud avalikud ja rubriigiga seotud väärtused.
+Kogu details-andmestikku, privaatset aadressi, koordinaate või sisemärkmeid ei
+muudeta otsitavaks. Ka vastete arv ei tohi peidetud infot paljastada.
+
+Juhise „Kirjuta nimetus, mark, mudel või oluline omadus” saab avaldada alles siis,
+kui vastavad väljad on päriselt otsitavad. Märksõna „110 kW” ei tähenda arvulist
+vahemikku ja märksõnaotsing ei luba automaatselt kirjavigade ega sünonüümide mõistmist.
+Vaste puudumisel soovitame vähem märksõnu või mõne filtri eemaldamist, mitte ei
+muuda kasutaja tingimusi märkamatult.
+
+Telefonis jääb kompaktne otsingu/filtri ligipääs kerimisel kasutatavaks. Paneel
+avaneb ja sulgub; valikud mõjuvad automaatselt, rist ja „Vaata tulemusi” ainult
+sulgevad. Muutmata otsing säilitab kerimiskoha, muudetud otsing algab tulemustest
+ning detailist tagasi tulles taastatakse otsing ja koht. „Eemalda täpsustused”
+säilitab märksõna ja rubriigi. Pikka püsivat filtrivormi ei ole vaja.
+
+Kuulutuse eesmärk jääb rubriigist eraldi: müük, ostusoov, rendile andmine või
+rendisoov, kinnisvaras sobiv üürisõnastus. Kuvame ainult päriselt toetatud valikuid.
+Algne portaal ühendab kuulutaja ja otsija, mitte ei vahenda tehinguid ega keerukaid
+broneeringuid. See ei muuda eraldi vabatahtlike Energy võimaluste suunda.
+Hobuste reeglid, kinnitused ning hinna/eelarve ja asukoha/otsingupiirkonna eristus
+säilivad; olemasolev omaniku mustandi muutmine töötab edasi.
+
+Järgmine konkreetne töö pärast lõpetamise ülevaatust: avalike lisaväljade
+märksõnaotsingu piiratud täiendus koos privaatsuskatsete ning indeksi/päringukulu
+plaaniga. Varasemat installerit ega 66 testi ei korrata. Productioni eelkontroll,
+rakendamine ja uue otsingupaneeli ühendamine jäävad eraldi kontrollitud sammudeks.

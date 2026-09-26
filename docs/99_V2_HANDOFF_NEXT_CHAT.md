@@ -1,3 +1,144 @@
+<!-- SELQIRO_PUBLIC_SEARCH_SOURCE_ACCEPTED_MVP_20260926 -->
+# Current handoff — 2026-09-26 public search source finish and approved simple MVP
+
+## Current evidence, not inferred completion
+
+Base `2fd7145f03cb333fec315b520b3b9cba97e54540`, parent `869be7b83d22d2376ca8038df326fbf5be2944ac`.
+Reviewed local result `public-listing-search-local-20260926-161832-ol_3bwuc.zip`,
+SHA-256 `2b52361f6376f45fcfa0d7563bef76cbcf426edb23daf7de078d98b25ef8cbb2`.
+Actual user run finished 26 Sept 16:19:20 +03: real new-helper PG17.6 SQL 66 PASS,
+rollback PASS (catalog/ACL/five empty tables), helper removal PASS, build PASS.
+Eight source/test/document paths staged, none committed; no original local DB,
+production, fresh remote lookup or UI change. This evidence supersedes the older
+preparation-only status, not the limited synthetic auth/ACL fixture boundary.
+
+This entry accompanies `selqiro-finish-public-listing-search-source.py`.
+Commit message: `Add public listing search read foundation`.
+The finisher changes only the five documentation files within those eight paths,
+preserves all three SQL/test/fixture files, performs a fresh build and asks COMMIT
+PUSH. It never invokes Docker, Supabase, SQL, installation or journal operations.
+Read `public-listing-search-finish-*.zip` for the actual child commit, source
+manifest, build/push/remote/clean-tree status. Merely seeing this entry is not
+proof of commit, push, production installation or deployment.
+
+## ONE next action
+
+Before a successful source finish: run ONLY that finisher, with dev stopped,
+return its result ZIP; do not manually restage or rerun the installer.
+After successful finish review: inspect the already collected category-field,
+write and public-display code and implement ONE bounded PUBLIC detail-value
+keyword extension with privacy/regression tests and a justified index/cost plan.
+Do not switch straight to production APPLY or a feature-rich filter UI. This
+26 September decision supersedes earlier entries that went directly to rollout.
+Separate fresh production preflight, explicit approval and verified contracts
+remain required before the eventual search client is exposed.
+
+## Approved product target versus implemented source
+
+Keep named category-specific fields as free text for now. One keyword box and
+few general filters, not every category converted to select menus. Later add
+useful structured enums/numbers category by category, preserving original values.
+The current `search_public_listings_v1` ONLY searches title/description. It has
+literal taxonomy-path/condition/public city-country filters, real count and
+newest-first bounded pages; it does NOT yet search brand/model/gearbox values.
+The current negative details/gearbox assertion remains unchanged. Future keyword
+coverage is only for reviewed public, category-applicable scalar values; never
+whole details, exact location, coordinates, internal notes or AI raw payloads.
+No synonym/typo/prefix or numeric-range behavior is promised by keyword search.
+No price/FX/proximity/purpose/public-horse capability is inferred from this source.
+
+Mobile sticky compact search + Filtrid; closed-by-default tall/side panel;
+changes auto-apply with debounce, X/Vaata tulemusi only close. Do not query on
+open/close alone. Preserve unchanged-search position; changed query aligns to
+results start; detail return restores query, page and card/scroll context.
+Eemalda täpsustused preserves keyword/category. Real matches/counts only, not a
+filter over the first loaded page. Browser focus/keyboard/scroll QA remains undone.
+Purpose is separate from taxonomy. Launch is publish/find/contact/agree without
+portal transaction handling or complex reservations. AI is optional. Search scale
+matters: the current computed vector/exact materialized count is not proof of
+large-volume performance; review indexing and measure before public enablement.
+
+## Preserved application and operational boundaries
+
+Kuulutused naming / mobile Lisa / existing URLs stay. Owner horse draft editing
+and wanted owner list/detail remain working; they are NOT globally read-only.
+Horse rules, private snapshots, CAS, seller price vs wanted budget and location
+vs search area stay unchanged. No new create safeguards, horse publication,
+image management, lifecycle, store-category assignment or Energy change here.
+Previous 20 source migrations stay exact; candidate 20260926120000 is only a
+source file until a separately verified production application. The runner does
+not freshly inspect production status or install a persistent local schema.
+Do not rerun completed horse-retirement/wanted/naming installers or APPLY tools,
+alter production-applied migrations or delete old COMPLETE journals.
+
+## Verified environment/workflow
+
+Mac Python 3.9+ compatible stdlib finisher, Git and existing npm build only.
+Inherited GIT_* overrides are removed only from child environments; parent shell
+and credential configuration are not rewritten; inherited names/values are not
+exported. Ordinary commit/push hooks and configured CI may run after consent.
+No package installation. Stop dev before build; no process is killed automatically.
+Reports/ZIPs stay outside the repository under Downloads/selqiro-recovery.
+The observed PG17.6 helper and prior CLI2.117.0 facts are historical; neither is
+required or invoked in this finisher. Tests and setup/crash diagnostics completed
+earlier must not be repeated for this documentation/source completion.
+
+---
+
+
+
+<!-- SELQIRO_PUBLIC_LISTING_SEARCH_SOURCE_CANDIDATE_20260926 -->
+## 2026-09-26 — Public search source candidate, not a UI or production rollout
+
+The 11:38 read-only collector passed at clean `2fd7145...`: 152 sources exported,
+304 scanned, zero reported missing/import candidates. No remote or database query.
+Review verified 170 ZIP entries/169 manifest hashes and all exported SHA/Git blobs.
+The 25 September evening Ready/Production and live Kuulutused screenshots are
+accepted as narrow user-run deployment evidence for `2fd7145`, not a new launch test.
+
+Source audit found V2 only loads the first 30 unfiltered items. V1 builds but never
+executes its filtered query before calling an unfiltered marketplace RPC. Neither
+must be reused as a complete filtered search. Category is the global CATEGORY_TREE;
+root/subcategory and details.detailCategory, separate from owner store_categories.
+V1 car gearbox is free text; motorcycles use transmission. No normalized automatic
+filter is inferred. Legacy listings lack a canonical currency column; no EUR or
+cross-currency price-order assumption is introduced.
+
+Candidate `20260926120000_add_public_listing_search.sql` adds one public stable,
+minimal ordinary-listing search function. Public title/description words, literal
+category path, condition and city/country text apply before count/newest pagination.
+No raw details/location/coordinates/account IDs; no premium-ranked results. Existing
+account blocks apply before count. No old function/table/policy/data is changed.
+
+The local runner writes this entry only after 66 SQL assertions and rollback pass
+in a new networkless PostgreSQL 17.6 core helper with synthetic auth/restrictive ACLs
+and five baseline table declarations. It does not connect to the original local DB
+or production. This is not full Supabase/Auth/HTTP/runtime inheritance/performance
+proof. Consult the returned report for build/staging status, not this future text.
+No commit, push or production application occurs in that runner. Existing owner
+editing/wanted lists and all application UI remain unchanged.
+
+Approved UX: compact sticky search text + Filtrid; initially closed mobile tall
+panel/desktop side panel; automatic selections; X/Vaata tulemusi close without
+reverting. No network request just for opening/closing. Debounce input and reject
+stale results. Preserve unchanged-query position; changed query closes at results
+start; detail return restores query/page/card position. Only supported filters and
+real counts. Eemalda täpsustused retains query/category. No floating duplicate of
+mobile Lisa navigation. Browser focus/Escape/scroll lock/keyboard QA is still needed.
+
+Purpose remains distinct from category: Müün, Soovin osta, Annan rendile,
+Soovin rentida; property uses üürile/üürida. Only supported category/country
+combinations may be exposed. Manual taxonomy must not require AI. Initial launch
+is classifieds/contact/agreement, not platform transactions or advanced booking.
+
+Next: review isolated report, then separate source checkpoint and read-only
+production preflight/approved additive rollout before typed search UI. Price,
+proximity, normalized car fields, generic purpose writes and public horses remain
+separate scoped contracts. Do not rerun old installers, tests or applied migrations.
+See `docs/architecture/public-listing-search-v1.md` for exact boundaries.
+
+---
+
 <!-- SELQIRO_KUULUTUSED_WORDING_ACCEPTED_20260925 -->
 # Current handoff — 2026-09-25 Kuulutused browser accepted
 
