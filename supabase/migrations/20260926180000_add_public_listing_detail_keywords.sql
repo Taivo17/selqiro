@@ -1,4 +1,25 @@
 begin;
+
+-- Deployment-only limits for this not-yet-applied migration.
+-- SET LOCAL takes effect in the SAME transaction as CREATE INDEX, then resets.
+-- These are server cancellation thresholds, not a guaranteed wall-clock outage cap.
+set local lock_timeout = '2s';
+set local statement_timeout = '15s';
+set local idle_in_transaction_session_timeout = '10s';
+set local transaction_timeout = '30s';
+do $rollout_limits$
+begin
+  if current_setting('server_version_num')::integer < 170000
+    or current_setting('lock_timeout') <> '2s'
+    or current_setting('statement_timeout') <> '15s'
+    or current_setting('idle_in_transaction_session_timeout') <> '10s'
+    or current_setting('transaction_timeout') <> '30s' then
+    raise exception 'listing_search_rollout_limits_required' using errcode = '55000';
+  end if;
+  raise notice 'PUBLIC_LISTING_ROLLOUT_LIMITS=2s/15s/10s/30s';
+end;
+$rollout_limits$;
+
 -- Separate extension after the committed title/description foundation.
 -- The earlier migration is preserved byte-for-byte and is required first.
 do $precondition$

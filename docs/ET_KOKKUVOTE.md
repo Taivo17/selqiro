@@ -8837,3 +8837,64 @@ Otsingupaneel ja uus otsing pole veel kasutajaliidesega ühendatud. Kavandatud
 kompaktne „Täpsusta otsingut” avamine/sulgemine jääb järgmise kliendietapi osaks.
 Töötavad hobusemustandi muutmine, otsingukuulutuste Minu ala nimekiri ja detail,
 pildid, Energy ning avaldamispiirid säilivad. Vanad operatsioonipäevikud jäävad alles.
+
+
+<!-- SELQIRO_PUBLIC_SEARCH_ROLLOUT_LIMITS_LOCAL_20260926 -->
+## 2026-09-26 — otsingu rollikontroll ja indeksi paigaldamise ajalimiidid
+
+Kell 21:18 tehtud ainult lugemise kontroll on üle vaadatud. Git oli puhas commit'il
+`f3da6fa`; productionis oli 20 migratsiooni ja kaks otsingumigratsiooni olid endiselt
+ootel. Uusi funktsioone ega indeksit veel ei olnud. Rollimärge puudutas ainult
+sisseehitatud `pg_write_all_data` rolli: sellel ei olnud sisselogimisvõimalust, liikmeid,
+mitte-superkasutaja rollile lülitumise võimalust ega rolli omanduses funktsioone.
+Portaali kasutajarollide õigusi pole selle märke tõttu põhjust laiendada. See hinnang
+kehtib loetud metaandmete ajal, mitte tulevaste õigusemuudatuste kohta.
+
+Ainult veel rakendamata indeksimigratsiooni `20260926180000` algusesse lisatakse
+sama andmebaasitehingu ajalimiidid: lukuootus 2 s, SQL-lause 15 s, tegevuseta avatud
+tehing 10 s ja tehing kokku 30 s. Otsingu sisu, lubatud väljad, indeks ja õigused ei
+muutu. Esimene otsingumigratsioon ning kõik varem rakendatud migratsioonid säilivad.
+Ajalimiidid on katkestamise künnised, mitte absoluutne katkestuse kestuse garantii.
+Need ei muuda portaali tavakasutajate ega kogu andmebaasi vaikeseadeid.
+
+Kohalik käivitaja testib uues võrguta abikonteineris varasemaid 66+261 kontrolli,
+kuut sama tehingu ajalimiidikontrolli ja eraldi päris ühendustega katkestusjuhtumeid.
+Alles testi ja abikonteineri eemaldamise edu järel kirjutab seitse täpset faili,
+käivitab build'i ning stage'ib need. Selle dokumendi olemasolu ei ole testi edutõend;
+vaata käivitaja lõpptulemust. Algset kohalikku DB-d ega productionit ei ühendata.
+Commit/push, juurutus, kasutajaliides, kuulutuste andmed ja Energy jäävad muutmata.
+
+Järgmine tegevus: saata selle käivituse uus ZIP ülevaatuseks. Pärast rohelist tulemust
+lõpetada eraldi lähteetapp; seejärel kontrollitud productioni rakendamine ja alles
+pärast seda otsingu kasutajaliidese ühendamine. Vanu skripte ei korrata, kuulutusi ei
+kustutata, õigusi ei laiendata ning operatsioonipäevikuid ei muudeta.
+
+
+<!-- SELQIRO_PUBLIC_SEARCH_ROLLOUT_LIMITS_SOURCE_ACCEPTED_20260926 -->
+## 2026-09-26 — Otsingumigratsiooni ajalimiiditest on üle vaadatud
+
+Kasutaja 22:05–22:06 jooks: `public-search-rollout-limits-local-20260926-220522-6swmvrc3.zip`.
+SHA-256: `bfd050371a81f3e73fd10f7923a6d1d62c3fd7f8dcb635762b8e480fc6a5000f`.
+Läbisid 333 kontrolli (66 + 261 + 6), päris serveri neli aegumiskatset,
+SET LOCAL väärtuste taastumine pärast commit'i/rollback'i, abibaasi
+kataloogi/õiguste ja viie tühja tabeli kontroll ning Selqiro build.
+Indeksi lukuootus katkes oodatud veaga; lukuhoidjat ei lõpetatud.
+Katkestatud testitehingute muudatused ja lukud ei jäänud alles.
+Eemaldati ainult selle jooksu uus võrguta abikonteiner.
+
+Kontrolliti 390 arhiivifaili / 389 manifestiräsi, 256 lähtefaili ning täpset
+seitsme faili patch'i. Otsinguloogika ja õigused ei muutunud: ainult veel
+rakendamata indeksimigratsiooni algusesse lisati serveri ajalimiidid ja
+nende kontroll. Algset kohalikku andmebaasi ega productionit ei ühendatud.
+Tegu pole täieliku Supabase'i, HTTP ega koormuskatsega.
+
+Lõpetamise skript säilitab testitud SQL-i ja testifaili, täiendab viit
+dokumenti, teeb build'i ning küsib seitsme faili jaoks COMMIT PUSH kinnituse.
+Uue commit'i, puhta tööpuu ja GitHubi sünkroonsuse tõend tuleb jooksu tulemusest.
+See ei rakenda productionisse ühtegi migratsiooni ega ühenda veel otsingu UI-d.
+Varasem productioni eelkontroll ei kinnita muudetud faili uut räsi.
+Järgmine töö pärast lähteetapi ülevaatust on uue commit'i ja ajalimiitidega
+migratsiooni sihitud ainult lugemise productioni eelkontroll.
+Kasutajale jääb plaan lihtsaks: märksõnad ja üldfiltrid; kategooriate lisaväljad
+jäävad esialgu vabatekstiks. Telefoni filtrid tulevad avatava/suletava paneelina.
+Vanu teste/käivitajaid ei korrata, kuulutusi ega kontosid ei kustutata.

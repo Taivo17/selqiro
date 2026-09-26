@@ -4918,3 +4918,123 @@ to public results. The existing owner horse editor, wanted list/detail, publicat
 boundaries, images, Energy and routes stay unchanged. Preserve all completed
 operation journals. Do not rerun completed installers, SQL suites, APPLY or finish
 scripts. If a runner stops, review its ZIP before retrying; do not reset/restore.
+
+
+<!-- SELQIRO_PUBLIC_SEARCH_ROLLOUT_LIMITS_LOCAL_20260926 -->
+## Public search: writer review and transaction-local rollout limits — 26 September 2026
+
+Latest source base: `f3da6fa145007c4514fd652274c55cb44c964be2`.
+The user's 21:17–21:18 production metadata-only role check was reviewed:
+`public-search-writer-roles-20260926-211754-x2r7_q6b.zip`,
+SHA-256 `211adb7612c08c1697b2e9c6463ad530cc4bf6cb9b18f0c012d6810604213d96`.
+All 19 entries / 18 manifest hashes, the exact executed runner, nested preflight
+and 255 source hashes matched. Remote main equalled f3da6fa and worktree was clean
+in that run. This documentation does not claim a newer live observation.
+
+At that observation both search migrations/functions/index were still absent:
+22 source migration versions versus 20 production versions. The sole uncovered
+planned-helper writer was built-in `pg_write_all_data`: NOLOGIN, no direct members,
+no non-superuser MEMBER/SET access, no owned functions and not the table owner.
+Accept this as a documented non-application role exception, not a reproduced
+application write failure. Do not broaden grants to PUBLIC or change role membership.
+Re-evaluate if memberships/owners/grants change; catalog privileges do not prove RLS
+row access. The other observed writer roles were covered by the planned grants.
+Only role-specific statement defaults were returned: anon 3s, authenticated 8s.
+Those are NOT proof of a future db-push session's settings.
+
+The unapplied `20260926180000_add_public_listing_detail_keywords.sql` is amended
+ONLY immediately after BEGIN with transaction-local lock 2s, statement 15s,
+idle-in-transaction 10s and transaction 30s limits, plus a same-transaction assertion
+and a notice. Its function bodies, frozen category registry, grants, index expression,
+visibility, pagination and comments after that preamble remain byte-for-byte unchanged.
+`20260926120000_add_public_listing_search.sql` and all 20 previously applied
+migrations are unchanged. No new migration version is introduced. Old second-migration
+SHA-256 was `e4e780546a665e7cefd30cd8434d235effc9aeae4fd6cfd8cd22903d92906aa0`;
+new SHA-256 is `b080a47eb2573a0f292316c10c00cd8dc10c0a5adff0e4c6b2bbc04b855cba8d`.
+The existing 66-assertion and 261-assertion SQL files and fixtures remain unchanged.
+A new in-transaction assertion fixture records the exact four settings.
+
+The local runner writes these seven repository paths only AFTER its new isolated
+helper test/rollback/cleanup succeeds; then it builds and stages. A green final result
+must include fresh 66+261 semantic regression assertions, 6 in-transaction assertions,
+real two-connection CREATE INDEX lock-timeout rollback, statement-timeout rollback,
+idle/transaction timeout lock release, and same-session reset after COMMIT/ROLLBACK.
+The idle and overall-transaction tests keep synthetic marker-table changes and a
+SHARE lock in an isolated transaction; they are fault-injection tests, NOT an observed
+production incident or index build benchmark. The exact candidate is separately
+committed inside the disposable helper to verify its final settings reset. The helper
+is removed afterward. No original local DB connection, production command, credential
+copy, role changes, package installation, UI change, commit or push is in this runner.
+Use its result for actual local test/build/staging outcome; preparation alone is not PASS.
+
+Configured cancellation thresholds are not a hard wall-clock outage guarantee:
+normal CREATE INDEX can block writers until its transaction ends, and cancellation/
+cleanup depends on PostgreSQL/operating-system progress. Only this migration transaction
+receives these limits, not application sessions or global defaults. No retry loop,
+concurrent-index substitution, session termination in production or history repair.
+A failure must remain a stop with evidence, not an automatic second attempt.
+
+Current production/UI status is unchanged. Search is not yet connected; the existing
+owner editor and wanted summaries continue unchanged. Two unmatched category paths
+in the earlier aggregate keep the title/description-only fallback; do not delete or
+silently recategorize those listings. No public horse publication is added.
+
+Next: review the local limits result, then finish this source-only checkpoint.
+Only after the revised source is committed may a separate scoped rollout verify fresh
+history/schema, accept only the two pending versions in order, apply through the normal
+pinned CLI and verify definitions/grants/index/history afterward. Previous preflight is
+historical evidence, not approval for modified bytes. Do NOT rerun completed old
+collectors, role checks, installers or finishers. Keep old journals untouched.
+Technical references: PostgreSQL 17 SET, client timeout settings, CREATE INDEX,
+and error codes. Management-query limits do not propagate to db-push connections.
+
+
+<!-- SELQIRO_PUBLIC_SEARCH_ROLLOUT_LIMITS_SOURCE_ACCEPTED_20260926 -->
+## 2026-09-26 — Accepted local search-migration timeout validation
+
+Evidence: `public-search-rollout-limits-local-20260926-220522-6swmvrc3.zip`,
+SHA-256 `bfd050371a81f3e73fd10f7923a6d1d62c3fd7f8dcb635762b8e480fc6a5000f`.
+The user's 22:05–22:06 (+03:00) run passed 66 foundation assertions,
+261 detail-keyword assertions and 6 same-transaction setting assertions.
+Real PG17.6 helper sessions also returned `55P03` for the exact candidate
+index lock wait, `57014` for the synthetic slow statement, `25P03` for idle
+transaction timeout and `25P04` for transaction timeout with continuing activity.
+The index blocker was preserved; ended test transactions released their locks.
+Commit/rollback restored the four SET LOCAL values within the same connection.
+Catalog/ACL snapshots and all five empty fixture tables matched after rollback.
+Only this run's verified offline helper was removed. The real Selqiro build passed.
+
+The reviewed archive has 390 files / 389 manifest hashes. All 256 exported
+source hashes, all seven planned file bytes, and the staged patch reconstructed
+from the 255-source base were verified. The 249 unrelated exported files stayed
+byte-identical. This is selected-source evidence, not a complete repository.
+
+Only the BEGIN-adjacent 21-line preamble of the still-unapplied
+`20260926180000_add_public_listing_detail_keywords.sql` changed: lock 2s,
+statement 15s, idle-in-transaction 10s, transaction 30s, plus effective-value checks.
+Search function bodies, helper grants, allowlist, GIN definition and the complete
+`20260926120000` migration are preserved. No new migration version was added.
+These are server cancellation thresholds, not an exact outage-duration guarantee.
+The helper uses five synthetic tables/restrictive ACLs, not full Supabase,
+production roles/HTTP, workload or actual production index-build performance.
+The original local application DB was not contacted or persistently migrated.
+
+Source-only finishing preserves both SQL files and all tests. It adds acceptance
+notes to five documents, requires a fresh passing build, and asks `COMMIT PUSH`
+before committing/pushing the exact seven-file change. Consult the finish result
+for the actual new commit, remote equality and clean-worktree evidence; none is
+asserted by the text of this document before the runner completes.
+
+Production last-read evidence remains the 20:43 preflight and 21:18 writer-role
+observation: 22 source versions / 20 remote, both search migrations pending.
+The unused built-in `pg_write_all_data` exception needs no broadened grants under
+that observed role inventory. Two unknown category paths retain title/description
+search only. No deletion, account change or raw-details fallback is required.
+The old preflight is NOT approval of the revised migration hash. After review of
+the finish ZIP, perform an updated read-only production preflight tied to the new
+commit and exact `b080a47eb2573a0f292316c10c00cd8dc10c0a5adff0e4c6b2bbc04b855cba8d`
+migration SHA. Any later apply is separately approved, normal migration history,
+with live before/after checks and no automatic retry/history repair on ambiguity.
+No production APPLY or search UI connection occurs in this source checkpoint.
+Keep the existing horse owner editor/list, publication, images and Energy intact.
+Do not rerun the completed local runner or old preflights/installers/finishers.

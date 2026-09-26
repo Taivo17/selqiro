@@ -1,3 +1,135 @@
+<!-- SELQIRO_PUBLIC_SEARCH_ROLLOUT_LIMITS_SOURCE_ACCEPTED_20260926 -->
+# Praegune handoff — 2026-09-26, otsingu ajalimiitide lähteetapp
+
+See ülemine kirje asendab allpool olevad ajaloolised järgmise töö juhised.
+
+## Viimane kinnitatud seis ja selle piirid
+
+- Baas: `f3da6fa145007c4514fd652274c55cb44c964be2`.
+- Kasutaja 22:05–22:06 (+03:00) jooksu tulemus:
+  `public-search-rollout-limits-local-20260926-220522-6swmvrc3.zip`.
+- SHA-256: `bfd050371a81f3e73fd10f7923a6d1d62c3fd7f8dcb635762b8e480fc6a5000f`.
+- 333 SQL-kontrolli, neli serveri aegumiskatset, rollback/SET LOCAL tagastus,
+  selle jooksu abikonteineri eemaldamine ja päris Selqiro build: PASS.
+- Selle local-jooksu lõpus seitse faili stage'itud, mitte commit'itud;
+  remote'i ei päritud. Käesolev lõpetaja ei nimeta neid juba push'ituks.
+- Lõpetaja edukuse korral loe selle uuest result.txt-st tegelik NEW_COMMIT,
+  BUILD, COMMIT, PUSH, WORKTREE ja REMOTE. Dokument ei saa teada oma commit'i räsi.
+
+## Muudatuse ulatus
+
+Üks ootel indeksimigratsioon, üks assertion-test ja viis dokumenti — seitse faili.
+`20260926180000_add_public_listing_detail_keywords.sql` muutus ainult alguses:
+2s lock / 15s statement / 10s idle / 30s transaction; seadistused kontrollitakse
+samas tehingus. Testitud faili SHA-256:
+`b080a47eb2573a0f292316c10c00cd8dc10c0a5adff0e4c6b2bbc04b855cba8d`.
+Otsingukehad, indeks, õigused, lubatud väljad ja esimene otsingumigratsioon säilivad.
+Kõik 22 migratsiooniversiooni säilivad; 20 varasemat rakendatud faili ei muudeta.
+Omaniku hobusemuutmisvorm ja wanted-nimekiri töötavad varasema kinnituse alusel;
+selles etapis brauserit ei korratud. Avaldamist, pilte ega Energy't ei muudeta.
+
+## Üks järgmine tegevus pärast eduka lõpetamise ZIP-i ülevaatust
+
+Valmista ette uuendatud ainult lugemise productioni eelkontroll, mis on seotud
+uue commit'i ja mõlema ootel migratsiooni täpsete baitidega. Kontrolli värsket
+ajalugu, skeemi/õigusi, CLI lepingut ja kuivproovi; ära veel rakenda ega ühenda UI-d.
+Vana 20:43 eelkontroll kehtis ajalimiitideta failile ega ole uue räsi rakendamisluba.
+Productioni rakendamine tuleb alles eraldi nõusoleku ning kontrollitud
+vea-/katkestuslepinguga; ebaselge tulemuse korral ei korrata db push'i ega parandata ajalugu.
+
+## Keskkond ja kehtiv tõend
+
+Mac: Python 3.9+, olemasolev native Supabase CLI 2.117.0 on varasemalt kontrollitud.
+Ära kasuta npx/latest paigaldamist, init/reset'i ega oletatavat config.toml faili.
+Git'i päritud ülekirjutused eemaldatakse ainult alamprotsessidest; terminal jääb muutmata.
+Local test kasutas uut võrguta PG17.6 abikonteinerit ja viit sünteetilist tabelit.
+Algset kohalikku Selqiro andmebaasi ei ühendatud ega paigaldatud sinna migratsiooni.
+Production viimati loetud 21:18: mõlemad otsingumigratsioonid veel puudu,
+22 source / 20 remote. See pole käesoleva lõpetaja uus andmebaasivaatlus.
+Ajalimiidikatsed pole tegeliku productioni indeksi ehitusaja või HTTP/RLS koormuse tõend.
+
+## Mitte korrata
+
+Ära korda läbinud local-ajalimiiditesti, varasemaid otsinguteste, kogumisi,
+installerit ega vanu preflight/apply/finish skripte. Ära taasta/kustuta faile,
+kuulutusi, kontosid või varasemaid operatsioonipäevikuid. Lõpetaja vea korral
+saada uus ZIP ülevaatuseks; olemasolev töö ja võimalik commit säilivad.
+
+---
+
+<!-- SELQIRO_PUBLIC_SEARCH_ROLLOUT_LIMITS_LOCAL_20260926 -->
+# CURRENT HANDOFF — public search bounded rollout preparation, 26 September 2026
+
+Read this entry before older next-task entries below.
+
+Source base remains **f3da6fa145007c4514fd652274c55cb44c964be2**. This runner does
+not commit/push. After its full success exactly SEVEN paths are staged: one unapplied
+index migration, one new timeout assertion fixture, and these five current documents.
+Use the accompanying result ZIP for SQL/build and staged/unstaged evidence. Do not
+infer a successful local run from the presence of this documentation alone.
+
+## One next action
+
+Return and review the new `public-search-rollout-limits-local-…zip`. After a reviewed
+PASS, finish the source-only checkpoint before preparing a separate production apply.
+Do not rerun old tests/installers, manually restage/restore files, repair history or
+apply the old preflight's hashes. No UI patch belongs in this checkpoint.
+
+## Verified production state and its time limit
+
+The actual 26 September 21:18 writer-role read at project `vyjletlmwoiwxsnsunlm`
+showed 20 applied versions and neither new search function nor index. Source has 22
+versions. `20260926120000` and `20260926180000` were still pending. The same run
+verified clean f3da6fa and remote-main equality. No fresh production/remote check is
+performed by this LOCAL-only runner. Production apply/deployment remain unverified.
+The role exception is built-in pg_write_all_data with NOLOGIN, no direct members,
+no non-superuser MEMBER/SET access and no owned functions. Do not broaden grants.
+Role defaults anon=3s/authenticated=8s do not prove deployment connection limits.
+
+## Exact source correction
+
+Only the pending second migration gets a BEGIN-local preamble:
+lock_timeout=2s, statement_timeout=15s, idle_in_transaction_session_timeout=10s,
+transaction_timeout=30s, same-transaction assertion and notice. Removing that exact
+preamble reconstructs the prior file byte-for-byte. Function bodies, grants, index,
+registry, first migration and all applied migration files are unchanged.
+Old second-file SHA-256: e4e780546a665e7cefd30cd8434d235effc9aeae4fd6cfd8cd22903d92906aa0.
+New second-file SHA-256: b080a47eb2573a0f292316c10c00cd8dc10c0a5adff0e4c6b2bbc04b855cba8d.
+There is no third migration version and no rewritten production history.
+
+## Evidence and environment
+
+Input `public-search-writer-roles-20260926-211754-x2r7_q6b.zip`, SHA-256
+211adb7612c08c1697b2e9c6463ad530cc4bf6cb9b18f0c012d6810604213d96, contains the
+unchanged 20:43 preflight, source-finish and prior isolated-test evidence.
+The new tests use the already reviewed local image by immutable ID, a NEW networkless
+helper, five synthetic tables, and PostgreSQL 17.6. No original Supabase DB is contacted.
+Synthetic permission/SQL tests are not full Supabase, HTTP, UI or performance tests.
+The runner reruns 66+261 semantic assertions, adds 6 same-transaction checks and real
+helper-only timeout fault cases. Build runs after cleanup; commit/push is absent.
+
+The helper's explicit successful candidate COMMIT is disposable-helper-only, not a
+persistent application-local migration. All test database state disappears with that
+helper. Configured thresholds are not a hard real-time outage SLA. A server failure,
+lock/timeout mismatch, cleanup issue or build failure stops without restoring files.
+
+Pinned production CLI remains 2.117.0 via the existing native arm64 public entrypoint
+at ~/.npm/_npx/aa8e5c70f9d8d161/node_modules/@supabase/cli-darwin-arm64/bin/supabase.
+This local runner does NOT execute it or npm/npx installation. A future rollout must
+revalidate the pin and actual new source/history; it cannot reuse old hash-guarded
+runners unchanged. Terminal GIT_* and DOCKER_* overrides are removed only from child
+environments. No config.toml is guessed/created. Old operation journals are untouched.
+
+## Unchanged product boundary
+
+Keywords + general filters; category-specific fields remain free text initially.
+Only allowlisted public scalar values participate in keyword search. Unknown paths
+fall back to title/description. No price-range/currency inference, synonym promise,
+rental-purpose activation, horse publication, UI search connection or Energy changes.
+Existing owner horse draft editor/wanted list remain working and unchanged.
+
+---
+
 <!-- SELQIRO_PUBLIC_DETAIL_KEYWORDS_SOURCE_ACCEPTED_20260926 -->
 # CURRENT HANDOFF — public detail keyword source completion, 26 September 2026
 
