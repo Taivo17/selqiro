@@ -1,3 +1,111 @@
+<!-- SELQIRO_PUBLIC_SEARCH_CLIENT_BROWSER_ACCEPTED_20260927 -->
+## Current client acceptance / 27 September 2026
+
+The user-confirmed working local search supersedes the earlier frozen-input FAIL.
+Immediate React input state is independent from delayed router synchronization;
+URL refresh persists keywords and filters. Preserve the exact tested repair.
+
+Browser acceptance is user evidence, not an automated browser run by the finisher.
+On 27 September the user reported: "testimisel on korras, peale lehe värskendamist
+otsing ja filtrid säilivad". Screenshots show keyword results, category narrowing,
+Paide/Türi location filtering, the Aravete empty state and the narrow-screen layout.
+The 21:09–21:10 Mac repair run passed 376 synthetic client checks and the real build.
+Evidence: `public-search-input-fix-20260927-210957-em02r8f_.zip`, SHA-256
+`b591d38d3efe99d8fc775b7533b864eace8e5fe211931b08d56d15abae66f2f4`.
+All 291 files / 290 manifest hashes / CRC and 267 source hash/blob/length triples
+were reviewed. The seven corrections match the prepared repair byte-for-byte.
+
+Source finish boundary: base `dda6bf259f9e521ee67f512a3b59d9319cb4adf2`, exactly 19 staged
+client/test/doc paths. Only five documentation files change during finishing;
+all tested application and test bytes, plus all 22 migrations, remain unchanged.
+The runner performs build, scope checks and explicit COMMIT PUSH, not SQL or new
+feature implementation. Actual commit/push/clean/remote status comes from its
+result ZIP. A successful Git push is not deployment evidence.
+
+The current search is ordinary listings only, with server paging (24), newest-first,
+keywords, global category path, condition and literal city/country text. Original
+price text is retained; no currency is invented. Do not turn optional taxonomy
+fields into hundreds of dropdowns or add price/radius/purpose filters in this finish.
+
+Next after source review: exact-deployment verification and small read-only smoke
+check including anonymous search and detail return. One/two-result screenshots do
+not prove multiple-page pagination or precise scroll restoration. Synthetic tests
+cover these contracts but are not a substitute for later targeted live coverage.
+Prior production SQL success is retained, not rerun or relabeled as new evidence.
+
+---
+<!-- SELQIRO_PUBLIC_SEARCH_INPUT_REPAIR_20260927 -->
+## 2026-09-27 — Public search input-state correction (browser acceptance pending)
+
+The 20:13 client installation passed build and 360 synthetic module checks, but
+its real manual browser test FAILED: query and location could not retain typing,
+and category/condition selections did not affect results. Do not commit that
+candidate or treat its READY_FOR_BROWSER result as browser acceptance.
+
+Cause in `usePublicSearchUrl`: controlled fields were rendered only from
+`useSearchParams`; the event handler changed history/ref without updating React
+state. It forwarded `window.history.state`, including internal Next router markers,
+which bypasses the framework's external-URL notification. The old test fixture
+read window.location directly and could not expose the stale router snapshot.
+
+Bounded client repair:
+- React state updates synchronously during each input/select event.
+- A current-input ref composes successive field changes, without being reset by
+  every router render; page offset resets on filter changes as before.
+- Native history uses `replaceState(null, "", url)` so Next copies its own metadata.
+- URL/Back/Forward synchronization is separate; stale router echoes cannot overwrite
+  newer input. A popstate outside the search route does not reset this page.
+- Exact text/unfinished spaces survive; history failure keeps input and shows an
+  error rather than performing a silently broadened search.
+- Existing debounce, abort/stale-result guards, return context and RPC are unchanged.
+
+The correction touches two existing client/test files and these five existing
+documents. It retains the original 19-file staged candidate at `dda6bf2`; no commit,
+push, package change, SQL, migration, identity/write, publication, image or Energy
+change is included. All 22 migration bytes remain guarded. Do not rerun the first
+client installer or any completed database/verification scripts.
+
+Validation: the added router-state regressions reproduce the original failure.
+The repair runner requires all 376 module checks and a fresh full project build.
+These are synthetic hook/router/transport tests, NOT React DOM/Next/browser or
+live RPC tests. User acceptance of typing, filters, refresh/Back and narrow layout
+is still required; inspect the new result ZIP before the separate commit step.
+
+<!-- SELQIRO_PUBLIC_LISTING_SEARCH_CLIENT_20260927 -->
+
+## 27 September 2026 — Public listing search client candidate
+
+Base: `dda6bf259f9e521ee67f512a3b59d9319cb4adf2` (five rollout/launch-focus docs,
+build, committed/pushed, clean and remote-equal in the 19:18–19:19 user run).
+Both search migrations were already applied and verified earlier on 27 September;
+their 22-version source tree is unchanged. Do not repeat server steps.
+
+One client feature connects `/v2/products` to `search_public_listings_v1`:
+- existing global taxonomy, plain AND keywords, condition, city/country substring,
+  newest order, 24-item server pages; no price/currency/nearby/purpose/horse promises;
+- scalar URL parameters preserve criteria and page on refresh/detail return;
+  edits reset offset; malformed/duplicate/unsupported filters show an error;
+- 300 ms debounce, cancellation on scope change, 15 s client timeout, stale-result
+  rejection and account-scoped response state; no automatic retry/fallback feed;
+- exact response envelope/field/count/page validation, bigint strings retained,
+  no arbitrary details, per-card enrichment or guessed currency;
+- sticky compact search below the measured V2 header; native modal filters,
+  independent panel state, close/Escape retain values, no query on opening/closing;
+- keyboard/native-link cards, modifier-click preserved and no automatic prefetch;
+  existing tab-local return context reused with search-only position restoration;
+- discovery mock offers/services and unsupported control promises removed from
+  this route only. Real existing services, owner features and other routes remain.
+
+Sources are prepared, not a claim of installation/deployment. The installer must
+verify clean exact base/source/index, run client tests and real build, then stage
+only this package. It never commits/pushes or executes DB/SQL/Docker/Supabase.
+Read its returned result for actual test/build/state evidence. Browser QA pending:
+keywords, category hierarchy, location/condition, empty/error/retry, pages,
+return position, closed-panel preservation, mobile/keyboard and owner regressions.
+Do not rerun the installer after a failure; return its ZIP without resetting files.
+
+---
+
 <!-- SELQIRO_PUBLIC_SEARCH_PRODUCTION_COMPLETE_LAUNCH_FOCUS_20260927 -->
 # Current status — production complete, 27 September 2026
 

@@ -24,6 +24,7 @@ const dummy = name => ({ __esModule: true, default: props => ({ type: name, prop
 function realm(options = {}) {
   const cache = new Map(), calls = [];
   const componentBoundaries = [
+    'src/features/public-listing-search/components/ListingSearchPage.tsx',
     'src/features/v2-shell/components/V2AccountActions.tsx',
     'src/features/product-discovery/components/ProductListingCard.tsx',
     ...['ListingCreateContentTypeSelector','HorseOfferTypeSelector','HorseOfferBasicFields',
@@ -34,6 +35,7 @@ function realm(options = {}) {
       .map(n => 'src/features/store-category-management/components/' + n + '.tsx'),
   ];
   const hooks = {
+    Suspense: props => props.children,
     useState: initial => [typeof initial === 'function' ? initial() : initial, () => {}],
     useEffect: () => {}, useRef: value => ({current: value}), useMemo: fn => fn(), useCallback: fn => fn,
   };
@@ -140,15 +142,13 @@ test('home uses neutral listing labels without renaming real producer and servic
     'Esiletõstetud kuulutus','Esiletõstetud teenused','Kohalik tootja']) assert.ok(v.text.includes(s), s);
   assert.doesNotMatch(v.text, /\bToode\b|Esiletõstetud toode/);
 });
-test('discovery title, search and featured heading use Kuulutused, no redundant English badge', () => {
+test('discovery composes the real Kuulutused search without skeleton results', () => {
   const v = view(discovery);
-  assert.equal(text(v.elements.find(e => e.type === 'h1').children), 'Kuulutused');
-  assert.ok(v.elements.some(e => e.type === 'input' && e.props.placeholder === 'Otsi kuulutusi…'));
-  assert.ok(v.text.includes('Esiletõstetud kuulutused'));
-  assert.ok(v.text.includes('Leia kuulutusi enda lähedalt.'));
-  assert.ok(v.text.includes('otsingu või kuulutuse kategooriaga'));
-  assert.doesNotMatch(v.text, /Product Discovery/i);
+  assert.ok(v.elements.some(e => e.type === 'ListingSearchPage'));
+  assert.doesNotMatch(source(discovery), /featuredProducts|relatedServices|Product Discovery/);
+  assert.ok(source(discovery).includes('Suspense'));
 });
+
 for (const [name,resultState,expected] of [
   ['empty',{listings:[],loading:false,error:null},'Kuulutusi ei leitud'],
   ['loading',{listings:[],loading:true,error:null},'Laen...'],

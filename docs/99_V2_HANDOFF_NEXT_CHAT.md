@@ -1,3 +1,166 @@
+<!-- SELQIRO_PUBLIC_SEARCH_CLIENT_BROWSER_ACCEPTED_20260927 -->
+# CURRENT — 27 September 2026: public search client accepted for finish
+
+This TOP entry supersedes all historical next-task entries below.
+Do not rerun the old installer, input repair, SQL tests, preflight, apply or
+verification scripts. Both search migrations were applied earlier and verified.
+
+## Actual evidence before source finish
+
+Base commit: `dda6bf259f9e521ee67f512a3b59d9319cb4adf2`.
+At 21:10 +03 the Mac repair run ended with exactly 19 staged files, no unstaged
+changes and no client commit/push. Fresh remote equality referred to this BASE,
+not to a deployed new search client. The result ZIP is
+`public-search-input-fix-20260927-210957-em02r8f_.zip` (SHA-256
+`b591d38d3efe99d8fc775b7533b864eace8e5fe211931b08d56d15abae66f2f4`).
+Its 291 files / 290 manifest hashes / CRC and all 267 source triples match; seven
+repair changes match the prepared script; the nested original installer ZIP is
+unchanged. The original frozen-input browser failure is superseded by the latest
+user-confirmed successful typing/filter test, including persistence after reload.
+
+Browser screenshots support combined keywords, category selection, Paide/Türi
+location filtering, the Aravete empty state and a usable narrow-screen layout.
+Mac build and all 376 synthetic router/hooks/transport/JSX tests passed in the
+21:09–21:10 run. These are not load tests. Anonymous access, precise detail-return
+scroll and multiple-page live browsing are not separately proven by these images.
+
+## This finish and its authoritative result
+
+Run only `selqiro-finish-public-listing-search-client.py` after stopping the local
+dev-server with Ctrl+C. Keep the exact 21:09 repair ZIP in Downloads. The runner
+verifies the 267 sources, all 22 migrations and the entire 19-file staged index;
+adds this acceptance to five existing documents; runs a fresh build; stages only
+those document updates and asks COMMIT PUSH before the exact 19-file commit/push.
+Application code, tests, stored listing data, SQL and live journals are untouched.
+
+Commit subject: `Connect public listing search with persistent filters`.
+Read NEW_COMMIT, COMMIT, PUSH, BUILD, WORKTREE and REMOTE in the returned result.
+This document cannot contain its own future commit hash and is not proof that a
+prepared finish has executed. On failure, preserve all files and any created
+commit, return the ZIP and do not rerun or restore without a reviewed recovery.
+
+## One next action after a reviewed successful source finish
+
+Verify the exact NEW_COMMIT as the active frontend deployment, then do a small
+read-only smoke check: keyword/location + reload, anonymous search and opening a
+listing and returning with the search retained. Check precise scroll return where
+there is a meaningful prior scroll position. Test multiple pages when existing
+matching data exceeds 24; do not fabricate production listings for this purpose.
+No new feature or schema patch belongs to the source-finishing step.
+
+## Stable scope and environment
+
+Public search uses `search_public_listings_v1` for ordinary active listings only,
+with keywords, global category path, condition and city/country text. No distance,
+price/purpose filters or public horse search. Raw stored prices/unknown currency
+must not be guessed; currency consistency remains a separate launch issue.
+Owner horse editor/list, saves, identity authority, images and Energy stay intact.
+Production search migrations 20260926120000 and 20260926180000 were previously
+verified with all 22 versions paired; no local persistent schema install or new
+DB observation occurs here. Do not replay a completed database operation.
+
+Use existing Mac Python 3.9+/Git/npm only. GIT_* overrides are removed from child
+commands only; the user's terminal is unchanged. No packages, reset, restore,
+force-push, live journal access or guessed Supabase config. A push may invoke normal
+hooks/CI, but is not itself deployment verification. Launch-first: core listings,
+services, contact and management; future knowledge/news/business modules deferred.
+
+---
+## Historical entries below
+
+<!-- SELQIRO_PUBLIC_SEARCH_INPUT_REPAIR_20260927 -->
+## CURRENT — 2026-09-27 public search inputs repair / no commit yet
+
+This entry supersedes all older next-task text below.
+
+Current last observed user state: clean base commit
+`dda6bf259f9e521ee67f512a3b59d9319cb4adf2`, with exactly 19 client/test/doc files
+staged, not committed. The 20:13 installer verified remote equality of that BASE;
+the new client has NOT been pushed or deployed. No unstaged patch was exported.
+Evidence: `public-listing-search-client-20260927-201305-17m8u0qv.zip`,
+SHA-256 `5969eee35c8be8118b0d2123d251543c08b0ee1cd4bb5916b89d4af9dc38e8d2`.
+Review verified 292 files/291 manifest hashes/CRC, 267 source triples,
+14 exact payloads/five doc prefixes and all 19 staged changes in a temporary index.
+
+User browser result: FAIL. Query/location cannot retain typing; category and
+condition do not affect the search. Prior 360 synthetic tests/build do not override
+this. Root in `usePublicSearchUrl` is missing immediate input state plus forwarding
+Next internal history state to a URL-changing native-history call. The test
+fixture had incorrectly equated window.location with the router snapshot.
+
+Prepared correction updates ONLY that hook, its existing test and five existing
+documents (seven paths inside the original 19). React controlled input state is
+immediate; history/Back/Forward synchronization is separate and stale-echo guarded.
+Next native replaceState receives null; framework metadata copying remains Next's
+responsibility. The API, RPC, UI layout and all other client sources stay unchanged.
+
+One next action: run the guarded public-search input-fix script, then repeat typing,
+filter, refresh/Back and narrow-view tests and return its ZIP. The script verifies
+all 267 sources and the exact original 19-file staged index, runs 376 synthetic
+client checks plus the real Mac build, and restages only seven corrected files.
+It cannot commit/push or execute SQL. A passing report still needs user browser
+acceptance before preparing a separate finish. Never repeat a stopped script or
+restore files without inspecting its report first.
+
+Database state remains prior applied/verified search migrations 20260926120000 and
+20260926180000; all 22 migration versions were paired in 10:17 verification.
+No new SQL, local persistent-schema install, production observation/write,
+publication, horse-public-search, image, Energy or operation-journal action occurs.
+Owner list/editor remain working. New UI tests are still synthetic router/hooks
+and fake API, not real React DOM, HTTP, production data or a load test.
+
+Do not rerun completed apply/verification/docs/source-finish scripts or the original
+search client installer. Do not edit applied SQL. Launch scope remains keyword
+search and supported general filters, not speculative future modules.
+
+<!-- SELQIRO_PUBLIC_LISTING_SEARCH_CLIENT_20260927 -->
+# Current handoff — 27 September 2026 public search client candidate
+
+This top entry supersedes the historical next tasks below.
+
+## Verified before this candidate
+
+`dda6bf259f9e521ee67f512a3b59d9319cb4adf2` was committed and pushed from parent
+`206892e742a53500dc64b42d1baa2c3389172a02`. User's docs run ended 19:19 +03;
+fresh build passed, clean main and remote equality were checked in that run.
+Reviewed ZIP `public-search-rollout-docs-20260927-191826-vu249pw5.zip`, SHA256
+`f13c92b7bccdd2096276ba1ffff7b4ffe958a5a53401a82b8fe6f4d10973c28f`:
+281 files / 280 manifest hashes / CRC, 256 source hashes/blobs, five exact doc
+prefixes and committed patch reconstruction passed. Artifact review is not a new
+Git/production observation. Frontend deployment of dda6bf2 was not verified.
+
+Both search migrations are already production-applied; 22/22 history and valid
+GIN were verified at 10:17. No server apply/preflight/verification repeats.
+
+## Current client step
+
+Prepare/install one typed public search feature, compact sticky input, closable
+mobile/desktop filters, 24-item pages and detail return. See the current section
+in docs/architecture/public-listing-search-v1.md. Source package does not change
+SQL, schema, save/auth/identity authority, horse publication, images or Energy.
+Search is ordinary listings only. Future knowledge/news/business modules deferred.
+
+Actual installation, staged file count, client tests and real build are known ONLY
+from this candidate's returned result ZIP; do not call prepared code installed.
+No commit/push/deployment is performed by the installer. After a PASS, run the
+included targeted browser checklist. Then review ZIP and user test feedback before
+one scoped finish. On a STOP, return ZIP; preserve files/index without restoring.
+
+## One next action
+
+Run `selqiro-connect-public-listing-search-client.py` on the clean dda6bf2 source,
+then return `public-listing-search-client-*.zip` and targeted browser findings.
+The exact Downloads docs-result ZIP is the only required input archive; it already
+contains the earlier production verification. No broad recollection/collector needed.
+
+Mac Python 3.9+, existing node/npm dependencies only. Stop this repo's dev-server
+before build, do not kill it or delete .next. GIT_* is sanitized in child commands
+only, not the user's terminal. No reset/restore, package install or live journal
+access. Do not rerun completed rollout/docs/old test runners.
+
+---
+## Historical handoffs below
+
 <!-- SELQIRO_PUBLIC_SEARCH_PRODUCTION_COMPLETE_LAUNCH_FOCUS_20260927 -->
 # Current handoff — 27 September 2026, search production complete
 

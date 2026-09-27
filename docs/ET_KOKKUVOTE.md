@@ -1,3 +1,92 @@
+<!-- SELQIRO_PUBLIC_SEARCH_CLIENT_BROWSER_ACCEPTED_20260927 -->
+## 27.09.2026 — Kuulutuste otsing ja filtrid läbisid kasutaja brauseritesti
+
+Kasutaja kinnitus: „testimisel on korras, peale lehe värskendamist otsing ja filtrid
+säilivad”. Piltidel leiab mitme märksõnaga õige kuulutuse, rehvide kategooria
+kitsendab tulemusi, Paide/Türi asukohavalik vahetab tulemusi ja Aravete puhul
+kuvatakse õige tühi tulemus. Kitsas vaates on otsing ja filtrinupp kasutatavad.
+Varasem lukus sisestusväljade viga on selle kasutajakatse järgi parandatud.
+
+Paranduse 21:09–21:10 jooksus läbisid 376 kliendikontrolli ja päris Maci build.
+Tulemus `public-search-input-fix-20260927-210957-em02r8f_.zip`:
+291 faili, 290 manifestiräsi ja kõik 267 lähtefaili kontrolliti üle. Seitse
+parandatud faili vastavad ettevalmistatud parandusele; muud kliendifailid säilivad.
+See ei olnud veel commit ega juurutus: 19 faili olid endiselt stage'itud.
+
+Nüüd lõpetatakse ainult see testitud otsinguetapp. Lõpetaja lisab kinnituse viide
+olemasolevasse dokumenti, kontrollib build'i ning küsib enne commit/push'i eraldi
+kinnitust. Rakenduskoodi, teste ja 22 migratsiooni enam ei muudeta. SQL-i,
+kuulutuste muutmist, pilte, avaldamist, Energyt ega live-päevikuid ei puudutata.
+Tegelik uus commit ja puhas/sünkroonne lõppseis selguvad lõpetaja tulemus-ZIP-ist.
+
+Pärast eduka tulemuse ülevaatust kontrollime sama commit'i Verceli juurutuses ning
+teeme lühikese kontota otsingu ja kuulutusest tagasi tulemise kontrolli. Pildid ei
+tõenda mitme lehekülje läbimist: nähtavaid tulemusi oli üks või kaks. Rohkemate
+lehtede testi saab teha siis, kui sobivaid olemasolevaid kuulutusi on üle 24.
+
+Hoiame algversiooni lihtsa: märksõnad ja üldfiltrid, lisaväljad jäävad vabatekstiks.
+Asukohafilter on teksti järgi, mitte kilomeetrites; teadmiste, uudiste ja tulevaste
+ärivõimaluste arendus ootab päris kasutajate tagasisidet. Hinna algteksti ei
+asendata oletatud valuutaga; ühtne hinna/valuuta kuvamine on eraldi käivitamise töö.
+
+---
+<!-- SELQIRO_PUBLIC_SEARCH_INPUT_REPAIR_20260927 -->
+## 2026-09-27 — Otsingu sisestusväljade parandus, brauseritest veel vajalik
+
+Kasutaja 20:13 kliendipaigaldus läbis build'i ja 360 moodulitesti, kuid järgnev
+brauseritest EI läbinud: otsingusõna ja asukoht ei jäänud väljale ning kategooria
+ja seisukord ei muutnud otsingut. Seda klienti ei või veel commit'ida.
+
+Viga oli uues kliendi otsinguolekus. Väljad sõltusid ainult aadressiparameetritest;
+sisestamine muutis aadressi ja ref'i, mitte kohe Reacti olekut. Lisaks anti
+Nexti sisemised ajaloomarkerid tagasi uue aadressi kirjutusse. Vana sünteetiline
+test luges aadressiriba otse ega eristanud seda hilinevast ruuteri olekust.
+
+Parandus uuendab teksti/valiku kohe Reacti olekus, kasutab aadressi muutmiseks
+Nextiga kooskõlas olevat kutset ning eristab uut sisestust hilinevast aadressi
+kinnitusest. Tagasi/Edasi taastab väljad; olemasolev märksõnaotsing, 300 ms
+päringuviivitus, piiratud tulemuste leheküljed ja turvapiirid jäävad samaks.
+
+Muutuvad ainult otsinguoleku fail, selle regressioonitestid ja viis olemasolevat
+dokumenti. Kogu varasem 19-failine kliendipakett jääb stagingusse, commit/push
+puuduvad. Andmebaasi, 22 migratsiooni, kuulutusi, omanikuvaateid, pilte, Energyt
+ega operatsioonipäevikuid ei muudeta. Vana paigaldajat ei korrata.
+
+Parandaja nõuab 376 moodulikontrolli ning värsket build'i. Testides on ruuter,
+hook'ide elutsükkel ja API asendatud; need ei asenda päris brauseritesti.
+Järgmine samm on uuesti proovida kirjutamist, filtreid, värskendust/tagasi ning
+kitsast vaadet ja saata uus tulemus-ZIP. Alles seejärel lõpetame commit'i.
+
+<!-- SELQIRO_PUBLIC_LISTING_SEARCH_CLIENT_20260927 -->
+
+## 27.09.2026 — Päris kuulutuste otsingu kasutajaliidese kandidaat
+
+Dokumenteerimise etapp lõppes kasutaja arvutis kell 19:19: commit `dda6bf2`,
+build korras, push tehtud ja tööpuu puhas. Viis dokumenti ja 256 lähtefaili
+kontrolliti tulemuse ZIP-ist. See ei olnud uus andmebaasi- ega brauseritest.
+
+Järgmine pakett ühendab päris otsingu: märksõnad, Selqiro üldine kategooria,
+seisukord ja kuulutusse kirjutatud linna/riigi tekst. Kuvatakse 24 tulemust lehel,
+uuemad ees. Otsing ja lehekülg on aadressis; kuulutusest tagasi tulles taastame
+koha. Sisestamisel ootame 300 ms ja katkestame vananenud päringu. Paneeli avamine
+või sulgemine ise uut päringut ei tee; rist ja Escape jätavad valikud alles.
+
+Telefonis ja arvutis on päise all väike kaasaliikuv otsing koos Filtrid-nupuga.
+Selle lehe näidiskuulutused ja teenused eemaldatakse, mitte ei esitata päris
+otsingutulemustena. Hinna-, raadiuse- ja ostu/rendi eesmärgi filtreid ei lubata:
+server neid veel ei toeta. Hobusepakkumiste avalik otsing pole selles RPC-s.
+Otsingu kaart ei mõtle hinnale valuutat juurde; kuvatakse algne hinnatekst.
+
+Paigaldaja teeb ainult kliendifailid, nende testid ja viis olemasolevat dokumenti.
+Päris build ja testide tulemus selgub paigaldaja raportist. Commit/push puudub.
+Järgmine kontroll on brauseris. Productioni migratsioone, avaldamist, pilte,
+identiteediõigusi, omaniku haldust ega Energy't selle paketiga ei muudeta.
+
+Teadmised, uudised ja tulevased ärivõimalused ei laienda käivitamise ulatust.
+Praegune fookus on lisamine, leidmine, ühenduse võtmine ja enda sisu haldamine.
+
+---
+
 <!-- SELQIRO_PUBLIC_SEARCH_PRODUCTION_COMPLETE_LAUNCH_FOCUS_20260927 -->
 ## 27.09.2026 — Otsingu serveriosa valmis; käivitamise fookus täpsustatud
 

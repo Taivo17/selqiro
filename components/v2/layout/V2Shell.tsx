@@ -45,7 +45,7 @@ export default function V2Shell({
 
   return (
     <div className="min-h-[100dvh] w-full overflow-x-clip bg-[#f7f8f6] text-neutral-950">
-      <header className="sticky top-0 z-40 border-b border-black/5 bg-white/90 backdrop-blur-xl">
+      <header data-v2-header className="sticky top-0 z-40 border-b border-black/5 bg-white/90 backdrop-blur-xl">
         <div className="mx-auto flex w-full min-w-0 max-w-7xl items-center justify-between gap-3 px-4 py-3 sm:px-5 sm:py-4">
           <div className="flex min-w-0 items-center gap-8">
             <Link
