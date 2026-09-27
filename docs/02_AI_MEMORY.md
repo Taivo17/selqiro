@@ -1,3 +1,36 @@
+<!-- SELQIRO_PUBLIC_SEARCH_PRODUCTION_COMPLETE_LAUNCH_FOCUS_20260927 -->
+## 2026-09-27 — Launch focus and completed search server rollout
+
+Current user decision: launch usefulness takes precedence over completing the
+long-term platform vision. Knowledge, news and future business capabilities are
+NOT launch prerequisites. Decide whether to implement them after real adoption
+and feedback. Preserve modular boundaries and documented extension points; do not
+build speculative tables, endpoints, empty modules or new infrastructure merely
+to call them a foundation. Existing working features are not deleted by this decision.
+
+The launch direction remains publish/find/contact/manage for listings and services.
+No mediated user-to-user transactions or complex booking engine at launch. Keep
+manual creation/search usable and optional AI quiet. This scope decision does not
+silently revoke existing safety, identity, privacy or Energy/payment requirements.
+Ship coherent user-visible steps; do not open an unrelated feature before closing
+and testing the current one. Future extensibility is not a reason to delay launch.
+
+Search source is committed at `206892e742a53500dc64b42d1baa2c3389172a02`.
+The 27 September 10:15–10:17 (+03) verification-only run confirmed both production
+migrations `20260926120000` and `20260926180000`: 22/22 history, exact source SQL,
+function contracts/ACLs, valid-ready-live GIN and unchanged remaining public DDL.
+The earlier collation stop was a verifier representation mismatch (`["0"]`), not
+permission to replay. The original two journal records were preserved and one
+COMPLETE record appended locally. Do not rerun completed apply/verification/test
+scripts or edit either applied migration. Full schemas stay private on the Mac.
+
+Search UI is still NOT connected. Next user-visible scope is the typed ordinary-
+listing keyword client, existing supported general filters, compact sticky search
+and a closable filter panel, pagination and detail-return context. No new SQL is
+required for this scope. Existing horse owner editing/wanted rows remain working.
+The server does not yet search public horse offers or generic buy/rent intentions;
+price ranges, currency inference and distance ordering are not supported here.
+
 # AI_MEMORY
 
 VERSION: 2.0

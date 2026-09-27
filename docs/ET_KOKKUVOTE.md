@@ -1,3 +1,37 @@
+<!-- SELQIRO_PUBLIC_SEARCH_PRODUCTION_COMPLETE_LAUNCH_FOCUS_20260927 -->
+## 27.09.2026 — Otsingu serveriosa valmis; käivitamise fookus täpsustatud
+
+Mõlemad tavakuulutuste otsingumigratsioonid on productionis rakendatud ja kinnitatud.
+27. septembri 10:15–10:17 kontroll ei rakendanud midagi uuesti: kõik 22 versiooni
+olid paaris, kuivproov ei leidnud ootel migratsioone, funktsioonid/õigused ja
+otsinguindeks vastasid lepingule. Muus avalikus skeemis kõrvalmuutusi ei leitud.
+Varasema järelkontrolli peatumise põhjus oli null-OID tekstiline esitus kontrollijas,
+mitte vajadus andmebaasi parandada. Kohalik operatsioonipäevik lõpeb nüüd COMPLETE-ga.
+
+Tõend: `public-search-verification-20260927-101559-0mtz9_56.zip`.
+Lähtekood jäi puhtaks commit'il `206892e742a53500dc64b42d1baa2c3389172a02`.
+Dokumenteerimise etapp muudab ainult viit olemasolevat dokumenti ja nõuab build'i
+ning eraldi COMMIT PUSH kinnitust. Selle tegelikku tulemust loeme uuest ZIP-ist.
+Rakendatud SQL-faile, varasemaid teste, kuulutusi ja päevikuid ei muudeta ega korrata.
+
+Kasutajale nähtav otsing on veel ühendamata. Järgmine tulemus on toimiv
+märksõnaotsing, olemasoleva kategooriatee/seisukorra/linna-riigi filtrid,
+lehekülgede laadimine ja telefoni/arvuti avatav-suletav filtripaneel.
+Esimene järjestus on uuemad ees; kauguse, hinnavahemiku, valuutateisenduse või
+hobuste avaliku otsingu valmidust selle serverilepinguga ei lubata.
+Omaniku hobusemustandi muutmine ja Otsin hobust nimekirja/detaili andmed säilivad.
+
+Kasutajaga kinnitatud käivitamise piir: teadmised, uudised ja tulevased ärivõimalused
+jäävad võimalikeks hilisemateks mooduliteks, mitte käivitamise eeltingimuseks.
+Vundament tähendab selgeid moodulipiire ja võimalust hiljem lisada — mitte tühjade
+moodulite või keeruka tulevikusüsteemi ette ehitamist. Nende tegeliku vajaduse
+otsustame pärast portaali käivitumist ja kasutajate tagasisidet.
+
+Praegu keskendume sellele, et inimene saaks kuulutuse või teenuse lisada, selle
+leida, avaldajaga ühendust võtta ja enda sisu hallata. Tehingute vahendamist ega
+keerukat broneerimist alguses ei lisa. Lihtsustamine ei tähenda juba töötava
+kustutamist ega turva-, privaatsus- või Energy/maksete nõuete eiramist.
+
 # Selqiro eestikeelne kokkuvõte
 
 See dokument on omaniku/tootejuhi vaade Selqiro praegusele suunale.

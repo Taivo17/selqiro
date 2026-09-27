@@ -1,3 +1,33 @@
+<!-- SELQIRO_PUBLIC_SEARCH_PRODUCTION_COMPLETE_LAUNCH_FOCUS_20260927 -->
+# Current status — production complete, 27 September 2026
+
+This entry supersedes historical pending/apply directions below.
+Both migrations `20260926120000` and `20260926180000` are APPLIED_VERIFIED in
+`vyjletlmwoiwxsnsunlm` from source `206892e742a53500dc64b42d1baa2c3389172a02`.
+One earlier CLI apply at 09:36 (+03) was followed by read-only completion at 10:17.
+Evidence ZIP `public-search-verification-20260927-101559-0mtz9_56.zip` has SHA-256
+`c513a191be0b99ff0df4a5b7774801b90ecee761268776d2dc3723ab8dd80ebc`.
+
+22/22 history, exact recorded SQL, both function signatures/bodies/owners/configs/
+ACLs, GIN definition and valid-ready-live state, and remaining public DDL passed.
+The earlier stop was a collation representation mismatch: a singleton string zero
+OID is equivalent to the checked numeric zero, not a missing/invalid index.
+The COMPLETE local journal has three records; old records and journals are preserved.
+Do not replay rollout or edit either applied migration or frozen helper/index policy.
+
+This is NOT a new HTTP/browser/write-role/load test. Prior 333 isolated SQL checks
+and real timeout evidence are preserved, not rerun. UI is still not connected.
+Next scope is a typed client over THIS RPC, supported filters and bounded pages,
+compact sticky search and initially closed filter panels with preserved return context.
+No price/currency/nearby/rental-intent/horse-public-search promises are introduced.
+Keep the supported free-text-detail MVP; do not normalize every category before launch.
+
+Launch decision: knowledge, news and future enterprise capabilities wait for
+post-launch evidence. Keep modular extension points, not speculative implementation.
+Existing working owner features, safety/privacy and Energy contracts stay unchanged.
+
+---
+
 <!-- SELQIRO_PUBLIC_DETAIL_KEYWORDS_SOURCE_ACCEPTED_20260926 -->
 ## 2026-09-26 — public detail keywords: real isolated test accepted
 

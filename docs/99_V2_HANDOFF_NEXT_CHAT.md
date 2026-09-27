@@ -1,3 +1,77 @@
+<!-- SELQIRO_PUBLIC_SEARCH_PRODUCTION_COMPLETE_LAUNCH_FOCUS_20260927 -->
+# Current handoff — 27 September 2026, search production complete
+
+THIS TOP ENTRY supersedes historical next-step instructions below. Both search
+migrations are already applied and verified. Do not repeat apply/preflight or the
+verification-only completion and do not edit an applied migration.
+
+## Actual state
+
+Source baseline: clean pushed `206892e742a53500dc64b42d1baa2c3389172a02`.
+The associated documentation runner edits only five existing documents; its actual
+NEW_COMMIT, BUILD, COMMIT, PUSH, WORKTREE and REMOTE are in the returned result ZIP.
+Do not infer that a prepared runner has already run or that its future commit exists.
+All application code, tests and all 22 migration files remain unchanged in that step.
+
+Production project `vyjletlmwoiwxsnsunlm`: both `20260926120000` and
+`20260926180000` were applied once on 27 September about 09:36 (+03), then verified
+read-only at 10:15–10:17. History 22/22, no pending dry-run, exact recorded migration
+SQL, function contracts/ACLs and valid-ready-live GIN all passed. The public DDL
+invariant matches after removing only reviewed additions. The saved `["0"]`
+collation representation explains the earlier verifier stop. It is not an SQL error.
+The exact operation journal now has three records ending COMPLETE; preserve it.
+
+Evidence: `public-search-verification-20260927-101559-0mtz9_56.zip`.
+SHA-256: `c513a191be0b99ff0df4a5b7774801b90ecee761268776d2dc3723ab8dd80ebc`.
+Archive review: 59 files / 58 manifest hashes, CRC, embedded evidence chain and all
+256 exported source hashes match. This artifact review is NOT a new production run.
+
+Search UI is still NOT connected. Existing owner horse editing, wanted list/detail,
+ordinary listing management and Kuulutused wording stay working and unchanged.
+Previous isolated SQL: 333 assertions plus real timeout cases on PG17.6 helper.
+No new HTTP/RLS write, browser, performance/load or deployment test is claimed.
+The original local application database was not migrated by these helper tests.
+
+## One next task after this documentation result is accepted
+
+Build ONE coherent client search feature from the exported current source:
+typed `search_public_listings_v1` wrapper and strict response model, search/filter
+state, debounced requests, bounded pages, compact sticky search and closable
+mobile/desktop filter panel, and tested detail-return context. Include relevant
+client tests and current docs; run build and targeted browser tests before commit.
+Read the actual source first; do not issue another broad collector if the exported
+files already cover the required imports. Do not rerun server tests/migrations.
+
+Supported first UI: keywords, global category path, condition, public city/country
+text and newest-first. Do not expose price/currency/distance/AI/rent-intention
+filters that the server does not implement. Horses are NOT in this public ordinary-
+listing RPC. Keep owner store rubriigid separate from global search categories.
+Opening/closing the filter makes no query by itself. Closing retains selections.
+Changed query resets pages; unchanged query and detail return preserve position.
+Skeleton data must not look like filtered live results. Existing workflows stay intact.
+
+## New controlling launch decision
+
+Knowledge, news and future business opportunities are NOT launch prerequisites.
+Keep room to add them modularly, without building empty pages/tables or generic
+infrastructure in advance. Decide implementation after real user adoption. Focus
+on publish/find/contact/manage for listings and services; no mediated user-to-user
+transactions or complex bookings. Do not silently remove existing working modules,
+Energy/payment requirements or safety/privacy boundaries under this decision.
+
+## Environment and no-repeat boundary
+
+Repo: `$HOME/selqiro`; main/origin-main; GitHub `Taivo17/selqiro`; Python 3.9+ on Mac.
+Latest verified production CLI: pinned existing native 2.117.0; no npm/npx install.
+Docs/client work does not use Supabase, Docker, SQL, private schemas or live journals.
+Sanitize inherited GIT_* only for child commands; do not modify the user's terminal.
+Stop the repo's dev server before build; do not kill user processes or delete .next.
+Do not reset/restore/delete user files, test accounts/listings or operation journals.
+On failure return the new result ZIP before any retry, commit or further patch.
+
+---
+## Historical handoffs below — not current instructions
+
 <!-- SELQIRO_PUBLIC_SEARCH_ROLLOUT_LIMITS_SOURCE_ACCEPTED_20260926 -->
 # Praegune handoff — 2026-09-26, otsingu ajalimiitide lähteetapp
 

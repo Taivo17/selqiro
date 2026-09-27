@@ -1,3 +1,72 @@
+<!-- SELQIRO_PUBLIC_SEARCH_PRODUCTION_COMPLETE_LAUNCH_FOCUS_20260927 -->
+## 2026-09-27 — Public search production verified; next boundary is the client
+
+Source baseline: `206892e742a53500dc64b42d1baa2c3389172a02`, clean main and remote
+main equal during the user's verification run. Target: `vyjletlmwoiwxsnsunlm`.
+Evidence: `public-search-verification-20260927-101559-0mtz9_56.zip`, SHA-256
+`c513a191be0b99ff0df4a5b7774801b90ecee761268776d2dc3723ab8dd80ebc`.
+
+Both migrations were applied by ONE earlier CLI dispatch at 09:36 (+03); the
+verification-only completion at 10:17 did not repeat DDL, repair history or write
+application rows. The original stop rejected the index collation OID represented
+as a decimal string. The corrected verifier accepts exactly one zero OID as `[0]`
+or `["0"]`; other index, function, ACL, history and schema checks remain enforced.
+Two fresh history/schema/metadata/writer observations and a dry-run passed.
+All 22 local/remote migration versions are paired; no migration is pending.
+
+Applied immutable source files (do not edit):
+- `20260926120000_add_public_listing_search.sql`: SHA-256
+  `236a0821db4ff345f6cba88e7c3210e71076e1ae5ac8c40d1aaaa4309b7d1180`.
+- `20260926180000_add_public_listing_detail_keywords.sql`: SHA-256
+  `b080a47eb2573a0f292316c10c00cd8dc10c0a5adff0e4c6b2bbc04b855cba8d`.
+
+Verified objects: `search_public_listings_v1`, pure immutable
+`public_listing_search_document_v1` and active-listing GIN
+`listings_public_keywords_v1_gin`. Function signatures, bodies, owners,
+search_path/configuration, explicit and effective execution grants and index
+metadata match the reviewed contract. Index is valid/ready/live. Removing only
+16 reviewed search DDL additions leaves 1338 original statements, invariant SHA
+`64fc3dc27e49eed32a6b961544dc7024db2ba269bb0094848035dbac40e67a79`.
+Post-schema SHA: `7a680c2fb9abdf45ea107efc9bb9bfe8fd8138cd19573d6989d1181c4ace17b7`.
+Full schema files were not shared and are not application-data backups.
+
+The operation journal has three records ending COMPLETE; two prior records are
+byte-identical. Documentation/client work must not write it or older journals.
+Built-in `pg_write_all_data` remains a reviewed role exception with no observed
+non-superuser access path; no broad grant was introduced. Future role changes
+require their own review, not assumptions based on this observation.
+
+Evidence limits: prior 333 assertions and real server-timeout tests used a NEW
+networkless PostgreSQL 17.6 helper, five synthetic tables/auth and restrictive ACLs.
+These were not rerun during verification. Original local DB, HTTP caller behavior,
+real data writes through ordinary roles, browser, load/performance and frontend
+deployment were not tested by this verification. No million-user capacity claim.
+
+### Next coherent implementation (not implemented by this documentation)
+
+Connect the existing search RPC through typed entity/model/UI boundaries. Use only
+keyword text, the existing global category path, condition and public city/country
+text filters; newest-first bounded pages. Category fields stay free text. Never
+infer EUR, distance ranking, exact numeric ranges, synonyms or typo correction.
+Unknown category paths retain title/description search, not guessed detail keys.
+
+UI: compact sticky search + Filtrid; initially closed mobile panel/desktop drawer;
+debounced input and stale-result protection; X/Vaata tulemusi closes without
+reverting filters or causing its own network request. Preserve unchanged-query
+scroll and detail return; changed query resets the result window. Reuse working
+return-context contracts and show honest loading/error/empty/clear states.
+Do not present skeleton featured/service data as filtered real results. Preserve
+existing owner editing, wanted summaries, public-profile and legacy workflows.
+
+### Launch scope boundary
+
+Knowledge, news and future business capabilities are post-launch decisions based
+on observed demand. Keep modular separation and stable shared identity/content
+contracts, not speculative framework/table/API construction. The first target is
+a useful publish/find/contact/manage experience. No user-to-user checkout or
+complex booking. This decision does not remove existing features or weaken
+privacy, safety or the separate Energy/payment contracts.
+
 # Selqiro V2 Production Architecture
 
 ## Purpose
