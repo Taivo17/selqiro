@@ -5175,3 +5175,111 @@ with live before/after checks and no automatic retry/history repair on ambiguity
 No production APPLY or search UI connection occurs in this source checkpoint.
 Keep the existing horse owner editor/list, publication, images and Energy intact.
 Do not rerun the completed local runner or old preflights/installers/finishers.
+
+
+<!-- SELQIRO_LISTING_ACTIVITY_RENEWAL_SOURCE_CANDIDATE_20260928 -->
+## 2026-09-28 — Ordinary listing explicit renewal: local source candidate
+
+28 Sep user evidence accepts deployed ea4063b anonymous search and its filters.
+A separate expired-listing management gap was reported: raw active status remains
+in My Area while the correct public expiry predicate excludes the listing. Status
+changes and content-only edits in V2 do not request renewal. The 17:48 source-only
+collector (`listing-expiry-context-20260928-174811-8jlao80y.zip`, SHA-256
+`d3d84ab2f14535546bec93121951406b7b574748481bc6d8585161ad3fa5264c`) preserved clean
+ea4063b/main/local origin-main, with no network/SQL/build. All 168 archive files,
+167 manifest hashes and 155 exported-source triples were reviewed. Saved selected
+DDL is from 27 Sep, not a fresh production observation.
+
+New isolated candidate: `20260928160000_add_owner_listing_activity_renewal.sql`.
+`renew_my_listing_activity_v1(text,timestamptz)` confirms one existing active-status
+listing owned by the authenticated active identity, with a required previous
+active_until compare-and-set. New expiry comes from the server UTC clock +90 days.
+Same ID/content/created_at, no ranking bump, charge, image/category or Energy write.
+No status flip: paused/sold/other states fail. NULL identity is not adopted.
+Legacy NULL expiry and a longer existing finite period are no-ops. Existing broad
+legacy direct grants/writers and public reads stay unchanged; this is not their
+security retirement. Ordinary listings do not currently have showcase-style
+updated_at/last_confirmed_at/published_at fields. Do not invent those fields.
+
+Runner tests only a NEW pinned networkless PG17.6 helper with seven selected
+schema tables, exact existing identity/search-vector helper bodies, synthetic auth
+and restrictive fixture ACL. 69 planned behavior/permission/preservation checks,
+outer rollback, catalog/data comparison and verified helper-only cleanup must
+succeed before writing eight files, building and staging. Read the actual run's
+result before claiming SQL/build PASS. No original local DB/production connection,
+commit/push, prior-test replay or user-interface change belongs to this step.
+Sequential stale-call tests are not multi-connection race or HTTP/load tests.
+
+After reviewed local results: scoped source checkpoint, separate fresh production
+preflight/approved additive rollout, then typed My Area `Aegunud` / `Uuenda kuulutust`.
+Do not activate the new UI before the server contract exists in production.
+Keep existing public-search visibility, owner editor and horse contracts intact.
+No bulk renewal and no implicit expired republication from ordinary edits.
+Substantive edit-based extension while still active remains separate work.
+Details: `docs/architecture/owner-listing-activity-renewal-v1.md`.
+
+### Local test comparator correction, 28 September v2
+
+The 18:32 v1 run stopped at the all-column preservation assertion after 48
+passes: JSON snapshots were rendered in different session time zones. Helper
+rollback and cleanup passed; ea4063b and all 291 sources stayed clean/unchanged.
+No source write, build or staging occurred; the old SQL suite is not PASS.
+V2 fixes both-side snapshots to UTC without omitting any column and adds five
+regressions (including detection of real creation-time/title changes). All 74
+checks, rollback and cleanup must pass before the same eight-file candidate
+write/build/staging. Migration and fixture bytes are unchanged. Await the v2
+result; do not rerun v1, access production or expose renewal UI yet.
+
+
+<!-- SELQIRO_LISTING_RENEWAL_SOURCE_ACCEPTED_20260928 -->
+## 2026-09-28 — Explicit ordinary-listing renewal: reviewed local PASS and source checkpoint
+
+The corrected user run ended at 19:16:05 +03:00. Evidence:
+`listing-renewal-local-20260928-191538-045yg193.zip`, SHA-256
+`bf79b02f6285553dd472e4109d7e710132f64de3be920235699291acf415a700`.
+Review checked all 376 archive files / 375 manifest hashes and CRC, all 295
+source size/blob/SHA triples, the exact runner and eight candidate payloads.
+A real temporary Git index reconstructed the staged patch against the exported
+base and matched all 295 selected final sources. No new remote observation was
+made during that local run or this off-device evidence review.
+
+Real isolated PostgreSQL 17.6 evidence: all 74 uniquely labelled checks passed
+in the expected order with exit 0 and the exact final PASS marker. Before/after
+catalog, ACL, constraints, triggers and seven-empty-table snapshots match.
+The same networkless helper was removed and its absence checked before source
+writes/build/staging. The user's Selqiro build passed. The original local
+application database and production were not contacted; no persistent renewal
+schema was installed there. This supersedes the earlier pending v2 test state,
+not the historical fact that v1 stopped after 48 checks.
+
+The UTC comparison correction is proven by the full 74-check run: raw timestamp
+text differs across the tested zones; canonical snapshots match; changing a
+creation timestamp or title is still detected. No preservation column was
+excluded except the intentionally modified active_until. Renewal migration and
+fixture remain byte-identical to the v1 candidate. Do not rerun either installer.
+
+Source-only finish: commit `Add explicit owner listing activity renewal contract`
+from base `ea4063b6b1f0ef3e390d9193cab48a5701f205a7`. Only the eight reviewed paths
+belong in that commit. This finisher adds five documentation entries, preserves
+the migration/test/fixture and application bytes, requires a fresh build and
+explicit COMMIT PUSH, then verifies the scoped child commit, remote equality and
+clean worktree. Actual completion/new SHA belong to its result, not this planned
+entry. No SQL/test replay, Docker, Supabase, apply or UI connection occurs here.
+Normal configured Git hooks/CI may run; deployment is not verified by this step.
+
+Renewal remains free, single-listing and explicit: matching prior deadline,
+server-resolved active identity, exact stored active status, server UTC 90 days,
+no content/status/creation-order/image/category/Energy changes or duplicate.
+Legacy NULL and a longer deadline remain no-ops; stale repeat requests conflict.
+This is deadline compare-and-set, not general content revision or a durable
+operation-ID ledger. Existing direct writers and broad SELECT policies are not
+retired or fixed here. Synthetic auth and restrictive fixture ACL are not full
+Supabase/HTTP permissions, parallel-connection race or performance evidence.
+
+Next, only after the source-finish result is reviewed: fresh read-only production
+preflight for the new commit and `20260928160000`. Check dependencies, actual
+function/role privileges, listing triggers, existing schema and migration history;
+no APPLY in that preflight. Separately approved additive rollout and verification
+must precede the typed owner renewal UI. Preserve working public search and its
+expiry exclusion. The present Minu ala raw-active/expired presentation discrepancy
+remains until the later Aegunud / Uuenda kuulutust client patch.

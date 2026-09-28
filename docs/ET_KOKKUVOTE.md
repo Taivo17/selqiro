@@ -9021,3 +9021,96 @@ migratsiooni sihitud ainult lugemise productioni eelkontroll.
 Kasutajale jääb plaan lihtsaks: märksõnad ja üldfiltrid; kategooriate lisaväljad
 jäävad esialgu vabatekstiks. Telefoni filtrid tulevad avatava/suletava paneelina.
 Vanu teste/käivitajaid ei korrata, kuulutusi ega kontosid ei kustutata.
+
+
+<!-- SELQIRO_LISTING_ACTIVITY_RENEWAL_SOURCE_CANDIDATE_20260928 -->
+## 2026-09-28 — Tavakuulutuse selgesõnalise uuendamise alus
+
+Kasutaja võttis ea4063b productioni kontota otsingu ja filtrid vastu. Eraldi leid:
+Minu ala roheline active ei arvesta möödunud tähtaega, kuigi otsing peidab aegunud
+kuulutuse õigesti. V2 staatuse ja sisu muutmine active_until väärtust ei pikenda.
+17:48 koguja jättis ea4063b tööpuu puhtaks; uut võrgu-, andmebaasi- ega build'i
+käsku ei tehtud. ZIP-i 168 faili, 167 räsi ja 155 allika kolmikud kontrolliti.
+Kaasas olev skeem pärineb 27.09 kontrollist, mitte uuest production-vaatlusest.
+
+Uus alus on ainult ühe olemasoleva tavakuulutuse tasuta uuendamise RPC.
+Server kontrollib kasutajat, aktiivset identiteeti, sama kuulutuse omanikku,
+active staatust ja eelmist tähtaega ning arvutab ise uue 90-päevase tähtaja.
+Sama kuulutuse ID, loomisaeg, sisu, pildid, rubriigid ja järjestus säilivad.
+Peatatud/müüdud kuulutust see toiming ei avalda. Varasem null-tähtaeg säilib;
+pikemat kehtivust ei lühendata. Vana tähtajaga kordustaotlus ei pikenda uuesti.
+Vana tabeliõiguste ja V1 kirjutuste täielikku sulgemist selles etapis ei tehta.
+
+Uut migratsiooni ja 74 kontrolliga testi käivitatakse ainult UUES eraldatud
+võrguta abibaasis. Algset kohalikku baasi ja productionit ei ühendata. Eduka
+SQL-i, tagasipööramise ja abikonteineri koristuse järel kirjutatakse kaheksa
+lähte-/testi-/dokumendifaili, käivitatakse build ja tehakse staging. Tegelikud
+PASS-tulemused peavad tulema tagastatud ZIP-ist. Commit/push puudub.
+
+Seejärel tuleb allika checkpoint ja eraldi kontrollitud production-rakendamine.
+Alles sellele järgneb Minu ala `Aegunud` märgis ning `Uuenda kuulutust` nupp.
+Kuulutus ei muutu uueks ega esiletõstetuks ja uuendamine ei tarbi Energy't.
+Juba aegunud kuulutuse sisumuutus ei avalda seda vaikimisi uuesti.
+Hobuste, teenuste ja tootenäidiste lepinguid selles paranduses ei muudeta.
+Käivitamise põhifookus säilib; uusi tulevikumooduleid ei ehitata.
+
+### Testi võrdluse parandus — 28.09.2026
+
+18:32 v1 katse peatus pärast 48 edukat kontrolli säilivusvõrdluses. Test
+võrdles eri ajavööndites JSON-iks teisendatud kuupäevi; seda ei tohi lugeda
+kogu testi läbimiseks. Muudatused olid ainult eraldatud abibaasi tehingus;
+tagasipööramine ja abikonteineri eemaldamine läbisid. Projekt jäi puhtaks
+commit'il ea4063b: build'i, lähtefailide kirjutamist ega staging'ut ei toimunud.
+
+V2 parandab ainult testi võrdluse: mõlemad hetktõmmised moodustatakse UTC-s.
+Ühtegi kuupäeva- ega sisuvälja kontrollist ei eemaldata. Viis lisakontrolli
+peavad näitama vana vormistusvea põhjuse ning kinnitama, et kuupäeva või
+pealkirja tegelik muutus jääb tuvastatavaks. Nõutud on kõik 74 kontrolli.
+Uuendamise migratsioon ja seitsme tabeli testialus jäävad täpselt samaks.
+Parandatud katse tegelik läbimine peab tulema uuest tulemuse ZIP-ist;
+productionit, algset kohalikku baasi ja kasutajaliidest selles etapis ei muudeta.
+Vana v1 skripti ei korrata; kasutusel on selqiro-add-listing-renewal-local-corrected.py.
+
+
+<!-- SELQIRO_LISTING_RENEWAL_SOURCE_ACCEPTED_20260928 -->
+## 2026-09-28 — Kuulutuse uuendamise 74 kontrolli läbisid; lähtekoodi etapi lõpetamine
+
+28. septembri parandatud katse lõppes kell 19:16:05 +03:00. Tõend on
+`listing-renewal-local-20260928-191538-045yg193.zip`, SHA-256
+`bf79b02f6285553dd472e4109d7e710132f64de3be920235699291acf415a700`.
+Kontrollitud on 376 arhiivifaili / 375 manifestiräsi ja CRC, kõik 295 lähtefaili
+ning täpselt kaheksa stage'itud faili muudatus. Ajutises päris Git-indexis
+rekonstrueeritud patch vastas kõigile 295 valitud lõppfailile.
+
+Kõik 74 PostgreSQL 17.6 kontrolli läbisid õiges järjekorras. Sealhulgas läbis
+varem peatunud kõigi muutmata väljade säilimise võrdlus. Uus test kinnitas, et
+UTC-normaliseerimine eemaldab ainult ajavööndi kirjapildi erinevuse; pealkirja
+või loomiskuupäeva tegelik muutus jääb tuvastatavaks. Migratsiooni ja seitsme
+tabeli testialuse sisu jäi esimese katsega bait-baidilt samaks.
+
+Abibaasi kataloog, õigused, piirangud, triggerid ja seitsme tühja tabeli hetkeseis
+taastusid täpselt. Selle käigu abikonteiner eemaldati ja puudumine kontrolliti.
+Seejärel lisati kaheksa kandidaatfaili, Selqiro build läbis ning failid stage'iti.
+Algset kohalikku andmebaasi ega productionit ei ühendatud. Uuendamisnuppu veel ei
+lisatud ja olemasolevaid kuulutusi ei uuendatud. Katse ei olnud täieliku Supabase'i,
+HTTP-õiguste, paralleelsete ühenduste, brauseri ega koormuse test.
+
+Järgnev lõpetaja säilitab testitud SQL-i, fikstuuri ja rakenduskoodi muutmata,
+lisab viide dokumenti tulemuse ning käivitab uue build'i. Ainult kinnituse
+COMMIT PUSH järel luuakse täpne kaheksafaililine commit
+`Add explicit owner listing activity renewal contract` ja pushitakse origin/main.
+Tegelik uus commit ja õnnestumine loetakse lõpetaja tulemuse ZIP-ist.
+SQL-i ega teste ei korrata, productionit ei rakendata. Git hook/CI võib käivituda.
+Kohaliku testikäigu ajal värsket remote'i kontrolli ei toimunud.
+
+Kasutajale kavandatud lahendus jääb lihtsaks: aegunud kuulutus kuvatakse Aegunud
+ja selle juures saab hiljem vajutada Uuenda kuulutust ning kinnitada, et pakkumine
+on alles. Server seab tasuta uue 90-päevase tähtaja samale kuulutusele. Ei looda
+koopiat, muudeta sisu ega tõsteta loomiskuupäeva järgi kuulutust ettepoole.
+Peatatud või müüdud staatus ei muutu selle toiminguga automaatselt aktiivseks.
+
+Pärast lähtekoodi lõpetamise tulemuse ülevaatust tuleb eraldi ainult lugemisega
+productioni eelkontroll. Alles eraldi kinnitatud rakendamise ja järelkontrolli
+järel ühendatakse kasutajaliides. Seni jääb Minu ala aktiivse/aegunud näitamise
+puudus lahendamata; otsingu korrektset aegumisfiltrit ei eemaldata.
+Ära korda läbitud installereid, SQL-teste ega varasemaid productioni skripte.

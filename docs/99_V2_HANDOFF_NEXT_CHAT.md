@@ -1,3 +1,190 @@
+<!-- SELQIRO_LISTING_RENEWAL_SOURCE_ACCEPTED_20260928 -->
+# CURRENT HANDOFF — 2026-09-28 ordinary-listing renewal source checkpoint
+
+This top entry supersedes historical next-task instructions below.
+Read the current finisher result to distinguish prepared, committed and pushed.
+
+## Current evidence / source boundary
+
+- Base: `ea4063b6b1f0ef3e390d9193cab48a5701f205a7`.
+- Corrected local run: `listing-renewal-local-20260928-191538-045yg193.zip`.
+- ZIP SHA-256: `bf79b02f6285553dd472e4109d7e710132f64de3be920235699291acf415a700`.
+- Actual run finished 28 Sep 19:16:05 +03:00: all 74 SQL checks, outer rollback,
+  same-helper cleanup and real Selqiro build PASS.
+- Git at that time: eight files staged, no extra unstaged changes, base HEAD
+  unchanged. Local origin/main check only, not a fresh remote query.
+- All 376 ZIP files / 375 hashes / CRC and all 295 source triples verified.
+  The eight-file staged patch reconstructed against selected source bytes in a
+  real temporary Git index and matched all 295 final exported source files.
+- Planned source commit: `Add explicit owner listing activity renewal contract`.
+  The finishing runner changes only five docs, builds, requires COMMIT PUSH,
+  checks exact eight-path scope and verifies clean/remote-equal completion.
+  The new commit SHA is not knowable until that run; use result.txt / Git.
+- Migration: `supabase/migrations/20260928160000_add_owner_listing_activity_renewal.sql`.
+  SHA-256: `0bfc32ce5a3eb9dfa7ac9d3a1328a9567ad9ff3c1c6b35eec04e12e92f1fec61`.
+- Test: `supabase/tests/20260928160000_owner_listing_activity_renewal_test.sql`.
+  SHA-256: `d1908ee1f7cbeb3bb131172fef0add9ee0978817b250e270540f1896d67a70bc`.
+- Fixture: `supabase/tests/fixtures/owner_listing_activity_renewal_v1_fixture.sql`.
+  SHA-256: `cc881f29606ab78de4fedbe2bce743971294b751dab5856d80898e5ef7be9110`.
+
+## One next task after reviewed successful source finish
+
+Prepare a fresh READ-ONLY production preflight for the observed new commit,
+linked project `vyjletlmwoiwxsnsunlm`, and only pending migration `20260928160000`.
+Inspect actual schema/identity helper/listing triggers/function and role
+privileges, migration history and dry-run. Do not call the renewal writer or
+apply the migration in that preflight. The fresh result must be reviewed before
+a separately approved additive rollout. No UI switch or bulk listing renewal.
+If source finish stopped, its report review is the only next task instead.
+
+## What remains unchanged / not yet proven
+
+- Renewal migration is NOT applied to production or the original local DB.
+  The local test's new isolated helper was removed, not installed persistently.
+- Existing public search and owner horse/listing editor remain unchanged.
+  Search's expiry exclusion is correct. Minu ala still has the reported raw
+  active-status/expired presentation discrepancy; no renewal button yet.
+- The earlier 18:32 v1 test failed after 48 assertions. The 19:15 v2 run supersedes
+  its incomplete result with a full 74-check PASS. It is not a production test.
+- The correction touched test serialization only; actual changed creation dates
+  and titles remain detectable. The migration/fixture bytes were unchanged.
+- Fixture uses seven selected real table definitions, exact identity/search-vector
+  helper bodies, synthetic auth and restrictive ACL. Not full Supabase, real HTTP
+  authorization, concurrent-connection race or load-test evidence.
+- SQL was not rerun by review/source finish. Normal Git hooks/CI may run;
+  any new frontend deployment is not verified by source finish.
+- Deadline compare-and-set is not general content revision or durable operation-ID
+  replay. Existing legacy direct writers and broad listing SELECT policies remain
+  separate pre-launch boundaries. Membership rules are reused, not expanded.
+
+## User contract for later client work
+
+One ordinary active-status listing, explicit free confirmation, server UTC 90-day
+renewal, original ID/content/created_at/images/category links/Energy preserved.
+No creation-order ranking bump. Paused/sold are separate status actions, never
+implicitly reactivated. Historical NULL expiry and longer periods remain no-ops;
+stale expected deadlines fail instead of being automatically retried.
+After production verification, add typed owner action and truthful Aegunud /
+Uuenda kuulutust presentation, exact deadline round-trip, one in-flight guard,
+identity/stale-response protection and refreshed owner row. Do not invent a new
+persisted expired status or filter partial pages as if complete counts were known.
+
+## Environment / do not rerun
+
+Python 3.9+ runner; Git child environments isolate inherited GIT_* overrides without
+changing the terminal. Source finish uses only local source/Git, existing npm build
+and approved GitHub remote, not Docker/Supabase/SQL. Previously verified Supabase
+CLI is the hash-pinned cached native 2.117.0; do not install/unpin/relink it.
+The renewal tests use a NEW pinned networkless PG17.6 helper, never the original
+Supabase container. Both renewal installers have now run; do not rerun them.
+Preserve all old result ZIPs and COMPLETE operation journals. No reset, restore,
+history repair, reapplication or editing a production-applied migration.
+
+---
+
+<!-- SELQIRO_LISTING_ACTIVITY_RENEWAL_SOURCE_CANDIDATE_20260928 -->
+# CURRENT — 28 September 2026: explicit ordinary-listing renewal candidate
+
+This top entry supersedes historical next-task instructions below.
+Known base: `ea4063b6b1f0ef3e390d9193cab48a5701f205a7`.
+28 Sep user evidence accepts ea4063b Vercel Ready / Production and anonymous
+keyword/category/location search. The completed search rollout must not be rerun.
+
+## Current evidence and exact next action
+
+Source-only collector 17:48 local / 14:48 UTC:
+`listing-expiry-context-20260928-174811-8jlao80y.zip`, SHA-256
+`d3d84ab2f14535546bec93121951406b7b574748481bc6d8585161ad3fa5264c`.
+168 entries / 167 hashes / CRC; 155 source triples; clean unchanged ea4063b
+main/local origin-main. No fresh remote check, SQL, build or deployment operation.
+The saved selected DDL is the exact 27 Sep snapshot, not live data or a new read.
+Combined with the previous finish, 291 actual source files are hash-guarded.
+
+New candidate installer: `selqiro-add-listing-renewal-local-corrected.py`.
+Only `LOCAL RENEW TEST`; stop the local dev server before the build.
+A NEW networkless PostgreSQL17.6 helper uses the existing pinned Docker image;
+no original local DB/container or production connection. Only seven selected
+tables, exact existing identity-access and search-vector helpers, synthetic auth
+and restrictive test ACLs are used. 74 planned checks plus outer rollback,
+empty-row/catalog comparison and exact helper cleanup precede any source writes.
+The runner then adds one new migration, one new SQL suite, one fixture, one
+architecture contract and four current-document entries: exactly eight paths.
+A successful existing build precedes staging. Commit/push are unavailable.
+Read result.txt before claiming this installation/test/build has executed.
+This document records candidate scope, not proof that a prepared script was run.
+
+**Next after the returned local result:** review SQL, rollback, cleanup, exact
+payloads and eight-file staged scope; then create a separate guarded source finish.
+Do not rerun the installer after a partial stop or stage/reset by hand.
+
+## Boundary
+
+New RPC `renew_my_listing_activity_v1(text,timestamptz)` only extends a currently
+active-status existing listing owned by the server-resolved active identity.
+Previous deadline is a compare-and-set precondition. Server UTC +90 days only.
+No creation, ownership/status/content/ranking/image/category/Energy changes.
+NULL legacy expiry and longer periods remain unchanged. Paused/sold fail;
+no generic user_id fallback for an unassigned or different identity.
+The existing vector trigger runs normally. No new updated_at/published_at field.
+Existing legacy direct table grants and public reads remain a separate boundary.
+Do not claim system-wide writer protection or public-table privacy was repaired.
+Sequential stale-call tests are not real multiple-connection/HTTP/load validation.
+
+Production: both earlier search migrations remain applied/verified; the new
+renewal migration is NOT applied. Persistent original local schema stays unchanged.
+UI remains unchanged, so the reported green active/expired contradiction is not
+fixed yet. After separate source+production rollout, implement one coherent
+My Area `Aegunud`/`Uuenda kuulutust` client including consistent owner filtering.
+Never remove the search expiry predicate or renew all listings automatically.
+Substantive active-edit renewal is not introduced by this explicit renewal patch.
+
+## Working environment
+
+Use the existing Docker Desktop Unix socket `~/.docker/run/docker.sock`; helper
+creation pins the already observed image ID and the full newly created container
+ID. Known binary directory `/usr/lib/postgresql/bin`, version 17.6.
+No pull, install, reset, original-container exec, Supabase/npx or journal access.
+GIT_* and DOCKER_* overrides are removed in child processes only.
+CLI 2.117.0 is historical production tooling; not used in this local step.
+Keep launch focus: listings, services, contact and management. Future modules wait.
+
+---
+
+
+## 28 September test-comparator correction (v2, not a production change)
+
+The actual 18:32 v1 run stopped after 48 passing assertions with
+`RENEWAL_ASSERT_FAILED: all_other_listing_columns_preserved` (psql exit 3).
+It captured JSON snapshots before switching the test caller to Pacific/Auckland,
+then compared them with new JSON in that different zone. Timestamp formatting
+therefore made unchanged values compare unequal. This is a source-level test
+defect; the old run is NOT a full SQL pass. It exported no per-column row diff.
+
+The v2 suite uses a test-only UTC snapshot function for BOTH sides of all listing
+and related-row comparisons. No timestamp or content column is ignored. Five
+new assertions reproduce the raw timestamp representation difference before
+renewal, verify matching instants/canonical rows, and require actual timestamp
+and title differences to remain detectable. All 69 original assertion labels
+remain; 74 total are required. The full v2 SQL run, not this preparation, must
+prove the corrected comparison and all remaining assertions.
+
+The production-candidate migration and seven-table fixture remain byte-for-byte
+identical. No permission, duration, status, renewal writer or UI change is made
+by this correction. Only the SQL test/comparator, external runner diagnostics
+and five candidate documents differ.
+
+The 18:32 failure had matching before/after catalog/ACL/seven-empty-table
+snapshots and confirmed helper removal; repository HEAD/index/worktree stayed
+clean at ea4063b with all 291 source hashes unchanged. No build, source writes,
+staging, commit/push, original DB connection or production command occurred.
+Do not rerun the v1 installer. The v2 runner first verifies the exact failed ZIP
+and its embedded collector, then runs only in a NEW isolated helper. It writes
+the eight candidate source/test/docs paths only after all 74 checks, rollback
+and helper cleanup pass; the existing build then precedes exact staging.
+
+Read the returned v2 result before claiming SQL/build PASS. Full Supabase ACL,
+HTTP authorization, concurrent races, production and browser behavior remain
+separate validation boundaries. No source finish or production action yet.
 <!-- SELQIRO_PUBLIC_SEARCH_CLIENT_BROWSER_ACCEPTED_20260927 -->
 # CURRENT — 27 September 2026: public search client accepted for finish
 
