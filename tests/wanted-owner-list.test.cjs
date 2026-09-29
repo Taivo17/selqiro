@@ -217,19 +217,20 @@ test('wanted list price/area agrees with existing detail formatter for supported
     assert.equal(normal(labels(s).priceLabel), normal(p.priceLabel)); assert.equal(labels(s).locationLabel, p.locationLabel);
   }
 });
-test('late response after list hook cleanup cannot replace the newer filter result', async () => {
-  const effects = [], states = [], pending = [];
-  const l = realm({ rpc: () => new Promise(resolve => pending.push(resolve)), react: {
-    useState: init => [init, next => states.push(next)], useEffect: fn => effects.push(fn),
-  } });
-  const hook = l(F + 'model/useMyAreaListings.ts').useMyAreaListings;
-  hook({ searchQuery: 'old' }); const cleanup = effects.shift()(); cleanup();
-  hook({ searchQuery: 'new' }); effects.shift()();
-  pending[1]({ data: [{ ...row(), title: 'NEW' }], error: null });
+test('late response after owner list session cleanup cannot replace the newer filter result', async () => {
+  const { OwnerListingActivitySession } = load(F + 'model/ownerListingActivitySession.ts');
+  const pending = [];
+  const actor = { userId: ID, identityId: identity };
+  const session = new OwnerListingActivitySession({ actor: async () => actor,
+    read: () => new Promise(resolve => pending.push(resolve)),
+    renew: () => { throw Error('Unexpected renewal'); }, status: () => { throw Error('Unexpected status write'); } });
+  session.activate(); const old = session.load({ searchQuery: 'old' });
+  await new Promise(resolve => setImmediate(resolve)); session.deactivate();
+  session.activate(); const fresh = session.load({ searchQuery: 'new' });
   await new Promise(resolve => setImmediate(resolve));
-  pending[0]({ data: [{ ...row(), title: 'OLD' }], error: null });
-  await new Promise(resolve => setImmediate(resolve));
-  assert.equal(states.at(-1).listings[0].title, 'NEW'); assert.equal(states.at(-1).loading, false);
+  pending[1]([card(map({ ...row(), title: 'NEW' }))]); await fresh;
+  pending[0]([card(map({ ...row(), title: 'OLD' }))]); await old;
+  assert.equal(session.getSnapshot().listings[0].title, 'NEW'); assert.equal(session.getSnapshot().loading, false);
 });
 test('strict typecheck of actual new parser/API/row mapping with only fake transport declaration', () => {
   const options = { strict: true, noEmit: true, skipLibCheck: true, target: ts.ScriptTarget.ES2017,

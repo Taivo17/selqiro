@@ -80,6 +80,15 @@ function nullableString(
   return text || null;
 }
 
+/** Required RPC column: malformed/missing data must not become an unlimited NULL deadline. */
+function nullableDeadline(value: unknown): string | null {
+  if (value === null) return null;
+  if (typeof value !== "string" || value.length === 0) {
+    throw new Error("Kuulutuse tähtaja vastus on vigane. Laadi nimekiri uuesti.");
+  }
+  return value; // Preserve original fractional seconds and timezone for expected-deadline CAS.
+}
+
 function nullableNumber(
   value: unknown
 ): number | null {
@@ -217,7 +226,7 @@ export function mapOwnerMarketplaceItemRow(
     locationLabel: nullableString(
       row.location_label
     ),
-    activeUntil: nullableString(
+    activeUntil: nullableDeadline(
       row.active_until
     ),
     publishedAt: nullableString(

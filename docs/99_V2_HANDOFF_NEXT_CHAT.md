@@ -1,3 +1,150 @@
+<!-- SELQIRO_OWNER_LISTING_RENEWAL_BROWSER_ACCEPTED_20260929 -->
+# CURRENT HANDOFF — 29 September 2026, renewal client browser accepted
+
+This top entry supersedes historical next-task entries below. Do not rerun the
+client installer, completed docs/source finishers, SQL/preflight/APPLY or journals.
+
+## Actual state before the source finisher
+
+Actual Mac installer 29 Sep 14:23-14:24 (+03): 483 client checks and full build PASS;
+19 exact paths staged, no unstaged changes, HEAD remains
+`08cdf0928910cb54fea616575a14ffe5e68d046b`. Remote equality referred to that base,
+not a new client commit or deployment. Evidence:
+`owner-listing-renewal-client-20260929-142334-uk14p449.zip`, SHA-256
+`93ff7d959346319c9ab8559c05e446c4d16bf942eed3dd1aae1fd83defee9edc`.
+Offline review checked all 338 entries/337 manifest hashes/CRC, 305 source triples,
+14 exact client/test payloads, five historical-byte-preserving doc additions,
+23 unchanged migrations and the staged patch in a real temporary Git index.
+
+The user's evening browser result is "testides on korras". Supplied desktop images
+show expired badges/deadlines, a chosen flatbed listing renewed until 28 Dec 2026,
+its subsequent appearance in public search, remaining expired rows, and consistent
+wanted budget/search area in the owner list and detail. The browser action is a real
+write to its configured database even when using localhost. Installer and finisher
+never invoke the renewal RPC. Do not call the browser step "no data changed".
+
+Evidence limits: user acceptance, not our automated browser run. Separate screenshots
+of cancel/Escape, reload, identity switching, narrow layout, network calls and error
+races were not supplied. Images do not independently establish deployment identity,
+row IDs/created_at, whole-row preservation, HTTP ACLs or load capacity. No extra
+production data read or fresh Mac/GitHub check occurs during offline review.
+
+## One next action and source-completion boundary
+
+Run only `selqiro-finish-owner-listing-renewal-client.py` with this exact client ZIP
+in Downloads and the repo's dev server stopped. It verifies the full staged index,
+305 sources and 23 migrations, preserves all 14 client/test payloads, prepends these
+five documentation entries, runs the existing build and asks COMMIT PUSH before a
+19-file commit. Subject: `Connect owner listing expiry and explicit free renewal`.
+The result prefix is owner-listing-renewal-finish-. Read NEW_COMMIT, COMMIT, PUSH,
+BUILD, WORKTREE and REMOTE in that result; this document cannot predict its own
+future commit hash. On STOP return the result without reset, restore or retry.
+
+After a reviewed successful finish, the ONE next step is to verify the actual new
+commit as Vercel Ready / active Production and perform a small read-only smoke check:
+My Area expiry/renewal controls, wanted detail and public search/detail return.
+Use already-renewed content; do not renew again just to test deployment. Do not open
+another feature before closing this checkpoint. Currency consistency and the narrow
+My Area content column remain separate existing launch polish tasks.
+
+## Preserved contracts, environment and production
+
+`renew_my_listing_activity_v1` is already APPLIED_VERIFIED from 28 Sep, history23/23
+and COMPLETE journal. This finisher makes no fresh database observation. It never
+runs SQL/Docker/Supabase, installs dependencies, edits live journals or applied SQL.
+Original persistent local schema is not changed. Previous 74 isolated PG assertions
+and 483 client checks remain prior evidence; build alone is freshly rerun.
+
+Repo ~/selqiro, main/origin-main, approved GitHub Taivo17/selqiro. Python3.9+ and
+existing npm dependencies only. Child GIT_* overrides are sanitized; terminal
+configuration stays untouched. Normal Git hooks/CI may run after explicit consent.
+Backups/results remain outside the repository under Downloads/selqiro-recovery.
+The source export is selected source, not the full repository or user-data backup.
+
+Keep free explicit 90 days, exact prior-deadline CAS, one status/renew lock, actor
+invalidation and no auto retry. Do not change ID/content/created_at/images/category/
+Energy/ranking or reactivate paused/sold as a side effect. Horse/wanted editor/list,
+public search and existing features remain working. Launch focus remains core
+publish/find/contact/manage; no speculative future modules in this source finish.
+
+---
+
+<!-- SELQIRO_OWNER_LISTING_RENEWAL_CLIENT_20260929 -->
+# CURRENT HANDOFF — 29 September 2026, expiry/renewal CLIENT candidate
+
+Confirmed source base: `08cdf0928910cb54fea616575a14ffe5e68d046b` —
+`Document listing renewal production rollout`, parent `d1f6bae`.
+User docs run ended 29 Sep 12:59:46 (+03): real build PASS, exactly five documents /
+249 additions committed and pushed, worktree clean and remote main equal in that run.
+Evidence `listing-renewal-rollout-docs-20260929-125918-y0t9awlp.zip`, SHA-256
+`2eca7bd7ab27dfc25a3347d3fb3ed8efe9da2b6ee826e6b45b5c96299800d661`.
+Offline review checked 320 files/319 manifest hashes/CRC, 295 source triples,
+23 unchanged migrations, five exact historical-byte-preserving doc prefixes,
+copied production/preflight/source manifests and real temporary Git-index patch
+reconstruction. That review is not a new Mac/GitHub/DB observation.
+
+This next package is CLIENT-ONLY and not proof of installation or deployment.
+It adds typed ordinary-listing deadline presentation and explicit free renewal
+through the existing `renew_my_listing_activity_v1`. Original deadline strings
+retain microseconds/timezone for CAS; finite input/one-row response checks reject
+invalid or inconsistent acknowledgements. No client-supplied new deadline, duration,
+identity, status, content, ranking, image/category or Energy mutation is added.
+Historical NULL or >=90-day remaining periods do not offer the renewal button.
+Server still owns time, authorization, unchanged-longer/null and stale-conflict rules.
+
+My Area derives Aegunud from active status + elapsed deadline, not days-left rounding.
+The existing active filter becomes “Aktiivsed ja aegunud”: its backend predicate is
+unchanged, and expired records are NOT removed from a partial returned batch.
+No expired-only filter or new persisted status is invented. Loaded counts are labelled
+as loaded; at 500 show the first-batch limit rather than a complete total.
+A local 30-second display clock makes no network requests and never renews anything.
+
+One mounted list session owns read/confirmation/mutation state, synchronous single-
+in-flight protection, before/after actor checks and generation-based stale suppression.
+No per-card context/detail reads. Auth callbacks only invalidate synchronously; reads
+are deferred out of that callback. Identity changes, logout, filter change and cleanup
+invalidate old responses/confirmation. A server acknowledgement is distinct from
+refresh failure. Conflict/unknown outcome blocks another write until refreshed data
+and a new explicit confirmation. Aborting fetch is NOT a rollback guarantee.
+No automatic write retry, effect-triggered renewal or bulk operation.
+
+Status changes remain the existing separate API. The shared client gate prevents
+status/renewal overlap in this list; no existing status database contract is changed.
+A successful operation reloads canonical owner rows. Same-identity/same-filter refresh
+keeps the local expanded view. Horse/wanted rows, editors, public search and all
+applied SQL remain intact. This is not a global legacy-writer or SELECT-policy repair.
+
+Validation target: 483 client assertions across seven explicit suites, TAP reporter,
+serial suite execution (`--test-concurrency=1`), zero failures/skips/cancels/todos,
+then the real project build. Preparation uses actual modules with synthetic transport,
+clock/hooks/JSX; NOT real React DOM, Mac Next build, production HTTP or a browser test.
+Serial execution avoids CPU contention in existing 1.5-second VM fixture limits;
+no assertion or old VM timeout was removed. The returned installer ZIP determines
+actual Mac test/build/staging success. No commit/push in the installer.
+
+Next: run only the new client installer, review its ZIP and targeted local browser
+checks (expired badge, cancel with no write, one deliberately chosen real renewal,
+reload/search visibility, paused/sold, filters, wanted/horse and narrow layout).
+A browser confirmation DOES change that one existing listing's deadline in its
+configured database. Do not create arbitrary fixtures or renew all listings.
+After accepted browser evidence, prepare a separate scoped finish and verify the
+actual frontend deployment. Do not replay old scripts or edit COMPLETE journals.
+
+---
+
+Read this top entry before historical instructions. The docs finish is COMPLETE.
+The new client installer is prepared, not yet user-run. Its only confirmation is
+RENEWAL CLIENT; stop this repo's dev server before tests/build. It writes/stages
+19 exact paths and has no commit, push, Supabase, Docker or SQL command.
+Source base must be clean 08cdf09. Downloads needs the exact docs-result ZIP above;
+prior evidence is already nested. Existing installed Node/npm/TypeScript only.
+Return the new owner-listing-renewal-client-*.zip on PASS or STOP. Preserve every
+file/index change; no reset/restore/retry before review. Production version
+20260928160000 remains already APPLIED_VERIFIED from 28 Sep, history 23/23.
+No new production read or write occurs merely by installing the client.
+
+---
+
 <!-- SELQIRO_LISTING_RENEWAL_PRODUCTION_DOCUMENTED_20260929 -->
 # CURRENT HANDOFF — 29 September 2026: renewal production rollout complete
 

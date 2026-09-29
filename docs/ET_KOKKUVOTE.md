@@ -1,3 +1,78 @@
+<!-- SELQIRO_OWNER_LISTING_RENEWAL_BROWSER_ACCEPTED_20260929 -->
+## 29.09.2026 — Aegunud kuulutuse uuendamine läbis kasutaja brauseritesti
+
+Kasutaja kinnitus: "testides on korras". Arvutivaate piltidel on aegunud kuulutus
+õigesti tähistatud; üks valitud platvormveoki kuulutus saab uue tähtaja 28. detsembrini
+ja ilmub tagasi otsingusse. Teised aegunud read jäävad aegunuks. "Otsin hobust"
+eelarve 5 000 eurot ja Rapla maakond säilivad nimekirjas ning detailis.
+See on kasutaja brauserikatse, mitte meie automaatne brauseri- või andmebaasitest.
+
+Paigaldaja tegelik käik lõppes 29.09 kell 14:24: 483 kliendikontrolli ja päris build
+läbisid. Tulemuse fail on owner-listing-renewal-client-20260929-142334-uk14p449.zip.
+Kontrollitud on 338 arhiivifaili, 337 manifestiräsi, kõik 305 lähtefaili ja muutmata
+23 migratsiooni. 19 faili on stage'itud, kuid uus commit ja push on veel tegemata;
+baas on 08cdf09. Testid kasutavad osaliselt asendatud võrgu- ja kasutajaliidese keskkonda.
+
+Nüüd lõpetame ainult selle testitud etapi. Uus lõpetaja lisab viide olemasolevasse
+dokumenti kinnituse, käivitab build'i ning küsib COMMIT PUSH. Rakenduskoodi ja teste
+enam ei muudeta. Tegelik uus commit ning puhas/sünkroonne lõppseis tulevad uuest ZIP-ist.
+Seejärel kontrollime sama commit'i Verceli juurutust ja teeme lühikese lugemiskontrolli.
+Juba uuendatud kuulutust pole vaja juurutuse kontrollimiseks uuesti pikendada.
+
+Uuendamine on tasuta ega kasuta Energy't. See kinnitab ühe olemasoleva pakkumise
+kehtivust 90 päevaks; ei loo uut kuulutust ega tõsta selle loomiskuupäeva. Staatuse
+muutmine on eraldi tegevus. Ühenduse tõrke korral tuleb tegelik seis uuesti laadida,
+mitte kirjutust automaatselt korrata. Brauseri kinnitus muudab päris tähtaega ka
+localhostist; paigaldaja ja lõpetaja ise kuulutusi ei uuenda.
+
+Serveri migratsioon on juba rakendatud. SQL-i, Dockerit, Supabase'i, pilte, avaldamist,
+Energy't ega lõpetatud päevikuid ei puudutata. Hinna/valuuta ühtlustamine ja Minu ala
+kitsa sisuveeru viimistlus jäävad eraldi tööks, mitte selle lõpetamise lisamuudatuseks.
+
+---
+
+<!-- SELQIRO_OWNER_LISTING_RENEWAL_CLIENT_20260929 -->
+## 29.09.2026 — Dokumenteerimine lõpetatud; aegumise ja uuendamise kliendipakett
+
+Kasutaja 12:59 käik lõppes commit'iga `08cdf0928910cb54fea616575a14ffe5e68d046b`.
+Build läbis, viis dokumenti / 249 lisatud rida said commit'i ja push'i, tööpuu jäi
+puhtaks ning GitHubi võrdsus kontrolliti. Ülevaatus kinnitas kõik 320 arhiivifaili,
+319 manifestiräsi, 295 lähtefaili, muutmata 23 migratsiooni ja täpse viie faili patch'i.
+See ei olnud uus andmebaasi- ega brauseritest. Dokumenteerijat ei korrata.
+
+Järgmine paigaldus ühendab ühe kasutajavoo: Minu ala näitab aktiivse staatusega,
+kuid lõppenud tähtajaga tavakuulutust kui „Aegunud”. „Uuenda kuulutust” avab ühe
+konkreetse pakkumise kinnituse. „Kinnita ja uuenda tasuta” pikendab selle tähtaja
+serveri järgi 90 päevani. Sisu, pildid, algne loomisaeg, järjestus ja Energy ei muutu.
+„Tühista” ei saada kirjutust. Peatatud ja müüdud kuulutust see toiming ei aktiveeri.
+Määramata või juba pikema tähtajaga kuulutust ei lühendata.
+
+Olemasolev staatusefilter nimetatakse „Aktiivsed ja aegunud”: serveri filter hõlmab
+mõlemaid. Eraldi aegunud-filtrit ei teeselda esimese 500 tulemuse kohalikul lõikamisel.
+Näidatakse laaditud ridade arvu; 500 puhul teatatakse piirist. Algne tähtajatekst
+säilib päringus täieliku täpsusega, mitte ümardatud JavaScripti kuupäevana.
+Topeltklõps, identiteedi vahetus ja hilinenud vastus ei tohi käivitada topeltsalvestust
+ega taastada vana identiteedi ridu. Ebaselge vastuse või konflikti järel tuleb
+nimekiri uuesti laadida ja uus kinnitus anda; kirjutust automaatselt ei korrata.
+
+Paigaldaja nõuab 483 kliendikontrolli ja päris Maci build'i, seejärel stage'ib
+19 täpset faili. Commit/push/SQL/Docker/Supabase puuduvad. Need arvud on nõuded,
+mitte väide seni käivitamata paigaldaja läbimisest. Ettevalmistuse kontrollides on
+transport, hook'id ja JSX asendatud; need ei ole päris brauseri ega productioni test.
+
+Järgmine kontroll pärast edukat paigaldust on brauseris: aegunud märgis, tühistamine,
+ühe tahtlikult valitud päris kuulutuse uuendamine, värskenduse järel säilivus,
+peatatud/müüdud read, filtrid, hobuse/otsingu read ja kitsas vaade. Kinnitus brauseris
+muudab selle ühe kuulutuse tähtaega kasutatavas andmebaasis. Testandmeid ega
+massuuendamist ei looda. Lõpuks saada paigaldaja ZIP ja brauseritulemus.
+
+Hobuste muutmisvorm, wanted-ridade eelarve/piirkond ja avalik otsing säilivad.
+Üldvaate varasemad näidisstatistikad ning vana tabelikirjutuse/avalike lugemisõiguste
+ülevaatus jäävad eraldi käivitamise tööks. Juba rakendatud SQL ja COMPLETE-päevikud
+jäävad puutumata; uusi tulevikumooduleid ei ehitata.
+
+---
+
 <!-- SELQIRO_LISTING_RENEWAL_PRODUCTION_DOCUMENTED_20260929 -->
 ## 29.09.2026 — Kuulutuse uuendamise serveriosa on productionis valmis
 

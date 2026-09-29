@@ -1,3 +1,100 @@
+<!-- SELQIRO_OWNER_LISTING_RENEWAL_BROWSER_ACCEPTED_20260929 -->
+## 2026-09-29 — Ordinary-listing expiry/renewal browser accepted
+
+The user reports "testides on korras" after the requested local browser checks.
+Desktop screenshots show an expired flatbed listing becoming active with a new
+28 December deadline and returning to public search; other expired rows remain
+expired. Wanted budget (5 000 EUR) and Rapla search area agree in owner list/detail.
+This is user-run browser evidence, not an automated HTTP/DB audit. Individual cancel,
+reload, identity-switch and narrow-screen cases are not separately pictured.
+
+Actual Mac installer 29 Sep 14:23-14:24 (+03): 483 client checks and full build PASS;
+19 exact paths staged, no unstaged changes, HEAD remains
+`08cdf0928910cb54fea616575a14ffe5e68d046b`. Remote equality referred to that base,
+not a new client commit or deployment. Evidence:
+`owner-listing-renewal-client-20260929-142334-uk14p449.zip`, SHA-256
+`93ff7d959346319c9ab8559c05e446c4d16bf942eed3dd1aae1fd83defee9edc`.
+Offline review checked all 338 entries/337 manifest hashes/CRC, 305 source triples,
+14 exact client/test payloads, five historical-byte-preserving doc additions,
+23 unchanged migrations and the staged patch in a real temporary Git index.
+
+Finish only the accepted 19-file checkpoint. The finisher modifies these five
+existing documents, runs a fresh build, and asks COMMIT PUSH. Application/test bytes
+and every applied migration remain unchanged. Its result supplies the actual new
+commit and remote equality; a prepared finisher is not a completed source checkpoint.
+After successful result review, verify that exact frontend commit and use read-only
+owner/search smoke checks. No new renewal write is needed just to verify deployment.
+
+Keep explicit free 90-day server renewal, original-deadline CAS, separate status
+operations and no automatic write retry. Energy, content, IDs, creation-order ranking,
+images and horse/wanted contracts remain unchanged. The prior production migration
+20260928160000 is already APPLIED_VERIFIED; do not repeat it or old installers.
+
+---
+
+<!-- SELQIRO_OWNER_LISTING_RENEWAL_CLIENT_20260929 -->
+## 2026-09-29 — Ordinary-listing activity client candidate
+
+Confirmed source base: `08cdf0928910cb54fea616575a14ffe5e68d046b` —
+`Document listing renewal production rollout`, parent `d1f6bae`.
+User docs run ended 29 Sep 12:59:46 (+03): real build PASS, exactly five documents /
+249 additions committed and pushed, worktree clean and remote main equal in that run.
+Evidence `listing-renewal-rollout-docs-20260929-125918-y0t9awlp.zip`, SHA-256
+`2eca7bd7ab27dfc25a3347d3fb3ed8efe9da2b6ee826e6b45b5c96299800d661`.
+Offline review checked 320 files/319 manifest hashes/CRC, 295 source triples,
+23 unchanged migrations, five exact historical-byte-preserving doc prefixes,
+copied production/preflight/source manifests and real temporary Git-index patch
+reconstruction. That review is not a new Mac/GitHub/DB observation.
+
+This next package is CLIENT-ONLY and not proof of installation or deployment.
+It adds typed ordinary-listing deadline presentation and explicit free renewal
+through the existing `renew_my_listing_activity_v1`. Original deadline strings
+retain microseconds/timezone for CAS; finite input/one-row response checks reject
+invalid or inconsistent acknowledgements. No client-supplied new deadline, duration,
+identity, status, content, ranking, image/category or Energy mutation is added.
+Historical NULL or >=90-day remaining periods do not offer the renewal button.
+Server still owns time, authorization, unchanged-longer/null and stale-conflict rules.
+
+My Area derives Aegunud from active status + elapsed deadline, not days-left rounding.
+The existing active filter becomes “Aktiivsed ja aegunud”: its backend predicate is
+unchanged, and expired records are NOT removed from a partial returned batch.
+No expired-only filter or new persisted status is invented. Loaded counts are labelled
+as loaded; at 500 show the first-batch limit rather than a complete total.
+A local 30-second display clock makes no network requests and never renews anything.
+
+One mounted list session owns read/confirmation/mutation state, synchronous single-
+in-flight protection, before/after actor checks and generation-based stale suppression.
+No per-card context/detail reads. Auth callbacks only invalidate synchronously; reads
+are deferred out of that callback. Identity changes, logout, filter change and cleanup
+invalidate old responses/confirmation. A server acknowledgement is distinct from
+refresh failure. Conflict/unknown outcome blocks another write until refreshed data
+and a new explicit confirmation. Aborting fetch is NOT a rollback guarantee.
+No automatic write retry, effect-triggered renewal or bulk operation.
+
+Status changes remain the existing separate API. The shared client gate prevents
+status/renewal overlap in this list; no existing status database contract is changed.
+A successful operation reloads canonical owner rows. Same-identity/same-filter refresh
+keeps the local expanded view. Horse/wanted rows, editors, public search and all
+applied SQL remain intact. This is not a global legacy-writer or SELECT-policy repair.
+
+Validation target: 483 client assertions across seven explicit suites, TAP reporter,
+serial suite execution (`--test-concurrency=1`), zero failures/skips/cancels/todos,
+then the real project build. Preparation uses actual modules with synthetic transport,
+clock/hooks/JSX; NOT real React DOM, Mac Next build, production HTTP or a browser test.
+Serial execution avoids CPU contention in existing 1.5-second VM fixture limits;
+no assertion or old VM timeout was removed. The returned installer ZIP determines
+actual Mac test/build/staging success. No commit/push in the installer.
+
+Next: run only the new client installer, review its ZIP and targeted local browser
+checks (expired badge, cancel with no write, one deliberately chosen real renewal,
+reload/search visibility, paused/sold, filters, wanted/horse and narrow layout).
+A browser confirmation DOES change that one existing listing's deadline in its
+configured database. Do not create arbitrary fixtures or renew all listings.
+After accepted browser evidence, prepare a separate scoped finish and verify the
+actual frontend deployment. Do not replay old scripts or edit COMPLETE journals.
+
+---
+
 <!-- SELQIRO_LISTING_RENEWAL_PRODUCTION_DOCUMENTED_20260929 -->
 ## 29 September 2026 — Ordinary-listing renewal is production-applied
 
