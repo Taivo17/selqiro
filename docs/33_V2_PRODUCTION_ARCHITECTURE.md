@@ -1,3 +1,45 @@
+<!-- SELQIRO_LISTING_RENEWAL_PRODUCTION_DOCUMENTED_20260929 -->
+## 29 September 2026 — Renewal server rollout complete; client boundary next
+
+This current entry supersedes older renewal deployment/next-preflight statements.
+Production project `vyjletlmwoiwxsnsunlm` applied migration `20260928160000` once
+in the user's 28 September 21:14–21:16 (+03) run. Source was clean and remote-equal
+at `d1f6bae1ea57ba78bec87f025c4d5df1d6e7ecef`; history 23/23, post dry-run empty,
+journal COMPLETE. See `docs/architecture/owner-listing-activity-renewal-v1.md`
+for the exact evidence, immutable source hash and validation limits.
+
+Verified addition: `renew_my_listing_activity_v1(text,timestamptz)`, exact body,
+result/signature/settings/comment, postgres owner, explicit and effective execution
+grants. The source-checked endpoint still validates auth and active-identity access.
+The stored public-DDL fingerprints preserve 1354 earlier statements with six new
+function-related statements. Raw full schemas remain private on the Mac; offline
+review compared stored fingerprints, not unavailable full dump bytes.
+No listing rows were read or renewed; existing triggers, writers, UI and Energy
+were not changed. Broad SELECT/legacy-writer issues are not solved by this addition.
+
+Next client must follow entity API -> feature hook -> compact owner UI boundaries.
+Read the exported current code first. Send the exact decimal listing ID and exact
+original deadline; do not lose timestamp precision by a Date round-trip. Server
+computes UTC +90 days and owns authorization, deadline conflict and no-shortening
+rules. A timeout/lost response is not proof of rollback: show uncertainty, refresh
+the owner row, and require a fresh explicit confirmation rather than blind retry.
+Use one in-flight guard and protect auth/identity changes and stale responses.
+
+Show expired active ordinary listings as Aegunud, distinct from paused/sold.
+No new persisted expired status; no client filter over a partial page presented as
+complete totals. Inspect the existing read/pagination contract before promising an
+expired filter; any missing server capability requires its own scoped contract.
+Preserve null-deadline semantics, original ID/content/created_at, images, category
+links, Energy and creation-based ordering. Do not broaden into horse publication,
+public horse search or unrelated owner return-context work.
+
+This docs-only checkpoint adds no client behavior. Actual docs build/commit/push
+are known only from its returned result; browser/RPC/deployment checks are not
+performed here. Do not repeat completed SQL/install/apply/verification steps or
+edit applied SQL. Preserve current working features and the launch-first scope.
+
+---
+
 <!-- SELQIRO_PUBLIC_SEARCH_CLIENT_BROWSER_ACCEPTED_20260927 -->
 ## 2026-09-27 — Accepted public listing search client checkpoint
 

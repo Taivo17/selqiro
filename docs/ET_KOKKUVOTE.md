@@ -1,3 +1,42 @@
+<!-- SELQIRO_LISTING_RENEWAL_PRODUCTION_DOCUMENTED_20260929 -->
+## 29.09.2026 — Kuulutuse uuendamise serveriosa on productionis valmis
+
+See kirje asendab varasemad juhised, mis suunasid uuendamise eelkontrolli või
+rakendamist alles tegema. 28. septembri käik kell 21:14–21:16 (+03) rakendas ja
+kontrollis migratsiooni `20260928160000_add_owner_listing_activity_renewal.sql`.
+Kõik 23 kohalikku ja productioni versiooni olid paaris, järelkuivproovis ootel
+tööd polnud ning rakendamise päevik lõppes COMPLETE-ga. Kood jäi puhtaks ja
+GitHubiga võrdseks commit'il `d1f6bae`. See on tolle käigu tõend, mitte uus vaatlus.
+
+Tõend: `listing-renewal-production-rollout-20260928-211455-2k5t_ztu.zip`.
+Vestluse hilisem „Thinking failed” ei tähendanud andmebaasi rakendamise viga.
+Ülevaatus kontrollis arhiivi ja selle lähtekooditõendit; vanu toiminguid ei korratud.
+Täpsem leping ja kontrolli piirid on failis
+`docs/architecture/owner-listing-activity-renewal-v1.md`.
+
+Ühtegi kuulutust selle käiguga ei uuendatud. Minu ala eksitav aktiivse/aegunud
+näit ja uuendamisnupu puudumine on veel parandamata. Praegune samm lisab lõppseisu
+ainult viide olemasolevasse dokumenti, teeb build'i ning küsib enne commit'i ja
+push'i eraldi kinnitust. Selle tegelik tulemus selgub uuest raportist.
+Andmebaasi, SQL-teste, kasutajaliidest, pilte ja Energy't selles sammus ei muudeta.
+
+Pärast dokumentatsiooni etapi kontrollimist ühendame ühe kasutajavoona Aegunud
+näidu ja Uuenda kuulutust tegevuse. Omanik kinnitab, et üks pakkumine on alles;
+server seab tasuta uue 90-päevase tähtaja. Kuulutuse ID, sisu, loomisaeg, pildid ja
+rubriigid jäävad samaks ning seda ei tõsteta uue kuulutusena järjekorra ette.
+Peatatud või müüdud kuulutust vaikimisi ei taasavaldata. Pikemat või varasemat
+lõputut kehtivust ei lühendata; muutunud tähtaja korral näidatakse konflikti.
+Võrgukatkestust ei tõlgendata kindla ebaõnnestumisena ega korrata uuendamist pimesi.
+
+Töötav otsing, tavaliste kuulutuste ja hobusemustandite muutmine ning Otsin hobust
+andmed säilivad. Käivitamise fookus on lisamine, leidmine, ühendus ja enda sisu
+haldamine; uusi tulevikumooduleid ei lisata. Säilita varasemad ZIP-id ja päevikud.
+Ära korda läbinud skripte, muuda rakendatud migratsiooni ega taasta faile vea korral
+ilma uut tulemust üle vaatamata. Brauseri, päris uuendamiskutse ja juurutuse
+kontrollid on eraldi; dokumentatsiooni build ei tõenda neid.
+
+---
+
 <!-- SELQIRO_PUBLIC_SEARCH_CLIENT_BROWSER_ACCEPTED_20260927 -->
 ## 27.09.2026 — Kuulutuste otsing ja filtrid läbisid kasutaja brauseritesti
 

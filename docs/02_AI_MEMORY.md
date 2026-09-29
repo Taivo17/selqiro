@@ -1,3 +1,37 @@
+<!-- SELQIRO_LISTING_RENEWAL_PRODUCTION_DOCUMENTED_20260929 -->
+## 29 September 2026 — Ordinary-listing renewal is production-applied
+
+This current entry supersedes older renewal SOURCE ONLY / next-preflight text.
+The 28 September 21:14:55–21:16:51 (+03) user rollout applied and verified
+`20260928160000_add_owner_listing_activity_renewal.sql` at project
+`vyjletlmwoiwxsnsunlm`. Source was clean, remote-equal
+`d1f6bae1ea57ba78bec87f025c4d5df1d6e7ecef` in that run; not a new live observation.
+History is 23/23 with no pending post-dry-run migration. The apply journal ends
+COMPLETE. ChatGPT's later "Thinking failed" did not mean the database apply failed.
+
+Canonical evidence and precise bounds: see the current section of
+`docs/architecture/owner-listing-activity-renewal-v1.md`. The reviewed result is
+`listing-renewal-production-rollout-20260928-211455-2k5t_ztu.zip`.
+The additive RPC was NOT called: no listing deadlines or application rows changed.
+My Area expiry presentation and renewal button are still unconnected. Existing
+ordinary/horse owner editing, wanted summaries and public search remain working.
+
+This checkpoint changes only the four current docs and that architecture contract.
+Use the new docs-result ZIP for its actual build, commit, push and final Git status;
+this entry cannot know its own future commit hash. No SQL/test replay or deployment
+verification occurs in the docs runner. The earlier 74 isolated-PG assertions stay
+historical evidence, not production HTTP, concurrent-connection or load coverage.
+
+Next after reviewed docs completion: one typed owner expiry/renewal client step,
+then build and targeted desktop/mobile browser testing before its source finish.
+Keep renewal explicit/free, expected-deadline CAS, server UTC 90 days, no automatic
+stale retry, no implicit paused/sold activation and no creation-order ranking bump.
+Do not rerun completed scripts, edit applied migrations or touch live journals.
+Broad listing SELECT policies and legacy direct writers remain separate launch
+boundaries. Keep launch publish/find/contact/manage; no speculative future modules.
+
+---
+
 <!-- SELQIRO_PUBLIC_SEARCH_CLIENT_BROWSER_ACCEPTED_20260927 -->
 ## 2026-09-27 — Public listing search client browser accepted
 

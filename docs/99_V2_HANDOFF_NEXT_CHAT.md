@@ -1,3 +1,68 @@
+<!-- SELQIRO_LISTING_RENEWAL_PRODUCTION_DOCUMENTED_20260929 -->
+# CURRENT HANDOFF — 29 September 2026: renewal production rollout complete
+
+This TOP entry supersedes every historical next-task instruction below.
+Do NOT rerun renewal local installers, source finish, preflight or APPLY.
+Do NOT edit `20260928160000_add_owner_listing_activity_renewal.sql`, repair
+migration history or delete COMPLETE operation journals.
+
+## Actual production/source evidence
+
+User rollout: `listing-renewal-production-rollout-20260928-211455-2k5t_ztu.zip`.
+SHA-256: `db5c1f987c37197d49f9e0c713e95b7b9c86e8874bc4d826f14d352f8d0a0947`.
+Run: 28 September 21:14:55–21:16:51 (+03),
+`PASS_LISTING_RENEWAL_PRODUCTION_APPLIED_VERIFIED`. Project `vyjletlmwoiwxsnsunlm`;
+migration `20260928160000` applied once, history 23/23, post dry-run none pending,
+new function/source/permissions and remaining public DDL verified; journal COMPLETE.
+Source was clean and remote-equal at `d1f6bae1ea57ba78bec87f025c4d5df1d6e7ecef`.
+The later chat failure was not an apply failure. The source/result ZIP chain already
+contains the selected 295 current source files; no broad recollection is needed.
+
+See `docs/architecture/owner-listing-activity-renewal-v1.md` for exact boundaries.
+The renewal RPC was not invoked and no listing deadline changed. UI renewal is
+still unconnected. Existing ordinary/horse owner editors and wanted list/detail
+remain working, not read-only skeletons. Public ordinary-listing search is working.
+
+## Current documentation checkpoint and ONE next task
+
+This entry belongs to `selqiro-document-listing-renewal-rollout.py`, changing only
+five existing docs. Source parent is d1f6bae; proposed subject:
+`Document listing renewal production rollout`.
+Read its `listing-renewal-rollout-docs-*.zip` result for actual BUILD, COMMIT, PUSH,
+NEW_COMMIT, WORKTREE and REMOTE. This text does not assert that the script ran.
+A stopped/cancelled run must be reviewed first; keep files/index/any commit intact.
+
+After reviewed docs success, implement ONE coherent typed owner expiry/renewal
+client: truthful Aegunud display and explicit Uuenda kuulutust confirmation, exact
+prior deadline CAS input, one in-flight action, auth/identity/stale-response guards,
+refreshed owner row and targeted tests. Inspect existing modules/read-pagination
+contracts first; do not invent complete expired counts from a partial page.
+Build and test the client in desktop/mobile browsers before a separate client finish.
+No new SQL or bulk renewal is implied by this handoff; a missing server contract
+must be handled separately rather than worked around silently.
+
+## Preserved contracts and evidence limits
+
+One existing active-status ordinary listing, free explicit confirmation, server
+UTC +90 days. No ID/content/created_at/images/category/Energy/ranking change;
+paused/sold never implicitly reactivate. NULL/longer deadlines are not shortened.
+A conflict or uncertain network outcome is not auto-retried with a new deadline.
+Broad SELECT policies and legacy direct writers remain separate pre-launch issues.
+The prior 74 SQL assertions used an isolated PG17.6 helper, not full Supabase/HTTP,
+independent concurrent connections or load testing. Neither this documentation
+nor the rollout verifies runtime renewal calls or frontend deployment.
+
+Mac: `~/selqiro`, Python 3.9+, existing Git/npm, `main` / `origin/main`,
+GitHub `Taivo17/selqiro`. Stop this repo's dev server before build. Docs runner
+never uses Docker/Supabase/SQL, installs packages, or accesses live journals.
+Inherited GIT_* overrides are removed in child environments only. Reports and
+backups stay outside the repo in Downloads/selqiro-recovery. No reset/restore or
+force-push; normal Git hooks/CI may run after explicit COMMIT PUSH consent.
+Keep launch publish/find/contact/manage, existing safety/privacy/Energy contracts,
+and modular boundaries; knowledge/news/future business modules wait for demand.
+
+---
+
 <!-- SELQIRO_LISTING_RENEWAL_SOURCE_ACCEPTED_20260928 -->
 # CURRENT HANDOFF — 2026-09-28 ordinary-listing renewal source checkpoint
 

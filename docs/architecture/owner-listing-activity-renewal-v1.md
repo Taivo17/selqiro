@@ -1,3 +1,72 @@
+<!-- SELQIRO_LISTING_RENEWAL_PRODUCTION_DOCUMENTED_20260929 -->
+# Current status — 29 September 2026: server applied, client not connected
+
+This current section supersedes historical candidate / not-deployed / next-apply
+statements below. The original contract and test history remain intact.
+
+## Verified production checkpoint (28 September, not a new live observation)
+
+Source: `d1f6bae1ea57ba78bec87f025c4d5df1d6e7ecef`, clean and remote-equal at the
+end of the user's 21:14:55–21:16:51 (+03) rollout. Subject:
+`Add explicit owner listing activity renewal contract`.
+Project `vyjletlmwoiwxsnsunlm`; migration
+`20260928160000_add_owner_listing_activity_renewal.sql` is APPLIED_VERIFIED.
+Immutable migration SHA-256:
+`0bfc32ce5a3eb9dfa7ac9d3a1328a9567ad9ff3c1c6b35eec04e12e92f1fec61`.
+
+Evidence ZIP: `listing-renewal-production-rollout-20260928-211455-2k5t_ztu.zip`.
+SHA-256: `db5c1f987c37197d49f9e0c713e95b7b9c86e8874bc4d826f14d352f8d0a0947`.
+Result: `PASS_LISTING_RENEWAL_PRODUCTION_APPLIED_VERIFIED`. One explicitly
+approved CLI dispatch, exit 0; two post observations, history 23/23, exact stored
+migration SQL and no pending post-dry-run migration. Journal chain:
+APPLY_INTENT -> APPLY_RESULT -> COMPLETE. Preserve it; never replay this apply.
+
+`renew_my_listing_activity_v1(text,timestamptz)` matches the committed function
+body, signature/result, settings and comment. Owner is postgres. Explicit grants
+are postgres/authenticated/service_role, not PUBLIC/anon; saved effective checks
+agree. Execution still requires an authenticated user and authorized active identity.
+The rollout verified existing public DDL unchanged apart from six function-related
+statements; 1354 prior statement fingerprints remain. Invariant SHA-256:
+`842bd33392e6115932e0d665d4276ed48f0ca1b0dd7ba9cb236ac914f8f21562`.
+
+Offline review checked 87 archive files/86 hashes/CRC, nested manifests, the executed
+runner against the prepared script, 295 selected source hashes, 23 migration Git
+blobs, four saved metadata responses/history and copied journal linkage. Full raw
+schema dumps remain private on the Mac; offline comparison used the saved statement
+fingerprints, not the unavailable raw dump bytes. These are schema-only snapshots,
+not application-data backups. Later ChatGPT failure was not a failed database apply.
+
+## Not performed and remaining boundary
+
+No renewal RPC invocation, application-row reads/writes or listing deadline changes
+in rollout. No original local DB change, source edit, build, SQL replay, browser
+or deployment verification. Earlier 74 isolated-PG17.6 assertions and helper
+rollback/cleanup remain prior evidence; not full Supabase, HTTP, concurrent-connection
+or load tests. Existing broad listing SELECT policies and legacy direct writers
+are unchanged separate launch issues, not closed by this additive endpoint.
+
+This docs-only checkpoint changes five existing documents, not the applied SQL,
+fixture/tests or application. Read its returned result for actual build/commit/push
+and new commit SHA. Do not infer execution from prepared documentation.
+
+## One next implementation after reviewed documentation completion
+
+Typed entity API, feature hook and compact owner confirmation UI: Aegunud /
+Uuenda kuulutust, exact original deadline CAS, server UTC 90 days, free single-listing
+confirmation, one in-flight action, identity/stale-response protection and refreshed
+owner state. A lost response is uncertain; refresh before a fresh confirmation,
+never retry blindly. Do not rewrite the timestamp through a precision-losing Date
+serialization. Keep NULL/longer-deadline no-ops and paused/sold actions separate.
+Preserve original ID/content/created_at/images/category/Energy/creation-order ranking.
+No persisted expired status or complete counts derived from partial-page filtering;
+inspect existing owner query/pagination before implementing those controls.
+No bulk renewal, new horse behavior, automatic content-edit renewal, public search
+expiry relaxation, or speculative future features. Build and targeted desktop/mobile
+browser tests precede a separate client source finish. Never rerun completed SQL,
+preflight/apply/finish scripts or modify any live operation journal.
+
+---
+
 # Owner listing activity renewal v1
 
 Base: `ea4063b6b1f0ef3e390d9193cab48a5701f205a7`.
