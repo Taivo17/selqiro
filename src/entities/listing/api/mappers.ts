@@ -112,6 +112,7 @@ export function mapListingDetailRow(row: MarketplaceListingRow): ProductListingD
 
   return {
     ...card,
+    rawPrice: row.price ?? null,
     userId: row.user_id || null,
     identityId: row.identity_id || null,
     country: row.country || null,

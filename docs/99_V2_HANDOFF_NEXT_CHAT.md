@@ -1,3 +1,116 @@
+<!-- SELQIRO_ORIGINAL_PRICE_BROWSER_ACCEPTED_DETAILS_ONLY_UNITS_20261002 -->
+# CURRENT — 2 October 2026: price safeguard accepted; source finish
+
+This TOP entry supersedes historical next actions below. Do not rerun the installer
+or any completed renewal/search/horse SQL/preflight/APPLY/source-finishing scripts.
+
+## Actual evidence before this source finish
+
+Base: 204088f37453c716b238b6ddab34403a09128644, main/origin-main, GitHub Taivo17/selqiro.
+Latest installer: listing-original-price-safety-20261001-120156-89xn2sw1.zip.
+SHA-256: d9853b28afc04d59757c07d0fe96de070475b54a52ecaedbd7fb82ad3ee9ea39.
+Actual Oct1 run ended 12:02:41 +03: 540 module cases and real Mac build PASS;
+eleven paths staged, none unstaged, no new commit/push. Base remote equality was
+checked in that run. Review verified 340 files/339 hashes and 308 source triples,
+exact eleven-file scope, unchanged 23 migrations and staged-patch reconstruction.
+These are saved run facts, not a new Mac/GitHub/database observation.
+
+Oct2 user acceptance: "testides on korras". Screenshots 10:38-10:45 show raw 5578,
+a saved title adding Gaz 53 and its public display; visible expiry is unchanged.
+This chosen browser save was a REAL write to its configured database. The installer
+and finisher do not call the writer or repeat that write. Public detail/My Area
+still append euro in an old display path; this first safeguard deliberately did not
+fix display or establish the stored currency. Images are not a server numeric-value,
+HTTP/RLS, identity, mobile, race/load or new-deployment audit.
+
+## One next action and prepared-versus-executed boundary
+
+Run ONLY selqiro-finish-original-listing-price-safety.py with the exact new installer
+ZIP in Downloads and the repository dev server stopped. It guards the full index,
+308 sources and 23 migrations, adds prefixes to the four current docs plus the
+already staged price contract, runs npm run build and asks COMMIT PUSH. It commits
+exactly eleven paths with subject: Protect original listing price during basic edits.
+All six tested app/test files remain byte-identical. The fifth doc was new in the
+installer, already staged; do not mistake its temporary AM status for a user edit.
+
+Read NEW_COMMIT, BUILD, COMMIT, PUSH, WORKTREE and REMOTE in the returned result.
+This document cannot know its future commit hash. A prepared finisher is not proof
+of completion. On cancellation/failure preserve all work/index/any commit and return
+the ZIP BEFORE any retry or new patch. No reset/restore or automatic retry.
+
+After reviewed successful finish: verify that exact NEW_COMMIT as active Vercel
+Ready/Production and perform read-only edit-price/public-view smoke. No new price,
+title, status, image or renewal write is required for deployment verification.
+Only then continue shared honest original-price display, followed by a separately
+controlled canonical fiat amount/currency contract and viewer preference/FX.
+
+## User-approved Details-only measurement boundary (not implemented)
+
+Unit conversion is ONLY for supported quantitative fields in "Detailid" with a
+known original value and explicit unambiguous unit. NEVER extract/convert units from
+the title or description; their editing and normal keyword search stay unchanged.
+Do not blindly parse free-text Details either. Preserve original values, display
+original first and mark rounded conversions. Derived output never hydrates saves.
+DetailsPreview is currently read-only and incomplete (eight entries), not regressed
+by this patch. Its later editor must patch allowed changed fields and retain the
+rest. Do not add that editor, units runtime, FX, crypto or new schemas in this finish.
+
+## Environment and lasting safety boundaries
+
+Mac Python 3.9+, existing Git/npm/node_modules; repo $HOME/selqiro. Stop npm run dev
+with Ctrl+C before build. No package install, Docker, Supabase, SQL, test replay,
+application-row read/write or live operation-journal access. GIT_* overrides are
+sanitized only in child processes; parent terminal stays unchanged. Normal approved
+Git hooks/CI may run. Reports/ZIPs stay outside the repo in Downloads/selqiro-recovery.
+All 23 applied migrations and COMPLETE journals are immutable. The renewal migration
+20260928160000 remains prior Sept28 APPLIED_VERIFIED, not a fresh schema observation.
+Working horse/wanted owner edits, renewal, photos, publication and Energy stay intact.
+Selected source exports are not full repository or user-data backups.
+
+---
+
+<!-- SELQIRO_LISTING_ORIGINAL_PRICE_SAFETY_20261001 -->
+# CURRENT — 1 October 2026: original-price safeguard, not FX/crypto installation
+
+This TOP entry supersedes historical next actions below.
+Required base is clean `204088f37453c716b238b6ddab34403a09128644` main/origin-main.
+The 29 September 20:01 source finish and later user Ready/Production/live smoke
+are completed evidence. Do not repeat renewal installer/finisher/APPLY/preflight.
+
+Candidate: `selqiro-protect-original-listing-price.py`. Exact previous result ZIP:
+`owner-listing-renewal-finish-20260929-200038-wfxvdf3j.zip`, SHA-256
+`277d3f3f3dd03bb4f4f837fb5274d023079c3b07025bf657da3111e860575933`.
+Stop dev before running. The runner verifies 305 source files and all 23 migrations,
+updates eleven paths, tests 57 new + 483 existing cases, runs npm build and stages.
+It cannot commit/push, execute SQL, install packages or call the writer/renewal RPC.
+
+ONE NEXT ACTION: return the price-safeguard result ZIP and targeted browser findings.
+If not yet run, run only this new candidate with `PRICE SAFETY` consent. If stopped,
+return its report without restoring/resetting files or repeating a script.
+Only after accepted tests/browser evidence prepare a separate source finisher.
+
+Implemented boundary: raw stored price hydrates the V2 ordinary form; unchanged price
+omits both price columns. Existing parser handles only explicitly changed price text.
+No general revision, race/HTTP authorization claim, price backfill, FX, currency selector,
+price filter, public display unification, crypto UI or legacy writer rewrite here.
+See `docs/architecture/listing-price-currency-v1.md` for audit and approved target.
+
+Browser opening/canceling is read-only. Saving a chosen existing owner test listing's
+changed title writes to the frontend's configured DB, including from localhost.
+Do not renew a listing or touch images/status/identity for this check. Preserve
+working horse/wanted owner editing; no general regression to read-only skeletons.
+
+After this checkpoint: honest shared original-price display, then separately tested
+canonical fiat amount/currency contracts, then viewer display preference/FX. Crypto
+agreement flag is deferred and separate from price; no wallets/payments/keys/tokens.
+Energy is not crypto. Unknown currency cannot become EUR from location or UI defaults.
+
+This source export is selected code/evidence, not the entire repository or data backup.
+Actual build/staged result belongs to result.txt. Preparation is not a live Mac, DB,
+GitHub or Vercel check. All 23 applied SQL files and COMPLETE journals stay untouched.
+
+---
+
 <!-- SELQIRO_OWNER_LISTING_RENEWAL_BROWSER_ACCEPTED_20260929 -->
 # CURRENT HANDOFF — 29 September 2026, renewal client browser accepted
 

@@ -1,3 +1,79 @@
+<!-- SELQIRO_ORIGINAL_PRICE_BROWSER_ACCEPTED_DETAILS_ONLY_UNITS_20261002 -->
+## 2026-10-02 — Accepted original-price boundary and Details-only unit direction
+
+The ordinary edit chain now separates stored rawPrice from priceLabel. The small
+listingBasicsForm model hydrates original text and detects exact input changes;
+useListingBasicsForm omits price for unchanged/reverted input; updateListingBasics
+then omits both price and price_amount. No reread-and-write workaround or new parser.
+The Oct1 installer passed 540 synthetic-transport/hooks module cases and full Mac
+build. Oct2 user screenshots accept title-save/raw-price preservation. Finishing
+modifies only five already staged documents; all six application/test bytes stay.
+The finisher result determines actual source commit, push and clean state.
+
+No new DB, RLS, general revision/CAS or idempotency guarantee follows from this patch.
+Legacy writers and explicit-price parsing remain distinct follow-ups. Public price
+formatting is still inconsistent; shared honest display is the next implementation
+AFTER source finish and exact deployment verification. Unknown currency cannot be
+inferred from country, user preferences or a historical UI fallback.
+
+### Agreed later measurement scope — no runtime implementation in this finish
+
+Use a small shared unit registry, pure converter and formatter, exposed ONLY through
+allowlisted quantitative category fields in the "Detailid" section. Eligibility
+requires a known field meaning, original numeric value and explicit supported unit.
+Do not feed title, description or arbitrary details text to conversion or unit
+extraction. Keep normal title/description editing and keyword indexing unchanged.
+
+Store one original; derive viewer-unit output without writing it back. The original
+is shown first; rounding is marked. Original inputs hydrate the owner editor, never
+formatted approximations. User preference is independent from language, market and
+acting identity. No network/AI/Energy is needed for fixed supported unit conversions.
+Initial scope can be length/distance/mass field-by-field; no generic global engine,
+empty tables/endpoints or conversion of nominal standards/model/year/code strings.
+Unknown/ambiguous units and legacy strings stay unchanged until a reviewed explicit
+owner edit. Currency and measurement conversions share principles, not one algorithm.
+Numeric search normalization requires its own server-side pre-pagination contract.
+
+DetailsPreview currently renders only eight non-detailCategory entries using
+FieldPreview; it is not a complete editable representation. A later editor must use
+category validation and changed-field updates, preserving unedited/unknown entries.
+Never unlock it by sending a replacement details object built from visible rows.
+The Details component, search, photos, renewal, horse/wanted and all 23 migrations
+remain unchanged here. Maintain the existing crypto/payment/Energy separation.
+
+---
+
+<!-- SELQIRO_LISTING_ORIGINAL_PRICE_SAFETY_20261001 -->
+## 2026-10-01 — Original-price editing safeguard candidate
+
+This dated entry supersedes older next-task instructions, not historical evidence.
+Base source: `204088f37453c716b238b6ddab34403a09128644`. User accepted that commit's
+Vercel Ready/Production and live owner/search/wanted checks on 29 September. No new
+production/Git observation is implied by preparing this candidate.
+
+First safeguard: hydrate V2 ordinary edit from stored raw price text, not priceLabel.
+Omit price AND price_amount from unrelated saves; explicit changed price keeps the
+existing parser/write path. Raw text, amount-only rows and change-then-revert remain
+separate. No bulk correction or automatic EUR inference. This is not general CAS.
+
+User approved: original amount/currency authority; independent viewer display currency;
+marked approximate FX with original always visible; free normal price display. A later
+optional "Krüptoga tasumine kokkuleppel" is a seller preference, not a payment service.
+No crypto infrastructure or crypto-denominated prices now. Energy remains separate.
+These are target decisions, not capabilities delivered by this safeguard.
+
+Exactly eleven candidate paths: four existing source files, one small form model,
+one new 57-case regression suite, this contract and four current documentation files.
+Installer requires eight suites/540 cases and real Mac build before staging. No commit,
+push, DB/RPC, package install, migration change or renewal. Read the returned result
+before claiming installation/build success. Preserve all 23 migrations and journals.
+
+Contract: `docs/architecture/listing-price-currency-v1.md`. After targeted owner browser
+acceptance, finish this source checkpoint separately; then shared honest price display,
+then canonical currency write/read support, then viewer preference/FX. No new crypto UI.
+
+---
+
 <!-- SELQIRO_OWNER_LISTING_RENEWAL_BROWSER_ACCEPTED_20260929 -->
 ## 2026-09-29 — Accepted owner expiry/renewal client checkpoint
 

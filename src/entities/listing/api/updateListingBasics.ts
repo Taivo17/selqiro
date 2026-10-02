@@ -7,7 +7,8 @@ export type UpdateListingBasicsInput = {
   activeIdentityId: string | null;
   title: string;
   description: string;
-  price: string;
+  /** Omit when unchanged. Empty text is an explicit existing clear operation. */
+  price?: string;
   condition: string;
   category: string | null;
   subcategory: string | null;
@@ -59,6 +60,10 @@ function validateInput(input: UpdateListingBasicsInput) {
 
   if (title.length > 140) {
     throw new Error("Pealkiri on liiga pikk.");
+  }
+
+  if (input.price !== undefined && typeof input.price !== "string") {
+    throw new Error("Hinna tekst peab olema tekstiväärtus.");
   }
 
   if (input.description.length > 5000) {
@@ -118,14 +123,15 @@ export async function updateListingBasics(
 
   const title = normalizeText(input.title);
   const description = normalizeLongText(input.description);
-  const price = normalizeText(input.price);
-  const priceAmount = parsePriceAmount(price);
+  // An unrelated edit must preserve both stored price fields, even if another
+  // session changed them after this form loaded. Explicit price edits keep the
+  // existing parser; canonical amount/currency validation is a separate step.
+  const price = input.price === undefined ? undefined : normalizeText(input.price);
 
   const payload = {
     title,
     description,
-    price,
-    price_amount: priceAmount,
+    ...(price === undefined ? {} : { price, price_amount: parsePriceAmount(price) }),
     condition: input.condition || null,
     search_text: buildListingSearchText({
       title,

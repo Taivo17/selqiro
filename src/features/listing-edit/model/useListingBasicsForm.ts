@@ -4,26 +4,13 @@ import { useEffect, useMemo, useState } from "react";
 import { updateListingBasics } from "../../../entities/listing/api/updateListingBasics";
 import type { ProductListingDetail } from "../../../entities/listing/model/types";
 
-export type ListingBasicsForm = {
-  title: string;
-  description: string;
-  price: string;
-  condition: string;
-};
+import {
+  buildInitialListingBasicsForm,
+  listingPriceEditPatch,
+  type ListingBasicsForm,
+} from "./listingBasicsForm";
 
-function buildInitialForm(
-  listing: ProductListingDetail | null
-): ListingBasicsForm {
-  return {
-    title: listing?.title || "",
-    description: listing?.description || "",
-    price:
-      listing?.priceLabel && listing.priceLabel !== "Hind kokkuleppel"
-        ? listing.priceLabel
-        : "",
-    condition: listing?.condition || "used",
-  };
-}
+export type { ListingBasicsForm } from "./listingBasicsForm";
 
 export function useListingBasicsForm(input: {
   listing: ProductListingDetail | null;
@@ -33,17 +20,17 @@ export function useListingBasicsForm(input: {
   const { listing, userId, activeIdentityId } = input;
 
   const [initialForm, setInitialForm] = useState<ListingBasicsForm>(
-    buildInitialForm(listing)
+    buildInitialListingBasicsForm(listing)
   );
   const [form, setForm] = useState<ListingBasicsForm>(
-    buildInitialForm(listing)
+    buildInitialListingBasicsForm(listing)
   );
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
   const [saved, setSaved] = useState(false);
 
   useEffect(() => {
-    const next = buildInitialForm(listing);
+    const next = buildInitialListingBasicsForm(listing);
 
     setInitialForm(next);
     setForm(next);
@@ -86,7 +73,7 @@ export function useListingBasicsForm(input: {
         activeIdentityId,
         title: form.title,
         description: form.description,
-        price: form.price,
+        ...listingPriceEditPatch(form.price, initialForm.price),
         condition: form.condition,
         category: listing.category,
         subcategory: listing.subcategory,

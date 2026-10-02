@@ -31,6 +31,8 @@ export type ListingImage = {
 };
 
 export type ProductListingDetail = ProductListingCard & {
+  /** Unformatted stored text; display labels must never hydrate editable fields. */
+  rawPrice: string | null;
   userId: string | null;
   identityId: string | null;
   country: string | null;

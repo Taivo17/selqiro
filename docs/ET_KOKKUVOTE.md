@@ -1,3 +1,70 @@
+<!-- SELQIRO_ORIGINAL_PRICE_BROWSER_ACCEPTED_DETAILS_ONLY_UNITS_20261002 -->
+## 02.10.2026 — Algse hinna kaitse läbis brauseritesti; mõõdud ainult Detailides
+
+Kasutaja kinnitas: „testides on korras”. Piltidel säilib muutmisvormis algne 5578,
+pealkirjale lisatud Gaz 53 salvestub ja jõuab avalikku vaatesse. Nähtav tähtaeg ei
+muutu. See oli kasutaja päris salvestus brauseri seadistatud andmebaasi; lõpetaja
+seda ei korda. Minu ala ja avaliku detaili vana euromärk jääb eraldi kuvamistööks.
+
+1. oktoobri 12:01–12:02 käigus läbisid 540 moodulijuhtu ja päris build. ZIP sisaldab
+340 faili, 339 manifestiräsi ja 308 lähtefaili. Lõppseis oli 204088f ning 11 faili
+staging'us, mitte uus commit. Uut Giti/productioni seisu pildid ei tõenda.
+
+Lõpetaja lisab ainult viie juba olemasoleva tööfaili dokumenditäiendused, säilitab
+kuus testitud rakendus-/testifaili, käivitab build'i ja küsib COMMIT PUSH. Tegeliku
+uue commit'i, push'i ja puhta lõppseisu loeme uuest tulemuse ZIP-ist. Seejärel
+kontrollime just seda veebiversiooni andmeid muutmata. Hinnaparanduse paigaldajat ei
+korrata; järgmine kooditöö on alles siis ühtne aus hind ja hiljem valuutaleping.
+
+Uus kinnitatud mõõtühikureegel: teisendame ainult „Detailid” osa toetatud mõõduvälju,
+kus algne arv ja ühik on üheselt teada. Pealkirjast ja kirjeldusest mõõte ei otsita,
+eemaldata, teisendata ega kirjutata ümber. Tavapärane tekstimuutmine ja märksõnaotsing
+säilivad. Ka suvalist Detailide vabateksti ei hakata automaatselt mõõduks oletama.
+Originaal on esmane; ümardatud abiteisendus on märgistatud ning ei asenda salvestatud
+väärtust. Teadmata ühik, mudelinumber ja tehniline standard jäävad muutmata.
+
+Praegune Detailide plokk on ainult eelvaade, mitte veel redaktor. See ei kadunud
+hinnaparandusega. Redaktor ja väike ühikumoodul tulevad hilisema eraldi tööna;
+nähtavate kaheksa välja järgi ei tohi kogu details-objekti üle kirjutada.
+
+Praegu ei lisata teisendusi, valuutavalikut, krüptomärgist ega maksesüsteemi. Energy
+jääb krüptost eraldi. SQL-i, 23 migratsiooni, lõpetatud päevikuid, hobuse/wanted-vooge,
+kuulutuse uuendamist ega pilte selles lõpetamises ei muudeta.
+
+---
+
+<!-- SELQIRO_LISTING_ORIGINAL_PRICE_SAFETY_20261001 -->
+## 01.10.2026 — Algse hinna kaitse enne valuutade ühendamist
+
+29. septembril lõpetati uuendamise kliendietapp commit'iga `204088f`. Kasutaja
+kinnitas sama commit'i Ready/Production juurutuse ja päris veebis omaniku/otsingu
+kontrolli. Neid samme ei korrata; uus ettevalmistus pole uus Giti või baasi kontroll.
+
+Kasutajaga kinnitatud suund: müüja määrab algsumma ja valuuta, vaataja valib
+kuvavaluuta. Teisendus on ligikaudne ning originaalhind jääb nähtavaks. Tavaline
+hinnakuvamine ei maksa Energy't. Makse-eelistus on hinnast eraldi: hilisem valikuline
+„Krüptoga tasumine kokkuleppel” ei tähenda krüptohindu ega Selqiro makseteenust.
+Rahakotte, võtmeid, ülekandeid, vahetust ega Energy krüptorahaks muutmist ei arendata.
+
+Esimene väike parandus kaitseb algandmeid. Praegune V2 muutmisvorm võttis hinnaväljale
+vormindatud kuvatud hinna; pealkirja salvestamine saatis ka selle hinna baasi tagasi.
+Uus kandidaat kasutab algteksti ning jätab mõlemad hinnaväljad päringust välja, kui
+kasutaja hinda ei muutnud. Ainult arvulise hinnaga vana kirje säilib samuti. Hinna
+teadlik muutmine kasutab selles sammus veel vana salvestusloogikat.
+
+Kokku 11 faili, 57 uut regressioonikontrolli ja koos varasematega 540 kliendikontrolli.
+Skript nõuab Maci build'i ja lisab failid staging'usse; commit/push ning andmebaasi
+käsud puuduvad. Tegelik läbimine tuleb uuest ZIP-ist ja järgnevast brauserikatsest.
+Testiks salvestamine muudab valitud kuulutust päriselt ka localhostist; kasuta ainult
+enda olemasolevat testkuulutust. Pilte, staatust ega tähtaega selleks ei muudeta.
+
+Ühtne hinnakuvamine, valuutavalik ja kursid tulevad järgmiste eraldi sammudena.
+Tundmatut valuutat ei asendata euroga ega parandata vanu hindu hulgi. Hobuse otsija
+eelarve, töötav muutmisvorm, otsing ja uuendamine säilivad. 23 rakendatud migratsiooni
+ning lõpetatud operatsioonipäevikuid ei puudutata.
+
+---
+
 <!-- SELQIRO_OWNER_LISTING_RENEWAL_BROWSER_ACCEPTED_20260929 -->
 ## 29.09.2026 — Aegunud kuulutuse uuendamine läbis kasutaja brauseritesti
 
