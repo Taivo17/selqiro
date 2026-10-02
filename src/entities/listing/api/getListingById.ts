@@ -254,8 +254,8 @@ function applyMarketplaceSnapshot(
     snapshot.seller_avatar_url || snapshot.avatar_url || row.seller_avatar_url || null;
 
   row.distance_km = snapshot.distance_km ?? row.distance_km ?? null;
-  row.price_amount = snapshot.price_amount ?? row.price_amount ?? null;
-  row.currency = snapshot.currency || row.currency || "€";
+  // Seller enrichment must not replace money from the directly loaded listing.
+  // Keep row.price, row.price_amount and row.currency exactly as read.
   row.image = snapshot.image || row.image || null;
 
   row.category = snapshot.category || row.category || null;

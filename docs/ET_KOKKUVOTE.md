@@ -1,3 +1,80 @@
+<!-- SELQIRO_PRICE_DISPLAY_ACCEPTED_TEST_LISTINGS_20261002 -->
+## 02.10.2026 — Ühine hinnakuvamine läbis kasutajakatse; testkuulutuste piir
+
+Kasutaja 14:00 käigus läbisid 633 moodulitesti ja päris Maci build. Aluseks jäi
+d8090ba, 22 faili stage'itud, muid unstaged muudatusi polnud; uut commit/push'i veel ei
+tehtud. Tõend: listing-price-display-20261002-140011-ft9q0e9u.zip, SHA-256
+e883cebe959e72d8db36176c5679cfcc473244a3c2484b6606663063d182a05e.
+354 arhiivifaili / 353 manifestiräsi, 311 lähtefaili ja täpne muudatus kontrolliti;
+kõik 23 migratsiooni säilisid. See pole uus andmebaasi või Giti vaatlus.
+
+Kasutaja kinnitus: „testides vigu ei leidnud”. Avalikus detailis, profiilil ja Minu
+alas on 5578 ilma oletatud eurota ning „Valuuta täpsustamata”. Kitsas otsingukaart
+näitab sama loetavalt. BMW 2345 € jääb alles, wanted-real säilib 5000-eurone eelarve
+ja Rapla maakond. Muutmisvormi algtekst on 5578 ja tegevus „Muudatusi pole”.
+Pildid ei tõenda eraldi kõiki filtri/tagasi-tegevusi, HTTP sisu, serveriridu,
+identiteedivahetust, koormust ega selle uue koodi production-juurutust.
+
+Oluline täpsustus: kasutaja sõnul on kõik praegu üleval olevad kuulutused ainult
+testimiseks ja need kustutatakse hiljem. Me ei ehita nende pärast keerukat vana
+hinna parandamist, täitmist ega pikaajalist ühilduvust. Edasine summa/valuuta
+salvestusleping võib lähtuda uutest õigesti sisestatud andmetest. Õiguste kontroll,
+algandmete õigsus ja turvaline salvestamine jäävad vajalikuks ka uute kuulutuste puhul.
+See pole praegune kustutamiskäsk ega väide, et kontod, teenused või sõnumid oleksid
+samuti kustutatavad. Hilisem koristus vajab eraldi ulatust ja kinnitust; praegu ei
+kustutata kuulutusi, pilte, migratsioone, lähtekoodiajalugu ega COMPLETE päevikuid.
+
+Lõpetame ainult selle 22-failise etapi: 17 testitud rakendus-/testifaili ei muudeta,
+viide olemasolevasse dokumenti lisatakse kinnitus, tehakse uus build ning eraldi
+COMMIT PUSH. Tegelik uus commit selgub lõpetaja ZIP-ist. Seejärel kontrollitakse
+sama uut versiooni productionis ainult lugedes, uut salvestust või pikendamist tegemata.
+Järgmine arendus on lihtne summa ja valuuta leping. Kursid ja krüpto jäävad eraldi.
+Mõõtühikuid teisendame hiljem vaid toetatud Detailide mõõduväljadest, mitte pealkirjast,
+kirjeldusest või suvalisest tekstist. Detailide redaktorit selles etapis ei lisata.
+
+---
+
+<!-- SELQIRO_HONEST_LISTING_PRICE_DISPLAY_CANDIDATE_20261002 -->
+## 02.10.2026 — Tavakuulutuse ühtne hinnakuvamine, paranduspakk
+
+Algse hinna kaitse etapp lõppes commit'iga d8090ba: uus build ja push läbisid,
+12:09 lõppseis oli puhas ja GitHubiga võrdne. Kasutaja 12:32–12:35 piltidel on
+õige Ready/Production versioon, päris veebiaadress, hinnaväljal 5578 ja pealkirjal
+Gaz 53. See on kasutaja juurutuse/lugemiskontroll, mitte uus andmebaasirea audit.
+
+Järgmine eraldi parandus ühtlustab ainult tavakuulutuste kuvamise otsingus,
+avalikus detailis, avalikul profiilil ja Minu alas. Üks ühine hinnamudel hoiab
+alles avaldaja algteksti. 5578 ei muutu oletuse põhjal 5578 euroks; arvu all on
+väike märge „Valuuta täpsustamata”. 2345 €, 1000 SEK, Hind kokkuleppel, Tasuta,
+hinnavahemik või tunnitasu säilivad tekstina. Kui puuduvad nii tekst kui summa,
+näitame „Küsi hinda”. Null ei tähenda puuduvat hinda ega automaatselt tasuta asja.
+
+Algset numbriteksti ei ümardata, ümber ei vormindata ega asendata vana tuletatud
+summaga. Valuutat ei oletata riigi, keele või vaataja järgi. Valuutatähis vanas
+tekstis ei luba veel vahetuskurssi rakendada. Detaili müüjainfo lisamine ei tohi
+kirjutada otseloetud kuulutuse hinnainfot üle. Väike selgitus jääb nähtavaks ka
+telefonis; hinnateksti ei peideta kolme punkti taha.
+
+Hobuse müügihinnad ja „Otsin hobust” ostueelarve jäävad eraldi senise loogika alla.
+Salvestatud hindu, muutmisvormi, staatust, kehtivusaega, pilte, rubriike, Energyt
+ja otsingu järjekorda ei muudeta. Ei lisata uusi andmepäringuid, valuutavalikut,
+kursse, makseid, krüptot, Detailide redaktorit ega mõõtühikute teisendust.
+Mõõtühikud puudutavad hiljem ainult toetatud Detailide mõõduvälju; pealkirja ja
+kirjeldust selleks ei analüüsita ega teisendata.
+
+Paigaldaja selqiro-unify-listing-price-display.py nõuab puhast d8090ba baasi,
+viimast lõpetamise ZIP-i ning kinnitust PRICE DISPLAY. Pakett on 22 faili:
+kliendikood, testid ja viis olemasolevat dokumenti. Kõik 633 kontrolli ja päris
+Maci build peavad läbima enne staging'ut. Commit/push'i ega SQL-i skript ei tee.
+Tegelik tulemus selgub tagastatavast ZIP-ist, mitte selle ettevalmistuse tekstist.
+
+Pärast edukat paigaldust kontrollime kohalikus brauseris ainult lugemist,
+hinnasilte, olemasolevaid filtreid ja kitsast vaadet. Kuulutusi ei salvestata,
+pikendata ega looda testiks juurde. Seejärel lõpetame etapi eraldi commit'iga.
+Vea korral säilita failid ja saada raport; vana skripti ega migratsioone ei korda.
+
+---
+
 <!-- SELQIRO_ORIGINAL_PRICE_BROWSER_ACCEPTED_DETAILS_ONLY_UNITS_20261002 -->
 ## 02.10.2026 — Algse hinna kaitse läbis brauseritesti; mõõdud ainult Detailides
 

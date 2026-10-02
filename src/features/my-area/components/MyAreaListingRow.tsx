@@ -1,4 +1,6 @@
 "use client";
+
+import ListingPrice from "../../../entities/listing/ui/ListingPrice";
 import Link from "next/link";
 import type { ListingStatus } from "../../../entities/listing/api/updateListingStatus";
 import { getListingActivity, isRenewableListingId } from "../../../entities/listing/model/listingActivity";
@@ -29,7 +31,7 @@ export default function MyAreaListingRow({ listing, now, busy, disabled, activeI
       </Link>
       <div className="flex min-w-0 items-center justify-between gap-3 md:block md:text-right">
         <span className="text-xs font-bold uppercase tracking-wider text-neutral-400 md:hidden">Hind</span>
-        <p className="max-w-full truncate text-base font-black">{listing.priceLabel}</p>
+        <ListingPrice price={listing} labelClassName="text-base" />
       </div>
       <div className="grid min-w-0 gap-2">
         <label className="sr-only" htmlFor={`listing-status-${listing.id}`}>Kuulutuse „{listing.title}” staatus</label>

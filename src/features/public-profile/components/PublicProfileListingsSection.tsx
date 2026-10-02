@@ -1,5 +1,7 @@
 "use client";
 
+import ListingPrice from "../../../entities/listing/ui/ListingPrice";
+
 import {
   useEffect,
   useMemo,
@@ -160,9 +162,7 @@ function ProfileListingCard({
         · {listing.locationLabel}
       </p>
 
-      <p className="mt-3 text-lg font-black">
-        {listing.priceLabel}
-      </p>
+      <ListingPrice price={listing} className="mt-3" labelClassName="text-lg" />
     </article>
   );
 }

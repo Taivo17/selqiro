@@ -1,3 +1,108 @@
+<!-- SELQIRO_PRICE_DISPLAY_ACCEPTED_TEST_LISTINGS_20261002 -->
+## 2026-10-02 — Accepted shared ordinary-price display; next contract stays simple
+
+One pure getListingPriceDisplay model and one ListingPrice component are connected
+to ordinary search, public detail/profile, My Area and the existing card/adapter.
+Original nonblank text wins; bare numeric text without a supplied currency gets a
+visible unknown-currency note, never inferred EUR. Missing price is "Küsi hinda".
+Decimal text is preserved, zero is not implicit free, currency-bearing prose stays
+as entered. The seller snapshot no longer replaces direct-row money fields.
+No stored data/write path, RPC, visibility, status/renewal or image behavior changed.
+rawPrice hydration and unchanged-price payload omission remain independent and intact.
+Horse prices/wanted budgets and service prices stay on their existing contracts.
+
+Actual 02 Oct 14:00:11–14:00:52 +03 installer run passed 633 module cases and
+real Mac build; base d8090ba remained unchanged with exactly 22 staged paths and no
+unstaged changes. This was not a new commit/push. The base remote was equal then.
+Evidence: listing-price-display-20261002-140011-ft9q0e9u.zip, SHA-256
+e883cebe959e72d8db36176c5679cfcc473244a3c2484b6606663063d182a05e.
+Review verified 354 archive files/353 hashes, 311 current/308 base source triples,
+all 22 payloads, staged-patch reconstruction and 23 unchanged migrations.
+633 TAP cases are prior synthetic-transport/hooks/JSX tests, not a browser/HTTP run.
+
+User acceptance 02 Oct: "testides vigu ei leidnud". Desktop screenshots show original
+5578 with "Valuuta täpsustamata" in public detail/profile and My Area, BMW 2345 €
+retained, wanted budget 5000 EUR / Rapla unchanged, and edit raw 5578 with no changes.
+The narrow search screenshot shows the same 5578/note without truncation.
+This is user browser evidence, not independent HTTP/DB, all filter/return actions,
+identity, race/load, full mobile owner/profile coverage or new deployment proof.
+
+User explicitly states all currently posted listings are test listings and will be
+deleted later. Treat old test-record preservation as a non-goal for the next schema:
+do not build elaborate historical-price repair, backfill or indefinite compatibility
+branches solely for them. Prefer one clean validated source amount/currency contract
+for newly created listings. This does NOT authorize deletion/reset now, change the
+classification of accounts/services/messages, or relax ownership, accuracy and safety.
+Any later cleanup needs its own exact scope and confirmation, including linked images.
+No test data, source history or completed operation journal is removed by this finish.
+
+Keep the accepted display code as a small current reader, not a reason to expand
+legacy parsers. Next source amount/currency validation can deliberately target the
+new create/edit contract. Audit real writers/readers and schema before changing
+storage; keep original amount/currency separate from viewer conversions and payments.
+No automatic EUR inference, unreviewed migration or system-wide reset is authorized.
+FX/rates, crypto agreement marker, payment processing and Details units stay separate.
+Do not add conversion to title/description or arbitrary detail text. Existing technical
+details preview is not an editor and must not blindly replace unseen JSON keys later.
+This finisher only prepends five docs, builds and commits/pushes the exact tested 22
+paths after consent; deployment requires a separate exact-commit read-only check.
+
+---
+
+<!-- SELQIRO_HONEST_LISTING_PRICE_DISPLAY_CANDIDATE_20261002 -->
+## 2026-10-02 — One display model for ordinary-listing prices (candidate)
+
+Baseline d8090ba is source-finished; the user supplied Ready/Production and live
+owner/edit/detail screenshots at 12:32–12:35. They confirm raw 5578 in edit and the
+existing public euro inconsistency; no new server-row, HTTP or Git check is implied.
+
+Read/display flow:
+- src/entities/listing/model/priceDisplay.ts: pure label + nullable note, original
+  nonblank price text first, only supplied source currency, missing -> Küsi hinda.
+- listing API mapper delegates; existing formatPriceLabel is only a forwarding
+  compatibility entry point. ProductListingCard carries optional priceNote and
+  permits an existing RPC decimal string for priceAmount without Number conversion.
+- getListingById retains directly loaded price/price_amount/currency during seller
+  snapshot enrichment; all identity/visibility/seller/gallery/query paths stay intact.
+- ordinary owner rows retain a display-only priceAmountText before the existing
+  Number adapter. It is absent on horse rows; existing numeric consumers unchanged.
+- the owner adapter delegates only its listing branch, leaving horse/wanted labels
+  byte-for-byte governed by their existing formatter/validated summary.
+- src/entities/listing/ui/ListingPrice.tsx renders label and visible note; no IO or
+  business rules. Search, public detail/profile/discovery and owner row reuse it.
+  Price labels wrap instead of being silently truncated; no whole-layout redesign.
+
+The narrow numeric-notation classifier ONLY decides a missing-currency note; it is
+not a number parser, locale detector, currency detector or validator. Non-numeric
+price text is displayed literally (escaped by React), including units and ranges.
+No conversion or numeric reformatting of original text, even for large/precise sums.
+A separate provided EUR label may display as €, but a token already in original
+text stays verbatim. Legacy $/kr/SEK text is never turned into a new ISO truth source.
+The exact string fallback cannot undo precision lost before the input reached JS.
+
+No new source-of-truth column, migration or write. Original price/price_amount
+persistence, search page/RPC/currency-null contract, filters/order, seller identity,
+owner permissions, auth, status/expiry renewal, images, store categories and Energy
+are outside this package. Unchanged write files and original-price regressions guard
+against display leaking into form hydration or save payloads. Horse public/private
+contracts and wanted budgets stay unchanged.
+
+The targeted suite exercises real source modules and actual JSX component trees
+using synthetic hooks/router/transport, not DOM/HTTP/production. It includes huge
+raw/fallback strings, zero/missing/free/prose, all five display components, seller
+snapshot conflict, profile/owner query boundaries, form preservation and strict
+read-model type checking with a fake transport declaration. Prior ordinary-row
+expectation changes only to preserve 1234.50, not to weaken horse tests.
+
+A guarded installer verifies all 308 base sources and 23 immutable migrations,
+runs all 633 cases serially with explicit TAP, runs the existing full build, then
+stages only 22 client/test/docs paths. Its PASS is not browser acceptance or commit.
+The new UI directory is the only new directory; three new files, 311-source export.
+Actual new Mac build and staging belong to the returned report. No SQL tests rerun.
+Next after browser acceptance: separate finish and exact deployment verification.
+
+---
+
 <!-- SELQIRO_ORIGINAL_PRICE_BROWSER_ACCEPTED_DETAILS_ONLY_UNITS_20261002 -->
 ## 2026-10-02 — Accepted original-price boundary and Details-only unit direction
 

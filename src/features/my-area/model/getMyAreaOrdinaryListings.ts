@@ -1,3 +1,4 @@
+import { getListingPriceDisplay } from "../../../entities/listing/model/priceDisplay";
 import {
   getMyMarketplaceItems,
 } from "../../../entities/marketplace-item/api/getMyMarketplaceItems";
@@ -23,11 +24,6 @@ type UnknownRecord = Record<string, unknown>;
 
 const MILLISECONDS_PER_DAY =
   24 * 60 * 60 * 1000;
-
-const priceNumberFormatter =
-  new Intl.NumberFormat("et-EE", {
-    maximumFractionDigits: 2,
-  });
 
 function isRecord(
   value: unknown
@@ -170,70 +166,6 @@ function normalizeOptionalText(
   return normalized || null;
 }
 
-function isNumericPriceText(
-  value: string
-): boolean {
-  const normalized = value
-    .replace(/\s+/g, "")
-    .replace(",", ".");
-
-  return /^\d+(?:\.\d{1,2})?$/.test(
-    normalized
-  );
-}
-
-function getPriceCurrencySuffix(
-  currency: string | null
-): string {
-  const normalized =
-    currency?.trim().toUpperCase() || "";
-
-  if (!normalized || normalized === "EUR") {
-    return " €";
-  }
-
-  return ` ${normalized}`;
-}
-
-function getPriceLabel(
-  item: OwnerListingMarketplaceItem
-): string {
-  const priceText =
-    normalizeOptionalText(item.priceText);
-
-  if (
-    priceText
-    && item.priceAmount !== null
-    && isNumericPriceText(priceText)
-  ) {
-    return (
-      priceNumberFormatter.format(
-        item.priceAmount
-      )
-      + getPriceCurrencySuffix(
-        item.currency
-      )
-    );
-  }
-
-  if (priceText) {
-    return priceText;
-  }
-
-  if (item.priceAmount !== null) {
-    return (
-      priceNumberFormatter.format(
-        item.priceAmount
-      )
-      + getPriceCurrencySuffix(
-        item.currency
-      )
-    );
-  }
-
-  return "Hind kokkuleppel";
-}
-
 function getLocationLabel(
   item: OwnerListingMarketplaceItem
 ): string {
@@ -280,7 +212,9 @@ function toMyIdentityListingCard(
       normalizeOptionalText(
         item.description
       ),
-    priceLabel: getPriceLabel(item),
+    ...getListingPriceDisplay({ price: item.priceText,
+      priceAmount: item.priceAmountText === undefined ? item.priceAmount : item.priceAmountText,
+      currency: item.currency }),
     priceAmount: item.priceAmount,
     currency: item.currency,
     imageUrl: item.imageUrl,

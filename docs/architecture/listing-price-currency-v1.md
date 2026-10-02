@@ -1,3 +1,106 @@
+<!-- SELQIRO_PRICE_DISPLAY_ACCEPTED_TEST_LISTINGS_20261002 -->
+## 2026-10-02 — Shared display browser accepted; disposable test-data direction
+
+Actual 02 Oct 14:00:11–14:00:52 +03 installer run passed 633 module cases and
+real Mac build; base d8090ba remained unchanged with exactly 22 staged paths and no
+unstaged changes. This was not a new commit/push. The base remote was equal then.
+Evidence: listing-price-display-20261002-140011-ft9q0e9u.zip, SHA-256
+e883cebe959e72d8db36176c5679cfcc473244a3c2484b6606663063d182a05e.
+Review verified 354 archive files/353 hashes, 311 current/308 base source triples,
+all 22 payloads, staged-patch reconstruction and 23 unchanged migrations.
+633 TAP cases are prior synthetic-transport/hooks/JSX tests, not a browser/HTTP run.
+
+User acceptance 02 Oct: "testides vigu ei leidnud". Desktop screenshots show original
+5578 with "Valuuta täpsustamata" in public detail/profile and My Area, BMW 2345 €
+retained, wanted budget 5000 EUR / Rapla unchanged, and edit raw 5578 with no changes.
+The narrow search screenshot shows the same 5578/note without truncation.
+This is user browser evidence, not independent HTTP/DB, all filter/return actions,
+identity, race/load, full mobile owner/profile coverage or new deployment proof.
+
+The shared display policy is now tested locally, not deployed by the installer.
+Freeze its 17 app/test files. Only five doc prefixes, a fresh build and explicitly
+confirmed 22-path commit/push belong to this source finish. Use returned NEW_COMMIT
+and remote/clean status; verify that exact serving deployment separately afterwards.
+No listing save/renewal or test-record creation is required for the read-only smoke.
+
+User explicitly states all currently posted listings are test listings and will be
+deleted later. Treat old test-record preservation as a non-goal for the next schema:
+do not build elaborate historical-price repair, backfill or indefinite compatibility
+branches solely for them. Prefer one clean validated source amount/currency contract
+for newly created listings. This does NOT authorize deletion/reset now, change the
+classification of accounts/services/messages, or relax ownership, accuracy and safety.
+Any later cleanup needs its own exact scope and confirmation, including linked images.
+No test data, source history or completed operation journal is removed by this finish.
+
+Next data-model work can prioritize a small validated original amount + fiat currency
+contract for new listings, without guessing currencies or preserving every historical
+text convention. Document any intentional break before removing a writer/reader;
+do not weaken authorization or let presentation values become saved source values.
+The current display-only unknown-currency fallback is small and remains unchanged in
+this finish. Future cleanup/migration is separately scoped, never an implicit reset.
+Viewer currency/FX remains derived and approximate, never the seller's payment terms.
+Crypto is only a deferred optional agreement preference, not processing or custody.
+Measurement conversion is confined to supported structured quantitative Detailid
+fields with explicit original value/unit. Never parse title/description for units.
+Energy, horse/wanted contracts, lifecycle, images and search ordering stay separate.
+
+---
+
+<!-- SELQIRO_HONEST_LISTING_PRICE_DISPLAY_CANDIDATE_20261002 -->
+## 2026-10-02 — Ordinary display-only candidate after accepted d8090ba production
+
+Accepted production scope: user screenshots at 12:32–12:35 show d8090ba main,
+Ready/Production and live edit/detail with original 5578. Actual 12:09 source
+finish is committed/pushed/clean/build-PASS. No fresh DB/Vercel API audit implied.
+
+Display rules are implemented in one pure getListingPriceDisplay model:
+1. Nonblank original price text wins over any derived numeric fallback. Trim only
+   outer display whitespace, preserve decimals/separators/prose/currency tokens.
+2. Bare numeric notation plus no supplied currency -> unchanged label and visible
+   "Valuuta täpsustamata". No locale/identity/location/default EUR inference.
+3. Explicit currency/free/agreement/range/unit-price prose -> original text, no
+   auto-recognition, conversion, validation or appended contradictory currency.
+4. Absent/blank price text -> existing amount if available; decimal strings stay
+   exact, trailing zeros retained, no Number coercion. A finite transport Number
+   is shown as received; its previously lost digits cannot be reconstructed.
+5. No usable text/amount -> "Küsi hinda". 0 stays numeric 0, never implicit free.
+6. A provided separate currency may accompany bare amounts (EUR label -> €); this
+   is presentation only, not confirmation of a canonical currency/FX contract.
+
+Read models carry optional priceNote; only the ordinary owner branch additionally
+retains priceAmountText from the existing read response before the legacy Number
+field. Neither is persisted. Existing priceAmount numeric consumers for owner rows
+stay intact. Generic listing priceAmount permits its already possible decimal string.
+One ListingPrice component renders label and note without truncation or private IO.
+
+Money authority in detail is the directly loaded listing: existing seller snapshot
+may enrich seller presentation but does NOT replace price_amount or currency.
+No other snapshot, seller, owner, visibility, auth, query or gallery behavior changes.
+The old text-only formatPriceLabel entry forwards to the same pure model. The
+compatibility ordinary-owner adapter uses that model too; it is not reactivated.
+
+Scope: search, public detail, profile listings, ordinary owner rows and existing
+product-discovery cards. Horse sale/free/lease/co-rider and wanted use their existing
+price/budget contracts, untouched. All existing search-filter/pagination/return,
+profile-category, status and renewal semantics stay outside the price calculation.
+
+Validation: 93 new source/JSX/read-boundary tests plus 540 existing cases (one
+ordinary-row expected value updated to retain 1234.50). No old horse expectation
+relaxed. New tests include all five renderers, huge decimals, contradictory numeric
+fallbacks/snapshots, 0/empty/missing/prose, query bounds and raw form hydration.
+These use synthetic transport/hooks, not browser DOM, SQL, real users or load.
+Actual installer PASS requires serial TAP 633/633 and the user's real full build;
+then read-only browser acceptance, separate finish and exact deployment verification.
+
+No new price storage, writes or SQL. Keep rawPrice hydration and unchanged-price
+omission. Never send a display label, note or amountText in a write payload.
+Later: safe source amount + currency write contract, viewer display currency and
+explicit approximate FX, separately tested cross-currency filters/order. No crypto
+processing; optional agreement marker may come later. Units are separate and only
+supported quantitative Detailid fields, never title/description/arbitrary prose.
+
+---
+
 <!-- SELQIRO_ORIGINAL_PRICE_BROWSER_ACCEPTED_DETAILS_ONLY_UNITS_20261002 -->
 # Current checkpoint — 2 October 2026: original-price browser acceptance
 

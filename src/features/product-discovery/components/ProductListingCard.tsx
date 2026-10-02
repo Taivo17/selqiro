@@ -1,5 +1,7 @@
 "use client";
 
+import ListingPrice from "../../../entities/listing/ui/ListingPrice";
+
 import {
   useRef,
   type KeyboardEvent,
@@ -112,7 +114,7 @@ export default function ProductListingCard({
         </p>
 
         <div className="mt-auto flex items-end justify-between gap-3 pt-4">
-          <p className="text-xl font-black">{listing.priceLabel}</p>
+          <ListingPrice price={listing} />
 
           <p className="text-right text-xs text-neutral-500">
             {listing.locationLabel}

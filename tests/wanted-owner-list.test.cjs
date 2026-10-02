@@ -153,7 +153,7 @@ test('ordinary listing ignores unwanted summary, keeps numeric-text ID and contr
   const result = card(map({ ...row(), content_type: 'listing', content_id: '9007199254740993', content_variant: null,
     price_amount: '1234.50', price_text: '1234.50', location_label: 'Paide', source_status: 'sold' }));
   assert.equal(result.key, 'listing:9007199254740993'); assert.equal(result.locationLabel, 'Paide');
-  assert.equal(normal(result.priceLabel), normal(new Intl.NumberFormat('et-EE', { maximumFractionDigits: 2 }).format(1234.5) + ' €')); assert.equal(result.status, 'sold');
+  assert.equal(result.priceLabel, '1234.50 €'); assert.equal(result.priceNote, null); assert.equal(result.status, 'sold');
   assert.equal(result.editHref, '/v2/my-area/listings/9007199254740993/edit');
   assert.equal(result.detailHref, '/v2/listing/9007199254740993');
   assert.equal(result.canChangeStatus, true); assert.deepEqual(clone(result.allowedStatusActions), ['active', 'paused', 'sold']);

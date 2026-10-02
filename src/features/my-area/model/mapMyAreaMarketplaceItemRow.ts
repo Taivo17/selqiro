@@ -1,3 +1,4 @@
+import { getListingPriceDisplay } from "../../../entities/listing/model/priceDisplay";
 import { getMyAreaWantedSummaryLabels } from "./myAreaWantedSummary";
 import type {
   OwnerMarketplaceItem,
@@ -186,7 +187,7 @@ function getHorseVariantLabel(
 function buildCardFields(
   item: OwnerMarketplaceItem,
   href: string
-): MyAreaMarketplaceItemCardFields {
+): MyAreaMarketplaceItemCardFields & { priceAmount: number | null } {
   const horseVariant =
     item.contentType === "horse_offer"
       ? getHorseVariantLabel(
@@ -203,7 +204,11 @@ function buildCardFields(
     id: item.contentId,
     title: item.title,
     description: item.description,
-    priceLabel: wanted?.priceLabel ?? getPriceLabel(item),
+    ...(item.contentType === "listing"
+      ? getListingPriceDisplay({ price: item.priceText,
+          priceAmount: item.priceAmountText === undefined ? item.priceAmount : item.priceAmountText,
+          currency: item.currency })
+      : { priceLabel: wanted?.priceLabel ?? getPriceLabel(item) }),
     priceAmount: item.priceAmount,
     currency: item.currency,
     imageUrl: item.imageUrl,

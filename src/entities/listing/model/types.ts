@@ -5,7 +5,9 @@ export type ProductListingCard = {
   title: string;
   description: string | null;
   priceLabel: string;
-  priceAmount: number | null;
+  /** Display-only clarification, never an editable price or a persisted field. */
+  priceNote?: string | null;
+  priceAmount: number | string | null;
   currency: string | null;
   imageUrl: string | null;
   category: string | null;

@@ -1,3 +1,154 @@
+<!-- SELQIRO_PRICE_DISPLAY_ACCEPTED_TEST_LISTINGS_20261002 -->
+# CURRENT — 2026-10-02 price display accepted; source finish only
+
+This TOP entry supersedes all historical next actions below. Do not rerun completed
+installers/finishers or SQL/preflight/APPLY tools merely because old entries say so.
+
+## Current source and evidence
+
+Actual 02 Oct 14:00:11–14:00:52 +03 installer run passed 633 module cases and
+real Mac build; base d8090ba remained unchanged with exactly 22 staged paths and no
+unstaged changes. This was not a new commit/push. The base remote was equal then.
+Evidence: listing-price-display-20261002-140011-ft9q0e9u.zip, SHA-256
+e883cebe959e72d8db36176c5679cfcc473244a3c2484b6606663063d182a05e.
+Review verified 354 archive files/353 hashes, 311 current/308 base source triples,
+all 22 payloads, staged-patch reconstruction and 23 unchanged migrations.
+633 TAP cases are prior synthetic-transport/hooks/JSX tests, not a browser/HTTP run.
+
+User acceptance 02 Oct: "testides vigu ei leidnud". Desktop screenshots show original
+5578 with "Valuuta täpsustamata" in public detail/profile and My Area, BMW 2345 €
+retained, wanted budget 5000 EUR / Rapla unchanged, and edit raw 5578 with no changes.
+The narrow search screenshot shows the same 5578/note without truncation.
+This is user browser evidence, not independent HTTP/DB, all filter/return actions,
+identity, race/load, full mobile owner/profile coverage or new deployment proof.
+
+Base d8090ba production was user-accepted at 12:32–12:35 earlier on 02 Oct. That
+is NOT the new shared-price-display deployment, which has no new commit yet.
+Current staged sources are the accepted reference; screenshots are not fresh Git.
+
+## One next action — current guarded finisher
+
+Stop this repo's dev server. Run only selqiro-finish-listing-price-display.py with
+the exact listing-price-display-20261002-140011-ft9q0e9u.zip in Downloads.
+It guards base d8090ba, full index, 311 sources and 23 unchanged migrations, prepends
+only these four docs plus the existing price contract, runs npm run build and asks
+COMMIT PUSH. The accepted 17 application/test files must remain byte-identical.
+Commit subject: Unify original listing price display without currency inference.
+Read NEW_COMMIT/BUILD/COMMIT/PUSH/WORKTREE/REMOTE in the returned result. This document
+cannot know its own future commit. On STOP preserve worktree/index/any commit and
+return the ZIP for review; no automatic retry, reset/restore or manual restaging.
+
+After successful result review: verify that exact new commit as active Vercel
+Ready/Production and perform read-only ordinary search/detail/profile/owner checks.
+Use existing examples while present, not another save/renewal/status/image action.
+Do not assume a push proves the serving deployment. No new feature before review.
+
+## New controlling test-data decision
+
+User explicitly states all currently posted listings are test listings and will be
+deleted later. Treat old test-record preservation as a non-goal for the next schema:
+do not build elaborate historical-price repair, backfill or indefinite compatibility
+branches solely for them. Prefer one clean validated source amount/currency contract
+for newly created listings. This does NOT authorize deletion/reset now, change the
+classification of accounts/services/messages, or relax ownership, accuracy and safety.
+Any later cleanup needs its own exact scope and confirmation, including linked images.
+No test data, source history or completed operation journal is removed by this finish.
+
+After deployment acceptance, the next design/code boundary is a simple explicit
+original amount + fiat currency create/edit contract. Inspect actual relevant
+writers/readers/schema; avoid historical data-repair work solely for disposable
+listings. No FX or unit runtime is delivered by this finish. No new SQL is approved.
+Measurement conversion later: supported typed Detailid fields only, not title or
+description. Crypto stays a later optional payment-preference marker, not custody,
+wallets, exchange or settlement. Energy remains separate.
+
+## Environment and immutable boundaries
+
+Repo $HOME/selqiro, main/origin-main, approved GitHub Taivo17/selqiro. Existing Mac
+Python 3.9+/Git/npm only, no install/Docker/Supabase/SQL/live-journal access. Inherited
+GIT_* overrides are removed only from children, not the terminal. Backups and result
+ZIP stay outside the repo. Build may use normal existing environment and dependencies;
+normal Git hooks/CI may run after consent. No application-row reads/writes by finisher.
+23 migrations remain unchanged; earlier applied search/horse/renewal contracts and
+COMPLETE journals are not reapplied, edited or deleted. Existing owner horse editor,
+wanted flows, original-price save guards, renewal, images and Energy remain working.
+
+---
+
+<!-- SELQIRO_HONEST_LISTING_PRICE_DISPLAY_CANDIDATE_20261002 -->
+# CURRENT — 2026-10-02 honest ordinary-listing price display candidate
+
+This TOP entry supersedes older next-task instructions. Read the latest result ZIP
+to distinguish prepared source, staged work and a completed commit. Never run an
+older installer/finisher/migration merely because historical instructions say so.
+
+## Verified base / evidence limits
+
+Source base: `d8090ba334d4f0ce319d862e74afd5711f775ba2` (d8090ba),
+parent 204088f, "Protect original listing price during basic edits".
+User finish 02 Oct 12:09:06–12:09:40 +03: fresh Mac build PASS, commit/push PASS,
+clean main and remote equality. Latest input:
+`listing-original-price-finish-20261002-120906-1b6kocyh.zip`, SHA-256
+`f53019e4e5b582ee24278430951766b3ad80aea02b7e437ff3839d78ccb47ed9`.
+336 files / 335 hashes; 308 selected source triples; raw commit object hashes to
+d8090ba. The source finish's prior 540 tests are not newly run browser/HTTP checks.
+
+User 12:32–12:35 screenshots: exact d8090ba Ready/Production, live selqiro.vercel.app,
+raw edit price 5578, Gaz 53 title, unchanged-form action and public listing/195.
+This accepts deployment/read-only UI scope, not an independent Vercel API/alias or
+DB-row audit. Do not repeat title save, renewal or deployment actions for this step.
+No new live source-state claim is made from these historical screenshots.
+
+## One current action
+
+Run only `selqiro-unify-listing-price-display.py` with the exact latest finish ZIP
+in Downloads and the clean d8090ba repository. Stop this repository's dev server
+first; use existing Python 3.9+, Node/npm/TypeScript. Consent: `PRICE DISPLAY`.
+The installer checks actual Git/source/index/remote; changed state stops, no reset.
+It adds 22 client/test/docs paths, runs 633 serial TAP cases and existing npm build,
+then stages only those paths. It has NO commit/push or database operation.
+Read result.txt for actual outcome; this document is candidate scope, not a PASS.
+
+After returned PASS: read-only LOCAL browser check of /v2/products, /v2/listing/195,
+/v2/profile/<actual seller slug>, /v2/my-area and the existing edit view. Raw 5578
+must have no invented euro and a visible currency-unknown note in ordinary display;
+2345 € and other original prose retain their text. Edit raw 5578 remains unchanged.
+Check horse sale/wanted budget, owner expiry, existing filters/return and narrow
+wrapping. Do not save, renew, change status/identity/images or create test listings.
+Return the ZIP and findings; only then prepare a separate source finish.
+If STOPPED: report review is the only next task; preserve files/index.
+
+## Candidate boundaries
+
+One price display model + one small UI component across ordinary listing surfaces.
+Original nonblank text is authoritative for display; exact decimal fallback text
+retained when present, no Number rounding of strings or inferred EUR. No free-price
+claim from zero/missing. Missing text and amount -> Küsi hinda. Currency-bearing or
+free-form text preserved, not validated or converted. A supplied label is not ISO
+truth. Seller snapshot cannot overwrite direct row money fields. Horse and wanted
+stay on their current path. No new queries or changes to existing query filters.
+
+Keep rawPrice and unchanged-price payload omission intact. New amountText in ordinary
+owner read is display-only; legacy numeric field remains compatible. Price/type
+storage migration, viewer preference/FX, crypto marker/payment, unit conversion,
+details editing, price filters/order and a broader My Area redesign are not added.
+Details units later: supported numeric Detailid fields only, never title/description
+or arbitrary text. Original values remain separate from derived display values.
+
+## Environment / do not rerun
+
+Repository $HOME/selqiro, main/origin-main, approved Taivo17/selqiro GitHub remote.
+GIT_* and JS preload/search overrides removed from children only, not shell settings.
+No install, Docker, Supabase, SQL, production rows or live operation-journal access.
+23 migrations remain byte-identical; production renewal/search/horse checkpoints
+remain prior applied/verified, not repeated. Keep COMPLETE journals and result ZIPs.
+The installer writes external reports, not backups into the repo. Only its own
+unpublished temp files may be removed; no user work reset/restore or forced push.
+Preparation uses saved sources and synthetic transport/hooks/JSX; not a real full
+Maci build, browser, HTTP/RLS, concurrent writer, performance or deployment test.
+
+---
+
 <!-- SELQIRO_ORIGINAL_PRICE_BROWSER_ACCEPTED_DETAILS_ONLY_UNITS_20261002 -->
 # CURRENT — 2 October 2026: price safeguard accepted; source finish
 

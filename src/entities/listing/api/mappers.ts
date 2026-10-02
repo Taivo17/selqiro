@@ -7,8 +7,8 @@ import { getPrimaryListingImageUrl, sortListingImages } from "../model/image";
 import {
   formatDistanceLabel,
   formatLocationLabel,
-  formatPriceLabel,
 } from "../model/format";
+import { getListingPriceDisplay } from "../model/priceDisplay";
 
 export type MarketplaceListingRow = {
   listing_id?: string | number | null;
@@ -25,7 +25,7 @@ export type MarketplaceListingRow = {
   title?: string | null;
   description?: string | null;
   price?: string | null;
-  price_amount?: number | null;
+  price_amount?: number | string | null;
   currency?: string | null;
   image?: string | null;
   category?: string | null;
@@ -77,13 +77,13 @@ export function mapMarketplaceListingRow(
     id,
     title: row.title || "Pealkiri puudub",
     description: row.description || null,
-    priceLabel: formatPriceLabel({
+    ...getListingPriceDisplay({
       price: row.price,
       priceAmount: row.price_amount ?? null,
-      currency: row.currency || "€",
+      currency: row.currency,
     }),
     priceAmount: row.price_amount ?? null,
-    currency: row.currency || "€",
+    currency: row.currency?.trim() || null,
     imageUrl: getPrimaryListingImageUrl({
       images: row.listing_images || [],
       fallbackImage: row.image || null,

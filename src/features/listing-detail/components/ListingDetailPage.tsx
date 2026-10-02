@@ -1,5 +1,7 @@
 "use client";
 
+import ListingPrice from "../../../entities/listing/ui/ListingPrice";
+
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState, type PointerEvent } from "react";
@@ -606,7 +608,7 @@ export default function ListingDetailPage({ listingId }: { listingId: string }) 
                 </button>
               </div>
 
-              <p className="mt-5 text-4xl font-black">{listing.priceLabel}</p>
+              <ListingPrice price={listing} className="mt-5" labelClassName="text-4xl" />
 
               <div className="mt-5 rounded-2xl bg-white p-4">
                 <p className="text-sm font-bold">{listing.locationLabel}</p>

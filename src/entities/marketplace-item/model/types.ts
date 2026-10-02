@@ -52,6 +52,8 @@ export type OwnerMarketplaceItemBase = {
 export type OwnerListingMarketplaceItem =
   OwnerMarketplaceItemBase & {
     contentType: "listing";
+    /** Exact source amount for display; legacy priceAmount remains compatible. */
+    priceAmountText?: string | null;
   };
 
 export type OwnerHorseOfferMarketplaceItem =

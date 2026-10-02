@@ -1,3 +1,4 @@
+import { listingPriceAmountText } from "../../listing/model/priceDisplay";
 import { parseOwnerWantedSummary } from "../model/ownerWantedSummary";
 import {
   MARKETPLACE_ITEM_CONTENT_TYPES,
@@ -250,6 +251,7 @@ export function mapOwnerMarketplaceItemRow(
     return {
       ...base,
       contentType,
+      priceAmountText: listingPriceAmountText(row.price_amount),
     };
   }
 
