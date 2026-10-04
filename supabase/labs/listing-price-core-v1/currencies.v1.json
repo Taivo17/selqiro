@@ -1,0 +1,27 @@
+{
+  "format": "selqiro_price_currency_registry_v1",
+  "scope": "16-currency local candidate subset, not the global launch currency list",
+  "source": "https://www.unicode.org/cldr/charts/48/supplemental/detailed_territory_currency_information.html",
+  "source_version": "CLDR 48, non-cash digits",
+  "review_date": "2026-10-03",
+  "max_integer_digits": 18,
+  "currencies": {
+    "AUD": 2,
+    "BHD": 3,
+    "CAD": 2,
+    "CHF": 2,
+    "CZK": 2,
+    "DKK": 2,
+    "EUR": 2,
+    "GBP": 2,
+    "JPY": 0,
+    "KWD": 3,
+    "NOK": 2,
+    "NZD": 2,
+    "PLN": 2,
+    "SEK": 2,
+    "TND": 3,
+    "USD": 2
+  },
+  "not_included": "cash rounding, FX, crypto, funds, guessed currencies; full launch registry needs explicit review"
+}

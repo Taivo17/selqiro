@@ -1,3 +1,34 @@
+<!-- SELQIRO_PRICE_CORE_LOCAL_PASS_SOURCE_20261004 -->
+## 04.10.2026 — Hinnatuuma katse läbitud; labor talletatakse lähtekoodi
+
+Kasutaja 10:34–10:35 katse läbis 154 SQL-kontrolli ning kolm päriselt kattuvate
+andmebaasiühenduste katset. Kontrolliti vana revisjoni konflikti, aktiivse identiteedi
+vahetust ja ettevõtte liikmelisuse muutumist mitteaktiivseks. Tagasipööramine ning
+ainult selle käigu abikonteineri eemaldamine läbisid. Lõpus oli main puhas commit’il
+6df0af9 ja GitHubiga võrdne. Need on varasemad katsed, mitte lähteetapis uuesti tehtud.
+
+Testitud SQL-i, valuutavalimit ja teste hoitakse nüüd paki sihtkohana kaustas
+`supabase/labs/listing-price-core-v1/`, mitte rakendatavate migratsioonide seas.
+Tegelik paigaldus/build/commit/push selgub selle lähteetapi uuest tulemuse-ZIP-ist.
+Töötavat portaali, andmebaasi ega 23 migratsiooni ei muudeta. Valuutavalik pole veel
+kasutajale avatud. Labori 16 valuutat pole maailma või käivitamise piirang.
+
+Vestluse vahetamiseks alusta lühikesest `docs/99_V2_HANDOFF_NEXT_CHAT.md` failist.
+Selle ainus toimetatav lähtealus on `docs/continuity/CURRENT_STATE.json`; vana
+5573-realise dokumendi kõik baidid jäävad eraldi docs/archive faili alles.
+Lähtekoodi, kohaliku katse, päris andmebaasi ja juurutuse seisud on eraldi.
+Vanad NEXT juhised ei ole tänased käivitamiskäsud. Täpne keskkond ja failikaart
+on `docs/continuity/README.md` failis; vanu teste ja auditeid ei korrata.
+
+Järgmine sisuline töö on algsumma/valuuta ning kuulutuse loomise või põhiväljade
+ühe tervikliku salvestuse ühendamine koos lugejatega. Pealkirja ja hinda ei salvestata
+kahe varjatud pooliku toiminguna. Praeguste testkuulutuste keerukat taastäitmist ei
+tehta, kuid neid praegu ei kustutata. Kuvavaluuta, kursid ja krüpto jäävad eraldi.
+Mõõtühikute teisendus tuleb ainult toetatud Detailide mõõduväljadest, mitte
+pealkirjast või kirjeldusest. Detailiredaktor on samuti eraldi järgmine töö.
+
+---
+
 <!-- SELQIRO_PRICE_DISPLAY_ACCEPTED_TEST_LISTINGS_20261002 -->
 ## 02.10.2026 — Ühine hinnakuvamine läbis kasutajakatse; testkuulutuste piir
 

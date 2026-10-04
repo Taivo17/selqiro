@@ -1,3 +1,43 @@
+<!-- SELQIRO_PRICE_CORE_LOCAL_PASS_SOURCE_20261004 -->
+## 2026-10-04 — Tested closed price lab retained as source, not deployed
+
+Accepted evidence: `listing-price-core-local-v2-20261004-103434-t4cgfpdb.zip`,
+SHA-256 `9d16717c2cc1efdbcb08f0d5573e11cc1db7a78e5cab395ec2a0f288a54d2ef2`.
+Actual Mac run ended 04 Oct 10:34:57 +03: 154 PostgreSQL 17.6 assertions,
+three overlapping two-session cases, selected outer rollback and exact helper
+removal PASS. Git was clean at `6df0af9457d2e812788b10a7a7951d8be8271912`
+and remote-equal. These tests are prior evidence, not rerun by this source step.
+
+The byte-identical SQL modules, 16-currency laboratory subset and test files are
+stored under `supabase/labs/listing-price-core-v1/`, NOT under migrations.
+The core writer remains closed to API roles. No application code, current client
+tests, package dependencies or the 23 applied migration files change.
+No persistent local schema, production migration or new frontend feature is installed.
+Use the new source result for actual build, staging, commit/push and clean-state
+facts; the presence of these prepared documents is not proof of execution.
+
+Continuity: start with `docs/99_V2_HANDOFF_NEXT_CHAT.md`, generated from
+`docs/continuity/CURRENT_STATE.json`. Its former 5573 lines are preserved exactly
+under `docs/archive/99_V2_HANDOFF_NEXT_CHAT.before-price-core-20261004-6df0af9.md`.
+Keep current state separate from historical NEXT instructions. Actual Git and the
+latest result outrank historical proposed next steps. Do not rerun completed
+lab runners, catalog audits, diagnostics, installers or production operations.
+
+This laboratory gate is not production hardening. Its fixture has seven selected
+tables and five captured functions with synthetic auth; postgres is a superuser
+there, unlike the observed production role. The three concurrent schedules prove
+CAS, active-identity change and membership-status change only; they do not prove
+all lock orders, full admin RPCs, HTTP/JWT, deadlock freedom or load capacity.
+The source checkpoint changes no trust/ACL policy or public search response.
+
+Before deployment integrate atomic create/basic save, full reviewed currency data,
+expected identity/revision from the same snapshot, read contracts and real deletion.
+Review trusted SECURITY DEFINER entrypoints and all three old price writers.
+Broad public SELECT, legacy write-RLS and AI enrich authorization/cost remain
+separate launch boundaries; do not claim they are fixed by retaining this lab.
+
+---
+
 <!-- SELQIRO_PRICE_DISPLAY_ACCEPTED_TEST_LISTINGS_20261002 -->
 ## 2026-10-02 — Accepted shared ordinary-price display; next contract stays simple
 

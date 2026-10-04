@@ -1,0 +1,129 @@
+{
+  "format": "selqiro_price_lab_provenance_v1",
+  "status": "TESTED_CLOSED_LAB_NOT_PRODUCTION_MIGRATION",
+  "source_base_commit": "6df0af9457d2e812788b10a7a7951d8be8271912",
+  "accepted_local_run": {
+    "file": "listing-price-core-local-v2-20261004-103434-t4cgfpdb.zip",
+    "sha256": "9d16717c2cc1efdbcb08f0d5573e11cc1db7a78e5cab395ec2a0f288a54d2ef2",
+    "bytes": 1398950,
+    "finished_at": "2026-10-04T07:34:57.420367+00:00",
+    "sql_assertions": 154,
+    "concurrency": {
+      "limit": "real PostgreSQL sessions in helper; no HTTP, UI or load claim",
+      "passed": true,
+      "tests": [
+        {
+          "expected_error": "listing_price_conflict",
+          "loser_exit": 3,
+          "name": "cas",
+          "overlapping_lock_observed": true,
+          "winner_exit": 0
+        },
+        {
+          "expected_error": "listing_price_identity_changed",
+          "loser_exit": 3,
+          "name": "identity",
+          "overlapping_lock_observed": true,
+          "winner_exit": 0
+        },
+        {
+          "expected_error": "listing_price_identity_forbidden",
+          "loser_exit": 3,
+          "name": "membership",
+          "overlapping_lock_observed": true,
+          "winner_exit": 0
+        }
+      ]
+    },
+    "outer_rollback": "PASS_SELECTED_CATALOG_PRIVILEGES_AND_SEVEN_EMPTY_TABLES",
+    "helper_cleanup": "PASS_EXACT_OWN_HELPER_REMOVED",
+    "runner_sha256": "1d3eefcdd44a3ef3f81066621c5ba1baeef1f8c0c1f3d0ef4edcc8976553f6ee"
+  },
+  "unchanged_files": {
+    "01_value_contract.sql": {
+      "input_path": "candidate/01_value_contract.sql",
+      "bytes": 5567,
+      "sha256": "5f9d58db5d28a9ec6804e1f0b2c282d5dd812897165b0e07242b12524d56c29c"
+    },
+    "02_write_guard.sql": {
+      "input_path": "candidate/02_write_guard.sql",
+      "bytes": 3812,
+      "sha256": "ced6884dea9e2098a259186b97f4e61b5fd07dd836256663dd451a2d9b03d1ea"
+    },
+    "03_owner_price_core.sql": {
+      "input_path": "candidate/03_owner_price_core.sql",
+      "bytes": 4214,
+      "sha256": "0483dd48688c1f8d2b3812109e2d2acec99373e65fe6f15f94b4558b3ce79419"
+    },
+    "currencies.v1.json": {
+      "input_path": "candidate/currencies.v1.json",
+      "bytes": 722,
+      "sha256": "6de33eb21da4e78256ccb26048e19d6459f4bf111fad71c9b5ccd2666f948d84"
+    },
+    "tests/fixture.sql": {
+      "input_path": "tests/fixture.sql",
+      "bytes": 13352,
+      "sha256": "e4d21dafe0f44c898a44fa17efd736aa619282e99dffb7934979abcca6a5d03f"
+    },
+    "tests/seed.sql": {
+      "input_path": "tests/seed.sql",
+      "bytes": 1798,
+      "sha256": "7a7a02a4cf7fe53586592bffe19d785f5b776ba04fe1850a934ab7f993ea6219"
+    },
+    "tests/suite.sql": {
+      "input_path": "tests/suite.sql",
+      "bytes": 39805,
+      "sha256": "9c4c9ab51de3870f430e35204346f028f8bdc444d045579eeb156aa86a0d3bd3"
+    },
+    "tests/expected-labels.json": {
+      "input_path": "tests/expected-labels.json",
+      "bytes": 4428,
+      "sha256": "d4899b206af26abe90a9162b69a4810790378f7d9e0506c847a38560a2259faa"
+    }
+  },
+  "reference": {
+    "path": "tests/concurrency.reference.py.txt",
+    "sha256": "d5440dcec79f63e340f2a8d34bf52bd62eec1b8a32c23578a00ac58b3c9c085a",
+    "not_standalone": true,
+    "exact_method_segments": [
+      {
+        "name": "start_session",
+        "start_line": 434,
+        "end_line": 445,
+        "sha256": "2a4135d3597d488fdc04bdcf0591da5fb7bd0d87f415fe33fba124cf6c84350b"
+      },
+      {
+        "name": "end_session",
+        "start_line": 446,
+        "end_line": 456,
+        "sha256": "4b7085bfe5f504848e462561ee3d83c9995437b134f4c0db50e405ba11c24b19"
+      },
+      {
+        "name": "wait_ready",
+        "start_line": 457,
+        "end_line": 464,
+        "sha256": "774e4191a77443c5348177ef63cb04cc9d844b9ca293f39e0095f22256e2d454"
+      },
+      {
+        "name": "race",
+        "start_line": 465,
+        "end_line": 489,
+        "sha256": "ed131454d9a231563f31824c8efa9578123e9efe530d32571b8c87d0d6c97b14"
+      },
+      {
+        "name": "concurrency_tests",
+        "start_line": 490,
+        "end_line": 505,
+        "sha256": "f7b3190a74f9d7f4ee3b7ba5d2dab8ec707ad25bef8dffbfefd65322cd24e7cb"
+      }
+    ]
+  },
+  "source_checkpoint_sql_rerun": false,
+  "api_execution_opened_by_source_checkpoint": false,
+  "limits": [
+    "Seven selected tables/five captured functions, synthetic auth; not full Supabase/HTTP/browser/load.",
+    "Lab postgres superuser differs from production non-superuser BYPASSRLS.",
+    "16 currencies are a lab sample only.",
+    "Creation/basic-save/readers/deletion/old-writer integration still pending."
+  ]
+}

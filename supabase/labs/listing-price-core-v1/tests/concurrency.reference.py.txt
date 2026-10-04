@@ -1,0 +1,83 @@
+# REFERENCE ONLY — not a standalone executable or project test command.
+# Exact method excerpts from the executed external v2 driver.
+# Runner SHA-256: 1d3eefcdd44a3ef3f81066621c5ba1baeef1f8c0c1f3d0ef4edcc8976553f6ee
+# Dependencies/helper isolation, constants and input guards remain in the original
+# archived runner.py.txt; see PROVENANCE.json. Do not invoke this excerpt with Python.
+
+    def start_session(self,name,sql):
+        self.label_guard(name)
+        self.helper_check(True)
+        target=self.out/'logs';op=target/(name+'.stdout');ep=target/(name+'.stderr')
+        require(not op.exists() and not ep.exists(),'Race session ei kordu.')
+        o=op.open('xb');e=ep.open('xb')
+        args=self.docker('exec','-i','--user','postgres',self.helper,'env','-i',
+          'PATH=/usr/lib/postgresql/bin:/usr/bin:/bin','HOME=/tmp','LC_ALL=C','PGCLIENTENCODING=UTF8',
+          'PGPASSFILE=/tmp/no-price-passfile','PGCONNECT_TIMEOUT=4','PGAPPNAME='+name,*self.psql_args())
+        proc=subprocess.Popen(args,stdin=subprocess.PIPE,stdout=o,stderr=e,cwd=self.root,env=self.env,start_new_session=True)
+        self.children.append(proc);proc.stdin.write(sql.encode());proc.stdin.flush()
+        session=(proc,o,e,op,ep);return session
+
+    def end_session(self,s,final=''):
+        proc,o,e,op,ep=s
+        try:
+            if final:proc.stdin.write(final.encode());proc.stdin.flush()
+            proc.stdin.close();proc.wait(timeout=12)
+        finally:
+            if proc.poll() is None:os.killpg(proc.pid,signal.SIGKILL);proc.wait()
+            o.close();e.close()
+        require(op.stat().st_size<=1024*1024 and ep.stat().st_size<=1024*1024,'Race valjund liiga suur.')
+        self.commands.append(dict(label=op.stem,exit_code=proc.returncode,async_session=True))
+        return proc.returncode,op.read_bytes(),ep.read_bytes()
+
+    def wait_ready(self,s):
+        proc,_,_,op,ep=s;start=time.monotonic()
+        while time.monotonic()-start<5:
+            require(proc.poll() is None,'Race A loppes enne kontrollpunkti.')
+            require(op.stat().st_size<=1024*1024 and ep.stat().st_size<=1024*1024,'Race valjund uletas piiri.')
+            if b'PRICE_A_HELD' in op.read_bytes().splitlines():return
+            time.sleep(.02)
+        raise Stop('Race A kontrollpunkti ei saabunud; ei nimeta katset labinuks.')
+
+    def race(self,name,a_sql,b_sql,expected_error):
+        a=self.start_session('price-'+name+'-a',"\\set ON_ERROR_STOP on\nBEGIN;\nSET LOCAL statement_timeout='8s'; SET LOCAL idle_in_transaction_session_timeout='10s';\n"+a_sql+"\n\\echo PRICE_A_HELD\n")
+        b=None
+        try:
+            self.wait_ready(a)
+            b=self.start_session('price-'+name+'-b',"\\set ON_ERROR_STOP on\nBEGIN;\nSET LOCAL statement_timeout='8s'; SET LOCAL idle_in_transaction_session_timeout='10s';\n"+b_sql+'\nCOMMIT;\n')
+            # Observe an actual blocked B backend, then release A before its 2s lock budget.
+            waiting=False;deadline=time.monotonic()+4
+            for i in range(20):
+                if time.monotonic()>deadline or b[0].poll() is not None:break
+                q="SELECT EXISTS(SELECT 1 FROM pg_stat_activity WHERE application_name='price-"+name+"-b' AND wait_event_type='Lock');"
+                cp=self.sql(q,'race-'+name+'-wait-'+str(i))
+                if cp.stdout.strip()==b't':waiting=True;break
+                time.sleep(.03)
+            a_result=self.end_session(a,'COMMIT;\n');a=None
+            b_result=self.end_session(b);b=None
+            require(waiting,'Kahe uhenduse kattuvat lukustust ei toendatud; ei loe race PASS-iks.')
+            require(a_result[0]==0 and b_result[0]==3 and expected_error.encode() in b_result[2],
+              'Konkurentsikatse tulemus erineb: '+name)
+            return dict(name=name,overlapping_lock_observed=True,winner_exit=0,loser_exit=3,expected_error=expected_error)
+        finally:
+            for s in (a,b):
+                if s is not None:
+                    try:self.end_session(s,'ROLLBACK;\n')
+                    except Exception:pass
+
+    def concurrency_tests(self):
+        def actor(uid):return "SET LOCAL ROLE authenticated; SET LOCAL request.jwt.claim.sub='"+uid+"';"
+        def call(id,identity,rev,amount):
+            return "SELECT public.set_my_listing_price_core_v1('"+id+"','"+identity+"','"+rev+"','{\"kind\":\"fixed\",\"amount\":\""+amount+"\",\"currency\":\"EUR\"}'::jsonb);"
+        observations=[]
+        observations.append(self.race('cas',actor(A)+call('1001',IA,'0','111.11'),actor(A)+call('1001',IA,'0','222.22'),'listing_price_conflict'))
+        exact=self.sql("SELECT price='111.11 EUR' AND price_amount=111.11 AND price_revision=1 AND title='Original A' FROM public.listings WHERE id=1001;",'race-cas-winner').stdout.strip()
+        require(exact==b't','Votja hinda voi revisjoni ei sailitatud.')
+        observations.append(self.race('identity',"UPDATE public.profiles SET active_identity_id='"+ID+"' WHERE id='"+A+"';",actor(A)+call('1001',IA,'1','333.33'),'listing_price_identity_changed'))
+        exact=self.sql("SELECT price='111.11 EUR' AND price_revision=1 FROM public.listings WHERE id=1001;",'race-identity-preserved').stdout.strip()
+        require(exact==b't','Identiteedikonflikt muutis hinda.')
+        observations.append(self.race('membership',"UPDATE public.business_members SET status='inactive' WHERE user_id='"+C+"';",actor(C)+call('1003',IC,'0','444.44'),'listing_price_identity_forbidden'))
+        exact=self.sql("SELECT price='3' AND price_kind IS NULL AND price_revision=0 FROM public.listings WHERE id=1003;",'race-membership-preserved').stdout.strip()
+        require(exact==b't','Liikmelisuse konflikt muutis hinda.')
+        self.js('concurrency-summary.json',dict(passed=True,tests=observations,limit='real PostgreSQL sessions in helper; no HTTP, UI or load claim'))
+        self.result['CONCURRENCY']='PASS_THREE_OVERLAPPING_TWO_SESSION_CASES'
+

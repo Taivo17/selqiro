@@ -1,3 +1,56 @@
+<!-- SELQIRO_PRICE_CORE_LOCAL_PASS_SOURCE_20261004 -->
+## 2026-10-04 — Tested closed price lab retained as source, not deployed
+
+Accepted evidence: `listing-price-core-local-v2-20261004-103434-t4cgfpdb.zip`,
+SHA-256 `9d16717c2cc1efdbcb08f0d5573e11cc1db7a78e5cab395ec2a0f288a54d2ef2`.
+Actual Mac run ended 04 Oct 10:34:57 +03: 154 PostgreSQL 17.6 assertions,
+three overlapping two-session cases, selected outer rollback and exact helper
+removal PASS. Git was clean at `6df0af9457d2e812788b10a7a7951d8be8271912`
+and remote-equal. These tests are prior evidence, not rerun by this source step.
+
+The byte-identical SQL modules, 16-currency laboratory subset and test files are
+stored under `supabase/labs/listing-price-core-v1/`, NOT under migrations.
+The core writer remains closed to API roles. No application code, current client
+tests, package dependencies or the 23 applied migration files change.
+No persistent local schema, production migration or new frontend feature is installed.
+Use the new source result for actual build, staging, commit/push and clean-state
+facts; the presence of these prepared documents is not proof of execution.
+
+Continuity: start with `docs/99_V2_HANDOFF_NEXT_CHAT.md`, generated from
+`docs/continuity/CURRENT_STATE.json`. Its former 5573 lines are preserved exactly
+under `docs/archive/99_V2_HANDOFF_NEXT_CHAT.before-price-core-20261004-6df0af9.md`.
+Keep current state separate from historical NEXT instructions. Actual Git and the
+latest result outrank historical proposed next steps. Do not rerun completed
+lab runners, catalog audits, diagnostics, installers or production operations.
+
+### Verified closed-core scope versus unimplemented integration
+
+The retained SQL uses existing price_amount numeric plus laboratory price_kind,
+currency and price_revision. Fixed amount is canonical decimal text, not a JSON
+Number. The lab caps amounts below 10^18 and validates the selected currency scale;
+zero is not free, and non-fixed modes carry no amount/currency. The legacy price
+text is a one-way display of structured prices. These are LAB limits, not a
+final all-country currency registry or a production migration approval.
+
+CAS checks the expected revision before no-op detection. Profile/identity/member
+locks serialize the three tested schedules; the loser remains unchanged. The
+membership race changes status to inactive; deletion was tested sequentially.
+Direct protected price/revision writes and structured delete/truncate are blocked
+inside the lab's tested SQL-role boundary, not a client-supplied trust flag.
+Do not apply the lab deletion guard to the live portal before coordinating its
+real deletion workflow. The trusted-role/definer surface needs integration review.
+
+No create RPC, durable create-idempotency or single basic-fields+price endpoint
+is delivered by this source checkpoint. Keep title/price in one future server
+transaction, never two partially succeeding browser calls. Preserve unchanged-
+price omission. Old /sell, /my-page and V2 writers need coordinated transition.
+Current search v1 expects null currency: do not change that response under it.
+Owner/public readers must deliver price kind and precise strings before opening
+new writes. No per-card conversion queries, FX, price sorting, crypto, unit
+conversion, Details editor, horse publication or Energy changes are included.
+
+---
+
 <!-- SELQIRO_PRICE_DISPLAY_ACCEPTED_TEST_LISTINGS_20261002 -->
 ## 2026-10-02 — Shared display browser accepted; disposable test-data direction
 

@@ -1,0 +1,46 @@
+{
+  "format": "selqiro_repo_handoff_v1",
+  "recorded_on": "2026-10-04",
+  "checkpoint": "Testitud suletud hinnalabori talletamine lähtekoodi ja lühike jooksev üleandmine. See EI ava uut hinnasisendit ega paigalda hinnaskeemi.",
+  "source": {
+    "Viimane enne seda pakki kinnitatud baas": "6df0af9457d2e812788b10a7a7951d8be8271912; 04.10.2026 10:34:57 +03 puhas main ja GitHubiga võrdne.",
+    "Selle paki tegelik lõpetamine": "Kasuta uut listing-price-core-source-*.zip tulemust: BUILD, NEW_COMMIT, COMMIT, PUSH, WORKTREE ja REMOTE. Selle faili olemasolu ei tõenda neid. Fail ei saa sisaldada oma tulevase commit’i räsi.",
+    "Autoriteet": "Tegelik Git ja uus käiguraport määravad paigalduse/staging’u/commit’i seisu; see JSON on jooksva üleandmise ainus toimetatav lähtefail."
+  },
+  "local_test": [
+    "04.10.2026 10:34–10:35 +03: 154 SQL-kontrolli ja 3 päriselt kattuvate DB-ühenduste katset PASS; rollback ning täpse abikonteineri eemaldamine PASS.",
+    "Tõend: listing-price-core-local-v2-20261004-103434-t4cgfpdb.zip; SHA-256 9d16717c2cc1efdbcb08f0d5573e11cc1db7a78e5cab395ec2a0f288a54d2ef2.",
+    "SQL/register/fixture/seed/sviit/nimeloend on laboris muutmata testitud baidid. Konkurentsijuhtimise fail on viide, mitte käivitatav projektitest.",
+    "Valitud 7 tabelit + 5 tegelikku funktsioonidefinitsiooni, sünteetiline auth; postgres laboris superuser. Mitte täielik Supabase, HTTP, brauser või koormustest."
+  ],
+  "production": [
+    "Hinnatuuma veerud/funktsioonid EI OLE productionis ega algses kohalikus DB-s paigaldatud. supabase/migrations sisaldab endiselt 23 muutmata faili.",
+    "03.10.2026 13:22–13:23 +03: kaks kattuvat ainult lugemise kataloogivaadet, 23/23 ajalugu; see on varasem skeemitõend, mitte tänane päring.",
+    "6df0af9 hinnakuvamine oli kasutaja 02.10.2026 Ready/Production ja nelja hinnapinna katses korras. Selle source-checkpoint’i uus deployment vajab vajadusel eraldi tõendit."
+  ],
+  "next_action": "Pärast selle lähtecheckpoint’i eduka build/commit/push tulemuse ülevaatust koosta ja testi üks atomaarne tavakuulutuse loomise ning põhiväljade+hinna salvestusleping koos versioonitud lugejate ja kolme vana kirjutaja koordineeritud üleminekuga. Kasuta olemasolevat kataloogi ja laborit; ära korda üldist auditit. Kui checkpoint pole lõpetatud, on ainus järgmine tegevus selle tulemuse ülevaatus, mitte integratsiooni paigaldamine.",
+  "stop_rule": "Säilita failid, index, võimalik commit ja raport. Ära korda käivitit, reset/restore’i, SQL-i või push’i enne konkreetse vea ülevaatust.",
+  "archive": {
+    "path": "docs/archive/99_V2_HANDOFF_NEXT_CHAT.before-price-core-20261004-6df0af9.md",
+    "lines": 5573,
+    "sha256": "667e47990a7d3cc20ff53709cb861663b4565cf1d3c830eda88e0d18e60fdb8a"
+  },
+  "read_next": [
+    "`supabase/labs/listing-price-core-v1/README.md` ja `PROVENANCE.json`: testitud serveripiir ning tõendi päritolu.",
+    "`docs/architecture/listing-price-currency-v1.md` algus: hinnalepingu integratsiooni piirid.",
+    "`docs/continuity/README.md`: keskkond, täpne failikaart, mitte-korratavad toimingud ja üleandmise uuendamine."
+  ],
+  "boundaries": [
+    "Müüja algsumma + fiat-valuuta eraldi vaataja kuvavaluutast; pole valuuta oletamist. Labori 16 valuutat pole lõplik launch-register.",
+    "Hinnatuuma EXECUTE jääb suletuks. Loomine/idempotentsus, põhiväljade atomaarne terviksalvestus, lugejad ja kustutusvoog pole labori PASS-iga valmis.",
+    "Vanad testkuulutused ei vaja keerukat taastäitmist, kuid kustutamine pole praegu lubatud. Kontodele, teenustele või sõnumitele seda testandmete väidet ei laiendata.",
+    "Säilivad töötav algse hinna kaitse, aus kuvamine, tasuta uuendamine ja hobuse/wanted omanikuvaated. FX/krüpto/Energy/maksed/avalik hobusevoog on eraldi.",
+    "Mõõtühikud tulevikus ainult toetatud Detailide mõõduväljadest, mitte pealkirjast, kirjeldusest ega suvalisest vabatekstist; Detailide redaktor on eraldi.",
+    "Lai listings avalik SELECT, vana konto-põhine write-RLS ja AI enrich’i ligipääs/kulu on lahendamata käivitamiseelsed piirid."
+  ],
+  "environment": [
+    "Mac: $HOME/selqiro, GitHub Taivo17/selqiro, main; Python 3.9+ ja olemasolev npm. Enne selle source-build’i peata dev ise Ctrl+C abil.",
+    "Selles checkpoint’is EI kasutata Dockerit, Supabase CLI-d, SQL-i, installi või vanu operatsioonipäevikuid. Git hook’id/CI võivad tavalise commit/push’i järel töötada.",
+    "Kohalikud v1/v2 hinnatestid, productioni v1/v2 audit ja veadiagnostika on lõpetatud. Ära korda neid; rakendatud migratsioonid ja COMPLETE päevikud jäävad alles."
+  ]
+}

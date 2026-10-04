@@ -1,3 +1,41 @@
+<!-- SELQIRO_PRICE_CORE_LOCAL_PASS_SOURCE_20261004 -->
+## 2026-10-04 — Tested closed price lab retained as source, not deployed
+
+Accepted evidence: `listing-price-core-local-v2-20261004-103434-t4cgfpdb.zip`,
+SHA-256 `9d16717c2cc1efdbcb08f0d5573e11cc1db7a78e5cab395ec2a0f288a54d2ef2`.
+Actual Mac run ended 04 Oct 10:34:57 +03: 154 PostgreSQL 17.6 assertions,
+three overlapping two-session cases, selected outer rollback and exact helper
+removal PASS. Git was clean at `6df0af9457d2e812788b10a7a7951d8be8271912`
+and remote-equal. These tests are prior evidence, not rerun by this source step.
+
+The byte-identical SQL modules, 16-currency laboratory subset and test files are
+stored under `supabase/labs/listing-price-core-v1/`, NOT under migrations.
+The core writer remains closed to API roles. No application code, current client
+tests, package dependencies or the 23 applied migration files change.
+No persistent local schema, production migration or new frontend feature is installed.
+Use the new source result for actual build, staging, commit/push and clean-state
+facts; the presence of these prepared documents is not proof of execution.
+
+Continuity: start with `docs/99_V2_HANDOFF_NEXT_CHAT.md`, generated from
+`docs/continuity/CURRENT_STATE.json`. Its former 5573 lines are preserved exactly
+under `docs/archive/99_V2_HANDOFF_NEXT_CHAT.before-price-core-20261004-6df0af9.md`.
+Keep current state separate from historical NEXT instructions. Actual Git and the
+latest result outrank historical proposed next steps. Do not rerun completed
+lab runners, catalog audits, diagnostics, installers or production operations.
+
+Enduring scope: fixed/free/negotiable/unspecified are distinct; preserve exact
+original amount and currency separately from viewer preferences. Test-only legacy
+listings do not justify elaborate backfill, nor authorize their deletion now.
+Future unit conversion is restricted to supported quantitative Details fields;
+never scan title/description/free text. FX, crypto payment preference, payments
+and the Details editor remain separate. Preserve working horse/wanted owner flows.
+
+Next after successful source-result review: one atomic creation/basic-fields-plus-
+price contract, coherent versioned readers and coordinated old-writer retirement.
+Do not attach the closed core to a second client-side partial save.
+
+---
+
 <!-- SELQIRO_PRICE_DISPLAY_ACCEPTED_TEST_LISTINGS_20261002 -->
 ## 2026-10-02 — Price display accepted; test listings are disposable later
 
