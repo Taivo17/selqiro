@@ -1,3 +1,50 @@
+<!-- SELQIRO_PRICE_INTEGRATION_SOURCE_20261006 -->
+## 2026-10-06 — Retain tested atomic basics and creation integration (closed lab)
+
+This checkpoint retains 04–09 in `supabase/labs/listing-price-integration-v1/`,
+using the existing 01–03 core/fixture/seed without duplicate copies. The exact
+new source outcome is `listing-price-integration-source-*.zip`, not this entry.
+Base is 38d260af982bd41784ce4d5cb5fca6db31535a88, clean and remote-equal in the
+06 October 09:24:49–50 +03 test result. A new commit hash is not predetermined.
+
+Historical actual tests: 05 October 110 basics assertions + five overlapping
+session pairs; 06 October creation 170 + five regressions, two isolation rejections
+and seven overlapping pairs. Outer rollback and own-helper removal passed in both.
+No SQL/test replay occurs merely to retain source. Exact bytes and result hashes
+are recorded in the integration lab PROVENANCE.json; suites remain separate.
+
+One basics save changes title/description/condition and optional price atomically.
+Omitted price preserves a concurrent newer price. Basics uses initial-value CAS,
+not a general revision/ABA detector. Price uses its own original revision.
+Creation makes listing/price/receipt together; same account/key/canonical input
+recovers the original current object, changed input conflicts, deleted results
+are not resurrected. Only READ COMMITTED is supported; sequence gaps are allowed.
+
+These remain closed local contracts, NOT a production migration or enabled API.
+The selected PG17.6 fixture has synthetic auth and a superuser; it is not full
+Supabase/JWT/HTTP, every role/definer/lock order or a performance result. Existing
+pure value helpers are distinct from the closed new row-reading/writing functions.
+Images, AI, geocoding and store-category relations are outside the creation SQL
+transaction. Do not dispatch them automatically on receipt recovery.
+
+Next after source review: versioned readers with exact decimal text and price kind,
+coordinating search-v1, owner list and detail. Before enabling writes: full currency
+registry, all three legacy writers/trusted paths, receipt/account retention and
+delete flows, then actual HTTP/JWT and recoverable publish-first browser integration.
+The 16 currencies stay a test subset; no guessed test-data currency backfill.
+
+Runtime files, existing client tests/dependencies and all 23 migrations are unchanged.
+No source operation calls SQL, Supabase, Docker, cleanup or an old journal; fresh
+build and exact staging precede separate COMMIT PUSH consent. Actual results belong
+to the new report. A stopped run must preserve files/index/commit, without replay.
+FX, crypto, Energy, horse publication and Details/unit conversion remain separate.
+Unit conversion is only for supported Details fields, never title/description.
+
+The short 99 handoff is generated from CURRENT_STATE; old archived history and the
+renderer are unchanged. At every important new external package explicitly say:
+**Laadi see üleandmispakett nüüd alla.** This is not automatic local saving.
+
+---
 <!-- SELQIRO_PRICE_CORE_LOCAL_PASS_SOURCE_20261004 -->
 ## 2026-10-04 — Tested closed price lab retained as source, not deployed
 

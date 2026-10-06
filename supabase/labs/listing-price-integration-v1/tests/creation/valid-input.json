@@ -1,0 +1,37 @@
+{
+  "basics": {
+    "title": "Test title",
+    "description": "Test description",
+    "condition": "used"
+  },
+  "price": {
+    "kind": "fixed",
+    "amount": "123.40",
+    "currency": "EUR"
+  },
+  "category_path": [
+    "vehicles",
+    "trucks_commercial",
+    "trucks"
+  ],
+  "location": {
+    "country": "Estonia",
+    "city": "Paide",
+    "latitude": "0",
+    "longitude": "0"
+  },
+  "attributes": {
+    "manufacturer": "",
+    "part_number": "",
+    "oem_number": "",
+    "vehicle_brand": "",
+    "vehicle_model": "",
+    "vehicle_year": "",
+    "engine": ""
+  },
+  "details": {
+    "power": "90KW",
+    "model": "Gaz 53"
+  },
+  "language": "et"
+}

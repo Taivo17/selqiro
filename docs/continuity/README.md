@@ -29,12 +29,14 @@ sisu järgi üle. Vana BOOT/sprint ei asenda tegelikku Git-seisu ja jooksva 99 a
 räsi ja build/remote seis tulevad välistest tulemustest. Hilisem tavapärane
 checkpoint võib selle kinnitatud räsi uue kirje alusena talletada.
 
-## Failikaart järgmise hinnaintegratsiooni jaoks
+## Failikaart hinnalugemise järgmise etapi jaoks
 
 | Vajadus | Täpne lähtekoht |
 |---|---|
 | Testitud suletud hinnatuum | supabase/labs/listing-price-core-v1/README.md |
-| SQL, muutmata testid ja päritolu | sama kausta PROVENANCE.json ning tests/ |
+| Testitud salvestus/loomine 04–09 | supabase/labs/listing-price-integration-v1/README.md |
+| Mõlema labori päritolu | nende PROVENANCE.json; integratsioonilabori tests/DEPENDENCIES.json |
+| Ainult failiräside kontroll | supabase/labs/listing-price-integration-v1/verify_sources.py (ei SQL-i) |
 | Uue hinnalepingu piirid | docs/architecture/listing-price-currency-v1.md algus |
 | Tavakuulutuse loomine | app/sell/page.tsx |
 | Vana muutmistee | app/my-page/page.tsx |
@@ -45,7 +47,7 @@ checkpoint võib selle kinnitatud räsi uue kirje alusena talletada.
 | Ühine praegune hinnakuva | src/entities/listing/model/priceDisplay.ts |
 | Omaniku ühine loend | src/entities/marketplace-item/api/getMyMarketplaceItems.ts |
 
-Kõik 313 valitud allikat ei ole kogu repo. Puuduvat konteksti kogu ainult konkreetse
+328-failine kontrollitud baas ja selle checkpoint’i uued failid ei ole kogu repo. Puuduvat konteksti kogu ainult konkreetse
 sõltuvuse jaoks; ära alusta uut üldist skeemiauditit, kui varasem tõend katab vajaduse.
 
 ## Kontrollitud keskkond (ajalooline, mitte automaatselt värske)
@@ -56,10 +58,10 @@ oma terminalis Ctrl+C abil. Ära tapa kasutaja protsesse, kustuta .next ega paig
 Runner ei loe või ekspordi .env faile; tavapärane projekti build kasutab olemasolevat
 keskkonnaseadistust. Git keskkonnaülekirjutused eemaldatakse ainult alamprotsessidest.
 
-04.10 lab kasutas uut network-none helperit ja juba olemasolevat image’it
+04.–06.10 laborikatsed kasutasid igaüks uut network-none helperit ja juba olemasolevat image’it
 `sha256:5deba92e50cd17bfacf8603834d317cdf3bfc1c016ec8293991997fa3b55fa3d`.
 Unix-socket oli `$HOME/.docker/run/docker.sock`, binaaritee `/usr/lib/postgresql/bin`,
-PG17.6. Lõplik helper eemaldati. Algset `supabase_db_selqiro` ei kasutatud.
+PG17.6. Iga eduka käigu helper eemaldati. Algset `supabase_db_selqiro` ei kasutatud.
 Binaar `pg_ctl` ja logisilt `version-pg-ctl` on eri nimed; silte ei lõdvendata.
 
 03.10 productioni lugemise projekt: `vyjletlmwoiwxsnsunlm`, olemasolev hash-pinned
@@ -70,7 +72,7 @@ või vanade privaatlogide eksporti. CLI ei ole selle lähtecheckpoint’i töör
 ## Lõpetatud toimingud — mitte praegused juhised
 
 Lõpetatud on hinnatuuma v1 STOP ja v2 PASS, hinnalepingu audit v1 STOP/veadiagnostika/v2
-PASS ning hinna kaitse/kuvamise, listing-renewal’i, search’i ja varasemad horse/wanted
+PASS, 04.10 hinnatuuma lähtecheckpoint, 05.10 atomic-basics PASS, 06.10 loomise V1/V2 STOP ning V3 PASS. Lõpetatud on ka hinna kaitse/kuvamise, listing-renewal’i, search’i ja varasemad horse/wanted
 rollout’id. Ära korda neid, muuda rakendatud migratsioone või kustuta COMPLETE päevikuid.
 Uus checkpoint’i väline ainult oma attempt-marker on eraldi varasematest DB päevikutest.
 Peatumisel tagasta uus raport; ära paranda staging’ut, reset/restore’i ega push’i käsitsi.
@@ -79,8 +81,9 @@ Peatumisel tagasta uus raport; ära paranda staging’ut, reset/restore’i ega 
 
 Hinnalabor ei paranda kogu portaali turvalisust. Avaliku listings SELECT-poliitika
 `true`, vana konto-põhine write-RLS ja AI enrich’i ligipääsu/kulu ülevaatus jäävad eraldi.
-Samuti puuduvad veel uus loomise idempotentsus, atomaarne põhiväljade+hinna endpoint,
-versioonitud lugejate üleminek ning labori kustutuspiiri live-kustutusvooga sobitamine.
+Loomine/kordus ja atomaarne põhiväljade+hinna endpoint on lokaalselt testitud, mitte
+productionis avatud. Veel on vajalikud versioonitud lugejad, tegelike kirjutajate ja
+usaldatud rollide üleminek, kviitungi/kontoandmete säilitamine ning kustutusvooga sobitamine.
 16 laborivaluutat on katsevalim; lõplik register vajab enne kasutajasisendit kontrolli.
 
 ## Väline üleandmispakk
@@ -89,3 +92,14 @@ versioonitud lugejate üleminek ning labori kustutuspiiri live-kustutusvooga sob
 kontrollräsid. Ei ZIP-i sees ZIP-i ahelat. Ajaloolise jooksu failid on evidence all,
 kandidaat ja committed source eri tähendusega kaustades. Ära kopeeri private-kausta,
 .env-faile, võtmeid, konto- või sõnumiandmeid. Algseid kasutaja tõendeid ei kustutata.
+
+## Uue paketi allalaadimise meeldetuletus
+
+Kasutaja on 38d260a seisu eraldi alla laadinud. Iga uue olulise valmis üleandmise
+juures tuleb vestluses eraldi öelda **Laadi see üleandmispakett nüüd alla** ja anda
+täpselt uue faili link. Ära väida, et see salvestus automaatselt Maci. Vestlust ei
+pea ennetavalt vahetama; fail on katkestuse puhuks. Vana pakett jääb alles.
+
+Tõendifailide ümberpaigutuse kaardid seovad iga algse ZIP-kirje baitide ja räsiga.
+Failiviide ei ole sandbox-tee ega terviklik rakendusandmete varukoopia. Käivitatava
+Downloads-skripti nimi/sisend/kinnitus peavad kattuma selle skripti konstantidega.

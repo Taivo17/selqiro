@@ -1,0 +1,271 @@
+{
+  "base_commit": "38d260af982bd41784ce4d5cb5fca6db31535a88",
+  "basics_result": {
+    "ended_at": "2026-10-05T10:26:06.170012+03:00",
+    "name": "listing-price-basics-local-20261005-102531-wjph_vwk.zip",
+    "not_rerun_by_creation": true,
+    "overlapping_pairs": 5,
+    "payload_sha256": "b15a51d86a330886ab6c6e2686c5a166c10aa66a3756270a4ca13d5603846534",
+    "runner_sha256": "3754da9dab41423574f18f3c87d0376d8c2733768967cbdf615c27df6602c643",
+    "sha256": "e42c1442456b9a64f09c8cc5ecd8fadc03b35439d1b1dd9c4b02d3c83ac5e75f",
+    "sql_assertions": 110
+  },
+  "classification": "CLOSED_LAB_SOURCE_CHECKPOINT_NOT_APPLIED",
+  "creation_result": {
+    "bytes": 1669154,
+    "ended_at": "2026-10-06T09:24:50.310853+03:00",
+    "isolation_rejections": 2,
+    "name": "listing-creation-local-v3-20261006-092421-ozo7ic85.zip",
+    "overlapping_pairs": 7,
+    "runner_sha256": "a6a938a05c972d896a92728797364e0b01cd2bb9c6f6b459e1b5d686356ea9d3",
+    "sha256": "95b2d294d006e39d99537b9e50d499fc870dce3a17a84690f6eb01333a2b7d25",
+    "sql_assertions": 170,
+    "syntax_regressions": 5
+  },
+  "dependencies": {
+    "lib/categories.ts": {
+      "bytes": 20126,
+      "sha256": "2b3bb98a9cbc2a718a42018a69553c0e202d26105ab71d80b5846b5f500f3ebf"
+    },
+    "supabase/labs/listing-price-core-v1/01_value_contract.sql": {
+      "bytes": 5567,
+      "sha256": "5f9d58db5d28a9ec6804e1f0b2c282d5dd812897165b0e07242b12524d56c29c"
+    },
+    "supabase/labs/listing-price-core-v1/02_write_guard.sql": {
+      "bytes": 3812,
+      "sha256": "ced6884dea9e2098a259186b97f4e61b5fd07dd836256663dd451a2d9b03d1ea"
+    },
+    "supabase/labs/listing-price-core-v1/03_owner_price_core.sql": {
+      "bytes": 4214,
+      "sha256": "0483dd48688c1f8d2b3812109e2d2acec99373e65fe6f15f94b4558b3ce79419"
+    },
+    "supabase/labs/listing-price-core-v1/currencies.v1.json": {
+      "bytes": 722,
+      "sha256": "6de33eb21da4e78256ccb26048e19d6459f4bf111fad71c9b5ccd2666f948d84"
+    },
+    "supabase/labs/listing-price-core-v1/tests/fixture.sql": {
+      "bytes": 13352,
+      "sha256": "e4d21dafe0f44c898a44fa17efd736aa619282e99dffb7934979abcca6a5d03f"
+    },
+    "supabase/labs/listing-price-core-v1/tests/seed.sql": {
+      "bytes": 1798,
+      "sha256": "7a7a02a4cf7fe53586592bffe19d785f5b776ba04fe1850a934ab7f993ea6219"
+    }
+  },
+  "format": "selqiro_tested_price_integration_sources_v1",
+  "limits": [
+    "7 selected baseline tables and synthetic auth, not full Supabase/JWT/HTTP or load.",
+    "Lab postgres is superuser; live role model differs.",
+    "Only READ COMMITTED creation is supported. Sequence gaps are allowed.",
+    "Price core/basics/creation writers are not opened to application roles by source retention. Pure pre-existing value helpers have separate execute rules.",
+    "No production migration, normal local DB mutation, image/AI/geocoding side effect or user interface here.",
+    "No receipt retention/cleanup/account-deletion policy is implemented.",
+    "16 currencies remain a test subset, not a global launch register.",
+    "Recorded controls are historical actual test evidence, not new execution by this source checkpoint."
+  ],
+  "preserved_sources": {
+    "04_basics_contract.sql": {
+      "bytes": 3807,
+      "kind": "creation_result",
+      "path": "candidate/04_basics_contract.sql",
+      "sha256": "796cdced4a02d883a6bd4384dd58aed998393eab07523f161ed616c3f9764e92"
+    },
+    "05_owner_basics_atomic.sql": {
+      "bytes": 6207,
+      "kind": "creation_result",
+      "path": "candidate/05_owner_basics_atomic.sql",
+      "sha256": "5d052e95e3bfa4d1d9bb5cb3f62ae66792a5bdaac3651b5303796d57b2642ccc"
+    },
+    "06_creation_categories.sql": {
+      "bytes": 10337,
+      "kind": "creation_result",
+      "path": "candidate/06_creation_categories.sql",
+      "sha256": "a342e2b196aacc7e60912858c260c2e1f01bcc845739ed10d1a643295896d029"
+    },
+    "07_creation_values.sql": {
+      "bytes": 6041,
+      "kind": "creation_result",
+      "path": "candidate/07_creation_values.sql",
+      "sha256": "045aa5588e16a800a1b896fb2a276bce678d247a77d18eae2d0a9e2293f77a73"
+    },
+    "08_creation_receipts.sql": {
+      "bytes": 2531,
+      "kind": "creation_result",
+      "path": "candidate/08_creation_receipts.sql",
+      "sha256": "7c13a163503f04b3d8888e290a8b7facc0373caa7251d842b80601307363730f"
+    },
+    "09_owner_create.sql": {
+      "bytes": 5103,
+      "kind": "creation_result",
+      "path": "candidate/09_owner_create.sql",
+      "sha256": "e4e7f875bbd17fd0cfffa092f988bed8449d5a0e5df5ce08d47f0de70d780a52"
+    },
+    "CREATION_CONTRACT.md": {
+      "bytes": 5763,
+      "kind": "creation_result",
+      "path": "candidate/CREATION_CONTRACT.md",
+      "sha256": "a99d89c86334b927661e59a4405d9e526338f6d73507445d832f31e4a355b1cb"
+    },
+    "creation-category-paths.v1.json": {
+      "bytes": 12288,
+      "kind": "creation_result",
+      "path": "candidate/creation-category-paths.v1.json",
+      "sha256": "c328fa4e4b02222a6fc51916a8a0663ec700c5239aecd4e0b9e7cb01979551f5"
+    },
+    "tests/basics/concurrency.reference.py.txt": {
+      "bytes": 7070,
+      "kind": "exact_method_extract",
+      "method_ranges": [
+        {
+          "first_line": 414,
+          "last_line": 425,
+          "method": "start_session",
+          "sha256": "2a4135d3597d488fdc04bdcf0591da5fb7bd0d87f415fe33fba124cf6c84350b"
+        },
+        {
+          "first_line": 426,
+          "last_line": 436,
+          "method": "end_session",
+          "sha256": "4b7085bfe5f504848e462561ee3d83c9995437b134f4c0db50e405ba11c24b19"
+        },
+        {
+          "first_line": 437,
+          "last_line": 444,
+          "method": "wait_ready",
+          "sha256": "774e4191a77443c5348177ef63cb04cc9d844b9ca293f39e0095f22256e2d454"
+        },
+        {
+          "first_line": 445,
+          "last_line": 470,
+          "method": "race",
+          "sha256": "391321300903864ba8c34cc1aff0c31ea2a2d89af096fc7ba5cc5433d520c964"
+        },
+        {
+          "first_line": 471,
+          "last_line": 498,
+          "method": "concurrency_tests",
+          "sha256": "80cf9a68761fd8dae042317fdd8ff61858c7052ee7e40b8fa8a0e0253fa2dfd4"
+        }
+      ],
+      "runner": "evidence/prior-basics-pass/runner.py.txt",
+      "runner_sha256": "3754da9dab41423574f18f3c87d0376d8c2733768967cbdf615c27df6602c643",
+      "sha256": "0acc7a953ab6754676da92283c02aff93d13ea10436c9165fd6d50328abed4f9"
+    },
+    "tests/basics/expected-labels.json": {
+      "bytes": 3154,
+      "kind": "prior_basics_payload",
+      "path": "tests/expected-labels.json",
+      "payload_sha256": "b15a51d86a330886ab6c6e2686c5a166c10aa66a3756270a4ca13d5603846534",
+      "runner_in_result": "evidence/prior-basics-pass/runner.py.txt",
+      "sha256": "4b21f48306ae22ca6df8cfe4d7d5d2fc88d6d8d1d1adc330472d89c8322b1316"
+    },
+    "tests/basics/suite.sql": {
+      "bytes": 50457,
+      "kind": "prior_basics_payload",
+      "path": "tests/suite.sql",
+      "payload_sha256": "b15a51d86a330886ab6c6e2686c5a166c10aa66a3756270a4ca13d5603846534",
+      "runner_in_result": "evidence/prior-basics-pass/runner.py.txt",
+      "sha256": "2b544449820972d8b356e5f91f08596d4cbb6b47e9bbb8e79ca7e088979092d7"
+    },
+    "tests/creation/case-expression-labels.json": {
+      "bytes": 144,
+      "kind": "creation_result",
+      "path": "tests/case-expression-labels.json",
+      "sha256": "685ee4a0415816e15fafc4a102467ea9e1233368749970f88626a8c5a1687d90"
+    },
+    "tests/creation/case-expression-regression.sql": {
+      "bytes": 3131,
+      "kind": "creation_result",
+      "path": "tests/case-expression-regression.sql",
+      "sha256": "b4c7e7ea9854fe04ba2de6d0b83286309400cd868cc445fc7d72f78c531c2c5d"
+    },
+    "tests/creation/concurrency.reference.py.txt": {
+      "bytes": 14945,
+      "kind": "exact_method_extract",
+      "method_ranges": [
+        {
+          "first_line": 476,
+          "last_line": 520,
+          "method": "sql_test",
+          "sha256": "5e53d323ec252d897f9487e17cae4f50b88ab34b6e5a8ae5f531830a67014e2d"
+        },
+        {
+          "first_line": 521,
+          "last_line": 540,
+          "method": "start_session",
+          "sha256": "a9411c269a264a7983a2e5adfdbbdb41a4379f80429233552df3e27d05d77dc7"
+        },
+        {
+          "first_line": 541,
+          "last_line": 558,
+          "method": "end_session",
+          "sha256": "a68cd8610e22bbbca501de7a33fa806472be516bfd296ac9424d4dc20075da21"
+        },
+        {
+          "first_line": 559,
+          "last_line": 566,
+          "method": "wait_ready",
+          "sha256": "774e4191a77443c5348177ef63cb04cc9d844b9ca293f39e0095f22256e2d454"
+        },
+        {
+          "first_line": 567,
+          "last_line": 597,
+          "method": "race",
+          "sha256": "defa12996984455aa792d59bbd561c6e033ee01d5b30d4c63362c355386950d4"
+        },
+        {
+          "first_line": 598,
+          "last_line": 635,
+          "method": "concurrency_tests",
+          "sha256": "4bfc77e0f263cc63ae1c9fd7d120623a3861b4b3961f194e685d5fc0603ed006"
+        },
+        {
+          "first_line": 636,
+          "last_line": 644,
+          "method": "_session_write",
+          "sha256": "35718f1ab4adc8a27a80173e9da1063c41f8da34477f5b99802bbfbfd82fd7a7"
+        },
+        {
+          "first_line": 646,
+          "last_line": 647,
+          "method": "actor_sql",
+          "sha256": "b58270c9b617c75cb0b07a12e622e9f9be4862d3e489397a6579ba6ae4ee4a80"
+        },
+        {
+          "first_line": 649,
+          "last_line": 653,
+          "method": "create_call",
+          "sha256": "37177b36a6c29e5527e46a17dc43db13c0ca80710ac56cce18bba6d79db0f895"
+        }
+      ],
+      "runner": "runner.py.txt",
+      "runner_sha256": "a6a938a05c972d896a92728797364e0b01cd2bb9c6f6b459e1b5d686356ea9d3",
+      "sha256": "2f9dea30faa927aa5ff9db8d8c8a9a5b44ac29aa36572589e242370b15ea6ebb"
+    },
+    "tests/creation/creation-fixture-extension.sql": {
+      "bytes": 689,
+      "kind": "creation_result",
+      "path": "tests/creation-fixture-extension.sql",
+      "sha256": "c2d66e819dc7db6dddf4561e1b4ecd403561e630fcd940f7058f72704666e9a6"
+    },
+    "tests/creation/expected-labels.json": {
+      "bytes": 5523,
+      "kind": "creation_result",
+      "path": "tests/expected-labels.json",
+      "sha256": "5e0835574a351a71d1b4ec89a5537d0ef422253e3da10e9609bc36f7ef135e33"
+    },
+    "tests/creation/suite.sql": {
+      "bytes": 93706,
+      "kind": "creation_result",
+      "path": "tests/suite.sql",
+      "sha256": "45c76066d015813aee0974eb75a0c1d7b62e23ac047321fad9feccaacd6f4410"
+    },
+    "tests/creation/valid-input.json": {
+      "bytes": 653,
+      "kind": "creation_result",
+      "path": "tests/valid-input.json",
+      "sha256": "16ba4392f4d3967d7d703153140c4e38b4c00e27780fa1b92568691bbcd1eb65"
+    }
+  },
+  "recorded_on": "2026-10-06"
+}

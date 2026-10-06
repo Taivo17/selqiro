@@ -1,3 +1,38 @@
+<!-- SELQIRO_PRICE_INTEGRATION_SOURCE_20261006 -->
+## 06.10.2026 — Testitud salvestuse ja loomise labori talletamine
+
+Selles lähtecheckpoint’is talletame 04–09 moodulid eraldi suletud integratsioonilaborisse.
+01–03 hinnatuum, fixture ja seed jäävad ainult senisesse hinnalaborisse. Mõlema
+integratsiooni testisviidid säilivad eraldi ja kõik testitud SQL-baidid muutmata.
+
+05.10 läbisid 110 põhiväljade testi ja viis kattuvat seansipaari. 06.10 läbisid
+170 loomistesti, viis regressiooni, kaks isolatsioonikeeldumist ning seitse kattuvat
+seansipaari. Rollback ja ainult oma ajutise helperi eemaldamine läbisid. Neid teste
+lähtekoodi talletamisel ei korrata. Viimane puhas/sünkroonne baas: 38d260a, 06.10 09:24 +03.
+
+Ühe salvestuse hind ja põhiväljad õnnestuvad koos või jäävad muutmata. Puutumata
+hind ei kirjuta teise seansi uut hinda üle. Loomisel saab sama võtme ja sisuga
+päring tagasi sama kuulutuse, ka kadunud vastuse taastamisel; muudetud sisu annab
+konflikti ning kustutatud kuulutust ei taastata salaja. See on serverilabori tõend,
+mitte veel valmis brauserivoog. Pildid, AI, geokodeerimine ja poe-rubriigid on eraldi.
+
+Tegeliku uue paigalduse, build’i, commit’i ja push’i loeme listing-price-integration-source
+raportist. See tekst ei ennusta tulevast commit’i. Labor pole productionis ega
+algses kohalikus andmebaasis rakendatud, uusi API-õigusi või valuutavalikut ei avata.
+Säilivad 23 migratsiooni ning kogu rakenduskood; testkuulutusi ja päevikuid ei kustutata.
+
+Järgmine töö pärast talletamise ülevaatust: täpse summateksti ja hinnaliigiga
+versioonitud lugemisleping. Täielik valuutaregister, vanad kirjutajad, usaldatud rollid,
+kustutus/kviitungi säilitamine ning HTTP/brauseri ühendus jäävad avamise eeltingimusteks.
+16 valuutat on testivalim, mitte riikide piirang. FX/krüpto/Energy/hobuseavaldamine ja
+Detailide mõõtühikud ei lisandu. Mõõtühikuid ei otsita pealkirjast ega kirjeldusest.
+
+Jooksev üleandmine säilib lühikesena: muudetakse CURRENT_STATE ja sellest genereeritud
+99-lehte koos; vana ajalooarhiiv ja renderdaja jäävad muutmata. Uue olulise välise
+paketi juures ütle eraldi **Laadi see üleandmispakett nüüd alla**. See ei salvesta
+faili automaatselt Maci ega nõua vestluse vahetamist.
+
+---
 <!-- SELQIRO_PRICE_CORE_LOCAL_PASS_SOURCE_20261004 -->
 ## 04.10.2026 — Hinnatuuma katse läbitud; labor talletatakse lähtekoodi
 

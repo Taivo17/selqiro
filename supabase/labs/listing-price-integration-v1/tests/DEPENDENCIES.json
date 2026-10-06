@@ -1,0 +1,49 @@
+{
+  "basics_order": [
+    "existing core tests/fixture.sql",
+    "existing core 01–03",
+    "04–05",
+    "tests/basics/suite.sql"
+  ],
+  "creation_order": [
+    "existing core tests/fixture.sql",
+    "tests/creation/creation-fixture-extension.sql",
+    "existing core 01–03",
+    "04–09",
+    "tests/creation/case-expression-regression.sql",
+    "tests/creation/suite.sql"
+  ],
+  "format": "selqiro_price_integration_dependencies_v1",
+  "note": "Fixture init, outer rollback, seed for overlapping sessions and cleanup belong to the original drivers; these lists are dependency maps, not complete executable commands.",
+  "paths": {
+    "lib/categories.ts": {
+      "bytes": 20126,
+      "sha256": "2b3bb98a9cbc2a718a42018a69553c0e202d26105ab71d80b5846b5f500f3ebf"
+    },
+    "supabase/labs/listing-price-core-v1/01_value_contract.sql": {
+      "bytes": 5567,
+      "sha256": "5f9d58db5d28a9ec6804e1f0b2c282d5dd812897165b0e07242b12524d56c29c"
+    },
+    "supabase/labs/listing-price-core-v1/02_write_guard.sql": {
+      "bytes": 3812,
+      "sha256": "ced6884dea9e2098a259186b97f4e61b5fd07dd836256663dd451a2d9b03d1ea"
+    },
+    "supabase/labs/listing-price-core-v1/03_owner_price_core.sql": {
+      "bytes": 4214,
+      "sha256": "0483dd48688c1f8d2b3812109e2d2acec99373e65fe6f15f94b4558b3ce79419"
+    },
+    "supabase/labs/listing-price-core-v1/currencies.v1.json": {
+      "bytes": 722,
+      "sha256": "6de33eb21da4e78256ccb26048e19d6459f4bf111fad71c9b5ccd2666f948d84"
+    },
+    "supabase/labs/listing-price-core-v1/tests/fixture.sql": {
+      "bytes": 13352,
+      "sha256": "e4d21dafe0f44c898a44fa17efd736aa619282e99dffb7934979abcca6a5d03f"
+    },
+    "supabase/labs/listing-price-core-v1/tests/seed.sql": {
+      "bytes": 1798,
+      "sha256": "7a7a02a4cf7fe53586592bffe19d785f5b776ba04fe1850a934ab7f993ea6219"
+    }
+  },
+  "scope": "Closed local lab only. No executable replay command."
+}
