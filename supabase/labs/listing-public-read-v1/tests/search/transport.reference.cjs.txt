@@ -1,0 +1,83 @@
+/* Closed-lab parser tests. Existing TypeScript only; no app/network/browser.
+ * SQL capture must be supplied by the new helper run, not constructed by this test.
+ * Preparation may use a labelled synthetic capture; runner never substitutes it. */
+const {test}=require('node:test'), assert=require('node:assert/strict');
+const fs=require('node:fs'), path=require('node:path'), vm=require('node:vm');
+const base=path.resolve(__dirname,'..'), source=path.join(base,'source-context');
+const ts=require(process.env.SELQIRO_TYPESCRIPT_FILE||'typescript');
+const clone=x=>JSON.parse(JSON.stringify(x));
+const cache=new Map();
+function moduleAt(file) {
+ file=path.resolve(file);assert.ok(file.startsWith(base+path.sep));
+ if(cache.has(file))return cache.get(file).exports;
+ const code=ts.transpileModule(fs.readFileSync(file,'utf8'),{fileName:file,reportDiagnostics:true,
+  compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2017,strict:true}});
+ assert.equal(code.diagnostics.filter(x=>x.category===ts.DiagnosticCategory.Error).length,0);
+ const m={exports:{}};cache.set(file,m);
+ function req(name){assert.ok(name.startsWith('.'));return moduleAt(path.resolve(path.dirname(file),name+'.ts'));}
+ vm.runInNewContext(code.outputText,{module:m,exports:m.exports,require:req,URL,Date,BigInt,Number,Object,Set},
+   {filename:file,timeout:2000});return m.exports;
+}
+const M=moduleAt(path.join(base,'client/priceRead.ts'));
+const P=moduleAt(path.join(base,'client/publicSearchV2.ts'));
+const OLD=moduleAt(path.join(source,'src/entities/listing/model/publicSearchResponse.ts'));
+const fixed=(a='999999999999999999.999',c='KWD')=>({version:1,kind:'fixed',amount:a,currency:c,legacy_text:null,legacy_amount:null});
+const legacy=(text='5578',a='5578')=>({version:1,kind:null,amount:null,currency:null,legacy_text:text,legacy_amount:a});
+const notfixed=k=>({version:1,kind:k,amount:null,currency:null,legacy_text:null,legacy_amount:null});
+function card(id='1001',price=fixed()) {return {content_type:'listing',content_id:id,title:'reader-alpha',description_preview:'Public description',price,
+ category:'vehicles',subcategory:'cars',detail_category:'passenger_cars',condition:'used',country:'Eesti',city:'Paide',
+ image_url:'https://example.invalid/primary.jpg',seller_name:'Seller A',seller_slug:'seller-a',seller_avatar_url:null,
+ seller_type:'private',created_at:'2026-01-01T00:00:00+00:00'};}
+function page(total='1',offset=0,limit=24) {
+ const n=BigInt(total),left=n>BigInt(offset)?n-BigInt(offset):0n,more=n>BigInt(offset+limit),cap=more&&offset+limit>100000;
+ return {schema_version:2,content_scope:'ordinary_listings',sort:'newest',items:Array.from({length:Number(left>BigInt(limit)?BigInt(limit):left)},(_,i)=>card(String(offset+i+1))),
+ total_count:total,result_limit:limit,result_offset:offset,has_more:more,next_offset:more&&!cap?offset+limit:null,window_limit_reached:cap};
+}
+for(const [code,scale] of Object.entries(JSON.parse(fs.readFileSync(path.join(base,'dependencies/currencies.v1.json'))).currencies)) {
+ const a='999999999999999999'+(scale?'.'+'9'.repeat(scale):'');
+ test('exact string preserved '+code,()=>assert.deepEqual(clone(M.parsePriceRead(fixed(a,code))),fixed(a,code)));
+}
+for(const a of ['0','1','0.001','0.01','0.1','12.5','9007199254740993','999999999999999999.999']) {
+ test('fixed canonical '+a,()=>assert.equal(M.parsePriceRead({...fixed(),amount:a}).amount,a));
+}
+for(const a of [0,1,9007199254740992,null,undefined,{},[],true,'','01','-1','+1','1e3','1.0','0.000','1.000','1.1234','1000000000000000000','NaN','Infinity','1,5','1 000','١','1.']) {
+ test('reject amount '+String(a)+' '+typeof a,()=>assert.throws(()=>M.parsePriceRead({...fixed(),amount:a})));
+}
+for(const c of [null,1,'eur','€','EU','EURO',' EUR','EUR ','$',{}])test('reject currency '+JSON.stringify(c),()=>assert.throws(()=>M.parsePriceRead(fixed('1',c))));
+for(const k of ['free','negotiable','unspecified']) {
+ test('nonfixed '+k,()=>assert.deepEqual(clone(M.parsePriceRead(notfixed(k))),notfixed(k)));
+ test('nonfixed stale amount '+k,()=>assert.throws(()=>M.parsePriceRead({...notfixed(k),amount:'0'})));
+ test('nonfixed stale currency '+k,()=>assert.throws(()=>M.parsePriceRead({...notfixed(k),currency:'EUR'})));
+}
+for(const t of ['5578','2345 €','Hind kokkuleppel','Tasuta','1000 SEK','$ 100','130.','12,34',null]) {
+ test('legacy no inference '+t,()=>{const x=M.parsePriceRead(legacy(t));assert.equal(x.kind,null);assert.equal(x.currency,null);assert.equal(x.legacy_text,t);});
+}
+for(const a of ['999999999999999999.123456','0','12.50',null])test('legacy numeric exact '+a,()=>assert.equal(M.parsePriceRead(legacy(null,a)).legacy_amount,a));
+for(const a of [0,{},'-1','1e3','NaN'])test('legacy bad numeric '+String(a),()=>assert.throws(()=>M.parsePriceRead(legacy(null,a))));
+for(const v of [null,[],{},true,1,{...fixed(),version:2},{...fixed(),kind:'rental'},{...fixed(),legacy_text:'secret'},{...legacy(),currency:'USD'},{...fixed(),revision:'1'},{...fixed(),request_key:'private'}]) {
+ test('wrong price shape '+JSON.stringify(v),()=>assert.throws(()=>M.parsePriceRead(v)));
+}
+for(const key of Object.keys(fixed()))test('missing price key '+key,()=>{const x=fixed();delete x[key];assert.throws(()=>M.parsePriceRead(x));});
+test('fixed zero distinct from free and unset',()=>{assert.notDeepEqual(clone(M.parsePriceRead(fixed('0','EUR'))),notfixed('free'));assert.notDeepEqual(notfixed('unspecified'),legacy(null,null));});
+test('no numeric roundtrip',()=>{const a='999999999999999999.999';assert.notEqual(String(Number(a)),a);assert.equal(P.parsePublicSearchV2(page(),0).items[0].price.amount,a);});
+for(const [total,offset,limit] of [['0',0,24],['3',0,1],['3',2,1],['3',3,1],['4',0,24],['61',0,60],['9223372036854775807',100000,24]]) {
+ test('bounded page '+[total,offset,limit],()=>{const x=P.parsePublicSearchV2(page(total,offset,limit),offset,limit);assert.equal(x.totalCount,total);assert.equal(x.offset,offset);});
+}
+for(const id of ['9223372036854775807','-9223372036854775808','9007199254740993','0'])test('exact id '+id,()=>{const x=page();x.items[0].content_id=id;assert.equal(P.parsePublicSearchV2(x,0).items[0].id,id);});
+for(const id of [9007199254740992,'9223372036854775808','-9223372036854775809','01','1.5',''])test('bad id '+id,()=>{const x=page();x.items[0].content_id=id;assert.throws(()=>P.parsePublicSearchV2(x,0));});
+for(const [key,value] of [['schema_version',1],['content_scope','horse_offers'],['sort','price'],['total_count',1],['total_count','-1'],['total_count','9223372036854775808'],['result_limit',23],['result_offset',1],['has_more',true],['next_offset',24],['window_limit_reached',true],['items',[]],['request_key','private']]) {
+ test('bad envelope '+key+':'+value,()=>{const x=page();x[key]=value;assert.throws(()=>P.parsePublicSearchV2(x,0));});
+}
+for(const [key,value] of [['user_id','private'],['identity_id','private'],['details',{}],['price_revision','1'],['price_amount','1'],['currency','EUR'],['content_type','horse_offer'],['seller_type','admin'],['created_at','bad'],['title',33],['description_preview',{}]]) {
+ test('bad card '+key,()=>{const x=page();x.items[0][key]=value;assert.throws(()=>P.parsePublicSearchV2(x,0));});
+}
+test('duplicate IDs rejected',()=>{const x=page('2');x.items[1].content_id=x.items[0].content_id;assert.throws(()=>P.parsePublicSearchV2(x,0));});
+for(const url of ['javascript:alert(1)','https://user:pass@example.invalid/x','data:image/x','not url'])test('unsafe image dropped '+url,()=>{const x=page();x.items[0].image_url=url;assert.equal(P.parsePublicSearchV2(x,0).items[0].imageUrl,null);});
+test('parser does not mutate response',()=>{const x=page(),before=JSON.stringify(x);P.parsePublicSearchV2(x,0);assert.equal(JSON.stringify(x),before);});
+// The same file runs after the actual SQL suite: capture is mandatory, never fabricated here.
+const capture=JSON.parse(fs.readFileSync(process.env.SELQIRO_PRICE_CAPTURE,'utf8'));
+test('SQL wire v2 survives JSON parse with full precision',()=>{const x=P.parsePublicSearchV2(capture.v2,0);assert.equal(x.items[0].price.amount,'999999999999999999.999');assert.equal(x.items[0].price.currency,'KWD');});
+test('SQL wire v1 remains accepted by unchanged old parser',()=>{const x=OLD.parsePublicSearchPage(capture.v1,0);assert.equal(x.items[0].priceAmount,'999999999999999999.999');assert.equal(capture.v1.items[0].currency,null);});
+test('old parser rejects new envelope instead of guessing',()=>assert.throws(()=>OLD.parsePublicSearchPage(capture.v2,0)));
+test('new parser rejects old envelope instead of implicit adapter',()=>assert.throws(()=>P.parsePublicSearchV2(capture.v1,0)));
+test('owner-only revision never appears in new public price',()=>{assert.equal(typeof capture.owner.price.revision,'string');assert.ok(!Object.hasOwn(capture.v2.items[0].price,'revision'));const {revision,...p}=capture.owner.price;const {legacy_amount,...pub}=capture.v2.items[0].price;assert.deepEqual(pub,p);});

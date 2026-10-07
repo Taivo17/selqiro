@@ -1,0 +1,11 @@
+// Only type-check the two new surface contract + two retained price/search modules; no application build or emit.
+const path=require('node:path');
+const ts=require(process.env.SELQIRO_TYPESCRIPT_FILE||'typescript');
+const root=path.resolve(__dirname,'..');
+const files=['priceRead.ts','publicSearchV2.ts','publicDetailV1.ts','publicProfileListingsV1.ts'].map(n=>path.join(root,'client',n));
+const program=ts.createProgram(files,{strict:true,noEmit:true,target:ts.ScriptTarget.ES2017,
+ module:ts.ModuleKind.CommonJS,moduleResolution:ts.ModuleResolutionKind.Node10,
+ types:[],lib:['lib.esnext.d.ts','lib.dom.d.ts'],skipLibCheck:true});
+const d=ts.getPreEmitDiagnostics(program);
+if(d.length){console.error(ts.formatDiagnosticsWithColorAndContext(d,{getCurrentDirectory:()=>root,getCanonicalFileName:n=>n,getNewLine:()=> '\n'}));process.exitCode=1;}
+else console.log('PRICE_SURFACE_TYPES=PASS');

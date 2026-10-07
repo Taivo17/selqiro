@@ -29,12 +29,14 @@ sisu järgi üle. Vana BOOT/sprint ei asenda tegelikku Git-seisu ja jooksva 99 a
 räsi ja build/remote seis tulevad välistest tulemustest. Hilisem tavapärane
 checkpoint võib selle kinnitatud räsi uue kirje alusena talletada.
 
-## Failikaart hinnalugemise järgmise etapi jaoks
+## Failikaart omaniku lugemislepingu järgmise etapi jaoks
 
 | Vajadus | Täpne lähtekoht |
 |---|---|
 | Testitud suletud hinnatuum | supabase/labs/listing-price-core-v1/README.md |
 | Testitud salvestus/loomine 04–09 | supabase/labs/listing-price-integration-v1/README.md |
+| Testitud avalikud lugejad 10–14 ja neli parserit | supabase/labs/listing-public-read-v1/README.md |
+| Nende täpsed sõltuvused/testide ajutine asetus | listing-public-read-v1/PROVENANCE.json ja tests/TEST_LAYOUTS.json |
 | Mõlema labori päritolu | nende PROVENANCE.json; integratsioonilabori tests/DEPENDENCIES.json |
 | Ainult failiräside kontroll | supabase/labs/listing-price-integration-v1/verify_sources.py (ei SQL-i) |
 | Uue hinnalepingu piirid | docs/architecture/listing-price-currency-v1.md algus |
@@ -47,8 +49,14 @@ checkpoint võib selle kinnitatud räsi uue kirje alusena talletada.
 | Ühine praegune hinnakuva | src/entities/listing/model/priceDisplay.ts |
 | Omaniku ühine loend | src/entities/marketplace-item/api/getMyMarketplaceItems.ts |
 
-328-failine kontrollitud baas ja selle checkpoint’i uued failid ei ole kogu repo. Puuduvat konteksti kogu ainult konkreetse
+350-failine kontrollitud baas ja selle checkpoint’i uued failid ei ole kogu repo. Puuduvat konteksti kogu ainult konkreetse
 sõltuvuse jaoks; ära alusta uut üldist skeemiauditit, kui varasem tõend katab vajaduse.
+
+Avalike lugejate kaks sviiti on eraldi. Node-testi `__dirname` sõltub ajaloolisest
+ajutisest asetusest; seetõttu on täpsed testibaidid `*.reference.cjs.txt` failidena,
+mitte ekslikult käivitatavate repo testidena. Neli parserit on päris `.ts` moodulid.
+Järgmine harness võib asetuskaardi järgi taastada välise töökausta, ilma testisisu
+muutmata. Vanad ühekorra käivitid ei ole üldised projektitestid.
 
 ## Kontrollitud keskkond (ajalooline, mitte automaatselt värske)
 
@@ -103,3 +111,10 @@ pea ennetavalt vahetama; fail on katkestuse puhuks. Vana pakett jääb alles.
 Tõendifailide ümberpaigutuse kaardid seovad iga algse ZIP-kirje baitide ja räsiga.
 Failiviide ei ole sandbox-tee ega terviklik rakendusandmete varukoopia. Käivitatava
 Downloads-skripti nimi/sisend/kinnitus peavad kattuma selle skripti konstantidega.
+
+## Avaliku lugemiskihi checkpoint 06.10.2026
+
+Uued tulemusfailid `listing-public-read-source-*.zip` määravad tegeliku lähtepaigalduse,
+build’i, staging’u ning commit/push’i. Järgmine etapp on omaniku segaloend, mitte
+uus avalik lugeja või vana testi kordamine. Enne uut kirjutust kontrolli tegelikku
+HEAD-i; ajalooline e4b4143 ei asenda värsket seisu. Olemasolev 99 arhiiv säilib.

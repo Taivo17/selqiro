@@ -1,3 +1,36 @@
+<!-- SELQIRO_PUBLIC_PRICE_READ_SOURCE_CHECKPOINT_20261006 -->
+## 06.10.2026 — testitud avaliku hinnalugemise talletamine
+
+Lähtealus e4b4143 oli kasutaja 22:12:30 (+03) käigu lõpus puhas ja GitHubiga võrdne.
+Selle uue talletamise build, staging, commit ja push selguvad alles
+listing-public-read-source-…zip tulemusest. Tulevast commit-räsi ei kirjutata ette.
+
+Üks labor talletab 10–14 SQL-moodulid, neli parserit ning otsingu ja avaliku
+detaili/profiili eraldi testiallikad. Varasemaid 01–09 mooduleid, testialust ega
+valuutavalimit ei dubleerita. Failid ei kuulu migrations-kausta ja töötav UI ei
+impordi uusi parsereid. 23 migratsiooni, rakenduskood ja olemasolevad testid säilivad.
+
+Läbitud 12:09 otsingukatse: 154 SQL +156 parserit (5 päris abibaasi JSON-iga) +2
+samaaegset lugemist. Läbitud 22:12 detaili/profiili katse: 320 SQL (172 registri
+kontrolli nende sees) +154 parserit (7 päris JSON-iga) +2 samaaegset lugemist.
+Mõlemal tüübid, valitud tagasipööramine ja ainult oma helperi eemaldamine PASS.
+Neid katseid selles lähteetapis ei korrata. Kontrollitakse failide säilimist ja
+olemasolevat build’i, mitte andmebaasi ega brauserit.
+
+Täpne summatekst ja valuuta jäävad eraldi kuvavaluutast. Avalik lugeja ei väljasta
+omaniku revisjoni, loomise võtit või kviitungit. Detail/otsing lubavad nulltähtaega,
+profiil mitte; teksti/pildipiiride lipud peab hilisem UI ausalt arvestama. Olemasolev
+lai tabelilugemine ei saanud parandatud. Valuutavalim pole lõplik register.
+
+Järgmine töö pärast tulemuse ülevaatust on omaniku segaloend: oma tavakuulutuse
+hind, hobuse müügihind ja otsija eelarve säilitavad erineva tähenduse. Uusi API-sid,
+valuutateisendusi, krüptot, Energyt ega ühikuteisendust ei avata. Praegusi
+testkuulutusi, pilte ja vanu päevikuid ei kustutata.
+
+Uue olulise välise üleandmise juures tuleb öelda „Laadi see üleandmispakett nüüd
+alla”; see pole automaatne Maci salvestus ega nõue kohe vestlust vahetada.
+
+---
 <!-- SELQIRO_PRICE_INTEGRATION_SOURCE_20261006 -->
 ## 06.10.2026 — Testitud salvestuse ja loomise labori talletamine
 

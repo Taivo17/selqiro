@@ -1,0 +1,7976 @@
+{
+  "version": 1,
+  "sources": {
+    "lib/categories.ts": "2b3bb98a9cbc2a718a42018a69553c0e202d26105ab71d80b5846b5f500f3ebf",
+    "lib/categoryFields.ts": "87bd9cacf3bbc0f31ab8c3625de8f9f32558cf6190ee7f4c84e7d0f232d6cc9f"
+  },
+  "policy": "Display, not search indexing. Declared scalar form fields only. Identifiers deliberately entered in public form fields remain displayable. No raw objects/arrays/unknown keys or guessed aliases.",
+  "excluded_fields": {
+    "online_account_included": "Account-transfer text needs a separate public-content decision.",
+    "certification_documents": "Free-text document references need a separate public-content decision."
+  },
+  "paths": [
+    {
+      "path": [
+        "vehicles",
+        "cars"
+      ],
+      "fields": []
+    },
+    {
+      "path": [
+        "vehicles",
+        "cars",
+        "passenger_cars"
+      ],
+      "fields": [
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "model",
+          "label": "Model"
+        },
+        {
+          "key": "year",
+          "label": "Year"
+        },
+        {
+          "key": "generation",
+          "label": "Generation / body code"
+        },
+        {
+          "key": "fuel",
+          "label": "Fuel"
+        },
+        {
+          "key": "engine",
+          "label": "Engine"
+        },
+        {
+          "key": "power",
+          "label": "Power"
+        },
+        {
+          "key": "gearbox",
+          "label": "Gearbox"
+        },
+        {
+          "key": "drivetrain",
+          "label": "Drivetrain"
+        },
+        {
+          "key": "mileage",
+          "label": "Mileage"
+        },
+        {
+          "key": "vin",
+          "label": "VIN"
+        },
+        {
+          "key": "registration_number",
+          "label": "Registration number"
+        },
+        {
+          "key": "body_type",
+          "label": "Body type"
+        },
+        {
+          "key": "doors",
+          "label": "Number of doors"
+        },
+        {
+          "key": "seats",
+          "label": "Seats"
+        },
+        {
+          "key": "color",
+          "label": "Color"
+        },
+        {
+          "key": "inspection_valid_until",
+          "label": "Inspection valid until"
+        }
+      ]
+    },
+    {
+      "path": [
+        "vehicles",
+        "cars",
+        "suv_offroad"
+      ],
+      "fields": [
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "model",
+          "label": "Model"
+        },
+        {
+          "key": "year",
+          "label": "Year"
+        },
+        {
+          "key": "generation",
+          "label": "Generation / body code"
+        },
+        {
+          "key": "fuel",
+          "label": "Fuel"
+        },
+        {
+          "key": "engine",
+          "label": "Engine"
+        },
+        {
+          "key": "power",
+          "label": "Power"
+        },
+        {
+          "key": "gearbox",
+          "label": "Gearbox"
+        },
+        {
+          "key": "drivetrain",
+          "label": "Drivetrain"
+        },
+        {
+          "key": "mileage",
+          "label": "Mileage"
+        },
+        {
+          "key": "vin",
+          "label": "VIN"
+        },
+        {
+          "key": "registration_number",
+          "label": "Registration number"
+        },
+        {
+          "key": "body_type",
+          "label": "Body type"
+        },
+        {
+          "key": "doors",
+          "label": "Number of doors"
+        },
+        {
+          "key": "seats",
+          "label": "Seats"
+        },
+        {
+          "key": "color",
+          "label": "Color"
+        },
+        {
+          "key": "inspection_valid_until",
+          "label": "Inspection valid until"
+        }
+      ]
+    },
+    {
+      "path": [
+        "vehicles",
+        "cars",
+        "vans_minibuses"
+      ],
+      "fields": [
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "model",
+          "label": "Model"
+        },
+        {
+          "key": "year",
+          "label": "Year"
+        },
+        {
+          "key": "generation",
+          "label": "Generation / body code"
+        },
+        {
+          "key": "fuel",
+          "label": "Fuel"
+        },
+        {
+          "key": "engine",
+          "label": "Engine"
+        },
+        {
+          "key": "power",
+          "label": "Power"
+        },
+        {
+          "key": "gearbox",
+          "label": "Gearbox"
+        },
+        {
+          "key": "drivetrain",
+          "label": "Drivetrain"
+        },
+        {
+          "key": "mileage",
+          "label": "Mileage"
+        },
+        {
+          "key": "vin",
+          "label": "VIN"
+        },
+        {
+          "key": "registration_number",
+          "label": "Registration number"
+        },
+        {
+          "key": "body_type",
+          "label": "Body type"
+        },
+        {
+          "key": "doors",
+          "label": "Number of doors"
+        },
+        {
+          "key": "seats",
+          "label": "Seats"
+        },
+        {
+          "key": "color",
+          "label": "Color"
+        },
+        {
+          "key": "inspection_valid_until",
+          "label": "Inspection valid until"
+        }
+      ]
+    },
+    {
+      "path": [
+        "vehicles",
+        "cars",
+        "pickup_trucks"
+      ],
+      "fields": [
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "model",
+          "label": "Model"
+        },
+        {
+          "key": "year",
+          "label": "Year"
+        },
+        {
+          "key": "generation",
+          "label": "Generation / body code"
+        },
+        {
+          "key": "fuel",
+          "label": "Fuel"
+        },
+        {
+          "key": "engine",
+          "label": "Engine"
+        },
+        {
+          "key": "power",
+          "label": "Power"
+        },
+        {
+          "key": "gearbox",
+          "label": "Gearbox"
+        },
+        {
+          "key": "drivetrain",
+          "label": "Drivetrain"
+        },
+        {
+          "key": "mileage",
+          "label": "Mileage"
+        },
+        {
+          "key": "vin",
+          "label": "VIN"
+        },
+        {
+          "key": "registration_number",
+          "label": "Registration number"
+        },
+        {
+          "key": "body_type",
+          "label": "Body type"
+        },
+        {
+          "key": "doors",
+          "label": "Number of doors"
+        },
+        {
+          "key": "seats",
+          "label": "Seats"
+        },
+        {
+          "key": "color",
+          "label": "Color"
+        },
+        {
+          "key": "inspection_valid_until",
+          "label": "Inspection valid until"
+        }
+      ]
+    },
+    {
+      "path": [
+        "vehicles",
+        "cars",
+        "motorhomes_campers"
+      ],
+      "fields": [
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "model",
+          "label": "Model"
+        },
+        {
+          "key": "year",
+          "label": "Year"
+        },
+        {
+          "key": "generation",
+          "label": "Generation / body code"
+        },
+        {
+          "key": "fuel",
+          "label": "Fuel"
+        },
+        {
+          "key": "engine",
+          "label": "Engine"
+        },
+        {
+          "key": "power",
+          "label": "Power"
+        },
+        {
+          "key": "gearbox",
+          "label": "Gearbox"
+        },
+        {
+          "key": "drivetrain",
+          "label": "Drivetrain"
+        },
+        {
+          "key": "mileage",
+          "label": "Mileage"
+        },
+        {
+          "key": "vin",
+          "label": "VIN"
+        },
+        {
+          "key": "registration_number",
+          "label": "Registration number"
+        },
+        {
+          "key": "body_type",
+          "label": "Body type"
+        },
+        {
+          "key": "doors",
+          "label": "Number of doors"
+        },
+        {
+          "key": "seats",
+          "label": "Seats"
+        },
+        {
+          "key": "color",
+          "label": "Color"
+        },
+        {
+          "key": "inspection_valid_until",
+          "label": "Inspection valid until"
+        },
+        {
+          "key": "sleeping_places",
+          "label": "Sleeping places"
+        },
+        {
+          "key": "length",
+          "label": "Length"
+        },
+        {
+          "key": "gross_weight",
+          "label": "Gross weight"
+        },
+        {
+          "key": "equipment",
+          "label": "Equipment"
+        }
+      ]
+    },
+    {
+      "path": [
+        "vehicles",
+        "cars",
+        "racing_vehicles"
+      ],
+      "fields": [
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "model",
+          "label": "Model"
+        },
+        {
+          "key": "year",
+          "label": "Year"
+        },
+        {
+          "key": "generation",
+          "label": "Generation / body code"
+        },
+        {
+          "key": "fuel",
+          "label": "Fuel"
+        },
+        {
+          "key": "engine",
+          "label": "Engine"
+        },
+        {
+          "key": "power",
+          "label": "Power"
+        },
+        {
+          "key": "gearbox",
+          "label": "Gearbox"
+        },
+        {
+          "key": "drivetrain",
+          "label": "Drivetrain"
+        },
+        {
+          "key": "mileage",
+          "label": "Mileage"
+        },
+        {
+          "key": "vin",
+          "label": "VIN"
+        },
+        {
+          "key": "registration_number",
+          "label": "Registration number"
+        },
+        {
+          "key": "body_type",
+          "label": "Body type"
+        },
+        {
+          "key": "doors",
+          "label": "Number of doors"
+        },
+        {
+          "key": "seats",
+          "label": "Seats"
+        },
+        {
+          "key": "color",
+          "label": "Color"
+        },
+        {
+          "key": "inspection_valid_until",
+          "label": "Inspection valid until"
+        },
+        {
+          "key": "discipline",
+          "label": "Discipline"
+        },
+        {
+          "key": "roll_cage",
+          "label": "Roll cage"
+        },
+        {
+          "key": "homologation",
+          "label": "Homologation"
+        },
+        {
+          "key": "track_street_legal",
+          "label": "Track / street legal"
+        }
+      ]
+    },
+    {
+      "path": [
+        "vehicles",
+        "motorcycles"
+      ],
+      "fields": []
+    },
+    {
+      "path": [
+        "vehicles",
+        "motorcycles",
+        "sport_bikes"
+      ],
+      "fields": [
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "model",
+          "label": "Model"
+        },
+        {
+          "key": "year",
+          "label": "Year"
+        },
+        {
+          "key": "engine_size",
+          "label": "Engine size"
+        },
+        {
+          "key": "power",
+          "label": "Power"
+        },
+        {
+          "key": "fuel",
+          "label": "Fuel"
+        },
+        {
+          "key": "mileage",
+          "label": "Mileage"
+        },
+        {
+          "key": "transmission",
+          "label": "Transmission"
+        },
+        {
+          "key": "type",
+          "label": "Type"
+        },
+        {
+          "key": "vin",
+          "label": "VIN"
+        },
+        {
+          "key": "registration_number",
+          "label": "Registration number"
+        },
+        {
+          "key": "inspection_valid_until",
+          "label": "Inspection valid until"
+        }
+      ]
+    },
+    {
+      "path": [
+        "vehicles",
+        "motorcycles",
+        "cruisers"
+      ],
+      "fields": [
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "model",
+          "label": "Model"
+        },
+        {
+          "key": "year",
+          "label": "Year"
+        },
+        {
+          "key": "engine_size",
+          "label": "Engine size"
+        },
+        {
+          "key": "power",
+          "label": "Power"
+        },
+        {
+          "key": "fuel",
+          "label": "Fuel"
+        },
+        {
+          "key": "mileage",
+          "label": "Mileage"
+        },
+        {
+          "key": "transmission",
+          "label": "Transmission"
+        },
+        {
+          "key": "type",
+          "label": "Type"
+        },
+        {
+          "key": "vin",
+          "label": "VIN"
+        },
+        {
+          "key": "registration_number",
+          "label": "Registration number"
+        },
+        {
+          "key": "inspection_valid_until",
+          "label": "Inspection valid until"
+        }
+      ]
+    },
+    {
+      "path": [
+        "vehicles",
+        "motorcycles",
+        "touring"
+      ],
+      "fields": [
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "model",
+          "label": "Model"
+        },
+        {
+          "key": "year",
+          "label": "Year"
+        },
+        {
+          "key": "engine_size",
+          "label": "Engine size"
+        },
+        {
+          "key": "power",
+          "label": "Power"
+        },
+        {
+          "key": "fuel",
+          "label": "Fuel"
+        },
+        {
+          "key": "mileage",
+          "label": "Mileage"
+        },
+        {
+          "key": "transmission",
+          "label": "Transmission"
+        },
+        {
+          "key": "type",
+          "label": "Type"
+        },
+        {
+          "key": "vin",
+          "label": "VIN"
+        },
+        {
+          "key": "registration_number",
+          "label": "Registration number"
+        },
+        {
+          "key": "inspection_valid_until",
+          "label": "Inspection valid until"
+        }
+      ]
+    },
+    {
+      "path": [
+        "vehicles",
+        "motorcycles",
+        "enduro_mx"
+      ],
+      "fields": [
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "model",
+          "label": "Model"
+        },
+        {
+          "key": "year",
+          "label": "Year"
+        },
+        {
+          "key": "engine_size",
+          "label": "Engine size"
+        },
+        {
+          "key": "power",
+          "label": "Power"
+        },
+        {
+          "key": "fuel",
+          "label": "Fuel"
+        },
+        {
+          "key": "mileage",
+          "label": "Mileage"
+        },
+        {
+          "key": "transmission",
+          "label": "Transmission"
+        },
+        {
+          "key": "type",
+          "label": "Type"
+        },
+        {
+          "key": "vin",
+          "label": "VIN"
+        },
+        {
+          "key": "registration_number",
+          "label": "Registration number"
+        },
+        {
+          "key": "inspection_valid_until",
+          "label": "Inspection valid until"
+        }
+      ]
+    },
+    {
+      "path": [
+        "vehicles",
+        "motorcycles",
+        "scooters"
+      ],
+      "fields": [
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "model",
+          "label": "Model"
+        },
+        {
+          "key": "year",
+          "label": "Year"
+        },
+        {
+          "key": "engine_size",
+          "label": "Engine size"
+        },
+        {
+          "key": "power",
+          "label": "Power"
+        },
+        {
+          "key": "fuel",
+          "label": "Fuel"
+        },
+        {
+          "key": "mileage",
+          "label": "Mileage"
+        },
+        {
+          "key": "transmission",
+          "label": "Transmission"
+        },
+        {
+          "key": "type",
+          "label": "Type"
+        },
+        {
+          "key": "vin",
+          "label": "VIN"
+        },
+        {
+          "key": "registration_number",
+          "label": "Registration number"
+        },
+        {
+          "key": "inspection_valid_until",
+          "label": "Inspection valid until"
+        }
+      ]
+    },
+    {
+      "path": [
+        "vehicles",
+        "motorcycles",
+        "atv_utv"
+      ],
+      "fields": [
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "model",
+          "label": "Model"
+        },
+        {
+          "key": "year",
+          "label": "Year"
+        },
+        {
+          "key": "engine_size",
+          "label": "Engine size"
+        },
+        {
+          "key": "power",
+          "label": "Power"
+        },
+        {
+          "key": "fuel",
+          "label": "Fuel"
+        },
+        {
+          "key": "mileage",
+          "label": "Mileage"
+        },
+        {
+          "key": "transmission",
+          "label": "Transmission"
+        },
+        {
+          "key": "type",
+          "label": "Type"
+        },
+        {
+          "key": "vin",
+          "label": "VIN"
+        },
+        {
+          "key": "registration_number",
+          "label": "Registration number"
+        },
+        {
+          "key": "inspection_valid_until",
+          "label": "Inspection valid until"
+        },
+        {
+          "key": "drivetrain",
+          "label": "Drivetrain"
+        },
+        {
+          "key": "winch",
+          "label": "Winch"
+        },
+        {
+          "key": "road_legal",
+          "label": "Road legal"
+        }
+      ]
+    },
+    {
+      "path": [
+        "vehicles",
+        "motorcycles",
+        "snowmobiles"
+      ],
+      "fields": [
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "model",
+          "label": "Model"
+        },
+        {
+          "key": "year",
+          "label": "Year"
+        },
+        {
+          "key": "engine_size",
+          "label": "Engine size"
+        },
+        {
+          "key": "power",
+          "label": "Power"
+        },
+        {
+          "key": "mileage",
+          "label": "Mileage"
+        },
+        {
+          "key": "track_length",
+          "label": "Track length"
+        },
+        {
+          "key": "electric_start",
+          "label": "Electric start"
+        }
+      ]
+    },
+    {
+      "path": [
+        "vehicles",
+        "trucks_commercial"
+      ],
+      "fields": []
+    },
+    {
+      "path": [
+        "vehicles",
+        "trucks_commercial",
+        "trucks"
+      ],
+      "fields": [
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "model",
+          "label": "Model"
+        },
+        {
+          "key": "year",
+          "label": "Year"
+        },
+        {
+          "key": "fuel",
+          "label": "Fuel"
+        },
+        {
+          "key": "engine",
+          "label": "Engine"
+        },
+        {
+          "key": "power",
+          "label": "Power"
+        },
+        {
+          "key": "gearbox",
+          "label": "Gearbox"
+        },
+        {
+          "key": "mileage",
+          "label": "Mileage"
+        },
+        {
+          "key": "seats",
+          "label": "Seats"
+        },
+        {
+          "key": "axle_configuration",
+          "label": "Axle configuration"
+        },
+        {
+          "key": "gross_weight",
+          "label": "Gross weight"
+        },
+        {
+          "key": "empty_weight",
+          "label": "Empty weight"
+        },
+        {
+          "key": "payload",
+          "label": "Payload"
+        },
+        {
+          "key": "load_space_length",
+          "label": "Load space length"
+        },
+        {
+          "key": "load_space_width",
+          "label": "Load space width"
+        },
+        {
+          "key": "load_space_height",
+          "label": "Load space height"
+        },
+        {
+          "key": "tachograph",
+          "label": "Tachograph"
+        },
+        {
+          "key": "vin",
+          "label": "VIN"
+        },
+        {
+          "key": "registration_number",
+          "label": "Registration number"
+        },
+        {
+          "key": "inspection_valid_until",
+          "label": "Inspection valid until"
+        }
+      ]
+    },
+    {
+      "path": [
+        "vehicles",
+        "trucks_commercial",
+        "semi_trucks"
+      ],
+      "fields": [
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "model",
+          "label": "Model"
+        },
+        {
+          "key": "year",
+          "label": "Year"
+        },
+        {
+          "key": "fuel",
+          "label": "Fuel"
+        },
+        {
+          "key": "engine",
+          "label": "Engine"
+        },
+        {
+          "key": "power",
+          "label": "Power"
+        },
+        {
+          "key": "gearbox",
+          "label": "Gearbox"
+        },
+        {
+          "key": "mileage",
+          "label": "Mileage"
+        },
+        {
+          "key": "seats",
+          "label": "Seats"
+        },
+        {
+          "key": "axle_configuration",
+          "label": "Axle configuration"
+        },
+        {
+          "key": "gross_weight",
+          "label": "Gross weight"
+        },
+        {
+          "key": "empty_weight",
+          "label": "Empty weight"
+        },
+        {
+          "key": "payload",
+          "label": "Payload"
+        },
+        {
+          "key": "load_space_length",
+          "label": "Load space length"
+        },
+        {
+          "key": "load_space_width",
+          "label": "Load space width"
+        },
+        {
+          "key": "load_space_height",
+          "label": "Load space height"
+        },
+        {
+          "key": "tachograph",
+          "label": "Tachograph"
+        },
+        {
+          "key": "vin",
+          "label": "VIN"
+        },
+        {
+          "key": "registration_number",
+          "label": "Registration number"
+        },
+        {
+          "key": "inspection_valid_until",
+          "label": "Inspection valid until"
+        }
+      ]
+    },
+    {
+      "path": [
+        "vehicles",
+        "trucks_commercial",
+        "buses"
+      ],
+      "fields": [
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "model",
+          "label": "Model"
+        },
+        {
+          "key": "year",
+          "label": "Year"
+        },
+        {
+          "key": "fuel",
+          "label": "Fuel"
+        },
+        {
+          "key": "engine",
+          "label": "Engine"
+        },
+        {
+          "key": "power",
+          "label": "Power"
+        },
+        {
+          "key": "gearbox",
+          "label": "Gearbox"
+        },
+        {
+          "key": "mileage",
+          "label": "Mileage"
+        },
+        {
+          "key": "seats",
+          "label": "Seats"
+        },
+        {
+          "key": "axle_configuration",
+          "label": "Axle configuration"
+        },
+        {
+          "key": "gross_weight",
+          "label": "Gross weight"
+        },
+        {
+          "key": "empty_weight",
+          "label": "Empty weight"
+        },
+        {
+          "key": "payload",
+          "label": "Payload"
+        },
+        {
+          "key": "load_space_length",
+          "label": "Load space length"
+        },
+        {
+          "key": "load_space_width",
+          "label": "Load space width"
+        },
+        {
+          "key": "load_space_height",
+          "label": "Load space height"
+        },
+        {
+          "key": "tachograph",
+          "label": "Tachograph"
+        },
+        {
+          "key": "vin",
+          "label": "VIN"
+        },
+        {
+          "key": "registration_number",
+          "label": "Registration number"
+        },
+        {
+          "key": "inspection_valid_until",
+          "label": "Inspection valid until"
+        }
+      ]
+    },
+    {
+      "path": [
+        "vehicles",
+        "trucks_commercial",
+        "commercial_trailers"
+      ],
+      "fields": [
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "model",
+          "label": "Model"
+        },
+        {
+          "key": "year",
+          "label": "Year"
+        },
+        {
+          "key": "trailer_type",
+          "label": "Trailer type"
+        },
+        {
+          "key": "length",
+          "label": "Length"
+        },
+        {
+          "key": "width",
+          "label": "Width"
+        },
+        {
+          "key": "height",
+          "label": "Height"
+        },
+        {
+          "key": "gross_weight",
+          "label": "Gross weight"
+        },
+        {
+          "key": "empty_weight",
+          "label": "Empty weight"
+        },
+        {
+          "key": "payload",
+          "label": "Payload"
+        },
+        {
+          "key": "axles",
+          "label": "Axles"
+        },
+        {
+          "key": "brake_type",
+          "label": "Brake type"
+        },
+        {
+          "key": "vin_serial",
+          "label": "VIN / serial number"
+        },
+        {
+          "key": "registration_number",
+          "label": "Registration number"
+        },
+        {
+          "key": "inspection_valid_until",
+          "label": "Inspection valid until"
+        }
+      ]
+    },
+    {
+      "path": [
+        "vehicles",
+        "agricultural_heavy_machinery"
+      ],
+      "fields": []
+    },
+    {
+      "path": [
+        "vehicles",
+        "agricultural_heavy_machinery",
+        "tractors"
+      ],
+      "fields": [
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "model",
+          "label": "Model"
+        },
+        {
+          "key": "year",
+          "label": "Year"
+        },
+        {
+          "key": "machine_type",
+          "label": "Machine type"
+        },
+        {
+          "key": "engine",
+          "label": "Engine"
+        },
+        {
+          "key": "power",
+          "label": "Power"
+        },
+        {
+          "key": "working_hours",
+          "label": "Working hours"
+        },
+        {
+          "key": "fuel",
+          "label": "Fuel"
+        },
+        {
+          "key": "drivetrain_tracks",
+          "label": "Drivetrain / tracks"
+        },
+        {
+          "key": "weight",
+          "label": "Weight"
+        },
+        {
+          "key": "attachment_type",
+          "label": "Attachment type"
+        },
+        {
+          "key": "hydraulics",
+          "label": "Hydraulics"
+        },
+        {
+          "key": "vin_serial",
+          "label": "VIN / serial number"
+        },
+        {
+          "key": "seats",
+          "label": "Seats"
+        }
+      ]
+    },
+    {
+      "path": [
+        "vehicles",
+        "agricultural_heavy_machinery",
+        "harvesters"
+      ],
+      "fields": [
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "model",
+          "label": "Model"
+        },
+        {
+          "key": "year",
+          "label": "Year"
+        },
+        {
+          "key": "machine_type",
+          "label": "Machine type"
+        },
+        {
+          "key": "engine",
+          "label": "Engine"
+        },
+        {
+          "key": "power",
+          "label": "Power"
+        },
+        {
+          "key": "working_hours",
+          "label": "Working hours"
+        },
+        {
+          "key": "fuel",
+          "label": "Fuel"
+        },
+        {
+          "key": "drivetrain_tracks",
+          "label": "Drivetrain / tracks"
+        },
+        {
+          "key": "weight",
+          "label": "Weight"
+        },
+        {
+          "key": "attachment_type",
+          "label": "Attachment type"
+        },
+        {
+          "key": "hydraulics",
+          "label": "Hydraulics"
+        },
+        {
+          "key": "vin_serial",
+          "label": "VIN / serial number"
+        },
+        {
+          "key": "header_width",
+          "label": "Header width"
+        },
+        {
+          "key": "crop_type",
+          "label": "Crop type"
+        }
+      ]
+    },
+    {
+      "path": [
+        "vehicles",
+        "agricultural_heavy_machinery",
+        "excavators"
+      ],
+      "fields": [
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "model",
+          "label": "Model"
+        },
+        {
+          "key": "year",
+          "label": "Year"
+        },
+        {
+          "key": "machine_type",
+          "label": "Machine type"
+        },
+        {
+          "key": "engine",
+          "label": "Engine"
+        },
+        {
+          "key": "power",
+          "label": "Power"
+        },
+        {
+          "key": "working_hours",
+          "label": "Working hours"
+        },
+        {
+          "key": "fuel",
+          "label": "Fuel"
+        },
+        {
+          "key": "drivetrain_tracks",
+          "label": "Drivetrain / tracks"
+        },
+        {
+          "key": "weight",
+          "label": "Weight"
+        },
+        {
+          "key": "attachment_type",
+          "label": "Attachment type"
+        },
+        {
+          "key": "hydraulics",
+          "label": "Hydraulics"
+        },
+        {
+          "key": "vin_serial",
+          "label": "VIN / serial number"
+        },
+        {
+          "key": "operating_weight",
+          "label": "Operating weight"
+        },
+        {
+          "key": "bucket_size",
+          "label": "Bucket size"
+        },
+        {
+          "key": "lift_capacity",
+          "label": "Lift capacity"
+        },
+        {
+          "key": "reach",
+          "label": "Reach"
+        }
+      ]
+    },
+    {
+      "path": [
+        "vehicles",
+        "agricultural_heavy_machinery",
+        "forestry_machinery"
+      ],
+      "fields": [
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "model",
+          "label": "Model"
+        },
+        {
+          "key": "year",
+          "label": "Year"
+        },
+        {
+          "key": "machine_type",
+          "label": "Machine type"
+        },
+        {
+          "key": "engine",
+          "label": "Engine"
+        },
+        {
+          "key": "power",
+          "label": "Power"
+        },
+        {
+          "key": "working_hours",
+          "label": "Working hours"
+        },
+        {
+          "key": "fuel",
+          "label": "Fuel"
+        },
+        {
+          "key": "drivetrain_tracks",
+          "label": "Drivetrain / tracks"
+        },
+        {
+          "key": "weight",
+          "label": "Weight"
+        },
+        {
+          "key": "attachment_type",
+          "label": "Attachment type"
+        },
+        {
+          "key": "hydraulics",
+          "label": "Hydraulics"
+        },
+        {
+          "key": "vin_serial",
+          "label": "VIN / serial number"
+        },
+        {
+          "key": "operating_weight",
+          "label": "Operating weight"
+        },
+        {
+          "key": "lift_capacity",
+          "label": "Lift capacity"
+        }
+      ]
+    },
+    {
+      "path": [
+        "vehicles",
+        "agricultural_heavy_machinery",
+        "construction_machinery"
+      ],
+      "fields": [
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "model",
+          "label": "Model"
+        },
+        {
+          "key": "year",
+          "label": "Year"
+        },
+        {
+          "key": "machine_type",
+          "label": "Machine type"
+        },
+        {
+          "key": "engine",
+          "label": "Engine"
+        },
+        {
+          "key": "power",
+          "label": "Power"
+        },
+        {
+          "key": "working_hours",
+          "label": "Working hours"
+        },
+        {
+          "key": "fuel",
+          "label": "Fuel"
+        },
+        {
+          "key": "drivetrain_tracks",
+          "label": "Drivetrain / tracks"
+        },
+        {
+          "key": "weight",
+          "label": "Weight"
+        },
+        {
+          "key": "attachment_type",
+          "label": "Attachment type"
+        },
+        {
+          "key": "hydraulics",
+          "label": "Hydraulics"
+        },
+        {
+          "key": "vin_serial",
+          "label": "VIN / serial number"
+        },
+        {
+          "key": "operating_weight",
+          "label": "Operating weight"
+        },
+        {
+          "key": "bucket_size",
+          "label": "Bucket size"
+        },
+        {
+          "key": "lift_capacity",
+          "label": "Lift capacity"
+        }
+      ]
+    },
+    {
+      "path": [
+        "vehicles",
+        "agricultural_heavy_machinery",
+        "agricultural_attachments_implements"
+      ],
+      "fields": [
+        {
+          "key": "implement_type",
+          "label": "Implement type"
+        },
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "model",
+          "label": "Model"
+        },
+        {
+          "key": "working_width",
+          "label": "Working width"
+        },
+        {
+          "key": "attachment_type",
+          "label": "Attachment type"
+        },
+        {
+          "key": "compatible_machine",
+          "label": "Compatible machine"
+        },
+        {
+          "key": "pto_required",
+          "label": "PTO required"
+        },
+        {
+          "key": "hydraulics_required",
+          "label": "Hydraulics required"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        }
+      ]
+    },
+    {
+      "path": [
+        "vehicles",
+        "agricultural_heavy_machinery",
+        "agricultural_heavy_machinery_spare_parts"
+      ],
+      "fields": [
+        {
+          "key": "part_name",
+          "label": "Part name"
+        },
+        {
+          "key": "manufacturer",
+          "label": "Manufacturer"
+        },
+        {
+          "key": "part_number",
+          "label": "Part number"
+        },
+        {
+          "key": "compatible_machine",
+          "label": "Compatible machine"
+        },
+        {
+          "key": "fits_brand",
+          "label": "Fits brand"
+        },
+        {
+          "key": "fits_model",
+          "label": "Fits model"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        }
+      ]
+    },
+    {
+      "path": [
+        "vehicles",
+        "marine"
+      ],
+      "fields": []
+    },
+    {
+      "path": [
+        "vehicles",
+        "marine",
+        "boats"
+      ],
+      "fields": [
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "model",
+          "label": "Model"
+        },
+        {
+          "key": "year",
+          "label": "Year"
+        },
+        {
+          "key": "type",
+          "label": "Type"
+        },
+        {
+          "key": "length",
+          "label": "Length"
+        },
+        {
+          "key": "width",
+          "label": "Width"
+        },
+        {
+          "key": "material",
+          "label": "Material"
+        },
+        {
+          "key": "engine_type",
+          "label": "Engine type"
+        },
+        {
+          "key": "engine_power",
+          "label": "Engine power"
+        },
+        {
+          "key": "fuel",
+          "label": "Fuel"
+        },
+        {
+          "key": "engine_hours",
+          "label": "Engine hours"
+        },
+        {
+          "key": "cabins",
+          "label": "Cabins"
+        },
+        {
+          "key": "trailer_included",
+          "label": "Trailer included"
+        },
+        {
+          "key": "registration_number",
+          "label": "Registration number"
+        }
+      ]
+    },
+    {
+      "path": [
+        "vehicles",
+        "marine",
+        "yachts"
+      ],
+      "fields": [
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "model",
+          "label": "Model"
+        },
+        {
+          "key": "year",
+          "label": "Year"
+        },
+        {
+          "key": "type",
+          "label": "Type"
+        },
+        {
+          "key": "length",
+          "label": "Length"
+        },
+        {
+          "key": "width",
+          "label": "Width"
+        },
+        {
+          "key": "material",
+          "label": "Material"
+        },
+        {
+          "key": "engine_type",
+          "label": "Engine type"
+        },
+        {
+          "key": "engine_power",
+          "label": "Engine power"
+        },
+        {
+          "key": "fuel",
+          "label": "Fuel"
+        },
+        {
+          "key": "engine_hours",
+          "label": "Engine hours"
+        },
+        {
+          "key": "cabins",
+          "label": "Cabins"
+        },
+        {
+          "key": "trailer_included",
+          "label": "Trailer included"
+        },
+        {
+          "key": "registration_number",
+          "label": "Registration number"
+        }
+      ]
+    },
+    {
+      "path": [
+        "vehicles",
+        "marine",
+        "jet_skis"
+      ],
+      "fields": [
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "model",
+          "label": "Model"
+        },
+        {
+          "key": "year",
+          "label": "Year"
+        },
+        {
+          "key": "type",
+          "label": "Type"
+        },
+        {
+          "key": "length",
+          "label": "Length"
+        },
+        {
+          "key": "width",
+          "label": "Width"
+        },
+        {
+          "key": "material",
+          "label": "Material"
+        },
+        {
+          "key": "engine_type",
+          "label": "Engine type"
+        },
+        {
+          "key": "engine_power",
+          "label": "Engine power"
+        },
+        {
+          "key": "fuel",
+          "label": "Fuel"
+        },
+        {
+          "key": "engine_hours",
+          "label": "Engine hours"
+        },
+        {
+          "key": "cabins",
+          "label": "Cabins"
+        },
+        {
+          "key": "trailer_included",
+          "label": "Trailer included"
+        },
+        {
+          "key": "registration_number",
+          "label": "Registration number"
+        }
+      ]
+    },
+    {
+      "path": [
+        "vehicles",
+        "marine",
+        "boat_trailers"
+      ],
+      "fields": [
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "model",
+          "label": "Model"
+        },
+        {
+          "key": "year",
+          "label": "Year"
+        },
+        {
+          "key": "trailer_type",
+          "label": "Trailer type"
+        },
+        {
+          "key": "length",
+          "label": "Length"
+        },
+        {
+          "key": "width",
+          "label": "Width"
+        },
+        {
+          "key": "height",
+          "label": "Height"
+        },
+        {
+          "key": "gross_weight",
+          "label": "Gross weight"
+        },
+        {
+          "key": "empty_weight",
+          "label": "Empty weight"
+        },
+        {
+          "key": "payload",
+          "label": "Payload"
+        },
+        {
+          "key": "axles",
+          "label": "Axles"
+        },
+        {
+          "key": "brake_type",
+          "label": "Brake type"
+        },
+        {
+          "key": "vin_serial",
+          "label": "VIN / serial number"
+        },
+        {
+          "key": "registration_number",
+          "label": "Registration number"
+        },
+        {
+          "key": "inspection_valid_until",
+          "label": "Inspection valid until"
+        }
+      ]
+    },
+    {
+      "path": [
+        "vehicles",
+        "marine",
+        "outboard_motors"
+      ],
+      "fields": [
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "model",
+          "label": "Model"
+        },
+        {
+          "key": "year",
+          "label": "Year"
+        },
+        {
+          "key": "power",
+          "label": "Power"
+        },
+        {
+          "key": "fuel",
+          "label": "Fuel"
+        },
+        {
+          "key": "shaft_length",
+          "label": "Shaft length"
+        },
+        {
+          "key": "serial_number",
+          "label": "Serial number"
+        }
+      ]
+    },
+    {
+      "path": [
+        "vehicles",
+        "aviation"
+      ],
+      "fields": []
+    },
+    {
+      "path": [
+        "vehicles",
+        "aviation",
+        "airplanes"
+      ],
+      "fields": [
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "model",
+          "label": "Model"
+        },
+        {
+          "key": "year",
+          "label": "Year"
+        },
+        {
+          "key": "aircraft_type",
+          "label": "Aircraft type"
+        },
+        {
+          "key": "engine",
+          "label": "Engine"
+        },
+        {
+          "key": "power",
+          "label": "Power"
+        },
+        {
+          "key": "flight_hours",
+          "label": "Flight hours"
+        },
+        {
+          "key": "seats",
+          "label": "Seats"
+        },
+        {
+          "key": "range",
+          "label": "Range"
+        },
+        {
+          "key": "registration_number",
+          "label": "Registration number"
+        },
+        {
+          "key": "serial_number",
+          "label": "Serial number"
+        },
+        {
+          "key": "maintenance_status",
+          "label": "Maintenance status"
+        }
+      ]
+    },
+    {
+      "path": [
+        "vehicles",
+        "aviation",
+        "helicopters"
+      ],
+      "fields": [
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "model",
+          "label": "Model"
+        },
+        {
+          "key": "year",
+          "label": "Year"
+        },
+        {
+          "key": "aircraft_type",
+          "label": "Aircraft type"
+        },
+        {
+          "key": "engine",
+          "label": "Engine"
+        },
+        {
+          "key": "power",
+          "label": "Power"
+        },
+        {
+          "key": "flight_hours",
+          "label": "Flight hours"
+        },
+        {
+          "key": "seats",
+          "label": "Seats"
+        },
+        {
+          "key": "range",
+          "label": "Range"
+        },
+        {
+          "key": "registration_number",
+          "label": "Registration number"
+        },
+        {
+          "key": "serial_number",
+          "label": "Serial number"
+        },
+        {
+          "key": "maintenance_status",
+          "label": "Maintenance status"
+        }
+      ]
+    },
+    {
+      "path": [
+        "vehicles",
+        "aviation",
+        "ultralights"
+      ],
+      "fields": [
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "model",
+          "label": "Model"
+        },
+        {
+          "key": "year",
+          "label": "Year"
+        },
+        {
+          "key": "aircraft_type",
+          "label": "Aircraft type"
+        },
+        {
+          "key": "engine",
+          "label": "Engine"
+        },
+        {
+          "key": "flight_hours",
+          "label": "Flight hours"
+        },
+        {
+          "key": "seats",
+          "label": "Seats"
+        },
+        {
+          "key": "registration_number",
+          "label": "Registration number"
+        }
+      ]
+    },
+    {
+      "path": [
+        "vehicles",
+        "aviation",
+        "drones"
+      ],
+      "fields": [
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "model",
+          "label": "Model"
+        },
+        {
+          "key": "camera",
+          "label": "Camera"
+        },
+        {
+          "key": "flight_time",
+          "label": "Flight time"
+        },
+        {
+          "key": "range",
+          "label": "Range"
+        },
+        {
+          "key": "battery_count",
+          "label": "Battery count"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        }
+      ]
+    },
+    {
+      "path": [
+        "vehicles",
+        "aviation",
+        "aircraft_parts"
+      ],
+      "fields": [
+        {
+          "key": "part_name",
+          "label": "Part name"
+        },
+        {
+          "key": "manufacturer",
+          "label": "Manufacturer"
+        },
+        {
+          "key": "part_number",
+          "label": "Part number"
+        },
+        {
+          "key": "serial_number",
+          "label": "Serial number"
+        },
+        {
+          "key": "compatible_aircraft",
+          "label": "Compatible aircraft"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        }
+      ]
+    },
+    {
+      "path": [
+        "vehicles",
+        "trailers"
+      ],
+      "fields": []
+    },
+    {
+      "path": [
+        "vehicles",
+        "trailers",
+        "light_trailers"
+      ],
+      "fields": [
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "model",
+          "label": "Model"
+        },
+        {
+          "key": "year",
+          "label": "Year"
+        },
+        {
+          "key": "trailer_type",
+          "label": "Trailer type"
+        },
+        {
+          "key": "length",
+          "label": "Length"
+        },
+        {
+          "key": "width",
+          "label": "Width"
+        },
+        {
+          "key": "height",
+          "label": "Height"
+        },
+        {
+          "key": "gross_weight",
+          "label": "Gross weight"
+        },
+        {
+          "key": "empty_weight",
+          "label": "Empty weight"
+        },
+        {
+          "key": "payload",
+          "label": "Payload"
+        },
+        {
+          "key": "axles",
+          "label": "Axles"
+        },
+        {
+          "key": "brake_type",
+          "label": "Brake type"
+        },
+        {
+          "key": "vin_serial",
+          "label": "VIN / serial number"
+        },
+        {
+          "key": "registration_number",
+          "label": "Registration number"
+        },
+        {
+          "key": "inspection_valid_until",
+          "label": "Inspection valid until"
+        }
+      ]
+    },
+    {
+      "path": [
+        "vehicles",
+        "trailers",
+        "car_trailers"
+      ],
+      "fields": [
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "model",
+          "label": "Model"
+        },
+        {
+          "key": "year",
+          "label": "Year"
+        },
+        {
+          "key": "trailer_type",
+          "label": "Trailer type"
+        },
+        {
+          "key": "length",
+          "label": "Length"
+        },
+        {
+          "key": "width",
+          "label": "Width"
+        },
+        {
+          "key": "height",
+          "label": "Height"
+        },
+        {
+          "key": "gross_weight",
+          "label": "Gross weight"
+        },
+        {
+          "key": "empty_weight",
+          "label": "Empty weight"
+        },
+        {
+          "key": "payload",
+          "label": "Payload"
+        },
+        {
+          "key": "axles",
+          "label": "Axles"
+        },
+        {
+          "key": "brake_type",
+          "label": "Brake type"
+        },
+        {
+          "key": "vin_serial",
+          "label": "VIN / serial number"
+        },
+        {
+          "key": "registration_number",
+          "label": "Registration number"
+        },
+        {
+          "key": "inspection_valid_until",
+          "label": "Inspection valid until"
+        }
+      ]
+    },
+    {
+      "path": [
+        "vehicles",
+        "trailers",
+        "cargo_trailers"
+      ],
+      "fields": [
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "model",
+          "label": "Model"
+        },
+        {
+          "key": "year",
+          "label": "Year"
+        },
+        {
+          "key": "trailer_type",
+          "label": "Trailer type"
+        },
+        {
+          "key": "length",
+          "label": "Length"
+        },
+        {
+          "key": "width",
+          "label": "Width"
+        },
+        {
+          "key": "height",
+          "label": "Height"
+        },
+        {
+          "key": "gross_weight",
+          "label": "Gross weight"
+        },
+        {
+          "key": "empty_weight",
+          "label": "Empty weight"
+        },
+        {
+          "key": "payload",
+          "label": "Payload"
+        },
+        {
+          "key": "axles",
+          "label": "Axles"
+        },
+        {
+          "key": "brake_type",
+          "label": "Brake type"
+        },
+        {
+          "key": "vin_serial",
+          "label": "VIN / serial number"
+        },
+        {
+          "key": "registration_number",
+          "label": "Registration number"
+        },
+        {
+          "key": "inspection_valid_until",
+          "label": "Inspection valid until"
+        }
+      ]
+    },
+    {
+      "path": [
+        "vehicles",
+        "trailers",
+        "caravans"
+      ],
+      "fields": [
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "model",
+          "label": "Model"
+        },
+        {
+          "key": "year",
+          "label": "Year"
+        },
+        {
+          "key": "trailer_type",
+          "label": "Trailer type"
+        },
+        {
+          "key": "length",
+          "label": "Length"
+        },
+        {
+          "key": "width",
+          "label": "Width"
+        },
+        {
+          "key": "height",
+          "label": "Height"
+        },
+        {
+          "key": "gross_weight",
+          "label": "Gross weight"
+        },
+        {
+          "key": "empty_weight",
+          "label": "Empty weight"
+        },
+        {
+          "key": "payload",
+          "label": "Payload"
+        },
+        {
+          "key": "axles",
+          "label": "Axles"
+        },
+        {
+          "key": "brake_type",
+          "label": "Brake type"
+        },
+        {
+          "key": "vin_serial",
+          "label": "VIN / serial number"
+        },
+        {
+          "key": "registration_number",
+          "label": "Registration number"
+        },
+        {
+          "key": "inspection_valid_until",
+          "label": "Inspection valid until"
+        },
+        {
+          "key": "sleeping_places",
+          "label": "Sleeping places"
+        },
+        {
+          "key": "heating",
+          "label": "Heating"
+        },
+        {
+          "key": "kitchen",
+          "label": "Kitchen"
+        },
+        {
+          "key": "toilet_shower",
+          "label": "Toilet / shower"
+        },
+        {
+          "key": "awning",
+          "label": "Awning"
+        }
+      ]
+    },
+    {
+      "path": [
+        "vehicles",
+        "trailers",
+        "horse_livestock_trailers"
+      ],
+      "fields": [
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "model",
+          "label": "Model"
+        },
+        {
+          "key": "year",
+          "label": "Year"
+        },
+        {
+          "key": "trailer_type",
+          "label": "Trailer type"
+        },
+        {
+          "key": "length",
+          "label": "Length"
+        },
+        {
+          "key": "width",
+          "label": "Width"
+        },
+        {
+          "key": "height",
+          "label": "Height"
+        },
+        {
+          "key": "gross_weight",
+          "label": "Gross weight"
+        },
+        {
+          "key": "empty_weight",
+          "label": "Empty weight"
+        },
+        {
+          "key": "payload",
+          "label": "Payload"
+        },
+        {
+          "key": "axles",
+          "label": "Axles"
+        },
+        {
+          "key": "brake_type",
+          "label": "Brake type"
+        },
+        {
+          "key": "vin_serial",
+          "label": "VIN / serial number"
+        },
+        {
+          "key": "registration_number",
+          "label": "Registration number"
+        },
+        {
+          "key": "inspection_valid_until",
+          "label": "Inspection valid until"
+        }
+      ]
+    },
+    {
+      "path": [
+        "vehicles",
+        "vehicle_parts"
+      ],
+      "fields": []
+    },
+    {
+      "path": [
+        "vehicles",
+        "vehicle_parts",
+        "engines_engine_parts"
+      ],
+      "fields": [
+        {
+          "key": "part_name",
+          "label": "Part name"
+        },
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "engine_type",
+          "label": "Engine type"
+        },
+        {
+          "key": "fits_brand",
+          "label": "Fits brand"
+        },
+        {
+          "key": "fits_model",
+          "label": "Fits model"
+        },
+        {
+          "key": "part_number",
+          "label": "Part number"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        }
+      ]
+    },
+    {
+      "path": [
+        "vehicles",
+        "vehicle_parts",
+        "transmission_drivetrain"
+      ],
+      "fields": [
+        {
+          "key": "part_name",
+          "label": "Part name"
+        },
+        {
+          "key": "gearbox_type",
+          "label": "Gearbox type"
+        },
+        {
+          "key": "drivetrain_type",
+          "label": "Drivetrain type"
+        },
+        {
+          "key": "fits_brand",
+          "label": "Fits brand"
+        },
+        {
+          "key": "fits_model",
+          "label": "Fits model"
+        },
+        {
+          "key": "part_number",
+          "label": "Part number"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        }
+      ]
+    },
+    {
+      "path": [
+        "vehicles",
+        "vehicle_parts",
+        "suspension_steering"
+      ],
+      "fields": [
+        {
+          "key": "part_name",
+          "label": "Part name"
+        },
+        {
+          "key": "side_position",
+          "label": "Side / position"
+        },
+        {
+          "key": "fits_brand",
+          "label": "Fits brand"
+        },
+        {
+          "key": "fits_model",
+          "label": "Fits model"
+        },
+        {
+          "key": "part_number",
+          "label": "Part number"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        }
+      ]
+    },
+    {
+      "path": [
+        "vehicles",
+        "vehicle_parts",
+        "brakes"
+      ],
+      "fields": [
+        {
+          "key": "brake_type",
+          "label": "Brake type"
+        },
+        {
+          "key": "side_position",
+          "label": "Side / position"
+        },
+        {
+          "key": "fits_brand",
+          "label": "Fits brand"
+        },
+        {
+          "key": "fits_model",
+          "label": "Fits model"
+        },
+        {
+          "key": "part_number",
+          "label": "Part number"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        }
+      ]
+    },
+    {
+      "path": [
+        "vehicles",
+        "vehicle_parts",
+        "electrical_parts"
+      ],
+      "fields": [
+        {
+          "key": "part_name",
+          "label": "Part name"
+        },
+        {
+          "key": "voltage",
+          "label": "Voltage"
+        },
+        {
+          "key": "fits_brand",
+          "label": "Fits brand"
+        },
+        {
+          "key": "fits_model",
+          "label": "Fits model"
+        },
+        {
+          "key": "part_number",
+          "label": "Part number"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        }
+      ]
+    },
+    {
+      "path": [
+        "vehicles",
+        "vehicle_parts",
+        "batteries"
+      ],
+      "fields": [
+        {
+          "key": "battery_type",
+          "label": "Battery type"
+        },
+        {
+          "key": "capacity",
+          "label": "Capacity"
+        },
+        {
+          "key": "voltage",
+          "label": "Voltage"
+        },
+        {
+          "key": "cca",
+          "label": "CCA"
+        },
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "model",
+          "label": "Model"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        }
+      ]
+    },
+    {
+      "path": [
+        "vehicles",
+        "vehicle_parts",
+        "starters_alternators"
+      ],
+      "fields": [
+        {
+          "key": "part_type",
+          "label": "Part type"
+        },
+        {
+          "key": "voltage",
+          "label": "Voltage"
+        },
+        {
+          "key": "power_rating",
+          "label": "Power rating"
+        },
+        {
+          "key": "fits_brand",
+          "label": "Fits brand"
+        },
+        {
+          "key": "fits_model",
+          "label": "Fits model"
+        },
+        {
+          "key": "part_number",
+          "label": "Part number"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        }
+      ]
+    },
+    {
+      "path": [
+        "vehicles",
+        "vehicle_parts",
+        "body_parts"
+      ],
+      "fields": [
+        {
+          "key": "body_part_type",
+          "label": "Body part type"
+        },
+        {
+          "key": "side_position",
+          "label": "Side / position"
+        },
+        {
+          "key": "color",
+          "label": "Color"
+        },
+        {
+          "key": "fits_brand",
+          "label": "Fits brand"
+        },
+        {
+          "key": "fits_model",
+          "label": "Fits model"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        }
+      ]
+    },
+    {
+      "path": [
+        "vehicles",
+        "vehicle_parts",
+        "lights_lamps"
+      ],
+      "fields": [
+        {
+          "key": "light_type",
+          "label": "Light type"
+        },
+        {
+          "key": "technology",
+          "label": "Technology"
+        },
+        {
+          "key": "side_position",
+          "label": "Side / position"
+        },
+        {
+          "key": "fits_brand",
+          "label": "Fits brand"
+        },
+        {
+          "key": "fits_model",
+          "label": "Fits model"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        }
+      ]
+    },
+    {
+      "path": [
+        "vehicles",
+        "vehicle_parts",
+        "interior_parts"
+      ],
+      "fields": [
+        {
+          "key": "interior_part_type",
+          "label": "Interior part type"
+        },
+        {
+          "key": "material",
+          "label": "Material"
+        },
+        {
+          "key": "color",
+          "label": "Color"
+        },
+        {
+          "key": "fits_brand",
+          "label": "Fits brand"
+        },
+        {
+          "key": "fits_model",
+          "label": "Fits model"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        }
+      ]
+    },
+    {
+      "path": [
+        "vehicles",
+        "vehicle_parts",
+        "exhaust_parts"
+      ],
+      "fields": [
+        {
+          "key": "exhaust_part_type",
+          "label": "Exhaust part type"
+        },
+        {
+          "key": "material",
+          "label": "Material"
+        },
+        {
+          "key": "fits_brand",
+          "label": "Fits brand"
+        },
+        {
+          "key": "fits_model",
+          "label": "Fits model"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        }
+      ]
+    },
+    {
+      "path": [
+        "vehicles",
+        "vehicle_parts",
+        "cooling_heating"
+      ],
+      "fields": [
+        {
+          "key": "part_type",
+          "label": "Part type"
+        },
+        {
+          "key": "coolant_type",
+          "label": "Coolant type"
+        },
+        {
+          "key": "fits_brand",
+          "label": "Fits brand"
+        },
+        {
+          "key": "fits_model",
+          "label": "Fits model"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        }
+      ]
+    },
+    {
+      "path": [
+        "vehicles",
+        "vehicle_parts",
+        "fuel_system"
+      ],
+      "fields": [
+        {
+          "key": "fuel_system_part",
+          "label": "Fuel system part"
+        },
+        {
+          "key": "fuel_type",
+          "label": "Fuel type"
+        },
+        {
+          "key": "fits_brand",
+          "label": "Fits brand"
+        },
+        {
+          "key": "fits_model",
+          "label": "Fits model"
+        },
+        {
+          "key": "part_number",
+          "label": "Part number"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        }
+      ]
+    },
+    {
+      "path": [
+        "vehicles",
+        "vehicle_parts",
+        "tires"
+      ],
+      "fields": [
+        {
+          "key": "width",
+          "label": "Width"
+        },
+        {
+          "key": "profile",
+          "label": "Profile"
+        },
+        {
+          "key": "diameter",
+          "label": "Diameter"
+        },
+        {
+          "key": "season",
+          "label": "Season"
+        },
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "model",
+          "label": "Model"
+        },
+        {
+          "key": "load_index",
+          "label": "Load index"
+        },
+        {
+          "key": "speed_index",
+          "label": "Speed index"
+        },
+        {
+          "key": "tread_depth",
+          "label": "Tread depth"
+        },
+        {
+          "key": "quantity",
+          "label": "Quantity"
+        },
+        {
+          "key": "dot_year",
+          "label": "DOT year"
+        }
+      ]
+    },
+    {
+      "path": [
+        "vehicles",
+        "vehicle_parts",
+        "wheels_rims"
+      ],
+      "fields": [
+        {
+          "key": "diameter",
+          "label": "Diameter"
+        },
+        {
+          "key": "width",
+          "label": "Width"
+        },
+        {
+          "key": "bolt_pattern",
+          "label": "Bolt pattern"
+        },
+        {
+          "key": "offset",
+          "label": "ET / offset"
+        },
+        {
+          "key": "center_bore",
+          "label": "Center bore"
+        },
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "model",
+          "label": "Model"
+        },
+        {
+          "key": "material",
+          "label": "Material"
+        },
+        {
+          "key": "quantity",
+          "label": "Quantity"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        }
+      ]
+    },
+    {
+      "path": [
+        "vehicles",
+        "vehicle_parts",
+        "accessories"
+      ],
+      "fields": [
+        {
+          "key": "accessory_type",
+          "label": "Accessory type"
+        },
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "model",
+          "label": "Model"
+        },
+        {
+          "key": "fits_brand",
+          "label": "Fits brand"
+        },
+        {
+          "key": "fits_model",
+          "label": "Fits model"
+        },
+        {
+          "key": "part_number",
+          "label": "Part number"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        }
+      ]
+    },
+    {
+      "path": [
+        "vehicles",
+        "vehicle_parts",
+        "riding_racing_gear"
+      ],
+      "fields": [
+        {
+          "key": "gear_type",
+          "label": "Gear type"
+        },
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "size",
+          "label": "Size"
+        },
+        {
+          "key": "discipline",
+          "label": "Discipline"
+        },
+        {
+          "key": "certification",
+          "label": "Certification"
+        },
+        {
+          "key": "material",
+          "label": "Material"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        }
+      ]
+    },
+    {
+      "path": [
+        "vehicles",
+        "vehicle_parts",
+        "spare_parts"
+      ],
+      "fields": [
+        {
+          "key": "part_name",
+          "label": "Part name"
+        },
+        {
+          "key": "manufacturer",
+          "label": "Manufacturer"
+        },
+        {
+          "key": "part_number",
+          "label": "Part number"
+        },
+        {
+          "key": "oem_number",
+          "label": "OEM number"
+        },
+        {
+          "key": "fits_brand",
+          "label": "Fits brand"
+        },
+        {
+          "key": "fits_model",
+          "label": "Fits model"
+        },
+        {
+          "key": "fits_generation",
+          "label": "Fits generation / body code"
+        },
+        {
+          "key": "fits_year_from",
+          "label": "Fits year from"
+        },
+        {
+          "key": "fits_year_to",
+          "label": "Fits year to"
+        },
+        {
+          "key": "fits_engine",
+          "label": "Fits engine"
+        },
+        {
+          "key": "fits_gearbox",
+          "label": "Fits gearbox"
+        },
+        {
+          "key": "side_position",
+          "label": "Side / position"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        }
+      ]
+    },
+    {
+      "path": [
+        "vehicles",
+        "vehicle_parts",
+        "vehicle_for_parts"
+      ],
+      "fields": [
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "model",
+          "label": "Model"
+        },
+        {
+          "key": "year",
+          "label": "Year"
+        },
+        {
+          "key": "generation",
+          "label": "Generation / body code"
+        },
+        {
+          "key": "fuel",
+          "label": "Fuel"
+        },
+        {
+          "key": "engine",
+          "label": "Engine"
+        },
+        {
+          "key": "gearbox",
+          "label": "Gearbox"
+        },
+        {
+          "key": "drivetrain",
+          "label": "Drivetrain"
+        },
+        {
+          "key": "mileage",
+          "label": "Mileage"
+        },
+        {
+          "key": "vin",
+          "label": "VIN"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        },
+        {
+          "key": "available_parts",
+          "label": "Available parts"
+        }
+      ]
+    },
+    {
+      "path": [
+        "electronics",
+        "phones"
+      ],
+      "fields": [
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "model",
+          "label": "Model"
+        },
+        {
+          "key": "storage",
+          "label": "Storage"
+        },
+        {
+          "key": "ram",
+          "label": "RAM"
+        },
+        {
+          "key": "color",
+          "label": "Color"
+        },
+        {
+          "key": "sim_type",
+          "label": "SIM type"
+        },
+        {
+          "key": "battery_health",
+          "label": "Battery health"
+        },
+        {
+          "key": "screen_condition",
+          "label": "Screen condition"
+        },
+        {
+          "key": "network_lock",
+          "label": "Network lock"
+        },
+        {
+          "key": "imei_serial",
+          "label": "IMEI / serial number"
+        },
+        {
+          "key": "included_accessories",
+          "label": "Included accessories"
+        }
+      ]
+    },
+    {
+      "path": [
+        "electronics",
+        "computers"
+      ],
+      "fields": [
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "model",
+          "label": "Model"
+        },
+        {
+          "key": "processor",
+          "label": "Processor"
+        },
+        {
+          "key": "ram",
+          "label": "RAM"
+        },
+        {
+          "key": "storage",
+          "label": "Storage"
+        },
+        {
+          "key": "graphics_card",
+          "label": "Graphics card"
+        },
+        {
+          "key": "screen_size",
+          "label": "Screen size"
+        },
+        {
+          "key": "operating_system",
+          "label": "Operating system"
+        },
+        {
+          "key": "battery_health",
+          "label": "Battery health"
+        },
+        {
+          "key": "serial_number",
+          "label": "Serial number"
+        },
+        {
+          "key": "included_accessories",
+          "label": "Included accessories"
+        }
+      ]
+    },
+    {
+      "path": [
+        "electronics",
+        "tv_audio"
+      ],
+      "fields": [
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "model",
+          "label": "Model"
+        },
+        {
+          "key": "screen_size",
+          "label": "Screen size"
+        },
+        {
+          "key": "display_type",
+          "label": "Display type"
+        },
+        {
+          "key": "resolution",
+          "label": "Resolution"
+        },
+        {
+          "key": "smart_tv",
+          "label": "Smart TV"
+        },
+        {
+          "key": "audio_type",
+          "label": "Audio type"
+        },
+        {
+          "key": "power_output",
+          "label": "Power output"
+        },
+        {
+          "key": "connections",
+          "label": "Connections"
+        },
+        {
+          "key": "remote_included",
+          "label": "Remote included"
+        },
+        {
+          "key": "serial_number",
+          "label": "Serial number"
+        }
+      ]
+    },
+    {
+      "path": [
+        "electronics",
+        "cameras"
+      ],
+      "fields": [
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "model",
+          "label": "Model"
+        },
+        {
+          "key": "camera_type",
+          "label": "Camera type"
+        },
+        {
+          "key": "lens_included",
+          "label": "Lens included"
+        },
+        {
+          "key": "sensor_size",
+          "label": "Sensor size"
+        },
+        {
+          "key": "megapixels",
+          "label": "Megapixels"
+        },
+        {
+          "key": "shutter_count",
+          "label": "Shutter count"
+        },
+        {
+          "key": "video_resolution",
+          "label": "Video resolution"
+        },
+        {
+          "key": "battery_count",
+          "label": "Battery count"
+        },
+        {
+          "key": "memory_card_included",
+          "label": "Memory card included"
+        },
+        {
+          "key": "serial_number",
+          "label": "Serial number"
+        }
+      ]
+    },
+    {
+      "path": [
+        "electronics",
+        "gaming"
+      ],
+      "fields": [
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "model",
+          "label": "Model"
+        },
+        {
+          "key": "platform",
+          "label": "Platform"
+        },
+        {
+          "key": "storage",
+          "label": "Storage"
+        },
+        {
+          "key": "controller_count",
+          "label": "Controller count"
+        },
+        {
+          "key": "game_count",
+          "label": "Game count"
+        },
+        {
+          "key": "included_accessories",
+          "label": "Included accessories"
+        },
+        {
+          "key": "serial_number",
+          "label": "Serial number"
+        }
+      ]
+    },
+    {
+      "path": [
+        "electronics",
+        "smart_home"
+      ],
+      "fields": [
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "model",
+          "label": "Model"
+        },
+        {
+          "key": "device_type",
+          "label": "Device type"
+        },
+        {
+          "key": "compatibility",
+          "label": "Compatibility"
+        },
+        {
+          "key": "connection_type",
+          "label": "Connection type"
+        },
+        {
+          "key": "power_type",
+          "label": "Power type"
+        },
+        {
+          "key": "app_support",
+          "label": "App support"
+        },
+        {
+          "key": "included_accessories",
+          "label": "Included accessories"
+        },
+        {
+          "key": "serial_number",
+          "label": "Serial number"
+        }
+      ]
+    },
+    {
+      "path": [
+        "electronics",
+        "components"
+      ],
+      "fields": [
+        {
+          "key": "component_type",
+          "label": "Component type"
+        },
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "model",
+          "label": "Model"
+        },
+        {
+          "key": "socket_compatibility",
+          "label": "Socket / compatibility"
+        },
+        {
+          "key": "capacity",
+          "label": "Capacity"
+        },
+        {
+          "key": "speed",
+          "label": "Speed"
+        },
+        {
+          "key": "power_rating",
+          "label": "Power rating"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        },
+        {
+          "key": "serial_number",
+          "label": "Serial number"
+        }
+      ]
+    },
+    {
+      "path": [
+        "electronics",
+        "electronics_accessories"
+      ],
+      "fields": [
+        {
+          "key": "accessory_type",
+          "label": "Accessory type"
+        },
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "model",
+          "label": "Model"
+        },
+        {
+          "key": "compatibility",
+          "label": "Compatibility"
+        },
+        {
+          "key": "connection_type",
+          "label": "Connection type"
+        },
+        {
+          "key": "color",
+          "label": "Color"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        },
+        {
+          "key": "quantity",
+          "label": "Quantity"
+        }
+      ]
+    },
+    {
+      "path": [
+        "electronics",
+        "other_electronics"
+      ],
+      "fields": [
+        {
+          "key": "item_type",
+          "label": "Item type"
+        },
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "model",
+          "label": "Model"
+        },
+        {
+          "key": "material",
+          "label": "Material"
+        },
+        {
+          "key": "color",
+          "label": "Color"
+        },
+        {
+          "key": "size",
+          "label": "Size"
+        },
+        {
+          "key": "dimensions",
+          "label": "Dimensions"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        },
+        {
+          "key": "quantity",
+          "label": "Quantity"
+        },
+        {
+          "key": "included_accessories",
+          "label": "Included accessories"
+        }
+      ]
+    },
+    {
+      "path": [
+        "real_estate",
+        "apartments"
+      ],
+      "fields": [
+        {
+          "key": "listing_type",
+          "label": "Listing type"
+        },
+        {
+          "key": "property_type",
+          "label": "Property type"
+        },
+        {
+          "key": "rooms",
+          "label": "Rooms"
+        },
+        {
+          "key": "area",
+          "label": "Area (m²)"
+        },
+        {
+          "key": "floor",
+          "label": "Floor"
+        },
+        {
+          "key": "total_floors",
+          "label": "Total floors"
+        },
+        {
+          "key": "year_built",
+          "label": "Year built"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        },
+        {
+          "key": "heating_type",
+          "label": "Heating type"
+        },
+        {
+          "key": "energy_class",
+          "label": "Energy class"
+        },
+        {
+          "key": "balcony",
+          "label": "Balcony"
+        },
+        {
+          "key": "furnished",
+          "label": "Furnished"
+        },
+        {
+          "key": "parking",
+          "label": "Parking"
+        },
+        {
+          "key": "storage_room",
+          "label": "Storage room"
+        },
+        {
+          "key": "bathroom_count",
+          "label": "Bathroom count"
+        },
+        {
+          "key": "district",
+          "label": "District / neighborhood"
+        }
+      ]
+    },
+    {
+      "path": [
+        "real_estate",
+        "houses"
+      ],
+      "fields": [
+        {
+          "key": "listing_type",
+          "label": "Listing type"
+        },
+        {
+          "key": "house_type",
+          "label": "House type"
+        },
+        {
+          "key": "rooms",
+          "label": "Rooms"
+        },
+        {
+          "key": "living_area",
+          "label": "Living area (m²)"
+        },
+        {
+          "key": "land_area",
+          "label": "Land area"
+        },
+        {
+          "key": "floors",
+          "label": "Floors"
+        },
+        {
+          "key": "year_built",
+          "label": "Year built"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        },
+        {
+          "key": "heating_type",
+          "label": "Heating type"
+        },
+        {
+          "key": "energy_class",
+          "label": "Energy class"
+        },
+        {
+          "key": "garage",
+          "label": "Garage"
+        },
+        {
+          "key": "sauna",
+          "label": "Sauna"
+        },
+        {
+          "key": "terrace",
+          "label": "Terrace"
+        },
+        {
+          "key": "water_supply",
+          "label": "Water supply"
+        },
+        {
+          "key": "sewer_connection",
+          "label": "Sewer connection"
+        },
+        {
+          "key": "district",
+          "label": "District / neighborhood"
+        }
+      ]
+    },
+    {
+      "path": [
+        "real_estate",
+        "land"
+      ],
+      "fields": [
+        {
+          "key": "land_type",
+          "label": "Land type"
+        },
+        {
+          "key": "area",
+          "label": "Area"
+        },
+        {
+          "key": "purpose",
+          "label": "Purpose"
+        },
+        {
+          "key": "detailed_plan",
+          "label": "Detailed plan"
+        },
+        {
+          "key": "electricity",
+          "label": "Electricity"
+        },
+        {
+          "key": "water",
+          "label": "Water"
+        },
+        {
+          "key": "sewer",
+          "label": "Sewer"
+        },
+        {
+          "key": "road_access",
+          "label": "Road access"
+        },
+        {
+          "key": "district",
+          "label": "District / neighborhood"
+        }
+      ]
+    },
+    {
+      "path": [
+        "real_estate",
+        "commercial_property"
+      ],
+      "fields": [
+        {
+          "key": "property_type",
+          "label": "Property type"
+        },
+        {
+          "key": "area",
+          "label": "Area"
+        },
+        {
+          "key": "floor",
+          "label": "Floor"
+        },
+        {
+          "key": "purpose",
+          "label": "Purpose"
+        },
+        {
+          "key": "parking",
+          "label": "Parking"
+        },
+        {
+          "key": "loading_access",
+          "label": "Loading access"
+        },
+        {
+          "key": "heating",
+          "label": "Heating"
+        },
+        {
+          "key": "security",
+          "label": "Security"
+        },
+        {
+          "key": "district",
+          "label": "District / neighborhood"
+        }
+      ]
+    },
+    {
+      "path": [
+        "real_estate",
+        "garages"
+      ],
+      "fields": [
+        {
+          "key": "area",
+          "label": "Area"
+        },
+        {
+          "key": "electricity",
+          "label": "Electricity"
+        },
+        {
+          "key": "heating",
+          "label": "Heating"
+        },
+        {
+          "key": "security",
+          "label": "Security"
+        },
+        {
+          "key": "water",
+          "label": "Water"
+        },
+        {
+          "key": "district",
+          "label": "District / neighborhood"
+        }
+      ]
+    },
+    {
+      "path": [
+        "real_estate",
+        "vacation_property"
+      ],
+      "fields": [
+        {
+          "key": "property_type",
+          "label": "Property type"
+        },
+        {
+          "key": "rooms",
+          "label": "Rooms"
+        },
+        {
+          "key": "area",
+          "label": "Area"
+        },
+        {
+          "key": "beds",
+          "label": "Beds"
+        },
+        {
+          "key": "sauna",
+          "label": "Sauna"
+        },
+        {
+          "key": "pool",
+          "label": "Pool"
+        },
+        {
+          "key": "beach_access",
+          "label": "Beach access"
+        },
+        {
+          "key": "seasonal_year_round",
+          "label": "Seasonal / year-round"
+        },
+        {
+          "key": "district",
+          "label": "District / neighborhood"
+        }
+      ]
+    },
+    {
+      "path": [
+        "clothing_fashion",
+        "men"
+      ],
+      "fields": [
+        {
+          "key": "category_type",
+          "label": "Category type"
+        },
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "size",
+          "label": "Size"
+        },
+        {
+          "key": "fit",
+          "label": "Fit"
+        },
+        {
+          "key": "color",
+          "label": "Color"
+        },
+        {
+          "key": "material",
+          "label": "Material"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        },
+        {
+          "key": "season",
+          "label": "Season"
+        },
+        {
+          "key": "authenticity",
+          "label": "Authenticity"
+        },
+        {
+          "key": "included_accessories",
+          "label": "Included accessories"
+        }
+      ]
+    },
+    {
+      "path": [
+        "clothing_fashion",
+        "women"
+      ],
+      "fields": [
+        {
+          "key": "category_type",
+          "label": "Category type"
+        },
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "size",
+          "label": "Size"
+        },
+        {
+          "key": "fit",
+          "label": "Fit"
+        },
+        {
+          "key": "color",
+          "label": "Color"
+        },
+        {
+          "key": "material",
+          "label": "Material"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        },
+        {
+          "key": "season",
+          "label": "Season"
+        },
+        {
+          "key": "authenticity",
+          "label": "Authenticity"
+        },
+        {
+          "key": "included_accessories",
+          "label": "Included accessories"
+        }
+      ]
+    },
+    {
+      "path": [
+        "clothing_fashion",
+        "kids"
+      ],
+      "fields": [
+        {
+          "key": "category_type",
+          "label": "Category type"
+        },
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "size_age",
+          "label": "Size / age"
+        },
+        {
+          "key": "gender",
+          "label": "Gender"
+        },
+        {
+          "key": "color",
+          "label": "Color"
+        },
+        {
+          "key": "material",
+          "label": "Material"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        },
+        {
+          "key": "season",
+          "label": "Season"
+        }
+      ]
+    },
+    {
+      "path": [
+        "clothing_fashion",
+        "workwear"
+      ],
+      "fields": [
+        {
+          "key": "workwear_type",
+          "label": "Workwear type"
+        },
+        {
+          "key": "gender",
+          "label": "Gender"
+        },
+        {
+          "key": "size",
+          "label": "Size"
+        },
+        {
+          "key": "industry",
+          "label": "Industry"
+        },
+        {
+          "key": "season",
+          "label": "Season"
+        },
+        {
+          "key": "visibility_class",
+          "label": "Visibility class"
+        },
+        {
+          "key": "protection_class",
+          "label": "Protection class"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        }
+      ]
+    },
+    {
+      "path": [
+        "clothing_fashion",
+        "shoes"
+      ],
+      "fields": [
+        {
+          "key": "gender",
+          "label": "Gender"
+        },
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "model",
+          "label": "Model"
+        },
+        {
+          "key": "size",
+          "label": "Size"
+        },
+        {
+          "key": "color",
+          "label": "Color"
+        },
+        {
+          "key": "material",
+          "label": "Material"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        },
+        {
+          "key": "season",
+          "label": "Season"
+        },
+        {
+          "key": "heel_height",
+          "label": "Heel height"
+        },
+        {
+          "key": "authenticity",
+          "label": "Authenticity"
+        },
+        {
+          "key": "original_box_included",
+          "label": "Original box included"
+        }
+      ]
+    },
+    {
+      "path": [
+        "clothing_fashion",
+        "watches"
+      ],
+      "fields": [
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "model",
+          "label": "Model"
+        },
+        {
+          "key": "movement_type",
+          "label": "Movement type"
+        },
+        {
+          "key": "case_material",
+          "label": "Case material"
+        },
+        {
+          "key": "case_size",
+          "label": "Case size"
+        },
+        {
+          "key": "water_resistance",
+          "label": "Water resistance"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        },
+        {
+          "key": "box_papers_included",
+          "label": "Box / papers included"
+        },
+        {
+          "key": "authenticity",
+          "label": "Authenticity"
+        },
+        {
+          "key": "serial_number",
+          "label": "Serial number"
+        }
+      ]
+    },
+    {
+      "path": [
+        "clothing_fashion",
+        "bags"
+      ],
+      "fields": [
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "model",
+          "label": "Model"
+        },
+        {
+          "key": "material",
+          "label": "Material"
+        },
+        {
+          "key": "color",
+          "label": "Color"
+        },
+        {
+          "key": "size",
+          "label": "Size"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        },
+        {
+          "key": "authenticity",
+          "label": "Authenticity"
+        },
+        {
+          "key": "dust_bag_box_included",
+          "label": "Dust bag / box included"
+        },
+        {
+          "key": "serial_number",
+          "label": "Serial number"
+        }
+      ]
+    },
+    {
+      "path": [
+        "clothing_fashion",
+        "jewelry"
+      ],
+      "fields": [
+        {
+          "key": "jewelry_type",
+          "label": "Jewelry type"
+        },
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "material",
+          "label": "Material"
+        },
+        {
+          "key": "gemstone",
+          "label": "Gemstone"
+        },
+        {
+          "key": "size",
+          "label": "Size"
+        },
+        {
+          "key": "weight",
+          "label": "Weight"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        },
+        {
+          "key": "authenticity",
+          "label": "Authenticity"
+        },
+        {
+          "key": "certificate_included",
+          "label": "Certificate included"
+        }
+      ]
+    },
+    {
+      "path": [
+        "clothing_fashion",
+        "other_clothing_fashion"
+      ],
+      "fields": [
+        {
+          "key": "item_type",
+          "label": "Item type"
+        },
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "model",
+          "label": "Model"
+        },
+        {
+          "key": "material",
+          "label": "Material"
+        },
+        {
+          "key": "color",
+          "label": "Color"
+        },
+        {
+          "key": "size",
+          "label": "Size"
+        },
+        {
+          "key": "dimensions",
+          "label": "Dimensions"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        },
+        {
+          "key": "quantity",
+          "label": "Quantity"
+        },
+        {
+          "key": "included_accessories",
+          "label": "Included accessories"
+        }
+      ]
+    },
+    {
+      "path": [
+        "tools_industrial",
+        "power_tools"
+      ],
+      "fields": [
+        {
+          "key": "tool_type",
+          "label": "Tool type"
+        },
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "model",
+          "label": "Model"
+        },
+        {
+          "key": "power_source",
+          "label": "Power source"
+        },
+        {
+          "key": "voltage",
+          "label": "Voltage"
+        },
+        {
+          "key": "power_rating",
+          "label": "Power rating"
+        },
+        {
+          "key": "battery_included",
+          "label": "Battery included"
+        },
+        {
+          "key": "battery_count",
+          "label": "Battery count"
+        },
+        {
+          "key": "charger_included",
+          "label": "Charger included"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        },
+        {
+          "key": "included_accessories",
+          "label": "Included accessories"
+        },
+        {
+          "key": "serial_number",
+          "label": "Serial number"
+        }
+      ]
+    },
+    {
+      "path": [
+        "tools_industrial",
+        "hand_tools"
+      ],
+      "fields": [
+        {
+          "key": "tool_type",
+          "label": "Tool type"
+        },
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "material",
+          "label": "Material"
+        },
+        {
+          "key": "size",
+          "label": "Size"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        },
+        {
+          "key": "set_single",
+          "label": "Set / single item"
+        },
+        {
+          "key": "included_accessories",
+          "label": "Included accessories"
+        }
+      ]
+    },
+    {
+      "path": [
+        "tools_industrial",
+        "workshop_equipment"
+      ],
+      "fields": [
+        {
+          "key": "equipment_type",
+          "label": "Equipment type"
+        },
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "model",
+          "label": "Model"
+        },
+        {
+          "key": "power_source",
+          "label": "Power source"
+        },
+        {
+          "key": "voltage",
+          "label": "Voltage"
+        },
+        {
+          "key": "capacity",
+          "label": "Capacity"
+        },
+        {
+          "key": "dimensions",
+          "label": "Dimensions"
+        },
+        {
+          "key": "weight",
+          "label": "Weight"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        },
+        {
+          "key": "included_accessories",
+          "label": "Included accessories"
+        },
+        {
+          "key": "serial_number",
+          "label": "Serial number"
+        }
+      ]
+    },
+    {
+      "path": [
+        "tools_industrial",
+        "industrial_equipment"
+      ],
+      "fields": [
+        {
+          "key": "equipment_type",
+          "label": "Equipment type"
+        },
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "model",
+          "label": "Model"
+        },
+        {
+          "key": "power_source",
+          "label": "Power source"
+        },
+        {
+          "key": "voltage",
+          "label": "Voltage"
+        },
+        {
+          "key": "capacity",
+          "label": "Capacity"
+        },
+        {
+          "key": "working_pressure",
+          "label": "Working pressure"
+        },
+        {
+          "key": "weight",
+          "label": "Weight"
+        },
+        {
+          "key": "dimensions",
+          "label": "Dimensions"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        },
+        {
+          "key": "serial_number",
+          "label": "Serial number"
+        }
+      ]
+    },
+    {
+      "path": [
+        "tools_industrial",
+        "safety_equipment"
+      ],
+      "fields": [
+        {
+          "key": "equipment_type",
+          "label": "Equipment type"
+        },
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "size",
+          "label": "Size"
+        },
+        {
+          "key": "certification",
+          "label": "Certification"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        },
+        {
+          "key": "expiration_date",
+          "label": "Expiration date"
+        },
+        {
+          "key": "included_accessories",
+          "label": "Included accessories"
+        }
+      ]
+    },
+    {
+      "path": [
+        "tools_industrial",
+        "other_tools_industrial"
+      ],
+      "fields": [
+        {
+          "key": "item_type",
+          "label": "Item type"
+        },
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "model",
+          "label": "Model"
+        },
+        {
+          "key": "material",
+          "label": "Material"
+        },
+        {
+          "key": "color",
+          "label": "Color"
+        },
+        {
+          "key": "size",
+          "label": "Size"
+        },
+        {
+          "key": "dimensions",
+          "label": "Dimensions"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        },
+        {
+          "key": "quantity",
+          "label": "Quantity"
+        },
+        {
+          "key": "included_accessories",
+          "label": "Included accessories"
+        }
+      ]
+    },
+    {
+      "path": [
+        "home_garden",
+        "furniture"
+      ],
+      "fields": [
+        {
+          "key": "furniture_type",
+          "label": "Furniture type"
+        },
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "material",
+          "label": "Material"
+        },
+        {
+          "key": "color",
+          "label": "Color"
+        },
+        {
+          "key": "dimensions",
+          "label": "Dimensions"
+        },
+        {
+          "key": "assembly_required",
+          "label": "Assembly required"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        },
+        {
+          "key": "included_accessories",
+          "label": "Included accessories"
+        }
+      ]
+    },
+    {
+      "path": [
+        "home_garden",
+        "appliances"
+      ],
+      "fields": [
+        {
+          "key": "appliance_type",
+          "label": "Appliance type"
+        },
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "model",
+          "label": "Model"
+        },
+        {
+          "key": "energy_class",
+          "label": "Energy class"
+        },
+        {
+          "key": "power_source",
+          "label": "Power source"
+        },
+        {
+          "key": "capacity",
+          "label": "Capacity"
+        },
+        {
+          "key": "dimensions",
+          "label": "Dimensions"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        },
+        {
+          "key": "warranty_remaining",
+          "label": "Warranty remaining"
+        },
+        {
+          "key": "included_accessories",
+          "label": "Included accessories"
+        },
+        {
+          "key": "serial_number",
+          "label": "Serial number"
+        }
+      ]
+    },
+    {
+      "path": [
+        "home_garden",
+        "garden_tools"
+      ],
+      "fields": [
+        {
+          "key": "tool_type",
+          "label": "Tool type"
+        },
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "model",
+          "label": "Model"
+        },
+        {
+          "key": "power_source",
+          "label": "Power source"
+        },
+        {
+          "key": "voltage",
+          "label": "Voltage"
+        },
+        {
+          "key": "battery_included",
+          "label": "Battery included"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        },
+        {
+          "key": "included_accessories",
+          "label": "Included accessories"
+        }
+      ]
+    },
+    {
+      "path": [
+        "home_garden",
+        "plants_seedlings"
+      ],
+      "fields": [
+        {
+          "key": "plant_type",
+          "label": "Plant type"
+        },
+        {
+          "key": "variety",
+          "label": "Variety"
+        },
+        {
+          "key": "quantity",
+          "label": "Quantity"
+        },
+        {
+          "key": "pot_size",
+          "label": "Pot size"
+        },
+        {
+          "key": "growth_stage",
+          "label": "Growth stage"
+        },
+        {
+          "key": "organic",
+          "label": "Organic"
+        }
+      ]
+    },
+    {
+      "path": [
+        "home_garden",
+        "seeds"
+      ],
+      "fields": [
+        {
+          "key": "seed_type",
+          "label": "Seed type"
+        },
+        {
+          "key": "variety",
+          "label": "Variety"
+        },
+        {
+          "key": "quantity",
+          "label": "Quantity"
+        },
+        {
+          "key": "package_weight",
+          "label": "Package weight"
+        },
+        {
+          "key": "sowing_season",
+          "label": "Sowing season"
+        },
+        {
+          "key": "organic",
+          "label": "Organic"
+        }
+      ]
+    },
+    {
+      "path": [
+        "home_garden",
+        "crops_produce"
+      ],
+      "fields": [
+        {
+          "key": "produce_type",
+          "label": "Produce type"
+        },
+        {
+          "key": "variety",
+          "label": "Variety"
+        },
+        {
+          "key": "quantity",
+          "label": "Quantity"
+        },
+        {
+          "key": "unit",
+          "label": "Unit"
+        },
+        {
+          "key": "harvest_date",
+          "label": "Harvest date"
+        },
+        {
+          "key": "organic",
+          "label": "Organic"
+        }
+      ]
+    },
+    {
+      "path": [
+        "home_garden",
+        "farm_supplies"
+      ],
+      "fields": [
+        {
+          "key": "supply_type",
+          "label": "Supply type"
+        },
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "quantity",
+          "label": "Quantity"
+        },
+        {
+          "key": "material",
+          "label": "Material"
+        },
+        {
+          "key": "intended_use",
+          "label": "Intended use"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        }
+      ]
+    },
+    {
+      "path": [
+        "home_garden",
+        "animal_feed"
+      ],
+      "fields": [
+        {
+          "key": "feed_type",
+          "label": "Feed type"
+        },
+        {
+          "key": "animal_type",
+          "label": "Animal type"
+        },
+        {
+          "key": "quantity",
+          "label": "Quantity"
+        },
+        {
+          "key": "package_weight",
+          "label": "Package weight"
+        },
+        {
+          "key": "ingredients",
+          "label": "Ingredients"
+        },
+        {
+          "key": "expiry_date",
+          "label": "Expiry date"
+        }
+      ]
+    },
+    {
+      "path": [
+        "home_garden",
+        "greenhouses"
+      ],
+      "fields": [
+        {
+          "key": "greenhouse_type",
+          "label": "Greenhouse type"
+        },
+        {
+          "key": "material",
+          "label": "Material"
+        },
+        {
+          "key": "length",
+          "label": "Length"
+        },
+        {
+          "key": "width",
+          "label": "Width"
+        },
+        {
+          "key": "height",
+          "label": "Height"
+        },
+        {
+          "key": "frame_material",
+          "label": "Frame material"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        }
+      ]
+    },
+    {
+      "path": [
+        "home_garden",
+        "decor"
+      ],
+      "fields": [
+        {
+          "key": "decor_type",
+          "label": "Decor type"
+        },
+        {
+          "key": "material",
+          "label": "Material"
+        },
+        {
+          "key": "color",
+          "label": "Color"
+        },
+        {
+          "key": "style",
+          "label": "Style"
+        },
+        {
+          "key": "dimensions",
+          "label": "Dimensions"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        }
+      ]
+    },
+    {
+      "path": [
+        "home_garden",
+        "lighting"
+      ],
+      "fields": [
+        {
+          "key": "lighting_type",
+          "label": "Lighting type"
+        },
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "power_source",
+          "label": "Power source"
+        },
+        {
+          "key": "bulb_type",
+          "label": "Bulb type"
+        },
+        {
+          "key": "color_temperature",
+          "label": "Color temperature"
+        },
+        {
+          "key": "smart_lighting_support",
+          "label": "Smart lighting support"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        },
+        {
+          "key": "included_accessories",
+          "label": "Included accessories"
+        }
+      ]
+    },
+    {
+      "path": [
+        "home_garden",
+        "kitchenware"
+      ],
+      "fields": [
+        {
+          "key": "item_type",
+          "label": "Item type"
+        },
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "material",
+          "label": "Material"
+        },
+        {
+          "key": "color",
+          "label": "Color"
+        },
+        {
+          "key": "size",
+          "label": "Size"
+        },
+        {
+          "key": "dimensions",
+          "label": "Dimensions"
+        },
+        {
+          "key": "capacity",
+          "label": "Capacity"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        },
+        {
+          "key": "quantity",
+          "label": "Quantity"
+        }
+      ]
+    },
+    {
+      "path": [
+        "home_garden",
+        "home_textiles"
+      ],
+      "fields": [
+        {
+          "key": "item_type",
+          "label": "Item type"
+        },
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "material",
+          "label": "Material"
+        },
+        {
+          "key": "color",
+          "label": "Color"
+        },
+        {
+          "key": "size",
+          "label": "Size"
+        },
+        {
+          "key": "dimensions",
+          "label": "Dimensions"
+        },
+        {
+          "key": "capacity",
+          "label": "Capacity"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        },
+        {
+          "key": "quantity",
+          "label": "Quantity"
+        }
+      ]
+    },
+    {
+      "path": [
+        "home_garden",
+        "household_supplies"
+      ],
+      "fields": [
+        {
+          "key": "item_type",
+          "label": "Item type"
+        },
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "material",
+          "label": "Material"
+        },
+        {
+          "key": "color",
+          "label": "Color"
+        },
+        {
+          "key": "size",
+          "label": "Size"
+        },
+        {
+          "key": "dimensions",
+          "label": "Dimensions"
+        },
+        {
+          "key": "capacity",
+          "label": "Capacity"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        },
+        {
+          "key": "quantity",
+          "label": "Quantity"
+        }
+      ]
+    },
+    {
+      "path": [
+        "home_garden",
+        "bathroom"
+      ],
+      "fields": [
+        {
+          "key": "item_type",
+          "label": "Item type"
+        },
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "material",
+          "label": "Material"
+        },
+        {
+          "key": "color",
+          "label": "Color"
+        },
+        {
+          "key": "size",
+          "label": "Size"
+        },
+        {
+          "key": "dimensions",
+          "label": "Dimensions"
+        },
+        {
+          "key": "capacity",
+          "label": "Capacity"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        },
+        {
+          "key": "quantity",
+          "label": "Quantity"
+        }
+      ]
+    },
+    {
+      "path": [
+        "home_garden",
+        "heating_fuels"
+      ],
+      "fields": [
+        {
+          "key": "fuel_type",
+          "label": "Fuel type"
+        },
+        {
+          "key": "wood_type",
+          "label": "Wood type"
+        },
+        {
+          "key": "quantity",
+          "label": "Quantity"
+        },
+        {
+          "key": "unit",
+          "label": "Unit"
+        },
+        {
+          "key": "moisture_level",
+          "label": "Moisture level"
+        },
+        {
+          "key": "packaging",
+          "label": "Packaging"
+        },
+        {
+          "key": "delivery_available",
+          "label": "Delivery available"
+        }
+      ]
+    },
+    {
+      "path": [
+        "home_garden",
+        "heating_equipment"
+      ],
+      "fields": [
+        {
+          "key": "equipment_type",
+          "label": "Equipment type"
+        },
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "model",
+          "label": "Model"
+        },
+        {
+          "key": "fuel_type",
+          "label": "Fuel type"
+        },
+        {
+          "key": "power",
+          "label": "Power"
+        },
+        {
+          "key": "dimensions",
+          "label": "Dimensions"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        },
+        {
+          "key": "included_accessories",
+          "label": "Included accessories"
+        }
+      ]
+    },
+    {
+      "path": [
+        "home_garden",
+        "outdoor_furniture"
+      ],
+      "fields": [
+        {
+          "key": "item_type",
+          "label": "Item type"
+        },
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "material",
+          "label": "Material"
+        },
+        {
+          "key": "color",
+          "label": "Color"
+        },
+        {
+          "key": "size",
+          "label": "Size"
+        },
+        {
+          "key": "dimensions",
+          "label": "Dimensions"
+        },
+        {
+          "key": "capacity",
+          "label": "Capacity"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        },
+        {
+          "key": "quantity",
+          "label": "Quantity"
+        }
+      ]
+    },
+    {
+      "path": [
+        "home_garden",
+        "other_home_garden"
+      ],
+      "fields": [
+        {
+          "key": "item_type",
+          "label": "Item type"
+        },
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "model",
+          "label": "Model"
+        },
+        {
+          "key": "material",
+          "label": "Material"
+        },
+        {
+          "key": "color",
+          "label": "Color"
+        },
+        {
+          "key": "size",
+          "label": "Size"
+        },
+        {
+          "key": "dimensions",
+          "label": "Dimensions"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        },
+        {
+          "key": "quantity",
+          "label": "Quantity"
+        },
+        {
+          "key": "included_accessories",
+          "label": "Included accessories"
+        }
+      ]
+    },
+    {
+      "path": [
+        "sports_outdoor",
+        "gym_equipment"
+      ],
+      "fields": [
+        {
+          "key": "equipment_type",
+          "label": "Equipment type"
+        },
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "model",
+          "label": "Model"
+        },
+        {
+          "key": "weight_resistance",
+          "label": "Weight / resistance"
+        },
+        {
+          "key": "dimensions",
+          "label": "Dimensions"
+        },
+        {
+          "key": "foldable",
+          "label": "Foldable"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        },
+        {
+          "key": "included_accessories",
+          "label": "Included accessories"
+        }
+      ]
+    },
+    {
+      "path": [
+        "sports_outdoor",
+        "bicycles"
+      ],
+      "fields": [
+        {
+          "key": "bike_type",
+          "label": "Bike type"
+        },
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "model",
+          "label": "Model"
+        },
+        {
+          "key": "frame_size",
+          "label": "Frame size"
+        },
+        {
+          "key": "wheel_size",
+          "label": "Wheel size"
+        },
+        {
+          "key": "material",
+          "label": "Material"
+        },
+        {
+          "key": "gear_count",
+          "label": "Gear count"
+        },
+        {
+          "key": "suspension",
+          "label": "Suspension"
+        },
+        {
+          "key": "brake_type",
+          "label": "Brake type"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        },
+        {
+          "key": "included_accessories",
+          "label": "Included accessories"
+        },
+        {
+          "key": "serial_number",
+          "label": "Serial number"
+        }
+      ]
+    },
+    {
+      "path": [
+        "sports_outdoor",
+        "winter_sports"
+      ],
+      "fields": [
+        {
+          "key": "equipment_type",
+          "label": "Equipment type"
+        },
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "model",
+          "label": "Model"
+        },
+        {
+          "key": "size",
+          "label": "Size"
+        },
+        {
+          "key": "binding_included",
+          "label": "Binding included"
+        },
+        {
+          "key": "boot_size",
+          "label": "Boot size"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        },
+        {
+          "key": "included_accessories",
+          "label": "Included accessories"
+        }
+      ]
+    },
+    {
+      "path": [
+        "sports_outdoor",
+        "camping"
+      ],
+      "fields": [
+        {
+          "key": "equipment_type",
+          "label": "Equipment type"
+        },
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "capacity",
+          "label": "Capacity"
+        },
+        {
+          "key": "weight",
+          "label": "Weight"
+        },
+        {
+          "key": "dimensions",
+          "label": "Dimensions"
+        },
+        {
+          "key": "season_rating",
+          "label": "Season rating"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        },
+        {
+          "key": "included_accessories",
+          "label": "Included accessories"
+        }
+      ]
+    },
+    {
+      "path": [
+        "sports_outdoor",
+        "fishing"
+      ],
+      "fields": [
+        {
+          "key": "equipment_type",
+          "label": "Equipment type"
+        },
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "model",
+          "label": "Model"
+        },
+        {
+          "key": "length",
+          "label": "Length"
+        },
+        {
+          "key": "power_rating",
+          "label": "Power rating"
+        },
+        {
+          "key": "reel_included",
+          "label": "Reel included"
+        },
+        {
+          "key": "line_included",
+          "label": "Line included"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        },
+        {
+          "key": "included_accessories",
+          "label": "Included accessories"
+        }
+      ]
+    },
+    {
+      "path": [
+        "sports_outdoor",
+        "other_sports_outdoor"
+      ],
+      "fields": [
+        {
+          "key": "item_type",
+          "label": "Item type"
+        },
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "model",
+          "label": "Model"
+        },
+        {
+          "key": "material",
+          "label": "Material"
+        },
+        {
+          "key": "color",
+          "label": "Color"
+        },
+        {
+          "key": "size",
+          "label": "Size"
+        },
+        {
+          "key": "dimensions",
+          "label": "Dimensions"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        },
+        {
+          "key": "quantity",
+          "label": "Quantity"
+        },
+        {
+          "key": "included_accessories",
+          "label": "Included accessories"
+        }
+      ]
+    },
+    {
+      "path": [
+        "sports_outdoor",
+        "equestrian_horse_supplies"
+      ],
+      "fields": []
+    },
+    {
+      "path": [
+        "sports_outdoor",
+        "equestrian_horse_supplies",
+        "saddles_accessories"
+      ],
+      "fields": [
+        {
+          "key": "item_type",
+          "label": "Item type"
+        },
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "model",
+          "label": "Model"
+        },
+        {
+          "key": "discipline",
+          "label": "Discipline"
+        },
+        {
+          "key": "horse_size",
+          "label": "Horse size"
+        },
+        {
+          "key": "seat_size",
+          "label": "Seat size"
+        },
+        {
+          "key": "material",
+          "label": "Material"
+        },
+        {
+          "key": "color",
+          "label": "Color"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        },
+        {
+          "key": "included_accessories",
+          "label": "Included accessories"
+        }
+      ]
+    },
+    {
+      "path": [
+        "sports_outdoor",
+        "equestrian_horse_supplies",
+        "bridles_halters_tack"
+      ],
+      "fields": [
+        {
+          "key": "item_type",
+          "label": "Item type"
+        },
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "model",
+          "label": "Model"
+        },
+        {
+          "key": "discipline",
+          "label": "Discipline"
+        },
+        {
+          "key": "horse_size",
+          "label": "Horse size"
+        },
+        {
+          "key": "seat_size",
+          "label": "Seat size"
+        },
+        {
+          "key": "material",
+          "label": "Material"
+        },
+        {
+          "key": "color",
+          "label": "Color"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        },
+        {
+          "key": "included_accessories",
+          "label": "Included accessories"
+        }
+      ]
+    },
+    {
+      "path": [
+        "sports_outdoor",
+        "equestrian_horse_supplies",
+        "rider_clothing_safety"
+      ],
+      "fields": [
+        {
+          "key": "item_type",
+          "label": "Item type"
+        },
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "size",
+          "label": "Size"
+        },
+        {
+          "key": "gender",
+          "label": "Gender"
+        },
+        {
+          "key": "discipline",
+          "label": "Discipline"
+        },
+        {
+          "key": "safety_standard",
+          "label": "Safety standard"
+        },
+        {
+          "key": "material",
+          "label": "Material"
+        },
+        {
+          "key": "color",
+          "label": "Color"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        }
+      ]
+    },
+    {
+      "path": [
+        "sports_outdoor",
+        "equestrian_horse_supplies",
+        "horse_blankets_textiles"
+      ],
+      "fields": [
+        {
+          "key": "item_type",
+          "label": "Item type"
+        },
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "horse_size",
+          "label": "Horse size"
+        },
+        {
+          "key": "blanket_weight",
+          "label": "Blanket weight"
+        },
+        {
+          "key": "material",
+          "label": "Material"
+        },
+        {
+          "key": "color",
+          "label": "Color"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        }
+      ]
+    },
+    {
+      "path": [
+        "sports_outdoor",
+        "equestrian_horse_supplies",
+        "horse_grooming_care"
+      ],
+      "fields": [
+        {
+          "key": "item_type",
+          "label": "Item type"
+        },
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "horse_size",
+          "label": "Horse size"
+        },
+        {
+          "key": "material",
+          "label": "Material"
+        },
+        {
+          "key": "quantity",
+          "label": "Quantity"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        },
+        {
+          "key": "included_accessories",
+          "label": "Included accessories"
+        }
+      ]
+    },
+    {
+      "path": [
+        "sports_outdoor",
+        "equestrian_horse_supplies",
+        "stable_paddock_equipment"
+      ],
+      "fields": [
+        {
+          "key": "item_type",
+          "label": "Item type"
+        },
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "material",
+          "label": "Material"
+        },
+        {
+          "key": "dimensions",
+          "label": "Dimensions"
+        },
+        {
+          "key": "capacity",
+          "label": "Capacity"
+        },
+        {
+          "key": "quantity",
+          "label": "Quantity"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        }
+      ]
+    },
+    {
+      "path": [
+        "sports_outdoor",
+        "equestrian_horse_supplies",
+        "driving_carriage_equipment"
+      ],
+      "fields": [
+        {
+          "key": "item_type",
+          "label": "Item type"
+        },
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "model",
+          "label": "Model"
+        },
+        {
+          "key": "discipline",
+          "label": "Discipline"
+        },
+        {
+          "key": "horse_size",
+          "label": "Horse size"
+        },
+        {
+          "key": "seat_size",
+          "label": "Seat size"
+        },
+        {
+          "key": "material",
+          "label": "Material"
+        },
+        {
+          "key": "color",
+          "label": "Color"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        },
+        {
+          "key": "included_accessories",
+          "label": "Included accessories"
+        }
+      ]
+    },
+    {
+      "path": [
+        "sports_outdoor",
+        "equestrian_horse_supplies",
+        "other_equestrian_supplies"
+      ],
+      "fields": [
+        {
+          "key": "item_type",
+          "label": "Item type"
+        },
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "model",
+          "label": "Model"
+        },
+        {
+          "key": "material",
+          "label": "Material"
+        },
+        {
+          "key": "color",
+          "label": "Color"
+        },
+        {
+          "key": "size",
+          "label": "Size"
+        },
+        {
+          "key": "dimensions",
+          "label": "Dimensions"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        },
+        {
+          "key": "quantity",
+          "label": "Quantity"
+        },
+        {
+          "key": "included_accessories",
+          "label": "Included accessories"
+        }
+      ]
+    },
+    {
+      "path": [
+        "antiques_collectibles",
+        "art"
+      ],
+      "fields": [
+        {
+          "key": "art_type",
+          "label": "Art type"
+        },
+        {
+          "key": "artist",
+          "label": "Artist"
+        },
+        {
+          "key": "title",
+          "label": "Title"
+        },
+        {
+          "key": "year_period",
+          "label": "Year / period"
+        },
+        {
+          "key": "material",
+          "label": "Material"
+        },
+        {
+          "key": "dimensions",
+          "label": "Dimensions"
+        },
+        {
+          "key": "signed",
+          "label": "Signed"
+        },
+        {
+          "key": "certificate_included",
+          "label": "Certificate included"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        },
+        {
+          "key": "frame_included",
+          "label": "Frame included"
+        }
+      ]
+    },
+    {
+      "path": [
+        "antiques_collectibles",
+        "vintage"
+      ],
+      "fields": [
+        {
+          "key": "item_type",
+          "label": "Item type"
+        },
+        {
+          "key": "brand_maker",
+          "label": "Brand / maker"
+        },
+        {
+          "key": "year_era",
+          "label": "Year / era"
+        },
+        {
+          "key": "material",
+          "label": "Material"
+        },
+        {
+          "key": "origin_country",
+          "label": "Origin country"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        },
+        {
+          "key": "restored",
+          "label": "Restored"
+        }
+      ]
+    },
+    {
+      "path": [
+        "antiques_collectibles",
+        "coins"
+      ],
+      "fields": [
+        {
+          "key": "country",
+          "label": "Country"
+        },
+        {
+          "key": "year",
+          "label": "Year"
+        },
+        {
+          "key": "currency",
+          "label": "Currency"
+        },
+        {
+          "key": "material",
+          "label": "Material"
+        },
+        {
+          "key": "denomination",
+          "label": "Denomination"
+        },
+        {
+          "key": "mint_mark",
+          "label": "Mint mark"
+        },
+        {
+          "key": "condition_grading",
+          "label": "Condition / grading"
+        },
+        {
+          "key": "certificate_included",
+          "label": "Certificate included"
+        }
+      ]
+    },
+    {
+      "path": [
+        "antiques_collectibles",
+        "military"
+      ],
+      "fields": [
+        {
+          "key": "item_type",
+          "label": "Item type"
+        },
+        {
+          "key": "country",
+          "label": "Country"
+        },
+        {
+          "key": "era",
+          "label": "Era"
+        },
+        {
+          "key": "original_reproduction",
+          "label": "Original / reproduction"
+        },
+        {
+          "key": "material",
+          "label": "Material"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        },
+        {
+          "key": "serial_markings",
+          "label": "Serial number / markings"
+        },
+        {
+          "key": "certificate_included",
+          "label": "Certificate included"
+        }
+      ]
+    },
+    {
+      "path": [
+        "antiques_collectibles",
+        "memorabilia"
+      ],
+      "fields": [
+        {
+          "key": "item_type",
+          "label": "Item type"
+        },
+        {
+          "key": "related_person_event",
+          "label": "Related person / event"
+        },
+        {
+          "key": "year_era",
+          "label": "Year / era"
+        },
+        {
+          "key": "signed",
+          "label": "Signed"
+        },
+        {
+          "key": "certificate_included",
+          "label": "Certificate included"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        }
+      ]
+    },
+    {
+      "path": [
+        "antiques_collectibles",
+        "other_antiques_collectibles"
+      ],
+      "fields": [
+        {
+          "key": "item_type",
+          "label": "Item type"
+        },
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "model",
+          "label": "Model"
+        },
+        {
+          "key": "material",
+          "label": "Material"
+        },
+        {
+          "key": "color",
+          "label": "Color"
+        },
+        {
+          "key": "size",
+          "label": "Size"
+        },
+        {
+          "key": "dimensions",
+          "label": "Dimensions"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        },
+        {
+          "key": "quantity",
+          "label": "Quantity"
+        },
+        {
+          "key": "included_accessories",
+          "label": "Included accessories"
+        }
+      ]
+    },
+    {
+      "path": [
+        "building_materials",
+        "lumber"
+      ],
+      "fields": [
+        {
+          "key": "material_type",
+          "label": "Material type"
+        },
+        {
+          "key": "wood_type",
+          "label": "Wood type"
+        },
+        {
+          "key": "length",
+          "label": "Length"
+        },
+        {
+          "key": "width",
+          "label": "Width"
+        },
+        {
+          "key": "thickness",
+          "label": "Thickness"
+        },
+        {
+          "key": "moisture_level",
+          "label": "Moisture level"
+        },
+        {
+          "key": "treatment_type",
+          "label": "Treatment type"
+        },
+        {
+          "key": "quantity",
+          "label": "Quantity"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        }
+      ]
+    },
+    {
+      "path": [
+        "building_materials",
+        "concrete"
+      ],
+      "fields": [
+        {
+          "key": "material_type",
+          "label": "Material type"
+        },
+        {
+          "key": "strength_class",
+          "label": "Strength class"
+        },
+        {
+          "key": "weight",
+          "label": "Weight"
+        },
+        {
+          "key": "bag_size",
+          "label": "Bag size"
+        },
+        {
+          "key": "quantity",
+          "label": "Quantity"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        }
+      ]
+    },
+    {
+      "path": [
+        "building_materials",
+        "insulation"
+      ],
+      "fields": [
+        {
+          "key": "insulation_type",
+          "label": "Insulation type"
+        },
+        {
+          "key": "material",
+          "label": "Material"
+        },
+        {
+          "key": "thickness",
+          "label": "Thickness"
+        },
+        {
+          "key": "coverage_area",
+          "label": "Coverage area"
+        },
+        {
+          "key": "fire_rating",
+          "label": "Fire rating"
+        },
+        {
+          "key": "quantity",
+          "label": "Quantity"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        }
+      ]
+    },
+    {
+      "path": [
+        "building_materials",
+        "roofing"
+      ],
+      "fields": [
+        {
+          "key": "roofing_type",
+          "label": "Roofing type"
+        },
+        {
+          "key": "material",
+          "label": "Material"
+        },
+        {
+          "key": "color",
+          "label": "Color"
+        },
+        {
+          "key": "dimensions",
+          "label": "Dimensions"
+        },
+        {
+          "key": "coverage_area",
+          "label": "Coverage area"
+        },
+        {
+          "key": "quantity",
+          "label": "Quantity"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        }
+      ]
+    },
+    {
+      "path": [
+        "building_materials",
+        "plumbing"
+      ],
+      "fields": [
+        {
+          "key": "plumbing_type",
+          "label": "Plumbing type"
+        },
+        {
+          "key": "material",
+          "label": "Material"
+        },
+        {
+          "key": "diameter",
+          "label": "Diameter"
+        },
+        {
+          "key": "length",
+          "label": "Length"
+        },
+        {
+          "key": "compatibility",
+          "label": "Compatibility"
+        },
+        {
+          "key": "pressure_rating",
+          "label": "Pressure rating"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        },
+        {
+          "key": "quantity",
+          "label": "Quantity"
+        }
+      ]
+    },
+    {
+      "path": [
+        "building_materials",
+        "other_building_materials"
+      ],
+      "fields": [
+        {
+          "key": "item_type",
+          "label": "Item type"
+        },
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "model",
+          "label": "Model"
+        },
+        {
+          "key": "material",
+          "label": "Material"
+        },
+        {
+          "key": "color",
+          "label": "Color"
+        },
+        {
+          "key": "size",
+          "label": "Size"
+        },
+        {
+          "key": "dimensions",
+          "label": "Dimensions"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        },
+        {
+          "key": "quantity",
+          "label": "Quantity"
+        },
+        {
+          "key": "included_accessories",
+          "label": "Included accessories"
+        }
+      ]
+    },
+    {
+      "path": [
+        "children_baby",
+        "strollers_prams"
+      ],
+      "fields": [
+        {
+          "key": "item_type",
+          "label": "Item type"
+        },
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "model",
+          "label": "Model"
+        },
+        {
+          "key": "age_range",
+          "label": "Age range"
+        },
+        {
+          "key": "safety_standard",
+          "label": "Safety standard"
+        },
+        {
+          "key": "material",
+          "label": "Material"
+        },
+        {
+          "key": "color",
+          "label": "Color"
+        },
+        {
+          "key": "dimensions",
+          "label": "Dimensions"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        },
+        {
+          "key": "included_accessories",
+          "label": "Included accessories"
+        }
+      ]
+    },
+    {
+      "path": [
+        "children_baby",
+        "child_car_seats"
+      ],
+      "fields": [
+        {
+          "key": "item_type",
+          "label": "Item type"
+        },
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "model",
+          "label": "Model"
+        },
+        {
+          "key": "age_range",
+          "label": "Age range"
+        },
+        {
+          "key": "safety_standard",
+          "label": "Safety standard"
+        },
+        {
+          "key": "material",
+          "label": "Material"
+        },
+        {
+          "key": "color",
+          "label": "Color"
+        },
+        {
+          "key": "dimensions",
+          "label": "Dimensions"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        },
+        {
+          "key": "included_accessories",
+          "label": "Included accessories"
+        }
+      ]
+    },
+    {
+      "path": [
+        "children_baby",
+        "nursery_furniture"
+      ],
+      "fields": [
+        {
+          "key": "item_type",
+          "label": "Item type"
+        },
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "model",
+          "label": "Model"
+        },
+        {
+          "key": "age_range",
+          "label": "Age range"
+        },
+        {
+          "key": "safety_standard",
+          "label": "Safety standard"
+        },
+        {
+          "key": "material",
+          "label": "Material"
+        },
+        {
+          "key": "color",
+          "label": "Color"
+        },
+        {
+          "key": "dimensions",
+          "label": "Dimensions"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        },
+        {
+          "key": "included_accessories",
+          "label": "Included accessories"
+        }
+      ]
+    },
+    {
+      "path": [
+        "children_baby",
+        "baby_feeding_care"
+      ],
+      "fields": [
+        {
+          "key": "item_type",
+          "label": "Item type"
+        },
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "model",
+          "label": "Model"
+        },
+        {
+          "key": "age_range",
+          "label": "Age range"
+        },
+        {
+          "key": "safety_standard",
+          "label": "Safety standard"
+        },
+        {
+          "key": "material",
+          "label": "Material"
+        },
+        {
+          "key": "color",
+          "label": "Color"
+        },
+        {
+          "key": "dimensions",
+          "label": "Dimensions"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        },
+        {
+          "key": "included_accessories",
+          "label": "Included accessories"
+        }
+      ]
+    },
+    {
+      "path": [
+        "children_baby",
+        "baby_safety_accessories"
+      ],
+      "fields": [
+        {
+          "key": "item_type",
+          "label": "Item type"
+        },
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "model",
+          "label": "Model"
+        },
+        {
+          "key": "age_range",
+          "label": "Age range"
+        },
+        {
+          "key": "safety_standard",
+          "label": "Safety standard"
+        },
+        {
+          "key": "material",
+          "label": "Material"
+        },
+        {
+          "key": "color",
+          "label": "Color"
+        },
+        {
+          "key": "dimensions",
+          "label": "Dimensions"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        },
+        {
+          "key": "included_accessories",
+          "label": "Included accessories"
+        }
+      ]
+    },
+    {
+      "path": [
+        "children_baby",
+        "other_children_baby"
+      ],
+      "fields": [
+        {
+          "key": "item_type",
+          "label": "Item type"
+        },
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "model",
+          "label": "Model"
+        },
+        {
+          "key": "age_range",
+          "label": "Age range"
+        },
+        {
+          "key": "safety_standard",
+          "label": "Safety standard"
+        },
+        {
+          "key": "material",
+          "label": "Material"
+        },
+        {
+          "key": "color",
+          "label": "Color"
+        },
+        {
+          "key": "dimensions",
+          "label": "Dimensions"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        },
+        {
+          "key": "included_accessories",
+          "label": "Included accessories"
+        }
+      ]
+    },
+    {
+      "path": [
+        "pet_supplies",
+        "dog_supplies"
+      ],
+      "fields": [
+        {
+          "key": "item_type",
+          "label": "Item type"
+        },
+        {
+          "key": "animal_type",
+          "label": "Animal type"
+        },
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "size",
+          "label": "Size"
+        },
+        {
+          "key": "material",
+          "label": "Material"
+        },
+        {
+          "key": "capacity",
+          "label": "Capacity"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        },
+        {
+          "key": "quantity",
+          "label": "Quantity"
+        },
+        {
+          "key": "included_accessories",
+          "label": "Included accessories"
+        }
+      ]
+    },
+    {
+      "path": [
+        "pet_supplies",
+        "cat_supplies"
+      ],
+      "fields": [
+        {
+          "key": "item_type",
+          "label": "Item type"
+        },
+        {
+          "key": "animal_type",
+          "label": "Animal type"
+        },
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "size",
+          "label": "Size"
+        },
+        {
+          "key": "material",
+          "label": "Material"
+        },
+        {
+          "key": "capacity",
+          "label": "Capacity"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        },
+        {
+          "key": "quantity",
+          "label": "Quantity"
+        },
+        {
+          "key": "included_accessories",
+          "label": "Included accessories"
+        }
+      ]
+    },
+    {
+      "path": [
+        "pet_supplies",
+        "aquariums_terrariums"
+      ],
+      "fields": [
+        {
+          "key": "item_type",
+          "label": "Item type"
+        },
+        {
+          "key": "animal_type",
+          "label": "Animal type"
+        },
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "size",
+          "label": "Size"
+        },
+        {
+          "key": "material",
+          "label": "Material"
+        },
+        {
+          "key": "capacity",
+          "label": "Capacity"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        },
+        {
+          "key": "quantity",
+          "label": "Quantity"
+        },
+        {
+          "key": "included_accessories",
+          "label": "Included accessories"
+        }
+      ]
+    },
+    {
+      "path": [
+        "pet_supplies",
+        "cages_housing"
+      ],
+      "fields": [
+        {
+          "key": "item_type",
+          "label": "Item type"
+        },
+        {
+          "key": "animal_type",
+          "label": "Animal type"
+        },
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "size",
+          "label": "Size"
+        },
+        {
+          "key": "material",
+          "label": "Material"
+        },
+        {
+          "key": "capacity",
+          "label": "Capacity"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        },
+        {
+          "key": "quantity",
+          "label": "Quantity"
+        },
+        {
+          "key": "included_accessories",
+          "label": "Included accessories"
+        }
+      ]
+    },
+    {
+      "path": [
+        "pet_supplies",
+        "pet_transport_grooming"
+      ],
+      "fields": [
+        {
+          "key": "item_type",
+          "label": "Item type"
+        },
+        {
+          "key": "animal_type",
+          "label": "Animal type"
+        },
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "size",
+          "label": "Size"
+        },
+        {
+          "key": "material",
+          "label": "Material"
+        },
+        {
+          "key": "capacity",
+          "label": "Capacity"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        },
+        {
+          "key": "quantity",
+          "label": "Quantity"
+        },
+        {
+          "key": "included_accessories",
+          "label": "Included accessories"
+        }
+      ]
+    },
+    {
+      "path": [
+        "pet_supplies",
+        "other_pet_supplies"
+      ],
+      "fields": [
+        {
+          "key": "item_type",
+          "label": "Item type"
+        },
+        {
+          "key": "animal_type",
+          "label": "Animal type"
+        },
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "size",
+          "label": "Size"
+        },
+        {
+          "key": "material",
+          "label": "Material"
+        },
+        {
+          "key": "capacity",
+          "label": "Capacity"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        },
+        {
+          "key": "quantity",
+          "label": "Quantity"
+        },
+        {
+          "key": "included_accessories",
+          "label": "Included accessories"
+        }
+      ]
+    },
+    {
+      "path": [
+        "books_music_media",
+        "books"
+      ],
+      "fields": [
+        {
+          "key": "media_type",
+          "label": "Media type"
+        },
+        {
+          "key": "title",
+          "label": "Title"
+        },
+        {
+          "key": "creator",
+          "label": "Author / creator"
+        },
+        {
+          "key": "language",
+          "label": "Language"
+        },
+        {
+          "key": "publication_year",
+          "label": "Publication year"
+        },
+        {
+          "key": "format",
+          "label": "Format"
+        },
+        {
+          "key": "genre",
+          "label": "Genre"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        },
+        {
+          "key": "quantity",
+          "label": "Quantity"
+        }
+      ]
+    },
+    {
+      "path": [
+        "books_music_media",
+        "magazines_comics"
+      ],
+      "fields": [
+        {
+          "key": "media_type",
+          "label": "Media type"
+        },
+        {
+          "key": "title",
+          "label": "Title"
+        },
+        {
+          "key": "creator",
+          "label": "Author / creator"
+        },
+        {
+          "key": "language",
+          "label": "Language"
+        },
+        {
+          "key": "publication_year",
+          "label": "Publication year"
+        },
+        {
+          "key": "format",
+          "label": "Format"
+        },
+        {
+          "key": "genre",
+          "label": "Genre"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        },
+        {
+          "key": "quantity",
+          "label": "Quantity"
+        }
+      ]
+    },
+    {
+      "path": [
+        "books_music_media",
+        "music_movies"
+      ],
+      "fields": [
+        {
+          "key": "media_type",
+          "label": "Media type"
+        },
+        {
+          "key": "title",
+          "label": "Title"
+        },
+        {
+          "key": "creator",
+          "label": "Author / creator"
+        },
+        {
+          "key": "language",
+          "label": "Language"
+        },
+        {
+          "key": "publication_year",
+          "label": "Publication year"
+        },
+        {
+          "key": "format",
+          "label": "Format"
+        },
+        {
+          "key": "genre",
+          "label": "Genre"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        },
+        {
+          "key": "quantity",
+          "label": "Quantity"
+        }
+      ]
+    },
+    {
+      "path": [
+        "books_music_media",
+        "musical_instruments"
+      ],
+      "fields": [
+        {
+          "key": "instrument_type",
+          "label": "Instrument type"
+        },
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "model",
+          "label": "Model"
+        },
+        {
+          "key": "material",
+          "label": "Material"
+        },
+        {
+          "key": "size",
+          "label": "Size"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        },
+        {
+          "key": "included_accessories",
+          "label": "Included accessories"
+        },
+        {
+          "key": "serial_number",
+          "label": "Serial number"
+        }
+      ]
+    },
+    {
+      "path": [
+        "books_music_media",
+        "instrument_accessories"
+      ],
+      "fields": [
+        {
+          "key": "item_type",
+          "label": "Item type"
+        },
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "model",
+          "label": "Model"
+        },
+        {
+          "key": "material",
+          "label": "Material"
+        },
+        {
+          "key": "color",
+          "label": "Color"
+        },
+        {
+          "key": "size",
+          "label": "Size"
+        },
+        {
+          "key": "dimensions",
+          "label": "Dimensions"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        },
+        {
+          "key": "quantity",
+          "label": "Quantity"
+        },
+        {
+          "key": "included_accessories",
+          "label": "Included accessories"
+        }
+      ]
+    },
+    {
+      "path": [
+        "books_music_media",
+        "other_books_media"
+      ],
+      "fields": [
+        {
+          "key": "media_type",
+          "label": "Media type"
+        },
+        {
+          "key": "title",
+          "label": "Title"
+        },
+        {
+          "key": "creator",
+          "label": "Author / creator"
+        },
+        {
+          "key": "language",
+          "label": "Language"
+        },
+        {
+          "key": "publication_year",
+          "label": "Publication year"
+        },
+        {
+          "key": "format",
+          "label": "Format"
+        },
+        {
+          "key": "genre",
+          "label": "Genre"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        },
+        {
+          "key": "quantity",
+          "label": "Quantity"
+        }
+      ]
+    },
+    {
+      "path": [
+        "hobbies_toys_crafts",
+        "toys"
+      ],
+      "fields": [
+        {
+          "key": "hobby_type",
+          "label": "Hobby type"
+        },
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "age_range",
+          "label": "Age range"
+        },
+        {
+          "key": "material",
+          "label": "Material"
+        },
+        {
+          "key": "dimensions",
+          "label": "Dimensions"
+        },
+        {
+          "key": "skill_level",
+          "label": "Skill level"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        },
+        {
+          "key": "quantity",
+          "label": "Quantity"
+        },
+        {
+          "key": "included_accessories",
+          "label": "Included accessories"
+        }
+      ]
+    },
+    {
+      "path": [
+        "hobbies_toys_crafts",
+        "board_games_puzzles"
+      ],
+      "fields": [
+        {
+          "key": "hobby_type",
+          "label": "Hobby type"
+        },
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "age_range",
+          "label": "Age range"
+        },
+        {
+          "key": "material",
+          "label": "Material"
+        },
+        {
+          "key": "dimensions",
+          "label": "Dimensions"
+        },
+        {
+          "key": "skill_level",
+          "label": "Skill level"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        },
+        {
+          "key": "quantity",
+          "label": "Quantity"
+        },
+        {
+          "key": "included_accessories",
+          "label": "Included accessories"
+        }
+      ]
+    },
+    {
+      "path": [
+        "hobbies_toys_crafts",
+        "arts_crafts"
+      ],
+      "fields": [
+        {
+          "key": "hobby_type",
+          "label": "Hobby type"
+        },
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "age_range",
+          "label": "Age range"
+        },
+        {
+          "key": "material",
+          "label": "Material"
+        },
+        {
+          "key": "dimensions",
+          "label": "Dimensions"
+        },
+        {
+          "key": "skill_level",
+          "label": "Skill level"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        },
+        {
+          "key": "quantity",
+          "label": "Quantity"
+        },
+        {
+          "key": "included_accessories",
+          "label": "Included accessories"
+        }
+      ]
+    },
+    {
+      "path": [
+        "hobbies_toys_crafts",
+        "model_rc_hobbies"
+      ],
+      "fields": [
+        {
+          "key": "hobby_type",
+          "label": "Hobby type"
+        },
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "age_range",
+          "label": "Age range"
+        },
+        {
+          "key": "material",
+          "label": "Material"
+        },
+        {
+          "key": "dimensions",
+          "label": "Dimensions"
+        },
+        {
+          "key": "skill_level",
+          "label": "Skill level"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        },
+        {
+          "key": "quantity",
+          "label": "Quantity"
+        },
+        {
+          "key": "included_accessories",
+          "label": "Included accessories"
+        }
+      ]
+    },
+    {
+      "path": [
+        "hobbies_toys_crafts",
+        "sewing_knitting"
+      ],
+      "fields": [
+        {
+          "key": "hobby_type",
+          "label": "Hobby type"
+        },
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "age_range",
+          "label": "Age range"
+        },
+        {
+          "key": "material",
+          "label": "Material"
+        },
+        {
+          "key": "dimensions",
+          "label": "Dimensions"
+        },
+        {
+          "key": "skill_level",
+          "label": "Skill level"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        },
+        {
+          "key": "quantity",
+          "label": "Quantity"
+        },
+        {
+          "key": "included_accessories",
+          "label": "Included accessories"
+        }
+      ]
+    },
+    {
+      "path": [
+        "hobbies_toys_crafts",
+        "other_hobbies_toys"
+      ],
+      "fields": [
+        {
+          "key": "hobby_type",
+          "label": "Hobby type"
+        },
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "age_range",
+          "label": "Age range"
+        },
+        {
+          "key": "material",
+          "label": "Material"
+        },
+        {
+          "key": "dimensions",
+          "label": "Dimensions"
+        },
+        {
+          "key": "skill_level",
+          "label": "Skill level"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        },
+        {
+          "key": "quantity",
+          "label": "Quantity"
+        },
+        {
+          "key": "included_accessories",
+          "label": "Included accessories"
+        }
+      ]
+    },
+    {
+      "path": [
+        "office_business",
+        "office_equipment"
+      ],
+      "fields": [
+        {
+          "key": "equipment_type",
+          "label": "Equipment type"
+        },
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "model",
+          "label": "Model"
+        },
+        {
+          "key": "connection_type",
+          "label": "Connection type"
+        },
+        {
+          "key": "power_source",
+          "label": "Power source"
+        },
+        {
+          "key": "dimensions",
+          "label": "Dimensions"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        },
+        {
+          "key": "included_accessories",
+          "label": "Included accessories"
+        },
+        {
+          "key": "serial_number",
+          "label": "Serial number"
+        }
+      ]
+    },
+    {
+      "path": [
+        "office_business",
+        "printers_scanners"
+      ],
+      "fields": [
+        {
+          "key": "equipment_type",
+          "label": "Equipment type"
+        },
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "model",
+          "label": "Model"
+        },
+        {
+          "key": "connection_type",
+          "label": "Connection type"
+        },
+        {
+          "key": "power_source",
+          "label": "Power source"
+        },
+        {
+          "key": "dimensions",
+          "label": "Dimensions"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        },
+        {
+          "key": "included_accessories",
+          "label": "Included accessories"
+        },
+        {
+          "key": "serial_number",
+          "label": "Serial number"
+        }
+      ]
+    },
+    {
+      "path": [
+        "office_business",
+        "office_furniture"
+      ],
+      "fields": [
+        {
+          "key": "item_type",
+          "label": "Item type"
+        },
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "material",
+          "label": "Material"
+        },
+        {
+          "key": "color",
+          "label": "Color"
+        },
+        {
+          "key": "size",
+          "label": "Size"
+        },
+        {
+          "key": "dimensions",
+          "label": "Dimensions"
+        },
+        {
+          "key": "capacity",
+          "label": "Capacity"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        },
+        {
+          "key": "quantity",
+          "label": "Quantity"
+        }
+      ]
+    },
+    {
+      "path": [
+        "office_business",
+        "retail_warehouse_equipment"
+      ],
+      "fields": [
+        {
+          "key": "equipment_type",
+          "label": "Equipment type"
+        },
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "model",
+          "label": "Model"
+        },
+        {
+          "key": "connection_type",
+          "label": "Connection type"
+        },
+        {
+          "key": "power_source",
+          "label": "Power source"
+        },
+        {
+          "key": "dimensions",
+          "label": "Dimensions"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        },
+        {
+          "key": "included_accessories",
+          "label": "Included accessories"
+        },
+        {
+          "key": "serial_number",
+          "label": "Serial number"
+        }
+      ]
+    },
+    {
+      "path": [
+        "office_business",
+        "presentation_equipment"
+      ],
+      "fields": [
+        {
+          "key": "equipment_type",
+          "label": "Equipment type"
+        },
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "model",
+          "label": "Model"
+        },
+        {
+          "key": "connection_type",
+          "label": "Connection type"
+        },
+        {
+          "key": "power_source",
+          "label": "Power source"
+        },
+        {
+          "key": "dimensions",
+          "label": "Dimensions"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        },
+        {
+          "key": "included_accessories",
+          "label": "Included accessories"
+        },
+        {
+          "key": "serial_number",
+          "label": "Serial number"
+        }
+      ]
+    },
+    {
+      "path": [
+        "office_business",
+        "other_office_business"
+      ],
+      "fields": [
+        {
+          "key": "item_type",
+          "label": "Item type"
+        },
+        {
+          "key": "brand",
+          "label": "Brand"
+        },
+        {
+          "key": "model",
+          "label": "Model"
+        },
+        {
+          "key": "material",
+          "label": "Material"
+        },
+        {
+          "key": "color",
+          "label": "Color"
+        },
+        {
+          "key": "size",
+          "label": "Size"
+        },
+        {
+          "key": "dimensions",
+          "label": "Dimensions"
+        },
+        {
+          "key": "condition",
+          "label": "Condition"
+        },
+        {
+          "key": "quantity",
+          "label": "Quantity"
+        },
+        {
+          "key": "included_accessories",
+          "label": "Included accessories"
+        }
+      ]
+    }
+  ],
+  "value_character_limit": 1000
+}

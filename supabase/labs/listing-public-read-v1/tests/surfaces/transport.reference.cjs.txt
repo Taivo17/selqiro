@@ -1,0 +1,76 @@
+/* New surface-contract tests. No HTTP/browser. Capture is supplied by the helper SQL stdout.
+ * A preparation-only SYNTHETIC capture may be passed explicitly; there is no fallback. */
+const {test}=require('node:test'),assert=require('node:assert/strict');
+const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm');
+const base=path.resolve(__dirname,'..'),ts=require(process.env.SELQIRO_TYPESCRIPT_FILE||'typescript');
+const clone=x=>JSON.parse(JSON.stringify(x)),cache=new Map();
+function mod(file){file=path.resolve(file);assert.ok(file.startsWith(base+path.sep));if(cache.has(file))return cache.get(file).exports;
+ const code=ts.transpileModule(fs.readFileSync(file,'utf8'),{fileName:file,reportDiagnostics:true,compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2017,strict:true}});
+ assert.equal(code.diagnostics.filter(x=>x.category===ts.DiagnosticCategory.Error).length,0);const m={exports:{}};cache.set(file,m);
+ vm.runInNewContext(code.outputText,{module:m,exports:m.exports,URL,Date,BigInt,Number,Object,Set,
+ require:name=>{assert.ok(name.startsWith('.'));return mod(path.resolve(path.dirname(file),name+'.ts'));}},{filename:file,timeout:2000});return m.exports;}
+const D=mod(path.join(base,'client/publicDetailV1.ts')),P=mod(path.join(base,'client/publicProfileListingsV1.ts')),
+ S=mod(path.join(base,'client/publicSearchV2.ts'));
+const fixed=(amount='999999999999999999.999',currency='KWD')=>({version:1,kind:'fixed',amount,currency,legacy_text:null,legacy_amount:null});
+const image=()=>({id:'01000000-0000-4000-8000-000000000001',thumb_url:'https://example.invalid/primary.jpg',medium_url:null,original_url:'https://example.invalid/original.jpg',is_primary:true,sort_order:0});
+function detail(id='1001'){return {schema_version:1,content_scope:'public_ordinary_listing_detail',requested_id:id,item:{content_type:'listing',content_id:id,
+ title:'surface-alpha',description:'72 in and 5 km remain authored text',title_truncated:false,description_truncated:false,price:fixed(),
+ category:'vehicles',subcategory:'cars',detail_category:'passenger_cars',condition:'used',country:'Eesti',city:'Paide',
+ image_url:'https://example.invalid/primary.jpg',images:[image()],images_has_more:false,
+ details:[{key:'vin',label:'VIN',value:'PUBLIC-AUTHORED-VIN'}],details_truncated:false,
+ seller_name:'Seller A',seller_slug:'seller-a',seller_avatar_url:null,seller_type:'private',created_at:'2026-01-01T00:00:00+00:00',active_until:'2099-01-01T00:00:00+00:00'}};}
+function card(id='1001'){const d=detail(id).item;return {content_type:d.content_type,content_id:id,title:d.title,description_preview:d.description,price:d.price,
+ category:d.category,subcategory:d.subcategory,detail_category:d.detail_category,condition:d.condition,country:d.country,city:d.city,
+ image_url:d.image_url,seller_name:d.seller_name,seller_slug:d.seller_slug,seller_avatar_url:d.seller_avatar_url,seller_type:d.seller_type,created_at:d.created_at};}
+function profile(total='1',offset=0,limit=12){const n=BigInt(total),remain=n>BigInt(offset)?n-BigInt(offset):0n,more=n>BigInt(offset+limit),cap=more&&offset+limit>100000;
+ return {schema_version:1,content_scope:'public_profile_ordinary_listings',seller_slug:'seller-a',profile_available:true,store_category_id:null,sort:'newest',
+ items:Array.from({length:Number(remain>BigInt(limit)?BigInt(limit):remain)},(_,i)=>card(String(1001+offset+i))),total_count:total,result_limit:limit,result_offset:offset,
+ has_more:more,next_offset:more&&!cap?offset+limit:null,window_limit_reached:cap};}
+const req=(o=0,l=12)=>({sellerSlug:'seller-a',storeCategoryId:null,offset:o,limit:l});
+test('exact detail price string',()=>assert.equal(D.parsePublicDetailV1(detail(),'1001').item.price.amount,'999999999999999999.999'));
+test('exact profile price string',()=>assert.equal(P.parsePublicProfileListingsV1(profile(),req()).items[0].price.amount,'999999999999999999.999'));
+test('no number roundtrip',()=>assert.notEqual(String(Number('999999999999999999.999')),'999999999999999999.999'));
+test('missing and hidden item accepted as null',()=>{const x=detail();x.item=null;assert.equal(D.parsePublicDetailV1(x,'1001').item,null);});
+test('null expiry publicly readable in detail grammar',()=>{const x=detail();x.item.active_until=null;assert.equal(D.parsePublicDetailV1(x,'1001').item.active_until,null);});
+for(const id of ['9223372036854775807','-9223372036854775808','9007199254740993','0'])test('exact detail id '+id,()=>assert.equal(D.parsePublicDetailV1(detail(id),id).item.content_id,id));
+for(const id of [1,'01','-0','+1','1.0','1e3','','9223372036854775808',null])test('reject requested id '+String(id),()=>assert.throws(()=>D.parsePublicDetailV1(detail(),id)));
+for(const key of Object.keys(detail()))test('missing detail envelope '+key,()=>{const x=detail();delete x[key];assert.throws(()=>D.parsePublicDetailV1(x,'1001'));});
+for(const key of Object.keys(detail().item))test('missing detail field '+key,()=>{const x=detail();delete x.item[key];assert.throws(()=>D.parsePublicDetailV1(x,'1001'));});
+for(const [k,v] of [['schema_version',2],['content_scope','owner_listing'],['requested_id','1002'],['request_key','private'],['item',[]]])test('bad detail envelope '+k,()=>{const x=detail();x[k]=v;assert.throws(()=>D.parsePublicDetailV1(x,'1001'));});
+for(const [k,v] of [['content_type','horse_offer'],['content_id','1002'],['seller_type','admin'],['created_at','bad'],['active_until','bad'],['title',3],['description',{}],['images',{}],['details',{}],['user_id','PRIVATE'],['identity_id','PRIVATE'],['price_revision','1'],['ai_raw',{}],['listing_lat',55],['location','SECRET'],['title_truncated',1],['images_has_more',true]])test('bad detail value '+k,()=>{const x=detail();x.item[k]=v;assert.throws(()=>D.parsePublicDetailV1(x,'1001'));});
+for(const [k,v] of [['amount',999999999999999999],['amount','1e3'],['amount','01'],['currency','eur'],['revision','1'],['legacy_text','wrong']])test('bad nested price '+k+':'+v,()=>{const x=detail();x.item.price[k]=v;assert.throws(()=>D.parsePublicDetailV1(x,'1001'));});
+for(const k of ['free','negotiable','unspecified'])test('nonfixed detail '+k,()=>{const x=detail();x.item.price={version:1,kind:k,amount:null,currency:null,legacy_text:null,legacy_amount:null};assert.equal(D.parsePublicDetailV1(x,'1001').item.price.kind,k);});
+test('fixed zero distinct',()=>{const x=detail();x.item.price=fixed('0','EUR');assert.equal(D.parsePublicDetailV1(x,'1001').item.price.kind,'fixed');});
+test('legacy original string unchanged',()=>{const x=detail();x.item.price={version:1,kind:null,amount:null,currency:null,legacy_text:'130.',legacy_amount:'130'};assert.equal(D.parsePublicDetailV1(x,'1001').item.price.legacy_text,'130.');});
+for(const url of ['javascript:alert(1)','https://user:password@example.invalid/x','data:text/a','not-url'])test('unsafe gallery and seller URL '+url,()=>{const x=detail();x.item.images[0].original_url=url;x.item.seller_avatar_url=url;const r=D.parsePublicDetailV1(x,'1001').item;assert.equal(r.images[0].original_url,null);assert.equal(r.seller_avatar_url,null);});
+test('raw gallery URLs retained',()=>assert.equal(D.parsePublicDetailV1(detail(),'1001').item.images[0].original_url,image().original_url));
+for(const [k,v] of [['id','bad'],['sort_order',1.5],['sort_order',2147483648],['is_primary','yes'],['user_id','PRIVATE']])test('bad gallery field '+k,()=>{const x=detail();x.item.images[0][k]=v;assert.throws(()=>D.parsePublicDetailV1(x,'1001'));});
+test('duplicate gallery ID rejected',()=>{const x=detail();x.item.images.push(image());assert.throws(()=>D.parsePublicDetailV1(x,'1001'));});
+test('11 gallery items rejected',()=>{const x=detail();x.item.images=Array.from({length:11},image);assert.throws(()=>D.parsePublicDetailV1(x,'1001'));});
+test('no gallery still preserves fallback',()=>{const x=detail();x.item.images=[];assert.equal(D.parsePublicDetailV1(x,'1001').item.image_url,x.item.image_url);});
+for(const [k,v] of [['key','private.note'],['key',''],['label',null],['value',3],['value',{}],['value',''],['secret','PRIVATE']])test('bad detail scalar '+k,()=>{const x=detail();x.item.details[0][k]=v;assert.throws(()=>D.parsePublicDetailV1(x,'1001'));});
+test('duplicate detail field rejected',()=>{const x=detail();x.item.details.push(clone(x.item.details[0]));assert.throws(()=>D.parsePublicDetailV1(x,'1001'));});
+test('detail max value accepted',()=>{const x=detail();x.item.details[0].value='a'.repeat(1000);assert.equal(D.parsePublicDetailV1(x,'1001').item.details[0].value.length,1000);});
+test('detail long value rejected',()=>{const x=detail();x.item.details[0].value='a'.repeat(1001);assert.throws(()=>D.parsePublicDetailV1(x,'1001'));});
+test('Unicode codepoints match database char_length',()=>{const x=detail();x.item.details[0].value='😀'.repeat(1000);assert.equal(Array.from(D.parsePublicDetailV1(x,'1001').item.details[0].value).length,1000);});
+test('description units not interpreted',()=>assert.equal(D.parsePublicDetailV1(detail(),'1001').item.description,detail().item.description));
+test('bounded truncation flags preserved',()=>{const x=detail();x.item.title='T'.repeat(4096);x.item.title_truncated=true;assert.equal(D.parsePublicDetailV1(x,'1001').item.title_truncated,true);});
+test('overbound title rejected',()=>{const x=detail();x.item.title='T'.repeat(4097);assert.throws(()=>D.parsePublicDetailV1(x,'1001'));});
+for(const [total,o,l] of [['0',0,12],['3',0,1],['3',1,1],['3',2,1],['3',4,12],['80',0,60],['9223372036854775807',100000,12]])test('profile pagination '+[total,o,l],()=>assert.equal(P.parsePublicProfileListingsV1(profile(total,o,l),req(o,l)).totalCount,total));
+for(const key of Object.keys(profile()))test('missing profile key '+key,()=>{const x=profile();delete x[key];assert.throws(()=>P.parsePublicProfileListingsV1(x,req()));});
+for(const [k,v] of [['schema_version',2],['content_scope','ordinary_listings'],['seller_slug','other'],['profile_available',false],['store_category_id','20000000-0000-4000-8000-000000000001'],['total_count',1],['has_more',true],['next_offset',12],['request_key','PRIVATE']])test('bad profile value '+k,()=>{const x=profile();x[k]=v;assert.throws(()=>P.parsePublicProfileListingsV1(x,req()));});
+for(const v of [[],undefined,'not-uuid','',{},'20000000-0000-4000-8000-000000000001'])test('category context not widened '+JSON.stringify(v),()=>assert.throws(()=>P.parsePublicProfileListingsV1(profile(),{...req(),storeCategoryId:v})));
+test('matching selected category',()=>{const x=profile(),id='20000000-0000-4000-8000-000000000001';x.store_category_id=id;assert.equal(P.parsePublicProfileListingsV1(x,{...req(),storeCategoryId:id}).storeCategoryId,id);});
+test('unavailable profile empty accepted',()=>{const x=profile('0');x.profile_available=false;assert.equal(P.parsePublicProfileListingsV1(x,req()).profileAvailable,false);});
+test('wrong seller card rejected',()=>{const x=profile();x.items[0].seller_slug='seller-b';assert.throws(()=>P.parsePublicProfileListingsV1(x,req()));});
+test('duplicate profile IDs rejected',()=>{const x=profile('2');x.items[1].content_id=x.items[0].content_id;assert.throws(()=>P.parsePublicProfileListingsV1(x,req()));});
+test('detail parse does not mutate input',()=>{const x=detail(),s=JSON.stringify(x);D.parsePublicDetailV1(x,'1001');assert.equal(JSON.stringify(x),s);});
+test('profile parse does not mutate input',()=>{const x=profile(),s=JSON.stringify(x);P.parsePublicProfileListingsV1(x,req());assert.equal(JSON.stringify(x),s);});
+const capture=JSON.parse(fs.readFileSync(process.env.SELQIRO_PRICE_CAPTURE,'utf8'));
+test('SQL exact detail amount',()=>assert.equal(D.parsePublicDetailV1(capture.detail,'1001').item.price.amount,'999999999999999999.999'));
+test('SQL profile detail price parity',()=>{const p=P.parsePublicProfileListingsV1(capture.profile,req()).items.find(x=>x.id==='1001');assert.deepEqual(clone(p.price),clone(D.parsePublicDetailV1(capture.detail,'1001').item.price));});
+test('SQL search detail price parity',()=>assert.deepEqual(clone(S.parsePublicSearchV2(capture.search,0).items[0].price),clone(D.parsePublicDetailV1(capture.detail,'1001').item.price)));
+test('SQL hidden returns no item',()=>assert.equal(D.parsePublicDetailV1(capture.hidden,'1101').item,null));
+test('SQL filtered branch real count',()=>{const x=P.parsePublicProfileListingsV1(capture.filtered,{...req(),storeCategoryId:'20000000-0000-4000-8000-000000000001'});assert.equal(x.totalCount,'2');assert.equal(new Set(x.items.map(x=>x.id)).size,2);});
+test('SQL gallery original URL',()=>assert.equal(D.parsePublicDetailV1(capture.detail,'1001').item.images[0].original_url,'https://example.invalid/original.jpg'));
+test('SQL no management payload',()=>{const x=JSON.stringify(capture);assert.ok(!x.includes('price_revision'));assert.ok(!x.includes('request_key'));assert.ok(!x.includes('SECRET_'));});

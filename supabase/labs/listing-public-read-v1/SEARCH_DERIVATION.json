@@ -1,0 +1,23 @@
+{
+  "base_commit": "e4b41436a88048ce828ff520ac6ce39d5ce372ef",
+  "saved_catalog_date": "2026-10-03",
+  "v1_definition_sha256": "af61fefae030ff65179bfa630641810b73a8f7e8ca18e93a5332852e1b00289c",
+  "source_migration": "supabase/migrations/20260926180000_add_public_listing_detail_keywords.sql",
+  "v1_body_matches_source": true,
+  "changes": [
+    "new function name v2 (no OR REPLACE)",
+    "select stored price_kind/currency/revision in same row",
+    "replace three scalar price fields with one price object",
+    "schema_version 2",
+    "explicitly closed ACL, lab comment"
+  ],
+  "unchanged": [
+    "predicate body",
+    "bounded query validation",
+    "index helper invocation",
+    "joins and account blocks",
+    "count/pagination/order",
+    "seller and image selection",
+    "v1 function and all source bytes"
+  ]
+}

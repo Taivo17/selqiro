@@ -1,0 +1,271 @@
+{
+  "base_commit": "e4b41436a88048ce828ff520ac6ce39d5ce372ef",
+  "classification": "CLOSED_LAB_SOURCE_CHECKPOINT_NOT_APPLIED",
+  "dependencies": {
+    "lib/categories.ts": {
+      "bytes": 20126,
+      "sha256": "2b3bb98a9cbc2a718a42018a69553c0e202d26105ab71d80b5846b5f500f3ebf"
+    },
+    "lib/categoryFields.ts": {
+      "bytes": 52862,
+      "sha256": "87bd9cacf3bbc0f31ab8c3625de8f9f32558cf6190ee7f4c84e7d0f232d6cc9f"
+    },
+    "src/entities/listing/model/publicSearch.ts": {
+      "bytes": 4914,
+      "sha256": "ac2b1c89dd0ef5b02e175f0fb73af97d50f86cc1260f26a376455680e4158474"
+    },
+    "src/entities/listing/model/publicSearchResponse.ts": {
+      "bytes": 4688,
+      "sha256": "765cfa096c8cff49d17e1a04369dd50d287ed1e56b5c3241b9f288f17b44c2a6"
+    },
+    "supabase/labs/listing-price-core-v1/01_value_contract.sql": {
+      "bytes": 5567,
+      "sha256": "5f9d58db5d28a9ec6804e1f0b2c282d5dd812897165b0e07242b12524d56c29c"
+    },
+    "supabase/labs/listing-price-core-v1/02_write_guard.sql": {
+      "bytes": 3812,
+      "sha256": "ced6884dea9e2098a259186b97f4e61b5fd07dd836256663dd451a2d9b03d1ea"
+    },
+    "supabase/labs/listing-price-core-v1/03_owner_price_core.sql": {
+      "bytes": 4214,
+      "sha256": "0483dd48688c1f8d2b3812109e2d2acec99373e65fe6f15f94b4558b3ce79419"
+    },
+    "supabase/labs/listing-price-core-v1/currencies.v1.json": {
+      "bytes": 722,
+      "sha256": "6de33eb21da4e78256ccb26048e19d6459f4bf111fad71c9b5ccd2666f948d84"
+    },
+    "supabase/labs/listing-price-core-v1/tests/fixture.sql": {
+      "bytes": 13352,
+      "sha256": "e4d21dafe0f44c898a44fa17efd736aa619282e99dffb7934979abcca6a5d03f"
+    },
+    "supabase/labs/listing-price-core-v1/tests/seed.sql": {
+      "bytes": 1798,
+      "sha256": "7a7a02a4cf7fe53586592bffe19d785f5b776ba04fe1850a934ab7f993ea6219"
+    },
+    "supabase/labs/listing-price-integration-v1/04_basics_contract.sql": {
+      "bytes": 3807,
+      "sha256": "796cdced4a02d883a6bd4384dd58aed998393eab07523f161ed616c3f9764e92"
+    },
+    "supabase/labs/listing-price-integration-v1/05_owner_basics_atomic.sql": {
+      "bytes": 6207,
+      "sha256": "5d052e95e3bfa4d1d9bb5cb3f62ae66792a5bdaac3651b5303796d57b2642ccc"
+    },
+    "supabase/migrations/20260926120000_add_public_listing_search.sql": {
+      "bytes": 7212,
+      "sha256": "236a0821db4ff345f6cba88e7c3210e71076e1ae5ac8c40d1aaaa4309b7d1180"
+    },
+    "supabase/migrations/20260926180000_add_public_listing_detail_keywords.sql": {
+      "bytes": 34784,
+      "sha256": "b080a47eb2573a0f292316c10c00cd8dc10c0a5adff0e4c6b2bbc04b855cba8d"
+    },
+    "tsconfig.json": {
+      "bytes": 666,
+      "sha256": "be18523b23b78b6e1a876ddd107d330f0168bddf09d751b57e0b5edce69c66f3"
+    }
+  },
+  "format": "selqiro_tested_public_read_sources_v1",
+  "limits": [
+    "Closed laboratory source, not a production migration or an opened RPC. Runtime imports and all 23 existing migrations unchanged.",
+    "Selected PG17.6 fixture, nine tables, synthetic auth and lab postgres superuser; not full Supabase, HTTP/JWT, all role inheritance, browser, or load.",
+    "Search/detail allow active NULL expiry, profile excludes it. This difference must not be silently normalized.",
+    "Existing broad listings SELECT/RLS and current visibility policy are not repaired by these bounded readers.",
+    "16 currencies remain a lab subset. No currency inference, FX, crypto, Energy or unit conversion.",
+    "Detail has explicit truncation flags, up to 10 images plus images_has_more. Later UI must handle these honestly.",
+    "Two surface endpoints share a snapshot in the recorded single SQL SELECT; separate HTTP requests are not a single snapshot.",
+    "Node fixtures are exact historical reference files, not in-place executable package scripts. Four TS modules remain real source in client/.",
+    "Recorded test counts are prior completed runs, not new SQL/Node results from retention."
+  ],
+  "preserved_sources": {
+    "10_price_read_model.sql": {
+      "bytes": 1293,
+      "kind": "public_surfaces_result",
+      "path": "dependencies/10_price_read_model.sql",
+      "sha256": "492a3e132919bf2c3d8d3b2fe450b483f06ae9e52e2fd28de3e19de6e910538c"
+    },
+    "11_public_search_v2.sql": {
+      "bytes": 6775,
+      "kind": "public_surfaces_result",
+      "path": "dependencies/11_public_search_v2.sql",
+      "sha256": "9e77d22e00fd60ef3c1fe12a0019cc8b45f7d7e96fcde7b09a328d1f992c01f5"
+    },
+    "12_public_detail_fields.sql": {
+      "bytes": 82714,
+      "kind": "public_surfaces_result",
+      "path": "candidate/12_public_detail_fields.sql",
+      "sha256": "1fec91d4774971b2ecb8c99d9a9124ff1c812137c959d9fc4fc37c420ecc94de"
+    },
+    "13_public_listing_detail.sql": {
+      "bytes": 4496,
+      "kind": "public_surfaces_result",
+      "path": "candidate/13_public_listing_detail.sql",
+      "sha256": "da11f9bf41af89c7dcff99b3407d98fa3956c49ae64529efe0b95ab1515d0aa8"
+    },
+    "14_public_profile_listings.sql": {
+      "bytes": 5649,
+      "kind": "public_surfaces_result",
+      "path": "candidate/14_public_profile_listings.sql",
+      "sha256": "ac70725a84268eaf6b4d652e13e502ebdb2686199e55044753f4f46aae121c1e"
+    },
+    "SEARCH_DERIVATION.json": {
+      "bytes": 825,
+      "kind": "prior_search_result",
+      "path": "candidate/DERIVATION.json",
+      "sha256": "08797cc645e26114f8d237c5d3c4fb078c8007766609953aad9d81aaee359e4b"
+    },
+    "client/priceRead.ts": {
+      "bytes": 2730,
+      "kind": "public_surfaces_result",
+      "path": "client/priceRead.ts",
+      "sha256": "0d30d3619224f07911ee8e7e2573a8d0f6647a4db1be151d763875d96a66ec42"
+    },
+    "client/publicDetailV1.ts": {
+      "bytes": 4805,
+      "kind": "public_surfaces_result",
+      "path": "client/publicDetailV1.ts",
+      "sha256": "3e15b3d7f7071b78ec1383e0bdf720e70d6c75f9f582eb97bcf11a3de862ac2d"
+    },
+    "client/publicProfileListingsV1.ts": {
+      "bytes": 2013,
+      "kind": "public_surfaces_result",
+      "path": "client/publicProfileListingsV1.ts",
+      "sha256": "22fe2e3eee55b162aa6227b7c060e7945c404b340bcb0bd2bd64d594a7ea82d6"
+    },
+    "client/publicSearchV2.ts": {
+      "bytes": 3758,
+      "kind": "public_surfaces_result",
+      "path": "client/publicSearchV2.ts",
+      "sha256": "105a3b4abccfab35e55d45086f546351e63426f0af368d085336e2b6d6b96b6b"
+    },
+    "public-detail-fields.v1.json": {
+      "bytes": 156628,
+      "kind": "public_surfaces_result",
+      "path": "candidate/public-detail-fields.v1.json",
+      "sha256": "8dd74bc2a2b622aab30044fa48d89becdf7b6d526199d273ac9229b5d3c26bdb"
+    },
+    "tests/reader-fixture-extension.sql": {
+      "bytes": 1885,
+      "kind": "public_surfaces_result",
+      "path": "tests/reader-fixture-extension.sql",
+      "sha256": "107201a066632682d1f8a506efbbb9a05aa0c8604c267c8ac4b3a3b1a845052a"
+    },
+    "tests/search/driver.reference.py.txt": {
+      "bytes": 14480,
+      "kind": "historical_driver_methods_not_executable",
+      "methods": [
+        "start_session",
+        "end_session",
+        "wait_ready",
+        "_session_write",
+        "core_text",
+        "test_batch",
+        "suite_summary",
+        "transport_test",
+        "sql_test",
+        "snapshot_tests"
+      ],
+      "path": "evidence/prior-reader-pass/runner.py.txt",
+      "runner_sha256": "01c391550dbbc4d327be685b0443a653520aad7a7e061353b6800e50ae530234",
+      "sha256": "153eb167500635332ac54ea1440d6bc7f03be20fa7b74d13594d118415eb2b7c"
+    },
+    "tests/search/expected-labels.json": {
+      "bytes": 4272,
+      "kind": "prior_search_result",
+      "path": "tests/expected-labels.json",
+      "sha256": "9a58526928e245f5442e834a9ef5e23237c52cf7653e89e23e8dfafaedfc7501"
+    },
+    "tests/search/seed.sql": {
+      "bytes": 4234,
+      "kind": "prior_search_result",
+      "path": "tests/reader-seed.sql",
+      "sha256": "729c0527322654f0a7706e6bbb746048493445f8eea9be3ee5f42722deb2b78a"
+    },
+    "tests/search/suite.sql": {
+      "bytes": 46757,
+      "kind": "prior_search_result",
+      "path": "tests/reader-suite.sql",
+      "sha256": "354fe9591727b2d6d52d7301b6fa36d0b9a241e267f685bb18d31922e8f8d03e"
+    },
+    "tests/search/transport.reference.cjs.txt": {
+      "bytes": 8944,
+      "kind": "prior_search_result",
+      "path": "tests/transport.test.cjs",
+      "sha256": "c24989528e7f143306f46a2cef38124360b4cd571690c1c0d70ddab084368373"
+    },
+    "tests/search/typecheck.reference.cjs.txt": {
+      "bytes": 806,
+      "kind": "prior_search_result",
+      "path": "tests/typecheck.cjs",
+      "sha256": "ec954f3e49adee4a2adf3c553afddedd2061b9f05d4b7de6fd9539d28e4ab10a"
+    },
+    "tests/surfaces/driver.reference.py.txt": {
+      "bytes": 16147,
+      "kind": "historical_driver_methods_not_executable",
+      "methods": [
+        "start_session",
+        "end_session",
+        "wait_ready",
+        "_session_write",
+        "core_text",
+        "test_batch",
+        "suite_summary",
+        "transport_test",
+        "sql_test",
+        "snapshot_tests"
+      ],
+      "path": "runner.py.txt",
+      "runner_sha256": "d87f7b6d2cc4340ebeed2b576428eecea699ceff54a9ab4544b1362d34348bda",
+      "sha256": "9dd67a2d164d601c6e5eb5f4bfaa852c9bd6032afb3cba810fcbd79829a391ee"
+    },
+    "tests/surfaces/expected-labels.json": {
+      "bytes": 8713,
+      "kind": "public_surfaces_result",
+      "path": "tests/expected-labels.json",
+      "sha256": "1b01890b8d983d94ecffb0de09f584034a77941ebcc526c310846fe0fc5f2024"
+    },
+    "tests/surfaces/seed.sql": {
+      "bytes": 2714,
+      "kind": "public_surfaces_result",
+      "path": "tests/surface-seed.sql",
+      "sha256": "90fe70acc2f0fad51c9bf88f582c35f98bd9edb0a24c1100b30f1b4a8f11813e"
+    },
+    "tests/surfaces/suite.sql": {
+      "bytes": 133305,
+      "kind": "public_surfaces_result",
+      "path": "tests/surface-suite.sql",
+      "sha256": "ab8f1a0ca5e4d278496f032e84a2b5584a8c75fb4b67240c0302a9a2a12f7501"
+    },
+    "tests/surfaces/transport.reference.cjs.txt": {
+      "bytes": 12855,
+      "kind": "public_surfaces_result",
+      "path": "tests/transport.test.cjs",
+      "sha256": "0395114c7b2c704d9588d90a51770ec7229fe1449f931f53bfb76f7a28d047bf"
+    },
+    "tests/surfaces/typecheck.reference.cjs.txt": {
+      "bytes": 894,
+      "kind": "public_surfaces_result",
+      "path": "tests/typecheck.cjs",
+      "sha256": "34c01ee8c2b830aa15955990eddc9f66bf7e970b733e9e2a8e3d83a83bbd5125"
+    }
+  },
+  "search_result": {
+    "actual_sql_capture_tests": 5,
+    "ended_at": "2026-10-06T12:09:43.348342+03:00",
+    "name": "listing-price-readers-local-20261006-120851-2md_r2ht.zip",
+    "node": 156,
+    "nonblocking_pairs": 2,
+    "runner_sha256": "01c391550dbbc4d327be685b0443a653520aad7a7e061353b6800e50ae530234",
+    "sha256": "2a858285e0c5a1e9b13b6e6358e130a49fad5c082d2d80f1dbefb90c3927a87b",
+    "sql": 154
+  },
+  "surfaces_result": {
+    "actual_sql_capture_tests": 7,
+    "ended_at": "2026-10-06T22:12:30.934509+03:00",
+    "name": "listing-public-surfaces-local-20261006-221157-orr45hmj.zip",
+    "node": 154,
+    "nonblocking_pairs": 2,
+    "registry_checks_included": 172,
+    "runner_sha256": "d87f7b6d2cc4340ebeed2b576428eecea699ceff54a9ab4544b1362d34348bda",
+    "sha256": "c96f2244e3d2b8b19144813c73fc0d3fb9fad1a9722d5a11d738efb137e7ff22",
+    "sql": 320
+  }
+}

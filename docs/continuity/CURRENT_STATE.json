@@ -5,44 +5,43 @@
     "sha256": "667e47990a7d3cc20ff53709cb861663b4565cf1d3c830eda88e0d18e60fdb8a"
   },
   "boundaries": [
-    "Originaalsumma ja fiat-valuuta eraldi kuvavaluutast; 16 valuutat on testivalim. Ei oletatud eurot, testkuulutuste taastäitmist ega kustutamist.",
-    "Uued ridadega töötavad read/save/create funktsioonid on suletud; puhtad väärtushelperid eraldi. Testitud SQL ei ole live-õiguste ja kõigi usaldatud kirjutajate audit.",
-    "Basics CAS on väärtuste, hind revisjoni järgi; loomine nõuab READ COMMITTED, sama võti taastab sama objekti. Kviitungi säilitamine ja konto/kirje kustutamine vajavad eraldi lepingut.",
-    "Pildid, geokodeerimine, AI ja poe-rubriigid pole SQL-tehingu osa. Taastuv publish-first kasutajaliides on veel ühendamata; FX/krüpto/Energy/maksed/hobuseavaldamine eraldi.",
-    "Mõõtühikud ainult toetatud Detailide mõõduväljadele, mitte pealkirjast/kirjeldusest ega vabateksti oletusest. Detailiredaktor eraldi.",
-    "Lai listings SELECT, vana konto-põhine write-RLS ja AI enrich’i ligipääs/kulu jäävad eraldi käivitamiseelseteks töödeks.",
-    "Uue olulise välise paketi juures ütle: „Laadi see üleandmispakett nüüd alla.” See pole automaatne salvestus ega nõue vestlust vahetada."
+    "Täpsed algsummad/valuuta eraldi kuvamisest; 16 valuutat on laborivalim, mitte lõplik register. Ei euro oletust, testandmete taastäitmist ega kustutamist.",
+    "Avalik hind ei kanna hinnarevisjoni, loomise võtit ega kviitungit. Omaniku mitteavaliku sisu tee jääb eraldi; horse/wanted pole ordinary hinnavälja erandid.",
+    "Detail/search lubavad NULL-tähtaega; profiil mitte. Truncation/images_has_more ja vana []→NULL filtripiir tuleb kliendiga teadlikult ühendada.",
+    "Lai SELECT/RLS, vana konto-põhine write, usaldatud kirjutajad, receipt/konto kustutus ja taastuv lisamisvoog jäävad eraldi avamise piirideks.",
+    "Basics väärtus-CAS pole üldine revisjon; loomine READ COMMITTED ja sequence-lüngad lubatud. Eraldi HTTP-kutsed pole üks snapshot.",
+    "FX/krüpto/Energy/hobuseavaldamine ja Detailide redaktor/ühikud eraldi. Ühikuid ei otsita pealkirjast ega kirjeldusest.",
+    "Uue olulise paketi juures ütle: „Laadi see üleandmispakett nüüd alla.” See pole automaatne salvestus ega nõue vestlust vahetada."
   ],
-  "checkpoint": "Testitud 04–09 hinna salvestus- ja loomisintegratsiooni talletamine suletud laborina. Kasutajale uut sisendit ega API õigust ei avata.",
+  "checkpoint": "Testitud 10–14 avaliku hinnalugemise ja nelja parseri talletamine suletud laborina. See ei ühenda kasutajaliidest ega rakenda skeemi.",
   "environment": [
-    "Mac: $HOME/selqiro, main, GitHub Taivo17/selqiro; Python 3.9+ ja olemasolev npm. Enne lähtebuild’i peata dev ise Ctrl+C abil.",
-    "Selles talletamises ei ole SQL-i, Dockerit, Supabase CLI-d, pakettide installi ega vanade operatsioonipäevikute muutmist. Tavalised Git hook’id/CI võivad käivituda.",
-    "Mitte korrata: completed core source, core v1/v2, basics, creation v1/v2/v3, auditid/diagnostika ja rakendatud migratsioonid. STOP: säilita failid/index/commit ja saada raport."
+    "Mac $HOME/selqiro, main, GitHub Taivo17/selqiro. Python 3.9+ ja olemasolev npm. Enne build’i peata oma dev-server Ctrl+C abil.",
+    "Selles lähteetapis pole SQL-i, Dockerit, Supabase CLI-d, pakettide paigaldust ega vanade päevikute muutmist. Tavalised hook’id/CI võivad käivituda.",
+    "Mitte korrata: lõpetatud source/test/audit/apply käiviteid, sh hinnalugeja ning public-surfaces test. STOP: säilita failid/index/commit ja tagasta uus raport."
   ],
   "format": "selqiro_repo_handoff_v1",
   "local_test": [
-    "Hinnatuum 01–03: 04.10.2026 154 SQL-kontrolli + 3 kattuvat seansipaari PASS; talletatud 38d260a all.",
-    "Põhiväljad 04–05: 05.10.2026 10:25–10:26 +03, 110 SQL-kontrolli + 5 kattuvat seansipaari PASS.",
-    "Loomine 06–09: 06.10.2026 09:24 +03, 170 SQL + 5 regressiooni + 2 isolatsioonikeeldumist + 7 kattuvat seansipaari PASS; tõend listing-creation-local-v3-20261006-092421-ozo7ic85.zip.",
-    "Mõlemad integratsioonikatsed: valitud rollback ja ainult oma võrguta helperi eemaldamine PASS. Need ei kordu lähtecheckpoint’is. Täpsed räsid: integratsioonilabori PROVENANCE.json.",
-    "Valitud 7 tabelit, sünteetiline auth, laboris superuser; mitte kogu Supabase/JWT/HTTP, kõik lukujärjestused või koormustest. Sequence-lüngad on lubatud."
+    "Repos olev alus: core 154 SQL +3 paari (04.10), basics 110 +5 (05.10), creation 170 +5 regressiooni +2 isolatsioonikeeldumist +7 paari (06.10 09:24) PASS; selles lähteetapis ei kordu.",
+    "Search/hind 06.10 12:08–12:09 +03: 154 SQL, 156 Node (5 päris SQL-capture’iga), 2 mitteblokeerivat paari ning tüübid/valitud rollback/helper-cleanup PASS.",
+    "Detail/profiil 06.10 22:11–22:12 +03: 320 SQL (172 registripariteeti nende sees), 154 Node (7 päris SQL-capture’iga), 2 paari ning tüübid/rollback/cleanup PASS.",
+    "Täpsed failid ja tõendi päritolu: listing-public-read-v1/PROVENANCE.json. Valitud PG17.6 üheksa tabelit ja sünteetiline auth pole HTTP/JWT/kogu Supabase, brauser või koormustest."
   ],
-  "next_action": "Pärast selle täpse lähtecheckpoint’i tulemuse ülevaatust koosta ja testi versioonitud hinnalugemise leping (hinnaliik ja täpne summatekst), kooskõlas search-v1 ning omaniku loendi ja detaili lugejatega. Täielik valuutaregister ja vanade kirjutajate üleminek peavad olema enne API/UI avamist koordineeritud. Kui talletamine peatus, vaata ainult seda tulemust; ära alusta uut funktsiooni.",
+  "next_action": "Kõigepealt vaata selle avaliku lugemiskihi lähtecheckpoint’i tulemus üle. Edu järel koosta eraldi owner ordinary/horse/wanted lugemisleping õige aktiivse identiteedi õiguse ja täpse hinnaseisuga, säilitades hobuse müügihinna ja otsija eelarve tähenduse. STOP korral vaata ainult raportit; ära alusta uut funktsiooni.",
   "production": [
-    "Hinnatuum ning 04–09 EI OLE productionis ega algses kohalikus andmebaasis rakendatud. 23 olemasolevat migratsiooni säilivad muutmata.",
-    "03.10.2026 13:22–13:23 +03 kaks kattuvat kataloogilugemist, 23/23 ajalugu; varasem tõend, mitte selle talletamise uus päring.",
-    "6df0af9 UI hinnakuvamise production-kinnitus 02.10.2026. 38d260a oli labor/dokumendid; uue lähtecommit’i deployment pole automaatselt tõendatud. Rakenduse runtime ei muutu."
+    "01–14 hinnalabori skeemi pole productionis ega algses kohalikus andmebaasis rakendatud. 23 olemasolevat migratsiooni ja töötav UI säilivad.",
+    "03.10 13:22–13:23 +03 varasem kataloog: 23/23 ajalugu. Viimane runtime-hinnakuva kasutajakinnitus 02.10 /6df0af9; hilisem source-push ei tõenda deployment’i.",
+    "Uued avalikud lugejad jäävad suletuks; vana search-v1, runtime’i kirjutajad/lugejad ning omaniku olemasolevad võimalused ei muutu."
   ],
   "read_next": [
-    "`supabase/labs/listing-price-integration-v1/README.md`, PROVENANCE.json ja tests/DEPENDENCIES.json; tuum on ainult ../listing-price-core-v1/ all.",
-    "`docs/architecture/listing-price-currency-v1.md` algus ning labori CREATION_CONTRACT.md: salvestus-, taastumis- ja avamispiir.",
-    "`docs/continuity/README.md`: failikaart, keskkond ja lõpetatud toimingud. Väline viimane tulemus annab tegeliku uue commit’i."
+    "`supabase/labs/listing-public-read-v1/README.md`, PROVENANCE.json ning tests/TEST_LAYOUTS.json; tests/DEPENDENCIES.json seob ühe korra talletatud aluse.",
+    "`src/entities/marketplace-item/api/getMyMarketplaceItems.ts`, api/mappers.ts, model/types.ts ning asjakohane vana get_my_marketplace_items_v2 serverileping.",
+    "`docs/architecture/listing-price-currency-v1.md` algus; `docs/continuity/README.md` annab keskkonna ja failikaardi."
   ],
   "recorded_on": "2026-10-06",
   "source": {
-    "Autoriteet": "See JSON genereerib jooksva 99-lehe. Tegelik Git ja käiguraport määravad tehtud lähtepaigalduse; production ja deployment vajavad eraldi kuupäevaga tõendit.",
-    "Selle etapi tegelik tulemus": "Loe listing-price-integration-source-*.zip: BUILD, COMMIT, NEW_COMMIT, PUSH, WORKTREE ja REMOTE. See dokument ei saa sisaldada oma tulevast commit-räsi ega tõenda paigaldamist.",
-    "Viimane kinnitatud baas": "38d260af982bd41784ce4d5cb5fca6db31535a88; 06.10.2026 09:24:49–50 +03 puhas main ja GitHubiga võrdne. See ei ole tänane automaatne live-kontroll."
+    "Autoriteet": "CURRENT_STATE genereerib jooksva 99-lehe. Tegelik Git ja käiguraport eristavad paigaldatud/stage’itud/commit’itud/push’itud seisu; production vajab eraldi tõendit.",
+    "Selle etapi tegelik tulemus": "Loe listing-public-read-source-*.zip: BUILD, COMMIT, NEW_COMMIT, PUSH, WORKTREE ja REMOTE. Dokument ei saa teada oma tulevast commit-räsi ega tõenda käivitamist.",
+    "Viimane kinnitatud baas": "e4b41436a88048ce828ff520ac6ce39d5ce372ef; 06.10.2026 22:12:30 +03 puhas main ja GitHubiga võrdne. Uus käiviti peab enne kirjutusi tegeliku seisu uuesti kontrollima."
   },
   "stop_rule": "Säilita failid, index, võimalik commit ja raport. Ära korda käivitit, reset/restore’i, SQL-i või push’i enne konkreetse vea ülevaatust."
 }

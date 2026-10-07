@@ -1,0 +1,162 @@
+{
+  "boundary": "Historical tests are exact reference bytes under separate folders. Do not execute the old one-shot runner; this map documents reconstruction for a future reviewed harness. No test is run by retention.",
+  "format": "selqiro_recorded_public_reader_test_layouts_v1",
+  "layouts": {
+    "search": {
+      "candidate/10_price_read_model.sql": {
+        "repository_path": "supabase/labs/listing-public-read-v1/10_price_read_model.sql"
+      },
+      "candidate/11_public_search_v2.sql": {
+        "repository_path": "supabase/labs/listing-public-read-v1/11_public_search_v2.sql"
+      },
+      "client/priceRead.ts": {
+        "repository_path": "supabase/labs/listing-public-read-v1/client/priceRead.ts"
+      },
+      "client/publicSearchV2.ts": {
+        "repository_path": "supabase/labs/listing-public-read-v1/client/publicSearchV2.ts"
+      },
+      "dependencies/01_value_contract.sql": {
+        "repository_path": "supabase/labs/listing-price-core-v1/01_value_contract.sql"
+      },
+      "dependencies/02_write_guard.sql": {
+        "repository_path": "supabase/labs/listing-price-core-v1/02_write_guard.sql"
+      },
+      "dependencies/03_owner_price_core.sql": {
+        "repository_path": "supabase/labs/listing-price-core-v1/03_owner_price_core.sql"
+      },
+      "dependencies/04_basics_contract.sql": {
+        "repository_path": "supabase/labs/listing-price-integration-v1/04_basics_contract.sql"
+      },
+      "dependencies/05_owner_basics_atomic.sql": {
+        "repository_path": "supabase/labs/listing-price-integration-v1/05_owner_basics_atomic.sql"
+      },
+      "dependencies/currencies.v1.json": {
+        "repository_path": "supabase/labs/listing-price-core-v1/currencies.v1.json"
+      },
+      "dependencies/fixture.sql": {
+        "repository_path": "supabase/labs/listing-price-core-v1/tests/fixture.sql"
+      },
+      "dependencies/search-v1.sql": {
+        "historical_result_path": "dependencies/search-v1.sql",
+        "sha256": "f51c1a9537936a9b11fefaf166b1d2bda8dff144c364381ea6db7f61e95543f1",
+        "source": "Captured Oct 3 catalog definitions; use original result map. Not another maintained implementation."
+      },
+      "dependencies/seed.sql": {
+        "repository_path": "supabase/labs/listing-price-core-v1/tests/seed.sql"
+      },
+      "source-context/src/entities/listing/model/publicSearch.ts": {
+        "repository_path": "src/entities/listing/model/publicSearch.ts"
+      },
+      "source-context/src/entities/listing/model/publicSearchResponse.ts": {
+        "repository_path": "src/entities/listing/model/publicSearchResponse.ts"
+      },
+      "tests/expected-labels.json": {
+        "repository_path": "supabase/labs/listing-public-read-v1/tests/search/expected-labels.json"
+      },
+      "tests/reader-fixture-extension.sql": {
+        "repository_path": "supabase/labs/listing-public-read-v1/tests/reader-fixture-extension.sql"
+      },
+      "tests/reader-seed.sql": {
+        "repository_path": "supabase/labs/listing-public-read-v1/tests/search/seed.sql"
+      },
+      "tests/reader-suite.sql": {
+        "repository_path": "supabase/labs/listing-public-read-v1/tests/search/suite.sql"
+      },
+      "tests/sql-transport-capture.json": {
+        "historical_result_path": "tests/sql-transport-capture.json",
+        "rule": "Historical capture retained in evidence only. A future live test must capture its own SQL stdout; no fallback.",
+        "sha256": "8dafbeeedaa3d5f432c58a1592470f16c7c33381c9cd633e5b0d7c70571a6484"
+      },
+      "tests/transport.test.cjs": {
+        "repository_path": "supabase/labs/listing-public-read-v1/tests/search/transport.reference.cjs.txt"
+      },
+      "tests/typecheck.cjs": {
+        "repository_path": "supabase/labs/listing-public-read-v1/tests/search/typecheck.reference.cjs.txt"
+      }
+    },
+    "surfaces": {
+      "candidate/12_public_detail_fields.sql": {
+        "repository_path": "supabase/labs/listing-public-read-v1/12_public_detail_fields.sql"
+      },
+      "candidate/13_public_listing_detail.sql": {
+        "repository_path": "supabase/labs/listing-public-read-v1/13_public_listing_detail.sql"
+      },
+      "candidate/14_public_profile_listings.sql": {
+        "repository_path": "supabase/labs/listing-public-read-v1/14_public_profile_listings.sql"
+      },
+      "client/priceRead.ts": {
+        "repository_path": "supabase/labs/listing-public-read-v1/client/priceRead.ts"
+      },
+      "client/publicDetailV1.ts": {
+        "repository_path": "supabase/labs/listing-public-read-v1/client/publicDetailV1.ts"
+      },
+      "client/publicProfileListingsV1.ts": {
+        "repository_path": "supabase/labs/listing-public-read-v1/client/publicProfileListingsV1.ts"
+      },
+      "client/publicSearchV2.ts": {
+        "repository_path": "supabase/labs/listing-public-read-v1/client/publicSearchV2.ts"
+      },
+      "dependencies/01_value_contract.sql": {
+        "repository_path": "supabase/labs/listing-price-core-v1/01_value_contract.sql"
+      },
+      "dependencies/02_write_guard.sql": {
+        "repository_path": "supabase/labs/listing-price-core-v1/02_write_guard.sql"
+      },
+      "dependencies/03_owner_price_core.sql": {
+        "repository_path": "supabase/labs/listing-price-core-v1/03_owner_price_core.sql"
+      },
+      "dependencies/04_basics_contract.sql": {
+        "repository_path": "supabase/labs/listing-price-integration-v1/04_basics_contract.sql"
+      },
+      "dependencies/05_owner_basics_atomic.sql": {
+        "repository_path": "supabase/labs/listing-price-integration-v1/05_owner_basics_atomic.sql"
+      },
+      "dependencies/10_price_read_model.sql": {
+        "repository_path": "supabase/labs/listing-public-read-v1/10_price_read_model.sql"
+      },
+      "dependencies/11_public_search_v2.sql": {
+        "repository_path": "supabase/labs/listing-public-read-v1/11_public_search_v2.sql"
+      },
+      "dependencies/currencies.v1.json": {
+        "repository_path": "supabase/labs/listing-price-core-v1/currencies.v1.json"
+      },
+      "dependencies/fixture.sql": {
+        "repository_path": "supabase/labs/listing-price-core-v1/tests/fixture.sql"
+      },
+      "dependencies/search-v1.sql": {
+        "historical_result_path": "dependencies/search-v1.sql",
+        "sha256": "f51c1a9537936a9b11fefaf166b1d2bda8dff144c364381ea6db7f61e95543f1",
+        "source": "Captured Oct 3 catalog definitions; use original result map. Not another maintained implementation."
+      },
+      "dependencies/seed.sql": {
+        "repository_path": "supabase/labs/listing-price-core-v1/tests/seed.sql"
+      },
+      "tests/base-reader-seed.sql": {
+        "repository_path": "supabase/labs/listing-public-read-v1/tests/search/seed.sql"
+      },
+      "tests/expected-labels.json": {
+        "repository_path": "supabase/labs/listing-public-read-v1/tests/surfaces/expected-labels.json"
+      },
+      "tests/reader-fixture-extension.sql": {
+        "repository_path": "supabase/labs/listing-public-read-v1/tests/reader-fixture-extension.sql"
+      },
+      "tests/sql-transport-capture.json": {
+        "historical_result_path": "tests/sql-transport-capture.json",
+        "rule": "Historical capture retained in evidence only. A future live test must capture its own SQL stdout; no fallback.",
+        "sha256": "62be9be255859644d5edff447981d3a2cd583ada4e04988c83285afd47c5515a"
+      },
+      "tests/surface-seed.sql": {
+        "repository_path": "supabase/labs/listing-public-read-v1/tests/surfaces/seed.sql"
+      },
+      "tests/surface-suite.sql": {
+        "repository_path": "supabase/labs/listing-public-read-v1/tests/surfaces/suite.sql"
+      },
+      "tests/transport.test.cjs": {
+        "repository_path": "supabase/labs/listing-public-read-v1/tests/surfaces/transport.reference.cjs.txt"
+      },
+      "tests/typecheck.cjs": {
+        "repository_path": "supabase/labs/listing-public-read-v1/tests/surfaces/typecheck.reference.cjs.txt"
+      }
+    }
+  }
+}

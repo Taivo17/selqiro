@@ -1,0 +1,175 @@
+# READ-ONLY REFERENCE. These are exact tested driver methods, NOT a standalone test.
+# No command here is authorized for replay. See README and PROVENANCE.json.
+# Dependencies/constants/lifecycle belong to the original pinned runner.
+
+    def start_session(self,name,sql):
+        self.label_guard(name);require(len(sql.encode())<=65536,'Sunteetiline session liiga suur.')
+        self.helper_check(True)
+        target=self.out/'logs';op=target/(name+'.stdout');ep=target/(name+'.stderr')
+        require(not op.exists() and not ep.exists(),'Race session ei kordu.')
+        o=op.open('xb');e=ep.open('xb')
+        args=self.docker('exec','-i','--user','postgres',self.helper,'env','-i',
+          'PATH=/usr/lib/postgresql/bin:/usr/bin:/bin','HOME=/tmp','LC_ALL=C','PGCLIENTENCODING=UTF8',
+          'PGPASSFILE=/tmp/no-price-passfile','PGCONNECT_TIMEOUT=4','PGAPPNAME='+name,*self.psql_args())
+        if not hasattr(self,'session_records'):self.session_records={}
+        rec=dict(name=name,started_at=now(),finished_at=None,held_observed_at=None,submitted='',exit_code=None)
+        self.session_records[name]=rec
+        proc=subprocess.Popen(args,stdin=subprocess.PIPE,stdout=o,stderr=e,cwd=self.root,env=self.env,start_new_session=True)
+        self.children.append(proc);os.set_blocking(proc.stdin.fileno(),False);s=(proc,o,e,op,ep)
+        self.put('tests/concurrency/'+name+'.initial.sql',sql)
+        try:self._session_write(s,sql.encode())
+        except BaseException:
+            if proc.poll() is None:os.killpg(proc.pid,signal.SIGKILL);proc.wait()
+            o.close();e.close();raise
+        return s
+
+    def end_session(self,s,final=''):
+        proc,o,e,op,ep=s;rec=self.session_records[op.stem]
+        try:
+            if final:self._session_write(s,final.encode())
+            proc.stdin.close();proc.wait(timeout=12)
+        finally:
+            if proc.poll() is None:os.killpg(proc.pid,signal.SIGKILL);proc.wait()
+            o.close();e.close();rec['finished_at']=now();rec['exit_code']=proc.returncode
+            path='tests/concurrency/'+op.stem+'.submitted.sql';self.put(path,rec['submitted'])
+            published={k:v for k,v in rec.items() if k!='submitted'}
+            published.update(sql_path=path,sql_sha256=sha(rec['submitted'].encode()),
+              stdout_path='logs/'+op.name,stderr_path='logs/'+ep.name,
+              stdout_sha256=sha(op.read_bytes()),stderr_sha256=sha(ep.read_bytes()))
+            self.js('tests/concurrency/'+op.stem+'.json',published)
+            self.commands.append(dict(label=op.stem,exit_code=proc.returncode,async_session=True,
+              started_at=rec['started_at'],finished_at=rec['finished_at'],sql_sha256=published['sql_sha256']))
+        require(op.stat().st_size<=1024*1024 and ep.stat().st_size<=1024*1024,'Race valjund liiga suur.')
+        return proc.returncode,op.read_bytes(),ep.read_bytes()
+
+    def wait_ready(self,s):
+        proc,_,_,op,ep=s;start=time.monotonic()
+        while time.monotonic()-start<5:
+            require(proc.poll() is None,'Race A loppes enne kontrollpunkti.')
+            require(op.stat().st_size<=1024*1024 and ep.stat().st_size<=1024*1024,'Race valjund uletas piiri.')
+            if b'PRICE_A_HELD' in op.read_bytes().splitlines():return
+            time.sleep(.02)
+        raise Stop('Race A kontrollpunkti ei saabunud; ei nimeta katset labinuks.')
+
+    def _session_write(self,s,data):
+        proc,o,e,op,ep=s
+        pending=memoryview(data);start=time.monotonic()
+        while pending:
+            require(time.monotonic()-start<4 and proc.poll() is None,'Sessioni sisend ei saanud piiratud ajaga edastatud.')
+            require(op.stat().st_size<=1024*1024 and ep.stat().st_size<=1024*1024,'Sessioni valjund uletas piiri.')
+            try:pending=pending[os.write(proc.stdin.fileno(),pending[:65536]):]
+            except BlockingIOError:time.sleep(.01)
+        self.session_records[op.stem]['submitted']+=data.decode()
+
+    def core_text(self):
+        names=['01_value_contract.sql','02_write_guard.sql','03_owner_price_core.sql',
+          '04_basics_contract.sql','05_owner_basics_atomic.sql']
+        return ''.join(self.payload['dependencies/'+n].decode()+'\n' for n in names)+''.join(
+          self.payload['candidate/'+n].decode()+'\n' for n in ['10_price_read_model.sql','11_public_search_v2.sql'])
+
+    def test_batch(self):
+        parts=[('batch/preamble',"\\set ON_ERROR_STOP on\nBEGIN;\nSET LOCAL TimeZone='UTC';\nSET LOCAL statement_timeout='15s';\n")]
+        for n in ['01_value_contract.sql','02_write_guard.sql','03_owner_price_core.sql','04_basics_contract.sql','05_owner_basics_atomic.sql']:
+            parts.append(('dependencies/'+n,self.payload['dependencies/'+n].decode()+'\n'))
+        for n in ['10_price_read_model.sql','11_public_search_v2.sql']:parts.append(('candidate/'+n,self.payload['candidate/'+n].decode()+'\n'))
+        for n in ['reader-seed.sql','reader-suite.sql']:parts.append(('tests/'+n,self.payload['tests/'+n].decode()+'\n'))
+        parts.append(('batch/rollback','ROLLBACK;\n'));line=1;self.batch_map=[]
+        for name,t in parts:
+            self.batch_map.append(dict(path=name,start_line=line,end_line=line+t.count('\n')-1,bytes=len(t.encode()),sha256=sha(t.encode())))
+            line+=t.count('\n')
+        self.js('tests/executed-source-map.json',self.batch_map)
+        return ''.join(t for _,t in parts)
+
+    def suite_summary(self,cp):
+        labels=[s.decode() for s in re.findall(rb'PRICE_READ_PASS: ([a-zA-Z0-9_]+)',cp.stderr)]
+        lines=[s for s in cp.stdout.splitlines() if s.strip()]
+        ok=cp.returncode==0 and labels==self.labels and len(lines)==2 and lines[0].startswith(b'{') and lines[-1]==b'PRICE_READ_SUITE=PASS'
+        diagnostic=None;m=re.search(rb'psql:<stdin>:(\d+): ERROR:\s+([0-9A-Z]{5}):',cp.stderr)
+        if m:
+            line=int(m.group(1));part=next((p for p in self.batch_map if p['start_line']<=line<=p['end_line']),None)
+            diagnostic=dict(sqlstate=m.group(2).decode(),statement_end_line=line,source=part['path'] if part else None,
+              note='Statement end, not necessarily offending token. Original SQL and synthetic error log retained.')
+        self.js('sql-test-summary.json',dict(passed=ok,exit_code=cp.returncode,observed_count=len(labels),expected_count=154,labels=labels,first_error=diagnostic))
+        self.result['SQL_SUITE']='PASS_154_ASSERTIONS' if ok else 'FAIL_'+str(len(labels))+'_OF_154'
+        require(ok,'Lugemise SQL ei labinud; vaata sql-test-summary.json ja reader-suite logi. Algset DB-d ei uhendatud.')
+        capture=load(lines[0]);require(set(capture)=={'v1','v2','owner'},'SQL capture kuju erineb.')
+        require(capture['v2']['items'][0]['price']['amount']=='999999999999999999.999','SQL summatekst kaotas tapsuse.')
+        self.put('tests/sql-transport-capture.json',lines[0]+b'\n')
+
+    def transport_test(self):
+        self.env['SELQIRO_PRICE_CAPTURE']=str(self.out/'tests/sql-transport-capture.json')
+        cp=self.command([self.node_bin,'--test','--test-reporter=tap',str(self.out/'tests/transport.test.cjs')],
+          'price-read-transport',timeout=50,check=False,save=True)
+        out=cp.stdout.decode(errors='replace')
+        needed={'tests':156,'suites':0,'pass':156,'fail':0,'cancelled':0,'skipped':0,'todo':0}
+        summary={k:re.findall(r'^# '+k+r' (\d+)\s*$',out,re.M) for k in needed}
+        ok=cp.returncode==0 and out.startswith('TAP version 13\n') and re.findall(r'^1\.\.(\d+)\s*$',out,re.M)==['156'] and all(summary[k]==[str(v)] for k,v in needed.items())
+        self.js('transport-summary.json',dict(passed=ok,exit_code=cp.returncode,expected=needed,observed=summary,
+          sql_capture_sha256=sha(plain(self.out/'tests/sql-transport-capture.json')),capture_source='Actual synthetic-helper SQL stdout',
+          boundary='Actual TS parsers and JSON data, not React/HTTP/browser. No old full suite replay.'))
+        self.result['TRANSPORT_TESTS']='PASS_156_ACTUAL_PARSERS_WITH_SQL_CAPTURE' if ok else 'FAIL_REVIEW_REQUIRED'
+        require(ok,'Lugemise kliendilepingu TAP tulemus ei vasta; ei jatka.')
+
+    def sql_test(self):
+        self.phase='engine-versions'
+        for name,label in VERSION_PROBES:
+            cp=self.h_exec(['/usr/lib/postgresql/bin/'+name,'--version'],label)
+            require(cp.stdout.decode().strip()==name+' (PostgreSQL) 17.6','Helperi PostgreSQL versioon erineb.')
+        self.phase='synthetic-key';self.h_exec(['/bin/sh','-c',PREPARE_TEST_KEY,'key','/etc/postgresql-custom'],'synthetic-key')
+        self.phase='cluster-init';self.h_exec(['/bin/sh','-c',INIT_CLUSTER,'init','/tmp/price-core','/usr/lib/postgresql/bin','/usr/lib/postgresql/share/postgresql'],'cluster-init')
+        self.phase='cluster-start';self.h_exec(['/bin/sh','-c',START_CLUSTER,'start','/tmp/price-core','/usr/lib/postgresql/bin'],'cluster-start',data=PG_CONFIG.encode())
+        engine=load(self.sql("select jsonb_build_object('version',current_setting('server_version_num'),'actor',current_user,'preloads',current_setting('shared_preload_libraries'),'listen',current_setting('listen_addresses'));",'engine-check',database='postgres').stdout)
+        require(engine==dict(version='170006',actor='postgres',preloads='',listen=''),'Helper andmebaasi piir erineb.')
+        self.js('evidence/engine.json',engine)
+        self.phase='fixture-database-create';self.sql('CREATE DATABASE selqiro_price_core_fixture;','fixture-database-create',database='postgres')
+        self.phase='fixture-init';self.sql(self.payload['dependencies/fixture.sql'].decode(),'fixture-init')
+        self.sql(self.payload['tests/reader-fixture-extension.sql'].decode(),'reader-fixture-extension')
+        self.sql('BEGIN;\n'+self.payload['dependencies/search-v1.sql'].decode()+'\nCOMMIT;','saved-search-v1-baseline')
+        before=self.sql(SNAPSHOT_SQL,'fixture-before').stdout.strip();self.put('evidence/fixture-before.json',before+b'\n')
+        batch=self.test_batch();self.put('tests/executed-rollback-batch.sql',batch)
+        self.phase='sql-suite';self.result['SQL_SUITE']='RUNNING';cp=self.sql(batch,'reader-suite',check=False)
+        self.phase='rollback-verification'
+        after=self.sql(SNAPSHOT_SQL,'fixture-after').stdout.strip();self.put('evidence/fixture-after.json',after+b'\n')
+        require(before==after,'Rollback ei taastanud valitud skeemi/oigusi/ridu.')
+        parsed=load(after);require(parsed['test_schema_absent'] and all(x['count']=='0' for x in parsed['rows'].values()),'Testread voi schemas jaid alles.')
+        self.result['OUTER_ROLLBACK']='PASS_SELECTED_CATALOG_PRIVILEGES_NINE_EMPTY_TABLES'
+        self.phase='sql-suite-summary';self.suite_summary(cp)
+        self.phase='transport-tests';self.transport_test()
+        self.phase='snapshot-setup'
+        self.sql('BEGIN;\n'+self.core_text()+'\n'+self.payload['tests/reader-seed.sql'].decode()+
+          "\nUPDATE public.listings SET price_kind='fixed',price_amount=10,currency='EUR' WHERE id=1001;\nGRANT EXECUTE ON FUNCTION public.search_public_listings_v2(text,text,text,text,text,text,integer,integer) TO anon;\nCOMMIT;",'snapshot-setup')
+        self.result['LOCAL_CANDIDATE_COMMIT']='DISPOSABLE_HELPER_ONLY_NEVER_ORIGINAL_DB'
+        self.phase='concurrent-read';self.snapshot_tests()
+
+    def snapshot_tests(self):
+        results=[]
+        for i,final in enumerate(['COMMIT;\n','ROLLBACK;\n']):
+            self.sql("UPDATE public.listings SET price_kind='fixed',price_amount=10,currency='EUR' WHERE id=1001;",'snapshot-reset-'+str(i))
+            name='price-read-snapshot-'+str(i);a=b=None
+            try:
+                a=self.start_session(name+'-a',"\\set ON_ERROR_STOP on\nBEGIN;\nSET LOCAL statement_timeout='6s'; SET LOCAL idle_in_transaction_session_timeout='10s';\nUPDATE public.listings SET price_kind='fixed',price_amount=999999999999999999.999,currency='KWD' WHERE id=1001;\n\\echo PRICE_A_HELD\n")
+                self.wait_ready(a);held=now()
+                active="SELECT EXISTS(SELECT 1 FROM pg_stat_activity WHERE application_name='"+name+"-a' AND state='idle in transaction');"
+                require(self.sql(active,'writer-held-before-'+str(i)).stdout.strip()==b't','A tehingu hoidmist ei kinnitatud.')
+                b=self.start_session(name+'-b',"\\set ON_ERROR_STOP on\nBEGIN READ ONLY;\nSET LOCAL statement_timeout='3s';\nSET LOCAL ROLE anon;\nSELECT public.search_public_listings_v2(p_search_query=>'reader-alpha');\nCOMMIT;\n")
+                br=self.end_session(b);b=None;read_finished=now()
+                require(br[0]==0,'B lugemine ei loppenud enne A vabastamist.')
+                pages=[load(x) for x in br[1].splitlines() if x.startswith(b'{')]
+                require(len(pages)==1 and pages[0]['items'][0]['price']['amount']=='10' and pages[0]['items'][0]['price']['currency']=='EUR','B ei lugenud tervet vana committed hinnaseisu.')
+                require(self.sql(active,'writer-held-after-'+str(i)).stdout.strip()==b't','A ei hoidnud tehingut B lugemise lopus.')
+                release=now();ar=self.end_session(a,final);a=None;require(ar[0]==0,'A tehingu lopp ei labinud.')
+                q="BEGIN READ ONLY; SET LOCAL ROLE anon; SELECT public.search_public_listings_v2(p_search_query=>'reader-alpha'); COMMIT;"
+                cp=self.sql(q,'reader-after-'+str(i));post=load(cp.stdout.strip())
+                expected=('999999999999999999.999','KWD') if i==0 else ('10','EUR')
+                v=post['items'][0]['price'];require((v['amount'],v['currency'])==expected,'Vabastatud tehingu jarel hinnaseis erineb.')
+                rec=dict(name=name,passed=True,read_only_transaction=True,writer_held_at=held,reader_finished_at=read_finished,
+                  writer_released_at=release,first_final=final.strip(),old_amount='10',old_currency='EUR',after_amount=v['amount'],after_currency=v['currency'],
+                  property='B completes while A remains idle-in-transaction; complete old price then complete committed price, no dirty/mixed tuple.')
+                results.append(rec);self.js('concurrent-read-summary.json',dict(passed=len(results)==2,tests=results,expected_count=2))
+            finally:
+                for session in (a,b):
+                    if session is not None:
+                        try:self.end_session(session,'ROLLBACK;\n' if session[0].poll() is None else '')
+                        except Exception:pass
+        self.result['CONCURRENT_READ']='PASS_TWO_NONBLOCKING_SNAPSHOT_CASES'
+

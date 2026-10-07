@@ -1,3 +1,39 @@
+<!-- SELQIRO_PUBLIC_PRICE_READ_SOURCE_CHECKPOINT_20261006 -->
+## 2026-10-06 — retain the tested public price-read layer, not an API rollout
+
+This dated source checkpoint supersedes older next-task entries. Base e4b4143 was
+clean and remote-equal in the user's 6 Oct 22:12:30 (+03) run. Read the new
+listing-public-read-source result for actual build, staged/committed/pushed state
+and NEW_COMMIT; this source document cannot know its own future commit hash.
+
+Retain 10–14 and four TS parsers in supabase/labs/listing-public-read-v1, outside
+migrations and runtime imports. Existing 01–09, their shared fixture/seed/currency
+sample, all 23 migrations, application source and existing tests stay unchanged.
+The new lab records exact tested bytes and dependency hashes; no second price
+truth source or duplicate core is introduced. Node suites keep exact bytes as
+reference files, with historical scratch layouts mapped for a future reviewed
+harness. This checkpoint does not replay one-shot SQL/Docker/Node test runners.
+
+Prior completed search run: 6 Oct 12:09, 154 SQL +156 parser cases (5 with helper
+JSON) +2 nonblocking snapshots. Prior surfaces run: 6 Oct 22:12, 320 SQL (172
+registry checks included) +154 parser cases (7 with helper JSON) +2 snapshots.
+Both included TS checking, selected rollback and removal of only their helper.
+These are selected PG17.6/synthetic-auth cases, not full HTTP/JWT/role/load/browser
+proof. Retention checks file parity and the existing project build, not new SQL.
+
+Public fields deliberately omit owner price revision/request key/receipt and
+precise private location. Search/detail permit active NULL expiry; profile does
+not. Detail truncation and images_has_more must be handled by later UI. Broad
+legacy SELECT/RLS is not repaired. The 16-currency sample is not a global register.
+No new permission or database application occurs. Preserve all original test data.
+
+Next after reviewed source completion: owner ordinary/horse/wanted reading with
+server active-identity authorization and one bounded list; preserve private owner
+access, horse sale-price and wanted-budget meanings. Registry, legacy/trusted
+writers, deletion/receipt policy, recoverable client and real HTTP/role/deployment
+QA remain separate release gates. FX/crypto/Energy/units are outside this step.
+
+---
 <!-- SELQIRO_PRICE_INTEGRATION_SOURCE_20261006 -->
 ## 2026-10-06 — Retain tested atomic basics and creation integration (closed lab)
 
