@@ -1,3 +1,73 @@
+<!-- SELQIRO_LISTING_EDIT_COMPOSITION_ACCEPTED_FINISH_20261009 -->
+## 09.10.2026 — Muutmislehe eraldamine läbis; kasutaja vaatamiskontroll vastu võetud
+
+Kasutaja 21:33:30–21:33:56 (+03) käigus läbisid kõik 198 moodulitesti ja päris build.
+Tulemus: `listing-edit-composition-20261009-213330-i2cqjhzn.zip`, SHA-256
+`b451ca55c86b1f241244580394d9aa2dc97294675dad3ebdb57e937533a9c768`.
+622 faili /621 manifestiräsi /418 valitud lähtefaili kontrollitud. Lõpus oli HEAD
+f8a624140b206611162dbd3f74ce33278bfab813, 17 faili staging'us (9 uut, 8 muudetud),
+kõrvalmuudatusi polnud ja GitHub vastas baasile. See polnud veel uus commit ega juurutus.
+
+Kasutaja kinnitas „kõik tundub olevat korras”. Viis arvutivaate ja üks kitsa vaate
+pilt (nimedes 21:39:55–21:41:06) toetavad tellitud vaatamiskontrolli vastuvõtmist.
+Piltidel on päis/identiteet, galerii, põhiväljad, senine hinnatekst, kategooria/asukoht,
+poe-rubriigid, kirjeldus ning Detailide eelvaade. Kitsa kategooriakaardi paigutus säilib.
+See ei tõenda eraldi iga lingi klõpsu, kogu mobiilivoogu, uusi salvestusi/pildikirjutusi,
+identiteedivahetust või HTTP-rasse. Vastu võetud vaatamiskontrolli ei pea kordama.
+
+Muutmisleht on nüüd 704 rea asemel 140 rida; kaheksa eraldatud moodulit on väikesed.
+Piltide kolm toimingut ja kümme abifunktsiooni säilisid. 48 uut testi +150 senist
+hinnaregressiooni kasutavad päris mooduleid, aga asendatud hook'e/JSX-i/API-sid.
+Uut valuutavalikut ega atomaarset hinnasalvestust veel ei avata. Detailid jäävad
+ainult eelvaateks; pilditoimingu järgse reload'i ja salvestamata teksti risk pole parandatud.
+
+Lõpetaja muudab ainult seitset dokumenti sama 17-failise paketi sees, säilitab kümme
+testitud koodi-/testifaili, teeb värske lähte/indexi/kaugseisu kontrolli ja build'i.
+Commit `Refactor listing edit page into focused modules` vajab eraldi COMMIT PUSH
+kinnitust. Tegelik uus räsi, push ja puhas seis selguvad lõpetaja tulemusest.
+SQL-i, 198 testi ja brauserit ei korrata. 23 migratsiooni, register ja laborid säilivad.
+
+Pärast kinnitatud lõpetamist järgneb sama kuulutuse hinna ja valuuta tervikühendus:
+täielik omaniku algseis, neli hinnaliiki, täpne summa, üks atomaarne salvestus ja
+sama hind kõigis vaadetes. Õigused, vanad kirjutajad ja aegunud vastused kuuluvad
+kontrolli enne avamist. Energy/maksed alles pärast põhivooge ja nähtavaid linke.
+AI, kursiteisendused, krüpto, ühikud ja muud kõrvalfunktsioonid jäävad ootele.
+Ära korda paigaldajat ega tee käsitsi taastamist; vea korral säilita failid ja raport.
+
+---
+
+<!-- SELQIRO_LISTING_EDIT_COMPOSITION_20261009 -->
+## 09.10.2026 — Muutmisleht väikesteks mooduliteks enne hinnaliidestust
+
+Alus on kontrollitud ja push'itud `f8a6241`; viimane päris Maci build ja puhas Git
+on 09.10 kell 20:21 käigust. Käesolev kirje ei kinnita uut paigaldust ega uut commit'i.
+
+704-realine ListingEditPage muutub 140-realiseks koosteleheks. Pilditegevused liiguvad
+väiksesse hook'i, mida kutsutakse samas lehe elutsüklis; väljad, pildid, kirjeldus,
+detailid, veateated ja tegevused eralduvad väikestesse komponentidesse. Olemasolevad
+funktsioonikehad, sõnastused, klassid, väljaväärtused ja API-kutsed jäävad samaks.
+Uut hinnavalikut, salvestust, õigust ega uut kohustuslikku mustandit ei avata.
+
+Pakett on täpselt 17 faili: kaheksa uut moodulit, uus test, senine leht ja seitse
+dokumenti. 48 uut kontrolli võrdlevad 15 vana JSX-kuju, 13 täpset funktsioonikeha ning
+pildi- ja väljasündmusi. Koos kahe senise hinnaregressioonisviidiga 198 Node-testi.
+Need kasutavad asendatud hook'e/API-sid, mitte päris brauserit ega andmebaasi.
+Päris paigaldus/testid/build/staging selguvad uuest tulemus-ZIP-ist, mitte sellest tekstist.
+
+Pärast PASS-i piisab lugemise brauserikontrollist: olemasoleva kuulutuse muutmisleht,
+põhiandmed, galerii juhtelemendid, rubriigid, kirjeldus/detailid, tagasilingid ja kitsas
+vaade. Ära korda selleks salvestamist, pildikustutust või kuulutuse uuendamist.
+Commit/push tuleb eraldi pärast ülevaatust. STOP-i korral säilita failid ja staging.
+
+Seejärel jätkame sama hinnatööga: täielik omaniku algseis, neli hinnaliiki, täpne summa
+ja kasutaja valitud valuuta, üks atomaarne salvestus ning sama hind kõigis vaadetes.
+Vanade kirjutusteede/õiguste üleminek jääb vajalikuks. Selle refaktoriga ei väideta
+parandatuks seniseid võistlustingimusi ega pilditoimingute järel lehe uuestilaadimise riske.
+Hobusemuutmine, uuendamine, 23 migratsiooni, varasemad laborid ning registrifailid säilivad.
+Energy/maksed alles pärast põhivooge ja nähtavaid toiminguid; AI/FX/krüpto/ühikud ootavad.
+
+---
+
 <!-- SELQIRO_PRICE_INPUT_LOCAL_ACCEPTED_SOURCE_FINISH_20261009 -->
 ## 09.10.2026 — Valuutaregister ja täpne hinnasisend läbisid kohaliku katse
 

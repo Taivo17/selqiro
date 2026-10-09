@@ -1,3 +1,79 @@
+<!-- SELQIRO_LISTING_EDIT_COMPOSITION_ACCEPTED_FINISH_20261009 -->
+## 09.10.2026 — Refaktori tegelik PASS ja brauserikinnitus eraldi commit'i tulemusest
+
+Jooksev seis ei ole enam „käivita refaktori paigaldaja”. 21:33 kasutajakäik lõppes
+198 testi/build PASS-iga ning 17 täpselt stage'itud failiga baasil f8a6241. Hilisem
+„kõik tundub olevat korras” koos kuue pildiga on vaatamiskontrolli üldine vastuvõtt,
+mitte üksikute linkide või kirjutuste mõõdetud tõend. Ära nõua selle kordamist.
+
+Lõpetaja ainus sisend Downloads-is on
+`listing-edit-composition-20261009-213330-i2cqjhzn.zip` (622 faili; SHA-256
+`b451ca55c86b1f241244580394d9aa2dc97294675dad3ebdb57e937533a9c768`).
+Käivita ainult `selqiro-finish-listing-edit-composition.py` pärast dev'i peatamist.
+Eraldi nõusolekud FINISH EDIT COMPOSITION ja pärast build'i COMMIT PUSH.
+Seitse dokumenti uuenevad; kümme testitud lähte-/testifaili jäävad muutmata.
+Kogu index, 418 allikat, 23 migratsiooni, puhas kõrvalmuudatusteta seis ja remote
+kontrollitakse uuesti. Oma uus lukk/päevik; vanu operatsioonipäevikuid ei loeta.
+
+`CURRENT_STATE.json` on lühikese repo üleandmislehe ainus allikas. Arhiiv (5573 rida)
+ja renderdaja jäävad bait-baidilt samaks. Need commit'itavad dokumendid ei saa teada
+enda tulevast commit-räsi: loe tegelik NEW_COMMIT/BUILD/COMMIT/PUSH/WORKTREE/REMOTE
+uuest `listing-edit-composition-finish-...zip` tulemusest. Olemasolevat tulemust loe,
+mitte ära korda lõpetajat. Katkestusel säilita failid/index/võimalik commit.
+
+Lõpetaja generaatori ja renderdaja --check on failikontrollid, mitte SQL-i või 198
+testi kordus. Tõendikaart säilitab eelmise tulemuse baidid; ajaloolised NEXT/CURRENT
+kirjed ei tohi uut juhist üle kirjutada. Push ei kinnita iseenesest Verceli juurutust.
+Välisel üleandmisel erista alati ettevalmistus, tegelik Maci käik, staging/commit,
+testide piirid, kasutaja brauserikinnitus ja production. Uue olulise paketi juures
+ütle kasutajale: Laadi see üleandmispakett nüüd alla.
+
+Pärast tulemust jätka sama hinna/valuuta serveri ja kliendi ühendust; ära alusta
+uut alussüsteemi. Energy/maksed ootavad põhivoogude ja nähtavate linkide valmimist.
+
+---
+
+<!-- SELQIRO_LISTING_EDIT_COMPOSITION_20261009 -->
+## 2026-10-09 — Listing edit composition before atomic price integration
+
+Source base: `f8a624140b206611162dbd3f74ce33278bfab813`, previously committed/pushed
+with a real Mac build and clean/remote-equal result at 20:21 +03 on 9 October.
+This is the behaviour-preserving UI extraction inside that price-edit work, not a
+new price model, data migration, broad collector or additional feature.
+
+`ListingEditPage.tsx` is reduced from 704 to 140 lines. The image actions move to
+`useListingEditImages`, still called unconditionally at page level before render
+gates. Images, basic fields, description, details, states and actions are small
+components. The original three image handler bodies and presentation helper bodies
+are byte-identical. Rendering adds no DOM wrapper. Save/read/image APIs, raw price
+hydration, routes, permissions, field values and separate classification/store saves
+remain unchanged. This step does NOT fix existing save races, loading/error priority,
+image reload/unsaved-input handling or enable structured price saving.
+
+One scoped 17-file package: eight new modules, one new test, the existing page and
+seven existing docs. All 154-currency/input files, 23 migrations, 01–16 SQL labs,
+archive, handoff renderer, dependencies, horse editor, renewal and Energy are preserved.
+48 new extraction checks compare 15 old expanded JSX trees, 13 exact function bodies
+and event/state flows. Alongside unchanged original-price/display suites there are
+198 Node tests with synthetic hooks/JSX/transport, NOT React DOM, HTTP or a browser.
+
+Read the new `listing-edit-composition-*.zip` for actual tests/build/staging; the
+installer cannot commit/push or contact a database. It checks tests in an external
+source mirror before writing, then runs the real project build before exact staging.
+On PASS inspect the local edit view read-only: image controls/field values, sections,
+links/back and narrow layout. No new save, deletion, primary switch or upload is
+required. Return ZIP + browser findings before separate source finish. On STOP keep
+all files/index and return ZIP; no installer replay/reset/restore/manual staging.
+
+After accepted refactor, continue the same price-edit release: parsed full owner
+snapshot, a single in-flight/account+identity generation-safe save, structured price
+field with explicit currency and normalized preview, atomic server save and coherent
+reads. Existing SQL contracts are reused; controlled server roles/legacy writer
+transition and HTTP/browser validation precede activation. Do not add another generic
+lab or registry. Energy/payments wait until core listing/contact/visible actions work.
+
+---
+
 <!-- SELQIRO_PRICE_INPUT_LOCAL_ACCEPTED_SOURCE_FINISH_20261009 -->
 ## 09.10.2026 — Hinnasisendi tegelik PASS ja sama lähteetapi lõpetamine
 

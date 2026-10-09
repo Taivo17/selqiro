@@ -5,36 +5,37 @@ Seisukirje: 2026-10-09
 
 ## Praegune checkpoint
 
-Valuutaregister ja täpne hinnasisend: V2 päris kohalik PASS; sama 18-failise lähteetapi lõpetamine. See kirje ei ennusta commit-i ega push-i tulemust.
+Muutmislehe eraldamine läbis tegelikud 198 moodulitesti, build'i ja kasutaja vaatamiskontrolli. Lõpetaja kinnitab sama 17-failise lähteetapi; tegelik commit/push selgub uuest tulemusest, mitte sellest dokumendist.
 
 ## Lähtekood ja tõendi piir
 
-- **See lähteetapp:** 11 testitud faili säilivad; ainult seitse dokumenti uuenevad. Lõpetaja nõuab värsket build-i ja COMMIT PUSH. Tegelik NEW_COMMIT/COMMIT/PUSH/WORKTREE/REMOTE on tema tulemus-ZIP-is, mitte siin ette teada.
-- **Ulatus:** 409 valitud allikat = 398 baasallikat +11 uut. 23 migratsiooni, 01–16 laborid, vana arhiiv, renderdaja ning töötav rakenduskood säilivad.
-- **Viimane tegelik kasutajakäik:** 09.10.2026 19:00:42 +03; HEAD fb5be305745cf016afdb8db293c8ac23d270ce55; täpselt 18 staged faili, lisamuudatusteta. GitHub võrdus baasiga; tööpuu polnud puhas.
+- **Lõpetamise piir:** Muudab ainult seitset sama paketi dokumenti. Kümme testitud rakendus-/testifaili säilivad. Uus räsi ja lõppseis tuleb finisheri result.txt-st; kontrolli Git enne järgmist kirjutust.
+- **Tõend:** listing-edit-composition-20261009-213330-i2cqjhzn.zip; SHA256 b451ca55c86b1f241244580394d9aa2dc97294675dad3ebdb57e937533a9c768; 622 faili /621 manifestiräsi /418 allikat.
+- **Viimane tegelik seis:** f8a624140b206611162dbd3f74ce33278bfab813, vanem fb5be305745cf016afdb8db293c8ac23d270ce55; 09.10 21:33:56 +03 lõpus 17 staged (9 add/8 modify), kõrvalmuudatusi polnud, remote võrdne baasile. Tööpuu ei olnud puhas.
 
 ## Tegelik kohalik katse
 
-- V2: 845 tulemust (844 normaliseerijat +1 JSON-keeldumine), 178 skaalat, 8 piiriregressiooni; 1058 Node kontrolli tegeliku SQL JSON-iga, kolm TS-moodulit ja Selqiro build PASS. V1 STOP on ajalooline.
-- Uus võrguta PG17.6 scalar-helper, täpselt kaks suletud funktsiooni; rollback ja eemaldamine läbisid enne lähtekirjutust. Algset rakendusbaasi ei ühendatud.
-- Lõpetamisel vanu SQL/Node/brauserikatseid ei korrata. Generator/handoff --check on failikontrollid; uus päris build ja commit/push selguvad uuest raportist.
+- 09.10 21:33 kasutajakäigus 198 Node-testi (48 uut +150 senist) ja päris npm run build PASS. Testides sünteetilised hook/JSX/API; mitte DOM/HTTP/pildikirjutused.
+- Kasutaja: „kõik tundub olevat korras”; kuus desktop/narrow pilti. Vaatamiskontroll vastu võetud; üksikuid linke, uusi kirjutusi, kogu mobiili või identiteedirasse eraldi ei tõendatud.
+- Lõpetaja kontrollib generaatori ja handoff'i vastavust ning teeb värske build'i. SQL-i, 198 testi ega vastuvõetud brauserikontrolli ei korrata. Varasemad hinnasisendi testid säilivad tõendina.
 
 ## Production / kasutajaliides
 
-- Uut hinnaskeemi pole productionis ega algses kohalikus rakendusbaasis rakendatud. 23/23 migratsiooniajalugu on varasem 03.10 tõend, mitte uus vaatlus.
-- UI pole uue sisendiga ühendatud. Senine hobusemuutmisvorm, hinnakuvamine, Energy ja pildid säilivad. Selle etapi frontend-deployment pole eraldi kontrollitud.
+- Lõpetaja ei käivita DB/SQL/Docker/Supabase/install käske ega muuda andmeridu. Kõik 23 migratsiooni ja 01–16 labor säilivad; uut hinnaskeemi ei rakendata.
+- 140-realine edit-page ja kaheksa moodulit säilitavad senise toorhinna, salvestuse, pildid ja rubriigid. Valuutavalik/atomaarne save pole avatud; hobusemuutmine ja uuendamine säilivad.
+- Pildi reload/unsaved/rasside piir pole refaktoriga parandatud. Juurutus kontrollimata; Git hookid/CI võivad käivituda. Vajadusel kontrolli täpset uut juurutust eraldi.
 
 ## Üks järgmine töö
 
-Enne lõpetamist käivita ainult selqiro-finish-listing-price-input.py ja tagasta listing-price-input-finish-...zip. Kui lõpetaja on juba käinud, loe tema tulemust, ära käivita uuesti. Pärast ülevaadatud edu jätka olemasoleva kuulutuse hinna/valuuta atomaarse muutmise ja kõigi hinnavaadete ühendamist koos serveriõiguste/vanade kirjutajate üleminekuga; mitte Energy.
+Kui lõpetaja tulemust pole, käivita ainult selqiro-finish-listing-edit-composition.py ja tagasta listing-edit-composition-finish-...zip. Olemasoleva tulemuse korral loe seda, ära korda. Pärast ülevaadatud PASS-i sama olemasoleva kuulutuse hinna/valuuta serveri+kliendi ühendus: omaniku snapshot, üks atomaarne save, kõik hinnavaated ja vanade kirjutajate/õiguste üleminek.
 
 **Peatumisel:** Säilita failid, index, võimalik commit ja raport. Ära korda käivitit, reset/restore’i, SQL-i või push’i enne konkreetse vea ülevaatust.
 
 ## Loe ainult vajalikku
 
-- docs/architecture/listing-price-currency-v1.md algus; data/currency/listing-currency-registry.v1.json ja selle generaator on ühine register.
-- src/entities/listing/model/listingPriceInput.ts; src/features/listing-edit/model/listingPriceDraft.ts; uue sisendi SQL fragment jääb fixture-gated releases/listing-price-v1 alla.
-- 04–05 täielik omaniku snapshot/atomaarne salvestus ning 10–16 lugejad on juba laborites; olemasolevaid lepinguid ei ehitata uuesti.
+- src/features/listing-edit/components/ListingEditPage.tsx ja väikesed ListingEdit* moodulid; useListingEditImages säilitab lehe elutsükli.
+- tests/listing-edit-composition.test.cjs; docs/architecture/listing-price-currency-v1.md algus; testipildid pole andmebaasikirjutused.
+- Täpne hinnasisend ja 04–05 snapshot/save ning 10–16 lugejad on olemas. Pärast refaktorit ühenda need serveriõiguste/vanade kirjutajate üleminekuga.
 
 ## Säilivad piirid
 
@@ -47,9 +48,9 @@ Enne lõpetamist käivita ainult selqiro-finish-listing-price-input.py ja tagast
 
 ## Keskkond
 
-- Mac $HOME/selqiro; Python 3.9+, olemasolev Git/npm; peata arendusserver ise Ctrl+C-ga. Lõpetaja ei vaja Dockerit ega Supabase CLI-d.
-- Ainus sisend Downloads-is: listing-price-input-local-v2-20261009-190007-eepibvc8.zip. Uut XML-päringut/kogujat/installi ei tehta. GIT_* ülekirjutused eemaldatakse ainult alamprotsessidest.
-- Hinnasisendi V1/V2 paigaldajad ja koguja on lõpetatud, neid ei korrata. Enne commit-i eraldi COMMIT PUSH; tühi vastus jätab staged failid alles.
+- Mac $HOME/selqiro; Python 3.9+, olemasolev Git/npm. Peata dev ise Ctrl+C-ga. Dockerit pole vaja, pakette ei paigaldata. GIT_*/Node ülekirjutused puhastatakse ainult alamprotsessides.
+- Ainus sisend Downloads-is: listing-edit-composition-20261009-213330-i2cqjhzn.zip. Kinnitused FINISH EDIT COMPOSITION ja COMMIT PUSH. Üks tavaline SHA→main push, mitte force.
+- Ära korda refaktoripaigaldajat, hinnasisendi V1/V2/finish skripte, valuutakogujat ega SQL/apply etappe. Säilita failid, staging ja lõpetatud päevikud.
 
 ## Ajalugu (mitte praegused käsud)
 

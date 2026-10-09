@@ -1,3 +1,88 @@
+<!-- SELQIRO_LISTING_EDIT_COMPOSITION_ACCEPTED_FINISH_20261009 -->
+## 2026-10-09 — Listing edit extraction: local PASS and browser acceptance
+
+This entry supersedes the earlier installer/browser-next instructions below.
+The 9 October 21:33:30–21:33:56 (+03) user run passed 198 module tests and the
+real Selqiro build. Evidence: `listing-edit-composition-20261009-213330-i2cqjhzn.zip`,
+SHA-256 `b451ca55c86b1f241244580394d9aa2dc97294675dad3ebdb57e937533a9c768`.
+The reviewed result contains 622 files /621 manifest hashes /418 selected sources.
+At export HEAD remained `f8a624140b206611162dbd3f74ce33278bfab813`, with exactly
+17 staged paths (9 added, 8 modified), no extra unstaged/untracked changes; remote
+main matched the base. This was NOT a clean worktree, new commit or deployment.
+
+The user subsequently confirmed “kõik tundub olevat korras”, with five desktop
+screenshots and one narrow screenshot (filenames 21:39:55–21:41:06). Accept this
+as the requested read-only browser check. It is not separate proof of individual
+link clicks, all mobile actions, new saves/image writes, identity changes, HTTP
+races or deployment identity. Do not repeat this accepted check merely to document it.
+
+The edit page is now 140 rather than 704 lines, composed from eight small modules.
+The three image-action bodies and ten presentation/helper bodies were preserved;
+15 expanded JSX snapshots and event tests passed among the 48 new extraction checks.
+The other 150 tests are existing original-price/display regressions. These tests use
+synthetic hooks/JSX/APIs, not DOM/HTTP. The currency selector and atomic save are
+NOT opened. Existing raw-price input, separate cards, horse editor and renewal stay.
+
+The source finisher changes only these seven documents within the same 17 paths;
+all ten tested application/test files remain byte-identical. A fresh full-index,
+source and remote check, generation checks and build precede an explicit COMMIT PUSH.
+Subject: `Refactor listing edit page into focused modules`. Read NEW_COMMIT, BUILD,
+COMMIT, PUSH, WORKTREE and REMOTE from its result, not from this document. No SQL,
+Node suite replay, install, Docker/Supabase, data mutations or old-journal access.
+Normal Git hooks/CI may run; push alone does not verify deployment.
+
+After verified completion, continue the SAME existing-listing price-edit release:
+full owner snapshot, explicit price kind/currency and exact amount, one atomic
+basics/price save and matching detail/search/profile/My Area reads. Reuse the tested
+contracts and registry; control stale responses, legacy writers/permissions and
+image reload/unsaved-input interactions before opening it. No new general lab,
+registry, broad refactor or collector merely to repeat known evidence.
+Energy/payments wait until core create/edit/find/contact and visible actions/links
+work. AI, FX, crypto and unit conversion remain separate later work.
+
+---
+
+<!-- SELQIRO_LISTING_EDIT_COMPOSITION_20261009 -->
+## 2026-10-09 — Listing edit composition before atomic price integration
+
+Source base: `f8a624140b206611162dbd3f74ce33278bfab813`, previously committed/pushed
+with a real Mac build and clean/remote-equal result at 20:21 +03 on 9 October.
+This is the behaviour-preserving UI extraction inside that price-edit work, not a
+new price model, data migration, broad collector or additional feature.
+
+`ListingEditPage.tsx` is reduced from 704 to 140 lines. The image actions move to
+`useListingEditImages`, still called unconditionally at page level before render
+gates. Images, basic fields, description, details, states and actions are small
+components. The original three image handler bodies and presentation helper bodies
+are byte-identical. Rendering adds no DOM wrapper. Save/read/image APIs, raw price
+hydration, routes, permissions, field values and separate classification/store saves
+remain unchanged. This step does NOT fix existing save races, loading/error priority,
+image reload/unsaved-input handling or enable structured price saving.
+
+One scoped 17-file package: eight new modules, one new test, the existing page and
+seven existing docs. All 154-currency/input files, 23 migrations, 01–16 SQL labs,
+archive, handoff renderer, dependencies, horse editor, renewal and Energy are preserved.
+48 new extraction checks compare 15 old expanded JSX trees, 13 exact function bodies
+and event/state flows. Alongside unchanged original-price/display suites there are
+198 Node tests with synthetic hooks/JSX/transport, NOT React DOM, HTTP or a browser.
+
+Read the new `listing-edit-composition-*.zip` for actual tests/build/staging; the
+installer cannot commit/push or contact a database. It checks tests in an external
+source mirror before writing, then runs the real project build before exact staging.
+On PASS inspect the local edit view read-only: image controls/field values, sections,
+links/back and narrow layout. No new save, deletion, primary switch or upload is
+required. Return ZIP + browser findings before separate source finish. On STOP keep
+all files/index and return ZIP; no installer replay/reset/restore/manual staging.
+
+After accepted refactor, continue the same price-edit release: parsed full owner
+snapshot, a single in-flight/account+identity generation-safe save, structured price
+field with explicit currency and normalized preview, atomic server save and coherent
+reads. Existing SQL contracts are reused; controlled server roles/legacy writer
+transition and HTTP/browser validation precede activation. Do not add another generic
+lab or registry. Energy/payments wait until core listing/contact/visible actions work.
+
+---
+
 <!-- SELQIRO_PRICE_INPUT_LOCAL_ACCEPTED_SOURCE_FINISH_20261009 -->
 ## 2026-10-09 — Frozen currency registry and exact input: actual local PASS
 
