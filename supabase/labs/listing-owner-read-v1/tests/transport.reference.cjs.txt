@@ -1,0 +1,68 @@
+const test=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
+const ts=require(process.env.SELQIRO_TYPESCRIPT_FILE);
+require.extensions['.ts']=(module,file)=>module._compile(ts.transpileModule(fs.readFileSync(file,'utf8'),{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.CommonJS}}).outputText,file);
+const {ownerReadRequest,parseOwnerReadPage}=require('../client/ownerMarketplaceV3.ts');
+const {parseOwnerMoney,parseWantedSummary}=require('../client/ownerMoney.ts');
+const {parsePriceRead}=require('../client/priceRead.ts');
+const actorId='11111111-1111-4111-8111-111111111111',identityId='aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa';
+const context={actorId,identityId},request=ownerReadRequest(context,{limit:100});
+const money={role:'listing_price',value:{version:1,kind:'fixed',amount:'999999999999999999.999',currency:'KWD',legacy_text:null,legacy_amount:null}};
+const time='2026-10-06T11:00:00.123456+00:00';
+function row(){return {content_type:'listing',content_id:'9007199254740993',identity_id:identityId,source_status:'active',lifecycle_status:'active',content_variant:null,
+ title:'Original 72 in',title_truncated:false,description_excerpt:'Original 5 km',description_truncated:false,image_url:'https://example.invalid/x.jpg',category:'vehicles',subcategory:'cars',condition:'used',city:'Paide',region:null,location_label:'Paide',active_until:time,published_at:null,created_at:time,sort_at:time,money:structuredClone(money)};}
+function page(items=[row()]){return {schema_version:3,actor_id:actorId,identity_id:identityId,result_limit:100,result_offset:0,has_more:false,next_offset:null,window_limit_reached:false,items};}
+function parse(v,c=context,r=request){return parseOwnerReadPage(v,c,r);}
+function horse(variant='sale',kind='fixed',amount='1234.56'){let r=row();Object.assign(r,{content_type:'horse_offer',content_id:'f0000000-0000-4000-8000-000000000001',content_variant:variant,source_status:'draft',lifecycle_status:'draft',category:null,subcategory:null,condition:null,money:{role:'horse_offer_price',value:{version:1,kind,amount,currency:'EUR'}}});return r;}
+function wanted(){let r=horse('wanted');Object.assign(r,{city:null,region:null,location_label:null,money:{role:'wanted_budget',value:{version:2,budget:{mode:'maximum',amount:'5000.5',currency:'EUR'},search_area:{country_code:'EE',city_or_municipality:'Rapla',region:'Rapla maakond'}}}});return r;}
+test('exact ordinary amount and bigint ID retained',()=>{let p=parse(page());assert.equal(p.items[0].money.value.amount,money.value.amount);assert.equal(p.items[0].content_id,'9007199254740993');});
+test('time remains byte exact with microseconds',()=>assert.equal(parse(page()).items[0].active_until,time));
+test('title description and units are not changed',()=>{let r=parse(page()).items[0];assert.equal(r.title,'Original 72 in');assert.equal(r.description_excerpt,'Original 5 km');});
+test('null deadline remains null',()=>{let r=row();r.active_until=null;assert.equal(parse(page([r])).items[0].active_until,null);});
+test('held horse status preserved',()=>{let r=horse();r.source_status=r.lifecycle_status='held_for_review';assert.equal(parse(page([r])).items[0].source_status,'held_for_review');});
+test('ordinary unknown source status preserved no inferred action',()=>{let r=row();r.source_status=r.lifecycle_status='other';assert.equal(parse(page([r])).items[0].source_status,'other');});
+test('wanted cannot be seller price',()=>assert.equal(parse(page([wanted()])).items[0].money.role,'wanted_budget'));
+for(const [variant,kind,amount] of [['sale','fixed','0'],['sale','from','1.2'],['free_transfer','free',null],['co_rider','contact',null],['lease','from','9999999999.99']]){
+ test('horse '+variant+' '+kind,()=>assert.equal(parse(page([horse(variant,kind,amount)])).items[0].money.value.amount,amount));
+}
+for(const kind of ['free','negotiable','unspecified'])test('ordinary '+kind,()=>{let r=row();r.money.value={version:1,kind,amount:null,currency:null,legacy_text:null,legacy_amount:null};assert.equal(parse(page([r])).items[0].money.value.kind,kind);});
+test('legacy price never inferred EUR',()=>{let r=row();r.money.value={version:1,kind:null,amount:null,currency:null,legacy_text:'130.',legacy_amount:'130'};assert.equal(parse(page([r])).items[0].money.value.currency,null);});
+for(const [key,value] of [['schema_version',2],['actor_id','22222222-2222-4222-8222-222222222222'],['identity_id','bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb'],['result_limit',30],['result_offset',1],['has_more',true],['has_more',1],['next_offset',100],['window_limit_reached',true],['items',null],['items',{}],['private','x']])
+ test('invalid envelope '+key+' '+String(value),()=>{let p=page();p[key]=value;assert.throws(()=>parse(p));});
+for(const key of Object.keys(page()))test('missing envelope '+key,()=>{let p=page();delete p[key];assert.throws(()=>parse(p));});
+for(const key of Object.keys(row()))test('missing item '+key,()=>{let r=row();delete r[key];assert.throws(()=>parse(page([r])));});
+for(const [key,value] of [['identity_id','bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb'],['content_type','service'],['content_id',1],['content_id','092'],['content_id','9223372036854775808'],['content_variant','sale'],['lifecycle_status','closed'],['title',null],['title','x'.repeat(513)],['title_truncated',true],['description_excerpt','x'.repeat(513)],['active_until','infinity'],['active_until','bad'],['created_at',null],['money',null],['price_revision','99'],['details',{}]])
+ test('invalid row '+key+' '+String(value).slice(0,20),()=>{let r=row();r[key]=value;assert.throws(()=>parse(page([r])));});
+for(const [variant,kind,amount,currency] of [['sale','free',null,'EUR'],['free_transfer','fixed','1','EUR'],['sale','fixed',1,'EUR'],['sale','fixed','1.00','EUR'],['sale','fixed','10000000000','EUR'],['sale','fixed','0.001','EUR'],['sale','fixed','NaN','EUR'],['sale','fixed','-1','EUR'],['sale','fixed','1','USD'],['wanted','contact',null,'EUR']])
+ test('invalid horse tuple '+JSON.stringify([variant,kind,amount,currency]),()=>{let r=horse(variant,kind,amount);r.money.value.currency=currency;assert.throws(()=>parse(page([r])));});
+for(const [key,value] of [['city','SELLER'],['region','SELLER'],['location_label','SELLER'],['category','vehicles']])test('wanted no seller fallback '+key,()=>{let r=wanted();r[key]=value;assert.throws(()=>parse(page([r])));});
+for(const b of [{mode:'maximum',amount:5000,currency:'EUR'},{mode:'maximum',amount:'1.00',currency:'EUR'},{mode:'contact',amount:'0',currency:'EUR'},{mode:'maximum',amount:'1',currency:'USD'},{mode:'maximum',amount:'0.001',currency:'EUR'},{mode:'contact',amount:null,currency:'EUR',other:'private'}])
+ test('invalid wanted budget '+JSON.stringify(b),()=>{let r=wanted();r.money.value.budget=b;assert.throws(()=>parse(page([r])));});
+for(const section of ['budget','search_area'])test('null wanted section '+section+' independent',()=>{let r=wanted();r.money.value[section]=null;assert.equal(parse(page([r])).items[0].money.value[section],null);});
+test('wanted contact vs invalid null budget',()=>{let r=wanted();r.money.value.budget={mode:'contact',amount:null,currency:'EUR'};assert.equal(parse(page([r])).items[0].money.value.budget.mode,'contact');});
+test('wanted zero remains explicit maximum',()=>{let r=wanted();r.money.value.budget.amount='0';assert.equal(parse(page([r])).items[0].money.value.budget.mode,'maximum');});
+for(const value of [{country_code:'FI',city_or_municipality:null,region:null},{country_code:'EE',city_or_municipality:'x'.repeat(161),region:null},{country_code:'EE',city_or_municipality:'',region:null},{country_code:'EE',city_or_municipality:null,region:null,lat:1}])
+ test('invalid wanted area '+JSON.stringify(value).slice(0,80),()=>{let r=wanted();r.money.value.search_area=value;assert.throws(()=>parse(page([r])));});
+for(const v of ['javascript:alert(1)','data:text/html,abc','file:///tmp/x','https://user:password@example.invalid/x','not a url'])test('image rejected '+v,()=>{let r=row();r.image_url=v;assert.equal(parse(page([r])).items[0].image_url,null);});
+test('truncated flags only affect excerpt not underlying content',()=>{let r=row();r.title='ä'.repeat(512);r.title_truncated=true;assert.equal(parse(page([r])).items[0].title.length,512);});
+test('duplicate identity row key rejected',()=>assert.throws(()=>parse(page([row(),row()]))));
+test('wrong current account same business rejected',()=>assert.throws(()=>parse(page(),{...context,actorId:'33333333-3333-4333-8333-333333333333'})));
+test('old row array not silently accepted',()=>assert.throws(()=>parse([row()])));
+for(const input of [{limit:0},{limit:101},{limit:1.5},{limit:null},{limit:NaN},{offset:-1},{offset:100001},{offset:null},{offset:Infinity},{status:'x'.repeat(41)},{search:'x'.repeat(201)},{search:'a\0b'},{storeCategoryId:''},{storeCategoryId:'wrong'},{status:0}])
+ test('invalid request '+JSON.stringify(input),()=>assert.throws(()=>ownerReadRequest(context,input)));
+test('request normalizes as existing v1',()=>{let q=ownerReadRequest(context,{status:' ACTIVE ',search:' x '});assert.equal(q.p_status_filter,'active');assert.equal(q.p_search_query,'x');});
+test('explicit [] category cannot become all',()=>assert.throws(()=>ownerReadRequest(context,{storeCategoryId:[]})));
+test('lookahead valid next page',()=>{let p=page([row(),{...row(),content_id:'2'}]);p.result_limit=2;p.has_more=true;p.next_offset=2;assert.equal(parse(p,context,ownerReadRequest(context,{limit:2})).next_offset,2);});
+test('window cap valid no invented next',()=>{let p=page();p.result_limit=1;p.result_offset=100000;p.has_more=true;p.window_limit_reached=true;assert.equal(parse(p,context,ownerReadRequest(context,{limit:1,offset:100000})).next_offset,null);});
+// REQUIRED SQL stdout from THIS test run. Preparation harness supplies a distinctly marked synthetic file.
+assert.ok(process.env.SELQIRO_OWNER_CAPTURE,'SQL capture path is mandatory; no fallback');
+const capture=JSON.parse(fs.readFileSync(process.env.SELQIRO_OWNER_CAPTURE,'utf8'));
+const loaded=parse(capture.page);
+const find=id=>loaded.items.find(x=>x.content_id===id);
+test('SQL capture exact ordinary amount',()=>assert.equal(find('1001').money.value.amount,'999999999999999999.999'));
+test('SQL capture horse numeric becomes exact text',()=>assert.equal(find('f0000000-0000-4000-8000-000000000001').money.value.amount,'1234.56'));
+test('SQL capture wanted budget not stale seller price',()=>assert.equal(find('f0000000-0000-4000-8000-000000000018').money.value.budget.amount,'5000.5'));
+test('SQL capture independent invalid wanted section',()=>assert.equal(find('f0000000-0000-4000-8000-000000000007').money.value.budget,null));
+test('SQL capture held horse readable',()=>assert.equal(find('f0000000-0000-4000-8000-000000000012').lifecycle_status,'held_for_review'));
+test('SQL capture pagination',()=>assert.equal(parse(capture.small,context,ownerReadRequest(context,{limit:2})).has_more,true));
+test('SQL capture category no duplicates',()=>assert.equal(parse(capture.filtered).items.length,2));
+test('SQL capture empty scoped page',()=>assert.equal(parse(capture.empty,context,ownerReadRequest(context,{offset:100000})).items.length,0));

@@ -1,3 +1,57 @@
+<!-- SELQIRO_OWNER_PRICE_READ_SOURCE_20261009 -->
+## 2026-10-09 — owner money reader retained, still closed
+
+The 9 October 09:46 +03 owner run passed 190 SQL, 140 parser cases (8 with its
+PostgreSQL capture), typecheck, 4 nonblocking pairs, selected rollback and cleanup.
+Source remained clean/remote-equal 2e5a376. Source retention is the next checkpoint;
+its actual new commit/build/push is known only from its result, not this entry.
+
+Retained location: `supabase/labs/listing-owner-read-v1/`. 15–16 SQL, ownerMoney.ts,
+ownerMarketplaceV3.ts and the original test assertions are unchanged. The new
+client/priceRead.ts re-exports the existing public-read shared parser; it does not
+copy or reinterpret price logic. tests/TEST_LAYOUTS.json records the old temporary
+harness layout. tests/snapshot.sql is the actual dispatched transaction, not the
+unwrapped SELECT body. No SQL execution, migrations or API grants in retention.
+
+`get_my_marketplace_items_v3` enforces current active identity access even for an
+empty page, then returns actor/identity context. The client must additionally
+reject stale auth/identity/filter generations. Money role is listing_price,
+horse_offer_price or wanted_budget; decimal amounts stay text. Wanted has no
+seller-price/location fallback and independent null budget/area behavior.
+
+The old v1 filters and order remain. Limit+1, default30/max100 and bounded offset
+do not mean a complete inventory count or a volume-performance guarantee. The
+current 500-row UI needs explicit pagination; source-active versus unexpired
+visibility must be handled before paging, not by filtering the first loaded page.
+The 512-character list snippets are not the full edit form snapshot.
+
+### One next bounded release-integration plan, not another general foundation
+
+After reviewing retention, compare existing source paths and the retained 01–16
+contracts. Identify the first missing user-visible integration slice and its
+server/client/deployment acceptance gates. Prioritize these existing gaps rather
+than inventing new background systems:
+
+1. A production currency registry and input validation, not the 16-currency test sample.
+2. Full owner edit initial values; do not save an excerpt or reuse public-read access.
+3. Effective expiry/paging and old/new reader/writer transition with RLS/role gates.
+4. Recoverable creation and receipt lifecycle, preserving separate image/category actions.
+
+Relevant source paths: src/entities/marketplace-item/api/getMyMarketplaceItems.ts,
+src/entities/listing/api/getEditableListingById.ts, updateListingBasics.ts,
+src/features/listing-edit/model/useListingBasicsForm.ts, app/sell/page.tsx,
+app/my-page/page.tsx and the three preceding lab READMEs. Missing source is a reason
+to collect that specific dependency, not to repeat a broad production schema audit.
+
+Old runtime and working horse draft editor remain until a tested replacement.
+Production still needs separately approved application and real HTTP/JWT/role/UI
+checks. Broad SELECT, trusted/legacy writers, receipt/account deletion, basic-field
+value-CAS limits and READ COMMITTED creation are not resolved by this source step.
+Free category assistance with strict cost controls is approved for a later stage;
+no AI/Energy pricing change, FX, crypto, unit conversion or data deletion here.
+
+---
+
 <!-- SELQIRO_PUBLIC_PRICE_READ_SOURCE_CHECKPOINT_20261006 -->
 ## 2026-10-06 — retain the tested public price-read layer, not an API rollout
 

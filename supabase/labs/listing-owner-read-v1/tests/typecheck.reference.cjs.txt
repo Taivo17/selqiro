@@ -1,0 +1,8 @@
+const fs=require('node:fs'),path=require('node:path');
+const ts=require(process.env.SELQIRO_TYPESCRIPT_FILE);
+const root=path.resolve(__dirname,'..','client');
+const program=ts.createProgram(['priceRead.ts','ownerMoney.ts','ownerMarketplaceV3.ts'].map(n=>path.join(root,n)),
+ {strict:true,noEmit:true,target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.CommonJS,moduleResolution:ts.ModuleResolutionKind.Node10,skipLibCheck:true});
+const errors=ts.getPreEmitDiagnostics(program);
+if(errors.length){console.error(ts.formatDiagnosticsWithColorAndContext(errors,{getCanonicalFileName:x=>x,getCurrentDirectory:()=>process.cwd(),getNewLine:()=> '\n'}));process.exitCode=1;}
+else console.log('OWNER_READ_TYPES=PASS');

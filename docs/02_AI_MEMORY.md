@@ -1,3 +1,38 @@
+<!-- SELQIRO_OWNER_PRICE_READ_SOURCE_20261009 -->
+## 2026-10-09 — retain tested owner price reader as a closed lab
+
+The reviewed local owner-read result completed 9 October 09:46 +03 at clean pushed
+2e5a376. Its 190 SQL assertions, 140 parser cases (8 actual same-run JSON), typecheck,
+4 nonblocking session pairs, selected rollback and helper cleanup passed. This
+source checkpoint does not replay them. Actual build/commit/push belongs to the
+new listing-owner-read-source result, not this prepared entry.
+
+Retain exact 15–16 SQL and both owner parser bodies in listing-owner-read-v1,
+outside migrations. One two-line re-export connects the unchanged ./priceRead
+imports to the existing public-read shared module; never duplicate implementation.
+Historical Node/driver sources are references with TEST_LAYOUTS, not broken repo
+test commands. Preserve the actual dispatched read-only snapshot transaction.
+No application import, API grant, migration or data change in this checkpoint.
+
+Money roles stay listing_price / horse_offer_price / wanted_budget. Keep account
+and active identity checks, exact amounts, independent wanted budget/search area,
+30/100 bounded page and no invented totals. Source-active may include expired;
+512-character list excerpts are NOT owner edit initial state. Old v1/v2 and the
+working horse editor remain unchanged until a controlled replacement.
+
+After reviewing the source result, close price release gaps in a scoped source
+integration plan; do not expand into another general foundation. Prioritize real
+currency registry, full owner edit reader, effective expiry before paging,
+legacy writers/readers, RLS/roles and recoverable creation client.
+
+Approved future product direction: simple category assistance is free with one
+primary image + title + short description, manual fallback and server-wide budget,
+quota and duplicate-call protection. Numerical pilot limits are still proposals;
+this source checkpoint does not change existing Energy pricing or invoke AI.
+Current handoff remains generated from CURRENT_STATE; original history is intact.
+
+---
+
 <!-- SELQIRO_PUBLIC_PRICE_READ_SOURCE_CHECKPOINT_20261006 -->
 ## 2026-10-06 — retain the tested public price-read layer, not an API rollout
 

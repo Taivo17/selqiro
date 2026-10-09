@@ -1,0 +1,74 @@
+{
+  "format": "selqiro_owner_fixture_sources_v1",
+  "horse_table": {
+    "source": "supabase/migrations/20260830170000_add_ee_horse_offer_foundation.sql",
+    "source_sha256": "7ed39b68732c27b5a21173b5ce01e8fa0264f57b6a72a079913539cb6a12fb67",
+    "exact_extracted_sha256": "d71b841ea412760cbc768a1527d1366356e3f66beea32cf785c947d29e625eb4"
+  },
+  "helpers": {
+    "source": "supabase/migrations/20260722173530_baseline_20260722.sql",
+    "source_sha256": "7ca065f92f01c0f38ada5f5a50d2a0fc5b716f5291d1525d398023b7db59da3f",
+    "exact_extracted_sha256": [
+      "2fb731aacbea5e03c071021225846601151cd794af07f0a9d26e89f4fceb6b61",
+      "e39d0327453da93515a9a14b1b40794ab4f821e64f812b7a3656bcc7060e34eb"
+    ]
+  },
+  "limits": [
+    "auth.users ID-only stub",
+    "horse triggers/publication-event tables/foreign keys added after table declaration are NOT installed",
+    "edit_revision is read preservation column only; writer/revision trigger not retested",
+    "existing core fixture has selected auth/ACL not full production"
+  ],
+  "source_map": {
+    "dependencies/fixture.sql": {
+      "path": "supabase/labs/listing-price-core-v1/tests/fixture.sql",
+      "sha256": "e4d21dafe0f44c898a44fa17efd736aa619282e99dffb7934979abcca6a5d03f",
+      "bytes": 13352
+    },
+    "dependencies/seed.sql": {
+      "path": "supabase/labs/listing-price-core-v1/tests/seed.sql",
+      "sha256": "7a7a02a4cf7fe53586592bffe19d785f5b776ba04fe1850a934ab7f993ea6219",
+      "bytes": 1798
+    },
+    "dependencies/01_value_contract.sql": {
+      "path": "supabase/labs/listing-price-core-v1/01_value_contract.sql",
+      "sha256": "5f9d58db5d28a9ec6804e1f0b2c282d5dd812897165b0e07242b12524d56c29c",
+      "bytes": 5567
+    },
+    "dependencies/02_write_guard.sql": {
+      "path": "supabase/labs/listing-price-core-v1/02_write_guard.sql",
+      "sha256": "ced6884dea9e2098a259186b97f4e61b5fd07dd836256663dd451a2d9b03d1ea",
+      "bytes": 3812
+    },
+    "dependencies/10_price_read_model.sql": {
+      "path": "supabase/labs/listing-public-read-v1/10_price_read_model.sql",
+      "sha256": "492a3e132919bf2c3d8d3b2fe450b483f06ae9e52e2fd28de3e19de6e910538c",
+      "bytes": 1293
+    },
+    "client/priceRead.ts": {
+      "path": "supabase/labs/listing-public-read-v1/client/priceRead.ts",
+      "sha256": "0d30d3619224f07911ee8e7e2573a8d0f6647a4db1be151d763875d96a66ec42",
+      "bytes": 2730
+    },
+    "dependencies/currencies.v1.json": {
+      "path": "supabase/labs/listing-price-core-v1/currencies.v1.json",
+      "sha256": "6de33eb21da4e78256ccb26048e19d6459f4bf111fad71c9b5ccd2666f948d84",
+      "bytes": 722
+    },
+    "tests/baseline/20260911203000_add_marketplace_item_projection_foundation.sql": {
+      "path": "supabase/migrations/20260911203000_add_marketplace_item_projection_foundation.sql",
+      "sha256": "1ad34e8590309148384ac957374a1450c106a31c2be3fcdd9f334893534e7f70",
+      "bytes": 4510
+    },
+    "tests/baseline/20260911220000_add_owner_marketplace_item_read_rpc.sql": {
+      "path": "supabase/migrations/20260911220000_add_owner_marketplace_item_read_rpc.sql",
+      "sha256": "7f2ff8d957d4ac3c8ab61e056a47d93079cb0cbc7810fd9b95dc27363127d9e5",
+      "bytes": 4683
+    },
+    "tests/baseline/20260920150000_add_owner_marketplace_wanted_summary.sql": {
+      "path": "supabase/migrations/20260920150000_add_owner_marketplace_wanted_summary.sql",
+      "sha256": "aa5e57dc4c5b1fe4342e496cdbe09d9143671f3e82399d07c230218b041f08b2",
+      "bytes": 6002
+    }
+  }
+}

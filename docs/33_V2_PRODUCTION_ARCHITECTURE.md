@@ -1,3 +1,44 @@
+<!-- SELQIRO_OWNER_PRICE_READ_SOURCE_20261009 -->
+## 2026-10-09 — closed owner read v3 retained-source boundary
+
+Source base: 2e5a376bd66f437c783ce6cd891a44ae5b4847a9, clean main/remote-equal at
+9 October 09:46 +03. The new source checkpoint retains the reviewed 190 SQL /
+140 parser /4 pair PASS but runs only file provenance/render checks and a fresh
+existing build before scoped staging and separately approved commit/push.
+It does not apply SQL or open any API execution right.
+
+`supabase/labs/listing-owner-read-v1/` retains 15_owner_money_models and
+16_owner_marketplace_read_v3, two actual TS parsers and their exact test sources.
+A two-line lab-only re-export resolves ./priceRead to the single public-read
+implementation. Existing 01–14 labs, fixtures, currency sample and 23 migrations
+are not copied/modified. TEST_LAYOUTS explicitly distinguishes the dated test
+workspace, reference harnesses and actual dispatched snapshot transaction.
+
+Server access is require_my_active_identity_v2 plus expected identity precondition;
+request actor/identity are private response context, not user-selected authority.
+Materialized old v1 filtering/order reads one extra row, then adds money only to
+the chosen page. No per-item network query or false full inventory count.
+
+Preserve ordinary price, horse sale/lease/from/contact/free meaning and wanted
+budget/search area independently. Do not use seller fallbacks for wanted.
+Source status, precise deadline and lifecycle are separate; effective expiry
+must filter server-side before paging when exposed. Excerpts with truncation
+flags are never edit payloads. UI still needs request-generation/auth/filter
+protection as well as actor/identity equality, including A→B→A switches.
+
+Local snapshots validated reads during uncommitted money/auth updates and denial
+on a later request after committed revocation. They do not prove immediate
+revocation of delivered data, full HTTP/JWT roles or load capacity.
+
+Next is one scoped price release integration plan from existing files: full
+currency registry, full edit read and expiry behavior, old writers/readers,
+RLS/roles, receipt lifecycle and recoverable client creation. Do not expose a
+new writer or reader by changing only an RPC name. Runtime remains unchanged.
+The approved later free category assistant keeps strict server cost controls;
+this checkpoint adds no AI, Energy, FX, crypto, images, units or horse publication.
+
+---
+
 <!-- SELQIRO_PUBLIC_PRICE_READ_SOURCE_CHECKPOINT_20261006 -->
 ## 2026-10-06 — retain the tested public price-read layer, not an API rollout
 

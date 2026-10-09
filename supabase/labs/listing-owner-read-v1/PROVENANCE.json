@@ -1,0 +1,172 @@
+{
+  "boundaries": [
+    "Closed lab only, outside migrations. No API execution grants opened.",
+    "The original two owner parser bodies are unchanged. The new two-line bridge re-exports the existing shared parser without copying implementation.",
+    "Historical Node suites/driver are reference files, not a newly portable test framework.",
+    "No production or original application-local price schema installed by this source checkpoint.",
+    "Owner list excerpts are not edit payloads; raw active status is not effective unexpired state.",
+    "Old owner v1/v2, working horse draft editing and runtime imports are not changed.",
+    "Selected PostgreSQL17.6/synthetic auth/file JSON is not full Supabase/HTTP/JWT, all role inheritance, browser or load validation."
+  ],
+  "dependencies": {
+    "supabase/labs/listing-price-core-v1/01_value_contract.sql": {
+      "bytes": 5567,
+      "sha256": "5f9d58db5d28a9ec6804e1f0b2c282d5dd812897165b0e07242b12524d56c29c"
+    },
+    "supabase/labs/listing-price-core-v1/02_write_guard.sql": {
+      "bytes": 3812,
+      "sha256": "ced6884dea9e2098a259186b97f4e61b5fd07dd836256663dd451a2d9b03d1ea"
+    },
+    "supabase/labs/listing-price-core-v1/currencies.v1.json": {
+      "bytes": 722,
+      "sha256": "6de33eb21da4e78256ccb26048e19d6459f4bf111fad71c9b5ccd2666f948d84"
+    },
+    "supabase/labs/listing-price-core-v1/tests/fixture.sql": {
+      "bytes": 13352,
+      "sha256": "e4d21dafe0f44c898a44fa17efd736aa619282e99dffb7934979abcca6a5d03f"
+    },
+    "supabase/labs/listing-price-core-v1/tests/seed.sql": {
+      "bytes": 1798,
+      "sha256": "7a7a02a4cf7fe53586592bffe19d785f5b776ba04fe1850a934ab7f993ea6219"
+    },
+    "supabase/labs/listing-public-read-v1/10_price_read_model.sql": {
+      "bytes": 1293,
+      "sha256": "492a3e132919bf2c3d8d3b2fe450b483f06ae9e52e2fd28de3e19de6e910538c"
+    },
+    "supabase/labs/listing-public-read-v1/client/priceRead.ts": {
+      "bytes": 2730,
+      "sha256": "0d30d3619224f07911ee8e7e2573a8d0f6647a4db1be151d763875d96a66ec42"
+    },
+    "supabase/migrations/20260722173530_baseline_20260722.sql": {
+      "bytes": 221677,
+      "sha256": "7ca065f92f01c0f38ada5f5a50d2a0fc5b716f5291d1525d398023b7db59da3f"
+    },
+    "supabase/migrations/20260830170000_add_ee_horse_offer_foundation.sql": {
+      "bytes": 34413,
+      "sha256": "7ed39b68732c27b5a21173b5ce01e8fa0264f57b6a72a079913539cb6a12fb67"
+    },
+    "supabase/migrations/20260911203000_add_marketplace_item_projection_foundation.sql": {
+      "bytes": 4510,
+      "sha256": "1ad34e8590309148384ac957374a1450c106a31c2be3fcdd9f334893534e7f70"
+    },
+    "supabase/migrations/20260911220000_add_owner_marketplace_item_read_rpc.sql": {
+      "bytes": 4683,
+      "sha256": "7f2ff8d957d4ac3c8ab61e056a47d93079cb0cbc7810fd9b95dc27363127d9e5"
+    },
+    "supabase/migrations/20260920150000_add_owner_marketplace_wanted_summary.sql": {
+      "bytes": 6002,
+      "sha256": "aa5e57dc4c5b1fe4342e496cdbe09d9143671f3e82399d07c230218b041f08b2"
+    }
+  },
+  "format": "selqiro_tested_owner_read_sources_v1",
+  "input_result": {
+    "bytes": 3665299,
+    "files": 874,
+    "manifest_hashes": 873,
+    "name": "listing-owner-price-read-local-20261009-094603-9s1hgwio.zip",
+    "sha256": "09eb658479de2bb22b52cea5a2f8d3facbd37fedbc19ea96371af277237fa697"
+  },
+  "new_scaffolding": {
+    "client/priceRead.ts": {
+      "bytes": 150,
+      "sha256": "4f4483e2ac8fed2af38d8181597cc807e085065be5bbfb7b50d91737a29f0eb3"
+    }
+  },
+  "preserved_sources": {
+    "15_owner_money_models.sql": {
+      "bytes": 2291,
+      "origin": "candidate/15_owner_money_models.sql",
+      "sha256": "c3a1be86febe7ee209e95359b802abb0eb3e0d14116b18ea5d81c876707a1052"
+    },
+    "16_owner_marketplace_read_v3.sql": {
+      "bytes": 5769,
+      "origin": "candidate/16_owner_marketplace_read_v3.sql",
+      "sha256": "43ae745d6d8922dbbd912766460a0138a5a414667abe1d85b551791dc83feedb"
+    },
+    "client/ownerMarketplaceV3.ts": {
+      "bytes": 7631,
+      "origin": "client/ownerMarketplaceV3.ts",
+      "sha256": "2ee9b6c4a812884fdc574c30364d60f4b2ae7de7ffc1cdec391dbf91631cff3a"
+    },
+    "client/ownerMoney.ts": {
+      "bytes": 3380,
+      "origin": "client/ownerMoney.ts",
+      "sha256": "c91163938b8a4de99377465f865b2be6efe776c39d4ff4ba115d78388375e9a0"
+    },
+    "tests/driver.reference.py.txt": {
+      "bytes": 8873,
+      "methods": [
+        "core_text",
+        "test_batch",
+        "suite_summary",
+        "snapshot_tests"
+      ],
+      "origin": "Exact AST-selected methods from runner.py.txt",
+      "sha256": "cadb94157d9befdfc4b0220f3dd60d2aa186c3baca67a91368d3ff7b2901e4ca"
+    },
+    "tests/expected-labels.json": {
+      "bytes": 4921,
+      "origin": "tests/expected-labels.json",
+      "sha256": "b5c170cc725fb50afc5faf6201f218c2838fe9554eb093b887df8930782d021c"
+    },
+    "tests/fixture-extension.sql": {
+      "bytes": 9918,
+      "origin": "tests/owner-fixture-extension.sql",
+      "sha256": "edf36135b1663eb0da980b3faa433d912ed632260cf2a7e9f14acdc681f0adaf"
+    },
+    "tests/fixture-provenance.json": {
+      "bytes": 3472,
+      "origin": "tests/fixture-provenance.json",
+      "sha256": "6929074cb06036dceeb363be8ae82a993078be56cbd1e2ab390e46a43066ab08"
+    },
+    "tests/seed.sql": {
+      "bytes": 7681,
+      "origin": "tests/owner-seed.sql",
+      "sha256": "dc94b5f62daa9d8aeb3809c264dab140e2530ae48d053086ace6894d29e04249"
+    },
+    "tests/snapshot.sql": {
+      "bytes": 3434,
+      "origin": "tests/dispatched-sql/007-fixture-before.sql",
+      "sha256": "1b8bfc9d0213d826f1103dfaab2b4b69408a03126b1f92e4cb7a409b8488d0dc"
+    },
+    "tests/suite.sql": {
+      "bytes": 61223,
+      "origin": "tests/owner-suite.sql",
+      "sha256": "c71742ccceecb27ba2012635d8ee5d7b270843554d74c58a53627e25beb7b778"
+    },
+    "tests/transport.reference.cjs.txt": {
+      "bytes": 11213,
+      "origin": "tests/transport.test.cjs",
+      "sha256": "c3b0d7ceb98ac91d664a198b26e0b98b1a5903a0afd9e3a947652b62aef069a9"
+    },
+    "tests/typecheck.reference.cjs.txt": {
+      "bytes": 710,
+      "origin": "tests/typecheck.cjs",
+      "sha256": "b7f1ca50afc4907354194e990817c9c36e0abf523ae2ac13b7b5e72f6b826213"
+    }
+  },
+  "recorded_on": "2026-10-09",
+  "runner": {
+    "bytes": 123887,
+    "sha256": "8fd718dcc7ec7fb9e201d4b6ce0a5d1e10e6ec060f262e30e7037adb2d08a09d",
+    "version": "owner-marketplace-price-read-isolated-lab-v1"
+  },
+  "snapshot": "tests/snapshot.sql is the actual dispatched transaction, verified against runner SNAPSHOT_SQL; not merely an unwrapped SELECT.",
+  "source_base": "2e5a376bd66f437c783ce6cd891a44ae5b4847a9",
+  "sql_capture": {
+    "bytes": 29242,
+    "external_path": "tests/sql-transport-capture.json",
+    "sha256": "0481f1a508d50cd5417180c0687af881c5f7dbf92bda5db86ccfa05841d81df3"
+  },
+  "test_evidence": {
+    "finished_at": "2026-10-09T06:46:42.710794+00:00",
+    "helper_cleanup": "only the run helper removed and verified",
+    "new_build": "not run by that test; source checkpoint requires its own build",
+    "nonblocking_two_session_cases": 4,
+    "parser_cases": 140,
+    "rollback": "selected catalogue/privileges and nine empty tables PASS; no sequence-counter restoration claim",
+    "same_run_sql_capture_cases": 8,
+    "sql_assertions": 190,
+    "types": "two new owner modules + retained shared price parser PASS"
+  }
+}

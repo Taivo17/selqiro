@@ -1,0 +1,100 @@
+# READ-ONLY REFERENCE. Exact tested driver methods, NOT a standalone test.
+# No replay is authorized by this file. See README and PROVENANCE.json.
+# Original constants, lifecycle and PostgreSQL helper belong to the dated runner.
+
+    def core_text(self):
+        names=['dependencies/01_value_contract.sql','dependencies/02_write_guard.sql','dependencies/10_price_read_model.sql',
+          'candidate/15_owner_money_models.sql','candidate/16_owner_marketplace_read_v3.sql']
+        return ''.join(self.payload[n].decode()+'\n' for n in names)
+
+    def test_batch(self):
+        parts=[('batch/preamble',"\\set ON_ERROR_STOP on\nBEGIN;\nSET LOCAL TimeZone='UTC';\nSET LOCAL statement_timeout='15s';\n")]
+        for n in ['dependencies/01_value_contract.sql','dependencies/02_write_guard.sql','dependencies/10_price_read_model.sql',
+          'candidate/15_owner_money_models.sql','candidate/16_owner_marketplace_read_v3.sql','dependencies/seed.sql','tests/owner-seed.sql','tests/owner-suite.sql']:
+            parts.append((n,self.payload[n].decode()+'\n'))
+        parts.append(('batch/rollback','ROLLBACK;\n'));line=1;self.batch_map=[]
+        for name,t in parts:
+            self.batch_map.append(dict(path=name,start_line=line,end_line=line+t.count('\n')-1,bytes=len(t.encode()),sha256=sha(t.encode())))
+            line+=t.count('\n')
+        self.js('tests/executed-source-map.json',self.batch_map)
+        return ''.join(t for _,t in parts)
+
+    def suite_summary(self,cp):
+        labels=[s.decode() for s in re.findall(rb'OWNER_READ_PASS: ([a-zA-Z0-9_]+)',cp.stderr)]
+        lines=[s for s in cp.stdout.splitlines() if s.strip()]
+        ok=cp.returncode==0 and labels==self.labels and len(lines)==2 and lines[0].startswith(b'{') and lines[-1]==b'OWNER_READ_SUITE=PASS'
+        diagnostic=None;m=re.search(rb'psql:<stdin>:(\d+): ERROR:\s+([0-9A-Z]{5}):',cp.stderr)
+        if m:
+            line=int(m.group(1));part=next((p for p in self.batch_map if p['start_line']<=line<=p['end_line']),None)
+            diagnostic=dict(sqlstate=m.group(2).decode(),statement_end_line=line,source=part['path'] if part else None,
+              note='Statement end, not necessarily offending token. Synthetic SQL log retained.')
+        self.js('sql-test-summary.json',dict(passed=ok,exit_code=cp.returncode,observed_count=len(labels),expected_count=190,labels=labels,first_error=diagnostic))
+        self.result['SQL_SUITE']='PASS_190_ASSERTIONS' if ok else 'FAIL_'+str(len(labels))+'_OF_190'
+        require(ok,'Omaniku lugemise SQL ei labinud; vaata sql-test-summary.json. Algset DB-d ei uhendatud.')
+        capture=load(lines[0]);require(set(capture)=={'page','small','filtered','empty'},'SQL capture kuju erineb.')
+        items=capture['page']['items'];ordinary=[x for x in items if x['content_type']=='listing' and x['content_id']=='1001']
+        require(len(ordinary)==1 and ordinary[0]['money']['value']['amount']=='999999999999999999.999','SQL summatekst erineb.')
+        self.put('tests/sql-transport-capture.json',lines[0]+b'\n')
+
+    def snapshot_tests(self):
+        A='aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa';C='cccccccc-cccc-4ccc-8ccc-cccccccccccc'
+        U='11111111-1111-4111-8111-111111111111';M='33333333-3333-4333-8333-333333333333'
+        sale='f0000000-0000-4000-8000-000000000001';wanted='f0000000-0000-4000-8000-000000000002'
+        results=[]
+        def find(page,id):
+            rows=[x for x in page['items'] if x['content_id']==id];require(len(rows)==1,'Snapshoti rida puudub voi kordub.');return rows[0]
+        def values(page,changed):
+            ordinary=find(page,'1001');h=find(page,sale);w=find(page,wanted)
+            require(page['actor_id']==U and page['identity_id']==A and ordinary['money']['role']=='listing_price'
+              and h['money']['role']=='horse_offer_price' and w['money']['role']=='wanted_budget','Snapshoti kontekst/tahendus erineb.')
+            require(ordinary['money']['value']['amount']==('999999999999999999.999' if changed else '10')
+              and ordinary['money']['value']['currency']==('KWD' if changed else 'EUR')
+              and ordinary['title']==('Owner changed' if changed else 'Owner original')
+              and h['money']['value']['amount']==('8888.88' if changed else '1234.56')
+              and w['money']['value']['budget']['amount']==('7777.77' if changed else '5000.5'),
+              'Omaniku erinevad hinnad/pealkiri ei ole terviklikus snapshot-is.')
+        for i in range(4):
+            # Reinitialize only synthetic values on our own helper.
+            self.sql("BEGIN; UPDATE public.profiles SET active_identity_id='"+A+"' WHERE id='"+U+"'; "
+              "UPDATE public.business_members SET status='active' WHERE user_id='"+M+"'; "
+              "UPDATE public.listings SET price_kind='fixed',price_amount=10,currency='EUR',title='Owner original' WHERE id=1001; "
+              "UPDATE public.horse_offers SET price_amount=1234.56 WHERE id='"+sale+"'; "
+              "UPDATE public.horse_offers SET details=jsonb_set(details,'{wanted,budget,amount}','5000.50'::jsonb) WHERE id='"+wanted+"'; COMMIT;",'snapshot-reset-'+str(i))
+            actor,identity=(M,C) if i==3 else (U,A)
+            query="SELECT public.get_my_marketplace_items_v3('"+identity+"',100);"
+            claims="SET LOCAL ROLE authenticated; SET LOCAL \"request.jwt.claim.sub\"='"+actor+"'; SET LOCAL \"request.jwt.claim.role\"='authenticated';\n"
+            mutation=("UPDATE public.listings SET price_amount=999999999999999999.999,currency='KWD',title='Owner changed' WHERE id=1001; "
+              "UPDATE public.horse_offers SET price_amount=8888.88 WHERE id='"+sale+"'; "
+              "UPDATE public.horse_offers SET details=jsonb_set(details,'{wanted,budget,amount}','7777.77'::jsonb) WHERE id='"+wanted+"';") if i<2 else (
+                "UPDATE public.profiles SET active_identity_id='dddddddd-dddd-4ddd-8ddd-dddddddddddd' WHERE id='"+U+"';" if i==2 else
+                "UPDATE public.business_members SET status='inactive' WHERE user_id='"+M+"';")
+            name='owner-read-snapshot-'+str(i);a=b=None;final='ROLLBACK;\n' if i==1 else 'COMMIT;\n'
+            try:
+                a=self.start_session(name+'-a',"\\set ON_ERROR_STOP on\nBEGIN;\nSET LOCAL statement_timeout='6s'; SET LOCAL idle_in_transaction_session_timeout='10s';\n"+mutation+"\n\\echo PRICE_A_HELD\n")
+                self.wait_ready(a);held=now()
+                active="SELECT EXISTS(SELECT 1 FROM pg_stat_activity WHERE application_name='"+name+"-a' AND state='idle in transaction');"
+                require(self.sql(active,'writer-held-before-'+str(i)).stdout.strip()==b't','A tehingu hoidmine pole kinnitatud.')
+                b=self.start_session(name+'-b',"\\set ON_ERROR_STOP on\nBEGIN READ ONLY; SET LOCAL statement_timeout='3s';\n"+claims+query+"\nCOMMIT;\n")
+                br=self.end_session(b);b=None;read_finished=now();require(br[0]==0,'B ei loppenud enne A vabastamist.')
+                capture=load(br[1].strip())
+                if i<2:values(capture,False)
+                else:require(capture['actor_id']==actor and capture['identity_id']==identity and len(capture['items'])>0,'Vana lubatud owner snapshot erineb.')
+                require(self.sql(active,'writer-held-after-'+str(i)).stdout.strip()==b't','A ei hoidnud tehingut B lopus.')
+                release=now();ar=self.end_session(a,final);a=None;require(ar[0]==0,'A tehingu lopp ei labinud.')
+                post=self.sql('BEGIN READ ONLY;\n'+claims+query+'\nCOMMIT;','reader-after-'+str(i),check=False)
+                if i<2:
+                    require(post.returncode==0,'Jarellugemine ei labinud.');values(load(post.stdout.strip()),i==0)
+                else:
+                    require(post.returncode!=0 and re.search(rb'ERROR:\s+42501:',post.stderr) is not None
+                      and not any(x.startswith(b'{') for x in post.stdout.splitlines()),'Uus request ei keeldunud parast oiguse/konteksti muudatust.')
+                results.append(dict(name=name,passed=True,read_only_transaction=True,writer_held_at=held,reader_finished_at=read_finished,
+                  writer_released_at=release,first_final=final.strip(),post_read='DENIED_42501' if i>=2 else ('NEW_ALL_MONEY' if i==0 else 'OLD_ALL_MONEY'),
+                  property='Single statement snapshot; later requests observe revocation. No instantaneous in-flight revocation/HTTP/load claim.'))
+                self.js('concurrent-read-summary.json',dict(passed=len(results)==4,tests=results,expected_count=4))
+            finally:
+                for session in (a,b):
+                    if session is not None:
+                        try:self.end_session(session,'ROLLBACK;\n' if session[0].poll() is None else '')
+                        except Exception:pass
+        self.result['CONCURRENT_READ']='PASS_FOUR_NONBLOCKING_MONEY_AND_AUTH_SNAPSHOT_CASES'
+

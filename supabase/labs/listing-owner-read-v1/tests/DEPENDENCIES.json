@@ -1,0 +1,54 @@
+{
+  "format": "selqiro_owner_read_dependencies_v1",
+  "paths": {
+    "supabase/labs/listing-price-core-v1/01_value_contract.sql": {
+      "bytes": 5567,
+      "sha256": "5f9d58db5d28a9ec6804e1f0b2c282d5dd812897165b0e07242b12524d56c29c"
+    },
+    "supabase/labs/listing-price-core-v1/02_write_guard.sql": {
+      "bytes": 3812,
+      "sha256": "ced6884dea9e2098a259186b97f4e61b5fd07dd836256663dd451a2d9b03d1ea"
+    },
+    "supabase/labs/listing-price-core-v1/currencies.v1.json": {
+      "bytes": 722,
+      "sha256": "6de33eb21da4e78256ccb26048e19d6459f4bf111fad71c9b5ccd2666f948d84"
+    },
+    "supabase/labs/listing-price-core-v1/tests/fixture.sql": {
+      "bytes": 13352,
+      "sha256": "e4d21dafe0f44c898a44fa17efd736aa619282e99dffb7934979abcca6a5d03f"
+    },
+    "supabase/labs/listing-price-core-v1/tests/seed.sql": {
+      "bytes": 1798,
+      "sha256": "7a7a02a4cf7fe53586592bffe19d785f5b776ba04fe1850a934ab7f993ea6219"
+    },
+    "supabase/labs/listing-public-read-v1/10_price_read_model.sql": {
+      "bytes": 1293,
+      "sha256": "492a3e132919bf2c3d8d3b2fe450b483f06ae9e52e2fd28de3e19de6e910538c"
+    },
+    "supabase/labs/listing-public-read-v1/client/priceRead.ts": {
+      "bytes": 2730,
+      "sha256": "0d30d3619224f07911ee8e7e2573a8d0f6647a4db1be151d763875d96a66ec42"
+    },
+    "supabase/migrations/20260722173530_baseline_20260722.sql": {
+      "bytes": 221677,
+      "sha256": "7ca065f92f01c0f38ada5f5a50d2a0fc5b716f5291d1525d398023b7db59da3f"
+    },
+    "supabase/migrations/20260830170000_add_ee_horse_offer_foundation.sql": {
+      "bytes": 34413,
+      "sha256": "7ed39b68732c27b5a21173b5ce01e8fa0264f57b6a72a079913539cb6a12fb67"
+    },
+    "supabase/migrations/20260911203000_add_marketplace_item_projection_foundation.sql": {
+      "bytes": 4510,
+      "sha256": "1ad34e8590309148384ac957374a1450c106a31c2be3fcdd9f334893534e7f70"
+    },
+    "supabase/migrations/20260911220000_add_owner_marketplace_item_read_rpc.sql": {
+      "bytes": 4683,
+      "sha256": "7f2ff8d957d4ac3c8ab61e056a47d93079cb0cbc7810fd9b95dc27363127d9e5"
+    },
+    "supabase/migrations/20260920150000_add_owner_marketplace_wanted_summary.sql": {
+      "bytes": 6002,
+      "sha256": "aa5e57dc4c5b1fe4342e496cdbe09d9143671f3e82399d07c230218b041f08b2"
+    }
+  },
+  "rule": "Existing core/public labs and applied migrations stay authoritative, byte-identical and single-copy. Nothing here applies or reruns them."
+}

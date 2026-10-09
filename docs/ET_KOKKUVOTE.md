@@ -1,3 +1,40 @@
+<!-- SELQIRO_OWNER_PRICE_READ_SOURCE_20261009 -->
+## 09.10.2026 — testitud omaniku hinnalugeja talletamise lähteetapp
+
+Omaniku katse 09.10 kell 09:46 läbis päris PostgreSQLis 190 kontrolli, 140 parseritesti,
+tüübikontrolli, neli samaaegset lugemiskatset ning tagasipööramise ja oma abikonteineri
+koristuse. Kaheksa parseritesti kasutasid sama käigu tegelikku SQL-vastust. Lähtekood
+jäi puhtaks commit’il 2e5a376 ja GitHubiga võrdseks. Need on varasemad testid, mitte
+selles talletuses korratavad käsud.
+
+Uus lähtepakett talletab 15–16 omaniku SQL-lugejad, kaks algset parserit ja testiallikad
+suletud laborina väljapoole migrations-kausta. Olemasolevat ühist hinnaparserit ei
+kopeerita: kahe realise suunava failiga jääb üks teostus. Omaniku testi snapshot
+säilib tegelikult käivitatud READ ONLY/UTC tehinguna koos päritoluga.
+
+Tavakuulutuse hind, hobuse hind ja ostusoovi eelarve jäävad eraldi. Täpsed summad
+liiguvad tekstina. Puuduvat eelarvet ei asendata hobuse hinna ega müüja asukohaga.
+Lehekülg on kuni 100 rida, vaikimisi 30; esimese lehe põhjal ei väideta koguarvu.
+Loendi lühendatud tekstid pole muutmisvormi algandmed. Vana töötav Minu ala ja
+hobusemustandi muutmine jäävad samaks.
+
+Paigaldaja kontrollib failide täpsust, dokumentatsiooni ja uut build’i, siis teeb
+täpselt plaanitud staging’u. Commit/push vajab eraldi kinnitust. Tegelik uus räsi ja
+puhas/sünkroonne seis tulevad listing-owner-read-source raportist. Andmebaasi,
+kuulutusi, pilte ja rakendatud migratsioone ei muudeta ega vanu teste korrata.
+
+Pärast tulemuse ülevaatust seome hinnatöö ühe kasutajale nähtava terviku plaaniks:
+valuutaregister, täisvormi lugemine, õige aegumisfilter, vana salvestuse/lugejate ja
+õiguste üleminek. Ei lisa järjest uusi kõrvalisi vundamendietappe.
+
+Kasutaja kinnitas hilisema tasuta lihtsa kategooriaabi koos pildi, pealkirja ja
+lühikirjeldusega ning serveri kulu-/kasutuskaitsega. Käsitsi lisamine peab alati
+töötama. AI arendust ega praeguse Energy hinna muutmist sellesse sammu ei lisata.
+Jooksev üleandmine jääb lühikeseks; vana ajalooarhiiv säilib. Uue olulise paketi
+juures tuletame eraldi meelde selle allalaadimist.
+
+---
+
 <!-- SELQIRO_PUBLIC_PRICE_READ_SOURCE_CHECKPOINT_20261006 -->
 ## 06.10.2026 — testitud avaliku hinnalugemise talletamine
 

@@ -1,0 +1,127 @@
+{
+  "bridge": "In the retained lab, client/priceRead.ts forwards to the one public-read lab implementation. Reconstructing the historical test layout uses the original repository dependency, not this forwarding path.",
+  "concurrency": "tests/driver.reference.py.txt retains core/test batch/summary/snapshot methods. Exact sessions, assertions, timestamps and captures remain in the pinned external result; no full one-off runner is presented as a permanent harness.",
+  "format": "selqiro_owner_read_test_layouts_v1",
+  "input_name": "listing-owner-price-read-local-20261009-094603-9s1hgwio.zip",
+  "input_sha256": "09eb658479de2bb22b52cea5a2f8d3facbd37fedbc19ea96371af277237fa697",
+  "no_run_command": "Historical transport/typecheck suites require their original temporary layout and same-run SQL capture. Do not run them against the live database or silently substitute saved capture for a fresh SQL test.",
+  "original_paths": {
+    "candidate/15_owner_money_models.sql": {
+      "bytes": 2291,
+      "lab_path": "15_owner_money_models.sql",
+      "sha256": "c3a1be86febe7ee209e95359b802abb0eb3e0d14116b18ea5d81c876707a1052"
+    },
+    "candidate/16_owner_marketplace_read_v3.sql": {
+      "bytes": 5769,
+      "lab_path": "16_owner_marketplace_read_v3.sql",
+      "sha256": "43ae745d6d8922dbbd912766460a0138a5a414667abe1d85b551791dc83feedb"
+    },
+    "client/ownerMarketplaceV3.ts": {
+      "bytes": 7631,
+      "lab_path": "client/ownerMarketplaceV3.ts",
+      "sha256": "2ee9b6c4a812884fdc574c30364d60f4b2ae7de7ffc1cdec391dbf91631cff3a"
+    },
+    "client/ownerMoney.ts": {
+      "bytes": 3380,
+      "lab_path": "client/ownerMoney.ts",
+      "sha256": "c91163938b8a4de99377465f865b2be6efe776c39d4ff4ba115d78388375e9a0"
+    },
+    "client/priceRead.ts": {
+      "bytes": 2730,
+      "repo_path": "supabase/labs/listing-public-read-v1/client/priceRead.ts",
+      "sha256": "0d30d3619224f07911ee8e7e2573a8d0f6647a4db1be151d763875d96a66ec42"
+    },
+    "dependencies/01_value_contract.sql": {
+      "bytes": 5567,
+      "repo_path": "supabase/labs/listing-price-core-v1/01_value_contract.sql",
+      "sha256": "5f9d58db5d28a9ec6804e1f0b2c282d5dd812897165b0e07242b12524d56c29c"
+    },
+    "dependencies/02_write_guard.sql": {
+      "bytes": 3812,
+      "repo_path": "supabase/labs/listing-price-core-v1/02_write_guard.sql",
+      "sha256": "ced6884dea9e2098a259186b97f4e61b5fd07dd836256663dd451a2d9b03d1ea"
+    },
+    "dependencies/10_price_read_model.sql": {
+      "bytes": 1293,
+      "repo_path": "supabase/labs/listing-public-read-v1/10_price_read_model.sql",
+      "sha256": "492a3e132919bf2c3d8d3b2fe450b483f06ae9e52e2fd28de3e19de6e910538c"
+    },
+    "dependencies/currencies.v1.json": {
+      "bytes": 722,
+      "repo_path": "supabase/labs/listing-price-core-v1/currencies.v1.json",
+      "sha256": "6de33eb21da4e78256ccb26048e19d6459f4bf111fad71c9b5ccd2666f948d84"
+    },
+    "dependencies/fixture.sql": {
+      "bytes": 13352,
+      "repo_path": "supabase/labs/listing-price-core-v1/tests/fixture.sql",
+      "sha256": "e4d21dafe0f44c898a44fa17efd736aa619282e99dffb7934979abcca6a5d03f"
+    },
+    "dependencies/seed.sql": {
+      "bytes": 1798,
+      "repo_path": "supabase/labs/listing-price-core-v1/tests/seed.sql",
+      "sha256": "7a7a02a4cf7fe53586592bffe19d785f5b776ba04fe1850a934ab7f993ea6219"
+    },
+    "tests/baseline/20260911203000_add_marketplace_item_projection_foundation.sql": {
+      "bytes": 4510,
+      "repo_path": "supabase/migrations/20260911203000_add_marketplace_item_projection_foundation.sql",
+      "sha256": "1ad34e8590309148384ac957374a1450c106a31c2be3fcdd9f334893534e7f70"
+    },
+    "tests/baseline/20260911220000_add_owner_marketplace_item_read_rpc.sql": {
+      "bytes": 4683,
+      "repo_path": "supabase/migrations/20260911220000_add_owner_marketplace_item_read_rpc.sql",
+      "sha256": "7f2ff8d957d4ac3c8ab61e056a47d93079cb0cbc7810fd9b95dc27363127d9e5"
+    },
+    "tests/baseline/20260920150000_add_owner_marketplace_wanted_summary.sql": {
+      "bytes": 6002,
+      "repo_path": "supabase/migrations/20260920150000_add_owner_marketplace_wanted_summary.sql",
+      "sha256": "aa5e57dc4c5b1fe4342e496cdbe09d9143671f3e82399d07c230218b041f08b2"
+    },
+    "tests/dispatched-sql/007-fixture-before.sql": {
+      "bytes": 3434,
+      "lab_path": "tests/snapshot.sql",
+      "sha256": "1b8bfc9d0213d826f1103dfaab2b4b69408a03126b1f92e4cb7a409b8488d0dc"
+    },
+    "tests/expected-labels.json": {
+      "bytes": 4921,
+      "lab_path": "tests/expected-labels.json",
+      "sha256": "b5c170cc725fb50afc5faf6201f218c2838fe9554eb093b887df8930782d021c"
+    },
+    "tests/fixture-provenance.json": {
+      "bytes": 3472,
+      "lab_path": "tests/fixture-provenance.json",
+      "sha256": "6929074cb06036dceeb363be8ae82a993078be56cbd1e2ab390e46a43066ab08"
+    },
+    "tests/owner-fixture-extension.sql": {
+      "bytes": 9918,
+      "lab_path": "tests/fixture-extension.sql",
+      "sha256": "edf36135b1663eb0da980b3faa433d912ed632260cf2a7e9f14acdc681f0adaf"
+    },
+    "tests/owner-seed.sql": {
+      "bytes": 7681,
+      "lab_path": "tests/seed.sql",
+      "sha256": "dc94b5f62daa9d8aeb3809c264dab140e2530ae48d053086ace6894d29e04249"
+    },
+    "tests/owner-suite.sql": {
+      "bytes": 61223,
+      "lab_path": "tests/suite.sql",
+      "sha256": "c71742ccceecb27ba2012635d8ee5d7b270843554d74c58a53627e25beb7b778"
+    },
+    "tests/snapshot.sql": {
+      "bytes": 3348,
+      "evidence_path": "tests/snapshot.sql",
+      "note": "Historical unwrapped SELECT. Exact dispatched transaction is tests/snapshot.sql in this lab; original raw SELECT remains in external result evidence.",
+      "sha256": "8d9502526a22def01e0b3f53b642b3dec5a11db05459603cd803fdc483597777"
+    },
+    "tests/transport.test.cjs": {
+      "bytes": 11213,
+      "lab_path": "tests/transport.reference.cjs.txt",
+      "sha256": "c3b0d7ceb98ac91d664a198b26e0b98b1a5903a0afd9e3a947652b62aef069a9"
+    },
+    "tests/typecheck.cjs": {
+      "bytes": 710,
+      "lab_path": "tests/typecheck.reference.cjs.txt",
+      "sha256": "b7f1ca50afc4907354194e990817c9c36e0abf523ae2ac13b7b5e72f6b826213"
+    }
+  },
+  "snapshot": "The retained tests/snapshot.sql is the exact dispatched BEGIN READ ONLY/UTC/search_path/SELECT/COMMIT transaction; the shorter historical tests/snapshot.sql input was only its SELECT body."
+}

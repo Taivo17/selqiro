@@ -29,13 +29,14 @@ sisu järgi üle. Vana BOOT/sprint ei asenda tegelikku Git-seisu ja jooksva 99 a
 räsi ja build/remote seis tulevad välistest tulemustest. Hilisem tavapärane
 checkpoint võib selle kinnitatud räsi uue kirje alusena talletada.
 
-## Failikaart omaniku lugemislepingu järgmise etapi jaoks
+## Failikaart hinnatöö sidumiseks pärast omaniku lugeja talletamist
 
 | Vajadus | Täpne lähtekoht |
 |---|---|
 | Testitud suletud hinnatuum | supabase/labs/listing-price-core-v1/README.md |
 | Testitud salvestus/loomine 04–09 | supabase/labs/listing-price-integration-v1/README.md |
 | Testitud avalikud lugejad 10–14 ja neli parserit | supabase/labs/listing-public-read-v1/README.md |
+| Omaniku lugeja 15–16 ja kaks parserit | supabase/labs/listing-owner-read-v1/README.md |
 | Nende täpsed sõltuvused/testide ajutine asetus | listing-public-read-v1/PROVENANCE.json ja tests/TEST_LAYOUTS.json |
 | Mõlema labori päritolu | nende PROVENANCE.json; integratsioonilabori tests/DEPENDENCIES.json |
 | Ainult failiräside kontroll | supabase/labs/listing-price-integration-v1/verify_sources.py (ei SQL-i) |
@@ -49,7 +50,7 @@ checkpoint võib selle kinnitatud räsi uue kirje alusena talletada.
 | Ühine praegune hinnakuva | src/entities/listing/model/priceDisplay.ts |
 | Omaniku ühine loend | src/entities/marketplace-item/api/getMyMarketplaceItems.ts |
 
-350-failine kontrollitud baas ja selle checkpoint’i uued failid ei ole kogu repo. Puuduvat konteksti kogu ainult konkreetse
+379-failine kontrollitud baas ja selle checkpoint’i uued failid ei ole kogu repo. Puuduvat konteksti kogu ainult konkreetse
 sõltuvuse jaoks; ära alusta uut üldist skeemiauditit, kui varasem tõend katab vajaduse.
 
 Avalike lugejate kaks sviiti on eraldi. Node-testi `__dirname` sõltub ajaloolisest
@@ -66,7 +67,7 @@ oma terminalis Ctrl+C abil. Ära tapa kasutaja protsesse, kustuta .next ega paig
 Runner ei loe või ekspordi .env faile; tavapärane projekti build kasutab olemasolevat
 keskkonnaseadistust. Git keskkonnaülekirjutused eemaldatakse ainult alamprotsessidest.
 
-04.–06.10 laborikatsed kasutasid igaüks uut network-none helperit ja juba olemasolevat image’it
+04.–09.10 laborikatsed kasutasid igaüks uut network-none helperit ja juba olemasolevat image’it
 `sha256:5deba92e50cd17bfacf8603834d317cdf3bfc1c016ec8293991997fa3b55fa3d`.
 Unix-socket oli `$HOME/.docker/run/docker.sock`, binaaritee `/usr/lib/postgresql/bin`,
 PG17.6. Iga eduka käigu helper eemaldati. Algset `supabase_db_selqiro` ei kasutatud.
@@ -112,9 +113,28 @@ Tõendifailide ümberpaigutuse kaardid seovad iga algse ZIP-kirje baitide ja rä
 Failiviide ei ole sandbox-tee ega terviklik rakendusandmete varukoopia. Käivitatava
 Downloads-skripti nimi/sisend/kinnitus peavad kattuma selle skripti konstantidega.
 
-## Avaliku lugemiskihi checkpoint 06.10.2026
+## Omaniku lugemise lähtecheckpoint 09.10.2026
 
-Uued tulemusfailid `listing-public-read-source-*.zip` määravad tegeliku lähtepaigalduse,
-build’i, staging’u ning commit/push’i. Järgmine etapp on omaniku segaloend, mitte
-uus avalik lugeja või vana testi kordamine. Enne uut kirjutust kontrolli tegelikku
-HEAD-i; ajalooline e4b4143 ei asenda värsket seisu. Olemasolev 99 arhiiv säilib.
+07.10 public-read source lõpetas commit’i 2e5a376; 09.10 owner-read katse lõpus oli
+sama puhas main ja remote-võrdsus. Uue `listing-owner-read-source-*.zip` tegelik
+tulemus määrab omaniku talletuse build’i/staging’u/commit’i/push’i. Uus commit pole
+ette teada. Olemasolev 99 arhiiv ja renderdaja säilivad bait-baidilt.
+
+Omaniku kaks algset parserit säilivad päris `.ts` failidena. Nende `./priceRead`
+import läbib selgelt dokumenteeritud kahe realise re-export-faili, mis suunab ühe
+juba talletatud public-read parseri juurde. See pole kopeeritud teostus ega uus UI
+import. Failipäritolu kontroll seob nii algsed parserid, silla kui ka sõltuvuse.
+
+Omaniku snapshoti retained allikas on tegelik saadetud READ ONLY/UTC tehing, mitte
+varasemas payload'is olnud lühem paljas SELECT. TEST_LAYOUTS ütleb selle vahe ära.
+Node/driver viited ei ole uus valmis testiraamistik ega luba vana testi korrata.
+
+Pärast lähteetapi tulemuse ülevaatust koosta üks kitsas hinnatöö sidumisplaan,
+mitte uus üldaudit ega lõputu laborite lisamine. Täisvormi algandmed, valuutaregister,
+serveri expiry-filter, vanade kirjutajate ja RLS üleminek tuleb prioriseerida üheks
+kasutajale nähtava tulemuse järjekorraks. Loendi väljavõtted ei ole salvestusandmed.
+
+Tasuta lihtne AI kategooriaabi ning serveri kulukaitse on kasutajaga kinnitatud
+hilisem suund. Algul pilt+pealkiri+lühikirjeldus, vajadusel üks piiratud mudelikõne,
+alati käsitsi jätkamine. Piloodi arvulisi limiite ega praegust Energy hinda see
+lähteetapp ei määra/muuda. Ei AI arendust käesoleva hinnatöö vahele.
