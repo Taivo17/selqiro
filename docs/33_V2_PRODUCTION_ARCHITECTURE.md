@@ -1,3 +1,147 @@
+<!-- SELQIRO_PRICE_INPUT_LOCAL_ACCEPTED_SOURCE_FINISH_20261009 -->
+## 2026-10-09 — Exact price input: tested source completion boundary
+
+Actual Mac evidence: `listing-price-input-local-v2-20261009-190007-eepibvc8.zip`
+(SHA-256 `a01ba609a1d7118cf5fce3ceb17100d3ef77b2d3b70bed503e500f3c9ad2a31c`).
+The 19:00 local run passed 845 outcomes /178 scales /8 JSON-function regressions,
+1058 Node assertions against the SAME run's SQL JSON, three-module TypeScript and
+the existing whole-project build. A new networkless PG17.6 scalar fixture contained
+no application tables; two IMMUTABLE/invoker functions were explicitly verified,
+then rolled back and the exact helper removed before source writes. This is not
+Supabase HTTP/JWT, role-inheritance, browser, contention or production evidence.
+
+Source was still fb5be30 at the final local/remote check; exactly 18 paths staged.
+This source finish amends seven documentation paths only and commits those same
+18 paths after a fresh build and explicit COMMIT PUSH. All 11 registry/XML/generator/
+TS/SQL/test files keep their reviewed hashes. All 23 migrations, historical labs,
+the 5573-line handoff archive and renderer stay byte-identical. Read the returned
+finish result for actual commit/push and final worktree, not this prepared text.
+
+One frozen registry is authoritative for the new price input policy:
+`data/currency/listing-currency-registry.v1.json`. The existing generator derives
+both TypeScript and closed SQL. Generation --check is a read-only byte check, not
+SQL execution. The original normalizer CREATE statement remains unchanged:
+SHA-256 `1a703a5757cbdc7648d881db2a3af2234b891db855d4789bd44b5f1d36b33d45`.
+The release fragment is NOT a deployable migration; its fixture gate is preserved.
+Never replace a live immutable validator with changing online registry semantics.
+A later source/version update must consider existing stored values separately.
+
+The null-character test is intentionally retained. Exactly one original payload
+fails jsonb decoding with 22P05; the other 844 reach the price normalizer. Do not
+call decoding rejection a normalizer success, remove the input, or widen exception
+handling to turn arbitrary errors into PASS. Initial V1 STOP remains historical.
+
+UI/API remain on their existing paths. After source completion the next coherent
+work is the existing-listing editor's full snapshot and typed atomic save plus
+consistent readers, with a controlled server rollout and old-writer transition.
+Do not expose a currency selector backed by the old Number/direct-table writer.
+Do not populate an editor from the owner's bounded list excerpts. Status, expiry,
+images and store-category operations keep their explicit independent contracts.
+No new expired-only filter is required just to connect the price input.
+
+No Energy payment work, AI calls, FX, crypto, unit conversion or test-data deletion
+belongs to this finish. Energy follows working core flows and visible actions;
+that is the latest product priority, not removal of the existing wallet foundation.
+
+---
+<!-- SELQIRO_PRICE_INPUT_JSON_BOUNDARY_REPAIR_20261009 -->
+## 09.10.2026 — hinnasisendi testi JSON-piiri ja generaatori eraldusparandus
+
+16:58–16:59 V1 katse peatus enne esimest hinnakontrolli: input-suite 22P05
+(235. rida), sest kogu maatriksi jsonb-laadimine kohtas bad_amount_26 U+0000 märki.
+See on testi sisendipiiri viga, mitte 845 hinnareegli ebaõnnestumine. Kolm TS-moodulit
+kompileerusid; Node, lähtekirjutus, build ja staging ei alanud. Valitud public-kataloog
+taastus tühjaks ja ainult selle käigu abikonteiner eemaldati. Git oli alguses puhas
+fb5be30 / remote-equal; katkestuse järel uut lõppkontrolli ei tehtud.
+Tõend: listing-price-input-local-20261009-165859-z3on24xa.zip,
+SHA256 7df7d18315cc4161e79b22d719de3d594763edfe080765bb14a67ea184808df7.
+
+V2 säilitab kõik 845 algset sisendit/ootust ja 178 täpsuskaarti muutmata baitidega.
+Test laadib JSON-i tekstina ja teisendab iga juhtumi eraldi jsonb-ks. Ainult täpne
+algne nullmärgijuhtum võib keelduda dekodeerimisel 22P05-ga; ülejäänud 844 peavad
+jõudma normaliseerijani. Veaallikas salvestatakse eraldi, seda ei nimetata hinnavalideerija
+läbimiseks. Muud veakoodid ega vale juhtumi dekodeerimisviga ei lähe edukaks keeldumiseks.
+Kaheksa lisaregressiooni eristavad algset bulk-viga, nullmärki/literaalset kaldkriipsu/
+JSON nulli, fixed-nullhinda, täpset piirhinda ja täpselt kahte suletud väärtusfunktsiooni.
+1058 algset Node'i kontrolli säilivad; päris SQL-vastuse võrdlus on nõutud enne paigaldust.
+
+Generaator leidis varem lõputagi ainult rea algusest ning kaasas soovimatu
+listing_price_legacy_label_v1 funktsiooni. Nüüd eraldab ta täpselt sama algse
+normalize_listing_price_v1 lause (SHA256 1a703a5757cbdc7648d881db2a3af2234b891db855d4789bd44b5f1d36b33d45).
+Hinnavalideerija keha ei muutu; kõrvaline abifunktsioon jäetakse uuest suletud fragmendist välja.
+154 valuuta valik, skaalaandmed, klient/vormimudel, Node-test ja algmaatriks ei muutu.
+Kohalik test nõuab nüüd päriselt täpselt kahte public-funktsiooni ning kummalgi puuduvat
+PUBLIC käivitusõigust; varasem tühi järelkataloog üksi ei tõendanud funktsioonide arvu.
+
+See on uus ettevalmistatud V2, mitte väide Maci SQL/build PASS-ist. Uus ainus sisend
+on ülalnimetatud STOP ZIP, mitte uus XML-laadimine ega vana koguja kordus. Käivita ainult
+selqiro-install-listing-price-input-corrected.py; kinnitus PRICE INPUT LOCAL V2.
+Pärast kõiki teste, rollback'i ja oma abikonteineri eemaldamist kirjutab käiviti sama
+18-failise paketi, teeb build'i ja staging'u. Commit/push puuduvad. STOP korral ära korda.
+01–16 laborid, 23 migratsiooni, kasutajaliides, olemasolevad hinnad ja Energy säilivad.
+Energy võetakse endiselt ette alles pärast põhivoogude ja nähtavate linkide valmimist.
+
+---
+
+<!-- SELQIRO_LISTING_CURRENCY_INPUT_20261009 -->
+## 09.10.2026 — valuutaregister ja täpne hinnasisend, Energy pärast põhivooge
+
+Kasutaja otsus 09.10: Energy ostud/maksed/esiletõstmise rahalise hinnavaste teostus
+võetakse ette alles pärast põhivoo valmimist: kuulutuse lisamine ja muutmine,
+otsing/detail/profiil/Minu ala, kontaktid/sõnumid ning nähtavad lingid/tegevused.
+See on tööjärjekord, mitte töötava Energy eemaldamine ega luba kulukaitseid nõrgendada.
+Kõik kaugema visiooni moodulid pole selle järjekorra eeltingimus. Tasulisi teenuseid
+ilma kontrollitud makse/ledgerita ei avata; näidishinnad jäävad kinnitamata.
+
+Selle paketi baas on fb5be305745cf016afdb8db293c8ac23d270ce55 (09.10 12:57
+build/commit/push/clean/remote-equal, varasem tõend). Paigaldaja tulemuse ZIP näitab
+tegelikku testi-, build'i- ja staging'u seisu; see tekst ei tõenda käivitamist.
+
+Üks fikseeritud register: data/currency/listing-currency-registry.v1.json; mõlemad
+SIX-i lähte-XML-id säilivad. 178 praegust koodi kirjeldatud, 154 uuteks hindadeks
+valitud (16×0 /131×2 /7×3 komakohta), 24 põhjendatud välistust. See pole maksevaluutade,
+riikide ega ajalooliste hindade lubatavuse loend. X-prefix ja ajaloolises loendis
+esinemine pole keelureegel. VED-i ei aliasta VES-iks; CLF/UYW nelja kohta ei kärbita.
+
+scripts/currency/generate_listing_price_registry.py tuletab registrist ühe TS-kaardi
+ja suletud SQL-väärtusefragmendi. SQL kasutab vana hinnalabori normalize_listing_price_v1
+keha muutmata baitidega, aga genereeritud 154-koodilist IMMUTABLE täpsuskaarti. Lab'e
+ega rakendatud migratsioone ei muudeta; fragment asub supabase/releases/listing-price-v1,
+mitte migrations-kaustas. See keeldub muust kui uuest selqiro_price_input_fixture baasist,
+kasutab CREATE (mitte live-funktsiooni asendamist), ega ava PUBLIC käivitusõigust.
+
+Uus src/entities/listing/model/listingPriceInput.ts valideerib kindla hinna, tasuta,
+kokkuleppe- ja lisamata hinna. Summa on täpne string: Number/parseFloat, FX, ümardus
+ja valuuta asukohast oletamine puuduvad. Kliendi punktiga võrguleping on sama mis SQL-il.
+Vorm lubab üht koma või punkti AINULT kümnendmärgina; grouping/mixed eraldajad keelatud.
+Näiteks 1,234 KWD tähendab 1.234 KWD, mitte 1234 KWD; EUR-is on kolm kohta viga.
+Tulevases vormis on selle tähenduse abi ja normaliseeritud summa+valuuta enne kinnitust
+nähtavad. Sisestuse algteksti ei muudeta iga klahvivajutusega.
+
+Uus listingPriceDraft.ts on puhas vormimudel, mitte API-kirjutaja. Muutmata hind annab
+changed:false ja ei läbigi uue hinna registrivalideerimist: vana/hilisem ajalooline
+hind ei takista pealkirja parandust. Teadlik uus hind valideeritakse, vana algtekst ei
+muutu automaatselt struktureeritud hinnaks. Valuutavahetus ei teisenda summat.
+
+Kvaliteedivärav: 845 sisendi SQL/kliendi maatriksjuhtu, 178 koodi täpsuse kooskõla,
+1058 Node'i kontrolli sh päris abibaasi maatriksi võrdlus, kolme TS-mooduli tüübikontroll,
+kahe funktsiooni rollback ning oma abikonteineri eemaldamine. See ei ole kogu Supabase,
+HTTP/JWT, salvestusvõistluse, brauseri ega koormuse test. Päris Maci tulemuse kontroll
+on kohustuslik; ettevalmistuses ei nimetata SQL-i või projekti build'i läbituks.
+
+Alles kõigi kohalike testide, rollback'i, koristuse ja lähtebaasi järelkontrolli järel
+kirjutatakse täpsed 18 lähte-/testi-/dokumendifaili, tehakse olemasolev npm run build
+ja staging. Commit/push ja production puuduvad. STOP korral säilita kõik, ära korda
+või taasta; saada uus listing-price-input-local-...zip ülevaatuseks.
+
+Järgmine samm pärast ülevaadatud lähteetappi on sama existing-listing hinnamuutmise
+serveri/kliendi ühendus, mitte uus üldaudit ega teine valuutakoguja. Kasuta olemasolevat
+get_my_listing_basics_v1 / save_my_listing_basics_v1 lepingut; vanade kirjutajate/õiguste
+ning selgelt versioonitud lugejate üleminek peab olema kontrollitud enne UI/API avamist.
+Kuulutusi, pilte, tähtaegu, hobusemustandi muutmist, Energy't ega vanu päevikuid ei puudutata.
+
+---
+
 <!-- SELQIRO_OWNER_PRICE_READ_SOURCE_20261009 -->
 ## 2026-10-09 — closed owner read v3 retained-source boundary
 

@@ -1,3 +1,80 @@
+<!-- SELQIRO_PRICE_INPUT_LOCAL_ACCEPTED_SOURCE_FINISH_20261009 -->
+## 09.10.2026 — Hinnasisendi tegelik PASS ja sama lähteetapi lõpetamine
+
+See algus asendab allpool ajalooliste V1/V2 käivituste järgmise tegevuse.
+Jooksev tõeallikas on endiselt CURRENT_STATE.json ja sellest genereeritud 99-leht.
+19:00 kasutajakäik läbis SQL/Node/build'i ning jättis 18 faili staging'usse samal
+fb5be30 baasil. Ainult selle käigu täpne PASS-ZIP on uuele lõpetajale vajalik:
+`listing-price-input-local-v2-20261009-190007-eepibvc8.zip`.
+Ära korda V1/V2 paigaldajat, valuutakogujat ega SQL-i. Andmebaasi pole paigaldatud.
+
+Uus `selqiro-finish-listing-price-input.py` säilitab testitud 11 faili ja muudab
+ainult seitset juba stage'itud dokumenti. Generator --check ja handoff --check
+on failide kontrollid; SQL/Node-sviite ei korrata. Värske build ning eraldi
+COMMIT PUSH kinnitavad ainult selle 18-faililise lähteetapi. Tegelik commit/push/
+puhas tööpuu loetakse lõpetaja result.json-ist, mitte ei ennustata dokumenti.
+Ka pärast edu ei suuna repo leht lõpetajat uuesti käivitama: kontrolli tulemust.
+
+Valitud eksport jääb 409 failiks; 398 algallika ja 11 uue faili vahe on dokumenteeritud.
+5573-realise arhiivi ja renderdaja baidid jäävad samaks. Tõendi vanad failid võivad
+sisaldada NEXT-käske, kuid need pole tänased juhised. Allpool vana 16-koodi laborivalim
+on ajalugu: uus 154-koodi sisendiregister on lokaalselt testitud, UI-ga veel ühendamata.
+
+Uue lõpetaja enda attempt-marker blokeerib topeltkirjutuse/commit'i; vanade paigaldus-
+ja production-päevikute poole ta ei pöördu. Katkestus säilitab failid/indexi/võimaliku
+commit'i ning nõuab raporti ülevaatust, mitte reset/restore/force-push või automaatset kordust.
+Tulemusraport eristab ettevalmistust, päris kasutajakäiku, lähtekoodi ja productionit.
+
+Järgneb hinna/valuuta nähtav muutmis- ja kuvamisvoog olemasolevate lepingutega.
+Energy/maksed alles pärast põhivoogude ja nähtavate linkide lõpetamist. Iga uue
+olulise üleandmispaketi juures tuleta kasutajale eraldi meelde selle allalaadimist.
+
+---
+<!-- SELQIRO_PRICE_INPUT_JSON_BOUNDARY_REPAIR_20261009 -->
+## 09.10.2026 — hinnasisendi testi JSON-piiri ja generaatori eraldusparandus
+
+16:58–16:59 V1 katse peatus enne esimest hinnakontrolli: input-suite 22P05
+(235. rida), sest kogu maatriksi jsonb-laadimine kohtas bad_amount_26 U+0000 märki.
+See on testi sisendipiiri viga, mitte 845 hinnareegli ebaõnnestumine. Kolm TS-moodulit
+kompileerusid; Node, lähtekirjutus, build ja staging ei alanud. Valitud public-kataloog
+taastus tühjaks ja ainult selle käigu abikonteiner eemaldati. Git oli alguses puhas
+fb5be30 / remote-equal; katkestuse järel uut lõppkontrolli ei tehtud.
+Tõend: listing-price-input-local-20261009-165859-z3on24xa.zip,
+SHA256 7df7d18315cc4161e79b22d719de3d594763edfe080765bb14a67ea184808df7.
+
+V2 säilitab kõik 845 algset sisendit/ootust ja 178 täpsuskaarti muutmata baitidega.
+Test laadib JSON-i tekstina ja teisendab iga juhtumi eraldi jsonb-ks. Ainult täpne
+algne nullmärgijuhtum võib keelduda dekodeerimisel 22P05-ga; ülejäänud 844 peavad
+jõudma normaliseerijani. Veaallikas salvestatakse eraldi, seda ei nimetata hinnavalideerija
+läbimiseks. Muud veakoodid ega vale juhtumi dekodeerimisviga ei lähe edukaks keeldumiseks.
+Kaheksa lisaregressiooni eristavad algset bulk-viga, nullmärki/literaalset kaldkriipsu/
+JSON nulli, fixed-nullhinda, täpset piirhinda ja täpselt kahte suletud väärtusfunktsiooni.
+1058 algset Node'i kontrolli säilivad; päris SQL-vastuse võrdlus on nõutud enne paigaldust.
+
+Generaator leidis varem lõputagi ainult rea algusest ning kaasas soovimatu
+listing_price_legacy_label_v1 funktsiooni. Nüüd eraldab ta täpselt sama algse
+normalize_listing_price_v1 lause (SHA256 1a703a5757cbdc7648d881db2a3af2234b891db855d4789bd44b5f1d36b33d45).
+Hinnavalideerija keha ei muutu; kõrvaline abifunktsioon jäetakse uuest suletud fragmendist välja.
+154 valuuta valik, skaalaandmed, klient/vormimudel, Node-test ja algmaatriks ei muutu.
+Kohalik test nõuab nüüd päriselt täpselt kahte public-funktsiooni ning kummalgi puuduvat
+PUBLIC käivitusõigust; varasem tühi järelkataloog üksi ei tõendanud funktsioonide arvu.
+
+See on uus ettevalmistatud V2, mitte väide Maci SQL/build PASS-ist. Uus ainus sisend
+on ülalnimetatud STOP ZIP, mitte uus XML-laadimine ega vana koguja kordus. Käivita ainult
+selqiro-install-listing-price-input-corrected.py; kinnitus PRICE INPUT LOCAL V2.
+Pärast kõiki teste, rollback'i ja oma abikonteineri eemaldamist kirjutab käiviti sama
+18-failise paketi, teeb build'i ja staging'u. Commit/push puuduvad. STOP korral ära korda.
+01–16 laborid, 23 migratsiooni, kasutajaliides, olemasolevad hinnad ja Energy säilivad.
+Energy võetakse endiselt ette alles pärast põhivoogude ja nähtavate linkide valmimist.
+
+---
+
+## 09.10.2026 — valuutaregistri sisendietapp
+
+Jooksev seis on CURRENT_STATE.json-is. Energy arendus algab alles pärast põhivoogude
+ja nähtavate linkide kontrolli. Uus registry/input pakett ei lülita UI-d ümber.
+Registri allikas: `data/currency/listing-currency-registry.v1.json`; `scripts/currency/generate_listing_price_registry.py --check` kontrollib tuletisi.
+
 # Selqiro — kiire ja kontrollitav vestlusevahetus
 
 ## Sisenemistee

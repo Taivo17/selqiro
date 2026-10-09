@@ -1,0 +1,2171 @@
+{
+  "entries": [
+    {
+      "code": "AED",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "UAE Dirham"
+      ],
+      "numeric_code": "784",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "AFN",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Afghani"
+      ],
+      "numeric_code": "971",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "ALL",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Lek"
+      ],
+      "numeric_code": "008",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "AMD",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Armenian Dram"
+      ],
+      "numeric_code": "051",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "AOA",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Kwanza"
+      ],
+      "numeric_code": "973",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "ARS",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Argentine Peso"
+      ],
+      "numeric_code": "032",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "AUD",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Australian Dollar"
+      ],
+      "numeric_code": "036",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "AWG",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Aruban Florin"
+      ],
+      "numeric_code": "533",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "AZN",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Azerbaijan Manat"
+      ],
+      "numeric_code": "944",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "BAM",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Convertible Mark"
+      ],
+      "numeric_code": "977",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "BBD",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Barbados Dollar"
+      ],
+      "numeric_code": "052",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "BDT",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Taka"
+      ],
+      "numeric_code": "050",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "BHD",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 3,
+      "names": [
+        "Bahraini Dinar"
+      ],
+      "numeric_code": "048",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "3"
+    },
+    {
+      "code": "BIF",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 0,
+      "names": [
+        "Burundi Franc"
+      ],
+      "numeric_code": "108",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "0"
+    },
+    {
+      "code": "BMD",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Bermudian Dollar"
+      ],
+      "numeric_code": "060",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "BND",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Brunei Dollar"
+      ],
+      "numeric_code": "096",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "BOB",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Boliviano"
+      ],
+      "numeric_code": "068",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "BOV",
+      "fund": true,
+      "input_allowed": false,
+      "minor_units": null,
+      "names": [
+        "Mvdol"
+      ],
+      "numeric_code": "984",
+      "reason": "fund_unit_outside_first_listing_price_scope",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "BRL",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Brazilian Real"
+      ],
+      "numeric_code": "986",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "BSD",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Bahamian Dollar"
+      ],
+      "numeric_code": "044",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "BTN",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Ngultrum"
+      ],
+      "numeric_code": "064",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "BWP",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Pula"
+      ],
+      "numeric_code": "072",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "BYN",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Belarusian Ruble"
+      ],
+      "numeric_code": "933",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "BZD",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Belize Dollar"
+      ],
+      "numeric_code": "084",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "CAD",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Canadian Dollar"
+      ],
+      "numeric_code": "124",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "CDF",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Congolese Franc"
+      ],
+      "numeric_code": "976",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "CHE",
+      "fund": true,
+      "input_allowed": false,
+      "minor_units": null,
+      "names": [
+        "WIR Euro"
+      ],
+      "numeric_code": "947",
+      "reason": "fund_unit_outside_first_listing_price_scope",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "CHF",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Swiss Franc"
+      ],
+      "numeric_code": "756",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "CHW",
+      "fund": true,
+      "input_allowed": false,
+      "minor_units": null,
+      "names": [
+        "WIR Franc"
+      ],
+      "numeric_code": "948",
+      "reason": "fund_unit_outside_first_listing_price_scope",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "CLF",
+      "fund": true,
+      "input_allowed": false,
+      "minor_units": null,
+      "names": [
+        "Unidad de Fomento"
+      ],
+      "numeric_code": "990",
+      "reason": "fund_unit_outside_first_listing_price_scope",
+      "source_minor_units": "4"
+    },
+    {
+      "code": "CLP",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 0,
+      "names": [
+        "Chilean Peso"
+      ],
+      "numeric_code": "152",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "0"
+    },
+    {
+      "code": "CNY",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Yuan Renminbi"
+      ],
+      "numeric_code": "156",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "COP",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Colombian Peso"
+      ],
+      "numeric_code": "170",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "COU",
+      "fund": true,
+      "input_allowed": false,
+      "minor_units": null,
+      "names": [
+        "Unidad de Valor Real"
+      ],
+      "numeric_code": "970",
+      "reason": "fund_unit_outside_first_listing_price_scope",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "CRC",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Costa Rican Colon"
+      ],
+      "numeric_code": "188",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "CUP",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Cuban Peso"
+      ],
+      "numeric_code": "192",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "CVE",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Cabo Verde Escudo"
+      ],
+      "numeric_code": "132",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "CZK",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Czech Koruna"
+      ],
+      "numeric_code": "203",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "DJF",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 0,
+      "names": [
+        "Djibouti Franc"
+      ],
+      "numeric_code": "262",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "0"
+    },
+    {
+      "code": "DKK",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Danish Krone"
+      ],
+      "numeric_code": "208",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "DOP",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Dominican Peso"
+      ],
+      "numeric_code": "214",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "DZD",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Algerian Dinar"
+      ],
+      "numeric_code": "012",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "EGP",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Egyptian Pound"
+      ],
+      "numeric_code": "818",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "ERN",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Nakfa"
+      ],
+      "numeric_code": "232",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "ETB",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Ethiopian Birr"
+      ],
+      "numeric_code": "230",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "EUR",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Euro"
+      ],
+      "numeric_code": "978",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "FJD",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Fiji Dollar"
+      ],
+      "numeric_code": "242",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "FKP",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Falkland Islands Pound"
+      ],
+      "numeric_code": "238",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "GBP",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Pound Sterling"
+      ],
+      "numeric_code": "826",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "GEL",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Lari"
+      ],
+      "numeric_code": "981",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "GHS",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Ghana Cedi"
+      ],
+      "numeric_code": "936",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "GIP",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Gibraltar Pound"
+      ],
+      "numeric_code": "292",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "GMD",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Dalasi"
+      ],
+      "numeric_code": "270",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "GNF",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 0,
+      "names": [
+        "Guinean Franc"
+      ],
+      "numeric_code": "324",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "0"
+    },
+    {
+      "code": "GTQ",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Quetzal"
+      ],
+      "numeric_code": "320",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "GYD",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Guyana Dollar"
+      ],
+      "numeric_code": "328",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "HKD",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Hong Kong Dollar"
+      ],
+      "numeric_code": "344",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "HNL",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Lempira"
+      ],
+      "numeric_code": "340",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "HTG",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Gourde"
+      ],
+      "numeric_code": "332",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "HUF",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Forint"
+      ],
+      "numeric_code": "348",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "IDR",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Rupiah"
+      ],
+      "numeric_code": "360",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "ILS",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "New Israeli Sheqel"
+      ],
+      "numeric_code": "376",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "INR",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Indian Rupee"
+      ],
+      "numeric_code": "356",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "IQD",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 3,
+      "names": [
+        "Iraqi Dinar"
+      ],
+      "numeric_code": "368",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "3"
+    },
+    {
+      "code": "IRR",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Iranian Rial"
+      ],
+      "numeric_code": "364",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "ISK",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 0,
+      "names": [
+        "Iceland Krona"
+      ],
+      "numeric_code": "352",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "0"
+    },
+    {
+      "code": "JMD",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Jamaican Dollar"
+      ],
+      "numeric_code": "388",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "JOD",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 3,
+      "names": [
+        "Jordanian Dinar"
+      ],
+      "numeric_code": "400",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "3"
+    },
+    {
+      "code": "JPY",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 0,
+      "names": [
+        "Yen"
+      ],
+      "numeric_code": "392",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "0"
+    },
+    {
+      "code": "KES",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Kenyan Shilling"
+      ],
+      "numeric_code": "404",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "KGS",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Som"
+      ],
+      "numeric_code": "417",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "KHR",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Riel"
+      ],
+      "numeric_code": "116",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "KMF",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 0,
+      "names": [
+        "Comorian Franc"
+      ],
+      "numeric_code": "174",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "0"
+    },
+    {
+      "code": "KPW",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "North Korean Won"
+      ],
+      "numeric_code": "408",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "KRW",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 0,
+      "names": [
+        "Won"
+      ],
+      "numeric_code": "410",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "0"
+    },
+    {
+      "code": "KWD",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 3,
+      "names": [
+        "Kuwaiti Dinar"
+      ],
+      "numeric_code": "414",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "3"
+    },
+    {
+      "code": "KYD",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Cayman Islands Dollar"
+      ],
+      "numeric_code": "136",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "KZT",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Tenge"
+      ],
+      "numeric_code": "398",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "LAK",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Lao Kip"
+      ],
+      "numeric_code": "418",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "LBP",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Lebanese Pound"
+      ],
+      "numeric_code": "422",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "LKR",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Sri Lanka Rupee"
+      ],
+      "numeric_code": "144",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "LRD",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Liberian Dollar"
+      ],
+      "numeric_code": "430",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "LSL",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Loti"
+      ],
+      "numeric_code": "426",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "LYD",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 3,
+      "names": [
+        "Libyan Dinar"
+      ],
+      "numeric_code": "434",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "3"
+    },
+    {
+      "code": "MAD",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Moroccan Dirham"
+      ],
+      "numeric_code": "504",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "MDL",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Moldovan Leu"
+      ],
+      "numeric_code": "498",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "MGA",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Malagasy Ariary"
+      ],
+      "numeric_code": "969",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "MKD",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Denar"
+      ],
+      "numeric_code": "807",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "MMK",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Kyat"
+      ],
+      "numeric_code": "104",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "MNT",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Tugrik"
+      ],
+      "numeric_code": "496",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "MOP",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Pataca"
+      ],
+      "numeric_code": "446",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "MRU",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Ouguiya"
+      ],
+      "numeric_code": "929",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "MUR",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Mauritius Rupee"
+      ],
+      "numeric_code": "480",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "MVR",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Rufiyaa"
+      ],
+      "numeric_code": "462",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "MWK",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Malawi Kwacha"
+      ],
+      "numeric_code": "454",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "MXN",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Mexican Peso"
+      ],
+      "numeric_code": "484",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "MXV",
+      "fund": true,
+      "input_allowed": false,
+      "minor_units": null,
+      "names": [
+        "Mexican Unidad de Inversion (UDI)"
+      ],
+      "numeric_code": "979",
+      "reason": "fund_unit_outside_first_listing_price_scope",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "MYR",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Malaysian Ringgit"
+      ],
+      "numeric_code": "458",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "MZN",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Mozambique Metical"
+      ],
+      "numeric_code": "943",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "NAD",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Namibia Dollar"
+      ],
+      "numeric_code": "516",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "NGN",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Naira"
+      ],
+      "numeric_code": "566",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "NIO",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Cordoba Oro"
+      ],
+      "numeric_code": "558",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "NOK",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Norwegian Krone"
+      ],
+      "numeric_code": "578",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "NPR",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Nepalese Rupee"
+      ],
+      "numeric_code": "524",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "NZD",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "New Zealand Dollar"
+      ],
+      "numeric_code": "554",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "OMR",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 3,
+      "names": [
+        "Rial Omani"
+      ],
+      "numeric_code": "512",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "3"
+    },
+    {
+      "code": "PAB",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Balboa"
+      ],
+      "numeric_code": "590",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "PEN",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Sol"
+      ],
+      "numeric_code": "604",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "PGK",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Kina"
+      ],
+      "numeric_code": "598",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "PHP",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Philippine Peso"
+      ],
+      "numeric_code": "608",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "PKR",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Pakistan Rupee"
+      ],
+      "numeric_code": "586",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "PLN",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Zloty"
+      ],
+      "numeric_code": "985",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "PYG",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 0,
+      "names": [
+        "Guarani"
+      ],
+      "numeric_code": "600",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "0"
+    },
+    {
+      "code": "QAR",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Qatari Rial"
+      ],
+      "numeric_code": "634",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "RON",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Romanian Leu"
+      ],
+      "numeric_code": "946",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "RSD",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Serbian Dinar"
+      ],
+      "numeric_code": "941",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "RUB",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Russian Ruble"
+      ],
+      "numeric_code": "643",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "RWF",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 0,
+      "names": [
+        "Rwanda Franc"
+      ],
+      "numeric_code": "646",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "0"
+    },
+    {
+      "code": "SAR",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Saudi Riyal"
+      ],
+      "numeric_code": "682",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "SBD",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Solomon Islands Dollar"
+      ],
+      "numeric_code": "090",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "SCR",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Seychelles Rupee"
+      ],
+      "numeric_code": "690",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "SDG",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Sudanese Pound"
+      ],
+      "numeric_code": "938",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "SEK",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Swedish Krona"
+      ],
+      "numeric_code": "752",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "SGD",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Singapore Dollar"
+      ],
+      "numeric_code": "702",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "SHP",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Saint Helena Pound"
+      ],
+      "numeric_code": "654",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "SLE",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Leone"
+      ],
+      "numeric_code": "925",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "SOS",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Somali Shilling"
+      ],
+      "numeric_code": "706",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "SRD",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Surinam Dollar"
+      ],
+      "numeric_code": "968",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "SSP",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "South Sudanese Pound"
+      ],
+      "numeric_code": "728",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "STN",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Dobra"
+      ],
+      "numeric_code": "930",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "SVC",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "El Salvador Colon"
+      ],
+      "numeric_code": "222",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "SYP",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Syrian Pound"
+      ],
+      "numeric_code": "760",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "SZL",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Lilangeni"
+      ],
+      "numeric_code": "748",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "THB",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Baht"
+      ],
+      "numeric_code": "764",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "TJS",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Somoni"
+      ],
+      "numeric_code": "972",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "TMT",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Turkmenistan New Manat"
+      ],
+      "numeric_code": "934",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "TND",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 3,
+      "names": [
+        "Tunisian Dinar"
+      ],
+      "numeric_code": "788",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "3"
+    },
+    {
+      "code": "TOP",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Pa’anga"
+      ],
+      "numeric_code": "776",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "TRY",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Turkish Lira"
+      ],
+      "numeric_code": "949",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "TTD",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Trinidad and Tobago Dollar"
+      ],
+      "numeric_code": "780",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "TWD",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "New Taiwan Dollar"
+      ],
+      "numeric_code": "901",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "TZS",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Tanzanian Shilling"
+      ],
+      "numeric_code": "834",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "UAH",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Hryvnia"
+      ],
+      "numeric_code": "980",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "UGX",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 0,
+      "names": [
+        "Uganda Shilling"
+      ],
+      "numeric_code": "800",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "0"
+    },
+    {
+      "code": "USD",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "US Dollar"
+      ],
+      "numeric_code": "840",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "USN",
+      "fund": true,
+      "input_allowed": false,
+      "minor_units": null,
+      "names": [
+        "US Dollar (Next day)"
+      ],
+      "numeric_code": "997",
+      "reason": "fund_unit_outside_first_listing_price_scope",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "UYI",
+      "fund": true,
+      "input_allowed": false,
+      "minor_units": null,
+      "names": [
+        "Uruguay Peso en Unidades Indexadas (UI)"
+      ],
+      "numeric_code": "940",
+      "reason": "fund_unit_outside_first_listing_price_scope",
+      "source_minor_units": "0"
+    },
+    {
+      "code": "UYU",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Peso Uruguayo"
+      ],
+      "numeric_code": "858",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "UYW",
+      "fund": true,
+      "input_allowed": false,
+      "minor_units": null,
+      "names": [
+        "Unidad Previsional"
+      ],
+      "numeric_code": "927",
+      "reason": "fund_unit_outside_first_listing_price_scope",
+      "source_minor_units": "4"
+    },
+    {
+      "code": "UZS",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Uzbekistan Sum"
+      ],
+      "numeric_code": "860",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "VED",
+      "fund": null,
+      "input_allowed": false,
+      "minor_units": null,
+      "names": [
+        "Bolívar Soberano"
+      ],
+      "numeric_code": "926",
+      "reason": "internal_redenomination_code_six_amendment_170_use_VES_for_new_listing_input",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "VES",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Bolívar Soberano"
+      ],
+      "numeric_code": "928",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "VND",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 0,
+      "names": [
+        "Dong"
+      ],
+      "numeric_code": "704",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "0"
+    },
+    {
+      "code": "VUV",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 0,
+      "names": [
+        "Vatu"
+      ],
+      "numeric_code": "548",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "0"
+    },
+    {
+      "code": "WST",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Tala"
+      ],
+      "numeric_code": "882",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "XAD",
+      "fund": true,
+      "input_allowed": false,
+      "minor_units": null,
+      "names": [
+        "Arab Accounting Dinar"
+      ],
+      "numeric_code": "396",
+      "reason": "fund_unit_outside_first_listing_price_scope",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "XAF",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 0,
+      "names": [
+        "CFA Franc BEAC"
+      ],
+      "numeric_code": "950",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "0"
+    },
+    {
+      "code": "XAG",
+      "fund": null,
+      "input_allowed": false,
+      "minor_units": null,
+      "names": [
+        "Silver"
+      ],
+      "numeric_code": "961",
+      "reason": "special_code_with_minor_unit_not_applicable",
+      "source_minor_units": "N.A."
+    },
+    {
+      "code": "XAU",
+      "fund": null,
+      "input_allowed": false,
+      "minor_units": null,
+      "names": [
+        "Gold"
+      ],
+      "numeric_code": "959",
+      "reason": "special_code_with_minor_unit_not_applicable",
+      "source_minor_units": "N.A."
+    },
+    {
+      "code": "XBA",
+      "fund": null,
+      "input_allowed": false,
+      "minor_units": null,
+      "names": [
+        "Bond Markets Unit European Composite Unit (EURCO)"
+      ],
+      "numeric_code": "955",
+      "reason": "special_code_with_minor_unit_not_applicable",
+      "source_minor_units": "N.A."
+    },
+    {
+      "code": "XBB",
+      "fund": null,
+      "input_allowed": false,
+      "minor_units": null,
+      "names": [
+        "Bond Markets Unit European Monetary Unit (E.M.U.-6)"
+      ],
+      "numeric_code": "956",
+      "reason": "special_code_with_minor_unit_not_applicable",
+      "source_minor_units": "N.A."
+    },
+    {
+      "code": "XBC",
+      "fund": null,
+      "input_allowed": false,
+      "minor_units": null,
+      "names": [
+        "Bond Markets Unit European Unit of Account 9 (E.U.A.-9)"
+      ],
+      "numeric_code": "957",
+      "reason": "special_code_with_minor_unit_not_applicable",
+      "source_minor_units": "N.A."
+    },
+    {
+      "code": "XBD",
+      "fund": null,
+      "input_allowed": false,
+      "minor_units": null,
+      "names": [
+        "Bond Markets Unit European Unit of Account 17 (E.U.A.-17)"
+      ],
+      "numeric_code": "958",
+      "reason": "special_code_with_minor_unit_not_applicable",
+      "source_minor_units": "N.A."
+    },
+    {
+      "code": "XCD",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "East Caribbean Dollar"
+      ],
+      "numeric_code": "951",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "XCG",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Caribbean Guilder"
+      ],
+      "numeric_code": "532",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "XDR",
+      "fund": null,
+      "input_allowed": false,
+      "minor_units": null,
+      "names": [
+        "SDR (Special Drawing Right)"
+      ],
+      "numeric_code": "960",
+      "reason": "special_code_with_minor_unit_not_applicable",
+      "source_minor_units": "N.A."
+    },
+    {
+      "code": "XOF",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 0,
+      "names": [
+        "CFA Franc BCEAO"
+      ],
+      "numeric_code": "952",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "0"
+    },
+    {
+      "code": "XPD",
+      "fund": null,
+      "input_allowed": false,
+      "minor_units": null,
+      "names": [
+        "Palladium"
+      ],
+      "numeric_code": "964",
+      "reason": "special_code_with_minor_unit_not_applicable",
+      "source_minor_units": "N.A."
+    },
+    {
+      "code": "XPF",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 0,
+      "names": [
+        "CFP Franc"
+      ],
+      "numeric_code": "953",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "0"
+    },
+    {
+      "code": "XPT",
+      "fund": null,
+      "input_allowed": false,
+      "minor_units": null,
+      "names": [
+        "Platinum"
+      ],
+      "numeric_code": "962",
+      "reason": "special_code_with_minor_unit_not_applicable",
+      "source_minor_units": "N.A."
+    },
+    {
+      "code": "XSU",
+      "fund": null,
+      "input_allowed": false,
+      "minor_units": null,
+      "names": [
+        "Sucre"
+      ],
+      "numeric_code": "994",
+      "reason": "special_code_with_minor_unit_not_applicable",
+      "source_minor_units": "N.A."
+    },
+    {
+      "code": "XTS",
+      "fund": null,
+      "input_allowed": false,
+      "minor_units": null,
+      "names": [
+        "Codes specifically reserved for testing purposes"
+      ],
+      "numeric_code": "963",
+      "reason": "special_code_with_minor_unit_not_applicable",
+      "source_minor_units": "N.A."
+    },
+    {
+      "code": "XUA",
+      "fund": null,
+      "input_allowed": false,
+      "minor_units": null,
+      "names": [
+        "ADB Unit of Account"
+      ],
+      "numeric_code": "965",
+      "reason": "special_code_with_minor_unit_not_applicable",
+      "source_minor_units": "N.A."
+    },
+    {
+      "code": "XXX",
+      "fund": null,
+      "input_allowed": false,
+      "minor_units": null,
+      "names": [
+        "The codes assigned for transactions where no currency is involved"
+      ],
+      "numeric_code": "999",
+      "reason": "special_code_with_minor_unit_not_applicable",
+      "source_minor_units": "N.A."
+    },
+    {
+      "code": "YER",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Yemeni Rial"
+      ],
+      "numeric_code": "886",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "ZAR",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Rand"
+      ],
+      "numeric_code": "710",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "ZMW",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Zambian Kwacha"
+      ],
+      "numeric_code": "967",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    },
+    {
+      "code": "ZWG",
+      "fund": null,
+      "input_allowed": true,
+      "minor_units": 2,
+      "names": [
+        "Zimbabwe Gold"
+      ],
+      "numeric_code": "924",
+      "reason": "current_nonfund_numeric_minor_unit",
+      "source_minor_units": "2"
+    }
+  ],
+  "format": "selqiro_listing_currency_registry_v1",
+  "policy": {
+    "exclude_fund_marked": true,
+    "exclude_na_minor_units": true,
+    "explicit_excluded": {
+      "VED": {
+        "code": "VED",
+        "note": "Source XML retains VED and VES. The amendment designates VED for internal redenomination needs and VES for future transactions; proposed UI uses VES without aliasing/converting VED.",
+        "publication_date": "2021-10-01",
+        "reviewed_on": "2026-10-09",
+        "url": "https://www.six-group.com/dam/download/financial-information/data-center/iso-currrency/amendments/dl_currency_iso_amendment_170.pdf"
+      }
+    },
+    "max_integer_digits": 18,
+    "no_automatic_source_refresh": true,
+    "supported_minor_units": [
+      0,
+      2,
+      3
+    ]
+  },
+  "scope": "New ordinary-listing price input only; not historical read validity, cash rounding, country eligibility, FX or payment-provider support.",
+  "source": {
+    "current_path": "data/currency/sources/list-one-20260917.xml",
+    "current_published": "2026-09-17",
+    "current_sha256": "33139b438657d1cee116ba737807ea71d19d6de4b90f799a09c56f0cc6a1b0ff",
+    "historical_path": "data/currency/sources/list-three-20260101.xml",
+    "historical_published": "2026-01-01",
+    "historical_sha256": "98fde2423cdb916dd59dcf5fe96222edad8fa198d865c1c83dbc464b9cc52387"
+  },
+  "version": "listing-currency-2026-09-17-v1"
+}
