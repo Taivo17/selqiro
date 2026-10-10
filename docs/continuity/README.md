@@ -1,3 +1,82 @@
+<!-- SELQIRO_EDIT_CLIENT_LOCAL_ACCEPTED_SOURCE_FINISH_20261010 -->
+## 2026-10-10 — Current entry: local edit-client PASS, not installer replay
+
+This dated entry supersedes earlier next-step instructions for the completed installer.
+
+The 10 October 12:36–12:37 (+03) user run passed 28 SQL assertions in a new networkless
+PostgreSQL 17.6 helper, produced 10 JSON captures, and passed all 108 Node cases plus the
+real Mac build. The last Node case consumed every capture from that same SQL run.
+Evidence: `listing-edit-client-local-20261010-123648-1beym8qt.zip`, SHA-256
+`13630d4a319818b613dc459fc41378b6dfe25a4dceb46f8f5374b688f7145a6c`.
+The saved 748-file / 747-manifest report and 427 selected source exports were reviewed.
+HEAD remained `7f2db6bc11ad0384ae1cf077c896f2ee77d9ea24`; exactly 16 files were staged,
+with no extra unstaged/untracked paths in the final check and remote equal to that BASE.
+This is not a new remote observation by this document or the offline review.
+
+Selected schema/privileges and seven empty fixture tables were restored, and only the
+new helper was removed before source writes. The original local DB and production were
+not connected. SQL used synthetic auth/rows; Node used synthetic transport/actors/timers.
+No new two-connection race, HTTP/JWT, React DOM, browser or load test is implied.
+
+The source finisher preserves all nine new files byte-for-byte, amends only seven existing
+documents, checks generated files, runs a fresh build and requests COMMIT PUSH before the
+exact 16-path commit. Planned subject: `Add account-bound atomic listing edit client`.
+Read its result for actual NEW_COMMIT, BUILD, COMMIT, PUSH, clean main and remote equality.
+These documents cannot know their own future commit hash or certify a future deployment.
+No SQL/Node-suite replay, Docker/Supabase, package install, reset/restore, force-push or old
+operation-journal access. A stop preserves files/index/any commit; return the new ZIP first.
+
+The short 99 handoff continues to be generated only from CURRENT_STATE.json. The original
+5573-line history archive and renderer remain byte-identical. The new architecture file
+listing-edit-client-v1.md is also kept unchanged; its candidate wording is qualified by
+this dated actual result and the finisher outcome, not silently rewritten.
+
+The new modules are still not imported by the current route. The account-bound adapters
+remain fixture-gated and closed to API roles; neither persistent local nor production
+price schema is installed by this source checkpoint. All 23 migrations, previous labs,
+154-currency registry, existing save/image APIs, horse editing and renewal stay unchanged.
+
+Next after reviewed source completion: finish THIS price-edit release using the existing
+contracts. Assemble controlled server/read/write permissions and legacy direct/SECURITY
+DEFINER writer transition; production preflight/application need separate review/consent.
+Then connect the real form, auth/identity events, unsaved/image action boundaries and the
+contextual named return flow. Display the same canonical price in detail/search/profile/
+My Area. Do not add another registry/lab/general framework or activate only the client.
+Energy/payments remain deferred until core create/edit/find/contact and visible links work.
+No AI, FX, crypto, units, new creation/publication or deletion of test listings/images.
+
+---
+<!-- SELQIRO_LISTING_EDIT_CLIENT_CONNECTION_CANDIDATE_20261010 -->
+## 2026-10-10 — Hinnamuutmise konto- ja identiteedipõhine kliendiühendus
+
+Alus 7f2db6b: refaktor commit/push/build lõpetatud 09.10 kell 22:42; 10.10 kasutaja
+kinnitas sama Verceli Ready/Production ning muutmis-/avaliku vaate töötamise.
+Viimane Git-kontroll on endiselt 09.10 käigu tõend, mitte uus vaatlus ekraanipildist.
+
+Uus kandidaat: täpne omaniku snapshot/ack parser, üks atomaarne salvestuspäring,
+muutmata hinna väljajätmine, serveri canonical-vastus ja ühe vormi salvestussessioon.
+Kaks õhukest suletud SQL-adapterit seovad JWT konto: ainult identiteedist ei piisa,
+kui kaks eri kontot kuuluvad samasse ettevõttesse. Sisemist hinnareeglit ei dubleerita.
+
+Käivitamine peab andma 28 uut SQL-kontrolli, 10 tegelikku vastust, 108 Node-testi,
+rollback/oma helperi eemaldamise ja build'i. See tekst ei väida ette nende läbimist.
+Edu korral 16 faili stagingus, commit/push puuduvad. Loe uus result.txt ja tagasta ZIP.
+Töötavat lehte, vanu API-sid, 154 valuuta registrit, 23 migratsiooni ega 01–16 laboreid
+selles etapis ei muudeta. Uut API-õigust ega hinnavalikut productionis ei avata.
+
+Kadunud vastus/konflikt: sisestus säilib, automaatset uut kirjutust ega vana vormi
+uue revisjoniga sidumist pole. Ainult teadlik lugemine ja kontrollitud versiooni
+kasutuselevõtt. Konto vahetus tühjendab selle seansi teksti; A→B→A ei elusta vana vastust.
+Hiljem tuleb sama sessioon ühendada päris auth-elutsükli, Reacti, piltide ja lahkumisega.
+Navigeerimise ettepanek: üks sihtnimega tagasitee, privaatne lähteinfo mitte avalikku URL-i;
+see kandidaat tagasilinki veel ei rakenda ega väida salvestamata sisestuse brauserikaitset.
+
+Järgmine pärast kontrollitud lähteetappi: sama hinnaühenduse väljalaske serveri/vanade
+kirjutajate ja õiguste üleminek, siis uus vorm ja neli kooskõlas hinnavaadet. Ei uut
+registrit ega üldist vormiraamistikku. Energy/maksed alles pärast portaali põhivooge.
+Täpsed failid/testipiirid: docs/architecture/listing-edit-client-v1.md.
+
+---
 <!-- SELQIRO_LISTING_EDIT_COMPOSITION_ACCEPTED_FINISH_20261009 -->
 ## 09.10.2026 — Refaktori tegelik PASS ja brauserikinnitus eraldi commit'i tulemusest
 

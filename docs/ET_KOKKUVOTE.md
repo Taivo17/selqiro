@@ -1,3 +1,76 @@
+<!-- SELQIRO_EDIT_CLIENT_LOCAL_ACCEPTED_SOURCE_FINISH_20261010 -->
+## 10.10.2026 — Hinnamuutmise kliendiühendus läbis; lõpetatakse sama lähteetapp
+
+Kasutaja 12:36–12:37 käigus läbisid uues võrguta PostgreSQL 17.6 abibaasis kõik 28 SQL-kontrolli,
+kümme salvestatud JSON-vastust, 108 Node’i testi ning päris Selqiro build. Viimane Node’i test
+võrdles kõiki kümmet selle sama SQL-käigu vastust. Suur täpne summa säilis tekstina, muutmata
+hind ei kirjutatud üle ning hinnakonflikti korral säilisid nii põhiväljad kui ka hind.
+
+Tõend: `listing-edit-client-local-20261010-123648-1beym8qt.zip`, SHA-256
+`13630d4a319818b613dc459fc41378b6dfe25a4dceb46f8f5374b688f7145a6c`.
+748 faili / 747 manifestiräsi ja 427 valitud lähtefaili kontrolliti. Käigu lõpus oli HEAD
+`7f2db6bc11ad0384ae1cf077c896f2ee77d9ea24`, täpselt 16 faili staging’us ning GitHub vastas
+baascommit’ile. CLEAN=False tähendas seda staging’ut, mitte riket. See pole värske kaugpäring.
+
+Testibaasi valitud skeem ja õigused taastusid, seitse testtabelit jäid tühjaks ning oma
+abikonteiner eemaldati enne lähtekoodi kirjutamist. Algset kohalikku baasi ega productionit
+ei ühendatud. Kontod/andmed ja Node’i transport/taimerid olid sünteetilised; see ei asenda
+päris HTTP/JWT, Reacti, brauseri või koormuse kontrolli ega uut kahe ühenduse võistlustesti.
+
+Lõpetaja muudab ainult seitset olemasolevat dokumenti. Üheksa uut faili — viis kliendimoodulit,
+kaks SQL-faili, Node-test ja arhitektuurileping — säilivad bait-baidilt. Sama 16-failine commit
+vajab uut build’i ja eraldi COMMIT PUSH kinnitust. Tegelik uus räsi, puhas main ja GitHubi
+võrdsus selguvad ainult lõpetaja tulemusest; neid ei eeldata selle dokumendi olemasolust.
+SQL-i ega 108 Node’i testi ei korrata. Dockerit, Supabase CLI-d, pakettide paigaldust või
+vanu operatsioonipäevikuid ei kasutata. Peatumisel säilita failid/index/commit ja saada ZIP.
+
+Töötav muutmisvorm uut klienti veel ei kasuta. Valuutavalikut ega uusi tagasilinke pole
+avatud, pilditoimingute salvestamata teksti kaitse pole veel ühendatud. Kõik 23 migratsiooni,
+154 valuuta register, laborid, hobusemuutmine ja uuendamine säilivad. Andmebaasi hinnaskeemi
+selles lähteetapis ei rakendata. Push ei kinnita iseenesest Verceli juurutust.
+
+Pärast lähteetapi ülevaatust viime sama hinnamuutmise töö lõpuni: kontrollitud serveriõigused
+ja vanade kirjutusteede üleminek, eraldi productioni eelkontroll/rakendamisnõusolek, siis
+päris vorm ja konto-/identiteedisündmused. Üks Salvesta kinnitab põhiväljad ja teadlikult
+muudetud hinna; sama hind peab jõudma detaili, otsingusse, profiili ja Minu alasse. Kadunud
+vastus ei käivita uut salvestust ega seo uut revisjoni vaikides vana sisestusega.
+
+Energy ja maksed ootavad, kuni lisamine, muutmine, leidmine, ühenduse võtmine ning nähtavad
+lingid/toimingud töötavad. AI, kursid, krüpto, ühikud ja testkuulutuste kustutamine jäävad välja.
+Uue olulise üleandmise juures tuleta kasutajale meelde: Laadi see üleandmispakett nüüd alla.
+
+---
+<!-- SELQIRO_LISTING_EDIT_CLIENT_CONNECTION_CANDIDATE_20261010 -->
+## 2026-10-10 — Hinnamuutmise konto- ja identiteedipõhine kliendiühendus
+
+Alus 7f2db6b: refaktor commit/push/build lõpetatud 09.10 kell 22:42; 10.10 kasutaja
+kinnitas sama Verceli Ready/Production ning muutmis-/avaliku vaate töötamise.
+Viimane Git-kontroll on endiselt 09.10 käigu tõend, mitte uus vaatlus ekraanipildist.
+
+Uus kandidaat: täpne omaniku snapshot/ack parser, üks atomaarne salvestuspäring,
+muutmata hinna väljajätmine, serveri canonical-vastus ja ühe vormi salvestussessioon.
+Kaks õhukest suletud SQL-adapterit seovad JWT konto: ainult identiteedist ei piisa,
+kui kaks eri kontot kuuluvad samasse ettevõttesse. Sisemist hinnareeglit ei dubleerita.
+
+Käivitamine peab andma 28 uut SQL-kontrolli, 10 tegelikku vastust, 108 Node-testi,
+rollback/oma helperi eemaldamise ja build'i. See tekst ei väida ette nende läbimist.
+Edu korral 16 faili stagingus, commit/push puuduvad. Loe uus result.txt ja tagasta ZIP.
+Töötavat lehte, vanu API-sid, 154 valuuta registrit, 23 migratsiooni ega 01–16 laboreid
+selles etapis ei muudeta. Uut API-õigust ega hinnavalikut productionis ei avata.
+
+Kadunud vastus/konflikt: sisestus säilib, automaatset uut kirjutust ega vana vormi
+uue revisjoniga sidumist pole. Ainult teadlik lugemine ja kontrollitud versiooni
+kasutuselevõtt. Konto vahetus tühjendab selle seansi teksti; A→B→A ei elusta vana vastust.
+Hiljem tuleb sama sessioon ühendada päris auth-elutsükli, Reacti, piltide ja lahkumisega.
+Navigeerimise ettepanek: üks sihtnimega tagasitee, privaatne lähteinfo mitte avalikku URL-i;
+see kandidaat tagasilinki veel ei rakenda ega väida salvestamata sisestuse brauserikaitset.
+
+Järgmine pärast kontrollitud lähteetappi: sama hinnaühenduse väljalaske serveri/vanade
+kirjutajate ja õiguste üleminek, siis uus vorm ja neli kooskõlas hinnavaadet. Ei uut
+registrit ega üldist vormiraamistikku. Energy/maksed alles pärast portaali põhivooge.
+Täpsed failid/testipiirid: docs/architecture/listing-edit-client-v1.md.
+
+---
 <!-- SELQIRO_LISTING_EDIT_COMPOSITION_ACCEPTED_FINISH_20261009 -->
 ## 09.10.2026 — Muutmislehe eraldamine läbis; kasutaja vaatamiskontroll vastu võetud
 
