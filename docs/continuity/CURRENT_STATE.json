@@ -5,42 +5,43 @@
     "sha256": "667e47990a7d3cc20ff53709cb861663b4565cf1d3c830eda88e0d18e60fdb8a"
   },
   "boundaries": [
-    "154 uuteks hindadeks valitud koodi, mitte maksevaluutade või riikide loend. Ajalooline/algne hind säilib kuni teadliku muudatuseni; 0 pole tasuta.",
-    "Summa tekstina; koma/punkt tähendab kümnendkohta, rühmituseraldajad keelatud. Üleliigseid komakohti ei ümardata. Valuutavahetus ei teisenda summat.",
-    "Muutmata hind JA hinnarevisjon jäetakse kirjutusest välja. Üks Salvesta põhiväljadele ja teadlikule hinnamuutusele; serveri kinnitatud tulemus on algseis. Ei kohustuslikku nähtavat mustandit.",
-    "API/UI avamise eel endiselt õigused, legacy-writer üleminek, HTTP ja brauserikontroll; loendi väljavõtted pole redaktori algandmed. Uusi expiry-filtreid pole hinnatööks vaja.",
-    "Energy/maksed pärast lisamise/muutmise, leidmise/kontakti ja nähtavate tegevuste töökorda saamist. Tasuta piiratud kategooriaabi oma kulukaitsega hiljem.",
-    "Ei FX-i/krüptot/ühikuid, AI-kutseid ega testkuulutuste/piltide/päevikute kustutamist. Uue olulise üleandmise juures ütle: Laadi see üleandmispakett nüüd alla.",
-    "20s katkestus pole rollback-kviitung. Ebakindel tulemus säilitab sisestuse; esmalt teadlik read-only lepitamine, ei uut revisjoni vana sisestuse külge ega automaatset kirjutuskordust."
+    "Summa tekstina, 154 koodi, neli hinnaliiki; muutmata hind/revisjon jäetakse päringust välja. Serveri kinnitatud tulemus ja üks atomaarne salvestus.",
+    "Üks kitsas NOLOGIN/NOBYPASSRLS hinnakirjutaja; testitud vana DML-definer ei saa struktureeritud hinda muuta. Mitte üldine DDL-/kõikide legacy põhiväljakirjutuste turvatõend.",
+    "Structured DELETE/TRUNCATE on kandidaadis keelatud: kustutuskaskaadid/admin/hooldus tuleb lahendada enne productionit. Ära eemalda fixture-gate'i ega rakenda generated SQL-i käsitsi.",
+    "Järgnev päris vormiühendus: neli hinnapinda, konto/identiteet, salvestamata teksti/pildireload'i kaitse ja selge tagasitee. Pildid, rubriigid, asukoht, staatus, tasuta uuendamine ja hobusemuutmine säilivad.",
+    "Energy/maksed ootavad põhivooge ja nähtavaid töötavaid linke. AI/FX/krüpto/ühikud ning testkuulutuste kustutamine pole selle etapi osa."
   ],
-  "checkpoint": "Hinnamuutmise konto-seotud kliendiühendus läbis kohaliku katse; lõpetatakse sama 16-failine lähteetapp. Üheksa uut faili säilivad muutmata. Commit/push ja uus räsi kinnituvad ainult lõpetaja tegelikust tulemusest; uus UI/API pole aktiveeritud.",
+  "checkpoint": "Hinna serverikoostise V2 kohalik katse on läbitud ja üle vaadatud. See kirje kuulub sama 22-failise lähteetapi lõpetamisse; tegelik uus commit/push ja lõpu Git-seis loe lõpetaja tulemusest, mitte ettevalmistatud dokumendist.",
   "environment": [
-    "Mac Python3.9+, olemasolev Git/npm/Node. Peata dev ise Ctrl+C. Lõpetaja ei kasuta Dockerit, SQL-i, Supabase CLI-d, uusi pakette, testide kordust ega vanu live-päevikuid.",
-    "Ainus sisend Downloads-is listing-edit-client-local-20261010-123648-1beym8qt.zip. Käiviti selqiro-finish-listing-edit-client.py; esmalt FINISH EDIT CLIENT, hiljem eraldi COMMIT PUSH.",
-    "Tühistamisel/veal säilivad dokumendid, index ja võimalik commit. Ei reset/restore/force-push’i või automaatset kordust; saada tulemus-ZIP. Lõpetaja kasutab ainult oma uut välist katsepäevikut."
+    "Mac Python 3.9+, olemasolev Git/npm. Peata dev Ctrl+C. Downloads-is piisab 200029 V2 PASS ZIP-ist; kinnitus FINISH PRICE SERVER, hiljem COMMIT PUSH.",
+    "Lõpetaja ei kasuta SQL/Docker/Supabase'i, pakettide paigaldust ega vanu live-päevikuid. Ainult oma uus väline append-only finish-attempt; vigast seisu ei taastata automaatselt.",
+    "Iga uue olulise üleandmise korral palu kasutajal pakett kohe alla laadida. Hoia jooksvas kirjes üks järgmine ülesanne, kuupäevad ja tõendi piirid."
   ],
   "format": "selqiro_repo_handoff_v1",
   "local_test": [
-    "10.10 12:36–12:37 kasutaja tegelik PG17.6: 28 SQL-kontrolli, 10 JSON-vastust, 108 Node’i testi ja päris build PASS; need on varasemad tõendid, mitte lõpetaja uued testid.",
-    "7 valitud tabelit ja sünteetiline auth/andmed; Node’i transport/konto/taimerid asendatud. Viimane test võrdles kõiki 10 sama käigu SQL-vastust. Ei uut kahe ühenduse race-/HTTP-/React DOM-/brauseri-/koormustesti.",
-    "Valitud skeem/õigused ja 7 tühja tabelit taastusid; oma helper eemaldati enne lähtekoodi kirjutamist. Lõpetaja ei korda SQL-i ega Node-sviiti; uus build ning generaatori/renderdaja --check on eraldi kontrollid."
+    "10.10 kell 20:00–20:01: 77 SQL-kontrolli + 6 sõltuvusregressiooni, 17 tegelikku JSON-vastust ja 26 Node-parseritesti PASS. Päris Maci build PASS.",
+    "Viis päriselt kattuvat kahe ühenduse katset PASS: uus/uus, vana-esimesena, uus-esimesena, liikmelisus ja identiteet. Kõigil lukustusootus ning säilinud lõppseis vaadeldud.",
+    "Rollback taastas valitud kataloogi/rollid/õigused ja 11 tühja tabelit. Abikonteiner eemaldati enne lähtekirjutusi. Paralleelkatse COMMIT oli ainult selles eemaldatavas helperis.",
+    "V1 puuduv wanted-helper oli testialuse viga; V2 täpne sõltuvus ja 6 regressiooni läbisid. Serverikoostise SQL ja õigused säilisid V1-ga. Vanu käiviteid ei korrata.",
+    "Lõpetaja loeb salvestatud testitõendit, ei korda SQL/Node/paralleelkatseid. Kontrollib kolme generaatorit ja teeb uue build'i; mitte uus HTTP/JWT/React/brauseri või koormuse test."
   ],
-  "next_action": "Loe listing-edit-client-finish-...zip: STOP korral säilita seis ja diagnoosi. Alles kontrollitud commit/push järel jätka SAMA hinnamuutmise väljalaset: olemasolevate lepingute kontrollitud serverikoostis ja vanade kirjutajate/õiguste üleminek, eraldi productioni preflight ja rakendamisnõusolek, siis tegelik vormi- ning hinnavaadete ühendus. Ära ava ainult klienti ega ehita uut registrit/üldraamistikku.",
+  "next_action": "Loe uue lõpetaja tulemus. Alles kontrollitud commit/push järel valmista sama hinnamuutmise väljalaske ainult lugemise productioni eelkontroll; otsusta structured DELETE/TRUNCATE ja konto kustutuskaskaadide/admini kooskõla enne eraldi rollout-nõusolekut. STOP korral diagnoosi raport, mitte ära korda. Uut hinnamootorit/registrit ei ehita.",
   "production": [
-    "10.10 kasutaja kinnitas 7f2db6b Ready/Production ning muutmis-/avaliku vaate. See on varasem kitsas kasutajatõend; lõpetaja ei kontrolli uut juurutust ega andmebaasi.",
-    "Praegune route uut klienti/seanssi ei impordi; kaks adapterit on fixture-gated ja API-grantideta. Vana hindade kirjutustee, pildid, rubriigid, hobused ja uuendamine jäävad samaks.",
-    "Serveri väljalase/legacy-writer õiguste üleminek, tegelik vormi/auth/identity side, salvestamata teksti/pildireload kaitse, sihtnimega tagasitee ja neli hinnavaadet on veel ühendamata."
+    "Hinna serverikoostist/rolle/API-sid pole productionis ega algses kohalikus rakendusbaasis aktiveeritud. 23 migratsiooni on muutmata; generated SQL jääb testibaasi kaitse taha ja väljapoole migratsioone.",
+    "Töötav muutmisvorm uut klienti veel ei kasuta. Viimane eraldi aktsepteeritud frontend on 7f2db6b; hilisem push ei kinnita iseenesest Verceli juurutust.",
+    "Productioni rollid, grants/default ACL, kirjutajad, konto kustutuskaskaadid ja admini/hoolduse kooskõla on enne rakendamist kontrollitavad piirid, mitte selle PASS-i väited."
   ],
   "read_next": [
-    "docs/architecture/listing-edit-client-v1.md; entities/listing/model/listingEditSnapshot.ts ja listingEditCommand.ts.",
-    "entities/listing/api/listingEditClient.ts; features/listing-edit/model/listingEditSession.ts ja listingEditDraft.ts (kõik src all).",
-    "supabase/contracts/listing_edit_api_v1.sql; supabase/tests/listing_edit_client_contract.sql; tests/listing-edit-client.test.cjs."
+    "docs/architecture/listing-price-server-release-v1.md; supabase/releases/listing-price-v1/composition-inputs.json ja server-composition.map.json.",
+    "docs/architecture/listing-price-currency-v1.md värske lähteetapi kirje; docs/architecture/listing-edit-client-v1.md.",
+    "Uue tulemuse result.txt, package-plan.json ja evidence/INPUT_RESULT_MAP.json; varasema V2 testid on otsekaardis, ajaloo NEXT ei ole tänane käsk."
   ],
   "recorded_on": "2026-10-10",
   "source": {
-    "Alus": "7f2db6bc11ad0384ae1cf077c896f2ee77d9ea24; 10.10 kell 12:37 jäi main sellele commit’ile, 16 faili staging’us ja remote baasiga võrdne. 427 valitud allikat, mitte kogu repo.",
-    "Lõpetamine": "selqiro-finish-listing-edit-client.py muudab ainult 7 olemasolevat dokumenti. 9 uut faili / 23 migratsiooni / register / laborid säilivad. Commit: Add account-bound atomic listing edit client; tegelik NEW_COMMIT/BUILD/PUSH/CLEAN/REMOTE loe tulemusest.",
-    "Tõend": "listing-edit-client-local-20261010-123648-1beym8qt.zip; SHA256 13630d4a319818b613dc459fc41378b6dfe25a4dceb46f8f5374b688f7145a6c."
+    "Alus": "835a9bbee989b0a53b698445c33a36ac917c8563; 10.10 kell 20:01 oli main sellel baasil, täpselt 22 rada staging'us ja kaugvõrdne baas. Uut commit'i siis ei tehtud.",
+    "Lõpetaja": "selqiro-finish-listing-price-server.py; ainult 7 dokumendiuuendust, build, eraldi COMMIT PUSH. Kõik 15 uut koostise/testi/lepingufaili säilivad. Commit: Add tested listing price server composition and writer guards.",
+    "Tegelik lõpp": "Loe listing-price-server-finish-…zip: NEW_COMMIT, BUILD, COMMIT, PUSH, WORKTREE ja REMOTE. See dokumendikirje ei saa sisaldada enda tulevase commit'i räsi.",
+    "Testitõend": "listing-price-server-local-v2-20261010-200029-4elsr7uo.zip; SHA-256 52a0a35fd10932314abfa917d98bb8f0eb4b5fe733b762fdd8d886be724b50e5. 949 faili, 442 valitud allikat; mitte kogu repo ega andmevarukoopia."
   },
-  "stop_rule": "Säilita failid, index, võimalik commit ja raport. Ära korda käivitit, reset/restore’i, SQL-i või push’i enne konkreetse vea ülevaatust."
+  "stop_rule": "Säilita failid, staging ja võimalik commit ning kõik vanad päevikud. Ära korda lõpetajat, V1/V2 paigaldajaid, push'i, reset/restore'i ega käsitsi staging'ut enne raporti ülevaatust."
 }

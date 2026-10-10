@@ -1,0 +1,19 @@
+[
+  "raw_editor",
+  "saved_max",
+  "max_editor",
+  "search_max",
+  "legacy_search_max",
+  "detail_max",
+  "profile_max",
+  "owner_max",
+  "changed_price",
+  "basics_omits_price",
+  "saved_free",
+  "saved_negotiable",
+  "saved_unspecified",
+  "saved_zero",
+  "business_saved",
+  "business_other_member_read",
+  "anonymous_zero_detail"
+]

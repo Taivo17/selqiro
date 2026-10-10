@@ -1,3 +1,79 @@
+<!-- SELQIRO_LISTING_PRICE_SERVER_ACCEPTED_SOURCE_FINISH_20261010 -->
+## 2026-10-10 — One current state for accepted server tests and source finish
+
+The V2 20:01 result supersedes its preparation-only record. Keep local test PASS,
+22 staged paths, source commit/push, production installation and browser/deployment
+as different facts. The finisher updates CURRENT_STATE.json and renders docs/99;
+it does not edit the historical archive or renderer. Five prepend-only docs retain
+all earlier bytes as history. The release architecture document and 14 other new
+files are immutable during this finish.
+
+The only input is listing-price-server-local-v2-20261010-200029-4elsr7uo.zip.
+The finisher reads saved 77+6 SQL /17 JSON /5 overlaps /26 Node results, not live
+journals. It has its own new exclusive append-only finish-attempt; do not remove it
+after STOP, cancellation-after-write or completion. No automatic replay/restore.
+Its output maps every prior input member to exact bytes, with a direct test-evidence
+map and content-addressed storage, not another nested ZIP or deeper history chain.
+Use result.txt and CURRENT_STATE.json for actual NEW_COMMIT/push/build/source status.
+The latest handoff must ask the user to download it now; do not require whole old chats.
+
+After reviewed source completion the single next task is a read-only production
+preflight of the SAME release, including DELETE/TRUNCATE/cascade/admin compatibility.
+Do not convert the fixture-gated composition into a production migration in this
+source finisher. Actual schema rollout and client/UI activation remain separate.
+Energy/payments and unrelated future features remain deferred. Preserve old reports.
+
+---
+
+<!-- SELQIRO_PRICE_SERVER_FIXTURE_DEPENDENCY_V2_20261010 -->
+## 10.10.2026 — Serverikoostise V1 peatunud; testibaasi sõltuvuse parandus V2
+
+Kasutaja 19:17 käik peatus enne 77 assertionit: SQLSTATE 42883, puudu oli
+`project_horse_wanted_owner_summary_v1(jsonb)` ainult eraldatud testialuses.
+Allikas on olemas muutmata migratsioonis `20260920150000_add_owner_marketplace_wanted_summary.sql`.
+See ei tõenda puuduolekut productionis; uut productioni vaatlust ei tehtud.
+Tagasipööramine, 11 tühja testtabelit ja helperi eemaldamine läbisid. Lõppvaatlus
+näitas puhast `835a9bb`; lähtekoodi kirjutus, build, staging ja paralleelkatsed ei alanud.
+
+V2 taastab üksnes täpse suletud abifunktsiooni testialusesse koos allika räsi ja
+sõltuvuskirjega. Koostise hinnakirjutaja, guard, API-õigused, kõik olemasolevad
+migratsioonid/laborid ning 77 algset assertionit, 17 vastust ja 5 paralleelkatset säilivad.
+Lisandub kuus kohustuslikku sõltuvusregressiooni (keha, tüüp/config, ACL ja eelarve).
+Uus käik peab tõendama tegeliku SQL/Node/build tulemuse; ettevalmistus pole läbimine.
+V1 käivitit ega vanu päevikuid ei korrata, muudeta ega kustutata.
+
+Käiviti: `selqiro-test-listing-price-server-local-corrected.py`.
+Sisend: `listing-price-server-local-20261010-191723-9z_olcso.zip`.
+Kinnitus `PRICE SERVER LOCAL V2`; ainult uus võrguta helper, seejärel sama 22-failine
+pakett/build/staging. Commit/push, production ja uus kasutajaliides puuduvad.
+PASS-järgne järgmine töö on sama lähteetapi lõpetamine; Energy/maksed ootavad põhivooge.
+
+---
+
+<!-- SELQIRO_PRICE_SERVER_COMPOSITION_CANDIDATE_20261010 -->
+## 2026-10-10 — Existing-listing price server composition candidate
+
+Base 835a9bb is committed/pushed; its 10 Oct 13:45 user run had a green build and
+clean remote-equal main. This new 22-path candidate composes retained contracts;
+it does not replay old tests, activate production or mount the new UI writer.
+A dedicated NOLOGIN/non-bypass role owns only the closed price-CAS core. The new
+invoker trigger does not trust arbitrary postgres-owned legacy definers or GUC flags.
+Original labs, 23 migrations, 154-code registry and current application APIs stay exact.
+
+See docs/architecture/listing-price-server-release-v1.md for transformations, exact
+legacy-writer matrix, selective grants, structured deletion boundary and test limits.
+77 new SQL checks/17 captures, five overlapping connection cases and a new parser
+bridge must pass in a NEW networkless PG17.6 helper; rollback and same-helper cleanup
+precede source writes/build/staging. Actual outcome is in the returned result, not
+this candidate entry. No full Supabase/HTTP/JWT/browser/load claim. No commit/push.
+
+After reviewed local PASS: finish this same source checkpoint, then fresh production
+preflight and separate rollout consent before the real four-kind edit/view integration.
+Never run the fixture composition by hand in production. Preserve old operation journals.
+Energy/payments and speculative features remain deferred until core flows/links work.
+
+---
+
 <!-- SELQIRO_EDIT_CLIENT_LOCAL_ACCEPTED_SOURCE_FINISH_20261010 -->
 ## 2026-10-10 — Current entry: local edit-client PASS, not installer replay
 

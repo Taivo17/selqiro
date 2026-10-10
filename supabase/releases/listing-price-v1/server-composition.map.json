@@ -1,0 +1,231 @@
+{
+  "format": "selqiro_listing_price_server_composition_v1",
+  "not_a_production_migration": true,
+  "output_sha256": "4be742d6b813f530c6fc5abfa488bbd7d775b8d70897a862f56eed0c1cf61f6d",
+  "source_manifest_sha256": "c85f365ca7f620dcecb77011507d20bac7b712dd249a5754f130ab6863aedb6f",
+  "segments": [
+    {
+      "source": "test-only envelope",
+      "sha256": "38aeeac2830dc84c1c2a5a10b539782e1220fea30092da63803f02136bf284d5",
+      "transformation": "byte-identical segment",
+      "start_line": 1,
+      "end_line": 15
+    },
+    {
+      "source": "supabase/releases/listing-price-v1/price-value-contract.generated.sql#listing_price_currency_scale_v1",
+      "sha256": "1ab42453dbdb2047aa06d795b071b7adea4fd018617dc70fe2dda5e986225936",
+      "transformation": "unchanged function definition",
+      "start_line": 16,
+      "end_line": 178
+    },
+    {
+      "source": "supabase/labs/listing-price-core-v1/01_value_contract.sql#normalize_listing_price_v1",
+      "sha256": "1a703a5757cbdc7648d881db2a3af2234b891db855d4789bd44b5f1d36b33d45",
+      "transformation": "unchanged function definition",
+      "start_line": 179,
+      "end_line": 222
+    },
+    {
+      "source": "supabase/labs/listing-price-core-v1/01_value_contract.sql#listing_price_legacy_label_v1",
+      "sha256": "360689b3fc56cb482e52d1df1faaa6a2d58b3e4cd9dad2b5090c23c9796025a9",
+      "transformation": "unchanged function definition",
+      "start_line": 223,
+      "end_line": 234
+    },
+    {
+      "source": "supabase/labs/listing-price-core-v1/01_value_contract.sql#listing_price_tuple_valid_v1",
+      "sha256": "ba6bd59f6407a04a98aa2d27f76c42d70ccc8c112674921dec0f1d03e4f361fc",
+      "transformation": "unchanged function definition",
+      "start_line": 235,
+      "end_line": 251
+    },
+    {
+      "source": "supabase/labs/listing-price-core-v1/01_value_contract.sql#listing_price_snapshot_v1",
+      "sha256": "e0c778ebad92906620a9de381ab81a1149dd4f21bc65c54e78b34daeab5f47df",
+      "transformation": "unchanged function definition",
+      "start_line": 252,
+      "end_line": 260
+    },
+    {
+      "source": "retained tuple constraint",
+      "sha256": "65dd1e810d5a9e8be162f976d4edf26c1598c037f061a44c4861c228b27d6753",
+      "transformation": "byte-identical segment",
+      "start_line": 261,
+      "end_line": 265
+    },
+    {
+      "source": "supabase/labs/listing-price-integration-v1/04_basics_contract.sql#normalize_listing_basics_v1",
+      "sha256": "715aa9b6764fe990b480c4085475ddbb430abbd7a9d64dc650efda289cb2652f",
+      "transformation": "unchanged function definition",
+      "start_line": 266,
+      "end_line": 299
+    },
+    {
+      "source": "supabase/labs/listing-price-integration-v1/04_basics_contract.sql#listing_basics_values_v1",
+      "sha256": "f3eeebd810a5372799c47c4b3a437029bc7d43eb0c9bdd3cd351f7c1f40f959a",
+      "transformation": "unchanged function definition",
+      "start_line": 300,
+      "end_line": 307
+    },
+    {
+      "source": "supabase/labs/listing-price-integration-v1/04_basics_contract.sql#listing_basics_snapshot_v1",
+      "sha256": "aa97b53a8695367091f7e515cacc240299431a025ca74223ccfe920bda1c9ac2",
+      "transformation": "unchanged function definition",
+      "start_line": 308,
+      "end_line": 319
+    },
+    {
+      "source": "supabase/labs/listing-price-integration-v1/04_basics_contract.sql#listing_basics_search_text_v1",
+      "sha256": "fefd14c99174d359cc4fbdba4b154124f4d7d62b1cd70e9bd477e23b00890bf2",
+      "transformation": "unchanged function definition",
+      "start_line": 320,
+      "end_line": 331
+    },
+    {
+      "source": "supabase/labs/listing-price-integration-v1/05_owner_basics_atomic.sql#lock_my_listing_basics_v1",
+      "sha256": "93d9f1c8e9d3eeb465b048901b8f9cf4f44c7e1e98cd812091059070d8732677",
+      "transformation": "Only SECURITY INVOKER -> SECURITY DEFINER, fixed postgres owner and revoked API EXECUTE. Body unchanged; needed for dedicated role without legacy recursive identity/member policies.",
+      "start_line": 332,
+      "end_line": 381
+    },
+    {
+      "source": "supabase/labs/listing-price-core-v1/03_owner_price_core.sql#set_my_listing_price_core_v1",
+      "sha256": "5bd34e1e4ed274186f3f10254132afb18a1d1328cb81d92d6acc73852bcb10ff",
+      "transformation": "Only delegate retained profile/identity/member/listing locking and auth checks to the single closed locker. Revision validation, CAS-before-noop, normalizer and UPDATE/response remain exact. Owner becomes NOLOGIN non-bypass role; no auth-schema grant needed.",
+      "start_line": 382,
+      "end_line": 430
+    },
+    {
+      "source": "supabase/labs/listing-price-integration-v1/05_owner_basics_atomic.sql#get_my_listing_basics_v1",
+      "sha256": "35c512f3a9e0deb2bcf154659c9ddfa538d0e23f783c2ee7e82839df023f7b10",
+      "transformation": "unchanged function definition",
+      "start_line": 431,
+      "end_line": 442
+    },
+    {
+      "source": "supabase/labs/listing-price-integration-v1/05_owner_basics_atomic.sql#save_my_listing_basics_v1",
+      "sha256": "0d2493a1ef89d93b88165ad4c32e81fcd6d03f0216fad47e6d378caecdc0d1ea",
+      "transformation": "unchanged function definition",
+      "start_line": 443,
+      "end_line": 491
+    },
+    {
+      "source": "supabase/contracts/listing_edit_api_v1.sql#get_my_listing_edit_v1",
+      "sha256": "07e7ad3e5d40ad5df831af4a0a6962ee0ebed130c463ae912a0ff6f101cd59bd",
+      "transformation": "unchanged function definition",
+      "start_line": 492,
+      "end_line": 509
+    },
+    {
+      "source": "supabase/contracts/listing_edit_api_v1.sql#save_my_listing_edit_v1",
+      "sha256": "313a5f2ab803d2436e9b0f59dc279e1a56d3df06b876cb71ffef0aaed594aff0",
+      "transformation": "unchanged function definition",
+      "start_line": 510,
+      "end_line": 529
+    },
+    {
+      "source": "supabase/labs/listing-public-read-v1/10_price_read_model.sql#listing_price_read_model_v1",
+      "sha256": "435cac6761093c318a11e0b70e0796b9314c75545e842393abe30a27caa4386a",
+      "transformation": "unchanged function definition",
+      "start_line": 530,
+      "end_line": 546
+    },
+    {
+      "source": "supabase/labs/listing-public-read-v1/11_public_search_v2.sql#search_public_listings_v2",
+      "sha256": "5b972cd975ae1f472d89f51a587da71f085f6e7809b1e605e0f04b0a2dc7c6d7",
+      "transformation": "unchanged function definition",
+      "start_line": 547,
+      "end_line": 655
+    },
+    {
+      "source": "supabase/labs/listing-public-read-v1/12_public_detail_fields.sql#public_listing_detail_field_spec_v1",
+      "sha256": "c8fdb39654d7d703046530e7211338b78e437b1f2b7e553f3cc0d240a7d169ed",
+      "transformation": "unchanged function definition",
+      "start_line": 656,
+      "end_line": 827
+    },
+    {
+      "source": "supabase/labs/listing-public-read-v1/12_public_detail_fields.sql#public_listing_detail_values_v1",
+      "sha256": "005ba0b3ff03673843f8eb15d96c63d5ffd0c1a0a9d5cecfb155674d786bd5db",
+      "transformation": "unchanged function definition",
+      "start_line": 828,
+      "end_line": 877
+    },
+    {
+      "source": "supabase/labs/listing-public-read-v1/13_public_listing_detail.sql#get_public_listing_detail_v1",
+      "sha256": "dcca9ac1b48c150876429d4183ff49d58a50b7dbc4c0edb7b35ac0d149c503b4",
+      "transformation": "unchanged function definition",
+      "start_line": 878,
+      "end_line": 943
+    },
+    {
+      "source": "supabase/labs/listing-public-read-v1/14_public_profile_listings.sql#get_public_profile_listings_v1",
+      "sha256": "3306a8f33c6285f078431bf57d72ebf7bcb8297ca4169b898f9aadd2ca29b543",
+      "transformation": "unchanged function definition",
+      "start_line": 944,
+      "end_line": 1021
+    },
+    {
+      "source": "supabase/labs/listing-owner-read-v1/15_owner_money_models.sql#project_horse_wanted_owner_summary_v2",
+      "sha256": "692e8e1fe6273d0f1c37c61064bb20afd6ec91dc736d87b6378bbd1f6a05e1d5",
+      "transformation": "unchanged function definition",
+      "start_line": 1022,
+      "end_line": 1039
+    },
+    {
+      "source": "supabase/labs/listing-owner-read-v1/15_owner_money_models.sql#horse_owner_price_read_v1",
+      "sha256": "066ecc4860cba01e2e8a697679848335af9a1c9efe13a68d8cedd05f1d4a24d3",
+      "transformation": "unchanged function definition",
+      "start_line": 1040,
+      "end_line": 1061
+    },
+    {
+      "source": "supabase/labs/listing-owner-read-v1/16_owner_marketplace_read_v3.sql#get_my_marketplace_items_v3",
+      "sha256": "8bc6c0c9c29bf2b321e9d43d66b74cce5a408e32a5d26f92fe99900eaaff0927",
+      "transformation": "unchanged function definition",
+      "start_line": 1062,
+      "end_line": 1149
+    },
+    {
+      "source": "explicit base ACL",
+      "sha256": "6573dc83f2c249da78f9bf89904c26d28d233596dc0ad22989954970aac5a2e8",
+      "transformation": "byte-identical segment",
+      "start_line": 1150,
+      "end_line": 1175
+    },
+    {
+      "source": "retained pure-value grants",
+      "sha256": "fa2407cda0a409d7a75f9eeeb09c0a7faea4101f6930f875506da685461d2a81",
+      "transformation": "byte-identical segment",
+      "start_line": 1176,
+      "end_line": 1182
+    },
+    {
+      "source": "supabase/releases/listing-price-v1/writer-authority.sql",
+      "sha256": "7a7a4cd09a7dc0b5f9a87a0efb58fca90a49ac1012070a03bed0fed884de4061",
+      "transformation": "reviewed new release-only authority component",
+      "start_line": 1183,
+      "end_line": 1222
+    },
+    {
+      "source": "supabase/releases/listing-price-v1/write-guard-v2.sql",
+      "sha256": "1971f58ce7f903e0a32b9860c5ba8832dfe70217ad5e2513b7b995d2c6384bb2",
+      "transformation": "reviewed new release-only authority component",
+      "start_line": 1223,
+      "end_line": 1300
+    },
+    {
+      "source": "supabase/releases/listing-price-v1/api-privileges.sql",
+      "sha256": "02de6e752a404f1ea251af5b4a0fc3cb9d244ef5a17c8c597527c117571be505",
+      "transformation": "reviewed new release-only authority component",
+      "start_line": 1301,
+      "end_line": 1316
+    }
+  ],
+  "changes": {
+    "lock_my_listing_basics_v1": "Only SECURITY INVOKER -> SECURITY DEFINER, fixed postgres owner and revoked API EXECUTE. Body unchanged; needed for dedicated role without legacy recursive identity/member policies.",
+    "set_my_listing_price_core_v1": "Only delegate retained profile/identity/member/listing locking and auth checks to the single closed locker. Revision validation, CAS-before-noop, normalizer and UPDATE/response remain exact. Owner becomes NOLOGIN non-bypass role; no auth-schema grant needed.",
+    "guard_listing_price_v2": "New version rejects structured INSERT/DELETE/TRUNCATE and trusts only dedicated effective writer role for structured price UPDATE. Original v1 lab is unchanged. Legacy unstructured create/edit and unrelated writes remain allowed by existing access checks."
+  },
+  "warning": "No runtime activation from source-only files; fresh production preflight remains required."
+}

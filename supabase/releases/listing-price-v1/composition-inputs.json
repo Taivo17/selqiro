@@ -1,0 +1,191 @@
+{
+  "format": "selqiro_listing_price_release_inputs_v1",
+  "base_commit": "835a9bbee989b0a53b698445c33a36ac917c8563",
+  "inputs": {
+    "supabase/releases/listing-price-v1/price-value-contract.generated.sql": {
+      "sha256": "01efcf477538ae466f40d40d72fad34474f140e6ccce2ebd32051e1d7a9c4790",
+      "bytes": 6347
+    },
+    "supabase/labs/listing-price-core-v1/01_value_contract.sql": {
+      "sha256": "5f9d58db5d28a9ec6804e1f0b2c282d5dd812897165b0e07242b12524d56c29c",
+      "bytes": 5567
+    },
+    "supabase/labs/listing-price-core-v1/03_owner_price_core.sql": {
+      "sha256": "0483dd48688c1f8d2b3812109e2d2acec99373e65fe6f15f94b4558b3ce79419",
+      "bytes": 4214
+    },
+    "supabase/labs/listing-price-integration-v1/04_basics_contract.sql": {
+      "sha256": "796cdced4a02d883a6bd4384dd58aed998393eab07523f161ed616c3f9764e92",
+      "bytes": 3807
+    },
+    "supabase/labs/listing-price-integration-v1/05_owner_basics_atomic.sql": {
+      "sha256": "5d052e95e3bfa4d1d9bb5cb3f62ae66792a5bdaac3651b5303796d57b2642ccc",
+      "bytes": 6207
+    },
+    "supabase/contracts/listing_edit_api_v1.sql": {
+      "sha256": "693bdb144321d024f8493e35169fe6a54db8560b95b44ad3691031f05c38ab9f",
+      "bytes": 2948
+    },
+    "supabase/labs/listing-public-read-v1/10_price_read_model.sql": {
+      "sha256": "492a3e132919bf2c3d8d3b2fe450b483f06ae9e52e2fd28de3e19de6e910538c",
+      "bytes": 1293
+    },
+    "supabase/labs/listing-public-read-v1/11_public_search_v2.sql": {
+      "sha256": "9e77d22e00fd60ef3c1fe12a0019cc8b45f7d7e96fcde7b09a328d1f992c01f5",
+      "bytes": 6775
+    },
+    "supabase/labs/listing-public-read-v1/12_public_detail_fields.sql": {
+      "sha256": "1fec91d4774971b2ecb8c99d9a9124ff1c812137c959d9fc4fc37c420ecc94de",
+      "bytes": 82714
+    },
+    "supabase/labs/listing-public-read-v1/13_public_listing_detail.sql": {
+      "sha256": "da11f9bf41af89c7dcff99b3407d98fa3956c49ae64529efe0b95ab1515d0aa8",
+      "bytes": 4496
+    },
+    "supabase/labs/listing-public-read-v1/14_public_profile_listings.sql": {
+      "sha256": "ac70725a84268eaf6b4d652e13e502ebdb2686199e55044753f4f46aae121c1e",
+      "bytes": 5649
+    },
+    "supabase/labs/listing-owner-read-v1/15_owner_money_models.sql": {
+      "sha256": "c3a1be86febe7ee209e95359b802abb0eb3e0d14116b18ea5d81c876707a1052",
+      "bytes": 2291
+    },
+    "supabase/labs/listing-owner-read-v1/16_owner_marketplace_read_v3.sql": {
+      "sha256": "43ae745d6d8922dbbd912766460a0138a5a414667abe1d85b551791dc83feedb",
+      "bytes": 5769
+    },
+    "supabase/releases/listing-price-v1/writer-authority.sql": {
+      "sha256": "7a7a4cd09a7dc0b5f9a87a0efb58fca90a49ac1012070a03bed0fed884de4061",
+      "bytes": 2694
+    },
+    "supabase/releases/listing-price-v1/write-guard-v2.sql": {
+      "sha256": "1971f58ce7f903e0a32b9860c5ba8832dfe70217ad5e2513b7b995d2c6384bb2",
+      "bytes": 3663
+    },
+    "supabase/releases/listing-price-v1/api-privileges.sql": {
+      "sha256": "02de6e752a404f1ea251af5b4a0fc3cb9d244ef5a17c8c597527c117571be505",
+      "bytes": 928
+    },
+    "supabase/labs/listing-price-core-v1/tests/fixture.sql": {
+      "sha256": "e4d21dafe0f44c898a44fa17efd736aa619282e99dffb7934979abcca6a5d03f",
+      "bytes": 13352
+    },
+    "supabase/labs/listing-public-read-v1/tests/reader-fixture-extension.sql": {
+      "sha256": "107201a066632682d1f8a506efbbb9a05aa0c8604c267c8ac4b3a3b1a845052a",
+      "bytes": 1885
+    },
+    "supabase/labs/listing-owner-read-v1/tests/fixture-extension.sql": {
+      "sha256": "edf36135b1663eb0da980b3faa433d912ed632260cf2a7e9f14acdc681f0adaf",
+      "bytes": 9918
+    },
+    "supabase/migrations/20260911203000_add_marketplace_item_projection_foundation.sql": {
+      "sha256": "1ad34e8590309148384ac957374a1450c106a31c2be3fcdd9f334893534e7f70",
+      "bytes": 4510
+    },
+    "supabase/migrations/20260911220000_add_owner_marketplace_item_read_rpc.sql": {
+      "sha256": "7f2ff8d957d4ac3c8ab61e056a47d93079cb0cbc7810fd9b95dc27363127d9e5",
+      "bytes": 4683
+    },
+    "supabase/migrations/20260926120000_add_public_listing_search.sql": {
+      "sha256": "236a0821db4ff345f6cba88e7c3210e71076e1ae5ac8c40d1aaaa4309b7d1180",
+      "bytes": 7212
+    },
+    "supabase/migrations/20260926180000_add_public_listing_detail_keywords.sql": {
+      "sha256": "b080a47eb2573a0f292316c10c00cd8dc10c0a5adff0e4c6b2bbc04b855cba8d",
+      "bytes": 34784
+    },
+    "supabase/migrations/20260722173530_baseline_20260722.sql": {
+      "sha256": "7ca065f92f01c0f38ada5f5a50d2a0fc5b716f5291d1525d398023b7db59da3f",
+      "bytes": 221677
+    },
+    "supabase/migrations/20260920150000_add_owner_marketplace_wanted_summary.sql": {
+      "sha256": "aa5e57dc4c5b1fe4342e496cdbe09d9143671f3e82399d07c230218b041f08b2",
+      "bytes": 6002
+    }
+  },
+  "fixture_files": [
+    "supabase/labs/listing-price-core-v1/tests/fixture.sql",
+    "supabase/labs/listing-public-read-v1/tests/reader-fixture-extension.sql",
+    "supabase/labs/listing-owner-read-v1/tests/fixture-extension.sql",
+    "supabase/migrations/20260911203000_add_marketplace_item_projection_foundation.sql",
+    "supabase/migrations/20260911220000_add_owner_marketplace_item_read_rpc.sql",
+    "supabase/migrations/20260926120000_add_public_listing_search.sql",
+    "supabase/migrations/20260926180000_add_public_listing_detail_keywords.sql"
+  ],
+  "legacy_functions": [
+    [
+      "add_listing_image_v2",
+      "add_listing_image_v2(text,text,text,text,integer)",
+      true
+    ],
+    [
+      "delete_listing_image_v2",
+      "delete_listing_image_v2(text,text)",
+      true
+    ],
+    [
+      "set_listing_primary_image_v2",
+      "set_listing_primary_image_v2(text,text)",
+      true
+    ],
+    [
+      "update_my_listing_classification_location_v2",
+      "update_my_listing_classification_location_v2(text,text,text,text,text,text,double precision,double precision)",
+      false
+    ],
+    [
+      "set_my_listing_store_categories_v2",
+      "set_my_listing_store_categories_v2(text,uuid[])",
+      false
+    ]
+  ],
+  "function_signatures": [
+    "listing_price_currency_scale_v1(text)",
+    "normalize_listing_price_v1(jsonb)",
+    "listing_price_legacy_label_v1(jsonb)",
+    "listing_price_tuple_valid_v1(text,numeric,text,bigint,text)",
+    "listing_price_snapshot_v1(text,numeric,text,bigint,text)",
+    "normalize_listing_basics_v1(jsonb)",
+    "listing_basics_values_v1(public.listings)",
+    "listing_basics_snapshot_v1(public.listings)",
+    "listing_basics_search_text_v1(public.listings)",
+    "lock_my_listing_basics_v1(text,uuid,boolean)",
+    "set_my_listing_price_core_v1(text,uuid,text,jsonb)",
+    "get_my_listing_basics_v1(text,uuid)",
+    "save_my_listing_basics_v1(text,uuid,jsonb,jsonb,jsonb,text)",
+    "get_my_listing_edit_v1(text,uuid,uuid)",
+    "save_my_listing_edit_v1(text,uuid,uuid,jsonb,jsonb,jsonb,text)",
+    "listing_price_read_model_v1(text,numeric,text,bigint,text)",
+    "search_public_listings_v2(text,text,text,text,text,text,integer,integer)",
+    "public_listing_detail_field_spec_v1(text[])",
+    "public_listing_detail_values_v1(public.listings)",
+    "get_public_listing_detail_v1(text)",
+    "get_public_profile_listings_v1(text,uuid,integer,integer)",
+    "project_horse_wanted_owner_summary_v2(jsonb)",
+    "horse_owner_price_read_v1(text,text,numeric,text)",
+    "get_my_marketplace_items_v3(uuid,integer,integer,text,text,uuid)"
+  ],
+  "pure_signatures": [
+    "listing_price_currency_scale_v1(text)",
+    "normalize_listing_price_v1(jsonb)",
+    "listing_price_legacy_label_v1(jsonb)",
+    "listing_price_tuple_valid_v1(text,numeric,text,bigint,text)",
+    "listing_price_snapshot_v1(text,numeric,text,bigint,text)"
+  ],
+  "changes": {
+    "lock_my_listing_basics_v1": "Only SECURITY INVOKER -> SECURITY DEFINER, fixed postgres owner and revoked API EXECUTE. Body unchanged; needed for dedicated role without legacy recursive identity/member policies.",
+    "set_my_listing_price_core_v1": "Only delegate retained profile/identity/member/listing locking and auth checks to the single closed locker. Revision validation, CAS-before-noop, normalizer and UPDATE/response remain exact. Owner becomes NOLOGIN non-bypass role; no auth-schema grant needed.",
+    "guard_listing_price_v2": "New version rejects structured INSERT/DELETE/TRUNCATE and trusts only dedicated effective writer role for structured price UPDATE. Original v1 lab is unchanged. Legacy unstructured create/edit and unrelated writes remain allowed by existing access checks."
+  },
+  "fixture_dependencies": [
+    {
+      "source": "supabase/migrations/20260920150000_add_owner_marketplace_wanted_summary.sql",
+      "name": "project_horse_wanted_owner_summary_v1",
+      "signature": "project_horse_wanted_owner_summary_v1(jsonb)",
+      "definition_sha256": "d4dcff498a32dba3a15b42a2507dba6ec8bd5a447359f48fcdbfdaa4753cb6ea",
+      "body_md5": "94d8612d4e56443696eca44a0406cc4b",
+      "owner": "postgres",
+      "execute": "closed_to_PUBLIC_anon_authenticated_service_role"
+    }
+  ]
+}

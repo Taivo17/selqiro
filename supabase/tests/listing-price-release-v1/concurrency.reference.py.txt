@@ -1,0 +1,92 @@
+# Integration driver methods copied into the guarded external runner.
+# Not standalone; uses that runner's pinned new helper, bounded commands and cleanup.
+    def start_session(self, name, sql):
+        self.label_guard(name); self.helper_check(True)
+        op=self.out/'logs'/(name+'.stdout');ep=self.out/'logs'/(name+'.stderr')
+        require(not op.exists() and not ep.exists(),'Paralleelse seansi logi juba olemas.')
+        o=op.open('xb');e=ep.open('xb')
+        args=self.docker('exec','-i','--user','postgres',self.helper,'env','-i',
+          'PATH=/usr/lib/postgresql/bin:/usr/bin:/bin','HOME=/tmp','LC_ALL=C',
+          'PGCLIENTENCODING=UTF8','PGPASSFILE=/tmp/no-price-passfile','PGCONNECT_TIMEOUT=4',
+          'PGAPPNAME='+name,*self.psql_args())
+        try:proc=subprocess.Popen(args,stdin=subprocess.PIPE,stdout=o,stderr=e,
+                cwd=self.root,env=self.env,start_new_session=True)
+        except BaseException:o.close();e.close();raise
+        s=(proc,o,e,op,ep);self.sessions.append(s)
+        proc.stdin.write(sql.encode());proc.stdin.flush();return s
+
+    def end_session(self,s,final=''):
+        proc,o,e,op,ep=s
+        try:
+            if final and proc.poll() is None:proc.stdin.write(final.encode());proc.stdin.flush()
+            if not proc.stdin.closed:proc.stdin.close()
+            proc.wait(timeout=12)
+        finally:
+            if proc.poll() is None:os.killpg(proc.pid,signal.SIGKILL);proc.wait()
+            o.close();e.close()
+        require(op.stat().st_size<=1024*1024 and ep.stat().st_size<=1024*1024,'Paralleelse seansi valjund liiga suur.')
+        self.commands.append(dict(label=op.stem,exit_code=proc.returncode,async_session=True,finished_at=utc()))
+        if s in self.sessions:self.sessions.remove(s)
+        return proc.returncode,op.read_bytes(),ep.read_bytes()
+
+    def race(self,name,a_sql,b_sql,expected_state,expected_message):
+        a=b=None
+        prefix="\\set ON_ERROR_STOP on\n\\set VERBOSITY verbose\nBEGIN;\nSET LOCAL statement_timeout='8s'; SET LOCAL idle_in_transaction_session_timeout='10s';\n"
+        try:
+            a=self.start_session('release-'+name+'-a',prefix+a_sql+'\n\\echo RELEASE_A_HELD\n')
+            deadline=time.monotonic()+5
+            while b'RELEASE_A_HELD' not in a[3].read_bytes().splitlines():
+                require(a[0].poll() is None and time.monotonic()<deadline,'Esimene seanss ei hoidnud kontrollpunkti.')
+                require(a[3].stat().st_size<1024*1024 and a[4].stat().st_size<1024*1024,'Seansi logi uletas piiri.')
+                time.sleep(.02)
+            b=self.start_session('release-'+name+'-b',prefix+b_sql+'\nCOMMIT;\n')
+            waiting=False;deadline=time.monotonic()+4
+            for n in range(20):
+                if time.monotonic()>deadline or b[0].poll() is not None:break
+                cp=self.sql("SELECT EXISTS(SELECT 1 FROM pg_stat_activity WHERE application_name='release-"+name+"-b' AND wait_event_type='Lock');",'race-'+name+'-wait-'+str(n))
+                if cp.stdout.strip()==b't':waiting=True;break
+                time.sleep(.02)
+            ar=self.end_session(a,'COMMIT;\n');a=None;br=self.end_session(b);b=None
+            require(waiting,'Tegelikku kattuvat lukku ei nahtud; katse ei ole PASS.')
+            errors=re.findall(r'ERROR:\s+([0-9A-Z]{5}):\s+([^\r\n]+)',br[2].decode())
+            require(ar[0]==0 and br[0]==3 and len(errors)==1 and errors[0]==(expected_state,expected_message),
+                'Kahe uhenduse vea tulemus erineb: '+name)
+            return dict(name=name,overlapping_lock_observed=True,winner_exit=ar[0],loser_exit=br[0],
+                sqlstate=expected_state,message=expected_message)
+        finally:
+            for s in (a,b):
+                if s is not None:
+                    try:self.end_session(s,'ROLLBACK;\n')
+                    except Exception:pass
+
+    def concurrency_tests(self):
+        a='11111111-1111-4111-8111-111111111111';i='aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa'
+        v='44444444-4444-4444-8444-444444444444';k='cccccccc-cccc-4ccc-8ccc-cccccccccccc'
+        def actor(u):return "SET LOCAL ROLE authenticated; SET LOCAL request.jwt.claim.sub='"+u+"'; SET LOCAL request.jwt.claim.role='authenticated';\n"
+        def call(id,amount,identity=i,user=a):
+            b=json.dumps(dict(title='Race '+str(id),description='Synthetic',condition='used'),separators=(',',':'))
+            p=json.dumps(dict(kind='fixed',amount=amount,currency='EUR'),separators=(',',':'))
+            return "SELECT public.save_my_listing_edit_v1('"+str(id)+"','"+identity+"','"+user+"','"+b+"'::jsonb,'"+b+"'::jsonb,'"+p+"'::jsonb,'0');"
+        setup="INSERT INTO public.listings(id,user_id,identity_id,title,description,price,price_amount) VALUES "+','.join(
+            "("+str(n)+",'"+a+"','"+(k if n==2004 else i)+"','Race "+str(n)+"','Synthetic','7',7)" for n in range(2001,2006))+';'
+        self.sql(setup,'race-raw-seed')
+        results=[]
+        cases=[
+          ('cas',actor(a)+call(2001,'11'),actor(a)+call(2001,'22'),'40001','listing_price_conflict',
+            "SELECT price='11 EUR' AND price_revision=1 AND title='Race 2001' FROM public.listings WHERE id=2001"),
+          ('raw-first',actor(a)+"UPDATE public.listings SET price='8',price_amount=8 WHERE id=2002;",actor(a)+call(2002,'22'),
+            '40001','listing_price_conflict',"SELECT price='8' AND price_kind IS NULL AND price_revision=1 FROM public.listings WHERE id=2002"),
+          ('new-first',actor(a)+call(2003,'11'),actor(a)+"UPDATE public.listings SET price='8',price_amount=8,title='Must not save' WHERE id=2003;",
+            '42501','listing_price_direct_write_forbidden',"SELECT price='11 EUR' AND price_revision=1 AND title='Race 2003' FROM public.listings WHERE id=2003"),
+          ('membership',"UPDATE public.business_members SET status='inactive' WHERE user_id='"+v+"';",actor(v)+call(2004,'22',k,v),
+            '42501','listing_price_identity_forbidden',"SELECT price='7' AND price_kind IS NULL AND price_revision=0 FROM public.listings WHERE id=2004"),
+          ('identity',"UPDATE public.profiles SET active_identity_id='dddddddd-dddd-4ddd-8ddd-dddddddddddd' WHERE id='"+a+"';",actor(a)+call(2005,'22'),
+            '42501','listing_price_identity_changed',"SELECT price='7' AND price_kind IS NULL AND price_revision=0 FROM public.listings WHERE id=2005")]
+        for name,aa,bb,code,message,query in cases:
+            observation=self.race(name,aa,bb,code,message)
+            require(self.sql(query+';','race-'+name+'-preserved').stdout.strip()==b't','Paralleelkatse muutis keelatud valja: '+name)
+            observation['state_preserved']=True;results.append(observation)
+            self.js('tests/concurrency-summary.json',dict(passed=False,completed=results,expected=5))
+        self.js('tests/concurrency-summary.json',dict(passed=True,completed=results,expected=5,
+          scope='Five actual overlapping helper sessions; synthetic identities. Not HTTP/JWT/React/load proof.'))
+        self.result['CONCURRENCY']='PASS_FIVE_OVERLAPPING_WRITER_AND_AUTH_TRANSITIONS'

@@ -1,3 +1,99 @@
+<!-- SELQIRO_LISTING_PRICE_SERVER_ACCEPTED_SOURCE_FINISH_20261010 -->
+## 2026-10-10 — Locally accepted price server assembly / same source checkpoint
+
+The actual 10 October 20:00–20:01 (+03) V2 run passed 77 original SQL assertions,
+6 dependency regressions, 17 actual JSON captures, five observed overlapping
+connection cases, 26 retained-parser tests and the real Selqiro build.
+Evidence: `listing-price-server-local-v2-20261010-200029-4elsr7uo.zip`;
+SHA-256 `52a0a35fd10932314abfa917d98bb8f0eb4b5fe733b762fdd8d886be724b50e5`.
+The reviewed archive has 949 files / 948 manifest hashes and 442 selected source
+triples. The 22-path staged patch reconstructed in an isolated Git index; its
+reverse reconstructed the 427-source base. All 23 migrations are unchanged.
+At export 17:01:06.961196 UTC, HEAD was `835a9bbee989b0a53b698445c33a36ac917c8563`, main,
+22 paths staged (7 modified docs / 15 additions), no extra changes. The final
+remote observation at 17:01:05.918804 UTC matched that BASE, not a new commit.
+
+This entry accompanies `Add tested listing price server composition and writer guards`. The source finisher writes only seven
+existing documents, preserves all 15 tested additions byte-for-byte (including
+the new release architecture document), checks three offline generators, builds,
+then requires separate COMMIT PUSH consent for the exact 22-path checkpoint.
+Its returned result and actual Git establish the new commit, push and clean state;
+this prepared entry is not proof that those operations already happened. Normal
+Git hooks and CI may run. No SQL, parallel cases or Node suite are replayed.
+
+The price schema, narrow writer role and new API are NOT installed in production
+or the original local application database. The candidate stays fixture-gated
+outside migrations; do not remove the gate or dispatch generated SQL manually.
+Structured DELETE/TRUNCATE remains closed. Account/identity deletion cascades and
+admin/maintenance compatibility must be resolved before a separately approved
+rollout. Fresh production role graphs, owners, column/default ACLs, existing
+writers and migrations still need read-only preflight. Tests of a synthetic old
+DML definer do not prove arbitrary DDL-capable functions safe. Legacy non-price
+basic writes are not globally CAS-protected by this change.
+The visible edit form does not import the new client yet. HTTP/JWT, real React,
+browser, Storage, complete cascade behavior and load are not established here.
+
+One next action after reviewed source completion: controlled READ-ONLY production
+preflight for this same price-edit release, including the open deletion/authority
+boundaries; no immediate application. Only later separately approved rollout and
+actual client/form connection, four price surfaces, unsaved-input/image-reload
+protection and contextual return navigation. Preserve working horse editing,
+classification, location, store rubriigid, status and free renewal. No new price
+engine or registry. Energy/payments wait until core flows and visible actions work.
+Do not rerun completed V1/V2 installers, finishers, tests or collectors; preserve
+all old journals and result ZIPs. On STOP keep files/index/any commit for review.
+
+---
+
+<!-- SELQIRO_PRICE_SERVER_FIXTURE_DEPENDENCY_V2_20261010 -->
+## 10.10.2026 — Serverikoostise V1 peatunud; testibaasi sõltuvuse parandus V2
+
+Kasutaja 19:17 käik peatus enne 77 assertionit: SQLSTATE 42883, puudu oli
+`project_horse_wanted_owner_summary_v1(jsonb)` ainult eraldatud testialuses.
+Allikas on olemas muutmata migratsioonis `20260920150000_add_owner_marketplace_wanted_summary.sql`.
+See ei tõenda puuduolekut productionis; uut productioni vaatlust ei tehtud.
+Tagasipööramine, 11 tühja testtabelit ja helperi eemaldamine läbisid. Lõppvaatlus
+näitas puhast `835a9bb`; lähtekoodi kirjutus, build, staging ja paralleelkatsed ei alanud.
+
+V2 taastab üksnes täpse suletud abifunktsiooni testialusesse koos allika räsi ja
+sõltuvuskirjega. Koostise hinnakirjutaja, guard, API-õigused, kõik olemasolevad
+migratsioonid/laborid ning 77 algset assertionit, 17 vastust ja 5 paralleelkatset säilivad.
+Lisandub kuus kohustuslikku sõltuvusregressiooni (keha, tüüp/config, ACL ja eelarve).
+Uus käik peab tõendama tegeliku SQL/Node/build tulemuse; ettevalmistus pole läbimine.
+V1 käivitit ega vanu päevikuid ei korrata, muudeta ega kustutata.
+
+Käiviti: `selqiro-test-listing-price-server-local-corrected.py`.
+Sisend: `listing-price-server-local-20261010-191723-9z_olcso.zip`.
+Kinnitus `PRICE SERVER LOCAL V2`; ainult uus võrguta helper, seejärel sama 22-failine
+pakett/build/staging. Commit/push, production ja uus kasutajaliides puuduvad.
+PASS-järgne järgmine töö on sama lähteetapi lõpetamine; Energy/maksed ootavad põhivooge.
+
+---
+
+<!-- SELQIRO_PRICE_SERVER_COMPOSITION_CANDIDATE_20261010 -->
+## 2026-10-10 — Existing-listing price server composition candidate
+
+Base 835a9bb is committed/pushed; its 10 Oct 13:45 user run had a green build and
+clean remote-equal main. This new 22-path candidate composes retained contracts;
+it does not replay old tests, activate production or mount the new UI writer.
+A dedicated NOLOGIN/non-bypass role owns only the closed price-CAS core. The new
+invoker trigger does not trust arbitrary postgres-owned legacy definers or GUC flags.
+Original labs, 23 migrations, 154-code registry and current application APIs stay exact.
+
+See docs/architecture/listing-price-server-release-v1.md for transformations, exact
+legacy-writer matrix, selective grants, structured deletion boundary and test limits.
+77 new SQL checks/17 captures, five overlapping connection cases and a new parser
+bridge must pass in a NEW networkless PG17.6 helper; rollback and same-helper cleanup
+precede source writes/build/staging. Actual outcome is in the returned result, not
+this candidate entry. No full Supabase/HTTP/JWT/browser/load claim. No commit/push.
+
+After reviewed local PASS: finish this same source checkpoint, then fresh production
+preflight and separate rollout consent before the real four-kind edit/view integration.
+Never run the fixture composition by hand in production. Preserve old operation journals.
+Energy/payments and speculative features remain deferred until core flows/links work.
+
+---
+
 <!-- SELQIRO_EDIT_CLIENT_LOCAL_ACCEPTED_SOURCE_FINISH_20261010 -->
 ## 2026-10-10 — Exact price client accepted for guarded source completion
 
