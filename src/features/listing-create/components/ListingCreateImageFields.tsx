@@ -123,8 +123,7 @@ export default function ListingCreateImageFields({ files, setFiles }: {
               {LISTING_CREATE_IMAGE_LIMIT}
               {" "}
               pilti. Esimene pilt on
-              põhipilt ja AI analüüsib
-              ainult seda pilti. Vali
+              põhipilt. Vali
               esimeseks võimalikult
               informatiivne foto.
             </p>
@@ -195,9 +194,8 @@ export default function ListingCreateImageFields({ files, setFiles }: {
             </p>
 
             <p className="mt-2 text-sm leading-6 text-neutral-500">
-              AI analüüs vajab vähemalt
-              ühte pilti ja kasutab ainult
-              esimest ehk põhipilti.
+              Vali fotod galeriist või tee uus pilt.
+              Siin näed valitud piltide eelvaateid.
             </p>
           </div>
         ) : (
@@ -229,7 +227,7 @@ export default function ListingCreateImageFields({ files, setFiles }: {
 
                     {index === 0 ? (
                       <span className="absolute left-3 top-3 rounded-full bg-amber-400 px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.12em] text-amber-950 shadow-sm">
-                        Põhipilt · AI analüüsib
+                        Põhipilt
                       </span>
                     ) : null}
                   </div>

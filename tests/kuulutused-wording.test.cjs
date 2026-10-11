@@ -30,7 +30,7 @@ function realm(options = {}) {
     ...['ListingCreateContentTypeSelector','HorseOfferTypeSelector','HorseOfferBasicFields',
       'HorseOfferUseFields','HorseOfferDisclosureFields','HorseOfferPriceFields','HorseOfferLocationFields',
       'HorseOfferDraftSaveAction','HorseOfferPublicationGate','ListingCreateAiAnalysisCard',
-      'ListingCreateTextFields','ListingCreateImageFields'].map(n => 'src/features/listing-create/components/' + n + '.tsx'),
+      'ListingCreateTextFields','ListingCreateImageFields','OrdinaryListingFields'].map(n => 'src/features/listing-create/components/' + n + '.tsx'),
     ...['StoreCategoryChildCreateForm','StoreCategoryDeleteControl','StoreCategoryRenameControl']
       .map(n => 'src/features/store-category-management/components/' + n + '.tsx'),
   ];
@@ -183,12 +183,14 @@ test('detail initial back copy and generic category fallback are neutral, galler
   assert.ok(source(back).includes('"products"')); assert.ok(source(back).includes('"public-profile"'));
   assert.ok(source(back).includes('"selqiro:listing-return-context:v1"'));
 });
-test('creation heading and mobile guidance agree while publication restriction and /sell stay', () => {
+test('ordinary creation is V2-only input and cannot pretend to publish or send users to /sell', () => {
   const v = view(create, {userId:'test-user'});
   assert.equal(text(v.elements.find(e => e.type === 'h1').children), 'Lisa kuulutus');
-  assert.ok(v.text.includes('Mobiili „Lisa” nupp avab seni töötava /sell voo.'));
-  assert.ok(v.text.includes('kuulutust siin veel ei avaldata'));
-  assert.ok(anchors(v).some(e => e.props.href === '/sell' && text(e.children) === 'Ava praegune töötav lisamine'));
+  assert.ok(v.text.includes('Avaldamine pole veel ühendatud'));
+  assert.ok(v.text.includes('sisestus jääb ainult avatud vormi'));
+  assert.ok(v.elements.some(e => e.type === 'OrdinaryListingFields'));
+  assert.ok(!v.elements.some(e => e.type === 'ListingCreateAiAnalysisCard'));
+  assert.ok(!anchors(v).some(e => e.props.href === '/sell'));
 });
 test('store-category explanatory text is neutral; no category action is performed', () => {
   const v = view(categories);

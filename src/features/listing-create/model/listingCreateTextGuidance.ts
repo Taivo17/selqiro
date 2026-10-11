@@ -17,9 +17,9 @@ export type ListingCreateTextGuidance = {
 const STANDARD_LISTING_GUIDANCE:
   ListingCreateTextGuidance = {
     heroDescription:
-      "Kirjuta esmalt pealkiri ja kirjeldus, kui tead, mida pakud. AI kasutab sinu teksti sobiva Selqiro kategooria leidmiseks ega kirjuta seda vaikides üle. Kui sa ei ole kindel, võid väljad tühjaks jätta.",
+      "Lisa pakkumise pealkiri, kirjeldus ja pildid ning vali kategooria, seisukord ja hind.",
     sectionDescription:
-      "Kirjelda pakkumist oma sõnadega. Sinu tekst aitab AI-l leida sobiva kategooria. Kui jätad väljad tühjaks, võib AI põhipildi põhjal pakkuda lühikese pealkirja ja kirjelduse.",
+      "Kirjuta lühike ja selge pealkiri ning kirjelda pakkumist oma sõnadega. Lisa seisukord, omadused ja muu huvilisele oluline info.",
     titlePlaceholder:
       "Näiteks lühike ja selge pealkiri",
     descriptionPlaceholder:

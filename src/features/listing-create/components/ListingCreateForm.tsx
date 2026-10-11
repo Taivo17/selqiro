@@ -1,7 +1,8 @@
 "use client";
 
-import Link from "next/link";
 import { useState } from "react";
+import OrdinaryListingFields from "./OrdinaryListingFields";
+import { createOrdinaryListingFieldState } from "../model/ordinaryListingFields";
 import ListingCreateContentTypeSelector from "./ListingCreateContentTypeSelector";
 import HorseOfferTypeSelector from "./HorseOfferTypeSelector";
 import HorseOfferBasicFields from "./HorseOfferBasicFields";
@@ -57,6 +58,9 @@ import ListingCreateTextFields from "./ListingCreateTextFields";
 import ListingCreateImageFields from "./ListingCreateImageFields";
 
 export default function ListingCreateForm({ userId }: { userId: string }) {
+  // Kept under the existing user-keyed form. Switching type does not submit or copy
+  // ordinary details into a horse offer; all new values stay local in this step.
+  const [ordinaryFields, setOrdinaryFields] = useState(createOrdinaryListingFieldState);
   const [
     contentType,
     setContentType,
@@ -206,19 +210,13 @@ export default function ListingCreateForm({ userId }: { userId: string }) {
               </p>
             </div>
 
-            <Link
-              href="/sell"
-              className="inline-flex w-full shrink-0 justify-center rounded-full border border-amber-300 bg-white px-5 py-3 text-sm font-black text-amber-950 shadow-sm transition hover:bg-amber-100 lg:w-auto"
-            >
-              Ava praegune töötav lisamine
-            </Link>
+
           </div>
 
           <p className="mt-5 rounded-2xl border border-amber-200 bg-white/70 px-4 py-3 text-xs leading-5 text-amber-950/75">
-            V2 hobusevormi teksti ja andmeid saab soovi korral salvestada
-            privaatse mustandina. Pilte veel ei laadita üles ega salvestata
-            ning kuulutust siin veel ei avaldata. Mobiili „Lisa” nupp avab
-            seni töötava /sell voo.
+            {horseMode
+              ? "Hobusevormi teksti ja andmeid saab soovi korral salvestada privaatse mustandina. Pilte veel ei laadita üles ning kuulutust siin veel ei avaldata."
+              : "Tavakuulutuse andmeid saab siin täita ja pilte eelvaadata. Avaldamine pole veel ühendatud; sisestus jääb ainult avatud vormi ega salvestu lehe värskendamisel."}
           </p>
         </div>
       </section>
@@ -249,11 +247,16 @@ export default function ListingCreateForm({ userId }: { userId: string }) {
 
       <ListingCreateImageFields files={files} setFiles={setFiles} />
 
-      <ListingCreateAiAnalysisCard
-        contentType={contentType}
-        hasImage={files.length > 0}
-        hasTextContext={hasTextContext}
-      />
+      {horseMode ? (
+        <ListingCreateAiAnalysisCard
+          contentType={contentType}
+          hasImage={files.length > 0}
+          hasTextContext={hasTextContext}
+        />
+      ) : (
+        <OrdinaryListingFields value={ordinaryFields} onChange={setOrdinaryFields}
+          title={title.value} description={description.value} />
+      )}
 
       {horseMode && horseOfferType ? (
         <HorseOfferBasicFields

@@ -1,3 +1,135 @@
+<!-- SELQIRO_V2_ORDINARY_FIELDS_SOURCE_ACCEPTANCE_20261011 -->
+## 2026-10-11 — V2 ordinary-listing fields accepted for source completion
+
+The 11 October 21:00–21:01 (+03) copy-correction run passed 367 Node checks
+and the real Mac build. Evidence: `v2-listing-create-copy-20261011-210030-5kgvwfit.zip`,
+SHA-256 `46129e936a1d0a5eae310ca308770638dc60aa58e5648f85f76b63daa7e9701b`.
+All 1,935 archive entries / 1,934 manifest hashes and 463 selected source triples
+were reviewed; the combined 23-path staged patch reconstructs those sources and
+reverses to the 451-source HEAD baseline. HEAD stayed at `62afc1f`; source was
+staged, not committed. The 21:13 repeat was blocked before new writes/tests/build.
+A temporary assistant-side file-processing failure did not change the project;
+the original successful archive is now readable and reviewed. Do not rerun either installer.
+
+User browser evidence: initial field tests found no errors; ordinary/horse/ordinary
+preserved ordinary input. Desktop/narrow screenshots show manual text guidance,
+neutral primary-image copy and all eight Estonian truck-field labels. Image-order
+interaction and category Cancel are not separately demonstrated by screenshots.
+Node checks use actual modules with synthetic hooks/JSX/API, not React DOM/HTTP.
+
+This entry accompanies `Add V2 ordinary listing fields with clear manual input`.
+The finisher changes only seven documents, preserves sixteen implementation/test
+files, checks three offline generators, builds, then asks COMMIT PUSH for exactly
+23 paths. Read its actual result for the new commit/push/clean/remote status.
+Prepared documentation is not proof of execution; deployment is checked separately.
+
+Publication and image upload remain disconnected. The 154-currency input contract,
+23 migrations, price laboratories, horse owner saves/editor, and existing renewal
+remain unchanged. No AI call, Energy/payment, FX, remembered currency or price-order
+feature is introduced. All current accounts/listings are user-declared test data;
+that is not deletion consent or permission to weaken authorization.
+
+After reviewed source completion, verify the exact deployment and a read-only
+/v2/sell smoke check. Next implement the SAME V2 upload/publication flow from the
+already exported source: private pending images, verified identity and versioned
+rules acceptance, confirmed publication and duplicate/uncertain-result handling.
+The tested creator currently makes an active row before images: do not wire it
+blindly. Retire risky V1 writes narrowly rather than rebuilding V1 compatibility.
+Review shared storage/delete and account/admin interactions before activation.
+No new broad collector, price lab, AI/search feature or Energy work is required
+merely to finish this input checkpoint. Preserve all old evidence and journals.
+
+---
+<!-- SELQIRO_V2_ORDINARY_COPY_CORRECTION_20261011 -->
+## 2026-10-11 — V2 ordinary creation: truthful copy and Estonian truck labels
+
+The preceding fields installer ran on the user's Mac at 14:19–14:20 (+03):
+332 Node checks and the real build passed. Evidence:
+`v2-ordinary-listing-fields-20261011-141958-k5rlnhdj.zip`, SHA-256
+`3159faa42f547f6d32231e786559a79f5cf71f4408ea66c0cb941c8a77a34198`.
+The reviewed final state was HEAD `62afc1fadd995876621ea4e6941c0c0cd7b4e4f8`,
+20 staged paths, no extra unstaged/untracked files. That was NOT a new commit/push.
+The user reported no browser errors and confirmed ordinary → horse → ordinary
+input preservation. Sixteen desktop/narrow screenshots show price validation,
+local image previews and the deliberately disabled publish action. Category OK
+clears category-specific details by contract; Cancel was not separately reported.
+
+This is a copy-only correction within that same unfinished creation checkpoint.
+It changes ordinary text guidance, three JSX text blocks in the shared image
+preview, and adds exactly eight FIELD_LABELS.et entries to lib/categoryFields.ts.
+The shared image label is now “Põhipilt”; neither an empty preview nor its main
+image claims AI is running. Horse-specific guidance/AI placeholder, existing
+horse draft/policy controls and all shared event/effect logic remain unchanged.
+This scope does not claim all future AI wording throughout the portal was removed.
+
+Truck detail labels: axle_configuration → Telgede konfiguratsioon;
+gross_weight → Täismass; empty_weight → Tühimass; payload → Kandevõime;
+load_space_length/width/height → Koormaruumi pikkus/laius/kõrgus;
+tachograph → Sõidumeerik. Only display names change. Category keys, schema,
+English fallback, field order, raw input, units and existing translations remain.
+Other consumers of this existing shared dictionary receive these same labels.
+
+New tests exercise the ACTUAL shared text/image components and actual detail
+renderer, not placeholder versions of those components. Hooks/JSX/object URLs
+remain simulated: this is not React DOM/Next/browser or an upload test. Existing
+332 tests remain unchanged. The correction requires these regressions, three
+offline generator checks and a fresh Mac build before exact staging.
+Read the NEW correction result for actual execution; this entry is a candidate
+contract, not proof that its tests, build or browser review have already passed.
+
+Correction scope: 11 file writes (three runtime, one new regression suite, seven
+documents); final combined checkpoint: 23 staged paths, 463 selected sources.
+No commit/push, package installation, SQL, Docker, Supabase, deployment, application
+row operation, Storage request or AI request is part of the correction runner.
+All 23 migrations, price contracts, currency registry, input/state/save logic,
+validation, disabled publication and image actions remain unchanged.
+
+NEXT: review correction ZIP and a brief desktop/narrow copy check, then finish this
+SAME 23-path creation-fields checkpoint with separately confirmed commit/push.
+Do not rerun the original installer or earlier completed production/diagnostic
+runners. Preserve existing staged files, logs and old operation journals on STOP.
+After source completion continue V2 upload and verified publication using existing
+contracts; no separate full V1 compatibility project. Currency memory and local
+price-search grouping are proposals, not implemented by this copy correction.
+Energy/payments remain deferred until core flows and visible actions work.
+
+---
+
+<!-- SELQIRO_V2_ORDINARY_FIELDS_20261011 -->
+## 2026-10-11 — ordinary V2 form inputs, no publication activation
+
+Composition: user-keyed ListingCreateForm -> OrdinaryListingFields -> small category,
+price, location, detail and validation components -> pure buildOrdinaryListingInput.
+The existing horse branch is separate; ordinary data is never sent to horse draft save.
+Model reuses CATEGORY_TREE, categoryFields, normalizeListingEditableBasics and
+normalizeListingPriceForm with the frozen 154-code registry. No new money normalizer.
+
+Local input check matches the existing closed row contract's named groups. Complete
+ancestry is required by this UI; new fields are named free text. Confirm category-detail
+clear; never carry ambiguous field meaning between categories. Country is coarse text
+with optional existing suggestions, not an inferred currency/GPS. Amount is a decimal
+string; nonfixed is explicit and fixed zero stays fixed. No unit/prose/FX conversion.
+
+This package does not invoke the creator or image APIs. Current image selection stays
+local and publication is disabled with visible explanation, even after input validation.
+No new actor, receipt, policy, request/session persistence or hidden autosave is added.
+The old /sell CTA and paid ordinary-AI placeholder disappear only from this form.
+This is not server-side V1 retirement; shared APIs and mobile routing are unchanged.
+
+Approved pivot: prioritize the V2 publish/find/manage flow; full V1 compatibility is
+not required for the three user-declared test accounts. Keep the real write/privacy
+boundaries. Reuse the existing creator's normalization/idempotency, but do not connect
+its active-before-images behavior as final publication. Confirm image completion and
+current policy/account checks before public visibility. No full V1 deletion subsystem.
+
+Validation plan: 236 new model/synthetic-JSX cases plus 57 horse and 39 wording =332;
+actual strict pure TypeScript and Mac full build. Not SQL/HTTP/React DOM or browser.
+Read result ZIP and targeted browser outcome before source finish. The 23 migrations,
+all price labs/guards and working owner actions stay byte-identical. No production
+schema activation or security claim follows from rendering input controls.
+See docs/architecture/v2-ordinary-listing-create-v1.md.
+
+---
 <!-- SELQIRO_LISTING_PRICE_SERVER_ACCEPTED_SOURCE_FINISH_20261010 -->
 ## 2026-10-10 — Verified local server composition; production boundary remains closed
 

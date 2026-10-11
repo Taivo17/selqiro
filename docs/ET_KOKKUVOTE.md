@@ -1,3 +1,104 @@
+<!-- SELQIRO_V2_ORDINARY_FIELDS_SOURCE_ACCEPTANCE_20261011 -->
+## 11.10.2026 — V2 tavakuulutuse sisestusetapp vastu võetud lõpetamiseks
+
+21:00–21:01 sõnastusparanduses läbisid 367 Node kontrolli ja päris Maci build.
+Õige tulemus on `v2-listing-create-copy-20261011-210030-5kgvwfit.zip`, SHA-256
+`46129e936a1d0a5eae310ca308770638dc60aa58e5648f85f76b63daa7e9701b`.
+Kontrolliti 1935 arhiivifaili, 1934 manifestiräsi ja 463 lähtefaili. 23-rajaline
+staging taastus eraldatud Giti indexis ja pöördus tagasi 451-failisele baasallikale.
+HEAD jäi 62afc1f juurde. 21:13 korduskatse kaitse peatas töö enne uusi kirjutusi,
+teste ja build’i; selle NOT_RUN ei tühista esimest PASS-i. Vestluse failitöötluse
+ajutine tõrge on ületatud, õige ZIP on üle vaadatud. Parandajat enam ei käivita.
+
+Kasutaja algses brauseritestis vigu ei leidnud; tava/hobune/tava säilitas sisestuse.
+Uued töölaud/kitsas pildid näitavad käsitsi tekstijuhist, Põhipilt-märgist ja kõiki
+kaheksat eestikeelset veoautosilti. Pildijärjekorra klõpsukatset ja kategooria Cancel
+tegevust ei loeta piltidest eraldi kinnitatuks. Node katsed ei ole DOM/HTTP-testid.
+
+Lõpetaja muudab ainult seitset dokumenti ning jätab 16 rakendus-/testifaili samaks.
+Pärast generaatorikontrolle ja uut build’i küsitakse COMMIT PUSH; kogu etapp on
+23 rada. Tegelik uus commit, push ja puhas/sünkroonne seis selguvad lõpetaja ZIP-ist.
+Valmis juhis ei tähenda juba tehtud commit’i või Verceli juurutust.
+
+Tavakuulutuse avaldamine ja pildiüleslaadimine on veel ühendamata. 154 valuuta
+register, 23 migratsiooni, hinnalaborid, hobuse haldus ja kuulutuse uuendamine
+säilivad. Valuuta meeldejätmine ning hinnaotsing on ettepanekud, mitte selle etapi
+funktsioonid. AI, Energy ja maksed ootavad. Testandmeid praegu ei kustutata.
+
+Pärast lähteetapi ülevaatust kontrolli sama juurutust ja tee ainult lugemise
+/v2/sell kontroll. Seejärel ühenda sama V2 piltide/avaldamise voog, mitte V1
+täisühilduvus: pilte ei tehta enneaegselt avalikuks ja ebaselge vastus ei loo
+uut topeltkuulutust ega käivita ennetavat pildikoristust. Olemasolev creator loob
+aktiivse rea enne pilte; seda ei ühendata pimesi. Õigused, reeglite nõustumine ja
+vana ohtliku kirjutustee sulgemine vajavad kitsast serverikontrolli.
+
+---
+<!-- SELQIRO_V2_ORDINARY_COPY_CORRECTION_20261011 -->
+## 11.10.2026 — V2 sisestusvormi sõnastuse piiratud parandus
+
+Kasutaja 14:19–14:20 paigaldus läbis 332 testi ja päris build'i. Kontrollitud
+ZIP on `v2-ordinary-listing-fields-20261011-141958-k5rlnhdj.zip`, SHA-256
+`3159faa42f547f6d32231e786559a79f5cf71f4408ea66c0cb941c8a77a34198`.
+Lõppseis: `62afc1f`, 20 stage'itud rada, kõrvalmuudatusi ei leitud; commit/push
+tegemata. Kasutaja ei leidnud brauseris vigu ja kinnitas tavaharust hobuseharusse
+ning tagasi tulles sisestuse säilimise. Pildid näitavad töölauda ja kitsast vaadet,
+EUR/HUF eelvaadet, JPY komakohaviga, kohalikke pilte ning suletud avaldamisnuppu.
+Kategooriavahetuse OK tühjendab detailid; Cancel-tulemust ei kinnitatud eraldi.
+
+Sama etapi järelparandus eemaldab tavakuulutuse tekstijuhisest ja ühise pildiploki
+kolmest tekstikohast ühendamata AI lubadused. Põhipildi märk on „Põhipilt”.
+Kaheksa veoauto lisavälja saavad eestikeelsed nimetused olemasolevas sõnastikus:
+Telgede konfiguratsioon, Täismass, Tühimass, Kandevõime, Koormaruumi pikkus,
+Koormaruumi laius, Koormaruumi kõrgus ja Sõidumeerik. Võtmeid, järjekorda,
+kasutaja sisestatud teksti ega ühikuid ei muudeta. Ühine sõnastik aitab ka teisi
+sama tõlkefunktsiooni kasutavaid vaateid; kogu portaali tõlkeid ei muudeta.
+Hobuse erijuhised ja senine AI näidiskaart jäävad selle kitsa paranduse piirist välja.
+
+Parandaja kirjutab 11 faili: kolm kuvamisfaili, ühe regressioonitesti ning seitse
+dokumenti. Koos eelmise kandidaadiga on lõpus 23 stage'itud rada ja 463 valitud
+lähtefaili, mitte endiselt 20 rada. Uus test kasutab tegelikke shared komponente;
+Reacti olek/JSX on sünteetiline, mitte uus päris brauserikatse. Kõik varasemad
+332 testi säilivad. Kolm generaatorikontrolli ja värske build peavad läbima.
+Tegelik käivituse tulemus loe uuest ZIP-ist; see ettevalmistatud kirje ei tõenda PASS-i.
+
+Avaldamine ja üleslaadimine jäävad ühendamata, hinna/kategooria/valideerimise ning
+pildieelvaate loogikat ei muudeta. SQL-i, paigaldusi, commit/push-i, Energyt ega
+operatsioonipäevikute muutmist ei tehta. Sisestus kaob endiselt värskendamisel.
+Valuuta meeldejätmine ja kohaliku hinnaotsingu ettepanekud on veel rakendamata.
+
+Järgmine: paranduse ZIP ja lühike töölaud/kitsas sõnastuskontroll, seejärel selle
+sama 23-failise etapi eraldi kinnitatud lõpetamine. Edasi V2 pildilaadimine ja
+kinnitatud avaldamine, mitte V1 ümberarendus. Peatumisel säilita staging ja failid;
+algset paigaldajat ega varasemaid lõpetatud käiviteid ei korrata.
+
+---
+
+<!-- SELQIRO_V2_ORDINARY_FIELDS_20261011 -->
+## 11.10.2026 — V2 tavakuulutuse väljad; avaldamine veel ühendamata
+
+Kasutaja kinnitas, et kolm praegust kontot on tema loodud ja kuulutused on testimiseks.
+V2 lisamine on esikohal; V1 täisühilduvust ei ehita. See pole andmete kustutamise luba.
+Uus kohalik pakett ühendab /v2/sell tavaharusse kategooria, seisukorra, hinna ja
+valuuta, riigi/piirkonna ning kategooriale vastavad vabateksti detailid. Summa jääb
+tekstiks; 154 valuuta olemasolev register ja komakohtade reeglid on muutmata.
+Kategooria vahetamisel küsitakse täidetud detailide tühjendamiseks kinnitust.
+Pealkirja, kirjelduse ega detailide mõõtühikuid ei teisendata; AI/FX/Energy kõnesid pole.
+Tavaharust eemaldatakse vana /sell CTA ja tasulise kategooriaabi placeholder.
+
+Avalda kuulutus on teadlikult suletud ka korrektse vormingu puhul. Sisestus ja
+pildieelvaade on lokaalsed, lehe värskendamisel kaovad; serveri salvestust pole.
+Mobiili Lisa senine siht ei muutu veel; testi avades otse /v2/sell. Hobuse mustandi
+salvestus ja nõustumised säilivad, neid selle lugemiskatsega ei vajutata.
+
+Paigaldaja peab läbima 332 testi, generaatorite kontrollid ja päris build'i ning
+stage'ima ainult selle paketi. Tegelikku läbimist loe uuest tulemus-ZIP-ist.
+Järgmine tegevus: lokaalne desktop/kitsas sisestuse brauserikontroll, seejärel sama
+lähteetapi lõpetamine. Siis ühendame sama V2 voo pildid ja serveri kinnitatud avaldamise.
+Hinna serverikoostis on 62afc1f lähtekoodis, mitte productionis aktiveeritud.
+Salvestatud eelkontrolli ajatempliparandus läbis; vanu päringuid ja käiviteid ei korrata.
+Leping: docs/architecture/v2-ordinary-listing-create-v1.md. Energy ja maksed ootavad.
+
+---
 <!-- SELQIRO_LISTING_PRICE_SERVER_ACCEPTED_SOURCE_FINISH_20261010 -->
 ## 10.10.2026 — Hinna serverikoostise kohalik katse läbis; lähteetapi lõpetamine
 
