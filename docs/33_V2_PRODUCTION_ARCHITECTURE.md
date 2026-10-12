@@ -1,3 +1,48 @@
+<!-- SELQIRO_V2_IMAGE_VERIFIER_SOURCE_REVIEWED_20261012 -->
+## 2026-10-12 — Mac image verifier verified; source-only completion checkpoint
+
+This entry supersedes the earlier pending-Mac image-verifier preparation wording.
+The ordinary fields at base c8da6f1d3e850ad35da9bf30ea76c8212b964696 were already
+committed/pushed, Ready/Production and user-accepted. The subsequent Storage reader
+is complete. Historical NEXT entries below are not current execution instructions.
+
+Reviewed actual Mac evidence: image-verification-source-20261012-191732-ga_qx0vo.zip,
+SHA-256 811e98e82e2528b0a99e3da6b9f93aa9b8960ba0d3ae17a3ed0df217e17fcd18.
+All 490 entries / 489 manifest hashes, 481 source triples and the exact 24-path
+staged overlay were reconciled. Mac Node 24.16.0 / Sharp 0.34.5 / libvips 8.17.3 /
+TypeScript 5.9.3 ran 119 passing TAP cases, with no failures, skips, cancellations
+or TODOs. Native/synthetic fixture distinctions remain in the image contract.
+The exact known installer records a successful real npm run build exit. Its private
+raw build log was intentionally not exported; warnings were not independently read.
+
+Recorded final state at 2026-10-12 16:17:55 UTC / 19:17:55 Europe/Tallinn was main
+at c8da6f1, exactly 24 staged paths, no unstaged changes: NOT a clean worktree.
+Commit/push were NOT_RUN then. That recorded observation is not fresh Git evidence.
+The separate source-only finisher amends seven documents, preserves every tested
+code/test/fixture byte, checks fresh Git/index/source/remote, then commits/pushes
+only the same 24 paths after COMMIT PUSH consent. Read its actual result for the
+new commit, push and clean/remote status; this prewritten entry does not prove them.
+It does not rerun image/application/SQL tests, native dependencies or the build.
+Only the current handoff renderer is checked for the amended documentation.
+
+The image verifier remains dormant: no route/client/Storage integration or upload,
+publication, cleanup or deletion is enabled. All 23 migrations, dependencies and
+existing app/price/identity/policy/horse/search/owner modules are unchanged.
+Push may trigger the existing deployment automation; neither its completion nor
+worker/native packaging is established here. Direct Sharp dependency, deployed
+native assets, real Storage HTTP/limits and whole-journey acceptance remain open.
+
+After a verified clean source completion, continue the SAME V2 private publication
+attempt, immutable server-owned objects, final publish, durable cleanup and terminal
+delete using the existing price/identity/policy modules. Recheck permissions and
+accepted rules at final publish; prevent duplicates and resurrection on replay.
+These are activation blockers, not later convenience features. See the image and
+ordinary-creation contracts and the separately approved 12 October requirements.
+No broad collector, general workflow engine, complete V1 rewrite, Energy, payments,
+AI or search extras. Do not rerun completed installers/readers/finishers/SQL/applies.
+Existing accounts, listings, images and operation journals are not deletion fixtures.
+
+---
 <!-- SELQIRO_V2_ORDINARY_FIELDS_SOURCE_ACCEPTANCE_20261011 -->
 ## 2026-10-11 — V2 ordinary-listing fields accepted for source completion
 

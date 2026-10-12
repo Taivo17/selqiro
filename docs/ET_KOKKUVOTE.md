@@ -1,3 +1,46 @@
+<!-- SELQIRO_V2_IMAGE_VERIFIER_SOURCE_REVIEWED_20261012 -->
+## 12.10.2026 — Maci pildikontroll läbis; lähteetapi kontrollitud lõpetamine
+
+See kirje asendab pildikontrolli varasema „Maci käik tegemata” sõnastuse.
+Baas c8da6f1d3e850ad35da9bf30ea76c8212b964696 oli juba commit'itud, push'itud,
+Vercelis Ready/Production ja kasutaja vastu võetud. Storage'i lugemine on lõpetatud.
+Allpool ajaloolised „järgmised tööd” ei ole praegused käivitamisjuhised.
+
+Õige tulemus: image-verification-source-20261012-191732-ga_qx0vo.zip; SHA-256
+811e98e82e2528b0a99e3da6b9f93aa9b8960ba0d3ae17a3ed0df217e17fcd18.
+Kontrolliti kõiki 490 faili / 489 manifestiräsi, 481 valitud lähtefaili ja 24-rajalist
+muudatust. Maci Node 24.16.0, Sharp 0.34.5, libvips 8.17.3 ja TypeScript 5.9.3:
+119/119 TAP testi läbisid; null viga, vahelejätmist, tühistamist või TODO-t.
+Päris native/protsessikatsed ja sünteetilised rikkekatsed on lepingus eristatud.
+Päris npm run build läbis täpse käiviti eduka väljumiskoodi järgi. Privaatset toorlogi
+ZIP-is pole ja selle hoiatusi eraldi ei loetud. Seda kausta ei ole vaja saata.
+
+12.10 kell 16:17:55 UTC / 19:17:55 Europe/Tallinn oli main baasil c8da6f1;
+24 rada staging'us (18 uut, kuus olemasoleva dokumendi uuendust), kõrvalmuudatusteta.
+See EI olnud puhas tööpuu ega uus commit/push. Värske tegelik Git-seis kontrollitakse
+uuesti enne kirjutusi. Eraldi lõpetaja täpsustab ainult seitset dokumenti ning
+commit'ib ja push'ib sama 24-rajalise etapi alles COMMIT PUSH nõusoleku järel.
+Tegelik uus commit, push ja puhas/kaugseis tõendatakse lõpetaja tulemusega, mitte
+selle ette kirjutatud dokumendiga. Pildi-, rakendus- ja SQL-teste ega build'i ei
+korrata; kontrollitakse ainult muudetud jooksva üleandmise generaatori kooskõla.
+
+Rakendus-, testi- ja näidispildibaidid säilivad muutmata. Moodul on endiselt
+ühendamata; uut uploadi, avaldamist, koristust ega kustutamist ei avata. 23 migratsiooni,
+sõltuvused ning olemasolevad hinna-, identiteedi-, reegli-, hobuse- ja omanikuvaated
+säilivad. Push võib käivitada olemasoleva juurutusautomaatika; uut Ready/Production
+seisu, native-pakendust ega kogu kasutajateed sellest veel ei järeldu.
+
+Pärast puhta lähteetapi tulemuse ülevaatust jätkub SAMA V2 voo privaatse katse,
+muutmatute failiviidete, kinnitatud lõppavaldamise, püsiva koristuse ja lõppkustutuse
+serverileping olemasolevate hinna-, identiteedi- ja reeglimoodulite peal.
+Need ning õigused, kordustaotluse turvalisus ja päris Storage HTTP/piiride kontroll
+on enne avamist vältimatud, mitte hilisemad mugavused. Kogu tee lisamine → leidmine →
+detail/profiil → suhtlus → haldamine → kustutamine vajab eri seansside vastuvõttu.
+Paigaldajat, lugejat, vanu lõpetajaid, SQL-teste ega rakendamisi ei korrata. Kasutaja
+kontode, kuulutuste, piltide ega päevikute kustutamiseks luba ei ole.
+Energy, maksed, AI ja otsingu lisad ootavad; üldmootorit ega V1 täiskihti ei ehitata.
+
+---
 <!-- SELQIRO_V2_ORDINARY_FIELDS_SOURCE_ACCEPTANCE_20261011 -->
 ## 11.10.2026 — V2 tavakuulutuse sisestusetapp vastu võetud lõpetamiseks
 

@@ -5,38 +5,35 @@
     "sha256": "667e47990a7d3cc20ff53709cb861663b4565cf1d3c830eda88e0d18e60fdb8a"
   },
   "boundaries": [
-    "Üks /v2/sell vorm, peamine lõppsiht Avalda kuulutus, mitte kohustuslik nähtav mustand. Praegune nupp on teadlikult suletud ja ütleb seda.",
-    "Originaalsumma/valuuta, hinnaliigid, detailivõtmed ja sisestatud ühikud säilivad. Valuuta meeldejätmine ja hinnajärjestus on ettepanekud; neid ei rakendata siin. AI/FX/Energy/maksed ootavad.",
-    "V1 /sell CTA eemaldamine ei ole serveri kirjutustee sulgemine. Vana Storage/DELETE risk tuleb enne aktiveerimist kitsalt sulgeda V2 ühiseid toiminguid rikkumata.",
-    "Testitud creator loob aktiivse rea enne pilte: seda ei ühendata pimesi avaldamiseks. Ebaselge vastus ei tohi tekitada uut ID-d ega ennetavat pildikoristust. Konto/admin õigused säilivad kontrollpunktina."
+    "Üks Avalda kuulutus, mitte nähtav kohustuslik mustand. Kontrollitud veebipilt pole uploadi volitus ega tõend DB-katse avaldamisvalmidusest.",
+    "25 MiB algfaili moodul ei muuda vana 10 MiB avalikku hoidlat. Uus privaatne otseüleslaadimine, hilinenud token, muutmatu veebipilt ja täpsete viidetega koristus peavad koos läbima integratsiooni.",
+    "Praeguseid kontosid, kuulutusi, pilte ja päevikuid ei kustutata. V1 riskantsete kirjutuste kitsas sulgemine on nõutud, mitte täisühilduvuse ehitamine.",
+    "Avaldamise avamise eel kontrollitakse lisamine → otsing → detail/profiil → suhtlus → haldamine → kustutamine eri rollidega. AI/Energy/maksed/otsingu lisad ootavad."
   ],
-  "checkpoint": "V2 tavakuulutuse sisestusväljad ja sõnastus on testi-/build-tõendi ning kasutaja brauseripiltide põhjal vastu võetud lähteetapi lõpetamiseks. Lõpetaja tulemus kinnitab tegeliku commit/push-i; avaldamine ja üleslaadimine jäävad suletuks.",
+  "checkpoint": "Maci seni ühendamata V2 pildikontrolli teostus on tõendatult läbinud 119/119 testi ja build'i. Lähteetapi lõpetaja säilitab testitud koodi ning täpsustab seitset dokumenti; tema tegelik uus commit/push ja puhas seis tuleb kinnitada tulemuse ZIP-ist. Uus upload ja avaldamine jäävad suletuks.",
   "environment": [
-    "Mac Python 3.9+, olemasolev Git/Node/npm. Peata dev Ctrl+C enne build-i; Dockerit/Supabase-i ega paketipaigaldust pole.",
-    "Raportid Downloads/selqiro-recovery all, mitte repos. Ainult lõpetaja enda uus väline päevik; vanu ei loeta ega muudeta. Iga olulise üleandmise järel palu pakett alla laadida."
+    "Lõpetaja: olemasolev Python 3.9+ ja Git; ei Node/npm/npx/installi, Dockerit ega Supabase CLI-d. Peata dev ja ära muuda projekti jooksu ajal. Git hooks/signing on ainult neis käskudes välja lülitatud, konfiguratsiooni ei kirjutata.",
+    "Algne ZIP leitakse Downloads/selqiro-recovery või Downloads alt räsi järgi. Ainult uus väline finisher'i päevik; vanad puutumata. Uus tulemus-ZIP valitakse Finderis võimalusel automaatselt. private-kausta ei jagata."
   ],
   "format": "selqiro_repo_handoff_v1",
   "local_test": [
-    "11.10 kell 21:00–21:01 läbisid 367 tegelike moodulite/sünteetilise React/JSX/API kontrolli ja päris Maci build. Lõpetaja neid teste ei korda; teeb värske build’i.",
-    "Kasutaja algtestis vigu ei leidnud; tava/hobune/tava säilitas sisestuse. Hilisemad töölaud/kitsas pildid näitavad parandatud juhiseid, Põhipilt-märgist ja 8 eesti veoautosilti. Mitte HTTP/avaldamis- ega täielik klõpsutest.",
-    "21:13 parandaja korduskatse peatus enne kirjutusi/teste/build’i; algne 21:00 PASS säilib. Ajutine assistendi failitöötluse tõrge on lahendatud. Kategooria Cancel ja pildi ümberjärjestus pole eraldi kasutajalt kinnitatud."
+    "12.10 Maci Node 24.16.0 / Sharp 0.34.5 / libvips 8.17.3 / TypeScript 5.9.3: 119/119 TAP testi, null viga/skip/cancel/TODO. Päris native/protsessid koos eristatud sünteetiliste rikkekatsetega; mitte Storage HTTP ega brauserivastuvõtt.",
+    "Päris npm run build PASS täpse käiviti eduka väljumise järgi. private/build.log pole eksporditud; toorväljundit ja hoiatusi siin eraldi ei loetud. Lõpetaja ei korda teste/build'i, kontrollib ainult muudetud jooksva üleandmise kooskõla."
   ],
-  "next_action": "Loe lõpetaja tulemus-ZIP. Eduka commit/push-i järel kontrolli täpset uut Verceli juurutust ja /v2/sell ainult lugemise vaadet. Siis ühenda sama V2 piltide/avaldamise voog juba kogutud lähtefailidest, kontrollides õigusi ja riskantseid V1 kirjutusi; mitte uus hinnalabor.",
+  "next_action": "Pärast lõpetaja eduka commit/push ja puhta/kaugvõrdse seisu raporti ülevaatust jätka SAMA V2 privaatse katse, muutmatute serverifailide, lõppavaldamise, püsiva koristuse ja lõppkustutuse serverilepinguga olemasoleva hinna/identiteedi/reeglite peal. Ära lisa uut app-patch'i lõpetamata staging'u otsa.",
   "production": [
-    "62afc1f kordusjuurutus oli varem kasutaja järgi Ready/Production. Uue sisestusetapi juurutust kinnitab alles uus tulemus ja eraldi Verceli kontroll.",
-    "10.10 salvestatud kataloogid läbisid 11.10 parandatud tervikkontrolli; ei tehta uut päringut. Algne eelkontrolli STOP ja tegemata Giti lõppkontroll säilivad ajaloolise piirina.",
-    "Uus hinnaskeem/roll/API pole aktiveeritud. /v2/sell tavaharus ainult kohalikud väljad ja pildieelvaade; Avalda on suletud. Hobuse toimingud ja uuendamine jäävad tööle."
+    "c8da6f1 varasem Ready/Production ja kasutaja veebikontroll ning Storage-konteksti lugemine on lõpetatud. Pildikontrolli uue commit'i juurutus/native-pakendus ei ole selle kirje järgi kontrollitud; push võib käivitada olemasoleva automaatika.",
+    "Uus moodul pole ühegi marsruudi/vormiga ühendatud. Katse/upload/publish/koristus/lõppkustutus pole avatud. 23 migratsiooni ja senised hinna-/identiteedi-/reegli-/hobuse-/otsingu-/omaniku moodulid säilivad; DB/Storage-käske lõpetajas pole."
   ],
   "read_next": [
-    "Uus lõpetaja result.txt /CURRENT_STATE.json; package-plan.json, source-manifest.json ja new-commit-object.txt. Vea korral ainult selle raporti ülevaatus, mitte korduskäivitus.",
-    "docs/architecture/v2-ordinary-listing-create-v1.md; src/features/listing-create/README.md. 367 testi ja brauseripildid on varasem tõend, mitte uuesti tegemise juhis."
+    "Uue image-verifier-source-finish käigu ALUSTA_SIIT.md ja result.json; enne käivitust väline source-finish-ready üleandmine. 19:17 Maci originaaltulemus jääb testide/build'i lähteks.",
+    "docs/architecture/v2-publication-image-verifier-v1.md; docs/architecture/v2-ordinary-listing-create-v1.md; kinnitatud 12.10 avaldamisnõuded. Ajaloolisi NEXT ülesandeid ei korrata."
   ],
-  "recorded_on": "2026-10-11",
+  "recorded_on": "2026-10-12",
   "source": {
-    "Alus": "62afc1fadd995876621ea4e6941c0c0cd7b4e4f8; 11.10 kell 21:01 täpselt 23 stage’itud rada, kõrvalmuudatusi ei leitud. Seda uut etappi pole enne lõpetajat commit’itud.",
-    "Lõpetaja": "selqiro-finish-v2-ordinary-listing-fields.py: 7 dokumendiuuendust, 16 testitud faili muutmata, 463 valitud allikat. Tegelik uus commit ja puhas/remote seis loe result.txt-st.",
-    "Täpsustus": "Kõik 3 praegust kontot ja kuulutused on kasutaja testandmed. V1 täisühilduvus pole eesmärk; see ei luba andmete kustutamist.",
-    "Tõend": "v2-listing-create-copy-20261011-210030-5kgvwfit.zip; SHA-256 46129e936a1d0a5eae310ca308770638dc60aa58e5648f85f76b63daa7e9701b. 1935 faili /1934 manifestiräsi üle vaadatud."
+    "Lähtebaas": "c8da6f1d3e850ad35da9bf30ea76c8212b964696; 463 valitud baasallikat / 481 pildikontrolli tulemust, mitte kogu repositoorium. Baasi varasem commit/push ja veebivastuvõtt on lõpetatud.",
+    "Lõpetamise piir": "Uus eraldi finisher kontrollib tegeliku HEAD-i, kogu indexi, tööpuu, 481 allikat ja remote'i enne kirjutusi. Seitse dokumenditäpsustust; kõik 17 koodi-/testi-/näidisfaili muutmata, commit'i ulatus endiselt 24 rada. Tegeliku lõppseisu tõend on finisher'i result.json.",
+    "Viimane Maci vaatlus": "12.10.2026 kell 16:17:55 UTC / 19:17:55 Europe/Tallinn: main/c8da6f1, 24 staged rada (18 uut, kuus olemasolevat), ei ühtki unstaged muutust. EI olnud puhas ega commit'itud; sama käigu remote võrdne. See pole uus live-kontroll."
   },
-  "stop_rule": "Säilita failid, staging, võimalik commit ja päevikud. Ära korda lõpetajat, väljade paigaldajat ega sõnastusparandajat; ära taasta/reset-i, kustuta markerit ega push-i käsitsi enne ülevaatust."
+  "stop_rule": "Säilita failid, index ja uus raport/päevik. Ära korda lõpetajat/paigaldajat/lugejat, reset/restore-i, käsitsi commit/push-i ega kustuta markereid. Ka kadunud push-vastus ei luba automaatset korduskatset; loe uue raporti commit/remote välju."
 }
