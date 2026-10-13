@@ -1,0 +1,36 @@
+{
+  "basics": {
+    "title": "Test title",
+    "description": "Synthetic description",
+    "condition": "used"
+  },
+  "price": {
+    "kind": "fixed",
+    "amount": "123.40",
+    "currency": "EUR"
+  },
+  "category_path": [
+    "vehicles",
+    "trucks_commercial",
+    "trucks"
+  ],
+  "location": {
+    "country": "Estonia",
+    "city": "Paide",
+    "latitude": null,
+    "longitude": null
+  },
+  "attributes": {
+    "manufacturer": "",
+    "part_number": "",
+    "oem_number": "",
+    "vehicle_brand": "",
+    "vehicle_model": "",
+    "vehicle_year": "",
+    "engine": ""
+  },
+  "details": {
+    "power": "90 kW"
+  },
+  "language": "et"
+}

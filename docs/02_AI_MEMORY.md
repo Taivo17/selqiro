@@ -1,3 +1,61 @@
+<!-- SELQIRO_PRIVATE_ATTEMPT_INSTALL_REVIEWED_FINISH_20261013 -->
+## 2026-10-13 — actual private-attempt installation reviewed; same source checkpoint completion
+
+The source installer has already run. Its unchanged result is
+`publication-attempt-source-install-20261013-100540-z_s6nsyk.zip`, SHA-256
+`6cdb59d5531992ad92e33d530183c6d16fb40ddce2d457e12c945019caf38b0e`.
+Independent offline review accepted all 502 selected sources and the exact 28-path overlay.
+All eighteen tested files are installed/staged byte-identically. All 23 migrations,
+existing application modules, dependencies and the dormant image verifier are unchanged.
+A new actual Mac build exited zero on 13 October 10:05:56 Tallinn; its private stdout
+was not independently read. Node24.16.0/npm11.13.0/Next16.2.1/TypeScript5.9.3 were recorded.
+The 195 SQL and 109 command tests are prior proof; neither they nor 119 native tests were replayed.
+Last full local observation was 10:05:59.825383 Tallinn: main/cb6b68b, exactly 28 staged
+paths and no unstaged extras, NOT clean. Last remote observation at 10:05:58.644430 matched
+cb6b68b. Those are saved observations, not a present live view or proof of a new commit.
+
+The separate source finisher keeps all eighteen tested files and the 28-path commit scope.
+It amends eight documentation paths only; the approved requirements and test inventory stay
+exact. Fresh actual Git/index/worktree/source/migration/approved-remote guards precede writes.
+Its result.json, commit-proof.json and remote-observations.json determine the actual new
+commit/push/clean outcome; this prewritten text is NOT proof that the finisher succeeded.
+Read that result once. On STOP preserve partial state and journal; never retry/reset/restore.
+After an accepted clean source finish, proceed directly with the SAME V2 private Storage,
+immutable verified image, final publication, durable cleanup, terminal deletion and full
+seller/buyer/anonymous journey. Do not start another documentation-only finish cycle.
+SQL stays labs-only; upload/publication remains disabled. Push may trigger deployment,
+but does not verify Ready/Production, cloud-native invocation or Storage HTTP behavior.
+No authorization to delete existing accounts, listings, images or journals is granted.
+Historical installation/test/next-action wording below is superseded, not a rerun instruction.
+
+---
+<!-- SELQIRO_PRIVATE_ATTEMPT_RETAINED_SOURCE_20261013 -->
+## 2026-10-13 — retain reviewed private-attempt source; upload stays disabled
+
+Current base is cb6b68bf2afedd138f18d0f1eccb0562d05e36cb: the image-verifier source
+finisher completed commit/push/clean, and the matching Ready/Production screenshot was reviewed.
+The later 12 October 23:38 v3 helper run passed 195 intended SQL assertions (157+36+2),
+with 109 Node/TypeScript passes reused from v2. Own helper removal was verified.
+Last full local source observation: 2026-10-12 20:38:26.647430 UTC, clean main/cb6b68b,
+481 selected sources and 23 migrations; no fresh GitHub read during that test run.
+
+This source package retains the same eighteen tested files, adds the approved requirements,
+contract and proof inventory, and updates current docs. Its 28 paths/502 selected sources are
+not proof of installation, build, staging or commit: read the new source-installer result.
+Fresh actual Git/index/worktree/source/approved-remote checks precede writes; a new existing
+build and the changed handoff check precede staging. No old test/SQL replay or production apply.
+See `docs/architecture/v2-private-publication-attempt-v1.md` and
+`docs/verification/v2-private-attempt-tests-20261012.json` for evidence and limitations.
+
+The candidate remains a dormant lab and pure command module, not a live RPC or migration.
+Private Storage, immutable verified images, final publication, durable cleanup, terminal
+listing/account/identity deletion consistency and the whole seller/buyer/anonymous journey
+remain activation gates. Cleanup references are not completed file deletion. Existing price,
+identity, policy, horse, search and owner modules are preserved. No Energy/payments/AI/search
+extras, general workflow engine or full V1 layer. Do not replay completed runners or delete
+existing accounts/listings/images/journals. Historical NEXT wording below is superseded.
+
+---
 <!-- SELQIRO_V2_IMAGE_VERIFIER_SOURCE_REVIEWED_20261012 -->
 ## 2026-10-12 — Mac image verifier verified; source-only completion checkpoint
 

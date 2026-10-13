@@ -1,50 +1,52 @@
 <!-- GENERATED from docs/continuity/CURRENT_STATE.json; do not edit independently. -->
 # Selqiro — praegune tööüleandmine
 
-Seisukirje: 2026-10-12
+Seisukirje: 2026-10-13
 
 ## Praegune checkpoint
 
-Maci seni ühendamata V2 pildikontrolli teostus on tõendatult läbinud 119/119 testi ja build'i. Lähteetapi lõpetaja säilitab testitud koodi ning täpsustab seitset dokumenti; tema tegelik uus commit/push ja puhas seis tuleb kinnitada tulemuse ZIP-ist. Uus upload ja avaldamine jäävad suletuks.
+Privaatse avaldamiskatse lähtepaigaldus ja uus Maci build on üle vaadatud: 18 testitud faili on projektis, kokku 28 rada staging’us. Eraldi lõpetaja säilitab testitud baidid ning lõpetab sama lähtecheckpointi. Uus commit/push/puhas-seis tuleb selle tegelikust result.json-ist, mitte sellest ette kirjutatud tekstist. Upload/avaldamine jääb suletuks.
 
 ## Lähtekood ja tõendi piir
 
-- **Lähtebaas:** c8da6f1d3e850ad35da9bf30ea76c8212b964696; 463 valitud baasallikat / 481 pildikontrolli tulemust, mitte kogu repositoorium. Baasi varasem commit/push ja veebivastuvõtt on lõpetatud.
-- **Lõpetamise piir:** Uus eraldi finisher kontrollib tegeliku HEAD-i, kogu indexi, tööpuu, 481 allikat ja remote'i enne kirjutusi. Seitse dokumenditäpsustust; kõik 17 koodi-/testi-/näidisfaili muutmata, commit'i ulatus endiselt 24 rada. Tegeliku lõppseisu tõend on finisher'i result.json.
-- **Viimane Maci vaatlus:** 12.10.2026 kell 16:17:55 UTC / 19:17:55 Europe/Tallinn: main/c8da6f1, 24 staged rada (18 uut, kuus olemasolevat), ei ühtki unstaged muutust. EI olnud puhas ega commit'itud; sama käigu remote võrdne. See pole uus live-kontroll.
+- **Lähtebaas:** cb6b68bf2afedd138f18d0f1eccb0562d05e36cb on paigalduse baas. Uue commit’i/parent’i/kaugseisu loe source-finisher result.json ja commit-proof.json failidest.
+- **Lähtepakett:** 28 commit’i rada / 502 valitud allikat. 18 testitud faili jäävad täpselt samaks; lõpetaja muudab ainult kaheksat dokumenti. Kinnitatud nõuded, testiinventuur, 23 migratsiooni ja senine rakendus ei muutu.
+- **Viimane Maci vaatlus:** 13.10.2026 10:05:59.825383 Tallinn: main/cb6b68b, 28 staged rada, unstaged puudub, mitte puhas; index e082157d32e39665098071f9720898dc5e7f98b1f8fa8f739c2988a175d3f044. Remote cb6b68b 10:05:58.644430. Hilisem seis tuleb lõpetaja tõendist.
 
 ## Tegelik kohalik katse
 
-- 12.10 Maci Node 24.16.0 / Sharp 0.34.5 / libvips 8.17.3 / TypeScript 5.9.3: 119/119 TAP testi, null viga/skip/cancel/TODO. Päris native/protsessid koos eristatud sünteetiliste rikkekatsetega; mitte Storage HTTP ega brauserivastuvõtt.
-- Päris npm run build PASS täpse käiviti eduka väljumise järgi. private/build.log pole eksporditud; toorväljundit ja hoiatusi siin eraldi ei loetud. Lõpetaja ei korda teste/build'i, kontrollib ainult muudetud jooksva üleandmise kooskõla.
+- 12.10 v3: päris PG17.6 ajutises abis 157 rollback + 36 kontrolli / 12 ajastust + 2 isolatsioonikeeldumist = 195 PASS. Oma abi eemaldati; production/algne DB/Storage puutumata.
+- 109 käsukoostaja testi ja range TypeScript: v2 PASS, mida v3 taaskasutas ilma kordamiseta. V1/v2 STOP-id säilivad ajaloona. 119 pilditesti ja vana build on varasemad tõendid.
+- 13.10 lähtepaigaldaja uus npm run build PASS, exit0; Node24.16.0/npm11.13.0/Next16.2.1/TS5.9.3. Privaatset stdout’i ei loetud. Lõpetaja build’i/195SQL/109Node/119native ei korda; ainult muudetud jooksva üleandmise --check.
 
 ## Production / kasutajaliides
 
-- c8da6f1 varasem Ready/Production ja kasutaja veebikontroll ning Storage-konteksti lugemine on lõpetatud. Pildikontrolli uue commit'i juurutus/native-pakendus ei ole selle kirje järgi kontrollitud; push võib käivitada olemasoleva automaatika.
-- Uus moodul pole ühegi marsruudi/vormiga ühendatud. Katse/upload/publish/koristus/lõppkustutus pole avatud. 23 migratsiooni ja senised hinna-/identiteedi-/reegli-/hobuse-/otsingu-/omaniku moodulid säilivad; DB/Storage-käske lõpetajas pole.
+- cb6b68b varasem Ready/Production on eraldi kasutaja ekraanitõend. Lõpetaja push võib käivitada Verceli automaatika; uus deployment/native-pakendus/Storage HTTP ei ole sellega vastu võetud.
+- Katsekood jääb labs-kausta ja API-rollidele suletuks; bucket/URL/RPC/upload/publish/koristus/lõppkustutus ei aktiveeru. Kõik 23 migratsiooni ja olemasolevad rakendusmoodulid jäävad muutmata.
 
 ## Üks järgmine töö
 
-Pärast lõpetaja eduka commit/push ja puhta/kaugvõrdse seisu raporti ülevaatust jätka SAMA V2 privaatse katse, muutmatute serverifailide, lõppavaldamise, püsiva koristuse ja lõppkustutuse serverilepinguga olemasoleva hinna/identiteedi/reeglite peal. Ära lisa uut app-patch'i lõpetamata staging'u otsa.
+Loe uue publication-attempt-source-finish tegelik tulemus: commit/parent/täpne ulatus, push, kaugvõrdsus ja puhas tööpuu. STOP-il säilita seis. Pärast edukat ülevaatust jätka otse SAMA V2 privaatse Storage’i, muutmatu kontrollitud veebipildi, kinnitatud lõppavaldamise, püsiva koristuse ja lõppkustutuse ühendust; mitte uut üldmootorit ega dokumendilõpetamise ringi. Lõpetatud skripte ei korrata.
 
-**Peatumisel:** Säilita failid, index ja uus raport/päevik. Ära korda lõpetajat/paigaldajat/lugejat, reset/restore-i, käsitsi commit/push-i ega kustuta markereid. Ka kadunud push-vastus ei luba automaatset korduskatset; loe uue raporti commit/remote välju.
+**Peatumisel:** Säilita failid, index ja uus raport/päevik. Ära korda source-finisherit, paigaldajat, v1/v2/v3 teste, vanu lõpetajaid/Storage-lugejaid/SQL-i. Ei reset/restore’i, käsitsi commit/push’i ega päevikute muutmist/kustutamist.
 
 ## Loe ainult vajalikku
 
-- Uue image-verifier-source-finish käigu ALUSTA_SIIT.md ja result.json; enne käivitust väline source-finish-ready üleandmine. 19:17 Maci originaaltulemus jääb testide/build'i lähteks.
-- docs/architecture/v2-publication-image-verifier-v1.md; docs/architecture/v2-ordinary-listing-create-v1.md; kinnitatud 12.10 avaldamisnõuded. Ajaloolisi NEXT ülesandeid ei korrata.
+- Uue source-finisher result.json, commit-proof.json, remote-observations.json ja ALUSTA_SIIT.md. source-context on ainult täpne allikavalik, mitte täisrepo. Installitõend säilib evidence/reviewed-source-install.zip sees.
+- docs/architecture/v2-private-publication-attempt-v1.md; docs/verification/v2-private-attempt-tests-20261012.json; docs/architecture/v2-publication-requirements-approved-20261012.md.
+- supabase/labs/listing-publication-attempt-v1/01_private_state.sql kuni 05_close_attempt.sql; src/server/listing-publication/attempts/prepareInput.ts. README ettevalmistusaegseid käske ei korrata.
 
 ## Säilivad piirid
 
-- Üks Avalda kuulutus, mitte nähtav kohustuslik mustand. Kontrollitud veebipilt pole uploadi volitus ega tõend DB-katse avaldamisvalmidusest.
-- 25 MiB algfaili moodul ei muuda vana 10 MiB avalikku hoidlat. Uus privaatne otseüleslaadimine, hilinenud token, muutmatu veebipilt ja täpsete viidetega koristus peavad koos läbima integratsiooni.
-- Praeguseid kontosid, kuulutusi, pilte ja päevikuid ei kustutata. V1 riskantsete kirjutuste kitsas sulgemine on nõutud, mitte täisühilduvuse ehitamine.
-- Avaldamise avamise eel kontrollitakse lisamine → otsing → detail/profiil → suhtlus → haldamine → kustutamine eri rollidega. AI/Energy/maksed/otsingu lisad ootavad.
+- Üks Avalda kuulutus, mitte nähtav kohustuslik mustand. Puhas käsukoostaja ei ole autentimine ja väljastamisreserveering ei ole signed URL.
+- Koristusviited ei kustuta Storage-faili. Hilinenud/ebakindel upload, muutmatu veebipilt, õiguste/hinna/reeglite lõppkontroll ning püsiv koristus/lõppkustutus vajavad tegelikku integratsiooni.
+- Konto/identiteedi RESTRICT ja tombstone ei ole valmis konto kustutamise või sõnumite säilitamise poliitika. Olemasolevaid kontosid/kuulutusi/pilte/päevikuid ei kustutata.
+- Enne avamist kogu lisamine → leidmine → detail/profiil → suhtlus → haldamine → kustutamine müüja/ostja/anonüümse seansiga, ohtlike V1 kirjutuste kitsas sulgemine. Energy/maksed/AI/otsingu lisad ja täis-V1/üldmootor jäävad välja.
 
 ## Keskkond
 
-- Lõpetaja: olemasolev Python 3.9+ ja Git; ei Node/npm/npx/installi, Dockerit ega Supabase CLI-d. Peata dev ja ära muuda projekti jooksu ajal. Git hooks/signing on ainult neis käskudes välja lülitatud, konfiguratsiooni ei kirjutata.
-- Algne ZIP leitakse Downloads/selqiro-recovery või Downloads alt räsi järgi. Ainult uus väline finisher'i päevik; vanad puutumata. Uus tulemus-ZIP valitakse Finderis võimalusel automaatselt. private-kausta ei jagata.
+- Eraldi source-finisher: Python3.9+ ja olemasolev Git; peata dev, ära muuda repo/index/seadistusi. Enne kirjutusi värsked Git/index/502allika/23migratsiooni/remote-kaitsed. Dockerit/Node/npm/build’i ega SQL-i pole vaja.
+- Lõpetajas kaasas muutmata installitulemus ja varasem testitõend; vanu ZIP-e pole vaja otsida. Uus ühekorrapäevik, privaatne Giti logi. Commit/push üks kord; ei reset/restore’i ega automaatset korduskatset.
 
 ## Ajalugu (mitte praegused käsud)
 

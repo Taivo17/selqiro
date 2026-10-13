@@ -1,3 +1,59 @@
+<!-- SELQIRO_PRIVATE_ATTEMPT_INSTALL_REVIEWED_FINISH_20261013 -->
+## 13.10.2026 — lähtepaigaldus üle vaadatud; sama 28-rajalise etapi lõpetamine
+
+Lähtepaigaldaja ON käivitatud ja üle vaadatud. Tõend:
+`publication-attempt-source-install-20261013-100540-z_s6nsyk.zip`, SHA-256
+`6cdb59d5531992ad92e33d530183c6d16fb40ddce2d457e12c945019caf38b0e`.
+Kõik 502 allikat ja 28-rajaline muudatus vastavad; 18 testitud faili on projektis ja staging’us.
+23 migratsiooni, olemasolevad rakendusmoodulid, sõltuvused ja pildikontroll säilivad.
+Uus päris Maci build lõpetas 13.10 kell 10:05:56 koodiga 0; privaatset väljundit siin ei loetud.
+Runtime oli Node24.16.0/npm11.13.0/Next16.2.1/TypeScript5.9.3. SQL195/Node109/native119 ei kordunud.
+Viimane täielik kohalik vaatlus 10:05:59.825383 Tallinn: main/cb6b68b, 28 staged rada,
+staging’uväliseid muudatusi pole, tööpuu EI OLE puhas. Kaugseis kattus 10:05:58.644430.
+Need on selle käigu salvestatud vaatlused, mitte uus praegune vaatlus või uus commit.
+
+Sama lähteetapi eraldi lõpetaja säilitab kõik 18 testitud faili ja commit’i 28-rajalise ulatuse.
+Täpsustuvad ainult kaheksa dokumenti; kinnitatud nõuded ja testiinventuur jäävad muutmata.
+Enne kirjutusi nõutakse tegelikke Git/index/tööpuu/allika/migratsiooni/kaugsihtmärgi kontrolle.
+Uus commit/push/puhas-seis selgub lõpetaja result.json-ist ja commit/remote-tõenditest;
+ettekirjutatud dokument ei tõenda õnnestumist. Loe tulemus üks kord üle. STOP-il säilita
+osaline seis ja päevik; kordus/reset/restore puudub. Pärast edukat ülevaatust jätka otse
+SAMA V2 privaatse Storage’i, muutmatu pildi, lõppavaldamise, püsiva koristuse, lõppkustutuse
+ja müüja/ostja/anonüümse kasutajatee ühendusega, mitte uue dokumendilõpetamise ringiga.
+SQL jääb labs-kausta ja upload/avaldamine suletuks. Push võib käivitada Verceli automaatika,
+kuid ei kinnita uut Ready/Production-seisu, native-käitust ega Storage HTTP lepingut.
+Kontode, olemasolevate kuulutuste, piltide või päevikute kustutamiseks luba puudub.
+Allpool säiliv ajalooline paigaldus-/testi-/järgmise töö sõnastus pole korduskäsk.
+
+---
+<!-- SELQIRO_PRIVATE_ATTEMPT_RETAINED_SOURCE_20261013 -->
+## 13.10.2026 — testitud privaatse avaldamiskatse lähtepakett
+
+Praegune baas on cb6b68bf2afedd138f18d0f1eccb0562d05e36cb. Pildikontrolli lõpetaja
+commit/push/puhas-seis ja sama commit'i Ready/Production ekraanitõend on üle vaadatud.
+12.10 kell 23:38 läbis v3 ajutises PostgreSQL 17.6 abis 195 SQL-kontrolli (157+36+2);
+109 Node'i testi ja TypeScripti PASS on v2 tõendi taaskasutus. Oma abikonteiner eemaldati.
+Viimane täielik kohalik vaatlus 12.10 kell 23:38:26.647430 Tallinn: puhas main/cb6b68b,
+481 valitud allikat ja 23 migratsiooni. See pole uus tänane Maci/GitHubi vaatlus.
+
+Uus lähtepakett säilitab 18 testitud kandidaati täpselt, lisab lepingu, tõendiinventuuri
+ja muutmata kinnitatud nõuded ning uuendab seitset dokumenti. Kokku 28 rada, lõplik
+valitud eksport 502 faili, mitte täisrepo. Paigaldus/build/staging/commit ei ole selle
+ettekirjutatud teksti järgi juba tehtud: loe uue lähtepaigaldaja tegelikku tulemust.
+Enne kirjutusi kontrollitakse Git/index/tööpuu/allikad/kaugsiht; lisatud lähtega tehakse
+uus build ja muudetud jooksva üleandmise kontroll. Vanad testid ja SQL ei kordu.
+
+Loe `docs/architecture/v2-private-publication-attempt-v1.md` ja
+`docs/verification/v2-private-attempt-tests-20261012.json`. Kandidaadi vana README on
+säilinud ettevalmistusaegne tekst, mitte käsk teste uuesti teha. See ei ole migratsioon
+või avatud API. Upload/avaldamine jääb suletuks. Päris privaatne Storage, muutmatu
+kontrollitud pilt, lõppavaldamine, püsiv koristaja, lõppkustutus ja konto/identiteedi/
+sõnumite kooskõla ning kogu eri rollidega kasutajatee on enne avamist endiselt vajalikud.
+Koristusviide ei võrdu kustutatud failiga. Olemasolevaid kontosid/kuulutusi/pilte/päevikuid
+ei kustutata. Energy, maksed, AI ja otsingu mugavused ootavad; üldmootorit ega V1 täiskihti
+ei lisata. Ajaloolised „järgmised tööd” allpool ei ole praegused käivitamisjuhised.
+
+---
 <!-- SELQIRO_V2_IMAGE_VERIFIER_SOURCE_REVIEWED_20261012 -->
 ## 12.10.2026 — Maci pildikontroll läbis; lähteetapi kontrollitud lõpetamine
 

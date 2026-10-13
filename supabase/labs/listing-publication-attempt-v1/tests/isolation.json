@@ -1,0 +1,12 @@
+[
+  {
+    "level": "repeatable read",
+    "label": "isolation_repeatable_read",
+    "sql": "BEGIN ISOLATION LEVEL REPEATABLE READ;\nSELECT set_config('request.jwt.claim.sub','11111111-1111-1111-1111-111111111111',true);\nSELECT publication_test.expect('isolation_repeatable_read','SELECT public.prepare_my_listing_publication_v1(''11111111-1111-1111-1111-111111111111'',''aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa'',''10000000-0000-0000-0000-000000000001'',''{\"basics\":{\"title\":\"Test title\",\"description\":\"Synthetic description\",\"condition\":\"used\"},\"price\":{\"kind\":\"fixed\",\"amount\":\"123.40\",\"currency\":\"EUR\"},\"category_path\":[\"vehicles\",\"trucks_commercial\",\"trucks\"],\"location\":{\"country\":\"Estonia\",\"city\":\"Paide\",\"latitude\":null,\"longitude\":null},\"attributes\":{\"manufacturer\":\"\",\"part_number\":\"\",\"oem_number\":\"\",\"vehicle_brand\":\"\",\"vehicle_model\":\"\",\"vehicle_year\":\"\",\"engine\":\"\"},\"details\":{\"power\":\"90 kW\"},\"language\":\"et\"}''::jsonb,''[{\"client_file_id\":\"20000000-0000-0000-0000-000000000001\",\"byte_length\":100,\"sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"}]''::jsonb);','25001');\nROLLBACK;"
+  },
+  {
+    "level": "serializable",
+    "label": "isolation_serializable",
+    "sql": "BEGIN ISOLATION LEVEL SERIALIZABLE;\nSELECT set_config('request.jwt.claim.sub','11111111-1111-1111-1111-111111111111',true);\nSELECT publication_test.expect('isolation_serializable','SELECT public.prepare_my_listing_publication_v1(''11111111-1111-1111-1111-111111111111'',''aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa'',''10000000-0000-0000-0000-000000000001'',''{\"basics\":{\"title\":\"Test title\",\"description\":\"Synthetic description\",\"condition\":\"used\"},\"price\":{\"kind\":\"fixed\",\"amount\":\"123.40\",\"currency\":\"EUR\"},\"category_path\":[\"vehicles\",\"trucks_commercial\",\"trucks\"],\"location\":{\"country\":\"Estonia\",\"city\":\"Paide\",\"latitude\":null,\"longitude\":null},\"attributes\":{\"manufacturer\":\"\",\"part_number\":\"\",\"oem_number\":\"\",\"vehicle_brand\":\"\",\"vehicle_model\":\"\",\"vehicle_year\":\"\",\"engine\":\"\"},\"details\":{\"power\":\"90 kW\"},\"language\":\"et\"}''::jsonb,''[{\"client_file_id\":\"20000000-0000-0000-0000-000000000001\",\"byte_length\":100,\"sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"}]''::jsonb);','25001');\nROLLBACK;"
+  }
+]

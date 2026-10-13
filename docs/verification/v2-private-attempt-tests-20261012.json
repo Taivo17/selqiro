@@ -1,0 +1,149 @@
+{
+  "candidate_files": {
+    "src/server/listing-publication/attempts/prepareInput.ts": {
+      "bytes": 5895,
+      "git_blob": "52df9c1f1d3ca4451dd29fbc2371e4b888ae4aa9",
+      "sha256": "98e22187d51ebddbef07347a18e0e7c6fe5f2723daee9ada69dbe6fad13ccfb6"
+    },
+    "supabase/labs/listing-publication-attempt-v1/01_private_state.sql": {
+      "bytes": 7683,
+      "git_blob": "414f48e14890bc1d5e9ae031baf41bd5929cee39",
+      "sha256": "530ab73dd20ba9d776318472b06847778f907d51203ecaa72a0f9de47de2f6fd"
+    },
+    "supabase/labs/listing-publication-attempt-v1/02_values_and_policy.sql": {
+      "bytes": 7477,
+      "git_blob": "4179cabae07f6a6e6d3099a71a70fd7f5e3f9391",
+      "sha256": "ad7306884a577986e30ee8c3836fb60d24efe15e709e95260163997aed31c48b"
+    },
+    "supabase/labs/listing-publication-attempt-v1/03_owner_attempt.sql": {
+      "bytes": 5625,
+      "git_blob": "2a33c9bfd78afb04e98adb688e0da95dbfcdf1f2",
+      "sha256": "6d971221ed8672684993556598a8e92a027183e3a7c9a48676fd1e71e142d4dd"
+    },
+    "supabase/labs/listing-publication-attempt-v1/04_upload_dispatch.sql": {
+      "bytes": 3578,
+      "git_blob": "47d6f4003e80e38115a0ddf590d591f8293e8f26",
+      "sha256": "7365d25a2054efbf32a4544d9d3e049f71ebbb9e25543b252091fe64b30da8fc"
+    },
+    "supabase/labs/listing-publication-attempt-v1/05_close_attempt.sql": {
+      "bytes": 3867,
+      "git_blob": "7d79596078c15459cded890cc9bc02f5c7076020",
+      "sha256": "e14d2ba908ec943393a4f324a7437107408584fa60b6aac0b4b04f8bd60797ef"
+    },
+    "supabase/labs/listing-publication-attempt-v1/README.md": {
+      "bytes": 10121,
+      "git_blob": "5b045563d3cf7355fd9e1379b652832431c1b9a4",
+      "sha256": "dfc3686a5d753ee7b2292c55605c43d1d3e3c2bf6ac29545bb4598296e9ffa7d"
+    },
+    "supabase/labs/listing-publication-attempt-v1/tests/DEPENDENCIES.json": {
+      "bytes": 8509,
+      "git_blob": "9f31366b1e8ce52ec5a766c091e1dfc60a196482",
+      "sha256": "05659650c45b147e57ec356f3201374697015c77d572f4ffb15a9e82c1c1982c"
+    },
+    "supabase/labs/listing-publication-attempt-v1/tests/expected-labels.json": {
+      "bytes": 4870,
+      "git_blob": "16a938568121fd19bc4ab4cf39904b08c043a2a6",
+      "sha256": "fdf7caf2a82e37e078ac4efe9e2666d2b7b2ad78c06d4f599276e9e96c594d40"
+    },
+    "supabase/labs/listing-publication-attempt-v1/tests/fixture.generated.sql": {
+      "bytes": 40417,
+      "git_blob": "3a38baa55fd6a91245eaa00f3323ba2228717e21",
+      "sha256": "fab1ab88575192a7ff2f4151b544a383559ea1ea544819e50fe9d1f523e08a3f"
+    },
+    "supabase/labs/listing-publication-attempt-v1/tests/isolation.json": {
+      "bytes": 2439,
+      "git_blob": "72077304d6163565fad13d654ec3092938413957",
+      "sha256": "86d7526b354d0b265ae37cc4a2926adb7602888d58b83844e3166f48b6193dde"
+    },
+    "supabase/labs/listing-publication-attempt-v1/tests/race-helpers.sql": {
+      "bytes": 1332,
+      "git_blob": "c9989a5dc420b0d8af4a0f1dcccc58dfcaac7f93",
+      "sha256": "a40e6ae132ca29f4a59213d380604b5aaa8067f1a702527080334a03903140b5"
+    },
+    "supabase/labs/listing-publication-attempt-v1/tests/races.json": {
+      "bytes": 28378,
+      "git_blob": "ee29036c6085171e32af2257244688f0880b2029",
+      "sha256": "49b55e4268273abdd02aae55d23bcb79df91fb18e86b988be247aba9f1030671"
+    },
+    "supabase/labs/listing-publication-attempt-v1/tests/seed.sql": {
+      "bytes": 2204,
+      "git_blob": "96bb5d6b41842acd14dc5be3a7752a21a53a0d92",
+      "sha256": "86950749c4779911c4d4cb70d172b220c4ef21b4133ed64b4c4b0b2cbcdb6f46"
+    },
+    "supabase/labs/listing-publication-attempt-v1/tests/suite.sql": {
+      "bytes": 132675,
+      "git_blob": "01d4023ac574543d6233434c567f46e87c3c295b",
+      "sha256": "8a25b169cbe336d9f53d132b8283503038daea317f40a248424cb2a97585e348"
+    },
+    "supabase/labs/listing-publication-attempt-v1/tests/valid-images.json": {
+      "bytes": 179,
+      "git_blob": "b1c5404032667e7145ff78b1605b48f1cdfbf6fe",
+      "sha256": "c54055fdd02a2eb10370018c6f733b4578428dc5b8df265f0f6afe17f6ef7004"
+    },
+    "supabase/labs/listing-publication-attempt-v1/tests/valid-input.json": {
+      "bytes": 638,
+      "git_blob": "ace580698253b0e16570ace8f1fc79601911ca49",
+      "sha256": "78b90575b0b5cb64e09dc67af212cb7ff6f4efc6096310442f6faf00e7f3cd4a"
+    },
+    "tests/listing-publication-command.test.cjs": {
+      "bytes": 10430,
+      "git_blob": "88b72d0106e151011a93b2fd5129c94314cb9f18",
+      "sha256": "f6e0e1761f09ab8c2a90a5eb725ef6303255ae75a9edc9c20364873f3455fe51"
+    }
+  },
+  "format": "selqiro-private-publication-attempt-reviewed-proof-v1",
+  "helper_cleanup": "OWN_RUN_HELPER_REMOVED_VERIFIED",
+  "limits": [
+    "Not the full Supabase stack, production role inheritance, live HTTP authentication or Storage contract.",
+    "No cloud-native invocation/load or complete seller/buyer/anonymous acceptance.",
+    "Raw Docker inspect/HTTP, Git index, rollback snapshots and lock polling responses not exported; exact-runner summaries plus independently checked participant output.",
+    "Prepared lab README and fixture metadata are preserved historical bytes; this record supplies later PASS, not permission to replay runners.",
+    "Source-install build/staging/commit/push are separate states supplied only by the actual future installer result."
+  ],
+  "node": {
+    "execution": "PRIOR_V2_PASS_REUSED_BY_V3_NOT_RERUN",
+    "original_v2_stop_preserved": true,
+    "passed": 109,
+    "runtime": {
+      "node": "v24.16.0",
+      "reporter": "tap-explicit",
+      "typescript": "5.9.3"
+    },
+    "tap_sha256": "129c0c7a544f79229b58e15ef6a841296acb7d7e30b8e31c2ef64e32ed220b71",
+    "test_exit": 0,
+    "typecheck_exit": 0
+  },
+  "observed_source": {
+    "branch": "main",
+    "clean": true,
+    "head": "cb6b68bf2afedd138f18d0f1eccb0562d05e36cb",
+    "index_sha256": "6c8151296cff61d7cf372f823d2894fa6b301928052e343ad9dfbd336bbf6624",
+    "observed_utc": "2026-10-12T20:38:26.647430+00:00",
+    "selected_sources": 481
+  },
+  "original_v3_runner_sha256": "138bb8a63ad735b902d2b735acc1c858db2f7ad50da1cc0bfdfd5b92ed06b5c5",
+  "original_v3_zip": {
+    "bytes": 2141181,
+    "files": 648,
+    "manifest_sha256": "96be55cf3dc89d0b736fb04a3b5164774d527d9f163534a43f83e7749e504a8c",
+    "name": "publication-attempt-helper-tests-v3-20261012-233817-xxsg0rzc.zip",
+    "sha256": "39d6db67627174e1bd11eea23efb93db7cae6aa8661ef5d00b6339420a482c58"
+  },
+  "proof_is_prior_execution_not_new_tests": true,
+  "recorded_on": "2026-10-13",
+  "requirements_sha256": "96ee0ecb6c9eae89fbe17deefbb59f1ad3d9a5482102709585227bfe90254a02",
+  "source_base": "cb6b68bf2afedd138f18d0f1eccb0562d05e36cb",
+  "source_manifest_sha256": "f586f974c9f88dee080dcc00b361a6e79e426631678176cba003e6ce9f16a2b8",
+  "sql": {
+    "applied_to": "ONLY_REMOVED_SYNTHETIC_HELPER",
+    "assertions_total": 195,
+    "blocking_schedules": 10,
+    "independent_account_schedules": 2,
+    "isolation_rejections": 2,
+    "production_applied": false,
+    "race_assertions": 36,
+    "race_schedules": 12,
+    "rollback": 157,
+    "status": "PRIOR_MAC_PG_17_6_PASS"
+  }
+}

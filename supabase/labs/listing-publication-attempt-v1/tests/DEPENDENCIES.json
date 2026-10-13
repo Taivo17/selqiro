@@ -1,0 +1,166 @@
+{
+  "mode": "exact_selected_declarations_not_old_suite_execution",
+  "declarations": [
+    {
+      "path": "supabase/releases/listing-price-v1/test-fixture.generated.sql",
+      "source_sha256": "81e5c81500308361a38ea01253c8df79e262cabbc4b6be58a9f123fd32be1616",
+      "declaration": "auth.uid",
+      "fragment_sha256": "6155c3b4c38fc81c505aecc1cc109220315dab034aeb398b64794dbda500c55f",
+      "bytes": 275
+    },
+    {
+      "path": "supabase/releases/listing-price-v1/test-fixture.generated.sql",
+      "source_sha256": "81e5c81500308361a38ea01253c8df79e262cabbc4b6be58a9f123fd32be1616",
+      "declaration": "TABLE profiles",
+      "fragment_sha256": "57ff83653be03a116d9e6d0d7b0f43d6045b574157dbaa443da7e95c55120178",
+      "bytes": 634
+    },
+    {
+      "path": "supabase/releases/listing-price-v1/test-fixture.generated.sql",
+      "source_sha256": "81e5c81500308361a38ea01253c8df79e262cabbc4b6be58a9f123fd32be1616",
+      "declaration": "TABLE identities",
+      "fragment_sha256": "8711f06dcde3e478a3b01d2b0663a3592e799f59005450f7741f7b8c5500b76e",
+      "bytes": 821
+    },
+    {
+      "path": "supabase/releases/listing-price-v1/test-fixture.generated.sql",
+      "source_sha256": "81e5c81500308361a38ea01253c8df79e262cabbc4b6be58a9f123fd32be1616",
+      "declaration": "TABLE business_members",
+      "fragment_sha256": "6709d1a15b5f8f1742415c67dccdbb4d20d84eca340e914beff7dc5aaf6856ab",
+      "bytes": 454
+    },
+    {
+      "path": "supabase/releases/listing-price-v1/test-fixture.generated.sql",
+      "source_sha256": "81e5c81500308361a38ea01253c8df79e262cabbc4b6be58a9f123fd32be1616",
+      "declaration": "TABLE listings",
+      "fragment_sha256": "55effd0c0ac767a4a62331b03cd52d63ed8928e46e25294fec58b879b9a3c419",
+      "bytes": 2049
+    },
+    {
+      "path": "supabase/releases/listing-price-v1/test-fixture.generated.sql",
+      "source_sha256": "81e5c81500308361a38ea01253c8df79e262cabbc4b6be58a9f123fd32be1616",
+      "declaration": "TABLE listing_images",
+      "fragment_sha256": "d0348bd3e50cd824eb599f26fd68f0b695307eb4c43d7ef9adc0f7adc9cf1f2a",
+      "bytes": 377
+    },
+    {
+      "path": "supabase/migrations/20260822130000_add_publication_policy_acceptance_foundation.sql",
+      "source_sha256": "92197bafc2dc79494a9db48bdff072384680dc7c9fbbc91c507b9f3a02104431",
+      "declaration": "TABLE publication_policy_documents",
+      "fragment_sha256": "be7819ee655bf4a4844c5cab939e2bcef491fff77f38844846f425b934226577",
+      "bytes": 2592
+    },
+    {
+      "path": "supabase/migrations/20260822130000_add_publication_policy_acceptance_foundation.sql",
+      "source_sha256": "92197bafc2dc79494a9db48bdff072384680dc7c9fbbc91c507b9f3a02104431",
+      "declaration": "TABLE user_publication_policy_acceptances",
+      "fragment_sha256": "2629e0366a672f53c1738b82af198a4405fe6873ae6503364aa7c10d93835ed6",
+      "bytes": 1862
+    },
+    {
+      "path": "supabase/migrations/20260822130000_add_publication_policy_acceptance_foundation.sql",
+      "source_sha256": "92197bafc2dc79494a9db48bdff072384680dc7c9fbbc91c507b9f3a02104431",
+      "declaration": "INDEX publication_policy_documents_version_unique_idx",
+      "fragment_sha256": "bc1519f6ebc9e2529e1cd91c669b1306714403716c32404e859fbe824651cf29",
+      "bytes": 184
+    },
+    {
+      "path": "supabase/migrations/20260822130000_add_publication_policy_acceptance_foundation.sql",
+      "source_sha256": "92197bafc2dc79494a9db48bdff072384680dc7c9fbbc91c507b9f3a02104431",
+      "declaration": "INDEX publication_policy_documents_one_active_idx",
+      "fragment_sha256": "e51c203efce7eb5b8de4d61b41334554cf07518d5a8726cd456aa041d2276d57",
+      "bytes": 186
+    },
+    {
+      "path": "supabase/releases/listing-price-v1/test-fixture.generated.sql",
+      "source_sha256": "81e5c81500308361a38ea01253c8df79e262cabbc4b6be58a9f123fd32be1616",
+      "declaration": "public.current_user_has_identity_access",
+      "fragment_sha256": "732467d6fa5a1cd88c61661b7c425a7dfbc8f51d64a2b28f9f936af073b1befe",
+      "bytes": 916
+    },
+    {
+      "path": "supabase/migrations/20260822130000_add_publication_policy_acceptance_foundation.sql",
+      "source_sha256": "92197bafc2dc79494a9db48bdff072384680dc7c9fbbc91c507b9f3a02104431",
+      "declaration": "public.get_required_publication_policies_v1",
+      "fragment_sha256": "30a27d8cd8d28ca048dce5410d6f70b78afbb93c75fbef4ccfc5581c6858b01c",
+      "bytes": 1822
+    },
+    {
+      "path": "supabase/migrations/20260822130000_add_publication_policy_acceptance_foundation.sql",
+      "source_sha256": "92197bafc2dc79494a9db48bdff072384680dc7c9fbbc91c507b9f3a02104431",
+      "declaration": "public.require_my_current_publication_policy_acceptance_v1",
+      "fragment_sha256": "0ace02f5c3a3a085b47d96c3d1a4bc7e2923f07ffae794bdf44054693a43449c",
+      "bytes": 1449
+    },
+    {
+      "path": "supabase/migrations/20260822130000_add_publication_policy_acceptance_foundation.sql",
+      "source_sha256": "92197bafc2dc79494a9db48bdff072384680dc7c9fbbc91c507b9f3a02104431",
+      "declaration": "public.prevent_publication_policy_document_version_mutation",
+      "fragment_sha256": "84d7676aa1dd4ea446621a08149966ba5c51b055987796e8daafc52e20e61a87",
+      "bytes": 923
+    },
+    {
+      "path": "supabase/migrations/20260822130000_add_publication_policy_acceptance_foundation.sql",
+      "source_sha256": "92197bafc2dc79494a9db48bdff072384680dc7c9fbbc91c507b9f3a02104431",
+      "declaration": "public.prevent_publication_policy_acceptance_update",
+      "fragment_sha256": "81fed69263a122fe9ce0faf415f8d5498c872dd0ddca36933c8abda76b916a8b",
+      "bytes": 281
+    },
+    {
+      "path": "supabase/releases/listing-price-v1/price-value-contract.generated.sql",
+      "source_sha256": "01efcf477538ae466f40d40d72fad34474f140e6ccce2ebd32051e1d7a9c4790",
+      "declaration": "public.listing_price_currency_scale_v1",
+      "fragment_sha256": "1ab42453dbdb2047aa06d795b071b7adea4fd018617dc70fe2dda5e986225936",
+      "bytes": 3599
+    },
+    {
+      "path": "supabase/releases/listing-price-v1/price-value-contract.generated.sql",
+      "source_sha256": "01efcf477538ae466f40d40d72fad34474f140e6ccce2ebd32051e1d7a9c4790",
+      "declaration": "public.normalize_listing_price_v1",
+      "fragment_sha256": "1a703a5757cbdc7648d881db2a3af2234b891db855d4789bd44b5f1d36b33d45",
+      "bytes": 2086
+    },
+    {
+      "path": "supabase/labs/listing-price-integration-v1/04_basics_contract.sql",
+      "source_sha256": "796cdced4a02d883a6bd4384dd58aed998393eab07523f161ed616c3f9764e92",
+      "declaration": "public.normalize_listing_basics_v1",
+      "fragment_sha256": "715aa9b6764fe990b480c4085475ddbb430abbd7a9d64dc650efda289cb2652f",
+      "bytes": 1644
+    },
+    {
+      "path": "supabase/labs/listing-price-integration-v1/06_creation_categories.sql",
+      "source_sha256": "a342e2b196aacc7e60912858c260c2e1f01bcc845739ed10d1a643295896d029",
+      "declaration": "public.listing_create_category_path_valid_v1",
+      "fragment_sha256": "0797348f528f3b9b26ee07d99813d3ae289ebddb278a54305d57af92a78fd982",
+      "bytes": 9950
+    },
+    {
+      "path": "supabase/labs/listing-price-integration-v1/07_creation_values.sql",
+      "source_sha256": "045aa5588e16a800a1b896fb2a276bce678d247a77d18eae2d0a9e2293f77a73",
+      "declaration": "public.require_listing_create_keys_v1",
+      "fragment_sha256": "d80f9c7518d8ba4118336090ab3dfcf74996c0311a77fc35e3c42a0ade5bc153",
+      "bytes": 589
+    },
+    {
+      "path": "supabase/labs/listing-price-integration-v1/07_creation_values.sql",
+      "source_sha256": "045aa5588e16a800a1b896fb2a276bce678d247a77d18eae2d0a9e2293f77a73",
+      "declaration": "public.normalize_listing_create_location_v1",
+      "fragment_sha256": "24639d7a167febf8917c6b0425ee1b15126c49eefd82912ccf8ae52b1dfb5605",
+      "bytes": 1674
+    },
+    {
+      "path": "supabase/labs/listing-price-integration-v1/07_creation_values.sql",
+      "source_sha256": "045aa5588e16a800a1b896fb2a276bce678d247a77d18eae2d0a9e2293f77a73",
+      "declaration": "public.normalize_listing_creation_v1",
+      "fragment_sha256": "0394b2dd9ea13b2338d3251b6f3b5843c6bf100278f0337b26dae0cf639092a9",
+      "bytes": 3165
+    },
+    {
+      "path": "supabase/labs/listing-price-integration-v1/08_creation_receipts.sql",
+      "source_sha256": "7c13a163503f04b3d8888e290a8b7facc0373caa7251d842b80601307363730f",
+      "declaration": "public.lock_listing_creation_actor_v1",
+      "fragment_sha256": "d0b7843981e06107e5cc817215b28a845a9836b58e43dffaa4a70b05f8417390",
+      "bytes": 1402
+    }
+  ]
+}
