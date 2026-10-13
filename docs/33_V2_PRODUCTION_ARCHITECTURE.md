@@ -1,3 +1,81 @@
+## 13.10.2026 — WEB-pildi lähtepaigaldus üle vaadatud; sama etapi kontrollitud lõpetamine
+
+Kõik 14 testitud veebipildi ühenduse faili on projektis muutmata kujul. Uus Maci build
+läbis 13.10 kell 21:57:49–21:57:54 Tallinn, väljumiskood 0; Node24.16.0/npm11.13.0/
+Next16.2.1/TypeScript5.9.3 ja Sharp0.34.5 metadata kontrolliti. Privaatset build-stdout'i
+pole välises ülevaatuses loetud; native-koodi selle paigalduse jaoks uuesti ei käivitatud.
+Algne paigaldustõend: private-web-image-source-install-20261013-215737-y14_o86h.zip,
+SHA-256 a55fffd386bb3636a530dd781b1d8ae877cb97987ff1719a5c8b1867ab362a99.
+
+85 ühendustesti (neli päris worker'i ühenduskatset nende SEES) ning 140 SQL-kontrolli
+on varasem vastuvõetud 21:10 Maci tõend, mitte selle lõpetaja uus testikäik. Kohalik
+HTTP kasutas sünteetilist Auth/REST/Storage mudelit; eemaldatud PG17.6 abi ei ole
+production. Valmis labori README ettevalmistusaegne sõnastus säilib ajalooliste baitidena.
+
+Viimane paigalduse täielik kohalik vaatlus 13.10 kell 21:57:58.255424 Tallinn:
+main/33b485b, täpselt 25 staged rada, staging'uväliste muudatusteta. Tööpuu EI OLNUD
+puhas, commit/push EI OLNUD tehtud. Järgmine eraldi kontrollitud lähtefinisher peab
+värskelt kontrollima tegelikku HEAD/tervet indexit/tööpuud/534 allikat/23 migratsiooni
+ja kinnitatud kaugsihti enne kirjutusi. Ainult kümme juba samasse ulatusse kuuluvat
+dokumenti täpsustatakse; 14 testitud faili, nõuded ja kõik tõendiinventuurid säilivad.
+Kogu commit jääb samaks 25 rajaks; üks commit ja üks mitte-force main-push.
+
+Tegelikku commit/push/clean/remote tulemust loe uuest private-web-image-source-finish
+result.json-ist, commit-proof.json-ist ning remote-observations.json-ist. See ette
+kirjutatud tekst EI kinnita tulevast käiku edukaks. Build'i ega 85/140/117/108/195/109/
+119 testisarju, paigaldajat, SQL-i, Dockerit või Supabase CLI-d ei korrata. Kontrollitakse
+ainult muudetud jooksva üleandmise kooskõla. 33b485b varasem Ready/Production pilt on
+vastu võetud; see ei ole uue commit'i juurutuse ega native/Storage vastuvõtu tõend.
+
+Pärast sama lähteetapi tulemusülevaatust jätka otse lõppavaldamise, püsiva piiratud
+koristuse, lõppkustutuse ning konto/identiteedi/sõnumite kooskõla ühendusega. Uut eraldi
+dokumendilõpetamise ringi ei tehta. Valmiduskviitung ei ole avaldatud kuulutus; üks POST
+ja räsi-tagasilugemine ei tõenda kõigi privilegeeritud WEB-kirjutajate piirangut.
+WEB intent/ready jääb blocked_write_settlement; 404/timeout/expiry/ready ei tõenda
+kirjutuse lõppu, faili puudumist ega lõpetatud koristust ning ei vabasta mahukvooti.
+Päris Storage/maht/CORS/hiline kirjutus, native-pilv ja terve müüja–ostja–anonüümse
+lisamine → leidmine → detail/profiil → suhtlus → haldamine → kustutamine ootavad vastuvõttu.
+Upload/avaldamine on suletud, SQL labs-only/API-closed. Energy/maksed/AI/otsingu lisad
+ootavad; üldmootorit ega täielikku V1 kihti ei ehitata. STOP-il säilita failid/index/
+raport/päevikud; ära korda, taasta ega tee käsitsi SQL-i/commit'i/push'i. Olemasolevate
+kontode, kuulutuste, piltide või operatsioonipäevikute kustutamisluba puudub.
+
+---
+
+## Praegune lisa — 13.10.2026 kontrollitud WEB-pildi lähtepakett
+
+Kehtiv lähtebaas on `33b485b717591e01d0a67751c8aff42662f3e44a`. Privaatse uploadi
+lähteetapp on lõpetatud: 17:56 commit/push/puhas main on üle vaadatud ning 18:20 kasutaja
+Ready/Production-ekraanipilt kattub sama commit'iga. Seda tõendit ega lõpetajat ei korrata.
+Viimane täielik kohalik Git-kontroll: 21:10:25.610189 Tallinn, puhas main, 518 allikat ja
+23 migratsiooni. Need on salvestatud tõendid, mitte käesoleva dokumendi värske vaatlus.
+
+Uus WEB-ühenduse kandidaat säilitab kõik 14 testitud faili täpselt. Tegelik Maci käik läbis
+85 ühendus/HTTP testi (neli päris native-worker'i katset nende SEES), range TypeScripti
+kontrolli ning PG17.6 eemaldatud abis 108 rollback + 24 kontrolli / 8 ajastust + 8 isolatsiooni-
+keeldumist = 140 SQL-PASS. Node24.16.0 / TS5.9.3 / Sharp0.34.5 / libvips8.17.3. HTTP oli
+päris kohalik, Auth/REST/Storage mudel sünteetiline, mitte päris Supabase ega Verceli native.
+
+Lähtepaigaldus sisaldab 14 testitud faili ja 11 dokumendirada (üheksa olemasolevat, kaks uut),
+kokku 25 rada / 534 valitud allikat. Tegelik kirjutus, üks uus build ja staging selguvad
+ainult uue `private-web-image-source-install-…/result.json` tõendist; neid EI väideta siin
+ette tehtuks. Enne kirjutusi peab värskelt vastama kogu Git/index/tööpuu, 518 lähtefaili,
+23 migratsiooni ja kinnitatud origin/main. 85/140 ega vanu117/108/195/109/119 sarju ei korrata.
+Kogu varasem pilditöötleja, katse/uploadi lähtekood, nõuded ja sõltuvused säilivad.
+
+Loe `docs/architecture/v2-private-publication-web-v1.md` ning
+`docs/verification/v2-private-web-image-tests-20261013.json`. Testitud README ajaloolised
+NOT_RUN-kohad säilivad algsete baitidena, mitte praeguse käivitamisjuhisena. SQL jääb laborisse
+ja API-rollidele suletuks; vormi/marsruuti, bucket'it, õigusi või avaldamist ei aktiveerita.
+Veebipildi valmiduskviitung ei ole avaldatud kuulutus ega kõigi teenusevõtme valdajate piir.
+Kirjutuskavatsusega WEB-i koristus jääb blocked_write_settlement ka pärast ready't; aegumine,
+404 ega ajapiir ei kustuta faili ega vabasta kvooti. Lõppavaldamine, päris Storage/native-pilv,
+piiratud püsiv koristus/lõppkustutus ja konto/identiteedi/sõnumite kooskõla on sama töö jätk.
+Terve müüja–ostja–anonüümse teekond vajab vastuvõttu. Energy/maksed/AI/otsingu lisad ootavad.
+Olemasolevaid kontosid, kuulutusi, pilte ja päevikuid ei kustutata; üldmootorit ega V1 täiskihti ei lisata.
+
+---
+
 ## 13.10.2026 — privaatse üleslaadimise paigaldus üle vaadatud; sama lähteetapi lõpetamine
 
 14 testitud üleslaadimisfaili on paigaldatud muutmata kujul. 15:22 Maci build läbis

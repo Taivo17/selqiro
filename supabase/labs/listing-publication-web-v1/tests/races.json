@@ -1,0 +1,114 @@
+[
+  {
+    "name": "one_claim",
+    "setup": "SELECT web_test.boot();",
+    "a": "SELECT web_test.start();SELECT web_test.check('web_race_one_claim_a',web_test.w()->>'process_allowed'='true');",
+    "b": "SELECT web_test.check('web_race_one_claim_b',web_test.claim()->>'process_allowed'='false');",
+    "verify": "SELECT set_config('request.jwt.claim.sub','11111111-1111-1111-1111-111111111111',false);\nSELECT web_test.check('web_race_one_claim_final',(SELECT count(*)=1 AND bool_and(state='processing') FROM listing_publication_private.web_images));",
+    "blocked": true,
+    "user_b": "11111111-1111-1111-1111-111111111111",
+    "expected": [
+      "web_race_one_claim_a",
+      "web_race_one_claim_b",
+      "web_race_one_claim_final"
+    ]
+  },
+  {
+    "name": "one_write_intent",
+    "setup": "SELECT web_test.boot();SELECT web_test.start();",
+    "a": "SELECT web_test.check('web_race_one_write_intent_a',web_test.prepare()->>'write_allowed'='true');",
+    "b": "SELECT web_test.check('web_race_one_write_intent_b',web_test.prepare()->>'write_allowed'='false');",
+    "verify": "SELECT set_config('request.jwt.claim.sub','11111111-1111-1111-1111-111111111111',false);\nSELECT web_test.check('web_race_one_write_intent_final',(SELECT count(*)=1 AND bool_and(state='prepared') FROM listing_publication_private.web_images));",
+    "blocked": true,
+    "user_b": "11111111-1111-1111-1111-111111111111",
+    "expected": [
+      "web_race_one_write_intent_a",
+      "web_race_one_write_intent_b",
+      "web_race_one_write_intent_final"
+    ]
+  },
+  {
+    "name": "prepare_then_cancel",
+    "setup": "SELECT web_test.boot();SELECT web_test.start();",
+    "a": "SELECT web_test.check('web_race_prepare_then_cancel_a',web_test.prepare()->>'write_allowed'='true');",
+    "b": "SELECT web_test.cancel();SELECT web_test.check('web_race_prepare_then_cancel_b',(SELECT state='cancelled' FROM listing_publication_private.attempts));",
+    "verify": "SELECT set_config('request.jwt.claim.sub','11111111-1111-1111-1111-111111111111',false);\nSELECT web_test.check('web_race_prepare_then_cancel_final',(SELECT c.state='blocked_write_settlement' FROM listing_publication_private.cleanup c JOIN listing_publication_private.objects o ON o.id=c.object_id WHERE o.kind='web'));",
+    "blocked": true,
+    "user_b": "11111111-1111-1111-1111-111111111111",
+    "expected": [
+      "web_race_prepare_then_cancel_a",
+      "web_race_prepare_then_cancel_b",
+      "web_race_prepare_then_cancel_final"
+    ]
+  },
+  {
+    "name": "cancel_then_prepare",
+    "setup": "SELECT web_test.boot();SELECT web_test.start();",
+    "a": "SELECT web_test.cancel();SELECT web_test.check('web_race_cancel_then_prepare_a',true);",
+    "b": "SELECT web_test.expect('web_race_cancel_then_prepare_b','SELECT web_test.prepare()','55000','publication_attempt_closed');",
+    "verify": "SELECT set_config('request.jwt.claim.sub','11111111-1111-1111-1111-111111111111',false);\nSELECT web_test.check('web_race_cancel_then_prepare_final',(SELECT c.state='pending' FROM listing_publication_private.cleanup c JOIN listing_publication_private.objects o ON o.id=c.object_id WHERE o.kind='web'));",
+    "blocked": true,
+    "user_b": "11111111-1111-1111-1111-111111111111",
+    "expected": [
+      "web_race_cancel_then_prepare_a",
+      "web_race_cancel_then_prepare_b",
+      "web_race_cancel_then_prepare_final"
+    ]
+  },
+  {
+    "name": "ready_then_cancel",
+    "setup": "SELECT web_test.boot();SELECT web_test.start();SELECT web_test.prepare();",
+    "a": "SELECT web_test.check('web_race_ready_then_cancel_a',web_test.ready()->'receipt' IS NOT NULL);",
+    "b": "SELECT web_test.cancel();SELECT web_test.check('web_race_ready_then_cancel_b',true);",
+    "verify": "SELECT set_config('request.jwt.claim.sub','11111111-1111-1111-1111-111111111111',false);\nSELECT web_test.expect('web_race_ready_then_cancel_final','SELECT web_test.read_ready()','55000','publication_attempt_closed');",
+    "blocked": true,
+    "user_b": "11111111-1111-1111-1111-111111111111",
+    "expected": [
+      "web_race_ready_then_cancel_a",
+      "web_race_ready_then_cancel_b",
+      "web_race_ready_then_cancel_final"
+    ]
+  },
+  {
+    "name": "cancel_then_ready",
+    "setup": "SELECT web_test.boot();SELECT web_test.start();SELECT web_test.prepare();",
+    "a": "SELECT web_test.cancel();SELECT web_test.check('web_race_cancel_then_ready_a',true);",
+    "b": "SELECT web_test.expect('web_race_cancel_then_ready_b','SELECT web_test.ready()','55000','publication_attempt_closed');",
+    "verify": "SELECT set_config('request.jwt.claim.sub','11111111-1111-1111-1111-111111111111',false);\nSELECT web_test.check('web_race_cancel_then_ready_final',(SELECT state='prepared' AND ready_id IS NULL FROM listing_publication_private.web_images));",
+    "blocked": true,
+    "user_b": "11111111-1111-1111-1111-111111111111",
+    "expected": [
+      "web_race_cancel_then_ready_a",
+      "web_race_cancel_then_ready_b",
+      "web_race_cancel_then_ready_final"
+    ]
+  },
+  {
+    "name": "identity_then_prepare",
+    "setup": "SELECT web_test.boot();SELECT web_test.start();",
+    "a": "UPDATE public.profiles SET active_identity_id='cccccccc-cccc-cccc-cccc-cccccccccccc' WHERE id='11111111-1111-1111-1111-111111111111';SELECT web_test.check('web_race_identity_then_prepare_a',true);",
+    "b": "SELECT web_test.expect('web_race_identity_then_prepare_b','SELECT web_test.prepare()','42501',NULL);",
+    "verify": "SELECT set_config('request.jwt.claim.sub','11111111-1111-1111-1111-111111111111',false);\nSELECT web_test.check('web_race_identity_then_prepare_final',(SELECT state='processing' FROM listing_publication_private.web_images));",
+    "blocked": true,
+    "user_b": "11111111-1111-1111-1111-111111111111",
+    "expected": [
+      "web_race_identity_then_prepare_a",
+      "web_race_identity_then_prepare_b",
+      "web_race_identity_then_prepare_final"
+    ]
+  },
+  {
+    "name": "independent_account",
+    "setup": "SELECT web_test.boot();SELECT set_config('request.jwt.claim.sub','22222222-2222-2222-2222-222222222222',false);SELECT web_test.boot('22222222-2222-2222-2222-222222222222','bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb');SELECT set_config('request.jwt.claim.sub','11111111-1111-1111-1111-111111111111',false);",
+    "a": "SELECT web_test.start();SELECT web_test.check('web_race_independent_account_a',web_test.w()->>'process_allowed'='true');",
+    "b": "SELECT web_test.check('web_race_independent_account_b',public.claim_listing_web_image_v1('22222222-2222-2222-2222-222222222222','bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb',(web_test.b('22222222-2222-2222-2222-222222222222')->>'attempt_id')::uuid,(web_test.b('22222222-2222-2222-2222-222222222222')->>'slot_id')::uuid,'81000000-0000-0000-0000-000000000001')->>'process_allowed'='true');",
+    "verify": "SELECT set_config('request.jwt.claim.sub','11111111-1111-1111-1111-111111111111',false);\nSELECT web_test.check('web_race_independent_account_final',(SELECT count(*)=2 FROM listing_publication_private.web_images));",
+    "blocked": false,
+    "user_b": "22222222-2222-2222-2222-222222222222",
+    "expected": [
+      "web_race_independent_account_a",
+      "web_race_independent_account_b",
+      "web_race_independent_account_final"
+    ]
+  }
+]

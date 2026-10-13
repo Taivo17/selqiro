@@ -5,48 +5,48 @@ Seisukirje: 2026-10-13
 
 ## Praegune checkpoint
 
-Privaatse uploadi 14 testitud faili on muutmata paigaldatud; 13.10 kell 15:22 uus Maci build ja 24-rajaline staging on üle vaadatud. Eraldi kontrollitud lõpetaja säilitab need baidid ja muudab ainult üheksat ulatuses dokumenti. Uus commit/push/puhas seis on ainult lõpetaja tegeliku result.json-i tõend, mitte selle ette kirjutatud lehe väide. Upload/avaldamine jääb suletuks.
+WEB-pildi 14 testitud faili on paigaldatud, 21:57 uus Maci build läbis ning täpne25-rajaline staging on üle vaadatud. Sama lähteetapi eraldi lõpetaja säilitab koodi ja tõendiinventuurid, täpsustab10 dokumenti ning kontrollib enne ühte commit/push-i tegelikku Git/remote-seisu. See ette kirjutatud leht EI kinnita lõpetaja käiku; tegelik tulemus loe private-web-image-source-finish ZIP-ist. Upload/avaldamine jääb suletuks.
 
 ## Lähtekood ja tõendi piir
 
-- **Lähtebaas:** b3264d136871bb5126b418cc78662cfd29f9f3d5, parent cb6b68bf2afedd138f18d0f1eccb0562d05e36cb. See jääb lõpetaja nõutud baasiks; uus commit loe lõpetaja result.json/commit-proof.json-ist.
-- **Lähtepakett:** 518 täpset valitud staging’u allikat, mitte kogu repo. Sama commit’i ulatus 24 rada (16 uut, kaheksa varasemat). Ainult üheksa doc-täpsustust; 14 testitud faili, nõuded, testiinventuurid, sõltuvused ja 23 migratsiooni säilivad.
-- **Viimane Maci vaatlus:** 13.10.2026 15:22:17.544753 Tallinn: main/b3264d1, 24 staged, ei ole puhas, kõrvalmuudatusi pole. Index 79846fca3599a13a65429424335c9ae716c607ebc42384e2f74c3dc05be6f1e6; approved origin/main kell15:22:16.169750 sama baas. Enne kirjutusi uued kaitsed.
+- **Lähtebaas:** 33b485b717591e01d0a67751c8aff42662f3e44a, parent b3264d136871bb5126b418cc78662cfd29f9f3d5. Selle baasi varasem Ready/Production-ekraanipilt on vastu võetud; seda uuesti ei küsita.
+- **Lähtepakett:** 534 täpset paigalduse järgset STAGING’U allikat; mitte täisrepo ega uus commit.14 testitud faili ja11 dokumendirada =25 rada (16 uut,9 varasemat muudatust). Lõpetaja muudab neist ainult10 dokumenti; nõuded/inventuurid,509 muud baasfaili ja23 migratsiooni säilivad.
+- **Viimane Maci vaatlus:** 13.10.2026 21:57:58.255424 Tallinn: main/33b485b,25 staged rada,no unstaged extras,tööpuu EI OLE puhas; index de9816b8f8e6030fc535a2996fde8f7c0f46f7d108b5490071348abe3104a098. Kaug-main vastas samale baasile21:57:56.899940. See ei ole värske tulevase käigu vaatlus.
 
 ## Tegelik kohalik katse
 
-- 13.10 v2: päris PG17.6 eemaldatud abis 89 rollback + 24 kontrolli / 8 ajastust + 4 isolatsioonikeeldumist = 117 PASS; 7 lukuootamist ja üks sõltumatu konto. Authenticated võõra konto keeldumine säilis täpselt 42501 / publication_account_changed.
-- 108 Node/HTTP testi ja range TypeScript: v1 PASS Node24.16.0/TS5.9.3, v2-s ei korratud. Päris kohalik HTTP sünteetilise Auth/REST/Storage mudeliga, mitte pilv. V1 STOP säilib; README vana NOT_RUN on ajalugu.
-- 13.10 kell15:22 uus lähtepaketi npm run build PASS exit0, Node24.16.0/npm11.13.0/Next16.2.1/TS5.9.3. Paigaldus-ZIP ba5b2428d894a113fbc67d46fc7d40e4aaeb055ebb989f82490e472a28b06024; private stdout lugemata. Lõpetaja ei korda build’i ega117/108/195/109/119 teste.
+- 13.10 21:10:85/85 uut ühendus/HTTP testi ja rangeTS, Node24.16.0/TS5.9.3/Sharp0.34.5/libvips8.17.3. Neli päris worker’i katset nende sees; kohalik HTTP sünteetilise Auth/REST/Storage mudeliga, mitte pilv.
+- Sama käigu PG17.6 eemaldatud abis108 rollback +24 kontrolli/8 ajastust +8 isolatsioonikeeldumist=140PASS;7 tegeliku lukuootamise kokkuvõtet,1 sõltumatu konto. Ajutised rolligrandid ei ole productioni õigused; WEB intent/ready koristuskaitse läbis.
+- 13.10 21:57:49–21:57:54 uus paigaldusbuild exit0, Node24.16.0/npm11.13.0/Next16.2.1/TS5.9.3 ja Sharp0.34.5 metadata. Toorstdout privaatne/lugemata. Lõpetaja ei korda build’i, native’i ega85/140/117/108/195/109/119sarju; teeb ainult muudetud jooksva üleandmise --check.
 
 ## Production / kasutajaliides
 
-- b3264d1 Ready/Production on varasem11:35 kasutaja ekraanitõend. Lõpetaja üks push võib käivitada olemasoleva Verceli automaatika; uus Ready/Production, native ja Storage-integratsioon pole lõpetaja poolt kontrollitud.
-- SQL jääb labs-kausta ja API-rollidele suletuks. Vorm/marsruudid/bucket/õigused/upload/publish/koristus/lõppkustutus ei aktiveeru. Tokeni aegumine ega kviitungi puhastus ei kustuta faili.
+- 33b485b Ready/Production on varasem18:20 kasutaja ekraanitõend, mitte native/Storage vastuvõtt. Seda enam ei küsita. Tulevane push võib käivitada olemasoleva automaatika; uue commit’i juurutuse olekut lõpetaja ei kontrolli.
+- SQL jääb labs-kausta/API-rollidele suletuks. Vorm/marsruudid/bucket/õigused/upload/publish/koristus/lõppkustutus ei aktiveeru. WEB-pilt jääb privaatseks; valmiduskviitung ei ole avaldatud kuulutus.
 
 ## Üks järgmine töö
 
-Loe uus private-upload-source-finish tulemus-ZIP: tegelik commit/parent/täpne24-rajaline ulatus/518allikat/push/remote/puhas seis. STOP-il säilita seis; ära korda lõpetajat ega paranda käsitsi. Pärast kinnitatud sama lähtecheckpointi jätka otse muutmatu kontrollitud WEB-pildi ja lõppavaldamise/koristuse/lõppkustutuse ühendusega. Ei uut docs-only lõpetamisringi ega app-patch’i lõpetamata staging’u otsa.
+Loe uus private-web-image-source-finish result.json,commit-proof.json,committed.patch,allikaräsid ning Git/remote-tõendid. Ainult tegelik edukas käik kinnitab commit/push/clean-seisu. STOP-il säilita osaline seis. Pärast selle sama25-rajalise lähteetapi ülevaatust jätka otse lõppavaldamise/püsiva piiratud koristuse/lõppkustutuse ja tervikteekonna ühendusega; mitte uus docs-onlyring.
 
-**Peatumisel:** Säilita failid/index/raport/päevikud. Ära korda private-upload lähtepaigaldajat/lõpetajat, upload v1/v2 ega katse v1/v2/v3 teste, vanu pildi/Storage/SQL-käike. Ei reset/restore’i, käsitsi SQL-i/commit/push-i ega päevikute kustutamist. Uut käsku vali tegeliku STOP-tõendi ülevaatuse järel.
+**Peatumisel:** Säilita failid/index/raport/päevikud. Ära korda WEB-teste/lähtepaigaldajat/lõpetajat, varasemaid upload/attempt/image paigaldajaid/lõpetajaid/teste/Storage-lugejat/SQL-käike. Ei reset/restore’i, käsitsi SQL-i/commit/push-i ega päevikute kustutamist. Uus käsk alles tegeliku STOP-tõendi ülevaatuse järel.
 
 ## Loe ainult vajalikku
 
-- Uue private-upload-source-finish result.json, commit-proof.json, committed.patch, source-manifest.json, git-guards.json ja remote-observations.json. evidence/reviewed-source-install.zip sisaldab muutmata15:21paigaldust ja algset v2 testitõendit.
-- docs/architecture/v2-private-publication-upload-v1.md; docs/verification/v2-private-upload-tests-20261013.json; docs/architecture/v2-publication-requirements-approved-20261012.md.
-- src/server/listing-publication/uploads/; src/entities/listing/api/uploadPrivateListingSource.ts; supabase/labs/listing-publication-upload-v1/. Senine katse/pildikontroll jääb aluseks; README ajaloolisi käivitusi ei korrata.
+- Uus private-web-image-source-finish result.json,commit-proof.json,committed.patch,source-manifest.json,git-guards.json ja remote-observations.json. evidence/reviewed-source-install.zip on muutmata21:57paigalduse/build’i tõend koos algse85/140testi ZIP-iga.
+- docs/architecture/v2-private-publication-web-v1.md; docs/verification/v2-private-web-image-tests-20261013.json; docs/architecture/v2-publication-requirements-approved-20261012.md.
+- src/server/listing-publication/web/ ning supabase/labs/listing-publication-web-v1/. Olemasolev images/attempts/uploads jääb aluseks; README ajaloolisi käivitusi ei korrata.
 
 ## Säilivad piirid
 
-- Üks Avalda kuulutus. Loakviitung/edukas PUT ei ole kontrollitud pilt ega avaldatud kuulutus; automaatset uut allkirjastamist/ülekirjutust/kustutamist ei lisata.
-- Tegelik Storage HTTP/maht/CORS/kehtivus/hiline ebakindel kirjutus, muutmatu veebipilt, lõppkontroll ning püsiv piiratud koristus/lõppkustutus vajavad integratsiooni. Tokeni puhastus ei vabasta mahukvooti.
-- Konto/identiteedi eemaldamine ja sõnumite säilimine peavad sobima. Täisteekond lisamine → leidmine → detail/profiil → suhtlus → haldamine → kustutamine eraldi müüja/ostja/anonüümse seansiga; kitsas V1 kirjutuskaitse, mitte täielik V1 kiht.
+- Üks Avalda kuulutus. Ready-kviitung ei ole avaldatud kuulutus ega teenusevõtme kõigi valdajate piirang. Kanooniline kirjutaja ei kirjuta üle; lubatud privilegeeritud kirjutajate piir on enne avamist vajalik.
+- WEB intent/ready korral koristus blocked_write_settlement; source’i varasem piir säilib.404/timeout/expiry/ready ei tõenda kirjutuse lõppu ega vabasta mahukvooti. Vajalikud päris Storage/maht/CORS/hiline kirjutus, native-pilv ja püsiv koristus/lõppkustutus.
+- Konto/identiteedi eemaldamine ja sõnumite säilimine peavad sobima. Terve lisamine→leidmine→detail/profiil→suhtlus→haldamine→kustutamine eraldi müüja/ostja/anonüümse seanssidega; vajalik kitsasV1 kaitse, mitte täisV1 ümberehitus.
 - Energy/maksed/AI/otsingu lisad ootavad; üldmootorit ei ehitata. Olemasolevate kontode/kuulutuste/piltide/päevikute kustutamisluba puudub.
 
 ## Keskkond
 
-- Lõpetaja: Python3.9+ ja olemasolev Git; peata dev ning ära muuda repo/index/seadistusi. Kinnitus COMMIT PUSH; tühi katkestab enne võrku/kirjutusi. Node/npm/Docker/SQL/Supabase CLI puuduvad.
-- Enne kirjutusi värsked main/HEAD/parent/terveindex/tööpuu/518allika/23migratsiooni/approved origin/main kaitsed. Algne paigaldus-ZIP on käivitis. Uus ühekorrapäevik; vana ei avata. STOP-il pole retry’d ega reset/restore’i.
+- Lõpetaja: Python3.9+ ja olemasolevGit; peata dev ning ära muuda projekti/indexit/seadistusi. Kinnitus COMMIT PUSH; tühi katkestab enne võrku/kirjutusi. Node/npm/build/Docker/SQL/Supabase CLI puuduvad.
+- Enne kirjutusi värsked main/HEAD/parent/terveindex/tööpuu/534allika/23migratsiooni/approved origin/main kaitsed. Algne paigaldus-ZIP on käivitis; uus ühekorrapäevik, vanu ei avata. STOP-il pole kordust ega reset/restore’i.
 
 ## Ajalugu (mitte praegused käsud)
 
