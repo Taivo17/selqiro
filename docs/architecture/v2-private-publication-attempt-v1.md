@@ -1,3 +1,65 @@
+## 13.10.2026 — privaatse üleslaadimise paigaldus üle vaadatud; sama lähteetapi lõpetamine
+
+14 testitud üleslaadimisfaili on paigaldatud muutmata kujul. 15:22 Maci build läbis
+väljumiskoodiga 0 (Node24.16.0/npm11.13.0/Next16.2.1/TypeScript5.9.3); privaatset
+build-stdout'i pole välises ülevaatuses loetud. 117 SQL- ja 108 transporditesti on
+varasem vastuvõetud tõend, mitte selle lõpetaja uus käivitus. V1 STOP säilib ajaloona.
+Algne paigaldustõend: private-upload-source-install-20261013-152156-9jwoxw_a.zip,
+SHA-256 ba5b2428d894a113fbc67d46fc7d40e4aaeb055ebb989f82490e472a28b06024.
+
+Üle vaadatud paigalduse lõppvaatlus 13.10 kell 15:22:17.544753 Tallinn: main/b3264d1,
+24 staged rada, kõrvalmuudatusteta; see tööpuu ei olnud puhas ega uus commit valmis.
+Ainult sama lähteetapi eraldi kontrollitud lõpetaja võib pärast värsket HEAD/index/
+tööpuu/518 allika/23 migratsiooni/approved remote-kontrolli muuta üheksat ulatuses
+olevat dokumenti ja teha ühe 24-rajalise commit'i ning ühe mitte-force main-push'i.
+Kõik 14 testitud faili, nõuded ja testiinventuurid säilivad. Build'i ega 117/108/195/
+109/119 teste, paigaldajat, Dockerit, Supabase CLI-d või SQL-i ei korrata.
+
+Tegelik commit/push/clean/remote loe uuest private-upload-source-finish tulemuse
+result.json-ist ja commit-proof.json-ist. See ette kirjutatud dokument EI kinnita
+neid toiminguid eduks. Pärast sama tulemuse ülevaatust jätka otse muutmatu kontrollitud
+WEB-pildi, lõppkontrolli/avaldamise, püsiva koristuse ja lõppkustutuse ühendusega;
+uut dokumentide lõpetamise ringi ei tehta. Loakviitung/edukas PUT ei ole kontrollitud
+pilt; tokeni aegumine/puhastus ei tõenda faili puudumist ega vabasta kvooti. Päris
+Storage HTTP/maht/CORS/hiline kirjutus, native-pilve käivitus ning eraldi müüja/ostja/
+anonüümse terve kasutajatee vastuvõtt jäävad avamise eeltingimusteks. Konto/identiteedi
+ja sõnumite kooskõla peab säilima. Upload/avaldamine on suletud, SQL labs-only/API-closed.
+STOP-il säilita failid/index/päevikud; ära korda, taasta, rakenda SQL-i ega tee käsitsi
+commit/push-i. Olemasolevate kontode/kuulutuste/piltide/päevikute kustutamisluba puudub.
+
+---
+
+## Current addition — 2026-10-13 tested private-upload source installation
+
+The accepted source base is b3264d136871bb5126b418cc78662cfd29f9f3d5; the earlier
+cb6b68b staged/unfinished instructions below are history. Commit/push/clean source finish
+was accepted at 11:34 Tallinn, with a separate user Ready/Production screenshot at 11:35.
+The last full local guard was 14:22:11.797339 Tallinn, not a fresh observation now.
+
+The fourteen upload candidates are retained byte-for-byte from the accepted v2 PG17.6
+helper proof: 89 rollback + 24 assertions in 8 schedules + 4 isolation rejections = 117 PASS.
+The 108 Node/TypeScript passes are the original v1 Mac proof, reused without re-execution.
+Real local HTTP used synthetic Auth/REST/Storage; it was not a cloud integration test.
+The original v1 STOP and preparation-time lab README remain unchanged historical evidence.
+
+This source-only installation has 24 paths: 14 tested files and 10 documentation paths
+(eight existing, two new). Its 518-file selected export is not the full repository. Actual
+installation/build/staging status comes from the new private-upload-source-install result;
+this prewritten document does not assert completion. Fresh whole-index/worktree/source/
+migration/approved-remote guards precede writes. One new existing build is planned; no
+117/108/195/109/119 suites, SQL, installs, commit/push or cloud actions are replayed.
+
+See v2-private-publication-upload-v1.md and ../verification/v2-private-upload-tests-20261013.json.
+No route, form, bucket or API grants are enabled. A durable upload receipt is not a verified
+image or publication. Token expiry/purge does not settle external writes, delete Storage
+objects, release quota or finish cleanup. Immutable sanitized WEB persistence, final publish,
+bounded durable cleanup and irreversible deletion remain SAME-flow activation gates, along
+with account/identity/message consistency, narrow unsafe V1 writer closure and actual
+seller/buyer/anonymous end-to-end acceptance. No general engine, full V1 layer, Energy,
+payments, AI or search extras are added. Existing accounts/listings/images/journals remain.
+
+---
+
 <!-- SELQIRO_PRIVATE_ATTEMPT_INSTALL_REVIEWED_FINISH_20261013 -->
 ## 2026-10-13 — actual private-attempt installation reviewed; same source checkpoint completion
 

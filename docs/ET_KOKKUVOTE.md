@@ -1,3 +1,65 @@
+## 13.10.2026 — privaatse üleslaadimise paigaldus üle vaadatud; sama lähteetapi lõpetamine
+
+14 testitud üleslaadimisfaili on paigaldatud muutmata kujul. 15:22 Maci build läbis
+väljumiskoodiga 0 (Node24.16.0/npm11.13.0/Next16.2.1/TypeScript5.9.3); privaatset
+build-stdout'i pole välises ülevaatuses loetud. 117 SQL- ja 108 transporditesti on
+varasem vastuvõetud tõend, mitte selle lõpetaja uus käivitus. V1 STOP säilib ajaloona.
+Algne paigaldustõend: private-upload-source-install-20261013-152156-9jwoxw_a.zip,
+SHA-256 ba5b2428d894a113fbc67d46fc7d40e4aaeb055ebb989f82490e472a28b06024.
+
+Üle vaadatud paigalduse lõppvaatlus 13.10 kell 15:22:17.544753 Tallinn: main/b3264d1,
+24 staged rada, kõrvalmuudatusteta; see tööpuu ei olnud puhas ega uus commit valmis.
+Ainult sama lähteetapi eraldi kontrollitud lõpetaja võib pärast värsket HEAD/index/
+tööpuu/518 allika/23 migratsiooni/approved remote-kontrolli muuta üheksat ulatuses
+olevat dokumenti ja teha ühe 24-rajalise commit'i ning ühe mitte-force main-push'i.
+Kõik 14 testitud faili, nõuded ja testiinventuurid säilivad. Build'i ega 117/108/195/
+109/119 teste, paigaldajat, Dockerit, Supabase CLI-d või SQL-i ei korrata.
+
+Tegelik commit/push/clean/remote loe uuest private-upload-source-finish tulemuse
+result.json-ist ja commit-proof.json-ist. See ette kirjutatud dokument EI kinnita
+neid toiminguid eduks. Pärast sama tulemuse ülevaatust jätka otse muutmatu kontrollitud
+WEB-pildi, lõppkontrolli/avaldamise, püsiva koristuse ja lõppkustutuse ühendusega;
+uut dokumentide lõpetamise ringi ei tehta. Loakviitung/edukas PUT ei ole kontrollitud
+pilt; tokeni aegumine/puhastus ei tõenda faili puudumist ega vabasta kvooti. Päris
+Storage HTTP/maht/CORS/hiline kirjutus, native-pilve käivitus ning eraldi müüja/ostja/
+anonüümse terve kasutajatee vastuvõtt jäävad avamise eeltingimusteks. Konto/identiteedi
+ja sõnumite kooskõla peab säilima. Upload/avaldamine on suletud, SQL labs-only/API-closed.
+STOP-il säilita failid/index/päevikud; ära korda, taasta, rakenda SQL-i ega tee käsitsi
+commit/push-i. Olemasolevate kontode/kuulutuste/piltide/päevikute kustutamisluba puudub.
+
+---
+
+## Praegune lisa — 13.10.2026 privaatse üleslaadimise testitud lähtepakett
+
+Kehtiv baas on `b3264d136871bb5126b418cc78662cfd29f9f3d5`, mitte varasem cb6b68b staging.
+11:34 lõpetaja commit/push/puhas tööpuu on üle vaadatud; b3264d1 Ready/Production on
+kasutaja eraldi 11:35 ekraanitõend. Viimane täielik kohalik allikakontroll on 14:22:11.797339
+Tallinnas: puhas main, 502 valitud allikat ja 23 migratsiooni. See ei ole värske Maci vaatlus.
+
+Uus 14-failine upload-leping säilib täpselt üle vaadatud testibaitidena. Tegelik v2 PG17.6
+abi läbis 89 rollback + 24 kontrolli / 8 ajastust + 4 isolatsioonikeeldumist = 117 PASS.
+108 Node/HTTP testi ja TypeScripti PASS on varasem v1 tõend (kohalik päris HTTP sünteetilise
+Auth/REST/Storage mudeliga), mida v2 ei korranud. V1 algne STOP ja README ettevalmistushetke
+NOT_RUN-kohad säilivad ajaloona. V2 enda abikonteiner eemaldati; pilve ei kasutatud.
+
+Uus source-only paigaldaja lisab 14 testitud faili ja kümme dokumendirada (kaheksa olemasolevat,
+kaks uut), kokku 24 rada / 518 valitud allikat. Tegelik paigaldus, üks uus build ja staging
+selguvad ainult `private-upload-source-install-…/result.json`-ist; neid ei väideta siin ette
+tehtuks. Enne Maci kirjutusi nõutakse värskeid Git/index/tööpuu/502 allika/23 migratsiooni ja
+lubatud origin/main kaitseid. 117/108/195/109/119 teste ei korrata. Commit/push puudub.
+
+Loe `docs/architecture/v2-private-publication-upload-v1.md` ja
+`docs/verification/v2-private-upload-tests-20261013.json`. SQL jääb labs-kausta/API-suletuks;
+ühtegi vormi, marsruuti, bucket'it, üleslaadimisõigust või avaldamist selle sammuga ei avata.
+Loakviitung ei ole kontrollitud pilt: tokeni aegumine/kustutamine ei tõenda faili puudumist,
+ei vabasta mahukvooti ega lõpeta koristust. Sama töö jätk on muutmatu kontrollitud veebipilt,
+kinnitatud lõppavaldamine, püsiv koristaja ja lõppkustutus; päris Storage, pilve-native ning
+müüja–ostja–anonüümse teekond vajavad vastuvõttu. Konto/identiteedi/sõnumite kooskõla ja vajalik
+kitsas V1 kirjutuskaitse jäävad avamise piiriks. Energy/maksed/AI/otsingu lisad ootavad.
+Olemasolevaid kontosid, kuulutusi, pilte ega päevikuid ei kustutata. Lõpetatud skripte ei korrata.
+
+---
+
 <!-- SELQIRO_PRIVATE_ATTEMPT_INSTALL_REVIEWED_FINISH_20261013 -->
 ## 13.10.2026 — lähtepaigaldus üle vaadatud; sama 28-rajalise etapi lõpetamine
 

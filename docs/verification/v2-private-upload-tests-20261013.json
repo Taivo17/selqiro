@@ -1,0 +1,110 @@
+{
+  "candidate_files": {
+    "src/entities/listing/api/privateUploadHttp.ts": {
+      "bytes": 3684,
+      "git_blob": "1794a32302e561121afeb267297606c3da1b7106",
+      "sha256": "4f28de9380ca8b0facc458325251e24583f469f5a5303ab32ef7810ef50fab4b"
+    },
+    "src/entities/listing/api/uploadPrivateListingSource.ts": {
+      "bytes": 2722,
+      "git_blob": "bd80ebe81869343a355913b1eacecdc8d23507ad",
+      "sha256": "718dd5e940063be4717919b0d41ece70981cfff7e4727852d58c38fcd8ba5196"
+    },
+    "src/entities/listing/model/privatePublicationUpload.ts": {
+      "bytes": 7059,
+      "git_blob": "753a3c226d1a91eaed149d02da8360ad7c7a31e2",
+      "sha256": "c5ea39fe4a592fb7e606b3f41613e6eed983709200ea487af7f2d75267df6103"
+    },
+    "src/server/listing-publication/uploads/issuePrivateUpload.ts": {
+      "bytes": 7117,
+      "git_blob": "fe444c16bb7e4d95a28a2a1f251be66dc497c469",
+      "sha256": "b1c43e13ff1c7faa23b60c90064df2f483a695993580a9bac1d4350b14142464"
+    },
+    "src/server/listing-publication/uploads/supabaseUploadBroker.ts": {
+      "bytes": 1064,
+      "git_blob": "76451d43f3c94e584dbfd90a91af53a7a89cc3e8",
+      "sha256": "5cba2d5c4043898d3cbd10f6e68743828b5cc8405151e2da037108359c439a92"
+    },
+    "supabase/labs/listing-publication-upload-v1/01_upload_grants.sql": {
+      "bytes": 18447,
+      "git_blob": "203b4ec8c069b91c406eaf6f7ce1492d7c417823",
+      "sha256": "78e1bdc244311f13ec027c32e2536d6d31190829a8c478daca585019c315f0a1"
+    },
+    "supabase/labs/listing-publication-upload-v1/README.md": {
+      "bytes": 6171,
+      "git_blob": "8f503622e822e6ff8ab4b077c140afb9bb23f3bb",
+      "sha256": "8e9b41f113d1cf7625e298d91d2bcde3d32b2bce039083d7c0b8e6c9c8d00c42"
+    },
+    "supabase/labs/listing-publication-upload-v1/tests/dependencies.json": {
+      "bytes": 1677,
+      "git_blob": "5ae0ce99d341490ca221d09ef43164217389ce11",
+      "sha256": "b012d5d7fef3d6603b52bf4b4e59e198fb7a2261b9fae4f84b926107f18940b8"
+    },
+    "supabase/labs/listing-publication-upload-v1/tests/expected-labels.json": {
+      "bytes": 3530,
+      "git_blob": "210d57d233054e4ebb5b46d549ff54ede0bef586",
+      "sha256": "af44ee81cae782fd91c0185ef6386a470808ce08024007ce85cd5d58d90132fe"
+    },
+    "supabase/labs/listing-publication-upload-v1/tests/helpers.sql": {
+      "bytes": 4335,
+      "git_blob": "6a31b2125f3d6ecab27798b3f677d2f3333019b9",
+      "sha256": "b571b8fcadb89784c5217616f5953711e1d6bc28feb689b0809ab25b61c165c8"
+    },
+    "supabase/labs/listing-publication-upload-v1/tests/isolation.json": {
+      "bytes": 1211,
+      "git_blob": "ddb5a370e156161ea11ae222ea211142a866c611",
+      "sha256": "df638ffe318d136d08ce03dd6dc6409d271ce8638a5da7855659059180f9a1f6"
+    },
+    "supabase/labs/listing-publication-upload-v1/tests/races.json": {
+      "bytes": 8936,
+      "git_blob": "4caa6a668fc0a546f715628f19db56e47a6ad2c4",
+      "sha256": "f00db92f79a03028efa2dafc891f512523011231811a31232a265b9e837599bb"
+    },
+    "supabase/labs/listing-publication-upload-v1/tests/suite.sql": {
+      "bytes": 27440,
+      "git_blob": "14aa0bad22f6195ad131d5a1b8bbf397463e99fe",
+      "sha256": "3c2520c150c06b9434c81071108ff3ad07f0e6b939404f04cf104c9d0f8df030"
+    },
+    "tests/listing-publication-upload.test.cjs": {
+      "bytes": 22888,
+      "git_blob": "bdaa5c9261e832f2820695d6be7b036675a6a245",
+      "sha256": "d1ce46bb41e2bc532ce260ad93697a3f000e166a4e9b8f58b2f12f6946f4fa1b"
+    }
+  },
+  "format": "selqiro_private_upload_reviewed_tests_v1",
+  "installation_and_build": "NOT_PRECLAIMED_SEE_NEW_SOURCE_INSTALL_RESULT",
+  "new_sql": {
+    "basis": "actual disposable synthetic helper, not production",
+    "isolation_rejections": 4,
+    "postgres": "17.6",
+    "race_assertions": 24,
+    "race_schedules": 8,
+    "rollback_assertions": 89,
+    "status": "PASS_REVIEWED",
+    "total": 117
+  },
+  "node": {
+    "node": "v24.16.0",
+    "passed": 108,
+    "status": "REUSED_V1_PASS_NOT_RERUN",
+    "transport": "real local HTTP with synthetic Auth/REST/Storage",
+    "typescript": "5.9.3"
+  },
+  "original_v1_status": "STOP_REVIEW_REQUIRED (test generator actor literal); preserved unchanged",
+  "proof_limits": [
+    "Full raw index, Docker inspect, snapshots and lock polls were not exported.",
+    "The lab role tests do not verify full Auth/PostgREST/Storage grants.",
+    "Upload/verification/publication/cleanup/deletion remain disabled and not end-to-end accepted."
+  ],
+  "recorded_on": "2026-10-13",
+  "replay_this_installer": "NONE_117_108_195_109_119",
+  "source_head": "b3264d136871bb5126b418cc78662cfd29f9f3d5",
+  "test_proof": {
+    "bytes": 4057296,
+    "executed_runner_sha256": "4fc8d404ded69d1ed74e733a03c38f2aed4fdc850ee4abb0520e6133802e5902",
+    "members": 636,
+    "name": "private-upload-tests-v2-20261013-142204-0kfy8bl4.zip",
+    "result_sha256": "ef42b00508185b6d5629375d72d14af783436ea58ad934f3cb3f9f3f7a75792e",
+    "sha256": "a6bef810c9fecb697a8acff4bea85ef2c1db307b2d2cb43d39167fff39f80745"
+  }
+}

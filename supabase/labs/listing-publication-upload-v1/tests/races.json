@@ -1,0 +1,114 @@
+[
+  {
+    "name": "single_claim",
+    "setup": "SELECT upload_test.boot();",
+    "a": "SELECT upload_test.start();SELECT upload_test.check('upload_race_single_claim_a',upload_test.c()->>'sign_allowed'='true');",
+    "b": "SELECT upload_test.check('upload_race_single_claim_b',upload_test.claim()->>'sign_allowed'='false');",
+    "verify": "SELECT set_config('request.jwt.claim.sub','11111111-1111-1111-1111-111111111111',false);\nSELECT upload_test.check('upload_race_single_claim_final',(SELECT count(*)=1 AND bool_and(state='signing') FROM listing_publication_private.upload_grants));",
+    "blocked": true,
+    "user_b": "11111111-1111-1111-1111-111111111111",
+    "expected": [
+      "upload_race_single_claim_a",
+      "upload_race_single_claim_b",
+      "upload_race_single_claim_final"
+    ]
+  },
+  {
+    "name": "receipt_then_read",
+    "setup": "SELECT upload_test.boot();SELECT upload_test.start();",
+    "a": "SELECT upload_test.check('upload_race_receipt_then_read_a',upload_test.record_token()->>'recorded'='true');",
+    "b": "SELECT upload_test.check('upload_race_receipt_then_read_b',upload_test.read_grant()->>'state'='ready');",
+    "verify": "SELECT set_config('request.jwt.claim.sub','11111111-1111-1111-1111-111111111111',false);\nSELECT upload_test.check('upload_race_receipt_then_read_final',(SELECT count(*)=1 AND bool_and(token=upload_test.token()) FROM listing_publication_private.upload_grants));",
+    "blocked": true,
+    "user_b": "11111111-1111-1111-1111-111111111111",
+    "expected": [
+      "upload_race_receipt_then_read_a",
+      "upload_race_receipt_then_read_b",
+      "upload_race_receipt_then_read_final"
+    ]
+  },
+  {
+    "name": "cancel_then_late_record",
+    "setup": "SELECT upload_test.boot();SELECT upload_test.start();",
+    "a": "SELECT upload_test.cancel();SELECT upload_test.check('upload_race_cancel_then_late_record_a',(SELECT state='cancelled' FROM listing_publication_private.attempts));",
+    "b": "SELECT upload_test.check('upload_race_cancel_then_late_record_b',upload_test.record_token()->>'recorded'='true');",
+    "verify": "SELECT set_config('request.jwt.claim.sub','11111111-1111-1111-1111-111111111111',false);\nSELECT upload_test.check('upload_race_cancel_then_late_record_final',(SELECT state='recorded' AND token IS NOT NULL FROM listing_publication_private.upload_grants) AND (SELECT c.state='blocked_write_settlement' FROM listing_publication_private.cleanup c JOIN listing_publication_private.objects o ON o.id=c.object_id WHERE o.kind='source'));",
+    "blocked": true,
+    "user_b": "11111111-1111-1111-1111-111111111111",
+    "expected": [
+      "upload_race_cancel_then_late_record_a",
+      "upload_race_cancel_then_late_record_b",
+      "upload_race_cancel_then_late_record_final"
+    ]
+  },
+  {
+    "name": "record_then_cancel",
+    "setup": "SELECT upload_test.boot();SELECT upload_test.start();",
+    "a": "SELECT upload_test.check('upload_race_record_then_cancel_a',upload_test.record_token()->>'recorded'='true');",
+    "b": "SELECT upload_test.cancel();SELECT upload_test.check('upload_race_record_then_cancel_b',(SELECT state='cancelled' FROM listing_publication_private.attempts));",
+    "verify": "SELECT set_config('request.jwt.claim.sub','11111111-1111-1111-1111-111111111111',false);\nSELECT upload_test.expect('upload_race_record_then_cancel_final','SELECT upload_test.read_grant()','55000');",
+    "blocked": true,
+    "user_b": "11111111-1111-1111-1111-111111111111",
+    "expected": [
+      "upload_race_record_then_cancel_a",
+      "upload_race_record_then_cancel_b",
+      "upload_race_record_then_cancel_final"
+    ]
+  },
+  {
+    "name": "identity_then_claim",
+    "setup": "SELECT upload_test.boot();",
+    "a": "UPDATE public.profiles SET active_identity_id='cccccccc-cccc-cccc-cccc-cccccccccccc' WHERE id='11111111-1111-1111-1111-111111111111';SELECT upload_test.check('upload_race_identity_then_claim_a',true);",
+    "b": "SELECT upload_test.expect('upload_race_identity_then_claim_b','SELECT upload_test.claim()','42501');",
+    "verify": "SELECT set_config('request.jwt.claim.sub','11111111-1111-1111-1111-111111111111',false);\nSELECT upload_test.check('upload_race_identity_then_claim_final',(SELECT state='reserved' AND token IS NULL AND claim_id IS NULL FROM listing_publication_private.upload_grants));",
+    "blocked": true,
+    "user_b": "11111111-1111-1111-1111-111111111111",
+    "expected": [
+      "upload_race_identity_then_claim_a",
+      "upload_race_identity_then_claim_b",
+      "upload_race_identity_then_claim_final"
+    ]
+  },
+  {
+    "name": "policy_then_read",
+    "setup": "SELECT upload_test.boot();SELECT upload_test.start();SELECT upload_test.record_token();",
+    "a": "UPDATE public.publication_policy_documents SET status='retired';SELECT upload_test.check('upload_race_policy_then_read_a',true);",
+    "b": "SELECT upload_test.expect('upload_race_policy_then_read_b','SELECT upload_test.read_grant()','42501');",
+    "verify": "SELECT set_config('request.jwt.claim.sub','11111111-1111-1111-1111-111111111111',false);\nSELECT upload_test.check('upload_race_policy_then_read_final',(SELECT state='recorded' AND token IS NOT NULL FROM listing_publication_private.upload_grants));",
+    "blocked": true,
+    "user_b": "11111111-1111-1111-1111-111111111111",
+    "expected": [
+      "upload_race_policy_then_read_a",
+      "upload_race_policy_then_read_b",
+      "upload_race_policy_then_read_final"
+    ]
+  },
+  {
+    "name": "conflicting_receipt",
+    "setup": "SELECT upload_test.boot();SELECT upload_test.start();",
+    "a": "SELECT upload_test.check('upload_race_conflicting_receipt_a',upload_test.record_token()->>'recorded'='true');",
+    "b": "SELECT upload_test.expect('upload_race_conflicting_receipt_b','SELECT upload_test.record_token(upload_test.token()||''x'')','22023');",
+    "verify": "SELECT set_config('request.jwt.claim.sub','11111111-1111-1111-1111-111111111111',false);\nSELECT upload_test.check('upload_race_conflicting_receipt_final',(SELECT token=upload_test.token() FROM listing_publication_private.upload_grants));",
+    "blocked": true,
+    "user_b": "11111111-1111-1111-1111-111111111111",
+    "expected": [
+      "upload_race_conflicting_receipt_a",
+      "upload_race_conflicting_receipt_b",
+      "upload_race_conflicting_receipt_final"
+    ]
+  },
+  {
+    "name": "independent_account",
+    "setup": "SELECT upload_test.boot();",
+    "a": "SELECT upload_test.start();SELECT upload_test.check('upload_race_independent_account_a',upload_test.c()->>'sign_allowed'='true');",
+    "b": "DO $f$ DECLARE a jsonb; b jsonb; c jsonb; BEGIN\n a:=public.prepare_my_listing_publication_v1('22222222-2222-2222-2222-222222222222','bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb','60000000-0000-0000-0000-000000000002','{\n  \"basics\": {\n    \"title\": \"Test title\",\n    \"description\": \"Synthetic description\",\n    \"condition\": \"used\"\n  },\n  \"price\": {\n    \"kind\": \"fixed\",\n    \"amount\": \"123.40\",\n    \"currency\": \"EUR\"\n  },\n  \"category_path\": [\n    \"vehicles\",\n    \"trucks_commercial\",\n    \"trucks\"\n  ],\n  \"location\": {\n    \"country\": \"Estonia\",\n    \"city\": \"Paide\",\n    \"latitude\": null,\n    \"longitude\": null\n  },\n  \"attributes\": {\n    \"manufacturer\": \"\",\n    \"part_number\": \"\",\n    \"oem_number\": \"\",\n    \"vehicle_brand\": \"\",\n    \"vehicle_model\": \"\",\n    \"vehicle_year\": \"\",\n    \"engine\": \"\"\n  },\n  \"details\": {\n    \"power\": \"90 kW\"\n  },\n  \"language\": \"et\"\n}'::jsonb,'[\n  {\n    \"client_file_id\": \"20000000-0000-0000-0000-000000000001\",\n    \"byte_length\": 100,\n    \"sha256\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"\n  }\n]'::jsonb);\n b:=public.reserve_my_listing_upload_v1('22222222-2222-2222-2222-222222222222','bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb',(a->>'attempt_id')::uuid,(a->'slots'->0->>'slot_id')::uuid,'70000000-0000-0000-0000-000000000002')->'binding';\n c:=public.claim_listing_upload_sign_v1('22222222-2222-2222-2222-222222222222','bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb',(b->>'attempt_id')::uuid,(b->>'slot_id')::uuid,'70000000-0000-0000-0000-000000000002',(b->>'grant_id')::uuid);\n IF c->>'sign_allowed'<>'true' THEN RAISE EXCEPTION 'second_claim_failed'; END IF;\nEND $f$;SELECT upload_test.check('upload_race_independent_account_b',(SELECT count(*)=1 FROM listing_publication_private.upload_grants WHERE state='signing'));",
+    "verify": "SELECT set_config('request.jwt.claim.sub','11111111-1111-1111-1111-111111111111',false);\nSELECT upload_test.check('upload_race_independent_account_final',(SELECT count(*)=2 FROM listing_publication_private.upload_grants WHERE state='signing'));",
+    "blocked": false,
+    "user_b": "22222222-2222-2222-2222-222222222222",
+    "expected": [
+      "upload_race_independent_account_a",
+      "upload_race_independent_account_b",
+      "upload_race_independent_account_final"
+    ]
+  }
+]

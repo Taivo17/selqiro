@@ -1,0 +1,37 @@
+{
+  "supabase/labs/listing-publication-attempt-v1/01_private_state.sql": {
+    "bytes": 7683,
+    "git_blob": "414f48e14890bc1d5e9ae031baf41bd5929cee39",
+    "sha256": "530ab73dd20ba9d776318472b06847778f907d51203ecaa72a0f9de47de2f6fd"
+  },
+  "supabase/labs/listing-publication-attempt-v1/02_values_and_policy.sql": {
+    "bytes": 7477,
+    "git_blob": "4179cabae07f6a6e6d3099a71a70fd7f5e3f9391",
+    "sha256": "ad7306884a577986e30ee8c3836fb60d24efe15e709e95260163997aed31c48b"
+  },
+  "supabase/labs/listing-publication-attempt-v1/03_owner_attempt.sql": {
+    "bytes": 5625,
+    "git_blob": "2a33c9bfd78afb04e98adb688e0da95dbfcdf1f2",
+    "sha256": "6d971221ed8672684993556598a8e92a027183e3a7c9a48676fd1e71e142d4dd"
+  },
+  "supabase/labs/listing-publication-attempt-v1/04_upload_dispatch.sql": {
+    "bytes": 3578,
+    "git_blob": "47d6f4003e80e38115a0ddf590d591f8293e8f26",
+    "sha256": "7365d25a2054efbf32a4544d9d3e049f71ebbb9e25543b252091fe64b30da8fc"
+  },
+  "supabase/labs/listing-publication-attempt-v1/05_close_attempt.sql": {
+    "bytes": 3867,
+    "git_blob": "7d79596078c15459cded890cc9bc02f5c7076020",
+    "sha256": "e14d2ba908ec943393a4f324a7437107408584fa60b6aac0b4b04f8bd60797ef"
+  },
+  "supabase/labs/listing-publication-attempt-v1/tests/fixture.generated.sql": {
+    "bytes": 40417,
+    "git_blob": "3a38baa55fd6a91245eaa00f3323ba2228717e21",
+    "sha256": "fab1ab88575192a7ff2f4151b544a383559ea1ea544819e50fe9d1f523e08a3f"
+  },
+  "supabase/labs/listing-publication-attempt-v1/tests/seed.sql": {
+    "bytes": 2204,
+    "git_blob": "96bb5d6b41842acd14dc5be3a7752a21a53a0d92",
+    "sha256": "86950749c4779911c4d4cb70d172b220c4ef21b4133ed64b4c4b0b2cbcdb6f46"
+  }
+}

@@ -1,0 +1,18 @@
+[
+  {
+    "label": "upload_isolation_repeatable_read_record",
+    "sql": "BEGIN ISOLATION LEVEL REPEATABLE READ; SELECT upload_test.expect('upload_isolation_repeatable_read_record','SELECT public.record_listing_upload_grant_v1(NULL,NULL,NULL,NULL,NULL)','25001','publication_read_committed_required'); ROLLBACK;"
+  },
+  {
+    "label": "upload_isolation_repeatable_read_purge",
+    "sql": "BEGIN ISOLATION LEVEL REPEATABLE READ; SELECT upload_test.expect('upload_isolation_repeatable_read_purge','SELECT public.purge_listing_upload_token_one_v1(NULL)','25001','publication_read_committed_required'); ROLLBACK;"
+  },
+  {
+    "label": "upload_isolation_serializable_record",
+    "sql": "BEGIN ISOLATION LEVEL SERIALIZABLE; SELECT upload_test.expect('upload_isolation_serializable_record','SELECT public.record_listing_upload_grant_v1(NULL,NULL,NULL,NULL,NULL)','25001','publication_read_committed_required'); ROLLBACK;"
+  },
+  {
+    "label": "upload_isolation_serializable_purge",
+    "sql": "BEGIN ISOLATION LEVEL SERIALIZABLE; SELECT upload_test.expect('upload_isolation_serializable_purge','SELECT public.purge_listing_upload_token_one_v1(NULL)','25001','publication_read_committed_required'); ROLLBACK;"
+  }
+]
