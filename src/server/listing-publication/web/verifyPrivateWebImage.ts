@@ -4,6 +4,7 @@ import { PublicationImageError, type sanitizeListingImage } from "../images/sani
 import { WEB_IMAGE, WebImageError, webFail, copyWebCommand, copyWebBinding, copyWebIntent, copyWebReceipt,
   detachSanitizedImage, sameRecord, webRecord, webHash, type WebCommand, type WebReceipt, type WebIntent } from "./webImageContract";
 import { readWebObjectBytes } from "./webObjectHttp";
+import { recordWebWriteCompletion } from "./webWriteCompletion";
 export type WebImageResult = Readonly<{kind:"ready";receipt:WebReceipt}> |
   Readonly<{kind:"reconcile_same_slot";attemptId:string;slotId:string}>;
 type Config = Readonly<{projectOrigin:string;publicKey:string;serviceKey:string}>;
@@ -85,6 +86,9 @@ export function createPrivateWebVerifier(config:Config, sanitizer:typeof sanitiz
             {method:"POST",headers:{...serviceHeaders,"content-type":"image/webp","x-upsert":"false","cache-control":"no-store"},
               body:new Uint8Array(sent)},{signal,timeoutMs:WEB_IMAGE.transferTimeoutMs});
           if(ack.status!==200) return pending(); // 400/409/5xx: never overwrite or retry. New explicit call can read back.
+          // Only THIS one-write branch has the complete Storage POST response. A ready
+          // readback, replay, abort or deadline must never manufacture this receipt.
+          await recordWebWriteCompletion(rpc, ack.json, binding, intent, claim.claim_id);
         }
       } else if(claim.state==="prepared") {
         if(claim.process_allowed) return webFail("invalid_response");

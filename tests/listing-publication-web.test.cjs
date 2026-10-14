@@ -28,7 +28,7 @@ const error=(code)=>e=>e instanceof C.WebImageError && e.code===code && !e.messa
 
 async function model(options={}) {
  const source=options.source || Buffer.from('synthetic input'), b=binding(source);
- const state={phase:'none',intent:null,receipt:null,stored:null,post:0,decodes:0,requests:[],active:true};
+ const state={phase:'none',intent:null,receipt:null,stored:null,post:0,decodes:0,requests:[],active:true,completions:0};
  let n=0;
  const server=http.createServer(async(req,res)=>{
   const data=[];for await(const chunk of req)data.push(chunk);const bytes=Buffer.concat(data);
@@ -45,7 +45,7 @@ async function model(options={}) {
    if(req.url.startsWith('/rest/v1/rpc/')) {
     const v=JSON.parse(bytes),name=req.url.split('/').at(-1);assert.equal(v.p_expected_user_id,A);assert.equal(v.p_expected_identity_id,I);
     assert.equal(v.p_attempt_id,ATT);assert.equal(v.p_slot_id,SLOT);
-    if(!state.active){json({error:'SYNTHETIC_PRIVATE_DETAILS'},403);return;}
+    if(!state.active&&name!=='record_listing_web_write_completed_v1'){json({error:'SYNTHETIC_PRIVATE_DETAILS'},403);return;}
     if(name==='claim_listing_web_image_v1') {
      assert.equal(v.p_request_key,REQ);let allow=false;
      if(state.phase==='none'){state.phase='processing';allow=true;}
@@ -61,6 +61,14 @@ async function model(options={}) {
      if(options.losePrepare){options.losePrepare=false;res.destroy();return;}
      const r={binding:{...b},intent:state.intent,write_allowed:true,write_before_epoch:Math.floor(Date.now()/1000)+30};
      if(options.prepareMutation)options.prepareMutation(r);json(r);return;
+    }
+    // Updated synthetic provider/RPC fixture, not an old SQL or native-test replay.
+    if(name==='record_listing_web_write_completed_v1') {
+     assert.equal(state.post,1);assert.equal(v.p_job_id,JOB);assert.equal(v.p_claim_id,CLAIM);
+     assert.equal(v.p_web_object_id,WEB);assert.equal(v.p_storage_object_id,'15151515-1515-1515-1515-151515151515');
+     assert.equal(v.p_storage_key,b.bucket_id+'/'+b.web_path);assert.equal(v.p_sent_sha256,state.intent.web_sha256);
+     assert.equal(v.p_sent_bytes,state.intent.web_bytes);state.completions++;
+     json({schema_version:1,job_id:JOB,web_object_id:WEB,storage_object_id:v.p_storage_object_id,completed:true});return;
     }
     if(name==='record_listing_web_ready_v1') {
      assert.ok(state.stored);assert.equal(v.p_job_id,JOB);assert.equal(v.p_observed_sha256,C.webHash(state.stored));
@@ -82,7 +90,7 @@ async function model(options={}) {
     assert.equal(C.webHash(bytes),state.intent.web_sha256);assert.equal(bytes.length,state.intent.web_bytes);
     if(options.postStatus){json({},options.postStatus);return;}
     if(!options.dropWrite)state.stored=options.corruptWrite?Buffer.alloc(bytes.length):Buffer.from(bytes);
-    if(options.loseWrite){options.loseWrite=false;res.destroy();return;}json({Key:'ack_is_not_verification'});return;
+    if(options.loseWrite){options.loseWrite=false;res.destroy();return;}json({Id:'15151515-1515-1515-1515-151515151515',Key:b.bucket_id+'/'+b.web_path});return;
    }
    if(req.method==='GET' && req.url==='/storage/v1/object/authenticated/'+b.bucket_id+'/'+b.web_path) {
     if(options.cancelOnReadback)state.active=false;
@@ -105,7 +113,7 @@ async function using(options,fn){const m=await model(options);try{await fn(m);}f
 
 test('model: full source -> detached web -> acknowledged intent -> POST -> full GET -> ready',async()=>using({},async m=>{
  const r=await m.verify();assert.equal(r.kind,'ready');assert.deepEqual(r.receipt,receipt());assert.equal(m.state.post,1);assert.equal(m.state.decodes,1);
- assert.deepEqual(m.state.requests.map(x=>x.path.split('/').at(-1)),['user','claim_listing_web_image_v1','source.upload','prepare_listing_web_write_v1','web-v1.webp','web-v1.webp','record_listing_web_ready_v1']);
+ assert.deepEqual(m.state.requests.map(x=>x.path.split('/').at(-1)),['user','claim_listing_web_image_v1','source.upload','prepare_listing_web_write_v1','web-v1.webp','record_listing_web_write_completed_v1','web-v1.webp','record_listing_web_ready_v1']);
  assert.ok(!JSON.stringify(r).includes(config.serviceKey));assert.ok(!JSON.stringify(r).includes('source_path'));
 }));
 test('model: same ready receipt replays without source/decode/write',async()=>using({},async m=>{

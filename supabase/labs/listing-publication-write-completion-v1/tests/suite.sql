@@ -1,0 +1,74 @@
+-- NEW WEB-completion tests. Existing helpers are definitions, not old test execution.
+SELECT final_test.check('completion_api_closed',NOT has_function_privilege('authenticated','public.record_listing_web_write_completed_v1(uuid,uuid,uuid,uuid,uuid,uuid,uuid,uuid,text,text,integer)','EXECUTE') AND NOT has_function_privilege('service_role','public.record_listing_web_write_completed_v1(uuid,uuid,uuid,uuid,uuid,uuid,uuid,uuid,text,text,integer)','EXECUTE'));
+SELECT final_test.check('completion_rls_forced',(SELECT relrowsecurity AND relforcerowsecurity FROM pg_class WHERE oid='listing_publication_private.web_write_completions'::regclass));
+SAVEPOINT cancelled; SELECT completion_test.boot();
+SELECT final_test.check('ready_alone_not_completion',(SELECT count(*)=0 FROM listing_publication_private.web_write_completions));
+SELECT final_test.check('ready_web_still_blocked',listing_publication_private.object_cleanup_state(completion_test.obj('web'))='blocked_write_settlement');
+SELECT final_test.cancel();
+SELECT final_test.check('cancelled_without_ack_both_blocked',(SELECT count(*)=2 AND bool_and(state='blocked_write_settlement') FROM listing_publication_private.cleanup));
+SELECT final_test.check('blocked_objects_not_claimed',public.claim_listing_cleanup_v1() IS NULL);
+SELECT final_test.expect('direct_pending_update_denied',$q$UPDATE listing_publication_private.cleanup SET state='pending' WHERE object_id=completion_test.obj('web')$q$,'55000','publication_cleanup_lineage_retained');
+SELECT completion_test.record();
+SELECT final_test.check('cancelled_web_ack_persisted',(SELECT count(*)=1 AND bool_and(sent_bytes=80 AND sent_sha256=repeat('b',64)) FROM listing_publication_private.web_write_completions));
+SELECT final_test.check('ack_only_releases_web',(SELECT state='pending' FROM listing_publication_private.cleanup WHERE object_id=completion_test.obj('web')));
+SELECT final_test.check('source_remains_blocked_after_web_ack',listing_publication_private.object_cleanup_state(completion_test.obj('source'))='blocked_write_settlement' AND (SELECT state='blocked_write_settlement' FROM listing_publication_private.cleanup WHERE object_id=completion_test.obj('source')));
+INSERT INTO final_test.ctx VALUES('saved_completion', (SELECT to_jsonb(r) FROM listing_publication_private.web_write_completions r)); SELECT completion_test.record();
+SELECT final_test.check('completion_replay_identical',(SELECT to_jsonb(r)=final_test.v('saved_completion') FROM listing_publication_private.web_write_completions r));
+SELECT final_test.expect('completion_conflicting_provider_denied',$q$SELECT completion_test.record('one','17171717-1717-1717-1717-171717171717')$q$,'22023','publication_web_completion_conflict');
+SELECT final_test.claim('web_claim');
+SELECT final_test.check('only_completed_web_claimed',(final_test.v('web_claim')->>'object_id')::uuid=completion_test.obj('web'));
+SELECT final_test.ack('web_claim'); SELECT completion_test.record();
+SELECT final_test.check('deleted_not_requeued_by_completion_replay',(SELECT state='deleted' FROM listing_publication_private.cleanup WHERE object_id=completion_test.obj('web')));
+SELECT final_test.check('source_still_not_claimable',public.claim_listing_cleanup_v1() IS NULL);
+SELECT final_test.check('completion_does_not_reopen_attempt',(SELECT state='cancelled' AND payload IS NULL FROM listing_publication_private.attempts WHERE id=final_test.a()));
+SELECT final_test.expect('receipt_update_denied',$q$UPDATE listing_publication_private.web_write_completions SET sent_bytes=81$q$,'55000','publication_web_completion_immutable');
+SELECT final_test.expect('receipt_delete_denied',$q$DELETE FROM listing_publication_private.web_write_completions$q$,'55000','publication_web_completion_immutable');
+SELECT final_test.expect('receipt_truncate_denied',$q$TRUNCATE listing_publication_private.web_write_completions$q$,'55000','publication_web_completion_immutable');
+ROLLBACK TO cancelled;
+SAVEPOINT before_close; SELECT completion_test.boot(); SELECT completion_test.record();
+SELECT final_test.check('open_web_completion_without_cleanup',NOT EXISTS(SELECT 1 FROM listing_publication_private.cleanup) AND public.claim_listing_cleanup_v1() IS NULL);
+SELECT final_test.publish();
+SELECT final_test.check('published_web_never_claimed',public.claim_listing_cleanup_v1() IS NULL);
+SELECT final_test.remove();
+SELECT final_test.check('published_delete_enqueues_completed_web',(SELECT state='pending' FROM listing_publication_private.cleanup WHERE object_id=completion_test.obj('web')));
+SELECT final_test.check('normal_source_still_pending_finality',(SELECT state='blocked_write_settlement' FROM listing_publication_private.cleanup WHERE object_id=completion_test.obj('source')));
+SELECT final_test.claim('web_claim'); SELECT final_test.ack('web_claim');
+SELECT final_test.check('content_deleting_not_falsely_fully_deleted',listing_publication_private.final_receipt(final_test.a())->>'state'='deleting' AND (listing_publication_private.final_receipt(final_test.a())->>'files_remaining')::integer=1);
+ROLLBACK TO before_close;
+SAVEPOINT prepared; SELECT completion_test.boot('one',1,false); SELECT completion_test.record();
+SELECT final_test.check('completion_does_not_manufacture_readiness',(SELECT state='prepared' AND ready_id IS NULL FROM listing_publication_private.web_images WHERE attempt_id=final_test.a()));
+SELECT final_test.check('completion_does_not_publish',NOT EXISTS(SELECT 1 FROM listing_publication_private.publications));
+SELECT final_test.cancel();
+SELECT final_test.check('prepared_ack_closure_pending',(SELECT state='pending' FROM listing_publication_private.cleanup WHERE object_id=completion_test.obj('web')));
+ROLLBACK TO prepared;
+SAVEPOINT invalid; SELECT completion_test.boot();
+SELECT final_test.expect('binding_u_denied',$q$SELECT completion_test.record('one','15151515-1515-1515-1515-151515151515','{"u":"22222222-2222-2222-2222-222222222222"}')$q$,'22023','publication_web_completion_binding_mismatch');
+SELECT final_test.expect('binding_i_denied',$q$SELECT completion_test.record('one','15151515-1515-1515-1515-151515151515','{"i":"bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb"}')$q$,'22023','publication_web_completion_binding_mismatch');
+SELECT final_test.expect('binding_a_denied',$q$SELECT completion_test.record('one','15151515-1515-1515-1515-151515151515','{"a":"18181818-1818-1818-1818-181818181818"}')$q$,'22023','publication_web_completion_binding_mismatch');
+SELECT final_test.expect('binding_s_denied',$q$SELECT completion_test.record('one','15151515-1515-1515-1515-151515151515','{"s":"18181818-1818-1818-1818-181818181818"}')$q$,'22023','publication_web_completion_binding_mismatch');
+SELECT final_test.expect('binding_j_denied',$q$SELECT completion_test.record('one','15151515-1515-1515-1515-151515151515','{"j":"18181818-1818-1818-1818-181818181818"}')$q$,'22023','publication_web_completion_binding_mismatch');
+SELECT final_test.expect('binding_c_denied',$q$SELECT completion_test.record('one','15151515-1515-1515-1515-151515151515','{"c":"18181818-1818-1818-1818-181818181818"}')$q$,'22023','publication_web_completion_binding_mismatch');
+SELECT final_test.expect('binding_o_denied',$q$SELECT completion_test.record('one','15151515-1515-1515-1515-151515151515','{"o":"18181818-1818-1818-1818-181818181818"}')$q$,'22023','publication_web_completion_binding_mismatch');
+SELECT final_test.expect('binding_key_denied',$q$SELECT completion_test.record('one','15151515-1515-1515-1515-151515151515','{"key":"listing-publication-private/invalid"}')$q$,'22023','publication_web_completion_binding_mismatch');
+SELECT final_test.expect('binding_hash_denied',$q$SELECT completion_test.record('one','15151515-1515-1515-1515-151515151515','{"hash":"cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"}')$q$,'22023','publication_web_completion_binding_mismatch');
+SELECT final_test.expect('binding_bytes_denied',$q$SELECT completion_test.record('one','15151515-1515-1515-1515-151515151515','{"bytes":81}')$q$,'22023','publication_web_completion_binding_mismatch');
+SELECT final_test.expect('zero_provider_denied',$q$SELECT completion_test.record('one','00000000-0000-0000-0000-000000000000')$q$,'22023','publication_web_completion_binding_mismatch');
+SELECT final_test.check('failed_bindings_leave_no_receipt',NOT EXISTS(SELECT 1 FROM listing_publication_private.web_write_completions));
+ROLLBACK TO invalid;
+SAVEPOINT service; SELECT completion_test.boot(); SELECT final_test.cancel();
+SELECT final_test.check('service_has_no_test_helper_access',NOT has_schema_privilege('service_role','completion_test','USAGE'));
+GRANT EXECUTE ON FUNCTION public.record_listing_web_write_completed_v1(uuid,uuid,uuid,uuid,uuid,uuid,uuid,uuid,text,text,integer) TO service_role;
+SELECT p->>'u' AS u,p->>'i' AS i,p->>'a' AS a,p->>'s' AS s,p->>'j' AS j,p->>'c' AS c,p->>'o' AS o,p->>'key' AS key,p->>'hash' AS hash,p->>'bytes' AS bytes FROM (SELECT completion_test.args() p) q
+\gset cw_
+SET LOCAL ROLE service_role;
+SELECT current_user='service_role' AS actual, public.record_listing_web_write_completed_v1(:'cw_u'::uuid,:'cw_i'::uuid,:'cw_a'::uuid,:'cw_s'::uuid,:'cw_j'::uuid,:'cw_c'::uuid,:'cw_o'::uuid,'15151515-1515-1515-1515-151515151515',:'cw_key',:'cw_hash',:'cw_bytes'::integer)->>'completed' AS completed
+\gset cw_
+RESET ROLE;
+
+SELECT final_test.check('actual_service_role_records_after_cancel',(:'cw_actual')::boolean IS TRUE AND (:'cw_completed')::boolean IS TRUE);
+SELECT final_test.expect('service_cannot_read_private_completion',$q$SELECT * FROM listing_publication_private.web_write_completions$q$,'42501',NULL,'service_role');
+ROLLBACK TO service;
+SELECT final_test.check('temporary_service_execute_rolled_back',NOT has_function_privilege('service_role','public.record_listing_web_write_completed_v1(uuid,uuid,uuid,uuid,uuid,uuid,uuid,uuid,text,text,integer)','EXECUTE'));
+SAVEPOINT spoof; GRANT USAGE ON SCHEMA listing_publication_private TO authenticated; GRANT EXECUTE ON FUNCTION listing_publication_private.require_upload_service() TO authenticated; SELECT set_config('request.jwt.claims','{"role":"service_role"}',true);
+SELECT final_test.expect('jwt_service_role_spoof_denied',$q$SELECT listing_publication_private.require_upload_service()$q$,'42501','publication_upload_service_required','authenticated');
+ROLLBACK TO spoof;

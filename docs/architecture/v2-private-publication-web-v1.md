@@ -1,3 +1,103 @@
+## 14.10.2026 — WEB-kirjutuse sama lähteetapi lõpetamine
+
+**Paigaldus ja build on Macis tehtud ning üle vaadatud; järgneb sama20-rajalise
+muudatuse piiratud lõpetaja. See ette kirjutatud dokument EI kinnita veel lõpetaja
+commit'i, push'i ega uut juurutust. Tegelik tulemus tuleb uue käigu result.json-ist.**
+
+- Alus b05c98dca11e008e99114e85679e024403fa49e2 / main, parent9f3961d.
+  Viimane täielik kohalik vaatlus 14.10.2026 19:25:47.667030 Tallinn:20staged,
+  staging'uväliste muudatusteta,571valitud allikat/23migratsiooni. Tööpuu pole puhas.
+  Viimane kaug-main'i vaatlus 19:25:46.179744 oli sama baasil. Need pole uued live-vaatlused.
+- Algne paigaldustõend: web-write-completion-source-install-20261014-192528-aje23uvf.zip,
+  7164099baiti, SHA-256 13eadffadbeb40065ae36aea1127b38acdaf7b4a493c10acc57f6dc6a58acc70.
+  Kõik11testitud faili paigaldati muutmata;20rada=11uut+9muudetud.
+- Päris build19:25:38.809509–19:25:43.339623 Tallinn exit0. Node24.16.0/npm11.13.0/
+  Next16.2.1/TypeScript5.9.3/Sharp0.34.5 on selle varasema paigalduskäigu tõend.
+  Build'i stdout1560b jäi privaatseks; selle sisu ega hoiatuste puudumist siin ei väideta.
+- Varasem34Node/HTTP+58SQL tõend säilib.34=31uut+3mudeliühilduvust, mitte vana85sarja
+  uusvastuvõtt. Päris kohalikHTTP, sünteetilisedAuth/REST/Storage/sanitizer;native puudus.
+  PG17.6:44rollback+12neljasajastuses+2isolatsioon,24SQLexit0 ja2NOTICE ettevalmistuses.
+  Neid ega muid vanu sarju või build'i lõpetajas ei korrata.
+
+**Piiratud lõpetaja:** uus COMMIT PUSH kinnitus, värsked tegelikud main/HEAD/parent/
+koguindex/tööpuu/571allika/23migratsiooni ja kinnitatudoriginmain kaitsed enne kirjutusi.
+Täpsustatakse ainult8samasse20radalisse muudatusse kuuluvat dokumenti; kõik11testitud
+faili, nõuded ja tõendiinventuurid jäävad muutmata. Jooksva üleandmise kontroll,
+kontrollitud eraldi indexi koopia, üks täpne commit ja kuni üks mitte-force main-push.
+Uus eraldi ühekordne päevik; vanu päevikuid ei avata. Osalisi muutusi ei taastata.
+
+**Järgmine tegevus pärast käiku:** loe UUE web-write-completion-source-finish tulemus,
+commit-proof, remote-observations ja lõplik Git-seis. Ainult kinnitatud commit/push/clean
+järel jätka otse sama V2 SOURCE/teadmataWEB välise kirjutuse lõplikkust, püsivat koristust
+ja tervet kasutajateed. Uut eraldi dokumentide lõpetamise ringi ei tehta.
+STOP-il säilita failid/index/päevik; ära korda ega tee käsitsi reset/restore/commit/push'i.
+
+**Avamise piir:** üleslaadimine ja avaldamine jäävad suletuks; SQL labs-only/API-closed.
+Kinnitatud üheWEBkirjutuse koristuskviitung ei ole täielik failikustutus. Kõik väljastatud
+SOURCE ja teadmataWEB jäävad blokeerituks. Ainukirjutaja/no-proxy-retry/tegelikuStorage
+vastuseleping, Storage/CORS/mahud/mobiil/native-pilv, konto-identiteedi-sõnumite kooskõla,
+vorm/marsruudid ja müüja–ostja–anonüümse lisamine→leidmine→detail/profiil→suhtlus→haldamine→
+kustutamine vajavad tegelikku vastuvõttu. Energy/maksed/AI/otsingulisad ootavad.
+Olemasolevate kontode, kuulutuste, piltide ega päevikute kustutamisluba puudub.
+Varasem b05c98d Ready/Production on baasi tõend; seda uuesti ei küsita.
+Push võib käivitada olemasoleva Verceli automaatika, kuid lõpetaja uut juurutusolekut ei kinnita.
+
+---
+
+## 14.10.2026 — ühe WEB-kirjutuse kviitung: testid vastu võetud, piiratud lähtepaigaldus
+
+Praegune commit'itud alus on `b05c98dca11e008e99114e85679e024403fa49e2` (560 valitud allikat, mitte täisrepo).
+Eelnev lõppavaldamise lähteetapp on lõpetatud: commit/push/clean ning b05c98d
+Ready41s/Production-ekraanitõend on vastu võetud. Neid lõpetamisi ei korrata.
+Viimane täielik kohalik vaatlus: 14.10.2026 18:24:58.039505 Tallinn, puhas main,
+560 allikat ja 23 migratsiooni; testikäigus GitHubi ei küsitud. See on salvestatud,
+mitte käesoleva ettevalmistuse värske vaatlus.
+
+Uus 34/58 testitõend on üle vaadatud: 34 Node/HTTP ja range ES2017 tüübikontroll
+Node24.16.0/TS5.9.3 peal; PostgreSQL17.6 44 rollback +12 neljas ajastuses +2
+isolatsioonikeeldumist. Native-pilditöötlejat ei kutsutud; Auth/REST/Storage/sanitizer
+olid kohaliku HTTP-testmudeli vastused. 34 sisaldab kolme vana WEB-testimudeli
+ühilduvuskontrolli, mitte vana 85-testilise sarja kordamist.
+Tõend: web-write-completion-tests-20261014-182452-x20z__kg.zip,
+SHA-256 256f35709fb725433f5d6a8ebcab02c121bba6502f0ec971eac6bdfd2f865257.
+Vt `docs/verification/v2-web-write-completion-tests-20261014.json` ja `docs/architecture/v2-private-web-write-completion-v1.md`.
+
+Sama 11-failine kandidaat säilib bait-baidilt. Muutuvad olemasolev
+verifyPrivateWebImage.ts ja listing-publication-web.test.cjs; lisandub üheksa
+uut faili. Ainult täielik 200/Id/Key vastus serveri ühelt lubatud WEB POST-ilt
+saab anda seotud püsiva kirjutuskviitungi. See ei asenda pildi valmidust ega
+kuulutuse lõppkontrolli. Tühistatud kviitungiga WEB saab testides koristusse;
+SOURCE ja teadmata WEB jäävad blocked_write_settlement. Täielik failikustutus
+EI OLE valmis; 404/timeout/aegumine/ready ei vabasta neid blokeeringuid.
+
+Uus source-only paigaldaja seob need 11 testitud faili 9 dokumendirajaga:
+20 rada (11 uut /9 olemasolevat muudetud), 571 valitud tulemusallikat.
+Kaks uut dokumendirada on käesoleva ühenduse leping ja tõendiinventuur.
+Enne kirjutusi värsked kogu Git/index/tööpuu/560allika/23migratsiooni ja lubatud
+kaug-main'i kaitsed. Üks uus päris build, ainult selle edu järel täpne staging.
+Paigaldus ja build on selles ette kirjutatud dokumendis VEEL VAATLEMATA;
+tegelik tulemus tuleb uuest web-write-completion-source-install result.json-ist.
+Testitud koodi ei muudeta, 34/58 ega vanu41/143/81/85/140/... sarju ei korrata.
+SQL-i, Storage'i, Dockerit, paketipaigaldust, commit'i ega push'i selles käigus pole.
+
+Üleslaadimine ja avaldamine jäävad suletuks; SQL labs-only/API-closed.
+Uusi marsruute, vorme, bucket'eid, õiguste avamist ega koristaja ajastust ei lisata.
+Tegelik Storage'i versioon/vastuseleping, ainukirjutaja piir ning vaheserveri
+automaatsete POST-korduste puudumine pole tõendatud. Kõik väljastatud SOURCE
+ja teadmata WEB failid, päris Storage/CORS/mahud/mobiil/native-pilv,
+konto/identiteedi/sõnumite kooskõla ning müüja–ostja–anonüümse täisteekond ootavad.
+Energy/maksed/AI/otsingu lisad ootavad; üldmootorit ega V1 täiskihti ei ehitata.
+Olemasolevate kontode, kuulutuste, piltide ja päevikute kustutamisluba pole.
+
+Järgmine tegevus pärast esimest paigalduskäiku: vaata uus tulemus-ZIP üle;
+ainult eduka build'i ja täpse staging'u järel lõpeta SAMA lähteetapp kontrollitult.
+Ära korda seda paigaldajat või vanu käiviteid, ära lisa kõrvalist rakendusmuudatust.
+STOP säilitab kõik osalised failid, indexi, privaatse build-logi ja uue päeviku.
+Ei reset/restore'i, käsitsi commit/push'i ega automaatset kordust.
+Pärast sama lähteetapi lõpetamist jätkub sisuline V2 ühendamine, mitte eraldi docs-onlyring.
+
+---
+
 ## 14.10.2026 — lõppavaldamise lähteetapp pärast ES2017 parandust; kontrollitud lõpetamine
 
 Sama lähteetapi BigInt-parandus on Macis tehtud ja selle tulemus üle vaadatud.

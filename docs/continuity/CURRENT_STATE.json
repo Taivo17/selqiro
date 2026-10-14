@@ -5,37 +5,37 @@
     "sha256": "667e47990a7d3cc20ff53709cb861663b4565cf1d3c830eda88e0d18e60fdb8a"
   },
   "boundaries": [
-    "Üks Avalda kuulutus, mitte kohustuslik nähtav mustand. Serveri lõppkontrollid ja mitte-taastumine on testitud kandidaadis; avalik vorm/marsruut pole ühendatud. Ühe RPC või build’i edu ei tõenda tervikteekonda.",
-    "Väljastatud SOURCE või ettevalmistatud WEB failid jäävad blocked_write_settlement. Kandidaat EI võimalda nende täielikku kustutust;404/timeout/expiry/ready ei tõenda välise kirjutuse lõppu ega vabasta kvooti. Hilise kirjutuse lõplikkus/lubatud kirjutajad jäävad avamise eelduseks.",
-    "Konto/identiteedi RESTRICT ei ole valmis konto kustutus. Vajalikud päris Storage/CORS/mahud/mobiil/native-pilv, sõnumite kooskõla ning lisamine→leidmine→detail/profiil→suhtlus→haldamine→kustutamine eraldi müüja/ostja/anonüümsena.",
-    "Energy/maksed/AI/otsingu lisad ootavad; üldmootorit või täielikkuV1kihti ei ehitata. Olemasolevate kontode/kuulutuste/piltide/päevikute kustutamisluba puudub."
+    "Üks Avalda kuulutus, mitte kohustuslik nähtav mustand. Õiguste/hinna/identiteedi/reeglite moodulid säilivad. Kviitung pole pildi valmisolek ega avaldamine.",
+    "Ainult üheWEBPOST-i täielik200/Id/Key saab seotudkviitungiks. Kõik väljastatudSOURCE/teadmataWEB jäävad blocked_write_settlement;404/timeout/aegumine/ready ei tõenda lõplikkust. Täielik failikustutus EI OLE valmis.",
+    "Ainukirjutaja/no-proxy-retry ja tegelikuStorageversiooni vastusepiir on kinnitamata. PärisStorage/CORS/mahud/mobiil/native, konto-identiteedi-sõnumid, vorm/marsruudid ja müüja/ostja/anonüümse täisteekond ootavad.",
+    "Energy/maksed/AI/otsingulisad ootavad; eiüldmootorit/V1täiskihti. Olemasolevate kontode/kuulutuste/piltide/päevikute kustutamisluba puudub."
   ],
-  "checkpoint": "14:46 BigInt-parandus üle vaadatud:41 uut regressiooni, final-moodulite ES2017 tüübikontroll ja uus build PASS. Sama lõppavaldamise lähteetapi36 rada on staging’us; commit/push veel tõendamata. Uus kontrollitud lõpetaja täpsustab ainult11 sama etapi dokumenti ja säilitab koodi/tõendid. See ette kirjutatud leht EI kinnita lõpetaja tulevast edu. Upload/avaldamine jääb suletuks.",
+  "checkpoint": "WEB-kirjutuse sama20-rajaline allikapaigaldus ja uusbuild on Macis tehtud ning üle vaadatud. Piiratud8dokumendiline lõpetaja säilitab kõik11testitud faili. See tekst EI kinnita tulevase commit/push’i ega juurutuse õnnestumist; loe uus result.json. Üleslaadimine/avaldamine jäävad suletuks.",
   "environment": [
-    "Peata dev. Ainult uus COMMIT PUSH lõpetaja; Docker/Supabase/npm/Node/build/testikäske pole vaja ega käivitata. Olemasolev Git-autentimine ainult kinnitatud sihile.",
-    "Värsked main/HEAD/parent/koguindex/tööpuu/560allika/23migratsiooni/approved origin/main kaitsed. Eraldi uus ühekordne päevik; vanu ei loeta ega muudeta. Osalisi muutusi ei taastata automaatselt."
+    "Peata dev. Ainult uus COMMIT PUSH lõpetaja. Docker/Supabase/Node/npm/build/testikäske ei käivitata; olemasolev Git-autentimine ainult kinnitatud sihile.",
+    "Värsked main/HEAD/parent/koguindex/tööpuu/571allika/23migratsiooni/approvedoriginmain kaitsed.8dokumendi varukoopiad,täpne20rada,eraldi commit-index ja uus ühekordne päevik. Vanu päevikuid ei avata ega muudeta."
   ],
   "format": "selqiro_repo_handoff_v1",
   "local_test": [
-    "14.10 14:46 Macis41/41 ES2017 regressiooni ja12-failine final-moodulitee tüübikontroll PASS. Vana literaali TS2737 negatiivkontroll, täpne ID-piir ja1000 deterministlikku sisendit ühe testi sees. EiHTTP/native/SQL-i.",
-    "Uus parandatud build14:46:07.849392–14:46:12.245211 Tallinn exit0; stdout1560b privaatne,stderr0. Node24.16.0/npm11.13.0/Next16.2.1/TS5.9.3/Sharp0.34.5 on sama paranduskäigu tõend, mitte uus lõpetaja runtime-kontroll.",
-    "Algne143 SQL PASS(103+30+10) ja81 Node/HTTP/TS PASS säilivad.81testi käis algsete failibaitide/ES2022 kohta, mitte parandatud faili uus täissari. V1/V2 ja12:00 buildSTOP jäävad ajalooks; ühtegi vana testi/build’i ei korrata."
+    "34/34Node/HTTP ja ES2017strict PASS Node24.16.0/TS5.9.3 peal;31uut+3mudeliühilduvust, mitte vana85sarja kordus. KohalikHTTP päris, Auth/REST/Storage/sanitizer sünteetilised;native puudus.",
+    "PG17.6 58/58:44rollback+12neljasajastuses+2isolatsioon;3lukuootamist ja1erikontoedenemine.24SQLexit0,2ettevalmistuseNOTICE-i; omaabi eemaldati. Muutmata salvestatud tõend, mitte uus SQL/Storage käik.",
+    "Paigaldatud allikate pärisbuild19:25:38.809509–19:25:43.339623 Tallinn exit0;stdout1560bprivaatne. Node24.16.0/npm11.13.0/Next16.2.1/TS5.9.3/Sharp0.34.5 varasemmeta. Lõpetajas build’i ega34/58/41/143/81/85/140/... sarju ei korrata."
   ],
-  "next_action": "Loe UUE private-final-publication-source-finish result.json,commit-proof,remote-observations ja lõplik Git-seis. Ainult kontrollitud commit/push/clean järel jätka sama V2 välise kirjutuse lõplikkuse, koristuse/lõppkustutuse ja terve kasutajatee ühendamist. STOP-il säilita failid/index/päevik; ära korda ega paranda käsitsi. Pärast sama etapi ülevaatust uut eraldi docs-onlyringi ei tehta.",
+  "next_action": "Loe UUE web-write-completion-source-finish result.json,commit-proof,remote-observations ja lõplik Git-seis. Ainult kinnitatud commit/push/clean järel jätka otse SOURCE/teadmataWEB lõplikkuse ja sama V2 tervikteekonna ühendamist. STOP säilitab failid/index/päeviku; ära korda ega paranda käsitsi. Uut eraldi docs-onlyringi ei tehta.",
   "production": [
-    "9f3961d Ready53s/Production on varasem baasi ekraanitõend. Uus ühe36-rajalise commit’i push võib käivitada olemasoleva Verceli automaatika; lõpetaja ei kinnita uut juurutust ega pilve/native/Storage vastuvõttu.",
-    "SQL labs-only/API-closed. Vorm/marsruudid/bucket/õigused/upload/publish/koristaja ajastus ei aktiveeru. Sisu eemaldatud/failid ootel on eraldi tulemus; normalissuedSOURCE/preparedWEB täielik koristus pole valmis."
+    "b05c98d Ready41s/Production varasem baasitõend säilib; seda ei küsita uuesti. Uue20rajalise commit’i push võib käivitada olemasoleva Verceli automaatika; lõpetaja uut juurutusolekut ega pilve vastuvõttu ei kinnita.",
+    "SQL labs-only/API-closed; vorm/marsruudid/bucket/õigused/koristaja ajastus ei aktiveeru. Ainult testides kinnitatud üksWEBkirjutus pääseb koristusse; väljastatudSOURCE ja teadmataWEB lõppkoristus on endiselt blokeeritud."
   ],
   "read_next": [
-    "Uue private-final-publication-source-finish tulemus; muutmata parandustõend evidence/reviewed-repaired-stage.zip koos varasema STOP-i ja testitõenditega.",
-    "src/server/listing-publication/final/finalContract.ts; tests/listing-publication-final-es2017.test.cjs; tsconfig.json; docs/verification/v2-final-es2017-repair-20261014.json.",
-    "docs/architecture/v2-private-publication-final-v1.md; docs/verification/v2-private-final-publication-tests-20261014.json; docs/architecture/v2-publication-requirements-approved-20261012.md."
+    "Uue web-write-completion-source-finish tulemus; evidence/reviewed-source-install.zip on muutmata19:25paigalduse/build’i tõend koos varasema34/58 testiga.",
+    "docs/architecture/v2-private-web-write-completion-v1.md; docs/verification/v2-web-write-completion-tests-20261014.json; docs/architecture/v2-publication-requirements-approved-20261012.md.",
+    "src/server/listing-publication/web/webWriteCompletion.ts; verifyPrivateWebImage.ts; supabase/labs/listing-publication-write-completion-v1/01_web_completion.sql; final/cleanupOne.ts."
   ],
   "recorded_on": "2026-10-14",
   "source": {
-    "Lähtebaas": "9f3961defbc797518995947bb21196d3208b94b9, parent 33b485b717591e01d0a67751c8aff42662f3e44a. Varasem WEB-etapi commit/push/clean ja9f3961d Ready/Production on vastu võetud, mitte kordamise juhis.",
-    "Lähtepakett": "560 täpset staging’u lähtefaili, mitte täisrepo ega uus commit. Sama36 rada:26 uut ja10 varasema dokumendi muudatust. Parandatud finalContract.ts, uus ES2017 test ja kõik teised testitud failid jäävad muutmata.",
-    "Viimane Maci vaatlus": "14.10.2026 14:46:16.381892 Tallinn pärast allikate eksporti:main9f3961d,36staged/noextras,tööpuu pole puhas. Index d72d4018c2f78e3f30b37bfe661bf01bc32f8e21e75298e8985fe3d1048219fd. Kaug-main14:46:15.027351 sama baasil; enne uusi kirjutusi värsked täielikud kaitsed."
+    "Lähtebaas": "b05c98dca11e008e99114e85679e024403fa49e2; parent9f3961defbc797518995947bb21196d3208b94b9. Baasi commit/push/clean ja Ready41s/Production on vastu võetud, mitte kordamise juhised.",
+    "Lähtepakett": "571 täpset staging’u lähtefaili, mitte täisrepo ega uus commit. Sama20rada:11uut+9muudetud. Kõik11testitud faili ja tõendiinventuurid säilivad. Lõpetajas ainult8juba staging’us dokumendi täpsustus.",
+    "Viimane Maci vaatlus": "14.10.2026 19:25:47.667030 Tallinn pärast allikate eksporti:mainb05c98d,20staged/noextras,tööpuu pole puhas. Indexf8ca56c888bb5c922daf58d8974f53b863dbd76f84cdd06830f2b0aea7b0a10a. Kaug-main19:25:46.179744 sama baasil; enne uusi kirjutusi värsked kaitsed."
   },
-  "stop_rule": "Ära korda BigInt-parandajat, diagnostikat, SOURCE-paigaldajat, SQLV1/V2/V3, vanu teste/lõpetajaid/lugejaid/rakendusi. Uut lõpetajat ei korrata; STOP säilitab failid,indexi,logid,päeviku. Ei käsitsi reset/restore’i, commit/push’i ega päevikute kustutamist."
+  "stop_rule": "Ära korda source-paigaldajat,34/58testi,parandusi,diagnostikaid,vanulõpetajaid/SQL/Node/native/Storage/productionikäike. Uut lõpetajat pärast esimest käiku ei korrata. Säilita failid/index/logid/päevikud; ei reset/restore’i,käsitsicommit/push’i ega olemasolevate andmete kustutamist."
 }

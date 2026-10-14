@@ -1,0 +1,10 @@
+[
+  {
+    "label": "completion_rejects_repeatable_read",
+    "sql": "BEGIN ISOLATION LEVEL REPEATABLE READ;\nSELECT final_test.expect('completion_rejects_repeatable_read',$q$SELECT public.record_listing_web_write_completed_v1(NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL)$q$,'25001','publication_read_committed_required');\nROLLBACK;"
+  },
+  {
+    "label": "completion_rejects_serializable",
+    "sql": "BEGIN ISOLATION LEVEL SERIALIZABLE;\nSELECT final_test.expect('completion_rejects_serializable',$q$SELECT public.record_listing_web_write_completed_v1(NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL)$q$,'25001','publication_read_committed_required');\nROLLBACK;"
+  }
+]

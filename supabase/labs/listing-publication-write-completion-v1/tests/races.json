@@ -1,0 +1,58 @@
+[
+  {
+    "name": "ack_then_cancel",
+    "setup": "SELECT completion_test.boot();",
+    "a": "SELECT completion_test.record();\nSELECT final_test.check('ack_then_cancel_a',true);",
+    "b": "SELECT final_test.cancel();\nSELECT final_test.check('ack_then_cancel_b',true);",
+    "verify": "SELECT final_test.check('ack_then_cancel_final',(SELECT count(*)=1 FROM listing_publication_private.web_write_completions) AND (SELECT state='pending' FROM listing_publication_private.cleanup WHERE object_id=completion_test.obj('web')) AND listing_publication_private.object_cleanup_state(completion_test.obj('source'))='blocked_write_settlement');",
+    "user_b": "11111111-1111-1111-1111-111111111111",
+    "blocked": true,
+    "expected": [
+      "ack_then_cancel_a",
+      "ack_then_cancel_b",
+      "ack_then_cancel_final"
+    ]
+  },
+  {
+    "name": "cancel_then_ack",
+    "setup": "SELECT completion_test.boot();",
+    "a": "SELECT final_test.cancel();\nSELECT final_test.check('cancel_then_ack_a',true);",
+    "b": "SELECT completion_test.record();\nSELECT final_test.check('cancel_then_ack_b',true);",
+    "verify": "SELECT final_test.check('cancel_then_ack_final',(SELECT count(*)=1 FROM listing_publication_private.web_write_completions) AND (SELECT state='pending' FROM listing_publication_private.cleanup WHERE object_id=completion_test.obj('web')) AND listing_publication_private.object_cleanup_state(completion_test.obj('source'))='blocked_write_settlement');",
+    "user_b": "11111111-1111-1111-1111-111111111111",
+    "blocked": true,
+    "expected": [
+      "cancel_then_ack_a",
+      "cancel_then_ack_b",
+      "cancel_then_ack_final"
+    ]
+  },
+  {
+    "name": "duplicate_ack",
+    "setup": "SELECT completion_test.boot();",
+    "a": "SELECT completion_test.record();\nSELECT final_test.check('duplicate_ack_a',true);",
+    "b": "SELECT completion_test.record();\nSELECT final_test.check('duplicate_ack_b',true);",
+    "verify": "SELECT final_test.check('duplicate_ack_final',(SELECT count(*)=1 FROM listing_publication_private.web_write_completions));",
+    "user_b": "11111111-1111-1111-1111-111111111111",
+    "blocked": true,
+    "expected": [
+      "duplicate_ack_a",
+      "duplicate_ack_b",
+      "duplicate_ack_final"
+    ]
+  },
+  {
+    "name": "separate_accounts",
+    "setup": "SELECT completion_test.boot(); SELECT completion_test.boot('two',1,true,'22222222-2222-2222-2222-222222222222','bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb');",
+    "a": "SELECT completion_test.record();\nSELECT final_test.check('separate_accounts_a',true);",
+    "b": "SELECT completion_test.record('two','17171717-1717-1717-1717-171717171717');\nSELECT final_test.check('separate_accounts_b',true);",
+    "verify": "SELECT final_test.check('separate_accounts_final',(SELECT count(*)=2 FROM listing_publication_private.web_write_completions));",
+    "user_b": "22222222-2222-2222-2222-222222222222",
+    "blocked": false,
+    "expected": [
+      "separate_accounts_a",
+      "separate_accounts_b",
+      "separate_accounts_final"
+    ]
+  }
+]
