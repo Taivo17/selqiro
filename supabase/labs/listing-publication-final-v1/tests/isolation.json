@@ -1,0 +1,42 @@
+[
+  {
+    "label": "isolation_confirmation_repeatable_read",
+    "sql": "BEGIN ISOLATION LEVEL REPEATABLE READ;SELECT final_test.actor();SELECT final_test.expect('isolation_confirmation_repeatable_read',$q$SELECT public.get_my_listing_publication_confirmation_v1('11111111-1111-1111-1111-111111111111','aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa','aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa')$q$,'25001','publication_read_committed_required');ROLLBACK;"
+  },
+  {
+    "label": "isolation_confirmation_serializable",
+    "sql": "BEGIN ISOLATION LEVEL SERIALIZABLE;SELECT final_test.actor();SELECT final_test.expect('isolation_confirmation_serializable',$q$SELECT public.get_my_listing_publication_confirmation_v1('11111111-1111-1111-1111-111111111111','aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa','aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa')$q$,'25001','publication_read_committed_required');ROLLBACK;"
+  },
+  {
+    "label": "isolation_publish_repeatable_read",
+    "sql": "BEGIN ISOLATION LEVEL REPEATABLE READ;SELECT final_test.actor();SELECT final_test.expect('isolation_publish_repeatable_read',$q$SELECT public.publish_my_listing_v1('11111111-1111-1111-1111-111111111111','aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa','aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa',repeat('a',64))$q$,'25001','publication_read_committed_required');ROLLBACK;"
+  },
+  {
+    "label": "isolation_publish_serializable",
+    "sql": "BEGIN ISOLATION LEVEL SERIALIZABLE;SELECT final_test.actor();SELECT final_test.expect('isolation_publish_serializable',$q$SELECT public.publish_my_listing_v1('11111111-1111-1111-1111-111111111111','aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa','aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa',repeat('a',64))$q$,'25001','publication_read_committed_required');ROLLBACK;"
+  },
+  {
+    "label": "isolation_delete_repeatable_read",
+    "sql": "BEGIN ISOLATION LEVEL REPEATABLE READ;SELECT final_test.actor();SELECT final_test.expect('isolation_delete_repeatable_read',$q$SELECT public.delete_my_published_listing_v1('11111111-1111-1111-1111-111111111111','aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa','1')$q$,'25001','publication_read_committed_required');ROLLBACK;"
+  },
+  {
+    "label": "isolation_delete_serializable",
+    "sql": "BEGIN ISOLATION LEVEL SERIALIZABLE;SELECT final_test.actor();SELECT final_test.expect('isolation_delete_serializable',$q$SELECT public.delete_my_published_listing_v1('11111111-1111-1111-1111-111111111111','aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa','1')$q$,'25001','publication_read_committed_required');ROLLBACK;"
+  },
+  {
+    "label": "isolation_cleanup_claim_repeatable_read",
+    "sql": "BEGIN ISOLATION LEVEL REPEATABLE READ;SELECT final_test.actor();SELECT final_test.expect('isolation_cleanup_claim_repeatable_read',$q$SELECT public.claim_listing_cleanup_v1()$q$,'25001','publication_read_committed_required');ROLLBACK;"
+  },
+  {
+    "label": "isolation_cleanup_claim_serializable",
+    "sql": "BEGIN ISOLATION LEVEL SERIALIZABLE;SELECT final_test.actor();SELECT final_test.expect('isolation_cleanup_claim_serializable',$q$SELECT public.claim_listing_cleanup_v1()$q$,'25001','publication_read_committed_required');ROLLBACK;"
+  },
+  {
+    "label": "isolation_cleanup_ack_repeatable_read",
+    "sql": "BEGIN ISOLATION LEVEL REPEATABLE READ;SELECT final_test.actor();SELECT final_test.expect('isolation_cleanup_ack_repeatable_read',$q$SELECT public.record_listing_cleanup_v1('11111111-1111-1111-1111-111111111111','aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa','deleted')$q$,'25001','publication_read_committed_required');ROLLBACK;"
+  },
+  {
+    "label": "isolation_cleanup_ack_serializable",
+    "sql": "BEGIN ISOLATION LEVEL SERIALIZABLE;SELECT final_test.actor();SELECT final_test.expect('isolation_cleanup_ack_serializable',$q$SELECT public.record_listing_cleanup_v1('11111111-1111-1111-1111-111111111111','aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa','deleted')$q$,'25001','publication_read_committed_required');ROLLBACK;"
+  }
+]

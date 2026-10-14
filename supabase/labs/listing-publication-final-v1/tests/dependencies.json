@@ -1,0 +1,42 @@
+{
+  "supabase/labs/listing-publication-attempt-v1/01_private_state.sql": {
+    "bytes": 7683,
+    "sha256": "530ab73dd20ba9d776318472b06847778f907d51203ecaa72a0f9de47de2f6fd",
+    "git_blob": "414f48e14890bc1d5e9ae031baf41bd5929cee39"
+  },
+  "supabase/labs/listing-publication-attempt-v1/02_values_and_policy.sql": {
+    "bytes": 7477,
+    "sha256": "ad7306884a577986e30ee8c3836fb60d24efe15e709e95260163997aed31c48b",
+    "git_blob": "4179cabae07f6a6e6d3099a71a70fd7f5e3f9391"
+  },
+  "supabase/labs/listing-publication-attempt-v1/03_owner_attempt.sql": {
+    "bytes": 5625,
+    "sha256": "6d971221ed8672684993556598a8e92a027183e3a7c9a48676fd1e71e142d4dd",
+    "git_blob": "2a33c9bfd78afb04e98adb688e0da95dbfcdf1f2"
+  },
+  "supabase/labs/listing-publication-attempt-v1/04_upload_dispatch.sql": {
+    "bytes": 3578,
+    "sha256": "7365d25a2054efbf32a4544d9d3e049f71ebbb9e25543b252091fe64b30da8fc",
+    "git_blob": "47d6f4003e80e38115a0ddf590d591f8293e8f26"
+  },
+  "supabase/labs/listing-publication-attempt-v1/05_close_attempt.sql": {
+    "bytes": 3867,
+    "sha256": "e14d2ba908ec943393a4f324a7437107408584fa60b6aac0b4b04f8bd60797ef",
+    "git_blob": "7d79596078c15459cded890cc9bc02f5c7076020"
+  },
+  "supabase/labs/listing-publication-upload-v1/01_upload_grants.sql": {
+    "bytes": 18447,
+    "sha256": "78e1bdc244311f13ec027c32e2536d6d31190829a8c478daca585019c315f0a1",
+    "git_blob": "203b4ec8c069b91c406eaf6f7ce1492d7c417823"
+  },
+  "supabase/labs/listing-publication-web-v1/01_web_receipts.sql": {
+    "bytes": 15502,
+    "sha256": "4a9181147932b0fc3cd5c23c383c5ef5ac40f8d117db166846f409722c831662",
+    "git_blob": "200677c07b27dc86c0bb89432d1c3949638c36e6"
+  },
+  "supabase/labs/listing-publication-web-v1/02_close_write_fence.sql": {
+    "bytes": 3872,
+    "sha256": "9ec08d1471bd678088c37180de0dd289d77a1fa9f9eb8514929e9adcf08167d0",
+    "git_blob": "4dc03eba9c4d3f7417bbd2f0a911fbfe86bfbffc"
+  }
+}

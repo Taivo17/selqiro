@@ -1,3 +1,91 @@
+## 14.10.2026 — lõppavaldamise lähteetapp pärast ES2017 parandust; kontrollitud lõpetamine
+
+Sama lähteetapi BigInt-parandus on Macis tehtud ja selle tulemus üle vaadatud.
+14.10 kell 14:46 läbisid 41 uut regressioonitesti, final-moodulite ES2017 tüübikontroll
+ja uus projektibuild (exit 0). ID ülempiir kasutab täpset BigInt("9223372036854775807")
+stringi; target ES2017, strict/lib, sõltuvused ja 23 migratsiooni säilisid.
+Algne 12:00 build'i STOP ja 12:38 diagnostika on muutmata ajalugu, mitte uus käivitus.
+Parandustõend: private-final-source-bigint-repair-20261014-144601-wrmuy_4a.zip,
+SHA-256 31ad04b22fbd179b0ac842cbaab8fa4c5c971d624eb2e3b7c755b4c302dcc5ef.
+
+Viimane täielik salvestatud Git-vaatlus oli 14.10.2026 14:46:16.381892 Tallinn:
+main/9f3961d, täpselt 36 rada staging'us (26 uut, 10 varasema dokumendi muudatus),
+staging'uväliste muudatusteta, 560 valitud allikat. Tööpuu EI OLNUD puhas ning
+commit/push EI OLNUD tehtud. Kaug-main'i viimane sama baasi vaatlus oli 14:46:15.027351.
+See on varasema käigu tõend, mitte uue lõpetaja värske Git- või võrguvaatlus.
+
+Järgnev kontrollitud source-finisher nõuab enne kirjutusi tegelikku main/HEAD-i,
+kogu indexit/tööpuud, 560 allikat, 23 migratsiooni ja kinnitatud kaugsihti.
+Täpsustatakse ainult ühtteist juba sama etapi dokumenti. Kõik 22 lõppavaldamise faili
+(sealhulgas parandatud TS), uus ES2017 regressioonitest, nõuded ja tõendiinventuurid
+säilivad bait-baidilt. Commit'i ulatus jääb samaks 36 rajaks; üks commit ja üks
+mitte-force main-push. Uut rakendusfunktsiooni pooleliolevale staging'ule ei lisata.
+
+Tegelikku commit/push/clean/remote tulemust loe uuest private-final-publication-source-finish
+result.json-ist, commit-proof.json-ist ja remote-observations.json-ist. See ette
+kirjutatud tekst EI kinnita tulevast lõpetamist edukaks. 41 testi/tüübikontrolli/build'i
+ning 143/81/85/140/117/108/195/109/119 sarju, vanu paigaldajaid/parandajaid/diagnostikat,
+SQL-i või Storage'i käike ei korrata. Kontrollitakse ainult muudetud jooksva üleandmise
+kooskõla. Node24.16.0/npm11.13.0/Next16.2.1/TS5.9.3/Sharp0.34.5 on varasema paranduse
+vaatlused; lõpetaja neid uuesti ei käivita. Privaatset build-stdout'i ülevaataja ei lugenud.
+
+143 SQL-kontrolli tõend säilib muutmata SQL-i kohta. Vana 81 Node/HTTP-testi PASS
+kuulub algsetele failibaitidele, mitte parandatud faili uuele täissarjale. Parandatud
+rea tõend on 41 sihitud testi, ES2017 tüübikontroll ja uus build. Varasemad V1/V2 STOP-id
+ning testitud README ettevalmistusaegsed NOT_RUN väljad säilivad ajalooliselt.
+
+Pärast selle SAMA lähteetapi lõpetamist ja tulemusülevaatust jätka päris V2 ühendamisega:
+hiliste väliste kirjutuste lõplikkus, lubatud privilegeeritud kirjutajad, püsiv piiratud
+koristus/lõppkustutus, konto-identiteedi-sõnumite kooskõla, vorm/marsruudid ning kogu
+lisamine → leidmine → detail/profiil → suhtlus → haldamine → kustutamine.
+Uut eraldi dokumendilõpetamise ringi ei tehta. Tavaliselt väljastatud SOURCE-loaga ja
+ettevalmistatud WEB-kirjutusega failid jäävad blocked_write_settlement; nende täielik
+failikustutus EI OLE valmis. 404/timeout/aegumine/ready ei tõenda välise kirjutuse lõppu.
+
+Upload/avaldamine jääb suletuks. SQL labs-only/API-closed; uut marsruuti, vormi, bucket'it,
+õiguste avamist ega koristaja ajastust see lõpetaja ei lisa. Vana9f3961d Ready/Production
+pilt on baasi tõend, mitte tulevase commit'i juurutuse või päris Storage/native vastuvõtt.
+Energy/maksed/AI/otsingulisad ootavad; üldmootorit või V1 täiskihti ei ehitata.
+Olemasolevaid kontosid/kuulutusi/pilte/päevikuid ei kustutata. STOP säilitab osalised
+failid/indexi/uue päeviku; ei käsitsi taastamist, korduskäivitust, commit'i ega push'i.
+
+---
+
+## Current addition — 2026-10-14 reviewed final-publication source package
+
+Current committed source base: `9f3961defbc797518995947bb21196d3208b94b9` (534 selected
+sources, not a full repository). Its 2026-10-13 commit/push/clean result and matching user
+Ready53s/Production screenshot were accepted; do not repeat that checkpoint. Latest full
+local guard is 2026-10-14 09:26:56.730031 Tallinn, still clean main. These are saved observations.
+
+Final-publication V3 passed 143 real PG17.6 assertions: 103 rollback, 30 assertions in ten
+schedules, ten expected isolation rejections. All 63 SQL exits were zero. Sixteen expected
+NOTICE lines were reviewed; stderr was NOT all empty. The original 81 Node/HTTP/TypeScript
+PASS is reused unchanged V1 evidence, not a V3 rerun. Original V1/V2 overall STOPs remain
+unchanged. Temporary SQL roles and loopback synthetic Auth/REST/Storage are not cloud acceptance.
+
+The scoped SOURCE installer retains all22 tested code/SQL/test/README files byte-identically
+and writes12 documentation paths:34 total (24 new/10 modified),558 selected outputs. ONE new
+current build and exact staging are planned, NOT preclaimed: read the new
+private-final-publication-source-install result.json. Fresh actual Git/index/worktree,
+534 sources,23 migrations and approved remote guards precede Mac writes. No 143/81 or old
+suite replay, SQL execution, package install, commit/push or Storage action. All existing
+application modules, approved requirements and earlier proof inventories remain unchanged.
+
+See v2-private-publication-final-v1.md and ../verification/v2-private-final-publication-tests-20261014.json.
+Historical candidate README NOT_RUN is retained as tested bytes. SQL stays labs-only/API-closed;
+no public route, form, bucket, worker schedule or upload/publication activation is added.
+Terminal content deletion is NOT completed file deletion. Normal issued SOURCE and prepared
+WEB objects remain blocked_write_settlement; no time/404/expiry/readiness shortcut is introduced.
+Account-erasure RESTRICT refusal is not an implemented account erasure journey. Actual delayed
+write finality, exclusive privileged writers, Storage/CORS/large-mobile/native-cloud acceptance,
+account/identity/message consistency and the full seller/buyer/anonymous journey remain launch gates.
+After this SAME source checkpoint finish, continue V2 integration; no new docs-only finish loop,
+general workflow engine or full V1 compatibility layer. Energy/payments/AI/search extras wait.
+No existing accounts/listings/images/journals may be deleted by this source installation.
+
+---
+
 ## 13.10.2026 — WEB-pildi lähtepaigaldus üle vaadatud; sama etapi kontrollitud lõpetamine
 
 Kõik 14 testitud veebipildi ühenduse faili on projektis muutmata kujul. Uus Maci build

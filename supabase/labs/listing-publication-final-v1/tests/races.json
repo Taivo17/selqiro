@@ -1,0 +1,142 @@
+[
+  {
+    "name": "parallel_same_publish",
+    "setup": "SELECT final_test.boot();SELECT final_test.confirm();",
+    "a": "SELECT final_test.check('parallel_same_publish_a',final_test.publish()->>'replayed'='false');",
+    "b": "SELECT final_test.check('parallel_same_publish_b',final_test.publish()->>'replayed'='true');",
+    "verify": "SELECT final_test.check('parallel_same_publish_verified',(SELECT count(*)=1 FROM public.listings));",
+    "blocked": true,
+    "user_b": "11111111-1111-1111-1111-111111111111",
+    "expected": [
+      "parallel_same_publish_a",
+      "parallel_same_publish_b",
+      "parallel_same_publish_verified"
+    ]
+  },
+  {
+    "name": "cancel_before_publish",
+    "setup": "SELECT final_test.boot();SELECT final_test.confirm();",
+    "a": "SELECT final_test.check('cancel_before_publish_a',final_test.cancel()->>'state'='cancelled');",
+    "b": "SELECT final_test.expect('cancel_before_publish_b',$q$SELECT final_test.publish()$q$,'55000','publication_attempt_closed');",
+    "verify": "SELECT final_test.check('cancel_before_publish_verified',NOT EXISTS(SELECT 1 FROM public.listings));",
+    "blocked": true,
+    "user_b": "11111111-1111-1111-1111-111111111111",
+    "expected": [
+      "cancel_before_publish_a",
+      "cancel_before_publish_b",
+      "cancel_before_publish_verified"
+    ]
+  },
+  {
+    "name": "publish_before_cancel",
+    "setup": "SELECT final_test.boot();SELECT final_test.confirm();",
+    "a": "SELECT final_test.check('publish_before_cancel_a',final_test.publish()->>'state'='published');",
+    "b": "SELECT final_test.check('publish_before_cancel_b',final_test.cancel()->>'state'='published');",
+    "verify": "SELECT final_test.check('publish_before_cancel_verified',(SELECT count(*)=1 FROM public.listings));",
+    "blocked": true,
+    "user_b": "11111111-1111-1111-1111-111111111111",
+    "expected": [
+      "publish_before_cancel_a",
+      "publish_before_cancel_b",
+      "publish_before_cancel_verified"
+    ]
+  },
+  {
+    "name": "delete_before_replay",
+    "setup": "SELECT final_test.boot('one',1,true);SELECT final_test.publish();",
+    "a": "SELECT final_test.check('delete_before_replay_a',final_test.remove()->>'state'='deleting');",
+    "b": "SELECT final_test.check('delete_before_replay_b',final_test.publish()->>'state'='deleting');",
+    "verify": "SELECT final_test.check('delete_before_replay_verified',NOT EXISTS(SELECT 1 FROM public.listings) AND (SELECT count(*)=2 FROM listing_publication_private.cleanup));",
+    "blocked": true,
+    "user_b": "11111111-1111-1111-1111-111111111111",
+    "expected": [
+      "delete_before_replay_a",
+      "delete_before_replay_b",
+      "delete_before_replay_verified"
+    ]
+  },
+  {
+    "name": "replay_before_delete",
+    "setup": "SELECT final_test.boot('one',1,true);SELECT final_test.publish();",
+    "a": "SELECT final_test.check('replay_before_delete_a',final_test.publish()->>'replayed'='true');",
+    "b": "SELECT final_test.check('replay_before_delete_b',final_test.remove()->>'state'='deleting');",
+    "verify": "SELECT final_test.check('replay_before_delete_verified',NOT EXISTS(SELECT 1 FROM public.listings));",
+    "blocked": true,
+    "user_b": "11111111-1111-1111-1111-111111111111",
+    "expected": [
+      "replay_before_delete_a",
+      "replay_before_delete_b",
+      "replay_before_delete_verified"
+    ]
+  },
+  {
+    "name": "parallel_same_delete",
+    "setup": "SELECT final_test.boot();SELECT final_test.confirm();SELECT final_test.publish();",
+    "a": "SELECT final_test.check('parallel_same_delete_a',final_test.remove()->>'state'='deleted');",
+    "b": "SELECT final_test.check('parallel_same_delete_b',final_test.remove()->>'state'='deleted');",
+    "verify": "SELECT final_test.check('parallel_same_delete_verified',NOT EXISTS(SELECT 1 FROM public.listings) AND (SELECT count(*)=1 FROM listing_publication_private.publications));",
+    "blocked": true,
+    "user_b": "11111111-1111-1111-1111-111111111111",
+    "expected": [
+      "parallel_same_delete_a",
+      "parallel_same_delete_b",
+      "parallel_same_delete_verified"
+    ]
+  },
+  {
+    "name": "parallel_cleanup_ack",
+    "setup": "SELECT final_test.boot('one',1,false);SELECT final_test.cancel();SELECT final_test.claim();",
+    "a": "SELECT final_test.check('parallel_cleanup_ack_a',final_test.ack()->>'state'='deleted');",
+    "b": "SELECT final_test.check('parallel_cleanup_ack_b',final_test.ack()->>'state'='deleted');",
+    "verify": "SELECT final_test.check('parallel_cleanup_ack_verified',(SELECT count(*)=1 FROM listing_publication_private.cleanup WHERE state='deleted' AND try_count=1));",
+    "blocked": true,
+    "user_b": "11111111-1111-1111-1111-111111111111",
+    "expected": [
+      "parallel_cleanup_ack_a",
+      "parallel_cleanup_ack_b",
+      "parallel_cleanup_ack_verified"
+    ]
+  },
+  {
+    "name": "cleanup_skip_locked_other_target",
+    "setup": "SELECT final_test.boot('one',1,false);SELECT final_test.cancel();",
+    "a": "SELECT final_test.check('cleanup_skip_locked_other_target_a',final_test.claim('worker-a') IS NOT NULL);",
+    "b": "SELECT final_test.check('cleanup_skip_locked_other_target_b',final_test.claim('worker-b') IS NOT NULL);",
+    "verify": "SELECT final_test.check('cleanup_skip_locked_other_target_verified',(SELECT count(*)=2 AND count(DISTINCT work_key)=2 FROM listing_publication_private.cleanup WHERE state='in_flight'));",
+    "blocked": false,
+    "user_b": "11111111-1111-1111-1111-111111111111",
+    "expected": [
+      "cleanup_skip_locked_other_target_a",
+      "cleanup_skip_locked_other_target_b",
+      "cleanup_skip_locked_other_target_verified"
+    ]
+  },
+  {
+    "name": "independent_accounts_publish",
+    "setup": "BEGIN;SELECT final_test.boot();SELECT final_test.confirm();SELECT final_test.boot('two',0,true,'22222222-2222-2222-2222-222222222222','bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb');SELECT final_test.confirm('two','22222222-2222-2222-2222-222222222222','bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb');COMMIT;",
+    "a": "SELECT final_test.check('independent_accounts_publish_a',final_test.publish()->>'state'='published');",
+    "b": "SELECT final_test.check('independent_accounts_publish_b',final_test.publish('two','22222222-2222-2222-2222-222222222222','bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb')->>'state'='published');",
+    "verify": "SELECT final_test.check('independent_accounts_publish_verified',(SELECT count(*)=2 AND count(DISTINCT identity_id)=2 FROM public.listings));",
+    "blocked": false,
+    "user_b": "22222222-2222-2222-2222-222222222222",
+    "expected": [
+      "independent_accounts_publish_a",
+      "independent_accounts_publish_b",
+      "independent_accounts_publish_verified"
+    ]
+  },
+  {
+    "name": "identity_change_before_final",
+    "setup": "SELECT final_test.boot();SELECT final_test.confirm();",
+    "a": "UPDATE public.profiles SET active_identity_id='cccccccc-cccc-cccc-cccc-cccccccccccc' WHERE id='11111111-1111-1111-1111-111111111111';SELECT final_test.check('identity_change_before_final_a',true);",
+    "b": "SELECT final_test.expect('identity_change_before_final_b',$q$SELECT final_test.publish()$q$,'42501');",
+    "verify": "SELECT final_test.check('identity_change_before_final_verified',NOT EXISTS(SELECT 1 FROM public.listings));",
+    "blocked": true,
+    "user_b": "11111111-1111-1111-1111-111111111111",
+    "expected": [
+      "identity_change_before_final_a",
+      "identity_change_before_final_b",
+      "identity_change_before_final_verified"
+    ]
+  }
+]

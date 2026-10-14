@@ -1,3 +1,97 @@
+## 14.10.2026 — lõppavaldamise lähteetapp pärast ES2017 parandust; kontrollitud lõpetamine
+
+Sama lähteetapi BigInt-parandus on Macis tehtud ja selle tulemus üle vaadatud.
+14.10 kell 14:46 läbisid 41 uut regressioonitesti, final-moodulite ES2017 tüübikontroll
+ja uus projektibuild (exit 0). ID ülempiir kasutab täpset BigInt("9223372036854775807")
+stringi; target ES2017, strict/lib, sõltuvused ja 23 migratsiooni säilisid.
+Algne 12:00 build'i STOP ja 12:38 diagnostika on muutmata ajalugu, mitte uus käivitus.
+Parandustõend: private-final-source-bigint-repair-20261014-144601-wrmuy_4a.zip,
+SHA-256 31ad04b22fbd179b0ac842cbaab8fa4c5c971d624eb2e3b7c755b4c302dcc5ef.
+
+Viimane täielik salvestatud Git-vaatlus oli 14.10.2026 14:46:16.381892 Tallinn:
+main/9f3961d, täpselt 36 rada staging'us (26 uut, 10 varasema dokumendi muudatus),
+staging'uväliste muudatusteta, 560 valitud allikat. Tööpuu EI OLNUD puhas ning
+commit/push EI OLNUD tehtud. Kaug-main'i viimane sama baasi vaatlus oli 14:46:15.027351.
+See on varasema käigu tõend, mitte uue lõpetaja värske Git- või võrguvaatlus.
+
+Järgnev kontrollitud source-finisher nõuab enne kirjutusi tegelikku main/HEAD-i,
+kogu indexit/tööpuud, 560 allikat, 23 migratsiooni ja kinnitatud kaugsihti.
+Täpsustatakse ainult ühtteist juba sama etapi dokumenti. Kõik 22 lõppavaldamise faili
+(sealhulgas parandatud TS), uus ES2017 regressioonitest, nõuded ja tõendiinventuurid
+säilivad bait-baidilt. Commit'i ulatus jääb samaks 36 rajaks; üks commit ja üks
+mitte-force main-push. Uut rakendusfunktsiooni pooleliolevale staging'ule ei lisata.
+
+Tegelikku commit/push/clean/remote tulemust loe uuest private-final-publication-source-finish
+result.json-ist, commit-proof.json-ist ja remote-observations.json-ist. See ette
+kirjutatud tekst EI kinnita tulevast lõpetamist edukaks. 41 testi/tüübikontrolli/build'i
+ning 143/81/85/140/117/108/195/109/119 sarju, vanu paigaldajaid/parandajaid/diagnostikat,
+SQL-i või Storage'i käike ei korrata. Kontrollitakse ainult muudetud jooksva üleandmise
+kooskõla. Node24.16.0/npm11.13.0/Next16.2.1/TS5.9.3/Sharp0.34.5 on varasema paranduse
+vaatlused; lõpetaja neid uuesti ei käivita. Privaatset build-stdout'i ülevaataja ei lugenud.
+
+143 SQL-kontrolli tõend säilib muutmata SQL-i kohta. Vana 81 Node/HTTP-testi PASS
+kuulub algsetele failibaitidele, mitte parandatud faili uuele täissarjale. Parandatud
+rea tõend on 41 sihitud testi, ES2017 tüübikontroll ja uus build. Varasemad V1/V2 STOP-id
+ning testitud README ettevalmistusaegsed NOT_RUN väljad säilivad ajalooliselt.
+
+Pärast selle SAMA lähteetapi lõpetamist ja tulemusülevaatust jätka päris V2 ühendamisega:
+hiliste väliste kirjutuste lõplikkus, lubatud privilegeeritud kirjutajad, püsiv piiratud
+koristus/lõppkustutus, konto-identiteedi-sõnumite kooskõla, vorm/marsruudid ning kogu
+lisamine → leidmine → detail/profiil → suhtlus → haldamine → kustutamine.
+Uut eraldi dokumendilõpetamise ringi ei tehta. Tavaliselt väljastatud SOURCE-loaga ja
+ettevalmistatud WEB-kirjutusega failid jäävad blocked_write_settlement; nende täielik
+failikustutus EI OLE valmis. 404/timeout/aegumine/ready ei tõenda välise kirjutuse lõppu.
+
+Upload/avaldamine jääb suletuks. SQL labs-only/API-closed; uut marsruuti, vormi, bucket'it,
+õiguste avamist ega koristaja ajastust see lõpetaja ei lisa. Vana9f3961d Ready/Production
+pilt on baasi tõend, mitte tulevase commit'i juurutuse või päris Storage/native vastuvõtt.
+Energy/maksed/AI/otsingulisad ootavad; üldmootorit või V1 täiskihti ei ehitata.
+Olemasolevaid kontosid/kuulutusi/pilte/päevikuid ei kustutata. STOP säilitab osalised
+failid/indexi/uue päeviku; ei käsitsi taastamist, korduskäivitust, commit'i ega push'i.
+
+---
+
+## Praegune lisa — 14.10.2026 testitud lõppavaldamise lähtepakett
+
+Kehtiv lähtebaas on `9f3961defbc797518995947bb21196d3208b94b9`. WEB-pildi lähteetapp
+on lõpetatud: 13.10 kell 22:36 commit/push/puhas main on üle vaadatud ning 22:38 kasutaja
+Ready53s/Production-ekraanipilt kattub sama commit'iga. Seda lõpetajat ega tõendit ei korrata.
+Viimane täielik kohalik Git-kontroll on 14.10 kell 09:26:56.730031 Tallinn: puhas main,
+534 valitud allikat ja 23 migratsiooni. See on salvestatud, mitte selle dokumendi uus vaatlus.
+
+Lõppavaldamise 22-failine kandidaat läbis V3-s tegeliku PG17.6 testietapi: 103 rollback +
+30 kontrolli kümnes kaheühenduslikus ajastuses + 10 oodatud isolatsioonikeeldumist = 143 PASS.
+63 SQL-käsku exit0; stderr'is kokku16 üle vaadatud NOTICE-rida, mitte vead. Testi enda
+service_role skeemipiir parandati õigusi laiendamata. Kaks varasemat tervik-STOP-i säilivad.
+81 Node/HTTP testi ja TypeScripti PASS on V1 muutmata Maci tõend; V3 neid ei korranud.
+Node24.16.0/TS5.9.3 on varasemad väärtused; HTTP oli kohalik sünteetilise Auth/REST/Storage
+mudeliga. SQL-abi eemaldati. See ei ole productioni ACL-i, Storage'i ega pilve vastuvõtt.
+
+Piiratud lähtepaigaldus säilitab kõik 22 testitud faili ja lisab/uuendab 12 dokumendirada:
+kokku34 rada (24 uut,10 varasemat),558 valitud allikat. Tegelik paigaldus, üks uus build ja
+staging loetakse ainult uue `private-final-publication-source-install-…/result.json` tõendist;
+neid EI väideta siin ette tehtuks. Enne kirjutusi nõutakse värsket Git/index/tööpuu,
+534 allika,23 migratsiooni ja kinnitatud kaug-main'i kontrolli. 143/81 ega vanu sarju ei korrata.
+Olemasolevad hinna/identiteedi/reegli/images/attempt/upload/WEB moodulid ja kõik migratsioonid säilivad.
+
+Loe `docs/architecture/v2-private-publication-final-v1.md` ning
+`docs/verification/v2-private-final-publication-tests-20261014.json`. Testitud README varasem
+NOT_RUN jääb ajalooliste baitidena alles. Seitse uut teostus-SQL-i jäävad laborifailideks:
+need ei ole selles etapis rakendatud migratsioonid. API-rollid ja upload/avaldamine jäävad suletuks.
+Puudub uus vorm, marsruut, Storage'i konfiguratsioon, töötleja ajastus või andmekustutus.
+
+Sisu lõppkustutus ja failide koristuse lõpp on eri olekud. Väljastatud SOURCE-loaga ning
+ettevalmistatud WEB-kirjutusega failid jäävad blocked_write_settlement: kandidaat EI võimalda
+veel nende täielikku failikustutust. Timeout/404/expiry/ready ei tõenda välise kirjutuse lõppu.
+Konto/identiteedi RESTRICT-keeldumise test pole valmis konto kustutusvoog. Hiliste kirjutuste
+lõplikkus, lubatud privilegeeritud kirjutajad, päris Storage/CORS/mahud/mobiil/native-pilv,
+sõnumite kooskõla ja terve müüja–ostja–anonüümse teekond on enne avamist vajalikud jätkutööd.
+Pärast sama lähtecheckpoint'i lõpetamist jätkub tegelik V2 ühendus, mitte uus docs-only ring.
+Energy/maksed/AI/otsingulisad ootavad; üldmootorit ega V1 täiskihti ei lisata.
+Olemasolevaid kontosid, kuulutusi, pilte ega operatsioonipäevikuid ei kustutata.
+
+---
+
 ## 13.10.2026 — WEB-pildi lähtepaigaldus üle vaadatud; sama etapi kontrollitud lõpetamine
 
 Kõik 14 testitud veebipildi ühenduse faili on projektis muutmata kujul. Uus Maci build
@@ -10205,3 +10299,36 @@ productioni eelkontroll. Alles eraldi kinnitatud rakendamise ja järelkontrolli
 järel ühendatakse kasutajaliides. Seni jääb Minu ala aktiivse/aegunud näitamise
 puudus lahendamata; otsingu korrektset aegumisfiltrit ei eemaldata.
 Ära korda läbitud installereid, SQL-teste ega varasemaid productioni skripte.
+
+
+## 2026-10-14 — lõppavaldamise ES2017 build-parandus (sama pooleli lähteetapp)
+
+Algne 12:00 paigaldaja kirjutas34 rada, kuid build väljus1-ga; staging/commit/push ei alanud.
+12:38 salvestatud logi diagnostika kinnitas TS2737: finalContract.ts:7:133 kasutas
+9223372036854775807n literaali, projekti tsconfig.target on ES2017. Vana moodulitestide
+kompileerimine kasutas ES2022; see ei kontrollinud tegelikku build-sihti. See oli
+ettevalmistuse puudus, mitte kasutaja seadistusviga.
+
+Samas ID-kontrollis asendatakse ainult literaal avaldisega BigInt("9223372036854775807").
+Piir jääb täpseks; ei Number-teisendust, uut hinnareeglit, ES2020-sihttaseme tõstmist ega
+tüübikontrolli väljalülitamist. Tsconfig/paketid ja23 migratsiooni säilivad.21 ülejäänud
+testitud kandidaatfaili, sh kogu SQL ja vana81-testifail, jäävad muutmata. Algne143SQL
+tõend säilib; vana81PASS on algse baitversiooni tõend, mitte muudetud faili uus täisvastuvõtt.
+
+Uus tests/listing-publication-final-es2017.test.cjs kontrollib sama tegeliku ES2017/lib/strict
+valikuga kompileerimist, vana literaali TS2737 negatiivkontrolli ning41 uut ID/receipt/price
+regressiooni, sh1000 deterministlikku piirivõrdlust ühes testis. Assistendi Node22.16.0/
+TS5.8.3 peal läbis41/41 ja kogu viie uue mooduli ühenduse ES2017 typecheck. Maci uus käik
+teeb need uued kontrollid Node24.16.0/TS5.9.3 peal; vanu143/81/sarju ei korrata.
+
+Eraldi piiratud parandaja kontrollib värskelt tegelikku baasi/koguindexit/tööpuud/558
+allikat/23migratsiooni/kaug-main'i. Muutub üks olemasolev TS-rida, lisandub uus test ja
+see eraldi parandustõendi dokument; seotud jooksvad dokumendid täpsustuvad. Kokku on
+sama lähteetapi kavand36 rada,560valitud allikat. Ainult uute kontrollide järel kirjutused,
+seejärel üks uus build ja edul täpne staging. Ei commit/push-i, SQL-i, Storage'i ega installi.
+Selle ette kirjutatud teksti järgi ei tohi tulevast build'i/PASS-i eeldada: tegelik tulemus
+loe private-final-source-bigint-repair ZIP-ist. STOP-il säilita kõik; vana paigaldajat ei korrata.
+
+Upload/avaldamine jääb suletuks. Hiliste kirjutuste lõplikkus, blocked_write_settlement
+objektide täielik koristus, konto/identiteedi/sõnumite ning terve kasutajatee ühendus
+jäävad kohustuslikuks. Olemasolevate kontode/kuulutuste/piltide/päevikute kustutusluba puudub.

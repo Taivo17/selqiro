@@ -1,0 +1,87 @@
+{
+  "exact_declarations": [
+    {
+      "source": "supabase/labs/listing-price-core-v1/01_value_contract.sql",
+      "name": "listing_price_legacy_label_v1",
+      "bytes": 368,
+      "sha256": "954b2f40fd3d38544cd8e3faa78ac8c331a956ba0708dbf55a219d1253ac82c6"
+    },
+    {
+      "source": "supabase/labs/listing-price-core-v1/01_value_contract.sql",
+      "name": "listing_price_tuple_valid_v1",
+      "bytes": 686,
+      "sha256": "95c3bd729b7c065b62f6f47db8c5f3ebd8f4cba817261f01e80680673d051b1a"
+    },
+    {
+      "source": "supabase/labs/listing-price-core-v1/01_value_contract.sql",
+      "name": "listing_price_snapshot_v1",
+      "bytes": 379,
+      "sha256": "afd7a59b9f5efdb5cbda339c19c2554ad7b412abc086d67ba25bdc7dcec4e807"
+    },
+    {
+      "source": "supabase/labs/listing-price-integration-v1/04_basics_contract.sql",
+      "name": "listing_basics_values_v1",
+      "bytes": 276,
+      "sha256": "cebbbad9141efc5dce1bc252e3720e3f672c55787a4b5d5b204007c5377ab11f"
+    },
+    {
+      "source": "supabase/labs/listing-price-integration-v1/04_basics_contract.sql",
+      "name": "listing_basics_snapshot_v1",
+      "bytes": 520,
+      "sha256": "2533ee9541d16613adb8d3994377288fa0c9ef72c0a7a44081c5eec347ff6be2"
+    },
+    {
+      "source": "supabase/labs/listing-price-integration-v1/04_basics_contract.sql",
+      "name": "listing_basics_search_text_v1",
+      "bytes": 507,
+      "sha256": "dfbb681057ecbb77cf3f27b9c06a2477dafcc3b9998542801c62336ab1894931"
+    },
+    {
+      "source": "supabase/migrations/20260722173530_baseline_20260722.sql",
+      "table": "conversations",
+      "bytes": 534,
+      "sha256": "d867d29b2daff38866efd10eb6375e7d580034ce3983a92cf93516c8e9213017"
+    },
+    {
+      "source": "supabase/migrations/20260722173530_baseline_20260722.sql",
+      "table": "messages",
+      "bytes": 429,
+      "sha256": "fcf3a1f15e613f7599f52e99fe26015c252189d5f03b829bb23250ae3b660343"
+    },
+    {
+      "source": "supabase/migrations/20260722173530_baseline_20260722.sql",
+      "constraint": "conversations_listing_id_fkey",
+      "sha256": "c123db2f2d06cc68f64df341be2c997b9a4e72c6e5a41e23871c9d1c077c8adf"
+    },
+    {
+      "source": "supabase/migrations/20260722173530_baseline_20260722.sql",
+      "constraint": "messages_listing_id_fkey",
+      "sha256": "7e1d51c0ade425c359c9c3e1aa79074a5f4914c6d5f2743a987432b8196c226c"
+    },
+    {
+      "source": "supabase/migrations/20260722173530_baseline_20260722.sql",
+      "constraint": "messages_conversation_id_fkey",
+      "sha256": "d926a94da8214748ecb9947a50d4bc8beed7caab34d2698c1529bdff2a429024"
+    },
+    {
+      "source": "supabase/migrations/20260722173530_baseline_20260722.sql",
+      "constraint": "profiles_id_fkey",
+      "bytes": 144,
+      "sha256": "2194b0937e0d3600d39d35e0ac77abfe395cade0e6af0cf1b66fe249b6e0ca4c"
+    },
+    {
+      "source": "supabase/migrations/20260722173530_baseline_20260722.sql",
+      "constraint": "identities_user_id_fkey",
+      "bytes": 158,
+      "sha256": "6a395cc78c6d4224c106d2436b33c2bcbfca889ddeb702ef38a3403fbdc05cd5"
+    }
+  ],
+  "writer": {
+    "guard_source": "supabase/releases/listing-price-v1/write-guard-v2.sql",
+    "guard_delta": "only structured INSERT role and terminal DELETE exception; UPDATE and TRUNCATE bodies unchanged",
+    "mapping_source": "supabase/labs/listing-price-integration-v1/09_owner_create.sql",
+    "mapping_sha256": "d2236122825defec99bad638c09d6e4750668b1892d83ebd2cba0bd6daaf4c39",
+    "mapping_bytes": 2203,
+    "mapping_exact": true
+  }
+}

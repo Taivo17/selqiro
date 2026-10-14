@@ -1,0 +1,56 @@
+{
+  "build": "ONE_NEW_BUILD_REQUIRED_AFTER_GUARDED_REPAIR_NOT_PRECLAIMED",
+  "change": {
+    "after": {
+      "bytes": 4429,
+      "git_blob": "070a6d041e5aff436c665866e3ea4928ceae10ca",
+      "sha256": "33cf4a86b43000925ef6fa7660f92360f33fad9a83c7897dfbdf0676bac8d2a0"
+    },
+    "before": {
+      "bytes": 4420,
+      "git_blob": "b2cfa7c01d64b586a36c1d8c7be644631cbd6f0c",
+      "sha256": "a2f187a0de8317c74085f5fd0e710d0fc25b28892cc8f3320237d9579f6321e5"
+    },
+    "new_expression": "BigInt(\"9223372036854775807\")",
+    "old_expression": "9223372036854775807n",
+    "path": "src/server/listing-publication/final/finalContract.ts",
+    "same_exact_integer_bound": true
+  },
+  "date": "2026-10-14",
+  "diagnostic_zip_sha256": "13f477cdbccfaf4c53f6a2fba4bc46c97441eca9495c63436d7794b550468565",
+  "format": "selqiro_scoped_build_repair_v1",
+  "next": "Review new result; never rerun original installer or clear its journal.",
+  "original_build": "FAILED_EXIT_1_TS2737_ES2017",
+  "original_stop_zip_sha256": "3a389130663bedf7d8daadc138bc1a932f77e89543a68f4f9203e61520ed527a",
+  "planned_selected_sources": 560,
+  "planned_stage_paths": 36,
+  "preserved": [
+    "tsconfig.json target ES2017 / strict / esnext lib",
+    "package.json and lock",
+    "23 migrations",
+    "all seven final SQL implementations",
+    "all21 other final candidate files",
+    "original143SQL/81Node evidence (old source bytes)"
+  ],
+  "publication": "DISABLED",
+  "regression": {
+    "assistant_full_final_ES2017_typecheck": "PASS",
+    "assistant_pass": 41,
+    "assistant_runtime": {
+      "node": "22.16.0",
+      "typescript": "5.8.3"
+    },
+    "deterministic_samples_inside_one_test": 1000,
+    "includes_original_literal_TS2737_negative_control": true,
+    "mac_run": "NOT_YET_OBSERVED_READ_NEW_REPAIR_RESULT",
+    "new_tests": 41,
+    "old81_replayed": false,
+    "oldSQL_replayed": false,
+    "path": "tests/listing-publication-final-es2017.test.cjs",
+    "record": {
+      "bytes": 7776,
+      "git_blob": "cecc997fcad9686bc17ce35620778ce9036afe39",
+      "sha256": "c046d0d31fbfd39613101ec4a44c176332c8e4665374e82429b62b9ec31d4ebc"
+    }
+  }
+}

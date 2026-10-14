@@ -1,0 +1,244 @@
+{
+  "actual_last_local_guard": {
+    "branch": "main",
+    "clean": true,
+    "head": "9f3961defbc797518995947bb21196d3208b94b9",
+    "index_sha256": "8af55979a1ae31fa4e4286ea4772fbaef4dcd6869c61e67edbc6ba30a8884187",
+    "observed_utc": "2026-10-14T06:26:56.730031+00:00",
+    "selected_sources": 534
+  },
+  "base_head": "9f3961defbc797518995947bb21196d3208b94b9",
+  "executed_test_runner_sha256": "b1f226699afaa71118b306a44116cc4453b1032655576bc10c050165047ee73d",
+  "format": "selqiro_reviewed_final_publication_test_proof_v1",
+  "limits": [
+    "Source selection is not full repository; full index/Docker/lock/snapshot bodies not exported.",
+    "81Node PASS was reused fromV1 without replay. Real loopback HTTP, synthetic Auth/REST/Storage, no native or cloud acceptance.",
+    "SQL test grants are not production permissions; original V1/V2 whole STOP results unchanged.",
+    "Normal issued SOURCE and prepared WEB files remain blocked_write_settlement; complete file deletion is NOT implemented.",
+    "Account/identity RESTRICT refusal is not a completed erasure flow. Full seller/buyer/anonymous journey remains required."
+  ],
+  "node": {
+    "cloud_storage": "NOT_CONTACTED",
+    "evidence": {
+      "new-final-tests.exit.json": {
+        "bytes": 21,
+        "git_blob": "1f1863572caeb9ef4f587c66dd24c057419924a5",
+        "sha256": "81868a6e94ffc0178bf833deb1c9013d9fab4ee95ddb876a5e8ec4f1d26376d2"
+      },
+      "new-final-tests.stderr": {
+        "bytes": 0,
+        "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "new-final-tests.tap": {
+        "bytes": 13431,
+        "git_blob": "3f33054d686318369c5d7400dc07f0b20af16dca",
+        "sha256": "00992f8fb5c7bd8dc696f86a72ce3099b109756f200f6c38be7411af12053adf"
+      },
+      "new-final-typecheck.exit.json": {
+        "bytes": 21,
+        "git_blob": "1f1863572caeb9ef4f587c66dd24c057419924a5",
+        "sha256": "81868a6e94ffc0178bf833deb1c9013d9fab4ee95ddb876a5e8ec4f1d26376d2"
+      },
+      "new-final-typecheck.stderr": {
+        "bytes": 0,
+        "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "new-final-typecheck.stdout": {
+        "bytes": 0,
+        "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "fail": 0,
+    "native_execution": "NONE",
+    "node": "v24.16.0",
+    "old_test_suites": "NOT_RERUN",
+    "passed": 81,
+    "reporter": "tap-explicit",
+    "sha256": "00992f8fb5c7bd8dc696f86a72ce3099b109756f200f6c38be7411af12053adf",
+    "tests": 81,
+    "transport": "real_loopback_HTTP_synthetic_Auth_REST_Storage",
+    "typescript": "5.9.3"
+  },
+  "node_reuse": {
+    "basis": "Exact saved v1 Node/TypeScript PASS; all input source and Node candidate bytes unchanged. Original SQL STOP remains STOP.",
+    "candidate_changes": {
+      "supabase/labs/listing-publication-final-v1/tests/expected-labels.json": {
+        "after": {
+          "bytes": 4281,
+          "git_blob": "12f6a54ff484e8b18dcfaa651f6bcb07b4a72eed",
+          "sha256": "a6894eac995255a65e914e0ecdbdb2dd05ca0edc941b2809139aa6fcbfb98e84"
+        },
+        "before": {
+          "bytes": 4005,
+          "git_blob": "4b1a87a7d65e1f217ab7af638eaccbc07414ada6",
+          "sha256": "8253079b9039157f841cd5cbf4fbe2b6810f09f78031261d5f30c7d8b940445c"
+        }
+      },
+      "supabase/labs/listing-publication-final-v1/tests/suite.sql": {
+        "after": {
+          "bytes": 33356,
+          "git_blob": "d54ad68fec1e52db062daf1780023120d4bc06c8",
+          "sha256": "a99fc69ec35193633220a3b7e742efe03a0fc16e9ae1ba800eba85118a1f7dce"
+        },
+        "before": {
+          "bytes": 29823,
+          "git_blob": "b7b8ca773da07920bfaa3100c8eee575e83cb026",
+          "sha256": "d5410ce2b323cfe7879929f003ff7dc88db5637da6b09ef8aef306ca14865111"
+        }
+      }
+    },
+    "fresh_runtime_observation": false,
+    "native_processes_this_run": 0,
+    "node": "v24.16.0",
+    "node_processes_this_run": 0,
+    "node_tests": 81,
+    "original_archive_sha256": "34a60718948fb39a21774bee5a9f38a379ed639cd0778eccf4c0ce535ff19ac6",
+    "original_finished_utc": "2026-10-13T21:00:22.810902+00:00",
+    "original_run_status": "STOP_REVIEW_REQUIRED",
+    "original_runner_sha256": "920a7b5a77e87cccd06f95c2cdda071e69bba5fbbbec8224400d2803f069f9b9",
+    "original_sql_status": "FAILED_OR_UNCONFIRMED",
+    "status": "REUSED_V1_PASS_NOT_RERUN",
+    "typescript": "5.9.3",
+    "typescript_processes_this_run": 0
+  },
+  "offline_review_checks": 141,
+  "prior_source_manifest_sha256": "1521b68dd42a37b9aa4cb8aa48eaf6f329c95b40a95ecf01c05b5cce63511229",
+  "recorded_on": "2026-10-14",
+  "rerun_in_source_installer": false,
+  "result_json_sha256": "a7419f7869c3c26b8a4ff354003e87593991b080b3bedfea0e07ba3d6919d61e",
+  "result_zip": "private-final-publication-tests-v3-20261014-092645-s2o4ahyw.zip",
+  "result_zip_bytes": 6459005,
+  "result_zip_sha256": "bf5fd58521001aabb5655e435271b026cad22466b1f0f059a7a3d0ec5b474350",
+  "source_install_build": "NOT_RUN_IN_THIS_PREWRITTEN_INVENTORY_SEE_NEW_INSTALL_RESULT",
+  "sql": {
+    "expected_notice_lines": 16,
+    "helper_cleanup": "OWN_RUN_HELPER_REMOVED_VERIFIED",
+    "isolation_rejections": 10,
+    "progress_cases": [
+      "cleanup skips another object under same account",
+      "independent accounts publish"
+    ],
+    "rollback": 103,
+    "runtime": "postgres (PostgreSQL) 17.6",
+    "schedule_assertions": 30,
+    "schedules": 10,
+    "statements": 63,
+    "stderr_all_empty": false,
+    "total": 143
+  },
+  "tested_files": {
+    "src/server/listing-publication/final/cleanupOne.ts": {
+      "bytes": 4115,
+      "git_blob": "2c7d53a1a69b6d6784d1a2de0a537ebf62c8a2f6",
+      "sha256": "df386550dc6405d0367a760fbdd99a0ffa5a29b7db29723270823e22b15847e5"
+    },
+    "src/server/listing-publication/final/finalContract.ts": {
+      "bytes": 4420,
+      "git_blob": "b2cfa7c01d64b586a36c1d8c7be644631cbd6f0c",
+      "sha256": "a2f187a0de8317c74085f5fd0e710d0fc25b28892cc8f3320237d9579f6321e5"
+    },
+    "src/server/listing-publication/final/finalizeListing.ts": {
+      "bytes": 3870,
+      "git_blob": "042e724fd82a80b15bc25b3d81ca356fa4df65c5",
+      "sha256": "8a7a8b566e3af827cb23c826fdb50c6f529a82b8e3bd10682152de7a004dc5d3"
+    },
+    "src/server/listing-publication/final/serveListingMedia.ts": {
+      "bytes": 2986,
+      "git_blob": "848756bcc2c150941a28df09fb9a919ed38875f9",
+      "sha256": "692fe149560d937dc008a978eb20a8ad54d7fb7410e174acb46702fbefed2121"
+    },
+    "src/server/listing-publication/final/supabaseFinal.ts": {
+      "bytes": 793,
+      "git_blob": "67213cba5a3626495a765dfbf73bef07d5eb5a0e",
+      "sha256": "9285c0c5ffd6bf841e54a5f6cf10191620037c09a6d7196d872be4fac7201f96"
+    },
+    "supabase/labs/listing-publication-final-v1/01_state.sql": {
+      "bytes": 6162,
+      "git_blob": "abd8988348450915f56e90d5d5e0a3f2761d1951",
+      "sha256": "dbfffa60751acb18734f5c7a8c6a5b842572cbce71a8b5e6cd0067c2c4799186"
+    },
+    "supabase/labs/listing-publication-final-v1/02_listing_writer.generated.sql": {
+      "bytes": 8162,
+      "git_blob": "2ad03ae0186ab0690860ff76cecc4ee59964d080",
+      "sha256": "6625af67124cffe23d16c86d33fe5279116c619f2ea117529b5511645766106e"
+    },
+    "supabase/labs/listing-publication-final-v1/03_final_and_delete.sql": {
+      "bytes": 11749,
+      "git_blob": "3c20d75827b5cb6f37bf6fc400a4d1a8937ee6d5",
+      "sha256": "f58063f55803293ae647033ae666b185794c4c5d8f00cfb5da3b68026a003f15"
+    },
+    "supabase/labs/listing-publication-final-v1/04_guards.sql": {
+      "bytes": 7628,
+      "git_blob": "fd688da8d284ceeae38c231bacb2c84fdd310d90",
+      "sha256": "93191132d611d040059ecf764e9aee9db96b626236326e8140bad9ff412e2d81"
+    },
+    "supabase/labs/listing-publication-final-v1/05_cleanup.sql": {
+      "bytes": 5251,
+      "git_blob": "ab6cce3dcc2e5c2db3df14f510add0c5d96b4235",
+      "sha256": "a476b88b67b1bc1ec0df8f8a94fcf545888901ead68b03f0fb251edc0fe85c42"
+    },
+    "supabase/labs/listing-publication-final-v1/06_authority.sql": {
+      "bytes": 4004,
+      "git_blob": "fefedad0eb9dbcf09be276dd4de550b57d160a1b",
+      "sha256": "4fa78ca05823a6c75c3cd578d5099e7289df37feb3cebcd4c0c76a26cfb800af"
+    },
+    "supabase/labs/listing-publication-final-v1/07_budget.generated.sql": {
+      "bytes": 4489,
+      "git_blob": "baff341c43d27d44aa508a3f2a813e2f89ccb576",
+      "sha256": "23f9961381d599f31341ae1717ef3a2d51c298e5b65c54433c71efaf1d8f8309"
+    },
+    "supabase/labs/listing-publication-final-v1/README.md": {
+      "bytes": 6965,
+      "git_blob": "61a96f4671721f591e36f2249cfc610e041f34f5",
+      "sha256": "c79d66651c3d09cce2f67d92245872562bb02c80e36c7df4e7d9089ecdc892a7"
+    },
+    "supabase/labs/listing-publication-final-v1/tests/dependencies.json": {
+      "bytes": 1909,
+      "git_blob": "49590544075631445390059ffa882e40e9812952",
+      "sha256": "71903392ce316c5287e1407cece643fae5adfc3e513077a4b8e6cb3d0738c0bb"
+    },
+    "supabase/labs/listing-publication-final-v1/tests/derivation.json": {
+      "bytes": 3513,
+      "git_blob": "80c2e488bf03dfad396fa3d281ff78c8022dc914",
+      "sha256": "6ecaaafa4c20baff1ec5d5559b2fd1357a37a30dfe5837a3d31c9da59a9ec056"
+    },
+    "supabase/labs/listing-publication-final-v1/tests/expected-labels.json": {
+      "bytes": 4281,
+      "git_blob": "12f6a54ff484e8b18dcfaa651f6bcb07b4a72eed",
+      "sha256": "a6894eac995255a65e914e0ecdbdb2dd05ca0edc941b2809139aa6fcbfb98e84"
+    },
+    "supabase/labs/listing-publication-final-v1/tests/fixture-extension.generated.sql": {
+      "bytes": 9191,
+      "git_blob": "56bb185dbbb5db277ea1b78a7ff455183bb3c345",
+      "sha256": "f9847b301ef7787b28f186202d7a8e9838375da6362d1dc8936fb24b6acbc880"
+    },
+    "supabase/labs/listing-publication-final-v1/tests/helpers.sql": {
+      "bytes": 6741,
+      "git_blob": "ae0e05424a4a6c182742233913e55fff51634e42",
+      "sha256": "f1ce69096c2325e8fe469589680ab6bee740ffe551a9c04cb3bcec962d89dda2"
+    },
+    "supabase/labs/listing-publication-final-v1/tests/isolation.json": {
+      "bytes": 3898,
+      "git_blob": "ae7c7dc199ca115d316edbc7234526dd16cb5620",
+      "sha256": "b8be171a6aeb77c6f68849773630ed633f12e149364679459589bc5e4db03ade"
+    },
+    "supabase/labs/listing-publication-final-v1/tests/races.json": {
+      "bytes": 7483,
+      "git_blob": "bd15a2d075fea1f5f07d481d20e0459a292aede7",
+      "sha256": "9d5e4afe18da34ce3b7b24485ff55bd1257fb74e70fd255ca8f537c32557cd2f"
+    },
+    "supabase/labs/listing-publication-final-v1/tests/suite.sql": {
+      "bytes": 33356,
+      "git_blob": "d54ad68fec1e52db062daf1780023120d4bc06c8",
+      "sha256": "a99fc69ec35193633220a3b7e742efe03a0fc16e9ae1ba800eba85118a1f7dce"
+    },
+    "tests/listing-publication-final.test.cjs": {
+      "bytes": 14522,
+      "git_blob": "af17e0367370c49ca61ac7578a9d7b188a3244bf",
+      "sha256": "1e3f5a2ba3f9c1ad4bd3a3a1d2f055731634993311b549cc255532bd22983d84"
+    }
+  }
+}
