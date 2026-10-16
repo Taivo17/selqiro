@@ -1,3 +1,98 @@
+## 16.10.2026 — väljastamata SOURCE-loa sama lähteetapi lõpetamine
+
+**Paigaldus ja uus build on Macis tehtud ning üle vaadatud. Järgneb SAMA 19-rajalise
+muudatuse piiratud lõpetaja. See ette kirjutatud dokument EI kinnita lõpetaja
+commit'i, push'i ega uue juurutuse õnnestumist; loe UUE käigu tegelikku result.json-i.**
+
+- Alus 8f5c3a82a803f9d5f977a9fbce62cbdb656f0164 / main, parent ea212d3.
+  Viimane täielik kohalik kaitse 16.10.2026 14:11:07.187940 Tallinn: 19 staged,
+  staging'uväliseid muudatusi pole; 594 valitud allikat ja 23 migratsiooni. Tööpuu pole puhas.
+  Kaug-main 14:11:05.810431 oli sama baas. Need on salvestatud, mitte uued live-vaatlused.
+- Algne paigaldustõend: source-no-release-source-install-20261016-141048-qifwk2zj(1).zip,
+  7 399 268 baiti; SHA256 f50255d4c219f4b2895beba617821b702163657f63fa1b528626c317015b6f77.
+  Kõik üheksa testitud faili on muutmata paigaldatud; 19 rada = 11 uut + kaheksa dokumenti.
+- Päris build 16.10 14:10:58.162576–14:11:02.685298 Tallinn: exit 0.
+  Node24.16.0/npm11.13.0/Next16.2.1/TypeScript5.9.3/Sharp0.34.5 on selle paigalduse
+  varasemad vaatlused, mitte lõpetaja uus runtime-test. Build'i stdout1560b jäi privaatseks;
+  selle sisu ega hoiatuste puudumist siin ei väideta. Native-töötlejat ei käivitatud.
+- Muutmata Maci 33 Node/HTTP + 67 SQL tõend: ES2017/strict, PG17.6 50 rollback,
+  15 kontrolli viies ajastuses ja kaks isolatsioonikeeldumist. Kaks lukuootamist,
+  kolm teise tehingu varasemat lõppu; viimane sama konto teine katse. 29 SQL-exit0,
+  kaks fixture-NOTICE'it; oma abi eemaldatud. HTTP oli kohalik, Auth/RPC/Storage
+  sünteetilised. See pole pilve vastuvõtt; neid ega vanu sarju ei korrata.
+
+**Piiratud lõpetaja:** uus COMMIT PUSH kinnitus; värsked tegelikud main/HEAD/parent/
+koguindex/tööpuu/594 allika/23 migratsiooni ja lubatud origin/main'i kaitsed enne kirjutusi.
+Täpsustatakse ainult üheksat juba samasse 19-rajalisse muudatusse kuuluvat dokumenti.
+Kõik üheksa testitud faili, nõuded, inventuurid ja töötavad moodulid säilivad bait-baidilt.
+Jooksva üleandmise kontroll, kontrollitud eraldi commit-index, üks commit ja kuni üks
+mitte-force main-push. Uus ühekordne päevik; vanu päevikuid ei avata. Osalisi muutusi ei taastata.
+
+**Pärast käiku:** loe UUE source-no-release-source-finish tulemus, commit-proof,
+remote-observations ja lõplik Git-seis. Ainult kinnitatud commit/push/clean järel jätka
+otse sama V2 recorded/väljastatud SOURCE-loa lõplikkuse, ebapiisava WEB-tõendi,
+püsiva koristuse/lõppkustutuse ja terve kasutajatee ühendust. Eraldi dokumentide
+lõpetamise ringi ei lisata. STOP-il säilita failid/index/päevik; ära korda ega tee
+käsitsi reset/restore/commit/push'i.
+
+**Avamise piir:** üleslaadimine ja avaldamine jäävad suletuks; SQL labs-only/API-closed.
+Uus kitsas proof puudutab suletud katse endiselt signing-olekus, salvestamata tokeniga
+juhtumit. Hiline tokenisalvestus keeldub ka pärast koristust. See EI tühista recorded-
+või brauserile väljastatud tokenit; ka aegunud/purgitud load ja ebapiisava tõendiga WEB
+jäävad blokeerituks. Täielik failikustutus EI OLE valmis. Record-before-get peab olema
+ainus väljastustee; lekketa saladused, teise privilegeeritud kirjutaja puudumine ning
+tegelik Storage/versioonikustutus/HTTP/CORS/mahud/mobiil/native-pilv vajavad vastuvõttu.
+Konto-identiteedi-sõnumite kooskõla, vormid/marsruudid ja müüja–ostja–anonüümse
+lisamine→leidmine→detail/profiil→suhtlus→haldamine→kustutamine jäävad kontrollida.
+Need on enne avamist vajalikud, mitte mugavused. Energy/maksed/AI/otsingu lisad ootavad.
+Olemasolevate kontode, kuulutuste, piltide ega päevikute kustutamisluba puudub.
+8f5c3a8 Ready42s/Production on vastu võetud baasitõend; seda uuesti ei küsita.
+Push võib käivitada olemasoleva Verceli automaatika; lõpetaja uut juurutusolekut ei kinnita.
+
+---
+
+## 16.10.2026 — väljastamata SOURCE-loa testitõend ja piiratud lähtepaigaldus
+
+Praegune commit’itud baas on `8f5c3a82a803f9d5f977a9fbce62cbdb656f0164`.
+Eelmine 20-rajaline kirjutusekontroll on commit’itud/push’itud ja üle vaadatud;
+8f5c3a8 Ready42s/Production-ekraanipilt on vastu võetud. Sama pilti ei küsita uuesti.
+Allolevad vanemad järgmised tööd on ajalugu, mitte käivitamisjuhis.
+
+Väljastamata SOURCE-loa Maci 16.10 12:54 testitõend: 33/33 Node/HTTP-testi ja
+ES2017/strict (Node24.16.0/TS5.9.3), 67/67 PG17.6 SQL-kontrolli (50 rollback +
+15 viies ajastuses + kaks isolatsioonikeeldumist). Kaks ajastust nõudsid lukuootamist,
+kolmes sai teine tehing enne esimese commit’i lõpetada; viimane on sama konto teine katse.
+29 SQL-käsku exit0, kaks fixture-NOTICE’it, oma abikonteiner eemaldati. HTTP oli kohalik,
+Auth/RPC/Storage sünteetilised. Native- või päris Storage’i vastuvõttu ei toimunud.
+Muutmata tõendi inventuur: `docs/verification/v2-source-no-release-tests-20261016.json`.
+
+Uus lähtepaigaldaja säilitab kõik üheksa testitud faili ning lisab kümme dokumenti:
+19 rada (11 uut, kaheksa dokumendimuudatust), oodatud lähtevalik 594. **Uue paigalduse,
+build’i ja staging’u tulemus on VEEL VAATLEMATA; loe UUE käigu result.json-i.**
+Enne kirjutusi värsked tegeliku Git/HEAD/koguindexi/tööpuu/583 allika/23 migratsiooni/
+lubatud remote’i kaitsed; seejärel üks uus build ja ainult PASS-i järel täpne staging.
+33/67 ega vanemaid teste, SQL-i, Storage’it, Dockerit või paigaldust ei korrata.
+Paketipaigaldust, commit’i ega push’i see uus käiviti ei tee. STOP säilitab failid ja indexi.
+
+Kitsas leping: suletud katse endiselt signing-olekus, salvestamata tokeniga SOURCE võib
+saada muutmatu väljastamata jätmise tõendi ja koristusloa. Sama katse lukul trigger
+keelab hilise tokenisalvestuse (`publication_source_release_sealed`), ka pärast koristust.
+Mahureservatsioon säilib kuni koristuse lõpetamise kinnituseni. Record-before-get peab
+olema ainus loa väljastustee; logilekked ja teised privilegeeritud kirjutajad pole kaetud.
+See EI tühista recorded/väljastatud tokenit. Ka aegunud/purgitud recorded-load, puuduv grant
+ja piisava tõendita WEB jäävad blokeerituks. Täielik failikustutus EI OLE valmis.
+
+Üleslaadimine/avaldamine on suletud, SQL labs-only/API-closed. Uut vormi/marsruuti,
+bucket’it, API-õigust, ajastatud worker’it või üldmootorit ei avata. Leping:
+`docs/architecture/v2-private-source-no-release-v1.md`. Päris Storage/HTTP/CORS/mahud/
+mobiil/native-pilv, konto-identiteedi-sõnumite kooskõla ja kogu müüja–ostja–anonüümse tee
+vajavad enne avamist vastuvõttu. Energy/maksed/AI/otsingu lisad ootavad.
+Pärast uue lähtepaigalduse vastuvõttu lõpeta SAMA lähteetapp eraldi kaitstud commit/push’iga,
+siis jätka V2 sisulist ühendust, mitte uut docs-only ringi. Olemasolevaid kontosid,
+kuulutusi, pilte ega päevikuid ei kustutata; lõpetatud skripte ei korrata.
+
+---
+
 ## 14.10.2026 — lõppavaldamise lähteetapp pärast ES2017 parandust; kontrollitud lõpetamine
 
 Sama lähteetapi BigInt-parandus on Macis tehtud ja selle tulemus üle vaadatud.

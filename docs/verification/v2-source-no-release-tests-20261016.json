@@ -1,0 +1,543 @@
+{
+  "actual_git_remote": "LOCAL_ORIGIN_ONLY_GITHUB_NOT_QUERIED_IN_TEST",
+  "candidate_files": {
+    "src/server/listing-publication/final/settleUnreleasedSourceOne.ts": {
+      "bytes": 2013,
+      "git_blob": "1e087a1038b7e626f66827b6b9af8d0aec9e7ca2",
+      "sha256": "88dc10bbcc5919ec1e8a5eb50297d9cda56bd5b7b83f5bcd8cef3c91a4793844"
+    },
+    "supabase/labs/listing-publication-source-no-release-v1/01_source_no_release.sql": {
+      "bytes": 11500,
+      "git_blob": "517495649bd1c814b7632a74c1a3d515dc59ba83",
+      "sha256": "a42e5549b21eb7905b170ec400b329210262064e4eef94f81aa4befd49652fce"
+    },
+    "supabase/labs/listing-publication-source-no-release-v1/README.md": {
+      "bytes": 3333,
+      "git_blob": "d262f45acada45b6a1c8324dc86bc4fe08a6632c",
+      "sha256": "6c711ea9e20630b3018abade9c6261908a50992631e7169170c02ebb7b15b965"
+    },
+    "supabase/labs/listing-publication-source-no-release-v1/tests/expected-labels.json": {
+      "bytes": 2062,
+      "git_blob": "f9219cc2a8b034a213e49f243c822c6ebf155fd5",
+      "sha256": "dae249046b8e73981eb49a602edcd17192331c924c605e8950600ccaa8a6766d"
+    },
+    "supabase/labs/listing-publication-source-no-release-v1/tests/helpers.sql": {
+      "bytes": 3533,
+      "git_blob": "994e9a15436e64ab661633d354d2d0fb4245a96a",
+      "sha256": "65a9055f57947e70f3a7e695703c9ffe2f355be5ad221fe82d9f65990406357b"
+    },
+    "supabase/labs/listing-publication-source-no-release-v1/tests/isolation.json": {
+      "bytes": 582,
+      "git_blob": "8e0bd1e2894370266cbb06bbbc91e3dfffd127fa",
+      "sha256": "67fa0467f94bbef4da40d3e96f84b2a810ffffb34d7379558453d20f96241bc2"
+    },
+    "supabase/labs/listing-publication-source-no-release-v1/tests/races.json": {
+      "bytes": 4681,
+      "git_blob": "8adf1dcf09e6c4db68ac118df70255e7a7fc8a9b",
+      "sha256": "448b081718c595a07caf36e702bfd02a4c1abe54f7e8a9cd2c2ab2721e642fbf"
+    },
+    "supabase/labs/listing-publication-source-no-release-v1/tests/suite.sql": {
+      "bytes": 11205,
+      "git_blob": "191119dc1823436cc183621ed4b86d2b43789809",
+      "sha256": "ef9382c35b9e53a17c3690fe7e4ef70711fcf6e8dfbc73fa22ebfcaef98e166e"
+    },
+    "tests/listing-publication-source-no-release.test.cjs": {
+      "bytes": 11462,
+      "git_blob": "f767e9757dbf0b67247ea6bb797bce3c34914600",
+      "sha256": "a33791fea272504ff9c07b1ebce9183b82de7521c05e9066bdf75e6dc7ab1c13"
+    }
+  },
+  "current_build": "NOT_YET_OBSERVED_USE_NEW_INSTALL_RESULT",
+  "date": "2026-10-16",
+  "format": "selqiro_reviewed_source_no_release_proof_v1",
+  "helper_cleanup": "OWN_RUN_HELPER_REMOVED_VERIFIED",
+  "last_actual_git": {
+    "branch": "main",
+    "clean": true,
+    "head": "8f5c3a82a803f9d5f977a9fbce62cbdb656f0164",
+    "index_sha256": "434aa362990220bf9df8154b633137e0716fb41240c6e614efff1cf5d9856fa4",
+    "observed_utc": "2026-10-16T09:54:15.671105+00:00",
+    "selected_sources": 583
+  },
+  "limits": [
+    "real loopback HTTP, synthetic Auth/RPC/Storage",
+    "SQL synthetic Storage fixture, no actual cloud deletion",
+    "recorded/released/expired/purged SOURCE remains blocked",
+    "no native invocation",
+    "full file deletion not ready",
+    "upload/publication disabled; labs API closed"
+  ],
+  "new_installer_executed": false,
+  "node": {
+    "commands": [
+      {
+        "exit_code": 0,
+        "finished_utc": "2026-10-16T09:54:09.754951+00:00",
+        "name": "new-no-release-typecheck",
+        "started_utc": "2026-10-16T09:54:09.437424+00:00",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "exit_code": 0,
+        "finished_utc": "2026-10-16T09:54:09.897823+00:00",
+        "name": "new-no-release-tests",
+        "started_utc": "2026-10-16T09:54:09.756436+00:00",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "602057f73bf77c3fb7b968d75a621bc2a1b66e027b40b0bad19829466866edc2"
+      }
+    ],
+    "inputs": {
+      "src/entities/listing/api/privateUploadHttp.ts": {
+        "bytes": 3684,
+        "git_blob": "1794a32302e561121afeb267297606c3da1b7106",
+        "sha256": "4f28de9380ca8b0facc458325251e24583f469f5a5303ab32ef7810ef50fab4b"
+      },
+      "src/entities/listing/model/listingPriceInput.ts": {
+        "bytes": 4296,
+        "git_blob": "370986e1aac9cccb7e64baf5c2d7009d69469d44",
+        "sha256": "e471a74bb3a924d9d737a0c984ecde6b290feb12b33dda7bd5619e432d1b0122"
+      },
+      "src/entities/listing/model/privatePublicationUpload.ts": {
+        "bytes": 7059,
+        "git_blob": "753a3c226d1a91eaed149d02da8360ad7c7a31e2",
+        "sha256": "c5ea39fe4a592fb7e606b3f41613e6eed983709200ea487af7f2d75267df6103"
+      },
+      "src/server/listing-publication/final/cleanupOne.ts": {
+        "bytes": 4115,
+        "git_blob": "2c7d53a1a69b6d6784d1a2de0a537ebf62c8a2f6",
+        "sha256": "df386550dc6405d0367a760fbdd99a0ffa5a29b7db29723270823e22b15847e5"
+      },
+      "src/server/listing-publication/final/finalContract.ts": {
+        "bytes": 4429,
+        "git_blob": "070a6d041e5aff436c665866e3ea4928ceae10ca",
+        "sha256": "33cf4a86b43000925ef6fa7660f92360f33fad9a83c7897dfbdf0676bac8d2a0"
+      },
+      "src/server/listing-publication/final/settleUnreleasedSourceOne.ts": {
+        "bytes": 2013,
+        "git_blob": "1e087a1038b7e626f66827b6b9af8d0aec9e7ca2",
+        "sha256": "88dc10bbcc5919ec1e8a5eb50297d9cda56bd5b7b83f5bcd8cef3c91a4793844"
+      },
+      "src/server/listing-publication/images/sanitize.d.cts": {
+        "bytes": 1238,
+        "git_blob": "f419677d4ebd332751881bdea3bb327868fc8d42",
+        "sha256": "dea4cd74f96fe7fba733729b71c353c6923ac1f5fe6f78fdf09f5003cd9e1710"
+      },
+      "src/server/listing-publication/uploads/issuePrivateUpload.ts": {
+        "bytes": 7117,
+        "git_blob": "fe444c16bb7e4d95a28a2a1f251be66dc497c469",
+        "sha256": "b1c43e13ff1c7faa23b60c90064df2f483a695993580a9bac1d4350b14142464"
+      },
+      "src/server/listing-publication/web/webImageContract.ts": {
+        "bytes": 7217,
+        "git_blob": "15bb44f739d4295d7e21d839912f54ae3cf64671",
+        "sha256": "98f164f59fc3d249527a47756f65ecc7382577aef8b17ccc07a59f5072606253"
+      },
+      "src/server/listing-publication/web/webObjectHttp.ts": {
+        "bytes": 3572,
+        "git_blob": "638acb42d0c3fcf4fae43a299e7e694902120069",
+        "sha256": "3358945080bc62b15b0e197cdc6d75aea7b4df570554d477d6303a7ef2fb3c00"
+      },
+      "src/shared/currency/listingCurrencies.generated.ts": {
+        "bytes": 6681,
+        "git_blob": "2efe4661d4c32ab8b8e2c4129d26de3b2891d205",
+        "sha256": "bbcaf613ee86d4041bce74b829abc45d992fec8ec75000c42ad6da45ff05b581"
+      },
+      "tests/listing-publication-source-no-release.test.cjs": {
+        "bytes": 11462,
+        "git_blob": "f767e9757dbf0b67247ea6bb797bce3c34914600",
+        "sha256": "a33791fea272504ff9c07b1ebce9183b82de7521c05e9066bdf75e6dc7ab1c13"
+      }
+    },
+    "runtime": {
+      "environment": "user_existing_runtime_new_tests_only",
+      "native_invocation": false,
+      "node": "v24.16.0",
+      "strict": true,
+      "target": "ES2017",
+      "typescript": "5.9.3"
+    },
+    "strict": true,
+    "target": "ES2017",
+    "test_titles": [
+      "- no-release: one database call settles closed signing without Storage I/O",
+      "- no-release: open signing remains ineligible",
+      "- no-release: reserved is not treated as unreleased",
+      "- no-release: recorded is not treated as unreleased",
+      "- no-release: purged_recorded is not treated as unreleased",
+      "- no-release: missing is not treated as unreleased",
+      "- no-release: duplicate scan is idle",
+      "- no-release: lost acknowledgement is reconcile with no automatic retry",
+      "- no-release: HTTP 202 is not success",
+      "- no-release: HTTP 400 is not success",
+      "- no-release: HTTP 401 is not success",
+      "- no-release: HTTP 403 is not success",
+      "- no-release: HTTP 500 is not success",
+      "- no-release: invalid schema receipt stays reconcile",
+      "- no-release: invalid object receipt stays reconcile",
+      "- no-release: invalid grant receipt stays reconcile",
+      "- no-release: invalid claim receipt stays reconcile",
+      "- no-release: invalid proof receipt stays reconcile",
+      "- no-release: invalid state receipt stays reconcile",
+      "- no-release: invalid extra_secret receipt stays reconcile",
+      "- no-release: badJson does not succeed",
+      "- no-release: redirect does not succeed",
+      "- no-release: pre-abort sends no request",
+      "- no-release: in-flight abort cannot become success",
+      "- no-release: bad configuration fails before I/O",
+      "- no-release: browser cannot construct privileged worker",
+      "- no-release: late signing response cannot escape unchanged broker after fence",
+      "- no-release: lost signing response then closure is still unreleased",
+      "- no-release: lost record ACK stays blocked even without retrieval",
+      "- no-release: previously released token remains blocked after closure",
+      "- no-release: unchanged broker rejects another authenticated account",
+      "- no-release: existing cleaner uses exact source only after proof",
+      "- no-release: stalled signer cannot recover a sealed grant through getter"
+    ],
+    "tests": 33
+  },
+  "proof_replay": "NONE",
+  "proof_zip": {
+    "bytes": 2307573,
+    "filename": "source-no-release-tests-20261016-125409-ff6pki_i.zip",
+    "members": 673,
+    "sha256": "c2ec4b7d521aa7df136acf92fab65aae3a8fb6845ea241937d0d82857aa18b32"
+  },
+  "requirements_sha256": "96ee0ecb6c9eae89fbe17deefbb59f1ad3d9a5482102709585227bfe90254a02",
+  "runner_sha256": "3bbcb37116ad1c13f62da33234ab12584b3e823ade838d04ca52ee1a877264d7",
+  "source_base": "8f5c3a82a803f9d5f977a9fbce62cbdb656f0164",
+  "sql": {
+    "assertions": 67,
+    "commands": [
+      {
+        "exit_code": 0,
+        "name": "fixture",
+        "stderr_sha256": "dd93fd322e3df947eaecd9d8c4c79bcd39583bc2dbd37bf5cc33917add84f885",
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "exit_code": 0,
+        "name": "new-no-release-rollback",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "5ec7ae9831567a7f6c439ca1d3bc2f4f709ff674de50774961089edeeb1d991a"
+      },
+      {
+        "exit_code": 0,
+        "name": "race-reset-1",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "exit_code": 0,
+        "name": "race-setup-1",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "82cac9da44a99f78f487be9e7681aeb79209256d43f91ecf0356efe57f284719"
+      },
+      {
+        "exit_code": 0,
+        "name": "race-1-a",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "b762cbcc85cbd208a36540e547b08f0c4242006a3fe9121ff298ec965f4ed7b7"
+      },
+      {
+        "exit_code": 0,
+        "name": "race-1-b",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "da71cfb65590315fcd46e1d903bbcb3d980ed3f76e35611ce05590f0c53ab072"
+      },
+      {
+        "exit_code": 0,
+        "name": "race-1-verify",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "f07e2441c0577a7a138c26bdfe904b8dc18b5c99bd5dd7e714511f3260b22177"
+      },
+      {
+        "exit_code": 0,
+        "name": "race-reset-2",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "exit_code": 0,
+        "name": "race-setup-2",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "82cac9da44a99f78f487be9e7681aeb79209256d43f91ecf0356efe57f284719"
+      },
+      {
+        "exit_code": 0,
+        "name": "race-2-b",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "61d24f2346f65ec4d44e724ed974cc69ffe4c7f0a997fc979dc71ced510e954a"
+      },
+      {
+        "exit_code": 0,
+        "name": "race-2-a",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "cadca89bbdce087775ab2a15417a77bac39d06501546e55ccc35df4e87db5d74"
+      },
+      {
+        "exit_code": 0,
+        "name": "race-2-verify",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "02ebd718cd22010448a194b89dcf437a054999fc055e16082080344a81387143"
+      },
+      {
+        "exit_code": 0,
+        "name": "race-reset-3",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "exit_code": 0,
+        "name": "race-setup-3",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "82cac9da44a99f78f487be9e7681aeb79209256d43f91ecf0356efe57f284719"
+      },
+      {
+        "exit_code": 0,
+        "name": "race-3-b",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "0db8fa3af45f2448c29f589cdfe1fbaf18fea79bdf93ac7fe6039b7471e31430"
+      },
+      {
+        "exit_code": 0,
+        "name": "race-3-a",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "03f53dbbea76f7310cbd245c0c159617388aadcec51e1f07e95ef980cfe88145"
+      },
+      {
+        "exit_code": 0,
+        "name": "race-3-verify",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "eb9df42bfc3b2290106fd301c714b5f0d590383286c83af5185603101ecc5e6a"
+      },
+      {
+        "exit_code": 0,
+        "name": "race-reset-4",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "exit_code": 0,
+        "name": "race-setup-4",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "2f8669f27a4e313e7c6107b43b80cdb5d468701f48f955f6d880e8bd458c139e"
+      },
+      {
+        "exit_code": 0,
+        "name": "race-4-a",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "38c34f108b801b9d04a83b3756f1c8931c52f029aadab63d700c47da099ffc0c"
+      },
+      {
+        "exit_code": 0,
+        "name": "race-4-b",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "08b72df17c55474e9696245aa70bbed84ff2dbd5e0184b1d1dab9a09cd912040"
+      },
+      {
+        "exit_code": 0,
+        "name": "race-4-verify",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "d6d0789d92e950f3ab0f9ee0278a0f3f467b65a0c4f037818f52c305b55c4cec"
+      },
+      {
+        "exit_code": 0,
+        "name": "race-reset-5",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "exit_code": 0,
+        "name": "race-setup-5",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "8f536cc8c367661967ad661db1295b937790a7773e166b8a5d18ebfa2cc25afb"
+      },
+      {
+        "exit_code": 0,
+        "name": "race-5-b",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "91db078370c54b17e141367e738dde826c36e56a16f4c0033bf632ddb52f97f0"
+      },
+      {
+        "exit_code": 0,
+        "name": "race-5-a",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "12816b6b107345e939e163bbd0574a5abf5b84cee28030d3553d3f30e09f0455"
+      },
+      {
+        "exit_code": 0,
+        "name": "race-5-verify",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "3c4a0ca6c9a1545f053d7602f124436948f79f8b54a7ff1e3df3e86fdb91ccb5"
+      },
+      {
+        "exit_code": 0,
+        "name": "new-isolation-0",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "4655249be280d0f76a6dc71ea449a307fd391bdc876adbb0e4b0f5049140df48"
+      },
+      {
+        "exit_code": 0,
+        "name": "new-isolation-1",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "c0938d0dd900b33ef9e730804cfc829a4d8b01317754465a81ecfa0194e892cd"
+      }
+    ],
+    "dependencies": {
+      "supabase/labs/listing-publication-attempt-v1/01_private_state.sql": {
+        "bytes": 7683,
+        "git_blob": "414f48e14890bc1d5e9ae031baf41bd5929cee39",
+        "sha256": "530ab73dd20ba9d776318472b06847778f907d51203ecaa72a0f9de47de2f6fd"
+      },
+      "supabase/labs/listing-publication-attempt-v1/02_values_and_policy.sql": {
+        "bytes": 7477,
+        "git_blob": "4179cabae07f6a6e6d3099a71a70fd7f5e3f9391",
+        "sha256": "ad7306884a577986e30ee8c3836fb60d24efe15e709e95260163997aed31c48b"
+      },
+      "supabase/labs/listing-publication-attempt-v1/03_owner_attempt.sql": {
+        "bytes": 5625,
+        "git_blob": "2a33c9bfd78afb04e98adb688e0da95dbfcdf1f2",
+        "sha256": "6d971221ed8672684993556598a8e92a027183e3a7c9a48676fd1e71e142d4dd"
+      },
+      "supabase/labs/listing-publication-attempt-v1/04_upload_dispatch.sql": {
+        "bytes": 3578,
+        "git_blob": "47d6f4003e80e38115a0ddf590d591f8293e8f26",
+        "sha256": "7365d25a2054efbf32a4544d9d3e049f71ebbb9e25543b252091fe64b30da8fc"
+      },
+      "supabase/labs/listing-publication-attempt-v1/05_close_attempt.sql": {
+        "bytes": 3867,
+        "git_blob": "7d79596078c15459cded890cc9bc02f5c7076020",
+        "sha256": "e14d2ba908ec943393a4f324a7437107408584fa60b6aac0b4b04f8bd60797ef"
+      },
+      "supabase/labs/listing-publication-attempt-v1/tests/fixture.generated.sql": {
+        "bytes": 40417,
+        "git_blob": "3a38baa55fd6a91245eaa00f3323ba2228717e21",
+        "sha256": "fab1ab88575192a7ff2f4151b544a383559ea1ea544819e50fe9d1f523e08a3f"
+      },
+      "supabase/labs/listing-publication-attempt-v1/tests/seed.sql": {
+        "bytes": 2204,
+        "git_blob": "96bb5d6b41842acd14dc5be3a7752a21a53a0d92",
+        "sha256": "86950749c4779911c4d4cb70d172b220c4ef21b4133ed64b4c4b0b2cbcdb6f46"
+      },
+      "supabase/labs/listing-publication-final-v1/01_state.sql": {
+        "bytes": 6162,
+        "git_blob": "abd8988348450915f56e90d5d5e0a3f2761d1951",
+        "sha256": "dbfffa60751acb18734f5c7a8c6a5b842572cbce71a8b5e6cd0067c2c4799186"
+      },
+      "supabase/labs/listing-publication-final-v1/02_listing_writer.generated.sql": {
+        "bytes": 8162,
+        "git_blob": "2ad03ae0186ab0690860ff76cecc4ee59964d080",
+        "sha256": "6625af67124cffe23d16c86d33fe5279116c619f2ea117529b5511645766106e"
+      },
+      "supabase/labs/listing-publication-final-v1/03_final_and_delete.sql": {
+        "bytes": 11749,
+        "git_blob": "3c20d75827b5cb6f37bf6fc400a4d1a8937ee6d5",
+        "sha256": "f58063f55803293ae647033ae666b185794c4c5d8f00cfb5da3b68026a003f15"
+      },
+      "supabase/labs/listing-publication-final-v1/04_guards.sql": {
+        "bytes": 7628,
+        "git_blob": "fd688da8d284ceeae38c231bacb2c84fdd310d90",
+        "sha256": "93191132d611d040059ecf764e9aee9db96b626236326e8140bad9ff412e2d81"
+      },
+      "supabase/labs/listing-publication-final-v1/05_cleanup.sql": {
+        "bytes": 5251,
+        "git_blob": "ab6cce3dcc2e5c2db3df14f510add0c5d96b4235",
+        "sha256": "a476b88b67b1bc1ec0df8f8a94fcf545888901ead68b03f0fb251edc0fe85c42"
+      },
+      "supabase/labs/listing-publication-final-v1/06_authority.sql": {
+        "bytes": 4004,
+        "git_blob": "fefedad0eb9dbcf09be276dd4de550b57d160a1b",
+        "sha256": "4fa78ca05823a6c75c3cd578d5099e7289df37feb3cebcd4c0c76a26cfb800af"
+      },
+      "supabase/labs/listing-publication-final-v1/07_budget.generated.sql": {
+        "bytes": 4489,
+        "git_blob": "baff341c43d27d44aa508a3f2a813e2f89ccb576",
+        "sha256": "23f9961381d599f31341ae1717ef3a2d51c298e5b65c54433c71efaf1d8f8309"
+      },
+      "supabase/labs/listing-publication-final-v1/tests/fixture-extension.generated.sql": {
+        "bytes": 9191,
+        "git_blob": "56bb185dbbb5db277ea1b78a7ff455183bb3c345",
+        "sha256": "f9847b301ef7787b28f186202d7a8e9838375da6362d1dc8936fb24b6acbc880"
+      },
+      "supabase/labs/listing-publication-final-v1/tests/helpers.sql": {
+        "bytes": 6741,
+        "git_blob": "ae0e05424a4a6c182742233913e55fff51634e42",
+        "sha256": "f1ce69096c2325e8fe469589680ab6bee740ffe551a9c04cb3bcec962d89dda2"
+      },
+      "supabase/labs/listing-publication-upload-v1/01_upload_grants.sql": {
+        "bytes": 18447,
+        "git_blob": "203b4ec8c069b91c406eaf6f7ce1492d7c417823",
+        "sha256": "78e1bdc244311f13ec027c32e2536d6d31190829a8c478daca585019c315f0a1"
+      },
+      "supabase/labs/listing-publication-web-v1/01_web_receipts.sql": {
+        "bytes": 15502,
+        "git_blob": "200677c07b27dc86c0bb89432d1c3949638c36e6",
+        "sha256": "4a9181147932b0fc3cd5c23c383c5ef5ac40f8d117db166846f409722c831662"
+      },
+      "supabase/labs/listing-publication-web-v1/02_close_write_fence.sql": {
+        "bytes": 3872,
+        "git_blob": "4dc03eba9c4d3f7417bbd2f0a911fbfe86bfbffc",
+        "sha256": "9ec08d1471bd678088c37180de0dd289d77a1fa9f9eb8514929e9adcf08167d0"
+      },
+      "supabase/labs/listing-publication-write-completion-v1/01_web_completion.sql": {
+        "bytes": 10410,
+        "git_blob": "f9dda32801943c017ead1a2ebca03469e5c04377",
+        "sha256": "6b35b7de26bdee868373a5f8292e7d9183de85a353a16daf60a415c996f95a36"
+      },
+      "supabase/labs/listing-publication-write-completion-v1/tests/helpers.sql": {
+        "bytes": 4237,
+        "git_blob": "d9ff286b76f24831f9ce4754b8065a6005e9a7d2",
+        "sha256": "fffdc678f78ef560007a1bd5fd8db3af5d15fdb88a477bfd0e451cfbc155f333"
+      },
+      "supabase/labs/listing-publication-write-reconcile-v1/01_reconcile.sql": {
+        "bytes": 21557,
+        "git_blob": "40831c45d479877f9e6f355d85ca2caf1d361ac8",
+        "sha256": "b6496a363598aee8ebc9dede05305aef74e1cbc4d30fc744a4e1814ae9149b7f"
+      },
+      "supabase/labs/listing-publication-write-reconcile-v1/tests/helpers.sql": {
+        "bytes": 4268,
+        "git_blob": "24067d35f70d23a5a370845f9ee9ea33a2211241",
+        "sha256": "1a279dd1a8fc500568c0bc74ec6b616a314ea7204e794f9c8e876a8d24df5467"
+      },
+      "supabase/labs/listing-publication-write-reconcile-v1/tests/storage-fixture.sql": {
+        "bytes": 651,
+        "git_blob": "00ce940d6e75ac4eddec303e9033dd259b780f76",
+        "sha256": "3084170f8b859b9003422bcc754b69f0c18c669662a67526980abae8206555f7"
+      }
+    },
+    "fixture_notices": 2,
+    "isolation": 2,
+    "postgres": "postgres (PostgreSQL) 17.6",
+    "race_assertions": 15,
+    "races": [
+      {
+        "name": "source_fence_before_late_record",
+        "passed": 3,
+        "schedule": "observed_pg_blocking_pids"
+      },
+      {
+        "name": "source_record_before_fence",
+        "passed": 3,
+        "schedule": "second_transaction_completed_before_first_commit"
+      },
+      {
+        "name": "source_duplicate_seal",
+        "passed": 3,
+        "schedule": "second_transaction_completed_before_first_commit"
+      },
+      {
+        "name": "source_get_before_cancel",
+        "passed": 3,
+        "schedule": "observed_pg_blocking_pids"
+      },
+      {
+        "name": "source_busy_attempt_skips_to_other",
+        "passed": 3,
+        "schedule": "second_transaction_completed_before_first_commit"
+      }
+    ],
+    "rollback": 50,
+    "scope": "NEW_OWN_NETWORK_NONE_HELPER_ONLY_NOT_PRODUCTION"
+  }
+}

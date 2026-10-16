@@ -1,0 +1,72 @@
+[
+  {
+    "name": "source_fence_before_late_record",
+    "setup": "SELECT no_release_test.boot(); SELECT no_release_test.close();",
+    "a": "SELECT no_release_test.seal();\nSELECT final_test.check('source_fence_before_late_record_a',true);",
+    "b": "DO $d$ BEGIN PERFORM no_release_test.record(); RAISE EXCEPTION 'unexpected_record'; EXCEPTION WHEN SQLSTATE '55000' THEN IF SQLERRM<>'publication_source_release_sealed' THEN RAISE; END IF; END $d$;\nSELECT final_test.check('source_fence_before_late_record_b',true);",
+    "verify": "SELECT final_test.check('source_fence_before_late_record_final',(SELECT count(*)=1 FROM listing_publication_private.source_no_release) AND (SELECT state='signing' FROM listing_publication_private.upload_grants));",
+    "blocked": true,
+    "user_b": "11111111-1111-1111-1111-111111111111",
+    "expected": [
+      "source_fence_before_late_record_a",
+      "source_fence_before_late_record_b",
+      "source_fence_before_late_record_final"
+    ]
+  },
+  {
+    "name": "source_record_before_fence",
+    "setup": "SELECT no_release_test.boot(); SELECT no_release_test.close();",
+    "a": "SELECT no_release_test.record();\nSELECT final_test.check('source_record_before_fence_a',true);",
+    "b": "DO $d$ BEGIN IF no_release_test.seal() IS NOT NULL THEN RAISE EXCEPTION 'unexpected_seal'; END IF; END $d$;\nSELECT final_test.check('source_record_before_fence_b',true);",
+    "verify": "SELECT final_test.check('source_record_before_fence_final',no_release_test.seal() IS NULL AND NOT EXISTS(SELECT 1 FROM listing_publication_private.source_no_release) AND (SELECT state='recorded' FROM listing_publication_private.upload_grants));",
+    "blocked": false,
+    "user_b": "11111111-1111-1111-1111-111111111111",
+    "expected": [
+      "source_record_before_fence_a",
+      "source_record_before_fence_b",
+      "source_record_before_fence_final"
+    ]
+  },
+  {
+    "name": "source_duplicate_seal",
+    "setup": "SELECT no_release_test.boot(); SELECT no_release_test.close();",
+    "a": "SELECT no_release_test.seal();\nSELECT final_test.check('source_duplicate_seal_a',true);",
+    "b": "DO $d$ BEGIN IF no_release_test.seal() IS NOT NULL THEN RAISE EXCEPTION 'unexpected_seal'; END IF; END $d$;\nSELECT final_test.check('source_duplicate_seal_b',true);",
+    "verify": "SELECT final_test.check('source_duplicate_seal_final',(SELECT count(*)=1 FROM listing_publication_private.source_no_release) AND no_release_test.seal() IS NULL);",
+    "blocked": false,
+    "user_b": "11111111-1111-1111-1111-111111111111",
+    "expected": [
+      "source_duplicate_seal_a",
+      "source_duplicate_seal_b",
+      "source_duplicate_seal_final"
+    ]
+  },
+  {
+    "name": "source_get_before_cancel",
+    "setup": "SELECT no_release_test.boot(); SELECT no_release_test.record();",
+    "a": "DO $d$ BEGIN IF no_release_test.get()->>'state' IS DISTINCT FROM 'ready' THEN RAISE EXCEPTION 'missing_ready'; END IF; END $d$;\nSELECT final_test.check('source_get_before_cancel_a',true);",
+    "b": "SELECT no_release_test.close();\nSELECT final_test.check('source_get_before_cancel_b',true);",
+    "verify": "SELECT final_test.check('source_get_before_cancel_final',no_release_test.seal() IS NULL AND NOT EXISTS(SELECT 1 FROM listing_publication_private.source_no_release) AND (SELECT state='recorded' FROM listing_publication_private.upload_grants));",
+    "blocked": true,
+    "user_b": "11111111-1111-1111-1111-111111111111",
+    "expected": [
+      "source_get_before_cancel_a",
+      "source_get_before_cancel_b",
+      "source_get_before_cancel_final"
+    ]
+  },
+  {
+    "name": "source_busy_attempt_skips_to_other",
+    "setup": "SELECT no_release_test.boot(); SELECT no_release_test.close(); SELECT no_release_test.boot('two'); SELECT no_release_test.close('two');",
+    "a": "SELECT 1 FROM listing_publication_private.attempts WHERE id=final_test.a() FOR UPDATE;\nSELECT final_test.check('source_busy_attempt_skips_to_other_a',true);",
+    "b": "DO $d$ DECLARE v jsonb;BEGIN v:=no_release_test.seal(); IF (v->>'object_id')::uuid IS DISTINCT FROM completion_test.obj('source','two') THEN RAISE EXCEPTION 'wrong_object'; END IF;END $d$;\nSELECT final_test.check('source_busy_attempt_skips_to_other_b',true);",
+    "verify": "SELECT final_test.check('source_busy_attempt_skips_to_other_final',(SELECT count(*)=1 FROM listing_publication_private.source_no_release WHERE object_id=completion_test.obj('source','two')));",
+    "blocked": false,
+    "user_b": "11111111-1111-1111-1111-111111111111",
+    "expected": [
+      "source_busy_attempt_skips_to_other_a",
+      "source_busy_attempt_skips_to_other_b",
+      "source_busy_attempt_skips_to_other_final"
+    ]
+  }
+]

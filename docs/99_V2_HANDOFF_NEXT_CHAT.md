@@ -5,48 +5,48 @@ Seisukirje: 2026-10-16
 
 ## Praegune checkpoint
 
-Sama 20-rajalise kirjutusekontrolli lähtepaigaldus ja uus build on Macis tehtud ning üle vaadatud. Piiratud üheksadokumendiline lõpetaja säilitab kõik kümme testitud faili. See tekst EI kinnita tulevase commit/push’i või juurutuse õnnestumist; loe uus result.json. Üleslaadimine ja avaldamine jäävad suletuks.
+Sama 19-rajalise väljastamata SOURCE-loa lähtepaigaldus ja uus build on Macis tehtud ning üle vaadatud. Piiratud üheksadokumendiline lõpetaja säilitab kõik üheksa testitud faili. See tekst EI kinnita tulevase commit/push’i või juurutuse õnnestumist; loe uus result.json. Üleslaadimine ja avaldamine jäävad suletuks.
 
 ## Lähtekood ja tõendi piir
 
-- **Lähtebaas:** ea212d300f915a6f48e427336f4a695a1ea2bfea; parent b05c98dca11e008e99114e85679e024403fa49e2. Baasi commit/push/clean ning Ready46s/Production on vastu võetud, mitte kordamise juhised.
-- **Lähtepakett:** 583 täpset staging’u lähtefaili, mitte täisrepo ega uus commit. Sama 20 rada: 12 uut + kaheksa dokumendimuudatust. Kümme testitud faili ja inventuurid säilivad. Lõpetajas ainult üheksa juba staging’us dokumendi täpsustus.
-- **Viimane Maci vaatlus:** 15.10.2026 13:10:23.597051 Tallinn pärast lähteeksporti: main ea212d3, 20 staged/noextras, tööpuu pole puhas. Index 7de74f8a8276a8dd291c352eaa4c8f16553fe235e4eddfed69369dee81141a7a. Kaug-main 13:10:22.151516 sama baasil; enne uusi kirjutusi värsked kaitsed.
+- **Lähtebaas:** 8f5c3a82a803f9d5f977a9fbce62cbdb656f0164; parent ea212d300f915a6f48e427336f4a695a1ea2bfea. Baasi commit/push/clean ja Ready42s/Production on vastu võetud, mitte kordamise juhised.
+- **Lähtepakett:** 594 täpset staging’u lähtefaili, mitte täisrepo ega uus commit. Sama19rada:11uut+kaheksa dokumendimuudatust. Üheksa testitud faili ja inventuurid säilivad. Lõpetajas ainult üheksa juba staging’us dokumendi täpsustus.
+- **Viimane Maci vaatlus:** 16.10.2026 14:11:07.187940 Tallinn pärast lähteeksporti: main8f5c3a8,19staged/noextras,tööpuu pole puhas. Index c950cfa04e0d16c81741df35967515010ab1bc9018427628d65f73ba0198912a. Kaug-main14:11:05.810431sama baasil;enne uusi kirjutusi värsked kaitsed.
 
 ## Tegelik kohalik katse
 
-- 48/48 Node/HTTP ja ES2017/strict PASS Node24.16.0/TS5.9.3 peal. Päris kohalik HTTP/baidid, sünteetiline RPC/Storage; native puudus. Kaks loogilist piirnäidet kuuluvad 48 sisse, mitte teenusekatsed.
-- PG17.6 83/83: 64 rollback + 15 viies ajastuses + neli isolatsioonikeeldumist. Neli lukuootamist; viies sama konto teine fail. 31 SQL-exit0, kaks fixture-NOTICE’it; oma abi eemaldati. Salvestatud muutmata tõend, mitte uus SQL/Storage käik.
-- Paigaldatud lähtefailide päris build 15.10 13:10:14.925310–13:10:19.415527 Tallinn exit0; stdout1560b privaatne. Node24.16.0/npm11.13.0/Next16.2.1/TS5.9.3/Sharp0.34.5 varasem metadata. Lõpetajas build’i ega 48/83/34/58/41/143/81/85 või vanemaid sarju ei korrata.
+- 33/33 Node/HTTP ja ES2017/strict PASS Node24.16.0/TS5.9.3 peal; olemasolevad issuePrivateUpload/cleanupOne muutmata. Päris kohalikHTTP, sünteetilineAuth/RPC/Storage;native puudus.
+- PG17.6 67/67:50rollback+15viiesajastuses+2isolatsioonikeeldumist. Kaks lukuootamist/kolm teise tehingu varasemat lõppu;viimane sama konto teine katse.29SQLexit0,kaksfixture-NOTICE’it;oma abi eemaldati. Salvestatud tõend,mitte uus SQL/Storagekäik.
+- Paigaldatud lähtefailide päris build16.10 14:10:58.162576–14:11:02.685298Tallinn exit0;stdout1560bprivaatne. Node24.16.0/npm11.13.0/Next16.2.1/TS5.9.3/Sharp0.34.5varasemad vaatlused. Lõpetajas build’i ega33/67/48/83/34/58/41/143/81/85 või vanemaid sarju ei korrata.
 
 ## Production / kasutajaliides
 
-- ea212d3 Ready46s/Production varasem vastu võetud baasitõend säilib; sama pilti ei küsita. Uue commit’i push võib käivitada olemasoleva Verceli automaatika; lõpetaja ei kinnita uut juurutusolekut ega pilve vastuvõttu.
-- SQL labs-only/API-closed. Vormi/marsruutide/bucket’i/õiguste/koristaja ajastuse avamist pole. Väljastatud/allkirjastamisel SOURCE ja piisava tõendita WEB on blokeeritud; täielik failikustutus pole valmis.
+- 8f5c3a8 Ready42s/Production varasem vastu võetud baasitõend säilib;sama pilti ei küsita. Uue commit’i push võib käivitada olemasoleva Verceli automaatika;lõpetaja ei kinnita uut juurutusolekut ega pilve vastuvõttu.
+- SQL labs-only/API-closed. Üleslaadimine/avaldamine,vormi/marsruutide/bucket’i/õiguste/koristaja ajastuse avamine puudub. Recorded/väljastatudSOURCE(ka aegunud/purgitud)ja piisava tõenditaWEB on blokeeritud;täielik failikustutus pole valmis.
 
 ## Üks järgmine töö
 
-Loe UUE write-reconcile-source-finish result.json, commit-proof, remote-observations ja lõplik Git-seis. Ainult kinnitatud commit/push/clean järel jätka otse sama V2 väljastatud SOURCE-loa lõplikkuse, püsiva koristuse ja terve kasutajatee ühendusega. STOP säilitab failid/index/päeviku; ära korda ega paranda käsitsi. Eraldi docs-only ringi ei tehta.
+Loe UUE source-no-release-source-finish result.json,commit-proof,remote-observations ja lõplik Git-seis. Ainult kinnitatud commit/push/clean järel jätka otse sama V2 recorded/väljastatudSOURCE-loa lõplikkuse,ebapiisavaWEB-tõendi,püsiva koristuse/lõppkustutuse ja terve kasutajatee ühendust. STOP säilitab failid/index/päeviku;ära korda ega paranda käsitsi. Eraldi docs-only ringi ei tehta.
 
-**Peatumisel:** Ära korda paigaldajat, 48/83 testi, vanu lõpetajaid, parandusi, diagnostikaid, SQL/Node/native/Storage-lugejaid ega productioni rakendamisi. Uut lõpetajat pärast esimest käiku ei korrata. Säilita failid/index/logid/päevikud; ei reset/restore’i, käsitsi commit/push’i ega olemasolevate andmete kustutamist.
+**Peatumisel:** Ära korda paigaldajat,33/67testi,vanu lõpetajaid,parandusi,diagnostikaid,SQL/Node/native/Storage-lugejaid ega productioni rakendamisi. Uut lõpetajat pärast esimest käiku ei korrata. Säilita failid/index/logid/päevikud;ei reset/restore’i,käsitsi commit/push’i ega olemasolevate andmete kustutamist.
 
 ## Loe ainult vajalikku
 
-- Uue write-reconcile-source-finish tulemus; evidence/reviewed-source-install.zip on muutmata 15.10 13:10 paigalduse/build’i tõend koos varasema 48/83 testiga.
-- docs/architecture/v2-private-write-reconcile-v1.md; docs/verification/v2-write-reconcile-tests-20261014.json; docs/architecture/v2-publication-requirements-approved-20261012.md.
-- src/server/listing-publication/final/reconcileWriteOne.ts ja cleanupOne.ts; supabase/labs/listing-publication-write-reconcile-v1/01_reconcile.sql; olemasolev signer ja WEB-kinnituse ühendus.
+- Uue source-no-release-source-finish tulemus;evidence/reviewed-source-install.zip on muutmata16.10 14:10paigalduse/build’i tõend koos varasema33/67testiga.
+- docs/architecture/v2-private-source-no-release-v1.md;docs/verification/v2-source-no-release-tests-20261016.json;docs/architecture/v2-publication-requirements-approved-20261012.md.
+- src/server/listing-publication/final/settleUnreleasedSourceOne.ts ja cleanupOne.ts;supabase/labs/listing-publication-source-no-release-v1/01_source_no_release.sql;olemasolev issuePrivateUpload ja reconcileWriteOne.
 
 ## Säilivad piirid
 
-- Üks Avalda kuulutus, mitte kohustuslik nähtav mustand. Senised hinna/identiteedi/reeglite/sõnumite/hobuse moodulid säilivad. Koristustõend ei ole pildi valmisolek ega avaldamine.
-- Ainult suletud katse allkirjastuseni mittejõudnud püsiv SOURCE-reservatsioon või ühe WEB-kirjutuse täpse põhikataloogiversiooni ja kogu faili baitide eraldi tõend. Väljastatud/allkirjastamisel SOURCE ja piisava tõendita WEB jäävad blokeerituks. Täielik failikustutus EI OLE valmis.
-- WEB-i ohutus eeldab tegeliku Storage’i kirjutuse/kataloogicommit’i järjekorra, skeemi/versiooni, ainukirjutaja, peidetud POST-korduste puudumise ja versioonikustutuse vastuvõttu. Päris Storage/HTTP/CORS/mahud/mobiil/native, konto/identiteet/sõnumid ja müüja/ostja/anonüümse teekond ootavad.
-- Energy/maksed/AI/otsingu lisad ootavad. Ei uut üldmootorit ega täielikku V1 kihti. Praeguste kontode/kuulutuste/piltide/päevikute kustutamiseks luba puudub.
+- Üks Avalda kuulutus, mitte kohustuslik nähtav mustand. Olemasolev hind/identiteet/reeglid/hobused/sõnumid säilivad. Uus tõend ei kinnita pildi valmidust ega avaldamist.
+- Ainult suletud signing-kirje ilma salvestatud tokenita saab püsiva no-release piiri; hiline record keeldub ka pärast koristust. Recorded/väljastatud SOURCE (ka aegunud/purgitud), puuduv grant ja ebapiisav WEB-tõend jäävad blokeerituks. Täielik failikustutus pole valmis.
+- Ainus record-before-get väljastustee, saladuselekketa käitumine, teiste privilegeeritud kirjutajate puudumine ja tegelik Storage’i leping vajavad integratsiooni. Päris HTTP/CORS/mahud/mobiil/native-pilv, konto/identiteet/sõnumid, vormid/marsruudid ja müüja/ostja/anonüümse tee jäävad avamise piiriks.
+- Energy/maksed/AI/otsingu lisad ootavad. Ei üldmootorit ega täielikku V1 kihti. Olemasolevate kontode/kuulutuste/piltide/päevikute kustutamisluba pole.
 
 ## Keskkond
 
-- Peata dev. Ainult uus COMMIT PUSH lõpetaja. Docker/Supabase/Node/npm/build/testikäske ei käivitata; olemasolev Git-autentimine ainult kinnitatud sihile.
-- Värsked main/HEAD/parent/koguindex/tööpuu/583 allika/23 migratsiooni/lubatud origin-main’i kaitsed. Üheksa dokumendi varukoopiad, täpne 20-rajaline commit, eraldi commit-index ja uus ühekordne päevik. Vanad päevikud puutumata.
+- Peata dev. Ainult uus COMMIT PUSH lõpetaja. Docker/Supabase/Node/npm/build/testikäske ei käivitata;olemasolev Git-autentimine ainult kinnitatud sihile.
+- Värsked main/HEAD/parent/koguindex/tööpuu/594allika/23migratsiooni/lubatudorigin-main’i kaitsed. Üheksa dokumendi varukoopiad,täpne19-rajalinecommit,eraldi commit-index ja uus ühekordne päevik. Vanad päevikud puutumata.
 
 ## Ajalugu (mitte praegused käsud)
 

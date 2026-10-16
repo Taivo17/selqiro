@@ -1,0 +1,10 @@
+[
+  {
+    "label": "no_release_isolation_repeatable_read",
+    "sql": "BEGIN ISOLATION LEVEL REPEATABLE READ; SELECT final_test.expect('no_release_isolation_repeatable_read','SELECT public.settle_unreleased_listing_source_one_v1()','25001','publication_read_committed_required'); ROLLBACK;"
+  },
+  {
+    "label": "no_release_isolation_serializable",
+    "sql": "BEGIN ISOLATION LEVEL SERIALIZABLE; SELECT final_test.expect('no_release_isolation_serializable','SELECT public.settle_unreleased_listing_source_one_v1()','25001','publication_read_committed_required'); ROLLBACK;"
+  }
+]
