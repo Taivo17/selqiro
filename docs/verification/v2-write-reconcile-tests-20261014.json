@@ -1,0 +1,350 @@
+{
+  "base_head": "ea212d300f915a6f48e427336f4a695a1ea2bfea",
+  "candidate_files": {
+    "src/server/listing-publication/final/reconcileWriteOne.ts": {
+      "bytes": 5244,
+      "git_blob": "8ccf95e4671b663aa08ee62c63598f78bcf39ca6",
+      "sha256": "4daa0639634ca130f902a976567fcd68fa6a0d145ad98c1feebafff2e3a6cafb"
+    },
+    "supabase/labs/listing-publication-write-reconcile-v1/01_reconcile.sql": {
+      "bytes": 21557,
+      "git_blob": "40831c45d479877f9e6f355d85ca2caf1d361ac8",
+      "sha256": "b6496a363598aee8ebc9dede05305aef74e1cbc4d30fc744a4e1814ae9149b7f"
+    },
+    "supabase/labs/listing-publication-write-reconcile-v1/README.md": {
+      "bytes": 4804,
+      "git_blob": "179d7dcbe01163ac25a02c3851775e7d0c4360ea",
+      "sha256": "bec4db91986c745b63ee09716aeafe94ab06ece6d3bb1993f8934191fed99f50"
+    },
+    "supabase/labs/listing-publication-write-reconcile-v1/tests/expected-labels.json": {
+      "bytes": 2618,
+      "git_blob": "c34cab58d8d379ce32e0c7f4450259dd46b5662b",
+      "sha256": "b6a807391e774fecebbdaacf63b2bb15b001f26be0206cb86aef0efa75674d8b"
+    },
+    "supabase/labs/listing-publication-write-reconcile-v1/tests/helpers.sql": {
+      "bytes": 4268,
+      "git_blob": "24067d35f70d23a5a370845f9ee9ea33a2211241",
+      "sha256": "1a279dd1a8fc500568c0bc74ec6b616a314ea7204e794f9c8e876a8d24df5467"
+    },
+    "supabase/labs/listing-publication-write-reconcile-v1/tests/isolation.json": {
+      "bytes": 1195,
+      "git_blob": "063a525ed8d9a31ba95dfef45b8cb9f9dc4e1b51",
+      "sha256": "09db2f1a6701589af42f47a059a9b218f8278a8bdccea43e06b4df75918523cd"
+    },
+    "supabase/labs/listing-publication-write-reconcile-v1/tests/races.json": {
+      "bytes": 4135,
+      "git_blob": "075965e476a8d1f1ffe1da495f32f8afe1610e23",
+      "sha256": "3822651495db569baf24d87d918622a83fef69f609ee7af2a9b572b5d717f10b"
+    },
+    "supabase/labs/listing-publication-write-reconcile-v1/tests/storage-fixture.sql": {
+      "bytes": 651,
+      "git_blob": "00ce940d6e75ac4eddec303e9033dd259b780f76",
+      "sha256": "3084170f8b859b9003422bcc754b69f0c18c669662a67526980abae8206555f7"
+    },
+    "supabase/labs/listing-publication-write-reconcile-v1/tests/suite.sql": {
+      "bytes": 16446,
+      "git_blob": "6d08ce93050432c0550b6877a12499c0cded4ce2",
+      "sha256": "49e29dfcf0f7eea5b508465cd6c5134d284ff2d01b7aa5da74bc7015321cc93d"
+    },
+    "tests/listing-publication-write-reconcile.test.cjs": {
+      "bytes": 13004,
+      "git_blob": "e49172a47fb2f79418fa5255b7fb5ad8c5509e01",
+      "sha256": "1cf0f8edd13085bbbc79d48fc5e06720a6c79ef6b96f1468aadef724a2dd0669"
+    }
+  },
+  "current_build": "NOT_YET_OBSERVED_USE_NEW_INSTALL_RESULT",
+  "format": "selqiro_write_reconcile_tests_v1",
+  "helper_cleanup": "OWN_RUN_HELPER_REMOVED_VERIFIED",
+  "last_observed_git": {
+    "branch": "main",
+    "clean": true,
+    "head": "ea212d300f915a6f48e427336f4a695a1ea2bfea",
+    "index_sha256": "ee88fd391485f9fe751eb3418f725e0362a9e27fddb015e61da6aee122367acd",
+    "observed_utc": "2026-10-14T18:56:45.078670+00:00",
+    "selected_sources": 571
+  },
+  "limits": [
+    "No real Storage/native/cloud/production proof.",
+    "Issued/signing SOURCE and inadequate WEB evidence remain blocked.",
+    "Actual provider ordering/schema/version/exclusive writers/no hidden POST retries/version deletion remain gates.",
+    "No full file-deletion or seller/buyer/anonymous journey acceptance."
+  ],
+  "node": {
+    "commands": [
+      {
+        "exit_code": 0,
+        "finished_utc": "2026-10-14T18:56:36.256022+00:00",
+        "name": "new-reconcile-typecheck",
+        "started_utc": "2026-10-14T18:56:35.937876+00:00",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "exit_code": 0,
+        "finished_utc": "2026-10-14T18:56:36.419073+00:00",
+        "name": "new-reconcile-tests",
+        "started_utc": "2026-10-14T18:56:36.257456+00:00",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "b1d1a9310187d2870f2440f5c956ba6fcd0ed93fde0c71f5c357bd809f65c79b"
+      }
+    ],
+    "logical_counterexamples_included": 2,
+    "passed": 48,
+    "provider": "SYNTHETIC_LOOPBACK",
+    "runtime": {
+      "environment": "user_existing_runtime_new_tests_only",
+      "native_invocation": false,
+      "node": "v24.16.0",
+      "strict": true,
+      "target": "ES2017",
+      "typescript": "5.9.3"
+    },
+    "tap_sha256": "b1d1a9310187d2870f2440f5c956ba6fcd0ed93fde0c71f5c357bd809f65c79b"
+  },
+  "old_tests_replayed": false,
+  "original_result": {
+    "bytes": 2283835,
+    "name": "write-reconcile-tests-20261014-215635-_ugn2iw8.zip",
+    "sha256": "697107f49b9cda37d245587bf5687afcdc1eaa0fd02212bb8db6110c41f5e654"
+  },
+  "recorded_on": "2026-10-15",
+  "remote": "NOT_QUERIED_LOCAL_ONLY",
+  "source_installation": "NOT_YET_OBSERVED_USE_NEW_INSTALL_RESULT",
+  "sql": {
+    "commands": [
+      {
+        "exit_code": 0,
+        "name": "fixture",
+        "stderr_sha256": "dd93fd322e3df947eaecd9d8c4c79bcd39583bc2dbd37bf5cc33917add84f885",
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "exit_code": 0,
+        "name": "new-reconcile-rollback",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "3d5755b0327023b7f71f728b6743867b44105d7daa954ddaa320e2196af7b3e5"
+      },
+      {
+        "exit_code": 0,
+        "name": "race-reset-1",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "exit_code": 0,
+        "name": "race-setup-1",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "d8627e2549b17926a1fe637215b3910cb0bf58b8e47dc6431b62ef2d3bd4f8fa"
+      },
+      {
+        "exit_code": 0,
+        "name": "race-1-a",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "816f0e8cb588712d397eb6dd56ca11644fff0cd10fecc291e9847036ccb6526c"
+      },
+      {
+        "exit_code": 0,
+        "name": "race-1-b",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "65bb139355bb3ebb2da89e6bda019f732c12d42b758bbff2ba92f573dea9dbe4"
+      },
+      {
+        "exit_code": 0,
+        "name": "race-1-verify",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "97616f093948f28acb0534ac1ecf61d94cf238c981dd92fbd808b8a2a0fbd710"
+      },
+      {
+        "exit_code": 0,
+        "name": "race-reset-2",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "exit_code": 0,
+        "name": "race-setup-2",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "d8627e2549b17926a1fe637215b3910cb0bf58b8e47dc6431b62ef2d3bd4f8fa"
+      },
+      {
+        "exit_code": 0,
+        "name": "race-2-a",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "988b2983c297f7ade55d4df6fb1b72e4dd7804d59f264b22cf23e5b51dccf1b8"
+      },
+      {
+        "exit_code": 0,
+        "name": "race-2-b",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "1e652ace123af24f6eccecca11f4125a3eabb785a2c9d5b98b9da5298840d853"
+      },
+      {
+        "exit_code": 0,
+        "name": "race-2-verify",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "050724d6ae746c0f4c2321120138e59230ff4801b0f8b7b37c5bf8419ad312b4"
+      },
+      {
+        "exit_code": 0,
+        "name": "race-reset-3",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "exit_code": 0,
+        "name": "race-setup-3",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "1aa93b31a41af3291d319302a9968ab80748653ad222981794b71ce8ad632431"
+      },
+      {
+        "exit_code": 0,
+        "name": "race-3-a",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "34cd6b869bfe604de1b771aef8af05e061b63f86fd80bf8a54e6c9b1ed5071f2"
+      },
+      {
+        "exit_code": 0,
+        "name": "race-3-b",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "a763dbb0a2dab39680ceadfed02f716e69d556394c1131990f4c6c98389f297b"
+      },
+      {
+        "exit_code": 0,
+        "name": "race-3-verify",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "9510b59b9bd96a12651d6c1aa029576b5850765afc7b15af4b02e5939a9ea92e"
+      },
+      {
+        "exit_code": 0,
+        "name": "race-reset-4",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "exit_code": 0,
+        "name": "race-setup-4",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "6f2643d049e86053fdfdbc7879bace52c0249065df8354195b30f0d1e7f84005"
+      },
+      {
+        "exit_code": 0,
+        "name": "race-4-a",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "9d20437dfeba00e69cbca61f7c1f3b39776b741cd4e7a9ad079be4280c631977"
+      },
+      {
+        "exit_code": 0,
+        "name": "race-4-b",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "5ec8104490d7c4b3f83e9c895f90417b49639e19d6e9c02d4d8d314c8a7c4e8b"
+      },
+      {
+        "exit_code": 0,
+        "name": "race-4-verify",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "4a1ff12996019e62a929e2357c1e5cc9fbf2d3f759c3461ffd1ec0cdf8fef35c"
+      },
+      {
+        "exit_code": 0,
+        "name": "race-reset-5",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "exit_code": 0,
+        "name": "race-setup-5",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "fa2cfaba8210a263887d3d6f7bcd24e3929b6b35ebc92695eb39c3e1a3d830db"
+      },
+      {
+        "exit_code": 0,
+        "name": "race-5-b",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "579c155d12e5f1d695ac0bb90d534c2fe3412112b6629311ae401e14c0246a3e"
+      },
+      {
+        "exit_code": 0,
+        "name": "race-5-a",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "e2bae19d4a3bcc93bab970d69b0b410e84a3d2161d503a9c9141dc6b58ffbe7c"
+      },
+      {
+        "exit_code": 0,
+        "name": "race-5-verify",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "0abd029115a951540d160a344442a1590874c1ad5412f36510398546e24062a9"
+      },
+      {
+        "exit_code": 0,
+        "name": "new-isolation-0",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "17a3e218b389678fdecdd7ba2b70cbff0fc8c46fa09a30c32e2c77e12c788dd4"
+      },
+      {
+        "exit_code": 0,
+        "name": "new-isolation-1",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "8447b0af33bc0c8b3000ef8691d868b8f1636e1f29dfdab84762ce3235f1a802"
+      },
+      {
+        "exit_code": 0,
+        "name": "new-isolation-2",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "1551946590e40497fee2695f417128d314e9f76ee2af226f5a51f2b03578ca74"
+      },
+      {
+        "exit_code": 0,
+        "name": "new-isolation-3",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "57673ee0a2209646154446e44fe99c9a128d30554d31b239b39f5041d08c135e"
+      }
+    ],
+    "fixture_notice_count": 2,
+    "isolation": [
+      "reconcile_claim_repeatable_read",
+      "reconcile_record_repeatable_read",
+      "reconcile_claim_serializable",
+      "reconcile_record_serializable"
+    ],
+    "passed": 83,
+    "provider_metadata": "SYNTHETIC_FOUR_COLUMN_RELATION",
+    "races": [
+      {
+        "name": "sign_before_cancel",
+        "passed": 3,
+        "schedule": "observed_pg_blocking_pids"
+      },
+      {
+        "name": "cancel_before_sign",
+        "passed": 3,
+        "schedule": "observed_pg_blocking_pids"
+      },
+      {
+        "name": "duplicate_source_settlement",
+        "passed": 3,
+        "schedule": "observed_pg_blocking_pids"
+      },
+      {
+        "name": "duplicate_web_settlement",
+        "passed": 3,
+        "schedule": "observed_pg_blocking_pids"
+      },
+      {
+        "name": "skip_locked_reconcile_other_file",
+        "passed": 3,
+        "schedule": "second_transaction_completed_before_first_commit"
+      }
+    ],
+    "rollback": 64,
+    "rollback_snapshot": {
+      "after_sha256": "a57f59eb44d8738b406cb90402119cf809198c005cbe89ea1bd5ccfb11d1b7d5",
+      "baseline_sha256": "a57f59eb44d8738b406cb90402119cf809198c005cbe89ea1bd5ccfb11d1b7d5",
+      "expected": 64,
+      "passed": 64,
+      "same": true
+    }
+  },
+  "sql_application": "NONE_LABS_ONLY_API_CLOSED",
+  "status": "PASS_WRITE_RECONCILE_NEW_TESTS_REVIEW_REQUIRED",
+  "upload_publication": "DISABLED"
+}

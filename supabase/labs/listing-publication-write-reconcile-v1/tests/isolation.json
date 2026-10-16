@@ -1,0 +1,18 @@
+[
+  {
+    "label": "reconcile_claim_repeatable_read",
+    "sql": "BEGIN ISOLATION LEVEL REPEATABLE READ; SELECT final_test.expect('reconcile_claim_repeatable_read',$q$SELECT public.claim_listing_write_reconcile_v1()$q$,'25001','publication_read_committed_required'); ROLLBACK;"
+  },
+  {
+    "label": "reconcile_record_repeatable_read",
+    "sql": "BEGIN ISOLATION LEVEL REPEATABLE READ; SELECT final_test.expect('reconcile_record_repeatable_read',$q$SELECT public.record_listing_write_reconcile_v1(NULL,NULL,'observed',NULL,NULL,NULL,NULL)$q$,'25001','publication_read_committed_required'); ROLLBACK;"
+  },
+  {
+    "label": "reconcile_claim_serializable",
+    "sql": "BEGIN ISOLATION LEVEL SERIALIZABLE; SELECT final_test.expect('reconcile_claim_serializable',$q$SELECT public.claim_listing_write_reconcile_v1()$q$,'25001','publication_read_committed_required'); ROLLBACK;"
+  },
+  {
+    "label": "reconcile_record_serializable",
+    "sql": "BEGIN ISOLATION LEVEL SERIALIZABLE; SELECT final_test.expect('reconcile_record_serializable',$q$SELECT public.record_listing_write_reconcile_v1(NULL,NULL,'observed',NULL,NULL,NULL,NULL)$q$,'25001','publication_read_committed_required'); ROLLBACK;"
+  }
+]

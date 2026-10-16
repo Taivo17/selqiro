@@ -1,0 +1,72 @@
+[
+  {
+    "name": "sign_before_cancel",
+    "setup": "SELECT reconcile_test.source();",
+    "a": "SELECT reconcile_test.sign();\nSELECT final_test.check('sign_before_cancel_a',true);",
+    "b": "SELECT final_test.cancel();\nSELECT final_test.check('sign_before_cancel_b',true);",
+    "verify": "SELECT final_test.check('sign_before_cancel_final',public.claim_listing_write_reconcile_v1() IS NULL AND listing_publication_private.object_cleanup_state(completion_test.obj('source'))='blocked_write_settlement');",
+    "blocked": true,
+    "user_b": "11111111-1111-1111-1111-111111111111",
+    "expected": [
+      "sign_before_cancel_a",
+      "sign_before_cancel_b",
+      "sign_before_cancel_final"
+    ]
+  },
+  {
+    "name": "cancel_before_sign",
+    "setup": "SELECT reconcile_test.source();",
+    "a": "SELECT final_test.cancel();\nSELECT final_test.check('cancel_before_sign_a',true);",
+    "b": "DO $d$ BEGIN PERFORM reconcile_test.sign(); RAISE EXCEPTION 'unexpected_sign_success'; EXCEPTION WHEN SQLSTATE '55000' THEN IF SQLERRM<>'publication_attempt_closed' THEN RAISE; END IF; END $d$;\nSELECT final_test.check('cancel_before_sign_b',true);",
+    "verify": "SELECT final_test.check('cancel_before_sign_final',(SELECT state='reserved' AND claim_id IS NULL FROM listing_publication_private.upload_grants));",
+    "blocked": true,
+    "user_b": "11111111-1111-1111-1111-111111111111",
+    "expected": [
+      "cancel_before_sign_a",
+      "cancel_before_sign_b",
+      "cancel_before_sign_final"
+    ]
+  },
+  {
+    "name": "duplicate_source_settlement",
+    "setup": "SELECT reconcile_test.source(); SELECT final_test.cancel(); SELECT reconcile_test.claim();",
+    "a": "SELECT reconcile_test.record();\nSELECT final_test.check('duplicate_source_settlement_a',true);",
+    "b": "SELECT reconcile_test.record();\nSELECT final_test.check('duplicate_source_settlement_b',true);",
+    "verify": "SELECT final_test.check('duplicate_source_settlement_final',(SELECT count(*)=1 FROM listing_publication_private.write_settlements) AND (SELECT state='settled' FROM listing_publication_private.write_reconcile_jobs));",
+    "blocked": true,
+    "user_b": "11111111-1111-1111-1111-111111111111",
+    "expected": [
+      "duplicate_source_settlement_a",
+      "duplicate_source_settlement_b",
+      "duplicate_source_settlement_final"
+    ]
+  },
+  {
+    "name": "duplicate_web_settlement",
+    "setup": "SELECT completion_test.boot(); SELECT reconcile_test.provider(); SELECT final_test.cancel(); SELECT reconcile_test.claim();",
+    "a": "SELECT reconcile_test.record();\nSELECT final_test.check('duplicate_web_settlement_a',true);",
+    "b": "SELECT reconcile_test.record();\nSELECT final_test.check('duplicate_web_settlement_b',true);",
+    "verify": "SELECT final_test.check('duplicate_web_settlement_final',(SELECT count(*)=1 FROM listing_publication_private.write_settlements) AND (SELECT state='pending' FROM listing_publication_private.cleanup WHERE object_id=completion_test.obj('web')));",
+    "blocked": true,
+    "user_b": "11111111-1111-1111-1111-111111111111",
+    "expected": [
+      "duplicate_web_settlement_a",
+      "duplicate_web_settlement_b",
+      "duplicate_web_settlement_final"
+    ]
+  },
+  {
+    "name": "skip_locked_reconcile_other_file",
+    "setup": "SELECT completion_test.boot('one'); SELECT completion_test.boot('two'); SELECT final_test.cancel('one'); SELECT final_test.cancel('two');",
+    "a": "SELECT reconcile_test.claim('a_claim');\nSELECT final_test.check('skip_locked_reconcile_other_file_a',true);",
+    "b": "SELECT reconcile_test.claim('b_claim');\nSELECT final_test.check('skip_locked_reconcile_other_file_b',true);",
+    "verify": "SELECT final_test.check('skip_locked_reconcile_other_file_final',final_test.v('a_claim')->>'object_id'<>final_test.v('b_claim')->>'object_id' AND (SELECT count(*)=2 FROM listing_publication_private.write_reconcile_jobs));",
+    "blocked": false,
+    "user_b": "11111111-1111-1111-1111-111111111111",
+    "expected": [
+      "skip_locked_reconcile_other_file_a",
+      "skip_locked_reconcile_other_file_b",
+      "skip_locked_reconcile_other_file_final"
+    ]
+  }
+]
