@@ -1,5 +1,5 @@
 import { PRIVATE_UPLOAD, copyUploadCommand, copyUploadBinding, copyPrivateUploadGrant, inspectUploadToken,
-  publicationStorageOrigin, uploadRecord, uploadFail, type UploadCommand, type PrivateUploadGrant } from "../../../entities/listing/model/privatePublicationUpload";
+  publicationStorageOrigin, uploadRecord, uploadFail, isUploadUuid, uploadSha256, type UploadCommand, type PrivateUploadGrant } from "../../../entities/listing/model/privatePublicationUpload";
 import { privateUploadHttp, type UploadFetch } from "../../../entities/listing/api/privateUploadHttp";
 export type UploadIssueResult = Readonly<{ kind: "grant"; grant: PrivateUploadGrant }> |
   Readonly<{ kind: "reconcile_same_slot"; attemptId: string; slotId: string }>;
@@ -69,16 +69,27 @@ export function createPrivateUploadIssuer(config: Config, fetcher: UploadFetch =
       }, true), ["recorded"]);
       if (receipt.recorded !== true) return uploadFail("outcome_unknown");
     }
-    // A lost record acknowledgement or application response is recovered on a NEW
-    // explicit call by reading the same token, not signing again. Auth/identity/policy
-    // and open-attempt/expiry conditions are rechecked by SQL before any secret release.
-    const read = uploadRecord(await rpc("get_my_listing_upload_grant_v1", { ...args, p_grant_id: binding.grant_id }), ["state", "grant"]);
-    if (read.state === "pending" && read.grant === null) return Object.freeze({ kind: "reconcile_same_slot", attemptId: cmd.attemptId, slotId: cmd.slotId });
-    if (read.state === "expired" && read.grant === null) return uploadFail("grant_unavailable");
-    if (read.state !== "ready") return uploadFail("invalid_response");
+    // Secrets are read by the trusted broker only, not by an authenticated browser RPC.
+    // The read creates a permanent release intent. A SECOND transaction must observe
+    // that exact intent before this function returns a token: tx=rollback / lost ACK
+    // must not turn an uncommitted audit row into proof that a capability was withheld.
+    const read = uploadRecord(await rpc("get_my_listing_upload_grant_v1",
+      { ...args, p_grant_id: binding.grant_id }, true), ["state", "grant", "release_id"]);
+    if (read.state === "pending" && read.grant === null && read.release_id === null)
+      return Object.freeze({ kind: "reconcile_same_slot", attemptId: cmd.attemptId, slotId: cmd.slotId });
+    if (read.state === "expired" && read.grant === null && read.release_id === null) return uploadFail("grant_unavailable");
+    if (read.state !== "ready" || !isUploadUuid(read.release_id)) return uploadFail("invalid_response");
     const grant = copyPrivateUploadGrant(read.grant, cmd, Date.now());
     if (grant.grant_id !== binding.grant_id || grant.object_id !== binding.object_id ||
         grant.expected_bytes !== binding.expected_bytes || grant.expected_sha256 !== binding.expected_sha256) return uploadFail("invalid_response");
-    return Object.freeze({ kind: "grant", grant });
+    const tokenHash = await uploadSha256(new TextEncoder().encode(grant.token));
+    const confirmed = uploadRecord(await rpc("confirm_listing_upload_release_v1", {
+      ...args, p_grant_id: binding.grant_id, p_release_id: read.release_id, p_token_sha256: tokenHash,
+    }, true), ["release_id", "grant_id", "confirmed"]);
+    if (confirmed.confirmed !== true || confirmed.release_id !== read.release_id || confirmed.grant_id !== grant.grant_id)
+      return uploadFail("outcome_unknown");
+    if (signal?.aborted) return uploadFail("aborted");
+    // Recheck time after both network requests. Never expose the internal release ID.
+    return Object.freeze({ kind: "grant", grant: copyPrivateUploadGrant(grant, cmd, Date.now()) });
   };
 }

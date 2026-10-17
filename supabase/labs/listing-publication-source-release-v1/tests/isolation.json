@@ -1,0 +1,26 @@
+[
+  {
+    "label": "release_get_repeatable_read",
+    "sql": "BEGIN ISOLATION LEVEL REPEATABLE READ;\nSELECT final_test.expect('release_get_repeatable_read','SELECT public.get_my_listing_upload_grant_v1(''11111111-1111-1111-1111-111111111111'',''aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa'',''33333333-3333-3333-3333-333333333333'',''44444444-4444-4444-4444-444444444444'',''88888888-8888-8888-8888-888888888888'',''66666666-6666-6666-6666-666666666666'')','25001','publication_read_committed_required',NULL);\nROLLBACK;"
+  },
+  {
+    "label": "release_get_serializable",
+    "sql": "BEGIN ISOLATION LEVEL SERIALIZABLE;\nSELECT final_test.expect('release_get_serializable','SELECT public.get_my_listing_upload_grant_v1(''11111111-1111-1111-1111-111111111111'',''aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa'',''33333333-3333-3333-3333-333333333333'',''44444444-4444-4444-4444-444444444444'',''88888888-8888-8888-8888-888888888888'',''66666666-6666-6666-6666-666666666666'')','25001','publication_read_committed_required',NULL);\nROLLBACK;"
+  },
+  {
+    "label": "release_confirm_repeatable_read",
+    "sql": "BEGIN ISOLATION LEVEL REPEATABLE READ;\nSELECT final_test.expect('release_confirm_repeatable_read','SELECT public.confirm_listing_upload_release_v1(''11111111-1111-1111-1111-111111111111'',''aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa'',''33333333-3333-3333-3333-333333333333'',''44444444-4444-4444-4444-444444444444'',''88888888-8888-8888-8888-888888888888'',''66666666-6666-6666-6666-666666666666'',''99999999-9999-9999-9999-999999999999'',repeat(''a'',64))','25001','publication_read_committed_required',NULL);\nROLLBACK;"
+  },
+  {
+    "label": "release_confirm_serializable",
+    "sql": "BEGIN ISOLATION LEVEL SERIALIZABLE;\nSELECT final_test.expect('release_confirm_serializable','SELECT public.confirm_listing_upload_release_v1(''11111111-1111-1111-1111-111111111111'',''aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa'',''33333333-3333-3333-3333-333333333333'',''44444444-4444-4444-4444-444444444444'',''88888888-8888-8888-8888-888888888888'',''66666666-6666-6666-6666-666666666666'',''99999999-9999-9999-9999-999999999999'',repeat(''a'',64))','25001','publication_read_committed_required',NULL);\nROLLBACK;"
+  },
+  {
+    "label": "release_settle_repeatable_read",
+    "sql": "BEGIN ISOLATION LEVEL REPEATABLE READ;\nSELECT final_test.expect('release_settle_repeatable_read','SELECT public.settle_recorded_unreleased_source_one_v1()','25001','publication_read_committed_required',NULL);\nROLLBACK;"
+  },
+  {
+    "label": "release_settle_serializable",
+    "sql": "BEGIN ISOLATION LEVEL SERIALIZABLE;\nSELECT final_test.expect('release_settle_serializable','SELECT public.settle_recorded_unreleased_source_one_v1()','25001','publication_read_committed_required',NULL);\nROLLBACK;"
+  }
+]

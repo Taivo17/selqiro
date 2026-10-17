@@ -1,0 +1,604 @@
+{
+  "actual_git_remote": "LOCAL_ORIGIN_ONLY_GITHUB_NOT_QUERIED_IN_TEST",
+  "candidate_files": {
+    "src/server/listing-publication/final/settleRecordedSourceOne.ts": {
+      "bytes": 1917,
+      "git_blob": "99579a73b73c525527bfb347ae1baf0d2904dee0",
+      "sha256": "660c30c318f9e6cd654623f30073cd35230674117c99a61974dfaab6e7f8ec0a"
+    },
+    "src/server/listing-publication/uploads/issuePrivateUpload.ts": {
+      "bytes": 8037,
+      "git_blob": "0e76df8d2ae57da0594d7faaddd7db7b474243cd",
+      "sha256": "563e8b546c83db13ca4163c21dc0ced811499b2ec19e1bf9013321cfbdd49f1f"
+    },
+    "supabase/labs/listing-publication-source-release-v1/01_release_ledger.sql": {
+      "bytes": 22896,
+      "git_blob": "55aa03e5fce3507b56ac859c486e0fd468d994f1",
+      "sha256": "d739c8de1876ccf71ea396768394a50631eb6fb545260e3477aa83dc51dd119c"
+    },
+    "supabase/labs/listing-publication-source-release-v1/README.md": {
+      "bytes": 4439,
+      "git_blob": "e6fdfff3ef709bb556ed83d6fd2cc539133ee71f",
+      "sha256": "d2b9911a868c081523769a0dbde7bfe72a177a349985937c392f4a467434a082"
+    },
+    "supabase/labs/listing-publication-source-release-v1/tests/expected-labels.json": {
+      "bytes": 2536,
+      "git_blob": "34426408f3eaccda7e2bb8141f5c653dc43585be",
+      "sha256": "2ccf2a4c89f6ded2ea154090d360c253858590053f5ae16b08de791da523b7fb"
+    },
+    "supabase/labs/listing-publication-source-release-v1/tests/helpers.sql": {
+      "bytes": 2000,
+      "git_blob": "f06f508ddb425f182206ed3837d4d61c96f6a729",
+      "sha256": "0a0b86f9e6185fb7439f6a1ab076392c1c8c81ef5671dbbfe0d8500e3768beff"
+    },
+    "supabase/labs/listing-publication-source-release-v1/tests/isolation.json": {
+      "bytes": 2770,
+      "git_blob": "0a925715a8e2a9f7a4bb588aaa38654080b2fe03",
+      "sha256": "46c1800578c5c85a09ad00ab72aa3f8e2025f13d47610209312f1157bae6b0ad"
+    },
+    "supabase/labs/listing-publication-source-release-v1/tests/races.json": {
+      "bytes": 4339,
+      "git_blob": "4eef8f4684c590a9e0cd151a2c42b81aa7e36507",
+      "sha256": "0a945e6bab54ef8d6e9018793a8290279cb8bd6ccfc367d82a8542c411de64b1"
+    },
+    "supabase/labs/listing-publication-source-release-v1/tests/suite.sql": {
+      "bytes": 16714,
+      "git_blob": "896e01b61d94eeb47b8601bfab3983a5037adc50",
+      "sha256": "8b9329eaf4d2dac1ce0a6eba93e5f6a02125a62fbfc2c26c6f43b58cb17c217c"
+    },
+    "tests/listing-publication-source-release.test.cjs": {
+      "bytes": 15339,
+      "git_blob": "8ef8978a4374261ac5c9706e0477df2c0a54be9a",
+      "sha256": "24e4950f76ddfc93f7f6490ad42966b656f2fac3459b5eef0a93490a0bf42d3b"
+    }
+  },
+  "current_build": "NOT_YET_OBSERVED_USE_NEW_INSTALL_RESULT",
+  "date": "2026-10-16",
+  "format": "selqiro_reviewed_source_release_proof_v1",
+  "helper_cleanup": "OWN_RUN_HELPER_REMOVED_VERIFIED",
+  "last_actual_git": {
+    "branch": "main",
+    "clean": true,
+    "head": "57251714485e0c100379a3eb923cbca356554055",
+    "index_sha256": "938bc6afa62b185f4ea443c8c3dd36aab1974aff62a53ee038f9b3a05a2abf3e",
+    "observed_utc": "2026-10-16T13:34:25.740802+00:00",
+    "selected_sources": 594
+  },
+  "limits": [
+    "real loopback HTTP, synthetic Auth/RPC/Storage and transaction results",
+    "SQL synthetic Storage fixture, no actual cloud deletion",
+    "historical uncovered and every possible-release intent stays blocked even after expiry/purge",
+    "covered no-intent recorded grants settle by coverage/no release not by expiry",
+    "no native invocation",
+    "full file deletion not ready",
+    "upload/publication disabled; labs API closed"
+  ],
+  "new_installer_executed": false,
+  "node": {
+    "commands": [
+      {
+        "exit_code": 0,
+        "finished_utc": "2026-10-16T13:34:19.167715+00:00",
+        "name": "new-source-release-typecheck",
+        "started_utc": "2026-10-16T13:34:18.843602+00:00",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "exit_code": 0,
+        "finished_utc": "2026-10-16T13:34:19.342808+00:00",
+        "name": "new-source-release-tests",
+        "started_utc": "2026-10-16T13:34:19.169313+00:00",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "8b20e00488307c692396a18abf15734094fc2ce5eda84743d57b2f75ae8785ea"
+      }
+    ],
+    "inputs": {
+      "src/entities/listing/api/privateUploadHttp.ts": {
+        "bytes": 3684,
+        "git_blob": "1794a32302e561121afeb267297606c3da1b7106",
+        "sha256": "4f28de9380ca8b0facc458325251e24583f469f5a5303ab32ef7810ef50fab4b"
+      },
+      "src/entities/listing/model/listingPriceInput.ts": {
+        "bytes": 4296,
+        "git_blob": "370986e1aac9cccb7e64baf5c2d7009d69469d44",
+        "sha256": "e471a74bb3a924d9d737a0c984ecde6b290feb12b33dda7bd5619e432d1b0122"
+      },
+      "src/entities/listing/model/privatePublicationUpload.ts": {
+        "bytes": 7059,
+        "git_blob": "753a3c226d1a91eaed149d02da8360ad7c7a31e2",
+        "sha256": "c5ea39fe4a592fb7e606b3f41613e6eed983709200ea487af7f2d75267df6103"
+      },
+      "src/server/listing-publication/final/cleanupOne.ts": {
+        "bytes": 4115,
+        "git_blob": "2c7d53a1a69b6d6784d1a2de0a537ebf62c8a2f6",
+        "sha256": "df386550dc6405d0367a760fbdd99a0ffa5a29b7db29723270823e22b15847e5"
+      },
+      "src/server/listing-publication/final/finalContract.ts": {
+        "bytes": 4429,
+        "git_blob": "070a6d041e5aff436c665866e3ea4928ceae10ca",
+        "sha256": "33cf4a86b43000925ef6fa7660f92360f33fad9a83c7897dfbdf0676bac8d2a0"
+      },
+      "src/server/listing-publication/final/settleRecordedSourceOne.ts": {
+        "bytes": 1917,
+        "git_blob": "99579a73b73c525527bfb347ae1baf0d2904dee0",
+        "sha256": "660c30c318f9e6cd654623f30073cd35230674117c99a61974dfaab6e7f8ec0a"
+      },
+      "src/server/listing-publication/images/sanitize.d.cts": {
+        "bytes": 1238,
+        "git_blob": "f419677d4ebd332751881bdea3bb327868fc8d42",
+        "sha256": "dea4cd74f96fe7fba733729b71c353c6923ac1f5fe6f78fdf09f5003cd9e1710"
+      },
+      "src/server/listing-publication/uploads/issuePrivateUpload.ts": {
+        "bytes": 8037,
+        "git_blob": "0e76df8d2ae57da0594d7faaddd7db7b474243cd",
+        "sha256": "563e8b546c83db13ca4163c21dc0ced811499b2ec19e1bf9013321cfbdd49f1f"
+      },
+      "src/server/listing-publication/web/webImageContract.ts": {
+        "bytes": 7217,
+        "git_blob": "15bb44f739d4295d7e21d839912f54ae3cf64671",
+        "sha256": "98f164f59fc3d249527a47756f65ecc7382577aef8b17ccc07a59f5072606253"
+      },
+      "src/server/listing-publication/web/webObjectHttp.ts": {
+        "bytes": 3572,
+        "git_blob": "638acb42d0c3fcf4fae43a299e7e694902120069",
+        "sha256": "3358945080bc62b15b0e197cdc6d75aea7b4df570554d477d6303a7ef2fb3c00"
+      },
+      "src/shared/currency/listingCurrencies.generated.ts": {
+        "bytes": 6681,
+        "git_blob": "2efe4661d4c32ab8b8e2c4129d26de3b2891d205",
+        "sha256": "bbcaf613ee86d4041bce74b829abc45d992fec8ec75000c42ad6da45ff05b581"
+      },
+      "tests/listing-publication-source-release.test.cjs": {
+        "bytes": 15339,
+        "git_blob": "8ef8978a4374261ac5c9706e0477df2c0a54be9a",
+        "sha256": "24e4950f76ddfc93f7f6490ad42966b656f2fac3459b5eef0a93490a0bf42d3b"
+      }
+    },
+    "proof_boundary": "New 52 targeted cases on changed issuer, not a replay of previous upload suites.",
+    "runtime": {
+      "environment": "user_existing_runtime_new_tests_only",
+      "native_invocation": false,
+      "node": "v24.16.0",
+      "strict": true,
+      "target": "ES2017",
+      "typescript": "5.9.3"
+    },
+    "strict": true,
+    "target": "ES2017",
+    "test_titles": [
+      "- release-ledger: one DB call settles tracked closed recorded grant",
+      "- release-ledger: open is not proof of no exposure",
+      "- release-ledger: untracked is not proof of no exposure",
+      "- release-ledger: possible_release is not proof of no exposure",
+      "- release-ledger: missing is not proof of no exposure",
+      "- release-ledger: reserved is not proof of no exposure",
+      "- release-ledger: signing is not proof of no exposure",
+      "- release-ledger: duplicate scan stays idle",
+      "- release-ledger: lost settlement ACK is not retried",
+      "- release-ledger: HTTP 202 is not settlement",
+      "- release-ledger: HTTP 400 is not settlement",
+      "- release-ledger: HTTP 401 is not settlement",
+      "- release-ledger: HTTP 403 is not settlement",
+      "- release-ledger: HTTP 500 is not settlement",
+      "- release-ledger: invalid schema receipt fails closed",
+      "- release-ledger: invalid object receipt fails closed",
+      "- release-ledger: invalid grant receipt fails closed",
+      "- release-ledger: invalid claim receipt fails closed",
+      "- release-ledger: invalid proof receipt fails closed",
+      "- release-ledger: invalid state receipt fails closed",
+      "- release-ledger: invalid extra_secret receipt fails closed",
+      "- release-ledger: badJson is not success",
+      "- release-ledger: redirect is not success",
+      "- release-ledger: pre-abort sends nothing",
+      "- release-ledger: in-flight abort never succeeds",
+      "- release-ledger: bad config fails before I/O",
+      "- release-ledger: browser cannot construct worker",
+      "- release-ledger: lost record ACK becomes safely unexposed only with coverage",
+      "- release-ledger: normal broker confirms committed exact intent before returning token",
+      "- release-ledger: rolled-back read cannot escape through broker",
+      "- release-ledger: lost read ACK conservatively retains possible-release intent",
+      "- release-ledger: lost confirmation ACK returns no token and never retries",
+      "- release-ledger: closure between read and confirmation returns no token",
+      "- release-ledger: closure while successful read response is delayed returns no token",
+      "- release-ledger: confirm HTTP 202 never releases token",
+      "- release-ledger: confirm HTTP 401 never releases token",
+      "- release-ledger: confirm HTTP 403 never releases token",
+      "- release-ledger: confirm HTTP 500 never releases token",
+      "- release-ledger: absent intent ID stops before confirm",
+      "- release-ledger: invalid intent ID stops before confirm",
+      "- release-ledger: nil intent ID stops before confirm",
+      "- release-ledger: malformed confirmation different_id cannot release",
+      "- release-ledger: malformed confirmation different_grant cannot release",
+      "- release-ledger: malformed confirmation false cannot release",
+      "- release-ledger: malformed confirmation string_true cannot release",
+      "- release-ledger: malformed confirmation extra_secret cannot release",
+      "- release-ledger: repeated explicit issuer call does not sign again",
+      "- release-ledger: pending has no extra confirmation or secret",
+      "- release-ledger: expired grant is not a release receipt",
+      "- release-ledger: Auth rejects another account before signing or secret reads",
+      "- release-ledger: existing cleaner removes only proved exact SOURCE",
+      "- release-ledger: possible-release intent cannot authorize cleaner"
+    ],
+    "tests": 52
+  },
+  "proof_replay": "NONE",
+  "proof_zip": {
+    "bytes": 2370087,
+    "filename": "source-release-tests-20261016-163418-ofke29v2.zip",
+    "members": 693,
+    "sha256": "a7b5918df8c90c8c9f6f94c902c21a1851fc60fe29089bb8ccf31549122709a4"
+  },
+  "requirements_sha256": "96ee0ecb6c9eae89fbe17deefbb59f1ad3d9a5482102709585227bfe90254a02",
+  "runner_sha256": "a9a5aa870ccc56b0a396f994749fcd9ae0b188ce1dfd119f25fc69e2ec7aeb7d",
+  "source_base": "57251714485e0c100379a3eb923cbca356554055",
+  "sql": {
+    "assertions": 87,
+    "commands": [
+      {
+        "exit_code": 0,
+        "name": "fixture",
+        "stderr_sha256": "dd93fd322e3df947eaecd9d8c4c79bcd39583bc2dbd37bf5cc33917add84f885",
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "exit_code": 0,
+        "name": "new-source-release-rollback",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "f35214089e67d18f91ffdf61d85dca99a78e34d4be6b4560d7e061ab34cec202"
+      },
+      {
+        "exit_code": 0,
+        "name": "race-reset-1",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "exit_code": 0,
+        "name": "race-setup-1",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "d8627e2549b17926a1fe637215b3910cb0bf58b8e47dc6431b62ef2d3bd4f8fa"
+      },
+      {
+        "exit_code": 0,
+        "name": "race-1-a",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "a1dd739fdead893349f2c4f57c695e150938eb8f0ed0572cc7dcd452210742d3"
+      },
+      {
+        "exit_code": 0,
+        "name": "race-1-b",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "9a2600fd456a3e5a2dfcdba0159d2544b23be073aa56560ce4d251043a1f2080"
+      },
+      {
+        "exit_code": 0,
+        "name": "race-1-verify",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "bd7358dc776231293e3456d222adc183a258bd2fef025bdcaacb7e68777d415a"
+      },
+      {
+        "exit_code": 0,
+        "name": "race-reset-2",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "exit_code": 0,
+        "name": "race-setup-2",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "d8627e2549b17926a1fe637215b3910cb0bf58b8e47dc6431b62ef2d3bd4f8fa"
+      },
+      {
+        "exit_code": 0,
+        "name": "race-2-a",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "72c2a0d0636c7788fd96c620f26db35a448edc889e25470d500c66bd73b7f6e4"
+      },
+      {
+        "exit_code": 0,
+        "name": "race-2-b",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "9eb813077b583454cc4ef9ce7acbaf50dc3b7581d1e8c77d1403ef81aa43b2cb"
+      },
+      {
+        "exit_code": 0,
+        "name": "race-2-verify",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "551f6d8d624d7be46957cd8db899e1bea0b6bf8fd5cb3f961b9f75dfcce25122"
+      },
+      {
+        "exit_code": 0,
+        "name": "race-reset-3",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "exit_code": 0,
+        "name": "race-setup-3",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "d8627e2549b17926a1fe637215b3910cb0bf58b8e47dc6431b62ef2d3bd4f8fa"
+      },
+      {
+        "exit_code": 0,
+        "name": "race-3-a",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "ead20429bacc830f4550d4f94ddddf351a2bc9da72f412098a4e2fa8c77365b8"
+      },
+      {
+        "exit_code": 0,
+        "name": "race-3-b",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "427010625c8f1a360d6fa106822df35470ef0284e811d3780b2e72df77770b9a"
+      },
+      {
+        "exit_code": 0,
+        "name": "race-3-verify",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "8200c3aebbda8a5faeaaa73ef0c98bd165c322dfdc655f48bf337baaf124b9e8"
+      },
+      {
+        "exit_code": 0,
+        "name": "race-reset-4",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "exit_code": 0,
+        "name": "race-setup-4",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "049159b83b5bfddc70addc6e961bc34ff43cda8260de042af17abc4589313bf6"
+      },
+      {
+        "exit_code": 0,
+        "name": "race-4-a",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "c4c07fbd4f59d32e1f39daf1165baf173fa867ffc6ca0b1f86691403d76c25e9"
+      },
+      {
+        "exit_code": 0,
+        "name": "race-4-b",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "f0a7386d489885ac86cbd9aeebb5e9af07a8dd0f1acb6b60cedf6052bba80ca0"
+      },
+      {
+        "exit_code": 0,
+        "name": "race-4-verify",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "64c1c89001422bc2b90c811050d5406ef773eb5b694aa92d4247f9aab8dbe187"
+      },
+      {
+        "exit_code": 0,
+        "name": "race-reset-5",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "exit_code": 0,
+        "name": "race-setup-5",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "8f536cc8c367661967ad661db1295b937790a7773e166b8a5d18ebfa2cc25afb"
+      },
+      {
+        "exit_code": 0,
+        "name": "race-5-b",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "de1f0e8e79366cf48dbc0413b79d083ce43661b46792cb122b1d844d9e8667d4"
+      },
+      {
+        "exit_code": 0,
+        "name": "race-5-a",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "4a72b884524c01dbcb7dc3d116c98a12ee542696130db42cc49d5c4eb13ca430"
+      },
+      {
+        "exit_code": 0,
+        "name": "race-5-verify",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "fcf05949a7f4fcc12b42925df5a27426964e27b2cfa96dae648c731cb94c79aa"
+      },
+      {
+        "exit_code": 0,
+        "name": "new-isolation-0",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "a67f9a40a5e08018987f404690ae142c494ede698b2e14350e711fa49289633b"
+      },
+      {
+        "exit_code": 0,
+        "name": "new-isolation-1",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "49fe569fa540bd70679e365889f25f2ccfa9dcb6a7d7edf7d22025f181bc3636"
+      },
+      {
+        "exit_code": 0,
+        "name": "new-isolation-2",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "5345339eb2fa258a09aa26066136d764b9943a2f26fcb64d2d7d92ac248e17af"
+      },
+      {
+        "exit_code": 0,
+        "name": "new-isolation-3",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "ceaaea040bb6de3464e2f3b27741530033b7cfdbd6f0c3475fd53ca5b46af6a2"
+      },
+      {
+        "exit_code": 0,
+        "name": "new-isolation-4",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "9160f448fd303bf94d82d6fe70f814854b7419b51a96222f48ad95538f26835d"
+      },
+      {
+        "exit_code": 0,
+        "name": "new-isolation-5",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "15fce7f8953aa4c23f7097d4309e05ef217e6bd325b9e9da542fe64d09647665"
+      }
+    ],
+    "dependencies": {
+      "supabase/labs/listing-publication-attempt-v1/01_private_state.sql": {
+        "bytes": 7683,
+        "git_blob": "414f48e14890bc1d5e9ae031baf41bd5929cee39",
+        "sha256": "530ab73dd20ba9d776318472b06847778f907d51203ecaa72a0f9de47de2f6fd"
+      },
+      "supabase/labs/listing-publication-attempt-v1/02_values_and_policy.sql": {
+        "bytes": 7477,
+        "git_blob": "4179cabae07f6a6e6d3099a71a70fd7f5e3f9391",
+        "sha256": "ad7306884a577986e30ee8c3836fb60d24efe15e709e95260163997aed31c48b"
+      },
+      "supabase/labs/listing-publication-attempt-v1/03_owner_attempt.sql": {
+        "bytes": 5625,
+        "git_blob": "2a33c9bfd78afb04e98adb688e0da95dbfcdf1f2",
+        "sha256": "6d971221ed8672684993556598a8e92a027183e3a7c9a48676fd1e71e142d4dd"
+      },
+      "supabase/labs/listing-publication-attempt-v1/04_upload_dispatch.sql": {
+        "bytes": 3578,
+        "git_blob": "47d6f4003e80e38115a0ddf590d591f8293e8f26",
+        "sha256": "7365d25a2054efbf32a4544d9d3e049f71ebbb9e25543b252091fe64b30da8fc"
+      },
+      "supabase/labs/listing-publication-attempt-v1/05_close_attempt.sql": {
+        "bytes": 3867,
+        "git_blob": "7d79596078c15459cded890cc9bc02f5c7076020",
+        "sha256": "e14d2ba908ec943393a4f324a7437107408584fa60b6aac0b4b04f8bd60797ef"
+      },
+      "supabase/labs/listing-publication-attempt-v1/tests/fixture.generated.sql": {
+        "bytes": 40417,
+        "git_blob": "3a38baa55fd6a91245eaa00f3323ba2228717e21",
+        "sha256": "fab1ab88575192a7ff2f4151b544a383559ea1ea544819e50fe9d1f523e08a3f"
+      },
+      "supabase/labs/listing-publication-attempt-v1/tests/seed.sql": {
+        "bytes": 2204,
+        "git_blob": "96bb5d6b41842acd14dc5be3a7752a21a53a0d92",
+        "sha256": "86950749c4779911c4d4cb70d172b220c4ef21b4133ed64b4c4b0b2cbcdb6f46"
+      },
+      "supabase/labs/listing-publication-final-v1/01_state.sql": {
+        "bytes": 6162,
+        "git_blob": "abd8988348450915f56e90d5d5e0a3f2761d1951",
+        "sha256": "dbfffa60751acb18734f5c7a8c6a5b842572cbce71a8b5e6cd0067c2c4799186"
+      },
+      "supabase/labs/listing-publication-final-v1/02_listing_writer.generated.sql": {
+        "bytes": 8162,
+        "git_blob": "2ad03ae0186ab0690860ff76cecc4ee59964d080",
+        "sha256": "6625af67124cffe23d16c86d33fe5279116c619f2ea117529b5511645766106e"
+      },
+      "supabase/labs/listing-publication-final-v1/03_final_and_delete.sql": {
+        "bytes": 11749,
+        "git_blob": "3c20d75827b5cb6f37bf6fc400a4d1a8937ee6d5",
+        "sha256": "f58063f55803293ae647033ae666b185794c4c5d8f00cfb5da3b68026a003f15"
+      },
+      "supabase/labs/listing-publication-final-v1/04_guards.sql": {
+        "bytes": 7628,
+        "git_blob": "fd688da8d284ceeae38c231bacb2c84fdd310d90",
+        "sha256": "93191132d611d040059ecf764e9aee9db96b626236326e8140bad9ff412e2d81"
+      },
+      "supabase/labs/listing-publication-final-v1/05_cleanup.sql": {
+        "bytes": 5251,
+        "git_blob": "ab6cce3dcc2e5c2db3df14f510add0c5d96b4235",
+        "sha256": "a476b88b67b1bc1ec0df8f8a94fcf545888901ead68b03f0fb251edc0fe85c42"
+      },
+      "supabase/labs/listing-publication-final-v1/06_authority.sql": {
+        "bytes": 4004,
+        "git_blob": "fefedad0eb9dbcf09be276dd4de550b57d160a1b",
+        "sha256": "4fa78ca05823a6c75c3cd578d5099e7289df37feb3cebcd4c0c76a26cfb800af"
+      },
+      "supabase/labs/listing-publication-final-v1/07_budget.generated.sql": {
+        "bytes": 4489,
+        "git_blob": "baff341c43d27d44aa508a3f2a813e2f89ccb576",
+        "sha256": "23f9961381d599f31341ae1717ef3a2d51c298e5b65c54433c71efaf1d8f8309"
+      },
+      "supabase/labs/listing-publication-final-v1/tests/fixture-extension.generated.sql": {
+        "bytes": 9191,
+        "git_blob": "56bb185dbbb5db277ea1b78a7ff455183bb3c345",
+        "sha256": "f9847b301ef7787b28f186202d7a8e9838375da6362d1dc8936fb24b6acbc880"
+      },
+      "supabase/labs/listing-publication-final-v1/tests/helpers.sql": {
+        "bytes": 6741,
+        "git_blob": "ae0e05424a4a6c182742233913e55fff51634e42",
+        "sha256": "f1ce69096c2325e8fe469589680ab6bee740ffe551a9c04cb3bcec962d89dda2"
+      },
+      "supabase/labs/listing-publication-source-no-release-v1/01_source_no_release.sql": {
+        "bytes": 11500,
+        "git_blob": "517495649bd1c814b7632a74c1a3d515dc59ba83",
+        "sha256": "a42e5549b21eb7905b170ec400b329210262064e4eef94f81aa4befd49652fce"
+      },
+      "supabase/labs/listing-publication-source-no-release-v1/tests/helpers.sql": {
+        "bytes": 3533,
+        "git_blob": "994e9a15436e64ab661633d354d2d0fb4245a96a",
+        "sha256": "65a9055f57947e70f3a7e695703c9ffe2f355be5ad221fe82d9f65990406357b"
+      },
+      "supabase/labs/listing-publication-upload-v1/01_upload_grants.sql": {
+        "bytes": 18447,
+        "git_blob": "203b4ec8c069b91c406eaf6f7ce1492d7c417823",
+        "sha256": "78e1bdc244311f13ec027c32e2536d6d31190829a8c478daca585019c315f0a1"
+      },
+      "supabase/labs/listing-publication-web-v1/01_web_receipts.sql": {
+        "bytes": 15502,
+        "git_blob": "200677c07b27dc86c0bb89432d1c3949638c36e6",
+        "sha256": "4a9181147932b0fc3cd5c23c383c5ef5ac40f8d117db166846f409722c831662"
+      },
+      "supabase/labs/listing-publication-web-v1/02_close_write_fence.sql": {
+        "bytes": 3872,
+        "git_blob": "4dc03eba9c4d3f7417bbd2f0a911fbfe86bfbffc",
+        "sha256": "9ec08d1471bd678088c37180de0dd289d77a1fa9f9eb8514929e9adcf08167d0"
+      },
+      "supabase/labs/listing-publication-write-completion-v1/01_web_completion.sql": {
+        "bytes": 10410,
+        "git_blob": "f9dda32801943c017ead1a2ebca03469e5c04377",
+        "sha256": "6b35b7de26bdee868373a5f8292e7d9183de85a353a16daf60a415c996f95a36"
+      },
+      "supabase/labs/listing-publication-write-completion-v1/tests/helpers.sql": {
+        "bytes": 4237,
+        "git_blob": "d9ff286b76f24831f9ce4754b8065a6005e9a7d2",
+        "sha256": "fffdc678f78ef560007a1bd5fd8db3af5d15fdb88a477bfd0e451cfbc155f333"
+      },
+      "supabase/labs/listing-publication-write-reconcile-v1/01_reconcile.sql": {
+        "bytes": 21557,
+        "git_blob": "40831c45d479877f9e6f355d85ca2caf1d361ac8",
+        "sha256": "b6496a363598aee8ebc9dede05305aef74e1cbc4d30fc744a4e1814ae9149b7f"
+      },
+      "supabase/labs/listing-publication-write-reconcile-v1/tests/helpers.sql": {
+        "bytes": 4268,
+        "git_blob": "24067d35f70d23a5a370845f9ee9ea33a2211241",
+        "sha256": "1a279dd1a8fc500568c0bc74ec6b616a314ea7204e794f9c8e876a8d24df5467"
+      },
+      "supabase/labs/listing-publication-write-reconcile-v1/tests/storage-fixture.sql": {
+        "bytes": 651,
+        "git_blob": "00ce940d6e75ac4eddec303e9033dd259b780f76",
+        "sha256": "3084170f8b859b9003422bcc754b69f0c18c669662a67526980abae8206555f7"
+      }
+    },
+    "fixture_notices": 2,
+    "isolation": 6,
+    "postgres": "postgres (PostgreSQL) 17.6",
+    "race_assertions": 15,
+    "races": [
+      {
+        "name": "release_get_before_cancel",
+        "passed": 3,
+        "schedule": "observed_pg_blocking_pids"
+      },
+      {
+        "name": "release_cancel_before_get",
+        "passed": 3,
+        "schedule": "observed_pg_blocking_pids"
+      },
+      {
+        "name": "release_duplicate_get",
+        "passed": 3,
+        "schedule": "observed_pg_blocking_pids"
+      },
+      {
+        "name": "release_cancel_before_confirm",
+        "passed": 3,
+        "schedule": "observed_pg_blocking_pids"
+      },
+      {
+        "name": "release_busy_attempt_skips",
+        "passed": 3,
+        "schedule": "second_transaction_completed_before_first_commit"
+      }
+    ],
+    "rollback": 66,
+    "scope": "NEW_OWN_NETWORK_NONE_HELPER_ONLY_NOT_PRODUCTION",
+    "service_role_get_confirm": "ONE_SQL_TRANSACTION_ROLE_TEST_NOT_TWO_HTTP_COMMITS"
+  }
+}

@@ -1,0 +1,72 @@
+[
+  {
+    "name": "release_get_before_cancel",
+    "setup": "SELECT release_test.boot();",
+    "a": "SELECT release_test.get();\nSELECT final_test.check('release_get_before_cancel_a',true);",
+    "b": "SELECT no_release_test.close();\nSELECT final_test.check('release_get_before_cancel_b',true);",
+    "verify": "SELECT final_test.check('release_get_before_cancel_final',(SELECT count(*)=1 FROM listing_publication_private.source_release_intents) AND release_test.seal() IS NULL);",
+    "blocked": true,
+    "user_b": "11111111-1111-1111-1111-111111111111",
+    "expected": [
+      "release_get_before_cancel_a",
+      "release_get_before_cancel_b",
+      "release_get_before_cancel_final"
+    ]
+  },
+  {
+    "name": "release_cancel_before_get",
+    "setup": "SELECT release_test.boot();",
+    "a": "SELECT no_release_test.close(); SELECT release_test.seal();\nSELECT final_test.check('release_cancel_before_get_a',true);",
+    "b": "DO $d$ BEGIN PERFORM release_test.get(); RAISE EXCEPTION 'unexpected_get'; EXCEPTION WHEN SQLSTATE '55000' THEN IF SQLERRM<>'publication_attempt_closed' THEN RAISE; END IF; END $d$;\nSELECT final_test.check('release_cancel_before_get_b',true);",
+    "verify": "SELECT final_test.check('release_cancel_before_get_final',(SELECT count(*)=1 FROM listing_publication_private.source_recorded_no_release) AND NOT EXISTS(SELECT 1 FROM listing_publication_private.source_release_intents));",
+    "blocked": true,
+    "user_b": "11111111-1111-1111-1111-111111111111",
+    "expected": [
+      "release_cancel_before_get_a",
+      "release_cancel_before_get_b",
+      "release_cancel_before_get_final"
+    ]
+  },
+  {
+    "name": "release_duplicate_get",
+    "setup": "SELECT release_test.boot();",
+    "a": "SELECT release_test.get('one','read');\nSELECT final_test.check('release_duplicate_get_a',true);",
+    "b": "SELECT release_test.get('one','read2');\nSELECT final_test.check('release_duplicate_get_b',true);",
+    "verify": "SELECT final_test.check('release_duplicate_get_final',(SELECT count(*)=1 FROM listing_publication_private.source_release_intents) AND final_test.v('read')->>'release_id'=final_test.v('read2')->>'release_id');",
+    "blocked": true,
+    "user_b": "11111111-1111-1111-1111-111111111111",
+    "expected": [
+      "release_duplicate_get_a",
+      "release_duplicate_get_b",
+      "release_duplicate_get_final"
+    ]
+  },
+  {
+    "name": "release_cancel_before_confirm",
+    "setup": "SELECT release_test.boot(); SELECT release_test.get();",
+    "a": "SELECT no_release_test.close();\nSELECT final_test.check('release_cancel_before_confirm_a',true);",
+    "b": "DO $d$ BEGIN PERFORM release_test.confirm(); RAISE EXCEPTION 'unexpected_confirm'; EXCEPTION WHEN SQLSTATE '55000' THEN IF SQLERRM<>'publication_attempt_closed' THEN RAISE; END IF; END $d$;\nSELECT final_test.check('release_cancel_before_confirm_b',true);",
+    "verify": "SELECT final_test.check('release_cancel_before_confirm_final',release_test.seal() IS NULL AND (SELECT count(*)=1 FROM listing_publication_private.source_release_intents));",
+    "blocked": true,
+    "user_b": "11111111-1111-1111-1111-111111111111",
+    "expected": [
+      "release_cancel_before_confirm_a",
+      "release_cancel_before_confirm_b",
+      "release_cancel_before_confirm_final"
+    ]
+  },
+  {
+    "name": "release_busy_attempt_skips",
+    "setup": "SELECT release_test.boot(); SELECT no_release_test.close(); SELECT release_test.boot('two'); SELECT no_release_test.close('two');",
+    "a": "SELECT 1 FROM listing_publication_private.attempts WHERE id=final_test.a() FOR UPDATE;\nSELECT final_test.check('release_busy_attempt_skips_a',true);",
+    "b": "DO $d$ DECLARE r jsonb; BEGIN r:=release_test.seal(); IF (r->>'object_id')::uuid IS DISTINCT FROM completion_test.obj('source','two') THEN RAISE EXCEPTION 'wrong_object'; END IF; END $d$;\nSELECT final_test.check('release_busy_attempt_skips_b',true);",
+    "verify": "SELECT final_test.check('release_busy_attempt_skips_final',(SELECT count(*)=1 FROM listing_publication_private.source_recorded_no_release WHERE object_id=completion_test.obj('source','two')));",
+    "blocked": false,
+    "user_b": "11111111-1111-1111-1111-111111111111",
+    "expected": [
+      "release_busy_attempt_skips_a",
+      "release_busy_attempt_skips_b",
+      "release_busy_attempt_skips_final"
+    ]
+  }
+]
