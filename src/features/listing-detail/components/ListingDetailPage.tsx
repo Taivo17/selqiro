@@ -1,6 +1,8 @@
 "use client";
 
 import ListingPrice from "../../../entities/listing/ui/ListingPrice";
+import ListingContactButton from "../../listing-conversation/components/ListingContactButton";
+import { v2IntegrationEnabled } from "../../../shared/config/v2Integration";
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -624,9 +626,9 @@ export default function ListingDetailPage({ listingId }: { listingId: string }) 
               </div>
 
               <div className="mt-5 grid gap-3">
-                <button className="rounded-full bg-black px-5 py-3 text-sm font-black text-white">
+                {v2IntegrationEnabled() ? <ListingContactButton listingId={listing.id} className="w-full rounded-full bg-black px-5 py-3 text-sm font-black text-white disabled:opacity-50" /> : <button className="rounded-full bg-black px-5 py-3 text-sm font-black text-white">
                   Kirjuta müüjale
-                </button>
+                </button>}
                 <button className="rounded-full border border-neutral-200 bg-white px-5 py-3 text-sm font-black">
                   Salvesta kuulutus
                 </button>

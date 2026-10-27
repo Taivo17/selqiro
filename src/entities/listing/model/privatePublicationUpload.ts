@@ -1,3 +1,4 @@
+import { localPublicationOrigin } from "../../../shared/config/v2Integration";
 /** V2 private SOURCE upload only. Neither a Storage acknowledgement nor a token is
  * evidence of a verified image or a published listing. No public image URL here. */
 export const PRIVATE_UPLOAD = Object.freeze({
@@ -45,7 +46,7 @@ export function copyUploadCommand(v: unknown): UploadCommand {
 export function publicationStorageOrigin(v: string): string {
   // A deployment configuration, NEVER a request-supplied destination. No custom hosts,
   // credentials, ports, paths, querystrings, redirects or a public-bucket fallback.
-  if (typeof v !== "string" || !/^https:\/\/[a-z]{20}\.supabase\.co$/.test(v)) return uploadFail("configuration");
+  if (typeof v !== "string" || (!/^https:\/\/[a-z]{20}\.supabase\.co$/.test(v) && !localPublicationOrigin(v))) return uploadFail("configuration");
   return v;
 }
 const bindingKeys = ["schema_version", "actor_user_id", "identity_id", "attempt_id", "slot_id", "object_id",

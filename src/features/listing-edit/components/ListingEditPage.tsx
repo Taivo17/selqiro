@@ -11,8 +11,13 @@ import { LoadingState, MessageState } from "./ListingEditStates";
 import { useEditableListing } from "../model/useEditableListing";
 import { useListingBasicsForm } from "../model/useListingBasicsForm";
 import { useListingEditImages } from "../model/useListingEditImages";
+import { v2IntegrationEnabled } from "../../../shared/config/v2Integration";
+import IntegratedListingEditPage from "./IntegratedListingEditPage";
 
 export default function ListingEditPage({ listingId }: { listingId: string }) {
+  return v2IntegrationEnabled() ? <IntegratedListingEditPage listingId={listingId} /> : <ExistingListingEditPage listingId={listingId} />;
+}
+function ExistingListingEditPage({ listingId }: { listingId: string }) {
   const { listing, activeIdentity, userId, loading, error, status } =
     useEditableListing(listingId);
 

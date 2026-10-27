@@ -1,0 +1,364 @@
+{
+  "format": "selqiro_service_access_v1",
+  "recorded_on": "2026-10-27 Europe/Tallinn",
+  "purpose": "Existing service identity, unchanged pinned CLI, accepted 26 October read-only metadata, and 27 October Mac worktree/interruption screenshot observations; no credentials or application rows.",
+  "workflow": {
+    "execution_host": "user Mac",
+    "sequence": [
+      "prepared bounded terminal command",
+      "existing Git/Supabase CLI authentication",
+      "Git push when the reviewed change is ready",
+      "Vercel deployment",
+      "actual web usage"
+    ],
+    "continue_in_current_conversation": true,
+    "chatgpt_plugins_required": false,
+    "user_report": "Taivo chooses real publication in the existing portal/database, has three existing personal portal accounts for seller/buyer checks, and reports a simple portal access code. No separate cloud test database is requested. Normal browser email/password login remains unchanged.",
+    "direct_chatgpt_service_access_verified": false
+  },
+  "repository": {
+    "owner": "Taivo17",
+    "name": "selqiro",
+    "approved_remote": "https://github.com/Taivo17/selqiro.git",
+    "canonical_mac_path": "/Users/taivo/selqiro",
+    "candidate_mac_path": "/Users/taivo/selqiro-v2-integratsioon-20261018",
+    "historical_candidate_branch": "work/v2-integratsioon-20261018",
+    "historical_accepted_base": "e95fa9ce1d41b9b4c6e4884b6076f414173a946d",
+    "current_mac_git_state_read": true,
+    "latest_observation": {
+      "observed_at_utc": "2026-10-26T18:54:31Z",
+      "primary": {
+        "approved_origin": "github.com/Taivo17/selqiro",
+        "head": "e95fa9ce1d41b9b4c6e4884b6076f414173a946d",
+        "branch": "main",
+        "worktree": {
+          "entries": 0,
+          "staged": 0,
+          "unstaged": 0,
+          "untracked": 0,
+          "conflicted": 0,
+          "clean": true
+        },
+        "config_hashes": {
+          "package.json": {
+            "bytes": 595,
+            "sha256": "0f8bc836bdc7642259ea5841d0c9ea711eefe6c377c0b16a9b92e4bf4c4e4678"
+          },
+          "package-lock.json": {
+            "bytes": 233873,
+            "sha256": "6a0a6e94de420c5b75e23fc8b7a08c90fec29d355b209d16ff1507a2f2bbddc7"
+          },
+          "next.config.ts": {
+            "bytes": 133,
+            "sha256": "614bce25b089c3f19b1e17a6346c74b858034040154c6621e7d35303004767cc"
+          }
+        }
+      },
+      "candidate": {
+        "approved_origin": "github.com/Taivo17/selqiro",
+        "head": "e95fa9ce1d41b9b4c6e4884b6076f414173a946d",
+        "branch": "work/v2-integratsioon-20261018",
+        "worktree": {
+          "entries": 85,
+          "staged": 0,
+          "unstaged": 47,
+          "untracked": 38,
+          "conflicted": 0,
+          "clean": false
+        },
+        "config_hashes": {
+          "package.json": {
+            "bytes": 733,
+            "sha256": "969a6726ee13e23323489981ffd152d173e148d482db60f69928b7001e67d142"
+          },
+          "package-lock.json": {
+            "bytes": 255491,
+            "sha256": "c052a145edbe7f9a560285867ea69491331c16fc63ec6fdfe7143a422f668941"
+          },
+          "next.config.ts": {
+            "bytes": 210,
+            "sha256": "779db3fdeedf09f7f324c72535b24944e45e37a0097495a84bedd1af82403043"
+          }
+        }
+      },
+      "remote_ref_queried": false
+    },
+    "portal_mac_path": "/Users/taivo/selqiro-veeb-20261026",
+    "portal_branch": "work/portal-20261026",
+    "portal_worktree_observation": {
+      "source": "User terminal screenshots on 27 October 2026; latest Screenshot 2026-10-27 at 11.54.46.png",
+      "timezone": "Europe/Tallinn",
+      "reported_status": "source prepared and staged",
+      "reported_path": "/Users/taivo/selqiro-veeb-20261026",
+      "original_main_and_candidate_modified_by_prepare_script": false,
+      "commit_or_push_reported": false,
+      "json_report_read_by_assistant": false,
+      "scope_limit": "Screenshot of successful prepare_portal_worktree output, not a fresh direct Git read or complete index inventory. The continuation verifies actual files/index/branch before writes."
+    }
+  },
+  "vercel": {
+    "project_name": "selqiro",
+    "account_or_team_label": "Taivo's projects",
+    "plan_label": "Hobby",
+    "public_url": "https://selqiro.vercel.app",
+    "latest_supplied_visual_evidence": {
+      "screenshot_filename": "Screenshot 2026-10-26 at 20.27.24.png",
+      "screenshot_date_timezone": "Europe/Tallinn",
+      "deployment_title": "Retain tested V2 source release ledger and durable confirmation",
+      "commit_short": "e95fa9c",
+      "branch": "main",
+      "status": "Ready",
+      "displayed_duration": "41s",
+      "environment_label": "Production",
+      "environment_label_color": "blue",
+      "displayed_deployment_date": "Oct 17",
+      "accepted_scope": "Visual dashboard deployment-status evidence only; not an API/deployment-ID read or a fresh Mac Git observation."
+    },
+    "api_state_read": false,
+    "new_deployment_created": false,
+    "deployment_of_current_local_integration_verified": false,
+    "separate_preview_target": null,
+    "selected_deployment_environment": "production"
+  },
+  "supabase": {
+    "historically_confirmed_production_project_ref": "vyjletlmwoiwxsnsunlm",
+    "current_project_ref_read": true,
+    "region": "eu-central-1",
+    "separate_preview_project_or_branch": null,
+    "historical_link_source": "Existing .temp/project-ref as recorded in the archived project handoff; exact current path/state must be observed, not created or relinked.",
+    "config_toml_absence_was_valid": true,
+    "cli_was_on_path": false,
+    "historical_native_entrypoint": "~/.npm/_npx/aa8e5c70f9d8d161/node_modules/@supabase/cli-darwin-arm64/bin/supabase",
+    "historical_read_contract": {
+      "date": "2026-10-03",
+      "confirmed_shape": "db query --file",
+      "full_argv_recovered": true,
+      "argv_template": [
+        "<cli>",
+        "--workdir",
+        "<root>",
+        "--profile",
+        "supabase",
+        "--agent",
+        "no",
+        "--output",
+        "json",
+        "--output-format",
+        "json",
+        "db",
+        "query",
+        "--linked",
+        "--project-ref",
+        "<REF>",
+        "--file",
+        "<sqlpath>"
+      ],
+      "argument_bindings": {
+        "cli": "The exact native entrypoint in cli_pin, after the five-file hash comparison.",
+        "root": "The verified existing Mac repository working directory.",
+        "REF": "vyjletlmwoiwxsnsunlm for the historically linked production target.",
+        "sqlpath": "The prepared read-only-inventory.sql file; no positional SQL argument."
+      },
+      "argv_source_artifact": "selqiro-apply-public-listing-search-production.py",
+      "argv_recovery": "Read the retained historical source artifact offline; not a new CLI execution or permission to replay its apply operation.",
+      "file_argument_correction_source": "docs/continuity/README.md records the successful 2026-10-03 db query --file correction.",
+      "constraint": "Use the preserved pinned CLI contract and a SQL file. Do not pass SQL beginning with -- as a positional argument, rerun the old apply script, or infer additional flags."
+    },
+    "cli_pin": {
+      "version": "2.117.0",
+      "cache_relative": ".npm/_npx/aa8e5c70f9d8d161/node_modules",
+      "entrypoint": "@supabase/cli-darwin-arm64/bin/supabase",
+      "sidecar": "@supabase/cli-darwin-arm64/bin/supabase-go",
+      "files": {
+        "supabase/package.json": {
+          "bytes": 3598,
+          "sha256": "17d239de5b3c7e65f7e44ca1aff9b0c0089c27080bde8403d3be2f49176be633"
+        },
+        "supabase/dist/supabase.js": {
+          "bytes": 2069,
+          "sha256": "21d25b4bfb1870db0aaf0963c028b10d0b0b431485f119abd704c1396c7991e6"
+        },
+        "@supabase/cli-darwin-arm64/package.json": {
+          "bytes": 642,
+          "sha256": "aeb0bf229e1977f2857bce26feb2feceb2c79f5383aecc216cded85539689aea"
+        },
+        "@supabase/cli-darwin-arm64/bin/supabase": {
+          "bytes": 70785296,
+          "sha256": "c2ca0770b4634e85a01254ffdfda1999063e5d424f41dc345839e62171d8bb4b",
+          "first_16_bytes_hex": "cffaedfe0c0000010000000002000000"
+        },
+        "@supabase/cli-darwin-arm64/bin/supabase-go": {
+          "bytes": 38839104,
+          "sha256": "f2590cf902b63a3450fc284d9b54751e48b6fec5881e0924e50df3be3361beda",
+          "first_16_bytes_hex": "cffaedfe0c0000010000000002000000"
+        }
+      },
+      "evidence_zip": "supabase-cli-inspect-20260914-181709-yxs215oi.zip",
+      "evidence_sha256": "af324d59d776570bdb3b641b17f09643871d84974e1915fa876fb89eb2c95ac9",
+      "selection_reason": "Existing matching arm64 native package; public entrypoint and read/dry-run paths reviewed at tag v2.117.0. Not an automatic latest-version selection or proof of the formerly used version.",
+      "origin_limit": "File hashes match the user snapshot; no vendor-signature or native binary reproducible-build verification.",
+      "official_source_tag": "https://github.com/supabase/cli/tree/v2.117.0"
+    },
+    "recovered_pin_evidence": {
+      "rollout_zip": "horse-draft-production-rollout-20260914-200826-q4ulosn_.zip",
+      "rollout_sha256": "9599e642a855c6c2bbc746947eca91ebbe2c977c8f444a501a8238b9dde0a420",
+      "recovered_filename": "cli-pin.json",
+      "recovered_on": "2026-10-26",
+      "recovery_operation": "Read accepted existing ZIP offline; no old runner or CLI execution.",
+      "current_mac_cache_reverified": true,
+      "provenance_limit": "The five pinned user-snapshot files matched on the Mac and the same CLI completed read-only service queries on 26 October. This remains a user-snapshot hash pin, not vendor-signature or reproducible-build verification.",
+      "current_mac_reverification_at_utc": "2026-10-26T18:54:31Z"
+    },
+    "status": "ACTIVE_HEALTHY",
+    "project_name": "Selqiro",
+    "server_version": "17.6",
+    "current_observation": {
+      "observed_at_utc": "2026-10-26T18:54:31Z",
+      "read_only": true,
+      "linked_ref_and_explicit_target_match": true,
+      "project_list_status": "ok",
+      "matching_projects": [
+        {
+          "id": "vyjletlmwoiwxsnsunlm",
+          "ref": "vyjletlmwoiwxsnsunlm",
+          "name": "Selqiro",
+          "region": "eu-central-1",
+          "status": "ACTIVE_HEALTHY"
+        }
+      ],
+      "migration_versions": [
+        "20260722173530",
+        "20260723173859",
+        "20260723184319",
+        "20260726150000",
+        "20260729183000",
+        "20260802213000",
+        "20260805123000",
+        "20260805150000",
+        "20260817130000",
+        "20260817150000",
+        "20260818130000",
+        "20260822130000",
+        "20260830170000",
+        "20260906150000",
+        "20260911203000",
+        "20260911220000",
+        "20260913113000",
+        "20260913190000",
+        "20260916200000",
+        "20260920150000",
+        "20260926120000",
+        "20260926180000",
+        "20260928160000"
+      ],
+      "migration_versions_match_source": true,
+      "listing_publication_private_exists": false,
+      "price_core_and_publication_read_contract_installed": false,
+      "scope_limit": "Catalog/signature/ACL metadata and migration versions only; no row contents, current policy versions, full function bodies, object contents or provider operation-authority behavior were inspected."
+    },
+    "selected_publication_target": "existing-production-project"
+  },
+  "next_step": {
+    "action": "Apply the focused three-account continuation to the already staged portal worktree using the new handoff jatka.py, prepare the same existing database/Storage, configure Vercel Production, then commit/push and exercise real seller/buyer flow.",
+    "deployment_guide": "docs/continuity/HOSTED_PORTAL.md",
+    "prepared_release": "supabase/releases/listing-publication-hosted-preview-v1/release.sql",
+    "release_sha256": "974dd6acb246b275acb593688aa14449cd42e80939101086d742ee5c4c5a4c3e",
+    "prepared_runtime_connected": true,
+    "source_applied_on_mac": true,
+    "live_routes_enabled": false,
+    "live_global_ui_mode_enabled": false,
+    "new_hosted_schema_applied": false,
+    "git_commit_or_push": false,
+    "new_vercel_deployment": false,
+    "actual_hosted_publication_verified": false,
+    "preview_target_selected": true,
+    "validation": {
+      "targeted_node_cases_passed": 14,
+      "sql_runtime_cases_passed": 8,
+      "sql_images": 0,
+      "sql_fixture_policy_privilege_limit": true,
+      "default_turbopack_build_exit": 0,
+      "build_seconds": 13.977,
+      "synthetic_build_config": true,
+      "real_hosted_execution": false,
+      "isolated_compile_cluster_stopped": true,
+      "portal_targeted_node_cases_passed": 8,
+      "portal_production_build_seconds": 17.905,
+      "portal_production_build_exit": 0,
+      "three_account_delta_final_evidence": {
+        "status": "PASS",
+        "synthetic_python_cases": 8,
+        "temporary_git_cases": 4,
+        "activation_sql_cases": 5,
+        "sql_engine": "PGlite 0.3.14 / PostgreSQL 17.5 WASM",
+        "sql_fixture": "minimal synthetic tables, one connection; exact activation template only",
+        "activation_sha256": "0112cbcb6b74be0e041ece005bf045546740463ac7991ab7ef4b27a9ce510c2c",
+        "python_3_9_ast": "PASS",
+        "application_sources_unchanged": true,
+        "application_build_repeated": false,
+        "actual_mac_or_cloud_execution": false,
+        "evidence_directory": "handoff/evidence/three-accounts-20261027"
+      }
+    },
+    "repeat_metadata_collection": false,
+    "new_chat_or_plugins_required": false,
+    "selected_target_kind": "existing-production-portal",
+    "project_ref": "vyjletlmwoiwxsnsunlm",
+    "app_origin": "https://selqiro.vercel.app",
+    "instance_id": "2d088814-0900-448a-a9d1-7b05470cb1d2",
+    "production_runtime_source_prepared": true,
+    "user_approved_real_publications": true,
+    "source_transfer_runner": "selqiro-portaali-jatk-20261027/jatka.py (external continuation; original prepare_portal_worktree.py already completed)",
+    "database_storage_runner": "scripts/hosted/apply_portal_release.py",
+    "source_applied_on_mac_scope": "26 October full portal source only, reported staged in 27 October screenshot; the 27 October three-account delta is not yet applied.",
+    "three_account_delta_applied_on_mac": false,
+    "three_account_activation_verified_in_cloud": false,
+    "account_selection_count": 3,
+    "browser_login_changed": false
+  },
+  "historical_sources": [
+    "docs/archive/99_V2_HANDOFF_NEXT_CHAT.before-price-core-20261004-6df0af9.md",
+    "docs/continuity/README.md",
+    "Accepted 14 September 2026 rollout evidence; exact archive named above.",
+    "User-supplied Vercel dashboard screenshot, 26 October 2026 20:27.",
+    "Accepted existing-web-context-20261026T185425Z-d8603a594704.zip; exact hash and timestamps in completed_metadata_read.",
+    "User-supplied Mac terminal Screenshot 2026-10-27 at 11.54.46.png: source staged; single-account preparation interrupted before email."
+  ],
+  "completed_metadata_read": {
+    "format": "selqiro_existing_web_context_v1",
+    "result_zip": "existing-web-context-20261026T185425Z-d8603a594704.zip",
+    "result_sha256": "354afb4e75c0af5239b2af2748cadc6b956c7197b05506bf0e70115ecef50af6",
+    "status": "complete",
+    "started_at_utc": "2026-10-26T18:54:25Z",
+    "finished_at_utc": "2026-10-26T18:54:31Z",
+    "display_time": "2026-10-26 20:54:25–20:54:31 Europe/Tallinn",
+    "collector_sha256": "32993aad8d4c2d8cd19bc1bcbfc7cdf3b817da139904caafd199c25cfb0639f7",
+    "sql_template_sha256": "e3ceb4927028f4c2c85ad6a05075f0a8d516b2ae0ed33707a681deb713250ee4",
+    "proof_consistency": "collector, pin, executed SQL, token and ZIP CRC verified",
+    "executed_on_user_mac": true,
+    "application_or_schema_writes": false,
+    "repeat_required": false
+  },
+  "cloud_preparation_interruption": {
+    "source": "Screenshot 2026-10-27 at 11.54.46.png and user statement that no email was entered",
+    "screenshot_local_time": "2026-10-27 11:54:46 Europe/Tallinn",
+    "stage": "selected_account_prompt",
+    "error_code": "INTERRUPTED",
+    "email_entered": false,
+    "remote_account_query_reached": false,
+    "database_or_storage_write_reached": false,
+    "journal_path": "~/Library/Application Support/Selqiro/hosted-publication/2d088814-0900-448a-a9d1-7b05470cb1d2/prepare-report.json",
+    "journal_contents_read_by_assistant": false,
+    "evidence_limit": "The reviewed source performs its first remote query after email input. The screenshot confirms interruption at that prompt; it is not a new read of global cloud state."
+  },
+  "runner_environment_observation": {
+    "source": "User screenshot Screenshot 2026-10-27 at 12.30.21.png",
+    "timezone": "Europe/Tallinn",
+    "command": "python3 \"$HOME/Downloads/selqiro-portaali-jatk-20261027/jatka.py\"",
+    "observed_stop": "GIT_ENVIRONMENT_OVERRIDE_PRESENT",
+    "actual_variable_names_or_values_observed": false,
+    "stop_precedes_git_and_all_mutations_by_source_review": true,
+    "r2_execution_observed": false,
+    "correction": "Preserve GIT_ASKPASS; normalize GIT_OPTIONAL_LOCKS and GIT_TERMINAL_PROMPT; reject other GIT_* names and print names only."
+  }
+}

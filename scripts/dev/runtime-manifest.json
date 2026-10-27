@@ -1,0 +1,53 @@
+{
+  "files": {
+    "backend.py": {
+      "bytes": 18856,
+      "sha256": "67f75ef2cccb16922939180d0caae9670488567a39359122d42f98d6f4c097e9"
+    },
+    "dev.py": {
+      "bytes": 28884,
+      "sha256": "35a89edae60cf950710d0383eb2dbf6d8660e8bac6e2343418e7413303439597"
+    },
+    "docker-client/config.json": {
+      "bytes": 97,
+      "sha256": "f5be2de77c49fd4fa1d29235031bb04ad8bd22276a6e814c2b772ec36306e88f"
+    },
+    "gateway.cjs": {
+      "bytes": 3094,
+      "sha256": "132cc861db6e87c71fc77f325f6c9fd0c4125bd8bb4eb08f73030d829a233a3d"
+    },
+    "init_schema.py": {
+      "bytes": 7168,
+      "sha256": "7237d95dca7f425933a96d8560e761141134d2c6d4348394d42af59b5e7d4a55"
+    },
+    "schema_compose.py": {
+      "bytes": 8532,
+      "sha256": "86eca21aa6fcbf090aaeafe9cccb345549327dff008b2694323b432dc2fee683"
+    },
+    "schema_fragments/profile-read-continuation.sql": {
+      "bytes": 1695,
+      "sha256": "533ee57ebab96b4002138efb541c5cc6a144d976254340b980f3c70dce747eff"
+    },
+    "schema_fragments/read-extension.sql": {
+      "bytes": 9155,
+      "sha256": "4f3f17ef3f2ff85d7d75d6863a425e29664b3e6e9c000880b3027cacf2dc1001"
+    },
+    "schema_provenance.json": {
+      "bytes": 11134,
+      "sha256": "791a579df302148e9c62f91e0826ff2525cfbe40fb2730cec5e4ac62ccd7426e"
+    },
+    "schema_sources.py": {
+      "bytes": 15645,
+      "sha256": "5dbd03690d562a8ac8327c06213e5423021b87a07a3c562153ed844c92e876da"
+    },
+    "seed_accounts.py": {
+      "bytes": 6067,
+      "sha256": "ffce80daea4480e58c59d7c66e38742d14d56f8f099d9221f2875d15b967db1b"
+    },
+    "supervisor.py": {
+      "bytes": 11096,
+      "sha256": "03b2c711d3de3d1e6c7266949f500d6470081abc345ef111961e04e2ab49fcb8"
+    }
+  },
+  "format": "selqiro-local-development-runtime-v1"
+}

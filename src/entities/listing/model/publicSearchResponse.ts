@@ -1,10 +1,13 @@
 import { PUBLIC_SEARCH_PAGE_SIZE, PUBLIC_SEARCH_MAX_OFFSET } from "./publicSearch";
+import { listingImageUrl } from "./listingMediaUrl";
+import type { ListingPriceDisplay } from "./priceDisplay";
 
 export type PublicSearchCard = {
   id: string; title: string; description: string | null; price: string | null; priceAmount: string | null;
   imageUrl: string | null; category: string | null; subcategory: string | null; detailCategory: string | null;
   condition: string | null; country: string | null; city: string | null;
   sellerName: string; createdAt: string;
+  displayPrice?: ListingPriceDisplay;
 };
 export type PublicSearchPage = {
   items: PublicSearchCard[]; totalCount: string; offset: number;
@@ -32,12 +35,7 @@ function identifier(value: unknown): string {
   return value;
 }
 function image(value: unknown): string | null {
-  const source = text(value);
-  if (!source) return null;
-  try {
-    const url = new URL(source);
-    return ["https:", "http:"].includes(url.protocol) && !url.username && !url.password ? url.href : null;
-  } catch { return null; }
+  return listingImageUrl(text(value));
 }
 function card(value: unknown): PublicSearchCard {
   const r = record(value);

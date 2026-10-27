@@ -6,6 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { supabase } from "../../lib/supabase";
 import { useAuth } from "../../lib/useAuth";
 import { getTranslation } from "../../lib/i18n/useTranslation";
+import { hostedPortalRequested } from "../../src/shared/config/v2Integration";
 
 type ProfileRow = {
   store_slug?: string | null;
@@ -53,6 +54,11 @@ export default function SiteHeader() {
 
   const userId = user?.id ?? null;
   const userEmail = user?.email ?? "";
+  // Navigation selects the completed portal journey; its layout and every
+  // action still check the installed release and the authenticated actor.
+  const portalJourney = hostedPortalRequested();
+  const sellHref = portalJourney ? "/v2/sell" : "/sell";
+  const myPageHref = portalJourney ? "/v2/my-area" : "/my-page";
 
   const goMarketplaceFresh = () => {
     setMobileMenuOpen(false);
@@ -492,7 +498,7 @@ export default function SiteHeader() {
                 </span>
               </Link>
 
-              <Link href="/my-page" className={navClass(isMyPage)}>
+              <Link href={myPageHref} className={navClass(isMyPage)}>
                 {t("navigation.myPage")}
               </Link>
 
@@ -509,7 +515,7 @@ export default function SiteHeader() {
                 </span>
               </Link>
 
-              <Link href="/sell" className={navClass(isSell)}>
+              <Link href={sellHref} className={navClass(isSell)}>
                 {t("navigation.sell")}
               </Link>
 
@@ -545,7 +551,7 @@ export default function SiteHeader() {
                     </span>
                   </Link>
 
-                  <Link href="/my-page" className={mobileNavClass(isMyPage)}>
+                  <Link href={myPageHref} className={mobileNavClass(isMyPage)}>
                     {t("navigation.myPage")}
                   </Link>
 
@@ -562,7 +568,7 @@ export default function SiteHeader() {
                     </span>
                   </Link>
 
-                  <Link href="/sell" className={mobileNavClass(isSell)}>
+                  <Link href={sellHref} className={mobileNavClass(isSell)}>
                     {t("navigation.sell")}
                   </Link>
 

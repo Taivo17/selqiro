@@ -10,6 +10,11 @@ import {
   SERVICE_PRICE_TYPES,
   type ServicePriceType,
 } from "../model/types";
+import { v2IntegrationEnabled } from "../../../shared/config/v2Integration";
+import {
+  parsePublicProfileServicesV1,
+  publicProfileOfferingsRequest,
+} from "../../profile/model/publicProfileOfferingsV1";
 
 const UUID_PATTERN =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -427,6 +432,7 @@ export async function getPublicServices(input: {
     | string
     | null
     | undefined;
+  sellerSlug?: string | null;
   limit?: number;
 }): Promise<PublicService[]> {
   const identityId =
@@ -440,6 +446,22 @@ export async function getPublicServices(input: {
 
   const limit =
     normalizeLimit(input.limit);
+
+  if (v2IntegrationEnabled()) {
+    const request = publicProfileOfferingsRequest({
+      identityId, sellerSlug: input.sellerSlug, limit,
+    });
+    try {
+      const { data, error } = await supabaseBrowserClient.rpc("get_public_profile_services_v1", {
+        p_seller_slug: request.sellerSlug,
+        p_result_limit: request.limit,
+      });
+      if (error) throw error;
+      return parsePublicProfileServicesV1(data, request);
+    } catch {
+      throw new Error("Avaliku profiili teenuseid ei saanud laadida. Proovi uuesti.");
+    }
+  }
 
   const {
     data: serviceData,

@@ -23,6 +23,30 @@ export async function readWebObjectBytes(fetcher: UploadFetch, url: string, head
     if(response.redirected) { cancel(); return webFail("invalid_response"); }
     if(response.status === 404) { cancel(); return null; } // only NOT READY, never permission to remove/retry a write
     if(response.status===401 || response.status===403) { cancel(); return webFail("unauthorized"); }
+    if(response.status===400 && response.headers.get("content-type")?.split(";")[0].trim()==="application/json" && response.body) {
+      // Native Storage 1.83.5's REST renderer sends its structured NoSuchKey/404
+      // as HTTP 400. Consume the real bounded response; never synthesize HTTP 404.
+      const declared=response.headers.get("content-length"), encoding=response.headers.get("content-encoding");
+      if((encoding!==null&&encoding!=="identity") || response.headers.has("content-range") ||
+         (declared!==null&&(!/^[1-9][0-9]*$/.test(declared)||Number(declared)>1024))) {
+        cancel(); return webFail("outcome_unknown");
+      }
+      const reader=response.body.getReader(), chunks:Buffer[]=[]; let size=0;
+      try {
+        while(true) {
+          const part=await reader.read(); if(controller.signal.aborted) return webFail("outcome_unknown");
+          if(part.done) break;
+          size+=part.value.byteLength; if(size>1024) return webFail("outcome_unknown");
+          chunks.push(Buffer.from(part.value));
+        }
+        if(declared!==null&&size!==Number(declared)) return webFail("outcome_unknown");
+        const error=JSON.parse(Buffer.concat(chunks,size).toString("utf8"));
+        if(error&&typeof error==="object"&&!Array.isArray(error)&&
+           Object.keys(error).sort().join(",")==="code,error,message,statusCode"&&
+           error.statusCode==="404"&&error.code==="NoSuchKey"&&error.error==="not_found"&&error.message==="Object not found") return null;
+        return webFail("outcome_unknown");
+      } finally { void reader.cancel().catch(()=>{}); }
+    }
     if(response.status!==200) { cancel(); return webFail("outcome_unknown"); }
     const length = response.headers.get("content-length"), encoding = response.headers.get("content-encoding");
     if((encoding!==null && encoding!=="identity") || response.headers.has("content-range") ||

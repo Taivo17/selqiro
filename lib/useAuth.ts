@@ -1,53 +1,79 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type { Session, User } from "@supabase/supabase-js";
 import { supabase } from "./supabase";
 
-type UseAuthReturn = {
+type AuthState = {
   user: User | null;
   session: Session | null;
   loading: boolean;
+  error: "timeout" | "unavailable" | null;
 };
 
+type UseAuthReturn = AuthState & { retry: () => void };
+
+const pending: AuthState = { user: null, session: null, loading: true, error: null };
+
 export function useAuth(): UseAuthReturn {
-  const [user, setUser] = useState<User | null>(null);
-  const [session, setSession] = useState<Session | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [state, setState] = useState<AuthState>(pending);
+  const [attempt, setAttempt] = useState(0);
+  const generation = useRef(0);
+
+  const retry = useCallback(() => {
+    // Retire an old read immediately, before React cleans up its effect.
+    ++generation.current;
+    setState(pending);
+    setAttempt(value => value + 1);
+  }, []);
 
   useEffect(() => {
     let mounted = true;
+    let reading = true;
+    const currentGeneration = ++generation.current;
+    const current = () => mounted && currentGeneration === generation.current;
 
-    supabase.auth.getSession().then(({ data, error }) => {
-      if (!mounted) return;
+    const fail = (error: Exclude<AuthState["error"], null>) => {
+      if (!current() || !reading) return;
+      reading = false;
+      clearTimeout(deadline);
+      setState({ user: null, session: null, loading: false, error });
+    };
+    const deadline = setTimeout(() => fail("timeout"), 15_000);
 
-      if (error) {
-        console.error("getSession error:", error);
-        setUser(null);
-        setSession(null);
-        setLoading(false);
-        return;
-      }
+    const accept = (session: Session | null) => {
+      if (!current()) return;
+      reading = false;
+      clearTimeout(deadline);
+      setState({ user: session?.user ?? null, session, loading: false, error: null });
+    };
 
-      setSession(data.session ?? null);
-      setUser(data.session?.user ?? null);
-      setLoading(false);
-    });
+    let subscription: { unsubscribe: () => void } | undefined;
+    try {
+      subscription = supabase.auth.onAuthStateChange((event, nextSession) => {
+        // getSession exposes bootstrap errors; INITIAL_SESSION may turn them
+        // into null. Only later auth events supersede that explicit read.
+        // This callback stays synchronous and never re-enters the auth lock.
+        if (event === "INITIAL_SESSION") return;
+        accept(event === "SIGNED_OUT" ? null : nextSession ?? null);
+      }).data.subscription;
 
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, nextSession) => {
-      if (!mounted) return;
-      setSession(nextSession ?? null);
-      setUser(nextSession?.user ?? null);
-      setLoading(false);
-    });
+      void supabase.auth.getSession().then(({ data, error }) => {
+        // A sign-out/account change, timeout or manual retry retires this read.
+        if (!current() || !reading) return;
+        if (error) fail("unavailable");
+        else accept(data.session ?? null);
+      }).catch(() => fail("unavailable"));
+    } catch {
+      fail("unavailable");
+    }
 
     return () => {
       mounted = false;
-      subscription.unsubscribe();
+      clearTimeout(deadline);
+      subscription?.unsubscribe();
     };
-  }, []);
+  }, [attempt]);
 
-  return { user, session, loading };
+  return { ...state, retry };
 }

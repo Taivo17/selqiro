@@ -5,30 +5,36 @@ import Link from "next/link";
 import type { ListingStatus } from "../../../entities/listing/api/updateListingStatus";
 import { getListingActivity, isRenewableListingId } from "../../../entities/listing/model/listingActivity";
 import type { MyAreaListingMarketplaceItemRow } from "../model/myAreaMarketplaceItemRow";
+import type { PublicationActor } from "../../../entities/listing/model/publicationJourney";
+import { managedListingMedia } from "../../../entities/listing/model/listingMediaUrl";
+import { v2IntegrationEnabled } from "../../../shared/config/v2Integration";
+import ManagedOwnerImage from "../../listing-edit/components/ManagedOwnerImage";
 
 type Props = { listing: MyAreaListingMarketplaceItemRow; now: number; busy: boolean; disabled: boolean;
-  activeIdentityId: string | null; onRenew: () => void; onStatus: (status: ListingStatus) => void };
-export default function MyAreaListingRow({ listing, now, busy, disabled, activeIdentityId, onRenew, onStatus }: Props) {
+  activeIdentityId: string | null; ownerActor?: PublicationActor | null; onRenew: () => void; onStatus: (status: ListingStatus) => void };
+export default function MyAreaListingRow({ listing, now, busy, disabled, activeIdentityId, ownerActor, onRenew, onStatus }: Props) {
   const activity = getListingActivity(listing.status, listing.activeUntil, now);
   const knownStatus = ["active", "paused", "sold"].includes(listing.status);
   const canRenew = activity.canRenew && listing.identityId === activeIdentityId && isRenewableListingId(listing.id);
+  const managed = v2IntegrationEnabled() && !!managedListingMedia(listing.imageUrl);
+  const imageClass = "h-16 w-24 shrink-0 rounded-2xl object-cover object-[center_42%] sm:w-28";
   const tone = activity.state === "active" ? "border-emerald-100 bg-emerald-50 text-emerald-800"
     : activity.state === "expired" || activity.state === "unknown" ? "border-amber-200 bg-amber-50 text-amber-900"
     : "border-neutral-200 bg-neutral-100 text-neutral-700";
   return (
     <div className="grid w-full min-w-0 gap-3 py-4 first:pt-0 last:pb-0 md:grid-cols-[minmax(0,1fr)_105px_150px] md:items-center">
-      <Link href={listing.href} className="flex min-w-0 items-center gap-3 rounded-2xl p-2 hover:bg-neutral-50 sm:gap-4">
-        {listing.imageUrl ? <img src={listing.imageUrl} alt="" loading="lazy"
-          className="h-16 w-24 shrink-0 rounded-2xl object-cover object-[center_42%] sm:w-28" />
+      <div className="flex min-w-0 items-center gap-3 rounded-2xl p-2 sm:gap-4">
+        {managed && listing.imageUrl && ownerActor ? <ManagedOwnerImage source={listing.imageUrl} actor={ownerActor} className={imageClass} compact />
+          : listing.imageUrl && !managed ? <img src={listing.imageUrl} alt="" loading="lazy" className={imageClass} />
           : <div className="h-16 w-24 shrink-0 rounded-2xl bg-neutral-100 sm:w-28" />}
-        <div className="min-w-0">
+        <Link href={v2IntegrationEnabled() && activity.state !== "active" ? listing.editHref : listing.href} className="min-w-0 flex-1 rounded-xl hover:bg-neutral-50">
           <h3 className="truncate text-base font-black">{listing.title}</h3>
           <p className="mt-1 truncate text-sm text-neutral-500">{listing.category || "Kategooria puudub"} · {listing.locationLabel}</p>
           <p className="mt-1 text-xs font-semibold text-neutral-600">{activity.label}</p>
           {activity.deadlineLabel ? <p className="mt-1 text-xs text-neutral-500">{activity.deadlineLabel}</p> : null}
           {activity.state === "expired" ? <p className="mt-1 text-xs text-amber-800">Aegunud kuulutust otsingus ei näidata.</p> : null}
-        </div>
-      </Link>
+        </Link>
+      </div>
       <div className="flex min-w-0 items-center justify-between gap-3 md:block md:text-right">
         <span className="text-xs font-bold uppercase tracking-wider text-neutral-400 md:hidden">Hind</span>
         <ListingPrice price={listing} labelClassName="text-base" />

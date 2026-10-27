@@ -3,6 +3,8 @@ import { getListingActivityActor } from "./getListingActivityActor";
 import { classifyListingEditError, ListingEditError, parseListingEditRead, validateListingEditKey,
   type ListingEditActor, type ListingEditKey, type ListingEditSnapshot } from "../model/listingEditSnapshot";
 import { listingEditRpcArguments, parseListingEditSaved, type ListingEditCommand, type ListingEditSaved } from "../model/listingEditCommand";
+import {v2IntegrationEnabled} from "../../../shared/config/v2Integration";
+import {publicationJourneyRequest} from "./publicationJourneyClient";
 
 export type ListingEditRpc = (name: "get_my_listing_edit_v1" | "save_my_listing_edit_v1",
   args: Record<string, unknown>, signal: AbortSignal) => PromiseLike<{ data: unknown; error: unknown }>;
@@ -67,8 +69,13 @@ export function createListingEditApi(rpc: ListingEditRpc, actor: () => Promise<L
     },
   };
 }
-/** Not imported by a route yet. SQL adapter and legacy-writer cutover must be verified before activation. */
+/** The isolated journey uses the same CAS adapter behind the verified run marker. */
 export const listingEditApi = createListingEditApi(
-  (name, args, signal) => supabaseBrowserClient.rpc(name, args).abortSignal(signal),
+  async (name, args, signal) => {
+    if (!v2IntegrationEnabled()) return supabaseBrowserClient.rpc(name, args).abortSignal(signal);
+    const actor = {userId: String(args.p_expected_actor_id), identityId: String(args.p_expected_identity_id)};
+    try { return {data: await publicationJourneyRequest(actor, name === "get_my_listing_edit_v1" ? "owner-edit-read" : "owner-edit-save", args, signal), error: null}; }
+    catch (error) { return {data: null, error}; }
+  },
   getListingActivityActor,
 );

@@ -1,3 +1,236 @@
+<!-- SELQIRO_EXISTING_PORTAL_SELECTED_20261026 -->
+## 26.10.2026 — Jätkame olemasolevas päris portaalis
+
+Taivo valis olemasoleva Selqiro portaali ja Supabase’i baasi. Eraldi testbaasi ei
+tehta. Jooksev juhis on `docs/continuity/HOSTED_PORTAL.md`; konkreetne siht ja
+paigalduse UUID on `scripts/hosted/portal-target.json`. Koodis on Production’i
+selge opt-in ning avalikud pildid säilivad ka avaldamise pausi ajal. 8 sihitud
+juhtu ja Turbopack/TypeScript production-build läbisid. Muutmata SQL-i ning
+varasemaid kohalikke/native kontrolle ei korratud.
+
+Kaks valmis Maci käsku teevad eraldi lähtekoodi tööpuu ja olemasoleva DB/Storage’i
+ettevalmistuse. Maci käivitamine, commit/push ja uus Verceli deployment on veel
+tegemata. Järgmine tulemus on üks päris pildiga kuulutus portaali veebis.
+`CURRENT_STATE.json` säilitab täpse vahe ettevalmistuse ja tegeliku rakendamise
+vahel. Allpool on varasem ajalugu; lahtine sihivalik on selle otsusega lõpetatud.
+
+---
+
+<!-- SELQIRO_HOSTED_RELEASE_CONNECTED_PREPARED_20261026 -->
+## 26.10.2026 — Veebieelvaate terviklik ühendus on lähtekoodis valmis
+
+Praegune tööjärg on `docs/continuity/CURRENT_STATE.json`; praktiline käivitamisjuhis
+on `docs/continuity/HOSTED_PREVIEW.md`. Valmis on lisav hosted SQL-release,
+managed Storage adapter ning päris Authi ja DB-valmisoleku järgi avanev UI/API.
+14 sihitud Node-juhtu, Turbopack-build ja eraldatud PG17.6 avaldamise/hinnamuutmise
+SQL-käik läbisid. SQL-käik kasutas nulli pilti; managed Storage HTTP ning päris
+Verceli kasutuskäik on veel tegemata. Täpsed tõendi piirid on arhitektuuridokis.
+
+Maci/GitHubi/Vercelisse pole seda muudatust veel üle kantud. Järgmine samm on
+konkreetne Supabase eelvaatesiht ja siis üks terviklik veebis avaldamine. Sama
+production-baasi kasutav Verceli Preview jagab avalikke kuulutusi; sihivalik ei
+ole vaikimisi tehtud. Hosted lõppkoristus jääb ootele ja reserve ei vabastata.
+Senised kontod, kohalik töötav keskkond ning kandidaadimuudatused säilivad.
+Allpool on ajalugu; lõpetatud metadata kogumist ega vanu NEXT-käske ei korrata.
+
+---
+
+<!-- SELQIRO_HOSTED_METADATA_ACCEPTED_CONFIG_PREPARED_20261026 -->
+## 2026-10-26 — Managed preview configuration and actual hosted boundary
+
+26.10 kell 20:54:25–20:54:31 Europe/Tallinn lõpetas kasutaja Macis olemasoleva
+ühendusega metadata lugemine edukalt. Tulemuse
+`existing-web-context-20261026T185425Z-d8603a594704.zip` SHA-256 on
+`354afb4e75c0af5239b2af2748cadc6b956c7197b05506bf0e70115ecef50af6`.
+CLI 2.117.0 viie faili pin, kogumisskript, päring ja token vastavad ettevalmistusele;
+tehing oli READ ONLY. See lugemine on lõpetatud ega vaja kordamist.
+
+Maci peapuu on puhas `main` / `e95fa9ce1d41b9b4c6e4884b6076f414173a946d`.
+V2 kandidaat on samal HEAD-il harul `work/v2-integratsioon-20261018`: 85 kirjet,
+47 unstaged, 38 untracked, 0 staged ja 0 konflikti. Kandidaadi muudatused säilivad.
+Supabase `vyjletlmwoiwxsnsunlm` / Selqiro on `eu-central-1`, `ACTIVE_HEALTHY`,
+PostgreSQL 17.6; kõik 23 production-migratsiooni versiooni vastavad lähtele.
+`listing_publication_private`, uus price-core ja nende avaldamis-/lugemis-RPC-d
+on veel hosted-keskkonda ühendamata. Metadata ei lugenud konto-, tingimuse- ega
+kuulutuseridu ega kinnita nende jooksvaid väärtusi.
+
+Valmis on assistendi lähtekoopia eraldi hosted-preview konfiguratsioon,
+serveri/SOURCE S3 credential factory ning kliendi valikuline sama projekti
+Storage-origin. App-origin tuletatakse Verceli enda deployment-hostist;
+valikuline eraldi väärtus peab täpselt vastama. Kohalikud piirangud, API-route'id,
+globaalne UI-lüliti, auth-klient, native-pilditöötleja ja skeem jäid samaks.
+Kood ei ole veel Macis, GitHubis ega Vercelis.
+
+8 nimetatud sihitud kontrolli läbisid (5 hosted config/S3 ja 3 kliendi Storage-origin), 0 fail/skip; käivitati name-patterniga ainult need uued juhtumid. Vaikimisi Next 16.2.1 Turbopack-build läbis exit 0, 15,308 s; kasutati sünteetilisi build-väärtusi ilma integratsioonilipu/backendita. Kahe esmase käigu failitaseme koondreport ei olnud 8 juhtumi tõend ning säilib diagnostikana; aktsepteeritud lõppreport sisaldab kõiki 8 nimetatud PASS-i. See ei tõenda Maci või tegeliku hosted-keskkonna käitust.
+Tõendid on selle jätkupaketi BUILD.json ja TARGETED_TESTS.json; kontrolli ei korrata.
+
+Järgmine töö on lisav hosted release/skeem ja managed S3 adapter koos tegeliku
+operation-authority lepinguga, seejärel sama tavakuulutuse veebieelvaade.
+Piiratud suletud piloot võib hoida koristuse ootel ning reservi kinni pärast
+korrektset Complete/readback'i; see ei tähenda täieliku lõppkoristuse valmisolekut.
+Kohalik kasutaja kinnitatud piltidega avaldamine jääb aluseks. Jätkame samas
+vestluses olemasoleva Mac → GitHub → Vercel tööviisiga. Uut ühenduste seadistusringi,
+metadata-kogumise kordust ega eraldi installeri/testimise etappi see juhis ei lisa.
+
+Täpne arhitektuur: `docs/architecture/hosted-publication-preview-v1.md`.
+Jooksev seis: `docs/continuity/CURRENT_STATE.json` ja `SERVICE_ACCESS.json`.
+Allpool olevad varasemad NEXT-juhised säilivad ajaloona.
+
+---
+
+<!-- SELQIRO_LOCAL_PUBLICATION_ACCEPTED_SERVICE_CONTINUITY_20261026 -->
+## 2026-10-26 — Accepted local listing and native deployment-file inclusion
+
+Local ordinary publication is user-accepted: Taivo's 19:12–19:13 evidence shows
+bmw / 5257 EUR / Active, three images and the owner-visible detail/gallery.
+This closes the local HMR/loading continuation. Hosted publication remains a
+separate integration boundary; the same user journey is the next web objective.
+
+next.config.ts now includes sanitize.cjs, worker.cjs, image-contract.cjs, Sharp
+and its runtime dependencies only for /api/v2/publication/*. Native createRequire
+and the separate child-process boundary remain intact. Default Next 16.2.1
+Turbopack build passed; the route trace contains 411 entries, and its isolated
+payload processed PNG→WebP with the unchanged sanitizer. This proves packaging
+and dependency resolution on Linux/Node 24.22.1, not execution on Vercel.
+These product bytes are still prepared in the assistant copy only; documentation
+updates do not assert a new build, Mac application, commit/push or deployment.
+
+The 20:27 Vercel screenshot accepts the existing selqiro deployment e95fa9c /
+main / Ready 41s / Production / Oct 17 as visual status evidence. Existing Git
+and Supabase CLI access is through the user's Mac workflow. ChatGPT plugin
+availability is not a prerequisite and a new conversation is not required.
+
+SERVICE_ACCESS.json records public service identity and the exact historical
+CLI 2.117.0 pin recovered from accepted rollout evidence. The production ref is
+vyjletlmwoiwxsnsunlm; region and an isolated preview target remain unconfirmed.
+The prepared external next-action/selqiro-read-existing-web-context.py with
+read-only-inventory.sql must establish actual project/schema/Storage/ACL context
+before the hosted adapter and release; it has not run on the user's Mac. No data rows, secrets,
+environment values or old private logs are needed for that metadata step.
+Keep local fixture guards, native processing, writer/finality/cleanup contracts,
+runtime pins, dependencies and all 23 production migrations unchanged.
+
+---
+
+## 24.10.2026 UTC — Avaliku profiili piiratud teenuse- ja vitriinilugemine
+
+Teenuste ja vitriinide senine otsetabeli tee võib autentitud lugejal sõltuda
+suletud `current_user_has_identity_access` abifunktsioonist. V2 profiil kasutab
+nüüd `get_public_profile_services_v1` / `get_public_profile_showcases_v1` avalikku
+projektsiooni. SECURITY DEFINER funktsioonid on fikseeritud search_path’i, UTC ja
+STABLE lepinguga. Labs’i lähtefailid tühistavad API rollide EXECUTE-õiguse; ainult
+uus isoleeritud fixture avab kaks avalikku sisenemispunkti anon/authenticated rollile.
+Omaniku helperi õigusi, eraandmete lugemist ega kirjutusõigusi ei laiendata.
+
+Üks ainus aktiivne vaadeldav slug määrab identiteedi. Duplikaat, puuduv või
+inaktiivne profiil tagastab kättesaamatu ümbrise. Published sisu ning vitriini
+serveri read_at-hetkel tulevikus olev active_until; kuni 80 parent’i. Ühes päringus
+on kuni 10 pilti iga parent’i kohta, seotud nii parent’i ID kui sama identiteediga.
+Vastuses puuduvad storage_path, uploaded_by_user_id ja muud privaatsed väljad.
+Teenuse decimal hind serialiseeritakse tekstina. Kliendi range leping välistab
+vaikiva vigase rea äraviskamise; HTTP/lepinguvea järel pole anonüümset varuteed.
+
+Hook seob oleku vaadeldava identity/slug paariga ning peidab eelmised read kohe.
+Non-V2 tee ja kohaliku V2 värava leping säilivad. Olemasolev avalik nähtavus säilib;
+uut kasutaja/business blokeerimise semantikat selles paranduses ei leiutata.
+25 kliendikontrolli, 22 päris PG rolli/ACL/piiri rühma ja päris Auth/PostgREST/Next
+kolme vaataja galerii- ning tavakuulutuse kontroll on PASS. Pildid on sünteetilised
+loopback-failid; Storage’i ega profile Kirjuta/Jälgi/näidisuudiseid see ei kinnita.
+
+Ülekanne: Mac 785→790, immutable dependency image 784→790. Need on eraldi täpsed
+preimage’i piirid. Uus fixture ei käivita vana journey setup’i ega lõpetatud teste.
+Vana 24.10 lõppkoristuse tulemus puudutab kuut juba kustutatud katse objektiseost,
+kuut lisakviitungit ja reservi lõppseisu; see pole kuus uut füüsilist kustutust.
+790 allika lõppbuildi tõend seotakse pärast dokumentide külmutamist välise
+BUILD.json-iga. Production’i sulgemine ja kõik 23 migratsiooni säilivad.
+
+---
+
+## 23.10.2026 — Minu ala integreeritud juhtimisvaade
+
+Praegune kandidaat ja vastuvõtu piir on `docs/continuity/CURRENT_STATE.json`-is.
+Minu ala identiteet ja avaliku profiili URL tulevad olemasolevatest
+`getActiveIdentity` / `getListingActivityActor` lepingutest. Konto või identiteedi
+vahetus tühistab aegunud tulemuse; Energy on eraldi mittekohustuslik moodul.
+Päris omaniku kuulutuste haldus ja kategooriafilter säilivad. Näidisloendurid,
+näidisuudised ja toimeta nupud eemaldatakse. Eraldatud avaldamisvoos peidetakse
+fixture’is puuduvad kategooria-, teenuse- ja vitriinimuudatused ning Energy;
+väljaspool seda voogu säilivad nende olemasolevad moodulid.
+
+Värske fixture saab `store_categories` kuue vajaliku veeru SELECT-i rollile
+`authenticated`. Senine avaliku lugemise RLS-poliitika säilib. Muutmisõigusi,
+`user_id` lugemist ega puuduvate mutation/helper RPC-de EXECUTE-luba ei lisata.
+Kõik 23 production-migratsiooni ja production’i API/config sulgemine on muutmata.
+
+Varasema Maci valitud SOURCE/WEB lõppkustutuse tõend on vastu võetud, seanss
+STOPPED ja luba kasutatud. See ei tõenda ajaloolise koguobjekti SOURCE-loa ega
+hosted Storage’i lõplikkust. Uue allikakandidaadi build’i tõend ja värske fixture’i
+käsitsi vaatlus peavad olema eraldi täpselt seotud. Korrektne profiililink ei
+kinnita profiili teenusejaotise kõiki õigusi ega Kirjuta/Jälgi/Uudised toiminguid.
+
+---
+
+## 17.10.2026 — Sama V2 avaldamisvoo täisrepo integratsioon
+
+<!-- SELQIRO_V2_FULL_REPOSITORY_INTEGRATION_20261017 -->
+
+**V2 teostus on ühendatud e95fa9c päris täisrepositooriumiga.** Viimane täisbuild
+on PASS; küsitud native V2 etapivaatluste koond on `PASS_WITH_SCOPE_LIMITATIONS`.
+Production'i üleslaadimine ja avaldamine jäävad suletuks. See checkpoint ei kinnita
+uut juurutust, hosted Storage'i lõplikkust ega tervet legacy `/my-page` teed.
+
+Üks kasutajatee seob lisamise → pildid → avaldamise → avalikud vaated → suhtlemise
+→ omaniku halduse → lõppkustutuse. Olemasolevad hinna-, identiteedi-, lugeja- ja
+omanikulepingud säilivad. Täisrepo ühendused paiknevad Authi tagasitees, V2
+konto/mobiili navigeerimises, lisamisvaate login-lingis ja mõlema sõnumimarsruudi
+V2Shellis. Need on kuus täpsustust varasema teostuse suhtes; kaks neist olid juba
+84 raja sees, seega koodimuudatuse ulatus on 88 rada.
+
+SOURCE osade väljastus, WEB-i täpne valmidustõend ning koristuse lõplikkus on sama
+publikatsioonikatse lepingus (`src/server/listing-publication/journey/` ja
+`supabase/labs/listing-publication-journey-v2/`). Ebapiisav või teadmata tõend ei
+muutu valmisolekuks. Juba väljastatud ajaloolise koguobjekti SOURCE-loa puuduvat
+lõplikkust ei tõenda uue voo edukas katse. Kasutaja sõnumid säilivad kuulutuse
+lõppkustutuse järel; automaatne kuulutuse hetkeseis pärineb serverist. Kohalik
+integratsioon on seotud konto, aktiivse identiteedi, täpse katse ja käigumarkeriga.
+`src/shared/config/v2Integration.ts` ja serveripiirid hoiavad production'i suletuna.
+
+Tõendi ulatus on eristatud:
+
+- `evidence/full-repository/build-20261017T144110Z.json`: kogu 784-failise allika
+  `npm run build` PASS, Node 24.19.0 / npm 11.13.0 / Next 16.2.1 / Turbopack.
+- `evidence/full-repository/native-surfaces/current-build-verdict.json`:
+  seitse küsitud etappi PASS. Muutunud sõnumiümbrised ja mobiilimenüüd ning profiili
+  tegelik RPC/kolm tühja jaotist on seotud 14:41 allikaga. 14:31 Authi/postkasti
+  tõendi järel muutusid ainult need kaks ümbrist. Viimase raw-run'i FAIL säilib:
+  legacy sihtlehe kolm read403 ja kolm keelatud kohalikku Nexti diagnostika POST-i.
+  Turvaline samale origin'ile tagasisuunamine ei kinnita legacy sihtlehe tervist.
+  Profiili Kirjuta/Jälgi/Uudised toimingud ei kuulu vastuvõttu.
+- `evidence/full-repository/current-source-binding.json` seob allikad ja varasema
+  production'i sulgemise tõendi. Viis väidet, kaheksa API 404-vastust ning 49 JS-faili
+  kontroll kuuluvad 14:31 build'ile; API/config allikad säilivad 14:41 versioonis,
+  kuid hilisema build'i vastu neid päringuid ega JS-kontrolli ei korratud.
+- Varasema teostuspaketi 42-etapiline tervikjooks, 20 brauseriväidet ja sõltumatu
+  protsessijärgne lõppkontroll PASS jäävad selle eraldatud käigu tõendiks.
+  Täisrepo kontroll ei korda neid ega paranda varasemaid tõendamata failijääke.
+
+Profiili lugemiste fixture sai kaheksa täpset baasideklaratsiooni. Jälgitud 14
+olemasoleva rakendustabeli andmed säilisid; lisandunud `service_categories` jäi
+0 reaga. Jälgitav neljateistkümnes tabel on varasem `store_categories`. See pole
+kogu andmebaasi muutumatuse väide: päris Authi login muudab seansi metaandmeid.
+Uued teenused ei tööta ja Nexti port on suletud; vanu teenuseid ega mahte ei muudeta.
+
+Kõik 23 migratsiooni jäävad baasiga identseks. 88 koodirada ja viis sama
+integratsiooni dokumenti annavad 93 rada (38 muudetud, 55 uut). Commit/push,
+production'i avamine ja Maci tegelik Git-kontroll pole selle kirje tulemus.
+Enne lähteülekande kirjutusi Macis on nõutav värske tegelik Git/allika/index'i
+kontroll. Kinnitatud nõuded säilivad failis
+`docs/architecture/v2-publication-requirements-approved-20261012.md`.
+Praegune seis on `docs/continuity/CURRENT_STATE.json`; üleandmispaketi kavandatud
+nimi on `selqiro-v2-fullrepo-integratsioon-e95fa9c-20261017.zip`.
+
+---
+
 ## 16.10.2026 — SOURCE-loa väljastusjälje sama lähteetapi lõpetamine
 
 **SOURCE RELEASE SOURCE paigaldus, üks uus projektibuild ja tulemuse ülevaatus on

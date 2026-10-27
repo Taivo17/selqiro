@@ -30,7 +30,7 @@ export default function SearchResultCard({item}: {item: PublicSearchCard}) {
         {item.description ? <p className="mt-2 line-clamp-2 break-words text-sm leading-6 text-neutral-600">{item.description}</p> : null}
         <p className="mt-2 line-clamp-2 text-xs text-neutral-500">{category ? category + " · " : ""}{item.sellerName}</p>
         <div className="mt-auto flex flex-wrap items-end justify-between gap-2 pt-4">
-          <ListingPrice price={getListingPriceDisplay({ price: item.price, priceAmount: item.priceAmount })} />
+          <ListingPrice price={item.displayPrice ?? getListingPriceDisplay({ price: item.price, priceAmount: item.priceAmount })} />
           <p className="text-right text-xs text-neutral-500">{place || "Asukoht täpsustamata"}</p>
         </div>
       </Link>

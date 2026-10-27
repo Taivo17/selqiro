@@ -1,5 +1,8 @@
 import { supabaseBrowserClient } from "../../../shared/supabase/browserClient";
 import type { ProductListingCard } from "../model/types";
+import { v2IntegrationEnabled } from "../../../shared/config/v2Integration";
+import { parsePublicProfileListingsV1 } from "../model/publicRead/publicProfileListingsV1";
+import { publicCard } from "../model/publicRead/presentation";
 import {
   mapMarketplaceListingRow,
   type MarketplaceListingRow,
@@ -32,6 +35,8 @@ export type GetListingsBySellerInput = {
    * to a category inside the supplied branch scope
    */
   storeCategoryScopeIds?: string[] | null;
+  /** Selected root; the server resolves its authorized descendants. */
+  storeCategoryId?: string | null;
 
   limit?: number;
 };
@@ -59,6 +64,17 @@ function normalizeStoreCategoryScopeIds(
 export async function getListingsBySeller(
   input: GetListingsBySellerInput
 ): Promise<ProductListingCard[]> {
+  if (v2IntegrationEnabled()) {
+    if (!input.sellerSlug || input.storeCategoryScopeIds?.length === 0) return [];
+    if (input.storeCategoryScopeIds && !input.storeCategoryId) throw new Error("Vali poe rubriik uuesti.");
+    const request = {sellerSlug: input.sellerSlug, storeCategoryId: input.storeCategoryId ?? null,
+      offset: 0, limit: Math.max(1, Math.min(input.limit ?? 12, 60))};
+    const {data, error} = await supabaseBrowserClient.rpc("get_public_profile_listings_v1", {
+      p_seller_slug: request.sellerSlug, p_store_category_id: request.storeCategoryId,
+      p_result_limit: request.limit, p_result_offset: request.offset});
+    if (error) throw new Error("Profiili kuulutusi ei saanud laadida.");
+    return parsePublicProfileListingsV1(data, request).items.map(publicCard);
+  }
   const limit = input.limit ?? 12;
 
   if (

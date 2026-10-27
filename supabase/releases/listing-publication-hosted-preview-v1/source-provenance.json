@@ -1,0 +1,1022 @@
+{
+  "format": "selqiro-hosted-additive-sql-provenance-v1",
+  "release_id": "listing-publication-hosted-preview-v1",
+  "public_function_names": [
+    "cancel_my_listing_publication_journey_v2",
+    "cancel_my_listing_publication_v1",
+    "claim_listing_cleanup_for_attempt_v2",
+    "claim_listing_cleanup_v1",
+    "claim_listing_multipart_complete_v2",
+    "claim_listing_multipart_part_v2",
+    "claim_listing_upload_sign_v1",
+    "claim_listing_web_image_v1",
+    "claim_listing_write_reconcile_v1",
+    "confirm_listing_upload_release_v1",
+    "contact_my_listing_seller_v1",
+    "delete_my_published_listing_v1",
+    "get_listing_multipart_v2",
+    "get_my_listing_basics_v1",
+    "get_my_listing_cleanup_summary_v1",
+    "get_my_listing_conversation_v1",
+    "get_my_listing_edit_v1",
+    "get_my_listing_media_binding_v2",
+    "get_my_listing_publication_confirmation_v1",
+    "get_my_listing_publication_journey_v2",
+    "get_my_listing_publication_v1",
+    "get_my_listing_upload_grant_v1",
+    "get_my_listing_web_ready_v1",
+    "get_my_managed_listing_v2",
+    "get_my_marketplace_items_v3",
+    "get_public_listing_detail_v1",
+    "get_public_listing_media_binding_v1",
+    "get_public_profile_listings_v1",
+    "get_public_profile_services_v1",
+    "get_public_profile_showcases_v1",
+    "get_selqiro_hosted_preview_readiness_v1",
+    "guard_listing_price_v2",
+    "horse_owner_price_read_v1",
+    "list_my_listing_conversations_v1",
+    "listing_actor_uid_hosted_v1",
+    "listing_basics_search_text_v1",
+    "listing_basics_snapshot_v1",
+    "listing_basics_values_v1",
+    "listing_contact_is_managed_v1",
+    "listing_contact_visible_v1",
+    "listing_create_category_path_valid_v1",
+    "listing_final_guard_state_v1",
+    "listing_price_currency_scale_v1",
+    "listing_price_legacy_label_v1",
+    "listing_price_read_model_v1",
+    "listing_price_snapshot_v1",
+    "listing_price_tuple_valid_v1",
+    "listing_source_part_allowed_hosted_v1",
+    "lock_listing_creation_actor_v1",
+    "lock_my_listing_basics_v1",
+    "normalize_listing_basics_v1",
+    "normalize_listing_create_location_v1",
+    "normalize_listing_creation_v1",
+    "normalize_listing_price_v1",
+    "prepare_listing_multipart_cleanup_v2",
+    "prepare_listing_web_write_v1",
+    "prepare_my_listing_publication_v1",
+    "project_horse_wanted_owner_summary_v2",
+    "public_listing_detail_field_spec_v1",
+    "public_listing_detail_values_v1",
+    "publish_my_listing_v1",
+    "purge_listing_upload_token_one_v1",
+    "record_listing_cleanup_v1",
+    "record_listing_multipart_abort_v2",
+    "record_listing_multipart_completed_v2",
+    "record_listing_multipart_created_v2",
+    "record_listing_multipart_problem_v2",
+    "record_listing_multipart_verified_v2",
+    "record_listing_upload_grant_v1",
+    "record_listing_web_ready_v1",
+    "record_listing_web_write_completed_v1",
+    "record_listing_write_reconcile_v1",
+    "renew_my_managed_listing_activity_v2",
+    "require_listing_create_keys_v1",
+    "reserve_listing_multipart_v2",
+    "reserve_my_listing_upload_v1",
+    "save_my_listing_basics_v1",
+    "save_my_listing_edit_v1",
+    "search_public_listings_v2",
+    "send_my_listing_message_v1",
+    "set_my_listing_price_core_v1",
+    "set_my_managed_listing_status_v2",
+    "settle_recorded_unreleased_source_one_v1",
+    "settle_unreleased_listing_source_one_v1"
+  ],
+  "sources": [
+    {
+      "path": "supabase/labs/listing-publication-attempt-v1/tests/fixture.generated.sql",
+      "source_sha256": "fab1ab88575192a7ff2f4151b544a383559ea1ea544819e50fe9d1f523e08a3f",
+      "adaptations": [],
+      "selection": "one function",
+      "function": "public.listing_price_currency_scale_v1",
+      "selected_sha256": "1ab42453dbdb2047aa06d795b071b7adea4fd018617dc70fe2dda5e986225936",
+      "output_sha256": "1ab42453dbdb2047aa06d795b071b7adea4fd018617dc70fe2dda5e986225936"
+    },
+    {
+      "path": "supabase/labs/listing-publication-attempt-v1/tests/fixture.generated.sql",
+      "source_sha256": "fab1ab88575192a7ff2f4151b544a383559ea1ea544819e50fe9d1f523e08a3f",
+      "adaptations": [],
+      "selection": "one function",
+      "function": "public.normalize_listing_price_v1",
+      "selected_sha256": "1a703a5757cbdc7648d881db2a3af2234b891db855d4789bd44b5f1d36b33d45",
+      "output_sha256": "1a703a5757cbdc7648d881db2a3af2234b891db855d4789bd44b5f1d36b33d45"
+    },
+    {
+      "path": "supabase/labs/listing-publication-attempt-v1/tests/fixture.generated.sql",
+      "source_sha256": "fab1ab88575192a7ff2f4151b544a383559ea1ea544819e50fe9d1f523e08a3f",
+      "adaptations": [],
+      "selection": "one function",
+      "function": "public.normalize_listing_basics_v1",
+      "selected_sha256": "715aa9b6764fe990b480c4085475ddbb430abbd7a9d64dc650efda289cb2652f",
+      "output_sha256": "715aa9b6764fe990b480c4085475ddbb430abbd7a9d64dc650efda289cb2652f"
+    },
+    {
+      "path": "supabase/labs/listing-publication-attempt-v1/tests/fixture.generated.sql",
+      "source_sha256": "fab1ab88575192a7ff2f4151b544a383559ea1ea544819e50fe9d1f523e08a3f",
+      "adaptations": [],
+      "selection": "one function",
+      "function": "public.listing_create_category_path_valid_v1",
+      "selected_sha256": "0797348f528f3b9b26ee07d99813d3ae289ebddb278a54305d57af92a78fd982",
+      "output_sha256": "0797348f528f3b9b26ee07d99813d3ae289ebddb278a54305d57af92a78fd982"
+    },
+    {
+      "path": "supabase/labs/listing-publication-attempt-v1/tests/fixture.generated.sql",
+      "source_sha256": "fab1ab88575192a7ff2f4151b544a383559ea1ea544819e50fe9d1f523e08a3f",
+      "adaptations": [],
+      "selection": "one function",
+      "function": "public.require_listing_create_keys_v1",
+      "selected_sha256": "d80f9c7518d8ba4118336090ab3dfcf74996c0311a77fc35e3c42a0ade5bc153",
+      "output_sha256": "d80f9c7518d8ba4118336090ab3dfcf74996c0311a77fc35e3c42a0ade5bc153"
+    },
+    {
+      "path": "supabase/labs/listing-publication-attempt-v1/tests/fixture.generated.sql",
+      "source_sha256": "fab1ab88575192a7ff2f4151b544a383559ea1ea544819e50fe9d1f523e08a3f",
+      "adaptations": [],
+      "selection": "one function",
+      "function": "public.normalize_listing_create_location_v1",
+      "selected_sha256": "24639d7a167febf8917c6b0425ee1b15126c49eefd82912ccf8ae52b1dfb5605",
+      "output_sha256": "24639d7a167febf8917c6b0425ee1b15126c49eefd82912ccf8ae52b1dfb5605"
+    },
+    {
+      "path": "supabase/labs/listing-publication-attempt-v1/tests/fixture.generated.sql",
+      "source_sha256": "fab1ab88575192a7ff2f4151b544a383559ea1ea544819e50fe9d1f523e08a3f",
+      "adaptations": [],
+      "selection": "one function",
+      "function": "public.normalize_listing_creation_v1",
+      "selected_sha256": "0394b2dd9ea13b2338d3251b6f3b5843c6bf100278f0337b26dae0cf639092a9",
+      "output_sha256": "0394b2dd9ea13b2338d3251b6f3b5843c6bf100278f0337b26dae0cf639092a9"
+    },
+    {
+      "path": "supabase/labs/listing-publication-attempt-v1/tests/fixture.generated.sql",
+      "source_sha256": "fab1ab88575192a7ff2f4151b544a383559ea1ea544819e50fe9d1f523e08a3f",
+      "adaptations": [
+        {
+          "reason": "gate independently of client/runtime flags before locking the existing actor",
+          "count": 1,
+          "before_sha256": "d0b7843981e06107e5cc817215b28a845a9836b58e43dffaa4a70b05f8417390",
+          "after_sha256": "54fea13ddfdcd7652861a00799c3550499f01595249f12a92e53adab34538ccd"
+        },
+        {
+          "reason": "route retained current-actor calls/grants through postgres-owned self-UID wrapper; no managed Auth privilege expansion",
+          "count": 1,
+          "before_sha256": "a9a52710919f609ca6d1d154123662386421f0eb1a70a0776355d8b5d2c6c1ce",
+          "after_sha256": "48c1a9633903e8f91ced00f30ea8fb1e4b3be16d4221d20803edf377bed04faf"
+        }
+      ],
+      "selection": "one function",
+      "function": "public.lock_listing_creation_actor_v1",
+      "selected_sha256": "d0b7843981e06107e5cc817215b28a845a9836b58e43dffaa4a70b05f8417390",
+      "output_sha256": "0d6326ce424209017f5eb025f2dc11263e5cb53e9fb7319501b635fff8a00d9f"
+    },
+    {
+      "path": "supabase/labs/listing-publication-final-v1/tests/fixture-extension.generated.sql",
+      "source_sha256": "f9847b301ef7787b28f186202d7a8e9838375da6362d1dc8936fb24b6acbc880",
+      "adaptations": [],
+      "selection": "one function",
+      "function": "public.listing_price_legacy_label_v1",
+      "selected_sha256": "360689b3fc56cb482e52d1df1faaa6a2d58b3e4cd9dad2b5090c23c9796025a9",
+      "output_sha256": "360689b3fc56cb482e52d1df1faaa6a2d58b3e4cd9dad2b5090c23c9796025a9"
+    },
+    {
+      "path": "supabase/labs/listing-publication-final-v1/tests/fixture-extension.generated.sql",
+      "source_sha256": "f9847b301ef7787b28f186202d7a8e9838375da6362d1dc8936fb24b6acbc880",
+      "adaptations": [],
+      "selection": "one function",
+      "function": "public.listing_price_tuple_valid_v1",
+      "selected_sha256": "ba6bd59f6407a04a98aa2d27f76c42d70ccc8c112674921dec0f1d03e4f361fc",
+      "output_sha256": "ba6bd59f6407a04a98aa2d27f76c42d70ccc8c112674921dec0f1d03e4f361fc"
+    },
+    {
+      "path": "supabase/labs/listing-publication-final-v1/tests/fixture-extension.generated.sql",
+      "source_sha256": "f9847b301ef7787b28f186202d7a8e9838375da6362d1dc8936fb24b6acbc880",
+      "adaptations": [],
+      "selection": "one function",
+      "function": "public.listing_price_snapshot_v1",
+      "selected_sha256": "e0c778ebad92906620a9de381ab81a1149dd4f21bc65c54e78b34daeab5f47df",
+      "output_sha256": "e0c778ebad92906620a9de381ab81a1149dd4f21bc65c54e78b34daeab5f47df"
+    },
+    {
+      "path": "supabase/labs/listing-publication-final-v1/tests/fixture-extension.generated.sql",
+      "source_sha256": "f9847b301ef7787b28f186202d7a8e9838375da6362d1dc8936fb24b6acbc880",
+      "adaptations": [],
+      "selection": "one function",
+      "function": "public.listing_basics_values_v1",
+      "selected_sha256": "f3eeebd810a5372799c47c4b3a437029bc7d43eb0c9bdd3cd351f7c1f40f959a",
+      "output_sha256": "f3eeebd810a5372799c47c4b3a437029bc7d43eb0c9bdd3cd351f7c1f40f959a"
+    },
+    {
+      "path": "supabase/labs/listing-publication-final-v1/tests/fixture-extension.generated.sql",
+      "source_sha256": "f9847b301ef7787b28f186202d7a8e9838375da6362d1dc8936fb24b6acbc880",
+      "adaptations": [],
+      "selection": "one function",
+      "function": "public.listing_basics_snapshot_v1",
+      "selected_sha256": "aa97b53a8695367091f7e515cacc240299431a025ca74223ccfe920bda1c9ac2",
+      "output_sha256": "aa97b53a8695367091f7e515cacc240299431a025ca74223ccfe920bda1c9ac2"
+    },
+    {
+      "path": "supabase/labs/listing-publication-final-v1/tests/fixture-extension.generated.sql",
+      "source_sha256": "f9847b301ef7787b28f186202d7a8e9838375da6362d1dc8936fb24b6acbc880",
+      "adaptations": [],
+      "selection": "one function",
+      "function": "public.listing_basics_search_text_v1",
+      "selected_sha256": "fefd14c99174d359cc4fbdba4b154124f4d7d62b1cd70e9bd477e23b00890bf2",
+      "output_sha256": "fefd14c99174d359cc4fbdba4b154124f4d7d62b1cd70e9bd477e23b00890bf2"
+    },
+    {
+      "path": "supabase/labs/listing-publication-final-v1/tests/fixture-extension.generated.sql",
+      "source_sha256": "f9847b301ef7787b28f186202d7a8e9838375da6362d1dc8936fb24b6acbc880",
+      "adaptations": [],
+      "selection": "one function",
+      "function": "public.guard_listing_price_v2",
+      "selected_sha256": "155b116e1a05126b3063bfdd21eae37a96a17f1d667a7aaecfb3fb8b5d5e004c",
+      "output_sha256": "155b116e1a05126b3063bfdd21eae37a96a17f1d667a7aaecfb3fb8b5d5e004c"
+    },
+    {
+      "path": "supabase/labs/listing-publication-attempt-v1/01_private_state.sql",
+      "source_sha256": "530ab73dd20ba9d776318472b06847778f907d51203ecaa72a0f9de47de2f6fd",
+      "adaptations": [
+        {
+          "reason": "replace top-level fixture-only installation gate with trusted additive target gate; preserve runtime invariants",
+          "count": 1,
+          "before_sha256": "7ea85c508b2c8e59e0d138f43a421f1dd46cd5943ca80862e7bf08f345da2fe5",
+          "after_sha256": "57dc10d667a64ff659592e70ae10922cca10e442607f959bd59a80a6c8841f1f"
+        },
+        {
+          "reason": "avoid recreating the already closed additive release settings schema",
+          "count": 1,
+          "before_sha256": "a83ca42cc5b3ce5c6d9808a0cc399239267f3c2635a438a6e2a0e6ab8449e03b",
+          "after_sha256": "d62c9652bac449e81302e0e6152570f78eaca5d4c72c6baf9ad16061eac6b83e"
+        }
+      ],
+      "selection": "declaration file",
+      "selected_sha256": "530ab73dd20ba9d776318472b06847778f907d51203ecaa72a0f9de47de2f6fd",
+      "output_sha256": "7c91e8f20e6a2b49723bae13a9bb15d1fcf3718083e522166429d40875d2c7cc"
+    },
+    {
+      "path": "supabase/labs/listing-publication-attempt-v1/02_values_and_policy.sql",
+      "source_sha256": "ad7306884a577986e30ee8c3836fb60d24efe15e709e95260163997aed31c48b",
+      "adaptations": [
+        {
+          "reason": "replace top-level fixture-only installation gate with trusted additive target gate; preserve runtime invariants",
+          "count": 1,
+          "before_sha256": "7ea85c508b2c8e59e0d138f43a421f1dd46cd5943ca80862e7bf08f345da2fe5",
+          "after_sha256": "57dc10d667a64ff659592e70ae10922cca10e442607f959bd59a80a6c8841f1f"
+        },
+        {
+          "reason": "route retained current-actor calls/grants through postgres-owned self-UID wrapper; no managed Auth privilege expansion",
+          "count": 3,
+          "before_sha256": "a9a52710919f609ca6d1d154123662386421f0eb1a70a0776355d8b5d2c6c1ce",
+          "after_sha256": "48c1a9633903e8f91ced00f30ea8fb1e4b3be16d4221d20803edf377bed04faf"
+        }
+      ],
+      "selection": "declaration file",
+      "selected_sha256": "ad7306884a577986e30ee8c3836fb60d24efe15e709e95260163997aed31c48b",
+      "output_sha256": "a326e40c26b1decd38d8434d651df06f466c8db2e8ef843e30d2c367ed41051c"
+    },
+    {
+      "path": "supabase/labs/listing-publication-attempt-v1/03_owner_attempt.sql",
+      "source_sha256": "6d971221ed8672684993556598a8e92a027183e3a7c9a48676fd1e71e142d4dd",
+      "adaptations": [
+        {
+          "reason": "replace top-level fixture-only installation gate with trusted additive target gate; preserve runtime invariants",
+          "count": 1,
+          "before_sha256": "7ea85c508b2c8e59e0d138f43a421f1dd46cd5943ca80862e7bf08f345da2fe5",
+          "after_sha256": "57dc10d667a64ff659592e70ae10922cca10e442607f959bd59a80a6c8841f1f"
+        }
+      ],
+      "selection": "declaration file",
+      "selected_sha256": "6d971221ed8672684993556598a8e92a027183e3a7c9a48676fd1e71e142d4dd",
+      "output_sha256": "eb0ebcab9596fecf036f3dcbc27fb2e1feaad440e85340185d91a1b7bee5aa92"
+    },
+    {
+      "path": "supabase/labs/listing-publication-attempt-v1/04_upload_dispatch.sql",
+      "source_sha256": "7365d25a2054efbf32a4544d9d3e049f71ebbb9e25543b252091fe64b30da8fc",
+      "adaptations": [
+        {
+          "reason": "replace top-level fixture-only installation gate with trusted additive target gate; preserve runtime invariants",
+          "count": 1,
+          "before_sha256": "7ea85c508b2c8e59e0d138f43a421f1dd46cd5943ca80862e7bf08f345da2fe5",
+          "after_sha256": "57dc10d667a64ff659592e70ae10922cca10e442607f959bd59a80a6c8841f1f"
+        }
+      ],
+      "selection": "declaration file",
+      "selected_sha256": "7365d25a2054efbf32a4544d9d3e049f71ebbb9e25543b252091fe64b30da8fc",
+      "output_sha256": "5d6eeabdb5297610f334444256abc6bf72e2cc05bf6b15019fbf685bd6f1c152"
+    },
+    {
+      "path": "supabase/labs/listing-publication-attempt-v1/05_close_attempt.sql",
+      "source_sha256": "e14d2ba908ec943393a4f324a7437107408584fa60b6aac0b4b04f8bd60797ef",
+      "adaptations": [
+        {
+          "reason": "replace top-level fixture-only installation gate with trusted additive target gate; preserve runtime invariants",
+          "count": 1,
+          "before_sha256": "7ea85c508b2c8e59e0d138f43a421f1dd46cd5943ca80862e7bf08f345da2fe5",
+          "after_sha256": "57dc10d667a64ff659592e70ae10922cca10e442607f959bd59a80a6c8841f1f"
+        }
+      ],
+      "selection": "declaration file",
+      "selected_sha256": "e14d2ba908ec943393a4f324a7437107408584fa60b6aac0b4b04f8bd60797ef",
+      "output_sha256": "31da522f13c60c9228a794dc76e43b8be3e1d543b5a8dd80cdcad897c25226d1"
+    },
+    {
+      "path": "supabase/labs/listing-publication-upload-v1/01_upload_grants.sql",
+      "source_sha256": "78e1bdc244311f13ec027c32e2536d6d31190829a8c478daca585019c315f0a1",
+      "adaptations": [
+        {
+          "reason": "replace top-level fixture-only installation gate with trusted additive target gate; preserve runtime invariants",
+          "count": 1,
+          "before_sha256": "7ea85c508b2c8e59e0d138f43a421f1dd46cd5943ca80862e7bf08f345da2fe5",
+          "after_sha256": "57dc10d667a64ff659592e70ae10922cca10e442607f959bd59a80a6c8841f1f"
+        },
+        {
+          "reason": "retain actual SQL service-role check; remove local postgres/fixture exception",
+          "count": 1,
+          "before_sha256": "ab616e1676c01a590f1253eb7fdcc25eb126527cd1ef3bba49ebdac515ad3c67",
+          "after_sha256": "b6b1d65c1c8e26c016165aafebe2497747951c024bce34e6cc5251d7103d3ed7"
+        }
+      ],
+      "selection": "declaration file",
+      "selected_sha256": "78e1bdc244311f13ec027c32e2536d6d31190829a8c478daca585019c315f0a1",
+      "output_sha256": "54bd6198cefc879f96bd9c42731bc9c7f5c34b069f42e9bd55652045165e3a7d"
+    },
+    {
+      "path": "supabase/labs/listing-publication-web-v1/01_web_receipts.sql",
+      "source_sha256": "4a9181147932b0fc3cd5c23c383c5ef5ac40f8d117db166846f409722c831662",
+      "adaptations": [
+        {
+          "reason": "replace top-level fixture-only installation gate with trusted additive target gate; preserve runtime invariants",
+          "count": 1,
+          "before_sha256": "7ea85c508b2c8e59e0d138f43a421f1dd46cd5943ca80862e7bf08f345da2fe5",
+          "after_sha256": "57dc10d667a64ff659592e70ae10922cca10e442607f959bd59a80a6c8841f1f"
+        }
+      ],
+      "selection": "declaration file",
+      "selected_sha256": "4a9181147932b0fc3cd5c23c383c5ef5ac40f8d117db166846f409722c831662",
+      "output_sha256": "5576b094568b47323f6fff34dad0eb17b609050939e31005630f87673c3334c0"
+    },
+    {
+      "path": "supabase/labs/listing-publication-web-v1/02_close_write_fence.sql",
+      "source_sha256": "9ec08d1471bd678088c37180de0dd289d77a1fa9f9eb8514929e9adcf08167d0",
+      "adaptations": [
+        {
+          "reason": "replace top-level fixture-only installation gate with trusted additive target gate; preserve runtime invariants",
+          "count": 1,
+          "before_sha256": "3518f43a6c5d45a6e159b5772b5c66ae019319e624cae4e979dde85571287198",
+          "after_sha256": "57dc10d667a64ff659592e70ae10922cca10e442607f959bd59a80a6c8841f1f"
+        }
+      ],
+      "selection": "declaration file",
+      "selected_sha256": "9ec08d1471bd678088c37180de0dd289d77a1fa9f9eb8514929e9adcf08167d0",
+      "output_sha256": "d14be04183e4c77024f4925a31464f52abf4ab0753f59b9d13c389393b75d269"
+    },
+    {
+      "path": "supabase/labs/listing-publication-final-v1/01_state.sql",
+      "source_sha256": "dbfffa60751acb18734f5c7a8c6a5b842572cbce71a8b5e6cd0067c2c4799186",
+      "adaptations": [
+        {
+          "reason": "replace top-level fixture-only installation gate with trusted additive target gate; preserve runtime invariants",
+          "count": 1,
+          "before_sha256": "3518f43a6c5d45a6e159b5772b5c66ae019319e624cae4e979dde85571287198",
+          "after_sha256": "57dc10d667a64ff659592e70ae10922cca10e442607f959bd59a80a6c8841f1f"
+        },
+        {
+          "reason": "nonsuperuser PG17 creator retains automatic ADMIN and adds only needed SET/INHERIT membership",
+          "count": 1,
+          "before_sha256": "32bf6cea0359bfc52488dd549b598b61d3cec125660a1334f53f08461b40490e",
+          "after_sha256": "a61c284b9e6b20fcc5f03ec47ca6ff9d8968d6bea3246399b379e4f7839f7ed0"
+        }
+      ],
+      "selection": "declaration file",
+      "selected_sha256": "dbfffa60751acb18734f5c7a8c6a5b842572cbce71a8b5e6cd0067c2c4799186",
+      "output_sha256": "087abfaf5c9269d268428ffd7a53fdc34ddd07ec7b15820ebde534d218ea4bcc"
+    },
+    {
+      "path": "supabase/labs/listing-publication-final-v1/02_listing_writer.generated.sql",
+      "source_sha256": "6625af67124cffe23d16c86d33fe5279116c619f2ea117529b5511645766106e",
+      "adaptations": [
+        {
+          "reason": "use the closed state classifier in the invoker trigger; do not require API SELECT on a private ledger even for legacy DELETE",
+          "count": 1,
+          "before_sha256": "5ee9f55b9b38f39e86d0751855235eed1fa269a8970bca2db36f8aa387daf770",
+          "after_sha256": "38ac3a86fdb53e785f494a342cab47d6021ec4cb88416877141fa4e6e9057f39"
+        },
+        {
+          "reason": "route retained current-actor calls/grants through postgres-owned self-UID wrapper; no managed Auth privilege expansion",
+          "count": 1,
+          "before_sha256": "a9a52710919f609ca6d1d154123662386421f0eb1a70a0776355d8b5d2c6c1ce",
+          "after_sha256": "48c1a9633903e8f91ced00f30ea8fb1e4b3be16d4221d20803edf377bed04faf"
+        }
+      ],
+      "selection": "declaration file",
+      "selected_sha256": "6625af67124cffe23d16c86d33fe5279116c619f2ea117529b5511645766106e",
+      "output_sha256": "9f294a7074ec907f3e1da848df9e73989e0412d35f591cde24eeae7dd53a73d7"
+    },
+    {
+      "path": "supabase/labs/listing-publication-final-v1/03_final_and_delete.sql",
+      "source_sha256": "f58063f55803293ae647033ae666b185794c4c5d8f00cfb5da3b68026a003f15",
+      "adaptations": [
+        {
+          "reason": "route retained current-actor calls/grants through postgres-owned self-UID wrapper; no managed Auth privilege expansion",
+          "count": 1,
+          "before_sha256": "a9a52710919f609ca6d1d154123662386421f0eb1a70a0776355d8b5d2c6c1ce",
+          "after_sha256": "48c1a9633903e8f91ced00f30ea8fb1e4b3be16d4221d20803edf377bed04faf"
+        }
+      ],
+      "selection": "declaration file",
+      "selected_sha256": "f58063f55803293ae647033ae666b185794c4c5d8f00cfb5da3b68026a003f15",
+      "output_sha256": "cba8448a6e83034bc2425ad1b55fb52b56c5c2103e3ca1f5f86d7883ef5baf88"
+    },
+    {
+      "path": "supabase/labs/listing-publication-final-v1/04_guards.sql",
+      "source_sha256": "93191132d611d040059ecf764e9aee9db96b626236326e8140bad9ff412e2d81",
+      "adaptations": [
+        {
+          "reason": "gate managed row mutations reached through old direct SQL writes, while preserving unmanaged legacy writes",
+          "count": 1,
+          "before_sha256": "c941c10ad147146c863b74f1dd618ac44121e484fbf1de6de63e435caafe89a4",
+          "after_sha256": "4e83c548c24d4bfa9ab16ebf95e307bc0f1251f4e6d7ebca89283fd85961eba8"
+        },
+        {
+          "reason": "route retained current-actor calls/grants through postgres-owned self-UID wrapper; no managed Auth privilege expansion",
+          "count": 1,
+          "before_sha256": "a9a52710919f609ca6d1d154123662386421f0eb1a70a0776355d8b5d2c6c1ce",
+          "after_sha256": "48c1a9633903e8f91ced00f30ea8fb1e4b3be16d4221d20803edf377bed04faf"
+        }
+      ],
+      "selection": "declaration file",
+      "selected_sha256": "93191132d611d040059ecf764e9aee9db96b626236326e8140bad9ff412e2d81",
+      "output_sha256": "b4683d78f4e5c29079f5757c5b848f84a01683f1d36bf552de88eac6b8c77ca6"
+    },
+    {
+      "path": "supabase/labs/listing-publication-final-v1/05_cleanup.sql",
+      "source_sha256": "a476b88b67b1bc1ec0df8f8a94fcf545888901ead68b03f0fb251edc0fe85c42",
+      "adaptations": [],
+      "selection": "declaration file",
+      "selected_sha256": "a476b88b67b1bc1ec0df8f8a94fcf545888901ead68b03f0fb251edc0fe85c42",
+      "output_sha256": "a476b88b67b1bc1ec0df8f8a94fcf545888901ead68b03f0fb251edc0fe85c42"
+    },
+    {
+      "path": "supabase/labs/listing-publication-final-v1/06_authority.sql",
+      "source_sha256": "4fa78ca05823a6c75c3cd578d5099e7289df37feb3cebcd4c0c76a26cfb800af",
+      "adaptations": [
+        {
+          "reason": "route retained current-actor calls/grants through postgres-owned self-UID wrapper; no managed Auth privilege expansion",
+          "count": 1,
+          "before_sha256": "a9a52710919f609ca6d1d154123662386421f0eb1a70a0776355d8b5d2c6c1ce",
+          "after_sha256": "48c1a9633903e8f91ced00f30ea8fb1e4b3be16d4221d20803edf377bed04faf"
+        },
+        {
+          "reason": "remove unsupported Auth schema regrant; actor wrapper uses already held postgres access",
+          "count": 1,
+          "before_sha256": "e78db4ab6d7fee7d41264082c40a16bc427999b4e6434bf7594fa43ff82d4550",
+          "after_sha256": "5fda383f8b1623aac1e0b1558fca265667b4d7bea50ae07f316bd2ef94a98693"
+        }
+      ],
+      "selection": "declaration file",
+      "selected_sha256": "4fa78ca05823a6c75c3cd578d5099e7289df37feb3cebcd4c0c76a26cfb800af",
+      "output_sha256": "a45b8dff301f115d4f3edd9cfb078ff3c81fa2ce1fe4ad3947261ed2ec4e5fad"
+    },
+    {
+      "path": "supabase/labs/listing-publication-final-v1/07_budget.generated.sql",
+      "source_sha256": "23f9961381d599f31341ae1717ef3a2d51c298e5b65c54433c71efaf1d8f8309",
+      "adaptations": [],
+      "selection": "declaration file",
+      "selected_sha256": "23f9961381d599f31341ae1717ef3a2d51c298e5b65c54433c71efaf1d8f8309",
+      "output_sha256": "23f9961381d599f31341ae1717ef3a2d51c298e5b65c54433c71efaf1d8f8309"
+    },
+    {
+      "path": "supabase/labs/listing-publication-write-completion-v1/01_web_completion.sql",
+      "source_sha256": "6b35b7de26bdee868373a5f8292e7d9183de85a353a16daf60a415c996f95a36",
+      "adaptations": [
+        {
+          "reason": "replace top-level fixture-only installation gate with trusted additive target gate; preserve runtime invariants",
+          "count": 1,
+          "before_sha256": "3518f43a6c5d45a6e159b5772b5c66ae019319e624cae4e979dde85571287198",
+          "after_sha256": "57dc10d667a64ff659592e70ae10922cca10e442607f959bd59a80a6c8841f1f"
+        }
+      ],
+      "selection": "declaration file",
+      "selected_sha256": "6b35b7de26bdee868373a5f8292e7d9183de85a353a16daf60a415c996f95a36",
+      "output_sha256": "61a0c4177e5e73fe0b83aeddd91baf53a2af62bb284239fbb3af611ef4fbdb39"
+    },
+    {
+      "path": "supabase/labs/listing-publication-write-reconcile-v1/01_reconcile.sql",
+      "source_sha256": "b6496a363598aee8ebc9dede05305aef74e1cbc4d30fc744a4e1814ae9149b7f",
+      "adaptations": [
+        {
+          "reason": "replace top-level fixture-only installation gate with trusted additive target gate; preserve runtime invariants",
+          "count": 1,
+          "before_sha256": "3518f43a6c5d45a6e159b5772b5c66ae019319e624cae4e979dde85571287198",
+          "after_sha256": "57dc10d667a64ff659592e70ae10922cca10e442607f959bd59a80a6c8841f1f"
+        },
+        {
+          "reason": "remove native WEB witness managed-table policy/grant; use the application-owned read-only view",
+          "count": 1,
+          "before_sha256": "c09f4b895f40d0cdcf7edab4171f58e6a1d180b9bc30e05f2edb0cb635b8b405",
+          "after_sha256": "691a66baa749e98ecaaa712f937648e6cfa21a44faff5a35a34aad7825c3a5c3"
+        },
+        {
+          "reason": "route retained WEB metadata witness reads through the private bounded view",
+          "count": 4,
+          "before_sha256": "b3cd15b4a42999959fe7707681bb0a6d4e98b245dd0cbde7d69f43b1af033c33",
+          "after_sha256": "cb24a65c473b932db811b87b579c14dc9bc03cc3a04d3f267ba08bddeca0b301"
+        }
+      ],
+      "selection": "declaration file",
+      "selected_sha256": "b6496a363598aee8ebc9dede05305aef74e1cbc4d30fc744a4e1814ae9149b7f",
+      "output_sha256": "b370c9247e0ad211896f6ae171007213b438e3285e9a89768e4900a8db627d83"
+    },
+    {
+      "path": "supabase/labs/listing-publication-source-no-release-v1/01_source_no_release.sql",
+      "source_sha256": "a42e5549b21eb7905b170ec400b329210262064e4eef94f81aa4befd49652fce",
+      "adaptations": [
+        {
+          "reason": "replace top-level fixture-only installation gate with trusted additive target gate; preserve runtime invariants",
+          "count": 1,
+          "before_sha256": "3518f43a6c5d45a6e159b5772b5c66ae019319e624cae4e979dde85571287198",
+          "after_sha256": "57dc10d667a64ff659592e70ae10922cca10e442607f959bd59a80a6c8841f1f"
+        }
+      ],
+      "selection": "declaration file",
+      "selected_sha256": "a42e5549b21eb7905b170ec400b329210262064e4eef94f81aa4befd49652fce",
+      "output_sha256": "faaccf6eae4ef683ec369e20d9327d01dc7544c3674e4d847a23cd62585c16d3"
+    },
+    {
+      "path": "supabase/labs/listing-publication-source-release-v1/01_release_ledger.sql",
+      "source_sha256": "d739c8de1876ccf71ea396768394a50631eb6fb545260e3477aa83dc51dd119c",
+      "adaptations": [
+        {
+          "reason": "replace top-level fixture-only installation gate with trusted additive target gate; preserve runtime invariants",
+          "count": 1,
+          "before_sha256": "3518f43a6c5d45a6e159b5772b5c66ae019319e624cae4e979dde85571287198",
+          "after_sha256": "57dc10d667a64ff659592e70ae10922cca10e442607f959bd59a80a6c8841f1f"
+        }
+      ],
+      "selection": "declaration file",
+      "selected_sha256": "d739c8de1876ccf71ea396768394a50631eb6fb545260e3477aa83dc51dd119c",
+      "output_sha256": "4dfb795e54f67ada24a4e12c1af4fa505fae337671840de6030ed76e329535f3"
+    },
+    {
+      "path": "supabase/labs/listing-publication-journey-v2/01_isolation_and_status.sql",
+      "source_sha256": "df50ec5d72de3c6b2e04d4bf02ea11ff17dc9ac80997e8eff161f95548b6be83",
+      "adaptations": [
+        {
+          "reason": "select journey declarations after the disposable run marker; create no local marker or readiness RPC",
+          "count": 1,
+          "before_sha256": "a5e315c62944f526e97679bce7b63a60f0d671ddc8eb5673f619876f97097c77",
+          "after_sha256": "3f64dd8c1fc04a23aaf8e2f3a01ea99f097d9e7b4235f32e313e31aef2e26e33"
+        }
+      ],
+      "selection": "declaration file",
+      "selected_sha256": "df50ec5d72de3c6b2e04d4bf02ea11ff17dc9ac80997e8eff161f95548b6be83",
+      "output_sha256": "3d6e66e3ba5b38ce33d520d7ef056881f93ee4743371527e199a7984b0b8cc37"
+    },
+    {
+      "path": "supabase/labs/listing-publication-multipart-v2/01_sessions.sql",
+      "source_sha256": "24feb0462f4f5742974ad8d8c10780eecd98d93348af6426e3fe3f628c354d36",
+      "adaptations": [
+        {
+          "reason": "replace top-level fixture-only installation gate with trusted additive target gate; preserve runtime invariants",
+          "count": 1,
+          "before_sha256": "861d7f858cf20b0d982737d5ea5b20486e8efa450068c09308582b0ccf098e8b",
+          "after_sha256": "57dc10d667a64ff659592e70ae10922cca10e442607f959bd59a80a6c8841f1f"
+        },
+        {
+          "reason": "record the managed protocol contract, never assert a local provider build as hosted fact",
+          "count": 1,
+          "before_sha256": "17ba821a2a8ccc6a0e06cc9cb053fd1917c5c7ae83f35edc37e028a3ae0bf18c",
+          "after_sha256": "3b32b84b8d68902d55fee09fd96927b7f97f91079b396bfd396b8865240aafd7"
+        },
+        {
+          "reason": "remove misleading local provider pin comment",
+          "count": 1,
+          "before_sha256": "b04f78914781ef3ccc54162ac7620c30e1ecb408a04384d348c4b513a0e0e48f",
+          "after_sha256": "6a970316a5bb1ffbd871e0abcb3ced6429574bbbcba45364930658bbdc91141b"
+        },
+        {
+          "reason": "replace two managed-table grants and three read policies with postgres-owned bounded read-only views",
+          "count": 1,
+          "before_sha256": "78a5ef5ae06889a48adbba67d363285e2a0a23719b7a532328ef2fc8c7d1c470",
+          "after_sha256": "ef9db033eb56fbc4a07d7e774a86cbe294a1e005ea324bc543387bf0e5dcfc56"
+        },
+        {
+          "reason": "replace local process/volume oracle with stronger unconditional denial; never fabricate terminal cleanup",
+          "count": 1,
+          "before_sha256": "61af0c6b20cc05f9ad5266cdccfb20ebe95e636771d1235ec5b66cff7ba3edd5",
+          "after_sha256": "b57a4b8d4207a97efb9c6c6203b3054ddc10a93e798b29d5b360e2d15d1a298b"
+        },
+        {
+          "reason": "route only metadata reads through bounded application-owned view: storage.s3_multipart_uploads_parts",
+          "count": 2,
+          "before_sha256": "06c8730a032cb932abce35134c64c6f0850635be2770b5be3141d9ef0c43228d",
+          "after_sha256": "c141b26f35a3e2d396232323a69b64dab533b6b8405c2c6d7f81dfa1d8073cc3"
+        },
+        {
+          "reason": "route only metadata reads through bounded application-owned view: storage.s3_multipart_uploads",
+          "count": 4,
+          "before_sha256": "690f145d551dab09f56af3a82decf3d25b1eec1ca14f3d7872612ca772957157",
+          "after_sha256": "a61e092c11f977262112b75b170ce575abe1f9cc93ffa38c8f99045e2527bfdf"
+        },
+        {
+          "reason": "route only metadata reads through bounded application-owned view: storage.objects",
+          "count": 8,
+          "before_sha256": "b3cd15b4a42999959fe7707681bb0a6d4e98b245dd0cbde7d69f43b1af033c33",
+          "after_sha256": "cb24a65c473b932db811b87b579c14dc9bc03cc3a04d3f267ba08bddeca0b301"
+        },
+        {
+          "reason": "declare bounded views before their first referenced function",
+          "count": 1,
+          "before_sha256": "ef4c4126145201e6ae2fa9dd8ce71e2b482542ce9f40281ff948e1943a5140a1",
+          "after_sha256": "9071e3a8b171d8ea53d02caa4996b86fa1d91436955b46d504bdc7055b484e24"
+        },
+        {
+          "reason": "object receipt rechecks the current hosted actor allowlist: record_listing_multipart_created_v2",
+          "count": 1,
+          "before_sha256": "4690cede6e5bb503620239f0c5a6641f4ee0963c302b71c1bebbb2d854f93713",
+          "after_sha256": "74ed3adba561f05914664b6bdac536e804bb73fea101d23a166ea7a743aa0e93"
+        },
+        {
+          "reason": "object receipt rechecks the current hosted actor allowlist: record_listing_multipart_completed_v2",
+          "count": 1,
+          "before_sha256": "022f4820e875cef7a112cad86b84660176150a5086de0a93dfb24918f77256ad",
+          "after_sha256": "50e25ed9b0cf41b5b2fa91292e4018f5ee2e0d5284bc7ff80b89152b714cb221"
+        },
+        {
+          "reason": "object receipt rechecks the current hosted actor allowlist: record_listing_multipart_problem_v2",
+          "count": 1,
+          "before_sha256": "33a0fa648c02bded2edc4610236a80923ba32fb264ea588b070cc6e31d8e11cb",
+          "after_sha256": "b7e96620c1f7a4b3d89ea15a09a65f81a5df8ea970f69866e8d2a48435cd0ca8"
+        }
+      ],
+      "selection": "declaration file",
+      "selected_sha256": "24feb0462f4f5742974ad8d8c10780eecd98d93348af6426e3fe3f628c354d36",
+      "output_sha256": "90e2dc3af3f79df6a5b72a8f13ce92b8ca9d4a5b5cc77f5b51901745da9637ee"
+    },
+    {
+      "path": "supabase/labs/listing-publication-multipart-v2/03_settlement.sql",
+      "source_sha256": "0e43c7c0d0bc2463a1a3ca2ee14c6570118b909040a81e875c5484438eaeb6fe",
+      "adaptations": [
+        {
+          "reason": "replace top-level fixture-only installation gate with trusted additive target gate; preserve runtime invariants",
+          "count": 1,
+          "before_sha256": "861d7f858cf20b0d982737d5ea5b20486e8efa450068c09308582b0ccf098e8b",
+          "after_sha256": "57dc10d667a64ff659592e70ae10922cca10e442607f959bd59a80a6c8841f1f"
+        },
+        {
+          "reason": "describe hosted held cleanup truthfully",
+          "count": 1,
+          "before_sha256": "7b17d4cc6b4388fa01c8785da1f7ee97ba87870924b4724ca0d01b51f272c4a1",
+          "after_sha256": "9e72b16044c92edbb15752d1386c803f31a1ad62cbf5093c9ac13a48fcc6bdc8"
+        },
+        {
+          "reason": "replace local process/volume oracle with stronger unconditional denial; never fabricate terminal cleanup",
+          "count": 1,
+          "before_sha256": "2599f3d784c9f6b540229834e82de8e27170285f774afa94b6ea8604d6205878",
+          "after_sha256": "47e29047da20b86ab4a924e58b7d5ec45b0b47a4000b9f4f288a2450fa631c79"
+        },
+        {
+          "reason": "route only metadata reads through bounded application-owned view: storage.s3_multipart_uploads",
+          "count": 2,
+          "before_sha256": "690f145d551dab09f56af3a82decf3d25b1eec1ca14f3d7872612ca772957157",
+          "after_sha256": "a61e092c11f977262112b75b170ce575abe1f9cc93ffa38c8f99045e2527bfdf"
+        },
+        {
+          "reason": "route only metadata reads through bounded application-owned view: storage.objects",
+          "count": 2,
+          "before_sha256": "b3cd15b4a42999959fe7707681bb0a6d4e98b245dd0cbde7d69f43b1af033c33",
+          "after_sha256": "cb24a65c473b932db811b87b579c14dc9bc03cc3a04d3f267ba08bddeca0b301"
+        },
+        {
+          "reason": "object receipt rechecks the current hosted actor allowlist: record_listing_multipart_problem_v2",
+          "count": 1,
+          "before_sha256": "0fdf380aeac41edf8c49b5af8c883aa4cde737deee05b106519af902b133fe92",
+          "after_sha256": "95a8cd9f33a4e8b8408d1c0c35b8648ed89a58ecd77600a04d081df7ad5635ce"
+        }
+      ],
+      "selection": "declaration file",
+      "selected_sha256": "0e43c7c0d0bc2463a1a3ca2ee14c6570118b909040a81e875c5484438eaeb6fe",
+      "output_sha256": "f66a6d5a360f90431d962019788c02580316a478b93289f32c4c881232fdd6d9"
+    },
+    {
+      "path": "supabase/labs/listing-public-read-v1/10_price_read_model.sql",
+      "source_sha256": "492a3e132919bf2c3d8d3b2fe450b483f06ae9e52e2fd28de3e19de6e910538c",
+      "adaptations": [],
+      "selection": "one function",
+      "function": "public.listing_price_read_model_v1",
+      "selected_sha256": "435cac6761093c318a11e0b70e0796b9314c75545e842393abe30a27caa4386a",
+      "output_sha256": "435cac6761093c318a11e0b70e0796b9314c75545e842393abe30a27caa4386a"
+    },
+    {
+      "path": "supabase/labs/listing-public-read-v1/11_public_search_v2.sql",
+      "source_sha256": "9e77d22e00fd60ef3c1fe12a0019cc8b45f7d7e96fcde7b09a328d1f992c01f5",
+      "adaptations": [
+        {
+          "reason": "route retained current-actor calls/grants through postgres-owned self-UID wrapper; no managed Auth privilege expansion",
+          "count": 1,
+          "before_sha256": "a9a52710919f609ca6d1d154123662386421f0eb1a70a0776355d8b5d2c6c1ce",
+          "after_sha256": "48c1a9633903e8f91ced00f30ea8fb1e4b3be16d4221d20803edf377bed04faf"
+        }
+      ],
+      "selection": "declaration file",
+      "selected_sha256": "9e77d22e00fd60ef3c1fe12a0019cc8b45f7d7e96fcde7b09a328d1f992c01f5",
+      "output_sha256": "f3129e2595e3f8e288a25c374f3681f0842db5fd50b0dac7f030c584b083bd2c"
+    },
+    {
+      "path": "supabase/labs/listing-public-read-v1/12_public_detail_fields.sql",
+      "source_sha256": "1fec91d4774971b2ecb8c99d9a9124ff1c812137c959d9fc4fc37c420ecc94de",
+      "adaptations": [],
+      "selection": "declaration file",
+      "selected_sha256": "1fec91d4774971b2ecb8c99d9a9124ff1c812137c959d9fc4fc37c420ecc94de",
+      "output_sha256": "1fec91d4774971b2ecb8c99d9a9124ff1c812137c959d9fc4fc37c420ecc94de"
+    },
+    {
+      "path": "supabase/labs/listing-public-read-v1/13_public_listing_detail.sql",
+      "source_sha256": "da11f9bf41af89c7dcff99b3407d98fa3956c49ae64529efe0b95ab1515d0aa8",
+      "adaptations": [
+        {
+          "reason": "route retained current-actor calls/grants through postgres-owned self-UID wrapper; no managed Auth privilege expansion",
+          "count": 1,
+          "before_sha256": "a9a52710919f609ca6d1d154123662386421f0eb1a70a0776355d8b5d2c6c1ce",
+          "after_sha256": "48c1a9633903e8f91ced00f30ea8fb1e4b3be16d4221d20803edf377bed04faf"
+        }
+      ],
+      "selection": "declaration file",
+      "selected_sha256": "da11f9bf41af89c7dcff99b3407d98fa3956c49ae64529efe0b95ab1515d0aa8",
+      "output_sha256": "c2f82d318b3c1f5ec9f00de081c232be8ba232d12f83af8556c38779356bab00"
+    },
+    {
+      "path": "supabase/labs/listing-public-read-v1/14_public_profile_listings.sql",
+      "source_sha256": "ac70725a84268eaf6b4d652e13e502ebdb2686199e55044753f4f46aae121c1e",
+      "adaptations": [
+        {
+          "reason": "route retained current-actor calls/grants through postgres-owned self-UID wrapper; no managed Auth privilege expansion",
+          "count": 1,
+          "before_sha256": "a9a52710919f609ca6d1d154123662386421f0eb1a70a0776355d8b5d2c6c1ce",
+          "after_sha256": "48c1a9633903e8f91ced00f30ea8fb1e4b3be16d4221d20803edf377bed04faf"
+        }
+      ],
+      "selection": "declaration file",
+      "selected_sha256": "ac70725a84268eaf6b4d652e13e502ebdb2686199e55044753f4f46aae121c1e",
+      "output_sha256": "155c245be426d5194d945fb0196c2ff1455a3ff1caecf823b1016bf19221a915"
+    },
+    {
+      "path": "supabase/labs/listing-public-read-v1/15_public_profile_services.sql",
+      "source_sha256": "4028b01fb0d752ae0cd0b95db03126dcb9c8e95d72f2470f03acb2bc987dabe8",
+      "adaptations": [],
+      "selection": "declaration file",
+      "selected_sha256": "4028b01fb0d752ae0cd0b95db03126dcb9c8e95d72f2470f03acb2bc987dabe8",
+      "output_sha256": "4028b01fb0d752ae0cd0b95db03126dcb9c8e95d72f2470f03acb2bc987dabe8"
+    },
+    {
+      "path": "supabase/labs/listing-public-read-v1/16_public_profile_showcases.sql",
+      "source_sha256": "7ece3b3181fb65dd91dcc8dd22a5721e7a73882182b133b832cb24d1713a2b6b",
+      "adaptations": [],
+      "selection": "declaration file",
+      "selected_sha256": "7ece3b3181fb65dd91dcc8dd22a5721e7a73882182b133b832cb24d1713a2b6b",
+      "output_sha256": "7ece3b3181fb65dd91dcc8dd22a5721e7a73882182b133b832cb24d1713a2b6b"
+    },
+    {
+      "path": "supabase/releases/listing-price-v1/server-composition.test.generated.sql",
+      "source_sha256": "4be742d6b813f530c6fc5abfa488bbd7d775b8d70897a862f56eed0c1cf61f6d",
+      "adaptations": [
+        {
+          "reason": "gate independently of client/runtime flags before locking the existing actor",
+          "count": 1,
+          "before_sha256": "93d9f1c8e9d3eeb465b048901b8f9cf4f44c7e1e98cd812091059070d8732677",
+          "after_sha256": "5e80d8120e1330d33d6e0b223801998f8ba60d0562e7a6b42fd4b30762c7129e"
+        },
+        {
+          "reason": "route retained current-actor calls/grants through postgres-owned self-UID wrapper; no managed Auth privilege expansion",
+          "count": 1,
+          "before_sha256": "a9a52710919f609ca6d1d154123662386421f0eb1a70a0776355d8b5d2c6c1ce",
+          "after_sha256": "48c1a9633903e8f91ced00f30ea8fb1e4b3be16d4221d20803edf377bed04faf"
+        }
+      ],
+      "selection": "one function",
+      "function": "public.lock_my_listing_basics_v1",
+      "selected_sha256": "93d9f1c8e9d3eeb465b048901b8f9cf4f44c7e1e98cd812091059070d8732677",
+      "output_sha256": "74c61c570f4505d510836835c1e7264bcca9ad24047a4193a32e54ca0eecca67"
+    },
+    {
+      "path": "supabase/releases/listing-price-v1/server-composition.test.generated.sql",
+      "source_sha256": "4be742d6b813f530c6fc5abfa488bbd7d775b8d70897a862f56eed0c1cf61f6d",
+      "adaptations": [],
+      "selection": "one function",
+      "function": "public.set_my_listing_price_core_v1",
+      "selected_sha256": "5bd34e1e4ed274186f3f10254132afb18a1d1328cb81d92d6acc73852bcb10ff",
+      "output_sha256": "5bd34e1e4ed274186f3f10254132afb18a1d1328cb81d92d6acc73852bcb10ff"
+    },
+    {
+      "path": "supabase/labs/listing-price-integration-v1/05_owner_basics_atomic.sql",
+      "source_sha256": "5d052e95e3bfa4d1d9bb5cb3f62ae66792a5bdaac3651b5303796d57b2642ccc",
+      "adaptations": [],
+      "selection": "one function",
+      "function": "public.get_my_listing_basics_v1",
+      "selected_sha256": "35c512f3a9e0deb2bcf154659c9ddfa538d0e23f783c2ee7e82839df023f7b10",
+      "output_sha256": "35c512f3a9e0deb2bcf154659c9ddfa538d0e23f783c2ee7e82839df023f7b10"
+    },
+    {
+      "path": "supabase/labs/listing-price-integration-v1/05_owner_basics_atomic.sql",
+      "source_sha256": "5d052e95e3bfa4d1d9bb5cb3f62ae66792a5bdaac3651b5303796d57b2642ccc",
+      "adaptations": [
+        {
+          "reason": "route retained current-actor calls/grants through postgres-owned self-UID wrapper; no managed Auth privilege expansion",
+          "count": 2,
+          "before_sha256": "a9a52710919f609ca6d1d154123662386421f0eb1a70a0776355d8b5d2c6c1ce",
+          "after_sha256": "48c1a9633903e8f91ced00f30ea8fb1e4b3be16d4221d20803edf377bed04faf"
+        }
+      ],
+      "selection": "one function",
+      "function": "public.save_my_listing_basics_v1",
+      "selected_sha256": "0d2493a1ef89d93b88165ad4c32e81fcd6d03f0216fad47e6d378caecdc0d1ea",
+      "output_sha256": "83ffc08f2c837ecea40784aebf945eab5fc38c975ea418ab7990ca1dfcc38ea4"
+    },
+    {
+      "path": "supabase/contracts/listing_edit_api_v1.sql",
+      "source_sha256": "693bdb144321d024f8493e35169fe6a54db8560b95b44ad3691031f05c38ab9f",
+      "adaptations": [
+        {
+          "reason": "route retained current-actor calls/grants through postgres-owned self-UID wrapper; no managed Auth privilege expansion",
+          "count": 1,
+          "before_sha256": "a9a52710919f609ca6d1d154123662386421f0eb1a70a0776355d8b5d2c6c1ce",
+          "after_sha256": "48c1a9633903e8f91ced00f30ea8fb1e4b3be16d4221d20803edf377bed04faf"
+        }
+      ],
+      "selection": "one function",
+      "function": "public.get_my_listing_edit_v1",
+      "selected_sha256": "07e7ad3e5d40ad5df831af4a0a6962ee0ebed130c463ae912a0ff6f101cd59bd",
+      "output_sha256": "20a8cd181b29d2f7eec96714f11474819ca9ef600e9a6d917c976283105006a3"
+    },
+    {
+      "path": "supabase/contracts/listing_edit_api_v1.sql",
+      "source_sha256": "693bdb144321d024f8493e35169fe6a54db8560b95b44ad3691031f05c38ab9f",
+      "adaptations": [
+        {
+          "reason": "route retained current-actor calls/grants through postgres-owned self-UID wrapper; no managed Auth privilege expansion",
+          "count": 1,
+          "before_sha256": "a9a52710919f609ca6d1d154123662386421f0eb1a70a0776355d8b5d2c6c1ce",
+          "after_sha256": "48c1a9633903e8f91ced00f30ea8fb1e4b3be16d4221d20803edf377bed04faf"
+        }
+      ],
+      "selection": "one function",
+      "function": "public.save_my_listing_edit_v1",
+      "selected_sha256": "313a5f2ab803d2436e9b0f59dc279e1a56d3df06b876cb71ffef0aaed594aff0",
+      "output_sha256": "af48d5809bb9f3fc163b45a86b2b3b72e988c1ac8b670ad7497852ab01b2bde2"
+    },
+    {
+      "path": "supabase/labs/listing-owner-read-v1/15_owner_money_models.sql",
+      "source_sha256": "c3a1be86febe7ee209e95359b802abb0eb3e0d14116b18ea5d81c876707a1052",
+      "adaptations": [],
+      "selection": "one function",
+      "function": "public.project_horse_wanted_owner_summary_v2",
+      "selected_sha256": "692e8e1fe6273d0f1c37c61064bb20afd6ec91dc736d87b6378bbd1f6a05e1d5",
+      "output_sha256": "692e8e1fe6273d0f1c37c61064bb20afd6ec91dc736d87b6378bbd1f6a05e1d5"
+    },
+    {
+      "path": "supabase/labs/listing-owner-read-v1/15_owner_money_models.sql",
+      "source_sha256": "c3a1be86febe7ee209e95359b802abb0eb3e0d14116b18ea5d81c876707a1052",
+      "adaptations": [],
+      "selection": "one function",
+      "function": "public.horse_owner_price_read_v1",
+      "selected_sha256": "066ecc4860cba01e2e8a697679848335af9a1c9efe13a68d8cedd05f1d4a24d3",
+      "output_sha256": "066ecc4860cba01e2e8a697679848335af9a1c9efe13a68d8cedd05f1d4a24d3"
+    },
+    {
+      "path": "supabase/labs/listing-owner-read-v1/16_owner_marketplace_read_v3.sql",
+      "source_sha256": "43ae745d6d8922dbbd912766460a0138a5a414667abe1d85b551791dc83feedb",
+      "adaptations": [
+        {
+          "reason": "route retained current-actor calls/grants through postgres-owned self-UID wrapper; no managed Auth privilege expansion",
+          "count": 1,
+          "before_sha256": "a9a52710919f609ca6d1d154123662386421f0eb1a70a0776355d8b5d2c6c1ce",
+          "after_sha256": "48c1a9633903e8f91ced00f30ea8fb1e4b3be16d4221d20803edf377bed04faf"
+        }
+      ],
+      "selection": "one function",
+      "function": "public.get_my_marketplace_items_v3",
+      "selected_sha256": "8bc6c0c9c29bf2b321e9d43d66b74cce5a408e32a5d26f92fe99900eaaff0927",
+      "output_sha256": "754c02ce1610f5cd49b92dc1dc3e902987fd5206bb11906587f35d80e2fd0d12"
+    },
+    {
+      "path": "supabase/releases/listing-price-v1/writer-authority.sql",
+      "source_sha256": "7a7a4cd09a7dc0b5f9a87a0efb58fca90a49ac1012070a03bed0fed884de4061",
+      "adaptations": [
+        {
+          "reason": "preserve authority without recreating already declared restricted writer",
+          "count": 1,
+          "before_sha256": "2ed45287b9aca6f1538f97372fb9fb8548c24f700f5360bec1e9c384cd284601",
+          "after_sha256": "0ba6ea56b3f77f31366fa1cbe53aaf80a3f2987a7ef396c19e4173b8a0771737"
+        },
+        {
+          "reason": "do not grant ADMIN back to its grantor; preserve creator grant and SET/INHERIT established once",
+          "count": 1,
+          "before_sha256": "81d5614a9d715ab07a92f9dfc46722034a61ab6ebc17f60b7bdf4fbe257a17d3",
+          "after_sha256": "aca6d1080bfa4206e074e9f7e06074354e461e285520607978d4abd1dd71fb41"
+        }
+      ],
+      "selection": "declaration file",
+      "selected_sha256": "7a7a4cd09a7dc0b5f9a87a0efb58fca90a49ac1012070a03bed0fed884de4061",
+      "output_sha256": "01ba350dfd9cbbdfeac4f7311cae46c7df9c9fbf83c62b5eceb61b530773db70"
+    },
+    {
+      "path": "supabase/labs/listing-publication-journey-v2/02_owner_surfaces.sql",
+      "source_sha256": "918bd0c08fcbace9dd14d066df43b745a3990c5e00e92192d012efd95a03ba81",
+      "adaptations": [
+        {
+          "reason": "replace top-level fixture-only installation gate with trusted additive target gate; preserve runtime invariants",
+          "count": 1,
+          "before_sha256": "e2bd75ccb4bd293fc4696eba0e2200f78e1b9e71dfd4dd8b48661833b3501b54",
+          "after_sha256": "57dc10d667a64ff659592e70ae10922cca10e442607f959bd59a80a6c8841f1f"
+        }
+      ],
+      "selection": "declaration file",
+      "selected_sha256": "918bd0c08fcbace9dd14d066df43b745a3990c5e00e92192d012efd95a03ba81",
+      "output_sha256": "d9c190de8f03e59c0392d87fa0e3831d97b569a2fccab23566894d3bfa089096"
+    },
+    {
+      "path": "supabase/labs/listing-contact-integration-v1/01_contact.sql",
+      "source_sha256": "6b24aa74ff6b60d9ca3b677a74740a5e043043908e1fa0818b4af6910742c08c",
+      "adaptations": [
+        {
+          "reason": "replace top-level fixture-only installation gate with trusted additive target gate; preserve runtime invariants",
+          "count": 1,
+          "before_sha256": "a3422295c18ab445e3e55bc89895d9379cb2f4286cdc5bf67cda6b420b828b6e",
+          "after_sha256": "9f528b92c7e75185da2cfed259a6897c5fe126ee76c11ed72a6b28b1d184f88c"
+        },
+        {
+          "reason": "make contact writer attributes and needed SET/INHERIT membership explicit while retaining PG17 automatic ADMIN",
+          "count": 1,
+          "before_sha256": "3bc0633f2b173216a25f04b89d365d18f9cc6e72c8d1b276f2db2167a7f3d4af",
+          "after_sha256": "a20228056225b21dc48d51c51239c11b0ef446bf93c4f888df5f576ce3947a84"
+        },
+        {
+          "reason": "route retained current-actor calls/grants through postgres-owned self-UID wrapper; no managed Auth privilege expansion",
+          "count": 3,
+          "before_sha256": "a9a52710919f609ca6d1d154123662386421f0eb1a70a0776355d8b5d2c6c1ce",
+          "after_sha256": "48c1a9633903e8f91ced00f30ea8fb1e4b3be16d4221d20803edf377bed04faf"
+        },
+        {
+          "reason": "remove unsupported Auth schema regrant; actor wrapper uses already held postgres access",
+          "count": 1,
+          "before_sha256": "01755be05bc5e6900c6902c00c1885a4100541b9d8b5a7d1b00f3c4669b66f66",
+          "after_sha256": "be23e9059198e22325aa559cc61722b5ac7a2fad9b28c16ac915bcc17338845f"
+        }
+      ],
+      "selection": "declaration file",
+      "selected_sha256": "6b24aa74ff6b60d9ca3b677a74740a5e043043908e1fa0818b4af6910742c08c",
+      "output_sha256": "024e9fc2ad26262c1c1f6f3b3e0359af0cd1d85e2775bf086605ef8573108990"
+    },
+    {
+      "path": "supabase/labs/listing-contact-integration-v1/02_read.sql",
+      "source_sha256": "a5a646c36e5969f29352b438c6c513fbb71159e4c903c6d4d01dec7cce0e7123",
+      "adaptations": [
+        {
+          "reason": "replace top-level fixture-only installation gate with trusted additive target gate; preserve runtime invariants",
+          "count": 1,
+          "before_sha256": "ebe0071db045789364e1fe57541780e4eaa5626dda111de08eb3171efb2e2cf4",
+          "after_sha256": "4f0fdcbbbc692880b00dd5228ca256b00762fab4fc0c3f29b9e06581e3e650b7"
+        }
+      ],
+      "selection": "declaration file",
+      "selected_sha256": "a5a646c36e5969f29352b438c6c513fbb71159e4c903c6d4d01dec7cce0e7123",
+      "output_sha256": "a2491d80facf4a322ffc42dd414f43eda6773be7cf950686b57722f1985d24a6"
+    }
+  ],
+  "components": [
+    {
+      "path": "00_preconditions.sql",
+      "sha256": "69c6005ed959afeb22bd1db3e597f23d17e7dfe86c968a35f512f94f34c995c8"
+    },
+    {
+      "path": "10_price_core.sql",
+      "sha256": "9f843033bed721ab73d8cb01d3750e4dacc417dc0ddf84b92c9845745bb75dad"
+    },
+    {
+      "path": "20_publication_core.sql",
+      "sha256": "f1c56c6ba381ceb5ab1d120092f676964762829ad63c5201a6c6b809c419f062"
+    },
+    {
+      "path": "30_multipart_and_journey.sql",
+      "sha256": "d0f8c44a557c1b03df8ceb23c5069cf94a8560a2e3faaa3b0a56d701d0858765"
+    },
+    {
+      "path": "40_read_models_and_owner.sql",
+      "sha256": "d19bf23e0746e8e6ba6750f4c235135fbaa9cff3b3f184e05a87433c10eaad78"
+    },
+    {
+      "path": "50_storage_authority.sql",
+      "sha256": "7e92d34dc4979ce38c9328168ab527add01e4a23299f6cb0f1225eefb703b510"
+    },
+    {
+      "path": "60_preview_authority.sql",
+      "sha256": "bee78747b8932504c6960b9dba9b5b6673d06c5876dc76508b2322e48f6789bb"
+    }
+  ],
+  "release_sha256": "974dd6acb246b275acb593688aa14449cd42e80939101086d742ee5c4c5a4c3e",
+  "execution": "composition only; no database, process, provider, network or fixture execution"
+}

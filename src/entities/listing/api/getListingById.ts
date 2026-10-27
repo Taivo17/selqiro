@@ -1,4 +1,7 @@
 import { supabaseBrowserClient } from "../../../shared/supabase/browserClient";
+import { v2IntegrationEnabled } from "../../../shared/config/v2Integration";
+import { parsePublicDetailV1 } from "../model/publicRead/publicDetailV1";
+import { publicDetail } from "../model/publicRead/presentation";
 import type { ProductListingDetail } from "../model/types";
 import { mapListingDetailRow, type MarketplaceListingRow } from "./mappers";
 
@@ -360,6 +363,11 @@ async function enrichSellerFromLegacyProfile(
 export async function getListingById(
   id: string
 ): Promise<ProductListingDetail | null> {
+  if (v2IntegrationEnabled()) {
+    const {data, error} = await supabaseBrowserClient.rpc("get_public_listing_detail_v1", {p_listing_id: id});
+    if (error) throw new Error("Kuulutust ei saanud laadida.");
+    const item = parsePublicDetailV1(data, id).item; return item ? publicDetail(item) : null;
+  }
   if (!id) {
     return null;
   }

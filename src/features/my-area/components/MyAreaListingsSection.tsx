@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
+import {v2IntegrationEnabled} from "../../../shared/config/v2Integration";
 import { useMyAreaListings, type MyAreaListingsStatusFilter } from "../model/useMyAreaListings";
 import { useMyAreaStoreCategories } from "../model/useMyAreaStoreCategories";
 import { useListingActivityClock } from "../model/useListingActivityClock";
@@ -8,19 +10,20 @@ import StoreCategoryHierarchyFilter from "../../store-category-filter/components
 import MyAreaHorseOfferRow from "./MyAreaHorseOfferRow";
 import MyAreaListingRow from "./MyAreaListingRow";
 import ListingRenewalConfirmation from "./ListingRenewalConfirmation";
+import PublicationCleanupStatus from "./PublicationCleanupStatus";
 
 const LISTING_PREVIEW_LIMIT = 5;
-const LISTING_MANAGEMENT_LIMIT = 500;
 const ALL_CATEGORIES = "all";
 const control = "min-h-11 min-w-0 rounded-full border border-neutral-200 bg-white px-4 text-sm font-semibold outline-none focus:ring-2 focus:ring-neutral-400 disabled:opacity-50";
 
 export default function MyAreaListingsSection() {
+  const listingManagementLimit = v2IntegrationEnabled() ? 100 : 500;
   const [searchInput, setSearchInput] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<MyAreaListingsStatusFilter>("all");
   const [selectedCategoryId, setSelectedCategoryId] = useState(ALL_CATEGORIES);
   const [showAll, setShowAll] = useState(false);
-  const state = useMyAreaListings({ limit: LISTING_MANAGEMENT_LIMIT, offset: 0, statusFilter,
+  const state = useMyAreaListings({ limit: listingManagementLimit, offset: 0, statusFilter,
     searchQuery: debouncedSearch, storeCategoryFilter: selectedCategoryId === ALL_CATEGORIES ? null : selectedCategoryId });
   const { listings, loading, error, session } = state;
   const { categories, loading: categoriesLoading, error: categoriesError } = useMyAreaStoreCategories();
@@ -45,7 +48,7 @@ export default function MyAreaListingsSection() {
   const busy = state.busyKey !== null;
   const disabled = busy || loading || editingSearch || state.needsReload || state.confirmation !== null;
   const visible = showAll ? listings : listings.slice(0, LISTING_PREVIEW_LIMIT);
-  const capped = listings.length >= LISTING_MANAGEMENT_LIMIT;
+  const capped = listings.length >= listingManagementLimit;
   const filtersActive = !!searchInput.trim() || statusFilter !== "all" || selectedCategoryId !== ALL_CATEGORIES;
   function clearFilters() {
     setSearchInput(""); setDebouncedSearch(""); setStatusFilter("all"); setSelectedCategoryId(ALL_CATEGORIES); setShowAll(false);
@@ -53,7 +56,8 @@ export default function MyAreaListingsSection() {
   return <section className="min-w-0 overflow-hidden rounded-[30px] border border-black/5 bg-white p-4 shadow-sm sm:p-6">
     <div className="mb-5 flex flex-col items-start gap-3 sm:flex-row sm:items-end sm:justify-between">
       <div><p className="text-xs font-bold uppercase tracking-[0.24em] text-neutral-400">Kuulutused</p>
-        <h2 className="mt-2 text-2xl font-black">Sinu kuulutused</h2></div>
+        <h2 className="mt-2 text-2xl font-black">Sinu kuulutused</h2>
+        {v2IntegrationEnabled() ? <Link href="/v2/messages" className="mt-2 inline-block text-sm font-bold underline">Ava vestlused</Link> : null}</div>
       {listings.length > LISTING_PREVIEW_LIMIT ? <button type="button" disabled={busy} onClick={() => setShowAll(v => !v)}
         className="min-h-11 w-full rounded-full border border-neutral-200 px-4 py-2 text-sm font-bold sm:w-auto">
         {showAll ? "Näita vähem" : capped ? `Näita laaditud (${listings.length})` : `Vaata kõiki (${listings.length})`}
@@ -106,11 +110,12 @@ export default function MyAreaListingsSection() {
       {visible.map(listing => listing.contentType === "horse_offer"
         ? <MyAreaHorseOfferRow key={listing.key} item={listing} />
         : <MyAreaListingRow key={listing.key} listing={listing} now={now} busy={state.busyKey === listing.key}
-            disabled={disabled} activeIdentityId={state.actor?.identityId ?? null}
+            disabled={disabled} activeIdentityId={state.actor?.identityId ?? null} ownerActor={state.actor}
             onRenew={() => session.requestRenewal(listing.key)}
             onStatus={status => { void session.changeStatus(listing.key, status); }} />)}
     </div> : null}
     {state.confirmation ? <ListingRenewalConfirmation confirmation={state.confirmation} busy={busy}
       onCancel={() => session.cancelRenewal()} onConfirm={() => { void session.confirmRenewal(state.confirmation); }} /> : null}
+    {v2IntegrationEnabled() && state.actor ? <PublicationCleanupStatus actor={state.actor} /> : null}
   </section>;
 }

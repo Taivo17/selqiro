@@ -1,0 +1,5 @@
+{
+  "source": "supabase/migrations/20260722173530_baseline_20260722.sql",
+  "sha256": "7ca065f92f01c0f38ada5f5a50d2a0fc5b716f5291d1525d398023b7db59da3f",
+  "note": "Exact baseline CREATE declarations, identity columns, constraints and policies; baseline RLS exercised against managed protections. Only the new disposable database."
+}

@@ -1,4 +1,5 @@
 import type { OwnerWantedSummary } from "./ownerWantedSummary";
+import type { ListingPriceDisplay } from "../../listing/model/priceDisplay";
 
 export const MARKETPLACE_ITEM_CONTENT_TYPES = [
   "listing",
@@ -54,6 +55,7 @@ export type OwnerListingMarketplaceItem =
     contentType: "listing";
     /** Exact source amount for display; legacy priceAmount remains compatible. */
     priceAmountText?: string | null;
+    displayPrice?: ListingPriceDisplay;
   };
 
 export type OwnerHorseOfferMarketplaceItem =

@@ -4,11 +4,18 @@ export type UploadFetch = (url: string, init: RequestInit) => Promise<Response>;
  * Aborting local I/O is NOT proof of rollback, missing object or revoked capability. */
 export async function privateUploadHttp(fetcher: UploadFetch, url: string, init: RequestInit, options: {
   signal?: AbortSignal; timeoutMs?: number; responseBytes?: number;
+  /** Explicit structured-error opt-in. The caller must allowlist safe fields;
+   * the same byte/deadline/JSON limits apply and errors never become exceptions. */
+  readErrorStatuses?: readonly number[];
 } = {}): Promise<{ status: number; json: unknown }> {
   const timeoutMs = options.timeoutMs ?? PRIVATE_UPLOAD.rpcTimeoutMs;
   const max = options.responseBytes ?? PRIVATE_UPLOAD.maxResponseBytes;
   if (!Number.isSafeInteger(timeoutMs) || timeoutMs < 1 || timeoutMs > PRIVATE_UPLOAD.uploadTimeoutMs ||
       !Number.isSafeInteger(max) || max < 1 || max > 65536) return uploadFail("configuration");
+  if (options.readErrorStatuses !== undefined && (!Array.isArray(options.readErrorStatuses)
+      || options.readErrorStatuses.length > 8 || options.readErrorStatuses.some(status =>
+        !Number.isInteger(status) || status < 400 || status > 599))) return uploadFail("configuration");
+  const readErrors = new Set(options.readErrorStatuses ?? []);
   if (options.signal?.aborted) return uploadFail("aborted");
   const controller = new AbortController();
   let timer: ReturnType<typeof setTimeout> | undefined;
@@ -24,7 +31,7 @@ export async function privateUploadHttp(fetcher: UploadFetch, url: string, init:
       signal: controller.signal, redirect: "error", cache: "no-store", credentials: "omit", referrerPolicy: "no-referrer" });
     if (controller.signal.aborted) { void res.body?.cancel().catch(() => {}); return uploadFail("outcome_unknown"); }
     if (res.redirected || !Number.isInteger(res.status) || res.status < 100 || res.status > 599) return uploadFail("invalid_response");
-    if (res.status < 200 || res.status >= 300) {
+    if ((res.status < 200 || res.status >= 300) && !readErrors.has(res.status)) {
       void res.body?.cancel().catch(() => {}); return { status: res.status, json: null };
     }
     const declared = res.headers.get("content-length");

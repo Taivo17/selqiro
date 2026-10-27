@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { useOrdinaryPublication } from "../model/useOrdinaryPublication";
+import OrdinaryPublicationAction from "./OrdinaryPublicationAction";
 import OrdinaryListingFields from "./OrdinaryListingFields";
 import { createOrdinaryListingFieldState } from "../model/ordinaryListingFields";
 import ListingCreateContentTypeSelector from "./ListingCreateContentTypeSelector";
@@ -58,6 +60,8 @@ import ListingCreateTextFields from "./ListingCreateTextFields";
 import ListingCreateImageFields from "./ListingCreateImageFields";
 
 export default function ListingCreateForm({ userId }: { userId: string }) {
+  const publication = useOrdinaryPublication(userId);
+  const [publicationSubmitting, setPublicationSubmitting] = useState(false);
   // Kept under the existing user-keyed form. Switching type does not submit or copy
   // ordinary details into a horse offer; all new values stay local in this step.
   const [ordinaryFields, setOrdinaryFields] = useState(createOrdinaryListingFieldState);
@@ -216,11 +220,14 @@ export default function ListingCreateForm({ userId }: { userId: string }) {
           <p className="mt-5 rounded-2xl border border-amber-200 bg-white/70 px-4 py-3 text-xs leading-5 text-amber-950/75">
             {horseMode
               ? "Hobusevormi teksti ja andmeid saab soovi korral salvestada privaatse mustandina. Pilte veel ei laadita üles ning kuulutust siin veel ei avaldata."
-              : "Tavakuulutuse andmeid saab siin täita ja pilte eelvaadata. Avaldamine pole veel ühendatud; sisestus jääb ainult avatud vormi ega salvestu lehe värskendamisel."}
+              : publication.enabled
+                ? "Täida kuulutuse andmed, vali pildid ja kinnita avaldamine. Pildid kontrollitakse enne kuulutuse avalikku nähtavust."
+                : "Tavakuulutuse andmeid saab siin täita ja pilte eelvaadata. Avaldamine pole veel ühendatud; sisestus jääb ainult avatud vormi ega salvestu lehe värskendamisel."}
           </p>
         </div>
       </section>
 
+      <fieldset className="min-w-0 space-y-6" disabled={!horseMode && publication.enabled && (publicationSubmitting || publication.view.phase !== "editing")}>
       <ListingCreateContentTypeSelector
         value={contentType}
         onChange={setContentType}
@@ -245,7 +252,7 @@ export default function ListingCreateForm({ userId }: { userId: string }) {
       <ListingCreateTextFields title={title} description={description}
         setTitle={setTitle} setDescription={setDescription} textGuidance={textGuidance} />
 
-      <ListingCreateImageFields files={files} setFiles={setFiles} />
+      {(!publication.enabled || horseMode || publication.view.phase === "editing") ? <ListingCreateImageFields files={files} setFiles={setFiles} /> : null}
 
       {horseMode ? (
         <ListingCreateAiAnalysisCard
@@ -400,6 +407,14 @@ export default function ListingCreateForm({ userId }: { userId: string }) {
           }
         />
       ) : null}
+      </fieldset>
+      {!horseMode && publication.enabled && ["needs_files", "resume"].includes(publication.view.phase)
+        ? <fieldset disabled={publicationSubmitting}><ListingCreateImageFields files={files} setFiles={setFiles} /></fieldset> : null}
+      {!horseMode ? <OrdinaryPublicationAction controller={publication} fields={ordinaryFields} title={title.value}
+        description={description.value} files={files} onSubmittingChange={setPublicationSubmitting} onNew={() => {
+          setFiles([]); setTitle(createListingCreateTextField()); setDescription(createListingCreateTextField());
+          setOrdinaryFields(createOrdinaryListingFieldState());
+        }} /> : null}
     </div>
   );
 }

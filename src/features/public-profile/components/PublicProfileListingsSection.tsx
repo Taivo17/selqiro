@@ -319,7 +319,8 @@ export default function PublicProfileListingsSection({
     error,
   } = usePublicProfileListings(
     profile,
-    storeCategoryScopeIds
+    storeCategoryScopeIds,
+    selectedCategoryId
   );
 
   /*

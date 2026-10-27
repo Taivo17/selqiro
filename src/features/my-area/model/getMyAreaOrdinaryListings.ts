@@ -212,9 +212,9 @@ function toMyIdentityListingCard(
       normalizeOptionalText(
         item.description
       ),
-    ...getListingPriceDisplay({ price: item.priceText,
+      ...(item.displayPrice ?? getListingPriceDisplay({ price: item.priceText,
       priceAmount: item.priceAmountText === undefined ? item.priceAmount : item.priceAmountText,
-      currency: item.currency }),
+        currency: item.currency })),
     priceAmount: item.priceAmount,
     currency: item.currency,
     imageUrl: item.imageUrl,

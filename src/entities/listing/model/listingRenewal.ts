@@ -1,7 +1,7 @@
 import { isRenewableListingId, listingDeadlineMicros } from "./listingActivity";
 
 export type ListingActivityActor = { userId: string; identityId: string };
-export type RenewListingActivityInput = { listingId: string; expectedActiveUntil: string | null };
+export type RenewListingActivityInput = { listingId: string; expectedActiveUntil: string | null; expectedActor?: ListingActivityActor };
 export type RenewListingActivityResult = { listingId: string; status: "active"; activeUntil: string | null; changed: boolean };
 export type ListingRenewalFailure = "invalid" | "conflict" | "forbidden" | "status" | "uncertain";
 

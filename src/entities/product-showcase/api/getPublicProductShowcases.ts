@@ -6,6 +6,11 @@ import {
   type PublicProductShowcase,
   type PublicProductShowcaseImage,
 } from "../model/public";
+import { v2IntegrationEnabled } from "../../../shared/config/v2Integration";
+import {
+  parsePublicProfileShowcasesV1,
+  publicProfileOfferingsRequest,
+} from "../../profile/model/publicProfileOfferingsV1";
 
 const UUID_PATTERN =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -340,6 +345,7 @@ getPublicProductShowcases(input: {
     | string
     | null
     | undefined;
+  sellerSlug?: string | null;
   limit?: number;
 }): Promise<
   PublicProductShowcase[]
@@ -355,6 +361,22 @@ getPublicProductShowcases(input: {
 
   const limit =
     normalizeLimit(input.limit);
+
+  if (v2IntegrationEnabled()) {
+    const request = publicProfileOfferingsRequest({
+      identityId, sellerSlug: input.sellerSlug, limit,
+    });
+    try {
+      const { data, error } = await supabaseBrowserClient.rpc("get_public_profile_showcases_v1", {
+        p_seller_slug: request.sellerSlug,
+        p_result_limit: request.limit,
+      });
+      if (error) throw error;
+      return parsePublicProfileShowcasesV1(data, request);
+    } catch {
+      throw new Error("Avaliku profiili tootenäidiseid ei saanud laadida. Proovi uuesti.");
+    }
+  }
 
   const requestedAt =
     Date.now();

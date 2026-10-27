@@ -1,12 +1,22 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { supabase } from "../../lib/supabase";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
+import { v2NavigationContextEnabled } from "../../src/shared/config/v2Integration";
+import { publicV2Href, safeInternalHref, v2ReturnHref } from "../../src/features/v2-shell/model/navigationContext";
 
-export default function AuthPage() {
+function postLoginHref(): string {
+  const next = new URLSearchParams(window.location.search).get("next");
+  return safeInternalHref(next) || "/my-page";
+}
+
+function AuthForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const v2Return = v2NavigationContextEnabled() ? v2ReturnHref(searchParams.get("next")) : null;
+  const browseHref = v2Return ? publicV2Href(v2Return) || "/v2" : "/";
 
   const [email, setEmail] = useState("");
   const [password, setParool] = useState("");
@@ -55,7 +65,7 @@ export default function AuthPage() {
       return;
     }
 
-    router.push("/my-page");
+    router.push(postLoginHref());
     router.refresh();
   };
 
@@ -67,6 +77,12 @@ export default function AuthPage() {
       return;
     }
 
+    if (v2Return) {
+      router.replace(browseHref);
+      router.refresh();
+      return;
+    }
+
     alert("Logisid välja.");
   };
 
@@ -75,10 +91,10 @@ export default function AuthPage() {
       <div className="mx-auto max-w-md">
         <div className="mb-6 flex flex-wrap gap-3">
           <Link
-            href="/"
+            href={browseHref}
             className="rounded-2xl border border-black/10 bg-white px-5 py-3 text-sm font-medium transition hover:bg-black/[0.03]"
           >
-            Tagasi turule
+            {v2Return ? "Tagasi sirvima" : "Tagasi turule"}
           </Link>
         </div>
 
@@ -150,5 +166,13 @@ export default function AuthPage() {
         </div>
       </div>
     </main>
+  );
+}
+
+export default function AuthPage() {
+  return (
+    <Suspense fallback={<main className="min-h-screen bg-[#f8f8f6] px-6 py-10 text-black">Laen...</main>}>
+      <AuthForm />
+    </Suspense>
   );
 }

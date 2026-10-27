@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { v2IntegrationEnabled } from "../../../shared/config/v2Integration";
 
 export type V2MobileNavigationItemId =
   | "home"
@@ -238,6 +239,14 @@ export default function V2MobileNavigation({
 }: {
   pathname: string;
 }) {
+  const items = v2IntegrationEnabled()
+    ? navigationItems.map((item) => item.id === "sell"
+      ? { ...item, href: "/v2/sell" }
+      : item.id === "messages"
+        ? { ...item, href: "/v2/messages" }
+        : item)
+    : navigationItems;
+
   return (
     <nav
       aria-label="Mobiili põhimenüü"
@@ -248,7 +257,7 @@ export default function V2MobileNavigation({
       }}
     >
       <div className="mx-auto grid max-w-lg grid-cols-5 items-end gap-0.5 px-2 pt-2">
-        {navigationItems.map((item) => {
+        {items.map((item) => {
           if (item.emphasized) {
             return (
               <SellNavigationItem

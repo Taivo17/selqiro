@@ -5,11 +5,32 @@ import ListingCreateForm from "./ListingCreateForm";
 
 function LoadingState() {
   return (
-    <div className="space-y-6">
-      <section className="h-56 animate-pulse rounded-[34px] bg-white shadow-sm" />
+    <div className="space-y-6" aria-busy="true">
+      <section className="rounded-[34px] bg-white p-7 shadow-sm sm:p-10">
+        <h1 className="text-3xl font-black tracking-tight">Kuulutuse lisamine</h1>
+        <p role="status" className="mt-3 text-sm text-neutral-600">Kontrollin sisselogimist…</p>
+      </section>
 
-      <section className="h-96 animate-pulse rounded-[30px] bg-white shadow-sm" />
+      <section aria-hidden="true" className="h-56 animate-pulse rounded-[30px] bg-white shadow-sm" />
     </div>
+  );
+}
+
+function AuthErrorState({ retry }: { retry: () => void }) {
+  return (
+    <section className="rounded-[34px] border border-amber-200 bg-amber-50 p-7 shadow-sm sm:p-10">
+      <h1 className="text-3xl font-black tracking-tight">Kuulutuse lisamine</h1>
+      <p role="alert" className="mt-3 text-sm leading-6 text-neutral-700">
+        Sisselogimise kontroll ei õnnestunud. Kontrolli ühendust ja proovi uuesti.
+      </p>
+      <button type="button" onClick={retry}
+        className="mt-6 rounded-full bg-black px-6 py-3 text-sm font-black text-white">
+        Proovi uuesti
+      </button>
+      <Link href="/v2/products" className="ml-5 inline-block py-3 text-sm font-bold underline">
+        Sirvi kuulutusi
+      </Link>
+    </section>
   );
 }
 
@@ -31,7 +52,7 @@ function LoginState() {
       </p>
 
       <Link
-        href="/auth"
+        href="/auth?next=%2Fv2%2Fsell"
         className="mt-6 inline-flex rounded-full bg-black px-6 py-3 text-sm font-black text-white"
       >
         Logi sisse
@@ -41,8 +62,9 @@ function LoginState() {
 }
 
 export default function ListingCreatePage() {
-  const { user, loading } = useAuth();
+  const { user, loading, error, retry } = useAuth();
   if (loading) return <LoadingState />;
+  if (error) return <AuthErrorState retry={retry} />;
   if (!user) return <LoginState />;
   // Auth changes discard private form state. Identity changes for one user do not.
   return <ListingCreateForm key={user.id} userId={user.id} />;

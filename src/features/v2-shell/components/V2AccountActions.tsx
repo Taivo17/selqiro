@@ -1,11 +1,27 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { Suspense, useState, useSyncExternalStore } from "react";
 import { useAuth } from "../../../../lib/useAuth";
 import { supabaseBrowserClient } from "../../../shared/supabase/browserClient";
+import { v2IntegrationEnabled } from "../../../shared/config/v2Integration";
+import { publicV2Href, v2ReturnHref } from "../model/navigationContext";
 import V2IdentityBadge from "./V2IdentityBadge";
+
+function subscribeToHashChange(onChange: () => void) {
+  window.addEventListener("hashchange", onChange);
+  return () => window.removeEventListener("hashchange", onChange);
+}
+
+function accountLoading() {
+  return (
+    <div className="flex min-w-0 items-center gap-2">
+      <div className="h-10 w-32 max-w-[42vw] rounded-full bg-neutral-100 sm:w-44" />
+      <div className="h-10 w-10 shrink-0 rounded-full bg-neutral-100 md:w-24" />
+    </div>
+  );
+}
 
 function LogoutIcon() {
   return (
@@ -27,9 +43,18 @@ function LogoutIcon() {
   );
 }
 
-export default function V2AccountActions() {
+function AccountActions({ authReturnHref }: { authReturnHref?: string }) {
   const router = useRouter();
-  const { user, loading } = useAuth();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const hash = useSyncExternalStore(subscribeToHashChange, () => window.location.hash, () => "");
+  const { user, loading, error, retry } = useAuth();
+  const search = searchParams.toString();
+  const returnPath = v2ReturnHref(authReturnHref) ||
+    v2ReturnHref((pathname || "/v2") + (search ? "?" + search : "") + hash) || "/v2";
+  const authHref = v2IntegrationEnabled()
+    ? "/auth?next=" + encodeURIComponent(returnPath)
+    : "/auth";
 
   const [loggingOut, setLoggingOut] =
     useState(false);
@@ -37,6 +62,11 @@ export default function V2AccountActions() {
   const handleLogout = async () => {
     if (loggingOut) return;
 
+    const integrated = v2IntegrationEnabled();
+    const destination = integrated
+      ? publicV2Href(window.location.pathname + window.location.search + window.location.hash) ||
+        publicV2Href(authReturnHref) || "/v2"
+      : authHref;
     setLoggingOut(true);
 
     const { error } =
@@ -52,16 +82,22 @@ export default function V2AccountActions() {
       return;
     }
 
-    router.push("/auth");
+    if (integrated) router.replace(destination, { scroll: false });
+    else router.push(destination);
     router.refresh();
   };
 
   if (loading) {
+    return accountLoading();
+  }
+
+  if (error) {
     return (
-      <div className="flex min-w-0 items-center gap-2">
-        <div className="h-10 w-32 max-w-[42vw] rounded-full bg-neutral-100 sm:w-44" />
-        <div className="h-10 w-10 shrink-0 rounded-full bg-neutral-100 md:w-24" />
-      </div>
+      <button type="button" onClick={retry}
+        title="Sisselogimise kontroll ei õnnestunud. Proovi uuesti."
+        className="rounded-full border border-amber-300 bg-amber-50 px-3 py-2 text-xs font-bold text-amber-900 sm:px-4 sm:text-sm">
+        Kontrolli kontot
+      </button>
     );
   }
 
@@ -69,7 +105,7 @@ export default function V2AccountActions() {
     return (
       <div className="flex items-center">
         <Link
-          href="/auth"
+          href={authHref}
           className="rounded-full bg-emerald-600 px-3 py-2 text-xs font-bold text-white shadow-sm transition hover:bg-emerald-700 sm:px-4 sm:text-sm"
         >
           Logi sisse
@@ -85,7 +121,7 @@ export default function V2AccountActions() {
   return (
     <div className="flex min-w-0 items-center gap-2">
       <Link
-        href="/messages"
+        href={v2IntegrationEnabled() ? "/v2/messages" : "/messages"}
         className="hidden rounded-full border border-neutral-200 bg-white px-4 py-2 text-sm font-medium shadow-sm transition hover:border-neutral-300 md:inline-flex"
       >
         Sõnumid
@@ -133,5 +169,13 @@ export default function V2AccountActions() {
         </span>
       </button>
     </div>
+  );
+}
+
+export default function V2AccountActions({ authReturnHref }: { authReturnHref?: string }) {
+  return (
+    <Suspense fallback={accountLoading()}>
+      <AccountActions authReturnHref={authReturnHref} />
+    </Suspense>
   );
 }

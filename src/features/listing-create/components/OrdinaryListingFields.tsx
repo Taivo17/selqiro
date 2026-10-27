@@ -5,6 +5,7 @@ import OrdinaryListingPriceFields from "./OrdinaryListingPriceFields";
 import OrdinaryListingLocationFields from "./OrdinaryListingLocationFields";
 import OrdinaryListingDetailFields from "./OrdinaryListingDetailFields";
 import OrdinaryListingPreview from "./OrdinaryListingPreview";
+import { v2IntegrationEnabled } from "../../../shared/config/v2Integration";
 
 type Props = { value: OrdinaryListingFieldState; onChange: (value: OrdinaryListingFieldState) => void;
   title: string; description: string };
@@ -25,7 +26,7 @@ export default function OrdinaryListingFields({ value, onChange, title, descript
       <OrdinaryListingPriceFields value={value} onChange={onChange} />
       <OrdinaryListingLocationFields value={value} onChange={onChange} />
       <OrdinaryListingDetailFields value={value} onChange={onChange} />
-      <OrdinaryListingPreview value={value} title={title} description={description} />
+      {!v2IntegrationEnabled() && <OrdinaryListingPreview value={value} title={title} description={description} />}
     </div>
   );
 }

@@ -43,7 +43,8 @@ export function usePublicProfileListings(
   profile: PublicProfile | null,
   storeCategoryScopeIds:
     | string[]
-    | null = null
+    | null = null,
+  selectedStoreCategoryId: string | null = null
 ): PublicProfileListingsState {
   const normalizedScopeIds =
     normalizeScopeIds(
@@ -118,6 +119,7 @@ export function usePublicProfileListings(
               profile.identityType,
             storeCategoryScopeIds:
               resolvedScopeIds,
+            storeCategoryId: selectedStoreCategoryId,
             limit: 80,
           });
 
@@ -151,7 +153,7 @@ export function usePublicProfileListings(
     return () => {
       mounted = false;
     };
-  }, [profile, categoryScopeKey]);
+  }, [profile, categoryScopeKey, selectedStoreCategoryId]);
 
   /*
    * React käivitab uue rubriigipäringu efekti

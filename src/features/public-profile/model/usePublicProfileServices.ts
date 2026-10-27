@@ -26,20 +26,29 @@ export function usePublicProfileServices(
   const identityId =
     profile?.identityId?.trim() ||
     null;
+  const sellerSlug =
+    profile?.slug?.trim() || null;
 
   const [state, setState] =
-    useState<PublicProfileServicesState>({
-      services: [],
-      loading: Boolean(identityId),
-      error: null,
+    useState<{
+      identityId: string | null;
+      sellerSlug: string | null;
+      value: PublicProfileServicesState;
+    }>({
+      identityId,
+      sellerSlug,
+      value: { services: [], loading: Boolean(identityId), error: null },
     });
 
   useEffect(() => {
     let mounted = true;
+    function update(value: PublicProfileServicesState) {
+      if (mounted) setState({ identityId, sellerSlug, value });
+    }
 
     async function loadServices() {
       if (!identityId) {
-        setState({
+        update({
           services: [],
           loading: false,
           error: null,
@@ -48,7 +57,7 @@ export function usePublicProfileServices(
         return;
       }
 
-      setState({
+      update({
         services: [],
         loading: true,
         error: null,
@@ -58,6 +67,7 @@ export function usePublicProfileServices(
         const services =
           await getPublicServices({
             identityId,
+            sellerSlug,
             limit: 80,
           });
 
@@ -65,7 +75,7 @@ export function usePublicProfileServices(
           return;
         }
 
-        setState({
+        update({
           services,
           loading: false,
           error: null,
@@ -75,7 +85,7 @@ export function usePublicProfileServices(
           return;
         }
 
-        setState({
+        update({
           services: [],
           loading: false,
           error:
@@ -91,7 +101,10 @@ export function usePublicProfileServices(
     return () => {
       mounted = false;
     };
-  }, [identityId]);
+  }, [identityId, sellerSlug]);
 
-  return state;
+  // Hide the old viewed profile synchronously, before the next effect commits.
+  return state.identityId === identityId && state.sellerSlug === sellerSlug
+    ? state.value
+    : { services: [], loading: Boolean(identityId), error: null };
 }

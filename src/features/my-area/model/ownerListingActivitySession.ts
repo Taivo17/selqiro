@@ -1,7 +1,7 @@
 import { getListingActivity, isRenewableListingId } from "../../../entities/listing/model/listingActivity";
 import { ListingRenewalError, listingRenewalError, sameListingActor,
   type ListingActivityActor, type RenewListingActivityInput, type RenewListingActivityResult } from "../../../entities/listing/model/listingRenewal";
-import type { ListingStatus } from "../../../entities/listing/api/updateListingStatus";
+import type { ListingStatus, UpdateListingStatusInput } from "../../../entities/listing/api/updateListingStatus";
 import type { MyAreaMarketplaceItemRow, MyAreaListingMarketplaceItemRow } from "./myAreaMarketplaceItemRow";
 import { ownerListingsFilterKey, type MyAreaListingsFilters } from "./myAreaListingsFilters";
 
@@ -15,11 +15,20 @@ export type OwnerListingActivityDependencies = {
   actor: () => Promise<ListingActivityActor>;
   read: (filters: MyAreaListingsFilters) => Promise<MyAreaMarketplaceItemRow[]>;
   renew: (input: RenewListingActivityInput) => Promise<RenewListingActivityResult>;
-  status: (input: { listingId: string; status: ListingStatus }) => Promise<void>;
+  status: (input: UpdateListingStatusInput) => Promise<void>;
   now?: () => number;
 };
 const initial = (): OwnerListingActivityState => ({ listings: [], loading: true, error: null,
   actor: null, filterKey: "", confirmation: null, busyKey: null, problem: null, notice: null, needsReload: false });
+
+function statusProblem(error: unknown, failure: ListingRenewalError): string {
+  if (failure.kind === "forbidden") return failure.message;
+  if (error && typeof error === "object" && "code" in error && "message" in error
+    && error.code === "40001" && error.message === "listing_status_conflict") {
+    return "Kuulutuse staatus on vahepeal muutunud. Laadi nimekiri uuesti ja kontrolli praegust staatust.";
+  }
+  return "Staatuse muutmise tulemus pole kinnitatud. Laadi nimekiri uuesti ja kontrolli kuulutuse praegust staatust enne uut muudatust.";
+}
 
 /** One mounted owner-list controller. No transport/UI code or automatic mutation retries. */
 export class OwnerListingActivitySession {
@@ -103,8 +112,8 @@ export class OwnerListingActivitySession {
     if (!confirmation || confirmation !== expected || !this.canAct()) return;
     const row = this.ordinary(confirmation.key);
     if (!row || row.status !== "active" || row.activeUntil !== confirmation.input.expectedActiveUntil) return;
-    await this.mutate(confirmation.key, async () => {
-      const result = await this.deps.renew({ ...confirmation.input });
+    await this.mutate(confirmation.key, "renewal", async () => {
+      const result = await this.deps.renew({ ...confirmation.input, expectedActor: this.state.actor ? {...this.state.actor} : undefined });
       return result.changed ? "Kuulutuse tähtaeg on uuendatud. Sisu ja järjestus ei muutunud."
         : "Olemasolev kehtivusaeg säilis; uut pikendamist polnud vaja.";
     });
@@ -113,12 +122,12 @@ export class OwnerListingActivitySession {
     if (!this.canAct() || this.state.confirmation || !["active", "paused", "sold"].includes(status)) return;
     const row = this.ordinary(key);
     if (!row || !["active", "paused", "sold"].includes(row.status) || row.status === status) return;
-    await this.mutate(key, async () => {
-      await this.deps.status({ listingId: row.id, status });
+    await this.mutate(key, "status", async () => {
+      await this.deps.status({ listingId: row.id, status, expectedStatus: row.status, expectedActor: this.state.actor ? {...this.state.actor} : undefined });
       return "Staatus muudetud. Kuulutuse tähtaega ei pikendatud.";
     });
   }
-  private async mutate(key: string, action: () => Promise<string>) {
+  private async mutate(key: string, operation: "renewal" | "status", action: () => Promise<string>) {
     const actor = this.state.actor;
     if (!actor) return;
     const epoch = this.epoch;
@@ -146,7 +155,7 @@ export class OwnerListingActivitySession {
         ...(contextChanged ? { listings: [], actor: null } : {}),
         problem: acknowledged && !contextChanged
           ? "Server kinnitas toimingu, kuid nimekirja värskendamine ebaõnnestus. Laadi nimekiri uuesti; ära korda toimingut."
-          : failure.message });
+          : operation === "status" ? statusProblem(error, failure) : failure.message });
     } finally {
       this.locked = false;
       // An obsolete completion never restores an old actor, row, dialog or success message.

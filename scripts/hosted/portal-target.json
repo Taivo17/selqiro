@@ -1,0 +1,28 @@
+{
+  "format": "selqiro-existing-portal-target-v1",
+  "selected_on": "2026-10-26 Europe/Tallinn",
+  "selection": "User chose real listings in the existing portal and database; no separate test database.",
+  "project_ref": "vyjletlmwoiwxsnsunlm",
+  "region": "eu-central-1",
+  "app_origin": "https://selqiro.vercel.app",
+  "instance_id": "2d088814-0900-448a-a9d1-7b05470cb1d2",
+  "release_id": "listing-publication-hosted-preview-v1",
+  "release_sha256": "974dd6acb246b275acb593688aa14449cd42e80939101086d742ee5c4c5a4c3e",
+  "activation_sha256": "0112cbcb6b74be0e041ece005bf045546740463ac7991ab7ef4b27a9ce510c2c",
+  "cli_pin_sha256": "4bcf6c83e7518b18c1f871288a96e0a93652a12d7d4a15c91537dbe1e2e6a778",
+  "bucket": {
+    "id": "listing-publication-private",
+    "name": "listing-publication-private",
+    "public": false,
+    "file_size_limit": 26214400,
+    "allowed_mime_types": [
+      "application/octet-stream",
+      "image/webp"
+    ]
+  },
+  "secrets_in_manifest": false,
+  "actual_cloud_application": false,
+  "actor_selection": "three-existing-accounts-v1",
+  "actor_count": 3,
+  "account_selection_updated_on": "2026-10-27 Europe/Tallinn"
+}

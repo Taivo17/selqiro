@@ -1,6 +1,9 @@
 import { supabaseBrowserClient } from "../../../shared/supabase/browserClient";
 import type { ProductListingCard } from "../model/types";
 import { mapMarketplaceListingRow } from "./mappers";
+import { v2IntegrationEnabled } from "../../../shared/config/v2Integration";
+import { parsePublicSearchV2 } from "../model/publicRead/publicSearchV2";
+import { publicCard } from "../model/publicRead/presentation";
 
 export type GetProductListingsInput = {
   limit?: number;
@@ -14,6 +17,12 @@ export async function getProductListings(
 ): Promise<ProductListingCard[]> {
   const limit = input.limit ?? 30;
   const offset = input.offset ?? 0;
+  if (v2IntegrationEnabled()) {
+    const size = Math.max(1, Math.min(limit, 60));
+    const {data, error} = await supabaseBrowserClient.rpc("search_public_listings_v2", {p_result_limit: size, p_result_offset: offset});
+    if (error) throw new Error("Kuulutusi ei saanud laadida.");
+    return parsePublicSearchV2(data, offset, size).items.map(publicCard);
+  }
 
   const hasNearbyCenter =
     typeof input.centerLat === "number" &&

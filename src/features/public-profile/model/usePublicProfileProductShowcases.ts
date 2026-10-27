@@ -28,20 +28,29 @@ usePublicProfileProductShowcases(
   const identityId =
     profile?.identityId?.trim() ||
     null;
+  const sellerSlug =
+    profile?.slug?.trim() || null;
 
   const [state, setState] =
-    useState<PublicProfileProductShowcasesState>({
-      showcases: [],
-      loading: Boolean(identityId),
-      error: null,
+    useState<{
+      identityId: string | null;
+      sellerSlug: string | null;
+      value: PublicProfileProductShowcasesState;
+    }>({
+      identityId,
+      sellerSlug,
+      value: { showcases: [], loading: Boolean(identityId), error: null },
     });
 
   useEffect(() => {
     let mounted = true;
+    function update(value: PublicProfileProductShowcasesState) {
+      if (mounted) setState({ identityId, sellerSlug, value });
+    }
 
     async function loadShowcases() {
       if (!identityId) {
-        setState({
+        update({
           showcases: [],
           loading: false,
           error: null,
@@ -50,7 +59,7 @@ usePublicProfileProductShowcases(
         return;
       }
 
-      setState({
+      update({
         showcases: [],
         loading: true,
         error: null,
@@ -60,6 +69,7 @@ usePublicProfileProductShowcases(
         const showcases =
           await getPublicProductShowcases({
             identityId,
+            sellerSlug,
             limit: 80,
           });
 
@@ -67,7 +77,7 @@ usePublicProfileProductShowcases(
           return;
         }
 
-        setState({
+        update({
           showcases,
           loading: false,
           error: null,
@@ -77,7 +87,7 @@ usePublicProfileProductShowcases(
           return;
         }
 
-        setState({
+        update({
           showcases: [],
           loading: false,
           error:
@@ -93,7 +103,10 @@ usePublicProfileProductShowcases(
     return () => {
       mounted = false;
     };
-  }, [identityId]);
+  }, [identityId, sellerSlug]);
 
-  return state;
+  // The old slug/identity must not render while the new read is being scheduled.
+  return state.identityId === identityId && state.sellerSlug === sellerSlug
+    ? state.value
+    : { showcases: [], loading: Boolean(identityId), error: null };
 }

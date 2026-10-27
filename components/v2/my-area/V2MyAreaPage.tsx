@@ -3,491 +3,106 @@
 import Link from "next/link";
 import { useEnergySummary } from "../../../src/features/energy-wallet/model/useEnergySummary";
 import MyAreaListingsSection from "../../../src/features/my-area/components/MyAreaListingsSection";
+import { useMyAreaIdentity } from "../../../src/features/my-area/model/useMyAreaIdentity";
 import MyServicesSection from "../../../src/features/service-management/components/MyServicesSection";
 import ProductShowcaseManagementCard from "../../../src/features/product-showcase-management/components/ProductShowcaseManagementCard";
 import StoreCategoryManagementCard from "../../../src/features/store-category-management/components/StoreCategoryManagementCard";
-const energyFormatter =
-  new Intl.NumberFormat("et-EE");
+import { v2IntegrationEnabled } from "../../../src/shared/config/v2Integration";
 
-function formatEnergy(
-  value: number
-): string {
-  return energyFormatter.format(
-    value
-  );
-}
+const actionClass = "inline-flex min-h-11 items-center justify-center rounded-full border border-neutral-200 bg-white px-5 py-3 text-sm font-bold shadow-sm transition hover:border-neutral-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700";
+const navClass = "flex min-h-11 items-center rounded-2xl px-4 py-3 text-sm font-bold text-neutral-700 hover:bg-neutral-100 hover:text-black focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700";
+const energyFormatter = new Intl.NumberFormat("et-EE");
 
-type SummaryCard = {
-  title: string;
-  value: string;
-  helper: string;
-  action: string;
-};
-
-type RowItem = {
-  title: string;
-  meta: string;
-  status?: string;
-  value?: string;
-};
-
-const summaryCards: SummaryCard[] = [
-  {
-    title: "Aktiivsed kuulutused",
-    value: "14",
-    helper: "Müügis või nähtaval",
-    action: "Vaata kuulutusi",
-  },
-  {
-    title: "Teenused",
-    value: "—",
-    helper: "Päris teenused on allpool",
-    action: "Vaata teenuseid",
-  },
-  {
-    title: "Uued sõnumid",
-    value: "2",
-    helper: "Vajavad vastust",
-    action: "Ava sõnumid",
-  },
-  {
-    title: "Energy",
-    value: "—",
-    helper: "Saadaval walletis",
-    action: "Vaata Energy",
-  },
-];
-
-const listings: RowItem[] = [
-  {
-    title: "Cub Cadet murutraktor",
-    meta: "Aiatehnika · Paide piirkond",
-    status: "Aktiivne",
-    value: "4562 €",
-  },
-  {
-    title: "BMW 5 Series",
-    meta: "Sõidukid · Türi piirkond",
-    status: "Aktiivne",
-    value: "6000 €",
-  },
-  {
-    title: "Biltema ketassaag",
-    meta: "Tööriistad · Paide piirkond",
-    status: "Pausil",
-    value: "45 €",
-  },
-];
-
-const updates: RowItem[] = [
-  {
-    title: "Täna saadaval hooldatud murutraktor",
-    meta: "Kiire teade · aktiivne",
-    status: "Aktiivne",
-  },
-  {
-    title: "Kevadhooaja hoolduse ajad avatud",
-    meta: "Uuendus · eelmine nädal",
-    status: "Avaldatud",
-  },
-];
-
-function SidebarItem({
-  label,
-  count,
-  active,
-}: {
-  label: string;
-  count?: string;
-  active?: boolean;
-}) {
+// The existing Energy surface stays outside the isolated publication flow.
+// Its read result never determines the My Area identity or profile destination.
+function EnergyOverview() {
+  const { wallet, loading, error } = useEnergySummary();
   return (
-    <button
-      className={[
-        "flex w-full items-center justify-between rounded-2xl px-4 py-3 text-left text-sm font-bold transition",
-        active
-          ? "bg-black text-white"
-          : "text-neutral-700 hover:bg-neutral-100 hover:text-black",
-      ].join(" ")}
-    >
-      <span>{label}</span>
-      {count ? (
-        <span
-          className={[
-            "rounded-full px-2 py-0.5 text-xs",
-            active ? "bg-white/20 text-white" : "bg-neutral-100 text-neutral-500",
-          ].join(" ")}
-        >
-          {count}
-        </span>
-      ) : null}
-    </button>
-  );
-}
-
-function SummaryCardView({ card }: { card: SummaryCard }) {
-  return (
-    <article className="rounded-[26px] border border-black/5 bg-white p-5 shadow-sm">
-      <p className="text-sm font-bold text-neutral-500">{card.title}</p>
-      <p className="mt-3 text-4xl font-black">{card.value}</p>
-      <p className="mt-1 text-sm text-neutral-500">{card.helper}</p>
-      <button className="mt-5 rounded-full border border-neutral-200 bg-white px-4 py-2 text-sm font-black shadow-sm">
-        {card.action}
-      </button>
-    </article>
-  );
-}
-
-function ModuleCard({
-  eyebrow,
-  title,
-  action,
-  children,
-}: {
-  eyebrow: string;
-  title: string;
-  action?: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <section className="min-w-0 overflow-hidden rounded-[30px] border border-black/5 bg-white p-6 shadow-sm">
-      <div className="mb-5 flex min-w-0 flex-col items-start gap-3 sm:flex-row sm:items-end sm:justify-between">
-        <div>
-          <p className="text-xs font-bold uppercase tracking-[0.24em] text-neutral-400">
-            {eyebrow}
-          </p>
-          <h2 className="mt-2 break-words text-2xl font-black">{title}</h2>
-        </div>
-
-        {action ? (
-          <button className="inline-flex w-full justify-center rounded-full border border-neutral-200 bg-white px-4 py-2 text-sm font-black shadow-sm sm:w-auto">
-            {action}
-          </button>
-        ) : null}
-      </div>
-
-      {children}
+    <section id="my-area-energy" className="scroll-mt-28 rounded-[30px] border border-black/5 bg-white p-6 shadow-sm">
+      <p className="text-xs font-bold uppercase tracking-[0.24em] text-neutral-400">Energy</p>
+      <h2 className="mt-2 text-xl font-black">
+        {loading ? "Laen Energy’t…" : wallet ? `${energyFormatter.format(wallet.availableTotal)} Energy` : "Energy pole saadaval"}
+      </h2>
+      <p className="mt-2 text-sm leading-6 text-neutral-600">
+        {error ? "Energy andmeid ei saanud laadida." : "Boonus- ja ostetud Energy on eraldi."}
+      </p>
+      <Link href="/v2/energy" className={`${actionClass} mt-5 w-full`}>Vaata Energy</Link>
     </section>
   );
 }
 
-function RowList({ items }: { items: RowItem[] }) {
-  return (
-    <div className="min-w-0 divide-y divide-black/5">
-      {items.map((item) => (
-        <div
-          key={item.title}
-          className="flex min-w-0 flex-col gap-3 py-4 first:pt-0 last:pb-0 md:flex-row md:items-center md:justify-between"
-        >
-          <div className="flex min-w-0 items-center gap-4">
-            <div className="h-14 w-16 shrink-0 rounded-2xl bg-gradient-to-br from-neutral-100 to-neutral-200" />
-            <div className="min-w-0">
-              <h3 className="truncate font-black">{item.title}</h3>
-              <p className="mt-1 text-sm text-neutral-500">{item.meta}</p>
-            </div>
-          </div>
-
-          <div className="flex min-w-0 flex-wrap items-center gap-2 md:justify-end">
-            {item.value ? <p className="font-black">{item.value}</p> : null}
-            {item.status ? (
-              <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-black text-emerald-700">
-                {item.status}
-              </span>
-            ) : null}
-            <button className="rounded-full border border-neutral-200 bg-white px-3 py-2 text-xs font-black shadow-sm">
-              Muuda
-            </button>
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-}
-
-function IdentityMiniPreview({
-  dark = false,
-  identityName,
-}: {
-  dark?: boolean;
-  identityName: string;
-}) {
-  return (
-    <div
-      className={[
-        "w-full min-w-0 overflow-hidden rounded-[22px] border",
-        dark ? "border-white/10 bg-white/10" : "border-black/5 bg-[#fbfbfa]",
-      ].join(" ")}
-    >
-      <div className="h-20 bg-gradient-to-br from-neutral-900 via-neutral-700 to-emerald-900" />
-
-      <div className="px-4 pb-4">
-        <div className="-mt-8 flex min-w-0 items-end gap-3">
-          <div className="h-16 w-16 shrink-0 rounded-full border-4 border-white bg-white shadow-sm">
-            <div className="h-full w-full rounded-full bg-gradient-to-br from-neutral-100 to-neutral-300" />
-          </div>
-
-          <div className="min-w-0 pb-1">
-            <p
-              className={[
-                "break-words text-[10px] font-bold uppercase tracking-[0.14em] sm:text-xs sm:tracking-[0.18em]",
-                dark ? "text-white/45" : "text-neutral-400",
-              ].join(" ")}
-            >
-              Aktiivne identiteet
-            </p>
-            <p
-              className={[
-                "truncate text-lg font-black",
-                dark ? "text-white" : "text-neutral-950",
-              ].join(" ")}
-            >
-              {identityName}
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 export default function V2MyAreaPage() {
-  const {
-    identity: activeIdentity,
-    wallet: energyWallet,
-    loading: energyLoading,
-    error: energyError,
-  } = useEnergySummary();
+  const { identity, loading, anonymous, error, refresh } = useMyAreaIdentity();
+  const integrated = v2IntegrationEnabled();
+  const messagesHref = integrated ? "/v2/messages" : "/messages";
+  const authHref = integrated ? "/auth?next=%2Fv2%2Fmy-area" : "/auth";
+  const profileHref = identity?.slug ? `/v2/profile/${encodeURIComponent(identity.slug)}` : null;
 
-  const activeIdentityName =
-    activeIdentity?.displayName ||
-    (
-      energyLoading
-        ? "Laen..."
-        : "Aktiivne identiteet"
+  if (anonymous) {
+    return (
+      <section className="rounded-[30px] border border-black/5 bg-white p-6 shadow-sm sm:p-8">
+        <h1 className="text-3xl font-black">Minu ala</h1>
+        <p className="mt-3 text-neutral-600">Logi sisse, et vaadata oma kuulutusi ja vestlusi.</p>
+        <Link href={authHref} className={`${actionClass} mt-5`}>Logi sisse</Link>
+      </section>
     );
-
-  const publicProfileHref =
-    activeIdentity?.slug
-      ? `/v2/profile/${activeIdentity.slug}`
-      : "/v2/my-area";
-
-  const energyValue =
-    energyLoading
-      ? "…"
-      : energyWallet
-        ? formatEnergy(
-            energyWallet.availableTotal
-          )
-        : "—";
-
-  const energyHelper =
-    energyLoading
-      ? "Laen walletit..."
-      : energyError
-        ? "Andmeid ei saanud laadida"
-        : energyWallet
-          ? "Saadaval walletis"
-          : "Wallet puudub";
-
-  const summaryCardsWithEnergy =
-    summaryCards.map((card) =>
-      card.title === "Energy"
-        ? {
-            ...card,
-            value: energyValue,
-            helper: energyHelper,
-          }
-        : card
-    );
+  }
 
   return (
-    <div className="grid min-w-0 grid-cols-[minmax(0,1fr)] gap-8 lg:grid-cols-[260px_minmax(0,1fr)]">
+    <div className="grid min-w-0 grid-cols-[minmax(0,1fr)] gap-8 lg:grid-cols-[220px_minmax(0,1fr)]">
       <aside className="hidden lg:block">
-        <div className="sticky top-28 space-y-2 rounded-[30px] border border-black/5 bg-white p-4 shadow-sm">
-          <SidebarItem label="Ülevaade" active />
-          <SidebarItem label="Profiil" />
-          <SidebarItem label="Kuulutused" count="14" />
-          <SidebarItem label="Teenused" />
-          <SidebarItem label="Tootenäidised" />
-          <SidebarItem label="Uuendused" count="2" />
-          <SidebarItem label="Sõnumid" count="2" />
-          <SidebarItem label="Energy" />
-          <SidebarItem label="Arveldus" />
-          <SidebarItem label="Seaded" />
-          <SidebarItem label="Blokeeritud kasutajad" />
-          <SidebarItem label="Admin" />
-        </div>
+        <nav aria-label="Minu ala" className="sticky top-28 space-y-1 rounded-[30px] border border-black/5 bg-white p-4 shadow-sm">
+          <a href="#my-area-listings" className={navClass}>Kuulutused</a>
+          <Link href={messagesHref} className={navClass}>Sõnumid</Link>
+          {profileHref ? <Link href={profileHref} className={navClass}>Avalik profiil</Link> : null}
+          {!integrated ? <>
+            <a href="#my-area-categories" className={navClass}>Poe rubriigid</a>
+            <a href="#my-area-services" className={navClass}>Teenused</a>
+            <a href="#my-area-showcase" className={navClass}>Tootenäidised</a>
+            <a href="#my-area-energy" className={navClass}>Energy</a>
+          </> : null}
+        </nav>
       </aside>
 
       <div className="min-w-0 space-y-8">
-        <section className="min-w-0 overflow-hidden rounded-[34px] border border-black/5 bg-white p-6 shadow-sm md:p-8">
-          <div className="flex min-w-0 flex-col gap-5 md:flex-row md:items-center md:justify-between">
+        <section className="min-w-0 rounded-[34px] border border-black/5 bg-white p-6 shadow-sm md:p-8">
+          <div className="flex min-w-0 flex-col gap-6 xl:flex-row xl:items-start xl:justify-between">
             <div className="min-w-0">
-              <p className="text-xs font-bold uppercase tracking-[0.26em] text-emerald-600">
-                Minu ala
-              </p>
-              <h1 className="mt-3 text-4xl font-black tracking-tight">
-                Ülevaade
-              </h1>
+              <p className="text-xs font-bold uppercase tracking-[0.24em] text-emerald-600">Minu ala</p>
+              <h1 className="mt-3 text-3xl font-black tracking-tight sm:text-4xl">Sinu kuulutused ja vestlused</h1>
               <p className="mt-3 max-w-2xl text-base leading-7 text-neutral-600">
-                See on sinu privaatne töölaud. Siin haldad aktiivse identiteedi
-                profiili, kuulutusi, teenuseid, uuendusi, Energy’t ja seadeid.
+                Halda aktiivse identiteedi kuulutusi ning ava ostjate ja müüjatega peetud vestlused.
               </p>
+              <nav aria-label="Kiirtegevused" className="mt-5 flex flex-wrap gap-3">
+                <Link href="/v2/sell" className={actionClass}>Lisa kuulutus</Link>
+                <Link href={messagesHref} className={actionClass}>Ava sõnumid</Link>
+              </nav>
             </div>
 
-            <div className="w-full min-w-0 rounded-[24px] bg-neutral-950 p-4 text-white md:w-[360px] md:shrink-0">
-              <p className="mb-3 text-xs font-bold uppercase tracking-[0.2em] text-white/50">
-                Tegutsen kui
-              </p>
-
-              <IdentityMiniPreview
-                dark
-                identityName={
-                  activeIdentityName
-                }
-              />
-
-              <p className="mt-3 text-sm leading-6 text-white/65">
-                See on Minu ala vaade. Avalikku profiili näevad teised kasutajad
-                eraldi profiililehel.
-              </p>
+            <div aria-live="polite" aria-busy={loading} className="w-full min-w-0 rounded-[24px] bg-neutral-950 p-5 text-white xl:w-80 xl:shrink-0">
+              <p className="text-xs font-bold uppercase tracking-[0.18em] text-white/60">Tegutsen kui</p>
+              {loading ? <p className="mt-3 text-lg font-bold">Laen identiteeti…</p> : identity ? <>
+                <p className="mt-3 break-words text-xl font-black">{identity.displayName}</p>
+                <p className="mt-1 text-sm text-white/70">{identity.type === "business" ? "Ettevõte" : "Eraisik"}</p>
+              </> : null}
+              {error ? <>
+                <p role="alert" className="mt-3 text-sm leading-6 text-white/80">{error}</p>
+                <button type="button" onClick={refresh} className={`${actionClass} mt-4 w-full text-neutral-950`}>Laadi identiteet uuesti</button>
+              </> : null}
+              {profileHref ? <Link href={profileHref} className={`${actionClass} mt-5 w-full text-neutral-950`}>Vaata avalikku profiili</Link>
+                : identity ? <p className="mt-3 text-sm leading-6 text-white/70">Selle identiteedi avalik profiil pole saadaval.</p> : null}
             </div>
           </div>
         </section>
 
-        <section className="grid min-w-0 grid-cols-[minmax(0,1fr)] gap-4 md:grid-cols-2 xl:grid-cols-4">
-          {summaryCardsWithEnergy.map((card) => (
-            <SummaryCardView key={card.title} card={card} />
-          ))}
-        </section>
+        <div id="my-area-listings" className="min-w-0 scroll-mt-28"><MyAreaListingsSection /></div>
 
-        <section className="grid min-w-0 grid-cols-[minmax(0,1fr)] gap-8 xl:grid-cols-[minmax(0,1fr)_360px]">
-          <div className="min-w-0 space-y-8">
-            <ModuleCard
-              eyebrow="Kiire teade"
-              title="Aktiivne uuendus"
-              action="Muuda"
-            >
-              <div className="min-w-0 rounded-[24px] border border-emerald-100 bg-emerald-50 p-5">
-                <h3 className="break-words text-xl font-black">
-                  Täna saadaval hooldatud murutraktor
-                </h3>
-                <p className="mt-2 break-words text-sm leading-6 text-neutral-600">
-                  Kuvatakse avalikus profiilis Kiire teate plokina ja Uuenduste ajaloos.
-                </p>
-              </div>
-            </ModuleCard>
-
-            <MyAreaListingsSection />
-
-            <StoreCategoryManagementCard />
-
-            <MyServicesSection />
-
-            <ProductShowcaseManagementCard />
-
-            <ModuleCard
-              eyebrow="Uuendused"
-              title="Viimased teated"
-              action="Vaata kõiki"
-            >
-              <RowList items={updates} />
-            </ModuleCard>
-          </div>
-
-          <aside className="min-w-0 space-y-5">
-            <section className="rounded-[30px] border border-black/5 bg-white p-6 shadow-sm">
-              <p className="text-xs font-bold uppercase tracking-[0.24em] text-neutral-400">
-                Profiil
-              </p>
-              <h2 className="mt-2 text-xl font-black">Avalik profiil</h2>
-              <div className="mt-5">
-                <IdentityMiniPreview
-                  identityName={
-                    activeIdentityName
-                  }
-                />
-              </div>
-
-              <p className="mt-4 text-sm leading-6 text-neutral-600">
-                Avalikus profiilis on nähtav kaanepilt, info, Kiire teade,
-                tootenäidised, kuulutused, teenused ja uuendused.
-              </p>
-
-              <Link
-                href={publicProfileHref}
-                className="mt-5 inline-flex w-full justify-center rounded-full bg-black px-5 py-3 text-sm font-black text-white"
-              >
-                Vaata avalikku profiili
-              </Link>
-            </section>
-
-            <section className="rounded-[30px] border border-black/5 bg-white p-6 shadow-sm">
-              <p className="text-xs font-bold uppercase tracking-[0.24em] text-neutral-400">
-                Energy
-              </p>
-              <h2 className="mt-2 break-words text-xl font-black">
-                {energyLoading
-                  ? "Laen Energy’t..."
-                  : energyWallet
-                    ? `${formatEnergy(
-                        energyWallet.availableTotal
-                      )} Energy`
-                    : "Energy pole saadaval"}
-              </h2>
-              <p className="mt-2 text-sm leading-6 text-neutral-600">
-                {energyError
-                  ? "Energy andmeid ei saanud laadida. Ava Energy vaade ja proovi uuesti."
-                  : "Energy kuulub aktiivse identiteedi walletile. Boonus- ja ostetud Energy on eraldi."}
-              </p>
-              <Link
-                href="/v2/energy"
-                className="mt-5 inline-flex w-full justify-center rounded-full border border-neutral-200 bg-white px-5 py-3 text-sm font-black shadow-sm"
-              >
-                Vaata Energy
-              </Link>
-            </section>
-
-            <section className="rounded-[30px] border border-blue-100 bg-blue-50 p-6">
-              <p className="text-xs font-bold uppercase tracking-[0.24em] text-blue-500">
-                Profiili täitmine
-              </p>
-              <h2 className="mt-2 text-xl font-black text-blue-950">72%</h2>
-              <p className="mt-2 text-sm leading-6 text-blue-900">
-                Omanikule näitame soovitusi siin, mitte avalikus profiilis.
-              </p>
-              <div className="mt-5 h-3 rounded-full bg-blue-100">
-                <div className="h-full w-[72%] rounded-full bg-blue-600" />
-              </div>
-            </section>
-
-            <section className="rounded-[30px] border border-black/5 bg-white p-6 shadow-sm">
-              <p className="text-xs font-bold uppercase tracking-[0.24em] text-neutral-400">
-                Arveldus
-              </p>
-              <h2 className="mt-2 text-xl font-black">Valmis hiljem</h2>
-              <p className="mt-2 text-sm leading-6 text-neutral-600">
-                Siia tulevad maksed, receipt’id, billing entity ja ettevõtte arved.
-              </p>
-            </section>
-
-            <section className="rounded-[30px] border border-black/5 bg-white p-6 shadow-sm">
-              <p className="text-xs font-bold uppercase tracking-[0.24em] text-neutral-400">
-                Admin
-              </p>
-              <h2 className="mt-2 text-xl font-black">Ligipääs olemas</h2>
-              <p className="mt-2 text-sm leading-6 text-neutral-600">
-                Admini moodul on nähtav ainult kasutajale, kellel on õigused.
-              </p>
-              <Link
-                href="/v2/admin"
-                className="mt-5 inline-flex w-full justify-center rounded-full bg-black px-5 py-3 text-sm font-black text-white"
-              >
-                Ava admin
-              </Link>
-            </section>
-          </aside>
-        </section>
+        {!integrated ? <>
+          <div id="my-area-categories" className="min-w-0 scroll-mt-28"><StoreCategoryManagementCard /></div>
+          <div id="my-area-services" className="min-w-0 scroll-mt-28"><MyServicesSection /></div>
+          <div id="my-area-showcase" className="min-w-0 scroll-mt-28"><ProductShowcaseManagementCard /></div>
+          <EnergyOverview />
+        </> : null}
       </div>
     </div>
   );

@@ -205,7 +205,7 @@ function buildCardFields(
     title: item.title,
     description: item.description,
     ...(item.contentType === "listing"
-      ? getListingPriceDisplay({ price: item.priceText,
+      ? item.displayPrice ?? getListingPriceDisplay({ price: item.priceText,
           priceAmount: item.priceAmountText === undefined ? item.priceAmount : item.priceAmountText,
           currency: item.currency })
       : { priceLabel: wanted?.priceLabel ?? getPriceLabel(item) }),

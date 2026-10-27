@@ -1,32 +1,32 @@
-# AI_BOOT
+# Selqiro — alusta siit
 
-VERSION: 1.0
+See on püsiv sisenemisjuhis. Praegust tööjärge ei dubleerita siin eraldi sprinti
+või NEXT-ülesandena.
 
-PROJECT: Selqiro
+## Loe selles järjekorras
 
-CURRENT_PHASE: Architecture Sprint 1
+1. `docs/continuity/CURRENT_STATE.json` — üks praegune seisukirje: tegelik Maci/Giti seis, tehtud kontrollid, pilveseis, piirid ja üks järgmine tegevus.
+2. `docs/99_V2_HANDOFF_NEXT_CHAT.md` — samast seisukirjest genereeritud loetav üleandmine.
+3. `docs/continuity/HOSTED_PORTAL.md` — käesoleva portaali kasutuselevõtu täpne juhend.
+4. `docs/continuity/SERVICE_ACCESS.json` — olemasolevate teenuste sihid, CLI pin ja kuupäevaga tõendipiirid; saladusi siin pole.
+5. `docs/03_AI_RULES.md`, `docs/00_PROJECT_DNA.md` ning ainult käsil oleva mooduli arhitektuur.
 
-CURRENT_GOAL:
-Split My Page into smaller modules and build the Selqiro Knowledge System.
+Püsivad otsused on `docs/02_AI_MEMORY.md`-s; V2 ulatus ja ehitusviis on
+`docs/30_V2_SCOPE.md` ja `docs/31_V2_BUILD_PLAN.md`. Vanade kuupäevade CURRENT/NEXT
+pealkirjad on ajalugu. Neid ei käsitleta tänaste käivitamiskäskudena.
 
-CURRENT_STATE:
-- Admin dashboard exists.
-- Admin reports exist.
-- Admin identities list exists.
-- Admin identity detail exists.
-- Admin can set identity plan: free, premium, business.
-- Premium source of truth is identity_profiles.plan.
-- MembershipCard component has been extracted.
-- My Page is still too large and needs gradual refactor.
+## Koostöö ja tõendite piir
 
-NEXT_TASK:
-Build Selqiro Knowledge System, then continue My Page refactor with LocationCard.
+- Arendame olemasolevat Selqiro portaali samas hoidlas; V2 on selle uus modulaarne kiht.
+- Anna üks parim soovitus ning vii töö väikeste nähtavate tulemusteni: vajalik kohalik kontroll → commit/push → Vercel → tegelik kasutustee.
+- Erista alati ettevalmistatud lähtekoodi, Macis rakendatud/staged tööd, commit/push'i, andmebaasi muudatust ja tegelikku deployment'i. Üks ei tõenda teist.
+- Enne Maci kirjutusi kontrolli tegelikku haru, HEAD-i, tööpuud/indexit, lähtefaile ja kinnitatud remote'i. Säilita kasutaja muudatused ning päevikud.
+- Ära korda lõpetatud paigaldajaid, teste või teenuste ühendamist ilma konkreetse uue põhjuseta. Kontode, kuulutuste, piltide, sõnumite või päevikute kustutamisluba puudub.
+- Uuenda pärast sisulist sammu seisukirjet, sellest genereeritud üleandmist ja `docs/selqiro-dev-log.md`-d. Väljastatud räsikaitsega pakki ei muudeta varjatult.
 
-CORE_RULES:
-- Give one best recommendation, not multiple equal options.
-- Prefer whole-file replacement over patching inside large files.
-- Keep files small and modular.
-- One source of truth.
-- Documentation grows with code.
-- Build after every change.
-- Think in 10-year architecture.
+## Arhitektuuri alus
+
+Väikesed moodulid, üks autoriteetne andmeallikas, õhuke kasutajaliides ning
+serveri/andmebaasi õiguskontroll. Tavaline osalemine ei sõltu Energy ostust.
+Kuulutused on praegune arendusetapp; Energy, maksete tuum ja piiratud AI abi
+jäävad kokkulepitud V2 käivitamise ulatusse.
