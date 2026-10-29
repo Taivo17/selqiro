@@ -1,5 +1,15 @@
 # Olemasoleva Selqiro portaali jätkamine
 
+> **Praegune seis 29.10.2026:** allpool kirjeldatud 27.10 ettevalmistus on juba
+> lõpetatud. Commit `8f25f65` on GitHubis ja Verceli Productionis; 28.10
+> redeploy oli Ready. Kuulutus **197** koos pildiga on päris portaalis
+> avaldatud ja teise kontoga nähtav. Praegune töö on ostja kontakti **HTTP 503**
+> põhjuse leidmine. Loe `CURRENT_STATE.json` ja
+> `CONTACT_DIAGNOSTICS_20261029.md` siinsamas kaustas. **Ära käivita allolevaid
+> ajaloolisi paigaldus-, aktiveerimis- ega esimese push’i käske uuesti.**
+
+## 27.10 ettevalmistuse ajalugu ja sihtandmed
+
 Seis: 27.10.2026 Europe/Tallinn. Jätkame sama Selqiro portaali, GitHubi hoidla ja
 Supabase’i andmebaasiga. Taivol on kolm olemasolevat portaali kontot; uus voog
 avatakse neile müüja/ostja kasutustee proovimiseks. Brauseri tavapärane e-posti ja

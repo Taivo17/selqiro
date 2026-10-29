@@ -1,8 +1,16 @@
+import { parseContactDiagnostic, type ListingContactDiagnostic } from "./contactDiagnostic";
+
 export type ListingContactProblem = "input" | "configuration" | "unauthorized" | "context_changed" | "refused" | "outcome_unknown" | "response" | "aborted";
 export class ListingContactError extends Error {
-  constructor(readonly code: ListingContactProblem) { super("listing_contact_" + code); this.name = "ListingContactError"; }
+  readonly diagnostic?: ListingContactDiagnostic;
+  constructor(readonly code: ListingContactProblem, diagnostic?: ListingContactDiagnostic) {
+    super("listing_contact_" + code); this.name = "ListingContactError";
+    this.diagnostic = parseContactDiagnostic(diagnostic) ?? undefined;
+  }
 }
-export const contactFail = (code: ListingContactProblem): never => { throw new ListingContactError(code); };
+export const contactFail = (code: ListingContactProblem, diagnostic?: ListingContactDiagnostic): never => {
+  throw new ListingContactError(code, diagnostic);
+};
 type ActorCommand = Readonly<{ expectedUserId: string; expectedIdentityId: string; requestKey: string }>;
 export type ListingContactCommand = ActorCommand & Readonly<{ listingId: string }>;
 export type ListingMessageCommand = ActorCommand & Readonly<{ conversationId: string; message: string; listingId: string | null }>;

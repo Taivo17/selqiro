@@ -2,11 +2,14 @@ import { localIntegrationConfig } from "../journey/localIntegration";
 import { assertPublicationActor, publicationRuntimeConfig, type PublicationRuntimeConfig } from "../journey/integrationRuntime";
 import { createListingContactService } from "./contactListing";
 import { ListingContactError } from "../../../entities/conversation/model/listingContact";
+import { contactDiagnostic, type ListingContactDiagnosticCode, type ListingContactStage } from "../../../entities/conversation/model/contactDiagnostic";
 import type { UploadFetch } from "../../../entities/listing/api/privateUploadHttp";
 
 const actions = ["contact", "send", "get", "list"] as const;
 const reply = (body: unknown, status = 200) => Response.json(body, { status,
   headers: { "Cache-Control": "private, no-store", "X-Content-Type-Options": "nosniff" } });
+const rejected = (code: ListingContactDiagnosticCode, status: number) => reply({ error: code,
+  diagnostic: contactDiagnostic("request", code, status) }, status);
 async function readBody(request: Request): Promise<unknown> {
   if (request.headers.get("content-type")?.split(";")[0].trim() !== "application/json" || !request.body) throw new ListingContactError("input");
   const declared = request.headers.get("content-length");
@@ -24,23 +27,28 @@ async function readBody(request: Request): Promise<unknown> {
 export function createListingContactHandler(c: PublicationRuntimeConfig, fetcher: UploadFetch = fetch) {
   const service = createListingContactService(c, fetcher);
   return async (request: Request, action: string) => {
-    if (!actions.includes(action as typeof actions[number])) return reply({ error: "not_found" }, 404);
-    if (request.method !== "POST") return reply({ error: "method" }, 405);
-    if (request.headers.get("host") !== new URL(c.appOrigin).host || request.headers.get("origin") !== c.appOrigin) return reply({ error: "origin" }, 403);
+    if (!actions.includes(action as typeof actions[number])) return rejected("not_found", 404);
+    if (request.method !== "POST") return rejected("method", 405);
+    if (request.headers.get("host") !== new URL(c.appOrigin).host || request.headers.get("origin") !== c.appOrigin) return rejected("origin", 403);
     const authorization = request.headers.get("authorization") ?? "";
-    if (!/^Bearer [A-Za-z0-9._-]{1,8192}$/.test(authorization)) return reply({ error: "unauthorized" }, 401);
+    if (!/^Bearer [A-Za-z0-9._-]{1,8192}$/.test(authorization)) return rejected("unauthorized", 401);
+    let stage: ListingContactStage = "request";
     try {
       const input = await readBody(request);
       const expectedUserId = input && typeof input === "object" && !Array.isArray(input)
         ? (input as Record<string, unknown>).expectedUserId : undefined;
+      stage = "actor_check";
       await assertPublicationActor(c, authorization.slice(7), expectedUserId, request.signal, fetcher);
+      stage = "service_auth";
       return reply(await service[action as typeof actions[number]](authorization.slice(7), input, request.signal));
     } catch (error) {
-      const code = error instanceof ListingContactError ? error.code
+      const code: ListingContactDiagnosticCode = error instanceof ListingContactError ? error.code
         : error instanceof Error && ["unauthorized", "context_changed", "integration_unverified"].includes(error.message)
-          ? error.message : "outcome_unknown";
-      return reply({ error: code }, ["unauthorized", "context_changed"].includes(code) ? 403
-        : ["input", "refused"].includes(code) ? 409 : 503);
+          ? error.message as "unauthorized" | "context_changed" | "integration_unverified" : "outcome_unknown";
+      const status = ["unauthorized", "context_changed"].includes(code) ? 403 : ["input", "refused"].includes(code) ? 409 : 503;
+      const diagnostic = error instanceof ListingContactError && error.diagnostic ? error.diagnostic
+        : contactDiagnostic(code === "integration_unverified" ? "readiness" : code === "input" ? "request" : stage, code, status);
+      return reply({ error: code, diagnostic }, status);
     }
   };
 }

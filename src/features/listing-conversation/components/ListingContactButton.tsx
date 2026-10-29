@@ -4,7 +4,8 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { v2IntegrationEnabled } from "../../../shared/config/v2Integration";
 import { contactListingSeller } from "../../../entities/conversation/api/managedConversationClient";
-import { isConversationId, type ListingContactCommand } from "../../../entities/conversation/model/listingContact";
+import { isConversationId, ListingContactError, type ListingContactCommand } from "../../../entities/conversation/model/listingContact";
+import { contactDiagnostic, formatContactDiagnostic } from "../../../entities/conversation/model/contactDiagnostic";
 import { useConversationActor } from "../model/useConversationActor";
 
 export default function ListingContactButton(props: { listingId: string; className?: string }) {
@@ -26,8 +27,12 @@ function EnabledListingContactButton({ listingId, className }: { listingId: stri
     try {
       const receipt = await contactListingSeller(actor.accessToken, command, actor.signal);
       if (context.isCurrent(actor)) router.push("/v2/messages/" + receipt.conversation_id);
-    } catch {
-      if (context.isCurrent(actor)) setProblem({ generation: actor.generation, text: "Vestlust ei saanud avada. Proovi uuesti; sama pöördumist ei dubleerita." });
+    } catch (error) {
+      const diagnostic = error instanceof ListingContactError ? error.diagnostic
+        ?? contactDiagnostic(error.code === "response" ? "browser_response" : "browser_request", error.code)
+        : contactDiagnostic("browser_request", "outcome_unknown");
+      if (context.isCurrent(actor)) setProblem({ generation: actor.generation,
+        text: "Vestlust ei saanud praegu avada. Tõrkekood: " + formatContactDiagnostic(diagnostic) + "." });
     } finally { inFlight.current = false; setBusy(false); }
   }
   const style = className ?? "block w-full rounded-2xl bg-[#171717] px-5 py-4 text-center font-semibold text-white disabled:opacity-50";
