@@ -1,5 +1,10 @@
 # V1 sõnumite kasutusloogika taastamine V2-s
 
+> Hilisem jätk 30.10.2026: kasutaja telefoni pildid näitavad uuendatud vestlusvaate kasutamist.
+> Kuulutusekaardi/klaviatuuri ja fotovaliku paranduse kehtiv juhis on
+> [MESSAGING_MOBILE_FIX_20261030.md](MESSAGING_MOBILE_FIX_20261030.md).
+> Allolev SQLi/Storage’i paigalduskäik on varasema tarne ajalugu; seda telefoniparanduseks ei korrata.
+
 Seis: 30.10.2026. Tegelik Maci `result.json` on loetud. Parandatud lähteviitega
 jätk läbis lähtekontrolli ja peatus ainult lugemisega andmebaasi eelkontrollis.
 See dokument kirjeldab Supabase’i toetatud poliitikaõigust arvestavat jätkupakki;

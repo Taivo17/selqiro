@@ -97,7 +97,7 @@
 .thread[data-chat-compact="true"] .draftCard { position: relative; padding: 4px 8px; margin-bottom: 4px; }
 .thread[data-chat-compact="true"] .draftCardLabel { margin: 0; }
 .thread[data-chat-compact="true"] .draftCardLabel > span { display: none; }
-.thread[data-chat-compact="true"] .draftCardLabel .textButton { margin-left: auto; padding: 2px 0; }
+.thread[data-chat-compact="true"] .draftCardLabel .textButton { margin-left: auto; padding: 6px 0; min-height: 32px; }
 .thread[data-chat-compact="true"] .compactListing { display: block; position: absolute; top: 6px; left: 8px; right: 76px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font-size: 12px; font-weight: 600; }
 .thread[data-chat-compact="true"] .expandedListing { display: none; }
 .thread[data-chat-compact="true"] .preview { padding: 3px 6px; margin-bottom: 0; gap: 7px; }
@@ -106,8 +106,12 @@
 .thread[data-chat-compact="true"] .textarea { max-height: 48px; }
 .thread[data-chat-compact="true"] .history { padding-top: 4px; padding-bottom: 4px; }
 .thread[data-chat-compact="true"] > .notice { max-height: 56px; overflow-y: auto; flex-shrink: 1; }
+.thread[data-chat-tight="true"] .attachments { max-height: 38px; }
+.thread[data-chat-tight="true"] .textarea { max-height: 24px; }
+.thread[data-chat-tight="true"] > .notice { max-height: 30px; }
 @media (max-width: 767px) {
   .thread { height: var(--chat-height, calc(100dvh - 75px)); min-height: 0; width: 100%; border: 0; border-radius: 0; box-shadow: none; }
+  .thread[data-chat-keyboard="true"] { position: fixed; top: var(--chat-top, 0px); left: 0; right: 0; z-index: 45; max-width: none; margin: 0; }
   .header { gap: 8px; padding: 8px 10px; }
   .heading h1 { font-size: 16px; }
   .header .avatar { width: 32px; height: 32px; }
@@ -116,6 +120,15 @@
   .composer { padding: 7px 10px max(9px, env(safe-area-inset-bottom)); }
   .sender { margin-bottom: 5px; }
   .draftCard { max-height: 120px; }
+  /* Compact immediately on focus, before the keyboard resize/pan events arrive. */
+  .composer[data-composer-focused="true"] .attachments { max-height: 74px; }
+  .composer[data-composer-focused="true"] .draftCard { position: relative; padding: 4px 8px; margin-bottom: 4px; }
+  .composer[data-composer-focused="true"] .draftCardLabel { margin: 0; }
+  .composer[data-composer-focused="true"] .draftCardLabel > span { display: none; }
+  .composer[data-composer-focused="true"] .draftCardLabel .textButton { margin-left: auto; padding: 6px 0; min-height: 32px; }
+  .composer[data-composer-focused="true"] .compactListing { display: block; position: absolute; top: 10px; left: 8px; right: 76px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font-size: 12px; font-weight: 600; }
+  .composer[data-composer-focused="true"] .expandedListing { display: none; }
+  .thread[data-chat-tight="true"] .attachments { max-height: 38px; }
   .notice { margin: 5px 10px; padding: 7px 9px; font-size: 12px; }
   .inbox { border-radius: 18px; padding: 14px; }
   .threadRow { gap: 5px; }

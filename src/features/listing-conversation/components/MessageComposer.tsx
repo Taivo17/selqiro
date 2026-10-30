@@ -1,5 +1,5 @@
 "use client";
-import { useId, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useId, useLayoutEffect, useRef, useState } from "react";
 import type { ListingMessageCard } from "../../../entities/conversation/model/listingMessageCards";
 import type { MessagePhotoDraft } from "../model/useMessagePhoto";
 import ConversationAvatar, { type ConversationIdentity } from "./ConversationAvatar";
@@ -11,6 +11,7 @@ type Props = {
   photo: MessagePhotoDraft | null; photoLocked: boolean; attachmentRequested: boolean; attachment: ListingMessageCard | null;
   attachmentUnavailable: boolean; onText: (text: string) => void; onSend: () => Promise<void>;
   onPhoto: (file: File) => void; onRetryPhoto: () => void; onRemovePhoto: () => void; onRemoveAttachment: () => void;
+  onPhotoPickerOpen: () => boolean; onPhotoPickerCancel: () => void;
 };
 export default function MessageComposer(props: Props) {
   const [focused, setFocused] = useState(false);
@@ -19,6 +20,13 @@ export default function MessageComposer(props: Props) {
   const count = Array.from(props.text).length;
   const photoBusy = props.photo?.state === "preparing" || props.photo?.state === "uploading";
   const photoDisabled = props.disabled || props.busy || props.unresolved;
+  const { onPhotoPickerCancel } = props;
+  useEffect(() => {
+    const input = file.current;
+    const cancel = () => onPhotoPickerCancel();
+    input?.addEventListener("cancel", cancel);
+    return () => input?.removeEventListener("cancel", cancel);
+  }, [onPhotoPickerCancel]);
   useLayoutEffect(() => {
     const input = textarea.current;
     if (!input) return;
@@ -26,7 +34,7 @@ export default function MessageComposer(props: Props) {
     input.style.height = Math.min(120, Math.max(focused ? 48 : 24, input.scrollHeight)) + "px";
   }, [props.text, focused]);
   const showSend = !!props.text.trim() || props.photo?.state === "ready" || props.busy || props.unresolved;
-  return <form className={styles.composer} onSubmit={event => {
+  return <form className={styles.composer} data-composer-focused={focused} onSubmit={event => {
     event.preventDefault();
     if (props.canSend) {
       // Keep the phone keyboard open during a normal send, including photo-only sends.
@@ -34,7 +42,8 @@ export default function MessageComposer(props: Props) {
       void props.onSend();
     }
   }}
-    onFocus={() => setFocused(true)} onBlur={event => { if (!event.currentTarget.contains(event.relatedTarget as Node | null)) setFocused(false); }}>
+    onFocus={() => { if (textarea.current && document.activeElement === textarea.current) setFocused(true); }}
+    onBlur={event => { if (!event.currentTarget.contains(event.relatedTarget as Node | null)) setFocused(false); }}>
     <div className={styles.sender} aria-label="Sõnumi saatja">
       <ConversationAvatar identity={props.identity} />
       <span>Saadad kui <strong>{props.identity?.name || "Identiteedi kontroll…"}</strong></span>
@@ -55,7 +64,7 @@ export default function MessageComposer(props: Props) {
         // eslint-disable-next-line @next/next/no-img-element
         <img src={props.photo.previewUrl} alt="Valitud foto eelvaade" />}
       <div className={styles.previewInfo}>
-        <p>{photoBusy ? "Valmistan fotot ette…" : props.photo.state === "ready" ? "Foto on saatmiseks valmis" : props.photo.error}</p>
+        <p role="status">{props.photo.state === "checking" ? "Kontrollin foto saatjat…" : photoBusy ? "Valmistan fotot ette…" : props.photo.state === "ready" ? "Foto on saatmiseks valmis" : props.photo.error}</p>
         {(props.photo.state === "error" || props.photo.state === "uncertain") && <button type="button" className={styles.textButton}
           disabled={photoDisabled} onClick={props.onRetryPhoto}>Proovi foto laadimist uuesti</button>}
       </div>
@@ -65,11 +74,13 @@ export default function MessageComposer(props: Props) {
     </div>}
     <div className={styles.composerRow}>
       <input ref={file} type="file" accept="image/jpeg,image/png,image/webp" className={styles.srOnly} tabIndex={-1}
-        aria-label="Vali foto" disabled={photoDisabled || !!props.photo} onChange={event => {
-          const selected = event.target.files?.[0]; if (selected) props.onPhoto(selected); event.target.value = "";
+        aria-label="Vali foto" onChange={event => {
+          const selected = event.target.files?.[0]; event.target.value = "";
+          if (selected) props.onPhoto(selected); else props.onPhotoPickerCancel();
         }} />
       <button type="button" className={styles.iconButton + " " + (!focused ? styles.photoLabel : "")}
-        disabled={photoDisabled || !!props.photo} onClick={() => file.current?.click()} aria-label="Lisa foto" title="Lisa foto">
+        onPointerDown={event => { if (event.button === 0) event.preventDefault(); }}
+        disabled={photoDisabled || !!props.photo} onClick={() => { if (props.onPhotoPickerOpen()) file.current?.click(); }} aria-label="Lisa foto" title="Lisa foto">
         <span aria-hidden="true">{focused ? "+" : "▧"}</span>{!focused && <span>Foto</span>}
       </button>
       <div className={styles.inputWrap}>

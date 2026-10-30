@@ -63,7 +63,14 @@ function ManagedConversation({ conversationId, originListingId = null }: Props) 
     {visible && !visible.can_send && <p className={styles.notice}>{visible.blocked_by_me
       ? "Oled selle kasutaja blokeerinud. Blokeeringut saad muuta vestluse menüüst."
       : "Selles vestluses ei saa praegu uusi sõnumeid saata."}</p>}
-    {state.changed && <p className={styles.notice} role="status">Pooleli olev sõnum kuulub eelmisele identiteedile. Tekst ja foto on alles; jätkamiseks vaheta tagasi.</p>}
+    {state.changed && !state.photo.waitingForActor && <p className={styles.notice} role="status">Pooleli olev sõnum kuulub eelmisele identiteedile. Tekst ja foto on alles; jätkamiseks vaheta tagasi.</p>}
+    {state.photo.waitingForActor && <div className={styles.notice} role="status">
+      <p>{context.error ? "Foto on valitud, kuid saatjat ei saanud kontrollida. Proovi kontrolli uuesti või eemalda foto."
+        : "Foto on valitud. Kontrollin aktiivset saatjat…"}</p>
+      {!!context.error && <button type="button" className={styles.textButton} onClick={context.refresh}>Kontrolli saatjat uuesti</button>}
+      <button type="button" className={styles.textButton} onClick={state.photo.cancelPending}>Eemalda valitud foto</button>
+    </div>}
+    {state.photo.selectionProblem && <p className={styles.notice} role="status">{state.photo.selectionProblem}</p>}
     {state.incomingListingId && !state.changed && <div className={styles.notice} role="status">
       <p>Avatud on teine kuulutus. Pooleli olev sõnum ja selle kuulutusekaart on alles.</p>
       <button type="button" className={styles.textButton} disabled={!state.canAcceptIncoming} onClick={state.acceptIncomingListing}>Tühjenda tekst ja lisa uus kuulutus</button>
@@ -72,6 +79,7 @@ function ManagedConversation({ conversationId, originListingId = null }: Props) 
     <MessageComposer identity={visible?.actor ?? null} text={state.body} canSend={state.canSend} busy={state.busy} unresolved={state.unresolved}
       disabled={state.changed || !visible?.can_send || state.acting} onText={state.changeBody} onSend={state.send}
       photo={state.photo.visiblePhoto} photoLocked={state.photo.locked} onPhoto={state.photo.choose} onRetryPhoto={state.photo.retry}
+      onPhotoPickerOpen={state.photo.beginSelection} onPhotoPickerCancel={state.photo.cancelSelection}
       onRemovePhoto={state.photo.remove} attachmentRequested={state.attachmentRequested} attachment={state.attachment}
       attachmentUnavailable={state.attachmentUnavailable} onRemoveAttachment={state.removeAttachment} />
   </section>;

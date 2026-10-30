@@ -118,3 +118,17 @@
 - Added development planning rule.
 - Added 10-year architecture principle.
 - Future development should prioritize modularity, maintainability, clear responsibilities, and easy debugging.
+
+
+## 2026-10-30 — Telefoni vestluse klaviatuur ja fotovalik
+
+Kasutaja telefoni pildid kinnitavad uuendatud sõnumivaate käivitumist ning näitavad
+kaht viga: kuulutusekaart varjas kirjutusvälja ja galerii valik ei jõudnud
+foto mustandisse. Parandatud nähtava vaate nihke/kõrguse käsitlemine ja fookuse
+ajal kompaktne kaart. Foto valik seotakse enne galerii avamist saatjaga ning
+säilib sama saatja korduskontrollini; valele identiteedile seda ei laadita.
+
+Uus tarne on ainult kliendikoodi parandus koos varukoopia, build’i ja piiratud
+commit/pushiga. Andmebaasi ega Storage’i ei paigaldata uuesti. Täpsed kontrollid
+ja piirid: `docs/continuity/MESSAGING_MOBILE_FIX_20261030.md` ning tarne
+`review/verification.json`. Viimase tootmis-commit’i räsi ei oletata pildi põhjal.

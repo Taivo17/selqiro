@@ -27,7 +27,7 @@ export function useListingConversation(conversationId: string, originListingId: 
   const [incomingListingId, setIncomingListingId] = useState<string | null>(null), [sentMessageId, setSentMessageId] = useState<string | null>(null);
   const incoming = useRef<string | null>(null), observedOrigin = useRef(originListingId);
   const sending = useRef(false), readVersion = useRef(0), readingNow = useRef(false), actingNow = useRef(false);
-  const photo = useMessagePhoto(conversationId, context.actor, context.isCurrent, busy || unresolved);
+  const photo = useMessagePhoto(conversationId, context.actor, context.isCurrent, busy || unresolved, context.refresh, context.anonymous);
   const markRead = useThreadReadWatermark(conversationId, context.actor, context.isCurrent);
 
   function replaceView(value: MessageThread | null) { viewRef.current = value; setView(value); }
