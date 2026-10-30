@@ -19,6 +19,7 @@ OVERLAYS = (
     "supabase/labs/listing-contact-integration-v1/01_contact.sql",
     "supabase/labs/listing-contact-integration-v1/02_read.sql",
     "supabase/labs/listing-contact-integration-v1/tests/authority.sql",
+    "supabase/repairs/20261029_listing_message_cards/changes.sql",
 )
 
 OWNER_GRANTS = """

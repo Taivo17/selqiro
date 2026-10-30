@@ -1,48 +1,48 @@
 <!-- GENERATED from docs/continuity/CURRENT_STATE.json; do not edit independently. -->
 # Selqiro — praegune tööüleandmine
 
-Seisukirje: 2026-10-29 Europe/Tallinn
+Seisukirje: 2026-10-30 Europe/Tallinn
 
 ## Praegune checkpoint
 
-29.10.2026: päris portaalis on kuulutus 197 koos pildiga avaldatud ja teise e-postiga sisselogitud ostjale nähtav. Vastuvõetud main-commit on 8f25f65; 28.10 Verceli Production redeploy on Ready. Ostja Jaani Pood nupu Kirjuta müüjale POST /api/v2/listing-contact/contact tagastab 503. Chrome ei anna selle vastuse keha kätte; algpõhjus pole kinnitatud. Valmis on väike kontaktivea diagnostika lähteparandus, mille Maci rakendamine, uus commit/push ja deployment on veel kinnitamata. Sama DevToolsi ringi ega lõpetatud 27.10 paigaldust ei korrata.
+30.10 kasutaja käivitas kuulutusekaardi paketi Macis; see peatus DATABASE_OUTCOME_NOT_VERIFIED teatega andmebaasietapis enne lähtekoodi, buildi, commit’i ja push’i. Tarnitud SQLi omanikuvahetuse viga on kohaliku mittesuperkasutaja katses korratud ja parandatud. Uus jätkupakk loeb vana päevikut ning kontrollib värsket DB-seisu enne jätkamist. Uue jätku Maci lõpp ja Productioni kaart ei ole veel kinnitatud.
 
 ## Lähtekood ja tõendi piir
 
-- **Vastuvõetud alus:** 8f25f65: Connect controlled listing publication to the existing Selqiro portal. Eelmine main-commit e95fa9ce1d41b9b4c6e4884b6076f414173a946d. Uuendaja kontrollib kordumatu täieliku SHA, vanema, tegeliku main-haru, hoidla/remote’i ja failihašid enne kirjutust.
-- **Kitsas kandidaat:** Kontaktitransport loeb vea JSON-i kuni 4096 baiti. Server ja klient säilitavad ainult lubatud etapi, põhjuse, HTTP staatuse ja teadaoleva SQLSTATE/PGRST koodi; nupu all kuvatakse lühike LC- tõrkekood. See parandab vea nähtavust, mitte veel kinnitamata 503 algpõhjust.
-- **Säiliv käitumine:** Origini/Authi/readiness’i kontroll, RPC argumendid, sama katse võti, range edukas vastus ja suunamine säilivad. SQL-release, andmed, sõltuvusversioonid ja keskkonnaseaded ei kuulu koodideltasse.
-- **Tarne piir:** Assistendis ettevalmistatud ja kontrollitud failid ei tähenda Maci paigaldust ega veebis avaldamist. Ühekordne uuendaja, lokaalne build, commit, push ja Verceli Ready tuleb eraldi tõendada.
-- **Järjepidevus:** 27.–28.10 lõpetatud seadistus ja päris pildiga avaldamine on nüüd jooksvasse seisu kantud. Ajaloolised paigaldusjuhised, kontod, andmed ja senised privaatpäevikud säilivad.
+- **Vastuvõetud alus:** Portaali alus on 8f25f65; selle järel jõudis nähtav kontaktidiagnostika kasutaja lehele. Paigaldaja kontrollib main-haru, sama hoidla origin’i, selle aluse esivanemlust ning iga muudetava ja seotud lähtefaili täpseid baashaše. Tegeliku jooksva main SHA loeb paigaldaja Macis; assistent ei mõtle seda välja.
+- **Uus kandidaat:** Kontakt liigub /v2/messages/ID?listing=ID teele. Eraldi hook haldab konto külge seotud koostajat, eemaldatavat eelvaadet ja muutumatut korduskatset. Iga ajalooline kaart tuleb selle sõnumi listing_id/title/image/price väljadest. Pealkiri, hind ja pilt ei tule vestluse hetkelisest headerist.
+- **Lugemisleping:** Lisandub getWithListings HTTP-tegevus ja get_my_listing_conversation_v2 RPC. Versiooni 2 range parser kasutab muutmata v1 parserit baasväljade valideerimiseks. Vana v1 lugemisleping ja olemasolev kontrollitud saatja säilivad.
+- **Andmebaasi tarne:** Üks uus piiratud omaniku ja authenticated-õigusega lugeja. V2 funktsiooni sisu, preflight ja verify säilivad bait-baidilt. Parandatud apply annab uuele omanikule CREATE õiguse ainult ühe tehingu sees omanikuvahetuseks ning võtab selle tagasi; public-skeemi omanik/ACL ja kuus vana piiri sõrmejälge peavad enne kinnitamist täpselt säilima.
+- **Paigaldus:** Uus selqiro-postkasti-kaart-jatk-20261030 pakk sisaldab sama kaardirakendust ja parandatud SQLi. jatka.py kontrollib vana manifesti ja DB-etapis peatunud päevikut lugemisrežiimis, hoiab selle lukku ning võrdleb uut lähte- ja DB-seisu vana algseisuga. Alles seejärel saab üks --publish käsk lisada puuduvat lugejat, paigaldada lähtekoodi, ehitada ning teha täpse commit’i ja mittejõustatud push’i.
+- **Tõendi piir:** Kasutaja screenshot kinnitab peatumiskoodi, kuid ei näita database_after raportit. Kohalik täpsete tarnitud SQL-baitide katse kordab 42501 permission denied for schema public viga ja tagasipöördumist absent-seisu; see ei asenda kasutaja live-seisu kontrolli. Jätkaja teeb selle vana päeviku ja värske lugemiskontrolli põhjal. Rakenduse kasutusloogika on eelmise kaardikandidaadiga identne.
 
 ## Tegelik kohalik katse
 
-- Varasemad kohaliku avaldamise ja 26.–27.10 release’i kontrollid säilivad ajaloolise tõendina; nende laiu sarju selle diagnostikaparanduse tõttu ei korrata.
-- 29.10 kontaktidiagnostika sihitud Node kontroll: 12/12 PASS, sünteetilised Auth/readiness/RPC vastused. Kontrollitud on veakeha 4096 baidi piir, HTTP staatuse säilimine aeglase veakeha puhul, katkestus/ajapiir, lubatud diagnostika, muutumatud konto/origini piirid ja range eduka vastuse leping.
-- Lõplik Next16.2.1 production Webpack-build PASS: kompileerimine 5,3 s, TypeScript 8,4 s, 27 staatilist lehte. Ainult sünteetilised build’i seaded; päris Authi/andmebaasi ei kutsutud. Sõltuvuste lukufail ja versioonid ei muutunud.
-- Build’i järel päris komponendi/kliendi kohalik brauseriproov Chrome for Testing156.0.8078.73-s PASS: lubatud tõrkekood nähtav, kõrvaline tekst väljajäetud, kolm käsitsi klõpsu tekitasid kolm päringut sama võtmega, edu suunas õigele vestluse URL-ile. Konto/router olid sünteetilised ja HTTP vastused pealt püütud; päris vestlus pole selle prooviga tõendatud.
-- Uuendaja13/13 sihitud kontrolli PASS ajutiste kohalike Git-hoidlate/remote’idega; build ja sõltuvuskäsud olid mockitud. Kontrolliti kõrvalise töö säilimist, täpseid faile, build’i/push’i ebaõnnestumist ja kadunud push-vastuse ühekordset lugemiskinnitust. Python3.9 süntaks sobib. Maci rakendamine ja uus Verceli deployment on veel kinnitamata.
+- 30.10 parandatud SQLi 40/40 kontrolli PASS PostgreSQL 18.6 / PGlite 0.5.13 ühe ühendusega sünteetilises katses. Paigaldaja postgres ei ole superkasutaja; vana SQLi 42501 viga kordub, parandatud SQL läbib ning public-skeemi õigused taastuvad täpselt ka katkestamisel. Fixture muudab PGlite kaitstud postgres-rolli lippu ainult isoleeritud katses; tootmises rolliatribuute ei muudeta.
+- 30.10 jätkaja 30/30 kontrolli PASS ajutiste päris Git-hoidlate/bare-remote’ide ning sünteetilise DB-transpordiga. Python 3.9 süntaks PASS. Kontrolliti vana päeviku säilimist, puuduvat/tundmatut/muutunud DB-seisu, ühte parandatud SQL-katset, kinnitatud lugeja hilisema kadumise keeldumist, lähte/build/commit/push jätkamist ning kasutaja töö säilimist. Build on nendes paigaldajatestides asendatud.
+- 30.10 tootmisbuild npm run build -- --webpack PASS koos TypeScripti ja leheandmetega. Kasutati sünteetilisi buildi keskkonnaväärtusi; päris Supabase’i ega OpenAI päringut ei tehtud.
+- 29.10 kaardilepingu/diagnostika 23/23 Node ja komponentide 14/14 brauseri kasutusolukorra varasemad tõendid säilivad täpselt samale rakenduskoodile. Rakenduse app/components/lib/src failid, sõltuvused ja buildikonfiguratsioon on bait-baidilt muutmata; uusi sõnumeid ega brauseri kasutuskatseid seekord ei tehtud.
+- Kohaliku skeemi 55 sisendi ja 12 runtime-kirje räside kontroll ning deterministlik koostamine PASS. Uus omanikuvahetuse parandus on ka värske kohaliku skeemi fragmendis; olemasoleva arendusbaasi lähtestamist ega automaatset migratsiooni ei lisatud.
 
 ## Production / kasutajaliides
 
-- 27.10 terminalipilt kinnitab DB-release’i, privaatse pildikogu ja kolme olemasoleva konto lubamise lõpetamist. Sama käik ise ei push’inud. Järgnev kasutaja terminalipilt kinnitab e95fa9c..8f25f65 main -> main push’i; täielikku uut SHA-d pole assistent Macist lugenud.
-- Verceli kasutaja pilt: 8f25f65 / main / Ready 59s / Production. 28.10 Production anon-võtme seadistuse järel sama lähtecommit’i uus redeploy: Ready 1m9s / Production. Need on juba vastu võetud, mitte järgmised korduskatsed.
-- Kuulutus 197: Müüa BMW, 4376 €, Taivo Garaaž, üks pilt. Kasutaja pildid näitavad avaldamise kinnitust, detaili, suurt pilti ja Minu ala Aktiivne olekut (kehtib kuni 26. jaan 2027 20:22).
-- Ostja Jaani Pood on kasutaja sõnul sisse logitud teise e-postiga; sama kuulutus ja pilt avanevad. 28.10T20:02:27Z contact-päringu päistes on HTTP503, application/json. Vastuse keha puudub DevToolsis; ei ole alust väita kindlat SQL-, konto- või võtmeviga.
-- Pildi koristusvaates: koristamisel 1, sulgemise kontroll ootel 0, vajavad tähelepanu 0, reserveeritud 29 MiB. Üheminutiline ooteaeg ei tõenda kinnijäämist. Hosted lõppkoristust ega avalikku täismahus valmidust ei ole vastu võetud.
+- Kasutaja varasem terminal ja Verceli pildid kinnitavad 8f25f65 main push’i ning Production Ready tulemust. Production anon-võtme järel tehtud redeploy ja avaldatud kuulutus 197 on juba vastu võetud.
+- Kuulutus 197: Müüa BMW, 4376 €, Taivo Garaaž, üks pilt. Kasutaja nägi avaldamise kinnitust, detaili, suurt pilti ja Minu ala aktiivset rida.
+- 29.10 kasutaja pildid kinnitavad /v2/messages/38 avanemist, Jaani Pood saadetud teksti ning selle lugemist Taivo Garaaži V2 ja V1 vaates. Edukat kontakti avamist/saatmist/lugemist ei nõuta uuesti; varasemat 503/LC-RPC uurimist ei avata selle kaarditöö käigus uuesti.
+- 30.10 kasutaja terminalipilt kinnitab algse kuulutusekaardi uuendaja DATABASE_OUTCOME_NOT_VERIFIED peatust. Kontrollitud paigaldaja koodis oli see enne lähtefailide paigaldust, buildi ja Git-toiminguid. Vana kaardipakki ei käivitata uuesti; jätkupakk kontrollib selle säilinud raportit. Jätku tegelik Maci tulemus ja Verceli Ready on ootel.
+- Hosted lõppkoristus ja reserve vabastamine jäävad eraldi lõpetamata tööks. Varasem üks pildiga kasutuskäik ja üheminutiline koristuse ooteaeg ei tõenda neid valmis.
 
 ## Üks järgmine töö
 
-Valmis diagnostikaparanduse pakett rakendatakse ühekordselt olemasolevale ~/selqiro main-harule, kontrollitakse build ning saadetakse tavalise commit/push abil samasse GitHubi. Paketi --publish tähendab neid avaldamissamme. Pärast sama uue commit’i Verceli Ready tulemust avab ostja kuulutuse 197 ja vajutab ühe korra Kirjuta müüjale. Kui kontakt ebaõnnestub, piisab nupu all kuvatavast LC- algusega tõrkekoodist. Seejärel parandada tuvastatud põhjus. DevToolsi Response/Edit/Copy-as-fetch ringi, kolme konto aktiveerimist ja kuulutuse avaldamist uuesti ei nõuta.
+Käivita selqiro-postkasti-kaart-jatk-20261030/jatka.py --publish samas olemasolevas Maci keskkonnas. Jätk loeb vana 29.10 paketi päevikut, kinnitab praeguse DB-seisu ning jätkab parandatud paigaldusest. Pärast VALMIS tulemust oota selle commit’i Restore listing cards in V2 conversations Verceli Ready olekut ja vaata uut kaarti kuulutuse alt alustatud sõnumi juures.
 
-**Peatumisel:** Erineva HEAD-i, remote’i, failihaši või kohaliku töö korral säilita kõik failid/index/commit ja lahenda tegelik erinevus. Ära kasuta reset/clean/stash/force-push’i, ära käivita vana ettevalmistajat ega muuda kontoõigusi oletuse põhjal. Ebaselge push’i puhul loe remote’i tulemus enne uut kirjutust. Tõrkekoodi võib jagada; Authorization’it ja võtmeid ei küsita.
+**Peatumisel:** Kui jätkaja peatub, loe selle PEATATUD-kood ja privaatne result.json; säilita mõlemad päevikud ja kasutaja töö. Tundmatut vana DB-tulemust ei eeldata edukaks ega ebaõnnestunuks. Parandatud SQLi ei korrata pärast selle enda ebaselget katset või varem kinnitatud lugeja kadumist. Vana kontakti parandajat, algset kaardiuuendajat, kontoaktiveerimist, portaali paigaldajat ega võtmete seadistust ei korrata. Päris sõnumeid ei saadeta assistendi tööriistadega ilma kasutaja selge saatmiskäsuta.
 
 ## Loe ainult vajalikku
 
-- docs/continuity/CONTACT_DIAGNOSTICS_20261029.md: praegune kontaktitõrge, kitsas lähteparandus, tõendi piir ja üks järgmine samm.
-- docs/continuity/HOSTED_PORTAL.md: kindel olemasolev siht ja ajalooline seadistus. Sealne 27.10 paigaldus on lõpetatud ega ole praegune käivitusjuhis.
-- src/entities/conversation/model/contactDiagnostic.ts, api/contactHttp.ts ning src/server/listing-publication/contact/: tõrkekoodi tegelik päritolu; SQL-i muutmine vajab esmalt konkreetset põhjust.
-- docs/30_V2_SCOPE.md ja docs/31_V2_BUILD_PLAN.md: ühe portaali kokkulepitud V2 ulatus. CURRENT_STATE on praeguse tegevuse allikas; docs/99 genereeritakse sellest.
+- docs/continuity/INBOX_CARDS_20261029.md: kaardi kasutuskäik, muudatused, tõendid ja tarne.
+- supabase/repairs/20261029_listing_message_cards/README.md: täpne v2 JSON-leping, guard, SQL ja tõendipiir.
+- docs/continuity/CONTACT_DIAGNOSTICS_20261029.md: varem tarnitud diagnostika ajalugu; see ei ole uus paigaldusülesanne.
 
 ## Säilivad piirid
 
@@ -54,10 +54,11 @@ Valmis diagnostikaparanduse pakett rakendatakse ühekordselt olemasolevale ~/sel
 
 ## Keskkond
 
-- Maci olemasolev main: ~/selqiro. Säilivad ~/selqiro-veeb-20261026 (work/portal-20261026) ja ~/selqiro-v2-integratsioon-20261018. Värske täielik HEAD ja puhas tööseis tuleb enne järgmist kirjutust päriselt kontrollida.
+- Maci olemasolev main: ~/selqiro. Säilivad ~/selqiro-veeb-20261026 (work/portal-20261026) ja ~/selqiro-v2-integratsioon-20261018. DB-parandaja teeb vaid hoidla/remote/link-faili lugemiskontrolli; tööfaile/indexit ei kirjuta.
 - GitHub https://github.com/Taivo17/selqiro.git; Vercel selqiro / Taivo’s projects / https://selqiro.vercel.app; Supabase vyjletlmwoiwxsnsunlm / eu-central-1; paigalduse UUID 2d088814-0900-448a-a9d1-7b05470cb1d2.
-- Olemasolev Supabase CLI ja Maci autentimine säilivad. ChatGPT pluginate uus ühendamine ei ole selle koodiparanduse eeltingimus. Assistendi isoleeritud lähtekoopia ei ole kasutaja Mac ega tõenda tema praegust Git-seisu.
+- Olemasolev Supabase CLI 2.117.0 ja Maci autentimine säilivad. Parandaja võrdleb viit varem kinnitatud CLI faili ning kasutab nende olemasolevat profiili. Uut pluginat, autentimist ega võtme sisestamist see pakk ei nõua; puuduv või teistsugune tööriist peatab käigu.
 - Varasem privaatne ettevalmistusraport ~/Library/Application Support/Selqiro/hosted-publication/2d088814-0900-448a-a9d1-7b05470cb1d2/prepare-report.json jääb alles. Kontode e-postid, paroolid, võtmed ja brauseri Authorization ei kuulu raportitesse.
+- Vana päevik säilib muutmata: ~/Library/Application Support/Selqiro/inbox-cards-20261029/c73d97b60f855320679a95b20bcfa4fbe5834d8b7b16b5bd1c6367fbb7d79c41/. Uue jätku päevik/varukoopiad: ~/Library/Application Support/Selqiro/inbox-cards-20261030/<manifest-sha>/. Sama olemasolev CLI 2.117.0, autentimine, main ja teised worktree’d.
 
 ## Ajalugu (mitte praegused käsud)
 

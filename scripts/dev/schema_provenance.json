@@ -112,7 +112,8 @@
     "supabase/labs/listing-publication-attempt-v1/tests/fixture.generated.sql": "fab1ab88575192a7ff2f4151b544a383559ea1ea544819e50fe9d1f523e08a3f",
     "supabase/labs/listing-contact-integration-v1/tests/fixture-extension.sql": "b36206c080a1ba9f5de74519c91aba4125e0b7ac71718e4d3a77d9ae0ab96aba",
     "supabase/labs/listing-contact-integration-v1/tests/authority.sql": "358ddbea9c3f0277e4b03d838085afafde728c523e785620f512eeb1d34071cc",
-    "supabase/labs/listing-public-read-v1/tests/reader-fixture-extension.sql": "107201a066632682d1f8a506efbbb9a05aa0c8604c267c8ac4b3a3b1a845052a"
+    "supabase/labs/listing-public-read-v1/tests/reader-fixture-extension.sql": "107201a066632682d1f8a506efbbb9a05aa0c8604c267c8ac4b3a3b1a845052a",
+    "supabase/repairs/20261029_listing_message_cards/changes.sql": "264426d1b88199d2cf4ee3ccfd8edb058949e7fded70885952cdf29ee6003c2e"
   },
   "pure_function_adaptations": [
     "source and declaration read immutable current-source hashes instead of historical runtime globals",

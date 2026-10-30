@@ -1,6 +1,7 @@
 import { v2IntegrationEnabled } from "../../../shared/config/v2Integration";
 import { contactHttp } from "./contactHttp";
 import { contactDiagnostic, readContactErrorDiagnostic } from "../model/contactDiagnostic";
+import { copyConversationCardReadCommand, parseConversationCardView } from "../model/listingMessageCards";
 import { contactFail, ListingContactError, copyListingContactCommand, copyListingMessageCommand, copyConversationReadCommand,
   copyConversationListCommand, parseListingContactReceipt, parseListingMessageReceipt, parseConversationView,
   parseConversationList } from "../model/listingContact";
@@ -34,6 +35,10 @@ export async function sendListingMessage(token: string, input: unknown, signal?:
 export async function getListingConversation(token: string, input: unknown, signal?: AbortSignal) {
   const c = copyConversationReadCommand(input);
   return parseConversationView(await request("get", token, c, signal), c);
+}
+export async function getListingConversationWithListings(token: string, input: unknown, signal?: AbortSignal) {
+  const c = copyConversationCardReadCommand(input);
+  return parseConversationCardView(await request("getWithListings", token, c, signal), c);
 }
 export async function listListingConversations(token: string, input: unknown, signal?: AbortSignal) {
   const c = copyConversationListCommand(input);

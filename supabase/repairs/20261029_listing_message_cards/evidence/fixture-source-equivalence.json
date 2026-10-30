@@ -1,0 +1,17 @@
+{
+  "format": "selqiro-listing-message-cards-fixture-source-equivalence-v1",
+  "source_path": "supabase/repairs/20261029_listing_contact_identity_context/changes.sql",
+  "frozen_path": "tests/fixtures/accepted-contact-fix.sql",
+  "sha256": "aaed21297cb61c9e9d76d74e19b973bfd745d401ca431bfd31ec095c13d3bd7b",
+  "bytes": 14477,
+  "byte_identical": true,
+  "scope": "Synthetic PGlite fixture input only; never a delivery-runner or local-schema SQL input.",
+  "evidence_relationship": "The earlier 37/37 result used these same accepted contact-fix bytes. The current 40/40 hosted-installer regression run reads the frozen fixture and verifies its SHA-256 before execution. It separately reproduces the shipped ownership failure, verifies rollback, applies the corrected SQL as nonsuper postgres and reruns the full reader tests.",
+  "prior_fixture_result_sha256": "5da867b91a97fdcd09ae9d6b4a68df3393a81307271bc604aebde08d8b2bc95a",
+  "prior_fixture_passed": 37,
+  "prior_fixture_failed": 0,
+  "current_fixture_result_sha256": "c393d9d1600849c1fab1d71cf5ed4b5b2ce269af0f556d3d736c211e7e2d9e9b",
+  "current_fixture_passed": 40,
+  "current_fixture_failed": 0,
+  "current_fixture_mode": "nonsuper_hosted_installer"
+}

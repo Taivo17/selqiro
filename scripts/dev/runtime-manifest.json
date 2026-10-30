@@ -21,8 +21,8 @@
       "sha256": "7237d95dca7f425933a96d8560e761141134d2c6d4348394d42af59b5e7d4a55"
     },
     "schema_compose.py": {
-      "bytes": 8532,
-      "sha256": "86eca21aa6fcbf090aaeafe9cccb345549327dff008b2694323b432dc2fee683"
+      "bytes": 8599,
+      "sha256": "2ae4a1ff79c21bf4ac49eec8dbf86fc206c15641964fc6bdcbe5491c77eb70d0"
     },
     "schema_fragments/profile-read-continuation.sql": {
       "bytes": 1695,
@@ -33,8 +33,8 @@
       "sha256": "4f3f17ef3f2ff85d7d75d6863a425e29664b3e6e9c000880b3027cacf2dc1001"
     },
     "schema_provenance.json": {
-      "bytes": 11134,
-      "sha256": "791a579df302148e9c62f91e0826ff2525cfbe40fb2730cec5e4ac62ccd7426e"
+      "bytes": 11269,
+      "sha256": "ff574d0c3a8b90df21e09d2141f5504d8d156ca4758e252836f9c140e44df04b"
     },
     "schema_sources.py": {
       "bytes": 15645,

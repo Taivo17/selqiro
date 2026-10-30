@@ -7,6 +7,7 @@ import { contactListingSeller } from "../../../entities/conversation/api/managed
 import { isConversationId, ListingContactError, type ListingContactCommand } from "../../../entities/conversation/model/listingContact";
 import { contactDiagnostic, formatContactDiagnostic } from "../../../entities/conversation/model/contactDiagnostic";
 import { useConversationActor } from "../model/useConversationActor";
+import { listingConversationHref } from "../model/listingConversationNavigation";
 
 export default function ListingContactButton(props: { listingId: string; className?: string }) {
   return v2IntegrationEnabled() ? <EnabledListingContactButton {...props} /> : null;
@@ -26,7 +27,7 @@ function EnabledListingContactButton({ listingId, className }: { listingId: stri
     pending.current = command;
     try {
       const receipt = await contactListingSeller(actor.accessToken, command, actor.signal);
-      if (context.isCurrent(actor)) router.push("/v2/messages/" + receipt.conversation_id);
+      if (context.isCurrent(actor)) router.push(listingConversationHref(receipt.conversation_id, receipt.listing_id));
     } catch (error) {
       const diagnostic = error instanceof ListingContactError ? error.diagnostic
         ?? contactDiagnostic(error.code === "response" ? "browser_response" : "browser_request", error.code)

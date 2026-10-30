@@ -5,7 +5,7 @@ import { ListingContactError } from "../../../entities/conversation/model/listin
 import { contactDiagnostic, type ListingContactDiagnosticCode, type ListingContactStage } from "../../../entities/conversation/model/contactDiagnostic";
 import type { UploadFetch } from "../../../entities/listing/api/privateUploadHttp";
 
-const actions = ["contact", "send", "get", "list"] as const;
+const actions = ["contact", "send", "get", "list", "getWithListings"] as const;
 const reply = (body: unknown, status = 200) => Response.json(body, { status,
   headers: { "Cache-Control": "private, no-store", "X-Content-Type-Options": "nosniff" } });
 const rejected = (code: ListingContactDiagnosticCode, status: number) => reply({ error: code,

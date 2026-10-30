@@ -1,0 +1,13 @@
+{
+  "format": "selqiro-listing-message-cards-package-v1",
+  "project_ref": "vyjletlmwoiwxsnsunlm",
+  "instance_id": "2d088814-0900-448a-a9d1-7b05470cb1d2",
+  "release_id": "listing-publication-hosted-preview-v1",
+  "body_sha256": "740815c40c0c52eba205a30cb7e8267025c5e394aeea760556b8ce7ac711c0cd",
+  "files": {
+    "changes.sql": "264426d1b88199d2cf4ee3ccfd8edb058949e7fded70885952cdf29ee6003c2e",
+    "preflight.sql": "6ea3f0b7e5777ef07edc21f6d5b9a61d891cdefb3ac35f713321b9fc1e06c0e8",
+    "apply.sql": "b014262fe4d5e5174960370ac0541c307f8a67b68cb448914ec3ab9d23413f0f",
+    "verify.sql": "6ea3f0b7e5777ef07edc21f6d5b9a61d891cdefb3ac35f713321b9fc1e06c0e8"
+  }
+}

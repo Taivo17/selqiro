@@ -2,6 +2,8 @@ import { privateUploadHttp, type UploadFetch } from "../../../entities/listing/a
 import { publicationStorageOrigin } from "../../../entities/listing/model/privatePublicationUpload";
 import { contactHttp } from "../../../entities/conversation/api/contactHttp";
 import { contactDiagnostic, type ListingContactStage } from "../../../entities/conversation/model/contactDiagnostic";
+import { copyConversationCardReadCommand, parseConversationCardView,
+  type ConversationCardView } from "../../../entities/conversation/model/listingMessageCards";
 import { contactFail, ListingContactError, copyListingContactCommand, copyListingMessageCommand,
   parseListingContactReceipt, parseListingMessageReceipt, type ListingContactReceipt, type ListingMessageReceipt,
   copyConversationReadCommand, copyConversationListCommand, parseConversationView, parseConversationList,
@@ -45,6 +47,18 @@ export function createListingContactService(config: Readonly<{ projectOrigin: st
     });
   }
   return Object.freeze({
+    async getWithListings(accessToken: string, input: unknown, signal?: AbortSignal): Promise<ConversationCardView> {
+      const c = copyConversationCardReadCommand(input);
+      try {
+        const rpc = await connect(accessToken, c.expectedUserId, signal);
+        const result = await rpc("get_my_listing_conversation_v2", {
+          p_expected_user_id: c.expectedUserId, p_expected_identity_id: c.expectedIdentityId,
+          p_conversation_id: c.conversationId, p_before_message_id: c.beforeMessageId,
+          p_attachment_listing_id: c.attachmentListingId,
+        });
+        return await atStage("receipt", signal, () => parseConversationCardView(result, c));
+      } catch (e) { if (e instanceof ListingContactError) throw e; return contactFail(signal?.aborted ? "aborted" : "outcome_unknown"); }
+    },
     async get(accessToken: string, input: unknown, signal?: AbortSignal): Promise<ConversationView> {
       const c = copyConversationReadCommand(input);
       try {

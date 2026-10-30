@@ -1,0 +1,252 @@
+{
+  "version": "PostgreSQL 18.6 (PGlite 0.5.13) on wasm32-unknown-emscripten, compiled by emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 6.0.5 (1db513782be24469589d7cb8a1f1834e9a33f271), 32-bit",
+  "checks": [
+    {
+      "label": "unrepaired_database_is_not_a_ready_base",
+      "passed": true
+    },
+    {
+      "label": "source_fragment_also_works_with_original_v1_reader_in_local_schema",
+      "passed": true
+    },
+    {
+      "label": "repaired_base_preflight_recognizes_absent_reader",
+      "passed": true
+    },
+    {
+      "label": "shipped_apply_reproduces_nonsuper_owner_transfer_failure_and_rolls_back",
+      "passed": true
+    },
+    {
+      "label": "rollback_restores_temporary_create_grant_after_owner_transfer",
+      "passed": true
+    },
+    {
+      "label": "unrelated_signature_collision_refuses_install",
+      "passed": true
+    },
+    {
+      "label": "unknown_dependency_state_refuses_install",
+      "passed": true
+    },
+    {
+      "label": "failed_postcondition_rolls_back_new_function",
+      "passed": true
+    },
+    {
+      "label": "guarded_additive_apply_and_verify",
+      "passed": true
+    },
+    {
+      "label": "public_schema_owner_and_acl_are_restored_byte_identically",
+      "passed": true
+    },
+    {
+      "label": "six_existing_security_fingerprints_are_preserved",
+      "passed": true
+    },
+    {
+      "label": "install_does_not_write_messages_conversations_listings_or_participants",
+      "passed": true
+    },
+    {
+      "label": "all_four_existing_public_v1_function_definitions_are_byte_identical",
+      "passed": true
+    },
+    {
+      "label": "direct_second_apply_stops_but_readonly_verify_accepts_applied",
+      "passed": true
+    },
+    {
+      "label": "reader_acl_is_authenticated_only_with_restricted_owner",
+      "passed": true
+    },
+    {
+      "label": "unexpected_reader_acl_is_not_recognized",
+      "passed": true
+    },
+    {
+      "label": "explicit_composer_preview_uses_canonical_listing_snapshot",
+      "passed": true
+    },
+    {
+      "label": "direct_inbox_open_does_not_attach_current_header",
+      "passed": true
+    },
+    {
+      "label": "buyer_and_seller_read_same_per_message_card_with_own_mine_flag",
+      "passed": true
+    },
+    {
+      "label": "plain_message_stays_without_card",
+      "passed": true
+    },
+    {
+      "label": "v1_reader_shape_stays_unchanged_after_v2_install",
+      "passed": true
+    },
+    {
+      "label": "later_listing_edits_do_not_rewrite_stored_message_snapshot",
+      "passed": true
+    },
+    {
+      "label": "same_identity_pair_can_discuss_two_listings_without_relabelling_history",
+      "passed": true
+    },
+    {
+      "label": "price_label_retains_precision_and_currency_exactly",
+      "passed": true
+    },
+    {
+      "label": "requested_unrelated_owner_preview_is_null_and_echoes_request",
+      "passed": true
+    },
+    {
+      "label": "requested_expired_preview_is_null_and_echoes_request",
+      "passed": true
+    },
+    {
+      "label": "requested_unpublished_preview_is_null_and_echoes_request",
+      "passed": true
+    },
+    {
+      "label": "requested_inactive_preview_is_null_and_echoes_request",
+      "passed": true
+    },
+    {
+      "label": "requested_absent_preview_is_null_and_echoes_request",
+      "passed": true
+    },
+    {
+      "label": "noncanonical_preview_id_is_rejected",
+      "passed": true,
+      "observed_code": "22023",
+      "message": "listing_contact_input",
+      "where": "PL/pgSQL function listing_contact_private.positive_id(text) line 4 at RAISE\nPL/pgSQL function get_my_listing_conversation_v2(uuid,uuid,text,text,text) line 10 at assignment"
+    },
+    {
+      "label": "forged_user_is_rejected",
+      "passed": true,
+      "observed_code": "42501",
+      "message": "publication_account_changed",
+      "where": "PL/pgSQL function listing_publication_private.require_actor(uuid,uuid) line 7 at RAISE\nPL/pgSQL function listing_contact_private.require_actor_hosted_v1(uuid,uuid) line 3 at RETURN\nSQL statement \"SELECT listing_contact_private.require_actor_hosted_v1(p_expected_user_id,p_expected_identity_id)\"\nPL/pgSQL function get_my_listing_conversation_v1(uuid,uuid,text,text) line 5 at PERFORM\nPL/pgSQL function get_my_listing_conversation_v2(uuid,uuid,text,text,text) line 8 at assignment"
+    },
+    {
+      "label": "other_identity_on_same_account_is_rejected",
+      "passed": true,
+      "observed_code": "42501",
+      "message": "listing_price_identity_changed",
+      "where": "PL/pgSQL function lock_listing_creation_actor_v1(uuid) line 10 at RAISE\nPL/pgSQL function listing_publication_private.require_actor(uuid,uuid) line 9 at RETURN\nPL/pgSQL function listing_contact_private.require_actor_hosted_v1(uuid,uuid) line 3 at RETURN\nSQL statement \"SELECT listing_contact_private.require_actor_hosted_v1(p_expected_user_id,p_expected_identity_id)\"\nPL/pgSQL function get_my_listing_conversation_v1(uuid,uuid,text,text) line 5 at PERFORM\nPL/pgSQL function get_my_listing_conversation_v2(uuid,uuid,text,text,text) line 8 at assignment"
+    },
+    {
+      "label": "third_account_cannot_read_history_or_preview",
+      "passed": true,
+      "observed_code": "42501",
+      "message": "listing_contact_unavailable",
+      "where": "PL/pgSQL function listing_contact_private.require_member(bigint,uuid,uuid) line 9 at RAISE\nPL/pgSQL function get_my_listing_conversation_v1(uuid,uuid,text,text) line 8 at assignment\nPL/pgSQL function get_my_listing_conversation_v2(uuid,uuid,text,text,text) line 8 at assignment"
+    },
+    {
+      "label": "blocked_member_can_read_history_but_can_send_is_false",
+      "passed": true
+    },
+    {
+      "label": "existing_sender_keeps_block_check",
+      "passed": true,
+      "observed_code": "42501",
+      "message": "listing_contact_blocked",
+      "where": "PL/pgSQL function listing_contact_private.require_unblocked(uuid,uuid) line 8 at RAISE\nSQL statement \"SELECT listing_contact_private.require_unblocked(p_expected_user_id,peer_u)\"\nPL/pgSQL function send_my_listing_message_v1(uuid,uuid,uuid,text,text,text) line 22 at PERFORM"
+    },
+    {
+      "label": "removed_allowlist_actor_cannot_read_cards",
+      "passed": true,
+      "observed_code": "42501",
+      "message": "publication_hosted_preview_actor_forbidden",
+      "where": "PL/pgSQL function listing_publication_private.assert_hosted_preview_actor(uuid) line 14 at RAISE\nSQL statement \"SELECT listing_publication_private.assert_hosted_preview_actor(actor)\"\nPL/pgSQL function lock_listing_creation_actor_v1(uuid) line 4 at PERFORM\nPL/pgSQL function listing_publication_private.require_actor(uuid,uuid) line 9 at RETURN\nPL/pgSQL function listing_contact_private.require_actor_hosted_v1(uuid,uuid) line 3 at RETURN\nSQL statement \"SELECT listing_contact_private.require_actor_hosted_v1(p_expected_user_id,p_expected_identity_id)\"\nPL/pgSQL function get_my_listing_conversation_v1(uuid,uuid,text,text) line 5 at PERFORM\nPL/pgSQL function get_my_listing_conversation_v2(uuid,uuid,text,text,text) line 8 at assignment"
+    },
+    {
+      "label": "v2_read_does_not_write_any_user_message_or_listing_state",
+      "passed": true
+    },
+    {
+      "label": "latest_page_has_fifty_and_cursor_preserves_message_cards",
+      "passed": true
+    },
+    {
+      "label": "historical_listing_scrub_preserves_text_but_removes_card_without_rebuilding_from_header",
+      "passed": true
+    },
+    {
+      "label": "v1_projection_matches_v2_after_removing_only_added_fields",
+      "passed": true
+    }
+  ],
+  "installer": {
+    "current_user": "postgres",
+    "session_user": "postgres",
+    "rolsuper": false,
+    "rolcreaterole": true,
+    "rolbypassrls": true,
+    "writer_can_create": false,
+    "installer_can_create": true,
+    "installer_can_set_writer": true
+  },
+  "preflight": {
+    "state": "absent",
+    "format": "selqiro-listing-message-cards-v1",
+    "guards": {
+      "base_fixed": true,
+      "read_columns": true,
+      "reader_state_known": true
+    },
+    "recognized": true,
+    "fingerprints": {
+      "reader": "50e50eaef808b791d5276f920ea6ff79bc862337b6e394ff5d41cfef76dd9cfb",
+      "writer_role": "3d3a6449439f9d1c15c5bae925c62d1d80adcfa57f7d2b85991449f841bdac74",
+      "api_boundary": "4f4d1c76adfaca7b60c1dca26143ffd3036d6855b287e86723d667efa572bce1",
+      "shared_helpers": "950b1e7a44cee6bb788f8a17476f35e7bd592d8ee7e9cbacf56f5fda015b994b",
+      "hosted_settings": "df177f25e5ed672257b5077149d37926696da4f61297f53f5c89705e5152d8d7",
+      "legacy_policies": "2e8344e6d12bf343284a92ab6bb0eaeb3a1456c9896831d3949e4d442aa38393",
+      "patched_functions": "c752cf9ffeba9519e22dcf2922c942c8607912a0302a50c9f143566b93441f9f"
+    }
+  },
+  "shipped_failure": {
+    "code": "42501",
+    "message": "permission denied for schema public"
+  },
+  "verification": {
+    "state": "applied",
+    "format": "selqiro-listing-message-cards-v1",
+    "guards": {
+      "base_fixed": true,
+      "read_columns": true,
+      "reader_state_known": true
+    },
+    "recognized": true,
+    "fingerprints": {
+      "reader": "ad476eab458984b9d66419c0ff26c35e56de571da3bff637b2331bf456780ca0",
+      "writer_role": "3d3a6449439f9d1c15c5bae925c62d1d80adcfa57f7d2b85991449f841bdac74",
+      "api_boundary": "4f4d1c76adfaca7b60c1dca26143ffd3036d6855b287e86723d667efa572bce1",
+      "shared_helpers": "950b1e7a44cee6bb788f8a17476f35e7bd592d8ee7e9cbacf56f5fda015b994b",
+      "hosted_settings": "df177f25e5ed672257b5077149d37926696da4f61297f53f5c89705e5152d8d7",
+      "legacy_policies": "2e8344e6d12bf343284a92ab6bb0eaeb3a1456c9896831d3949e4d442aa38393",
+      "patched_functions": "c752cf9ffeba9519e22dcf2922c942c8607912a0302a50c9f143566b93441f9f"
+    }
+  },
+  "passed": 40,
+  "failed": 0,
+  "new_reader_sha256": "264426d1b88199d2cf4ee3ccfd8edb058949e7fded70885952cdf29ee6003c2e",
+  "fixture_inputs": {
+    "accepted_contact_fix_sha256": "aaed21297cb61c9e9d76d74e19b973bfd745d401ca431bfd31ec095c13d3bd7b",
+    "preflight_sha256": "6ea3f0b7e5777ef07edc21f6d5b9a61d891cdefb3ac35f713321b9fc1e06c0e8",
+    "apply_sha256": "b014262fe4d5e5174960370ac0541c307f8a67b68cb448914ec3ab9d23413f0f",
+    "verify_sha256": "6ea3f0b7e5777ef07edc21f6d5b9a61d891cdefb3ac35f713321b9fc1e06c0e8",
+    "fixture_sha256": "07f38bc34a4288223713e1a70bb8cea40f19bbd2f401c7ed70ce5652ece88ad3"
+  },
+  "fixture_mode": "nonsuper_hosted_installer",
+  "limitations": [
+    "Single-connection synthetic PGlite PostgreSQL fixture, not live Supabase",
+    "No multi-connection scheduler or real Storage HTTP",
+    "Legacy terminal scrub reproduced with existing trigger and actual FK behavior; full finalizer not rerun",
+    "PGlite-protected postgres role flags changed through pg_authid only during isolated fixture setup; no production role is modified"
+  ]
+}

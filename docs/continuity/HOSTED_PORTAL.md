@@ -1,12 +1,10 @@
 # Olemasoleva Selqiro portaali jätkamine
 
-> **Praegune seis 29.10.2026:** allpool kirjeldatud 27.10 ettevalmistus on juba
-> lõpetatud. Commit `8f25f65` on GitHubis ja Verceli Productionis; 28.10
-> redeploy oli Ready. Kuulutus **197** koos pildiga on päris portaalis
-> avaldatud ja teise kontoga nähtav. Praegune töö on ostja kontakti **HTTP 503**
-> põhjuse leidmine. Loe `CURRENT_STATE.json` ja
-> `CONTACT_DIAGNOSTICS_20261029.md` siinsamas kaustas. **Ära käivita allolevaid
-> ajaloolisi paigaldus-, aktiveerimis- ega esimese push’i käske uuesti.**
+## 30.10.2026 — kuulutusekaardi paigalduse jätk
+
+Algne kaardiuuendaja peatus kasutaja Macis teatega `DATABASE_OUTCOME_NOT_VERIFIED` enne lähtekoodi/buildi/Giti etappe. Omanikuvahetuse puuduv õigus on mittesuperkasutaja katses korratud ja SQL parandatud. Uus `selqiro-postkasti-kaart-jatk-20261030/jatka.py --publish` kontrollib vana päevikut ja värsket DB-seisu, seejärel jätkab olemasolevast projektist. Täpne jooksev seis on CURRENT_STATE.json-is ja kirjeldus INBOX_CARDS_20261029.md-s. Jätku Maci lõpp ning Productioni kaart on veel kinnitamata.
+
+> **Vastu võetud seis 29.10.2026:** varasem ettevalmistus, redeploy ja kuulutuse 197 avaldamine on lõpetatud. Kasutaja nägi ka vestlust 38 ning ostja sõnumit müüja V2/V1 vaates. Järgnev on ajalooline portaali paigaldamise kirjeldus; praegune kaardimuudatuse tööjärg on CURRENT_STATE.json-is. **Allolevaid vanu paigaldus-, aktiveerimis- ega push-käske ei korrata.**
 
 ## 27.10 ettevalmistuse ajalugu ja sihtandmed
 
