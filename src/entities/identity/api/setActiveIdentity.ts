@@ -94,9 +94,30 @@ function getSwitchErrorMessage(error: {
 
 export async function setActiveIdentity(input: {
   identityId: string;
+  expectedUserId?: string;
 }): Promise<SetActiveIdentityResult> {
   const cleanIdentityId =
     normalizeIdentityId(input.identityId);
+
+  if (input.expectedUserId !== undefined && !UUID_PATTERN.test(input.expectedUserId)) {
+    throw new Error("Sisselogitud konto ID ei ole korrektne.");
+  }
+  const sessionResult = await supabaseBrowserClient.auth.getSession();
+  const session = sessionResult.data.session;
+  if (sessionResult.error || !session?.access_token || !session.user?.id) {
+    throw new Error("Identiteedi vahetamiseks logi sisse.");
+  }
+  const expectedUserId = input.expectedUserId ?? session.user.id;
+  const accessToken = session.access_token;
+  if (session.user.id !== expectedUserId) {
+    throw new Error("Sisselogitud konto muutus. Kontrolli kontot uuesti.");
+  }
+  // Verify the captured token itself. A later session change must not select
+  // a different account while Supabase resolves its request authorization.
+  const userResult = await supabaseBrowserClient.auth.getUser(accessToken);
+  if (userResult.error || userResult.data.user?.id !== expectedUserId) {
+    throw new Error("Sisselogitud kontot ei saanud kinnitada. Kontrolli kontot uuesti.");
+  }
 
   const { data, error } =
     await supabaseBrowserClient.rpc(
@@ -104,7 +125,7 @@ export async function setActiveIdentity(input: {
       {
         p_identity_id: cleanIdentityId,
       }
-    );
+    ).setHeader("Authorization", `Bearer ${accessToken}`);
 
   if (error) {
     throw new Error(

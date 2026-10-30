@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  useCallback,
   useEffect,
   useRef,
   useState,
@@ -9,6 +10,7 @@ import { usePathname } from "next/navigation";
 import { shouldReloadIdentityScopedRoute } from "../model/identityRouteReload";
 import type { IdentitySummary } from "../../../entities/identity/model/types";
 import { useV2IdentitySwitcher } from "../model/useV2IdentitySwitcher";
+import { safeMessageAvatar } from "../../../entities/conversation/model/messagingValidation";
 
 function identityTypeLabel(
   identity: IdentitySummary
@@ -25,11 +27,15 @@ function IdentityAvatar({
   identity: IdentitySummary | null;
   className: string;
 }) {
-  if (identity?.avatarUrl) {
+  const avatarUrl = safeMessageAvatar(identity?.avatarUrl ?? null);
+  if (avatarUrl) {
     return (
+      // The allowlisted public avatar loads directly with no referrer.
+      // eslint-disable-next-line @next/next/no-img-element
       <img
-        src={identity.avatarUrl}
+        src={avatarUrl}
         alt=""
+        referrerPolicy="no-referrer"
         className={[
           className,
           "shrink-0 rounded-full object-cover",
@@ -79,15 +85,17 @@ export default function V2IdentityBadge({
     userEmail,
   });
 
-  const [menuOpen, setMenuOpen] =
-    useState(false);
+  const menuContext = `${userId ?? ""}\n${pathname ?? ""}`;
+  const [menu, setMenu] = useState({ context: menuContext, open: false });
+  if (menu.context !== menuContext) setMenu({ context: menuContext, open: false });
+  const menuOpen = menu.context === menuContext && menu.open;
+  const setMenuOpen = useCallback((value: boolean | ((current: boolean) => boolean)) => {
+    setMenu(current => ({ context: menuContext, open: typeof value === "function"
+      ? value(current.context === menuContext && current.open) : value }));
+  }, [menuContext]);
 
   const rootRef =
     useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    setMenuOpen(false);
-  }, [pathname]);
 
   useEffect(() => {
     if (!menuOpen) return;
@@ -137,13 +145,11 @@ export default function V2IdentityBadge({
         handleKeyDown
       );
     };
-  }, [menuOpen]);
+  }, [menuOpen, setMenuOpen]);
 
   const label = loading
-    ? "Laen..."
-    : activeIdentity?.displayName ||
-      userEmail?.split("@")[0] ||
-      "Kasutaja";
+    ? "Kontrollin..."
+    : switchingIdentityId ? "Vahetan..." : activeIdentity?.displayName || "Vali identiteet";
 
   async function handleIdentityChange(
     identityId: string
@@ -189,8 +195,9 @@ export default function V2IdentityBadge({
         type="button"
         aria-haspopup="menu"
         aria-expanded={menuOpen}
-        aria-label="Vaheta aktiivset identiteeti"
-        disabled={loading}
+        aria-label={activeIdentity ? `Tegutsen kui ${activeIdentity.displayName}. Vaheta identiteeti` : "Vali aktiivne identiteet"}
+        title={label}
+        disabled={loading || Boolean(switchingIdentityId)}
         onClick={() =>
           setMenuOpen(
             (current) => !current

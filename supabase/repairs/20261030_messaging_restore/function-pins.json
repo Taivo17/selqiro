@@ -1,0 +1,598 @@
+[
+  {
+    "signature": "listing_contact_private.guard_message()",
+    "name": "guard_message",
+    "schema": "listing_contact_private",
+    "owner": "postgres",
+    "language": "plpgsql",
+    "secdef": false,
+    "volatility": "v",
+    "args": null,
+    "defaults": 0,
+    "default_expression": null,
+    "result": "trigger",
+    "config": [
+      "search_path=pg_catalog, public, auth, pg_temp"
+    ],
+    "body_sha256": "a2ac16ccb92fb05c5e1ddb2849fbf2c14e5ea00004916f60186f46733de63950",
+    "acl_roles": [
+      "postgres",
+      "selqiro_listing_contact_writer_v1"
+    ]
+  },
+  {
+    "signature": "messaging_private_v2.bucket_ready()",
+    "name": "bucket_ready",
+    "schema": "messaging_private_v2",
+    "owner": "postgres",
+    "language": "sql",
+    "secdef": true,
+    "volatility": "s",
+    "args": null,
+    "defaults": 0,
+    "default_expression": null,
+    "result": "boolean",
+    "config": [
+      "search_path=pg_catalog, pg_temp"
+    ],
+    "body_sha256": "bbff113436e34f7e251903262749066fab152206ad5470982ad77cb3201f8302",
+    "acl_roles": [
+      "postgres",
+      "selqiro_listing_contact_writer_v1"
+    ]
+  },
+  {
+    "signature": "messaging_private_v2.exact_thread(bigint, uuid, uuid)",
+    "name": "exact_thread",
+    "schema": "messaging_private_v2",
+    "owner": "postgres",
+    "language": "sql",
+    "secdef": false,
+    "volatility": "s",
+    "args": [
+      "p_conversation",
+      "p_user",
+      "p_identity"
+    ],
+    "defaults": 0,
+    "default_expression": null,
+    "result": "boolean",
+    "config": [
+      "search_path=pg_catalog, pg_temp"
+    ],
+    "body_sha256": "19fd6913a5e44248686e56a0151d7a953c0fbf7b603cfc2e2b65a21ac252fd23",
+    "acl_roles": [
+      "postgres",
+      "selqiro_listing_contact_writer_v1"
+    ]
+  },
+  {
+    "signature": "messaging_private_v2.guard_account_block()",
+    "name": "guard_account_block",
+    "schema": "messaging_private_v2",
+    "owner": "postgres",
+    "language": "plpgsql",
+    "secdef": true,
+    "volatility": "v",
+    "args": null,
+    "defaults": 0,
+    "default_expression": null,
+    "result": "trigger",
+    "config": [
+      "search_path=pg_catalog, pg_temp",
+      "lock_timeout=2s"
+    ],
+    "body_sha256": "83bd3c50a4d0bb2323e5dee7ed86032d506ea82e276b6127d3238bc96b37773a",
+    "acl_roles": [
+      "postgres",
+      "selqiro_listing_contact_writer_v1"
+    ]
+  },
+  {
+    "signature": "messaging_private_v2.identity_card(uuid)",
+    "name": "identity_card",
+    "schema": "messaging_private_v2",
+    "owner": "postgres",
+    "language": "sql",
+    "secdef": true,
+    "volatility": "s",
+    "args": [
+      "p_identity"
+    ],
+    "defaults": 0,
+    "default_expression": null,
+    "result": "jsonb",
+    "config": [
+      "search_path=pg_catalog, pg_temp"
+    ],
+    "body_sha256": "62ceeedfd0a054f3563ed4e9abf8cf33bb2605dd3ee20bf53e9f35b4e0296bcc",
+    "acl_roles": [
+      "postgres",
+      "selqiro_listing_contact_writer_v1"
+    ]
+  },
+  {
+    "signature": "messaging_private_v2.photo_receipt(messaging_private_v2.photos)",
+    "name": "photo_receipt",
+    "schema": "messaging_private_v2",
+    "owner": "postgres",
+    "language": "sql",
+    "secdef": false,
+    "volatility": "s",
+    "args": [
+      "p"
+    ],
+    "defaults": 0,
+    "default_expression": null,
+    "result": "jsonb",
+    "config": [
+      "search_path=pg_catalog, pg_temp"
+    ],
+    "body_sha256": "2530b94b02c3184d7297700808498d471b0df80d03d918260021d95b563aefc2",
+    "acl_roles": [
+      "postgres",
+      "selqiro_listing_contact_writer_v1"
+    ]
+  },
+  {
+    "signature": "messaging_private_v2.protect_attached_photo()",
+    "name": "protect_attached_photo",
+    "schema": "messaging_private_v2",
+    "owner": "postgres",
+    "language": "plpgsql",
+    "secdef": true,
+    "volatility": "v",
+    "args": null,
+    "defaults": 0,
+    "default_expression": null,
+    "result": "trigger",
+    "config": [
+      "search_path=pg_catalog, pg_temp"
+    ],
+    "body_sha256": "f5ff79e11810dc2fed2a039d1684f64cdfe055fa112fad91ef9f5e17ff670cc8",
+    "acl_roles": [
+      "postgres",
+      "selqiro_listing_contact_writer_v1"
+    ]
+  },
+  {
+    "signature": "messaging_private_v2.require_thread(bigint, uuid, uuid)",
+    "name": "require_thread",
+    "schema": "messaging_private_v2",
+    "owner": "postgres",
+    "language": "plpgsql",
+    "secdef": false,
+    "volatility": "v",
+    "args": [
+      "p_conversation",
+      "p_user",
+      "p_identity"
+    ],
+    "defaults": 0,
+    "default_expression": null,
+    "result": "conversations",
+    "config": [
+      "search_path=pg_catalog, pg_temp"
+    ],
+    "body_sha256": "5f2487f6126fd6a17f67c6ec4b9de340840f8ac3f0585d5750a38c90396fbd36",
+    "acl_roles": [
+      "postgres",
+      "selqiro_listing_contact_writer_v1"
+    ]
+  },
+  {
+    "signature": "messaging_private_v2.safe_legacy_path(bigint, text)",
+    "name": "safe_legacy_path",
+    "schema": "messaging_private_v2",
+    "owner": "postgres",
+    "language": "sql",
+    "secdef": false,
+    "volatility": "i",
+    "args": [
+      "p_conversation",
+      "p_path"
+    ],
+    "defaults": 0,
+    "default_expression": null,
+    "result": "boolean",
+    "config": [
+      "search_path=pg_catalog, pg_temp"
+    ],
+    "body_sha256": "725be82b057829689f62d388837a4c405da02660524a727cc381397ed71901b3",
+    "acl_roles": [
+      "postgres",
+      "selqiro_listing_contact_writer_v1"
+    ]
+  },
+  {
+    "signature": "messaging_private_v2.set_block(uuid, uuid, bigint, boolean)",
+    "name": "set_block",
+    "schema": "messaging_private_v2",
+    "owner": "postgres",
+    "language": "plpgsql",
+    "secdef": true,
+    "volatility": "v",
+    "args": [
+      "p_user",
+      "p_identity",
+      "p_conversation",
+      "p_blocked"
+    ],
+    "defaults": 0,
+    "default_expression": null,
+    "result": "void",
+    "config": [
+      "search_path=pg_catalog, pg_temp",
+      "lock_timeout=2s"
+    ],
+    "body_sha256": "6d8edfb3963c7261644fddd9519c715d047b78b5037a0c387ea9b03cdeef08fc",
+    "acl_roles": [
+      "postgres",
+      "selqiro_listing_contact_writer_v1"
+    ]
+  },
+  {
+    "signature": "public.cancel_my_message_photo_v2(uuid, uuid, text, uuid)",
+    "name": "cancel_my_message_photo_v2",
+    "schema": "public",
+    "owner": "selqiro_listing_contact_writer_v1",
+    "language": "plpgsql",
+    "secdef": true,
+    "volatility": "v",
+    "args": [
+      "p_expected_user_id",
+      "p_expected_identity_id",
+      "p_conversation_id",
+      "p_attachment_id"
+    ],
+    "defaults": 0,
+    "default_expression": null,
+    "result": "jsonb",
+    "config": [
+      "search_path=pg_catalog, public, auth, pg_temp",
+      "lock_timeout=2s"
+    ],
+    "body_sha256": "55a1216fe599b8a047bd299bcb24c153a51de0f764dbf8ede7912442b764c5d8",
+    "acl_roles": [
+      "authenticated",
+      "selqiro_listing_contact_writer_v1"
+    ]
+  },
+  {
+    "signature": "public.claim_message_photo_cleanup_v2(uuid, integer)",
+    "name": "claim_message_photo_cleanup_v2",
+    "schema": "public",
+    "owner": "postgres",
+    "language": "plpgsql",
+    "secdef": true,
+    "volatility": "v",
+    "args": [
+      "p_claim_key",
+      "p_limit"
+    ],
+    "defaults": 1,
+    "default_expression": "3",
+    "result": "jsonb",
+    "config": [
+      "search_path=pg_catalog, pg_temp",
+      "lock_timeout=2s"
+    ],
+    "body_sha256": "21059a776ef44ea56bee5c1a15ec2ca229cab8d23064e56b73b1c3d91691f9f2",
+    "acl_roles": [
+      "postgres",
+      "service_role"
+    ]
+  },
+  {
+    "signature": "public.claim_message_photo_upload_v2(uuid, uuid, uuid, text, uuid, text, bigint, integer, integer)",
+    "name": "claim_message_photo_upload_v2",
+    "schema": "public",
+    "owner": "postgres",
+    "language": "plpgsql",
+    "secdef": true,
+    "volatility": "v",
+    "args": [
+      "p_attachment_id",
+      "p_expected_user_id",
+      "p_expected_identity_id",
+      "p_source_sha256",
+      "p_claim_key",
+      "p_web_sha256",
+      "p_web_bytes",
+      "p_width",
+      "p_height"
+    ],
+    "defaults": 0,
+    "default_expression": null,
+    "result": "jsonb",
+    "config": [
+      "search_path=pg_catalog, pg_temp",
+      "lock_timeout=2s"
+    ],
+    "body_sha256": "4b5eb65ca6095b5db082c83b182d639bf7c071a97ed6fbcb0aeec6494e25a54a",
+    "acl_roles": [
+      "postgres",
+      "service_role"
+    ]
+  },
+  {
+    "signature": "public.finish_message_photo_cleanup_v2(uuid, uuid, boolean, text)",
+    "name": "finish_message_photo_cleanup_v2",
+    "schema": "public",
+    "owner": "postgres",
+    "language": "plpgsql",
+    "secdef": true,
+    "volatility": "v",
+    "args": [
+      "p_attachment_id",
+      "p_claim_key",
+      "p_removed",
+      "p_failure_code"
+    ],
+    "defaults": 1,
+    "default_expression": "NULL::text",
+    "result": "jsonb",
+    "config": [
+      "search_path=pg_catalog, pg_temp",
+      "lock_timeout=2s"
+    ],
+    "body_sha256": "4780e8a3a1437763ad97d4dc72d40175b9e3e2ddf3da0f36bb41d83c667ffe4a",
+    "acl_roles": [
+      "postgres",
+      "service_role"
+    ]
+  },
+  {
+    "signature": "public.finish_message_photo_upload_v2(uuid, uuid, text, text, bigint, integer, integer, text)",
+    "name": "finish_message_photo_upload_v2",
+    "schema": "public",
+    "owner": "postgres",
+    "language": "plpgsql",
+    "secdef": true,
+    "volatility": "v",
+    "args": [
+      "p_attachment_id",
+      "p_claim_key",
+      "p_outcome",
+      "p_web_sha256",
+      "p_web_bytes",
+      "p_width",
+      "p_height",
+      "p_failure_code"
+    ],
+    "defaults": 1,
+    "default_expression": "NULL::text",
+    "result": "jsonb",
+    "config": [
+      "search_path=pg_catalog, pg_temp",
+      "lock_timeout=2s"
+    ],
+    "body_sha256": "f49f44e5d5dfa3ceb768c4bfeb9da6105efb4458d751bc7e0c3e2e83922dadca",
+    "acl_roles": [
+      "postgres",
+      "service_role"
+    ]
+  },
+  {
+    "signature": "public.get_my_message_photo_binding_v2(uuid, uuid, text, text)",
+    "name": "get_my_message_photo_binding_v2",
+    "schema": "public",
+    "owner": "selqiro_listing_contact_writer_v1",
+    "language": "plpgsql",
+    "secdef": true,
+    "volatility": "v",
+    "args": [
+      "p_expected_user_id",
+      "p_expected_identity_id",
+      "p_conversation_id",
+      "p_message_id"
+    ],
+    "defaults": 0,
+    "default_expression": null,
+    "result": "jsonb",
+    "config": [
+      "search_path=pg_catalog, public, auth, pg_temp",
+      "lock_timeout=2s"
+    ],
+    "body_sha256": "fd00f01e0042ca0d8bae144047aaaed01f3af76e8c45a9814986a72bc24048e9",
+    "acl_roles": [
+      "authenticated",
+      "selqiro_listing_contact_writer_v1"
+    ]
+  },
+  {
+    "signature": "public.get_my_message_thread_v2(uuid, uuid, text, text, text)",
+    "name": "get_my_message_thread_v2",
+    "schema": "public",
+    "owner": "selqiro_listing_contact_writer_v1",
+    "language": "plpgsql",
+    "secdef": true,
+    "volatility": "v",
+    "args": [
+      "p_expected_user_id",
+      "p_expected_identity_id",
+      "p_conversation_id",
+      "p_before_message_id",
+      "p_attachment_listing_id"
+    ],
+    "defaults": 2,
+    "default_expression": "NULL::text, NULL::text",
+    "result": "jsonb",
+    "config": [
+      "search_path=pg_catalog, public, auth, pg_temp",
+      "lock_timeout=2s"
+    ],
+    "body_sha256": "2db77291a038a9092d1a1d6929b4eb929642f9beb6f8c4da2903930caf680ec9",
+    "acl_roles": [
+      "authenticated",
+      "selqiro_listing_contact_writer_v1"
+    ]
+  },
+  {
+    "signature": "public.hide_my_thread_v2(uuid, uuid, text)",
+    "name": "hide_my_thread_v2",
+    "schema": "public",
+    "owner": "selqiro_listing_contact_writer_v1",
+    "language": "plpgsql",
+    "secdef": true,
+    "volatility": "v",
+    "args": [
+      "p_expected_user_id",
+      "p_expected_identity_id",
+      "p_conversation_id"
+    ],
+    "defaults": 0,
+    "default_expression": null,
+    "result": "jsonb",
+    "config": [
+      "search_path=pg_catalog, public, auth, pg_temp",
+      "lock_timeout=2s"
+    ],
+    "body_sha256": "4c96a94b35d82b44cfa10bf69538979d92336f07cc7db040b618fb71b0e8ec23",
+    "acl_roles": [
+      "authenticated",
+      "selqiro_listing_contact_writer_v1"
+    ]
+  },
+  {
+    "signature": "public.list_my_message_threads_v2(uuid, uuid, timestamp with time zone, text)",
+    "name": "list_my_message_threads_v2",
+    "schema": "public",
+    "owner": "selqiro_listing_contact_writer_v1",
+    "language": "plpgsql",
+    "secdef": true,
+    "volatility": "v",
+    "args": [
+      "p_expected_user_id",
+      "p_expected_identity_id",
+      "p_before_updated_at",
+      "p_before_conversation_id"
+    ],
+    "defaults": 2,
+    "default_expression": "NULL::timestamp with time zone, NULL::text",
+    "result": "jsonb",
+    "config": [
+      "search_path=pg_catalog, public, auth, pg_temp",
+      "lock_timeout=2s"
+    ],
+    "body_sha256": "ea23465a4ad4da28151e04e3ddcb17356fed35ec34f065c29df6c73e1b1cbbf8",
+    "acl_roles": [
+      "authenticated",
+      "selqiro_listing_contact_writer_v1"
+    ]
+  },
+  {
+    "signature": "public.mark_my_thread_read_v2(uuid, uuid, text, text)",
+    "name": "mark_my_thread_read_v2",
+    "schema": "public",
+    "owner": "selqiro_listing_contact_writer_v1",
+    "language": "plpgsql",
+    "secdef": true,
+    "volatility": "v",
+    "args": [
+      "p_expected_user_id",
+      "p_expected_identity_id",
+      "p_conversation_id",
+      "p_through_message_id"
+    ],
+    "defaults": 0,
+    "default_expression": null,
+    "result": "jsonb",
+    "config": [
+      "search_path=pg_catalog, public, auth, pg_temp",
+      "lock_timeout=2s"
+    ],
+    "body_sha256": "6f38f871015c4996d6000c4fe07e3476f944687578fc31c869df324c6008ea5b",
+    "acl_roles": [
+      "authenticated",
+      "selqiro_listing_contact_writer_v1"
+    ]
+  },
+  {
+    "signature": "public.reserve_my_message_photo_v2(uuid, uuid, uuid, text, text, bigint, text)",
+    "name": "reserve_my_message_photo_v2",
+    "schema": "public",
+    "owner": "selqiro_listing_contact_writer_v1",
+    "language": "plpgsql",
+    "secdef": true,
+    "volatility": "v",
+    "args": [
+      "p_expected_user_id",
+      "p_expected_identity_id",
+      "p_request_key",
+      "p_conversation_id",
+      "p_source_sha256",
+      "p_source_bytes",
+      "p_source_mime"
+    ],
+    "defaults": 0,
+    "default_expression": null,
+    "result": "jsonb",
+    "config": [
+      "search_path=pg_catalog, public, auth, pg_temp",
+      "lock_timeout=2s"
+    ],
+    "body_sha256": "07f4ecb16970ca276efb8d191523eaa72a1b670c9c3aa4f208e49f12955ac3ec",
+    "acl_roles": [
+      "authenticated",
+      "selqiro_listing_contact_writer_v1"
+    ]
+  },
+  {
+    "signature": "public.send_my_message_v2(uuid, uuid, uuid, text, text, text, uuid)",
+    "name": "send_my_message_v2",
+    "schema": "public",
+    "owner": "selqiro_listing_contact_writer_v1",
+    "language": "plpgsql",
+    "secdef": true,
+    "volatility": "v",
+    "args": [
+      "p_expected_user_id",
+      "p_expected_identity_id",
+      "p_request_key",
+      "p_conversation_id",
+      "p_message",
+      "p_listing_id",
+      "p_attachment_id"
+    ],
+    "defaults": 2,
+    "default_expression": "NULL::text, NULL::uuid",
+    "result": "jsonb",
+    "config": [
+      "search_path=pg_catalog, public, auth, pg_temp",
+      "lock_timeout=2s"
+    ],
+    "body_sha256": "22669894a1de3dceac8d608a271ae7c459c16f2957af33b04b24fbf9365e1538",
+    "acl_roles": [
+      "authenticated",
+      "selqiro_listing_contact_writer_v1"
+    ]
+  },
+  {
+    "signature": "public.set_my_thread_block_v2(uuid, uuid, text, boolean)",
+    "name": "set_my_thread_block_v2",
+    "schema": "public",
+    "owner": "selqiro_listing_contact_writer_v1",
+    "language": "plpgsql",
+    "secdef": true,
+    "volatility": "v",
+    "args": [
+      "p_expected_user_id",
+      "p_expected_identity_id",
+      "p_conversation_id",
+      "p_blocked"
+    ],
+    "defaults": 0,
+    "default_expression": null,
+    "result": "jsonb",
+    "config": [
+      "search_path=pg_catalog, public, auth, pg_temp",
+      "lock_timeout=2s"
+    ],
+    "body_sha256": "2755d8475ddd0c5ee7e61d7e66e96919013202056d8473bb7a81b63ddabb2d81",
+    "acl_roles": [
+      "authenticated",
+      "selqiro_listing_contact_writer_v1"
+    ]
+  }
+]

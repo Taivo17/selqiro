@@ -1,0 +1,825 @@
+{
+  "schema": {
+    "acl": [
+      {
+        "grantee": "postgres",
+        "grantor": "postgres",
+        "grantable": false,
+        "privilege": "CREATE"
+      },
+      {
+        "grantee": "postgres",
+        "grantor": "postgres",
+        "grantable": false,
+        "privilege": "USAGE"
+      },
+      {
+        "grantee": "selqiro_listing_contact_writer_v1",
+        "grantor": "postgres",
+        "grantable": false,
+        "privilege": "USAGE"
+      }
+    ],
+    "owner": "postgres"
+  },
+  "tables": [
+    {
+      "acl": [
+        {
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "grantable": false,
+          "privilege": "DELETE"
+        },
+        {
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "grantable": false,
+          "privilege": "INSERT"
+        },
+        {
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "grantable": false,
+          "privilege": "MAINTAIN"
+        },
+        {
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "grantable": false,
+          "privilege": "REFERENCES"
+        },
+        {
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "grantable": false,
+          "privilege": "SELECT"
+        },
+        {
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "grantable": false,
+          "privilege": "TRIGGER"
+        },
+        {
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "grantable": false,
+          "privilege": "TRUNCATE"
+        },
+        {
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "grantable": false,
+          "privilege": "UPDATE"
+        },
+        {
+          "grantee": "selqiro_listing_contact_writer_v1",
+          "grantor": "postgres",
+          "grantable": false,
+          "privilege": "INSERT"
+        },
+        {
+          "grantee": "selqiro_listing_contact_writer_v1",
+          "grantor": "postgres",
+          "grantable": false,
+          "privilege": "SELECT"
+        },
+        {
+          "grantee": "selqiro_listing_contact_writer_v1",
+          "grantor": "postgres",
+          "grantable": false,
+          "privilege": "UPDATE"
+        }
+      ],
+      "rls": true,
+      "kind": "r",
+      "name": "photos",
+      "owner": "postgres",
+      "columns": [
+        {
+          "name": "attachment_id",
+          "type": "uuid",
+          "default": "gen_random_uuid()",
+          "identity": "",
+          "not_null": true,
+          "generated": ""
+        },
+        {
+          "name": "actor_user_id",
+          "type": "uuid",
+          "default": null,
+          "identity": "",
+          "not_null": true,
+          "generated": ""
+        },
+        {
+          "name": "identity_id",
+          "type": "uuid",
+          "default": null,
+          "identity": "",
+          "not_null": true,
+          "generated": ""
+        },
+        {
+          "name": "conversation_id",
+          "type": "bigint",
+          "default": null,
+          "identity": "",
+          "not_null": true,
+          "generated": ""
+        },
+        {
+          "name": "request_key",
+          "type": "uuid",
+          "default": null,
+          "identity": "",
+          "not_null": true,
+          "generated": ""
+        },
+        {
+          "name": "source_sha256",
+          "type": "text",
+          "default": null,
+          "identity": "",
+          "not_null": true,
+          "generated": ""
+        },
+        {
+          "name": "source_bytes",
+          "type": "bigint",
+          "default": null,
+          "identity": "",
+          "not_null": true,
+          "generated": ""
+        },
+        {
+          "name": "source_mime",
+          "type": "text",
+          "default": null,
+          "identity": "",
+          "not_null": true,
+          "generated": ""
+        },
+        {
+          "name": "state",
+          "type": "text",
+          "default": "'reserved'::text",
+          "identity": "",
+          "not_null": true,
+          "generated": ""
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "default": "clock_timestamp()",
+          "identity": "",
+          "not_null": true,
+          "generated": ""
+        },
+        {
+          "name": "expires_at",
+          "type": "timestamp with time zone",
+          "default": "(clock_timestamp() + '00:30:00'::interval)",
+          "identity": "",
+          "not_null": true,
+          "generated": ""
+        },
+        {
+          "name": "upload_key",
+          "type": "uuid",
+          "default": null,
+          "identity": "",
+          "not_null": false,
+          "generated": ""
+        },
+        {
+          "name": "web_sha256",
+          "type": "text",
+          "default": null,
+          "identity": "",
+          "not_null": false,
+          "generated": ""
+        },
+        {
+          "name": "web_bytes",
+          "type": "bigint",
+          "default": null,
+          "identity": "",
+          "not_null": false,
+          "generated": ""
+        },
+        {
+          "name": "width",
+          "type": "integer",
+          "default": null,
+          "identity": "",
+          "not_null": false,
+          "generated": ""
+        },
+        {
+          "name": "height",
+          "type": "integer",
+          "default": null,
+          "identity": "",
+          "not_null": false,
+          "generated": ""
+        },
+        {
+          "name": "message_id",
+          "type": "bigint",
+          "default": null,
+          "identity": "",
+          "not_null": false,
+          "generated": ""
+        },
+        {
+          "name": "cleanup_key",
+          "type": "uuid",
+          "default": null,
+          "identity": "",
+          "not_null": false,
+          "generated": ""
+        },
+        {
+          "name": "cleanup_lease_until",
+          "type": "timestamp with time zone",
+          "default": null,
+          "identity": "",
+          "not_null": false,
+          "generated": ""
+        },
+        {
+          "name": "next_cleanup_at",
+          "type": "timestamp with time zone",
+          "default": null,
+          "identity": "",
+          "not_null": false,
+          "generated": ""
+        },
+        {
+          "name": "cleanup_attempts",
+          "type": "bigint",
+          "default": "0",
+          "identity": "",
+          "not_null": true,
+          "generated": ""
+        },
+        {
+          "name": "last_cleanup_at",
+          "type": "timestamp with time zone",
+          "default": null,
+          "identity": "",
+          "not_null": false,
+          "generated": ""
+        },
+        {
+          "name": "last_cleanup_removed",
+          "type": "boolean",
+          "default": null,
+          "identity": "",
+          "not_null": false,
+          "generated": ""
+        },
+        {
+          "name": "failure_code",
+          "type": "text",
+          "default": null,
+          "identity": "",
+          "not_null": false,
+          "generated": ""
+        }
+      ],
+      "indexes": [
+        "CREATE INDEX photos_actor_created_v2 ON messaging_private_v2.photos USING btree (actor_user_id, created_at)",
+        "CREATE UNIQUE INDEX photos_actor_user_id_request_key_key ON messaging_private_v2.photos USING btree (actor_user_id, request_key)",
+        "CREATE INDEX photos_cleanup_v2 ON messaging_private_v2.photos USING btree (state, next_cleanup_at, expires_at)",
+        "CREATE UNIQUE INDEX photos_message_id_key ON messaging_private_v2.photos USING btree (message_id)",
+        "CREATE UNIQUE INDEX photos_pkey ON messaging_private_v2.photos USING btree (attachment_id)"
+      ],
+      "policies": [
+        {
+          "name": "controlled_writer",
+          "check": "true",
+          "roles": [
+            "selqiro_listing_contact_writer_v1"
+          ],
+          "using": "true",
+          "command": "*",
+          "permissive": true
+        }
+      ],
+      "force_rls": false,
+      "constraints": [
+        {
+          "name": "photos_actor_user_id_request_key_key",
+          "type": "u",
+          "validated": true,
+          "definition": "UNIQUE (actor_user_id, request_key)"
+        },
+        {
+          "name": "photos_check",
+          "type": "c",
+          "validated": true,
+          "definition": "CHECK ((((upload_key IS NULL) AND (web_sha256 IS NULL) AND (web_bytes IS NULL) AND (width IS NULL) AND (height IS NULL)) OR ((upload_key IS NOT NULL) AND (web_sha256 IS NOT NULL) AND (web_bytes IS NOT NULL) AND (width IS NOT NULL) AND (height IS NOT NULL))))"
+        },
+        {
+          "name": "photos_check1",
+          "type": "c",
+          "validated": true,
+          "definition": "CHECK (((state <> ALL (ARRAY['uploading'::text, 'ready'::text, 'attached'::text])) OR (upload_key IS NOT NULL)))"
+        },
+        {
+          "name": "photos_check2",
+          "type": "c",
+          "validated": true,
+          "definition": "CHECK (((state = 'attached'::text) = (message_id IS NOT NULL)))"
+        },
+        {
+          "name": "photos_check3",
+          "type": "c",
+          "validated": true,
+          "definition": "CHECK (((state = 'tombstoned'::text) OR ((cleanup_key IS NULL) AND (cleanup_lease_until IS NULL) AND (next_cleanup_at IS NULL))))"
+        },
+        {
+          "name": "photos_check4",
+          "type": "c",
+          "validated": true,
+          "definition": "CHECK (((cleanup_key IS NULL) = (cleanup_lease_until IS NULL)))"
+        },
+        {
+          "name": "photos_check5",
+          "type": "c",
+          "validated": true,
+          "definition": "CHECK ((expires_at > created_at))"
+        },
+        {
+          "name": "photos_cleanup_attempts_check",
+          "type": "c",
+          "validated": true,
+          "definition": "CHECK ((cleanup_attempts >= 0))"
+        },
+        {
+          "name": "photos_conversation_id_fkey",
+          "type": "f",
+          "validated": true,
+          "definition": "FOREIGN KEY (conversation_id) REFERENCES conversations(id) ON DELETE RESTRICT"
+        },
+        {
+          "name": "photos_failure_code_check",
+          "type": "c",
+          "validated": true,
+          "definition": "CHECK ((failure_code ~ '^[A-Z0-9_]{1,64}$'::text))"
+        },
+        {
+          "name": "photos_height_check",
+          "type": "c",
+          "validated": true,
+          "definition": "CHECK (((height >= 1) AND (height <= 1600)))"
+        },
+        {
+          "name": "photos_message_id_fkey",
+          "type": "f",
+          "validated": true,
+          "definition": "FOREIGN KEY (message_id) REFERENCES messages(id) ON DELETE RESTRICT DEFERRABLE INITIALLY DEFERRED"
+        },
+        {
+          "name": "photos_message_id_key",
+          "type": "u",
+          "validated": true,
+          "definition": "UNIQUE (message_id)"
+        },
+        {
+          "name": "photos_pkey",
+          "type": "p",
+          "validated": true,
+          "definition": "PRIMARY KEY (attachment_id)"
+        },
+        {
+          "name": "photos_request_key_check",
+          "type": "c",
+          "validated": true,
+          "definition": "CHECK ((request_key <> '00000000-0000-0000-0000-000000000000'::uuid))"
+        },
+        {
+          "name": "photos_source_bytes_check",
+          "type": "c",
+          "validated": true,
+          "definition": "CHECK (((source_bytes >= 1) AND (source_bytes <= 1400000)))"
+        },
+        {
+          "name": "photos_source_mime_check",
+          "type": "c",
+          "validated": true,
+          "definition": "CHECK ((source_mime = 'image/webp'::text))"
+        },
+        {
+          "name": "photos_source_sha256_check",
+          "type": "c",
+          "validated": true,
+          "definition": "CHECK ((source_sha256 ~ '^[0-9a-f]{64}$'::text))"
+        },
+        {
+          "name": "photos_state_check",
+          "type": "c",
+          "validated": true,
+          "definition": "CHECK ((state = ANY (ARRAY['reserved'::text, 'uploading'::text, 'ready'::text, 'attached'::text, 'tombstoned'::text])))"
+        },
+        {
+          "name": "photos_web_bytes_check",
+          "type": "c",
+          "validated": true,
+          "definition": "CHECK (((web_bytes >= 1) AND (web_bytes <= 2000000)))"
+        },
+        {
+          "name": "photos_web_sha256_check",
+          "type": "c",
+          "validated": true,
+          "definition": "CHECK ((web_sha256 ~ '^[0-9a-f]{64}$'::text))"
+        },
+        {
+          "name": "photos_width_check",
+          "type": "c",
+          "validated": true,
+          "definition": "CHECK (((width >= 1) AND (width <= 1600)))"
+        }
+      ]
+    },
+    {
+      "acl": [
+        {
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "grantable": false,
+          "privilege": "DELETE"
+        },
+        {
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "grantable": false,
+          "privilege": "INSERT"
+        },
+        {
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "grantable": false,
+          "privilege": "MAINTAIN"
+        },
+        {
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "grantable": false,
+          "privilege": "REFERENCES"
+        },
+        {
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "grantable": false,
+          "privilege": "SELECT"
+        },
+        {
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "grantable": false,
+          "privilege": "TRIGGER"
+        },
+        {
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "grantable": false,
+          "privilege": "TRUNCATE"
+        },
+        {
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "grantable": false,
+          "privilege": "UPDATE"
+        },
+        {
+          "grantee": "selqiro_listing_contact_writer_v1",
+          "grantor": "postgres",
+          "grantable": false,
+          "privilege": "INSERT"
+        },
+        {
+          "grantee": "selqiro_listing_contact_writer_v1",
+          "grantor": "postgres",
+          "grantable": false,
+          "privilege": "SELECT"
+        },
+        {
+          "grantee": "selqiro_listing_contact_writer_v1",
+          "grantor": "postgres",
+          "grantable": false,
+          "privilege": "UPDATE"
+        }
+      ],
+      "rls": true,
+      "kind": "r",
+      "name": "read_watermarks",
+      "owner": "postgres",
+      "columns": [
+        {
+          "name": "actor_user_id",
+          "type": "uuid",
+          "default": null,
+          "identity": "",
+          "not_null": true,
+          "generated": ""
+        },
+        {
+          "name": "identity_id",
+          "type": "uuid",
+          "default": null,
+          "identity": "",
+          "not_null": true,
+          "generated": ""
+        },
+        {
+          "name": "conversation_id",
+          "type": "bigint",
+          "default": null,
+          "identity": "",
+          "not_null": true,
+          "generated": ""
+        },
+        {
+          "name": "through_message_id",
+          "type": "bigint",
+          "default": null,
+          "identity": "",
+          "not_null": true,
+          "generated": ""
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "default": "clock_timestamp()",
+          "identity": "",
+          "not_null": true,
+          "generated": ""
+        }
+      ],
+      "indexes": [
+        "CREATE UNIQUE INDEX read_watermarks_pkey ON messaging_private_v2.read_watermarks USING btree (actor_user_id, identity_id, conversation_id)"
+      ],
+      "policies": [
+        {
+          "name": "controlled_writer",
+          "check": "true",
+          "roles": [
+            "selqiro_listing_contact_writer_v1"
+          ],
+          "using": "true",
+          "command": "*",
+          "permissive": true
+        }
+      ],
+      "force_rls": false,
+      "constraints": [
+        {
+          "name": "read_watermarks_conversation_id_fkey",
+          "type": "f",
+          "validated": true,
+          "definition": "FOREIGN KEY (conversation_id) REFERENCES conversations(id) ON DELETE CASCADE"
+        },
+        {
+          "name": "read_watermarks_pkey",
+          "type": "p",
+          "validated": true,
+          "definition": "PRIMARY KEY (actor_user_id, identity_id, conversation_id)"
+        },
+        {
+          "name": "read_watermarks_through_message_id_check",
+          "type": "c",
+          "validated": true,
+          "definition": "CHECK ((through_message_id > 0))"
+        }
+      ]
+    },
+    {
+      "acl": [
+        {
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "grantable": false,
+          "privilege": "DELETE"
+        },
+        {
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "grantable": false,
+          "privilege": "INSERT"
+        },
+        {
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "grantable": false,
+          "privilege": "MAINTAIN"
+        },
+        {
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "grantable": false,
+          "privilege": "REFERENCES"
+        },
+        {
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "grantable": false,
+          "privilege": "SELECT"
+        },
+        {
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "grantable": false,
+          "privilege": "TRIGGER"
+        },
+        {
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "grantable": false,
+          "privilege": "TRUNCATE"
+        },
+        {
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "grantable": false,
+          "privilege": "UPDATE"
+        },
+        {
+          "grantee": "selqiro_listing_contact_writer_v1",
+          "grantor": "postgres",
+          "grantable": false,
+          "privilege": "INSERT"
+        },
+        {
+          "grantee": "selqiro_listing_contact_writer_v1",
+          "grantor": "postgres",
+          "grantable": false,
+          "privilege": "SELECT"
+        },
+        {
+          "grantee": "selqiro_listing_contact_writer_v1",
+          "grantor": "postgres",
+          "grantable": false,
+          "privilege": "UPDATE"
+        }
+      ],
+      "rls": true,
+      "kind": "r",
+      "name": "send_receipts",
+      "owner": "postgres",
+      "columns": [
+        {
+          "name": "actor_user_id",
+          "type": "uuid",
+          "default": null,
+          "identity": "",
+          "not_null": true,
+          "generated": ""
+        },
+        {
+          "name": "identity_id",
+          "type": "uuid",
+          "default": null,
+          "identity": "",
+          "not_null": true,
+          "generated": ""
+        },
+        {
+          "name": "request_key",
+          "type": "uuid",
+          "default": null,
+          "identity": "",
+          "not_null": true,
+          "generated": ""
+        },
+        {
+          "name": "conversation_id",
+          "type": "bigint",
+          "default": null,
+          "identity": "",
+          "not_null": true,
+          "generated": ""
+        },
+        {
+          "name": "message_id",
+          "type": "bigint",
+          "default": null,
+          "identity": "",
+          "not_null": true,
+          "generated": ""
+        },
+        {
+          "name": "intent_sha256",
+          "type": "bytea",
+          "default": null,
+          "identity": "",
+          "not_null": true,
+          "generated": ""
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "default": "clock_timestamp()",
+          "identity": "",
+          "not_null": true,
+          "generated": ""
+        }
+      ],
+      "indexes": [
+        "CREATE UNIQUE INDEX send_receipts_message_id_key ON messaging_private_v2.send_receipts USING btree (message_id)",
+        "CREATE UNIQUE INDEX send_receipts_pkey ON messaging_private_v2.send_receipts USING btree (actor_user_id, request_key)"
+      ],
+      "policies": [
+        {
+          "name": "controlled_writer",
+          "check": "true",
+          "roles": [
+            "selqiro_listing_contact_writer_v1"
+          ],
+          "using": "true",
+          "command": "*",
+          "permissive": true
+        }
+      ],
+      "force_rls": false,
+      "constraints": [
+        {
+          "name": "send_receipts_conversation_id_fkey",
+          "type": "f",
+          "validated": true,
+          "definition": "FOREIGN KEY (conversation_id) REFERENCES conversations(id) ON DELETE RESTRICT"
+        },
+        {
+          "name": "send_receipts_intent_sha256_check",
+          "type": "c",
+          "validated": true,
+          "definition": "CHECK ((octet_length(intent_sha256) = 32))"
+        },
+        {
+          "name": "send_receipts_message_id_fkey",
+          "type": "f",
+          "validated": true,
+          "definition": "FOREIGN KEY (message_id) REFERENCES messages(id) ON DELETE RESTRICT DEFERRABLE INITIALLY DEFERRED"
+        },
+        {
+          "name": "send_receipts_message_id_key",
+          "type": "u",
+          "validated": true,
+          "definition": "UNIQUE (message_id)"
+        },
+        {
+          "name": "send_receipts_pkey",
+          "type": "p",
+          "validated": true,
+          "definition": "PRIMARY KEY (actor_user_id, request_key)"
+        },
+        {
+          "name": "send_receipts_request_key_check",
+          "type": "c",
+          "validated": true,
+          "definition": "CHECK ((request_key <> '00000000-0000-0000-0000-000000000000'::uuid))"
+        }
+      ]
+    }
+  ],
+  "triggers": [
+    {
+      "name": "messaging_account_block_v2",
+      "enabled": "O",
+      "definition": "CREATE TRIGGER messaging_account_block_v2 BEFORE INSERT ON public.messages FOR EACH ROW EXECUTE FUNCTION messaging_private_v2.guard_account_block()"
+    },
+    {
+      "name": "protect_attached_message_photo_v2",
+      "enabled": "O",
+      "definition": "CREATE TRIGGER protect_attached_message_photo_v2 BEFORE DELETE OR UPDATE ON public.messages FOR EACH ROW EXECUTE FUNCTION messaging_private_v2.protect_attached_photo()"
+    }
+  ],
+  "public_indexes": [
+    {
+      "name": "messaging_thread_activity_v2",
+      "owner": "postgres",
+      "definition": "CREATE INDEX messaging_thread_activity_v2 ON public.conversations USING btree (COALESCE(updated_at, created_at) DESC, id DESC)"
+    },
+    {
+      "name": "messaging_thread_message_v2",
+      "owner": "postgres",
+      "definition": "CREATE INDEX messaging_thread_message_v2 ON public.messages USING btree (conversation_id, id DESC)"
+    }
+  ],
+  "storage_policy": [
+    {
+      "name": "message_attachments_v2_server_only",
+      "check": "(bucket_id <> 'message-attachments-v2'::text)",
+      "roles": [
+        "anon",
+        "authenticated"
+      ],
+      "using": "(bucket_id <> 'message-attachments-v2'::text)",
+      "command": "*",
+      "permissive": false
+    }
+  ]
+}

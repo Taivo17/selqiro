@@ -113,12 +113,15 @@
     "supabase/labs/listing-contact-integration-v1/tests/fixture-extension.sql": "b36206c080a1ba9f5de74519c91aba4125e0b7ac71718e4d3a77d9ae0ab96aba",
     "supabase/labs/listing-contact-integration-v1/tests/authority.sql": "358ddbea9c3f0277e4b03d838085afafde728c523e785620f512eeb1d34071cc",
     "supabase/labs/listing-public-read-v1/tests/reader-fixture-extension.sql": "107201a066632682d1f8a506efbbb9a05aa0c8604c267c8ac4b3a3b1a845052a",
-    "supabase/repairs/20261029_listing_message_cards/changes.sql": "264426d1b88199d2cf4ee3ccfd8edb058949e7fded70885952cdf29ee6003c2e"
+    "supabase/repairs/20261029_listing_message_cards/changes.sql": "264426d1b88199d2cf4ee3ccfd8edb058949e7fded70885952cdf29ee6003c2e",
+    "supabase/repairs/20261029_listing_message_cards/tests/fixtures/accepted-contact-fix.sql": "aaed21297cb61c9e9d76d74e19b973bfd745d401ca431bfd31ec095c13d3bd7b",
+    "supabase/repairs/20261030_messaging_restore/changes.sql": "eaa813d5cee8ad9514f3e1de9bafb6a4c5f9cacebb1a96ef957fc08951dac883"
   },
   "pure_function_adaptations": [
     "source and declaration read immutable current-source hashes instead of historical runtime globals",
     "compile_schema renamed compile_base_schema",
     "table terminator accepts indentation needed by two retained gallery CREATE TABLE declarations",
-    "retained_price_authority source read uses the same hash-checked source helper"
+    "retained_price_authority source read uses the same hash-checked source helper",
+    "declaration accepts only public or listing_contact_private so the exact retained actor wrapper can be selected without historical repair execution"
   ]
 }

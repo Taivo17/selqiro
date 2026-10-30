@@ -18,6 +18,7 @@ export default function V2Shell({
 
   const showMobileNavigation =
     shouldShowV2MobileNavigation(pathname);
+  const isMessageThread = /^\/v2\/messages\/[1-9][0-9]*\/?$/.test(pathname || "");
 
   return (
     <div className="min-h-[100dvh] w-full overflow-x-clip bg-[#f7f8f6] text-neutral-950">
@@ -25,8 +26,9 @@ export default function V2Shell({
 
       <main
         className={[
-          "mx-auto w-full min-w-0 max-w-7xl px-4 pt-6 sm:px-5 sm:pt-8",
-          showMobileNavigation
+          "mx-auto w-full min-w-0 max-w-7xl",
+          isMessageThread ? "px-0 pt-0 pb-0 md:px-5 md:pt-6 md:pb-4" : "px-4 pt-6 sm:px-5 sm:pt-8",
+          isMessageThread ? "" : showMobileNavigation
             ? "pb-32 md:pb-8"
             : "pb-8",
         ].join(" ")}

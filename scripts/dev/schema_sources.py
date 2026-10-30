@@ -35,9 +35,11 @@ def source(path):
     return content
 
 
-def declaration(path, name, kind="function"):
+def declaration(path, name, kind="function", schema="public"):
     content = source_text(path)
-    owner = r'(?:"public"\."' + re.escape(name) + r'"|public\.' + re.escape(name) + r')'
+    if schema not in ("public", "listing_contact_private"):
+        raise ValueError("Unsupported selected declaration schema")
+    owner = r'(?:"' + re.escape(schema) + r'"\."' + re.escape(name) + r'"|' + re.escape(schema) + r'\.' + re.escape(name) + r')'
     if kind == "function":
         match = re.search(r'create(?:\s+or\s+replace)?\s+function\s+' + owner + r'\s*\(', content, re.I)
         if not match:

@@ -1,0 +1,1374 @@
+{
+  "source": "actual isolated PostgreSQL RPC results; synthetic identities only",
+  "cases": [
+    {
+      "parser": "parseSendMessageReceipt",
+      "command": {
+        "expectedUserId": "91000000-0000-0000-0000-000000000001",
+        "expectedIdentityId": "a1000000-0000-0000-0000-000000000001",
+        "conversationId": "1",
+        "requestKey": "e1000000-0000-0000-0000-000000000200",
+        "message": "SQL to web parser contract",
+        "listingId": "197",
+        "attachmentId": null
+      },
+      "value": {
+        "action": "send",
+        "replayed": false,
+        "message_id": "260",
+        "identity_id": "a1000000-0000-0000-0000-000000000001",
+        "request_key": "e1000000-0000-0000-0000-000000000200",
+        "actor_user_id": "91000000-0000-0000-0000-000000000001",
+        "schema_version": 2,
+        "conversation_id": "1"
+      }
+    },
+    {
+      "parser": "parseSendMessageReceipt",
+      "command": {
+        "expectedUserId": "91000000-0000-0000-0000-000000000001",
+        "expectedIdentityId": "a1000000-0000-0000-0000-000000000001",
+        "conversationId": "1",
+        "requestKey": "e1000000-0000-0000-0000-000000000200",
+        "message": "SQL to web parser contract",
+        "listingId": "197",
+        "attachmentId": null
+      },
+      "value": {
+        "action": "send",
+        "replayed": true,
+        "message_id": "260",
+        "identity_id": "a1000000-0000-0000-0000-000000000001",
+        "request_key": "e1000000-0000-0000-0000-000000000200",
+        "actor_user_id": "91000000-0000-0000-0000-000000000001",
+        "schema_version": 2,
+        "conversation_id": "1"
+      }
+    },
+    {
+      "parser": "parseMessageThread",
+      "command": {
+        "expectedUserId": "91000000-0000-0000-0000-000000000001",
+        "expectedIdentityId": "a1000000-0000-0000-0000-000000000001",
+        "conversationId": "1",
+        "beforeMessageId": null,
+        "attachmentListingId": "197"
+      },
+      "value": {
+        "peer": {
+          "name": "Synthetic seller",
+          "avatar_url": null,
+          "identity_id": "b2000000-0000-0000-0000-000000000002"
+        },
+        "actor": {
+          "name": "Synthetic buyer",
+          "avatar_url": null,
+          "identity_id": "a1000000-0000-0000-0000-000000000001"
+        },
+        "listing": {
+          "id": "197",
+          "title": "Synthetic car"
+        },
+        "can_send": true,
+        "messages": [
+          {
+            "id": "4",
+            "mine": true,
+            "text": "managed text",
+            "image": null,
+            "listing": {
+              "id": "197",
+              "image": null,
+              "price": "4376 EUR",
+              "title": "Synthetic car"
+            },
+            "created_at": "2026-10-30T11:02:25.121+00:00",
+            "text_truncated": false
+          },
+          {
+            "id": "5",
+            "mine": false,
+            "text": "displayed",
+            "image": null,
+            "listing": null,
+            "created_at": "2026-10-30T11:02:25.134+00:00",
+            "text_truncated": false
+          },
+          {
+            "id": "6",
+            "mine": false,
+            "text": "arrived after displayed",
+            "image": null,
+            "listing": null,
+            "created_at": "2026-10-30T11:02:25.141+00:00",
+            "text_truncated": false
+          },
+          {
+            "id": "9",
+            "mine": false,
+            "text": "new after hide",
+            "image": null,
+            "listing": null,
+            "created_at": "2026-10-30T11:02:25.223+00:00",
+            "text_truncated": false
+          },
+          {
+            "id": "23",
+            "mine": true,
+            "text": "",
+            "image": {
+              "kind": "v2",
+              "width": 640,
+              "height": 480,
+              "attachment_id": "62d9b24b-ed35-4783-a42b-0423e1f3b6fb"
+            },
+            "listing": null,
+            "created_at": "2026-10-30T11:02:25.342+00:00",
+            "text_truncated": false
+          },
+          {
+            "id": "28",
+            "mine": true,
+            "text": "atomic rejection",
+            "image": {
+              "kind": "v2",
+              "width": 640,
+              "height": 480,
+              "attachment_id": "7af41e5f-1da2-4c0e-8877-45e1a77b9354"
+            },
+            "listing": null,
+            "created_at": "2026-10-30T11:02:25.399+00:00",
+            "text_truncated": false
+          },
+          {
+            "id": "260",
+            "mine": true,
+            "text": "SQL to web parser contract",
+            "image": null,
+            "listing": {
+              "id": "197",
+              "image": null,
+              "price": "4376 EUR",
+              "title": "Synthetic car"
+            },
+            "created_at": "2026-10-30T11:02:25.689+00:00",
+            "text_truncated": false
+          }
+        ],
+        "identity_id": "a1000000-0000-0000-0000-000000000001",
+        "actor_user_id": "91000000-0000-0000-0000-000000000001",
+        "blocked_by_me": false,
+        "schema_version": 2,
+        "conversation_id": "1",
+        "attachment_listing": {
+          "id": "197",
+          "image": null,
+          "price": "4376 EUR",
+          "title": "Synthetic car"
+        },
+        "attachment_listing_id": "197",
+        "next_before_message_id": null
+      }
+    },
+    {
+      "parser": "parseMessageThread",
+      "command": {
+        "expectedUserId": "91000000-0000-0000-0000-000000000001",
+        "expectedIdentityId": "a1000000-0000-0000-0000-000000000001",
+        "conversationId": "2",
+        "beforeMessageId": null,
+        "attachmentListingId": null
+      },
+      "value": {
+        "peer": {
+          "name": "Synthetic seller",
+          "avatar_url": null,
+          "identity_id": "b2000000-0000-0000-0000-000000000002"
+        },
+        "actor": {
+          "name": "Synthetic buyer",
+          "avatar_url": null,
+          "identity_id": "a1000000-0000-0000-0000-000000000001"
+        },
+        "listing": null,
+        "can_send": true,
+        "messages": [
+          {
+            "id": "2",
+            "mine": false,
+            "text": "old legacy text",
+            "image": {
+              "kind": "legacy",
+              "width": null,
+              "height": null,
+              "attachment_id": null
+            },
+            "listing": {
+              "id": "200",
+              "image": null,
+              "price": "4 000 EUR",
+              "title": "Historical snapshot"
+            },
+            "created_at": "2026-10-30T11:02:25.045+00:00",
+            "text_truncated": false
+          },
+          {
+            "id": "3",
+            "mine": true,
+            "text": "new controlled old thread",
+            "image": null,
+            "listing": {
+              "id": "197",
+              "image": null,
+              "price": "4376 EUR",
+              "title": "Synthetic car"
+            },
+            "created_at": "2026-10-30T11:02:25.1+00:00",
+            "text_truncated": false
+          },
+          {
+            "id": "12",
+            "mine": false,
+            "text": "direct legacy allowed after unblock",
+            "image": null,
+            "listing": null,
+            "created_at": "2026-10-30T11:02:25.265+00:00",
+            "text_truncated": false
+          },
+          {
+            "id": "16",
+            "mine": false,
+            "text": "arrived first",
+            "image": null,
+            "listing": null,
+            "created_at": "2026-10-30T11:02:25.274+00:00",
+            "text_truncated": false
+          },
+          {
+            "id": "17",
+            "mine": false,
+            "text": "late legacy arrival",
+            "image": null,
+            "listing": null,
+            "created_at": "2026-10-30T11:02:25.282+00:00",
+            "text_truncated": false
+          },
+          {
+            "id": "26",
+            "mine": true,
+            "text": "legacy photo",
+            "image": {
+              "kind": "v2",
+              "width": 640,
+              "height": 480,
+              "attachment_id": "d7370c65-6f8a-4a89-a8d7-c4a52d3d8a6d"
+            },
+            "listing": null,
+            "created_at": "2026-10-30T11:02:25.376+00:00",
+            "text_truncated": false
+          }
+        ],
+        "identity_id": "a1000000-0000-0000-0000-000000000001",
+        "actor_user_id": "91000000-0000-0000-0000-000000000001",
+        "blocked_by_me": false,
+        "schema_version": 2,
+        "conversation_id": "2",
+        "attachment_listing": null,
+        "attachment_listing_id": null,
+        "next_before_message_id": null
+      }
+    },
+    {
+      "parser": "parseMessageThreadList",
+      "command": {
+        "expectedUserId": "91000000-0000-0000-0000-000000000001",
+        "expectedIdentityId": "a1000000-0000-0000-0000-000000000001",
+        "cursor": null
+      },
+      "value": {
+        "actor": {
+          "name": "Synthetic buyer",
+          "avatar_url": null,
+          "identity_id": "a1000000-0000-0000-0000-000000000001"
+        },
+        "identity_id": "a1000000-0000-0000-0000-000000000001",
+        "next_cursor": {
+          "updated_at": "2026-01-01T00:00:00+00:00",
+          "conversation_id": "21"
+        },
+        "actor_user_id": "91000000-0000-0000-0000-000000000001",
+        "conversations": [
+          {
+            "peer": {
+              "name": "Synthetic seller",
+              "avatar_url": null,
+              "identity_id": "b2000000-0000-0000-0000-000000000002"
+            },
+            "unread": true,
+            "preview": {
+              "text": "SQL to web parser contract",
+              "has_image": false
+            },
+            "can_send": true,
+            "updated_at": "2026-10-30T11:02:25.689+00:00",
+            "listing_title": "Synthetic car",
+            "conversation_id": "1"
+          },
+          {
+            "peer": {
+              "name": "Synthetic seller",
+              "avatar_url": null,
+              "identity_id": "b2000000-0000-0000-0000-000000000002"
+            },
+            "unread": true,
+            "preview": {
+              "text": "new activity",
+              "has_image": false
+            },
+            "can_send": true,
+            "updated_at": "2026-10-30T11:02:25.645+00:00",
+            "listing_title": "Historical listing",
+            "conversation_id": "9"
+          },
+          {
+            "peer": {
+              "name": "Synthetic seller",
+              "avatar_url": null,
+              "identity_id": "b2000000-0000-0000-0000-000000000002"
+            },
+            "unread": false,
+            "preview": {
+              "text": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀",
+              "has_image": false
+            },
+            "can_send": true,
+            "updated_at": "2026-10-30T11:02:25.518+00:00",
+            "listing_title": "Historical listing",
+            "conversation_id": "8"
+          },
+          {
+            "peer": {
+              "name": "Synthetic seller",
+              "avatar_url": null,
+              "identity_id": "b2000000-0000-0000-0000-000000000002"
+            },
+            "unread": false,
+            "preview": {
+              "text": "history 65",
+              "has_image": false
+            },
+            "can_send": true,
+            "updated_at": "2026-10-30T11:02:25.46+00:00",
+            "listing_title": "Historical listing",
+            "conversation_id": "7"
+          },
+          {
+            "peer": {
+              "name": "Synthetic seller",
+              "avatar_url": null,
+              "identity_id": "b2000000-0000-0000-0000-000000000002"
+            },
+            "unread": true,
+            "preview": {
+              "text": "legacy photo",
+              "has_image": true
+            },
+            "can_send": true,
+            "updated_at": "2026-10-30T11:02:25.376+00:00",
+            "listing_title": "Historical listing",
+            "conversation_id": "2"
+          },
+          {
+            "peer": {
+              "name": "Synthetic seller",
+              "avatar_url": null,
+              "identity_id": "b2000000-0000-0000-0000-000000000002"
+            },
+            "unread": true,
+            "preview": {
+              "text": "",
+              "has_image": true
+            },
+            "can_send": true,
+            "updated_at": "2026-10-30T11:02:25.291+00:00",
+            "listing_title": "Historical listing",
+            "conversation_id": "6"
+          },
+          {
+            "peer": {
+              "name": "Synthetic seller",
+              "avatar_url": null,
+              "identity_id": "b2000000-0000-0000-0000-000000000002"
+            },
+            "unread": false,
+            "preview": {
+              "text": "unseen concurrent arrival",
+              "has_image": false
+            },
+            "can_send": true,
+            "updated_at": "2026-10-30T11:02:25.177+00:00",
+            "listing_title": "Historical listing",
+            "conversation_id": "5"
+          },
+          {
+            "peer": {
+              "name": "Synthetic seller",
+              "avatar_url": null,
+              "identity_id": "b2000000-0000-0000-0000-000000000002"
+            },
+            "unread": false,
+            "preview": {
+              "text": "",
+              "has_image": false
+            },
+            "can_send": true,
+            "updated_at": "2026-01-01T00:00:00+00:00",
+            "listing_title": "Historical listing",
+            "conversation_id": "63"
+          },
+          {
+            "peer": {
+              "name": "Synthetic seller",
+              "avatar_url": null,
+              "identity_id": "b2000000-0000-0000-0000-000000000002"
+            },
+            "unread": false,
+            "preview": {
+              "text": "",
+              "has_image": false
+            },
+            "can_send": true,
+            "updated_at": "2026-01-01T00:00:00+00:00",
+            "listing_title": "Historical listing",
+            "conversation_id": "62"
+          },
+          {
+            "peer": {
+              "name": "Synthetic seller",
+              "avatar_url": null,
+              "identity_id": "b2000000-0000-0000-0000-000000000002"
+            },
+            "unread": false,
+            "preview": {
+              "text": "",
+              "has_image": false
+            },
+            "can_send": true,
+            "updated_at": "2026-01-01T00:00:00+00:00",
+            "listing_title": "Historical listing",
+            "conversation_id": "61"
+          },
+          {
+            "peer": {
+              "name": "Synthetic seller",
+              "avatar_url": null,
+              "identity_id": "b2000000-0000-0000-0000-000000000002"
+            },
+            "unread": false,
+            "preview": {
+              "text": "",
+              "has_image": false
+            },
+            "can_send": true,
+            "updated_at": "2026-01-01T00:00:00+00:00",
+            "listing_title": "Historical listing",
+            "conversation_id": "60"
+          },
+          {
+            "peer": {
+              "name": "Synthetic seller",
+              "avatar_url": null,
+              "identity_id": "b2000000-0000-0000-0000-000000000002"
+            },
+            "unread": false,
+            "preview": {
+              "text": "",
+              "has_image": false
+            },
+            "can_send": true,
+            "updated_at": "2026-01-01T00:00:00+00:00",
+            "listing_title": "Historical listing",
+            "conversation_id": "59"
+          },
+          {
+            "peer": {
+              "name": "Synthetic seller",
+              "avatar_url": null,
+              "identity_id": "b2000000-0000-0000-0000-000000000002"
+            },
+            "unread": false,
+            "preview": {
+              "text": "",
+              "has_image": false
+            },
+            "can_send": true,
+            "updated_at": "2026-01-01T00:00:00+00:00",
+            "listing_title": "Historical listing",
+            "conversation_id": "58"
+          },
+          {
+            "peer": {
+              "name": "Synthetic seller",
+              "avatar_url": null,
+              "identity_id": "b2000000-0000-0000-0000-000000000002"
+            },
+            "unread": false,
+            "preview": {
+              "text": "",
+              "has_image": false
+            },
+            "can_send": true,
+            "updated_at": "2026-01-01T00:00:00+00:00",
+            "listing_title": "Historical listing",
+            "conversation_id": "57"
+          },
+          {
+            "peer": {
+              "name": "Synthetic seller",
+              "avatar_url": null,
+              "identity_id": "b2000000-0000-0000-0000-000000000002"
+            },
+            "unread": false,
+            "preview": {
+              "text": "",
+              "has_image": false
+            },
+            "can_send": true,
+            "updated_at": "2026-01-01T00:00:00+00:00",
+            "listing_title": "Historical listing",
+            "conversation_id": "56"
+          },
+          {
+            "peer": {
+              "name": "Synthetic seller",
+              "avatar_url": null,
+              "identity_id": "b2000000-0000-0000-0000-000000000002"
+            },
+            "unread": false,
+            "preview": {
+              "text": "",
+              "has_image": false
+            },
+            "can_send": true,
+            "updated_at": "2026-01-01T00:00:00+00:00",
+            "listing_title": "Historical listing",
+            "conversation_id": "55"
+          },
+          {
+            "peer": {
+              "name": "Synthetic seller",
+              "avatar_url": null,
+              "identity_id": "b2000000-0000-0000-0000-000000000002"
+            },
+            "unread": false,
+            "preview": {
+              "text": "",
+              "has_image": false
+            },
+            "can_send": true,
+            "updated_at": "2026-01-01T00:00:00+00:00",
+            "listing_title": "Historical listing",
+            "conversation_id": "54"
+          },
+          {
+            "peer": {
+              "name": "Synthetic seller",
+              "avatar_url": null,
+              "identity_id": "b2000000-0000-0000-0000-000000000002"
+            },
+            "unread": false,
+            "preview": {
+              "text": "",
+              "has_image": false
+            },
+            "can_send": true,
+            "updated_at": "2026-01-01T00:00:00+00:00",
+            "listing_title": "Historical listing",
+            "conversation_id": "53"
+          },
+          {
+            "peer": {
+              "name": "Synthetic seller",
+              "avatar_url": null,
+              "identity_id": "b2000000-0000-0000-0000-000000000002"
+            },
+            "unread": false,
+            "preview": {
+              "text": "",
+              "has_image": false
+            },
+            "can_send": true,
+            "updated_at": "2026-01-01T00:00:00+00:00",
+            "listing_title": "Historical listing",
+            "conversation_id": "52"
+          },
+          {
+            "peer": {
+              "name": "Synthetic seller",
+              "avatar_url": null,
+              "identity_id": "b2000000-0000-0000-0000-000000000002"
+            },
+            "unread": false,
+            "preview": {
+              "text": "",
+              "has_image": false
+            },
+            "can_send": true,
+            "updated_at": "2026-01-01T00:00:00+00:00",
+            "listing_title": "Historical listing",
+            "conversation_id": "51"
+          },
+          {
+            "peer": {
+              "name": "Synthetic seller",
+              "avatar_url": null,
+              "identity_id": "b2000000-0000-0000-0000-000000000002"
+            },
+            "unread": false,
+            "preview": {
+              "text": "",
+              "has_image": false
+            },
+            "can_send": true,
+            "updated_at": "2026-01-01T00:00:00+00:00",
+            "listing_title": "Historical listing",
+            "conversation_id": "50"
+          },
+          {
+            "peer": {
+              "name": "Synthetic seller",
+              "avatar_url": null,
+              "identity_id": "b2000000-0000-0000-0000-000000000002"
+            },
+            "unread": false,
+            "preview": {
+              "text": "",
+              "has_image": false
+            },
+            "can_send": true,
+            "updated_at": "2026-01-01T00:00:00+00:00",
+            "listing_title": "Historical listing",
+            "conversation_id": "49"
+          },
+          {
+            "peer": {
+              "name": "Synthetic seller",
+              "avatar_url": null,
+              "identity_id": "b2000000-0000-0000-0000-000000000002"
+            },
+            "unread": false,
+            "preview": {
+              "text": "",
+              "has_image": false
+            },
+            "can_send": true,
+            "updated_at": "2026-01-01T00:00:00+00:00",
+            "listing_title": "Historical listing",
+            "conversation_id": "48"
+          },
+          {
+            "peer": {
+              "name": "Synthetic seller",
+              "avatar_url": null,
+              "identity_id": "b2000000-0000-0000-0000-000000000002"
+            },
+            "unread": false,
+            "preview": {
+              "text": "",
+              "has_image": false
+            },
+            "can_send": true,
+            "updated_at": "2026-01-01T00:00:00+00:00",
+            "listing_title": "Historical listing",
+            "conversation_id": "47"
+          },
+          {
+            "peer": {
+              "name": "Synthetic seller",
+              "avatar_url": null,
+              "identity_id": "b2000000-0000-0000-0000-000000000002"
+            },
+            "unread": false,
+            "preview": {
+              "text": "",
+              "has_image": false
+            },
+            "can_send": true,
+            "updated_at": "2026-01-01T00:00:00+00:00",
+            "listing_title": "Historical listing",
+            "conversation_id": "46"
+          },
+          {
+            "peer": {
+              "name": "Synthetic seller",
+              "avatar_url": null,
+              "identity_id": "b2000000-0000-0000-0000-000000000002"
+            },
+            "unread": false,
+            "preview": {
+              "text": "",
+              "has_image": false
+            },
+            "can_send": true,
+            "updated_at": "2026-01-01T00:00:00+00:00",
+            "listing_title": "Historical listing",
+            "conversation_id": "45"
+          },
+          {
+            "peer": {
+              "name": "Synthetic seller",
+              "avatar_url": null,
+              "identity_id": "b2000000-0000-0000-0000-000000000002"
+            },
+            "unread": false,
+            "preview": {
+              "text": "",
+              "has_image": false
+            },
+            "can_send": true,
+            "updated_at": "2026-01-01T00:00:00+00:00",
+            "listing_title": "Historical listing",
+            "conversation_id": "44"
+          },
+          {
+            "peer": {
+              "name": "Synthetic seller",
+              "avatar_url": null,
+              "identity_id": "b2000000-0000-0000-0000-000000000002"
+            },
+            "unread": false,
+            "preview": {
+              "text": "",
+              "has_image": false
+            },
+            "can_send": true,
+            "updated_at": "2026-01-01T00:00:00+00:00",
+            "listing_title": "Historical listing",
+            "conversation_id": "43"
+          },
+          {
+            "peer": {
+              "name": "Synthetic seller",
+              "avatar_url": null,
+              "identity_id": "b2000000-0000-0000-0000-000000000002"
+            },
+            "unread": false,
+            "preview": {
+              "text": "",
+              "has_image": false
+            },
+            "can_send": true,
+            "updated_at": "2026-01-01T00:00:00+00:00",
+            "listing_title": "Historical listing",
+            "conversation_id": "42"
+          },
+          {
+            "peer": {
+              "name": "Synthetic seller",
+              "avatar_url": null,
+              "identity_id": "b2000000-0000-0000-0000-000000000002"
+            },
+            "unread": false,
+            "preview": {
+              "text": "",
+              "has_image": false
+            },
+            "can_send": true,
+            "updated_at": "2026-01-01T00:00:00+00:00",
+            "listing_title": "Historical listing",
+            "conversation_id": "41"
+          },
+          {
+            "peer": {
+              "name": "Synthetic seller",
+              "avatar_url": null,
+              "identity_id": "b2000000-0000-0000-0000-000000000002"
+            },
+            "unread": false,
+            "preview": {
+              "text": "",
+              "has_image": false
+            },
+            "can_send": true,
+            "updated_at": "2026-01-01T00:00:00+00:00",
+            "listing_title": "Historical listing",
+            "conversation_id": "40"
+          },
+          {
+            "peer": {
+              "name": "Synthetic seller",
+              "avatar_url": null,
+              "identity_id": "b2000000-0000-0000-0000-000000000002"
+            },
+            "unread": false,
+            "preview": {
+              "text": "",
+              "has_image": false
+            },
+            "can_send": true,
+            "updated_at": "2026-01-01T00:00:00+00:00",
+            "listing_title": "Historical listing",
+            "conversation_id": "39"
+          },
+          {
+            "peer": {
+              "name": "Synthetic seller",
+              "avatar_url": null,
+              "identity_id": "b2000000-0000-0000-0000-000000000002"
+            },
+            "unread": false,
+            "preview": {
+              "text": "",
+              "has_image": false
+            },
+            "can_send": true,
+            "updated_at": "2026-01-01T00:00:00+00:00",
+            "listing_title": "Historical listing",
+            "conversation_id": "38"
+          },
+          {
+            "peer": {
+              "name": "Synthetic seller",
+              "avatar_url": null,
+              "identity_id": "b2000000-0000-0000-0000-000000000002"
+            },
+            "unread": false,
+            "preview": {
+              "text": "",
+              "has_image": false
+            },
+            "can_send": true,
+            "updated_at": "2026-01-01T00:00:00+00:00",
+            "listing_title": "Historical listing",
+            "conversation_id": "37"
+          },
+          {
+            "peer": {
+              "name": "Synthetic seller",
+              "avatar_url": null,
+              "identity_id": "b2000000-0000-0000-0000-000000000002"
+            },
+            "unread": false,
+            "preview": {
+              "text": "",
+              "has_image": false
+            },
+            "can_send": true,
+            "updated_at": "2026-01-01T00:00:00+00:00",
+            "listing_title": "Historical listing",
+            "conversation_id": "36"
+          },
+          {
+            "peer": {
+              "name": "Synthetic seller",
+              "avatar_url": null,
+              "identity_id": "b2000000-0000-0000-0000-000000000002"
+            },
+            "unread": false,
+            "preview": {
+              "text": "",
+              "has_image": false
+            },
+            "can_send": true,
+            "updated_at": "2026-01-01T00:00:00+00:00",
+            "listing_title": "Historical listing",
+            "conversation_id": "35"
+          },
+          {
+            "peer": {
+              "name": "Synthetic seller",
+              "avatar_url": null,
+              "identity_id": "b2000000-0000-0000-0000-000000000002"
+            },
+            "unread": false,
+            "preview": {
+              "text": "",
+              "has_image": false
+            },
+            "can_send": true,
+            "updated_at": "2026-01-01T00:00:00+00:00",
+            "listing_title": "Historical listing",
+            "conversation_id": "34"
+          },
+          {
+            "peer": {
+              "name": "Synthetic seller",
+              "avatar_url": null,
+              "identity_id": "b2000000-0000-0000-0000-000000000002"
+            },
+            "unread": false,
+            "preview": {
+              "text": "",
+              "has_image": false
+            },
+            "can_send": true,
+            "updated_at": "2026-01-01T00:00:00+00:00",
+            "listing_title": "Historical listing",
+            "conversation_id": "33"
+          },
+          {
+            "peer": {
+              "name": "Synthetic seller",
+              "avatar_url": null,
+              "identity_id": "b2000000-0000-0000-0000-000000000002"
+            },
+            "unread": false,
+            "preview": {
+              "text": "",
+              "has_image": false
+            },
+            "can_send": true,
+            "updated_at": "2026-01-01T00:00:00+00:00",
+            "listing_title": "Historical listing",
+            "conversation_id": "32"
+          },
+          {
+            "peer": {
+              "name": "Synthetic seller",
+              "avatar_url": null,
+              "identity_id": "b2000000-0000-0000-0000-000000000002"
+            },
+            "unread": false,
+            "preview": {
+              "text": "",
+              "has_image": false
+            },
+            "can_send": true,
+            "updated_at": "2026-01-01T00:00:00+00:00",
+            "listing_title": "Historical listing",
+            "conversation_id": "31"
+          },
+          {
+            "peer": {
+              "name": "Synthetic seller",
+              "avatar_url": null,
+              "identity_id": "b2000000-0000-0000-0000-000000000002"
+            },
+            "unread": false,
+            "preview": {
+              "text": "",
+              "has_image": false
+            },
+            "can_send": true,
+            "updated_at": "2026-01-01T00:00:00+00:00",
+            "listing_title": "Historical listing",
+            "conversation_id": "30"
+          },
+          {
+            "peer": {
+              "name": "Synthetic seller",
+              "avatar_url": null,
+              "identity_id": "b2000000-0000-0000-0000-000000000002"
+            },
+            "unread": false,
+            "preview": {
+              "text": "",
+              "has_image": false
+            },
+            "can_send": true,
+            "updated_at": "2026-01-01T00:00:00+00:00",
+            "listing_title": "Historical listing",
+            "conversation_id": "29"
+          },
+          {
+            "peer": {
+              "name": "Synthetic seller",
+              "avatar_url": null,
+              "identity_id": "b2000000-0000-0000-0000-000000000002"
+            },
+            "unread": false,
+            "preview": {
+              "text": "",
+              "has_image": false
+            },
+            "can_send": true,
+            "updated_at": "2026-01-01T00:00:00+00:00",
+            "listing_title": "Historical listing",
+            "conversation_id": "28"
+          },
+          {
+            "peer": {
+              "name": "Synthetic seller",
+              "avatar_url": null,
+              "identity_id": "b2000000-0000-0000-0000-000000000002"
+            },
+            "unread": false,
+            "preview": {
+              "text": "",
+              "has_image": false
+            },
+            "can_send": true,
+            "updated_at": "2026-01-01T00:00:00+00:00",
+            "listing_title": "Historical listing",
+            "conversation_id": "27"
+          },
+          {
+            "peer": {
+              "name": "Synthetic seller",
+              "avatar_url": null,
+              "identity_id": "b2000000-0000-0000-0000-000000000002"
+            },
+            "unread": false,
+            "preview": {
+              "text": "",
+              "has_image": false
+            },
+            "can_send": true,
+            "updated_at": "2026-01-01T00:00:00+00:00",
+            "listing_title": "Historical listing",
+            "conversation_id": "26"
+          },
+          {
+            "peer": {
+              "name": "Synthetic seller",
+              "avatar_url": null,
+              "identity_id": "b2000000-0000-0000-0000-000000000002"
+            },
+            "unread": false,
+            "preview": {
+              "text": "",
+              "has_image": false
+            },
+            "can_send": true,
+            "updated_at": "2026-01-01T00:00:00+00:00",
+            "listing_title": "Historical listing",
+            "conversation_id": "25"
+          },
+          {
+            "peer": {
+              "name": "Synthetic seller",
+              "avatar_url": null,
+              "identity_id": "b2000000-0000-0000-0000-000000000002"
+            },
+            "unread": false,
+            "preview": {
+              "text": "",
+              "has_image": false
+            },
+            "can_send": true,
+            "updated_at": "2026-01-01T00:00:00+00:00",
+            "listing_title": "Historical listing",
+            "conversation_id": "24"
+          },
+          {
+            "peer": {
+              "name": "Synthetic seller",
+              "avatar_url": null,
+              "identity_id": "b2000000-0000-0000-0000-000000000002"
+            },
+            "unread": false,
+            "preview": {
+              "text": "",
+              "has_image": false
+            },
+            "can_send": true,
+            "updated_at": "2026-01-01T00:00:00+00:00",
+            "listing_title": "Historical listing",
+            "conversation_id": "23"
+          },
+          {
+            "peer": {
+              "name": "Synthetic seller",
+              "avatar_url": null,
+              "identity_id": "b2000000-0000-0000-0000-000000000002"
+            },
+            "unread": false,
+            "preview": {
+              "text": "",
+              "has_image": false
+            },
+            "can_send": true,
+            "updated_at": "2026-01-01T00:00:00+00:00",
+            "listing_title": "Historical listing",
+            "conversation_id": "22"
+          },
+          {
+            "peer": {
+              "name": "Synthetic seller",
+              "avatar_url": null,
+              "identity_id": "b2000000-0000-0000-0000-000000000002"
+            },
+            "unread": false,
+            "preview": {
+              "text": "",
+              "has_image": false
+            },
+            "can_send": true,
+            "updated_at": "2026-01-01T00:00:00+00:00",
+            "listing_title": "Historical listing",
+            "conversation_id": "21"
+          }
+        ],
+        "schema_version": 2
+      }
+    },
+    {
+      "parser": "parseMessageThreadList",
+      "command": {
+        "expectedUserId": "91000000-0000-0000-0000-000000000001",
+        "expectedIdentityId": "a1000000-0000-0000-0000-000000000001",
+        "cursor": {
+          "updated_at": "2026-01-01T00:00:00+00:00",
+          "conversation_id": "21"
+        }
+      },
+      "value": {
+        "actor": {
+          "name": "Synthetic buyer",
+          "avatar_url": null,
+          "identity_id": "a1000000-0000-0000-0000-000000000001"
+        },
+        "identity_id": "a1000000-0000-0000-0000-000000000001",
+        "next_cursor": null,
+        "actor_user_id": "91000000-0000-0000-0000-000000000001",
+        "conversations": [
+          {
+            "peer": {
+              "name": "Synthetic seller",
+              "avatar_url": null,
+              "identity_id": "b2000000-0000-0000-0000-000000000002"
+            },
+            "unread": false,
+            "preview": {
+              "text": "",
+              "has_image": false
+            },
+            "can_send": true,
+            "updated_at": "2026-01-01T00:00:00+00:00",
+            "listing_title": "Historical listing",
+            "conversation_id": "20"
+          },
+          {
+            "peer": {
+              "name": "Synthetic seller",
+              "avatar_url": null,
+              "identity_id": "b2000000-0000-0000-0000-000000000002"
+            },
+            "unread": false,
+            "preview": {
+              "text": "",
+              "has_image": false
+            },
+            "can_send": true,
+            "updated_at": "2026-01-01T00:00:00+00:00",
+            "listing_title": "Historical listing",
+            "conversation_id": "19"
+          },
+          {
+            "peer": {
+              "name": "Synthetic seller",
+              "avatar_url": null,
+              "identity_id": "b2000000-0000-0000-0000-000000000002"
+            },
+            "unread": false,
+            "preview": {
+              "text": "",
+              "has_image": false
+            },
+            "can_send": true,
+            "updated_at": "2026-01-01T00:00:00+00:00",
+            "listing_title": "Historical listing",
+            "conversation_id": "18"
+          },
+          {
+            "peer": {
+              "name": "Synthetic seller",
+              "avatar_url": null,
+              "identity_id": "b2000000-0000-0000-0000-000000000002"
+            },
+            "unread": false,
+            "preview": {
+              "text": "",
+              "has_image": false
+            },
+            "can_send": true,
+            "updated_at": "2026-01-01T00:00:00+00:00",
+            "listing_title": "Historical listing",
+            "conversation_id": "17"
+          },
+          {
+            "peer": {
+              "name": "Synthetic seller",
+              "avatar_url": null,
+              "identity_id": "b2000000-0000-0000-0000-000000000002"
+            },
+            "unread": false,
+            "preview": {
+              "text": "",
+              "has_image": false
+            },
+            "can_send": true,
+            "updated_at": "2026-01-01T00:00:00+00:00",
+            "listing_title": "Historical listing",
+            "conversation_id": "16"
+          },
+          {
+            "peer": {
+              "name": "Synthetic seller",
+              "avatar_url": null,
+              "identity_id": "b2000000-0000-0000-0000-000000000002"
+            },
+            "unread": false,
+            "preview": {
+              "text": "",
+              "has_image": false
+            },
+            "can_send": true,
+            "updated_at": "2026-01-01T00:00:00+00:00",
+            "listing_title": "Historical listing",
+            "conversation_id": "15"
+          },
+          {
+            "peer": {
+              "name": "Synthetic seller",
+              "avatar_url": null,
+              "identity_id": "b2000000-0000-0000-0000-000000000002"
+            },
+            "unread": false,
+            "preview": {
+              "text": "",
+              "has_image": false
+            },
+            "can_send": true,
+            "updated_at": "2026-01-01T00:00:00+00:00",
+            "listing_title": "Historical listing",
+            "conversation_id": "14"
+          },
+          {
+            "peer": {
+              "name": "Synthetic seller",
+              "avatar_url": null,
+              "identity_id": "b2000000-0000-0000-0000-000000000002"
+            },
+            "unread": false,
+            "preview": {
+              "text": "",
+              "has_image": false
+            },
+            "can_send": true,
+            "updated_at": "2026-01-01T00:00:00+00:00",
+            "listing_title": "Historical listing",
+            "conversation_id": "13"
+          },
+          {
+            "peer": {
+              "name": "Synthetic seller",
+              "avatar_url": null,
+              "identity_id": "b2000000-0000-0000-0000-000000000002"
+            },
+            "unread": false,
+            "preview": {
+              "text": "",
+              "has_image": false
+            },
+            "can_send": true,
+            "updated_at": "2026-01-01T00:00:00+00:00",
+            "listing_title": "Historical listing",
+            "conversation_id": "12"
+          },
+          {
+            "peer": {
+              "name": "Synthetic seller",
+              "avatar_url": null,
+              "identity_id": "b2000000-0000-0000-0000-000000000002"
+            },
+            "unread": false,
+            "preview": {
+              "text": "",
+              "has_image": false
+            },
+            "can_send": true,
+            "updated_at": "2026-01-01T00:00:00+00:00",
+            "listing_title": "Historical listing",
+            "conversation_id": "11"
+          },
+          {
+            "peer": {
+              "name": "Synthetic seller",
+              "avatar_url": null,
+              "identity_id": "b2000000-0000-0000-0000-000000000002"
+            },
+            "unread": false,
+            "preview": {
+              "text": "",
+              "has_image": false
+            },
+            "can_send": true,
+            "updated_at": "2026-01-01T00:00:00+00:00",
+            "listing_title": "Historical listing",
+            "conversation_id": "10"
+          }
+        ],
+        "schema_version": 2
+      }
+    },
+    {
+      "parser": "parseMarkThreadReadReceipt",
+      "command": {
+        "expectedUserId": "91000000-0000-0000-0000-000000000001",
+        "expectedIdentityId": "a1000000-0000-0000-0000-000000000001",
+        "conversationId": "1",
+        "throughMessageId": "260"
+      },
+      "value": {
+        "action": "mark_read",
+        "identity_id": "a1000000-0000-0000-0000-000000000001",
+        "actor_user_id": "91000000-0000-0000-0000-000000000001",
+        "schema_version": 2,
+        "conversation_id": "1",
+        "through_message_id": "260"
+      }
+    },
+    {
+      "parser": "parseHideThreadReceipt",
+      "command": {
+        "expectedUserId": "91000000-0000-0000-0000-000000000001",
+        "expectedIdentityId": "a1000000-0000-0000-0000-000000000001",
+        "conversationId": "1"
+      },
+      "value": {
+        "action": "hide",
+        "identity_id": "a1000000-0000-0000-0000-000000000001",
+        "actor_user_id": "91000000-0000-0000-0000-000000000001",
+        "schema_version": 2,
+        "conversation_id": "1"
+      }
+    },
+    {
+      "parser": "parseSetThreadBlockedReceipt",
+      "command": {
+        "expectedUserId": "91000000-0000-0000-0000-000000000001",
+        "expectedIdentityId": "a1000000-0000-0000-0000-000000000001",
+        "conversationId": "1",
+        "blocked": true
+      },
+      "value": {
+        "action": "block",
+        "can_send": false,
+        "identity_id": "a1000000-0000-0000-0000-000000000001",
+        "actor_user_id": "91000000-0000-0000-0000-000000000001",
+        "blocked_by_me": true,
+        "schema_version": 2,
+        "conversation_id": "1"
+      }
+    },
+    {
+      "parser": "parseSetThreadBlockedReceipt",
+      "command": {
+        "expectedUserId": "91000000-0000-0000-0000-000000000001",
+        "expectedIdentityId": "a1000000-0000-0000-0000-000000000001",
+        "conversationId": "1",
+        "blocked": false
+      },
+      "value": {
+        "action": "unblock",
+        "can_send": true,
+        "identity_id": "a1000000-0000-0000-0000-000000000001",
+        "actor_user_id": "91000000-0000-0000-0000-000000000001",
+        "blocked_by_me": false,
+        "schema_version": 2,
+        "conversation_id": "1"
+      }
+    }
+  ]
+}

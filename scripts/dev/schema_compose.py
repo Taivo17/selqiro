@@ -70,6 +70,21 @@ def compile_schema(source_root):
     chunks = [retained.compile_base_schema()]
     chunks.extend(retained.source(relative) for relative in OVERLAYS)
     chunks.append(retained.OVERLAY_GRANTS)
+    # The card delivery installed this byte-identical reviewed fixture. The
+    # earlier cloud-only repair did not copy its archival source_delta into Git.
+    # Select only the wrapper for this fresh local database, never its lifecycle.
+    chunks.append(retained.declaration(
+        "supabase/repairs/20261029_listing_message_cards/tests/fixtures/accepted-contact-fix.sql",
+        "require_actor_hosted_v1", schema="listing_contact_private"))
+    chunks.append("""
+REVOKE ALL ON FUNCTION listing_contact_private.require_actor_hosted_v1(uuid,uuid)
+ FROM PUBLIC,anon,authenticated,service_role;
+GRANT EXECUTE ON FUNCTION listing_contact_private.require_actor_hosted_v1(uuid,uuid)
+ TO selqiro_listing_contact_writer_v1;
+ALTER FUNCTION listing_contact_private.require_peer(uuid,uuid) SECURITY DEFINER;
+ALTER FUNCTION listing_contact_private.peer_ready(uuid,uuid,uuid) SECURITY DEFINER;
+""")
+    chunks.append(retained.source("supabase/repairs/20261030_messaging_restore/changes.sql"))
     existing = "\n".join(chunks)
 
     if not has_declaration(existing, "table", "horse_offers"):

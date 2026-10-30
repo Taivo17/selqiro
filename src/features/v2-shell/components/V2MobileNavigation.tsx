@@ -58,6 +58,7 @@ export function shouldShowV2MobileNavigation(
    * oma kontekstipõhise alumise tegevusriba.
    */
   const hiddenPrefixes = [
+    "/v2/messages/",
     "/v2/listing/",
     "/v2/showcase/",
     "/v2/service/",

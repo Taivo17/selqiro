@@ -235,6 +235,15 @@ ALTER ROLE supabase_storage_admin SET search_path TO storage,public; REVOKE CREA
     m['stage']='APPLICATION_SCHEMA_READY';save(m)
     start_services(m)
     http(m,'POST','/storage/v1/bucket',{'id':'listing-publication-private','name':'listing-publication-private','public':False,'file_size_limit':52428800},m['service_key'])
+    # New empty local environments receive the same private message-photo
+    # bucket contract via Storage's API. Existing environments are never reset
+    # or silently migrated by this initializer.
+    message_bucket={'id':'message-attachments-v2','name':'message-attachments-v2','public':False,
+                    'file_size_limit':2000000,'allowed_mime_types':['image/webp']}
+    http(m,'POST','/storage/v1/bucket',message_bucket,m['service_key'])
+    observed=http(m,'GET','/storage/v1/bucket/message-attachments-v2',None,m['service_key'])
+    require(isinstance(observed,dict) and all(observed.get(k)==v for k,v in message_bucket.items()),
+            'local_message_bucket_contract')
     from seed_accounts import seed_accounts
     result=seed_accounts(state,m['run_id'],lambda statement:sql(m,statement),lambda method,path,body=None,token=None:http(m,method,path,body,token),service_key=m['service_key'])
     m['stage']='READY';m['initialized']=True;save(m)

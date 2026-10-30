@@ -1,0 +1,71 @@
+{
+  "version": "PostgreSQL 18.6 (PGlite 0.5.13) on wasm32-unknown-emscripten, compiled by emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 6.0.5 (1db513782be24469589d7cb8a1f1834e9a33f271), 32-bit",
+  "checks": [
+    {
+      "label": "nonowner_with_ordinary_table_grants_has_no_native_policy_authority",
+      "passed": true
+    },
+    {
+      "label": "unregistered_custom_GUC_placeholder_never_grants_policy_authority",
+      "passed": true
+    },
+    {
+      "label": "registered_metadata_parser_accepts_exact_current_user_and_resolved_target_OID",
+      "passed": true
+    },
+    {
+      "label": "registered_metadata_parser_rejects_missing_wrong_name_context_and_type",
+      "passed": true
+    },
+    {
+      "label": "registered_metadata_parser_rejects_malformed_role_and_table_shapes",
+      "passed": true
+    },
+    {
+      "label": "registered_metadata_parser_never_expands_roles_substrings_or_unqualified_other_tables",
+      "passed": true
+    },
+    {
+      "label": "numeric_regclass_OID_input_is_not_a_Supautils_table_name",
+      "passed": true
+    },
+    {
+      "label": "actual_database_permission_still_refuses_a_parser_positive_without_Supautils",
+      "passed": true
+    }
+  ],
+  "passed": true,
+  "scope": "Synthetic PGlite non-owner authorization and exact registered-setting parser tests. Positive metadata cases are parser fixtures, not an installed Supautils hook. Native SQL rejects CREATE POLICY without actual authority. No live database, Storage API, role grant, or ownership change outside the isolated fixture.",
+  "evidence": {
+    "schema_version": 1,
+    "source_sha256": {
+      "build-guards.py": "4b3f4e09cb71d6c7005f86941f088c1c6fc7a2ceb0a27b26b66637dca2935567",
+      "catalog-guard.sql": "3e9e22abc683854c025d3beada7e5afb8a5fce44d658e746f85f7adc30be229f",
+      "preflight.sql": "c3b07ace0d1634c3dea0b7dd0dc5690f54cdd8f07cbb80e8c031c8e2996afa49",
+      "apply.sql": "24cd538a14a870c10696160bb6d12d873cf0e5bc29054911ec4709ee17b2c61e",
+      "verify.sql": "1c355901e3f40308c9c98ce7b63c4754af7bfee7c07162944708af34f694875e",
+      "changes.sql": "eaa813d5cee8ad9514f3e1de9bafb6a4c5f9cacebb1a96ef957fc08951dac883",
+      "function-pins.json": "eb9ee3cb889e1d7a8ead66dc957c92b87c34032067499f0aa152af1946d6662f",
+      "structure-pins.json": "8e55df1b88c512aee88f77af184b1e4cbdda6d2b4653a6ad2a512b8492e44043",
+      "tests/catalog-structure.sql": "4651d3f7274fd4d7f893c64e3d46252f5842b18917c674d55773a380e79bd41f",
+      "tests/fixture.mjs": "208f8f453c82061ca0f5ff6bc5c901c233c75967ec512ca8ad887e014019be0a",
+      "tests/installation-runtime.mjs": "964d5e21059b60dc360fe88d5c31f3a0db6e1599b5f8ff0d8990af39f1ce79b2",
+      "tests/storage-authority-runtime.mjs": "e5201d7de408807ed4cc93fcea76b6223f98d796dc6e2e17e43b3be6799f05d6",
+      "tests/pre-authority-fresh-fingerprints.json": "50fb3e7a1d77b6cdcc5ad92bf960607749dd688137a0c9408ee63ad79a50bccd"
+    },
+    "unchanged_runtime_sql_sha256": "eaa813d5cee8ad9514f3e1de9bafb6a4c5f9cacebb1a96ef957fc08951dac883",
+    "fresh_fingerprints": {
+      "new_guard": "a5be6fd14797297cc98667155325d8518dbdf7a36df69739c2c4cdd1e01b520c",
+      "new_functions": "b2b44cf18796df0beb1a581f4a982649128978b4b5212cb5ad666d2572b730f4",
+      "new_structure": "c2551ebacefa889287c860f97bfdf9e5dcbbbc238938177c70475d37e34623de"
+    },
+    "fresh_fingerprints_match_previous": true,
+    "engine": {
+      "implementation": "PGlite",
+      "server_version_num": 180006
+    },
+    "provider_supautils_hook_executed": false,
+    "native_postgresql_17_executed": false,
+    "live_database_or_storage_calls": false
+  }
+}

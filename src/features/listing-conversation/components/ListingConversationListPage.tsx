@@ -1,48 +1,41 @@
 "use client";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
 import { v2IntegrationEnabled } from "../../../shared/config/v2Integration";
-import { listListingConversations } from "../../../entities/conversation/api/managedConversationClient";
-import type { ConversationList } from "../../../entities/conversation/model/listingContact";
-import { useConversationActor, type ConversationActorContext } from "../model/useConversationActor";
+import { useMessageInbox } from "../model/useMessageInbox";
+import ConversationAvatar from "./ConversationAvatar";
+import ThreadActions from "./ThreadActions";
+import styles from "./conversation.module.css";
 
 export default function ListingConversationListPage() {
   return v2IntegrationEnabled() ? <ManagedConversationList /> : <p>Vestlused ei ole kättesaadavad.</p>;
 }
 function ManagedConversationList() {
-  const context = useConversationActor(), generation = useRef(0);
-  const [list, setList] = useState<ConversationList | null>(null), [reading, setReading] = useState(false);
-  const [problem, setProblem] = useState<string | null>(null);
-  async function load(actor: ConversationActorContext, before: string | null = null) {
-    const version = ++generation.current; setReading(true);
-    try {
-      const value = await listListingConversations(actor.accessToken, { expectedUserId: actor.expectedUserId,
-        expectedIdentityId: actor.expectedIdentityId, beforeConversationId: before }, actor.signal);
-      if (context.isCurrent(actor) && version === generation.current) {
-        setList(current => before && current ? Object.freeze({ ...value, conversations: Object.freeze([...current.conversations, ...value.conversations]) }) : value);
-        setProblem(null);
-      }
-    } catch { if (context.isCurrent(actor) && version === generation.current) { setList(null); setProblem("Vestlusi ei saanud laadida."); } }
-    finally { if (version === generation.current) setReading(false); }
-  }
-  useEffect(() => {
-    generation.current += 1; setList(null); setProblem(null);
-    if (context.actor) void load(context.actor);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [context.actor]);
-  const visible = context.actor && list?.actor_user_id === context.actor.expectedUserId && list.identity_id === context.actor.expectedIdentityId ? list : null;
-  return <section className="mx-auto max-w-3xl space-y-5 rounded-[28px] border border-black/5 bg-white p-5 shadow-sm md:p-8">
-    <header className="flex items-center justify-between gap-4"><h1 className="text-2xl font-bold">Vestlused</h1>
-      <button type="button" onClick={context.refresh} disabled={reading} className="rounded-xl border px-3 py-2 text-sm">Värskenda</button></header>
-    {(reading || context.loading) && <p role="status">Laen vestlusi…</p>}
-    {context.anonymous && <Link className="block text-sm font-semibold" href="/auth?next=%2Fv2%2Fmessages">Vestluste lugemiseks logi sisse</Link>}
-    {(context.error || problem) && <p role="alert" className="text-sm text-amber-900">{context.error || problem}</p>}
-    {visible?.conversations.map(item => <Link key={item.conversation_id} href={"/v2/messages/" + item.conversation_id}
-      className="block rounded-2xl border border-neutral-200 p-4 hover:bg-neutral-50">
-      <strong>{item.peer_name || "Vestlus"}</strong><p className="mt-1 text-sm text-neutral-600">{item.listing_title || "Vestluse sõnumid"}</p>
-    </Link>)}
-    {visible && !visible.conversations.length && <p className="text-neutral-600">Selle identiteediga pole veel vestlusi.</p>}
-    {visible?.next_before_conversation_id && <button type="button" disabled={reading} className="rounded-xl border px-4 py-2 text-sm"
-      onClick={() => context.actor && void load(context.actor, visible.next_before_conversation_id)}>Lae rohkem vestlusi</button>}
+  const state = useMessageInbox(), { context, visible } = state;
+  return <section className={styles.inbox}>
+    <header className={styles.inboxHeader}><h1>Vestlused</h1>
+      <button type="button" onClick={context.actor ? state.refresh : context.refresh} disabled={state.reading || state.acting} className={styles.textButton}>Värskenda</button></header>
+    {visible && <div className={styles.sender}><ConversationAvatar identity={visible.actor} /><span>Postkast: <strong>{visible.actor.name || "Sinu identiteet"}</strong></span></div>}
+    {(state.reading || context.loading) && <p role="status">Laen vestlusi…</p>}
+    {context.anonymous && <Link className={styles.textButton} href="/auth?next=%2Fv2%2Fmessages">Vestluste lugemiseks logi sisse</Link>}
+    {(context.error || state.problem) && <p role="alert" className={styles.notice}>{context.error || state.problem}</p>}
+    {visible?.conversations.map(item => <div key={item.conversation_id} className={styles.threadRow + (item.unread ? " " + styles.unread : "")}>
+      <Link href={"/v2/messages/" + item.conversation_id} className={styles.threadLink}>
+        <ConversationAvatar identity={item.peer} />
+        <div className={styles.threadInfo}>
+          <div className={styles.rowHeading}><strong>{item.peer.name || "Vestlus"}</strong>
+            <time dateTime={item.updated_at} title={new Date(item.updated_at).toLocaleString("et-EE")}>
+              {new Date(item.updated_at).toLocaleDateString("et-EE", { day: "numeric", month: "short" })}
+            </time>
+          </div>
+          {item.listing_title && <p className={styles.rowListing}>{item.listing_title}</p>}
+          <p className={styles.rowPreview}>{item.preview.has_image ? "▧ Foto" + (item.preview.text ? " · " : "") : ""}{item.preview.text || (!item.preview.has_image ? "Alusta vestlust" : "")}</p>
+          {!item.can_send && <p className={styles.rowListing}>Saatmine pole praegu võimalik</p>}
+        </div>
+        {item.unread && <span className={styles.unreadDot} role="img" aria-label="Lugemata sõnumid" />}
+      </Link>
+      <ThreadActions disabled={state.acting} onHide={() => state.hide(item.conversation_id)} onBlock={blocked => state.block(item.conversation_id, blocked)} />
+    </div>)}
+    {visible && !visible.conversations.length && <p className={styles.rowPreview}>Selle identiteediga pole veel vestlusi.</p>}
+    {visible?.next_cursor && <button type="button" disabled={state.reading || state.acting} className={styles.textButton} onClick={state.more}>Lae rohkem vestlusi</button>}
   </section>;
 }

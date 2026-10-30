@@ -1,0 +1,43 @@
+{
+  "state": "absent",
+  "format": "selqiro-messaging-restore-v2",
+  "guards": {
+    "base_contract": true,
+    "bucket_contract": true,
+    "required_columns": true,
+    "known_object_state": true,
+    "storage_row_security": true,
+    "storage_policy_authority": true,
+    "existing_message_triggers": true
+  },
+  "invariants": {
+    "reader": "ad476eab458984b9d66419c0ff26c35e56de571da3bff637b2331bf456780ca0",
+    "writer_role": "3d3a6449439f9d1c15c5bae925c62d1d80adcfa57f7d2b85991449f841bdac74",
+    "api_boundary": "4f4d1c76adfaca7b60c1dca26143ffd3036d6855b287e86723d667efa572bce1",
+    "legacy_buckets": "ac4deaad8f09f777cafe23fcb3d5cf47f2852377405ba87d1b6247343f861aeb",
+    "hosted_settings": "df177f25e5ed672257b5077149d37926696da4f61297f53f5c89705e5152d8d7",
+    "legacy_policies": "2e8344e6d12bf343284a92ab6bb0eaeb3a1456c9896831d3949e4d442aa38393",
+    "patched_functions": "c752cf9ffeba9519e22dcf2922c942c8607912a0302a50c9f143566b93441f9f",
+    "public_schema_acl": "7ed123ad3052963d75ae646529200ddacf9a05b6c4a31cabe8cb4b277b374263",
+    "protected_functions": "e0c2e99d79ff282f1a8b8a2a0ce58690e9e737522edbdc7b7512fbea201f7eea",
+    "legacy_storage_policies": "708ef9fa3248230ba8aae7e2f7538593ca8c12905f37319413d2f124d5755061",
+    "existing_message_triggers": "f683a8a5a748528eda5b42a0c06a0d2a81d0fe33b5be32146d509a3daa28ed05"
+  },
+  "recognized": true,
+  "bucket_state": "ready",
+  "fingerprints": {
+    "new_guard": "a5be6fd14797297cc98667155325d8518dbdf7a36df69739c2c4cdd1e01b520c",
+    "new_functions": "b2b44cf18796df0beb1a581f4a982649128978b4b5212cb5ad666d2572b730f4",
+    "new_structure": "c2551ebacefa889287c860f97bfdf9e5dcbbbc238938177c70475d37e34623de"
+  },
+  "ready_to_apply": true,
+  "required_bucket": {
+    "id": "message-attachments-v2",
+    "name": "message-attachments-v2",
+    "public": false,
+    "file_size_limit": 2000000,
+    "allowed_mime_types": [
+      "image/webp"
+    ]
+  }
+}

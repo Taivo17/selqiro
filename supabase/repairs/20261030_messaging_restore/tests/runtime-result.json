@@ -1,0 +1,144 @@
+{
+  "version": "PostgreSQL 18.6 (PGlite 0.5.13) on wasm32-unknown-emscripten, compiled by emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 6.0.5 (1db513782be24469589d7cb8a1f1834e9a33f271), 32-bit",
+  "checks": [
+    {
+      "label": "exact_changes_apply_under_hosted_nonsuperuser_with_default_API_execute_grants",
+      "passed": true
+    },
+    {
+      "label": "unified_history_lists_managed_and_exact_legacy_without_channel_backfill",
+      "passed": true
+    },
+    {
+      "label": "third_party_cannot_read_history_or_photo_binding",
+      "passed": true,
+      "observed_code": "42501",
+      "message": "message_thread_unavailable",
+      "where": "PL/pgSQL function messaging_private_v2.require_thread(bigint,uuid,uuid) line 5 at RAISE\nPL/pgSQL function get_my_message_thread_v2(uuid,uuid,text,text,text) line 8 at assignment"
+    },
+    {
+      "label": "expected_user_cannot_substitute_authenticated_user",
+      "passed": true,
+      "observed_code": "42501",
+      "message": "listing_price_identity_changed",
+      "where": "PL/pgSQL function lock_listing_creation_actor_v1(uuid) line 10 at RAISE\nPL/pgSQL function listing_publication_private.require_actor(uuid,uuid) line 9 at RETURN\nPL/pgSQL function listing_contact_private.require_actor_hosted_v1(uuid,uuid) line 3 at RETURN\nSQL statement \"SELECT listing_contact_private.require_actor_hosted_v1(p_expected_user_id,p_expected_identity_id)\"\nPL/pgSQL function get_my_message_thread_v2(uuid,uuid,text,text,text) line 4 at PERFORM"
+    },
+    {
+      "label": "same_account_other_active_identity_cannot_cross_thread",
+      "passed": true
+    },
+    {
+      "label": "null_identity_and_group_like_legacy_threads_fail_closed_without_affecting_valid_history",
+      "passed": true
+    },
+    {
+      "label": "controlled_send_to_legitimate_legacy_and_exact_snapshot_replay",
+      "passed": true
+    },
+    {
+      "label": "managed_text_send_and_existing_v1_card_reader_remain_working",
+      "passed": true
+    },
+    {
+      "label": "read_watermark_does_not_acknowledge_a_newer_message_arriving_after_display",
+      "passed": true
+    },
+    {
+      "label": "first_visible_ID_watermark_does_not_import_ahead_of_visibility_legacy_timestamp",
+      "passed": true
+    },
+    {
+      "label": "foreign_conversation_watermark_rejected",
+      "passed": true,
+      "observed_code": "22023",
+      "message": "message_read_input",
+      "where": "PL/pgSQL function mark_my_thread_read_v2(uuid,uuid,text,text) line 8 at RAISE"
+    },
+    {
+      "label": "hide_changes_only_own_inbox_then_new_message_restores",
+      "passed": true
+    },
+    {
+      "label": "account_block_both_directions_preserves_history_and_replay_then_unblock",
+      "passed": true
+    },
+    {
+      "label": "account_block_also_rejects_direct_legacy_INSERT",
+      "passed": true
+    },
+    {
+      "label": "legacy_direct_insert_rejects_wrong_selected_identity_and_outsider_membership",
+      "passed": true
+    },
+    {
+      "label": "legacy_preallocated_lower_id_cannot_arrive_below_read_watermark",
+      "passed": true
+    },
+    {
+      "label": "legacy_null_message_photo_keeps_string_and_boolean_wire_contract",
+      "passed": true
+    },
+    {
+      "label": "photo_reservation_binds_actor_identity_conversation_request_and_digest",
+      "passed": true
+    },
+    {
+      "label": "authenticated_cannot_call_service_finalize_or_private_ledger",
+      "passed": true
+    },
+    {
+      "label": "frozen_output_replay_preserves_original_claim_key_and_rejects_changed_bytes",
+      "passed": true
+    },
+    {
+      "label": "unready_foreign_or_cross_thread_photo_never_attaches",
+      "passed": true
+    },
+    {
+      "label": "photo_only_send_attaches_once_atomic_and_same_key_replays",
+      "passed": true
+    },
+    {
+      "label": "photo_read_context_and_attached_cancel_are_guarded",
+      "passed": true
+    },
+    {
+      "label": "managed_guard_rejects_unbound_photo_even_for_contact_writer",
+      "passed": true
+    },
+    {
+      "label": "legacy_private_photo_binding_is_immutable",
+      "passed": true
+    },
+    {
+      "label": "failed_message_INSERT_rolls_back_photo_binding_and_send_receipt_atomically",
+      "passed": true
+    },
+    {
+      "label": "canceled_late_finish_never_resurrects_and_cleanup_tombstone_is_revisited",
+      "passed": true
+    },
+    {
+      "label": "restrictive_storage_policy_denies_new_bucket_despite_broad_legacy_policy",
+      "passed": true
+    },
+    {
+      "label": "legacy_reader_pages_newest_first_at_most50_and_never_reuses_header_snapshot",
+      "passed": true
+    },
+    {
+      "label": "oversized_old_history_is_explicitly_truncated_and_byte_budget_paginates",
+      "passed": true
+    },
+    {
+      "label": "activity_cursor_uses_timestamp_and_id_ties_without_duplicates",
+      "passed": true
+    },
+    {
+      "label": "quota_counts_canceled_requests_and_same_key_replay_does_not_consume_more",
+      "passed": true
+    }
+  ],
+  "scope": "Local PGlite PostgreSQL runtime with synthetic actors, existing source helpers/triggers/RLS and hosted non-superuser permissions; no live database, Storage HTTP or simultaneous independent database sessions.",
+  "passed": true
+}

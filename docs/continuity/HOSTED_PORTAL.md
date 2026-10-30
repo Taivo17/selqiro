@@ -1,10 +1,27 @@
 # Olemasoleva Selqiro portaali jätkamine
 
-## 30.10.2026 — kuulutusekaardi paigalduse jätk
+## 30.10.2026 — sõnumiuuenduse tegeliku eelkontrolli jätk
 
-Algne kaardiuuendaja peatus kasutaja Macis teatega `DATABASE_OUTCOME_NOT_VERIFIED` enne lähtekoodi/buildi/Giti etappe. Omanikuvahetuse puuduv õigus on mittesuperkasutaja katses korratud ja SQL parandatud. Uus `selqiro-postkasti-kaart-jatk-20261030/jatka.py --publish` kontrollib vana päevikut ja värsket DB-seisu, seejärel jätkab olemasolevast projektist. Täpne jooksev seis on CURRENT_STATE.json-is ja kirjeldus INBOX_CARDS_20261029.md-s. Jätku Maci lõpp ning Productioni kaart on veel kinnitamata.
+Kuulutuse 197 avaldamine, vestlus 38, ostja/müüja tekst ning kuulutusekaart on
+kasutaja tõenditega vastu võetud. Kaardijätku commit
+`cbd475757690db7bd1faf8784cd43359f45d5be9` ja edukas push jäävad lõpetatuks.
 
-> **Vastu võetud seis 29.10.2026:** varasem ettevalmistus, redeploy ja kuulutuse 197 avaldamine on lõpetatud. Kasutaja nägi ka vestlust 38 ning ostja sõnumit müüja V2/V1 vaates. Järgnev on ajalooline portaali paigaldamise kirjeldus; praegune kaardimuudatuse tööjärg on CURRENT_STATE.json-is. **Allolevaid vanu paigaldus-, aktiveerimis- ega push-käske ei korrata.**
+Kasutaja üles laaditud `result.json` kinnitab sõnumijätku 599… lähtekontrollide
+läbimist samal main-baascommit’il. Ainult lugemiseks tehtud DB-eelkontroll peatus
+`DATABASE_PRECONDITIONS_NOT_MATCHED` juures: kuus guard’i läbisid, ainult
+`storage_policy_authority` oli väär. Hoidla loomine, andmebaasi paigaldus,
+lähtefailide kopeerimine, build, commit ja push ei alanud.
+
+Põhjus on paigaldaja omanikupõhine õiguse-eeldus. Supabase toetab eraldi
+registreeritud `supautils.policy_grants` luba poliitika haldamiseks. Parandus
+kontrollib selle täpset rolli ja tabelit; päris poliitika loomine ja tehingu
+järelkontroll säilivad. Teenuse rolle, omanikke ega konfiguratsiooni ei muudeta.
+
+Järgmine pakk on `selqiro-sonumid-oigused-20261030/uuenda.py --publish`.
+See lukustab mõlemad muutmata vanad sõnumipäevikud ning võrdleb enne kirjutusi
+kõiki 11 varasemast raportist pärit DB-invarianti. Jooksev üleandmine on
+`CURRENT_STATE.json`-is ja `MESSAGING_RESTORE_20261030.md`-s. Selle uue jätku
+Maci lõpp ja Verceli Ready on veel ootel. Allolev ajalugu ei ole kordamiskäsk.
 
 ## 27.10 ettevalmistuse ajalugu ja sihtandmed
 

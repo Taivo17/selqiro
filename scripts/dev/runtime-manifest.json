@@ -1,8 +1,8 @@
 {
   "files": {
     "backend.py": {
-      "bytes": 18856,
-      "sha256": "67f75ef2cccb16922939180d0caae9670488567a39359122d42f98d6f4c097e9"
+      "bytes": 19549,
+      "sha256": "45e38e95fd0c9b4d6df7dc95a523e81e2434e71f0bebf952bb07753905736e73"
     },
     "dev.py": {
       "bytes": 28884,
@@ -21,8 +21,8 @@
       "sha256": "7237d95dca7f425933a96d8560e761141134d2c6d4348394d42af59b5e7d4a55"
     },
     "schema_compose.py": {
-      "bytes": 8599,
-      "sha256": "2ae4a1ff79c21bf4ac49eec8dbf86fc206c15641964fc6bdcbe5491c77eb70d0"
+      "bytes": 9585,
+      "sha256": "05f361a808c0bf1898e0b1424d73ae096daca8f564712474daf70bfb59b4bcce"
     },
     "schema_fragments/profile-read-continuation.sql": {
       "bytes": 1695,
@@ -33,12 +33,12 @@
       "sha256": "4f3f17ef3f2ff85d7d75d6863a425e29664b3e6e9c000880b3027cacf2dc1001"
     },
     "schema_provenance.json": {
-      "bytes": 11269,
-      "sha256": "ff574d0c3a8b90df21e09d2141f5504d8d156ca4758e252836f9c140e44df04b"
+      "bytes": 11717,
+      "sha256": "c6aacb0359719852690e9a4761d5ead46540cf97df94dca3548085af26967be2"
     },
     "schema_sources.py": {
-      "bytes": 15645,
-      "sha256": "5dbd03690d562a8ac8327c06213e5423021b87a07a3c562153ed844c92e876da"
+      "bytes": 15830,
+      "sha256": "00f26ec95b3856b1313a7706a950daa3d3a240643f8606fea883422d0824d738"
     },
     "seed_accounts.py": {
       "bytes": 6067,
