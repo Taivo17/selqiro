@@ -27,29 +27,30 @@ function ascii(bytes: Uint8Array, start: number, length: number) {
   return String.fromCharCode(...bytes.subarray(start, start + length));
 }
 
-/** Read only the first TIFF IFD, which contains orientation. No thumbnails,
- * linked IFDs, GPS, names, or other metadata are copied into the output. */
-function exifOrientation(bytes: Uint8Array): number {
+/** Orientation is optional metadata, not evidence that the image is corrupt.
+ * Ignore malformed TIFF data while keeping the containing image's bounds
+ * strict. No thumbnails, linked IFDs, GPS, or other metadata are copied. */
+function exifOrientation(bytes: Uint8Array): number | null {
   const start = ascii(bytes, 0, 6) === "Exif\0\0" ? 6 : 0;
-  if (bytes.length < start + 8) return invalid();
+  if (bytes.length < start + 8) return null;
   const order = ascii(bytes, start, 2);
-  if (order !== "II" && order !== "MM") return invalid();
+  if (order !== "II" && order !== "MM") return null;
   const little = order === "II";
   const view = new DataView(bytes.buffer, bytes.byteOffset + start, bytes.byteLength - start);
-  if (view.getUint16(2, little) !== 42) return invalid();
+  if (view.getUint16(2, little) !== 42) return null;
   const offset = view.getUint32(4, little);
-  if (offset < 8 || offset + 2 > view.byteLength) return invalid();
+  if (offset < 8 || offset + 2 > view.byteLength) return null;
   const count = view.getUint16(offset, little);
-  if (offset + 2 + count * 12 > view.byteLength) return invalid();
+  if (offset + 2 + count * 12 > view.byteLength) return null;
   for (let index = 0; index < count; index++) {
     const entry = offset + 2 + index * 12;
     if (view.getUint16(entry, little) !== 0x0112) continue;
-    if (view.getUint16(entry + 2, little) !== 3 || view.getUint32(entry + 4, little) !== 1) return invalid();
+    if (view.getUint16(entry + 2, little) !== 3 || view.getUint32(entry + 4, little) !== 1) return null;
     const orientation = view.getUint16(entry + 8, little);
-    if (orientation < 1 || orientation > 8) return invalid();
+    if (orientation < 1 || orientation > 8) return null;
     return orientation;
   }
-  return 1;
+  return null;
 }
 
 /** Inspect bounded headers before asking a browser decoder to allocate pixels.
@@ -67,31 +68,38 @@ export async function readSelectedImageInfo(file: Blob, checkAbort: () => void):
     return bytes;
   };
   const signature = await read(0, Math.min(file.size, 16));
-  let orientation = 1;
-  let seenExif = false;
-  let exifRange: readonly [number, number] | null = null;
+  let orientation: number | null = null;
+  const exifRanges: (readonly [number, number])[] = [];
   let webpFlags = -1;
   const exif = (bytes: Uint8Array, start: number, end: number) => {
-    if (seenExif) return invalid();
-    seenExif = true;
-    orientation = exifOrientation(bytes);
-    exifRange = [start, end];
+    // Camera/gallery editors can leave multiple EXIF blocks. Strip each one
+    // and use the first valid orientation, applying it only once later.
+    if (orientation === null) orientation = exifOrientation(bytes);
+    exifRanges.push([start, end]);
   };
   const result = (mime: SelectedImageInfo["mime"], width: number, height: number): SelectedImageInfo => {
     let parts: BlobPart[] = [file];
-    if (exifRange) {
-      const [start, end] = exifRange;
+    if (exifRanges.length) {
+      let offset = 0;
+      parts = [];
       if (mime === "image/webp") {
-        if (webpFlags < 0 || start < 30) return invalid();
+        if (webpFlags < 0 || exifRanges[0][0] < 30) return invalid();
         const riff = signature.slice(0, 12);
-        new DataView(riff.buffer).setUint32(4, file.size - (end - start) - 8, true);
-        parts = [riff, file.slice(12, 20), new Uint8Array([webpFlags & ~0x08]),
-          file.slice(21, start), file.slice(end)];
-      } else parts = [file.slice(0, start), file.slice(end)];
+        const removedBytes = exifRanges.reduce((total, [start, end]) => total + end - start, 0);
+        new DataView(riff.buffer).setUint32(4, file.size - removedBytes - 8, true);
+        parts = [riff, file.slice(12, 20), new Uint8Array([webpFlags & ~0x08])];
+        offset = 21;
+      }
+      for (const [start, end] of exifRanges) {
+        if (start < offset) return invalid();
+        parts.push(file.slice(offset, start));
+        offset = end;
+      }
+      parts.push(file.slice(offset));
     }
     // Browser EXIF support differs for WebP. Strip the local EXIF block before
     // decoding and let the caller apply the parsed orientation exactly once.
-    return { mime, width, height, orientation, source: new Blob(parts, { type: mime }) };
+    return { mime, width, height, orientation: orientation ?? 1, source: new Blob(parts, { type: mime }) };
   };
   if (signature[0] === 0xff && signature[1] === 0xd8 && signature[2] === 0xff) {
     let offset = 2;

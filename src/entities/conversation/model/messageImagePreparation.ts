@@ -1,6 +1,7 @@
 import { contactFail } from "./listingContact";
 import { MESSAGE_IMAGE_LIMITS, type PreparedMessageImage } from "./messageImage";
 import { MESSAGE_IMAGE_SELECTION_LIMITS, SelectedImageHeaderError, readSelectedImageInfo } from "./messageImageSelection";
+import { decodeMessageImage } from "./messageImageDecode";
 
 export class MessageImagePreparationError extends Error {
   constructor(message: string) { super(message); this.name = "MessageImagePreparationError"; }
@@ -20,7 +21,9 @@ export async function prepareMessageImage(file: File, signal?: AbortSignal): Pro
     checkAbort(signal);
     if (error instanceof SelectedImageHeaderError && error.reason === "unsupported")
       return preparationFail("Seda pildivormingut ei saa lisada. Vali JPEG-, PNG- või WebP-pilt.");
-    return preparationFail("Seda fotot ei saanud avada. Vali teine JPEG-, PNG- või WebP-pilt.");
+    return preparationFail(error instanceof SelectedImageHeaderError
+      ? "Selle foto andmeid ei saanud lugeda. Vali teine JPEG-, PNG- või WebP-pilt."
+      : "Valitud fotot ei saanud seadmest lugeda. Vali foto galeriist uuesti.");
   }
   if (info.width < 1 || info.height < 1 || info.width > MESSAGE_IMAGE_SELECTION_LIMITS.edge || info.height > MESSAGE_IMAGE_SELECTION_LIMITS.edge)
     return preparationFail("Valitud foto mõõtmed on liiga suured. Vali foto, mille pikem külg on kuni 32 768 pikslit.");
@@ -32,23 +35,25 @@ export async function prepareMessageImage(file: File, signal?: AbortSignal): Pro
   // Providers may omit/generalize MIME. Only local bytes and the decoder decide
   // the format. Ask for bounded output while decoding, not afterwards. Browsers
   // can still allocate internal source buffers, hence the separate source caps.
-  let bitmap: ImageBitmap;
-  try { bitmap = await createImageBitmap(info.source, { imageOrientation: "none", resizeWidth: targetWidth,
-    resizeHeight: targetHeight, resizeQuality: "high" }); }
-  catch { checkAbort(signal); return preparationFail("Seda fotot ei saanud avada. Vali teine JPEG-, PNG- või WebP-pilt."); }
+  let decoded;
+  try { decoded = await decodeMessageImage(info, targetWidth, targetHeight, signal); }
+  catch { checkAbort(signal); return preparationFail("Brauser ei saanud seda fotot avada. Vali foto uuesti või proovi teist JPEG-, PNG- või WebP-pilti."); }
   const canvas = document.createElement("canvas");
   try {
     checkAbort(signal);
-    if (bitmap.width !== targetWidth || bitmap.height !== targetHeight)
-      return preparationFail("Brauser ei saanud fotot vähendada. Proovi brauserit uuendada või vali väiksem foto.");
+    // The image-element fallback can return source-size pixels, or a smaller
+    // browser rendition on low-memory phones. Never enlarge that rendition.
+    const outputScale = Math.min(1, targetWidth / decoded.width, targetHeight / decoded.height);
+    const outputWidth = Math.max(1, Math.round(decoded.width * outputScale));
+    const outputHeight = Math.max(1, Math.round(decoded.height * outputScale));
     let blob: Blob | null = null;
     // Bound CPU work: quality first, then two progressively smaller encodings.
     const attempts = [{ scale: 1, quality: 0.82 }, { scale: 1, quality: 0.67 },
       { scale: 1, quality: 0.52 }, { scale: 0.8, quality: 0.5 }, { scale: 0.64, quality: 0.5 }];
     for (const attempt of attempts) {
       checkAbort(signal);
-      canvas.width = Math.max(1, Math.round((swapped ? bitmap.height : bitmap.width) * attempt.scale));
-      canvas.height = Math.max(1, Math.round((swapped ? bitmap.width : bitmap.height) * attempt.scale));
+      canvas.width = Math.max(1, Math.round((swapped ? outputHeight : outputWidth) * attempt.scale));
+      canvas.height = Math.max(1, Math.round((swapped ? outputWidth : outputHeight) * attempt.scale));
       const context = canvas.getContext("2d"); if (!context) return preparationFail("Brauser ei saanud fotot töödelda. Proovi lehte värskendada ja vali foto uuesti.");
       switch (info.orientation) {
         case 2: context.transform(-1, 0, 0, 1, canvas.width, 0); break;
@@ -59,7 +64,7 @@ export async function prepareMessageImage(file: File, signal?: AbortSignal): Pro
         case 7: context.transform(0, -1, -1, 0, canvas.width, canvas.height); break;
         case 8: context.transform(0, -1, 1, 0, 0, canvas.height); break;
       }
-      context.drawImage(bitmap, 0, 0, swapped ? canvas.height : canvas.width, swapped ? canvas.width : canvas.height);
+      context.drawImage(decoded.source, 0, 0, swapped ? canvas.height : canvas.width, swapped ? canvas.width : canvas.height);
       blob = await new Promise<Blob | null>(resolve => canvas.toBlob(resolve, "image/webp", attempt.quality));
       checkAbort(signal);
       if (!blob || blob.type !== "image/webp" || blob.size < 1) break;
@@ -73,5 +78,5 @@ export async function prepareMessageImage(file: File, signal?: AbortSignal): Pro
     for (let offset = 0; offset < bytes.length; offset += 32768) binary += String.fromCharCode(...bytes.subarray(offset, offset + 32768));
     return Object.freeze({ imageBase64: btoa(binary), sourceSha256: Array.from(digest, b => b.toString(16).padStart(2, "0")).join(""),
       sourceBytes: bytes.length, sourceMime: "image/webp", preview: blob, width: canvas.width, height: canvas.height });
-  } finally { bitmap.close(); canvas.width = 0; canvas.height = 0; }
+  } finally { decoded.dispose(); canvas.width = 0; canvas.height = 0; }
 }

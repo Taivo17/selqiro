@@ -1,3 +1,9 @@
+> **Hilisem kasutaja kinnitus 31.10.2026:** telefoni kirjutusväli on ka
+> kuulutusekaardiga klaviatuuri kohal nähtav ning varem liiga suur foto õnnestus
+> arvutis lisada. Need tulemused on vastu võetud. Ühe telefonifoto avamise
+> jätkutöö on `MESSAGING_PHONE_PHOTO_20261031.md`. Allolev tekst on varasema
+> tarne ajalooline kirjeldus, selle paigaldust ega klaviatuurikontrolli ei korrata.
+
 # Suurte sõnumifotode ja telefoni kirjutusvälja jätkuparandus — 31.10.2026
 
 ## Kasutaja kinnitatud olukord

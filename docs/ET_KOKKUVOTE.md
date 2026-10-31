@@ -1,3 +1,23 @@
+<!-- SELQIRO_PHONE_PHOTO_20261031 -->
+## 31.10.2026 — Telefoni foto avamise ühilduvus
+
+Kasutaja kinnitab, et telefonis jääb kirjutusväli nüüd klaviatuuri kohal nähtavaks
+ning varem liiga suur foto õnnestus arvutis lisada. Need parandused on vastu
+võetud. Praegune töö on telefonis valitud Viofo foto avamise tõrge enne üleslaadimist.
+
+Siia saabunud 185 804-baidine JPEG-koopia avaneb; selle põhjal ei oletata telefoni
+algfaili vormingut ega EXIF-i. Katses kordus eraldi viga: vana päiselugeja keeldus
+loetavatest fotodest vigase või topelt EXIF-i tõttu. Uus kitsas lähtekoodiparandus
+talub valikulise lisainfo vigu ning lisab kohaliku pildielemendi varuvariandi,
+kui bitmap-dekodeerimine ei toimi. Foto vähendamine ja saatja kontroll säilivad.
+
+Praegune juhis ja tõendi piir on `docs/continuity/MESSAGING_PHONE_PHOTO_20261031.md`;
+masinloetav tööjärg on `docs/continuity/CURRENT_STATE.json`. Uus käsk on
+`selqiro-foto-telefon-20261031/uuenda.py --publish`. Uue paranduse päris telefoni
+tulemus ja Verceli Ready jäävad paigaldusjärgseks. Allpool säilib varasem ajalugu.
+
+---
+
 <!-- SELQIRO_MESSAGES_FOLLOWUP_20261031 -->
 ## 31.10.2026 — Suurte fotode ja telefoni kirjutusvälja jätkuparandus
 
