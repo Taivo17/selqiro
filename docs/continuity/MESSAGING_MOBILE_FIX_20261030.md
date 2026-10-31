@@ -1,3 +1,14 @@
+<!-- SELQIRO_MESSAGES_FOLLOWUP_20261031 -->
+## 31.10.2026 — Selle paranduse kasutajatagasiside ja järgmine jätk
+
+Kasutaja kinnitas foto valimise ning saatmise toimimist, kuid kompaktse kaardiga
+mitmerealine tekst jäi telefonis endiselt klaviatuuri varju. Üle 5 MB foto
+peatus suurusepiiril. Uus käsk ja värske tõend on `docs/continuity/MESSAGING_MOBILE_FOLLOWUP_20261031.md` failis.
+Allolev 30.10 kontroll on ajalooline; seda ei loeta füüsilise telefoni vea
+täieliku lahendamise tõendiks ega käivitata vana paigaldajat uuesti.
+
+---
+
 # Telefoni sõnumivaate parandus — 30.10.2026
 
 ## Kasutaja kinnitatud olukord

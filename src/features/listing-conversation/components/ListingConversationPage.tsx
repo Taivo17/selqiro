@@ -55,6 +55,7 @@ function ManagedConversation({ conversationId, originListingId = null }: Props) 
       {(newMessages || state.pendingLatest) && <button type="button" className={styles.newMessages} onClick={jump}>Uued sõnumid ↓</button>}
       <span className={styles.srOnly} role="status">{newMessages || state.pendingLatest ? "Saabus uusi sõnumeid" : ""}</span>
     </div>
+    <div className={styles.notices} data-conversation-notices role="region" aria-label="Vestluse teated" tabIndex={0}>
     {(state.problem || context.error) && <div role="alert" className={styles.notice}>
       <p>{state.problem || context.error}</p>
       {!state.unresolved && <button type="button" className={styles.textButton} onClick={context.actor ? state.refresh : context.refresh}>Proovi uuesti</button>}
@@ -76,6 +77,7 @@ function ManagedConversation({ conversationId, originListingId = null }: Props) 
       <button type="button" className={styles.textButton} disabled={!state.canAcceptIncoming} onClick={state.acceptIncomingListing}>Tühjenda tekst ja lisa uus kuulutus</button>
       {!!state.photo.photo && <p>Uue kuulutuse valimiseks eemalda esmalt pooleli olev foto.</p>}
     </div>}
+    </div>
     <MessageComposer identity={visible?.actor ?? null} text={state.body} canSend={state.canSend} busy={state.busy} unresolved={state.unresolved}
       disabled={state.changed || !visible?.can_send || state.acting} onText={state.changeBody} onSend={state.send}
       photo={state.photo.visiblePhoto} photoLocked={state.photo.locked} onPhoto={state.photo.choose} onRetryPhoto={state.photo.retry}

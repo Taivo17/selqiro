@@ -30,6 +30,12 @@ export default function MessageComposer(props: Props) {
   useLayoutEffect(() => {
     const input = textarea.current;
     if (!input) return;
+    // Native sizing keeps the field and caret geometry in one browser layout
+    // pass. Only browsers without it need the measured-height fallback.
+    if (CSS.supports("field-sizing", "content")) {
+      input.style.removeProperty("height");
+      return;
+    }
     input.style.height = "24px";
     input.style.height = Math.min(120, Math.max(focused ? 48 : 24, input.scrollHeight)) + "px";
   }, [props.text, focused]);

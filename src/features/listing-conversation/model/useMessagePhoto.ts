@@ -82,7 +82,7 @@ export function useMessagePhoto(conversationId: string, actor: ConversationActor
         error: submitted || value.state === "uncertain"
           ? "Pildi laadimise tulemust ei saanud kinnitada. Proovi sama pildi laadimist uuesti."
           : error instanceof MessageImagePreparationError ? error.message
-            : "Pilti ei saanud ette valmistada. Vali kuni 5 MB JPEG-, PNG- või WebP-pilt." });
+            : "Pilti ei saanud ette valmistada. Proovi foto uuesti valida." });
     } finally { context.signal.removeEventListener("abort", abort); working.current = false; }
   }
   function beginSelection() {

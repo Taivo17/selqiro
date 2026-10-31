@@ -14,8 +14,11 @@ export function useConversationViewport() {
     let restingHeight = window.visualViewport?.height ?? window.innerHeight;
     let previousWidth = window.innerWidth;
     const measure = () => {
-      cancelAnimationFrame(frame);
+      // Resize, caret-pan and composer reflow may arrive in the same frame.
+      // Coalesce them without continually cancelling the pending correction.
+      if (frame) return;
       frame = requestAnimationFrame(() => {
+        frame = 0;
         const viewport = window.visualViewport;
         const visibleHeight = viewport?.height ?? window.innerHeight;
         const visibleTop = viewport?.offsetTop ?? 0;
@@ -46,17 +49,30 @@ export function useConversationViewport() {
     measure();
     window.addEventListener("resize", measure);
     window.addEventListener("scroll", measure, { passive: true });
+    window.addEventListener("pageshow", measure);
+    element.addEventListener("input", measure);
     element.addEventListener("focusin", measure);
     element.addEventListener("focusout", measure);
     window.visualViewport?.addEventListener("resize", measure);
     window.visualViewport?.addEventListener("scroll", measure);
     const observer = new ResizeObserver(measure);
+    // Native caret scrolling can finish after the viewport resize. Observe the
+    // actual composition geometry too: wrapping text, status and attachments.
+    observer.observe(element);
+    const composer = element.querySelector("form");
+    if (composer) observer.observe(composer);
+    const notices = element.querySelector("[data-conversation-notices]");
+    if (notices) observer.observe(notices);
+    const conversationHeader = element.querySelector("header");
+    if (conversationHeader) observer.observe(conversationHeader);
     const header = document.querySelector("header");
-    if (header) observer.observe(header);
+    if (header && header !== conversationHeader) observer.observe(header);
     return () => {
       cancelAnimationFrame(frame); observer.disconnect();
       window.removeEventListener("resize", measure);
       window.removeEventListener("scroll", measure);
+      window.removeEventListener("pageshow", measure);
+      element.removeEventListener("input", measure);
       element.removeEventListener("focusin", measure);
       element.removeEventListener("focusout", measure);
       window.visualViewport?.removeEventListener("resize", measure);

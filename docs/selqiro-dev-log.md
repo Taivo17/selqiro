@@ -1,3 +1,20 @@
+<!-- SELQIRO_MESSAGES_FOLLOWUP_20261031 -->
+## 31.10.2026 — Suurte fotode ja telefoni kirjutusvälja jätkuparandus
+
+Praegune tööjärg on `docs/continuity/CURRENT_STATE.json`; täpne uus juhis on
+`docs/continuity/MESSAGING_MOBILE_FOLLOWUP_20261031.md`. Kasutaja kinnitab nüüd fotode saatmist arvutis ja telefonis ning
+kuulutusekaardi kaasa minekut. Alles olid üle 5 MB foto keeldumine ja klaviatuuri
+taha jääv mitmerealine tekst. Uus lähtekoodikandidaat vähendab suure foto
+automaatselt ning korrigeerib vestluse klaviatuuripaigutust.
+
+Lõpliku lähtekoodi build, sihitud kontrollid ja paigaldaja katsed läbisid;
+füüsilise telefoni ning uue Verceli deployment'i kinnitus on pärast paigaldamist.
+Kasutatakse uut `selqiro-sonumid-parandus-20261031/uuenda.py --publish` käsku.
+Varasemaid DB/Storage paigaldajaid ei korrata. Allpool säilib senine ajalugu;
+selle vanu staatuseid ei tõlgendata tänase tööjärjena.
+
+---
+
 # Selqiro development log
 
 ## 2026-10-30 — Tegeliku DB-eelkontrolli raport ja Supabase’i poliitikaõiguse parandus
