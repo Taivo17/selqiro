@@ -1,3 +1,135 @@
+<!-- SELQIRO_LISTING_PRIMARY_IMAGE_REPAIR_20261101 -->
+## 2026-11-01 — Observed preflight stop; correct the baseline fixture
+
+The actual Mac report for release
+`55d3e168491cf62bf584fdac8f57a9704d308b901d8569e9d4656a0917864814`
+records a successful read-only preflight command followed by a
+`DATABASE_PRECONDITIONS_NOT_MATCHED` stop at `baseline_verified`.
+Only `functions` and `final_writer_policies` failed; seven other guards passed.
+The observed base was `b0a04fccbf354f0480a4b6eb8dd176b3c55383a8` at the run
+started 2026-11-01 12:13:23 UTC. Database application had not started; build,
+commit and push had not run. The report is actual hosted-read evidence, not
+application or deployment evidence.
+
+Two source-fixture errors explain the mismatch: broad `USING(true)` fixture
+policies replaced the original identity-scoped final-writer policies, and the
+fixture selected the earlier 20-core `final_receipt` rather than its later
+30-multipart override. Rebuilding from the correct definitions produces the
+exact dependency fingerprint observed in the report. The correction belongs
+to the preflight/installation baseline and its tests; it does not broaden
+production policies. The capability and `changes.sql` remain unchanged.
+
+843 source files outside continuity/docs and the uninstalled SQL repair, plus
+the installer runtime, are byte-identical to the prior candidate. Prior 85
+model/client, 78 handler, 50 installer, browser, build and lint proofs are
+retained, not rerun. Two new installer regressions pass in 0.592 seconds using
+real temporary Git/local bare remotes and synthetic DB/build; they cover the
+observed guard failure without apply intent and a corrected manifest beside
+the old, byte-preserved stopped journal. Corrected PGlite 18 suites pass 26
+runtime and 19 guarded-installation checks. The delivered old preflight
+reproduces exactly the two false guards in the real report. Corrected guards
+accept retained final definitions and reject the obsolete receipt,
+unconditional policies and expanded role lists. The old 23 + 15 SQL results
+remain historical fixture evidence. No native PostgreSQL 17 execution,
+concurrent-session race or live application is established by these tests.
+
+The repaired package has not been applied on the Mac; no new commit/push or
+Vercel Ready has been observed. Current detail:
+`docs/continuity/LISTING_PRIMARY_IMAGE_REPAIR_20261101.md`. Earlier architecture
+and product scope records remain below, unchanged as history.
+
+---
+
+<!-- SELQIRO_LISTING_PRIMARY_IMAGE_20261101 -->
+## 01.11.2026 — Managed gallery primary selection; locally verified candidate
+
+The current increment selects a primary image from an existing published,
+managed gallery. It restores amber orientation in public listing search and
+My Area listings, and separates content removal from unconfirmed file cleanup
+in the owner UI. Image upload/removal and the complete hosted cleanup and
+capacity-release lifecycle remain outstanding.
+
+The additive SQL candidate is
+`supabase/repairs/20261101_listing_primary_image/changes.sql`. The read RPC
+`get_my_managed_listing_images_v1` binds the authenticated user, active identity,
+listing and original publication attempt. The write RPC
+`set_my_managed_listing_primary_image_v1` adds an expected presentation revision
+and an original ordinal. It updates `listing_images.is_primary` and
+`listings.image` together, using a separate per-attempt presentation revision.
+Publication slots, media paths, object receipts and cleanup records retain
+their existing meaning. A read does not create a revision; selecting the
+current primary with a matching revision is a no-op. Stale revisions conflict
+even when the requested target is already primary.
+
+The existing same-origin journey handler exposes only `owner-images-read` and
+`owner-images-primary` for this capability. Auth and hosted readiness precede
+the RPC, exact keys and canonical IDs/revisions are checked, and known server
+errors are allowlisted. The typed client captures immutable commands, checks
+the actor before and after one request, preserves bigint revisions as strings,
+and does not retry writes. Its saved-response parser requires unchanged
+original URLs/ordinals, the requested primary and the exact revision change.
+Ambiguous post-dispatch failures remain unknown. The owner hook reads the
+current gallery after acknowledgement, blocks another image write on an
+unconfirmed result and invalidates old actor/attempt state on context changes.
+
+Local evidence: 85 actual model/client tests; 78 actual handler tests; 23 runtime
+and 15 installation checks on PGlite 18 with non-superuser roles; 50 installer
+cases in 13.634 seconds using real Git/local bare remotes and real child-group
+timeout/Ctrl-C handling, with synthetic SQL/build. The final integrated edit
+page, hook, client, text session and private image loader passed browser checks
+at 1440/390/320 px with synthetic Auth and all HTTP intercepted. There were no
+external requests or page errors; the final rerun includes deletion-confirmation
+reset across A → B → A identity changes. The source build passed in 19.73 seconds
+with synthetic build-only Supabase/OpenAI values; six runtime files passed
+targeted ESLint without warnings.
+
+These results do not establish native PostgreSQL 17 execution, races between
+concurrent database sessions, live DB application, Mac installation, a new
+commit/push or Vercel Ready. The accepted messaging baseline remains user-shown
+commit `b0a04fccbf354f0480a4b6eb8dd176b3c55383a8`. The exact scope and evidence are
+in `docs/continuity/LISTING_PRIMARY_IMAGE_20261101.md`; CURRENT_STATE remains the
+source of the generated short handoff. Prior architecture records follow
+unchanged as history.
+
+---
+
+<!-- SELQIRO_LISTINGS_DIRECTION_20261101 -->
+## 01.11.2026 — Kuulutused koos hobustega; kujundus töö käigus
+
+Kasutaja 01.11 otsus: esimene lõpetatav tervik on kuulutused koos
+hobusekuulutustega. Sama lisamiskoht, ühine otsing/detail/profiil/Minu ala ning
+vestlus ja kuulutusekaart; hobuse kategooria avab eriväljad ja põhjalikumad
+avaldamiskinnitused. Eraldi hobuste portaali ei tehta. See asendab varasema
+järjekorra, kus hobused jäid teenuste järel tehtavaks.
+
+Kujundus valmib iga funktsionaalse etapi sees: kuulutuste merevaik, teenuste
+türkiis ja tootenäidiste indigo ühtselt otsingus, Minu alas ja profiilil.
+Töö täpset varasemat tooni kontrollitud allikast ei kinnitatud. Uudised on
+aktiivse identiteedi jälgitavate avalike postituste voog, oma V2 vaates.
+V1 voog pärib praegu kuulutusi; üldine avalike postituste voog vajab ühendamist.
+Päris logod tuleb lugeda ühisest profiiliallikast: V1/profiil kasutab
+identity_profiles.avatar_url, V2 sõnumid/valik praegu identities.avatar_url.
+
+31.10 kasutaja võttis vastu fotode lisamise arvutis ja telefonis, ka Viofo
+foto, ning klaviatuuri kohal nähtava kirjutusvälja. Terminali viimane foto
+paranduse commit on b0a04fccbf354f0480a4b6eb8dd176b3c55383a8. Sama parandust
+uuesti ei paigaldata ega vana ootel staatust tänase tööna ei käsitleta.
+
+Uus tingimuslik luba: vanad testkuulutused ja testsõnumid võib eemaldada, kui
+need põhjustavad probleemi; enne teostust määrata konkreetsed kirjed ja seotud
+kasutuseta failid. Kontod, identiteedid, logod, teenused, tootenäidised ja
+päevikud sellesse loasse ei kuulu. Praegu midagi ei kustutatud. Sama ulatuse
+luba uuesti ei küsita. See täpsustus asendab nende testobjektide varasema
+üldise kustutamiskeelu, mitte muude objektide kaitset.
+
+Käesolev checkpoint on allikavaatlus ja tööplaan assistendi taastatud
+lähtekoopias; uut runtime-parandust, pilvetoimingut ega Maci/GitHubi muudatust
+pole tehtud. Täpne audit, järgmine järjekord ja tõendi piir on
+`docs/continuity/LISTINGS_DESIGN_NEWS_20261101.md`; jooksev seis on
+`docs/continuity/CURRENT_STATE.json`. Allpool on ajaloolised kirjed.
+
+---
+
 <!-- SELQIRO_PHONE_PHOTO_20261031 -->
 ## 31.10.2026 — Telefoni foto avamise ühilduvus
 

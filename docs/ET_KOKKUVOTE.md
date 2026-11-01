@@ -1,3 +1,109 @@
+<!-- SELQIRO_LISTING_PRIMARY_IMAGE_REPAIR_20261101 -->
+## 01.11.2026 — Tegelik peatumine ja põhipildi paketi eelduste parandus
+
+Kasutaja tegelik jooksuraport kinnitab, et eelmine põhipildi pakett peatus
+`DATABASE_PRECONDITIONS_NOT_MATCHED` teatega etapis `baseline_verified`.
+Maci 12:13:23 UTC alanud käik kontrollis baasi
+`b0a04fccbf354f0480a4b6eb8dd176b3c55383a8`. Ainult lugemiseks tehtud andmebaasi
+eelkontroll lõppes exit 0-ga; üheksast kaitsest ebaõnnestusid `functions` ja
+`final_writer_policies`. Andmebaasi kirjutamist, build'i, uut commit'i ega
+push'i ei alustatud. Raport ja vana jooksupäevik säilivad.
+
+Põhjus tuvastati meie kohaliku kontrollaluse koostamises: kasutati
+identiteediga piiratud poliitikate asemel `USING(true)` näidispoliitikaid ning
+`final_receipt` funktsiooni varasemat 20-core määratlust hilisema 30-multipart
+määratluse asemel. Õigest allikast taastatud sõltuvuste räsi kattub täpselt
+kasutaja raportiga. Parandus taastab õige kontrollaluse; õiguste piire ei avardata.
+
+Rakenduse runtime, põhipildi SQL-muudatus ja paigaldaja runtime on muutumatud.
+85 kliendi-, 78 HTTP-piiri-, 50 paigaldaja-, brauseri-, build'i- ja lindi tõendid
+säilivad varasemast; neid selles paranduses uuesti tehtuna ei esitata.
+Kaks uut paigaldaja regressioonikatset ning parandatud kontrollalusega 26 SQL-i
+runtime- ja 19 paigalduskaitse katset läbisid. Vana paketi täpselt kahe kaitse
+peatus taastoodeti; õige kontroll võtab kehtiva aluse vastu ning tõrjub aegunud
+funktsiooni ja laiendatud poliitikaid. Need on kohalikud PGlite 18 kontrollid.
+Paranduspaketi Maci rakendamist ega Verceli Ready tulemust pole nähtud.
+
+Uus paigalduspakk on `selqiro-kuulutused-pohipilt-parandus-20261101.zip`;
+eraldi üleandmine uuendatakse nimega `selqiro-uleandmine-20261101.zip`.
+Ulatus ja edasine järjekord säilivad: põhipilt ning merevaigutoon; seejärel
+kuulutuspiltide täielik elutsükkel ja hobused samas kuulutuste voos.
+Jooksev tõend: `docs/continuity/LISTING_PRIMARY_IMAGE_REPAIR_20261101.md` ja
+`docs/continuity/CURRENT_STATE.json`. Allpool on säilitatud varasem ajalugu.
+
+---
+
+<!-- SELQIRO_LISTING_PRIMARY_IMAGE_20261101 -->
+## 01.11.2026 — Põhipildi valik ja kuulutuste värvitoon: kontrollitud kohalik jätk
+
+Kuulutuste esimene väike jätk on lähtekoopia koodis ette valmistatud: omanik
+saab avaldatud kuulutuse olemasolevatest hallatud piltidest valida põhipildi.
+Kuulutuste otsingu ja Minu ala kuulutuste sektsiooni merevaigutoon on taastatud,
+sisukaardid jäävad valgeks. Koristamise tekst eristab sisu eemaldamist ja
+pildifailide veel kinnitamata lõppkoristust. Uute piltide lisamine, olemasolevate
+eemaldamine ja kogu failikoristuse lõpetamine jäävad järgmisse töösse.
+
+85 mudeli/kliendi ja 78 HTTP-piiri katset läbisid. Lõpliku lähte integreeritud
+muutmisvaadet kontrolliti 1440, 390 ja 320 px laiuses sünteetilise Authi ning
+kinni püütud HTTP-ga; välispäringuid ega lehevigu ei olnud. PGlite 18 kohalikud
+23 SQL-i runtime- ja 15 paigalduskaitse katset ning paigaldaja 50 katset läbisid.
+Lõplik build läbis 19,73 sekundiga ja kuue runtime-faili ESLint hoiatusteta.
+Need kontrollid ei kinnita päris andmebaasi, Maci rakendamist, uut commit/push'i
+ega Verceli Ready tulemust.
+
+31.10 vastu võetud sõnumifotod, Viofo foto ja telefoni kirjutusväli säilivad.
+Viimane kasutaja näidatud commit on
+`b0a04fccbf354f0480a4b6eb8dd176b3c55383a8`; uut commit'i ei oletata.
+Järgmisena jätkame kuulutuspiltide kogu elutsükliga ning hobuste ühendamisega
+samasse kuulutuste voogu. Logod, Uudised ja ülejäänud moodulid järgnevad senises
+plaanis; Energy/maksed jäävad avaliku käivitamise eelseks kohustuseks.
+
+Selle etapi paranduspaketi nimi on `selqiro-kuulutused-pohipilt-20261101.zip`;
+eraldi üleandmise nimi on `selqiro-uleandmine-20261101.zip`. Üleandmine antakse
+suurema kontrollitud etapi järel, vestluse või töökonteksti vahetamisel ning
+kasutaja soovil. Jooksev seis ja kontrollide piir on
+`docs/continuity/CURRENT_STATE.json` ja
+`docs/continuity/LISTING_PRIMARY_IMAGE_20261101.md`. Allpool säilib varasem ajalugu.
+
+---
+
+<!-- SELQIRO_LISTINGS_DIRECTION_20261101 -->
+## 01.11.2026 — Kuulutused koos hobustega; kujundus töö käigus
+
+Kasutaja 01.11 otsus: esimene lõpetatav tervik on kuulutused koos
+hobusekuulutustega. Sama lisamiskoht, ühine otsing/detail/profiil/Minu ala ning
+vestlus ja kuulutusekaart; hobuse kategooria avab eriväljad ja põhjalikumad
+avaldamiskinnitused. Eraldi hobuste portaali ei tehta. See asendab varasema
+järjekorra, kus hobused jäid teenuste järel tehtavaks.
+
+Kujundus valmib iga funktsionaalse etapi sees: kuulutuste merevaik, teenuste
+türkiis ja tootenäidiste indigo ühtselt otsingus, Minu alas ja profiilil.
+Töö täpset varasemat tooni kontrollitud allikast ei kinnitatud. Uudised on
+aktiivse identiteedi jälgitavate avalike postituste voog, oma V2 vaates.
+V1 voog pärib praegu kuulutusi; üldine avalike postituste voog vajab ühendamist.
+Päris logod tuleb lugeda ühisest profiiliallikast: V1/profiil kasutab
+identity_profiles.avatar_url, V2 sõnumid/valik praegu identities.avatar_url.
+
+31.10 kasutaja võttis vastu fotode lisamise arvutis ja telefonis, ka Viofo
+foto, ning klaviatuuri kohal nähtava kirjutusvälja. Terminali viimane foto
+paranduse commit on b0a04fccbf354f0480a4b6eb8dd176b3c55383a8. Sama parandust
+uuesti ei paigaldata ega vana ootel staatust tänase tööna ei käsitleta.
+
+Uus tingimuslik luba: vanad testkuulutused ja testsõnumid võib eemaldada, kui
+need põhjustavad probleemi; enne teostust määrata konkreetsed kirjed ja seotud
+kasutuseta failid. Kontod, identiteedid, logod, teenused, tootenäidised ja
+päevikud sellesse loasse ei kuulu. Praegu midagi ei kustutatud. Sama ulatuse
+luba uuesti ei küsita. See täpsustus asendab nende testobjektide varasema
+üldise kustutamiskeelu, mitte muude objektide kaitset.
+
+Käesolev checkpoint on allikavaatlus ja tööplaan assistendi taastatud
+lähtekoopias; uut runtime-parandust, pilvetoimingut ega Maci/GitHubi muudatust
+pole tehtud. Täpne audit, järgmine järjekord ja tõendi piir on
+`docs/continuity/LISTINGS_DESIGN_NEWS_20261101.md`; jooksev seis on
+`docs/continuity/CURRENT_STATE.json`. Allpool on ajaloolised kirjed.
+
+---
+
 <!-- SELQIRO_PHONE_PHOTO_20261031 -->
 ## 31.10.2026 — Telefoni foto avamise ühilduvus
 

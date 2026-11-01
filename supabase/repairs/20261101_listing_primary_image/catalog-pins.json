@@ -1,0 +1,163 @@
+{
+  "schema_version": 1,
+  "scope": "Exact final retained function definitions and original writer policy predicates plus required relation/actor/trigger contracts; all existing private structures/authority preserved as observed invariants.",
+  "dependencies_sha256": "fb89562d7bb6e653b53e3baad61ae32dc6a64aa1578051a2eed4f50cbf8af4e3",
+  "capability_sha256": "be211792d33b920adfc4c86bb08da0ca6e0d582b68b19960b3fc30aaa2b82df9",
+  "dependency_function_names": [
+    "public.current_user_has_identity_access",
+    "public.set_listing_primary_image_v2",
+    "public.listing_actor_uid_hosted_v1",
+    "listing_publication_private.hosted_storage_contract_ready",
+    "listing_publication_private.assert_hosted_preview_actor",
+    "public.lock_listing_creation_actor_v1",
+    "public.require_listing_create_keys_v1",
+    "listing_publication_private.require_actor",
+    "listing_publication_private.validate_web_intent",
+    "public.listing_final_guard_state_v1",
+    "public.guard_listing_price_v2",
+    "listing_publication_private.guard_managed_listing",
+    "listing_publication_private.guard_managed_image",
+    "listing_publication_private.protect_attempt",
+    "listing_publication_private.protect_slot",
+    "listing_publication_private.protect_object",
+    "listing_publication_private.protect_web_image",
+    "listing_publication_private.protect_publication",
+    "listing_publication_private.apply_delete",
+    "listing_publication_private.final_receipt",
+    "public.delete_my_published_listing_v1",
+    "public.get_selqiro_hosted_preview_readiness_v1"
+  ],
+  "new_function_names": [
+    "listing_publication_private.protect_managed_image_presentation_v1",
+    "listing_publication_private.require_managed_image_actor_v1",
+    "listing_publication_private.validate_managed_image_intent_v1",
+    "listing_publication_private.lock_managed_listing_images_v1",
+    "public.get_my_managed_listing_images_v1",
+    "public.set_my_managed_listing_primary_image_v1"
+  ],
+  "final_writer_policy_pins": [
+    {
+      "name": "final_internal_writer",
+      "check": "true",
+      "roles": [
+        "selqiro_listing_final_writer_v1"
+      ],
+      "using": "true",
+      "command": "*",
+      "relation": "listing_publication_private.attempts",
+      "permissive": true
+    },
+    {
+      "name": "final_internal_writer",
+      "check": "true",
+      "roles": [
+        "selqiro_listing_final_writer_v1"
+      ],
+      "using": "true",
+      "command": "*",
+      "relation": "listing_publication_private.cleanup",
+      "permissive": true
+    },
+    {
+      "name": "final_internal_writer",
+      "check": "true",
+      "roles": [
+        "selqiro_listing_final_writer_v1"
+      ],
+      "using": "true",
+      "command": "*",
+      "relation": "listing_publication_private.objects",
+      "permissive": true
+    },
+    {
+      "name": "final_internal_writer",
+      "check": "true",
+      "roles": [
+        "selqiro_listing_final_writer_v1"
+      ],
+      "using": "true",
+      "command": "*",
+      "relation": "listing_publication_private.publications",
+      "permissive": true
+    },
+    {
+      "name": "final_internal_writer",
+      "check": "true",
+      "roles": [
+        "selqiro_listing_final_writer_v1"
+      ],
+      "using": "true",
+      "command": "*",
+      "relation": "listing_publication_private.slots",
+      "permissive": true
+    },
+    {
+      "name": "final_internal_writer",
+      "check": "true",
+      "roles": [
+        "selqiro_listing_final_writer_v1"
+      ],
+      "using": "true",
+      "command": "*",
+      "relation": "listing_publication_private.web_images",
+      "permissive": true
+    },
+    {
+      "name": "final_writer_images",
+      "check": "(EXISTS ( SELECT 1\n   FROM public.listings l\n  WHERE ((l.id = listing_images.listing_id) AND public.current_user_has_identity_access(l.identity_id))))",
+      "roles": [
+        "selqiro_listing_final_writer_v1"
+      ],
+      "using": "(EXISTS ( SELECT 1\n   FROM public.listings l\n  WHERE ((l.id = listing_images.listing_id) AND public.current_user_has_identity_access(l.identity_id))))",
+      "command": "*",
+      "relation": "public.listing_images",
+      "permissive": true
+    },
+    {
+      "name": "final_writer_listings",
+      "check": "public.current_user_has_identity_access(identity_id)",
+      "roles": [
+        "selqiro_listing_final_writer_v1"
+      ],
+      "using": "public.current_user_has_identity_access(identity_id)",
+      "command": "*",
+      "relation": "public.listings",
+      "permissive": true
+    }
+  ],
+  "changes_sha256": "6e131c70b2dc941b411588f2e6585c5bf3a85b23b50f2e2dc19d766ff1297714",
+  "source_provenance": [
+    {
+      "path": "supabase/migrations/20260722173530_baseline_20260722.sql",
+      "sha256": "7ca065f92f01c0f38ada5f5a50d2a0fc5b716f5291d1525d398023b7db59da3f"
+    },
+    {
+      "path": "supabase/releases/listing-publication-hosted-preview-v1/00_preconditions.sql",
+      "sha256": "69c6005ed959afeb22bd1db3e597f23d17e7dfe86c968a35f512f94f34c995c8"
+    },
+    {
+      "path": "supabase/releases/listing-publication-hosted-preview-v1/10_price_core.sql",
+      "sha256": "9f843033bed721ab73d8cb01d3750e4dacc417dc0ddf84b92c9845745bb75dad"
+    },
+    {
+      "path": "supabase/releases/listing-publication-hosted-preview-v1/20_publication_core.sql",
+      "sha256": "f1c56c6ba381ceb5ab1d120092f676964762829ad63c5201a6c6b809c419f062"
+    },
+    {
+      "path": "supabase/releases/listing-publication-hosted-preview-v1/30_multipart_and_journey.sql",
+      "sha256": "d0f8c44a557c1b03df8ceb23c5069cf94a8560a2e3faaa3b0a56d701d0858765"
+    },
+    {
+      "path": "supabase/releases/listing-publication-hosted-preview-v1/60_preview_authority.sql",
+      "sha256": "bee78747b8932504c6960b9dba9b5b6673d06c5876dc76508b2322e48f6789bb"
+    },
+    {
+      "path": "supabase/releases/listing-publication-hosted-preview-v1/release.sql",
+      "sha256": "974dd6acb246b275acb593688aa14449cd42e80939101086d742ee5c4c5a4c3e"
+    },
+    {
+      "path": "supabase/repairs/20261101_listing_primary_image/tests/previous-preflight.sql",
+      "sha256": "e1f14709ebeee6c1513f4507937fc4418ae535a4ae465c6882a81bcdcf82a8fd"
+    }
+  ]
+}

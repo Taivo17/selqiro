@@ -1,0 +1,153 @@
+{
+  "schema_version": 1,
+  "scope": "Actual SQL in isolated PGlite with synthetic hosted-like roles and retained declarations.",
+  "checks": [
+    {
+      "label": "read_returns_exact_envelope_stable_ordinals_revision_zero_without_writes",
+      "passed": true
+    },
+    {
+      "label": "cover_change_updates_exactly_primary_mirror_revision_and_no_immutable_data",
+      "passed": true
+    },
+    {
+      "label": "same_primary_with_current_revision_is_noop_without_revision_increment",
+      "passed": true
+    },
+    {
+      "label": "stale_same_target_is_conflict_even_after_uncertain_previous_success",
+      "passed": true
+    },
+    {
+      "label": "two_editors_same_revision_first_wins_second_conflicts_then_explicit_refresh_succeeds",
+      "passed": true
+    },
+    {
+      "label": "empty_gallery_read_is_valid_and_does_not_initialize_revision",
+      "passed": true
+    },
+    {
+      "label": "bad_revision_and_ordinal_commands_are_rejected_before_mutation",
+      "passed": true
+    },
+    {
+      "label": "failure_after_primary_flags_update_rolls_back_the_complete_change",
+      "passed": true
+    },
+    {
+      "label": "wrong_actor_spoof_cannot_read_another_users_gallery",
+      "passed": true,
+      "observed_sqlstate": "42501"
+    },
+    {
+      "label": "wrong_identity_cannot_read_or_write_managed_gallery",
+      "passed": true
+    },
+    {
+      "label": "changed_active_identity_invalidates_existing_edit_session",
+      "passed": true
+    },
+    {
+      "label": "unlisted_hosted_actor_is_rejected",
+      "passed": true
+    },
+    {
+      "label": "wrong_attempt_listing_binding_is_rejected",
+      "passed": true
+    },
+    {
+      "label": "business_active_member_can_edit_without_becoming_original_creator",
+      "passed": true
+    },
+    {
+      "label": "revoked_business_membership_is_rechecked_before_mutation",
+      "passed": true
+    },
+    {
+      "label": "original_public_writer_policies_filter_another_identity_even_for_internal_writer",
+      "passed": true
+    },
+    {
+      "label": "retained_identity_policy_helper_is_closed_to_public_and_explicitly_granted_to_writer",
+      "passed": true
+    },
+    {
+      "label": "paused_and_sold_listing_cover_edit_preserves_lifecycle_status",
+      "passed": true
+    },
+    {
+      "label": "gallery_corruption_and_missing_ready_receipts_fail_closed_without_partial_change",
+      "passed": true
+    },
+    {
+      "label": "legacy_primary_writer_remains_blocked_for_managed_listings",
+      "passed": true
+    },
+    {
+      "label": "direct_authenticated_private_table_and_helpers_are_forbidden",
+      "passed": true
+    },
+    {
+      "label": "api_permission_matrix_is_authenticated_only_and_writer_role_is_closed",
+      "passed": true
+    },
+    {
+      "label": "immutable_slot_updates_are_still_rejected",
+      "passed": true,
+      "observed_sqlstate": "55000"
+    },
+    {
+      "label": "terminal_deletion_tombstone_blocks_new_gallery_actions_and_retains_revision",
+      "passed": true
+    },
+    {
+      "label": "latest_receipt_keeps_seeded_terminal_images_pending_without_multipart_auxiliary_proof",
+      "passed": true
+    },
+    {
+      "label": "actual_existing_delete_of_empty_listing_remains_compatible",
+      "passed": true
+    }
+  ],
+  "native_postgresql_17_executed": false,
+  "provider_storage_executed": false,
+  "live_database_calls": false,
+  "parallel_sessions_executed": false,
+  "engine": "PostgreSQL 18.6 (PGlite 0.5.13) on wasm32-unknown-emscripten, compiled by emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 6.0.5 (1db513782be24469589d7cb8a1f1834e9a33f271), 32-bit",
+  "passed": true,
+  "source_provenance": [
+    {
+      "path": "supabase/migrations/20260722173530_baseline_20260722.sql",
+      "sha256": "7ca065f92f01c0f38ada5f5a50d2a0fc5b716f5291d1525d398023b7db59da3f"
+    },
+    {
+      "path": "supabase/releases/listing-publication-hosted-preview-v1/00_preconditions.sql",
+      "sha256": "69c6005ed959afeb22bd1db3e597f23d17e7dfe86c968a35f512f94f34c995c8"
+    },
+    {
+      "path": "supabase/releases/listing-publication-hosted-preview-v1/10_price_core.sql",
+      "sha256": "9f843033bed721ab73d8cb01d3750e4dacc417dc0ddf84b92c9845745bb75dad"
+    },
+    {
+      "path": "supabase/releases/listing-publication-hosted-preview-v1/20_publication_core.sql",
+      "sha256": "f1c56c6ba381ceb5ab1d120092f676964762829ad63c5201a6c6b809c419f062"
+    },
+    {
+      "path": "supabase/releases/listing-publication-hosted-preview-v1/30_multipart_and_journey.sql",
+      "sha256": "d0f8c44a557c1b03df8ceb23c5069cf94a8560a2e3faaa3b0a56d701d0858765"
+    },
+    {
+      "path": "supabase/releases/listing-publication-hosted-preview-v1/60_preview_authority.sql",
+      "sha256": "bee78747b8932504c6960b9dba9b5b6673d06c5876dc76508b2322e48f6789bb"
+    },
+    {
+      "path": "supabase/releases/listing-publication-hosted-preview-v1/release.sql",
+      "sha256": "974dd6acb246b275acb593688aa14449cd42e80939101086d742ee5c4c5a4c3e"
+    },
+    {
+      "path": "supabase/repairs/20261101_listing_primary_image/tests/previous-preflight.sql",
+      "sha256": "e1f14709ebeee6c1513f4507937fc4418ae535a4ae465c6882a81bcdcf82a8fd"
+    }
+  ],
+  "changes_sha256": "6e131c70b2dc941b411588f2e6585c5bf3a85b23b50f2e2dc19d766ff1297714"
+}

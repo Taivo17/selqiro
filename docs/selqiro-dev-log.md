@@ -1,3 +1,71 @@
+<!-- SELQIRO_LISTING_PRIMARY_IMAGE_REPAIR_20261101 -->
+## 2026-11-01 — Tegelik eelduste peatus ja kontrollaluse parandus
+
+- Kasutaja `result(1).json` tõendab vana manifesti `55d3e168491cf62bf584fdac8f57a9704d308b901d8569e9d4656a0917864814` peatumist `baseline_verified` etapis teatega `DATABASE_PRECONDITIONS_NOT_MATCHED`. 01.11 12:13:23 UTC alanud käigus kontrollitud baas oli `b0a04fccbf354f0480a4b6eb8dd176b3c55383a8`.
+- Ainult lugemiseks tehtud preflight-käsk lõppes exit 0-ga. Ebaõnnestusid täpselt `functions` ja `final_writer_policies`; DB kirjutamist/build'i/commit'i/push'i ei alustatud. Tõend säilib üleandmises `kontrollid/actual-preflight-stop-20261101.json`.
+- Leiti kaks meie fixture'i viga: tegelike identiteedipõhiste poliitikate asemel `USING(true)` näidised ja `final_receipt` varasem 20-core määratlus hilisema 30-multipart asemel. Parandatud sõltuvusräsi kattub täpselt tegeliku raportiga. Parandatud PGlite 18 kontrollalusel läbisid 26 runtime- ja 19 paigalduskaitse katset: vana preflight taastoodab tegeliku kahe kaitse peatuse; uus võtab õige aluse vastu ning tõrjub vananenud receipt'i, piiranguteta poliitikad ja laiendatud rollid. Native PG17/paralleelseansside/live-rakendamise tulemust ei väideta.
+- 843 muud lähtefaili, runtime UI, `changes.sql`, capability ning paigaldaja runtime säilivad. Varasemaid 85/78/50 katseid, brauserikäiku, build'i ja linti ei käivitatud uuesti. Vana 23 + 15 SQL-tulemus kirjeldab vigast fixture'i, mitte õige aluskoosseisu sobivust.
+- Kaks uut paigaldaja regressioonikatset läbisid 0,592 s: tegelik kahe-kaitse peatus ilma apply-intent'ita ja uus manifest vana peatunud päeviku kõrval; üks rakendamine ning vana päevik bait-baidilt säilinud. Päris ajutine Git/kohalik bare-remote, sünteetilised SQL/build-vastused.
+- Uus kandidaat on `selqiro-kuulutused-pohipilt-parandus-20261101.zip`, eraldi üleandmine säilitab nime `selqiro-uleandmine-20261101.zip`. Paranduse Maci rakendamist, uut commit/push'i ega Verceli Ready tulemust pole nähtud. Vanu päevikuid, pakette, testandmeid ega ajalugu ei kustutatud.
+- Järjekord ja vastu võetud sõnumid säilivad. Uus checkpoint: `docs/continuity/LISTING_PRIMARY_IMAGE_REPAIR_20261101.md`; lühileht tekib `CURRENT_STATE.json` põhjal. Allpool on varasemate hetkede ajalugu.
+
+---
+
+<!-- SELQIRO_LISTING_PRIMARY_IMAGE_20261101 -->
+## 2026-11-01 — Olemasoleva põhipildi valik ja merevaigutoon, kohalikult kontrollitud
+
+- Lisatud on olemasoleva hallatud kuulutuspildi põhipildiks valimise mudel, klient, HTTP-tegevused ja omanikuvaate ühendus. Lisav SQL-kandidaat kasutab algset pildikohta ning eraldi esitlusversiooni; URL-e ja avaldamise pildifaile ümber ei nimetata.
+- Ranged vastusekontrollid välistavad vale konto/identiteedi/kuulutuse/avaldamiskatse sidumise, arvuks ümardatud bigint-versiooni ning tõendamata salvestused. Teadmata tulemusega kirjutust ei korrata automaatselt.
+- Avaliku otsingu ja Minu ala kuulutuste ümbrised kasutavad taas merevaigutooni ning valgeid sisukaarte. Otsingufiltrite, URL-ide ja kerimise lepinguid ei muudetud.
+- Koristamise tekstid eristavad avaldatud veebipilte, üleslaaditud algfailide koristamist ja eemaldatud kuulutuse veel lõpetamata failikoristust. See ei kinnita hosted lõppkoristuse ega mahu vabastamise valmimist.
+- 85 mudeli/kliendi ja 78 HTTP-piiri sihitud katset läbisid. HTTP-piiril parandati kontrolli käigus puuduvate/lisaväljade liigitus ning UUID lõpureavahetuse vastuvõtmine; juhtumid on kaetud.
+- PGlite 18 mittesuperkasutajate 23 runtime- ja 15 paigalduskaitse katset läbisid. Native PG17, samaaegsete eraldi andmebaasiseansside ja päris pilve tulemust ei väideta.
+- Paigaldaja 50 kohalikku katset läbisid 13,634 sekundiga: päris Git, kohalik bare-remote, päris timeout/Ctrl-C alamprotsessigrupid ning sünteetilised SQL/build-vastused. Need ei ole Maci ega välise GitHubi/pilve käivitused.
+- Lõpliku lähte integreeritud muutmisvaate brauserikontroll läbis 1440/390/320 px juures sünteetilise Authi ja kinni püütud HTTP-ga. Kontrolliti topeltklõpsu ühte kirjutust, ühist hõivatud olekut, sisestuse säilimist, konfliktide/teadmata tulemuse blokeeringut, hiliseid vastuseid ning konto/identiteedi vahetust. A → B → A vahetus ei taasta vana kustutamiskinnitust. Välispäringuid ega lehevigu ei olnud.
+- Lõpliku lähte build läbis exit 0 / 19,73 s (`review/run-build.py`, `npm run build -- --webpack`) sünteetiliste Supabase/OpenAI build-väärtustega. Kuue runtime-faili sihitud ESLint läbis hoiatusteta. Esimene katse peatus puuduvate build-väärtuste tõttu lehtede kogumisel; seda ei esitata õnnestunud buildina.
+- Maci rakendamist, uut commit/push'i ega Verceli Ready tulemust ei ole nähtud. Vastu võetud sõnumifotode aluseks jääb kasutaja näidatud `b0a04fccbf354f0480a4b6eb8dd176b3c55383a8`; uut commit'i ei oletata.
+- Etapi paranduspaki nimi on `selqiro-kuulutused-pohipilt-20261101.zip`; eraldi üleandmine on `selqiro-uleandmine-20261101.zip`. Üleandmine antakse suuremate kontrollitud etappide järel, konteksti vahetamisel ja kasutaja soovil.
+- Järgmine töö jääb kuulutuspiltide kogu elutsüklile ja hobuste ühisele kuulutuste voole. Testkirjeid, vanu raporteid ega ajalugu ei kustutatud. Jooksev seis: `docs/continuity/LISTING_PRIMARY_IMAGE_20261101.md` ning `docs/continuity/CURRENT_STATE.json`.
+
+---
+
+<!-- SELQIRO_LISTINGS_DIRECTION_20261101 -->
+## 01.11.2026 — Kuulutused koos hobustega; kujundus töö käigus
+
+Kasutaja 01.11 otsus: esimene lõpetatav tervik on kuulutused koos
+hobusekuulutustega. Sama lisamiskoht, ühine otsing/detail/profiil/Minu ala ning
+vestlus ja kuulutusekaart; hobuse kategooria avab eriväljad ja põhjalikumad
+avaldamiskinnitused. Eraldi hobuste portaali ei tehta. See asendab varasema
+järjekorra, kus hobused jäid teenuste järel tehtavaks.
+
+Kujundus valmib iga funktsionaalse etapi sees: kuulutuste merevaik, teenuste
+türkiis ja tootenäidiste indigo ühtselt otsingus, Minu alas ja profiilil.
+Töö täpset varasemat tooni kontrollitud allikast ei kinnitatud. Uudised on
+aktiivse identiteedi jälgitavate avalike postituste voog, oma V2 vaates.
+V1 voog pärib praegu kuulutusi; üldine avalike postituste voog vajab ühendamist.
+Päris logod tuleb lugeda ühisest profiiliallikast: V1/profiil kasutab
+identity_profiles.avatar_url, V2 sõnumid/valik praegu identities.avatar_url.
+
+31.10 kasutaja võttis vastu fotode lisamise arvutis ja telefonis, ka Viofo
+foto, ning klaviatuuri kohal nähtava kirjutusvälja. Terminali viimane foto
+paranduse commit on b0a04fccbf354f0480a4b6eb8dd176b3c55383a8. Sama parandust
+uuesti ei paigaldata ega vana ootel staatust tänase tööna ei käsitleta.
+
+Uus tingimuslik luba: vanad testkuulutused ja testsõnumid võib eemaldada, kui
+need põhjustavad probleemi; enne teostust määrata konkreetsed kirjed ja seotud
+kasutuseta failid. Kontod, identiteedid, logod, teenused, tootenäidised ja
+päevikud sellesse loasse ei kuulu. Praegu midagi ei kustutatud. Sama ulatuse
+luba uuesti ei küsita. See täpsustus asendab nende testobjektide varasema
+üldise kustutamiskeelu, mitte muude objektide kaitset.
+
+Käesolev checkpoint on allikavaatlus ja tööplaan assistendi taastatud
+lähtekoopias; uut runtime-parandust, pilvetoimingut ega Maci/GitHubi muudatust
+pole tehtud. Täpne audit, järgmine järjekord ja tõendi piir on
+`docs/continuity/LISTINGS_DESIGN_NEWS_20261101.md`; jooksev seis on
+`docs/continuity/CURRENT_STATE.json`. Allpool on ajaloolised kirjed.
+
+---
+
 <!-- SELQIRO_PHONE_PHOTO_20261031 -->
 ## 31.10.2026 — Telefoni foto avamise ühilduvus
 

@@ -5,12 +5,12 @@ import {useManagedListing} from "../model/useManagedListing";
 import {ListingEditSession, type ListingEditSessionState} from "../model/listingEditSession";
 import {listingEditApi} from "../../../entities/listing/api/listingEditClient";
 import type {PublicationActor} from "../../../entities/listing/model/publicationJourney";
-import {ACTIVE_IDENTITY_CHANGED_EVENT} from "../../v2-shell/model/useV2IdentitySwitcher";
+import {ACTIVE_IDENTITY_CHANGED_EVENT, ACTIVE_IDENTITY_CHANGING_EVENT} from "../../v2-shell/model/identityEvents";
 import {supabaseBrowserClient} from "../../../shared/supabase/browserClient";
 import {selectListingPriceKind} from "../model/listingPriceDraft";
 import type {ListingPriceKind} from "../../../entities/listing/model/listingPriceInput";
 import {LISTING_CURRENCIES} from "../../../shared/currency/listingCurrencies.generated";
-import ManagedOwnerImage from "./ManagedOwnerImage";
+import ManagedListingImagePicker from "./ManagedListingImagePicker";
 
 function BoundEditor({actor, listingId, blocked}: {actor: PublicationActor; listingId: string; blocked: boolean}) {
   const [session, setSession] = useState<ListingEditSession | null>(null);
@@ -23,7 +23,9 @@ function BoundEditor({actor, listingId, blocked}: {actor: PublicationActor; list
     const drop = () => session.setContext(null);
     const auth = supabaseBrowserClient.auth.onAuthStateChange((_event, next) => { if (next?.user.id !== actor.userId) drop(); }).data.subscription;
     window.addEventListener(ACTIVE_IDENTITY_CHANGED_EVENT, drop);
-    return () => { unsubscribe(); drop(); auth.unsubscribe(); window.removeEventListener(ACTIVE_IDENTITY_CHANGED_EVENT, drop); session.dispose(); };
+    window.addEventListener(ACTIVE_IDENTITY_CHANGING_EVENT, drop);
+    return () => { unsubscribe(); drop(); auth.unsubscribe(); window.removeEventListener(ACTIVE_IDENTITY_CHANGED_EVENT, drop);
+      window.removeEventListener(ACTIVE_IDENTITY_CHANGING_EVENT, drop); session.dispose(); };
   }, [listingId, actor]);
   if (!state || !session) return <p role="status">Laadin kuulutuse andmeid…</p>;
   const draft = state.draft, price = draft?.price;
@@ -68,11 +70,22 @@ function BoundEditor({actor, listingId, blocked}: {actor: PublicationActor; list
     </div> : null}
   </section>;
 }
+function ListingDeleteSection({blocked, onRemove}: {blocked: boolean; onRemove: () => void}) {
+  const [confirm, setConfirm] = useState(false);
+  return <section className="space-y-3 rounded-[30px] border bg-white p-6"><h2 className="text-xl font-black">Eemalda kuulutus</h2>
+    <p>Kuulutuse sisu eemaldatakse ja pildifailid suunatakse koristamisele. Failide lõplik kustutamine kinnitatakse eraldi. Vestlustes säilib sinu kirjutatud tekst.</p>
+    <button type="button" disabled={blocked} onClick={() => setConfirm(true)} className="rounded-full border border-red-200 px-5 py-3 font-bold text-red-800">Kustuta kuulutus</button>
+    {confirm ? <div role="alertdialog" aria-label="Kinnita kuulutuse kustutamine" className="space-y-3 rounded-xl border p-4">
+      <p>Kas kustutad selle kuulutuse lõplikult?</p>
+      <button type="button" disabled={blocked} onClick={() => { if (!blocked) { setConfirm(false); onRemove(); } }} className="mr-5 font-bold underline">Jah, kustuta lõplikult</button>
+      <button type="button" onClick={() => setConfirm(false)}>Jäta alles</button>
+    </div> : null}
+  </section>;
+}
 export default function IntegratedListingEditPage({listingId}: {listingId: string}) {
-  const owner = useManagedListing(listingId), [confirm, setConfirm] = useState<string | null>(null);
+  const owner = useManagedListing(listingId);
   const confirmationScope = owner.actor && owner.receipt ? [owner.actor.userId, owner.actor.identityId,
     listingId, owner.receipt.attempt_id, owner.receipt.request_key].join(":") : null;
-  useEffect(() => { setConfirm(null); }, [confirmationScope]);
   const blocked = owner.loading || owner.busy || owner.error !== null;
   if (owner.loading && !owner.actor) return <p role="status">Kontrollin kuulutuse haldusõigust…</p>;
   return <div className="space-y-6">
@@ -81,32 +94,23 @@ export default function IntegratedListingEditPage({listingId}: {listingId: strin
     {owner.loading ? <p role="status">Kontrollin kuulutuse seisu. Sinu sisestus on alles.</p> : null}
     {owner.receipt?.state === "published" && owner.actor ? <>
       <BoundEditor key={`${owner.actor.userId}:${owner.actor.identityId}:${listingId}`} actor={owner.actor} listingId={listingId} blocked={blocked} />
-      <section className="space-y-4 rounded-[30px] border bg-white p-6"><h2 className="text-2xl font-black">Avaldatud pildid</h2>
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">{owner.images.map(source => <ManagedOwnerImage key={source} source={source} actor={owner.actor!} className="aspect-[4/3] w-full rounded-xl object-contain" />)}</div>
-        <p className="text-sm text-neutral-600">Selle kuulutuse pilte praegu muuta ei saa.</p>
-      </section>
+      <ManagedListingImagePicker actor={owner.actor} gallery={owner.gallery} fallbackImages={owner.images}
+        blocked={blocked} error={owner.imageError} message={owner.imageMessage} busyOrdinal={owner.primaryBusyOrdinal}
+        onSelect={ordinal => { void owner.setPrimary(ordinal); }} onRefresh={owner.refresh} />
       {owner.receipt.files_remaining > 0 ? <section className="space-y-3 rounded-[30px] border bg-white p-6" aria-label="Algfailide koristamine">
         <h2 className="text-xl font-black">Algfailide koristamine</h2>
         <p>Avaldatud veebipildid jäävad kuulutusse. Üleslaaditud algfailide lõppkoristust ootab {owner.receipt.files_remaining} faili.</p>
         {owner.cleanupState === "needs_attention" ? <p role="status">Algfailide koristamine vajab täiendavat kontrolli. Töö seis on salvestatud.</p> : null}
         <button type="button" disabled={blocked} onClick={() => { void owner.cleanup(); }}
-          className="rounded-full border px-5 py-3 font-bold disabled:opacity-50">{owner.busy ? "Kontrollin algfailide koristamist…" : "Jätka algfailide koristamist"}</button>
+          className="rounded-full border px-5 py-3 font-bold disabled:opacity-50">{owner.busy ? "Kontrollin…" : "Kontrolli koristamise seisu"}</button>
       </section> : null}
-      <section className="space-y-3 rounded-[30px] border bg-white p-6"><h2 className="text-xl font-black">Eemalda kuulutus</h2>
-        <p>Kuulutuse eemaldamisel kustutatakse selle sisu ja hallatavad pildifailid. Vestlustes säilib sinu kirjutatud tekst.</p>
-        <button type="button" disabled={blocked} onClick={() => setConfirm(confirmationScope)} className="rounded-full border border-red-200 px-5 py-3 font-bold text-red-800">Kustuta kuulutus</button>
-        {confirm !== null && confirm === confirmationScope ? <div role="alertdialog" aria-label="Kinnita kuulutuse kustutamine" className="space-y-3 rounded-xl border p-4">
-          <p>Kas kustutad selle kuulutuse lõplikult?</p>
-          <button type="button" disabled={blocked} onClick={() => { if (!blocked && confirm === confirmationScope) { setConfirm(null); void owner.remove(); } }} className="mr-5 font-bold underline">Jah, kustuta lõplikult</button>
-          <button type="button" onClick={() => setConfirm(null)}>Jäta alles</button>
-        </div> : null}
-      </section>
+      <ListingDeleteSection key={confirmationScope} blocked={blocked} onRemove={() => { void owner.remove(); }} />
     </> : owner.receipt ? <section className="space-y-3 rounded-[30px] border bg-white p-6" role="status">
       <h1 className="text-2xl font-black">{owner.receipt.state === "deleted" ? "Kuulutus ja pildid on kustutatud" : "Kuulutuse sisu on eemaldatud"}</h1>
       {owner.receipt.state === "deleting" ? <p>Piltide lõppkoristus on pooleli. Kontrollimist või koristamist vajab {owner.receipt.files_remaining} faili.</p> : null}
       {owner.receipt.state === "deleting" && owner.cleanupState === "needs_attention" ? <p>Piltide koristamine vajab täiendavat kontrolli. Failide lõplik kustutamine ei ole veel kinnitatud; töö seis on salvestatud.</p> : null}
       {owner.receipt.state === "deleting" ? <button type="button" disabled={blocked} onClick={() => { void owner.cleanup(); }}
-        className="rounded-full border px-5 py-3 font-bold disabled:opacity-50">{owner.busy ? "Koristan pilte…" : "Jätka piltide koristamist"}</button> : null}
+        className="rounded-full border px-5 py-3 font-bold disabled:opacity-50">{owner.busy ? "Kontrollin…" : "Kontrolli koristamise seisu"}</button> : null}
     </section> : <p>Selle aktiivse identiteedi hallatavat avaldamist ei leitud.</p>}
     <button type="button" disabled={owner.busy} onClick={owner.refresh} className="rounded-full border px-5 py-3 font-bold">Kontrolli seisu</button>
   </div>;

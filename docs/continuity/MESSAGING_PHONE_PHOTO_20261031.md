@@ -1,3 +1,12 @@
+<!-- SELQIRO_PHONE_PHOTO_ACCEPTED_20261101 -->
+> **Hilisem vastuvõtt, kirja pandud 01.11.2026:** kasutaja kinnitas 31.10, et
+> fotode lisamine arvutis ja telefonis toimib; pildil on ka Viofo foto vestluses.
+> Terminal kinnitab paranduse VALMIS ning commit'i
+> `b0a04fccbf354f0480a4b6eb8dd176b3c55383a8`. Allolev paigalduskäsk ja ootel
+> sõnastus on paketi ettevalmistamise ajalugu, mitte uus töö. Sama paigaldust
+> ei korrata. Praegune tööjärg on `CURRENT_STATE.json` ja
+> `LISTINGS_DESIGN_NEWS_20261101.md`.
+
 # Telefoni sõnumifoto avamise ühilduvus — 31.10.2026
 
 ## Vastu võetud ja praegune ülesanne

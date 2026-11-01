@@ -53,7 +53,7 @@ export default function ListingSearchPage() {
     <V2DiscoveryTypeSwitcher active="products" />
     <div><h1 className="text-3xl font-black sm:text-4xl">Kuulutused</h1>
       <p className="mt-2 text-sm text-neutral-600">Leia märksõnade järgi ja täpsusta vajadusel filtritega.</p></div>
-    <div className="sticky z-30 -mx-1 rounded-2xl border border-neutral-200 bg-white p-2 shadow-sm" style={{top: headerHeight + 8}}>
+    <div className="sticky z-30 -mx-1 rounded-2xl border border-amber-200 bg-white p-2 shadow-sm" style={{top: headerHeight + 8}}>
       <form role="search" className="flex min-w-0 items-center gap-2" onSubmit={e => e.preventDefault()}>
         <label className="min-w-0 flex-1"><span className="sr-only">Otsi kuulutusi</span>
           <input type="search" value={url.input.query} maxLength={160} placeholder="Otsi kuulutusi…" aria-describedby="public-search-help"
@@ -61,7 +61,7 @@ export default function ListingSearchPage() {
             onChange={e => change({query: e.target.value})} />
         </label>
         <button type="button" aria-haspopup="dialog" aria-expanded={open} onClick={() => setOpen(true)}
-          className="min-h-11 shrink-0 rounded-full border border-neutral-300 px-4 py-2 text-sm font-bold">Filtrid{count ? ` (${count})` : ""}</button>
+          className="min-h-11 shrink-0 rounded-full border border-amber-300 bg-white px-4 py-2 text-sm font-bold text-amber-900">Filtrid{count ? ` (${count})` : ""}</button>
       </form>
     </div>
     <p id="public-search-help" className="text-sm leading-6 text-neutral-600">Sisesta nimi, mark, mudel või oluline omadus, näiteks „Audi A4 automaat”. Kõik sisestatud sõnad peavad kuulutuse otsitavas tekstis leiduma.</p>
@@ -74,7 +74,7 @@ export default function ListingSearchPage() {
         aria-label="Eemalda asukohafilter" onClick={() => change({location: ""})}>{url.input.location} ×</button> : null}
       <span className="ml-auto text-neutral-500">Uuemad ees</span>
     </div>
-    <section ref={resultRef} style={{scrollMarginTop: headerHeight + 88}}>
+    <section ref={resultRef} className="relative min-w-0 overflow-hidden rounded-[30px] border border-amber-200 bg-amber-50 p-3 pt-5 shadow-sm before:pointer-events-none before:absolute before:inset-x-0 before:top-0 before:h-1.5 before:bg-amber-500 before:content-[''] sm:p-6" style={{scrollMarginTop: headerHeight + 88}}>
       <SearchResults page={url.error ? null : data.page} loading={loading && !url.error} error={url.error || data.error}
         offset={url.input.offset} onRetry={data.retry}
         onReset={() => {moveToResults.current = true; url.replace({...EMPTY_PUBLIC_SEARCH});}}

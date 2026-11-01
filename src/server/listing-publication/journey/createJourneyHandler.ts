@@ -12,6 +12,8 @@ const ownerActions = {
   "owner-set-status": {name: "set_my_managed_listing_status_v2", keys: ["p_listing_id", "p_expected_identity_id", "p_expected_user_id", "p_expected_status", "p_status"]},
   "owner-renew": {name: "renew_my_managed_listing_activity_v2", keys: ["p_listing_id", "p_expected_identity_id", "p_expected_user_id", "p_expected_active_until"]},
   "owner-cleanup-status": {name: "get_my_listing_cleanup_summary_v1", keys: ["p_expected_identity_id", "p_expected_user_id"]},
+  "owner-images-read": {name: "get_my_managed_listing_images_v1", keys: ["p_expected_user_id", "p_expected_identity_id", "p_listing_id", "p_attempt_id"]},
+  "owner-images-primary": {name: "set_my_managed_listing_primary_image_v1", keys: ["p_expected_user_id", "p_expected_identity_id", "p_listing_id", "p_attempt_id", "p_expected_revision", "p_ordinal"]},
 } as const;
 const actions = new Set(["prepare", "status", "cancel", "image-prepare", "image-verify", "publish", "remove", "cleanup", "owner-status", ...Object.keys(ownerActions)]);
 const response = (value: unknown, status = 200) => Response.json(value, {status,
@@ -39,21 +41,30 @@ function actorArgs(v: Record<string, unknown>, last: "requestKey" | "listingId")
 function ownerContract(action: keyof typeof ownerActions, input: Record<string, unknown>) {
   const definition = ownerActions[action], keys: string[] = [...definition.keys];
   if (action === "owner-edit-save" && Object.hasOwn(input, "p_price_change")) keys.push("p_price_change", "p_expected_price_revision");
-  uploadRecord(input, keys);
+  try { uploadRecord(input, keys); } catch { throw new Error("input"); }
   if (!isUploadUuid(input.p_expected_identity_id)
     || !isUploadUuid(input[action.startsWith("owner-edit-") ? "p_expected_actor_id" : "p_expected_user_id"])
     || action !== "owner-cleanup-status" && !isId(input.p_listing_id)) throw new Error("input");
+  if (action.startsWith("owner-images-") && ![input.p_expected_user_id, input.p_expected_identity_id, input.p_attempt_id]
+    .every(value => typeof value === "string" && value.length === 36 && isUploadUuid(value))) throw new Error("input");
+  if (action === "owner-images-primary") {
+    const revision = input.p_expected_revision;
+    if (typeof revision !== "string" || revision.length > 19 || /^(0|[1-9][0-9]*)$/.exec(revision)?.[0] !== revision
+      || BigInt(revision) > BigInt("9223372036854775807") || !Number.isInteger(input.p_ordinal)
+      || Number(input.p_ordinal) < 0 || Number(input.p_ordinal) > 9) throw new Error("input");
+  }
   return {name: definition.name, args: input};
 }
 function ownerContractError(value: unknown): {code: string; message: string} | null {
   if (!value || typeof value !== "object" || Array.isArray(value)) return null;
   const r = value as Record<string, unknown>;
   // Preserve only known CAS/authorization classes, never raw server details.
-  if (r.code === "40001" && ["listing_basics_conflict", "listing_price_conflict", "listing_activity_conflict", "listing_status_conflict"].includes(String(r.message)))
+  if (r.code === "40001" && ["listing_basics_conflict", "listing_price_conflict", "listing_activity_conflict", "listing_status_conflict", "listing_images_conflict"].includes(String(r.message)))
     return {code: "40001", message: String(r.message)};
   if (r.code === "42501") return {code: "42501", message: "listing_activity_identity_required"};
   if (r.code === "22023" || r.code === "22P05") return {code: "22023", message: "listing_activity_deadline_invalid"};
-  if (r.code === "55000" && r.message === "listing_activity_active_status_required") return {code: "55000", message: r.message};
+  if (r.code === "55000" && ["listing_activity_active_status_required", "listing_images_unavailable"].includes(String(r.message)))
+    return {code: "55000", message: String(r.message)};
   if (r.code === "PGRST202" || r.code === "42883") return {code: "PGRST202", message: "owner_contract_unavailable"};
   return null;
 }

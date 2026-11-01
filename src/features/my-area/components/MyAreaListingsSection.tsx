@@ -14,7 +14,7 @@ import PublicationCleanupStatus from "./PublicationCleanupStatus";
 
 const LISTING_PREVIEW_LIMIT = 5;
 const ALL_CATEGORIES = "all";
-const control = "min-h-11 min-w-0 rounded-full border border-neutral-200 bg-white px-4 text-sm font-semibold outline-none focus:ring-2 focus:ring-neutral-400 disabled:opacity-50";
+const control = "min-h-11 min-w-0 rounded-full border border-neutral-200 bg-white px-4 text-sm font-semibold outline-none focus:ring-2 focus:ring-amber-500 disabled:opacity-50";
 
 export default function MyAreaListingsSection() {
   const listingManagementLimit = v2IntegrationEnabled() ? 100 : 500;
@@ -53,17 +53,17 @@ export default function MyAreaListingsSection() {
   function clearFilters() {
     setSearchInput(""); setDebouncedSearch(""); setStatusFilter("all"); setSelectedCategoryId(ALL_CATEGORIES); setShowAll(false);
   }
-  return <section className="min-w-0 overflow-hidden rounded-[30px] border border-black/5 bg-white p-4 shadow-sm sm:p-6">
+  return <section className="relative min-w-0 overflow-hidden rounded-[30px] border border-amber-200 bg-amber-50 p-4 shadow-sm before:pointer-events-none before:absolute before:inset-x-0 before:top-0 before:h-1.5 before:bg-amber-500 before:content-[''] sm:p-6">
     <div className="mb-5 flex flex-col items-start gap-3 sm:flex-row sm:items-end sm:justify-between">
-      <div><p className="text-xs font-bold uppercase tracking-[0.24em] text-neutral-400">Kuulutused</p>
+      <div><p className="inline-flex rounded-full border border-amber-200 bg-amber-100 px-3 py-1.5 text-xs font-bold uppercase tracking-[0.18em] text-amber-800">Kuulutused</p>
         <h2 className="mt-2 text-2xl font-black">Sinu kuulutused</h2>
         {v2IntegrationEnabled() ? <Link href="/v2/messages" className="mt-2 inline-block text-sm font-bold underline">Ava vestlused</Link> : null}</div>
       {listings.length > LISTING_PREVIEW_LIMIT ? <button type="button" disabled={busy} onClick={() => setShowAll(v => !v)}
-        className="min-h-11 w-full rounded-full border border-neutral-200 px-4 py-2 text-sm font-bold sm:w-auto">
+        className="min-h-11 w-full rounded-full border border-amber-200 bg-white px-4 py-2 text-sm font-bold text-amber-900 sm:w-auto">
         {showAll ? "Näita vähem" : capped ? `Näita laaditud (${listings.length})` : `Vaata kõiki (${listings.length})`}
       </button> : null}
     </div>
-    <div className="mb-5 rounded-3xl border border-neutral-100 bg-neutral-50 p-4">
+    <div className="mb-5 rounded-3xl border border-amber-200 bg-white p-4">
       <div className="grid min-w-0 gap-3 md:grid-cols-[minmax(0,1fr)_220px_auto]">
         <input aria-label="Otsi oma kuulutusi" value={searchInput} disabled={busy}
           onChange={e => setSearchInput(e.target.value)} placeholder="Otsi oma kuulutusi…" className={control} />
@@ -103,10 +103,10 @@ export default function MyAreaListingsSection() {
       <span>Kuulutus</span><span className="text-right">Hind / eelarve</span><span className="text-center">Tegevused</span>
     </div>
     {loading ? <p role="status" className="p-5 text-sm text-neutral-600">Laen sinu kuulutusi…</p> : null}
-    {!loading && !error && !state.problem && listings.length === 0 ? <div className="rounded-3xl border border-dashed border-neutral-200 p-6 text-center">
+    {!loading && !error && !state.problem && listings.length === 0 ? <div className="rounded-3xl border border-dashed border-amber-200 bg-white p-6 text-center">
       <h3 className="font-bold">Ühtegi kuulutust ei leitud</h3><p className="mt-2 text-sm text-neutral-600">Muuda otsingut, staatust või rubriiki.</p>
     </div> : null}
-    {!loading && !error ? <div className="divide-y divide-black/5">
+    {!loading && !error ? <div className="divide-y divide-black/5 rounded-2xl bg-white">
       {visible.map(listing => listing.contentType === "horse_offer"
         ? <MyAreaHorseOfferRow key={listing.key} item={listing} />
         : <MyAreaListingRow key={listing.key} listing={listing} now={now} busy={state.busyKey === listing.key}
