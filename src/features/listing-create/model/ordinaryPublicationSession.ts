@@ -28,6 +28,7 @@ export class OrdinaryPublicationSession {
   private abort = new AbortController();
   private operation: Promise<void> | null = null;
   private remoteIntent = false;
+  private terminalRequestKey: string | null = null;
   private files = new Map<string, Blob>();
   private listener: (view: PublicationView) => void = () => {};
   private readonly deps: PublicationSessionDeps;
@@ -99,9 +100,10 @@ export class OrdinaryPublicationSession {
     const value = await this.deps.request("status", this.args(j), this.abort.signal); this.checkGeneration(g);
     const result = publicationJourney(value, this.deps.actor, j.requestKey);
     this.change({snapshot: result.snapshot, receipt: result.receipt});
-    if (result.receipt) { this.change({phase: result.receipt.state === "published" ? "published" : "closed",
+    if (result.receipt) { this.terminalRequestKey = j.requestKey; this.change({phase: result.receipt.state === "published" ? "published" : "closed",
       message: result.receipt.state === "published" ? "Kuulutus on avaldatud." : "Kuulutuse sisu on eemaldatud."}); return null; }
     if (result.intentClosed || result.snapshot && result.snapshot.state !== "open") {
+      this.terminalRequestKey = j.requestKey;
       this.change({phase: "closed", message: "Avaldamiskatse on suletud. Piltide koristamise tulemus jääb serveris alles."}); return null;
     }
     if (!result.snapshot) throw new Error("outcome_unknown"); return result.snapshot;
@@ -111,7 +113,7 @@ export class OrdinaryPublicationSession {
     return this.run(async g => { const snapshot = await this.status(g, this.journal());
       if (snapshot) this.change({phase: "resume", message: "Leidsin poolelioleva avaldamise. Jätkamisel kasutatakse all näidatud salvestatud andmeid."}); });
   }
-  start(listing: ListingCreationInput, selected: readonly Blob[]): Promise<void> {
+  start(listing: ListingCreationInput, selected: readonly Blob[], onIntentCreated?: (requestKey: string) => void): Promise<void> {
     if (this.operation) return this.operation;
     // Capture at the user action boundary, before even the cross-tab lock awaits.
     // A caller may replace or mutate its form state while another tab holds it.
@@ -133,6 +135,7 @@ export class OrdinaryPublicationSession {
       const bound = bindPrepareListingPublicationCommand({...this.args(j), listing: capturedListing, images});
       this.deps.writeJournal(j); // Persist BEFORE first prepare; no content, filenames or capability URLs.
       this.remoteIntent = true;
+      onIntentCreated?.(j.requestKey);
       const value = await this.deps.request("prepare", {...this.args(j), listing: bound.p_input, images: bound.p_images}, this.abort.signal);
       this.checkGeneration(g);
       const s = publicationSnapshot(value, this.deps.actor, j.requestKey); this.change({snapshot: s});
@@ -192,6 +195,7 @@ export class OrdinaryPublicationSession {
     const result = await this.deps.request("publish", {...this.args(journal), attemptId: s.attempt_id, expectedPrice: s.payload.price}, this.abort.signal);
     this.checkGeneration(g);
     const r = receipt(result, {identityId: this.deps.actor.identityId, userId: this.deps.actor.userId, attemptId: s.attempt_id, requestKey: journal.requestKey}, Object.hasOwn(uploadRecord(result), "replayed"));
+    this.terminalRequestKey = journal.requestKey;
     this.change({receipt: r, phase: r.state === "published" ? "published" : "closed", message: r.state === "published" ? "Kuulutus on avaldatud." : "Kuulutuse sisu on eemaldatud."});
   }
   cancel(): Promise<void> {
@@ -200,12 +204,41 @@ export class OrdinaryPublicationSession {
       const value = await this.deps.request("cancel", this.args(j), this.abort.signal); this.checkGeneration(g);
       const result = publicationJourney(value, this.deps.actor, j.requestKey);
       if (!result.intentClosed) throw new Error("outcome_unknown");
+      this.terminalRequestKey = j.requestKey;
       this.change({phase: "closed", snapshot: result.snapshot, receipt: result.receipt,
         message: "Avaldamiskatse on suletud. Piltide lõppkoristus jätkub eraldi kontrolliga."});
     });
   }
-  reset() {
-    if (this.operation || !["published", "closed"].includes(this.view.phase)) return;
-    this.deps.clearJournal(); this.files.clear(); this.remoteIntent = false; this.change(initial());
+  async reset(onReset?: (requestKey: string) => void): Promise<string | null> {
+    if (this.operation || this.abort.signal.aborted || !this.terminalRequestKey
+      || !["published", "closed"].includes(this.view.phase)) return null;
+    const expected = this.terminalRequestKey, generation = this.generation;
+    let cleared: string | null = null;
+    // The same actor lock used by start/resume makes compare-and-clear atomic
+    // across tabs. A newer journal belongs to a different attempt and is retained.
+    const work = this.deps.withLock(async () => {
+      this.checkGeneration(generation);
+      const latest = this.deps.readJournal();
+      if (latest) {
+        const journal = this.journal();
+        if (journal.requestKey !== expected) {
+          const snapshot = await this.status(generation, journal);
+          if (snapshot) this.change({phase: "resume", message: "Selle identiteedi teine avaldamine on pooleli. Jätka sama katsega."});
+          return;
+        }
+        this.deps.clearJournal();
+      }
+      this.checkGeneration(generation);
+      this.files.clear(); this.remoteIntent = false; this.terminalRequestKey = null;
+      // Settle the exact cached draft in the same synchronous step as journal
+      // removal, before editing reopens. A focus recheck cannot drop this notice.
+      cleared = expected; onReset?.(expected); this.change(initial());
+    }).catch(() => {
+      if (generation === this.generation && !this.abort.signal.aborted)
+        this.change({message: "Uut kuulutust ei saanud veel alustada. Eelmise katse taastamise andmed ja sisestus jäävad alles; proovi uuesti."});
+    });
+    this.operation = work.finally(() => { this.operation = null; });
+    await this.operation;
+    return generation === this.generation && !this.abort.signal.aborted ? cleared : null;
   }
 }

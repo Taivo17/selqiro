@@ -29,7 +29,9 @@ export class HorseDraftSession {
   private closed = false;
   private epoch = 0;
   private boundIdentityId: string | null = null;
-  constructor(readonly userId: string, private readonly api: HorseDraftSessionApi) {}
+  constructor(readonly userId: string, private readonly api: HorseDraftSessionApi, identityId: string | null = null) {
+    this.boundIdentityId = identityId;
+  }
   getSnapshot = () => this.state;
   subscribe = (listener: () => void) => {
     this.listeners.add(listener);
@@ -41,6 +43,10 @@ export class HorseDraftSession {
   }
   activate() { this.active = true; }
   deactivate() { this.active = false; this.epoch += 1; }
+  suspend() {
+    this.epoch += 1;
+    this.set({ context: "checking" });
+  }
   authChanged(userId: string | null) {
     if (userId === this.userId) return; // Token refresh is not a new form.
     this.closed = true;

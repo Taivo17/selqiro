@@ -1,3 +1,54 @@
+<!-- SELQIRO_IDENTITY_ORDER_R3_OBSERVED_BASE_20261103 -->
+# Kehtiv jätk — r3, 03.11.2026
+
+Täielik koondvõrdlus 14:50:55 kinnitas puhta main-haru, HEAD-i 04d7081ce51c6da106f726b21dfbfc21e4576f2e ja kõik 950 jälgitavat faili. Senine 22 faili parandus sobib selle baasiga. Allpool olevad r2/r1 käsud on ajalugu; neid ei korrata.
+
+Ava `selqiro-pohipilt-identiteet-20261103-r3.zip` Downloads-kausta ja käivita:
+
+```bash
+python3 -I -B "$HOME/Downloads/selqiro-pohipilt-identiteet-20261103-r3/uuenda.py" --publish
+```
+
+Uus manifest põhineb tegelikul koondraportil; puuduvad ajaloolised failid jäävad puuduma ja olemasolev diagnostikadokument säilib. Paigaldaja kontrollib enne kirjutusi uuesti tegelikku ~/selqiro haru/HEAD-i, kogu indexit/tööpuud, kõiki 950 vana faili või kavandatud puudumist ning kinnitatud remote-main’i. Seejärel varukoopiad, vajalik Maci build ning täpne commit/push. Uue manifesti päevik on eraldi. SQL-i või teenuseseadistust ei korrata.
+
+VALMIS järel kontrolli uue commit’i Verceli Ready ning põhipildi esimeseks liikumist ja Taivo Garaaži / Milline Vedu vormi. PEATATUD korral saada r3 result.json; säilita kõik töö ja päevikud. Täpne autoriteetne seis on CURRENT_STATE.json.
+
+## Varasemad r2/r1 juhised — säilitatud ajalugu
+
+<!-- SELQIRO_IDENTITY_ORDER_R2_20261103 -->
+# Kehtiv jätk — r2, 03.11.2026
+
+R1 peatus puudunud ajaloolise postkasti auditidokumendi kontrollis enne projektikirjutusi. Raporti HEAD oli `04d7081ce51c6da106f726b21dfbfc21e4576f2e`. Uus r2 korrigeerib ainult dokumendibaasi eeldust ja jätkudokumente; rakenduskood jääb samaks. Allpool olev r1 käsk on ajalugu.
+
+Ava `selqiro-pohipilt-identiteet-20261103-r2.zip` Downloads-kausta ja käivita:
+
+```bash
+python3 -I -B "$HOME/Downloads/selqiro-pohipilt-identiteet-20261103-r2/uuenda.py" --publish
+```
+
+Paigaldaja siht on olemasolev `~/selqiro`. Enne kirjutusi kontrollitakse tegelikku haru, HEAD-i, kogu indexit/tööpuud, kõiki seotud rakendusallikaid ning kinnitatud remote-main'i. Seejärel varukoopiad, vajalik Maci build, täpne commit/push. Uue manifesti päevik on eraldi; vana r1 tulemus jääb alles. Andmebaasi ega Storage'i seadistamist ei korrata.
+
+VALMIS järel kontrolli sama commit'i Verceli Ready ning põhipildi järjekorda ja Taivo Garaaži / Milline Vedu vormi. PEATATUD järel saada uue käigu result.json; ära muuda ega kustuta päevikuid. Täpne autoriteetne seis on CURRENT_STATE.json.
+
+## Varasem r1 juhis — säilitatud ajalugu
+
+<!-- SELQIRO_LISTING_IDENTITY_ORDER_20261103 -->
+# Praegune jätk — 03.11.2026
+
+Kehtiv seis on `CURRENT_STATE.json` ja sellest genereeritud `docs/99_V2_HANDOFF_NEXT_CHAT.md`. 02.11 põhipildi valimine on kasutaja poolt vastu võetud. Varasemad allpool olevad seadistamis- ja paigaldamiskäsud on ajalugu.
+
+Uus ainult kliendi parandus: `selqiro-pohipilt-identiteet-20261103.zip`. Ava see Maci Downloads-kausta ja käivita üks kord:
+
+```bash
+python3 -I -B "$HOME/Downloads/selqiro-pohipilt-identiteet-20261103/uuenda.py" --publish
+```
+
+Paigaldaja kontrollib olemasolevat `~/selqiro` hoidlat, kogu indexit, tegelikku HEAD-i, lähtefaile ja kinnitatud remote-main'i. Ta säilitab originaalfailid, teeb ühe vajaliku buildi ning --publish korral ühe täpse commit/push'i. Supabase'i, Storage'i ega Verceli seadeid uuesti ei seadistata.
+
+VALMIS järel kontrolli sama commit'i Ready ning põhipildi järjekorda ja Taivo Garaaži / Milline Vedu lisamisvormi. PEATATUD järel saada näidatud result.json ja täpne rida; ära korda teadmata tulemusega käiku ega kustuta päevikuid.
+
+## Varasemad kuupäevastatud juhised
+
 # Olemasoleva Selqiro portaali jätkamine
 
 ## 30.10.2026 — sõnumiuuenduse tegeliku eelkontrolli jätk

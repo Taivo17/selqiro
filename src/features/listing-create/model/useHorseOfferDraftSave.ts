@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState, useSyncExternalStore } from "react";
+import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { supabaseBrowserClient } from "../../../shared/supabase/browserClient";
 import { saveMyHorseOfferDraft } from "../../../entities/horse-offer/api/saveMyHorseOfferDraft";
 import { updateMyHorseOfferDraft } from "../../../entities/horse-offer/api/updateMyHorseOfferDraft";
@@ -12,17 +12,23 @@ import { HorseOfferDraftPayloadError, buildHorseOfferDraftSaveInput, type HorseO
 
 export type HorseOfferDraftSaveSnapshot = Omit<HorseOfferDraftFormSnapshot, "offerId">;
 export type HorseOfferDraftSavePhase = "idle" | "saving" | "saved" | "error" | "blocked";
-export function useHorseOfferDraftSave(userId: string, snapshot: HorseOfferDraftSaveSnapshot | null) {
-  const [session] = useState(() => new HorseDraftSession(userId, {
+type Context = { session: HorseDraftSession; ready: boolean; canAct: () => boolean };
+export function useHorseOfferDraftSave(userId: string, snapshot: HorseOfferDraftSaveSnapshot | null, context?: Context) {
+  const [ownSession] = useState(() => new HorseDraftSession(userId, {
     actor: getHorseDraftActor, create: saveMyHorseOfferDraft, update: updateMyHorseOfferDraft,
   }));
+  const session = context?.session ?? ownSession;
+  const contextRef = useRef(context); contextRef.current = context;
   const state = useSyncExternalStore(session.subscribe, session.getSnapshot, session.getSnapshot);
   const [payloadError, setPayloadError] = useState<string | null>(null);
   useEffect(() => {
     session.activate();
-    const refresh = () => { void session.refreshContext(); };
-    window.addEventListener(ACTIVE_IDENTITY_CHANGED_EVENT, refresh);
-    window.addEventListener("focus", refresh);
+    const refresh = () => {
+      if (!contextRef.current || contextRef.current.canAct()) void session.refreshContext();
+      else session.suspend();
+    };
+    if (!contextRef.current) window.addEventListener(ACTIVE_IDENTITY_CHANGED_EVENT, refresh);
+    if (!contextRef.current) window.addEventListener("focus", refresh);
     const { data: { subscription } } = supabaseBrowserClient.auth.onAuthStateChange((_event, nextSession) => {
       // Synchronous only: no Supabase calls while the auth callback owns its lock.
       session.authChanged(nextSession?.user.id ?? null);
@@ -35,17 +41,21 @@ export function useHorseOfferDraftSave(userId: string, snapshot: HorseOfferDraft
       subscription.unsubscribe();
     };
   }, [session]);
+  useEffect(() => {
+    if (context?.ready) void session.refreshContext();
+    else if (context) session.suspend();
+  }, [context?.ready, session]);
   let dirty = state.baseline !== null;
   if (snapshot && state.baseline) {
     try { dirty = Object.keys(buildHorseDraftChanges(state.baseline, buildHorseOfferDraftSaveInput(snapshot))).length > 0; }
     catch { dirty = true; }
   }
   const phase: HorseOfferDraftSavePhase = state.busy ? "saving"
-    : state.stop || state.context !== "ready" ? "blocked"
+    : state.stop || state.context !== "ready" || (context && !context.ready) ? "blocked"
     : payloadError || state.message ? "error"
     : state.baseline && !dirty && snapshot ? "saved" : "idle";
   const save = useCallback(async () => {
-    if (!snapshot || !session.canSave()) return;
+    if (!snapshot || !session.canSave() || (contextRef.current && !contextRef.current.canAct())) return;
     setPayloadError(null);
     try { await session.save(buildHorseOfferDraftSaveInput(snapshot)); }
     catch (error) {
@@ -61,7 +71,7 @@ export function useHorseOfferDraftSave(userId: string, snapshot: HorseOfferDraft
     contextChecking: state.context === "checking",
     canRecheck: !state.busy && !state.stop && state.context === "blocked",
     errorMessage: state.message || payloadError,
-    recheck: () => { void session.refreshContext(); }, save,
+    recheck: () => { if (!contextRef.current || contextRef.current.canAct()) void session.refreshContext(); }, save,
   };
 }
 export type HorseOfferDraftSaveController = ReturnType<typeof useHorseOfferDraftSave>;

@@ -66,6 +66,6 @@ export default function ListingCreatePage() {
   if (loading) return <LoadingState />;
   if (error) return <AuthErrorState retry={retry} />;
   if (!user) return <LoginState />;
-  // Auth changes discard private form state. Identity changes for one user do not.
+  // Auth changes discard private form state. The open page keeps a separate draft for each identity.
   return <ListingCreateForm key={user.id} userId={user.id} />;
 }

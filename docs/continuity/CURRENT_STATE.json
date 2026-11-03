@@ -1,9 +1,42 @@
 {
+  "format": "selqiro_repo_handoff_v1",
+  "recorded_on": "2026-11-03",
   "archive": {
     "lines": 5573,
     "path": "docs/archive/99_V2_HANDOFF_NEXT_CHAT.before-price-core-20261004-6df0af9.md",
     "sha256": "667e47990a7d3cc20ff53709cb861663b4565cf1d3c830eda88e0d18e60fdb8a"
   },
+  "checkpoint": "03.11.2026 kell 14:50:55 Europe/Tallinn tehtud ainult lugev koondvõrdlus on üle vaadatud: puhas main, HEAD 04d7081ce51c6da106f726b21dfbfc21e4576f2e, täielik 950 faili HEAD/index/tööpuu ja muutumatud enne/pärast vaatlused. Kõik 22 paigaldatava faili vana baasi nõuet sobivad (14 olemasolevat + 8 uut). Puudu on 15 ainult assistendi arhiivis olnud ajaloolist faili; üks ajalooline diagnostikadokument erineb ja selle tegelikud baidid säilivad. Rakenduskoodis erinevust ei leitud. Eraldi r3 on koostatud täpselt mõõdetud lähtebaasilt. Rakenduskood, testid ja paigaldaja Python-kood jäävad varasema kontrollitud parandusega samaks; muutuvad manifest ja viis jätkudokumenti. R3 Maci rakendamine, build, uus commit/push ning selle deployment on veel tegemata.",
+  "source": {
+    "Üks töö": "Olemasoleva foto põhipildiks valimine on kasutaja poolt vastu võetud. Uus parandus tõstab selle foto muutmisvaates esimeseks ja eraldab lisamisvormi avatud lehe sisestuse konto ning aktiivse identiteedi järgi.",
+    "Identiteedi piir": "Üks kontrollitud tegutseja juhib vormi ja avaldamist. CHANGING, konto vahetus ning teise akna teade peatavad vana tegutseja käsud kohe. Kõva kontekstimuutus peidab vana vormi ka juba poolelioleva focus-kontrolli ajal. Sama identiteedi tavaline fookusekontroll säilitab foto sisendelemendi.",
+    "Mustandid": "Iga identiteet hoiab samal avatud lehel oma teksti, faile, tavavälju ja hobusevälju. Hobuse tegelik mustandiseanss säilib koos ID, versiooni ja liigulukuga; hiline loomise vastus jääb algsele identiteedile. Vahetus ei loo mustandist uut koopiat.",
+    "Järgmine kuulutus": "Lõpetatud avaldamise tulemus ja Lisa järgmine kuulutus on vormi alguses nähtavad. Nupp eemaldab ainult kinnitatud sama katse taastamisvõtme sama tegutseja lukus. Ainult sama saatmise sisestus tühjeneb; uuem tekst/fotovalik ja teised identiteedid säilivad.",
+    "Põhipilt": "Muutub ainult kuvamisjärjekord. Pildi algne ordinal, URL, serveri tõend ja põhipildi valimise RPC jäävad samaks. Avalik detail sortis põhipildi juba enne seda parandust esimeseks.",
+    "Tarne": "selqiro-pohipilt-identiteet-20261103-r3.zip sisaldab ainult senist 22 faili muudatust ning muutmata paigaldajat. selqiro-uleandmine-20261103-r3.zip source/ on rekonstrueeritud 950 tegeliku Giti faili baasil + 8 uut kavandatud faili, kokku 958. Varasemad 15 puudu olevat arhiivifaili on eraldi ajaloos ja neid ei looda ega kustutata Macis. Algne koondraport ja r1/r2 pakid säilivad muutmata.",
+    "Järgmine tervik": "Pärast selle paranduse tegelikku vastuvõttu lõpetada kuulutuse fotode lisamine/asendamine/eemaldamine, failide lõppkoristus ja mahu vabastamine; hobused ühises kuulutuste voos. Seejärel päris logod, Uudised ja ülejäänud V2. Energy/maksete tuumik jääb avaliku avamise eelseks.",
+    "R3 mõõdetud lähtebaas": "936 olemasolevat kõrvalfaili on seotud nende tegelike räsidega, sealhulgas kõik 65 päriselt olemasolevat varem informatiivseks jäetud ajaloodokumenti. Muudetavatel failidel on 14 täpset olemasolevat baasi ja 8 kinnitatud puudumist. HOSTED_PORTAL.md varasem valikuline puudumine eemaldati: selle olemasolev täpne räsi on nüüd tõendatud. CONTACT_DIAGNOSTICS_20261029.md jääb kasutaja tegelikul kujul alles. Paigaldaja vaatleb enne kirjutusi uuesti tegelikku main/HEAD-i, kogu indexit, tööpuud ja remote-main’i; HEAD-i ei oletata aruande kuupäeva põhjal. Vana b0a04f on jätkuvalt põlvnemisankur, mitte väide praeguse HEAD-i kohta."
+  },
+  "local_test": [
+    "Kasutaja koondraport: 175805 baiti, SHA-256 27846b7a8c5e6c836b6ea592bc7e6989a37d34f7cb851ba1304536aed09dd1c2; 6 arhiiviliiget, CRC ja kõik 5 manifestikirjet läbisid. Kõik 973 vaadeldud rada ja täielik 950 failiga Gitipuu/index on kooskõlas; lugemata või kopeerimata vajalikke faile pole.",
+    "Kõik 950 tegeliku baasfaili baidid on taastatavad: 949 algsest kontrollitud üleandmisest ja üks dokument uuest raportist. Iga SHA-256 ja Giti blob ID on kontrollitud. R3 kliendikood ja testid on r1/r2-ga identsed.",
+    "Varasemad rakenduse 119+4 Node-kontrolli, 13 brauserirühma / 20 konteksti ja lõplik exit 0 build säilivad oma algse tõendina. Neid ei korratud. R1 paigaldaja 20 katset, r2 11 katset ja lugeja 13 katset säilivad samuti varasemate kontrollidena.",
+    "R3 piiritletud uued kontrollid puudutavad ainult mõõdetud 950 faili baasiga manifesti ning täpse 22 faili muudatuse rakendamist. Tulemus ja toorlogi on üleandmispaki kontrollid/r3/verification.json ja selle kõrval; päris Maci build tuleb paigaldamisel."
+  ],
+  "production": [
+    "Kasutaja vastuvõtt säilib: päris pildiga kuulutuse avaldamine, ostja-müüja kontakt, kuulutusekaart, sõnumifotod arvutis/telefonis, Viofo foto ja klaviatuuri kohal kirjutusväli.",
+    "Varasema põhipildiparandaja edukas commit 04d7081ce51c6da106f726b21dfbfc21e4576f2e ja 02.11 põhipildi valimise kasutajavastuvõtt säilivad. Vanemat paigaldajat või SQL-i ei korrata.",
+    "R1 ja r2 peatusid enne projektikirjutusi. Koondraport säilitab nende täpsete päevikute valitud väljad ning originaalide räsid. 03.11 14:50:55 seis: puhas main, kogu index HEAD-iga kooskõlas, 950 olemasolevat faili, puuduvad varjatud indexilipud, kohalikud fetch/push sihid kinnitatud ja mirror=false.",
+    "Koondvõrdlus ei teinud võrguühendust: remote-main’i värsket võrdsust, pilveandmebaasi ega Verceli seisu selle põhjal ei kinnitata. R3 pole veel Macis käivitatud. Selle ettevalmistuse ajal ei muudetud andmebaasi, Storage’it, kontosid ega sõnumeid."
+  ],
+  "next_action": "Ava selqiro-pohipilt-identiteet-20261103-r3.zip Downloads-kausta ning käivita python3 -I -B \"$HOME/Downloads/selqiro-pohipilt-identiteet-20261103-r3/uuenda.py\" --publish. R3 teeb oma värsked tegelikud kontrollid enne kirjutusi ja kasutab eraldi päevikut. VALMIS järel vaata uue commit’i/push’i tulemust, sama commit’i Verceli Ready ning põhipildi järjekorda ja Taivo Garaaži / Milline Vedu lisamisvormi. Koondlugejat ja r1/r2 või varasemaid paigaldajaid ei korrata.",
+  "stop_rule": "PEATATUD korral säilita kõik olemasolevad failid ja päevikud ning saada r3 result.json. Uus või vahepeal muutunud tegelik lähtebaas vajab ülevaatust. Ära kopeeri puuduvaid ajaloolisi SQL-faile käsitsi projekti ega muuda väljastatud räsikaitsega pakke.",
+  "read_next": [
+    "docs/continuity/LISTING_IDENTITY_ORDER_20261103.md: r3 mõõdetud baas ja säilinud funktsionaalne ulatus.",
+    "docs/continuity/HOSTED_PORTAL.md: üks kehtiv r3 käsk.",
+    "Üleandmispaki kontrollid/r3/verification.json ja actual-source-report-original.zip: täielik lähtebaasi tõend.",
+    "src/features/listing-create/README.md; pärast vastuvõttu sama kuulutuste elutsükli ja hobuste avaldamise moodulid."
+  ],
   "boundaries": [
     "Üks portaal, hoidla ja olemasolev Supabase’i projekt. Kohalik arendusbaas/proovikontod ei kandu pilve. Uut pilve-testbaasi ei looda.",
     "Olemasolev kolme konto hosted-lubamine ja päris Auth jäävad jõusse. Üldine avalik kasutus ei tohi jääda käsitsi konto lubamise taha, kuid see tarne piirangut ei eemalda.",
@@ -12,53 +45,12 @@
     "Sõnumifotod: 250 MiB konto kohta koos kinnitatud ja tombstone-kirjetega. Peitmine mahtu ei vabasta. Kasutuse järel piiratud koristus ei ole püsiv scheduler ega hilinenud kirjutuste lõplikkuse tõend.",
     "V1 hilisem last_read_at ei kasvata olemasolevat V2 loetud ID-d. Oma postkastist peitmine ei kustuta teise osalise sõnumeid; üksiksõnumi tagasivõtmist ei lisata.",
     "Energy/maksed, teenused, identiteedid, sõnumid, piiratud AI abi ja haldus jäävad kokkulepitud V2 plaani. See tarne ei nihuta neid vaikimisi avaliku käivitamise järel aega.",
-    "01.11 testandmete luba asendab varasema blanket-keelu ainult vanade testkuulutuste/testsõnumite ja nende tuvastatud kasutuseta seoste ulatuses. Kontod, identiteedid, logod, teenused, tootenäidised ja päevikud säilivad."
+    "01.11 testandmete luba asendab varasema blanket-keelu ainult vanade testkuulutuste/testsõnumite ja nende tuvastatud kasutuseta seoste ulatuses. Kontod, identiteedid, logod, teenused, tootenäidised ja päevikud säilivad.",
+    "Kohalikku sisestust hoitakse ainult avatud lehel. Täielik lehe taaslaadimine ei taasta valitud File-objekte. Poolelioleva avaldamise taastamine eeldab säilinud tegutsejapõhist brauseripäevikut; väliselt kustutatud/katkise päeviku taastamine üle seansi taasloomise on eraldi varasem elutsükli puudus."
   ],
-  "checkpoint": "01.11 tegelik vana manifesti 55d3e168… Maci käik peatus baseline_verified etapis DATABASE_PRECONDITIONS_NOT_MATCHED teatega. Ainult lugemiseks tehtud DB-eelkontroll toimus, kuid functions ja final_writer_policies ei sobinud; DB kirjutus/build/commit/push jäid alustamata. Põhjuseks on kaks meie fixture’i viga: liiga üldised poliitikanäidised ja final_receipt’i varasem määratlus. Õige sõltuvusräsi kattub tegeliku raportiga. Parandatud kontrollalusega läbisid 26 SQL-i runtime- ja 19 paigalduskaitse katset ning 2 uut paigaldaja regressioonikatset. Varasem runtime-tõend säilib, paranduse Maci rakendamist ega Verceli Ready tulemust pole nähtud.",
   "environment": [
-    "Maci töökoht ja vanad koopiad säilivad. Tegelik 01.11 12:13:23 UTC alanud peatunud käik kontrollis baasi b0a04fccbf354f0480a4b6eb8dd176b3c55383a8 ja 36 lähtefaili. See on selle jooksu vaatlus, mitte lubadus hilisema HEAD-i või tööpuu kohta.",
-    "GitHub https://github.com/Taivo17/selqiro.git; Vercel https://selqiro.vercel.app; Supabase vyjletlmwoiwxsnsunlm / eu-central-1; paigalduse UUID 2d088814-0900-448a-a9d1-7b05470cb1d2.",
-    "Uus kohalik kandidaat: work/selqiro-listing-primary-repair-20261101/source. Eelmine source/pakett ja peatunud päevik säilivad. Tegelik raport: kontrollid/actual-preflight-stop-20261101.json; ülevaade actual-report-review.json; baitide võrdlus retained-proof-and-new-regressions.json.",
-    "Seisukirje kuupäev 2026-11-01; kasutaja tööajavöönd Europe/Tallinn. Uut väliskirjutust, sisselogimist ega teenuse ligipääsu seadistamist selle dokumendiuuenduse põhjal ei eeldata."
-  ],
-  "format": "selqiro_repo_handoff_v1",
-  "local_test": [
-    "Säilitatud 85 mudeli/kliendi ja 78 tegeliku HTTP-piiri läbinud katset; neid selles paranduses ei korratud. tests/managed-listing-images.test.cjs ja tests/managed-listing-images-handler.test.cjs kontrollivad ranget actor/attempt/URL/bigint-lepingut, muutumatuid käske, Auth/readiness/Host/Origin piiri ning kirjutuse kordamatust.",
-    "Säilitatud lõpliku integreeritud lehe/hook’i/kliendi/tekstisessiooni/pildilaadija brauserikäik 1440/390/320 px juures, sh A → B → A kustutamiskinnituse lähtestus. Sünteetiline Auth, kogu HTTP kinni püütud, välispäringuid/lehevigu polnud; ei korratud. Tõend browser-check/browser-proof.json.",
-    "Uued PGlite 18 kontrollid parandatud allikapõhise fixture’iga: 26/26 runtime + 19/19 paigalduskaitset läbisid. Vana preflight taastoodab raporti täpselt kaks mittesobivat kaitset; uus võtab kehtiva aluse vastu ja tõrjub varasema receipt’i, piiranguteta poliitikaid ning laiendatud rolle. Vana 23 + 15 jääb ajalooks. Native PG17, paralleelseansside võistlust ja paranduse live-rakendamist ei väideta.",
-    "Säilitatud 50 paigaldajakatset / 13,634 s; ei korratud. Uued 2/2 regressioonikatset läbisid / 0,592 s: tegelik kahe-kaitse peatus ilma apply-intent’ita ning uus manifest vana peatunud päeviku kõrval ühe apply ja muutumatu vana päevikuga. Päris ajutine Git/kohalik bare-remote, sünteetilised SQL/build-vastused.",
-    "Säilitatud exit 0 / 19,73 s build sünteetiliste Supabase/OpenAI build-väärtustega ja kuue runtime-faili hoiatusteta ESLint; ei korratud. 843 lähtefaili väljaspool continuity/dokumentatsiooni ja paigaldamata SQL-parandust ning paigaldaja runtime on eelmise kandidaadiga bait-baidilt samad. Ka changes.sql ja capability säilivad."
-  ],
-  "next_action": "Anna üle selqiro-kuulutused-pohipilt-parandus-20261101.zip ning uuendatud selqiro-uleandmine-20261101.zip. Uus käik peab kontrollima Maci tegelikku baasi; vana peatunud päevik säilib. Kinnita uus raport, commit/push ja Verceli Ready eraldi. Seejärel kuulutuspiltide kogu elutsükkel, kinnitatud koristus/mahu vabastamine ning hobused samas kuulutuste voos; logod/Uudised/ülejäänud moodulid järgnevad, Energy/maksed enne avalikku käivitamist. Vastu võetud sõnumifotode/klaviatuuri paigaldajaid ei korrata.",
-  "production": [
-    "Kuulutuse 197 tegelik avaldamine pildiga ning varasem main/Vercel vastuvõtt säilivad. Sama ettevalmistust ei korrata.",
-    "Kasutaja kinnitas 31.10 kuulutusekaardi/teksti ja fotode toimimise arvutis ning telefonis, ka Viofo foto. Kirjutusväli jääb klaviatuuri kohale. Seda tegelikku vastuvõttu ei märgita uuesti ootele.",
-    "Tegelik 01.11 Maci raport kinnitab ainult lugemiseks tehtud DB-eelkontrolli ja kirjutamiseelset peatumist baasil b0a04fccbf354f0480a4b6eb8dd176b3c55383a8. Paranduse rakendamist, uut commit/push’i ega Verceli Ready tulemust pole vaadeldud.",
-    "Põhipildi valik ja merevaigutoon on seni kohalik kandidaat. Uus pakett parandab eelduste kontrollalust; see ei lisa foto lisamist/eemaldamist ega lõplikku koristust. Uudised, hobuste ühine avaldamine ja logoühendus on jätkuvalt lõpetamata. Testandmeid ei eemaldatud."
-  ],
-  "read_next": [
-    "docs/continuity/LISTING_PRIMARY_IMAGE_REPAIR_20261101.md: tegelik peatumine, kaks kontrollaluse viga, uus kandidaat ning säilitatud ja uute tõendite piir.",
-    "docs/continuity/LISTING_PRIMARY_IMAGE_20261101.md: eelmise kandidaadi muutumatu funktsionaalne ulatus ja ajaloolised katsed; SQL-aluse sobivuse seis on uuemas parandusdokumendis.",
-    "docs/continuity/LISTINGS_DESIGN_NEWS_20261101.md: kuulutused koos hobustega, värvid, uudisvoog, logoallikas ja tingimuslik testandmete luba.",
-    "supabase/repairs/20261101_listing_primary_image/: parandatud fixture, päritolu/pin’id ja preflight/apply/verify kaitsed. Mudel/klient src/entities/listing/ all ning createJourneyHandler.ts/useManagedListing.ts jäävad muutumatuks.",
-    "src/server/listing-publication/multipart/multipartPublicationImages.ts; ListingCreateForm.tsx, HorseOfferPublicationGate.tsx ja hosted 40_read_models_and_owner.sql: lõpetamata failielutsükkel ning hobuste ühine avaldamine.",
-    "docs/continuity/MESSAGING_PHONE_PHOTO_20261031.md: vastu võetud sõnumifotode tõend. docs/30_V2_SCOPE.md Launch scope correction: Energy and payments säilib."
-  ],
-  "recorded_on": "2026-11-01",
-  "source": {
-    "Aktiivne identiteet": "Nähtav nimi/logo ning tegeliku toimingu identiteet peavad kattuma kuulutuses, sõnumis, jälgimises ja uudisvoos. Vahetus samas või teises aknas ei vii vana mustandit uue identiteedi nimele; olemasolevad konto/tegutseja lukud ja muutumatud saatmiskinnitused säilivad.",
-    "Ette valmistatud ulatus": "Olemasoleva avaldatud hallatud galerii põhipildi valik; otsingu ja Minu ala kuulutuste merevaigutoon; ausad sisu eemaldamise ja failikoristuse tekstid. Uute piltide lisamine/eemaldamine ning täielik hosted koristus ei ole selle sammuga valmis.",
-    "Hobused": "Kuulutuste esimese terviku sees: sama lisamiskoht ning ühine otsing/detail/profiil/haldus/salvestamine/kontakt/kaart. Kategooria avab eriväljad ja kinnitused. Mustand on olemas; avaldamine ja ühised lugemisvaated vajavad ühendamist. horse_offers UUID ning müügi/ostusoovi semantika säilivad.",
-    "Kontrollaluse parandus": "Fixture peab sisaldama tegelikke identiteedipõhiseid lõppkirjutamise poliitikaid ning hilisemat 30-multipart final_receipt’i. Taastatud sõltuvusräsi fb89562d7bb6e653b53e3baad61ae32dc6a64aa1578051a2eed4f50cbf8af4e3 kattub kasutaja raportiga. Kaitseid ega tootmise õiguste piire ei nõrgendata.",
-    "Kujundus": "ListingSearchPage ja MyAreaListingsSection kasutavad taas merevaiku ning valgeid sisukaarte. Otsingufiltrite/kerimise leping säilib. Teenuste türkiis, tootenäidiste indigo ja kogu portaali ühtlus jäävad senise plaani osaks; Töö varasem täpne toon pole kinnitatud.",
-    "Lahtine kuulutuste töö": "Avaldatud kuulutuse piltide lisamine/eemaldamine, kogu elutsükli vastuvõtt, hosted lõppkoristus ja mahu vabastamine. Hoitud settle tagastab endiselt pending/filesRemaining:null. Uus tekst eristab kinnitamata koristust; see ei muuda seda lõpetatuks.",
-    "Logod ja Uudised": "Pärast kuulutuste-hobuste põhivoogu ühendada profiili kanooniline identity_profiles.avatar_url ka vestluse/valiku juurde ning teha oma V2 Uudiste vaade aktiivse identiteedi jälgitavate avalikele postitustele. V1 voog pärib praegu kuulutusi; V2 Uudiste ja Töö lingid suunduvad /v2. Need puudused on alles.",
-    "Põhipildi leping": "get_my_managed_listing_images_v1 ja set_my_managed_listing_primary_image_v1 seovad konto, aktiivse identiteedi, kuulutuse ning algse avaldamiskatse. Valik kasutab muutumatut algset ordinal’i ja eraldi bigint-esitlusversiooni; pildi URL-e, avaldamiskohti ega failikinnitusi ümber ei kirjutata.",
-    "Salvestamise piir": "Muutumatu käsk, tegutseja kontroll enne/pärast, üks kirjutus ilma automaatse korduseta. Konflikti või teadmata tulemuse järel uus pildivalik ei avane enne värsket seisu. Salvestusjärgne lugemine ei asenda uuemat põhipildivalikut vanema seisuga; identiteedivahetus hülgab vana seisu ja hilise vastuse.",
-    "Taastatud alus": "Varasema kandidaadi runtime ja 843 võrreldud muud lähtefaili säilivad. Päris peatunud Maci käik kontrollis baasi b0a04fccbf354f0480a4b6eb8dd176b3c55383a8. Parandatud kandidaat on uues assistendi lähtekoopias; enne järgmist kirjutust kontrollitakse tegelikku baasi uuesti.",
-    "Testandmete luba": "01.11 võib eemaldada vanad testkuulutused/testsõnumid, kui need tekitavad probleemi ning konkreetne ulatus ja kasutuseta seosed on teada. Selles sammus ei kustutatud midagi. Kontod, identiteedid, logod, muu sisu ja päevikud säilivad.",
-    "Vastu võetud sõnumifotod": "Kasutaja kinnitas arvuti ja telefoni fotod, sh Viofo, automaatse vähendamise ning klaviatuuri kohal kirjutusvälja. Commit b0a04fccbf354f0480a4b6eb8dd176b3c55383a8 on vastu võetud foto alus ja tegeliku peatunud 01.11 jooksu baas; uut commit’i ei ole tõendatud.",
-    "Üleandmise rütm": "Eraldi pakk suurema kontrollitud etapi järel, konteksti/vestluse vahetamisel ja kasutaja soovil. Uus paigaldus: selqiro-kuulutused-pohipilt-parandus-20261101.zip; eraldi üleandmine: selqiro-uleandmine-20261101.zip. Vana pakett/päevik säilib; lühileht renderdatakse sellest CURRENT_STATE-ist."
-  },
-  "stop_rule": "Peatumisel säilita uus täpne raport ning vana päevik; ära nõrgenda kontrolle, kirjuta peatunud manifesti ümber ega korda vana paketti. Tundmatu lähtebaasi või ebaselge pilvetoimingu puhul jää töö säilitamise juurde. Testandmete tingimuslikku eemaldamisluba kasuta ainult tuvastatud ulatuses, seda uuesti küsimata. Päris sõnumeid ei saadeta ilma selge saatmiskäsuta."
+    "Üks olemasolev hoidla https://github.com/Taivo17/selqiro.git ja portaal https://selqiro.vercel.app. Uue paigaldaja vaikimisi Maci töökoht on ~/selqiro, nagu viimases kasutaja käivitatud põhipildi paigaldajas.",
+    "Supabase vyjletlmwoiwxsnsunlm / eu-central-1; paigalduse UUID 2d088814-0900-448a-a9d1-7b05470cb1d2. Need on säilitatud sihid, mitte värske teenusekontroll. SERVICE_ACCESS.json vanemad 27.10 olekulipud ei tühista kasutaja hilisemat vastuvõttu.",
+    "Viimane täielik Maci kohalik vaatlus: 03.11.2026 14:50:55 Europe/Tallinn, /Users/taivo/selqiro, puhas main / HEAD 04d7081ce51c6da106f726b21dfbfc21e4576f2e, 950 jälgitavat faili. R3 ettevalmistatud source on sellest taastatud kandidaat, mitte juba Macis rakendatud parandus ega värske tootmise vaatlus."
+  ]
 }

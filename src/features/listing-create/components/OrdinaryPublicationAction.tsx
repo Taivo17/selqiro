@@ -9,7 +9,8 @@ import type { OrdinaryListingFieldState } from "../model/ordinaryListingFields";
 import { awaitPublicationReadiness, type useOrdinaryPublication } from "../model/useOrdinaryPublication";
 
 type Props = {controller: ReturnType<typeof useOrdinaryPublication>; fields: OrdinaryListingFieldState;
-  title: string; description: string; files: readonly File[]; onNew: () => void;
+  title: string; description: string; files: readonly File[]; onNew: (requestKey: string) => void;
+  onCaptureSubmission: () => (requestKey: string) => void;
   onSubmittingChange: (submitting: boolean) => void};
 
 // A policy read may fail without discarding the listing form. Late responses are
@@ -23,7 +24,7 @@ function policySnapshot(policies: readonly PublicationPolicyStatus[]): string {
   return JSON.stringify(policies.map(p => [p.policyKey, p.policyDocumentId, p.policyVersion, p.contentHash]).sort());
 }
 
-export default function OrdinaryPublicationAction({controller: c, fields, title, description, files, onNew, onSubmittingChange}: Props) {
+export default function OrdinaryPublicationAction({controller: c, fields, title, description, files, onNew, onCaptureSubmission, onSubmittingChange}: Props) {
   const [policies, setPolicies] = useState<PublicationPolicyStatus[] | null>(null);
   const [policyState, setPolicyState] = useState<"idle" | "loading" | "ready" | "error">("idle");
   const [policyReload, setPolicyReload] = useState(0);
@@ -51,7 +52,7 @@ export default function OrdinaryPublicationAction({controller: c, fields, title,
   if (!c.enabled) return null;
   const busy = c.view.phase === "busy" || accepting;
   const needsAcceptance = policies?.some(p => !p.accepted) ?? true;
-  const ready = !!c.actor && policyState === "ready" && !!policies?.some(p => p.policyKey === "marketplace-general") && (!needsAcceptance || checked);
+  const ready = !!c.actor && c.contextReady && c.canAct(c.actor) && policyState === "ready" && !!policies?.some(p => p.policyKey === "marketplace-general") && (!needsAcceptance || checked);
   const submit = async (resume: boolean) => {
     if (submission.current || busy || !ready || c.contextError || !c.actor || !policies || !c.session.current) return;
     const epoch = c.epoch.current, session = c.session.current, actor = c.actor;
@@ -59,12 +60,13 @@ export default function OrdinaryPublicationAction({controller: c, fields, title,
     let input;
     // Keep the selected bytes from this click across policy acceptance awaits.
     const capturedFiles = files.map(file => file.slice(0, file.size, "application/octet-stream"));
+    const markSubmitted = onCaptureSubmission();
     try { if (!resume) input = buildOrdinaryListingInput(fields, title, description); }
     catch (error) { setMessage(error instanceof Error ? error.message : "Kontrolli vormi välju."); return; }
     // Block a second click synchronously, before React renders the busy state.
     const operation = {};
     submission.current = operation; setAccepting(true); onSubmittingChange(true);
-    const current = () => submission.current === operation && c.epoch.current === epoch && c.session.current === session;
+    const current = () => submission.current === operation && c.epoch.current === epoch && c.session.current === session && c.canAct(actor);
     try {
       setMessage("Kontrollin kehtivaid avaldamistingimusi…");
       const reviewed = await readPolicies();
@@ -99,7 +101,7 @@ export default function OrdinaryPublicationAction({controller: c, fields, title,
         }
       }
       setMessage(null);
-      if (resume) await session.resume(capturedFiles); else if (input) await session.start(input, capturedFiles);
+      if (resume) await session.resume(capturedFiles); else if (input) await session.start(input, capturedFiles, markSubmitted);
     } catch {
       if (current()) {
         setPolicies(null); setChecked(false); setPolicyState("loading");
@@ -119,6 +121,20 @@ export default function OrdinaryPublicationAction({controller: c, fields, title,
           }
         }
       }
+    } finally {
+      if (submission.current === operation) {
+        submission.current = null; setAccepting(false); onSubmittingChange(false);
+      }
+    }
+  };
+  const startNext = async () => {
+    if (submission.current || busy || !c.actor || !c.canAct(c.actor) || !c.session.current) return;
+    const session = c.session.current, operation = {};
+    submission.current = operation; setAccepting(true); onSubmittingChange(true);
+    try {
+      // onNew is bound to this identity's entry and the completed request key.
+      // It must run at reset's commit even if a harmless focus read is pending.
+      await session.reset(onNew);
     } finally {
       if (submission.current === operation) {
         submission.current = null; setAccepting(false); onSubmittingChange(false);
@@ -156,18 +172,18 @@ export default function OrdinaryPublicationAction({controller: c, fields, title,
       <Link href={`/v2/listing/${c.view.receipt.listing_id}`} className="font-bold underline">Vaata kuulutust</Link>
       <Link href="/v2/my-area" className="font-bold underline">Ava Minu ala</Link>
     </div> : null}
-    {terminal ? <button type="button" disabled={busy} className="rounded-full border px-5 py-3 font-bold disabled:opacity-50"
-      onClick={() => { c.session.current?.reset(); onNew(); }}>Lisa järgmine kuulutus</button> : <div className="flex flex-wrap gap-3">
+    {terminal ? <button type="button" disabled={busy || !c.contextReady} className="rounded-full border px-5 py-3 font-bold disabled:opacity-50"
+      onClick={() => { void startNext(); }}>Lisa järgmine kuulutus</button> : <div className="flex flex-wrap gap-3">
       {c.view.phase !== "needs_attention" ? <button type="button" disabled={busy || !ready || !!c.contextError} onClick={() => { void submit(c.view.phase !== "editing"); }}
         className="rounded-full bg-black px-6 py-3 font-bold text-white disabled:opacity-50">
         {busy ? "Palun oota…" : c.view.phase === "editing" ? "Avalda kuulutus" : "Kontrolli ja jätka"}
       </button> : null}
-      {c.view.phase !== "editing" ? <button type="button" disabled={busy} className="rounded-full border px-5 py-3 font-bold"
-        onClick={() => setCancelOpen(true)}>Katkesta avaldamine</button> : null}
+      {c.view.phase !== "editing" ? <button type="button" disabled={busy || !c.contextReady} className="rounded-full border px-5 py-3 font-bold"
+        onClick={() => { if (c.actor && c.canAct(c.actor)) setCancelOpen(true); }}>Katkesta avaldamine</button> : null}
     </div>}
     {cancelOpen && !terminal ? <div role="alertdialog" aria-label="Katkesta see avaldamine" className="space-y-3 rounded-2xl border p-4">
       <p>Kas sulged selle avaldamiskatse? Saadetud piltide koristamist kontrollitakse serveris.</p>
-      <button type="button" disabled={busy} className="mr-4 font-bold underline" onClick={() => { setCancelOpen(false); void c.session.current?.cancel(); }}>Jah, katkesta</button>
+      <button type="button" disabled={busy || !c.contextReady} className="mr-4 font-bold underline" onClick={() => { if (c.actor && c.canAct(c.actor)) { setCancelOpen(false); void c.session.current?.cancel(); } }}>Jah, katkesta</button>
       <button type="button" onClick={() => setCancelOpen(false)}>Jätka praeguse katsega</button>
     </div> : null}
   </section>;

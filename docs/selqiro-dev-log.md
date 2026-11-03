@@ -1,3 +1,24 @@
+<!-- SELQIRO_IDENTITY_ORDER_R3_OBSERVED_BASE_20261103 -->
+## 2026-11-03 — R3 seotakse täielikult mõõdetud 950 faili baasiga
+
+Kasutaja koondraport 14:50:55 Europe/Tallinn on vastu võetud: puhas main / HEAD 04d7081ce51c6da106f726b21dfbfc21e4576f2e, kõik 950 HEAD/index-faili kaetud, enne/pärast muutumatu, kõrvalisi Giti muudatusi ja lugemata faile pole. Kõik 22 kavandatud payloadi baasid sobivad. Erinevused olid 15 puuduvas arhiivifailis ja ühe ajaloodokumendi hilisemas arhiiviplokis; tegelik dokument jääb muutmata. Rakenduskoodis lahknevust pole.
+
+R3 lähtekoopia taastati tegelikust 950 faili baasist; sama paranduse 8 uut faili annavad 958 faili. Paigaldaja Python-kood ning rakenduskood/testid jäid samaks. Manifest seob kõik 936 tegelikku kõrvalfaili ning 14 olemasolevat payloadi baasi ja 8 uut puuduvat rada. HOSTED_PORTAL valikuline puudumine eemaldati. Vanad puuduolevad arhiivifailid jäävad üleandmises ajalooks, neid Maci ei lisata. Väljastatud r1/r2 ja nende päevikud säilivad. Appi/buildi/SQL-i korduskatseid ei tehtud; r3 vajalikud manifesti- ja täpse baasiga paigalduskontrollid on eraldi tõend. Järgmine käsk on CURRENT_STATE-is; Maci rakendamine/commit/push/Ready on veel ees.
+
+<!-- SELQIRO_IDENTITY_ORDER_R2_20261103 -->
+## 2026-11-03 — R2 parandab paigalduspaki dokumentide lähte-eeldust
+
+R1 peatus kasutaja Macis kell 13:25 alustatud käigus enne projektikirjutusi: auditidokument INBOX_V1_REVIEW_20261029.md puudus. Raport kinnitab sihi ~/selqiro ja HEAD-i 04d7081ce51c6da106f726b21dfbfc21e4576f2e; build/push ei käivitunud ja uut commit'i pole. Varasema põhipildi parandaja VALMIS-käik sama commit'iga on terminalipildilt vastu võetud.
+
+Eraldi r2 hoiab rakenduskoodi ja paigaldaja täitmisloogika samana. 67 seni tõendamata muutmata Markdown-ajaloodokumenti ei ole enam selle kliendiparanduse olemasolutingimus; kõik ülejäänud 884 täpset lähtekontrolli, kogu tegeliku indexi kaitse ja 22 muudetava faili kontrollid säilivad. HOSTED_PORTAL.md võib tuntud baasi kõrval ka täiesti puududa; sel juhul luuakse juba kavandatud dokument, tundmatut olemasolevat sisu ei kirjutata üle. Vana pakk/päevik ja kasutaja muudatused säilivad. R2 kontrollide täpne piir on LISTING_IDENTITY_ORDER_20261103.md-s; järgmine käsk on CURRENT_STATE-is.
+
+<!-- SELQIRO_LISTING_IDENTITY_ORDER_20261103 -->
+## 2026-11-03 — Põhipildi järjekord ja identiteedipõhine kuulutusevorm
+
+Taastatud 01.11 üleandmispakk ning 02.11 kasutaja põhipildi valiku vastuvõtt. Katkenud uus kandidaat polnud kättesaadav; koostatud uus kliendiparandus: valitud foto esimeseks, iga identiteedi avatud vorm eraldi, hobuse mustandi ID/versiooni säilitamine ning lõpetatud avaldamisest selge järgmise kuulutuse alustamine. Hilised vastused ja teise identiteedi sisestus on eraldatud.
+
+119 seotud Node-kontrolli, 4 põhipildi kontrolli, 20 uue paigaldaja kontrolli, sihitud brauserikatsed ning praeguse lähtekoodi build läbisid assistendi eraldatud keskkonnas. Maci/commit/push/Ready ja päris kasutustee uuele parandusele veel puuduvad. Uus paigaldaja on ainult kliendilähtekoodile; andmebaasi ja Storage'it ei muudeta. Täpne tõend ja taastamise piir: `docs/continuity/LISTING_IDENTITY_ORDER_20261103.md`; üks järgmine samm on CURRENT_STATE-is.
+
 <!-- SELQIRO_LISTING_PRIMARY_IMAGE_REPAIR_20261101 -->
 ## 2026-11-01 — Tegelik eelduste peatus ja kontrollaluse parandus
 

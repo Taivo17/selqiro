@@ -275,12 +275,12 @@ test('cross-tab lock failure before any intent keeps an editable form and cannot
 test('losing local journal after a dispatched prepare cannot turn unknown remote intent into a safe local reset', async () => {
   const h = harness({ request: async (action, body, state) => { if (action === 'prepare') { state.journal = null; throw Error('lost_remote_result_and_journal'); } } });
   const s = h.session(); await s.start(listing(), []);
-  assert.equal(s.view.phase, 'unknown'); s.reset(); assert.equal(h.clears, 0); assert.equal(s.view.phase, 'unknown');
+  assert.equal(s.view.phase, 'unknown'); await s.reset(); assert.equal(h.clears, 0); assert.equal(s.view.phase, 'unknown');
 });
 
 test('a completed attempt reset does not attach the next form validation error to the old remote intent', async () => {
   const h = harness(), s = h.session(); await s.start(listing(), []); assert.equal(s.view.phase, 'published');
-  s.reset(); assert.equal(h.journal, null); assert.equal(s.view.phase, 'editing');
+  await s.reset(); assert.equal(h.journal, null); assert.equal(s.view.phase, 'editing');
   await s.start(listing(), [new Blob([])]);
   assert.equal(s.view.phase, 'editing'); assert.equal(h.journal, null); assert.equal(h.requests.filter(x => x.action === 'prepare').length, 1);
 });
@@ -357,4 +357,56 @@ test('owner HTTP bounds a stalled error body and never retries the write', async
     return new Response(stalled, {status: 409});
   }, ORIGIN, {method: 'POST'}, {readErrorStatuses: [409], timeoutMs: 20}), error => error.code === 'outcome_unknown');
   assert.equal(requests, 1);
+});
+
+test('terminal reset holds actor lock, clears exact key and settles draft before editing opens', async () => {
+  const h = harness(), s = h.session(); await s.start(listing(), []);
+  const expected = h.journal.requestKey, events = [];
+  s.subscribe(view => { if (view.phase === 'editing') events.push('editing'); });
+  const result = await s.reset(key => { assert.equal(h.journal, null); assert.equal(key, expected); events.push('draft'); });
+  assert.equal(result, expected); assert.deepEqual(events, ['draft', 'editing']); assert.equal(h.clears, 1);
+});
+test('newer same-actor open journal is reconciled instead of erased by an older terminal reset', async () => {
+  const h = harness(), s = h.session(); await s.start(listing(), []);
+  await h.open(); h.backend.published = false;
+  let clearedDraft = false;
+  assert.equal(await s.reset(() => { clearedDraft = true; }), null);
+  assert.equal(h.journal.requestKey, REQUEST); assert.equal(h.clears, 0); assert.equal(clearedDraft, false);
+  assert.equal(s.view.phase, 'resume');
+});
+test('reset lock rejection preserves terminal view, journal, and local draft', async () => {
+  let reject = false;
+  const h = harness({ withLock: async work => { if (reject) throw Error('busy_elsewhere'); return work(); } }), s = h.session();
+  await s.start(listing(), []); const journal = copy(h.journal); reject = true;
+  assert.equal(await s.reset(() => { assert.fail('must retain draft'); }), null);
+  assert.deepEqual(h.journal, journal); assert.equal(h.clears, 0); assert.equal(s.view.phase, 'published');
+});
+test('identity invalidation while reset waits for lock prevents journal removal and cached-draft cleanup', async () => {
+  const gate = deferred(); let wait = false;
+  const h = harness({ withLock: async work => { if (wait) await gate.promise; return work(); } }), s = h.session();
+  await s.start(listing(), []); const journal = copy(h.journal); wait = true;
+  const pending = s.reset(() => { assert.fail('invalidated reset must not clear draft'); });
+  s.invalidate(); gate.resolve(); assert.equal(await pending, null);
+  assert.deepEqual(h.journal, journal); assert.equal(h.clears, 0);
+});
+test('same-actor focus readiness changing while reset awaits does not drop committed draft cleanup', async () => {
+  const gate = deferred(); let wait = false, ready = true, cleared = 0;
+  const h = harness({ withLock: async work => { if (wait) await gate.promise; return work(); } }), s = h.session();
+  await s.start(listing(), []); wait = true;
+  const pending = s.reset(() => { assert.equal(ready, false); cleared++; });
+  ready = false; gate.resolve(); assert.ok(await pending);
+  assert.equal(cleared, 1); assert.equal(s.view.phase, 'editing'); assert.equal(h.journal, null);
+});
+test('failed journal removal never calls cleanup or reopens editing', async () => {
+  const h = harness(); h.deps.clearJournal = () => { throw Error('storage denied'); };
+  const s = h.session(); await s.start(listing(), []); const journal = copy(h.journal);
+  assert.equal(await s.reset(() => { assert.fail('journal still retained'); }), null);
+  assert.deepEqual(h.journal, journal); assert.equal(s.view.phase, 'published');
+});
+test('creation marker runs only for the newly persisted journal, never a restored competing attempt', async () => {
+  const h = harness(), s = h.session(), marked = [];
+  await h.open(); await s.start(listing(), [], key => marked.push(key)); assert.deepEqual(marked, []);
+  const other = harness(), next = other.session();
+  await next.start(listing(), [], key => { assert.equal(other.journal.requestKey, key); marked.push(key); });
+  assert.equal(marked.length, 1); assert.equal(marked[0], other.journal.requestKey);
 });

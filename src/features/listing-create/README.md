@@ -1,3 +1,12 @@
+<!-- SELQIRO_LISTING_IDENTITY_ORDER_20261103 -->
+## 03.11.2026 — Ühe konto identiteetide avatud mustandid
+
+Vormi kompositsioon on jagatud `ListingCreateForm` tegutsejapiiriks ja `ListingCreateIdentityForm` väljadeks. `listingCreateDrafts` hoiab ainult avatud lehe konto/identiteedi kirjeid, sealhulgas täpset `HorseDraftSession` instantsi. Konto vahetus sulgeb kogu; identiteedi vahetus taastab sama kirje. Sama tegutseja focus-kontroll jätab fotovaliku DOM-i alles.
+
+Lõpetatud tavakuulutuse juures on kohe Lisa järgmine kuulutus. Lähtestus võrdleb sama Web Lock'i all terminalse katse võtit ning puhastab ainult selle saatmise konkreetse, vahepeal muutmata sisestuse. Uuemad failid/tekst ja teine identiteet säilivad. Poolelioleva katse jätk eeldab säilinud avaldamispäevikut; uut püsivat tekstide/fotode autosalvestust ei lisata.
+
+Lähtekatsete ja kasutaja vastuvõtu täpne vahe ning alles jäävad elutsükli piirid: `docs/continuity/LISTING_IDENTITY_ORDER_20261103.md`. Allpool olevad varasemate kuupäevade käivitamisjuhised on ajalugu.
+
 <!-- SELQIRO_V2_ORDINARY_FIELDS_SOURCE_ACCEPTANCE_20261011 -->
 ## 2026-10-11 — V2 ordinary-listing fields accepted for source completion
 

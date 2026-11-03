@@ -2,6 +2,7 @@
 
 import type {PublicationActor} from "../../../entities/listing/model/publicationJourney";
 import type {ManagedListingImagesSnapshot} from "../../../entities/listing/model/managedListingImages";
+import {orderManagedListingImagesForDisplay} from "../model/managedListingImageOrder";
 import ManagedOwnerImage from "./ManagedOwnerImage";
 
 type Props = {
@@ -17,7 +18,8 @@ type Props = {
 };
 
 export default function ManagedListingImagePicker(props: Props) {
-  const images = props.gallery?.images ?? props.fallbackImages.map((url, ordinal) => ({url, ordinal, isPrimary: false}));
+  const images = orderManagedListingImagesForDisplay(props.gallery?.images
+    ?? props.fallbackImages.map((url, ordinal) => ({url, ordinal, isPrimary: false})));
   return <section className="space-y-4 rounded-[30px] border border-amber-200 bg-white p-4 sm:p-6" aria-label="Kuulutuse põhipilt">
     <div>
       <h2 className="text-2xl font-black">Kuulutuse pildid</h2>
