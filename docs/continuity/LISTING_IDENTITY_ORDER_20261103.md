@@ -1,3 +1,26 @@
+<!-- SELQIRO_IDENTITY_ORDER_ACCEPTED_20261104 -->
+# R3 vastu võetud — 04.11.2026
+
+Kasutaja terminalipilt kinnitab edukat R3 build/commit/push tulemust:
+`8be94cdff322bc051cd54f5143cd3ea12312493e`. Verceli kasutajapildil on sama `8be94cd`,
+`main`, `Ready` ja `Production` (46 s). Kasutaja kinnitas: „testides on nüüd korras”.
+Selle paranduse vastuvõtt on lõpetatud. Vanu paigaldajaid, koondlugejat või
+lõpetatud kontrolle ei korrata ning uut `result.json` vastuvõtuks ei küsita.
+
+Tõendid on terminali/Verceli kuvatõmmised ja kasutaja kinnitus. Raporti faili,
+värsket Git-puud ega teenuse API-t ei loetud. Üksikuid varasemaid sünteetilisi
+juhtumeid ei esitata kasutaja eraldi tootmiskatsetena. Täpne tekstiline vaatlus
+on üleandmise `kontrollid/vastuvott-20261104/observations.json`-is.
+
+Järgmine tegevus on [kuulutuspiltide elutsükli jätk](LISTING_PHOTO_LIFECYCLE_NEXT_20261104.md).
+Uus üleandmine sisaldab ajakohastatud dokumente, mida pole Maci või Giti eraldi
+kirjutatud. Rakenduskood, testid, SQL ja väljastatud pakid on muutmata.
+
+## Allpool: muutmata ettevalmistusajalugu
+
+Järgnevad 03.11 „veel tegemata” väited ja NEXT-juhised kirjeldavad oma kuupäeva
+ettevalmistust. Praeguse seisu määrab ülal olev vastuvõtt ning CURRENT_STATE.json.
+
 <!-- SELQIRO_IDENTITY_ORDER_R3_OBSERVED_BASE_20261103 -->
 # R3 — täielikult mõõdetud Maci lähtebaas, 03.11.2026
 

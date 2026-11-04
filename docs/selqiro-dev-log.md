@@ -1,3 +1,60 @@
+<!-- SELQIRO_HOSTED_COMPLETED_SOURCE_20261104 -->
+## 2026-11-04 — Ühe avaldatud algfoto koristus ja selgem vastutuspiir
+
+- Kasutaja jätkamiskorraldus ja küsimus liigse keerukuse kohta viisid ühe
+  konkreetse lihtsustuseni: Supabase'i hallatud teenuselt ei nõuta kättesaamatut
+  kohaliku protsessi/privaatse ketta tõendit. Selqiro kinnitab täpse teenuseobjekti
+  loogilise eemaldamise; peidetud ajutiste failide elutsükkel kuulub teenusele.
+- Lisatud üks väike hosted SOURCE-adapter; olemasolev ühe objekti transport,
+  cleanup-päevik, mahuarvestus ja omanikuvaade jäävad kasutusse. Runtime muutub
+  kolmes failis; UI ja rakenduse sõltuvused jäävad samaks.
+- Lisav SQL annab kaks kitsast service_role-only RPC-d ja privaatse tõendi.
+  Üldised koristus-RPC-d ning readiness'i held-piir säilivad. Esimene kustutuse
+  kinnitus nõuab lõpetatud/kontrollitud sessiooni ja autoriteetset puudumist;
+  hilisem kuulutuse eemaldamine või diagnostika ei lae vabanenud SOURCE-i tagasi.
+- 31/31 sihitud Node-katset, 19/19 SQL-käitumise ja 14/14 SQL-paigalduse rühma,
+  tootmisbuild (exit 0, 31,49 s), neli brauserijuhtu 1440/390 px ning 14 erinevat
+  paigaldaja-liidese katset on läbinud. SQL-keskkond oli PostgreSQL17.5/WASM,
+  teenuseandmed sünteetilised; native paralleelseansse ega päris pilve ei katsetatud.
+  Täpsed piirid ja eraldi tarne sidumine on üleandmise kontrollifailides.
+- Lõplike SQL-raportite parseri sidumine ja üks tegeliku R3 baasiga kokkupandud
+  ajutise paki katse läbisid; korduskäik ei korranud SQL-i ega build’i. Git ja
+  kohalik remote olid päris, SQL-transport ja build selles tarnekatses sünteetilised.
+- Uus uuenduspakk seotakse tegeliku vastu võetud R3 958 faili baasiga, mitte
+  hilisema veel Maci rakendamata dokumentatsioonikoopiaga. Varasemad R3 ja
+  vastuvõtu ZIP-id säilivad muutmata. Maci/SQL/commit/push/Ready/päris koristuse
+  uus tulemus on endiselt ees; selle kohta ettevalmistus tõendit ei anna.
+- SOURCE 25 MiB vabastamine jätab WEB-i 4 MiB arvesse. See on loogiline reserv,
+  mitte lubadus teenusepakkuja ketta või arve hetkeseisu kohta. Pooleliolevad
+  upload'id, WEB-koristus, fotode koosseisu muutmine ja scheduler jäävad eraldi.
+- CURRENT_STATE, genereeritud üleandmine ja HOSTED_PORTAL on uuendatud.
+  Püsiv otsus: docs/architecture/hosted-completed-source-cleanup-v1.md.
+  Engineering handbook sai lühikese keerukuse piiramise reegli; ajaloolist
+  AI_MEMORY olekukirjete massi ei kasvatatud uue dubleeriva seisukirjega.
+
+<!-- SELQIRO_IDENTITY_ORDER_ACCEPTED_20261104 -->
+## 2026-11-04 — R3 Production ja kasutajavastuvõtt kinnitatud
+
+- Kasutaja terminalipilt: R3 kuulutusevormi/põhipildi parandus, build, commit ja
+  push lõpetatud; commit `8be94cdff322bc051cd54f5143cd3ea12312493e`.
+- Verceli kasutajapildil on sama `8be94cd`, `main`, `Ready`, sinine `Production`
+  ja kestus 46 s. Täpset juurutamisaega suhtelisest „20h ago” tekstist ei tuletata.
+- Kasutaja kinnitus „testides on nüüd korras” sulgeb selle paranduse vastuvõtu.
+  Terminalis varem nähtud R1/R2 peatused ei ole enam praegune takistus.
+- CURRENT_STATE, sellest genereeritud üleandmine, HOSTED_PORTAL ja paranduse
+  detaildokument on uues üleandmiskoopia lähtepuus ajakohastatud. Eraldi Maci
+  kirjutust, dokumentatsiooni-only commit’i/push’i ega deployment’i ei tehtud.
+- Olemasoleva koodi lugemine kinnitas: hosted settle on teadlikult held-režiimis;
+  üldine objektikoristaja, piiratud claim/retry päevik ja objektipõhine reserv
+  on olemas. Järgmine kitsas töö on avaldatud katse SOURCE-algfoto hosted
+  lõpetamistõend ja koristus, aktiivset WEB-i säilitades. Täpne piir:
+  `docs/continuity/LISTING_PHOTO_LIFECYCLE_NEXT_20261104.md`.
+- 25 MiB SOURCE ja 4 MiB WEB arvestatakse eraldi. SOURCE tulevane tõendatud
+  lõppkoristus saab vabastada oma reservi; aktiivne WEB jääb arvesse. Praegune
+  held-rada seda ei tee. Selles sammus ei kustutatud faile ega muudetud SQL-i.
+- Varasemad rakenduse, brauseri, build’i, paigaldaja ja SQL-kontrollid säilivad
+  ajalooliste tõenditena; neid ei korratud. Uut tulemusraportit ei küsitud.
+
 <!-- SELQIRO_IDENTITY_ORDER_R3_OBSERVED_BASE_20261103 -->
 ## 2026-11-03 — R3 seotakse täielikult mõõdetud 950 faili baasiga
 

@@ -1,0 +1,148 @@
+{
+  "schema_version": 1,
+  "scope": "One completed published SOURCE; exact retained PostgreSQL declarations and synthetic metadata.",
+  "checks": [
+    {
+      "label": "service_only_boundary_and_private_or_generic_apis_remain_closed",
+      "passed": true
+    },
+    {
+      "label": "wrong_user_identity_attempt_and_request_are_denied",
+      "passed": true
+    },
+    {
+      "label": "claim_requires_read_committed",
+      "passed": true
+    },
+    {
+      "label": "unknown_unverified_problem_hash_version_and_provider_leftovers_stay_held",
+      "passed": true
+    },
+    {
+      "label": "broken_published_gallery_fails_before_claim",
+      "passed": true
+    },
+    {
+      "label": "claim_is_exact_source_with_one_lease_and_no_web_mutation",
+      "passed": true
+    },
+    {
+      "label": "delete_ack_without_database_absence_rolls_back_and_retains_quota",
+      "passed": true
+    },
+    {
+      "label": "record_binding_rejects_web_other_attempt_and_stale_work_key",
+      "passed": true
+    },
+    {
+      "label": "observed_logical_absence_releases_exactly_25_mib_retaining_4_mib_web",
+      "passed": true
+    },
+    {
+      "label": "lost_result_ack_is_idempotent_without_double_release",
+      "passed": true
+    },
+    {
+      "label": "one_pass_claims_only_one_of_several_sources",
+      "passed": true
+    },
+    {
+      "label": "another_active_business_member_is_authorized_and_revocation_blocks_result",
+      "passed": true
+    },
+    {
+      "label": "network_failure_retains_quota_and_existing_backoff_blocks_immediate_retry",
+      "passed": true
+    },
+    {
+      "label": "expired_lease_can_reclaim_once_and_exhausted_lease_requires_attention",
+      "passed": true
+    },
+    {
+      "label": "metadata_appearing_after_claim_prevents_false_deleted_result",
+      "passed": true
+    },
+    {
+      "label": "listing_removal_interleaved_after_dispatch_preserves_source_result_lineage",
+      "passed": true
+    },
+    {
+      "label": "later_listing_removal_never_recharges_completed_source",
+      "passed": true
+    },
+    {
+      "label": "problem_before_first_record_keeps_quota_but_late_diagnostic_never_recharges",
+      "passed": true
+    },
+    {
+      "label": "auxiliary_oracle_is_not_fabricated_and_legacy_readiness_stays_held",
+      "passed": true
+    }
+  ],
+  "live_database_calls": false,
+  "provider_storage_executed": false,
+  "native_postgresql_executed": false,
+  "concurrent_session_execution": false,
+  "synthetic_provider_metadata": true,
+  "engine": "PostgreSQL 17.5 on aarch64-unknown-linux-gnu, compiled by emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 3.1.74 (1092ec30a3fb1d46b1782ff1b4db5094d3d06ae5), 32-bit",
+  "passed": true,
+  "source_provenance": [
+    {
+      "path": "supabase/migrations/20260722173530_baseline_20260722.sql",
+      "sha256": "7ca065f92f01c0f38ada5f5a50d2a0fc5b716f5291d1525d398023b7db59da3f"
+    },
+    {
+      "path": "supabase/releases/listing-publication-hosted-preview-v1/00_preconditions.sql",
+      "sha256": "69c6005ed959afeb22bd1db3e597f23d17e7dfe86c968a35f512f94f34c995c8"
+    },
+    {
+      "path": "supabase/releases/listing-publication-hosted-preview-v1/10_price_core.sql",
+      "sha256": "9f843033bed721ab73d8cb01d3750e4dacc417dc0ddf84b92c9845745bb75dad"
+    },
+    {
+      "path": "supabase/releases/listing-publication-hosted-preview-v1/20_publication_core.sql",
+      "sha256": "f1c56c6ba381ceb5ab1d120092f676964762829ad63c5201a6c6b809c419f062"
+    },
+    {
+      "path": "supabase/releases/listing-publication-hosted-preview-v1/30_multipart_and_journey.sql",
+      "sha256": "d0f8c44a557c1b03df8ceb23c5069cf94a8560a2e3faaa3b0a56d701d0858765"
+    },
+    {
+      "path": "supabase/releases/listing-publication-hosted-preview-v1/60_preview_authority.sql",
+      "sha256": "bee78747b8932504c6960b9dba9b5b6673d06c5876dc76508b2322e48f6789bb"
+    },
+    {
+      "path": "supabase/releases/listing-publication-hosted-preview-v1/release.sql",
+      "sha256": "974dd6acb246b275acb593688aa14449cd42e80939101086d742ee5c4c5a4c3e"
+    },
+    {
+      "path": "supabase/repairs/20261101_listing_primary_image/tests/previous-preflight.sql",
+      "sha256": "e1f14709ebeee6c1513f4507937fc4418ae535a4ae465c6882a81bcdcf82a8fd"
+    },
+    {
+      "path": "supabase/releases/listing-publication-hosted-preview-v1/20_publication_core.sql",
+      "sha256": "f1c56c6ba381ceb5ab1d120092f676964762829ad63c5201a6c6b809c419f062"
+    },
+    {
+      "path": "supabase/releases/listing-publication-hosted-preview-v1/30_multipart_and_journey.sql",
+      "sha256": "d0f8c44a557c1b03df8ceb23c5069cf94a8560a2e3faaa3b0a56d701d0858765"
+    },
+    {
+      "path": "supabase/releases/listing-publication-hosted-preview-v1/release.sql",
+      "sha256": "974dd6acb246b275acb593688aa14449cd42e80939101086d742ee5c4c5a4c3e"
+    },
+    {
+      "path": "supabase/repairs/20261101_listing_primary_image/changes.sql",
+      "sha256": "6e131c70b2dc941b411588f2e6585c5bf3a85b23b50f2e2dc19d766ff1297714"
+    },
+    {
+      "path": "supabase/repairs/20261101_listing_primary_image/tests/fixture.mjs",
+      "sha256": "b56ff4b3eea26e49a5370eb246440a37a8bbc553ed4cf8310187c8b6213fb210"
+    },
+    {
+      "path": "supabase/repairs/20261101_listing_primary_image/preflight.sql",
+      "sha256": "1f07a7c17fa12737bc9a6242ce02baa62d3450148f4f94b5c1837da7f5a8b178"
+    }
+  ],
+  "changes_sha256": "ba8a028c16453d0eb0007d565897f7e6af3c3cbe2b285932e060e29a4643961e"
+}

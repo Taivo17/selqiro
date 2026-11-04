@@ -1,67 +1,64 @@
 <!-- GENERATED from docs/continuity/CURRENT_STATE.json; do not edit independently. -->
 # Selqiro — praegune tööüleandmine
 
-Seisukirje: 2026-11-03
+Seisukirje: 2026-11-04
 
 ## Praegune checkpoint
 
-03.11.2026 kell 14:50:55 Europe/Tallinn tehtud ainult lugev koondvõrdlus on üle vaadatud: puhas main, HEAD 04d7081ce51c6da106f726b21dfbfc21e4576f2e, täielik 950 faili HEAD/index/tööpuu ja muutumatud enne/pärast vaatlused. Kõik 22 paigaldatava faili vana baasi nõuet sobivad (14 olemasolevat + 8 uut). Puudu on 15 ainult assistendi arhiivis olnud ajaloolist faili; üks ajalooline diagnostikadokument erineb ja selle tegelikud baidid säilivad. Rakenduskoodis erinevust ei leitud. Eraldi r3 on koostatud täpselt mõõdetud lähtebaasilt. Rakenduskood, testid ja paigaldaja Python-kood jäävad varasema kontrollitud parandusega samaks; muutuvad manifest ja viis jätkudokumenti. R3 Maci rakendamine, build, uus commit/push ning selle deployment on veel tegemata.
+04.11.2026: R3 kuulutusevormi ja põhipildi parandus on vastu võetud commit’iga 8be94cdff322bc051cd54f5143cd3ea12312493e (kasutaja terminal, Vercel Ready/Production ja „testides on nüüd korras”). Järgmine kitsas kandidaat on valmis kohalikuks tarneks: ühe avaldatud katse lõpetatud ja kontrollitud SOURCE-algfoto koristus Supabase Storage API kaudu. Selle lähtekoodi, SQL-i ja paigaldaja kontrollid on eraldatud keskkonnas läbinud; uus Maci rakendamine, pilve-SQL, commit/push, Ready ja päris eemaldamine on veel kinnitamata.
 
 ## Lähtekood ja tõendi piir
 
-- **Üks töö:** Olemasoleva foto põhipildiks valimine on kasutaja poolt vastu võetud. Uus parandus tõstab selle foto muutmisvaates esimeseks ja eraldab lisamisvormi avatud lehe sisestuse konto ning aktiivse identiteedi järgi.
-- **Identiteedi piir:** Üks kontrollitud tegutseja juhib vormi ja avaldamist. CHANGING, konto vahetus ning teise akna teade peatavad vana tegutseja käsud kohe. Kõva kontekstimuutus peidab vana vormi ka juba poolelioleva focus-kontrolli ajal. Sama identiteedi tavaline fookusekontroll säilitab foto sisendelemendi.
-- **Mustandid:** Iga identiteet hoiab samal avatud lehel oma teksti, faile, tavavälju ja hobusevälju. Hobuse tegelik mustandiseanss säilib koos ID, versiooni ja liigulukuga; hiline loomise vastus jääb algsele identiteedile. Vahetus ei loo mustandist uut koopiat.
-- **Järgmine kuulutus:** Lõpetatud avaldamise tulemus ja Lisa järgmine kuulutus on vormi alguses nähtavad. Nupp eemaldab ainult kinnitatud sama katse taastamisvõtme sama tegutseja lukus. Ainult sama saatmise sisestus tühjeneb; uuem tekst/fotovalik ja teised identiteedid säilivad.
-- **Põhipilt:** Muutub ainult kuvamisjärjekord. Pildi algne ordinal, URL, serveri tõend ja põhipildi valimise RPC jäävad samaks. Avalik detail sortis põhipildi juba enne seda parandust esimeseks.
-- **Tarne:** selqiro-pohipilt-identiteet-20261103-r3.zip sisaldab ainult senist 22 faili muudatust ning muutmata paigaldajat. selqiro-uleandmine-20261103-r3.zip source/ on rekonstrueeritud 950 tegeliku Giti faili baasil + 8 uut kavandatud faili, kokku 958. Varasemad 15 puudu olevat arhiivifaili on eraldi ajaloos ja neid ei looda ega kustutata Macis. Algne koondraport ja r1/r2 pakid säilivad muutmata.
-- **Järgmine tervik:** Pärast selle paranduse tegelikku vastuvõttu lõpetada kuulutuse fotode lisamine/asendamine/eemaldamine, failide lõppkoristus ja mahu vabastamine; hobused ühises kuulutuste voos. Seejärel päris logod, Uudised ja ülejäänud V2. Energy/maksete tuumik jääb avaliku avamise eelseks.
-- **R3 mõõdetud lähtebaas:** 936 olemasolevat kõrvalfaili on seotud nende tegelike räsidega, sealhulgas kõik 65 päriselt olemasolevat varem informatiivseks jäetud ajaloodokumenti. Muudetavatel failidel on 14 täpset olemasolevat baasi ja 8 kinnitatud puudumist. HOSTED_PORTAL.md varasem valikuline puudumine eemaldati: selle olemasolev täpne räsi on nüüd tõendatud. CONTACT_DIAGNOSTICS_20261029.md jääb kasutaja tegelikul kujul alles. Paigaldaja vaatleb enne kirjutusi uuesti tegelikku main/HEAD-i, kogu indexit, tööpuud ja remote-main’i; HEAD-i ei oletata aruande kuupäeva põhjal. Vana b0a04f on jätkuvalt põlvnemisankur, mitte väide praeguse HEAD-i kohta.
+- **Üks muudatus:** Olemasolev cleanup-päevik, ühe objekti transport ja omanikuvaade säilivad. Uus 66-realise serveriadapteri ühendus lubab ainult avaldatud kuulutuse lõpetatud, kontrollitud SOURCE-i; avaldatud WEB ja põhipilt säilivad. Runtime muutub kolmes failis. Rakenduse sõltuvusi ja UI-komponente ei muudeta.
+- **Lihtsustamise otsus:** Hallatud teenuse juures ei nõuta Selqirole kättesaamatut privaatse ketta või peatatud Storage-protsessi tõendit. Selqiro kinnitab täpse API/objekti/sessiooni seose ja loogilise eemaldamise; Supabase vastutab peidetud ajutiste failide eest. See piir on docs/architecture/hosted-completed-source-cleanup-v1.md-s ning engineering-handbook’is.
+- **Andmebaas:** Lisav parandus loob kaks service_role-only RPC-d ja ühe privaatse tõendifunktsiooni ning lisab olemasolevale kustumiseotsusele kitsa SOURCE-haru. Uut tabelit, järjekorda ega mahubilanssi ei looda. Vanad üldised koristuse RPC-d jäävad suletuks; cleanup_mode: held säilib, et SQL-i eelnev paigaldus töötaks vana rakendusega.
+- **Tulemuse autoriteet:** Üks kustutuse ACK ega tühi claim ei tähenda valmisolekut. Adapter tagastab pending/null või kinnitatud needs_attention/null; olemasolev omanikuvaade loeb värske serverikviitungi. Alles püsiv tulemus ja objekti/upload’i/osade puudumine vabastavad selle SOURCE-i 25 MiB reservi. WEB-i 4 MiB jääb arvesse.
+- **Tarne lähtebaas:** Uuenduspakk võrdleb tegeliku R3 tarne 958 faili baasi, mille kasutaja on vastu võtnud. 04.11 varasema üleandmise uuendatud dokumente ei eeldata juba Macis olevaks. Paigaldaja loeb enne kirjutusi tegeliku haru/HEAD-i, kogu indexi, tööpuu, lähteräsid ja kinnitatud remote’i.
+- **Pakett:** selqiro-algfotode-koristus-20261104.zip sisaldab ühe käsu uuendajat; selqiro-uleandmine-algfotod-20261104.zip sisaldab täielikku uut lähtekoopiat, sama paigaldajat ja tõendeid. Varem väljastatud R3 ja 04.11 vastuvõtupakid jäävad muutmata. Uus kandidaat on ettevalmistatud koopia, mitte uus Macist või GitHubist loetud puhas tööpuu.
 
 ## Tegelik kohalik katse
 
-- Kasutaja koondraport: 175805 baiti, SHA-256 27846b7a8c5e6c836b6ea592bc7e6989a37d34f7cb851ba1304536aed09dd1c2; 6 arhiiviliiget, CRC ja kõik 5 manifestikirjet läbisid. Kõik 973 vaadeldud rada ja täielik 950 failiga Gitipuu/index on kooskõlas; lugemata või kopeerimata vajalikke faile pole.
-- Kõik 950 tegeliku baasfaili baidid on taastatavad: 949 algsest kontrollitud üleandmisest ja üks dokument uuest raportist. Iga SHA-256 ja Giti blob ID on kontrollitud. R3 kliendikood ja testid on r1/r2-ga identsed.
-- Varasemad rakenduse 119+4 Node-kontrolli, 13 brauserirühma / 20 konteksti ja lõplik exit 0 build säilivad oma algse tõendina. Neid ei korratud. R1 paigaldaja 20 katset, r2 11 katset ja lugeja 13 katset säilivad samuti varasemate kontrollidena.
-- R3 piiritletud uued kontrollid puudutavad ainult mõõdetud 950 faili baasiga manifesti ning täpse 22 faili muudatuse rakendamist. Tulemus ja toorlogi on üleandmispaki kontrollid/r3/verification.json ja selle kõrval; päris Maci build tuleb paigaldamisel.
+- 31/31 sihitud Node-katset: Auth, konto/identiteedi/katse piir, üks SOURCE, vale tee/WEB tõrjumine, tundmatu/kadunud vastus, katkestus ja senise koristaja vaikimisi leping. HTTP-vastused sünteetilised; varasemaid laiu komplekte ei korratud.
+- 19/19 SQL-käitumise ning 14/14 paigalduse kontrollrühma PASS PostgreSQL 17.5 / PGlite 0.3.14 WASM-is. Kasutatud säilitatud tegelikke funktsioonimääratlusi, identiteedipoliitikaid ja kaitsetrigereid, sünteetilisi andmeid/Storage-metaandmeid. Tõendatud 25 MiB vabastamine ja 4 MiB WEB säilimine, õigused, lease, teadmata tulemus ning hilisema eemaldamise/diagnostika piir. Native paralleelseansse ega päris Storage’it ei käitatud.
+- Tootmisbuild npm run build -- --webpack: exit 0, 31,49 s, sünteetilised build-väärtused. Uue kandidaadi esimene build õnnestus. Rakenduse sõltuvused tulid olemasolevast muutmata lock-failist.
+- 4/4 brauserijuhtumit pärast build’i: tegelik IntegratedListingEditPage/useManagedListing ja uus serveriadapter, 1440/390 px, edukas koristus ning ootele jäämine. Auth ja teenusevastused sünteetilised. Värske kviitung juhib failide arvu; WEB/põhipilt säilivad. Lehevigu, ootamatuid/välispäringuid ega horisontaalset ülevoolu ei olnud.
+- 14 erinevat paigaldaja-liidese katset vastu võetud: päris ajutine Git/index, varukoopiad ja kohalik bare-remote; SQL/build-vastused sünteetilised. Kaks esialgset testi ootasid liiga kitsast peatusekoodi, ootused parandati ja ainult need kaks korrati. Tööpuu/indexi või remote’i muutus peatab enne SQL-kirjutust; tundmatut apply’d ei korrata.
+- Lõplike SQL-raportite range parseri sidumine ja üks kokkupandud ajutise paki kasutuskatse PASS (5,161 s): päris R3 baas/allikad, Git/index/varukoopiad, üks commit ja kohalik push. Korduskäik ainult loeb kinnitust; kokku üks SQL apply-intent ja üks sünteetiline build. SQL-vastused pärinesid eraldi kontrollitud WASM-raportitest; see pole pilvepaigaldus.
+- Täpsed tulemused, lähteräsid, brauseri keskkonna piir ja tarne sidumise kontroll on uue üleandmise kontrollid/algfotod-20261104/ all. Varasemad R3 tulemused säilivad oma algse kuupäevaga; neid ei kasutata uue SQL-i tootmistõendina.
 
 ## Production / kasutajaliides
 
-- Kasutaja vastuvõtt säilib: päris pildiga kuulutuse avaldamine, ostja-müüja kontakt, kuulutusekaart, sõnumifotod arvutis/telefonis, Viofo foto ja klaviatuuri kohal kirjutusväli.
-- Varasema põhipildiparandaja edukas commit 04d7081ce51c6da106f726b21dfbfc21e4576f2e ja 02.11 põhipildi valimise kasutajavastuvõtt säilivad. Vanemat paigaldajat või SQL-i ei korrata.
-- R1 ja r2 peatusid enne projektikirjutusi. Koondraport säilitab nende täpsete päevikute valitud väljad ning originaalide räsid. 03.11 14:50:55 seis: puhas main, kogu index HEAD-iga kooskõlas, 950 olemasolevat faili, puuduvad varjatud indexilipud, kohalikud fetch/push sihid kinnitatud ja mirror=false.
-- Koondvõrdlus ei teinud võrguühendust: remote-main’i värsket võrdsust, pilveandmebaasi ega Verceli seisu selle põhjal ei kinnitata. R3 pole veel Macis käivitatud. Selle ettevalmistuse ajal ei muudetud andmebaasi, Storage’it, kontosid ega sõnumeid.
+- Viimane vastu võetud rakendus: 8be94cdff322bc051cd54f5143cd3ea12312493e; Verceli kasutajapildil main / Ready / Production / 46 s. Kasutaja „testides on nüüd korras” sulgeb R3 vastuvõtu.
+- Varasem päris pildiga avaldamine, ostja-müüja kontakt, sõnumifotod arvutis/telefonis, klaviatuur ja põhipildi valik on vastu võetud. Neid samme uue algfotokoristuse eel ei korrata.
+- Uue kandidaadi kohta pole veel Maci VALMIS-raportit, uut commit/push’i, Supabase’i paigaldust, Verceli Ready tulemust ega päris algfoto eemaldamise tõendit. Ettevalmistamisel neid välisteenuseid ei muudetud.
 
 ## Üks järgmine töö
 
-Ava selqiro-pohipilt-identiteet-20261103-r3.zip Downloads-kausta ning käivita python3 -I -B "$HOME/Downloads/selqiro-pohipilt-identiteet-20261103-r3/uuenda.py" --publish. R3 teeb oma värsked tegelikud kontrollid enne kirjutusi ja kasutab eraldi päevikut. VALMIS järel vaata uue commit’i/push’i tulemust, sama commit’i Verceli Ready ning põhipildi järjekorda ja Taivo Garaaži / Milline Vedu lisamisvormi. Koondlugejat ja r1/r2 või varasemaid paigaldajaid ei korrata.
+Laadi alla ja paki Downloads-kaustas lahti selqiro-algfotode-koristus-20261104.zip. Käivita HOSTED_PORTAL.md üks python3 -I -B uuenda.py --publish käsk. See kontrollib olemasolevat ~/selqiro tööpuud, lisab täpselt sobiva SQL-toe, lähtefailid, build’i ja piiratud commit/push’i. Pärast sama uue commit’i Verceli Ready tulemust kontrollida ühe pildiga avaldatud kuulutuse algfailikoristust olemasolevas omanikuvaates: serverikviitungi järelejäänud algfailide arv jõuab nulli ning avalik WEB/põhipilt jääb alles.
 
-**Peatumisel:** PEATATUD korral säilita kõik olemasolevad failid ja päevikud ning saada r3 result.json. Uus või vahepeal muutunud tegelik lähtebaas vajab ülevaatust. Ära kopeeri puuduvaid ajaloolisi SQL-faile käsitsi projekti ega muuda väljastatud räsikaitsega pakke.
+**Peatumisel:** PEATATUD korral säilita töö ja päevik ning saada peatuse kood ja nimetatud result.json. Tundmatut SQL-rakendamist ei korrata automaatselt; enne jätkamist loetakse paigaldatud lepingu täpne seis. Allika/indexi/remote’i kõrvalekaldeid ei lahendata jõuga ega vana guard’i eemaldades. Kontosid, identiteete, kasutaja sisutekste, avalikke WEB-pilte ja päevikuid selle tarnega ei kustutata. Varasemaid lõpetatud paigaldajaid ei korrata.
 
 ## Loe ainult vajalikku
 
-- docs/continuity/LISTING_IDENTITY_ORDER_20261103.md: r3 mõõdetud baas ja säilinud funktsionaalne ulatus.
-- docs/continuity/HOSTED_PORTAL.md: üks kehtiv r3 käsk.
-- Üleandmispaki kontrollid/r3/verification.json ja actual-source-report-original.zip: täielik lähtebaasi tõend.
-- src/features/listing-create/README.md; pärast vastuvõttu sama kuulutuste elutsükli ja hobuste avaldamise moodulid.
+- docs/continuity/HOSTED_PORTAL.md — üks uus käsk ja selle tegelik vastuvõtutee.
+- docs/architecture/hosted-completed-source-cleanup-v1.md — vastutusjaotus, kaks RPC-d, loogiline maht ja allesjäävad piirid.
+- supabase/repairs/20261104_hosted_completed_source_cleanup/README.md — SQL-i leping ning täpsed kohalikud kontrollid.
+- docs/continuity/LISTING_IDENTITY_ORDER_20261103.md — lõpetatud R3 vastuvõtt; varasem LISTING_PHOTO_LIFECYCLE_NEXT_20261104.md on nüüd märgitud lähteauditi ajalooks.
 
 ## Säilivad piirid
 
-- Üks portaal, hoidla ja olemasolev Supabase’i projekt. Kohalik arendusbaas/proovikontod ei kandu pilve. Uut pilve-testbaasi ei looda.
-- Olemasolev kolme konto hosted-lubamine ja päris Auth jäävad jõusse. Üldine avalik kasutus ei tohi jääda käsitsi konto lubamise taha, kuid see tarne piirangut ei eemalda.
-- Kuulutuspiltide olemasolev private bucket (25 MiB, application/octet-stream,image/webp), avalik published-binding/räsi kontroll ja serverivõtmete piir säilivad. Sõnumifotode olemasolev privaatne bucket on eraldi.
-- Kuulutuste hosted settle jääb pending/filesRemaining:null; reserv 29 MiB/pildikoht ja 300 MiB/konto. Lõppkoristus, säilitustähtajad ja reservi vabastamine on eraldi lõpetamata.
-- Sõnumifotod: 250 MiB konto kohta koos kinnitatud ja tombstone-kirjetega. Peitmine mahtu ei vabasta. Kasutuse järel piiratud koristus ei ole püsiv scheduler ega hilinenud kirjutuste lõplikkuse tõend.
-- V1 hilisem last_read_at ei kasvata olemasolevat V2 loetud ID-d. Oma postkastist peitmine ei kustuta teise osalise sõnumeid; üksiksõnumi tagasivõtmist ei lisata.
-- Energy/maksed, teenused, identiteedid, sõnumid, piiratud AI abi ja haldus jäävad kokkulepitud V2 plaani. See tarne ei nihuta neid vaikimisi avaliku käivitamise järel aega.
-- 01.11 testandmete luba asendab varasema blanket-keelu ainult vanade testkuulutuste/testsõnumite ja nende tuvastatud kasutuseta seoste ulatuses. Kontod, identiteedid, logod, teenused, tootenäidised ja päevikud säilivad.
-- Kohalikku sisestust hoitakse ainult avatud lehel. Täielik lehe taaslaadimine ei taasta valitud File-objekte. Poolelioleva avaldamise taastamine eeldab säilinud tegutsejapõhist brauseripäevikut; väliselt kustutatud/katkise päeviku taastamine üle seansi taasloomise on eraldi varasem elutsükli puudus.
+- Üks olemasolev portaal, hoidla ja Supabase’i projekt; sama kolm kontot ja päris Auth. Uut pilve-testbaasi, kontosüsteemi, taustateenust ega käsitsi valitavat koristusrežiimi ei lisata.
+- SOURCE 25 MiB ja WEB 4 MiB on Selqiro loogilised ülempiirid, konto piir 300 MiB. Selle kandidaadi kinnitatud SOURCE-koristus ei tähenda teenusepakkuja füüsilise kettaruumi kohest nullimist ega kohest arve vähenemist.
+- Üks omaniku käsk või avaldamisele järgnev koristussamm käsitleb kuni ühte SOURCE-i. Pooleliolev/tühistatud/aegunud upload, avaldamata objekt, WEB-i eemaldamine ja püsiv scheduler jäävad selle sammu ulatusest välja. Fotode kogu elutsükkel peab valmima enne üldist avalikku kasutust.
+- Kuulutuse fotode lisamine/asendamine/eemaldamine järgneb selle kitsama sammu vastuvõtule. Hobused jäävad ühisesse lisamise, otsingu, detaili ja omanikuvaate voogu. Energy/maksete tuum ning piiratud AI abi jäävad kokkulepitud V2 käivitamiseelsesse ulatusse.
+- Sõnumite, privaatsete sõnumifotode ning nende 250 MiB mahuarvestust ei muudeta. 01.11 kitsas vanade testobjektide eemaldamisluba ei anna luba kustutada kontosid, identiteete, logosid, teenuseid, tootenäidiseid või päevikuid.
+- R3 vormimustandid jäävad avatud lehe ja aktiivse identiteedi kaupa eraldatuks. Täielik taaslaadimine ei taasta valitud File-objekte. Varem teadaolev katkise välise brauseripäeviku taastamine ja ülejäänud V2 tööd säilivad.
 
 ## Keskkond
 
-- Üks olemasolev hoidla https://github.com/Taivo17/selqiro.git ja portaal https://selqiro.vercel.app. Uue paigaldaja vaikimisi Maci töökoht on ~/selqiro, nagu viimases kasutaja käivitatud põhipildi paigaldajas.
-- Supabase vyjletlmwoiwxsnsunlm / eu-central-1; paigalduse UUID 2d088814-0900-448a-a9d1-7b05470cb1d2. Need on säilitatud sihid, mitte värske teenusekontroll. SERVICE_ACCESS.json vanemad 27.10 olekulipud ei tühista kasutaja hilisemat vastuvõttu.
-- Viimane täielik Maci kohalik vaatlus: 03.11.2026 14:50:55 Europe/Tallinn, /Users/taivo/selqiro, puhas main / HEAD 04d7081ce51c6da106f726b21dfbfc21e4576f2e, 950 jälgitavat faili. R3 ettevalmistatud source on sellest taastatud kandidaat, mitte juba Macis rakendatud parandus ega värske tootmise vaatlus.
+- Kinnitatud siht: https://github.com/Taivo17/selqiro.git; portaal https://selqiro.vercel.app; uuendaja vaikimisi siht ~/selqiro. Terminaliviiba kaustanimi ei määra sihti. --repo kasutamisel kontrollivad Git ja CLI sama tegelikku rada.
+- Olemasolev Supabase vyjletlmwoiwxsnsunlm / eu-central-1; paigalduse UUID 2d088814-0900-448a-a9d1-7b05470cb1d2. CLI 2.117.0 viie faili pin ja olemasolev autentimine; uusi paigaldusi ega login’it pole vaja. Need on säilitatud sihid, mitte uus teenusevaatlus.
+- Viimane täielik Maci vaatlus on 03.11 koondraporti 950-failine 04d7081 baas; hilisem R3 edukas tarne ja kasutajavastuvõtt annavad 958-failise paigaldusbaasi. Uue käsu eel loetakse värske tegelik Git ja andmebaasileping, mitte ei eeldata praegust puhtust piltide põhjal.
 
 ## Ajalugu (mitte praegused käsud)
 

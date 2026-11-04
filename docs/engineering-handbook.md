@@ -290,3 +290,26 @@ Rules may evolve when:
 Changes to the standard should always include the reason for the change.
 
 The objective is continuous improvement rather than rigid adherence to old decisions.
+
+## Complexity budget — 2026-11-04
+
+Before adding a mechanism, check whether an existing module, state record or
+provider contract can carry the responsibility. Add a separate layer only when
+it has a distinct failure boundary or a demonstrated product need. A small file
+alone does not make an architecture simple; the number of states and hidden
+connections matters too.
+
+Use one durable record for each operation and reuse its retry rules. Keep tests
+proportional to the changed behavior and concrete remaining risks. Do not repeat
+completed broad checks or add a general framework for one narrow action.
+
+For managed services, verify the exact guarantees available through their API
+and documented contract. Do not simulate access to hidden provider processes or
+disks. Clearly distinguish application accounting from physical storage and
+provider billing. Unknown write results still require reconciliation.
+
+The first application is the
+[hosted completed-SOURCE cleanup contract](architecture/hosted-completed-source-cleanup-v1.md):
+the existing cleanup ledger and transport are reused, and the provider owns its
+hidden temporary-file lifecycle. This replaces an unavailable local-disk proof
+with a precise managed-service responsibility boundary.

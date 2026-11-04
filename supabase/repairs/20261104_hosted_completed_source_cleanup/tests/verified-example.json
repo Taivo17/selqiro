@@ -1,0 +1,38 @@
+{
+  "kind": "listing-hosted-completed-source-cleanup-v1",
+  "state": "applied",
+  "guards": {
+    "functions": true,
+    "installer": true,
+    "actor_roles": true,
+    "core_relations": true,
+    "managed_triggers": true,
+    "required_columns": true,
+    "hosted_context_ready": true,
+    "closed_private_schema": true,
+    "final_writer_policies": true
+  },
+  "invariants": {
+    "existing_authority": "41eb207ea490ab976ed1176998f953004ee302dd579f4df045086845f8a94aee",
+    "existing_functions": "9e256fd1a92ca5e3b42eb448bc260449f0ea48af1ad1d77e62742bdb067f49f6",
+    "immutable_structure": "a8529147421072b02a2e8c15e95beb89147f8a91d315c87e9b7997432dcd71f8"
+  },
+  "recognized": true,
+  "fingerprints": {
+    "capability": "cbd582d9cd263ecd166220f6200f4cc9eed27818a3ef53d9aa9827f6f422ae89",
+    "dependencies": "cf39c7b63463841c7204c71a74019717e36bf69a8b823fe1f5c6ada7260c490e"
+  },
+  "hosted_context": {
+    "release_id": "listing-publication-hosted-preview-v1",
+    "instance_id": "2d088814-0900-448a-a9d1-7b05470cb1d2",
+    "project_ref": "vyjletlmwoiwxsnsunlm",
+    "cleanup_mode": "held",
+    "release_ready": true,
+    "storage_authority_version": "source-part-rfc3986-v1"
+  },
+  "ready_to_apply": false,
+  "schema_version": 1,
+  "dependencies_ok": true,
+  "capability_absent": false,
+  "capability_present": true
+}

@@ -7,6 +7,7 @@ import { createJourneyRequestHandler } from "./createJourneyHandler";
 import { createMultipartPublicationImages, createHostedMultipartPublicationImages,
   type MultipartSettlementCommand } from "../multipart/multipartPublicationImages";
 import { copyWebCommand } from "../web/webImageContract";
+import { createSettleHostedSourceOne } from "../final/settleHostedSourceOne";
 import type { sanitizeListingImage as Sanitize } from "../images/sanitize.cjs";
 
 function journeyHandler(c: PublicationRuntimeConfig) {
@@ -20,10 +21,11 @@ function journeyHandler(c: PublicationRuntimeConfig) {
   const images = isHostedPublicationRuntime(c)
     ? createHostedMultipartPublicationImages(c, sanitizeListingImage)
     : createMultipartPublicationImages({...c, integrationScope: "disposable-v2"}, sanitizeListingImage);
+  const settle = isHostedPublicationRuntime(c) ? createSettleHostedSourceOne(c) : images.settle;
   return createJourneyRequestHandler(c, {
     prepare: (token, input, signal) => images.prepare(token, copyWebCommand(input), signal),
     verify: (token, input, signal) => images.verify(token, copyWebCommand(input), signal),
-    settle: (token, input, signal) => images.settle(token, input as MultipartSettlementCommand, signal),
+    settle: (token, input, signal) => settle(token, input as MultipartSettlementCommand, signal),
   });
 }
 
