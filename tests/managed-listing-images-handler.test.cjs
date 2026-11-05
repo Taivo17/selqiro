@@ -27,10 +27,11 @@ const RELEASE = 'listing-publication-hosted-preview-v1';
 const TOKEN = 'synthetic.user.session';
 const NOW = Date.parse('2026-11-01T12:00:00Z');
 const LISTING = '9007199254740993';
-const READ = 'owner-images-read', PRIMARY = 'owner-images-primary';
+const READ = 'owner-images-read', PRIMARY = 'owner-images-primary', REMOVE = 'owner-images-remove';
 const RPC = {
   [READ]: 'get_my_managed_listing_images_v1',
   [PRIMARY]: 'set_my_managed_listing_primary_image_v1',
+  [REMOVE]: 'remove_my_managed_listing_image_v1',
 };
 const READINESS = '/rest/v1/rpc/get_selqiro_hosted_preview_readiness_v1';
 const secret = 'synthetic-private-database-details-never-return';
@@ -55,7 +56,7 @@ function config() {
 }
 function args(action = PRIMARY) {
   return { p_expected_user_id: USER, p_expected_identity_id: IDENTITY, p_listing_id: LISTING,
-    p_attempt_id: ATTEMPT, ...(action === PRIMARY ? { p_expected_revision: '9007199254740993', p_ordinal: 2 } : {}) };
+    p_attempt_id: ATTEMPT, ...(action !== READ ? { p_expected_revision: '9007199254740993', p_ordinal: 2 } : {}) };
 }
 function readiness(patch = {}) {
   return { schema_version: 1, scope: 'hosted-preview-v1', storage_contract: 'supabase-s3-session-v1',
@@ -64,10 +65,10 @@ function readiness(patch = {}) {
 }
 function snapshot(action = READ) {
   return { schema_version: 1, actor_user_id: USER, identity_id: IDENTITY, listing_id: LISTING,
-    attempt_id: ATTEMPT, revision: action === PRIMARY ? '9007199254740994' : '9007199254740993',
+    attempt_id: ATTEMPT, revision: action !== READ ? '9007199254740994' : '9007199254740993',
     images: Array.from({ length: 3 }, (_, ordinal) => ({ ordinal,
-      url: `/api/v2/listing-media/${ATTEMPT}/${ordinal}`, is_primary: ordinal === (action === PRIMARY ? 2 : 0) })),
-    ...(action === PRIMARY ? { changed: true } : {}) };
+      url: `/api/v2/listing-media/${ATTEMPT}/${ordinal}`, is_primary: ordinal === (action === PRIMARY ? 2 : 0) })).filter(image => action !== REMOVE || image.ordinal !== 2),
+    ...(action !== READ ? { changed: true } : {}) };
 }
 function harness(options = {}) {
   const c = config(), calls = [], imageCalls = [];
@@ -130,13 +131,13 @@ function harness(options = {}) {
   };
 }
 
-for (const action of [READ, PRIMARY]) test(`${action}: Auth and readiness precede the exact user-authorized RPC`, async () => {
+for (const action of [READ, PRIMARY, REMOVE]) test(`${action}: Auth and readiness precede the exact user-authorized RPC`, async () => {
   const h = harness(), input = args(action), result = await h.invoke(action, input);
   assert.equal(result.status, 200); assert.deepEqual(result.value, snapshot(action));
   assert.deepEqual(h.calls.map(call => call.pathname), ['/auth/v1/user', READINESS, '/rest/v1/rpc/' + RPC[action]]);
   assert.deepEqual(h.rpcCalls()[0].body, input);
   assert.equal(typeof h.rpcCalls()[0].body.p_listing_id, 'string');
-  if (action === PRIMARY) assert.equal(h.rpcCalls()[0].body.p_expected_revision, '9007199254740993');
+  if (action !== READ) assert.equal(h.rpcCalls()[0].body.p_expected_revision, '9007199254740993');
 });
 
 test('neither pending authentication nor pending readiness permits an early primary write', async () => {
@@ -150,7 +151,7 @@ test('neither pending authentication nor pending readiness permits an early prim
   ready.resolve(json(readiness())); assert.equal((await pending).status, 200); assert.equal(h.rpcCalls().length, 1);
 });
 
-for (const action of [READ, PRIMARY]) {
+for (const action of [READ, PRIMARY, REMOVE]) {
   test(`${action}: a different authenticated account cannot use the caller's expected user`, async () => {
     const h = harness({ auth: () => json({ id: OTHER }) });
     assert.deepEqual(await h.invoke(action), { status: 403, value: { error: 'context_changed' } });
@@ -172,7 +173,7 @@ test('invalid Auth response and disabled readiness cannot reach a primary write'
   }
 });
 
-for (const action of [READ, PRIMARY]) {
+for (const action of [READ, PRIMARY, REMOVE]) {
   for (const key of Object.keys(args(action)).filter(key => key !== 'p_expected_user_id'))
     test(`${action}: missing ${key} is refused before RPC dispatch`, async () => {
       const h = harness(), input = args(action); delete input[key];
@@ -310,4 +311,42 @@ test('non-POST and unknown owner image action do not authenticate or dispatch', 
   assert.deepEqual(await h.invoke(PRIMARY, args(), { method: 'GET' }), { status: 405, value: { error: 'method' } });
   assert.deepEqual(await h.invoke('owner-images-delete', args()), { status: 404, value: { error: 'not_found' } });
   assert.equal(h.calls.length, 0);
+});
+
+for (const [name, patch] of [
+  ['numeric revision', {p_expected_revision: 5}], ['newline revision', {p_expected_revision: '5\n'}],
+  ['overflow revision', {p_expected_revision: '9223372036854775808'}],
+  ['string ordinal', {p_ordinal: '1'}], ['out of range ordinal', {p_ordinal: 10}],
+  ['foreign path', {p_ordinal: '/source.upload'}],
+]) test('removal rejects invalid CAS input before RPC: ' + name, async () => {
+  const h = harness();
+  assert.deepEqual(await h.invoke(REMOVE, {...args(REMOVE), ...patch}), {status: 409, value: {error: 'refused'}});
+  assert.equal(h.rpcCalls().length, 0);
+});
+
+for (const [code, message, status] of [
+  ['40001', 'listing_images_conflict', 409], ['55000', 'listing_images_unavailable', 409],
+  ['42501', secret, 403], ['22023', secret, 409], ['PGRST202', secret, 409],
+]) test('removal rejection is normalized once without cleanup: ' + code, async () => {
+  const h = harness({rpc: () => json({code, message, detail: secret}, 409)});
+  const result = await h.invoke(REMOVE);
+  assert.equal(result.status, status); assert.equal(result.value.error, 'owner_contract');
+  assert.equal(result.value.code, code); assert.equal(JSON.stringify(result).includes(secret), false);
+  assert.equal(h.rpcCalls().length, 1); assert.deepEqual(h.imageCalls, []);
+});
+
+test('lost removal acknowledgement stays unknown without resend or cleanup', async () => {
+  const h = harness({rpc: () => {throw Error('connection lost after commit');}});
+  assert.deepEqual(await h.invoke(REMOVE), {status: 503, value: {error: 'outcome_unknown'}});
+  assert.equal(h.rpcCalls().length, 1); assert.deepEqual(h.imageCalls, []);
+});
+
+test('removal abort after RPC dispatch ignores late success without cleanup', async () => {
+  const entered = defer(), reply = defer(), control = new AbortController();
+  const h = harness({rpc: async () => {entered.resolve(); return reply.promise;}});
+  const pending = h.invoke(REMOVE, args(REMOVE), {signal: control.signal});
+  await entered.promise; control.abort();
+  assert.deepEqual(await pending, {status: 503, value: {error: 'outcome_unknown'}});
+  reply.resolve(json(snapshot(REMOVE))); await Promise.resolve();
+  assert.equal(h.rpcCalls().length, 1); assert.deepEqual(h.imageCalls, []);
 });

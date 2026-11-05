@@ -114,6 +114,24 @@ Käsk on seotud omaniku olemasoleva kasutusteega ja uue avaldamise järel
 tehtava piiratud koristussammuga. Ühe käsuga koristatakse kuni üks algfoto.
 Püsivat ajastatud koristajat ega kõigi vanade objektide masskoristust ei lisata.
 
+## Avaliku kasutajaliidese otsus — 04.11.2026
+
+Kasutaja veebikatse järel kinnitatud nõue: algfailide koristus on süsteemi
+taustatöö. Tavakasutaja ei pea seda käivitama ega kontrollima. Avalikus
+portaalis ei kuvata koristusloendurit, koristusnuppu ega tehnilisi
+lõpetamisteateid. Kuulutuse tegelik avaldamisolek jääb selgelt nähtavaks.
+
+Kasutajale kuvatakse ainult probleem, mis vajab tema tegevust või takistab
+teenuse kasutamist, koos arusaadava järgmise sammuga. Tehniline olek ja vead
+säilivad olemasolevas sisemises päevikus ning asjakohases haldusdiagnostikas.
+Ka kuulutuse eemaldamise kinnitustekst kirjeldab kasutajale nähtavat mõju.
+
+Testimisel võib paneel praegu alles olla. Enne eemaldamist peab sobivate
+algfailide automaatne lõpuni viimine töötama nupuvajutuseta ja avatud
+omanikuvaatest sõltumata. Aluseks jääb senine ühe objekti leping ja püsiv
+tööjärg. Ainult paneeli peitmine seda nõuet ei täida. Siin dokumenteeritakse
+otsus, mitte valmis scheduler või praegu peidetud UI. Muud elutsükli piirid säilivad.
+
 ## Muudatuse failipiir
 
 - `src/server/listing-publication/final/settleHostedSourceOne.ts`: Auth ja
@@ -151,4 +169,13 @@ Selqiro praeguse pilveversiooni ega käesoleva muudatuse tootmiskatse.
   DELETE'i ei eeldata kontrollimata deployed versiooni põhjal.
 - [S3 uploads](https://supabase.com/docs/guides/storage/uploads/s3-uploads):
   multipart'i elutsükkel; automaatset aegumist ei kasutata selle sammu tõendina.
+
+## Järgnev kitsas täiendus — 04.11.2026
+
+[Avaldatud lisafoto eemaldamise kandidaat](published-listing-photo-removal-v1.md)
+säilitab käesoleva SOURCE-töötaja. Galeriikontroll arvestab nüüd aktiivseid
+pildiridu ning täpseid eemaldatud WEB-i päevikukirjeid. Foto eemaldamise eel
+peab selle SOURCE olema tõendatult koristatud; nii saab allesjäänud SOURCE-ide
+senine koristus edasi töötada. WEB-i eemaldamiskirje ei muuda avaldatud
+SOURCE-kviitungi failide arvu ega vabasta WEB-i reservi.
 

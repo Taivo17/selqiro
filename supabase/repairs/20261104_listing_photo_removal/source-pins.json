@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "inputs": {
+    "supabase/migrations/20260722173530_baseline_20260722.sql": "7ca065f92f01c0f38ada5f5a50d2a0fc5b716f5291d1525d398023b7db59da3f",
+    "supabase/releases/listing-publication-hosted-preview-v1/00_preconditions.sql": "69c6005ed959afeb22bd1db3e597f23d17e7dfe86c968a35f512f94f34c995c8",
+    "supabase/releases/listing-publication-hosted-preview-v1/10_price_core.sql": "9f843033bed721ab73d8cb01d3750e4dacc417dc0ddf84b92c9845745bb75dad",
+    "supabase/releases/listing-publication-hosted-preview-v1/20_publication_core.sql": "f1c56c6ba381ceb5ab1d120092f676964762829ad63c5201a6c6b809c419f062",
+    "supabase/releases/listing-publication-hosted-preview-v1/60_preview_authority.sql": "bee78747b8932504c6960b9dba9b5b6673d06c5876dc76508b2322e48f6789bb",
+    "supabase/releases/listing-publication-hosted-preview-v1/30_multipart_and_journey.sql": "d0f8c44a557c1b03df8ceb23c5069cf94a8560a2e3faaa3b0a56d701d0858765",
+    "supabase/releases/listing-publication-hosted-preview-v1/release.sql": "974dd6acb246b275acb593688aa14449cd42e80939101086d742ee5c4c5a4c3e",
+    "supabase/repairs/20261101_listing_primary_image/tests/previous-preflight.sql": "e1f14709ebeee6c1513f4507937fc4418ae535a4ae465c6882a81bcdcf82a8fd",
+    "supabase/repairs/20261101_listing_primary_image/changes.sql": "6e131c70b2dc941b411588f2e6585c5bf3a85b23b50f2e2dc19d766ff1297714",
+    "supabase/repairs/20261101_listing_primary_image/preflight.sql": "1f07a7c17fa12737bc9a6242ce02baa62d3450148f4f94b5c1837da7f5a8b178",
+    "supabase/repairs/20261101_listing_primary_image/tests/fixture.mjs": "b56ff4b3eea26e49a5370eb246440a37a8bbc553ed4cf8310187c8b6213fb210",
+    "supabase/releases/listing-publication-hosted-preview-v1/40_read_models_and_owner.sql": "d19bf23e0746e8e6ba6750f4c235135fbaa9cff3b3f184e05a87433c10eaad78",
+    "supabase/repairs/20261104_hosted_completed_source_cleanup/changes.sql": "ba8a028c16453d0eb0007d565897f7e6af3c3cbe2b285932e060e29a4643961e",
+    "supabase/repairs/20261104_hosted_completed_source_cleanup/tests/fixture.mjs": "6dabfc2483f47ddf38af0a939147d5b2df830e60ca5eaa2614d109cf1be435e0"
+  }
+}

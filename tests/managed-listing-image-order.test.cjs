@@ -83,3 +83,14 @@ test('empty and fallback galleries preserve their existing order', () => {
   assert.equal(displayed[0], fallback[0]);
   assert.equal(displayed[1], fallback[1]);
 });
+
+test('primary-first display after a middle removal preserves the remaining original ordinals', () => {
+  const complete = snapshot(4, 2);
+  const active = {...complete, images: complete.images.filter(image => image.ordinal !== 1)};
+  const displayed = order(active.images);
+  assert.deepEqual(ordinals(displayed), [2, 0, 3]);
+  const selected = displayed[2];
+  const args = model.managedListingPrimaryArguments({key, baseline: active, ordinal: selected.ordinal});
+  assert.equal(args.p_ordinal, 3); assert.equal(args.p_expected_revision, '5');
+  assert.equal(selected.url, `/api/v2/listing-media/${key.attemptId}/3`);
+});

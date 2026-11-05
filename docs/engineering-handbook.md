@@ -313,3 +313,10 @@ The first application is the
 the existing cleanup ledger and transport are reused, and the provider owns its
 hidden temporary-file lifecycle. This replaces an unavailable local-disk proof
 with a precise managed-service responsibility boundary.
+
+The published-photo removal slice applies the same rule: active gallery rows,
+their existing presentation revision and the existing cleanup ledger carry the
+change. A retired WEB cleanup record also explains the missing gallery member;
+no parallel membership table is introduced. Original media identities remain
+stable, and removal from a listing is distinct from proved Storage deletion.
+See [the photo-removal contract](architecture/published-listing-photo-removal-v1.md).

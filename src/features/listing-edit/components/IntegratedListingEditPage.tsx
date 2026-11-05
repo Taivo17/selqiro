@@ -96,7 +96,9 @@ export default function IntegratedListingEditPage({listingId}: {listingId: strin
       <BoundEditor key={`${owner.actor.userId}:${owner.actor.identityId}:${listingId}`} actor={owner.actor} listingId={listingId} blocked={blocked} />
       <ManagedListingImagePicker actor={owner.actor} gallery={owner.gallery} fallbackImages={owner.images}
         blocked={blocked} error={owner.imageError} message={owner.imageMessage} busyOrdinal={owner.primaryBusyOrdinal}
-        onSelect={ordinal => { void owner.setPrimary(ordinal); }} onRefresh={owner.refresh} />
+        removalBusyOrdinal={owner.removalBusyOrdinal} canRemove={owner.receipt.files_remaining === 0}
+        onSelect={ordinal => { void owner.setPrimary(ordinal); }} onRemove={command => { void owner.removeImage(command); }}
+        onRefresh={owner.refresh} />
       {owner.receipt.files_remaining > 0 ? <section className="space-y-3 rounded-[30px] border bg-white p-6" aria-label="Algfailide koristamine">
         <h2 className="text-xl font-black">Algfailide koristamine</h2>
         <p>Avaldatud veebipildid jäävad kuulutusse. Üleslaaditud algfailide lõppkoristust ootab {owner.receipt.files_remaining} faili.</p>

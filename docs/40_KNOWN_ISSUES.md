@@ -42,3 +42,17 @@ Required future fix:
 
 Store category creation does not rely on this client setter for authorization.
 Its RPC validates the stored active identity independently.
+
+## Published photo lifecycle — remaining public-launch work, 2026-11-04
+
+The current small removal candidate removes a non-primary photo from the active
+gallery and revokes its media routes. Its private WEB object remains queued and
+charged until a separate, proved cleanup capability completes. The removal
+command does not claim physical deletion or release that reservation.
+
+Adding/replacing published photos, retired/terminal WEB cleanup and automatic
+completion independent of the owner page remain to be finished. Before public
+launch, ordinary users must not see technical cleanup counters or be responsible
+for advancing cleanup. The current test panel is intentionally retained at the
+user's request. See `docs/architecture/published-listing-photo-removal-v1.md` and
+the authoritative `docs/continuity/CURRENT_STATE.json` for actual delivery state.

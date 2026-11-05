@@ -1,22 +1,33 @@
 # Listing Edit feature
 
-Listing Edit owns the private V2 listing editing workflow.
+Private route: `/v2/my-area/listings/[id]/edit`.
 
-Current scope:
+The managed publication path composes `IntegratedListingEditPage`, the existing
+basics/price edit session, `useManagedListing` and `ManagedListingImagePicker`.
+It supports saved basic fields, current gallery/primary selection and the
+bounded listing lifecycle. Authorization remains in server/database contracts.
 
-- route exists
-- listing loads
-- owner check works
-- read-only edit shell is visible
+The 2026-11-04 photo-removal candidate adds removal of one non-primary photo
+after SOURCE cleanup, while at least one photo remains. It reuses the gallery
+revision, authenticated transport and existing owner-action lock. Confirmation
+belongs to the displayed actor, identity, listing, attempt, revision and original
+photo ordinal. Remaining URLs are never renumbered. Unknown results require a
+read-only refresh before another photo action.
 
-Not yet implemented:
+The older `ListingEditPage` and its image hooks are a separate retained entry
+path; they are not copied into the managed publication workflow. Do not call
+legacy Storage/image mutation helpers for managed publication slots.
 
-- saving
-- image editing
-- category editing
-- AI assist
-- status actions
+Relevant contracts:
 
-Rule:
+- `docs/architecture/listing-edit-client-v1.md` — basic edit session.
+- `docs/architecture/published-listing-photo-removal-v1.md` — active membership,
+  media revocation, held WEB cleanup and exact scope.
+- `docs/architecture/hosted-completed-source-cleanup-v1.md` — accepted SOURCE
+  cleanup and the public-launch UX requirement.
+- `docs/continuity/CURRENT_STATE.json` — prepared versus installed/accepted state.
 
-Editing changes public production content, so each capability must be added in small tested steps.
+New-photo upload/replacement and physical cleanup of retired WEB objects remain
+subsequent bounded capabilities. The cleanup diagnostics may stay visible while
+testing; reliable automatic cleanup and ordinary-user UI simplification are
+required before public launch.

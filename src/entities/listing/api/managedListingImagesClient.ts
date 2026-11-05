@@ -1,26 +1,29 @@
 import { getListingActivityActor } from "./getListingActivityActor";
 import { publicationJourneyRequest } from "./publicationJourneyClient";
 import type { PublicationActor } from "../model/publicationJourney";
-import { bindManagedListingImagesKey, bindManagedListingPrimaryCommand, classifyManagedListingImagesError,
-  ManagedListingImagesError, managedListingImagesReadArguments, managedListingPrimaryArguments,
-  parseManagedListingImages, parseManagedListingPrimarySaved,
+import { bindManagedListingImagesKey, bindManagedListingPrimaryCommand, bindManagedListingRemoveCommand, classifyManagedListingImagesError,
+  ManagedListingImagesError, managedListingImagesReadArguments, managedListingPrimaryArguments, managedListingRemoveArguments,
+  parseManagedListingImages, parseManagedListingPrimarySaved, parseManagedListingRemoveSaved,
   type ManagedListingImagesKey, type ManagedListingImagesSaved, type ManagedListingImagesSnapshot,
-  type ManagedListingPrimaryCommand } from "../model/managedListingImages";
+  type ManagedListingPrimaryCommand, type ManagedListingRemoveCommand } from "../model/managedListingImages";
 
+type ImageAction = "owner-images-read" | "owner-images-primary" | "owner-images-remove";
 export type ManagedListingImagesRequest = (actor: PublicationActor,
-  action: "owner-images-read" | "owner-images-primary", args: Readonly<Record<string, unknown>>,
+  action: ImageAction, args: Readonly<Record<string, unknown>>,
   signal: AbortSignal) => PromiseLike<unknown>;
 export type ManagedListingImagesClient = Readonly<{
   read(key: ManagedListingImagesKey, signal?: AbortSignal): Promise<ManagedListingImagesSnapshot>;
   setPrimary(command: ManagedListingPrimaryCommand, signal?: AbortSignal): Promise<ManagedListingImagesSaved>;
+  remove(command: ManagedListingRemoveCommand, signal?: AbortSignal): Promise<ManagedListingImagesSaved>;
 }>;
 
 /** One bounded request with actor checks on both sides. Writes have no retry or legacy fallback. */
 export function createManagedListingImagesClient(request: ManagedListingImagesRequest,
     actor: () => PromiseLike<PublicationActor>): ManagedListingImagesClient {
-  async function checked<T>(key: ManagedListingImagesKey, writing: boolean,
+  async function checked<T>(key: ManagedListingImagesKey, action: ImageAction,
       args: Readonly<Record<string, unknown>>, parse: (value: unknown) => T, signal?: AbortSignal): Promise<T> {
     if (signal?.aborted) throw new ManagedListingImagesError("context");
+    const writing = action !== "owner-images-read";
     const controller = new AbortController();
     let dispatched = false;
     let cancel: (() => void) | undefined;
@@ -31,7 +34,7 @@ export function createManagedListingImagesClient(request: ManagedListingImagesRe
         if (!matches(await actor()) || controller.signal.aborted) throw new ManagedListingImagesError("context");
         dispatched = true;
         const value = await request(Object.freeze({ userId: key.userId, identityId: key.identityId }),
-          writing ? "owner-images-primary" : "owner-images-read", args, controller.signal);
+          action, args, controller.signal);
         if (controller.signal.aborted) throw new ManagedListingImagesError(writing ? "unknown" : "context");
         const result = parse(value);
         let confirmed: PublicationActor;
@@ -64,13 +67,18 @@ export function createManagedListingImagesClient(request: ManagedListingImagesRe
   return Object.freeze({
     read(key: ManagedListingImagesKey, signal?: AbortSignal) {
       const bound = bindManagedListingImagesKey(key);
-      return checked(bound, false, managedListingImagesReadArguments(bound),
+      return checked(bound, "owner-images-read", managedListingImagesReadArguments(bound),
         value => parseManagedListingImages(value, bound), signal);
     },
     setPrimary(command: ManagedListingPrimaryCommand, signal?: AbortSignal) {
       const bound = bindManagedListingPrimaryCommand(command);
-      return checked(bound.key, true, managedListingPrimaryArguments(bound),
+      return checked(bound.key, "owner-images-primary", managedListingPrimaryArguments(bound),
         value => parseManagedListingPrimarySaved(value, bound), signal);
+    },
+    remove(command: ManagedListingRemoveCommand, signal?: AbortSignal) {
+      const bound = bindManagedListingRemoveCommand(command);
+      return checked(bound.key, "owner-images-remove", managedListingRemoveArguments(bound),
+        value => parseManagedListingRemoveSaved(value, bound), signal);
     },
   });
 }
@@ -78,3 +86,4 @@ export function createManagedListingImagesClient(request: ManagedListingImagesRe
 export const managedListingImagesClient = createManagedListingImagesClient(publicationJourneyRequest, getListingActivityActor);
 export const readManagedListingImages = managedListingImagesClient.read;
 export const setManagedListingPrimaryImage = managedListingImagesClient.setPrimary;
+export const removeManagedListingImage = managedListingImagesClient.remove;

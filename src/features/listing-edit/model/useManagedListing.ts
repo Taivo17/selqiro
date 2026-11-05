@@ -9,16 +9,18 @@ import {receipt, type FinalReceipt} from "../../../server/listing-publication/fi
 import {uploadRecord} from "../../../entities/listing/model/privatePublicationUpload";
 import {managedListingMedia} from "../../../entities/listing/model/listingMediaUrl";
 import type {PublicationActor} from "../../../entities/listing/model/publicationJourney";
-import {readManagedListingImages, setManagedListingPrimaryImage} from "../../../entities/listing/api/managedListingImagesClient";
-import {ManagedListingImagesError, type ManagedListingImagesSnapshot} from "../../../entities/listing/model/managedListingImages";
+import {readManagedListingImages, removeManagedListingImage, setManagedListingPrimaryImage} from "../../../entities/listing/api/managedListingImagesClient";
+import {bindManagedListingRemoveCommand, confirmManagedListingImagesReadback, ManagedListingImagesError,
+  type ManagedListingImagesSnapshot, type ManagedListingRemoveCommand} from "../../../entities/listing/model/managedListingImages";
 export type ManagedListingState = {actor: PublicationActor | null; receipt: FinalReceipt | null;
   activity: {status: "active" | "paused" | "sold"; activeUntil: string | null} | null; images: string[];
   gallery: ManagedListingImagesSnapshot | null; imageError: string | null; imageMessage: string | null;
-  primaryBusyOrdinal: number | null;
+  primaryBusyOrdinal: number | null; removalBusyOrdinal: number | null;
   cleanupState: "pending" | "needs_attention" | "settled" | null;
   loading: boolean; busy: boolean; error: string | null};
 const initial = (): ManagedListingState => ({actor: null, receipt: null, activity: null, images: [], gallery: null,
-  imageError: null, imageMessage: null, primaryBusyOrdinal: null, cleanupState: null, loading: true, busy: false, error: null});
+  imageError: null, imageMessage: null, primaryBusyOrdinal: null, removalBusyOrdinal: null,
+  cleanupState: null, loading: true, busy: false, error: null});
 function sameImages(gallery: ManagedListingImagesSnapshot, urls: readonly string[]) {
   const expected = [...urls].sort(), actual = gallery.images.map(image => image.url).sort();
   return expected.length === actual.length && expected.every((url, index) => url === actual[index]);
@@ -41,7 +43,7 @@ export function useManagedListing(listingId: string) {
       const keep = preserve && previous.actor !== null && previous.receipt?.listing_id === listingId;
       const g = ++generation.current; control.current.abort(); control.current = new AbortController();
       const signal = control.current.signal; locked.current = false;
-      const checking = keep ? {...previous, loading: true, busy: false, primaryBusyOrdinal: null, error: null} : initial();
+      const checking = keep ? {...previous, loading: true, busy: false, primaryBusyOrdinal: null, removalBusyOrdinal: null, error: null} : initial();
       stateRef.current = checking; setState(checking);
       queueMicrotask(() => { void (async () => {
         try {
@@ -76,6 +78,8 @@ export function useManagedListing(listingId: string) {
             try {
               gallery = await readManagedListingImages({...actor, listingId, attemptId: final.attempt_id}, signal);
               if (!sameImages(gallery, value.images as string[])) throw new ManagedListingImagesError("unavailable");
+              if (sameAttempt && previous.gallery?.images.length)
+                gallery = confirmManagedListingImagesReadback(previous.gallery, gallery);
             } catch (error) {
               if (error instanceof ManagedListingImagesError && error.code === "context") throw error;
               gallery = null;
@@ -84,7 +88,8 @@ export function useManagedListing(listingId: string) {
           }
           if (!active || g !== generation.current || identityChangePending(actor.userId)) return;
           const next: ManagedListingState = {actor, receipt: final, activity, images: value.images as string[],
-            gallery, imageError, imageMessage: null, primaryBusyOrdinal: null, cleanupState, loading: false, busy: false, error: null};
+            gallery, imageError, imageMessage: null, primaryBusyOrdinal: null, removalBusyOrdinal: null,
+            cleanupState, loading: false, busy: false, error: null};
           stateRef.current = next; setState(next);
         } catch { if (active && g === generation.current) {
           const retained = stateRef.current.actor === previous.actor && keep ? stateRef.current : initial();
@@ -128,7 +133,7 @@ export function useManagedListing(listingId: string) {
         attemptId: current.receipt.attempt_id, requestKey: current.receipt.request_key});
       if (!final.content_deleted || !["deleting", "deleted"].includes(final.state)) throw new Error("response");
       const next: ManagedListingState = {...current, receipt: final, images: [], gallery: null, activity: null,
-        imageError: null, imageMessage: null, primaryBusyOrdinal: null,
+        imageError: null, imageMessage: null, primaryBusyOrdinal: null, removalBusyOrdinal: null,
         cleanupState: final.state === "deleted" ? "settled" : "pending", busy: false, error: null}; stateRef.current = next; setState(next);
     } catch { if (g === generation.current) {
       const failed = {...stateRef.current, busy: false, error: "Kustutamise tulemus pole kinnitatud. Kontrolli seisu enne uut tegevust."};
@@ -161,7 +166,7 @@ export function useManagedListing(listingId: string) {
     } }
     finally { if (g === generation.current) locked.current = false; }
   };
-  const setPrimary = async (ordinal: number) => {
+  const changeImage = async (action: "primary" | "remove", ordinal: number, confirmation?: ManagedListingRemoveCommand) => {
     const current = stateRef.current, actor = current.actor, gallery = current.gallery;
     if (locked.current || current.loading || current.error || current.imageError || !actor || !gallery
       || identityChangePending(actor.userId) || current.receipt?.state !== "published"
@@ -169,35 +174,49 @@ export function useManagedListing(listingId: string) {
       || gallery.key.userId !== actor.userId || gallery.key.identityId !== actor.identityId
       || gallery.key.attemptId !== current.receipt.attempt_id
       || !gallery.images.some(image => image.ordinal === ordinal && !image.isPrimary)) return;
+    let command = {key: gallery.key, baseline: gallery, ordinal};
+    if (action === "remove") {
+      if (!confirmation || current.receipt.files_remaining !== 0 || gallery.images.length < 2) return;
+      try {
+        command = bindManagedListingRemoveCommand(confirmation);
+        // A confirmation belongs to the displayed revision and target. It cannot
+        // silently follow a refresh, account change or a different primary.
+        if (command.ordinal !== ordinal || command.baseline.revision !== gallery.revision) return;
+        confirmManagedListingImagesReadback(command.baseline, gallery);
+      } catch { return; }
+    }
     locked.current = true; const g = generation.current;
-    const busy = {...current, busy: true, primaryBusyOrdinal: ordinal, imageMessage: null, imageError: null};
+    const busy = {...current, busy: true, primaryBusyOrdinal: action === "primary" ? ordinal : null,
+      removalBusyOrdinal: action === "remove" ? ordinal : null, imageMessage: null, imageError: null};
     stateRef.current = busy; setState(busy);
     let acknowledged = false;
     try {
-      const saved = await setManagedListingPrimaryImage({key: gallery.key, baseline: gallery, ordinal}, control.current.signal);
+      const saved = await (action === "primary" ? setManagedListingPrimaryImage : removeManagedListingImage)(command, control.current.signal);
       acknowledged = true;
       if (g !== generation.current) return;
-      // Read the current presentation after the CAS acknowledgement. A newer
-      // concurrent choice may already exist; never repaint an older primary.
-      const fresh = await readManagedListingImages(gallery.key, control.current.signal);
+      // Both primary and membership can advance concurrently. Confirm a current
+      // authorized snapshot; the ACK alone never removes a displayed photo.
+      const fresh = confirmManagedListingImagesReadback(saved.snapshot,
+        await readManagedListingImages(gallery.key, control.current.signal));
       if (g !== generation.current) return;
-      if (!sameImages(fresh, current.images) || BigInt(fresh.revision) < BigInt(saved.snapshot.revision)
-        || fresh.revision === saved.snapshot.revision && fresh.images.some((image, index) => image.isPrimary !== saved.snapshot.images[index]?.isPrimary))
-        throw new ManagedListingImagesError("unknown");
-      const next: ManagedListingState = {...stateRef.current, gallery: fresh, busy: false, primaryBusyOrdinal: null,
-        imageError: null, imageMessage: fresh.images[ordinal]?.isPrimary ? "Põhipilt on salvestatud."
-          : "Põhipilti muudeti vahepeal uuesti. Näitan viimast salvestatud valikut."};
+      const next: ManagedListingState = {...stateRef.current, gallery: fresh, images: fresh.images.map(image => image.url),
+        busy: false, primaryBusyOrdinal: null, removalBusyOrdinal: null, imageError: null,
+        imageMessage: action === "remove" ? "Foto on kuulutusest eemaldatud."
+          : fresh.images.some(image => image.ordinal === ordinal && image.isPrimary) ? "Põhipilt on salvestatud."
+          : "Pilte muudeti vahepeal uuesti. Näitan viimast salvestatud seisu."};
       stateRef.current = next; setState(next);
     } catch (error) {
       if (g !== generation.current) return;
       const problem = error instanceof ManagedListingImagesError ? error : new ManagedListingImagesError("unknown");
-      const failed: ManagedListingState = {...stateRef.current, busy: false, primaryBusyOrdinal: null, imageMessage: null,
-        imageError: acknowledged ? "Põhipildi valik salvestati, kuid viimast seisu ei saanud lugeda. Kontrolli piltide seisu."
+      const failed: ManagedListingState = {...stateRef.current, busy: false, primaryBusyOrdinal: null, removalBusyOrdinal: null, imageMessage: null,
+        imageError: acknowledged ? "Pildimuudatus salvestati, kuid viimast seisu ei saanud lugeda. Kontrolli piltide seisu."
           : problem.message};
       stateRef.current = failed; setState(failed);
       // The imageError keeps writes locked until a successful, authoritative
       // read. A render, timeout or released button never retries the command.
     } finally { if (g === generation.current) locked.current = false; }
   };
-  return {...scoped, refresh: () => refreshRef.current(), remove, cleanup, setPrimary};
+  return {...scoped, refresh: () => refreshRef.current(), remove, cleanup,
+    setPrimary: (ordinal: number) => changeImage("primary", ordinal),
+    removeImage: (command: ManagedListingRemoveCommand) => changeImage("remove", command.ordinal, command)};
 }

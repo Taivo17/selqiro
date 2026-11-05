@@ -1,3 +1,69 @@
+<!-- SELQIRO_PUBLISHED_PHOTO_REMOVAL_20261104 -->
+## 2026-11-04 — Ühe avaldatud lisafoto eemaldamine
+
+- Ettevalmistatud üks väike fotode muutmise samm: omanik saab konkreetse
+  kinnitusega eemaldada mittepõhipildi, kui vähemalt üks foto jääb alles ja
+  valitud algfaili koristus on tõendatud. Praegune UI ootab SOURCE-loenduri nulli.
+- Sama aktiivsete pildiridade tabel, esitusrevision ja cleanup-päevik jäävad
+  kasutusse. Uut tabelit/järjekorda/rolli/mahubilanssi ei looda. Algsete fotode
+  URL-id ja kviitungid säilivad; eemaldatud foto mõlemad veebiaadressid sulguvad.
+- Üks uus authenticated-only RPC, neli piiratud funktsiooniasendust ja üks
+  cleanup-põhjuse lisamine. WEB jääb privaatselt järjekorda ja reservi;
+  Storage’i kustutust, valmisolekut või mahu vabastamist ei teeselda.
+- Klient seob kinnituse identiteedi/kuulutuse/katse/revisioni/fotoga, kasutab
+  senist omaniku toimingulukku ja nõuab värsket serveri lugemit. Ebaselget
+  kirjutust ei korrata. Tekstitoimetaja ja salvestamata sisestus säilivad.
+- Sõltumatu ülevaatus leidis ja parandas liigse seose: üldine omanikuvaate
+  lugem ei tohi sõltuda täiesti korras galeriist. Vigase galeriirea korral
+  keelatakse foto muutmine, kuid kuulutuse tekstihaldus ja kogu kuulutuse
+  autoriseeritud eemaldamine jäävad võimalikuks. Selle kohta lisati SQL-katse.
+- 225/225 sihitud kliendi/mudeli/HTTP/järjestuse katset PASS; lõpliku SQL-i
+  20/20 käitumise ja 14/14 paigalduse kontrollrühma PASS (PGlite/PostgreSQL17.5
+  WASM, sünteetilised andmed). Lõplik runtime’i build PASS 18,94 s.
+- 12/12 brauserijuhtu PASS tegeliku omanikuvaate ja hookidega, 1440/390 px.
+  HTTP-vastused olid sünteetilised; 0 leheviga, välispäringut või ootamatut
+  toimingut. Esialgse Chromiumi protsessieluea tõrge lahendati ainult katses.
+- Uue SQL-raporti parserisidumine ning neli uue tarne liidesekatset PASS.
+  Git/index/kohalik remote olid ajutised päris tööriistad; SQL/build seal
+  sünteetilised. Varasemate testide tõendid säilivad kuupäevaga, mitte uue
+  sammu tootmistõendina. Detailid on üleandmise kontrollikataloogis.
+- Kokkupandud tarnekatse PASS 6,737 s: täpne 34 faili delta ja 961 guardi,
+  üks commit/kohalik push; kordus ainult luges SQL-kinnitust. Katseraami vana
+  raportitee parandati, paigaldaja jäi muutmata. Lõpliku pakendi räsid ja
+  allikate vastavus kontrolliti eraldi enne väljastamist.
+- Lähtebaasiks on eelmise SOURCE-tarne 978 kontrollitud faili. Viis eraldi
+  Maci rakendamata vastuvõtudokumenti kaasatakse uude deltasse. Tegelik HEAD,
+  kogu index/tööpuu, lähtefailid ja remote loetakse uuendamisel värskelt;
+  R3 räsi on ainult esivanema kontroll. Vanad väljastatud pakid säilivad.
+- Uuendatud seisukirje, sellest genereeritud üleandmine, HOSTED_PORTAL,
+  mooduli arhitektuur, feature README, engineering handbook ja teadaolevad
+  avaliku avamise piirid. Testimiseks jääb koristuspaneel nähtavaks.
+- Maci, pilveandmebaasi, GitHubi ega Vercelit selles ettevalmistuses ei
+  muudetud; päris kasutaja fotot ei eemaldatud. Järgneb üks uus uuenduskäsk,
+  selle commit’i Ready ning üks kitsas testkuulutuse kasutuskatse.
+
+<!-- SELQIRO_HOSTED_SOURCE_WEB_ACCEPTED_20261104 -->
+## 2026-11-04 — Algfotokoristuse veebikatse ja avaliku UI otsus
+
+- Kasutaja piltidel väheneb kuulutuse 201 ootel arv 3 → 2 → 1, seejärel
+  plokk kaob. Kolm fotot/põhipilt säilivad. Uuel ühe fotoga kuulutusel 202
+  plokki pole. Otsingus on piltidega kaardid sisse logitud vaates.
+- Nähtav kasutustee on vastu võetud. Uut commit'i, Maci raportit, Verceli
+  deployment'i identiteeti, SQL-fingerprinti või mahuloendurit piltidel pole.
+  Vanemat R3 räsi ei kanta uue tarne tõendiks.
+- Kasutaja otsus: testimisel võib koristus nähtav olla; avalikus portaalis
+  peab see olema töökindel taustatöö. Koristusnupp/loendur ja tehnilised
+  lõpukinnitused eemaldatakse enne avamist. Kasutaja näeb tegelikku kuulutuse
+  olekut ning talle olulist probleemi. Senine sisemine päevik säilib.
+- Ainult paneeli peitmine ei täida nõuet: automaatne lõpuni viimine ei tohi
+  sõltuda kasutaja nupuvajutusest ega avatud lehest. Praegu UI-d ei muudeta.
+- Uuendati viis dokumenti uues üleandmiskoopias: CURRENT_STATE, genereeritud
+  lühileht, HOSTED_PORTAL, olemasolev arhitektuurileping ja see päevik.
+  Runtime/SQL/testid/paigaldaja säilivad; teste ega build'i ei korratud.
+  Dokumente pole eraldi Maci või Giti rakendatud. Eraldi terminalikäsku ei anta.
+- Järgmine koodisamm kasutab värskelt loetud tegelikku Git-baasi. Vanad
+  väljastatud pakid ja päevikud säilivad; uut kirjutust tootmises ei tehtud.
+
 <!-- SELQIRO_HOSTED_COMPLETED_SOURCE_20261104 -->
 ## 2026-11-04 — Ühe avaldatud algfoto koristus ja selgem vastutuspiir
 

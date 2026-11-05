@@ -14,6 +14,7 @@ const ownerActions = {
   "owner-cleanup-status": {name: "get_my_listing_cleanup_summary_v1", keys: ["p_expected_identity_id", "p_expected_user_id"]},
   "owner-images-read": {name: "get_my_managed_listing_images_v1", keys: ["p_expected_user_id", "p_expected_identity_id", "p_listing_id", "p_attempt_id"]},
   "owner-images-primary": {name: "set_my_managed_listing_primary_image_v1", keys: ["p_expected_user_id", "p_expected_identity_id", "p_listing_id", "p_attempt_id", "p_expected_revision", "p_ordinal"]},
+  "owner-images-remove": {name: "remove_my_managed_listing_image_v1", keys: ["p_expected_user_id", "p_expected_identity_id", "p_listing_id", "p_attempt_id", "p_expected_revision", "p_ordinal"]},
 } as const;
 const actions = new Set(["prepare", "status", "cancel", "image-prepare", "image-verify", "publish", "remove", "cleanup", "owner-status", ...Object.keys(ownerActions)]);
 const response = (value: unknown, status = 200) => Response.json(value, {status,
@@ -47,7 +48,7 @@ function ownerContract(action: keyof typeof ownerActions, input: Record<string, 
     || action !== "owner-cleanup-status" && !isId(input.p_listing_id)) throw new Error("input");
   if (action.startsWith("owner-images-") && ![input.p_expected_user_id, input.p_expected_identity_id, input.p_attempt_id]
     .every(value => typeof value === "string" && value.length === 36 && isUploadUuid(value))) throw new Error("input");
-  if (action === "owner-images-primary") {
+  if (action === "owner-images-primary" || action === "owner-images-remove") {
     const revision = input.p_expected_revision;
     if (typeof revision !== "string" || revision.length > 19 || /^(0|[1-9][0-9]*)$/.exec(revision)?.[0] !== revision
       || BigInt(revision) > BigInt("9223372036854775807") || !Number.isInteger(input.p_ordinal)

@@ -1,82 +1,83 @@
-# Olemasolev Selqiro portaal — algfoto koristuse tarne
+# Selqiro portaal — ühe lisafoto eemaldamine
 
-Seis: 04.11.2026. Autoriteetne jooksev seis on
-[CURRENT_STATE.json](CURRENT_STATE.json); lühike üleandmine genereeritakse sellest.
+Seis: 04.11.2026 Europe/Tallinn. Autoriteetne seis on
+[CURRENT_STATE.json](CURRENT_STATE.json); lühileht genereeritakse sellest.
 
-## Vastuvõetud alus
+## Ettevalmistatud tulemus
 
-R3 vormi ja põhipildi parandus on kasutaja poolt vastu võetud:
-`8be94cdff322bc051cd54f5143cd3ea12312493e`, Vercelis `main / Ready / Production`,
-kasutaja kinnitus „testides on nüüd korras”. Vana paigaldajat, koondlugejat
-ja selle paranduse teste ei korrata.
+Avaldatud hallatud kuulutuse muutmisvaates saab kinnituse järel eemaldada ühe
+foto, mis ei ole põhipilt. Vähemalt üks foto jääb alles. Põhipildi eemaldamiseks
+vali enne teine olemasolev foto põhipildiks.
 
-## Uue muudatuse eesmärk
+Eemaldatud foto kaob galeriist ning selle vana avalik ja omaniku veebiaadress
+sulgub. Ülejäänud fotode aadressid, põhipilt ja salvestamata tekstimuudatused
+säilivad. Katkenud või ebaselge vastuse järel loetakse seisu uuesti; eemaldamist
+automaatselt ei korrata.
 
-Ühe avaldatud kuulutuse lõpetatud ja kontrollitud SOURCE-algfoto eemaldamine
-Supabase API kaudu. Algfoto loogiline 25 MiB reserv vabaneb; avalik WEB-pilt ja
-selle 4 MiB reserv säilivad. Kasutatakse sama omanikuvaadet ja koristuspäevikut.
-Täpsed õigused, teenuse vastutuspiir ja allesjääv töö on
-[arhitektuurilepingus](../architecture/hosted-completed-source-cleanup-v1.md).
+Selles sammus jääb eemaldatud WEB-fail privaatsesse koristusjärjekorda ja selle
+ruum arvestusse. Lõpliku failikoristuse tõend tuleb järgmise kitsa lepinguga.
+Uut tabelit, järjekorda, mahubilanssi ega üldist töövoomootorit ei lisata.
 
-See kandidaat on eraldatud keskkonnas kontrollitud. Maci, pilve-SQL-i,
-GitHubi ja Verceli uut tulemust ei ole veel nähtud.
+## Üks jätkamiskäsk
 
-## Üks käsk
+1. Laadi alla ja paki Downloads-kaustas lahti
+   `selqiro-foto-eemaldamine-20261104.zip`.
+2. Käivita terminalis:
 
-Laadi alla `selqiro-algfotode-koristus-20261104.zip` ja paki see Downloads-kaustas
-lahti. Käivita terminalis:
-
-```bash
-python3 -I -B "$HOME/Downloads/selqiro-algfotode-koristus-20261104/uuenda.py" --publish
+```sh
+python3 -I -B "$HOME/Downloads/selqiro-foto-eemaldamine-20261104/uuenda.py" --publish
 ```
 
-Siht on olemasolev `~/selqiro`, olenemata terminali hetke kaustast.
-Paigaldaja ei paigalda Node'i, npm-pakette ega Supabase CLI-d uuesti.
-Kasutatakse senist viie failiga kontrollitud CLI 2.117.0 ja autentimist.
+Uuendaja loeb tegeliku haru, HEAD-i, kogu indexi/tööpuu, lähteräsid ja kinnitatud
+remote'i. Seejärel kontrollib olemasoleva andmebaasi täpset lepingut, paigaldab
+ühe piiratud SQL-muudatuse, teeb lähtefailide varukoopiad, rakendab muudatuse,
+koostab portaali ning teeb täpse commit'i ja tavalise push'i. Paigaldaja ise ei
+käivita foto eemaldamise käsku ega kustuta Storage'i objekte.
 
-Käsk kontrollib tegeliku haru/HEAD-i, kogu indexi/tööpuu, lähteräsid ja
-kinnitatud remote'i. Aluseks on vastu võetud R3 tegelik 958 faili tarne;
-varasema 04.11 dokumentatsiooniüleandmise faile ei eeldata juba Maci rakendatuks.
-Seejärel kontrollib ja lisab see täpselt sobiva SQL-toe, säilitab varukoopiad,
-rakendab allikad, teeb build'i ning piiratud commit'i ja tavalise push'i.
-SQL-toe paigaldamine ise ei käivita ühegi foto eemaldamist.
+Lähtebaas on eelmise algfotokoristuse tarne 978 faili. Vana R3 commit on ainult
+esivanema kontroll, mitte oletatav praegune HEAD. Ka eelmise vastuvõtu viis
+Maci rakendamata dokumenti jõuavad selle kontrollitud muudatusega kaasa.
 
-Pärast `VALMIS` tulemust oota Vercelis selle **uue commit'i** `Ready / Production`
-tulemust ja värskenda portaali. Siinses dokumendis uut commit'i räsi ette ei anta.
+Kui ilmub `PEATATUD`, saada peatuse rida ja nimetatud `result.json`.
+Säilita töö ja päevikud. Tundmatut SQL-tulemust ega muutunud lähtebaasi ei
+parandata korduskäivituste või kaitsete eemaldamisega.
 
-## Üks uus päris kasutuskatse
+## Pärast VALMIS-tulemust
 
-Kasuta ühe fotoga juba avaldatud kuulutust, mille omanikuvaates on algfaili
-koristus veel ootel. Vajuta olemasolevat koristuse jätkamise nuppu.
+Oota Vercelis terminalis näidatud uue commit'i `Ready / Production` tulemust
+ja värskenda portaali.
 
-Oodatud tulemus:
+Tee üks kitsas kasutuskatse olemasoleva vähemalt kolme fotoga testkuulutusega,
+mille algfailide koristus on lõpetatud:
 
-- omanikuvaate värske serverikviitungi järgi pole selle katse algfaile alles;
-- koristusplokk kaob pärast kviitungi uuendamist;
-- avalik foto ja valitud põhipilt on kuulutuses alles.
+1. Ava muutmisvaade ja vali ühe lisafoto **Eemalda foto**.
+2. Kinnita eemaldamine. Valitud foto peab kaduma, teised jääma alles.
+3. Vali üks allesjäänud foto põhipildiks ja vaata kuulutuse avalikku detaili.
+   Allesjäänud galerii ning valitud põhipilt peavad vastama muutmisvaatele.
 
-Uue kuulutuse avaldamine teeb sama piiratud koristussammu juba pärast
-avaldamist. Kui kasutad uut ühe fotoga kuulutust, võib koristusplokk seetõttu
-juba puududa. Kui katse sisaldab mitut fotot, tegeleb üks käsk kuni ühe algfotoga.
+Kui tulemuse kinnitamine katkeb, kasuta **Kontrolli piltide seisu**.
+Ära korda eemaldamist teadmata tulemuse pealt. Viimasele fotole ega praegusele
+põhipildile eemaldusnuppu ei kuvata.
 
-Kasutajaliides ei näita 25 MiB arvestust eraldi uue rahakotina. Mahu vabanemine
-on kontrollitud andmebaasilepingu tagajärg, mitte üksiku nupu ACK-i oletus.
-Teadmata tulemuse korral jääb töö ootele ja avalik pilt nähtavale.
+## Senine vastuvõtt säilib
 
-## Kui käsk peatub
+Eelmise kasutajapildi jadas vähenes kuulutuse 201 algfailide arv 3 → 2 → 1,
+seejärel plokk kadus ja kolm fotot säilisid. Uue ühe fotoga kuulutuse 202
+omanikuvaates koristusplokki ei olnud. See nähtav käitumine on vastu võetud;
+selle paigaldust või katset ei korrata.
 
-Saada `PEATATUD` rida ja terminalis nimetatud `result.json`. Säilita päevik ja
-olemasolev töö. Tundmatut SQL-rakendamist uuesti ei saadeta: jätkaja loeb sama
-lepingu seisu ning ei tee pimedat korduskirjutust. Allikakaitset ei eemaldata
-ja teist sihtkausta ei looda peatuse vältimiseks.
+Nende piltide põhjal pole teada algfotokoristuse täpne uus commit, Maci index
+või Verceli deployment'i identiteet. Selle fotoeemalduse lähtekood ja kohalikud
+kontrollid ei tõenda samuti Maci rakendamist, SQL-i, push'i ega Productionit.
+Uuendaja värske raport ning järgnev veebikatse annavad järgmise tõendi.
 
-## Üleandmine ja allesjäävad piirid
+## Avaliku vaate otsus
 
-`selqiro-uleandmine-algfotod-20261104.zip` sisaldab täielikku uut lähtekoopiat,
-sama paigalduspakki ja kontrollide tõendeid. Vanad väljastatud ZIP-id ja päevikud
-säilivad muutmata. Kõik tarnefailid on räsiga seotud.
+Testimise ajal võib senine koristusplokk alles olla. Enne avalikku avamist peab
+sobivate failide koristus edenema kasutaja nupuvajutusteta ning avatud
+omanikuvaatest sõltumata. Tehniline loendur, koristusnupp ja lõpukinnitused
+kaovad tavakasutaja vaatest. Nähtavaks jäävad kuulutuse tegelik olek ja kasutaja
+tegevust mõjutav arusaadav probleem. Ainult paneeli peitmine seda nõuet ei täida.
 
-Pooleliolevate/tühistatud upload'ide koristus, WEB-i eemaldamine pärast
-kuulutuse eemaldamist, avaldatud fotode koosseisu muutmine ja püsiv ajastatud
-koristaja on järgmised eraldi elutsükli sammud. See tarne ei tähenda kogu
-portaali avalikuks avamiseks valmisolekut.
+Täpsed piirid:
+[published-listing-photo-removal-v1.md](../architecture/published-listing-photo-removal-v1.md).

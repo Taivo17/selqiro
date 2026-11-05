@@ -1,7 +1,9 @@
 "use client";
 
+import {useState} from "react";
 import type {PublicationActor} from "../../../entities/listing/model/publicationJourney";
-import type {ManagedListingImagesSnapshot} from "../../../entities/listing/model/managedListingImages";
+import {bindManagedListingRemoveCommand, type ManagedListingImagesSnapshot,
+  type ManagedListingRemoveCommand} from "../../../entities/listing/model/managedListingImages";
 import {orderManagedListingImagesForDisplay} from "../model/managedListingImageOrder";
 import ManagedOwnerImage from "./ManagedOwnerImage";
 
@@ -13,9 +15,33 @@ type Props = {
   error: string | null;
   message: string | null;
   busyOrdinal: number | null;
+  removalBusyOrdinal: number | null;
+  canRemove: boolean;
   onSelect: (ordinal: number) => void;
+  onRemove: (command: ManagedListingRemoveCommand) => void;
   onRefresh: () => void;
 };
+
+function RemovePhoto({gallery, ordinal, blocked, busy, onRemove}: {
+  gallery: ManagedListingImagesSnapshot; ordinal: number; blocked: boolean; busy: boolean;
+  onRemove: (command: ManagedListingRemoveCommand) => void;
+}) {
+  const [confirmation, setConfirmation] = useState<ManagedListingRemoveCommand | null>(null);
+  return <div className="mt-2">
+    <button type="button" disabled={blocked} aria-label={`Eemalda foto ${ordinal + 1}`}
+      onClick={() => { if (!blocked) setConfirmation(bindManagedListingRemoveCommand({key: gallery.key, baseline: gallery, ordinal})); }}
+      className="min-h-11 w-full rounded-xl border border-red-200 px-2 py-2 text-sm font-bold text-red-800 disabled:opacity-50">
+      {busy ? "Eemaldan…" : "Eemalda foto"}
+    </button>
+    {confirmation ? <div role="alertdialog" aria-label={`Kinnita foto ${ordinal + 1} eemaldamine`}
+      className="mt-2 space-y-2 rounded-xl border border-red-200 bg-white p-3 text-sm">
+      <p>Kas eemaldad selle foto kuulutusest? Ülejäänud fotod jäävad alles.</p>
+      <button type="button" disabled={blocked} className="min-h-11 font-bold text-red-800 underline disabled:opacity-50"
+        onClick={() => { if (!blocked) { setConfirmation(null); onRemove(confirmation); } }}>Jah, eemalda foto</button>
+      <button type="button" className="block min-h-11 font-bold underline" onClick={() => setConfirmation(null)}>Jäta alles</button>
+    </div> : null}
+  </div>;
+}
 
 export default function ManagedListingImagePicker(props: Props) {
   const images = orderManagedListingImagesForDisplay(props.gallery?.images
@@ -35,6 +61,11 @@ export default function ManagedListingImagePicker(props: Props) {
             className="mt-2 min-h-11 w-full rounded-xl border border-amber-300 bg-white px-2 py-2 text-sm font-bold text-amber-900 hover:bg-amber-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-700 disabled:opacity-50">
             {props.busyOrdinal === image.ordinal ? "Salvestan…" : "Määra põhipildiks"}
           </button> : null}
+        {props.gallery && props.canRemove && props.gallery.images.length >= 2 && !image.isPrimary ? <RemovePhoto
+          key={[props.actor.userId, props.actor.identityId, props.gallery.key.listingId, props.gallery.key.attemptId,
+            props.gallery.revision, image.ordinal].join(":")}
+          gallery={props.gallery} ordinal={image.ordinal} blocked={props.blocked || props.error !== null}
+          busy={props.removalBusyOrdinal === image.ordinal} onRemove={props.onRemove} /> : null}
       </li>)}
     </ul> : <p className="text-neutral-600">Sellel kuulutusel pole fotosid.</p>}
     {props.error ? <div className="space-y-2 rounded-xl bg-amber-50 p-3">

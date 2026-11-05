@@ -58,9 +58,15 @@ function command(ordinal = 2, row = wire()) {
   return { key: copy(KEY), baseline: R.model.parseManagedListingImages(row, KEY), ordinal };
 }
 function saved(cmd) {
-  const changed = !cmd.baseline.images[cmd.ordinal].isPrimary;
+  const changed = !cmd.baseline.images.find(image => image.ordinal === cmd.ordinal).isPrimary;
   return { ...wire(cmd.baseline.images.length, cmd.ordinal,
-    String(BigInt(cmd.baseline.revision) + (changed ? 1n : 0n)), cmd.key), changed };
+    String(BigInt(cmd.baseline.revision) + (changed ? 1n : 0n)), cmd.key), changed,
+    images: cmd.baseline.images.map(image => ({ordinal: image.ordinal, url: image.url, is_primary: image.ordinal === cmd.ordinal})) };
+}
+function removed(cmd) {
+  return {...wire(0, 0, String(BigInt(cmd.baseline.revision) + 1n), cmd.key), changed: true,
+    images: cmd.baseline.images.filter(image => image.ordinal !== cmd.ordinal)
+      .map(image => ({ordinal: image.ordinal, url: image.url, is_primary: image.isPrimary}))};
 }
 
 test('read binds complete actor/listing/attempt and freezes original ordered image metadata', () => {
@@ -96,7 +102,6 @@ for (const [name, change] of [
   ['newline revision', row => row.revision = '5\n'],
   ['overflow revision', row => row.revision = '9223372036854775808'],
   ['image count', row => row.images = wire(11).images],
-  ['missing image', row => row.images.splice(1, 1)],
   ['sparse image', row => delete row.images[1]],
   ['duplicate ordinal', row => row.images[1].ordinal = 0],
   ['reordered images', row => row.images.reverse()],
@@ -186,17 +191,133 @@ for (const [code, message, expected] of [
   assert.equal(R.model.classifyManagedListingImagesError({ code, message }).code, expected);
 });
 
-test('live adapter uses only the existing two owner journey actions', async () => {
+test('live adapter uses only the three closed owner image journey actions', async () => {
   const calls = [], cmd = command();
   const r = realm({ actor: async () => ({ userId: U, identityId: I }), request: async (actor, action, args, signal) => {
     calls.push({ actor: copy(actor), action, args: copy(args), signal });
-    return action === 'owner-images-read' ? wire() : saved(cmd);
+    return action === 'owner-images-read' ? wire() : action === 'owner-images-remove' ? removed(cmd) : saved(cmd);
   } });
   await r.client.readManagedListingImages(KEY);
   await r.client.setManagedListingPrimaryImage(cmd);
-  assert.deepEqual(calls.map(call => call.action), ['owner-images-read', 'owner-images-primary']);
+  await r.client.removeManagedListingImage(cmd);
+  assert.deepEqual(calls.map(call => call.action), ['owner-images-read', 'owner-images-primary', 'owner-images-remove']);
   assert.deepEqual(calls[1].actor, { userId: U, identityId: I });
   assert.equal(calls[1].args.p_attempt_id, A);
+  assert.deepEqual(calls[2].args, calls[1].args);
+});
+
+test('active membership preserves gaps and primary selection uses the original ordinal', () => {
+  const row = wire(10, 0); row.images = row.images.filter(image => [0, 2, 9].includes(image.ordinal));
+  const cmd = command(9, row), result = R.model.parseManagedListingPrimarySaved(saved(cmd), cmd);
+  assert.deepEqual(result.snapshot.images.map(image => image.ordinal), [0, 2, 9]);
+  assert.equal(result.snapshot.images[2].isPrimary, true);
+  assert.equal(R.model.managedListingPrimaryArguments(cmd).p_ordinal, 9);
+  assert.equal(result.snapshot.images[2].url, `/api/v2/listing-media/${A}/9`);
+});
+
+test('one removal preserves every remaining object and primary and increments exact bigint revision once', () => {
+  const cmd = command(1, wire(3, 0, '9007199254740993'));
+  const result = R.model.parseManagedListingRemoveSaved(removed(cmd), cmd);
+  assert.equal(result.changed, true); assert.equal(result.snapshot.revision, '9007199254740994');
+  assert.deepEqual(copy(result.snapshot.images), copy(cmd.baseline.images.filter(image => image.ordinal !== 1)));
+  assert.deepEqual(copy(R.model.managedListingRemoveArguments(cmd)), {p_expected_user_id: U, p_expected_identity_id: I,
+    p_listing_id: KEY.listingId, p_attempt_id: A, p_expected_revision: '9007199254740993', p_ordinal: 1});
+  assert.ok(Object.isFrozen(result) && Object.isFrozen(result.snapshot.images));
+});
+
+for (const [name, cmd] of [
+  ['primary', command(0)], ['last image', command(0, wire(1))], ['absent ordinal', command(9)],
+  ['revision overflow', command(1, wire(3, 0, '9223372036854775807'))],
+  ['different attempt', {...command(1), key: {...KEY, attemptId: OTHER}}],
+]) test('removal command refuses ' + name, () => {
+  assert.throws(() => R.model.bindManagedListingRemoveCommand(cmd), error => error.code === 'invalid');
+});
+
+for (const [name, change] of [
+  ['changed false', row => row.changed = false], ['changed missing', row => delete row.changed],
+  ['unchanged revision', row => row.revision = '5'], ['skipped revision', row => row.revision = '7'],
+  ['retained target', row => row.images = wire().images],
+  ['removed another photo', row => row.images = wire().images.filter(image => image.ordinal !== 2)],
+  ['changed primary', row => { row.images[0].is_primary = false; row.images[1].is_primary = true; }],
+  ['renumbered remaining URL', row => { row.images[1].ordinal = 1; row.images[1].url = `/api/v2/listing-media/${A}/1`; }],
+  ['different listing', row => row.listing_id = '1'], ['private detail', row => row.object_path = 'never-return'],
+]) test('removal acknowledgement refuses ' + name, () => {
+  const cmd = command(1), row = removed(cmd); change(row);
+  assert.throws(() => R.model.parseManagedListingRemoveSaved(row, cmd), error => error.code === 'unknown');
+});
+
+test('authoritative readback may advance after removal to a newer primary or smaller active membership', () => {
+  const cmd = command(1, wire(4)), ack = R.model.parseManagedListingRemoveSaved(removed(cmd), cmd).snapshot;
+  assert.deepEqual(copy(R.model.confirmManagedListingImagesReadback(ack, ack)), copy(ack));
+  const row = removed(cmd); delete row.changed; row.revision = '7';
+  row.images = row.images.filter(image => image.ordinal !== 3).map(image => ({...image, is_primary: image.ordinal === 2}));
+  const fresh = R.model.parseManagedListingImages(row, KEY);
+  assert.deepEqual(R.model.confirmManagedListingImagesReadback(ack, fresh).images.map(image => image.ordinal), [0, 2]);
+});
+
+test('an existing zero-photo gallery remains valid on authoritative readback', () => {
+  const empty = R.model.parseManagedListingImages(wire(0), KEY);
+  const later = R.model.parseManagedListingImages(wire(0, 0, '6'), KEY);
+  assert.equal(R.model.confirmManagedListingImagesReadback(empty, empty).images.length, 0);
+  assert.equal(R.model.confirmManagedListingImagesReadback(empty, later).images.length, 0);
+});
+
+for (const [name, change] of [
+  ['older revision', row => row.revision = '5'],
+  ['same revision with another primary', row => { row.images[0].is_primary = false; row.images[1].is_primary = true; }],
+  ['same revision with missing member', row => row.images.pop()],
+  ['revived retired member', row => { row.revision = '7'; row.images = wire().images; }],
+  ['no active members', row => { row.revision = '7'; row.images = []; }],
+]) test('readback cannot establish success from ' + name, () => {
+  const cmd = command(1), ack = R.model.parseManagedListingRemoveSaved(removed(cmd), cmd).snapshot;
+  const row = removed(cmd); delete row.changed; change(row);
+  const observed = R.model.parseManagedListingImages(row, KEY);
+  assert.throws(() => R.model.confirmManagedListingImagesReadback(ack, observed), error => error.code === 'unknown');
+});
+
+test('removal captures immutable confirmation before asynchronous preflight', async () => {
+  const gate = defer(), entered = defer(), original = command(1), input = copy(original), calls = []; let reads = 0;
+  const api = R.client.createManagedListingImagesClient(async (actor, action, args) => {
+    calls.push({actor, action, args}); return removed(original);
+  }, async () => { if (reads++ === 0) { entered.resolve(); await gate.promise; } return {userId: U, identityId: I}; });
+  const pending = api.remove(input); await entered.promise;
+  input.ordinal = 2; input.key.identityId = OTHER; input.baseline.revision = '99'; input.baseline.images[1].url = '/changed';
+  gate.resolve(); const result = await pending;
+  assert.equal(calls.length, 1); assert.equal(calls[0].action, 'owner-images-remove');
+  assert.equal(calls[0].args.p_ordinal, 1); assert.equal(calls[0].args.p_expected_revision, '5');
+  assert.deepEqual(result.snapshot.images.map(image => image.ordinal), [0, 2]);
+});
+
+for (const current of [{userId: OTHER, identityId: I}, {userId: U, identityId: OTHER}])
+  test('removal rejects changed preflight actor with no dispatch ' + JSON.stringify(current), async () => {
+    let sent = 0;
+    const api = R.client.createManagedListingImagesClient(async () => { sent++; }, async () => current);
+    await assert.rejects(api.remove(command(1)), error => error.code === 'context'); assert.equal(sent, 0);
+  });
+
+for (const failure of [new Error('lost acknowledgement'), {changed: true}, {code: '40001', message: 'listing_images_conflict'},
+  {code: '55000', message: 'listing_images_unavailable'}, {code: '42501'}])
+  test('removal is dispatched once for uncertain or rejected result ' + (failure.code ?? failure.message ?? 'malformed'), async () => {
+    let sent = 0;
+    const api = R.client.createManagedListingImagesClient(async () => {
+      sent++; if (failure.changed) return failure; throw failure;
+    }, async () => ({userId: U, identityId: I}));
+    await assert.rejects(api.remove(command(1))); await tick(); assert.equal(sent, 1);
+  });
+
+test('removal postflight context change remains unknown despite valid acknowledgement', async () => {
+  const cmd = command(1); let reads = 0, sent = 0;
+  const api = R.client.createManagedListingImagesClient(async () => { sent++; return removed(cmd); },
+    async () => ({userId: U, identityId: reads++ === 0 ? I : OTHER}));
+  await assert.rejects(api.remove(cmd), error => error.code === 'unknown'); assert.equal(sent, 1);
+});
+
+test('aborted removal remains unknown and a late acknowledgement never retries', async () => {
+  const cmd = command(1), entered = defer(), gate = defer(), control = new AbortController(); let sent = 0;
+  const api = R.client.createManagedListingImagesClient(async () => { sent++; entered.resolve(); return gate.promise; },
+    async () => ({userId: U, identityId: I}));
+  const pending = api.remove(cmd, control.signal); await entered.promise; control.abort();
+  await assert.rejects(pending, error => error.code === 'unknown'); gate.resolve(removed(cmd)); await tick(); assert.equal(sent, 1);
 });
 
 test('caller mutation during asynchronous preflight cannot change dispatched command or baseline', async () => {
