@@ -1,3 +1,4 @@
+import { randomUUID } from "node:crypto";
 import { privateUploadHttp, type UploadFetch } from "../../../entities/listing/api/privateUploadHttp";
 import { publicationStorageOrigin, isUploadUuid } from "../../../entities/listing/model/privatePublicationUpload";
 import { readWebObjectBytes } from "../web/webObjectHttp";
@@ -64,10 +65,12 @@ export function createCleanupOne(config: WorkerConfig, fetcher: UploadFetch = fe
         { signal, timeoutMs: 10000 });
       if (r.status === 200 && Array.isArray(r.json) && r.json.length <= 1
           && r.json.every(value => row(value).name === task.object_path)) {
-        // Absence is meaningful only after this confirmed claim and API result.
-        // The scoped recorder additionally checks authoritative DB absence.
+        // A fresh provider cacheNonce avoids reading a pre-delete cached body.
+        // It is independent of the lease/work key and never changes the object path.
+        // The scoped recorder still requires authoritative DB absence.
         const bytes = await readWebObjectBytes(fetcher,
-          origin + "/storage/v1/object/authenticated/" + task.bucket_id + "/" + task.object_path,
+          origin + "/storage/v1/object/authenticated/" + task.bucket_id + "/" + task.object_path
+            + "?cacheNonce=" + randomUUID(),
           headers, 4 * 1024 * 1024, null, signal);
         outcome = bytes === null ? "deleted" : "response";
       }

@@ -25,6 +25,8 @@ const command = () => ({expectedUserId: USER, expectedIdentityId: IDENTITY, atte
 const args = () => ({p_expected_user_id: USER, p_expected_identity_id: IDENTITY, p_attempt_id: ATTEMPT, p_request_key: REQUEST});
 const pending = {kind: 'pending', attemptId: ATTEMPT, filesRemaining: null};
 const json = (value, status = 200) => Response.json(value, {status});
+const freshCleanupQuery = parsed => [...parsed.searchParams.keys()].join(',') === 'cacheNonce'
+  && /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/.test(parsed.searchParams.get('cacheNonce'));
 const claim = (objectPath = WEB) => ({schema_version: 1, object_id: OBJECT, work_key: WORK, bucket_id: BUCKET,
   object_path: objectPath, try_count: 1, lease_until_epoch: Math.floor(Date.now() / 1000) + 60});
 function fixture(overrides = {}, storagePath = WEB) {
@@ -36,7 +38,9 @@ function fixture(overrides = {}, storagePath = WEB) {
     const parsed = new URL(url);
     const call = {path: parsed.pathname, method: init.method, headers: new Headers(init.headers),
       body: init.body ? JSON.parse(init.body) : null, init}; calls.push(call);
-    const op = parsed.origin !== API || parsed.search ? null
+    const readback = call.method === 'GET' && call.path === `/storage/v1/object/authenticated/${BUCKET}/${storagePath}`;
+    const queryAllowed = readback ? freshCleanupQuery(parsed) : parsed.search === '';
+    const op = parsed.origin !== API || parsed.hash || !queryAllowed ? null
       : call.method === 'GET' && call.path === '/auth/v1/user' ? 'auth'
       : call.method === 'POST' && call.path === SOURCE_CLAIM ? 'source'
       : call.method === 'POST' && call.path === WEB_CLAIM ? 'web'

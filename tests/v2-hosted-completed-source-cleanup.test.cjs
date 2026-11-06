@@ -34,6 +34,8 @@ const claim = () => ({schema_version: 1, object_id: OBJECT, work_key: WORK, buck
   object_path: SOURCE, try_count: 1, lease_until_epoch: Math.floor(Date.now() / 1000) + 60});
 const pending = {kind: 'pending', attemptId: ATTEMPT, filesRemaining: null};
 const json = (value, status = 200) => Response.json(value, {status});
+const freshCleanupQuery = parsed => [...parsed.searchParams.keys()].join(',') === 'cacheNonce'
+  && /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/.test(parsed.searchParams.get('cacheNonce'));
 
 function fixture(overrides = {}) {
   const calls = [], unexpected = [];
@@ -51,7 +53,9 @@ function fixture(overrides = {}) {
     const call = {url, path: parsed.pathname, method: init.method, headers: new Headers(init.headers),
       body: init.body ? JSON.parse(init.body) : null, init};
     calls.push(call);
-    const operation = parsed.origin !== API || parsed.search ? null
+    const readback = call.path === `/storage/v1/object/authenticated/${BUCKET}/${SOURCE}` && call.method === 'GET';
+    const queryAllowed = readback ? freshCleanupQuery(parsed) : parsed.search === '';
+    const operation = parsed.origin !== API || parsed.hash || !queryAllowed ? null
       : call.path === '/auth/v1/user' && call.method === 'GET' ? 'auth'
       : call.path === CLAIM && call.method === 'POST' ? 'claim'
       : call.path === RECORD && call.method === 'POST' ? 'record'
@@ -237,9 +241,13 @@ test('durable needs_attention remains visible without an invented remaining coun
 test('default cleanup worker preserves its existing RPC contract without explicit scoped operations', async () => {
   const calls = [], unexpected = [];
   const fetcher = async (url, init) => {
-    const path = new URL(url).pathname;
+    const parsed = new URL(url), path = parsed.pathname;
     const body = init.body ? JSON.parse(init.body) : null;
     calls.push({path, method: init.method, body});
+    const readback = path === `/storage/v1/object/authenticated/${BUCKET}/${SOURCE}` && init.method === 'GET';
+    if (parsed.origin !== API || parsed.hash || !(readback ? freshCleanupQuery(parsed) : parsed.search === '')) {
+      unexpected.push(url); throw Error('Unexpected default worker query');
+    }
     if (path === '/rest/v1/rpc/claim_listing_cleanup_v1') return json(claim());
     if (path === `/storage/v1/object/${BUCKET}` && init.method === 'DELETE') return json([{name: SOURCE}]);
     if (path === `/storage/v1/object/authenticated/${BUCKET}/${SOURCE}`) return json({}, 404);

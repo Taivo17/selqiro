@@ -1,3 +1,18 @@
+<!-- SELQIRO_RETIRED_WEB_PENDING_20261106 -->
+## 06.11.2026 — eemaldatud WEB-i puudumise kontroll vajab värsket vastust
+
+Kuulutuse 201 päris raport kinnitab retry_wait/try2/last_error=response;
+Storage’i objekti/upload’i/osade metaandmed on juba puudu, kuid lõpetamistõend
+ja 4 MiB loogilise reservi vabastus on veel ootel. Väljastatud koodis tähendab
+response aktsepteeritud DELETE-i järel mittetühja kontroll-GET-i vastust.
+Vahemälu on toetatud seletus, HTTP-päiseid raport ei sisalda.
+
+Ettevalmistatud väike parandus annab ainult kustutamisjärgsele GET-ile uue
+juhusliku cacheNonce’i. Olemasolev SQL ja õiguse/puudumise kontrollid säilivad.
+Paranduse tegelik vastuvõtt jääb uue commit’i Ready/Production ja ühe olemasoleva
+koristussammu järel loetava nulli ootele. Käivitamisjuhis on CURRENT_STATE-is;
+raport ja järelduste piir RETIRED_WEB_DIAGNOSTIC_20261106.md-s.
+
 # Known Issues
 
 ## My Page is too large

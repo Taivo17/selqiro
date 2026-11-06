@@ -13,6 +13,7 @@ const command={expectedUserId:U,expectedIdentityId:I,attemptId:A,slotId:S,dispat
 const binding={schema_version:1,actor_user_id:U,identity_id:I,attempt_id:A,slot_id:S,object_id:O,dispatch_key:D,grant_id:G,
  bucket_id:'listing-publication-private',object_path:`v1/${A}/${S}/source.upload`,expected_bytes:100,expected_sha256:'a'.repeat(64)};
 const receipt=()=>({schema_version:1,object_id:O,grant_id:G,claim_id:C,proof:'source_recorded_never_released',state:'settled'});
+const assertCleanupQuery=(parsed,cleanup)=>{assert.equal(parsed.hash,'');if(cleanup){assert.deepEqual([...parsed.searchParams.keys()],['cacheNonce']);assert.match(parsed.searchParams.get('cacheNonce'),/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/);}else assert.equal(parsed.search,'');};
 const defer=()=>{let resolve;const promise=new Promise(r=>resolve=r);return {promise,resolve};};
 async function model(o={}){
  const s={requests:[],closed:o.closed??true,grant:o.grant??'recorded',covered:o.covered??true,intent:o.intent??false,
@@ -22,7 +23,8 @@ async function model(o={}){
  const tokenHash=crypto.createHash('sha256').update(token).digest('hex');
  const server=http.createServer(async(req,res)=>{try{
   let body='';for await(const b of req)body+=b;assert.ok(body.length<16384);
-  const p=req.url;s.requests.push({path:p,method:req.method,body});
+  const parsed=new URL(req.url,origin),p=parsed.pathname;s.requests.push({path:req.url,method:req.method,body});
+  assertCleanupQuery(parsed,req.method==='GET'&&p==='/storage/v1/object/authenticated/'+binding.bucket_id+'/'+binding.object_path&&s.deleted);
   const json=(v,status=200)=>{res.writeHead(status,{'content-type':'application/json'});res.end(JSON.stringify(v));};
   if(p==='/rest/v1/rpc/settle_recorded_unreleased_source_one_v1'){
    assert.equal(req.headers.authorization,'Bearer '+config.serviceKey);assert.equal(req.method,'POST');assert.equal(body,'{}');

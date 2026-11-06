@@ -1,3 +1,42 @@
+<!-- SELQIRO_CLEANUP_FRESH_READBACK_20261106 -->
+## 2026-11-06 — päris raporti põhjal koristuse kontrollpäringu väike parandus
+
+- Saadud ja kontrollitud 18:30 lugemisraport: main/b482c02c675c9d6a5a575ece7edc806151df918e,
+  kogu index 1019 ja 14 valitud faili stabiilsed. See ei ole uus täielik tööpuu
+  inventuur. SQL read_only, võimekuseräsi ja 12 õiguserida sobivad.
+- Kuulutus 201: kaks aktiivset fotot/üks põhipilt, SOURCE 0; üks eemaldatud WEB
+  retry_wait/try2/last_error=response. Objekti/upload’i/osade kõik loendurid0,
+  täpne lõpetatud kontrollitud sessioon sobib; deleted-kinnitus on puudu.
+- Piiritletud viga: aktsepteeritud DELETE järel tagastas kontroll-GET veel sisu.
+  Vahemälu on ametliku teenuselepinguga toetatud seletus; HTTP-päiseid ei kogutud.
+  Varem oletatud alles olev multipart-osa ei vasta tegelikule raportile.
+- Ainult cleanupOne.ts tootekoodile lisatud värske juhuslik cacheNonce pärast
+  aktsepteeritud DELETE-i. Lease’i töövõtit URL-i ei panda. Sama ühe objekti,
+  autentitud bounded read’i ja scoped SQL puudumistõendi leping säilib.
+- SQL-i 6 piiratud kordust PASS: olemasolev recorder lõpetas juba puuduva
+  objekti 1→0 ja vabastas 4 MiB; vana võti ning taastunud metaandmed keeldusid.
+  Sünteetiline PGlite/PostgreSQL 17.5, mitte live teenusetulemus.
+- Rakenduse build PASS 28,87 s; 122/122 sihitud Node-katset ning 2/2 brauserijuhtu
+  päris omanikuvaate ja parandatud töötajaga (1440/390 px) läbisid sünteetilise
+  teenusega. Paneel kadus serveri nulli järel; fotod/põhipilt/tekst säilisid.
+  Uuendaja 6/6 tarnekatset läbisid päris ajutise Gitiga ja asendatud build’iga.
+- Eraldi uus ainult rakenduskoodi puudutav uuendaja kasutab kinnitatud b482c02 baasi ja kogu
+  lähte/indexi/remote’i kontrolli, varundust, build’i ning üht commit/push’i.
+  SQL-i/Storage’i paigaldaja ei kutsu. Varasemad väljastatud pakid säilivad.
+- Uuendatud CURRENT_STATE, genereeritud99, HOSTED_PORTAL, diagnoos, kaks
+  moodulilepingut ja teadaolev tõrge. Uue paranduse Mac/deployment/live vastuvõtt
+  on ootel; tehnilise paneeli avaliku avamise eel eemaldamise nõue säilib.
+
+<!-- SELQIRO_RETIRED_WEB_DIAGNOSTIC_20261106 -->
+## 2026-11-06 — Productionis peatunud eemaldatud foto koristuse diagnoos
+
+- Uus kasutajatõend: b482c02 / main / Ready 46 s / Production; kuulutusel 201 jääb WEB-koristus korduvate vajutuste järel ühele. Kaks aktiivset fotot ja Mercedese põhipilt säilivad.
+- Kinnitatud koodipiir: claim/record tõrge võib muutuda vaikseks pending-vastuseks. Sünteetilise alles oleva multipart-osa korral kordus pending1/try_count0; live põhjus on kinnitamata.
+- Ette valmistatud üks ainult lugemise kontrollpakk kuulutusele 201, senise pinned CLI ja kinnitatud teenusega. Ühtki claim'i/record'it/Storage'i toimingut ei käivitata.
+- Kaks uut SQL-diagnostikajuhtu ja kolm runtime'i veajuhukordust läbisid; vanu laiu kontrolle ega build'i ei korratud. Uue kontrollpaki failide/raporti katsed on eraldi tõendis.
+- Uuendatud üks CURRENT_STATE, sellest genereeritud99 ning HOSTED_PORTAL. Tootmise algpõhjus, täis-HEAD, päris Storage'i puudumine ja reservi vabastamine jäävad järgmise lugemisraporti ootele.
+- Runtime ja SQL-parandused ning varasemad väljastatud pakid jäid muutmata. Käesolevad uued dokumendid on ettevalmistatud koopias; Maci rakendus/commit puudub.
+
 <!-- SELQIRO_RETIRED_WEB_CLEANUP_20261106 -->
 ## 2026-11-06 — Varem eemaldatud WEB-foto lõppkoristus ette valmistatud
 

@@ -14,20 +14,23 @@ const task=(kind='web_commit')=>({schema_version:1,object_id:OBJECT,work_key:WOR
  expected_sha256:kind==='web_commit'?webHash(bytes()):null,expected_bytes:kind==='web_commit'?bytes().length:null,
  storage_object_id:kind==='web_commit'?PROVIDER:null,storage_version:kind==='web_commit'?VERSION:null,
  lease_until_epoch:Math.floor(Date.now()/1000)+60,try_count:1});
+const assertCleanupQuery=(parsed,cleanup)=>{assert.equal(parsed.hash,'');if(cleanup){assert.deepEqual([...parsed.searchParams.keys()],['cacheNonce']);assert.match(parsed.searchParams.get('cacheNonce'),/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/);}else assert.equal(parsed.search,'');};
 async function model(options={}){
  const state={requests:[],task:task(options.kind),stored:bytes(),settled:false,deleted:false,recordCalls:0,deleteCalls:0};
  if(options.mutateTask)options.mutateTask(state.task);let err;
  const server=http.createServer(async(req,res)=>{try{
   let body=Buffer.alloc(0);for await(const b of req)body=Buffer.concat([body,b]);
   state.requests.push({method:req.method,path:req.url,body:body.toString()});
+  const parsed=new URL(req.url,origin),p=parsed.pathname;
+  assertCleanupQuery(parsed,req.method==='GET'&&p==='/storage/v1/object/authenticated/'+state.task.bucket_id+'/'+state.task.object_path&&state.deleted);
   assert.equal(req.headers.authorization,'Bearer SYNTHETIC_SERVICE_SECRET');
   const json=(v,status=200)=>{res.writeHead(status,{'content-type':'application/json'});res.end(JSON.stringify(v));};
-  if(req.url==='/rest/v1/rpc/claim_listing_write_reconcile_v1'){
+  if(p==='/rest/v1/rpc/claim_listing_write_reconcile_v1'){
    assert.equal(req.method,'POST');assert.equal(body.toString(),'{}');
    if(options.loseClaim){res.destroy();return;}if(options.claimStatus){json({},options.claimStatus);return;}
    json(options.idle||state.settled?null:state.task);return;
   }
-  if(req.url==='/rest/v1/rpc/record_listing_write_reconcile_v1'){
+  if(p==='/rest/v1/rpc/record_listing_write_reconcile_v1'){
    state.recordCalls++;assert.equal(req.method,'POST');const r=JSON.parse(body);
    assert.equal(r.p_object_id,OBJECT);assert.equal(r.p_work_key,WORK);
    if(options.recordStatus){json({},options.recordStatus);return;}
@@ -43,7 +46,7 @@ async function model(options={}){
    if(options.mutateReceipt)options.mutateReceipt(saved);
    if(options.loseRecord){res.destroy();return;}json(saved);return;
   }
-  if(req.url==='/storage/v1/object/authenticated/'+state.task.bucket_id+'/'+state.task.object_path){
+  if(p==='/storage/v1/object/authenticated/'+state.task.bucket_id+'/'+state.task.object_path){
    assert.equal(req.method,'GET');assert.equal(req.headers['accept-encoding'],'identity');
    if(options.readReject){res.destroy();return;}
    if(options.readStatus||state.deleted||options.absent){json({},state.deleted||options.absent?404:options.readStatus);return;}
@@ -53,14 +56,14 @@ async function model(options={}){
    if(options.truncated){res.write(b.subarray(0,4));setImmediate(()=>res.destroy());return;}
    if(options.onRead)await options.onRead(state);res.end(b);return;
   }
-  if(req.url==='/rest/v1/rpc/claim_listing_cleanup_v1'){
+  if(p==='/rest/v1/rpc/claim_listing_cleanup_v1'){
    json(!state.settled||state.deleted?null:{schema_version:1,object_id:OBJECT,work_key:DELETEWORK,bucket_id:state.task.bucket_id,
     object_path:state.task.object_path,try_count:1,lease_until_epoch:Math.floor(Date.now()/1000)+60});return;
   }
-  if(req.url==='/storage/v1/object/'+state.task.bucket_id){
+  if(p==='/storage/v1/object/'+state.task.bucket_id){
    assert.equal(req.method,'DELETE');assert.ok(state.settled);state.deleteCalls++;state.deleted=true;json([{name:state.task.object_path}]);return;
   }
-  if(req.url==='/rest/v1/rpc/record_listing_cleanup_v1'){
+  if(p==='/rest/v1/rpc/record_listing_cleanup_v1'){
    const r=JSON.parse(body);assert.equal(r.p_result,'deleted');json({object_id:OBJECT,work_key:DELETEWORK,state:'deleted'});return;
   }
   throw Error('unexpected_endpoint '+req.url);

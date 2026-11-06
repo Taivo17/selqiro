@@ -122,3 +122,18 @@ tundmatu tulemuse, tõendatud mahu vabastamise ja selle püsimise. Serveri/HTTP
 ning brauseri katsed eristavad sünteetilist teenust päris Storage'ist. Pärast
 sama uue commit'i Ready/Production tulemust sobib üks olemasolev eemaldatud foto
 (nt kasutaja juba katsetatud kuulutusel 201); uut fotoeemaldust pole vaja korrata.
+
+
+## Puudumise lugemise värskus — 06.11.2026
+
+Kustutamise järel kontrollitav autentitud GET saab iga kord uue serveris
+loodud juhusliku UUID `cacheNonce` parameetriks. See suunab teenuse päringu
+varasemast vahemäluvastusest sõltumatult lugema. Lease’i töövõtit URL-i ei panda.
+Muutumatu objektitee ja DELETE-i prefix säilivad. Ka värske päringu200 sisu
+jätab tulemuse ebakindlaks; andmebaasi scoped recorder kontrollib endiselt
+puudumist enne püsivat lõpetamist ja reservi vabastamist.
+
+See on ühe olemasoleva transpordimooduli parandus. Algse võimekuse SQL-i ei
+paigaldata selle tõttu uuesti. Muud pildilugemised, shared reader ning
+kasutajaliides ei muutu. Tegelik tootmistõend ja järelduse piir on
+[06.11 lugemisraportis](../continuity/RETIRED_WEB_DIAGNOSTIC_20261106.md).

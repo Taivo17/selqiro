@@ -188,3 +188,18 @@ ainult selle täpse `null` korral eemaldatud WEB-i claim'i. Üks päring eemalda
 kuni ühe objekti. Vana SOURCE-only adapter ja SOURCE-kviitungi loendur säilivad;
 WEB-i diagnostika loetakse eraldi olemasolevatest andmetest. Uus paigaldus ei
 käivita varasema SOURCE-i paranduse SQL-i uuesti.
+
+
+## Puudumise lugemise värskus — 06.11.2026
+
+Kustutamise järel kontrollitav autentitud GET saab iga kord uue serveris
+loodud juhusliku UUID `cacheNonce` parameetriks. See suunab teenuse päringu
+varasemast vahemäluvastusest sõltumatult lugema. Lease’i töövõtit URL-i ei panda.
+Muutumatu objektitee ja DELETE-i prefix säilivad. Ka värske päringu200 sisu
+jätab tulemuse ebakindlaks; andmebaasi scoped recorder kontrollib endiselt
+puudumist enne püsivat lõpetamist ja reservi vabastamist.
+
+See on ühe olemasoleva transpordimooduli parandus. Algse võimekuse SQL-i ei
+paigaldata selle tõttu uuesti. Muud pildilugemised, shared reader ning
+kasutajaliides ei muutu. Tegelik tootmistõend ja järelduse piir on
+[06.11 lugemisraportis](../continuity/RETIRED_WEB_DIAGNOSTIC_20261106.md).

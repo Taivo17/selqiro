@@ -28,6 +28,8 @@ const receipt=(i=intent())=>({schema_version:1,receipt_id:REC,job_id:JOB,attempt
  web_sha256:i.web_sha256,web_bytes:i.web_bytes,width:i.width,height:i.height,pipeline_version:i.pipeline_version});
 const error=(code)=>e=>e instanceof C.WebImageError && e.code===code && !e.message.includes('SECRET');
 
+const assertCleanupQuery=(parsed,cleanup)=>{assert.equal(parsed.hash,'');if(cleanup){assert.deepEqual([...parsed.searchParams.keys()],['cacheNonce']);assert.match(parsed.searchParams.get('cacheNonce'),/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/);}else assert.equal(parsed.search,'');};
+
 async function model(options={}) {
  const source=options.source || Buffer.from('synthetic input'), b=binding(source);
  const state={phase:'none',intent:null,receipt:null,stored:null,post:0,decodes:0,requests:[],active:true,completed:false,completions:0,deleteCalls:0,deleted:false,sourceKept:true};
@@ -38,14 +40,16 @@ async function model(options={}) {
   const json=(x,status=200)=>{res.writeHead(status,{'content-type':'application/json'});res.end(JSON.stringify(x));};
   const object=(buf,type)=>{if(!buf){res.writeHead(404);res.end();return;}res.writeHead(200,{'content-type':type,'content-length':String(buf.length)});res.end(buf);};
   try {
-   if(req.url==='/auth/v1/user') {
+   const parsed=new URL(req.url,origin),p=parsed.pathname;
+   assertCleanupQuery(parsed,req.method==='GET'&&p==='/storage/v1/object/authenticated/'+b.bucket_id+'/'+b.web_path&&state.deleteCalls>0);
+   if(p==='/auth/v1/user') {
     assert.equal(req.headers.authorization,'Bearer SYNTHETIC_USER');assert.equal(req.headers.apikey,config.publicKey);
     if(options.authDelay)await new Promise(r=>setTimeout(r,options.authDelay));
     json({id:options.otherUser ? I : A},options.authStatus || 200);return;
    }
    assert.equal(req.headers.authorization,'Bearer '+config.serviceKey);assert.equal(req.headers.apikey,config.serviceKey);
-   if(req.url.startsWith('/rest/v1/rpc/')) {
-    const v=JSON.parse(bytes),name=req.url.split('/').at(-1);
+   if(p.startsWith('/rest/v1/rpc/')) {
+    const v=JSON.parse(bytes),name=p.split('/').at(-1);
     if(name==='claim_listing_cleanup_v1') {
      json(!state.active&&state.completed&&!state.deleted ? {schema_version:1,object_id:WEB,work_key:WORK,
       bucket_id:b.bucket_id,object_path:b.web_path,try_count:1,lease_until_epoch:Math.floor(Date.now()/1000)+60}:null);return;
@@ -95,17 +99,17 @@ async function model(options={}) {
     throw Error('unexpected_rpc');
    }
    if(req.method==='DELETE'){
-    assert.equal(req.url,'/storage/v1/object/'+b.bucket_id);assert.equal(state.active,false);assert.equal(state.completed,true);
+    assert.equal(p,'/storage/v1/object/'+b.bucket_id);assert.equal(state.active,false);assert.equal(state.completed,true);
     assert.deepEqual(JSON.parse(bytes),{prefixes:[b.web_path]});state.deleteCalls++;state.stored=null;
     json([{name:b.web_path}]);return;
    }
    assert.equal(req.headers['x-upsert'],req.method==='POST'?'false':undefined);
-   assert.ok(!req.url.includes('?') && !req.url.includes('/public/') && !req.url.includes('/render/'));
-   if(req.method==='GET' && req.url==='/storage/v1/object/authenticated/'+b.bucket_id+'/'+b.source_path) {
+   assert.ok(!p.includes('/public/') && !p.includes('/render/'));
+   if(req.method==='GET' && p==='/storage/v1/object/authenticated/'+b.bucket_id+'/'+b.source_path) {
     assert.equal(req.headers.range,undefined);assert.equal(req.headers['accept-encoding'],'identity');
     object(options.sourceMissing?null:(options.sourceCorrupt?Buffer.alloc(source.length):source),'application/octet-stream');return;
    }
-   if(req.method==='POST' && req.url==='/storage/v1/object/'+b.bucket_id+'/'+b.web_path) {
+   if(req.method==='POST' && p==='/storage/v1/object/'+b.bucket_id+'/'+b.web_path) {
     assert.equal(state.phase,'prepared');assert.equal(req.headers['content-type'],'image/webp');state.post++;
     assert.equal(C.webHash(bytes),state.intent.web_sha256);assert.equal(bytes.length,state.intent.web_bytes);
     if(options.postStatus){json({},options.postStatus);return;}
@@ -117,7 +121,7 @@ async function model(options={}) {
     if(options.truncateAck){res.writeHead(200,{'content-type':'application/json'});res.write('{"Id":');setImmediate(()=>res.destroy());return;}
     json(ack);return;
    }
-   if(req.method==='GET' && req.url==='/storage/v1/object/authenticated/'+b.bucket_id+'/'+b.web_path) {
+   if(req.method==='GET' && p==='/storage/v1/object/authenticated/'+b.bucket_id+'/'+b.web_path) {
     if(options.cancelOnReadback)state.active=false;
     object(state.stored,options.wrongMime?'application/octet-stream':'image/webp');return;
    }
