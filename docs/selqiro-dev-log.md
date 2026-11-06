@@ -1,3 +1,82 @@
+<!-- SELQIRO_RETIRED_WEB_CLEANUP_20261106 -->
+## 2026-11-06 — Varem eemaldatud WEB-foto lõppkoristus ette valmistatud
+
+- Lisatud üks kitsas hosted-koristuse tee juba kinnitatud
+  published_image_removed objektile. Senine päevik, lease, kordusreeglid,
+  transport ja loogiline arvestus säilivad. Uusi tabeleid/rolle/järjekordi pole.
+- Kolm kitsast RPC-d, kaks privaatset helperit ning üks lisaharu senises
+  puudumistõendis. Aktiivset fotot ei valita; õigust kontrollitakse senise
+  actor-wrapperi ja galeriilepinguga. SQL ei kustuta Storage'i ridu.
+- SOURCE claim on esimene; ainult literal null lubab eemaldatud WEB-i claim'i.
+  Üks päring töötleb kuni ühe objekti. 4 MiB reserv vabaneb alles täpse
+  lõpetatud sessiooni ja teenuseobjekti/upload'i/osade puudumise järel.
+  Tundmatu vastus ei vabasta mahtu; hilisem kogu kuulutuse eemaldamine või
+  kõrvaline SOURCE-diagnostika ei taasta juba vabastatud WEB-reservi.
+- Vana owner-status ja SOURCE-kviitung säilivad. Eraldi autenditud diagnostika
+  loeb samast päevikust; selle tõrge ei blokeeri põhitoimetajat. Lehe avamine,
+  fookus ja värskendus ei käivita koristust. Testipaneeli nupp on
+  „Korista järgmine fail”, sama omaniku toimingulukuga.
+- 91/91 sihitud Node-katset PASS: säiliv SOURCE 31, uus töötaja/seis 45 ja
+  autenditud lugemistee 15. HTTP on sünteetiline. SQL-i 22 käitumise ja 14
+  paigalduse kontrollrühma PASS PostgreSQL 17.5/PGlite 0.3.14 WASM-is.
+  Native paralleelseansse ega päris Storage'it ei kasutatud.
+- Lõpliku runtime'i build PASS29,33 s. Pärast build'i 11/11 brauserijuhtumit
+  PASS tegelike komponentide/hookide/kliendiga,1440/390 px. Olemasoleva 201
+  kahe foto ja ühe eemaldatud foto seis läks 1 → 0/0; galerii/põhipilt ning
+  salvestamata sisestus säilisid. Lisaks teadmata/vigased/hilised lugemid,
+  SOURCE/WEB koosolu ja hilisem kuulutuse eemaldamine.0 leheviga/välispäringut/
+  ootamatut toimingut. Teenusevastused on sünteetilised.
+- Neli tarne liidesekatset PASS ja kokkupandud tarnekatse PASS, 4,604 s:
+  995-failine väljastatud baas, 38 payloadi, 981 guardi, üks täpne commit ja
+  tavaline kohalik push. SQL/build selles katses sünteetilised; kordus oli
+  ainult lugemine. Lõplikud allikad/manifest kontrollitakse pakendamisel.
+- Sõltumatu ülevaatus leidis kaks täpsustust: status-reservi täpne 4 MiB leping
+  ning SOURCE-esimese nupu üldisem sõnastus. Need on lõplikus koodis sees.
+  SQL-i esimene lugemisõiguse tõrge lahendati olemasoleva wrapperiga õigusi
+  laiendamata; algne katse süntaks ning brauseri binaari/fondide lahtipakkimise
+  tõrked säilivad katsete ajaloos. Rakenduse uus build polnud tööriistaparanduse
+  tõttu vajalik; lõplikud runtime-räsid säilisid.
+- Uuendatud CURRENT_STATE, sellest genereeritud üleandmine, HOSTED_PORTAL,
+  moodulilepingud, feature README, engineering handbook ja teadaolevad piirid.
+  05.11 vastuvõtu viis Maci rakendamata dokumenti on uues deltas, old-räsid
+  võetakse muutmata 04.11 fotoeemalduse tarnest. Vanad pakid/päevikud säilivad.
+- Uus paigaldaja kinnitab SQL-toe enne lähtefaile/build'i/commit-push'i;
+  paigaldaja ise päris faili ei korista. Selle ettevalmistusega ei muudetud
+  Maci, pilveandmebaasi, GitHubi ega Vercelit. Järgmine kitsas tee on uus
+  uuendaja → sama commit Ready/Production → olemasoleva 201 üks koristussamm.
+- Avaliku avamise eel jääb nõue: koristus peab lõppema nupuvajutuse/avatud
+  omanikuvaateta, tehnilised loendurid/nupud kaovad tavavaatelt. Püsivat
+  ajastajat see samm ei lisa; testimiseks võib diagnostika nähtav olla.
+
+<!-- SELQIRO_PUBLISHED_PHOTO_REMOVAL_ACCEPTED_20261105 -->
+## 2026-11-05 — Fotoeemaldus ja järgnev põhipilt veebis vastu võetud
+
+- Kasutaja kinnitas, et kustutamine ja uue põhipildi määramine toimivad.
+  Seitsmel kuvatõmmisel on eemaldamise kinnitus, kuulutuse 201 galerii 3 → 2,
+  edukas teade, Mercedes uue põhipildina ja sama pilt otsingukaardil.
+- Esimene terminaliviga oli Python [Errno 2]: ZIP polnud lahti pakitud ning
+  uuenda.py ei leitud. Uuendaja ega SQL ei alanud. Järgnev jooks lõppes
+  VALMIS-teatega; uut parandust või korduskäiku ei ole vaja.
+- Fotoeemalduse täiscommit on 69ca43454857d3f742aea35faa57cfecf57b7cf1.
+  Terminal kinnitab andmebaasitoe, build’i ja commit/push’i; Verceli pildil
+  69ca434 / main / Ready 45s / sinine Production.
+- Uus terminalipilt lisab ka algfotokoristuse varem puudunud täiscommit’i:
+  203021cec14d103d4c2cd38230d33979e2baa02a; Vercelis 203021c / main /
+  Ready 46s / Production. Eelmise päeva funktsionaalne vastuvõtt säilib.
+- Tõend on kasutaja terminali/juhtpaneeli/veebivaadete põhine. Täit raportit,
+  Maci indexit/tööpuud, DB-kataloogiräsi ja deployment-ID-d ei loetud.
+  Pilte ei loeta füüsilise WEB-kustutuse ega mahu vabanemise tõendiks.
+- Järgmine väike samm on eemaldatud WEB-foto lõppkoristus olemasoleva
+  päeviku ja ühe objekti transpordiga. Reserv vabaneb alles tõendatud
+  puudumisel. See vastuvõtt ei käivita päris kustutust.
+- Uuendati uues üleandmiskoopias viis dokumenti: CURRENT_STATE, sellest
+  genereeritud üleandmine, HOSTED_PORTAL, mooduli arhitektuur ja päevik.
+  Neid pole eraldi Maci/Giti rakendatud. Vana paigaldaja ja väljastatud
+  üleandmine säilivad muutmata; järgmise delta old-räsid tulevad vanast tarnest.
+- Runtime, SQL, testid ja paigaldaja on muutmata. Uut build’i, katseid või
+  teenuseühendusi ei korratud; kontrolliti dokumentide ulatust, genereerimist
+  ning pakendi terviklust. Brauseripilte uude pakki ei lisatud.
+
 <!-- SELQIRO_PUBLISHED_PHOTO_REMOVAL_20261104 -->
 ## 2026-11-04 — Ühe avaldatud lisafoto eemaldamine
 

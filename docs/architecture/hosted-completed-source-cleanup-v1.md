@@ -179,3 +179,12 @@ peab selle SOURCE olema tõendatult koristatud; nii saab allesjäänud SOURCE-id
 senine koristus edasi töötada. WEB-i eemaldamiskirje ei muuda avaldatud
 SOURCE-kviitungi failide arvu ega vabasta WEB-i reservi.
 
+
+## Eemaldatud WEB-i jätk — 06.11.2026
+
+[Eemaldatud WEB-i kitsas leping](hosted-retired-web-cleanup-v1.md) kasutab sama
+ühe objekti transporti. Hosted-voog proovib kõigepealt senist SOURCE claim'i ja
+ainult selle täpse `null` korral eemaldatud WEB-i claim'i. Üks päring eemaldab
+kuni ühe objekti. Vana SOURCE-only adapter ja SOURCE-kviitungi loendur säilivad;
+WEB-i diagnostika loetakse eraldi olemasolevatest andmetest. Uus paigaldus ei
+käivita varasema SOURCE-i paranduse SQL-i uuesti.

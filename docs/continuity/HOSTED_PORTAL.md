@@ -1,83 +1,82 @@
-# Selqiro portaal — ühe lisafoto eemaldamine
+# Selqiro portaal — eemaldatud foto lõppkoristus
 
-Seis: 04.11.2026 Europe/Tallinn. Autoriteetne seis on
-[CURRENT_STATE.json](CURRENT_STATE.json); lühileht genereeritakse sellest.
+Seis: 06.11.2026 Europe/Tallinn. Autoriteetne seis on
+[CURRENT_STATE.json](CURRENT_STATE.json); loetav üleandmine genereeritakse sellest.
 
-## Ettevalmistatud tulemus
+## Viimane vastu võetud tulemus
 
-Avaldatud hallatud kuulutuse muutmisvaates saab kinnituse järel eemaldada ühe
-foto, mis ei ole põhipilt. Vähemalt üks foto jääb alles. Põhipildi eemaldamiseks
-vali enne teine olemasolev foto põhipildiks.
+Kuulutusel 201 eemaldati kinnitusega üks lisafoto, kaks fotot jäid alles ja
+Mercedes määrati põhipildiks. Sama põhipilt ilmus otsingukaardile. Kasutaja
+kinnitas toimimist; terminali commit oli
+`69ca43454857d3f742aea35faa57cfecf57b7cf1` ja Verceli pildil oli sama prefiksiga
+`main / Ready / Production`. Fotoeemalduse ja varasema algfotokoristuse
+paigaldajaid ega juba vastu võetud kasutuskatseid ei korrata.
 
-Eemaldatud foto kaob galeriist ning selle vana avalik ja omaniku veebiaadress
-sulgub. Ülejäänud fotode aadressid, põhipilt ja salvestamata tekstimuudatused
-säilivad. Katkenud või ebaselge vastuse järel loetakse seisu uuesti; eemaldamist
-automaatselt ei korrata.
+## Käesolev üks samm
 
-Selles sammus jääb eemaldatud WEB-fail privaatsesse koristusjärjekorda ja selle
-ruum arvestusse. Lõpliku failikoristuse tõend tuleb järgmise kitsa lepinguga.
-Uut tabelit, järjekorda, mahubilanssi ega üldist töövoomootorit ei lisata.
+Uus pakett lisab ühe juba galeriist eemaldatud WEB-foto lõppkoristuse.
+Olemasolev päevik, ühe objekti transport ning ruumiarvestus jäävad kasutusse.
+Sama objekti reserv vabaneb alles siis, kui eemaldamise tulemus ja teenuseobjekti
+puudumine on kinnitatud. Aktiivsed fotod ja praegune põhipilt säilivad.
 
-## Üks jätkamiskäsk
+Uue sammu lähtekood ja kohalikud kontrollid on ette valmistatud. See ei tõenda
+uut Maci paigaldust, pilveandmebaasi muudatust, commit/push'i, Vercelit ega
+päris faili puudumist. Nende järgmine kontrollitav tee on allpool.
 
-1. Laadi alla ja paki Downloads-kaustas lahti
-   `selqiro-foto-eemaldamine-20261104.zip`.
-2. Käivita terminalis:
+## Laadi alla, paki lahti ja käivita üks käsk
 
-```sh
-python3 -I -B "$HOME/Downloads/selqiro-foto-eemaldamine-20261104/uuenda.py" --publish
+Laadi alla `selqiro-eemaldatud-fotode-koristus-20261106.zip` ja paki see
+Downloads-kaustas lahti. Seal peab tekkima kaust
+`selqiro-eemaldatud-fotode-koristus-20261106`, milles asub `uuenda.py`.
+Lahtipakkimata ZIP-is olevat skripti Python selle käsuga ei ava.
+
+```bash
+python3 -I -B "$HOME/Downloads/selqiro-eemaldatud-fotode-koristus-20261106/uuenda.py" --publish
 ```
 
-Uuendaja loeb tegeliku haru, HEAD-i, kogu indexi/tööpuu, lähteräsid ja kinnitatud
-remote'i. Seejärel kontrollib olemasoleva andmebaasi täpset lepingut, paigaldab
-ühe piiratud SQL-muudatuse, teeb lähtefailide varukoopiad, rakendab muudatuse,
-koostab portaali ning teeb täpse commit'i ja tavalise push'i. Paigaldaja ise ei
-käivita foto eemaldamise käsku ega kustuta Storage'i objekte.
+Uuendaja kasutab sama kontrollitud hoidlat (`~/selqiro` vaikimisi) ja
+olemasolevat Supabase'i ühendust. Terminaliviiba kaustanimi ei vali sihti.
+Tegelik haru, HEAD, kogu index/tööpuu, lähtefailid ja kinnitatud remote
+kontrollitakse enne kirjutusi värskelt. Viimane vastu võetud commit on ainult
+esivanema kontroll; see ei asenda tegeliku seisu lugemist.
 
-Lähtebaas on eelmise algfotokoristuse tarne 978 faili. Vana R3 commit on ainult
-esivanema kontroll, mitte oletatav praegune HEAD. Ka eelmise vastuvõtu viis
-Maci rakendamata dokumenti jõuavad selle kontrollitud muudatusega kaasa.
+Uus SQL-tugi paigaldatakse enne rakenduskoodi. Seejärel rakendatakse piiratud
+delta, tehakse build ning täpne commit ja tavaline push. Paigaldaja ei käivita
+faili koristust ega Storage DELETE-i. Olemasolevad päevikud ja kasutaja töö
+säilivad. 05.11 vastuvõtudokumentide muudatused on uues deltas kaasas; nende
+old-räsid lähtuvad viimasest muutmata väljastatud lähtebaasist.
 
-Kui ilmub `PEATATUD`, saada peatuse rida ja nimetatud `result.json`.
-Säilita töö ja päevikud. Tundmatut SQL-tulemust ega muutunud lähtebaasi ei
-parandata korduskäivituste või kaitsete eemaldamisega.
+Kui ilmub `PEATATUD`, säilita töö ja päevikud ning saada peatumisrida koos
+samal real nimetatud `result.json` raportiga. Tundmatut kirjutust ei korrata
+pimesi ja lähte- või SQL-kaitseid ei eemaldata.
 
-## Pärast VALMIS-tulemust
+## Sama commit veebis ja üks kitsas katse
 
-Oota Vercelis terminalis näidatud uue commit'i `Ready / Production` tulemust
-ja värskenda portaali.
+1. Oota Vercelis just terminalis väljastatud uue commit'i `Ready / Production`
+   tulemust ja värskenda portaali.
+2. Ava Taivo Garaaži olemasoleva kuulutuse 201 muutmisvaade. Eelmises vastu
+   võetud katses jäi sinna kaks fotot ning üks eemaldatud foto ootab lõppkoristust.
+3. Testimiseks on eraldi plokk **„Eemaldatud fotode koristamine”**. Ootel ühe
+   faili korral vajuta üks kord **„Korista järgmine fail”**.
+4. Värske kinnitatud nullseisu korral plokk kaob. Samad kaks fotot ja praegune
+   põhipilt peavad alles jääma. Uut fotot pole selle katse jaoks vaja eemaldada.
 
-Tee üks kitsas kasutuskatse olemasoleva vähemalt kolme fotoga testkuulutusega,
-mille algfailide koristus on lõpetatud:
+Nupp töötleb kuni ühe sobiva objekti. Senine SOURCE-koristus on esimesena;
+ainult selle tühja claim'i järel proovitakse varem eemaldatud WEB-i.
+Kuulutuse 201 senine SOURCE-loendur oli juba null. Värskendamine ja lehe avamine
+loevad seisu ega käivita koristust. Kui kuvatakse kontrollimist vajav või
+kinnitamata tulemus, ei loeta faili ega reservi veel vabastatuks.
 
-1. Ava muutmisvaade ja vali ühe lisafoto **Eemalda foto**.
-2. Kinnita eemaldamine. Valitud foto peab kaduma, teised jääma alles.
-3. Vali üks allesjäänud foto põhipildiks ja vaata kuulutuse avalikku detaili.
-   Allesjäänud galerii ning valitud põhipilt peavad vastama muutmisvaatele.
+Nullseis on olemasoleva päeviku ja teenusemetaandmete põhine Selqiro loogiline
+arvestus. See ei tähenda teenusepakkuja varjatud ketaste või arve kontrolli.
 
-Kui tulemuse kinnitamine katkeb, kasuta **Kontrolli piltide seisu**.
-Ära korda eemaldamist teadmata tulemuse pealt. Viimasele fotole ega praegusele
-põhipildile eemaldusnuppu ei kuvata.
+## Avaliku avamise piir
 
-## Senine vastuvõtt säilib
+Tehnilised plokid võivad testimise ajal jääda nähtavaks. Enne avalikku avamist
+peab koristus edenema kasutaja nupuvajutusteta ning avatud omanikuvaatest
+sõltumata; tehnilised loendurid ja koristusnupud kaovad tavavaatest. Käesolev
+samm ei lisa püsivat ajastajat. Ainult paneeli peitmine ei täida nõuet.
 
-Eelmise kasutajapildi jadas vähenes kuulutuse 201 algfailide arv 3 → 2 → 1,
-seejärel plokk kadus ja kolm fotot säilisid. Uue ühe fotoga kuulutuse 202
-omanikuvaates koristusplokki ei olnud. See nähtav käitumine on vastu võetud;
-selle paigaldust või katset ei korrata.
-
-Nende piltide põhjal pole teada algfotokoristuse täpne uus commit, Maci index
-või Verceli deployment'i identiteet. Selle fotoeemalduse lähtekood ja kohalikud
-kontrollid ei tõenda samuti Maci rakendamist, SQL-i, push'i ega Productionit.
-Uuendaja värske raport ning järgnev veebikatse annavad järgmise tõendi.
-
-## Avaliku vaate otsus
-
-Testimise ajal võib senine koristusplokk alles olla. Enne avalikku avamist peab
-sobivate failide koristus edenema kasutaja nupuvajutusteta ning avatud
-omanikuvaatest sõltumata. Tehniline loendur, koristusnupp ja lõpukinnitused
-kaovad tavakasutaja vaatest. Nähtavaks jäävad kuulutuse tegelik olek ja kasutaja
-tegevust mõjutav arusaadav probleem. Ainult paneeli peitmine seda nõuet ei täida.
-
-Täpsed piirid:
-[published-listing-photo-removal-v1.md](../architecture/published-listing-photo-removal-v1.md).
+Fotode lisamine/asendamine, katkiste üleslaadimiste ning teiste terminalsete
+WEB-objektide koristus järgnevad eraldi väikeste sammudena. Täpne käesolev
+leping on [hosted-retired-web-cleanup-v1.md](../architecture/hosted-retired-web-cleanup-v1.md).

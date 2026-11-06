@@ -12,6 +12,7 @@ const ownerActions = {
   "owner-set-status": {name: "set_my_managed_listing_status_v2", keys: ["p_listing_id", "p_expected_identity_id", "p_expected_user_id", "p_expected_status", "p_status"]},
   "owner-renew": {name: "renew_my_managed_listing_activity_v2", keys: ["p_listing_id", "p_expected_identity_id", "p_expected_user_id", "p_expected_active_until"]},
   "owner-cleanup-status": {name: "get_my_listing_cleanup_summary_v1", keys: ["p_expected_identity_id", "p_expected_user_id"]},
+  "owner-retired-images-status": {name: "get_my_listing_retired_web_cleanup_v1", keys: ["p_expected_user_id", "p_expected_identity_id", "p_attempt_id", "p_request_key"]},
   "owner-images-read": {name: "get_my_managed_listing_images_v1", keys: ["p_expected_user_id", "p_expected_identity_id", "p_listing_id", "p_attempt_id"]},
   "owner-images-primary": {name: "set_my_managed_listing_primary_image_v1", keys: ["p_expected_user_id", "p_expected_identity_id", "p_listing_id", "p_attempt_id", "p_expected_revision", "p_ordinal"]},
   "owner-images-remove": {name: "remove_my_managed_listing_image_v1", keys: ["p_expected_user_id", "p_expected_identity_id", "p_listing_id", "p_attempt_id", "p_expected_revision", "p_ordinal"]},
@@ -45,8 +46,10 @@ function ownerContract(action: keyof typeof ownerActions, input: Record<string, 
   try { uploadRecord(input, keys); } catch { throw new Error("input"); }
   if (!isUploadUuid(input.p_expected_identity_id)
     || !isUploadUuid(input[action.startsWith("owner-edit-") ? "p_expected_actor_id" : "p_expected_user_id"])
-    || action !== "owner-cleanup-status" && !isId(input.p_listing_id)) throw new Error("input");
+    || action !== "owner-cleanup-status" && action !== "owner-retired-images-status" && !isId(input.p_listing_id)) throw new Error("input");
   if (action.startsWith("owner-images-") && ![input.p_expected_user_id, input.p_expected_identity_id, input.p_attempt_id]
+    .every(value => typeof value === "string" && value.length === 36 && isUploadUuid(value))) throw new Error("input");
+  if (action === "owner-retired-images-status" && !Object.values(input)
     .every(value => typeof value === "string" && value.length === 36 && isUploadUuid(value))) throw new Error("input");
   if (action === "owner-images-primary" || action === "owner-images-remove") {
     const revision = input.p_expected_revision;

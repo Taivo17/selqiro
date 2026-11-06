@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "scope": "Exact retired published WEB; accepted PostgreSQL declarations with synthetic provider metadata.",
+  "checks": [
+    {
+      "label": "claim_record_service_only_read_authenticated_only_and_generic_apis_closed",
+      "passed": true
+    },
+    {
+      "label": "exact_actor_identity_attempt_request_required_for_read_and_mutation",
+      "passed": true
+    },
+    {
+      "label": "read_is_separate_read_only_authorized_projection_and_source_counter_is_unchanged",
+      "passed": false,
+      "message": "permission denied for function lock_listing_creation_actor_v1",
+      "code": "42501"
+    }
+  ],
+  "live_database_calls": false,
+  "provider_storage_executed": false,
+  "native_postgresql_executed": false,
+  "concurrent_session_execution": false,
+  "synthetic_provider_metadata": true,
+  "engine": "PostgreSQL 17.5 on aarch64-unknown-linux-gnu, compiled by emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 3.1.74 (1092ec30a3fb1d46b1782ff1b4db5094d3d06ae5), 32-bit",
+  "passed": false,
+  "changes_sha256": "71fd930a22bc14cb74f0e9bf47c54e24c2c1a28c65ee8d7e6a396cf8eb4f9e36",
+  "resolution": "Reuse the accepted require_managed_image_actor_v1 wrapper; no grant widening."
+}

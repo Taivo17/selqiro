@@ -43,16 +43,21 @@ Required future fix:
 Store category creation does not rely on this client setter for authorization.
 Its RPC validates the stored active identity independently.
 
-## Published photo lifecycle — remaining public-launch work, 2026-11-04
+## Published photo lifecycle — remaining public-launch work, 2026-11-06
 
-The current small removal candidate removes a non-primary photo from the active
-gallery and revokes its media routes. Its private WEB object remains queued and
-charged until a separate, proved cleanup capability completes. The removal
-command does not claim physical deletion or release that reservation.
+The user accepted non-primary photo removal and the following primary-image
+change on 2026-11-05. The next prepared slice adds bounded Storage cleanup for
+that already-retired WEB object and releases its existing logical reservation
+only after authoritative absence. Prepared code is not production acceptance;
+see the one current state record for installation and validation evidence.
 
-Adding/replacing published photos, retired/terminal WEB cleanup and automatic
-completion independent of the owner page remain to be finished. Before public
-launch, ordinary users must not see technical cleanup counters or be responsible
-for advancing cleanup. The current test panel is intentionally retained at the
-user's request. See `docs/architecture/published-listing-photo-removal-v1.md` and
-the authoritative `docs/continuity/CURRENT_STATE.json` for actual delivery state.
+The new cleanup uses the existing ledger and one-object transport. It does not
+finish all photo lifecycle cases. Adding/replacing published photos, failed or
+unfinished uploads, other terminal WEB objects and automatic completion
+independent of the owner page remain to be finished before public launch.
+
+Ordinary users must not see technical cleanup counters or be responsible for
+advancing cleanup at public launch. The current test panels are intentionally
+retained at the user's request. Hiding a panel does not supply a background
+worker. See `docs/architecture/hosted-retired-web-cleanup-v1.md` and the
+authoritative `docs/continuity/CURRENT_STATE.json`.

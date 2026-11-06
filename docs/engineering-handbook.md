@@ -320,3 +320,16 @@ change. A retired WEB cleanup record also explains the missing gallery member;
 no parallel membership table is introduced. Original media identities remain
 stable, and removal from a listing is distinct from proved Storage deletion.
 See [the photo-removal contract](architecture/published-listing-photo-removal-v1.md).
+
+## Retired-photo cleanup extension — 2026-11-06
+
+Retired WEB cleanup reuses the same cleanup ledger, work lease, bounded retry
+and one-object Storage transport. Its separate read model derives the exact
+listing's pending count and existing reservation; it does not maintain another
+queue or balance. Keep published SOURCE receipt semantics stable.
+
+A diagnostic read must not become a requirement for editing a listing's basic
+fields. Only an explicit cleanup action may invoke the bounded worker during
+testing. Build the future background runner around the same contract rather
+than adding cleanup side effects to page loads or focus events. See
+[the retired WEB contract](architecture/hosted-retired-web-cleanup-v1.md).

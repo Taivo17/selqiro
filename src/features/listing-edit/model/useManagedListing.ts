@@ -9,6 +9,8 @@ import {receipt, type FinalReceipt} from "../../../server/listing-publication/fi
 import {uploadRecord} from "../../../entities/listing/model/privatePublicationUpload";
 import {managedListingMedia} from "../../../entities/listing/model/listingMediaUrl";
 import type {PublicationActor} from "../../../entities/listing/model/publicationJourney";
+import {readRetiredListingImageCleanup} from "../../../entities/listing/api/retiredListingImageCleanupClient";
+import type {RetiredImageCleanupStatus} from "../../../entities/listing/model/retiredListingImageCleanup";
 import {readManagedListingImages, removeManagedListingImage, setManagedListingPrimaryImage} from "../../../entities/listing/api/managedListingImagesClient";
 import {bindManagedListingRemoveCommand, confirmManagedListingImagesReadback, ManagedListingImagesError,
   type ManagedListingImagesSnapshot, type ManagedListingRemoveCommand} from "../../../entities/listing/model/managedListingImages";
@@ -17,10 +19,12 @@ export type ManagedListingState = {actor: PublicationActor | null; receipt: Fina
   gallery: ManagedListingImagesSnapshot | null; imageError: string | null; imageMessage: string | null;
   primaryBusyOrdinal: number | null; removalBusyOrdinal: number | null;
   cleanupState: "pending" | "needs_attention" | "settled" | null;
+  retiredCleanup: RetiredImageCleanupStatus | null; retiredCleanupLoading: boolean; retiredCleanupError: string | null;
   loading: boolean; busy: boolean; error: string | null};
 const initial = (): ManagedListingState => ({actor: null, receipt: null, activity: null, images: [], gallery: null,
   imageError: null, imageMessage: null, primaryBusyOrdinal: null, removalBusyOrdinal: null,
-  cleanupState: null, loading: true, busy: false, error: null});
+  cleanupState: null, retiredCleanup: null, retiredCleanupLoading: false, retiredCleanupError: null,
+  loading: true, busy: false, error: null});
 function sameImages(gallery: ManagedListingImagesSnapshot, urls: readonly string[]) {
   const expected = [...urls].sort(), actual = gallery.images.map(image => image.url).sort();
   return expected.length === actual.length && expected.every((url, index) => url === actual[index]);
@@ -29,12 +33,35 @@ export function useManagedListing(listingId: string) {
   const [state, setState] = useState(initial);
   const stateRef = useRef(state); stateRef.current = state;
   const generation = useRef(0), control = useRef(new AbortController()), locked = useRef(false);
-  const refreshRef = useRef<() => void>(() => {});
+  const refreshRef = useRef<() => void>(() => {}), retiredRead = useRef(0);
+  const retiredRefreshRef = useRef<(actor: PublicationActor, final: FinalReceipt) => void>(() => {});
   useEffect(() => {
     let active = true;
     const suspend = () => {
       ++generation.current; control.current.abort(); locked.current = false;
       const next = initial(); stateRef.current = next; setState(next);
+    };
+    // Diagnostics are a separate read. Their availability cannot remove the
+    // owner's editor or gallery, and reading never claims or deletes an object.
+    retiredRefreshRef.current = (actor, final) => {
+      const g = generation.current, read = ++retiredRead.current, signal = control.current.signal;
+      const applies = () => active && g === generation.current && read === retiredRead.current
+        && !identityChangePending(actor.userId) && stateRef.current.actor?.userId === actor.userId
+        && stateRef.current.actor.identityId === actor.identityId
+        && stateRef.current.receipt?.attempt_id === final.attempt_id && stateRef.current.receipt.request_key === final.request_key;
+      const checking = {...stateRef.current, retiredCleanup: null, retiredCleanupLoading: true, retiredCleanupError: null};
+      stateRef.current = checking; setState(checking);
+      void readRetiredListingImageCleanup({...actor, attemptId: final.attempt_id, requestKey: final.request_key}, signal)
+        .then(status => {
+          if (!applies()) return;
+          const next = {...stateRef.current, retiredCleanup: status, retiredCleanupLoading: false, retiredCleanupError: null};
+          stateRef.current = next; setState(next);
+        }).catch(() => {
+          if (!applies()) return;
+          const failed = {...stateRef.current, retiredCleanup: null, retiredCleanupLoading: false,
+            retiredCleanupError: "Eemaldatud fotode koristamise seisu ei saanud kontrollida."};
+          stateRef.current = failed; setState(failed);
+        });
     };
     const load = (preserve: boolean) => {
       if (identityChangePending(stateRef.current.actor?.userId ?? null)) { suspend(); return; }
@@ -89,8 +116,10 @@ export function useManagedListing(listingId: string) {
           if (!active || g !== generation.current || identityChangePending(actor.userId)) return;
           const next: ManagedListingState = {actor, receipt: final, activity, images: value.images as string[],
             gallery, imageError, imageMessage: null, primaryBusyOrdinal: null, removalBusyOrdinal: null,
-            cleanupState, loading: false, busy: false, error: null};
+            cleanupState, retiredCleanup: null, retiredCleanupLoading: false, retiredCleanupError: null,
+            loading: false, busy: false, error: null};
           stateRef.current = next; setState(next);
+          if (final) retiredRefreshRef.current(actor, final);
         } catch { if (active && g === generation.current) {
           const retained = stateRef.current.actor === previous.actor && keep ? stateRef.current : initial();
           const failed = {...retained, loading: false, busy: false, error: "Kuulutuse haldusõigust ja seisu ei saanud kontrollida."};
@@ -114,7 +143,7 @@ export function useManagedListing(listingId: string) {
     return () => { active = false;
       // Retire every outstanding operation, including writes started after mount.
       // eslint-disable-next-line react-hooks/exhaustive-deps
-      ++generation.current; control.current.abort(); refreshRef.current = () => {};
+      ++generation.current; control.current.abort(); refreshRef.current = () => {}; retiredRefreshRef.current = () => {};
       subscription.unsubscribe(); window.removeEventListener(ACTIVE_IDENTITY_CHANGED_EVENT, invalidate);
       window.removeEventListener(ACTIVE_IDENTITY_CHANGING_EVENT, suspend);
       window.removeEventListener("focus", focus); window.removeEventListener("storage", storage); };
@@ -134,7 +163,9 @@ export function useManagedListing(listingId: string) {
       if (!final.content_deleted || !["deleting", "deleted"].includes(final.state)) throw new Error("response");
       const next: ManagedListingState = {...current, receipt: final, images: [], gallery: null, activity: null,
         imageError: null, imageMessage: null, primaryBusyOrdinal: null, removalBusyOrdinal: null,
-        cleanupState: final.state === "deleted" ? "settled" : "pending", busy: false, error: null}; stateRef.current = next; setState(next);
+        cleanupState: final.state === "deleted" ? "settled" : "pending", retiredCleanup: null,
+        retiredCleanupLoading: false, retiredCleanupError: null, busy: false, error: null}; stateRef.current = next; setState(next);
+      retiredRefreshRef.current(actor, final);
     } catch { if (g === generation.current) {
       const failed = {...stateRef.current, busy: false, error: "Kustutamise tulemus pole kinnitatud. Kontrolli seisu enne uut tegevust."};
       stateRef.current = failed; setState(failed);
@@ -144,8 +175,11 @@ export function useManagedListing(listingId: string) {
   const scoped = state.receipt && state.receipt.listing_id !== listingId ? initial() : state;
   const cleanup = async () => {
     const current = stateRef.current, actor = current.actor, final = current.receipt;
+    const retiredPending = !current.retiredCleanupLoading && !current.retiredCleanupError
+      && (current.retiredCleanup?.filesRemaining ?? 0) > 0;
     if (locked.current || current.loading || current.error || !actor || !final
-      || !["published", "deleting"].includes(final.state) || final.files_remaining === 0 || final.listing_id !== listingId) return;
+      || !["published", "deleting", "deleted"].includes(final.state)
+      || final.files_remaining === 0 && !retiredPending || final.listing_id !== listingId) return;
     locked.current = true; const g = generation.current;
     const busy = {...current, busy: true, error: null}; stateRef.current = busy; setState(busy);
     try {
@@ -158,10 +192,13 @@ export function useManagedListing(listingId: string) {
         || (result.kind === "settled") !== (result.filesRemaining === 0)) throw new Error("response");
       locked.current = false;
       const checked: ManagedListingState = {...stateRef.current, busy: false,
-        cleanupState: result.kind as ManagedListingState["cleanupState"]}; stateRef.current = checked; setState(checked);
-      refreshRef.current(); // Read the authoritative final receipt; don't infer deletion from an ACK.
+        cleanupState: final.files_remaining > 0 ? result.kind as ManagedListingState["cleanupState"] : current.cleanupState};
+      stateRef.current = checked; setState(checked);
+      refreshRef.current(); // Refresh both authoritative scopes; an ACK cannot free a reservation.
     } catch { if (g === generation.current) {
-      const failed = {...stateRef.current, busy: false, error: "Piltide koristamise tulemust ei saanud kinnitada. Kontrolli seisu enne järgmist toimingut."};
+      const message = "Piltide koristamise tulemust ei saanud kinnitada. Kontrolli seisu enne järgmist toimingut.";
+      const failed = final.files_remaining > 0 ? {...stateRef.current, busy: false, error: message}
+        : {...stateRef.current, busy: false, retiredCleanup: null, retiredCleanupLoading: false, retiredCleanupError: message};
       stateRef.current = failed; setState(failed);
     } }
     finally { if (g === generation.current) locked.current = false; }
@@ -205,6 +242,7 @@ export function useManagedListing(listingId: string) {
           : fresh.images.some(image => image.ordinal === ordinal && image.isPrimary) ? "Põhipilt on salvestatud."
           : "Pilte muudeti vahepeal uuesti. Näitan viimast salvestatud seisu."};
       stateRef.current = next; setState(next);
+      if (action === "remove") retiredRefreshRef.current(actor, current.receipt);
     } catch (error) {
       if (g !== generation.current) return;
       const problem = error instanceof ManagedListingImagesError ? error : new ManagedListingImagesError("unknown");

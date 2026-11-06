@@ -11,6 +11,7 @@ import {selectListingPriceKind} from "../model/listingPriceDraft";
 import type {ListingPriceKind} from "../../../entities/listing/model/listingPriceInput";
 import {LISTING_CURRENCIES} from "../../../shared/currency/listingCurrencies.generated";
 import ManagedListingImagePicker from "./ManagedListingImagePicker";
+import RetiredListingImageCleanup from "./RetiredListingImageCleanup";
 
 function BoundEditor({actor, listingId, blocked}: {actor: PublicationActor; listingId: string; blocked: boolean}) {
   const [session, setSession] = useState<ListingEditSession | null>(null);
@@ -114,6 +115,8 @@ export default function IntegratedListingEditPage({listingId}: {listingId: strin
       {owner.receipt.state === "deleting" ? <button type="button" disabled={blocked} onClick={() => { void owner.cleanup(); }}
         className="rounded-full border px-5 py-3 font-bold disabled:opacity-50">{owner.busy ? "Kontrollin…" : "Kontrolli koristamise seisu"}</button> : null}
     </section> : <p>Selle aktiivse identiteedi hallatavat avaldamist ei leitud.</p>}
+    {owner.receipt ? <RetiredListingImageCleanup status={owner.retiredCleanup} loading={owner.retiredCleanupLoading}
+      error={owner.retiredCleanupError} blocked={blocked} onCleanup={() => { void owner.cleanup(); }} onRefresh={owner.refresh} /> : null}
     <button type="button" disabled={owner.busy} onClick={owner.refresh} className="rounded-full border px-5 py-3 font-bold">Kontrolli seisu</button>
   </div>;
 }

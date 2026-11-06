@@ -1,0 +1,9 @@
+{
+  "schema_version": 1,
+  "passed": false,
+  "scope": "Local test harness syntax before SQL execution",
+  "failure": "SyntaxError: Unexpected reserved word; await gallery in non-async rejection callback",
+  "runtime_test_sha256": "f7ad3e130ec84c58fa57e6d3c16d6a918e18cd7c45c2355b081bc609090ab741",
+  "sql_executed": false,
+  "live_database_calls": false
+}

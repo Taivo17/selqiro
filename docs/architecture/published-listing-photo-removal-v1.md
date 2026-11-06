@@ -1,7 +1,8 @@
 # Published listing photo removal v1
 
-Prepared: 2026-11-04. Installation and production acceptance are tracked only in
-`docs/continuity/CURRENT_STATE.json` and the new Mac execution journal.
+Implemented: 2026-11-04. User acceptance recorded: 2026-11-05. Current installation
+and production evidence are tracked in `docs/continuity/CURRENT_STATE.json`;
+this module document defines the retained behavior and limits.
 
 ## Goal and deliberately small scope
 
@@ -140,3 +141,29 @@ Neither prepared source nor local fixtures prove a Mac commit, database change,
 GitHub push, Vercel deployment or real use. The new updater checks actual Git,
 HEAD, the complete index/worktree, source hashes and approved remote before Mac
 or database writes; the last known R3 hash is only an ancestry anchor.
+
+## User acceptance — 2026-11-05
+
+The user supplied a successful updater terminal result, matching Vercel
+Ready/Production row and owner/discovery screenshots. One non-primary photo was
+removed from listing 201 (three photos to two); a remaining photo was then saved
+as primary and shown on the discovery card. The exact commit and observations
+belong to CURRENT_STATE and the dated acceptance evidence, not a second status
+record here. The initial unextracted-ZIP missing-file error preceded execution;
+the later successful run resolves it without any installer change or replay.
+
+The screenshots do not prove physical WEB deletion, quota release, an anonymous
+read or a direct request to the retired URL. The retained local tests cover the
+implemented media-binding contract. This release deliberately leaves retired
+WEB objects private and charged. The next bounded capability should finish one
+eligible retired WEB object through the existing cleanup ledger and transport,
+then release its reservation only after authoritative absence is established.
+
+## Bounded follow-up — 2026-11-06
+
+The [retired WEB cleanup contract](hosted-retired-web-cleanup-v1.md) now defines
+that separate prepared capability. The accepted photo-removal command remains
+unchanged: it revokes gallery membership and queues the exact WEB object. A
+separate explicit worker and authoritative absence proof finish its deletion
+and release its reservation. The original acceptance evidence above remains
+historical; CURRENT_STATE holds the new capability's actual delivery state.
