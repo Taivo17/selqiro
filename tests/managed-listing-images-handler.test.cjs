@@ -32,6 +32,10 @@ const RPC = {
   [READ]: 'get_my_managed_listing_images_v1',
   [PRIMARY]: 'set_my_managed_listing_primary_image_v1',
   [REMOVE]: 'remove_my_managed_listing_image_v1',
+  'owner-images-add-prepare': 'prepare_my_managed_listing_image_addition_v1',
+  'owner-images-add-status': 'get_my_managed_listing_image_addition_v1',
+  'owner-images-add-append': 'append_my_managed_listing_image_v1',
+  'owner-images-add-cancel': 'cancel_my_managed_listing_image_addition_v1',
 };
 const READINESS = '/rest/v1/rpc/get_selqiro_hosted_preview_readiness_v1';
 const secret = 'synthetic-private-database-details-never-return';
@@ -214,7 +218,7 @@ for (const revision of ['0', '9007199254740993', '9223372036854775807'])
     assert.equal(h.rpcCalls().length, 1); assert.equal(h.rpcCalls()[0].body.p_expected_revision, revision);
   });
 
-for (const ordinal of [-1, 10, 1.5, '1', null, true]) test('primary ordinal is a slot integer: reject ' + String(ordinal), async () => {
+for (const ordinal of [-1, 2147483648, 1.5, '1', null, true]) test('primary ordinal is a gallery integer: reject ' + String(ordinal), async () => {
   const h = harness();
   assert.deepEqual(await h.invoke(PRIMARY, { ...args(), p_ordinal: ordinal }), { status: 409, value: { error: 'refused' } });
   assert.equal(h.rpcCalls().length, 0);
@@ -316,7 +320,7 @@ test('non-POST and unknown owner image action do not authenticate or dispatch', 
 for (const [name, patch] of [
   ['numeric revision', {p_expected_revision: 5}], ['newline revision', {p_expected_revision: '5\n'}],
   ['overflow revision', {p_expected_revision: '9223372036854775808'}],
-  ['string ordinal', {p_ordinal: '1'}], ['out of range ordinal', {p_ordinal: 10}],
+  ['string ordinal', {p_ordinal: '1'}], ['out of range ordinal', {p_ordinal: 2147483648}],
   ['foreign path', {p_ordinal: '/source.upload'}],
 ]) test('removal rejects invalid CAS input before RPC: ' + name, async () => {
   const h = harness();
@@ -348,5 +352,75 @@ test('removal abort after RPC dispatch ignores late success without cleanup', as
   await entered.promise; control.abort();
   assert.deepEqual(await pending, {status: 503, value: {error: 'outcome_unknown'}});
   reply.resolve(json(snapshot(REMOVE))); await Promise.resolve();
+  assert.equal(h.rpcCalls().length, 1); assert.deepEqual(h.imageCalls, []);
+});
+
+for (const action of [PRIMARY, REMOVE]) test(`${action}: a durable gallery ordinal above nine reaches SQL unchanged`, async () => {
+  const h = harness(); assert.equal((await h.invoke(action, {...args(action), p_ordinal: 2147483647})).status, 200);
+  assert.equal(h.rpcCalls()[0].body.p_ordinal, 2147483647);
+});
+
+const ADD_PREPARE = 'owner-images-add-prepare', ADD_STATUS = 'owner-images-add-status';
+const ADD_APPEND = 'owner-images-add-append', ADD_CANCEL = 'owner-images-add-cancel';
+function additionArgs(action) {
+  return {...args(READ), p_request_key: OTHER,
+    ...(action === ADD_PREPARE || action === ADD_APPEND ? {p_expected_revision: '9007199254740993'} : {}),
+    ...(action === ADD_PREPARE ? {p_image: {client_file_id: OTHER, byte_length: 1234, sha256: 'a'.repeat(64)}} : {}),
+    ...(action === ADD_APPEND ? {p_addition_attempt_id: OTHER, p_ready_id: INSTANCE} : {})};
+}
+for (const action of [ADD_PREPARE, ADD_STATUS, ADD_APPEND, ADD_CANCEL]) {
+  test(`${action}: one user-token RPC follows Auth and readiness; recovery reads need no revision`, async () => {
+    const h = harness(), input = additionArgs(action); assert.equal((await h.invoke(action, input)).status, 200);
+    assert.deepEqual(h.calls.map(c => c.pathname), ['/auth/v1/user', READINESS, '/rest/v1/rpc/' + RPC[action]]);
+    assert.deepEqual(h.rpcCalls()[0].body, input); assert.deepEqual(h.imageCalls, []);
+  });
+  test(`${action}: other actor or extra target path cannot reach RPC`, async () => {
+    const h = harness({auth: () => json({id: OTHER})});
+    assert.equal((await h.invoke(action, additionArgs(action))).status, 403); assert.equal(h.rpcCalls().length, 0);
+    const validActor = harness();
+    assert.equal((await validActor.invoke(action, {...additionArgs(action), p_object_path: 'other/source.upload'})).status, 409);
+    assert.equal(validActor.rpcCalls().length, 0);
+  });
+}
+for (const [label, patch] of [
+  ['missing request', {p_request_key: null}], ['numeric revision', {p_expected_revision: 3}],
+  ['unbounded file', {p_image: {client_file_id: OTHER, byte_length: 26214401, sha256: 'a'.repeat(64)}}],
+  ['empty file', {p_image: {client_file_id: OTHER, byte_length: 0, sha256: 'a'.repeat(64)}}],
+  ['unverified digest', {p_image: {client_file_id: OTHER, byte_length: 1234, sha256: 'A'.repeat(64)}}],
+  ['caller filename', {p_image: {client_file_id: OTHER, byte_length: 1234, sha256: 'a'.repeat(64), filename: 'private.jpg'}}],
+]) test('addition prepare refuses ' + label + ' before SQL', async () => {
+  const h = harness(); assert.equal((await h.invoke(ADD_PREPARE, {...additionArgs(ADD_PREPARE), ...patch})).status, 409);
+  assert.equal(h.rpcCalls().length, 0);
+});
+for (const field of ['p_addition_attempt_id', 'p_ready_id', 'p_expected_revision'])
+  test('append requires exact ' + field, async () => {
+    const h = harness(), input = additionArgs(ADD_APPEND); delete input[field];
+    assert.equal((await h.invoke(ADD_APPEND, input)).status, 409); assert.equal(h.rpcCalls().length, 0);
+  });
+for (const [label, action, patch] of [
+  ['request key', ADD_PREPARE, {p_request_key: OTHER + '\n'}],
+  ['client file id', ADD_PREPARE, {p_image: {client_file_id: OTHER + '\n', byte_length: 1234, sha256: 'a'.repeat(64)}}],
+  ['ready id', ADD_APPEND, {p_ready_id: INSTANCE + '\n'}],
+]) test('addition rejects a trailing newline in ' + label + ' before SQL', async () => {
+  const h = harness();
+  assert.equal((await h.invoke(action, {...additionArgs(action), ...patch})).status, 409);
+  assert.equal(h.rpcCalls().length, 0); assert.deepEqual(h.imageCalls, []);
+});
+test('lost append acknowledgement stays unknown and never triggers upload, cleanup or resend', async () => {
+  const h = harness({rpc: () => {throw Error('lost response after attach');}});
+  assert.deepEqual(await h.invoke(ADD_APPEND, additionArgs(ADD_APPEND)), {status: 503, value: {error: 'outcome_unknown'}});
+  assert.equal(h.rpcCalls().length, 1); assert.deepEqual(h.imageCalls, []);
+});
+for (const message of ['publication_open_attempt_limit', 'publication_daily_attempt_limit', 'publication_retained_bytes_limit'])
+  test('addition exposes only the known capacity refusal ' + message, async () => {
+    const h = harness({rpc: () => json({code: '54000', message, details: secret, hint: secret}, 500)});
+    assert.deepEqual(await h.invoke(ADD_PREPARE, additionArgs(ADD_PREPARE)),
+      {status: 409, value: {error: 'owner_contract', code: '54000', message}});
+    assert.equal(h.rpcCalls().length, 1); assert.deepEqual(h.imageCalls, []);
+  });
+test('an unknown 54000 remains an unknown outcome without raw details or a retry', async () => {
+  const h = harness({rpc: () => json({code: '54000', message: 'publication_message_cleanup_limit', details: secret}, 500)});
+  assert.deepEqual(await h.invoke(ADD_PREPARE, additionArgs(ADD_PREPARE)),
+    {status: 503, value: {error: 'outcome_unknown'}});
   assert.equal(h.rpcCalls().length, 1); assert.deepEqual(h.imageCalls, []);
 });

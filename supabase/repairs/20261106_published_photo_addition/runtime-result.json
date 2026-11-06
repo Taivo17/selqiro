@@ -1,0 +1,131 @@
+{
+  "schema_version": 1,
+  "suite": "published-photo-addition-sql",
+  "started_at_utc": "2026-11-06T20:12:25.557Z",
+  "completed_at_utc": "2026-11-06T20:13:01.157Z",
+  "passed": 17,
+  "total": 17,
+  "command": "SELQIRO_PGLITE_MODULE=/workspace/scratch/60fc6c106c73/work/selqiro-hosted-source-20261104/tooling/node_modules/@electric-sql/pglite/dist/index.js node supabase/repairs/20261106_published_photo_addition/tests/runtime.mjs",
+  "environment": {
+    "node": "v24.22.1",
+    "pglite": "0.3.14",
+    "postgres": "17.5"
+  },
+  "limitations": [
+    "Disposable PGlite PostgreSQL/WASM fixtures with synthetic accounts, listings and provider metadata.",
+    "SOURCE/WEB and cleanup state transitions use retained SQL RPCs; metadata witnesses are synthetic and do not prove live Storage IO.",
+    "Competing CAS requests execute serially in the fixture; native concurrent PostgreSQL lock scheduling is not tested.",
+    "No Mac installation, remote database mutation, Git push or Vercel deployment is established by these results."
+  ],
+  "changes_sha256": "975c57a3bae9282a50d16cb06c94d674ce2286c9f772f09e6877fcf43794e04b",
+  "module_sha256": {
+    "modules/01_binding.sql": "c4aa01406f310aab369d2577359efe76ab5f95c56bf28189e7fe665f1104b3d3",
+    "modules/02_gallery.sql": "4eaa1739c1948ed169bf074a5e763af565da90e03da412c1769d924a1f6a6fc8",
+    "modules/03_attempt_helpers.sql": "550c94365e5a3c2b3654b693aba866c7c36e1aff86c5168de350d2a4853489bb",
+    "modules/04_addition_prepare.sql": "cb6af145033aaecc7880828ee872edb76932f1665e0183917b414d981ae72ab0",
+    "modules/05_append.sql": "c73fe812245f83a9f2b50b74622c03742b15d973db457c1855f5348d256076a6",
+    "modules/06_attempt_transitions.sql": "7e125f661f2a80bad0abb417da0208d573480662c0e9dfa758789d90c3c16e7e",
+    "modules/07_deletion_receipts.sql": "58664559d89487a8a16145626c0ebdca4cc46726cec2018d18a302662eb3b2bc",
+    "modules/08_media_reads.sql": "4c70b03af65d678b9a630fd0bf70f65048de534424155b20859de63962813084",
+    "modules/09_source_cleanup.sql": "ed574c41b74321dfa86b0de1de61df5cd8fca2b339fc27500050a1ce500011c1",
+    "modules/10_retired_cleanup.sql": "45ac9f6f4e5da67518d2b1d197b4ea0d51b317bc0de4d22b04d1deb4a61e800e",
+    "modules/11_multipart_cleanup.sql": "f7f67fc360a49eafdce92a809c098d3ad785a06b471ed7a3c5b645531cb485ae",
+    "modules/99_authority.sql": "b6570777d19d66896979c6204de00736ce14203a3f5376194689cee8ec0eee76"
+  },
+  "fixture_and_test_sha256": {
+    "tests/fixture.mjs": "bde57392919f75d594c474b591ce8c576d73e63efea1deaf65af3085c1afadc9",
+    "tests/retained-authority.mjs": "df570ae208bb3b9a4e25a08695dcfeef982157d51e4af25fde656e95f4cce1e7",
+    "tests/runtime.mjs": "499fc64423434e0f6f3a3752e6f04cad17777eb724ca0e02f2301c2d0d2468e7",
+    "tests/runtime-case.mjs": "bc2b67eea533294c5d4512641f293c79cab5fb4269d2f083e44397608dabf8dc",
+    "tests/runtime-core.mjs": "895450111a2adb2993bc30386c5459377af62828b5760405c9f78e318e8268e5",
+    "tests/runtime-lifecycle.mjs": "fbc069af49603e22e2e3f9530fd815de3b2a26272b60b47a5754c3e9ac990246",
+    "tests/runtime-helpers.mjs": "38c98c2e0e7749989c316ad839fc96ea43bec59f7037d7668e8e1ceac561335f"
+  },
+  "scenarios": [
+    {
+      "id": "append_and_replay",
+      "passed": true,
+      "purpose": "One verified photo attaches once, preserves primary and original publisher; lost reply recovers exact receipt; SOURCE cleanup releases only child SOURCE reservation."
+    },
+    {
+      "id": "concurrent_cas",
+      "passed": true,
+      "purpose": "Two prepared additions at one revision serialize; stale second append fails CAS without losing its ready photo; explicit current revision succeeds."
+    },
+    {
+      "id": "active_cap_and_monotone",
+      "passed": true,
+      "purpose": "Ten active photos block preparation; retirement permits ordinals10 and11 with immutable independent media URLs and current primary preserved."
+    },
+    {
+      "id": "late_active_cap",
+      "passed": true,
+      "purpose": "Two prepared attempts for the last active slot cannot both attach, including a refreshed-revision second append."
+    },
+    {
+      "id": "first_photo",
+      "passed": true,
+      "purpose": "Zero-image original publication receives its first child as ordinal0 and primary."
+    },
+    {
+      "id": "retired_replay",
+      "passed": true,
+      "purpose": "Retired child WEB is no longer served; exact cleanup releases its reservation; old append ACK survives retirement and whole parent deletion without resurrection."
+    },
+    {
+      "id": "ordinary_publish",
+      "passed": true,
+      "purpose": "The unchanged user path performs initial prepare, SOURCE/WEB completion and verification, confirmation and original publication through the shared allocator."
+    },
+    {
+      "id": "sql_first_compatibility",
+      "passed": true,
+      "purpose": "No-child gallery, primary/removal responses and root cleanup tasks preserve exact old schema1; no-child multipart remains schema3."
+    },
+    {
+      "id": "child_not_normal_publication",
+      "passed": true,
+      "purpose": "Ready child cannot enter ordinary confirmation/publish; an unrelated actor gets ownership refusal before child-purpose disclosure."
+    },
+    {
+      "id": "cancel_before_prepare",
+      "passed": true,
+      "purpose": "Durable existing request tombstone blocks a delayed preparation without creating a child or reserving bytes."
+    },
+    {
+      "id": "cancel_uncertain_upload",
+      "passed": true,
+      "purpose": "Cancellation closes an uncertain multipart dispatch while retaining exact cleanup lineage and quota; published parent SOURCE count excludes unattached children."
+    },
+    {
+      "id": "delete_parent_with_children",
+      "passed": true,
+      "purpose": "Whole deletion closes attached, ready and uncertain children atomically; all ten objects remain accounted for and no later dispatch/attach can revive content."
+    },
+    {
+      "id": "business_member",
+      "passed": true,
+      "purpose": "Another active business member may append and clean SOURCE; parent publisher remains unchanged; revoked member loses access."
+    },
+    {
+      "id": "authority_and_stale_identity",
+      "passed": true,
+      "purpose": "Bound actor, current identity, RPC roles, protected binding relation and immutable metadata reject unauthorized writes/reads."
+    },
+    {
+      "id": "append_requires_live_verified_storage",
+      "passed": true,
+      "purpose": "Ready acknowledgement alone cannot attach when exact Storage object metadata is absent or an upload witness remains unresolved."
+    },
+    {
+      "id": "expired_child",
+      "passed": true,
+      "purpose": "An initially expired synthetic child cannot append or dispatch; cancellation retains its object lineage and reservations."
+    },
+    {
+      "id": "lifetime_cleanup_page",
+      "passed": true,
+      "purpose": "Twenty-one retained objects across one root and nine cancelled children remain accurately counted while a cleanup response carries at most twenty exact origins."
+    }
+  ]
+}

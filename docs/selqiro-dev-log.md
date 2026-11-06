@@ -1,3 +1,74 @@
+<!-- SELQIRO_PUBLISHED_PHOTO_ADDITION_20261106 -->
+## 2026-11-06 — ühe foto lisamine avaldatud kuulutusele ette valmistatud
+
+- Kasutaja valis järgmise sammu pärast kuulutuse 201 eemaldatud foto koristuse
+  nähtavat vastuvõttu. Lisandub üks foto korraga olemasolevale kuulutusele,
+  kuni kümme aktiivset fotot. Senised fotod, URL-id, põhipilt ja pooleliolev
+  teksti/hinnavorm säilivad; tühja galerii esimene foto saab põhipildiks.
+- Senine ühe pildi privaatne SOURCE→WEB ülekanne eraldati ühiseks abiks ja
+  kontrolliti enne uue võime lisamist: 51/51 teekonnajuhtu, build ja kaks
+  päris loomiskomponendi brauserijuhtu PASS sünteetilise teenusega.
+- Üks kaitstud seostabel seob uue ühe pildikohaga katse algse avaldamisega.
+  Galerii jääb listing_images tabelisse. Kviitungi, mahabilansi, töövõtu ja
+  koristuse olemasolevaid mehhanisme kasutatakse edasi. Algset avaldamist
+  ei avata uuesti ning vana URL-i ei kasutata uue foto jaoks.
+- Neli kitsast omaniku RPC-d: ettevalmistus, seis, kinnitatud lisamine ja
+  katkestamine. Iga uus muutus kontrollib tegelikku tegutsejat/identiteeti,
+  kuulutuse haldamise õigust ja galerii revisjoni. Kadunud vastus taastab sama
+  päringu; juba saadetud faili ei saadeta automaatselt teist korda. Kviitung
+  jääb loetavaks pärast hilisemat foto või kogu kuulutuse eemaldamist.
+- Algsete galeriide ja koristuste vanad vastuseskeemid säilivad SQL-first
+  paigalduse ajal. Uue foto eraldi päritolu kasutavad sama galerii, meedialugeja,
+  põhipildi muutmine, eemaldamine ja kitsas ühe objekti koristus.
+- Sihitud kliendi/galerii/avaldamise jooks 218/218 PASS; hilisem handleri,
+  lisamissessiooni, mahupiiri transpordi ja lõpetamise jooks 194/194 PASS.
+  Jooksud osaliselt kattuvad. Seotud koristustranspordi 73/73 ning lõppkviitungi
+  neli loendurijuhtu läbisid; range päritolu regressioon on lõplikus jooksus.
+- Lõplik täielik build PASS 20,95 s. Päris muutmisvaate kuus brauserijuhtu
+  1440/390 px PASS: lisamine, uus põhipilt, kadunud vastuse taastumine ilma
+  teise PUT-ita, tühja galerii esimene foto, kümne foto piir ja selge ajutise
+  mahupiiri teade/katkestamine. Salvestamata pealkiri säilis ja sama identiteedi
+  muutumissündmuse järel sai lisamist uuesti kasutada. Teenus oli sünteetiline.
+- SQL-i 17/17 sihitud juhtu PASS külmutatud lähte ja fixture'iga: päris seniste
+  SQL-RPC-de SOURCE/WEB-valmidus, kinnitamine, algne avaldamine, lisamine,
+  äriliikme õigused, vanade URL-ide säilimine, eemaldamine, kviitungi kordus,
+  tühistamine ja emakuulutuse eemaldamine. PostgreSQL 17.5/PGlite 0.3.14;
+  teenuse metaandmed sünteetilised, päris võrguteenus/lukugraafik kinnitamata.
+- SQL-i paigalduse 10/10 kontrolli PASS; 101 päritud funktsiooni õigused
+  võrreldi säilitatud release’i ja paranduste kronoloogiaga. Tootmise tegelik
+  kataloog kontrollitakse enne rakendamist, seda siin ei loetud.
+- Uue uuendaja 12/12 sihitud kontrolli PASS kohaliku ajutise Gitiga. Eelmise
+  paranduse päevik on ainult commit'i leidmise alus; kontrollitakse ka täpset
+  Giti vanemat, puud, kõiki 1021 lähtefaili, tööpuud/indexit ja remote'i.
+  SQL-i teadmata vastus ei põhjusta automaatset uuesti rakendamist.
+- Uuendatud üks CURRENT_STATE, sellest genereeritud üleandmine, HOSTED_PORTAL,
+  moodulileping, handbook ja known issues. Varem väljastatud paketid ning kogu
+  varasem arenduspäevik säilivad. Selle sammu Mac/SQL/commit/push/Vercel ja päris
+  foto lisamise kasutuskatse on pärast uue paketi käivitamist ootel.
+- Automaatne lõpetamine ilma omaniku leheta, katkestatud/ebaõnnestunud failide
+  lõppkoristus ja tehniliste paneelide eemaldamine tavavaatelt on endiselt
+  avaliku avamise eelne töö. Käesolev lisamine ei väida neid lõpetatuks.
+
+<!-- SELQIRO_CLEANUP_READBACK_ACCEPTED_20261106 -->
+## 2026-11-06 — eemaldatud foto koristuse nähtav kasutuskatse vastu võetud
+
+- Kasutaja teatas: „nüüd peaks olema korras, koristuspaneel kadus”. Kahel
+  kuvatõmmisel on kuulutuse 201 sama muutmisvaade: varem üks ootel fail,
+  hiljem paneel kadunud; Mercedes põhipildina ja BMW teise fotona säilivad.
+- Kasutuskatse on vastu võetud. Selle kinnitusega ei kaasnenud uut täpset
+  commit’i/Ready-rida ega SQL-lõppseisu; serveri nulli, deleted-kviitungit või
+  4 MiB reservivabastust ei esitata eraldi mõõdetud faktina.
+- Ettevalmistatud eraldi kuue dokumendi vastuvõtutäiend: CURRENT_STATE,
+  sellest genereeritud99, HOSTED_PORTAL, diagnoosi ajalugu, teadaolevad
+  probleemid ning see päevik. Maci/Giti dokumente selle sammuga ei muudeta.
+- Väljastatud paranduse ZIP ja kõik rakenduse, SQL-i ning katsete failid
+  säilivad. Varasemaid builde, kasutuskatseid, paigaldajat ega diagnostikat
+  dokumenteerimise tõttu ei korrata; kontroll piirdub dokumentide vastavusega.
+- Järgmine soovitus on foto lisamine olemasolevale avaldatud kuulutusele sama
+  pilditöötluse ja avaldamise raja kaudu. Selle funktsiooni teostust siin ei alustata.
+- Enne avalikku avamist jäävad vajalikuks avatud omanikuvaatest sõltumatu
+  koristus ja tehniliste koristusnuppude/loendurite eemaldamine tavavaatelt.
+
 <!-- SELQIRO_CLEANUP_FRESH_READBACK_20261106 -->
 ## 2026-11-06 — päris raporti põhjal koristuse kontrollpäringu väike parandus
 

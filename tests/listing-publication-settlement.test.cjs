@@ -29,7 +29,7 @@ process.env.SELQIRO_V2_LOCAL_INTEGRATION = 'v1';
 process.env.NEXT_PUBLIC_SUPABASE_URL = ORIGIN;
 const config = {projectOrigin: ORIGIN, appOrigin: APP, publicKey: 'synthetic-public', serviceKey: 'synthetic-service',
   runId: RUN, s3Endpoint: ORIGIN + '/storage/v1/s3', s3Region: 'local', s3TenantId: 'synthetic-tenant',
-  s3AccessKeyId: 'synthetic-access', s3SecretAccessKey: 'synthetic-secret', integrationScope: 'disposable-v2'};
+  s3AccessKeyId: 'synthetic-access', s3SecretAccessKey: 'synthetic-secret'};
 const command = {expectedUserId: U, expectedIdentityId: I, attemptId: A, requestKey: K};
 const json = (value, status = 200) => Response.json(value, {status});
 const copy = value => structuredClone(value);
@@ -61,7 +61,7 @@ async function settlement(before, after = before) {
     }
     throw Error('unexpected transport operation: ' + pathname);
   };
-  const images = createMultipartPublicationImages(config, async () => { throw Error('sanitizer must not run'); }, fetcher);
+  const images = createMultipartPublicationImages({...config, integrationScope: 'disposable-v2'}, async () => { throw Error('sanitizer must not run'); }, fetcher);
   const result = await images.settle('synthetic-user-token', command);
   assert.equal(calls.some(c => c.pathname.startsWith('/storage/')), false);
   return {result, calls};
@@ -105,6 +105,64 @@ test('old snapshot schema and malformed new counts fail closed before claiming c
     assert.deepEqual(result, {kind: 'needs_attention', attemptId: A, filesRemaining: null});
     assert.equal(calls.filter(c => c.pathname.endsWith('/claim_listing_cleanup_for_attempt_v2')).length, 0);
   }
+});
+
+function familyItem() {
+  const x = item();
+  return {...x, origin_attempt_id: OTHER, origin_request_key: P,
+    session: {...x.session, attempt_id: OTHER, object_path: `v1/${OTHER}/${S}/source.upload`}};
+}
+function familySnapshot(patch = {}) {
+  return snapshot({schema_version: 4, items: [familyItem()], ...patch});
+}
+test('a bounded child batch can report more than twenty pending family objects without falsely settling', async () => {
+  const {result} = await settlement(familySnapshot({files_remaining: 21, auxiliary_pending: 21}));
+  assert.deepEqual(result, {kind: 'pending', attemptId: A, filesRemaining: 21});
+});
+test('family session must match its stated origin before any cleanup claim', async () => {
+  for (const patch of [{origin_attempt_id: A}, {origin_request_key: null}, {origin_attempt_id: OTHER + '\n'}]) {
+    const {result, calls} = await settlement(familySnapshot({items: [{...familyItem(), ...patch}]}));
+    assert.deepEqual(result, {kind: 'needs_attention', attemptId: A, filesRemaining: null});
+    assert.equal(calls.some(c => c.pathname.endsWith('/claim_listing_cleanup_for_attempt_v2')), false);
+  }
+});
+test('family origin UUIDs reject trailing newlines even when the session path matches', async () => {
+  const child = familyItem(), malformedOrigin = OTHER + '\n';
+  for (const value of [
+    {...child, origin_request_key: P + '\n'},
+    {...child, origin_attempt_id: malformedOrigin, session: {...child.session,
+      attempt_id: malformedOrigin, object_path: `v1/${malformedOrigin}/${S}/source.upload`}},
+  ]) {
+    const {result, calls} = await settlement(familySnapshot({items: [value]}));
+    assert.deepEqual(result, {kind: 'needs_attention', attemptId: A, filesRemaining: null});
+    assert.equal(calls.some(c => c.pathname.endsWith('/claim_listing_cleanup_for_attempt_v2')), false);
+  }
+});
+test('terminal parent reuses one exact child claim, DELETE, fresh absence read and durable recorder', async () => {
+  const calls = [], taskPath = familyItem().session.object_path; let snapshots = 0;
+  const fetcher = async (url, init) => {
+    const parsed = new URL(url), pathname = parsed.pathname, body = init.body ? JSON.parse(init.body) : null;
+    assert.equal(parsed.origin, ORIGIN); calls.push({pathname, method: init.method, body});
+    if (pathname === '/auth/v1/user') return json({id: U});
+    if (pathname.endsWith('/prepare_listing_multipart_cleanup_v2')) return json(snapshots++ === 0 ? familySnapshot()
+      : familySnapshot({files_remaining: 0, auxiliary_pending: 0, items: []}));
+    if (pathname.endsWith('/claim_listing_cleanup_for_attempt_v2')) return json({schema_version: 2,
+      attempt_id: A, request_key: K, origin_attempt_id: OTHER, origin_request_key: P,
+      object_id: O, work_key: C, bucket_id: 'listing-publication-private', object_path: taskPath,
+      try_count: 1, lease_until_epoch: Math.floor(Date.now() / 1000) + 60});
+    if (init.method === 'DELETE') {assert.equal(pathname, '/storage/v1/object/listing-publication-private');
+      assert.deepEqual(body, {prefixes: [taskPath]}); return json([{name: taskPath}]);}
+    if (init.method === 'GET' && pathname === '/storage/v1/object/authenticated/listing-publication-private/' + taskPath) {
+      assert.deepEqual([...parsed.searchParams.keys()], ['cacheNonce']); return json({error: 'not found'}, 404);}
+    if (pathname.endsWith('/record_listing_cleanup_v1')) {
+      assert.deepEqual(body, {p_object_id: O, p_work_key: C, p_result: 'deleted'});
+      return json({object_id: O, work_key: C, state: 'deleted'});}
+    throw Error('Unexpected family cleanup transport ' + pathname);
+  };
+  const images = createMultipartPublicationImages({...config, integrationScope: 'disposable-v2'}, async () => {throw Error('no sanitizer');}, fetcher);
+  assert.deepEqual(await images.settle('synthetic-user-token', command), {kind: 'settled', attemptId: A, filesRemaining: 0});
+  assert.equal(calls.filter(c => c.method === 'DELETE').length, 1);
+  assert.equal(calls.filter(c => c.pathname.endsWith('/record_listing_cleanup_v1')).length, 1);
 });
 
 const rec = (state = 'published', count = state === 'deleted' ? 0 : 1) => ({schema_version: 1,

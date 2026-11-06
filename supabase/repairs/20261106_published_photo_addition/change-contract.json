@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "new_functions": [
+    "listing_publication_private.managed_image_gallery_projection_v1(jsonb,boolean)",
+    "listing_publication_private.protect_managed_image_addition_v1()",
+    "listing_publication_private.managed_image_family_v1(uuid)",
+    "listing_publication_private.managed_image_origins_v1(uuid)",
+    "listing_publication_private.managed_image_root_v1(uuid)",
+    "listing_publication_private.managed_image_addition_receipt_v1(uuid)",
+    "listing_publication_private.allocate_managed_publication_attempt_v1(uuid,uuid,uuid,bytea,jsonb,jsonb)",
+    "listing_publication_private.normalize_managed_image_addition_v1(jsonb)",
+    "listing_publication_private.require_managed_image_policies_v1()",
+    "listing_publication_private.managed_image_addition_journey_v1(uuid,uuid,uuid,boolean)",
+    "listing_publication_private.lock_managed_image_addition_parent_v1(uuid,uuid,bigint,uuid,boolean)",
+    "listing_publication_private.managed_image_addition_status_v1(uuid,uuid,bigint,uuid,uuid)",
+    "public.get_my_managed_listing_image_addition_v1(uuid,uuid,bigint,uuid,uuid)",
+    "public.prepare_my_managed_listing_image_addition_v1(uuid,uuid,bigint,uuid,uuid,text,jsonb)",
+    "public.cancel_my_managed_listing_image_addition_v1(uuid,uuid,bigint,uuid,uuid)",
+    "public.append_my_managed_listing_image_v1(uuid,uuid,bigint,uuid,uuid,uuid,uuid,text)",
+    "listing_publication_private.assert_ordinary_publication_v1(uuid)",
+    "listing_publication_private.managed_image_cleanup_task_v2(uuid,uuid,uuid)"
+  ],
+  "changed_functions": [
+    "listing_publication_private.lock_managed_listing_images_v1(uuid,uuid,bigint,uuid,boolean)",
+    "public.set_my_managed_listing_primary_image_v1(uuid,uuid,bigint,uuid,text,integer)",
+    "public.remove_my_managed_listing_image_v1(uuid,uuid,bigint,uuid,text,integer)",
+    "public.prepare_my_listing_publication_v1(uuid,uuid,uuid,jsonb,jsonb)",
+    "listing_publication_private.protect_attempt()",
+    "listing_publication_private.apply_final(uuid,jsonb,text)",
+    "listing_publication_private.final_material(uuid)",
+    "public.get_my_listing_publication_confirmation_v1(uuid,uuid,uuid)",
+    "public.publish_my_listing_v1(uuid,uuid,uuid,text)",
+    "listing_publication_private.apply_delete(uuid)",
+    "listing_publication_private.final_receipt(uuid)",
+    "public.get_public_listing_media_binding_v1(uuid,integer)",
+    "public.get_my_listing_media_binding_v2(uuid,uuid,uuid,integer)",
+    "public.get_my_managed_listing_v2(uuid,uuid,text)",
+    "listing_publication_private.lock_multipart_cleanup_context(uuid,uuid,uuid,uuid)",
+    "public.claim_listing_published_source_cleanup_v1(uuid,uuid,uuid,uuid)",
+    "public.record_listing_published_source_cleanup_v1(uuid,uuid,uuid,uuid,uuid,uuid,text)",
+    "listing_publication_private.hosted_retired_web_deleted_v1(uuid)",
+    "public.claim_listing_retired_web_cleanup_v1(uuid,uuid,uuid,uuid)",
+    "public.record_listing_retired_web_cleanup_v1(uuid,uuid,uuid,uuid,uuid,uuid,text)",
+    "public.get_my_listing_retired_web_cleanup_v1(uuid,uuid,uuid,uuid)",
+    "public.prepare_listing_multipart_cleanup_v2(uuid,uuid,uuid,uuid)",
+    "public.claim_listing_cleanup_for_attempt_v2(uuid,uuid,uuid,uuid)"
+  ],
+  "new_relations": [
+    "listing_publication_private.managed_image_additions_v1"
+  ]
+}

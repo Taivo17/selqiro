@@ -72,7 +72,7 @@ function removed(cmd) {
 test('read binds complete actor/listing/attempt and freezes original ordered image metadata', () => {
   const row = wire(), result = R.model.parseManagedListingImages(row, KEY);
   assert.deepEqual(copy(result.key), KEY);
-  assert.deepEqual(copy(result.images), row.images.map(image => ({ ordinal: image.ordinal, url: image.url, isPrimary: image.is_primary })));
+  assert.deepEqual(copy(result.images), row.images.map(image => ({ ordinal: image.ordinal, mediaAttemptId: KEY.attemptId, mediaOrdinal: image.ordinal, url: image.url, isPrimary: image.is_primary })));
   assert.equal(result.revision, '5');
   assert.ok(Object.isFrozen(result) && Object.isFrozen(result.key) && Object.isFrozen(result.images));
   assert.ok(result.images.every(Object.isFrozen));
@@ -422,4 +422,47 @@ test('whole-operation deadline after write dispatch is unknown without retry', a
   const api = r.client.createManagedListingImagesClient(async () => { sent++; entered.resolve(); return gate.promise; }, async () => ({ userId: U, identityId: I }));
   const pending = api.setPrimary(cmd); await entered.promise; timeout();
   await assert.rejects(pending, error => error.code === 'unknown'); gate.resolve(saved(cmd)); await tick(); assert.equal(sent, 1);
+});
+
+function galleryV2(withAddition = true) {
+  const row = wire(2); row.schema_version = 2;
+  row.images = row.images.map(image => ({...image, media_attempt_id: A, media_ordinal: image.ordinal}));
+  if (withAddition) row.images.push({ordinal: 12, media_attempt_id: OTHER, media_ordinal: 0,
+    url: `/api/v2/listing-media/${OTHER}/0`, is_primary: false});
+  return row;
+}
+test('v2 keeps stable gallery ordinals independent of the one-slot child media origin', () => {
+  const read = R.model.parseManagedListingImages(galleryV2(), KEY);
+  assert.deepEqual(copy(read.images[2]), {ordinal: 12, mediaAttemptId: OTHER, mediaOrdinal: 0,
+    url: `/api/v2/listing-media/${OTHER}/0`, isPrimary: false});
+  const cmd = command(12, galleryV2());
+  assert.equal(R.model.managedListingPrimaryArguments(cmd).p_ordinal, 12);
+  assert.equal(R.model.managedListingRemoveArguments(cmd).p_ordinal, 12);
+  const primary = galleryV2(); primary.revision = '6'; primary.changed = true;
+  primary.images = primary.images.map(image => ({...image, is_primary: image.ordinal === 12}));
+  assert.equal(R.model.parseManagedListingPrimarySaved(primary, cmd).snapshot.images[2].isPrimary, true);
+  const removed = galleryV2(false); removed.revision = '6'; removed.changed = true;
+  assert.equal(R.model.parseManagedListingRemoveSaved(removed, cmd).snapshot.images.length, 2);
+});
+for (const [name, change] of [
+  ['missing origin', row => delete row.images[2].media_attempt_id],
+  ['missing source ordinal', row => delete row.images[2].media_ordinal],
+  ['wrong source URL', row => row.images[2].url = `/api/v2/listing-media/${OTHER}/1`],
+  ['nonzero child source ordinal', row => {row.images[2].media_ordinal = 1; row.images[2].url = `/api/v2/listing-media/${OTHER}/1`;}],
+  ['reused original source at new ordinal', row => {row.images[2].media_attempt_id = A; row.images[2].url = `/api/v2/listing-media/${A}/0`;}],
+  ['duplicate child object', row => row.images.push({...row.images[2], ordinal: 13})],
+  ['out-of-range gallery ordinal', row => row.images[2].ordinal = 2147483648],
+  ['legacy schema with child fields', row => row.schema_version = 1],
+]) test('v2 refuses ' + name, () => {
+  const row = galleryV2(); change(row);
+  assert.throws(() => R.model.parseManagedListingImages(row, KEY), error => error.code === 'unknown');
+});
+test('authorized readback can add a new child while preserving every known ordinal identity', () => {
+  const before = R.model.parseManagedListingImages(galleryV2(false), KEY);
+  const row = galleryV2(); row.revision = '6';
+  assert.equal(R.model.confirmManagedListingImagesReadback(before, R.model.parseManagedListingImages(row, KEY)).images.length, 3);
+  row.revision = '5';
+  assert.throws(() => R.model.confirmManagedListingImagesReadback(before, R.model.parseManagedListingImages(row, KEY)));
+  row.revision = '6'; row.images[0] = {...row.images[2], ordinal: 0, is_primary: true}; row.images.pop();
+  assert.throws(() => R.model.confirmManagedListingImagesReadback(before, R.model.parseManagedListingImages(row, KEY)));
 });

@@ -161,7 +161,7 @@ test('diagnostic validates known zero, pending and needs_attention without chang
   }
 });
 for (const patch of [{schema_version: 2}, {attempt_id: OTHER}, {request_key: OTHER}, {files_remaining: -1},
-  {files_remaining: 11, reserved_bytes: 11 * 4194304}, {files_remaining: 0}, {needs_attention: 2},
+  {files_remaining: 2147483648, reserved_bytes: 2147483648 * 4194304}, {files_remaining: 0}, {needs_attention: 2},
   {needs_attention: true}, {reserved_bytes: 0}, {reserved_bytes: 1}, {reserved_bytes: 9e15}, {settled: true}]) {
   test(`malformed diagnostic ${JSON.stringify(patch)} cannot become settled`, () => {
     assert.throws(() => retiredImageCleanupStatus({...diagnostic(), ...patch}, key()));
@@ -174,3 +174,21 @@ test('status binding rejects invalid scopes and getters without invoking them', 
     assert.throws(() => bindRetiredImageCleanupKey(bad));
   assert.equal(reads, 0); assert.ok(Object.isFrozen(bindRetiredImageCleanupKey(key())));
 });
+
+const childClaim = (suffix = 'web-v1.webp') => ({...claim(`v1/${OTHER}/${SLOT}/${suffix}`),
+  schema_version: 2, attempt_id: ATTEMPT, request_key: REQUEST, origin_attempt_id: OTHER, origin_request_key: WORK});
+for (const suffix of ['source.upload', 'web-v1.webp'])
+  test(`an exact child ${suffix} claim reuses the same one-object transport and root-scoped recorder`, async () => {
+    const task = childClaim(suffix), source = suffix === 'source.upload';
+    const f = fixture({[source ? 'source' : 'web']: () => json(task)}, task.object_path);
+    assert.deepEqual(await f.run(), pending); assert.equal(deletes(f).length, 1); assert.equal(records(f).length, 1);
+    assert.deepEqual(deletes(f)[0].body, {prefixes: [task.object_path]});
+    assert.deepEqual(records(f)[0].body, {...args(), p_object_id: OBJECT, p_work_key: WORK, p_result: 'deleted'});
+    assert.equal(records(f)[0].path, source ? SOURCE_RECORD : WEB_RECORD);
+  });
+for (const patch of [{attempt_id: OTHER}, {request_key: OTHER}, {origin_attempt_id: ATTEMPT},
+  {origin_request_key: null}, {object_path: WEB}, {broadly_authorized: true}])
+  test('malformed child binding cannot select a Storage object: ' + JSON.stringify(patch), async () => {
+    const f = fixture({web: () => json({...childClaim(), ...patch})});
+    assert.deepEqual(await f.run(), pending); assert.equal(deletes(f).length, 0); assert.equal(records(f).length, 0);
+  });

@@ -2,11 +2,14 @@ import { bindPrepareListingPublicationCommand } from "../attempts/prepareInput";
 import { createFinalListingService } from "../final/finalizeListing";
 import { isId, receipt, type FinalReceipt } from "../final/finalContract";
 import { isUploadUuid, uploadRecord } from "../../../entities/listing/model/privatePublicationUpload";
+import { isPublicationCapacityError } from "../../../entities/listing/model/publicationCapacity";
 import { privateUploadHttp, type UploadFetch } from "../../../entities/listing/api/privateUploadHttp";
 import { assertPublicationActor, type PublicationRuntimeConfig } from "./integrationRuntime";
 import type { MultipartPublicationImages } from "./journeyTypes";
+import { isGalleryOrdinal, isGalleryRevision, photoAdditionActions, validatePhotoAdditionInput } from "./photoAdditionContract";
 
 const ownerActions = {
+  ...photoAdditionActions,
   "owner-edit-read": {name: "get_my_listing_edit_v1", keys: ["p_listing_id", "p_expected_identity_id", "p_expected_actor_id"]},
   "owner-edit-save": {name: "save_my_listing_edit_v1", keys: ["p_listing_id", "p_expected_identity_id", "p_expected_actor_id", "p_expected_basics", "p_basics"]},
   "owner-set-status": {name: "set_my_managed_listing_status_v2", keys: ["p_listing_id", "p_expected_identity_id", "p_expected_user_id", "p_expected_status", "p_status"]},
@@ -52,17 +55,16 @@ function ownerContract(action: keyof typeof ownerActions, input: Record<string, 
   if (action === "owner-retired-images-status" && !Object.values(input)
     .every(value => typeof value === "string" && value.length === 36 && isUploadUuid(value))) throw new Error("input");
   if (action === "owner-images-primary" || action === "owner-images-remove") {
-    const revision = input.p_expected_revision;
-    if (typeof revision !== "string" || revision.length > 19 || /^(0|[1-9][0-9]*)$/.exec(revision)?.[0] !== revision
-      || BigInt(revision) > BigInt("9223372036854775807") || !Number.isInteger(input.p_ordinal)
-      || Number(input.p_ordinal) < 0 || Number(input.p_ordinal) > 9) throw new Error("input");
+    if (!isGalleryRevision(input.p_expected_revision) || !isGalleryOrdinal(input.p_ordinal)) throw new Error("input");
   }
+  validatePhotoAdditionInput(action, input);
   return {name: definition.name, args: input};
 }
 function ownerContractError(value: unknown): {code: string; message: string} | null {
   if (!value || typeof value !== "object" || Array.isArray(value)) return null;
   const r = value as Record<string, unknown>;
   // Preserve only known CAS/authorization classes, never raw server details.
+  if (isPublicationCapacityError(r)) return {code: r.code, message: r.message};
   if (r.code === "40001" && ["listing_basics_conflict", "listing_price_conflict", "listing_activity_conflict", "listing_status_conflict", "listing_images_conflict"].includes(String(r.message)))
     return {code: "40001", message: String(r.message)};
   if (r.code === "42501") return {code: "42501", message: "listing_activity_identity_required"};

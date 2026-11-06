@@ -6,6 +6,7 @@ import { WEB_IMAGE, WebImageError, webFail, webRecord, copyWebCommand, copyWebBi
   type WebBinding, type WebIntent } from "../web/webImageContract";
 import { readWebObjectBytes } from "../web/webObjectHttp";
 import { createCleanupOne } from "../final/cleanupOne";
+import { cleanupFamilyTask } from "../final/cleanupFamilyTask";
 import { multipartConfig, copyMultipartSession, createMultipartS3Transport, createHostedMultipartS3Transport,
   type MultipartPublicationConfig, type MultipartKind, type MultipartSession, type BrowserPartGrant } from "./s3Transport";
 import { isHostedPreviewConfig, type HostedPreviewConfig } from "../journey/hostedPreviewConfig";
@@ -300,14 +301,20 @@ function createMultipartImageFlow(config: Readonly<{ publicKey: string; serviceK
         attention: number; blocked: number; auxiliaryPending: number } => {
       const s = webRecord(value, ["schema_version", "attempt_id", "request_key", "files_remaining", "unresolved",
         "needs_attention", "blocked", "auxiliary_pending", "items"]);
-      if (s.schema_version !== 3 || s.attempt_id !== cmd.attemptId || s.request_key !== cmd.requestKey ||
-          !Number.isSafeInteger(s.files_remaining) || Number(s.files_remaining) < 0 || Number(s.files_remaining) > 20 ||
+      const family = s.schema_version === 4;
+      if ((!family && s.schema_version !== 3) || s.attempt_id !== cmd.attemptId || s.request_key !== cmd.requestKey ||
+          !Number.isSafeInteger(s.files_remaining) || Number(s.files_remaining) < 0 || Number(s.files_remaining) > (family ? 2147483647 : 20) ||
           [s.unresolved, s.needs_attention, s.blocked, s.auxiliary_pending].some(v =>
             !Number.isSafeInteger(v) || Number(v) < 0 || Number(v) > Number(s.files_remaining)) ||
-          !Array.isArray(s.items) || s.items.length > 20 || Number(s.files_remaining) > s.items.length) return webFail("invalid_response");
+          !Array.isArray(s.items) || s.items.length > 20 || (!family && Number(s.files_remaining) > s.items.length)
+          || (family && Number(s.files_remaining) < s.items.length)) return webFail("invalid_response");
       const seen = new Set<string>();
       const items = s.items.map(value => {
-        const item = webRecord(value, ["object_id", "session", "abort_key", "abort_allowed", "abort_observed", "auxiliary_observed"]);
+        const keys = ["object_id", "session", "abort_key", "abort_allowed", "abort_observed", "auxiliary_observed"];
+        const item = webRecord(value, family ? [...keys, "origin_attempt_id", "origin_request_key"] : keys);
+        if (family && (![item.origin_attempt_id, item.origin_request_key]
+          .every(value => typeof value === "string" && value.length === 36 && isUploadUuid(value))
+          || item.origin_attempt_id === cmd.attemptId && item.origin_request_key !== cmd.requestKey)) return webFail("invalid_response");
         if (!isUploadUuid(item.object_id) || seen.has(item.object_id) ||
             (item.abort_key !== null && !isUploadUuid(item.abort_key)) ||
             [item.abort_allowed, item.abort_observed, item.auxiliary_observed].some(v => typeof v !== "boolean")) return webFail("invalid_response");
@@ -317,7 +324,8 @@ function createMultipartImageFlow(config: Readonly<{ publicKey: string; serviceK
           const raw = webRecord(item.session);
           if (!isUploadUuid(raw.slot_id) || !isUploadUuid(raw.request_key) || !["source", "web"].includes(String(raw.kind))) return webFail("invalid_response");
           session = copyMultipartSession(raw, { expectedUserId: cmd.expectedUserId, expectedIdentityId: cmd.expectedIdentityId,
-            attemptId: cmd.attemptId, slotId: raw.slot_id, requestKey: raw.request_key }, raw.kind as MultipartKind);
+            attemptId: family ? String(item.origin_attempt_id) : cmd.attemptId,
+            slotId: raw.slot_id, requestKey: raw.request_key }, raw.kind as MultipartKind);
           if (session.object_id !== item.object_id) return webFail("invalid_response");
         }
         if (item.abort_allowed && (!session?.upload_id || !item.abort_key || item.abort_observed)) return webFail("invalid_response");
@@ -344,24 +352,14 @@ function createMultipartImageFlow(config: Readonly<{ publicKey: string; serviceK
               !["aborted", "absent"].includes(String(saved.outcome))) return webFail("invalid_response");
         } catch { unknown = true; }
       }
-      // Reuse the accepted cleaner unchanged. Only its claim is narrowed to this
-      // authenticated terminal attempt. No generic/global worker is activated.
-      const scopedFetch: UploadFetch = (url, init) => {
-        const target = new URL(url);
-        if (target.origin !== origin) return webFail("configuration");
-        if (target.pathname === "/rest/v1/rpc/claim_listing_cleanup_v1") {
-          if (init.method !== "POST") return webFail("invalid_response");
-          return fetcher(`${origin}/rest/v1/rpc/claim_listing_cleanup_for_attempt_v2`, { ...init, body: JSON.stringify(args) });
-        }
-        if (init.method === "DELETE") {
-          const body = webRecord(JSON.parse(String(init.body)), ["prefixes"]);
-          if (target.pathname !== `/storage/v1/object/${WEB_IMAGE.bucket}` || !Array.isArray(body.prefixes) ||
-              body.prefixes.length !== 1 || typeof body.prefixes[0] !== "string" ||
-              !body.prefixes[0].startsWith(`v1/${cmd.attemptId}/`)) return webFail("invalid_response");
-        }
-        return fetcher(url, init);
-      };
-      const cleanup = createCleanupOne({ projectOrigin: origin, serviceKey: config.serviceKey }, scopedFetch);
+      // The same one-object cleaner accepts only a SQL-authorized exact family
+      // task. No global worker, bucket sweep or URL-prefix deletion is enabled.
+      const cleanup = createCleanupOne({ projectOrigin: origin, serviceKey: config.serviceKey }, fetcher, {
+        claim: async () => cleanupFamilyTask(await rpc("claim_listing_cleanup_for_attempt_v2", args), cmd),
+        record: (objectId, workKey, outcome) => rpc("record_listing_cleanup_v1", {
+          p_object_id: objectId, p_work_key: workKey, p_result: outcome,
+        }),
+      });
       for (let i = 0; i < before.items.length; i += 1) {
         const cleaned = await cleanup(signal);
         if (cleaned.kind === "idle") break;

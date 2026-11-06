@@ -18,7 +18,7 @@ export function retiredImageCleanupStatus(value: unknown, key: RetiredImageClean
   const bound = bindRetiredImageCleanupKey(key);
   const r = uploadRecord(value, ["schema_version", "attempt_id", "request_key", "files_remaining", "needs_attention", "reserved_bytes"]);
   if (r.schema_version !== 1 || r.attempt_id !== bound.attemptId || r.request_key !== bound.requestKey
-    || !Number.isSafeInteger(r.files_remaining) || Number(r.files_remaining) < 0 || Number(r.files_remaining) > 10
+    || !Number.isSafeInteger(r.files_remaining) || Number(r.files_remaining) < 0 || Number(r.files_remaining) > 2147483647
     || !Number.isSafeInteger(r.needs_attention) || Number(r.needs_attention) < 0 || Number(r.needs_attention) > Number(r.files_remaining)
     || !Number.isSafeInteger(r.reserved_bytes) || Number(r.reserved_bytes) < 0
     // The v1 ledger reserves exactly 4 MiB for each WEB object. Validate the

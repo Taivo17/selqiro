@@ -2,6 +2,7 @@ import { supabaseBrowserClient } from "../../../shared/supabase/browserClient";
 import { v2IntegrationEnabled } from "../../../shared/config/v2Integration";
 import { privateUploadHttp } from "./privateUploadHttp";
 import type { PublicationActor } from "../model/publicationJourney";
+import { isPublicationCapacityError } from "../model/publicationCapacity";
 
 export async function publicationJourneyRequest(actor: PublicationActor, action: string, body: object, signal: AbortSignal) {
   if (!v2IntegrationEnabled() || signal.aborted) throw new Error("context_changed");
@@ -14,7 +15,8 @@ export async function publicationJourneyRequest(actor: PublicationActor, action:
   if ((r.status === 403 || r.status === 409) && action.startsWith("owner-") && r.json && typeof r.json === "object") {
     const error = r.json as Record<string, unknown>;
     if (error.error === "owner_contract" && typeof error.code === "string" && typeof error.message === "string"
-      && ["40001", "42501", "22023", "55000", "PGRST202"].includes(error.code) && /^[a-z_]{1,80}$/.test(error.message))
+      && (["40001", "42501", "22023", "55000", "PGRST202"].includes(error.code) || isPublicationCapacityError(error))
+      && /^[a-z_]{1,80}$/.test(error.message))
       throw {code: error.code, message: error.message};
   }
   if (r.status === 403 || r.status === 401) throw new Error("context_changed");

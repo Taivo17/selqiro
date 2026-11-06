@@ -1,57 +1,70 @@
-# Eemaldatud foto koristuse kontrollpäringu parandus
+# Foto lisamine olemasolevale kuulutusele
 
-Seis: 06.11.2026 Europe/Tallinn. Autoriteetne seis on
-[CURRENT_STATE.json](CURRENT_STATE.json).
+Seis: 06.11.2026 Europe/Tallinn. Üks autoriteetne seisukirje on
+[CURRENT_STATE.json](CURRENT_STATE.json). See muudatus on ette valmistatud;
+Maci rakendus, uus commit/push, Verceli deployment ja kasutaja uus fotokatse
+kinnitatakse eraldi pärast alloleva uuendaja käivitamist.
 
-## Mida uus raport näitas
+## Mis lisandub
 
-Kuulutuse 201 varasema foto eemaldamiskäsk jõudis teenuseni, kuid järgnev
-lugemine tagastas veel sisu. Päris raportis on koristus `retry_wait / try_count2 /
-last_error=response`; vastava objekti, upload’i ja osade metaandmed puuduvad.
-Lõpetamiskinnitus ning 4 MiB loogilise reservi vabastus on veel ootel.
+Kuulutuse muutmisvaate piltide juurde lisandub **Lisa foto**. Lisada saab ühe
+JPEG-, PNG- või WebP-foto korraga, kuni 25 MiB; galeriis saab olla kuni kümme
+fotot. Senised fotod ja põhipilt säilivad. Kui kuulutusel pole veel ühtki
+fotot, saab esimene lisatud foto põhipildiks.
 
-Üks serverimoodul lisab puudumise kontrollile värske juhusliku `cacheNonce`-i.
-Olemasolev SQL, õiguskontroll ja püsiv puudumistõend jäävad kasutusse.
-See uuendaja ei käivita SQL-i ega Storage-API-t. Varasemaid paigaldajaid
-ja juba tehtud lugemisdiagnostikat ei korrata.
+Sama pilditöötlus teenindab uue kuulutuse avaldamist ja hilisemat foto lisamist.
+Foto lisamine ei salvesta pooleliolevaid teksti- ega hinnamuudatusi. Kui võrgu
+vastus jääb teadmata, saab kontrollida ja jätkata sama lisamist.
 
-## Üks järgmine käsk
+## Üks uuendamiskäsk
 
-Laadi alla **selqiro-koristuse-parandus-20261106.zip** ja paki see Downloads-kaustas
-lahti, nii et seal on kaust `selqiro-koristuse-parandus-20261106`.
-Käivita:
+1. Laadi alla **selqiro-foto-lisamine-20261106.zip**.
+2. Ava ZIP topeltklõpsuga. Downloads-kausta peab tekkima
+   **selqiro-foto-lisamine-20261106**, mille sees on **uuenda.py**.
+3. Käivita terminalis:
 
 ```bash
-python3 -I -B "$HOME/Downloads/selqiro-koristuse-parandus-20261106/uuenda.py" --publish
+python3 -I -B "$HOME/Downloads/selqiro-foto-lisamine-20261106/uuenda.py" --publish
 ```
 
-Vaikimisi hoidla on `~/selqiro`. Uuendaja kontrollib tegeliku haru, täieliku
-HEAD-i `b482c02c675c9d6a5a575ece7edc806151df918e`, puhta tööpuu, kogu 1019-failise
-indexi, lähteräsid ja kinnitatud remote’i enne kirjutusi. Muudetavad failid
-varundatakse uude päevikukausta; seejärel rakendatakse väike koodidelta koos
-katsete/dokumentidega, tehakse build, üks commit ning tavaline push.
+Uuendaja kontrollib olemasolevat töökausta `/Users/taivo/selqiro`, haru `main`,
+HEAD-i, tööpuud ja indexit, kõiki teadaolevaid lähtefaile ning kinnitatud
+remote'i `https://github.com/Taivo17/selqiro.git`. Terminaliviiba kaustanimest
+sihti ei tuletata. Eelmise vastu võetud paranduse täpne commit loetakse selle
+olemasolevast kohalikust tulemuspäevikust ja kontrollitakse sõltumatult selle
+Giti vanemat, puud ning faili sisu. Vastuvõtudokumente ei eeldata Macis juba
+rakendatuks; need tulevad selle pakiga kaasa.
 
-`PEATATUD` korral saada kood ja selle jooksu `result.json`; säilita töö ja päevikud.
-Tundmatut või muudetud lähtebaasi ei kirjutata üle.
+Seejärel kontrollitakse olemasoleva Supabase'i täpset skeemi, rakendatakse
+läbivaadatud muudatus, kontrollitakse tulemust, lisatakse failid, tehakse build
+ning üks commit ja tavaline push. Uut projekti ega kontosüsteemi ei looda.
+Paigaldaja ei käivita foto üleslaadimist, kuulutuse muutmist ega failikoristust.
 
-## Päris vastuvõtt
+Kui kuvatakse `PEATATUD`, säilita väljund ja raport. Lähtefaili või andmebaasi
+erinevust ei parandata käsitsi räsikaitsest möödudes. Kui SQL-i vastus katkeb,
+kontrollib sama uuendaja jätkamisel tegelikku lõppseisu enne võimalikke
+järgmisi samme; SQL-i ei käivitata teadmata tulemuse tõttu pimesi uuesti.
 
-1. Oota Vercelis **uuendaja väljundis nimetatud uue commit’i** `Ready / Production`
-   tulemust. Vana `b482c02` Ready-rida ei tõenda paranduse avaldamist.
-2. Värskenda sama identiteedi all kuulutuse 201 muutmisvaadet.
-3. Vajuta olemasoleva eemaldatud foto juures **Korista järgmine fail** üks kord.
-4. Serverist loetud null peab peitma eemaldatud fotode koristuspaneeli;
-   kaks allesjäänud fotot ja praegune põhipilt peavad säilima. Kontrolli seisu
-   värskendus ei tohi paneeli tagasi tuua.
+## Vercel ja üks tegelik kasutuskatse
 
-Selleks pole vaja uut fotot ega kuulutust eemaldada. Kui paneel pärast seda
-endiselt ühe faili näitab, saada tulemus; järjestikused kordusvajutused pole
-uus diagnoos. Tegelik4 MiB vabastus sõltub endiselt serveri lõpetamistõendist,
-mitte ainult HTTP-vastusest või paneeli peitmisest.
+Pärast terminali `VALMIS` tulemust oota Vercelis **sama uue commit'i**
+`Ready / Production` tulemust ja värskenda portaali.
 
-## Avaliku avamise piir
+1. Ava olemasolev enda kuulutus muutmisvaates.
+2. Vali **Lisa foto**, vali üks foto ja vajuta **Lisa kuulutusele**.
+3. Veendu, et uus foto lisandus ning senised fotod ja põhipilt jäid alles.
+4. Ava kuulutus tavavaates ja kontrolli, et uus foto on galeriis.
 
-Praegu võib tehniline paneel testimiseks nähtav olla. Enne avalikku kasutust
-peab koristus edenema nupuvajutusest ja avatud omanikuvaatest sõltumata ning
-tehnilised koristusloendurid kaovad tavavaatelt. See väike parandus ei lisa
-uut koristusmehhanismi ega tõenda kogu fotode elutsükli valmimist.
+Varem vastu võetud foto eemaldamise ja koristuspaneeli kadumise katseid selle
+jaoks uuesti ei nõuta. Uue foto saab soovi korral põhipildiks valida sama
+olemasoleva tegevusega.
+
+## Säiliv avaliku avamise nõue
+
+Koristuse tehnilised paneelid jäävad praegu testimiseks nähtavaks. Foto lisamise
+järel võib SOURCE-algfail vajada senist lõpetamist; uus veebipilt on eraldi.
+Automaatne koristus ilma omaniku leheta ja tehniliste paneelide eemaldamine
+tavakasutaja vaatest on endiselt avaliku avamise eelne töö.
+
+06.11 kasutaja vastu võetud kuulutuse 201 koristustulemus säilib ajaloos.
+Selle tõend ei määra käesoleva uue paketi commit'i ega deployment'i.

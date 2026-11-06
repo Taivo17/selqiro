@@ -1,0 +1,1356 @@
+-- GENERATED from modules/*.sql by tests/compose.mjs. Apply only through guarded apply.sql.
+
+-- One photo addition owns one normal private publication attempt. It never owns
+-- a second public listing. A permanent binding distinguishes source ordinal 0
+-- from the parent gallery's never-reused ordinal.
+CREATE TABLE listing_publication_private.managed_image_additions_v1 (
+ attempt_id uuid PRIMARY KEY REFERENCES listing_publication_private.attempts(id) ON DELETE RESTRICT,
+ parent_attempt_id uuid NOT NULL REFERENCES listing_publication_private.publications(attempt_id) ON DELETE RESTRICT,
+ attached_at timestamptz,
+ ready_id uuid,
+ gallery_ordinal integer CHECK(gallery_ordinal>=0),
+ attached_revision bigint CHECK(attached_revision>=1),
+ was_primary boolean,
+ CHECK(attempt_id<>parent_attempt_id),
+ CHECK((attached_at IS NULL AND ready_id IS NULL AND gallery_ordinal IS NULL AND attached_revision IS NULL AND was_primary IS NULL)
+  OR (attached_at IS NOT NULL AND ready_id IS NOT NULL AND gallery_ordinal IS NOT NULL AND attached_revision IS NOT NULL AND was_primary IS NOT NULL)),
+ UNIQUE(parent_attempt_id,gallery_ordinal)
+);
+ALTER TABLE listing_publication_private.managed_image_additions_v1 ENABLE ROW LEVEL SECURITY;
+REVOKE ALL ON listing_publication_private.managed_image_additions_v1 FROM PUBLIC,anon,authenticated,service_role;
+GRANT SELECT,INSERT,UPDATE ON listing_publication_private.managed_image_additions_v1 TO selqiro_listing_final_writer_v1;
+CREATE POLICY managed_image_addition_writer ON listing_publication_private.managed_image_additions_v1
+ FOR ALL TO selqiro_listing_final_writer_v1 USING(true) WITH CHECK(true);
+
+CREATE FUNCTION listing_publication_private.protect_managed_image_addition_v1()
+RETURNS trigger LANGUAGE plpgsql SET search_path=pg_catalog,pg_temp AS $f$
+DECLARE child listing_publication_private.attempts%ROWTYPE; parent record;
+BEGIN
+ IF current_user<>'selqiro_listing_final_writer_v1' OR TG_OP NOT IN('INSERT','UPDATE') THEN
+  RAISE EXCEPTION 'listing_image_addition_immutable' USING ERRCODE='42501'; END IF;
+ SELECT * INTO child FROM listing_publication_private.attempts WHERE id=NEW.attempt_id;
+ SELECT p.listing_id,a.identity_id,a.actor_user_id INTO parent
+  FROM listing_publication_private.publications p JOIN listing_publication_private.attempts a ON a.id=p.attempt_id
+  WHERE p.attempt_id=NEW.parent_attempt_id AND p.state='published' AND a.state='published';
+ IF NOT FOUND OR child.state IS DISTINCT FROM 'open' OR child.identity_id IS DISTINCT FROM parent.identity_id
+  OR child.payload IS DISTINCT FROM jsonb_build_object('schema_version',1,'purpose','listing_image_addition',
+   'parent_attempt_id',NEW.parent_attempt_id,'listing_id',parent.listing_id::text)
+  OR EXISTS(SELECT 1 FROM listing_publication_private.publications WHERE attempt_id=child.id)
+  OR (SELECT count(*) FROM listing_publication_private.slots WHERE attempt_id=child.id)<>1
+  OR NOT EXISTS(SELECT 1 FROM listing_publication_private.slots WHERE attempt_id=child.id AND ordinal=0) THEN
+  RAISE EXCEPTION 'listing_image_addition_binding' USING ERRCODE='55000'; END IF;
+ IF TG_OP='INSERT' THEN
+  IF NEW.attached_at IS NOT NULL THEN RAISE EXCEPTION 'listing_image_addition_immutable' USING ERRCODE='55000'; END IF;
+ ELSE
+  IF OLD.attached_at IS NOT NULL OR NEW.attempt_id IS DISTINCT FROM OLD.attempt_id
+   OR NEW.parent_attempt_id IS DISTINCT FROM OLD.parent_attempt_id OR NEW.attached_at IS NULL
+   OR NEW.gallery_ordinal::bigint IS DISTINCT FROM (SELECT coalesce(max(g.ordinal)::bigint+1,0)
+    FROM listing_publication_private.managed_image_origins_v1(NEW.parent_attempt_id) g)
+   OR NOT EXISTS(SELECT 1 FROM listing_publication_private.slots s
+    JOIN listing_publication_private.web_images w ON w.slot_id=s.id AND w.attempt_id=s.attempt_id
+    JOIN public.listing_images i ON i.listing_id=parent.listing_id AND i.sort_order=NEW.gallery_ordinal
+    WHERE s.attempt_id=child.id AND s.ordinal=0 AND w.state='ready' AND w.ready_id=NEW.ready_id
+     AND i.user_id=parent.actor_user_id AND i.is_primary=NEW.was_primary
+     AND i.original_url='/api/v2/listing-media/'||child.id::text||'/0'
+     AND i.medium_url=i.original_url AND i.thumb_url=i.original_url)
+   OR NOT EXISTS(SELECT 1 FROM listing_publication_private.managed_image_presentations_v1
+    WHERE attempt_id=NEW.parent_attempt_id AND revision=NEW.attached_revision) THEN
+   RAISE EXCEPTION 'listing_image_addition_immutable' USING ERRCODE='55000'; END IF;
+ END IF;
+ RETURN NEW;
+END $f$;
+CREATE TRIGGER protect_managed_image_addition_v1 BEFORE INSERT OR UPDATE OR DELETE
+ ON listing_publication_private.managed_image_additions_v1 FOR EACH ROW
+ EXECUTE FUNCTION listing_publication_private.protect_managed_image_addition_v1();
+CREATE TRIGGER protect_managed_image_addition_truncate_v1 BEFORE TRUNCATE
+ ON listing_publication_private.managed_image_additions_v1 FOR EACH STATEMENT
+ EXECUTE FUNCTION listing_publication_private.protect_managed_image_addition_v1();
+
+-- Exact retained family, including unattached children for cancellation/deletion.
+CREATE FUNCTION listing_publication_private.managed_image_family_v1(p_parent uuid)
+RETURNS TABLE(attempt_id uuid) LANGUAGE sql STABLE SET search_path=pg_catalog,pg_temp AS $f$
+ SELECT p_parent UNION ALL
+ SELECT a.attempt_id FROM listing_publication_private.managed_image_additions_v1 a WHERE a.parent_attempt_id=p_parent;
+$f$;
+
+-- Every attached origin persists after retirement and parent deletion. No source
+-- ordinal or URL is reused. Pending children are not public gallery members.
+CREATE FUNCTION listing_publication_private.managed_image_origins_v1(p_parent uuid)
+RETURNS TABLE(parent_attempt_id uuid,media_attempt_id uuid,slot_id uuid,media_ordinal integer,
+ ordinal integer,canonical_url text,attached_ready_id uuid)
+LANGUAGE sql STABLE SET search_path=pg_catalog,pg_temp AS $f$
+ SELECT p_parent,s.attempt_id,s.id,s.ordinal,s.ordinal,
+  '/api/v2/listing-media/'||s.attempt_id::text||'/'||s.ordinal::text,NULL::uuid
+ FROM listing_publication_private.slots s WHERE s.attempt_id=p_parent
+ UNION ALL
+ SELECT a.parent_attempt_id,a.attempt_id,s.id,s.ordinal,a.gallery_ordinal,
+  '/api/v2/listing-media/'||a.attempt_id::text||'/'||s.ordinal::text,a.ready_id
+ FROM listing_publication_private.managed_image_additions_v1 a
+ JOIN listing_publication_private.slots s ON s.attempt_id=a.attempt_id AND s.ordinal=0
+ WHERE a.parent_attempt_id=p_parent AND a.attached_at IS NOT NULL;
+$f$;
+
+CREATE FUNCTION listing_publication_private.managed_image_root_v1(p_origin uuid)
+RETURNS uuid LANGUAGE sql STABLE SET search_path=pg_catalog,pg_temp AS $f$
+ SELECT p.attempt_id FROM listing_publication_private.publications p WHERE p.attempt_id=p_origin
+ UNION ALL SELECT a.parent_attempt_id FROM listing_publication_private.managed_image_additions_v1 a
+ WHERE a.attempt_id=p_origin AND a.attached_at IS NOT NULL;
+$f$;
+
+CREATE FUNCTION listing_publication_private.managed_image_addition_receipt_v1(p_child uuid)
+RETURNS jsonb LANGUAGE sql STABLE SET search_path=pg_catalog,pg_temp AS $f$
+ SELECT jsonb_build_object('schema_version',1,'listing_id',p.listing_id::text,'attempt_id',b.parent_attempt_id,
+  'addition_attempt_id',a.id,'request_key',a.request_key,'actor_user_id',a.actor_user_id,'identity_id',a.identity_id,
+  'slot_id',s.id,'ready_id',b.ready_id,'ordinal',b.gallery_ordinal,'media_attempt_id',a.id,'media_ordinal',s.ordinal,
+  'url','/api/v2/listing-media/'||a.id::text||'/0','attached_at',
+   to_char(b.attached_at AT TIME ZONE 'UTC','YYYY-MM-DD"T"HH24:MI:SS.US"Z"'),
+  'attached_revision',b.attached_revision::text,'was_primary',b.was_primary)
+ FROM listing_publication_private.managed_image_additions_v1 b
+ JOIN listing_publication_private.attempts a ON a.id=b.attempt_id
+ JOIN listing_publication_private.publications p ON p.attempt_id=b.parent_attempt_id
+ JOIN listing_publication_private.slots s ON s.attempt_id=a.id AND s.ordinal=0
+ WHERE a.id=p_child AND b.attached_at IS NOT NULL;
+$f$;
+
+
+-- Gallery identity and source identity are separate. Existing mutation CAS and
+-- retirement proof remain unchanged, with one resolver for every photo origin.
+CREATE FUNCTION listing_publication_private.managed_image_gallery_projection_v1(p_gallery jsonb,p_force_v2 boolean)
+RETURNS jsonb LANGUAGE sql SET search_path=pg_catalog,pg_temp AS $f$
+ SELECT CASE WHEN p_gallery IS NULL THEN NULL
+  WHEN p_force_v2 OR EXISTS(SELECT 1 FROM listing_publication_private.managed_image_additions_v1
+    WHERE parent_attempt_id=(p_gallery->>'attempt_id')::uuid AND attached_at IS NOT NULL)
+  THEN p_gallery||jsonb_build_object('schema_version',2,'images',(SELECT coalesce(jsonb_agg(
+   value||jsonb_build_object('media_attempt_id',coalesce(value->'media_attempt_id',p_gallery->'attempt_id'),
+    'media_ordinal',coalesce(value->'media_ordinal',value->'ordinal')) ORDER BY (value->>'ordinal')::integer),'[]'::jsonb)
+   FROM jsonb_array_elements(p_gallery->'images')))
+  ELSE p_gallery||jsonb_build_object('schema_version',1,'images',(SELECT coalesce(jsonb_agg(
+   value-'media_attempt_id'-'media_ordinal' ORDER BY (value->>'ordinal')::integer),'[]'::jsonb)
+   FROM jsonb_array_elements(p_gallery->'images'))) END;
+$f$;
+
+CREATE OR REPLACE FUNCTION listing_publication_private.lock_managed_listing_images_v1(
+ p_expected_user_id uuid,p_expected_identity_id uuid,p_listing_id bigint,p_attempt_id uuid,p_for_update boolean)
+RETURNS jsonb LANGUAGE plpgsql SET search_path=pg_catalog,pg_temp AS $f$
+DECLARE a listing_publication_private.attempts%ROWTYPE;
+ p listing_publication_private.publications%ROWTYPE; l public.listings%ROWTYPE;
+ r record; n integer; seen integer:=0; image_count integer; primary_count integer; primary_url text;
+ images jsonb:='[]'::jsonb; revision bigint;
+BEGIN
+ PERFORM listing_publication_private.require_managed_image_actor_v1(p_expected_user_id,p_expected_identity_id);
+ IF p_listing_id IS NULL OR p_listing_id<1 OR p_attempt_id IS NULL OR p_for_update IS NULL THEN
+  RAISE EXCEPTION 'listing_images_command_invalid' USING ERRCODE='22023'; END IF;
+ -- Keep actor -> attempt -> publication -> listing -> image serialization.
+ IF p_for_update THEN
+  SELECT * INTO a FROM listing_publication_private.attempts
+   WHERE id=p_attempt_id AND identity_id=p_expected_identity_id FOR UPDATE;
+ ELSE
+  SELECT * INTO a FROM listing_publication_private.attempts
+   WHERE id=p_attempt_id AND identity_id=p_expected_identity_id FOR SHARE;
+ END IF;
+ IF NOT FOUND THEN RAISE EXCEPTION 'listing_images_forbidden' USING ERRCODE='42501'; END IF;
+ IF p_for_update THEN
+  SELECT * INTO p FROM listing_publication_private.publications WHERE attempt_id=a.id FOR UPDATE;
+ ELSE
+  SELECT * INTO p FROM listing_publication_private.publications WHERE attempt_id=a.id FOR SHARE;
+ END IF;
+ IF NOT FOUND THEN RAISE EXCEPTION 'listing_images_unavailable' USING ERRCODE='55000'; END IF;
+ IF p.listing_id IS DISTINCT FROM p_listing_id THEN
+  RAISE EXCEPTION 'listing_images_forbidden' USING ERRCODE='42501'; END IF;
+ IF a.state<>'published' OR p.state<>'published' OR p.deleted_at IS NOT NULL THEN
+  RAISE EXCEPTION 'listing_images_unavailable' USING ERRCODE='55000'; END IF;
+ IF p_for_update THEN SELECT * INTO l FROM public.listings WHERE id=p_listing_id FOR UPDATE;
+ ELSE SELECT * INTO l FROM public.listings WHERE id=p_listing_id FOR SHARE; END IF;
+ IF NOT FOUND THEN RAISE EXCEPTION 'listing_images_unavailable' USING ERRCODE='55000'; END IF;
+ IF l.identity_id IS DISTINCT FROM a.identity_id OR l.user_id IS DISTINCT FROM a.actor_user_id
+  OR l.created_by_user_id IS DISTINCT FROM a.actor_user_id THEN
+  RAISE EXCEPTION 'listing_images_forbidden' USING ERRCODE='42501'; END IF;
+ IF p_for_update THEN
+  PERFORM 1 FROM public.listing_images WHERE listing_id=l.id ORDER BY id FOR UPDATE;
+ ELSE PERFORM 1 FROM public.listing_images WHERE listing_id=l.id ORDER BY id FOR SHARE; END IF;
+ SELECT count(*) INTO n FROM listing_publication_private.managed_image_origins_v1(a.id);
+ SELECT count(*),count(*) FILTER(WHERE is_primary),max(original_url) FILTER(WHERE is_primary)
+  INTO image_count,primary_count,primary_url FROM public.listing_images WHERE listing_id=l.id;
+ IF (SELECT count(*) FROM listing_publication_private.slots WHERE attempt_id=a.id)>10 OR image_count>10 OR image_count>n OR (n=0 AND (primary_count<>0 OR l.image IS NOT NULL))
+  OR (n>0 AND (image_count<1 OR primary_count<>1 OR l.image IS DISTINCT FROM primary_url)) THEN
+  RAISE EXCEPTION 'listing_images_unavailable' USING ERRCODE='55000'; END IF;
+ FOR r IN
+  SELECT g.slot_id,g.ordinal,g.media_attempt_id,g.media_ordinal,g.canonical_url,g.attached_ready_id,origin.state AS origin_state,origin.identity_id AS origin_identity,
+   o.id AS object_id,o.bucket_id,o.object_path,so.id AS source_object_id,
+   w.id AS web_id,w.state AS web_state,w.ready_id,w.ready_at,w.intent,
+   i.id AS image_id,i.user_id AS image_user_id,i.original_url,i.medium_url,i.thumb_url,i.is_primary,
+   c.object_id AS cleanup_object_id,c.bucket_id AS cleanup_bucket,c.object_path AS cleanup_path,c.reason AS cleanup_reason
+  FROM listing_publication_private.managed_image_origins_v1(a.id) g
+  JOIN listing_publication_private.attempts origin ON origin.id=g.media_attempt_id
+  LEFT JOIN listing_publication_private.objects o ON o.slot_id=g.slot_id AND o.attempt_id=g.media_attempt_id AND o.kind='web'
+  LEFT JOIN listing_publication_private.objects so ON so.slot_id=g.slot_id AND so.attempt_id=g.media_attempt_id AND so.kind='source'
+  LEFT JOIN listing_publication_private.web_images w ON w.slot_id=g.slot_id AND w.attempt_id=g.media_attempt_id
+  LEFT JOIN public.listing_images i ON i.listing_id=l.id AND i.sort_order=g.ordinal
+  LEFT JOIN listing_publication_private.cleanup c ON c.object_id=o.id
+  ORDER BY g.ordinal
+ LOOP
+  -- Every origin retains its proof, even after public membership ends.
+  IF r.ordinal<>seen OR r.object_id IS NULL OR r.bucket_id IS DISTINCT FROM 'listing-publication-private'
+   OR r.object_path IS DISTINCT FROM ('v1/'||r.media_attempt_id::text||'/'||r.slot_id::text||'/web-v1.webp')
+   OR r.origin_state IS DISTINCT FROM 'published' OR r.origin_identity IS DISTINCT FROM a.identity_id
+   OR (r.attached_ready_id IS NOT NULL AND r.attached_ready_id IS DISTINCT FROM r.ready_id)
+   OR r.web_id IS NULL OR r.web_state IS DISTINCT FROM 'ready' OR r.ready_id IS NULL OR r.ready_at IS NULL THEN
+   RAISE EXCEPTION 'listing_images_unavailable' USING ERRCODE='55000'; END IF;
+  seen:=seen+1;
+  BEGIN PERFORM listing_publication_private.validate_managed_image_intent_v1(r.intent,r.slot_id);
+  EXCEPTION WHEN SQLSTATE '22023' THEN
+   RAISE EXCEPTION 'listing_images_unavailable' USING ERRCODE='55000'; END;
+  IF r.cleanup_object_id IS NOT NULL THEN
+   -- A missing row is valid only with its exact retained removal lineage.
+   IF r.image_id IS NOT NULL OR r.cleanup_reason IS DISTINCT FROM 'published_image_removed'
+    OR r.cleanup_bucket IS DISTINCT FROM r.bucket_id OR r.cleanup_path IS DISTINCT FROM r.object_path
+    OR listing_publication_private.hosted_completed_source_deleted_v1(r.source_object_id) IS DISTINCT FROM true THEN
+    RAISE EXCEPTION 'listing_images_unavailable' USING ERRCODE='55000'; END IF;
+  ELSE
+   IF r.image_id IS NULL OR r.image_user_id IS DISTINCT FROM a.actor_user_id
+    OR r.original_url IS DISTINCT FROM r.canonical_url OR r.medium_url IS DISTINCT FROM r.canonical_url
+    OR r.thumb_url IS DISTINCT FROM r.canonical_url OR r.is_primary IS NULL THEN
+    RAISE EXCEPTION 'listing_images_unavailable' USING ERRCODE='55000'; END IF;
+   images:=images||jsonb_build_array(jsonb_build_object('ordinal',r.ordinal,'media_attempt_id',r.media_attempt_id,'media_ordinal',r.media_ordinal,'url',r.canonical_url,'is_primary',r.is_primary));
+  END IF;
+ END LOOP;
+ IF seen<>n OR jsonb_array_length(images)<>image_count THEN
+  RAISE EXCEPTION 'listing_images_unavailable' USING ERRCODE='55000'; END IF;
+ SELECT x.revision INTO revision FROM listing_publication_private.managed_image_presentations_v1 x WHERE x.attempt_id=a.id;
+ -- SQL is installed before the app: unchanged galleries keep their exact old
+ -- envelope until an addition exists. Addition endpoints explicitly request v2.
+ RETURN listing_publication_private.managed_image_gallery_projection_v1(
+  jsonb_build_object('schema_version',2,'actor_user_id',p_expected_user_id,'identity_id',a.identity_id,
+   'listing_id',l.id::text,'attempt_id',a.id,'revision',coalesce(revision,0)::text,'images',images),false);
+END $f$;
+
+CREATE OR REPLACE FUNCTION public.set_my_managed_listing_primary_image_v1(
+ p_expected_user_id uuid,p_expected_identity_id uuid,p_listing_id bigint,p_attempt_id uuid,
+ p_expected_revision text,p_ordinal integer)
+RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET lock_timeout='2s' AS $f$
+DECLARE gallery jsonb; target jsonb; previous_revision bigint; next_revision bigint; affected integer;
+BEGIN
+ IF p_expected_revision IS NULL OR p_expected_revision !~ '^(0|[1-9][0-9]{0,18})$'
+  OR p_ordinal IS NULL OR p_ordinal<0 THEN
+  RAISE EXCEPTION 'listing_images_command_invalid' USING ERRCODE='22023';
+ END IF;
+ IF p_expected_revision::numeric>9223372036854775807 THEN
+  RAISE EXCEPTION 'listing_images_command_invalid' USING ERRCODE='22023';
+ END IF;
+ gallery:=listing_publication_private.lock_managed_listing_images_v1(
+  p_expected_user_id,p_expected_identity_id,p_listing_id,p_attempt_id,true);
+ -- Compare even when the requested target already happens to be primary.
+ IF gallery->>'revision' IS DISTINCT FROM p_expected_revision THEN
+  RAISE EXCEPTION 'listing_images_conflict' USING ERRCODE='40001';
+ END IF;
+ SELECT value INTO target FROM jsonb_array_elements(gallery->'images') WHERE (value->>'ordinal')::integer=p_ordinal;
+ IF NOT FOUND THEN RAISE EXCEPTION 'listing_images_command_invalid' USING ERRCODE='22023'; END IF;
+ IF (target->>'is_primary')::boolean THEN RETURN gallery||jsonb_build_object('changed',false); END IF;
+ previous_revision:=(gallery->>'revision')::bigint;
+ IF previous_revision=9223372036854775807 THEN RAISE EXCEPTION 'listing_images_unavailable' USING ERRCODE='55000'; END IF;
+ next_revision:=previous_revision+1;
+ UPDATE public.listing_images SET is_primary=false WHERE listing_id=p_listing_id AND is_primary;
+ GET DIAGNOSTICS affected=ROW_COUNT;
+ IF affected<>1 THEN RAISE EXCEPTION 'listing_images_unavailable' USING ERRCODE='55000'; END IF;
+ UPDATE public.listing_images SET is_primary=true
+  WHERE listing_id=p_listing_id AND sort_order=p_ordinal AND original_url=target->>'url';
+ GET DIAGNOSTICS affected=ROW_COUNT;
+ IF affected<>1 THEN RAISE EXCEPTION 'listing_images_unavailable' USING ERRCODE='55000'; END IF;
+ UPDATE public.listings SET image=target->>'url' WHERE id=p_listing_id;
+ GET DIAGNOSTICS affected=ROW_COUNT;
+ IF affected<>1 THEN RAISE EXCEPTION 'listing_images_unavailable' USING ERRCODE='55000'; END IF;
+ IF previous_revision=0 THEN
+  INSERT INTO listing_publication_private.managed_image_presentations_v1(attempt_id,revision)
+   VALUES(p_attempt_id,next_revision);
+ ELSE
+  UPDATE listing_publication_private.managed_image_presentations_v1 SET revision=next_revision
+   WHERE attempt_id=p_attempt_id AND revision=previous_revision;
+ END IF;
+ GET DIAGNOSTICS affected=ROW_COUNT;
+ IF affected<>1 THEN RAISE EXCEPTION 'listing_images_conflict' USING ERRCODE='40001'; END IF;
+ SELECT jsonb_agg(value||jsonb_build_object('is_primary',(value->>'ordinal')::integer=p_ordinal)
+  ORDER BY (value->>'ordinal')::integer) INTO target FROM jsonb_array_elements(gallery->'images');
+ RETURN gallery||jsonb_build_object('revision',next_revision::text,'images',target,'changed',true);
+END $f$;
+
+CREATE OR REPLACE FUNCTION public.remove_my_managed_listing_image_v1(
+ p_expected_user_id uuid,p_expected_identity_id uuid,p_listing_id bigint,p_attempt_id uuid,
+ p_expected_revision text,p_ordinal integer)
+RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET lock_timeout='2s' AS $f$
+DECLARE gallery jsonb; target jsonb; previous_revision bigint; affected integer;
+ source_id uuid; web_object listing_publication_private.objects%ROWTYPE;
+BEGIN
+ IF p_expected_revision IS NULL OR p_expected_revision !~ '^(0|[1-9][0-9]{0,18})$'
+  OR p_ordinal IS NULL OR p_ordinal<0 THEN
+  RAISE EXCEPTION 'listing_images_command_invalid' USING ERRCODE='22023'; END IF;
+ IF p_expected_revision::numeric>9223372036854775807 THEN
+  RAISE EXCEPTION 'listing_images_command_invalid' USING ERRCODE='22023'; END IF;
+ gallery:=listing_publication_private.lock_managed_listing_images_v1(
+  p_expected_user_id,p_expected_identity_id,p_listing_id,p_attempt_id,true);
+ IF gallery->>'revision' IS DISTINCT FROM p_expected_revision THEN
+  RAISE EXCEPTION 'listing_images_conflict' USING ERRCODE='40001'; END IF;
+ SELECT value INTO target FROM jsonb_array_elements(gallery->'images') WHERE (value->>'ordinal')::integer=p_ordinal;
+ IF NOT FOUND OR jsonb_array_length(gallery->'images')<2 OR (target->>'is_primary')::boolean THEN
+  RAISE EXCEPTION 'listing_images_command_invalid' USING ERRCODE='22023'; END IF;
+ previous_revision:=(gallery->>'revision')::bigint;
+ IF previous_revision=9223372036854775807 THEN
+  RAISE EXCEPTION 'listing_images_unavailable' USING ERRCODE='55000'; END IF;
+ SELECT o.* INTO web_object FROM listing_publication_private.managed_image_origins_v1(p_attempt_id) g
+ JOIN listing_publication_private.objects o ON o.slot_id=g.slot_id AND o.attempt_id=g.media_attempt_id AND o.kind='web'
+ WHERE g.ordinal=p_ordinal;
+ SELECT o.id INTO source_id FROM listing_publication_private.objects o
+ WHERE o.slot_id=web_object.slot_id AND o.attempt_id=web_object.attempt_id AND o.kind='source';
+ -- The accepted SOURCE claim needs its WEB to remain active. Requiring that
+ -- SOURCE already settled avoids stranding it or changing the accepted worker.
+ IF listing_publication_private.hosted_completed_source_deleted_v1(source_id) IS DISTINCT FROM true THEN
+  RAISE EXCEPTION 'listing_images_unavailable' USING ERRCODE='55000'; END IF;
+ INSERT INTO listing_publication_private.cleanup(object_id,bucket_id,object_path,reason,state,enqueued_at)
+ VALUES(web_object.id,web_object.bucket_id,web_object.object_path,'published_image_removed',
+  listing_publication_private.object_cleanup_state(web_object.id),clock_timestamp());
+ DELETE FROM public.listing_images WHERE listing_id=p_listing_id AND sort_order=p_ordinal
+  AND original_url=target->>'url' AND is_primary=false;
+ GET DIAGNOSTICS affected=ROW_COUNT;
+ IF affected<>1 THEN RAISE EXCEPTION 'listing_images_unavailable' USING ERRCODE='55000'; END IF;
+ IF previous_revision=0 THEN
+  INSERT INTO listing_publication_private.managed_image_presentations_v1(attempt_id,revision) VALUES(p_attempt_id,1);
+ ELSE
+  UPDATE listing_publication_private.managed_image_presentations_v1 SET revision=previous_revision+1
+   WHERE attempt_id=p_attempt_id AND revision=previous_revision;
+ END IF;
+ GET DIAGNOSTICS affected=ROW_COUNT;
+ IF affected<>1 THEN RAISE EXCEPTION 'listing_images_conflict' USING ERRCODE='40001'; END IF;
+ -- Revalidate all active and removed slots before committing any part.
+ RETURN listing_publication_private.lock_managed_listing_images_v1(
+  p_expected_user_id,p_expected_identity_id,p_listing_id,p_attempt_id,true)||jsonb_build_object('changed',true);
+END $f$;
+
+
+-- Reuse the existing private attempt allocator and account limits for both
+-- initial publication and one-photo additions. Only this helper owns the limits.
+CREATE FUNCTION listing_publication_private.allocate_managed_publication_attempt_v1(
+ p_user uuid,p_identity uuid,p_request uuid,p_fingerprint bytea,p_payload jsonb,p_images jsonb)
+RETURNS uuid LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,pg_temp AS $f$
+DECLARE active_id uuid; policies jsonb; t timestamptz; reserved bigint; aid uuid; sid uuid; image record;
+BEGIN
+ active_id:=listing_publication_private.require_actor(p_user,p_identity);
+ policies:=listing_publication_private.require_policies(); t:=clock_timestamp();
+ IF (SELECT count(*) FROM listing_publication_private.attempts WHERE actor_user_id=p_user
+  AND state='open' AND expires_at>t)>=3 THEN
+  RAISE EXCEPTION 'publication_open_attempt_limit' USING ERRCODE='54000'; END IF;
+ IF (SELECT count(*) FROM listing_publication_private.attempts WHERE actor_user_id=p_user
+  AND created_at>t-interval '24 hours')>=20 THEN
+  RAISE EXCEPTION 'publication_daily_attempt_limit' USING ERRCODE='54000'; END IF;
+ SELECT coalesce(sum(o.reserved_bytes),0) INTO reserved FROM listing_publication_private.objects o
+ JOIN listing_publication_private.attempts a ON a.id=o.attempt_id
+ WHERE a.actor_user_id=p_user AND NOT listing_publication_private.multipart_object_fully_deleted(o.id);
+ IF reserved+jsonb_array_length(p_images)::bigint*(26214400+4194304)>314572800 THEN
+  RAISE EXCEPTION 'publication_retained_bytes_limit' USING ERRCODE='54000'; END IF;
+ INSERT INTO listing_publication_private.attempts(actor_user_id,identity_id,request_key,intent_sha256,
+  payload,policy_snapshot,created_at,expires_at)
+ VALUES(p_user,active_id,p_request,p_fingerprint,p_payload,policies,t,t+interval '24 hours') RETURNING id INTO aid;
+ FOR image IN SELECT value,ordinality FROM jsonb_array_elements(p_images) WITH ORDINALITY LOOP
+  INSERT INTO listing_publication_private.slots(attempt_id,ordinal,client_file_id,expected_source_bytes,expected_source_sha256)
+  VALUES(aid,image.ordinality-1,(image.value->>'client_file_id')::uuid,(image.value->>'byte_length')::integer,
+   decode(image.value->>'sha256','hex')) RETURNING id INTO sid;
+  INSERT INTO listing_publication_private.objects(attempt_id,slot_id,kind,bucket_id,object_path,reserved_bytes)
+  VALUES(aid,sid,'source','listing-publication-private','v1/'||aid::text||'/'||sid::text||'/source.upload',26214400),
+   (aid,sid,'web','listing-publication-private','v1/'||aid::text||'/'||sid::text||'/web-v1.webp',4194304);
+ END LOOP;
+ RETURN aid;
+END $f$;
+
+-- Closed wrappers preserve the existing postgres policy/normalizer authority;
+-- API roles receive no new access to those retained helpers or their tables.
+CREATE FUNCTION listing_publication_private.normalize_managed_image_addition_v1(p_image jsonb)
+RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,pg_temp AS $f$
+BEGIN RETURN listing_publication_private.normalize_images(jsonb_build_array(p_image))->0; END $f$;
+CREATE FUNCTION listing_publication_private.require_managed_image_policies_v1()
+RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,pg_temp AS $f$
+BEGIN RETURN listing_publication_private.require_policies(); END $f$;
+CREATE FUNCTION listing_publication_private.managed_image_addition_journey_v1(
+ p_user uuid,p_identity uuid,p_request uuid,p_close boolean)
+RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,pg_temp AS $f$
+BEGIN
+ IF p_close THEN RETURN public.cancel_my_listing_publication_journey_v2(p_user,p_identity,p_request); END IF;
+ RETURN public.get_my_listing_publication_journey_v2(p_user,p_identity,p_request);
+END $f$;
+
+CREATE FUNCTION listing_publication_private.lock_managed_image_addition_parent_v1(
+ p_user uuid,p_identity uuid,p_listing bigint,p_parent uuid,p_for_update boolean)
+RETURNS text LANGUAGE plpgsql SET search_path=pg_catalog,pg_temp AS $f$
+DECLARE a listing_publication_private.attempts%ROWTYPE; p listing_publication_private.publications%ROWTYPE;
+BEGIN
+ PERFORM listing_publication_private.require_managed_image_actor_v1(p_user,p_identity);
+ IF p_listing IS NULL OR p_listing<1 OR p_parent IS NULL OR p_for_update IS NULL THEN
+  RAISE EXCEPTION 'listing_images_command_invalid' USING ERRCODE='22023'; END IF;
+ IF p_for_update THEN
+  SELECT * INTO a FROM listing_publication_private.attempts WHERE id=p_parent AND identity_id=p_identity FOR UPDATE;
+ ELSE SELECT * INTO a FROM listing_publication_private.attempts WHERE id=p_parent AND identity_id=p_identity FOR SHARE; END IF;
+ IF NOT FOUND THEN RAISE EXCEPTION 'listing_images_forbidden' USING ERRCODE='42501'; END IF;
+ IF p_for_update THEN
+  SELECT * INTO p FROM listing_publication_private.publications WHERE attempt_id=a.id FOR UPDATE;
+ ELSE SELECT * INTO p FROM listing_publication_private.publications WHERE attempt_id=a.id FOR SHARE; END IF;
+ IF NOT FOUND OR p.listing_id IS DISTINCT FROM p_listing THEN
+  RAISE EXCEPTION 'listing_images_forbidden' USING ERRCODE='42501'; END IF;
+ IF NOT((a.state='published' AND p.state='published' AND p.deleted_at IS NULL)
+  OR (a.state='deleted' AND p.state='deleting' AND p.deleted_at IS NOT NULL)) THEN
+  RAISE EXCEPTION 'listing_images_unavailable' USING ERRCODE='55000'; END IF;
+ RETURN a.state;
+END $f$;
+
+CREATE FUNCTION listing_publication_private.managed_image_addition_status_v1(
+ p_user uuid,p_identity uuid,p_listing bigint,p_parent uuid,p_request uuid)
+RETURNS jsonb LANGUAGE plpgsql SET search_path=pg_catalog,pg_temp AS $f$
+DECLARE parent_state text; a listing_publication_private.attempts%ROWTYPE; journey jsonb; gallery jsonb;
+BEGIN
+ IF p_request IS NULL OR p_request='00000000-0000-0000-0000-000000000000'::uuid THEN
+  RAISE EXCEPTION 'publication_request_key_invalid' USING ERRCODE='22023'; END IF;
+ parent_state:=listing_publication_private.lock_managed_image_addition_parent_v1(p_user,p_identity,p_listing,p_parent,false);
+ SELECT * INTO a FROM listing_publication_private.attempts WHERE actor_user_id=p_user AND request_key=p_request FOR SHARE;
+ IF FOUND AND (a.identity_id IS DISTINCT FROM p_identity OR NOT EXISTS(
+  SELECT 1 FROM listing_publication_private.managed_image_additions_v1 WHERE attempt_id=a.id AND parent_attempt_id=p_parent)) THEN
+  RAISE EXCEPTION 'publication_request_conflict' USING ERRCODE='22023'; END IF;
+ journey:=listing_publication_private.managed_image_addition_journey_v1(p_user,p_identity,p_request,false);
+ IF parent_state='published' THEN
+  gallery:=listing_publication_private.managed_image_gallery_projection_v1(
+   listing_publication_private.lock_managed_listing_images_v1(p_user,p_identity,p_listing,p_parent,false),true);
+ END IF;
+ RETURN jsonb_build_object('schema_version',1,'listing_id',p_listing::text,'attempt_id',p_parent,'request_key',p_request,
+  'snapshot',journey->'snapshot','receipt',listing_publication_private.managed_image_addition_receipt_v1(a.id),
+  'intent_closed',(journey->>'intent_closed')::boolean OR parent_state='deleted','gallery',gallery);
+END $f$;
+
+
+CREATE FUNCTION public.get_my_managed_listing_image_addition_v1(
+ p_expected_user_id uuid,p_expected_identity_id uuid,p_listing_id bigint,p_attempt_id uuid,p_request_key uuid)
+RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET lock_timeout='2s' AS $f$
+BEGIN
+ RETURN listing_publication_private.managed_image_addition_status_v1(
+  p_expected_user_id,p_expected_identity_id,p_listing_id,p_attempt_id,p_request_key);
+END $f$;
+
+CREATE FUNCTION public.prepare_my_managed_listing_image_addition_v1(
+ p_expected_user_id uuid,p_expected_identity_id uuid,p_listing_id bigint,p_attempt_id uuid,p_request_key uuid,
+ p_expected_revision text,p_image jsonb)
+RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET lock_timeout='2s' AS $f$
+DECLARE parent_state text; image jsonb; payload jsonb; fingerprint bytea;
+ a listing_publication_private.attempts%ROWTYPE; aid uuid; gallery jsonb;
+BEGIN
+ IF p_request_key IS NULL OR p_request_key='00000000-0000-0000-0000-000000000000'::uuid
+  OR p_expected_revision IS NULL OR p_expected_revision !~'^(0|[1-9][0-9]{0,18})$' THEN
+  RAISE EXCEPTION 'listing_images_command_invalid' USING ERRCODE='22023'; END IF;
+ IF p_expected_revision::numeric>9223372036854775807 THEN
+  RAISE EXCEPTION 'listing_images_command_invalid' USING ERRCODE='22023'; END IF;
+ parent_state:=listing_publication_private.lock_managed_image_addition_parent_v1(
+  p_expected_user_id,p_expected_identity_id,p_listing_id,p_attempt_id,true);
+ image:=listing_publication_private.normalize_managed_image_addition_v1(p_image);
+ payload:=jsonb_build_object('schema_version',1,'purpose','listing_image_addition',
+  'parent_attempt_id',p_attempt_id,'listing_id',p_listing_id::text);
+ fingerprint:=sha256(convert_to('selqiro-managed-image-addition-v1:'||jsonb_build_object('target',payload,'image',image)::text,'UTF8'));
+ SELECT * INTO a FROM listing_publication_private.attempts
+  WHERE actor_user_id=p_expected_user_id AND request_key=p_request_key FOR UPDATE;
+ IF FOUND THEN
+  IF a.identity_id IS DISTINCT FROM p_expected_identity_id OR a.intent_sha256 IS DISTINCT FROM fingerprint
+   OR NOT EXISTS(SELECT 1 FROM listing_publication_private.managed_image_additions_v1
+    WHERE attempt_id=a.id AND parent_attempt_id=p_attempt_id) THEN
+   RAISE EXCEPTION 'publication_request_conflict' USING ERRCODE='22023'; END IF;
+  RETURN listing_publication_private.managed_image_addition_status_v1(
+   p_expected_user_id,p_expected_identity_id,p_listing_id,p_attempt_id,p_request_key)||jsonb_build_object('replayed',true);
+ END IF;
+ IF parent_state<>'published' THEN RAISE EXCEPTION 'listing_images_unavailable' USING ERRCODE='55000'; END IF;
+ gallery:=listing_publication_private.lock_managed_listing_images_v1(
+  p_expected_user_id,p_expected_identity_id,p_listing_id,p_attempt_id,true);
+ IF gallery->>'revision' IS DISTINCT FROM p_expected_revision THEN
+  RAISE EXCEPTION 'listing_images_conflict' USING ERRCODE='40001'; END IF;
+ IF jsonb_array_length(gallery->'images')>=10 THEN
+  RAISE EXCEPTION 'publication_image_count_exceeded' USING ERRCODE='22023'; END IF;
+ aid:=listing_publication_private.allocate_managed_publication_attempt_v1(
+  p_expected_user_id,p_expected_identity_id,p_request_key,fingerprint,payload,jsonb_build_array(image));
+ -- Enrol the unused child in the accepted multipart domain before any writer.
+ -- Cancellation before upload can then settle its exact reserved objects too.
+ INSERT INTO listing_publication_private.multipart_attempts(attempt_id) VALUES(aid);
+ INSERT INTO listing_publication_private.managed_image_additions_v1(attempt_id,parent_attempt_id) VALUES(aid,p_attempt_id);
+ RETURN listing_publication_private.managed_image_addition_status_v1(
+  p_expected_user_id,p_expected_identity_id,p_listing_id,p_attempt_id,p_request_key)||jsonb_build_object('replayed',false);
+END $f$;
+
+CREATE FUNCTION public.cancel_my_managed_listing_image_addition_v1(
+ p_expected_user_id uuid,p_expected_identity_id uuid,p_listing_id bigint,p_attempt_id uuid,p_request_key uuid)
+RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET lock_timeout='2s' AS $f$
+DECLARE a listing_publication_private.attempts%ROWTYPE;
+BEGIN
+ IF p_request_key IS NULL OR p_request_key='00000000-0000-0000-0000-000000000000'::uuid THEN
+  RAISE EXCEPTION 'publication_request_key_invalid' USING ERRCODE='22023'; END IF;
+ PERFORM listing_publication_private.lock_managed_image_addition_parent_v1(
+  p_expected_user_id,p_expected_identity_id,p_listing_id,p_attempt_id,true);
+ SELECT * INTO a FROM listing_publication_private.attempts
+  WHERE actor_user_id=p_expected_user_id AND request_key=p_request_key FOR UPDATE;
+ IF FOUND AND (a.identity_id IS DISTINCT FROM p_expected_identity_id OR NOT EXISTS(
+  SELECT 1 FROM listing_publication_private.managed_image_additions_v1 WHERE attempt_id=a.id AND parent_attempt_id=p_attempt_id)) THEN
+  RAISE EXCEPTION 'publication_request_conflict' USING ERRCODE='22023'; END IF;
+ -- The retained journey tombstone also closes a not-yet-observed prepare under
+ -- the same profile lock. An attached image is a read-only replay, not removed.
+ PERFORM listing_publication_private.managed_image_addition_journey_v1(
+  p_expected_user_id,p_expected_identity_id,p_request_key,true);
+ RETURN listing_publication_private.managed_image_addition_status_v1(
+  p_expected_user_id,p_expected_identity_id,p_listing_id,p_attempt_id,p_request_key);
+END $f$;
+
+
+-- Append exactly one verified WEB. Public membership, immutable acknowledgement,
+-- SOURCE retirement, child terminal state and parent revision commit together.
+CREATE FUNCTION public.append_my_managed_listing_image_v1(
+ p_expected_user_id uuid,p_expected_identity_id uuid,p_listing_id bigint,p_attempt_id uuid,p_request_key uuid,
+ p_addition_attempt_id uuid,p_ready_id uuid,p_expected_revision text)
+RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET lock_timeout='2s' AS $f$
+DECLARE parent_state text; a listing_publication_private.attempts%ROWTYPE;
+ b listing_publication_private.managed_image_additions_v1%ROWTYPE;
+ s listing_publication_private.slots%ROWTYPE; w listing_publication_private.web_images%ROWTYPE;
+ gallery jsonb; previous_revision bigint; next_ordinal bigint; url text; first_image boolean;
+ publisher uuid; affected integer; t timestamptz;
+BEGIN
+ IF p_request_key IS NULL OR p_addition_attempt_id IS NULL OR p_ready_id IS NULL
+  OR p_expected_revision IS NULL OR p_expected_revision !~'^(0|[1-9][0-9]{0,18})$' THEN
+  RAISE EXCEPTION 'listing_images_command_invalid' USING ERRCODE='22023'; END IF;
+ IF p_expected_revision::numeric>9223372036854775807 THEN
+  RAISE EXCEPTION 'listing_images_command_invalid' USING ERRCODE='22023'; END IF;
+ parent_state:=listing_publication_private.lock_managed_image_addition_parent_v1(
+  p_expected_user_id,p_expected_identity_id,p_listing_id,p_attempt_id,true);
+ SELECT * INTO a FROM listing_publication_private.attempts WHERE id=p_addition_attempt_id
+  AND actor_user_id=p_expected_user_id AND identity_id=p_expected_identity_id AND request_key=p_request_key FOR UPDATE;
+ IF NOT FOUND THEN RAISE EXCEPTION 'publication_request_conflict' USING ERRCODE='22023'; END IF;
+ SELECT * INTO b FROM listing_publication_private.managed_image_additions_v1
+  WHERE attempt_id=a.id AND parent_attempt_id=p_attempt_id FOR UPDATE;
+ IF NOT FOUND THEN RAISE EXCEPTION 'publication_request_conflict' USING ERRCODE='22023'; END IF;
+ IF b.attached_at IS NOT NULL THEN
+  IF b.ready_id IS DISTINCT FROM p_ready_id THEN
+   RAISE EXCEPTION 'publication_confirmation_conflict' USING ERRCODE='22023'; END IF;
+  -- The permanent ACK remains valid if the added image has since been retired.
+  RETURN listing_publication_private.managed_image_addition_status_v1(
+   p_expected_user_id,p_expected_identity_id,p_listing_id,p_attempt_id,p_request_key)||jsonb_build_object('changed',false,'replayed',true);
+ END IF;
+ IF parent_state<>'published' OR a.state<>'open' OR a.expires_at<=clock_timestamp() THEN
+  RAISE EXCEPTION 'publication_attempt_closed' USING ERRCODE='55000'; END IF;
+ gallery:=listing_publication_private.lock_managed_listing_images_v1(
+  p_expected_user_id,p_expected_identity_id,p_listing_id,p_attempt_id,true);
+ IF gallery->>'revision' IS DISTINCT FROM p_expected_revision THEN
+  RAISE EXCEPTION 'listing_images_conflict' USING ERRCODE='40001'; END IF;
+ IF jsonb_array_length(gallery->'images')>=10 THEN
+  RAISE EXCEPTION 'publication_image_count_exceeded' USING ERRCODE='22023'; END IF;
+ IF listing_publication_private.require_managed_image_policies_v1() IS DISTINCT FROM a.policy_snapshot THEN
+  RAISE EXCEPTION 'publication_policy_changed' USING ERRCODE='42501'; END IF;
+ SELECT * INTO s FROM listing_publication_private.slots WHERE attempt_id=a.id AND ordinal=0;
+ IF NOT FOUND OR (SELECT count(*) FROM listing_publication_private.slots WHERE attempt_id=a.id)<>1 THEN
+  RAISE EXCEPTION 'listing_image_addition_binding' USING ERRCODE='55000'; END IF;
+ -- The child attempt lock serializes every retained WEB mutator; no extra
+ -- UPDATE privilege is needed merely to lock the immutable ready receipt.
+ SELECT * INTO w FROM listing_publication_private.web_images WHERE attempt_id=a.id AND slot_id=s.id;
+ IF NOT FOUND OR w.state<>'ready' OR w.ready_id IS DISTINCT FROM p_ready_id OR w.ready_at IS NULL THEN
+  RAISE EXCEPTION 'publication_images_not_ready' USING ERRCODE='55000'; END IF;
+ PERFORM listing_publication_private.validate_managed_image_intent_v1(w.intent,s.id);
+ IF (SELECT count(*) FROM listing_publication_private.objects WHERE attempt_id=a.id)<>2
+  OR EXISTS(SELECT 1 FROM listing_publication_private.objects o
+   LEFT JOIN listing_publication_private.multipart_sessions m ON m.object_id=o.id
+   WHERE o.attempt_id=a.id AND (o.slot_id<>s.id OR o.dispatch_key IS NOT NULL
+    OR m.id IS NULL OR m.provider_contract<>'supabase-s3-session-v1' OR m.state<>'completed'
+    OR m.completed_at IS NULL OR m.verified_at IS NULL OR m.problem IS NOT NULL
+    OR m.request_key IS DISTINCT FROM w.request_key OR m.storage_object_id IS NULL OR m.storage_version IS NULL
+    OR m.observed_sha256 IS DISTINCT FROM CASE WHEN o.kind='source' THEN encode(s.expected_source_sha256,'hex') ELSE w.intent->>'web_sha256' END
+    OR m.observed_bytes IS DISTINCT FROM CASE WHEN o.kind='source' THEN s.expected_source_bytes ELSE (w.intent->>'web_bytes')::integer END
+    OR NOT EXISTS(SELECT 1 FROM listing_publication_private.hosted_storage_objects z
+     WHERE z.id=m.storage_object_id AND z.version=m.storage_version AND z.bucket_id=o.bucket_id AND z.name=o.object_path)
+    OR EXISTS(SELECT 1 FROM listing_publication_private.hosted_storage_objects z
+     WHERE z.bucket_id=o.bucket_id AND z.name=o.object_path AND (z.id<>m.storage_object_id OR z.version IS DISTINCT FROM m.storage_version))
+    OR EXISTS(SELECT 1 FROM listing_publication_private.hosted_s3_multipart_uploads u
+     WHERE u.id=m.upload_id OR (u.bucket_id=o.bucket_id AND u.key=o.object_path))
+    OR EXISTS(SELECT 1 FROM listing_publication_private.hosted_s3_multipart_uploads_parts q
+     WHERE q.upload_id=m.upload_id OR (q.bucket_id=o.bucket_id AND q.key=o.object_path))
+    OR EXISTS(SELECT 1 FROM listing_publication_private.cleanup c WHERE c.object_id=o.id))) THEN
+  RAISE EXCEPTION 'publication_multipart_web_completion_required' USING ERRCODE='55000'; END IF;
+ previous_revision:=(gallery->>'revision')::bigint;
+ SELECT coalesce(max(g.ordinal)::bigint+1,0) INTO next_ordinal FROM listing_publication_private.managed_image_origins_v1(p_attempt_id) g;
+ IF previous_revision=9223372036854775807 OR next_ordinal>2147483647 THEN
+  RAISE EXCEPTION 'listing_images_unavailable' USING ERRCODE='55000'; END IF;
+ SELECT actor_user_id INTO publisher FROM listing_publication_private.attempts WHERE id=p_attempt_id;
+ first_image:=jsonb_array_length(gallery->'images')=0;
+ url:='/api/v2/listing-media/'||a.id::text||'/0'; t:=clock_timestamp();
+ INSERT INTO public.listing_images(listing_id,user_id,original_url,medium_url,thumb_url,sort_order,is_primary)
+ VALUES(p_listing_id,publisher,url,url,url,next_ordinal::integer,first_image);
+ IF first_image THEN UPDATE public.listings SET image=url WHERE id=p_listing_id; END IF;
+ IF previous_revision=0 THEN
+  INSERT INTO listing_publication_private.managed_image_presentations_v1(attempt_id,revision) VALUES(p_attempt_id,1);
+ ELSE UPDATE listing_publication_private.managed_image_presentations_v1 SET revision=previous_revision+1
+  WHERE attempt_id=p_attempt_id AND revision=previous_revision; END IF;
+ GET DIAGNOSTICS affected=ROW_COUNT;
+ IF affected<>1 THEN RAISE EXCEPTION 'listing_images_conflict' USING ERRCODE='40001'; END IF;
+ UPDATE listing_publication_private.managed_image_additions_v1 SET attached_at=t,ready_id=w.ready_id,
+  gallery_ordinal=next_ordinal::integer,attached_revision=previous_revision+1,was_primary=first_image WHERE attempt_id=a.id;
+ INSERT INTO listing_publication_private.cleanup(object_id,bucket_id,object_path,reason,state,enqueued_at)
+ SELECT o.id,o.bucket_id,o.object_path,'published_source',listing_publication_private.object_cleanup_state(o.id),t
+ FROM listing_publication_private.objects o WHERE o.attempt_id=a.id AND o.kind='source';
+ -- Recheck the wall-clock and policy boundary after every potentially waiting lock.
+ IF a.expires_at<=clock_timestamp() THEN RAISE EXCEPTION 'publication_attempt_closed' USING ERRCODE='55000'; END IF;
+ IF listing_publication_private.require_managed_image_policies_v1() IS DISTINCT FROM a.policy_snapshot THEN
+  RAISE EXCEPTION 'publication_policy_changed' USING ERRCODE='42501'; END IF;
+ UPDATE listing_publication_private.attempts SET state='published',payload=NULL,closed_at=t WHERE id=a.id;
+ RETURN listing_publication_private.managed_image_addition_status_v1(
+  p_expected_user_id,p_expected_identity_id,p_listing_id,p_attempt_id,p_request_key)||jsonb_build_object('changed',true,'replayed',false);
+END $f$;
+
+
+-- Existing terminal attempts are never reopened. The sole new transition is
+-- supported by an exact immutable attachment receipt and existing cleanup rows.
+CREATE OR REPLACE FUNCTION public.prepare_my_listing_publication_v1(
+ p_expected_user_id uuid,p_expected_identity_id uuid,p_request_key uuid,p_input jsonb,p_images jsonb
+) RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER
+SET search_path=pg_catalog,public,auth,pg_temp SET lock_timeout='2s' SET timezone='UTC' AS $fn$
+DECLARE active_id uuid; n jsonb; images jsonb; fingerprint bytea; a listing_publication_private.attempts%ROWTYPE;
+BEGIN
+ active_id:=listing_publication_private.require_actor(p_expected_user_id,p_expected_identity_id);
+ IF p_request_key IS NULL OR p_request_key='00000000-0000-0000-0000-000000000000'::uuid THEN
+  RAISE EXCEPTION 'publication_request_key_invalid' USING ERRCODE='22023';
+ END IF;
+ n:=public.normalize_listing_creation_v1(p_input);
+ IF n->>'language'<>'et' OR n->'location'->>'country'='' OR n->'location'->>'city'=''
+    OR n->'location'->>'latitude' IS NOT NULL OR n->'location'->>'longitude' IS NOT NULL THEN
+  RAISE EXCEPTION 'publication_form_scope_invalid' USING ERRCODE='22023';
+ END IF;
+ images:=listing_publication_private.normalize_images(p_images);
+ fingerprint:=sha256(convert_to('selqiro-publication-attempt-v1:'||jsonb_build_object('input',n,'images',images)::text,'UTF8'));
+ SELECT x.* INTO a FROM listing_publication_private.attempts x
+  WHERE x.actor_user_id=p_expected_user_id AND x.request_key=p_request_key FOR UPDATE;
+ IF FOUND THEN
+  IF a.identity_id IS DISTINCT FROM active_id OR a.intent_sha256 IS DISTINCT FROM fingerprint THEN
+   RAISE EXCEPTION 'publication_request_conflict' USING ERRCODE='22023';
+  END IF;
+  -- Recovery only; do not rewrite content, move deadline, issue permission or reopen a tombstone.
+  RETURN listing_publication_private.snapshot(a.id)||jsonb_build_object('replayed',true);
+ END IF;
+ a.id:=listing_publication_private.allocate_managed_publication_attempt_v1(
+  p_expected_user_id,active_id,p_request_key,fingerprint,n,images);
+ RETURN listing_publication_private.snapshot(a.id)||jsonb_build_object('replayed',false);
+END $fn$;
+
+CREATE OR REPLACE FUNCTION listing_publication_private.protect_attempt() RETURNS trigger LANGUAGE plpgsql
+SET search_path=pg_catalog,pg_temp AS $f$
+BEGIN
+ IF TG_OP='DELETE' THEN RAISE EXCEPTION 'publication_receipt_retained' USING ERRCODE='55000'; END IF;
+ IF current_user='selqiro_listing_final_writer_v1' AND OLD.state='open' AND NEW.state='published'
+  AND NEW.payload IS NULL AND NEW.closed_at IS NOT NULL
+  AND (to_jsonb(NEW)-ARRAY['state','payload','closed_at'])=(to_jsonb(OLD)-ARRAY['state','payload','closed_at'])
+  AND EXISTS(SELECT 1 FROM listing_publication_private.managed_image_additions_v1 b
+   JOIN listing_publication_private.publications p ON p.attempt_id=b.parent_attempt_id
+   JOIN listing_publication_private.attempts parent ON parent.id=p.attempt_id
+   JOIN public.listings l ON l.id=p.listing_id
+   WHERE b.attempt_id=OLD.id AND b.attached_at IS NOT NULL AND p.state='published' AND parent.state='published'
+    AND parent.identity_id=OLD.identity_id AND l.identity_id=OLD.identity_id AND l.created_by_user_id=parent.actor_user_id)
+  AND NOT EXISTS(SELECT 1 FROM listing_publication_private.objects o LEFT JOIN listing_publication_private.cleanup c ON c.object_id=o.id
+   WHERE o.attempt_id=OLD.id AND o.kind='source' AND (c.object_id IS NULL OR c.reason<>'published_source'
+    OR c.bucket_id<>o.bucket_id OR c.object_path<>o.object_path)) THEN RETURN NEW; END IF;
+ IF current_user='selqiro_listing_final_writer_v1' AND OLD.state='published' AND NEW.state='deleted'
+  AND (to_jsonb(NEW)-'state')=(to_jsonb(OLD)-'state')
+  AND EXISTS(SELECT 1 FROM listing_publication_private.managed_image_additions_v1 b
+   JOIN listing_publication_private.publications p ON p.attempt_id=b.parent_attempt_id
+   WHERE b.attempt_id=OLD.id AND b.attached_at IS NOT NULL AND p.state='deleting'
+    AND NOT EXISTS(SELECT 1 FROM public.listings l WHERE l.id=p.listing_id))
+  AND NOT EXISTS(SELECT 1 FROM listing_publication_private.objects o LEFT JOIN listing_publication_private.cleanup c ON c.object_id=o.id
+   WHERE o.attempt_id=OLD.id AND (c.object_id IS NULL OR c.bucket_id<>o.bucket_id OR c.object_path<>o.object_path)) THEN RETURN NEW; END IF;
+ IF current_user='selqiro_listing_final_writer_v1' AND OLD.state='open' AND NEW.state='published'
+  AND NEW.payload IS NULL AND NEW.closed_at IS NOT NULL
+  AND (to_jsonb(NEW)-ARRAY['state','payload','closed_at'])=(to_jsonb(OLD)-ARRAY['state','payload','closed_at'])
+  AND EXISTS(SELECT 1 FROM listing_publication_private.publications p JOIN public.listings l ON l.id=p.listing_id
+   WHERE p.attempt_id=OLD.id AND p.state='published' AND l.identity_id=OLD.identity_id AND l.created_by_user_id=OLD.actor_user_id)
+  AND NOT EXISTS(SELECT 1 FROM listing_publication_private.objects o LEFT JOIN listing_publication_private.cleanup c ON c.object_id=o.id
+   WHERE o.attempt_id=OLD.id AND o.kind='source' AND (c.object_id IS NULL OR c.reason<>'published_source' OR c.bucket_id<>o.bucket_id OR c.object_path<>o.object_path))
+ THEN RETURN NEW; END IF;
+ IF current_user='selqiro_listing_final_writer_v1' AND OLD.state='published' AND NEW.state='deleted'
+  AND (to_jsonb(NEW)-'state')=(to_jsonb(OLD)-'state')
+  AND EXISTS(SELECT 1 FROM listing_publication_private.publications p WHERE p.attempt_id=OLD.id AND p.state='deleting'
+   AND NOT EXISTS(SELECT 1 FROM public.listings l WHERE l.id=p.listing_id))
+  AND NOT EXISTS(SELECT 1 FROM listing_publication_private.objects o LEFT JOIN listing_publication_private.cleanup c ON c.object_id=o.id
+   WHERE o.attempt_id=OLD.id AND (c.object_id IS NULL OR c.bucket_id<>o.bucket_id OR c.object_path<>o.object_path))
+ THEN RETURN NEW; END IF;
+ IF (to_jsonb(NEW)-ARRAY['state','payload','closed_at']) IS DISTINCT FROM (to_jsonb(OLD)-ARRAY['state','payload','closed_at'])
+  OR OLD.state<>'open' OR NEW.state NOT IN('cancelled','expired') OR NEW.payload IS NOT NULL OR NEW.closed_at IS NULL THEN
+  RAISE EXCEPTION 'publication_attempt_immutable' USING ERRCODE='55000'; END IF;
+ IF EXISTS(SELECT 1 FROM listing_publication_private.objects o LEFT JOIN listing_publication_private.cleanup c ON c.object_id=o.id
+  WHERE o.attempt_id=OLD.id AND (c.object_id IS NULL OR c.bucket_id<>o.bucket_id OR c.object_path<>o.object_path OR c.reason<>NEW.state
+   OR c.state<>listing_publication_private.object_cleanup_state(o.id))) THEN
+  RAISE EXCEPTION 'publication_cleanup_lineage_required' USING ERRCODE='55000'; END IF;
+ RETURN NEW;
+END $f$;
+
+CREATE FUNCTION listing_publication_private.assert_ordinary_publication_v1(p_attempt uuid)
+RETURNS void LANGUAGE plpgsql SET search_path=pg_catalog,pg_temp AS $f$
+BEGIN
+ IF EXISTS(SELECT 1 FROM listing_publication_private.managed_image_additions_v1 WHERE attempt_id=p_attempt) THEN
+  RAISE EXCEPTION 'publication_addition_requires_append' USING ERRCODE='55000'; END IF;
+END $f$;
+
+CREATE OR REPLACE FUNCTION listing_publication_private.apply_final(p_attempt uuid,p_normalized jsonb,p_confirmation text)
+RETURNS bigint LANGUAGE plpgsql SECURITY DEFINER
+SET search_path=pg_catalog,public,auth,pg_temp SET timezone='UTC' AS $f$
+DECLARE a listing_publication_private.attempts%ROWTYPE; r public.listings%ROWTYPE;
+ n jsonb:=p_normalized; actor uuid:=public.listing_actor_uid_hosted_v1(); active_id uuid; at_time timestamptz:=clock_timestamp();
+BEGIN
+ PERFORM listing_publication_private.assert_ordinary_publication_v1(p_attempt);
+ SELECT x.* INTO a FROM listing_publication_private.attempts x WHERE x.id=p_attempt FOR UPDATE;
+ IF NOT FOUND OR a.actor_user_id IS DISTINCT FROM actor OR a.state<>'open' OR a.payload IS DISTINCT FROM n
+  OR a.expires_at<=at_time THEN RAISE EXCEPTION 'publication_attempt_closed' USING ERRCODE='55000'; END IF;
+ active_id:=a.identity_id;
+  r.title:=n->'basics'->>'title'; r.description:=n->'basics'->>'description';
+  r.condition:=n->'basics'->>'condition';
+  r.category:=n->'category_path'->>0; r.subcategory:=coalesce(n->'category_path'->>1,'');
+  r.country:=n->'location'->>'country'; r.city:=n->'location'->>'city';
+  r.location:=concat_ws(' • ',nullif(r.country,''),nullif(r.city,''));
+  r.listing_lat:=(n->'location'->>'latitude')::double precision;
+  r.listing_lng:=(n->'location'->>'longitude')::double precision;
+  r.manufacturer:=n->'attributes'->>'manufacturer'; r.part_number:=n->'attributes'->>'part_number';
+  r.oem_number:=n->'attributes'->>'oem_number'; r.vehicle_brand:=n->'attributes'->>'vehicle_brand';
+  r.vehicle_model:=n->'attributes'->>'vehicle_model'; r.vehicle_year:=n->'attributes'->>'vehicle_year';
+  r.engine:=n->'attributes'->>'engine';
+  -- One-way initial mirrors used by existing detail readers. Input cannot supply two values.
+  r.details:=(n->'details')||jsonb_build_object('detailCategory',coalesce(n->'category_path'->>2,''),
+    'manufacturer',r.manufacturer,'partNumber',r.part_number,'oemNumber',r.oem_number,
+    'vehicleBrand',r.vehicle_brand,'vehicleModel',r.vehicle_model,'vehicleYear',r.vehicle_year,'engine',r.engine);
+  INSERT INTO public.listings(
+   user_id,identity_id,created_by_user_id,updated_by_user_id,title,description,condition,
+   price_kind,price_amount,currency,category,subcategory,country,city,location,listing_lat,listing_lng,
+   manufacturer,part_number,oem_number,vehicle_brand,vehicle_model,vehicle_year,engine,details,
+   search_text,listing_language,status,created_at,active_until,image,
+   ai_status,ai_enriched,ai_level,is_featured,is_boosted)
+  VALUES(actor,active_id,actor,actor,r.title,r.description,r.condition,
+   n->'price'->>'kind',(n->'price'->>'amount')::numeric,n->'price'->>'currency',
+   r.category,r.subcategory,r.country,r.city,r.location,r.listing_lat,r.listing_lng,
+   r.manufacturer,r.part_number,r.oem_number,r.vehicle_brand,r.vehicle_model,r.vehicle_year,r.engine,r.details,
+   public.listing_basics_search_text_v1(r),n->>'language','active',at_time,at_time+interval '2160 hours',NULL,
+   'not_started',false,'none',false,false)
+  RETURNING * INTO r;
+
+ INSERT INTO listing_publication_private.publications(attempt_id,listing_id,confirmation_sha256,published_at,state)
+ VALUES(a.id,r.id,p_confirmation,at_time,'published');
+ INSERT INTO public.listing_images(listing_id,user_id,original_url,medium_url,thumb_url,sort_order,is_primary)
+ SELECT r.id,actor,'/api/v2/listing-media/'||a.id::text||'/'||s.ordinal::text,
+ '/api/v2/listing-media/'||a.id::text||'/'||s.ordinal::text,
+ '/api/v2/listing-media/'||a.id::text||'/'||s.ordinal::text,s.ordinal,s.ordinal=0
+ FROM listing_publication_private.slots s WHERE s.attempt_id=a.id ORDER BY s.ordinal;
+ UPDATE public.listings SET image=(SELECT i.original_url FROM public.listing_images i
+  WHERE i.listing_id=r.id AND i.is_primary) WHERE id=r.id;
+ PERFORM listing_publication_private.assert_final_last_boundary(a.id);
+ INSERT INTO listing_publication_private.cleanup(object_id,bucket_id,object_path,reason,state,enqueued_at)
+ SELECT o.id,o.bucket_id,o.object_path,'published_source',listing_publication_private.object_cleanup_state(o.id),at_time
+ FROM listing_publication_private.objects o WHERE o.attempt_id=a.id AND o.kind='source';
+ UPDATE listing_publication_private.attempts SET state='published',payload=NULL,closed_at=at_time WHERE id=a.id;
+ RETURN r.id;
+END $f$;
+
+CREATE OR REPLACE FUNCTION listing_publication_private.final_material(p_attempt uuid) RETURNS jsonb LANGUAGE plpgsql
+SET search_path=pg_catalog,public,pg_temp AS $f$
+DECLARE a listing_publication_private.attempts%ROWTYPE; n jsonb; images jsonb; x record;
+BEGIN
+ PERFORM listing_publication_private.assert_ordinary_publication_v1(p_attempt);
+ SELECT * INTO a FROM listing_publication_private.attempts WHERE id=p_attempt;
+ IF NOT FOUND OR a.state<>'open' OR a.expires_at<=clock_timestamp() THEN
+  RAISE EXCEPTION 'publication_attempt_closed' USING ERRCODE='55000'; END IF;
+ n:=public.normalize_listing_creation_v1(a.payload-'version');
+ IF n IS DISTINCT FROM a.payload THEN RAISE EXCEPTION 'publication_input_changed' USING ERRCODE='22023'; END IF;
+ FOR x IN SELECT s.id,w.state,w.ready_id,w.intent FROM listing_publication_private.slots s
+  LEFT JOIN listing_publication_private.web_images w ON w.slot_id=s.id AND w.attempt_id=s.attempt_id
+  WHERE s.attempt_id=a.id ORDER BY s.ordinal LOOP
+  IF x.state IS DISTINCT FROM 'ready' OR x.ready_id IS NULL THEN
+   RAISE EXCEPTION 'publication_images_not_ready' USING ERRCODE='55000'; END IF;
+  PERFORM listing_publication_private.validate_web_intent(x.intent,x.id);
+ END LOOP;
+ IF EXISTS(SELECT 1 FROM listing_publication_private.objects o JOIN listing_publication_private.cleanup c ON c.object_id=o.id WHERE o.attempt_id=a.id) THEN
+  RAISE EXCEPTION 'publication_cleanup_conflict' USING ERRCODE='55000'; END IF;
+ SELECT coalesce(jsonb_agg(jsonb_build_object('slot_id',s.id,'ordinal',s.ordinal,'receipt_id',w.ready_id,
+  'web_sha256',w.intent->>'web_sha256','web_bytes',w.intent->'web_bytes') ORDER BY s.ordinal),'[]') INTO images
+ FROM listing_publication_private.slots s JOIN listing_publication_private.web_images w ON w.slot_id=s.id WHERE s.attempt_id=a.id;
+ RETURN jsonb_build_object('schema_version',1,'attempt_id',a.id,'request_key',a.request_key,
+ 'actor_user_id',a.actor_user_id,'identity_id',a.identity_id,'price',n->'price','image_count',jsonb_array_length(images),
+ 'confirmation_sha256',encode(sha256(convert_to('selqiro-final-v1:'||jsonb_build_object(
+  'intent',encode(a.intent_sha256,'hex'),'attempt',a.id,'price',n->'price','images',images)::text,'UTF8')),'hex'));
+END $f$;
+
+CREATE OR REPLACE FUNCTION public.get_my_listing_publication_confirmation_v1(p_expected_user_id uuid,p_expected_identity_id uuid,p_attempt_id uuid)
+RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER
+SET search_path=pg_catalog,public,auth,pg_temp SET lock_timeout='2s' AS $f$
+DECLARE a listing_publication_private.attempts%ROWTYPE;
+BEGIN
+ PERFORM listing_publication_private.require_actor(p_expected_user_id,p_expected_identity_id);
+ SELECT x.* INTO a FROM listing_publication_private.attempts x WHERE x.id=p_attempt_id AND x.actor_user_id=p_expected_user_id
+  AND x.identity_id=p_expected_identity_id FOR UPDATE;
+ IF NOT FOUND THEN RAISE EXCEPTION 'publication_attempt_unavailable' USING ERRCODE='P0002'; END IF;
+ PERFORM listing_publication_private.assert_ordinary_publication_v1(p_attempt_id);
+ IF a.state IN('published','deleted') THEN RETURN jsonb_build_object('receipt',listing_publication_private.final_receipt(a.id)); END IF;
+ IF listing_publication_private.require_policies() IS DISTINCT FROM a.policy_snapshot THEN
+  RAISE EXCEPTION 'publication_policy_changed' USING ERRCODE='42501'; END IF;
+ RETURN jsonb_build_object('confirmation',listing_publication_private.final_material(a.id));
+END $f$;
+
+CREATE OR REPLACE FUNCTION public.publish_my_listing_v1(p_expected_user_id uuid,p_expected_identity_id uuid,p_attempt_id uuid,p_confirmation_sha256 text)
+RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER
+SET search_path=pg_catalog,public,auth,pg_temp SET lock_timeout='2s' AS $f$
+DECLARE a listing_publication_private.attempts%ROWTYPE; p listing_publication_private.publications%ROWTYPE; material jsonb;
+BEGIN
+ PERFORM listing_publication_private.require_actor(p_expected_user_id,p_expected_identity_id);
+ IF p_confirmation_sha256 IS NULL OR char_length(p_confirmation_sha256)<>64 OR p_confirmation_sha256 !~ '^[0-9a-f]{64}$' THEN
+  RAISE EXCEPTION 'publication_confirmation_invalid' USING ERRCODE='22023'; END IF;
+ SELECT x.* INTO a FROM listing_publication_private.attempts x WHERE x.id=p_attempt_id AND x.actor_user_id=p_expected_user_id
+  AND x.identity_id=p_expected_identity_id FOR UPDATE;
+ IF NOT FOUND THEN RAISE EXCEPTION 'publication_attempt_unavailable' USING ERRCODE='P0002'; END IF;
+ PERFORM listing_publication_private.assert_ordinary_publication_v1(p_attempt_id);
+ SELECT * INTO p FROM listing_publication_private.publications WHERE attempt_id=a.id;
+ IF FOUND THEN
+  IF p.confirmation_sha256 IS DISTINCT FROM p_confirmation_sha256 THEN RAISE EXCEPTION 'publication_confirmation_conflict' USING ERRCODE='22023'; END IF;
+  -- Recovery is a read, even after terms changed, deletion, or listing expiration. Never reactivate.
+  RETURN listing_publication_private.final_receipt(a.id)||jsonb_build_object('replayed',true);
+ END IF;
+ IF listing_publication_private.require_policies() IS DISTINCT FROM a.policy_snapshot THEN
+  RAISE EXCEPTION 'publication_policy_changed' USING ERRCODE='42501'; END IF;
+ material:=listing_publication_private.final_material(a.id);
+ IF material->>'confirmation_sha256' IS DISTINCT FROM p_confirmation_sha256 THEN
+  RAISE EXCEPTION 'publication_confirmation_conflict' USING ERRCODE='22023'; END IF;
+ PERFORM listing_publication_private.apply_final(a.id,a.payload,p_confirmation_sha256);
+ RETURN listing_publication_private.final_receipt(a.id)||jsonb_build_object('replayed',false);
+END $f$;
+
+
+-- Terminal listing removal retains the original publication and every bound
+-- child, closes pending writes, and queues exact objects before public deletion.
+CREATE OR REPLACE FUNCTION listing_publication_private.apply_delete(p_attempt uuid) RETURNS void LANGUAGE plpgsql SECURITY DEFINER
+SET search_path=pg_catalog,public,auth,pg_temp AS $f$
+DECLARE a listing_publication_private.attempts%ROWTYPE; p listing_publication_private.publications%ROWTYPE; child record; t timestamptz:=clock_timestamp();
+BEGIN
+ SELECT * INTO a FROM listing_publication_private.attempts WHERE id=p_attempt FOR UPDATE;
+ IF public.current_user_has_identity_access(a.identity_id) IS DISTINCT FROM true THEN
+  RAISE EXCEPTION 'listing_price_identity_forbidden' USING ERRCODE='42501'; END IF;
+ SELECT * INTO p FROM listing_publication_private.publications WHERE attempt_id=a.id FOR UPDATE;
+ IF NOT FOUND THEN RAISE EXCEPTION 'publication_result_unavailable' USING ERRCODE='P0002'; END IF;
+ IF p.state='deleting' THEN RETURN; END IF;
+ -- Parent serialization fences a new child or attachment while all existing
+ -- children are closed in stable order. Their exact immutable ledgers survive.
+ FOR child IN SELECT c.id,c.state FROM listing_publication_private.attempts c
+  JOIN listing_publication_private.managed_image_additions_v1 b ON b.attempt_id=c.id
+  WHERE b.parent_attempt_id=a.id ORDER BY c.id FOR UPDATE OF c LOOP
+  IF child.state='open' THEN PERFORM listing_publication_private.close_locked_attempt(child.id,'cancelled'); END IF;
+ END LOOP;
+ PERFORM 1 FROM public.listings l WHERE l.id=p.listing_id AND l.identity_id=a.identity_id FOR UPDATE;
+ IF NOT FOUND THEN RAISE EXCEPTION 'publication_result_unavailable' USING ERRCODE='P0002'; END IF;
+ -- Locking the referenced listing fences new FK-linked messages while snapshots are scrubbed.
+ IF (SELECT count(*) FROM (SELECT id FROM public.messages WHERE listing_id=p.listing_id LIMIT 501) q)>500
+ OR (SELECT count(*) FROM (SELECT id FROM public.conversations WHERE listing_id=p.listing_id LIMIT 501) q)>500 THEN
+ RAISE EXCEPTION 'publication_message_cleanup_limit' USING ERRCODE='54000'; END IF;
+
+ -- Durably retain every exact key BEFORE deleting listing content or cascade-dependent rows.
+ INSERT INTO listing_publication_private.cleanup(object_id,bucket_id,object_path,reason,state,enqueued_at)
+ SELECT o.id,o.bucket_id,o.object_path,'terminal_delete',listing_publication_private.object_cleanup_state(o.id),t
+ FROM listing_publication_private.objects o WHERE o.attempt_id IN(SELECT attempt_id FROM listing_publication_private.managed_image_family_v1(a.id))
+ ON CONFLICT(object_id) DO NOTHING;
+ UPDATE listing_publication_private.publications SET state='deleting',deleted_at=t WHERE attempt_id=a.id;
+ UPDATE public.conversations SET listing_title_snapshot=NULL,listing_image_snapshot=NULL,listing_price_snapshot=NULL WHERE listing_id=p.listing_id;
+ UPDATE public.messages SET listing_title=NULL,listing_image=NULL,listing_price=NULL WHERE listing_id=p.listing_id;
+ DELETE FROM public.listing_images WHERE listing_id=p.listing_id;
+ DELETE FROM public.listings WHERE id=p.listing_id AND identity_id=a.identity_id AND created_by_user_id=a.actor_user_id;
+ IF NOT FOUND THEN RAISE EXCEPTION 'publication_result_unavailable' USING ERRCODE='P0002'; END IF;
+ UPDATE listing_publication_private.attempts SET state='deleted' WHERE state='published' AND id IN(
+  SELECT attempt_id FROM listing_publication_private.managed_image_additions_v1 WHERE parent_attempt_id=a.id AND attached_at IS NOT NULL);
+ UPDATE listing_publication_private.attempts SET state='deleted' WHERE id=a.id;
+ -- Tokens/hashes and private lineage remain under existing retention policy. Account erasure
+ -- stays RESTRICT until that separate narrow retention/rekey boundary has been accepted.
+END $f$;
+
+CREATE OR REPLACE FUNCTION listing_publication_private.final_receipt(p_attempt uuid) RETURNS jsonb LANGUAGE sql
+SET search_path=pg_catalog,pg_temp AS $f$
+ SELECT jsonb_build_object('schema_version',1,'attempt_id',a.id,'request_key',a.request_key,
+ 'actor_user_id',a.actor_user_id,'identity_id',a.identity_id,'listing_id',p.listing_id::text,
+ 'state',CASE WHEN p.state='published' THEN 'published' WHEN EXISTS(
+ SELECT 1 FROM listing_publication_private.objects o LEFT JOIN listing_publication_private.cleanup c ON c.object_id=o.id
+ WHERE o.attempt_id IN(SELECT attempt_id FROM listing_publication_private.managed_image_family_v1(a.id)) AND NOT listing_publication_private.multipart_object_fully_deleted(o.id)) THEN 'deleting' ELSE 'deleted' END,
+ 'published_at',to_char(p.published_at AT TIME ZONE 'UTC','YYYY-MM-DD"T"HH24:MI:SS.US"Z"'),
+ 'content_deleted',p.state='deleting',
+ 'files_remaining',(SELECT count(*) FROM listing_publication_private.objects o LEFT JOIN listing_publication_private.cleanup c ON c.object_id=o.id
+ WHERE o.attempt_id IN(SELECT attempt_id FROM listing_publication_private.managed_image_family_v1(a.id)) AND (p.state='deleting' OR (o.kind='source' AND c.reason='published_source')) AND NOT listing_publication_private.multipart_object_fully_deleted(o.id)))
+ FROM listing_publication_private.publications p JOIN listing_publication_private.attempts a ON a.id=p.attempt_id WHERE a.id=p_attempt;
+$f$;
+
+
+-- Canonical public media routes retain their immutable origin attempt/slot.
+-- Every response still requires exact live membership in the parent listing.
+CREATE OR REPLACE FUNCTION public.get_public_listing_media_binding_v1(p_attempt_id uuid,p_ordinal integer)
+RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,public,auth,pg_temp AS $f$
+DECLARE v jsonb;
+BEGIN
+ PERFORM listing_publication_private.require_upload_service();
+ IF p_ordinal IS NULL OR p_ordinal NOT BETWEEN 0 AND 9 THEN RETURN NULL; END IF;
+ SELECT jsonb_build_object('schema_version',1,'attempt_id',g.media_attempt_id,'ordinal',g.media_ordinal,'bucket_id',o.bucket_id,
+  'object_path',o.object_path,'sha256',w.intent->>'web_sha256','bytes',(w.intent->>'web_bytes')::integer) INTO v
+ FROM listing_publication_private.publications p JOIN listing_publication_private.attempts a ON a.id=p.attempt_id
+ JOIN public.listings l ON l.id=p.listing_id JOIN public.identities i ON i.id=l.identity_id
+ JOIN LATERAL listing_publication_private.managed_image_origins_v1(a.id) g
+  ON g.media_attempt_id=p_attempt_id AND g.media_ordinal=p_ordinal
+ JOIN listing_publication_private.attempts origin ON origin.id=g.media_attempt_id AND origin.state='published' AND origin.identity_id=a.identity_id
+ JOIN listing_publication_private.slots s ON s.id=g.slot_id
+ JOIN listing_publication_private.objects o ON o.slot_id=s.id AND o.attempt_id=g.media_attempt_id AND o.kind='web'
+ JOIN listing_publication_private.web_images w ON w.slot_id=s.id AND w.attempt_id=g.media_attempt_id AND (g.attached_ready_id IS NULL OR g.attached_ready_id=w.ready_id) AND w.state='ready'
+ JOIN public.listing_images li ON li.listing_id=l.id AND li.sort_order=g.ordinal AND li.user_id=a.actor_user_id
+  AND li.original_url=g.canonical_url
+  AND li.medium_url=li.original_url AND li.thumb_url=li.original_url
+ WHERE a.id=listing_publication_private.managed_image_root_v1(p_attempt_id) AND a.state='published' AND p.state='published' AND l.status='active'
+  AND l.active_until>clock_timestamp() AND i.status='active' AND l.identity_id=a.identity_id
+  AND NOT EXISTS(SELECT 1 FROM listing_publication_private.cleanup c WHERE c.object_id=o.id);
+ RETURN v;
+END $f$;
+
+CREATE OR REPLACE FUNCTION public.get_my_listing_media_binding_v2(
+ p_expected_user_id uuid,p_expected_identity_id uuid,p_attempt_id uuid,p_ordinal integer)
+RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,pg_temp AS $f$
+DECLARE v jsonb;
+BEGIN
+ PERFORM listing_publication_private.require_actor(p_expected_user_id,p_expected_identity_id);
+ IF p_ordinal IS NULL OR p_ordinal NOT BETWEEN 0 AND 9 THEN RETURN NULL; END IF;
+ SELECT jsonb_build_object('schema_version',1,'attempt_id',g.media_attempt_id,'ordinal',g.media_ordinal,'bucket_id',o.bucket_id,
+  'object_path',o.object_path,'sha256',w.intent->>'web_sha256','bytes',(w.intent->>'web_bytes')::integer) INTO v
+ FROM listing_publication_private.publications p JOIN listing_publication_private.attempts a ON a.id=p.attempt_id
+ JOIN public.listings l ON l.id=p.listing_id
+ JOIN LATERAL listing_publication_private.managed_image_origins_v1(a.id) g
+  ON g.media_attempt_id=p_attempt_id AND g.media_ordinal=p_ordinal
+ JOIN listing_publication_private.attempts origin ON origin.id=g.media_attempt_id AND origin.state='published' AND origin.identity_id=a.identity_id
+ JOIN listing_publication_private.slots s ON s.id=g.slot_id
+ JOIN listing_publication_private.objects o ON o.slot_id=s.id AND o.attempt_id=g.media_attempt_id AND o.kind='web'
+ JOIN listing_publication_private.web_images w ON w.slot_id=s.id AND w.attempt_id=g.media_attempt_id AND (g.attached_ready_id IS NULL OR g.attached_ready_id=w.ready_id) AND w.state='ready'
+ JOIN public.listing_images li ON li.listing_id=l.id AND li.sort_order=g.ordinal AND li.user_id=a.actor_user_id
+  AND li.original_url=g.canonical_url
+  AND li.medium_url=li.original_url AND li.thumb_url=li.original_url
+ WHERE a.id=listing_publication_private.managed_image_root_v1(p_attempt_id) AND a.state='published' AND p.state='published'
+  AND l.identity_id=a.identity_id AND a.identity_id=p_expected_identity_id
+  AND NOT EXISTS(SELECT 1 FROM listing_publication_private.cleanup c WHERE c.object_id=o.id);
+ RETURN v;
+END $f$;
+
+CREATE OR REPLACE FUNCTION public.get_my_managed_listing_v2(
+ p_expected_user_id uuid,p_expected_identity_id uuid,p_listing_id text)
+RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,pg_temp AS $f$
+DECLARE aid uuid; activity jsonb; images jsonb;
+BEGIN
+ PERFORM listing_publication_private.require_actor(p_expected_user_id,p_expected_identity_id);
+ IF p_listing_id IS NULL OR p_listing_id !~'^[1-9][0-9]{0,18}$' OR p_listing_id::numeric>9223372036854775807 THEN
+  RAISE EXCEPTION 'listing_id_invalid' USING ERRCODE='22023'; END IF;
+ SELECT a.id INTO aid FROM listing_publication_private.attempts a
+ JOIN listing_publication_private.publications p ON p.attempt_id=a.id
+ WHERE p.listing_id=p_listing_id::bigint AND a.identity_id=p_expected_identity_id FOR SHARE OF a;
+ IF aid IS NOT NULL THEN
+  SELECT jsonb_build_object('status',l.status,'active_until',l.active_until) INTO activity
+   FROM public.listings l WHERE l.id=p_listing_id::bigint AND l.identity_id=p_expected_identity_id;
+  -- Management status remains readable if a gallery is malformed. The separate
+  -- gallery RPC still validates every slot before any photo action. EXISTS
+  -- projects each immutable ordinal once, even if public rows are duplicated.
+  SELECT coalesce(jsonb_agg(g.canonical_url ORDER BY g.ordinal),'[]'::jsonb) INTO images
+  FROM listing_publication_private.managed_image_origins_v1(aid) g
+  JOIN listing_publication_private.attempts a ON a.id=aid
+  JOIN listing_publication_private.attempts origin ON origin.id=g.media_attempt_id AND origin.state='published' AND origin.identity_id=a.identity_id
+  JOIN listing_publication_private.objects o ON o.slot_id=g.slot_id AND o.attempt_id=g.media_attempt_id AND o.kind='web'
+  WHERE activity IS NOT NULL
+   AND EXISTS(SELECT 1 FROM public.listing_images li WHERE li.listing_id=p_listing_id::bigint
+    AND li.sort_order=g.ordinal AND li.user_id=a.actor_user_id
+    AND li.original_url=g.canonical_url AND li.medium_url=li.original_url AND li.thumb_url=li.original_url)
+   AND NOT EXISTS(SELECT 1 FROM listing_publication_private.cleanup c WHERE c.object_id=o.id);
+ END IF;
+ RETURN jsonb_build_object('receipt',listing_publication_private.final_receipt(aid),
+  'activity',activity,'images',coalesce(images,'[]'::jsonb));
+END $f$;
+
+
+-- Expand only the exact parent/child selection. Provider IO, verification,
+-- leases, retry limits and the accepted SOURCE deletion proof remain unchanged.
+CREATE OR REPLACE FUNCTION listing_publication_private.lock_multipart_cleanup_context(p_user uuid,p_identity uuid,p_attempt uuid,p_request uuid)
+RETURNS uuid LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET lock_timeout='2s' AS $f$
+DECLARE active_id uuid; a listing_publication_private.attempts%ROWTYPE;
+BEGIN
+ active_id:=listing_publication_private.lock_upload_service_actor(p_user,p_identity);
+ -- The current authorizer may be another active business member of the same
+ -- identity. The accepted identity lock above checks their actual access; the
+ -- original publisher remains unchanged in attempts/publication receipts.
+ SELECT * INTO a FROM listing_publication_private.attempts WHERE id=p_attempt
+  AND identity_id=active_id AND request_key=p_request FOR UPDATE;
+ IF NOT FOUND OR NOT EXISTS(SELECT 1 FROM listing_publication_private.multipart_attempts m WHERE m.attempt_id IN(SELECT attempt_id FROM listing_publication_private.managed_image_family_v1(a.id))) THEN
+  RAISE EXCEPTION 'publication_multipart_cleanup_unavailable' USING ERRCODE='42501'; END IF;
+ IF a.state NOT IN('cancelled','expired','deleted','published') THEN
+  RAISE EXCEPTION 'publication_multipart_cleanup_not_terminal' USING ERRCODE='55000'; END IF;
+ -- Parent -> child locking matches append and whole-listing deletion. A child
+ -- request has no descendants and retains the existing single-attempt behavior.
+ PERFORM 1 FROM listing_publication_private.attempts child
+ WHERE child.id IN(SELECT b.attempt_id FROM listing_publication_private.managed_image_additions_v1 b WHERE b.parent_attempt_id=a.id)
+ ORDER BY child.id FOR UPDATE;
+ RETURN a.id;
+END $f$;
+
+CREATE FUNCTION listing_publication_private.managed_image_cleanup_task_v2(p_parent uuid,p_request uuid,p_object uuid)
+RETURNS jsonb LANGUAGE sql SET search_path=pg_catalog,pg_temp AS $f$
+ SELECT CASE WHEN a.id=p_parent THEN jsonb_build_object('schema_version',1)
+  ELSE jsonb_build_object('schema_version',2,'attempt_id',p_parent,'request_key',p_request,
+   'origin_attempt_id',a.id,'origin_request_key',a.request_key) END||jsonb_build_object(
+  'object_id',c.object_id,'work_key',c.work_key,'bucket_id',c.bucket_id,'object_path',c.object_path,
+  'try_count',c.try_count,'lease_until_epoch',floor(extract(epoch FROM c.lease_until))::bigint)
+ FROM listing_publication_private.cleanup c JOIN listing_publication_private.objects o ON o.id=c.object_id
+ JOIN listing_publication_private.attempts a ON a.id=o.attempt_id
+ WHERE c.object_id=p_object AND o.attempt_id IN(SELECT attempt_id FROM listing_publication_private.managed_image_family_v1(p_parent));
+$f$;
+
+CREATE OR REPLACE FUNCTION public.claim_listing_published_source_cleanup_v1(
+ p_expected_user_id uuid,p_expected_identity_id uuid,p_attempt_id uuid,p_request_key uuid)
+RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER
+SET search_path=pg_catalog,pg_temp SET lock_timeout='2s' AS $f$
+DECLARE aid uuid; listing_id bigint; c listing_publication_private.cleanup%ROWTYPE;
+ t timestamptz:=clock_timestamp(); old_sub text:=current_setting('request.jwt.claim.sub',true);
+ old_claims text:=current_setting('request.jwt.claims',true);
+BEGIN
+ aid:=listing_publication_private.lock_multipart_cleanup_context(
+  p_expected_user_id,p_expected_identity_id,p_attempt_id,p_request_key);
+ IF current_setting('transaction_isolation')<>'read committed' THEN
+  RAISE EXCEPTION 'publication_read_committed_required' USING ERRCODE='25001'; END IF;
+ SELECT p.listing_id INTO listing_id FROM listing_publication_private.publications p
+ JOIN listing_publication_private.attempts a ON a.id=p.attempt_id
+ WHERE a.id=aid AND a.state='published' AND p.state='published' AND p.deleted_at IS NULL
+ FOR SHARE OF p;
+ IF NOT FOUND THEN RETURN NULL; END IF;
+
+ -- Auth already bound this user at the server boundary. The service-only actor
+ -- lock above verifies their current access. Reuse the accepted gallery checker
+ -- under that same user so original identity RLS also protects its public reads.
+ PERFORM set_config('request.jwt.claim.sub',p_expected_user_id::text,true);
+ PERFORM set_config('request.jwt.claims',jsonb_build_object('sub',p_expected_user_id)::text,true);
+ PERFORM listing_publication_private.lock_managed_listing_images_v1(
+  p_expected_user_id,p_expected_identity_id,listing_id,aid,false);
+ PERFORM set_config('request.jwt.claim.sub',coalesce(old_sub,''),true);
+ PERFORM set_config('request.jwt.claims',coalesce(old_claims,''),true);
+ -- A failed statement/subtransaction restores its temporary GUC changes too.
+ t:=clock_timestamp();
+
+ SELECT q.* INTO c FROM listing_publication_private.cleanup q
+ JOIN listing_publication_private.objects o ON o.id=q.object_id
+ JOIN listing_publication_private.slots s ON s.id=o.slot_id AND s.attempt_id=o.attempt_id
+ JOIN listing_publication_private.multipart_sessions m ON m.object_id=o.id
+ JOIN listing_publication_private.objects w ON w.attempt_id=o.attempt_id AND w.slot_id=o.slot_id AND w.kind='web'
+ JOIN listing_publication_private.web_images r ON r.attempt_id=w.attempt_id AND r.slot_id=w.slot_id
+ JOIN listing_publication_private.multipart_sessions wm ON wm.object_id=w.id
+ WHERE o.attempt_id IN(SELECT attempt_id FROM listing_publication_private.managed_image_family_v1(aid)) AND o.kind='source' AND o.dispatch_key IS NULL
+  AND q.reason='published_source' AND q.bucket_id=o.bucket_id AND q.object_path=o.object_path
+  AND m.provider_contract='supabase-s3-session-v1' AND m.state='completed'
+  AND m.completed_at IS NOT NULL AND m.verified_at IS NOT NULL AND m.problem IS NULL
+  AND m.storage_object_id IS NOT NULL AND m.storage_version IS NOT NULL
+  AND m.observed_sha256=encode(s.expected_source_sha256,'hex') AND m.observed_bytes=s.expected_source_bytes
+  AND listing_publication_private.object_cleanup_state(o.id)='pending'
+  AND NOT EXISTS(SELECT 1 FROM listing_publication_private.hosted_s3_multipart_uploads u
+   WHERE u.id=m.upload_id OR (u.bucket_id=o.bucket_id AND u.key=o.object_path))
+  AND NOT EXISTS(SELECT 1 FROM listing_publication_private.hosted_s3_multipart_uploads_parts up
+   WHERE up.upload_id=m.upload_id OR (up.bucket_id=o.bucket_id AND up.key=o.object_path))
+  AND r.state='ready' AND r.ready_id IS NOT NULL AND r.ready_at IS NOT NULL
+  AND wm.provider_contract='supabase-s3-session-v1' AND wm.state='completed'
+  AND wm.completed_at IS NOT NULL AND wm.verified_at IS NOT NULL AND wm.problem IS NULL
+  AND wm.observed_sha256=r.intent->>'web_sha256' AND wm.observed_bytes=(r.intent->>'web_bytes')::integer
+  AND EXISTS(SELECT 1 FROM listing_publication_private.hosted_storage_objects z
+   WHERE z.bucket_id=w.bucket_id AND z.name=w.object_path AND z.id=wm.storage_object_id AND z.version=wm.storage_version)
+  AND NOT EXISTS(SELECT 1 FROM listing_publication_private.hosted_storage_objects z
+   WHERE z.bucket_id=w.bucket_id AND z.name=w.object_path AND (z.id<>wm.storage_object_id OR z.version IS DISTINCT FROM wm.storage_version))
+  AND NOT EXISTS(SELECT 1 FROM listing_publication_private.cleanup wc WHERE wc.object_id=w.id)
+  AND ((q.state IN('pending','retry_wait') AND (q.not_before IS NULL OR q.not_before<=t))
+   OR (q.state='in_flight' AND q.lease_until<=t))
+ ORDER BY q.enqueued_at,q.object_id LIMIT 1 FOR UPDATE OF q SKIP LOCKED;
+ IF NOT FOUND THEN RETURN NULL; END IF;
+ IF c.try_count>=8 THEN
+  UPDATE listing_publication_private.cleanup SET state='needs_attention',last_error='lease_lost' WHERE object_id=c.object_id;
+  RETURN NULL;
+ END IF;
+ UPDATE listing_publication_private.cleanup SET state='in_flight',work_key=gen_random_uuid(),lease_until=t+interval '60 seconds',
+  try_count=try_count+1,not_before=NULL,last_error=NULL WHERE object_id=c.object_id RETURNING * INTO c;
+ RETURN listing_publication_private.managed_image_cleanup_task_v2(aid,p_request_key,c.object_id);
+END $f$;
+
+CREATE OR REPLACE FUNCTION public.record_listing_published_source_cleanup_v1(
+ p_expected_user_id uuid,p_expected_identity_id uuid,p_attempt_id uuid,p_request_key uuid,
+ p_object_id uuid,p_work_key uuid,p_result text)
+RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER
+SET search_path=pg_catalog,pg_temp SET lock_timeout='2s' AS $f$
+DECLARE aid uuid; result jsonb; cleanup_state text; session_problem text;
+BEGIN
+ aid:=listing_publication_private.lock_multipart_cleanup_context(
+  p_expected_user_id,p_expected_identity_id,p_attempt_id,p_request_key);
+ -- A listing may be removed after the external DELETE was dispatched. Preserve
+ -- the original published_source lineage; do not require mutable published state.
+ SELECT c.state,m.problem INTO cleanup_state,session_problem FROM listing_publication_private.objects o
+ JOIN listing_publication_private.cleanup c ON c.object_id=o.id
+ JOIN listing_publication_private.multipart_sessions m ON m.object_id=o.id
+ WHERE o.id=p_object_id AND o.attempt_id IN(SELECT attempt_id FROM listing_publication_private.managed_image_family_v1(aid)) AND o.kind='source' AND o.dispatch_key IS NULL
+  AND c.reason='published_source' AND c.bucket_id=o.bucket_id AND c.object_path=o.object_path
+  AND c.work_key=p_work_key AND m.state='completed' AND m.completed_at IS NOT NULL AND m.verified_at IS NOT NULL
+ FOR UPDATE OF c;
+ IF NOT FOUND THEN RAISE EXCEPTION 'publication_source_cleanup_binding' USING ERRCODE='42501'; END IF;
+ IF p_result='deleted' AND cleanup_state<>'deleted' AND session_problem IS NOT NULL THEN
+  RAISE EXCEPTION 'publication_source_cleanup_not_observed' USING ERRCODE='55000';
+ END IF;
+ -- A later diagnostic cannot undo an already accepted logical deletion. The
+ -- immutable verified lineage and current metadata absence remain mandatory.
+ -- The closed recorder owns lease expiry, idempotency, backoff and retry limits.
+ result:=public.record_listing_cleanup_v1(p_object_id,p_work_key,p_result);
+ IF p_result='deleted' AND listing_publication_private.hosted_completed_source_deleted_v1(p_object_id) IS DISTINCT FROM true THEN
+  RAISE EXCEPTION 'publication_source_cleanup_not_observed' USING ERRCODE='55000';
+ END IF;
+ -- Failure above rolls back the recorder update; no quota changes on an ACK alone.
+ RETURN result;
+END $f$;
+
+
+-- Immutable original or attached origin proves retired WEB identity even
+-- after parent deletion. No public-row absence alone releases retained quota.
+CREATE OR REPLACE FUNCTION listing_publication_private.hosted_retired_web_deleted_v1(p_object uuid)
+RETURNS boolean LANGUAGE sql SET search_path=pg_catalog,pg_temp AS $f$
+ SELECT coalesce((SELECT o.kind='web' AND o.dispatch_key IS NULL
+  AND c.reason='published_image_removed' AND c.state='deleted'
+  AND c.bucket_id=o.bucket_id AND c.object_path=o.object_path
+  AND o.bucket_id='listing-publication-private'
+  AND o.object_path='v1/'||o.attempt_id::text||'/'||s.id::text||'/web-v1.webp'
+  AND p.published_at IS NOT NULL AND p.confirmation_sha256 IS NOT NULL
+  AND w.state='ready' AND w.ready_id IS NOT NULL AND w.ready_at IS NOT NULL
+  AND (g.attached_ready_id IS NULL OR g.attached_ready_id=w.ready_id)
+  AND w.intent->>'source_sha256'=encode(s.expected_source_sha256,'hex')
+  AND w.intent->>'source_bytes'=s.expected_source_bytes::text
+  AND m.provider_contract='supabase-s3-session-v1' AND m.state='completed'
+  AND m.completed_at IS NOT NULL AND m.verified_at IS NOT NULL
+  AND m.storage_object_id IS NOT NULL AND m.storage_version IS NOT NULL
+  AND m.observed_sha256=w.intent->>'web_sha256'
+  AND m.observed_bytes::text=w.intent->>'web_bytes'
+  AND NOT EXISTS(SELECT 1 FROM listing_publication_private.hosted_storage_objects z
+   WHERE z.bucket_id=o.bucket_id AND z.name=o.object_path)
+  AND NOT EXISTS(SELECT 1 FROM listing_publication_private.hosted_s3_multipart_uploads u
+   WHERE u.id=m.upload_id OR (u.bucket_id=o.bucket_id AND u.key=o.object_path))
+  AND NOT EXISTS(SELECT 1 FROM listing_publication_private.hosted_s3_multipart_uploads_parts q
+   WHERE q.upload_id=m.upload_id OR (q.bucket_id=o.bucket_id AND q.key=o.object_path))
+ FROM listing_publication_private.objects o
+ JOIN listing_publication_private.slots s ON s.id=o.slot_id AND s.attempt_id=o.attempt_id
+ JOIN listing_publication_private.multipart_attempts a ON a.attempt_id=o.attempt_id
+ JOIN listing_publication_private.publications p ON p.attempt_id=listing_publication_private.managed_image_root_v1(o.attempt_id)
+ JOIN LATERAL listing_publication_private.managed_image_origins_v1(p.attempt_id) g
+  ON g.media_attempt_id=o.attempt_id AND g.slot_id=o.slot_id
+ JOIN listing_publication_private.web_images w ON w.slot_id=s.id AND w.attempt_id=o.attempt_id
+ JOIN listing_publication_private.multipart_sessions m ON m.object_id=o.id
+ JOIN listing_publication_private.cleanup c ON c.object_id=o.id
+ WHERE o.id=p_object),false);
+$f$;
+
+CREATE OR REPLACE FUNCTION public.claim_listing_retired_web_cleanup_v1(
+ p_expected_user_id uuid,p_expected_identity_id uuid,p_attempt_id uuid,p_request_key uuid)
+RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER
+SET search_path=pg_catalog,pg_temp SET lock_timeout='2s' AS $f$
+DECLARE aid uuid; c listing_publication_private.cleanup%ROWTYPE; t timestamptz;
+BEGIN
+ aid:=listing_publication_private.lock_retired_web_cleanup_context_v1(
+  p_expected_user_id,p_expected_identity_id,p_attempt_id,p_request_key);
+ t:=clock_timestamp();
+ SELECT q.* INTO c FROM listing_publication_private.cleanup q
+ JOIN listing_publication_private.objects o ON o.id=q.object_id
+ JOIN listing_publication_private.slots s ON s.id=o.slot_id AND s.attempt_id=o.attempt_id
+ JOIN listing_publication_private.web_images w ON w.slot_id=s.id AND w.attempt_id=o.attempt_id
+ JOIN listing_publication_private.multipart_sessions m ON m.object_id=o.id
+ WHERE o.attempt_id IN(SELECT attempt_id FROM listing_publication_private.managed_image_family_v1(aid)) AND o.kind='web' AND o.dispatch_key IS NULL
+  AND q.reason='published_image_removed' AND q.bucket_id=o.bucket_id AND q.object_path=o.object_path
+  AND w.state='ready' AND w.ready_id IS NOT NULL AND w.ready_at IS NOT NULL
+  AND w.intent->>'source_sha256'=encode(s.expected_source_sha256,'hex')
+  AND w.intent->>'source_bytes'=s.expected_source_bytes::text
+  AND m.provider_contract='supabase-s3-session-v1' AND m.state='completed'
+  AND m.completed_at IS NOT NULL AND m.verified_at IS NOT NULL AND m.problem IS NULL
+  AND m.storage_object_id IS NOT NULL AND m.storage_version IS NOT NULL
+  AND m.observed_sha256=w.intent->>'web_sha256' AND m.observed_bytes::text=w.intent->>'web_bytes'
+  AND listing_publication_private.object_cleanup_state(o.id)='pending'
+  AND NOT EXISTS(SELECT 1 FROM listing_publication_private.hosted_storage_objects z
+   WHERE z.bucket_id=o.bucket_id AND z.name=o.object_path
+    AND (z.id<>m.storage_object_id OR z.version IS DISTINCT FROM m.storage_version))
+  AND NOT EXISTS(SELECT 1 FROM listing_publication_private.hosted_s3_multipart_uploads u
+   WHERE u.id=m.upload_id OR (u.bucket_id=o.bucket_id AND u.key=o.object_path))
+  AND NOT EXISTS(SELECT 1 FROM listing_publication_private.hosted_s3_multipart_uploads_parts up
+   WHERE up.upload_id=m.upload_id OR (up.bucket_id=o.bucket_id AND up.key=o.object_path))
+  AND ((q.state IN('pending','retry_wait') AND (q.not_before IS NULL OR q.not_before<=t))
+   OR (q.state='in_flight' AND q.lease_until<=t))
+ ORDER BY q.enqueued_at,q.object_id LIMIT 1 FOR UPDATE OF q SKIP LOCKED;
+ IF NOT FOUND THEN RETURN NULL; END IF;
+ IF c.try_count>=8 THEN
+  UPDATE listing_publication_private.cleanup SET state='needs_attention',last_error='lease_lost' WHERE object_id=c.object_id;
+  RETURN NULL;
+ END IF;
+ UPDATE listing_publication_private.cleanup SET state='in_flight',work_key=gen_random_uuid(),lease_until=t+interval '60 seconds',
+  try_count=try_count+1,not_before=NULL,last_error=NULL WHERE object_id=c.object_id RETURNING * INTO c;
+ RETURN listing_publication_private.managed_image_cleanup_task_v2(aid,p_request_key,c.object_id);
+END $f$;
+
+CREATE OR REPLACE FUNCTION public.record_listing_retired_web_cleanup_v1(
+ p_expected_user_id uuid,p_expected_identity_id uuid,p_attempt_id uuid,p_request_key uuid,
+ p_object_id uuid,p_work_key uuid,p_result text)
+RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER
+SET search_path=pg_catalog,pg_temp SET lock_timeout='2s' AS $f$
+DECLARE aid uuid; result jsonb; cleanup_state text; session_problem text;
+BEGIN
+ aid:=listing_publication_private.lock_retired_web_cleanup_context_v1(
+  p_expected_user_id,p_expected_identity_id,p_attempt_id,p_request_key);
+ SELECT c.state,m.problem INTO cleanup_state,session_problem FROM listing_publication_private.objects o
+ JOIN listing_publication_private.cleanup c ON c.object_id=o.id
+ JOIN listing_publication_private.multipart_sessions m ON m.object_id=o.id
+ WHERE o.id=p_object_id AND o.attempt_id IN(SELECT attempt_id FROM listing_publication_private.managed_image_family_v1(aid)) AND o.kind='web' AND o.dispatch_key IS NULL
+  AND c.reason='published_image_removed' AND c.bucket_id=o.bucket_id AND c.object_path=o.object_path
+  AND c.work_key=p_work_key AND m.state='completed' AND m.completed_at IS NOT NULL AND m.verified_at IS NOT NULL
+ FOR UPDATE OF c;
+ IF NOT FOUND THEN RAISE EXCEPTION 'publication_retired_web_cleanup_binding' USING ERRCODE='42501'; END IF;
+ IF p_result='deleted' AND cleanup_state<>'deleted' AND session_problem IS NOT NULL THEN
+  RAISE EXCEPTION 'publication_retired_web_cleanup_not_observed' USING ERRCODE='55000'; END IF;
+ -- Reuse exact lease, idempotency, retry/backoff and eight-attempt limits.
+ result:=public.record_listing_cleanup_v1(p_object_id,p_work_key,p_result);
+ IF p_result='deleted' AND listing_publication_private.hosted_retired_web_deleted_v1(p_object_id) IS DISTINCT FROM true THEN
+  RAISE EXCEPTION 'publication_retired_web_cleanup_not_observed' USING ERRCODE='55000'; END IF;
+ -- The recorder update rolls back on failed proof. No release on an ACK alone.
+ RETURN result;
+END $f$;
+
+CREATE OR REPLACE FUNCTION public.get_my_listing_retired_web_cleanup_v1(
+ p_expected_user_id uuid,p_expected_identity_id uuid,p_attempt_id uuid,p_request_key uuid)
+RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER
+SET search_path=pg_catalog,pg_temp SET lock_timeout='2s' AS $f$
+DECLARE aid uuid;
+BEGIN
+ PERFORM listing_publication_private.require_managed_image_actor_v1(p_expected_user_id,p_expected_identity_id);
+ SELECT a.id INTO aid FROM listing_publication_private.attempts a
+ JOIN listing_publication_private.publications p ON p.attempt_id=a.id
+ WHERE a.id=p_attempt_id AND a.identity_id=p_expected_identity_id AND a.request_key=p_request_key
+  AND ((a.state='published' AND p.state='published' AND p.deleted_at IS NULL)
+   OR (a.state='deleted' AND p.state='deleting' AND p.deleted_at IS NOT NULL)) FOR SHARE OF a;
+ IF NOT FOUND THEN RAISE EXCEPTION 'publication_retired_web_cleanup_unavailable' USING ERRCODE='42501'; END IF;
+ -- Separate derived status: no Storage IO, no mutation, no second balance and
+ -- no dependence on a perfect gallery. Published SOURCE receipt stays unchanged.
+ RETURN (SELECT jsonb_build_object('schema_version',1,'attempt_id',aid,'request_key',p_request_key,
+  'files_remaining',count(*),
+  'needs_attention',count(*) FILTER(WHERE c.state IN('needs_attention','blocked_write_settlement') OR m.problem IS NOT NULL),
+  'reserved_bytes',coalesce(sum(o.reserved_bytes),0))
+ FROM listing_publication_private.objects o JOIN listing_publication_private.cleanup c ON c.object_id=o.id
+ LEFT JOIN listing_publication_private.multipart_sessions m ON m.object_id=o.id
+ WHERE o.attempt_id IN(SELECT attempt_id FROM listing_publication_private.managed_image_family_v1(aid)) AND o.kind='web' AND c.reason='published_image_removed'
+  AND c.bucket_id=o.bucket_id AND c.object_path=o.object_path
+  AND listing_publication_private.multipart_object_fully_deleted(o.id) IS DISTINCT FROM true);
+END $f$;
+
+
+-- The existing terminal multipart worker receives a bounded exact family page.
+-- Counts cover all eligible retained work; settled objects leave the next page.
+CREATE OR REPLACE FUNCTION public.prepare_listing_multipart_cleanup_v2(
+ p_expected_user_id uuid,p_expected_identity_id uuid,p_attempt_id uuid,p_request_key uuid)
+RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,public,pg_temp SET lock_timeout='2s' AS $f$
+DECLARE aid uuid; has_children boolean;
+BEGIN
+ aid:=listing_publication_private.lock_multipart_cleanup_context(p_expected_user_id,p_expected_identity_id,p_attempt_id,p_request_key);
+ SELECT EXISTS(SELECT 1 FROM listing_publication_private.managed_image_additions_v1 WHERE parent_attempt_id=aid) INTO has_children;
+ INSERT INTO listing_publication_private.multipart_abort_observations(session_id)
+ SELECT m.id FROM listing_publication_private.multipart_sessions m JOIN listing_publication_private.objects o ON o.id=m.object_id
+ JOIN listing_publication_private.attempts a ON a.id=o.attempt_id
+ WHERE a.id IN(SELECT attempt_id FROM listing_publication_private.managed_image_family_v1(aid))
+  AND a.state IN('cancelled','expired','deleted') AND m.completed_at IS NULL
+  AND m.upload_id IS NOT NULL AND m.create_received_at IS NOT NULL
+  AND NOT EXISTS(SELECT 1 FROM listing_publication_private.multipart_abort_observations b WHERE b.session_id=m.id);
+ UPDATE listing_publication_private.cleanup c SET state='pending' FROM listing_publication_private.objects o
+ WHERE c.object_id=o.id AND o.attempt_id IN(SELECT attempt_id FROM listing_publication_private.managed_image_family_v1(aid))
+  AND c.state='blocked_write_settlement' AND listing_publication_private.object_cleanup_state(o.id)='pending';
+ RETURN (WITH eligible AS MATERIALIZED (
+  SELECT o.id AS object_id,a.id AS origin_attempt_id,a.request_key AS origin_request_key,m.id AS session_id,
+   m.completed_at,m.problem,c.state AS cleanup_state,b.abort_key,b.session_id AS abort_session,b.observed_at,
+   r.session_id AS auxiliary_session,listing_publication_private.multipart_object_fully_deleted(o.id) AS fully_deleted
+  FROM listing_publication_private.objects o JOIN listing_publication_private.attempts a ON a.id=o.attempt_id
+  LEFT JOIN listing_publication_private.cleanup c ON c.object_id=o.id
+  LEFT JOIN listing_publication_private.multipart_sessions m ON m.object_id=o.id
+  LEFT JOIN listing_publication_private.multipart_abort_observations b ON b.session_id=m.id
+  LEFT JOIN listing_publication_private.multipart_auxiliary_receipts r ON r.session_id=m.id
+  WHERE a.id IN(SELECT attempt_id FROM listing_publication_private.managed_image_family_v1(aid))
+   AND (a.state IN('cancelled','expired','deleted') OR (a.state='published' AND o.kind='source')))
+ SELECT jsonb_build_object('schema_version',CASE WHEN has_children THEN 4 ELSE 3 END,'attempt_id',aid,'request_key',p_request_key,
+  'files_remaining',count(*) FILTER(WHERE NOT fully_deleted),
+  'unresolved',count(*) FILTER(WHERE session_id IS NOT NULL AND completed_at IS NULL AND observed_at IS NULL),
+  'needs_attention',count(*) FILTER(WHERE NOT fully_deleted AND (cleanup_state='needs_attention' OR problem IS NOT NULL)),
+  'blocked',count(*) FILTER(WHERE NOT fully_deleted AND cleanup_state='blocked_write_settlement'),
+  'auxiliary_pending',count(*) FILTER(WHERE NOT fully_deleted AND session_id IS NOT NULL AND auxiliary_session IS NULL),
+  'items',(SELECT coalesce(jsonb_agg((CASE WHEN has_children THEN
+    jsonb_build_object('origin_attempt_id',page.origin_attempt_id,'origin_request_key',page.origin_request_key)
+    ELSE '{}'::jsonb END)||jsonb_build_object('object_id',page.object_id,
+    'session',CASE WHEN page.session_id IS NULL THEN NULL ELSE listing_publication_private.multipart_binding(page.object_id) END,
+    'abort_key',page.abort_key,'abort_allowed',page.abort_session IS NOT NULL AND page.observed_at IS NULL,
+    'abort_observed',page.observed_at IS NOT NULL,'auxiliary_observed',page.auxiliary_session IS NOT NULL)
+    ORDER BY page.object_id),'[]'::jsonb)
+   FROM (SELECT * FROM eligible WHERE NOT has_children OR NOT fully_deleted ORDER BY object_id LIMIT 20) page)) FROM eligible);
+END $f$;
+
+CREATE OR REPLACE FUNCTION public.claim_listing_cleanup_for_attempt_v2(
+ p_expected_user_id uuid,p_expected_identity_id uuid,p_attempt_id uuid,p_request_key uuid)
+RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,public,pg_temp SET lock_timeout='2s' AS $f$
+DECLARE aid uuid; c listing_publication_private.cleanup%ROWTYPE; t timestamptz:=clock_timestamp();
+BEGIN
+ aid:=listing_publication_private.lock_multipart_cleanup_context(p_expected_user_id,p_expected_identity_id,p_attempt_id,p_request_key);
+ IF current_setting('transaction_isolation')<>'read committed' THEN
+  RAISE EXCEPTION 'publication_read_committed_required' USING ERRCODE='25001'; END IF;
+ SELECT q.* INTO c FROM listing_publication_private.cleanup q
+ JOIN listing_publication_private.objects o ON o.id=q.object_id JOIN listing_publication_private.attempts a ON a.id=o.attempt_id
+ WHERE a.id IN(SELECT attempt_id FROM listing_publication_private.managed_image_family_v1(aid))
+  AND (a.state IN('cancelled','expired','deleted') OR (a.state='published' AND o.kind='source'))
+  AND q.bucket_id=o.bucket_id AND q.object_path=o.object_path AND listing_publication_private.object_cleanup_state(o.id)='pending'
+  AND ((q.state IN('pending','retry_wait') AND (q.not_before IS NULL OR q.not_before<=t)) OR (q.state='in_flight' AND q.lease_until<=t))
+ ORDER BY q.enqueued_at,q.object_id LIMIT 1 FOR UPDATE OF q SKIP LOCKED;
+ IF NOT FOUND THEN RETURN NULL; END IF;
+ IF c.try_count>=8 THEN
+  UPDATE listing_publication_private.cleanup SET state='needs_attention',last_error='lease_lost' WHERE object_id=c.object_id;
+  RETURN NULL;
+ END IF;
+ UPDATE listing_publication_private.cleanup SET state='in_flight',work_key=gen_random_uuid(),lease_until=t+interval '60 seconds',
+  try_count=try_count+1,not_before=NULL,last_error=NULL WHERE object_id=c.object_id RETURNING * INTO c;
+ RETURN listing_publication_private.managed_image_cleanup_task_v2(aid,p_request_key,c.object_id);
+END $f$;
+
+
+-- Exactly four browser RPCs use the existing closed final writer.
+GRANT CREATE ON SCHEMA public TO selqiro_listing_final_writer_v1;
+ALTER FUNCTION public.get_my_managed_listing_image_addition_v1(uuid,uuid,bigint,uuid,uuid) OWNER TO selqiro_listing_final_writer_v1;
+ALTER FUNCTION public.prepare_my_managed_listing_image_addition_v1(uuid,uuid,bigint,uuid,uuid,text,jsonb) OWNER TO selqiro_listing_final_writer_v1;
+ALTER FUNCTION public.cancel_my_managed_listing_image_addition_v1(uuid,uuid,bigint,uuid,uuid) OWNER TO selqiro_listing_final_writer_v1;
+ALTER FUNCTION public.append_my_managed_listing_image_v1(uuid,uuid,bigint,uuid,uuid,uuid,uuid,text) OWNER TO selqiro_listing_final_writer_v1;
+REVOKE CREATE ON SCHEMA public FROM selqiro_listing_final_writer_v1;
+REVOKE ALL ON FUNCTION listing_publication_private.protect_managed_image_addition_v1(),
+ listing_publication_private.managed_image_gallery_projection_v1(jsonb,boolean),
+ listing_publication_private.managed_image_family_v1(uuid),
+ listing_publication_private.managed_image_origins_v1(uuid),
+ listing_publication_private.managed_image_root_v1(uuid),
+ listing_publication_private.managed_image_addition_receipt_v1(uuid),
+ listing_publication_private.allocate_managed_publication_attempt_v1(uuid,uuid,uuid,bytea,jsonb,jsonb),
+ listing_publication_private.normalize_managed_image_addition_v1(jsonb),
+ listing_publication_private.require_managed_image_policies_v1(),
+ listing_publication_private.managed_image_addition_journey_v1(uuid,uuid,uuid,boolean),
+ listing_publication_private.lock_managed_image_addition_parent_v1(uuid,uuid,bigint,uuid,boolean),
+ listing_publication_private.managed_image_addition_status_v1(uuid,uuid,bigint,uuid,uuid),
+ public.get_my_managed_listing_image_addition_v1(uuid,uuid,bigint,uuid,uuid),
+ public.prepare_my_managed_listing_image_addition_v1(uuid,uuid,bigint,uuid,uuid,text,jsonb),
+ public.cancel_my_managed_listing_image_addition_v1(uuid,uuid,bigint,uuid,uuid),
+ public.append_my_managed_listing_image_v1(uuid,uuid,bigint,uuid,uuid,uuid,uuid,text),
+ listing_publication_private.assert_ordinary_publication_v1(uuid),
+ listing_publication_private.managed_image_cleanup_task_v2(uuid,uuid,uuid)
+ FROM PUBLIC,anon,authenticated,service_role;
+GRANT EXECUTE ON FUNCTION listing_publication_private.protect_managed_image_addition_v1(),
+ listing_publication_private.managed_image_gallery_projection_v1(jsonb,boolean),
+ listing_publication_private.managed_image_family_v1(uuid),
+ listing_publication_private.managed_image_origins_v1(uuid),
+ listing_publication_private.managed_image_root_v1(uuid),
+ listing_publication_private.managed_image_addition_receipt_v1(uuid),
+ listing_publication_private.allocate_managed_publication_attempt_v1(uuid,uuid,uuid,bytea,jsonb,jsonb),
+ listing_publication_private.normalize_managed_image_addition_v1(jsonb),
+ listing_publication_private.require_managed_image_policies_v1(),
+ listing_publication_private.managed_image_addition_journey_v1(uuid,uuid,uuid,boolean),
+ listing_publication_private.lock_managed_image_addition_parent_v1(uuid,uuid,bigint,uuid,boolean),
+ listing_publication_private.managed_image_addition_status_v1(uuid,uuid,bigint,uuid,uuid),
+ listing_publication_private.assert_ordinary_publication_v1(uuid),
+ listing_publication_private.managed_image_cleanup_task_v2(uuid,uuid,uuid)
+ TO selqiro_listing_final_writer_v1;
+GRANT EXECUTE ON FUNCTION public.get_my_managed_listing_image_addition_v1(uuid,uuid,bigint,uuid,uuid),
+ public.prepare_my_managed_listing_image_addition_v1(uuid,uuid,bigint,uuid,uuid,text,jsonb),
+ public.cancel_my_managed_listing_image_addition_v1(uuid,uuid,bigint,uuid,uuid),
+ public.append_my_managed_listing_image_v1(uuid,uuid,bigint,uuid,uuid,uuid,uuid,text)
+ TO authenticated;

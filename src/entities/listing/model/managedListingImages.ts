@@ -1,7 +1,11 @@
 export type ManagedListingImagesKey = Readonly<{
   userId: string; identityId: string; listingId: string; attemptId: string;
 }>;
-export type ManagedListingImage = Readonly<{ ordinal: number; url: string; isPrimary: boolean }>;
+export type ManagedListingImage = Readonly<{
+  ordinal: number; mediaAttemptId: string; mediaOrdinal: number; url: string; isPrimary: boolean;
+}>;
+export const MANAGED_LISTING_IMAGE_LIMIT = 10;
+export const MAX_MANAGED_IMAGE_ORDINAL = 2147483647;
 export type ManagedListingImagesSnapshot = Readonly<{
   key: ManagedListingImagesKey; revision: string; images: readonly ManagedListingImage[];
 }>;
@@ -56,19 +60,28 @@ export function bindManagedListingImagesKey(value: ManagedListingImagesKey): Man
   return Object.freeze({ userId: row.userId, identityId: row.identityId, listingId: row.listingId, attemptId: row.attemptId });
 }
 
-function parseImages(value: unknown, key: ManagedListingImagesKey, wire: boolean,
+function parseImages(value: unknown, key: ManagedListingImagesKey, wire: 1 | 2 | false,
     problem: ManagedListingImagesProblem = "unknown"): readonly ManagedListingImage[] {
-  ensure(Array.isArray(value) && value.length <= 10, problem);
+  ensure(Array.isArray(value) && value.length <= MANAGED_LISTING_IMAGE_LIMIT, problem);
   let previous = -1;
   const images = Array.from(value, item => {
-    const row = record(item, ["ordinal", "url", wire ? "is_primary" : "isPrimary"], problem);
-    // Active membership may have gaps. Original ordinals and URLs never change.
-    ensure(Number.isInteger(row.ordinal) && Number(row.ordinal) > previous && Number(row.ordinal) <= 9
-      && row.url === `/api/v2/listing-media/${key.attemptId}/${row.ordinal}`
+    const row = record(item, wire === 1 ? ["ordinal", "url", "is_primary"]
+      : ["ordinal", "url", wire ? "is_primary" : "isPrimary",
+        wire ? "media_attempt_id" : "mediaAttemptId", wire ? "media_ordinal" : "mediaOrdinal"], problem);
+    const mediaAttemptId = wire === 1 ? key.attemptId : row[wire ? "media_attempt_id" : "mediaAttemptId"];
+    const mediaOrdinal = wire === 1 ? row.ordinal : row[wire ? "media_ordinal" : "mediaOrdinal"];
+    // Gallery ordinals never move or get reused. A later photo has its own
+    // immutable source attempt/slot, independent of its position in this gallery.
+    ensure(Number.isInteger(row.ordinal) && Number(row.ordinal) > previous && Number(row.ordinal) <= MAX_MANAGED_IMAGE_ORDINAL
+      && uuid(mediaAttemptId) && Number.isInteger(mediaOrdinal) && Number(mediaOrdinal) >= 0 && Number(mediaOrdinal) <= 9
+      && (mediaAttemptId === key.attemptId ? row.ordinal === mediaOrdinal : mediaOrdinal === 0)
+      && row.url === `/api/v2/listing-media/${mediaAttemptId}/${mediaOrdinal}`
       && typeof row[wire ? "is_primary" : "isPrimary"] === "boolean", problem);
     previous = Number(row.ordinal);
-    return Object.freeze({ ordinal: previous, url: row.url as string, isPrimary: row[wire ? "is_primary" : "isPrimary"] as boolean });
+    return Object.freeze({ordinal: previous, mediaAttemptId: mediaAttemptId as string, mediaOrdinal: Number(mediaOrdinal),
+      url: row.url as string, isPrimary: row[wire ? "is_primary" : "isPrimary"] as boolean});
   });
+  ensure(new Set(images.map(image => image.url)).size === images.length, problem);
   ensure(images.length === 0 || images.filter(image => image.isPrimary).length === 1, problem);
   return Object.freeze(images);
 }
@@ -77,12 +90,12 @@ function parseImages(value: unknown, key: ManagedListingImagesKey, wire: boolean
 export function parseManagedListingImages(value: unknown, expected: ManagedListingImagesKey): ManagedListingImagesSnapshot {
   const key = bindManagedListingImagesKey(expected);
   const row = record(value, READ_FIELDS);
-  ensure(row.schema_version === 1 && row.actor_user_id === key.userId && row.identity_id === key.identityId
+  ensure((row.schema_version === 1 || row.schema_version === 2) && row.actor_user_id === key.userId && row.identity_id === key.identityId
     && row.listing_id === key.listingId && row.attempt_id === key.attemptId && unsigned(row.revision));
-  return Object.freeze({ key, revision: row.revision, images: parseImages(row.images, key, true) });
+  return Object.freeze({ key, revision: row.revision, images: parseImages(row.images, key, row.schema_version as 1 | 2) });
 }
 
-function bindSnapshot(value: ManagedListingImagesSnapshot, problem: ManagedListingImagesProblem): ManagedListingImagesSnapshot {
+export function bindManagedListingImagesSnapshot(value: ManagedListingImagesSnapshot, problem: ManagedListingImagesProblem = "invalid"): ManagedListingImagesSnapshot {
   const raw = record(value, ["key", "revision", "images"], problem);
   const key = bindManagedListingImagesKey(raw.key as ManagedListingImagesKey);
   ensure(unsigned(raw.revision), problem);
@@ -92,10 +105,10 @@ function bindSnapshot(value: ManagedListingImagesSnapshot, problem: ManagedListi
 function bindCommand(value: ManagedListingPrimaryCommand, remove: boolean): ManagedListingPrimaryCommand {
   const row = record(value, ["key", "baseline", "ordinal"], "invalid");
   const key = bindManagedListingImagesKey(row.key as ManagedListingImagesKey);
-  const baseline = bindSnapshot(row.baseline as ManagedListingImagesSnapshot, "invalid");
+  const baseline = bindManagedListingImagesSnapshot(row.baseline as ManagedListingImagesSnapshot, "invalid");
   ensure(sameKey(key, baseline.key), "invalid");
   const selected = baseline.images.find(image => image.ordinal === row.ordinal);
-  ensure(Number.isInteger(row.ordinal) && Number(row.ordinal) >= 0 && Number(row.ordinal) <= 9
+  ensure(Number.isInteger(row.ordinal) && Number(row.ordinal) >= 0 && Number(row.ordinal) <= MAX_MANAGED_IMAGE_ORDINAL
     && selected, "invalid");
   ensure(baseline.revision !== String(MAX_BIGINT) || !remove && selected.isPrimary, "invalid");
   ensure(!remove || baseline.images.length >= 2 && !selected.isPrimary, "invalid");
@@ -150,13 +163,20 @@ export function parseManagedListingRemoveSaved(value: unknown, input: ManagedLis
   return Object.freeze({snapshot, changed: true});
 }
 
-/** Readback can advance to a newer primary/removal, never restore a retired object or an older revision. */
+/** A later authorized read may include additions; existing object identities cannot change. */
 export function confirmManagedListingImagesReadback(acknowledged: ManagedListingImagesSnapshot,
     observed: ManagedListingImagesSnapshot): ManagedListingImagesSnapshot {
-  const saved = bindSnapshot(acknowledged, "unknown"), fresh = bindSnapshot(observed, "unknown");
+  const saved = bindManagedListingImagesSnapshot(acknowledged, "unknown"), fresh = bindManagedListingImagesSnapshot(observed, "unknown");
   ensure(sameKey(saved.key, fresh.key) && BigInt(fresh.revision) >= BigInt(saved.revision)
     && (saved.images.length === 0 || fresh.images.length > 0));
-  ensure(fresh.images.every(image => saved.images.some(previous => previous.ordinal === image.ordinal && previous.url === image.url)));
+  const highest = Math.max(-1, ...saved.images.map(image => image.ordinal));
+  ensure(fresh.images.every(image => {
+    const previous = saved.images.find(item => item.ordinal === image.ordinal);
+    if (previous) return image.url === previous.url && image.mediaAttemptId === previous.mediaAttemptId
+      && image.mediaOrdinal === previous.mediaOrdinal;
+    return BigInt(fresh.revision) > BigInt(saved.revision) && image.ordinal > highest
+      && image.mediaAttemptId !== saved.key.attemptId;
+  }));
   if (fresh.revision === saved.revision) ensure(fresh.images.length === saved.images.length
     && fresh.images.every((image, index) => image.ordinal === saved.images[index].ordinal && image.isPrimary === saved.images[index].isPrimary));
   return fresh;

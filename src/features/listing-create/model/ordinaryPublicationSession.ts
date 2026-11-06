@@ -1,3 +1,4 @@
+import { completePublicationImage, publicationImageUploadOrigin, type PublicationImageJournal } from "../../../entities/listing/api/completePublicationImage";
 import type { ListingCreationInput } from "../../../entities/listing/model/listingCreationInput";
 import { PRIVATE_UPLOAD, isUploadUuid, uploadRecord } from "../../../entities/listing/model/privatePublicationUpload";
 import { publicationJourney, publicationSnapshot, type PublicationActor, type PublicationSnapshot } from "../../../entities/listing/model/publicationJourney";
@@ -8,7 +9,7 @@ export type PublicationView = Readonly<{
   phase: "editing" | "busy" | "resume" | "needs_files" | "unknown" | "needs_attention" | "published" | "closed";
   message: string; snapshot: PublicationSnapshot | null; receipt: FinalReceipt | null;
 }>;
-export type JourneyJournal = {version: 1; requestKey: string; dispatched: string[]};
+export type JourneyJournal = PublicationImageJournal;
 export type PublicationSessionDeps = {
   actor: PublicationActor; projectOrigin: string;
   /** Trusted application configuration, never an origin learned from an upload response. */
@@ -35,11 +36,7 @@ export class OrdinaryPublicationSession {
   private readonly uploadOrigin: string;
   view: PublicationView = initial();
   constructor(deps: PublicationSessionDeps) {
-    const uploadOrigin = deps.storageOrigin === undefined ? deps.projectOrigin : deps.storageOrigin;
-    const project = /^https:\/\/([a-z]{20})\.supabase\.co$/.exec(deps.projectOrigin);
-    if (uploadOrigin !== deps.projectOrigin
-        && (!project || uploadOrigin !== `https://${project[1]}.storage.supabase.co`)) throw new Error("configuration");
-    this.uploadOrigin = uploadOrigin;
+    this.uploadOrigin = publicationImageUploadOrigin(deps.projectOrigin, deps.storageOrigin);
     this.deps = {...deps, actor: Object.freeze({...deps.actor})};
   }
   subscribe(fn: (view: PublicationView) => void) { this.listener = fn; fn(this.view); return () => { this.listener = () => {}; }; }
@@ -158,38 +155,17 @@ export class OrdinaryPublicationSession {
   private async complete(g: number, journal: JourneyJournal, s: PublicationSnapshot) {
     if (s.state !== "open" || !s.payload) { await this.status(g, journal); return; }
     for (const slot of s.slots) {
-      const cmd = {...this.args(journal), attemptId: s.attempt_id, slotId: slot.slot_id, requestKey: slot.client_file_id};
       this.change({message: `Kontrollin pilti ${slot.ordinal + 1}/${s.slots.length}…`});
-      const dispatched = this.journal().dispatched.includes(slot.slot_id);
-      let result = uploadRecord(await this.deps.request(dispatched ? "image-verify" : "image-prepare", cmd, this.abort.signal));
+      await completePublicationImage({actor: this.deps.actor, attemptId: s.attempt_id,
+        requestKey: journal.requestKey, slot, uploadOrigin: this.uploadOrigin, signal: this.abort.signal}, {
+        readJournal: () => this.journal(), writeJournal: value => this.deps.writeJournal(value),
+        readBytes: () => this.files.get(slot.client_file_id),
+        request: (action, body, signal) => this.deps.request(action, body, signal),
+        putPart: (url, headers, bytes, signal) => this.deps.putPart(url, headers, bytes, signal),
+        checkContext: () => this.checkGeneration(g),
+        onUpload: () => this.change({message: `Saadan pilti ${slot.ordinal + 1}/${s.slots.length}…`}),
+      });
       this.checkGeneration(g);
-      if (result.kind === "part" && !dispatched) {
-        const bytes = this.files.get(slot.client_file_id); if (!bytes) throw new Error("files_required");
-        const u = uploadRecord(result.upload, ["url", "headers", "expiresAt", "expectedBytes", "sha256"]);
-        const url = new URL(String(u.url));
-        if (url.origin !== this.uploadOrigin || url.username || url.password || url.hash
-            || !["/storage/v1/s3", "/s3"].some(prefix => url.pathname === `${prefix}/listing-publication-private/v1/${s.attempt_id}/${slot.slot_id}/source.upload`)
-            || url.searchParams.get("partNumber") !== "1" || url.searchParams.getAll("partNumber").length !== 1
-            || !url.searchParams.get("uploadId") || url.searchParams.getAll("uploadId").length !== 1
-            || result.attemptId !== s.attempt_id || result.slotId !== slot.slot_id
-            || u.expectedBytes !== slot.expected_bytes || u.sha256 !== slot.expected_sha256
-            || !Number.isSafeInteger(u.expiresAt) || Number(u.expiresAt) <= Date.now()) throw new Error("response");
-        const headers = uploadRecord(u.headers, ["content-type"]);
-        if (headers["content-type"] !== "application/octet-stream") throw new Error("response");
-        const latest = this.journal(); if (latest.requestKey !== journal.requestKey || latest.dispatched.includes(slot.slot_id)) throw new Error("context_changed");
-        this.deps.writeJournal({...latest, dispatched: [...latest.dispatched, slot.slot_id]});
-        this.checkGeneration(g);
-        this.change({message: `Saadan pilti ${slot.ordinal + 1}/${s.slots.length}…`});
-        await this.deps.putPart(url.href, {"content-type": "application/octet-stream"}, bytes, this.abort.signal);
-        this.checkGeneration(g);
-        result = uploadRecord(await this.deps.request("image-verify", cmd, this.abort.signal)); this.checkGeneration(g);
-      }
-      if (result.kind !== "ready") throw new Error(result.kind === "needs_attention"
-        ? ["image_rejected", "image_processor_unavailable"].includes(String(result.reason)) ? String(result.reason) : "needs_attention"
-        : "outcome_unknown");
-      const r = uploadRecord(result.receipt);
-      if (r.schema_version !== 1 || r.attempt_id !== s.attempt_id || r.slot_id !== slot.slot_id
-        || !isUploadUuid(r.receipt_id) || !isUploadUuid(r.job_id) || r.pipeline_version !== "listing-web-v1") throw new Error("response");
     }
     this.change({message: "Kinnitan avaldamist…"});
     const result = await this.deps.request("publish", {...this.args(journal), attemptId: s.attempt_id, expectedPrice: s.payload.price}, this.abort.signal);

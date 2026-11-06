@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "inputs": {
+    "supabase/repairs/20261106_retired_web_cleanup/tests/fixture.mjs": "1727e262fde32191f0b483b7acb5ebe868d84900ce05599c6ec0e1dc2d90e811",
+    "supabase/repairs/20261106_retired_web_cleanup/changes.sql": "6f55e6a3e390cc00838fb4a98b7c085d6d6e3170e4e935f75be747fcf5608cad",
+    "supabase/releases/listing-publication-hosted-preview-v1/00_preconditions.sql": "69c6005ed959afeb22bd1db3e597f23d17e7dfe86c968a35f512f94f34c995c8",
+    "supabase/releases/listing-publication-hosted-preview-v1/10_price_core.sql": "9f843033bed721ab73d8cb01d3750e4dacc417dc0ddf84b92c9845745bb75dad",
+    "supabase/releases/listing-publication-hosted-preview-v1/20_publication_core.sql": "f1c56c6ba381ceb5ab1d120092f676964762829ad63c5201a6c6b809c419f062",
+    "supabase/releases/listing-publication-hosted-preview-v1/30_multipart_and_journey.sql": "d0f8c44a557c1b03df8ceb23c5069cf94a8560a2e3faaa3b0a56d701d0858765",
+    "supabase/releases/listing-publication-hosted-preview-v1/60_preview_authority.sql": "bee78747b8932504c6960b9dba9b5b6673d06c5876dc76508b2322e48f6789bb",
+    "supabase/releases/listing-publication-hosted-preview-v1/release.sql": "974dd6acb246b275acb593688aa14449cd42e80939101086d742ee5c4c5a4c3e",
+    "supabase/migrations/20260822130000_add_publication_policy_acceptance_foundation.sql": "92197bafc2dc79494a9db48bdff072384680dc7c9fbbc91c507b9f3a02104431",
+    "supabase/migrations/20260722173530_baseline_20260722.sql": "7ca065f92f01c0f38ada5f5a50d2a0fc5b716f5291d1525d398023b7db59da3f"
+  }
+}

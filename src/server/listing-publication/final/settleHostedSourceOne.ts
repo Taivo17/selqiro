@@ -4,6 +4,7 @@ import { isUploadUuid } from "../../../entities/listing/model/privatePublication
 import type { MultipartSettlementCommand, MultipartSettlementResult } from "../multipart/multipartPublicationImages";
 import { createCleanupOne, serviceConfig, type WorkerConfig } from "./cleanupOne";
 import { fail, row } from "./finalContract";
+import { cleanupFamilyTask } from "./cleanupFamilyTask";
 
 type HostedCleanupConfig = WorkerConfig & Readonly<{ publicKey: string }>;
 const source = {claim: "claim_listing_published_source_cleanup_v1",
@@ -52,12 +53,7 @@ function createScopedHostedCleanup(config: HostedCleanupConfig, fetcher: UploadF
           operations = retiredWeb;
           task = await rpc(retiredWeb.claim, scope, callSignal);
         }
-        if (task !== null) {
-          const path = row(task).object_path;
-          if (typeof path !== "string" || !path.startsWith("v1/" + cmd.attemptId + "/")
-              || !path.endsWith(operations.suffix)) return fail("response");
-        }
-        return task;
+        return cleanupFamilyTask(task, cmd, operations.suffix);
       },
       record: (objectId, workKey, outcome, callSignal) => rpc(operations.record, {
         ...scope, p_object_id: objectId, p_work_key: workKey, p_result: outcome,

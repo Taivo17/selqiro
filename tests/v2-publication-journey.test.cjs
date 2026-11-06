@@ -237,7 +237,7 @@ test('cancel retains the same durable request key even when prepare has no confi
   assert.throws(delayedPrepare, /refused/); assert.equal(h.backend.snapshot, null);
 });
 
-for (const phase of ['digest', 'prepare', 'image-prepare', 'publish']) {
+for (const phase of ['digest', 'prepare', 'image-prepare', 'image-verify', 'publish']) {
   test(`identity invalidation while ${phase} awaits prevents all late UI updates and follow-on writes`, async () => {
     const gate = deferred(), entered = deferred();
     const h = harness({ digest: phase === 'digest' ? async () => { entered.resolve(); await gate.promise; } : undefined,

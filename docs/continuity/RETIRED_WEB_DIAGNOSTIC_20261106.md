@@ -1,5 +1,24 @@
 # Eemaldatud WEB-foto koristus — raport ja minimaalne parandus
 
+## 06.11.2026 — kasutaja kinnitas nähtava koristuskatse õnnestumist
+
+Kasutaja: „nüüd peaks olema korras, koristuspaneel kadus”.
+`Screenshot 2026-11-06 at 21.15.34.png` näitab kuulutuse 201 eemaldatud fotode
+paneelis veel üht ootel faili. `Screenshot 2026-11-06 at 21.15.58.png` näitab
+sama lehte paneelita. Identiteet on Taivo Garaaz, mõlemad alles jäetud fotod on
+nähtavad ja Mercedes on endiselt põhipilt. Failinimede kellaaegu ei käsitleta
+sõltumatult mõõdetud serveriajana.
+
+See kasutuskatse on vastu võetud. Täpset paranduse commit’i, Verceli Ready-rida
+või lõpetamisjärgset SQL-raportit kasutaja selle kinnitusega ei esitanud.
+Seetõttu ei esitata pildilt kadunud paneeli eraldi loetud nulli, deleted-kviitungi
+või 4 MiB reservivabastuse tõendina. Samuti ei kinnita see automaatset taustatööd.
+Uut paigaldust, koristusvajutust ega diagnostikat vastuvõtu kordamiseks ei tehta.
+
+Alljärgnev 18:30 raport, diagnoos ja selle koostamishetke ootel-seis säilivad
+paranduseelse ajaloona. Praegune tööjärg on CURRENT_STATE-is. Käesolev
+vastuvõtutäiend ei muuda väljastatud parandust ega rakenduse/SQL-i faile.
+
 ## 06.11.2026 kell 18:30 saadud tegelik raport
 
 Kasutaja saatis `selqiro-koristuse-raport-20261106-163015-f6f3a20f.zip`.

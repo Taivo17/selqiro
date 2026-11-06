@@ -23,7 +23,7 @@ export function receipt(value:unknown,context:{identityId:string;attemptId?:stri
  (context.userId!==undefined&&r.actor_user_id!==context.userId) || (context.requestKey!==undefined&&r.request_key!==context.requestKey) ||
  !isId(r.listing_id) || (context.listingId!==undefined&&r.listing_id!==context.listingId) ||
  typeof r.published_at!=="string" || r.published_at.length!==27 || !/^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d\.\d{6}Z$/.test(r.published_at) || (!Number.isFinite(Date.parse(r.published_at)) || new Date(r.published_at).toISOString()!==r.published_at.slice(0,23)+"Z") ||
- !Number.isSafeInteger(r.files_remaining)||Number(r.files_remaining)<0||Number(r.files_remaining)>20 ||
+ !Number.isSafeInteger(r.files_remaining)||Number(r.files_remaining)<0||Number(r.files_remaining)>2147483647 ||
  !["published","deleting","deleted"].includes(String(r.state))|| typeof r.content_deleted!=="boolean"||
  (r.state==="published"?r.content_deleted:!r.content_deleted)|| (r.state==="deleted"&&r.files_remaining!==0)||
  (r.state==="deleting"&&r.files_remaining===0)||(withReplay&&typeof r.replayed!=="boolean")) return fail("response");

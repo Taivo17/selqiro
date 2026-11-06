@@ -14,6 +14,7 @@ import type {RetiredImageCleanupStatus} from "../../../entities/listing/model/re
 import {readManagedListingImages, removeManagedListingImage, setManagedListingPrimaryImage} from "../../../entities/listing/api/managedListingImagesClient";
 import {bindManagedListingRemoveCommand, confirmManagedListingImagesReadback, ManagedListingImagesError,
   type ManagedListingImagesSnapshot, type ManagedListingRemoveCommand} from "../../../entities/listing/model/managedListingImages";
+import type {RunPhotoAddition} from "./managedPhotoAdditionSession";
 export type ManagedListingState = {actor: PublicationActor | null; receipt: FinalReceipt | null;
   activity: {status: "active" | "paused" | "sold"; activeUntil: string | null} | null; images: string[];
   gallery: ManagedListingImagesSnapshot | null; imageError: string | null; imageMessage: string | null;
@@ -92,7 +93,7 @@ export function useManagedListing(listingId: string) {
             activity = {status: a.status as "active" | "paused" | "sold", activeUntil: a.active_until as string | null};
           }
           if (!Array.isArray(value.images) || value.images.length > 10
-            || value.images.some(v => !managedListingMedia(v) || managedListingMedia(v)?.attemptId !== final?.attempt_id)) throw new Error("response");
+            || value.images.some(v => !managedListingMedia(v)) || new Set(value.images).size !== value.images.length) throw new Error("response");
           const sameAttempt = sameActor && previous.receipt?.attempt_id === final?.attempt_id
             && previous.receipt?.request_key === final?.request_key;
           // An owner read confirms finality; a cleanup ACK never substitutes for it.
@@ -188,7 +189,7 @@ export function useManagedListing(listingId: string) {
         ["kind", "attemptId", "filesRemaining"]);
       if (g !== generation.current) return;
       if (result.attemptId !== final.attempt_id || !["pending", "needs_attention", "settled"].includes(String(result.kind))
-        || result.filesRemaining !== null && (!Number.isSafeInteger(result.filesRemaining) || Number(result.filesRemaining) < 0 || Number(result.filesRemaining) > 20)
+        || result.filesRemaining !== null && (!Number.isSafeInteger(result.filesRemaining) || Number(result.filesRemaining) < 0 || Number(result.filesRemaining) > 2147483647)
         || (result.kind === "settled") !== (result.filesRemaining === 0)) throw new Error("response");
       locked.current = false;
       const checked: ManagedListingState = {...stateRef.current, busy: false,
@@ -254,7 +255,36 @@ export function useManagedListing(listingId: string) {
       // read. A render, timeout or released button never retries the command.
     } finally { if (g === generation.current) locked.current = false; }
   };
-  return {...scoped, refresh: () => refreshRef.current(), remove, cleanup,
+  const runPhotoAddition: RunPhotoAddition = async (key, work) => {
+    const current = stateRef.current, actor = current.actor, final = current.receipt;
+    if (locked.current || current.loading || current.error || !actor || !final || final.state !== "published"
+      || identityChangePending(actor.userId) || final.listing_id !== listingId || key.listingId !== listingId
+      || key.userId !== actor.userId || key.identityId !== actor.identityId || key.attemptId !== final.attempt_id)
+      throw new Error("context_changed");
+    // This lock is acquired synchronously, before the browser's cross-tab lock.
+    // It is shared with primary changes, photo removal and listing deletion.
+    locked.current = true; const g = generation.current, signal = control.current.signal;
+    const checkContext = () => {
+      if (g !== generation.current || signal.aborted || identityChangePending(actor.userId)
+        || stateRef.current.actor?.userId !== actor.userId || stateRef.current.actor.identityId !== actor.identityId)
+        throw new Error("context_changed");
+    };
+    const busy = {...current, busy: true, imageMessage: null}; stateRef.current = busy; setState(busy);
+    try { return await work({signal, checkContext, showGallery: gallery => {
+      checkContext();
+      if (gallery.key.userId !== key.userId || gallery.key.identityId !== key.identityId
+        || gallery.key.listingId !== listingId || gallery.key.attemptId !== key.attemptId) throw new Error("response");
+      if (stateRef.current.gallery) confirmManagedListingImagesReadback(stateRef.current.gallery, gallery);
+      const next = {...stateRef.current, gallery, images: gallery.images.map(image => image.url), imageError: null};
+      stateRef.current = next; setState(next);
+    }}); }
+    finally { if (g === generation.current) {
+      locked.current = false;
+      const next = {...stateRef.current, busy: false}; stateRef.current = next; setState(next);
+      refreshRef.current();
+    } }
+  };
+  return {...scoped, refresh: () => refreshRef.current(), remove, cleanup, runPhotoAddition,
     setPrimary: (ordinal: number) => changeImage("primary", ordinal),
     removeImage: (command: ManagedListingRemoveCommand) => changeImage("remove", command.ordinal, command)};
 }

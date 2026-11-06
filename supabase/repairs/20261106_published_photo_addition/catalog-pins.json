@@ -1,0 +1,431 @@
+{
+  "schema_version": 1,
+  "scope": "Exact reviewed prior and new function signatures, bodies, owners and ACLs plus the single protected addition binding relation; unchanged functions, existing relation structures, grants, policies, roles and hosted context remain invariants.",
+  "dependencies_sha256": "353d1713730095f9f9b793137b0f2c2cdd175569a53d3f84f786bc21e6ef77c3",
+  "capability_sha256": "3806e3316cd7b1041fba8c9290234ba86579e8b4425e651d8cc30cfe33c4d18a",
+  "before_capability_sha256": "9285a3ca3b31a5fb18c95cded712bf05830dde1743b30406cca7e113afbb54bc",
+  "dependency_function_names": [
+    "public.current_user_has_identity_access",
+    "public.set_listing_primary_image_v2",
+    "public.listing_actor_uid_hosted_v1",
+    "listing_publication_private.hosted_storage_contract_ready",
+    "listing_publication_private.assert_hosted_preview_actor",
+    "public.lock_listing_creation_actor_v1",
+    "public.require_listing_create_keys_v1",
+    "listing_publication_private.require_actor",
+    "listing_publication_private.validate_web_intent",
+    "public.listing_final_guard_state_v1",
+    "public.guard_listing_price_v2",
+    "listing_publication_private.guard_managed_listing",
+    "listing_publication_private.guard_managed_image",
+    "listing_publication_private.protect_slot",
+    "listing_publication_private.protect_object",
+    "listing_publication_private.protect_web_image",
+    "listing_publication_private.protect_publication",
+    "public.delete_my_published_listing_v1",
+    "public.get_selqiro_hosted_preview_readiness_v1",
+    "listing_publication_private.require_upload_service",
+    "listing_publication_private.lock_upload_service_actor",
+    "listing_publication_private.legacy_cleanup_state_before_multipart_v2",
+    "listing_publication_private.object_cleanup_state",
+    "listing_publication_private.protect_cleanup",
+    "listing_publication_private.protect_multipart_attempt",
+    "listing_publication_private.protect_multipart_session",
+    "listing_publication_private.protect_multipart_auxiliary",
+    "listing_publication_private.protect_multipart_abort",
+    "listing_publication_private.guard_legacy_source_in_multipart",
+    "public.claim_listing_cleanup_v1",
+    "public.record_listing_cleanup_v1",
+    "public.get_my_listing_cleanup_summary_v1",
+    "listing_publication_private.multipart_object_fully_deleted",
+    "listing_publication_private.guard_cleanup_web_fence",
+    "listing_publication_private.protect_managed_image_presentation_v1",
+    "listing_publication_private.require_managed_image_actor_v1",
+    "listing_publication_private.validate_managed_image_intent_v1",
+    "public.get_my_managed_listing_images_v1",
+    "listing_publication_private.hosted_completed_source_deleted_v1",
+    "public.listing_price_currency_scale_v1",
+    "public.normalize_listing_price_v1",
+    "public.normalize_listing_basics_v1",
+    "public.listing_create_category_path_valid_v1",
+    "public.normalize_listing_create_location_v1",
+    "public.normalize_listing_creation_v1",
+    "public.listing_price_legacy_label_v1",
+    "public.listing_price_tuple_valid_v1",
+    "public.listing_basics_search_text_v1",
+    "listing_publication_private.require_policies",
+    "listing_publication_private.normalize_images",
+    "listing_publication_private.snapshot",
+    "listing_publication_private.close_locked_attempt",
+    "listing_publication_private.lock_web_context",
+    "listing_publication_private.web_binding",
+    "listing_publication_private.web_receipt",
+    "listing_publication_private.assert_final_last_boundary",
+    "public.cancel_my_listing_publication_v1",
+    "public.prepare_listing_web_write_v1",
+    "listing_publication_private.guard_closed_journey_request",
+    "listing_publication_private.multipart_binding",
+    "listing_publication_private.lock_multipart_context",
+    "listing_publication_private.lock_multipart_object",
+    "public.get_my_listing_publication_journey_v2",
+    "public.cancel_my_listing_publication_journey_v2",
+    "public.reserve_listing_multipart_v2",
+    "public.get_listing_multipart_v2",
+    "public.record_listing_multipart_created_v2",
+    "public.claim_listing_multipart_part_v2",
+    "public.claim_listing_multipart_complete_v2",
+    "public.record_listing_multipart_completed_v2",
+    "public.record_listing_multipart_verified_v2",
+    "public.claim_listing_web_image_v1",
+    "public.record_listing_web_ready_v1",
+    "public.record_listing_multipart_abort_v2",
+    "listing_publication_private.assert_hosted_preview_object",
+    "public.get_required_publication_policies_v1",
+    "public.require_my_current_publication_policy_acceptance_v1",
+    "listing_publication_private.lock_retired_web_cleanup_context_v1"
+  ],
+  "new_function_names": [
+    "listing_publication_private.managed_image_gallery_projection_v1",
+    "listing_publication_private.protect_managed_image_addition_v1",
+    "listing_publication_private.managed_image_family_v1",
+    "listing_publication_private.managed_image_origins_v1",
+    "listing_publication_private.managed_image_root_v1",
+    "listing_publication_private.managed_image_addition_receipt_v1",
+    "listing_publication_private.allocate_managed_publication_attempt_v1",
+    "listing_publication_private.normalize_managed_image_addition_v1",
+    "listing_publication_private.require_managed_image_policies_v1",
+    "listing_publication_private.managed_image_addition_journey_v1",
+    "listing_publication_private.lock_managed_image_addition_parent_v1",
+    "listing_publication_private.managed_image_addition_status_v1",
+    "public.get_my_managed_listing_image_addition_v1",
+    "public.prepare_my_managed_listing_image_addition_v1",
+    "public.cancel_my_managed_listing_image_addition_v1",
+    "public.append_my_managed_listing_image_v1",
+    "listing_publication_private.assert_ordinary_publication_v1",
+    "listing_publication_private.managed_image_cleanup_task_v2"
+  ],
+  "changed_function_names": [
+    "listing_publication_private.lock_managed_listing_images_v1",
+    "public.set_my_managed_listing_primary_image_v1",
+    "public.remove_my_managed_listing_image_v1",
+    "public.prepare_my_listing_publication_v1",
+    "listing_publication_private.protect_attempt",
+    "listing_publication_private.apply_final",
+    "listing_publication_private.final_material",
+    "public.get_my_listing_publication_confirmation_v1",
+    "public.publish_my_listing_v1",
+    "listing_publication_private.apply_delete",
+    "listing_publication_private.final_receipt",
+    "public.get_public_listing_media_binding_v1",
+    "public.get_my_listing_media_binding_v2",
+    "public.get_my_managed_listing_v2",
+    "listing_publication_private.lock_multipart_cleanup_context",
+    "public.claim_listing_published_source_cleanup_v1",
+    "public.record_listing_published_source_cleanup_v1",
+    "listing_publication_private.hosted_retired_web_deleted_v1",
+    "public.claim_listing_retired_web_cleanup_v1",
+    "public.record_listing_retired_web_cleanup_v1",
+    "public.get_my_listing_retired_web_cleanup_v1",
+    "public.prepare_listing_multipart_cleanup_v2",
+    "public.claim_listing_cleanup_for_attempt_v2"
+  ],
+  "new_function_signatures": [
+    "listing_publication_private.managed_image_gallery_projection_v1(jsonb,boolean)",
+    "listing_publication_private.protect_managed_image_addition_v1()",
+    "listing_publication_private.managed_image_family_v1(uuid)",
+    "listing_publication_private.managed_image_origins_v1(uuid)",
+    "listing_publication_private.managed_image_root_v1(uuid)",
+    "listing_publication_private.managed_image_addition_receipt_v1(uuid)",
+    "listing_publication_private.allocate_managed_publication_attempt_v1(uuid,uuid,uuid,bytea,jsonb,jsonb)",
+    "listing_publication_private.normalize_managed_image_addition_v1(jsonb)",
+    "listing_publication_private.require_managed_image_policies_v1()",
+    "listing_publication_private.managed_image_addition_journey_v1(uuid,uuid,uuid,boolean)",
+    "listing_publication_private.lock_managed_image_addition_parent_v1(uuid,uuid,bigint,uuid,boolean)",
+    "listing_publication_private.managed_image_addition_status_v1(uuid,uuid,bigint,uuid,uuid)",
+    "public.get_my_managed_listing_image_addition_v1(uuid,uuid,bigint,uuid,uuid)",
+    "public.prepare_my_managed_listing_image_addition_v1(uuid,uuid,bigint,uuid,uuid,text,jsonb)",
+    "public.cancel_my_managed_listing_image_addition_v1(uuid,uuid,bigint,uuid,uuid)",
+    "public.append_my_managed_listing_image_v1(uuid,uuid,bigint,uuid,uuid,uuid,uuid,text)",
+    "listing_publication_private.assert_ordinary_publication_v1(uuid)",
+    "listing_publication_private.managed_image_cleanup_task_v2(uuid,uuid,uuid)"
+  ],
+  "changed_function_signatures": [
+    "listing_publication_private.lock_managed_listing_images_v1(uuid,uuid,bigint,uuid,boolean)",
+    "public.set_my_managed_listing_primary_image_v1(uuid,uuid,bigint,uuid,text,integer)",
+    "public.remove_my_managed_listing_image_v1(uuid,uuid,bigint,uuid,text,integer)",
+    "public.prepare_my_listing_publication_v1(uuid,uuid,uuid,jsonb,jsonb)",
+    "listing_publication_private.protect_attempt()",
+    "listing_publication_private.apply_final(uuid,jsonb,text)",
+    "listing_publication_private.final_material(uuid)",
+    "public.get_my_listing_publication_confirmation_v1(uuid,uuid,uuid)",
+    "public.publish_my_listing_v1(uuid,uuid,uuid,text)",
+    "listing_publication_private.apply_delete(uuid)",
+    "listing_publication_private.final_receipt(uuid)",
+    "public.get_public_listing_media_binding_v1(uuid,integer)",
+    "public.get_my_listing_media_binding_v2(uuid,uuid,uuid,integer)",
+    "public.get_my_managed_listing_v2(uuid,uuid,text)",
+    "listing_publication_private.lock_multipart_cleanup_context(uuid,uuid,uuid,uuid)",
+    "public.claim_listing_published_source_cleanup_v1(uuid,uuid,uuid,uuid)",
+    "public.record_listing_published_source_cleanup_v1(uuid,uuid,uuid,uuid,uuid,uuid,text)",
+    "listing_publication_private.hosted_retired_web_deleted_v1(uuid)",
+    "public.claim_listing_retired_web_cleanup_v1(uuid,uuid,uuid,uuid)",
+    "public.record_listing_retired_web_cleanup_v1(uuid,uuid,uuid,uuid,uuid,uuid,text)",
+    "public.get_my_listing_retired_web_cleanup_v1(uuid,uuid,uuid,uuid)",
+    "public.prepare_listing_multipart_cleanup_v2(uuid,uuid,uuid,uuid)",
+    "public.claim_listing_cleanup_for_attempt_v2(uuid,uuid,uuid,uuid)"
+  ],
+  "new_relations": [
+    "listing_publication_private.managed_image_additions_v1"
+  ],
+  "changed_constraints": [],
+  "final_writer_policy_pins": [
+    {
+      "name": "final_internal_writer",
+      "check": "true",
+      "roles": [
+        "selqiro_listing_final_writer_v1"
+      ],
+      "using": "true",
+      "command": "*",
+      "relation": "listing_publication_private.attempts",
+      "permissive": true
+    },
+    {
+      "name": "final_internal_writer",
+      "check": "true",
+      "roles": [
+        "selqiro_listing_final_writer_v1"
+      ],
+      "using": "true",
+      "command": "*",
+      "relation": "listing_publication_private.cleanup",
+      "permissive": true
+    },
+    {
+      "name": "multipart_attempt_internal",
+      "check": "true",
+      "roles": [
+        "selqiro_listing_final_writer_v1"
+      ],
+      "using": "true",
+      "command": "*",
+      "relation": "listing_publication_private.multipart_attempts",
+      "permissive": true
+    },
+    {
+      "name": "multipart_auxiliary_internal",
+      "check": null,
+      "roles": [
+        "selqiro_listing_final_writer_v1"
+      ],
+      "using": "true",
+      "command": "r",
+      "relation": "listing_publication_private.multipart_auxiliary_receipts",
+      "permissive": true
+    },
+    {
+      "name": "multipart_session_internal",
+      "check": "true",
+      "roles": [
+        "selqiro_listing_final_writer_v1"
+      ],
+      "using": "true",
+      "command": "*",
+      "relation": "listing_publication_private.multipart_sessions",
+      "permissive": true
+    },
+    {
+      "name": "final_internal_writer",
+      "check": "true",
+      "roles": [
+        "selqiro_listing_final_writer_v1"
+      ],
+      "using": "true",
+      "command": "*",
+      "relation": "listing_publication_private.objects",
+      "permissive": true
+    },
+    {
+      "name": "final_internal_writer",
+      "check": "true",
+      "roles": [
+        "selqiro_listing_final_writer_v1"
+      ],
+      "using": "true",
+      "command": "*",
+      "relation": "listing_publication_private.publications",
+      "permissive": true
+    },
+    {
+      "name": "final_internal_writer",
+      "check": "true",
+      "roles": [
+        "selqiro_listing_final_writer_v1"
+      ],
+      "using": "true",
+      "command": "*",
+      "relation": "listing_publication_private.slots",
+      "permissive": true
+    },
+    {
+      "name": "final_internal_writer",
+      "check": "true",
+      "roles": [
+        "selqiro_listing_final_writer_v1"
+      ],
+      "using": "true",
+      "command": "*",
+      "relation": "listing_publication_private.web_images",
+      "permissive": true
+    },
+    {
+      "name": "final_writer_images",
+      "check": "(EXISTS ( SELECT 1\n   FROM public.listings l\n  WHERE ((l.id = listing_images.listing_id) AND public.current_user_has_identity_access(l.identity_id))))",
+      "roles": [
+        "selqiro_listing_final_writer_v1"
+      ],
+      "using": "(EXISTS ( SELECT 1\n   FROM public.listings l\n  WHERE ((l.id = listing_images.listing_id) AND public.current_user_has_identity_access(l.identity_id))))",
+      "command": "*",
+      "relation": "public.listing_images",
+      "permissive": true
+    },
+    {
+      "name": "final_writer_listings",
+      "check": "public.current_user_has_identity_access(identity_id)",
+      "roles": [
+        "selqiro_listing_final_writer_v1"
+      ],
+      "using": "public.current_user_has_identity_access(identity_id)",
+      "command": "*",
+      "relation": "public.listings",
+      "permissive": true
+    }
+  ],
+  "changes_sha256": "975c57a3bae9282a50d16cb06c94d674ce2286c9f772f09e6877fcf43794e04b",
+  "source_provenance": [
+    {
+      "path": "supabase/migrations/20260722173530_baseline_20260722.sql",
+      "sha256": "7ca065f92f01c0f38ada5f5a50d2a0fc5b716f5291d1525d398023b7db59da3f"
+    },
+    {
+      "path": "supabase/releases/listing-publication-hosted-preview-v1/00_preconditions.sql",
+      "sha256": "69c6005ed959afeb22bd1db3e597f23d17e7dfe86c968a35f512f94f34c995c8"
+    },
+    {
+      "path": "supabase/releases/listing-publication-hosted-preview-v1/10_price_core.sql",
+      "sha256": "9f843033bed721ab73d8cb01d3750e4dacc417dc0ddf84b92c9845745bb75dad"
+    },
+    {
+      "path": "supabase/releases/listing-publication-hosted-preview-v1/20_publication_core.sql",
+      "sha256": "f1c56c6ba381ceb5ab1d120092f676964762829ad63c5201a6c6b809c419f062"
+    },
+    {
+      "path": "supabase/releases/listing-publication-hosted-preview-v1/30_multipart_and_journey.sql",
+      "sha256": "d0f8c44a557c1b03df8ceb23c5069cf94a8560a2e3faaa3b0a56d701d0858765"
+    },
+    {
+      "path": "supabase/releases/listing-publication-hosted-preview-v1/60_preview_authority.sql",
+      "sha256": "bee78747b8932504c6960b9dba9b5b6673d06c5876dc76508b2322e48f6789bb"
+    },
+    {
+      "path": "supabase/releases/listing-publication-hosted-preview-v1/release.sql",
+      "sha256": "974dd6acb246b275acb593688aa14449cd42e80939101086d742ee5c4c5a4c3e"
+    },
+    {
+      "path": "supabase/repairs/20261101_listing_primary_image/tests/previous-preflight.sql",
+      "sha256": "e1f14709ebeee6c1513f4507937fc4418ae535a4ae465c6882a81bcdcf82a8fd"
+    },
+    {
+      "path": "supabase/releases/listing-publication-hosted-preview-v1/20_publication_core.sql",
+      "sha256": "f1c56c6ba381ceb5ab1d120092f676964762829ad63c5201a6c6b809c419f062"
+    },
+    {
+      "path": "supabase/releases/listing-publication-hosted-preview-v1/30_multipart_and_journey.sql",
+      "sha256": "d0f8c44a557c1b03df8ceb23c5069cf94a8560a2e3faaa3b0a56d701d0858765"
+    },
+    {
+      "path": "supabase/releases/listing-publication-hosted-preview-v1/release.sql",
+      "sha256": "974dd6acb246b275acb593688aa14449cd42e80939101086d742ee5c4c5a4c3e"
+    },
+    {
+      "path": "supabase/repairs/20261101_listing_primary_image/changes.sql",
+      "sha256": "6e131c70b2dc941b411588f2e6585c5bf3a85b23b50f2e2dc19d766ff1297714"
+    },
+    {
+      "path": "supabase/repairs/20261101_listing_primary_image/tests/fixture.mjs",
+      "sha256": "b56ff4b3eea26e49a5370eb246440a37a8bbc553ed4cf8310187c8b6213fb210"
+    },
+    {
+      "path": "supabase/repairs/20261101_listing_primary_image/preflight.sql",
+      "sha256": "1f07a7c17fa12737bc9a6242ce02baa62d3450148f4f94b5c1837da7f5a8b178"
+    },
+    {
+      "path": "supabase/releases/listing-publication-hosted-preview-v1/20_publication_core.sql",
+      "sha256": "f1c56c6ba381ceb5ab1d120092f676964762829ad63c5201a6c6b809c419f062"
+    },
+    {
+      "path": "supabase/releases/listing-publication-hosted-preview-v1/40_read_models_and_owner.sql",
+      "sha256": "d19bf23e0746e8e6ba6750f4c235135fbaa9cff3b3f184e05a87433c10eaad78"
+    },
+    {
+      "path": "supabase/releases/listing-publication-hosted-preview-v1/release.sql",
+      "sha256": "974dd6acb246b275acb593688aa14449cd42e80939101086d742ee5c4c5a4c3e"
+    },
+    {
+      "path": "supabase/repairs/20261104_hosted_completed_source_cleanup/changes.sql",
+      "sha256": "ba8a028c16453d0eb0007d565897f7e6af3c3cbe2b285932e060e29a4643961e"
+    },
+    {
+      "path": "supabase/repairs/20261104_hosted_completed_source_cleanup/tests/fixture.mjs",
+      "sha256": "6dabfc2483f47ddf38af0a939147d5b2df830e60ca5eaa2614d109cf1be435e0"
+    },
+    {
+      "path": "supabase/repairs/20261104_listing_photo_removal/tests/fixture.mjs",
+      "sha256": "887c567d14403a4f13442dac1ada8972b6620fecf16cf4cd87c4cf9581f5099b"
+    },
+    {
+      "path": "supabase/repairs/20261104_listing_photo_removal/changes.sql",
+      "sha256": "87046f65b65122c3c794f10b6c174d456a2b80db9b34eb0a23bfd74fbf864706"
+    },
+    {
+      "path": "supabase/releases/listing-publication-hosted-preview-v1/00_preconditions.sql",
+      "sha256": "69c6005ed959afeb22bd1db3e597f23d17e7dfe86c968a35f512f94f34c995c8"
+    },
+    {
+      "path": "supabase/releases/listing-publication-hosted-preview-v1/10_price_core.sql",
+      "sha256": "9f843033bed721ab73d8cb01d3750e4dacc417dc0ddf84b92c9845745bb75dad"
+    },
+    {
+      "path": "supabase/releases/listing-publication-hosted-preview-v1/20_publication_core.sql",
+      "sha256": "f1c56c6ba381ceb5ab1d120092f676964762829ad63c5201a6c6b809c419f062"
+    },
+    {
+      "path": "supabase/releases/listing-publication-hosted-preview-v1/30_multipart_and_journey.sql",
+      "sha256": "d0f8c44a557c1b03df8ceb23c5069cf94a8560a2e3faaa3b0a56d701d0858765"
+    },
+    {
+      "path": "supabase/releases/listing-publication-hosted-preview-v1/release.sql",
+      "sha256": "974dd6acb246b275acb593688aa14449cd42e80939101086d742ee5c4c5a4c3e"
+    },
+    {
+      "path": "supabase/releases/listing-publication-hosted-preview-v1/60_preview_authority.sql",
+      "sha256": "bee78747b8932504c6960b9dba9b5b6673d06c5876dc76508b2322e48f6789bb"
+    },
+    {
+      "path": "supabase/migrations/20260822130000_add_publication_policy_acceptance_foundation.sql",
+      "sha256": "92197bafc2dc79494a9db48bdff072384680dc7c9fbbc91c507b9f3a02104431"
+    },
+    {
+      "path": "supabase/migrations/20260722173530_baseline_20260722.sql",
+      "sha256": "7ca065f92f01c0f38ada5f5a50d2a0fc5b716f5291d1525d398023b7db59da3f"
+    },
+    {
+      "path": "supabase/repairs/20261106_retired_web_cleanup/tests/fixture.mjs",
+      "sha256": "1727e262fde32191f0b483b7acb5ebe868d84900ce05599c6ec0e1dc2d90e811"
+    },
+    {
+      "path": "supabase/repairs/20261106_retired_web_cleanup/changes.sql",
+      "sha256": "6f55e6a3e390cc00838fb4a98b7c085d6d6e3170e4e935f75be747fcf5608cad"
+    }
+  ]
+}

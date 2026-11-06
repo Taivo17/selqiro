@@ -333,3 +333,18 @@ fields. Only an explicit cleanup action may invoke the bounded worker during
 testing. Build the future background runner around the same contract rather
 than adding cleanup side effects to page loads or focus events. See
 [the retired WEB contract](architecture/hosted-retired-web-cleanup-v1.md).
+
+## Published-photo addition — 2026-11-06
+
+Reuse the existing one-image SOURCE-to-WEB transfer for both publication and
+later addition. Keep one public listing and one active gallery. A protected
+addition binding records a new immutable media origin; it is not another
+gallery, quota balance or cleanup queue. Never reopen a completed publication
+or reuse a retired photo URL to attach new bytes.
+
+Keep visible user actions small: one photo at a time, preserving the current
+primary and unsaved text. An uncertain network reply must recover the same
+request and durable receipt. A confirmed capacity refusal should explain the
+temporary limit instead of inviting an ineffective retry loop. Details and
+test boundaries are in the
+[published-photo addition contract](architecture/published-photo-addition-v1.md).

@@ -1,6 +1,6 @@
 "use client";
 
-import {useState} from "react";
+import {useState, type ReactNode} from "react";
 import type {PublicationActor} from "../../../entities/listing/model/publicationJourney";
 import {bindManagedListingRemoveCommand, type ManagedListingImagesSnapshot,
   type ManagedListingRemoveCommand} from "../../../entities/listing/model/managedListingImages";
@@ -20,6 +20,7 @@ type Props = {
   onSelect: (ordinal: number) => void;
   onRemove: (command: ManagedListingRemoveCommand) => void;
   onRefresh: () => void;
+  children?: ReactNode;
 };
 
 function RemovePhoto({gallery, ordinal, blocked, busy, onRemove}: {
@@ -44,7 +45,7 @@ function RemovePhoto({gallery, ordinal, blocked, busy, onRemove}: {
 }
 
 export default function ManagedListingImagePicker(props: Props) {
-  const images = orderManagedListingImagesForDisplay(props.gallery?.images
+  const images = orderManagedListingImagesForDisplay<{ordinal: number; url: string; isPrimary: boolean}>(props.gallery?.images
     ?? props.fallbackImages.map((url, ordinal) => ({url, ordinal, isPrimary: false})));
   return <section className="space-y-4 rounded-[30px] border border-amber-200 bg-white p-4 sm:p-6" aria-label="Kuulutuse põhipilt">
     <div>
@@ -68,6 +69,7 @@ export default function ManagedListingImagePicker(props: Props) {
           busy={props.removalBusyOrdinal === image.ordinal} onRemove={props.onRemove} /> : null}
       </li>)}
     </ul> : <p className="text-neutral-600">Sellel kuulutusel pole fotosid.</p>}
+    {props.children}
     {props.error ? <div className="space-y-2 rounded-xl bg-amber-50 p-3">
       <p role="alert">{props.error}</p>
       <button type="button" disabled={props.blocked} onClick={props.onRefresh}

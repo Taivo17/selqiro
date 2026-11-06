@@ -11,6 +11,7 @@ import {selectListingPriceKind} from "../model/listingPriceDraft";
 import type {ListingPriceKind} from "../../../entities/listing/model/listingPriceInput";
 import {LISTING_CURRENCIES} from "../../../shared/currency/listingCurrencies.generated";
 import ManagedListingImagePicker from "./ManagedListingImagePicker";
+import ManagedListingPhotoAdd from "./ManagedListingPhotoAdd";
 import RetiredListingImageCleanup from "./RetiredListingImageCleanup";
 
 function BoundEditor({actor, listingId, blocked}: {actor: PublicationActor; listingId: string; blocked: boolean}) {
@@ -99,7 +100,10 @@ export default function IntegratedListingEditPage({listingId}: {listingId: strin
         blocked={blocked} error={owner.imageError} message={owner.imageMessage} busyOrdinal={owner.primaryBusyOrdinal}
         removalBusyOrdinal={owner.removalBusyOrdinal} canRemove={owner.receipt.files_remaining === 0}
         onSelect={ordinal => { void owner.setPrimary(ordinal); }} onRemove={command => { void owner.removeImage(command); }}
-        onRefresh={owner.refresh} />
+        onRefresh={owner.refresh}>
+        <ManagedListingPhotoAdd key={confirmationScope} ownerKey={{...owner.actor, listingId, attemptId: owner.receipt.attempt_id}}
+          gallery={owner.gallery} blocked={blocked || owner.imageError !== null} runOperation={owner.runPhotoAddition} />
+      </ManagedListingImagePicker>
       {owner.receipt.files_remaining > 0 ? <section className="space-y-3 rounded-[30px] border bg-white p-6" aria-label="Algfailide koristamine">
         <h2 className="text-xl font-black">Algfailide koristamine</h2>
         <p>Avaldatud veebipildid jäävad kuulutusse. Üleslaaditud algfailide lõppkoristust ootab {owner.receipt.files_remaining} faili.</p>
