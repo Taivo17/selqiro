@@ -743,3 +743,39 @@ ja piirid: `docs/continuity/MESSAGING_MOBILE_FIX_20261030.md` ning tarne
 - Üks uus app-only paranduspakett valmistatakse tegelikule 1081-failisele a4b5b2d lähtele; see ei käivita eelmisi paigaldajaid, ei vaja migratsiooni ega muuda limiite. Lõpliku ZIP-i kontroll tehakse pärast kogu sisu pakkimist ja säilitatakse väljaspool muutumatut arhiivi.
 - Uuendatud on üks CURRENT_STATE ja sellest genereeritav üleandmine, praegune paigaldusjuhis, juhtumileping ja teadaolevad tööd. Engineering Standard täpsustus on põhjendatud: eksplitsiitse lisamise lõpetamine kasutab olemasolevat koristust, üksnes passiivne vaatamine/fookus seda ei käivita.
 - Üks järgmine tegevus: Maci uuenda.py --publish, sama commit'i Verceli Ready, üks uus foto 201 kuulutusele ning galerii/avaliku vaate ja tegeliku aja kontroll. Täielik V2 keelekatvus ja üldine taustakoristus on endiselt eraldi lõpetamata tööd.
+
+
+## 2026-11-07 — Frankfurdi tulemus ja foto kuvamise kattuv laadimine
+
+- Kasutaja võttis f1745be foto valiku/reservi paranduse vastu: viis uut fotot,
+  kümne foto piir ning nähtavus galeriis ja avalikus vaates on kinnitatud.
+  Varasema viie mõõtmise 20,4 s keskmine on ajalooline võrdlus.
+- Sama koodi Production redeploy pärast iad1 → fra1 seadistust on Ready.
+  Päris image-verify Server-Timing total 7647,2 → 4345,2 ms; X-Vercel-Id
+  arn1::iad1 → arn1::fra1. Üks uus lisamine võttis stopperiga 12 s.
+  Eri katsete/failide mõõtudest ei tuletata kindlat püsivat keskmist.
+- Serveriaudit ei leidnud põhjendatud vajadust muuta kontrollide lepingut.
+  Uus väike kliendimuudatus alustab salvestuskviitungiga seotud WEB-foto
+  kaitstud lugemist värske galerii lugemise ajal. Üks peidetud sama võtmega
+  pildikomponent saab nähtavaks alles värske liikmesustõendi järel.
+  Server, SQL, sõltuvused, limiidid, SOURCE-koristus ja päevik säilivad.
+- Kontrolleri 50/50 ja tegeliku integreeritud Reacti Chromiumi 11/11 juhtu
+  PASS. Peidetud foto ei anna edu/nuppe/loendurit; nähtavaks muutumine säilitab
+  ühe päringu ning sama LI/IMG/Blob URL-i. Tühi galerii, lugemistõrge, uuem
+  eemaldamine, identiteedi vahetus, unmount ja käsitsi kordus läbisid.
+  Auth/RPC/Storage on katses sünteetilised; pilveteenuseid ei kutsutud.
+- Kohalik 800 ms galerii + 1000 ms meedia viitekatse: 2116,5 → 1554,9 ms
+  append-vastusest nähtava fotoni. See 561,6 ms ajavõit ei ole tootmise lubadus.
+- Üks kogu portaali npm run build -- --webpack PASS 28,77 s; TypeScript ja
+  27 staatilist lehte, neli kliendifaili/test/package/lock säilisid. Paigaldaja
+  6/6 kontrolli PASS kõigi 1084 aktsepteeritud lähtefailiga, ajutise Giti,
+  kohaliku bare-remote'i ja sünteetilise build'iga. Täpne lõplik ZIP kontrollitakse
+  pärast pakkimist; selle hilisem tõend säilib muutumatu arhiivi kõrval.
+- Uus eraldi selqiro-foto-kuvamine-20261107 pakk lahendab f1745be Macis
+  täispikaks commit'iks ning kontrollib kogu lähtepuu/indexit enne kirjutust.
+  Eelmisi pakke/päevikuid ei muudeta. CURRENT_STATE ja genereeritud üleandmine
+  eristavad vastuvõetud tootmistulemust ning alles paigaldatavat uut parandust.
+- Üks järgmine tegevus: uus uuenda.py --publish, selle commit'i Ready ning
+  üks stopperiga lisamine testkuulutusele, kus on vaba fotokoht. Kuulutusel 201
+  olevaid fotosid katse nimel ei kustutata. V2 täielik EN/ET ja üldine
+  taustakoristus jäävad eraldi lõpetamata töödeks.

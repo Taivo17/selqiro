@@ -97,6 +97,7 @@ export default function IntegratedListingEditPage({listingId}: {listingId: strin
     {owner.receipt?.state === "published" && owner.actor ? <>
       <BoundEditor key={`${owner.actor.userId}:${owner.actor.identityId}:${listingId}`} actor={owner.actor} listingId={listingId} blocked={blocked} />
       <ManagedListingImagePicker actor={owner.actor} gallery={owner.gallery} fallbackImages={owner.images}
+        preloadingImage={owner.preloadingImage}
         blocked={blocked} error={owner.imageError} message={owner.imageMessage} busyOrdinal={owner.primaryBusyOrdinal}
         removalBusyOrdinal={owner.removalBusyOrdinal} canRemove={owner.receipt.files_remaining === 0}
         onSelect={ordinal => { void owner.setPrimary(ordinal); }} onRemove={command => { void owner.removeImage(command); }}

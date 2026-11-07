@@ -20,7 +20,7 @@ function original(count=2) {
       url:`/api/v2/listing-media/${A}/${ordinal}`,is_primary:ordinal===0}))};
 }
 function harness(options={}) {
-  const h={journal:null,requests:[],puts:[],shown:[],writes:[],uuid:0,closed:false,snapshot:null,receipt:null,
+  const h={journal:null,requests:[],puts:[],shown:[],preloaded:[],writes:[],uuid:0,closed:false,snapshot:null,receipt:null,
     gallery:original(options.count??2),signal:new AbortController(),busy:false,rejectJournal:false,verifyReady:true};
   h.envelope=()=>({schema_version:1,listing_id:KEY.listingId,attempt_id:A,request_key:h.requestKey,
     snapshot:copy(h.snapshot),receipt:copy(h.receipt),intent_closed:h.closed,gallery:copy(h.gallery)});
@@ -72,6 +72,7 @@ function harness(options={}) {
       h.journal=copy(value);h.writes.push(copy(value));},clearJournal:()=>{h.journal=null;},
     runOwnerOperation:async(key,work)=>{assert.deepEqual(key,KEY);if(h.busy)throw Error('owner_busy');h.busy=true;
       try{return await work({signal:h.signal.signal,checkContext:()=>{if(h.signal.signal.aborted)throw Error('context_changed');},
+        preloadImage:source=>h.preloaded.push(source),
         showGallery:gallery=>h.shown.push(copy(gallery))});}finally{h.busy=false;}},
     withLock:options.withLock??(async work=>work()),
     request:async(action,args,signal)=>{h.requests.push({action,args:copy(args),signal,journal:copy(h.journal)});
@@ -100,6 +101,28 @@ test('one addition reuses private image transfer and appends at a stable gallery
 test('the first added photo becomes primary only for an empty existing gallery',async()=>{
   const h=harness({count:0}),s=h.session();await s.start(h.baseline(),photo());
   assert.equal(s.view.phase,'added');assert.equal(h.gallery.images[0].is_primary,true);assert.equal(h.gallery.images.length,1);
+  assert.deepEqual(h.preloaded,[`/api/v2/listing-media/${CHILD}/0`]);
+});
+test('protected image read may start after the exact append ACK while fresh gallery readback still gates visibility and success',async()=>{
+  const appendEntered=defer(),appendGate=defer(),readEntered=defer(),readGate=defer();
+  const h=harness({request:async action=>{if(action==='owner-images-add-append'){appendEntered.resolve();await appendGate.promise;}},
+    readGallery:async()=>{readEntered.resolve();await readGate.promise;}}),s=h.session();
+  const pending=s.start(h.baseline(),photo());await appendEntered.promise;
+  assert.deepEqual(h.preloaded,[]);assert.equal(s.view.phase,'busy');
+  appendGate.resolve();await readEntered.promise;
+  assert.deepEqual(h.preloaded,[`/api/v2/listing-media/${CHILD}/0`]);assert.equal(s.view.phase,'busy');
+  assert.ok(h.shown.every(gallery=>gallery.images.every(image=>image.mediaAttemptId!==CHILD)));
+  readGate.resolve();await pending;
+  assert.equal(s.view.phase,'added');assert.equal(h.shown.at(-1).images.at(-1).mediaAttemptId,CHILD);
+  assert.equal(h.preloaded.length,1);assert.equal(h.puts.length,1);
+});
+test('a preloaded image cannot turn failed gallery readback into success or a repeated append',async()=>{
+  const h=harness({readGallery:async()=>{throw Error('readback_unavailable');}}),s=h.session();
+  await s.start(h.baseline(),photo());
+  assert.equal(h.preloaded.length,1);assert.equal(s.view.phase,'unknown');
+  assert.ok(h.shown.every(gallery=>gallery.images.every(image=>image.mediaAttemptId!==CHILD)));
+  assert.equal(h.requests.filter(r=>r.action==='owner-images-add-append').length,1);assert.equal(h.puts.length,1);
+  assert.equal(h.journal.readyId,READY);assert.ok(h.receipt);
 });
 test('ten active photos stop a new addition before any journal or network write',async()=>{
   const h=harness({count:10}),s=h.session();await s.start(h.baseline(),photo());
@@ -122,6 +145,7 @@ test('uncertain verification cannot attach; cancellation preserves every active 
   const h=harness();h.verifyReady=false;const before=copy(h.gallery),s=h.session();await s.start(h.baseline(),photo());
   assert.equal(s.view.phase,'needs_attention');assert.ok(!h.requests.some(r=>r.action==='owner-images-add-append'));
   await s.cancel();assert.equal(s.view.phase,'closed');assert.deepEqual(h.gallery,before);assert.equal(h.puts.length,1);
+  assert.deepEqual(h.preloaded,[]);
 });
 test('a lost attach response is recovered by exact receipt and readback without another append',async()=>{
   const h=harness({request:async(action,args,state)=>{if(action==='owner-images-add-append'){state.server(action,args);throw Error('lost_append');}}});
@@ -136,10 +160,13 @@ test('an immutable attachment receipt after later retirement or primary change d
   const reloaded=h.session();await reloaded.inspect();assert.equal(reloaded.view.phase,'added');
   assert.match(reloaded.view.message,/pärast seda muudetud/);assert.equal(h.shown.at(-1).images.length,2);
   assert.equal(h.requests.filter(r=>r.action==='owner-images-add-append').length,1);
+  assert.deepEqual(h.preloaded,[],'An old receipt for a retired image must not start a protected preview');
 });
 test('final success wording follows fresh readback when the just-added photo is retired after ACK',async()=>{
   const h=harness({readGallery:async state=>{state.gallery={...state.gallery,revision:'7',images:state.gallery.images.filter(i=>i.ordinal!==12)};}});
   const s=h.session();await s.start(h.baseline(),photo());assert.equal(s.view.phase,'added');assert.match(s.view.message,/pärast seda muudetud/);
+  assert.equal(h.preloaded.length,1);assert.equal(h.shown.at(-1).images.length,2);
+  assert.ok(h.shown.at(-1).images.every(image=>image.mediaAttemptId!==CHILD));
 });
 test('explicit resume recovers an unobserved prepare using the same request and image descriptor',async()=>{
   let lose=true;const h=harness({request:async(action)=>{if(action==='owner-images-add-prepare'&&lose){lose=false;throw Error('prepare_not_observed');}}});
@@ -196,9 +223,11 @@ for(const stage of ['digest','owner-images-add-prepare','image-prepare','image-v
     const h=harness({digest:stage==='digest'?block:undefined,request:async action=>{if(action===stage)await block();},
       readGallery:stage==='readback'?block:undefined}),s=h.session(),seen=[];s.subscribe(v=>seen.push(v));
     const pending=s.start(h.baseline(),photo());await entered.promise;
-    const counts={seen:seen.length,requests:h.requests.length,puts:h.puts.length,shown:h.shown.length};
+    const counts={seen:seen.length,requests:h.requests.length,puts:h.puts.length,shown:h.shown.length,preloaded:h.preloaded.length};
+    assert.equal(h.preloaded.length,stage==='readback'?1:0);
     s.invalidate();h.signal.abort();gate.resolve();await pending;
     assert.equal(seen.length,counts.seen);assert.equal(h.requests.length,counts.requests);assert.equal(h.puts.length,counts.puts);assert.equal(h.shown.length,counts.shown);
+    assert.equal(h.preloaded.length,counts.preloaded);
   });
 }
 test('journal failure before prepare prevents any remote intent',async()=>{
@@ -227,6 +256,7 @@ for(const [name,change] of [
 ])test('attachment acknowledgement rejects '+name,async()=>{
   const h=harness({request:async(action,args,state)=>{if(action==='owner-images-add-append'){const result=state.server(action,args);change(result.receipt);return result;}}});
   const s=h.session();await s.start(h.baseline(),photo());assert.equal(s.view.phase,'unknown');assert.equal(h.requests.filter(r=>r.action==='owner-images-add-append').length,1);
+  assert.deepEqual(h.preloaded,[],'Malformed attachment proof cannot authorize a protected preview');
 });
 test('journal rejects newline UUID/hash and a different actor baseline',async()=>{
   const h=harness();await h.session().start(h.baseline(),photo());

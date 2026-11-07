@@ -1,54 +1,58 @@
-# Foto lisamise parandus
+# Foto kiirem kuvamine pärast lisamist
 
-Seis: 07.11.2026 Europe/Tallinn. Üks autoriteetne tööjärg on
+Seis: 07.11.2026 Europe/Tallinn. Üks praegune tööjärg on
 [CURRENT_STATE.json](CURRENT_STATE.json). Varasemad käsud on ajalugu.
 
 ## Kinnitatud lähtealus
 
-Kasutaja r2 diagnostika lõpetas edukalt Python 3.9.6 all. Maci main HEAD on
-`a4b5b2d14e456e6e83d4412b839ef330259cd048`; kõik 1081 lähtefaili vastavad
-väljastatud foto valimise r2-le. Tracked tööpuu ja index olid enne/pärast
-lugemist puhtad ning muutumatud. Andmebaasi vaatlus kinnitab, et avaldatud
-algfailide koristuse ootele jäämine põhjustas konto reservi piirangu.
+Foto valiku ja lõpetatud algfailide reservi parandus on kasutaja poolt
+paigaldatud ja kasutuses. Verceli lähtecommit on `f1745be`
+(`Fix photo selection and release completed upload sources`).
+Kasutaja lisas kuulutusele 201 viis fotot, jõudis kümne foto piirini ning
+kinnitas galerii ja avaliku vaate. Vana viie foto takistus on lahendatud.
 
-Uus parandus säilitab järgmise foto kohaliku valiku omanikuvaate lugemise ajal
-ning ühendab olemasoleva SOURCE-koristuse lisamistoiminguga. Andmebaasi
-migratsiooni ega uut teenuseseadistust see tarne ei vaja.
+Verceli Function Region on Frankfurt `fra1`. Sama koodiga redeploy on
+Ready / Production; uus `image-verify` vastus kinnitas `arn1::fra1`.
+Serverietapp vähenes kahe vaatluse vahel 7647,2 ms → 4345,2 ms.
+Kasutaja ühe uue lisamise stopperiaeg oli 12 sekundit.
+Seda piirkonna muutmist ega selle kinnitamist ei korrata.
+
+Järgmine väike kliendiparandus alustab kinnitatud uue veebifoto kaitstud
+laadimist samal ajal värske galerii lugemisega. Foto saab nähtavaks alles
+siis, kui värske galerii kontroll seda lubab. Pildi kontroll, salvestamine,
+andmebaas ja teenuseseaded kasutavad senist rada.
 
 ## Üks käsk
 
-1. Laadi **selqiro-foto-lisamise-parandus-20261107.zip** Downloads-kausta
-   ja paki lahti. Tekib samanimeline kaust failiga `uuenda.py`.
+1. Laadi **selqiro-foto-kuvamine-20261107.zip** Downloads-kausta ja paki lahti.
 2. Käivita terminalis:
 
 ```bash
-python3 -I -B "$HOME/Downloads/selqiro-foto-lisamise-parandus-20261107/uuenda.py" --publish
+python3 -I -B "$HOME/Downloads/selqiro-foto-kuvamine-20261107/uuenda.py" --publish
 ```
 
-Paigaldaja kontrollib enne kirjutamist täpset lähtepuud, main-haru, indexit,
-kinnitatud remote'i ja lähtecommit'i. Muudetavatest failidest tehakse varukoopia.
-Seejärel tehakse build ning piiratud commit ja push samasse olemasolevasse
-hoidlasse. Eelmisi paigaldus- ega diagnostikaprogramme ei käivitata uuesti.
+Paigaldaja lahendab olemasolevas Gitis `f1745be` täpseks üheseks commit'iks
+ning võrdleb 1084 lähtemanifesti faili, main-haru, tööpuud, indexit ja
+kinnitatud remote'i. Muudetavatest failidest tehakse varukoopia, seejärel
+build ning selle paranduse commit ja tavaline push samasse hoidlasse.
+Paki kontroll ei järelda Maci täpset lähtepuud ainult Verceli ekraanipildist.
+
 `PEATATUD` korral säilita teade ja raport ning saada need vestlusse.
+Varem väljastatud paigaldajaid ega diagnostikaprogramme ei käivitata uuesti.
 
-## Üks kasutuskatse pärast Ready tulemust
+## Üks kasutuskatse pärast uue commit'i Ready tulemust
 
-Oota Vercelis terminalis näidatud uue commit'i **Ready** tulemust ja värskenda
-portaali. Ava kuulutuse 201 muutmisvaade ning lisa üks uus foto. Kontrolli,
-et valitud foto eelvaade ilmub, uus foto jõuab galeriisse ja on nähtav ka
-avalikus kuulutuses. Vana ruumipuuduse teate korral vali esmalt
-„Katkesta lisamine” ja seejärel „Lisa järgmine foto”. Mõõda võimalusel lisamise aeg.
+Oota Vercelis terminalis näidatud uue commit'i **Ready / Production**
+tulemust ja värskenda portaali. Ava testkuulutus, kus on alla kümne foto;
+kuulutus 201 oli viimases kinnitatud katses täis. Lisa üks uus foto ja
+mõõda aeg nupust **Lisa kuulutusele** kuni uue foto nähtavale ilmumiseni.
+Kontrolli ka selle foto avalikku nähtavust.
 
-Kui konto reserv enne lisamist ei mahu, võib selle esimene katse sisaldada
-ühe varasema lõpetatud algfaili koristust. Edaspidine vastusejärgne koristus
-ei pea takistama juba kinnitatud foto kuvamist. Tegelik kiirus kinnitatakse
-selle uue kasutuskatsega, mitte kohaliku sünteetilise testi ajaga.
+Üks kasutuskatse on selle paranduse kontrolliks piisav. Ära eemalda
+kinnitatud fotosid üksnes katse jaoks. Täpset uut sekundiarvu ette ei lubata:
+muudatus võimaldab kahe viimase lugemisetapi osalist kattumist, kuid foto ettevalmistus,
+üleslaadimine, kontroll ja salvestamine võtavad endiselt aega.
 
-Koristatakse ainult sama kuulutuse olemasoleva lepinguga lubatud algfaili;
-aktiivsed veebifotod jäävad alles. Värske päringu ja Storage'i puudumise
-tõendamiseta reservi ei vabastata. Üks samm ei tähenda kogu konto koristuse
-lõppu. Senised testpaneelid võivad veel näidata teisi ootel faile.
-
-Koodi ettevalmistus, Maci paigaldus, Git, andmebaasi vaatlus, Vercel ja päris
-kasutuskatse on eraldi tõendid. Täpne juhtum:
-[PHOTO_ADDITION_DIAGNOSTIC_20261107.md](PHOTO_ADDITION_DIAGNOSTIC_20261107.md).
+Paki kohalikud kontrollid ja nende piirid on
+[PHOTO_DISPLAY_20261107.md](PHOTO_DISPLAY_20261107.md). Need ei tähenda,
+et uus parandus oleks juba Macis või Vercelis paigaldatud.

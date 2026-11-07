@@ -215,3 +215,30 @@ pelgalt galerii fotode arvu või üldise veateate põhjal.
 Kasutajaliidese keele nõue ja tegelik V2 puudujääk on
 [ühises keelelepingus](interface-language-v1.md). Keelte sidumisel tuleb
 sõnumid tõlkida kuvamisel, säilitades poolelioleva toimingu ja selle võtmed.
+
+
+## Kaitstud foto laadimine paralleelselt galerii lugemisega, 07.11.2026
+
+Pärast parsitud püsivat lisamiskviitungit võib alustada täpselt selle foto
+tavalist kaitstud WEB-lugemist samaaegselt järgneva värske galerii lugemisega.
+Kviitung ega eellaadimine üksi ei muuda fotot nähtavaks galerii liikmeks.
+Värske autoriseeritud galerii võrdlus salvestuskviitungiga jääb nõutuks.
+
+Olemasolev omaniku hook hoiab ühe toimingu jooksul kõige rohkem üht ajutist
+eellaadimise URL-i. Sama URL-võtmega pildikomponent on esialgu peidetud ning
+muutub nähtavaks alles värske galerii liikmena. Aktiivsete fotode arv ja
+toimingunupud tulevad ainult galeriist; tühi galerii ei saa eellaadimisest
+fiktiivset põhipilti. Päring/Blob URL säilib nähtavaks muutumisel.
+
+Galerii lugemise vea, hilisema eemaldamise või konteksti muutuse korral
+peidetud komponent eemaldatakse ja senine pildilaadija vabastab ressursid.
+Meedia Auth/readiness, jooksva omanikuseose, täielike baitide/räsi ja seose
+lõppkontrolli ei muudeta. Uut püsivat vahemälu, järjekorda ega üleslaadimiste
+kordust ei lisata. Värske galerii lugemine toimub endiselt pärast salvestust.
+
+Enne seda muudatust on kasutaja kinnitanud f1745be paranduse, kümne foto
+kasutuskatse ning Frankfurdi fra1 redeploy. Serveri mõõtmine paranes
+7,6472 → 4,3452 sekundile; üks uus kogu lisamise katse võttis 12 sekundit.
+Uue paralleelse laadimise tootmisajavõitu pole veel mõõdetud.
+Täpsed mõõdud, teostus ja kontrollipiirid:
+[PHOTO_DISPLAY_20261107.md](../continuity/PHOTO_DISPLAY_20261107.md).

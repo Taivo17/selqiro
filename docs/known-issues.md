@@ -1,48 +1,43 @@
-# Teadaolevad käsilolevad vead
+# Teadaolevad käsilolevad tööd
 
 Seis: 07.11.2026 Europe/Tallinn. Praegune tööjärg on
 `continuity/CURRENT_STATE.json`-is; see dokument ei ole teine NEXT-allikas.
 
-## Foto valik omanikuvaate värskenduse ajal
+## Foto valik ja viie foto takistus — kasutaja katsega lahendatud
 
-Väljastatud foto valimise r2 komponendis on kohalikult korratud viga: native
-failivalijast naasmise fookus võib alustada omanikuvaate lugemist enne faili
-`change` sündmust. Valik jäetakse kõrvale ja eelmise lisamise eduteade jääb
-nähtavale, kuigi uut prepare/PUT/append'i ei toimunud.
+Foto valimise ja lõpetatud SOURCE-algfailide reservi parandus on kasutuses,
+Verceli lähtecommit `f1745be`. Kasutaja lisas kuulutusele 201 veel viis
+fotot, jõudis lubatud kümneni ning kinnitas galerii ja avaliku vaate.
+Varasem eksitav eduteade ja konto reservist tingitud viie foto takistus
+ei ole enam selle kasutuskatse põhjal lahtised paigaldustööd.
 
-Käesolev parandus seob valiku avatud valija kontrolleriga, hoiab kohaliku faili
-lugemise ajal alles ning lähtestab vana lõpetatud toimingu alles sobivas seisus.
-Valiku saab ka oote ajal kõrvale jätta. Uuema teise vahekaardi kavatsuse või
-identiteedi muutuse korral fail teise toimingusse ei lähe. Päris Maci ja
-telefoni kasutuskatse tehakse pärast uue commit'i Verceli Ready tulemust.
-
-## Avaldatud algfailide reserv takistas järgmist fotot
-
-07.11 kell 13:29 Europe/Tallinn päris lugemine kinnitab 277 MiB konto reservi:
-225 MiB on üheksa avaldatud SOURCE-algfaili ootel koristus ja 52 MiB on
-13 kasutusel oleva WEB-objekti reserv. Piir on 300 MiB; uue foto 29 MiB ei mahu.
-Avatud katseid, pooleliolevaid sessioone/osi ega nähtava metaandmeta reserve
-selles vaatluses polnud. Tegemist ei ole viie foto piiriga.
-
-Parandus ühendab olemasoleva SOURCE-koristaja foto lisamisega. Üks täpselt
-kinnitatud mahu-keeldumine võib viia ühe sama kuulutuse SOURCE-objekti
-koristuseni ning ühe sama sisendiga prepare-korduseni, kui värske omanikuvaade
-kinnitab koristatud algfailide arvu muutust. Eduka append'i järel tehakse üks
-piiratud SOURCE-samm pärast vastuse saatmist. SQL-i, 300 MiB piiri ega
-aktiivse galerii faile selleks ei muudeta.
-
-Maci rakendamist, uut deployment'i ja kasutaja uut edukat lisamist ei ole veel
-kinnitatud. Täpne tõend ja piirid on
+07.11 kell 13:29 Europe/Tallinn r2 diagnostika tuvastatud 277 MiB reserv
+jääb ajalooliseks vaatluseks, mitte tänase konto mahu väiteks.
+Täpsed algandmed säilivad
 `continuity/PHOTO_ADDITION_DIAGNOSTIC_20261107.md`-s.
+
+## Foto lisamise ooteaeg
+
+Frankfurdi `fra1` funktsioonipiirkond on seadistatud ja sama koodi
+redeploy on kasutaja kinnitatud. Värske vastus kinnitab tegelikku `fra1`
+käivitust. Mõõdetud serverietapp 7647,2 → 4345,2 ms ning üks uus
+stopperiga lisamine 12 s näitavad paranemist; üks uus katse ei kinnita
+püsivat keskmist ega kõikide pildisuuruste tulemust.
+
+Järgmine parandus võimaldab kinnitatud uue foto kaitstud laadimist ja värsket
+galerii lugemist teha samal ajal. Galerii tõend, identiteedikaitse ja serveri pildikontroll
+säilivad. See ei vähenda SOURCE/WEB kontrolli ennast ega võrdu kogu 12 s
+eemaldamisega. Päris tulemus vajab pärast uut Ready'd üht kasutuskatset.
+Vt `continuity/PHOTO_DISPLAY_20261107.md`.
 
 ## Üldine koristus enne avalikku avamist
 
 Katkestatud/aegunud üleslaadimiste ja terve kuulutuse terminalse hosted
-koristuse kõik juhud on eraldi lõpetamata töö. Käesolev raport näitab nende
-kategooriate nulli selle konto hetktõmmises; see ei tõenda üldist valmisolekut.
-Uus vastusejärgne samm ei ole püsiv taustatööde teenus ega tühjenda korraga
-kogu konto järjekorda. Tehnilised testpaneelid eemaldatakse tavakasutaja
-vaatest koos täieliku taustal lõpetamisega.
+koristuse kõik juhud on eraldi lõpetamata töö. Eduka lisamise üks
+vastusejärgne SOURCE-samm ei ole püsiv taustatööde teenus ega tühjenda
+korraga kogu konto järjekorda. Tehnilised testpaneelid eemaldatakse
+tavakasutaja vaatest koos täieliku taustal lõpetamisega. Paneeli peitmine
+ei asenda failide lõpetamist.
 
 ## V2 kasutajaliidese keelekatvus on poolik
 
@@ -50,7 +45,7 @@ Inglise põhikeel ja eesti teine keel on püsiv nõue. V2 sisaldab veel
 eestikeelseid püsitekste. Olemasoleva `profiles.language` eelistuse ja
 isoleeritud tõlkeabi abil tuleb lõpetada terviklik kuulutuse kasutustee,
 kaasa arvatud foto lisamise oleku-, vea- ja ligipääsetavuse tekstid.
-Selle paranduse sees ei lisata eraldi keele-eelistuse allikat.
+Foto kuvamise parandus ei lisa uut keelesüsteemi.
 Vt `architecture/interface-language-v1.md`.
 
 ## Diagnostika ajatemplite ühilduvus — lahendatud

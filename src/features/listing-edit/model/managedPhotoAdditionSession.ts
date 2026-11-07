@@ -15,6 +15,7 @@ export type PhotoAdditionView = Readonly<{
 }>;
 export type PhotoAdditionOperation = Readonly<{
   signal: AbortSignal; checkContext: () => void; showGallery: (gallery: ManagedListingImagesSnapshot) => void;
+  preloadImage?: (source: string) => void;
 }>;
 export type RunPhotoAddition = <T>(key: ManagedListingImagesKey,
   work: (operation: PhotoAdditionOperation) => Promise<T>) => Promise<T>;
@@ -110,6 +111,12 @@ export class ManagedPhotoAdditionSession {
     if (result.receipt && result.acknowledged) {
       let displayed = result.gallery;
       if (result.gallery) {
+        // The parsed receipt names one committed WEB image. Its protected read
+        // may overlap gallery readback, but cannot make the image a visible
+        // gallery member or establish success before that readback completes.
+        if (result.gallery.images.some(image => image.url === result.receipt!.url)) {
+          context.checkContext(); context.preloadImage?.(result.receipt.url);
+        }
         const fresh = confirmManagedListingImagesReadback(result.acknowledged,
           await this.deps.readGallery(this.key, context.signal));
         context.checkContext(); context.showGallery(fresh); displayed = fresh;

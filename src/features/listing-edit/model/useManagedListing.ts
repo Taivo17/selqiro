@@ -18,12 +18,13 @@ import type {RunPhotoAddition} from "./managedPhotoAdditionSession";
 export type ManagedListingState = {actor: PublicationActor | null; receipt: FinalReceipt | null;
   activity: {status: "active" | "paused" | "sold"; activeUntil: string | null} | null; images: string[];
   gallery: ManagedListingImagesSnapshot | null; imageError: string | null; imageMessage: string | null;
+  preloadingImage: string | null;
   primaryBusyOrdinal: number | null; removalBusyOrdinal: number | null;
   cleanupState: "pending" | "needs_attention" | "settled" | null;
   retiredCleanup: RetiredImageCleanupStatus | null; retiredCleanupLoading: boolean; retiredCleanupError: string | null;
   loading: boolean; busy: boolean; error: string | null};
 const initial = (): ManagedListingState => ({actor: null, receipt: null, activity: null, images: [], gallery: null,
-  imageError: null, imageMessage: null, primaryBusyOrdinal: null, removalBusyOrdinal: null,
+  imageError: null, imageMessage: null, preloadingImage: null, primaryBusyOrdinal: null, removalBusyOrdinal: null,
   cleanupState: null, retiredCleanup: null, retiredCleanupLoading: false, retiredCleanupError: null,
   loading: true, busy: false, error: null});
 function sameImages(gallery: ManagedListingImagesSnapshot, urls: readonly string[]) {
@@ -116,7 +117,7 @@ export function useManagedListing(listingId: string) {
           }
           if (!active || g !== generation.current || identityChangePending(actor.userId)) return;
           const next: ManagedListingState = {actor, receipt: final, activity, images: value.images as string[],
-            gallery, imageError, imageMessage: null, primaryBusyOrdinal: null, removalBusyOrdinal: null,
+            gallery, imageError, imageMessage: null, preloadingImage: null, primaryBusyOrdinal: null, removalBusyOrdinal: null,
             cleanupState, retiredCleanup: null, retiredCleanupLoading: false, retiredCleanupError: null,
             loading: false, busy: false, error: null};
           stateRef.current = next; setState(next);
@@ -264,13 +265,23 @@ export function useManagedListing(listingId: string) {
     // This lock is acquired synchronously, before the browser's cross-tab lock.
     // It is shared with primary changes, photo removal and listing deletion.
     locked.current = true; const g = generation.current, signal = control.current.signal;
+    let preloadedSource: string | null = null;
     const checkContext = () => {
       if (g !== generation.current || signal.aborted || identityChangePending(actor.userId)
         || stateRef.current.actor?.userId !== actor.userId || stateRef.current.actor.identityId !== actor.identityId)
         throw new Error("context_changed");
     };
     const busy = {...current, busy: true, imageMessage: null}; stateRef.current = busy; setState(busy);
-    try { return await work({signal, checkContext, showGallery: gallery => {
+    try { return await work({signal, checkContext, preloadImage: source => {
+      checkContext();
+      if (preloadedSource !== null || !managedListingMedia(source)) return;
+      preloadedSource = source;
+      if (stateRef.current.images.includes(source)) return;
+      // One hidden, operation-scoped member uses the ordinary protected image
+      // component. Only showGallery's fresh read can promote it into the gallery.
+      const next = {...stateRef.current, preloadingImage: source};
+      stateRef.current = next; setState(next);
+    }, showGallery: gallery => {
       checkContext();
       if (gallery.key.userId !== key.userId || gallery.key.identityId !== key.identityId
         || gallery.key.listingId !== listingId || gallery.key.attemptId !== key.attemptId) throw new Error("response");
@@ -280,7 +291,7 @@ export function useManagedListing(listingId: string) {
     }}); }
     finally { if (g === generation.current) {
       locked.current = false;
-      const next = {...stateRef.current, busy: false}; stateRef.current = next; setState(next);
+      const next = {...stateRef.current, busy: false, preloadingImage: null}; stateRef.current = next; setState(next);
       refreshRef.current();
     } }
   };
