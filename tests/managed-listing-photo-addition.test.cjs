@@ -243,3 +243,45 @@ test('cleanup count projection can exceed ten historical photos while keeping ex
   assert.throws(()=>cleanup.retiredImageCleanupStatus({schema_version:1,attempt_id:A,request_key:CHILD,
     files_remaining:2147483648,needs_attention:0,reserved_bytes:2147483648*4194304},key));
 });
+
+const additionOriginal=()=>new Blob(['original photo selected before lock with camera metadata']);
+const additionPrepared=()=>new Blob(['smaller encoded photo']);
+const additionRecipe='webp-2048-q90-v1';
+test('prepared addition persists original and transfer proofs before prepare and PUT',async()=>{
+  const h=harness();h.deps.preparePhoto=async bytes=>{assert.equal(await bytes.text(),await additionOriginal().text());return {bytes:additionPrepared(),recipe:additionRecipe};};
+  const s=h.session();await s.start(h.baseline(),additionOriginal());const proof=h.journal.preparation[0];
+  assert.equal(s.view.phase,'added');assert.equal(proof.originalSha256,await digest(additionOriginal()));
+  assert.equal(proof.uploadSha256,await digest(additionPrepared()));assert.equal(h.journal.image.sha256,proof.uploadSha256);
+  assert.equal(h.requests[0].args.p_image.byte_length,additionPrepared().size);assert.deepEqual(h.requests[0].journal.preparation,[proof]);
+  assert.equal(h.puts[0].text,await additionPrepared().text());assert.equal(h.puts[0].journal.preparation[0].uploadSha256,proof.uploadSha256);
+});
+for(const mode of ['same original','different original','changed codec','invalid recipe','missing proof','wrong transferred hash'])test('prepared addition reload: '+mode,async()=>{
+  let hold=true,changed=false;const h=harness({request:async action=>{if(action==='image-prepare'&&hold)throw Error('grant_lost');}});
+  h.deps.preparePhoto=async()=>({bytes:changed?new Blob(['changed encoded photo']):additionPrepared(),recipe:additionRecipe});
+  await h.session().start(h.baseline(),additionOriginal());const requestKey=h.journal.requestKey;hold=false;
+  if(mode==='changed codec')changed=true;
+  if(mode==='invalid recipe')h.journal.preparation[0].recipe='future-recipe';
+  if(mode==='missing proof')h.journal.preparation=[];
+  if(mode==='wrong transferred hash')h.journal.preparation[0].uploadSha256='a'.repeat(64);
+  const s=h.session();await s.resume(mode==='different original'?new Blob(['different original content']):additionOriginal());
+  assert.equal(h.journal.requestKey,requestKey);assert.equal(h.requests.filter(r=>r.action==='owner-images-add-prepare').length,1);
+  if(mode==='same original'){assert.equal(s.view.phase,'added');assert.equal(h.puts.length,1);assert.equal(h.puts[0].text,await additionPrepared().text());}
+  else {assert.equal(h.puts.length,0);assert.equal(s.view.phase,mode==='different original'?'needs_file':mode==='changed codec'?'needs_attention':'unknown');}
+});
+test('an issued legacy addition journal without provenance still uploads its raw original',async()=>{
+  let hold=true;const h=harness({request:async action=>{if(action==='image-prepare'&&hold)throw Error('grant_lost');}});
+  await h.session().start(h.baseline(),additionOriginal());delete h.journal.preparation;hold=false;
+  h.deps.preparePhoto=async()=>{assert.fail('legacy raw bytes must not be transformed');};
+  const s=h.session();await s.resume(additionOriginal());assert.equal(s.view.phase,'added');assert.equal(h.puts[0].text,await additionOriginal().text());
+});
+test('prepared addition unknown PUT uses server verification without codec dependence or a second PUT',async()=>{
+  const h=harness({putPart:async()=>{throw Error('lost_put');}});h.deps.preparePhoto=async()=>({bytes:additionPrepared(),recipe:additionRecipe});
+  await h.session().start(h.baseline(),additionOriginal());h.deps.preparePhoto=async()=>{assert.fail('do not transform dispatched bytes');};
+  const s=h.session();await s.resume(new Blob(['unrelated selection']));assert.equal(s.view.phase,'added');assert.equal(h.puts.length,1);
+});
+test('addition invalidation aborts preparation before any remote intent or stored proof',async()=>{
+  const gate=defer(),entered=defer(),h=harness();let signal;
+  h.deps.preparePhoto=async(bytes,preparationSignal)=>{signal=preparationSignal;entered.resolve();await gate.promise;return {bytes:additionPrepared(),recipe:additionRecipe};};
+  const s=h.session(),pending=s.start(h.baseline(),additionOriginal());await entered.promise;s.invalidate();assert.equal(signal.aborted,true);
+  gate.resolve();await pending;assert.equal(h.journal,null);assert.equal(h.requests.length,0);assert.equal(h.puts.length,0);
+});

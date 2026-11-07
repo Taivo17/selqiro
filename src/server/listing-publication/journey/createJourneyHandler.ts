@@ -7,6 +7,7 @@ import { privateUploadHttp, type UploadFetch } from "../../../entities/listing/a
 import { assertPublicationActor, type PublicationRuntimeConfig } from "./integrationRuntime";
 import type { MultipartPublicationImages } from "./journeyTypes";
 import { isGalleryOrdinal, isGalleryRevision, photoAdditionActions, validatePhotoAdditionInput } from "./photoAdditionContract";
+import { createPublicationTiming, timePublicationStage } from "./publicationTiming";
 
 const ownerActions = {
   ...photoAdditionActions,
@@ -113,22 +114,31 @@ export function createJourneyRequestHandler(c: PublicationRuntimeConfig, images:
     const authorization = request.headers.get("authorization") ?? "";
     if (!/^Bearer [A-Za-z0-9._-]{1,8192}$/.test(authorization)) return response({error: "unauthorized"}, 401);
     const token = authorization.slice(7);
+    const timing = action === "image-prepare" || action === "image-verify" || action.startsWith("owner-images-")
+      ? createPublicationTiming() : undefined;
+    const reply = (value: unknown, status = 200) => {
+      const result = response(value, status);
+      try { const header = timing?.header(); if (header) result.headers.set("Server-Timing", header); }
+      catch { /* An unavailable timing header cannot change a publication result. */ }
+      return result;
+    };
     try {
       const input = await readBody(request);
       const expectedUserId = Object.hasOwn(ownerActions, action)
         ? input[action.startsWith("owner-edit-") ? "p_expected_actor_id" : "p_expected_user_id"]
         : input.expectedUserId;
-      await assertPublicationActor(c, token, expectedUserId, request.signal, fetcher);
+      await timePublicationStage(timing?.record, "gate", () =>
+        assertPublicationActor(c, token, expectedUserId, request.signal, fetcher));
       const headers = {apikey: c.publicKey, authorization, "content-type": "application/json"};
       if (Object.hasOwn(ownerActions, action)) {
         const bound = ownerContract(action as keyof typeof ownerActions, input);
-        const r = await privateUploadHttp(fetcher, c.projectOrigin + "/rest/v1/rpc/" + bound.name,
+        const r = await timePublicationStage(timing?.record, "owner_rpc", () => privateUploadHttp(fetcher, c.projectOrigin + "/rest/v1/rpc/" + bound.name,
           {method: "POST", headers, body: JSON.stringify(bound.args)}, {signal: request.signal, responseBytes: 65536,
-            readErrorStatuses: [400, 401, 403, 404, 409, 422, 500, 503]});
-        if (r.status === 200) return response(r.json);
+            readErrorStatuses: [400, 401, 403, 404, 409, 422, 500, 503]}));
+        if (r.status === 200) return reply(r.json);
         const error = ownerContractError(r.json);
-        if (error) return response({error: "owner_contract", ...error}, error.code === "42501" ? 403 : 409);
-        return response({error: "outcome_unknown"}, 503);
+        if (error) return reply({error: "owner_contract", ...error}, error.code === "42501" ? 403 : 409);
+        return reply({error: "outcome_unknown"}, 503);
       }
       const rpc = async (name: string, args: unknown) => {
         const r = await privateUploadHttp(fetcher, c.projectOrigin + "/rest/v1/rpc/" + name,
@@ -152,7 +162,7 @@ export function createJourneyRequestHandler(c: PublicationRuntimeConfig, images:
         return response(result);
       }
       if (action === "owner-status") return response(await rpc("get_my_managed_listing_v2", actorArgs(input, "listingId")));
-      if (action === "image-prepare" || action === "image-verify") return response(await images[action === "image-prepare" ? "prepare" : "verify"](token, input, request.signal));
+      if (action === "image-prepare" || action === "image-verify") return reply(await images[action === "image-prepare" ? "prepare" : "verify"](token, input, request.signal, timing?.record));
       if (action === "cleanup") return response(await settle(token, input, request.signal));
       if (action === "publish" || action === "remove") {
         const result = action === "publish" ? await final.publish(token, input, request.signal) : await final.remove(token, input, request.signal);
@@ -170,11 +180,11 @@ export function createJourneyRequestHandler(c: PublicationRuntimeConfig, images:
     } catch (error) {
       const code = error && typeof error === "object" && "code" in error ? String(error.code)
         : error instanceof Error ? error.message : "outcome_unknown";
-      if (code === "integration_unverified") return response({error: "integration_unverified"}, 503);
-      if (["unauthorized", "context_changed"].includes(code)) return response({error: code}, 403);
+      if (code === "integration_unverified") return reply({error: "integration_unverified"}, 503);
+      if (["unauthorized", "context_changed"].includes(code)) return reply({error: code}, 403);
       if (["input", "context", "images", "count", "bytes", "invalid_input", "refused"].includes(code))
-        return response({error: "refused"}, 409);
-      return response({error: "outcome_unknown"}, 503);
+        return reply({error: "refused"}, 409);
+      return reply({error: "outcome_unknown"}, 503);
     }
   };
 }

@@ -5,6 +5,9 @@ import {appendPhotoAdditionArguments, bindPhotoAdditionJournal, parsePhotoAdditi
   preparePhotoAdditionArguments, type PhotoAdditionJournal, type PhotoAdditionResult} from "../../../entities/listing/model/managedListingPhotoAddition";
 import {PRIVATE_UPLOAD} from "../../../entities/listing/model/privatePublicationUpload";
 import {isPublicationCapacityError} from "../../../entities/listing/model/publicationCapacity";
+import {measurePhotoTask} from "../../../entities/listing/model/photoPerformance";
+import {preparePublicationFile, preparedImageDescriptor, restorePublicationFile,
+  type PrepareListingPhoto} from "../../../entities/listing/model/publicationFilePreparation";
 
 export type PhotoAdditionView = Readonly<{
   phase: "idle" | "busy" | "resume" | "needs_file" | "unknown" | "needs_attention" | "added" | "closed";
@@ -22,7 +25,7 @@ export type PhotoAdditionSessionDeps = {
   request: (action: string, args: object, signal: AbortSignal) => Promise<unknown>;
   readGallery: (key: ManagedListingImagesKey, signal: AbortSignal) => Promise<ManagedListingImagesSnapshot>;
   putPart: (url: string, headers: Record<string, string>, bytes: Blob, signal: AbortSignal) => Promise<void>;
-  uuid: () => string; digest: (bytes: Blob) => Promise<string>;
+  uuid: () => string; digest: (bytes: Blob) => Promise<string>; preparePhoto?: PrepareListingPhoto;
 };
 const initial = (): PhotoAdditionView => ({phase: "idle", message: ""});
 /** One addition, using the same image transfer as new listings. The journal and
@@ -31,6 +34,7 @@ export class ManagedPhotoAdditionSession {
   private readonly key: ManagedListingImagesKey;
   private readonly uploadOrigin: string;
   private generation = 0;
+  private abort = new AbortController();
   private operation: Promise<void> | null = null;
   private file: {clientId: string; bytes: Blob} | undefined;
   private remoteIntent = false;
@@ -44,7 +48,7 @@ export class ManagedPhotoAdditionSession {
   subscribe(listener: (view: PhotoAdditionView) => void) {
     this.listener = listener; listener(this.view); return () => { this.listener = () => {}; };
   }
-  invalidate() { ++this.generation; this.file = undefined; this.listener = () => {}; }
+  invalidate() { ++this.generation; this.abort.abort(); this.file = undefined; this.listener = () => {}; }
   private change(view: PhotoAdditionView) { this.view = Object.freeze(view); this.listener(this.view); }
   private journal(): PhotoAdditionJournal { return bindPhotoAdditionJournal(this.deps.readJournal(), this.key); }
   private hasIntent() { try { return this.remoteIntent || this.deps.readJournal() !== null; } catch { return true; } }
@@ -52,23 +56,29 @@ export class ManagedPhotoAdditionSession {
     if (!(file instanceof Blob) || file.size < 1 || file.size > PRIVATE_UPLOAD.maxSourceBytes) throw new Error("invalid_file");
     return file.slice(0, file.size, "application/octet-stream");
   }
-  private run(work: (context: PhotoAdditionOperation) => Promise<void>): Promise<void> {
+  private run(work: (context: PhotoAdditionOperation) => Promise<void>, measureTotal = false): Promise<void> {
     if (this.operation) return this.operation;
     const generation = this.generation;
     const operation = this.deps.runOwnerOperation(this.key, owner => this.deps.withLock(async () => {
-      const context: PhotoAdditionOperation = {...owner, checkContext: () => {
-        owner.checkContext(); if (this.generation !== generation || owner.signal.aborted) throw new Error("context_changed");
+      const abort = () => this.abort.abort();
+      owner.signal.addEventListener("abort", abort, {once: true});
+      if (owner.signal.aborted) abort();
+      const context: PhotoAdditionOperation = {...owner, signal: this.abort.signal, checkContext: () => {
+        owner.checkContext(); if (this.generation !== generation || this.abort.signal.aborted) throw new Error("context_changed");
       }};
-      context.checkContext(); this.change({phase: "busy", message: "Kontrollin foto lisamist…"});
-      try { await work(context); }
+      try {
+        context.checkContext(); this.change({phase: "busy", message: "Kontrollin foto lisamist…"});
+        await (measureTotal ? measurePhotoTask("total", () => work(context)) : work(context));
+      }
       catch (error) {
         if (this.generation !== generation || owner.signal.aborted) return;
         const reason = error instanceof Error ? error.message : (error as {code?: string})?.code;
         const capacityUnavailable = isPublicationCapacityError(error);
         const phase = !this.hasIntent() ? "idle" : capacityUnavailable ? "needs_attention" : reason === "files_required" ? "needs_file" : reason === "40001" ? "resume"
-          : ["image_rejected", "image_processor_unavailable", "needs_attention", "image_limit"].includes(reason ?? "") ? "needs_attention" : "unknown";
+          : ["image_rejected", "image_processor_unavailable", "needs_attention", "image_limit", "photo_preparation_changed"].includes(reason ?? "") ? "needs_attention" : "unknown";
         const message = capacityUnavailable ? "Foto lisamine on ajutiselt piiratud. Katkesta see lisamine ja proovi hiljem uuesti. Kuulutuse olemasolevad fotod jäävad alles."
           : reason === "files_required" ? "Vali sama algne foto, et lisamist jätkata. Juba saadetud fotot uuesti ei saadeta."
+          : reason === "photo_preparation_changed" ? "Brauser valmistas foto seekord teisiti ette. Katkesta see lisamine ja vali sama algne foto uueks lisamiseks. Olemasolevad fotod jäävad alles."
           : reason === "image_rejected" ? "See foto ei sobi lisamiseks. Katkesta lisamine ning vali JPEG-, PNG- või WebP-foto."
           : reason === "image_limit" ? "Kuulutusel on juba 10 fotot. Katkesta see lisamine; olemasolevad fotod jäävad alles."
           : reason === "40001" ? "Kuulutuse pilte muudeti samal ajal. Kontrolli ja jätka sama foto lisamist."
@@ -76,7 +86,7 @@ export class ManagedPhotoAdditionSession {
           : phase === "needs_attention" ? "Foto töötlemist ei saanud lõpetada. Katkesta see lisamine ja proovi teise fotoga."
           : "Foto lisamise tulemus pole veel kinnitatud. Kontrolli ja jätka sama lisamist.";
         this.change({phase, message});
-      }
+      } finally { owner.signal.removeEventListener("abort", abort); }
     })).catch(() => {
       if (this.generation === generation) this.change({phase: this.hasIntent() ? "unknown" : "idle",
         message: "Kuulutuse seis või konto muutus või lisamine on teises aknas töös. Kontrolli seisu ja proovi uuesti."});
@@ -138,13 +148,14 @@ export class ManagedPhotoAdditionSession {
         if (!await this.accept(result, existing, context)) this.change({phase: "resume", message: "Selle kuulutuse foto lisamine on juba pooleli. Jätka sama lisamist."});
         return;
       }
-      const sha256 = await this.deps.digest(captured); context.checkContext();
+      this.change({phase: "busy", message: "Valmistan fotot saatmiseks ette…"});
+      const prepared = await preparePublicationFile(captured, clientId, this.deps, context); context.checkContext();
       const journal = bindPhotoAdditionJournal({version: 1, requestKey, dispatched: [], baseline: bound,
-        image: {client_file_id: clientId, byte_length: captured.size, sha256}, readyId: null}, this.key);
-      this.deps.writeJournal(journal); this.remoteIntent = true; this.file = {clientId: journal.image.client_file_id, bytes: captured};
+        image: preparedImageDescriptor(prepared.preparation), preparation: [prepared.preparation], readyId: null}, this.key);
+      this.deps.writeJournal(journal); this.remoteIntent = true; this.file = {clientId: journal.image.client_file_id, bytes: prepared.bytes};
       const result = parsePhotoAdditionResult(await this.request("owner-images-add-prepare", preparePhotoAdditionArguments(journal), context), journal);
       await this.complete(result, journal, context);
-    });
+    }, true);
   }
   resume(selected?: Blob): Promise<void> {
     if (this.operation) return this.operation;
@@ -164,13 +175,17 @@ export class ManagedPhotoAdditionSession {
         result = parsePhotoAdditionResult(await this.request("owner-images-add-prepare", preparePhotoAdditionArguments(journal), context), journal);
         if (await this.accept(result, journal, context)) return;
       }
-      if (captured) {
-        const hash = await this.deps.digest(captured); context.checkContext();
-        if (captured.size !== journal.image.byte_length || hash !== journal.image.sha256) throw new Error("files_required");
-        this.file = {clientId: journal.image.client_file_id, bytes: captured};
+      if (captured && !journal.dispatched.length) {
+        let bytes = captured;
+        if (journal.preparation) bytes = await restorePublicationFile(captured, journal.preparation[0], this.deps, context);
+        else {
+          const hash = await this.deps.digest(captured); context.checkContext();
+          if (captured.size !== journal.image.byte_length || hash !== journal.image.sha256) throw new Error("files_required");
+        }
+        context.checkContext(); this.file = {clientId: journal.image.client_file_id, bytes};
       }
       await this.complete(result, journal, context);
-    });
+    }, true);
   }
   private async complete(result: PhotoAdditionResult, journal: PhotoAdditionJournal, context: PhotoAdditionOperation) {
     if (await this.accept(result, journal, context)) return;

@@ -348,3 +348,23 @@ request and durable receipt. A confirmed capacity refusal should explain the
 temporary limit instead of inviting an ineffective retry loop. Details and
 test boundaries are in the
 [published-photo addition contract](architecture/published-photo-addition-v1.md).
+
+## Photo preparation and timing — 2026-11-06
+
+Keep browser preparation shared between new publication and later photo addition.
+Reuse neutral, bounded local image header/decode helpers while preserving each
+feature's limits and errors. A new preparation recipe belongs beside the existing
+upload journal, with the original and transferred byte hashes; it does not require
+a second intent system. Older journals retain their exact raw-byte interpretation.
+
+Measure fixed stages without a new telemetry service, content logs or technical
+user panels. A timing failure cannot affect the operation. Optimize the measured
+bottleneck; preserve server authorization, exact-byte verification and uncertain
+write recovery. A smaller local fixture is evidence of reduced bytes, not a
+production latency promise. See
+[photo preparation](architecture/listing-photo-preparation-v1.md).
+
+A delivery receipt may locate a predecessor commit, but the Git tree and parent
+must be checked independently. Once a successful Mac receipt gives the next exact
+commit, use that verified base directly in the following release; do not grow an
+unbounded installer history engine for routine source updates.

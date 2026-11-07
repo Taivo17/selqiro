@@ -23,8 +23,8 @@ function journeyHandler(c: PublicationRuntimeConfig) {
     : createMultipartPublicationImages({...c, integrationScope: "disposable-v2"}, sanitizeListingImage);
   const settle = isHostedPublicationRuntime(c) ? createSettleHostedCleanupOne(c) : images.settle;
   return createJourneyRequestHandler(c, {
-    prepare: (token, input, signal) => images.prepare(token, copyWebCommand(input), signal),
-    verify: (token, input, signal) => images.verify(token, copyWebCommand(input), signal),
+    prepare: (token, input, signal, timing) => images.prepare(token, copyWebCommand(input), signal, timing),
+    verify: (token, input, signal, timing) => images.verify(token, copyWebCommand(input), signal, timing),
     settle: (token, input, signal) => settle(token, input as MultipartSettlementCommand, signal),
   });
 }

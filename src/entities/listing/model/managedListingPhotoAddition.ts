@@ -4,10 +4,12 @@ import {bindManagedListingImagesKey, bindManagedListingImagesSnapshot, confirmMa
   managedListingImagesReadArguments, parseManagedListingImages, MANAGED_LISTING_IMAGE_LIMIT, MAX_MANAGED_IMAGE_ORDINAL,
   type ManagedListingImagesKey, type ManagedListingImagesSnapshot} from "./managedListingImages";
 import type {PublicationImageJournal} from "../api/completePublicationImage";
+import {bindFilePreparations, preparationMatchesUpload, type PublicationFilePreparation} from "./publicationFilePreparation";
 
 export type AdditionImage = Readonly<{client_file_id: string; byte_length: number; sha256: string}>;
 export type PhotoAdditionJournal = PublicationImageJournal & {
   baseline: ManagedListingImagesSnapshot; image: AdditionImage; readyId: string | null;
+  preparation?: readonly PublicationFilePreparation[];
 };
 export type PhotoAdditionSnapshot = Readonly<{
   attemptId: string; state: "open" | "cancelled" | "expired" | "published" | "deleted"; slot: PublicationSlot;
@@ -40,14 +42,19 @@ export function bindAdditionImage(value: unknown): AdditionImage {
 /** Only request identifiers, a bounded gallery baseline and byte metadata are kept.
  * File contents, filenames and signed upload URLs never enter this journal. */
 export function bindPhotoAdditionJournal(value: unknown, expected: ManagedListingImagesKey): PhotoAdditionJournal {
-  const row = uploadRecord(value, ["version", "requestKey", "dispatched", "baseline", "image", "readyId"]);
+  const fields = ["version", "requestKey", "dispatched", "baseline", "image", "readyId"];
+  const hasPreparation = Object.hasOwn(uploadRecord(value), "preparation");
+  const row = uploadRecord(value, hasPreparation ? [...fields, "preparation"] : fields);
   const baseline = bindManagedListingImagesSnapshot(row.baseline as ManagedListingImagesSnapshot);
   check(row.version === 1 && uuid(row.requestKey) && sameKey(baseline.key, bindManagedListingImagesKey(expected))
     && baseline.images.length < MANAGED_LISTING_IMAGE_LIMIT && BigInt(baseline.revision) < MAX_REVISION
     && Array.isArray(row.dispatched) && row.dispatched.length <= 1 && row.dispatched.every(uuid)
     && (row.readyId === null || uuid(row.readyId)));
+  const image = bindAdditionImage(row.image);
+  const preparation = hasPreparation ? bindFilePreparations(row.preparation, 1) : undefined;
+  if (preparation) check(preparation.length === 1 && preparationMatchesUpload(preparation[0], image.client_file_id, image.byte_length, image.sha256));
   return {version: 1, requestKey: row.requestKey as string, dispatched: [...row.dispatched] as string[],
-    baseline, image: bindAdditionImage(row.image), readyId: row.readyId as string | null};
+    baseline, image, readyId: row.readyId as string | null, ...(preparation ? {preparation} : {})};
 }
 export function photoAdditionArguments(key: ManagedListingImagesKey, requestKey: string) {
   check(uuid(requestKey));

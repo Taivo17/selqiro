@@ -1,70 +1,59 @@
-# Foto lisamine olemasolevale kuulutusele
+# Fotode kiirendus — olemasoleva portaali uuendus
 
-Seis: 06.11.2026 Europe/Tallinn. Üks autoriteetne seisukirje on
-[CURRENT_STATE.json](CURRENT_STATE.json). See muudatus on ette valmistatud;
-Maci rakendus, uus commit/push, Verceli deployment ja kasutaja uus fotokatse
-kinnitatakse eraldi pärast alloleva uuendaja käivitamist.
+Seis: 06.11.2026 Europe/Tallinn. Üks autoriteetne seis on
+[CURRENT_STATE.json](CURRENT_STATE.json).
 
-## Mis lisandub
+## Mida see samm teeb
 
-Kuulutuse muutmisvaate piltide juurde lisandub **Lisa foto**. Lisada saab ühe
-JPEG-, PNG- või WebP-foto korraga, kuni 25 MiB; galeriis saab olla kuni kümme
-fotot. Senised fotod ja põhipilt säilivad. Kui kuulutusel pole veel ühtki
-fotot, saab esimene lisatud foto põhipildiks.
+Foto lisamine ja avalik nähtavus on kasutaja poolt vastu võetud. Uus hinnang
+ühe foto lisamisele on 27–31 sekundit. See pakett vähendab suurte fotode
+üleslaadimise mahtu brauseris ning lisab piiratud etappide ajamõõtmise.
+Sama ettevalmistus teenindab uue kuulutuse loomist ja hilisemat foto lisamist.
+Serveri õiguste, faili ja lõpptulemuse kontrollid säilivad.
 
-Sama pilditöötlus teenindab uue kuulutuse avaldamist ja hilisemat foto lisamist.
-Foto lisamine ei salvesta pooleliolevaid teksti- ega hinnamuudatusi. Kui võrgu
-vastus jääb teadmata, saab kontrollida ja jätkata sama lisamist.
+Uus pakett on **selqiro-fotode-kiirendus-20261106.zip**. Varem väljastatud
+foto lisamise paketti ega selle paigaldajat ei käivitata uuesti.
 
-## Üks uuendamiskäsk
+## Üks jätkamiskäsk
 
-1. Laadi alla **selqiro-foto-lisamine-20261106.zip**.
-2. Ava ZIP topeltklõpsuga. Downloads-kausta peab tekkima
-   **selqiro-foto-lisamine-20261106**, mille sees on **uuenda.py**.
-3. Käivita terminalis:
+1. Laadi uus ZIP Maci Downloads-kausta ja paki lahti. Seal peab tekkima
+   `selqiro-fotode-kiirendus-20261106` kaust, mille sees on `uuenda.py`.
+2. Käivita terminalis:
 
 ```bash
-python3 -I -B "$HOME/Downloads/selqiro-foto-lisamine-20261106/uuenda.py" --publish
+python3 -I -B "$HOME/Downloads/selqiro-fotode-kiirendus-20261106/uuenda.py" --publish
 ```
 
-Uuendaja kontrollib olemasolevat töökausta `/Users/taivo/selqiro`, haru `main`,
-HEAD-i, tööpuud ja indexit, kõiki teadaolevaid lähtefaile ning kinnitatud
-remote'i `https://github.com/Taivo17/selqiro.git`. Terminaliviiba kaustanimest
-sihti ei tuletata. Eelmise vastu võetud paranduse täpne commit loetakse selle
-olemasolevast kohalikust tulemuspäevikust ja kontrollitakse sõltumatult selle
-Giti vanemat, puud ning faili sisu. Vastuvõtudokumente ei eeldata Macis juba
-rakendatuks; need tulevad selle pakiga kaasa.
+Uuendaja kontrollib olemasolevaid edukaid raporteid ja tegelikku Giti seisu,
+sealhulgas täpset lähtepuud, haru, HEAD-i, tööpuud/indexit ja kinnitatud
+remote'i. Raportist leitav commit kontrollitakse sõltumatult. Siht on senine
+`/Users/taivo/selqiro`; uut hoidlat ega worktree'd ei looda.
 
-Seejärel kontrollitakse olemasoleva Supabase'i täpset skeemi, rakendatakse
-läbivaadatud muudatus, kontrollitakse tulemust, lisatakse failid, tehakse build
-ning üks commit ja tavaline push. Uut projekti ega kontosüsteemi ei looda.
-Paigaldaja ei käivita foto üleslaadimist, kuulutuse muutmist ega failikoristust.
+See uuendaja rakendab ainult lähtekoodi, teeb vajaliku build'i ja loob ning
+push'ib ühe kontrollitud commit'i. SQL-i, Supabase CLI-d ega Storage'i
+paigaldamisel ei käivitata. Kasutaja päevikud ja kõrvalised muudatused säilivad.
+`PEATATUD` korral saada täpne rida ja raport; ära muuda räsikaitset ega kustuta
+päevikuid. Sama eduka sammu jätkamine ei korda kinnitatud build'i või push'i.
 
-Kui kuvatakse `PEATATUD`, säilita väljund ja raport. Lähtefaili või andmebaasi
-erinevust ei parandata käsitsi räsikaitsest möödudes. Kui SQL-i vastus katkeb,
-kontrollib sama uuendaja jätkamisel tegelikku lõppseisu enne võimalikke
-järgmisi samme; SQL-i ei käivitata teadmata tulemuse tõttu pimesi uuesti.
+## Üks tootmise võrdlus
 
-## Vercel ja üks tegelik kasutuskatse
+Pärast uuendaja edukat lõppu vaata Vercelis **sama uue commit'i Production
+Ready** tulemust ja värskenda portaali. Lisa samal seadmel ning ühendusel
+võimalusel sama algne foto, millega varasem 27–31 sekundi hinnang tekkis.
+Võrdle aega nupuvajutusest foto nähtavale ilmumiseni. Märgi ka algfaili maht,
+kui see on kohe näha; terve testiseeria kordamine pole vajalik.
 
-Pärast terminali `VALMIS` tulemust oota Vercelis **sama uue commit'i**
-`Ready / Production` tulemust ja värskenda portaali.
+Lokaalses katses vähenes ühe 7,14 MB JPEG-i saatmismaht ligikaudu 0,99 MB-ni.
+See on sünteetilise võrdlusfaili tulemus. Tootmise kogukestust pole pärast
+parandust mõõdetud ja kindlat sekundite arvu ei lubata.
 
-1. Ava olemasolev enda kuulutus muutmisvaates.
-2. Vali **Lisa foto**, vali üks foto ja vajuta **Lisa kuulutusele**.
-3. Veendu, et uus foto lisandus ning senised fotod ja põhipilt jäid alles.
-4. Ava kuulutus tavavaates ja kontrolli, et uus foto on galeriis.
+Kui kogukestus jääb pikaks, aitavad brauseri piiratud `performance.measure`
+ja vastuse `Server-Timing` eristada üleslaadimist, serveri lugemist/töötlust,
+salvestamist ja kinnitamist. Mõõtmise jaoks ei lisandu kasutajale tehnilist
+paneeli, uut telemeetriateenust ega fotode sisu logimist.
 
-Varem vastu võetud foto eemaldamise ja koristuspaneeli kadumise katseid selle
-jaoks uuesti ei nõuta. Uue foto saab soovi korral põhipildiks valida sama
-olemasoleva tegevusega.
+## Säiliv avaliku avamise töö
 
-## Säiliv avaliku avamise nõue
-
-Koristuse tehnilised paneelid jäävad praegu testimiseks nähtavaks. Foto lisamise
-järel võib SOURCE-algfail vajada senist lõpetamist; uus veebipilt on eraldi.
-Automaatne koristus ilma omaniku leheta ja tehniliste paneelide eemaldamine
-tavakasutaja vaatest on endiselt avaliku avamise eelne töö.
-
-06.11 kasutaja vastu võetud kuulutuse 201 koristustulemus säilib ajaloos.
-Selle tõend ei määra käesoleva uue paketi commit'i ega deployment'i.
+Koristuse testpaneelide nähtavus jääb selles sammus seniseks. Automaatne
+lõpetamine ilma omaniku avatud leheta ja tehniliste koristusnuppude/loendurite
+eemaldamine tavavaatest tuleb lõpetada enne avalikku avamist.

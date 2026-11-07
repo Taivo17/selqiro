@@ -410,3 +410,45 @@ test('creation marker runs only for the newly persisted journal, never a restore
   await next.start(listing(), [], key => { assert.equal(other.journal.requestKey, key); marked.push(key); });
   assert.equal(marked.length, 1); assert.equal(marked[0], other.journal.requestKey);
 });
+
+// Preparation provenance: intent hashes always describe the transferred bytes.
+const preparedRecipe = 'webp-2048-q90-v1';
+const preparedSource = () => new Blob(['original selected photo content with metadata']);
+const preparedBytes = () => new Blob(['small encoded photo']);
+test('new publication captures before preparation, persists both byte proofs and PUTs the prepared hash', async () => {
+  const gate=deferred(), entered=deferred(), h=harness();
+  h.deps.preparePhoto=async bytes=>{entered.resolve();await gate.promise;assert.equal(await bytes.text(),await preparedSource().text());return {bytes:preparedBytes(),recipe:preparedRecipe};};
+  const selected=[preparedSource()], s=h.session(), pending=s.start(listing(),selected); await entered.promise;
+  selected[0]=new Blob(['changed selection']);gate.resolve();await pending;
+  const proof=h.journal.preparation[0], body=h.requests[0].body;
+  assert.equal(s.view.phase,'published');assert.equal(proof.originalSha256,await sha(preparedSource()));
+  assert.equal(proof.uploadSha256,await sha(preparedBytes()));assert.equal(body.images[0].sha256,proof.uploadSha256);
+  assert.equal(body.images[0].byte_length,preparedBytes().size);assert.equal(h.puts[0].text,await preparedBytes().text());
+  assert.equal(h.puts[0].journalAtDispatch.preparation[0].uploadSha256,proof.uploadSha256);
+});
+for (const mode of ['same original','different original','changed codec','malformed metadata']) test('prepared publication reload: '+mode,async()=>{
+  let hold=true,codecChanged=false;const h=harness({request:async action=>{if(action==='image-prepare'&&hold)throw Error('grant_lost');}});
+  h.deps.preparePhoto=async()=>({bytes:codecChanged?new Blob(['other encoded photo']):preparedBytes(),recipe:preparedRecipe});
+  await h.session().start(listing(),[preparedSource()]);const requestKey=h.journal.requestKey;hold=false;
+  if(mode==='changed codec')codecChanged=true;
+  if(mode==='malformed metadata')h.journal.preparation[0].version=99;
+  const reloaded=h.session();await reloaded.resume([mode==='different original'?new Blob(['some other selected original']):preparedSource()]);
+  assert.equal(h.journal.requestKey,requestKey);assert.equal(h.requests.filter(r=>r.action==='prepare').length,1);
+  if(mode==='same original'){assert.equal(reloaded.view.phase,'published');assert.equal(h.puts.length,1);assert.equal(h.puts[0].text,await preparedBytes().text());}
+  else {assert.equal(h.puts.length,0);assert.equal(reloaded.view.phase,mode==='different original'?'needs_files':mode==='changed codec'?'needs_attention':'unknown');}
+});
+test('legacy publication journal resumes exact raw bytes even with a new preparer installed',async()=>{
+  const h=harness();await h.open(preparedSource());h.deps.preparePhoto=async()=>{assert.fail('legacy must not prepare again');};
+  const s=h.session();await s.resume([preparedSource()]);assert.equal(s.view.phase,'published');assert.equal(h.puts[0].text,await preparedSource().text());
+});
+test('prepared publication with uncertain PUT verifies only, without requiring re-encoding',async()=>{
+  const h=harness({putPart:async()=>{throw Error('lost_put');}});h.deps.preparePhoto=async()=>({bytes:preparedBytes(),recipe:preparedRecipe});
+  await h.session().start(listing(),[preparedSource()]);h.deps.preparePhoto=async()=>{assert.fail('a dispatched upload is never encoded or sent again');};
+  const s=h.session();await s.resume([new Blob(['unrelated selection after reload'])]);assert.equal(s.view.phase,'published');assert.equal(h.puts.length,1);
+});
+test('identity change during browser preparation prevents every intent and transfer',async()=>{
+  const gate=deferred(),entered=deferred(),h=harness();let preparationSignal;
+  h.deps.preparePhoto=async(bytes,signal)=>{preparationSignal=signal;entered.resolve();await gate.promise;return {bytes:preparedBytes(),recipe:preparedRecipe};};
+  const s=h.session(),pending=s.start(listing(),[preparedSource()]);await entered.promise;s.invalidate();assert.equal(preparationSignal.aborted,true);
+  gate.resolve();await pending;assert.equal(h.journal,null);assert.equal(h.requests.length,0);assert.equal(h.puts.length,0);
+});

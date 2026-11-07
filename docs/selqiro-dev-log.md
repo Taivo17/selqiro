@@ -1,3 +1,73 @@
+<!-- SELQIRO_PHOTO_SPEED_PREPARED_20261106 -->
+## 2026-11-06 — ühine fotode ettevalmistus ja piiratud etapiajad
+
+- Kasutaja lisas ühe foto edukalt ning hindas kuluks umbes 29 sekundit,
+  võimaliku vahemikuga 27–31 sekundit. Stopperit ei kasutatud. See esialgne
+  koguaeg ei määra veel aeglast serverietappi.
+- Suurte JPEG/PNG/WebP-fotode üks ühine brauseriretsept: pikem serv kuni
+  2048 px, WebP 0,9, üks orientatsioonipööre, alfa säilib, suurendamist ei ole.
+  Väikseid kuni 2048 px / 512 KiB faile ei kodeerita uuesti; ebasoodne või
+  puuduv kodeering jätab algsed baidid. Serveri pildikontroll säilib.
+- Sama helper teenindab loomist ja hilisemat lisamist. Olemasoleva
+  sõnumifoto päiselugeja/dekodeerija neutraalne osa on shared/media moodulis;
+  sõnumi API, piirid ja veakäitumine säilivad õhukeste ümbristega.
+- Jätkamiskirje valikuline versioonitud preparation seob algse faili ja
+  tegelikult saadetavad baidid. Vana kirje jätkab toorfailiga. Koodeki muutus
+  peatab täpsete baitide taastamise, mitte ei saada teist faili sama kavatsuse
+  alla. Kadunud PUT-vastus kontrollib sama katset ühe saatmisega.
+- Mõõtmised on brauseri piiratud performance.measure ja serveri fikseeritud
+  Server-Timing. Failinimesid, sisu, tokeneid ega URL-e ei logita; uut
+  telemeetriateenust, andmebaasitabelit või tehnilist paneeli ei ole.
+- Kliendi 121 ettevalmistuse/loomise/lisamise testi, 11 sõnumiregressiooni,
+  serveri 163 sihitud testi ja viis mõõtmise testi läbisid. TypeScript puhas.
+  Täielik build läbis 28,84 sekundiga sünteetiliste keskkonnaseadetega.
+- Viis päris Chromiumi muutmisvaate juhtu 1440/390 px läbisid tegeliku
+  brauserikodeerija ja native serverisanitizeriga. Transport oli sünteetiline.
+  Kaetud suur JPEG, pöördega JPEG, alfa PNG, väike WebP ning kadunud PUT-i
+  taastumine pärast lehe laadimist ilma teise saatmiseta. Vanad fotod ja
+  põhipilt säilisid; samal lehel säilis salvestamata tekst.
+- Kohalik 7141825 B JPEG vähenes 993462 B-ni (86,1%), alfa PNG 12713958 B-st
+  843810 B-ni (93,4%). Üksik native teisendusaeg ei näidanud JPEG-i puhul
+  kiirenemist (632/668 ms); tõendatud kasu on väiksem võrgu-/SOURCE-maht.
+  Tootmise koguaeg ja peamine kitsaskoht jäävad uue deployment'i võrdluseks.
+- Uus eraldi source-only paigaldusmall läbis 19 Git/jätkamise kontrolli.
+  Olemasolevad kaks raportit leiavad eelkäijad, tegelik puu/vanem/teema ja
+  kõik failid kontrollitakse sõltumatult. Lõplik kokkupandud pakett saab oma
+  käivitustõendi. SQL-i, Supabase CLI-d ega Storage'i ei käivitata.
+- Uuendatud üks CURRENT_STATE ja sellest genereeritud üleandmine,
+  HOSTED_PORTAL, jõudlusmärge, moodulileping, handbook ja known issues.
+  Väljastatud varasemad pakid ja kogu senise päeviku baidid säilivad.
+  Maci build/commit/push, uus Verceli Ready ning päris kiirusekatse on ootel.
+
+<!-- SELQIRO_PHOTO_ADDITION_ACCEPTED_PERFORMANCE_20261106 -->
+## 2026-11-06 — foto lisamise kasutuskatse vastu võetud; jõudlus vajab mõõtmist
+
+- Kasutaja kinnitas: „pildi lisamine toimib ja on nähtav ka avalikus vaates”.
+  See foto lisamise kasutuskatse on vastu võetud. Varem kinnitatud foto
+  eemaldamist, põhipildi muutmist ja koristuspaneeli kadumist ei korrata.
+- Kasutaja teatas V2 foto lisamise aeglusest V1-ga võrreldes. Tegelikku ühe
+  faili suurust, kogukestust ega serverietappide aegu selles teates ei olnud;
+  täpset peamist viivituse põhjust pole veel mõõdetud.
+- Olemasoleva lähtekoodi võrdlus: V1 /sell ja /my-page vähendavad foto
+  brauseris kuni 1600 px laiuseks JPEG-iks kvaliteediga 0,82 ja kasutavad
+  mitme foto korral kuni kolme paralleelset töötlejat. V2 hallatud lisamine
+  saadab algse kuni 25 MiB faili, valmistab serveris kuni 2048 px pikema
+  servaga WebP-foto ning ootab mitut järjestikust kontrolli ja kinnitust.
+- Järgmine soovitus on üks ühine jõudlusparandus: jämedad etappide ajad ja
+  failimahud, selle põhjal brauseri ettevalmistus olemasoleva veebiväljundi
+  järgi ning ainult tõendatult üleliigsete päringute ühendamine. Pildisisu,
+  failinimesid, tokeneid ega allkirjastatud URL-e ei logita. Täpsete baitide,
+  identiteedi, õiguste ja sama lisamise taastumise lepingud peavad säilima.
+- Uus vastuvõtutäiend on eraldi 1066-failise lähtebaasi töökopias. Muudetud
+  on ainult CURRENT_STATE, sellest genereeritud üleandmine, HOSTED_PORTAL,
+  known issues ja päevik; lisatud on PHOTO_UPLOAD_PERFORMANCE_20261106.md.
+  Kõik varasema päeviku baidid ning väljastatud ZIP/pakk säilivad.
+- Uut Maci result.json-i, commit'i ega Verceli Ready-rida ei esitatud. Neid
+  ei tuletata nähtavast vastuvõtust. Selle ülevaate käigus rakenduskoodi,
+  SQL-i ega pilveteenuseid ei muudetud; build'i, teste ja lõpetatud
+  paigaldajat ei korratud. Dokumentide kooskõla ja lähtefailide säilimine
+  kontrollitakse eraldi.
+
 <!-- SELQIRO_PUBLISHED_PHOTO_ADDITION_20261106 -->
 ## 2026-11-06 — ühe foto lisamine avaldatud kuulutusele ette valmistatud
 

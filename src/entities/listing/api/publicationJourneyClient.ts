@@ -3,15 +3,32 @@ import { v2IntegrationEnabled } from "../../../shared/config/v2Integration";
 import { privateUploadHttp } from "./privateUploadHttp";
 import type { PublicationActor } from "../model/publicationJourney";
 import { isPublicationCapacityError } from "../model/publicationCapacity";
+import {measurePhotoTask, type PhotoPerformanceStage} from "../model/photoPerformance";
+
+function photoRequestStage(action: string): PhotoPerformanceStage | null {
+  switch (action) {
+    case "prepare": case "owner-images-add-prepare": return "prepare";
+    case "image-prepare": return "image_prepare";
+    case "image-verify": return "image_verify";
+    case "status": case "owner-images-add-status": return "status";
+    case "owner-images-add-append": return "append";
+    case "owner-images-read": return "gallery";
+    case "publish": return "publish";
+    default: return null;
+  }
+}
 
 export async function publicationJourneyRequest(actor: PublicationActor, action: string, body: object, signal: AbortSignal) {
   if (!v2IntegrationEnabled() || signal.aborted) throw new Error("context_changed");
   const {data, error} = await supabaseBrowserClient.auth.getSession();
   if (signal.aborted || error || data.session?.user.id !== actor.userId) throw new Error("context_changed");
-  const r = await privateUploadHttp(fetch, window.location.origin + "/api/v2/publication/" + action, {
-    method: "POST", headers: {authorization: "Bearer " + data.session.access_token, "content-type": "application/json"}, body: JSON.stringify(body),
+  const accessToken = data.session.access_token;
+  const request = () => privateUploadHttp(fetch, window.location.origin + "/api/v2/publication/" + action, {
+    method: "POST", headers: {authorization: "Bearer " + accessToken, "content-type": "application/json"}, body: JSON.stringify(body),
   }, {signal, timeoutMs: 120000, responseBytes: 65536,
     ...(action.startsWith("owner-") ? {readErrorStatuses: [403, 409]} : {})});
+  const stage = photoRequestStage(action);
+  const r = await (stage ? measurePhotoTask(stage, request) : request());
   if ((r.status === 403 || r.status === 409) && action.startsWith("owner-") && r.json && typeof r.json === "object") {
     const error = r.json as Record<string, unknown>;
     if (error.error === "owner_contract" && typeof error.code === "string" && typeof error.message === "string"
@@ -27,10 +44,12 @@ export async function putPublicationPart(url: string, headers: Record<string, st
   const abort = () => controller.abort(); signal.addEventListener("abort", abort, {once: true});
   const timer = setTimeout(abort, 120000);
   try {
-    if (signal.aborted) throw new Error("context_changed");
-    const r = await fetch(url, {method: "PUT", headers, body: bytes, signal: controller.signal,
-      credentials: "omit", cache: "no-store", redirect: "error", referrerPolicy: "no-referrer"});
-    void r.body?.cancel().catch(() => {});
-    if (r.status !== 200 || r.redirected || controller.signal.aborted) throw new Error("outcome_unknown");
+    await measurePhotoTask("upload", async () => {
+      if (signal.aborted) throw new Error("context_changed");
+      const r = await fetch(url, {method: "PUT", headers, body: bytes, signal: controller.signal,
+        credentials: "omit", cache: "no-store", redirect: "error", referrerPolicy: "no-referrer"});
+      void r.body?.cancel().catch(() => {});
+      if (r.status !== 200 || r.redirected || controller.signal.aborted) throw new Error("outcome_unknown");
+    }, {inputBytes: bytes.size});
   } finally { clearTimeout(timer); signal.removeEventListener("abort", abort); controller.abort(); }
 }

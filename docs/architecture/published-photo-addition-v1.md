@@ -42,6 +42,11 @@ foto lisamist. Kasutatakse senist private SOURCE → kontrollitud native
 pilditöötlus → private WEB rada, multipart-sessioone ja muutumatuid kviitungeid.
 Olemasolevaid pilte ei saadeta uuesti ega töödelda ümber.
 
+Suure valitud foto brauseri ettevalmistus, täpsete algsete/saadetud baitide
+seos ja mõõtmine on ühises
+[foto ettevalmistuse lepingus](listing-photo-preparation-v1.md). See vähendab
+saadetavat SOURCE-mahtu, säilitades senise serveri kontrolli ja jätkamise.
+
 - Ühe SOURCE-faili piir on 25 MiB ja WEB-faili piir 4 MiB.
 - Konto senine 300 MiB loogiline reserv ja üleslaadimise sageduspiirid säilivad.
 - Faili sisu võetakse kinnisest Blob-ist; faili valimise järel tehtud

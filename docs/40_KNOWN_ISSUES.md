@@ -1,16 +1,19 @@
-<!-- SELQIRO_PUBLISHED_PHOTO_ADDITION_20261106 -->
-## 06.11.2026 — avaldatud kuulutusele foto lisamine on ette valmistatud
+<!-- SELQIRO_PHOTO_SPEED_PREPARED_20261106 -->
+## 06.11.2026 — foto kiirendus valmistatud; tootmise ajavõrdlus ootel
 
-Ühe foto lisamine kasutab olemasolevat privaatset pilditöötlust. Lisatud foto
-püsiv päritolu, põhipildi muutmine, eemaldamine ja sellega seotud koristus
-kasutavad sama kuulutuse õiguskontrolli. Tegelik Maci paigaldus, uus commit,
-Production-deployment ja kasutaja lisamiskatse on kinnitamata; tööjärg on
-CURRENT_STATE-is. Varasem fotoeemaldus ja konkreetne koristuskatse on vastu võetud.
+Foto lisamine ja avalik nähtavus on kasutaja poolt vastu võetud. Uus ligikaudne
+kogukestus on 27–31 sekundit. Valmis on ühine brauseri ettevalmistus ja piiratud
+etapiajad. Suurte kohalike võrdlusfailide saatmismaht vähenes; tootmise kiiruse
+paranemist pole veel mõõdetud. Täpne Verceli deployment ja võrdluskatse tulevad
+pärast uue source-only paketi rakendamist. Vt CURRENT_STATE ja
+`continuity/PHOTO_UPLOAD_PERFORMANCE_20261106.md`.
 
-Avaliku avamise eel jäävad vajalikuks pooleliolevate/katkestatud üleslaadimiste
-ning kõigi terminalsete objektide automaatne lõpetamine, reservi vabastamine ja
-tehniliste paneelide eemaldamine tavavaatelt. Lisamine ei tähenda selle taustatöö
-valmimist. Foto vahetamine ühe asendustoiminguga ei kuulu käesolevasse sammu.
+Serveri ja andmebaasi õiguste, failiräsi ning kviitungi kontrollid säilivad.
+Tehnilise koristuse nähtavus jääb testimise ajal seniseks. Pooleliolevate või
+katkestatud üleslaadimiste ning terminalsete objektide automaatne lõpetamine,
+reservi vabastamine ja paneelide eemaldamine tavakasutaja vaatest on endiselt
+avaliku avamise eelne töö. Foto vahetamine ühe asendustoiminguga ei ole selle
+kiirendusparanduse osa.
 
 <!-- SELQIRO_RETIRED_WEB_ACCEPTED_20261106 -->
 ## 06.11.2026 — kuulutuse 201 koristuskatse on kasutaja poolt vastu võetud
@@ -81,8 +84,11 @@ commit/deployment identity were not supplied with that confirmation. See the
 one current state record for these evidence boundaries.
 
 The new cleanup uses the existing ledger and one-object transport. It does not
-finish all photo lifecycle cases. Adding a published photo is now implemented
-in prepared source; its installation and real user acceptance remain pending.
+finish all photo lifecycle cases. On 2026-11-06 the user confirmed that adding a
+published photo works and the new image is visible publicly. This functional
+acceptance is complete; an exact installation/commit/deployment receipt was not
+supplied with it. The user also reports slower V2 addition than V1; per-stage
+production timing remains unmeasured. See PHOTO_UPLOAD_PERFORMANCE_20261106.md.
 Replacement as one operation, failed or unfinished uploads, other terminal WEB
 objects and automatic completion independent of the owner page still require
 explicit completion before public launch.

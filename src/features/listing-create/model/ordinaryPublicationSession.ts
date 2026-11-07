@@ -4,12 +4,15 @@ import { PRIVATE_UPLOAD, isUploadUuid, uploadRecord } from "../../../entities/li
 import { publicationJourney, publicationSnapshot, type PublicationActor, type PublicationSnapshot } from "../../../entities/listing/model/publicationJourney";
 import { receipt, type FinalReceipt } from "../../../server/listing-publication/final/finalContract";
 import { bindPrepareListingPublicationCommand } from "../../../server/listing-publication/attempts/prepareInput";
+import {bindFilePreparations, preparePublicationFile, preparedImageDescriptor, preparationMatchesUpload,
+  restorePublicationFile, type PrepareListingPhoto, type PublicationFilePreparation} from "../../../entities/listing/model/publicationFilePreparation";
+import {measurePhotoTask} from "../../../entities/listing/model/photoPerformance";
 
 export type PublicationView = Readonly<{
   phase: "editing" | "busy" | "resume" | "needs_files" | "unknown" | "needs_attention" | "published" | "closed";
   message: string; snapshot: PublicationSnapshot | null; receipt: FinalReceipt | null;
 }>;
-export type JourneyJournal = PublicationImageJournal;
+export type JourneyJournal = PublicationImageJournal & {preparation?: readonly PublicationFilePreparation[]};
 export type PublicationSessionDeps = {
   actor: PublicationActor; projectOrigin: string;
   /** Trusted application configuration, never an origin learned from an upload response. */
@@ -18,7 +21,7 @@ export type PublicationSessionDeps = {
   withLock: <T>(work: () => Promise<T>) => Promise<T>;
   request: (action: string, body: object, signal: AbortSignal) => Promise<unknown>;
   putPart: (url: string, headers: Record<string, string>, bytes: Blob, signal: AbortSignal) => Promise<void>;
-  uuid: () => string; digest: (bytes: Blob) => Promise<string>;
+  uuid: () => string; digest: (bytes: Blob) => Promise<string>; preparePhoto?: PrepareListingPhoto;
 };
 const initial = (): PublicationView => ({phase: "editing", message: "", snapshot: null, receipt: null});
 /** A single ordinary-publication controller. It retains an immutable input/Blob set,
@@ -47,7 +50,8 @@ export class OrdinaryPublicationSession {
   private journal(): JourneyJournal {
     const j = this.deps.readJournal(); if (!j || j.version !== 1 || !isUploadUuid(j.requestKey)
       || !Array.isArray(j.dispatched) || j.dispatched.length > 10 || !j.dispatched.every(isUploadUuid)
-      || new Set(j.dispatched).size !== j.dispatched.length) throw new Error("journal_missing"); return j;
+      || new Set(j.dispatched).size !== j.dispatched.length) throw new Error("journal_missing");
+    return Object.hasOwn(j, "preparation") ? {...j, preparation: bindFilePreparations(j.preparation)} : j;
   }
   private hasIntent(): boolean {
     if (this.remoteIntent) return true;
@@ -68,13 +72,13 @@ export class OrdinaryPublicationSession {
       : {phase: "editing", message: "Kontrolli kuulutuse andmeid ja piltide mahtu ning proovi uuesti."});
     return Promise.resolve();
   }
-  private run(work: (g: number) => Promise<void>): Promise<void> {
+  private run(work: (g: number) => Promise<void>, measureTotal = false): Promise<void> {
     if (this.operation) return this.operation;
     const g = this.generation;
     const operation = this.deps.withLock(async () => {
       this.checkGeneration(g);
       this.change({phase: "busy", message: "Kontrollin avaldamise seisu…"});
-      try { await work(g); }
+      try { await (measureTotal ? measurePhotoTask("total", () => work(g)) : work(g)); }
       catch (error) {
         if (g !== this.generation || this.abort.signal.aborted) return;
         const code = error instanceof Error ? error.message : "outcome_unknown";
@@ -83,8 +87,9 @@ export class OrdinaryPublicationSession {
           this.change({phase: "editing", message: "Ettevalmistus ei õnnestunud. Kontrolli andmeid ja brauseri salvestusruumi ning proovi uuesti."});
           return;
         }
-        this.change({phase: code === "files_required" ? "needs_files" : ["needs_attention", "image_rejected", "image_processor_unavailable"].includes(code) ? "needs_attention" : "unknown",
+        this.change({phase: code === "files_required" ? "needs_files" : ["needs_attention", "image_rejected", "image_processor_unavailable", "photo_preparation_changed"].includes(code) ? "needs_attention" : "unknown",
           message: code === "files_required" ? "Vali samad algsed pildid, et jätkata. Juba saadetud pilte uuesti ei saadeta."
+            : code === "photo_preparation_changed" ? "Brauser valmistas pildi seekord teisiti ette. Katkesta see katse ja vali samad algsed fotod uueks avaldamiseks."
             : code === "image_rejected" ? "Üks valitud piltidest ei sobi avaldamiseks. Katkesta see katse ja vali uueks avaldamiseks sobivad JPEG-, PNG- või WebP-pildid."
             : code === "image_processor_unavailable" ? "Pildi töötlemist ei saanud lõpetada. Katkesta see katse; seejärel saad alustada uut avaldamist."
             : code === "needs_attention" ? "Pildi lõpetamine vajab kontrolli. Avaldamine on ootel; saad katse katkestada."
@@ -123,12 +128,15 @@ export class OrdinaryPublicationSession {
     return this.run(async g => {
       if (this.deps.readJournal()) { const s = await this.status(g, this.journal());
         if (s) this.change({phase: "resume", message: "Selle identiteedi avaldamine on juba pooleli."}); return; }
-      const images = [];
+      const images = [], preparation: PublicationFilePreparation[] = [];
       for (const bytes of captured) {
         this.change({message: "Valmistan pilte saatmiseks ette…"});
-        const id = this.deps.uuid(), sha256 = await this.deps.digest(bytes); this.checkGeneration(g);
-        this.files.set(id, bytes); images.push({client_file_id: id, byte_length: bytes.size, sha256});
+        const prepared = await preparePublicationFile(bytes, this.deps.uuid(), this.deps,
+          {signal: this.abort.signal, checkContext: () => this.checkGeneration(g)}); this.checkGeneration(g);
+        preparation.push(prepared.preparation);
+        this.files.set(prepared.preparation.clientFileId, prepared.bytes); images.push(preparedImageDescriptor(prepared.preparation));
       }
+      j = {...j, preparation};
       const bound = bindPrepareListingPublicationCommand({...this.args(j), listing: capturedListing, images});
       this.deps.writeJournal(j); // Persist BEFORE first prepare; no content, filenames or capability URLs.
       this.remoteIntent = true;
@@ -137,7 +145,7 @@ export class OrdinaryPublicationSession {
       this.checkGeneration(g);
       const s = publicationSnapshot(value, this.deps.actor, j.requestKey); this.change({snapshot: s});
       await this.complete(g, j, s);
-    });
+    }, true);
   }
   resume(selected: readonly Blob[]): Promise<void> {
     if (this.operation) return this.operation;
@@ -145,20 +153,37 @@ export class OrdinaryPublicationSession {
     try { captured = this.captureFiles(selected); } catch { return this.captureFailed(); }
     return this.run(async g => {
       const j = this.journal(), s = await this.status(g, j); if (!s) return;
-      for (const bytes of captured) {
+      const waiting = s.slots.filter(slot => !j.dispatched.includes(slot.slot_id));
+      for (const bytes of waiting.length ? captured : []) {
         const hash = await this.deps.digest(bytes); this.checkGeneration(g);
-        for (const slot of s.slots) if (slot.expected_bytes === bytes.size && slot.expected_sha256 === hash) this.files.set(slot.client_file_id, bytes);
+        for (const slot of waiting) {
+          if (j.preparation) {
+            const proof = j.preparation.find(item => item.clientFileId === slot.client_file_id);
+            if (!proof || !preparationMatchesUpload(proof, slot.client_file_id, slot.expected_bytes, slot.expected_sha256))
+              throw new Error("photo_preparation_invalid");
+            if (proof.originalBytes !== bytes.size || proof.originalSha256 !== hash) continue;
+            const prepared = await restorePublicationFile(bytes, proof, this.deps,
+              {signal: this.abort.signal, checkContext: () => this.checkGeneration(g)}, hash);
+            this.files.set(slot.client_file_id, prepared);
+          } else if (slot.expected_bytes === bytes.size && slot.expected_sha256 === hash) this.files.set(slot.client_file_id, bytes);
+        }
       }
       await this.complete(g, j, s);
-    });
+    }, true);
   }
   private async complete(g: number, journal: JourneyJournal, s: PublicationSnapshot) {
     if (s.state !== "open" || !s.payload) { await this.status(g, journal); return; }
+    if (journal.preparation && (journal.preparation.length !== s.slots.length || s.slots.some(slot =>
+      !journal.preparation!.some(proof => preparationMatchesUpload(proof, slot.client_file_id, slot.expected_bytes, slot.expected_sha256)))))
+      throw new Error("photo_preparation_invalid");
     for (const slot of s.slots) {
       this.change({message: `Kontrollin pilti ${slot.ordinal + 1}/${s.slots.length}…`});
       await completePublicationImage({actor: this.deps.actor, attemptId: s.attempt_id,
         requestKey: journal.requestKey, slot, uploadOrigin: this.uploadOrigin, signal: this.abort.signal}, {
-        readJournal: () => this.journal(), writeJournal: value => this.deps.writeJournal(value),
+        readJournal: () => this.journal(), writeJournal: value => {
+          const latest = this.journal(); if (latest.requestKey !== value.requestKey) throw new Error("context_changed");
+          this.deps.writeJournal({...latest, dispatched: value.dispatched});
+        },
         readBytes: () => this.files.get(slot.client_file_id),
         request: (action, body, signal) => this.deps.request(action, body, signal),
         putPart: (url, headers, bytes, signal) => this.deps.putPart(url, headers, bytes, signal),

@@ -10,6 +10,7 @@ import { cleanupFamilyTask } from "../final/cleanupFamilyTask";
 import { multipartConfig, copyMultipartSession, createMultipartS3Transport, createHostedMultipartS3Transport,
   type MultipartPublicationConfig, type MultipartKind, type MultipartSession, type BrowserPartGrant } from "./s3Transport";
 import { isHostedPreviewConfig, type HostedPreviewConfig } from "../journey/hostedPreviewConfig";
+import { timePublicationStage, type PublicationTimingSink } from "../journey/publicationTiming";
 export type { MultipartPublicationConfig } from "./s3Transport";
 
 export type MultipartImageResult = Readonly<{ kind: "ready"; receipt: WebReceipt }> |
@@ -50,7 +51,7 @@ function createMultipartImageFlow(config: Readonly<{ publicKey: string; serviceK
   const serviceHeaders = { apikey: config.serviceKey, authorization: `Bearer ${config.serviceKey}`, "content-type": "application/json" };
 
   async function run(accessToken: string, input: WebCommand, allowSourcePart: boolean,
-      signal?: AbortSignal): Promise<MultipartImageResult> {
+      signal?: AbortSignal, timing?: PublicationTimingSink): Promise<MultipartImageResult> {
     const cmd = copyWebCommand(input);
     if (typeof accessToken !== "string" || !accessToken || accessToken.length > 8192 || /\s/.test(accessToken)) return webFail("unauthorized");
     if (signal?.aborted) return webFail("aborted");
@@ -141,35 +142,36 @@ function createMultipartImageFlow(config: Readonly<{ publicKey: string; serviceK
     }
     async function finishWeb(binding: WebBinding, intent: WebIntent, web: MultipartSession): Promise<MultipartImageResult> {
       if (web.problem !== null || web.state === "needs_attention") return attention(web.problem);
-      const done = await completeSession(web);
+      const done = await timePublicationStage(timing, "web_finalize", () => completeSession(web));
       if (!done) return pending();
       if (done.expected_sha256 !== intent.web_sha256 || done.expected_bytes !== intent.web_bytes ||
           done.object_id !== binding.web_object_id) return webFail("invalid_response");
-      const observed = await verifyBytes(done);
+      const observed = await timePublicationStage(timing, "web_read", () => verifyBytes(done));
       if (!observed) return pending();
-      const ready = webRecord(await rpc("record_listing_web_ready_v1", { ...args, p_job_id: binding.job_id,
-        p_observed_sha256: webHash(observed.bytes), p_observed_bytes: observed.bytes.length }), ["receipt"]);
+      const ready = webRecord(await timePublicationStage(timing, "web_finalize", () => rpc("record_listing_web_ready_v1", { ...args, p_job_id: binding.job_id,
+        p_observed_sha256: webHash(observed.bytes), p_observed_bytes: observed.bytes.length })), ["receipt"]);
       return Object.freeze({ kind: "ready", receipt: copyWebReceipt(ready.receipt, binding, intent) });
     }
     try {
-      const auth = await privateUploadHttp(fetcher, `${origin}/auth/v1/user`, { method: "GET",
-        headers: { apikey: config.publicKey, authorization: `Bearer ${accessToken}` } }, { signal, responseBytes: 65536 });
+      const auth = await timePublicationStage(timing, "image_auth", () => privateUploadHttp(fetcher, `${origin}/auth/v1/user`, { method: "GET",
+        headers: { apikey: config.publicKey, authorization: `Bearer ${accessToken}` } }, { signal, responseBytes: 65536 }));
       if (auth.status !== 200) return webFail("unauthorized");
       if (webRecord(auth.json).id !== cmd.expectedUserId) return webFail("context_changed");
-      let source = allowSourcePart ? await reserveSession("source") : await getSession("source");
+      let source = await timePublicationStage(timing, "source_session", () =>
+        allowSourcePart ? reserveSession("source") : getSession("source"));
       if (!source) return allowSourcePart ? attention() : pending();
       if (source.problem !== null || source.state === "needs_attention") return attention(source.problem);
       if (source.state === "creating" || source.state === "completing") return pending();
       if (source.state === "open") {
-        const part = await s3.listOnePart(source, signal);
+        const part = await timePublicationStage(timing, "source_session", () => s3.listOnePart(source!, signal));
         if (part === null) {
           if (!allowSourcePart) return pending();
-          const claimed = webRecord(await rpc("claim_listing_multipart_part_v2", { ...commandArgs, p_kind: "source" }),
+          const claimed = webRecord(await timePublicationStage(timing, "source_session", () => rpc("claim_listing_multipart_part_v2", { ...commandArgs, p_kind: "source" })),
             ["session", "part_allowed"]);
           source = parse(claimed.session, "source");
           if (claimed.part_allowed !== true) return pending();
           try {
-            const upload = await s3.presignSourcePart(source, accessToken);
+            const upload = await timePublicationStage(timing, "source_session", () => s3.presignSourcePart(source!, accessToken));
             return Object.freeze({ kind: "part", upload, attemptId: cmd.attemptId, slotId: cmd.slotId });
           } catch (error) {
             if (error instanceof WebImageError && error.code === "write_window_expired") {
@@ -178,13 +180,13 @@ function createMultipartImageFlow(config: Readonly<{ publicKey: string; serviceK
             throw error;
           }
         }
-        const completed = await completeSession(source, part);
+        const completed = await timePublicationStage(timing, "source_finalize", () => completeSession(source!, part));
         if (!completed) return pending();
         source = completed;
       }
-      const verifiedSource = await verifyBytes(source);
+      const verifiedSource = await timePublicationStage(timing, "source_read", () => verifyBytes(source!));
       if (!verifiedSource) return pending();
-      const claim = webRecord(await rpc("claim_listing_web_image_v1", commandArgs),
+      const claim = webRecord(await timePublicationStage(timing, "web_session", () => rpc("claim_listing_web_image_v1", commandArgs)),
         ["binding", "state", "process_allowed", "claim_id", "process_before_epoch", "intent", "receipt"]);
       const binding = copyWebBinding(claim.binding, cmd);
       if (binding.source_object_id !== source.object_id || binding.source_sha256 !== source.expected_sha256 ||
@@ -198,14 +200,14 @@ function createMultipartImageFlow(config: Readonly<{ publicKey: string; serviceK
       if (claim.receipt !== null) return webFail("invalid_response");
       if (claim.state === "prepared") {
         // No second sanitizer or second part writer after an unknown WEB dispatch.
-        const intent = copyWebIntent(claim.intent, binding), web = await getSession("web");
+        const intent = copyWebIntent(claim.intent, binding), web = await timePublicationStage(timing, "web_session", () => getSession("web"));
         return web ? await finishWeb(binding, intent, web) : pending();
       }
       if (claim.state !== "processing" || claim.intent !== null) return webFail("invalid_response");
       if (!claim.process_allowed) return pending();
       if (!Number.isSafeInteger(claim.process_before_epoch) || Number(claim.process_before_epoch) <= Math.floor(Date.now() / 1000)) return pending();
       let result: SanitizedListingImage;
-      try { result = await sanitizer(verifiedSource.bytes); }
+      try { result = await timePublicationStage(timing, "sanitize", () => sanitizer(verifiedSource.bytes)); }
       catch (error) {
         // The native CJS supervisor and Next's compiled module may have different
         // class identities. Read only the trusted boundary's own data properties.
@@ -222,22 +224,22 @@ function createMultipartImageFlow(config: Readonly<{ publicKey: string; serviceK
       // Native supervisor is awaited; no Promise.race releases its binary lock early.
       const owned = detachSanitizedImage(result, binding), intent = owned.intent;
       if (signal?.aborted) return pending();
-      const prepared = webRecord(await rpc("prepare_listing_web_write_v1", { ...args, p_job_id: binding.job_id,
-        p_claim_id: claim.claim_id, p_intent: intent }), ["binding", "intent", "write_allowed", "write_before_epoch"]);
+      const prepared = webRecord(await timePublicationStage(timing, "web_session", () => rpc("prepare_listing_web_write_v1", { ...args, p_job_id: binding.job_id,
+        p_claim_id: claim.claim_id, p_intent: intent })), ["binding", "intent", "write_allowed", "write_before_epoch"]);
       if (!sameRecord(copyWebBinding(prepared.binding, cmd), binding) || !sameRecord(copyWebIntent(prepared.intent, binding), intent) ||
           typeof prepared.write_allowed !== "boolean" || !Number.isSafeInteger(prepared.write_before_epoch)) return webFail("invalid_response");
       if (!prepared.write_allowed || Number(prepared.write_before_epoch) <= Math.floor(Date.now() / 1000)) return pending();
-      let web = await reserveSession("web");
+      let web = await timePublicationStage(timing, "web_session", () => reserveSession("web"));
       if (!web) return attention();
       if (web.problem !== null || web.state === "needs_attention") return attention(web.problem);
       if (web.state !== "open") return await finishWeb(binding, intent, web);
-      const partClaim = webRecord(await rpc("claim_listing_multipart_part_v2", { ...commandArgs, p_kind: "web" }), ["session", "part_allowed"]);
+      const partClaim = webRecord(await timePublicationStage(timing, "web_session", () => rpc("claim_listing_multipart_part_v2", { ...commandArgs, p_kind: "web" })), ["session", "part_allowed"]);
       web = parse(partClaim.session, "web");
       if (typeof partClaim.part_allowed !== "boolean") return webFail("invalid_response");
       if (partClaim.part_allowed) {
         const sent = Buffer.from(owned.bytes);
         if (sent.length !== web.expected_bytes || webHash(sent) !== web.expected_sha256) return webFail("invalid_response");
-        try { await s3.putWebPart(web, sent, signal); }
+        try { await timePublicationStage(timing, "web_write", () => s3.putWebPart(web!, sent, signal)); }
         catch { await problem(web, "part_outcome_unknown"); return attention(); }
       }
       return await finishWeb(binding, intent, web);
@@ -376,8 +378,8 @@ function createMultipartImageFlow(config: Readonly<{ publicKey: string; serviceK
     } finally { active = false; }
   }
   return Object.freeze({
-    prepare: (token: string, command: WebCommand, signal?: AbortSignal) => run(token, command, true, signal),
-    verify: (token: string, command: WebCommand, signal?: AbortSignal) => run(token, command, false, signal),
+    prepare: (token: string, command: WebCommand, signal?: AbortSignal, timing?: PublicationTimingSink) => run(token, command, true, signal, timing),
+    verify: (token: string, command: WebCommand, signal?: AbortSignal, timing?: PublicationTimingSink) => run(token, command, false, signal, timing),
     settle: holdCleanup ? readHeldSettlement : settle,
   });
 }

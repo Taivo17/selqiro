@@ -1,4 +1,6 @@
 "use client";
+
+import {prepareListingPhoto} from "../../../entities/listing/model/listingPhotoPreparation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { v2IntegrationEnabled, publicationUploadOrigin } from "../../../shared/config/v2Integration";
 import { supabaseBrowserClient } from "../../../shared/supabase/browserClient";
@@ -81,7 +83,7 @@ export function useOrdinaryPublication(userId: string, callbacks: Callbacks = {}
                 return navigator.locks.request(key, {ifAvailable: true}, lock => { if (!lock) throw new Error("busy_elsewhere"); return work(); });
               },
               request: (action, body, signal) => publicationJourneyRequest(stableActor, action, body, signal),
-              putPart: putPublicationPart, uuid: () => crypto.randomUUID(),
+              putPart: putPublicationPart, uuid: () => crypto.randomUUID(), preparePhoto: prepareListingPhoto,
               digest: async bytes => Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256", await bytes.arrayBuffer())), b => b.toString(16).padStart(2, "0")).join(""),
             });
             session.current = s;

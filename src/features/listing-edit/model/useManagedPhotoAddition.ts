@@ -1,4 +1,6 @@
 "use client";
+
+import {prepareListingPhoto} from "../../../entities/listing/model/listingPhotoPreparation";
 import {useEffect, useRef, useState} from "react";
 import {publicationJourneyRequest, putPublicationPart} from "../../../entities/listing/api/publicationJourneyClient";
 import {readManagedListingImages} from "../../../entities/listing/api/managedListingImagesClient";
@@ -40,7 +42,7 @@ export function useManagedPhotoAddition(key: ManagedListingImagesKey, runOperati
         },
         request: (action, args, signal) => publicationJourneyRequest(bound, action, args, signal),
         readGallery: readManagedListingImages, putPart: putPublicationPart,
-        uuid: () => crypto.randomUUID(),
+        uuid: () => crypto.randomUUID(), preparePhoto: prepareListingPhoto,
         digest: async bytes => Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256", await bytes.arrayBuffer())),
           byte => byte.toString(16).padStart(2, "0")).join(""),
       });
