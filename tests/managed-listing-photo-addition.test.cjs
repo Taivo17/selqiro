@@ -153,23 +153,30 @@ test('cancel before a missing prepare closes that request and cannot delete an e
   const before=copy(h.gallery),s=h.session();await s.start(h.baseline(),photo());await s.cancel();
   assert.equal(s.view.phase,'closed');assert.throws(delayed,/closed_request/);assert.deepEqual(h.gallery,before);assert.equal(h.puts.length,0);
 });
-for(const message of ['publication_open_attempt_limit','publication_daily_attempt_limit','publication_retained_bytes_limit'])
-  test('known temporary capacity '+message+' keeps the exact journal and offers cancellation without another prepare',async()=>{
+const capacityCases=[
+  ['publication_open_attempt_limit',/pooleliolevat lisamist/],
+  ['publication_daily_attempt_limit',/24 tunni jooksul alustatud lisamiste piir/],
+  ['publication_retained_bytes_limit',/üleslaadimiseks.*piisavalt vaba ruumi/],
+];
+for(const [message,explanation] of capacityCases)
+  test('known temporary capacity '+message+' explains its reason without retrying or changing cancellation',async()=>{
     const h=harness({request:async action=>{if(action==='owner-images-add-prepare')throw {code:'54000',message};}});
     const before=copy(h.gallery),s=h.session();await s.start(h.baseline(),photo());
-    assert.equal(s.view.phase,'needs_attention');assert.match(s.view.message,/ajutiselt piiratud/);
+    assert.equal(s.view.phase,'needs_attention');assert.match(s.view.message,explanation);
+    for(const [other,pattern] of capacityCases)if(other!==message)assert.doesNotMatch(s.view.message,pattern);
+    assert.doesNotMatch(s.view.message,/publication_|54000|MiB/);
     const journal=copy(h.journal);assert.ok(journal);assert.equal(h.puts.length,0);assert.equal(h.requests.length,1);
     assert.deepEqual(h.gallery,before);await s.cancel();assert.equal(s.view.phase,'closed');
     assert.deepEqual(h.journal,journal);assert.deepEqual(h.gallery,before);
-    assert.equal(h.requests.filter(r=>r.action==='owner-images-add-prepare').length,1);
-    assert.equal(h.requests.filter(r=>r.action==='owner-images-add-cancel').length,1);
+    assert.deepEqual(h.requests.map(r=>r.action),['owner-images-add-prepare','owner-images-add-cancel']);
     assert.equal(h.requests.at(-1).args.p_request_key,journal.requestKey);
   });
 test('an unrecognized 54000 failure remains unknown and never claims capacity or clears the journal',async()=>{
   const h=harness({request:async action=>{if(action==='owner-images-add-prepare')throw {code:'54000',message:'private_internal_failure'};}});
   const s=h.session();await s.start(h.baseline(),photo());assert.equal(s.view.phase,'unknown');
   assert.ok(h.journal);assert.equal(h.requests.length,1);assert.equal(h.puts.length,0);
-  assert.ok(!s.view.message.includes('ajutiselt piiratud'));assert.ok(!s.view.message.includes('private_internal_failure'));
+  assert.match(s.view.message,/tulemus pole veel kinnitatud/);assert.ok(!s.view.message.includes('private_internal_failure'));
+  for(const [,pattern] of capacityCases)assert.doesNotMatch(s.view.message,pattern);
 });
 test('reload before PUT requires the same original bytes and never uploads a newly selected different photo',async()=>{
   const h=harness({request:async action=>{if(action==='image-prepare')throw Error('grant_lost');}});

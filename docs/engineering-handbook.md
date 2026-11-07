@@ -368,3 +368,14 @@ A delivery receipt may locate a predecessor commit, but the Git tree and parent
 must be checked independently. Once a successful Mac receipt gives the next exact
 commit, use that verified base directly in the following release; do not grow an
 unbounded installer history engine for routine source updates.
+
+
+## Interface language, 2026-11-07
+
+English is the base and fallback language; Estonian is the second supported
+language. Reuse the existing `profiles.language` preference and `lib/i18n`
+lookup with small feature dictionaries. A business identity or country change
+does not select a new UI language. Resolve user-facing messages at render time
+without restarting durable operations. Treat full language coverage as an
+end-to-end feature, including errors, categories, policy text and accessibility.
+See `docs/architecture/interface-language-v1.md` for the current V2 gaps.

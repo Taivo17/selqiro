@@ -7329,3 +7329,17 @@ loe private-final-source-bigint-repair ZIP-ist. STOP-il säilita kõik; vana pai
 Upload/avaldamine jääb suletuks. Hiliste kirjutuste lõplikkus, blocked_write_settlement
 objektide täielik koristus, konto/identiteedi/sõnumite ning terve kasutajatee ühendus
 jäävad kohustuslikuks. Olemasolevate kontode/kuulutuste/piltide/päevikute kustutusluba puudub.
+
+
+## 2026-11-07 — inglise põhikeel, eesti teine keel
+
+Kasutaja kinnitas: Selqiro põhikeel ja puuduva tõlke varukeel on inglise (`en`),
+teine keel eesti (`et`); teised suuremad keeled lisanduvad vajaduse järgi.
+Sisselogitud kasutaja ühe eelistuse allikas on olemasolev `profiles.language`.
+Riik ega aktiivne äriidentiteet ei muuda kasutajaliidese keelt.
+
+Olemasolevat `lib/i18n` abi laiendatakse väikeste moodulisõnastikega. Uut
+paralleelset tõlkemootorit või keeleandmemudelit ei looda. Keelevahetus ei
+alusta pooleliolevat üleslaadimist uuesti ega tõlgi kasutaja sisu automaatselt.
+Audit leidis V2-s eestikeelseid püsisõnesid; täielik English/Eesti katvus ei
+ole veel valmis. Vt `docs/architecture/interface-language-v1.md`.

@@ -1,59 +1,79 @@
-# Fotode kiirendus — olemasoleva portaali uuendus
+# Foto valimine — olemasoleva portaali uuendus
 
-Seis: 06.11.2026 Europe/Tallinn. Üks autoriteetne seis on
+Seis: 07.11.2026 Europe/Tallinn. Üks autoriteetne seis on
 [CURRENT_STATE.json](CURRENT_STATE.json).
+
+## R2 parandab väljastatud ZIP-i koosseisu
+
+Esimene ZIP oli kasutajal lahti pakitud. Peatuse `PACKAGE_EXTRA_FILE_REFUSED`
+põhjus oli kaks assistendi lisatud .log tõendifaili, mida uuendaja pakireeglid
+ei luba. Peatus toimus enne hoidla muutmist ja uue jooksupäeviku loomist;
+selle vea kohta eraldi result.json-i ei teki.
+
+R2 tarnib need samad tõendid .md dokumentidena, jättes rakenduskoodi ja
+uuendaja kontrollid samaks. Paki r2 eraldi kausta; vana kausta ega sealsete
+failide käsitsi muutmist pole vaja. Väljastatud vana ZIP ja päevikud säilivad.
 
 ## Mida see samm teeb
 
-Foto lisamine ja avalik nähtavus on kasutaja poolt vastu võetud. Uus hinnang
-ühe foto lisamisele on 27–31 sekundit. See pakett vähendab suurte fotode
-üleslaadimise mahtu brauseris ning lisab piiratud etappide ajamõõtmise.
-Sama ettevalmistus teenindab uue kuulutuse loomist ja hilisemat foto lisamist.
-Serveri õiguste, faili ja lõpptulemuse kontrollid säilivad.
+Nähtav foto valimise nupp avab kohe seadme failide/fotode valija. Eraldi
+brauseri `Choose File` nuppu enam vahepealse sammuna ei näidata. Sama kehtib
+nupu „Lisa järgmine foto” kohta. Valiku katkestamine säilitab lõpetatud
+lisamise ja selle jätkamiskirje; uut faili saadetakse alles eraldi kinnitusega.
 
-Uus pakett on **selqiro-fotode-kiirendus-20261106.zip**. Varem väljastatud
-foto lisamise paketti ega selle paigaldajat ei käivitata uuesti.
+Ajutise piirangu teade eristab konto pooleliolevaid lisamisi, viimase 24 tunni
+katsete piiri ja vaba üleslaadimisruumi. Aktiivse galerii piir jääb kümneks.
+Piiri muutmist ega konto konkreetse keeldumise põhjust ette ei oletata.
+
+Uus pakett on **selqiro-foto-valik-20261107-r2.zip**. See sisaldab ka inglise
+põhikeele/eesti teise keele püsivat otsust ning V2 keelekatvuse auditit.
+Täielik V2 tõlkimine ja edasine jõudlusparandus on eraldi töö.
 
 ## Üks jätkamiskäsk
 
 1. Laadi uus ZIP Maci Downloads-kausta ja paki lahti. Seal peab tekkima
-   `selqiro-fotode-kiirendus-20261106` kaust, mille sees on `uuenda.py`.
+   `selqiro-foto-valik-20261107-r2` kaust, mille sees on `uuenda.py`.
 2. Käivita terminalis:
 
 ```bash
-python3 -I -B "$HOME/Downloads/selqiro-fotode-kiirendus-20261106/uuenda.py" --publish
+python3 -I -B "$HOME/Downloads/selqiro-foto-valik-20261107-r2/uuenda.py" --publish
 ```
 
-Uuendaja kontrollib olemasolevaid edukaid raporteid ja tegelikku Giti seisu,
-sealhulgas täpset lähtepuud, haru, HEAD-i, tööpuud/indexit ja kinnitatud
-remote'i. Raportist leitav commit kontrollitakse sõltumatult. Siht on senine
-`/Users/taivo/selqiro`; uut hoidlat ega worktree'd ei looda.
+Uuendaja leiab vahetult eelneva eduka fotode kiirenduse raporti ja kontrollib
+selle commit’i sõltumatult tegeliku Giti ajaloo ning täpsete lähtepuudega.
+Kontrollitakse ka main-haru, HEAD-i, tööpuud/indexit, kõiki lähtifaile ja
+kinnitatud remote’i. Siht on senine `/Users/taivo/selqiro`; uut hoidlat ega
+worktree’d ei looda. Varem edukalt lõpetatud paigaldajaid ei korrata.
 
-See uuendaja rakendab ainult lähtekoodi, teeb vajaliku build'i ja loob ning
-push'ib ühe kontrollitud commit'i. SQL-i, Supabase CLI-d ega Storage'i
-paigaldamisel ei käivitata. Kasutaja päevikud ja kõrvalised muudatused säilivad.
-`PEATATUD` korral saada täpne rida ja raport; ära muuda räsikaitset ega kustuta
-päevikuid. Sama eduka sammu jätkamine ei korda kinnitatud build'i või push'i.
+See on ainult lähtekoodiuuendus: vajalik build ning üks kontrollitud
+commit/push. SQL-i, Supabase CLI-d ega Storage’i ei käivitata. Kasutaja
+päevikud ja kõrvalised muudatused säilivad. `PEATATUD` korral saada täpne
+rida ja raport; ära muuda räsikaitset ega kustuta päevikuid. Sama eduka sammu
+uuesti käivitamine ei korda kinnitatud build’i ega push’i.
 
-## Üks tootmise võrdlus
+## Üks kasutuskatse
 
-Pärast uuendaja edukat lõppu vaata Vercelis **sama uue commit'i Production
-Ready** tulemust ja värskenda portaali. Lisa samal seadmel ning ühendusel
-võimalusel sama algne foto, millega varasem 27–31 sekundi hinnang tekkis.
-Võrdle aega nupuvajutusest foto nähtavale ilmumiseni. Märgi ka algfaili maht,
-kui see on kohe näha; terve testiseeria kordamine pole vajalik.
+Pärast uuendaja edukat lõppu oota Vercelis **sama uue commit’i Production
+Ready** tulemust ja värskenda portaali. Kuulutuse muutmisel peab „Vali foto”
+või „Lisa järgmine foto” avama kohe seadme valija. Faili valimine näitab
+kohalikku eelvaadet; „Lisa kuulutusele” alustab saatmist.
 
-Lokaalses katses vähenes ühe 7,14 MB JPEG-i saatmismaht ligikaudu 0,99 MB-ni.
-See on sünteetilise võrdlusfaili tulemus. Tootmise kogukestust pole pärast
-parandust mõõdetud ja kindlat sekundite arvu ei lubata.
+Proovi senise viie fotoga kuulutusele üht lisamist. Kui piirang kordub,
+saada uus täpne kasutajateade. Olemasolevaid fotosid ega päevikuid selle
+jaoks kustutada ei ole vaja. Varasemat tervet kasutuskatsete sarja ei korrata.
 
-Kui kogukestus jääb pikaks, aitavad brauseri piiratud `performance.measure`
-ja vastuse `Server-Timing` eristada üleslaadimist, serveri lugemist/töötlust,
-salvestamist ja kinnitamist. Mõõtmise jaoks ei lisandu kasutajale tehnilist
-paneeli, uut telemeetriateenust ega fotode sisu logimist.
+## Aeg ja keel
 
-## Säiliv avaliku avamise töö
+Uued kasutaja stopperiajad on 17 ja 19 sekundit. Varasem 27–31 sekundit oli
+ligikaudne loendus. Failide/võrgu samasus pole kinnitatud; kindlat ajavõitu
+nende põhjal ei lubata. Edasiseks kiirenduseks kasutatakse olemasolevaid
+piiratud etapimõõtmisi, säilitades õiguste ja faili kontrollid.
 
-Koristuse testpaneelide nähtavus jääb selles sammus seniseks. Automaatne
-lõpetamine ilma omaniku avatud leheta ja tehniliste koristusnuppude/loendurite
-eemaldamine tavavaatest tuleb lõpetada enne avalikku avamist.
+Inglise põhikeel ja eesti teine keel on nõue. V2 sisaldab veel püsivalt
+eestikeelseid tekste, seega ingliskeelse profiili täielik V2 katvus ei ole
+valmis. Järgmine keeleetapp ühendab ühe tervikliku kuulutuse kasutustee
+olemasoleva tõlkeabiga; vt `architecture/interface-language-v1.md`.
+
+Koristuse tehnilised paneelid jäävad testimise ajal seniseks. Automaatne
+lõpetamine ja nende eemaldamine tavakasutaja vaatest on vajalik enne
+üldist avalikku avamist.

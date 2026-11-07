@@ -1,3 +1,27 @@
+<!-- SELQIRO_PHOTO_PICKER_PREPARED_20261107 -->
+## 07.11.2026 — fotovalik, piirangute põhjus ja V2 keelekatvus
+
+Stopperiga kasutajakatsed võtsid 17 ja 19 sekundit. Täpne tootmise etapijaotus
+pole veel teada; varasema ligikaudse 27–31 sekundiga ei arvutata kinnitatud
+protsentuaalset kiirenemist. Olemasolev mõõtmine jääb järgmise kitsaskoha aluseks.
+
+Otsene fotovalik ja konto kolme ajutise piirangu eraldi teated on uues
+lähtepaketis ette valmistatud. Viie foto juures nähtud täpne keeldumise põhjus
+on veel tuvastamata; koodis on kümme aktiivset fotot. SQL-i piire ei muudeta
+üldise veateate põhjal. Uus teade ja edasine üks kasutuskatse on kirjas
+`continuity/PHOTO_PICKER_REVIEW_20261107.md`-s ning CURRENT_STATE-is.
+
+V2 pole täielikult kakskeelne: päises, vormides, kategooriates ja veateadetes
+on eestikeelsed püsisõned. Kinnitatud suund on English põhikeel/varukeel,
+Eesti teine keel ning olemasolev profiles.language + lib/i18n. Järgmine
+terviklik etapp peab katma kogu praeguse kuulutuse kasutustee mõlemas keeles.
+Vt `architecture/interface-language-v1.md`. Praegune fotovalikupakett seda
+lõpetatuks ei märgi.
+
+Allpool olevad kuupäevaga sissekanded on varasemad tõendipiirid, mitte uued
+paigaldamiskäsud. Koristuse automaatne lõpetamine ja tavakasutaja tehniliste
+paneelide eemaldamine jäävad enne avalikku avamist vajalikuks.
+
 <!-- SELQIRO_PHOTO_SPEED_PREPARED_20261106 -->
 ## 06.11.2026 — foto kiirendus valmistatud; tootmise ajavõrdlus ootel
 

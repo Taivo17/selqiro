@@ -1,6 +1,6 @@
 # Foto lisamine avaldatud kuulutusele
 
-Leping: 06.11.2026. Paigalduse ja kasutuskatse tegelik seis on
+Leping: 07.11.2026. Paigalduse ja kasutuskatse tegelik seis on
 [`CURRENT_STATE.json`](../continuity/CURRENT_STATE.json).
 
 ## Eesmärk ja kasutaja toiming
@@ -142,3 +142,22 @@ tööpuud/indexit, kinnitatud remote'i ja kõiki lähtifaile. Täpne eelmise
 paranduse commit leitakse selle olemasolevast tulemuspäevikust ning
 kontrollitakse sõltumatult Giti puud ja vanemat. Päeviku väitest üksi ei piisa.
 Varem väljastatud pakke ega kasutaja päevikuid ei muudeta.
+
+## Otsene fotovalik ja täpne ajutine piirang, 07.11.2026
+
+Üks nähtav rakenduse nupp avab native failivalija samas kasutaja sündmuses.
+Lõpetatud toimingu reset ootab sobivat valitud faili. Valija katkestamine ei
+muuda päevikut; uuema kavatsuse või tegutseja muutuse korral ei kinnitata
+vana valikut. Faili valimine ei saada faile ilma eraldi üleslaadimistoiminguta.
+
+Aktiivse galerii kümne foto piir on eraldi konto kolme avatud katse, veereva
+24 tunni 20 uue katse ja 300 MiB reservi piiridest. Ühe foto lisamine loeb
+uueks katseks. Edukas published lisamine ei ole enam open; koristust ootav
+algfail võib siiski hoida oma reservi. Brauser kuvab olemasoleva suletud
+kolme veakoodi järgi täpse kasutajateate, säilitades jätkamise/katkestamise.
+Tundmatule veale ei omistata kvoodipõhjust ja serveri piire ei suurendata
+pelgalt galerii fotode arvu või üldise veateate põhjal.
+
+Kasutajaliidese keele nõue ja tegelik V2 puudujääk on
+[ühises keelelepingus](interface-language-v1.md). Keelte sidumisel tuleb
+sõnumid tõlkida kuvamisel, säilitades poolelioleva toimingu ja selle võtmed.

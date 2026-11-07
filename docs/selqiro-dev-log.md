@@ -1,3 +1,53 @@
+<!-- SELQIRO_PHOTO_PICKER_PACKAGE_FIX_20261107_R2 -->
+## 2026-11-07 — foto-valiku pakendamisviga ja eraldi r2
+
+- Kasutaja ZIP oli lahti pakitud. Terminalipilt näitas uut peatust
+  PACKAGE_EXTRA_FILE_REFUSED ning eelneva kiirenduse build/commit/push edu
+  commit’iga 832c6a4c0e97c6b883a81f63ca1821ef3b192cb3. Ready-rida pole lisatud.
+- Täpne väljastatud 32-failine ZIP kordab vea: assistent lisas pärast
+  esialgset tarnekontrolli kaks .log faili, mida pakireeglid ei luba.
+  Peatus on enne eelkäija lugejat, Journalit, Giti ja projektikirjutusi;
+  seetõttu uut result.json-i ei tekkinud. See oli assistendi pakendamisviga.
+- Uus r2-kaust tarnib samad tõendid lubatud .md nimedega. Vana väljastatud
+  ZIP, lähtepuu ja päevikud säilivad. Uuendajat, räsikaitset, eelkäija profiili,
+  kolme runtime-faili ja kahte rakenduse testi ei muudeta.
+- Rakenduse varasemaid build’i/teste ei korrata; r2 tarne kontrollib tervet
+  koostepakki ja enne väljastamist just lõplikust ZIP-ist lahti pakitud sisu.
+  Käsitsi failide eemaldamist kasutajalt ei nõuta.
+- Uuendatud CURRENT_STATE, genereeritud üleandmine, HOSTED_PORTAL ja
+  foto-valiku ülevaade; lisatud PHOTO_PICKER_PACKAGE_FIX_20261107.md.
+  R2 Maci rakendus, uus commit/push ja Production Ready on veel ootel.
+
+<!-- SELQIRO_PHOTO_PICKER_PREPARED_20261107 -->
+## 2026-11-07 — otsene foto valik, täpne piiranguteade ja keeleotsus
+
+- Kasutaja stopperiajad on 17 ja 19 sekundit; varasem 27–31 oli ligikaudne.
+  Failide ja võrgu samasus pole kinnitatud. Foto lisamise ja avaliku nähtavuse
+  vastuvõtt säilib; tootmise peamine aeglane etapp on veel mõõtmata.
+- Üks nähtav foto valimise nupp avab native valija. Sama kehtib järgmise foto
+  kohta. Tühi valik ei reset’i toimingut ega päevikut; sobiva faili järel
+  kasutatakse olemasolevat kontrollitud reset’i ja uuema kavatsuse kaitset.
+  Valimine teeb eelvaate, üleslaadimine vajab eraldi kasutaja toimingut.
+- Viie foto järel nähtud üldteade ei olnud galerii piir: koodis on kümme.
+  Sama serveri kolme täpse konto piirangu põhjal lisati eraldi teated.
+  Kvoote, SQL-i, õigusi, API lepingut, jätkamist ega päringujärjestust ei muudeta.
+- Sihitud üks testijooks 58/58 PASS; täielik build PASS 27,72 sekundiga
+  sünteetiliste seadetega. Chromiumi 7/7 juhtu läbisid tegeliku vaate ja
+  native valijasündmusega; Auth/RPC/Storage olid sünteetilised. Üks klikk/Enter,
+  tühi valik, järgmine valik, uuema kavatsuse kaitse, kolm piirangut ja kümne
+  foto piir on kaetud. Kaks varasemat keskkonna käivitust ei jõudnud ühegi
+  juhtumini; need tõendid säilisid. Uuendaja sihitud 19/19 kontrolli läbisid.
+- Keelte read-only audit: V1 eelistus/tõlkemehhanism on olemas, V2 sisaldab
+  eestikeelseid püsisõnesid. Kinnitatud English põhikeel ja Eesti teine keel
+  dokumenteeriti; terviklik V2 keelekatvus jääb järgmise keeleetapi tööks.
+- Uuendatud autoriteetne CURRENT_STATE, sellest genereeritav üleandmine,
+  HOSTED_PORTAL, moodulileping, AI_MEMORY, handbook ja known issues. Lisatud
+  kitsas vastuvõtu/paranduse märge ja kasutajaliidese keele leping.
+- Uus source-only tarne kontrollib ainult vahetult eelnevat edukat raportit,
+  mille commit/vanem/täpsed lähtepuud kontrollitakse sõltumatult. SQL-i,
+  Supabase CLI-d ega Storage’i ei käivitata; vanad pakid ja päeviku baidid
+  säilivad. Uue paketi Maci commit/Ready ja kasutuskatse jäävad ootele.
+
 <!-- SELQIRO_PHOTO_SPEED_PREPARED_20261106 -->
 ## 2026-11-06 — ühine fotode ettevalmistus ja piiratud etapiajad
 

@@ -4,7 +4,7 @@ import {bindManagedListingImagesKey, bindManagedListingImagesSnapshot, confirmMa
 import {appendPhotoAdditionArguments, bindPhotoAdditionJournal, parsePhotoAdditionResult, photoAdditionArguments,
   preparePhotoAdditionArguments, type PhotoAdditionJournal, type PhotoAdditionResult} from "../../../entities/listing/model/managedListingPhotoAddition";
 import {PRIVATE_UPLOAD} from "../../../entities/listing/model/privatePublicationUpload";
-import {isPublicationCapacityError} from "../../../entities/listing/model/publicationCapacity";
+import {publicationCapacityReason, type PublicationCapacityReason} from "../../../entities/listing/model/publicationCapacity";
 import {measurePhotoTask} from "../../../entities/listing/model/photoPerformance";
 import {preparePublicationFile, preparedImageDescriptor, restorePublicationFile,
   type PrepareListingPhoto} from "../../../entities/listing/model/publicationFilePreparation";
@@ -26,6 +26,11 @@ export type PhotoAdditionSessionDeps = {
   readGallery: (key: ManagedListingImagesKey, signal: AbortSignal) => Promise<ManagedListingImagesSnapshot>;
   putPart: (url: string, headers: Record<string, string>, bytes: Blob, signal: AbortSignal) => Promise<void>;
   uuid: () => string; digest: (bytes: Blob) => Promise<string>; preparePhoto?: PrepareListingPhoto;
+};
+const capacityMessages: Readonly<Record<PublicationCapacityReason, string>> = {
+  open_attempts: "Kontol on juba mitu pooleliolevat lisamist. Lõpeta või katkesta pooleliolevad lisamised ja proovi uuesti. Kuulutuse olemasolevad fotod jäävad alles.",
+  daily_attempts: "Viimase 24 tunni jooksul alustatud lisamiste piir on täis. Katkesta see lisamine ja proovi hiljem uuesti. Kuulutuse olemasolevad fotod jäävad alles.",
+  retained_capacity: "Uute fotode üleslaadimiseks pole kontol praegu piisavalt vaba ruumi. Katkesta see lisamine ja proovi hiljem uuesti. Kuulutuse olemasolevad fotod jäävad alles.",
 };
 const initial = (): PhotoAdditionView => ({phase: "idle", message: ""});
 /** One addition, using the same image transfer as new listings. The journal and
@@ -73,10 +78,10 @@ export class ManagedPhotoAdditionSession {
       catch (error) {
         if (this.generation !== generation || owner.signal.aborted) return;
         const reason = error instanceof Error ? error.message : (error as {code?: string})?.code;
-        const capacityUnavailable = isPublicationCapacityError(error);
-        const phase = !this.hasIntent() ? "idle" : capacityUnavailable ? "needs_attention" : reason === "files_required" ? "needs_file" : reason === "40001" ? "resume"
+        const capacityReason = publicationCapacityReason(error);
+        const phase = !this.hasIntent() ? "idle" : capacityReason ? "needs_attention" : reason === "files_required" ? "needs_file" : reason === "40001" ? "resume"
           : ["image_rejected", "image_processor_unavailable", "needs_attention", "image_limit", "photo_preparation_changed"].includes(reason ?? "") ? "needs_attention" : "unknown";
-        const message = capacityUnavailable ? "Foto lisamine on ajutiselt piiratud. Katkesta see lisamine ja proovi hiljem uuesti. Kuulutuse olemasolevad fotod jäävad alles."
+        const message = capacityReason ? capacityMessages[capacityReason]
           : reason === "files_required" ? "Vali sama algne foto, et lisamist jätkata. Juba saadetud fotot uuesti ei saadeta."
           : reason === "photo_preparation_changed" ? "Brauser valmistas foto seekord teisiti ette. Katkesta see lisamine ja vali sama algne foto uueks lisamiseks. Olemasolevad fotod jäävad alles."
           : reason === "image_rejected" ? "See foto ei sobi lisamiseks. Katkesta lisamine ning vali JPEG-, PNG- või WebP-foto."

@@ -5,15 +5,21 @@ const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),ts=r
 const USER='71000000-0000-0000-0000-000000000001',IDENTITY='72000000-0000-0000-0000-000000000002';
 const build=filename=>ts.transpileModule(fs.readFileSync(filename,'utf8'),{fileName:filename,
   compilerOptions:{target:ts.ScriptTarget.ES2017,module:ts.ModuleKind.CommonJS}}).outputText;
+function loadModel(name){
+  const module={exports:{}};
+  vm.runInNewContext(build(path.resolve(__dirname,'../src/entities/listing/model/'+name+'.ts')),
+    {module,exports:module.exports},{timeout:1000});
+  return module.exports;
+}
+const capacity=loadModel('publicationCapacity'),timing=loadModel('photoPerformance');
 function client(response){
-  const calls=[],capacity={exports:{}},api={exports:{}};
-  vm.runInNewContext(build(path.resolve(__dirname,'../src/entities/listing/model/publicationCapacity.ts')),
-    {module:capacity,exports:capacity.exports},{timeout:1000});
+  const calls=[],api={exports:{}};
   const dependencies={
     '../../../shared/supabase/browserClient':{supabaseBrowserClient:{auth:{getSession:async()=>
       ({data:{session:{user:{id:USER},access_token:'synthetic-session'}},error:null})}}},
     '../../../shared/config/v2Integration':{v2IntegrationEnabled:()=>true},
-    '../model/publicationCapacity':capacity.exports,
+    '../model/publicationCapacity':capacity,
+    '../model/photoPerformance':timing,
     './privateUploadHttp':{privateUploadHttp:async(fetcher,url,init,options)=>{
       calls.push({url,init,options});return response;
     }},
@@ -37,3 +43,26 @@ for(const message of ['publication_message_cleanup_limit','publication_open_atte
     await assert.rejects(h.request(),error=>error instanceof Error&&error.message==='outcome_unknown');
     assert.equal(h.calls.length,1);
   });
+
+for(const [message,reason] of [
+  ['publication_open_attempt_limit','open_attempts'],
+  ['publication_daily_attempt_limit','daily_attempts'],
+  ['publication_retained_bytes_limit','retained_capacity'],
+])test('capacity reason preserves the known SQL class '+message,()=>{
+  const error={code:'54000',message};
+  assert.equal(capacity.isPublicationCapacityError(error),true);
+  assert.equal(capacity.publicationCapacityReason(error),reason);
+});
+test('capacity reasons reject unknown errors and malformed classes without broadening the existing guard',()=>{
+  for(const value of [null,undefined,false,'publication_open_attempt_limit',[],
+    {code:54000,message:'publication_open_attempt_limit'},
+    {code:'40001',message:'publication_open_attempt_limit'},
+    {code:'54000',message:'publication_open_attempt_limit\n'},
+    {code:'54000',message:'private_internal_failure'},
+    {code:'54000',message:'toString'},
+    Object.assign([],{code:'54000',message:'publication_open_attempt_limit'}),
+  ]){
+    assert.equal(capacity.isPublicationCapacityError(value),false);
+    assert.equal(capacity.publicationCapacityReason(value),null);
+  }
+});
