@@ -1,6 +1,7 @@
 import "server-only";
 import * as nodeModule from "node:module";
 import path from "node:path";
+import { after } from "next/server";
 import { localIntegrationConfig } from "./localIntegration";
 import { publicationRuntimeConfig, isHostedPublicationRuntime, type PublicationRuntimeConfig } from "./integrationRuntime";
 import { createJourneyRequestHandler } from "./createJourneyHandler";
@@ -26,7 +27,7 @@ function journeyHandler(c: PublicationRuntimeConfig) {
     prepare: (token, input, signal, timing) => images.prepare(token, copyWebCommand(input), signal, timing),
     verify: (token, input, signal, timing) => images.verify(token, copyWebCommand(input), signal, timing),
     settle: (token, input, signal) => settle(token, input as MultipartSettlementCommand, signal),
-  });
+  }, fetch, after);
 }
 
 export function localJourneyHandler() {

@@ -4,10 +4,12 @@ import { isId, receipt, type FinalReceipt } from "../final/finalContract";
 import { isUploadUuid, uploadRecord } from "../../../entities/listing/model/privatePublicationUpload";
 import { isPublicationCapacityError } from "../../../entities/listing/model/publicationCapacity";
 import { privateUploadHttp, type UploadFetch } from "../../../entities/listing/api/privateUploadHttp";
-import { assertPublicationActor, type PublicationRuntimeConfig } from "./integrationRuntime";
+import { assertPublicationActor, isHostedPublicationRuntime, type PublicationRuntimeConfig } from "./integrationRuntime";
 import type { MultipartPublicationImages } from "./journeyTypes";
 import { isGalleryOrdinal, isGalleryRevision, photoAdditionActions, validatePhotoAdditionInput } from "./photoAdditionContract";
 import { createPublicationTiming, timePublicationStage } from "./publicationTiming";
+import { createPublishedSourceCompletion, hasCommittedPhotoAppend, photoAdditionSourceScope,
+  type AfterPublicationResponse } from "./completePublishedSource";
 
 const ownerActions = {
   ...photoAdditionActions,
@@ -76,9 +78,12 @@ function ownerContractError(value: unknown): {code: string; message: string} | n
   return null;
 }
 /** The one application boundary for the closed integrated publication journey.
- * External failures are unknown outcomes. It never retries a write or clears a journal. */
-export function createJourneyRequestHandler(c: PublicationRuntimeConfig, images: MultipartPublicationImages, fetcher: UploadFetch = fetch) {
+ * Unknown writes are never retried. Only a known capacity refusal may receive
+ * one identical prepare after confirmed SOURCE completion; journals stay intact. */
+export function createJourneyRequestHandler(c: PublicationRuntimeConfig, images: MultipartPublicationImages,
+    fetcher: UploadFetch = fetch, afterResponse?: AfterPublicationResponse) {
   const final = createFinalListingService(c, fetcher);
+  const completeSource = isHostedPublicationRuntime(c) ? createPublishedSourceCompletion(c, fetcher) : null;
   async function refreshFinalReceipt(known: FinalReceipt, expectedUserId: unknown,
       headers: Record<string, string>, signal: AbortSignal): Promise<FinalReceipt> {
     const r = await privateUploadHttp(fetcher, c.projectOrigin + "/rest/v1/rpc/get_my_managed_listing_v2",
@@ -132,10 +137,28 @@ export function createJourneyRequestHandler(c: PublicationRuntimeConfig, images:
       const headers = {apikey: c.publicKey, authorization, "content-type": "application/json"};
       if (Object.hasOwn(ownerActions, action)) {
         const bound = ownerContract(action as keyof typeof ownerActions, input);
-        const r = await timePublicationStage(timing?.record, "owner_rpc", () => privateUploadHttp(fetcher, c.projectOrigin + "/rest/v1/rpc/" + bound.name,
+        const callOwner = () => timePublicationStage(timing?.record, "owner_rpc", () => privateUploadHttp(fetcher, c.projectOrigin + "/rest/v1/rpc/" + bound.name,
           {method: "POST", headers, body: JSON.stringify(bound.args)}, {signal: request.signal, responseBytes: 65536,
             readErrorStatuses: [400, 401, 403, 404, 409, 422, 500, 503]}));
-        if (r.status === 200) return reply(r.json);
+        let r = await callOwner();
+        if (action === "owner-images-add-prepare" && r.status !== 200 && completeSource
+          && isPublicationCapacityError(r.json) && r.json.message === "publication_retained_bytes_limit") {
+          // This exact allocator exception rolled back before creating a child.
+          // SQL rechecks all limits and the unchanged gallery revision on retry.
+          if (await completeSource(token, photoAdditionSourceScope(input), request.signal)) r = await callOwner();
+        }
+        if (r.status === 200) {
+          if (action === "owner-images-add-append" && completeSource && afterResponse
+            && hasCommittedPhotoAppend(r.json, input)) {
+            const scope = photoAdditionSourceScope(input);
+            try { afterResponse(async () => {
+              // The framework retains this bounded job after sending the ACK.
+              // It has its own deadline and does not inherit request aborts.
+              await completeSource(token, scope);
+            }); } catch { /* Keep the committed append; the existing ledger retains its SOURCE. */ }
+          }
+          return reply(r.json);
+        }
         const error = ownerContractError(r.json);
         if (error) return reply({error: "owner_contract", ...error}, error.code === "42501" ? 403 : 409);
         return reply({error: "outcome_unknown"}, 503);

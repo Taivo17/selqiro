@@ -49,6 +49,7 @@ saadetavat SOURCE-mahtu, säilitades senise serveri kontrolli ja jätkamise.
 
 - Ühe SOURCE-faili piir on 25 MiB ja WEB-faili piir 4 MiB.
 - Konto senine 300 MiB loogiline reserv ja üleslaadimise sageduspiirid säilivad.
+  Uus foto vajab 29 MiB reservi ka siis, kui saadetav fail on väiksem.
 - Faili sisu võetakse kinnisest Blob-ist; faili valimise järel tehtud
   kasutajaliidese muudatus ei asenda juba alanud toimingu baite.
 - Brauseri püsiv jätkamiskirje seob konto, identiteedi, kuulutuse, päringu,
@@ -124,10 +125,44 @@ vastust. Pooleliolevad failid jäävad senisesse päevikusse ja reservi kuni
 tõendatud lõpetamiseni. SQL ei kustuta Storage'i metainfo ridu ning
 teadmata tulemus ei vabasta ruumi.
 
-`cleanup_mode: held` ja üldiste koristus-RPC-de suletud ligipääs säilivad.
-See samm ei lülita sisse üldist taustakoristust. Automaatne lõpetamine
-ilma omaniku avatud lehest sõltumata ning tehniliste paneelide eemaldamine
-tavakasutaja vaatest jäävad avaliku avamise eelseteks töödeks.
+## Avaldatud SOURCE-i piiratud lõpetamine, 07.11.2026
+
+[Aktsepteeritud diagnostika](../continuity/PHOTO_ADDITION_DIAGNOSTIC_20261107.md)
+näitas, et avaldatud lisamiste koristust ootavad SOURCE-id hoidsid konto
+reservi. Parandus seob kaks olemasoleva lisamistoimingu kohta sama hosted
+SOURCE-koristajaga; uut SQL-i, mahapiiri ega koristusjärjekorda ei lisata.
+
+- Kui `prepare` annab täpse `publication_retained_bytes_limit` keeldumise
+  SQLSTATE-ga `54000`, võib lõpetada ühe sama emaavaldamise SOURCE-objekti.
+  Allocator annab selle keeldumise enne uue katse ja objektide loomist.
+  Tundmatu võrguvastus ega muu veakood seda rada ei käivita.
+- Enne ja pärast koristust loetakse praeguse kasutaja õigustega värske
+  omaniku kviitung. Identiteet, kuulutus, emaavaldamine ja selle päringuvõti
+  peavad sobima. Alles kviitungi loenduri tõendatud vähenemise järel
+  korratakse sama `prepare` käsku samade argumentidega kõige rohkem üks kord.
+  Allocator kontrollib reservi, õigusi ja galerii revisjoni uuesti.
+- Kinnitatud `append`-kviitung võib käivitada ühe sama emaavaldamise SOURCE-i
+  lõpetamise Next.js-i `after()` kaudu pärast vastust. Kinnitatud lisamise
+  vastus säilib ka siis, kui koristuse registreerimine või lõpetamine ebaõnnestub.
+  Kliendi galerii täisvalideerimine jääb eraldi kohustuseks.
+
+Mõlemad lõpetamiskutsed kasutavad 20 sekundi täitmispiiri. `prepare`-rajal
+kehtib ka päringu katkestussignaal; pärast vastust käivitatud kutsel on oma
+piir ja route'i/platvormi eluiga. Alles jäävad senised täpsed claim-, lease-,
+Storage'i puudumise ja SQL-i lõpetamistõendid. Tundmatu tulemus ei vabasta
+reservi ega muuda kinnitatud lisamist ebaõnnestunuks.
+
+Praegune lubatud äriliige võib erineda algsest avaldajast. Selle liikme
+õigusi kontrollitakse uuesti, kuid kviitungi algne avaldaja ei muutu.
+Selline koristus võib vabastada algse avaldaja reservi, mistõttu teise liikme
+järgmine `prepare` võib oma konto piiri tõttu endiselt keelduda.
+
+Üks kutse puudutab kõige rohkem üht sobivat SOURCE-i samas emaavaldamise
+seoses. See ei kustuta aktiivseid WEB-fotosid ega käi läbi teisi kuulutusi või
+kontosid. `cleanup_mode: held` ja üldiste koristus-RPC-de suletud ligipääs
+säilivad. See ei ole püsiv taustatööde planeerija ega kogu varasema järjekorra
+tühjendamine. Tehniliste paneelide eemaldamine tavakasutaja vaatest jääb
+avaliku avamise eelseks tööks. Parandus ei tõenda foto lisamise uut kiirust.
 
 ## Kontroll ja tarne
 
@@ -137,18 +172,37 @@ jätkamist, identiteedi vahetust, lisatud foto põhipildiks valimist ja
 eemaldamist ning olemasolevate fotode/teksti säilimist. SQL-i ja Storage'i
 sünteetilisi tõendeid ei nimetata tootmise kasutuskatseks.
 
-Uus eraldi räsikaitsega pakett kontrollib enne Maci kirjutusi haru, HEAD-i,
-tööpuud/indexit, kinnitatud remote'i ja kõiki lähtifaile. Täpne eelmise
-paranduse commit leitakse selle olemasolevast tulemuspäevikust ning
-kontrollitakse sõltumatult Giti puud ja vanemat. Päeviku väitest üksi ei piisa.
+Paranduse kinnitatud lähteseis on Maci `main` commit
+`a4b5b2d14e456e6e83d4412b839ef330259cd048`: 07.11 kell 11:29 UTC diagnostikas
+vastasid 1081/1081 lähtefaili väljastatud fotovaliku r2-le ning tööpuu ja index
+säilisid enne/pärast lugemist. Räsikaitsega tarne kontrollib enne kirjutusi
+haru, HEAD-i, tööpuud/indexit, kinnitatud remote'i ja lähtefaile uuesti.
 Varem väljastatud pakke ega kasutaja päevikuid ei muudeta.
+
+Lõpliku ühise build'i, serverikontrollide, paketi ja päris Maci/Verceli
+kasutuskatse seis kuulub ainult `CURRENT_STATE.json`-i; käsk kuulub
+`HOSTED_PORTAL.md`-sse. Kohalikud katsed ei tõenda Maci paigaldust,
+tootmises vabastatud reservi ega uue foto nähtavust päris avalikus vaates.
 
 ## Otsene fotovalik ja täpne ajutine piirang, 07.11.2026
 
 Üks nähtav rakenduse nupp avab native failivalija samas kasutaja sündmuses.
-Lõpetatud toimingu reset ootab sobivat valitud faili. Valija katkestamine ei
-muuda päevikut; uuema kavatsuse või tegutseja muutuse korral ei kinnitata
-vana valikut. Faili valimine ei saada faile ilma eraldi üleslaadimistoiminguta.
+Peidetud failisisend jääb omaniku värskenduse ajal lubatuks, et valijast
+tagastatav fail ei kaoks. Nähtav avamisnupp kontrollib endiselt omaniku ja
+galerii valmisolekut. Kohalik valik seotakse valija avanud kontrolleriga ning
+säilib ajutise lugemise või lugemisvea ajal. Senine kontrollitud terminalse
+toimingu reset ootab sama kontrollerit, lubatud omanikku ja vaba galeriikohta.
+
+Ootel valik asendab vana eduteate teatega, et uut fotot pole veel lisatud.
+Täituva galerii puhul ei alustata reset'i ega üleslaadimist. Kohalikust
+valikust saab loobuda ka lugemisvea või täis galerii korral; see ei tühista
+kaugtoimingut. Valija katkestamine ei muuda päevikut; kontrolleri või
+identiteedi vahetus ja uuem teise vahekaardi kavatsus säilitavad senised
+kaitsed. Faili valimine ei saada faile ilma eraldi üleslaadimistoiminguta.
+
+Lõplikku komponenti kontrolliti üheksa sihitud integreeritud Chromiumi
+juhuga. Tõendid ja päris OS-valija katse piir on
+[juhtumi ülevaates](../continuity/PHOTO_ADDITION_DIAGNOSTIC_20261107.md).
 
 Aktiivse galerii kümne foto piir on eraldi konto kolme avatud katse, veereva
 24 tunni 20 uue katse ja 300 MiB reservi piiridest. Ühe foto lisamine loeb

@@ -329,9 +329,11 @@ listing's pending count and existing reservation; it does not maintain another
 queue or balance. Keep published SOURCE receipt semantics stable.
 
 A diagnostic read must not become a requirement for editing a listing's basic
-fields. Only an explicit cleanup action may invoke the bounded worker during
-testing. Build the future background runner around the same contract rather
-than adding cleanup side effects to page loads or focus events. See
+fields. The diagnostic panels invoke the bounded worker only through an explicit
+cleanup action during testing. The photo-addition completion rule below also
+permits one published-SOURCE step as part of an explicit photo addition. Build
+the future background runner around the same contract rather than adding
+cleanup side effects to page loads or focus events. See
 [the retired WEB contract](architecture/hosted-retired-web-cleanup-v1.md).
 
 ## Published-photo addition — 2026-11-06
@@ -379,3 +381,25 @@ does not select a new UI language. Resolve user-facing messages at render time
 without restarting durable operations. Treat full language coverage as an
 end-to-end feature, including errors, categories, policy text and accessibility.
 See `docs/architecture/interface-language-v1.md` for the current V2 gaps.
+
+## Complete published photo additions — 2026-11-07
+
+The real account diagnostic found nine completed published SOURCE files holding
+225 MiB of reservation. Merely queuing their cleanup left normal photo addition
+blocked. Reuse the existing exact SOURCE cleaner from the explicit addition
+action; do not introduce a second queue, another balance, a higher quota or
+cleanup side effects on reads.
+
+A known, rolled-back retained-capacity prepare refusal may trigger one scoped
+SOURCE cleanup and one identical prepare retry only after an authoritative
+parent receipt confirms progress. An unknown write result never permits this
+retry. A committed append may schedule one bounded SOURCE pass with the
+framework's supported post-response lifecycle; its failure cannot revoke the
+known successful append. This is a completion opportunity, not a durable global
+background worker. The existing ledger remains authoritative.
+
+This deliberately extends the earlier explicit-cleanup-button testing rule:
+it repairs a measured lifecycle omission without making the owner wait for
+housekeeping after every successful addition. Reads, focus and diagnostics
+remain free of cleanup mutations. Source selection and quota release still
+require the retained SQL authorization and provider deletion proof.

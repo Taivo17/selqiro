@@ -690,3 +690,56 @@ Uus tarne on ainult kliendikoodi parandus koos varukoopia, build’i ja piiratud
 commit/pushiga. Andmebaasi ega Storage’i ei paigaldata uuesti. Täpsed kontrollid
 ja piirid: `docs/continuity/MESSAGING_MOBILE_FIX_20261030.md` ning tarne
 `review/verification.json`. Viimase tootmis-commit’i räsi ei oletata pildi põhjal.
+
+
+## 2026-11-07 — Foto lisamise eksitava eduteate ja reservi diagnoos
+
+- Kasutaja uus teade: kuulutusel 201 täpne üleslaadimisreservi piirang; kuulutusel 202 eduteade ilma uue nähtava fotota. Uut Maci commit’i ega Verceli räsi ei oletata ekraanipildi põhjal.
+- Tegeliku r2 komponendi ühes uues Chromiumi katses korrati focus-before-change viga. Omanikuvaate lugemine blokeerib valiku; uus File kaob ja vana lõpetatud journal/eduteade säilib ilma uue prepare/PUT/append’ita. Katse on sünteetilise Auth/RPC/Storage transpordiga, mitte kasutaja päris sündmusjälg.
+- Koodi audit eristas kontoülese reservi galerii kümne foto piirist. Juurdelisamise SOURCE koristus jääb järjekorda; katkestatud/aegunud katsete hosted reservi lõpetamine on endiselt lahti. Konkreetse konto reservi põhjuste jaotus on lugemata.
+- Valmistatud uus ainult lugemiseks koguja: tegeliku Git/1081 teadaoleva lähtefaili vaatlus ja üks piiratud READ ONLY päring 201/202 galerii, viimaste lisamiste ning ühise algse avaldaja konto reservi koondandmetele. Kasutab muutmata kontrollitud transporti; ei käivita rakendust ega kirjuta projektifaile, indexit, andmebaasi või Storage’it.
+- Koguja 7/7 sihitud testi PASS. Uue SQL-i 3/3 PGlite kontrolli PASS täpsete praeguste lugemispredikaatidega; 36 tabeli andmed säilisid. Sama range parser aktsepteeris kõigi kolme tegeliku sünteetilise päringu väljundit. Reaalset konto tulemust sellest ei tuletata.
+- Fotovaliku väike ühe komponendi parandus valmistatakse ette eraldi lähtekoopias. See ei kuulu diagnostikapaki paigaldatavasse sisusse. Maci rakendamiseks on vaja värsket tegeliku lähtepuu aruannet; senised räsikaitsega paketid säilivad muutmata.
+- Uuendatud CURRENT_STATE, sellest genereeritud üleandmine, HOSTED_PORTAL ja käesolev append-only päevik; lisatud PHOTO_ADDITION_DIAGNOSTIC_20261107 ning known-issues. Need on kohalikud ettevalmistatud dokumendid, mitte Maci hoidlasse kirjutamise tõend. Üks järgmine tegevus on saata uue koguja aruande-ZIP.
+
+- Sama töö prototüübi kontroll lõpetatud: ainult ManagedListingPhotoAdd muutus (108 rida; SHA-256 840a129529818fac815c9008731f103c79380751b09f03ec8474d5305a700618), build PASS 26,39 s ning viis sihitud brauserijuhtu PASS. Teine explicit lisamine andis galerii 3→4; konteksti- ja päevikupiirid säilisid. Esimese jooksu brauseriprotsessi sulgumise tõend säilib; päris Maci/telefoni OS-valija tagastust pole kontrollitud. Seda prototüüpi koguja ei paigalda.
+
+- Diagnostika lõplik 24-failine ZIP läbis pärast kõigi failide pakkimist täpse arhiivi read_package/CRC/baidivõrdluse. SHA-256 d6eecd1ef79c2500ace6bee5427f64e40076d79c2118722f80c7750030d3e853, manifest f1599bfc062372a039c5e09728e620d567d0879f2c6fe7b96a02e998a0a7ea10. Kinnitatud tarne ja vanad väljastatud paketid jäävad muutmata; aruanne päris Macist on järgmine samm.
+
+
+## 2026-11-07 — foto lisamise diagnostika ajatemplite ühilduvus
+
+- Saabus raport `selqiro-foto-lisamise-raport-20261107-110102-ccc90d21.zip`.
+  Enne-lugemist Maci main HEAD `a4b5b2d14e456e6e83d4412b839ef330259cd048`,
+  1081/1081 r2 lähtefaili vastavad ja tracked tööpuu/index puhas. Sama commit'i
+  build/commit/push on terminalipildiga teatatud; uut Verceli Ready tõendit pole.
+- CLI lugemispäring exit 0, kuid koguja `DATABASE_REPORT_TIME_INVALID` tõttu
+  konto vaatlus puudub. Toorvastust ega pärast-lugemist hetktõmmist ei säilitatud.
+  Vana `database:not_read` on algväärtus, mitte tõend, et päringut ei toimunud.
+- Uues eraldi r2 kontrollipakis parandati ainult sekundi murdosa parsimise
+  ühilduvus ning vastuse saamise/Pythoniversiooni raportikirje. SQL ja transport
+  säilivad bait-baidilt; rakendust, Maci, pilveandmeid ega vanu pakke ei muudetud.
+- 10/10 sihitud regressioonikontrolli PASS. Muutmata SQL läbis kohaliku PGlite
+  timestamptz katse ja 36 tabeli enne/pärast räsid vastasid. Testimiskeskkond oli
+  Python 3.12.14 koos avaldatud Python 3.9 murdosa lugemisabiga; tegelikku 3.9
+  protsessi ei käivitatud. Sõltumatu lähteülevaatus ei leidnud takistust.
+- Vana portaali build'i ega laiu sarju ei korratud. Üks varane kohaliku fixture'i
+  seadistusviga säilib eraldi tõendina; see ei puudutanud päris teenust.
+- Uuendati CURRENT_STATE, sellest genereeritavat üleandmist, HOSTED_PORTAL-i,
+  juhtumidokumenti ja known-issues'i. Need on ettevalmistatud lähtekoopias.
+  Üks järgmine tegevus on uue r2 koguja lugemine ja uus aruande-ZIP.
+
+- Lõplik r2 kontrollipakk: 21 faili / 138027 baiti. Täpsest ZIP-ist read_package, CRC ja baitide vastavus PASS. ZIP SHA-256 `62790e99d2c2b4c5879a729e5a177118d4febb36365bd96a72f4240d20ce93f1`, manifest `333b72b84e683068e6822cf3ded38c54b53cb933797b9433a979b69735879fd7`. Pärast külmutamist ZIP-i ei muudeta; käesolev lõpptõend lisati ainult ettevalmistatud lähtekoopiasse.
+
+
+## 2026-11-07 — päris reservi vaatlus ja foto lisamise lõpetamine
+
+- Uus r2 diagnostika lõpetas 11:29:48 UTC edukalt Maci Python 3.9.6 all. Enne/pärast main HEAD a4b5b2d14e456e6e83d4412b839ef330259cd048 ja 1081 lähtefaili vastavad; tracked index/tööpuu puhas. Eelmine ajatemplite ühilduvuse puudujääk on päris raportiga lahendatud.
+- Päris read-only vaatlus: konto 277 MiB reservist 225 MiB on 9 avaldatud algfaili ning 52 MiB 13 aktiivse veebifoto reserv. Uue foto 29 MiB ei mahu 300 MiB piirile. Kuulutus 201 viis pilti/revision 6, 202 kolm/revision 2; pooleliolevad/aegunud katsed ja sessioonid olid null. Raport pole praeguse brauseri tegutseja ega Storage I/O vaatlus.
+- Ühe kliendikomponendi parandus säilitab File-i omanikuvaate focus-lugemise ajal, peidab ootel uue valiku ajal vana eduteate ning jätab reset/journal/identiteedikaitse alles. Kohalikku valikut saab katkestada ka lugemisvea ajal. Native sisend on lubatud; nähtav nupp ja üleslaadimine säilitavad senised õiguskontrollid.
+- Lisatud üks väike serveri SOURCE-lõpetamise moodul ja kaks sidumist: täpne kvoodikeeldumine → olemasolev sama emaseose koristaja → värske väiksem loendur → üks identne prepare. Püsiv append seob ühe piiratud töö tegeliku Next after()-iga. Tundmatut kirjutust ei korrata; olemasolev kviitung/ledger ja SQL jäävad autoriteetseks.
+- 9/9 brauserijuhtu ja 31/31 serveripiiri juhtu PASS. Muutmata tegelik SQL kohalikus PGlite fixtures läbis 27 väidet:277→281→256 MiB, vana ja uus galerii ning kõik WEB-objektid säilisid. Tegelik Next after/AfterContext koos sünteetilise close/waitUntil elutsükliga läbis vastusejärgse ja request-abort'i sõltumatuse kontrolli. Päris pilve- ega OS-valijakatset ei tehtud.
+- Üks kombineeritud production build PASS 26,42 s; neli rakendusfaili säilisid. Paigaldaja 4/4 sihitud kontrolli PASS reaalses ajutises Gitis/kohalikus remotes, sünteetilise build'iga. Sõltumatu lähteülevaatus ei leidnud takistust. Laiu vanu testisarju ei korratud.
+- Üks uus app-only paranduspakett valmistatakse tegelikule 1081-failisele a4b5b2d lähtele; see ei käivita eelmisi paigaldajaid, ei vaja migratsiooni ega muuda limiite. Lõpliku ZIP-i kontroll tehakse pärast kogu sisu pakkimist ja säilitatakse väljaspool muutumatut arhiivi.
+- Uuendatud on üks CURRENT_STATE ja sellest genereeritav üleandmine, praegune paigaldusjuhis, juhtumileping ja teadaolevad tööd. Engineering Standard täpsustus on põhjendatud: eksplitsiitse lisamise lõpetamine kasutab olemasolevat koristust, üksnes passiivne vaatamine/fookus seda ei käivita.
+- Üks järgmine tegevus: Maci uuenda.py --publish, sama commit'i Verceli Ready, üks uus foto 201 kuulutusele ning galerii/avaliku vaate ja tegeliku aja kontroll. Täielik V2 keelekatvus ja üldine taustakoristus on endiselt eraldi lõpetamata tööd.
