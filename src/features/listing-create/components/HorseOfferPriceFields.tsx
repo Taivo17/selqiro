@@ -1,5 +1,7 @@
 "use client";
 
+import { marketplaceMessage } from "../../../shared/i18n/marketplaceMessages";
+import { useMarketplaceTranslation } from "../../../shared/i18n/useMarketplaceTranslation";
 import {
   HORSE_OFFER_MONEY_INPUT_MAX_LENGTH,
   isValidHorseMoneyInput,
@@ -31,31 +33,31 @@ type ChoiceOption<T extends string> = {
 const SELLER_PRICE_OPTIONS: ChoiceOption<HorseSellerPriceMode>[] = [
   {
     value: "fixed",
-    label: "Kindel summa",
-    description: "Kuvatakse ühe konkreetse summana.",
+    label: marketplaceMessage("horse.fixed_amount.6f753f"),
+    description: marketplaceMessage("horse.shown_as_one_fixed_amount.4d25eb"),
   },
   {
     value: "from",
-    label: "Alates",
-    description: "Kuvatakse alates-summana.",
+    label: marketplaceMessage("horse.from.661c2a"),
+    description: marketplaceMessage("horse.shown_as_a_starting_amount.4532e5"),
   },
   {
     value: "contact",
-    label: "Kokkuleppel",
-    description: "Summat ei ole vaja sisestada.",
+    label: marketplaceMessage("horse.by_agreement.3bd541"),
+    description: marketplaceMessage("horse.no_amount_is_required.67d525"),
   },
 ];
 
 const WANTED_BUDGET_OPTIONS: ChoiceOption<HorseWantedBudgetMode>[] = [
   {
     value: "maximum",
-    label: "Eelarve kuni",
-    description: "Sisestad maksimaalse ostueelarve.",
+    label: marketplaceMessage("horse.maximum_budget.12732b"),
+    description: marketplaceMessage("horse.enter_your_maximum_purchase_budget.54ffd3"),
   },
   {
     value: "contact",
-    label: "Eelarve on paindlik",
-    description: "Kindlat ülempiiri ei kuvata.",
+    label: marketplaceMessage("horse.flexible_budget.20da6f"),
+    description: marketplaceMessage("horse.no_fixed_maximum_is_shown.f28c7c"),
   },
 ];
 
@@ -65,19 +67,19 @@ const PERIOD_OPTIONS: {
 }[] = [
   {
     value: "day",
-    label: "päev",
+    label: marketplaceMessage("horse.day.1e9bc5"),
   },
   {
     value: "week",
-    label: "nädal",
+    label: marketplaceMessage("horse.week.4c3fce"),
   },
   {
     value: "month",
-    label: "kuu",
+    label: marketplaceMessage("horse.period.month"),
   },
   {
     value: "agreed_period",
-    label: "kokkulepitud periood",
+    label: marketplaceMessage("horse.agreed_period.879bc3"),
   },
 ];
 
@@ -92,6 +94,7 @@ function ChoiceCards<T extends string>({
   options: ChoiceOption<T>[];
   onChange: (value: T) => void;
 }) {
+  const { language, r } = useMarketplaceTranslation();
   const columnClass =
     options.length === 2
       ? "sm:grid-cols-2"
@@ -100,13 +103,13 @@ function ChoiceCards<T extends string>({
   return (
     <fieldset>
       <legend className="text-xs font-black uppercase tracking-[0.16em] text-neutral-500">
-        {legend}
+        {r(legend)}
       </legend>
 
       <div
         className={`mt-3 grid gap-3 ${columnClass}`}
       >
-        {options.map((option) => {
+        {r(options.map((option) => {
           const selected =
             option.value === value;
 
@@ -124,21 +127,20 @@ function ChoiceCards<T extends string>({
                 value={option.value}
                 checked={selected}
                 onChange={() =>
-                  onChange(option.value)
-                }
+                  onChange(option.value)}
                 className="sr-only"
               />
 
               <span className="block text-sm font-black text-neutral-900">
-                {option.label}
+                {r(option.label)}
               </span>
 
               <span className="mt-1 block text-xs leading-5 text-neutral-500">
-                {option.description}
+                {r(option.description)}
               </span>
             </label>
           );
-        })}
+        }))}
       </div>
     </fieldset>
   );
@@ -153,10 +155,11 @@ function AmountField({
   value: string;
   onChange: (value: string) => void;
 }) {
+  const { language, r } = useMarketplaceTranslation();
   return (
     <label className="block rounded-[20px] border border-neutral-200 bg-[#fbfbfa] p-4">
       <span className="text-xs font-black uppercase tracking-[0.16em] text-neutral-500">
-        {label}
+        {r(label)}
       </span>
 
       <div className="mt-3 flex items-center gap-3">
@@ -176,10 +179,8 @@ function AmountField({
               onChange(nextValue);
             }
           }}
-          placeholder="Näiteks 3500"
-          maxLength={
-            HORSE_OFFER_MONEY_INPUT_MAX_LENGTH
-          }
+          placeholder={r(marketplaceMessage("horse.for_example_3500.ea849f"))}
+          maxLength={HORSE_OFFER_MONEY_INPUT_MAX_LENGTH}
           className="min-w-0 flex-1 bg-transparent text-lg font-black outline-none placeholder:text-neutral-300"
         />
 
@@ -189,8 +190,8 @@ function AmountField({
       </div>
 
       <span className="mt-2 block text-right text-xs font-black text-neutral-400">
-        {value.length}/
-        {HORSE_OFFER_MONEY_INPUT_MAX_LENGTH}
+        {r(value.length)}/
+        {r(HORSE_OFFER_MONEY_INPUT_MAX_LENGTH)}
       </span>
     </label>
   );
@@ -205,11 +206,11 @@ function PeriodField({
     value: HorseRecurringPricePeriod
   ) => void;
 }) {
+  const { language, r } = useMarketplaceTranslation();
   return (
     <label className="block rounded-[20px] border border-neutral-200 bg-[#fbfbfa] p-4">
       <span className="text-xs font-black uppercase tracking-[0.16em] text-neutral-500">
-        Tasu periood
-      </span>
+        {r(marketplaceMessage("horse.payment_period.766676"))}</span>
 
       <select
         value={value}
@@ -217,18 +218,17 @@ function PeriodField({
           onChange(
             event.target
               .value as HorseRecurringPricePeriod
-          )
-        }
+          )}
         className="mt-3 w-full bg-transparent text-base font-black outline-none"
       >
-        {PERIOD_OPTIONS.map((option) => (
+        {r(PERIOD_OPTIONS.map((option) => (
           <option
             key={option.value}
             value={option.value}
           >
-            {option.label}
+            {r(option.label)}
           </option>
-        ))}
+        )))}
       </select>
     </label>
   );
@@ -253,22 +253,23 @@ function SellerPriceFields({
     change: HorseOfferPriceFieldChange
   ) => void;
 }) {
+  const { language, r } = useMarketplaceTranslation();
   const amountVisible =
     value.mode !== "contact";
 
   return (
     <>
       <h2 className="mt-2 text-2xl font-black tracking-tight">
-        {title}
+        {r(title)}
       </h2>
 
       <p className="mt-2 max-w-3xl text-sm leading-6 text-neutral-600">
-        {description}
+        {r(description)}
       </p>
 
       <div className="mt-5">
         <ChoiceCards
-          legend="Kuidas tasu kuvatakse?"
+          legend={marketplaceMessage("horse.how_should_the_fee_be_displayed.f84b27")}
           value={value.mode}
           options={SELLER_PRICE_OPTIONS}
           onChange={(mode) =>
@@ -277,12 +278,11 @@ function SellerPriceFields({
               patch: {
                 mode,
               },
-            })
-          }
+            })}
         />
       </div>
 
-      {amountVisible ? (
+      {r(amountVisible ? (
         <div
           className={`mt-4 grid items-start gap-4 ${
             showPeriod
@@ -291,7 +291,7 @@ function SellerPriceFields({
           }`}
         >
           <AmountField
-            label={amountLabel}
+            label={r(amountLabel)}
             value={value.amount}
             onChange={(amount) =>
               onChange({
@@ -299,28 +299,24 @@ function SellerPriceFields({
                 patch: {
                   amount,
                 },
-              })
-            }
+              })}
           />
 
-          {showPeriod ? (
+          {r(showPeriod ? (
             <PeriodField
-              value={
-                value.period
-                ?? "month"
-              }
+              value={value.period
+                ?? "month"}
               onChange={(period) =>
                 onChange({
                   branch,
                   patch: {
                     period,
                   },
-                })
-              }
+                })}
             />
-          ) : null}
+          ) : null)}
         </div>
-      ) : null}
+      ) : null)}
     </>
   );
 }
@@ -331,6 +327,7 @@ HorseOfferPriceFields({
   value,
   onChange,
 }: HorseOfferPriceFieldsProps) {
+  const { language, r } = useMarketplaceTranslation();
   if (offerType === "free_transfer") {
     return (
       <section
@@ -338,24 +335,16 @@ HorseOfferPriceFields({
         data-horse-price-field-mode="free"
       >
         <p className="text-xs font-black uppercase tracking-[0.22em] text-amber-700">
-          Hind ja tingimused
-        </p>
+          {r(marketplaceMessage("horse.price_and_terms.4107b0"))}</p>
 
         <h2 className="mt-2 text-2xl font-black tracking-tight">
-          Tasuta üleandmine
-        </h2>
+          {r(marketplaceMessage("horse.free_transfer.ccb86a"))}</h2>
 
         <p className="mt-2 max-w-3xl text-sm leading-6 text-neutral-600">
-          Selle pakkumise liigi puhul
-          hinda ega eelarvet ei sisestata.
-          Hilisem salvestusleping peab
-          kasutama tasuta hinna tüüpi ja
-          jätma summa tühjaks.
-        </p>
+          {r(marketplaceMessage("horse.this_listing_type_does_not_use_a_price.02606d"))}</p>
 
         <p className="mt-5 rounded-[20px] border border-amber-200 bg-amber-50 px-4 py-3 text-sm font-bold text-amber-950">
-          Hind: tasuta
-        </p>
+          {r(marketplaceMessage("horse.price_free.a82d74"))}</p>
       </section>
     );
   }
@@ -370,22 +359,17 @@ HorseOfferPriceFields({
         data-horse-price-field-mode="wanted"
       >
         <p className="text-xs font-black uppercase tracking-[0.22em] text-amber-700">
-          Eelarve
-        </p>
+          {r(marketplaceMessage("horse.budget.b9d39f"))}</p>
 
         <h2 className="mt-2 text-2xl font-black tracking-tight">
-          Ostueelarve
-        </h2>
+          {r(marketplaceMessage("horse.purchase_budget.943f7e"))}</h2>
 
         <p className="mt-2 max-w-3xl text-sm leading-6 text-neutral-600">
-          Kirjelda enda ostueelarvet.
-          See on otsija eelarve, mitte
-          müüja hind.
-        </p>
+          {r(marketplaceMessage("horse.describe_your_purchase_budget_this_is_the_searcher.e651ba"))}</p>
 
         <div className="mt-5">
           <ChoiceCards
-            legend="Kuidas eelarve kuvatakse?"
+            legend={marketplaceMessage("horse.how_should_the_budget_be_displayed.5403fb")}
             value={value.wanted.mode}
             options={WANTED_BUDGET_OPTIONS}
             onChange={(mode) =>
@@ -394,15 +378,14 @@ HorseOfferPriceFields({
                 patch: {
                   mode,
                 },
-              })
-            }
+              })}
           />
         </div>
 
-        {amountVisible ? (
+        {r(amountVisible ? (
           <div className="mt-4">
             <AmountField
-              label="Maksimaalne eelarve"
+              label={r(marketplaceMessage("horse.maximum_budget.75578d"))}
               value={value.wanted.amount}
               onChange={(amount) =>
                 onChange({
@@ -410,17 +393,13 @@ HorseOfferPriceFields({
                   patch: {
                     amount,
                   },
-                })
-              }
+                })}
             />
           </div>
-        ) : null}
+        ) : null)}
 
         <p className="mt-4 rounded-[20px] border border-neutral-200 bg-[#fbfbfa] px-4 py-3 text-xs leading-5 text-neutral-500">
-          Ostueelarve kirjeldab otsija võimalusi,
-          mitte müüja hinda. Eelarve säilib
-          otsingukuulutuse eraldi andmena.
-        </p>
+          {r(marketplaceMessage("horse.the_purchase_budget_describes_the_searcher_s_means.494994"))}</p>
       </section>
     );
   }
@@ -435,59 +414,48 @@ HorseOfferPriceFields({
   const config =
     offerType === "sale"
       ? {
-          title: "Müügihind",
+          title: marketplaceMessage("horse.sale_price.d5f34b"),
           description:
-            "Määra müügihind või jäta hind kokkuleppele.",
-          amountLabel: "Müügihind",
+            marketplaceMessage("horse.set_a_sale_price_or_leave_it_open.e1aee6"),
+          amountLabel: marketplaceMessage("horse.sale_price.d5f34b"),
           showPeriod: false,
         }
       : offerType === "lease"
         ? {
-            title: "Renditasu",
+            title: marketplaceMessage("horse.lease_fee.2fa551"),
             description:
-              "Määra renditasu ja summa periood või jäta tasu kokkuleppele.",
-            amountLabel: "Renditasu",
+              marketplaceMessage("horse.set_a_lease_fee_and_payment_period_or.f81d9b"),
+            amountLabel: marketplaceMessage("horse.lease_fee.2fa551"),
             showPeriod: true,
           }
         : {
-            title: "Kaasratsaniku tasu",
+            title: marketplaceMessage("horse.co_rider_fee.beb49d"),
             description:
-              "Määra kaasratsaniku tasu ja summa periood või jäta tasu kokkuleppele.",
-            amountLabel: "Kaasratsaniku tasu",
+              marketplaceMessage("horse.set_a_co_rider_fee_and_payment_period.3a16f2"),
+            amountLabel: marketplaceMessage("horse.co_rider_fee.beb49d"),
             showPeriod: true,
           };
 
   return (
     <section
       className="rounded-[30px] border border-black/5 bg-white p-5 shadow-sm sm:p-6"
-      data-horse-price-field-mode={
-        branch
-      }
+      data-horse-price-field-mode={branch}
     >
       <p className="text-xs font-black uppercase tracking-[0.22em] text-amber-700">
-        Hind ja tingimused
-      </p>
+        {r(marketplaceMessage("horse.price_and_terms.4107b0"))}</p>
 
       <SellerPriceFields
         branch={branch}
-        title={config.title}
-        description={
-          config.description
-        }
-        amountLabel={
-          config.amountLabel
-        }
-        showPeriod={
-          config.showPeriod
-        }
+        title={r(config.title)}
+        description={r(config.description)}
+        amountLabel={config.amountLabel}
+        showPeriod={config.showPeriod}
         value={value[branch]}
         onChange={onChange}
       />
 
       <p className="mt-4 rounded-[20px] border border-neutral-200 bg-[#fbfbfa] px-4 py-3 text-xs leading-5 text-neutral-500">
-        Hind ja otsija eelarve on eri tähendusega.
-        Valuuta on Eesti hobusepiloodis EUR.
-      </p>
+        {r(marketplaceMessage("horse.a_price_and_a_searcher_s_budget_have.a2ec71"))}</p>
     </section>
   );
 }

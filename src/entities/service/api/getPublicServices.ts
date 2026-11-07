@@ -1,3 +1,4 @@
+import { marketplaceMessage, safeMarketplaceError } from "../../../shared/i18n/marketplaceMessages";
 import {
   supabaseBrowserClient,
 } from "../../../shared/supabase/browserClient";
@@ -73,7 +74,7 @@ function normalizeIdentityId(
 
   if (!UUID_PATTERN.test(cleanValue)) {
     throw new Error(
-      "Avaliku profiili identiteedi ID ei ole korrektne."
+      marketplaceMessage("service.the_public_profile_identity_id_is_invalid.ee7d8e")
     );
   }
 
@@ -459,7 +460,7 @@ export async function getPublicServices(input: {
       if (error) throw error;
       return parsePublicProfileServicesV1(data, request);
     } catch {
-      throw new Error("Avaliku profiili teenuseid ei saanud laadida. Proovi uuesti.");
+      throw new Error(marketplaceMessage("service.the_public_profile_s_services_could_not_be.726579"));
     }
   }
 
@@ -506,8 +507,7 @@ export async function getPublicServices(input: {
 
   if (serviceError) {
     throw new Error(
-      serviceError.message ||
-        "Avaliku profiili teenuseid ei saanud laadida."
+      safeMarketplaceError(serviceError, marketplaceMessage("service.the_public_profile_s_services_could_not_be.de98ca"))
     );
   }
 
@@ -587,8 +587,7 @@ export async function getPublicServices(input: {
 
   if (imageError) {
     throw new Error(
-      imageError.message ||
-        "Avaliku profiili teenuste pilte ei saanud laadida."
+      safeMarketplaceError(imageError, marketplaceMessage("service.the_public_profile_s_service_images_could_not.ff4da4"))
     );
   }
 

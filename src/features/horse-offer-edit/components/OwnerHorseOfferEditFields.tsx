@@ -1,3 +1,7 @@
+"use client";
+
+import { marketplaceMessage } from "../../../shared/i18n/marketplaceMessages";
+import { useMarketplaceTranslation } from "../../../shared/i18n/useMarketplaceTranslation";
 import HorseOfferBasicFields from "../../listing-create/components/HorseOfferBasicFields";
 import HorseOfferDisclosureFields from "../../listing-create/components/HorseOfferDisclosureFields";
 import HorseOfferLocationFields from "../../listing-create/components/HorseOfferLocationFields";
@@ -14,18 +18,19 @@ type Props = {
   onChange: (edit: (form: OwnerHorseDraftForm) => OwnerHorseDraftForm) => void;
 };
 export default function OwnerHorseOfferEditFields({ form, disabled, locationLocked, onChange }: Props) {
+  const { language, r } = useMarketplaceTranslation();
   return (
     <fieldset disabled={disabled} aria-disabled={disabled} className="space-y-6 disabled:cursor-not-allowed [&_input]:disabled:opacity-100 [&_select]:disabled:opacity-100 [&_textarea]:disabled:opacity-100">
       <section className="rounded-[30px] border border-black/5 bg-white p-5 shadow-sm sm:p-6">
-        <h2 className="text-2xl font-black tracking-tight">Pealkiri ja kirjeldus</h2>
+        <h2 className="text-2xl font-black tracking-tight">{r(marketplaceMessage("horse.title_and_description.3e438e"))}</h2>
         <div className="mt-5 grid gap-4">
           <label className="rounded-[20px] border border-neutral-200 bg-[#fbfbfa] p-4">
-            <span className="text-xs font-black uppercase tracking-[0.16em] text-neutral-500">Pealkiri</span>
+            <span className="text-xs font-black uppercase tracking-[0.16em] text-neutral-500">{r(marketplaceMessage("horse.title.abe10a"))}</span>
             <input type="text" value={form.title} maxLength={140} onChange={e => onChange(f => ({ ...f, title: e.target.value }))}
               className="mt-3 w-full bg-transparent text-base font-bold outline-none" />
           </label>
           <label className="rounded-[20px] border border-neutral-200 bg-[#fbfbfa] p-4">
-            <span className="text-xs font-black uppercase tracking-[0.16em] text-neutral-500">Kirjeldus</span>
+            <span className="text-xs font-black uppercase tracking-[0.16em] text-neutral-500">{r(marketplaceMessage("horse.description.8dbc42"))}</span>
             <textarea value={form.description} maxLength={5000} rows={6} onChange={e => onChange(f => ({ ...f, description: e.target.value }))}
               className="mt-3 w-full resize-y bg-transparent text-base leading-7 outline-none" />
           </label>
@@ -42,9 +47,8 @@ export default function OwnerHorseOfferEditFields({ form, disabled, locationLock
       <HorseOfferPriceFields offerType={form.offerType} value={form.priceFields}
         onChange={change => onChange(f => ({ ...f, priceFields: applyHorseOfferPriceFieldChange(f.priceFields, change) }))} />
       <div>
-        {locationLocked ? <p role="note" className="mb-3 rounded-[20px] border border-amber-200 bg-amber-50 p-4 text-sm leading-6">
-          Pakkumisel on täpne privaatne asukoht. Linna ja piirkonna muutmine vajab eraldi asukohatööriista ning on siin lukus. Teisi lubatud välju saad muuta; privaatne asukoht säilib.
-        </p> : null}
+        {r(locationLocked ? <p role="note" className="mb-3 rounded-[20px] border border-amber-200 bg-amber-50 p-4 text-sm leading-6">
+          {r(marketplaceMessage("horse.this_listing_has_a_private_exact_location_changing.12459e"))}</p> : null)}
         <fieldset disabled={locationLocked} aria-disabled={locationLocked}>
           <HorseOfferLocationFields offerType={form.offerType} value={form.locationFields}
             onChange={change => onChange(f => ({ ...f, locationFields: applyHorseOfferLocationFieldChange(f.locationFields, change) }))} />

@@ -67,7 +67,7 @@ function fallbackIdentity(input: {
     displayName:
       profile?.store_name ||
       userEmail?.split("@")[0] ||
-      "Kasutaja",
+      "",
     avatarUrl: null,
     slug: profile?.store_slug || null,
   };

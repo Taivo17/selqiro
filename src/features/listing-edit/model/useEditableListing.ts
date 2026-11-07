@@ -91,7 +91,7 @@ export function useEditableListing(listingId: string): EditableListingState {
           error:
             error instanceof Error
               ? error.message
-              : "Failed to load editable listing",
+              : "editableLoadFailed",
           status: "loading",
         });
       }

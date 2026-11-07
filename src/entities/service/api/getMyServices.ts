@@ -1,3 +1,4 @@
+import { marketplaceMessage } from "../../../shared/i18n/marketplaceMessages";
 import { supabaseBrowserClient } from "../../../shared/supabase/browserClient";
 import {
   SERVICE_PRICE_TYPES,
@@ -64,7 +65,7 @@ function requiredText(
 
   if (!cleanValue) {
     throw new Error(
-      `Andmebaas ei tagastanud teenuse välja: ${fieldName}.`
+      marketplaceMessage("service.the_database_did_not_return_the_service_field.9b5ae2", { p0: String(fieldName) })
     );
   }
 
@@ -247,12 +248,12 @@ function getServiceLoadErrorMessage(
       "policy"
     )
   ) {
-    return "Sul ei ole õigust selle identiteedi teenuseid vaadata.";
+    return marketplaceMessage("service.you_do_not_have_permission_to_view_this.6557e7");
   }
 
   return (
     message ||
-    "Teenuseid ei saanud laadida."
+    marketplaceMessage("service.services_could_not_be_loaded.2b0a27")
   );
 }
 
@@ -262,7 +263,7 @@ export async function getMyServices(input: {
 }): Promise<Service[]> {
   const identityId = normalizeUuid(
     input.identityId,
-    "Aktiivse identiteedi ID ei ole korrektne."
+    marketplaceMessage("service.the_active_identity_id_is_invalid.9dcd11")
   );
 
   const requestedLimit = Number(
@@ -353,12 +354,12 @@ export async function getMyServiceDetail(input: {
 }): Promise<MyServiceDetail | null> {
   const serviceId = normalizeUuid(
     input.serviceId,
-    "Teenuse ID ei ole korrektne."
+    marketplaceMessage("service.the_service_id_is_invalid.23000a")
   );
 
   const identityId = normalizeUuid(
     input.identityId,
-    "Aktiivse identiteedi ID ei ole korrektne."
+    marketplaceMessage("service.the_active_identity_id_is_invalid.9dcd11")
   );
 
   const {
@@ -419,7 +420,7 @@ export async function getMyServiceDetail(input: {
     service.identityId !== identityId
   ) {
     throw new Error(
-      "Andmebaas tagastas ootamatu teenuse."
+      marketplaceMessage("service.the_database_returned_an_unexpected_service.124f9e")
     );
   }
 
@@ -434,7 +435,7 @@ export async function getMyServiceDetail(input: {
       image.identityId !== identityId
     ) {
       throw new Error(
-        "Andmebaas tagastas ootamatu teenusepildi."
+        marketplaceMessage("service.the_database_returned_an_unexpected_service_image.4e343c")
       );
     }
   }

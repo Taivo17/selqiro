@@ -1,4 +1,6 @@
 "use client";
+import { uiMessage, safeUiError } from "../../../../lib/i18n/interfaceMessage";
+
 
 import { useEffect, useState } from "react";
 import { getPublicProfileBySlug } from "../../../entities/profile/api/getPublicProfileBySlug";
@@ -25,7 +27,7 @@ export function usePublicProfile(slug: string): PublicProfileState {
         setState({
           profile: null,
           loading: false,
-          error: "Profile slug missing",
+          error: uiMessage("the_profile_address_is_missing"),
         });
         return;
       }
@@ -53,9 +55,7 @@ export function usePublicProfile(slug: string): PublicProfileState {
           profile: null,
           loading: false,
           error:
-            error instanceof Error
-              ? error.message
-              : "Failed to load public profile",
+            safeUiError(error, "could_not_load_the_public_profile_try_again"),
         });
       }
     }

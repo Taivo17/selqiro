@@ -1,5 +1,8 @@
 "use client";
 
+import { localeForLanguage } from "../../../../lib/i18n/useTranslation";
+import { marketplaceMessage, safeMarketplaceError } from "../../../shared/i18n/marketplaceMessages";
+import { useMarketplaceTranslation } from "../../../shared/i18n/useMarketplaceTranslation";
 import {
   useEffect,
   useMemo,
@@ -36,24 +39,24 @@ function statusLabel(
   service: MyServiceDetail
 ): string {
   if (service.status === "published") {
-    return "Avalik";
+    return marketplaceMessage("service.public.22d0d3");
   }
 
   if (service.status === "archived") {
-    return "Arhiveeritud";
+    return marketplaceMessage("horse.archived.c37d62");
   }
 
-  return "Mustand";
+  return marketplaceMessage("horse.draft.e9670d");
 }
 
 function statusClass(
   label: string
 ): string {
-  if (label === "Avalik") {
+  if (label === marketplaceMessage("service.public.22d0d3")) {
     return "border-emerald-100 bg-emerald-50 text-emerald-700";
   }
 
-  if (label === "Mustand") {
+  if (label === marketplaceMessage("horse.draft.e9670d")) {
     return "border-amber-100 bg-amber-50 text-amber-800";
   }
 
@@ -62,11 +65,12 @@ function statusClass(
 
 function formatCurrency(
   amount: number,
-  currency: string
+  currency: string,
+  language: "en" | "et"
 ): string {
   try {
     return new Intl.NumberFormat(
-      "et-EE",
+      localeForLanguage(language),
       {
         style: "currency",
         currency,
@@ -80,23 +84,25 @@ function formatCurrency(
 }
 
 function priceLabel(
-  service: MyServiceDetail
+  service: MyServiceDetail,
+  language: "en" | "et"
 ): string {
   if (
     service.priceType === "contact" ||
     service.priceAmount === null
   ) {
-    return "Hind kokkuleppel";
+    return marketplaceMessage("service.price_by_agreement.299166");
   }
 
   const amountLabel =
     formatCurrency(
       service.priceAmount,
-      service.currency
+      service.currency,
+      language
     );
 
   if (service.priceType === "from") {
-    return `Alates ${amountLabel}`;
+    return marketplaceMessage("service.from_value.dc06d7", { p0: String(amountLabel) });
   }
 
   if (service.priceType === "hourly") {
@@ -107,7 +113,8 @@ function priceLabel(
 }
 
 function formatDate(
-  value: string | null
+  value: string | null,
+  language: "en" | "et"
 ): string | null {
   if (!value) return null;
 
@@ -118,7 +125,7 @@ function formatDate(
   }
 
   return new Intl.DateTimeFormat(
-    "et-EE",
+    localeForLanguage(language),
     {
       dateStyle: "medium",
     }
@@ -138,10 +145,11 @@ function locationLabel(
   ]
     .filter(Boolean)
     .join(", ") ||
-    "Ei ole määratud";
+    marketplaceMessage("service.not_specified.530480");
 }
 
 function LoadingState() {
+  const { language, r } = useMarketplaceTranslation();
   return (
     <section className="mx-auto max-w-5xl rounded-[34px] border border-black/5 bg-white p-6 shadow-sm md:p-8">
       <div className="h-5 w-28 animate-pulse rounded-full bg-neutral-100" />
@@ -170,14 +178,15 @@ function MessageState({
   actionLabel: string;
   onAction: () => void;
 }) {
+  const { language, r } = useMarketplaceTranslation();
   return (
     <section className="mx-auto max-w-3xl rounded-[34px] border border-black/5 bg-white p-8 text-center shadow-sm">
       <h1 className="text-3xl font-black">
-        {title}
+        {r(title)}
       </h1>
 
       <p className="mx-auto mt-3 max-w-2xl text-sm leading-6 text-neutral-500">
-        {text}
+        {r(text)}
       </p>
 
       <button
@@ -185,7 +194,7 @@ function MessageState({
         onClick={onAction}
         className="mt-6 rounded-full bg-black px-5 py-3 text-sm font-black text-white"
       >
-        {actionLabel}
+        {r(actionLabel)}
       </button>
     </section>
   );
@@ -196,6 +205,7 @@ export default function ServiceDetailPage({
 }: {
   serviceId: string;
 }) {
+  const { language, r } = useMarketplaceTranslation();
   const router = useRouter();
 
   const {
@@ -215,11 +225,11 @@ export default function ServiceDetailPage({
           serviceCategories.map(
             (category) => [
               category.code,
-              category.labelEt,
+              language === "et" ? category.labelEt : category.labelEn,
             ]
           )
         ),
-      [serviceCategories]
+      [serviceCategories, language]
     );
 
   const [
@@ -305,9 +315,7 @@ export default function ServiceDetailPage({
         if (!mounted) return;
 
         setError(
-          loadError instanceof Error
-            ? loadError.message
-            : "Teenust ei saanud laadida."
+          safeMarketplaceError(loadError, marketplaceMessage("service.the_service_could_not_be_loaded.d86bb3"))
         );
 
         setStatus("error");
@@ -368,12 +376,11 @@ export default function ServiceDetailPage({
   ) {
     return (
       <MessageState
-        title="Logi sisse"
-        text="Teenuse eelvaate avamiseks pead olema sisse logitud."
-        actionLabel="Logi sisse"
+        title={r(marketplaceMessage("horse.sign_in.777709"))}
+        text={r(marketplaceMessage("service.sign_in_to_open_the_service_preview.1bf920"))}
+        actionLabel={r(marketplaceMessage("horse.sign_in.777709"))}
         onAction={() =>
-          router.push("/auth")
-        }
+          router.push("/auth")}
       />
     );
   }
@@ -381,9 +388,9 @@ export default function ServiceDetailPage({
   if (status === "not_found") {
     return (
       <MessageState
-        title="Teenust ei leitud"
-        text="See teenus ei kuulu aktiivsele identiteedile või ei ole enam saadaval."
-        actionLabel="Tagasi Minu alasse"
+        title={r(marketplaceMessage("service.service_not_found.074aa0"))}
+        text={r(marketplaceMessage("service.this_service_does_not_belong_to_the_active.487120"))}
+        actionLabel={r(marketplaceMessage("horse.back_to_my_area.17fad0"))}
         onAction={returnToMyArea}
       />
     );
@@ -395,12 +402,10 @@ export default function ServiceDetailPage({
   ) {
     return (
       <MessageState
-        title="Teenust ei saanud laadida"
-        text={
-          error ||
-          "Tekkis ootamatu viga."
-        }
-        actionLabel="Tagasi Minu alasse"
+        title={r(marketplaceMessage("service.the_service_could_not_be_loaded.59e727"))}
+        text={error ||
+          marketplaceMessage("service.an_unexpected_error_occurred.e7f5d5")}
+        actionLabel={r(marketplaceMessage("horse.back_to_my_area.17fad0"))}
         onAction={returnToMyArea}
       />
     );
@@ -433,11 +438,12 @@ export default function ServiceDetailPage({
   ]
     .filter(Boolean)
     .join(" · ") ||
-    "Rubriik puudub";
+    marketplaceMessage("service.no_category.9bc711");
 
   const publishedAtLabel =
     formatDate(
-      service.publishedAt
+      service.publishedAt,
+      language
     );
 
   const galleryService = {
@@ -452,22 +458,20 @@ export default function ServiceDetailPage({
         onClick={returnToMyArea}
         className="inline-flex rounded-full border border-neutral-200 bg-white px-4 py-2.5 text-sm font-black shadow-sm transition hover:border-neutral-300"
       >
-        ← Tagasi Minu alasse
-      </button>
+        {r(marketplaceMessage("horse.back_to_my_area.2b7192"))}</button>
 
       <section className="overflow-hidden rounded-[34px] border border-black/5 bg-white p-5 shadow-sm sm:p-6 md:p-8">
         <div className="flex min-w-0 flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
           <div className="min-w-0">
             <p className="text-xs font-black uppercase tracking-[0.24em] text-emerald-600">
-              Teenus
-            </p>
+              {r(marketplaceMessage("service.service.d6b32e"))}</p>
 
             <h1 className="mt-3 break-words text-3xl font-black tracking-tight sm:text-4xl">
-              {service.title}
+              {r(service.title)}
             </h1>
 
             <p className="mt-2 break-words text-xs font-black uppercase tracking-[0.16em] text-neutral-400">
-              {categoryLabel}
+              {r(categoryLabel)}
             </p>
           </div>
 
@@ -479,20 +483,19 @@ export default function ServiceDetailPage({
               ),
             ].join(" ")}
           >
-            {resolvedStatusLabel}
+            {r(resolvedStatusLabel)}
           </span>
         </div>
 
-        {service.status !==
+        {r(service.status !==
         "published" ? (
           <div className="mt-5 rounded-[20px] border border-emerald-100 bg-emerald-50 px-4 py-3 text-sm font-semibold leading-6 text-emerald-900">
-            See on aktiivse identiteedi privaatne eelvaade. Avalikul profiilil kuvatakse ainult avaldatud teenus.
-          </div>
-        ) : null}
+            {r(marketplaceMessage("service.this_is_a_private_preview_for_the_active.252438"))}</div>
+        ) : null)}
 
         <div className="mt-6 grid min-w-0 gap-6 lg:grid-cols-[minmax(0,1.35fr)_minmax(280px,0.65fr)]">
           <div className="min-w-0">
-            {service.images.length > 0 ||
+            {r(service.images.length > 0 ||
             service.imageUrl ? (
               <PublicProfileServiceGallery
                 service={galleryService}
@@ -500,62 +503,56 @@ export default function ServiceDetailPage({
               />
             ) : (
               <div className="flex h-72 items-center justify-center rounded-[24px] bg-gradient-to-br from-neutral-100 to-neutral-200 text-sm font-black text-neutral-400">
-                Pilt puudub
-              </div>
-            )}
+                {r(marketplaceMessage("horse.no_image.615289"))}</div>
+            ))}
           </div>
 
           <div className="min-w-0 space-y-4">
             <section className="rounded-[24px] border border-neutral-100 bg-[#fbfbfa] p-5">
               <p className="text-xs font-black uppercase tracking-[0.18em] text-neutral-400">
-                Kirjeldus
-              </p>
+                {r(marketplaceMessage("horse.description.8dbc42"))}</p>
 
               <p className="mt-3 whitespace-pre-wrap break-words text-sm leading-7 text-neutral-700">
-                {service.description ||
-                  "Kirjeldus puudub."}
+                {r(service.description ||
+                  marketplaceMessage("service.no_description.5b24f9"))}
               </p>
             </section>
 
             <section className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
               <div className="rounded-[20px] border border-neutral-100 bg-[#fbfbfa] p-4">
                 <p className="text-xs font-black uppercase tracking-[0.16em] text-neutral-400">
-                  Hind
-                </p>
+                  {r(marketplaceMessage("service.price.ee7887"))}</p>
 
                 <p className="mt-2 break-words font-black">
-                  {priceLabel(service)}
+                  {r(priceLabel(service, language))}
                 </p>
               </div>
 
               <div className="rounded-[20px] border border-neutral-100 bg-[#fbfbfa] p-4">
                 <p className="text-xs font-black uppercase tracking-[0.16em] text-neutral-400">
-                  Asukoht
-                </p>
+                  {r(marketplaceMessage("service.location.b55f9b"))}</p>
 
                 <p className="mt-2 break-words font-black">
-                  {locationLabel(service)}
+                  {r(locationLabel(service))}
                 </p>
               </div>
 
               <div className="rounded-[20px] border border-neutral-100 bg-[#fbfbfa] p-4">
                 <p className="text-xs font-black uppercase tracking-[0.16em] text-neutral-400">
-                  Staatus
-                </p>
+                  {r(marketplaceMessage("horse.status.e99bbe"))}</p>
 
                 <p className="mt-2 font-black">
-                  {resolvedStatusLabel}
+                  {r(resolvedStatusLabel)}
                 </p>
               </div>
 
               <div className="rounded-[20px] border border-neutral-100 bg-[#fbfbfa] p-4">
                 <p className="text-xs font-black uppercase tracking-[0.16em] text-neutral-400">
-                  Avaldatud
-                </p>
+                  {r(marketplaceMessage("horse.published.2de00c"))}</p>
 
                 <p className="mt-2 font-black">
-                  {publishedAtLabel ||
-                    "Ei ole avaldatud"}
+                  {r(publishedAtLabel ||
+                    marketplaceMessage("service.not_published.625a18"))}
                 </p>
               </div>
             </section>

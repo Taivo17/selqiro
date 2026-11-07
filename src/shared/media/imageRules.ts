@@ -1,3 +1,4 @@
+import { marketplaceMessage } from "../i18n/marketplaceMessages";
 export const CONTENT_IMAGE_LIMIT = 10;
 
 export const CONTENT_IMAGE_MAX_SIZE_BYTES =
@@ -19,22 +20,22 @@ export function validateContentImageFile(
   file: File
 ): void {
   if (!file) {
-    throw new Error("Pildifail puudub.");
+    throw new Error(marketplaceMessage("media.the_image_file_is_missing.254703"));
   }
 
   if (!ALLOWED_CONTENT_IMAGE_TYPES.has(file.type)) {
     throw new Error(
-      "Lubatud on JPG, PNG ja WEBP pildid."
+      marketplaceMessage("media.jpg_png_and_webp_images_are_supported.41635b")
     );
   }
 
   if (file.size <= 0) {
-    throw new Error("Pildifail on tühi.");
+    throw new Error(marketplaceMessage("media.the_image_file_is_empty.9ddb60"));
   }
 
   if (file.size > CONTENT_IMAGE_MAX_SIZE_BYTES) {
     throw new Error(
-      "Pilt on liiga suur. Maksimaalne suurus on 10 MB."
+      marketplaceMessage("media.the_image_is_too_large_the_maximum_size.3bfce1")
     );
   }
 }
@@ -77,13 +78,13 @@ export function buildContentImageStoragePath(input: {
 
   if (!UUID_PATTERN.test(userId)) {
     throw new Error(
-      "Kasutaja ID ei ole korrektne."
+      marketplaceMessage("media.the_user_id_is_invalid.4b8b9f")
     );
   }
 
   if (!UUID_PATTERN.test(contentId)) {
     throw new Error(
-      "Sisu ID ei ole korrektne."
+      marketplaceMessage("media.the_content_id_is_invalid.6d3732")
     );
   }
 

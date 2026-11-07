@@ -1,3 +1,4 @@
+import { marketplaceMessage } from "../../../shared/i18n/marketplaceMessages";
 export type ServiceImage = {
   id: string;
   serviceId: string;
@@ -35,7 +36,7 @@ function requiredText(
 
   if (!cleanValue) {
     throw new Error(
-      `Andmebaas ei tagastanud teenusepildi välja: ${fieldName}.`
+      marketplaceMessage("service.the_database_did_not_return_the_service_image.379e7b", { p0: String(fieldName) })
     );
   }
 

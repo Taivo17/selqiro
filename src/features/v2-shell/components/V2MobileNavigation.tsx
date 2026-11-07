@@ -1,5 +1,11 @@
 "use client";
 
+import { useV2Translation } from "@/src/shared/i18n/V2LanguageProvider";
+import { getCatalogTranslation, type TranslationParams } from "@/lib/i18n/useTranslation";
+import type { Language } from "@/lib/i18n/translations";
+import { shellUiMessages } from "@/lib/i18n/catalogs/shellUi";
+
+
 import Link from "next/link";
 import { v2IntegrationEnabled } from "../../../shared/config/v2Integration";
 
@@ -17,34 +23,34 @@ type V2MobileNavigationItem = {
   emphasized?: boolean;
 };
 
-const navigationItems: V2MobileNavigationItem[] = [
+const navigationItems = (uiLanguage: Language): V2MobileNavigationItem[] => { const t = (key: keyof typeof shellUiMessages.en, params?: TranslationParams) => getCatalogTranslation(uiLanguage, shellUiMessages, key, params); return [
   {
     id: "home",
-    label: "Avaleht",
+    label: t("home"),
     href: "/v2",
   },
   {
     id: "find",
-    label: "Leia",
+    label: t("find"),
     href: "/v2/products",
   },
   {
     id: "sell",
-    label: "Lisa",
+    label: t("add"),
     href: "/sell",
     emphasized: true,
   },
   {
     id: "messages",
-    label: "Sõnumid",
+    label: t("messages"),
     href: "/messages",
   },
   {
     id: "my-area",
-    label: "Minu ala",
+    label: t("my_area"),
     href: "/v2/my-area",
   },
-];
+]; };
 
 export function shouldShowV2MobileNavigation(
   pathname: string | null
@@ -218,10 +224,12 @@ function SellNavigationItem({
 }: {
   item: V2MobileNavigationItem;
 }) {
+  const { t } = useV2Translation(shellUiMessages);
+
   return (
     <Link
       href={item.href}
-      aria-label="Lisa kuulutus"
+      aria-label={t("add_listing")}
       className="relative -mt-7 flex min-h-[82px] min-w-0 flex-col items-center justify-end gap-1 px-1 text-center"
     >
       <span className="flex h-14 w-14 items-center justify-center rounded-full bg-emerald-600 text-white shadow-[0_10px_28px_rgba(5,150,105,0.35)] ring-4 ring-white transition active:scale-95">
@@ -240,17 +248,19 @@ export default function V2MobileNavigation({
 }: {
   pathname: string;
 }) {
+  const { language: uiLanguage, t } = useV2Translation(shellUiMessages);
+
   const items = v2IntegrationEnabled()
-    ? navigationItems.map((item) => item.id === "sell"
+    ? navigationItems(uiLanguage).map((item) => item.id === "sell"
       ? { ...item, href: "/v2/sell" }
       : item.id === "messages"
         ? { ...item, href: "/v2/messages" }
         : item)
-    : navigationItems;
+    : navigationItems(uiLanguage);
 
   return (
     <nav
-      aria-label="Mobiili põhimenüü"
+      aria-label={t("mobile_main_navigation")}
       className="fixed inset-x-0 bottom-0 z-50 border-t border-black/5 bg-white/95 shadow-[0_-8px_28px_rgba(0,0,0,0.06)] backdrop-blur-xl md:hidden"
       style={{
         paddingBottom:

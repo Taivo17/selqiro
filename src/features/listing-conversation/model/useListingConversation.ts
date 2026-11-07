@@ -1,4 +1,6 @@
 "use client";
+import { uiMessage } from "../../../../lib/i18n/interfaceMessage";
+
 import { useEffect, useRef, useState } from "react";
 import { getMessageThread, hideThread, sendMessage, setThreadBlocked } from "../../../entities/conversation/api/messagingClient";
 import { copySendMessage } from "../../../entities/conversation/model/messagingCommands";
@@ -61,8 +63,8 @@ export function useListingConversation(conversationId: string, originListingId: 
       if (!unresolved) setProblem(null);
     } catch {
       if (context.isCurrent(actor) && version === readVersion.current) setProblem(viewRef.current
-        ? "Uusi sõnumeid ei saanud laadida. Proovime automaatselt uuesti."
-        : "Vestlust ei saanud laadida. Proovi värskendada.");
+        ? uiMessage("could_not_load_new_messages_we_will_try_again_automatically")
+        : uiMessage("could_not_load_the_conversation_try_refreshing"));
     } finally { if (version === readVersion.current) { readingNow.current = false; setReading(false); } }
   }
   useEffect(() => {
@@ -133,7 +135,7 @@ export function useListingConversation(conversationId: string, originListingId: 
           requestKey: crypto.randomUUID(), conversationId, message: current.text, listingId: current.listingId,
           attachmentId: image?.attachmentId ?? null }), revision: current.revision });
       }
-    } catch { setProblem("Sisesta kuni 5000 märgi pikkune sõnum või lisa foto."); return; }
+    } catch { setProblem(uiMessage("enter_a_message_of_up_to_5000_characters_or_add_a_photo")); return; }
     attempt.current = frozen; sending.current = true; setBusy(true); setProblem(null);
     try {
       const receipt = await sendMessage(actor.accessToken, frozen.command, actor.signal);
@@ -156,10 +158,10 @@ export function useListingConversation(conversationId: string, originListingId: 
         && error.diagnostic?.stage === "rpc" && error.diagnostic.code === "refused";
       if (refused) {
         attempt.current = null; setUnresolved(false);
-        if (context.isCurrent(actor)) { await load(actor); setProblem("Sõnumit ei saadetud. Kontrolli fotot või kuulutusekaarti ja proovi uuesti."); }
+        if (context.isCurrent(actor)) { await load(actor); setProblem(uiMessage("the_message_was_not_sent_check_the_photo_or_listing_card_and_try_again")); }
       } else {
         setUnresolved(true);
-        if (context.isCurrent(actor)) setProblem("Saatmise tulemust ei saanud kinnitada. Noolega proovid sama sõnumit uuesti; uut koopiat ei tehta. Hiljem kirjutatud tekst jääb alles.");
+        if (context.isCurrent(actor)) setProblem(uiMessage("the_send_result_could_not_be_confirmed_the_arrow_retries_the_same_message_w"));
       }
     } finally { sending.current = false; setBusy(false); }
   }
@@ -174,7 +176,7 @@ export function useListingConversation(conversationId: string, originListingId: 
       if (!context.isCurrent(actor)) return false;
       if (blocked !== null) await load(actor);
       return true;
-    } catch { if (context.isCurrent(actor)) setProblem("Muudatust ei saanud kinnitada. Proovi uuesti."); return false; }
+    } catch { if (context.isCurrent(actor)) setProblem(uiMessage("the_change_could_not_be_confirmed_try_again")); return false; }
     finally { actingNow.current = false; setActing(false); }
   }
   const actor = context.actor;

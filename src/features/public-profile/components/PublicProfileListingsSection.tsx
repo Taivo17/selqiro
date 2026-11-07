@@ -1,5 +1,15 @@
 "use client";
 
+import { getCategoryLabel } from "@/lib/categories";
+
+import { renderUiMessage } from "@/lib/i18n/interfaceMessage";
+
+import { useV2Translation } from "@/src/shared/i18n/V2LanguageProvider";
+
+
+import { publicUiMessages } from "@/lib/i18n/catalogs/publicUi";
+
+
 import ListingPrice from "../../../entities/listing/ui/ListingPrice";
 
 import {
@@ -43,6 +53,8 @@ function ProfileListingCard({
     cardViewportTop: number;
   }) => void;
 }) {
+  const { language: uiLanguage, t } = useV2Translation(publicUiMessages);
+
   const router = useRouter();
 
   const cardRef =
@@ -141,8 +153,7 @@ function ProfileListingCard({
 
       <div className="mt-3 flex items-center justify-between gap-3">
         <span className="text-[10px] font-black uppercase tracking-[0.16em] text-neutral-400">
-          Kuulutus
-        </span>
+          {t("listing_2")} </span>
 
         <button
           type="button"
@@ -153,13 +164,12 @@ function ProfileListingCard({
       </div>
 
       <h3 className="mt-2 line-clamp-2 text-base font-black">
-        {listing.title}
+        {listing.title || t("untitled_listing")}
       </h3>
 
       <p className="mt-1 text-sm leading-5 text-neutral-500">
-        {listing.category ||
-          "Kategooria puudub"}{" "}
-        · {listing.locationLabel}
+        {listing.category ? getCategoryLabel(listing.category, listing.category, uiLanguage) : t("no_category")}{" "}
+        · {listing.locationLabel || t("location_unspecified")}
       </p>
 
       <ListingPrice price={listing} className="mt-3" labelClassName="text-lg" />
@@ -261,6 +271,8 @@ export default function PublicProfileListingsSection({
     showAll: boolean
   ) => void;
 }) {
+  const { language: uiLanguage, t } = useV2Translation(publicUiMessages);
+
   const [
     selectedCategoryId,
     setSelectedCategoryId,
@@ -567,12 +579,10 @@ export default function PublicProfileListingsSection({
       <div className="mb-5 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="inline-flex rounded-full border border-amber-200 bg-amber-100 px-3 py-1.5 text-[11px] font-black uppercase tracking-[0.18em] text-amber-800">
-            Kuulutused
-          </p>
+            {t("listings")} </p>
 
           <h2 className="mt-2 text-2xl font-black tracking-tight md:text-3xl">
-            Müügis praegu
-          </h2>
+            {t("currently_for_sale")} </h2>
         </div>
 
         {canToggleListings ? (
@@ -587,8 +597,8 @@ export default function PublicProfileListingsSection({
             className="inline-flex w-full justify-center rounded-full border border-amber-200 bg-white px-4 py-2.5 text-sm font-black text-amber-800 shadow-sm transition hover:border-amber-300 hover:bg-amber-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500/30 sm:w-auto"
           >
             {showAll
-              ? "Vaata vähem"
-              : `Vaata kõiki (${listings.length})`}
+              ? t("view_less")
+              : t("view_all_count", {count: listings.length})}
           </button>
         ) : null}
       </div>
@@ -627,12 +637,10 @@ export default function PublicProfileListingsSection({
       {!loading && error ? (
         <div className="rounded-[22px] border border-red-100 bg-red-50 p-5">
           <h3 className="font-black text-red-950">
-            Kuulutusi ei saanud
-            laadida
-          </h3>
+            {t("could_not_load_listings")} </h3>
 
           <p className="mt-2 text-sm leading-6 text-red-800">
-            {error}
+            {renderUiMessage(uiLanguage, error)}
           </p>
         </div>
       ) : null}
@@ -642,15 +650,10 @@ export default function PublicProfileListingsSection({
       listings.length === 0 ? (
         <div className="rounded-[22px] border border-dashed border-neutral-200 bg-[#fbfbfa] p-6 text-center">
           <h3 className="font-black">
-            Selles rubriigis
-            aktiivseid kuulutusi ei
-            ole
-          </h3>
+            {t("no_active_listings_in_this_category")} </h3>
 
           <p className="mt-2 text-sm leading-6 text-neutral-500">
-            Vali teine rubriik või
-            kuva kõik kuulutused.
-          </p>
+            {t("choose_another_category_or_show_all_listings")} </p>
         </div>
       ) : null}
 

@@ -1,5 +1,6 @@
 "use client";
 
+import { marketplaceMessage, safeMarketplaceError } from "../../../shared/i18n/marketplaceMessages";
 import {
   useCallback,
   useEffect,
@@ -102,14 +103,8 @@ function resolveError(
   error: unknown,
   fallback: string
 ): Error {
-  if (
-    error instanceof Error &&
-    error.message
-  ) {
-    return error;
-  }
-
-  return new Error(fallback);
+  const message = safeMarketplaceError(error, fallback);
+  return error instanceof Error && error.message === message ? error : new Error(message);
 }
 
 export function useMyProductShowcases(): MyProductShowcasesState {
@@ -248,7 +243,7 @@ export function useMyProductShowcases(): MyProductShowcasesState {
         const resolvedError =
           resolveError(
             error,
-            "Tootenäidiseid ei saanud laadida."
+            marketplaceMessage("showcase.product_showcases_could_not_be_loaded.bb4a17")
           );
 
         setState({
@@ -292,7 +287,7 @@ export function useMyProductShowcases(): MyProductShowcasesState {
   ): Promise<ProductShowcase> {
     if (!state.activeIdentityId) {
       throw new Error(
-        "Aktiivne identiteet puudub."
+        marketplaceMessage("service.no_active_identity.80f933")
       );
     }
 
@@ -302,7 +297,7 @@ export function useMyProductShowcases(): MyProductShowcasesState {
       deletingRef.current
     ) {
       throw new Error(
-        "Teine tootenäidise toiming juba käib."
+        marketplaceMessage("showcase.another_product_showcase_operation_is_already_in_progress.2610f6")
       );
     }
 
@@ -338,7 +333,7 @@ export function useMyProductShowcases(): MyProductShowcasesState {
       const resolvedError =
         resolveError(
           error,
-          "Tootenäidist ei saanud salvestada."
+          marketplaceMessage("showcase.the_product_showcase_could_not_be_saved.8e58b1")
         );
 
       setState((current) => ({
@@ -360,7 +355,7 @@ export function useMyProductShowcases(): MyProductShowcasesState {
   ): Promise<ProductShowcase> {
     if (!state.activeIdentityId) {
       throw new Error(
-        "Aktiivne identiteet puudub."
+        marketplaceMessage("service.no_active_identity.80f933")
       );
     }
 
@@ -370,7 +365,7 @@ export function useMyProductShowcases(): MyProductShowcasesState {
       deletingRef.current
     ) {
       throw new Error(
-        "Teine tootenäidise toiming juba käib."
+        marketplaceMessage("showcase.another_product_showcase_operation_is_already_in_progress.2610f6")
       );
     }
 
@@ -405,7 +400,7 @@ export function useMyProductShowcases(): MyProductShowcasesState {
       const resolvedError =
         resolveError(
           error,
-          "Tootenäidise staatust ei saanud muuta."
+          marketplaceMessage("showcase.the_product_showcase_status_could_not_be_changed.da945d")
         );
 
       setState((current) => ({
@@ -433,7 +428,7 @@ export function useMyProductShowcases(): MyProductShowcasesState {
   > {
     if (!state.activeIdentityId) {
       throw new Error(
-        "Aktiivne identiteet puudub."
+        marketplaceMessage("service.no_active_identity.80f933")
       );
     }
 
@@ -443,7 +438,7 @@ export function useMyProductShowcases(): MyProductShowcasesState {
       deletingRef.current
     ) {
       throw new Error(
-        "Teine tootenäidise toiming juba käib."
+        marketplaceMessage("showcase.another_product_showcase_operation_is_already_in_progress.2610f6")
       );
     }
 
@@ -455,7 +450,7 @@ export function useMyProductShowcases(): MyProductShowcasesState {
 
     if (!showcase) {
       throw new Error(
-        "Tootenäidist ei leitud."
+        marketplaceMessage("showcase.product_showcase_not_found.a97381")
       );
     }
 
@@ -464,7 +459,7 @@ export function useMyProductShowcases(): MyProductShowcasesState {
       "archived"
     ) {
       throw new Error(
-        "Tootenäidis tuleb enne jäädavat kustutamist arhiveerida."
+        marketplaceMessage("showcase.archive_the_product_showcase_before_deleting_it_permanently.245945")
       );
     }
 
@@ -506,7 +501,7 @@ export function useMyProductShowcases(): MyProductShowcasesState {
       const resolvedError =
         resolveError(
           error,
-          "Tootenäidist ei saanud jäädavalt kustutada."
+          marketplaceMessage("showcase.the_product_showcase_could_not_be_permanently_deleted.6bd5cd")
         );
 
       setState((current) => ({

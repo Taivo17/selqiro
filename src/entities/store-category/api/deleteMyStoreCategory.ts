@@ -1,3 +1,4 @@
+import { marketplaceMessage, safeMarketplaceError } from "../../../shared/i18n/marketplaceMessages";
 import { supabaseBrowserClient } from "../../../shared/supabase/browserClient";
 
 type DeleteStoreCategoryRpcRow = {
@@ -40,22 +41,22 @@ function getDeleteErrorMessage(error: {
     error.code === "23503" ||
     message.includes("has child categories")
   ) {
-    return "Ülemrubriiki ei saa kustutada enne selle alamrubriikide eemaldamist.";
+    return marketplaceMessage("category.remove_the_subcategories_before_deleting_this_parent_category.137a73");
   }
 
   if (error.code === "42501") {
-    return "Sul puudub selle rubriigi kustutamise õigus.";
+    return marketplaceMessage("category.you_do_not_have_permission_to_delete_this.2d93c2");
   }
 
   if (error.code === "22023") {
     if (message.includes("active identity")) {
-      return "Aktiivne identiteet puudub.";
+      return marketplaceMessage("service.no_active_identity.80f933");
     }
 
-    return "Kustutatav rubriik puudub.";
+    return marketplaceMessage("category.the_category_to_delete_is_missing.e8f8cc");
   }
 
-  return error.message || "Rubriiki ei saanud kustutada.";
+  return safeMarketplaceError(error, marketplaceMessage("category.the_category_could_not_be_deleted.67c79b"));
 }
 
 export async function deleteMyStoreCategory(
@@ -64,7 +65,7 @@ export async function deleteMyStoreCategory(
   const cleanCategoryId = categoryId.trim();
 
   if (!cleanCategoryId) {
-    throw new Error("Kustutatav rubriik puudub.");
+    throw new Error(marketplaceMessage("category.the_category_to_delete_is_missing.e8f8cc"));
   }
 
   const { data, error } = await supabaseBrowserClient.rpc(
@@ -86,11 +87,11 @@ export async function deleteMyStoreCategory(
   );
 
   if (!row?.deleted_category_id || !row.deleted_name) {
-    throw new Error("Andmebaas ei tagastanud kustutatud rubriiki.");
+    throw new Error(marketplaceMessage("category.the_database_did_not_return_the_deleted_category.fb4aeb"));
   }
 
   if (row.deleted_category_id !== cleanCategoryId) {
-    throw new Error("Andmebaas tagastas ootamatu rubriigi.");
+    throw new Error(marketplaceMessage("category.the_database_returned_an_unexpected_category.cd850c"));
   }
 
   const level =

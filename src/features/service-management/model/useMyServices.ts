@@ -1,5 +1,6 @@
 "use client";
 
+import { marketplaceMessage, safeMarketplaceError } from "../../../shared/i18n/marketplaceMessages";
 import {
   useCallback,
   useEffect,
@@ -115,14 +116,8 @@ function resolveError(
   error: unknown,
   fallback: string
 ): Error {
-  if (
-    error instanceof Error &&
-    error.message
-  ) {
-    return error;
-  }
-
-  return new Error(fallback);
+  const message = safeMarketplaceError(error, fallback);
+  return error instanceof Error && error.message === message ? error : new Error(message);
 }
 
 export function useMyServices(): MyServicesState {
@@ -272,7 +267,7 @@ export function useMyServices(): MyServicesState {
         const resolvedError =
           resolveError(
             error,
-            "Teenuseid ei saanud laadida."
+            marketplaceMessage("service.services_could_not_be_loaded.2b0a27")
           );
 
         setState({
@@ -319,7 +314,7 @@ export function useMyServices(): MyServicesState {
 
     if (!activeIdentityId) {
       throw new Error(
-        "Aktiivne identiteet puudub."
+        marketplaceMessage("service.no_active_identity.80f933")
       );
     }
 
@@ -340,7 +335,7 @@ export function useMyServices(): MyServicesState {
       !existingService
     ) {
       throw new Error(
-        "Teenuse mustandit ei leitud aktiivse identiteedi alt."
+        marketplaceMessage("service.the_service_draft_was_not_found_under_the.329796")
       );
     }
 
@@ -350,7 +345,7 @@ export function useMyServices(): MyServicesState {
         "draft"
     ) {
       throw new Error(
-        "Muuta saab ainult teenuse mustandit."
+        marketplaceMessage("service.only_draft_services_can_be_edited.57af15")
       );
     }
 
@@ -359,7 +354,7 @@ export function useMyServices(): MyServicesState {
       statusChangingRef.current
     ) {
       throw new Error(
-        "Teine teenuse toiming juba käib."
+        marketplaceMessage("service.another_service_operation_is_already_in_progress.cb2ffa")
       );
     }
 
@@ -386,7 +381,7 @@ export function useMyServices(): MyServicesState {
         activeIdentityId
       ) {
         throw new Error(
-          "Andmebaas tagastas vale identiteedi teenuse."
+          marketplaceMessage("service.the_database_returned_a_service_for_the_wrong.2369e1")
         );
       }
 
@@ -396,7 +391,7 @@ export function useMyServices(): MyServicesState {
           "draft"
       ) {
         throw new Error(
-          "Andmebaas tagastas muutmisel ootamatu teenuse staatuse."
+          marketplaceMessage("service.the_database_returned_an_unexpected_service_status_after.6bc129")
         );
       }
 
@@ -414,7 +409,7 @@ export function useMyServices(): MyServicesState {
     } catch (error) {
       throw resolveError(
         error,
-        "Teenust ei saanud salvestada."
+        marketplaceMessage("service.the_service_could_not_be_saved.c93d3c")
       );
     } finally {
       savingRef.current = false;
@@ -431,7 +426,7 @@ export function useMyServices(): MyServicesState {
 
     if (!activeIdentityId) {
       throw new Error(
-        "Aktiivne identiteet puudub."
+        marketplaceMessage("service.no_active_identity.80f933")
       );
     }
 
@@ -447,7 +442,7 @@ export function useMyServices(): MyServicesState {
 
     if (!existingService) {
       throw new Error(
-        "Teenust ei leitud aktiivse identiteedi alt."
+        marketplaceMessage("service.the_service_was_not_found_under_the_active.6605f5")
       );
     }
 
@@ -458,7 +453,7 @@ export function useMyServices(): MyServicesState {
 
     if (status !== expectedStatus) {
       throw new Error(
-        "Valitud teenuse olekumuutus ei ole lubatud."
+        marketplaceMessage("service.the_selected_service_status_change_is_not_allowed.76ab0f")
       );
     }
 
@@ -467,7 +462,7 @@ export function useMyServices(): MyServicesState {
       statusChangingRef.current
     ) {
       throw new Error(
-        "Teine teenuse toiming juba käib."
+        marketplaceMessage("service.another_service_operation_is_already_in_progress.cb2ffa")
       );
     }
 
@@ -494,7 +489,7 @@ export function useMyServices(): MyServicesState {
         activeIdentityId
       ) {
         throw new Error(
-          "Andmebaas tagastas vale identiteedi teenuse."
+          marketplaceMessage("service.the_database_returned_a_service_for_the_wrong.2369e1")
         );
       }
 
@@ -505,7 +500,7 @@ export function useMyServices(): MyServicesState {
           expectedStatus
       ) {
         throw new Error(
-          "Andmebaas tagastas ootamatu teenuse staatuse."
+          marketplaceMessage("service.the_database_returned_an_unexpected_service_status.3b1c44")
         );
       }
 
@@ -523,7 +518,7 @@ export function useMyServices(): MyServicesState {
     } catch (error) {
       throw resolveError(
         error,
-        "Teenuse staatust ei saanud muuta."
+        marketplaceMessage("service.the_service_status_could_not_be_changed.076de2")
       );
     } finally {
       statusChangingRef.current =

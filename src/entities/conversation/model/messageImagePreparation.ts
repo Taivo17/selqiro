@@ -1,3 +1,4 @@
+import { uiMessage } from "../../../../lib/i18n/interfaceMessage";
 import { contactFail } from "./listingContact";
 import { MESSAGE_IMAGE_LIMITS, type PreparedMessageImage } from "./messageImage";
 import { MESSAGE_IMAGE_SELECTION_LIMITS, SelectedImageHeaderError, readSelectedImageInfo } from "./messageImageSelection";
@@ -12,23 +13,23 @@ function checkAbort(signal?: AbortSignal) { if (signal?.aborted) contactFail("ab
  * server independently decodes and removes metadata from this prepared WebP. */
 export async function prepareMessageImage(file: File, signal?: AbortSignal): Promise<PreparedMessageImage> {
   checkAbort(signal);
-  if (!file || !Number.isSafeInteger(file.size) || file.size < 1) return preparationFail("Valitud pildifail on tühi. Vali teine foto.");
+  if (!file || !Number.isSafeInteger(file.size) || file.size < 1) return preparationFail(uiMessage("the_selected_image_file_is_empty_choose_another_photo"));
   if (file.size > MESSAGE_IMAGE_SELECTION_LIMITS.bytes)
-    return preparationFail("Valitud foto on suurem kui 32 MB. Vali väiksem JPEG-, PNG- või WebP-pilt.");
+    return preparationFail(uiMessage("the_selected_photo_is_larger_than_32_mb_choose_a_smaller_jpeg_png_or_webp_i"));
   let info;
   try { info = await readSelectedImageInfo(file, () => checkAbort(signal)); }
   catch (error) {
     checkAbort(signal);
     if (error instanceof SelectedImageHeaderError && error.reason === "unsupported")
-      return preparationFail("Seda pildivormingut ei saa lisada. Vali JPEG-, PNG- või WebP-pilt.");
+      return preparationFail(uiMessage("this_image_format_is_unsupported_choose_a_jpeg_png_or_webp_image"));
     return preparationFail(error instanceof SelectedImageHeaderError
-      ? "Selle foto andmeid ei saanud lugeda. Vali teine JPEG-, PNG- või WebP-pilt."
-      : "Valitud fotot ei saanud seadmest lugeda. Vali foto galeriist uuesti.");
+      ? uiMessage("could_not_read_this_photo_s_data_choose_another_jpeg_png_or_webp_image")
+      : uiMessage("could_not_read_the_selected_photo_from_your_device_select_it_from_the_galle"));
   }
   if (info.width < 1 || info.height < 1 || info.width > MESSAGE_IMAGE_SELECTION_LIMITS.edge || info.height > MESSAGE_IMAGE_SELECTION_LIMITS.edge)
-    return preparationFail("Valitud foto mõõtmed on liiga suured. Vali foto, mille pikem külg on kuni 32 768 pikslit.");
+    return preparationFail(uiMessage("the_selected_photo_s_dimensions_are_too_large_choose_a_photo_with_a_longest"));
   if (info.width * info.height > MESSAGE_IMAGE_SELECTION_LIMITS.pixels)
-    return preparationFail("Valitud foto eraldusvõime on liiga suur. Vali kuni 64-megapiksline foto.");
+    return preparationFail(uiMessage("the_selected_photo_s_resolution_is_too_high_choose_a_photo_of_up_to_64_mega"));
   const swapped = info.orientation >= 5;
   const scale = Math.min(1, MESSAGE_IMAGE_LIMITS.edge / Math.max(info.width, info.height));
   const targetWidth = Math.max(1, Math.round(info.width * scale)), targetHeight = Math.max(1, Math.round(info.height * scale));
@@ -37,7 +38,7 @@ export async function prepareMessageImage(file: File, signal?: AbortSignal): Pro
   // can still allocate internal source buffers, hence the separate source caps.
   let decoded;
   try { decoded = await decodeMessageImage(info, targetWidth, targetHeight, signal); }
-  catch { checkAbort(signal); return preparationFail("Brauser ei saanud seda fotot avada. Vali foto uuesti või proovi teist JPEG-, PNG- või WebP-pilti."); }
+  catch { checkAbort(signal); return preparationFail(uiMessage("the_browser_could_not_open_this_photo_select_it_again_or_try_another_jpeg_p")); }
   const canvas = document.createElement("canvas");
   try {
     checkAbort(signal);
@@ -54,7 +55,7 @@ export async function prepareMessageImage(file: File, signal?: AbortSignal): Pro
       checkAbort(signal);
       canvas.width = Math.max(1, Math.round((swapped ? outputHeight : outputWidth) * attempt.scale));
       canvas.height = Math.max(1, Math.round((swapped ? outputWidth : outputHeight) * attempt.scale));
-      const context = canvas.getContext("2d"); if (!context) return preparationFail("Brauser ei saanud fotot töödelda. Proovi lehte värskendada ja vali foto uuesti.");
+      const context = canvas.getContext("2d"); if (!context) return preparationFail(uiMessage("the_browser_could_not_process_the_photo_try_refreshing_the_page_and_selecti"));
       switch (info.orientation) {
         case 2: context.transform(-1, 0, 0, 1, canvas.width, 0); break;
         case 3: context.transform(-1, 0, 0, -1, canvas.width, canvas.height); break;
@@ -71,7 +72,7 @@ export async function prepareMessageImage(file: File, signal?: AbortSignal): Pro
       if (blob.size <= MESSAGE_IMAGE_LIMITS.sourceBytes) break;
     }
     if (!blob || blob.type !== "image/webp" || blob.size < 1 || blob.size > MESSAGE_IMAGE_LIMITS.sourceBytes)
-      return preparationFail("Fotot ei saanud saatmiseks vähendada. Vali teine või väiksem foto.");
+      return preparationFail(uiMessage("the_photo_could_not_be_resized_for_sending_choose_another_or_smaller_photo"));
     const bytes = new Uint8Array(await blob.arrayBuffer()); checkAbort(signal);
     const digest = new Uint8Array(await crypto.subtle.digest("SHA-256", bytes)); checkAbort(signal);
     let binary = "";

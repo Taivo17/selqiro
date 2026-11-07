@@ -7,6 +7,13 @@ import {
   type ChangeEvent,
   type MouseEvent,
 } from "react";
+import { getCatalogTranslation } from "../../lib/i18n/useTranslation";
+import type { Language } from "../../lib/i18n/translations";
+
+const messages = {
+  en: { searchLocation: "Search location…", searching: "Searching…" },
+  et: { searchLocation: "Otsi asukohta…", searching: "Otsin…" },
+} as const;
 
 export type LocationSearchScope = "all" | "locality";
 
@@ -28,6 +35,7 @@ type Props = {
   value: string;
   placeholder?: string;
   searchScope?: LocationSearchScope;
+  language?: Language;
   onTextChange: (value: string) => void;
   onSelect: (location: SelectedLocation) => void;
 };
@@ -111,11 +119,14 @@ function isAbortError(error: unknown) {
 export default function LocationAutocomplete({
   country = "Estonia",
   value,
-  placeholder = "Otsi asukohta...",
+  placeholder,
   searchScope = "all",
+  language = "et",
   onTextChange,
   onSelect,
 }: Props) {
+  // V2 passes its profile language. Existing V1 callers keep their prior default.
+  const t = (key: keyof typeof messages.en) => getCatalogTranslation(language, messages, key);
   const [loading, setLoading] = useState(false);
   const [places, setPlaces] = useState<SelectedLocation[]>([]);
   const [open, setOpen] = useState(false);
@@ -239,15 +250,16 @@ export default function LocationAutocomplete({
         onFocus={() => {
           if (places.length > 0) setOpen(true);
         }}
-        placeholder={placeholder}
+        placeholder={placeholder ?? t("searchLocation")}
+        aria-label={placeholder ?? t("searchLocation")}
         aria-autocomplete="list"
         aria-expanded={open}
         className="w-full rounded-2xl border border-black/10 px-4 py-4 outline-none"
       />
 
       {loading ? (
-        <div className="absolute right-4 top-4 text-sm text-black/40">
-          Otsin...
+        <div role="status" className="absolute right-4 top-4 text-sm text-black/40">
+          {t("searching")}
         </div>
       ) : null}
 

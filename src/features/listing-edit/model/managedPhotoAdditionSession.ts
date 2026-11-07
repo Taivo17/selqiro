@@ -29,9 +29,9 @@ export type PhotoAdditionSessionDeps = {
   uuid: () => string; digest: (bytes: Blob) => Promise<string>; preparePhoto?: PrepareListingPhoto;
 };
 const capacityMessages: Readonly<Record<PublicationCapacityReason, string>> = {
-  open_attempts: "Kontol on juba mitu pooleliolevat lisamist. Lõpeta või katkesta pooleliolevad lisamised ja proovi uuesti. Kuulutuse olemasolevad fotod jäävad alles.",
-  daily_attempts: "Viimase 24 tunni jooksul alustatud lisamiste piir on täis. Katkesta see lisamine ja proovi hiljem uuesti. Kuulutuse olemasolevad fotod jäävad alles.",
-  retained_capacity: "Uute fotode üleslaadimiseks pole kontol praegu piisavalt vaba ruumi. Katkesta see lisamine ja proovi hiljem uuesti. Kuulutuse olemasolevad fotod jäävad alles.",
+  open_attempts: "additionCapacityActive",
+  daily_attempts: "additionCapacityDaily",
+  retained_capacity: "additionCapacityStorage",
 };
 const initial = (): PhotoAdditionView => ({phase: "idle", message: ""});
 /** One addition, using the same image transfer as new listings. The journal and
@@ -73,7 +73,7 @@ export class ManagedPhotoAdditionSession {
         owner.checkContext(); if (this.generation !== generation || this.abort.signal.aborted) throw new Error("context_changed");
       }};
       try {
-        context.checkContext(); this.change({phase: "busy", message: "Kontrollin foto lisamist…"});
+        context.checkContext(); this.change({phase: "busy", message: "checkingAddition"});
         await (measureTotal ? measurePhotoTask("total", () => work(context)) : work(context));
       }
       catch (error) {
@@ -83,19 +83,19 @@ export class ManagedPhotoAdditionSession {
         const phase = !this.hasIntent() ? "idle" : capacityReason ? "needs_attention" : reason === "files_required" ? "needs_file" : reason === "40001" ? "resume"
           : ["image_rejected", "image_processor_unavailable", "needs_attention", "image_limit", "photo_preparation_changed"].includes(reason ?? "") ? "needs_attention" : "unknown";
         const message = capacityReason ? capacityMessages[capacityReason]
-          : reason === "files_required" ? "Vali sama algne foto, et lisamist jätkata. Juba saadetud fotot uuesti ei saadeta."
-          : reason === "photo_preparation_changed" ? "Brauser valmistas foto seekord teisiti ette. Katkesta see lisamine ja vali sama algne foto uueks lisamiseks. Olemasolevad fotod jäävad alles."
-          : reason === "image_rejected" ? "See foto ei sobi lisamiseks. Katkesta lisamine ning vali JPEG-, PNG- või WebP-foto."
-          : reason === "image_limit" ? "Kuulutusel on juba 10 fotot. Katkesta see lisamine; olemasolevad fotod jäävad alles."
-          : reason === "40001" ? "Kuulutuse pilte muudeti samal ajal. Kontrolli ja jätka sama foto lisamist."
-          : phase === "idle" ? "Foto lisamist ei saanud ette valmistada. Kontrolli faili ja brauseri salvestusruumi ning proovi uuesti."
-          : phase === "needs_attention" ? "Foto töötlemist ei saanud lõpetada. Katkesta see lisamine ja proovi teise fotoga."
-          : "Foto lisamise tulemus pole veel kinnitatud. Kontrolli ja jätka sama lisamist.";
+          : reason === "files_required" ? "resumeSamePhoto"
+          : reason === "photo_preparation_changed" ? "photoPreparationChanged"
+          : reason === "image_rejected" ? "photoNotSuitable"
+          : reason === "image_limit" ? "photoAdditionFull"
+          : reason === "40001" ? "photoAdditionConflict"
+          : phase === "idle" ? "photoPrepareFailed"
+          : phase === "needs_attention" ? "photoProcessingFailed"
+          : "photoAdditionUnconfirmed";
         this.change({phase, message});
       } finally { owner.signal.removeEventListener("abort", abort); }
     })).catch(() => {
       if (this.generation === generation) this.change({phase: this.hasIntent() ? "unknown" : "idle",
-        message: "Kuulutuse seis või konto muutus või lisamine on teises aknas töös. Kontrolli seisu ja proovi uuesti."});
+        message: "photoAdditionContextChanged"});
     });
     this.operation = operation.finally(() => { this.operation = null; }); return this.operation;
   }
@@ -123,26 +123,26 @@ export class ManagedPhotoAdditionSession {
       }
       context.checkContext(); this.file = undefined; this.terminalRequest = journal.requestKey;
       this.change({phase: "added", message: displayed
-        ? displayed.images.some(image => image.url === result.receipt!.url) ? "Foto on kuulutusele lisatud."
-          : "Foto lisamine oli lõpetatud. Kuulutuse pilte on pärast seda muudetud."
-        : "Foto lisamine oli lõpetatud. Kuulutus on pärast seda eemaldatud."});
+        ? displayed.images.some(image => image.url === result.receipt!.url) ? "photoAdded"
+          : "photoAddedGalleryChanged"
+        : "photoAddedListingRemoved"});
       return true;
     }
     if (result.intentClosed || result.snapshot && result.snapshot.state !== "open") {
       this.file = undefined; this.terminalRequest = journal.requestKey;
-      this.change({phase: "closed", message: "Foto lisamine on katkestatud. Kuulutuse olemasolevad fotod jäid alles."}); return true;
+      this.change({phase: "closed", message: "photoAdditionCancelled"}); return true;
     }
     if (result.gallery) { context.checkContext(); context.showGallery(result.gallery); }
     return false;
   }
   inspect(): Promise<void> {
     try { if (this.deps.readJournal() === null) { this.change(initial()); return Promise.resolve(); } }
-    catch { this.change({phase: "unknown", message: "Poolelioleva lisamise andmeid ei saanud lugeda. Kontrolli brauseri salvestusruumi."}); return Promise.resolve(); }
+    catch { this.change({phase: "unknown", message: "pendingAdditionReadFailed"}); return Promise.resolve(); }
     return this.run(async context => {
       const journal = this.journal(), result = await this.status(context, journal);
       if (await this.accept(result, journal, context)) return;
       if (!result.snapshot) throw new Error("outcome_unknown");
-      this.change({phase: "resume", message: "Selle kuulutuse ühe foto lisamine on pooleli. Jätka sama lisamist või katkesta see."});
+      this.change({phase: "resume", message: "photoAdditionPending"});
     });
   }
   start(baseline: ManagedListingImagesSnapshot, selected: Blob): Promise<void> {
@@ -153,14 +153,14 @@ export class ManagedPhotoAdditionSession {
       requestKey = this.deps.uuid(); clientId = this.deps.uuid();
       captured = this.capture(selected); bound = bindManagedListingImagesSnapshot(baseline);
       if (bound.images.length >= MANAGED_LISTING_IMAGE_LIMIT) throw new Error("image_limit");
-    } catch { this.change({phase: this.hasIntent() ? "unknown" : "idle", message: "Vali üks kuni 25 MiB foto. Kuulutusel saab olla kuni 10 fotot."}); return Promise.resolve(); }
+    } catch { this.change({phase: this.hasIntent() ? "unknown" : "idle", message: "photoAdditionInputInvalid"}); return Promise.resolve(); }
     return this.run(async context => {
       if (this.deps.readJournal() !== null) {
         const existing = this.journal(), result = await this.status(context, existing);
-        if (!await this.accept(result, existing, context)) this.change({phase: "resume", message: "Selle kuulutuse foto lisamine on juba pooleli. Jätka sama lisamist."});
+        if (!await this.accept(result, existing, context)) this.change({phase: "resume", message: "photoAdditionAlreadyPending"});
         return;
       }
-      this.change({phase: "busy", message: "Valmistan fotot saatmiseks ette…"});
+      this.change({phase: "busy", message: "preparingPhoto"});
       const prepared = await preparePublicationFile(captured, clientId, this.deps, context); context.checkContext();
       const journal = bindPhotoAdditionJournal({version: 1, requestKey, dispatched: [], baseline: bound,
         image: preparedImageDescriptor(prepared.preparation), preparation: [prepared.preparation], readyId: null}, this.key);
@@ -173,7 +173,7 @@ export class ManagedPhotoAdditionSession {
     if (this.operation) return this.operation;
     let captured: Blob | undefined;
     try { if (selected) captured = this.capture(selected); }
-    catch { this.change({phase: "needs_file", message: "Vali sama algne kuni 25 MiB foto."}); return Promise.resolve(); }
+    catch { this.change({phase: "needs_file", message: "chooseSameOriginalLimit"}); return Promise.resolve(); }
     return this.run(async context => {
       let journal = this.journal(), result = await this.status(context, journal);
       if (await this.accept(result, journal, context)) return;
@@ -211,7 +211,7 @@ export class ManagedPhotoAdditionSession {
       }, readBytes: () => this.file?.clientId === snapshot.slot.client_file_id ? this.file.bytes : undefined, request: (action, args) => this.request(action, args, context),
       putPart: (url, headers, bytes, signal) => this.deps.putPart(url, headers, bytes, signal),
       checkContext: context.checkContext,
-      onUpload: () => this.change({phase: "busy", message: "Saadan ja kontrollin fotot…"}),
+      onUpload: () => this.change({phase: "busy", message: "uploadingVerifyingPhoto"}),
     });
     context.checkContext();
     let latest = this.journal();
@@ -225,7 +225,7 @@ export class ManagedPhotoAdditionSession {
     if (checked.gallery.images.length >= MANAGED_LISTING_IMAGE_LIMIT) throw new Error("image_limit");
     latest = bindPhotoAdditionJournal({...latest, baseline: checked.gallery}, this.key);
     this.deps.writeJournal(latest); context.checkContext();
-    this.change({phase: "busy", message: "Lisan foto kuulutusele…"});
+    this.change({phase: "busy", message: "appendingPhoto"});
     const attached = parsePhotoAdditionResult(await this.request("owner-images-add-append",
       appendPhotoAdditionArguments(latest, checked.snapshot), context), latest);
     if (!await this.accept(attached, latest, context)) throw new Error("outcome_unknown");
@@ -244,7 +244,7 @@ export class ManagedPhotoAdditionSession {
       const current = this.deps.readJournal();
       if (current !== null && this.journal().requestKey !== this.terminalRequest) {
         const newer = this.journal(), result = await this.status(context, newer);
-        if (!await this.accept(result, newer, context)) this.change({phase: "resume", message: "Selle kuulutuse järgmine foto lisamine on pooleli."});
+        if (!await this.accept(result, newer, context)) this.change({phase: "resume", message: "nextAdditionPending"});
         return;
       }
       context.checkContext(); this.deps.clearJournal(); this.file = undefined; this.remoteIntent = false; this.terminalRequest = null;

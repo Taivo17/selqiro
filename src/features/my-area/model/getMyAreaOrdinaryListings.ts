@@ -175,7 +175,7 @@ function getLocationLabel(
     )
     || normalizeOptionalText(item.city)
     || normalizeOptionalText(item.region)
-    || "Asukoht täpsustamata"
+    || ""
   );
 }
 

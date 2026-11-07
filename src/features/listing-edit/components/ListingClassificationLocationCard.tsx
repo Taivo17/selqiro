@@ -1,4 +1,6 @@
 "use client";
+import { useV2Translation } from "../../../shared/i18n/V2LanguageProvider";
+import { listingEditMessages, translateListingEditMessage } from "../model/listingEditMessages";
 
 import LocationAutocomplete, {
   type SelectedLocation,
@@ -30,23 +32,25 @@ const categoryTree =
   CATEGORY_TREE as unknown as readonly CategoryNode[];
 
 function categoryLabel(
-  category: CategoryNode
+  category: CategoryNode,
+  language: "en" | "et"
 ): string {
   return getCategoryLabel(
     category.value,
     category.label,
-    "et"
+    language
   );
 }
 
 function buildCategoryOptions(
   categories: readonly CategoryNode[],
-  currentValue: string
+  currentValue: string,
+  language: "en" | "et"
 ): SelectOption[] {
   const options = categories.map(
     (category) => ({
       value: category.value,
-      label: categoryLabel(category),
+      label: categoryLabel(category, language),
     })
   );
 
@@ -59,7 +63,7 @@ function buildCategoryOptions(
   ) {
     options.unshift({
       value: currentValue,
-      label: `Praegune: ${currentValue}`,
+      label: translateListingEditMessage(language, "currentValue", { value: currentValue }),
     });
   }
 
@@ -67,12 +71,13 @@ function buildCategoryOptions(
 }
 
 function buildCountryOptions(
-  currentCountry: string
+  currentCountry: string,
+  language: "en" | "et"
 ): SelectOption[] {
   const options = COUNTRY_OPTIONS.map(
     (country) => ({
       value: country.name,
-      label: country.name,
+      label: new Intl.DisplayNames([language], { type: "region" }).of(country.code) || country.name,
     })
   );
 
@@ -85,7 +90,7 @@ function buildCountryOptions(
   ) {
     options.unshift({
       value: currentCountry,
-      label: `Praegune: ${currentCountry}`,
+      label: translateListingEditMessage(language, "currentValue", { value: currentCountry }),
     });
   }
 
@@ -105,6 +110,8 @@ function SelectBox({
   placeholder?: string;
   onChange: (value: string) => void;
 }) {
+  const { language, t } = useV2Translation(listingEditMessages);
+
   return (
     <label className="block rounded-2xl bg-[#fbfbfa] p-4">
       <span className="text-xs font-bold uppercase tracking-[0.18em] text-neutral-400">
@@ -142,6 +149,8 @@ export default function ListingClassificationLocationCard({
 }: {
   listing: ProductListingDetail;
 }) {
+  const { language, t } = useV2Translation(listingEditMessages);
+
   const editor =
     useListingClassificationLocation(listing);
 
@@ -149,7 +158,8 @@ export default function ListingClassificationLocationCard({
     categoryTree.find(
       (category) =>
         category.value ===
-        editor.form.category
+        editor.form.category,
+      language
     );
 
   const subcategoryNodes =
@@ -159,7 +169,8 @@ export default function ListingClassificationLocationCard({
     subcategoryNodes.find(
       (category) =>
         category.value ===
-        editor.form.subcategory
+        editor.form.subcategory,
+      language
     );
 
   const detailCategoryNodes =
@@ -168,24 +179,28 @@ export default function ListingClassificationLocationCard({
   const categoryOptions =
     buildCategoryOptions(
       categoryTree,
-      editor.form.category
+      editor.form.category,
+      language
     );
 
   const subcategoryOptions =
     buildCategoryOptions(
       subcategoryNodes,
-      editor.form.subcategory
+      editor.form.subcategory,
+      language
     );
 
   const detailCategoryOptions =
     buildCategoryOptions(
       detailCategoryNodes,
-      editor.form.detailCategory
+      editor.form.detailCategory,
+      language
     );
 
   const countryOptions =
     buildCountryOptions(
-      editor.form.country
+      editor.form.country,
+      language
     );
 
   const showSubcategory =
@@ -218,29 +233,19 @@ export default function ListingClassificationLocationCard({
     <section className="rounded-[34px] border border-black/5 bg-white p-6 shadow-sm md:p-8">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="text-xs font-bold uppercase tracking-[0.24em] text-neutral-400">
-            Selqiro otsing
-          </p>
+          <p className="text-xs font-bold uppercase tracking-[0.24em] text-neutral-400">{t("selqiroSearch")}</p>
 
-          <h2 className="mt-2 text-2xl font-black">
-            Kategooria ja asukoht
-          </h2>
+          <h2 className="mt-2 text-2xl font-black">{t("classificationLocation")}</h2>
 
-          <p className="mt-2 max-w-2xl text-sm leading-6 text-neutral-600">
-            Selqiro üldkategooria aitab kuulutust
-            turuplatsi otsingus leida. Poe-rubriigid
-            jäävad sellest valikust eraldi.
-          </p>
+          <p className="mt-2 max-w-2xl text-sm leading-6 text-neutral-600">{t("classificationHelp")}</p>
         </div>
 
-        <span className="w-fit whitespace-nowrap rounded-full bg-neutral-100 px-3 py-2 text-xs font-black text-neutral-600">
-          Eraldi salvestus
-        </span>
+        <span className="w-fit whitespace-nowrap rounded-full bg-neutral-100 px-3 py-2 text-xs font-black text-neutral-600">{t("savedSeparately")}</span>
       </div>
 
       <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
         <SelectBox
-          label="Üldkategooria"
+          label={t("category")}
           value={editor.form.category}
           options={categoryOptions}
           onChange={editor.setCategory}
@@ -248,12 +253,12 @@ export default function ListingClassificationLocationCard({
 
         {showSubcategory ? (
           <SelectBox
-            label="Alamkategooria"
+            label={t("subcategory")}
             value={
               editor.form.subcategory
             }
             options={subcategoryOptions}
-            placeholder="Vali alamkategooria"
+            placeholder={t("selectSubcategory")}
             onChange={
               editor.setSubcategory
             }
@@ -262,14 +267,14 @@ export default function ListingClassificationLocationCard({
 
         {showDetailCategory ? (
           <SelectBox
-            label="Täpsustav kategooria"
+            label={t("specificCategory")}
             value={
               editor.form.detailCategory
             }
             options={
               detailCategoryOptions
             }
-            placeholder="Vali täpsustus"
+            placeholder={t("selectSpecificCategory")}
             onChange={
               editor.setDetailCategory
             }
@@ -279,25 +284,24 @@ export default function ListingClassificationLocationCard({
 
       <div className="mt-5 grid gap-3 sm:grid-cols-2">
         <SelectBox
-          label="Riik"
+          label={t("country")}
           value={editor.form.country}
           options={countryOptions}
-          placeholder="Riik määramata"
+          placeholder={t("countryMissing")}
           onChange={editor.setCountry}
         />
 
         <div className="rounded-2xl bg-[#fbfbfa] p-4">
-          <p className="text-xs font-bold uppercase tracking-[0.18em] text-neutral-400">
-            Linn või piirkond
-          </p>
+          <p className="text-xs font-bold uppercase tracking-[0.18em] text-neutral-400">{t("cityRegion")}</p>
 
           <div className="mt-2">
             <LocationAutocomplete
+              language={language}
               country={
                 editor.form.country
               }
               value={editor.form.city}
-              placeholder="Otsi linna või piirkonda..."
+              placeholder={t("searchCity")}
               onTextChange={
                 editor.setCity
               }
@@ -311,36 +315,25 @@ export default function ListingClassificationLocationCard({
 
       <div className="mt-3 rounded-2xl border border-neutral-100 bg-[#fbfbfa] px-4 py-3">
         {hasCoordinates ? (
-          <p className="text-xs font-semibold leading-5 text-neutral-600">
-            Kaardipunkt:{" "}
+          <p className="text-xs font-semibold leading-5 text-neutral-600">{t("mapPoint")}{" "}
             {editor.form.listingLat?.toFixed(5)},{" "}
             {editor.form.listingLng?.toFixed(5)}
           </p>
         ) : editor.form.city.trim() ? (
-          <p className="text-xs font-semibold leading-5 text-neutral-500">
-            Kaardipunkt leitakse võimalusel
-            salvestamise ajal. Täpsema tulemuse
-            saad otsingu soovituse valimisel.
-          </p>
+          <p className="text-xs font-semibold leading-5 text-neutral-500">{t("mapPointHelp")}</p>
         ) : (
-          <p className="text-xs font-semibold leading-5 text-neutral-500">
-            Lisa linn või piirkond. Eraisiku puhul
-            ei ole soovitatav sisestada täpset
-            koduaadressi.
-          </p>
+          <p className="text-xs font-semibold leading-5 text-neutral-500">{t("locationPrivacyHelp")}</p>
         )}
       </div>
 
       {editor.saveError ? (
         <p className="mt-4 rounded-2xl border border-red-100 bg-red-50 p-3 text-sm leading-6 text-red-800">
-          {editor.saveError}
+          {translateListingEditMessage(language, editor.saveError)}
         </p>
       ) : null}
 
       {editor.saved ? (
-        <p className="mt-4 rounded-2xl border border-emerald-100 bg-emerald-50 p-3 text-sm font-bold text-emerald-700">
-          Kategooria ja asukoht salvestatud.
-        </p>
+        <p className="mt-4 rounded-2xl border border-emerald-100 bg-emerald-50 p-3 text-sm font-bold text-emerald-700">{t("classificationSaved")}</p>
       ) : null}
 
       <div className="mt-5 flex flex-wrap gap-3">
@@ -353,10 +346,10 @@ export default function ListingClassificationLocationCard({
           className="rounded-full bg-black px-5 py-3 text-sm font-black text-white transition disabled:cursor-not-allowed disabled:bg-neutral-200 disabled:text-neutral-500"
         >
           {editor.saving
-            ? "Salvestan..."
+            ? t("savingDots")
             : editor.dirty
-              ? "Salvesta kategooria ja asukoht"
-              : "Muudatusi pole"}
+              ? t("saveClassification")
+              : t("noChanges")}
         </button>
 
         {editor.dirty ? (
@@ -365,9 +358,7 @@ export default function ListingClassificationLocationCard({
             onClick={editor.reset}
             disabled={editor.saving}
             className="rounded-full border border-neutral-200 bg-white px-5 py-3 text-sm font-black text-neutral-700 shadow-sm disabled:opacity-50"
-          >
-            Taasta algne
-          </button>
+          >{t("restoreOriginal")}</button>
         ) : null}
       </div>
     </section>

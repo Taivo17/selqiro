@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { useV2Translation } from "../../../shared/i18n/V2LanguageProvider";
+import { listingEditMessages } from "./listingEditMessages";
 import { setListingPrimaryImage } from "../../../entities/listing/api/setListingPrimaryImage";
 import { deleteListingImage } from "../../../entities/listing/api/deleteListingImage";
 import { uploadListingImage } from "../../../entities/listing/api/uploadListingImage";
@@ -8,10 +10,16 @@ import type { ListingImage, ProductListingDetail } from "../../../entities/listi
 
 /** The page calls this unconditionally, as before extraction. No new save or retry policy. */
 export function useListingEditImages(listing: ProductListingDetail | null) {
+  const { t } = useV2Translation(listingEditMessages);
   const [primarySavingId, setPrimarySavingId] = useState<string | null>(null);
   const [deletingImageId, setDeletingImageId] = useState<string | null>(null);
   const [uploadingImage, setUploadingImage] = useState(false);
-  const [imageError, setImageError] = useState<string | null>(null);
+  const [imageError, setImageErrorState] = useState<string | null>(null);
+  const [imageErrorParams, setImageErrorParams] = useState<Readonly<Record<string, string | number>> | undefined>();
+  const [imageErrorReason, setImageErrorReason] = useState<string | null>(null);
+  const setImageError = (key: string | null, params?: Readonly<Record<string, string | number>>, reason?: string) => {
+    setImageErrorState(key); setImageErrorParams(params); setImageErrorReason(reason ?? null);
+  };
 
   async function handleSetPrimaryImage(image: ListingImage) {
     const listingIdForUpdate = listing?.id;
@@ -33,7 +41,7 @@ export function useListingEditImages(listing: ProductListingDetail | null) {
       setImageError(
         error instanceof Error
           ? error.message
-          : "Põhipildi muutmine ebaõnnestus."
+          : "primaryChangeFailed"
       );
     } finally {
       setPrimarySavingId(null);
@@ -47,11 +55,11 @@ export function useListingEditImages(listing: ProductListingDetail | null) {
     if (!listingIdForUpdate || !imageIdForUpdate) return;
 
     if ((listing?.images.length || 0) <= 1) {
-      setImageError("Viimast pilti ei saa kustutada.");
+      setImageError("lastImageCannotDelete");
       return;
     }
 
-    const confirmed = window.confirm("Kas kustutada see pilt kuulutuselt?");
+    const confirmed = window.confirm(t("confirmDeleteImage"));
 
     if (!confirmed) return;
 
@@ -67,7 +75,7 @@ export function useListingEditImages(listing: ProductListingDetail | null) {
       window.location.reload();
     } catch (error) {
       setImageError(
-        error instanceof Error ? error.message : "Pildi kustutamine ebaõnnestus."
+        error instanceof Error ? error.message : "imageDeleteFailed"
       );
     } finally {
       setDeletingImageId(null);
@@ -84,12 +92,12 @@ export function useListingEditImages(listing: ProductListingDetail | null) {
     const remainingSlots = 10 - currentImageCount;
 
     if (remainingSlots <= 0) {
-      setImageError("Kuulutusele saab lisada kuni 10 pilti.");
+      setImageError("legacyImageLimit");
       return;
     }
 
     if (selectedFiles.length > remainingSlots) {
-      setImageError(`Saad lisada veel ${remainingSlots} pilti.`);
+      setImageError("imageSlotsRemaining", { count: remainingSlots });
       return;
     }
 
@@ -111,20 +119,18 @@ export function useListingEditImages(listing: ProductListingDetail | null) {
       window.location.reload();
     } catch (error) {
       const message =
-        error instanceof Error ? error.message : "Pildi lisamine ebaõnnestus.";
+        error instanceof Error ? error.message : "imageAddFailed";
 
-      setImageError(
-        uploadedCount > 0
-          ? `${uploadedCount} pilti lisatud, aga järgmise pildi lisamine ebaõnnestus: ${message}`
-          : message
-      );
+      setImageError(uploadedCount > 0 ? "imagesPartlyAdded" : message,
+        uploadedCount > 0 ? { count: uploadedCount } : undefined,
+        uploadedCount > 0 ? message : undefined);
     } finally {
       setUploadingImage(false);
     }
   }
 
   return {
-    primarySavingId, deletingImageId, uploadingImage, imageError,
+    primarySavingId, deletingImageId, uploadingImage, imageError, imageErrorParams, imageErrorReason,
     handleSetPrimaryImage, handleDeleteImage, handleUploadImages,
   };
 }

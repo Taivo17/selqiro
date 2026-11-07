@@ -1,7 +1,14 @@
+import { getCatalogTranslation } from "../../../../lib/i18n/useTranslation";
+import { listingPresentationMessages } from "../../../../lib/i18n/catalogs/listingPresentation";
+import type { Language } from "../../../../lib/i18n/translations";
+
 /** Display only: original text wins. No locale/identity/country or exchange-rate inference. */
 export type ListingPriceDisplay = {
   priceLabel: string;
   priceNote: string | null;
+  /** Explicit semantic labels, never inferred from arbitrary user-written price text. */
+  priceLabelKey?: "ask_price" | "free" | "negotiable";
+  priceNoteKey?: "unspecified_currency";
 };
 
 export type ListingPriceDisplayInput = {
@@ -30,7 +37,7 @@ export function getListingPriceDisplay(input: ListingPriceDisplayInput): Listing
   const text = typeof input.price === "string" ? input.price.trim() : "";
   const amount = text ? null : listingPriceAmountText(input.priceAmount);
   const label = text || amount;
-  if (label === null || label === "") return { priceLabel: "Küsi hinda", priceNote: null };
+  if (label === null || label === "") return { priceLabel: "Ask for price", priceLabelKey: "ask_price", priceNote: null };
   const numeric = text ? isBareNumber(text) : true;
   if (!numeric) return { priceLabel: label, priceNote: null };
 
@@ -39,5 +46,13 @@ export function getListingPriceDisplay(input: ListingPriceDisplayInput): Listing
   const suffix = currency.toUpperCase() === "EUR" ? "€" : currency;
   return suffix
     ? { priceLabel: `${label} ${suffix}`, priceNote: null }
-    : { priceLabel: label, priceNote: "Valuuta täpsustamata" };
+    : { priceLabel: label, priceNote: "Currency unspecified", priceNoteKey: "unspecified_currency" };
+}
+
+/** Render only explicit semantic fields; all seller-entered price text stays verbatim. */
+export function localizeListingPrice(price: Pick<ListingPriceDisplay, "priceLabel"> & Partial<Omit<ListingPriceDisplay, "priceLabel">>, language: Language = "en") {
+  return {
+    priceLabel: price.priceLabelKey ? getCatalogTranslation(language, listingPresentationMessages, price.priceLabelKey) : price.priceLabel,
+    priceNote: price.priceNoteKey ? getCatalogTranslation(language, listingPresentationMessages, price.priceNoteKey) : price.priceNote ?? null,
+  };
 }

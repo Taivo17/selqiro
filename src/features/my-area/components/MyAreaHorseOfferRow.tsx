@@ -1,4 +1,11 @@
+"use client";
+
+import { marketplaceMessage } from "../../../shared/i18n/marketplaceMessages";
+import { useMarketplaceTranslation } from "../../../shared/i18n/useMarketplaceTranslation";
 import Link from "next/link";
+import { OWNER_HORSE_KIND_LABELS, OWNER_HORSE_STATUS_LABELS } from "../../horse-offer-detail/model/ownerHorseDetailLabels";
+import { formatOwnerHorseMoney } from "../../../entities/horse-offer/model/ownerMoney";
+import { getMyAreaWantedSummaryLabels } from "../model/myAreaWantedSummary";
 
 import type {
   MyAreaHorseOfferMarketplaceItemRow,
@@ -35,19 +42,30 @@ function getStatusClasses(
 export default function MyAreaHorseOfferRow({
   item,
 }: MyAreaHorseOfferRowProps) {
+  const { language, r } = useMarketplaceTranslation();
   const isWanted = item.contentVariant === "wanted";
+  const wanted = isWanted ? getMyAreaWantedSummaryLabels(item.wantedSummary, language) : null;
+  const rawPrice = item.priceText?.trim() || "";
+  const plainNumeric = /^\d+(?:[.,]\d{1,2})?$/.test(rawPrice.replace(/\s+/g, ""));
+  const sellerPrice = item.priceType === "free"
+    ? marketplaceMessage("horse.free.e5aa0d")
+    : rawPrice && !plainNumeric ? rawPrice
+    : typeof item.priceAmount === "number" ? formatOwnerHorseMoney(item.priceAmount, item.currency || "EUR", language)
+    : rawPrice || marketplaceMessage("service.price_by_agreement.299166");
+  const priceLabel = wanted?.priceLabel ?? sellerPrice;
+  const statusLabel = OWNER_HORSE_STATUS_LABELS[item.sourceStatus] || item.statusLabel;
   const meta = [
-    item.subcategory,
-    item.locationLabel,
+    OWNER_HORSE_KIND_LABELS[item.contentVariant || ""] || item.subcategory,
+    wanted?.locationLabel ?? (item.locationLabel || marketplaceMessage("horse.location_not_added.8c8234")),
   ].filter(Boolean).join(" · ");
 
   const title =
-    item.title || "Pealkirjata hobusepakkumine";
+    item.title || marketplaceMessage("horse.untitled_horse_listing.9905c6");
 
   const readOnlyExplanation =
     item.sourceStatus === "draft"
-      ? "Ava salvestatud andmed. Mustandit saad muuta detailvaatest."
-      : "Ava salvestatud andmed. See pakkumine ei ole muudetav mustand.";
+      ? marketplaceMessage("horse.open_the_saved_details_you_can_edit_the.fa6ec3")
+      : marketplaceMessage("horse.open_the_saved_details_this_listing_is_not.2ccc52");
 
   const detailHref =
     `/v2/my-area/horse-offers/${
@@ -75,7 +93,7 @@ export default function MyAreaHorseOfferRow({
         ].join(" ")}
         href={detailHref}
       >
-        {item.imageUrl ? (
+        {r(item.imageUrl ? (
           <img
             alt=""
             className={[
@@ -93,9 +111,8 @@ export default function MyAreaHorseOfferRow({
               "text-sm font-semibold text-zinc-500",
             ].join(" ")}
           >
-            Hobune
-          </div>
-        )}
+            {r(marketplaceMessage("horse.horse.e6dbc2"))}</div>
+        ))}
 
         <div className="min-w-0 flex-1">
           <div className="mb-1 flex min-w-0 items-center">
@@ -108,8 +125,7 @@ export default function MyAreaHorseOfferRow({
                 "text-amber-900",
               ].join(" ")}
             >
-              Hobusepakkumine
-            </span>
+              {r(marketplaceMessage("horse.horse_listing.f28ecd"))}</span>
           </div>
 
           <h3
@@ -117,32 +133,31 @@ export default function MyAreaHorseOfferRow({
               "truncate text-base font-semibold text-zinc-950",
               "transition-colors group-hover:text-zinc-700",
             ].join(" ")}
-            title={title}
+            title={r(title)}
           >
-            {title}
+            {r(title)}
           </h3>
 
-          {meta ? (
+          {r(meta ? (
             <p
               className={isWanted
                 ? "mt-0.5 break-words text-sm text-zinc-500"
                 : "mt-0.5 truncate text-sm text-zinc-500"}
-              title={meta}
+              title={r(meta)}
             >
-              {meta}
+              {r(meta)}
             </p>
-          ) : null}
+          ) : null)}
 
-          {item.daysLeft !== null ? (
+          {r(typeof item.daysLeft === "number" ? (
             <p className="mt-0.5 text-xs text-zinc-400">
-              {item.daysLeft} päeva jäänud
-            </p>
-          ) : null}
+              {r(item.daysLeft === 1 ? marketplaceMessage("horse.daysLeftOne") : marketplaceMessage("horse.daysLeftMany", { count: item.daysLeft }))}</p>
+          ) : null)}
         </div>
       </Link>
 
       <p className="min-w-0 break-words text-sm font-semibold text-zinc-900 md:text-right">
-        {item.priceLabel}
+        {r(priceLabel)}
       </p>
 
       <div className="flex flex-col items-stretch gap-1 md:items-end">
@@ -153,13 +168,13 @@ export default function MyAreaHorseOfferRow({
             getStatusClasses(item.lifecycleStatus),
           ].join(" ")}
         >
-          {item.statusLabel}
+          {r(statusLabel)}
         </span>
         <span
           className="text-center text-[11px] text-zinc-400 md:text-right"
-          title={readOnlyExplanation}
+          title={r(readOnlyExplanation)}
         >
-          {item.sourceStatus === "draft" ? "Muutmine detailis" : "Ainult vaade"}
+          {r(item.sourceStatus === "draft" ? marketplaceMessage("horse.edit_in_details.503bf2") : marketplaceMessage("horse.view_only.b2d42f"))}
         </span>
       </div>
     </article>

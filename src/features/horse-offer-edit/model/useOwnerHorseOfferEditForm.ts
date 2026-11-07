@@ -1,5 +1,7 @@
 "use client";
 
+import { marketplaceMessage } from "../../../shared/i18n/marketplaceMessages";
+import { useMarketplaceTranslation } from "../../../shared/i18n/useMarketplaceTranslation";
 import { useEffect, useState, useSyncExternalStore } from "react";
 import { supabaseBrowserClient } from "../../../shared/supabase/browserClient";
 import { getMyHorseOfferEditSnapshot } from "../../../entities/horse-offer/api/getMyHorseOfferEditSnapshot";
@@ -10,6 +12,7 @@ import { OwnerHorseDraftSession } from "./ownerHorseDraftSession";
 
 /** Parent MUST key this component by user ID + offer ID. */
 export function useOwnerHorseOfferEditForm(userId: string, offerId: string) {
+  const { language, r } = useMarketplaceTranslation();
   const [session] = useState(() => new OwnerHorseDraftSession(userId, offerId, {
     actor: getHorseDraftActor, read: getMyHorseOfferEditSnapshot, update: updateMyHorseOfferDraft,
   }));
@@ -37,14 +40,14 @@ export function useOwnerHorseOfferEditForm(userId: string, offerId: string) {
     };
   }, [session]);
   const confirmLeave = () => !session.hasUnsettledWork()
-    || (state.work === "idle" && window.confirm("Vormis on salvestamata või kontrollimata muudatusi. Kas lahkud ja loobud kohalikust sisestusest?"));
+    || (state.work === "idle" && window.confirm(r(marketplaceMessage("horse.the_form_has_unsaved_or_unconfirmed_changes_leave.4c1740"))));
   const reload = () => {
     const replace = !!state.snapshot && !state.acknowledgement && (session.hasUnsettledWork() || !!state.problem);
-    if (replace && !window.confirm("Asendan kohaliku sisestuse viimaste serveriandmetega. Salvestamata tekst kaob. Kas jätkan?")) return;
+    if (replace && !window.confirm(r(marketplaceMessage("horse.this_will_replace_local_input_with_the_latest.90bc94")))) return;
     void session.reload(replace);
   };
   const reset = () => {
-    if (session.isDirty() && window.confirm("Kas loobud selles vormis tehtud salvestamata muudatustest?")) session.resetToLoaded();
+    if (session.isDirty() && window.confirm(r(marketplaceMessage("horse.discard_the_unsaved_changes_in_this_form.77b8ad")))) session.resetToLoaded();
   };
   return { state, session, confirmLeave, reload, reset };
 }

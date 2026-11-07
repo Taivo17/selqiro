@@ -3,9 +3,6 @@ import { getMyAreaWantedSummaryLabels } from "./myAreaWantedSummary";
 import type {
   OwnerMarketplaceItem,
 } from "../../../entities/marketplace-item/model/types";
-import type {
-  MyIdentityListingCard,
-} from "../../../entities/listing/model/types";
 import {
   MY_AREA_LISTING_STATUS_ACTIONS,
   type MyAreaHorseOfferMarketplaceItemRow,
@@ -136,7 +133,7 @@ function getLocationLabel(
     )
     || normalizeOptionalText(item.city)
     || normalizeOptionalText(item.region)
-    || "Asukoht täpsustamata"
+    || ""
   );
 }
 

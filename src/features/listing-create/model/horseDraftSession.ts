@@ -1,3 +1,4 @@
+import { marketplaceMessage } from "../../../shared/i18n/marketplaceMessages";
 import { HorseDraftWriteError } from "../../../entities/horse-offer/model/draftWriteError";
 import type { HorseDraftActor, HorseDraftAcknowledgement, HorseDraftUpdateInput, HorseDraftUpdateResult } from "../../../entities/horse-offer/model/draftEdit";
 import type { SavedHorseOfferDraft, SaveMyHorseOfferDraftInput, HorseOfferDraftOfferType } from "../../../entities/horse-offer/model/types";
@@ -15,8 +16,8 @@ export type HorseDraftSessionApi = {
   create: (input: SaveMyHorseOfferDraftInput) => Promise<SavedHorseOfferDraft>;
   update: (input: HorseDraftUpdateInput) => Promise<HorseDraftUpdateResult>;
 };
-const CONTEXT_MESSAGE = "Aktiivne identiteet muutus või selle kontroll ei õnnestunud. Sisestus on alles. Vali vormi algne identiteet ja kontrolli uuesti.";
-const UNKNOWN_MESSAGE = "Salvestuse tulemust ei saanud kinnitada. Sisestus on alles. Kontrolli mustandit Minu alas; ära loo pimesi uut ega värskenda seda vormi enne kontrollimist.";
+const CONTEXT_MESSAGE = marketplaceMessage("horse.the_active_identity_changed_or_could_not_be.80ae40");
+const UNKNOWN_MESSAGE = marketplaceMessage("horse.the_save_result_could_not_be_confirmed_your.38f30f");
 
 /** One mounted user's draft session, never a global store or durable idempotency layer. */
 export class HorseDraftSession {
@@ -51,7 +52,7 @@ export class HorseDraftSession {
     if (userId === this.userId) return; // Token refresh is not a new form.
     this.closed = true;
     this.epoch += 1;
-    this.set({ context: "blocked", message: "Konto muutus. Selle konto vormi enam ei salvestata." });
+    this.set({ context: "blocked", message: marketplaceMessage("horse.the_account_changed_this_account_s_form_will.7a6b79") });
   }
   async refreshContext() {
     if (!this.active || this.closed) return;
@@ -76,7 +77,7 @@ export class HorseDraftSession {
   async save(input: SaveMyHorseOfferDraftInput) {
     if (!this.canSave()) return;
     if (input.offerId !== null || (this.state.lockedType && input.offerType !== this.state.lockedType)) {
-      this.set({ message: "Salvestatud pakkumise liiki ei saa selles vormis muuta." }); return;
+      this.set({ message: marketplaceMessage("horse.the_saved_listing_type_cannot_be_changed_in.45653e") }); return;
     }
     // All values in the validated mapper output are scalars. Snapshot before any await.
     const sent = { ...input };
@@ -103,7 +104,7 @@ export class HorseDraftSession {
         this.set({ recoveryId: saved.offerId, lockedType: sent.offerType });
         if (saved.identityId !== actor.identityId || saved.createdByUserId !== this.userId
           || saved.offerType !== sent.offerType || saved.editRevision !== "1") {
-          throw new HorseDraftWriteError("Loomise kontekst erineb.", "unknown", null, saved.offerId);
+          throw new HorseDraftWriteError(marketplaceMessage("horse.the_creation_context_differs.a7e1ee"), "unknown", null, saved.offerId);
         }
         this.set({ draft: { offerId: saved.offerId, identityId: saved.identityId, userId: this.userId,
           offerType: saved.offerType, editRevision: saved.editRevision, updatedAt: saved.updatedAt }, baseline: sent });
@@ -116,13 +117,13 @@ export class HorseDraftSession {
         this.set({ stop: "unknown", message: UNKNOWN_MESSAGE, lockedType: sent.offerType,
           recoveryId: error instanceof HorseDraftWriteError ? error.knownOfferId || this.state.recoveryId : this.state.recoveryId });
       } else if (error.outcome === "not_sent") {
-        this.set({ message: "Salvestust ei saadetud. Kontrolli vormi välju." });
+        this.set({ message: marketplaceMessage("horse.the_save_was_not_sent_check_the_form.e1f1e4") });
       } else if (error.code === "40001") {
-        this.set({ stop: "conflict", message: "Mustandit on vahepeal muudetud. Sinu sisestus on alles. Ava salvestatud mustand eraldi aknas; seda vana vormi uuesti ei saadeta." });
+        this.set({ stop: "conflict", message: marketplaceMessage("horse.the_draft_was_changed_elsewhere_your_input_is.379cac") });
       } else if (error.code === "55000") {
-        this.set({ stop: "not_editable", message: "See pakkumine ei ole enam muudetav mustand. Sisestus on alles; kontrolli salvestatud pakkumist." });
+        this.set({ stop: "not_editable", message: marketplaceMessage("horse.this_listing_is_no_longer_an_editable_draft.25f431") });
       } else {
-        this.set({ message: "Server lükkas salvestuse tagasi. Kontrolli välju ja aktiivset identiteeti. Sisestus on alles; uuesti salvestades kasutatakse sama andmeversiooni." });
+        this.set({ message: marketplaceMessage("horse.the_server_rejected_the_save_check_the_fields.e0ff31") });
       }
     } finally {
       this.set({ busy: false });

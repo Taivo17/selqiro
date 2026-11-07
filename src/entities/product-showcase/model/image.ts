@@ -1,3 +1,4 @@
+import { marketplaceMessage } from "../../../shared/i18n/marketplaceMessages";
 export type ProductShowcaseImage = {
   id: string;
   showcaseId: string;
@@ -34,7 +35,7 @@ function requiredText(
 
   if (!cleanValue) {
     throw new Error(
-      `Andmebaas ei tagastanud välja: ${fieldName}.`
+      marketplaceMessage("showcase.the_database_did_not_return_the_field_value.b1f7fe", { p0: String(fieldName) })
     );
   }
 

@@ -1,4 +1,6 @@
 "use client";
+import { useV2Translation } from "../../../shared/i18n/V2LanguageProvider";
+import { listingCreateMessages, translateListingCreateMessage } from "../model/listingCreateMessages";
 import { useState } from "react";
 import { getHorseDraftActor } from "../../../entities/horse-offer/api/getHorseDraftActor";
 import { saveMyHorseOfferDraft } from "../../../entities/horse-offer/api/saveMyHorseOfferDraft";
@@ -8,15 +10,19 @@ import { useOrdinaryPublication } from "../model/useOrdinaryPublication";
 import ListingCreateIdentityForm from "./ListingCreateIdentityForm";
 
 function ContextState({ publication }: { publication: ReturnType<typeof useOrdinaryPublication> }) {
+  const { language, t } = useV2Translation(listingCreateMessages);
+
   return <section className="rounded-[34px] border border-amber-200 bg-amber-50 p-7 sm:p-10">
-    <h1 className="text-3xl font-black tracking-tight">Lisa kuulutus</h1>
-    <p role="status" className="mt-3 text-sm">{publication.contextError || "Kontrollin aktiivset identiteeti…"}</p>
+    <h1 className="text-3xl font-black tracking-tight">{t("addListing")}</h1>
+    <p role="status" className="mt-3 text-sm">{publication.contextError ? translateListingCreateMessage(language, publication.contextError) : t("checkingIdentity")}</p>
     {publication.contextError ? <button type="button" className="mt-5 rounded-full bg-black px-5 py-3 font-bold text-white"
-      onClick={publication.retryContext}>Kontrolli identiteeti uuesti</button> : null}
+      onClick={publication.retryContext}>{t("checkIdentity")}</button> : null}
   </section>;
 }
 
 export default function ListingCreateForm({ userId }: { userId: string }) {
+  const { language, t } = useV2Translation(listingCreateMessages);
+
   const [drafts] = useState(() => new ListingCreateDrafts(userId, {
     actor: getHorseDraftActor, create: saveMyHorseOfferDraft, update: updateMyHorseOfferDraft,
   }));

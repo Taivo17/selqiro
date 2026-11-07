@@ -7,29 +7,29 @@ export type SetListingPrimaryImageInput = {
 
 function mapPrimaryImageError(message: string): string {
   if (message.includes("not_authenticated")) {
-    return "Sisselogimine puudub.";
+    return "authMissing";
   }
 
   if (message.includes("listing_not_found")) {
-    return "Kuulutust ei leitud.";
+    return "listingNotFound";
   }
 
   if (message.includes("not_owner")) {
-    return "Sul ei ole õigust seda kuulutust muuta.";
+    return "editForbidden";
   }
 
   if (message.includes("image_not_found")) {
-    return "Pilti ei leitud selle kuulutuse juurest.";
+    return "imageNotFound";
   }
 
-  return message || "Põhipildi muutmine ebaõnnestus.";
+  return message || "primaryChangeFailed";
 }
 
 export async function setListingPrimaryImage(
   input: SetListingPrimaryImageInput
 ): Promise<void> {
   if (!input.listingId || !input.imageId) {
-    throw new Error("Pildi või kuulutuse id puudub.");
+    throw new Error("imageListingIdMissing");
   }
 
   const { error } = await supabaseBrowserClient.rpc(

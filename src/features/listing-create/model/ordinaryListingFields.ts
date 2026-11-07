@@ -55,18 +55,18 @@ export function selectOrdinaryCategory(
   state: OrdinaryListingFieldState, level: number, value: string,
 ): OrdinaryListingFieldState {
   if (!Number.isInteger(level) || level < 0 || level > 2 || level > state.categoryPath.length) {
-    throw new Error("Kategooria valiku aste ei sobi.");
+    throw new Error("input.categoryLevel");
   }
   if (state.categoryPath[level] === value || (value === "" && level === state.categoryPath.length)) return state;
   const categoryPath = [...state.categoryPath.slice(0, level), ...(value ? [value] : [])];
-  if (categoryPath.length && !ordinaryCategoryNodes(categoryPath)) throw new Error("Kategooriatee ei sobi.");
+  if (categoryPath.length && !ordinaryCategoryNodes(categoryPath)) throw new Error("input.categoryPath");
   // Do not carry a field such as 'type' between unrelated category meanings.
   return { ...state, categoryPath, detailValues: {} };
 }
 export function selectOrdinaryPriceKind(
   state: OrdinaryListingFieldState, priceKind: ListingPriceKind,
 ): OrdinaryListingFieldState {
-  if (!["fixed", "free", "negotiable", "unspecified"].includes(priceKind)) throw new Error("Vali hinna liik.");
+  if (!["fixed", "free", "negotiable", "unspecified"].includes(priceKind)) throw new Error("price.kind");
   return { ...state, priceKind,
     amountInput: priceKind === "fixed" ? state.amountInput : "",
     currencyInput: priceKind === "fixed" ? state.currencyInput : "" };
@@ -75,7 +75,7 @@ export function setOrdinaryDetail(
   state: OrdinaryListingFieldState, key: string, value: string,
 ): OrdinaryListingFieldState {
   if (!ordinaryDetailFields(state.categoryPath).some(field => field.key === key) || typeof value !== "string") {
-    throw new Error("Detail ei kuulu valitud kategooriasse.");
+    throw new Error("input.detailCategory");
   }
   return { ...state, detailValues: { ...state.detailValues, [key]: value } };
 }

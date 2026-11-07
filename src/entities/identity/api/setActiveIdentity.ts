@@ -1,3 +1,4 @@
+import { uiMessage } from "../../../../lib/i18n/interfaceMessage";
 import { supabaseBrowserClient } from "../../../shared/supabase/browserClient";
 import type {
   IdentitySummary,
@@ -50,7 +51,7 @@ function normalizeIdentityId(
 
   if (!UUID_PATTERN.test(cleanValue)) {
     throw new Error(
-      "Valitud identiteedi ID ei ole korrektne."
+      uiMessage("identity_id_invalid")
     );
   }
 
@@ -68,27 +69,26 @@ function getSwitchErrorMessage(error: {
     if (
       message.includes("authentication")
     ) {
-      return "Identiteedi vahetamiseks logi sisse.";
+      return uiMessage("identity_sign_in");
     }
 
-    return "Sul puudub ligipääs valitud identiteedile.";
+    return uiMessage("you_do_not_have_access_to_the_selected_identity");
   }
 
   if (error.code === "22023") {
     if (message.includes("inactive")) {
-      return "Valitud identiteet ei ole aktiivne.";
+      return uiMessage("identity_inactive");
     }
 
     if (message.includes("profile")) {
-      return "Kasutajaprofiili ei leitud.";
+      return uiMessage("profile_missing");
     }
 
-    return "Valitud identiteeti ei leitud või selle andmed ei ole korrektsed.";
+    return uiMessage("identity_missing");
   }
 
   return (
-    error.message ||
-    "Aktiivset identiteeti ei saanud vahetada."
+    uiMessage("could_not_switch_identity")
   );
 }
 
@@ -100,23 +100,23 @@ export async function setActiveIdentity(input: {
     normalizeIdentityId(input.identityId);
 
   if (input.expectedUserId !== undefined && !UUID_PATTERN.test(input.expectedUserId)) {
-    throw new Error("Sisselogitud konto ID ei ole korrektne.");
+    throw new Error(uiMessage("account_id_invalid"));
   }
   const sessionResult = await supabaseBrowserClient.auth.getSession();
   const session = sessionResult.data.session;
   if (sessionResult.error || !session?.access_token || !session.user?.id) {
-    throw new Error("Identiteedi vahetamiseks logi sisse.");
+    throw new Error(uiMessage("identity_sign_in"));
   }
   const expectedUserId = input.expectedUserId ?? session.user.id;
   const accessToken = session.access_token;
   if (session.user.id !== expectedUserId) {
-    throw new Error("Sisselogitud konto muutus. Kontrolli kontot uuesti.");
+    throw new Error(uiMessage("the_signed_in_account_changed_check_your_account_again"));
   }
   // Verify the captured token itself. A later session change must not select
   // a different account while Supabase resolves its request authorization.
   const userResult = await supabaseBrowserClient.auth.getUser(accessToken);
   if (userResult.error || userResult.data.user?.id !== expectedUserId) {
-    throw new Error("Sisselogitud kontot ei saanud kinnitada. Kontrolli kontot uuesti.");
+    throw new Error(uiMessage("account_verify_again"));
   }
 
   const { data, error } =
@@ -142,7 +142,7 @@ export async function setActiveIdentity(input: {
 
   if (!row?.identity_id) {
     throw new Error(
-      "Andmebaas ei tagastanud valitud identiteeti."
+      uiMessage("identity_not_returned")
     );
   }
 
@@ -153,7 +153,7 @@ export async function setActiveIdentity(input: {
     returnedIdentityId !== cleanIdentityId
   ) {
     throw new Error(
-      "Andmebaas tagastas ootamatu identiteedi."
+      uiMessage("identity_unexpected")
     );
   }
 
@@ -165,7 +165,7 @@ export async function setActiveIdentity(input: {
       ),
       displayName:
         row.display_name?.trim() ||
-        "Identiteet",
+        "",
       avatarUrl:
         row.avatar_url || null,
       slug: row.slug || null,

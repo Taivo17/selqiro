@@ -1,3 +1,4 @@
+import { marketplaceMessage } from "../../../shared/i18n/marketplaceMessages";
 import type { SaveMyHorseOfferDraftInput } from "../../../entities/horse-offer/model/types";
 import type { HorseDraftChanges, HorseDraftChangeKey } from "../../../entities/horse-offer/model/draftEdit";
 
@@ -20,7 +21,7 @@ const wanted: FieldPair[] = [
 ];
 /** Baseline is the submitted form paired with THAT write's acknowledgement. */
 export function buildHorseDraftChanges(before: SaveMyHorseOfferDraftInput, after: SaveMyHorseOfferDraftInput): HorseDraftChanges {
-  if (before.offerType !== after.offerType) throw new Error("Salvestatud pakkumise liiki ei saa selles vormis muuta.");
+  if (before.offerType !== after.offerType) throw new Error(marketplaceMessage("horse.the_saved_listing_type_cannot_be_changed_in.45653e"));
   const fields = [...common, ...(after.offerType === "wanted" ? wanted : specific)];
   if (after.offerType === "lease" || after.offerType === "co_rider") fields.push(["recurringFeePeriod", "recurring_fee_period"]);
   const changes: HorseDraftChanges = {};

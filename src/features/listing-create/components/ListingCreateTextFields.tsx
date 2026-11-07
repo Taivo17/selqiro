@@ -1,4 +1,6 @@
 "use client";
+import { useV2Translation } from "../../../shared/i18n/V2LanguageProvider";
+import { listingCreateMessages, translateListingCreateMessage } from "../model/listingCreateMessages";
 import { listingCreateFieldSourceLabel, updateListingCreateTextFieldByUser,
   type ListingCreateFieldSource, type ListingCreateTextField } from "../model/fieldProvenance";
 import { getListingCreateTextGuidance } from "../model/listingCreateTextGuidance";
@@ -8,6 +10,8 @@ function FieldSourceBadge({
 }: {
   source: ListingCreateFieldSource;
 }) {
+  const { language, t } = useV2Translation(listingCreateMessages);
+
   return (
     <span
       className={[
@@ -19,9 +23,7 @@ function FieldSourceBadge({
             : "bg-neutral-100 text-neutral-500",
       ].join(" ")}
     >
-      {listingCreateFieldSourceLabel(
-        source
-      )}
+      {translateListingCreateMessage(language, listingCreateFieldSourceLabel(source))}
     </span>
   );
 }
@@ -31,16 +33,14 @@ export default function ListingCreateTextFields({ title, description, setTitle, 
   setTitle: (value: ListingCreateTextField) => void; setDescription: (value: ListingCreateTextField) => void;
   textGuidance: ReturnType<typeof getListingCreateTextGuidance>;
 }) {
+  const { language, t } = useV2Translation(listingCreateMessages);
+
   return (
 <section className="rounded-[30px] border border-black/5 bg-white p-5 shadow-sm sm:p-6">
         <div>
-          <p className="text-xs font-black uppercase tracking-[0.22em] text-amber-700">
-            Samm 1
-          </p>
+          <p className="text-xs font-black uppercase tracking-[0.22em] text-amber-700">{t("stepOne")}</p>
 
-          <h2 className="mt-2 text-2xl font-black tracking-tight">
-            Kirjuta pealkiri ja kirjeldus
-          </h2>
+          <h2 className="mt-2 text-2xl font-black tracking-tight">{t("textHeading")}</h2>
 
           <p className="mt-2 max-w-3xl text-sm leading-6 text-neutral-600">
             {textGuidance.sectionDescription}
@@ -55,9 +55,7 @@ export default function ListingCreateTextFields({ title, description, setTitle, 
             }
           >
             <span className="flex items-center justify-between gap-3">
-              <span className="text-xs font-black uppercase tracking-[0.18em] text-neutral-500">
-                Pealkiri
-              </span>
+              <span className="text-xs font-black uppercase tracking-[0.18em] text-neutral-500">{t("title")}</span>
 
               <FieldSourceBadge
                 source={title.source}
@@ -92,9 +90,7 @@ export default function ListingCreateTextFields({ title, description, setTitle, 
             }
           >
             <span className="flex items-center justify-between gap-3">
-              <span className="text-xs font-black uppercase tracking-[0.18em] text-neutral-500">
-                Kirjeldus
-              </span>
+              <span className="text-xs font-black uppercase tracking-[0.18em] text-neutral-500">{t("description")}</span>
 
               <FieldSourceBadge
                 source={

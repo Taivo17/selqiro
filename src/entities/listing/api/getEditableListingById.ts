@@ -36,7 +36,7 @@ export async function getEditableListingById(input: {
     .maybeSingle();
 
   if (error) {
-    throw new Error(error.message || "Failed to load editable listing");
+    throw new Error(error.message || "editableLoadFailed");
   }
 
   if (!data) {

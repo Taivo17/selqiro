@@ -7,6 +7,8 @@ export type ProductListingCard = {
   priceLabel: string;
   /** Display-only clarification, never an editable price or a persisted field. */
   priceNote?: string | null;
+  priceLabelKey?: "ask_price" | "free" | "negotiable";
+  priceNoteKey?: "unspecified_currency";
   priceAmount: number | string | null;
   currency: string | null;
   imageUrl: string | null;

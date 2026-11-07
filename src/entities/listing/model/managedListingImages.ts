@@ -17,11 +17,11 @@ export type ManagedListingImagesSaved = Readonly<{ snapshot: ManagedListingImage
 export type ManagedListingImagesProblem = "invalid" | "context" | "conflict" | "unavailable" | "unknown";
 
 const messages: Record<ManagedListingImagesProblem, string> = {
-  invalid: "Vali selle kuulutuse olemasolev foto ja kontrolli piltide seisu.",
-  context: "Konto, aktiivne identiteet või kuulutuse haldusõigus muutus. Laadi kuulutuse seis uuesti.",
-  conflict: "Kuulutuse pilte on vahepeal muudetud. Kontrolli salvestatud seisu enne järgmist toimingut.",
-  unavailable: "Kuulutuse piltide muutmine pole praegu saadaval.",
-  unknown: "Piltide muutmise tulemust ei saanud kinnitada. Kontrolli salvestatud seisu enne järgmist toimingut.",
+  invalid: "managedImagesInvalid",
+  context: "managedImagesContext",
+  conflict: "managedImagesConflict",
+  unavailable: "managedImagesUnavailable",
+  unknown: "managedImagesUnknown",
 };
 export class ManagedListingImagesError extends Error {
   constructor(readonly code: ManagedListingImagesProblem) {

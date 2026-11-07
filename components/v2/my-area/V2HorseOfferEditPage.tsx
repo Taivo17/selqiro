@@ -1,3 +1,5 @@
+"use client";
+
 import V2Shell from "../layout/V2Shell";
 import OwnerHorseOfferEditPage from "../../../src/features/horse-offer-edit/components/OwnerHorseOfferEditPage";
 

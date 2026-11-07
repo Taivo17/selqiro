@@ -5,9 +5,10 @@ import { hostedPublicationRequested } from "../../src/shared/config/v2Integratio
 import { hostedPreviewConfig } from "../../src/server/listing-publication/journey/hostedPreviewConfig";
 import { hostedPreviewCapability } from "../../src/server/listing-publication/journey/hostedPreviewReadiness";
 import type { HostedPreviewCapability } from "../../src/shared/config/hostedPreviewProtocol";
+import V2LanguageProvider from "../../src/shared/i18n/V2LanguageProvider";
 
 export default async function V2Layout({children}: {children: ReactNode}) {
-  if (!hostedPublicationRequested()) return children;
+  if (!hostedPublicationRequested()) return <V2LanguageProvider>{children}</V2LanguageProvider>;
   // No live backend read during build. Only a real hosted request asks its DB.
   await connection();
   const config = hostedPreviewConfig();
@@ -16,5 +17,5 @@ export default async function V2Layout({children}: {children: ReactNode}) {
     try { capability = await hostedPreviewCapability(config); }
     catch { /* Preserve the existing read surface while this release is closed. */ }
   }
-  return <HostedPreviewGate key={capability?.instanceId ?? "existing"} capability={capability}>{children}</HostedPreviewGate>;
+  return <V2LanguageProvider><HostedPreviewGate key={capability?.instanceId ?? "existing"} capability={capability}>{children}</HostedPreviewGate></V2LanguageProvider>;
 }

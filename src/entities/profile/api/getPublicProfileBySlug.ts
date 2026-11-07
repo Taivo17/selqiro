@@ -31,11 +31,11 @@ function formatLocationLabel(input: {
   country?: string | null;
   location?: string | null;
 }): string {
-  return input.city || input.location || input.country || "Asukoht puudub";
+  return input.city || input.location || input.country || "";
 }
 
 function mapPublicProfile(row: PublicProfileRpcRow, fallbackSlug: string): PublicProfile {
-  const displayName = row.display_name || row.store_name || "Profiil";
+  const displayName = row.display_name || row.store_name || "";
   const slug = row.slug || row.store_slug || fallbackSlug;
 
   return {

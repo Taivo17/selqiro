@@ -1,5 +1,7 @@
 "use client";
 
+import { marketplaceMessage } from "../../../shared/i18n/marketplaceMessages";
+import { useMarketplaceTranslation } from "../../../shared/i18n/useMarketplaceTranslation";
 import { useEffect, useMemo, useState } from "react";
 import type { StoreCategory } from "../../../entities/store-category/model/types";
 
@@ -72,6 +74,7 @@ export default function StoreCategoryHierarchyFilter({
   allCategoryId,
   onSelectCategory,
 }: StoreCategoryHierarchyFilterProps) {
+  const { language, r } = useMarketplaceTranslation();
   const { roots, childrenByRoot } = useMemo(
     () => buildHierarchy(categories),
     [categories]
@@ -136,17 +139,14 @@ export default function StoreCategoryHierarchyFilter({
               : "border border-neutral-200 bg-white text-neutral-700",
           ].join(" ")}
         >
-          Kõik rubriigid
-        </button>
+          {r(marketplaceMessage("category.all_categories.9aae72"))}</button>
 
         <p className="text-xs leading-5 text-neutral-500">
-          Ülemrubriik näitab kogu haru. Alamrubriik
-          kitsendab tulemusi.
-        </p>
+          {r(marketplaceMessage("category.a_parent_category_shows_its_whole_branch_a.fa7901"))}</p>
       </div>
 
       <div className="mt-3 grid items-start gap-2 sm:grid-cols-2">
-        {roots.map((rootCategory) => {
+        {r(roots.map((rootCategory) => {
           const children =
             childrenByRoot.get(rootCategory.id) || [];
 
@@ -177,12 +177,8 @@ export default function StoreCategoryHierarchyFilter({
               <button
                 type="button"
                 onClick={() => selectRoot(rootCategory.id)}
-                aria-expanded={
-                  hasChildren ? expanded : undefined
-                }
-                aria-controls={
-                  hasChildren ? childRegionId : undefined
-                }
+                aria-expanded={hasChildren ? expanded : undefined}
+                aria-controls={hasChildren ? childRegionId : undefined}
                 className={[
                   "flex w-full items-center justify-between gap-3 px-3 py-2.5 text-left transition",
                   rootSelected
@@ -201,16 +197,15 @@ export default function StoreCategoryHierarchyFilter({
                         : "text-neutral-400",
                     ].join(" ")}
                   >
-                    Ülemrubriik
-                  </span>
+                    {r(marketplaceMessage("category.parent_category.f3ddd3"))}</span>
 
                   <span className="mt-1 block break-words text-sm font-black leading-5">
-                    {rootCategory.name}
+                    {r(rootCategory.name)}
                   </span>
                 </span>
 
                 <span className="flex shrink-0 items-center gap-2">
-                  {hasChildren ? (
+                  {r(hasChildren ? (
                     <span
                       className={[
                         "rounded-full px-2 py-1 text-[11px] font-black",
@@ -219,11 +214,11 @@ export default function StoreCategoryHierarchyFilter({
                           : "bg-neutral-100 text-neutral-500",
                       ].join(" ")}
                     >
-                      {children.length}
+                      {r(children.length)}
                     </span>
-                  ) : null}
+                  ) : null)}
 
-                  {hasChildren ? (
+                  {r(hasChildren ? (
                     <span
                       aria-hidden="true"
                       className={[
@@ -233,23 +228,22 @@ export default function StoreCategoryHierarchyFilter({
                           : "text-neutral-400",
                       ].join(" ")}
                     >
-                      {expanded ? "▾" : "›"}
+                      {r(expanded ? "▾" : "›")}
                     </span>
-                  ) : null}
+                  ) : null)}
                 </span>
               </button>
 
-              {expanded && hasChildren ? (
+              {r(expanded && hasChildren ? (
                 <div
                   id={childRegionId}
                   className="border-t border-neutral-200 bg-[#fbfbfa] p-3"
                 >
                   <p className="mb-2 text-[10px] font-black uppercase tracking-[0.14em] text-neutral-400">
-                    Alamrubriigid
-                  </p>
+                    {r(marketplaceMessage("category.subcategories.310c5a"))}</p>
 
                   <div className="flex flex-wrap gap-2">
-                    {children.map((childCategory) => {
+                    {r(children.map((childCategory) => {
                       const childSelected =
                         selectedCategoryId ===
                         childCategory.id;
@@ -262,8 +256,7 @@ export default function StoreCategoryHierarchyFilter({
                             selectChild(
                               rootCategory.id,
                               childCategory.id
-                            )
-                          }
+                            )}
                           className={[
                             "max-w-full rounded-full px-3 py-2 text-left text-xs font-black transition",
                             childSelected
@@ -272,17 +265,17 @@ export default function StoreCategoryHierarchyFilter({
                           ].join(" ")}
                         >
                           <span className="break-words">
-                            {childCategory.name}
+                            {r(childCategory.name)}
                           </span>
                         </button>
                       );
-                    })}
+                    }))}
                   </div>
                 </div>
-              ) : null}
+              ) : null)}
             </article>
           );
-        })}
+        }))}
       </div>
     </div>
   );

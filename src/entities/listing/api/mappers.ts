@@ -75,7 +75,7 @@ export function mapMarketplaceListingRow(
 
   return {
     id,
-    title: row.title || "Pealkiri puudub",
+    title: row.title || "",
     description: row.description || null,
     ...getListingPriceDisplay({
       price: row.price,
@@ -91,13 +91,9 @@ export function mapMarketplaceListingRow(
     category: row.category || null,
     subcategory: row.subcategory || null,
     condition: row.condition || null,
-    locationLabel: formatLocationLabel({
-      city: row.city,
-      location: row.location,
-      country: row.country,
-    }),
+    locationLabel: row.city || row.location || row.country || "",
     distanceLabel: formatDistanceLabel(row.distance_km ?? null),
-    sellerName: row.seller_name || "Müüja",
+    sellerName: row.seller_name || "",
     sellerAvatarUrl: row.seller_avatar_url || row.avatar_url || null,
     sellerSlug: row.seller_slug || null,
     sellerType: row.seller_type || null,

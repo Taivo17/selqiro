@@ -1,5 +1,7 @@
 "use client";
 
+import { marketplaceMessage, safeMarketplaceError } from "../../../shared/i18n/marketplaceMessages";
+import { useMarketplaceTranslation } from "../../../shared/i18n/useMarketplaceTranslation";
 import {
   useCallback,
   useEffect,
@@ -38,10 +40,7 @@ function resolveError(
   error: unknown,
   fallback: string
 ): string {
-  return error instanceof Error &&
-    error.message
-    ? error.message
-    : fallback;
+  return safeMarketplaceError(error, fallback);
 }
 
 function buildOptimisticDeletedImages(
@@ -76,6 +75,7 @@ export default function ServiceImageManager({
   onImageUrlChange,
   onBusyChange,
 }: ServiceImageManagerProps) {
+  const { language, r } = useMarketplaceTranslation();
   const [
     open,
     setOpen,
@@ -211,7 +211,7 @@ export default function ServiceImageManager({
             setError(
               resolveError(
                 loadError,
-                "Teenuse pilte ei saanud laadida."
+                marketplaceMessage("service.service_images_could_not_be_loaded.d3870f")
               )
             );
           }
@@ -352,8 +352,8 @@ export default function ServiceImageManager({
     ) {
       setError(
         remainingSlots === 0
-          ? `Teenusele saab lisada kuni ${SERVICE_IMAGE_LIMIT} pilti.`
-          : `Saad lisada veel ${remainingSlots} pilti.`
+          ? marketplaceMessage("service.a_service_can_have_up_to_value_images.e4bb05", { p0: String(SERVICE_IMAGE_LIMIT) })
+          : marketplaceMessage("service.you_can_add_value_more_images.025f7f", { p0: String(remainingSlots) })
       );
 
       input.value = "";
@@ -404,19 +404,19 @@ export default function ServiceImageManager({
 
       setSuccessMessage(
         uploadedCount === 1
-          ? "Teenusele lisati üks pilt."
-          : `Teenusele lisati ${uploadedCount} pilti.`
+          ? marketplaceMessage("service.one_image_was_added_to_the_service.38cf04")
+          : marketplaceMessage("service.value_images_were_added_to_the_service.35f6af", { p0: String(uploadedCount) })
       );
     } catch (uploadError) {
       const message =
         resolveError(
           uploadError,
-          "Teenuse pildi lisamine ebaõnnestus."
+          marketplaceMessage("service.the_service_image_could_not_be_added.2a3709")
         );
 
       setError(
         uploadedCount > 0
-          ? `${uploadedCount} pilti lisati, kuid järgmise pildi lisamine ebaõnnestus: ${message}`
+          ? marketplaceMessage("service.value_images_were_added_but_the_next_image.2ddfc3", { p0: String(uploadedCount), p1: String(message) })
           : message
       );
     } finally {
@@ -465,13 +465,13 @@ export default function ServiceImageManager({
       );
 
       setSuccessMessage(
-        "Teenuse põhipilt muudeti."
+        marketplaceMessage("service.the_service_s_main_image_was_changed.ba2b18")
       );
     } catch (primaryError) {
       setError(
         resolveError(
           primaryError,
-          "Teenuse põhipilti ei saanud muuta."
+          marketplaceMessage("service.the_service_s_main_image_could_not_be.85c9bf")
         )
       );
     } finally {
@@ -491,11 +491,9 @@ export default function ServiceImageManager({
     }
 
     const confirmed =
-      window.confirm(
-        images.length === 1
-          ? "Kas eemaldada teenuse viimane pilt?"
-          : "Kas eemaldada see pilt teenuselt?"
-      );
+      window.confirm(r(images.length === 1
+          ? marketplaceMessage("service.remove_the_service_s_last_image.ae86fc")
+          : marketplaceMessage("service.remove_this_image_from_the_service.d2105b")));
 
     if (!confirmed) {
       return;
@@ -535,7 +533,7 @@ export default function ServiceImageManager({
         result.storageCleanupFailed
       ) {
         setWarning(
-          "Pilt eemaldati teenuselt, kuid Storage'i faili automaatne koristamine ebaõnnestus. Andmebaasi tulemus on salvestatud."
+          marketplaceMessage("service.the_image_was_removed_from_the_service_but.5360f2")
         );
       }
 
@@ -568,23 +566,23 @@ export default function ServiceImageManager({
         setWarning(
           (
             result.storageCleanupFailed
-              ? "Storage'i faili koristamine ja "
+              ? marketplaceMessage("service.the_stored_file_cleanup_and.4b3e76")
               : ""
           ) +
-          "Pildiloendi uuesti laadimine ebaõnnestus. Värskendamisel kuvatakse serveri viimane seis."
+          marketplaceMessage("service.the_image_list_could_not_be_reloaded_refresh.c38883")
         );
       }
 
       setSuccessMessage(
         result.remainingCount === 0
-          ? "Teenuse viimane pilt eemaldati."
-          : "Teenuse pilt eemaldati."
+          ? marketplaceMessage("service.the_service_s_last_image_was_removed.241b78")
+          : marketplaceMessage("service.the_service_image_was_removed.f4fac2")
       );
     } catch (deleteError) {
       setError(
         resolveError(
           deleteError,
-          "Teenuse pilti ei saanud kustutada."
+          marketplaceMessage("service.the_service_image_could_not_be_deleted.7bf769")
         )
       );
     } finally {
@@ -599,15 +597,14 @@ export default function ServiceImageManager({
       <div className="flex min-w-0 flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="min-w-0">
           <p className="text-[11px] font-black uppercase tracking-[0.18em] text-neutral-400">
-            Teenuse pildid
-          </p>
+            {r(marketplaceMessage("service.service_images.5350af"))}</p>
 
           <p className="mt-1 break-words text-sm font-semibold text-neutral-600">
-            {loaded
-              ? `${images.length}/${SERVICE_IMAGE_LIMIT} pilti`
+            {r(loaded
+              ? marketplaceMessage("service.value_value_images.97a0e5", { p0: String(images.length), p1: String(SERVICE_IMAGE_LIMIT) })
               : service.imageUrl
-                ? "Põhipilt on olemas"
-                : "Pilte ei ole veel lisatud"}
+                ? marketplaceMessage("service.a_main_image_is_available.ef4547")
+                : marketplaceMessage("service.no_images_added_yet.d4bf76"))}
           </p>
         </div>
 
@@ -616,70 +613,64 @@ export default function ServiceImageManager({
           aria-expanded={open}
           aria-controls={`service-images-${service.id}`}
           onClick={toggleOpen}
-          disabled={
-            disabled ||
-            operationBusy
-          }
+          disabled={disabled ||
+            operationBusy}
           className="inline-flex min-h-10 w-full items-center justify-center rounded-full border border-neutral-200 bg-white px-4 py-2 text-xs font-black text-neutral-700 shadow-sm transition hover:border-neutral-300 disabled:cursor-wait disabled:opacity-50 sm:w-auto"
         >
-          {open
-            ? "Sulge pildihaldur"
-            : "Halda pilte"}
+          {r(open
+            ? marketplaceMessage("service.close_image_manager.3b2fb5")
+            : marketplaceMessage("service.manage_images.7231de"))}
         </button>
       </div>
 
-      {open ? (
+      {r(open ? (
         <div
           id={`service-images-${service.id}`}
           className="mt-4 min-w-0 border-t border-neutral-100 pt-4"
         >
-          {loading ? (
+          {r(loading ? (
             <div className="space-y-3">
               <div className="h-40 animate-pulse rounded-[20px] bg-neutral-100 sm:h-52" />
               <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
-                {[0, 1, 2].map(
+                {r([0, 1, 2].map(
                   (item) => (
                     <div
                       key={item}
                       className="h-32 animate-pulse rounded-[18px] bg-neutral-100"
                     />
                   )
-                )}
+                ))}
               </div>
             </div>
-          ) : null}
+          ) : null)}
 
-          {!loading &&
+          {r(!loading &&
           primaryImageUrl ? (
             <div className="overflow-hidden rounded-[20px] border border-neutral-100 bg-neutral-100">
               <img
-                src={
-                  primaryImageUrl
-                }
-                alt={`${service.title} põhipilt`}
+                src={primaryImageUrl}
+                alt={r(marketplaceMessage("service.main_image_for_value.4c06d2", { p0: String(service.title) }))}
                 className="h-44 w-full object-cover sm:h-56"
               />
             </div>
-          ) : null}
+          ) : null)}
 
-          {!loading &&
+          {r(!loading &&
           loaded &&
           images.length === 0 ? (
             <div className="rounded-[20px] border border-dashed border-neutral-200 bg-[#fbfbfa] px-4 py-6 text-center">
               <p className="font-black">
-                Teenusel ei ole veel pilte
-              </p>
+                {r(marketplaceMessage("service.the_service_has_no_images_yet.317078"))}</p>
 
               <p className="mt-2 text-sm leading-6 text-neutral-500">
-                Esimene lisatud pilt muutub automaatselt põhipildiks.
-              </p>
+                {r(marketplaceMessage("service.the_first_image_you_add_automatically_becomes_the.31d635"))}</p>
             </div>
-          ) : null}
+          ) : null)}
 
-          {!loading &&
+          {r(!loading &&
           images.length > 0 ? (
             <div className="mt-3 grid min-w-0 grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
-              {images.map(
+              {r(images.map(
                 (image, index) => {
                   const imageUrl =
                     getServiceImageUrl(
@@ -708,17 +699,12 @@ export default function ServiceImageManager({
                         onClick={() =>
                           void handleSetPrimary(
                             image
-                          )
-                        }
-                        disabled={
-                          controlsDisabled ||
-                          image.isPrimary
-                        }
-                        aria-label={
-                          image.isPrimary
-                            ? `Pilt ${index + 1} on teenuse põhipilt`
-                            : `Tee pilt ${index + 1} teenuse põhipildiks`
-                        }
+                          )}
+                        disabled={controlsDisabled ||
+                          image.isPrimary}
+                        aria-label={r(image.isPrimary
+                            ? marketplaceMessage("service.image_value_is_the_service_s_main_image.2719e9", { p0: String(index + 1) })
+                            : marketplaceMessage("service.make_image_value_the_service_s_main_image.1a09cd", { p0: String(index + 1) }))}
                         className="group relative block h-24 w-full overflow-hidden rounded-[14px] bg-neutral-100 disabled:cursor-default sm:h-28"
                       >
                         <img
@@ -728,11 +714,10 @@ export default function ServiceImageManager({
                           className="h-full w-full object-cover transition duration-300 group-hover:scale-[1.02]"
                         />
 
-                        {image.isPrimary ? (
+                        {r(image.isPrimary ? (
                           <span className="absolute left-2 top-2 rounded-full bg-emerald-50 px-2 py-1 text-[10px] font-black text-emerald-700 shadow-sm">
-                            Põhipilt
-                          </span>
-                        ) : null}
+                            {r(marketplaceMessage("service.main_image.7fc1c0"))}</span>
+                        ) : null)}
                       </button>
 
                       <div className="mt-2 grid gap-2">
@@ -741,12 +726,9 @@ export default function ServiceImageManager({
                           onClick={() =>
                             void handleSetPrimary(
                               image
-                            )
-                          }
-                          disabled={
-                            controlsDisabled ||
-                            image.isPrimary
-                          }
+                            )}
+                          disabled={controlsDisabled ||
+                            image.isPrimary}
                           className={[
                             "min-h-9 rounded-full border px-2 py-1.5 text-[11px] font-black transition disabled:cursor-default disabled:opacity-60",
                             image.isPrimary
@@ -754,11 +736,11 @@ export default function ServiceImageManager({
                               : "border-neutral-200 bg-white text-neutral-700 hover:bg-neutral-50",
                           ].join(" ")}
                         >
-                          {image.isPrimary
-                            ? "Põhipilt"
+                          {r(image.isPrimary
+                            ? marketplaceMessage("service.main_image.7fc1c0")
                             : settingPrimary
-                              ? "Muudan..."
-                              : "Põhipildiks"}
+                              ? marketplaceMessage("service.updating.94c79c")
+                              : marketplaceMessage("service.set_as_main.6960df"))}
                         </button>
 
                         <button
@@ -766,28 +748,25 @@ export default function ServiceImageManager({
                           onClick={() =>
                             void handleDelete(
                               image
-                            )
-                          }
-                          disabled={
-                            controlsDisabled
-                          }
+                            )}
+                          disabled={controlsDisabled}
                           className="min-h-9 rounded-full border border-red-100 bg-red-50 px-2 py-1.5 text-[11px] font-black text-red-700 transition hover:bg-red-100 disabled:cursor-wait disabled:opacity-50"
                         >
-                          {deleting
-                            ? "Kustutan..."
+                          {r(deleting
+                            ? marketplaceMessage("service.deleting.b12b82")
                             : images.length === 1
-                              ? "Eemalda viimane"
-                              : "Kustuta"}
+                              ? marketplaceMessage("service.remove_last_image.bedea5")
+                              : marketplaceMessage("service.delete.b50cda"))}
                         </button>
                       </div>
                     </article>
                   );
                 }
-              )}
+              ))}
             </div>
-          ) : null}
+          ) : null)}
 
-          {!loading ? (
+          {r(!loading ? (
             <div className="mt-4 flex min-w-0 flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <label
                 className={[
@@ -810,61 +789,57 @@ export default function ServiceImageManager({
                      */
                     event.currentTarget.value = "";
                   }}
-                  disabled={
-                    controlsDisabled ||
-                    remainingSlots === 0
-                  }
+                  disabled={controlsDisabled ||
+                    remainingSlots === 0}
                   onChange={(event) =>
                     void handleUpload(
                       event
-                    )
-                  }
+                    )}
                   className="sr-only"
                 />
 
-                {uploading
-                  ? "Laadin pilte..."
+                {r(uploading
+                  ? marketplaceMessage("service.uploading_images.7c5e1c")
                   : remainingSlots === 0
-                    ? `Maksimum ${SERVICE_IMAGE_LIMIT} pilti`
+                    ? marketplaceMessage("service.maximum_value_images.15aa96", { p0: String(SERVICE_IMAGE_LIMIT) })
                     : remainingSlots === 1
-                      ? "Lisa viimane pilt"
-                      : `Lisa pilte (${remainingSlots} kohta)`}
+                      ? marketplaceMessage("service.add_last_image.17645c")
+                      : marketplaceMessage("service.add_images_value_spaces.4d658c", { p0: String(remainingSlots) }))}
               </label>
 
               <p className="text-xs leading-5 text-neutral-500">
-                Lubatud JPG, PNG ja WEBP. HEIC/HEIF foto proovitakse enne üleslaadimist JPG-ks teisendada. Maksimaalne suurus 10 MB pildi kohta.
-              </p>
+                {r(marketplaceMessage("service.jpg_png_and_webp_are_supported_heic_heif.8d0e91"))}</p>
             </div>
-          ) : null}
+          ) : null)}
 
-          {error ? (
+          {r(error ? (
             <p
               role="alert"
               className="mt-3 rounded-xl border border-red-100 bg-red-50 px-3 py-2.5 text-sm font-semibold leading-6 text-red-800"
             >
-              {error}
+              {r(error)}
             </p>
-          ) : null}
+          ) : null)}
 
-          {warning ? (
+          {r(warning ? (
             <p
               role="status"
               className="mt-3 rounded-xl border border-amber-100 bg-amber-50 px-3 py-2.5 text-sm font-semibold leading-6 text-amber-900"
             >
-              {warning}
+              {r(warning)}
             </p>
-          ) : null}
+          ) : null)}
 
-          {successMessage ? (
+          {r(successMessage ? (
             <p
               role="status"
               className="mt-3 rounded-xl border border-emerald-100 bg-emerald-50 px-3 py-2.5 text-sm font-semibold leading-6 text-emerald-800"
             >
-              {successMessage}
+              {r(successMessage)}
             </p>
-          ) : null}
+          ) : null)}
 
-          {!loading &&
+          {r(!loading &&
           error &&
           !loaded ? (
             <button
@@ -876,18 +851,14 @@ export default function ServiceImageManager({
                      * Viga kuvatakse komponendis.
                      */
                   }
-                )
-              }
-              disabled={
-                controlsDisabled
-              }
+                )}
+              disabled={controlsDisabled}
               className="mt-3 rounded-full border border-neutral-200 bg-white px-4 py-2 text-xs font-black text-neutral-700 shadow-sm disabled:opacity-50"
             >
-              Proovi uuesti
-            </button>
-          ) : null}
+              {r(marketplaceMessage("horse.try_again.8c63df"))}</button>
+          ) : null)}
         </div>
-      ) : null}
+      ) : null)}
     </section>
   );
 }

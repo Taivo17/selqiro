@@ -1,5 +1,7 @@
 "use client";
 
+import { marketplaceMessage } from "../../../shared/i18n/marketplaceMessages";
+import { useMarketplaceTranslation } from "../../../shared/i18n/useMarketplaceTranslation";
 import LocationAutocomplete from "../../../../app/components/LocationAutocomplete";
 import {
   HORSE_OFFER_LOCATION_COUNTRY_CODE,
@@ -27,6 +29,7 @@ HorseOfferLocationFields({
   value,
   onChange,
 }: HorseOfferLocationFieldsProps) {
+  const { language, r } = useMarketplaceTranslation();
   const branch =
     getHorseOfferLocationBranch(
       offerType
@@ -46,82 +49,68 @@ HorseOfferLocationFields({
   const visibleArea = [
     current.cityOrMunicipality.trim(),
     current.region.trim(),
-    "Eesti",
+    marketplaceMessage("service.estonia.ed7477"),
   ].filter(Boolean);
 
   return (
     <section
       className="rounded-[30px] border border-black/5 bg-white p-5 shadow-sm sm:p-6"
-      data-horse-location-field-mode={
-        branch
-      }
-      data-horse-location-country-code={
-        current.countryCode
-      }
+      data-horse-location-field-mode={branch}
+      data-horse-location-country-code={current.countryCode}
     >
       <p className="text-xs font-black uppercase tracking-[0.22em] text-amber-700">
-        {wanted
-          ? "Otsingupiirkond"
-          : "Asukoht"}
+        {r(wanted
+          ? marketplaceMessage("horse.search_area.6c28ce")
+          : marketplaceMessage("service.location.b55f9b"))}
       </p>
 
       <h2 className="mt-2 text-2xl font-black tracking-tight">
-        {wanted
-          ? "Kust hobust otsid?"
-          : "Hobuse tegelik asukoht"}
+        {r(wanted
+          ? marketplaceMessage("horse.where_are_you_looking_for_a_horse.c9d4da")
+          : marketplaceMessage("horse.horse_s_actual_location.1365c7"))}
       </h2>
 
       <p className="mt-2 max-w-3xl text-sm leading-6 text-neutral-600">
-        {wanted
-          ? "Märgi Eesti linn, vald või piirkond, kust soovid hobust leida. See on otsingukriteerium, mitte ühe konkreetse hobuse tegelik asukoht."
-          : "Märgi Eesti linn või vald ja maakond või piirkond, kus konkreetne hobune tegelikult asub."}
+        {r(wanted
+          ? marketplaceMessage("horse.enter_the_estonian_town_municipality_or_region_where.f903e5")
+          : marketplaceMessage("horse.enter_the_estonian_town_or_municipality_and_county.53d2c5"))}
       </p>
 
       <div className="mt-5 grid items-start gap-4 md:grid-cols-2">
         <div className="rounded-[20px] border border-neutral-200 bg-[#fbfbfa] p-4">
           <span className="text-xs font-black uppercase tracking-[0.16em] text-neutral-500">
-            Riik
-          </span>
+            {r(marketplaceMessage("service.country.8d7336"))}</span>
 
           <div className="mt-3 flex min-h-14 items-center justify-between gap-3 rounded-2xl border border-neutral-200 bg-white px-4 py-3">
             <span className="text-base font-black text-neutral-950">
-              Eesti
-            </span>
+              {r(marketplaceMessage("service.estonia.ed7477"))}</span>
 
             <span className="rounded-full border border-neutral-200 bg-[#fbfbfa] px-3 py-1 text-xs font-black text-neutral-600">
-              {
-                HORSE_OFFER_LOCATION_COUNTRY_CODE
-              }
+              {r(HORSE_OFFER_LOCATION_COUNTRY_CODE)}
             </span>
           </div>
 
           <p className="mt-3 text-xs leading-5 text-neutral-500">
-            Eesti hobusepiloodis on riik
-            fikseeritud ja seda ei saa
-            muuta.
-          </p>
+            {r(marketplaceMessage("horse.the_country_is_fixed_for_the_estonian_horse.9a6a1d"))}</p>
         </div>
 
         <div className="min-w-0 rounded-[20px] border border-neutral-200 bg-[#fbfbfa] p-4">
           <span className="text-xs font-black uppercase tracking-[0.16em] text-neutral-500">
-            {wanted
-              ? "Soovitud linn või vald"
-              : "Linn või vald"}
+            {r(wanted
+              ? marketplaceMessage("horse.preferred_town_or_municipality.329702")
+              : marketplaceMessage("horse.town_or_municipality.fd8f9e"))}
           </span>
 
           <div className="mt-3">
             <LocationAutocomplete
+              language={language}
               key={branch}
               country="Estonia"
               searchScope="locality"
-              value={
-                current.cityOrMunicipality
-              }
-              placeholder={
-                wanted
-                  ? "Näiteks Paide või Tartu"
-                  : "Näiteks Paide"
-              }
+              value={current.cityOrMunicipality}
+              placeholder={r(wanted
+                  ? marketplaceMessage("horse.for_example_paide_or_tartu.e45b69")
+                  : marketplaceMessage("service.for_example_paide.e3ac08"))}
               onTextChange={(nextValue) => {
                 if (
                   nextValue.length
@@ -175,20 +164,13 @@ HorseOfferLocationFields({
 
           <div className="mt-2 flex items-start justify-between gap-3 text-xs leading-5 text-neutral-500">
             <span>
-              Alusta vähemalt kahe tähega.
-              Kui sobivat tulemust ei ole,
-              saad koha käsitsi sisestada.
-            </span>
+              {r(marketplaceMessage("horse.enter_at_least_two_letters_if_no_suitable.17b5c6"))}</span>
 
             <span className="shrink-0 font-black text-neutral-400">
-              {
-                current.cityOrMunicipality
-                  .length
-              }
+              {r(current.cityOrMunicipality
+                  .length)}
               /
-              {
-                HORSE_OFFER_LOCATION_VALUE_MAX_LENGTH
-              }
+              {r(HORSE_OFFER_LOCATION_VALUE_MAX_LENGTH)}
             </span>
           </div>
         </div>
@@ -196,9 +178,9 @@ HorseOfferLocationFields({
 
       <label className="mt-4 block rounded-[20px] border border-neutral-200 bg-[#fbfbfa] p-4">
         <span className="text-xs font-black uppercase tracking-[0.16em] text-neutral-500">
-          {wanted
-            ? "Soovitud maakond või piirkond"
-            : "Maakond või piirkond"}
+          {r(wanted
+            ? marketplaceMessage("horse.preferred_county_or_region.eaa159")
+            : marketplaceMessage("horse.county_or_region.ad8882"))}
         </span>
 
         <input
@@ -213,40 +195,33 @@ HorseOfferLocationFields({
                     event.target.value
                   ),
               },
-            })
-          }
-          placeholder={
-            wanted
-              ? "Näiteks Järvamaa või kogu Eesti"
-              : "Näiteks Järvamaa"
-          }
-          maxLength={
-            HORSE_OFFER_LOCATION_VALUE_MAX_LENGTH
-          }
+            })}
+          placeholder={r(wanted
+              ? marketplaceMessage("horse.for_example_j_rva_county_or_all_of.04e38a")
+              : marketplaceMessage("horse.for_example_j_rva_county.4d3ddc"))}
+          maxLength={HORSE_OFFER_LOCATION_VALUE_MAX_LENGTH}
           className="mt-3 w-full bg-transparent text-base font-bold outline-none placeholder:text-neutral-300"
         />
 
         <span className="mt-2 block text-right text-xs font-black text-neutral-400">
-          {current.region.length}/
-          {
-            HORSE_OFFER_LOCATION_VALUE_MAX_LENGTH
-          }
+          {r(current.region.length)}/
+          {r(HORSE_OFFER_LOCATION_VALUE_MAX_LENGTH)}
         </span>
       </label>
 
-      {hasVisibleArea ? (
+      {r(hasVisibleArea ? (
         <p className="mt-4 rounded-[20px] border border-amber-200 bg-amber-50 px-4 py-3 text-sm font-black leading-6 text-amber-950">
-          {wanted
-            ? "Valitud otsingupiirkond: "
-            : "Hobuse asukoht: "}
-          {visibleArea.join(" · ")}
+          {r(wanted
+            ? marketplaceMessage("horse.selected_search_area.0cf361")
+            : marketplaceMessage("horse.horse_location.2643c9"))}
+          {r(visibleArea.join(" · "))}
         </p>
-      ) : null}
+      ) : null)}
 
       <p className="mt-4 rounded-[20px] border border-neutral-200 bg-[#fbfbfa] px-4 py-3 text-xs leading-5 text-neutral-500">
-        {wanted
-          ? "Otsingupiirkond kirjeldab, kust hobust otsitakse. See ei ole ühe konkreetse hobuse tegelik asukoht."
-          : "Täpset aadressi ega koordinaate siin ei kuvata ega küsita. Avalik asukoht jääb linna või piirkonna tasemele."}
+        {r(wanted
+          ? marketplaceMessage("horse.the_search_area_describes_where_you_are_looking.a13196")
+          : marketplaceMessage("horse.an_exact_address_or_coordinates_are_neither_shown.cd2b5b"))}
       </p>
     </section>
   );

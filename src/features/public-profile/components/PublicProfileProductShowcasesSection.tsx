@@ -1,5 +1,13 @@
 "use client";
 
+import { renderMarketplaceMessage } from "@/src/shared/i18n/marketplaceMessages";
+
+import { useV2Translation } from "@/src/shared/i18n/V2LanguageProvider";
+
+
+import { publicUiMessages } from "@/lib/i18n/catalogs/publicUi";
+
+
 import {
   useMemo,
 } from "react";
@@ -43,6 +51,8 @@ function ShowcaseCard({
   showcase: PublicProductShowcase;
   expanded: boolean;
 }) {
+  const { t } = useV2Translation(publicUiMessages);
+
   return (
     <article
       className={[
@@ -60,13 +70,12 @@ function ShowcaseCard({
       <div className="mt-3 flex min-w-0 items-center justify-between gap-3">
         <span className="max-w-full truncate rounded-full bg-emerald-50 px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.14em] text-emerald-700">
           {showcase.category ||
-            "Tootenäidis"}
+            t("product_showcase")}
         </span>
 
         {showcase.images.length > 1 ? (
           <span className="shrink-0 text-[11px] font-black text-neutral-400">
-            {showcase.images.length} pilti
-          </span>
+            {showcase.images.length}  {t("images")} </span>
         ) : null}
       </div>
 
@@ -102,6 +111,8 @@ PublicProfileProductShowcasesSection({
     expanded: boolean
   ) => void;
 }) {
+  const { language: uiLanguage, t } = useV2Translation(publicUiMessages);
+
   const {
     showcases,
     loading,
@@ -142,12 +153,10 @@ PublicProfileProductShowcasesSection({
       <div className="mb-5 flex min-w-0 items-end justify-between gap-4">
         <div className="min-w-0">
           <p className="inline-flex rounded-full border border-indigo-200 bg-indigo-100 px-3 py-1.5 text-[11px] font-black uppercase tracking-[0.18em] text-indigo-700">
-            Tootenäidised
-          </p>
+            {t("product_showcases")} </p>
 
           <h2 className="mt-2 break-words text-2xl font-black tracking-tight md:text-3xl">
-            Mida see profiil pakub
-          </h2>
+            {t("what_this_profile_offers")} </h2>
         </div>
 
         {!loading &&
@@ -164,11 +173,11 @@ PublicProfileProductShowcasesSection({
             className="shrink-0 rounded-full border border-indigo-200 bg-white px-4 py-2 text-sm font-black text-indigo-700 shadow-sm transition hover:border-indigo-300 hover:bg-indigo-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/30"
           >
             {expanded
-              ? "Näita vähem"
+              ? t("show_less")
               : showcases.length >
                   SHOWCASE_PREVIEW_LIMIT
-                ? `Vaata kõiki (${showcases.length})`
-                : "Vaata lähemalt"}
+                ? t("view_all_count", {count: showcases.length})
+                : t("view_details")}
           </button>
         ) : null}
       </div>
@@ -180,11 +189,10 @@ PublicProfileProductShowcasesSection({
       {!loading && error ? (
         <div className="rounded-[22px] border border-red-100 bg-red-50 p-5">
           <h3 className="font-black text-red-950">
-            Tootenäidiseid ei saanud laadida
-          </h3>
+            {t("could_not_load_product_showcases")} </h3>
 
           <p className="mt-2 text-sm leading-6 text-red-800">
-            {error}
+            {renderMarketplaceMessage(uiLanguage, error)}
           </p>
         </div>
       ) : null}

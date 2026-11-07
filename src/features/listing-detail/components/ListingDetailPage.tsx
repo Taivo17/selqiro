@@ -1,5 +1,17 @@
 "use client";
 
+import { getCategoryLabel } from "@/lib/categories";
+import { getFieldLabel } from "@/lib/categoryFields";
+import { searchConditionLabel } from "@/src/entities/listing/model/publicSearch";
+
+import { renderUiMessage } from "@/lib/i18n/interfaceMessage";
+
+import { useV2Translation } from "@/src/shared/i18n/V2LanguageProvider";
+import { getCatalogTranslation, type TranslationParams } from "@/lib/i18n/useTranslation";
+import type { Language } from "@/lib/i18n/translations";
+import { publicUiMessages } from "@/lib/i18n/catalogs/publicUi";
+
+
 import ListingPrice from "../../../entities/listing/ui/ListingPrice";
 import ListingContactButton from "../../listing-conversation/components/ListingContactButton";
 import { v2IntegrationEnabled } from "../../../shared/config/v2Integration";
@@ -70,20 +82,22 @@ function formatDetailLabel(label: string): string {
 }
 
 function buildDetailRows(
-  listing: ProductListingDetail
+  listing: ProductListingDetail, uiLanguage: Language = "en"
 ): Array<[string, string]> {
+  const t = (key: keyof typeof publicUiMessages.en, params?: TranslationParams) => getCatalogTranslation(uiLanguage, publicUiMessages, key, params);
+
   const baseRows: Array<[string, string | null]> = [
-    ["Kategooria", listing.category],
-    ["Alamkategooria", listing.subcategory],
-    ["Seisukord", listing.condition],
-    ["Asukoht", listing.locationLabel],
-    ["Müüja", listing.sellerName],
+    [t("category"), listing.category ? getCategoryLabel(listing.category, listing.category, uiLanguage) : null],
+    [t("subcategory"), listing.subcategory ? getCategoryLabel(listing.subcategory, listing.subcategory, uiLanguage) : null],
+    [t("condition"), searchConditionLabel(listing.condition, uiLanguage)],
+    [t("location"), listing.locationLabel],
+    [t("seller"), listing.sellerName],
   ];
 
   const detailRows = Object.entries(listing.details || {})
     .map(
       ([key, value]) =>
-        [formatDetailLabel(key), stringifyDetailValue(value)] as [string, string]
+        [getFieldLabel(key, formatDetailLabel(key), uiLanguage), typeof value === "boolean" ? t(value ? "yes" : "no") : stringifyDetailValue(value)] as [string, string]
     )
     .filter(([, value]) => Boolean(value));
 
@@ -131,23 +145,18 @@ function ListingReturnBackButton({
   listingId: string;
   className: string;
 }) {
+  const { language: uiLanguage } = useV2Translation(publicUiMessages);
+
   const router = useRouter();
 
   const [
-    label,
-    setLabel,
-  ] = useState(
-    "← Tagasi kuulutuste juurde"
-  );
+    backContext,
+    setBackContext,
+  ] = useState<ReturnType<typeof readListingReturnContext>>(null);
+  const label = getListingReturnBackLabel(backContext, uiLanguage);
 
   useEffect(() => {
-    setLabel(
-      getListingReturnBackLabel(
-        readListingReturnContext(
-          listingId
-        )
-      )
-    );
+    setBackContext(readListingReturnContext(listingId));
   }, [listingId]);
 
   function handleBack() {
@@ -197,12 +206,13 @@ function ErrorState({
   error: string;
   listingId: string;
 }) {
+  const { language: uiLanguage, t } = useV2Translation(publicUiMessages);
+
   return (
     <section className="rounded-[34px] border border-red-100 bg-red-50 p-8">
       <h1 className="text-3xl font-black text-red-950">
-        Kuulutust ei saanud laadida
-      </h1>
-      <p className="mt-3 text-sm leading-6 text-red-800">{error}</p>
+        {t("could_not_load_listing")} </h1>
+      <p className="mt-3 text-sm leading-6 text-red-800">{renderUiMessage(uiLanguage, error)}</p>
       <ListingReturnBackButton
         listingId={listingId}
         className="mt-6 inline-flex rounded-full bg-black px-5 py-3 text-sm font-black text-white"
@@ -216,12 +226,13 @@ function EmptyState({
 }: {
   listingId: string;
 }) {
+  const { t } = useV2Translation(publicUiMessages);
+
   return (
     <section className="rounded-[34px] border border-black/5 bg-white p-8 text-center shadow-sm">
-      <h1 className="text-3xl font-black">Kuulutust ei leitud</h1>
+      <h1 className="text-3xl font-black">{t("listing_not_found")}</h1>
       <p className="mt-3 text-sm leading-6 text-neutral-500">
-        See kuulutus võib olla eemaldatud, aegunud või mitte avalik.
-      </p>
+        {t("this_listing_may_have_been_removed_expired_or_made_private")} </p>
       <ListingReturnBackButton
         listingId={listingId}
         className="mt-6 inline-flex rounded-full bg-black px-5 py-3 text-sm font-black text-white"
@@ -231,6 +242,8 @@ function EmptyState({
 }
 
 export default function ListingDetailPage({ listingId }: { listingId: string }) {
+  const { language: uiLanguage, t } = useV2Translation(publicUiMessages);
+
   const [showMore, setShowMore] = useState(false);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [lightboxOpen, setLightboxOpen] = useState(false);
@@ -340,7 +353,7 @@ export default function ListingDetailPage({ listingId }: { listingId: string }) 
     selectedGalleryImage?.thumbUrl ||
     listing.imageUrl;
 
-  const detailRows = buildDetailRows(listing);
+  const detailRows = buildDetailRows(listing, uiLanguage);
   const visibleDetails = showMore ? detailRows : detailRows.slice(0, 6);
 
   function showPreviousImage() {
@@ -471,8 +484,8 @@ export default function ListingDetailPage({ listingId }: { listingId: string }) 
           />
 
           <p className="text-sm font-semibold text-neutral-500">
-            {listing.category || "Kuulutus"}
-            {listing.subcategory ? ` · ${listing.subcategory}` : ""}
+            {listing.category ? getCategoryLabel(listing.category, listing.category, uiLanguage) : t("listing_2")}
+            {listing.subcategory ? ` · ${getCategoryLabel(listing.subcategory, listing.subcategory, uiLanguage)}` : ""}
           </p>
         </div>
 
@@ -511,7 +524,7 @@ export default function ListingDetailPage({ listingId }: { listingId: string }) 
                 <div
                   role="button"
                   tabIndex={0}
-                  aria-label="Näita galerii nuppe"
+                  aria-label={t("show_gallery_controls")}
                   className="absolute inset-0 z-10 cursor-default bg-transparent focus:outline-none"
                   style={{ touchAction: "pan-y" }}
                   onMouseMove={revealGalleryControls}
@@ -531,7 +544,7 @@ export default function ListingDetailPage({ listingId }: { listingId: string }) 
                     showPreviousImage();
                   }}
                     className="flex h-11 w-11 items-center justify-center rounded-full bg-white/90 text-2xl font-black shadow-sm backdrop-blur transition hover:bg-white"
-                    aria-label="Eelmine pilt"
+                    aria-label={t("previous_image")}
                   >
                     ‹
                   </button>
@@ -543,7 +556,7 @@ export default function ListingDetailPage({ listingId }: { listingId: string }) 
                     showNextImage();
                   }}
                     className="flex h-11 w-11 items-center justify-center rounded-full bg-white/90 text-2xl font-black shadow-sm backdrop-blur transition hover:bg-white"
-                    aria-label="Järgmine pilt"
+                    aria-label={t("next_image")}
                   >
                     ›
                   </button>
@@ -574,7 +587,7 @@ export default function ListingDetailPage({ listingId }: { listingId: string }) 
                             ? "border-emerald-400 bg-emerald-50"
                             : "border-transparent hover:border-neutral-200",
                         ].join(" ")}
-                        aria-label={`Näita pilt ${index + 1}`}
+                        aria-label={t("show_image_number", {index: index + 1})}
                       >
                         <img
                           src={url}
@@ -598,10 +611,9 @@ export default function ListingDetailPage({ listingId }: { listingId: string }) 
               <div className="flex items-start justify-between gap-4">
                 <div>
                   <p className="text-xs font-black uppercase tracking-[0.18em] text-emerald-600">
-                    Kuulutus
-                  </p>
+                    {t("listing_2")} </p>
                   <h1 className="mt-3 text-3xl font-black tracking-tight">
-                    {listing.title}
+                    {listing.title || t("untitled_listing")}
                   </h1>
                 </div>
 
@@ -613,32 +625,26 @@ export default function ListingDetailPage({ listingId }: { listingId: string }) 
               <ListingPrice price={listing} className="mt-5" labelClassName="text-4xl" />
 
               <div className="mt-5 rounded-2xl bg-white p-4">
-                <p className="text-sm font-bold">{listing.locationLabel}</p>
+                <p className="text-sm font-bold">{listing.locationLabel || t("location_unspecified")}</p>
                 {listing.distanceLabel ? (
                   <p className="mt-1 text-sm text-neutral-500">
-                    {listing.distanceLabel} sinust
-                  </p>
+                    {listing.distanceLabel}  {t("from_you")} </p>
                 ) : null}
                 <p className="mt-3 text-xs leading-5 text-neutral-400">
-                  Eraisiku asukoht võib olla ligikaudne. Täpne koht lepitakse
-                  kokku müüjaga.
-                </p>
+                  {t("a_private_seller_s_location_may_be_approximate_agree_the_exact_location_wit")} </p>
               </div>
 
               <div className="mt-5 grid gap-3">
                 {v2IntegrationEnabled() ? <ListingContactButton listingId={listing.id} className="w-full rounded-full bg-black px-5 py-3 text-sm font-black text-white disabled:opacity-50" /> : <button className="rounded-full bg-black px-5 py-3 text-sm font-black text-white">
-                  Kirjuta müüjale
-                </button>}
+                  {t("contact_seller")} </button>}
                 <button className="rounded-full border border-neutral-200 bg-white px-5 py-3 text-sm font-black">
-                  Salvesta kuulutus
-                </button>
+                  {t("save_listing")} </button>
               </div>
             </div>
 
             <div className="rounded-[28px] border border-black/5 bg-white p-6 shadow-sm">
               <p className="text-xs font-bold uppercase tracking-[0.22em] text-neutral-400">
-                Müüja
-              </p>
+                {t("seller")} </p>
 
               <div className="mt-4 flex items-center gap-4">
                 {listing.sellerAvatarUrl ? (
@@ -655,9 +661,9 @@ export default function ListingDetailPage({ listingId }: { listingId: string }) 
                 )}
 
                 <div>
-                  <h2 className="font-black">{listing.sellerName}</h2>
+                  <h2 className="font-black">{listing.sellerName || t("seller")}</h2>
                   <p className="text-sm text-neutral-500">
-                    {listing.sellerType || "Müüja"}
+                    {listing.sellerType === "private" ? t("private_seller") : listing.sellerType === "business" ? t("business_seller") : t("seller")}
                   </p>
                 </div>
               </div>
@@ -667,8 +673,7 @@ export default function ListingDetailPage({ listingId }: { listingId: string }) 
                   href={`/v2/profile/${listing.sellerSlug}`}
                   className="mt-5 inline-flex w-full justify-center rounded-full border border-neutral-200 bg-white px-5 py-3 text-sm font-black"
                 >
-                  Vaata profiili
-                </Link>
+                  {t("view_profile")} </Link>
               ) : null}
             </div>
           </aside>
@@ -678,8 +683,7 @@ export default function ListingDetailPage({ listingId }: { listingId: string }) 
       <section className="grid gap-8 lg:grid-cols-[1fr_1fr]">
         <div className="rounded-[34px] border border-black/5 bg-white p-6 shadow-sm md:p-8">
           <p className="text-xs font-bold uppercase tracking-[0.24em] text-neutral-400">
-            Kirjeldus
-          </p>
+            {t("description")} </p>
 
           {listing.description ? (
             <p className="mt-4 text-base leading-8 text-neutral-700">
@@ -687,22 +691,20 @@ export default function ListingDetailPage({ listingId }: { listingId: string }) 
             </p>
           ) : (
             <p className="mt-4 text-base leading-8 text-neutral-500">
-              Müüja ei ole kirjeldust lisanud.
-            </p>
+              {t("the_seller_has_not_added_a_description")} </p>
           )}
 
           <button
             onClick={() => setShowMore((value) => !value)}
             className="mt-5 rounded-full border border-neutral-200 bg-white px-5 py-3 text-sm font-black shadow-sm"
           >
-            {showMore ? "Näita vähem" : "Näita rohkem"}
+            {showMore ? t("show_less") : t("show_more")}
           </button>
         </div>
 
         <div className="rounded-[34px] border border-black/5 bg-white p-6 shadow-sm md:p-8">
           <p className="text-xs font-bold uppercase tracking-[0.24em] text-neutral-400">
-            Olulised detailid
-          </p>
+            {t("key_details")} </p>
 
           {visibleDetails.length > 0 ? (
             <div className="mt-5 grid gap-3 sm:grid-cols-2">
@@ -720,13 +722,11 @@ export default function ListingDetailPage({ listingId }: { listingId: string }) 
             </div>
           ) : (
             <p className="mt-4 text-sm leading-6 text-neutral-500">
-              Detailvälju ei ole lisatud.
-            </p>
+              {t("no_detail_fields_have_been_added")} </p>
           )}
 
           <p className="mt-5 text-sm text-neutral-500">
-            “Näita rohkem” avab rohkem kuulutuse infot, kui seda on lisatud.
-          </p>
+            {t("show_more_displays_further_listing_information_when_available")} </p>
         </div>
       </section>
       {lightboxOpen && lightboxImageUrl ? (
@@ -736,7 +736,7 @@ export default function ListingDetailPage({ listingId }: { listingId: string }) 
           onMouseMove={revealLightboxControls}
           role="dialog"
           aria-modal="true"
-          aria-label="Suur pilt"
+          aria-label={t("full_size_image")}
         >
           <button
             type="button"
@@ -745,7 +745,7 @@ export default function ListingDetailPage({ listingId }: { listingId: string }) 
               setLightboxOpen(false);
             }}
             className="absolute right-4 top-4 z-30 flex h-11 w-11 items-center justify-center rounded-full bg-white/90 text-2xl font-black shadow-sm transition hover:bg-white"
-            aria-label="Sulge pilt"
+            aria-label={t("close_image")}
           >
             ×
           </button>
@@ -777,7 +777,7 @@ export default function ListingDetailPage({ listingId }: { listingId: string }) 
                     revealLightboxControls();
                   }}
                   className="pointer-events-auto flex h-12 w-12 items-center justify-center rounded-full bg-white/90 text-3xl font-black shadow-sm transition hover:bg-white"
-                  aria-label="Eelmine pilt"
+                  aria-label={t("previous_image")}
                 >
                   ‹
                 </button>
@@ -790,7 +790,7 @@ export default function ListingDetailPage({ listingId }: { listingId: string }) 
                     revealLightboxControls();
                   }}
                   className="pointer-events-auto flex h-12 w-12 items-center justify-center rounded-full bg-white/90 text-3xl font-black shadow-sm transition hover:bg-white"
-                  aria-label="Järgmine pilt"
+                  aria-label={t("next_image")}
                 >
                   ›
                 </button>

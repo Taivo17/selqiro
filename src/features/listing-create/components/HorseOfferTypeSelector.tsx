@@ -1,5 +1,7 @@
 "use client";
 
+import { marketplaceMessage } from "../../../shared/i18n/marketplaceMessages";
+import { useMarketplaceTranslation } from "../../../shared/i18n/useMarketplaceTranslation";
 import {
   getHorseOfferTypeOption,
   HORSE_OFFER_TYPE_OPTIONS,
@@ -20,33 +22,30 @@ HorseOfferTypeSelector({
   onChange,
   disabled = false,
 }: HorseOfferTypeSelectorProps) {
+  const { language, r } = useMarketplaceTranslation();
   const selectedOption =
     getHorseOfferTypeOption(value);
 
   return (
     <section
       className="rounded-[30px] border border-black/5 bg-white p-5 shadow-sm sm:p-6"
-      data-horse-offer-type={
-        value || "unselected"
-      }
+      data-horse-offer-type={value || "unselected"}
     >
       <fieldset disabled={disabled}>
         <legend className="text-xs font-black uppercase tracking-[0.22em] text-amber-700">
-          Hobusepakkumise liik
-        </legend>
+          {r(marketplaceMessage("horse.horse_listing_type.d16611"))}</legend>
 
         <h2 className="mt-2 text-2xl font-black tracking-tight">
-          Mida soovid teha?
-        </h2>
+          {r(marketplaceMessage("horse.what_would_you_like_to_do.0c697f"))}</h2>
 
         <p className="mt-2 max-w-3xl text-sm leading-6 text-neutral-600">
-          {disabled
-            ? "Selle salvestuse pakkumiseliik on lukus. Teise liigi jaoks ava eraldi uus vorm; olemasolevat mustandit ei teisendata."
-            : "Vali pakkumise liik. See määrab hobuseväljad ja enne avaldamist nõutavad kinnitused."}
+          {r(disabled
+            ? marketplaceMessage("horse.the_listing_type_is_locked_for_this_save.f2487d")
+            : marketplaceMessage("horse.choose_a_listing_type_this_determines_the_horse.cc5a39"))}
         </p>
 
         <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
-          {HORSE_OFFER_TYPE_OPTIONS.map(
+          {r(HORSE_OFFER_TYPE_OPTIONS.map(
             (option) => {
               const selected =
                 option.value === value;
@@ -64,8 +63,7 @@ HorseOfferTypeSelector({
                     onChange={() =>
                       onChange(
                         option.value
-                      )
-                    }
+                      )}
                     className="peer sr-only"
                   />
 
@@ -80,11 +78,11 @@ HorseOfferTypeSelector({
                   >
                     <span className="min-w-0">
                       <span className="block text-base font-black">
-                        {option.label}
+                        {r(option.label)}
                       </span>
 
                       <span className="mt-1 block text-sm leading-6 text-neutral-600">
-                        {option.description}
+                        {r(option.description)}
                       </span>
                     </span>
 
@@ -97,15 +95,15 @@ HorseOfferTypeSelector({
                           : "border-neutral-300 bg-white",
                       ].join(" ")}
                     >
-                      {selected ? (
+                      {r(selected ? (
                         <span className="h-2 w-2 rounded-full bg-amber-950" />
-                      ) : null}
+                      ) : null)}
                     </span>
                   </span>
                 </label>
               );
             }
-          )}
+          ))}
         </div>
       </fieldset>
 
@@ -118,9 +116,9 @@ HorseOfferTypeSelector({
             : "border-neutral-200 bg-[#fbfbfa] text-neutral-600",
         ].join(" ")}
       >
-        {selectedOption
-          ? `Valitud: ${selectedOption.label}.`
-          : "Pakkumise liik ei ole veel valitud."}
+        {r(selectedOption
+          ? marketplaceMessage("horse.selected_value.6734b5", { p0: String(selectedOption.label) })
+          : marketplaceMessage("horse.no_listing_type_selected_yet.6edb2a"))}
       </p>
     </section>
   );

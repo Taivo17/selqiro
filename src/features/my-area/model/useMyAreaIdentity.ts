@@ -1,4 +1,6 @@
 "use client";
+import { uiMessage } from "../../../../lib/i18n/interfaceMessage";
+
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { getActiveIdentity } from "../../../entities/identity/api/getActiveIdentity";
@@ -51,14 +53,14 @@ export function useMyAreaIdentity() {
       if (!current()) return;
       // Do not turn a fallback identity or a crossed account/identity read into a profile link.
       if (!identity || identity.id !== confirmed.identityId || user.id !== confirmed.userId) {
-        throw new Error("Aktiivne konto või identiteet muutus.");
+        throw new Error(uiMessage("the_active_account_or_identity_changed"));
       }
       setState({ identity, loading: false, anonymous: false, error: null });
     } catch {
       if (!current()) return;
       setState({
         identity: null, loading: false, anonymous: false,
-        error: "Aktiivset identiteeti ei saanud kontrollida. Proovi uuesti.",
+        error: uiMessage("could_not_verify_the_active_identity_try_again"),
       });
     }
   }, []);

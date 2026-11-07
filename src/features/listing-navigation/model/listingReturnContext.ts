@@ -1,3 +1,6 @@
+import type { Language } from "../../../../lib/i18n/translations";
+import { getCatalogTranslation } from "../../../../lib/i18n/useTranslation";
+import { listingPresentationMessages } from "../../../../lib/i18n/catalogs/listingPresentation";
 export type ListingReturnSource =
   | "products"
   | "public-profile";
@@ -626,10 +629,8 @@ export function
 getListingReturnBackLabel(
   context:
     | ListingReturnContext
-    | null
+    | null,
+  language: Language = "en"
 ): string {
-  return context?.source ===
-    "public-profile"
-    ? "← Tagasi profiilile"
-    : "← Tagasi kuulutuste juurde";
+  return getCatalogTranslation(language, listingPresentationMessages, context?.source === "public-profile" ? "back_profile" : "back_listings");
 }

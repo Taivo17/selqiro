@@ -1,3 +1,4 @@
+import { marketplaceMessage } from "../../../shared/i18n/marketplaceMessages";
 import { supabaseBrowserClient } from "../../../shared/supabase/browserClient";
 import {
   SERVICE_STATUSES,
@@ -53,7 +54,7 @@ function normalizeStatus(
     )
   ) {
     throw new Error(
-      "Valitud teenuse staatus ei ole korrektne."
+      marketplaceMessage("service.the_selected_service_status_is_invalid.c72279")
     );
   }
 
@@ -83,7 +84,7 @@ function getStatusErrorMessage(
       "permission"
     )
   ) {
-    return "Aktiivne identiteet puudub või sul ei ole õigust selle teenuse staatust muuta.";
+    return marketplaceMessage("service.there_is_no_active_identity_or_you_do.487f1c");
   }
 
   if (
@@ -91,7 +92,7 @@ function getStatusErrorMessage(
       "service id"
     )
   ) {
-    return "Teenuse ID ei ole korrektne.";
+    return marketplaceMessage("service.the_service_id_is_invalid.23000a");
   }
 
   if (
@@ -102,7 +103,7 @@ function getStatusErrorMessage(
       "status is invalid"
     )
   ) {
-    return "Valitud teenuse staatus ei ole korrektne.";
+    return marketplaceMessage("service.the_selected_service_status_is_invalid.c72279");
   }
 
   return message || fallback;
@@ -116,7 +117,7 @@ export async function setMyServiceStatus(
 ): Promise<Service> {
   const serviceId = normalizeUuid(
     input.serviceId,
-    "Teenuse ID ei ole korrektne."
+    marketplaceMessage("service.the_service_id_is_invalid.23000a")
   );
 
   const status = normalizeStatus(
@@ -136,7 +137,7 @@ export async function setMyServiceStatus(
     throw new Error(
       getStatusErrorMessage(
         error,
-        "Teenuse staatust ei saanud muuta."
+        marketplaceMessage("service.the_service_status_could_not_be_changed.076de2")
       )
     );
   }
@@ -150,7 +151,7 @@ export async function setMyServiceStatus(
 
   if (!row) {
     throw new Error(
-      "Andmebaas ei tagastanud muudetud teenust."
+      marketplaceMessage("service.the_database_did_not_return_the_updated_service.2002de")
     );
   }
 
@@ -162,7 +163,7 @@ export async function setMyServiceStatus(
     service.status !== status
   ) {
     throw new Error(
-      "Andmebaas tagastas ootamatu teenuse staatuse."
+      marketplaceMessage("service.the_database_returned_an_unexpected_service_status.3b1c44")
     );
   }
 
@@ -171,7 +172,7 @@ export async function setMyServiceStatus(
     !service.publishedAt
   ) {
     throw new Error(
-      "Avaldatud teenusel puudub avaldamise aeg."
+      marketplaceMessage("service.the_published_service_has_no_publication_date.991665")
     );
   }
 

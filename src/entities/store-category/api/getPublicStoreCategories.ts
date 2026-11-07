@@ -1,3 +1,4 @@
+import { marketplaceMessage, safeMarketplaceError } from "../../../shared/i18n/marketplaceMessages";
 import { supabaseBrowserClient } from "../../../shared/supabase/browserClient";
 import type { StoreCategory } from "../model/types";
 
@@ -62,8 +63,7 @@ export async function getPublicStoreCategories(
 
   if (error) {
     throw new Error(
-      error.message ||
-        "Avaliku profiili poe-rubriike ei saanud laadida."
+      safeMarketplaceError(error, marketplaceMessage("category.the_public_profile_s_shop_categories_could_not.d6a731"))
     );
   }
 

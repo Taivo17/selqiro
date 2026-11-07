@@ -34,13 +34,13 @@ export class ListingEditSession {
     // Authentication loss/account change drops account-bound plaintext, not just the save button.
     if (!actor || actor.userId !== this.key.userId) {
       this.epoch++; this.controller?.abort(); this.set({ closed: true, context: "blocked", snapshot: null, draft: null, reviewed: null,
-        work: "idle", problem: "context", message: "Konto muutus. Ava vorm õige kontoga uuesti.", saved: false }); return;
+        work: "idle", problem: "context", message: "sessionAccountChanged", saved: false }); return;
     }
     const context = actor.identityId === this.key.identityId ? "ready" : "blocked";
     if (context !== this.state.context) {
       this.epoch++; this.controller?.abort();
       this.set({ context, saved: false, reviewed: null,
-        ...(this.pending === "write" ? { problem: "unknown" as const, message: "Salvestuse ajal muutus kontekst. Kontrolli salvestatud versiooni; kirjutust ei korrata." } : {}) });
+        ...(this.pending === "write" ? { problem: "unknown" as const, message: "saveContextChanged" } : {}) });
     }
   }
   dispose() { this.disposed = true; this.epoch++; this.controller?.abort(); this.listeners.clear(); this.set({ closed: true,
@@ -71,13 +71,13 @@ export class ListingEditSession {
       const loaded = await this.api.read(this.key, this.controller.signal);
       if (!this.current(epoch)) return;
       if (this.state.snapshot && BigInt(loaded.price.revision) < BigInt(this.state.snapshot.price.revision)) throw new Error("Older snapshot");
-      if (review) this.set({ reviewed: loaded, message: "Salvestatud versioon on kontrollitud. Kohalik sisestus on endiselt alles." });
+      if (review) this.set({ reviewed: loaded, message: "savedReviewed" });
       else this.set({ snapshot: loaded, draft: buildListingEditDraft(loaded), problem: null, saved: false });
     } catch (error) {
       if (this.current(epoch)) {
         const e = classifyListingEditError(error);
         // Preserve a previous unknown/conflict gate if the reconciliation read fails.
-        this.set({ ...(review ? {} : { problem: e.code }), message: "Salvestatud kuulutust ei saanud lugeda. Olemasolev sisestus on alles." });
+        this.set({ ...(review ? {} : { problem: e.code }), message: "savedReadFailed" });
       }
     } finally { this.pending = null; this.controller = null; if (!this.disposed && !this.state.closed) this.set({ work: "idle" }); }
   }
@@ -86,20 +86,20 @@ export class ListingEditSession {
     if (!discardConfirmed || !this.canEdit() || !this.state.reviewed) return;
     const loaded = this.state.reviewed;
     this.set({ snapshot: loaded, draft: buildListingEditDraft(loaded), reviewed: null, problem: null,
-      message: "Vorm kasutab kontrollitud salvestatud versiooni.", saved: false });
+      message: "usingReviewed", saved: false });
   }
   async save() {
     if (!this.canSave() || !this.state.snapshot || !this.state.draft) return;
     let command;
     try { command = buildListingEditCommand(this.key, this.state.snapshot, this.state.draft); }
-    catch (error) { this.set({ problem: "invalid", message: error instanceof Error ? error.message : "Kontrolli sisestust." }); return; }
+    catch (error) { this.set({ problem: "invalid", message: error instanceof Error ? error.message : "checkInput" }); return; }
     const epoch = this.epoch; this.pending = "write"; this.controller = new AbortController(); // synchronous: a second click cannot dispatch another write
     this.set({ work: "saving", saved: false, reviewed: null, problem: null, message: null });
     try {
       const result = await this.api.save(command, this.controller.signal);
       if (!this.current(epoch)) return;
       this.set({ snapshot: result.snapshot, draft: buildListingEditDraft(result.snapshot), problem: null,
-        message: "Salvestatud.", saved: true });
+        message: "saved", saved: true });
     } catch (error) {
       if (this.current(epoch)) { const e = classifyListingEditError(error); this.set({ problem: e.code, message: e.message }); }
     } finally { this.pending = null; this.controller = null; if (!this.disposed && !this.state.closed) this.set({ work: "idle" }); }

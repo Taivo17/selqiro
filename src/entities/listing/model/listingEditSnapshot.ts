@@ -12,18 +12,18 @@ export type ListingEditSnapshot = Readonly<{
 }>;
 export type ListingEditProblem = "invalid" | "context" | "conflict" | "forbidden" | "unavailable" | "unknown";
 const messages: Record<ListingEditProblem, string> = {
-  invalid: "Kontrolli kuulutuse pealkirja, kirjeldust, seisukorda ja hinda.",
-  context: "Konto või aktiivne identiteet muutus. Sisestust ei salvestatud selle kontrolli kaudu.",
-  conflict: "Kuulutust on vahepeal muudetud. Sinu sisestus on alles; kontrolli salvestatud versiooni.",
-  forbidden: "Selle kuulutuse muutmiseks puudub praegu õigus.",
-  unavailable: "Uus hinnasalvestus pole praegu saadaval. Vana salvestusteed ei kasutata asendusena.",
-  unknown: "Salvestuse tulemust ei saanud kinnitada. Sisestus on alles. Ära korda salvestamist; kontrolli salvestatud versiooni.",
+  invalid: "edit.invalid",
+  context: "edit.context",
+  conflict: "edit.conflict",
+  forbidden: "edit.forbidden",
+  unavailable: "edit.unavailable",
+  unknown: "edit.unknown",
 };
 export class ListingEditError extends Error {
   constructor(readonly code: ListingEditProblem, message = messages[code]) { super(message); this.name = "ListingEditError"; }
 }
 export function editEnsure(value: unknown): asserts value {
-  if (!value) throw new ListingEditError("unknown", "Kuulutuse muutmise vastuse vorming ei sobi.");
+  if (!value) throw new ListingEditError("unknown", "edit.responseInvalid");
 }
 export function editRecord(value: unknown, fields: readonly string[]): Record<string, unknown> {
   editEnsure(value !== null && typeof value === "object" && !Array.isArray(value));

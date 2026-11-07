@@ -1,5 +1,13 @@
 "use client";
 
+import { renderUiMessage } from "@/lib/i18n/interfaceMessage";
+
+import { useV2Translation } from "@/src/shared/i18n/V2LanguageProvider";
+import { getCatalogTranslation, type TranslationParams } from "@/lib/i18n/useTranslation";
+import type { Language } from "@/lib/i18n/translations";
+import { shellUiMessages } from "@/lib/i18n/catalogs/shellUi";
+
+
 import {
   useCallback,
   useEffect,
@@ -13,11 +21,13 @@ import { useV2IdentitySwitcher } from "../model/useV2IdentitySwitcher";
 import { safeMessageAvatar } from "../../../entities/conversation/model/messagingValidation";
 
 function identityTypeLabel(
-  identity: IdentitySummary
+  identity: IdentitySummary, uiLanguage: Language = "en"
 ) {
+  const t = (key: keyof typeof shellUiMessages.en, params?: TranslationParams) => getCatalogTranslation(uiLanguage, shellUiMessages, key, params);
+
   return identity.type === "business"
-    ? "Ettevõte"
-    : "Eraisik";
+    ? t("business")
+    : t("private_person");
 }
 
 function IdentityAvatar({
@@ -71,6 +81,8 @@ export default function V2IdentityBadge({
   userId: string | null;
   userEmail?: string | null;
 }) {
+  const { language: uiLanguage, t } = useV2Translation(shellUiMessages);
+
   const pathname = usePathname();
 
   const {
@@ -148,8 +160,8 @@ export default function V2IdentityBadge({
   }, [menuOpen, setMenuOpen]);
 
   const label = loading
-    ? "Kontrollin..."
-    : switchingIdentityId ? "Vahetan..." : activeIdentity?.displayName || "Vali identiteet";
+    ? t("checking")
+    : switchingIdentityId ? t("switching") : activeIdentity ? activeIdentity.displayName || t("identity") : t("choose_identity");
 
   async function handleIdentityChange(
     identityId: string
@@ -195,7 +207,7 @@ export default function V2IdentityBadge({
         type="button"
         aria-haspopup="menu"
         aria-expanded={menuOpen}
-        aria-label={activeIdentity ? `Tegutsen kui ${activeIdentity.displayName}. Vaheta identiteeti` : "Vali aktiivne identiteet"}
+        aria-label={activeIdentity ? t("acting_as_change_identity", {name: activeIdentity.displayName || t("identity")}) : t("choose_active_identity")}
         title={label}
         disabled={loading || Boolean(switchingIdentityId)}
         onClick={() =>
@@ -212,8 +224,7 @@ export default function V2IdentityBadge({
 
         <span className="min-w-0 flex-1">
           <span className="hidden text-[10px] uppercase tracking-[0.18em] text-neutral-400 sm:block">
-            Tegutsen kui
-          </span>
+            {t("acting_as")} </span>
 
           <span className="block max-w-[64px] truncate font-semibold sm:max-w-[160px]">
             {label}
@@ -236,22 +247,18 @@ export default function V2IdentityBadge({
       {menuOpen ? (
         <div
           role="menu"
-          aria-label="Vali aktiivne identiteet"
+          aria-label={t("choose_active_identity")}
           className="absolute right-0 top-[calc(100%+10px)] z-50 w-[320px] max-w-[calc(100vw-2rem)] rounded-[24px] border border-black/10 bg-white p-3 shadow-2xl"
         >
           <div className="px-2 pb-3 pt-1">
             <p className="text-xs font-black uppercase tracking-[0.18em] text-neutral-400">
-              Tegutsen kui
-            </p>
+              {t("acting_as")} </p>
 
             <p className="mt-1 text-sm font-black">
-              Vali aktiivne identiteet
-            </p>
+              {t("choose_active_identity")} </p>
 
             <p className="mt-1 text-xs leading-5 text-neutral-500">
-              Aktiivne identiteet määrab Minu ala,
-              kuulutuste ja omanikuvaadete sisu.
-            </p>
+              {t("your_active_identity_determines_the_listings_and_owner_information_shown_in")} </p>
           </div>
 
           <div className="space-y-2">
@@ -295,7 +302,7 @@ export default function V2IdentityBadge({
 
                     <span className="min-w-0 flex-1">
                       <span className="block truncate text-sm font-black">
-                        {identity.displayName}
+                        {identity.displayName || t("identity")}
                       </span>
 
                       <span
@@ -307,9 +314,9 @@ export default function V2IdentityBadge({
                         ].join(" ")}
                       >
                         {switching
-                          ? "Vahetan..."
+                          ? t("switching")
                           : identityTypeLabel(
-                              identity
+                              identity, uiLanguage
                             )}
                       </span>
                     </span>
@@ -319,8 +326,7 @@ export default function V2IdentityBadge({
                         className="shrink-0 rounded-full bg-white/15 px-2.5 py-1 text-[11px] font-black"
                         aria-hidden="true"
                       >
-                        ✓ Aktiivne
-                      </span>
+                        {t("active")} </span>
                     ) : (
                       <span
                         className="shrink-0 text-lg text-neutral-300"
@@ -339,13 +345,10 @@ export default function V2IdentityBadge({
           identities.length === 0 ? (
             <div className="rounded-2xl border border-dashed border-neutral-200 bg-[#fbfbfa] p-4">
               <p className="text-sm font-black">
-                Identiteete ei leitud
-              </p>
+                {t("no_identities_found")} </p>
 
               <p className="mt-1 text-xs leading-5 text-neutral-500">
-                Kontol puudub aktiivne era- või
-                ettevõtteidentiteet.
-              </p>
+                {t("this_account_has_no_active_private_or_business_identity")} </p>
             </div>
           ) : null}
 
@@ -355,11 +358,10 @@ export default function V2IdentityBadge({
               className="mt-3 rounded-2xl border border-red-100 bg-red-50 p-3"
             >
               <p className="text-xs font-black text-red-950">
-                Identiteeti ei saanud vahetada
-              </p>
+                {t("could_not_switch_identity")} </p>
 
               <p className="mt-1 text-xs leading-5 text-red-800">
-                {error}
+                {renderUiMessage(uiLanguage, error)}
               </p>
             </div>
           ) : null}

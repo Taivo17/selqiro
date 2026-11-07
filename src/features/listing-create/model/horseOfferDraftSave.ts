@@ -1,3 +1,4 @@
+import { marketplaceMessage } from "../../../shared/i18n/marketplaceMessages";
 import {
   EE_HORSE_OFFER_CURRENCY,
   EE_HORSE_OFFER_MARKET_COUNTRY_CODE,
@@ -92,7 +93,7 @@ function parseOptionalInteger(
   if (!/^\d+$/.test(normalized)) {
     throw new HorseOfferDraftPayloadError(
       field,
-      "Birth year must be a whole number."
+      marketplaceMessage("horse.the_birth_year_must_be_a_whole_number.aed8bf")
     );
   }
 
@@ -105,7 +106,7 @@ function parseOptionalInteger(
   ) {
     throw new HorseOfferDraftPayloadError(
       field,
-      `Birth year must be between ${minimum} and ${maximum}.`
+      marketplaceMessage("horse.the_birth_year_must_be_between_value_and.23fc3a", { p0: String(minimum), p1: String(maximum) })
     );
   }
 
@@ -125,7 +126,7 @@ function parseOptionalHeight(
   if (!/^\d{1,3}(?:\.\d)?$/.test(normalized)) {
     throw new HorseOfferDraftPayloadError(
       "heightCm",
-      "Horse height must be a number with at most one decimal place."
+      marketplaceMessage("horse.the_height_must_be_a_number_with_at.199e0d")
     );
   }
 
@@ -138,7 +139,7 @@ function parseOptionalHeight(
   ) {
     throw new HorseOfferDraftPayloadError(
       "heightCm",
-      "Horse height must be between 1 and 300 cm."
+      marketplaceMessage("horse.the_height_must_be_between_1_and_300.94d629")
     );
   }
 
@@ -161,7 +162,7 @@ function parseOptionalMoney(
   if (!/^\d{1,10}(?:\.\d{1,2})?$/.test(normalized)) {
     throw new HorseOfferDraftPayloadError(
       field,
-      "Amount must contain up to ten whole-number digits and at most two decimals."
+      marketplaceMessage("horse.the_amount_may_contain_up_to_ten_whole.059ae5")
     );
   }
 
@@ -174,7 +175,7 @@ function parseOptionalMoney(
   ) {
     throw new HorseOfferDraftPayloadError(
       field,
-      "Amount is outside the supported range."
+      marketplaceMessage("horse.the_amount_is_outside_the_supported_range.c138c7")
     );
   }
 
@@ -195,7 +196,7 @@ function requireMoney(
   if (amount === null) {
     throw new HorseOfferDraftPayloadError(
       field,
-      "Selected price mode requires an amount."
+      marketplaceMessage("horse.the_selected_price_type_requires_an_amount.213367")
     );
   }
 
@@ -230,7 +231,7 @@ function requireRecurringFeePeriod(
   if (!value) {
     throw new HorseOfferDraftPayloadError(
       "recurringFeePeriod",
-      "Lease and co-rider drafts require a fee period."
+      marketplaceMessage("horse.lease_and_co_rider_drafts_require_a_payment.d7d928")
     );
   }
 
@@ -289,7 +290,7 @@ function requireEstoniaLocation(
   ) {
     throw new HorseOfferDraftPayloadError(
       "locationCountry",
-      "The Estonia horse-offer pilot accepts only EE locations."
+      marketplaceMessage("horse.the_estonian_horse_listing_pilot_accepts_only_locations.b27ead")
     );
   }
 }

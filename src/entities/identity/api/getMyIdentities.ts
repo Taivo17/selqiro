@@ -61,8 +61,8 @@ export async function getMyIdentities(): Promise<
         (
           item.display_name ||
           item.store_name ||
-          "Identiteet"
-        ).trim() || "Identiteet";
+          ""
+        ).trim() || "";
 
       return {
         id: item.id,

@@ -1,3 +1,4 @@
+import { marketplaceMessage, safeMarketplaceError } from "../../../shared/i18n/marketplaceMessages";
 import {
   supabaseBrowserClient,
 } from "../../../shared/supabase/browserClient";
@@ -62,7 +63,7 @@ function normalizeIdentityId(
 
   if (!UUID_PATTERN.test(cleanValue)) {
     throw new Error(
-      "Avaliku profiili identiteedi ID ei ole korrektne."
+      marketplaceMessage("service.the_public_profile_identity_id_is_invalid.ee7d8e")
     );
   }
 
@@ -374,7 +375,7 @@ getPublicProductShowcases(input: {
       if (error) throw error;
       return parsePublicProfileShowcasesV1(data, request);
     } catch {
-      throw new Error("Avaliku profiili tootenäidiseid ei saanud laadida. Proovi uuesti.");
+      throw new Error(marketplaceMessage("showcase.the_public_profile_s_product_showcases_could_not.217c1d"));
     }
   }
 
@@ -426,8 +427,7 @@ getPublicProductShowcases(input: {
 
   if (showcaseError) {
     throw new Error(
-      showcaseError.message ||
-        "Avaliku profiili tootenäidiseid ei saanud laadida."
+      safeMarketplaceError(showcaseError, marketplaceMessage("showcase.the_public_profile_s_product_showcases_could_not.da9be6"))
     );
   }
 
@@ -512,8 +512,7 @@ getPublicProductShowcases(input: {
 
   if (imageError) {
     throw new Error(
-      imageError.message ||
-        "Avaliku profiili tootenäidiste pilte ei saanud laadida."
+      safeMarketplaceError(imageError, marketplaceMessage("showcase.the_public_profile_s_product_showcase_images_could.b3ab96"))
     );
   }
 

@@ -1,4 +1,7 @@
 "use client";
+import { uiMessage } from "../../../../lib/i18n/interfaceMessage";
+import { safeMarketplaceError } from "../../../shared/i18n/marketplaceMessages";
+
 
 import {
   useEffect,
@@ -91,9 +94,7 @@ usePublicProfileProductShowcases(
           showcases: [],
           loading: false,
           error:
-            loadError instanceof Error
-              ? loadError.message
-              : "Avaliku profiili tootenäidiseid ei saanud laadida.",
+            safeMarketplaceError(loadError, uiMessage("could_not_load_this_profile_s_product_showcases")),
         });
       }
     }

@@ -31,6 +31,14 @@ function realm(options={}) {
     assert.ok(file.startsWith(root+path.sep));
     if (options.modules?.[name]) return options.modules[name];
     if (name==='lib/useAuth.ts') return {useAuth:()=>({user:null,loading:false})};
+    // This suite exercises the retained v1 search RPC with its exact v1 fixtures.
+    // Hosted v2 public-read contracts have separate parser/adapter coverage.
+    if (name==='src/shared/config/v2Integration.ts') return {v2IntegrationEnabled:()=>false};
+    if (name==='src/shared/i18n/V2LanguageProvider.tsx') return {
+      useV2Language:()=>({language:options.language||'en'}),
+      useV2Translation:catalog=>({language:options.language||'en',t:(key,params)=>
+        load('lib/i18n/useTranslation.ts').getCatalogTranslation(options.language||'en',catalog,key,params)}),
+    };
     if (name==='src/shared/supabase/browserClient.ts') return {supabaseBrowserClient:{rpc(name,args) {
       const call={name,args,signal:null};calls.push(call);
       return {abortSignal(signal) {call.signal=signal;return options.transport?options.transport(call):Promise.resolve({data:page(),error:null});}};}}};
@@ -44,8 +52,8 @@ function realm(options={}) {
       if(req==='react/jsx-runtime')return {jsx:(type,props)=>({type,props}),jsxs:(type,props)=>({type,props}),Fragment:'fragment'};
       if(req==='next/link')return {__esModule:true,default:p=>({type:'a',props:p})};
       if(req==='next/navigation')return {useSearchParams:()=>new URLSearchParams(options.browser?.routerSearch ?? options.browser?.win.location.search ?? '')};
-      assert.ok(req.startsWith('.'),'Unexpected external dependency '+req);
-      const base=path.resolve(path.dirname(file),req);
+      assert.ok(req.startsWith('.')||req.startsWith('@/'),'Unexpected external dependency '+req);
+      const base=req.startsWith('@/')?path.join(root,req.slice(2)):path.resolve(path.dirname(file),req);
       const target=[base+'.ts',base+'.tsx',base].find(p=>fs.existsSync(p)&&fs.statSync(p).isFile());assert.ok(target,req);
       return load(target);
     }
@@ -84,9 +92,9 @@ for (const q of ['offset=-1','offset=100001','offset=1.5','offset=no','q=x&q=y',
 });
 test('global labels, hierarchy and filter count use the existing taxonomy',()=>{
   const v={...M.EMPTY_PUBLIC_SEARCH,category:'vehicles',subcategory:'cars',detailCategory:'passenger_cars',condition:'used',location:'Paide'};
-  assert.equal(M.publicFilterCount(v),3);assert.equal(M.publicCategoryPath(v),'Sõidukid › Autod › Sõiduautod');
+  assert.equal(M.publicFilterCount(v),3);assert.equal(M.publicCategoryPath(v),'Vehicles › Cars › Passenger cars');
   assert.ok(M.searchCategoryChildren('vehicles','cars').some(n=>n.value==='passenger_cars'));
-  assert.equal(M.formatSearchCount('9223372036854775807'),'9 223 372 036 854 775 807');
+  assert.equal(M.formatSearchCount('9223372036854775807'),'9,223,372,036,854,775,807');
 });
 for(const [offset,total] of [[0,'0'],[0,'1'],[0,'24'],[0,'25'],[24,'25'],[48,'20'],[99984,'999999'],[0,'9223372036854775807']])
  test(`response count/page boundaries ${offset}/${total}`,()=>{
@@ -132,9 +140,9 @@ const text=nodes=>nodes.map(n=>typeof n==='string'?n:text(n.children)).join(' ')
 function view(file,props={},options={}) {const r=realm(options),nodes=render(r.load(file).default(props));return {...r,nodes,elements:all(nodes),text:text(nodes)};}
 test('search page has a compact real input and only supported scope',()=>{
   const v=view(feature+'components/ListingSearchPage.tsx',{}, {browser:browser()});
-  assert.equal(text(v.elements.find(e=>e.type==='h1').children),'Kuulutused');
-  assert.ok(v.elements.some(e=>e.type==='input'&&e.props.type==='search'));assert.ok(v.text.includes('Audi A4 automaat'));
-  assert.doesNotMatch(v.text,/Esiletõstetud|Cub Cadet|Sinu lähedal|API|skeleton/);
+  assert.equal(text(v.elements.find(e=>e.type==='h1').children),'Listings');
+  assert.ok(v.elements.some(e=>e.type==='input'&&e.props.type==='search'));assert.ok(v.text.includes('Audi A4 automatic'));
+  assert.doesNotMatch(v.text,/Esiletõstetud|Highlighted|Cub Cadet|Sinu lähedal|Near you|API|skeleton/);
   assert.equal(v.calls.length,0);
 });
 test('dialog semantics and closing are presentation only',()=>{
@@ -142,7 +150,7 @@ test('dialog semantics and closing are presentation only',()=>{
   const v=view(feature+'components/SearchFilters.tsx',{input:{...M.EMPTY_PUBLIC_SEARCH,category:'vehicles',subcategory:'cars'},onChange:()=>changed++,onClose:()=>closed++,onClear:()=>{}},{browser:b});
   const d=v.elements.find(e=>e.type==='dialog');assert.equal(d.props['aria-labelledby'],'listing-filter-title');
   assert.equal(v.elements.filter(e=>e.type==='select').length,4);
-  v.elements.find(e=>e.props['aria-label']==='Sulge filtrid').props.onClick();assert.equal(closed,1);assert.equal(changed,0);
+  v.elements.find(e=>e.props['aria-label']==='Close filters').props.onClick();assert.equal(closed,1);assert.equal(changed,0);
   let prevented=false;d.props.onCancel({preventDefault(){prevented=true;}});assert.ok(prevented);assert.equal(closed,2);
   assert.equal(v.calls.length,0);assert.doesNotMatch(v.text,/Hinnavahemik|Kaugus|Rendi/);
 });
@@ -152,9 +160,9 @@ test('changing a parent explicitly clears child selectors',()=>{
   assert.deepEqual(changes,[{category:'electronics',subcategory:'',detailCategory:''}]);
 });
 for(const [name,p,loading,error,expected] of [
- ['empty',P.parsePublicSearchPage(page(0,'0'),0),false,null,'Kuulutusi ei leitud'],
- ['loading',null,true,null,'Otsin…'],['error',null,false,'Ühenduse viga','Proovi uuesti'],
- ['results',P.parsePublicSearchPage(page(),0),false,null,'1 kuulutus'],
+ ['empty',P.parsePublicSearchPage(page(0,'0'),0),false,null,'No listings found'],
+ ['loading',null,true,null,'Searching…'],['error',null,false,'Ühenduse viga','Try again'],
+ ['results',P.parsePublicSearchPage(page(),0),false,null,'1 listing'],
 ])test('search result '+name+' view',()=>{
  const v=view(feature+'components/SearchResults.tsx',{page:p,loading,error,offset:0,onPage:()=>{},onRetry:()=>{},onReset:()=>{}},{browser:browser()});assert.ok(v.text.includes(expected));
 });

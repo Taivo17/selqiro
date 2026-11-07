@@ -1,3 +1,4 @@
+import { marketplaceMessage } from "../../../shared/i18n/marketplaceMessages";
 export const HORSE_OFFER_TYPES = {
   sale: "sale",
   freeTransfer: "free_transfer",
@@ -19,38 +20,38 @@ export type HorseOfferTypeOption = {
 export const HORSE_OFFER_TYPE_OPTIONS = [
   {
     value: HORSE_OFFER_TYPES.sale,
-    label: "Müük",
+    label: marketplaceMessage("horse.sale.2879b9"),
     description:
-      "Pakud konkreetset hobust müügiks.",
+      marketplaceMessage("horse.offer_a_specific_horse_for_sale.9bdee0"),
     requiresSpecificHorse: true,
   },
   {
     value:
       HORSE_OFFER_TYPES.freeTransfer,
-    label: "Tasuta üleandmine",
+    label: marketplaceMessage("horse.free_transfer.ccb86a"),
     description:
-      "Annad konkreetse hobuse tasuta uuele vastutavale omanikule.",
+      marketplaceMessage("horse.transfer_a_specific_horse_to_a_new_responsible.2546f7"),
     requiresSpecificHorse: true,
   },
   {
     value: HORSE_OFFER_TYPES.lease,
-    label: "Rent",
+    label: marketplaceMessage("horse.lease.f0268c"),
     description:
-      "Pakud konkreetset hobust rendile või kokkulepitud kasutusse.",
+      marketplaceMessage("horse.offer_a_specific_horse_for_lease_or_agreed.cfefcf"),
     requiresSpecificHorse: true,
   },
   {
     value: HORSE_OFFER_TYPES.coRider,
-    label: "Kaasratsaniku otsing",
+    label: marketplaceMessage("horse.co_rider_wanted.0ddb2c"),
     description:
-      "Otsid konkreetsele hobusele sobivat kaasratsanikku.",
+      marketplaceMessage("horse.find_a_suitable_co_rider_for_a_specific.0b5e9a"),
     requiresSpecificHorse: true,
   },
   {
     value: HORSE_OFFER_TYPES.wanted,
-    label: "Otsin hobust",
+    label: marketplaceMessage("horse.horse_wanted.5f511d"),
     description:
-      "Kirjeldad, millist hobust soovid leida.",
+      marketplaceMessage("horse.describe_the_horse_you_are_looking_for.a39e43"),
     requiresSpecificHorse: false,
   },
 ] as const satisfies readonly HorseOfferTypeOption[];

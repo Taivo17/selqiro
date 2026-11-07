@@ -1,3 +1,4 @@
+import { uiMessage } from "../../../../lib/i18n/interfaceMessage";
 export const ACTIVE_IDENTITY_CHANGED_EVENT = "selqiro:active-identity-changed";
 export const ACTIVE_IDENTITY_CHANGING_EVENT = "selqiro:active-identity-changing";
 export const ACTIVE_IDENTITY_STORAGE_KEY = "selqiro:active-identity-version";
@@ -12,7 +13,7 @@ export function identityChangePending(userId: string | null) {
 }
 
 export function beginIdentityChange(userId: string): IdentityChange {
-  if (pendingChange) throw new Error("Identiteedi vahetamine juba käib.");
+  if (pendingChange) throw new Error(uiMessage("an_identity_switch_is_already_in_progress"));
   const change = Object.freeze({ userId, operationId: crypto.randomUUID() });
   pendingChange = change;
   if (typeof window !== "undefined") window.dispatchEvent(new Event(ACTIVE_IDENTITY_CHANGING_EVENT));

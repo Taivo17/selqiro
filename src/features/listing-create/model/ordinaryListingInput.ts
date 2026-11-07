@@ -26,7 +26,7 @@ export function ordinaryDetailMaxLength(key: string): number {
 function jsonbText(value: unknown): string {
   if (value === null || typeof value === "string") return JSON.stringify(value);
   if (Array.isArray(value)) return "[" + value.map(jsonbText).join(", ") + "]";
-  ensure(value && typeof value === "object", "Kuulutuse andmete vorming ei sobi.");
+  ensure(value && typeof value === "object", "input.format");
   return "{" + Object.entries(value).map(([k, v]) => JSON.stringify(k) + ": " + jsonbText(v)).join(", ") + "}";
 }
 
@@ -36,19 +36,19 @@ function jsonbText(value: unknown): string {
 export function buildOrdinaryListingInput(
   state: OrdinaryListingFieldState, title: string, description: string,
 ): ListingCreationInput {
-  ensure(state && ordinaryCategoryIsComplete(state.categoryPath), "Vali kategooria kuni viimase pakutava astmeni.");
-  ensure(["new", "used", "damaged"].includes(state.condition), "Vali eseme seisukord.");
+  ensure(state && ordinaryCategoryIsComplete(state.categoryPath), "input.categoryRequired");
+  ensure(["new", "used", "damaged"].includes(state.condition), "input.conditionRequired");
   let basics: ReturnType<typeof normalizeListingEditableBasics>;
   try { basics = normalizeListingEditableBasics({ title, description, condition: state.condition }); }
-  catch { throw new OrdinaryListingInputError("Lisa 2–140 märgiga pealkiri ja kuni 5000 märgiga kirjeldus."); }
-  ensure(basics.description.length > 0, "Kirjelda pakkumist oma sõnadega.");
+  catch { throw new OrdinaryListingInputError("input.basics"); }
+  ensure(basics.description.length > 0, "input.descriptionRequired");
   ensure(new TextEncoder().encode(jsonbText({ title, description, condition: state.condition })).length <= 24000,
-    "Pealkirja ja kirjelduse kogumaht on liiga suur.");
-  ensure(text(state.country, 120) && state.country.trim().length > 0, "Lisa riik (kuni 120 märki).");
-  ensure(text(state.city, 160) && state.city.trim().length > 0, "Lisa linn või piirkond (kuni 160 märki).");
+    "input.basicsTooLarge");
+  ensure(text(state.country, 120) && state.country.trim().length > 0, "input.country");
+  ensure(text(state.city, 160) && state.city.trim().length > 0, "input.city");
   const price = normalizeListingPriceForm(state.priceKind, state.amountInput, state.currencyInput);
   ensure(state.detailValues && typeof state.detailValues === "object" && !Array.isArray(state.detailValues),
-    "Detailide vorming ei sobi.");
+    "input.detailsFormat");
   const allowed = new Set(ordinaryDetailFields(state.categoryPath).map(field => field.key));
   const attributes: ListingCreationInput["attributes"] = {
     manufacturer: "", part_number: "", oem_number: "", vehicle_brand: "", vehicle_model: "", vehicle_year: "", engine: "",
@@ -56,8 +56,8 @@ export function buildOrdinaryListingInput(
   const mutableAttributes = { ...attributes };
   const details: Record<string, string> = {};
   for (const [key, value] of Object.entries(state.detailValues)) {
-    ensure(allowed.has(key), "Väljade hulgas on valitud kategooriale võõras detail. Vali kategooria uuesti.");
-    ensure(text(value, ordinaryDetailMaxLength(key)), "Üks detail on liiga pikk või sisaldab sobimatuid märke.");
+    ensure(allowed.has(key), "input.unexpectedDetail");
+    ensure(text(value, ordinaryDetailMaxLength(key)), "input.detailTooLong");
     if (ATTR_SET.has(key)) mutableAttributes[key as keyof typeof mutableAttributes] = value;
     else if (value !== "") details[key] = value; // original free text; never units/AI conversion
   }
@@ -68,6 +68,6 @@ export function buildOrdinaryListingInput(
     attributes: mutableAttributes, details, language: "et",
   };
   ensure(Object.keys(details).length <= 64 && new TextEncoder().encode(jsonbText(result)).length <= 65536,
-    "Kuulutuse detailide kogumaht on liiga suur.");
+    "input.detailsTooLarge");
   return result;
 }

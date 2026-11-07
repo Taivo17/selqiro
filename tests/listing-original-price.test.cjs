@@ -146,21 +146,21 @@ test('editable owner read exposes exact source text rather than the formatted di
   assert.equal(result.status,'ok');assert.equal(result.listing.rawPrice,'0005578.0000');
 });
 for(const values of [{identity_id:'other'},{identity_id:null,user_id:'other'}])test('existing ownership rejection prevents writes: '+JSON.stringify(values),async()=>{
-  const s=setup(values);await assert.rejects(s.api(input()),/õigust/);assert.equal(s.db.calls.updates.length,0);
+  const s=setup(values);await assert.rejects(s.api(input()),/editForbidden/);assert.equal(s.db.calls.updates.length,0);
 });
 test('existing genuine legacy user ownership still works without a price write',async()=>{
   const s=setup({identity_id:null});await s.api(input());assert.equal(s.db.calls.updates.length,1);
   assert.ok(!Object.hasOwn(s.db.calls.updates[0],'price'));
 });
 for(const bad of [null,12,{},[]])test('present non-string price fails before transport: '+JSON.stringify(bad),async()=>{
-  const s=setup();await assert.rejects(s.api(input({price:bad})),/Hinna tekst/);assert.equal(s.db.calls.reads,0);assert.equal(s.db.calls.updates.length,0);
+  const s=setup();await assert.rejects(s.api(input({price:bad})),/priceMustBeText/);assert.equal(s.db.calls.reads,0);assert.equal(s.db.calls.updates.length,0);
 });
 test('missing user and short title still fail before transport',async()=>{
-  const s=setup();await assert.rejects(s.api(input({userId:null})),/Sisselogimine/);
-  await assert.rejects(s.api(input({title:'x'})),/vähemalt/);assert.equal(s.db.calls.reads,0);
+  const s=setup();await assert.rejects(s.api(input({userId:null})),/authMissing/);
+  await assert.rejects(s.api(input({title:'x'})),/titleTooShort/);assert.equal(s.db.calls.reads,0);
 });
 test('missing row and read errors do not dispatch a write',async()=>{
-  const s=setup();s.db.setRow(null);await assert.rejects(s.api(input()),/ei leitud/);
+  const s=setup();s.db.setRow(null);await assert.rejects(s.api(input()),/listingNotFound/);
   s.db.readError({message:'read failed'});await assert.rejects(s.api(input()),/read failed/);assert.equal(s.db.calls.updates.length,0);
 });
 test('write failure stays an error without retry or marking the form saved',async()=>{

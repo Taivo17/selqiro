@@ -1,3 +1,8 @@
+"use client";
+
+import { localeForLanguage } from "../../../../lib/i18n/useTranslation";
+import { marketplaceMessage } from "../../../shared/i18n/marketplaceMessages";
+import { useMarketplaceTranslation } from "../../../shared/i18n/useMarketplaceTranslation";
 import {
   getProductShowcaseActivity,
   type ProductShowcaseActivity,
@@ -16,7 +21,8 @@ type ActivityPresentation = {
 };
 
 function formatActivityDate(
-  value: string | null
+  value: string | null,
+  language: "en" | "et"
 ): string | null {
   if (!value) return null;
 
@@ -26,7 +32,7 @@ function formatActivityDate(
     return null;
   }
 
-  return new Intl.DateTimeFormat("et-EE", {
+  return new Intl.DateTimeFormat(localeForLanguage(language), {
     dateStyle: "medium",
   }).format(date);
 }
@@ -35,16 +41,18 @@ function remainingDaysLabel(
   daysLeft: number
 ): string {
   return daysLeft === 1
-    ? "1 päev"
-    : `${daysLeft} päeva`;
+    ? marketplaceMessage("showcase.1_day.e325ce")
+    : marketplaceMessage("showcase.value_days.f7b402", { p0: String(daysLeft) });
 }
 
 function getActivityPresentation(
-  activity: ProductShowcaseActivity
+  activity: ProductShowcaseActivity,
+  language: "en" | "et"
 ): ActivityPresentation | null {
   const dateLabel =
     formatActivityDate(
-      activity.activeUntil
+      activity.activeUntil,
+      language
     );
 
   const daysLabel =
@@ -54,10 +62,10 @@ function getActivityPresentation(
 
   if (activity.state === "active") {
     return {
-      label: "Aktiivne",
+      label: marketplaceMessage("showcase.active.ec7011"),
       message:
-        `Avalik kuni ${dateLabel}. ` +
-        `Jäänud ${daysLabel}.`,
+        marketplaceMessage("showcase.public_until_value.89150a", { p0: String(dateLabel) }) +
+        marketplaceMessage("showcase.value_remaining.fe3209", { p0: String(daysLabel) }),
       className:
         "border-emerald-100 bg-emerald-50 text-emerald-800",
     };
@@ -65,10 +73,10 @@ function getActivityPresentation(
 
   if (activity.state === "warning") {
     return {
-      label: "Aegub varsti",
+      label: marketplaceMessage("showcase.expires_soon.89c0d1"),
       message:
-        `Vaata info üle enne ${dateLabel}. ` +
-        `Jäänud ${daysLabel}.`,
+        marketplaceMessage("showcase.review_the_details_before_value.6d0bae", { p0: String(dateLabel) }) +
+        marketplaceMessage("showcase.value_remaining.fe3209", { p0: String(daysLabel) }),
       className:
         "border-amber-200 bg-amber-50 text-amber-900",
     };
@@ -76,10 +84,10 @@ function getActivityPresentation(
 
   if (activity.state === "urgent") {
     return {
-      label: "Aegub peagi",
+      label: marketplaceMessage("showcase.expires_very_soon.90d84e"),
       message:
-        `Kontrolli infot enne ${dateLabel}. ` +
-        `Jäänud ${daysLabel}.`,
+        marketplaceMessage("showcase.review_the_details_before_value.4128f3", { p0: String(dateLabel) }) +
+        marketplaceMessage("showcase.value_remaining.fe3209", { p0: String(daysLabel) }),
       className:
         "border-orange-200 bg-orange-50 text-orange-900",
     };
@@ -87,11 +95,11 @@ function getActivityPresentation(
 
   if (activity.state === "expired") {
     return {
-      label: "Aegunud",
+      label: marketplaceMessage("showcase.expired.00e195"),
       message:
-        `Tähtaeg oli ${dateLabel}. ` +
-        "Tootenäidis ei ole avalikus profiilis nähtav, " +
-        "kuid jääb sinu Minu alasse alles.",
+        marketplaceMessage("showcase.the_deadline_was_value.11e23c", { p0: String(dateLabel) }) +
+        marketplaceMessage("showcase.the_product_showcase_is_not_visible_on_the.25b9dd") +
+        marketplaceMessage("showcase.but_remains_in_my_area.22dcd0"),
       className:
         "border-red-200 bg-red-50 text-red-900",
     };
@@ -99,10 +107,10 @@ function getActivityPresentation(
 
   if (activity.state === "invalid") {
     return {
-      label: "Vajab kontrolli",
+      label: marketplaceMessage("showcase.needs_review.95fc34"),
       message:
-        "Aktiivsuse tähtaega ei saanud kuvada. " +
-        "Värskenda lehte ja kontrolli tootenäidist uuesti.",
+        marketplaceMessage("showcase.the_active_period_could_not_be_displayed.6dac33") +
+        marketplaceMessage("showcase.refresh_the_page_and_check_the_product_showcase.71d0fa"),
       className:
         "border-red-200 bg-red-50 text-red-900",
     };
@@ -115,6 +123,7 @@ export default function ProductShowcaseActivityStatus({
   showcase,
   now,
 }: ProductShowcaseActivityStatusProps) {
+  const { language, r } = useMarketplaceTranslation();
   if (
     now === null ||
     showcase.status !== "published"
@@ -129,7 +138,7 @@ export default function ProductShowcaseActivityStatus({
     );
 
   const presentation =
-    getActivityPresentation(activity);
+    getActivityPresentation(activity, language);
 
   if (!presentation) {
     return null;
@@ -143,11 +152,11 @@ export default function ProductShowcaseActivityStatus({
       ].join(" ")}
     >
       <span className="inline-flex rounded-full bg-white/70 px-2.5 py-1 text-[11px] font-black">
-        {presentation.label}
+        {r(presentation.label)}
       </span>
 
       <p className="mt-2 text-xs font-semibold leading-5">
-        {presentation.message}
+        {r(presentation.message)}
       </p>
     </div>
   );

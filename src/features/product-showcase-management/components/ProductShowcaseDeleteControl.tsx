@@ -1,5 +1,7 @@
 "use client";
 
+import { marketplaceMessage, safeMarketplaceError } from "../../../shared/i18n/marketplaceMessages";
+import { useMarketplaceTranslation } from "../../../shared/i18n/useMarketplaceTranslation";
 import {
   useEffect,
   useState,
@@ -28,6 +30,7 @@ ProductShowcaseDeleteControl({
   onCancel,
   onConfirm,
 }: ProductShowcaseDeleteControlProps) {
+  const { language, r } = useMarketplaceTranslation();
   const [
     confirmationTitle,
     setConfirmationTitle,
@@ -53,7 +56,7 @@ ProductShowcaseDeleteControl({
 
     if (!titleConfirmed) {
       setError(
-        "Sisesta tootenäidise nimi täpselt samal kujul."
+        marketplaceMessage("showcase.enter_the_product_showcase_name_exactly_as_shown.d694c4")
       );
 
       return;
@@ -63,9 +66,7 @@ ProductShowcaseDeleteControl({
       await onConfirm();
     } catch (deleteError) {
       setError(
-        deleteError instanceof Error
-          ? deleteError.message
-          : "Tootenäidist ei saanud jäädavalt kustutada."
+        safeMarketplaceError(deleteError, marketplaceMessage("showcase.the_product_showcase_could_not_be_permanently_deleted.6bd5cd"))
       );
     }
   }
@@ -78,30 +79,24 @@ ProductShowcaseDeleteControl({
         disabled={disabled}
         className="rounded-full border border-red-200 bg-red-50 px-4 py-2 text-xs font-black text-red-700 transition hover:bg-red-100 disabled:cursor-not-allowed disabled:opacity-40"
       >
-        Kustuta jäädavalt
-      </button>
+        {r(marketplaceMessage("showcase.delete_permanently.c69790"))}</button>
     );
   }
 
   return (
     <div className="min-w-0 basis-full rounded-2xl border border-red-200 bg-red-50 p-4">
       <p className="text-sm font-black text-red-950">
-        Kustuta tootenäidis jäädavalt?
-      </p>
+        {r(marketplaceMessage("showcase.permanently_delete_this_product_showcase.fea764"))}</p>
 
       <p className="mt-2 text-xs leading-5 text-red-800">
-        Tootenäidis ja kõik selle pildid
-        eemaldatakse jäädavalt. Seda toimingut
-        ei saa tagasi võtta.
-      </p>
+        {r(marketplaceMessage("showcase.the_product_showcase_and_all_its_images_will.a6e11e"))}</p>
 
       <label className="mt-4 block">
         <span className="block text-xs font-black text-red-950">
-          Sisesta kinnitamiseks täpselt:
-        </span>
+          {r(marketplaceMessage("showcase.to_confirm_enter_exactly.24f9f9"))}</span>
 
         <span className="mt-1 block break-words rounded-xl border border-red-200 bg-white px-3 py-2 text-sm font-black text-red-950">
-          {showcase.title}
+          {r(showcase.title)}
         </span>
 
         <input
@@ -117,35 +112,32 @@ ProductShowcaseDeleteControl({
           autoComplete="off"
           spellCheck={false}
           disabled={deleting}
-          aria-label="Sisesta kustutamise kinnitamiseks tootenäidise nimi"
+          aria-label={r(marketplaceMessage("showcase.enter_the_product_showcase_name_to_confirm_deletion.b92333"))}
           className="mt-2 min-h-11 w-full rounded-xl border border-red-200 bg-white px-3 text-sm font-semibold text-neutral-950 outline-none transition focus:border-red-500 disabled:cursor-wait disabled:opacity-60"
         />
       </label>
 
-      {error ? (
+      {r(error ? (
         <p
           role="alert"
           className="mt-3 rounded-xl border border-red-200 bg-white px-3 py-2 text-xs font-semibold leading-5 text-red-900"
         >
-          {error}
+          {r(error)}
         </p>
-      ) : null}
+      ) : null)}
 
       <div className="mt-4 flex flex-wrap gap-2">
         <button
           type="button"
           onClick={() =>
-            void handleConfirm()
-          }
-          disabled={
-            deleting ||
-            !titleConfirmed
-          }
+            void handleConfirm()}
+          disabled={deleting ||
+            !titleConfirmed}
           className="rounded-full bg-red-700 px-4 py-2 text-xs font-black text-white transition hover:bg-red-800 disabled:cursor-not-allowed disabled:opacity-40"
         >
-          {deleting
-            ? "Kustutan..."
-            : "Kustuta jäädavalt"}
+          {r(deleting
+            ? marketplaceMessage("service.deleting.b12b82")
+            : marketplaceMessage("showcase.delete_permanently.c69790"))}
         </button>
 
         <button
@@ -154,8 +146,7 @@ ProductShowcaseDeleteControl({
           disabled={deleting}
           className="rounded-full border border-red-200 bg-white px-4 py-2 text-xs font-black text-red-800 disabled:cursor-wait disabled:opacity-50"
         >
-          Tühista
-        </button>
+          {r(marketplaceMessage("service.cancel.a6b940"))}</button>
       </div>
     </div>
   );

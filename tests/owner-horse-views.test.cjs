@@ -21,10 +21,14 @@ function detail(kind='wanted') {
     details:{schema_version:1,branch:kind==='wanted'?'wanted':'specific',wanted:{preferred_sex:'unknown',
       budget:{mode:'maximum',amount:5000,currency:'EUR'},search_area:{country_code:'EE',city_or_municipality:'Rapla maakond',region:'Rapla maakond'}}}};
 }
-function realm({row=detail(),pathname='/v2/my-area/horse-offers/'+ID,detailState,auth={user:{id:U,email:'test@example.invalid'},loading:false},editorState}={}) {
+function realm({row=detail(),pathname='/v2/my-area/horse-offers/'+ID,detailState,auth={user:{id:U,email:'test@example.invalid'},loading:false},editorState,language='et'}={}) {
  const cache=new Map();
  function load(rel) {
   const file=path.resolve(root,rel); assert.ok(file.startsWith(root+path.sep));
+  if(file.endsWith('/src/shared/i18n/V2LanguageProvider.tsx')) return {
+    useV2Language:()=>({language,status:'ready',error:null,signedIn:!!auth.user,canChange:true,setLanguage:async()=>true,refresh:()=>{}}),
+    useV2Translation:catalog=>({language,t:(key,params)=>load('lib/i18n/useTranslation.ts').getCatalogTranslation(language,catalog,key,params)}),
+  };
   if(file.endsWith('/lib/useAuth.ts')) return {useAuth:()=>auth};
   if(file.endsWith('/src/shared/supabase/browserClient.ts')) return {supabaseBrowserClient:{auth:{signOut:()=>{throw Error('write is not expected');}}}};
   if(file.endsWith('/src/features/horse-offer-detail/model/useOwnerHorseOfferDetail.ts')) return {useOwnerHorseOfferDetail:()=>detailState||{detail:row,isLoading:false,isNotFound:false,errorMessage:null,reload:()=>{}}};
@@ -37,19 +41,25 @@ function realm({row=detail(),pathname='/v2/my-area/horse-offers/'+ID,detailState
   const m={exports:{}};cache.set(file,m);
   const requireLocal=name=>{
     if(name==='react/jsx-runtime') return {jsx:(type,props,key)=>({type,props:props||{},key}),jsxs:(type,props,key)=>({type,props:props||{},key}),Fragment:'fragment'};
-    if(name==='react') return {useState:x=>[typeof x==='function'?x():x,()=>{}],useRef:x=>({current:x}),useEffect:()=>{},useMemo:f=>f(),useCallback:f=>f};
+    if(name==='react') return {useState:x=>[typeof x==='function'?x():x,()=>{}],useRef:x=>({current:x}),useEffect:()=>{},useMemo:f=>f(),useCallback:f=>f,useId:()=> 'synthetic-language-select',useSyncExternalStore:(_subscribe,_getSnapshot,getServerSnapshot)=>getServerSnapshot()};
     if(name==='next/link') return {__esModule:true,default:props=>({type:'a',props})};
-    if(name==='next/navigation') return {usePathname:()=>pathname,useRouter:()=>({push:()=>{},refresh:()=>{}})};
-    assert.ok(name.startsWith('.'),'Unexpected external dependency: '+name);
-    const base=path.resolve(path.dirname(file),name);
+    if(name==='next/navigation') return {usePathname:()=>pathname,useSearchParams:()=>new URLSearchParams(),useRouter:()=>({push:()=>{},refresh:()=>{}})};
+    assert.ok(name.startsWith('.')||name.startsWith('@/'),'Unexpected external dependency: '+name);
+    const base=name.startsWith('@/')?path.resolve(root,name.slice(2)):path.resolve(path.dirname(file),name);
     return load(fs.existsSync(base+'.ts')?base+'.ts':base+'.tsx');
   };
-  vm.runInNewContext(out.outputText,{module:m,exports:m.exports,require:requireLocal,Date,Intl,Number,String,Object,Array,Set,Map,JSON,BigInt,Promise,Error,TextEncoder},{filename:file,timeout:1500});
+  vm.runInNewContext(out.outputText,{module:m,exports:m.exports,require:requireLocal,Date,Intl,Number,String,Object,Array,Set,Map,JSON,BigInt,Promise,Error,TextEncoder,process:{env:{}}},{filename:file,timeout:1500});
   return m.exports;
  }
  return load;
 }
-const load=realm();const present=load('src/entities/horse-offer/model/ownerPresentation.ts').getOwnerHorsePresentation;
+const load=realm();
+const resolveMessage=load('src/shared/i18n/marketplaceMessages.ts').renderMarketplaceMessage;
+// Presentation tokens remain language-neutral until a view selects its language.
+const display = (value,language='et') => typeof value==='string' ? resolveMessage(language,value)
+  : Array.isArray(value) ? value.map(x=>display(x,language))
+  : value && typeof value==='object' ? Object.fromEntries(Object.entries(value).map(([k,v])=>[k,display(v,language)])) : value;
+const present=(detail,language='et')=>display(load('src/entities/horse-offer/model/ownerPresentation.ts').getOwnerHorsePresentation(detail,language),language);
 function render(element) {
  if(element===null||element===undefined||element===false||element===true)return [];
  if(Array.isArray(element))return element.flatMap(render);
@@ -101,7 +111,7 @@ for(const kind of ['Detail','Edit'])test(kind+' wrapper composes actual shared s
  const pathname='/v2/my-area/horse-offers/'+ID+(kind==='Edit'?'/edit':'');
  const nodes=tree('components/v2/my-area/V2HorseOffer'+kind+'Page.tsx',{pathname});
  assert.equal(all(nodes).filter(n=>n.type==='main').length,1);
- assert.equal(all(nodes).filter(n=>n.type==='button'&&n.props['aria-label']==='Vaheta aktiivset identiteeti').length,1);
+ assert.equal(all(nodes).filter(n=>n.type==='button'&&n.props['aria-label']==='Tegutsen kui Test identity. Vaheta identiteeti').length,1);
  assert.match(text(nodes),/Test identity/);
 });
 test('wanted detail element tree displays nested summary and no future-edit claim',()=>{
@@ -111,7 +121,7 @@ test('wanted detail element tree displays nested summary and no future-edit clai
 });
 for(const state of [{detail:null,isLoading:true},{detail:null,isLoading:false,isNotFound:true},{detail:null,isLoading:false,isNotFound:false,errorMessage:'Read failed'}])test('detail loading/not-found/error retains one shared identity button',()=>{
  const nodes=tree('components/v2/my-area/V2HorseOfferDetailPage.tsx',{detailState:{reload:()=>{},...state}});
- assert.equal(all(nodes).filter(n=>n.type==='main').length,1);assert.equal(all(nodes).filter(n=>n.props['aria-label']==='Vaheta aktiivset identiteeti').length,1);
+ assert.equal(all(nodes).filter(n=>n.type==='main').length,1);assert.equal(all(nodes).filter(n=>n.props['aria-label']==='Tegutsen kui Test identity. Vaheta identiteeti').length,1);
 });
 test('editor blocked identity presentation does not display saved title and fields',()=>{
  const state={context:'blocked',work:'idle',snapshot:{detail:detail()},closed:false};
@@ -121,7 +131,7 @@ test('editor blocked identity presentation does not display saved title and fiel
 test('missing list summary stays detail-only, without inventing budget/location',()=>{
  const mapper=load('src/features/my-area/model/mapMyAreaMarketplaceItemRow.ts').mapMyAreaMarketplaceItemRow;
  const item={contentType:'horse_offer',contentVariant:'wanted',contentId:ID,title:'Wanted',sourceStatus:'draft',lifecycleStatus:'draft',priceAmount:null,priceType:'contact',priceText:null,currency:'EUR',locationLabel:null,city:null,region:null,activeUntil:null};
- const before=plain(item);const row=mapper(item);assert.equal(row.priceLabel,'Eelarve detailvaates');assert.equal(row.locationLabel,'Otsingupiirkond detailvaates');assert.equal(row.priceAmount,null);assert.deepEqual(plain(item),before);
+ const before=plain(item);const row=mapper(item);assert.equal(resolveMessage('et',row.priceLabel),'Eelarve detailvaates');assert.equal(resolveMessage('et',row.locationLabel),'Otsingupiirkond detailvaates');assert.equal(row.priceAmount,null);assert.deepEqual(plain(item),before);
  const nodes=render(load('src/features/my-area/components/MyAreaHorseOfferRow.tsx').default({item:row}));assert.match(text(nodes),/Muutmine detailis/);assert.doesNotMatch(text(nodes),/Ainult vaade|Hind kokkuleppel|Asukoht täpsustamata/);
 });
 test('ordinary listing mapping and horse sale mapping retain prices, location and action boundaries',()=>{
@@ -137,4 +147,16 @@ test('targeted view modules have no new RPC, mutation, local storage or per-row 
  for(const file of ['src/entities/horse-offer/model/ownerPresentation.ts','src/features/horse-offer-detail/components/OwnerHorseDetailCard.tsx','src/features/horse-offer-detail/components/OwnerHorseOfferDetailPage.tsx','src/features/my-area/components/MyAreaHorseOfferRow.tsx','src/features/my-area/model/mapMyAreaMarketplaceItemRow.ts']) {
   const text=fs.readFileSync(path.join(root,file),'utf8');assert.doesNotMatch(text,/\.rpc\(|\.from\(|\.insert\(|\.update\(|\.delete\(|\bfetch\(|localStorage|sessionStorage/);
  }
+});
+
+// Same synthetic owner data, different interface preference: data and action scope stay fixed.
+test('English owner horse view translates budget, facts and actions without rewriting user data',()=>{
+ const d=detail();d.title='Minu hobuseotsing';d.details.wanted.preferred_breed='Eesti hobune';
+ const before=plain(d);
+ const nodes=tree('components/v2/my-area/V2HorseOfferDetailPage.tsx',{row:d,language:'en'});
+ const words=normal(text(nodes));
+ assert.match(words,/Purchase budget/);assert.match(words,/Budget up to €5,000/);assert.match(words,/Search area: Rapla maakond/);
+ assert.match(words,/Minu hobuseotsing/);assert.match(words,/Eesti hobune/);
+ assert.doesNotMatch(words,/Ostueelarve|Otsingupiirkond|selqiro-ui-/);
+ assert.deepEqual(plain(d),before);
 });

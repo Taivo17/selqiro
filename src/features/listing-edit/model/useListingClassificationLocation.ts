@@ -344,7 +344,7 @@ export function useListingClassificationLocation(
       setSaveError(
         error instanceof Error
           ? error.message
-          : "Kategooriat ja asukohta ei saanud salvestada."
+          : "classificationSaveFailed"
       );
     } finally {
       setSaving(false);

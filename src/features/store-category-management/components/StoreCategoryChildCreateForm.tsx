@@ -1,5 +1,7 @@
 "use client";
 
+import { marketplaceMessage, safeMarketplaceError } from "../../../shared/i18n/marketplaceMessages";
+import { useMarketplaceTranslation } from "../../../shared/i18n/useMarketplaceTranslation";
 import { useState } from "react";
 import type { FormEvent } from "react";
 import {
@@ -20,6 +22,7 @@ export default function StoreCategoryChildCreateForm({
   onCreate,
   onCancel,
 }: StoreCategoryChildCreateFormProps) {
+  const { language, r } = useMarketplaceTranslation();
   const [name, setName] = useState("");
   const [error, setError] = useState<string | null>(null);
 
@@ -31,13 +34,13 @@ export default function StoreCategoryChildCreateForm({
     setError(null);
 
     if (!cleanName) {
-      setError("Sisesta alamrubriigi nimi.");
+      setError(marketplaceMessage("category.enter_a_subcategory_name.dfbd9a"));
       return;
     }
 
     if (cleanName.length > STORE_CATEGORY_NAME_MAX_LENGTH) {
       setError(
-        `Alamrubriigi nimi võib olla kuni ${STORE_CATEGORY_NAME_MAX_LENGTH} tähemärki.`
+        marketplaceMessage("category.the_subcategory_name_can_contain_up_to_value.6921e5", { p0: String(STORE_CATEGORY_NAME_MAX_LENGTH) })
       );
       return;
     }
@@ -47,9 +50,7 @@ export default function StoreCategoryChildCreateForm({
       setName("");
     } catch (creationError) {
       setError(
-        creationError instanceof Error
-          ? creationError.message
-          : "Alamrubriiki ei saanud lisada."
+        safeMarketplaceError(creationError, marketplaceMessage("category.the_subcategory_could_not_be_added.33d624"))
       );
     }
   }
@@ -61,8 +62,7 @@ export default function StoreCategoryChildCreateForm({
     >
       <label>
         <span className="mb-1.5 block text-[11px] font-black uppercase tracking-[0.14em] text-neutral-500">
-          Uus alamrubriik
-        </span>
+          {r(marketplaceMessage("category.new_subcategory.a9900a"))}</span>
 
         <input
           value={name}
@@ -71,7 +71,7 @@ export default function StoreCategoryChildCreateForm({
             setError(null);
           }}
           maxLength={STORE_CATEGORY_NAME_MAX_LENGTH}
-          placeholder="Näiteks Murutraktorid"
+          placeholder={r(marketplaceMessage("category.for_example_ride_on_mowers.453710"))}
           autoFocus
           disabled={creating}
           className="w-full rounded-xl border border-neutral-200 bg-white px-3 py-2.5 text-sm outline-none transition focus:border-neutral-400 disabled:cursor-not-allowed disabled:opacity-60"
@@ -80,19 +80,18 @@ export default function StoreCategoryChildCreateForm({
 
       <div className="mt-1.5 flex items-start justify-between gap-3">
         <p className="text-[11px] leading-4 text-neutral-500">
-          Lisatakse rubriigi „{parentName}” alla.
-        </p>
+          {r(marketplaceMessage("category.added_under.abe1b1"))}{r(parentName)}{r(marketplaceMessage("category..a7629c"))}</p>
 
         <span className="shrink-0 text-[11px] font-black text-neutral-400">
-          {name.length}/{STORE_CATEGORY_NAME_MAX_LENGTH}
+          {r(name.length)}/{r(STORE_CATEGORY_NAME_MAX_LENGTH)}
         </span>
       </div>
 
-      {error ? (
+      {r(error ? (
         <p className="mt-2 rounded-lg border border-red-100 bg-red-50 px-2.5 py-2 text-xs font-semibold leading-5 text-red-800">
-          {error}
+          {r(error)}
         </p>
-      ) : null}
+      ) : null)}
 
       <div className="mt-3 flex flex-wrap gap-2">
         <button
@@ -100,7 +99,7 @@ export default function StoreCategoryChildCreateForm({
           disabled={creating || !name.trim()}
           className="rounded-full bg-black px-4 py-2 text-xs font-black text-white disabled:cursor-not-allowed disabled:opacity-40"
         >
-          {creating ? "Lisan..." : "Lisa alamrubriik"}
+          {r(creating ? marketplaceMessage("category.adding.57ede3") : marketplaceMessage("category.add_subcategory.6d7727"))}
         </button>
 
         <button
@@ -109,8 +108,7 @@ export default function StoreCategoryChildCreateForm({
           disabled={creating}
           className="rounded-full border border-neutral-200 bg-white px-4 py-2 text-xs font-black text-neutral-700 disabled:opacity-40"
         >
-          Tühista
-        </button>
+          {r(marketplaceMessage("service.cancel.a6b940"))}</button>
       </div>
     </form>
   );

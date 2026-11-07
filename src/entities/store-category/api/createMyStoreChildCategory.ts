@@ -1,3 +1,4 @@
+import { marketplaceMessage, safeMarketplaceError } from "../../../shared/i18n/marketplaceMessages";
 import { supabaseBrowserClient } from "../../../shared/supabase/browserClient";
 import {
   normalizeStoreCategoryName,
@@ -33,30 +34,30 @@ function getCreateChildErrorMessage(error: {
   const message = (error.message || "").toLowerCase();
 
   if (error.code === "23505") {
-    return "Selle nimega alamrubriik on selle ülemrubriigi all juba olemas.";
+    return marketplaceMessage("category.a_subcategory_with_this_name_already_exists_under.bdca8e");
   }
 
   if (error.code === "42501") {
-    return "Sul puudub selle ülemrubriigi alla lisamise õigus.";
+    return marketplaceMessage("category.you_do_not_have_permission_to_add_a.b5fd8d");
   }
 
   if (error.code === "22023") {
     if (message.includes("active identity")) {
-      return "Aktiivne identiteet puudub.";
+      return marketplaceMessage("service.no_active_identity.80f933");
     }
 
     if (message.includes("does not exist")) {
-      return "Valitud ülemrubriiki ei leitud.";
+      return marketplaceMessage("category.the_selected_parent_category_was_not_found.9093eb");
     }
 
     if (message.includes("only be added under a root")) {
-      return "Alamrubriiki saab lisada ainult ülemrubriigi alla.";
+      return marketplaceMessage("category.subcategories_can_only_be_added_under_a_parent.0c7217");
     }
 
-    return "Kontrolli alamrubriigi nime.";
+    return marketplaceMessage("category.check_the_subcategory_name.ee9ba9");
   }
 
-  return error.message || "Alamrubriiki ei saanud lisada.";
+  return safeMarketplaceError(error, marketplaceMessage("category.the_subcategory_could_not_be_added.33d624"));
 }
 
 export async function createMyStoreChildCategory(input: {
@@ -67,16 +68,16 @@ export async function createMyStoreChildCategory(input: {
   const cleanName = normalizeStoreCategoryName(input.name);
 
   if (!parentId) {
-    throw new Error("Valitud ülemrubriik puudub.");
+    throw new Error(marketplaceMessage("category.no_parent_category_is_selected.84730a"));
   }
 
   if (!cleanName) {
-    throw new Error("Sisesta alamrubriigi nimi.");
+    throw new Error(marketplaceMessage("category.enter_a_subcategory_name.dfbd9a"));
   }
 
   if (cleanName.length > STORE_CATEGORY_NAME_MAX_LENGTH) {
     throw new Error(
-      `Alamrubriigi nimi võib olla kuni ${STORE_CATEGORY_NAME_MAX_LENGTH} tähemärki.`
+      marketplaceMessage("category.the_subcategory_name_can_contain_up_to_value.6921e5", { p0: String(STORE_CATEGORY_NAME_MAX_LENGTH) })
     );
   }
 
@@ -100,11 +101,11 @@ export async function createMyStoreChildCategory(input: {
   );
 
   if (!row?.id || !row.name || !row.parent_id) {
-    throw new Error("Andmebaas ei tagastanud loodud alamrubriiki.");
+    throw new Error(marketplaceMessage("category.the_database_did_not_return_the_created_subcategory.afd584"));
   }
 
   if (row.parent_id !== parentId) {
-    throw new Error("Loodud alamrubriigi ülemrubriik ei vasta valikule.");
+    throw new Error(marketplaceMessage("category.the_created_subcategory_does_not_belong_to_the.0afc4e"));
   }
 
   return {

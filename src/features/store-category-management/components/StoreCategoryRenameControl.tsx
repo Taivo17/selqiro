@@ -1,5 +1,7 @@
 "use client";
 
+import { marketplaceMessage, safeMarketplaceError } from "../../../shared/i18n/marketplaceMessages";
+import { useMarketplaceTranslation } from "../../../shared/i18n/useMarketplaceTranslation";
 import { useEffect, useState } from "react";
 import type { FormEvent, ReactNode } from "react";
 import {
@@ -35,6 +37,7 @@ export default function StoreCategoryRenameControl({
   onSave,
   onCancel,
 }: StoreCategoryRenameControlProps) {
+  const { language, r } = useMarketplaceTranslation();
   const [name, setName] = useState(category.name);
   const [error, setError] = useState<string | null>(null);
 
@@ -55,19 +58,19 @@ export default function StoreCategoryRenameControl({
     setError(null);
 
     if (!cleanName) {
-      setError("Sisesta rubriigi nimi.");
+      setError(marketplaceMessage("category.enter_a_category_name.730cbc"));
       return;
     }
 
     if (cleanName.length > STORE_CATEGORY_NAME_MAX_LENGTH) {
       setError(
-        `Rubriigi nimi võib olla kuni ${STORE_CATEGORY_NAME_MAX_LENGTH} tähemärki.`
+        marketplaceMessage("category.the_category_name_can_contain_up_to_value.0188e5", { p0: String(STORE_CATEGORY_NAME_MAX_LENGTH) })
       );
       return;
     }
 
     if (unchanged) {
-      setError("Rubriigi nimi ei ole muutunud.");
+      setError(marketplaceMessage("category.the_category_name_has_not_changed.7f4e19"));
       return;
     }
 
@@ -75,9 +78,7 @@ export default function StoreCategoryRenameControl({
       await onSave(cleanName);
     } catch (saveError) {
       setError(
-        saveError instanceof Error
-          ? saveError.message
-          : "Rubriigi nime ei saanud muuta."
+        safeMarketplaceError(saveError, marketplaceMessage("category.the_category_could_not_be_renamed.c0c08e"))
       );
     }
   }
@@ -90,9 +91,9 @@ export default function StoreCategoryRenameControl({
       >
         <label>
           <span className="mb-1.5 block text-[11px] font-black uppercase tracking-[0.14em] text-neutral-500">
-            {level === "root"
-              ? "Muuda ülemrubriigi nime"
-              : "Muuda alamrubriigi nime"}
+            {r(level === "root"
+              ? marketplaceMessage("category.rename_parent_category.ebf116")
+              : marketplaceMessage("category.rename_subcategory.e5c33b"))}
           </span>
 
           <input
@@ -110,19 +111,18 @@ export default function StoreCategoryRenameControl({
 
         <div className="mt-1.5 flex items-start justify-between gap-3">
           <p className="text-[11px] leading-4 text-neutral-500">
-            Muutub ainult nimi. Rubriigi asukoht jääb samaks.
-          </p>
+            {r(marketplaceMessage("category.only_the_name_will_change_the_category_stays.8a5191"))}</p>
 
           <span className="shrink-0 text-[11px] font-black text-neutral-400">
-            {name.length}/{STORE_CATEGORY_NAME_MAX_LENGTH}
+            {r(name.length)}/{r(STORE_CATEGORY_NAME_MAX_LENGTH)}
           </span>
         </div>
 
-        {error ? (
+        {r(error ? (
           <p className="mt-2 rounded-lg border border-red-100 bg-red-50 px-2.5 py-2 text-xs font-semibold leading-5 text-red-800">
-            {error}
+            {r(error)}
           </p>
-        ) : null}
+        ) : null)}
 
         <div className="mt-3 flex flex-wrap gap-2">
           <button
@@ -130,7 +130,7 @@ export default function StoreCategoryRenameControl({
             disabled={saving || !cleanName || unchanged}
             className="rounded-full bg-black px-4 py-2 text-xs font-black text-white disabled:cursor-not-allowed disabled:opacity-40"
           >
-            {saving ? "Salvestan..." : "Salvesta"}
+            {r(saving ? marketplaceMessage("service.saving.cf92f2") : marketplaceMessage("category.save.7c457c"))}
           </button>
 
           <button
@@ -139,8 +139,7 @@ export default function StoreCategoryRenameControl({
             disabled={saving}
             className="rounded-full border border-neutral-200 bg-white px-4 py-2 text-xs font-black text-neutral-700 disabled:opacity-40"
           >
-            Tühista
-          </button>
+            {r(marketplaceMessage("service.cancel.a6b940"))}</button>
         </div>
       </form>
     );
@@ -148,35 +147,31 @@ export default function StoreCategoryRenameControl({
 
   return (
     <div
-      className={
-        level === "child"
+      className={level === "child"
           ? "rounded-xl border border-neutral-200 bg-white px-3 py-2"
-          : undefined
-      }
+          : undefined}
     >
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
-          {level === "root" ? (
+          {r(level === "root" ? (
             <span className="inline-flex rounded-full bg-white px-2.5 py-1 text-[11px] font-black uppercase tracking-[0.14em] text-neutral-500">
-              Ülemrubriik
-            </span>
-          ) : null}
+              {r(marketplaceMessage("category.parent_category.f3ddd3"))}</span>
+          ) : null)}
 
-          {level === "root" ? (
+          {r(level === "root" ? (
             <h3 className="mt-2 break-words text-base font-black leading-5">
-              {category.name}
+              {r(category.name)}
             </h3>
           ) : (
             <p className="break-words text-sm font-black">
-              {category.name}
+              {r(category.name)}
             </p>
-          )}
+          ))}
 
-          {level === "child" ? (
+          {r(level === "child" ? (
             <p className="mt-1 text-[11px] font-bold uppercase tracking-[0.14em] text-neutral-400">
-              Alamrubriik
-            </p>
-          ) : null}
+              {r(marketplaceMessage("category.subcategory.ee4371"))}</p>
+          ) : null)}
 
           <button
             type="button"
@@ -184,22 +179,21 @@ export default function StoreCategoryRenameControl({
             disabled={disabled}
             className="mt-2 text-[11px] font-black text-neutral-500 underline decoration-neutral-300 underline-offset-4 transition hover:text-black disabled:cursor-not-allowed disabled:opacity-40"
           >
-            Muuda nime
-          </button>
+            {r(marketplaceMessage("category.rename.599819"))}</button>
         </div>
 
-        {trailing}
+        {r(trailing)}
       </div>
 
-      {successMessage ? (
+      {r(successMessage ? (
         <p className="mt-2 rounded-lg border border-emerald-100 bg-emerald-50 px-2.5 py-2 text-xs font-semibold leading-5 text-emerald-800">
-          {successMessage}
+          {r(successMessage)}
         </p>
-      ) : null}
+      ) : null)}
 
-      {footer ? (
-        <div className="mt-2">{footer}</div>
-      ) : null}
+      {r(footer ? (
+        <div className="mt-2">{r(footer)}</div>
+      ) : null)}
     </div>
   );
 }

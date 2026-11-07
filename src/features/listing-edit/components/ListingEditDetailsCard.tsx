@@ -1,9 +1,14 @@
 "use client";
+import { useV2Translation } from "../../../shared/i18n/V2LanguageProvider";
+import { listingEditMessages, translateListingEditMessage } from "../model/listingEditMessages";
 
+import { getFieldLabel } from "../../../../lib/categoryFields";
 import type { ProductListingDetail } from "../../../entities/listing/model/types";
 import { FieldPreview } from "./ListingEditPrimitives";
 
 function DetailsPreview({ listing }: { listing: ProductListingDetail }) {
+  const { language, t } = useV2Translation(listingEditMessages);
+
   const details = Object.entries(
     listing.details || {}
   )
@@ -12,9 +17,7 @@ function DetailsPreview({ listing }: { listing: ProductListingDetail }) {
 
   if (details.length === 0) {
     return (
-      <p className="mt-4 text-sm leading-6 text-neutral-500">
-        Detailvälju ei ole lisatud.
-      </p>
+      <p className="mt-4 text-sm leading-6 text-neutral-500">{t("noDetails")}</p>
     );
   }
 
@@ -23,7 +26,7 @@ function DetailsPreview({ listing }: { listing: ProductListingDetail }) {
       {details.map(([key, value]) => (
         <FieldPreview
           key={key}
-          label={key.replace(/_/g, " ")}
+          label={getFieldLabel(key, key.replace(/_/g, " "), language)}
           value={
             typeof value === "string" || typeof value === "number"
               ? value
@@ -36,11 +39,11 @@ function DetailsPreview({ listing }: { listing: ProductListingDetail }) {
 }
 
 export default function ListingEditDetailsCard({ listing }: { listing: ProductListingDetail }) {
+  const { language, t } = useV2Translation(listingEditMessages);
+
   return (
           <section className="rounded-[34px] border border-black/5 bg-white p-6 shadow-sm md:p-8">
-            <p className="text-xs font-bold uppercase tracking-[0.24em] text-neutral-400">
-              Detailid
-            </p>
+            <p className="text-xs font-bold uppercase tracking-[0.24em] text-neutral-400">{t("details")}</p>
 
             <DetailsPreview listing={listing} />
           </section>

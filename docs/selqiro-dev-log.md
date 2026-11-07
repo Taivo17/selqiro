@@ -1,3 +1,31 @@
+<!-- SELQIRO_V2_LANGUAGE_PREPARED_20261107 -->
+## 2026-11-07 — üks V2 keele-eelistus ja ühise kuulutusaluse audit
+
+- Kasutaja kinnitas foto kuvamise paranduse 785c359 Ready / Production;
+  üks lisamine 9 s, foto avalikus vaates nähtav. Varasemat parandust ei korrata.
+- V2 päis kasutab üht English/Eesti valikut ja olemasolevat profiles.language
+  välja. Inglise keel on vaikimisi/fallback, aktiivne identiteet ei määra keelt.
+  Värske autentimispõlvkond, 12 s tähtaeg ja kinnitatud tagasilugemine säilivad.
+- Olemasolevad V2 navigeerimise, kuulutuste, profiili, vestluse, energia,
+  hobuse, teenuse ja tootenäidise vaated on lokaliseeritud. Kataloogid
+  tõlgivad ka nähtava oleku/vea keelevahetusel. Kasutajasisu jääb puutumata.
+- 1687 + 174 + 99 + 62 sihitud testi läbisid. Chromiumis 10 provideri,
+  üks tegeliku fototöövoo ja 12 päise/demo kuva juhtumit läbisid. Keelevahetus
+  ei tekitanud teist üleslaadimist ega salvestamata vormi kadu.
+- Ühine Next kooste läbis 27,96 s; kogu vaadatud runtime säilis. Paigaldaja
+  6/6 kontrolli läbisid 1085-failise päris baaspuu ja kohaliku Giti kaudu.
+  Tootmisteenuseid ei kutsutud; Mac/Ready/keele-eelistuse vastuvõtt on ootel.
+- Kõik serveri/API/SQL-failid on algbaasiga identsed. Tingimuste et-EE
+  originaaltekst/räsi ja ordinary publication et leping säilivad; inglise
+  liides annab eestikeelse dokumendi kohta teate.
+- Ühise aluse audit eristab tegelikke võimeid ja järgmisi ühendusi:
+  kanoonilised listings, horse_offers ja services säilivad. Hobuste täielik
+  avaldamine/fotod/avalik detail tuleb enne päris teenuste kataloogi.
+  See keelepakett neid domeeniühendusi veel ei teosta.
+- Uuendatud üks CURRENT_STATE, sellest genereeritav üleandmine,
+  HOSTED_PORTAL, known-issues ja arhitektuur. Varem väljastatud arhiivi,
+  lähtepuu ja käesoleva päeviku senised baidid säilivad.
+
 <!-- SELQIRO_PHOTO_PICKER_PACKAGE_FIX_20261107_R2 -->
 ## 2026-11-07 — foto-valiku pakendamisviga ja eraldi r2
 

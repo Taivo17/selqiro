@@ -1,6 +1,12 @@
 "use client";
 
+import { useV2Translation } from "@/src/shared/i18n/V2LanguageProvider";
+import { demoUi, type DemoTranslate } from "@/lib/i18n/catalogs/demoUi";
+
+
 import { useState } from "react";
+
+const riskMessageKeys = { Low: "riskLow", Medium: "riskMedium", High: "riskHigh" } as const;
 
 type AdminCase = {
   id: string;
@@ -29,98 +35,98 @@ type Signal = {
   users: string;
 };
 
-const cases: AdminCase[] = [
+const getCases = (t: DemoTranslate): AdminCase[] => [
   {
     id: "ST-78421",
-    title: "Today's Story flagged by AI",
-    type: "Story Review",
-    country: "Estonia",
+    title: t("storyFlagged"),
+    type: t("storyReview"),
+    country: t("estonia"),
     language: "et",
     risk: "High",
-    status: "Needs review",
+    status: t("needsReview"),
     age: "5 min",
   },
   {
     id: "REP-1029",
-    title: "Listing complaint — possible scam",
-    type: "Report",
-    country: "Finland",
+    title: t("listingComplaint"),
+    type: t("report"),
+    country: t("finland"),
     language: "fi",
     risk: "High",
-    status: "New",
+    status: t("new"),
     age: "12 min",
   },
   {
     id: "SRV-4421",
-    title: "Service profile unclear claim",
-    type: "Service Review",
-    country: "Japan",
+    title: t("serviceClaim"),
+    type: t("serviceReview"),
+    country: t("japan"),
     language: "ja",
     risk: "Medium",
-    status: "AI triaged",
+    status: t("aiTriaged"),
     age: "18 min",
     assigned: "Mari",
   },
   {
     id: "PAY-9902",
-    title: "Payment dispute — charge issue",
-    type: "Payment",
-    country: "Germany",
+    title: t("paymentDispute"),
+    type: t("payment"),
+    country: t("germany"),
     language: "de",
     risk: "Medium",
-    status: "Waiting provider",
+    status: t("waitingProvider"),
     age: "31 min",
   },
 ];
 
-const auditItems: AuditItem[] = [
+const getAuditItems = (t: DemoTranslate): AuditItem[] => [
   {
-    title: "Energy adjustment added",
-    meta: "Wallet: Milline Vedu · +100 Welcome Energy",
-    actor: "Admin",
+    title: t("energyAdjustmentAdded"),
+    meta: t("welcomeEnergy"),
+    actor: t("admin"),
     time: "10:42",
   },
   {
-    title: "Story approved",
-    meta: "Story ID: ST-78211",
-    actor: "Admin",
+    title: t("storyApproved"),
+    meta: t("storyId"),
+    actor: t("admin"),
     time: "10:21",
   },
   {
-    title: "Listing hidden",
-    meta: "Listing ID: L-99231 · policy violation",
-    actor: "Admin",
+    title: t("listingHidden"),
+    meta: t("listingViolation"),
+    actor: t("admin"),
     time: "09:58",
   },
   {
-    title: "AI auto-answer sent",
-    meta: "Support case: payment processing time",
+    title: t("aiAnswer"),
+    meta: t("paymentSupport"),
     actor: "AI",
     time: "09:05",
   },
 ];
 
-const signals: Signal[] = [
+const getSignals = (t: DemoTranslate): Signal[] => [
   {
-    title: "Payment checkout error",
-    area: "Payments",
+    title: t("checkoutError"),
+    area: t("payments"),
     severity: "High",
     trend: "+75%",
-    users: "12 users",
+    users: t("users12"),
   },
   {
-    title: "Image upload timeout",
-    area: "Listings",
+    title: t("uploadTimeout"),
+    area: t("listingsAdmin"),
     severity: "Medium",
     trend: "+40%",
-    users: "8 users",
+    users: t("users8"),
   },
   {
-    title: "Japanese UI label confusion",
-    area: "Localization",
+    title: t("japaneseLabel"),
+    area: t("localization"),
     severity: "Low",
     trend: "+20%",
-    users: "5 users",
+    users: t("users5"),
   },
 ];
 
@@ -189,6 +195,7 @@ function StatCard({
 }
 
 function RiskBadge({ risk }: { risk: AdminCase["risk"] }) {
+  const { t } = useV2Translation(demoUi);
   const cls =
     risk === "High"
       ? "bg-red-50 text-red-700"
@@ -198,7 +205,7 @@ function RiskBadge({ risk }: { risk: AdminCase["risk"] }) {
 
   return (
     <span className={["rounded-full px-3 py-1 text-xs font-black", cls].join(" ")}>
-      {risk}
+      {t(riskMessageKeys[risk])}
     </span>
   );
 }
@@ -212,6 +219,7 @@ function CaseRow({
   active: boolean;
   onClick: () => void;
 }) {
+  const { t } = useV2Translation(demoUi);
   return (
     <button
       onClick={onClick}
@@ -258,7 +266,7 @@ function CaseRow({
               active ? "bg-white/10 text-white" : "bg-blue-50 text-blue-700",
             ].join(" ")}
           >
-            Assigned: {item.assigned}
+             {t("assignedPrefix")} {item.assigned}
           </span>
         ) : null}
       </div>
@@ -267,6 +275,7 @@ function CaseRow({
 }
 
 function SignalCard({ signal }: { signal: Signal }) {
+  const { t } = useV2Translation(demoUi);
   const cls =
     signal.severity === "High"
       ? "bg-red-50 text-red-700"
@@ -282,16 +291,16 @@ function SignalCard({ signal }: { signal: Signal }) {
             {signal.area}
           </p>
           <h3 className="mt-2 font-black">{signal.title}</h3>
-          <p className="mt-1 text-sm text-neutral-500">{signal.users} affected</p>
+          <p className="mt-1 text-sm text-neutral-500">{signal.users}  {t("affectedSuffix")}</p>
         </div>
 
         <span className={["rounded-full px-3 py-1 text-xs font-black", cls].join(" ")}>
-          {signal.severity}
+          {t(riskMessageKeys[signal.severity])}
         </span>
       </div>
 
       <p className="mt-3 text-sm font-black text-neutral-700">
-        Trend: {signal.trend}
+         {t("trendPrefix")} {signal.trend}
       </p>
     </article>
   );
@@ -314,6 +323,10 @@ function AuditRow({ item }: { item: AuditItem }) {
 }
 
 export default function V2AdminDashboardPage() {
+  const { t } = useV2Translation(demoUi);
+  const cases = getCases(t);
+  const auditItems = getAuditItems(t);
+  const signals = getSignals(t);
   const [selectedCaseId, setSelectedCaseId] = useState(cases[0].id);
   const selectedCase = cases.find((item) => item.id === selectedCaseId) || cases[0];
 
@@ -321,16 +334,16 @@ export default function V2AdminDashboardPage() {
     <div className="grid gap-8 lg:grid-cols-[260px_1fr]">
       <aside className="hidden lg:block">
         <div className="sticky top-28 space-y-2 rounded-[30px] border border-black/5 bg-white p-4 shadow-sm">
-          <SidebarItem label="Dashboard" active />
-          <SidebarItem label="Reports" count="28" />
-          <SidebarItem label="Story Review" count="7" />
-          <SidebarItem label="Listings Review" count="18" />
-          <SidebarItem label="Services Review" count="6" />
-          <SidebarItem label="Identities" />
-          <SidebarItem label="Energy & Payments" count="4" />
-          <SidebarItem label="AI Signals" count="3" />
-          <SidebarItem label="Audit Log" />
-          <SidebarItem label="Settings" />
+          <SidebarItem label={t("dashboard")} active />
+          <SidebarItem label={t("reports")} count="28" />
+          <SidebarItem label={t("storyReview")} count="7" />
+          <SidebarItem label={t("listingsReview")} count="18" />
+          <SidebarItem label={t("servicesReview")} count="6" />
+          <SidebarItem label={t("identities")} />
+          <SidebarItem label={t("energyPayments")} count="4" />
+          <SidebarItem label={t("aiSignals")} count="3" />
+          <SidebarItem label={t("auditLog")} />
+          <SidebarItem label={t("settings")} />
         </div>
       </aside>
 
@@ -339,35 +352,29 @@ export default function V2AdminDashboardPage() {
           <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
             <div>
               <p className="text-xs font-bold uppercase tracking-[0.26em] text-emerald-600">
-                Admin
-              </p>
+                 {t("admin")} </p>
               <h1 className="mt-3 text-4xl font-black tracking-tight">
-                Moderation dashboard
-              </h1>
+                 {t("moderationDashboard")} </h1>
               <p className="mt-3 max-w-3xl text-base leading-7 text-neutral-600">
-                Admin on modulaarne juhtumite töölaud. AI teeb esmase sorteerimise,
-                inimene lahendab tundlikud ja kahtlased juhtumid.
-              </p>
+                 {t("adminDescription")} </p>
             </div>
 
             <div className="rounded-[24px] bg-neutral-950 p-5 text-white md:w-[340px]">
               <p className="text-xs font-bold uppercase tracking-[0.2em] text-white/50">
-                Admin põhimõte
-              </p>
-              <p className="mt-2 text-2xl font-black">Trust first</p>
+                 {t("adminPrinciple")} </p>
+              <p className="mt-2 text-2xl font-black">{t("trustFirst")}</p>
               <p className="mt-2 text-sm leading-6 text-white/65">
-                Piiratud ligipääs, põhjendatud tegevused ja audit log.
-              </p>
+                 {t("adminAccess")} </p>
             </div>
           </div>
         </section>
 
         <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
-          <StatCard label="Open reports" value="28" helper="-12% today" tone="green" />
-          <StatCard label="AI escalations" value="11" helper="needs human" tone="orange" />
-          <StatCard label="Story reviews" value="7" helper="pending" tone="orange" />
-          <StatCard label="Payment issues" value="4" helper="support" />
-          <StatCard label="System alerts" value="2" helper="critical" tone="red" />
+          <StatCard label={t("openReports")} value="28" helper={t("todayChange")} tone="green" />
+          <StatCard label={t("aiEscalations")} value="11" helper={t("needsHuman")} tone="orange" />
+          <StatCard label={t("storyReviews")} value="7" helper={t("pending")} tone="orange" />
+          <StatCard label={t("paymentIssues")} value="4" helper={t("support")} />
+          <StatCard label={t("systemAlerts")} value="2" helper={t("critical")} tone="red" />
         </section>
 
         <section className="grid gap-8 xl:grid-cols-[1fr_420px]">
@@ -376,49 +383,39 @@ export default function V2AdminDashboardPage() {
               <div className="mb-6 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
                 <div>
                   <p className="text-xs font-bold uppercase tracking-[0.26em] text-neutral-400">
-                    AI triage
-                  </p>
-                  <h2 className="mt-2 text-3xl font-black">First-pass overview</h2>
+                     {t("aiTriage")} </p>
+                  <h2 className="mt-2 text-3xl font-black">{t("firstPassOverview")}</h2>
                   <p className="mt-2 max-w-3xl text-sm leading-6 text-neutral-500">
-                    AI aitab sorteerida juhtumeid, tõlkida avalikku sisu ja tuvastada
-                    korduvaid probleeme. Tundlikud otsused jäävad inimesele.
-                  </p>
+                     {t("aiTriageDescription")} </p>
                 </div>
 
                 <span className="rounded-full bg-emerald-50 px-4 py-2 text-sm font-black text-emerald-700">
-                  82% handled or routed
-                </span>
+                   {t("handled82")} </span>
               </div>
 
               <div className="grid gap-4 md:grid-cols-3">
                 <div className="rounded-[24px] bg-emerald-50 p-5">
                   <p className="text-xs font-bold uppercase tracking-[0.18em] text-emerald-700">
-                    Green
-                  </p>
-                  <h3 className="mt-2 text-xl font-black">Clear cases</h3>
+                     {t("green")} </p>
+                  <h3 className="mt-2 text-xl font-black">{t("clearCases")}</h3>
                   <p className="mt-2 text-sm leading-6 text-neutral-600">
-                    AI võib vastata lihtsale küsimusele või suunata õigesse kohta.
-                  </p>
+                     {t("clearCasesDescription")} </p>
                 </div>
 
                 <div className="rounded-[24px] bg-amber-50 p-5">
                   <p className="text-xs font-bold uppercase tracking-[0.18em] text-amber-700">
-                    Yellow
-                  </p>
-                  <h3 className="mt-2 text-xl font-black">Uncertain</h3>
+                     {t("yellow")} </p>
+                  <h3 className="mt-2 text-xl font-black">{t("uncertain")}</h3>
                   <p className="mt-2 text-sm leading-6 text-neutral-600">
-                    AI eskaleerib adminile koos põhjuse ja kokkuvõttega.
-                  </p>
+                     {t("uncertainDescription")} </p>
                 </div>
 
                 <div className="rounded-[24px] bg-red-50 p-5">
                   <p className="text-xs font-bold uppercase tracking-[0.18em] text-red-700">
-                    Red
-                  </p>
-                  <h3 className="mt-2 text-xl font-black">High risk</h3>
+                     {t("red")} </p>
+                  <h3 className="mt-2 text-xl font-black">{t("highRisk")}</h3>
                   <p className="mt-2 text-sm leading-6 text-neutral-600">
-                    Pettus, maksed, privaatsus või kõrge nähtavusega sisu vajab inimest.
-                  </p>
+                     {t("highRiskDescription")} </p>
                 </div>
               </div>
             </section>
@@ -427,14 +424,12 @@ export default function V2AdminDashboardPage() {
               <div className="mb-5 flex items-end justify-between gap-4">
                 <div>
                   <p className="text-xs font-bold uppercase tracking-[0.26em] text-neutral-400">
-                    Queue
-                  </p>
-                  <h2 className="mt-2 text-3xl font-black">Needs human review</h2>
+                     {t("queue")} </p>
+                  <h2 className="mt-2 text-3xl font-black">{t("needsHumanReview")}</h2>
                 </div>
 
                 <button className="rounded-full border border-neutral-200 bg-white px-4 py-2 text-sm font-black shadow-sm">
-                  Vaata kõiki
-                </button>
+                   {t("viewAll")} </button>
               </div>
 
               <div className="space-y-3">
@@ -453,13 +448,10 @@ export default function V2AdminDashboardPage() {
               <div className="mb-5 flex items-end justify-between gap-4">
                 <div>
                   <p className="text-xs font-bold uppercase tracking-[0.26em] text-neutral-400">
-                    AI Signals
-                  </p>
-                  <h2 className="mt-2 text-3xl font-black">Recurring issues</h2>
+                     {t("aiSignals")} </p>
+                  <h2 className="mt-2 text-3xl font-black">{t("recurringIssues")}</h2>
                   <p className="mt-2 max-w-3xl text-sm leading-6 text-neutral-500">
-                    AI Signals grupeerib korduvad probleemid, et admin ei peaks
-                    sama viga kümnete üksikjuhtumitena lahendama.
-                  </p>
+                     {t("aiSignalsDescription")} </p>
                 </div>
               </div>
 
@@ -474,8 +466,7 @@ export default function V2AdminDashboardPage() {
           <aside className="space-y-5">
             <section className="rounded-[30px] border border-black/5 bg-white p-6 shadow-sm">
               <p className="text-xs font-bold uppercase tracking-[0.24em] text-neutral-400">
-                Case detail
-              </p>
+                 {t("caseDetail")} </p>
               <h2 className="mt-2 text-2xl font-black">{selectedCase.title}</h2>
               <p className="mt-2 text-sm text-neutral-500">
                 {selectedCase.type} · {selectedCase.id}
@@ -484,78 +475,63 @@ export default function V2AdminDashboardPage() {
               <div className="mt-5 grid gap-3">
                 <div className="rounded-2xl bg-[#fbfbfa] p-4">
                   <p className="text-xs font-bold uppercase tracking-[0.18em] text-neutral-400">
-                    Ownership
-                  </p>
+                     {t("ownership")} </p>
                   <p className="mt-1 font-black">
                     {selectedCase.assigned
-                      ? `Handled by ${selectedCase.assigned}`
-                      : "Unassigned"}
+                      ? t("handledBy", { name: selectedCase.assigned })
+                      : t("unassigned")}
                   </p>
                   <button className="mt-3 rounded-full bg-black px-4 py-2 text-xs font-black text-white">
-                    Võtan käsile
-                  </button>
+                     {t("takeCase")} </button>
                 </div>
 
                 <div className="rounded-2xl bg-[#fbfbfa] p-4">
                   <p className="text-xs font-bold uppercase tracking-[0.18em] text-neutral-400">
-                    Original
-                  </p>
+                     {t("original")} </p>
                   <p className="mt-2 text-sm leading-6 text-neutral-700">
-                    Originaaltekst kuvatakse siin. See on tõe allikas.
-                  </p>
+                     {t("originalDescription")} </p>
                 </div>
 
                 <div className="rounded-2xl bg-emerald-50 p-4">
                   <p className="text-xs font-bold uppercase tracking-[0.18em] text-emerald-700">
-                    AI translation
-                  </p>
+                     {t("aiTranslation")} </p>
                   <p className="mt-2 text-sm leading-6 text-neutral-700">
-                    AI tõlge admini töökeelde. Privaatsõnumeid AI Launchis ei tõlgi.
-                  </p>
+                     {t("aiTranslationDescription")} </p>
                 </div>
 
                 <div className="rounded-2xl bg-amber-50 p-4">
                   <p className="text-xs font-bold uppercase tracking-[0.18em] text-amber-700">
-                    AI recommendation
-                  </p>
+                     {t("aiRecommendation")} </p>
                   <p className="mt-2 text-sm leading-6 text-neutral-700">
-                    Risk: {selectedCase.risk}. Soovitus: vaata seotud objekti ja
-                    tee inimese otsus.
+                    {t("riskRecommendation", { risk: t(riskMessageKeys[selectedCase.risk]) })}
                   </p>
                 </div>
               </div>
 
               <div className="mt-5 grid gap-3">
                 <button className="rounded-full bg-black px-5 py-3 text-sm font-black text-white">
-                  Ava detailvaade
-                </button>
+                   {t("openDetails")} </button>
                 <button className="rounded-full border border-neutral-200 bg-white px-5 py-3 text-sm font-black">
-                  Eskaleeri
-                </button>
+                   {t("escalate")} </button>
               </div>
             </section>
 
             <section className="rounded-[30px] border border-black/5 bg-white p-6 shadow-sm">
               <p className="text-xs font-bold uppercase tracking-[0.24em] text-neutral-400">
-                Energy / maksed
-              </p>
-              <h2 className="mt-2 text-xl font-black">Adjustment tööriist</h2>
+                 {t("energyPaymentsHeading")} </p>
+              <h2 className="mt-2 text-xl font-black">{t("adjustmentTool")}</h2>
               <p className="mt-2 text-sm leading-6 text-neutral-600">
-                Admin saab Energy’t lisada või eemaldada ainult ledger tehinguna.
-                Saldot ei muudeta otse.
-              </p>
+                 {t("adjustmentDescription")} </p>
               <button className="mt-5 w-full rounded-full border border-neutral-200 bg-white px-5 py-3 text-sm font-black shadow-sm">
-                Ava Energy juhtum
-              </button>
+                 {t("openEnergyCase")} </button>
             </section>
 
             <section className="rounded-[30px] border border-black/5 bg-white p-6 shadow-sm">
               <div className="mb-5 flex items-end justify-between gap-4">
                 <div>
                   <p className="text-xs font-bold uppercase tracking-[0.24em] text-neutral-400">
-                    Audit log
-                  </p>
-                  <h2 className="mt-2 text-xl font-black">Viimased tegevused</h2>
+                     {t("auditLogHeading")} </p>
+                  <h2 className="mt-2 text-xl font-black">{t("recentActivity")}</h2>
                 </div>
               </div>
 

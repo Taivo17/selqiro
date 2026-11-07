@@ -47,27 +47,27 @@ function validateInput(input: UpdateListingBasicsInput) {
   const title = normalizeText(input.title);
 
   if (!input.userId) {
-    throw new Error("Sisselogimine puudub.");
+    throw new Error("authMissing");
   }
 
   if (!input.listingId) {
-    throw new Error("Kuulutuse id puudub.");
+    throw new Error("listingIdMissingLower");
   }
 
   if (title.length < 2) {
-    throw new Error("Pealkiri peab olema vähemalt 2 tähemärki.");
+    throw new Error("titleTooShort");
   }
 
   if (title.length > 140) {
-    throw new Error("Pealkiri on liiga pikk.");
+    throw new Error("titleTooLong");
   }
 
   if (input.price !== undefined && typeof input.price !== "string") {
-    throw new Error("Hinna tekst peab olema tekstiväärtus.");
+    throw new Error("priceMustBeText");
   }
 
   if (input.description.length > 5000) {
-    throw new Error("Kirjeldus on liiga pikk.");
+    throw new Error("descriptionTooLong");
   }
 }
 
@@ -104,11 +104,11 @@ export async function updateListingBasics(
     .maybeSingle();
 
   if (ownerError) {
-    throw new Error(ownerError.message || "Kuulutuse kontroll ebaõnnestus.");
+    throw new Error(ownerError.message || "listingCheckFailed");
   }
 
   if (!ownerRow) {
-    throw new Error("Kuulutust ei leitud.");
+    throw new Error("listingNotFound");
   }
 
   if (
@@ -118,7 +118,7 @@ export async function updateListingBasics(
       activeIdentityId,
     })
   ) {
-    throw new Error("Sul ei ole õigust seda kuulutust muuta.");
+    throw new Error("editForbidden");
   }
 
   const title = normalizeText(input.title);
@@ -149,6 +149,6 @@ export async function updateListingBasics(
     .eq("id", input.listingId);
 
   if (updateError) {
-    throw new Error(updateError.message || "Kuulutuse salvestamine ebaõnnestus.");
+    throw new Error(updateError.message || "listingSaveFailed");
   }
 }

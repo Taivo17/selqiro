@@ -1,5 +1,7 @@
 "use client";
 
+import { marketplaceMessage, safeMarketplaceError } from "../../../shared/i18n/marketplaceMessages";
+import { useMarketplaceTranslation } from "../../../shared/i18n/useMarketplaceTranslation";
 import {
   useEffect,
   useState,
@@ -142,6 +144,7 @@ export default function ServiceDraftCreateForm({
   onCancelEdit,
   onEdited,
 }: ServiceDraftCreateFormProps) {
+  const { language, r } = useMarketplaceTranslation();
   const editing =
     service !== null;
   const [
@@ -268,7 +271,7 @@ export default function ServiceDraftCreateForm({
       SERVICE_TITLE_MIN_LENGTH
     ) {
       setFormError(
-        `Pealkiri peab olema vähemalt ${SERVICE_TITLE_MIN_LENGTH} tähemärki.`
+        marketplaceMessage("service.the_title_must_contain_at_least_value_characters.154417", { p0: String(SERVICE_TITLE_MIN_LENGTH) })
       );
       return;
     }
@@ -278,7 +281,7 @@ export default function ServiceDraftCreateForm({
       SERVICE_TITLE_MAX_LENGTH
     ) {
       setFormError(
-        `Pealkiri võib olla kuni ${SERVICE_TITLE_MAX_LENGTH} tähemärki.`
+        marketplaceMessage("service.the_title_can_contain_up_to_value_characters.6b5ca7", { p0: String(SERVICE_TITLE_MAX_LENGTH) })
       );
       return;
     }
@@ -288,7 +291,7 @@ export default function ServiceDraftCreateForm({
       SERVICE_DESCRIPTION_MAX_LENGTH
     ) {
       setFormError(
-        `Kirjeldus võib olla kuni ${SERVICE_DESCRIPTION_MAX_LENGTH} tähemärki.`
+        marketplaceMessage("service.the_description_can_contain_up_to_value_characters.69b2ed", { p0: String(SERVICE_DESCRIPTION_MAX_LENGTH) })
       );
       return;
     }
@@ -298,7 +301,7 @@ export default function ServiceDraftCreateForm({
         .category
     ) {
       setFormError(
-        "Vali teenuse ülemrubriik."
+        marketplaceMessage("service.select_the_service_s_parent_category.df0217")
       );
       return;
     }
@@ -308,7 +311,7 @@ export default function ServiceDraftCreateForm({
       SERVICE_COUNTRY_MAX_LENGTH
     ) {
       setFormError(
-        `Riik võib olla kuni ${SERVICE_COUNTRY_MAX_LENGTH} tähemärki.`
+        marketplaceMessage("service.the_country_can_contain_up_to_value_characters.0f4b08", { p0: String(SERVICE_COUNTRY_MAX_LENGTH) })
       );
       return;
     }
@@ -318,7 +321,7 @@ export default function ServiceDraftCreateForm({
       SERVICE_CITY_MAX_LENGTH
     ) {
       setFormError(
-        `Linn või piirkond võib olla kuni ${SERVICE_CITY_MAX_LENGTH} tähemärki.`
+        marketplaceMessage("service.the_town_or_region_can_contain_up_to.9ce5fd", { p0: String(SERVICE_CITY_MAX_LENGTH) })
       );
       return;
     }
@@ -328,7 +331,7 @@ export default function ServiceDraftCreateForm({
       SERVICE_LOCATION_MAX_LENGTH
     ) {
       setFormError(
-        `Asukoha täpsustus võib olla kuni ${SERVICE_LOCATION_MAX_LENGTH} tähemärki.`
+        marketplaceMessage("service.the_location_details_can_contain_up_to_value.1cbc6f", { p0: String(SERVICE_LOCATION_MAX_LENGTH) })
       );
       return;
     }
@@ -344,7 +347,7 @@ export default function ServiceDraftCreateForm({
       priceAmount === null
     ) {
       setFormError(
-        "Sisesta valitud hinnatüübi jaoks numbriline hind."
+        marketplaceMessage("service.enter_a_numeric_amount_for_the_selected_price.683a69")
       );
       return;
     }
@@ -358,7 +361,7 @@ export default function ServiceDraftCreateForm({
       )
     ) {
       setFormError(
-        "Teenuse hind ei ole korrektne."
+        marketplaceMessage("service.the_service_price_is_invalid.ccff83")
       );
       return;
     }
@@ -401,15 +404,13 @@ export default function ServiceDraftCreateForm({
       );
       setFormOpen(false);
       setSuccessMessage(
-        `Teenus „${savedService.title}” lisati mustandina.`
+        marketplaceMessage("service.service_value_added_as_a_draft.57ac9e", { p0: String(savedService.title) })
       );
     } catch (error) {
       setFormError(
-        error instanceof Error
-          ? error.message
-          : editing
-            ? "Teenuse mustandit ei saanud salvestada."
-            : "Teenust ei saanud lisada."
+        safeMarketplaceError(error, editing
+            ? marketplaceMessage("service.the_service_draft_could_not_be_saved.1ed4de")
+            : marketplaceMessage("service.the_service_could_not_be_added.6d48a9"))
       );
     }
   }
@@ -420,17 +421,13 @@ export default function ServiceDraftCreateForm({
         <div className="flex min-w-0 flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="min-w-0">
             <p className="text-xs font-black uppercase tracking-[0.18em] text-emerald-700">
-              Uus teenus
-            </p>
+              {r(marketplaceMessage("service.new_service.df89c6"))}</p>
 
             <h3 className="mt-2 break-words text-lg font-black">
-              Lisa teenus mustandina
-            </h3>
+              {r(marketplaceMessage("service.add_a_service_as_a_draft.734566"))}</h3>
 
             <p className="mt-2 max-w-2xl text-sm leading-6 text-neutral-600">
-              Mustand on nähtav ainult aktiivse identiteedi haldusvaates.
-              Avaldamine lisatakse eraldi järgmises etapis.
-            </p>
+              {r(marketplaceMessage("service.the_draft_is_visible_only_in_the_active.0048f6"))}</p>
           </div>
 
           <button
@@ -439,18 +436,17 @@ export default function ServiceDraftCreateForm({
             disabled={saving}
             className="inline-flex w-full shrink-0 justify-center rounded-full bg-black px-5 py-3 text-sm font-black text-white transition disabled:cursor-wait disabled:opacity-50 sm:w-auto"
           >
-            Lisa teenus
-          </button>
+            {r(marketplaceMessage("service.add_service.e84aa1"))}</button>
         </div>
 
-        {successMessage ? (
+        {r(successMessage ? (
           <p
             role="status"
             className="mt-4 rounded-xl border border-emerald-100 bg-emerald-50 px-3 py-2.5 text-sm font-semibold leading-6 text-emerald-800"
           >
-            {successMessage}
+            {r(successMessage)}
           </p>
-        ) : null}
+        ) : null)}
       </section>
     );
   }
@@ -464,20 +460,19 @@ export default function ServiceDraftCreateForm({
       <div className="flex min-w-0 flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div className="min-w-0">
           <p className="text-xs font-black uppercase tracking-[0.18em] text-emerald-700">
-            {editing
-              ? "Teenuse mustand"
-              : "Uus teenus"}
+            {r(editing
+              ? marketplaceMessage("service.service_draft.4d9581")
+              : marketplaceMessage("service.new_service.df89c6"))}
           </p>
 
           <h3 className="mt-2 text-lg font-black">
-            {editing
-              ? "Muuda teenuse mustandit"
-              : "Lisa teenus mustandina"}
+            {r(editing
+              ? marketplaceMessage("service.edit_service_draft.bd2b97")
+              : marketplaceMessage("service.add_a_service_as_a_draft.734566"))}
           </h3>
 
           <p className="mt-2 max-w-2xl text-sm leading-6 text-neutral-600">
-            Täida põhiväljad. Pildid, muutmine ja avaldamine tulevad eraldi sammudena.
-          </p>
+            {r(marketplaceMessage("service.complete_the_basic_fields_after_saving_the_draft.ea83d8"))}</p>
         </div>
 
         <button
@@ -486,15 +481,13 @@ export default function ServiceDraftCreateForm({
           disabled={saving}
           className="w-full shrink-0 rounded-full border border-neutral-200 bg-white px-4 py-2.5 text-sm font-black shadow-sm disabled:cursor-wait disabled:opacity-50 sm:w-auto"
         >
-          Sulge
-        </button>
+          {r(marketplaceMessage("service.close.16d9ad"))}</button>
       </div>
 
       <div className="mt-5 grid min-w-0 gap-4 sm:grid-cols-2">
         <label className="min-w-0 sm:col-span-2">
           <span className="mb-2 block text-xs font-black uppercase tracking-[0.14em] text-neutral-500">
-            Pealkiri *
-          </span>
+            {r(marketplaceMessage("service.title.6a1352"))}</span>
 
           <input
             value={form.title}
@@ -506,33 +499,26 @@ export default function ServiceDraftCreateForm({
               }));
               setFormError(null);
             }}
-            minLength={
-              SERVICE_TITLE_MIN_LENGTH
-            }
-            maxLength={
-              SERVICE_TITLE_MAX_LENGTH
-            }
+            minLength={SERVICE_TITLE_MIN_LENGTH}
+            maxLength={SERVICE_TITLE_MAX_LENGTH}
             required
             disabled={saving}
-            placeholder="Näiteks Murutraktori hooldus"
+            placeholder={r(marketplaceMessage("service.for_example_ride_on_mower_maintenance.ca6200"))}
             className="min-h-12 w-full min-w-0 rounded-2xl border border-neutral-200 bg-white px-4 text-sm font-semibold outline-none transition focus:border-neutral-400 disabled:cursor-wait disabled:opacity-60"
           />
 
           <span className="mt-1 block text-right text-[11px] font-bold text-neutral-400">
-            {form.title.length}/
-            {SERVICE_TITLE_MAX_LENGTH}
+            {r(form.title.length)}/
+            {r(SERVICE_TITLE_MAX_LENGTH)}
           </span>
         </label>
 
         <label className="min-w-0 sm:col-span-2">
           <span className="mb-2 block text-xs font-black uppercase tracking-[0.14em] text-neutral-500">
-            Kirjeldus
-          </span>
+            {r(marketplaceMessage("horse.description.8dbc42"))}</span>
 
           <textarea
-            value={
-              form.description
-            }
+            value={form.description}
             onChange={(event) => {
               setForm((current) => ({
                 ...current,
@@ -541,28 +527,22 @@ export default function ServiceDraftCreateForm({
               }));
               setFormError(null);
             }}
-            maxLength={
-              SERVICE_DESCRIPTION_MAX_LENGTH
-            }
+            maxLength={SERVICE_DESCRIPTION_MAX_LENGTH}
             rows={5}
             disabled={saving}
-            placeholder="Kirjelda, mida teenus sisaldab ja kellele see sobib."
+            placeholder={r(marketplaceMessage("service.describe_what_the_service_includes_and_who_it.904dea"))}
             className="w-full min-w-0 resize-y rounded-2xl border border-neutral-200 bg-white px-4 py-3 text-sm leading-6 outline-none transition focus:border-neutral-400 disabled:cursor-wait disabled:opacity-60"
           />
 
           <span className="mt-1 block text-right text-[11px] font-bold text-neutral-400">
-            {form.description.length}/
-            {
-              SERVICE_DESCRIPTION_MAX_LENGTH
-            }
+            {r(form.description.length)}/
+            {r(SERVICE_DESCRIPTION_MAX_LENGTH)}
           </span>
         </label>
 
         <div className="min-w-0 sm:col-span-2">
           <ServiceCategorySelector
-            value={
-              form.categorySelection
-            }
+            value={form.categorySelection}
             onChange={(
               categorySelection
             ) => {
@@ -579,8 +559,7 @@ export default function ServiceDraftCreateForm({
 
         <label className="min-w-0">
           <span className="mb-2 block text-xs font-black uppercase tracking-[0.14em] text-neutral-500">
-            Hinnatüüp
-          </span>
+            {r(marketplaceMessage("service.price_type.d6f274"))}</span>
 
           <select
             value={form.priceType}
@@ -588,43 +567,33 @@ export default function ServiceDraftCreateForm({
               updatePriceType(
                 event.target
                   .value as ServicePriceType
-              )
-            }
+              )}
             disabled={saving}
             className="min-h-12 w-full min-w-0 rounded-2xl border border-neutral-200 bg-white px-4 text-sm font-black outline-none transition focus:border-neutral-400 disabled:cursor-wait disabled:opacity-60"
           >
             <option value="contact">
-              Hind kokkuleppel
-            </option>
+              {r(marketplaceMessage("service.price_by_agreement.299166"))}</option>
             <option value="fixed">
-              Fikseeritud hind
-            </option>
+              {r(marketplaceMessage("service.fixed_price.2286ec"))}</option>
             <option value="from">
-              Alates hinnast
-            </option>
+              {r(marketplaceMessage("service.starting_price.92ca47"))}</option>
             <option value="hourly">
-              Tunnitasu
-            </option>
+              {r(marketplaceMessage("service.hourly_rate.b315ed"))}</option>
           </select>
         </label>
 
         <label className="min-w-0">
           <span className="mb-2 block text-xs font-black uppercase tracking-[0.14em] text-neutral-500">
-            Hind
-          </span>
+            {r(marketplaceMessage("service.price.ee7887"))}</span>
 
           <div className="grid min-w-0 grid-cols-[minmax(0,1fr)_88px] gap-2">
             <input
               type="number"
               inputMode="decimal"
               min="0"
-              max={
-                SERVICE_PRICE_MAX
-              }
+              max={SERVICE_PRICE_MAX}
               step="0.01"
-              value={
-                form.priceAmount
-              }
+              value={form.priceAmount}
               onChange={(event) => {
                 setForm((current) => ({
                   ...current,
@@ -633,21 +602,15 @@ export default function ServiceDraftCreateForm({
                 }));
                 setFormError(null);
               }}
-              required={
-                form.priceType !==
-                "contact"
-              }
-              disabled={
-                saving ||
+              required={form.priceType !==
+                "contact"}
+              disabled={saving ||
                 form.priceType ===
-                  "contact"
-              }
-              placeholder={
-                form.priceType ===
+                  "contact"}
+              placeholder={r(form.priceType ===
                   "contact"
                   ? "—"
-                  : "0.00"
-              }
+                  : "0.00")}
               className="min-h-12 w-full min-w-0 rounded-2xl border border-neutral-200 bg-white px-4 text-sm font-semibold outline-none transition focus:border-neutral-400 disabled:cursor-not-allowed disabled:bg-neutral-100 disabled:text-neutral-400"
             />
 
@@ -660,10 +623,9 @@ export default function ServiceDraftCreateForm({
                     currency:
                       event.target.value,
                   })
-                )
-              }
+                )}
               disabled={saving}
-              aria-label="Valuuta"
+              aria-label={r(marketplaceMessage("service.currency.5946b1"))}
               className="min-h-12 w-full rounded-2xl border border-neutral-200 bg-white px-3 text-sm font-black outline-none disabled:cursor-wait disabled:opacity-60"
             >
               <option value="EUR">
@@ -675,8 +637,7 @@ export default function ServiceDraftCreateForm({
 
         <label className="min-w-0">
           <span className="mb-2 block text-xs font-black uppercase tracking-[0.14em] text-neutral-500">
-            Riik
-          </span>
+            {r(marketplaceMessage("service.country.8d7336"))}</span>
 
           <select
             value={form.country}
@@ -687,21 +648,18 @@ export default function ServiceDraftCreateForm({
                   country:
                     event.target.value,
                 })
-              )
-            }
+              )}
             disabled={saving}
             className="min-h-12 w-full min-w-0 rounded-2xl border border-neutral-200 bg-white px-4 text-sm font-black outline-none disabled:cursor-wait disabled:opacity-60"
           >
             <option value="Estonia">
-              Eesti
-            </option>
+              {r(marketplaceMessage("service.estonia.ed7477"))}</option>
           </select>
         </label>
 
         <label className="min-w-0">
           <span className="mb-2 block text-xs font-black uppercase tracking-[0.14em] text-neutral-500">
-            Linn või piirkond
-          </span>
+            {r(marketplaceMessage("service.town_or_region.a66ae4"))}</span>
 
           <input
             value={form.city}
@@ -713,22 +671,18 @@ export default function ServiceDraftCreateForm({
               }));
               setFormError(null);
             }}
-            maxLength={
-              SERVICE_CITY_MAX_LENGTH
-            }
+            maxLength={SERVICE_CITY_MAX_LENGTH}
             disabled={saving}
-            placeholder="Näiteks Paide"
+            placeholder={r(marketplaceMessage("service.for_example_paide.e3ac08"))}
             className="min-h-12 w-full min-w-0 rounded-2xl border border-neutral-200 bg-white px-4 text-sm font-semibold outline-none transition focus:border-neutral-400 disabled:cursor-wait disabled:opacity-60"
           />
         </label>
 
         <label className="min-w-0 sm:col-span-2">
           <span className="mb-2 block text-xs font-black uppercase tracking-[0.14em] text-neutral-500">
-            Asukoha täpsustus
-            <span className="normal-case tracking-normal text-neutral-400">
-              {" "}
-              (valikuline)
-            </span>
+            {r(marketplaceMessage("service.location_details.6c4b64"))}<span className="normal-case tracking-normal text-neutral-400">
+              {r(" ")}
+              {r(marketplaceMessage("service.optional.c6075a"))}</span>
           </span>
 
           <input
@@ -741,45 +695,40 @@ export default function ServiceDraftCreateForm({
               }));
               setFormError(null);
             }}
-            maxLength={
-              SERVICE_LOCATION_MAX_LENGTH
-            }
+            maxLength={SERVICE_LOCATION_MAX_LENGTH}
             disabled={saving}
-            placeholder="Näiteks Paide piirkond"
+            placeholder={r(marketplaceMessage("service.for_example_paide_area.e36e45"))}
             className="min-h-12 w-full min-w-0 rounded-2xl border border-neutral-200 bg-white px-4 text-sm font-semibold outline-none transition focus:border-neutral-400 disabled:cursor-wait disabled:opacity-60"
           />
 
           <p className="mt-2 text-xs leading-5 text-neutral-500">
-            Eraisikuna sisesta linn või piirkond, mitte kodu täpne aadress.
-          </p>
+            {r(marketplaceMessage("service.as_a_private_person_enter_a_town_or.d6a3fa"))}</p>
         </label>
       </div>
 
-      {formError ? (
+      {r(formError ? (
         <p
           role="alert"
           className="mt-4 break-words rounded-2xl border border-red-100 bg-red-50 px-4 py-3 text-sm font-semibold leading-6 text-red-800"
         >
-          {formError}
+          {r(formError)}
         </p>
-      ) : null}
+      ) : null)}
 
       <div className="mt-5 flex flex-col gap-2 sm:flex-row">
         <button
           type="submit"
-          disabled={
-            saving ||
+          disabled={saving ||
             !form.title.trim() ||
             !form.categorySelection
-              .category
-          }
+              .category}
           className="rounded-full bg-black px-5 py-3 text-sm font-black text-white transition disabled:cursor-not-allowed disabled:opacity-40"
         >
-          {saving
-              ? "Salvestan..."
+          {r(saving
+              ? marketplaceMessage("service.saving.cf92f2")
               : editing
-                ? "Salvesta muudatused"
-                : "Lisa mustand"}
+                ? marketplaceMessage("horse.save_changes.10e8e6")
+                : marketplaceMessage("service.add_draft.05d673"))}
         </button>
 
         <button
@@ -788,8 +737,7 @@ export default function ServiceDraftCreateForm({
           disabled={saving}
           className="rounded-full border border-neutral-200 bg-white px-5 py-3 text-sm font-black shadow-sm disabled:cursor-wait disabled:opacity-50"
         >
-          Tühista
-        </button>
+          {r(marketplaceMessage("service.cancel.a6b940"))}</button>
       </div>
     </form>
   );

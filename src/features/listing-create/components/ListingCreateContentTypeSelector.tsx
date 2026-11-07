@@ -1,4 +1,6 @@
 "use client";
+import { useV2Translation } from "../../../shared/i18n/V2LanguageProvider";
+import { listingCreateMessages, translateListingCreateMessage } from "../model/listingCreateMessages";
 
 import {
   LISTING_CREATE_CONTENT_TYPES,
@@ -22,9 +24,9 @@ type ListingCreateContentTypeSelectorProps = {
 
 const STANDARD_LISTING_OPTION = {
   value: LISTING_CREATE_CONTENT_TYPES.listing,
-  label: "Tavaline kuulutus",
+  label: "ordinaryListing",
   description:
-    "Siia sobivad kõik tavapärased müügi- ja pakkumiskuulutused.",
+    "ordinaryListingDescription",
 } as const;
 
 export default function
@@ -34,6 +36,8 @@ ListingCreateContentTypeSelector({
   marketCountryCode =
     DEFAULT_LIVE_ANIMAL_MARKET_COUNTRY_CODE,
 }: ListingCreateContentTypeSelectorProps) {
+  const { language, t } = useV2Translation(listingCreateMessages);
+
   const liveAnimalCapabilities =
     getEnabledLiveAnimalOfferCapabilities(
       marketCountryCode
@@ -44,9 +48,8 @@ ListingCreateContentTypeSelector({
     ...liveAnimalCapabilities.map(
       (capability) => ({
         value: capability.contentType,
-        label: capability.label,
-        description:
-          capability.description,
+        label: "horseListing",
+        description: "horseListingDescription",
       })
     ),
   ] satisfies readonly {
@@ -78,20 +81,11 @@ ListingCreateContentTypeSelector({
       }
     >
       <fieldset>
-        <legend className="text-xs font-black uppercase tracking-[0.22em] text-amber-700">
-          Kuulutuse liik
-        </legend>
+        <legend className="text-xs font-black uppercase tracking-[0.22em] text-amber-700">{t("listingType")}</legend>
 
-        <h2 className="mt-2 text-2xl font-black tracking-tight">
-          Mida soovid lisada?
-        </h2>
+        <h2 className="mt-2 text-2xl font-black tracking-tight">{t("whatToAdd")}</h2>
 
-        <p className="mt-2 max-w-3xl text-sm leading-6 text-neutral-600">
-          Kõik valikud kasutavad sama
-          rahulikku kuulutuse lisamise vormi.
-          Valik määrab ainult vajalikud väljad
-          ja turvalise avaldamislepingu.
-        </p>
+        <p className="mt-2 max-w-3xl text-sm leading-6 text-neutral-600">{t("listingTypeHelp")}</p>
 
         <div className="mt-5 grid gap-3 md:grid-cols-2">
           {contentTypeOptions.map(
@@ -128,11 +122,11 @@ ListingCreateContentTypeSelector({
                   >
                     <span className="min-w-0">
                       <span className="block text-base font-black">
-                        {option.label}
+                        {translateListingCreateMessage(language, option.label)}
                       </span>
 
                       <span className="mt-1 block text-sm leading-6 text-neutral-600">
-                        {option.description}
+                        {translateListingCreateMessage(language, option.description)}
                       </span>
                     </span>
 
@@ -163,17 +157,11 @@ ListingCreateContentTypeSelector({
           className="mt-4 rounded-[22px] border border-amber-200 bg-amber-50 px-4 py-4"
         >
           <p className="text-sm font-black text-amber-950">
-            {
-              liveAnimalCapability
-                .selectedTitle
-            }
+            {t("horseModeSelected")}
           </p>
 
           <p className="mt-1 text-sm leading-6 text-amber-950/75">
-            {
-              liveAnimalCapability
-                .selectedDescription
-            }
+            {t("horseModeHelp")}
           </p>
         </div>
       ) : null}

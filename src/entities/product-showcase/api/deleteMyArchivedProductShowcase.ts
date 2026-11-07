@@ -1,3 +1,4 @@
+import { marketplaceMessage } from "../../../shared/i18n/marketplaceMessages";
 import {
   supabaseBrowserClient,
 } from "../../../shared/supabase/browserClient";
@@ -62,7 +63,7 @@ function normalizeCount(
     parsedValue < 0
   ) {
     throw new Error(
-      `Kustutamise serverivastuse väli ${fieldName} ei ole korrektne.`
+      marketplaceMessage("showcase.the_deletion_response_field_value_is_invalid.0063ab", { p0: String(fieldName) })
     );
   }
 
@@ -77,7 +78,7 @@ async function readRoutePayload(
 
   if (!rawBody) {
     throw new Error(
-      "Kustutamise server ei tagastanud vastust."
+      marketplaceMessage("showcase.the_deletion_server_returned_no_response.53e438")
     );
   }
 
@@ -87,7 +88,7 @@ async function readRoutePayload(
     value = JSON.parse(rawBody);
   } catch {
     throw new Error(
-      "Kustutamise serverivastus ei olnud korrektne."
+      marketplaceMessage("showcase.the_deletion_server_returned_an_invalid_response.dc5c30")
     );
   }
 
@@ -97,7 +98,7 @@ async function readRoutePayload(
     Array.isArray(value)
   ) {
     throw new Error(
-      "Kustutamise serverivastus ei olnud korrektne."
+      marketplaceMessage("showcase.the_deletion_server_returned_an_invalid_response.dc5c30")
     );
   }
 
@@ -113,7 +114,7 @@ deleteMyArchivedProductShowcase(input: {
   const showcaseId =
     normalizeUuid(
       input.showcaseId,
-      "Tootenäidise ID ei ole korrektne."
+      marketplaceMessage("showcase.the_product_showcase_id_is_invalid.2a98a1")
     );
 
   const {
@@ -131,7 +132,7 @@ deleteMyArchivedProductShowcase(input: {
     !accessToken
   ) {
     throw new Error(
-      "Tootenäidise kustutamiseks logi uuesti sisse."
+      marketplaceMessage("showcase.sign_in_again_to_delete_the_product_showcase.693b51")
     );
   }
 
@@ -161,7 +162,7 @@ deleteMyArchivedProductShowcase(input: {
     );
   } catch {
     throw new Error(
-      "Kustutamise serveriga ei saanud ühendust. Proovi uuesti."
+      marketplaceMessage("showcase.the_deletion_server_could_not_be_reached_try.90f0f7")
     );
   }
 
@@ -176,14 +177,14 @@ deleteMyArchivedProductShowcase(input: {
       typeof payload.error === "string" &&
       payload.error.trim()
         ? payload.error
-        : "Tootenäidist ei saanud jäädavalt kustutada."
+        : marketplaceMessage("showcase.the_product_showcase_could_not_be_permanently_deleted.6bd5cd")
     );
   }
 
   const deletedShowcaseId =
     normalizeUuid(
       payload.deletedShowcaseId || "",
-      "Kustutamise server tagastas vigase tootenäidise ID."
+      marketplaceMessage("showcase.the_deletion_server_returned_an_invalid_product_showcase.6955a5")
     );
 
   if (
@@ -191,7 +192,7 @@ deleteMyArchivedProductShowcase(input: {
     showcaseId
   ) {
     throw new Error(
-      "Kustutamise server tagastas ootamatu tootenäidise."
+      marketplaceMessage("showcase.the_deletion_server_returned_an_unexpected_product_showcase.0a87ed")
     );
   }
 
@@ -200,7 +201,7 @@ deleteMyArchivedProductShowcase(input: {
     "boolean"
   ) {
     throw new Error(
-      "Kustutamise serverivastus ei olnud täielik."
+      marketplaceMessage("showcase.the_deletion_response_was_incomplete.714094")
     );
   }
 

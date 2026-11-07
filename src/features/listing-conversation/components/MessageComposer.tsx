@@ -1,4 +1,12 @@
 "use client";
+
+import { renderUiMessage } from "@/lib/i18n/interfaceMessage";
+
+import { useV2Translation } from "@/src/shared/i18n/V2LanguageProvider";
+
+
+import { messagesUiMessages } from "@/lib/i18n/catalogs/messagesUi";
+
 import { useEffect, useId, useLayoutEffect, useRef, useState } from "react";
 import type { ListingMessageCard } from "../../../entities/conversation/model/listingMessageCards";
 import type { MessagePhotoDraft } from "../model/useMessagePhoto";
@@ -14,6 +22,8 @@ type Props = {
   onPhotoPickerOpen: () => boolean; onPhotoPickerCancel: () => void;
 };
 export default function MessageComposer(props: Props) {
+  const { language: uiLanguage, t } = useV2Translation(messagesUiMessages);
+
   const [focused, setFocused] = useState(false);
   const textarea = useRef<HTMLTextAreaElement>(null), file = useRef<HTMLInputElement>(null);
   const inputId = useId(), counterId = useId();
@@ -50,49 +60,49 @@ export default function MessageComposer(props: Props) {
   }}
     onFocus={() => { if (textarea.current && document.activeElement === textarea.current) setFocused(true); }}
     onBlur={event => { if (!event.currentTarget.contains(event.relatedTarget as Node | null)) setFocused(false); }}>
-    <div className={styles.sender} aria-label="Sõnumi saatja">
+    <div className={styles.sender} aria-label={t("message_sender")}>
       <ConversationAvatar identity={props.identity} />
-      <span>Saadad kui <strong>{props.identity?.name || "Identiteedi kontroll…"}</strong></span>
+      <span>{t("sending_as")} <strong>{props.identity?.name || t("checking_identity")}</strong></span>
     </div>
-    {(props.attachmentRequested || props.photo) && <div className={styles.attachments} aria-label="Sõnumi manused">
-    {props.attachmentRequested && <div className={styles.draftCard} aria-label="Sõnumiga kaasnev kuulutus">
-      <div className={styles.draftCardLabel}><span>Sõnumiga läheb kaasa</span>
-        <button type="button" className={styles.textButton} onClick={props.onRemoveAttachment} disabled={photoDisabled} aria-label="Eemalda kuulutusekaart">Eemalda</button></div>
+    {(props.attachmentRequested || props.photo) && <div className={styles.attachments} aria-label={t("message_attachments")}>
+    {props.attachmentRequested && <div className={styles.draftCard} aria-label={t("listing_attached_to_the_message")}>
+      <div className={styles.draftCardLabel}><span>{t("included_with_your_message")}</span>
+        <button type="button" className={styles.textButton} onClick={props.onRemoveAttachment} disabled={photoDisabled} aria-label={t("remove_listing_card")}>{t("remove")}</button></div>
       {props.attachment && <>
         <span className={styles.compactListing}>{props.attachment.title}</span>
         <div className={styles.expandedListing}><ConversationListingCard listing={props.attachment} /></div>
       </>}
-      {props.attachmentUnavailable && <p role="status">Kuulutus pole praegu kättesaadav. Võid kaardi eemaldada ja saata sõnumi.</p>}
+      {props.attachmentUnavailable && <p role="status">{t("the_listing_is_currently_unavailable_you_can_remove_its_card_and_send_your_")}</p>}
     </div>}
-    {props.photo && <div className={styles.preview} aria-label="Lisatud foto">
+    {props.photo && <div className={styles.preview} aria-label={t("attached_photo")}>
       {props.photo.previewUrl &&
         // Object URLs refer to locally prepared/private photos and are intentionally not public Next images.
         // eslint-disable-next-line @next/next/no-img-element
-        <img src={props.photo.previewUrl} alt="Valitud foto eelvaade" />}
+        <img src={props.photo.previewUrl} alt={t("selected_photo_preview")} />}
       <div className={styles.previewInfo}>
-        <p role="status">{props.photo.state === "checking" ? "Kontrollin foto saatjat…" : photoBusy ? "Valmistan fotot ette…" : props.photo.state === "ready" ? "Foto on saatmiseks valmis" : props.photo.error}</p>
+        <p role="status">{props.photo.state === "checking" ? t("checking_photo_sender") : photoBusy ? t("preparing_photo") : props.photo.state === "ready" ? t("photo_ready_to_send") : renderUiMessage(uiLanguage, props.photo.error)}</p>
         {(props.photo.state === "error" || props.photo.state === "uncertain") && <button type="button" className={styles.textButton}
-          disabled={photoDisabled} onClick={props.onRetryPhoto}>Proovi foto laadimist uuesti</button>}
+          disabled={photoDisabled} onClick={props.onRetryPhoto}>{t("retry_photo_upload")}</button>}
       </div>
       <button type="button" className={styles.iconButton} disabled={photoDisabled || photoBusy || props.photoLocked}
-        onClick={props.onRemovePhoto} aria-label="Eemalda foto">×</button>
+        onClick={props.onRemovePhoto} aria-label={t("remove_photo")}>×</button>
     </div>}
     </div>}
     <div className={styles.composerRow}>
       <input ref={file} type="file" accept="image/jpeg,image/png,image/webp" className={styles.srOnly} tabIndex={-1}
-        aria-label="Vali foto" onChange={event => {
+        aria-label={t("choose_photo")} onChange={event => {
           const selected = event.target.files?.[0]; event.target.value = "";
           if (selected) props.onPhoto(selected); else props.onPhotoPickerCancel();
         }} />
       <button type="button" className={styles.iconButton + " " + (!focused ? styles.photoLabel : "")}
         onPointerDown={event => { if (event.button === 0) event.preventDefault(); }}
-        disabled={photoDisabled || !!props.photo} onClick={() => { if (props.onPhotoPickerOpen()) file.current?.click(); }} aria-label="Lisa foto" title="Lisa foto">
-        <span aria-hidden="true">{focused ? "+" : "▧"}</span>{!focused && <span>Foto</span>}
+        disabled={photoDisabled || !!props.photo} onClick={() => { if (props.onPhotoPickerOpen()) file.current?.click(); }} aria-label={t("add_photo")} title={t("add_photo")}>
+        <span aria-hidden="true">{focused ? "+" : "▧"}</span>{!focused && <span>{t("photo_2")}</span>}
       </button>
       <div className={styles.inputWrap}>
-        <label htmlFor={inputId} className={styles.srOnly}>Sinu sõnum</label>
+        <label htmlFor={inputId} className={styles.srOnly}>{t("your_message")}</label>
         <textarea id={inputId} ref={textarea} className={styles.textarea} rows={1} value={props.text} maxLength={10000}
-          placeholder="Kirjuta sõnum…" disabled={props.disabled || props.unresolved} aria-describedby={count > 4500 ? counterId : undefined}
+          placeholder={t("write_a_message")} disabled={props.disabled || props.unresolved} aria-describedby={count > 4500 ? counterId : undefined}
           onChange={event => props.onText(event.target.value)} onKeyDown={event => {
             // Phone keyboards keep Enter for paragraphs. A desktop IME commit is never a send.
             if (event.key === "Enter" && !event.shiftKey && !event.altKey && !event.ctrlKey && !event.metaKey
@@ -103,14 +113,14 @@ export default function MessageComposer(props: Props) {
           }} />
         {showSend && <button type="submit" className={styles.send} disabled={!props.canSend}
           onPointerDown={event => { if (event.button === 0) event.preventDefault(); }}
-          aria-label={props.busy ? "Saadan sõnumit" : props.unresolved ? "Proovi sama saatmist uuesti" : "Saada sõnum"}
-          title={props.unresolved ? "Proovi sama saatmist uuesti" : "Saada sõnum"}>
+          aria-label={props.busy ? t("sending_message") : props.unresolved ? t("retry_this_message") : t("send_message")}
+          title={props.unresolved ? t("retry_this_message") : t("send_message")}>
           {props.busy ? <span aria-hidden="true">…</span> : <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
             <path d="M12 19V5m-6 6 6-6 6 6" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
           </svg>}
         </button>}
       </div>
     </div>
-    {count > 4500 && <p id={counterId} className={styles.counter + (count > 5000 ? " " + styles.overLimit : "")} role={count > 5000 ? "status" : undefined}>{count} / 5000 märki</p>}
+    {count > 4500 && <p id={counterId} className={styles.counter + (count > 5000 ? " " + styles.overLimit : "")} role={count > 5000 ? "status" : undefined}>{count}  {t("5000_characters")}</p>}
   </form>;
 }

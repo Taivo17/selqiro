@@ -1,8 +1,14 @@
 "use client";
 
+import { useV2Translation } from "@/src/shared/i18n/V2LanguageProvider";
+
+
+import { publicUiMessages } from "@/lib/i18n/catalogs/publicUi";
+
+
 import { useEffect, useRef, useState } from "react";
 import { useAuth } from "../../../../lib/useAuth";
-import { EMPTY_PUBLIC_SEARCH, publicCategoryPath, publicFilterCount, publicSearchKey, SEARCH_CONDITIONS,
+import { EMPTY_PUBLIC_SEARCH, publicCategoryPath, publicFilterCount, publicSearchKey, searchConditionLabel,
   type PublicSearchFields } from "../../../entities/listing/model/publicSearch";
 import V2DiscoveryTypeSwitcher from "../../v2-shell/components/V2DiscoveryTypeSwitcher";
 import { usePublicSearchUrl } from "../model/usePublicSearchUrl";
@@ -12,6 +18,8 @@ import SearchFilters from "./SearchFilters";
 import SearchResults from "./SearchResults";
 
 export default function ListingSearchPage() {
+  const { language: uiLanguage, t } = useV2Translation(publicUiMessages);
+
   const url = usePublicSearchUrl();
   const auth = useAuth();
   const [open, setOpen] = useState(false);
@@ -47,32 +55,32 @@ export default function ListingSearchPage() {
   function clearFilters() {
     change({category: "", subcategory: "", detailCategory: "", condition: "", location: ""});
   }
-  const category = publicCategoryPath(url.input);
-  const condition = SEARCH_CONDITIONS.find(c => c.value === url.input.condition)?.label;
+  const category = publicCategoryPath(url.input, uiLanguage);
+  const condition = searchConditionLabel(url.input.condition, uiLanguage);
   return <div className="min-w-0 space-y-5">
     <V2DiscoveryTypeSwitcher active="products" />
-    <div><h1 className="text-3xl font-black sm:text-4xl">Kuulutused</h1>
-      <p className="mt-2 text-sm text-neutral-600">Leia märksõnade järgi ja täpsusta vajadusel filtritega.</p></div>
+    <div><h1 className="text-3xl font-black sm:text-4xl">{t("listings")}</h1>
+      <p className="mt-2 text-sm text-neutral-600">{t("search_by_keywords_and_refine_the_results_with_filters")}</p></div>
     <div className="sticky z-30 -mx-1 rounded-2xl border border-amber-200 bg-white p-2 shadow-sm" style={{top: headerHeight + 8}}>
       <form role="search" className="flex min-w-0 items-center gap-2" onSubmit={e => e.preventDefault()}>
-        <label className="min-w-0 flex-1"><span className="sr-only">Otsi kuulutusi</span>
-          <input type="search" value={url.input.query} maxLength={160} placeholder="Otsi kuulutusi…" aria-describedby="public-search-help"
+        <label className="min-w-0 flex-1"><span className="sr-only">{t("search_listings")}</span>
+          <input type="search" value={url.input.query} maxLength={160} placeholder={t("search_listings_2")} aria-describedby="public-search-help"
             className="min-h-11 w-full min-w-0 rounded-xl bg-neutral-50 px-3 py-2 text-base outline-none focus:ring-2 focus:ring-amber-500"
             onChange={e => change({query: e.target.value})} />
         </label>
         <button type="button" aria-haspopup="dialog" aria-expanded={open} onClick={() => setOpen(true)}
-          className="min-h-11 shrink-0 rounded-full border border-amber-300 bg-white px-4 py-2 text-sm font-bold text-amber-900">Filtrid{count ? ` (${count})` : ""}</button>
+          className="min-h-11 shrink-0 rounded-full border border-amber-300 bg-white px-4 py-2 text-sm font-bold text-amber-900">{t("filters")}{count ? ` (${count})` : ""}</button>
       </form>
     </div>
-    <p id="public-search-help" className="text-sm leading-6 text-neutral-600">Sisesta nimi, mark, mudel või oluline omadus, näiteks „Audi A4 automaat”. Kõik sisestatud sõnad peavad kuulutuse otsitavas tekstis leiduma.</p>
+    <p id="public-search-help" className="text-sm leading-6 text-neutral-600">{t("enter_a_name_brand_model_or_key_feature_such_as_audi_a4_automatic_all_enter")}</p>
     <div className="flex flex-wrap items-center gap-2 text-sm">
       {category ? <button type="button" className="min-h-10 rounded-full border border-amber-300 bg-amber-50 px-3 py-2 text-left"
-        aria-label={"Eemalda kategooria: " + category} onClick={() => change({category: "", subcategory: "", detailCategory: ""})}>{category} ×</button> : null}
+        aria-label={t("remove_category") + category} onClick={() => change({category: "", subcategory: "", detailCategory: ""})}>{category} ×</button> : null}
       {condition ? <button type="button" className="min-h-10 rounded-full border border-neutral-300 bg-white px-3 py-2"
-        aria-label={"Eemalda seisukord: " + condition} onClick={() => change({condition: ""})}>{condition} ×</button> : null}
+        aria-label={t("remove_condition") + condition} onClick={() => change({condition: ""})}>{condition} ×</button> : null}
       {url.input.location.trim() ? <button type="button" className="min-h-10 rounded-full border border-neutral-300 bg-white px-3 py-2 text-left"
-        aria-label="Eemalda asukohafilter" onClick={() => change({location: ""})}>{url.input.location} ×</button> : null}
-      <span className="ml-auto text-neutral-500">Uuemad ees</span>
+        aria-label={t("remove_location_filter")} onClick={() => change({location: ""})}>{url.input.location} ×</button> : null}
+      <span className="ml-auto text-neutral-500">{t("newest_first")}</span>
     </div>
     <section ref={resultRef} className="relative min-w-0 overflow-hidden rounded-[30px] border border-amber-200 bg-amber-50 p-3 pt-5 shadow-sm before:pointer-events-none before:absolute before:inset-x-0 before:top-0 before:h-1.5 before:bg-amber-500 before:content-[''] sm:p-6" style={{scrollMarginTop: headerHeight + 88}}>
       <SearchResults page={url.error ? null : data.page} loading={loading && !url.error} error={url.error || data.error}

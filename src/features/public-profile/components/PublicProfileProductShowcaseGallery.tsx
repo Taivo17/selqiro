@@ -1,5 +1,11 @@
 "use client";
 
+import { useV2Translation } from "@/src/shared/i18n/V2LanguageProvider";
+
+
+import { publicUiMessages } from "@/lib/i18n/catalogs/publicUi";
+
+
 import {
   useEffect,
   useRef,
@@ -61,6 +67,8 @@ export default function PublicProfileProductShowcaseGallery({
   showcase: PublicProductShowcase;
   expanded: boolean;
 }) {
+  const { t } = useV2Translation(publicUiMessages);
+
   const [
     selectedImageId,
     setSelectedImageId,
@@ -560,7 +568,7 @@ export default function PublicProfileProductShowcaseGallery({
             : undefined
         }
         aria-label={
-          `Ava tootenäidise „${showcase.title}” pilt suurelt`
+          t("open_showcase_image", {title: showcase.title})
         }
         className={[
           "group relative block w-full overflow-hidden rounded-[20px] bg-neutral-100 outline-none ring-offset-2 transition focus-visible:ring-2 focus-visible:ring-black",
@@ -573,9 +581,7 @@ export default function PublicProfileProductShowcaseGallery({
           <img
             src={selectedDisplayUrl}
             alt={
-              `${showcase.title}, pilt ${
-                selectedImageIndex + 1
-              }`
+              t("image_alt", { title: showcase.title, index: selectedImageIndex + 1 })
             }
             loading="lazy"
             draggable={false}
@@ -588,8 +594,7 @@ export default function PublicProfileProductShowcaseGallery({
         ) : null}
 
         <span className="pointer-events-none absolute bottom-3 right-3 rounded-full bg-black/75 px-3 py-1.5 text-[11px] font-black text-white opacity-100 shadow-lg transition sm:opacity-0 sm:group-hover:opacity-100 sm:group-focus-visible:opacity-100">
-          Suurenda
-        </span>
+          {t("enlarge")} </span>
 
         {showcase.images.length > 1 ? (
           <span className="pointer-events-none absolute left-3 top-3 rounded-full bg-black/65 px-2.5 py-1 text-[11px] font-black text-white shadow">
@@ -603,7 +608,7 @@ export default function PublicProfileProductShowcaseGallery({
       showcase.images.length > 1 ? (
         <div
           aria-label={
-            `${showcase.title} galerii pisipildid`
+            t("gallery_thumbnails", { title: showcase.title })
           }
           className="mt-2 flex max-w-full gap-2 overflow-x-auto overscroll-x-contain pb-1"
         >
@@ -619,7 +624,7 @@ export default function PublicProfileProductShowcaseGallery({
                   type="button"
                   aria-pressed={selected}
                   aria-label={
-                    `Näita pilti ${index + 1} ${showcase.images.length}-st`
+                    t("show_image_of_count", {index: index + 1, count: showcase.images.length})
                   }
                   onClick={() =>
                     selectImage(image.id)
@@ -658,7 +663,7 @@ export default function PublicProfileProductShowcaseGallery({
           role="dialog"
           aria-modal="true"
           aria-label={
-            `${showcase.title} pildigalerii`
+            t("gallery_title", { title: showcase.title })
           }
           onMouseDown={(event) => {
             if (
@@ -684,7 +689,7 @@ export default function PublicProfileProductShowcaseGallery({
                 </p>
 
                 <p className="mt-0.5 text-xs font-semibold text-white/55">
-                  Pilt {selectedImageIndex + 1}
+                  {t("image")} {selectedImageIndex + 1}
                   {" / "}
                   {showcase.images.length}
                 </p>
@@ -696,7 +701,7 @@ export default function PublicProfileProductShowcaseGallery({
                 onClick={() =>
                   setLightboxOpen(false)
                 }
-                aria-label="Sulge pildigalerii"
+                aria-label={t("close_image_gallery")}
                 className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white text-xl font-black text-black outline-none transition hover:bg-neutral-200 focus-visible:ring-2 focus-visible:ring-white"
               >
                 ×
@@ -721,9 +726,7 @@ export default function PublicProfileProductShowcaseGallery({
               <img
                 src={selectedFullUrl}
                 alt={
-                  `${showcase.title}, pilt ${
-                    selectedImageIndex + 1
-                  }`
+                  t("image_alt", { title: showcase.title, index: selectedImageIndex + 1 })
                 }
                 draggable={false}
                 className="max-h-full max-w-full select-none object-contain"
@@ -746,7 +749,7 @@ export default function PublicProfileProductShowcaseGallery({
                     onBlur={
                       scheduleLightboxControlsHide
                     }
-                    aria-label="Eelmine pilt"
+                    aria-label={t("previous_image")}
                     className={[
                       "absolute left-2 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-2xl font-black text-black shadow-lg outline-none transition-opacity duration-300 hover:bg-white focus-visible:ring-2 focus-visible:ring-white sm:left-4 sm:h-12 sm:w-12",
                       lightboxControlsVisible
@@ -768,7 +771,7 @@ export default function PublicProfileProductShowcaseGallery({
                     onBlur={
                       scheduleLightboxControlsHide
                     }
-                    aria-label="Järgmine pilt"
+                    aria-label={t("next_image")}
                     className={[
                       "absolute right-2 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-2xl font-black text-black shadow-lg outline-none transition-opacity duration-300 hover:bg-white focus-visible:ring-2 focus-visible:ring-white sm:right-4 sm:h-12 sm:w-12",
                       lightboxControlsVisible
@@ -784,7 +787,7 @@ export default function PublicProfileProductShowcaseGallery({
 
             {showcase.images.length > 1 ? (
               <div
-                aria-label="Pildigalerii valik"
+                aria-label={t("image_gallery_selection")}
                 className="mt-3 flex shrink-0 gap-2 overflow-x-auto overscroll-x-contain pb-1"
               >
                 {showcase.images.map(
@@ -801,7 +804,7 @@ export default function PublicProfileProductShowcaseGallery({
                           selected
                         }
                         aria-label={
-                          `Ava pilt ${index + 1}`
+                          t("open_image_number", { index: index + 1 })
                         }
                         onClick={() =>
                           selectImage(

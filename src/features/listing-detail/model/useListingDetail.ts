@@ -1,4 +1,6 @@
 "use client";
+import { uiMessage, safeUiError } from "../../../../lib/i18n/interfaceMessage";
+
 
 import { useEffect, useState } from "react";
 import { getListingById } from "../../../entities/listing/api/getListingById";
@@ -25,7 +27,7 @@ export function useListingDetail(listingId: string): ListingDetailState {
         setState({
           listing: null,
           loading: false,
-          error: "Listing id missing",
+          error: uiMessage("the_listing_identifier_is_missing"),
         });
         return;
       }
@@ -53,9 +55,7 @@ export function useListingDetail(listingId: string): ListingDetailState {
           listing: null,
           loading: false,
           error:
-            error instanceof Error
-              ? error.message
-              : "Failed to load listing",
+            safeUiError(error, "could_not_load_the_listing_try_again"),
         });
       }
     }

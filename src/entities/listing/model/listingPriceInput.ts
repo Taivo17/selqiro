@@ -8,12 +8,12 @@ export type ListingPriceInput =
 
 export type ListingPriceErrorCode = "shape" | "kind" | "currency" | "amount" | "precision" | "nonfixed";
 const messages: Record<ListingPriceErrorCode, string> = {
-  shape: "Hinna andmed ei ole õiges vormingus.",
-  kind: "Vali hinna liik.",
-  currency: "Vali toetatud valuuta. Valuutat ei tuletata asukohast.",
-  amount: "Sisesta summa numbritena. Ära kasuta tuhandete eraldajaid, valuutamärki ega eksponenti.",
-  precision: "Summal on selle valuuta jaoks liiga palju komakohti. Paranda summat või valuutat; hinda ei ümardata.",
-  nonfixed: "Tasuta, kokkuleppehinna ja lisamata hinna puhul jäta summa ning valuuta tühjaks.",
+  shape: "price.shape",
+  kind: "price.kind",
+  currency: "price.currency",
+  amount: "price.amount",
+  precision: "price.precision",
+  nonfixed: "price.nonfixed",
 };
 export class ListingPriceInputError extends Error {
   constructor(readonly code: ListingPriceErrorCode) {
@@ -55,7 +55,7 @@ export function normalizeListingPriceWire(value: unknown): ListingPriceInput {
 }
 
 export const LISTING_PRICE_INPUT_HELP =
-  "Koma või punkt tähistab kümnendkohta. Ära kasuta tuhandete eraldajaid. Valuuta vahetamine summat ei teisenda.";
+  "price.inputHelp";
 
 /** This is a field grammar, not a locale/number guesser. Original form text is not mutated.
  * Both single separators explicitly mean DECIMAL; '1,234' KWD means 1.234 KWD,

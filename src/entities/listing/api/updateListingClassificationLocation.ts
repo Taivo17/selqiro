@@ -43,7 +43,7 @@ function normalizeListingId(value: string): string {
   const cleanValue = value.trim();
 
   if (!LISTING_ID_PATTERN.test(cleanValue)) {
-    throw new Error("Kuulutuse ID ei ole korrektne.");
+    throw new Error("listingIdInvalid");
   }
 
   return cleanValue;
@@ -63,12 +63,12 @@ function normalizeRequiredCategory(
   const cleanValue = normalizeText(value);
 
   if (!cleanValue) {
-    throw new Error("Vali Selqiro üldkategooria.");
+    throw new Error("categoryRequired");
   }
 
   if (cleanValue.length > 120) {
     throw new Error(
-      "Selqiro üldkategooria väärtus on liiga pikk."
+      "categoryTooLong"
     );
   }
 
@@ -138,7 +138,7 @@ function normalizeReturnedCoordinate(
 
   if (!Number.isFinite(parsedValue)) {
     throw new Error(
-      `Andmebaas tagastas vigase välja: ${fieldName}.`
+      "responseInvalid"
     );
   }
 
@@ -168,17 +168,17 @@ function getUpdateErrorMessage(error: {
 
   if (error.code === "42501") {
     if (message.includes("authentication")) {
-      return "Kuulutuse muutmiseks logi sisse.";
+      return "signInToChange";
     }
 
     if (
       message.includes("active identity") ||
       message.includes("does not belong")
     ) {
-      return "Sul ei ole õigust seda kuulutust aktiivse identiteediga muuta.";
+      return "activeIdentityEditForbidden";
     }
 
-    return "Sul ei ole õigust seda kuulutust muuta.";
+    return "editForbidden";
   }
 
   if (error.code === "22023") {
@@ -186,30 +186,30 @@ function getUpdateErrorMessage(error: {
       message.includes("listing") &&
       message.includes("does not exist")
     ) {
-      return "Kuulutust ei leitud.";
+      return "listingNotFound";
     }
 
     if (message.includes("active identity")) {
-      return "Aktiivne identiteet puudub või ei ole ligipääsetav.";
+      return "activeIdentityUnavailable";
     }
 
     if (
       message.includes("latitude") ||
       message.includes("longitude")
     ) {
-      return "Valitud asukoha koordinaadid ei ole korrektsed.";
+      return "coordinatesInvalid";
     }
 
     if (message.includes("category")) {
-      return "Valitud Selqiro kategooria ei ole korrektne.";
+      return "categoryInvalid";
     }
 
-    return "Kategooria või asukoha andmed ei ole korrektsed.";
+    return "classificationInvalid";
   }
 
   return (
     error.message ||
-    "Kuulutuse kategooriat ja asukohta ei saanud salvestada."
+    "classificationUpdateFailed"
   );
 }
 
@@ -226,28 +226,28 @@ export async function updateListingClassificationLocation(
     normalizeOptionalText(
       input.subcategory,
       160,
-      "Selqiro alamkategooria väärtus on liiga pikk."
+      "subcategoryTooLong"
     );
 
   const detailCategory =
     normalizeOptionalText(
       input.detailCategory,
       160,
-      "Selqiro täpsustava kategooria väärtus on liiga pikk."
+      "specificCategoryTooLong"
     );
 
   const country =
     normalizeOptionalText(
       input.country,
       120,
-      "Riigi nimi on liiga pikk."
+      "countryTooLong"
     );
 
   const city =
     normalizeOptionalText(
       input.city,
       160,
-      "Linna või piirkonna nimi on liiga pikk."
+      "cityTooLong"
     );
 
   const listingLat =
@@ -257,7 +257,7 @@ export async function updateListingClassificationLocation(
         minimum: -90,
         maximum: 90,
         errorMessage:
-          "Valitud laiuskraad ei ole korrektne.",
+          "latitudeInvalid",
       }
     );
 
@@ -268,7 +268,7 @@ export async function updateListingClassificationLocation(
         minimum: -180,
         maximum: 180,
         errorMessage:
-          "Valitud pikkuskraad ei ole korrektne.",
+          "longitudeInvalid",
       }
     );
 
@@ -277,7 +277,7 @@ export async function updateListingClassificationLocation(
     (listingLng === null)
   ) {
     throw new Error(
-      "Asukoha laius- ja pikkuskraad peavad olema määratud koos."
+      "coordinatesNeedPair"
     );
   }
 
@@ -311,7 +311,7 @@ export async function updateListingClassificationLocation(
 
   if (!row?.listing_id) {
     throw new Error(
-      "Andmebaas ei tagastanud muudetud kuulutust."
+      "updatedListingMissing"
     );
   }
 
@@ -320,7 +320,7 @@ export async function updateListingClassificationLocation(
 
   if (returnedListingId !== listingId) {
     throw new Error(
-      "Andmebaas tagastas ootamatu kuulutuse."
+      "unexpectedListing"
     );
   }
 
@@ -329,7 +329,7 @@ export async function updateListingClassificationLocation(
 
   if (returnedCategory !== category) {
     throw new Error(
-      "Andmebaas tagastas ootamatu Selqiro kategooria."
+      "unexpectedCategory"
     );
   }
 
@@ -350,7 +350,7 @@ export async function updateListingClassificationLocation(
     returnedListingLng !== listingLng
   ) {
     throw new Error(
-      "Andmebaas tagastas ootamatud asukoha koordinaadid."
+      "unexpectedCoordinates"
     );
   }
 
@@ -361,31 +361,31 @@ export async function updateListingClassificationLocation(
       normalizeOptionalText(
         row.subcategory,
         160,
-        "Andmebaas tagastas liiga pika alamkategooria."
+        "responseSubcategoryTooLong"
       ),
     detailCategory:
       normalizeOptionalText(
         row.detail_category,
         160,
-        "Andmebaas tagastas liiga pika täpsustava kategooria."
+        "responseSpecificCategoryTooLong"
       ),
     country:
       normalizeOptionalText(
         row.country,
         120,
-        "Andmebaas tagastas liiga pika riigi nime."
+        "responseCountryTooLong"
       ),
     city:
       normalizeOptionalText(
         row.city,
         160,
-        "Andmebaas tagastas liiga pika linna nime."
+        "responseCityTooLong"
       ),
     location:
       normalizeOptionalText(
         row.location,
         300,
-        "Andmebaas tagastas liiga pika asukoha."
+        "responseLocationTooLong"
       ),
     listingLat: returnedListingLat,
     listingLng: returnedListingLng,

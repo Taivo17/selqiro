@@ -1,4 +1,7 @@
 "use client";
+import { uiMessage } from "../../../../lib/i18n/interfaceMessage";
+import { safeMarketplaceError } from "../../../shared/i18n/marketplaceMessages";
+
 
 import { useEffect, useState } from "react";
 import { getPublicStoreCategories } from "../../../entities/store-category/api/getPublicStoreCategories";
@@ -64,9 +67,7 @@ export function usePublicProfileStoreCategories(
           categories: [],
           loading: false,
           error:
-            loadError instanceof Error
-              ? loadError.message
-              : "Avaliku profiili poe-rubriike ei saanud laadida.",
+            safeMarketplaceError(loadError, uiMessage("could_not_load_this_profile_s_store_categories")),
         });
       }
     }

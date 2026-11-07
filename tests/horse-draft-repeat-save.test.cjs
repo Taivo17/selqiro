@@ -260,7 +260,9 @@ for (const [name, snippets] of [
   test(name + ': helper text fits creation and read-only viewing', () => {
     const file = path.join(root, 'src/features/listing-create/components', name + '.tsx');
     const source = fs.readFileSync(file, 'utf8');
-    const normalized = source.replace(/\s+/g, ' ');
+    const messages=load('lib/i18n/catalogs/marketplaceUi.ts').marketplaceUi.et;
+    const referenced=[...source.matchAll(/marketplaceMessage\("([^"]+)"/g)].map(x=>messages[x[1]]).join(' ');
+    const normalized = (source+' '+referenced).replace(/\s+/g, ' ');
     for (const snippet of snippets) assert.ok(normalized.includes(snippet), snippet);
     assert.doesNotMatch(normalized, /checkpoint|ainult lokaalne|midagi ei salvestata/i);
     const compiled = ts.transpileModule(source, { fileName: file, reportDiagnostics: true,

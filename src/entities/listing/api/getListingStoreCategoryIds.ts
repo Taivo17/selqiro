@@ -8,7 +8,7 @@ function normalizeListingId(value: string): string {
   const cleanValue = value.trim();
 
   if (!/^[1-9][0-9]*$/.test(cleanValue)) {
-    throw new Error("Kuulutuse ID ei ole korrektne.");
+    throw new Error("listingIdInvalid");
   }
 
   return cleanValue;
@@ -39,7 +39,7 @@ export async function getListingStoreCategoryIds(
   if (error) {
     throw new Error(
       error.message ||
-        "Kuulutuse poe-rubriike ei saanud laadida."
+        "storeAssignmentReadFailed"
     );
   }
 

@@ -1,6 +1,9 @@
 "use client";
+import { useV2Translation } from "../../../shared/i18n/V2LanguageProvider";
+import { listingEditMessages, translateListingEditMessage } from "../model/listingEditMessages";
 
 import { useMemo } from "react";
+import { localeForLanguage } from "../../../../lib/i18n/useTranslation";
 import type { StoreCategory } from "../../../entities/store-category/model/types";
 
 type ListingStoreCategorySelectorProps = {
@@ -21,7 +24,8 @@ type CategoryOptionProps = {
 
 function compareCategories(
   first: StoreCategory,
-  second: StoreCategory
+  second: StoreCategory,
+  language: string
 ) {
   const firstOrder =
     typeof first.sort_order === "number"
@@ -39,16 +43,17 @@ function compareCategories(
 
   return first.name.localeCompare(
     second.name,
-    "et"
+    localeForLanguage(language)
   );
 }
 
 function buildCategoryTree(
-  categories: StoreCategory[]
+  categories: StoreCategory[],
+  language: string
 ) {
   const roots = categories
     .filter((category) => !category.parent_id)
-    .sort(compareCategories);
+    .sort((a, b) => compareCategories(a, b, language));
 
   const rootIds = new Set(
     roots.map((category) => category.id)
@@ -81,7 +86,7 @@ function buildCategoryTree(
   }
 
   for (const children of childrenByParent.values()) {
-    children.sort(compareCategories);
+    children.sort((a, b) => compareCategories(a, b, language));
   }
 
   return {
@@ -99,6 +104,8 @@ function CategoryOption({
   disabled,
   onToggle,
 }: CategoryOptionProps) {
+  const { language, t } = useV2Translation(listingEditMessages);
+
   return (
     <button
       type="button"
@@ -129,8 +136,8 @@ function CategoryOption({
         <span className="min-w-0 flex-1">
           <span className="block text-[11px] font-black uppercase tracking-[0.15em] text-neutral-400">
             {level === "root"
-              ? "Ülemrubriik"
-              : "Alamrubriik"}
+              ? t("parentSection")
+              : t("childSection")}
           </span>
 
           <span className="mt-1 block break-words text-sm font-black leading-5 text-neutral-950">
@@ -152,7 +159,7 @@ function CategoryOption({
               : "bg-neutral-100 text-neutral-500",
           ].join(" ")}
         >
-          {selected ? "Valitud" : "Vali"}
+          {selected ? t("selected") : t("select")}
         </span>
       </div>
     </button>
@@ -165,6 +172,8 @@ export default function ListingStoreCategorySelector({
   disabled,
   onToggleCategory,
 }: ListingStoreCategorySelectorProps) {
+  const { language, t } = useV2Translation(listingEditMessages);
+
   const selectedCategoryIdSet = useMemo(
     () => new Set(selectedCategoryIds),
     [selectedCategoryIds]
@@ -175,8 +184,8 @@ export default function ListingStoreCategorySelector({
     childrenByParent,
     deeperCategoryCount,
   } = useMemo(
-    () => buildCategoryTree(categories),
-    [categories]
+    () => buildCategoryTree(categories, language),
+    [categories, language]
   );
 
   return (
@@ -209,9 +218,7 @@ export default function ListingStoreCategorySelector({
 
               {children.length > 0 ? (
                 <div className="mt-3 border-l-2 border-neutral-200 pl-3">
-                  <p className="mb-2 text-[11px] font-black uppercase tracking-[0.15em] text-neutral-400">
-                    Alamrubriigid
-                  </p>
+                  <p className="mb-2 text-[11px] font-black uppercase tracking-[0.15em] text-neutral-400">{t("childSections")}</p>
 
                   <div className="space-y-2">
                     {children.map(
@@ -238,10 +245,7 @@ export default function ListingStoreCategorySelector({
                   </div>
                 </div>
               ) : (
-                <p className="mt-3 px-2 text-xs leading-5 text-neutral-400">
-                  Selle ülemrubriigi all pole
-                  alamrubriike.
-                </p>
+                <p className="mt-3 px-2 text-xs leading-5 text-neutral-400">{t("noChildSections")}</p>
               )}
             </article>
           );
@@ -251,15 +255,10 @@ export default function ListingStoreCategorySelector({
       {deeperCategoryCount > 0 ? (
         <div className="mt-4 rounded-2xl border border-amber-100 bg-amber-50 p-4">
           <p className="font-black text-amber-950">
-            {deeperCategoryCount} sügavama
-            taseme rubriiki ei kuvata
+            {t("deeperSectionCount", { count: deeperCategoryCount })}
           </p>
 
-          <p className="mt-2 text-sm leading-6 text-amber-900">
-            V2 muutmisvaade toetab praegu
-            ülemrubriiki ja selle otseseid
-            alamrubriike.
-          </p>
+          <p className="mt-2 text-sm leading-6 text-amber-900">{t("sectionDepthHelp")}</p>
         </div>
       ) : null}
     </>

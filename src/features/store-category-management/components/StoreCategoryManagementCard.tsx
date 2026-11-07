@@ -1,5 +1,7 @@
 "use client";
 
+import { marketplaceMessage, safeMarketplaceError } from "../../../shared/i18n/marketplaceMessages";
+import { useMarketplaceTranslation } from "../../../shared/i18n/useMarketplaceTranslation";
 import { useState } from "react";
 import type { FormEvent } from "react";
 import {
@@ -69,19 +71,21 @@ function buildCategoryView(categories: MyAreaStoreCategory[]) {
 }
 
 function LoadingCategories() {
+  const { language, r } = useMarketplaceTranslation();
   return (
     <div className="mt-5 grid min-w-0 grid-cols-[minmax(0,1fr)] gap-3 md:grid-cols-2">
-      {[0, 1, 2, 3].map((item) => (
+      {r([0, 1, 2, 3].map((item) => (
         <div
           key={item}
           className="h-24 animate-pulse rounded-[22px] bg-neutral-100"
         />
-      ))}
+      )))}
     </div>
   );
 }
 
 export default function StoreCategoryManagementCard() {
+  const { language, r } = useMarketplaceTranslation();
   const {
     categories,
     loading,
@@ -136,13 +140,13 @@ export default function StoreCategoryManagementCard() {
     setCreateSuccess(null);
 
     if (!cleanName) {
-      setCreateError("Sisesta rubriigi nimi.");
+      setCreateError(marketplaceMessage("category.enter_a_category_name.730cbc"));
       return;
     }
 
     if (cleanName.length > STORE_CATEGORY_NAME_MAX_LENGTH) {
       setCreateError(
-        `Rubriigi nimi võib olla kuni ${STORE_CATEGORY_NAME_MAX_LENGTH} tähemärki.`
+        marketplaceMessage("category.the_category_name_can_contain_up_to_value.0188e5", { p0: String(STORE_CATEGORY_NAME_MAX_LENGTH) })
       );
       return;
     }
@@ -152,13 +156,11 @@ export default function StoreCategoryManagementCard() {
 
       setNewRootName("");
       setCreateSuccess(
-        `Ülemrubriik „${createdCategory.name}“ lisatud.`
+        marketplaceMessage("category.parent_category_value_added.9e2121", { p0: String(createdCategory.name) })
       );
     } catch (creationError) {
       setCreateError(
-        creationError instanceof Error
-          ? creationError.message
-          : "Ülemrubriiki ei saanud lisada."
+        safeMarketplaceError(creationError, marketplaceMessage("category.the_parent_category_could_not_be_added.fb0b3a"))
       );
     }
   }
@@ -185,7 +187,7 @@ export default function StoreCategoryManagementCard() {
     setChildFormParentId(null);
     setChildSuccess({
       parentId,
-      message: `Alamrubriik „${createdCategory.name}“ lisatud.`,
+      message: marketplaceMessage("category.subcategory_value_added.d94a43", { p0: String(createdCategory.name) }),
     });
   }
 
@@ -214,7 +216,7 @@ export default function StoreCategoryManagementCard() {
     setEditingCategoryId(null);
     setRenameSuccess({
       categoryId,
-      message: `Rubriigi nimi muudetud: „${updatedCategory.name}“.`,
+      message: marketplaceMessage("category.category_renamed_value.dd55a2", { p0: String(updatedCategory.name) }),
     });
   }
 
@@ -241,11 +243,11 @@ export default function StoreCategoryManagementCard() {
 
     const removedLinksText =
       deletedCategory.removedListingLinks === 1
-        ? "Eemaldati 1 kuulutuse seos."
-        : `Eemaldati ${deletedCategory.removedListingLinks} kuulutuse seost.`;
+        ? marketplaceMessage("category.1_listing_link_removed.bf1a97")
+        : marketplaceMessage("category.value_listing_links_removed.1c41c2", { p0: String(deletedCategory.removedListingLinks) });
 
     setDeleteSuccess(
-      `Rubriik „${deletedCategory.name}“ kustutatud. ${removedLinksText} Kuulutused jäid alles.`
+      marketplaceMessage("category.category_value_deleted_value_listings_were_preserved.b990e1", { p0: String(deletedCategory.name), p1: String(removedLinksText) })
     );
   }
 
@@ -261,25 +263,19 @@ export default function StoreCategoryManagementCard() {
       <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="text-xs font-bold uppercase tracking-[0.24em] text-neutral-400">
-            Poe ülesehitus
-          </p>
+            {r(marketplaceMessage("category.shop_structure.f31e91"))}</p>
 
           <h2 className="mt-2 text-2xl font-black">
-            Sinu poe rubriigid
-          </h2>
+            {r(marketplaceMessage("category.your_shop_categories.ee1750"))}</h2>
 
           <p className="mt-2 max-w-2xl text-sm leading-6 text-neutral-600">
-            Need rubriigid kuuluvad ainult aktiivse identiteedi enda
-            profiilile. Need ei ole seotud Selqiro üldise
-            kategooriapuuga.
-          </p>
+            {r(marketplaceMessage("category.these_categories_belong_only_to_the_active_identity.1e6abd"))}</p>
         </div>
 
-        {!loading && !error ? (
+        {r(!loading && !error ? (
           <span className="w-fit whitespace-nowrap rounded-full bg-neutral-100 px-2.5 py-1.5 text-[11px] font-black text-neutral-600">
-            {roots.length} ülemrubriiki · {directChildCount} alamrubriiki
-          </span>
-        ) : null}
+            {r(roots.length)}  {r(marketplaceMessage("category.parent_categories.036de0"))} {r(directChildCount)}  {r(marketplaceMessage("category.subcategories.1bf744"))}</span>
+        ) : null)}
       </div>
 
       <form
@@ -289,8 +285,7 @@ export default function StoreCategoryManagementCard() {
         <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
           <label className="min-w-0 flex-1">
             <span className="mb-2 block text-xs font-black uppercase tracking-[0.16em] text-neutral-500">
-              Uus ülemrubriik
-            </span>
+              {r(marketplaceMessage("category.new_parent_category.033804"))}</span>
 
             <input
               value={newRootName}
@@ -300,7 +295,7 @@ export default function StoreCategoryManagementCard() {
                 setCreateSuccess(null);
               }}
               maxLength={STORE_CATEGORY_NAME_MAX_LENGTH}
-              placeholder="Näiteks Varuosad"
+              placeholder={r(marketplaceMessage("category.for_example_spare_parts.5350b8"))}
               disabled={categoryActionBusy}
               className="w-full rounded-2xl border border-neutral-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-neutral-400 disabled:cursor-not-allowed disabled:opacity-60"
             />
@@ -311,62 +306,59 @@ export default function StoreCategoryManagementCard() {
             disabled={categoryActionBusy || !newRootName.trim()}
             className="inline-flex w-full justify-center rounded-full bg-black px-5 py-3 text-sm font-black text-white transition disabled:cursor-not-allowed disabled:opacity-40 sm:w-auto"
           >
-            {creatingRootCategory ? "Lisan..." : "Lisa ülemrubriik"}
+            {r(creatingRootCategory ? marketplaceMessage("category.adding.57ede3") : marketplaceMessage("category.add_parent_category.db594d"))}
           </button>
         </div>
 
         <div className="mt-2 flex items-start justify-between gap-3">
           <p className="text-xs leading-5 text-neutral-500">
-            Rubriik lisatakse aktiivse identiteedi poe ülesehitusse.
-          </p>
+            {r(marketplaceMessage("category.the_category_will_be_added_to_the_active.bcaa0e"))}</p>
 
           <span className="shrink-0 text-xs font-black text-neutral-400">
-            {newRootName.length}/{STORE_CATEGORY_NAME_MAX_LENGTH}
+            {r(newRootName.length)}/{r(STORE_CATEGORY_NAME_MAX_LENGTH)}
           </span>
         </div>
 
-        {createError ? (
+        {r(createError ? (
           <p className="mt-3 rounded-xl border border-red-100 bg-red-50 px-3 py-2 text-sm font-semibold text-red-800">
-            {createError}
+            {r(createError)}
           </p>
-        ) : null}
+        ) : null)}
 
-        {createSuccess ? (
+        {r(createSuccess ? (
           <p className="mt-3 rounded-xl border border-emerald-100 bg-emerald-50 px-3 py-2 text-sm font-semibold text-emerald-800">
-            {createSuccess}
+            {r(createSuccess)}
           </p>
-        ) : null}
+        ) : null)}
       </form>
 
-      {deleteSuccess ? (
+      {r(deleteSuccess ? (
         <p className="mt-4 rounded-xl border border-emerald-100 bg-emerald-50 px-3 py-2 text-sm font-semibold leading-6 text-emerald-800">
-          {deleteSuccess}
+          {r(deleteSuccess)}
         </p>
-      ) : null}
+      ) : null)}
 
-      {loading ? <LoadingCategories /> : null}
+      {r(loading ? <LoadingCategories /> : null)}
 
-      {!loading && error ? (
+      {r(!loading && error ? (
         <div className="mt-5 rounded-[22px] border border-red-100 bg-red-50 p-5">
           <p className="font-black text-red-950">
-            Rubriike ei saanud laadida
-          </p>
-          <p className="mt-2 text-sm leading-6 text-red-800">{error}</p>
+            {r(marketplaceMessage("category.categories_could_not_be_loaded.acac19"))}</p>
+          <p className="mt-2 text-sm leading-6 text-red-800">{r(error)}</p>
         </div>
-      ) : null}
+      ) : null)}
 
-      {!loading && !error && roots.length === 0 ? (
+      {r(!loading && !error && roots.length === 0 ? (
         <div className="mt-5 rounded-[22px] border border-dashed border-neutral-200 bg-[#fbfbfa] p-5">
-          <p className="font-black">Rubriike ei ole veel lisatud</p>
+          <p className="font-black">{r(marketplaceMessage("category.no_categories_added_yet.1d217c"))}</p>
           <p className="mt-1 text-sm leading-6 text-neutral-500">
-            Esimese ülemrubriigi lisamine tuleb järgmise sammuna.
-          </p>
+            {r(marketplaceMessage("category.add_your_first_parent_category_using_the_form.096ebe"))}</p>
         </div>
-      ) : null}
+      ) : null)}
 
-      {!loading && !error && roots.length > 0 ? (
+      {r(!loading && !error && roots.length > 0 ? (
         <div className="mt-5 grid min-w-0 grid-cols-[minmax(0,1fr)] gap-3 md:grid-cols-2">
-          {roots.map((rootCategory) => {
+          {r(roots.map((rootCategory) => {
             const children =
               childrenByParent.get(rootCategory.id) || [];
 
@@ -381,135 +373,98 @@ export default function StoreCategoryManagementCard() {
                   editing={editingCategoryId === rootCategory.id}
                   saving={renamingCategoryId === rootCategory.id}
                   disabled={categoryActionBusy}
-                  successMessage={
-                    renameSuccess?.categoryId === rootCategory.id
+                  successMessage={renameSuccess?.categoryId === rootCategory.id
                       ? renameSuccess.message
-                      : null
-                  }
-                  trailing={
-                    children.length > 0 ? (
+                      : null}
+                  trailing={children.length > 0 ? (
                       <span className="shrink-0 rounded-full bg-white px-2.5 py-1 text-xs font-black text-neutral-500">
-                        {children.length}
+                        {r(children.length)}
                       </span>
-                    ) : null
-                  }
-                  footer={
-                    <StoreCategoryDeleteControl
+                    ) : null}
+                  footer={<StoreCategoryDeleteControl
                       category={rootCategory}
                       level="root"
                       childCount={children.length}
-                      confirming={
-                        deleteConfirmCategoryId ===
-                        rootCategory.id
-                      }
-                      deleting={
-                        deletingCategoryId ===
-                        rootCategory.id
-                      }
-                      disabled={
-                        categoryActionBusy &&
+                      confirming={deleteConfirmCategoryId ===
+                        rootCategory.id}
+                      deleting={deletingCategoryId ===
+                        rootCategory.id}
+                      disabled={categoryActionBusy &&
                         deleteConfirmCategoryId !==
-                          rootCategory.id
-                      }
+                          rootCategory.id}
                       onStart={() =>
-                        openDeleteConfirm(rootCategory.id)
-                      }
+                        openDeleteConfirm(rootCategory.id)}
                       onCancel={closeDeleteConfirm}
                       onConfirm={() =>
-                        handleDeleteCategory(rootCategory.id)
-                      }
-                    />
-                  }
+                        handleDeleteCategory(rootCategory.id)}
+                    />}
                   onStartEdit={() =>
-                    openRenameForm(rootCategory.id)
-                  }
+                    openRenameForm(rootCategory.id)}
                   onSave={(name) =>
                     handleRenameCategory(
                       rootCategory.id,
                       name
-                    )
-                  }
+                    )}
                   onCancel={closeRenameForm}
                 />
 
-                {children.length > 0 ? (
+                {r(children.length > 0 ? (
                   <div className="mt-3 space-y-2 border-l-2 border-neutral-200 pl-3">
-                    {children.map((childCategory) => (
+                    {r(children.map((childCategory) => (
                       <StoreCategoryRenameControl
                         key={childCategory.id}
                         category={childCategory}
                         level="child"
-                        editing={
-                          editingCategoryId === childCategory.id
-                        }
-                        saving={
-                          renamingCategoryId === childCategory.id
-                        }
+                        editing={editingCategoryId === childCategory.id}
+                        saving={renamingCategoryId === childCategory.id}
                         disabled={categoryActionBusy}
-                        successMessage={
-                          renameSuccess?.categoryId ===
+                        successMessage={renameSuccess?.categoryId ===
                           childCategory.id
                             ? renameSuccess.message
-                            : null
-                        }
-                        footer={
-                          <StoreCategoryDeleteControl
+                            : null}
+                        footer={<StoreCategoryDeleteControl
                             category={childCategory}
                             level="child"
                             childCount={0}
-                            confirming={
-                              deleteConfirmCategoryId ===
-                              childCategory.id
-                            }
-                            deleting={
-                              deletingCategoryId ===
-                              childCategory.id
-                            }
-                            disabled={
-                              categoryActionBusy &&
+                            confirming={deleteConfirmCategoryId ===
+                              childCategory.id}
+                            deleting={deletingCategoryId ===
+                              childCategory.id}
+                            disabled={categoryActionBusy &&
                               deleteConfirmCategoryId !==
-                                childCategory.id
-                            }
+                                childCategory.id}
                             onStart={() =>
                               openDeleteConfirm(
                                 childCategory.id
-                              )
-                            }
+                              )}
                             onCancel={closeDeleteConfirm}
                             onConfirm={() =>
                               handleDeleteCategory(
                                 childCategory.id
-                              )
-                            }
-                          />
-                        }
+                              )}
+                          />}
                         onStartEdit={() =>
-                          openRenameForm(childCategory.id)
-                        }
+                          openRenameForm(childCategory.id)}
                         onSave={(name) =>
                           handleRenameCategory(
                             childCategory.id,
                             name
-                          )
-                        }
+                          )}
                         onCancel={closeRenameForm}
                       />
-                    ))}
+                    )))}
                   </div>
-                ) : null}
+                ) : null)}
                 <div className="mt-3 border-t border-neutral-200 pt-3">
-                  {childFormParentId === rootCategory.id ? (
+                  {r(childFormParentId === rootCategory.id ? (
                     <StoreCategoryChildCreateForm
                       parentName={rootCategory.name}
-                      creating={
-                        creatingChildParentId === rootCategory.id
-                      }
+                      creating={creatingChildParentId === rootCategory.id}
                       onCreate={(name) =>
                         handleCreateChildCategory(
                           rootCategory.id,
                           name
-                        )
-                      }
+                        )}
                       onCancel={closeChildForm}
                     />
                   ) : (
@@ -519,29 +474,26 @@ export default function StoreCategoryManagementCard() {
                       disabled={categoryActionBusy}
                       className="rounded-full border border-neutral-200 bg-white px-3 py-2 text-xs font-black text-neutral-700 shadow-sm disabled:cursor-not-allowed disabled:opacity-40"
                     >
-                      + Lisa alamrubriik
-                    </button>
-                  )}
+                      {r(marketplaceMessage("category.add_subcategory.c03d9e"))}</button>
+                  ))}
 
-                  {childSuccess?.parentId === rootCategory.id &&
+                  {r(childSuccess?.parentId === rootCategory.id &&
                   childFormParentId !== rootCategory.id ? (
                     <p className="mt-2 rounded-lg border border-emerald-100 bg-emerald-50 px-2.5 py-2 text-xs font-semibold leading-5 text-emerald-800">
-                      {childSuccess.message}
+                      {r(childSuccess.message)}
                     </p>
-                  ) : null}
+                  ) : null)}
                 </div>
               </article>
             );
-          })}
+          }))}
         </div>
-      ) : null}
+      ) : null)}
 
-      {!loading && !error && deeperCategoryCount > 0 ? (
+      {r(!loading && !error && deeperCategoryCount > 0 ? (
         <div className="mt-4 rounded-2xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">
-          {deeperCategoryCount} sügavama taseme rubriiki ei kuvata selles
-          kahetasandilises V2 haldusvaates.
-        </div>
-      ) : null}
+          {r(deeperCategoryCount)}  {r(marketplaceMessage("category.categories_at_deeper_levels_are_not_shown_in.15dc80"))}</div>
+      ) : null)}
     </section>
   );
 }

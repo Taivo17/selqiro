@@ -1,5 +1,11 @@
 "use client";
 
+import { useV2Translation } from "@/src/shared/i18n/V2LanguageProvider";
+
+
+import { publicUiMessages } from "@/lib/i18n/catalogs/publicUi";
+
+
 import {
   useEffect,
   useMemo,
@@ -91,6 +97,8 @@ export default function PublicProfileServiceGallery({
   service: PublicService;
   expanded: boolean;
 }) {
+  const { t } = useV2Translation(publicUiMessages);
+
   const galleryImages =
     useMemo(
       () =>
@@ -625,16 +633,14 @@ export default function PublicProfileServiceGallery({
             : undefined
         }
         aria-label={
-          `Ava teenuse „${service.title}” pilt suurelt`
+          t("open_service_image", { title: service.title })
         }
         className={imageAreaClass}
       >
         <img
           src={selectedDisplayUrl}
           alt={
-            `${service.title}, pilt ${
-              selectedImageIndex + 1
-            }`
+            t("image_alt", { title: service.title, index: selectedImageIndex + 1 })
           }
           loading="lazy"
           draggable={false}
@@ -646,8 +652,7 @@ export default function PublicProfileServiceGallery({
         />
 
         <span className="pointer-events-none absolute bottom-3 right-3 rounded-full bg-black/75 px-3 py-1.5 text-[11px] font-black text-white opacity-100 shadow-lg transition sm:opacity-0 sm:group-hover:opacity-100 sm:group-focus-visible:opacity-100">
-          Suurenda
-        </span>
+          {t("enlarge")} </span>
 
         {galleryImages.length > 1 ? (
           <span className="pointer-events-none absolute left-3 top-3 rounded-full bg-black/65 px-2.5 py-1 text-[11px] font-black text-white shadow">
@@ -661,7 +666,7 @@ export default function PublicProfileServiceGallery({
       galleryImages.length > 1 ? (
         <div
           aria-label={
-            `${service.title} galerii pisipildid`
+            t("gallery_thumbnails", { title: service.title })
           }
           className="mt-2 flex max-w-full gap-2 overflow-x-auto overscroll-x-contain pb-1"
         >
@@ -677,7 +682,7 @@ export default function PublicProfileServiceGallery({
                   type="button"
                   aria-pressed={selected}
                   aria-label={
-                    `Näita pilti ${index + 1} ${galleryImages.length}-st`
+                    t("show_image_of_count", {index: index + 1, count: galleryImages.length})
                   }
                   onClick={() =>
                     selectImage(image.id)
@@ -717,7 +722,7 @@ export default function PublicProfileServiceGallery({
           role="dialog"
           aria-modal="true"
           aria-label={
-            `${service.title} pildigalerii`
+            t("gallery_title", { title: service.title })
           }
           onMouseDown={(event) => {
             if (
@@ -743,7 +748,7 @@ export default function PublicProfileServiceGallery({
                 </p>
 
                 <p className="mt-0.5 text-xs font-semibold text-white/55">
-                  Pilt {selectedImageIndex + 1}
+                  {t("image")} {selectedImageIndex + 1}
                   {" / "}
                   {galleryImages.length}
                 </p>
@@ -755,7 +760,7 @@ export default function PublicProfileServiceGallery({
                 onClick={() =>
                   setLightboxOpen(false)
                 }
-                aria-label="Sulge pildigalerii"
+                aria-label={t("close_image_gallery")}
                 className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white text-xl font-black text-black outline-none transition hover:bg-neutral-200 focus-visible:ring-2 focus-visible:ring-white"
               >
                 ×
@@ -780,9 +785,7 @@ export default function PublicProfileServiceGallery({
               <img
                 src={selectedFullUrl}
                 alt={
-                  `${service.title}, pilt ${
-                    selectedImageIndex + 1
-                  }`
+                  t("image_alt", { title: service.title, index: selectedImageIndex + 1 })
                 }
                 draggable={false}
                 className="max-h-full max-w-full select-none object-contain"
@@ -805,7 +808,7 @@ export default function PublicProfileServiceGallery({
                     onBlur={
                       scheduleLightboxControlsHide
                     }
-                    aria-label="Eelmine pilt"
+                    aria-label={t("previous_image")}
                     className={[
                       "absolute left-2 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-2xl font-black text-black shadow-lg outline-none transition-opacity duration-300 hover:bg-white focus-visible:ring-2 focus-visible:ring-white sm:left-4 sm:h-12 sm:w-12",
                       lightboxControlsVisible
@@ -827,7 +830,7 @@ export default function PublicProfileServiceGallery({
                     onBlur={
                       scheduleLightboxControlsHide
                     }
-                    aria-label="Järgmine pilt"
+                    aria-label={t("next_image")}
                     className={[
                       "absolute right-2 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-2xl font-black text-black shadow-lg outline-none transition-opacity duration-300 hover:bg-white focus-visible:ring-2 focus-visible:ring-white sm:right-4 sm:h-12 sm:w-12",
                       lightboxControlsVisible
@@ -843,7 +846,7 @@ export default function PublicProfileServiceGallery({
 
             {galleryImages.length > 1 ? (
               <div
-                aria-label="Pildigalerii valik"
+                aria-label={t("image_gallery_selection")}
                 className="mt-3 flex shrink-0 gap-2 overflow-x-auto overscroll-x-contain pb-1"
               >
                 {galleryImages.map(
@@ -860,7 +863,7 @@ export default function PublicProfileServiceGallery({
                           selected
                         }
                         aria-label={
-                          `Ava pilt ${index + 1}`
+                          t("open_image_number", { index: index + 1 })
                         }
                         onClick={() =>
                           selectImage(

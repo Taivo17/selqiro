@@ -1,3 +1,4 @@
+import { marketplaceMessage, safeMarketplaceError } from "../../../shared/i18n/marketplaceMessages";
 import { supabaseBrowserClient } from "../../../shared/supabase/browserClient";
 import {
   normalizeStoreCategoryName,
@@ -31,22 +32,22 @@ function getCreateErrorMessage(error: {
   message?: string | null;
 }) {
   if (error.code === "23505") {
-    return "Selle nimega ülemrubriik on juba olemas.";
+    return marketplaceMessage("category.a_parent_category_with_this_name_already_exists.75499c");
   }
 
   if (error.code === "42501") {
-    return "Sul puudub selle identiteedi rubriikide muutmise õigus.";
+    return marketplaceMessage("category.you_do_not_have_permission_to_change_this.22a348");
   }
 
   if (error.code === "22023") {
     if (error.message?.toLowerCase().includes("active identity")) {
-      return "Aktiivne identiteet puudub.";
+      return marketplaceMessage("service.no_active_identity.80f933");
     }
 
-    return "Kontrolli rubriigi nime.";
+    return marketplaceMessage("category.check_the_category_name.21b417");
   }
 
-  return error.message || "Ülemrubriiki ei saanud lisada.";
+  return safeMarketplaceError(error, marketplaceMessage("category.the_parent_category_could_not_be_added.fb0b3a"));
 }
 
 export async function createMyStoreRootCategory(
@@ -55,12 +56,12 @@ export async function createMyStoreRootCategory(
   const cleanName = normalizeStoreCategoryName(name);
 
   if (!cleanName) {
-    throw new Error("Sisesta rubriigi nimi.");
+    throw new Error(marketplaceMessage("category.enter_a_category_name.730cbc"));
   }
 
   if (cleanName.length > STORE_CATEGORY_NAME_MAX_LENGTH) {
     throw new Error(
-      `Rubriigi nimi võib olla kuni ${STORE_CATEGORY_NAME_MAX_LENGTH} tähemärki.`
+      marketplaceMessage("category.the_category_name_can_contain_up_to_value.0188e5", { p0: String(STORE_CATEGORY_NAME_MAX_LENGTH) })
     );
   }
 
@@ -83,7 +84,7 @@ export async function createMyStoreRootCategory(
   );
 
   if (!row?.id || !row.name) {
-    throw new Error("Andmebaas ei tagastanud loodud rubriiki.");
+    throw new Error(marketplaceMessage("category.the_database_did_not_return_the_created_category.023132"));
   }
 
   return {

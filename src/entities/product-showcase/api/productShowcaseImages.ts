@@ -1,3 +1,4 @@
+import { marketplaceMessage, safeMarketplaceError } from "../../../shared/i18n/marketplaceMessages";
 import { supabaseBrowserClient } from "../../../shared/supabase/browserClient";
 import {
   buildContentImageStoragePath,
@@ -45,7 +46,7 @@ function normalizeUuid(
 
   if (!UUID_PATTERN.test(cleanValue)) {
     throw new Error(
-      `${fieldLabel} ei ole korrektne.`
+      marketplaceMessage("service.value_is_invalid.0527f5", { p0: String(fieldLabel) })
     );
   }
 
@@ -71,12 +72,12 @@ function getImageErrorMessage(
 
   if (error.code === "42501") {
     if (message.includes("authentication")) {
-      return "Toimingu tegemiseks logi sisse.";
+      return marketplaceMessage("showcase.sign_in_to_continue.88be83");
     }
 
     return (
-      "Sul ei ole õigust selle tootenäidise " +
-      "pilte aktiivse identiteediga muuta."
+      marketplaceMessage("showcase.you_do_not_have_permission_to_edit_this.12f884") +
+      marketplaceMessage("showcase.images_as_the_active_identity.8e1f15")
     );
   }
 
@@ -85,8 +86,8 @@ function getImageErrorMessage(
     message.includes("max_images")
   ) {
     return (
-      `Tootenäidisele saab lisada kuni ` +
-      `${CONTENT_IMAGE_LIMIT} pilti.`
+      marketplaceMessage("showcase.a_product_showcase_can_have_up_to.2e1638") +
+      marketplaceMessage("showcase.value_images.a82b8e", { p0: String(CONTENT_IMAGE_LIMIT) })
     );
   }
 
@@ -94,8 +95,8 @@ function getImageErrorMessage(
     message.includes("must keep at least one image")
   ) {
     return (
-      "Avaldatud tootenäidise viimast pilti " +
-      "ei saa kustutada."
+      marketplaceMessage("showcase.the_last_image_of_a_published_product_showcase.9d7b91") +
+      marketplaceMessage("showcase.cannot_be_deleted.8b7d15")
     );
   }
 
@@ -105,8 +106,8 @@ function getImageErrorMessage(
     )
   ) {
     return (
-      "Enne avaldamist lisa tootenäidisele " +
-      "vähemalt üks pilt."
+      marketplaceMessage("showcase.before_publishing_add.787cf9") +
+      marketplaceMessage("showcase.at_least_one_image_to_the_product_showcase.e6f272")
     );
   }
 
@@ -115,8 +116,8 @@ function getImageErrorMessage(
     message.includes("active identity")
   ) {
     return (
-      "See tootenäidis ei kuulu aktiivsele " +
-      "identiteedile."
+      marketplaceMessage("showcase.this_product_showcase_does_not_belong_to_the.6d2fc3") +
+      marketplaceMessage("showcase.identity")
     );
   }
 
@@ -124,14 +125,14 @@ function getImageErrorMessage(
     message.includes("image was not found") ||
     message.includes("image was not found in storage")
   ) {
-    return "Tootenäidise pilti ei leitud.";
+    return marketplaceMessage("showcase.the_product_showcase_image_was_not_found.fb9532");
   }
 
   if (message.includes("storage path")) {
-    return "Pildi salvestustee ei ole korrektne.";
+    return marketplaceMessage("showcase.the_image_storage_path_is_invalid.26dab3");
   }
 
-  return error.message || fallback;
+  return safeMarketplaceError(error, fallback);
 }
 
 async function removeStorageObject(
@@ -159,7 +160,7 @@ export async function getProductShowcaseImages(
 ): Promise<ProductShowcaseImage[]> {
   const cleanShowcaseId = normalizeUuid(
     showcaseId,
-    "Tootenäidise ID"
+    marketplaceMessage("showcase.product_showcase_id.9c2d29")
   );
 
   const { data, error } =
@@ -195,7 +196,7 @@ export async function getProductShowcaseImages(
     throw new Error(
       getImageErrorMessage(
         error,
-        "Tootenäidise pilte ei saanud laadida."
+        marketplaceMessage("showcase.the_product_showcase_images_could_not_be_loaded.2cb0dc")
       )
     );
   }
@@ -215,7 +216,7 @@ export async function uploadProductShowcaseImage(
 ): Promise<ProductShowcaseImage> {
   const showcaseId = normalizeUuid(
     input.showcaseId,
-    "Tootenäidise ID"
+    marketplaceMessage("showcase.product_showcase_id.9c2d29")
   );
 
   validateContentImageFile(input.file);
@@ -227,7 +228,7 @@ export async function uploadProductShowcaseImage(
     await supabaseBrowserClient.auth.getUser();
 
   if (userError || !user?.id) {
-    throw new Error("Sisselogimine puudub.");
+    throw new Error(marketplaceMessage("showcase.you_are_not_signed_in.bd3a1b"));
   }
 
   const storagePath =
@@ -250,7 +251,7 @@ export async function uploadProductShowcaseImage(
     throw new Error(
       getImageErrorMessage(
         uploadError,
-        "Pildi üleslaadimine ebaõnnestus."
+        marketplaceMessage("showcase.the_image_upload_failed.3c0152")
       )
     );
   }
@@ -267,7 +268,7 @@ export async function uploadProductShowcaseImage(
     await removeStorageObject(storagePath);
 
     throw new Error(
-      "Pildi avalikku aadressi ei saanud luua."
+      marketplaceMessage("showcase.the_public_image_address_could_not_be_created.14b12a")
     );
   }
 
@@ -289,7 +290,7 @@ export async function uploadProductShowcaseImage(
       throw new Error(
         getImageErrorMessage(
           error,
-          "Pilti ei saanud tootenäidisega siduda."
+          marketplaceMessage("showcase.the_image_could_not_be_linked_to_the.66493e")
         )
       );
     }
@@ -303,7 +304,7 @@ export async function uploadProductShowcaseImage(
 
     if (!row) {
       throw new Error(
-        "Andmebaas ei tagastanud lisatud pilti."
+        marketplaceMessage("showcase.the_database_did_not_return_the_added_image.1b1026")
       );
     }
 
@@ -322,12 +323,12 @@ export async function setProductShowcasePrimaryImage(
 ): Promise<ProductShowcaseImage> {
   const showcaseId = normalizeUuid(
     input.showcaseId,
-    "Tootenäidise ID"
+    marketplaceMessage("showcase.product_showcase_id.9c2d29")
   );
 
   const imageId = normalizeUuid(
     input.imageId,
-    "Pildi ID"
+    marketplaceMessage("showcase.image_id.8a922d")
   );
 
   const { data, error } =
@@ -343,7 +344,7 @@ export async function setProductShowcasePrimaryImage(
     throw new Error(
       getImageErrorMessage(
         error,
-        "Põhipilti ei saanud muuta."
+        marketplaceMessage("showcase.the_main_image_could_not_be_changed.9d1e42")
       )
     );
   }
@@ -357,7 +358,7 @@ export async function setProductShowcasePrimaryImage(
 
   if (!row) {
     throw new Error(
-      "Andmebaas ei tagastanud põhipilti."
+      marketplaceMessage("showcase.the_database_did_not_return_the_main_image.fdafc2")
     );
   }
 
@@ -372,12 +373,12 @@ export async function deleteProductShowcaseImage(
 ): Promise<DeleteProductShowcaseImageResult> {
   const showcaseId = normalizeUuid(
     input.showcaseId,
-    "Tootenäidise ID"
+    marketplaceMessage("showcase.product_showcase_id.9c2d29")
   );
 
   const imageId = normalizeUuid(
     input.imageId,
-    "Pildi ID"
+    marketplaceMessage("showcase.image_id.8a922d")
   );
 
   const { data, error } =
@@ -393,7 +394,7 @@ export async function deleteProductShowcaseImage(
     throw new Error(
       getImageErrorMessage(
         error,
-        "Pilti ei saanud kustutada."
+        marketplaceMessage("showcase.the_image_could_not_be_deleted.9acfb9")
       )
     );
   }
@@ -410,7 +411,7 @@ export async function deleteProductShowcaseImage(
 
   if (!deletedImageId) {
     throw new Error(
-      "Andmebaas ei tagastanud kustutatud pilti."
+      marketplaceMessage("showcase.the_database_did_not_return_the_deleted_image.9fa502")
     );
   }
 

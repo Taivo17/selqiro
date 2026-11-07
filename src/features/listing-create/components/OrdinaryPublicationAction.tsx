@@ -1,4 +1,6 @@
 "use client";
+import { useV2Translation } from "../../../shared/i18n/V2LanguageProvider";
+import { listingCreateMessages, translateListingCreateMessage } from "../model/listingCreateMessages";
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { getMyRequiredPublicationPolicyStatus } from "../../../entities/publication-policy/api/getMyRequiredPublicationPolicyStatus";
@@ -25,6 +27,8 @@ function policySnapshot(policies: readonly PublicationPolicyStatus[]): string {
 }
 
 export default function OrdinaryPublicationAction({controller: c, fields, title, description, files, onNew, onCaptureSubmission, onSubmittingChange}: Props) {
+  const { language, t } = useV2Translation(listingCreateMessages);
+
   const [policies, setPolicies] = useState<PublicationPolicyStatus[] | null>(null);
   const [policyState, setPolicyState] = useState<"idle" | "loading" | "ready" | "error">("idle");
   const [policyReload, setPolicyReload] = useState(0);
@@ -41,10 +45,10 @@ export default function OrdinaryPublicationAction({controller: c, fields, title,
       if (!active || c.epoch.current !== epoch) return;
       setPolicies(value);
       if (value.some(p => p.policyKey === "marketplace-general")) setPolicyState("ready");
-      else { setPolicyState("error"); setMessage("Kehtivaid avaldamistingimusi ei leitud. Laadi tingimused uuesti."); }
+      else { setPolicyState("error"); setMessage("policiesMissing"); }
     }).catch(() => {
       if (active && c.epoch.current === epoch) {
-        setPolicyState("error"); setMessage("Avaldamistingimusi ei saanud laadida. Proovi uuesti; sisestatud andmed ja pildid jäävad alles.");
+        setPolicyState("error"); setMessage("policiesLoadFailed");
       }
     });
     return () => { active = false; submission.current = null; onSubmittingChange(false); };
@@ -62,26 +66,26 @@ export default function OrdinaryPublicationAction({controller: c, fields, title,
     const capturedFiles = files.map(file => file.slice(0, file.size, "application/octet-stream"));
     const markSubmitted = onCaptureSubmission();
     try { if (!resume) input = buildOrdinaryListingInput(fields, title, description); }
-    catch (error) { setMessage(error instanceof Error ? error.message : "Kontrolli vormi välju."); return; }
+    catch (error) { setMessage(error instanceof Error ? error.message : "checkForm"); return; }
     // Block a second click synchronously, before React renders the busy state.
     const operation = {};
     submission.current = operation; setAccepting(true); onSubmittingChange(true);
     const current = () => submission.current === operation && c.epoch.current === epoch && c.session.current === session && c.canAct(actor);
     try {
-      setMessage("Kontrollin kehtivaid avaldamistingimusi…");
+      setMessage("checkingPolicies");
       const reviewed = await readPolicies();
       if (!current()) return;
       setPolicies(reviewed);
       if (!reviewed.some(p => p.policyKey === "marketplace-general")) {
-        setChecked(false); setPolicyState("error"); setMessage("Kehtivaid avaldamistingimusi ei leitud. Laadi tingimused uuesti."); return;
+        setChecked(false); setPolicyState("error"); setMessage("policiesMissing"); return;
       }
       if (policySnapshot(reviewed) !== policySnapshot(policies) || (reviewed.some(p => !p.accepted) && !checked)) {
-        setChecked(false); setMessage("Avaldamistingimused muutusid. Loe kehtivaid tingimusi ja kinnita avaldamine uuesti."); return;
+        setChecked(false); setMessage("policiesChanged"); return;
       }
       const missing = reviewed.filter(p => !p.accepted);
       for (const policy of missing) {
         if (!current()) return;
-        setMessage("Salvestan nõustumist avaldamistingimustega…");
+        setMessage("savingAcceptance");
         await awaitPublicationReadiness(acceptPublicationPolicy({policyDocumentId: policy.policyDocumentId, policyVersion: policy.policyVersion,
           contentHash: policy.contentHash, identityId: actor.identityId}));
       }
@@ -93,11 +97,11 @@ export default function OrdinaryPublicationAction({controller: c, fields, title,
         if (!current()) return;
         setPolicies(fresh); setChecked(false);
         if (!fresh.some(p => p.policyKey === "marketplace-general")) {
-          setPolicyState("error"); setMessage("Kehtivaid avaldamistingimusi ei leitud. Laadi tingimused uuesti."); return;
+          setPolicyState("error"); setMessage("policiesMissing"); return;
         }
         setPolicyState("ready");
         if (policySnapshot(fresh) !== policySnapshot(reviewed) || fresh.some(p => !p.accepted)) {
-          setMessage("Avaldamistingimused muutusid või nõustumine jäi pooleli. Vaata all olevaid tingimusi ja kinnita avaldamine uuesti."); return;
+          setMessage("acceptanceIncomplete"); return;
         }
       }
       setMessage(null);
@@ -105,7 +109,7 @@ export default function OrdinaryPublicationAction({controller: c, fields, title,
     } catch {
       if (current()) {
         setPolicies(null); setChecked(false); setPolicyState("loading");
-        setMessage("Avaldamise ettevalmistamise tulemus jäi kinnitamata. Kontrollin salvestatud nõustumisi; kuulutust automaatselt ei avaldata.");
+        setMessage("preparationUnconfirmed");
         // A lost acceptance response is uncertain, not a failed remote write.
         // Read once to reconcile; even a successful read requires another click.
         try {
@@ -113,11 +117,11 @@ export default function OrdinaryPublicationAction({controller: c, fields, title,
           if (!current()) return;
           setPolicies(fresh);
           setPolicyState(fresh.some(p => p.policyKey === "marketplace-general") ? "ready" : "error");
-          setMessage("Avaldamine jäi ootele. Kontrolli all olevaid tingimusi ja kinnita avaldamine uuesti; sisestatud andmed ja pildid on alles.");
+          setMessage("publicationWaiting");
         } catch {
           if (current()) {
             setPolicyState("error");
-            setMessage("Nõustumise värsket olekut ei saanud kontrollida. Laadi tingimused uuesti; sisestatud andmed ja pildid on alles.");
+            setMessage("acceptanceCheckFailed");
           }
         }
       }
@@ -142,49 +146,50 @@ export default function OrdinaryPublicationAction({controller: c, fields, title,
     }
   };
   const terminal = ["published", "closed"].includes(c.view.phase);
-  return <section className="space-y-4 rounded-[30px] border border-amber-200 bg-white p-6" aria-label="Kuulutuse avaldamine">
-    <h2 className="text-xl font-black">Kuulutuse avaldamine</h2>
-    {!terminal && policyState === "loading" ? <p role="status" className="text-sm text-neutral-600">Laadin avaldamistingimusi…</p> : null}
+  return <section className="space-y-4 rounded-[30px] border border-amber-200 bg-white p-6" aria-label={t("listingPublication")}>
+    <h2 className="text-xl font-black">{t("listingPublication")}</h2>
+    {!terminal && policyState === "loading" ? <p role="status" className="text-sm text-neutral-600">{t("loadingPolicies")}</p> : null}
     {c.view.snapshot?.payload && c.view.phase !== "editing" ? <div className="rounded-2xl bg-neutral-50 p-4">
-      <p className="text-xs text-neutral-600">Selle avaldamise salvestatud andmed</p>
+      <p className="text-xs text-neutral-600">{t("savedPublicationDetails")}</p>
       <p className="font-bold">{c.view.snapshot.payload.basics.title}</p>
       <p className="text-sm">{c.view.snapshot.payload.price.kind === "fixed"
         ? `${c.view.snapshot.payload.price.amount} ${c.view.snapshot.payload.price.currency}`
-        : {free: "Tasuta", negotiable: "Kokkuleppel", unspecified: "Hind täpsustamata"}[c.view.snapshot.payload.price.kind]}</p>
-      <p className="text-sm">{c.view.snapshot.slots.length} pilti</p>
+        : {free: t("priceFree"), negotiable: t("priceByAgreement"), unspecified: t("priceNotSpecified")}[c.view.snapshot.payload.price.kind]}</p>
+      <p className="text-sm">{t("imageCount", { count: c.view.snapshot.slots.length })}</p>
     </div> : null}
     {!terminal && policies ? <div className="space-y-3">
+      {language === "en" && policies.some(p => p.locale === "et-EE") ? <p className="text-sm text-neutral-600">{t("policyEstonianNotice")}</p> : null}
       {policies.map(p => <details key={p.policyDocumentId} className="rounded-xl border border-neutral-200 p-3">
-        <summary className="cursor-pointer font-semibold">{p.title} · {p.policyVersion}{p.accepted ? " · kinnitatud" : ""}</summary>
-        <p className="mt-2 text-sm">{p.summary}</p><p className="mt-2 whitespace-pre-wrap text-sm">{p.bodyText}</p>
+        <summary className="cursor-pointer font-semibold"><span lang={p.locale === "et-EE" ? "et" : p.locale}>{p.title} · {p.policyVersion}</span>{p.accepted ? t("acceptedSuffix") : ""}</summary>
+        <p lang={p.locale === "et-EE" ? "et" : p.locale} className="mt-2 text-sm">{p.summary}</p><p lang={p.locale === "et-EE" ? "et" : p.locale} className="mt-2 whitespace-pre-wrap text-sm">{p.bodyText}</p>
       </details>)}
       {needsAcceptance ? <label className="flex items-start gap-3 text-sm"><input type="checkbox" checked={checked} disabled={busy}
-        onChange={e => setChecked(e.target.checked)} className="mt-1" />Olen tutvunud nende avaldamistingimustega ja nõustun nendega.</label> : null}
+        onChange={e => setChecked(e.target.checked)} className="mt-1" />{t("acceptTerms")}</label> : null}
     </div> : null}
-    <p role="status" aria-live="polite" className="text-sm">{c.contextError || message || c.view.message}</p>
+    <p role="status" aria-live="polite" className="text-sm">{translateListingCreateMessage(language, c.contextError || message || c.view.message, c.contextError || message ? undefined : c.view.messageParams)}</p>
     {!terminal && c.contextError ? <button type="button" disabled={busy}
       className="rounded-full border px-5 py-3 font-bold disabled:opacity-50"
-      onClick={c.retryContext}>Kontrolli identiteeti uuesti</button> : null}
+      onClick={c.retryContext}>{t("checkIdentity")}</button> : null}
     {!terminal && policyState === "error" ? <button type="button" disabled={busy || !c.actor}
       className="rounded-full border px-5 py-3 font-bold disabled:opacity-50"
-      onClick={() => { if (!submission.current) setPolicyReload(value => value + 1); }}>Laadi tingimused uuesti</button> : null}
+      onClick={() => { if (!submission.current) setPolicyReload(value => value + 1); }}>{t("reloadTerms")}</button> : null}
     {c.view.phase === "published" && c.view.receipt ? <div className="flex flex-wrap gap-4">
-      <Link href={`/v2/listing/${c.view.receipt.listing_id}`} className="font-bold underline">Vaata kuulutust</Link>
-      <Link href="/v2/my-area" className="font-bold underline">Ava Minu ala</Link>
+      <Link href={`/v2/listing/${c.view.receipt.listing_id}`} className="font-bold underline">{t("viewListing")}</Link>
+      <Link href="/v2/my-area" className="font-bold underline">{t("openMyArea")}</Link>
     </div> : null}
     {terminal ? <button type="button" disabled={busy || !c.contextReady} className="rounded-full border px-5 py-3 font-bold disabled:opacity-50"
-      onClick={() => { void startNext(); }}>Lisa järgmine kuulutus</button> : <div className="flex flex-wrap gap-3">
+      onClick={() => { void startNext(); }}>{t("addNextListing")}</button> : <div className="flex flex-wrap gap-3">
       {c.view.phase !== "needs_attention" ? <button type="button" disabled={busy || !ready || !!c.contextError} onClick={() => { void submit(c.view.phase !== "editing"); }}
         className="rounded-full bg-black px-6 py-3 font-bold text-white disabled:opacity-50">
-        {busy ? "Palun oota…" : c.view.phase === "editing" ? "Avalda kuulutus" : "Kontrolli ja jätka"}
+        {busy ? t("pleaseWait") : c.view.phase === "editing" ? t("publishListing") : t("checkContinue")}
       </button> : null}
       {c.view.phase !== "editing" ? <button type="button" disabled={busy || !c.contextReady} className="rounded-full border px-5 py-3 font-bold"
-        onClick={() => { if (c.actor && c.canAct(c.actor)) setCancelOpen(true); }}>Katkesta avaldamine</button> : null}
+        onClick={() => { if (c.actor && c.canAct(c.actor)) setCancelOpen(true); }}>{t("cancelPublication")}</button> : null}
     </div>}
-    {cancelOpen && !terminal ? <div role="alertdialog" aria-label="Katkesta see avaldamine" className="space-y-3 rounded-2xl border p-4">
-      <p>Kas sulged selle avaldamiskatse? Saadetud piltide koristamist kontrollitakse serveris.</p>
-      <button type="button" disabled={busy || !c.contextReady} className="mr-4 font-bold underline" onClick={() => { if (c.actor && c.canAct(c.actor)) { setCancelOpen(false); void c.session.current?.cancel(); } }}>Jah, katkesta</button>
-      <button type="button" onClick={() => setCancelOpen(false)}>Jätka praeguse katsega</button>
+    {cancelOpen && !terminal ? <div role="alertdialog" aria-label={t("cancelThisPublication")} className="space-y-3 rounded-2xl border p-4">
+      <p>{t("confirmCancel")}</p>
+      <button type="button" disabled={busy || !c.contextReady} className="mr-4 font-bold underline" onClick={() => { if (c.actor && c.canAct(c.actor)) { setCancelOpen(false); void c.session.current?.cancel(); } }}>{t("yesCancel")}</button>
+      <button type="button" onClick={() => setCancelOpen(false)}>{t("continueAttempt")}</button>
     </div> : null}
   </section>;
 }

@@ -1,3 +1,5 @@
+import type { Language } from "../../../../lib/i18n/translations";
+import { marketplaceMessage } from "../../../shared/i18n/marketplaceMessages";
 import { formatOwnerHorseMoney as money } from "./ownerMoney";
 import type { OwnerHorseOfferDetail } from "./types";
 
@@ -21,7 +23,7 @@ const record = (value: unknown): RecordValue | null =>
 const text = (value: unknown): string | null =>
   typeof value === "string" && value.trim() ? value.trim() : null;
 const SEX: Record<string, string> = {
-  mare: "Mära", gelding: "Ruun", stallion: "Täkk", unknown: "Täpsustamata",
+  mare: marketplaceMessage("horse.mare.67d254"), gelding: marketplaceMessage("horse.gelding.6a1963"), stallion: marketplaceMessage("horse.stallion.4dcb92"), unknown: marketplaceMessage("category.unspecified.99fb9b"),
 };
 const sexLabel = (value: unknown) => typeof value === "string" ? SEX[value] || null : null;
 
@@ -36,7 +38,7 @@ function supportedAmount(value: unknown): value is number {
     && value <= 9999999999.99 && /^\d+(?:\.\d{1,2})?$/.test(String(value));
 }
 
-function wantedPresentation(detail: OwnerHorseOfferDetail): OwnerHorsePresentation {
+function wantedPresentation(detail: OwnerHorseOfferDetail, language: Language): OwnerHorsePresentation {
   const shapeOK = detail.details.schema_version === 1 && detail.details.branch === "wanted";
   const wanted = shapeOK ? record(detail.details.wanted) : null;
   const budget = record(wanted?.budget);
@@ -52,60 +54,60 @@ function wantedPresentation(detail: OwnerHorseOfferDetail): OwnerHorsePresentati
   const validPreferences = wanted !== null && preferenceKeys.every(key =>
     wanted[key] == null || typeof wanted[key] === "string")
     && (wanted.preferred_sex == null || sexLabel(wanted.preferred_sex) !== null);
-  const priceLabel = !validBudget ? "Eelarve vajab kontrollimist"
-    : budget!.mode === "contact" ? "Eelarve on paindlik"
-    : `Eelarve kuni ${money(budget!.amount as number, "EUR")}`;
+  const priceLabel = !validBudget ? marketplaceMessage("horse.budget_needs_review.d3858b")
+    : budget!.mode === "contact" ? marketplaceMessage("horse.flexible_budget.20da6f")
+    : marketplaceMessage("horse.budget_up_to_value.82a955", { p0: String(money(budget!.amount as number, "EUR", language)) });
   const locationLabel = validArea
-    ? location(area!.city_or_municipality, area!.region) || "Otsingupiirkond lisamata"
-    : "Otsingupiirkond vajab kontrollimist";
+    ? location(area!.city_or_municipality, area!.region) || marketplaceMessage("horse.search_area_not_added.085cfe")
+    : marketplaceMessage("horse.search_area_needs_review.9e6629");
   // No fallback to seller price, horse location, facts or disclosures on the wanted branch.
   return {
-    isWanted: true, priceHeading: "Ostueelarve", priceLabel,
-    locationHeading: "Otsingupiirkond", locationLabel,
+    isWanted: true, priceHeading: marketplaceMessage("horse.purchase_budget.943f7e"), priceLabel,
+    locationHeading: marketplaceMessage("horse.search_area.6c28ce"), locationLabel,
     basics: [
-      { label: "Soovitud sugu", value: sexLabel(wanted?.preferred_sex) },
-      { label: "Soovitud tõug", value: text(wanted?.preferred_breed) },
+      { label: marketplaceMessage("horse.preferred_sex.023ced"), value: sexLabel(wanted?.preferred_sex) },
+      { label: marketplaceMessage("horse.preferred_breed.fa271b"), value: text(wanted?.preferred_breed) },
     ],
     use: [
-      { label: "Soovitud kasutusala", value: text(wanted?.preferred_discipline) },
-      { label: "Soovitud väljaõpe", value: text(wanted?.preferred_training_level) },
-      { label: "Kavandatud kasutus", value: text(wanted?.intended_use) },
+      { label: marketplaceMessage("horse.preferred_discipline.752b6f"), value: text(wanted?.preferred_discipline) },
+      { label: marketplaceMessage("horse.preferred_training.10bb84"), value: text(wanted?.preferred_training_level) },
+      { label: marketplaceMessage("horse.intended_use.3733e9"), value: text(wanted?.intended_use) },
     ],
     disclosures: [
-      { label: "Tervisega seotud eelistused", value: text(wanted?.health_preferences) },
-      { label: "Käitumisega seotud eelistused", value: text(wanted?.behavior_preferences) },
+      { label: marketplaceMessage("horse.health_preferences.189805"), value: text(wanted?.health_preferences) },
+      { label: marketplaceMessage("horse.behaviour_preferences.4d0ce4"), value: text(wanted?.behavior_preferences) },
     ],
     warning: validBudget && validArea && validPreferences ? null
-      : "Osa salvestatud otsinguandmeid ei vasta selle vaate toetatud vormingule. Andmeid ei ole muudetud.",
+      : marketplaceMessage("horse.some_saved_search_details_are_not_in_a.0f0482"),
   };
 }
 
-export function getOwnerHorsePresentation(detail: OwnerHorseOfferDetail): OwnerHorsePresentation {
-  if (detail.offerType === "wanted") return wantedPresentation(detail);
+export function getOwnerHorsePresentation(detail: OwnerHorseOfferDetail, language: Language = "et"): OwnerHorsePresentation {
+  if (detail.offerType === "wanted") return wantedPresentation(detail, language);
   let priceLabel: string;
-  if (detail.offerType === "free_transfer" || detail.priceType === "free") priceLabel = "Tasuta";
-  else if (detail.priceAmount === null) priceLabel = detail.priceType === "contact" ? "Hind kokkuleppel" : "Hind lisamata";
-  else priceLabel = `${detail.priceType === "from" ? "Alates " : ""}${money(detail.priceAmount, detail.currency)}`;
+  if (detail.offerType === "free_transfer" || detail.priceType === "free") priceLabel = marketplaceMessage("horse.free.e5aa0d");
+  else if (detail.priceAmount === null) priceLabel = detail.priceType === "contact" ? marketplaceMessage("service.price_by_agreement.299166") : marketplaceMessage("horse.price_not_added.5d5a00");
+  else priceLabel = `${detail.priceType === "from" ? marketplaceMessage("horse.from.5aab60") : ""}${money(detail.priceAmount, detail.currency, language)}`;
   return {
-    isWanted: false, priceHeading: "Hind", priceLabel,
-    locationHeading: "Avalik asukoht",
-    locationLabel: location(detail.city, detail.region) || "Asukoht lisamata",
+    isWanted: false, priceHeading: marketplaceMessage("service.price.ee7887"), priceLabel,
+    locationHeading: marketplaceMessage("horse.public_location.b377a0"),
+    locationLabel: location(detail.city, detail.region) || marketplaceMessage("horse.location_not_added.8c8234"),
     basics: [
-      { label: "Hobuse nimi", value: detail.horseName },
-      { label: "Sünniaasta", value: detail.birthYear },
-      { label: "Sugu", value: sexLabel(detail.sex) },
-      { label: "Tõug", value: detail.breed },
-      { label: "Värvus", value: detail.color },
-      { label: "Turjakõrgus", value: detail.heightCm === null ? null : `${detail.heightCm} cm` },
+      { label: marketplaceMessage("horse.horse_name.b4ca2f"), value: detail.horseName },
+      { label: marketplaceMessage("horse.year_of_birth.9b64d1"), value: detail.birthYear },
+      { label: marketplaceMessage("horse.sex.b95704"), value: sexLabel(detail.sex) },
+      { label: marketplaceMessage("horse.breed.482c80"), value: detail.breed },
+      { label: marketplaceMessage("horse.colour.fba70e"), value: detail.color },
+      { label: marketplaceMessage("horse.height_at_withers.51b51c"), value: detail.heightCm === null ? null : `${detail.heightCm} cm` },
     ],
     use: [
-      { label: "Distsipliin", value: detail.discipline },
-      { label: "Treeningutase", value: detail.trainingLevel },
-      { label: "Sobivus", value: detail.suitability },
+      { label: marketplaceMessage("horse.discipline.34a249"), value: detail.discipline },
+      { label: marketplaceMessage("horse.training_level.aca1d2"), value: detail.trainingLevel },
+      { label: marketplaceMessage("horse.suitability.4a8410"), value: detail.suitability },
     ],
     disclosures: [
-      { label: "Tervis", value: detail.healthNotes },
-      { label: "Käitumine", value: detail.behaviorNotes },
+      { label: marketplaceMessage("horse.health.381624"), value: detail.healthNotes },
+      { label: marketplaceMessage("horse.behaviour.b71ee4"), value: detail.behaviorNotes },
     ],
     warning: null,
   };

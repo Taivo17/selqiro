@@ -1,4 +1,6 @@
 "use client";
+import { uiMessage, safeUiError } from "../../../../lib/i18n/interfaceMessage";
+
 import { useEffect, useRef, useState } from "react";
 import { setActiveIdentity, type SetActiveIdentityResult } from "../../../entities/identity/api/setActiveIdentity";
 import type { IdentitySummary } from "../../../entities/identity/model/types";
@@ -36,7 +38,7 @@ export function useV2IdentitySwitcher({ userId }: { userId: string | null; userE
           setState({ ...result, userId, loading: false, switchingIdentityId: null, error: switchError.current?.message ?? null });
       }, () => {
         if (live.current && version === generation.current && owner.current === userId)
-          setState({ ...empty(userId), loading: false, error: "Identiteeti ei saanud kontrollida. Proovi uuesti." });
+          setState({ ...empty(userId), loading: false, error: uiMessage("could_not_verify_the_identity_try_again") });
       });
     };
     const changing = () => {
@@ -66,10 +68,10 @@ export function useV2IdentitySwitcher({ userId }: { userId: string | null; userE
 
   async function switchIdentity(identityId: string): Promise<SetActiveIdentityResult> {
     if (!userId || owner.current !== userId || state.userId !== userId || state.loading)
-      throw new Error("Identiteete alles kontrollitakse.");
-    if (busy.current || identityChangePending(userId)) throw new Error("Identiteedi vahetamine juba käib.");
+      throw new Error(uiMessage("identities_are_still_being_checked"));
+    if (busy.current || identityChangePending(userId)) throw new Error(uiMessage("an_identity_switch_is_already_in_progress"));
     const target = state.identities.find(item => item.id === identityId.trim());
-    if (!target) throw new Error("Sul puudub ligipääs valitud identiteedile.");
+    if (!target) throw new Error(uiMessage("you_do_not_have_access_to_the_selected_identity"));
     if (state.activeIdentity?.id === target.id) return { identity: state.activeIdentity, changed: false };
     const version = ++generation.current;
     busy.current = target.id;
@@ -79,14 +81,14 @@ export function useV2IdentitySwitcher({ userId }: { userId: string | null; userE
     try {
       const result = await setActiveIdentity({ identityId: target.id, expectedUserId: userId });
       if (!live.current || owner.current !== userId || version !== generation.current)
-        throw new Error("Konto vahetus toimingu ajal. Kontrolli aktiivset identiteeti.");
+        throw new Error(uiMessage("the_account_changed_during_this_action_check_the_active_identity"));
       setState(current => ({ ...current, activeIdentity: result.identity,
         identities: current.identities.map(item => item.id === target.id ? result.identity : item),
         switchingIdentityId: null, error: null }));
       return result;
     } catch (error) {
       if (live.current && owner.current === userId && version === generation.current) {
-        switchError.current = { userId, message: error instanceof Error ? error.message : "Identiteedi vahetamine ei õnnestunud." };
+        switchError.current = { userId, message: safeUiError(error, "could_not_switch_identity") };
         setState(current => ({ ...current, activeIdentity: null, switchingIdentityId: null,
           error: switchError.current?.message ?? null }));
       }

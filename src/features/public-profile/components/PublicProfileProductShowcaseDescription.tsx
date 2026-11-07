@@ -1,5 +1,11 @@
 "use client";
 
+import { useV2Translation } from "@/src/shared/i18n/V2LanguageProvider";
+
+
+import { publicUiMessages } from "@/lib/i18n/catalogs/publicUi";
+
+
 import {
   useEffect,
   useRef,
@@ -15,6 +21,8 @@ export default function PublicProfileProductShowcaseDescription({
   description: string;
   expanded: boolean;
 }) {
+  const { t } = useV2Translation(publicUiMessages);
+
   const [
     descriptionOpen,
     setDescriptionOpen,
@@ -138,8 +146,8 @@ export default function PublicProfileProductShowcaseDescription({
           className="mt-2 rounded-full border border-neutral-200 bg-white px-3 py-1.5 text-xs font-black text-neutral-700 shadow-sm transition hover:border-neutral-300"
         >
           {descriptionOpen
-            ? "Näita vähem"
-            : "Vaata rohkem"}
+            ? t("show_less")
+            : t("view_more")}
         </button>
       ) : null}
     </div>

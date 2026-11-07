@@ -10,7 +10,7 @@ import {measurePhotoTask} from "../../../entities/listing/model/photoPerformance
 
 export type PublicationView = Readonly<{
   phase: "editing" | "busy" | "resume" | "needs_files" | "unknown" | "needs_attention" | "published" | "closed";
-  message: string; snapshot: PublicationSnapshot | null; receipt: FinalReceipt | null;
+  message: string; messageParams?: Readonly<Record<string, string | number>>; snapshot: PublicationSnapshot | null; receipt: FinalReceipt | null;
 }>;
 export type JourneyJournal = PublicationImageJournal & {preparation?: readonly PublicationFilePreparation[]};
 export type PublicationSessionDeps = {
@@ -44,7 +44,7 @@ export class OrdinaryPublicationSession {
   }
   subscribe(fn: (view: PublicationView) => void) { this.listener = fn; fn(this.view); return () => { this.listener = () => {}; }; }
   invalidate() { this.generation++; this.abort.abort(); this.listener = () => {}; this.files.clear(); }
-  private change(patch: Partial<PublicationView>) { this.view = Object.freeze({...this.view, ...patch}); this.listener(this.view); }
+  private change(patch: Partial<PublicationView>) { this.view = Object.freeze({...this.view, ...patch, ...(Object.hasOwn(patch, "message") ? {messageParams: patch.messageParams} : {})}); this.listener(this.view); }
   private checkGeneration(g: number) { if (g !== this.generation || this.abort.signal.aborted) throw new Error("context_changed"); }
   private args(j: JourneyJournal) { return {expectedUserId: this.deps.actor.userId, expectedIdentityId: this.deps.actor.identityId, requestKey: j.requestKey}; }
   private journal(): JourneyJournal {
@@ -68,8 +68,8 @@ export class OrdinaryPublicationSession {
   }
   private captureFailed(): Promise<void> {
     if (!this.abort.signal.aborted) this.change(this.hasIntent()
-      ? {phase: "resume", message: "Ettevalmistus ei õnnestunud. Salvestatud katse on alles; kontrolli jätkamiseks valitud pilte."}
-      : {phase: "editing", message: "Kontrolli kuulutuse andmeid ja piltide mahtu ning proovi uuesti."});
+      ? {phase: "resume", message: "captureFailedExisting"}
+      : {phase: "editing", message: "checkDetailsImages"});
     return Promise.resolve();
   }
   private run(work: (g: number) => Promise<void>, measureTotal = false): Promise<void> {
@@ -77,25 +77,25 @@ export class OrdinaryPublicationSession {
     const g = this.generation;
     const operation = this.deps.withLock(async () => {
       this.checkGeneration(g);
-      this.change({phase: "busy", message: "Kontrollin avaldamise seisu…"});
+      this.change({phase: "busy", message: "checkingPublication"});
       try { await (measureTotal ? measurePhotoTask("total", () => work(g)) : work(g)); }
       catch (error) {
         if (g !== this.generation || this.abort.signal.aborted) return;
         const code = error instanceof Error ? error.message : "outcome_unknown";
         if (!this.hasIntent()) {
           this.files.clear();
-          this.change({phase: "editing", message: "Ettevalmistus ei õnnestunud. Kontrolli andmeid ja brauseri salvestusruumi ning proovi uuesti."});
+          this.change({phase: "editing", message: "prepareFailed"});
           return;
         }
         this.change({phase: code === "files_required" ? "needs_files" : ["needs_attention", "image_rejected", "image_processor_unavailable", "photo_preparation_changed"].includes(code) ? "needs_attention" : "unknown",
-          message: code === "files_required" ? "Vali samad algsed pildid, et jätkata. Juba saadetud pilte uuesti ei saadeta."
-            : code === "photo_preparation_changed" ? "Brauser valmistas pildi seekord teisiti ette. Katkesta see katse ja vali samad algsed fotod uueks avaldamiseks."
-            : code === "image_rejected" ? "Üks valitud piltidest ei sobi avaldamiseks. Katkesta see katse ja vali uueks avaldamiseks sobivad JPEG-, PNG- või WebP-pildid."
-            : code === "image_processor_unavailable" ? "Pildi töötlemist ei saanud lõpetada. Katkesta see katse; seejärel saad alustada uut avaldamist."
-            : code === "needs_attention" ? "Pildi lõpetamine vajab kontrolli. Avaldamine on ootel; saad katse katkestada."
-            : "Tulemus pole veel kindel. Kontrolli ja jätka sama katsega või katkesta see."});
+          message: code === "files_required" ? "sameImagesRequired"
+            : code === "photo_preparation_changed" ? "imagePreparationChanged"
+            : code === "image_rejected" ? "imageRejected"
+            : code === "image_processor_unavailable" ? "imageProcessorUnavailable"
+            : code === "needs_attention" ? "imageNeedsAttention"
+            : "outcomeUnknown"});
       }
-    }).catch(() => { if (g === this.generation) this.change({phase: this.hasIntent() ? "unknown" : "editing", message: "Sama avaldamine on teises aknas töös või brauser ei saanud taastamise võtmeid lukustada."}); });
+    }).catch(() => { if (g === this.generation) this.change({phase: this.hasIntent() ? "unknown" : "editing", message: "busyElsewhere"}); });
     this.operation = operation.finally(() => { this.operation = null; }); return this.operation;
   }
   private async status(g: number, j: JourneyJournal) {
@@ -103,17 +103,17 @@ export class OrdinaryPublicationSession {
     const result = publicationJourney(value, this.deps.actor, j.requestKey);
     this.change({snapshot: result.snapshot, receipt: result.receipt});
     if (result.receipt) { this.terminalRequestKey = j.requestKey; this.change({phase: result.receipt.state === "published" ? "published" : "closed",
-      message: result.receipt.state === "published" ? "Kuulutus on avaldatud." : "Kuulutuse sisu on eemaldatud."}); return null; }
+      message: result.receipt.state === "published" ? "published" : "listingRemoved"}); return null; }
     if (result.intentClosed || result.snapshot && result.snapshot.state !== "open") {
       this.terminalRequestKey = j.requestKey;
-      this.change({phase: "closed", message: "Avaldamiskatse on suletud. Piltide koristamise tulemus jääb serveris alles."}); return null;
+      this.change({phase: "closed", message: "attemptClosed"}); return null;
     }
     if (!result.snapshot) throw new Error("outcome_unknown"); return result.snapshot;
   }
   inspect(): Promise<void> {
     if (!this.deps.readJournal()) { this.change(initial()); return Promise.resolve(); }
     return this.run(async g => { const snapshot = await this.status(g, this.journal());
-      if (snapshot) this.change({phase: "resume", message: "Leidsin poolelioleva avaldamise. Jätkamisel kasutatakse all näidatud salvestatud andmeid."}); });
+      if (snapshot) this.change({phase: "resume", message: "attemptFound"}); });
   }
   start(listing: ListingCreationInput, selected: readonly Blob[], onIntentCreated?: (requestKey: string) => void): Promise<void> {
     if (this.operation) return this.operation;
@@ -127,10 +127,10 @@ export class OrdinaryPublicationSession {
     } catch { return this.captureFailed(); }
     return this.run(async g => {
       if (this.deps.readJournal()) { const s = await this.status(g, this.journal());
-        if (s) this.change({phase: "resume", message: "Selle identiteedi avaldamine on juba pooleli."}); return; }
+        if (s) this.change({phase: "resume", message: "identityAttemptOpen"}); return; }
       const images = [], preparation: PublicationFilePreparation[] = [];
       for (const bytes of captured) {
-        this.change({message: "Valmistan pilte saatmiseks ette…"});
+        this.change({message: "preparingPhotos"});
         const prepared = await preparePublicationFile(bytes, this.deps.uuid(), this.deps,
           {signal: this.abort.signal, checkContext: () => this.checkGeneration(g)}); this.checkGeneration(g);
         preparation.push(prepared.preparation);
@@ -177,7 +177,7 @@ export class OrdinaryPublicationSession {
       !journal.preparation!.some(proof => preparationMatchesUpload(proof, slot.client_file_id, slot.expected_bytes, slot.expected_sha256)))))
       throw new Error("photo_preparation_invalid");
     for (const slot of s.slots) {
-      this.change({message: `Kontrollin pilti ${slot.ordinal + 1}/${s.slots.length}…`});
+      this.change({message: "checkingImage", messageParams: {number: slot.ordinal + 1, count: s.slots.length}});
       await completePublicationImage({actor: this.deps.actor, attemptId: s.attempt_id,
         requestKey: journal.requestKey, slot, uploadOrigin: this.uploadOrigin, signal: this.abort.signal}, {
         readJournal: () => this.journal(), writeJournal: value => {
@@ -188,16 +188,16 @@ export class OrdinaryPublicationSession {
         request: (action, body, signal) => this.deps.request(action, body, signal),
         putPart: (url, headers, bytes, signal) => this.deps.putPart(url, headers, bytes, signal),
         checkContext: () => this.checkGeneration(g),
-        onUpload: () => this.change({message: `Saadan pilti ${slot.ordinal + 1}/${s.slots.length}…`}),
+        onUpload: () => this.change({message: "uploadingImage", messageParams: {number: slot.ordinal + 1, count: s.slots.length}}),
       });
       this.checkGeneration(g);
     }
-    this.change({message: "Kinnitan avaldamist…"});
+    this.change({message: "confirmingPublication"});
     const result = await this.deps.request("publish", {...this.args(journal), attemptId: s.attempt_id, expectedPrice: s.payload.price}, this.abort.signal);
     this.checkGeneration(g);
     const r = receipt(result, {identityId: this.deps.actor.identityId, userId: this.deps.actor.userId, attemptId: s.attempt_id, requestKey: journal.requestKey}, Object.hasOwn(uploadRecord(result), "replayed"));
     this.terminalRequestKey = journal.requestKey;
-    this.change({receipt: r, phase: r.state === "published" ? "published" : "closed", message: r.state === "published" ? "Kuulutus on avaldatud." : "Kuulutuse sisu on eemaldatud."});
+    this.change({receipt: r, phase: r.state === "published" ? "published" : "closed", message: r.state === "published" ? "published" : "listingRemoved"});
   }
   cancel(): Promise<void> {
     return this.run(async g => {
@@ -207,7 +207,7 @@ export class OrdinaryPublicationSession {
       if (!result.intentClosed) throw new Error("outcome_unknown");
       this.terminalRequestKey = j.requestKey;
       this.change({phase: "closed", snapshot: result.snapshot, receipt: result.receipt,
-        message: "Avaldamiskatse on suletud. Piltide lõppkoristus jätkub eraldi kontrolliga."});
+        message: "attemptClosedCleanup"});
     });
   }
   async reset(onReset?: (requestKey: string) => void): Promise<string | null> {
@@ -224,7 +224,7 @@ export class OrdinaryPublicationSession {
         const journal = this.journal();
         if (journal.requestKey !== expected) {
           const snapshot = await this.status(generation, journal);
-          if (snapshot) this.change({phase: "resume", message: "Selle identiteedi teine avaldamine on pooleli. Jätka sama katsega."});
+          if (snapshot) this.change({phase: "resume", message: "anotherAttemptOpen"});
           return;
         }
         this.deps.clearJournal();
@@ -236,7 +236,7 @@ export class OrdinaryPublicationSession {
       cleared = expected; onReset?.(expected); this.change(initial());
     }).catch(() => {
       if (generation === this.generation && !this.abort.signal.aborted)
-        this.change({message: "Uut kuulutust ei saanud veel alustada. Eelmise katse taastamise andmed ja sisestus jäävad alles; proovi uuesti."});
+        this.change({message: "nextListingFailed"});
     });
     this.operation = work.finally(() => { this.operation = null; });
     await this.operation;

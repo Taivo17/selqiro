@@ -1,3 +1,4 @@
+import { marketplaceMessage, safeMarketplaceError } from "../../../shared/i18n/marketplaceMessages";
 import type { OwnerHorseOfferEditSnapshot } from "../../../entities/horse-offer/model/editSnapshot";
 import { isHorseDraftUuid, isHorseDraftRevision, isExpectedHorseDraftRevision,
   type HorseDraftActor, type HorseDraftUpdateInput, type HorseDraftUpdateResult } from "../../../entities/horse-offer/model/draftEdit";
@@ -23,11 +24,11 @@ export type OwnerHorseDraftApi = {
   update: (input: HorseDraftUpdateInput) => Promise<HorseDraftUpdateResult>;
 };
 const COPY = {
-  context: "Aktiivne identiteet muutus või selle kontroll ei õnnestunud. Sisestus on alles. Vali mustandi algne identiteet ja kontrolli uuesti.",
-  read: "Mustandi andmeid ei saanud laadida. Olemasolev sisestus on alles.",
-  acknowledged: "Muudatus salvestati, kuid värskeid andmeid ei saanud laadida. Korda ainult andmete lugemist.",
-  conflict: "Mustandit on vahepeal muudetud. Sinu sisestus on alles ja seda ei kirjutata uuema versiooni peale. Kontrolli salvestatud pakkumist eraldi aknas.",
-  unknown: "Salvestuse tulemust ei saanud kinnitada. Sisestus on alles. Ära korda kirjutamist; kontrolli salvestatud pakkumist eraldi aknas.",
+  context: marketplaceMessage("horse.the_active_identity_changed_or_could_not_be.78dfbb"),
+  read: marketplaceMessage("horse.the_draft_could_not_be_loaded_your_existing.50b8b7"),
+  acknowledged: marketplaceMessage("horse.the_change_was_saved_but_the_latest_details.f0bf3f"),
+  conflict: marketplaceMessage("horse.the_draft_was_changed_elsewhere_your_input_is.35d535"),
+  unknown: marketplaceMessage("horse.the_save_result_could_not_be_confirmed_your.8b23ed"),
 };
 const clone = <T,>(x: T): T => JSON.parse(JSON.stringify(x)) as T;
 function freeze<T>(x: T): T {
@@ -63,7 +64,7 @@ export class OwnerHorseDraftSession {
     if (userId === this.userId || this.state.closed) return;
     this.epoch++; this.readTicket++;
     this.set({ closed: true, snapshot: null, form: null, baseline: null, acknowledgement: null,
-      context: "blocked", work: "idle", problem: null, message: "Konto muutus. Ava vorm õige kontoga uuesti." });
+      context: "blocked", work: "idle", problem: null, message: marketplaceMessage("horse.the_account_changed_reopen_the_form_with_the.cc45b5") });
   }
   private valid(epoch: number) { return this.active && !this.state.closed && this.epoch === epoch; }
   private matches(actor: HorseDraftActor) {
@@ -126,7 +127,7 @@ export class OwnerHorseDraftSession {
       if (!this.matches(afterActor) || afterActor.identityId !== actor.identityId) {
         this.set({ context: "blocked" }); return;
       }
-      if (!loaded) { this.set({ problem: "not_found", message: "Pakkumist ei leitud või sellele pole aktiivse identiteediga ligipääsu." }); return; }
+      if (!loaded) { this.set({ problem: "not_found", message: marketplaceMessage("horse.the_listing_was_not_found_or_is_not.5836b9") }); return; }
       if (loaded.detail.offerId !== this.offerId || loaded.detail.contentId !== this.offerId
         || loaded.detail.identityId !== actor.identityId || !isHorseDraftRevision(loaded.editRevision)) {
         throw new Error("Invalid atomic snapshot");
@@ -140,9 +141,9 @@ export class OwnerHorseDraftSession {
       const newer = ack && BigInt(snapshot.editRevision) > BigInt(ack.editRevision);
       this.set({ snapshot, form, baseline: form ? clone(form) : null, problem: null, acknowledgement: null,
         message: reason === "acknowledged" ? newer
-          ? "Salvestus kinnitati. Vahepeal on mustandit veel muudetud; kuvatakse viimast terviklikku serveriversiooni."
-          : "Muudatused on salvestatud."
-          : reason === "replace" ? "Salvestatud andmed on uuesti laaditud." : null });
+          ? marketplaceMessage("horse.the_save_was_confirmed_the_draft_has_since.716b24")
+          : marketplaceMessage("horse.changes_saved.8cbfff")
+          : reason === "replace" ? marketplaceMessage("horse.saved_details_reloaded.27c564") : null });
     } catch {
       if (current()) this.set({ problem: "load", message: this.state.acknowledgement ? COPY.acknowledged : COPY.read });
     } finally {
@@ -157,7 +158,7 @@ export class OwnerHorseDraftSession {
       if (!Object.keys(changes).length) return;
       input = { offerId: this.offerId, editRevision: this.state.snapshot.editRevision, changes: { ...changes } };
     } catch (error) {
-      this.set({ message: error instanceof Error ? error.message : "Kontrolli muudetud välju." }); return;
+      this.set({ message: safeMarketplaceError(error, marketplaceMessage("horse.check_the_changed_fields.743c12")) }); return;
     }
     const epoch = this.epoch;
     this.writing = true; // Before the first await; UI state alone is not a mutex.
@@ -181,9 +182,9 @@ export class OwnerHorseDraftSession {
       else if (!(error instanceof HorseDraftWriteError) || error.outcome === "unknown") {
         this.set({ problem: "unknown", message: COPY.unknown });
       } else if (error.code === "40001") this.set({ problem: "conflict", message: COPY.conflict });
-      else if (error.code === "55000") this.set({ problem: "not_editable", message: "See pakkumine ei ole enam muudetav mustand. Sisestus on alles; kontrolli salvestatud pakkumist." });
-      else if (error.code === "42501") this.set({ context: "blocked", message: "Kontrolli aktiivset identiteeti ja ligipääsu. Sisestus on alles." });
-      else this.set({ message: "Salvestust ei tehtud. Kontrolli muudetud välju; kordus kasutab sama andmeversiooni." });
+      else if (error.code === "55000") this.set({ problem: "not_editable", message: marketplaceMessage("horse.this_listing_is_no_longer_an_editable_draft.25f431") });
+      else if (error.code === "42501") this.set({ context: "blocked", message: marketplaceMessage("horse.check_your_active_identity_and_access_your_input.3fffa2") });
+      else this.set({ message: marketplaceMessage("horse.nothing_was_saved_check_the_changed_fields_retrying.8e40c0") });
     } finally {
       this.writing = false;
       if (!this.state.closed) this.set({ work: "idle" });

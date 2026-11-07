@@ -1,3 +1,7 @@
+import type { Language } from "../../../../lib/i18n/translations";
+import { getCatalogTranslation, localeForLanguage } from "../../../../lib/i18n/useTranslation";
+import { listingPresentationMessages } from "../../../../lib/i18n/catalogs/listingPresentation";
+import { uiMessage } from "../../../../lib/i18n/interfaceMessage";
 import { CATEGORY_TREE, getCategoryLabel } from "../../../../lib/categories";
 
 export const PUBLIC_SEARCH_PAGE_SIZE = 24;
@@ -15,25 +19,29 @@ export const EMPTY_PUBLIC_SEARCH: PublicSearchInput = {
 export type SearchCategory = { value: string; label: string; children?: readonly SearchCategory[] };
 export const SEARCH_CATEGORIES: readonly SearchCategory[] = CATEGORY_TREE;
 export const SEARCH_CONDITIONS = [
-  { value: "new", label: "Uus" }, { value: "used", label: "Kasutatud" },
-  { value: "damaged", label: "Kahjustatud" },
+  { value: "new", label: "New" }, { value: "used", label: "Used" },
+  { value: "damaged", label: "Damaged" },
 ] as const;
-export const searchCategoryLabel = (node: SearchCategory) => getCategoryLabel(node.value, node.label, "et");
+export const searchCategoryLabel = (node: SearchCategory, language: Language = "en") => getCategoryLabel(node.value, node.label, language);
+export function searchConditionLabel(value: string | null | undefined, language: Language = "en"): string {
+  return value === "new" || value === "used" || value === "damaged"
+    ? getCatalogTranslation(language, listingPresentationMessages, value) : value ?? "";
+}
 export function searchCategoryChildren(category: string, subcategory?: string): readonly SearchCategory[] {
   const children = SEARCH_CATEGORIES.find(n => n.value === category)?.children || [];
   return subcategory ? children.find(n => n.value === subcategory)?.children || [] : children;
 }
 export function publicSearchError(input: PublicSearchInput): string | null {
   if ([input.query, input.location].some(v => typeof v !== "string" || [...v].length > 160))
-    return "Otsingutekst võib olla kuni 160 märki.";
+    return uiMessage("search_text_can_contain_up_to_160_characters");
   if (!Number.isInteger(input.offset) || input.offset < 0 || input.offset > PUBLIC_SEARCH_MAX_OFFSET)
-    return "See tulemuste lehekülg ei ole toetatud. Alusta otsingut uuesti.";
-  if (!["", "new", "used", "damaged"].includes(input.condition)) return "Vali toetatud seisukord.";
+    return uiMessage("this_result_page_is_unsupported_start_your_search_again");
+  if (!["", "new", "used", "damaged"].includes(input.condition)) return uiMessage("choose_a_supported_condition");
   if ((input.category && !SEARCH_CATEGORIES.some(n => n.value === input.category)) ||
       (input.subcategory && !searchCategoryChildren(input.category).some(n => n.value === input.subcategory)) ||
       (input.detailCategory && (!input.subcategory ||
         !searchCategoryChildren(input.category, input.subcategory).some(n => n.value === input.detailCategory))))
-    return "See kategooriavalik ei ole toetatud. Vali kategooria uuesti.";
+    return uiMessage("this_category_selection_is_unsupported_choose_the_category_again");
   return null;
 }
 export function publicSearchKey(input: PublicSearchInput): string {
@@ -53,7 +61,7 @@ export function parsePublicSearch(params: URLSearchParams): { input: PublicSearc
   const unsupported = ["min_price", "max_price", "price_min", "price_max", "currency", "radius", "purpose"]
     .some(k => params.has(k)) || (params.has("sort") && params.get("sort") !== "newest");
   return {input, error: duplicate || unsupported
-    ? "Link sisaldab toetamata või korduvaid filtreid. Alusta otsingut uuesti."
+    ? uiMessage("this_link_contains_unsupported_or_duplicate_filters_start_your_search_again")
     : publicSearchError(input)};
 }
 export function publicSearchUrl(input: PublicSearchInput): string {
@@ -69,14 +77,14 @@ export function publicSearchUrl(input: PublicSearchInput): string {
 }
 export const publicFilterCount = (input: PublicSearchFields) =>
   Number(Boolean(input.category)) + Number(Boolean(input.condition)) + Number(Boolean(input.location.trim()));
-export function publicCategoryPath(input: Pick<PublicSearchFields, "category" | "subcategory" | "detailCategory">): string {
+export function publicCategoryPath(input: Pick<PublicSearchFields, "category" | "subcategory" | "detailCategory">, language: Language = "en"): string {
   let nodes = SEARCH_CATEGORIES;
   const labels: string[] = [];
   for (const value of [input.category, input.subcategory, input.detailCategory]) {
     const node = nodes.find(n => n.value === value);
     if (!node) break;
-    labels.push(searchCategoryLabel(node)); nodes = node.children || [];
+    labels.push(searchCategoryLabel(node, language)); nodes = node.children || [];
   }
   return labels.join(" › ");
 }
-export const formatSearchCount = (text: string) => text.replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+export const formatSearchCount = (text: string, language: Language = "en") => /^\d+$/.test(text) ? BigInt(text).toLocaleString(localeForLanguage(language)) : text;

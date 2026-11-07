@@ -1,3 +1,4 @@
+import { marketplaceMessage, safeMarketplaceError } from "../../../shared/i18n/marketplaceMessages";
 import { supabaseBrowserClient } from "../../../shared/supabase/browserClient";
 import {
   normalizeStoreCategoryName,
@@ -33,22 +34,22 @@ function getRenameErrorMessage(error: {
   const message = (error.message || "").toLowerCase();
 
   if (error.code === "23505") {
-    return "Selle nimega rubriik on samal tasemel juba olemas.";
+    return marketplaceMessage("category.a_category_with_this_name_already_exists_at.74381a");
   }
 
   if (error.code === "42501") {
-    return "Sul puudub selle rubriigi muutmise õigus.";
+    return marketplaceMessage("category.you_do_not_have_permission_to_edit_this.a16e2a");
   }
 
   if (error.code === "22023") {
     if (message.includes("active identity")) {
-      return "Aktiivne identiteet puudub.";
+      return marketplaceMessage("service.no_active_identity.80f933");
     }
 
-    return "Kontrolli rubriigi nime.";
+    return marketplaceMessage("category.check_the_category_name.21b417");
   }
 
-  return error.message || "Rubriigi nime ei saanud muuta.";
+  return safeMarketplaceError(error, marketplaceMessage("category.the_category_could_not_be_renamed.c0c08e"));
 }
 
 export async function renameMyStoreCategory(input: {
@@ -59,16 +60,16 @@ export async function renameMyStoreCategory(input: {
   const cleanName = normalizeStoreCategoryName(input.name);
 
   if (!categoryId) {
-    throw new Error("Muudetav rubriik puudub.");
+    throw new Error(marketplaceMessage("category.the_category_to_edit_is_missing.19c8bb"));
   }
 
   if (!cleanName) {
-    throw new Error("Sisesta rubriigi nimi.");
+    throw new Error(marketplaceMessage("category.enter_a_category_name.730cbc"));
   }
 
   if (cleanName.length > STORE_CATEGORY_NAME_MAX_LENGTH) {
     throw new Error(
-      `Rubriigi nimi võib olla kuni ${STORE_CATEGORY_NAME_MAX_LENGTH} tähemärki.`
+      marketplaceMessage("category.the_category_name_can_contain_up_to_value.0188e5", { p0: String(STORE_CATEGORY_NAME_MAX_LENGTH) })
     );
   }
 
@@ -92,11 +93,11 @@ export async function renameMyStoreCategory(input: {
   );
 
   if (!row?.id || !row.name) {
-    throw new Error("Andmebaas ei tagastanud muudetud rubriiki.");
+    throw new Error(marketplaceMessage("category.the_database_did_not_return_the_updated_category.d73f0f"));
   }
 
   if (row.id !== categoryId) {
-    throw new Error("Andmebaas tagastas ootamatu rubriigi.");
+    throw new Error(marketplaceMessage("category.the_database_returned_an_unexpected_category.cd850c"));
   }
 
   return {

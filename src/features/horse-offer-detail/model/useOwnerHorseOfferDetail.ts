@@ -1,5 +1,6 @@
 "use client";
 
+import { marketplaceMessage, safeMarketplaceError } from "../../../shared/i18n/marketplaceMessages";
 import {
   useCallback,
   useEffect,
@@ -35,14 +36,7 @@ const initialState: OwnerHorseOfferDetailState = {
 function getReadErrorMessage(
   error: unknown
 ): string {
-  if (
-    error instanceof Error &&
-    error.message.trim().length > 0
-  ) {
-    return error.message;
-  }
-
-  return "Hobusepakkumise laadimine ebaõnnestus.";
+  return safeMarketplaceError(error, marketplaceMessage("horse.the_horse_listing_could_not_be_loaded.154fe9"));
 }
 
 export function useOwnerHorseOfferDetail(
@@ -71,7 +65,7 @@ export function useOwnerHorseOfferDetail(
       setState({
         detail: null,
         errorMessage:
-          "Hobusepakkumise tunnus puudub.",
+          marketplaceMessage("horse.the_horse_listing_id_is_missing.0c601d"),
         isLoading: false,
         isNotFound: false,
       });

@@ -1,4 +1,10 @@
 "use client";
+
+import { useV2Translation } from "@/src/shared/i18n/V2LanguageProvider";
+
+
+import { messagesUiMessages } from "@/lib/i18n/catalogs/messagesUi";
+
 import { useEffect, useRef, useState } from "react";
 import { createMessageImageClient } from "../../../entities/conversation/api/messageImages";
 import type { ConversationActorContext } from "../model/useConversationActor";
@@ -7,6 +13,8 @@ import styles from "./conversation.module.css";
 type Props = { conversationId: string; messageId: string; actor: ConversationActorContext;
   isCurrent: (actor: ConversationActorContext) => boolean; width: number | null; height: number | null };
 export default function MessageImage({ conversationId, messageId, actor, isCurrent, width, height }: Props) {
+  const { t } = useV2Translation(messagesUiMessages);
+
   const [nearby, setNearby] = useState(false), [url, setUrl] = useState<string | null>(null);
   const [error, setError] = useState(false), [retry, setRetry] = useState(0);
   const holder = useRef<HTMLDivElement>(null), dialog = useRef<HTMLDialogElement>(null);
@@ -32,18 +40,18 @@ export default function MessageImage({ conversationId, messageId, actor, isCurre
   }, [actor, conversationId, isCurrent, messageId, nearby, retry]);
   return <div ref={holder}>
     {url ? <>
-      <button type="button" className={styles.messageImage} onClick={() => dialog.current?.showModal()} aria-label="Ava foto suurelt">
+      <button type="button" className={styles.messageImage} onClick={() => dialog.current?.showModal()} aria-label={t("open_full_size_photo")}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={url} alt="Vestluses saadetud foto" width={width ?? undefined} height={height ?? undefined} />
+        <img src={url} alt={t("photo_sent_in_conversation")} width={width ?? undefined} height={height ?? undefined} />
       </button>
-      <dialog ref={dialog} className={styles.dialog + " " + styles.imageDialog} aria-label="Vestluse foto">
-        <div className={styles.imageClose}><button type="button" className={styles.iconButton} onClick={() => dialog.current?.close()} aria-label="Sulge foto">×</button></div>
+      <dialog ref={dialog} className={styles.dialog + " " + styles.imageDialog} aria-label={t("conversation_photo")}>
+        <div className={styles.imageClose}><button type="button" className={styles.iconButton} onClick={() => dialog.current?.close()} aria-label={t("close_photo")}>×</button></div>
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={url} alt="Vestluses saadetud foto suurvaade" />
+        <img src={url} alt={t("full_size_photo_sent_in_conversation")} />
       </dialog>
     </> : <div style={{ width: "min(260px, 100%)", minHeight: 100 }}>
-      {error ? <button type="button" className={styles.textButton} onClick={() => { setError(false); setRetry(value => value + 1); }}>Lae foto uuesti</button>
-        : <p className={styles.time}>Laen fotot…</p>}
+      {error ? <button type="button" className={styles.textButton} onClick={() => { setError(false); setRetry(value => value + 1); }}>{t("reload_photo")}</button>
+        : <p className={styles.time}>{t("loading_photo")}</p>}
     </div>}
   </div>;
 }

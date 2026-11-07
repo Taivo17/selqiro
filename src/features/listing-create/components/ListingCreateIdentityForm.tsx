@@ -1,4 +1,6 @@
 "use client";
+import { useV2Translation } from "../../../shared/i18n/V2LanguageProvider";
+import { listingCreateMessages, translateListingCreateMessage } from "../model/listingCreateMessages";
 import { useState } from "react";
 import type { useOrdinaryPublication } from "../model/useOrdinaryPublication";
 import { useListingCreateDraft } from "../model/useListingCreateDraft";
@@ -26,6 +28,8 @@ import ListingCreateImageFields from "./ListingCreateImageFields";
 
 type Props = { userId: string; entry: ListingCreateDraftEntry; publication: ReturnType<typeof useOrdinaryPublication> };
 export default function ListingCreateIdentityForm({ userId, entry, publication }: Props) {
+  const { language, t } = useV2Translation(listingCreateMessages);
+
   const [publicationSubmitting, setPublicationSubmitting] = useState(false);
   const { ordinaryFields, setOrdinaryFields, contentType, setContentType, horseOfferType, setHorseOfferType,
     horseOfferFields, setHorseOfferFields, horseOfferUseFields, setHorseOfferUseFields,
@@ -50,7 +54,8 @@ export default function ListingCreateIdentityForm({ userId, entry, publication }
   const textGuidance =
     getListingCreateTextGuidance(
       contentType,
-      horseOfferType
+      horseOfferType,
+      language
     );
 
   const horseOfferDraftSave =
@@ -94,13 +99,9 @@ export default function ListingCreateIdentityForm({ userId, entry, publication }
         <div className="border-t-4 border-amber-400 p-6 sm:p-8">
           <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
             <div className="min-w-0">
-              <p className="text-xs font-black uppercase tracking-[0.26em] text-amber-700">
-                Uus kuulutus
-              </p>
+              <p className="text-xs font-black uppercase tracking-[0.26em] text-amber-700">{t("newListing")}</p>
 
-              <h1 className="mt-3 break-words text-4xl font-black tracking-tight sm:text-5xl">
-                Lisa kuulutus
-              </h1>
+              <h1 className="mt-3 break-words text-4xl font-black tracking-tight sm:text-5xl">{t("addListing")}</h1>
 
               <p className="mt-3 max-w-3xl text-sm leading-6 text-neutral-600 sm:text-base">
                 {textGuidance.heroDescription}
@@ -112,17 +113,17 @@ export default function ListingCreateIdentityForm({ userId, entry, publication }
 
           <p className="mt-5 rounded-2xl border border-amber-200 bg-white/70 px-4 py-3 text-xs leading-5 text-amber-950/75">
             {horseMode
-              ? "Hobusevormi teksti ja andmeid saab soovi korral salvestada privaatse mustandina. Pilte veel ei laadita üles ning kuulutust siin veel ei avaldata."
+              ? t("horseDraftExplanation")
               : publication.enabled
-                ? "Täida kuulutuse andmed, vali pildid ja kinnita avaldamine. Pildid kontrollitakse enne kuulutuse avalikku nähtavust."
-                : "Tavakuulutuse andmeid saab siin täita ja pilte eelvaadata. Avaldamine pole veel ühendatud; sisestus jääb ainult avatud vormi ega salvestu lehe värskendamisel."}
+                ? t("publicationExplanation")
+                : t("previewOnlyExplanation")}
           </p>
         </div>
       </section>
 
       {!publication.contextReady ? <section role="status" className="rounded-2xl border border-amber-200 bg-white p-5">
-        <p>{publication.contextError || "Kontrollin aktiivset identiteeti…"}</p>
-        {publication.contextError ? <button type="button" className="mt-3 font-bold underline" onClick={publication.retryContext}>Kontrolli identiteeti uuesti</button> : null}
+        <p>{publication.contextError ? translateListingCreateMessage(language, publication.contextError) : t("checkingIdentity")}</p>
+        {publication.contextError ? <button type="button" className="mt-3 font-bold underline" onClick={publication.retryContext}>{t("checkIdentity")}</button> : null}
       </section> : null}
 
       <fieldset className="min-w-0 space-y-6"

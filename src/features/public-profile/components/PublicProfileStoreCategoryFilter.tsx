@@ -1,5 +1,13 @@
 "use client";
 
+import { renderMarketplaceMessage } from "@/src/shared/i18n/marketplaceMessages";
+
+import { useV2Translation } from "@/src/shared/i18n/V2LanguageProvider";
+import { localeForLanguage } from "@/lib/i18n/useTranslation";
+import type { Language } from "@/lib/i18n/translations";
+import { publicUiMessages } from "@/lib/i18n/catalogs/publicUi";
+
+
 import { useMemo } from "react";
 import type { StoreCategory } from "../../../entities/store-category/model/types";
 
@@ -22,7 +30,7 @@ type PublicProfileStoreCategoryFilterProps = {
 
 function compareCategories(
   first: StoreCategory,
-  second: StoreCategory
+  second: StoreCategory, language: Language
 ) {
   const firstOrder =
     typeof first.sort_order === "number"
@@ -40,16 +48,16 @@ function compareCategories(
 
   return first.name.localeCompare(
     second.name,
-    "et"
+    localeForLanguage(language)
   );
 }
 
 function buildCategoryView(
-  categories: StoreCategory[]
+  categories: StoreCategory[], language: Language
 ) {
   const roots = categories
     .filter((category) => !category.parent_id)
-    .sort(compareCategories);
+    .sort((first, second) => compareCategories(first, second, language));
 
   const rootIds = new Set(
     roots.map((category) => category.id)
@@ -85,7 +93,7 @@ function buildCategoryView(
   }
 
   for (const children of childrenByParent.values()) {
-    children.sort(compareCategories);
+    children.sort((first, second) => compareCategories(first, second, language));
   }
 
   return {
@@ -106,14 +114,16 @@ export default function PublicProfileStoreCategoryFilter({
   onSelectRoot,
   onSelectChild,
 }: PublicProfileStoreCategoryFilterProps) {
+  const { language: uiLanguage, t } = useV2Translation(publicUiMessages);
+
   const {
     roots,
     childrenByParent,
     directChildCount,
     deeperCategoryCount,
   } = useMemo(
-    () => buildCategoryView(categories),
-    [categories]
+    () => buildCategoryView(categories, uiLanguage),
+    [categories, uiLanguage]
   );
 
   const selectedCategory = useMemo(
@@ -162,17 +172,14 @@ export default function PublicProfileStoreCategoryFilter({
     return (
       <div className="mb-5 rounded-[22px] border border-amber-100 bg-amber-50 p-4">
         <p className="text-sm font-black text-amber-950">
-          Poe rubriike ei saanud laadida
-        </p>
+          {t("could_not_load_store_categories")} </p>
 
         <p className="mt-1 text-xs leading-5 text-amber-900">
-          {error}
+          {renderMarketplaceMessage(uiLanguage, error)}
         </p>
 
         <p className="mt-1 text-xs leading-5 text-amber-800">
-          Kõik avalikud kuulutused jäävad siiski
-          nähtavaks.
-        </p>
+          {t("all_public_listings_remain_visible")} </p>
       </div>
     );
   }
@@ -190,18 +197,15 @@ export default function PublicProfileStoreCategoryFilter({
       <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <p className="text-[11px] font-black uppercase tracking-[0.18em] text-neutral-400">
-            Poe rubriigid
-          </p>
+            {t("store_categories")} </p>
 
           <p className="mt-1 text-sm font-black">
-            Filtreeri selle profiili kuulutusi
-          </p>
+            {t("filter_this_profile_s_listings")} </p>
         </div>
 
         <span className="w-fit rounded-full bg-white px-3 py-1.5 text-[11px] font-black text-neutral-500 shadow-sm">
-          {roots.length} ülemrubriiki ·{" "}
-          {directChildCount} alamrubriiki
-        </span>
+          {roots.length}  {t("parent_categories")}{" "}
+          {directChildCount}  {t("subcategories")} </span>
       </div>
 
       <div className="mt-3 flex flex-wrap gap-2">
@@ -215,8 +219,7 @@ export default function PublicProfileStoreCategoryFilter({
               : "border border-neutral-200 bg-white text-neutral-700 hover:border-neutral-300",
           ].join(" ")}
         >
-          Kõik kuulutused
-        </button>
+          {t("all_listings")} </button>
 
         {roots.map((rootCategory) => {
           const children =
@@ -305,12 +308,10 @@ export default function PublicProfileStoreCategoryFilter({
         >
           <div className="flex items-center justify-between gap-3">
             <p className="text-[11px] font-black uppercase tracking-[0.16em] text-neutral-400">
-              {expandedRoot.name} · alamrubriigid
-            </p>
+              {expandedRoot.name}  {t("subcategories_2")} </p>
 
             <span className="text-[11px] font-bold text-neutral-400">
-              Vali täpsem rubriik
-            </span>
+              {t("choose_a_more_specific_category")} </span>
           </div>
 
           <div className="mt-2 flex flex-wrap gap-2">
@@ -347,17 +348,11 @@ export default function PublicProfileStoreCategoryFilter({
       ) : null}
 
       <p className="mt-3 text-xs leading-5 text-neutral-500">
-        Ülemrubriik näitab kogu selle haru
-        kuulutusi. Alamrubriik kitsendab tulemuse
-        ainult valitud rubriigile.
-      </p>
+        {t("a_parent_category_shows_all_listings_in_that_branch_a_subcategory_narrows_t")} </p>
 
       {deeperCategoryCount > 0 ? (
         <p className="mt-2 text-xs leading-5 text-amber-800">
-          {deeperCategoryCount} sügavama taseme
-          rubriiki osaleb filtris, kuid seda ei
-          kuvata veel kahetasandilises menüüs.
-        </p>
+          {deeperCategoryCount}  {t("deeper_categories_are_included_in_the_filter_but_are_not_yet_shown_in_the_t")} </p>
       ) : null}
     </div>
   );

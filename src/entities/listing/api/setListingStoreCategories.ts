@@ -18,7 +18,7 @@ function normalizeListingId(value: string): string {
   const cleanValue = value.trim();
 
   if (!/^[1-9][0-9]*$/.test(cleanValue)) {
-    throw new Error("Kuulutuse ID ei ole korrektne.");
+    throw new Error("listingIdInvalid");
   }
 
   return cleanValue;
@@ -87,31 +87,31 @@ function getAssignmentErrorMessage(error: {
 
   if (error.code === "42501") {
     if (message.includes("listing")) {
-      return "Sul ei ole õigust selle kuulutuse rubriike muuta.";
+      return "storeAssignmentForbidden";
     }
 
     if (message.includes("categor")) {
-      return "Üks või mitu valitud rubriiki ei kuulu aktiivsele identiteedile.";
+      return "storeSectionOwnerMismatch";
     }
 
-    return "Sul puudub selle toimingu tegemiseks õigus.";
+    return "actionForbidden";
   }
 
   if (error.code === "22023") {
     if (message.includes("active identity")) {
-      return "Aktiivne identiteet puudub.";
+      return "activeIdentityMissing";
     }
 
     if (message.includes("does not exist")) {
-      return "Kuulutust ei leitud.";
+      return "listingNotFound";
     }
 
-    return "Kuulutuse või rubriikide andmed ei ole korrektsed.";
+    return "storeAssignmentInvalid";
   }
 
   return (
     error.message ||
-    "Kuulutuse poe-rubriike ei saanud salvestada."
+    "storeAssignmentSaveFailed"
   );
 }
 
@@ -145,7 +145,7 @@ export async function setListingStoreCategories(input: {
 
   if (!row?.listing_id) {
     throw new Error(
-      "Andmebaas ei tagastanud salvestatud kuulutust."
+      "savedListingMissing"
     );
   }
 
@@ -153,7 +153,7 @@ export async function setListingStoreCategories(input: {
 
   if (returnedListingId !== cleanListingId) {
     throw new Error(
-      "Andmebaas tagastas ootamatu kuulutuse."
+      "unexpectedListing"
     );
   }
 
@@ -168,7 +168,7 @@ export async function setListingStoreCategories(input: {
 
   if (assignedCount !== returnedCategoryIds.length) {
     throw new Error(
-      "Andmebaasi tagastatud rubriikide arv ei vasta salvestatud valikule."
+      "storeAssignmentCountMismatch"
     );
   }
 

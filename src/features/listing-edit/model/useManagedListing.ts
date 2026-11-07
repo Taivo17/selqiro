@@ -61,7 +61,7 @@ export function useManagedListing(listingId: string) {
         }).catch(() => {
           if (!applies()) return;
           const failed = {...stateRef.current, retiredCleanup: null, retiredCleanupLoading: false,
-            retiredCleanupError: "Eemaldatud fotode koristamise seisu ei saanud kontrollida."};
+            retiredCleanupError: "retiredCleanupReadFailed"};
           stateRef.current = failed; setState(failed);
         });
     };
@@ -112,7 +112,7 @@ export function useManagedListing(listingId: string) {
             } catch (error) {
               if (error instanceof ManagedListingImagesError && error.code === "context") throw error;
               gallery = null;
-              imageError = "Piltide valikut ei saanud kontrollida. Laadi piltide seis uuesti.";
+              imageError = "galleryReadFailed";
             }
           }
           if (!active || g !== generation.current || identityChangePending(actor.userId)) return;
@@ -124,7 +124,7 @@ export function useManagedListing(listingId: string) {
           if (final) retiredRefreshRef.current(actor, final);
         } catch { if (active && g === generation.current) {
           const retained = stateRef.current.actor === previous.actor && keep ? stateRef.current : initial();
-          const failed = {...retained, loading: false, busy: false, error: "Kuulutuse haldusõigust ja seisu ei saanud kontrollida."};
+          const failed = {...retained, loading: false, busy: false, error: "ownerStatusReadFailed"};
           stateRef.current = failed; setState(failed);
         } }
       })(); });
@@ -169,7 +169,7 @@ export function useManagedListing(listingId: string) {
         retiredCleanupLoading: false, retiredCleanupError: null, busy: false, error: null}; stateRef.current = next; setState(next);
       retiredRefreshRef.current(actor, final);
     } catch { if (g === generation.current) {
-      const failed = {...stateRef.current, busy: false, error: "Kustutamise tulemus pole kinnitatud. Kontrolli seisu enne uut tegevust."};
+      const failed = {...stateRef.current, busy: false, error: "deletionUnconfirmed"};
       stateRef.current = failed; setState(failed);
     } }
     finally { if (g === generation.current) locked.current = false; }
@@ -198,7 +198,7 @@ export function useManagedListing(listingId: string) {
       stateRef.current = checked; setState(checked);
       refreshRef.current(); // Refresh both authoritative scopes; an ACK cannot free a reservation.
     } catch { if (g === generation.current) {
-      const message = "Piltide koristamise tulemust ei saanud kinnitada. Kontrolli seisu enne järgmist toimingut.";
+      const message = "cleanupUnconfirmed";
       const failed = final.files_remaining > 0 ? {...stateRef.current, busy: false, error: message}
         : {...stateRef.current, busy: false, retiredCleanup: null, retiredCleanupLoading: false, retiredCleanupError: message};
       stateRef.current = failed; setState(failed);
@@ -240,16 +240,16 @@ export function useManagedListing(listingId: string) {
       if (g !== generation.current) return;
       const next: ManagedListingState = {...stateRef.current, gallery: fresh, images: fresh.images.map(image => image.url),
         busy: false, primaryBusyOrdinal: null, removalBusyOrdinal: null, imageError: null,
-        imageMessage: action === "remove" ? "Foto on kuulutusest eemaldatud."
-          : fresh.images.some(image => image.ordinal === ordinal && image.isPrimary) ? "Põhipilt on salvestatud."
-          : "Pilte muudeti vahepeal uuesti. Näitan viimast salvestatud seisu."};
+        imageMessage: action === "remove" ? "photoRemoved"
+          : fresh.images.some(image => image.ordinal === ordinal && image.isPrimary) ? "primarySaved"
+          : "galleryChangedAgain"};
       stateRef.current = next; setState(next);
       if (action === "remove") retiredRefreshRef.current(actor, current.receipt);
     } catch (error) {
       if (g !== generation.current) return;
       const problem = error instanceof ManagedListingImagesError ? error : new ManagedListingImagesError("unknown");
       const failed: ManagedListingState = {...stateRef.current, busy: false, primaryBusyOrdinal: null, removalBusyOrdinal: null, imageMessage: null,
-        imageError: acknowledged ? "Pildimuudatus salvestati, kuid viimast seisu ei saanud lugeda. Kontrolli piltide seisu."
+        imageError: acknowledged ? "imageSavedReadFailed"
           : problem.message};
       stateRef.current = failed; setState(failed);
       // The imageError keeps writes locked until a successful, authoritative

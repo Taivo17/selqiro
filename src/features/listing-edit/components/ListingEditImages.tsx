@@ -1,4 +1,6 @@
 "use client";
+import { useV2Translation } from "../../../shared/i18n/V2LanguageProvider";
+import { listingEditMessages, translateListingEditMessage } from "../model/listingEditMessages";
 
 import type { ListingImage, ProductListingDetail } from "../../../entities/listing/model/types";
 import type { ListingEditImageActions } from "../model/useListingEditImages";
@@ -12,6 +14,8 @@ export default function ListingEditImages({ listing, actions }: {
   listing: ProductListingDetail;
   actions: ListingEditImageActions;
 }) {
+  const { language, t } = useV2Translation(listingEditMessages);
+
   const { primarySavingId, deletingImageId, uploadingImage, imageError,
     handleSetPrimaryImage, handleDeleteImage, handleUploadImages } = actions;
   const mainImageUrl =
@@ -19,9 +23,7 @@ export default function ListingEditImages({ listing, actions }: {
 
   return (
           <section className="rounded-[34px] border border-black/5 bg-white p-6 shadow-sm md:p-8">
-            <p className="text-xs font-bold uppercase tracking-[0.24em] text-neutral-400">
-              Pildid
-            </p>
+            <p className="text-xs font-bold uppercase tracking-[0.24em] text-neutral-400">{t("images")}</p>
 
             {mainImageUrl ? (
               <img
@@ -54,8 +56,8 @@ export default function ListingEditImages({ listing, actions }: {
                       className="group relative block h-24 w-full overflow-hidden rounded-[16px] bg-neutral-100 disabled:cursor-default"
                       aria-label={
                         isPrimary
-                          ? `Pilt ${index + 1} on esimene`
-                          : `Tee pilt ${index + 1} esimeseks`
+                          ? t("imageIsPrimary", { number: index + 1 })
+                          : t("setPrimaryNumber", { number: index + 1 })
                       }
                     >
                       <img
@@ -73,7 +75,7 @@ export default function ListingEditImages({ listing, actions }: {
                             : "hidden",
                         ].join(" ")}
                       >
-                        {isPrimary ? "✓ Esimene" : ""}
+                        {isPrimary ? t("firstImage") : ""}
                       </span>
                     </button>
 
@@ -90,10 +92,10 @@ export default function ListingEditImages({ listing, actions }: {
                         ].join(" ")}
                       >
                         {isPrimary
-                          ? "✓ Esimene"
+                          ? t("firstImage")
                           : primarySavingId === imageId
-                            ? "Muudan..."
-                            : "Esimeseks"}
+                            ? t("changing")
+                            : t("makeFirst")}
                       </button>
 
                       {listing.images.length > 1 ? (
@@ -103,16 +105,14 @@ export default function ListingEditImages({ listing, actions }: {
                           disabled={deletingImageId === imageId}
                           className="rounded-full border border-red-100 bg-red-50 px-3 py-2 text-xs font-black text-red-700 transition hover:bg-red-100 disabled:cursor-wait disabled:opacity-60"
                         >
-                          {deletingImageId === imageId ? "Kustutan..." : "Kustuta"}
+                          {deletingImageId === imageId ? t("deleting") : t("delete")}
                         </button>
                       ) : (
                         <button
                           type="button"
                           disabled
                           className="rounded-full border border-neutral-100 bg-neutral-50 px-3 py-2 text-xs font-black text-neutral-300"
-                        >
-                          Viimane pilt
-                        </button>
+                        >{t("lastImage")}</button>
                       )}
                     </div>
                   </div>
@@ -122,7 +122,7 @@ export default function ListingEditImages({ listing, actions }: {
 
             {imageError ? (
               <p className="mt-3 rounded-2xl bg-red-50 p-3 text-sm leading-6 text-red-800">
-                {imageError}
+                {translateListingEditMessage(language, imageError, { ...actions.imageErrorParams, reason: translateListingEditMessage(language, actions.imageErrorReason) })}
               </p>
             ) : null}
 
@@ -131,9 +131,7 @@ export default function ListingEditImages({ listing, actions }: {
                 <button
                   disabled
                   className="rounded-full border border-neutral-200 bg-neutral-50 px-5 py-3 text-sm font-black text-neutral-400"
-                >
-                  Maksimum 10 pilti lisatud
-                </button>
+                >{t("imageLimitReached")}</button>
               ) : (
                 <label
                   className={[
@@ -141,7 +139,7 @@ export default function ListingEditImages({ listing, actions }: {
                     uploadingImage ? "pointer-events-none opacity-60" : "",
                   ].join(" ")}
                 >
-                  {uploadingImage ? "Laadin pilte..." : "Lisa pildid"}
+                  {uploadingImage ? t("uploadingImages") : t("addImages")}
                   <input
                     type="file"
                     accept="image/jpeg,image/png,image/webp"
@@ -157,9 +155,7 @@ export default function ListingEditImages({ listing, actions }: {
                 </label>
               )}
 
-              <p className="mt-2 text-xs leading-5 text-neutral-400">
-                Lubatud JPG, PNG ja WEBP. Võid valida mitu pilti korraga. Maksimaalne suurus 10 MB pildi kohta.
-              </p>
+              <p className="mt-2 text-xs leading-5 text-neutral-400">{t("legacyImageHelp")}</p>
             </div>
           </section>
   );

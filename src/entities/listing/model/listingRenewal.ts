@@ -1,3 +1,4 @@
+import { uiMessage } from "../../../../lib/i18n/interfaceMessage";
 import { isRenewableListingId, listingDeadlineMicros } from "./listingActivity";
 
 export type ListingActivityActor = { userId: string; identityId: string };
@@ -6,11 +7,11 @@ export type RenewListingActivityResult = { listingId: string; status: "active"; 
 export type ListingRenewalFailure = "invalid" | "conflict" | "forbidden" | "status" | "uncertain";
 
 const messages: Record<ListingRenewalFailure, string> = {
-  invalid: "Kuulutuse tähtaega ei saanud kontrollida. Laadi nimekiri uuesti.",
-  conflict: "Kuulutuse tähtaeg on vahepeal muutunud. Laadi nimekiri uuesti ja kontrolli kehtivust.",
-  forbidden: "Konto või aktiivne identiteet ei vasta sellele kuulutusele. Laadi nimekiri uuesti.",
-  status: "Kuulutuse staatus on muutunud. Peatatud või müüdud kuulutust ei uuendata.",
-  uncertain: "Uuendamise tulemus pole kinnitatud. Kuulutus võis saada uue tähtaja. Laadi nimekiri uuesti ja kontrolli seda enne uut kinnitust.",
+  invalid: uiMessage("could_not_verify_the_listing_s_expiry_reload_the_list"),
+  conflict: uiMessage("the_listing_s_expiry_has_changed_reload_the_list_and_check_its_validity"),
+  forbidden: uiMessage("the_account_or_active_identity_does_not_match_this_listing_reload_the_list"),
+  status: uiMessage("the_listing_s_status_has_changed_paused_or_sold_listings_cannot_be_renewed"),
+  uncertain: uiMessage("the_renewal_result_has_not_been_confirmed_the_listing_may_have_a_new_expiry"),
 };
 export class ListingRenewalError extends Error {
   constructor(readonly kind: ListingRenewalFailure) { super(messages[kind]); this.name = "ListingRenewalError"; }

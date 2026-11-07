@@ -1,5 +1,8 @@
 "use client";
 
+import { localeForLanguage } from "../../../../lib/i18n/useTranslation";
+import { marketplaceMessage, safeMarketplaceError } from "../../../shared/i18n/marketplaceMessages";
+import { useMarketplaceTranslation } from "../../../shared/i18n/useMarketplaceTranslation";
 import {
   useEffect,
   useMemo,
@@ -31,14 +34,14 @@ function statusLabel(
   status: ServiceStatus
 ): string {
   if (status === "published") {
-    return "Avalik";
+    return marketplaceMessage("service.public.22d0d3");
   }
 
   if (status === "archived") {
-    return "Arhiveeritud";
+    return marketplaceMessage("horse.archived.c37d62");
   }
 
-  return "Mustand";
+  return marketplaceMessage("horse.draft.e9670d");
 }
 
 function statusClass(
@@ -73,28 +76,28 @@ function lifecycleActionLabel(
   status: ServiceStatus
 ): string {
   if (status === "draft") {
-    return "Avalda";
+    return marketplaceMessage("service.publish.1b6402");
   }
 
   if (status === "published") {
-    return "Arhiveeri";
+    return marketplaceMessage("service.archive.016685");
   }
 
-  return "Taasta mustandiks";
+  return marketplaceMessage("service.restore_as_draft.88e185");
 }
 
 function lifecycleBusyLabel(
   status: ServiceStatus
 ): string {
   if (status === "draft") {
-    return "Avaldan...";
+    return marketplaceMessage("service.publishing.6bc9b5");
   }
 
   if (status === "published") {
-    return "Arhiveerin...";
+    return marketplaceMessage("service.archiving.a441cf");
   }
 
-  return "Taastan...";
+  return marketplaceMessage("service.restoring.8d72ed");
 }
 
 function lifecycleActionClass(
@@ -115,23 +118,24 @@ function lifecycleSuccessMessage(
   service: Service
 ): string {
   if (service.status === "published") {
-    return `Teenus „${service.title}” on nüüd avalik.`;
+    return marketplaceMessage("service.service_value_is_now_public.94b1b4", { p0: String(service.title) });
   }
 
   if (service.status === "archived") {
-    return `Teenus „${service.title}” arhiveeriti.`;
+    return marketplaceMessage("service.service_value_was_archived.d73fa1", { p0: String(service.title) });
   }
 
-  return `Teenus „${service.title}” taastati mustandiks.`;
+  return marketplaceMessage("service.service_value_was_restored_as_a_draft.95c331", { p0: String(service.title) });
 }
 
 function formatCurrency(
   amount: number,
-  currency: string
+  currency: string,
+  language: "en" | "et"
 ): string {
   try {
     return new Intl.NumberFormat(
-      "et-EE",
+      localeForLanguage(language),
       {
         style: "currency",
         currency,
@@ -145,27 +149,29 @@ function formatCurrency(
 }
 
 function priceLabel(
-  service: Service
+  service: Service,
+  language: "en" | "et"
 ): string {
   if (
     service.priceType ===
       "contact" ||
     service.priceAmount === null
   ) {
-    return "Hind kokkuleppel";
+    return marketplaceMessage("service.price_by_agreement.299166");
   }
 
   const amountLabel =
     formatCurrency(
       service.priceAmount,
-      service.currency
+      service.currency,
+      language
     );
 
   if (
     service.priceType ===
     "from"
   ) {
-    return `Alates ${amountLabel}`;
+    return marketplaceMessage("service.from_value.dc06d7", { p0: String(amountLabel) });
   }
 
   if (
@@ -216,13 +222,14 @@ function serviceMeta(
   ]
     .filter(Boolean)
     .join(" · ") ||
-    "Lisainfo puudub";
+    marketplaceMessage("service.no_further_information.7afc52");
 }
 
 function LoadingServices() {
+  const { language, r } = useMarketplaceTranslation();
   return (
     <div className="mt-5 space-y-3">
-      {[0, 1, 2].map(
+      {r([0, 1, 2].map(
         (item) => (
           <div
             key={item}
@@ -236,7 +243,7 @@ function LoadingServices() {
             </div>
           </div>
         )
-      )}
+      ))}
     </div>
   );
 }
@@ -254,6 +261,7 @@ function ServiceRow({
     serviceId: string
   ) => void;
 }) {
+  const { language, r } = useMarketplaceTranslation();
   const detailHref =
     `/v2/service/${service.id}?from=my-area`;
 
@@ -265,12 +273,11 @@ function ServiceRow({
           onOpenService(
             event,
             service.id
-          )
-        }
-        aria-label={`Vaata teenust „${service.title}”`}
+          )}
+        aria-label={r(marketplaceMessage("service.view_service_value.881bf1", { p0: String(service.title) }))}
         className="group h-24 min-w-0 overflow-hidden rounded-[16px] bg-gradient-to-br from-neutral-100 to-neutral-200 outline-none ring-offset-2 transition focus-visible:ring-2 focus-visible:ring-black sm:rounded-[18px]"
       >
-        {service.imageUrl ? (
+        {r(service.imageUrl ? (
           <img
             src={service.imageUrl}
             alt=""
@@ -281,7 +288,7 @@ function ServiceRow({
                 "none";
             }}
           />
-        ) : null}
+        ) : null)}
       </Link>
 
       <div className="min-w-0">
@@ -293,9 +300,9 @@ function ServiceRow({
             ),
           ].join(" ")}
         >
-          {statusLabel(
+          {r(statusLabel(
             service.status
-          )}
+          ))}
         </span>
 
         <Link
@@ -304,19 +311,18 @@ function ServiceRow({
             onOpenService(
               event,
               service.id
-            )
-          }
+            )}
           className="block rounded-lg outline-none ring-offset-2 transition hover:text-neutral-600 focus-visible:ring-2 focus-visible:ring-black"
         >
           <h3 className="mt-1.5 line-clamp-2 break-words text-base font-black leading-5 sm:mt-2 sm:text-lg sm:leading-6">
-            {service.title}
+            {r(service.title)}
           </h3>
 
           <p className="mt-1 line-clamp-2 break-words text-[10px] font-bold uppercase leading-4 tracking-[0.1em] text-neutral-400 sm:text-xs sm:tracking-[0.12em]">
-            {serviceMeta(
+            {r(serviceMeta(
               service,
               categoryLabelByCode
-            )}
+            ))}
           </p>
         </Link>
 
@@ -326,30 +332,29 @@ function ServiceRow({
             onOpenService(
               event,
               service.id
-            )
-          }
+            )}
           className="block rounded-lg outline-none ring-offset-2 transition hover:text-neutral-800 focus-visible:ring-2 focus-visible:ring-black"
         >
-          {service.description ? (
+          {r(service.description ? (
             <p className="mt-1.5 line-clamp-2 break-words text-xs leading-5 text-neutral-600 sm:mt-2 sm:text-sm sm:leading-6">
-              {service.description}
+              {r(service.description)}
             </p>
           ) : (
             <p className="mt-1.5 text-xs leading-5 text-neutral-400 sm:mt-2 sm:text-sm">
-              Kirjeldus puudub.
-            </p>
-          )}
+              {r(marketplaceMessage("service.no_description.5b24f9"))}</p>
+          ))}
         </Link>
       </div>
 
       <p className="col-start-2 break-words text-sm font-black text-neutral-800 sm:col-start-auto sm:max-w-[150px] sm:text-right">
-        {priceLabel(service)}
+        {r(priceLabel(service, language))}
       </p>
     </article>
   );
 }
 
 export default function MyServicesSection() {
+  const { language, r } = useMarketplaceTranslation();
   const {
     activeIdentityId,
     services,
@@ -376,11 +381,11 @@ export default function MyServicesSection() {
           serviceCategories.map(
             (category) => [
               category.code,
-              category.labelEt,
+              language === "et" ? category.labelEt : category.labelEn,
             ]
           )
         ),
-      [serviceCategories]
+      [serviceCategories, language]
     );
 
   const [
@@ -575,9 +580,7 @@ export default function MyServicesSection() {
       );
     } catch (error) {
       setStatusErrorMessage(
-        error instanceof Error
-          ? error.message
-          : "Teenuse staatust ei saanud muuta."
+        safeMarketplaceError(error, marketplaceMessage("service.the_service_status_could_not_be_changed.076de2"))
       );
     }
   }
@@ -587,20 +590,16 @@ export default function MyServicesSection() {
       <div className="flex min-w-0 flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div className="min-w-0">
           <p className="text-xs font-bold uppercase tracking-[0.24em] text-neutral-400">
-            Teenused
-          </p>
+            {r(marketplaceMessage("service.services.78936e"))}</p>
 
           <h2 className="mt-2 break-words text-2xl font-black">
-            Sinu teenused
-          </h2>
+            {r(marketplaceMessage("service.your_services.0d8f24"))}</h2>
 
           <p className="mt-2 max-w-2xl break-words text-sm leading-6 text-neutral-600">
-            Siin saad luua, muuta, avaldada ja arhiveerida aktiivse identiteedi teenuseid.
-            Mustandteenuse pilte saab hallata otse teenusekaardilt. Pildi, pealkirja või kirjelduse kaudu saad avada teenuse detail-eelvaate.
-          </p>
+            {r(marketplaceMessage("service.create_edit_publish_and_archive_services_for_the.ef6a74"))}</p>
         </div>
 
-        {canToggle &&
+        {r(canToggle &&
         editingServiceId ===
           null &&
         changingStatusServiceId ===
@@ -614,153 +613,133 @@ export default function MyServicesSection() {
               setShowAll(
                 (current) =>
                   !current
-              )
-            }
+              )}
             className="inline-flex w-full shrink-0 justify-center rounded-full border border-neutral-200 bg-white px-4 py-2.5 text-sm font-black shadow-sm transition hover:border-neutral-300 sm:w-auto"
           >
-            {showAll
-              ? "Näita vähem"
-              : `Vaata kõiki (${services.length})`}
+            {r(showAll
+              ? marketplaceMessage("service.show_less.2dacfc")
+              : marketplaceMessage("service.view_all_value.d0b8d3", { p0: String(services.length) }))}
           </button>
-        ) : null}
+        ) : null)}
       </div>
 
-      {!loading &&
+      {r(!loading &&
       !error &&
       activeIdentityId ? (
         <div className="mt-4 flex flex-wrap gap-2">
           <span className="rounded-full bg-neutral-100 px-3 py-1.5 text-xs font-black text-neutral-600">
-            {services.length} kokku
-          </span>
+            {r(services.length)}  {r(marketplaceMessage("service.total.1d0b5c"))}</span>
 
           <span className="rounded-full bg-emerald-50 px-3 py-1.5 text-xs font-black text-emerald-700">
-            {publishedCount} avalikku
-          </span>
+            {r(publishedCount)}  {r(marketplaceMessage("service.public.78e906"))}</span>
 
           <span className="rounded-full bg-amber-50 px-3 py-1.5 text-xs font-black text-amber-700">
-            {draftCount} mustandit
-          </span>
+            {r(draftCount)}  {r(marketplaceMessage("service.drafts.7dc5e1"))}</span>
 
-          {archivedCount > 0 ? (
+          {r(archivedCount > 0 ? (
             <span className="rounded-full bg-neutral-100 px-3 py-1.5 text-xs font-black text-neutral-500">
-              {archivedCount} arhiveeritud
-            </span>
-          ) : null}
+              {r(archivedCount)}  {r(marketplaceMessage("service.archived.2ba0d9"))}</span>
+          ) : null)}
         </div>
-      ) : null}
+      ) : null)}
 
-      {!loading &&
+      {r(!loading &&
       !error &&
       activeIdentityId ? (
         <>
-          {editingServiceId ===
+          {r(editingServiceId ===
           null ? (
             <ServiceDraftCreateForm
-              activeIdentityId={
-                activeIdentityId
-              }
-              saving={
-                savingServiceId ===
-                "new"
-              }
-              onSave={
-                saveService
-              }
-              onClearError={
-                clearError
-              }
+              activeIdentityId={activeIdentityId}
+              saving={savingServiceId ===
+                "new"}
+              onSave={saveService}
+              onClearError={clearError}
             />
-          ) : null}
+          ) : null)}
 
-          {editSuccessMessage ? (
+          {r(editSuccessMessage ? (
             <p
               role="status"
               className="mt-4 rounded-xl border border-emerald-100 bg-emerald-50 px-3 py-2.5 text-sm font-semibold leading-6 text-emerald-800"
             >
-              {editSuccessMessage}
+              {r(editSuccessMessage)}
             </p>
-          ) : null}
+          ) : null)}
 
-          {statusSuccessMessage ? (
+          {r(statusSuccessMessage ? (
             <p
               role="status"
               className="mt-4 rounded-xl border border-emerald-100 bg-emerald-50 px-3 py-2.5 text-sm font-semibold leading-6 text-emerald-800"
             >
-              {statusSuccessMessage}
+              {r(statusSuccessMessage)}
             </p>
-          ) : null}
+          ) : null)}
 
-          {statusErrorMessage ? (
+          {r(statusErrorMessage ? (
             <p
               role="alert"
               className="mt-4 rounded-xl border border-red-100 bg-red-50 px-3 py-2.5 text-sm font-semibold leading-6 text-red-800"
             >
-              {statusErrorMessage}
+              {r(statusErrorMessage)}
             </p>
-          ) : null}
+          ) : null)}
         </>
-      ) : null}
+      ) : null)}
 
-      {loading ? (
+      {r(loading ? (
         <LoadingServices />
-      ) : null}
+      ) : null)}
 
-      {!loading && error ? (
+      {r(!loading && error ? (
         <div className="mt-5 rounded-[22px] border border-red-100 bg-red-50 p-5">
           <p className="font-black text-red-950">
-            Teenuseid ei saanud laadida
-          </p>
+            {r(marketplaceMessage("service.services_could_not_be_loaded.59b8ca"))}</p>
 
           <p className="mt-2 break-words text-sm leading-6 text-red-800">
-            {error}
+            {r(error)}
           </p>
 
           <button
             type="button"
             onClick={() =>
-              void refresh()
-            }
+              void refresh()}
             className="mt-4 rounded-full border border-red-200 bg-white px-4 py-2 text-sm font-black text-red-800"
           >
-            Proovi uuesti
-          </button>
+            {r(marketplaceMessage("horse.try_again.8c63df"))}</button>
         </div>
-      ) : null}
+      ) : null)}
 
-      {!loading &&
+      {r(!loading &&
       !error &&
       !activeIdentityId ? (
         <div className="mt-5 rounded-[22px] border border-dashed border-neutral-200 bg-[#fbfbfa] p-5">
           <p className="font-black">
-            Aktiivne identiteet puudub
-          </p>
+            {r(marketplaceMessage("service.no_active_identity.579519"))}</p>
 
           <p className="mt-2 text-sm leading-6 text-neutral-500">
-            Teenuste vaatamiseks logi sisse ja vali aktiivne identiteet.
-          </p>
+            {r(marketplaceMessage("service.sign_in_and_select_an_active_identity_to.cdf7fb"))}</p>
         </div>
-      ) : null}
+      ) : null)}
 
-      {!loading &&
+      {r(!loading &&
       !error &&
       activeIdentityId &&
       services.length === 0 ? (
         <div className="mt-5 rounded-[22px] border border-dashed border-neutral-200 bg-[#fbfbfa] p-5">
           <p className="font-black">
-            Teenuseid ei ole veel lisatud
-          </p>
+            {r(marketplaceMessage("service.no_services_added_yet.71f9e7"))}</p>
 
           <p className="mt-2 text-sm leading-6 text-neutral-500">
-            Esimese teenuse lisamine tuleb järgmise eraldiseisva sammuna.
-          </p>
+            {r(marketplaceMessage("service.create_your_first_service_using_the_form_above.bf65fd"))}</p>
         </div>
-      ) : null}
+      ) : null)}
 
-      {!loading &&
+      {r(!loading &&
       !error &&
       services.length > 0 ? (
         <div className="mt-5 space-y-3">
-          {visibleServices.map(
+          {r(visibleServices.map(
             (service) => (
               <div
                   key={service.id}
@@ -771,25 +750,17 @@ export default function MyServicesSection() {
                 >
                   <ServiceRow
                     service={service}
-                    categoryLabelByCode={
-                      categoryLabelByCode
-                    }
-                    onOpenService={
-                      handleOpenService
-                    }
+                    categoryLabelByCode={categoryLabelByCode}
+                    onOpenService={handleOpenService}
                   />
 
-                  {service.status ===
+                  {r(service.status ===
                     "draft" ? (
                     <ServiceImageManager
-                      service={
-                        service
-                      }
-                      disabled={
-                        actionBusy &&
+                      service={service}
+                      disabled={actionBusy &&
                         imageBusyServiceId !==
-                          service.id
-                      }
+                          service.id}
                       onImageUrlChange={(
                         imageUrl
                       ) => {
@@ -815,12 +786,12 @@ export default function MyServicesSection() {
                         );
                       }}
                     />
-                  ) : null}
+                  ) : null)}
 
-                  {editingServiceId ===
+                  {r(editingServiceId ===
                     null ? (
                     <div className="mt-2 grid grid-cols-[repeat(auto-fit,minmax(120px,1fr))] gap-2 [&>button]:w-full sm:flex sm:flex-wrap sm:justify-end sm:[&>button]:w-auto">
-                      {service.status ===
+                      {r(service.status ===
                       "draft" ? (
                         <button
                           type="button"
@@ -839,25 +810,19 @@ export default function MyServicesSection() {
                             );
                             clearError();
                           }}
-                          disabled={
-                            actionBusy
-                          }
+                          disabled={actionBusy}
                           className="rounded-full border border-neutral-200 bg-white px-4 py-2 text-xs font-black text-neutral-700 shadow-sm transition hover:border-neutral-300 disabled:cursor-wait disabled:opacity-50"
                         >
-                          Muuda
-                        </button>
-                      ) : null}
+                          {r(marketplaceMessage("service.edit.b81741"))}</button>
+                      ) : null)}
 
                       <button
                         type="button"
                         onClick={() =>
                           void handleStatusChange(
                             service
-                          )
-                        }
-                        disabled={
-                          actionBusy
-                        }
+                          )}
+                        disabled={actionBusy}
                         className={[
                           "rounded-full border px-4 py-2 text-xs font-black shadow-sm transition disabled:cursor-wait disabled:opacity-50",
                           lifecycleActionClass(
@@ -865,40 +830,30 @@ export default function MyServicesSection() {
                           ),
                         ].join(" ")}
                       >
-                        {changingStatusServiceId ===
+                        {r(changingStatusServiceId ===
                         service.id
                           ? lifecycleBusyLabel(
                               service.status
                             )
                           : lifecycleActionLabel(
                               service.status
-                            )}
+                            ))}
                       </button>
                     </div>
-                  ) : null}
+                  ) : null)}
 
-                  {service.status ===
+                  {r(service.status ===
                     "draft" &&
                   activeIdentityId &&
                   editingServiceId ===
                     service.id ? (
                     <ServiceDraftCreateForm
-                      activeIdentityId={
-                        activeIdentityId
-                      }
-                      service={
-                        service
-                      }
-                      saving={
-                        savingServiceId ===
-                        service.id
-                      }
-                      onSave={
-                        saveService
-                      }
-                      onClearError={
-                        clearError
-                      }
+                      activeIdentityId={activeIdentityId}
+                      service={service}
+                      saving={savingServiceId ===
+                        service.id}
+                      onSave={saveService}
+                      onClearError={clearError}
                       onCancelEdit={() => {
                         setEditingServiceId(
                           null
@@ -918,16 +873,16 @@ export default function MyServicesSection() {
                           null
                         );
                         setEditSuccessMessage(
-                          `Teenus „${updatedService.title}” salvestatud.`
+                          marketplaceMessage("service.service_value_saved.d172b5", { p0: String(updatedService.title) })
                         );
                       }}
                     />
-                  ) : null}
+                  ) : null)}
                 </div>
             )
-          )}
+          ))}
         </div>
-      ) : null}
+      ) : null)}
     </section>
   );
 }

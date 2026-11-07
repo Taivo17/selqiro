@@ -15,17 +15,20 @@ function nodes(tree, predicate) {
   return [...(predicate(tree) ? [tree] : []), ...nodes(tree.props?.children, predicate)];
 }
 function realm() {
+  const language="et";
   const cache = new Map(), cells = [], calls = { horse: [], confirm: [] };
   let cell = 0, confirm = true;
   const mocks = new Set(['ListingCreateContentTypeSelector','HorseOfferTypeSelector','HorseOfferBasicFields',
     'HorseOfferUseFields','HorseOfferDisclosureFields','HorseOfferPriceFields','HorseOfferLocationFields',
-    'HorseOfferDraftSaveAction','HorseOfferPublicationGate','ListingCreateAiAnalysisCard','ListingCreateTextFields','ListingCreateImageFields']);
+    'HorseOfferDraftSaveAction','HorseOfferPublicationGate','ListingCreateAiAnalysisCard','ListingCreateTextFields','ListingCreateImageFields','OrdinaryPublicationAction']);
   function load(name) {
     const file = path.resolve(root, name), rel = path.relative(root, file).split(path.sep).join('/');
     assert.ok(file.startsWith(root + path.sep));
+    if(rel==='src/shared/i18n/V2LanguageProvider.tsx')return {useV2Translation:catalog=>({language,t:(key,params)=>load('lib/i18n/useTranslation.ts').getCatalogTranslation(language,catalog,key,params)})};
+    if(rel==='src/shared/config/v2Integration.ts')return {v2IntegrationEnabled:()=>false};
     if (rel === M+'useHorseOfferDraftSave.ts') return {useHorseOfferDraftSave:(user, input)=>{ calls.horse.push(json([user,input])); return {typeLocked:false}; }};
     if (rel.startsWith(C) && mocks.has(path.basename(rel,'.tsx'))) return {__esModule:true,default:props=>({type:path.basename(rel,'.tsx'),props})};
-    assert.ok(rel.startsWith(M) || rel.startsWith(C) || rel.startsWith('lib/categories') || rel.startsWith('lib/categoryFields')
+    assert.ok(rel.startsWith('lib/i18n/') || rel==='src/shared/i18n/marketplaceMessages.ts' || rel.startsWith(M) || rel.startsWith(C) || rel.startsWith('lib/categories') || rel.startsWith('lib/categoryFields')
       || rel==='lib/geography/countries.ts' || rel.startsWith('src/entities/listing/model/')
       || rel==='src/shared/currency/listingCurrencies.generated.ts' || rel.startsWith('src/entities/horse-offer/model/'), rel);
     if (cache.has(file)) return cache.get(file).exports;
@@ -35,14 +38,16 @@ function realm() {
     assert.equal(output.diagnostics.filter(x=>x.category===ts.DiagnosticCategory.Error).length,0);
     function req(spec) {
       if(spec==='react')return {useState(initial){const i=cell++; if(!(i in cells))cells[i]=typeof initial==='function'?initial():initial;
-        return[cells[i],v=>{cells[i]=typeof v==='function'?v(cells[i]):v;}];}};
+        return[cells[i],v=>{cells[i]=typeof v==='function'?v(cells[i]):v;}];},
+        useRef(initial){const i=cell++;if(!(i in cells))cells[i]={current:initial};return cells[i];},
+        useMemo(factory){return factory();},useEffect(){},useSyncExternalStore(_subscribe,getSnapshot){return getSnapshot();}};
       if(spec==='react/jsx-runtime')return{jsx:(type,props,key)=>({type,props,key}),jsxs:(type,props,key)=>({type,props,key})};
       assert.ok(spec.startsWith('.'),'No runtime service allowed: '+spec);
       const base=path.resolve(path.dirname(file),spec), next=[base+'.ts',base+'.tsx'].find(p=>fs.existsSync(p));
       assert.ok(next,spec);return load(next);
     }
     vm.runInNewContext(output.outputText,{module,exports:module.exports,require:req,Object,Array,String,Number,Boolean,
-      Error,TypeError,Map,Set,JSON,RegExp,Math,TextEncoder,BigInt,Date,
+      Error,TypeError,Map,Set,JSON,RegExp,Math,TextEncoder,BigInt,Date,Intl,
       window:{confirm:message=>{calls.confirm.push(message);return confirm;}}},{filename:file,timeout:1500});
     return module.exports;
   }
@@ -179,7 +184,12 @@ for(const valid of [false,true])test('publication button remains explicitly disa
  assert.equal(nodes(tree,n=>n.props['data-ordinary-input-valid']!==undefined)[0].props['data-ordinary-input-valid'],String(valid));
 });
 test('ordinary form has no legacy CTA or paid category-helper card; controlled horse branch is preserved',()=>{
- const h=realm();const render=()=>h.render('ListingCreateForm',{userId:'user-a'});
+ const h=realm(),actor={userId:'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',identityId:'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb'};
+ const entry=new (h.load(M+'listingCreateDrafts.ts').ListingCreateDraftEntry)(actor,{
+  actor:async()=>actor,create:async()=>assert.fail('render does not create a draft'),update:async()=>assert.fail('render does not update a draft')
+ });
+ const publication={enabled:false,contextReady:true,contextError:null,view:{phase:'editing'},ownsForm:()=>true,canAct:()=>true};
+ const render=()=>h.render('ListingCreateIdentityForm',{userId:actor.userId,entry,publication});
  let tree=render();assert.ok(nodes(tree,n=>n.props['data-ordinary-listing-fields']!==undefined).length);
  assert.ok(!text(tree).includes('25 Energy'));assert.equal(nodes(tree,n=>n.props.href==='/sell').length,0);
  const get=(type)=>nodes(tree,n=>n.type===type)[0];
@@ -208,7 +218,7 @@ test('oversized escaped basics and multi-byte detail payload are refused before 
  assert.throws(()=>prepare(draft(),'Title','\u001a'.repeat(5000)));
  const fields=m.ordinaryDetailFields(['vehicles','trucks_commercial','trucks']);
  const detailValues=Object.fromEntries(fields.map(f=>[f.key,'😀'.repeat(input.ordinaryDetailMaxLength(f.key))]));
- assert.throws(()=>prepare(draft({detailValues})),/kogumaht/);
+ assert.throws(()=>prepare(draft({detailValues})),/input.detailsTooLarge/);
 });
 test('new field modules have no transport, storage, AI, automatic ID or persisted-draft implementation',()=>{
  const modules=['ordinaryListingFields','ordinaryListingInput'].map(n=>M+n+'.ts')

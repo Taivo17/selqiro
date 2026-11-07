@@ -1,4 +1,6 @@
 "use client";
+import { uiMessage } from "../../../../lib/i18n/interfaceMessage";
+
 import { useEffect, useRef, useState } from "react";
 import { createMessageImageClient } from "../../../entities/conversation/api/messageImages";
 import { MessageImagePreparationError, prepareMessageImage } from "../../../entities/conversation/model/messageImagePreparation";
@@ -36,7 +38,7 @@ export function useMessagePhoto(conversationId: string, actor: ConversationActor
       const pending = selectionOwner.current !== null || current.current?.state === "checking";
       selectionOwner.current = null;
       if (current.current?.state === "checking") replace(null);
-      if (pending) setSelectionProblem("Foto valimine katkestati, sest aktiivset identiteeti vahetatakse. Vali foto uuesti.");
+      if (pending) setSelectionProblem(uiMessage("photo_selection_was_cancelled_because_the_active_identity_is_changing_choos"));
     };
     window.addEventListener(ACTIVE_IDENTITY_CHANGING_EVENT, changed);
     return () => { live.current = false; selectionOwner.current = null; controller.current?.abort();
@@ -80,9 +82,9 @@ export function useMessagePhoto(conversationId: string, actor: ConversationActor
       }
       update({ state: submitted || value.state === "uncertain" ? "uncertain" : "error",
         error: submitted || value.state === "uncertain"
-          ? "Pildi laadimise tulemust ei saanud kinnitada. Proovi sama pildi laadimist uuesti."
+          ? uiMessage("the_photo_upload_result_could_not_be_confirmed_retry_the_same_photo_upload")
           : error instanceof MessageImagePreparationError ? error.message
-            : "Pilti ei saanud ette valmistada. Proovi foto uuesti valida." });
+            : uiMessage("could_not_prepare_the_photo_try_selecting_it_again") });
     } finally { context.signal.removeEventListener("abort", abort); working.current = false; }
   }
   function beginSelection() {
@@ -95,7 +97,7 @@ export function useMessagePhoto(conversationId: string, actor: ConversationActor
     const owner = selectionOwner.current; selectionOwner.current = null;
     if (!live.current || !owner || lock.current || current.current || working.current) return;
     if ((actor && isCurrent(actor) && ownerKey(actor) !== owner) || anonymous) {
-      setSelectionProblem("Foto valimine katkestati, sest kasutaja või identiteet muutus. Vali foto uuesti."); return;
+      setSelectionProblem(uiMessage("photo_selection_was_cancelled_because_the_user_or_identity_changed_choose_t")); return;
     }
     const value: MessagePhotoDraft = { owner, file, requestKey: crypto.randomUUID(),
       prepared: null, previewUrl: null, attachmentId: null, state: "checking", error: null };
@@ -109,11 +111,11 @@ export function useMessagePhoto(conversationId: string, actor: ConversationActor
     const owner = actor && isCurrent(actor) ? ownerKey(actor) : null;
     if (anonymous || (owner && selectionOwner.current && selectionOwner.current !== owner)) {
       const armed = selectionOwner.current !== null; selectionOwner.current = null;
-      if (armed) setSelectionProblem("Foto valimine katkestati, sest kasutaja või identiteet muutus. Vali foto uuesti.");
+      if (armed) setSelectionProblem(uiMessage("photo_selection_was_cancelled_because_the_user_or_identity_changed_choose_t"));
     }
     if (!value || value.state !== "checking") return;
     if (anonymous || (owner && value.owner !== owner)) {
-      replace(null); setSelectionProblem("Foto valimine katkestati, sest kasutaja või identiteet muutus. Vali foto uuesti."); return;
+      replace(null); setSelectionProblem(uiMessage("photo_selection_was_cancelled_because_the_user_or_identity_changed_choose_t")); return;
     }
     if (actor && owner === value.owner && !lock.current) void upload(value, actor);
     // The async upload operates on the selected file and exact actor generation.

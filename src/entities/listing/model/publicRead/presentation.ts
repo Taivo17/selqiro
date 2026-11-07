@@ -6,14 +6,15 @@ import type { ProductListingCard, ProductListingDetail } from "../types";
 export function priceReadDisplay(price: PriceRead): ListingPriceDisplay {
   if (price.kind === "fixed") return getListingPriceDisplay({priceAmount: price.amount, currency: price.currency});
   if (price.kind === null) return getListingPriceDisplay({price: price.legacy_text, priceAmount: price.legacy_amount});
-  return {priceLabel: {free: "Tasuta", negotiable: "Kokkuleppel", unspecified: "Küsi hinda"}[price.kind], priceNote: null};
+  return {priceLabel: {free: "Free", negotiable: "Negotiable", unspecified: "Ask for price"}[price.kind],
+    priceLabelKey: price.kind === "unspecified" ? "ask_price" : price.kind, priceNote: null};
 }
 export function publicCard(item: SearchCardV2): ProductListingCard {
-  return {id: item.id, title: item.title || "Pealkirjata kuulutus", description: item.description, ...priceReadDisplay(item.price),
+  return {id: item.id, title: item.title || "", description: item.description, ...priceReadDisplay(item.price),
     priceAmount: item.price.kind === "fixed" ? item.price.amount : item.price.kind === null ? item.price.legacy_amount : null,
     currency: item.price.currency, imageUrl: item.imageUrl, category: item.category, subcategory: item.subcategory,
-    condition: item.condition, locationLabel: [...new Set([item.city, item.country].filter(Boolean))].join(" · ") || "Asukoht täpsustamata",
-    distanceLabel: null, sellerName: item.sellerName || "Avaldaja", sellerAvatarUrl: item.sellerAvatarUrl,
+    condition: item.condition, locationLabel: [...new Set([item.city, item.country].filter(Boolean))].join(" · "),
+    distanceLabel: null, sellerName: item.sellerName || "", sellerAvatarUrl: item.sellerAvatarUrl,
     sellerSlug: item.sellerSlug, sellerType: item.sellerType, isHighlighted: false, href: `/v2/listing/${item.id}`};
 }
 export function publicDetail(item: PublicDetail): ProductListingDetail {

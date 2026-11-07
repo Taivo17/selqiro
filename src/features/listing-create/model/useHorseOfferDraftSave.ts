@@ -1,5 +1,6 @@
 "use client";
 
+import { marketplaceMessage } from "../../../shared/i18n/marketplaceMessages";
 import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { supabaseBrowserClient } from "../../../shared/supabase/browserClient";
 import { saveMyHorseOfferDraft } from "../../../entities/horse-offer/api/saveMyHorseOfferDraft";
@@ -60,8 +61,8 @@ export function useHorseOfferDraftSave(userId: string, snapshot: HorseOfferDraft
     try { await session.save(buildHorseOfferDraftSaveInput(snapshot)); }
     catch (error) {
       setPayloadError(error instanceof HorseOfferDraftPayloadError
-        ? "Kontrolli sünniaastat, turjakõrgust, hinda või eelarvet ja tasu perioodi."
-        : "Kontrolli vormi välju. Andmeid ei saadetud.");
+        ? marketplaceMessage("horse.check_the_birth_year_height_price_or_budget.e244c9")
+        : marketplaceMessage("horse.check_the_form_fields_no_data_was_sent.e20aa9"));
     }
   }, [snapshot, session]);
   return {

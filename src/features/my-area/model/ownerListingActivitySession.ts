@@ -1,3 +1,4 @@
+import { uiMessage } from "../../../../lib/i18n/interfaceMessage";
 import { getListingActivity, isRenewableListingId } from "../../../entities/listing/model/listingActivity";
 import { ListingRenewalError, listingRenewalError, sameListingActor,
   type ListingActivityActor, type RenewListingActivityInput, type RenewListingActivityResult } from "../../../entities/listing/model/listingRenewal";
@@ -25,9 +26,9 @@ function statusProblem(error: unknown, failure: ListingRenewalError): string {
   if (failure.kind === "forbidden") return failure.message;
   if (error && typeof error === "object" && "code" in error && "message" in error
     && error.code === "40001" && error.message === "listing_status_conflict") {
-    return "Kuulutuse staatus on vahepeal muutunud. Laadi nimekiri uuesti ja kontrolli praegust staatust.";
+    return uiMessage("the_listing_s_status_has_changed_reload_the_list_and_check_its_current_stat");
   }
-  return "Staatuse muutmise tulemus pole kinnitatud. Laadi nimekiri uuesti ja kontrolli kuulutuse praegust staatust enne uut muudatust.";
+  return uiMessage("the_status_change_has_not_been_confirmed_reload_the_list_and_check_the_list");
 }
 
 /** One mounted owner-list controller. No transport/UI code or automatic mutation retries. */
@@ -76,7 +77,7 @@ export class OwnerListingActivitySession {
       if (!this.current(epoch)) return;
       await this.readSnapshot(epoch, actor, null);
     } catch {
-      if (this.current(epoch)) this.set({ loading: false, error: "Kuulutusi ei saanud laadida. Kontrolli sisselogimist ja aktiivset identiteeti ning proovi uuesti.", needsReload: true });
+      if (this.current(epoch)) this.set({ loading: false, error: uiMessage("could_not_load_listings_check_your_sign_in_and_active_identity_then_try_aga"), needsReload: true });
     }
   }
   private async readSnapshot(epoch: number, actor: ListingActivityActor, notice: string | null) {
@@ -114,8 +115,8 @@ export class OwnerListingActivitySession {
     if (!row || row.status !== "active" || row.activeUntil !== confirmation.input.expectedActiveUntil) return;
     await this.mutate(confirmation.key, "renewal", async () => {
       const result = await this.deps.renew({ ...confirmation.input, expectedActor: this.state.actor ? {...this.state.actor} : undefined });
-      return result.changed ? "Kuulutuse tähtaeg on uuendatud. Sisu ja järjestus ei muutunud."
-        : "Olemasolev kehtivusaeg säilis; uut pikendamist polnud vaja.";
+      return result.changed ? uiMessage("the_listing_s_expiry_has_been_renewed_its_content_and_position_are_unchange")
+        : uiMessage("the_existing_expiry_was_retained_no_extension_was_needed");
     });
   }
   async changeStatus(key: string, status: ListingStatus): Promise<void> {
@@ -124,7 +125,7 @@ export class OwnerListingActivitySession {
     if (!row || !["active", "paused", "sold"].includes(row.status) || row.status === status) return;
     await this.mutate(key, "status", async () => {
       await this.deps.status({ listingId: row.id, status, expectedStatus: row.status, expectedActor: this.state.actor ? {...this.state.actor} : undefined });
-      return "Staatus muudetud. Kuulutuse tähtaega ei pikendatud.";
+      return uiMessage("status_changed_the_listing_s_expiry_was_not_extended");
     });
   }
   private async mutate(key: string, operation: "renewal" | "status", action: () => Promise<string>) {
@@ -154,7 +155,7 @@ export class OwnerListingActivitySession {
       this.set({ confirmation: null, loading: false, needsReload: true,
         ...(contextChanged ? { listings: [], actor: null } : {}),
         problem: acknowledged && !contextChanged
-          ? "Server kinnitas toimingu, kuid nimekirja värskendamine ebaõnnestus. Laadi nimekiri uuesti; ära korda toimingut."
+          ? uiMessage("the_server_confirmed_the_action_but_the_list_could_not_be_refreshed_reload_")
           : operation === "status" ? statusProblem(error, failure) : failure.message });
     } finally {
       this.locked = false;

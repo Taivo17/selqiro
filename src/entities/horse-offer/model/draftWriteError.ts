@@ -1,4 +1,4 @@
-/** Only an explicit PostgreSQL rejection proves that the RPC did not commit. */
+import { marketplaceMessage } from "../../../shared/i18n/marketplaceMessages";
 export class HorseDraftWriteError extends Error {
   constructor(
     message: string,
@@ -14,7 +14,7 @@ export function horseDraftRpcError(error: { code?: string | null; message?: stri
   // Connection/PostgREST/transport errors are intentionally NOT in this list.
   const rejected = ["22023", "23514", "23503", "23502", "23505", "42501", "P0001", "55000", "40001", "54000"];
   const code = error.code || null;
-  return new HorseDraftWriteError("Mustandi salvestus ei õnnestunud.",
+  return new HorseDraftWriteError(marketplaceMessage("horse.the_draft_could_not_be_saved.fb8388"),
     code && rejected.includes(code) ? "rejected" : "unknown", code);
 }
 

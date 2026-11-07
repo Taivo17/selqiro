@@ -1,4 +1,6 @@
 "use client";
+import { uiMessage } from "../../../../lib/i18n/interfaceMessage";
+
 
 import { useEffect, useRef, useState } from "react";
 import { searchPublicListings } from "../../../entities/listing/api/searchPublicListings";
@@ -31,8 +33,8 @@ export function usePublicListingSearch(input: PublicSearchInput, audience: strin
         if (active) setState({key, page, loading: false, error: null});
       } catch {
         if (active) setState({key, page: null, loading: false, error: timedOut
-          ? "Otsing võttis liiga kaua. Täpsusta otsingut või proovi uuesti."
-          : "Kuulutusi ei saanud laadida. Kontrolli ühendust ja proovi uuesti."});
+          ? uiMessage("the_search_took_too_long_refine_your_search_or_try_again")
+          : uiMessage("could_not_load_listings_check_your_connection_and_try_again")});
       } finally { if (timeout) clearTimeout(timeout); }
     }, 300);
     return () => { active = false; clearTimeout(debounce); if (timeout) clearTimeout(timeout); controller.abort(); };

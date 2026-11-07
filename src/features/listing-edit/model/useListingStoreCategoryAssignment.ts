@@ -20,6 +20,7 @@ export type ListingStoreCategoryAssignmentState = {
   loaded: boolean;
   error: string | null;
   success: string | null;
+  successParams?: Readonly<Record<string, string | number>>;
   dirty: boolean;
   toggleCategory: (categoryId: string) => void;
   clearSelection: () => void;
@@ -55,14 +56,14 @@ function categorySetsAreEqual(
 
 function getSuccessMessage(assignedCount: number): string {
   if (assignedCount === 0) {
-    return "Kuulutuse poe-rubriigid eemaldatud.";
+    return "storeAssignmentsRemoved";
   }
 
   if (assignedCount === 1) {
-    return "Kuulutusele salvestati 1 poe-rubriik.";
+    return "storeAssignmentOneSaved";
   }
 
-  return `Kuulutusele salvestati ${assignedCount} poe-rubriiki.`;
+  return "storeAssignmentCountSaved";
 }
 
 export function useListingStoreCategoryAssignment({
@@ -81,6 +82,7 @@ export function useListingStoreCategoryAssignment({
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] =
     useState<string | null>(null);
+  const [successParams, setSuccessParams] = useState<Readonly<Record<string, string | number>> | undefined>();
 
   useEffect(() => {
     let mounted = true;
@@ -132,7 +134,7 @@ export function useListingStoreCategoryAssignment({
         setError(
           loadError instanceof Error
             ? loadError.message
-            : "Kuulutuse poe-rubriike ei saanud laadida."
+            : "storeAssignmentReadFailed"
         );
       }
     }
@@ -198,7 +200,7 @@ export function useListingStoreCategoryAssignment({
 
     if (!enabled || !cleanListingId) {
       const validationError =
-        new Error("Kuulutuse ID puudub.");
+        new Error("listingIdMissing");
 
       setError(validationError.message);
       throw validationError;
@@ -207,7 +209,7 @@ export function useListingStoreCategoryAssignment({
     if (!loaded) {
       const notLoadedError =
         new Error(
-          "Kuulutuse praeguseid rubriigiseoseid ei ole laaditud."
+          "storeAssignmentsNotLoaded"
         );
 
       setError(notLoadedError.message);
@@ -216,7 +218,7 @@ export function useListingStoreCategoryAssignment({
 
     if (loading) {
       const loadingError =
-        new Error("Rubriikide seoseid alles laetakse.");
+        new Error("storeAssignmentsLoading");
 
       setError(loadingError.message);
       throw loadingError;
@@ -224,7 +226,7 @@ export function useListingStoreCategoryAssignment({
 
     if (saving) {
       const savingError =
-        new Error("Rubriikide salvestamine juba käib.");
+        new Error("storeAssignmentsSaving");
 
       setError(savingError.message);
       throw savingError;
@@ -232,7 +234,7 @@ export function useListingStoreCategoryAssignment({
 
     if (!dirty) {
       const unchangedError =
-        new Error("Rubriikide valik ei ole muutunud.");
+        new Error("storeAssignmentsUnchanged");
 
       setError(unchangedError.message);
       throw unchangedError;
@@ -254,6 +256,7 @@ export function useListingStoreCategoryAssignment({
       setSavedCategoryIds(normalizedCategoryIds);
       setSelectedCategoryIds(normalizedCategoryIds);
       setSuccess(getSuccessMessage(result.assignedCount));
+      setSuccessParams({ count: result.assignedCount });
 
       return {
         ...result,
@@ -263,7 +266,7 @@ export function useListingStoreCategoryAssignment({
       const message =
         saveError instanceof Error
           ? saveError.message
-          : "Kuulutuse poe-rubriike ei saanud salvestada.";
+          : "storeAssignmentSaveFailed";
 
       setError(message);
       throw saveError;
@@ -280,6 +283,7 @@ export function useListingStoreCategoryAssignment({
     loaded,
     error,
     success,
+    successParams,
     dirty,
     toggleCategory,
     clearSelection,

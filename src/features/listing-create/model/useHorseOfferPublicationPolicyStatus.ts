@@ -1,5 +1,6 @@
 "use client";
 
+import { marketplaceMessage } from "../../../shared/i18n/marketplaceMessages";
 import {
   useCallback,
   useEffect,
@@ -84,10 +85,10 @@ function getPolicyStatusErrorMessage(
       : "";
 
   if (message.includes("not_authenticated")) {
-    return "Reeglite oleku vaatamiseks logi uuesti sisse.";
+    return marketplaceMessage("horse.sign_in_again_to_view_policy_status.f1a02f");
   }
 
-  return "Reeglite olekut ei saanud laadida. Kontrolli ühendust ja proovi uuesti.";
+  return marketplaceMessage("horse.policy_status_could_not_be_loaded_check_your.34e455");
 }
 
 function getPolicyAcceptanceErrorMessage(
@@ -97,14 +98,14 @@ function getPolicyAcceptanceErrorMessage(
     error instanceof
       PublicationPolicyReviewRequiredError
   ) {
-    return "Reeglistiku kehtiv versioon muutus. Oleku värskendamise järel ava uus täistekst ja kinnita uuesti.";
+    return marketplaceMessage("horse.the_active_policy_version_changed_after_refreshing_the.227d4c");
   }
 
   if (
     error instanceof
       PublicationPolicyStatusLoadError
   ) {
-    return "Nõustumine võis salvestuda, kuid värsket olekut ei saanud serverist kinnitada. Laadi reeglite olek uuesti.";
+    return marketplaceMessage("horse.acceptance_may_have_been_saved_but_the_latest.32a017");
   }
 
   if (
@@ -115,7 +116,7 @@ function getPolicyAcceptanceErrorMessage(
       error.message.toLowerCase();
 
     if (message.includes("not_authenticated")) {
-      return "Nõustumise salvestamiseks logi uuesti sisse.";
+      return marketplaceMessage("horse.sign_in_again_to_save_policy_acceptance.643a4a");
     }
 
     if (
@@ -129,7 +130,7 @@ function getPolicyAcceptanceErrorMessage(
         "publication_policy_hash_mismatch"
       )
     ) {
-      return "Reeglistiku kehtiv versioon muutus. Oleku värskendamise järel ava uus täistekst ja kinnita uuesti.";
+      return marketplaceMessage("horse.the_active_policy_version_changed_after_refreshing_the.227d4c");
     }
 
     if (
@@ -137,11 +138,11 @@ function getPolicyAcceptanceErrorMessage(
         "publication_policy_identity_forbidden"
       )
     ) {
-      return "Aktiivse identiteedi kasutusõigus muutus. Kontrolli, kelle nimel tegutsed, ja proovi uuesti.";
+      return marketplaceMessage("horse.your_access_to_the_active_identity_changed_check.85901e");
     }
   }
 
-  return "Kõiki nõustumisi ei saanud salvestada. Juba õnnestunud append-only nõustumised jäid alles; värskenda olekut ja proovi ülejäänutega uuesti.";
+  return marketplaceMessage("horse.not_all_acceptances_could_be_saved_successful_acceptances.aa0932");
 }
 
 function getPolicySnapshotKey(
@@ -292,7 +293,7 @@ useHorseOfferPublicationPolicyStatus():
           ...current,
           acceptancePhase: "error",
           acceptanceErrorMessage:
-            "Reeglite olek peab enne nõustumist olema edukalt laaditud.",
+            marketplaceMessage("horse.policy_status_must_load_successfully_before_acceptance.0db190"),
           acceptanceMessage: null,
         }));
         return;
@@ -330,7 +331,7 @@ useHorseOfferPublicationPolicyStatus():
           ...current,
           acceptancePhase: "error",
           acceptanceErrorMessage:
-            "Reeglistike olek muutus. Ava värsked täistekstid ja kinnita uuesti.",
+            marketplaceMessage("horse.policy_status_changed_open_the_latest_full_texts.a26d62"),
           acceptanceMessage: null,
         }));
         return;
@@ -342,7 +343,7 @@ useHorseOfferPublicationPolicyStatus():
           acceptancePhase: "success",
           acceptanceErrorMessage: null,
           acceptanceMessage:
-            "Kõigi nõutud reeglistikega on juba nõustutud.",
+            marketplaceMessage("horse.all_required_policy_documents_have_already_been_accepted.82dc34"),
           acceptanceCompletedCount: 0,
           acceptanceTotalCount: 0,
         }));
@@ -479,7 +480,7 @@ useHorseOfferPublicationPolicyStatus():
             acceptancePhase: "success",
             acceptanceErrorMessage: null,
             acceptanceMessage:
-              "Kõigi nõutud reeglistikega nõustumine on salvestatud.",
+              marketplaceMessage("horse.acceptance_of_all_required_policy_documents_has_been.ce8c78"),
             acceptanceCompletedCount:
               initialMissingPolicies.length,
             acceptanceTotalCount:

@@ -1,9 +1,14 @@
 "use client";
 
+import { useV2Translation } from "@/src/shared/i18n/V2LanguageProvider";
+import { demoUi, type DemoTranslate } from "@/lib/i18n/catalogs/demoUi";
+
+
 import { useState } from "react";
 import V2DiscoveryTypeSwitcher from "../../../src/features/v2-shell/components/V2DiscoveryTypeSwitcher";
 
 type Service = {
+  id: string;
   title: string;
   provider: string;
   description: string;
@@ -15,133 +20,142 @@ type Service = {
   details: string[];
 };
 
-const featuredServices: Service[] = [
+const getFeaturedServices = (t: DemoTranslate): Service[] => [
   {
-    title: "Puksiirabi",
+    id: "featuredServices-0",
+    title: t("towing"),
     provider: "Paide Puksiirabi",
-    description: "Sõidukite pukseerimine, käivitusabi ja transport.",
-    area: "Tallinn, Gonsiori piirkond",
-    distance: "ajutine asukoht",
-    price: "Alates 45 €",
+    description: t("towingDescription"),
+    area: t("gonsiori"),
+    distance: t("temporaryLocation"),
+    price: t("from45"),
     badge: "LIVE",
-    cta: "Küsi abi",
+    cta: t("askHelp"),
     details: [
-      "Puksiir on ajutiselt Tallinnas kuni 16:00.",
-      "Sobib sõiduautode ja väiketranspordi jaoks.",
-      "Täpne hind sõltub asukohast, olukorrast ja sihtkohast.",
+      t("towingUntilDescription"),
+      t("towingVehicles"),
+      t("towingPrice"),
     ],
   },
   {
-    title: "Aiatehnika hooldus",
+    id: "featuredServices-1",
+    title: t("gardenMaintenance"),
     provider: "Milline Vedu",
-    description: "Murutraktorite, niidukite ja väiketehnika hooldus.",
-    area: "Paide piirkond",
+    description: t("gardenMaintenanceDescription"),
+    area: t("paideArea"),
     distance: "~12 km",
-    badge: "Esiletõstetud",
-    cta: "Võta ühendust",
+    badge: t("featured"),
+    cta: t("contact"),
     details: [
-      "Hooldame murutraktoreid ja niidukeid.",
-      "Hinna täpsustame pärast masina ja töö mahu nägemist.",
-      "Võimalik kokku leppida ülevaatuse aeg.",
+      t("maintainMowers"),
+      t("maintenancePrice"),
+      t("inspectionAppointment"),
     ],
   },
   {
-    title: "Autoremont",
+    id: "featuredServices-2",
+    title: t("carRepair"),
     provider: "Autoteenindus Paide",
-    description: "Hooldus, remont ja diagnostika.",
+    description: t("carRepairDescription"),
     area: "Paide",
     distance: "~2.4 km",
-    price: "Hind kokkuleppel",
-    badge: "Sinu lähedal",
-    cta: "Kirjuta",
+    price: t("priceByAgreement"),
+    badge: t("nearYou"),
+    cta: t("write"),
     details: [
-      "Teostame üldhooldust ja lihtsamat remonti.",
-      "Kirjuta, mis autol viga on, ja lepime aja kokku.",
-      "Täpset hinda ei kuvata enne töö mahu selgumist.",
+      t("generalMaintenance"),
+      t("describeCarIssue"),
+      t("priceAfterAssessment"),
     ],
   },
 ];
 
-const quickUpdates: Service[] = [
+const getQuickUpdates = (t: DemoTranslate): Service[] => [
   {
-    title: "Puksiir Tallinnas kuni 16:00",
+    id: "quickUpdates-0",
+    title: t("towQuickTitle"),
     provider: "Paide Puksiirabi",
     description:
-      "Ajutine teenindusasukoht Gonsiori piirkonnas. Sobib puksiiri ja autoabi otsinguga.",
-    area: "Tallinn, Gonsiori piirkond",
-    distance: "kehtib kuni 16:00",
-    badge: "Kiire teade",
-    cta: "Küsi abi",
+      t("towQuickDescription"),
+    area: t("gonsiori"),
+    distance: t("until16"),
+    badge: t("quickUpdate"),
+    cta: t("askHelp"),
     details: [
-      "Tavapärane piirkond on Järvamaa.",
-      "Aktiivne ajutine asukoht teeb teenuse nähtavaks Tallinnas.",
-      "Kui aeg lõpeb, kaob ajutine asukoht otsingust.",
+      t("usualArea"),
+      t("temporaryVisibility"),
+      t("temporaryExpiry"),
     ],
   },
   {
-    title: "Täna vaba aeg aiatehnika hoolduseks",
+    id: "quickUpdates-1",
+    title: t("gardenQuickTitle"),
     provider: "Milline Vedu",
     description:
-      "Täna saab veel ühe muruniiduki või murutraktori hoolduse aja kokku leppida.",
-    area: "Paide piirkond",
+      t("gardenQuickDescription"),
+    area: t("paideArea"),
     distance: "~12 km",
-    badge: "Kiire teade",
-    cta: "Kirjuta",
+    badge: t("quickUpdate"),
+    cta: t("write"),
     details: [
-      "Kiire teade on seotud teenuse ja piirkonnaga.",
-      "Kui teade aegub, jääb see hiljem uuenduste ajalukku.",
+      t("quickLink"),
+      t("quickHistory"),
     ],
   },
 ];
 
-const normalServices: Service[] = [
+const getNormalServices = (t: DemoTranslate): Service[] => [
   {
-    title: "Elektritööd",
+    id: "normalServices-0",
+    title: t("electrical"),
     provider: "Paide Elektritööd OÜ",
-    description: "Kodused elektritööd ja väiksemad parandused.",
+    description: t("electricalDescription"),
     area: "Paide",
     distance: "~0.6 km",
-    cta: "Võta ühendust",
+    cta: t("contact"),
     details: [
-      "Väiksemad elektritööd kodus või ettevõttes.",
-      "Töö maht ja hind täpsustatakse enne alustamist.",
+      t("electricalDetails"),
+      t("priceBeforeStart"),
     ],
   },
   {
-    title: "Puhastusteenus",
+    id: "normalServices-1",
+    title: t("cleaning"),
     provider: "Kodupuhas OÜ",
-    description: "Kodu ja kontori koristus.",
+    description: t("cleaningDescription"),
     area: "Paide",
     distance: "~0.8 km",
-    price: "Alates 35 €",
-    cta: "Kirjuta",
+    price: t("from35"),
+    cta: t("write"),
     details: [
-      "Koristus kodudele ja väiksematele kontoritele.",
-      "Hind sõltub pinna suurusest ja töö sagedusest.",
+      t("cleaningDetails"),
+      t("cleaningPrice"),
     ],
   },
   {
+    id: "normalServices-2",
     title: "Aiahaldjas OÜ",
     provider: "Aiateenused",
-    description: "Aiatööd, niitmine ja hooajalised teenused.",
+    description: t("gardenDescription"),
     area: "Paide",
     distance: "~1.1 km",
-    cta: "Võta ühendust",
+    cta: t("contact"),
     details: [
-      "Aiatööd ja hooajaline hooldus.",
-      "Teenuse hind sõltub töö mahust ja asukohast.",
+      t("gardenDetails"),
+      t("gardenPrice"),
     ],
   },
   {
-    title: "Sõidukite transport",
+    id: "normalServices-3",
+    title: t("vehicleTransport"),
     provider: "Milline Vedu",
-    description: "Kohalik transport kokkuleppel.",
+    description: t("transportDescription"),
     area: "Järvamaa",
     distance: "~15 km",
-    cta: "Kirjuta",
+    cta: t("write"),
     details: [
-      "Transport kokkuleppel Järvamaal ja lähialadel.",
-      "Täpsustame veose, asukoha ja sihtkoha enne hinna pakkumist.",
+      t("transportDetails"),
+      t("transportPrice"),
     ],
   },
 ];
@@ -198,6 +212,7 @@ function ServiceCard({
   service: Service;
   onOpen: (service: Service) => void;
 }) {
+  const { t } = useV2Translation(demoUi);
   return (
     <article className="rounded-[26px] border border-black/5 bg-white p-3 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
       <PlaceholderImage className="h-36" />
@@ -209,8 +224,7 @@ function ServiceCard({
           </span>
         ) : (
           <span className="inline-flex rounded-full border border-teal-200 bg-teal-100 px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.16em] text-teal-700">
-            Teenus
-          </span>
+             {t("service")} </span>
         )}
 
         <button className="rounded-full border border-neutral-200 bg-white px-2.5 py-1 text-xs font-bold text-neutral-500">
@@ -241,8 +255,7 @@ function ServiceCard({
         onClick={() => onOpen(service)}
         className="mt-5 w-full rounded-full bg-black px-5 py-3 text-sm font-black text-white"
       >
-        Vaata teenust
-      </button>
+         {t("viewService")} </button>
     </article>
   );
 }
@@ -290,12 +303,13 @@ function ServiceModal({
   service: Service | null;
   onClose: () => void;
 }) {
+  const { t } = useV2Translation(demoUi);
   if (!service) return null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/45 p-4">
       <button
-        aria-label="Sulge"
+        aria-label={t("close")}
         className="absolute inset-0 cursor-default"
         onClick={onClose}
       />
@@ -304,8 +318,7 @@ function ServiceModal({
         <div className="flex items-start justify-between gap-4">
           <div>
             <p className="inline-flex rounded-full border border-teal-200 bg-teal-100 px-3 py-1.5 text-[11px] font-black uppercase tracking-[0.18em] text-teal-700">
-              Teenuse detail
-            </p>
+               {t("serviceDetail")} </p>
             <h2 className="mt-2 text-3xl font-black">{service.title}</h2>
             <p className="mt-1 text-sm font-semibold text-neutral-500">
               {service.provider}
@@ -316,8 +329,7 @@ function ServiceModal({
             onClick={onClose}
             className="rounded-full border border-neutral-200 bg-white px-4 py-2 text-sm font-black"
           >
-            Sulge
-          </button>
+             {t("close")} </button>
         </div>
 
         <PlaceholderImage className="mt-6 h-64" />
@@ -329,28 +341,25 @@ function ServiceModal({
         <div className="mt-5 grid gap-3 md:grid-cols-3">
           <div className="rounded-2xl bg-[#fbfbfa] p-4">
             <p className="text-xs font-bold uppercase tracking-[0.18em] text-neutral-400">
-              Piirkond
-            </p>
+               {t("area")} </p>
             <p className="mt-1 font-black">{service.area}</p>
           </div>
 
           <div className="rounded-2xl bg-[#fbfbfa] p-4">
             <p className="text-xs font-bold uppercase tracking-[0.18em] text-neutral-400">
-              Kaugus / aeg
-            </p>
+               {t("distanceTime")} </p>
             <p className="mt-1 font-black">{service.distance}</p>
           </div>
 
           <div className="rounded-2xl bg-[#fbfbfa] p-4">
             <p className="text-xs font-bold uppercase tracking-[0.18em] text-neutral-400">
-              Hind
-            </p>
-            <p className="mt-1 font-black">{service.price || "Kokkuleppel"}</p>
+               {t("price")} </p>
+            <p className="mt-1 font-black">{service.price || t("byAgreement")}</p>
           </div>
         </div>
 
         <div className="mt-5 rounded-[24px] border border-black/5 bg-[#fbfbfa] p-5">
-          <h3 className="font-black">Lisainfo</h3>
+          <h3 className="font-black">{t("moreInformation")}</h3>
           <ul className="mt-3 space-y-2 text-sm leading-6 text-neutral-600">
             {service.details.map((detail) => (
               <li key={detail}>• {detail}</li>
@@ -363,8 +372,7 @@ function ServiceModal({
             {service.cta}
           </button>
           <button className="rounded-full border border-neutral-200 bg-white px-5 py-3 text-sm font-black">
-            Sõnum
-          </button>
+             {t("message")} </button>
         </div>
       </article>
     </div>
@@ -372,7 +380,13 @@ function ServiceModal({
 }
 
 export default function V2ServicesPage() {
-  const [selectedService, setSelectedService] = useState<Service | null>(null);
+  const { t } = useV2Translation(demoUi);
+  const featuredServices = getFeaturedServices(t);
+  const quickUpdates = getQuickUpdates(t);
+  const normalServices = getNormalServices(t);
+  const [selectedServiceId, setSelectedServiceId] = useState<string | null>(null);
+  const selectedService = [...featuredServices, ...quickUpdates, ...normalServices].find(service => service.id === selectedServiceId) ?? null;
+  const openService = (service: Service) => setSelectedServiceId(service.id);
 
   return (
     <div className="space-y-8">
@@ -382,59 +396,51 @@ export default function V2ServicesPage() {
         <div className="mb-5 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
           <div>
             <p className="inline-flex rounded-full border border-teal-200 bg-teal-100 px-3 py-1.5 text-[11px] font-black uppercase tracking-[0.18em] text-teal-700">
-              Teenused
-            </p>
+               {t("services")} </p>
             <h1 className="mt-2 text-4xl font-black tracking-tight md:text-5xl">
-              Leia teenus enda lähedalt
-            </h1>
+               {t("findNearbyService")} </h1>
             <p className="mt-3 max-w-3xl text-sm leading-6 text-neutral-600">
-              Otsing mõjutab esiletõstetud teenuseid, kiireid teateid ja tavalisi
-              tulemusi. Teenuste hind on vabatahtlik.
-            </p>
+               {t("serviceSearchDescription")} </p>
           </div>
 
           <div className="rounded-[22px] bg-neutral-950 px-5 py-4 text-white md:w-[300px]">
             <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/45">
-              Asukoht
-            </p>
-            <p className="mt-1 text-xl font-black">Paide, Eesti</p>
+               {t("location")} </p>
+            <p className="mt-1 text-xl font-black">{t("paideEstonia")}</p>
           </div>
         </div>
 
         <div className="grid gap-3 lg:grid-cols-[1fr_auto_auto_auto]">
           <input
-            placeholder="Otsi teenust..."
+            placeholder={t("searchService")}
             className="h-12 rounded-full border border-neutral-200 bg-white px-5 text-sm outline-none transition placeholder:text-neutral-400 focus:border-teal-400 focus:ring-2 focus:ring-teal-500/20"
           />
 
           <button className="rounded-full border border-neutral-200 bg-white px-4 py-3 text-sm font-bold shadow-sm">
-            Asukoht: Paide
-          </button>
+             {t("locationPaide")} </button>
 
           <button className="rounded-full border border-neutral-200 bg-white px-4 py-3 text-sm font-bold shadow-sm">
-            Filtrid
-          </button>
+             {t("filters")} </button>
 
           <button className="rounded-full border border-teal-300 bg-teal-100 px-4 py-3 text-sm font-black text-teal-950 shadow-sm">
-            Sinu lähedal
-          </button>
+             {t("nearYou")} </button>
         </div>
       </section>
 
       <section className="relative overflow-hidden rounded-[34px] border border-teal-200 bg-teal-50 p-6 shadow-sm before:pointer-events-none before:absolute before:inset-x-0 before:top-0 before:h-1.5 before:bg-teal-500 before:content-[''] md:p-8">
         <SectionHeader
-          eyebrow="Sinu lähedal"
-          title="Esiletõstetud teenused"
-          helper="Esiletõstetud teenused on esimesena nähtavad, kui need sobivad otsingu, piirkonna ja kategooriaga."
-          action="Vaata kõiki"
+          eyebrow={t("nearYou")}
+          title={t("featuredServices")}
+          helper={t("featuredServiceExplanation")}
+          action={t("viewAll")}
         />
 
         <div className="grid gap-4 md:grid-cols-3">
           {featuredServices.map((service) => (
             <ServiceCard
-              key={service.title}
+              key={service.id}
               service={service}
-              onOpen={setSelectedService}
+              onOpen={openService}
             />
           ))}
         </div>
@@ -443,18 +449,18 @@ export default function V2ServicesPage() {
       {quickUpdates.length > 0 ? (
         <section className="relative overflow-hidden rounded-[34px] border border-teal-200 bg-teal-50 p-6 shadow-sm before:pointer-events-none before:absolute before:inset-x-0 before:top-0 before:h-1.5 before:bg-teal-500 before:content-[''] md:p-8">
           <SectionHeader
-            eyebrow="Aktiivne info"
-            title="Kiired teated sinu lähedal"
-            helper="Siin näeme ajaliselt olulisi teenusteateid ja ajutisi teeninduskohti, mis sobivad otsinguga."
-            action="Vaata kõiki"
+            eyebrow={t("activeInformation")}
+            title={t("quickUpdatesNearby")}
+            helper={t("quickUpdateExplanation")}
+            action={t("viewAll")}
           />
 
           <div className="-mx-2 flex gap-4 overflow-x-auto px-2 pb-2">
             {quickUpdates.map((service) => (
               <QuickUpdateCard
-                key={service.title}
+                key={service.id}
                 service={service}
-                onOpen={setSelectedService}
+                onOpen={openService}
               />
             ))}
           </div>
@@ -465,20 +471,19 @@ export default function V2ServicesPage() {
         <div className="mb-5 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
           <div>
             <p className="inline-flex rounded-full border border-teal-200 bg-teal-100 px-3 py-1.5 text-[11px] font-black uppercase tracking-[0.18em] text-teal-700">
-              Tulemused
-            </p>
-            <h2 className="mt-2 text-3xl font-black">Teenused sinu lähedal</h2>
+               {t("results")} </p>
+            <h2 className="mt-2 text-3xl font-black">{t("servicesNearby")}</h2>
           </div>
 
-          <p className="text-sm font-semibold text-neutral-500">24 näidatud</p>
+          <p className="text-sm font-semibold text-neutral-500">{t("shown24")}</p>
         </div>
 
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
           {normalServices.map((service) => (
             <ServiceCard
-              key={service.title}
+              key={service.id}
               service={service}
-              onOpen={setSelectedService}
+              onOpen={openService}
             />
           ))}
         </div>
@@ -486,7 +491,7 @@ export default function V2ServicesPage() {
 
       <ServiceModal
         service={selectedService}
-        onClose={() => setSelectedService(null)}
+        onClose={() => setSelectedServiceId(null)}
       />
     </div>
   );

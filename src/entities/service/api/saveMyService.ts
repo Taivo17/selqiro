@@ -1,3 +1,4 @@
+import { marketplaceMessage } from "../../../shared/i18n/marketplaceMessages";
 import { SERVICE_CATEGORY_CODE_PATTERN } from "../../service-category/model/types";
 import { supabaseBrowserClient } from "../../../shared/supabase/browserClient";
 import {
@@ -80,7 +81,7 @@ function normalizeOptionalSingleLine(
     maximumLength
   ) {
     throw new Error(
-      `${fieldLabel} võib olla kuni ${maximumLength} tähemärki.`
+      marketplaceMessage("service.value_can_contain_up_to_value_characters.f04d6c", { p0: String(fieldLabel), p1: String(maximumLength) })
     );
   }
 
@@ -98,7 +99,7 @@ function normalizeCategoryCode(
   if (!cleanValue) {
     if (required) {
       throw new Error(
-        `Vali ${fieldLabel.toLowerCase()}.`
+        marketplaceMessage("service.select_value.fe8fc7", { p0: String(fieldLabel.toLowerCase()) })
       );
     }
 
@@ -111,7 +112,7 @@ function normalizeCategoryCode(
     )
   ) {
     throw new Error(
-      `${fieldLabel} ei ole korrektne.`
+      marketplaceMessage("service.value_is_invalid.0527f5", { p0: String(fieldLabel) })
     );
   }
 
@@ -135,7 +136,7 @@ function normalizePriceType(
     )
   ) {
     throw new Error(
-      "Valitud hinnatüüp ei ole korrektne."
+      marketplaceMessage("service.the_selected_price_type_is_invalid.38b891")
     );
   }
 
@@ -156,7 +157,7 @@ function normalizeCurrency(
     !/^[A-Z]{3}$/.test(cleanValue)
   ) {
     throw new Error(
-      "Valuuta peab olema kolmetäheline kood."
+      marketplaceMessage("service.the_currency_must_be_a_three_letter_code.2a92cf")
     );
   }
 
@@ -177,19 +178,19 @@ function normalizePriceAmount(
     !Number.isFinite(value)
   ) {
     throw new Error(
-      "Sisesta valitud hinnatüübi jaoks numbriline hind."
+      marketplaceMessage("service.enter_a_numeric_amount_for_the_selected_price.683a69")
     );
   }
 
   if (value < 0) {
     throw new Error(
-      "Teenuse hind ei saa olla negatiivne."
+      marketplaceMessage("service.the_service_price_cannot_be_negative.cd0ddf")
     );
   }
 
   if (value > SERVICE_PRICE_MAX) {
     throw new Error(
-      "Teenuse hind on liiga suur."
+      marketplaceMessage("service.the_service_price_is_too_high.64ce08")
     );
   }
 
@@ -203,7 +204,7 @@ function normalizeSaveInput(
 ) {
   const serviceId = normalizeUuid(
     input.serviceId,
-    "Teenuse ID ei ole korrektne."
+    marketplaceMessage("service.the_service_id_is_invalid.23000a")
   );
 
   const title =
@@ -216,7 +217,7 @@ function normalizeSaveInput(
     SERVICE_TITLE_MIN_LENGTH
   ) {
     throw new Error(
-      `Pealkiri peab olema vähemalt ${SERVICE_TITLE_MIN_LENGTH} tähemärki.`
+      marketplaceMessage("service.the_title_must_contain_at_least_value_characters.154417", { p0: String(SERVICE_TITLE_MIN_LENGTH) })
     );
   }
 
@@ -225,7 +226,7 @@ function normalizeSaveInput(
     SERVICE_TITLE_MAX_LENGTH
   ) {
     throw new Error(
-      `Pealkiri võib olla kuni ${SERVICE_TITLE_MAX_LENGTH} tähemärki.`
+      marketplaceMessage("service.the_title_can_contain_up_to_value_characters.6b5ca7", { p0: String(SERVICE_TITLE_MAX_LENGTH) })
     );
   }
 
@@ -239,21 +240,21 @@ function normalizeSaveInput(
     SERVICE_DESCRIPTION_MAX_LENGTH
   ) {
     throw new Error(
-      `Kirjeldus võib olla kuni ${SERVICE_DESCRIPTION_MAX_LENGTH} tähemärki.`
+      marketplaceMessage("service.the_description_can_contain_up_to_value_characters.69b2ed", { p0: String(SERVICE_DESCRIPTION_MAX_LENGTH) })
     );
   }
 
   const category =
     normalizeCategoryCode(
       input.category,
-      "Ülemrubriik",
+      marketplaceMessage("category.parent_category.f3ddd3"),
       true
     ) as string;
 
   const subcategory =
     normalizeCategoryCode(
       input.subcategory,
-      "Alamrubriik",
+      marketplaceMessage("category.subcategory.ee4371"),
       false
     );
 
@@ -284,19 +285,19 @@ function normalizeSaveInput(
       normalizeOptionalSingleLine(
         input.country,
         SERVICE_COUNTRY_MAX_LENGTH,
-        "Riik"
+        marketplaceMessage("service.country.8d7336")
       ),
     city:
       normalizeOptionalSingleLine(
         input.city,
         SERVICE_CITY_MAX_LENGTH,
-        "Linn või piirkond"
+        marketplaceMessage("service.town_or_region.a66ae4")
       ),
     location:
       normalizeOptionalSingleLine(
         input.location,
         SERVICE_LOCATION_MAX_LENGTH,
-        "Asukoha täpsustus"
+        marketplaceMessage("service.location_details.6c4b64")
       ),
   };
 }
@@ -324,7 +325,7 @@ function getSaveErrorMessage(
       "permission"
     )
   ) {
-    return "Aktiivne identiteet puudub või sul ei ole õigust seda teenust muuta.";
+    return marketplaceMessage("service.there_is_no_active_identity_or_you_do.6116cb");
   }
 
   if (
@@ -338,7 +339,7 @@ function getSaveErrorMessage(
       "service subcategory"
     )
   ) {
-    return "Valitud teenuserubriik või alamrubriik ei ole korrektne.";
+    return marketplaceMessage("service.the_selected_service_category_or_subcategory_is_invalid.a1801c");
   }
 
   if (
@@ -346,7 +347,7 @@ function getSaveErrorMessage(
       "service title"
     )
   ) {
-    return "Teenuse pealkiri ei ole korrektne.";
+    return marketplaceMessage("service.the_service_title_is_invalid.525aea");
   }
 
   if (
@@ -354,7 +355,7 @@ function getSaveErrorMessage(
       "service description"
     )
   ) {
-    return "Teenuse kirjeldus on liiga pikk.";
+    return marketplaceMessage("service.the_service_description_is_too_long.008d3b");
   }
 
   if (
@@ -362,7 +363,7 @@ function getSaveErrorMessage(
       "numeric price"
     )
   ) {
-    return "Sisesta valitud hinnatüübi jaoks numbriline hind.";
+    return marketplaceMessage("service.enter_a_numeric_amount_for_the_selected_price.683a69");
   }
 
   if (
@@ -370,7 +371,7 @@ function getSaveErrorMessage(
       "service price"
     )
   ) {
-    return "Teenuse hind ei ole korrektne.";
+    return marketplaceMessage("service.the_service_price_is_invalid.ccff83");
   }
 
   if (
@@ -378,7 +379,7 @@ function getSaveErrorMessage(
       "currency"
     )
   ) {
-    return "Teenuse valuuta ei ole korrektne.";
+    return marketplaceMessage("service.the_service_currency_is_invalid.5c9776");
   }
 
   if (
@@ -392,7 +393,7 @@ function getSaveErrorMessage(
       "location"
     )
   ) {
-    return "Teenuse asukoha andmed ei ole korrektsed.";
+    return marketplaceMessage("service.the_service_location_details_are_invalid.bfe745");
   }
 
   return (
@@ -441,7 +442,7 @@ export async function saveMyService(
       throw new Error(
         getSaveErrorMessage(
           currentError,
-          "Teenuse olemasolevaid andmeid ei saanud kontrollida."
+          marketplaceMessage("service.the_existing_service_details_could_not_be_checked.24f262")
         )
       );
     }
@@ -463,7 +464,7 @@ export async function saveMyService(
 
     if (!currentRow) {
       throw new Error(
-        "Muudetavat teenuse mustandit ei leitud."
+        marketplaceMessage("service.the_service_draft_to_edit_was_not_found.f33916")
       );
     }
 
@@ -511,7 +512,7 @@ export async function saveMyService(
       )
     ) {
       throw new Error(
-        "Teenuse olemasolevad asukoha koordinaadid ei ole korrektsed."
+        marketplaceMessage("service.the_service_s_existing_location_coordinates_are_invalid.bbe7dc")
       );
     }
 
@@ -560,7 +561,7 @@ export async function saveMyService(
     throw new Error(
       getSaveErrorMessage(
         error,
-        "Teenust ei saanud salvestada."
+        marketplaceMessage("service.the_service_could_not_be_saved.c93d3c")
       )
     );
   }
@@ -574,7 +575,7 @@ export async function saveMyService(
 
   if (!row) {
     throw new Error(
-      "Andmebaas ei tagastanud salvestatud teenust."
+      marketplaceMessage("service.the_database_did_not_return_the_saved_service.8d47d9")
     );
   }
 
@@ -587,7 +588,7 @@ export async function saveMyService(
       normalized.serviceId
   ) {
     throw new Error(
-      "Andmebaas tagastas ootamatu teenuse."
+      marketplaceMessage("service.the_database_returned_an_unexpected_service.124f9e")
     );
   }
 
@@ -596,7 +597,7 @@ export async function saveMyService(
     service.status !== "draft"
   ) {
     throw new Error(
-      "Uus teenus ei loodud mustandina."
+      marketplaceMessage("service.the_new_service_was_not_created_as_a.effbe2")
     );
   }
 

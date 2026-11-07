@@ -1,11 +1,15 @@
 "use client";
+import { useV2Translation } from "../../../shared/i18n/V2LanguageProvider";
+import { listingEditMessages, translateListingEditMessage } from "../model/listingEditMessages";
 
 import Link from "next/link";
 import { PlaceholderImage } from "./ListingEditPrimitives";
 
 export function LoadingState() {
+  const { language, t } = useV2Translation(listingEditMessages);
+
   return (
-    <section className="rounded-[34px] border border-black/5 bg-white p-8 shadow-sm">
+    <section aria-label={t("loadingListing")} aria-busy="true" className="rounded-[34px] border border-black/5 bg-white p-8 shadow-sm">
       <div className="h-8 w-64 rounded-full bg-neutral-100" />
       <div className="mt-6 grid gap-6 lg:grid-cols-[1fr_360px]">
         <PlaceholderImage className="h-80" />
@@ -30,6 +34,8 @@ export function MessageState({
   actionHref: string;
   actionLabel: string;
 }) {
+  const { language, t } = useV2Translation(listingEditMessages);
+
   return (
     <section className="rounded-[34px] border border-black/5 bg-white p-8 text-center shadow-sm">
       <h1 className="text-3xl font-black">{title}</h1>

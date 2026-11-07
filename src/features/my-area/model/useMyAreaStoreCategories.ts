@@ -1,4 +1,6 @@
 "use client";
+import { uiMessage, safeUiError } from "../../../../lib/i18n/interfaceMessage";
+
 
 import { useEffect, useState } from "react";
 import { createMyStoreChildCategory } from "../../../entities/store-category/api/createMyStoreChildCategory";
@@ -99,7 +101,7 @@ export function useMyAreaStoreCategories(): MyAreaStoreCategoriesState {
 
         if (profileError) {
           throw new Error(
-            profileError.message || "Aktiivset identiteeti ei saanud laadida."
+            profileError.message || uiMessage("could_not_load_the_active_identity")
           );
         }
 
@@ -130,7 +132,7 @@ export function useMyAreaStoreCategories(): MyAreaStoreCategoriesState {
           .order("created_at", { ascending: true });
 
         if (error) {
-          throw new Error(error.message || "Rubriike ei saanud laadida.");
+          throw new Error(error.message || uiMessage("could_not_load_categories"));
         }
 
         if (!mounted) return;
@@ -147,9 +149,7 @@ export function useMyAreaStoreCategories(): MyAreaStoreCategoriesState {
           categories: [],
           loading: false,
           error:
-            loadError instanceof Error
-              ? loadError.message
-              : "Rubriike ei saanud laadida.",
+            safeUiError(loadError, "could_not_load_categories"),
         });
       }
     }
@@ -177,7 +177,7 @@ export function useMyAreaStoreCategories(): MyAreaStoreCategoriesState {
 
   async function createRootCategory(name: string) {
     if (creatingRootCategory) {
-      throw new Error("Ülemrubriigi lisamine juba käib.");
+      throw new Error(uiMessage("a_parent_category_is_already_being_added"));
     }
 
     setCreatingRootCategory(true);
@@ -196,7 +196,7 @@ export function useMyAreaStoreCategories(): MyAreaStoreCategoriesState {
     name: string
   ) {
     if (creatingChildParentId) {
-      throw new Error("Alamrubriigi lisamine juba käib.");
+      throw new Error(uiMessage("a_subcategory_is_already_being_added"));
     }
 
     setCreatingChildParentId(parentId);
@@ -219,7 +219,7 @@ export function useMyAreaStoreCategories(): MyAreaStoreCategoriesState {
     name: string
   ) {
     if (renamingCategoryId) {
-      throw new Error("Rubriigi nime muutmine juba käib.");
+      throw new Error(uiMessage("this_category_is_already_being_renamed"));
     }
 
     setRenamingCategoryId(categoryId);
@@ -241,7 +241,7 @@ export function useMyAreaStoreCategories(): MyAreaStoreCategoriesState {
     categoryId: string
   ) {
     if (deletingCategoryId) {
-      throw new Error("Rubriigi kustutamine juba käib.");
+      throw new Error(uiMessage("this_category_is_already_being_deleted"));
     }
 
     setDeletingCategoryId(categoryId);

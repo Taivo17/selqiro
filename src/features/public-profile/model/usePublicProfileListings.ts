@@ -1,5 +1,7 @@
 "use client";
 
+import { safeUiError } from "../../../../lib/i18n/interfaceMessage";
+
 import { useEffect, useState } from "react";
 import { getListingsBySeller } from "../../../entities/listing/api/getListingsBySeller";
 import type { ProductListingCard } from "../../../entities/listing/model/types";
@@ -139,9 +141,7 @@ export function usePublicProfileListings(
           listings: [],
           loading: false,
           error:
-            loadError instanceof Error
-              ? loadError.message
-              : "Profiili kuulutusi ei saanud laadida.",
+            safeUiError(loadError, "could_not_load_this_profile_s_listings"),
           resolvedScopeKey:
             categoryScopeKey,
         });

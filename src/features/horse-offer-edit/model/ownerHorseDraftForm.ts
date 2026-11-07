@@ -1,3 +1,4 @@
+import { marketplaceMessage } from "../../../shared/i18n/marketplaceMessages";
 import type { OwnerHorseOfferDetail } from "../../../entities/horse-offer/model/types";
 import type { HorseDraftChangeKey, HorseDraftChanges } from "../../../entities/horse-offer/model/draftEdit";
 import { hydrateOwnerHorseOfferEditForm, type OwnerHorseOfferEditFormState } from "./horseOfferEditHydration";
@@ -88,7 +89,7 @@ const LIMITS: Partial<Record<HorseDraftChangeKey, number>> = {
   wanted_city: 160, wanted_region: 160,
 };
 export class OwnerHorseDraftInputError extends Error {}
-function invalid(): never { throw new OwnerHorseDraftInputError("Kontrolli muudetud väljade pikkust, sünniaastat, turjakõrgust, hinda või eelarvet."); }
+function invalid(): never { throw new OwnerHorseDraftInputError(marketplaceMessage("horse.check_the_length_of_changed_fields_birth_year.b9c16f")); }
 function scalar(key: HorseDraftChangeKey, raw: string): string | number | null {
   if (typeof raw !== "string") return invalid();
   if (["birth_year", "height_cm", "price_amount", "wanted_budget_amount"].includes(key)) {
@@ -130,7 +131,7 @@ export function buildOwnerHorseDraftChanges(
   if (mode in changes) changes[amount] = scalar(amount, after[amount]!);
   if ((mode in changes || amount in changes) && after[mode] !== "contact" && changes[amount] === null) return invalid();
   if (hasPrivateHorseLocation(detail) && ("city" in changes || "region" in changes)) {
-    throw new OwnerHorseDraftInputError("Täpse salvestatud asukoha tõttu ei saa selles vormis linna ega piirkonda muuta.");
+    throw new OwnerHorseDraftInputError(marketplaceMessage("horse.the_saved_exact_location_prevents_changing_the_town.f58d23"));
   }
   return changes;
 }

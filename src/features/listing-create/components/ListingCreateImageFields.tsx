@@ -1,27 +1,22 @@
 "use client";
+import { localeForLanguage } from "../../../../lib/i18n/useTranslation";
+import { useV2Translation } from "../../../shared/i18n/V2LanguageProvider";
+import { listingCreateMessages, translateListingCreateMessage } from "../model/listingCreateMessages";
 import { useEffect, useState, type ChangeEvent, type Dispatch, type SetStateAction } from "react";
 import { appendListingCreateImages, moveListingCreateImage, LISTING_CREATE_IMAGE_LIMIT,
-  LISTING_CREATE_MAX_SOURCE_IMAGE_SIZE_MB } from "../model/imageSelection";
+  LISTING_CREATE_MAX_SOURCE_IMAGE_SIZE_MB, type ListingCreateImageIssue } from "../model/imageSelection";
 
-function formatFileSize(
-  bytes: number
-): string {
-  const megabytes =
-    bytes / 1024 / 1024;
-
-  if (megabytes >= 1) {
-    return `${megabytes.toFixed(1)} MB`;
-  }
-
-  return `${Math.max(
-    1,
-    Math.round(bytes / 1024)
-  )} KB`;
+function formatFileSize(bytes: number, language: string): string {
+  const megabytes = bytes / 1024 / 1024;
+  const amount = megabytes >= 1 ? megabytes : Math.max(1, Math.round(bytes / 1024));
+  return `${new Intl.NumberFormat(localeForLanguage(language), {maximumFractionDigits: megabytes >= 1 ? 1 : 0}).format(amount)} ${megabytes >= 1 ? "MiB" : "KiB"}`;
 }
 
 export default function ListingCreateImageFields({ files, setFiles }: {
   files: File[]; setFiles: Dispatch<SetStateAction<File[]>>;
 }) {
+  const { language, t } = useV2Translation(listingCreateMessages);
+
   const [
     previewUrls,
     setPreviewUrls,
@@ -30,9 +25,7 @@ export default function ListingCreateImageFields({ files, setFiles }: {
   const [
     imageError,
     setImageError,
-  ] = useState<string | null>(
-    null
-  );
+  ] = useState<ListingCreateImageIssue[]>([]);
 
   useEffect(() => {
     const urls = files.map((file) =>
@@ -72,9 +65,7 @@ export default function ListingCreateImageFields({ files, setFiles }: {
 
     setFiles(result.files);
     setImageError(
-      result.errors.length > 0
-        ? result.errors.join(" ")
-        : null
+      result.errors
     );
   }
 
@@ -88,7 +79,7 @@ export default function ListingCreateImageFields({ files, setFiles }: {
       )
     );
 
-    setImageError(null);
+    setImageError([]);
   }
 
   function moveImage(
@@ -109,31 +100,17 @@ export default function ListingCreateImageFields({ files, setFiles }: {
 <section className="rounded-[30px] border border-black/5 bg-white p-5 shadow-sm sm:p-6">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <p className="text-xs font-black uppercase tracking-[0.22em] text-amber-700">
-              Samm 2
-            </p>
+            <p className="text-xs font-black uppercase tracking-[0.22em] text-amber-700">{t("stepTwo")}</p>
 
-            <h2 className="mt-2 text-2xl font-black tracking-tight">
-              Lisa pildid
-            </h2>
+            <h2 className="mt-2 text-2xl font-black tracking-tight">{t("addImages")}</h2>
 
             <p className="mt-2 max-w-2xl text-sm leading-6 text-neutral-600">
-              Vali kuni
-              {" "}
-              {LISTING_CREATE_IMAGE_LIMIT}
-              {" "}
-              pilti. Esimene pilt on
-              põhipilt. Vali
-              esimeseks võimalikult
-              informatiivne foto.
-            </p>
+              {t("imagesHelp", { limit: LISTING_CREATE_IMAGE_LIMIT })}
+          </p>
           </div>
 
           <span className="w-fit rounded-full bg-amber-100 px-3 py-1.5 text-xs font-black text-amber-900">
-            {files.length}/
-            {LISTING_CREATE_IMAGE_LIMIT}
-            {" "}
-            valitud
+            {t("imagesSelected", { count: files.length, limit: LISTING_CREATE_IMAGE_LIMIT })}
           </span>
         </div>
 
@@ -148,10 +125,7 @@ export default function ListingCreateImageFields({ files, setFiles }: {
                 handleFileSelection
               }
               className="hidden"
-            />
-
-            Tee pilt
-          </label>
+            />{t("takePhoto")}</label>
 
           <label className="flex min-h-14 cursor-pointer items-center justify-center rounded-2xl border border-neutral-200 bg-white px-4 py-3 text-center text-sm font-black transition hover:bg-neutral-50">
             <input
@@ -162,41 +136,27 @@ export default function ListingCreateImageFields({ files, setFiles }: {
                 handleFileSelection
               }
               className="hidden"
-            />
-
-            Vali galeriist
-          </label>
+            />{t("chooseGallery")}</label>
         </div>
 
         <p className="mt-3 text-xs leading-5 text-neutral-500">
-          Lubatud on JPG, PNG ja WEBP.
-          Ühe algfaili maksimaalne suurus
-          on
-          {" "}
-          {LISTING_CREATE_MAX_SOURCE_IMAGE_SIZE_MB}
-          {" "}
-          MB.
+          {t("imageFormatsHelp", { size: LISTING_CREATE_MAX_SOURCE_IMAGE_SIZE_MB })}
         </p>
 
-        {imageError ? (
+        {imageError.length > 0 ? (
           <p
             role="alert"
             className="mt-4 rounded-2xl border border-red-100 bg-red-50 px-4 py-3 text-sm font-semibold leading-6 text-red-800"
           >
-            {imageError}
+            {imageError.map(issue => { const reason = t(issue.key, issue.params); return issue.filename ? t("fileError", { filename: issue.filename, reason }) : reason; }).join(" ")}
           </p>
         ) : null}
 
         {files.length === 0 ? (
           <div className="mt-5 rounded-[24px] border border-dashed border-neutral-200 bg-[#fbfbfa] p-6 text-center">
-            <p className="font-black">
-              Pilte ei ole veel valitud
-            </p>
+            <p className="font-black">{t("noSelectedImages")}</p>
 
-            <p className="mt-2 text-sm leading-6 text-neutral-500">
-              Vali fotod galeriist või tee uus pilt.
-              Siin näed valitud piltide eelvaateid.
-            </p>
+            <p className="mt-2 text-sm leading-6 text-neutral-500">{t("chooseImagesHelp")}</p>
           </div>
         ) : (
           <div className="mt-5 grid min-w-0 gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -219,28 +179,26 @@ export default function ListingCreateImageFields({ files, setFiles }: {
                         }
                         alt={
                           file.name ||
-                          `Valitud pilt ${index + 1}`
+                          t("previewImage", { number: index + 1 })
                         }
                         className="h-full w-full object-contain"
                       />
                     ) : null}
 
                     {index === 0 ? (
-                      <span className="absolute left-3 top-3 rounded-full bg-amber-400 px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.12em] text-amber-950 shadow-sm">
-                        Põhipilt
-                      </span>
+                      <span className="absolute left-3 top-3 rounded-full bg-amber-400 px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.12em] text-amber-950 shadow-sm">{t("primaryImage")}</span>
                     ) : null}
                   </div>
 
                   <div className="p-3">
                     <p className="truncate text-sm font-black">
                       {file.name ||
-                        `Pilt ${index + 1}`}
+                        t("selectedImage", { number: index + 1 })}
                     </p>
 
                     <p className="mt-1 text-xs text-neutral-500">
                       {formatFileSize(
-                        file.size
+                        file.size, language
                       )}
                     </p>
 
@@ -256,7 +214,7 @@ export default function ListingCreateImageFields({ files, setFiles }: {
                         disabled={
                           index === 0
                         }
-                        aria-label="Liiguta pilt ettepoole"
+                        aria-label={t("moveImageEarlier")}
                         className="rounded-xl border border-neutral-200 bg-white px-2 py-2 text-xs font-black disabled:cursor-not-allowed disabled:opacity-35"
                       >
                         ←
@@ -274,7 +232,7 @@ export default function ListingCreateImageFields({ files, setFiles }: {
                           index ===
                           files.length - 1
                         }
-                        aria-label="Liiguta pilt tahapoole"
+                        aria-label={t("moveImageLater")}
                         className="rounded-xl border border-neutral-200 bg-white px-2 py-2 text-xs font-black disabled:cursor-not-allowed disabled:opacity-35"
                       >
                         →
@@ -286,9 +244,7 @@ export default function ListingCreateImageFields({ files, setFiles }: {
                           removeImage(index)
                         }
                         className="rounded-xl border border-red-100 bg-red-50 px-2 py-2 text-xs font-black text-red-700"
-                      >
-                        Eemalda
-                      </button>
+                      >{t("remove")}</button>
                     </div>
                   </div>
                 </article>

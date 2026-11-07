@@ -1,3 +1,4 @@
+import { uiMessage } from "../../../../lib/i18n/interfaceMessage";
 import { PUBLIC_SEARCH_PAGE_SIZE, PUBLIC_SEARCH_MAX_OFFSET } from "./publicSearch";
 import { listingImageUrl } from "./listingMediaUrl";
 import type { ListingPriceDisplay } from "./priceDisplay";
@@ -14,7 +15,7 @@ export type PublicSearchPage = {
   hasMore: boolean; nextOffset: number | null; windowLimitReached: boolean;
 };
 function check(value: unknown): asserts value {
-  if (!value) throw new Error("Otsingu vastuse vorming ei sobi. Proovi uuesti.");
+  if (!value) throw new Error(uiMessage("the_search_response_could_not_be_read_try_again"));
 }
 function record(value: unknown): Record<string, unknown> {
   check(value && typeof value === "object" && !Array.isArray(value)); return value as Record<string, unknown>;
@@ -49,11 +50,11 @@ function card(value: unknown): PublicSearchCard {
   check(createdAt !== null && Number.isFinite(Date.parse(createdAt)));
   text(r.seller_slug); text(r.seller_avatar_url);
   check(r.seller_type === "private" || r.seller_type === "business");
-  return {id: identifier(r.content_id), title: text(r.title) || "Pealkirjata kuulutus",
+  return {id: identifier(r.content_id), title: text(r.title) || "",
     description: text(r.description_preview), price: text(r.price), priceAmount: amount,
     imageUrl: image(r.image_url), category: text(r.category), subcategory: text(r.subcategory),
     detailCategory: text(r.detail_category), condition: text(r.condition), country: text(r.country),
-    city: text(r.city), sellerName: text(r.seller_name) || "Avaldaja", createdAt};
+    city: text(r.city), sellerName: text(r.seller_name) || "", createdAt};
 }
 export function parsePublicSearchPage(value: unknown, requestedOffset: number): PublicSearchPage {
   const r = record(value);

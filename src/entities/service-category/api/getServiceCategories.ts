@@ -1,3 +1,4 @@
+import { marketplaceMessage } from "../../../shared/i18n/marketplaceMessages";
 import { supabaseBrowserClient } from "../../../shared/supabase/browserClient";
 import {
   SERVICE_CATEGORY_CODE_PATTERN,
@@ -28,7 +29,7 @@ function requiredCode(
     )
   ) {
     throw new Error(
-      `Teenuse rubriigi väli ei ole korrektne: ${fieldName}.`
+      marketplaceMessage("category.the_service_category_field_is_invalid_value.f34b86", { p0: String(fieldName) })
     );
   }
 
@@ -65,7 +66,7 @@ function requiredLabel(
     cleanValue.length > 120
   ) {
     throw new Error(
-      `Teenuse rubriigi nimetus ei ole korrektne: ${fieldName}.`
+      marketplaceMessage("category.the_service_category_label_is_invalid_value.0a01d1", { p0: String(fieldName) })
     );
   }
 
@@ -108,7 +109,7 @@ function mapServiceCategoryRow(
 
   if (parentCode === code) {
     throw new Error(
-      "Teenuse rubriik ei saa olla iseenda ülemrubriik."
+      marketplaceMessage("category.a_service_category_cannot_be_its_own_parent.cb566f")
     );
   }
 
@@ -145,12 +146,12 @@ function getCategoryLoadErrorMessage(
       .toLowerCase()
       .includes("permission")
   ) {
-    return "Teenuste rubriikide lugemiseks puudub ligipääs.";
+    return marketplaceMessage("category.you_do_not_have_access_to_read_service.21ba9f");
   }
 
   return (
     message ||
-    "Teenuste rubriike ei saanud laadida."
+    marketplaceMessage("category.service_categories_could_not_be_loaded.9373a9")
   );
 }
 

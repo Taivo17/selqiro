@@ -19,7 +19,8 @@ function text(tree){
  return tree&&typeof tree==='object'?text(tree.props?.children):'';
 }
 const clean=tree=>text(tree).replace(/\s+/g,' ').trim();
-function realm(){
+function realm(initialLanguage="et"){
+ let language=initialLanguage;
  const cache=new Map(),state=new Map(),effects=new Map(),urls={created:[],revoked:[]};
  let instance='',cursor=0,changed=false,pending=[];
  const react={
@@ -39,7 +40,8 @@ function realm(){
  'src/shared/currency/listingCurrencies.generated.ts']);
  function load(name){
   const file=path.resolve(root,name),rel=path.relative(root,file).split(path.sep).join('/');
-  assert.ok(allow.has(rel),'Unexpected runtime dependency: '+rel);
+  if(rel==='src/shared/i18n/V2LanguageProvider.tsx')return {useV2Translation:catalog=>({language,t:(key,params)=>load('lib/i18n/useTranslation.ts').getCatalogTranslation(language,catalog,key,params)})};
+  assert.ok(allow.has(rel)||rel.startsWith('lib/i18n/')||rel==='src/shared/i18n/marketplaceMessages.ts'||rel==='src/entities/listing/model/listingInputMessages.ts'||rel===M+'listingCreateMessages.ts','Unexpected runtime dependency: '+rel);
   if(cache.has(file))return cache.get(file).exports;
   const mod={exports:{}};cache.set(file,mod);
   const out=ts.transpileModule(fs.readFileSync(file,'utf8'),{fileName:file,reportDiagnostics:true,
@@ -53,7 +55,7 @@ function realm(){
    assert.ok(next,'Missing local module: '+spec);return load(next);
   };
   vm.runInNewContext(out.outputText,{module:mod,exports:mod.exports,require:requireLocal,
-   Object,Array,String,Number,Boolean,Error,TypeError,Map,Set,JSON,RegExp,Math,TextEncoder,BigInt,Date,
+   Object,Array,String,Number,Boolean,Error,TypeError,Map,Set,JSON,RegExp,Math,TextEncoder,BigInt,Date,Intl,
    URL:{createObjectURL(file){const u='blob:test-'+urls.created.length;urls.created.push({file,url:u});return u;},
     revokeObjectURL(url){urls.revoked.push(url);}}},{filename:file,timeout:1500});
   return mod.exports;
@@ -64,7 +66,7 @@ function realm(){
   if(typeof n.type==='function'){instance=id;cursor=0;return expand(n.type(n.props),id+':child');}
   return {...n,props:{...n.props,children:expand(n.props?.children,id+':children')}};
  }
- return {load,urls,render(name,props){let tree;
+ return {load,urls,setLanguage:value=>{language=value;},render(name,props){let tree;
   for(let i=0;i<5;i++){changed=false;pending=[];tree=expand({type:load(C+name+'.tsx').default,props},'root');
    for(const fn of pending)fn();if(!changed)return tree;}
   assert.fail('Synthetic effect render did not settle');
@@ -106,12 +108,12 @@ test('detail order and identifiers match the actual truck schema',()=>{
  assert.equal(nodes(tree,n=>n.type==='input').length,20);
 });
 test('ordinary guidance describes manual entry without a photo-only AI promise',()=>{
- const g=realm().load(M+'listingCreateTextGuidance.ts').getListingCreateTextGuidance('listing',null);
+ const g=realm().load(M+'listingCreateTextGuidance.ts').getListingCreateTextGuidance('listing',null,'et');
  assert.match(g.sectionDescription,/oma sõnadega/);assert.match(g.heroDescription,/vali kategooria/);
  assert.doesNotMatch(g.sectionDescription,/\bAI\b|tühjaks|analüüs/);assert.doesNotMatch(g.heroDescription,/\bAI\b/);
 });
 for(const content of ['','My title 90 kW'])test('actual shared text component shows truthful ordinary guidance: '+JSON.stringify(content),()=>{
- const h=realm(),g=h.load(M+'listingCreateTextGuidance.ts').getListingCreateTextGuidance('listing',null);
+ const h=realm(),g=h.load(M+'listingCreateTextGuidance.ts').getListingCreateTextGuidance('listing',null,'et');
  const f=h.load(M+'fieldProvenance.ts');let title=f.createListingCreateTextField(content),description=f.createListingCreateTextField('Manual');
  const tree=h.render('ListingCreateTextFields',{title,description,setTitle:v=>{title=v;},setDescription:v=>{description=v;},textGuidance:g});
  assert.ok(clean(tree).includes(g.sectionDescription));assert.doesNotMatch(clean(tree),/AI|analüüsib/);
@@ -120,7 +122,7 @@ for(const content of ['','My title 90 kW'])test('actual shared text component sh
  assert.equal(nodes(tree,n=>n.type==='textarea')[0].props.maxLength,5000);
 });
 test('provenance is not falsified for a genuinely AI-sourced field',()=>{
- const h=realm(),g=h.load(M+'listingCreateTextGuidance.ts').getListingCreateTextGuidance('listing',null);
+ const h=realm(),g=h.load(M+'listingCreateTextGuidance.ts').getListingCreateTextGuidance('listing',null,'et');
  const tree=h.render('ListingCreateTextFields',{title:{value:'Previously suggested',source:'ai'},description:{value:'',source:'empty'},
  setTitle:()=>{},setDescription:()=>{},textGuidance:g});
  assert.match(clean(tree),/AI soovitus/);assert.equal(nodes(tree,n=>n.props['data-listing-create-field-source']==='ai').length,1);
@@ -163,4 +165,28 @@ test('copy correction cannot enable the existing publication preview',()=>{
  const h=realm();const tree=h.render('OrdinaryListingPreview',{value:draft(h),title:'Test',description:'Manual entry'});
  const button=nodes(tree,n=>n.type==='button')[0];assert.equal(button.props.disabled,true);assert.equal(button.props.onClick,undefined);
  assert.match(clean(tree),/Andmeid ja pilte ei saadeta serverisse/);
+});
+
+test('live EN/ET image copy changes while selected File objects, object URLs and held errors are retained',()=>{
+ const h=realm('en'),original=photo();let files=[];
+ const setFiles=next=>{files=typeof next==='function'?next(files):next;};
+ let tree=h.render('ListingCreateImageFields',{files,setFiles});
+ assert.match(clean(tree),/No photos selected/);
+ const target={files:[original,{...original,name:'bad.gif',type:'image/gif'}],value:'picked'};
+ nodes(tree,n=>n.type==='input'&&n.props.type==='file')[0].props.onChange({target});
+ tree=h.render('ListingCreateImageFields',{files,setFiles});const url=nodes(tree,n=>n.type==='img')[0].props.src;
+ const english=clean(nodes(tree,n=>n.props.role==='alert')[0]);assert.match(english,/bad.gif/);assert.match(english,/JPG/);
+ h.setLanguage('et');tree=h.render('ListingCreateImageFields',{files,setFiles});
+ assert.equal(files.length,1);assert.equal(files[0],original);assert.equal(nodes(tree,n=>n.type==='img')[0].props.src,url);
+ assert.equal(h.urls.created.length,1);assert.equal(h.urls.revoked.length,0);
+ const estonian=clean(nodes(tree,n=>n.props.role==='alert')[0]);assert.match(estonian,/bad.gif/);assert.notEqual(estonian,english);
+ h.setLanguage('en');tree=h.render('ListingCreateImageFields',{files,setFiles});assert.equal(clean(nodes(tree,n=>n.props.role==='alert')[0]),english);
+ assert.equal(h.urls.created.length,1);h.unmount();assert.equal(h.urls.revoked.length,1);
+});
+test('ordinary guidance defaults and unsupported language fall back to English without touching user input',()=>{
+ const h=realm('en'),get=h.load(M+'listingCreateTextGuidance.ts').getListingCreateTextGuidance;
+ const english=get('listing',null),unsupported=get('listing',null,'fi');assert.deepEqual(json(english),json(unsupported));
+ assert.match(english.heroDescription,/Add a title/);const raw='Pealkiri 90 kW';
+ const tree=h.render('ListingCreateTextFields',{title:{value:raw,source:'user'},description:{value:'Originaal',source:'user'},setTitle:()=>assert.fail('no edit'),setDescription:()=>assert.fail('no edit'),textGuidance:english});
+ assert.equal(nodes(tree,n=>n.type==='input')[0].props.value,raw);assert.match(clean(tree),/Title/);
 });

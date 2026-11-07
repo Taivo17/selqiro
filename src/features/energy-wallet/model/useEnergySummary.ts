@@ -1,4 +1,6 @@
 "use client";
+import { uiMessage, safeUiError } from "../../../../lib/i18n/interfaceMessage";
+
 
 import {
   useCallback,
@@ -95,7 +97,7 @@ useEnergySummary(): EnergySummaryState {
 
           if (!identity) {
             throw new Error(
-              "Aktiivset identiteeti ei saanud laadida."
+              uiMessage("could_not_load_the_active_identity")
             );
           }
 
@@ -114,7 +116,7 @@ useEnergySummary(): EnergySummaryState {
             wallet.identityId
           ) {
             throw new Error(
-              "Aktiivne identiteet muutus Energy laadimise ajal."
+              uiMessage("the_active_identity_changed_while_energy_was_loading")
             );
           }
 
@@ -137,9 +139,7 @@ useEnergySummary(): EnergySummaryState {
             wallet: null,
             loading: false,
             error:
-              loadError instanceof Error
-                ? loadError.message
-                : "Energy kokkuvõtet ei saanud laadida.",
+              safeUiError(loadError, "could_not_load_the_energy_summary"),
           });
         }
       },

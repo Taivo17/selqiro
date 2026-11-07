@@ -1,5 +1,13 @@
 "use client";
 
+import { renderMarketplaceMessage } from "@/src/shared/i18n/marketplaceMessages";
+
+import { useV2Translation } from "@/src/shared/i18n/V2LanguageProvider";
+import { getCatalogTranslation, localeForLanguage, type TranslationParams } from "@/lib/i18n/useTranslation";
+import type { Language } from "@/lib/i18n/translations";
+import { publicUiMessages } from "@/lib/i18n/catalogs/publicUi";
+
+
 import {
   useMemo,
 } from "react";
@@ -22,11 +30,12 @@ const SERVICE_PREVIEW_LIMIT = 5;
 
 function formatCurrency(
   amount: number,
-  currency: string
+  currency: string,
+  uiLanguage: Language
 ): string {
   try {
     return new Intl.NumberFormat(
-      "et-EE",
+      localeForLanguage(uiLanguage),
       {
         style: "currency",
         currency,
@@ -40,27 +49,29 @@ function formatCurrency(
 }
 
 function priceLabel(
-  service: PublicService
+  service: PublicService, uiLanguage: Language = "en"
 ): string {
+  const t = (key: keyof typeof publicUiMessages.en, params?: TranslationParams) => getCatalogTranslation(uiLanguage, publicUiMessages, key, params);
+
   if (
     service.priceType ===
       "contact" ||
     service.priceAmount === null
   ) {
-    return "Hind kokkuleppel";
+    return t("price_by_agreement");
   }
 
   const amountLabel =
     formatCurrency(
       service.priceAmount,
-      service.currency
+      service.currency, uiLanguage
     );
 
   if (
     service.priceType ===
     "from"
   ) {
-    return `Alates ${amountLabel}`;
+    return t("price_from", {amount: amountLabel});
   }
 
   if (
@@ -92,8 +103,10 @@ function fallbackCategoryLabel(
 function serviceCategoryLabel(
   service: PublicService,
   categoryLabelByCode:
-    Map<string, string>
+    Map<string, string>, uiLanguage: Language = "en"
 ): string {
+  const t = (key: keyof typeof publicUiMessages.en, params?: TranslationParams) => getCatalogTranslation(uiLanguage, publicUiMessages, key, params);
+
   const rootLabel =
     service.category
       ? categoryLabelByCode.get(
@@ -120,7 +133,7 @@ function serviceCategoryLabel(
   ]
     .filter(Boolean)
     .join(" · ") ||
-    "Teenus";
+    t("service");
 }
 
 function serviceLocationLabel(
@@ -165,10 +178,12 @@ function ServiceCard({
   categoryLabelByCode:
     Map<string, string>;
 }) {
+  const { language: uiLanguage, t } = useV2Translation(publicUiMessages);
+
   const categoryLabel =
     serviceCategoryLabel(
       service,
-      categoryLabelByCode
+      categoryLabelByCode, uiLanguage
     );
 
   const locationLabel =
@@ -195,8 +210,7 @@ function ServiceCard({
 
         {service.images.length > 1 ? (
           <span className="shrink-0 text-[11px] font-black text-neutral-400">
-            {service.images.length} pilti
-          </span>
+            {service.images.length}  {t("images")} </span>
         ) : null}
       </div>
 
@@ -224,7 +238,7 @@ function ServiceCard({
       />
 
       <p className="mt-3 break-words text-base font-black text-neutral-900">
-        {priceLabel(service)}
+        {priceLabel(service, uiLanguage)}
       </p>
     </article>
   );
@@ -241,6 +255,8 @@ export default function PublicProfileServicesSection({
     expanded: boolean
   ) => void;
 }) {
+  const { language: uiLanguage, t } = useV2Translation(publicUiMessages);
+
   const {
     services,
     loading,
@@ -260,11 +276,11 @@ export default function PublicProfileServicesSection({
           serviceCategories.map(
             (category) => [
               category.code,
-              category.labelEt,
+              uiLanguage === "et" ? category.labelEt || category.labelEn : category.labelEn,
             ]
           )
         ),
-      [serviceCategories]
+      [serviceCategories, uiLanguage]
     );
 
   const previewServices =
@@ -299,12 +315,10 @@ export default function PublicProfileServicesSection({
       <div className="mb-5 flex min-w-0 items-end justify-between gap-4">
         <div className="min-w-0">
           <p className="inline-flex rounded-full border border-teal-200 bg-teal-100 px-3 py-1.5 text-[11px] font-black uppercase tracking-[0.18em] text-teal-700">
-            Teenused
-          </p>
+            {t("services")} </p>
 
           <h2 className="mt-2 break-words text-2xl font-black tracking-tight md:text-3xl">
-            Pakutavad teenused
-          </h2>
+            {t("services_offered")} </h2>
         </div>
 
         {!loading &&
@@ -321,11 +335,11 @@ export default function PublicProfileServicesSection({
             className="shrink-0 rounded-full border border-teal-200 bg-white px-4 py-2 text-sm font-black text-teal-700 shadow-sm transition hover:border-teal-300 hover:bg-teal-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500/30"
           >
             {expanded
-              ? "Näita vähem"
+              ? t("show_less")
               : services.length >
                   SERVICE_PREVIEW_LIMIT
-                ? `Vaata kõiki (${services.length})`
-                : "Vaata lähemalt"}
+                ? t("view_all_count", {count: services.length})
+                : t("view_details")}
           </button>
         ) : null}
       </div>
@@ -337,11 +351,10 @@ export default function PublicProfileServicesSection({
       {!loading && error ? (
         <div className="rounded-[22px] border border-red-100 bg-red-50 p-5">
           <h3 className="font-black text-red-950">
-            Teenuseid ei saanud laadida
-          </h3>
+            {t("could_not_load_services")} </h3>
 
           <p className="mt-2 text-sm leading-6 text-red-800">
-            {error}
+            {renderMarketplaceMessage(uiLanguage, error)}
           </p>
         </div>
       ) : null}

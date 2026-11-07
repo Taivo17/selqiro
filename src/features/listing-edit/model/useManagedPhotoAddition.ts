@@ -49,7 +49,7 @@ export function useManagedPhotoAddition(key: ManagedListingImagesKey, runOperati
       session.current = controller;
       controller.subscribe(next => { if (active && session.current === controller) setView(next); });
       void controller.inspect().finally(() => { if (active && session.current === controller) setReady(true); });
-    } catch { setView({phase: "unknown", message: "Foto lisamist ei saanud ette valmistada. Värskenda lehte ja proovi uuesti."}); }
+    } catch { setView({phase: "unknown", message: "photoAdditionInitFailed"}); }
     return () => {
       active = false; drop(); auth.unsubscribe();
       window.removeEventListener(ACTIVE_IDENTITY_CHANGING_EVENT, drop);

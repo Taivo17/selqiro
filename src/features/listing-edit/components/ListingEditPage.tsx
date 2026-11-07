@@ -1,4 +1,6 @@
 "use client";
+import { useV2Translation } from "../../../shared/i18n/V2LanguageProvider";
+import { listingEditMessages, translateListingEditMessage } from "../model/listingEditMessages";
 
 import ListingStoreCategoryAssignmentCard from "./ListingStoreCategoryAssignmentCard";
 import ListingClassificationLocationCard from "./ListingClassificationLocationCard";
@@ -15,9 +17,13 @@ import { v2IntegrationEnabled } from "../../../shared/config/v2Integration";
 import IntegratedListingEditPage from "./IntegratedListingEditPage";
 
 export default function ListingEditPage({ listingId }: { listingId: string }) {
+  const { language, t } = useV2Translation(listingEditMessages);
+
   return v2IntegrationEnabled() ? <IntegratedListingEditPage listingId={listingId} /> : <ExistingListingEditPage listingId={listingId} />;
 }
 function ExistingListingEditPage({ listingId }: { listingId: string }) {
+  const { language, t } = useV2Translation(listingEditMessages);
+
   const { listing, activeIdentity, userId, loading, error, status } =
     useEditableListing(listingId);
 
@@ -36,10 +42,10 @@ function ExistingListingEditPage({ listingId }: { listingId: string }) {
   if (error) {
     return (
       <MessageState
-        title="Muutmise vaadet ei saanud laadida"
-        text={error}
+        title={t("editLoadTitle")}
+        text={translateListingEditMessage(language, error)}
         actionHref="/v2/my-area"
-        actionLabel="Tagasi Minu alasse"
+        actionLabel={t("backToMyArea")}
       />
     );
   }
@@ -47,10 +53,10 @@ function ExistingListingEditPage({ listingId }: { listingId: string }) {
   if (status === "not_authenticated") {
     return (
       <MessageState
-        title="Logi sisse"
-        text="Kuulutuse muutmiseks pead olema sisse logitud."
+        title={t("signIn")}
+        text={t("signInToEdit")}
         actionHref="/auth"
-        actionLabel="Logi sisse"
+        actionLabel={t("signIn")}
       />
     );
   }
@@ -58,10 +64,10 @@ function ExistingListingEditPage({ listingId }: { listingId: string }) {
   if (status === "not_found") {
     return (
       <MessageState
-        title="Kuulutust ei leitud"
-        text="See kuulutus võib olla eemaldatud või ei ole enam saadaval."
+        title={t("listingNotFoundTitle")}
+        text={t("listingUnavailableHelp")}
         actionHref="/v2/my-area"
-        actionLabel="Tagasi Minu alasse"
+        actionLabel={t("backToMyArea")}
       />
     );
   }
@@ -69,10 +75,10 @@ function ExistingListingEditPage({ listingId }: { listingId: string }) {
   if (status === "forbidden") {
     return (
       <MessageState
-        title="Sul ei ole õigust seda kuulutust muuta"
-        text="Muutmise vaade avaneb ainult kuulutuse omanikule või aktiivsele identiteedile."
+        title={t("editForbiddenTitle")}
+        text={t("editForbiddenHelp")}
         actionHref="/v2/my-area"
-        actionLabel="Tagasi Minu alasse"
+        actionLabel={t("backToMyArea")}
       />
     );
   }
@@ -80,10 +86,10 @@ function ExistingListingEditPage({ listingId }: { listingId: string }) {
   if (!listing) {
     return (
       <MessageState
-        title="Kuulutust ei leitud"
-        text="Kuulutuse andmeid ei õnnestunud laadida."
+        title={t("listingNotFoundTitle")}
+        text={t("listingLoadFailed")}
         actionHref="/v2/my-area"
-        actionLabel="Tagasi Minu alasse"
+        actionLabel={t("backToMyArea")}
       />
     );
   }
@@ -93,28 +99,19 @@ function ExistingListingEditPage({ listingId }: { listingId: string }) {
       <section className="rounded-[34px] border border-black/5 bg-white p-6 shadow-sm md:p-8">
         <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
           <div>
-            <p className="text-xs font-bold uppercase tracking-[0.26em] text-emerald-600">
-              Kuulutuse muutmine
-            </p>
+            <p className="text-xs font-bold uppercase tracking-[0.26em] text-emerald-600">{t("listingEditing")}</p>
             <h1 className="mt-3 text-4xl font-black tracking-tight">
               {basicsForm.form.title || listing.title}
             </h1>
-            <p className="mt-3 max-w-3xl text-sm leading-6 text-neutral-600">
-              Muuta saab põhiandmeid, pilte ja poe-rubriike.
-              Poe-rubriikide valik salvestatakse põhiandmetest eraldi.
-            </p>
+            <p className="mt-3 max-w-3xl text-sm leading-6 text-neutral-600">{t("legacyEditHelp")}</p>
           </div>
 
           <div className="rounded-[24px] bg-neutral-950 p-5 text-white md:w-[320px]">
-            <p className="text-xs font-bold uppercase tracking-[0.2em] text-white/45">
-              Aktiivne identiteet
-            </p>
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-white/45">{t("activeIdentity")}</p>
             <p className="mt-2 text-2xl font-black">
-              {activeIdentity?.displayName || "Puudub"}
+              {activeIdentity?.displayName || t("none")}
             </p>
-            <p className="mt-2 text-sm leading-6 text-white/65">
-              Seda kuulutust saab muuta ainult õige omanik / identiteet.
-            </p>
+            <p className="mt-2 text-sm leading-6 text-white/65">{t("correctIdentityRequired")}</p>
           </div>
         </div>
       </section>

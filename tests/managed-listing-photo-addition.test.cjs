@@ -5,6 +5,8 @@ require.extensions['.ts'] = (module, filename) => module._compile(ts.transpileMo
   fileName: filename, compilerOptions: {target: ts.ScriptTarget.ES2017, module: ts.ModuleKind.CommonJS, esModuleInterop: true},
 }).outputText, filename);
 const {ManagedPhotoAdditionSession} = require('../src/features/listing-edit/model/managedPhotoAdditionSession.ts');
+const {translateListingEditMessage} = require('../src/features/listing-edit/model/listingEditMessages.ts');
+const present = key => translateListingEditMessage('et', key);
 const model = require('../src/entities/listing/model/managedListingPhotoAddition.ts');
 const galleryModel = require('../src/entities/listing/model/managedListingImages.ts');
 const U='71000000-0000-0000-0000-000000000001', I='72000000-0000-0000-0000-000000000002';
@@ -158,13 +160,13 @@ test('an immutable attachment receipt after later retirement or primary change d
   await h.session().start(h.baseline(),photo());
   h.gallery={...h.gallery,revision:'8',images:h.gallery.images.filter(i=>i.ordinal!==12).map(i=>({...i,is_primary:i.ordinal===1}))};
   const reloaded=h.session();await reloaded.inspect();assert.equal(reloaded.view.phase,'added');
-  assert.match(reloaded.view.message,/pärast seda muudetud/);assert.equal(h.shown.at(-1).images.length,2);
+  assert.equal(reloaded.view.message,"photoAddedGalleryChanged");assert.match(present(reloaded.view.message),/pärast seda muudetud/);assert.equal(h.shown.at(-1).images.length,2);
   assert.equal(h.requests.filter(r=>r.action==='owner-images-add-append').length,1);
   assert.deepEqual(h.preloaded,[],'An old receipt for a retired image must not start a protected preview');
 });
 test('final success wording follows fresh readback when the just-added photo is retired after ACK',async()=>{
   const h=harness({readGallery:async state=>{state.gallery={...state.gallery,revision:'7',images:state.gallery.images.filter(i=>i.ordinal!==12)};}});
-  const s=h.session();await s.start(h.baseline(),photo());assert.equal(s.view.phase,'added');assert.match(s.view.message,/pärast seda muudetud/);
+  const s=h.session();await s.start(h.baseline(),photo());assert.equal(s.view.phase,'added');assert.equal(s.view.message,"photoAddedGalleryChanged");assert.match(present(s.view.message),/pärast seda muudetud/);
   assert.equal(h.preloaded.length,1);assert.equal(h.shown.at(-1).images.length,2);
   assert.ok(h.shown.at(-1).images.every(image=>image.mediaAttemptId!==CHILD));
 });
@@ -189,9 +191,9 @@ for(const [message,explanation] of capacityCases)
   test('known temporary capacity '+message+' explains its reason without retrying or changing cancellation',async()=>{
     const h=harness({request:async action=>{if(action==='owner-images-add-prepare')throw {code:'54000',message};}});
     const before=copy(h.gallery),s=h.session();await s.start(h.baseline(),photo());
-    assert.equal(s.view.phase,'needs_attention');assert.match(s.view.message,explanation);
-    for(const [other,pattern] of capacityCases)if(other!==message)assert.doesNotMatch(s.view.message,pattern);
-    assert.doesNotMatch(s.view.message,/publication_|54000|MiB/);
+    assert.equal(s.view.phase,'needs_attention');assert.match(present(s.view.message),explanation);
+    for(const [other,pattern] of capacityCases)if(other!==message)assert.doesNotMatch(present(s.view.message),pattern);
+    assert.doesNotMatch(present(s.view.message),/publication_|54000|MiB/);
     const journal=copy(h.journal);assert.ok(journal);assert.equal(h.puts.length,0);assert.equal(h.requests.length,1);
     assert.deepEqual(h.gallery,before);await s.cancel();assert.equal(s.view.phase,'closed');
     assert.deepEqual(h.journal,journal);assert.deepEqual(h.gallery,before);
@@ -202,8 +204,8 @@ test('an unrecognized 54000 failure remains unknown and never claims capacity or
   const h=harness({request:async action=>{if(action==='owner-images-add-prepare')throw {code:'54000',message:'private_internal_failure'};}});
   const s=h.session();await s.start(h.baseline(),photo());assert.equal(s.view.phase,'unknown');
   assert.ok(h.journal);assert.equal(h.requests.length,1);assert.equal(h.puts.length,0);
-  assert.match(s.view.message,/tulemus pole veel kinnitatud/);assert.ok(!s.view.message.includes('private_internal_failure'));
-  for(const [,pattern] of capacityCases)assert.doesNotMatch(s.view.message,pattern);
+  assert.equal(s.view.message,"photoAdditionUnconfirmed");assert.match(present(s.view.message),/tulemus pole veel kinnitatud/);assert.ok(!s.view.message.includes('private_internal_failure'));
+  for(const [,pattern] of capacityCases)assert.doesNotMatch(present(s.view.message),pattern);
 });
 test('reload before PUT requires the same original bytes and never uploads a newly selected different photo',async()=>{
   const h=harness({request:async action=>{if(action==='image-prepare')throw Error('grant_lost');}});
@@ -321,4 +323,23 @@ test('addition invalidation aborts preparation before any remote intent or store
   h.deps.preparePhoto=async(bytes,preparationSignal)=>{signal=preparationSignal;entered.resolve();await gate.promise;return {bytes:additionPrepared(),recipe:additionRecipe};};
   const s=h.session(),pending=s.start(h.baseline(),additionOriginal());await entered.promise;s.invalidate();assert.equal(signal.aborted,true);
   gate.resolve();await pending;assert.equal(h.journal,null);assert.equal(h.requests.length,0);assert.equal(h.puts.length,0);
+});
+
+// Rendering the same held state in another interface language must not create intent.
+test('an in-flight photo notice can switch EN/ET while request, journal, transfer and preload stay identical', async () => {
+  const entered=defer(),gate=defer();
+  const h=harness({request:async action=>{if(action==='image-verify'){entered.resolve();await gate.promise;}}});
+  const session=h.session(),pending=session.start(h.baseline(),photo());await entered.promise;
+  const snapshot=session.view,journal=copy(h.journal),requests=copy(h.requests.map(({action,args})=>({action,args}))),writes=h.writes.length;
+  assert.equal(snapshot.phase,'busy');assert.equal(snapshot.message,'uploadingVerifyingPhoto');
+  const english=translateListingEditMessage('en',snapshot.message),estonian=translateListingEditMessage('et',snapshot.message);
+  assert.equal(english,'Uploading and checking photo…');assert.equal(estonian,'Saadan ja kontrollin fotot…');
+  assert.equal(translateListingEditMessage('en',snapshot.message),english);
+  assert.equal(session.view,snapshot);assert.deepEqual(h.journal,journal);assert.equal(h.writes.length,writes);
+  assert.deepEqual(h.requests.map(({action,args})=>({action,args})),requests);assert.equal(h.puts.length,1);assert.equal(h.preloaded.length,0);
+  gate.resolve();await pending;assert.equal(session.view.phase,'added');
+  assert.equal(translateListingEditMessage('en',session.view.message),'The photo has been added to the listing.');
+  assert.equal(translateListingEditMessage('et',session.view.message),'Foto on kuulutusele lisatud.');
+  assert.equal(h.puts.length,1);assert.equal(h.requests.filter(r=>r.action==='owner-images-add-append').length,1);
+  assert.equal(h.preloaded.length,1);assert.equal(h.shown.at(-1).images.length,3);
 });

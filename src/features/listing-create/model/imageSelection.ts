@@ -14,80 +14,34 @@ const LISTING_CREATE_ALLOWED_IMAGE_TYPES =
     "image/webp",
   ]);
 
+export type ListingCreateImageIssue = Readonly<{
+  key: "imageTypeInvalid" | "imageTooLarge" | "imagesPartlyAdded" | "imageLimit";
+  params?: Readonly<Record<string, string | number>>;
+  filename?: string;
+}>;
 export type AppendListingCreateImagesResult = {
-  files: File[];
-  errors: string[];
+  files: File[]; errors: ListingCreateImageIssue[];
 };
-
-export function validateListingCreateImage(
-  file: File
-): string | null {
-  if (
-    !LISTING_CREATE_ALLOWED_IMAGE_TYPES.has(
-      file.type
-    )
-  ) {
-    return "Lubatud on JPG-, PNG- ja WEBP-pildid.";
+/** Semantic notices keep selected files and their errors stable across language changes. */
+export function validateListingCreateImage(file: File): ListingCreateImageIssue | null {
+  if (!LISTING_CREATE_ALLOWED_IMAGE_TYPES.has(file.type)) return {key: "imageTypeInvalid"};
+  if (file.size > LISTING_CREATE_MAX_SOURCE_IMAGE_SIZE_BYTES) {
+    return {key: "imageTooLarge", params: {size: LISTING_CREATE_MAX_SOURCE_IMAGE_SIZE_MB}};
   }
-
-  if (
-    file.size >
-    LISTING_CREATE_MAX_SOURCE_IMAGE_SIZE_BYTES
-  ) {
-    return (
-      "Pilt on liiga suur. " +
-      `Maksimaalne algfail on ${LISTING_CREATE_MAX_SOURCE_IMAGE_SIZE_MB} MB.`
-    );
-  }
-
   return null;
 }
-
-export function appendListingCreateImages(
-  currentFiles: File[],
-  incomingFiles: File[]
-): AppendListingCreateImagesResult {
-  const errors: string[] = [];
-  const validFiles: File[] = [];
-
+export function appendListingCreateImages(currentFiles: File[], incomingFiles: File[]): AppendListingCreateImagesResult {
+  const errors: ListingCreateImageIssue[] = [], validFiles: File[] = [];
   for (const file of incomingFiles) {
-    const validationError =
-      validateListingCreateImage(file);
-
-    if (validationError) {
-      errors.push(
-        `${file.name}: ${validationError}`
-      );
-      continue;
-    }
-
-    validFiles.push(file);
+    const issue = validateListingCreateImage(file);
+    if (issue) errors.push({...issue, filename: file.name});
+    else validFiles.push(file);
   }
-
-  const remainingSlots = Math.max(
-    0,
-    LISTING_CREATE_IMAGE_LIMIT -
-      currentFiles.length
-  );
-
-  if (validFiles.length > remainingSlots) {
-    errors.push(
-      remainingSlots > 0
-        ? `Valisid liiga palju pilte. Lisati esimesed ${remainingSlots}.`
-        : `Kuulutusele saab lisada kuni ${LISTING_CREATE_IMAGE_LIMIT} pilti.`
-    );
-  }
-
-  return {
-    files: [
-      ...currentFiles,
-      ...validFiles.slice(
-        0,
-        remainingSlots
-      ),
-    ],
-    errors,
-  };
+  const remainingSlots = Math.max(0, LISTING_CREATE_IMAGE_LIMIT - currentFiles.length);
+  if (validFiles.length > remainingSlots) errors.push(remainingSlots > 0
+    ? {key: "imagesPartlyAdded", params: {count: remainingSlots}}
+    : {key: "imageLimit", params: {limit: LISTING_CREATE_IMAGE_LIMIT}});
+  return {files: [...currentFiles, ...validFiles.slice(0, remainingSlots)], errors};
 }
 
 export function moveListingCreateImage(

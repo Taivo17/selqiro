@@ -96,7 +96,7 @@ export function useOrdinaryPublication(userId: string, callbacks: Callbacks = {}
         } catch {
           if (!alive || accountClosed || readVersion !== version) return;
           suspend();
-          setContextError("Aktiivset identiteeti või avaldamise taastamise võtmeid ei saanud kontrollida. Proovi uuesti; selle lehe identiteetide mustandid jäävad alles.");
+          setContextError("identityUnavailable");
         }
       })(); });
     };

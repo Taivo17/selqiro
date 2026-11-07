@@ -54,6 +54,7 @@ function row(kind = 'sale', extra = {}) {
   return {...r,...extra};
 }
 const load = realm();
+const renderNotice=load('src/shared/i18n/marketplaceMessages.ts').renderMarketplaceMessage;
 const {mapOwnerHorseOfferDetail:map} = load(E+'api/mappers.ts');
 const {OwnerHorseDraftSession:Session} = load(F+'model/ownerHorseDraftSession.ts');
 const {HorseDraftWriteError:WriteError} = load(E+'model/draftWriteError.ts');
@@ -174,7 +175,7 @@ test('normalized no-op ACK keeps exact version and rereads canonical input',asyn
 test('later entire snapshot is adopted with notice, never merged with old input',async()=>{
  const {s,api}=await session();changeTitle(s);api.update=async()=>({offerId:ID,editRevision:'2',updatedAt:T});
  api.read=async()=>({...snap(),detail:{...snap().detail,title:'Other writer'},editRevision:'3'});await s.save();
- assert.equal(s.getSnapshot().form.title,'Other writer');assert.equal(s.getSnapshot().snapshot.editRevision,'3');assert.match(s.getSnapshot().message,/veel muudetud/);
+ assert.equal(s.getSnapshot().form.title,'Other writer');assert.equal(s.getSnapshot().snapshot.editRevision,'3');assert.match(renderNotice('et',s.getSnapshot().message),/veel muudetud/);
 });
 test('acknowledged write plus failed reread retries only reading',async()=>{
  const {s,api,calls}=await session();changeTitle(s);const realRead=api.read;api.read=async()=>{throw new Error('read unavailable');};await s.save();
@@ -281,7 +282,10 @@ test('UI and hook wiring: user/ID key, subscriptions cleanup, disabled form, exp
  const hook=source(F+'model/useOwnerHorseOfferEditForm.ts');assert.match(hook,/subscription.unsubscribe/);assert.match(hook,/removeEventListener\("beforeunload"/);assert.match(hook,/window.confirm/);assert.doesNotMatch(hook,/localStorage|sessionStorage/);
  const fields=source(F+'components/OwnerHorseOfferEditFields.tsx');assert.match(fields,/<fieldset disabled=\{disabled\}/);assert.match(fields,/<fieldset disabled=\{locationLocked\}/);
  const session=source(F+'model/ownerHorseDraftSession.ts');assert.doesNotMatch(session,/saveMyHorseOfferDraft|api\.create|localStorage|sessionStorage/);
- const basic=source('src/features/listing-create/components/HorseOfferBasicFields.tsx');assert.match(basic,/value="unknown">Pole teada \(salvestatud väärtus\)/);
+ const basic=source('src/features/listing-create/components/HorseOfferBasicFields.tsx');assert.match(basic,/value="unknown"/);
+ const messages=load('lib/i18n/catalogs/marketplaceUi.ts').marketplaceUi.et;
+ const referenced=[...basic.matchAll(/marketplaceMessage\("([^"]+)"/g)].map(x=>messages[x[1]]).join(' ');
+ assert.match(referenced,/Pole teada \(salvestatud väärtus\)/);
 });
 test('new and changed TSX plus hook transpile without syntax errors (not React rendering)',()=>{
  for(const file of [F+'components/OwnerHorseOfferEditPage.tsx',F+'components/OwnerHorseOfferEditor.tsx',F+'components/OwnerHorseOfferEditFields.tsx',F+'components/OwnerHorseOfferEditImages.tsx',
@@ -291,4 +295,15 @@ test('new and changed TSX plus hook transpile without syntax errors (not React r
     compilerOptions:{jsx:ts.JsxEmit.ReactJSX,target:ts.ScriptTarget.ES2017,module:ts.ModuleKind.CommonJS}});
   assert.deepEqual(out.diagnostics.filter(d=>d.category===ts.DiagnosticCategory.Error),[],file);
  }
+});
+
+// Rendering retained feedback in another language cannot restart or alter a save.
+test('changing notice language preserves the stopped conflict, revision, input and API call counts',async()=>{
+ const {s,calls}=await session('sale',{update:async()=>{throw new WriteError('conflict','rejected','40001');}});
+ changeTitle(s,'My unsaved horse');await s.save();
+ const state=s.getSnapshot();const before=plain(state);const beforeCalls=plain(calls);
+ const et=renderNotice('et',s.contextMessage());const en=renderNotice('en',s.contextMessage());
+ assert.notEqual(en,et);assert.doesNotMatch(en,/selqiro-ui-/);assert.doesNotMatch(et,/selqiro-ui-/);
+ assert.equal(s.getSnapshot(),state);assert.deepEqual(plain(s.getSnapshot()),before);assert.deepEqual(plain(calls),beforeCalls);
+ assert.equal(s.getSnapshot().problem,'conflict');assert.equal(s.getSnapshot().snapshot.editRevision,'1');assert.equal(s.getSnapshot().form.title,'My unsaved horse');
 });

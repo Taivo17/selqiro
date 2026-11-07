@@ -1,3 +1,4 @@
+import { marketplaceMessage, safeMarketplaceError } from "../../../shared/i18n/marketplaceMessages";
 import {
   supabaseBrowserClient,
 } from "../../../shared/supabase/browserClient";
@@ -62,7 +63,7 @@ function normalizeHorseOfferId(
 
   if (!UUID_PATTERN.test(normalized)) {
     throw new OwnerHorseOfferDetailReadError(
-      "Horse offer ID is invalid.",
+      marketplaceMessage("horse.the_horse_listing_id_is_invalid.8f70aa"),
       "INVALID_HORSE_OFFER_ID"
     );
   }
@@ -88,15 +89,14 @@ export async function getMyHorseOffer(
 
   if (error) {
     throw new OwnerHorseOfferDetailReadError(
-      error.message
-        || "Horse offer detail read failed.",
+      safeMarketplaceError(error, marketplaceMessage("horse.the_horse_listing_details_could_not_be_loaded.fbe973")),
       error.code || null
     );
   }
 
   if (!Array.isArray(data)) {
     throw new OwnerHorseOfferDetailReadError(
-      "Horse offer detail read returned an invalid payload."
+      marketplaceMessage("horse.the_horse_listing_response_has_an_invalid_format.064bfa")
     );
   }
 
@@ -106,7 +106,7 @@ export async function getMyHorseOffer(
 
   if (data.length !== 1) {
     throw new OwnerHorseOfferDetailReadError(
-      "Horse offer detail read returned an unexpected record count."
+      marketplaceMessage("horse.the_horse_listing_response_contained_an_unexpected_number.52d9db")
     );
   }
 

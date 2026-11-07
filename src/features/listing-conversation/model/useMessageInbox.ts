@@ -1,4 +1,6 @@
 "use client";
+import { uiMessage } from "../../../../lib/i18n/interfaceMessage";
+
 import { useEffect, useRef, useState } from "react";
 import { hideThread, listMessageThreads, setThreadBlocked } from "../../../entities/conversation/api/messagingClient";
 import type { MessageThreadCursor, MessageThreadList } from "../../../entities/conversation/model/messaging";
@@ -21,7 +23,7 @@ export function useMessageInbox() {
         ? Object.freeze({ ...value, conversations: Object.freeze([...current.conversations,
           ...value.conversations.filter(row => !current.conversations.some(known => known.conversation_id === row.conversation_id))]) }) : value);
       paginated.current = cursor !== null; setProblem(null);
-    } catch { if (context.isCurrent(actor) && request === version.current) setProblem("Vestlusi ei saanud värskendada. Proovi uuesti."); }
+    } catch { if (context.isCurrent(actor) && request === version.current) setProblem(uiMessage("could_not_refresh_conversations_try_again")); }
     finally { if (request === version.current) { working.current = false; setReading(false); } }
   }
   useEffect(() => {
@@ -51,7 +53,7 @@ export function useMessageInbox() {
         conversations: Object.freeze(current.conversations.filter(row => row.conversation_id !== conversationId)) }) : null);
       else await load(actor);
       return true;
-    } catch { if (context.isCurrent(actor)) setProblem("Muudatust ei saanud kinnitada. Proovi uuesti."); return false; }
+    } catch { if (context.isCurrent(actor)) setProblem(uiMessage("the_change_could_not_be_confirmed_try_again")); return false; }
     finally { if (mutation.current === operation) { mutation.current = null; setActing(false); } }
   }
   const visible = context.actor && list?.actor_user_id === context.actor.expectedUserId && list.identity_id === context.actor.expectedIdentityId ? list : null;

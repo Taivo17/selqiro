@@ -86,7 +86,7 @@ export function useListingBasicsForm(input: {
       setSaveError(
         error instanceof Error
           ? error.message
-          : "Kuulutuse salvestamine ebaõnnestus."
+          : "listingSaveFailed"
       );
     } finally {
       setSaving(false);

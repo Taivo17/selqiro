@@ -12,6 +12,6 @@ export default function ConversationAvatar({ identity }: { identity: Pick<Conver
       // The permitted image origin is shared with listing cards; arbitrary chat tracking URLs are never loaded.
       // eslint-disable-next-line @next/next/no-img-element
       ? <img src={image} alt="" referrerPolicy="no-referrer" onError={() => setFailed(image)} />
-      : (identity?.name?.trim().slice(0, 1).toLocaleUpperCase("et-EE") || "?")}
+      : (identity?.name?.trim().slice(0, 1).toUpperCase() || "?")}
   </span>;
 }

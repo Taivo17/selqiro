@@ -1,58 +1,49 @@
-# Foto kiirem kuvamine pärast lisamist
+# V2 inglise ja eesti kasutajaliidese paigaldamine
 
 Seis: 07.11.2026 Europe/Tallinn. Üks praegune tööjärg on
 [CURRENT_STATE.json](CURRENT_STATE.json). Varasemad käsud on ajalugu.
 
-## Kinnitatud lähtealus
+## Vastuvõetud lähtealus
 
-Foto valiku ja lõpetatud algfailide reservi parandus on kasutaja poolt
-paigaldatud ja kasutuses. Verceli lähtecommit on `f1745be`
-(`Fix photo selection and release completed upload sources`).
-Kasutaja lisas kuulutusele 201 viis fotot, jõudis kümne foto piirini ning
-kinnitas galerii ja avaliku vaate. Vana viie foto takistus on lahendatud.
+Kasutaja kinnitas viimase foto kuvamise paranduse `785c359`
+(`Load the added photo while confirming gallery membership`) Ready / Production
+seisu. Üks lisamine võttis 9 sekundit ja foto oli avalikus vaates nähtav.
+Frankfurt `fra1` ning kümne foto piir on juba kinnitatud; neid ei korrata.
 
-Verceli Function Region on Frankfurt `fra1`. Sama koodiga redeploy on
-Ready / Production; uus `image-verify` vastus kinnitas `arn1::fra1`.
-Serverietapp vähenes kahe vaatluse vahel 7647,2 ms → 4345,2 ms.
-Kasutaja ühe uue lisamise stopperiaeg oli 12 sekundit.
-Seda piirkonna muutmist ega selle kinnitamist ei korrata.
-
-Järgmine väike kliendiparandus alustab kinnitatud uue veebifoto kaitstud
-laadimist samal ajal värske galerii lugemisega. Foto saab nähtavaks alles
-siis, kui värske galerii kontroll seda lubab. Pildi kontroll, salvestamine,
-andmebaas ja teenuseseaded kasutavad senist rada.
+Uus pakett lisab V2 päisesse **English / Eesti** valiku ja tõlgib olemasolevad
+vaated. Sama konto `profiles.language` jääb ainsaks püsivaks eelistuseks.
+Pooleliolev vorm ja fotolisamine säilivad keele vahetamisel.
 
 ## Üks käsk
 
-1. Laadi **selqiro-foto-kuvamine-20261107.zip** Downloads-kausta ja paki lahti.
-2. Käivita terminalis:
+Paki **selqiro-v2-keeled-20261107.zip** Downloads-kausta ja käivita:
 
 ```bash
-python3 -I -B "$HOME/Downloads/selqiro-foto-kuvamine-20261107/uuenda.py" --publish
+python3 -I -B "$HOME/Downloads/selqiro-v2-keeled-20261107/uuenda.py" --publish
 ```
 
-Paigaldaja lahendab olemasolevas Gitis `f1745be` täpseks üheseks commit'iks
-ning võrdleb 1084 lähtemanifesti faili, main-haru, tööpuud, indexit ja
-kinnitatud remote'i. Muudetavatest failidest tehakse varukoopia, seejärel
-build ning selle paranduse commit ja tavaline push samasse hoidlasse.
-Paki kontroll ei järelda Maci täpset lähtepuud ainult Verceli ekraanipildist.
+Paigaldaja lahendab `785c359` tegelikus Gitis üheseks commit'iks ja kontrollib
+1085 lähtefaili, täielikku indexit/puud, main-haru ja kinnitatud remote'i.
+Muudetavad failid varundatakse; järgneb build, piiratud commit ja tavaline push.
+SQL-i, fotode koristust ega teenuse seadistamist ei käivitata.
 
-`PEATATUD` korral säilita teade ja raport ning saada need vestlusse.
-Varem väljastatud paigaldajaid ega diagnostikaprogramme ei käivitata uuesti.
+**PEATATUD** korral säilita teade ja raport ning saada need vestlusse.
+Varem väljastatud pakette või diagnostikat ei käivitata uuesti.
 
-## Üks kasutuskatse pärast uue commit'i Ready tulemust
+## Üks kontroll pärast uut Ready tulemust
 
-Oota Vercelis terminalis näidatud uue commit'i **Ready / Production**
-tulemust ja värskenda portaali. Ava testkuulutus, kus on alla kümne foto;
-kuulutus 201 oli viimases kinnitatud katses täis. Lisa üks uus foto ja
-mõõda aeg nupust **Lisa kuulutusele** kuni uue foto nähtavale ilmumiseni.
-Kontrolli ka selle foto avalikku nähtavust.
+Oota terminalis näidatud uue commit'i **Ready / Production** tulemust,
+värskenda portaali ja vali päisest **English**. Ava kuulutuse muutmine ja
+avalik vaade. Värskenda lehte: inglise keele valik peab kontol säilima.
+Seejärel vali soovi korral **Eesti**. Müüja pealkiri, kirjeldus ja muu
+kasutajasisu peavad jääma samaks.
 
-Üks kasutuskatse on selle paranduse kontrolliks piisav. Ära eemalda
-kinnitatud fotosid üksnes katse jaoks. Täpset uut sekundiarvu ette ei lubata:
-muudatus võimaldab kahe viimase lugemisetapi osalist kattumist, kuid foto ettevalmistus,
-üleslaadimine, kontroll ja salvestamine võtavad endiselt aega.
+Kinnitatavate õigusdokumentide praegune originaal on eesti keeles; inglise
+liides selgitab seda. Tõlgitud liides ei asenda dokumendi originaalteksti.
 
-Paki kohalikud kontrollid ja nende piirid on
-[PHOTO_DISPLAY_20261107.md](PHOTO_DISPLAY_20261107.md). Need ei tähenda,
-et uus parandus oleks juba Macis või Vercelis paigaldatud.
+## Järgmine arendus
+
+Hobuste täielik avaldamine/fotod/avalik detail/kontakt ja seejärel teenuste
+päris avalik kataloog. Ühine tehniline alus ja säilivad erinevused on
+[shared-marketplace-foundation.md](../architecture/shared-marketplace-foundation.md).
+Teenuste näidisvaade ei ole selle keelepaketi järel veel päris otsing.

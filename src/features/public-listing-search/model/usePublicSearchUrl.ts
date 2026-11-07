@@ -1,4 +1,6 @@
 "use client";
+import { uiMessage } from "../../../../lib/i18n/interfaceMessage";
+
 
 import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
@@ -53,7 +55,7 @@ export function usePublicSearchUrl() {
       // forwards internal router markers and bypasses its URL notification.
       window.history.replaceState(null, "", url);
     } catch {
-      setState({input, error: "Otsinguaadressi ei saanud uuendada. Proovi uuesti või värskenda lehte."});
+      setState({input, error: uiMessage("could_not_update_the_search_address_try_again_or_refresh_the_page")});
     }
   }
   function change(fields: Partial<PublicSearchFields>) {

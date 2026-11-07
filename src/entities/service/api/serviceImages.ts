@@ -1,3 +1,4 @@
+import { marketplaceMessage, safeMarketplaceError } from "../../../shared/i18n/marketplaceMessages";
 import {
   CONTENT_IMAGE_LIMIT,
   validateContentImageFile,
@@ -61,7 +62,7 @@ function normalizeUuid(
 
   if (!UUID_PATTERN.test(cleanValue)) {
     throw new Error(
-      `${fieldLabel} ei ole korrektne.`
+      marketplaceMessage("service.value_is_invalid.0527f5", { p0: String(fieldLabel) })
     );
   }
 
@@ -126,15 +127,15 @@ function getImageErrorMessage(
       )
     ) {
       return (
-        "Teenuse piltide muutmiseks " +
-        "logi sisse."
+        marketplaceMessage("service.to_edit_service_images.7b2cde") +
+        marketplaceMessage("service.sign_in.80e738")
       );
     }
 
     return (
-      "Sul ei ole õigust selle " +
-      "teenuse pilte aktiivse " +
-      "identiteediga muuta."
+      marketplaceMessage("service.you_do_not_have_permission_to_edit_this.bb687c") +
+      marketplaceMessage("service.service_s_images_as_the_active.f4f726") +
+      marketplaceMessage("service.identity.bb019e")
     );
   }
 
@@ -148,8 +149,8 @@ function getImageErrorMessage(
     )
   ) {
     return (
-      "Teenuse pilte saab muuta " +
-      "ainult mustandteenusel."
+      marketplaceMessage("service.service_images_can_only_be_edited.25db4f") +
+      marketplaceMessage("service.while_the_service_is_a_draft.a3eac7")
     );
   }
 
@@ -162,8 +163,8 @@ function getImageErrorMessage(
     )
   ) {
     return (
-      `Teenusele saab lisada kuni ` +
-      `${SERVICE_IMAGE_LIMIT} pilti.`
+      marketplaceMessage("service.a_service_can_have_up_to.b1447c") +
+      marketplaceMessage("showcase.value_images.a82b8e", { p0: String(SERVICE_IMAGE_LIMIT) })
     );
   }
 
@@ -173,8 +174,8 @@ function getImageErrorMessage(
     )
   ) {
     return (
-      "Teenuse pildi salvestustee " +
-      "ei ole korrektne."
+      marketplaceMessage("service.the_service_image_storage_path.7a9807") +
+      marketplaceMessage("service.is_invalid.978521")
     );
   }
 
@@ -187,14 +188,13 @@ function getImageErrorMessage(
     )
   ) {
     return (
-      "Teenust või teenuse pilti " +
-      "ei leitud."
+      marketplaceMessage("service.the_service_or_service_image.f56371") +
+      marketplaceMessage("service.was_not_found.ce2a00")
     );
   }
 
   return (
-    error.message ||
-    fallback
+    safeMarketplaceError(error, fallback)
   );
 }
 
@@ -335,7 +335,7 @@ async function loadBrowserImage(
           () => {
             reject(
               new Error(
-                "Apple'i pildifaili ei saanud brauseris avada."
+                marketplaceMessage("service.the_apple_image_file_could_not_be_opened.973338")
               )
             );
           };
@@ -374,7 +374,7 @@ async function canvasToJpegBlob(
 
   if (!blob) {
     throw new Error(
-      "Apple'i pildifaili JPG-ks teisendamine ebaõnnestus."
+      marketplaceMessage("service.the_apple_image_file_could_not_be_converted.50ccda")
     );
   }
 
@@ -404,7 +404,7 @@ async function convertAppleImageToJpeg(
       !sourceHeight
     ) {
       throw new Error(
-        "Apple'i pildifaili mõõtmeid ei saanud lugeda."
+        marketplaceMessage("service.the_apple_image_dimensions_could_not_be_read.758b20")
       );
     }
 
@@ -462,7 +462,7 @@ async function convertAppleImageToJpeg(
 
     if (!context) {
       throw new Error(
-        "Brauser ei võimalda pildi teisendamist."
+        marketplaceMessage("service.the_browser_does_not_support_image_conversion.828933")
       );
     }
 
@@ -514,15 +514,11 @@ async function prepareServiceImageFile(
         file
       );
     } catch (error) {
-      const detail =
-        error instanceof Error &&
-        error.message
-          ? ` ${error.message}`
-          : "";
+      const detail = safeMarketplaceError(error, "");
 
       throw new Error(
-        `HEIC/HEIF pilti ei saanud brauseris JPG-ks teisendada.${detail} ` +
-        "Proovi telefoni kaamera seadetes kasutada JPEG/JPG vormingut või vali JPG/PNG/WEBP fail."
+        marketplaceMessage("service.the_heic_heif_image_could_not_be_converted.7c1fed", { p0: String(detail) }) +
+        marketplaceMessage("service.try_using_jpeg_jpg_in_your_phone_camera.051cdb")
       );
     }
   }
@@ -632,7 +628,7 @@ export async function getServiceImages(
   const cleanServiceId =
     normalizeUuid(
       serviceId,
-      "Teenuse ID"
+      marketplaceMessage("service.service_id.283384")
     );
 
   const { data, error } =
@@ -686,7 +682,7 @@ export async function getServiceImages(
     throw new Error(
       getImageErrorMessage(
         error,
-        "Teenuse pilte ei saanud laadida."
+        marketplaceMessage("service.service_images_could_not_be_loaded.d3870f")
       )
     );
   }
@@ -710,7 +706,7 @@ export async function uploadServiceImage(
   const serviceId =
     normalizeUuid(
       input.serviceId,
-      "Teenuse ID"
+      marketplaceMessage("service.service_id.283384")
     );
 
   const preparedFile =
@@ -737,7 +733,7 @@ export async function uploadServiceImage(
     !user?.id
   ) {
     throw new Error(
-      "Teenuse pildi lisamiseks logi sisse."
+      marketplaceMessage("service.sign_in_to_add_a_service_image.f7f9b8")
     );
   }
 
@@ -770,7 +766,7 @@ export async function uploadServiceImage(
     throw new Error(
       getImageErrorMessage(
         uploadError,
-        "Teenuse pildi üleslaadimine ebaõnnestus."
+        marketplaceMessage("service.the_service_image_upload_failed.a31e48")
       )
     );
   }
@@ -798,7 +794,7 @@ export async function uploadServiceImage(
     );
 
     throw new Error(
-      "Teenuse pildi avalikku aadressi ei saanud luua."
+      marketplaceMessage("service.the_service_image_s_public_address_could_not.90c0cb")
     );
   }
 
@@ -827,7 +823,7 @@ export async function uploadServiceImage(
       throw new Error(
         getImageErrorMessage(
           error,
-          "Teenuse pilti ei saanud registreerida."
+          marketplaceMessage("service.the_service_image_could_not_be_registered.85c22b")
         )
       );
     }
@@ -843,7 +839,7 @@ export async function uploadServiceImage(
 
     if (!row) {
       throw new Error(
-        "Andmebaas ei tagastanud lisatud teenusepilti."
+        marketplaceMessage("service.the_database_did_not_return_the_added_service.f050ef")
       );
     }
 
@@ -861,7 +857,7 @@ export async function uploadServiceImage(
         storagePath
     ) {
       throw new Error(
-        "Andmebaas tagastas ootamatu teenusepildi."
+        marketplaceMessage("service.the_database_returned_an_unexpected_service_image.4e343c")
       );
     }
 
@@ -892,13 +888,13 @@ export async function setServicePrimaryImage(
   const serviceId =
     normalizeUuid(
       input.serviceId,
-      "Teenuse ID"
+      marketplaceMessage("service.service_id.283384")
     );
 
   const imageId =
     normalizeUuid(
       input.imageId,
-      "Teenusepildi ID"
+      marketplaceMessage("service.service_image_id.ab93e4")
     );
 
   const { data, error } =
@@ -916,7 +912,7 @@ export async function setServicePrimaryImage(
     throw new Error(
       getImageErrorMessage(
         error,
-        "Teenuse põhipilti ei saanud muuta."
+        marketplaceMessage("service.the_service_s_main_image_could_not_be.85c9bf")
       )
     );
   }
@@ -930,7 +926,7 @@ export async function setServicePrimaryImage(
 
   if (!row) {
     throw new Error(
-      "Andmebaas ei tagastanud muudetud teenusepilti."
+      marketplaceMessage("service.the_database_did_not_return_the_updated_service.d162dd")
     );
   }
 
@@ -948,7 +944,7 @@ export async function setServicePrimaryImage(
     image.sortOrder !== 0
   ) {
     throw new Error(
-      "Andmebaas tagastas ootamatu põhipildi."
+      marketplaceMessage("service.the_database_returned_an_unexpected_main_image.036b0a")
     );
   }
 
@@ -964,13 +960,13 @@ export async function deleteServiceImage(
   const serviceId =
     normalizeUuid(
       input.serviceId,
-      "Teenuse ID"
+      marketplaceMessage("service.service_id.283384")
     );
 
   const imageId =
     normalizeUuid(
       input.imageId,
-      "Teenusepildi ID"
+      marketplaceMessage("service.service_image_id.ab93e4")
     );
 
   const {
@@ -993,7 +989,7 @@ export async function deleteServiceImage(
     !accessToken
   ) {
     throw new Error(
-      "Teenuse pildi kustutamiseks logi sisse."
+      marketplaceMessage("service.sign_in_to_delete_a_service_image.7425d1")
     );
   }
 
@@ -1034,7 +1030,7 @@ export async function deleteServiceImage(
   ) {
     throw new Error(
       payload?.error ||
-      "Teenuse pilti ei saanud kustutada."
+      marketplaceMessage("service.the_service_image_could_not_be_deleted.7bf769")
     );
   }
 
@@ -1044,7 +1040,7 @@ export async function deleteServiceImage(
   const deletedImageId =
     normalizeUuid(
       result.deletedImageId || "",
-      "Kustutatud teenusepildi ID"
+      marketplaceMessage("service.deleted_service_image_id.fdf082")
     );
 
   if (
@@ -1052,7 +1048,7 @@ export async function deleteServiceImage(
     imageId
   ) {
     throw new Error(
-      "Server tagastas ootamatu kustutatud teenusepildi."
+      marketplaceMessage("service.the_server_returned_an_unexpected_deleted_service_image.1d0715")
     );
   }
 

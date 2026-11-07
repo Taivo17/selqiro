@@ -1,5 +1,7 @@
 "use client";
 
+import { marketplaceMessage } from "../../../shared/i18n/marketplaceMessages";
+import { useMarketplaceTranslation } from "../../../shared/i18n/useMarketplaceTranslation";
 import {
   useEffect,
   useId,
@@ -31,6 +33,7 @@ export default function ServiceCategorySelector({
   required = false,
   className = "",
 }: ServiceCategorySelectorProps) {
+  const { language, r } = useMarketplaceTranslation();
   const rootSelectId =
     useId();
 
@@ -147,7 +150,7 @@ export default function ServiceCategorySelector({
           "grid min-w-0 gap-3 sm:grid-cols-2",
           className,
         ].join(" ")}
-        aria-label="Teenuste rubriike laetakse"
+        aria-label={r(marketplaceMessage("category.loading_service_categories.0ba362"))}
       >
         <div className="h-[82px] animate-pulse rounded-2xl bg-neutral-100" />
         <div className="h-[82px] animate-pulse rounded-2xl bg-neutral-100" />
@@ -164,22 +167,19 @@ export default function ServiceCategorySelector({
         ].join(" ")}
       >
         <p className="font-black text-red-950">
-          Rubriike ei saanud laadida
-        </p>
+          {r(marketplaceMessage("category.categories_could_not_be_loaded.acac19"))}</p>
 
         <p className="mt-2 break-words text-sm leading-6 text-red-800">
-          {error}
+          {r(error)}
         </p>
 
         <button
           type="button"
           onClick={() =>
-            void refresh()
-          }
+            void refresh()}
           className="mt-3 rounded-full border border-red-200 bg-white px-4 py-2 text-sm font-black text-red-800"
         >
-          Proovi uuesti
-        </button>
+          {r(marketplaceMessage("horse.try_again.8c63df"))}</button>
       </div>
     );
   }
@@ -193,12 +193,10 @@ export default function ServiceCategorySelector({
         ].join(" ")}
       >
         <p className="font-black">
-          Teenuste rubriike ei ole
-        </p>
+          {r(marketplaceMessage("category.no_service_categories.d29e95"))}</p>
 
         <p className="mt-2 text-sm leading-6 text-neutral-500">
-          Aktiivseid globaalseid rubriike ei leitud.
-        </p>
+          {r(marketplaceMessage("category.no_active_global_categories_were_found.ee2897"))}</p>
       </div>
     );
   }
@@ -227,12 +225,12 @@ export default function ServiceCategorySelector({
   const selectionLabel =
     selectedRoot
       ? [
-          selectedRoot.labelEt,
-          selectedChild?.labelEt,
+          language === "et" ? selectedRoot.labelEt : selectedRoot.labelEn,
+          language === "et" ? selectedChild?.labelEt : selectedChild?.labelEn,
         ]
           .filter(Boolean)
           .join(" → ")
-      : "Rubriiki ei ole valitud";
+      : marketplaceMessage("category.no_category_selected.31172a");
 
   return (
     <div
@@ -244,50 +242,39 @@ export default function ServiceCategorySelector({
       <fieldset
         disabled={disabled}
         className="grid min-w-0 gap-3 sm:grid-cols-2"
-        aria-describedby={
-          helpTextId
-        }
+        aria-describedby={helpTextId}
       >
         <label
           htmlFor={rootSelectId}
           className="min-w-0 rounded-2xl border border-neutral-200 bg-white p-4"
         >
           <span className="block text-xs font-black uppercase tracking-[0.14em] text-neutral-500">
-            Ülemrubriik
-            {required ? " *" : ""}
+            {r(marketplaceMessage("category.parent_category.f3ddd3"))}{r(required ? " *" : "")}
           </span>
 
           <select
             id={rootSelectId}
-            value={
-              value.category || ""
-            }
+            value={value.category || ""}
             required={required}
             onChange={(event) =>
               handleRootChange(
                 event.target.value
-              )
-            }
+              )}
             className="mt-2 min-h-11 w-full min-w-0 bg-transparent text-sm font-black outline-none disabled:cursor-not-allowed disabled:opacity-60"
           >
             <option value="">
-              Vali ülemrubriik
-            </option>
+              {r(marketplaceMessage("category.select_a_parent_category.5f286d"))}</option>
 
-            {tree.roots.map(
+            {r(tree.roots.map(
               (category) => (
                 <option
-                  key={
-                    category.code
-                  }
-                  value={
-                    category.code
-                  }
+                  key={category.code}
+                  value={category.code}
                 >
-                  {category.labelEt}
+                  {r(language === "et" ? category.labelEt : category.labelEn)}
                 </option>
               )
-            )}
+            ))}
           </select>
         </label>
 
@@ -296,54 +283,43 @@ export default function ServiceCategorySelector({
           className="min-w-0 rounded-2xl border border-neutral-200 bg-white p-4"
         >
           <span className="block text-xs font-black uppercase tracking-[0.14em] text-neutral-500">
-            Alamrubriik
-            <span className="normal-case tracking-normal text-neutral-400">
-              {" "}
-              (valikuline)
-            </span>
+            {r(marketplaceMessage("category.subcategory.ee4371"))}<span className="normal-case tracking-normal text-neutral-400">
+              {r(" ")}
+              {r(marketplaceMessage("service.optional.c6075a"))}</span>
           </span>
 
           <select
             id={childSelectId}
-            value={
-              value.subcategory ||
-              ""
-            }
-            disabled={
-              disabled ||
+            value={value.subcategory ||
+              ""}
+            disabled={disabled ||
               !value.category ||
-              childOptions.length === 0
-            }
+              childOptions.length === 0}
             onChange={(event) =>
               handleChildChange(
                 event.target.value
-              )
-            }
+              )}
             className="mt-2 min-h-11 w-full min-w-0 bg-transparent text-sm font-black outline-none disabled:cursor-not-allowed disabled:text-neutral-400"
           >
             <option value="">
-              {!value.category
-                ? "Vali esmalt ülemrubriik"
+              {r(!value.category
+                ? marketplaceMessage("category.select_a_parent_category_first.86a2ad")
                 : childOptions.length ===
                     0
-                  ? "Alamrubriike ei ole"
-                  : "Täpsustamata"}
+                  ? marketplaceMessage("category.no_subcategories.f0f27c")
+                  : marketplaceMessage("category.unspecified.99fb9b"))}
             </option>
 
-            {childOptions.map(
+            {r(childOptions.map(
               (category) => (
                 <option
-                  key={
-                    category.code
-                  }
-                  value={
-                    category.code
-                  }
+                  key={category.code}
+                  value={category.code}
                 >
-                  {category.labelEt}
+                  {r(language === "et" ? category.labelEt : category.labelEn)}
                 </option>
               )
-            )}
+            ))}
           </select>
         </label>
       </fieldset>
@@ -354,20 +330,18 @@ export default function ServiceCategorySelector({
         className="mt-3 rounded-xl border border-neutral-200 bg-white px-3 py-2.5"
       >
         <p className="text-[11px] font-black uppercase tracking-[0.14em] text-neutral-400">
-          Praegune valik
-        </p>
+          {r(marketplaceMessage("category.current_selection.03b773"))}</p>
 
         <p className="mt-1 break-words text-sm font-black text-neutral-700">
-          {selectionLabel}
+          {r(selectionLabel)}
         </p>
       </div>
 
-      {tree.deeperCategoryCount > 0 ||
+      {r(tree.deeperCategoryCount > 0 ||
       tree.orphanCategoryCount > 0 ? (
         <p className="mt-3 rounded-xl border border-amber-100 bg-amber-50 px-3 py-2 text-xs leading-5 text-amber-900">
-          Mõnda sügavama taseme või puuduva ülemaga rubriiki selles kahetasandilises vaates ei kuvata.
-        </p>
-      ) : null}
+          {r(marketplaceMessage("category.some_categories_at_deeper_levels_or_without_a.d36593"))}</p>
+      ) : null)}
     </div>
   );
 }

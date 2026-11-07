@@ -15,24 +15,24 @@ const ALLOWED_IMAGE_TYPES = new Set([
 ]);
 
 function mapUploadImageError(message: string): string {
-  if (message.includes("not_authenticated")) return "Sisselogimine puudub.";
-  if (message.includes("listing_not_found")) return "Kuulutust ei leitud.";
-  if (message.includes("not_owner")) return "Sul ei ole õigust seda kuulutust muuta.";
-  if (message.includes("image_url_missing")) return "Pildi URL puudub.";
+  if (message.includes("not_authenticated")) return "authMissing";
+  if (message.includes("listing_not_found")) return "listingNotFound";
+  if (message.includes("not_owner")) return "editForbidden";
+  if (message.includes("image_url_missing")) return "imageUrlMissing";
   if (message.includes("max_images")) {
     return `Kuulutusele saab lisada kuni ${MAX_LISTING_IMAGES} pilti.`;
   }
 
-  return message || "Pildi lisamine ebaõnnestus.";
+  return message || "imageAddFailed";
 }
 
 function validateImageFile(file: File) {
   if (!ALLOWED_IMAGE_TYPES.has(file.type)) {
-    throw new Error("Lubatud on JPG, PNG ja WEBP pildid.");
+    throw new Error("legacyImageType");
   }
 
   if (file.size > MAX_IMAGE_SIZE_BYTES) {
-    throw new Error("Pilt on liiga suur. Maksimaalne suurus on 10 MB.");
+    throw new Error("legacyImageTooLarge");
   }
 }
 
@@ -77,7 +77,7 @@ export async function uploadListingImage(
   input: UploadListingImageInput
 ): Promise<void> {
   if (!input.listingId) {
-    throw new Error("Kuulutuse id puudub.");
+    throw new Error("listingIdMissingLower");
   }
 
   validateImageFile(input.file);
@@ -88,7 +88,7 @@ export async function uploadListingImage(
   } = await supabaseBrowserClient.auth.getUser();
 
   if (userError || !user?.id) {
-    throw new Error("Sisselogimine puudub.");
+    throw new Error("authMissing");
   }
 
   const path = safeStoragePath({
@@ -106,7 +106,7 @@ export async function uploadListingImage(
     });
 
   if (uploadError) {
-    throw new Error(uploadError.message || "Pildi üleslaadimine ebaõnnestus.");
+    throw new Error(uploadError.message || "imageUploadFailed");
   }
 
   const { data: publicUrlData } = supabaseBrowserClient.storage

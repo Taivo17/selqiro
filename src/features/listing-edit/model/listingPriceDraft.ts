@@ -39,10 +39,10 @@ export function getListingPriceDraftChange(
   current: ListingPriceDraft, initial: ListingPriceDraft,
 ): ListingPriceDraftChange {
   if (current.legacyText !== initial.legacyText) {
-    throw new Error("Algset hinnateksti ei muudeta automaatselt. Vali uus hinnaliik.");
+    throw new Error("chooseNewPriceKind");
   }
   if (current.kind === initial.kind && current.amountInput === initial.amountInput &&
       current.currencyInput === initial.currencyInput) return { changed: false };
-  if (current.kind === null) throw new Error("Hinna muutmiseks vali hinnaliik; vana tekst ei ole uus struktureeritud hind.");
+  if (current.kind === null) throw new Error("legacyPriceNeedsKind");
   return { changed: true, price: normalizeListingPriceForm(current.kind, current.amountInput, current.currencyInput) };
 }

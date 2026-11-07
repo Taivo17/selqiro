@@ -69,12 +69,12 @@ export function listingCreateFieldSourceLabel(
   source: ListingCreateFieldSource
 ): string {
   if (source === "user") {
-    return "Sinu tekst";
+    return "yourText";
   }
 
   if (source === "ai") {
-    return "AI soovitus";
+    return "aiSuggestion";
   }
 
-  return "Tühi";
+  return "empty";
 }

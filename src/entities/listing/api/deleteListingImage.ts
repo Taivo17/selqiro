@@ -11,13 +11,13 @@ type DeleteListingImageResult = {
 };
 
 function mapDeleteImageError(message: string): string {
-  if (message.includes("not_authenticated")) return "Sisselogimine puudub.";
-  if (message.includes("listing_not_found")) return "Kuulutust ei leitud.";
-  if (message.includes("not_owner")) return "Sul ei ole õigust seda kuulutust muuta.";
-  if (message.includes("image_not_found")) return "Pilti ei leitud selle kuulutuse juurest.";
-  if (message.includes("last_image")) return "Viimast pilti ei saa kustutada.";
+  if (message.includes("not_authenticated")) return "authMissing";
+  if (message.includes("listing_not_found")) return "listingNotFound";
+  if (message.includes("not_owner")) return "editForbidden";
+  if (message.includes("image_not_found")) return "imageNotFound";
+  if (message.includes("last_image")) return "lastImageCannotDelete";
 
-  return message || "Pildi kustutamine ebaõnnestus.";
+  return message || "imageDeleteFailed";
 }
 
 function storagePathFromUrl(url: string): string | null {
@@ -65,7 +65,7 @@ export async function deleteListingImage(
   input: DeleteListingImageInput
 ): Promise<void> {
   if (!input.listingId || !input.imageId) {
-    throw new Error("Pildi või kuulutuse id puudub.");
+    throw new Error("imageListingIdMissing");
   }
 
   const { data, error } = await supabaseBrowserClient.rpc(

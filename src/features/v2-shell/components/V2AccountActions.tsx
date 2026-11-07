@@ -1,5 +1,11 @@
 "use client";
 
+import { useV2Translation } from "@/src/shared/i18n/V2LanguageProvider";
+
+
+import { shellUiMessages } from "@/lib/i18n/catalogs/shellUi";
+
+
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useState, useSyncExternalStore } from "react";
@@ -44,6 +50,8 @@ function LogoutIcon() {
 }
 
 function AccountActions({ authReturnHref }: { authReturnHref?: string }) {
+  const { t } = useV2Translation(shellUiMessages);
+
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -76,8 +84,7 @@ function AccountActions({ authReturnHref }: { authReturnHref?: string }) {
 
     if (error) {
       alert(
-        error.message ||
-          "Väljalogimine ebaõnnestus."
+        t("sign_out_failed")
       );
       return;
     }
@@ -94,10 +101,9 @@ function AccountActions({ authReturnHref }: { authReturnHref?: string }) {
   if (error) {
     return (
       <button type="button" onClick={retry}
-        title="Sisselogimise kontroll ei õnnestunud. Proovi uuesti."
+        title={t("we_could_not_verify_your_sign_in_please_try_again")}
         className="rounded-full border border-amber-300 bg-amber-50 px-3 py-2 text-xs font-bold text-amber-900 sm:px-4 sm:text-sm">
-        Kontrolli kontot
-      </button>
+        {t("check_account")} </button>
     );
   }
 
@@ -108,11 +114,9 @@ function AccountActions({ authReturnHref }: { authReturnHref?: string }) {
           href={authHref}
           className="rounded-full bg-emerald-600 px-3 py-2 text-xs font-bold text-white shadow-sm transition hover:bg-emerald-700 sm:px-4 sm:text-sm"
         >
-          Logi sisse
-          <span className="hidden sm:inline">
+          {t("sign_in")} <span className="hidden sm:inline">
             {" "}
-            / Loo konto
-          </span>
+            {t("create_account")} </span>
         </Link>
       </div>
     );
@@ -124,15 +128,13 @@ function AccountActions({ authReturnHref }: { authReturnHref?: string }) {
         href={v2IntegrationEnabled() ? "/v2/messages" : "/messages"}
         className="hidden rounded-full border border-neutral-200 bg-white px-4 py-2 text-sm font-medium shadow-sm transition hover:border-neutral-300 md:inline-flex"
       >
-        Sõnumid
-      </Link>
+        {t("messages")} </Link>
 
       <Link
         href="/v2/my-area"
         className="hidden rounded-full border border-neutral-200 bg-white px-4 py-2 text-sm font-medium shadow-sm transition hover:border-neutral-300 md:inline-flex"
       >
-        Minu ala
-      </Link>
+        {t("my_area")} </Link>
 
       <V2IdentityBadge
         userId={user.id}
@@ -152,10 +154,10 @@ function AccountActions({ authReturnHref }: { authReturnHref?: string }) {
         disabled={loggingOut}
         aria-label={
           loggingOut
-            ? "Väljun"
-            : "Logi välja"
+            ? t("signing_out")
+            : t("sign_out")
         }
-        title="Logi välja"
+        title={t("sign_out")}
         className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-neutral-200 bg-white text-neutral-500 shadow-sm transition hover:border-neutral-300 hover:text-black disabled:cursor-wait disabled:opacity-60 md:h-auto md:w-auto md:border-transparent md:bg-emerald-600 md:px-4 md:py-2 md:text-sm md:font-bold md:text-white md:hover:bg-emerald-700 md:hover:text-white"
       >
         <span className="md:hidden">
@@ -164,8 +166,8 @@ function AccountActions({ authReturnHref }: { authReturnHref?: string }) {
 
         <span className="hidden md:inline">
           {loggingOut
-            ? "Väljun..."
-            : "Logi välja"}
+            ? t("signing_out_2")
+            : t("sign_out")}
         </span>
       </button>
     </div>

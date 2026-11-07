@@ -1,5 +1,6 @@
 "use client";
 
+import { marketplaceMessage, safeMarketplaceError } from "../../../shared/i18n/marketplaceMessages";
 import {
   useCallback,
   useEffect,
@@ -19,14 +20,7 @@ export type ServiceCategoriesState = {
 function resolveError(
   error: unknown
 ): string {
-  if (
-    error instanceof Error &&
-    error.message
-  ) {
-    return error.message;
-  }
-
-  return "Teenuste rubriike ei saanud laadida.";
+  return safeMarketplaceError(error, marketplaceMessage("category.service_categories_could_not_be_loaded.9373a9"));
 }
 
 export function useServiceCategories():

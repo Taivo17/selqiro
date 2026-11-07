@@ -1,5 +1,13 @@
 "use client";
 
+import { renderUiMessage } from "@/lib/i18n/interfaceMessage";
+
+import { useV2Translation } from "@/src/shared/i18n/V2LanguageProvider";
+import { getCatalogTranslation, localeForLanguage, type TranslationParams } from "@/lib/i18n/useTranslation";
+import type { Language } from "@/lib/i18n/translations";
+import { energyUiMessages } from "@/lib/i18n/catalogs/energyUi";
+
+
 import Link from "next/link";
 import type {
   EnergyLedgerEntry,
@@ -21,39 +29,14 @@ type HistoryPresentation = {
   tone: HistoryTone;
 };
 
-const energyFormatter =
-  new Intl.NumberFormat(
-    "et-EE"
-  );
-
-function formatEnergy(
-  value: number
-): string {
-  return energyFormatter.format(
-    value
-  );
+function formatEnergy(value: number, uiLanguage: Language): string {
+  return value.toLocaleString(localeForLanguage(uiLanguage));
 }
-
-function formatDateTime(
-  value: string
-): string {
+function formatDateTime(value: string, uiLanguage: Language): string {
   const date = new Date(value);
-
-  if (
-    Number.isNaN(
-      date.getTime()
-    )
-  ) {
-    return value;
-  }
-
-  return new Intl.DateTimeFormat(
-    "et-EE",
-    {
-      dateStyle: "medium",
-      timeStyle: "short",
-    }
-  ).format(date);
+  return Number.isNaN(date.getTime()) ? value : new Intl.DateTimeFormat(localeForLanguage(uiLanguage), {
+    dateStyle: "medium", timeStyle: "short",
+  }).format(date);
 }
 
 function metadataText(
@@ -73,13 +56,15 @@ function metadataText(
 }
 
 function featureLabel(
-  entry: EnergyLedgerEntry
+  entry: EnergyLedgerEntry, uiLanguage: Language = "en"
 ): string {
+  const t = (key: keyof typeof energyUiMessages.en, params?: TranslationParams) => getCatalogTranslation(uiLanguage, energyUiMessages, key, params);
+
   if (
     entry.feature ===
     "admin_test_energy"
   ) {
-    return "Admini test-Energy";
+    return t("admin_test_energy");
   }
 
   return entry.feature
@@ -88,8 +73,10 @@ function featureLabel(
 }
 
 function historyTitle(
-  entry: EnergyLedgerEntry
+  entry: EnergyLedgerEntry, uiLanguage: Language = "en"
 ): string {
+  const t = (key: keyof typeof energyUiMessages.en, params?: TranslationParams) => getCatalogTranslation(uiLanguage, energyUiMessages, key, params);
+
   const label =
     metadataText(
       entry,
@@ -104,42 +91,42 @@ function historyTitle(
     entry.eventType ===
     "paid_grant"
   ) {
-    return "Ostetud Energy lisatud";
+    return t("purchased_energy_added");
   }
 
   if (
     entry.eventType ===
     "bonus_grant"
   ) {
-    return "Boonus-Energy lisatud";
+    return t("bonus_energy_added");
   }
 
   if (
     entry.eventType ===
     "reserve"
   ) {
-    return "Energy reserveeritud";
+    return t("energy_reserved");
   }
 
   if (
     entry.eventType ===
     "commit"
   ) {
-    return "Energy kasutatud";
+    return t("energy_used");
   }
 
   if (
     entry.eventType ===
     "release"
   ) {
-    return "Energy vabastatud";
+    return t("energy_released");
   }
 
-  return "Energy parandus";
+  return t("energy_adjustment");
 }
 
 function historyAmount(
-  entry: EnergyLedgerEntry
+  entry: EnergyLedgerEntry, uiLanguage: Language
 ): {
   amount: string;
   tone: HistoryTone;
@@ -163,7 +150,7 @@ function historyAmount(
 
     return {
       amount:
-        `${formatEnergy(amount)} reserveeritud`,
+        getCatalogTranslation(uiLanguage, energyUiMessages, "amount_reserved", {amount: formatEnergy(amount, uiLanguage)}),
       tone: "reserved",
     };
   }
@@ -179,7 +166,7 @@ function historyAmount(
 
     return {
       amount:
-        `−${formatEnergy(amount)}`,
+        `−${formatEnergy(amount, uiLanguage)}`,
       tone: "minus",
     };
   }
@@ -195,7 +182,7 @@ function historyAmount(
 
     return {
       amount:
-        `+${formatEnergy(amount)}`,
+        `+${formatEnergy(amount, uiLanguage)}`,
       tone: "plus",
     };
   }
@@ -205,7 +192,7 @@ function historyAmount(
   ) {
     return {
       amount:
-        `+${formatEnergy(availableDelta)}`,
+        `+${formatEnergy(availableDelta, uiLanguage)}`,
       tone: "plus",
     };
   }
@@ -215,14 +202,14 @@ function historyAmount(
       `−${formatEnergy(
         Math.abs(
           availableDelta
-        )
+        ), uiLanguage
       )}`,
     tone: "minus",
   };
 }
 
 function historyPresentation(
-  entry: EnergyLedgerEntry
+  entry: EnergyLedgerEntry, uiLanguage: Language = "en"
 ): HistoryPresentation {
   const purpose =
     metadataText(
@@ -233,15 +220,15 @@ function historyPresentation(
   const {
     amount,
     tone,
-  } = historyAmount(entry);
+  } = historyAmount(entry, uiLanguage);
 
   return {
-    title: historyTitle(entry),
+    title: historyTitle(entry, uiLanguage),
     meta: [
       purpose ||
-        featureLabel(entry),
+        featureLabel(entry, uiLanguage),
       formatDateTime(
-        entry.createdAt
+        entry.createdAt, uiLanguage
       ),
     ].join(" · "),
     amount,
@@ -258,6 +245,7 @@ function BalanceCard({
   value: number;
   helper: string;
 }) {
+  const { language: uiLanguage } = useV2Translation(energyUiMessages);
   return (
     <div className="rounded-[22px] border border-black/5 bg-[#fbfbfa] p-5">
       <p className="text-xs font-black uppercase tracking-[0.18em] text-neutral-400">
@@ -265,7 +253,7 @@ function BalanceCard({
       </p>
 
       <p className="mt-2 break-words text-3xl font-black">
-        {formatEnergy(value)}
+        {formatEnergy(value, uiLanguage)}
       </p>
 
       <p className="mt-1 text-sm leading-5 text-neutral-500">
@@ -280,8 +268,10 @@ function HistoryRow({
 }: {
   entry: EnergyLedgerEntry;
 }) {
+  const { language: uiLanguage } = useV2Translation(energyUiMessages);
+
   const item =
-    historyPresentation(entry);
+    historyPresentation(entry, uiLanguage);
 
   return (
     <div className="flex min-w-0 items-start justify-between gap-4 py-4 first:pt-0 last:pb-0">
@@ -325,29 +315,24 @@ function LoadingState() {
 }
 
 function LoginState() {
+  const { t } = useV2Translation(energyUiMessages);
+
   return (
     <section className="rounded-[34px] border border-emerald-100 bg-emerald-50 p-8 text-center shadow-sm">
       <p className="text-xs font-black uppercase tracking-[0.24em] text-emerald-700">
-        Energy
-      </p>
+        {t("energy")} </p>
 
       <h1 className="mt-3 text-3xl font-black tracking-tight">
-        Logi walleti vaatamiseks sisse
-      </h1>
+        {t("sign_in_to_view_your_wallet")} </h1>
 
       <p className="mx-auto mt-3 max-w-xl text-sm leading-6 text-neutral-600">
-        Energy kuulub aktiivse identiteedi walletile.
-        Saldo ja ajalugu on nähtavad ainult sisse
-        logitud kasutajale, kellel on sellele
-        identiteedile ligipääs.
-      </p>
+        {t("energy_belongs_to_the_active_identity_s_wallet_its_balance_and_history_are_")} </p>
 
       <Link
         href="/auth"
         className="mt-6 inline-flex rounded-full bg-black px-6 py-3 text-sm font-black text-white"
       >
-        Logi sisse
-      </Link>
+        {t("sign_in")} </Link>
     </section>
   );
 }
@@ -359,18 +344,18 @@ function ErrorState({
   error: string;
   onRetry: () => void;
 }) {
+  const { language: uiLanguage, t } = useV2Translation(energyUiMessages);
+
   return (
     <section className="rounded-[34px] border border-red-100 bg-red-50 p-8 text-center shadow-sm">
       <p className="text-xs font-black uppercase tracking-[0.24em] text-red-700">
-        Energy
-      </p>
+        {t("energy")} </p>
 
       <h1 className="mt-3 text-3xl font-black tracking-tight text-red-950">
-        Energy andmeid ei saanud laadida
-      </h1>
+        {t("could_not_load_energy_information")} </h1>
 
       <p className="mx-auto mt-3 max-w-2xl break-words text-sm leading-6 text-red-800">
-        {error}
+        {renderUiMessage(uiLanguage, error)}
       </p>
 
       <button
@@ -378,8 +363,7 @@ function ErrorState({
         onClick={onRetry}
         className="mt-6 rounded-full bg-red-950 px-6 py-3 text-sm font-black text-white"
       >
-        Proovi uuesti
-      </button>
+        {t("try_again")} </button>
     </section>
   );
 }
@@ -393,38 +377,32 @@ function WalletHero({
   identityName: string;
   onRefresh: () => void;
 }) {
+  const { language: uiLanguage, t } = useV2Translation(energyUiMessages);
+
   return (
     <section className="rounded-[34px] border border-black/5 bg-white p-6 shadow-sm md:p-8">
       <div className="grid gap-6 lg:grid-cols-[1fr_380px] lg:items-center">
         <div className="min-w-0">
           <p className="text-xs font-black uppercase tracking-[0.26em] text-emerald-600">
-            Energy
-          </p>
+            {t("energy")} </p>
 
           <h1 className="mt-3 break-words text-4xl font-black tracking-tight md:text-5xl">
-            Energy wallet
-          </h1>
+            {t("energy_wallet")} </h1>
 
           <p className="mt-3 max-w-3xl text-base leading-7 text-neutral-600">
-            Energy kuulub aktiivsele identiteedile.
-            Siin kuvatakse päris saadaval, ostetud,
-            boonus- ja reserveeritud Energy ning
-            append-only tehinguajalugu.
-          </p>
+            {t("energy_belongs_to_your_active_identity_this_page_shows_available_purchased_")} </p>
 
           <button
             type="button"
             onClick={onRefresh}
             className="mt-5 rounded-full border border-neutral-200 bg-white px-5 py-2.5 text-sm font-black shadow-sm transition hover:border-neutral-300"
           >
-            Värskenda andmeid
-          </button>
+            {t("refresh_information")} </button>
         </div>
 
         <div className="min-w-0 rounded-[26px] bg-neutral-950 p-6 text-white">
           <p className="text-xs font-black uppercase tracking-[0.2em] text-white/45">
-            Tegutsen kui
-          </p>
+            {t("acting_as")} </p>
 
           <p className="mt-2 break-words text-2xl font-black">
             {identityName}
@@ -432,24 +410,22 @@ function WalletHero({
 
           <div className="mt-5 rounded-[22px] bg-white/10 p-5">
             <p className="text-xs font-black uppercase tracking-[0.2em] text-white/45">
-              Saadaval
-            </p>
+              {t("available")} </p>
 
             <p className="mt-2 break-words text-5xl font-black">
               {formatEnergy(
-                wallet.availableTotal
+                wallet.availableTotal, uiLanguage
               )}
             </p>
 
             <p className="mt-1 text-sm text-white/60">
-              Energy kasutamiseks valmis
-            </p>
+              {t("energy_ready_to_use")} </p>
           </div>
 
           <p className="mt-4 text-xs leading-5 text-white/45">
-            Uuendatud{" "}
+            {t("updated")}{" "}
             {formatDateTime(
-              wallet.updatedAt
+              wallet.updatedAt, uiLanguage
             )}
           </p>
         </div>
@@ -460,6 +436,8 @@ function WalletHero({
 
 export default function
 EnergyWalletPage() {
+  const { language: uiLanguage, t } = useV2Translation(energyUiMessages);
+
   const {
     identity,
     wallet,
@@ -491,7 +469,7 @@ EnergyWalletPage() {
       <ErrorState
         error={
           error ||
-          "Energy wallet puudub."
+          t("no_energy_wallet_found")
         }
         onRetry={() => {
           void refresh();
@@ -505,7 +483,7 @@ EnergyWalletPage() {
       <WalletHero
         wallet={wallet}
         identityName={
-          identity.displayName
+          identity.displayName || t("active_identity")
         }
         onRefresh={() => {
           void refresh();
@@ -517,43 +495,38 @@ EnergyWalletPage() {
           <section className="rounded-[34px] border border-black/5 bg-white p-6 shadow-sm md:p-8">
             <div>
               <p className="text-xs font-black uppercase tracking-[0.26em] text-neutral-400">
-                Saldo jaotus
-              </p>
+                {t("balance_breakdown")} </p>
 
               <h2 className="mt-2 text-3xl font-black tracking-tight">
-                Walleti päris seis
-              </h2>
+                {t("current_wallet_balance")} </h2>
 
               <p className="mt-2 max-w-3xl text-sm leading-6 text-neutral-500">
-                Ostetud ja boonus-Energy on eraldi.
-                Reserveeritud Energy ei ole teise
-                tegevuse jaoks saadaval.
-              </p>
+                {t("purchased_and_bonus_energy_are_kept_separate_reserved_energy_is_unavailable")} </p>
             </div>
 
             <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               <BalanceCard
-                label="Boonus"
+                label={t("bonus")}
                 value={
                   wallet.availableBonus
                 }
-                helper="Tervitus-, test- või kompensatsiooni-Energy"
+                helper={t("welcome_test_or_compensation_energy")}
               />
 
               <BalanceCard
-                label="Ostetud"
+                label={t("purchased")}
                 value={
                   wallet.availablePaid
                 }
-                helper="Päriselt makstud Energy"
+                helper={t("energy_you_have_paid_for")}
               />
 
               <BalanceCard
-                label="Reserveeritud"
+                label={t("reserved")}
                 value={
                   wallet.reservedTotal
                 }
-                helper="Poolelioleva tegevuse jaoks kinni"
+                helper={t("held_for_a_pending_action")}
               />
             </div>
           </section>
@@ -562,31 +535,23 @@ EnergyWalletPage() {
             <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
               <div>
                 <p className="text-xs font-black uppercase tracking-[0.26em] text-neutral-400">
-                  Ajalugu
-                </p>
+                  {t("history")} </p>
 
                 <h2 className="mt-2 text-3xl font-black tracking-tight">
-                  Energy ajalugu
-                </h2>
+                  {t("energy_history")} </h2>
               </div>
 
               <span className="w-fit rounded-full bg-neutral-100 px-3 py-1.5 text-xs font-black text-neutral-600">
-                {entries.length} sündmust
-              </span>
+                {entries.length}  {t("events")} </span>
             </div>
 
             {entries.length === 0 ? (
               <div className="rounded-[22px] border border-dashed border-neutral-200 bg-[#fbfbfa] p-6 text-center">
                 <p className="font-black">
-                  Energy ajalugu on tühi
-                </p>
+                  {t("your_energy_history_is_empty")} </p>
 
                 <p className="mt-2 text-sm leading-6 text-neutral-500">
-                  Grandid, ostud, reserveeringud,
-                  kasutamised, vabastamised ja
-                  parandused ilmuvad siia ledger'i
-                  sündmustena.
-                </p>
+                  {t("grants_purchases_reservations_use_releases_and_adjustments_appear_here_as_t")} </p>
               </div>
             ) : (
               <div className="divide-y divide-black/5">
@@ -604,105 +569,74 @@ EnergyWalletPage() {
 
           <section className="rounded-[34px] border border-blue-100 bg-blue-50 p-6 shadow-sm md:p-8">
             <p className="text-xs font-black uppercase tracking-[0.26em] text-blue-600">
-              Tulevane võimalus
-            </p>
+              {t("coming_later")} </p>
 
             <h2 className="mt-2 text-3xl font-black tracking-tight text-blue-950">
-              Energy ostmine ei ole veel avatud
-            </h2>
+              {t("energy_purchases_are_not_available_yet")} </h2>
 
             <p className="mt-3 max-w-3xl text-sm leading-6 text-blue-900">
-              Paketid, hinnad, makseteenus, receipt'id
-              ja arved lisatakse eraldi kontrollitud
-              etapis. Sellel lehel ei ole praegu
-              ühtegi makset käivitavat nuppu.
-            </p>
+              {t("packages_prices_payment_processing_receipts_and_invoices_will_be_introduced")} </p>
 
             <button
               type="button"
               disabled
               className="mt-5 cursor-not-allowed rounded-full bg-blue-950 px-6 py-3 text-sm font-black text-white opacity-45"
             >
-              Ostmine tuleb hiljem
-            </button>
+              {t("purchases_coming_later")} </button>
           </section>
         </div>
 
         <aside className="min-w-0 space-y-5">
           <section className="rounded-[30px] border border-emerald-100 bg-emerald-50 p-6 shadow-sm">
             <p className="text-xs font-black uppercase tracking-[0.24em] text-emerald-700">
-              Aktiivne identiteet
-            </p>
+              {t("active_identity")} </p>
 
             <h2 className="mt-2 break-words text-2xl font-black text-emerald-950">
-              {identity.displayName}
+              {identity.displayName || t("active_identity")}
             </h2>
 
             <p className="mt-2 text-sm leading-6 text-emerald-950/75">
-              Identiteeti vahetades laadib Energy
-              vaade automaatselt selle identiteedi
-              walleti ja ajaloo.
-            </p>
+              {t("switching_identities_automatically_loads_the_selected_identity_s_energy_wal")} </p>
           </section>
 
           <section className="rounded-[30px] border border-black/5 bg-white p-6 shadow-sm">
             <p className="text-xs font-black uppercase tracking-[0.24em] text-neutral-400">
-              Saldoämbrid
-            </p>
+              {t("balance_types")} </p>
 
             <h2 className="mt-2 text-2xl font-black">
-              Ostetud ja boonus eraldi
-            </h2>
+              {t("purchased_and_bonus_kept_separate")} </h2>
 
             <div className="mt-4 space-y-3 text-sm leading-6 text-neutral-600">
               <p>
-                Boonus-Energy kasutatakse tulevikus
-                vabatahtlike lisavõimaluste
-                proovimiseks ja kompensatsioonideks.
-              </p>
+                {t("bonus_energy_will_be_used_for_trying_optional_features_and_for_compensation")} </p>
 
               <p>
-                Ostetud Energy jääb eraldi, et maksete,
-                tagastuste ja tehniliste paranduste
-                ajalugu oleks korrektne.
-              </p>
+                {t("purchased_energy_is_kept_separate_so_payments_refunds_and_technical_adjustm")} </p>
             </div>
           </section>
 
           <section className="rounded-[30px] border border-amber-100 bg-amber-50 p-6 shadow-sm">
             <p className="text-xs font-black uppercase tracking-[0.24em] text-amber-700">
-              Reserveeritud
-            </p>
+              {t("reserved")} </p>
 
             <h2 className="mt-2 text-2xl font-black text-amber-950">
               {formatEnergy(
-                wallet.reservedTotal
-              )} Energy
-            </h2>
+                wallet.reservedTotal, uiLanguage
+              )}  {t("energy")} </h2>
 
             <p className="mt-2 text-sm leading-6 text-amber-950/75">
-              Reserveeritud Energy on poolelioleva
-              toimingu jaoks kinni. Reserve/commit/
-              release tehingud lisatakse järgmises
-              tehnilises etapis.
-            </p>
+              {t("reserved_energy_is_held_for_a_pending_action_reserve_commit_and_release_tra")} </p>
           </section>
 
           <section className="rounded-[30px] border border-black/5 bg-white p-6 shadow-sm">
             <p className="text-xs font-black uppercase tracking-[0.24em] text-neutral-400">
-              Selqiro tugi
-            </p>
+              {t("selqiro_support")} </p>
 
             <h2 className="mt-2 text-2xl font-black">
-              Parandused jäävad ajalukku
-            </h2>
+              {t("adjustments_remain_in_the_history")} </h2>
 
             <p className="mt-2 text-sm leading-6 text-neutral-600">
-              Tulevased admini parandused lisatakse
-              uue ledger'i sündmusena. Olemasolevat
-              saldot ega varasemat ajalugu ei muudeta
-              otse.
-            </p>
+              {t("future_administrator_adjustments_will_appear_as_new_transaction_records_exi")} </p>
           </section>
         </aside>
       </section>
