@@ -18,6 +18,7 @@ import OwnerHorseOfferEditFields from "./OwnerHorseOfferEditFields";
 import OwnerHorseGalleryEditor, {horseEditorGalleryDirty, horseEditorPhotos, type HorseEditorPhoto} from "./OwnerHorseGalleryEditor";
 import { horseActivityDeadline } from "../../../entities/horse-offer/model/horseActivity";
 import { getListingActivity } from "../../../entities/listing/model/listingActivity";
+import { applicableHorseSavedConfirmation } from "../../../entities/horse-offer/model/savedConfirmation";
 
 const button = "rounded-full border border-zinc-300 bg-white px-5 py-3 text-sm font-black disabled:opacity-40";
 
@@ -46,6 +47,8 @@ export default function OwnerHorseOfferEditor({userId, offerId}: {userId: string
   const locked = publication.view.phase !== "editing";
   const supportedStatus = !!detail && ["draft", "published", "paused", "closed"].includes(detail.status);
   const editable = !!(supportedStatus && form && context.ready && !locked);
+  const savedConfirmation = context.active && form
+    ? applicableHorseSavedConfirmation(context.snapshot, context.actor, form.offerType) : null;
   const publiclyActive = detail?.status === "published" && getListingActivity("active",
     horseActivityDeadline(detail.activeUntil, detail.publishedAt)).state === "active"
     && horseActivityDeadline(detail.activeUntil, detail.publishedAt) !== null;
@@ -67,7 +70,9 @@ export default function OwnerHorseOfferEditor({userId, offerId}: {userId: string
       const content = {...buildHorseOfferDraftSaveInput(form), locationText: detail.locationText, horseLat: detail.horseLat, horseLng: detail.horseLng};
       void publication.session.start({content, expectedRevision: context.snapshot.editRevision,
         gallery: photos.map(photo => photo.image ? {imageId: photo.image.id, isPrimary: photo.isPrimary}
-          : {file: photo.file, isPrimary: photo.isPrimary}), confirmations, policySnapshot: policies});
+          : {file: photo.file, isPrimary: photo.isPrimary}),
+        confirmations: savedConfirmation ? {reusePublicationEventId: savedConfirmation.publicationEventId} : confirmations,
+        policySnapshot: policies});
     } catch { setLocalError("checkDetails"); }
   };
   return <div className="mx-auto w-full min-w-0 max-w-5xl space-y-6 pb-8" data-owner-horse-offer-edit-id={offerId}
@@ -91,12 +96,14 @@ export default function OwnerHorseOfferEditor({userId, offerId}: {userId: string
           disabled={!editable} onChange={next => { if (editable) setPhotos(next); }} />
         {form && supportedStatus ? <fieldset disabled={!editable}>
           <HorseOfferPublicationGate offerType={form.offerType} value={confirmations} onPoliciesChange={setPolicies}
+            savedConfirmation={savedConfirmation}
             onConfirmAllChange={checked => { if (editable) setConfirmations(applyHorseOfferPublicationConfirmationGroupChange(form.offerType, checked)); }} />
         </fieldset> : null}
       </div>
       {form && supportedStatus ? <HorsePublicationAction
         session={publication.session} view={publication.view} editing={detail.status !== "draft"} ready={context.ready}
-        canSubmit={editable && !!policies && (detail.status === "draft" || dirty) && getHorseOfferPublicationConfirmationProgress(form.offerType, confirmations).complete}
+        canSubmit={editable && !!policies && (detail.status === "draft" || dirty)
+          && (!!savedConfirmation || getHorseOfferPublicationConfirmationProgress(form.offerType, confirmations).complete)}
         onSubmit={submit} localError={localError} onReset={() => setLocalError("")} /> : null}
       <section className="rounded-3xl border border-zinc-200 bg-white p-5">
         {publication.view.phase === "editing" ? <p className="text-sm">{t(dirty ? "unsaved" : "noChanges")}</p> : null}

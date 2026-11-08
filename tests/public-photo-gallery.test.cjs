@@ -57,10 +57,20 @@ const nodes = (tree, type) => descendants(tree).filter(node => node.type === typ
 function mountedGallery(initialProps = { title: 'Horse test', photos }) {
   const state = [], effects = [], refs = [];
   let cursor = 0, dirty = false, tree, props = initialProps;
+  let now = 0, nextTimer = 0;
+  const timers = new Map();
+  const clock = {
+    setTimeout(callback, delay) { const id = ++nextTimer; timers.set(id, { callback, due: now + delay }); return id; },
+    clearTimeout(id) { timers.delete(id); },
+  };
   const doc = { activeElement: null, body: { style: { overflow: 'auto' } } };
   class Element {
     isConnected = true;
+    focusVisible = false;
+    children = new Set();
     focus() { doc.activeElement = this; }
+    contains(other) { return this === other || this.children.has(other); }
+    matches(selector) { return selector === ':focus-visible' && this.focusVisible; }
   }
   class Dialog extends Element {
     open = false;
@@ -92,7 +102,7 @@ function mountedGallery(initialProps = { title: 'Horse test', photos }) {
       }
     },
   };
-  const modules = createModules(hooks, { document: doc, HTMLElement: Element });
+  const modules = createModules(hooks, { document: doc, HTMLElement: Element, window: clock });
   const Gallery = modules.load(galleryModule).default;
   const domRefs = new Map();
   function render() {
@@ -115,11 +125,37 @@ function mountedGallery(initialProps = { title: 'Horse test', photos }) {
     }
     return tree;
   }
+  function act(callback) {
+    callback();
+    for (let i = 0; dirty && i < 10; i++) render();
+    assert.equal(dirty, false);
+  }
   render();
   return {
     get tree() { return tree; },
     doc, opener,
-    act(callback) { callback(); for (let i = 0; dirty && i < 10; i++) render(); assert.equal(dirty, false); },
+    act,
+    get pendingTimers() { return [...timers.values()]; },
+    advance(milliseconds) {
+      const end = now + milliseconds;
+      for (;;) {
+        const next = [...timers].filter(([, timer]) => timer.due <= end).sort((a, b) => a[1].due - b[1].due)[0];
+        if (!next) break;
+        const [id, timer] = next;
+        now = timer.due;
+        timers.delete(id);
+        act(timer.callback);
+      }
+      now = end;
+    },
+    focusNavigation(container, keyboard = true) {
+      const element = new Element();
+      element.focusVisible = keyboard;
+      container.props.ref.current.children.add(element);
+      element.focus();
+      act(container.props.onFocus);
+    },
+    blurNavigation(container) { opener.focus(); act(container.props.onBlur); },
     update(next) { props = next; render(); },
     language(value) { modules.language(value); render(); },
     unmount() { for (const effect of effects) effect?.cleanup?.(); },
@@ -136,6 +172,194 @@ function click(gallery, name) {
 const mainPhoto = gallery => nodes(gallery.tree, 'img')[0].props.src;
 const event = patch => ({ pointerId: 5, pointerType: 'touch', isPrimary: true,
   clientX: 150, clientY: 100, detail: 1, stopPropagation() {}, preventDefault() {}, ...patch });
+const surface = (gallery, large = false) => nodes(large ? nodes(gallery.tree, 'dialog')[0] : gallery.tree, 'div')
+  .find(node => typeof node.props.onPointerMove === 'function');
+const navigation = (gallery, large = false) => nodes(large ? nodes(gallery.tree, 'dialog')[0] : gallery.tree, 'div')
+  .find(node => node.props.ref && typeof node.props.onFocus === 'function');
+function arrowsHidden(gallery, large = false) {
+  const arrows = nodes(navigation(gallery, large), 'button');
+  assert.equal(arrows.length, 2);
+  return arrows.every(node => node.props.className.split(' ').includes('opacity-0')
+    && node.props.className.split(' ').includes('pointer-events-none'));
+}
+
+test('navigation alone hides after three seconds; enlargement, thumbnails and keyboard entry remain available', () => {
+  const gallery = mountedGallery();
+  assert.equal(arrowsHidden(gallery), false);
+  assert.equal(gallery.pendingTimers.length, 1);
+  gallery.advance(2999);
+  assert.equal(arrowsHidden(gallery), false);
+  gallery.advance(1);
+  assert.equal(arrowsHidden(gallery), true);
+  assert.equal(gallery.pendingTimers.length, 0);
+  for (const label of ['Previous image', 'Next image']) {
+    const arrow = button(gallery, label);
+    assert.equal(arrow.props['aria-hidden'], undefined);
+    assert.equal(arrow.props.tabIndex, undefined, 'A visually hidden arrow remains keyboard reachable');
+    assert.match(arrow.props.className, /focus-visible:opacity-100/);
+  }
+  assert.doesNotMatch(button(gallery, 'Enlarge image 1 of 3').props.className, /opacity-0/);
+  assert.doesNotMatch(button(gallery, 'Show image 2 of 3').props.className, /opacity-0/);
+  click(gallery, 'Enlarge image 1 of 3');
+  gallery.advance(3000);
+  assert.equal(arrowsHidden(gallery, true), true);
+  assert.doesNotMatch(button(gallery, 'Close image').props.className, /opacity-0/);
+  assert.equal(nodes(nodes(gallery.tree, 'dialog')[0], 'img')[0].props.src, photos[0].fullSrc);
+});
+
+test('pointer movement or entry reveals arrows and each interaction starts a fresh three seconds', () => {
+  const gallery = mountedGallery();
+  gallery.advance(3000);
+  gallery.act(surface(gallery).props.onPointerMove);
+  assert.equal(arrowsHidden(gallery), false);
+  gallery.advance(2000);
+  gallery.act(surface(gallery).props.onPointerMove);
+  assert.equal(gallery.pendingTimers.length, 1, 'Repeated motion replaces the previous timer');
+  gallery.advance(2999);
+  assert.equal(arrowsHidden(gallery), false);
+  gallery.advance(1);
+  assert.equal(arrowsHidden(gallery), true);
+  gallery.act(surface(gallery).props.onPointerEnter);
+  assert.equal(arrowsHidden(gallery), false);
+  gallery.advance(3000);
+  assert.equal(arrowsHidden(gallery), true);
+});
+
+test('photo and thumbnail selection reveal navigation, including selecting the current thumbnail', () => {
+  const gallery = mountedGallery();
+  gallery.advance(3000);
+  click(gallery, 'Show image 2 of 3');
+  assert.equal(mainPhoto(gallery), photos[1].src);
+  assert.equal(arrowsHidden(gallery), false);
+  gallery.advance(2500);
+  click(gallery, 'Show image 2 of 3');
+  gallery.advance(2999);
+  assert.equal(arrowsHidden(gallery), false);
+  gallery.advance(1);
+  assert.equal(arrowsHidden(gallery), true);
+  gallery.act(() => gallery.tree.props.onKeyDown({ key: 'Home', preventDefault() {}, stopPropagation() {} }));
+  assert.equal(mainPhoto(gallery), photos[0].src);
+  assert.equal(arrowsHidden(gallery), false);
+  gallery.advance(3000);
+  gallery.update({ title: 'Changed', photos: [{ id: 'replacement', src: '/exact/replacement.webp' }, photos[1]] });
+  assert.equal(arrowsHidden(gallery), false, 'A different displayed photo has a new idle period');
+  gallery.advance(3000);
+  assert.equal(arrowsHidden(gallery), true);
+});
+
+test('keyboard focus keeps navigation visible, then blur starts another idle period; mouse focus does not pin arrows', () => {
+  const gallery = mountedGallery();
+  gallery.advance(3000);
+  gallery.focusNavigation(navigation(gallery));
+  assert.equal(arrowsHidden(gallery), false);
+  gallery.advance(9000);
+  assert.equal(arrowsHidden(gallery), false);
+  gallery.blurNavigation(navigation(gallery));
+  gallery.advance(2999);
+  assert.equal(arrowsHidden(gallery), false);
+  gallery.advance(1);
+  assert.equal(arrowsHidden(gallery), true);
+  gallery.focusNavigation(navigation(gallery), false);
+  assert.equal(arrowsHidden(gallery), false);
+  gallery.advance(3000);
+  assert.equal(arrowsHidden(gallery), true);
+});
+
+test('enlarged-view navigation has a fresh idle period on opening, movement and reopening', () => {
+  const gallery = mountedGallery();
+  gallery.advance(3000);
+  click(gallery, 'Enlarge image 1 of 3');
+  assert.equal(arrowsHidden(gallery, true), false);
+  assert.equal(gallery.pendingTimers.length, 1, 'Inline idle work stops while the modal is open');
+  gallery.advance(3000);
+  assert.equal(arrowsHidden(gallery, true), true);
+  gallery.act(surface(gallery, true).props.onPointerMove);
+  assert.equal(arrowsHidden(gallery, true), false);
+  gallery.advance(3000);
+  assert.equal(arrowsHidden(gallery, true), true);
+  gallery.focusNavigation(navigation(gallery, true));
+  gallery.advance(6000);
+  assert.equal(arrowsHidden(gallery, true), false);
+  click(gallery, 'Close image');
+  assert.equal(arrowsHidden(gallery), false);
+  gallery.advance(3000);
+  click(gallery, 'Enlarge image 1 of 3');
+  assert.equal(arrowsHidden(gallery, true), false);
+  gallery.advance(3000);
+  assert.equal(arrowsHidden(gallery, true), true, 'Closed modal keyboard focus cannot keep a new viewer visible forever');
+});
+
+test('touch gestures reveal the arrows after inactivity and preserve swipe navigation', () => {
+  const gallery = mountedGallery();
+  gallery.advance(3000);
+  const opener = button(gallery, 'Enlarge image 1 of 3');
+  gallery.act(() => opener.props.onPointerDown(event()));
+  assert.equal(arrowsHidden(gallery), false);
+  gallery.act(() => opener.props.onPointerUp(event({ clientX: 50, clientY: 110 })));
+  assert.equal(mainPhoto(gallery), photos[1].src);
+  assert.equal(arrowsHidden(gallery), false);
+  click(gallery, 'Enlarge image 2 of 3');
+  assert.equal(nodes(gallery.tree, 'dialog').length, 0, 'A swipe does not also enlarge the image');
+  click(gallery, 'Enlarge image 2 of 3');
+  gallery.advance(3000);
+  gallery.act(() => surface(gallery, true).props.onPointerDown(event()));
+  assert.equal(arrowsHidden(gallery, true), false);
+  gallery.act(() => surface(gallery, true).props.onPointerUp(event({ clientX: 50, clientY: 110 })));
+  assert.equal(mainPhoto(gallery), photos[2].src);
+});
+
+test('the first non-mouse tap in a hidden-arrow viewer gutter reveals controls without closing; visible background taps still close', () => {
+  for (const pointerType of ['touch', 'pen']) {
+    const gallery = mountedGallery();
+    click(gallery, 'Enlarge image 1 of 3');
+    gallery.advance(3000);
+    const target = {};
+    // Touch pointer entry precedes pointer down. It must not erase the fact
+    // that this first tap is revealing previously hidden controls.
+    gallery.act(() => surface(gallery, true).props.onPointerEnter(event({ pointerType })));
+    assert.equal(arrowsHidden(gallery, true), true);
+    gallery.act(() => surface(gallery, true).props.onPointerDown(event({ pointerType })));
+    gallery.act(() => surface(gallery, true).props.onPointerUp(event({ pointerType })));
+    gallery.act(() => surface(gallery, true).props.onClick({ target, currentTarget: target }));
+    assert.equal(nodes(gallery.tree, 'dialog').length, 1);
+    assert.equal(arrowsHidden(gallery, true), false);
+    gallery.act(() => surface(gallery, true).props.onPointerDown(event({ pointerType })));
+    gallery.act(() => surface(gallery, true).props.onPointerUp(event({ pointerType })));
+    gallery.act(() => surface(gallery, true).props.onClick({ target, currentTarget: target }));
+    assert.equal(nodes(gallery.tree, 'dialog').length, 0);
+    // The independent explicit close action is never swallowed by that tap.
+    click(gallery, 'Enlarge image 1 of 3');
+    gallery.advance(3000);
+    gallery.act(() => surface(gallery, true).props.onPointerDown(event({ pointerType })));
+    gallery.act(() => surface(gallery, true).props.onPointerUp(event({ pointerType })));
+    click(gallery, 'Close image');
+    assert.equal(nodes(gallery.tree, 'dialog').length, 0);
+  }
+});
+
+test('cancelled idle callbacks cannot hide new activity and all timer work stops on unmount or losing multiple photos', () => {
+  const gallery = mountedGallery();
+  const oldCallback = gallery.pendingTimers[0].callback;
+  gallery.advance(2000);
+  gallery.act(surface(gallery).props.onPointerMove);
+  gallery.act(oldCallback);
+  assert.equal(arrowsHidden(gallery), false);
+  const currentCallback = gallery.pendingTimers[0].callback;
+  const beforeUnmount = gallery.tree;
+  gallery.unmount();
+  assert.equal(gallery.pendingTimers.length, 0);
+  gallery.act(currentCallback);
+  assert.equal(gallery.tree, beforeUnmount, 'A cleaned-up callback cannot update an unmounted gallery');
+  const replacement = mountedGallery();
+  const pending = replacement.pendingTimers[0].callback;
+  replacement.update({ title: 'Single', photos: [photos[0]] });
+  assert.equal(replacement.pendingTimers.length, 0);
+  replacement.act(pending);
+  assert.equal(nodes(replacement.tree, 'button').length, 1);
+  replacement.update({ title: 'Empty', photos: [] });
+  assert.equal(replacement.pendingTimers.length, 0);
+  assert.equal(nodes(replacement.tree, 'button').length, 0);
+});
 
 test('shared gallery arrows, thumbnails and keyboard select exact sources and wrap in order', () => {
   const gallery = mountedGallery();

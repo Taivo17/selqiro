@@ -1,11 +1,13 @@
 # Shared marketplace foundation
 
-Status: implementation checkpoint, 2026-11-08. The user's latest screenshots
-confirm canonical horse publication with two photos, public discovery and My
-Area. The new horse parity candidate adds the shared viewer, protected owner
-thumbnail and 90-day owner lifecycle; its local evidence and installation status
-are recorded in `docs/continuity/CURRENT_STATE.json`. Services follow this parity
-acceptance. See `horse-owner-lifecycle-v1.md` and `horse-publication-v1.md`.
+Status: implementation checkpoint, 2026-11-08. The user accepted the horse
+public gallery, owner thumbnail and links, paused content edits, reactivation
+without deadline extension, and explicit 90-day renewal. The next scoped repair
+restores 3000-ms idle arrows and stored factual-confirmation reuse for the same
+horse/person. Its local evidence and pending installation are recorded in
+`docs/continuity/CURRENT_STATE.json`. Services are next. See
+`horse-confirmation-reuse-v1.md`, `horse-owner-lifecycle-v1.md` and
+`horse-publication-v1.md`.
 
 ## Decision
 
@@ -31,8 +33,8 @@ framework that hides these differences.
 | Area | Implemented in this source | Remaining boundary |
 | --- | --- | --- |
 | Ordinary listings | Controlled publication, managed images, primary/add/remove, exact readback and cleanup | Existing accepted behavior is retained; general background cleanup remains separate |
-| Horse create and edit | Five types, exact policies, one Publish, private resumable attempt, revision-checked atomic published Save, managed ordered gallery | Publication observed by user; parity candidate preserves paused/sold/expired edits and finite 90-day activity |
-| Horse public and contact | Canonical detail, typed mixed discovery, profile cards, permitted public media, current shared messaging | Parity candidate adds explicit status/renewal; archive/delete remain outside this change |
+| Horse create and edit | Five types, exact policies, one Publish, private resumable attempt, revision-checked atomic published Save, managed ordered gallery | User accepted paused editing and finite 90-day renewal; saved factual-confirmation reuse is the next scoped repair |
+| Horse public and contact | Canonical detail, typed mixed discovery, profile cards, permitted public media, current shared messaging | User accepted explicit status/renewal; archive/delete remain outside this change |
 | Shared owner list | Canonical listing/horse projection, authenticated thumbnails, shared status/renew/edit controls and image/title links | Service variant is not yet connected |
 | Service owner management | Existing draft create/edit, categories, images, primary image and status actions | Must align user flow, revision/finality and managed media with the confirmed-save foundation |
 | Service public profile | Actual published service reads and profile gallery | `/v2/services` still contains examples; `/v2/service/[id]` is an owner preview |

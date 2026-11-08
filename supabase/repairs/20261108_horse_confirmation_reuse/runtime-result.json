@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "suite": "stored-horse-confirmation-evidence-and-edit-reuse",
+  "started_at_utc": "2026-11-08T15:28:04.862Z",
+  "completed_at_utc": "2026-11-08T15:28:25.139Z",
+  "passed": 9,
+  "total": 9,
+  "files": {
+    "01_saved_confirmations.sql": "dede63c5a42fd90d15605e1e8a13d3b830d739f7ca9b5452dcdf90b033e41973",
+    "02_commands.sql": "340879a79b79ca246ec1b8392a5e0f44f930c8874a013d08b1fa9d08b479c989",
+    "03_authority.sql": "726e745df5589603bfec3ff97a6368fa7228db0787ea41bf0b8b453cc9cc5836",
+    "tests/fixture.mjs": "a4290e4b0646914195f3491c38fb8ac37a77ce256fb372e7adabefce0b395f39",
+    "tests/runtime-case.mjs": "a4af188b461bb15d2daecb1bd4b30edda053398075bf20f8530c59e12758b215",
+    "tests/runtime.mjs": "f626ba34e4cd073336e9aaab3e77c5279d1480cb2ff220a4fae326b0882b5e64"
+  },
+  "scenarios": [
+    {
+      "case": "saved_evidence_only_after_successful_publication",
+      "passed": true,
+      "postgres": "PostgreSQL 17.5 on aarch64-unknown-linux-gnu, compiled by emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 3.1.74 (1092ec30a3fb1d46b1782ff1b4db5094d3d06ae5), 32-bit",
+      "provider_io": false,
+      "native_concurrency": false
+    },
+    {
+      "case": "repeated_edits_keep_original_evidence_and_lifecycle",
+      "passed": true,
+      "postgres": "PostgreSQL 17.5 on aarch64-unknown-linux-gnu, compiled by emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 3.1.74 (1092ec30a3fb1d46b1782ff1b4db5094d3d06ae5), 32-bit",
+      "provider_io": false,
+      "native_concurrency": false
+    },
+    {
+      "case": "wanted_reuse_preserves_four_fact_scope",
+      "passed": true,
+      "postgres": "PostgreSQL 17.5 on aarch64-unknown-linux-gnu, compiled by emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 3.1.74 (1092ec30a3fb1d46b1782ff1b4db5094d3d06ae5), 32-bit",
+      "provider_io": false,
+      "native_concurrency": false
+    },
+    {
+      "case": "invalid_reference_new_draft_other_offer_and_type_refused",
+      "passed": true,
+      "postgres": "PostgreSQL 17.5 on aarch64-unknown-linux-gnu, compiled by emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 3.1.74 (1092ec30a3fb1d46b1782ff1b4db5094d3d06ae5), 32-bit",
+      "provider_io": false,
+      "native_concurrency": false
+    },
+    {
+      "case": "same_person_identity_and_private_authority",
+      "passed": true,
+      "postgres": "PostgreSQL 17.5 on aarch64-unknown-linux-gnu, compiled by emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 3.1.74 (1092ec30a3fb1d46b1782ff1b4db5094d3d06ae5), 32-bit",
+      "provider_io": false,
+      "native_concurrency": false
+    },
+    {
+      "case": "changed_policies_remain_explicit_and_exact",
+      "passed": true,
+      "postgres": "PostgreSQL 17.5 on aarch64-unknown-linux-gnu, compiled by emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 3.1.74 (1092ec30a3fb1d46b1782ff1b4db5094d3d06ae5), 32-bit",
+      "provider_io": false,
+      "native_concurrency": false
+    },
+    {
+      "case": "exact_retry_conflict_and_stale_revision",
+      "passed": true,
+      "postgres": "PostgreSQL 17.5 on aarch64-unknown-linux-gnu, compiled by emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 3.1.74 (1092ec30a3fb1d46b1782ff1b4db5094d3d06ae5), 32-bit",
+      "provider_io": false,
+      "native_concurrency": false
+    },
+    {
+      "case": "final_write_rechecks_original_evidence",
+      "passed": true,
+      "postgres": "PostgreSQL 17.5 on aarch64-unknown-linux-gnu, compiled by emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 3.1.74 (1092ec30a3fb1d46b1782ff1b4db5094d3d06ae5), 32-bit",
+      "provider_io": false,
+      "native_concurrency": false
+    },
+    {
+      "case": "old_explicit_attempt_survives_install",
+      "passed": true,
+      "postgres": "PostgreSQL 17.5 on aarch64-unknown-linux-gnu, compiled by emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 3.1.74 (1092ec30a3fb1d46b1782ff1b4db5094d3d06ae5), 32-bit",
+      "provider_io": false,
+      "native_concurrency": false
+    }
+  ],
+  "limitations": [
+    "Disposable PostgreSQL/WASM with synthetic provider metadata; no actual Storage HTTP, remote migration or native concurrent scheduling is claimed."
+  ]
+}

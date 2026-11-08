@@ -1,3 +1,26 @@
+<!-- SELQIRO_HORSE_EDIT_POLISH_20261108 -->
+## 08.11.2026 — hobuse haldus vastu võetud; kaks viimistlust
+
+Kasutaja kinnitas galerii vahetamise/suurendamise, hobuse pisipildi, hobuse ja
+tavakuulutuse pildilingid, peatamise avaliku nähtavuse ning peatatud kuulutuse
+muutmise. Aktiveerimine ei pikenda tähtaega; eraldi kinnitatud uuendamine annab
+uue 90-päevase tähtaja. Need katsed on läbitud ning neid ei küsita uuesti.
+
+Uus piiratud parandus taastab galerii noolte 3-sekundilise peitumise ja kasutab
+sama hobuse muutmisel päriselt salvestatud algset faktilist kinnitust. Uut
+linnukest ei tehta kasutaja eest; varasema sündmuse viide kontrollitakse serveris.
+Kehtivate tingimuste versiooniga nõustumine jääb eraldi. Paigaldaja kontrollib
+eduka hobuse halduse väljalaske 1226-failist puud ja selle varasemat receipt’i ahelat.
+Uue paranduse Maci paigaldus ja Verceli Ready on ootel, mitte juba tehtud.
+
+Praegune käsk ja ainult kaks uut kontrolli: `docs/continuity/HOSTED_PORTAL.md`.
+Täpne seis: `docs/continuity/CURRENT_STATE.json`; leping:
+`docs/architecture/horse-confirmation-reuse-v1.md`. Teenused on järgmine töö sama
+Avalda → Minu ala → Muuda → Salvesta loogikaga; töökuulutused hiljem.
+Allpool olevad vanad „ootel” märked ja käsud on ajalugu.
+
+---
+
 <!-- SELQIRO_UPLOAD_CAPACITY_PREFLIGHT_R2_20261108 -->
 ## 08.11.2026 — jätkaja mälu: ruumiparanduse eelkontrolli r2
 

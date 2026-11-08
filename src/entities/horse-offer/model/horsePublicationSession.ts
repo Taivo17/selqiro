@@ -7,15 +7,14 @@ import { measurePhotoTask } from "../../listing/model/photoPerformance";
 import type { SaveMyHorseOfferDraftInput } from "./types";
 import type { OwnerHorseOfferEditSnapshot } from "./editSnapshot";
 import { bindHorseOwnerSnapshot, bindHorsePrepare, bindHorsePublicationResult, type HorsePolicySnapshot,
-  type HorsePrepareCommand, type HorsePublicationResult, type HorseGalleryIntent } from "./publication";
-import type { HorseOfferPublicationConfirmationState } from "../../../features/listing-create/model/horseOfferPublicationGate";
+  type HorsePrepareCommand, type HorsePublicationResult, type HorseGalleryIntent, type HorseConfirmationSelection } from "./publication";
 import { buildHorseOfferDraftSaveInput } from "../../../features/listing-create/model/horseOfferDraftSave";
 import { prepareOwnerHorseDraftForm } from "../../../features/horse-offer-edit/model/ownerHorseDraftForm";
 
 export type HorseSelectedImage = Readonly<{imageId: string; isPrimary: boolean} | {file: Blob; isPrimary: boolean}>;
 export type HorsePublicationStart = Readonly<{
   content: SaveMyHorseOfferDraftInput; expectedRevision: string | null;
-  gallery: readonly HorseSelectedImage[]; confirmations: HorseOfferPublicationConfirmationState;
+  gallery: readonly HorseSelectedImage[]; confirmations: HorseConfirmationSelection;
   policySnapshot: readonly HorsePolicySnapshot[];
 }>;
 export type HorsePublicationJournal = PublicationImageJournal & {

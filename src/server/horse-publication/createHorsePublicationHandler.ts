@@ -72,7 +72,14 @@ function bind(action: string, input: Record<string, unknown>): { name: string; a
       "content", "gallery", "confirmations", "policySnapshot"]);
     if (!(input.offerId === null && input.expectedRevision === null)
       && !(uuid(input.offerId) && revision(input.expectedRevision))) throw new Error("input");
-    uploadRecord(input.content); uploadRecord(input.confirmations);
+    uploadRecord(input.content);
+    const confirmations = uploadRecord(input.confirmations);
+    // A saved confirmation is a reference, never a newly supplied true flag.
+    // The database resolves and re-checks immutable evidence for the same actor.
+    if (Object.hasOwn(confirmations, "reusePublicationEventId")) {
+      uploadRecord(confirmations, ["reusePublicationEventId"]);
+      if (!uuid(input.offerId) || !uuid(confirmations.reusePublicationEventId)) throw new Error("input");
+    }
     if (!Array.isArray(input.gallery) || input.gallery.length > 10
       || !Array.isArray(input.policySnapshot) || input.policySnapshot.length !== 2) throw new Error("input");
     return { name: "prepare_my_horse_publication_v1", args: { ...actor, p_request_key: input.requestKey,

@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "kind": "horse-confirmation-reuse-guard-generation",
+  "result": "PASS",
+  "generated_at_utc": "2026-11-08T15:23:33.504Z",
+  "dependencies": "ff8a6a66696e67277f76002fd70767679877d193b58f1c5f526d2aa8ef0c85d2",
+  "capability": "36f85275e0bdf86673466084a69a67d47cd92677821b87d2555663a24b34a8b2",
+  "functions": 4,
+  "modules": 3,
+  "changed_functions": [
+    "public.get_my_horse_offer_publication_snapshot_v1",
+    "public.prepare_my_horse_publication_v1",
+    "public.publish_my_horse_offer_v1"
+  ],
+  "new_functions": [
+    "horse_publication_private.reusable_confirmation"
+  ],
+  "generated_sql_install_and_replay": true,
+  "retained_invariants_unchanged": true,
+  "prior_function_authority_unchanged": true,
+  "owner_read_lock_timeout_seconds": 2,
+  "live_database": false,
+  "mac_installer": false,
+  "production_storage": false,
+  "files": {
+    "preflight.sql": "f02bb333e43ffb42ccd7de4b043ca96a2d82749911629effd687e18b0351b92e",
+    "apply.sql": "a07cb01d8816fc6a4134c0a440575eb469b8530bbb18f50435bf47f9845a95ee",
+    "verify.sql": "f02bb333e43ffb42ccd7de4b043ca96a2d82749911629effd687e18b0351b92e",
+    "catalog-pins.json": "f852948a2986d85bdd5943d2201e8551b1608e61e48ed6a5418a6df712ff3a3e",
+    "source-pins.json": "5dcfdea95c10ded824a1021e15d2480d4dc5931e8b8a1726ed2044378952fa95"
+  }
+}

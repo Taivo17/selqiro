@@ -4,6 +4,7 @@ import { localeForLanguage } from "../../../../lib/i18n/useTranslation";
 import { useV2Translation } from "../../../shared/i18n/V2LanguageProvider";
 import { horsePublicationMessages } from "../../horse-publication/model/horsePublicationMessages";
 import type { HorsePolicySnapshot } from "../../../entities/horse-offer/model/publication";
+import type { HorseSavedConfirmation } from "../../../entities/horse-offer/model/savedConfirmation";
 import { marketplaceMessage } from "../../../shared/i18n/marketplaceMessages";
 import { useMarketplaceTranslation } from "../../../shared/i18n/useMarketplaceTranslation";
 import {
@@ -38,6 +39,7 @@ type HorseOfferPublicationGateProps = {
     checked: boolean
   ) => void;
   onPoliciesChange?: (policies: readonly HorsePolicySnapshot[] | null) => void;
+  savedConfirmation?: HorseSavedConfirmation | null;
 };
 
 type ConfirmationDefinition = {
@@ -353,6 +355,7 @@ HorseOfferPublicationGate({
   value,
   onConfirmAllChange,
   onPoliciesChange,
+  savedConfirmation = null,
 }: HorseOfferPublicationGateProps) {
   const { language, r } = useMarketplaceTranslation();
   const { t: horseText } = useV2Translation(horsePublicationMessages);
@@ -380,6 +383,7 @@ HorseOfferPublicationGate({
 
   const aggregateChecked =
     progress.complete;
+  const statementsConfirmed = aggregateChecked || savedConfirmation !== null;
 
   const expectedPolicies =
     POLICY_REQUIREMENTS.map(
@@ -492,13 +496,58 @@ HorseOfferPublicationGate({
     return marketplaceMessage("horse.both_policy_documents_must_be_accepted_before_publishing.d56789");
   })();
 
+  const confirmationStatements = (<>
+          <p className="mt-4 text-xs font-black uppercase tracking-[0.14em] text-neutral-500">
+            {r(marketplaceMessage("horse.statements_for_every_horse_listing.f05577"))}</p>
+
+          <ol className="mt-3 space-y-3">
+            {r(commonConfirmations.map(
+              (definition, index) => (
+                <ConfirmationStatement
+                  key={definition.key}
+                  definition={definition}
+                  index={index + 1}
+                />
+              )
+            ))}
+          </ol>
+
+          {r(requiresSpecificHorse ? (
+            <>
+              <p className="mt-5 text-xs font-black uppercase tracking-[0.14em] text-neutral-500">
+                {r(marketplaceMessage("horse.additional_statements_for_a_specific_horse.3f2ce0"))}</p>
+
+              <ol className="mt-3 space-y-3">
+                {r(SPECIFIC_CONFIRMATIONS.map(
+                  (definition, index) => (
+                    <ConfirmationStatement
+                      key={definition.key}
+                      definition={definition}
+                      index={commonConfirmations.length
+                        + index
+                        + 1}
+                    />
+                  )
+                ))}
+              </ol>
+            </>
+          ) : (
+            <p
+              className="mt-5 rounded-[18px] border border-sky-100 bg-sky-50 px-4 py-3 text-sm leading-6 text-sky-950"
+              data-horse-wanted-specific-confirmations="omitted"
+            >
+              {r(marketplaceMessage("horse.a_wanted_horse_listing_does_not_ask_you.ea7243"))}</p>
+          ))}
+
+  </>);
+
   return (
     <section
       className="rounded-[30px] border border-black/5 bg-white p-5 shadow-sm sm:p-6"
       data-horse-publication-gate-mode={requiresSpecificHorse
           ? "specific"
           : "wanted"}
-      data-horse-publication-gate-local-complete={progress.complete
+      data-horse-publication-gate-local-complete={statementsConfirmed
           ? "true"
           : "false"}
       data-policy-status-request={policyStatus.phase}
@@ -676,7 +725,19 @@ HorseOfferPublicationGate({
             {r(marketplaceMessage("horse.the_server_accepts_only_the_active_document_s.4b28f3"))}</p>
         </section>
 
-        <fieldset className="rounded-[22px] border border-neutral-200 bg-[#fbfbfa] p-4 sm:p-5">
+        {savedConfirmation ? <section
+          className="rounded-[22px] border border-amber-200 bg-amber-50 p-4 sm:p-5"
+          data-horse-confirmations="saved">
+          <h3 className="text-lg font-black">{horseText("savedConfirmationsTitle")}</h3>
+          <p className="mt-3 text-sm leading-6">{horseText("savedConfirmationsHelp")}</p>
+          <p className="mt-2 text-xs leading-5 text-neutral-600">{horseText("savedConfirmationsAt", {
+            date: formatAcceptedAt(savedConfirmation.confirmedAt, language) || savedConfirmation.confirmedAt,
+          })}</p>
+          <details className="mt-4 rounded-[18px] border border-amber-200 bg-white p-4">
+            <summary className="cursor-pointer text-sm font-bold">{horseText("savedConfirmationsDetails")}</summary>
+            {confirmationStatements}
+          </details>
+        </section> : <fieldset className="rounded-[22px] border border-neutral-200 bg-[#fbfbfa] p-4 sm:p-5">
           <legend className="sr-only">
             {r(marketplaceMessage("horse.horse_listing_factual_confirmations.19e39d"))}</legend>
 
@@ -701,47 +762,7 @@ HorseOfferPublicationGate({
           >
             {r(marketplaceMessage("horse.read_all_the_statements_below_you_can_then.586dd3"))}</p>
 
-          <p className="mt-4 text-xs font-black uppercase tracking-[0.14em] text-neutral-500">
-            {r(marketplaceMessage("horse.statements_for_every_horse_listing.f05577"))}</p>
-
-          <ol className="mt-3 space-y-3">
-            {r(commonConfirmations.map(
-              (definition, index) => (
-                <ConfirmationStatement
-                  key={definition.key}
-                  definition={definition}
-                  index={index + 1}
-                />
-              )
-            ))}
-          </ol>
-
-          {r(requiresSpecificHorse ? (
-            <>
-              <p className="mt-5 text-xs font-black uppercase tracking-[0.14em] text-neutral-500">
-                {r(marketplaceMessage("horse.additional_statements_for_a_specific_horse.3f2ce0"))}</p>
-
-              <ol className="mt-3 space-y-3">
-                {r(SPECIFIC_CONFIRMATIONS.map(
-                  (definition, index) => (
-                    <ConfirmationStatement
-                      key={definition.key}
-                      definition={definition}
-                      index={commonConfirmations.length
-                        + index
-                        + 1}
-                    />
-                  )
-                ))}
-              </ol>
-            </>
-          ) : (
-            <p
-              className="mt-5 rounded-[18px] border border-sky-100 bg-sky-50 px-4 py-3 text-sm leading-6 text-sky-950"
-              data-horse-wanted-specific-confirmations="omitted"
-            >
-              {r(marketplaceMessage("horse.a_wanted_horse_listing_does_not_ask_you.ea7243"))}</p>
-          ))}
+          {confirmationStatements}
 
           <label
             className={[
@@ -776,7 +797,7 @@ HorseOfferPublicationGate({
                 {r(marketplaceMessage("horse.one_checkbox_confirms_all_statements_applicable_to_this.ffabfe"))}</span>
             </span>
           </label>
-        </fieldset>
+        </fieldset>}
       </div>
 
       <div
@@ -784,23 +805,25 @@ HorseOfferPublicationGate({
         aria-live="polite"
         className={[
           "mt-4 flex flex-col gap-2 rounded-[20px] border px-4 py-3 text-sm sm:flex-row sm:items-center sm:justify-between",
-          progress.complete
+          statementsConfirmed
             ? "border-amber-200 bg-amber-50 text-amber-950"
             : "border-neutral-200 bg-[#fbfbfa] text-neutral-600",
         ].join(" ")}
       >
         <span className="font-semibold leading-6">
-          {r(aggregateChecked
+          {savedConfirmation ? horseText("savedConfirmationsSummary") : r(aggregateChecked
             ? marketplaceMessage("horse.all_statements_for_this_listing_are_confirmed.7d4be6")
             : marketplaceMessage("horse.read_the_value_statements_and_confirm_them_with.7054a1", { p0: String(progress.requiredCount) }))}
         </span>
 
         <span className="shrink-0 text-xs font-black uppercase tracking-[0.12em]">
-          {progress.complete ? horseText("ready") : ""}</span>
+          {statementsConfirmed && policyStatus.phase === "ready" && !incompleteReadyResponse
+            && acceptedPolicyCount === POLICY_REQUIREMENTS.length
+            ? horseText(savedConfirmation ? "readyToSave" : "ready") : ""}</span>
       </div>
 
       <p className="mt-4 rounded-[20px] border border-neutral-200 bg-[#fbfbfa] px-4 py-3 text-xs leading-5 text-neutral-500">
-        {horseText("reviewBeforePublish")}</p>
+        {horseText(savedConfirmation ? "reviewBeforeSave" : "reviewBeforePublish")}</p>
     </section>
   );
 }

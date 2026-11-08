@@ -1,3 +1,22 @@
+<!-- SELQIRO_HORSE_EDIT_POLISH_20261108 -->
+## 2026-11-08 — accepted horse lifecycle, saved confirmations and idle arrows
+
+The user accepted the shared gallery, owner thumbnails/links, paused editing,
+public visibility and separate 90-day renewal. The next scoped repair restores
+3000-ms idle arrow hiding and references an original immutable factual
+confirmation for edits of the same horse by the same confirming user.
+Current policy acceptance stays independent. See
+`docs/architecture/horse-confirmation-reuse-v1.md` and the single current
+`docs/continuity/CURRENT_STATE.json`. New deployment remains pending; prior
+accepted browser behavior does not establish a new Git commit or DB receipt.
+The next updater verifies the parity success receipt and all 1226 source blobs,
+including the independently checked capacity ancestor. Services follow with
+canonical UUIDs and the same Publish / My Area Edit–Save interaction.
+
+Earlier dated records below remain historical.
+
+---
+
 <!-- SELQIRO_UPLOAD_CAPACITY_PREFLIGHT_R2_20261108 -->
 ## 2026-11-08 — upload-capacity r2 corrects the preflight fixture
 

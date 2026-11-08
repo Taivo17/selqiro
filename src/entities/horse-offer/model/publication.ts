@@ -6,8 +6,10 @@ import type { OwnerHorseOfferEditSnapshot } from "./editSnapshot";
 import { mapOwnerHorseOfferDetail } from "../api/mappers";
 import type { HorseOfferPublicationConfirmationState } from "../../../features/listing-create/model/horseOfferPublicationGate";
 import { getHorseOfferRequiredPublicationConfirmationKeys } from "../../../features/listing-create/model/horseOfferPublicationGate";
+import { bindHorseSavedConfirmation, type HorseConfirmationReuse } from "./savedConfirmation";
 
 export type HorsePolicySnapshot = Readonly<{documentId: string; version: string; contentHash: string; accepted: true}>;
+export type HorseConfirmationSelection = HorseOfferPublicationConfirmationState | HorseConfirmationReuse;
 export type HorseGalleryIntent = Readonly<{imageId: string; isPrimary: boolean} | {
   clientFileId: string; byteLength: number; sha256: string; isPrimary: boolean;
 }>;
@@ -15,7 +17,7 @@ export type HorsePrepareCommand = Readonly<{
   expectedUserId: string; expectedIdentityId: string; requestKey: string;
   offerId: string | null; expectedRevision: string | null;
   content: SaveMyHorseOfferDraftInput; gallery: readonly HorseGalleryIntent[];
-  confirmations: HorseOfferPublicationConfirmationState; policySnapshot: readonly HorsePolicySnapshot[];
+  confirmations: HorseConfirmationSelection; policySnapshot: readonly HorsePolicySnapshot[];
 }>;
 export type HorsePublicationResult = Readonly<{
   schema_version: 1; content_type: "horse_offer"; actor_user_id: string; identity_id: string; request_key: string;
@@ -52,7 +54,12 @@ export function bindHorsePrepare(value: unknown, actor: PublicationActor, scope:
   }
   if (r.gallery.length && r.gallery.filter(item => item.isPrimary).length !== 1) throw new Error("images_invalid");
   const confirmations = uploadRecord(r.confirmations);
-  if (getHorseOfferRequiredPublicationConfirmationKeys(c.offerType).some(key => confirmations[key] !== true)) throw new Error("confirmations_required");
+  if (Object.hasOwn(confirmations, "reusePublicationEventId")) {
+    if (scope === null || Object.keys(confirmations).length !== 1 || !isUploadUuid(confirmations.reusePublicationEventId))
+      throw new Error("confirmations_required");
+  } else if (getHorseOfferRequiredPublicationConfirmationKeys(c.offerType).some(key => confirmations[key] !== true)) {
+    throw new Error("confirmations_required");
+  }
   if (!Array.isArray(r.policySnapshot) || r.policySnapshot.length !== 2) throw new Error("policies_required");
   const policies = r.policySnapshot.map(item => {
     const p = uploadRecord(item, ["documentId", "version", "contentHash", "accepted"]);
@@ -101,5 +108,6 @@ export function bindHorseOwnerSnapshot(value: unknown, actor: PublicationActor, 
   if (!isHorseDraftRevision(row.edit_revision)) return invalid();
   const detail = mapOwnerHorseOfferDetail(row);
   if (detail.offerId !== offerId || detail.contentId !== offerId || detail.identityId !== actor.identityId) return invalid();
-  return {detail, editRevision: row.edit_revision as string};
+  const savedConfirmation = bindHorseSavedConfirmation(row.saved_confirmation, actor, offerId, detail.offerType, detail.status);
+  return {detail, editRevision: row.edit_revision as string, savedConfirmation};
 }

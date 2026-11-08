@@ -141,6 +141,54 @@ test('horse owner read retains flat canonical UUID snapshot and redacts unrecogn
   assert.equal(writes, 1, 'unknown writes must never be repeated');
 });
 
+test('saved horse confirmations cross HTTP as an exact original-event reference without fabricated booleans', async () => {
+  const input = { ...prepare, offerId: OFFER, expectedRevision: '7',
+    confirmations: { reusePublicationEventId: EVENT } };
+  const { calls, handle } = setup(receipt({ edit_revision: '7' }));
+  const res = await handle(request(input), 'prepare');
+  assert.equal(res.status, 200); assert.equal(calls.length, 2);
+  assert.deepEqual(calls[1].args.p_confirmations, { reusePublicationEventId: EVENT });
+  assert.equal(calls[1].args.p_offer_id, OFFER); assert.equal(calls[1].args.p_expected_revision, '7');
+  assert.deepEqual(calls[1].args.p_policy_snapshot, input.policySnapshot, 'saved facts never replace the shown policy snapshot');
+});
+
+test('new-offer and malformed saved-confirmation references are rejected before remote work', async () => {
+  const edit = { ...prepare, offerId: OFFER, expectedRevision: '7' };
+  for (const input of [
+    { ...prepare, confirmations: { reusePublicationEventId: EVENT } },
+    ...[null, 2, 'not-an-event', '00000000-0000-0000-0000-000000000000'].map(value =>
+      ({ ...edit, confirmations: { reusePublicationEventId: value } })),
+    { ...edit, confirmations: { reusePublicationEventId: EVENT, publisher_confirms_age_18_or_over: true } },
+    { ...edit, confirmations: { reusePublicationEventId: EVENT, actor_user_id: USER } },
+  ]) {
+    const { calls, handle } = setup(receipt());
+    assert.ok([409, 503].includes((await handle(request(input), 'prepare')).status),
+      'malformed input must fail closed before any remote call');
+    assert.equal(calls.length, 0);
+  }
+});
+
+test('owner-only saved-confirmation descriptor remains separate from current policy consent', async () => {
+  const saved = { schema_version: 1, offer_id: OFFER, identity_id: IDENTITY, actor_user_id: USER,
+    offer_type: 'sale', publication_event_id: EVENT, confirmed_at: '2026-11-08T13:00:00.123456Z' };
+  const owner = { content_type: 'horse_offer', content_id: OFFER, offer_id: OFFER, identity_id: IDENTITY,
+    edit_revision: '7', images: [], saved_confirmation: saved };
+  const { calls, handle } = setup(owner);
+  const res = await handle(request({ ...actor, offerId: OFFER }), 'owner-read');
+  assert.equal(res.status, 200); assert.deepEqual(await res.json(), owner);
+  assert.equal(calls.length, 2);
+  assert.ok(calls[1].url.endsWith('/get_my_horse_offer_publication_snapshot_v1'));
+});
+
+test('a rejected saved-confirmation reference is returned once without inventing confirmation or replaying the write', async () => {
+  const input = { ...prepare, offerId: OFFER, expectedRevision: '7', confirmations: { reusePublicationEventId: EVENT } };
+  const { calls, handle } = setup(() => Response.json({ code: '22023', message: 'horse_offer_confirmations_required',
+    details: 'private-original-event-details' }, { status: 400 }));
+  const res = await handle(request(input), 'prepare');
+  assert.equal(res.status, 409); assert.deepEqual(await res.json(), { error: 'refused', code: '22023' });
+  assert.equal(calls.length, 2);
+});
+
 const bytes = Buffer.from('UklGRiIAAABXRUJQVlA4IBYAAAAwAQCdASoBAAEADsD+JaQAA3AAAAAA', 'base64');
 const mediaBinding = { schema_version: 1, attempt_id: ATTEMPT, ordinal: 0, bucket_id: 'listing-publication-private',
   object_path: `v1/${ATTEMPT}/${SLOT}/web-v1.webp`, sha256: createHash('sha256').update(bytes).digest('hex'), bytes: bytes.length };

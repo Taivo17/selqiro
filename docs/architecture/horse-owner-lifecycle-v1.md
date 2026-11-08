@@ -1,11 +1,11 @@
 # Horse galleries and owner lifecycle parity
 
-Date: 2026-11-08. This is the new candidate after the upload-capacity r2 release.
-User screenshots confirm the canonical horse `hobutest` is public with two
-photos and present in public search/My Area. They also reveal the missing
-gallery controls, absent owner thumbnail and missing owner lifecycle actions.
-The screenshots are user acceptance evidence, not an exported installation
-receipt or a new Git/Vercel observation by the assistant.
+Date: 2026-11-08. The user has now accepted this release in the browser:
+gallery enlargement/switching, owner thumbnails and image/title links, public
+hiding while paused, saved paused edits, reactivation with the previous expiry,
+and explicit 90-day renewal. This does not infer a new Git commit from a
+screenshot. The next repair is documented in `horse-confirmation-reuse-v1.md`;
+it restores idle arrow hiding and reuses saved per-offer factual confirmations.
 
 ## Product contract
 

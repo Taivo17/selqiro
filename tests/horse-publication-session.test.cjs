@@ -90,6 +90,33 @@ test('published edit preserves UUID, expected revision, private location and ord
  assert.equal(f.store.result.slots[0].ordinal,1);assert.equal(f.session.getSnapshot().confirmed.detail.images[0].id,OLD);
  assert.equal(f.session.getSnapshot().confirmed.detail.horseLat,58.1);assert.equal(f.session.getSnapshot().confirmed.editRevision,'5');
 });
+test('saved confirmation edit journals and submits only the original event reference',async()=>{
+ const f=fixture({edit:true}),value=input('sale',true);value.confirmations={reusePublicationEventId:E};
+ await f.session.start(value);assert.equal(f.session.getSnapshot().phase,'published');
+ assert.deepEqual(f.store.command.confirmations,{reusePublicationEventId:E});
+ assert.deepEqual(f.store.journal.command.confirmations,{reusePublicationEventId:E});
+ assert.equal(f.calls.filter(c=>c.action==='prepare').length,1);
+ assert.equal(JSON.stringify(f.store.command.confirmations).includes('publisher_confirms'),false);
+});
+test('an uncertain saved-confirmation prepare retains the same event on explicit recovery',async()=>{
+ const f=fixture({edit:true}),value=input('sale',true);value.confirmations={reusePublicationEventId:E};
+ f.hooks.prepare=async()=>{throw Error('outcome_unknown')};await f.session.start(value);
+ assert.equal(f.session.getSnapshot().phase,'unknown');value.confirmations.reusePublicationEventId=Q;
+ delete f.hooks.prepare;await f.session.resume();
+ const calls=f.calls.filter(c=>c.action==='prepare');assert.equal(calls.length,2);
+ assert.deepEqual(calls[0].body,calls[1].body);assert.deepEqual(calls[1].body.confirmations,{reusePublicationEventId:E});
+});
+for(const [name,edit,selection] of [
+ ['new listing',false,{reusePublicationEventId:E}],
+ ['empty reference',true,{reusePublicationEventId:''}],
+ ['malformed reference',true,{reusePublicationEventId:'not-an-event'}],
+ ['reference mixed with new facts',true,{reusePublicationEventId:E,...confirm('sale',true)}],
+ ['reference mixed with extra metadata',true,{reusePublicationEventId:E,accepted:true}],
+])test('invalid saved confirmation '+name+' cannot dispatch prepare',async()=>{
+ const f=fixture({edit}),value=input('sale',edit);value.confirmations=selection;
+ await f.session.start(value);assert.equal(f.session.getSnapshot().phase,'editing');
+ assert.equal(f.calls.some(c=>c.action==='prepare'),false);assert.equal(f.store.journal,null);
+});
 for(const status of ['paused','closed'])test(status+' edit confirms saved content without assuming reactivation',async()=>{
  const f=fixture({edit:true}),value=input('sale',true);
  value.gallery=[{imageId:OLD,isPrimary:true}];

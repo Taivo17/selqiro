@@ -1,64 +1,55 @@
-# Hobuse galerii ja 90-päevane haldus
+# Hobuse muutmise kinnitused ja galerii nooled
 
-Seis: 08.11.2026 Europe/Tallinn. Üks praegune tööjärg on
-[CURRENT_STATE.json](CURRENT_STATE.json). Varasemaid paigaldusi ei korrata.
+Seis: 08.11.2026 Europe/Tallinn. Praegune tööjärg on
+[CURRENT_STATE.json](CURRENT_STATE.json). Vanad paigalduskäsud on ajalugu.
 
 ## Kasutaja kinnitatud tulemus
 
-Hobuse „hobutest” avalikus vaates on kaks fotot. Kuulutus on näha ka ühises
-avalikus otsingus ja Minu alas. Kasutaja uued ekraanipildid kinnitavad seda
-brauseritulemust. Ruumiparanduse r2 uus commit ja privaatne eduraport ei ole
-vestluses eraldi eksporditud; uus uuendaja kontrollib neid Macis enne muutmist.
-Säilitatud täpne r2 lähtekood sisaldab 1193 faili.
+Kasutaja katse kinnitab hobuse ja tavakuulutuse pildilinke, hobuse pisipilti
+Minu alas, avaliku galerii fotode vahetamist ja suurendamist. Peatatud hobune
+kaob avalikust vaatest; peatatud kuulutuse muudatus ilmub esmalt Minu alas ja
+pärast aktiveerimist avalikus vaates. Aktiveerimine säilitab senise tähtaja.
+Eraldi „Uuenda kuulutust” ja kinnitus annavad uue 90-päevase tähtaja.
+Neid vastuvõetud katseid ei ole vaja selle väikse paranduse jaoks korrata.
 
-Käesolev uuendus lisab puuduva galerii edasi-tagasi vahetamise ja suure vaate,
-hobuse pisipildi ning samad staatuse, tähtaja, uuendamise ja muutmise valikud
-nagu tavakuulutustel. Ka tavakuulutuse pilt avab sama sihi kui pealkiri.
+Uus muudatus taastab noolte peitumise kolme sekundi järel ning kasutab sama
+kuulutuse muutmisel kasutaja varem antud faktilist kinnitust. Kasutustingimuste
+uue versiooniga nõustumine on eraldi. EN/ET ja olemasolev halduse loogika säilivad.
 
 ## Üks praegune käsk
 
-Paki **selqiro-hobuste-haldus-20261108.zip** Downloads-kausta ja käivita:
+Paki **selqiro-hobuse-muutmise-viimistlus-20261108.zip** Downloads-kausta ja käivita:
 
 ```bash
-python3 -I -B "$HOME/Downloads/selqiro-hobuste-haldus-20261108/uuenda.py" --publish
+python3 -I -B "$HOME/Downloads/selqiro-hobuse-muutmise-viimistlus-20261108/uuenda.py" --publish
 ```
 
-Uuendaja kontrollib eduka ruumiparanduse r2 privaatset tulemust, selle tegelikku
-commiti ja kogu lähtepuud, töökausta, indexit ja kaug-main'i. Seejärel teeb ta
-kontrollitud SQL-tehingu, järelkontrolli, failivarukoopiad, lähteuuenduse,
-build'i, täpse commit'i ja tavalise push'i. Teadmata SQL-tulemust kontrollitakse
-lugemisega; seda ei rakendata pimesi uuesti.
+Uuendaja kontrollib eelmise hobuse halduse väljalaske privaatset eduraportit,
+commiti, kõiki 1226 alusfaili ja selle eelnevat paigaldusahelat. Uus andmebaasi
+muudatus on eraldi täpsete eeltingimustega tehing. Järgneb järelkontroll,
+failivarukoopia, rakenduse kooste, commit ja tavaline push. Eelmised päevikud
+säilivad; teadmata SQL-tulemust kontrollitakse lugemisega.
 
 **PEATATUD** korral säilita teade, raport ja päevikud ning saada need vestlusse.
-Kaitseid, paigalduspäevikuid ega varukoopiaid ei kustutata.
 
-## Vastuvõtt pärast Ready / Production tulemust
+## Kaks kontrolli pärast selle commit’i Ready / Production tulemust
 
-1. Värskenda portaali ja ava Minu ala. Kontrolli hobuse pilti ning ava sama
-   aktiivne avalik kuulutus pildist ja pealkirjast. Tee pildilingi kontroll ka
-   tavakuulutusega.
-2. Vaheta hobuse fotosid noolte või pisipiltidega, ava suur vaade, vaheta fotot
-   seal ning sulge vaade. Kitsas vaates kontrolli ka puuteliigutust.
-3. Vali hobusel Peatatud. Avalik detail ja otsing peavad seda peitma; Minu ala
-   peab säilitama omaniku foto ja Muuda võimaluse.
-4. Vali uuesti Aktiivne. See ei pikenda tähtaega. „Uuenda kuulutust” kinnitab
-   eraldi, et pakkumine on alles, ning annab uue 90-päevase perioodi.
-5. Kontrolli soovi korral sama haldusvaadet English-keeles.
+1. Ava avalik kuulutus ja jäta kursor pildil paigale. Nooltega navigeerimine
+   peitub umbes kolme sekundi pärast ja ilmub kursori liigutamisel tagasi.
+   Sama kehtib suurendatud vaates. Klaviatuuriga fookuses olevat noolt ei peideta.
+2. Ava sama hobuse kuulutuse muutmine. Kui varasem kinnitus on selle kuulutuse
+   ja praeguse kasutajaga seotud, kuvatakse „Väited on juba kinnitatud”. Muuda
+   näiteks teksti ja salvesta ilma uut väidete linnukest tegemata.
 
-Seniste tähtajata hobuste 90 päeva arvestatakse algsest avaldamise hetkest.
-Aegunud aktiivset rida näidatakse Aegunud olekus. Sisu salvestamine ei aktiveeri
-peatatud/müüdud kuulutust ega uuenda aegunud tähtaega.
+Uue kuulutuse või puuduva sobiva kinnituse korral on esmane kinnitamine endiselt
+vajalik. Muutunud avaldamistingimused tuleb läbi vaadata ja eraldi kinnitada.
 
 ## Järgmine töö
 
-Pärast selle muudatuse vastuvõttu ühendatakse teenused kanoonilise `services`
-UUID ja sama **Avalda → Minu ala → Muuda → Salvesta** loogikaga. Kohustuslikku
-eraldi mustandi salvestamist ei lisata. Töökuulutused järgnevad hiljem.
+Järgnevad teenused kanoonilise `services` UUID ning sama
+**Avalda → Minu ala → Muuda → Salvesta** kasutusvooga. Kohustuslikku eraldi
+mustandi salvestamist ei lisata; töökuulutused järgivad sama loogikat hiljem.
+Mitmesaja kuulutuse eesmärk ja otsustamata püsiv arvupiir säilivad.
 
-Mitmesaja kuulutuse eesmärk ja otsustamata püsiv arvupiir säilivad. Käesolev
-muudatus ei muuda ajutise üleslaadimisruumi arvestust ega olemasolevaid
-kasutuselevõtu sageduskaitseid. English/Eesti ning Frankfurt fra1 säilivad.
-
-Täpne leping: [horse-owner-lifecycle-v1.md](../architecture/horse-owner-lifecycle-v1.md).
-Eelmise töö juhend säilib ainult ajaloona:
-[HOSTED_PORTAL.before-horse-parity-20261108.md](../archive/HOSTED_PORTAL.before-horse-parity-20261108.md).
+Täpne leping: [horse-confirmation-reuse-v1.md](../architecture/horse-confirmation-reuse-v1.md).
+Varasema töö juhend säilib [arhiivis](../archive/HOSTED_PORTAL.before-horse-edit-polish-20261108.md).

@@ -2,19 +2,20 @@
 
 Seis: 08.11.2026 Europe/Tallinn. Tänane tööjärg on `continuity/CURRENT_STATE.json`.
 
-## Praegu: hobuse galerii ja Minu ala elutsükli parandus
+## Praegu: galerii noolte ja hobuse kinnituste viimistlus
 
-Kasutaja uus brauseritulemus kinnitab kahe fotoga hobuse avaldamist. Puuduvad
-pildinooled/suur vaade, omaniku pisipilt ja staatus/uuendamine on käesoleva
-kandidaadi ulatus. Uuendaja lähtub eduka ruumiparanduse r2 täpsest lähtekoodist
-ja kontrollib tegelikku receipt’i ning commiti Macis. Vanu ruumipakette ei korrata.
-Uue kandidaadi kohalik testitõend on kontrollraportis; Maci paigaldus, Ready ja
-selle UI vastuvõtt järgnevad. Vt `architecture/horse-owner-lifecycle-v1.md`.
+Kasutaja kinnitas eelmise halduse paranduse brauserikäitumise: galerii, pildilingid,
+omaniku pisipilt, peatamine/muutmine/aktiveerimine ja eraldi tähtaja uuendamine.
+Need on vastu võetud. Uus parandus taastab noolte peitumise 3 sekundi järel ja
+kasutab olemasolevat algset faktilist kinnitust sama hobuse muutmisel.
+Kehtivate tingimuste versioon ei ole sama mis kuulutuse faktiline kinnitus.
+Kohalik tõend ning uus paigalduspiir on `continuity/CURRENT_STATE.json`-s;
+leping on `architecture/horse-confirmation-reuse-v1.md`.
 
-Teenused on järgmine töö: kanooniline services UUID, üks Avalda ja Minu ala
-Muuda/Salvesta, ilma kohustusliku eraldi mustandita. Üldine taustakoristus ja
-kasutuselevõtu sageduskaitsete lõplik tooteotsus jäävad eraldi. Püsivat
-mitmesaja kuulutuse piiri ei kehtestata selle parandusega.
+Teenused järgnevad sama Avalda / Minu ala Muuda–Salvesta vooga ilma kohustusliku
+mustandita. Püsiv kuulutuste arvupiir on otsustamata. Üldine terminalne
+koristus ja olemasolevate 3-avatud/20-uut-toimingut kaitsete lõplik tooteotsus
+jäävad eraldi tööks.
 
 ## Varasem checkpoint — allpool ajalooline seis enne uut hobuse brauseritulemust
 

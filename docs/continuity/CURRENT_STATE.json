@@ -6,32 +6,33 @@
     "path": "docs/archive/99_V2_HANDOFF_NEXT_CHAT.before-price-core-20261004-6df0af9.md",
     "sha256": "667e47990a7d3cc20ff53709cb861663b4565cf1d3c830eda88e0d18e60fdb8a"
   },
-  "checkpoint": "Kasutaja kinnitas kahe fotoga hobuse avaliku detaili, otsingu ja Minu ala. Hobuse galerii ja Minu ala halduse ühine kandidaat on kohalikult kontrollitud: piltide vahetamine ja suurendamine, omaniku pisipilt, ühised staatusevalikud, 90-päevane tähtaeg ja eraldi uuendamine. Tavakuulutuse pildilink on parandatud. Uue paketi Maci paigaldus, Verceli Ready ning pärisbrauseri vastuvõtt on veel ootel.",
+  "checkpoint": "Kasutaja võttis hobuse galerii, pisipildi, pildilingid, peatamise, muutmise, taasaktiveerimise ja eraldi 90-päevase uuendamise brauseris vastu. Uus kitsas parandus on kohalikult kontrollitud: galerii nooled peituvad 3 sekundi tegevusetuse järel ja sama hobuse muutmisel kasutatakse tegelikku varasemat faktilist kinnitust. Uue viimistluspaketi Maci paigaldus, Verceli Ready ning kaks uut kasutajakatset on veel ootel.",
   "source": {
-    "Alus": "Täpselt säilitatud upload-capacity r2 lähtekood: 1193 faili, manifest dbbe2c0266a91514aeb0bdf07ff1ff711b87c7f0a0547c6cbf44864749694ee9. Maci eduraport määrab uue tegeliku commit’i; uuendaja kontrollib selle vanemat 6bb4385, pealkirja, ulatust ning kõiki Giti objekte. Screenshoti põhjal commit’i ei oletata.",
-    "Galerii": "Ühine PublicPhotoGallery teenindab hobuse ja tavakuulutuse avalikku vaadet. Nooled, pisipildid, suur vaade, klaviatuur ja puuteliigutus; olemasolevad meedia-URL-id ja õiguskontrollid säilivad.",
-    "Minu ala": "Hobuse meediaviide läbib oma tüübi kontrolli ja omaniku pilt laetakse autentitud meediatee kaudu. Pilt ja tekst avavad sama sobiva vaate; parempoolne üleliigne avaliku vaate link eemaldatakse. Staatuse, uuendamise ja muutmise esitlus on ühine.",
-    "Elutsükkel": "Hobune jääb horse_offers UUID-kirjeks. published/paused/closed vastavad Aktiivne/Peatatud/Müüdud valikutele. Esmaavaldamine annab 90×24 tundi; vana NULL-tähtaeg tuletatakse algsest avaldamisest. Sisu muutmine ja staatuse valik ei pikenda tähtaega ega tühista teises aknas tehtud elutsüklitoimingut.",
-    "Leping": "Uus eraldi horse_lifecycle SQL-parandus kasutab parandatud capacity-r2 kontrollalust. Üks tehing, täpsed sõltuvused ja õigused, eraldi järelkontroll ning sama katse päevik. Vanad rakendatud SQL-failid ja väljastatud paketid jäävad muutmata."
+    "Alus": "Täpselt säilitatud hobuste halduse lähtekood: 1226 faili, manifest e09e3468758b13d390cd04d7fe153dcd0c6d8596d15605e71e287a0501750224. Uuendaja loeb Maci privaatse eduraporti, kontrollib selle määratud commit’i kõiki Giti objekte, pealkirja ja ulatust ning eelnevat capacity-r2 raportit ja lähtepuud. Raport või ekraanipilt üksi ei asenda Giti kontrolli.",
+    "Galerii": "Ühine PublicPhotoGallery peidab tavavaate ja suurendatud vaate nooled 3000 ms tegevusetuse järel. Liikumine, puudutus, pildivalik või klaviatuur toob need tagasi. Klaviatuuriga fookuses nool ja sulgemine jäävad kättesaadavaks. Peidetud noolte kohal tehtud esimene puuteekraani puudutus ei sulge suurendatud pilti.",
+    "Salvestatud väited": "Sama kuulutuse, omaniku identiteedi, kinnitava kasutaja ja pakkumise liigi algne muutumatu avaldamissündmus annab kinnituse. Vorm näitab selle algset aega ja saadab ainult algse sündmuse viite. Uut faktilist linnukest kasutaja eest ei tehta. Sobiva tõendita jääb eraldi kinnitamine alles.",
+    "Kehtivad tingimused": "Faktiliste väidete varasem kinnitus ja kehtiva tingimuste versiooniga nõustumine jäävad eraldi. Uus tingimuste versioon vajab endiselt kasutaja nõustumist. Ettevalmistus ja lõplik salvestamine kontrollivad aktorit, identiteeti, revisjoni ning praegusi tingimusi.",
+    "Andmebaas": "Uus eraldi horse_confirmation_reuse SQL-parandus lisab ühe privaatse abifunktsiooni ning asendab omanikuvaate, ettevalmistuse ja avaldamise funktsioonid. Omand, õigused ja kõik ülejäänud sõltuvused kontrollitakse. Uusi tabeleid, rolle, RLS-reegleid ega triggereid ei looda; vanu sündmusi ei kirjutata üle. Omaniku lugemise lukustusoote piir on 2 sekundit.",
+    "Elutsükkel": "Kasutaja kinnitas: peatamine ja taasaktiveerimine ei muuda tähtaega; Muuda/Salvesta säilitab staatuse; ainult Uuenda kuulutust koos kinnitusega pikendab 90 päeva. Hobune jääb horse_offers UUID-kirjeks. Seda vastu võetud loogikat ei avata uuesti."
   },
   "local_test": [
-    "Kliendi/galerii/omanikuvaate/elutsükli koondkatse 254/254 PASS, ilma vahelejäetud või tühistatud katseteta. HTTP uued ja säilitatud avaldamistoimingud 15/15 PASS.",
-    "SQL elutsükli käitumine 9/9 ning paigalduse, kõrvalekallete ja atomaarse tagasipööramise katsed 12/12 PASS. Sõltumatu ülevaatus kontrollis moodulite, genereeritud SQL-i ja alusfailide räside vastavust ning kordas kahte võtmekatset.",
-    "Uuendaja taastumise ja peatamise 20/20 katset PASS. Sõltumatu kontroll keeldus veel viiest valest eelmise paigalduse raporti/commiti juhtumist enne andmebaasi või lähtefailide muutmist.",
-    "Täielik Next.js tootmiskooste koos TypeScriptiga PASS sünteetiliste võtmetega; 506 rakenduse lähtefaili räsi püsis koostamise ajal muutmata. Uusi tootmiskoodi lint-vigu ei ole; viis alusversiooni set-state-in-effect leidu säilivad.",
-    "PGlite, sünteetilised HTTP/DOM piirid ja ajutine Git ei asenda native samaaegsust, pärisbrauseri galerii/fookuse kontrolli ega kasutaja Maci, Supabase’i ja Verceli paigaldust. Täpse ZIP-i koostatud paigalduskatse ja baitide kontroll lisatakse eraldi väljastusraportisse."
+    "Lõplik kliendi, galerii, omanikuvaate, keele ja avaldamisseansi koondkatse 294/294 PASS, ilma vahelejätmiste, tühistamiste või vigadeta. Selle sees galerii 16/16 ning salvestatud kinnituste ja seansi 73/73; viimast kordas sõltumatu ülevaataja. HTTP transpordipiir 19/19 PASS.",
+    "Salvestatud kinnituse SQL-käitumine 9/9 ning paigalduse, kõrvalekallete ja atomaarse tagasipööramise katsed 12/12 PASS. Kaetud on algse tõendi korduskasutus, teine kinnitav kasutaja, puuduv väide, muutunud tingimused, lõplik järelkontroll ning aegunud staatuse/uuendamise revisjon. Vana juba ettevalmistatud otsesõnaline kinnitus töötab edasi.",
+    "Lõpliku rakenduskoodi Next.js tootmiskooste koos TypeScriptiga PASS sünteetiliste võtmetega. Kõigi 535 rakenduse lähtefaili räsid püsisid koostamisel muutmata. Uusi tootmiskoodi lint-vigu ei ole; kaks muutmata alusversiooni effect-plokki ning galerii kolm senist pildihoiatust säilivad.",
+    "Uuendaja piiratud allika, kahe eelmise paigalduse raporti/Giti kontrolli ja taastumise katsed 30/30 PASS. Lõpliku koostatud ZIP-i tegelike abifailide, ajutise Giti ja SQL-aruande piiride kontroll ning räside ülevaatus lisatakse eraldi väljastusraportisse.",
+    "Kohalikud katsed kasutavad PGlite’i, sünteetilisi ajastuse/HTTP/autentimise piire ja ajutist Giti. Need ei asenda native samaaegsust, päris Storage’i, kasutaja Maci paigaldust, Verceli Ready tulemust ega kaht uut brauserikontrolli."
   ],
   "production": [
-    "Kasutaja kinnitas ekraanipiltidega hobuse hobutest kaks fotot avalikus detailis ning kirje otsingus ja Minu alas. Uue capacity-r2 commit’i või selle privaatse paigaldusraporti eraldi eksporti ei ole; järgmine uuendaja kontrollib need Macis.",
-    "Uue galerii/elutsükli kandidaadi paigaldus, Verceli Ready ja kasutaja vastuvõtt on ootel. Arendustöö ei teinud live-andmebaasi, Storage’i ega deployment’i toiminguid.",
+    "Kasutaja kinnitas ekraanipiltide ja kirjeldusega hobuse ning tavakuulutuse galerii/pildilingid, Minu ala pisipildi, avalikust vaatest peatamisel kadumise, peatatud muutmise, aktiveerimisel uue sisu näitamise ning eraldi tähtaja uuendamise. Need varasemad vastuvõtukatsed on tehtud.",
+    "Uus noolte peitumise ja kinnituste korduskasutuse pakett on kohalik kandidaat. Selle Maci build/push, Verceli Ready ja kaks uut kasutajakatset on ootel. Käesoleva arenduse ajal ei tehtud live-andmebaasi, Storage’i ega deployment’i toiminguid.",
     "English/Eesti, Frankfurt fra1 ja varasem üks 9-sekundiline fotolisamise kasutajamõõt säilivad varasema tõendina."
   ],
-  "next_action": "Paki selqiro-hobuste-haldus-20261108.zip Downloads-kaustas lahti ja järgi HOSTED_PORTAL.md ühte käsku. Seejärel oota selle commit’i Ready/Production tulemust ning kontrolli galeriid, pisipilti, pildilinke, staatust ja eraldi uuendamist. Teenused järgnevad sama Avalda ja Minu ala Muuda/Salvesta loogikaga, töökuulutused hiljem.",
+  "next_action": "Paki selqiro-hobuse-muutmise-viimistlus-20261108.zip Downloads-kaustas lahti ja järgi HOSTED_PORTAL.md ühte käsku. Oota selle commit’i Ready/Production tulemust ja kontrolli ainult noolte 3-sekundilist peitumist/tagasitulekut ning sama hobuse muutmist ilma uue faktilise kinnituseta. Seejärel jätka teenuste Avalda ja Minu ala Muuda/Salvesta vooga ilma kohustusliku eraldi mustandita; töökuulutused hiljem.",
   "stop_rule": "PEATATUD korral säilita teade, raport, kasutaja muudatused ja kõik päevikud. Räsikaitset, remote’i ega õiguskontrolli ei nõrgendata erinevuse möödumiseks. Uue konkreetse tõendita ei korrata vanu paigaldusi, diagnostikat ega vastuvõetud kasutuskatseid.",
   "read_next": [
-    "docs/continuity/HOSTED_PORTAL.md — üks uus käsk ja vastuvõtt.",
-    "docs/architecture/horse-owner-lifecycle-v1.md — ühine galerii ja 90-päevane haldus.",
-    "docs/architecture/horse-publication-v1.md — kanooniline UUID, revisjon, nõusolek, galerii ja kontakt.",
+    "docs/continuity/HOSTED_PORTAL.md — üks uus paigalduskäsk ja kaks uut kontrolli.",
+    "docs/architecture/horse-confirmation-reuse-v1.md — salvestatud väite tõend, poliitikate eristus ja galerii taimer.",
+    "docs/architecture/horse-owner-lifecycle-v1.md — juba vastu võetud 90-päevane haldus.",
     "docs/architecture/shared-marketplace-foundation.md ja docs/known-issues.md — teenused järgmisena ja säilivad piirid."
   ],
   "boundaries": [
@@ -39,7 +40,7 @@
     "Hobune jääb horse_offers ja teenus services kanooniliseks UUID-kirjeks; listings tabelisse varikoopiat ei looda. Kuni kümme fotot, üks põhipilt ja null foto lubamine säilivad.",
     "Staatus ei uuenda tähtaega. 90 päeva pikendamine on eraldi omaniku kinnitus; teise identiteedi või aegunud revisjoni käsk ei tohi tulemust muuta.",
     "Püsiv kuulutuste arvupiir on otsustamata. 300 MiB on ajutise töö kaitse, kolm avatud ja 20 uut toimingut/24 h eraldi olemasolevad kasutuselevõtukaitsed.",
-    "Üldine terminalne taustakoristus jääb eraldi tööks. Uus elutsükkel ei kustuta kuulutusi, pilte, nõusolekuid ega päevikuid.",
+    "Üldine terminalne taustakoristus jääb eraldi tööks. Viimistlus ei kustuta kuulutusi, pilte, nõusolekuid ega päevikuid ning ei muuda varasemaid väljastatud pakette või rakendatud SQL-faile.",
     "Teenuste sisestamine ja muutmine järgib sama Avalda ning Minu ala Muuda/Salvesta voogu ilma kohustusliku eraldi mustandita. Teenuse eriväljad säilivad; töökuulutused hiljem."
   ],
   "environment": [

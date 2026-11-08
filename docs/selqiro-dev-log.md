@@ -946,3 +946,20 @@ ja piirid: `docs/continuity/MESSAGING_MOBILE_FIX_20261030.md` ning tarne
   Macis, sama commit’i Ready / Production ja üks hobuse avaldamise/muutmise
   kasutuskatse. Teenused järgnevad ühe Avalda ning Minu ala Muuda/Salvesta vooga;
   töökuulutused hiljem.
+
+
+## 2026-11-08 — hobuse halduse vastuvõtt ja muutmise viimistlus
+
+- Kasutaja kinnitas ühise galerii, suurendamise, omaniku pisipildi, pildilingid,
+  peatatud sisu muutmise ning eraldi 90-päevase uuendamise. Korduvat vastuvõttu
+  nende punktide jaoks ei nõuta.
+- Vana 3000-ms galerii käitumine tuuakse ühisesse komponenti. Hiire liikumine,
+  puudutus ja navigeerimine kuvavad nooled; klaviatuurifookus jääb nähtavaks.
+- Omaniku atomaarne lugemine tagastab olemasoleva faktilise kinnituse tõendi.
+  Muutmisvorm saadab algse sündmuse viite, server kontrollib seda ettevalmistusel
+  ja lõppkirjutusel. Algne sündmus/aeg säilib; uued tingimused vajavad eraldi
+  nõusolekut. Uue kuulutuse esmast kinnitust ei asendata.
+- Uus SQL-parandus ja paigalduspäevik on eraldi. Alus on eelmise halduse 1226
+  faili ja receipt’idega kontrollitud tegelik Git-ahel. Uue paranduse paigaldus
+  Macis ning Verceli Ready järgnevad; teenused on pärast viimistlust järgmised.
+- Täpsed lõplike baitidega seotud kontrollid säilivad paketi kontrollraportis.
