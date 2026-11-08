@@ -2,12 +2,13 @@ import "server-only";
 import { privateUploadHttp, type UploadFetch } from "../../entities/listing/api/privateUploadHttp";
 import { isUploadUuid, uploadRecord } from "../../entities/listing/model/privatePublicationUpload";
 import { isPublicationCapacityError } from "../../entities/listing/model/publicationCapacity";
-import { assertPublicationActor, type PublicationRuntimeConfig } from "../listing-publication/journey/integrationRuntime";
+import { assertPublicationActor, isHostedPublicationRuntime, type PublicationRuntimeConfig } from "../listing-publication/journey/integrationRuntime";
 import type { MultipartPublicationImages } from "../listing-publication/journey/journeyTypes";
 import { createPublicationTiming, timePublicationStage } from "../listing-publication/journey/publicationTiming";
 import type { AfterPublicationResponse } from "../listing-publication/journey/completePublishedSource";
 import { copyWebCommand } from "../listing-publication/web/webImageContract";
 import { createHorseCleanupPass } from "./settleHorseCleanup";
+import { createAccountSourceCompletion } from "../listing-publication/journey/completeAccountSource";
 
 const actions = new Set(["prepare", "status", "publish", "cancel", "owner-read", "image-prepare", "image-verify"]);
 const receiptKeys = ["schema_version", "content_type", "state", "actor_user_id", "identity_id", "request_key",
@@ -137,6 +138,7 @@ export function createHorsePublicationRequestHandler(config: PublicationRuntimeC
     images: Pick<MultipartPublicationImages, "prepare" | "verify">, fetcher: UploadFetch = fetch,
     afterResponse?: AfterPublicationResponse) {
   const cleanup = createHorseCleanupPass(config, fetcher);
+  const completeSources = isHostedPublicationRuntime(config) ? createAccountSourceCompletion(config, fetcher) : null;
   return async (request: Request, action: string): Promise<Response> => {
     if (!actions.has(action)) return response({ error: "not_found" }, 404);
     if (request.method !== "POST") return response({ error: "method" }, 405);
@@ -180,7 +182,15 @@ export function createHorsePublicationRequestHandler(config: PublicationRuntimeC
         return reply(await images[action === "image-prepare" ? "prepare" : "verify"](token, image, request.signal, timing.record));
       }
       if (!bound) throw new Error("input");
-      const call = await timePublicationStage(timing.record, "owner_rpc", () => rpc(bound.name, bound.args));
+      const callBound = () => timePublicationStage(timing.record, "owner_rpc", () => rpc(bound.name, bound.args));
+      let call = await callBound();
+      if (action === "prepare" && call.status !== 200 && completeSources && isPublicationCapacityError(call.json)
+        && call.json.message === "publication_retained_bytes_limit") {
+        // This known allocator exception rolls back before creating the attempt.
+        // A confirmed SOURCE completion permits one retry of these same arguments.
+        if (await completeSources(token, { expectedUserId: String(input.expectedUserId),
+          expectedIdentityId: String(input.expectedIdentityId) }, request.signal) > 0) call = await callBound();
+      }
       if (call.status !== 200) {
         const error = safeDatabaseError(call.json);
         return reply(error ?? { error: "outcome_unknown" }, error ? error.error === "context_changed" ? 403 : 409 : 503);
@@ -197,7 +207,12 @@ export function createHorsePublicationRequestHandler(config: PublicationRuntimeC
         && ["publish", "status"].includes(action)) {
         const scope = { expectedUserId: String(saved.actor_user_id), expectedIdentityId: String(saved.identity_id),
           attemptId: saved.attempt_id, requestKey: String(saved.request_key) };
-        try { afterResponse(() => cleanup(token, scope)); } catch { /* The committed receipt and cleanup ledger remain valid. */ }
+        try { afterResponse(async () => {
+          await cleanup(token, scope);
+          if (completeSources) await completeSources(token, {
+            expectedUserId: scope.expectedUserId, expectedIdentityId: scope.expectedIdentityId,
+          });
+        }); } catch { /* The committed receipt and cleanup ledger remain valid. */ }
       }
       return reply(saved);
     } catch (error) {

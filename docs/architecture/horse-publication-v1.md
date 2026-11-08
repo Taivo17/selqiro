@@ -1,10 +1,17 @@
 # Horse publication V1
 
-Status: implemented and locally verified, 2026-11-08. This source is prepared for
-`selqiro-hobused-20261108-r2`; installation, a new Production Ready result and user
-acceptance are still pending. No production database, Storage or deployment was
-changed during development. Final build/package evidence is recorded in
-`docs/continuity/CURRENT_STATE.json`.
+Status: the returned 2026-11-08 report confirms the successful horse r2
+installation receipt and clean `main` `6bb4385` with 1165 source files. That
+receipt records verified SQL, passed build and verified push; it is not a fresh
+Vercel deployment check. The user's two-photo publication then hit the old
+reservation counter. The first upload-capacity package then stopped in its
+preflight before applying SQL or source changes. Its corrected r2 fixture
+restores seventeen retained private functions; the application and capacity
+SQL logic are unchanged. The repair and its separate installation/acceptance
+boundary are described in `upload-capacity-v1.md` and
+`../continuity/UPLOAD_CAPACITY_20261108.md`. Use only the current instructions in
+`../continuity/HOSTED_PORTAL.md`; do not repeat the successful horse-r2 installation.
+Development performed no live database, Storage or deployment operations.
 
 ## User workflow and canonical record
 
@@ -118,7 +125,10 @@ source/retired objects from the same command lineage. The shared worker verifies
 physical absence before recording release. Failure retains the queue and does
 not undo publication. This is not a persistent general background cleanup
 service; abandoned/expired uploads and complete portal cleanup remain separate
-work.
+work. The upload-capacity repair preserves this horse pass and follows it with
+a bounded account SOURCE pass across the original actor's currently accessible
+identities. See `upload-capacity-v1.md` for the exact authorization and budget
+rules; canonical published WEB objects are not counted as unfinished work.
 
 ## Discovery, profile and contact
 
@@ -142,9 +152,14 @@ Editable statuses are `draft` and `published`. `held_for_review`, `paused`,
 delete, pause or renewal actions have not been added. Services and jobs are not
 changed by this horse release.
 
-## Verification and acceptance
+## Original horse verification and remaining acceptance
 
-Local evidence at this checkpoint: 35 controller/React server-rendered UI tests,
+The following counts record the original horse implementation, not a rerun of
+the current capacity repair. Current evidence is in
+`../continuity/UPLOAD_CAPACITY_20261108.md` and
+`../continuity/CURRENT_STATE.json`.
+
+Local evidence at the original checkpoint: 35 controller/React server-rendered UI tests,
 6 public-read/profile-page/parser tests, 9 HTTP/media tests, 8 SQL integration
 checks, 9 core SQL checks and 12 installation-guard checks passed. The updater
 passed 17 temporary-Git cases, including hook termination after timeout,

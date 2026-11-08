@@ -8,8 +8,9 @@ import { assertPublicationActor, isHostedPublicationRuntime, type PublicationRun
 import type { MultipartPublicationImages } from "./journeyTypes";
 import { isGalleryOrdinal, isGalleryRevision, photoAdditionActions, validatePhotoAdditionInput } from "./photoAdditionContract";
 import { createPublicationTiming, timePublicationStage } from "./publicationTiming";
-import { createPublishedSourceCompletion, hasCommittedPhotoAppend, photoAdditionSourceScope,
+import { hasCommittedPhotoAppend,
   type AfterPublicationResponse } from "./completePublishedSource";
+import { createAccountSourceCompletion } from "./completeAccountSource";
 
 const ownerActions = {
   ...photoAdditionActions,
@@ -83,7 +84,7 @@ function ownerContractError(value: unknown): {code: string; message: string} | n
 export function createJourneyRequestHandler(c: PublicationRuntimeConfig, images: MultipartPublicationImages,
     fetcher: UploadFetch = fetch, afterResponse?: AfterPublicationResponse) {
   const final = createFinalListingService(c, fetcher);
-  const completeSource = isHostedPublicationRuntime(c) ? createPublishedSourceCompletion(c, fetcher) : null;
+  const completeSources = isHostedPublicationRuntime(c) ? createAccountSourceCompletion(c, fetcher) : null;
   async function refreshFinalReceipt(known: FinalReceipt, expectedUserId: unknown,
       headers: Record<string, string>, signal: AbortSignal): Promise<FinalReceipt> {
     const r = await privateUploadHttp(fetcher, c.projectOrigin + "/rest/v1/rpc/get_my_managed_listing_v2",
@@ -141,20 +142,22 @@ export function createJourneyRequestHandler(c: PublicationRuntimeConfig, images:
           {method: "POST", headers, body: JSON.stringify(bound.args)}, {signal: request.signal, responseBytes: 65536,
             readErrorStatuses: [400, 401, 403, 404, 409, 422, 500, 503]}));
         let r = await callOwner();
-        if (action === "owner-images-add-prepare" && r.status !== 200 && completeSource
+        if (action === "owner-images-add-prepare" && r.status !== 200 && completeSources
           && isPublicationCapacityError(r.json) && r.json.message === "publication_retained_bytes_limit") {
           // This exact allocator exception rolled back before creating a child.
           // SQL rechecks all limits and the unchanged gallery revision on retry.
-          if (await completeSource(token, photoAdditionSourceScope(input), request.signal)) r = await callOwner();
+          if (await completeSources(token, { expectedUserId: String(input.p_expected_user_id),
+            expectedIdentityId: String(input.p_expected_identity_id) }, request.signal) > 0) r = await callOwner();
         }
         if (r.status === 200) {
-          if (action === "owner-images-add-append" && completeSource && afterResponse
+          if (action === "owner-images-add-append" && completeSources && afterResponse
             && hasCommittedPhotoAppend(r.json, input)) {
-            const scope = photoAdditionSourceScope(input);
+            const scope = { expectedUserId: String(input.p_expected_user_id),
+              expectedIdentityId: String(input.p_expected_identity_id) };
             try { afterResponse(async () => {
               // The framework retains this bounded job after sending the ACK.
               // It has its own deadline and does not inherit request aborts.
-              await completeSource(token, scope);
+              await completeSources(token, scope);
             }); } catch { /* Keep the committed append; the existing ledger retains its SOURCE. */ }
           }
           return reply(r.json);
@@ -170,8 +173,26 @@ export function createJourneyRequestHandler(c: PublicationRuntimeConfig, images:
         if ([400,404,409,422].includes(r.status)) throw new Error("refused");
         if (r.status !== 200) throw new Error("outcome_unknown"); return r.json;
       };
-      if (action === "prepare") return response(await rpc("prepare_my_listing_publication_v1",
-        bindPrepareListingPublicationCommand(input as Parameters<typeof bindPrepareListingPublicationCommand>[0])));
+      if (action === "prepare") {
+        const args = bindPrepareListingPublicationCommand(input as Parameters<typeof bindPrepareListingPublicationCommand>[0]);
+        const callPrepare = () => privateUploadHttp(fetcher, c.projectOrigin + "/rest/v1/rpc/prepare_my_listing_publication_v1",
+          { method: "POST", headers, body: JSON.stringify(args) }, { signal: request.signal, responseBytes: 65536,
+            readErrorStatuses: [400, 401, 403, 404, 409, 422, 500, 503] });
+        let prepared = await callPrepare();
+        if (prepared.status !== 200 && completeSources && isPublicationCapacityError(prepared.json)
+          && prepared.json.message === "publication_retained_bytes_limit") {
+          // Only a definite allocator refusal permits one identical command.
+          // Failed/lost replies never authorize replay or quota release.
+          if (await completeSources(token, { expectedUserId: String(input.expectedUserId),
+            expectedIdentityId: String(input.expectedIdentityId) }, request.signal) > 0) prepared = await callPrepare();
+        }
+        if (prepared.status === 200) return response(prepared.json);
+        if (isPublicationCapacityError(prepared.json))
+          return response({ error: "owner_contract", code: prepared.json.code, message: prepared.json.message }, 409);
+        if (prepared.status === 401 || prepared.status === 403) throw new Error("unauthorized");
+        if ([400, 404, 409, 422].includes(prepared.status)) throw new Error("refused");
+        throw new Error("outcome_unknown");
+      }
       if (action === "status" || action === "cancel") {
         const result = await rpc(action === "status" ? "get_my_listing_publication_journey_v2" : "cancel_my_listing_publication_journey_v2", actorArgs(input, "requestKey"));
         if (action === "cancel") {
@@ -189,6 +210,11 @@ export function createJourneyRequestHandler(c: PublicationRuntimeConfig, images:
       if (action === "cleanup") return response(await settle(token, input, request.signal));
       if (action === "publish" || action === "remove") {
         const result = action === "publish" ? await final.publish(token, input, request.signal) : await final.remove(token, input, request.signal);
+        if (action === "publish" && result.state === "published" && completeSources && afterResponse) {
+          const scope = { expectedUserId: String(input.expectedUserId), expectedIdentityId: String(input.expectedIdentityId) };
+          try { afterResponse(async () => { await completeSources(token, scope); }); }
+          catch { /* Keep the committed receipt and durable SOURCE cleanup queue. */ }
+        }
         // Content commit and file cleanup remain separately observable. A bounded
         // first cleanup pass is part of the user action, never a new publication.
         try {

@@ -185,7 +185,7 @@ test('cancel before a missing prepare closes that request and cannot delete an e
 const capacityCases=[
   ['publication_open_attempt_limit',/pooleliolevat lisamist/],
   ['publication_daily_attempt_limit',/24 tunni jooksul alustatud lisamiste piir/],
-  ['publication_retained_bytes_limit',/üleslaadimiseks.*piisavalt vaba ruumi/],
+  ['publication_retained_bytes_limit',/Ajutine üleslaadimisruum.*hõivatud/],
 ];
 for(const [message,explanation] of capacityCases)
   test('known temporary capacity '+message+' explains its reason without retrying or changing cancellation',async()=>{

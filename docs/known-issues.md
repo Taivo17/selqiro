@@ -3,7 +3,40 @@
 Seis: 08.11.2026 Europe/Tallinn. Üks praegune tööjärg on
 `continuity/CURRENT_STATE.json`-is; see dokument ei ole teine NEXT-allikas.
 
-## Hobuste kuulutused — teostatud, kasutuselevõtt ja vastuvõtt ootel
+## Kahe foto lisamine — ajutise ruumi arvestuse parandus
+
+Esimene ruumiparanduse pakett peatus eelkontrollis enne SQL-i või lähtefailide
+muutmist, build'i, commit'i ja push'i. Puudus oli kohalikus kontrollaluses:
+17 varem paigaldatud privaatse funktsiooni taastamine täpsetest säilitatud
+SQL-määratlustest koos algsete õiguste/omanikega reprodutseerib tegeliku
+raporti funktsioonide ja sõltuvuste räsid. Parandatud kandidaat on
+`selqiro-uleslaadimise-ruum-20261108-r2.zip`; tööloogika ja kolm SQL-moodulit
+jäävad samaks. Vana peatuse päevik säilib. R2 paigaldus ja Ready on veel ootel.
+
+Hobuse kahe fotoga avaldamine peatus reservipiiril. Kontrollitud raportis oli
+259 MiB reserve: 175 MiB koristamist ootavaid avaldatud SOURCE-algfaile ja
+84 MiB juba avaldatud WEB-galeriipilte. Kaks uut fotot lisasid 58 MiB ning
+vana kontroll sai 317 > 300 MiB. See ei olnud tegeliku kettamahu mõõtmine ega
+kasutajaga kokku lepitud püsiv kontopiir.
+
+Valmistatud parandus eristab ajutist üleslaadimistööd avaldatud galeriist.
+Sama kontroll on enne koristamist 175 + 58 = 233 MiB. SOURCE-reserv vabaneb
+endiselt alles pärast värsket Storage'i puudumiskontrolli ja seotud püsivat
+kinnitust. Sama algse kasutaja lubatud identiteetide avaldatud SOURCE-objekte
+lõpetab piiratud taustakäik; WEB-pilte see võime ei kustuta. Uusi fotosid
+mitte lisav toiming ei vaja uut pildireservi ning jätab vahele ainult baitide
+kontrolli. Vt `architecture/upload-capacity-v1.md` ja
+`continuity/UPLOAD_CAPACITY_20261108.md`.
+
+Kasutaja eesmärk on mitusada kuulutust; täpne püsiv arvupiir on otsustamata.
+300 MiB on selles paranduses ajutise töö kaitse. Kolm avatud toimingut ja
+20 uut toimingut jooksva 24 tunni jooksul jäävad eraldi kasutuselevõtukaitsetena
+alles; need ei määra konto avaldatud kuulutuste arvu ning vajavad enne laiemat
+kasutust eraldi otsust. Parandatud r2 Maci paigaldus, Ready ning sama kahe
+fotoga hobuse avaldamise vastuvõtt on ootel. Praegune käsk ja jätkamissammud
+on ainult `continuity/HOSTED_PORTAL.md`-s.
+
+## Hobuste kuulutused — r2 paigaldus edukas, avaldamise vastuvõtt jätkub
 
 Kõik viis tüüpi kasutavad üht Avalda-toimingut; eraldi kohustuslikku mustandi
 salvestamist ei ole. Privaatne jätkatav katse säilitab täpsed andmed, fotode
@@ -16,20 +49,16 @@ detail, tüübiga ühine otsing, avaliku profiili kaardid ja olemasolevad vestlu
 Hobune säilitab oma UUID ega tekita tavalise kuulutuse koopiat.
 Vt `architecture/horse-publication-v1.md`.
 
-Esimese paketi Maci eelkontroll peatus enne muutmist. Ainult lugemise raport
-kinnitas seniste funktsioonide koodi ja struktuuri vastavuse; erinevus oli viie
-funktsiooni õiguste ja kahe automaatse rolliliikmesuse testmudelis. r2 kasutab
-nende täpset tõendatud kuju. Vt `continuity/HORSE_PREFLIGHT_20261108.md`.
-
-Kohalikud kliendi, serveri ja SQL-katsed on läbinud; see ei tõenda tootmise
-paigaldust. r2 Maci käivitus, commit/push, Verceli Ready ja üks sisuline
-kasutuskatse on veel ootel. Natiivset brauserit selles tööruumis ei olnud;
-tegelike Reacti komponentide SSR ja kontrollerikatsed ei ole visuaalne
-brauserikatse. Lõplik build'i tulemus on CURRENT_STATE-is.
+Esimese paketi Maci eelkontrolli peatus jääb ajalukku. Hilisema r2 tulemuse
+`complete`, andmebaasi kontrolli, build'i ja push'i edu on tagastatud raportiga
+kinnitatud. Praegune puhas `main` on
+`6bb438519570faa0e42f56e0670e32965cfd62fb`, 1165 lähtefaili. R2 uuesti ei
+paigaldata. See tõend ei asenda uue ruumiparanduse Verceli Ready ega praegu
+pooleli oleva kahe fotoga avaldamise kasutajakatset.
 
 Muudetavad seisud on `draft` ja `published`. `held_for_review`, `paused`,
 `closed`, `rejected`, `archived` on lugemiseks. Uusi peatamise, arhiveerimise,
-kustutamise ega uuendamise nuppe/lepinguid selles paketis ei lisata.
+kustutamise ega uuendamise nuppe/lepinguid selles paranduses ei lisata.
 
 ## Teenused — järgmine ühendatav domeen; töökuulutused hiljem
 
@@ -63,13 +92,16 @@ kasutaja katses 9 s lisamise. See pole püsiva keskmise lubadus. Frankfurt
 ## Üldine koristus enne avalikku avamist
 
 Katkestatud/aegunud üleslaadimiste ja kogu kuulutuse terminalse koristuse täielik
-püsiv taustateenus on eraldi töö. Hobuse kinnitatud toimingu piiratud
-vastusejärgne koristus säilitab ebaõnnestumisel järjekorra; see ei ole kogu konto
-lõpmatu taustakoristus. Tehniliste testpaneelide eemaldamine peab käima koos
-täieliku taustal lõpetamisega.
+püsiv taustateenus on eraldi töö. Praegune raport näitas null arvestuses
+terminalset objekti; sellest ei järeldu terminalse koristuse valmidus.
+Avaldatud SOURCE-failide piiratud vastusejärgne lõpetamine säilitab
+Storage’i või andmebaasi vea korral järjekorra ja kinnitamata reservi.
+See ei ole lõpmatu püsiv taustateenus. Tehniliste testpaneelide eemaldamine
+peab käima koos täieliku taustal lõpetamisega.
 
 ## Diagnostika ajatemplid — varasem lahendus säilib
 
 Parandatud r2 koguja lõpetas 07.11 kell 13:29 Python 3.9.6 all edukalt. Maci
 lähtepuu ja index säilisid. Toonane 277 MiB reserv on ajalooline vaatlus;
-vt `continuity/PHOTO_ADDITION_DIAGNOSTIC_20261107.md`.
+vt `continuity/PHOTO_ADDITION_DIAGNOSTIC_20261107.md`. Praeguse paranduse
+259 MiB vaatlus ja selle ulatus on `continuity/UPLOAD_CAPACITY_20261108.md`-s.

@@ -1,3 +1,53 @@
+<!-- SELQIRO_UPLOAD_CAPACITY_PREFLIGHT_R2_20261108 -->
+## 2026-11-08 — üleslaadimisruumi esimene peatus ja kontrollaluse r2
+
+- Tagastatud `selqiro-uleslaadimise-ruum-20261108-result.json` räsi on
+  `bd8a76d4e3c3d73763ef8acd669dec2ee9d13af89726962c371baba93e3588da`.
+  Release `24c41b2440d0dec3f2fd2708b2b44afd843271f024d4419554834b47c451eb5d`
+  peatus enne SQL-i rakendamist, lähtefailide muutmist, build'i, commit'i ja push'i.
+  Täpne edukas hobuse r2 alus `6bb4385` / 1165 faili säilib.
+- Viga oli kohalikus fixture'is: 17 varem väljastatud privaatset funktsiooni
+  puudusid, kuigi uus sõltuvuskontroll need tootmises kaasa arvas. Säilitatud
+  SQL-i täpsed määratlused, omanikud ja õigused taastavad tegeliku raporti
+  funktsioonide räsi `93b95bd4…` ja sõltuvusräsi `bd0d02ea…`.
+- R2 parandab kontrollalust ja selle genereeritud kaitseid. Viis runtime-faili
+  ning kolm ruumiparanduse SQL-moodulit on muutumatud; kontrolli ulatust ega
+  tootmise õigusi ei nõrgendata. Vana pakett ja peatunud päevik jäävad alles.
+- Uus pakett on `selqiro-uleslaadimise-ruum-20261108-r2.zip`. Selle paigaldus,
+  Ready ja kahe fotoga hobuse avalik tulemus on veel ootel. Praegune käsk ning
+  sama toimingu jätkamine on `docs/continuity/HOSTED_PORTAL.md`-s.
+- Pärast hobuse vastuvõttu järgnevad teenused sama Avalda / Minu ala
+  Muuda–Salvesta loogikaga; töökuulutused hiljem. Kontol mitusada kuulutust on
+  eesmärk, täpne püsiv piir pole otsustatud. Allpool säilib varasem ajalugu.
+
+---
+
+<!-- SELQIRO_UPLOAD_CAPACITY_20261108 -->
+## 2026-11-08 — kahe hobusefoto ruumikeeld tuvastatud ja parandus valmistatud
+
+- R2 edu on raportiga kinnitatud: `main` `6bb4385`, 1165 faili, SQL/build/push
+  edukad. Ainult lugemise raporti ZIP-i SHA-256 on
+  `2e50d5516d25c4f73bc77163d0cb03bce55489989e096c45c514312c1f0200d7`.
+- Vana arvestus: 175 MiB avaldatud SOURCE + 84 MiB avaldatud WEB = 259 MiB;
+  kasutaja kaks uut fotot lisavad 58 MiB ning kontroll sai 317 > 300 MiB.
+  Uus ajutine arvestus saab 233 MiB enne koristamist. Püsivat kontokvooti
+  ega mitmesaja kuulutuse täpset piirangut selle parandusega ei kehtestata.
+- Lisatud ühine ajutise ruumi loendur ja sama algse kasutaja lubatud
+  identiteetide piiratud SOURCE-lõpetamine. Värske Storage'i puudumine ning
+  seotud püsiv kinnitus on nõutud; avaldatud WEB-i see võime ei kustuta.
+  Ainult täpne ruumikeeld võib kinnitatud koristuse järel saada ühe identse korduse.
+- 67 uut ja 198 varasemat runtime-katset, tsc ja viie muudetud runtime-faili
+  ESLint läbisid. Sünteetilise seadistusega build läbis 28,29 s. SQL-i ja
+  täpse tarne tõendid on eraldi; Maci parandus/Ready/vastuvõtt on veel ootel.
+- Praegune käsk on `docs/continuity/HOSTED_PORTAL.md`-s. Pärast Ready jätkatakse
+  sama hobusetoimingut samade kahe algfotoga ja kontrollitakse avalikku vaadet.
+  Kolme avatud / 20 uue toimingu kaitsed ja terminalse koristuse järgmine töö
+  on selgelt eristatud. Teenused järgnevad sama lihtsa kanoonilise UUID vooga.
+
+Allpool säilivad varasemad sissekanded; vanad paigalduskäsud on ajalugu.
+
+---
+
 <!-- SELQIRO_HORSE_PUBLICATION_PREPARED_20261108 -->
 ## 2026-11-08 — kanooniline hobuse avaldamine ja kinnitatud muutmine
 

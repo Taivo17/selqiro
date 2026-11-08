@@ -1,82 +1,77 @@
-# Hobuste kuulutuste ühendamine olemasolevasse portaali
+# Hobuse kahe fotoga avaldamise jätkamine
 
 Seis: 08.11.2026 Europe/Tallinn. Üks praegune tööjärg on
 [CURRENT_STATE.json](CURRENT_STATE.json). Varasemad paigalduskäsud on ajalugu.
 
-## Praegune alus ja uus tulemus
+## Praegune alus ja parandus
 
-English/Eesti valik on kasutaja kuvatõmmistes olemas. Varasema foto kuvamise
-parandus `785c359`, ühe lisamise 9 s tulemus ja Frankfurt `fra1` on vastu võetud.
-Neid varasemaid paigaldusi/kasutuskatseid ei korrata.
+Hobuse r2 paigaldus on tagastatud raporti järgi edukalt lõpetatud: lähtealus on
+puhas `main` commit `6bb438519570faa0e42f56e0670e32965cfd62fb`, kokku 1165 faili.
+Hobuse vana r1 peatus ei ole praegune seis. Hobusepaketti ega varasemaid foto- ja
+keelepakette ei käivitata uuesti.
 
-Uus hobusepakett põhineb täpselt taastatud 1106-failisel keelepaketil. See lisab
-ühe Avalda-toimingu kõigile viiele hobusetüübile, hallatud fotod, avaliku
-kuulutuse/otsingu/profiili ning ühise kontakti. Hilisem muutmine käib Minu alast
-ühe Salvesta muudatused toiminguga. Sisemine privaatne jätkamiskatse ei nõua
-eraldi Salvesta mustand nuppu. Senine avalik versioon säilib kuni kinnitatud
-muudatuseni; kanooniline hobuse UUID ei muutu.
+Kahe uue foto ruumikeelu põhjus on tuvastatud: senine tehniline arvestus liitis
+175 MiB koristamist ootavaid algfailireserve ja 84 MiB juba avaldatud
+veebipildireserve. Kaks uut fotot lisasid 58 MiB; vana kontroll sai 317 MiB.
+Uus parandus käsitleb 300 MiB läve ajutise üleslaadimistöö kaitsena.
+Avaldatud galeriipildid seda arvestust ei kasvata, nii et sama kahe foto
+kontroll on enne koristamist 233 MiB. Kontole püsivat 300 MiB tootepiiri ega
+kuulutuste arvu piiri ei kehtestata.
 
-Esimene hobusepakett peatus kasutaja Macis enne muutmist. 08.11 kell 12:42
-Eesti aja järgi kogutud ainult lugemise raport kinnitas puhta lähtealuse
-`92408b6ceb7a9fec3119d35a86c9bb47628acf22` ning senise SQL-koodi ja struktuuri
-vastavuse. Peatuse põhjus oli testmudeli erinevus olemasolevate õigusekirjete
-kujule. r2 täpsustab selle aluse kontrolli; seniseid õigusi ümber ei kirjutata.
-Vt [eelkontrolli paranduse tõend](HORSE_PREFLIGHT_20261108.md).
+## Miks ruumiparandusel on uus r2
 
-Rakenduse varasem TypeScripti, sihitud katsete ja kooste tõend säilib muutmata
-runtime-failide alusel. r2 andmebaasi- ja paigalduskontrollid on eraldi. r2
-Maci paigaldus, uus Production Ready ja hobusevoo kasutaja vastuvõtt on ootel.
+Esimese ruumipaketi tagastatud `result.json` näitab eelkontrolli peatust enne
+SQL-i rakendamist, lähtefailide uuendamist, build'i ja avaldamist. Kohalikust
+kontrollalusest puudusid 17 varem paigaldatud privaatset funktsiooni. Nende
+täpsete määratluste ja õiguste taastamine säilitatud lähtekoodist reprodutseerib
+raporti funktsioonide ja koondsõltuvuste räsid. R2 parandab kontrollalust; rakenduse tööloogika
+ja kolm SQL-moodulit säilivad. Vana paketi ega peatunud päeviku kustutamist
+pole vaja. Täpne tõend on [UPLOAD_CAPACITY_20261108.md](UPLOAD_CAPACITY_20261108.md).
+R2 ruumiparanduse paigaldust ega Ready tulemust pole veel kinnitatud.
 
-## Üks käsk
+## Üks praegune käsk
 
-Paki **selqiro-hobused-20261108-r2.zip** Downloads-kausta ja käivita:
+Paki **selqiro-uleslaadimise-ruum-20261108-r2.zip** Downloads-kausta ja käivita:
 
 ```bash
-python3 -I -B "$HOME/Downloads/selqiro-hobused-20261108-r2/uuenda.py" --publish
+python3 -I -B "$HOME/Downloads/selqiro-uleslaadimise-ruum-20261108-r2/uuenda.py" --publish
 ```
 
-Paigaldus nõuab eelmise eduka keelepaketi privaatset päevikut ja selle täpset
-kinnitatud lähtepuud. Samuti kontrollitakse tegelikku haru, indexit ja remote'i.
-Failid varundatakse. Hobuse SQL-i 01–07 on üks kontrollitud tehing koos täpse
-preflight/verify kontrolliga; järgneb portaali kooste, piiratud commit ja
-tavaline push. Ühtegi varasemat foto- või keelepaketti pole vaja uuesti käivitada.
+Paigaldaja kontrollib eduka hobuse r2 privaatset tulemust, täpset lähtepuud,
+haru, indeksit ja kinnitatud remote'i. SQL-i uus võime paigaldatakse
+kontrollitud tehingus; järgnevad failivarukoopia ja uuendus, build, piiratud
+commit ja tavaline push. Päevikud ja varasemad varukoopiad säilivad.
 
 **PEATATUD** korral säilita teade, raport ja päevikud ning saada teade koos
 raportiga vestlusse. Tundmatu lähte- või andmebaasiseisu korral kontrolli ei
-nõrgendata ega vana paketti oletuse järgi uuesti käivitata.
+nõrgendata ega varasemat paigaldust oletuse järgi korrata.
 
-## Üks sisuline kontroll pärast uut Ready tulemust
+## Jätka sama kahe fotoga toimingut pärast Ready tulemust
 
-Oota terminalis näidatud uue commit'i **Ready / Production** tulemust ja
-värskenda portaali. Seejärel:
+1. Oota terminalis näidatud uue commit'i **Ready / Production** tulemust.
+2. Värskenda senist hobuse lisamise lehte.
+3. Vajuta **Kontrolli salvestatud tulemust**.
+4. Kui vorm küsib algfaile, vali **Vali algfotod** kaudu need samad kaks fotot.
+5. Vajuta **Jätka** ja kontrolli pärast avaldamist, et mõlemad fotod on näha
+   hobuse kuulutuse avalikus vaates.
 
-1. Lisa üks hobuse kuulutus: täida väljad, vali foto, vaata tingimused ja
-   kinnitused üle ning vajuta Avalda. Eraldi mustandina salvestamist ei küsita.
-2. Ava avalik detail ning leia sama kuulutus otsingust ja kuulutaja profiililt.
-   Foto ja õige hobusetüüp peavad olema nähtavad.
-3. Ava Minu ala → Muuda, muuda teksti, lisa teine foto, vali see põhipildiks ja
-   salvesta. Avaliku lehe UUID peab jääma samaks; pärast kinnitust on uus
-   versioon nähtav.
-4. Kui teine testkonto on olemas, ava sellelt kontakt. Vestlus peab avanema olemasolevas
-   sõnumivaates koos õige hobuse viitega.
-5. Vaheta English/Eesti. Nupud ja tagasiside vahetavad keelt; sisestatud sisu
-   ning poolelioleva vormi andmed säilivad.
+Säilitatud toiming jätkab sama käsu ja võtmega ka siis, kui esialgne ruumikeeld
+jättis serverisse toimingu loomata. Selle jätkamiseks pole vaja päevikut
+käsitsi kustutada ega uut dubleerivat kuulutust luua.
 
-Kõik viis tüüpi, taastumise veateed ja revisjonikaitse on sihitud kohalikes
-katsetes kaetud. Üks päris teekond pärast Ready tulemust ei tähenda uut
-üldist regressioonitesti ega paljude testkuulutuste loomist.
+## Säiliv suund ja järgmine töö
 
-## Piirid ja järgmine töö
+Kasutaja eesmärk on mitusada kuulutust kontol; täpne püsiv arvupiir on otsustamata.
+Kolme korraga avatud ja 20 uue toimingu/24 h kasutuselevõtukaitsed on sellest
+eraldi ning vajavad edaspidi tooteotsust. Piiratud avaldatud algfailide
+lõpetamine ei ole kogu portaali püsiv terminalne taustakoristus.
 
-Draft/published hobuseid saab muuta. Ülejäänud staatused jäävad lugemiseks;
-uusi arhiveerimise, kustutamise, peatamise või uuendamise toiminguid ei ole
-lisatud. Originaalsed kinnitatavad dokumendid on praegu eestikeelsed; inglise
-liides selgitab seda, nende sisu ega räsi ei asendata tõlkega.
+English/Eesti valik, Frankfurt `fra1` ja varem vastu võetud üks 9-sekundiline
+fotolisamine säilivad. Teenused ühendatakse järgmisena kanoonilise `services`
+UUID peale: sisestamine → **Avalda**, hiljem Minu ala → **Muuda** →
+**Salvesta muudatused**, ilma kohustusliku eraldi mustandisalvestuseta.
+Töökuulutused järgivad sama loogikat hiljem.
 
-Teenused on järgmine etapp: kanooniline `services` UUID, sama Avalda ja
-Minu ala Muuda/Salvesta kogemus, päris kataloog/detail/kontakt ja hallatud
-fotod. Praegune teenuste näidisvaade ei muutu selle hobusepaketiga päris
-otsinguks. Töökuulutused järgivad sama loogikat hiljem.
-
-Arhitektuur: [horse-publication-v1.md](../architecture/horse-publication-v1.md)
-ja [shared-marketplace-foundation.md](../architecture/shared-marketplace-foundation.md).
+Tõend ja tehniline leping:
+[UPLOAD_CAPACITY_20261108.md](UPLOAD_CAPACITY_20261108.md) ning
+[upload-capacity-v1.md](../architecture/upload-capacity-v1.md).

@@ -1,3 +1,60 @@
+<!-- SELQIRO_UPLOAD_CAPACITY_PREFLIGHT_R2_20261108 -->
+## 08.11.2026 — jätkaja mälu: ruumiparanduse eelkontrolli r2
+
+Loe `docs/continuity/CURRENT_STATE.json` ja
+`docs/continuity/UPLOAD_CAPACITY_20261108.md`. Uus kasutaja `result.json`
+(SHA-256 `bd8a76d4e3c3d73763ef8acd669dec2ee9d13af89726962c371baba93e3588da`)
+kinnitab capacity-v1 peatuse `baseline_verified` etapis. SQL-i rakendamine,
+lähtefailide uuendamine, build, commit ja push ei alanud. Edukas hobuse r2
+`6bb4385` / 1165 faili jääb aluseks; seda paigaldust ei korrata.
+
+Kohalikust fixture'ist puudusid 17 säilitatud väljalaske privaatset funktsiooni,
+mille uus täielik privaatse skeemi sõltuvuskontroll kaasas. Täpsete funktsioonide
+ning algsete omanike/õiguste taastamine retained SQL-ist reprodutseerib tegeliku
+`existing_functions=93b95bd4…` ja `dependencies=bd0d02ea…`; vana capability
+`d043db1c…` ei muutu. Räsivõrdlust ei kitsendata ega tundmatut seisu aktsepteerita.
+
+Parandatud pakett on `selqiro-uleslaadimise-ruum-20261108-r2.zip`.
+Viis rakenduse runtime-faili ja kolm SQL-moodulit säilivad eelmisest kandidaadist;
+varasemad 67/198 runtime-, tsc-, lindi- ja build'i tulemused on säilitatud tõend.
+R2 kontrollaluse ja tarne värske tõend kuulub eraldi tarnearuandesse. Uut
+Maci paigaldust ega Ready tulemust ei väideta. Praegune käsk on ainult
+`docs/continuity/HOSTED_PORTAL.md`-s; vana capacity-v1 ja kõik päevikud säilivad.
+
+Pärast r2 commit'i Ready tulemust jätka sama hobusetoimingut samade kahe fotoga
+ning kontrolli avalikku vaadet. Seejärel services UUID, Avalda ja Minu ala
+Muuda/Salvesta, töökuulutused hiljem. Mitusada kuulutust on toote eesmärk;
+täpset püsivat arvupiiri ei ole otsustatud. Allpool on muutmata ajalugu.
+
+---
+
+<!-- SELQIRO_UPLOAD_CAPACITY_20261108 -->
+## 08.11.2026 — jätkaja mälu: ajutine üleslaadimisruum
+
+Loe esmalt `docs/continuity/CURRENT_STATE.json`, seejärel
+`docs/continuity/UPLOAD_CAPACITY_20261108.md`. Hobuse r2 on päris raporti järgi
+edukalt paigaldatud: puhas `main` `6bb4385`, 1165 faili, kontrollitud SQL/build/push.
+R1 peatus ja vana r2-ootel märge on ajalugu; neid pakette uuesti ei käivitata.
+
+Kasutaja valis kaks fotot ja soovib hiljem mitusada kuulutust kontole.
+Täpset püsivat arvupiiri pole kokku lepitud. Vana reserv oli 259 MiB
+(175 SOURCE + 84 avaldatud WEB), kaks uut lisavad 58 MiB. Uus ühine ajutise
+ruumi kontroll jätab kinnitatud galerii WEB-i välja: 233 MiB mahub 300 MiB
+ajutisse kaitsesse. SOURCE-reserv vabaneb ainult kinnitatud puudumise järel.
+Piiratud konto koristus seob praeguse kasutaja/identiteedi ja sama algse
+kasutaja teise lubatud identiteedi; ei vaheta aktiivset identiteeti ega kustuta WEB-i.
+
+67 uut ja 198 varasemat runtime-katset, tsc ja ESLint läbisid; sünteetilise
+konfiguratsiooniga build läbis 28,29 s. Uus live-paigaldus/Ready/vastuvõtt pole
+kinnitatud. Pärast uut Ready: senine vorm → Kontrolli salvestatud tulemust →
+vajadusel samad kaks Vali algfotod kaudu → Jätka. Päevikut ei kustutata.
+Kolm avatud ja 20 uut toimingut/24 h on eraldi allesjäävad kasutuselevõtukaitsed;
+terminalne koristus on eraldi töö. Järgmisena services UUID, Avalda ning
+Minu ala Muuda/Salvesta; EN/ET ja vastuvõetud üks 9 s fotolisamine säilivad.
+Allpool olevad dateeritud kirjed on muutmata ajalugu.
+
+---
+
 <!-- SELQIRO_LISTING_PRIMARY_IMAGE_REPAIR_20261101 -->
 ## 01.11.2026 — Jätkaja mälu: peatunud paketi kontrollaluse parandus
 

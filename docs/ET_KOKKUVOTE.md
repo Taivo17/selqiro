@@ -1,3 +1,52 @@
+<!-- SELQIRO_UPLOAD_CAPACITY_PREFLIGHT_R2_20261108 -->
+## 08.11.2026 — ruumiparanduse r2 parandab eelkontrolli alust
+
+Esimene üleslaadimisruumi pakett peatus `DATABASE_PRECONDITIONS_NOT_MATCHED`
+teatega enne andmebaasi või lähtefailide muutmist. Build, commit ja push ei
+alanud. Kasutaja saadetud `result.json` kinnitab endiselt edukat hobuse r2
+alust: `main` `6bb4385` ja 1165 faili. Vana peatuse päevik säilib.
+
+Põhjus oli meie kohaliku kontrollaluse koostamises: sealt puudusid 17
+varasema väljalaske privaatset funktsiooni. Nende täpsete määratluste,
+omanike ja õiguste taastamine säilitatud lähtekoodist annab mõlemad
+tegelikus raportis nähtud räsid. Uus r2 parandab kontrollalust ja sellest
+tekkivaid kaitseid. Rakenduse viis runtime-faili ja ruumiparanduse kolm
+SQL-moodulit on eelmise kandidaadiga samad; tootmise õigusi ei laiendata.
+
+Praegune pakett on `selqiro-uleslaadimise-ruum-20261108-r2.zip`; üks käsk ja
+sama kahe fotoga hobusetoimingu jätkamine on `docs/continuity/HOSTED_PORTAL.md`-s.
+R2 ruumiparanduse Maci paigaldus, Ready ja avalik kahe fotoga tulemus on veel
+ootel. Mitmesaja kuulutuse eesmärk, otsustamata püsiv arvupiir ning teenuste
+järgmine Avalda / Minu ala Muuda–Salvesta töö säilivad; töökuulutused hiljem.
+Allpool säilib varasem ajalugu; vanad ootel-olekud ei ole tänased juhised.
+
+---
+
+<!-- SELQIRO_UPLOAD_CAPACITY_20261108 -->
+## 08.11.2026 — hobuse r2 paigaldatud; kahe foto ajutise ruumi parandus
+
+R2 edu on raportiga kinnitatud: puhas `main` `6bb4385`, 1165 faili ning
+andmebaasi/build'i/push'i edukas tulemus. Kaks uut fotot peatusid vana
+reserviarvestuse tõttu: 175 MiB algfaile + 84 MiB avaldatud veebipilte +
+58 MiB uut reservi = 317 MiB. Uus ajutise töö arvestus saab 233 MiB juba enne
+koristamist. 300 MiB ei ole kontole kokku lepitud püsiv mahu- ega kuulutuste piir;
+kasutaja soovib mitusada kuulutust ja täpne arvupiir on veel otsustamata.
+
+Parandus sisaldab sama algse kasutaja avaldatud SOURCE-failide piiratud
+lõpetamist. Kolm avatud toimingut ja 20 uut toimingut/24 h jäävad eraldi
+kasutuselevõtukaitseteks. Terminalne koristus vajab eraldi tööd. 67 uut
+runtime-katset, 198 senist regressiooni, TypeScript ja viie muudetud runtime-faili
+ESLint läbisid; kohalik build läbis 28,29 s sünteetiliste seadetega. Uue
+paranduse Maci paigaldus, Ready ja kahe fotoga avalik tulemus on veel ootel.
+
+Praegune käsk ja sama toimingu jätkamine on `docs/continuity/HOSTED_PORTAL.md`-s;
+täpne tõend on `docs/continuity/UPLOAD_CAPACITY_20261108.md`-s. EN/ET ning üks
+vastu võetud 9 s fotolisamine säilivad. Järgmisena teenused kanoonilise UUID
+ja sama Avalda / Minu ala Muuda–Salvesta vooga, töökuulutused hiljem.
+Allpool säilib varasem ajalugu; vanad ootel-olekud ei ole tänased juhised.
+
+---
+
 <!-- SELQIRO_LISTING_PRIMARY_IMAGE_REPAIR_20261101 -->
 ## 01.11.2026 — Tegelik peatumine ja põhipildi paketi eelduste parandus
 

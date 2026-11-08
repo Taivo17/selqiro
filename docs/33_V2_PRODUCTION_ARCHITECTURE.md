@@ -1,3 +1,60 @@
+<!-- SELQIRO_UPLOAD_CAPACITY_PREFLIGHT_R2_20261108 -->
+## 2026-11-08 — upload-capacity r2 corrects the preflight fixture
+
+The returned capacity-v1 stop report preserves the accepted horse-r2 baseline
+`main` `6bb4385` with 1165 source files. It stopped at `baseline_verified` with
+`DATABASE_PRECONDITIONS_NOT_MATCHED`; SQL application, source replacement,
+build, commit and push had not started. No new installation or Ready is claimed.
+
+The capacity guard includes all functions in the retained private schemas.
+Its local fixture omitted seventeen previously released private functions.
+Restoring their exact retained definitions and original owner/ACL statements
+reproduces the observed `existing_functions=93b95bd4…` and
+`dependencies=bd0d02ea…`; the absent-capability fingerprint remains `d043db1c…`.
+The correction restores the fixture and regenerates the exact guards. It does
+not narrow the checked function scope, accept unknown drift or broaden authority.
+
+The five application runtime files and three capacity SQL modules are unchanged
+from the initial candidate. Previous runtime/build evidence remains evidence of
+those bytes; r2 fixture/installation/package checks are separately recorded.
+Current package: `selqiro-uleslaadimise-ruum-20261108-r2.zip`.
+Use the one current command in `docs/continuity/HOSTED_PORTAL.md`, then resume
+the preserved two-photo horse request after the new commit reaches Ready.
+Services retain canonical UUIDs and the shared Publish / My Area Edit–Save flow
+next; jobs follow later. The several-hundred-listing goal and undecided permanent
+limit remain unchanged. Earlier dated architecture records are preserved below.
+
+---
+
+<!-- SELQIRO_UPLOAD_CAPACITY_20261108 -->
+## 2026-11-08 — transient upload capacity after successful horse r2
+
+The returned read-only report confirms the successful horse r2 receipt and clean
+`main` `6bb4385`, with 1165 source files. Its 259 MiB reservation total comprises
+175 MiB pending published SOURCE and 84 MiB published WEB. Two new photos add
+58 MiB; the old counter refused 317 MiB. The new shared transient counter excludes
+canonical published WEB, so the same request checks at 233 MiB before cleanup.
+The retained 300 MiB bound is unfinished-work protection, not a permanent account
+allowance. The intended several-hundred-listing product limit remains undecided.
+
+A service-only bounded SOURCE pass rechecks the current actor/identity and access
+to the original actor's historical identity, then requires exact fresh Storage
+absence plus durable recording. It never selects gallery WEB. Only an exact
+capacity refusal and confirmed completion permit one identical prepare retry.
+Committed responses schedule bounded work without changing their success result.
+The separate 3-open/20-new-per-24-hour rollout guards remain; terminal cleanup
+is not part of this repair. No new live installation or Ready is claimed.
+
+67 new runtime tests, 198 relevant existing regressions, TypeScript and focused
+ESLint passed. The synthetic-configuration build passed in 28.29 seconds.
+Current contract: `docs/architecture/upload-capacity-v1.md`; evidence and next
+acceptance: `docs/continuity/UPLOAD_CAPACITY_20261108.md` and
+`docs/continuity/HOSTED_PORTAL.md`.
+Services retain canonical UUIDs and get the same Publish / My Area Edit–Save
+flow next; jobs follow later. Prior dated architecture records remain below.
+
+---
+
 <!-- SELQIRO_LISTING_PRIMARY_IMAGE_REPAIR_20261101 -->
 ## 2026-11-01 — Observed preflight stop; correct the baseline fixture
 

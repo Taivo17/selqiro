@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "kind": "listing-upload-capacity-guard-generation",
+  "result": "PASS",
+  "generated_at_utc": "2026-11-08T13:32:10.958Z",
+  "dependencies": "bd0d02ea9d228af46cf3f6a016bc985a4b7edffffa7c157e94c389440194fa38",
+  "capability": "7b2ae16eb51a93d31d7542463eeb895f5116850332bb0e56a2b74c49827fc79b",
+  "functions": 10,
+  "modules": 3,
+  "changed_functions": [
+    "listing_publication_private.allocate_managed_publication_attempt_v1",
+    "public.prepare_my_horse_publication_v1"
+  ],
+  "new_functions": [
+    "listing_publication_private.account_source_cleanup_eligible_v1",
+    "listing_publication_private.lock_account_source_cleanup_context_v1",
+    "listing_publication_private.lock_account_upload_actor_v1",
+    "listing_publication_private.lock_account_upload_identity_v1",
+    "listing_publication_private.pending_upload_reserved_bytes_v1",
+    "listing_publication_private.upload_object_is_published_web_v1",
+    "public.claim_listing_account_source_cleanup_v1",
+    "public.record_listing_account_source_cleanup_v1"
+  ],
+  "generated_sql_install_and_replay": true,
+  "retained_invariants_unchanged": true,
+  "prior_function_authority_unchanged": true,
+  "live_database": false,
+  "mac_installer": false,
+  "production_storage": false,
+  "files": {
+    "preflight.sql": "210c682be594303caaf8d712389f3a7b79f1a43169fc68f800e960c236d8bb2c",
+    "apply.sql": "7f24205dbc265370d5dc8e4b78324aaf26aee507c5bab897970807173d1283a5",
+    "verify.sql": "210c682be594303caaf8d712389f3a7b79f1a43169fc68f800e960c236d8bb2c",
+    "catalog-pins.json": "e39f290a23af6ef20165b2ae66807a3f2917efa5acbcd7590efde36a8c08016d",
+    "source-pins.json": "f0cd9d2cfb2240999d5d7c894472260d9fc6bdeca5992fff391139ef4112a4a1"
+  }
+}

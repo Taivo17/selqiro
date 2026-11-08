@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "suite": "transient-upload-capacity-and-account-source-cleanup",
+  "started_at_utc": "2026-11-08T13:33:37.263Z",
+  "completed_at_utc": "2026-11-08T13:34:16.222Z",
+  "passed": 8,
+  "total": 8,
+  "files": {
+    "01_capacity.sql": "fda68efa66d00eddb8cc3ec04d89267af67adc600ccbcfb9b808a7118a0b8fd9",
+    "02_account_source_cleanup.sql": "b00bd4c785c5790cb9d0d5adb18a68a4664f64d09cfcca4881728e85bfc48019",
+    "03_authority.sql": "e3db49a1b6b0b28c34a47b3b3c62a522c4f9c1995fe8264a4576d27d27e21621"
+  },
+  "scenarios": [
+    {
+      "case": "reported_259mib_and_all_three_gates",
+      "passed": true,
+      "postgres": "PostgreSQL 17.5 on aarch64-unknown-linux-gnu, compiled by emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 3.1.74 (1092ec30a3fb1d46b1782ff1b4db5094d3d06ae5), 32-bit",
+      "provider_io": false,
+      "native_concurrency": false
+    },
+    {
+      "case": "cross_identity_account_scope_and_revocation",
+      "passed": true,
+      "postgres": "PostgreSQL 17.5 on aarch64-unknown-linux-gnu, compiled by emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 3.1.74 (1092ec30a3fb1d46b1782ff1b4db5094d3d06ae5), 32-bit",
+      "provider_io": false,
+      "native_concurrency": false
+    },
+    {
+      "case": "exact_provider_proof_and_source_only_record",
+      "passed": true,
+      "postgres": "PostgreSQL 17.5 on aarch64-unknown-linux-gnu, compiled by emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 3.1.74 (1092ec30a3fb1d46b1782ff1b4db5094d3d06ae5), 32-bit",
+      "provider_io": false,
+      "native_concurrency": false
+    },
+    {
+      "case": "published_gallery_can_exceed_former_lifetime_cap",
+      "passed": true,
+      "postgres": "PostgreSQL 17.5 on aarch64-unknown-linux-gnu, compiled by emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 3.1.74 (1092ec30a3fb1d46b1782ff1b4db5094d3d06ae5), 32-bit",
+      "provider_io": false,
+      "native_concurrency": false
+    },
+    {
+      "case": "retired_web_debt_and_zero_upload_edit",
+      "passed": true,
+      "postgres": "PostgreSQL 17.5 on aarch64-unknown-linux-gnu, compiled by emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 3.1.74 (1092ec30a3fb1d46b1782ff1b4db5094d3d06ae5), 32-bit",
+      "provider_io": false,
+      "native_concurrency": false
+    },
+    {
+      "case": "record_after_whole_listing_removal",
+      "passed": true,
+      "postgres": "PostgreSQL 17.5 on aarch64-unknown-linux-gnu, compiled by emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 3.1.74 (1092ec30a3fb1d46b1782ff1b4db5094d3d06ae5), 32-bit",
+      "provider_io": false,
+      "native_concurrency": false
+    },
+    {
+      "case": "three_hundred_historical_listings",
+      "passed": true,
+      "postgres": "PostgreSQL 17.5 on aarch64-unknown-linux-gnu, compiled by emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 3.1.74 (1092ec30a3fb1d46b1782ff1b4db5094d3d06ae5), 32-bit",
+      "provider_io": false,
+      "native_concurrency": false
+    },
+    {
+      "case": "legacy_published_source_receipt_preserved",
+      "passed": true,
+      "postgres": "PostgreSQL 17.5 on aarch64-unknown-linux-gnu, compiled by emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 3.1.74 (1092ec30a3fb1d46b1782ff1b4db5094d3d06ae5), 32-bit",
+      "provider_io": false,
+      "native_concurrency": false
+    }
+  ],
+  "limitations": [
+    "Disposable PostgreSQL/WASM with synthetic provider metadata; no actual Storage HTTP deletion, remote migration or native concurrent scheduling is claimed."
+  ]
+}
