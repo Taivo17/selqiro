@@ -1,3 +1,24 @@
+# Praegune parandus — muutmisvaate avamine
+
+Seis: 08.11.2026 Europe/Tallinn. Tänane tööjärg on `continuity/CURRENT_STATE.json`.
+
+Kasutaja on vastu võtnud galerii noolte peitumise/tagasituleku ja sama hobuse
+salvestatud faktilise kinnituse kasutamise. Juba vastu võetud galerii, pisipildi,
+pildilinkide, peatamise/aktiveerimise ning tähtaja katsed säilivad.
+
+Uus probleem on muutmisvaates taastatud varasema lõpetatud salvestuse olek:
+see jättis väljad lukku kuni all oleva „Muuda uuesti” vajutamiseni. Parandus
+annab pärast tulemuse kontrollimist ja vormi laadimist kohe muudetavad väljad
+ning kasutab üht „Salvesta muudatused” toimingut. Pooleliolevat teadmata
+salvestust ei kustutata selle nimel ning teise vahekaardi tulemus ei kirjuta
+üle kohalikku salvestamata teksti. Vt `architecture/horse-direct-edit-v1.md`.
+
+See on lähtekoodi parandus; uue paketi Maci paigaldus, Verceli Ready ning üks
+vahetu muutmise/salvestamise kasutuskatse järgnevad kohalikele kontrollidele.
+Teenused jätkuvad pärast seda sama kasutusloogikaga. Allpool on varasem ajalugu.
+
+---
+
 # Teadaolevad käsilolevad tööd
 
 Seis: 08.11.2026 Europe/Tallinn. Tänane tööjärg on `continuity/CURRENT_STATE.json`.

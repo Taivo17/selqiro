@@ -963,3 +963,36 @@ ja piirid: `docs/continuity/MESSAGING_MOBILE_FIX_20261030.md` ning tarne
   faili ja receipt’idega kontrollitud tegelik Git-ahel. Uue paranduse paigaldus
   Macis ning Verceli Ready järgnevad; teenused on pärast viimistlust järgmised.
 - Täpsed lõplike baitidega seotud kontrollid säilivad paketi kontrollraportis.
+
+
+## 2026-11-08 — hobuse muutmisvaade avaneb kohe muutmiseks
+
+- Kasutaja kinnitas noolte 3-sekundilise peitumise ja tagasituleku mõlemas
+  galeriivaates ning varasema faktilise kinnituse kasutamise. Need eelmise
+  viimistluse vastuvõtud on lõpetatud.
+- Uus tähelepanek: vana lõpetatud salvestuse brauseripäevik taastas terminalse
+  ekraani, jättes muutmisvormi lukku kuni all oleva „Muuda uuesti” vajutamiseni.
+  Kasutaja soovib avada Muuda, kohe välju muuta ja vajutada Salvesta muudatused.
+- Omaniku vorm võtab nüüd esmalt kasutusele kinnitatud sisu/galerii/revisjoni ja
+  lõpetab täpselt selle terminalse toimingu automaatselt olemasoleva lukuga.
+  Aktiivse operatsiooni lõpetaja oodatakse ära. Pärast edukat salvestamist saab
+  edasi muuta; järgmine salvestus saab uue võtme ja kinnitatud revisjoni.
+- Teise vahekaardi lõpetatud toiming ei kirjuta üle kohalikku salvestamata
+  teksti ega omista sellele uuemat revisjoni. Kasutaja näeb laadimise teadet;
+  serveri revisjonikaitse ja teadmata toimingu taastamine säilivad. Uus muudatus
+  ei muuda esmast avaldamist, kinnitusi, SQL-i, galeriid ega tähtaja/staatusereeglit.
+- Kolm sihitud kliendisarja 90/90 PASS, sealhulgas seitse editori/hooki/seansi
+  elutsükli juhtu. Sõltumatu ülevaataja käivitas varasema 88-juhulise sarja ja
+  vaatas üle kaks hiljem lisatud EN/ET renderdusjuhtu; rakenduskood ei muutunud.
+  Sõltumatu ülevaatus ning kuus eraldi seansikatset läbisid.
+  Next.js/TypeScript tootmiskooste PASS 28,983 s; 535 rakendusfaili räsi säilisid.
+  Lint-võrdluses uusi vigu pole, kaks varasemat Reacti viga säilivad.
+- Uuendaja 33/33 kontrolli läbisid päris ajutise Giti ja kohalike remote’idega.
+  Uus source-only pakett kontrollib eelmise viimistluse 1252-failist puud ja
+  privaatse raportiga leitud tegelikku commiti koos eelneva ahelaga. SQL-i ega
+  Storage’i ühendust ei kasutata. Lõpliku paketi/ZIP-i kontroll säilib eraldi
+  tarnearuandes; varasemad ZIP-id, SQL-failid ja paigalduspäevikud jäävad alles.
+- Üks järgmine samm: uus selqiro-hobuse-muutmine-20261108 käsk, selle commit’i
+  Ready/Production ning üks Muuda → kohe kirjuta → Salvesta → muuda uuesti
+  kasutuskatse ilma eraldi avamisnuputa. Teenused järgnevad sama lihtsa vooga;
+  töökuulutused hiljem. Maci rakendamist ega uut deployment’i veel ei väideta.

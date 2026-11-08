@@ -108,7 +108,7 @@ test('a saved factual confirmation never accepts changed policy documents',()=>{
 function editor({saved=true,accepted=true,dirty=true,status='paused',active=true}={}) {
  const s=snapshot({status,saved_confirmation:saved?evidence():null}),base=prepareForm(s.detail),form=plain(base);
  if(dirty)form.title='Updated title';const calls=[];
- const states=[base,form,[],confirmation.createHorseOfferPublicationConfirmationState(),accepted?policies().map(p=>({documentId:p.policyDocumentId,version:p.policyVersion,contentHash:p.contentHash,accepted:true})):null,''];
+ const states=[base,form,[],confirmation.createHorseOfferPublicationConfirmationState(),accepted?policies().map(p=>({documentId:p.policyDocumentId,version:p.policyVersion,contentHash:p.contentHash,accepted:true})):null,'',s];
  let cursor=0;const Action=()=>null;
  const l=realm({react:{useState:()=>[states[cursor++],()=>{}],useEffect:()=>{},useRef:v=>({current:v})},
   'src/features/horse-offer-edit/model/useHorseOwnerContext.ts':{useHorseOwnerContext:()=>({actor,active,ready:active,snapshot:s,canAct:()=>active,reload(){},adopt(){}})},

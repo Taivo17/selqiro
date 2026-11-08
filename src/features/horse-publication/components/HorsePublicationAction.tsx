@@ -8,8 +8,8 @@ import { horsePublicationReviewForm } from "../model/horsePublicationReviewForm"
 import OwnerHorseOfferEditFields from "../../horse-offer-edit/components/OwnerHorseOfferEditFields";
 
 const button = "rounded-full border border-zinc-300 bg-white px-5 py-3 text-sm font-black disabled:cursor-not-allowed disabled:opacity-40";
-export default function HorsePublicationAction({session, view, editing = false, canSubmit, onSubmit, onReset, ready = true, localError = ""}: {
-  session: HorsePublicationSession | null; view: HorsePublicationView; editing?: boolean; canSubmit: boolean;
+export default function HorsePublicationAction({session, view, editing = false, ownerEdit = false, canSubmit, onSubmit, onReset, ready = true, localError = ""}: {
+  session: HorsePublicationSession | null; view: HorsePublicationView; editing?: boolean; ownerEdit?: boolean; canSubmit: boolean;
   onSubmit: () => void; onReset?: (key: string) => void; ready?: boolean; localError?: string;
 }) {
   const { t } = useV2Translation(horsePublicationMessages);
@@ -42,11 +42,11 @@ export default function HorsePublicationAction({session, view, editing = false, 
           onClick={() => { void session?.resume(files); }}>{t("continue")}</button> : null}
         <button type="button" className={button} disabled={!session || !ready} onClick={() => { void session?.cancel(); }}>{t("cancel")}</button>
       </> : null}
-      {view.phase === "published" && view.result?.horse_offer_id ? <>
+      {view.phase === "published" && !ownerEdit && view.result?.horse_offer_id ? <>
         {view.confirmed?.detail.status === "published" ? <Link className={button} href={`/v2/horse-offer/${view.result.horse_offer_id}`}>{t("publicView")}</Link> : null}
         <Link className={button} href={`/v2/my-area/horse-offers/${view.result.horse_offer_id}`}>{t("ownerView")}</Link>
       </> : null}
-      {["published", "closed"].includes(view.phase) ? <button type="button" className={button} disabled={!session || !ready}
+      {(view.phase === "published" && !ownerEdit) || view.phase === "closed" ? <button type="button" className={button} disabled={!session || !ready}
         onClick={() => { void session?.reset(key => { setFiles([]); onReset?.(key); }); }}>
         {t(view.phase === "closed" ? "returnForm" : editing ? "editAgain" : "newListing")}</button> : null}
     </div>

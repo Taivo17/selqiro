@@ -208,6 +208,63 @@ test('published terminal reset cannot clear another tab newer intent',async()=>{
  const f=fixture();await f.session.start(input());f.store.journal.requestKey=Q;f.store.journal.command.requestKey=Q;
  await f.session.reset();assert.equal(f.store.journal.requestKey,Q);assert.equal(f.session.getSnapshot().phase,'unknown');
 });
+test('completed owner edit is retired only after the exact verified snapshot is acknowledged',async()=>{
+ const f=fixture({edit:true});await f.session.start(input('sale',true));
+ const recovered=new Session(f.deps);await recovered.inspect();const confirmed=recovered.getSnapshot().confirmed;
+ assert.equal(recovered.getSnapshot().phase,'published');assert.equal(confirmed.editRevision,'5');assert.ok(f.store.journal);
+ await recovered.finishEdit(plain(confirmed));assert.ok(f.store.journal,'a copied or unrelated snapshot cannot acknowledge the handoff');
+ await recovered.finishEdit(confirmed);assert.equal(recovered.getSnapshot().phase,'editing');assert.equal(f.store.journal,null);
+ assert.equal(recovered.getSnapshot().message,'changesSaved');assert.equal(f.calls.filter(c=>c.action==='publish').length,1);
+});
+test('automatic edit handoff waits for the emitting operation and duplicate effects clear once',async()=>{
+ const f=fixture({edit:true}),release=deferred(),callbacks=[];let clears=0;
+ const clear=f.deps.clearJournal;f.deps.clearJournal=()=>{clears++;clear();};
+ f.deps.withLock=async work=>{const value=await work();if(f.store.journal)await release.promise;return value;};
+ const session=new Session(f.deps);session.subscribe(()=>{
+  const view=session.getSnapshot();if(view.phase==='published')callbacks.push(session.finishEdit(view.confirmed),session.finishEdit(view.confirmed));
+ });
+ const saving=session.start(input('sale',true));await until(()=>callbacks.length===2);
+ assert.equal(session.getSnapshot().phase,'published');assert.ok(f.store.journal);assert.equal(clears,0);
+ release.resolve();await saving;await Promise.all(callbacks);
+ assert.equal(clears,1);assert.equal(f.store.journal,null);assert.equal(session.getSnapshot().phase,'editing');
+});
+test('storage inspection cannot unlock an operation preparing its first journal',async()=>{
+ const f=fixture({edit:true}),gate=deferred();f.deps.withLock=async work=>{await gate.promise;return work();};
+ const session=new Session(f.deps),saving=session.start(input('sale',true));
+ assert.equal(f.store.journal,null);assert.equal(session.getSnapshot().phase,'busy');
+ const inspecting=session.inspect();assert.equal(session.getSnapshot().phase,'busy');
+ gate.resolve();await Promise.all([saving,inspecting]);assert.equal(session.getSnapshot().phase,'published');
+ assert.equal(f.calls.filter(c=>c.action==='prepare').length,1);
+});
+test('another tab removing the same terminal journal does not discard the pending edit snapshot',async()=>{
+ const f=fixture({edit:true});await f.session.start(input('sale',true));const confirmed=f.session.getSnapshot().confirmed;
+ f.store.journal=null;await f.session.inspect();assert.equal(f.session.getSnapshot().phase,'published');
+ assert.equal(f.session.getSnapshot().confirmed,confirmed);await f.session.finishEdit(confirmed);
+ assert.equal(f.session.getSnapshot().phase,'editing');assert.equal(f.store.journal,null);
+});
+test('a newer request or changed immutable intent cannot be cleared by automatic handoff',async()=>{
+ for(const mutate of [j=>{j.requestKey=Q;j.command.requestKey=Q;},j=>{j.command.content.title='A different intent';},j=>{j.attemptId=Q;}]){
+  const f=fixture({edit:true});await f.session.start(input('sale',true));const confirmed=f.session.getSnapshot().confirmed;
+  mutate(f.store.journal);const newer=plain(f.store.journal);await f.session.finishEdit(confirmed);
+  assert.deepEqual(f.store.journal,newer);assert.equal(f.session.getSnapshot().phase,'unknown');
+ }
+});
+test('identity change or failed owner read cannot retire an unresolved owner journal',async()=>{
+ const changed=fixture({edit:true});await changed.session.start(input('sale',true));const confirmed=changed.session.getSnapshot().confirmed;
+ changed.store.allowed=false;await changed.session.finishEdit(confirmed);assert.ok(changed.store.journal);assert.equal(changed.session.getSnapshot().phase,'unknown');
+ const unknown=fixture({edit:true});unknown.hooks['owner-read']=async()=>{throw Error('outcome_unknown');};await unknown.session.start(input('sale',true));
+ await unknown.session.finishEdit(confirmed);assert.ok(unknown.store.journal);assert.equal(unknown.session.getSnapshot().phase,'unknown');
+ assert.equal(unknown.session.getSnapshot().confirmed,null);
+});
+test('preserving a foreign dirty draft returns to editing with reload feedback',async()=>{
+ const f=fixture({edit:true});await f.session.start(input('sale',true));await f.session.finishEdit(f.session.getSnapshot().confirmed,true);
+ assert.equal(f.session.getSnapshot().phase,'editing');assert.equal(f.session.getSnapshot().message,'savedElsewhere');assert.equal(f.store.journal,null);
+});
+test('create success retains its explicit add-another-listing boundary',async()=>{
+ const f=fixture();await f.session.start(input());const confirmed=f.session.getSnapshot().confirmed;
+ await f.session.finishEdit(confirmed);assert.equal(f.session.getSnapshot().phase,'published');assert.ok(f.store.journal);
+ await f.session.reset();assert.equal(f.session.getSnapshot().phase,'editing');assert.equal(f.store.journal,null);
+});
 test('all runtime feedback exists in English and Estonian without changing retained operation',async()=>{
  assert.deepEqual(Object.keys(catalog.en).sort(),Object.keys(catalog.et).sort());const f=fixture();await f.session.start(input());const before=plain(f.store.journal);
  assert.equal(catalog.en[f.session.getSnapshot().message],'Your horse listing is published.');assert.equal(catalog.et[f.session.getSnapshot().message],'Hobuse kuulutus on avaldatud.');assert.deepEqual(f.store.journal,before);
@@ -242,6 +299,13 @@ for(const language of ['en','et'])test(language+': final action links use exact 
  const f=fixture();await f.session.start(input());const Action=renderRealm(language)('src/features/horse-publication/components/HorsePublicationAction.tsx').default;
  const html=renderToStaticMarkup(React.createElement(Action,{session:{},view:f.session.getSnapshot(),canSubmit:false,onSubmit(){}}));
  assert.ok(html.includes(`/v2/horse-offer/${H}`));assert.ok(html.includes(`/v2/my-area/horse-offers/${H}`));assert.equal(html.includes('/v2/listing/'),false);assert.ok(html.includes(catalog[language].published));
+});
+for(const language of ['en','et'])test(language+': owner success does not require an Edit again action',async()=>{
+ const f=fixture({edit:true});await f.session.start(input('sale',true));
+ const Action=renderRealm(language)('src/features/horse-publication/components/HorsePublicationAction.tsx').default;
+ const html=renderToStaticMarkup(React.createElement(Action,{session:f.session,view:f.session.getSnapshot(),editing:true,ownerEdit:true,canSubmit:false,onSubmit(){}}));
+ assert.ok(html.includes(catalog[language].changesSaved));assert.equal(html.includes(catalog[language].editAgain),false);
+ assert.equal(html.includes(catalog[language].newListing),false);assert.equal(html.includes('<button'),false);
 });
 for(const kind of ['sale','free_transfer','lease','co_rider','wanted'])test(kind+': recovered intent review round-trips all visible branch values',()=>{
  const value=input(kind),form=load('src/features/horse-publication/model/horsePublicationReviewForm.ts').horsePublicationReviewForm(value.content);

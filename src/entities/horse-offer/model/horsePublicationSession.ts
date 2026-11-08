@@ -148,7 +148,13 @@ export class HorsePublicationSession {
     this.operation = operation.finally(() => { this.operation = null; }); return this.operation;
   }
   inspect = (): Promise<void> => {
-    if (!this.hasJournal()) { this.change(initial()); return Promise.resolve(); }
+    if (this.operation) return this.operation;
+    if (!this.hasJournal()) {
+      // Another tab may retire the same completed edit while its verified
+      // snapshot is still being adopted here. Keep the handoff observable.
+      if (this.deps.offerId && this.view.phase === "published" && this.view.confirmed) return Promise.resolve();
+      this.change(initial()); return Promise.resolve();
+    }
     return this.run(async () => {
       const j = this.journal();
       const result = await this.readResult(await this.deps.request("status", this.scope(j), this.abort.signal), j);
@@ -245,6 +251,33 @@ export class HorsePublicationSession {
     const result = await this.readResult(await this.deps.request("cancel", this.scope(j), this.abort.signal), j);
     if (!["cancelled", "published"].includes(result.state)) throw new Error("outcome_unknown");
   });
+  /** The owner editor acknowledges the verified snapshot only after its form
+   * and revision are ready together (or it has preserved an unrelated draft).
+   * Published is emitted before run() releases its lock, so await that operation
+   * instead of dropping this handoff like a manual reset during busy work. */
+  finishEdit = async (confirmed: OwnerHorseOfferEditSnapshot, preserveDraft = false): Promise<void> => {
+    const expected = this.terminal, intent = this.view.intent, result = this.view.result;
+    if (!this.deps.offerId || !expected || !intent || !result || this.view.phase !== "published"
+      || this.view.confirmed !== confirmed || result.state !== "published") return;
+    if (this.operation) await this.operation;
+    if (this.abort.signal.aborted || this.terminal !== expected || this.view.phase !== "published"
+      || this.view.confirmed !== confirmed || this.view.intent !== intent || this.view.result !== result) return;
+    const message = preserveDraft ? "savedElsewhere" : this.view.message;
+    return this.run(async () => {
+      // Only this exact terminal intent can be retired. A later tab's request
+      // must remain available for reconciliation, even if it targets this horse.
+      if (this.terminal !== expected || this.view.confirmed !== confirmed
+        || this.view.intent !== intent || this.view.result !== result) throw new Error("context_changed");
+      if (this.deps.readJournal() !== null) {
+        const journal = this.journal();
+        if (journal.requestKey !== expected || journal.attemptId !== result.attempt_id
+          || JSON.stringify(journal.command) !== JSON.stringify(intent)) throw new Error("context_changed");
+        this.deps.clearJournal();
+      }
+      this.files.clear(); this.terminal = null;
+      this.change({...initial(), message});
+    });
+  };
   reset = (onReset?: (key: string) => void): Promise<void> => {
     if (this.operation || !this.terminal || !["published", "closed"].includes(this.view.phase)) return Promise.resolve();
     const expected = this.terminal;

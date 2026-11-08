@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState, type MouseEvent } from "react";
+import { useEffect, useRef, useState, type MouseEvent } from "react";
 import type { OwnerHorseDraftForm } from "../model/ownerHorseDraftForm";
 import { hasPrivateHorseLocation, ownerHorseDraftDirty, prepareOwnerHorseDraftForm } from "../model/ownerHorseDraftForm";
 import { useHorseOwnerContext } from "../model/useHorseOwnerContext";
@@ -19,6 +19,7 @@ import OwnerHorseGalleryEditor, {horseEditorGalleryDirty, horseEditorPhotos, typ
 import { horseActivityDeadline } from "../../../entities/horse-offer/model/horseActivity";
 import { getListingActivity } from "../../../entities/listing/model/listingActivity";
 import { applicableHorseSavedConfirmation } from "../../../entities/horse-offer/model/savedConfirmation";
+import type { OwnerHorseOfferEditSnapshot } from "../../../entities/horse-offer/model/editSnapshot";
 
 const button = "rounded-full border border-zinc-300 bg-white px-5 py-3 text-sm font-black disabled:opacity-40";
 
@@ -32,21 +33,39 @@ export default function OwnerHorseOfferEditor({userId, offerId}: {userId: string
   const [confirmations, setConfirmations] = useState(createHorseOfferPublicationConfirmationState);
   const [policies, setPolicies] = useState<readonly HorsePolicySnapshot[] | null>(null);
   const [localError, setLocalError] = useState("");
+  const [formSnapshot, setFormSnapshot] = useState<OwnerHorseOfferEditSnapshot | null>(null);
+  const submittedRequest = useRef<string | null>(null);
+  const completion = useRef<{snapshot: OwnerHorseOfferEditSnapshot; preserveDraft: boolean} | null>(null);
   const detail = context.snapshot?.detail;
   useEffect(() => {
     if (!context.snapshot) return;
     const next = prepareOwnerHorseDraftForm(context.snapshot.detail);
     setBaseline(next); setForm(next); setPhotos(horseEditorPhotos(context.snapshot.detail.images));
     setConfirmations(createHorseOfferPublicationConfirmationState()); setLocalError("");
+    setFormSnapshot(context.snapshot);
   }, [context.snapshot]);
-  useEffect(() => {
-    if (publication.view.phase === "published" && publication.view.confirmed) context.adopt(publication.view.confirmed);
-  }, [publication.view.phase, publication.view.confirmed, context.adopt]);
   const dirty = !!(baseline && form && detail && (ownerHorseDraftDirty(baseline, form) || horseEditorGalleryDirty(detail.images, photos)));
   const working = publication.view.phase === "busy";
   const locked = publication.view.phase !== "editing";
   const supportedStatus = !!detail && ["draft", "published", "paused", "closed"].includes(detail.status);
-  const editable = !!(supportedStatus && form && context.ready && !locked);
+  const editable = !!(supportedStatus && form && context.active && context.ready && publication.session
+    && formSnapshot === context.snapshot && !locked);
+  const confirmed = publication.view.confirmed, requestKey = publication.view.result?.request_key;
+  const {active, canAct, snapshot, adopt} = context;
+  const {session} = publication;
+  const phase = publication.view.phase;
+  useEffect(() => {
+    if (phase !== "published" || !confirmed || !session || !active || !canAct()) return;
+    if (completion.current?.snapshot !== confirmed) {
+      // A different tab's completed intent must never replace this tab's
+      // unsaved values or silently attach its newer revision to those values.
+      const preserveDraft = dirty && requestKey !== submittedRequest.current;
+      completion.current = {snapshot: confirmed, preserveDraft};
+      if (!preserveDraft) adopt(confirmed);
+    }
+    if (!completion.current.preserveDraft && (snapshot !== confirmed || formSnapshot !== confirmed)) return;
+    void session.finishEdit(confirmed, completion.current.preserveDraft);
+  }, [phase, confirmed, requestKey, session, active, canAct, adopt, snapshot, formSnapshot, dirty]);
   const savedConfirmation = context.active && form
     ? applicableHorseSavedConfirmation(context.snapshot, context.actor, form.offerType) : null;
   const publiclyActive = detail?.status === "published" && getListingActivity("active",
@@ -72,7 +91,7 @@ export default function OwnerHorseOfferEditor({userId, offerId}: {userId: string
         gallery: photos.map(photo => photo.image ? {imageId: photo.image.id, isPrimary: photo.isPrimary}
           : {file: photo.file, isPrimary: photo.isPrimary}),
         confirmations: savedConfirmation ? {reusePublicationEventId: savedConfirmation.publicationEventId} : confirmations,
-        policySnapshot: policies});
+        policySnapshot: policies}, key => { submittedRequest.current = key; });
     } catch { setLocalError("checkDetails"); }
   };
   return <div className="mx-auto w-full min-w-0 max-w-5xl space-y-6 pb-8" data-owner-horse-offer-edit-id={offerId}
@@ -101,7 +120,12 @@ export default function OwnerHorseOfferEditor({userId, offerId}: {userId: string
         </fieldset> : null}
       </div>
       {form && supportedStatus ? <HorsePublicationAction
-        session={publication.session} view={publication.view} editing={detail.status !== "draft"} ready={context.ready}
+        key={publication.view.intent?.requestKey ?? "form"}
+        session={publication.session} view={phase === "editing"
+          && (dirty && ["changesSaved", "changedAfterSave", "published"].includes(publication.view.message)
+            || !dirty && publication.view.message === "savedElsewhere")
+          ? {...publication.view, message: ""} : publication.view}
+        editing={detail.status !== "draft"} ownerEdit ready={context.ready}
         canSubmit={editable && !!policies && (detail.status === "draft" || dirty)
           && (!!savedConfirmation || getHorseOfferPublicationConfirmationProgress(form.offerType, confirmations).complete)}
         onSubmit={submit} localError={localError} onReset={() => setLocalError("")} /> : null}

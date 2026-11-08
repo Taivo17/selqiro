@@ -1,3 +1,31 @@
+<!-- SELQIRO_HORSE_EDIT_DIRECT_20261108 -->
+## 08.11.2026 — muutmise avamine peab võimaldama kohe muuta
+
+Kasutaja kinnitas galerii noolte 3-sekundilise peitumise ja tagasituleku nii
+pildil kui suurendatud vaates. Samuti ei nõutud sama hobuse muutmisel enam
+faktiliste väidete uut kinnitamist. Viimistluspaketi need vastuvõtud on tehtud.
+
+Uus kasutusnõue: Minu alas „Muuda” avamisel peavad väljad pärast andmete
+laadimist olema kohe muudetavad. All paiknev „Muuda uuesti” ei ole lubatud
+muutmise eeltingimus. Salvestamine käib nupuga „Salvesta muudatused” ning
+pärast salvestamist saab samas vormis edasi muuta.
+
+Põhjus on taastatud lõpetatud avaldamisseanss. Selle automaatne lõpetamine
+peab toimuma alles kinnitatud omanikuvaate ja sama vormirevisjoni kasutuselevõtu
+järel. Teadmata salvestustulemus jääb taastatavaks; teise vahekaardi uuemat
+päevikut ega kasutaja salvestamata teksti ei tohi automaatselt asendada.
+
+Järgmine pakett on ainult lähtekoodi parandus. Alus on eelmise viimistluse
+1252 faili ning privaatse raporti ja tegelike Giti objektidega kontrollitav
+commit. Uut SQL-i ei rakendata. Täpne tõendipiir ja üks järgmine samm on
+`docs/continuity/CURRENT_STATE.json`-s; praktiline käsk
+`docs/continuity/HOSTED_PORTAL.md`-s ja leping
+`docs/architecture/horse-direct-edit-v1.md`-s. Teenused järgnevad sama lihtsa
+Avalda → Minu ala → Muuda → Salvesta vooga, töökuulutused hiljem.
+Allpool olevad vanad „ootel” märked on ajalugu.
+
+---
+
 <!-- SELQIRO_HORSE_EDIT_POLISH_20261108 -->
 ## 08.11.2026 — hobuse haldus vastu võetud; kaks viimistlust
 

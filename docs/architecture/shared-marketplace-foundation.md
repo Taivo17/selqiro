@@ -2,12 +2,13 @@
 
 Status: implementation checkpoint, 2026-11-08. The user accepted the horse
 public gallery, owner thumbnail and links, paused content edits, reactivation
-without deadline extension, and explicit 90-day renewal. The next scoped repair
-restores 3000-ms idle arrows and stored factual-confirmation reuse for the same
-horse/person. Its local evidence and pending installation are recorded in
-`docs/continuity/CURRENT_STATE.json`. Services are next. See
-`horse-confirmation-reuse-v1.md`, `horse-owner-lifecycle-v1.md` and
-`horse-publication-v1.md`.
+without deadline extension, explicit 90-day renewal, 3000-ms idle arrows and
+stored factual-confirmation reuse. The current narrow repair opens the owner
+edit form directly after verified loading and leaves it editable after Save;
+no Edit again activation is required. Its local evidence and pending release
+are recorded in `docs/continuity/CURRENT_STATE.json`. Services are next. See
+`horse-direct-edit-v1.md`, `horse-confirmation-reuse-v1.md` and
+`horse-owner-lifecycle-v1.md`.
 
 ## Decision
 
@@ -33,7 +34,7 @@ framework that hides these differences.
 | Area | Implemented in this source | Remaining boundary |
 | --- | --- | --- |
 | Ordinary listings | Controlled publication, managed images, primary/add/remove, exact readback and cleanup | Existing accepted behavior is retained; general background cleanup remains separate |
-| Horse create and edit | Five types, exact policies, one Publish, private resumable attempt, revision-checked atomic published Save, managed ordered gallery | User accepted paused editing and finite 90-day renewal; saved factual-confirmation reuse is the next scoped repair |
+| Horse create and edit | Five types, exact policies, one Publish, private resumable attempt, revision-checked atomic published Save, managed ordered gallery | User accepted lifecycle and saved confirmations; direct editor entry is the current scoped repair |
 | Horse public and contact | Canonical detail, typed mixed discovery, profile cards, permitted public media, current shared messaging | User accepted explicit status/renewal; archive/delete remain outside this change |
 | Shared owner list | Canonical listing/horse projection, authenticated thumbnails, shared status/renew/edit controls and image/title links | Service variant is not yet connected |
 | Service owner management | Existing draft create/edit, categories, images, primary image and status actions | Must align user flow, revision/finality and managed media with the confirmed-save foundation |
@@ -84,9 +85,10 @@ private homes and live worker GPS coordinates are not exposed by default.
 
 ## Ordered next work
 
-1. Install and accept the new horse gallery/lifecycle parity package once using
-   the focused journey in `docs/continuity/HOSTED_PORTAL.md`. Keep the accepted
-   publication and upload-capacity releases intact; do not replay old installers.
+1. Install the direct horse-edit entry repair and check one open/edit/save
+   journey in `docs/continuity/HOSTED_PORTAL.md`. Keep the accepted gallery,
+   confirmation, lifecycle and upload-capacity releases intact; do not replay
+   old installers or repeat accepted browser checks without a regression.
 2. Complete services on the same user workflow: one Publish, later My Area
    Edit/Save, canonical service UUID, revision/operation reconciliation,
    managed images, real discovery, public detail and current contact routing.
