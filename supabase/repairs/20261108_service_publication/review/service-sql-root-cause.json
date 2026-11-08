@@ -1,0 +1,108 @@
+{
+  "schema_version": 1,
+  "kind": "service-publication-v1-stop-root-cause",
+  "result": "PASS",
+  "generated_at_utc": "2026-11-08T20:03:13.790Z",
+  "original_report_sha256": "6430306e81abdae9cf961a1c3722ab6e47f1a86f24f2cfa39d99f824efa61af2",
+  "observed_fingerprints": {
+    "capability": "c33641ef8c175d9b6cb4b80dba1503b95685fd371f68e92d62607101a40c5b26",
+    "dependencies": "9dd1c4ef3f97785a8f164bb5409f9e4788835fd7a280d8b5db326c36c1be2572"
+  },
+  "reconstructed_fingerprints": {
+    "capability": "c33641ef8c175d9b6cb4b80dba1503b95685fd371f68e92d62607101a40c5b26",
+    "dependencies": "9dd1c4ef3f97785a8f164bb5409f9e4788835fd7a280d8b5db326c36c1be2572"
+  },
+  "issued_fixture_fingerprints": {
+    "capability": "c8f63bccc8b51001e2cea564b1abe28206e55fc9a6db209230cae141e24fe7b8",
+    "dependencies": "1a5db1b7a74f1ba26223d02baa78a23746345eba27fa68650f7a2df5173e447a"
+  },
+  "both_observed_domains_explained": true,
+  "runtime_modules_unchanged": {
+    "01_state.sql": "b0a8a744befacab337eb81bb41c985387056c6aa9e1c577f4a2e7b6fb92e22d9",
+    "02_content.sql": "6cd60b1e773ba394574c0c3cbbcca98bb25e09bc47d0e07543ac666c31f305de",
+    "03_commands.sql": "ba40cd1edc847172c2f1ae65ba9b904eec1c0c5b75b05b1a4556f3cd1e16b550",
+    "04_cancel.sql": "a3b4149ea64b3804e799bac0d346a09538a32deab28157cdd0e57be94d97bc65",
+    "05_media_bridge.sql": "bd20070e61ebdfe5990e17213a21351e0fe369780634af0a6355620d263c6532",
+    "06_reads_status.sql": "a41834df2927f690e193b546539390afb72100e292ab617ef8e47aa6a425e95d",
+    "07_contact.sql": "dc13f1215ca767887fc6cd4abafaf21b54ca1a629319b96fc031dc5e64ccdd64",
+    "08_authority.sql": "ef12f384aa3923a7bd9617c3e14a5fc6f78dcb5b4e778ac981ff4769962ebf96"
+  },
+  "explanation": [
+    "The V1 fixture restored future function defaults before recreating two already-existing baseline writers, leaving an anon EXECUTE grant that their dumped ACLs do not contain.",
+    "The V1 fixture omitted retained defaults for future public tables; the later service category migration revokes only PUBLIC and therefore retains the provider anon/authenticated table grants."
+  ],
+  "source_clauses": [
+    {
+      "path": "supabase/migrations/20260722173530_baseline_20260722.sql",
+      "statement": "ALTER DEFAULT PRIVILEGES FOR ROLE \"postgres\" IN SCHEMA \"public\" GRANT ALL ON TABLES TO \"postgres\";"
+    },
+    {
+      "path": "supabase/migrations/20260722173530_baseline_20260722.sql",
+      "statement": "ALTER DEFAULT PRIVILEGES FOR ROLE \"postgres\" IN SCHEMA \"public\" GRANT ALL ON TABLES TO \"anon\";"
+    },
+    {
+      "path": "supabase/migrations/20260722173530_baseline_20260722.sql",
+      "statement": "ALTER DEFAULT PRIVILEGES FOR ROLE \"postgres\" IN SCHEMA \"public\" GRANT ALL ON TABLES TO \"authenticated\";"
+    },
+    {
+      "path": "supabase/migrations/20260722173530_baseline_20260722.sql",
+      "statement": "ALTER DEFAULT PRIVILEGES FOR ROLE \"postgres\" IN SCHEMA \"public\" GRANT ALL ON TABLES TO \"service_role\";"
+    },
+    {
+      "path": "supabase/migrations/20260722173530_baseline_20260722.sql",
+      "statement": "REVOKE ALL ON FUNCTION \"public\".\"save_my_service_v2\"(\"p_service_id\" \"uuid\", \"p_title\" \"text\", \"p_description\" \"text\", \"p_category\" \"text\", \"p_subcategory\" \"text\", \"p_image_url\" \"text\", \"p_price_amount\" numeric, \"p_currency\" \"text\", \"p_price_type\" \"text\", \"p_country\" \"text\", \"p_city\" \"text\", \"p_location\" \"text\", \"p_service_lat\" double precision, \"p_service_lng\" double precision) FROM PUBLIC;"
+    },
+    {
+      "path": "supabase/migrations/20260722173530_baseline_20260722.sql",
+      "statement": "GRANT ALL ON FUNCTION \"public\".\"save_my_service_v2\"(\"p_service_id\" \"uuid\", \"p_title\" \"text\", \"p_description\" \"text\", \"p_category\" \"text\", \"p_subcategory\" \"text\", \"p_image_url\" \"text\", \"p_price_amount\" numeric, \"p_currency\" \"text\", \"p_price_type\" \"text\", \"p_country\" \"text\", \"p_city\" \"text\", \"p_location\" \"text\", \"p_service_lat\" double precision, \"p_service_lng\" double precision) TO \"service_role\";"
+    },
+    {
+      "path": "supabase/migrations/20260722173530_baseline_20260722.sql",
+      "statement": "GRANT ALL ON FUNCTION \"public\".\"save_my_service_v2\"(\"p_service_id\" \"uuid\", \"p_title\" \"text\", \"p_description\" \"text\", \"p_category\" \"text\", \"p_subcategory\" \"text\", \"p_image_url\" \"text\", \"p_price_amount\" numeric, \"p_currency\" \"text\", \"p_price_type\" \"text\", \"p_country\" \"text\", \"p_city\" \"text\", \"p_location\" \"text\", \"p_service_lat\" double precision, \"p_service_lng\" double precision) TO \"authenticated\";"
+    },
+    {
+      "path": "supabase/migrations/20260722173530_baseline_20260722.sql",
+      "statement": "REVOKE ALL ON FUNCTION \"public\".\"set_my_service_status_v2\"(\"p_service_id\" \"uuid\", \"p_status\" \"text\") FROM PUBLIC;"
+    },
+    {
+      "path": "supabase/migrations/20260722173530_baseline_20260722.sql",
+      "statement": "GRANT ALL ON FUNCTION \"public\".\"set_my_service_status_v2\"(\"p_service_id\" \"uuid\", \"p_status\" \"text\") TO \"service_role\";"
+    },
+    {
+      "path": "supabase/migrations/20260722173530_baseline_20260722.sql",
+      "statement": "GRANT ALL ON FUNCTION \"public\".\"set_my_service_status_v2\"(\"p_service_id\" \"uuid\", \"p_status\" \"text\") TO \"authenticated\";"
+    },
+    {
+      "path": "supabase/migrations/20260802213000_add_service_category_foundation.sql",
+      "statement": "revoke all\non table\n  public.service_categories\nfrom public;"
+    },
+    {
+      "path": "supabase/migrations/20260802213000_add_service_category_foundation.sql",
+      "statement": "grant select\non table\n  public.service_categories\nto anon, authenticated;"
+    },
+    {
+      "path": "supabase/migrations/20260802213000_add_service_category_foundation.sql",
+      "statement": "grant all\non table\n  public.service_categories\nto service_role;"
+    }
+  ],
+  "source_sha256": {
+    "supabase/migrations/20260722173530_baseline_20260722.sql": "7ca065f92f01c0f38ada5f5a50d2a0fc5b716f5291d1525d398023b7db59da3f",
+    "supabase/migrations/20260802213000_add_service_category_foundation.sql": "cd080327dd45e9b5bd22d13d67b6d5774a52015493d50aa78c37c2fe3ee14d41"
+  },
+  "rejected_authority_drift": [
+    "unexpected_anon_writer_execute",
+    "unexpected_category_acl_change"
+  ],
+  "generated_sql_apply_and_replay": true,
+  "invariants_unchanged": true,
+  "public_default_privileges_unchanged": true,
+  "category_authority_unchanged": true,
+  "old_service_writers_fenced": true,
+  "live_database": false,
+  "application_rows_from_user_database_read": false,
+  "production_storage": false,
+  "limitations": [
+    "Exact fingerprints were reconstructed from retained source in disposable PostgreSQL/WASM; no live SQL or Storage operation was performed.",
+    "The broad before/after authority invariant also includes hosted actor rows. It is checked within each installation transaction and is not a fixture-to-production acceptance pin."
+  ]
+}

@@ -6,7 +6,9 @@ import { useV2Translation } from "@/src/shared/i18n/V2LanguageProvider";
 import { getCatalogTranslation, localeForLanguage, type TranslationParams } from "@/lib/i18n/useTranslation";
 import type { Language } from "@/lib/i18n/translations";
 import { publicUiMessages } from "@/lib/i18n/catalogs/publicUi";
-
+import Link from "next/link";
+import {getPublicServiceImageUrl} from "../../../entities/service/model/public";
+import {serviceMediaUrl} from "../../../entities/service/model/publicService";
 
 import {
   useMemo,
@@ -23,8 +25,6 @@ import {
 import {
   usePublicProfileServices,
 } from "../model/usePublicProfileServices";
-import PublicProfileServiceDescription from "./PublicProfileServiceDescription";
-import PublicProfileServiceGallery from "./PublicProfileServiceGallery";
 
 const SERVICE_PREVIEW_LIMIT = 5;
 
@@ -188,6 +188,9 @@ function ServiceCard({
 
   const locationLabel =
     serviceLocationLabel(service);
+  const href = `/v2/service/${service.id}`;
+  const image = service.images.find(image => image.isPrimary) ?? service.images[0];
+  const imageUrl = serviceMediaUrl(image ? getPublicServiceImageUrl(image) : service.imageUrl);
 
   return (
     <article
@@ -198,10 +201,12 @@ function ServiceCard({
           : "w-[250px] flex-none",
       ].join(" ")}
     >
-      <PublicProfileServiceGallery
-        service={service}
-        expanded={expanded}
-      />
+      <Link href={href} className="block overflow-hidden rounded-[20px] bg-neutral-100 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald-700" aria-label={service.title}>
+        {/* Already processed public media retains its canonical publication endpoint. */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        {imageUrl ? <img src={imageUrl} alt="" loading="lazy" referrerPolicy="no-referrer" className={`w-full object-cover ${expanded ? "aspect-[4/3]" : "h-36"}`} />
+          : <span className="flex h-36 items-center justify-center text-sm text-neutral-500">{t("service")}</span>}
+      </Link>
 
       <div className="mt-3 flex min-w-0 items-center justify-between gap-3">
         <span className="max-w-full truncate rounded-full bg-emerald-50 px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.12em] text-emerald-700">
@@ -222,7 +227,7 @@ function ServiceCard({
             : "line-clamp-2",
         ].join(" ")}
       >
-        {service.title}
+        <Link href={href} className="hover:underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald-700">{service.title}</Link>
       </h3>
 
       {locationLabel ? (
@@ -231,11 +236,7 @@ function ServiceCard({
         </p>
       ) : null}
 
-      <PublicProfileServiceDescription
-        serviceId={service.id}
-        description={service.description}
-        expanded={expanded}
-      />
+      {service.description ? <Link href={href} className={`mt-2 block break-words text-sm leading-6 text-neutral-600 hover:text-black ${expanded ? "line-clamp-5" : "line-clamp-3"}`}>{service.description}</Link> : null}
 
       <p className="mt-3 break-words text-base font-black text-neutral-900">
         {priceLabel(service, uiLanguage)}

@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "kind": "service-publication-issued-v1-stop-observation",
+  "original_report_sha256": "6430306e81abdae9cf961a1c3722ab6e47f1a86f24f2cfa39d99f824efa61af2",
+  "observed_fields": {
+    "format": "selqiro-services-20261108-v1",
+    "release_id": "a7464dbe2444a5aaa354ace0c2694f7046adaa3a899828986f634651fd31c7bb",
+    "base": "78209e8ed0c7330b117d7db070b733eda5aa1723",
+    "stage": "stopped_preserved",
+    "database": "not_started",
+    "storage_operations": "not_performed",
+    "build": "not_run",
+    "commit": null,
+    "push": "not_run",
+    "error_code": "DATABASE_PRECONDITIONS_NOT_MATCHED",
+    "stopped_at": "baseline_verified",
+    "database_last_read": {
+      "capability_absent": false,
+      "capability_present": false,
+      "dependencies_ok": false,
+      "fingerprints": {
+        "capability": "c33641ef8c175d9b6cb4b80dba1503b95685fd371f68e92d62607101a40c5b26",
+        "dependencies": "9dd1c4ef3f97785a8f164bb5409f9e4788835fd7a280d8b5db326c36c1be2572"
+      },
+      "guards": {
+        "actor_roles": true,
+        "closed_private_schema": true,
+        "core_relations": true,
+        "final_writer_policies": true,
+        "functions": false,
+        "hosted_context_ready": true,
+        "installer": true,
+        "managed_triggers": true,
+        "required_columns": true
+      },
+      "hosted_context": {
+        "cleanup_mode": "held",
+        "instance_id": "2d088814-0900-448a-a9d1-7b05470cb1d2",
+        "project_ref": "vyjletlmwoiwxsnsunlm",
+        "release_id": "listing-publication-hosted-preview-v1",
+        "release_ready": true,
+        "storage_authority_version": "source-part-rfc3986-v1"
+      },
+      "invariants": {
+        "existing_authority": "efa38563bb83faa3061242ef994c72c30f3f9494af9064c75a7dcac314ceeb88",
+        "existing_functions": "babaacbbca672d8a8b951ad46c863e5b4ac9f3bc2d41704f6049d3ef44f546a7",
+        "immutable_structure": "9a264b28ca98e3d2b1ac2523388e45f92fd2b8ee3be29088373b200831116732"
+      },
+      "kind": "service-publication-v1",
+      "ready_to_apply": false,
+      "recognized": false,
+      "schema_version": 1,
+      "state": "unknown"
+    }
+  }
+}

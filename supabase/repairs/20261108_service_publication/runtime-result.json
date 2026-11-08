@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "kind": "service-publication-runtime",
+  "result": "PASS",
+  "generated_at_utc": "2026-11-08T20:03:29.896Z",
+  "checks": [
+    {
+      "case": "commands_and_cas",
+      "passed": true,
+      "provider_io": false,
+      "native_concurrency": false
+    },
+    {
+      "case": "legacy_identity_and_authority",
+      "passed": true,
+      "provider_io": false,
+      "native_concurrency": false
+    },
+    {
+      "case": "managed_media_cleanup_and_binding",
+      "passed": true,
+      "provider_io": false,
+      "native_concurrency": false
+    },
+    {
+      "case": "domain_cancel_policy_and_public_search",
+      "passed": true,
+      "provider_io": false,
+      "native_concurrency": false
+    },
+    {
+      "case": "contact_context_business_and_history",
+      "passed": true,
+      "provider_io": false,
+      "native_concurrency": false
+    },
+    {
+      "case": "ordinary_horse_binary_regressions",
+      "passed": true,
+      "provider_io": false,
+      "native_concurrency": false
+    }
+  ],
+  "live_database": false,
+  "production_storage": false,
+  "native_concurrency": false,
+  "limitations": [
+    "WASM database serializes commands; stale revision races are interleaved, not simultaneous sessions.",
+    "Provider object metadata is synthetic."
+  ]
+}

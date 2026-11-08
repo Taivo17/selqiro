@@ -1,3 +1,50 @@
+<!-- SELQIRO_SERVICE_PREFLIGHT_R2_20261108 -->
+## 08.11.2026 — Teenuste esimene paigaldus peatus enne muudatusi
+
+Esimese teenuste paketi tegelik raport kinnitab `DATABASE_PRECONDITIONS_NOT_MATCHED`
+peatust enne SQL-i rakendamist, lähtefailide muutmist, build'i, commit'i ja push'i.
+Raporti SHA256 on `6430306e81abdae9cf961a1c3722ab6e47f1a86f24f2cfa39d99f824efa61af2`.
+Kõik 1255 lähtefaili ja 87 sihtfaili algolekut vastavad vastu võetud alusele;
+tegelik Maci commit on `78209e8ed0c7330b117d7db070b733eda5aa1723`.
+
+Põhjus oli kohalikus SQL-katsekeskkonnas: teenuserubriigi tabeli varasemad
+TABLES-vaikeõigused jäid taastamata ja kahe vana teenusefunktsiooni juurde jäi
+hilisemate FUNCTIONS-vaikeõiguste tõttu anon EXECUTE. Algallikate järgi taastatud
+õigused annavad mõlemad päris raporti räsi täpselt. r2 uuendab sellest tuletatud
+eel- ja järelkontrollid; teenuste rakendus ning kaheksa SQL-moodulit ei muutu.
+Täpseid kontrolle ei nõrgendata. Esimene pakett ja peatunud päevik säilivad.
+
+Praegune käsk ja tõendipiir on `docs/continuity/HOSTED_PORTAL.md` ning
+`docs/continuity/CURRENT_STATE.json`. Kasuta `selqiro-teenused-20261108-r2.zip`.
+Teenuste uus paigaldus ja kasutuskatse on veel ootel. Hobuse vahetu muutmine,
+korduv salvestamine ja galerii jäävad kasutaja poolt vastu võetuks.
+Allpool olevad esimese teenuste paketi tööjärg ja teadmata-commit kirjeldus on ajalugu.
+
+---
+
+<!-- SELQIRO_SERVICE_PUBLICATION_20261108 -->
+## 08.11.2026 — praegune seis: hobuse muutmise vastuvõtt tehtud
+
+Kasutaja kinnitas kohe avaneva muutmisvormi, korduva salvestuse ja kõigi
+muudatuste nähtavuse avalikus vaates. „Muuda uuesti” eeltingimuse viga on
+kasutuskatse järgi lahendatud. Galerii ja hobuse elutsükli varasem vastuvõtt
+säilib; nende korduskontroll ei ole teenuste töö eeltingimus.
+
+Teenuste uus kandidaat ühendab avaldamise, omaniku muutmise ja fotod ning
+asendab avalikud näidisandmed päris teenuste lugemisega. Kohaliku kontrolli
+ja live-paigalduse piir on continuity/CURRENT_STATE.json-s. Teenuste päris
+kasutuskatse on vajalik pärast uut paigaldust, mitte väidetavalt juba tehtud.
+Quick Update, live-asukoht, üldine taustakoristus ja töökuulutused jäävad
+järgnevateks töödeks. Allpool olevad varasemad „järgmine/ootel” kirjed on ajalugu.
+
+Teenuste 75 sihitud katset, tootmiskooste ja muudetud failide lint läbisid.
+Ühise `public-profile-offerings.test.cjs` neli vana veateksti ootust annavad
+sama tõrke nii kandidaadis kui ka muutmata hobusemuutmise lähtealuses:
+varasem tõlkeuuendus tagastab sõnumivõtme, test ootab sõnasõnalist teksti.
+See on eraldi testivõlg; teenuste tarne ei muuda neid vanu ootusi.
+
+---
+
 # Praegune parandus — muutmisvaate avamine
 
 Seis: 08.11.2026 Europe/Tallinn. Tänane tööjärg on `continuity/CURRENT_STATE.json`.

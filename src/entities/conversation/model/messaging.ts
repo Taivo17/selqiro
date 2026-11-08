@@ -15,7 +15,7 @@ type ReadReceipt = Readonly<{ schema_version: 2; actor_user_id: string; identity
 export type MessageThread = ReadReceipt & Readonly<{
   actor: MessageIdentity; conversation_id: string; peer: MessageIdentity;
   can_send: boolean; blocked_by_me: boolean;
-  listing: Readonly<{ id: string; title: string | null; content_type?: "horse_offer" }> | null;
+  listing: Readonly<{ id: string; title: string | null; content_type?: "horse_offer" | "service" }> | null;
   messages: readonly MessageThreadMessage[]; next_before_message_id: string | null;
   attachment_listing_id: string | null; attachment_listing: ListingMessageCard | null;
 }>;

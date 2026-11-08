@@ -86,8 +86,12 @@ function stamp(value: unknown): Stamp {
   return { value, order: parts[1] + "." + (parts[2] || "").padEnd(6, "0") };
 }
 
-function imageUrl(value: unknown): string {
+function imageUrl(value: unknown, service = false): string {
   const clean = text(value, 2000, 1);
+  if (service && /^\/api\/v2\/service-media\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\/[0-9]$/.test(clean)) {
+    uuid(clean.split("/")[4]);
+    return clean;
+  }
   let parsed: URL;
   try {
     parsed = new URL(clean);
@@ -99,8 +103,8 @@ function imageUrl(value: unknown): string {
   return parsed.toString();
 }
 
-function optionalImageUrl(value: unknown): string | null {
-  return value === null ? null : imageUrl(value);
+function optionalImageUrl(value: unknown, service = false): string | null {
+  return value === null ? null : imageUrl(value, service);
 }
 
 /** Validate before dispatch, so an absent viewed slug cannot become an unscoped read. */
@@ -170,9 +174,9 @@ function images(
     ensure(primaryCount <= 1);
     return {
       id,
-      originalUrl: imageUrl(row.original_url),
-      mediumUrl: optionalImageUrl(row.medium_url),
-      thumbUrl: optionalImageUrl(row.thumb_url),
+      originalUrl: imageUrl(row.original_url, parentKey === "service_id"),
+      mediumUrl: optionalImageUrl(row.medium_url, parentKey === "service_id"),
+      thumbUrl: optionalImageUrl(row.thumb_url, parentKey === "service_id"),
       sortOrder: sortOrder(row.sort_order),
       isPrimary: row.is_primary,
       createdAt: stamp(row.created_at).value,
@@ -202,7 +206,7 @@ export function parsePublicProfileServicesV1(
       .map(image => ({ ...image, serviceId: base.id }));
     ensure(typeof row.currency === "string" && /^[A-Z]{3}$/.test(row.currency));
     ensure(typeof row.price_type === "string" && SERVICE_PRICE_TYPES.includes(row.price_type as ServicePriceType));
-    const fallbackImage = optionalImageUrl(row.image_url);
+    const fallbackImage = optionalImageUrl(row.image_url, true);
     return {
       ...base,
       subcategory: optionalText(row.subcategory, 160),

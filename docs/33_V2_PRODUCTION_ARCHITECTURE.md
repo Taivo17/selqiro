@@ -1,3 +1,49 @@
+<!-- SELQIRO_SERVICE_PREFLIGHT_R2_20261108 -->
+## 08.11.2026 — Teenuste r2 kontrollalus vastab tegelikule kataloogile
+
+Esimese teenuste paketi tegelik raport kinnitab `DATABASE_PRECONDITIONS_NOT_MATCHED`
+peatust enne SQL-i rakendamist, lähtefailide muutmist, build'i, commit'i ja push'i.
+Raporti SHA256 on `6430306e81abdae9cf961a1c3722ab6e47f1a86f24f2cfa39d99f824efa61af2`.
+Kõik 1255 lähtefaili ja 87 sihtfaili algolekut vastavad vastu võetud alusele;
+tegelik Maci commit on `78209e8ed0c7330b117d7db070b733eda5aa1723`.
+
+Põhjus oli kohalikus SQL-katsekeskkonnas: teenuserubriigi tabeli varasemad
+TABLES-vaikeõigused jäid taastamata ja kahe vana teenusefunktsiooni juurde jäi
+hilisemate FUNCTIONS-vaikeõiguste tõttu anon EXECUTE. Algallikate järgi taastatud
+õigused annavad mõlemad päris raporti räsi täpselt. r2 uuendab sellest tuletatud
+eel- ja järelkontrollid; teenuste rakendus ning kaheksa SQL-moodulit ei muutu.
+Täpseid kontrolle ei nõrgendata. Esimene pakett ja peatunud päevik säilivad.
+
+Praegune käsk ja tõendipiir on `docs/continuity/HOSTED_PORTAL.md` ning
+`docs/continuity/CURRENT_STATE.json`. Kasuta `selqiro-teenused-20261108-r2.zip`.
+Teenuste uus paigaldus ja kasutuskatse on veel ootel. Hobuse vahetu muutmine,
+korduv salvestamine ja galerii jäävad kasutaja poolt vastu võetuks.
+Allpool olevad esimese teenuste paketi tööjärg ja teadmata-commit kirjeldus on ajalugu.
+
+---
+
+<!-- SELQIRO_SERVICE_PUBLICATION_20261108 -->
+## 08.11.2026 — teenuse domeeni adapter ühisele avaldamisalusele
+
+Hobuse vahetu muutmine ja järjestikune salvestamine on kasutaja katses vastu
+võetud. Teenuste uus lähtekandidaat kasutab sama kasutusloogikat ja kontrollitud
+salvestuse põhimõtteid: services/service_images UUID-d, aktiivne identiteet,
+eeldatud revisjon, toimingu korduskasutus ja täpne lõpptulemuse lugemine.
+
+Uus SQL asub ainult supabase/repairs/20261108_service_publication/ all.
+Teenuse lisamine ei vaja eraldi mustandi avalikku sammu; olemasolevaid mustandeid
+saab jätkata. Muutmine säilitab avaldatud/peatatud staatuse. Uus teenuse API,
+hallatud fotode domeeni adapter, avalik otsing/detail/profiil ja tüübiga teenuse
+vestluskontekst kasutavad olemasolevat kontot, andmebaasi ja sõnumeid.
+
+Olemasolevad teenused ja legacy-fotod säilivad, listings varikoopiaid ei looda.
+Teenustele ei lisata selles etapis aegumistähtaega. Kohalikud katsed ei asenda
+Maci rakendamist ega live-vastuvõttu. Täpne leping on
+architecture/service-publication-v1.md; praegune seis continuity/CURRENT_STATE.json.
+Allpool olevad varasemad paigaldus- ja ootel-kirjed säilivad ajaloo jaoks.
+
+---
+
 <!-- SELQIRO_HORSE_EDIT_POLISH_20261108 -->
 ## 2026-11-08 — accepted horse lifecycle, saved confirmations and idle arrows
 

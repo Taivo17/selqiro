@@ -1,104 +1,103 @@
 # Shared marketplace foundation
 
-Status: implementation checkpoint, 2026-11-08. The user accepted the horse
-public gallery, owner thumbnail and links, paused content edits, reactivation
-without deadline extension, explicit 90-day renewal, 3000-ms idle arrows and
-stored factual-confirmation reuse. The current narrow repair opens the owner
-edit form directly after verified loading and leaves it editable after Save;
-no Edit again activation is required. Its local evidence and pending release
-are recorded in `docs/continuity/CURRENT_STATE.json`. Services are next. See
-`horse-direct-edit-v1.md`, `horse-confirmation-reuse-v1.md` and
-`horse-owner-lifecycle-v1.md`.
+Status: implementation checkpoint, 2026-11-08. The user accepted horse gallery,
+owner thumbnail and links, pause/edit/resume, explicit 90-day renewal, idle
+arrows, factual-confirmation reuse, immediate edit entry and consecutive saves.
+The current source adds the service adapter and real service discovery/detail.
+Local evidence and the pending service installation are recorded in
+`docs/continuity/CURRENT_STATE.json`. See `service-publication-v1.md`.
 
 ## Decision
 
-Ordinary listings, horse listings and services share reliable account/identity
-checks, confirmed saves, managed photos, gallery membership, cleanup, contact,
-language preference and common owner/public components. User interaction is
-simple: enter fields and photos, Publish, then My Area → Edit → Save changes.
-A private recovery attempt may exist internally; users do not need a separate
-mandatory Save draft step. Jobs should follow the same interaction later.
+Ordinary listings, horse listings and services share account/identity checks,
+confirmed saves, managed photos, gallery membership, cleanup, contact, language
+preference and owner/public components. Interaction is simple: enter fields
+and photos, Publish, then My Area → Edit → Save changes. A private recovery
+attempt may exist internally; a separate mandatory Save draft action is not
+part of the user flow. After a verified save, editing can continue directly.
+Jobs should follow the same interaction later.
 
 Each domain retains one canonical source: `public.listings`,
 `public.horse_offers` and `public.services`, with its existing ID and ownership.
-Horses and services must not be copied into ordinary listings. Shared lists are
-read-only projections keyed by `(content_type, content_id)`.
+Horses and services must not be copied into ordinary listings. Shared
+projections are typed by content kind and ID.
 
 Reuse the tested primitives behind explicit domain adapters. Numeric listing
-RPCs cannot accept horse/service UUIDs. Share the mechanisms that are actually
-common and retain domain-specific validation instead of adding a generic write
-framework that hides these differences.
+RPCs cannot accept horse/service UUIDs. Share the common mechanisms and retain
+domain-specific validation rather than a generic write framework that hides
+these differences.
 
 ## Current source capability
 
-| Area | Implemented in this source | Remaining boundary |
+| Area | Implemented in this source | Evidence or remaining boundary |
 | --- | --- | --- |
-| Ordinary listings | Controlled publication, managed images, primary/add/remove, exact readback and cleanup | Existing accepted behavior is retained; general background cleanup remains separate |
-| Horse create and edit | Five types, exact policies, one Publish, private resumable attempt, revision-checked atomic published Save, managed ordered gallery | User accepted lifecycle and saved confirmations; direct editor entry is the current scoped repair |
-| Horse public and contact | Canonical detail, typed mixed discovery, profile cards, permitted public media, current shared messaging | User accepted explicit status/renewal; archive/delete remain outside this change |
-| Shared owner list | Canonical listing/horse projection, authenticated thumbnails, shared status/renew/edit controls and image/title links | Service variant is not yet connected |
-| Service owner management | Existing draft create/edit, categories, images, primary image and status actions | Must align user flow, revision/finality and managed media with the confirmed-save foundation |
-| Service public profile | Actual published service reads and profile gallery | `/v2/services` still contains examples; `/v2/service/[id]` is an owner preview |
-| Live service availability | Product blueprint and discovery examples | No complete Quick Update or temporary-location write/read/expiry flow |
+| Ordinary listings | Controlled publication, managed images, primary/add/remove, exact readback and cleanup | Accepted behavior retained; general background cleanup remains separate |
+| Horse create and edit | Five types, exact policies, one Publish, resumable attempt, revision-checked Save, ordered gallery and immediate repeat editing | User accepted direct entry, repeated save and public result |
+| Horse public and owner | Canonical discovery/detail/profile/contact, thumbnail and links, Active/Paused/Sold and explicit 90-day renewal | User accepted; archive/delete remain separate |
+| Service create and edit | Canonical UUID, one Publish, current owner revision, same-form repeat Save, managed new photos and preserved legacy gallery | New local candidate; installation and user acceptance pending |
+| Service owner management | Identity-scoped list, thumbnails and links, Edit, Active/Paused, existing draft continuation | No new service expiry policy or permanent count limit |
+| Service public and contact | Real keyword/category/area discovery, canonical detail/profile, common gallery and typed inbox context | No demo cards; local validation does not claim production rollout |
+| Live service availability | Product blueprint | Quick Update and temporary-location write/read/expiry remain separate |
 
-### Implementation evidence
+## Shared publication boundary
 
-Horse creation and published editing now use
-`src/entities/horse-offer/model/horsePublicationSession.ts`,
-`src/features/horse-publication/` and the separate
-`src/server/horse-publication/` adapter. Their current SQL contracts are in
-`supabase/repairs/20261108_horse_publication/`. The old private draft modules
-remain compatibility code; they are not the mandatory create action.
+The horse implementation remains in `src/entities/horse-offer/`,
+`src/features/horse-publication/` and `src/server/horse-publication/`.
+The service adapter is in `src/entities/service/`,
+`src/features/service-editor/` and `src/server/service-publication/`, with new
+SQL confined to `supabase/repairs/20261108_service_publication/`.
 
-The shared owner projection already reads canonical listings and horses. The
-new public `search_public_marketplace_v1` applies common filtering/counts to a
-typed union. Public horse detail/profile links and current conversation cards
-preserve UUID identity; no shadow listing or second inbox is created.
+A request key identifies one operation. Retries reconcile the same operation;
+a confirmed subsequent save uses a new key and current revision. The UI adopts
+verified content and ordered gallery before retiring a terminal journal. An
+unknown outcome remains recoverable. An identity change or stale revision
+cannot transfer ownership or silently replace unsaved local content.
 
-Service APIs remain in `src/entities/service/api/`. `save_my_service_v2` and
-`set_my_service_status_v2` use active-identity ownership but lack the new expected
-edit revision contract. The existing service image RPCs are draft-bound with a
-ten-image limit and do not yet use the managed source/verified-web journey.
-Existing UI disabling is not a substitute for authoritative mutation checks.
+The established binary source/verified-web lifecycle is shared through
+explicit domain bindings. Final membership, public status and hash/length
+checks remain authoritative. No client image URL or success toast alone proves
+publication. Existing services and legacy photos remain representable, while
+new uploads use managed private media.
+
+Public media routes and contact cards must keep the content type: listing
+numeric ID, horse UUID and service UUID are not interchangeable. Contact reuses
+the current inbox with an authoritative recipient. Changing the current
+subject clears the other domain's current context without altering historical
+message snapshots.
 
 ## Domain differences
 
-Horse `sale`, `free_transfer`, `lease`, `co_rider` and `wanted` retain distinct
-semantics. Wanted has buyer budget/search area and preferences; free transfer
-has no invented amount; recurring fees have an explicit period. The pilot is
+Horse sale, free transfer, lease, co-rider and wanted retain distinct semantics.
+Wanted has buyer budget/search area and preferences; free transfer has no
+invented amount; recurring fees have an explicit period. The pilot remains
 Estonia/EUR. Exact policy version/hash and account acceptance remain binding.
-The original accepted policy text remains Estonian. Exact private location is
-not included in public detail/search.
+The original accepted policy text remains Estonian. Horse factual declarations
+remain horse-specific and are not copied into services.
 
-Services retain `fixed`, `from`, `hourly` and `contact` pricing, and existing
-`draft`, `published`, `archived` statuses. Price remains optional; contact
-pricing must not acquire an invented amount. Blueprint price ranges have no
-current field and require a separate contract decision. Accessible private and
-business identities remain supported. Identity-owned shop categories and
-global service taxonomy are different structures; translations do not rewrite
-codes or user-created category names.
+Services retain fixed/from/hourly/contact pricing and draft/published/archived
+status. Price remains optional; contact pricing never invents an amount.
+Blueprint price ranges have no current field and require a separate decision.
+Accessible private/business identities remain supported. The existing service
+category pair may be preserved during editing even if retired; new or changed
+pairs must be valid and active. Shop taxonomy and global service taxonomy are
+different structures. Translations do not rewrite their codes or user content.
 
-Service operating area, availability and optional temporary location are not
-product inventory or a horse's location. Public location is approximate by
-default. Exact business location requires an explicit owner-controlled choice;
-private homes and live worker GPS coordinates are not exposed by default.
+Service operating area and optional future temporary location are not product
+inventory or a horse's location. Public location is approximate/descriptive;
+private homes or live worker GPS coordinates are not exposed by default.
+This release adds no service expiry period and no new account-wide count cap.
 
 ## Ordered next work
 
-1. Install the direct horse-edit entry repair and check one open/edit/save
-   journey in `docs/continuity/HOSTED_PORTAL.md`. Keep the accepted gallery,
-   confirmation, lifecycle and upload-capacity releases intact; do not replay
-   old installers or repeat accepted browser checks without a regression.
-2. Complete services on the same user workflow: one Publish, later My Area
-   Edit/Save, canonical service UUID, revision/operation reconciliation,
-   managed images, real discovery, public detail and current contact routing.
-   Preserve existing services and galleries while adapting their contracts.
-3. Add the small launch availability model: one active Quick Update and one
-   temporary service location, with authoritative expiry/replacement and
-   approximate public location. Multiple units and staff roles remain later
-   work under `docs/architecture/live_services.md`.
-4. Add jobs later with the same creation/editing interaction and explicit
-   job-specific fields. Do not introduce another mandatory draft workflow.
+1. Install and accept the service publication/editing candidate using
+   `docs/continuity/HOSTED_PORTAL.md`. Keep accepted horse/gallery/capacity
+   behavior and all previous reports; do not replay old installers.
+2. Complete the small launch availability model: one active Quick Update and
+   one temporary service location with authoritative expiry/replacement and
+   approximate public location. Fleet and staff remain later work under
+   `docs/architecture/live_services.md`.
+3. Add jobs with the same creation/editing interaction and explicit job fields.
+   Do not introduce another mandatory draft workflow.
 
-For each domain, the owner action, authoritative result and public view must
-agree. A success notification alone is not publication or gallery confirmation.
+For every domain, the owner action, authoritative result and public view must
+agree. A successful transport response is not a confirmed publication.

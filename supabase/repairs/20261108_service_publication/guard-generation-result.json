@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "kind": "service-publication-guard-generation",
+  "result": "PASS",
+  "generated_at_utc": "2026-11-08T20:02:51.817Z",
+  "dependencies": "9dd1c4ef3f97785a8f164bb5409f9e4788835fd7a280d8b5db326c36c1be2572",
+  "capability": "f95c0cd0cbb13e51962ade6842c6faa0dad1aacf3ba9a3a50a34ca33c769fe6f",
+  "functions": 58,
+  "modules": 8,
+  "generated_sql_install_and_replay": true,
+  "retained_invariants_unchanged": true,
+  "live_database": false,
+  "mac_installer": false,
+  "production_storage": false,
+  "files": {
+    "preflight.sql": "e289392d2bb6faecb7c7cac3f40bab2ade8632afc219dc234477dfe8debd80fb",
+    "apply.sql": "7504607d99c80beb79871c531ad9147fe0118538a33b5c9d4941d9a27247f949",
+    "verify.sql": "e289392d2bb6faecb7c7cac3f40bab2ade8632afc219dc234477dfe8debd80fb",
+    "catalog-pins.json": "8d534fa810e6addf6fe47a2ef544e858ab923f66e9c759e730d6eab514237b60",
+    "source-pins.json": "e68326258fca517f1098f0d25ffd2950f15e5c1b63a40eeb922dfeac3d23e147"
+  }
+}

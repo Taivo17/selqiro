@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "kind": "service-publication-installation",
+  "result": "PASS",
+  "generated_at_utc": "2026-11-08T20:03:33.193Z",
+  "checks": [
+    {
+      "case": "seeded_install_replay_preserves_canonical_rows",
+      "passed": true,
+      "live_database": false
+    },
+    {
+      "case": "old_writer_definition_drift",
+      "passed": true,
+      "live_database": false
+    },
+    {
+      "case": "old_writer_acl_drift",
+      "passed": true,
+      "live_database": false
+    },
+    {
+      "case": "canonical_structure_drift",
+      "passed": true,
+      "live_database": false
+    },
+    {
+      "case": "canonical_rls_drift",
+      "passed": true,
+      "live_database": false
+    },
+    {
+      "case": "canonical_trigger_drift",
+      "passed": true,
+      "live_database": false
+    },
+    {
+      "case": "atomic_module_failure_rolls_back",
+      "passed": true,
+      "live_database": false
+    },
+    {
+      "case": "applied_authority_drift_is_not_repaired_silently",
+      "passed": true,
+      "live_database": false
+    }
+  ],
+  "live_database": false,
+  "mac_installer": false
+}

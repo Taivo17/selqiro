@@ -1,5 +1,6 @@
 import { contactFail, type ConversationActor } from "./listingContact";
 import { horseMediaUrl, horseUuid } from "../../horse-offer/model/publicHorse";
+import { serviceMediaUrl, serviceUuid } from "../../service/model/publicService";
 import type { ListingMessageCard } from "./listingMessageCards";
 import { messageRecord as record, messageUuid as uuid, messageId as id, messageText, messageLabel as label,
   messageInstant as instant, messageCursor } from "./messagingValidation";
@@ -9,10 +10,10 @@ import type { GetMessageThreadCommand, ListMessageThreadsCommand, SendMessageCom
   MarkThreadReadReceipt, HideThreadReceipt, SetThreadBlockedReceipt } from "./messaging";
 
 const actorKeys = ["schema_version", "actor_user_id", "identity_id"] as const;
-function isHorseCard(value: unknown): boolean {
-  if (!value || typeof value !== "object") return false;
+function cardKind(value: unknown): "horse_offer" | "service" | null {
+  if (!value || typeof value !== "object") return null;
   const descriptor = Object.getOwnPropertyDescriptor(value, "content_type");
-  return !!descriptor && "value" in descriptor && descriptor.value === "horse_offer";
+  return descriptor && "value" in descriptor && (descriptor.value === "horse_offer" || descriptor.value === "service") ? descriptor.value : null;
 }
 function actor(r: Record<string, unknown>, c: ConversationActor) {
   if (r.schema_version !== 2 || r.actor_user_id !== c.expectedUserId || r.identity_id !== c.expectedIdentityId) contactFail("response");
@@ -24,9 +25,12 @@ function identity(value: unknown): MessageIdentity {
 }
 function card(value: unknown): ListingMessageCard | null {
   if (value === null) return null;
-  if (isHorseCard(value)) {
+  const kind = cardKind(value);
+  if (kind) {
     const r = record(value, ["content_type", "id", "title", "image", "price"], "response");
-    if (!horseUuid(r.id) || !label(r.title, 2000) || (r.image !== null && !horseMediaUrl(r.image)) || !label(r.price, 2000)) return contactFail("response");
+    const validId = kind === "service" ? serviceUuid(r.id) : horseUuid(r.id);
+    const image = kind === "service" ? serviceMediaUrl(r.image) : horseMediaUrl(r.image);
+    if (!validId || !label(r.title, 2000) || (r.image !== null && !image) || !label(r.price, 2000)) return contactFail("response");
     return Object.freeze({ ...r }) as ListingMessageCard;
   }
   const r = record(value, ["id", "title", "image", "price"], "response");
@@ -53,9 +57,9 @@ export function parseMessageThread(value: unknown, c: GetMessageThreadCommand): 
     return contactFail("response");
   let listing: MessageThread["listing"] = null;
   if (r.listing !== null) {
-    const horse = isHorseCard(r.listing);
-    const s = record(r.listing, horse ? ["id", "title", "content_type"] : ["id", "title"], "response");
-    if (!(horse ? horseUuid(s.id) : id(s.id)) || !label(s.title, 2000)) return contactFail("response");
+    const kind = cardKind(r.listing);
+    const s = record(r.listing, kind ? ["id", "title", "content_type"] : ["id", "title"], "response");
+    if (!(kind === "service" ? serviceUuid(s.id) : kind === "horse_offer" ? horseUuid(s.id) : id(s.id)) || !label(s.title, 2000)) return contactFail("response");
     listing = Object.freeze({ ...s }) as NonNullable<MessageThread["listing"]>;
   }
   let last = BigInt(0);

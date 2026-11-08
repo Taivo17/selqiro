@@ -1,3 +1,49 @@
+<!-- SELQIRO_SERVICE_PREFLIGHT_R2_20261108 -->
+## 08.11.2026 — Teenuste paigalduspaketi r2 parandus
+
+Esimese teenuste paketi tegelik raport kinnitab `DATABASE_PRECONDITIONS_NOT_MATCHED`
+peatust enne SQL-i rakendamist, lähtefailide muutmist, build'i, commit'i ja push'i.
+Raporti SHA256 on `6430306e81abdae9cf961a1c3722ab6e47f1a86f24f2cfa39d99f824efa61af2`.
+Kõik 1255 lähtefaili ja 87 sihtfaili algolekut vastavad vastu võetud alusele;
+tegelik Maci commit on `78209e8ed0c7330b117d7db070b733eda5aa1723`.
+
+Põhjus oli kohalikus SQL-katsekeskkonnas: teenuserubriigi tabeli varasemad
+TABLES-vaikeõigused jäid taastamata ja kahe vana teenusefunktsiooni juurde jäi
+hilisemate FUNCTIONS-vaikeõiguste tõttu anon EXECUTE. Algallikate järgi taastatud
+õigused annavad mõlemad päris raporti räsi täpselt. r2 uuendab sellest tuletatud
+eel- ja järelkontrollid; teenuste rakendus ning kaheksa SQL-moodulit ei muutu.
+Täpseid kontrolle ei nõrgendata. Esimene pakett ja peatunud päevik säilivad.
+
+Praegune käsk ja tõendipiir on `docs/continuity/HOSTED_PORTAL.md` ning
+`docs/continuity/CURRENT_STATE.json`. Kasuta `selqiro-teenused-20261108-r2.zip`.
+Teenuste uus paigaldus ja kasutuskatse on veel ootel. Hobuse vahetu muutmine,
+korduv salvestamine ja galerii jäävad kasutaja poolt vastu võetuks.
+Allpool olevad esimese teenuste paketi tööjärg ja teadmata-commit kirjeldus on ajalugu.
+
+---
+
+<!-- SELQIRO_SERVICE_PUBLICATION_20261108 -->
+## 08.11.2026 — hobuse muutmine vastu võetud; teenused ühise voo peale
+
+Kasutaja kinnitas, et „Muuda” avab kohe muudetavad väljad, pärast salvestamist
+saab samas vormis uuesti muuta ja salvestada ning kõik muudatused on avalikus
+vaates nähtavad. Hobuse vahetu muutmise parandus on kasutuskatse järgi vastu
+võetud; seda katset ega varasemaid galerii katseid ei küsita uuesti.
+
+Teenuste uus kandidaat ühendab ühe „Avalda” vormi, Minu ala „Muuda” / „Salvesta
+muudatused”, fotod, aktiivse/peatatud oleku, päris avaliku otsingu ja detaili ning
+olemasolevad sõnumid. Kanooniline services UUID ja olemasolevad teenused säilivad.
+Eraldi kohustuslik mustandiks salvestamine jääb ära. Teenuse avaldamine ja muutmine
+kasutavad kontrollitud tulemust, revisjoni ning taastatavat toimingut.
+
+Praegune tõendipiir ja järgmine samm: `docs/continuity/CURRENT_STATE.json`.
+Paigaldusjuhis: `docs/continuity/HOSTED_PORTAL.md`. Leping:
+`docs/architecture/service-publication-v1.md`. Teenuste live-paigaldust ei
+väideta enne selle raportit ja kasutuskatset. Allpool olevad vanad ootel-kirjed
+on ajalugu.
+
+---
+
 <!-- SELQIRO_HORSE_EDIT_POLISH_20261108 -->
 ## 08.11.2026 — hobuse haldus vastu võetud; kaks viimistlust
 

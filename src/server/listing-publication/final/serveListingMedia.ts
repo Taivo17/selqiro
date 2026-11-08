@@ -13,10 +13,11 @@ export type ListingMediaFailure = Readonly<{
 export type ManagedMediaOwner = Readonly<{
  userId:string;identityId:string;accessToken:string;publicKey:string;
 }>;
-export type ManagedMediaKind = "listing" | "horse_offer";
+export type ManagedMediaKind = "listing" | "horse_offer" | "service";
 const mediaContracts = {
  listing: { public: "get_public_listing_media_binding_v1", owner: "get_my_listing_media_binding_v2" },
  horse_offer: { public: "get_public_horse_media_binding_v1", owner: "get_my_horse_media_binding_v1" },
+ service: { public: "get_public_service_media_binding_v1", owner: "get_my_service_media_binding_v1" },
 } as const;
 /** Serves an authorized WEB image through the stable public or owner media route.
  * Never serves SOURCE, trusts metadata, caches, redirects or leaks a signed/private
@@ -24,7 +25,7 @@ const mediaContracts = {
 export function createManagedMediaHandler(kind:ManagedMediaKind,config:WorkerConfig,fetcher:UploadFetch=fetch,
  owner?:ManagedMediaOwner,onFailure?:(failure:ListingMediaFailure)=>void) {
  const {origin,headers}=serviceConfig(config);
- if(kind!=="listing"&&kind!=="horse_offer")return fail("input");
+ if(kind!=="listing"&&kind!=="horse_offer"&&kind!=="service")return fail("input");
  const contract=mediaContracts[kind];
  if(owner&&(!isUploadUuid(owner.userId)||!isUploadUuid(owner.identityId)||!owner.accessToken||!owner.publicKey))return fail("input");
  return async function serve(attemptId:string,ordinalText:string,signal?:AbortSignal):Promise<Response> {

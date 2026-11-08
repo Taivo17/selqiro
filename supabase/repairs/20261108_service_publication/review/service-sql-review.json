@@ -1,0 +1,211 @@
+{
+  "schema_version": 1,
+  "kind": "service-sql-review",
+  "result": "PASS",
+  "generated_at_utc": "2026-11-08T20:04:07.490355+00:00",
+  "owner": "/root/service_contracts",
+  "scope": "supabase/repairs/20261108_service_publication/**",
+  "state": "ready_for_parent_review_and_packaging_not_applied_to_live_database",
+  "counts": {
+    "modules": 8,
+    "capability_functions": 58,
+    "changed_functions_including_acl_only": 15,
+    "new_functions": 43,
+    "new_private_tables": 8,
+    "runtime_case_groups": 6,
+    "installation_cases": 8,
+    "runtime_assertion_sites": 80,
+    "runtime_rejected_operation_sites": 33,
+    "source_pins": 67,
+    "baseline_reconstruction_suites": 1,
+    "additional_authority_drift_cases": 2
+  },
+  "tested_contracts": [
+    "R2 corrects two disposable fixture ACL reconstruction omissions. Retained source reproduces both observed V1 stop fingerprints exactly; all eight deployed SQL modules remain identical. Either unexpected anonymous writer EXECUTE or taxonomy ACL drift still fails closed; generated apply preserves public defaults and fences old writers.",
+    "One immutable service prepare/publish command with a canonical services UUID; draft promotion and repeat edit/save.",
+    "Exact request replay, expected revision compare-and-swap, interleaved stale edit race, status successor readback; active/paused status does not introduce an expiry.",
+    "Legacy canonical IDs, exact parent image IDs, original URLs, GPS and unchanged optional inactive/null category or price fields survive unrelated edits; new/draft input remains complete.",
+    "Authenticated current identity and active business membership; old browser RPC writers, raw table writes and old Storage upload authority are fenced.",
+    "New media uses the retained private multipart/verifier ledger with exact client file key, source/web receipt, primary selection in a non-first gallery slot and normalized owner ordering.",
+    "Confirmed source cleanup frees unfinished budget, retained WEB does not consume unfinished budget; retired WEB requires exact membership revocation and fresh hosted deletion evidence.",
+    "Actual anonymous detail/search with filters and pagination, no owner metadata or Storage object paths; draft, paused, inactive-identity or mismatched publication snapshots are withheld.",
+    "Service and horse contact share a channel, switch only its current pointer, and preserve historical per-message cards. Business provider resolves business_accounts.owner_user_id and active membership.",
+    "Ordinary listing and horse private binary publication and account-source cleanup continue working after the service bridge.",
+    "Guarded install preserves existing service rows/images byte-for-byte except new revision metadata; replay is idempotent; function/ACL/structure/RLS/trigger drift fails closed; module failure rolls back atomically."
+  ],
+  "commands": [
+    "SELQIRO_PGLITE_MODULE=file:///workspace/scratch/60fc6c106c73/work/selqiro-hosted-source-20261104/tooling/node_modules/@electric-sql/pglite/dist/index.js node supabase/repairs/20261108_service_publication/tests/build-guards.mjs",
+    "SELQIRO_PGLITE_MODULE=file:///workspace/scratch/60fc6c106c73/work/selqiro-hosted-source-20261104/tooling/node_modules/@electric-sql/pglite/dist/index.js node supabase/repairs/20261108_service_publication/tests/runtime.mjs",
+    "SELQIRO_PGLITE_MODULE=file:///workspace/scratch/60fc6c106c73/work/selqiro-hosted-source-20261104/tooling/node_modules/@electric-sql/pglite/dist/index.js node supabase/repairs/20261108_service_publication/tests/installation.mjs",
+    "SELQIRO_PGLITE_MODULE=file:///workspace/scratch/60fc6c106c73/work/selqiro-hosted-source-20261104/tooling/node_modules/@electric-sql/pglite/dist/index.js node supabase/repairs/20261108_service_publication/tests/baseline-reconstruction.mjs"
+  ],
+  "runtime_cases": [
+    {
+      "case": "commands_and_cas",
+      "passed": true,
+      "provider_io": false,
+      "native_concurrency": false
+    },
+    {
+      "case": "legacy_identity_and_authority",
+      "passed": true,
+      "provider_io": false,
+      "native_concurrency": false
+    },
+    {
+      "case": "managed_media_cleanup_and_binding",
+      "passed": true,
+      "provider_io": false,
+      "native_concurrency": false
+    },
+    {
+      "case": "domain_cancel_policy_and_public_search",
+      "passed": true,
+      "provider_io": false,
+      "native_concurrency": false
+    },
+    {
+      "case": "contact_context_business_and_history",
+      "passed": true,
+      "provider_io": false,
+      "native_concurrency": false
+    },
+    {
+      "case": "ordinary_horse_binary_regressions",
+      "passed": true,
+      "provider_io": false,
+      "native_concurrency": false
+    }
+  ],
+  "installation_cases": [
+    {
+      "case": "seeded_install_replay_preserves_canonical_rows",
+      "passed": true,
+      "live_database": false
+    },
+    {
+      "case": "old_writer_definition_drift",
+      "passed": true,
+      "live_database": false
+    },
+    {
+      "case": "old_writer_acl_drift",
+      "passed": true,
+      "live_database": false
+    },
+    {
+      "case": "canonical_structure_drift",
+      "passed": true,
+      "live_database": false
+    },
+    {
+      "case": "canonical_rls_drift",
+      "passed": true,
+      "live_database": false
+    },
+    {
+      "case": "canonical_trigger_drift",
+      "passed": true,
+      "live_database": false
+    },
+    {
+      "case": "atomic_module_failure_rolls_back",
+      "passed": true,
+      "live_database": false
+    },
+    {
+      "case": "applied_authority_drift_is_not_repaired_silently",
+      "passed": true,
+      "live_database": false
+    }
+  ],
+  "guard_report": {
+    "kind": "service-publication-v1",
+    "guard_keys": [
+      "actor_roles",
+      "closed_private_schema",
+      "core_relations",
+      "final_writer_policies",
+      "functions",
+      "hosted_context_ready",
+      "installer",
+      "managed_triggers",
+      "required_columns"
+    ],
+    "invariant_keys": [
+      "existing_authority",
+      "existing_functions",
+      "immutable_structure"
+    ],
+    "fingerprints": {
+      "capability": "f95c0cd0cbb13e51962ade6842c6faa0dad1aacf3ba9a3a50a34ca33c769fe6f",
+      "dependencies": "9dd1c4ef3f97785a8f164bb5409f9e4788835fd7a280d8b5db326c36c1be2572"
+    },
+    "before_example_bytes": 1303,
+    "verified_example_bytes": 1305,
+    "before_fingerprints": {
+      "capability": "c33641ef8c175d9b6cb4b80dba1503b95685fd371f68e92d62607101a40c5b26",
+      "dependencies": "9dd1c4ef3f97785a8f164bb5409f9e4788835fd7a280d8b5db326c36c1be2572"
+    }
+  },
+  "source_pins_verified": true,
+  "module_pins_verified": true,
+  "limitations": [
+    "All database execution was in a disposable PostgreSQL/WASM fixture, never the live database.",
+    "Provider object metadata was synthetic; production Storage upload, binary HTTP transport and browser UI require their separate validation.",
+    "WASM serializes database statements. Revision race coverage uses interleaved prepare/publish commands and does not claim simultaneous native PostgreSQL sessions.",
+    "Retained service migrations establish expected declarations; unknown deployed catalog drift is refused by exact preflight rather than silently accepted.",
+    "Legacy public Storage objects remain in place. Removing their gallery membership does not delete their raw legacy object in this step.",
+    "Service status is draft/published/archived. No new service 90-day expiry policy, quota tier, fleet/QuickUpdate or AI feature is introduced.",
+    "The historical guard key functions includes canonical structures, authority and hosted views. Broad preservation invariants are compared within one installation transaction, not against synthetic fixture row data."
+  ],
+  "files": {
+    "01_state.sql": "b0a8a744befacab337eb81bb41c985387056c6aa9e1c577f4a2e7b6fb92e22d9",
+    "02_content.sql": "6cd60b1e773ba394574c0c3cbbcca98bb25e09bc47d0e07543ac666c31f305de",
+    "03_commands.sql": "ba40cd1edc847172c2f1ae65ba9b904eec1c0c5b75b05b1a4556f3cd1e16b550",
+    "04_cancel.sql": "a3b4149ea64b3804e799bac0d346a09538a32deab28157cdd0e57be94d97bc65",
+    "05_media_bridge.sql": "bd20070e61ebdfe5990e17213a21351e0fe369780634af0a6355620d263c6532",
+    "06_reads_status.sql": "a41834df2927f690e193b546539390afb72100e292ab617ef8e47aa6a425e95d",
+    "07_contact.sql": "dc13f1215ca767887fc6cd4abafaf21b54ca1a629319b96fc031dc5e64ccdd64",
+    "08_authority.sql": "ef12f384aa3923a7bd9617c3e14a5fc6f78dcb5b4e778ac981ff4769962ebf96",
+    "apply.sql": "7504607d99c80beb79871c531ad9147fe0118538a33b5c9d4941d9a27247f949",
+    "catalog-pins.json": "8d534fa810e6addf6fe47a2ef544e858ab923f66e9c759e730d6eab514237b60",
+    "changes.sql": "aa7dc88a5f7752c5f4634fd6a94c14476bc8342959bd6c16b2beb6ccb7ebc8cf",
+    "guard-generation-result.json": "2b8ed2ae6345e8f9b0a8e2b1bf314505befaba70edbe7177a36cdea84a3ae5ba",
+    "installation-result.json": "c51c2d492a4b890978f70a61bfa1796d613a40c5462b984bc305fc4063a04c1f",
+    "preflight.sql": "e289392d2bb6faecb7c7cac3f40bab2ade8632afc219dc234477dfe8debd80fb",
+    "review/service-sql-root-cause.json": "0f30e7762c0eeae75134610dca4dd5177d3cde0a864439a0dcb91661f30bcf9c",
+    "review/v1-stop-observation.json": "b24bd4a1b72acc935ded2cd7f1a5dbbee207ee16f7a52091fe6e1dc5910a27ed",
+    "runtime-result.json": "cab6ee2028d4807fa6a8b0024b2175a48c9bac60006c3f546807bd9664f8e226",
+    "source-pins.json": "e68326258fca517f1098f0d25ffd2950f15e5c1b63a40eeb922dfeac3d23e147",
+    "tests/baseline-reconstruction.mjs": "28ad239317d8caee44e99b0847a4909a1c1f60faaab0162861bb265b03628e2c",
+    "tests/before-example.json": "27c99649e40a0b5c744ec85cde4758c6368a040114e64ef6bd2b94b8c60de615",
+    "tests/build-guards.mjs": "fdf896858edbceea03fca1130234df962bf5c1ac19743e48975e6dbcb0d9432a",
+    "tests/catalog.sql": "54bbad7c31ba318bb5bd92cbb018d6239b38517e9639224896607d94ddafb8de",
+    "tests/compose-contact.py": "afb4a0e6a215c0dfc341c1f146b685241ea782f3c76c8ea86a7fe364f0967729",
+    "tests/compose-media.py": "383e87ecc30613dd37d773648401a728b70a96214fbd12b5ad0242a0365b97ad",
+    "tests/fixture.mjs": "6e7875e5e4b3f41f149feab9fb9694c0a3399b61894c790a7947879459ee2e05",
+    "tests/installation-case.mjs": "2fb9212eef6a87e84a6245496f5fcf4ec715f37dda7a163b05b85232b7d5b45b",
+    "tests/installation.mjs": "c3984f8d98c2626d3d0ff8ea61ad80dd5928a52af295df4ad9f86c399444d4c1",
+    "tests/runtime-case.mjs": "b669c9f1939df825c30401b6544111ec714dfabcc370dd194c4d497de16a5f4f",
+    "tests/runtime.mjs": "74a43268582eb5654ac153e8e2304f6cce47e8becbe75e73c59a38db9e7622f3",
+    "tests/verified-example.json": "d92f0e94d6e3121c65a35be3a99840aedcce85e7a883ee4712a064295bbac1e0",
+    "verify.sql": "e289392d2bb6faecb7c7cac3f40bab2ade8632afc219dc234477dfe8debd80fb"
+  },
+  "review_revision": "r2_source_supported_fixture_acl_correction",
+  "correction": {
+    "original_report_sha256": "6430306e81abdae9cf961a1c3722ab6e47f1a86f24f2cfa39d99f824efa61af2",
+    "root_cause_proof": "review/service-sql-root-cause.json",
+    "both_observed_fingerprints_reconstructed": true,
+    "runtime_sql_modules_unchanged": 8,
+    "issued_v1_guard_files_unchanged": {
+      "preflight.sql": "3238891aa78161a6c830c2aec7f97c028aef0297b6d4c17ddc1cdb28788d3733",
+      "apply.sql": "0b7aaa9a75db209ec24a4a764f7cad17599b9909fb8594415a10a734a773fcc3",
+      "catalog-pins.json": "2d768961baf1b7a5b9537d46e28b4bd0ecb40e04a1df7b41272cff1f7f57e22b",
+      "source-pins.json": "10caa4d0e41c77dc2deac2fbda9d3cc8c87d4398f099f7bb29d99df909e505dd"
+    },
+    "public_default_privileges_unchanged_by_apply": true,
+    "old_writers_fenced_after_apply": true,
+    "no_fresh_live_metadata_collection_required": true
+  }
+}

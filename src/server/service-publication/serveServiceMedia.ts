@@ -1,0 +1,10 @@
+import { createManagedMediaHandler, type ManagedMediaOwner, type ListingMediaFailure } from "../listing-publication/final/serveListingMedia";
+import type { WorkerConfig } from "../listing-publication/final/cleanupOne";
+import type { UploadFetch } from "../../entities/listing/api/privateUploadHttp";
+
+/** Same immutable WEB bytes and post-read membership check as ordinary listings,
+ * backed exclusively by the canonical service gallery and its publication event. */
+export function createServiceMediaHandler(config: WorkerConfig, fetcher: UploadFetch = fetch,
+    owner?: ManagedMediaOwner, onFailure?: (failure: ListingMediaFailure) => void) {
+  return createManagedMediaHandler("service", config, fetcher, owner, onFailure);
+}

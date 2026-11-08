@@ -6,7 +6,7 @@ import {
 /** A server-stored snapshot belonging to one message, never the current header. */
 export type ListingMessageCard = Readonly<{
   id: string; title: string | null; image: string | null; price: string | null;
-  content_type?: "horse_offer";
+  content_type?: "horse_offer" | "service";
 }>;
 export type ConversationCardReadCommand = ConversationReadCommand & Readonly<{ attachmentListingId: string | null }>;
 export type ConversationCardView = Omit<ConversationView, "schema_version" | "messages"> & Readonly<{
