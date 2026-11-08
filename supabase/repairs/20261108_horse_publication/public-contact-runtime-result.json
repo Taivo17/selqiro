@@ -1,0 +1,246 @@
+{
+  "schema_version": 1,
+  "suite": "horse-public-contact-sql",
+  "started_at_utc": "2026-11-08T10:53:10.214Z",
+  "completed_at_utc": "2026-11-08T10:53:12.583Z",
+  "passed": true,
+  "checks": [
+    {
+      "name": "five_offer_types_publish_real_gallery_and_public_price_models",
+      "passed": true
+    },
+    {
+      "name": "ordinary_publication_and_shared_media_pipeline_still_publish",
+      "passed": true
+    },
+    {
+      "name": "marketplace_union_filters_counts_and_paginates_once",
+      "passed": true
+    },
+    {
+      "name": "horse_contact_reuses_real_chat_send_and_typed_thread_cards",
+      "passed": true
+    },
+    {
+      "name": "ordinary_context_in_same_channel_preserves_horse_message_snapshot",
+      "passed": true
+    },
+    {
+      "name": "contact_and_thread_reject_own_unauthorized_and_stale_identity_access",
+      "passed": true
+    },
+    {
+      "name": "bilateral_blocks_hide_public_results_and_block_new_contact_send",
+      "passed": true
+    },
+    {
+      "name": "stale_event_expiry_and_inactive_identity_never_leak_public_horse",
+      "passed": true
+    }
+  ],
+  "modules": {
+    "01_policy_schema.sql": "be0654b2469343f66a8003cccc3dc6ca5c6e737a643f75f02abb4ffc51b5f2f6",
+    "02_commands_prepare.sql": "0210ee7479acde04772c2b1639bd78a59393c97d0793f0b13264511222369cd6",
+    "03_finality.sql": "993481b227edddcb8994437b4c30adb47b9312591fa66fda8cc71a265750d33b",
+    "04_media_bridge.sql": "915c959aaec954f88852196e97c9b1c8cb400ebed500ec7f5e3096843994020d",
+    "05_authority.sql": "06c8478d107b7bae5f7d6697171862ed5ce255518a98824fd2e5ac341d97eab5",
+    "06_contact.sql": "8bf0dab59f31ccf1d876699278603f242eabedc8d39145e2e2d56240ebb40a95",
+    "07_public.sql": "a7561dfc90514af190ce3a246e690a165285fee284b3853efff08849168ac353"
+  },
+  "source_provenance": [
+    {
+      "path": "supabase/migrations/20260722173530_baseline_20260722.sql",
+      "sha256": "7ca065f92f01c0f38ada5f5a50d2a0fc5b716f5291d1525d398023b7db59da3f"
+    },
+    {
+      "path": "supabase/releases/listing-publication-hosted-preview-v1/00_preconditions.sql",
+      "sha256": "69c6005ed959afeb22bd1db3e597f23d17e7dfe86c968a35f512f94f34c995c8"
+    },
+    {
+      "path": "supabase/releases/listing-publication-hosted-preview-v1/10_price_core.sql",
+      "sha256": "9f843033bed721ab73d8cb01d3750e4dacc417dc0ddf84b92c9845745bb75dad"
+    },
+    {
+      "path": "supabase/releases/listing-publication-hosted-preview-v1/20_publication_core.sql",
+      "sha256": "f1c56c6ba381ceb5ab1d120092f676964762829ad63c5201a6c6b809c419f062"
+    },
+    {
+      "path": "supabase/releases/listing-publication-hosted-preview-v1/30_multipart_and_journey.sql",
+      "sha256": "d0f8c44a557c1b03df8ceb23c5069cf94a8560a2e3faaa3b0a56d701d0858765"
+    },
+    {
+      "path": "supabase/releases/listing-publication-hosted-preview-v1/60_preview_authority.sql",
+      "sha256": "bee78747b8932504c6960b9dba9b5b6673d06c5876dc76508b2322e48f6789bb"
+    },
+    {
+      "path": "supabase/releases/listing-publication-hosted-preview-v1/release.sql",
+      "sha256": "974dd6acb246b275acb593688aa14449cd42e80939101086d742ee5c4c5a4c3e"
+    },
+    {
+      "path": "supabase/repairs/20261101_listing_primary_image/tests/previous-preflight.sql",
+      "sha256": "e1f14709ebeee6c1513f4507937fc4418ae535a4ae465c6882a81bcdcf82a8fd"
+    },
+    {
+      "path": "supabase/releases/listing-publication-hosted-preview-v1/20_publication_core.sql",
+      "sha256": "f1c56c6ba381ceb5ab1d120092f676964762829ad63c5201a6c6b809c419f062"
+    },
+    {
+      "path": "supabase/releases/listing-publication-hosted-preview-v1/30_multipart_and_journey.sql",
+      "sha256": "d0f8c44a557c1b03df8ceb23c5069cf94a8560a2e3faaa3b0a56d701d0858765"
+    },
+    {
+      "path": "supabase/releases/listing-publication-hosted-preview-v1/release.sql",
+      "sha256": "974dd6acb246b275acb593688aa14449cd42e80939101086d742ee5c4c5a4c3e"
+    },
+    {
+      "path": "supabase/repairs/20261101_listing_primary_image/changes.sql",
+      "sha256": "6e131c70b2dc941b411588f2e6585c5bf3a85b23b50f2e2dc19d766ff1297714"
+    },
+    {
+      "path": "supabase/repairs/20261101_listing_primary_image/tests/fixture.mjs",
+      "sha256": "b56ff4b3eea26e49a5370eb246440a37a8bbc553ed4cf8310187c8b6213fb210"
+    },
+    {
+      "path": "supabase/repairs/20261101_listing_primary_image/preflight.sql",
+      "sha256": "1f07a7c17fa12737bc9a6242ce02baa62d3450148f4f94b5c1837da7f5a8b178"
+    },
+    {
+      "path": "supabase/releases/listing-publication-hosted-preview-v1/20_publication_core.sql",
+      "sha256": "f1c56c6ba381ceb5ab1d120092f676964762829ad63c5201a6c6b809c419f062"
+    },
+    {
+      "path": "supabase/releases/listing-publication-hosted-preview-v1/40_read_models_and_owner.sql",
+      "sha256": "d19bf23e0746e8e6ba6750f4c235135fbaa9cff3b3f184e05a87433c10eaad78"
+    },
+    {
+      "path": "supabase/releases/listing-publication-hosted-preview-v1/release.sql",
+      "sha256": "974dd6acb246b275acb593688aa14449cd42e80939101086d742ee5c4c5a4c3e"
+    },
+    {
+      "path": "supabase/repairs/20261104_hosted_completed_source_cleanup/changes.sql",
+      "sha256": "ba8a028c16453d0eb0007d565897f7e6af3c3cbe2b285932e060e29a4643961e"
+    },
+    {
+      "path": "supabase/repairs/20261104_hosted_completed_source_cleanup/tests/fixture.mjs",
+      "sha256": "6dabfc2483f47ddf38af0a939147d5b2df830e60ca5eaa2614d109cf1be435e0"
+    },
+    {
+      "path": "supabase/repairs/20261104_listing_photo_removal/tests/fixture.mjs",
+      "sha256": "887c567d14403a4f13442dac1ada8972b6620fecf16cf4cd87c4cf9581f5099b"
+    },
+    {
+      "path": "supabase/repairs/20261104_listing_photo_removal/changes.sql",
+      "sha256": "87046f65b65122c3c794f10b6c174d456a2b80db9b34eb0a23bfd74fbf864706"
+    },
+    {
+      "path": "supabase/releases/listing-publication-hosted-preview-v1/00_preconditions.sql",
+      "sha256": "69c6005ed959afeb22bd1db3e597f23d17e7dfe86c968a35f512f94f34c995c8"
+    },
+    {
+      "path": "supabase/releases/listing-publication-hosted-preview-v1/10_price_core.sql",
+      "sha256": "9f843033bed721ab73d8cb01d3750e4dacc417dc0ddf84b92c9845745bb75dad"
+    },
+    {
+      "path": "supabase/releases/listing-publication-hosted-preview-v1/20_publication_core.sql",
+      "sha256": "f1c56c6ba381ceb5ab1d120092f676964762829ad63c5201a6c6b809c419f062"
+    },
+    {
+      "path": "supabase/releases/listing-publication-hosted-preview-v1/30_multipart_and_journey.sql",
+      "sha256": "d0f8c44a557c1b03df8ceb23c5069cf94a8560a2e3faaa3b0a56d701d0858765"
+    },
+    {
+      "path": "supabase/releases/listing-publication-hosted-preview-v1/release.sql",
+      "sha256": "974dd6acb246b275acb593688aa14449cd42e80939101086d742ee5c4c5a4c3e"
+    },
+    {
+      "path": "supabase/releases/listing-publication-hosted-preview-v1/60_preview_authority.sql",
+      "sha256": "bee78747b8932504c6960b9dba9b5b6673d06c5876dc76508b2322e48f6789bb"
+    },
+    {
+      "path": "supabase/migrations/20260822130000_add_publication_policy_acceptance_foundation.sql",
+      "sha256": "92197bafc2dc79494a9db48bdff072384680dc7c9fbbc91c507b9f3a02104431"
+    },
+    {
+      "path": "supabase/migrations/20260722173530_baseline_20260722.sql",
+      "sha256": "7ca065f92f01c0f38ada5f5a50d2a0fc5b716f5291d1525d398023b7db59da3f"
+    },
+    {
+      "path": "supabase/repairs/20261106_retired_web_cleanup/tests/fixture.mjs",
+      "sha256": "1727e262fde32191f0b483b7acb5ebe868d84900ce05599c6ec0e1dc2d90e811"
+    },
+    {
+      "path": "supabase/repairs/20261106_retired_web_cleanup/changes.sql",
+      "sha256": "6f55e6a3e390cc00838fb4a98b7c085d6d6e3170e4e935f75be747fcf5608cad"
+    },
+    {
+      "path": "supabase/repairs/20261108_horse_publication/tests/fixture.mjs",
+      "sha256": "1c0941d4eefa06ad080002b8cc459f4b51509fe6eba29ecc54333e903a0873fa"
+    },
+    {
+      "path": "supabase/repairs/20261108_horse_publication/tests/provider-pglite.mjs",
+      "sha256": "4034b554de08c8a2523ceda6f2f9b6df34f6a0196d067b3f633d1b3b80a91c1e"
+    },
+    {
+      "path": "supabase/repairs/20261108_horse_publication/tests/public-contact-fixture.mjs",
+      "sha256": "e35ce8028b150413d8eb2ed4e4ed1efe08aa9f911956b0575ee600f0d534b622"
+    },
+    {
+      "path": "supabase/repairs/20261106_published_photo_addition/changes.sql",
+      "sha256": "975c57a3bae9282a50d16cb06c94d674ce2286c9f772f09e6877fcf43794e04b"
+    },
+    {
+      "path": "supabase/releases/listing-publication-hosted-preview-v1/20_publication_core.sql",
+      "sha256": "f1c56c6ba381ceb5ab1d120092f676964762829ad63c5201a6c6b809c419f062"
+    },
+    {
+      "path": "supabase/migrations/20260722173530_baseline_20260722.sql",
+      "sha256": "7ca065f92f01c0f38ada5f5a50d2a0fc5b716f5291d1525d398023b7db59da3f"
+    },
+    {
+      "path": "supabase/migrations/20260830170000_add_ee_horse_offer_foundation.sql",
+      "sha256": "7ed39b68732c27b5a21173b5ce01e8fa0264f57b6a72a079913539cb6a12fb67"
+    },
+    {
+      "path": "supabase/migrations/20260913113000_add_owner_horse_offer_detail_read.sql",
+      "sha256": "2582ac149a756113cae100cf432b8e3bd34c42d1c0892c37a2c468eeda006887"
+    },
+    {
+      "path": "supabase/migrations/20260913190000_add_owner_horse_offer_draft_update.sql",
+      "sha256": "689302ab8cb9524a17fe94c8887562b4b4f58f52aa0b5992779c8dd453d54712"
+    },
+    {
+      "path": "supabase/migrations/20260822130000_add_publication_policy_acceptance_foundation.sql",
+      "sha256": "92197bafc2dc79494a9db48bdff072384680dc7c9fbbc91c507b9f3a02104431"
+    },
+    {
+      "path": "supabase/migrations/20260722173530_baseline_20260722.sql",
+      "sha256": "7ca065f92f01c0f38ada5f5a50d2a0fc5b716f5291d1525d398023b7db59da3f"
+    },
+    {
+      "path": "supabase/releases/listing-publication-hosted-preview-v1/40_read_models_and_owner.sql",
+      "sha256": "d19bf23e0746e8e6ba6750f4c235135fbaa9cff3b3f184e05a87433c10eaad78"
+    },
+    {
+      "path": "supabase/repairs/20261029_listing_message_cards/tests/fixtures/accepted-contact-fix.sql",
+      "sha256": "aaed21297cb61c9e9d76d74e19b973bfd745d401ca431bfd31ec095c13d3bd7b"
+    },
+    {
+      "path": "supabase/repairs/20261029_listing_message_cards/changes.sql",
+      "sha256": "264426d1b88199d2cf4ee3ccfd8edb058949e7fded70885952cdf29ee6003c2e"
+    },
+    {
+      "path": "supabase/repairs/20261030_messaging_restore/changes.sql",
+      "sha256": "eaa813d5cee8ad9514f3e1de9bafb6a4c5f9cacebb1a96ef957fc08951dac883"
+    },
+    {
+      "path": "supabase/migrations/20260926180000_add_public_listing_detail_keywords.sql",
+      "sha256": "b080a47eb2573a0f292316c10c00cd8dc10c0a5adff0e4c6b2bbc04b855cba8d"
+    }
+  ],
+  "postgres": "PostgreSQL 17.5 on aarch64-unknown-linux-gnu, compiled by emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 3.1.74 (1092ec30a3fb1d46b1782ff1b4db5094d3d06ae5), 32-bit",
+  "limitations": [
+    "Isolated PostgreSQL/WASM, non-superuser installer and actual retained SQL ACLs.",
+    "Synthetic identities and provider metadata; no live Storage, remote database or browser calls.",
+    "No native concurrent-session scheduling or production deployment is claimed."
+  ]
+}

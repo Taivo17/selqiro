@@ -1,3 +1,38 @@
+<!-- SELQIRO_HORSE_PUBLICATION_PREPARED_20261108 -->
+## 2026-11-08 — kanooniline hobuse avaldamine ja kinnitatud muutmine
+
+- Kasutaja näitas toimivat English/Eesti valikut; varasem foto 785c359 ja
+  ühe lisamise 9 s vastuvõtt säilivad. Lähtealus on täpselt taastatud
+  1106-failine keelepakett, mitte varasema foto paranduse puu.
+- Kõik viis hobusetüüpi kasutavad üht Avalda-toimingut. Privaatne jätkatav
+  prepare on sisemine taastemehhanism; kohustuslikku Salvesta mustand sammu
+  ei ole. Hobune jääb horse_offers UUID kirjeks, listings koopiat ei teki.
+- Minu ala avaldatud hobuse Muuda → Salvesta muudatused kasutab sama UUID-d
+  ja eeldatud revisjoni. Vana avalik versioon säilib kuni sisu ja galerii
+  atomaarse kinnitamiseni. Kadunud vastus lepitakse sama toiminguvõtmega;
+  teadmata PUT-i ei saadeta pimesi uuesti.
+- Ühendatud on täpsed poliitikad/kinnitused, hallatud pildid, järjestus ja
+  põhipilt, tegelik avalik detail/otsing/profiil ning praegused ühised
+  vestlused tüübiga hobusekaartidega. Privaatne täpne asukoht ei lähe avalikku
+  projektsiooni. Uus UI/tagasiside on EN/ET, keel ei loo uut toimingut.
+- Kohalik tõend: 35 kontrolleri/React SSR + 6 avaliku lugemise/profiili +
+  9 meediatranspordi testi ning 8 SQL-integratsiooni + 9 SQL-tuuma +
+  12 SQL-paigalduskaitse kontrolli läbisid. Uuendaja 17 ajutise Giti juhtu
+  läbisid. TypeScript puhas. Natiivne brauser puudub; täit visuaalset
+  brauserikatset ega tootmise Storage-katset ei väideta.
+- Täielik npm run build -- --webpack läbis 28,69 s (exit 0) külmutatud
+  runtime’i peal sünteetiliste seadetega. Lõplik paketi kontroll säilib
+  eraldi tarnearuandes; kohalik build ei tõenda tootmise paigaldust.
+- SQL-i 01–07 tarnitakse ühe kontrollitud tehinguna koos preflight/verify
+  kaitsetega. Pakett selqiro-hobused-20261108 nõuab eelmise keelepaigalduse
+  täpset edukat privaatset päevikut ja lähtepuud. Tootmist pole muudetud;
+  Maci paigaldus, uus Ready ja kasutaja vastuvõtt on ootel.
+- Draft/published on muudetavad; ülejäänud hobuseseisud on lugemiseks.
+  Uusi archive/delete/renew toiminguid ei lisata. Teenused on järgmine
+  kanooniline domeen sama Avalda/Muuda/Salvesta vooga, töökuulutused hiljem.
+- Uuendatud hobuse arhitektuur, ühine alus, known-issues, üks CURRENT_STATE,
+  HOSTED_PORTAL ja sellest genereeritud üleandmine. Varasem päevik säilib.
+
 <!-- SELQIRO_V2_LANGUAGE_PREPARED_20261107 -->
 ## 2026-11-07 — üks V2 keele-eelistus ja ühise kuulutusaluse audit
 
@@ -807,3 +842,36 @@ ja piirid: `docs/continuity/MESSAGING_MOBILE_FIX_20261030.md` ning tarne
   üks stopperiga lisamine testkuulutusele, kus on vaba fotokoht. Kuulutusel 201
   olevaid fotosid katse nimel ei kustutata. V2 täielik EN/ET ja üldine
   taustakoristus jäävad eraldi lõpetamata töödeks.
+
+
+## 2026-11-08 — hobuse avaldamise r2 eelkontrolli parandus
+
+- Esimese hobusepaketi kasutaja raport kinnitas `DATABASE_PRECONDITIONS_NOT_MATCHED`
+  peatuse enne SQL-i, failide, build’i, commit’i ja push’i tegemist. Aluseks jäi
+  keeleuuendus `92408b6ceb7a9fec3119d35a86c9bb47628acf22`, 1106 puhast faili.
+- Ainult lugemise kataloogiraport lõpetas 10:42:37 UTC. ZIP-i manifest/CRC ja
+  failiräsid kontrolliti, kõik 15 erinevusrida arvutati eraldi uuesti. 171
+  funktsiooni kood/faktid, 5 struktuuri, 2 poliitika-autoriteeti ja 3 vaadet
+  vastasid; erinevused olid viies ACL-is ja kahes automaatses rolliliikmesuses.
+- Säilitatud baseline’i vaikeõigused ning kaks rolli loomise allikat selgitavad
+  tootmise kuju. Kohalik testadapter kasutab PostgreSQLi enda rolli-DDL-i,
+  eraldi supabase_admin bootstrap’i ja tavalist postgres paigaldajat. Kõik
+  võrreldud kataloogifaktid kattuvad nüüd päris raportiga. Tootmise õigusi ei
+  kirjutata vastavuse saamiseks ümber, kaitseid ei eemaldata.
+- Seitse hobuse SQL-võimekusmoodulit ja kõik 499 rakenduse runtime-faili säilisid.
+  Genereeritud SQL-is muutusid ainult sõltuvuste räsi ja täpne rollifaktide
+  võrdlusväärtus. Muutmata ehitussisendite varasem build ja 162 Node-testi
+  tõend säilivad; neid ei käitatud uuesti.
+- Parandatud SQL-mudeliga läbis 9 tuuma- ja 8 avaliku/kontakti juhtu ning 21
+  paigalduskaitse juhtu. Viimane koosneb 19 läbinud juhust ja kahest sihitud
+  jätkukontrollist; ühe võimatu negatiivse testseadistuse algne peatus,
+  parandus ja mõlema jooksu tõendid säilivad. Uuendaja 18/18 kontrolli läbisid,
+  sh algse peatunud päeviku muutmatus ja eraldi uue väljalaske päevik.
+- Uus pakett on `selqiro-hobused-20261108-r2`; vana ZIP ja päevikud jäävad alles.
+  Täpne koostatud pakett ja lõplik ZIP kontrollitakse enne väljastamist;
+  eraldi tarnearuandes säilivad täpsed baidid, testipiirid ja tulemus.
+- Uuendatud on CURRENT_STATE, sellest genereeritav üleandmine, HOSTED_PORTAL,
+  juhtumidokument, arhitektuur ja teadaolevad tööd. Järgmine on r2 paigaldus
+  Macis, sama commit’i Ready / Production ja üks hobuse avaldamise/muutmise
+  kasutuskatse. Teenused järgnevad ühe Avalda ning Minu ala Muuda/Salvesta vooga;
+  töökuulutused hiljem.

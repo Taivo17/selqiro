@@ -10,13 +10,22 @@ export type ListingMediaFailure = Readonly<{
  status: number;
  databaseCode?: string;
 }>;
+export type ManagedMediaOwner = Readonly<{
+ userId:string;identityId:string;accessToken:string;publicKey:string;
+}>;
+export type ManagedMediaKind = "listing" | "horse_offer";
+const mediaContracts = {
+ listing: { public: "get_public_listing_media_binding_v1", owner: "get_my_listing_media_binding_v2" },
+ horse_offer: { public: "get_public_horse_media_binding_v1", owner: "get_my_horse_media_binding_v1" },
+} as const;
 /** Serves an authorized WEB image through the stable public or owner media route.
  * Never serves SOURCE, trusts metadata, caches, redirects or leaks a signed/private
  * Storage URL. Rechecks eligibility after I/O. */
-export function createListingMediaHandler(config:WorkerConfig,fetcher:UploadFetch=fetch,owner?:{
- userId:string;identityId:string;accessToken:string;publicKey:string;
-},onFailure?:(failure:ListingMediaFailure)=>void) {
+export function createManagedMediaHandler(kind:ManagedMediaKind,config:WorkerConfig,fetcher:UploadFetch=fetch,
+ owner?:ManagedMediaOwner,onFailure?:(failure:ListingMediaFailure)=>void) {
  const {origin,headers}=serviceConfig(config);
+ if(kind!=="listing"&&kind!=="horse_offer")return fail("input");
+ const contract=mediaContracts[kind];
  if(owner&&(!isUploadUuid(owner.userId)||!isUploadUuid(owner.identityId)||!owner.accessToken||!owner.publicKey))return fail("input");
  return async function serve(attemptId:string,ordinalText:string,signal?:AbortSignal):Promise<Response> {
   const out=(status:number,body:Uint8Array|null=null)=>new Response(body===null?null:new Uint8Array(body).buffer,{status,headers:{
@@ -32,7 +41,7 @@ export function createListingMediaHandler(config:WorkerConfig,fetcher:UploadFetc
   };
   const get=async(recheck=false)=>{
    stage=recheck?"recheck_request":"binding_request";
-   const res=await privateUploadHttp(fetcher,origin+"/rest/v1/rpc/"+(owner?"get_my_listing_media_binding_v2":"get_public_listing_media_binding_v1"),
+   const res=await privateUploadHttp(fetcher,origin+"/rest/v1/rpc/"+(owner?contract.owner:contract.public),
     {method:"POST",headers:owner?{apikey:owner.publicKey,authorization:"Bearer "+owner.accessToken,"content-type":"application/json"}:headers,
      body:JSON.stringify({p_attempt_id:attemptId,p_ordinal:ordinal,...(owner?{p_expected_user_id:owner.userId,p_expected_identity_id:owner.identityId}:{})})},{signal});
    if(res.status!==200){
@@ -61,4 +70,11 @@ export function createListingMediaHandler(config:WorkerConfig,fetcher:UploadFetc
    return out(200,new Uint8Array(bytes));
   }catch{report({stage,status:503});return out(503);}
  };
+}
+
+/** Existing listing callers retain their domain and exact public API. A horse
+ * URL can only use the separately authorized horse binding contract. */
+export function createListingMediaHandler(config:WorkerConfig,fetcher:UploadFetch=fetch,
+ owner?:ManagedMediaOwner,onFailure?:(failure:ListingMediaFailure)=>void) {
+ return createManagedMediaHandler("listing",config,fetcher,owner,onFailure);
 }

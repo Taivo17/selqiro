@@ -15,7 +15,7 @@ export type SearchPageV2 = {
 function safeImage(value: unknown): string | null {
   return listingImageUrl(text(value));
 }
-function card(value: unknown): SearchCardV2 {
+export function parsePublicSearchCardV2(value: unknown): SearchCardV2 {
   const r = record(value, ["content_type", "content_id", "title", "description_preview", "price",
     "category", "subcategory", "detail_category", "condition", "country", "city", "image_url",
     "seller_name", "seller_slug", "seller_avatar_url", "seller_type", "created_at"]);
@@ -45,7 +45,7 @@ export function parsePublicSearchV2(value: unknown, requestedOffset: number, req
   const more = total > offset + limit, capped = more && requestedOffset + requestedLimit > 100000;
   const next = more && !capped ? requestedOffset + requestedLimit : null;
   ensure(r.has_more === more && r.next_offset === next && r.window_limit_reached === capped);
-  const items = r.items.map(card);
+  const items = r.items.map(parsePublicSearchCardV2);
   ensure(new Set(items.map(i => i.id)).size === items.length);
   return {items, totalCount, limit: requestedLimit, offset: requestedOffset,
     hasMore: more, nextOffset: next, windowLimitReached: capped};

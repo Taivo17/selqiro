@@ -12,7 +12,7 @@ import styles from "./conversation.module.css";
 
 type Props = {
   peer: ConversationIdentity | null;
-  listing: Readonly<{ id: string; title: string | null }> | null;
+  listing: Readonly<{ id: string; title: string | null; content_type?: "horse_offer" }> | null;
   ready: boolean; blocked: boolean; busy: boolean;
   onHide: () => Promise<boolean>; onBlock: (blocked: boolean) => Promise<boolean>;
 };
@@ -24,7 +24,7 @@ export default function ConversationHeader(props: Props) {
     <ConversationAvatar identity={props.peer} />
     <div className={styles.heading}>
       <h1>{props.peer?.name || t("conversation")}</h1>
-      {props.listing ? <Link className={styles.listingLink} href={"/v2/listing/" + props.listing.id} prefetch={false}>
+      {props.listing ? <Link className={styles.listingLink} href={(props.listing.content_type === "horse_offer" ? "/v2/horse-offer/" : "/v2/listing/") + props.listing.id} prefetch={false}>
         {props.listing.title || t("view_listing")}
       </Link> : props.ready && <span className={styles.listingLink}>{t("conversation_messages")}</span>}
     </div>

@@ -1,57 +1,75 @@
 # Teadaolevad käsilolevad tööd
 
-Seis: 07.11.2026 Europe/Tallinn. Praegune tööjärg on
-`continuity/CURRENT_STATE.json`-is; see ei ole teine NEXT-allikas.
+Seis: 08.11.2026 Europe/Tallinn. Üks praegune tööjärg on
+`continuity/CURRENT_STATE.json`-is; see dokument ei ole teine NEXT-allikas.
 
-## Foto lisamine ja kuvamine — kasutaja kinnitatud
+## Hobuste kuulutused — teostatud, kasutuselevõtt ja vastuvõtt ootel
 
-Kümne foto piir, lisamine, avalik nähtavus, põhipilt ning varasem eemaldamine
-ja koristus on kasutaja katsetega kinnitatud. Viimane vastuvõetud commit on
-`785c359`, `Load the added photo while confirming gallery membership`.
-Kasutaja ühe viimase lisamise stopperiaeg oli 9 s; see pole püsiva keskmise
-lubadus. Varasem viie foto takistus ja kuvamise paranduse paigaldus ei ole
-praegused lahtised tööd. Frankfurdi `fra1` seadistus on vastu võetud.
+Kõik viis tüüpi kasutavad üht Avalda-toimingut; eraldi kohustuslikku mustandi
+salvestamist ei ole. Privaatne jätkatav katse säilitab täpsed andmed, fotode
+seosed, nõusoleku ja toiminguvõtme. Avaldatud kuulutuse muutmine käib Minu alast
+ühe Salvesta muudatused toiminguga. Senine avalik versioon jääb alles kuni
+revisjoniga kontrollitud tehingu kinnitamiseni.
 
-## EN/ET liides — lokaalselt valmis, paigaldus ja konto salvestuse katse ootel
+Ühendatud on hallatud fotod, põhipilt/järjekord/lisamine/eemaldamine, avalik
+detail, tüübiga ühine otsing, avaliku profiili kaardid ja olemasolevad vestlused.
+Hobune säilitab oma UUID ega tekita tavalise kuulutuse koopiat.
+Vt `architecture/horse-publication-v1.md`.
 
-Üks `profiles.language` eelistus; inglise põhikeel/fallback ja eesti teine keel.
-Olemasolevad V2 vormid ning avalikud/omaniku vaated on lokaliseeritud. Ühine
-kooste ja sihitud testid läbisid. Poolelioleva fotolisamise keelevahetus
-säilitas sama toimingu ja pildisõlme päris Chromiumi sünteetilises katses.
-Maci/Ready tulemus ja päris konto keele püsivus kinnitatakse pärast uut paketti.
-Vt `architecture/interface-language-v1.md`.
+Esimese paketi Maci eelkontroll peatus enne muutmist. Ainult lugemise raport
+kinnitas seniste funktsioonide koodi ja struktuuri vastavuse; erinevus oli viie
+funktsiooni õiguste ja kahe automaatse rolliliikmesuse testmudelis. r2 kasutab
+nende täpset tõendatud kuju. Vt `continuity/HORSE_PREFLIGHT_20261108.md`.
 
-### Sisu ja õigusdokumendi keel
+Kohalikud kliendi, serveri ja SQL-katsed on läbinud; see ei tõenda tootmise
+paigaldust. r2 Maci käivitus, commit/push, Verceli Ready ja üks sisuline
+kasutuskatse on veel ootel. Natiivset brauserit selles tööruumis ei olnud;
+tegelike Reacti komponentide SSR ja kontrollerikatsed ei ole visuaalne
+brauserikatse. Lõplik build'i tulemus on CURRENT_STATE-is.
 
-Kasutaja sisestatud sisu ei tõlgita. Olemasolev ordinary publication metadata
-`language: et` ja kinnitatav `marketplace-general` poliitika `locale: et-EE`
-on säilinud serverileping. Ingliskeelne liides selgitab eestikeelset originaali.
-Ingliskeelse poliitikaversiooni ning sisu tegeliku keelemärgistuse laiendamine
-vajab eraldi autoriteetset lepingut; seda ei kuulutata selle paketiga valmis.
+Muudetavad seisud on `draft` ja `published`. `held_for_review`, `paused`,
+`closed`, `rejected`, `archived` on lugemiseks. Uusi peatamise, arhiveerimise,
+kustutamise ega uuendamise nuppe/lepinguid selles paketis ei lisata.
 
-## Hobused ja teenused — ühendamine järgmisena
+## Teenused — järgmine ühendatav domeen; töökuulutused hiljem
 
-Hobustel on päris privaatne mustand ning revisjoniga muutmine; fotode valik
-loomisel on eelvaade ja muutmise pildid on lugemiseks. Täielik avaldamine,
-hallatud fotod, avalik detail/otsing ja kontakt pole veel ühendatud.
+Olemasolev teenuste omaniku haldus ja avaliku profiili lugemine säilivad.
+`/v2/services` näitab endiselt näidisandmeid, `/v2/service/[id]` on omaniku
+vaade. Päris kataloog/detail/kontakt, revisjoniga kinnitatud salvestus ja hallatud
+meedia tuleb ühendada kanoonilise `services` UUID peale. Kasutaja soovitud
+voog on sisestamine → Avalda ning Minu ala → Muuda → Salvesta muudatused;
+eraldi kohustuslikku mustandi salvestust ei lisata. Töökuulutused järgivad sama
+loogikat hiljem. Vt `architecture/shared-marketplace-foundation.md`.
 
-Teenuste omaniku haldus ja avaliku profiili lugemine on olemas.
-`/v2/services` näitab endiselt näidisandmeid ja `/v2/service/[id]` on omaniku
-vaade. Päris otsing/detail/kontakt ning revisjonide ja hallatud meedia ühtlustus
-on tegemata. Tööjärjekord: hobused, teenused, väike saadavuse/asukoha mudel.
-Vt `architecture/shared-marketplace-foundation.md` täpset lähtekoodi auditit.
+## EN/ET liides — kasutaja kuvatõmmistega kinnitatud
+
+Keelevalik on olemas ning kasutaja näitas ingliskeelset avalikku otsingut ja
+eestikeelset Minu ala. Inglise põhikeel/fallback, eesti teine keel ja üks konto
+`profiles.language` eelistus säilivad. Hobuste uued toimingud on mõlemas keeles.
+Keel ei muuda aktiivset identiteeti, kasutajasisu ega poolelioleva toimingu võtit.
+
+Kasutajasisu ei tõlgita. Kinnitatavate õigusdokumentide praegune originaal on
+eesti keeles; inglise liides selgitab seda. Ingliskeelsete poliitikaversioonide
+ja tegeliku sisukeele metadata laiendamine vajab eraldi autoriteetset lepingut.
+
+## Foto lisamine ja kuvamine — varasem vastuvõtt säilib
+
+Tavalise kuulutuse kümne foto piir, avalik nähtavus, põhipilt, eemaldamine ja
+koristus on kasutaja katsetega kinnitatud. Vastuvõetud commit `785c359`
+(`Load the added photo while confirming gallery membership`) andis ühes
+kasutaja katses 9 s lisamise. See pole püsiva keskmise lubadus. Frankfurt
+`fra1` on kinnitatud; neid varasemaid vastuvõtte ilma uue regressioonita ei korrata.
 
 ## Üldine koristus enne avalikku avamist
 
-Katkestatud/aegunud üleslaadimiste ja terve kuulutuse terminalse hosted
-koristuse kõik juhud on eraldi lõpetamata töö. Eduka lisamise üks
-vastusejärgne SOURCE-samm ei ole püsiv taustatööde teenus ega tühjenda
-korraga kogu konto järjekorda. Tehniliste testpaneelide eemaldamine peab
-käima koos täieliku taustal lõpetamisega.
+Katkestatud/aegunud üleslaadimiste ja kogu kuulutuse terminalse koristuse täielik
+püsiv taustateenus on eraldi töö. Hobuse kinnitatud toimingu piiratud
+vastusejärgne koristus säilitab ebaõnnestumisel järjekorra; see ei ole kogu konto
+lõpmatu taustakoristus. Tehniliste testpaneelide eemaldamine peab käima koos
+täieliku taustal lõpetamisega.
 
-## Diagnostika ajatemplite ühilduvus — lahendatud
+## Diagnostika ajatemplid — varasem lahendus säilib
 
-Parandatud r2 koguja lõpetas 07.11 kell 13:29 Python 3.9.6 all edukalt.
-Maci lähtepuu ja index säilisid. Toonane 277 MiB reserv jääb ajalooliseks
-vaatluseks. Esimene peatatud raport ja vanad paketid säilivad ajaloona;
+Parandatud r2 koguja lõpetas 07.11 kell 13:29 Python 3.9.6 all edukalt. Maci
+lähtepuu ja index säilisid. Toonane 277 MiB reserv on ajalooline vaatlus;
 vt `continuity/PHOTO_ADDITION_DIAGNOSTIC_20261107.md`.

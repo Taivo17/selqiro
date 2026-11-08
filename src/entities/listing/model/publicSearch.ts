@@ -3,6 +3,8 @@ import { getCatalogTranslation, localeForLanguage } from "../../../../lib/i18n/u
 import { listingPresentationMessages } from "../../../../lib/i18n/catalogs/listingPresentation";
 import { uiMessage } from "../../../../lib/i18n/interfaceMessage";
 import { CATEGORY_TREE, getCategoryLabel } from "../../../../lib/categories";
+import { horsePublicMessages } from "../../../../lib/i18n/catalogs/horsePublic";
+import { HORSE_TYPES } from "../../horse-offer/model/publicHorse";
 
 export const PUBLIC_SEARCH_PAGE_SIZE = 24;
 export const PUBLIC_SEARCH_MAX_OFFSET = 100000;
@@ -17,12 +19,16 @@ export const EMPTY_PUBLIC_SEARCH: PublicSearchInput = {
   condition: "", location: "", offset: 0,
 };
 export type SearchCategory = { value: string; label: string; children?: readonly SearchCategory[] };
-export const SEARCH_CATEGORIES: readonly SearchCategory[] = CATEGORY_TREE;
+export const SEARCH_CATEGORIES: readonly SearchCategory[] = [...CATEGORY_TREE,
+  { value: "horses", label: "Horses", children: HORSE_TYPES.map(value => ({ value, label: horsePublicMessages.en[value] })) }];
 export const SEARCH_CONDITIONS = [
   { value: "new", label: "New" }, { value: "used", label: "Used" },
   { value: "damaged", label: "Damaged" },
 ] as const;
-export const searchCategoryLabel = (node: SearchCategory, language: Language = "en") => getCategoryLabel(node.value, node.label, language);
+export const searchCategoryLabel = (node: SearchCategory, language: Language = "en") =>
+  node.value === "horses" || HORSE_TYPES.includes(node.value as typeof HORSE_TYPES[number])
+    ? getCatalogTranslation(language, horsePublicMessages, node.value as "horses" | typeof HORSE_TYPES[number])
+    : getCategoryLabel(node.value, node.label, language);
 export function searchConditionLabel(value: string | null | undefined, language: Language = "en"): string {
   return value === "new" || value === "used" || value === "damaged"
     ? getCatalogTranslation(language, listingPresentationMessages, value) : value ?? "";

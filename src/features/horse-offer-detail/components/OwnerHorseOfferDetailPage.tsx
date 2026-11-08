@@ -3,6 +3,8 @@
 import { marketplaceMessage } from "../../../shared/i18n/marketplaceMessages";
 import { useMarketplaceTranslation } from "../../../shared/i18n/useMarketplaceTranslation";
 import Link from "next/link";
+import { useV2Translation } from "../../../shared/i18n/V2LanguageProvider";
+import { horsePublicationMessages } from "../../horse-publication/model/horsePublicationMessages";
 import { getOwnerHorsePresentation } from "../../../entities/horse-offer/model/ownerPresentation";
 import { useOwnerHorseOfferDetail } from "../model/useOwnerHorseOfferDetail";
 import { OWNER_HORSE_KIND_LABELS, OWNER_HORSE_STATUS_LABELS, formatOwnerHorseDate, getOwnerHorseStatusClassName } from "../model/ownerHorseDetailLabels";
@@ -10,6 +12,7 @@ import { OwnerHorseDetailCard as Card, OwnerHorseDetailValues as Values } from "
 
 export default function OwnerHorseOfferDetailPage({ offerId }: { offerId: string }) {
   const { language, r } = useMarketplaceTranslation();
+  const {t} = useV2Translation(horsePublicationMessages);
   const { detail, errorMessage, isLoading, isNotFound, reload } = useOwnerHorseOfferDetail(offerId);
   if (isLoading) return <div className="mx-auto w-full max-w-6xl py-7" role="status">
     <p>{r(marketplaceMessage("horse.loading_horse_listing.92fbfa"))}</p>
@@ -45,8 +48,7 @@ export default function OwnerHorseOfferDetailPage({ offerId }: { offerId: string
         <span className={`inline-flex h-fit w-fit shrink-0 rounded-full border px-4 py-2 text-xs font-semibold ${getOwnerHorseStatusClassName(detail.status)}`}>{r(status)}</span>
       </div>
       <div className="mt-6 rounded-[24px] border border-amber-200 bg-amber-50 px-5 py-4 text-sm leading-6 text-amber-950">
-        {r(isDraft ? marketplaceMessage("horse.this_is_your_saved_draft_use_edit_draft.2f460d")
-          : marketplaceMessage("horse.this_is_your_saved_listing_it_is_not.758ecc"))}
+        {isDraft ? t("explanation") : detail.status === "published" ? t("editExplanation") : t("readOnly")}
       </div>
       {r(view.warning ? <p role="alert" className="mt-4 rounded-2xl border border-amber-300 bg-amber-50 p-4 text-sm">{r(view.warning)}</p> : null)}
       <div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,1.25fr)_minmax(300px,0.75fr)]">
@@ -62,6 +64,9 @@ export default function OwnerHorseOfferDetailPage({ offerId }: { offerId: string
             </div>
             <p className="mt-5 whitespace-pre-wrap break-words text-sm leading-7 text-zinc-700">{r(detail.description.trim() || marketplaceMessage("horse.no_description_added.25bac7"))}</p>
           </Card>
+          {detail.images.length > 1 ? <Card eyebrow={t("photos")} title={t("photos")}>
+            <div className="grid grid-cols-2 gap-3">{detail.images.map(image => <img key={image.id} src={image.url} alt={r(title)} className="aspect-[4/3] w-full rounded-2xl object-contain" />)}</div>
+          </Card> : null}
           <Card eyebrow={r(view.isWanted ? marketplaceMessage("horse.search_preferences.e24496") : marketplaceMessage("horse.horse_details.80a75f"))} title={r(view.isWanted ? marketplaceMessage("horse.wanted_horse.5c7574") : marketplaceMessage("horse.main_characteristics.ca7a3d"))}>
             <Values fields={view.basics} columns empty={r(view.isWanted ? marketplaceMessage("horse.no_preferences_added.d602cc") : marketplaceMessage("horse.no_basic_details_added.8aabfa"))} />
           </Card>
@@ -92,15 +97,15 @@ export default function OwnerHorseOfferDetailPage({ offerId }: { offerId: string
             ]} />
           </Card>
           <div className="rounded-[28px] border border-black/10 bg-zinc-950 p-5 text-white shadow-sm sm:p-6">
-            <h2 className="text-xl font-semibold">{r(isDraft ? marketplaceMessage("horse.manage_draft.f90a53") : marketplaceMessage("horse.listing_details.25bf4c"))}</h2>
+            <h2 className="text-xl font-semibold">{t("heading")}</h2>
             <p className="mt-3 text-sm leading-6 text-zinc-300">
-              {r(isDraft ? marketplaceMessage("horse.edit_the_draft_s_text_and_details_publishing.358bf3")
-                : marketplaceMessage("horse.this_listing_is_not_a_draft_its_details.baea47"))}
+              {isDraft ? t("explanation") : detail.status === "published" ? t("editExplanation") : t("readOnly")}
             </p>
-            <Link href={`/v2/my-area/horse-offers/${encodeURIComponent(detail.offerId)}/edit`}
+            {isDraft || detail.status === "published" ? <Link href={`/v2/my-area/horse-offers/${encodeURIComponent(detail.offerId)}/edit`}
               className="mt-5 inline-flex rounded-full bg-white px-5 py-3 text-sm font-semibold text-zinc-950 hover:bg-zinc-100">
-              {r(isDraft ? marketplaceMessage("horse.edit_draft.66fac2") : marketplaceMessage("horse.view_details.7a45f3"))}
-            </Link>
+              {t("edit")}
+            </Link> : null}
+            {detail.status === "published" ? <Link href={`/v2/horse-offer/${detail.offerId}`} className="mt-4 block text-sm font-bold underline">{t("publicView")}</Link> : null}
           </div>
         </aside>
       </div>

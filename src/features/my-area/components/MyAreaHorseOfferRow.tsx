@@ -3,6 +3,8 @@
 import { marketplaceMessage } from "../../../shared/i18n/marketplaceMessages";
 import { useMarketplaceTranslation } from "../../../shared/i18n/useMarketplaceTranslation";
 import Link from "next/link";
+import { useV2Translation } from "../../../shared/i18n/V2LanguageProvider";
+import { horsePublicationMessages } from "../../horse-publication/model/horsePublicationMessages";
 import { OWNER_HORSE_KIND_LABELS, OWNER_HORSE_STATUS_LABELS } from "../../horse-offer-detail/model/ownerHorseDetailLabels";
 import { formatOwnerHorseMoney } from "../../../entities/horse-offer/model/ownerMoney";
 import { getMyAreaWantedSummaryLabels } from "../model/myAreaWantedSummary";
@@ -43,6 +45,7 @@ export default function MyAreaHorseOfferRow({
   item,
 }: MyAreaHorseOfferRowProps) {
   const { language, r } = useMarketplaceTranslation();
+  const {t} = useV2Translation(horsePublicationMessages);
   const isWanted = item.contentVariant === "wanted";
   const wanted = isWanted ? getMyAreaWantedSummaryLabels(item.wantedSummary, language) : null;
   const rawPrice = item.priceText?.trim() || "";
@@ -62,10 +65,7 @@ export default function MyAreaHorseOfferRow({
   const title =
     item.title || marketplaceMessage("horse.untitled_horse_listing.9905c6");
 
-  const readOnlyExplanation =
-    item.sourceStatus === "draft"
-      ? marketplaceMessage("horse.open_the_saved_details_you_can_edit_the.fa6ec3")
-      : marketplaceMessage("horse.open_the_saved_details_this_listing_is_not.2ccc52");
+  const editable = item.sourceStatus === "draft" || item.sourceStatus === "published";
 
   const detailHref =
     `/v2/my-area/horse-offers/${
@@ -170,12 +170,8 @@ export default function MyAreaHorseOfferRow({
         >
           {r(statusLabel)}
         </span>
-        <span
-          className="text-center text-[11px] text-zinc-400 md:text-right"
-          title={r(readOnlyExplanation)}
-        >
-          {r(item.sourceStatus === "draft" ? marketplaceMessage("horse.edit_in_details.503bf2") : marketplaceMessage("horse.view_only.b2d42f"))}
-        </span>
+        {editable ? <Link href={`${detailHref}/edit`} className="rounded-full border px-4 py-2 text-center text-xs font-bold">{t("edit")}</Link> : null}
+        {item.sourceStatus === "published" ? <Link href={`/v2/horse-offer/${encodeURIComponent(item.contentId)}`} className="text-center text-xs underline">{t("publicView")}</Link> : null}
       </div>
     </article>
   );

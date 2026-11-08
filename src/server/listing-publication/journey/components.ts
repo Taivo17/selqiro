@@ -10,8 +10,9 @@ import { createMultipartPublicationImages, createHostedMultipartPublicationImage
 import { copyWebCommand } from "../web/webImageContract";
 import { createSettleHostedCleanupOne } from "../final/settleHostedSourceOne";
 import type { sanitizeListingImage as Sanitize } from "../images/sanitize.cjs";
+import type { MultipartPublicationImages } from "./journeyTypes";
 
-function journeyHandler(c: PublicationRuntimeConfig) {
+function nativeMultipartImages(c: PublicationRuntimeConfig) {
   // Run the reviewed native worker as a real isolated child, with its original byte
   // protocol. Do not bundle it into the route or replace native decoding with a mock.
   // Resolve Node's own loader at runtime. A direct createRequire(cwd) call is
@@ -19,9 +20,23 @@ function journeyHandler(c: PublicationRuntimeConfig) {
   const createNativeRequire = Reflect.get(nodeModule, "createRequire") as typeof nodeModule.createRequire;
   const nativeRequire = createNativeRequire(path.join(process.cwd(), "package.json"));
   const {sanitizeListingImage} = nativeRequire("./src/server/listing-publication/images/sanitize.cjs") as {sanitizeListingImage: typeof Sanitize};
-  const images = isHostedPublicationRuntime(c)
+  return isHostedPublicationRuntime(c)
     ? createHostedMultipartPublicationImages(c, sanitizeListingImage)
     : createMultipartPublicationImages({...c, integrationScope: "disposable-v2"}, sanitizeListingImage);
+}
+
+/** Shared native implementation, with no domain publication or deletion authority.
+ * Each domain authorizes its immutable attempt before reaching this processor. */
+export function createPublicationImageProcessor(c: PublicationRuntimeConfig): Pick<MultipartPublicationImages, "prepare" | "verify"> {
+  const images = nativeMultipartImages(c);
+  return {
+    prepare: (token, input, signal, timing) => images.prepare(token, copyWebCommand(input), signal, timing),
+    verify: (token, input, signal, timing) => images.verify(token, copyWebCommand(input), signal, timing),
+  };
+}
+
+function journeyHandler(c: PublicationRuntimeConfig) {
+  const images = nativeMultipartImages(c);
   const settle = isHostedPublicationRuntime(c) ? createSettleHostedCleanupOne(c) : images.settle;
   return createJourneyRequestHandler(c, {
     prepare: (token, input, signal, timing) => images.prepare(token, copyWebCommand(input), signal, timing),

@@ -2,6 +2,7 @@ import { uiMessage } from "../../../../lib/i18n/interfaceMessage";
 import { PUBLIC_SEARCH_PAGE_SIZE, PUBLIC_SEARCH_MAX_OFFSET } from "./publicSearch";
 import { listingImageUrl } from "./listingMediaUrl";
 import type { ListingPriceDisplay } from "./priceDisplay";
+import type { HorsePrice, PublicHorseType } from "../../horse-offer/model/publicHorse";
 
 export type PublicSearchCard = {
   id: string; title: string; description: string | null; price: string | null; priceAmount: string | null;
@@ -9,6 +10,9 @@ export type PublicSearchCard = {
   condition: string | null; country: string | null; city: string | null;
   sellerName: string; createdAt: string;
   displayPrice?: ListingPriceDisplay;
+  contentType?: "listing" | "horse_offer";
+  horsePrice?: HorsePrice;
+  offerType?: PublicHorseType;
 };
 export type PublicSearchPage = {
   items: PublicSearchCard[]; totalCount: string; offset: number;

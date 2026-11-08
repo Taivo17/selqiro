@@ -1,6 +1,9 @@
 "use client";
 
 import { localeForLanguage } from "../../../../lib/i18n/useTranslation";
+import { useV2Translation } from "../../../shared/i18n/V2LanguageProvider";
+import { horsePublicationMessages } from "../../horse-publication/model/horsePublicationMessages";
+import type { HorsePolicySnapshot } from "../../../entities/horse-offer/model/publication";
 import { marketplaceMessage } from "../../../shared/i18n/marketplaceMessages";
 import { useMarketplaceTranslation } from "../../../shared/i18n/useMarketplaceTranslation";
 import {
@@ -34,6 +37,7 @@ type HorseOfferPublicationGateProps = {
   onConfirmAllChange: (
     checked: boolean
   ) => void;
+  onPoliciesChange?: (policies: readonly HorsePolicySnapshot[] | null) => void;
 };
 
 type ConfirmationDefinition = {
@@ -348,8 +352,10 @@ HorseOfferPublicationGate({
   offerType,
   value,
   onConfirmAllChange,
+  onPoliciesChange,
 }: HorseOfferPublicationGateProps) {
   const { language, r } = useMarketplaceTranslation();
+  const { t: horseText } = useV2Translation(horsePublicationMessages);
   const policyStatus =
     useHorseOfferPublicationPolicyStatus();
   const [policyAcceptanceConfirmed,
@@ -446,6 +452,13 @@ HorseOfferPublicationGate({
       missingPolicyCount > 0
       || unexpectedPolicyCount > 0
     );
+
+  useEffect(() => {
+    const complete = policyStatus.phase === "ready" && policyStatus.policies.length === POLICY_REQUIREMENTS.length
+      && POLICY_REQUIREMENTS.every(requirement => policyStatus.policies.filter(policy => policy.policyKey === requirement.key && policy.accepted).length === 1);
+    onPoliciesChange?.(complete ? policyStatus.policies.map(policy => ({documentId: policy.policyDocumentId,
+      version: policy.policyVersion, contentHash: policy.contentHash, accepted: true as const})) : null);
+  }, [policyStatus.phase, policyStatus.policies, onPoliciesChange]);
 
   const showPolicyRetry =
     policyStatus.phase === "error"
@@ -559,6 +572,10 @@ HorseOfferPublicationGate({
           >
             {r(policySummary)}
           </p>
+          <button type="button" disabled={policyStatus.phase === "loading" || policyStatus.isAccepting}
+            onClick={policyStatus.retry} className="mt-3 rounded-full border border-neutral-300 bg-white px-4 py-2 text-xs font-black disabled:opacity-40">
+            {horseText("refreshPolicies")}
+          </button>
 
           {r(policyStatus.phase === "ready"
           && !incompleteReadyResponse
@@ -779,11 +796,11 @@ HorseOfferPublicationGate({
         </span>
 
         <span className="shrink-0 text-xs font-black uppercase tracking-[0.12em]">
-          {r(marketplaceMessage("horse.publishing_is_not_connected.088158"))}</span>
+          {progress.complete ? horseText("ready") : ""}</span>
       </div>
 
       <p className="mt-4 rounded-[20px] border border-neutral-200 bg-[#fbfbfa] px-4 py-3 text-xs leading-5 text-neutral-500">
-        {r(marketplaceMessage("horse.this_step_saves_only_the_authenticated_user_s.5909d7"))}</p>
+        {horseText("reviewBeforePublish")}</p>
     </section>
   );
 }

@@ -1,4 +1,5 @@
 import { contactFail, type ConversationActor } from "./listingContact";
+import { horseMediaUrl, horseUuid } from "../../horse-offer/model/publicHorse";
 import type { ListingMessageCard } from "./listingMessageCards";
 import { messageRecord as record, messageUuid as uuid, messageId as id, messageText, messageLabel as label,
   messageInstant as instant, messageCursor } from "./messagingValidation";
@@ -8,6 +9,11 @@ import type { GetMessageThreadCommand, ListMessageThreadsCommand, SendMessageCom
   MarkThreadReadReceipt, HideThreadReceipt, SetThreadBlockedReceipt } from "./messaging";
 
 const actorKeys = ["schema_version", "actor_user_id", "identity_id"] as const;
+function isHorseCard(value: unknown): boolean {
+  if (!value || typeof value !== "object") return false;
+  const descriptor = Object.getOwnPropertyDescriptor(value, "content_type");
+  return !!descriptor && "value" in descriptor && descriptor.value === "horse_offer";
+}
 function actor(r: Record<string, unknown>, c: ConversationActor) {
   if (r.schema_version !== 2 || r.actor_user_id !== c.expectedUserId || r.identity_id !== c.expectedIdentityId) contactFail("response");
 }
@@ -18,6 +24,11 @@ function identity(value: unknown): MessageIdentity {
 }
 function card(value: unknown): ListingMessageCard | null {
   if (value === null) return null;
+  if (isHorseCard(value)) {
+    const r = record(value, ["content_type", "id", "title", "image", "price"], "response");
+    if (!horseUuid(r.id) || !label(r.title, 2000) || (r.image !== null && !horseMediaUrl(r.image)) || !label(r.price, 2000)) return contactFail("response");
+    return Object.freeze({ ...r }) as ListingMessageCard;
+  }
   const r = record(value, ["id", "title", "image", "price"], "response");
   if (!id(r.id) || !label(r.title, 2000) || !label(r.image, 4096) || !label(r.price, 2000)) return contactFail("response");
   return Object.freeze({ ...r }) as ListingMessageCard;
@@ -42,8 +53,9 @@ export function parseMessageThread(value: unknown, c: GetMessageThreadCommand): 
     return contactFail("response");
   let listing: MessageThread["listing"] = null;
   if (r.listing !== null) {
-    const s = record(r.listing, ["id", "title"], "response");
-    if (!id(s.id) || !label(s.title, 2000)) return contactFail("response");
+    const horse = isHorseCard(r.listing);
+    const s = record(r.listing, horse ? ["id", "title", "content_type"] : ["id", "title"], "response");
+    if (!(horse ? horseUuid(s.id) : id(s.id)) || !label(s.title, 2000)) return contactFail("response");
     listing = Object.freeze({ ...s }) as NonNullable<MessageThread["listing"]>;
   }
   let last = BigInt(0);

@@ -16,7 +16,7 @@ export const listingCreateMessages = {
     "checkingIdentity": "Checking the active identity…",
     "checkIdentity": "Check identity again",
     "identityUnavailable": "Could not verify the active identity or publication recovery data. Try again; the identity drafts on this page are preserved.",
-    "horseDraftExplanation": "You can save the horse form text and details as a private draft. Photos are not uploaded and the listing is not published here yet.",
+    "horseDraftExplanation": "Complete the horse details, add photos and publish the listing. You can edit it later in My Area.",
     "publicationExplanation": "Enter the listing details, choose photos and confirm publication. Photos are checked before the listing becomes public.",
     "previewOnlyExplanation": "You can enter ordinary listing details and preview photos here. Publication is not connected yet; the input stays in this open form and is lost if you refresh.",
     "ordinaryListing": "Ordinary listing",
@@ -164,7 +164,7 @@ export const listingCreateMessages = {
     "unknownError": "Could not complete this action. Check the details and try again.",
     "decimalPlaces": " Allowed decimal places: {count}.",
     "horseModeSelected": "Horse mode selected",
-    "horseModeHelp": "Continue in the same form with horse details and the confirmations required for the offer type. The current form saves a private draft; publication is not connected yet."
+    "horseModeHelp": "Complete the horse details and the confirmations for your offer type, then publish. The listing can be edited later in My Area."
   },
   "et": {
     "addListing": "Lisa kuulutus",
@@ -180,7 +180,7 @@ export const listingCreateMessages = {
     "checkingIdentity": "Kontrollin aktiivset identiteeti…",
     "checkIdentity": "Kontrolli identiteeti uuesti",
     "identityUnavailable": "Aktiivset identiteeti või avaldamise taastamise võtmeid ei saanud kontrollida. Proovi uuesti; selle lehe identiteetide mustandid jäävad alles.",
-    "horseDraftExplanation": "Hobusevormi teksti ja andmeid saab soovi korral salvestada privaatse mustandina. Pilte veel ei laadita üles ning kuulutust siin veel ei avaldata.",
+    "horseDraftExplanation": "Täida hobuse andmed, lisa fotod ja avalda kuulutus. Hiljem saad seda muuta minu alal.",
     "publicationExplanation": "Täida kuulutuse andmed, vali pildid ja kinnita avaldamine. Pildid kontrollitakse enne kuulutuse avalikku nähtavust.",
     "previewOnlyExplanation": "Tavakuulutuse andmeid saab siin täita ja pilte eelvaadata. Avaldamine pole veel ühendatud; sisestus jääb ainult avatud vormi ega salvestu lehe värskendamisel.",
     "ordinaryListing": "Tavaline kuulutus",
@@ -328,7 +328,7 @@ export const listingCreateMessages = {
     "unknownError": "Toimingut ei saanud lõpetada. Kontrolli andmeid ja proovi uuesti.",
     "decimalPlaces": " Lubatud komakohti: {count}.",
     "horseModeSelected": "Hobuse režiim on valitud",
-    "horseModeHelp": "Jätka samas vormis hobuse andmete ja pakkumise liigile vastavate kinnitustega. Praegune vorm salvestab privaatse mustandi; avaldamine pole veel ühendatud."
+    "horseModeHelp": "Täida hobuse andmed ja pakkumise liigile vastavad kinnitused ning avalda kuulutus. Hiljem saad seda muuta minu alal."
   }
 } as const;
 

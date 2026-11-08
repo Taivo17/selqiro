@@ -1,0 +1,400 @@
+{
+  "schema_version": 1,
+  "suite": "horse-installation-guards",
+  "completed_at_utc": "2026-11-08T10:56:40+00:00",
+  "passed": 21,
+  "total": 21,
+  "files": {
+    "preflight.sql": "09d030c6f93525c1ba1cf44ffc7aab1d12dbd11cfd1b4aea0b0ea40f3d62cfec",
+    "apply.sql": "472962892212ba374da1469c6945a98003113825ed910e0b21694ba5e430314e",
+    "verify.sql": "09d030c6f93525c1ba1cf44ffc7aab1d12dbd11cfd1b4aea0b0ea40f3d62cfec",
+    "catalog-pins.json": "4e6a661d999acfc956f5fc5502886380d237bbcea9b78d447fd8f766b4a46465",
+    "source-pins.json": "82f3c1ae7105374b278ccf410f5d293010f1ef519837bfaec366cc3aee9253a8"
+  },
+  "scenarios": [
+    {
+      "case": "install_and_replay",
+      "passed": true,
+      "postgres": "PostgreSQL 17.5 on aarch64-unknown-linux-gnu, compiled by emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 3.1.74 (1092ec30a3fb1d46b1782ff1b4db5094d3d06ae5), 32-bit",
+      "installer": {
+        "current_user": "postgres",
+        "session_user": "postgres",
+        "rolsuper": false,
+        "rolcreaterole": true,
+        "rolcreatedb": true,
+        "rolbypassrls": true
+      },
+      "live_database": false,
+      "native_concurrency": false
+    },
+    {
+      "case": "unknown_function",
+      "passed": true,
+      "postgres": "PostgreSQL 17.5 on aarch64-unknown-linux-gnu, compiled by emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 3.1.74 (1092ec30a3fb1d46b1782ff1b4db5094d3d06ae5), 32-bit",
+      "installer": {
+        "current_user": "postgres",
+        "session_user": "postgres",
+        "rolsuper": false,
+        "rolcreaterole": true,
+        "rolcreatedb": true,
+        "rolbypassrls": true
+      },
+      "live_database": false,
+      "native_concurrency": false
+    },
+    {
+      "case": "unknown_authority",
+      "passed": true,
+      "postgres": "PostgreSQL 17.5 on aarch64-unknown-linux-gnu, compiled by emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 3.1.74 (1092ec30a3fb1d46b1782ff1b4db5094d3d06ae5), 32-bit",
+      "installer": {
+        "current_user": "postgres",
+        "session_user": "postgres",
+        "rolsuper": false,
+        "rolcreaterole": true,
+        "rolcreatedb": true,
+        "rolbypassrls": true
+      },
+      "live_database": false,
+      "native_concurrency": false
+    },
+    {
+      "case": "partial_schema",
+      "passed": true,
+      "postgres": "PostgreSQL 17.5 on aarch64-unknown-linux-gnu, compiled by emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 3.1.74 (1092ec30a3fb1d46b1782ff1b4db5094d3d06ae5), 32-bit",
+      "installer": {
+        "current_user": "postgres",
+        "session_user": "postgres",
+        "rolsuper": false,
+        "rolcreaterole": true,
+        "rolcreatedb": true,
+        "rolbypassrls": true
+      },
+      "live_database": false,
+      "native_concurrency": false
+    },
+    {
+      "case": "applied_acl_drift",
+      "passed": true,
+      "postgres": "PostgreSQL 17.5 on aarch64-unknown-linux-gnu, compiled by emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 3.1.74 (1092ec30a3fb1d46b1782ff1b4db5094d3d06ae5), 32-bit",
+      "installer": {
+        "current_user": "postgres",
+        "session_user": "postgres",
+        "rolsuper": false,
+        "rolcreaterole": true,
+        "rolcreatedb": true,
+        "rolbypassrls": true
+      },
+      "live_database": false,
+      "native_concurrency": false
+    },
+    {
+      "case": "writer_role_drift",
+      "passed": true,
+      "postgres": "PostgreSQL 17.5 on aarch64-unknown-linux-gnu, compiled by emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 3.1.74 (1092ec30a3fb1d46b1782ff1b4db5094d3d06ae5), 32-bit",
+      "installer": {
+        "current_user": "postgres",
+        "session_user": "postgres",
+        "rolsuper": false,
+        "rolcreaterole": true,
+        "rolcreatedb": true,
+        "rolbypassrls": true
+      },
+      "live_database": false,
+      "native_concurrency": false
+    },
+    {
+      "case": "canonical_schema_drift",
+      "passed": true,
+      "postgres": "PostgreSQL 17.5 on aarch64-unknown-linux-gnu, compiled by emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 3.1.74 (1092ec30a3fb1d46b1782ff1b4db5094d3d06ae5), 32-bit",
+      "installer": {
+        "current_user": "postgres",
+        "session_user": "postgres",
+        "rolsuper": false,
+        "rolcreaterole": true,
+        "rolcreatedb": true,
+        "rolbypassrls": true
+      },
+      "live_database": false,
+      "native_concurrency": false
+    },
+    {
+      "case": "atomic_rollback",
+      "passed": true,
+      "postgres": "PostgreSQL 17.5 on aarch64-unknown-linux-gnu, compiled by emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 3.1.74 (1092ec30a3fb1d46b1782ff1b4db5094d3d06ae5), 32-bit",
+      "installer": {
+        "current_user": "postgres",
+        "session_user": "postgres",
+        "rolsuper": false,
+        "rolcreaterole": true,
+        "rolcreatedb": true,
+        "rolbypassrls": true
+      },
+      "live_database": false,
+      "native_concurrency": false
+    },
+    {
+      "case": "retained_policy_baseline",
+      "passed": true,
+      "postgres": "PostgreSQL 17.5 on aarch64-unknown-linux-gnu, compiled by emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 3.1.74 (1092ec30a3fb1d46b1782ff1b4db5094d3d06ae5), 32-bit",
+      "installer": {
+        "current_user": "postgres",
+        "session_user": "postgres",
+        "rolsuper": false,
+        "rolcreaterole": true,
+        "rolcreatedb": true,
+        "rolbypassrls": true
+      },
+      "live_database": false,
+      "native_concurrency": false
+    },
+    {
+      "case": "policy_definition_drift",
+      "passed": true,
+      "postgres": "PostgreSQL 17.5 on aarch64-unknown-linux-gnu, compiled by emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 3.1.74 (1092ec30a3fb1d46b1782ff1b4db5094d3d06ae5), 32-bit",
+      "installer": {
+        "current_user": "postgres",
+        "session_user": "postgres",
+        "rolsuper": false,
+        "rolcreaterole": true,
+        "rolcreatedb": true,
+        "rolbypassrls": true
+      },
+      "live_database": false,
+      "native_concurrency": false
+    },
+    {
+      "case": "extra_private_policy",
+      "passed": true,
+      "postgres": "PostgreSQL 17.5 on aarch64-unknown-linux-gnu, compiled by emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 3.1.74 (1092ec30a3fb1d46b1782ff1b4db5094d3d06ae5), 32-bit",
+      "installer": {
+        "current_user": "postgres",
+        "session_user": "postgres",
+        "rolsuper": false,
+        "rolcreaterole": true,
+        "rolcreatedb": true,
+        "rolbypassrls": true
+      },
+      "live_database": false,
+      "native_concurrency": false
+    },
+    {
+      "case": "missing_public_writer_policy",
+      "passed": true,
+      "postgres": "PostgreSQL 17.5 on aarch64-unknown-linux-gnu, compiled by emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 3.1.74 (1092ec30a3fb1d46b1782ff1b4db5094d3d06ae5), 32-bit",
+      "installer": {
+        "current_user": "postgres",
+        "session_user": "postgres",
+        "rolsuper": false,
+        "rolcreaterole": true,
+        "rolcreatedb": true,
+        "rolbypassrls": true
+      },
+      "live_database": false,
+      "native_concurrency": false
+    },
+    {
+      "case": "provider_baseline_and_defaults",
+      "passed": true,
+      "postgres": "PostgreSQL 17.5 on aarch64-unknown-linux-gnu, compiled by emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 3.1.74 (1092ec30a3fb1d46b1782ff1b4db5094d3d06ae5), 32-bit",
+      "installer": {
+        "current_user": "postgres",
+        "session_user": "postgres",
+        "rolsuper": false,
+        "rolcreaterole": true,
+        "rolcreatedb": true,
+        "rolbypassrls": true
+      },
+      "live_database": false,
+      "native_concurrency": false
+    },
+    {
+      "case": "retained_helper_acl_grantee",
+      "passed": true,
+      "postgres": "PostgreSQL 17.5 on aarch64-unknown-linux-gnu, compiled by emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 3.1.74 (1092ec30a3fb1d46b1782ff1b4db5094d3d06ae5), 32-bit",
+      "installer": {
+        "current_user": "postgres",
+        "session_user": "postgres",
+        "rolsuper": false,
+        "rolcreaterole": true,
+        "rolcreatedb": true,
+        "rolbypassrls": true
+      },
+      "live_database": false,
+      "native_concurrency": false
+    },
+    {
+      "case": "retained_helper_acl_grant_option",
+      "passed": true,
+      "postgres": "PostgreSQL 17.5 on aarch64-unknown-linux-gnu, compiled by emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 3.1.74 (1092ec30a3fb1d46b1782ff1b4db5094d3d06ae5), 32-bit",
+      "installer": {
+        "current_user": "postgres",
+        "session_user": "postgres",
+        "rolsuper": false,
+        "rolcreaterole": true,
+        "rolcreatedb": true,
+        "rolbypassrls": true
+      },
+      "live_database": false,
+      "native_concurrency": false
+    },
+    {
+      "case": "retained_policy_acl_grant_option",
+      "passed": true,
+      "postgres": "PostgreSQL 17.5 on aarch64-unknown-linux-gnu, compiled by emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 3.1.74 (1092ec30a3fb1d46b1782ff1b4db5094d3d06ae5), 32-bit",
+      "installer": {
+        "current_user": "postgres",
+        "session_user": "postgres",
+        "rolsuper": false,
+        "rolcreaterole": true,
+        "rolcreatedb": true,
+        "rolbypassrls": true
+      },
+      "live_database": false,
+      "native_concurrency": false
+    },
+    {
+      "case": "retained_function_overload",
+      "passed": true,
+      "postgres": "PostgreSQL 17.5 on aarch64-unknown-linux-gnu, compiled by emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 3.1.74 (1092ec30a3fb1d46b1782ff1b4db5094d3d06ae5), 32-bit",
+      "installer": {
+        "current_user": "postgres",
+        "session_user": "postgres",
+        "rolsuper": false,
+        "rolcreaterole": true,
+        "rolcreatedb": true,
+        "rolbypassrls": true
+      },
+      "live_database": false,
+      "native_concurrency": false
+    },
+    {
+      "case": "writer_bootstrap_inherit",
+      "passed": true,
+      "postgres": "PostgreSQL 17.5 on aarch64-unknown-linux-gnu, compiled by emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 3.1.74 (1092ec30a3fb1d46b1782ff1b4db5094d3d06ae5), 32-bit",
+      "installer": {
+        "current_user": "postgres",
+        "session_user": "postgres",
+        "rolsuper": false,
+        "rolcreaterole": true,
+        "rolcreatedb": true,
+        "rolbypassrls": true
+      },
+      "live_database": false,
+      "native_concurrency": false
+    },
+    {
+      "case": "writer_bootstrap_set",
+      "passed": true,
+      "postgres": "PostgreSQL 17.5 on aarch64-unknown-linux-gnu, compiled by emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 3.1.74 (1092ec30a3fb1d46b1782ff1b4db5094d3d06ae5), 32-bit",
+      "installer": {
+        "current_user": "postgres",
+        "session_user": "postgres",
+        "rolsuper": false,
+        "rolcreaterole": true,
+        "rolcreatedb": true,
+        "rolbypassrls": true
+      },
+      "live_database": false,
+      "native_concurrency": false
+    },
+    {
+      "case": "writer_bootstrap_admin",
+      "passed": true,
+      "postgres": "PostgreSQL 17.5 on aarch64-unknown-linux-gnu, compiled by emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 3.1.74 (1092ec30a3fb1d46b1782ff1b4db5094d3d06ae5), 32-bit",
+      "installer": {
+        "current_user": "postgres",
+        "session_user": "postgres",
+        "rolsuper": false,
+        "rolcreaterole": true,
+        "rolcreatedb": true,
+        "rolbypassrls": true
+      },
+      "live_database": false,
+      "native_concurrency": false
+    },
+    {
+      "case": "writer_bootstrap_grantor",
+      "passed": true,
+      "postgres": "PostgreSQL 17.5 on aarch64-unknown-linux-gnu, compiled by emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 3.1.74 (1092ec30a3fb1d46b1782ff1b4db5094d3d06ae5), 32-bit",
+      "installer": {
+        "current_user": "postgres",
+        "session_user": "postgres",
+        "rolsuper": false,
+        "rolcreaterole": true,
+        "rolcreatedb": true,
+        "rolbypassrls": true
+      },
+      "live_database": false,
+      "native_concurrency": false
+    }
+  ],
+  "execution_mode": "19 unchanged passed scenarios plus targeted continuation of one corrected negative setup and one remaining scenario",
+  "execution_batches": [
+    {
+      "passed": 19,
+      "cases": [
+        "install_and_replay",
+        "unknown_function",
+        "unknown_authority",
+        "partial_schema",
+        "applied_acl_drift",
+        "writer_role_drift",
+        "canonical_schema_drift",
+        "atomic_rollback",
+        "retained_policy_baseline",
+        "policy_definition_drift",
+        "extra_private_policy",
+        "missing_public_writer_policy",
+        "provider_baseline_and_defaults",
+        "retained_helper_acl_grantee",
+        "retained_helper_acl_grant_option",
+        "retained_policy_acl_grant_option",
+        "retained_function_overload",
+        "writer_bootstrap_inherit",
+        "writer_bootstrap_set"
+      ],
+      "log_sha256": "0f4dd4b4eeadfc70e71ad88b7f8cdaa2addf9aa76b29a5e962cd04e22f01dbd1",
+      "input_sha256": {
+        "preflight.sql": "09d030c6f93525c1ba1cf44ffc7aab1d12dbd11cfd1b4aea0b0ea40f3d62cfec",
+        "apply.sql": "472962892212ba374da1469c6945a98003113825ed910e0b21694ba5e430314e",
+        "verify.sql": "09d030c6f93525c1ba1cf44ffc7aab1d12dbd11cfd1b4aea0b0ea40f3d62cfec",
+        "catalog-pins.json": "4e6a661d999acfc956f5fc5502886380d237bbcea9b78d447fd8f766b4a46465",
+        "source-pins.json": "82f3c1ae7105374b278ccf410f5d293010f1ef519837bfaec366cc3aee9253a8",
+        "tests/fixture.mjs": "1c0941d4eefa06ad080002b8cc459f4b51509fe6eba29ecc54333e903a0873fa",
+        "tests/provider-pglite.mjs": "4034b554de08c8a2523ceda6f2f9b6df34f6a0196d067b3f633d1b3b80a91c1e",
+        "tests/public-contact-fixture.mjs": "e35ce8028b150413d8eb2ed4e4ed1efe08aa9f911956b0575ee600f0d534b622",
+        "tests/installation-case.mjs": "0b25c1ce57cd9289e7bcc54d6dad71d0a7d3760bb1c5b14966a7fca2282e94d6",
+        "tests/installation.mjs": "440a2265322973a7f8a376a3b6f6ed384003da6099d900485fa0b13b8aefa7e5"
+      },
+      "input_hash_provenance": "First two test-script bodies reconstructed from the exact subsequent single-case edit; other listed inputs unchanged between batches.",
+      "stopped_reason": "PostgreSQL rejected impossible test setup ADMIN grant back to own grantor before the guard ran; not a production or guard failure."
+    },
+    {
+      "passed": 2,
+      "cases": [
+        "writer_bootstrap_admin",
+        "writer_bootstrap_grantor"
+      ],
+      "log_sha256": "bf33016320ff21b976da1e403ff16a127733ee33c0726a6d1ad79982278b103a",
+      "input_sha256": {
+        "preflight.sql": "09d030c6f93525c1ba1cf44ffc7aab1d12dbd11cfd1b4aea0b0ea40f3d62cfec",
+        "apply.sql": "472962892212ba374da1469c6945a98003113825ed910e0b21694ba5e430314e",
+        "verify.sql": "09d030c6f93525c1ba1cf44ffc7aab1d12dbd11cfd1b4aea0b0ea40f3d62cfec",
+        "catalog-pins.json": "4e6a661d999acfc956f5fc5502886380d237bbcea9b78d447fd8f766b4a46465",
+        "source-pins.json": "82f3c1ae7105374b278ccf410f5d293010f1ef519837bfaec366cc3aee9253a8",
+        "tests/fixture.mjs": "1c0941d4eefa06ad080002b8cc459f4b51509fe6eba29ecc54333e903a0873fa",
+        "tests/provider-pglite.mjs": "4034b554de08c8a2523ceda6f2f9b6df34f6a0196d067b3f633d1b3b80a91c1e",
+        "tests/public-contact-fixture.mjs": "e35ce8028b150413d8eb2ed4e4ed1efe08aa9f911956b0575ee600f0d534b622",
+        "tests/installation-case.mjs": "e0196d1bdb83e79f3e4a0e403f266520b14fd32bde5324ce44e8b0a815ee0509",
+        "tests/installation.mjs": "6194ff4353c7dd8854f462bd20735c32af6bd9d06cde50dc110005c9ed2c6c8c"
+      },
+      "corrected_case": "writer_bootstrap_admin",
+      "correction": "Revoke bootstrap ADMIN OPTION with dependent membership CASCADE, restore ordinary installer and assert strict actor_roles rejection."
+    }
+  ],
+  "limitations": [
+    "Disposable PostgreSQL/WASM only; live installation is gated by generated preflight before mutation.",
+    "No live database, native concurrent lock scheduling, Mac installer run or Vercel deployment is claimed.",
+    "The21 passing scenarios were checked in two explicitly recorded batches; this is not a claim of one unchanged full-suite run."
+  ]
+}

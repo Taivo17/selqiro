@@ -5,12 +5,16 @@ import { useState } from "react";
 import type { useOrdinaryPublication } from "../model/useOrdinaryPublication";
 import { useListingCreateDraft } from "../model/useListingCreateDraft";
 import type { ListingCreateDraftEntry } from "../model/listingCreateDrafts";
-import { useHorseOfferDraftSave } from "../model/useHorseOfferDraftSave";
+import { buildHorseOfferDraftSaveInput } from "../model/horseOfferDraftSave";
+import { useHorsePublication } from "../../horse-publication/model/useHorsePublication";
+import { horsePublicationMessages } from "../../horse-publication/model/horsePublicationMessages";
+import HorsePublicationAction from "../../horse-publication/components/HorsePublicationAction";
+import type { HorsePolicySnapshot } from "../../../entities/horse-offer/model/publication";
 import { getListingCreateTextGuidance } from "../model/listingCreateTextGuidance";
 import { getLiveAnimalOfferCapability, LIVE_ANIMAL_SPECIES } from "../model/liveAnimalOfferCapabilities";
 import { applyHorseOfferPriceFieldChange } from "../model/horseOfferPriceFields";
 import { applyHorseOfferLocationFieldChange } from "../model/horseOfferLocationFields";
-import { applyHorseOfferPublicationConfirmationGroupChange, createHorseOfferPublicationConfirmationState } from "../model/horseOfferPublicationGate";
+import { applyHorseOfferPublicationConfirmationGroupChange, createHorseOfferPublicationConfirmationState, getHorseOfferPublicationConfirmationProgress } from "../model/horseOfferPublicationGate";
 import OrdinaryPublicationAction from "./OrdinaryPublicationAction";
 import OrdinaryListingFields from "./OrdinaryListingFields";
 import ListingCreateContentTypeSelector from "./ListingCreateContentTypeSelector";
@@ -20,9 +24,7 @@ import HorseOfferUseFields from "./HorseOfferUseFields";
 import HorseOfferDisclosureFields from "./HorseOfferDisclosureFields";
 import HorseOfferPriceFields from "./HorseOfferPriceFields";
 import HorseOfferLocationFields from "./HorseOfferLocationFields";
-import HorseOfferDraftSaveAction from "./HorseOfferDraftSaveAction";
 import HorseOfferPublicationGate from "./HorseOfferPublicationGate";
-import ListingCreateAiAnalysisCard from "./ListingCreateAiAnalysisCard";
 import ListingCreateTextFields from "./ListingCreateTextFields";
 import ListingCreateImageFields from "./ListingCreateImageFields";
 
@@ -58,29 +60,24 @@ export default function ListingCreateIdentityForm({ userId, entry, publication }
       language
     );
 
-  const horseOfferDraftSave =
-    useHorseOfferDraftSave(
-      userId,
-      horseMode && horseOfferType
-        ? {
-            offerType: horseOfferType,
-            title: title.value,
-            description:
-              description.value,
-            basicFields:
-              horseOfferFields,
-            useFields:
-              horseOfferUseFields,
-            disclosureFields:
-              horseOfferDisclosureFields,
-            priceFields:
-              horseOfferPriceFields,
-            locationFields:
-              horseOfferLocationFields,
-          }
-        : null,
-      { session: entry.horseSession, ready: publication.contextReady, canAct: () => publication.canAct(entry.actor) }
-    );
+  const { t: horseText } = useV2Translation(horsePublicationMessages);
+  const [policies, setPolicies] = useState<readonly HorsePolicySnapshot[] | null>(null);
+  const [horseError, setHorseError] = useState("");
+  const horsePublication = useHorsePublication(entry.actor, null, publication.ownsForm(entry.actor),
+    () => publication.ownsForm(entry.actor));
+  const horseLocked = horsePublication.view.phase !== "editing";
+  const submitHorse = () => {
+    if (!horseOfferType || !policies || !horsePublication.session || !publication.canAct(entry.actor)) return;
+    setHorseError("");
+    try {
+      const content = buildHorseOfferDraftSaveInput({offerType: horseOfferType, title: title.value, description: description.value,
+        basicFields: horseOfferFields, useFields: horseOfferUseFields, disclosureFields: horseOfferDisclosureFields,
+        priceFields: horseOfferPriceFields, locationFields: horseOfferLocationFields});
+      void horsePublication.session.start({content, expectedRevision: null,
+        gallery: files.map((file, index) => ({file, isPrimary: index === 0})),
+        confirmations: horseOfferPublicationConfirmations, policySnapshot: policies}, entry.captureSubmission());
+    } catch { setHorseError("checkDetails"); }
+  };
 
   return (
     <div
@@ -113,7 +110,7 @@ export default function ListingCreateIdentityForm({ userId, entry, publication }
 
           <p className="mt-5 rounded-2xl border border-amber-200 bg-white/70 px-4 py-3 text-xs leading-5 text-amber-950/75">
             {horseMode
-              ? t("horseDraftExplanation")
+              ? horseText("explanation")
               : publication.enabled
                 ? t("publicationExplanation")
                 : t("previewOnlyExplanation")}
@@ -128,7 +125,7 @@ export default function ListingCreateIdentityForm({ userId, entry, publication }
 
       <fieldset className="min-w-0 space-y-6"
         hidden={!horseMode && publication.enabled && publication.view.phase !== "editing"}
-        disabled={!publication.contextReady || (!horseMode && publication.enabled && (publicationSubmitting || publication.view.phase !== "editing"))}>
+        disabled={!publication.contextReady || (horseMode && horseLocked) || (!horseMode && publication.enabled && (publicationSubmitting || publication.view.phase !== "editing"))}>
       <ListingCreateContentTypeSelector
         value={contentType}
         onChange={setContentType}
@@ -137,9 +134,9 @@ export default function ListingCreateIdentityForm({ userId, entry, publication }
       {horseMode ? (
         <HorseOfferTypeSelector
           value={horseOfferType}
-          disabled={horseOfferDraftSave.typeLocked}
+          disabled={horseLocked}
           onChange={(nextOfferType) => {
-            if (horseOfferDraftSave.typeLocked) return;
+            if (horseLocked) return;
             setHorseOfferType(
               nextOfferType
             );
@@ -155,16 +152,8 @@ export default function ListingCreateIdentityForm({ userId, entry, publication }
 
       {(!publication.enabled || horseMode || publication.view.phase === "editing") ? <ListingCreateImageFields files={files} setFiles={setFiles} /> : null}
 
-      {horseMode ? (
-        <ListingCreateAiAnalysisCard
-          contentType={contentType}
-          hasImage={files.length > 0}
-          hasTextContext={hasTextContext}
-        />
-      ) : (
-        <OrdinaryListingFields value={ordinaryFields} onChange={setOrdinaryFields}
-          title={title.value} description={description.value} />
-      )}
+      {!horseMode ? <OrdinaryListingFields value={ordinaryFields} onChange={setOrdinaryFields}
+        title={title.value} description={description.value} /> : null}
 
       {horseMode && horseOfferType ? (
         <HorseOfferBasicFields
@@ -289,11 +278,8 @@ export default function ListingCreateIdentityForm({ userId, entry, publication }
       ) : null}
 
       {horseMode && horseOfferType ? (
-        <HorseOfferDraftSaveAction controller={horseOfferDraftSave} />
-      ) : null}
-
-      {horseMode && horseOfferType ? (
         <HorseOfferPublicationGate
+          onPoliciesChange={setPolicies}
           offerType={horseOfferType}
           value={
             horseOfferPublicationConfirmations
@@ -309,6 +295,11 @@ export default function ListingCreateIdentityForm({ userId, entry, publication }
         />
       ) : null}
       </fieldset>
+      {(horseMode && horseOfferType) || horseLocked ? <HorsePublicationAction
+        session={horsePublication.session} view={horsePublication.view} ready={publication.contextReady}
+        canSubmit={horseMode && !!horseOfferType && !!policies && getHorseOfferPublicationConfirmationProgress(horseOfferType!, horseOfferPublicationConfirmations).complete}
+        onSubmit={submitHorse} localError={horseError}
+        onReset={requestKey => { entry.finishHorse(requestKey, horsePublication.view.phase === "published"); setHorseError(""); }} /> : null}
       {!horseMode && publication.enabled && ["needs_files", "resume"].includes(publication.view.phase)
         ? <fieldset disabled={publicationSubmitting || !publication.contextReady}><ListingCreateImageFields files={files} setFiles={setFiles} /></fieldset> : null}
       {!horseMode ? <OrdinaryPublicationAction controller={publication} fields={ordinaryFields} title={title.value}

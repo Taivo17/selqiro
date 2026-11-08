@@ -9,7 +9,7 @@ import { createHorseOfferLocationFieldState } from "./horseOfferLocationFields";
 import { createHorseOfferPublicationConfirmationState } from "./horseOfferPublicationGate";
 import type { HorseOfferType } from "./horseOfferType";
 
-/** Private, in-memory values. Files and text never go into the recovery journal. */
+/** Editable values stay in memory. Publication captures a separate immutable horse intent for recovery; image bytes stay in memory. */
 export function createListingCreateDraft() {
   return {
     contentType: DEFAULT_LISTING_CREATE_CONTENT_TYPE as ListingCreateContentType,

@@ -47,6 +47,15 @@ export class ListingCreateDraftEntry {
         files: fresh.files, ordinaryFields: fresh.ordinaryFields } : this.snapshot.value });
     return true;
   }
+  finishHorse(requestKey: string, published: boolean) {
+    if (this.snapshot.submittedRequestKey !== requestKey) return false;
+    const owned = this.snapshot.value.contentType === "horse_offer" && this.snapshot.value === this.submittedValue;
+    this.submittedValue = null;
+    const fresh = createListingCreateDraft();
+    this.set({...this.snapshot, submittedRequestKey: null, generation: this.snapshot.generation + 1,
+      value: published && owned ? {...fresh, contentType: "horse_offer", horseOfferType: this.snapshot.value.horseOfferType} : this.snapshot.value});
+    return true;
+  }
   close() { this.closed = true; this.horseSession.authChanged(null); this.horseSession.deactivate(); this.listeners.clear(); }
 }
 

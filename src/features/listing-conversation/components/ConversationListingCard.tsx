@@ -8,13 +8,15 @@ import { messagesUiMessages } from "@/lib/i18n/catalogs/messagesUi";
 import Link from "next/link";
 import { useState } from "react";
 import { safeListingCardImage, type ListingMessageCard } from "../../../entities/conversation/model/listingMessageCards";
+import { horseMediaUrl } from "../../../entities/horse-offer/model/publicHorse";
 
 export default function ConversationListingCard({ listing }: { listing: ListingMessageCard }) {
   const { t } = useV2Translation(messagesUiMessages);
 
-  const src = safeListingCardImage(listing.image);
+  const horse = listing.content_type === "horse_offer";
+  const src = horse ? horseMediaUrl(listing.image) : safeListingCardImage(listing.image);
   const [failedImage, setFailedImage] = useState<string | null>(null);
-  return <Link href={"/v2/listing/" + listing.id} prefetch={false}
+  return <Link href={(horse ? "/v2/horse-offer/" : "/v2/listing/") + listing.id} prefetch={false}
     className="flex min-w-0 items-center gap-3 rounded-xl border border-black/10 bg-white p-3 text-left hover:border-black/30 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700"
     aria-label={t("view_listing_2") + (listing.title || t("listing"))}>
     <span className="flex h-16 w-20 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-neutral-100 text-center text-xs text-neutral-500">

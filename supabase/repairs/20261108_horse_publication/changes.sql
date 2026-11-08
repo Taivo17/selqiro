@@ -1,0 +1,1379 @@
+-- COMPONENT 01_policy_schema.sql
+-- Horse offers remain canonical UUID records. This repair creates no listings.
+CREATE SCHEMA horse_publication_private;
+REVOKE ALL ON SCHEMA horse_publication_private FROM PUBLIC,anon,authenticated,service_role;
+ALTER DEFAULT PRIVILEGES IN SCHEMA horse_publication_private REVOKE EXECUTE ON FUNCTIONS FROM PUBLIC;
+
+CREATE TABLE horse_publication_private.commands (
+ attempt_id uuid PRIMARY KEY REFERENCES listing_publication_private.attempts(id) ON DELETE RESTRICT,
+ horse_offer_id uuid NOT NULL REFERENCES public.horse_offers(id) ON DELETE RESTRICT,
+ actor_user_id uuid NOT NULL REFERENCES public.profiles(id) ON DELETE RESTRICT,
+ identity_id uuid NOT NULL REFERENCES public.identities(id) ON DELETE RESTRICT,
+ request_key uuid NOT NULL,
+ base_revision bigint NOT NULL CHECK(base_revision>0),
+ proposed_content jsonb NOT NULL CHECK(jsonb_typeof(proposed_content)='object'),
+ gallery_intent jsonb NOT NULL CHECK(jsonb_typeof(gallery_intent)='array' AND jsonb_array_length(gallery_intent)<=10),
+ confirmation_snapshot jsonb NOT NULL CHECK(jsonb_typeof(confirmation_snapshot)='object'),
+ state text NOT NULL DEFAULT 'prepared' CHECK(state IN('prepared','published','cancelled')),
+ publication_event_id uuid REFERENCES public.horse_offer_publication_events(id) ON DELETE RESTRICT,
+ published_revision bigint,
+ created_at timestamptz NOT NULL DEFAULT clock_timestamp(),
+ UNIQUE(actor_user_id,request_key),
+ CHECK((state='published' AND publication_event_id IS NOT NULL AND published_revision IS NOT NULL)
+    OR (state IN('prepared','cancelled') AND publication_event_id IS NULL AND published_revision IS NULL))
+);
+CREATE TABLE horse_publication_private.closed_requests (
+ actor_user_id uuid NOT NULL REFERENCES public.profiles(id) ON DELETE RESTRICT,
+ identity_id uuid NOT NULL REFERENCES public.identities(id) ON DELETE RESTRICT,
+ request_key uuid NOT NULL CHECK(request_key<>'00000000-0000-0000-0000-000000000000'::uuid),
+ closed_at timestamptz NOT NULL DEFAULT clock_timestamp(),
+ PRIMARY KEY(actor_user_id,request_key)
+);
+CREATE TABLE horse_publication_private.gallery (
+ image_id uuid PRIMARY KEY REFERENCES public.horse_offer_images(id) ON DELETE CASCADE,
+ horse_offer_id uuid NOT NULL REFERENCES public.horse_offers(id) ON DELETE CASCADE,
+ attempt_id uuid NOT NULL REFERENCES listing_publication_private.attempts(id) ON DELETE RESTRICT,
+ slot_id uuid NOT NULL REFERENCES listing_publication_private.slots(id) ON DELETE RESTRICT,
+ object_id uuid NOT NULL REFERENCES listing_publication_private.objects(id) ON DELETE RESTRICT,
+ ready_id uuid NOT NULL,
+ web_sha256 bytea NOT NULL CHECK(octet_length(web_sha256)=32),
+ web_bytes integer NOT NULL CHECK(web_bytes BETWEEN 1 AND 4194304),
+ UNIQUE(attempt_id,slot_id)
+);
+ALTER TABLE horse_publication_private.commands ENABLE ROW LEVEL SECURITY;
+ALTER TABLE horse_publication_private.closed_requests ENABLE ROW LEVEL SECURITY;
+ALTER TABLE horse_publication_private.gallery ENABLE ROW LEVEL SECURITY;
+REVOKE ALL ON ALL TABLES IN SCHEMA horse_publication_private FROM PUBLIC,anon,authenticated,service_role;
+GRANT USAGE ON SCHEMA horse_publication_private TO selqiro_listing_final_writer_v1;
+GRANT SELECT ON ALL TABLES IN SCHEMA horse_publication_private TO selqiro_listing_final_writer_v1;
+CREATE POLICY horse_command_writer_read ON horse_publication_private.commands FOR SELECT TO selqiro_listing_final_writer_v1 USING(true);
+CREATE POLICY horse_gallery_writer_read ON horse_publication_private.gallery FOR SELECT TO selqiro_listing_final_writer_v1 USING(true);
+CREATE POLICY horse_closed_writer_read ON horse_publication_private.closed_requests FOR SELECT TO selqiro_listing_final_writer_v1 USING(true);
+
+CREATE FUNCTION horse_publication_private.protect_command() RETURNS trigger
+LANGUAGE plpgsql SET search_path=pg_catalog,pg_temp AS $f$
+BEGIN
+ IF TG_OP='DELETE' OR OLD.state<>'prepared' OR NEW.state NOT IN('published','cancelled')
+  OR (to_jsonb(NEW)-ARRAY['state','publication_event_id','published_revision']) IS DISTINCT FROM
+     (to_jsonb(OLD)-ARRAY['state','publication_event_id','published_revision']) THEN
+  RAISE EXCEPTION 'horse_publication_receipt_immutable' USING ERRCODE='55000'; END IF;
+ RETURN NEW;
+END $f$;
+CREATE TRIGGER protect_horse_command BEFORE UPDATE OR DELETE ON horse_publication_private.commands
+ FOR EACH ROW EXECUTE FUNCTION horse_publication_private.protect_command();
+
+-- The canonical EE policy set is locked before recording or checking consent.
+-- Extra currently required horse terms fail closed until their UI is supported.
+CREATE FUNCTION horse_publication_private.current_policies() RETURNS jsonb
+LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,pg_temp AS $f$
+DECLARE result jsonb; t timestamptz;
+BEGIN
+ LOCK TABLE public.publication_policy_documents IN SHARE MODE;
+ t:=clock_timestamp();
+ SELECT jsonb_agg(jsonb_build_object('document_id',p.id,'version',p.policy_version,'content_hash',p.content_hash)
+  ORDER BY p.policy_key,p.id) INTO result
+ FROM public.publication_policy_documents p
+ WHERE p.status='active' AND p.locale='et-EE' AND 'horse_offer'=ANY(p.applies_to_content_types)
+  AND p.effective_from<=t AND (p.effective_until IS NULL OR p.effective_until>t)
+  AND ((p.policy_key='marketplace-general' AND p.country_code IS NULL)
+    OR (p.policy_key='horse-offer-ee' AND p.country_code='EE'));
+ IF coalesce(jsonb_array_length(result),0)<>2 OR EXISTS(
+  SELECT 1 FROM public.publication_policy_documents p
+  WHERE p.status='active' AND p.locale='et-EE' AND 'horse_offer'=ANY(p.applies_to_content_types)
+   AND (p.country_code IS NULL OR p.country_code='EE') AND p.requires_user_acceptance
+   AND p.effective_from<=t AND (p.effective_until IS NULL OR p.effective_until>t)
+   AND NOT EXISTS(SELECT 1 FROM jsonb_array_elements(result) x WHERE (x->>'document_id')::uuid=p.id)) THEN
+  RAISE EXCEPTION 'horse_offer_policy_unavailable' USING ERRCODE='55000'; END IF;
+ IF NOT EXISTS(SELECT 1 FROM public.publication_policy_documents p
+  WHERE p.id=(SELECT (x->>'document_id')::uuid FROM jsonb_array_elements(result) x
+   JOIN public.publication_policy_documents q ON q.id=(x->>'document_id')::uuid WHERE q.policy_key='horse-offer-ee')
+  AND p.metadata @> '{"market_country_code":"EE","horse_location_country_code":"EE","cross_border_flow":false,"ai_moderation_mode":"off"}'::jsonb
+  AND p.metadata->'supported_offer_types' @> '["sale","free_transfer","lease","co_rider","wanted"]'::jsonb) THEN
+  RAISE EXCEPTION 'horse_offer_policy_unavailable' USING ERRCODE='55000'; END IF;
+ RETURN result;
+END $f$;
+
+CREATE FUNCTION horse_publication_private.accept_shown_policies(p_user uuid,p_identity uuid,p_shown jsonb)
+RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,pg_temp AS $f$
+DECLARE required jsonb; shown jsonb; item jsonb; doc public.publication_policy_documents%ROWTYPE;
+BEGIN
+ required:=horse_publication_private.current_policies();
+ IF p_shown IS NULL OR jsonb_typeof(p_shown)<>'array' OR jsonb_array_length(p_shown)<>2 THEN
+  RAISE EXCEPTION 'horse_offer_policy_consent_required' USING ERRCODE='22023'; END IF;
+ FOR item IN SELECT value FROM jsonb_array_elements(p_shown) LOOP
+  IF jsonb_typeof(item)<>'object' OR item-'documentId'-'version'-'contentHash'-'accepted'<>'{}'::jsonb
+   OR item->'accepted' IS DISTINCT FROM 'true'::jsonb
+   OR jsonb_typeof(item->'documentId') IS DISTINCT FROM 'string'
+   OR jsonb_typeof(item->'version') IS DISTINCT FROM 'string'
+   OR item->>'contentHash' !~'^[0-9a-f]{64}$' THEN
+   RAISE EXCEPTION 'horse_offer_policy_consent_required' USING ERRCODE='22023'; END IF;
+ END LOOP;
+ SELECT jsonb_agg(jsonb_build_object('document_id',(x->>'documentId')::uuid,'version',x->>'version','content_hash',x->>'contentHash')
+  ORDER BY p.policy_key,p.id) INTO shown FROM jsonb_array_elements(p_shown) x
+  JOIN public.publication_policy_documents p ON p.id=(x->>'documentId')::uuid;
+ IF shown IS DISTINCT FROM required THEN RAISE EXCEPTION 'publication_policy_changed' USING ERRCODE='42501'; END IF;
+ FOR doc IN SELECT p.* FROM public.publication_policy_documents p
+  JOIN jsonb_array_elements(required) x ON p.id=(x->>'document_id')::uuid LOOP
+  INSERT INTO public.user_publication_policy_acceptances(user_id,identity_id,policy_document_id,
+   policy_key,policy_version,country_code,locale,content_hash,acceptance_source)
+  VALUES(p_user,p_identity,doc.id,doc.policy_key,doc.policy_version,doc.country_code,doc.locale,doc.content_hash,'publication_gate')
+  ON CONFLICT(user_id,policy_document_id) DO NOTHING;
+ END LOOP;
+ RETURN required;
+END $f$;
+
+CREATE FUNCTION horse_publication_private.require_policies() RETURNS jsonb
+LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,pg_temp AS $f$
+DECLARE required jsonb; actor uuid:=public.listing_actor_uid_hosted_v1(); item jsonb;
+BEGIN
+ IF actor IS NULL THEN RAISE EXCEPTION 'horse_offer_authentication_required' USING ERRCODE='42501'; END IF;
+ required:=horse_publication_private.current_policies();
+ FOR item IN SELECT value FROM jsonb_array_elements(required) LOOP
+  PERFORM 1 FROM public.user_publication_policy_acceptances a
+  WHERE a.user_id=actor AND a.policy_document_id=(item->>'document_id')::uuid
+   AND a.policy_version=item->>'version' AND a.content_hash=item->>'content_hash' FOR SHARE;
+  IF NOT FOUND THEN RAISE EXCEPTION 'horse_offer_policy_consent_required' USING ERRCODE='42501'; END IF;
+ END LOOP;
+ RETURN required;
+END $f$;
+
+CREATE FUNCTION horse_publication_private.confirmations(p_type text,p_input jsonb) RETURNS jsonb
+LANGUAGE plpgsql IMMUTABLE SET search_path=pg_catalog,pg_temp AS $f$
+DECLARE names text[]:=ARRAY['publisher_confirms_age_18_or_over','publisher_confirms_information_accurate',
+ 'publisher_accepts_transaction_responsibility','publisher_confirms_not_for_slaughter']; key text; result jsonb:='{}';
+BEGIN
+ IF p_input IS NULL OR jsonb_typeof(p_input)<>'object' OR octet_length(p_input::text)>2048 THEN
+  RAISE EXCEPTION 'horse_offer_confirmations_required' USING ERRCODE='22023'; END IF;
+ IF p_type<>'wanted' THEN names:=names||ARRAY['publisher_is_owner_or_authorized','publisher_confirms_horse_identified',
+  'publisher_confirms_passport_available']; END IF;
+ IF EXISTS(SELECT 1 FROM jsonb_object_keys(p_input) k WHERE k<>ALL(ARRAY[
+  'publisher_confirms_age_18_or_over','publisher_confirms_information_accurate','publisher_accepts_transaction_responsibility',
+  'publisher_confirms_not_for_slaughter','publisher_is_owner_or_authorized','publisher_confirms_horse_identified','publisher_confirms_passport_available'])) THEN
+  RAISE EXCEPTION 'horse_offer_confirmations_invalid' USING ERRCODE='22023'; END IF;
+ FOREACH key IN ARRAY names LOOP
+  IF p_input->key IS DISTINCT FROM 'true'::jsonb THEN
+   RAISE EXCEPTION 'horse_offer_confirmations_required' USING ERRCODE='22023'; END IF;
+  result:=result||jsonb_build_object(key,true);
+ END LOOP;
+ RETURN result;
+END $f$;
+
+-- COMPONENT 02_commands_prepare.sql
+CREATE FUNCTION horse_publication_private.normalize_content(p_existing public.horse_offers,p_content jsonb)
+RETURNS public.horse_offers LANGUAGE plpgsql SET search_path=pg_catalog,pg_temp AS $f$
+DECLARE n public.horse_offers:=p_existing; typ text; item record; target text; patch jsonb:='{}';
+ mappings constant jsonb:='{"title":"title","description":"description","priceAmount":"price_amount","priceType":"price_type",
+ "horseName":"horse_name","birthYear":"birth_year","sex":"sex","breed":"breed","color":"color","heightCm":"height_cm",
+ "discipline":"discipline","trainingLevel":"training_level","suitability":"suitability","healthNotes":"health_notes",
+ "behaviorNotes":"behavior_notes","city":"city","region":"region","recurringFeePeriod":"recurring_fee_period",
+ "wantedPreferredSex":"wanted_preferred_sex","wantedPreferredBreed":"wanted_preferred_breed",
+ "wantedPreferredDiscipline":"wanted_preferred_discipline","wantedPreferredTrainingLevel":"wanted_preferred_training_level",
+ "wantedIntendedUse":"wanted_intended_use","wantedHealthPreferences":"wanted_health_preferences",
+ "wantedBehaviorPreferences":"wanted_behavior_preferences","wantedBudgetMode":"wanted_budget_mode",
+ "wantedBudgetAmount":"wanted_budget_amount","wantedCity":"wanted_city","wantedRegion":"wanted_region"}'::jsonb;
+BEGIN
+ IF p_content IS NULL OR jsonb_typeof(p_content)<>'object' OR octet_length(p_content::text)>65536 THEN
+  RAISE EXCEPTION 'horse_offer_content_invalid' USING ERRCODE='22023'; END IF;
+ typ:=p_content->>'offerType';
+ IF typ IS NULL OR typ NOT IN('sale','free_transfer','lease','co_rider','wanted')
+  OR p_content->>'marketCountryCode' IS DISTINCT FROM 'EE'
+  OR p_content->>'horseLocationCountryCode' IS DISTINCT FROM 'EE'
+  OR p_content->>'currency' IS DISTINCT FROM 'EUR'
+  OR NOT(p_content ?& ARRAY['title','description']) THEN
+  RAISE EXCEPTION 'horse_offer_content_invalid' USING ERRCODE='22023'; END IF;
+ IF n.id IS NOT NULL AND n.offer_type IS DISTINCT FROM typ THEN
+  RAISE EXCEPTION 'horse_offer_type_immutable' USING ERRCODE='22023'; END IF;
+ IF n.id IS NULL THEN
+  n.offer_type:=typ; n.status:='draft'; n.market_country_code:='EE'; n.horse_location_country_code:='EE'; n.currency:='EUR';
+  n.title:=''; n.description:=''; n.price_type:=CASE WHEN typ='free_transfer' THEN 'free' ELSE 'contact' END;
+  n.details:=CASE WHEN typ='wanted' THEN
+   '{"schema_version":1,"branch":"wanted","wanted":{"budget":{"mode":"contact","currency":"EUR"},"search_area":{"country_code":"EE"}}}'::jsonb
+   ELSE '{"schema_version":1,"branch":"specific"}'::jsonb END;
+  IF typ IN('lease','co_rider') THEN n.details:=n.details||'{"recurring_fee":{"period":"agreed_period"}}'::jsonb; END IF;
+ END IF;
+ FOR item IN SELECT key,value FROM jsonb_each(p_content) LOOP
+  IF item.key=ANY(ARRAY['offerType','marketCountryCode','horseLocationCountryCode','currency','offerId']) THEN CONTINUE; END IF;
+  IF item.key=ANY(ARRAY['locationText','horseLat','horseLng']) THEN
+   IF item.value<>'null'::jsonb THEN RAISE EXCEPTION 'horse_offer_private_location_not_supported' USING ERRCODE='22023'; END IF;
+   CONTINUE;
+  END IF;
+  target:=mappings->>item.key;
+  IF target IS NULL THEN RAISE EXCEPTION 'horse_offer_content_field_invalid' USING ERRCODE='22023'; END IF;
+  IF (typ='wanted' AND NOT(target IN('title','description') OR target LIKE 'wanted\_%' ESCAPE '\'))
+   OR (typ<>'wanted' AND target LIKE 'wanted\_%' ESCAPE '\')
+   OR (typ NOT IN('lease','co_rider') AND target='recurring_fee_period') THEN
+   IF item.value<>'null'::jsonb AND NOT(target='wanted_budget_mode' AND item.value='"contact"'::jsonb)
+    AND NOT(typ='wanted' AND target='price_type' AND item.value='"contact"'::jsonb) THEN
+    RAISE EXCEPTION 'horse_offer_content_branch_invalid' USING ERRCODE='22023'; END IF;
+   CONTINUE;
+  END IF;
+  patch:=patch||jsonb_build_object(target,item.value);
+ END LOOP;
+ n:=public.apply_horse_offer_draft_patch_v1(n,patch);
+ IF length(btrim(n.title)) NOT BETWEEN 2 AND 140 OR length(btrim(n.description)) NOT BETWEEN 1 AND 5000
+  OR length(n.horse_name)>160 OR length(n.breed)>160 OR length(n.color)>120 OR length(n.discipline)>240
+  OR length(n.training_level)>500 OR length(n.suitability)>2000 OR length(n.health_notes)>3000
+  OR length(n.behavior_notes)>3000 OR length(n.city)>160 OR length(n.region)>160 THEN
+  RAISE EXCEPTION 'horse_offer_content_incomplete' USING ERRCODE='22023'; END IF;
+ IF (typ='free_transfer' AND (n.price_type<>'free' OR n.price_amount IS NOT NULL))
+  OR (typ<>'free_transfer' AND NOT((n.price_type='contact' AND n.price_amount IS NULL)
+   OR (n.price_type IN('fixed','from') AND n.price_amount IS NOT NULL))) THEN
+  RAISE EXCEPTION 'horse_offer_price_invalid' USING ERRCODE='22023'; END IF;
+ RETURN n;
+END $f$;
+
+CREATE FUNCTION horse_publication_private.normalize_gallery(p_offer uuid,p_identity uuid,p_input jsonb)
+RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,pg_temp AS $f$
+DECLARE item jsonb; result jsonb:='[]'; ids uuid[]:='{}'; image_key uuid; count_primary integer:=0; total_bytes bigint:=0;
+BEGIN
+ IF p_input IS NULL OR jsonb_typeof(p_input)<>'array' OR jsonb_array_length(p_input)>10 THEN
+  RAISE EXCEPTION 'publication_image_count_exceeded' USING ERRCODE='22023'; END IF;
+ FOR item IN SELECT value FROM jsonb_array_elements(p_input) LOOP
+  IF jsonb_typeof(item)<>'object' OR jsonb_typeof(item->'isPrimary') IS DISTINCT FROM 'boolean' THEN
+   RAISE EXCEPTION 'horse_offer_gallery_invalid' USING ERRCODE='22023'; END IF;
+  IF (item->>'isPrimary')::boolean THEN count_primary:=count_primary+1; END IF;
+  IF item ? 'imageId' THEN
+   IF item-'imageId'-'isPrimary'<>'{}'::jsonb OR jsonb_typeof(item->'imageId') IS DISTINCT FROM 'string' THEN
+    RAISE EXCEPTION 'horse_offer_gallery_invalid' USING ERRCODE='22023'; END IF;
+   image_key:=(item->>'imageId')::uuid;
+   IF NOT EXISTS(SELECT 1 FROM public.horse_offer_images i JOIN horse_publication_private.gallery g ON g.image_id=i.id
+    WHERE i.id=image_key AND i.horse_offer_id=p_offer AND i.identity_id=p_identity AND g.horse_offer_id=p_offer) THEN
+    RAISE EXCEPTION 'horse_offer_image_unavailable' USING ERRCODE='42501'; END IF;
+   item:=jsonb_build_object('imageId',image_key,'isPrimary',(item->>'isPrimary')::boolean);
+  ELSE
+   IF item-'clientFileId'-'byteLength'-'sha256'-'isPrimary'<>'{}'::jsonb
+    OR jsonb_typeof(item->'clientFileId') IS DISTINCT FROM 'string'
+    OR jsonb_typeof(item->'byteLength') IS DISTINCT FROM 'number'
+    OR (item->>'byteLength')::numeric NOT BETWEEN 1 AND 26214400
+    OR (item->>'byteLength')::numeric<>trunc((item->>'byteLength')::numeric)
+    OR jsonb_typeof(item->'sha256') IS DISTINCT FROM 'string'
+    OR item->>'sha256' !~'^[0-9a-f]{64}$' THEN
+    RAISE EXCEPTION 'horse_offer_gallery_invalid' USING ERRCODE='22023'; END IF;
+   image_key:=(item->>'clientFileId')::uuid;
+   total_bytes:=total_bytes+(item->>'byteLength')::bigint;
+   item:=jsonb_build_object('clientFileId',image_key,'byteLength',(item->>'byteLength')::integer,
+    'sha256',item->>'sha256','isPrimary',(item->>'isPrimary')::boolean);
+  END IF;
+  IF image_key IS NULL OR image_key='00000000-0000-0000-0000-000000000000'::uuid OR image_key=ANY(ids) THEN
+   RAISE EXCEPTION 'horse_offer_gallery_invalid' USING ERRCODE='22023'; END IF;
+  ids:=array_append(ids,image_key); result:=result||jsonb_build_array(item);
+ END LOOP;
+ IF (jsonb_array_length(result)>0 AND count_primary<>1) OR total_bytes>104857600 THEN
+  RAISE EXCEPTION 'horse_offer_gallery_invalid' USING ERRCODE='22023'; END IF;
+ RETURN result;
+END $f$;
+
+CREATE FUNCTION horse_publication_private.snapshot(p_attempt uuid) RETURNS jsonb
+LANGUAGE sql STABLE SECURITY DEFINER SET search_path=pg_catalog,pg_temp AS $f$
+ SELECT jsonb_build_object('schema_version',1,'content_type','horse_offer','state',c.state,
+  'actor_user_id',c.actor_user_id,'identity_id',c.identity_id,'request_key',c.request_key,
+  'attempt_id',c.attempt_id,'horse_offer_id',c.horse_offer_id,
+  'edit_revision',coalesce(c.published_revision,c.base_revision)::text,'publication_event_id',c.publication_event_id,
+  'slots',coalesce((SELECT jsonb_agg(jsonb_build_object('slot_id',s.id,'client_file_id',s.client_file_id,
+   'ordinal',s.ordinal,'expected_bytes',s.expected_source_bytes,'expected_sha256',encode(s.expected_source_sha256,'hex'))
+   ORDER BY s.ordinal) FROM listing_publication_private.slots s WHERE s.attempt_id=c.attempt_id),'[]'::jsonb))
+ FROM horse_publication_private.commands c WHERE c.attempt_id=p_attempt;
+$f$;
+
+CREATE FUNCTION public.get_my_horse_publication_attempt_v1(
+ p_expected_user_id uuid,p_expected_identity_id uuid,p_attempt_id uuid,p_request_key uuid)
+RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET lock_timeout='2s' AS $f$
+DECLARE c horse_publication_private.commands%ROWTYPE; closed_identity uuid;
+BEGIN
+ PERFORM listing_publication_private.require_actor(p_expected_user_id,p_expected_identity_id);
+ IF p_request_key IS NULL OR p_request_key='00000000-0000-0000-0000-000000000000'::uuid THEN
+  RAISE EXCEPTION 'publication_request_key_invalid' USING ERRCODE='22023'; END IF;
+ SELECT * INTO c FROM horse_publication_private.commands
+ WHERE actor_user_id=p_expected_user_id AND request_key=p_request_key FOR SHARE;
+ IF FOUND THEN
+  IF c.identity_id IS DISTINCT FROM p_expected_identity_id OR (p_attempt_id IS NOT NULL AND c.attempt_id<>p_attempt_id) THEN
+   RAISE EXCEPTION 'publication_request_conflict' USING ERRCODE='22023'; END IF;
+  RETURN horse_publication_private.snapshot(c.attempt_id);
+ END IF;
+ IF p_attempt_id IS NOT NULL THEN RAISE EXCEPTION 'horse_offer_attempt_unavailable' USING ERRCODE='42501'; END IF;
+ SELECT identity_id INTO closed_identity FROM horse_publication_private.closed_requests
+ WHERE actor_user_id=p_expected_user_id AND request_key=p_request_key;
+ IF FOUND AND closed_identity IS DISTINCT FROM p_expected_identity_id THEN
+  RAISE EXCEPTION 'publication_request_conflict' USING ERRCODE='22023'; END IF;
+ RETURN jsonb_build_object('schema_version',1,'content_type','horse_offer',
+  'state',CASE WHEN closed_identity IS NULL THEN 'not_found' ELSE 'cancelled' END,
+  'actor_user_id',p_expected_user_id,'identity_id',p_expected_identity_id,'request_key',p_request_key,
+  'attempt_id',NULL,'horse_offer_id',NULL,'edit_revision',NULL,'publication_event_id',NULL,'slots','[]'::jsonb);
+END $f$;
+
+CREATE FUNCTION public.prepare_my_horse_publication_v1(
+ p_expected_user_id uuid,p_expected_identity_id uuid,p_request_key uuid,p_offer_id uuid,p_expected_revision text,
+ p_content jsonb,p_gallery jsonb,p_confirmations jsonb,p_policy_snapshot jsonb)
+RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET lock_timeout='2s' AS $f$
+DECLARE c horse_publication_private.commands%ROWTYPE; current public.horse_offers%ROWTYPE; proposed public.horse_offers%ROWTYPE;
+ gallery jsonb; factual jsonb; policies jsonb; fingerprint bytea; prior listing_publication_private.attempts%ROWTYPE;
+ t timestamptz; reserved bigint; aid uuid; sid uuid; item record; new_count integer;
+BEGIN
+ PERFORM listing_publication_private.require_actor(p_expected_user_id,p_expected_identity_id);
+ IF p_request_key IS NULL OR p_request_key='00000000-0000-0000-0000-000000000000'::uuid
+  OR (p_offer_id IS NULL AND p_expected_revision IS NOT NULL)
+  OR (p_offer_id IS NOT NULL AND (p_expected_revision IS NULL OR p_expected_revision !~'^[1-9][0-9]{0,18}$'
+    OR p_expected_revision::numeric>9223372036854775807)) THEN
+  RAISE EXCEPTION 'horse_offer_command_invalid' USING ERRCODE='22023'; END IF;
+ IF coalesce(p_content->>'offerId','')<>coalesce(p_offer_id::text,'') THEN
+  RAISE EXCEPTION 'horse_offer_command_invalid' USING ERRCODE='22023'; END IF;
+ -- Raw input fingerprint makes retry exact, including confirmation/policy intent.
+ fingerprint:=sha256(convert_to('selqiro-horse-publication-v1:'||jsonb_build_object(
+  'offer',p_offer_id,'revision',p_expected_revision,'content',p_content,'gallery',p_gallery,
+  'confirmations',p_confirmations,'policies',p_policy_snapshot)::text,'UTF8'));
+ SELECT * INTO prior FROM listing_publication_private.attempts WHERE actor_user_id=p_expected_user_id AND request_key=p_request_key FOR UPDATE;
+ IF FOUND THEN
+  SELECT * INTO c FROM horse_publication_private.commands WHERE attempt_id=prior.id;
+  IF NOT FOUND OR prior.identity_id IS DISTINCT FROM p_expected_identity_id OR prior.intent_sha256 IS DISTINCT FROM fingerprint THEN
+   RAISE EXCEPTION 'publication_request_conflict' USING ERRCODE='22023'; END IF;
+  RETURN horse_publication_private.snapshot(prior.id);
+ END IF;
+ IF EXISTS(SELECT 1 FROM horse_publication_private.closed_requests WHERE actor_user_id=p_expected_user_id AND request_key=p_request_key) THEN
+  RAISE EXCEPTION 'publication_attempt_closed' USING ERRCODE='55000'; END IF;
+ IF p_offer_id IS NOT NULL THEN
+  SELECT * INTO current FROM public.horse_offers WHERE id=p_offer_id AND identity_id=p_expected_identity_id FOR UPDATE;
+  IF NOT FOUND THEN RAISE EXCEPTION 'horse_offer_unavailable' USING ERRCODE='42501'; END IF;
+  IF current.status NOT IN('draft','published','paused') THEN
+   RAISE EXCEPTION 'horse_offer_status_not_editable' USING ERRCODE='55000'; END IF;
+  IF current.edit_revision::text IS DISTINCT FROM p_expected_revision THEN
+   RAISE EXCEPTION 'horse_offer_edit_conflict' USING ERRCODE='40001'; END IF;
+ END IF;
+ proposed:=horse_publication_private.normalize_content(current,p_content);
+ factual:=horse_publication_private.confirmations(proposed.offer_type,p_confirmations);
+ gallery:=horse_publication_private.normalize_gallery(p_offer_id,p_expected_identity_id,p_gallery);
+ policies:=horse_publication_private.accept_shown_policies(p_expected_user_id,p_expected_identity_id,p_policy_snapshot);
+ t:=clock_timestamp();
+ IF (SELECT count(*) FROM listing_publication_private.attempts WHERE actor_user_id=p_expected_user_id AND state='open' AND expires_at>t)>=3 THEN
+  RAISE EXCEPTION 'publication_open_attempt_limit' USING ERRCODE='54000'; END IF;
+ IF (SELECT count(*) FROM listing_publication_private.attempts WHERE actor_user_id=p_expected_user_id AND created_at>t-interval '24 hours')>=20 THEN
+  RAISE EXCEPTION 'publication_daily_attempt_limit' USING ERRCODE='54000'; END IF;
+ SELECT count(*) INTO new_count FROM jsonb_array_elements(gallery) x WHERE x ? 'clientFileId';
+ SELECT coalesce(sum(o.reserved_bytes),0) INTO reserved FROM listing_publication_private.objects o
+ JOIN listing_publication_private.attempts a ON a.id=o.attempt_id
+ WHERE a.actor_user_id=p_expected_user_id AND NOT listing_publication_private.multipart_object_fully_deleted(o.id);
+ IF reserved+new_count::bigint*(26214400+4194304)>314572800 THEN
+  RAISE EXCEPTION 'publication_retained_bytes_limit' USING ERRCODE='54000'; END IF;
+ IF p_offer_id IS NULL THEN
+  INSERT INTO public.horse_offers(identity_id,created_by_user_id,updated_by_user_id,offer_type,status,market_country_code,
+   horse_location_country_code,title,description,price_amount,price_type,currency,horse_name,birth_year,sex,breed,color,height_cm,
+   discipline,training_level,suitability,health_notes,behavior_notes,city,region,details)
+  VALUES(p_expected_identity_id,p_expected_user_id,p_expected_user_id,proposed.offer_type,'draft','EE','EE',proposed.title,
+   proposed.description,proposed.price_amount,proposed.price_type,'EUR',proposed.horse_name,proposed.birth_year,proposed.sex,
+   proposed.breed,proposed.color,proposed.height_cm,proposed.discipline,proposed.training_level,proposed.suitability,
+   proposed.health_notes,proposed.behavior_notes,proposed.city,proposed.region,proposed.details) RETURNING * INTO current;
+ END IF;
+ INSERT INTO listing_publication_private.attempts(actor_user_id,identity_id,request_key,intent_sha256,payload,policy_snapshot,created_at,expires_at)
+ VALUES(p_expected_user_id,p_expected_identity_id,p_request_key,fingerprint,
+  jsonb_build_object('purpose','horse_publication','horse_offer_id',current.id),policies,t,t+interval '24 hours') RETURNING id INTO aid;
+ INSERT INTO horse_publication_private.commands(attempt_id,horse_offer_id,actor_user_id,identity_id,request_key,base_revision,
+  proposed_content,gallery_intent,confirmation_snapshot)
+ VALUES(aid,current.id,p_expected_user_id,p_expected_identity_id,p_request_key,current.edit_revision,to_jsonb(proposed),gallery,factual);
+ FOR item IN SELECT value,ordinality FROM jsonb_array_elements(gallery) WITH ORDINALITY LOOP
+  IF NOT(item.value ? 'clientFileId') THEN CONTINUE; END IF;
+  INSERT INTO listing_publication_private.slots(attempt_id,ordinal,client_file_id,expected_source_bytes,expected_source_sha256)
+  VALUES(aid,item.ordinality-1,(item.value->>'clientFileId')::uuid,(item.value->>'byteLength')::integer,
+   decode(item.value->>'sha256','hex')) RETURNING id INTO sid;
+  INSERT INTO listing_publication_private.objects(attempt_id,slot_id,kind,bucket_id,object_path,reserved_bytes)
+  VALUES(aid,sid,'source','listing-publication-private','v1/'||aid::text||'/'||sid::text||'/source.upload',26214400),
+   (aid,sid,'web','listing-publication-private','v1/'||aid::text||'/'||sid::text||'/web-v1.webp',4194304);
+ END LOOP;
+ IF horse_publication_private.require_policies() IS DISTINCT FROM policies THEN
+  RAISE EXCEPTION 'publication_policy_changed' USING ERRCODE='42501'; END IF;
+ RETURN horse_publication_private.snapshot(aid);
+END $f$;
+
+CREATE FUNCTION public.get_my_horse_offer_publication_snapshot_v1(
+ p_expected_user_id uuid,p_expected_identity_id uuid,p_offer_id uuid)
+RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,pg_temp AS $f$
+DECLARE result jsonb;
+BEGIN
+ PERFORM listing_publication_private.require_actor(p_expected_user_id,p_expected_identity_id);
+ SELECT s.offer||jsonb_build_object('edit_revision',s.edit_revision) INTO result
+ FROM public.get_my_horse_offer_edit_snapshot_v1(p_offer_id) s;
+ IF result IS NULL OR result->>'identity_id' IS DISTINCT FROM p_expected_identity_id::text THEN
+  RAISE EXCEPTION 'horse_offer_unavailable' USING ERRCODE='42501'; END IF;
+ result:=jsonb_set(result,'{images}',coalesce((SELECT jsonb_agg(
+  x||jsonb_build_object('url',replace(x->>'url','/api/v2/horse-media/','/api/v2/horse-owner-media/'),
+   'original_url',replace(x->>'original_url','/api/v2/horse-media/','/api/v2/horse-owner-media/'),
+   'medium_url',replace(x->>'medium_url','/api/v2/horse-media/','/api/v2/horse-owner-media/'),
+   'thumb_url',replace(x->>'thumb_url','/api/v2/horse-media/','/api/v2/horse-owner-media/')) ORDER BY ord)
+  FROM jsonb_array_elements(result->'images') WITH ORDINALITY e(x,ord)),'[]'::jsonb));
+ result:=result||jsonb_build_object('image_url',replace(result->>'image_url','/api/v2/horse-media/','/api/v2/horse-owner-media/'));
+ RETURN result;
+END $f$;
+
+CREATE FUNCTION public.cancel_my_horse_publication_v1(
+ p_expected_user_id uuid,p_expected_identity_id uuid,p_attempt_id uuid,p_request_key uuid)
+RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET lock_timeout='2s' AS $f$
+DECLARE c horse_publication_private.commands%ROWTYPE; a listing_publication_private.attempts%ROWTYPE; existing_identity uuid;
+BEGIN
+ PERFORM listing_publication_private.require_actor(p_expected_user_id,p_expected_identity_id);
+ IF p_request_key IS NULL OR p_request_key='00000000-0000-0000-0000-000000000000'::uuid THEN
+  RAISE EXCEPTION 'publication_request_key_invalid' USING ERRCODE='22023'; END IF;
+ SELECT * INTO a FROM listing_publication_private.attempts WHERE actor_user_id=p_expected_user_id AND request_key=p_request_key FOR UPDATE;
+ IF FOUND THEN
+  SELECT * INTO c FROM horse_publication_private.commands WHERE attempt_id=a.id FOR UPDATE;
+  IF NOT FOUND OR a.identity_id IS DISTINCT FROM p_expected_identity_id OR (p_attempt_id IS NOT NULL AND p_attempt_id<>a.id) THEN
+   RAISE EXCEPTION 'publication_request_conflict' USING ERRCODE='22023'; END IF;
+  IF c.state='published' THEN RETURN horse_publication_private.snapshot(a.id); END IF;
+  IF a.state='open' THEN PERFORM listing_publication_private.close_locked_attempt(a.id,'cancelled'); END IF;
+  IF c.state='prepared' THEN UPDATE horse_publication_private.commands SET state='cancelled' WHERE attempt_id=a.id; END IF;
+ ELSIF p_attempt_id IS NOT NULL THEN RAISE EXCEPTION 'horse_offer_attempt_unavailable' USING ERRCODE='42501'; END IF;
+ SELECT identity_id INTO existing_identity FROM horse_publication_private.closed_requests
+ WHERE actor_user_id=p_expected_user_id AND request_key=p_request_key;
+ IF FOUND AND existing_identity IS DISTINCT FROM p_expected_identity_id THEN
+  RAISE EXCEPTION 'publication_request_conflict' USING ERRCODE='22023'; END IF;
+ INSERT INTO horse_publication_private.closed_requests(actor_user_id,identity_id,request_key)
+ VALUES(p_expected_user_id,p_expected_identity_id,p_request_key) ON CONFLICT DO NOTHING;
+ RETURN public.get_my_horse_publication_attempt_v1(p_expected_user_id,p_expected_identity_id,p_attempt_id,p_request_key);
+END $f$;
+
+-- COMPONENT 03_finality.sql
+-- A public projection is valid only for the exact current event and gallery.
+CREATE FUNCTION horse_publication_private.is_public(p_offer uuid) RETURNS boolean
+LANGUAGE sql STABLE SECURITY DEFINER SET search_path=pg_catalog,pg_temp AS $f$
+ SELECT EXISTS(SELECT 1 FROM public.horse_offers h
+  JOIN public.horse_offer_publication_events e ON e.id=h.current_publication_event_id
+  WHERE h.id=p_offer AND h.status='published' AND h.published_at IS NOT NULL
+   AND (h.active_until IS NULL OR h.active_until>statement_timestamp())
+   AND e.horse_offer_id=h.id AND e.identity_id=h.identity_id AND e.decision='published'
+   AND e.content_snapshot=public.build_horse_offer_content_snapshot_v1(h.id)
+   AND e.content_hash=encode(sha256(convert_to(e.content_snapshot::text,'UTF8')),'hex')
+   AND NOT EXISTS(SELECT 1 FROM public.horse_offer_images i
+    LEFT JOIN horse_publication_private.gallery g ON g.image_id=i.id
+    LEFT JOIN listing_publication_private.web_images w ON w.slot_id=g.slot_id AND w.attempt_id=g.attempt_id
+    WHERE i.horse_offer_id=h.id AND (g.image_id IS NULL OR g.horse_offer_id<>h.id OR i.identity_id<>h.identity_id
+     OR w.state IS DISTINCT FROM 'ready' OR w.ready_id IS DISTINCT FROM g.ready_id
+     OR EXISTS(SELECT 1 FROM listing_publication_private.cleanup c WHERE c.object_id=g.object_id))));
+$f$;
+
+-- Ready is a durable DB receipt, but publication additionally checks exact live
+-- provider metadata and absence of unresolved upload witnesses, like listings.
+CREATE FUNCTION horse_publication_private.require_ready_image(p_attempt uuid,p_slot uuid)
+RETURNS listing_publication_private.web_images LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,pg_temp AS $f$
+DECLARE s listing_publication_private.slots%ROWTYPE; w listing_publication_private.web_images%ROWTYPE;
+BEGIN
+ SELECT * INTO s FROM listing_publication_private.slots WHERE id=p_slot AND attempt_id=p_attempt;
+ SELECT * INTO w FROM listing_publication_private.web_images WHERE slot_id=p_slot AND attempt_id=p_attempt;
+ IF s.id IS NULL OR w.id IS NULL OR w.state<>'ready' OR w.ready_id IS NULL OR w.ready_at IS NULL THEN
+  RAISE EXCEPTION 'publication_images_not_ready' USING ERRCODE='55000'; END IF;
+ PERFORM listing_publication_private.validate_managed_image_intent_v1(w.intent,s.id);
+ IF (SELECT count(*) FROM listing_publication_private.objects WHERE slot_id=s.id)<>2
+  OR EXISTS(SELECT 1 FROM listing_publication_private.objects o
+   LEFT JOIN listing_publication_private.multipart_sessions m ON m.object_id=o.id
+   WHERE o.slot_id=s.id AND (o.attempt_id<>p_attempt OR o.dispatch_key IS NOT NULL
+    OR m.id IS NULL OR m.provider_contract<>'supabase-s3-session-v1' OR m.state<>'completed'
+    OR m.completed_at IS NULL OR m.verified_at IS NULL OR m.problem IS NOT NULL
+    OR m.request_key IS DISTINCT FROM w.request_key OR m.storage_object_id IS NULL OR m.storage_version IS NULL
+    OR m.observed_sha256 IS DISTINCT FROM CASE WHEN o.kind='source' THEN encode(s.expected_source_sha256,'hex') ELSE w.intent->>'web_sha256' END
+    OR m.observed_bytes IS DISTINCT FROM CASE WHEN o.kind='source' THEN s.expected_source_bytes ELSE (w.intent->>'web_bytes')::integer END
+    OR NOT EXISTS(SELECT 1 FROM listing_publication_private.hosted_storage_objects z
+     WHERE z.id=m.storage_object_id AND z.version=m.storage_version AND z.bucket_id=o.bucket_id AND z.name=o.object_path)
+    OR EXISTS(SELECT 1 FROM listing_publication_private.hosted_storage_objects z
+     WHERE z.bucket_id=o.bucket_id AND z.name=o.object_path AND (z.id<>m.storage_object_id OR z.version IS DISTINCT FROM m.storage_version))
+    OR EXISTS(SELECT 1 FROM listing_publication_private.hosted_s3_multipart_uploads u
+     WHERE u.id=m.upload_id OR (u.bucket_id=o.bucket_id AND u.key=o.object_path))
+    OR EXISTS(SELECT 1 FROM listing_publication_private.hosted_s3_multipart_uploads_parts q
+     WHERE q.upload_id=m.upload_id OR (q.bucket_id=o.bucket_id AND q.key=o.object_path))
+    OR EXISTS(SELECT 1 FROM listing_publication_private.cleanup c WHERE c.object_id=o.id))) THEN
+  RAISE EXCEPTION 'publication_multipart_web_completion_required' USING ERRCODE='55000'; END IF;
+ RETURN w;
+END $f$;
+
+-- This helper is owned by the retained final writer solely for the protected
+-- attempt terminal transition. Its input cannot choose content or an outcome.
+CREATE FUNCTION horse_publication_private.assert_actor(p_user uuid,p_identity uuid)
+RETURNS void LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,pg_temp AS $f$
+BEGIN
+ PERFORM listing_publication_private.require_actor(p_user,p_identity);
+END $f$;
+
+CREATE FUNCTION horse_publication_private.close_published_attempt(p_user uuid,p_identity uuid,p_attempt uuid)
+RETURNS void LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,pg_temp AS $f$
+DECLARE c horse_publication_private.commands%ROWTYPE;
+BEGIN
+ PERFORM horse_publication_private.assert_actor(p_user,p_identity);
+ SELECT * INTO c FROM horse_publication_private.commands
+ WHERE attempt_id=p_attempt AND actor_user_id=p_user AND identity_id=p_identity;
+ IF NOT FOUND OR c.state<>'published' OR NOT horse_publication_private.is_public(c.horse_offer_id) THEN
+  RAISE EXCEPTION 'horse_offer_finality_invalid' USING ERRCODE='55000'; END IF;
+ UPDATE listing_publication_private.attempts SET state='published',payload=NULL,closed_at=clock_timestamp()
+ WHERE id=p_attempt AND actor_user_id=p_user AND identity_id=p_identity AND state='open';
+ IF NOT FOUND THEN RAISE EXCEPTION 'publication_attempt_closed' USING ERRCODE='55000'; END IF;
+END $f$;
+
+CREATE FUNCTION public.publish_my_horse_offer_v1(
+ p_expected_user_id uuid,p_expected_identity_id uuid,p_attempt_id uuid,p_request_key uuid)
+RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET lock_timeout='2s' AS $f$
+DECLARE a listing_publication_private.attempts%ROWTYPE; c horse_publication_private.commands%ROWTYPE;
+ h public.horse_offers%ROWTYPE; n public.horse_offers%ROWTYPE; w listing_publication_private.web_images%ROWTYPE;
+ s listing_publication_private.slots%ROWTYPE; web_object listing_publication_private.objects%ROWTYPE;
+ item record; new_image uuid; primary_url text; content jsonb; event_id uuid; t timestamptz;
+ general public.publication_policy_documents%ROWTYPE; horse public.publication_policy_documents%ROWTYPE;
+ general_acceptance uuid; horse_acceptance uuid; policy jsonb;
+BEGIN
+ PERFORM listing_publication_private.require_actor(p_expected_user_id,p_expected_identity_id);
+ IF p_attempt_id IS NULL OR p_request_key IS NULL THEN
+  RAISE EXCEPTION 'horse_offer_command_invalid' USING ERRCODE='22023'; END IF;
+ SELECT * INTO a FROM listing_publication_private.attempts WHERE id=p_attempt_id
+  AND actor_user_id=p_expected_user_id AND identity_id=p_expected_identity_id AND request_key=p_request_key FOR UPDATE;
+ IF NOT FOUND THEN RAISE EXCEPTION 'horse_offer_attempt_unavailable' USING ERRCODE='42501'; END IF;
+ SELECT * INTO c FROM horse_publication_private.commands WHERE attempt_id=a.id FOR UPDATE;
+ IF NOT FOUND THEN RAISE EXCEPTION 'horse_offer_attempt_unavailable' USING ERRCODE='42501'; END IF;
+ IF c.state='published' THEN RETURN horse_publication_private.snapshot(a.id); END IF;
+ IF c.state<>'prepared' OR a.state<>'open' OR a.expires_at<=clock_timestamp() THEN
+  RAISE EXCEPTION 'publication_attempt_closed' USING ERRCODE='55000'; END IF;
+ SELECT * INTO h FROM public.horse_offers WHERE id=c.horse_offer_id AND identity_id=p_expected_identity_id FOR UPDATE;
+ IF NOT FOUND THEN RAISE EXCEPTION 'horse_offer_unavailable' USING ERRCODE='42501'; END IF;
+ IF h.edit_revision<>c.base_revision THEN RAISE EXCEPTION 'horse_offer_edit_conflict' USING ERRCODE='40001'; END IF;
+ IF h.status NOT IN('draft','published','paused') THEN
+  RAISE EXCEPTION 'horse_offer_status_not_editable' USING ERRCODE='55000'; END IF;
+ policy:=horse_publication_private.require_policies();
+ IF policy IS DISTINCT FROM a.policy_snapshot THEN RAISE EXCEPTION 'publication_policy_changed' USING ERRCODE='42501'; END IF;
+ PERFORM horse_publication_private.confirmations(h.offer_type,c.confirmation_snapshot);
+ PERFORM horse_publication_private.normalize_gallery(h.id,h.identity_id,c.gallery_intent);
+ IF (SELECT count(*) FROM listing_publication_private.slots WHERE attempt_id=a.id)<>
+  (SELECT count(*) FROM jsonb_array_elements(c.gallery_intent) x WHERE x ? 'clientFileId') THEN
+  RAISE EXCEPTION 'horse_offer_gallery_invalid' USING ERRCODE='55000'; END IF;
+ -- All new images must be proven before any canonical content or membership moves.
+ FOR s IN SELECT * FROM listing_publication_private.slots WHERE attempt_id=a.id ORDER BY ordinal LOOP
+  IF c.gallery_intent->s.ordinal->>'clientFileId' IS DISTINCT FROM s.client_file_id::text THEN
+   RAISE EXCEPTION 'horse_offer_gallery_invalid' USING ERRCODE='55000'; END IF;
+  PERFORM horse_publication_private.require_ready_image(a.id,s.id);
+ END LOOP;
+ n:=jsonb_populate_record(NULL::public.horse_offers,c.proposed_content);
+ IF n.offer_type IS DISTINCT FROM h.offer_type OR n.market_country_code IS DISTINCT FROM 'EE'
+  OR n.horse_location_country_code IS DISTINCT FROM 'EE' OR n.currency IS DISTINCT FROM 'EUR' THEN
+  RAISE EXCEPTION 'horse_offer_content_invalid' USING ERRCODE='55000'; END IF;
+ -- Retire only explicitly omitted images. Their immutable object lineage survives.
+ INSERT INTO listing_publication_private.cleanup(object_id,bucket_id,object_path,reason,state,enqueued_at)
+ SELECT o.id,o.bucket_id,o.object_path,'published_image_removed',listing_publication_private.object_cleanup_state(o.id),clock_timestamp()
+ FROM horse_publication_private.gallery g JOIN listing_publication_private.objects o ON o.id=g.object_id
+ WHERE g.horse_offer_id=h.id AND NOT EXISTS(SELECT 1 FROM jsonb_array_elements(c.gallery_intent) x WHERE x->>'imageId'=g.image_id::text)
+ ON CONFLICT(object_id) DO NOTHING;
+ DELETE FROM public.horse_offer_images i WHERE i.horse_offer_id=h.id
+  AND NOT EXISTS(SELECT 1 FROM jsonb_array_elements(c.gallery_intent) x WHERE x->>'imageId'=i.id::text);
+ UPDATE public.horse_offer_images SET is_primary=false WHERE horse_offer_id=h.id AND is_primary;
+ FOR item IN SELECT value,ordinality FROM jsonb_array_elements(c.gallery_intent) WITH ORDINALITY LOOP
+  IF item.value ? 'imageId' THEN
+   UPDATE public.horse_offer_images SET sort_order=item.ordinality-1,is_primary=(item.value->>'isPrimary')::boolean
+   WHERE id=(item.value->>'imageId')::uuid AND horse_offer_id=h.id;
+  ELSE
+   SELECT * INTO s FROM listing_publication_private.slots WHERE attempt_id=a.id AND ordinal=item.ordinality-1;
+   SELECT * INTO w FROM listing_publication_private.web_images WHERE slot_id=s.id AND attempt_id=a.id;
+   SELECT * INTO web_object FROM listing_publication_private.objects WHERE slot_id=s.id AND kind='web';
+   primary_url:='/api/v2/horse-media/'||a.id::text||'/'||s.ordinal::text;
+   INSERT INTO public.horse_offer_images(horse_offer_id,identity_id,uploaded_by_user_id,original_url,medium_url,thumb_url,
+    storage_path,sort_order,is_primary)
+   VALUES(h.id,h.identity_id,p_expected_user_id,primary_url,primary_url,primary_url,web_object.object_path,item.ordinality-1,
+    (item.value->>'isPrimary')::boolean) RETURNING id INTO new_image;
+   INSERT INTO horse_publication_private.gallery(image_id,horse_offer_id,attempt_id,slot_id,object_id,ready_id,web_sha256,web_bytes)
+   VALUES(new_image,h.id,a.id,s.id,web_object.id,w.ready_id,decode(w.intent->>'web_sha256','hex'),(w.intent->>'web_bytes')::integer);
+  END IF;
+ END LOOP;
+ SELECT original_url INTO primary_url FROM public.horse_offer_images WHERE horse_offer_id=h.id AND is_primary;
+ UPDATE public.horse_offers SET title=n.title,description=n.description,price_amount=n.price_amount,price_type=n.price_type,
+  horse_name=n.horse_name,birth_year=n.birth_year,sex=n.sex,breed=n.breed,color=n.color,height_cm=n.height_cm,
+  discipline=n.discipline,training_level=n.training_level,suitability=n.suitability,health_notes=n.health_notes,
+  behavior_notes=n.behavior_notes,city=n.city,region=n.region,details=n.details,image_url=primary_url,updated_by_user_id=p_expected_user_id
+ WHERE id=h.id AND identity_id=h.identity_id AND edit_revision=c.base_revision;
+ IF NOT FOUND THEN RAISE EXCEPTION 'horse_offer_edit_conflict' USING ERRCODE='40001'; END IF;
+ SELECT p.* INTO general FROM public.publication_policy_documents p
+  JOIN jsonb_array_elements(policy) x ON p.id=(x->>'document_id')::uuid WHERE p.policy_key='marketplace-general';
+ SELECT p.* INTO horse FROM public.publication_policy_documents p
+  JOIN jsonb_array_elements(policy) x ON p.id=(x->>'document_id')::uuid WHERE p.policy_key='horse-offer-ee';
+ SELECT id INTO general_acceptance FROM public.user_publication_policy_acceptances
+  WHERE user_id=p_expected_user_id AND policy_document_id=general.id AND content_hash=general.content_hash;
+ SELECT id INTO horse_acceptance FROM public.user_publication_policy_acceptances
+  WHERE user_id=p_expected_user_id AND policy_document_id=horse.id AND content_hash=horse.content_hash;
+ content:=public.build_horse_offer_content_snapshot_v1(h.id); t:=clock_timestamp();
+ INSERT INTO public.horse_offer_publication_events(horse_offer_id,identity_id,actor_user_id,submission_key,decision,
+  general_policy_document_id,general_policy_version,general_policy_content_hash,general_acceptance_id,
+  horse_policy_document_id,horse_policy_version,horse_policy_content_hash,horse_acceptance_id,
+  confirmation_snapshot,content_snapshot,content_hash,risk_signals)
+ VALUES(h.id,h.identity_id,p_expected_user_id,a.id,'published',general.id,general.policy_version,general.content_hash,general_acceptance,
+  horse.id,horse.policy_version,horse.content_hash,horse_acceptance,c.confirmation_snapshot,content,
+  encode(sha256(convert_to(content::text,'UTF8')),'hex'),'{}') RETURNING id INTO event_id;
+ UPDATE public.horse_offers SET current_publication_event_id=event_id,status='published',published_at=coalesce(published_at,t),
+  active_until=CASE WHEN active_until IS NOT NULL AND active_until<=t THEN t+interval '90 days' ELSE active_until END,
+  updated_by_user_id=p_expected_user_id WHERE id=h.id RETURNING * INTO h;
+ INSERT INTO listing_publication_private.cleanup(object_id,bucket_id,object_path,reason,state,enqueued_at)
+ SELECT o.id,o.bucket_id,o.object_path,'published_source',listing_publication_private.object_cleanup_state(o.id),t
+ FROM listing_publication_private.objects o WHERE o.attempt_id=a.id AND o.kind='source';
+ IF a.expires_at<=clock_timestamp() THEN RAISE EXCEPTION 'publication_attempt_closed' USING ERRCODE='55000'; END IF;
+ IF horse_publication_private.require_policies() IS DISTINCT FROM policy THEN
+  RAISE EXCEPTION 'publication_policy_changed' USING ERRCODE='42501'; END IF;
+ UPDATE horse_publication_private.commands SET state='published',publication_event_id=event_id,published_revision=h.edit_revision WHERE attempt_id=a.id;
+ PERFORM horse_publication_private.close_published_attempt(p_expected_user_id,p_expected_identity_id,a.id);
+ RETURN horse_publication_private.snapshot(a.id);
+END $f$;
+
+-- COMPONENT 04_media_bridge.sql
+-- Explicit horse media purpose, reusing the accepted immutable binary lineage.
+-- Existing ordinary implementations below retain every former branch and check.
+CREATE FUNCTION horse_publication_private.attempt_publication_matches(p_attempt uuid,p_user uuid,p_identity uuid)
+RETURNS boolean LANGUAGE sql STABLE SECURITY DEFINER SET search_path=pg_catalog,pg_temp AS $f$
+ SELECT EXISTS(SELECT 1 FROM horse_publication_private.commands c
+  JOIN public.horse_offers h ON h.id=c.horse_offer_id
+  JOIN public.horse_offer_publication_events e ON e.id=c.publication_event_id
+  WHERE c.attempt_id=p_attempt AND c.actor_user_id=p_user AND c.identity_id=p_identity
+   AND c.state='published' AND c.publication_event_id=h.current_publication_event_id
+   AND h.identity_id=p_identity AND h.status='published' AND e.horse_offer_id=h.id
+   AND e.identity_id=p_identity AND e.actor_user_id=p_user AND e.submission_key=p_attempt
+   AND e.decision='published' AND horse_publication_private.is_public(h.id));
+$f$;
+REVOKE ALL ON FUNCTION horse_publication_private.attempt_publication_matches(uuid,uuid,uuid) FROM PUBLIC,anon,authenticated,service_role;
+GRANT EXECUTE ON FUNCTION horse_publication_private.attempt_publication_matches(uuid,uuid,uuid) TO selqiro_listing_final_writer_v1;
+
+CREATE FUNCTION listing_publication_private.assert_non_horse_attempt_v1(p_attempt uuid)
+RETURNS void LANGUAGE plpgsql SET search_path=pg_catalog,pg_temp AS $f$
+BEGIN
+ IF EXISTS(SELECT 1 FROM horse_publication_private.commands WHERE attempt_id=p_attempt) THEN
+  RAISE EXCEPTION 'horse_publication_requires_horse_command' USING ERRCODE='55000'; END IF;
+END $f$;
+REVOKE ALL ON FUNCTION listing_publication_private.assert_non_horse_attempt_v1(uuid) FROM PUBLIC,anon,authenticated,service_role;
+GRANT EXECUTE ON FUNCTION listing_publication_private.assert_non_horse_attempt_v1(uuid) TO selqiro_listing_final_writer_v1;
+
+CREATE FUNCTION listing_publication_private.require_attempt_policies_v1(p_attempt uuid)
+RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,pg_temp AS $f$
+BEGIN
+ IF EXISTS(SELECT 1 FROM horse_publication_private.commands c
+  JOIN listing_publication_private.attempts a ON a.id=c.attempt_id
+  WHERE c.attempt_id=p_attempt AND a.actor_user_id=c.actor_user_id AND a.identity_id=c.identity_id
+   AND a.request_key=c.request_key AND c.state='prepared') THEN
+  RETURN horse_publication_private.require_policies();
+ END IF;
+ PERFORM listing_publication_private.assert_non_horse_attempt_v1(p_attempt);
+ RETURN listing_publication_private.require_policies();
+END $f$;
+REVOKE ALL ON FUNCTION listing_publication_private.require_attempt_policies_v1(uuid) FROM PUBLIC,anon,authenticated,service_role;
+GRANT EXECUTE ON FUNCTION listing_publication_private.require_attempt_policies_v1(uuid) TO selqiro_listing_final_writer_v1;
+CREATE OR REPLACE FUNCTION listing_publication_private.protect_attempt() RETURNS trigger LANGUAGE plpgsql
+SET search_path=pg_catalog,pg_temp AS $f$
+BEGIN
+ IF TG_OP='DELETE' THEN RAISE EXCEPTION 'publication_receipt_retained' USING ERRCODE='55000'; END IF;
+ -- A canonical horse event is an explicit alternative, never a numeric listing.
+ IF current_user='selqiro_listing_final_writer_v1' AND OLD.state='open' AND NEW.state='published'
+  AND NEW.payload IS NULL AND NEW.closed_at IS NOT NULL
+  AND (to_jsonb(NEW)-ARRAY['state','payload','closed_at'])=(to_jsonb(OLD)-ARRAY['state','payload','closed_at'])
+  AND horse_publication_private.attempt_publication_matches(OLD.id,OLD.actor_user_id,OLD.identity_id)
+  AND NOT EXISTS(SELECT 1 FROM listing_publication_private.objects o LEFT JOIN listing_publication_private.cleanup c ON c.object_id=o.id
+   WHERE o.attempt_id=OLD.id AND o.kind='source' AND (c.object_id IS NULL OR c.reason<>'published_source'
+    OR c.bucket_id<>o.bucket_id OR c.object_path<>o.object_path)) THEN RETURN NEW; END IF;
+ IF current_user='selqiro_listing_final_writer_v1' AND OLD.state='open' AND NEW.state='published'
+  AND NEW.payload IS NULL AND NEW.closed_at IS NOT NULL
+  AND (to_jsonb(NEW)-ARRAY['state','payload','closed_at'])=(to_jsonb(OLD)-ARRAY['state','payload','closed_at'])
+  AND EXISTS(SELECT 1 FROM listing_publication_private.managed_image_additions_v1 b
+   JOIN listing_publication_private.publications p ON p.attempt_id=b.parent_attempt_id
+   JOIN listing_publication_private.attempts parent ON parent.id=p.attempt_id
+   JOIN public.listings l ON l.id=p.listing_id
+   WHERE b.attempt_id=OLD.id AND b.attached_at IS NOT NULL AND p.state='published' AND parent.state='published'
+    AND parent.identity_id=OLD.identity_id AND l.identity_id=OLD.identity_id AND l.created_by_user_id=parent.actor_user_id)
+  AND NOT EXISTS(SELECT 1 FROM listing_publication_private.objects o LEFT JOIN listing_publication_private.cleanup c ON c.object_id=o.id
+   WHERE o.attempt_id=OLD.id AND o.kind='source' AND (c.object_id IS NULL OR c.reason<>'published_source'
+    OR c.bucket_id<>o.bucket_id OR c.object_path<>o.object_path)) THEN RETURN NEW; END IF;
+ IF current_user='selqiro_listing_final_writer_v1' AND OLD.state='published' AND NEW.state='deleted'
+  AND (to_jsonb(NEW)-'state')=(to_jsonb(OLD)-'state')
+  AND EXISTS(SELECT 1 FROM listing_publication_private.managed_image_additions_v1 b
+   JOIN listing_publication_private.publications p ON p.attempt_id=b.parent_attempt_id
+   WHERE b.attempt_id=OLD.id AND b.attached_at IS NOT NULL AND p.state='deleting'
+    AND NOT EXISTS(SELECT 1 FROM public.listings l WHERE l.id=p.listing_id))
+  AND NOT EXISTS(SELECT 1 FROM listing_publication_private.objects o LEFT JOIN listing_publication_private.cleanup c ON c.object_id=o.id
+   WHERE o.attempt_id=OLD.id AND (c.object_id IS NULL OR c.bucket_id<>o.bucket_id OR c.object_path<>o.object_path)) THEN RETURN NEW; END IF;
+ IF current_user='selqiro_listing_final_writer_v1' AND OLD.state='open' AND NEW.state='published'
+  AND NEW.payload IS NULL AND NEW.closed_at IS NOT NULL
+  AND (to_jsonb(NEW)-ARRAY['state','payload','closed_at'])=(to_jsonb(OLD)-ARRAY['state','payload','closed_at'])
+  AND EXISTS(SELECT 1 FROM listing_publication_private.publications p JOIN public.listings l ON l.id=p.listing_id
+   WHERE p.attempt_id=OLD.id AND p.state='published' AND l.identity_id=OLD.identity_id AND l.created_by_user_id=OLD.actor_user_id)
+  AND NOT EXISTS(SELECT 1 FROM listing_publication_private.objects o LEFT JOIN listing_publication_private.cleanup c ON c.object_id=o.id
+   WHERE o.attempt_id=OLD.id AND o.kind='source' AND (c.object_id IS NULL OR c.reason<>'published_source' OR c.bucket_id<>o.bucket_id OR c.object_path<>o.object_path))
+ THEN RETURN NEW; END IF;
+ IF current_user='selqiro_listing_final_writer_v1' AND OLD.state='published' AND NEW.state='deleted'
+  AND (to_jsonb(NEW)-'state')=(to_jsonb(OLD)-'state')
+  AND EXISTS(SELECT 1 FROM listing_publication_private.publications p WHERE p.attempt_id=OLD.id AND p.state='deleting'
+   AND NOT EXISTS(SELECT 1 FROM public.listings l WHERE l.id=p.listing_id))
+  AND NOT EXISTS(SELECT 1 FROM listing_publication_private.objects o LEFT JOIN listing_publication_private.cleanup c ON c.object_id=o.id
+   WHERE o.attempt_id=OLD.id AND (c.object_id IS NULL OR c.bucket_id<>o.bucket_id OR c.object_path<>o.object_path))
+ THEN RETURN NEW; END IF;
+ IF (to_jsonb(NEW)-ARRAY['state','payload','closed_at']) IS DISTINCT FROM (to_jsonb(OLD)-ARRAY['state','payload','closed_at'])
+  OR OLD.state<>'open' OR NEW.state NOT IN('cancelled','expired') OR NEW.payload IS NOT NULL OR NEW.closed_at IS NULL THEN
+  RAISE EXCEPTION 'publication_attempt_immutable' USING ERRCODE='55000'; END IF;
+ IF EXISTS(SELECT 1 FROM listing_publication_private.objects o LEFT JOIN listing_publication_private.cleanup c ON c.object_id=o.id
+  WHERE o.attempt_id=OLD.id AND (c.object_id IS NULL OR c.bucket_id<>o.bucket_id OR c.object_path<>o.object_path OR c.reason<>NEW.state
+   OR c.state<>listing_publication_private.object_cleanup_state(o.id))) THEN
+  RAISE EXCEPTION 'publication_cleanup_lineage_required' USING ERRCODE='55000'; END IF;
+ RETURN NEW;
+END $f$;
+
+CREATE OR REPLACE FUNCTION listing_publication_private.lock_web_context(p_user uuid,p_identity uuid,p_attempt uuid,p_service boolean)
+RETURNS uuid LANGUAGE plpgsql SET search_path=pg_catalog,public,auth,pg_temp AS $f$
+DECLARE active_id uuid; a listing_publication_private.attempts%ROWTYPE;
+ old_sub text:=current_setting('request.jwt.claim.sub',true); old_claims text:=current_setting('request.jwt.claims',true);
+BEGIN
+ IF p_service IS NULL THEN RAISE EXCEPTION 'publication_web_invalid' USING ERRCODE='22023'; END IF;
+ IF p_service THEN active_id:=listing_publication_private.lock_upload_service_actor(p_user,p_identity);
+ ELSE active_id:=listing_publication_private.require_actor(p_user,p_identity); END IF;
+ SELECT x.* INTO a FROM listing_publication_private.attempts x
+  WHERE x.id=p_attempt AND x.actor_user_id=p_user AND x.identity_id=active_id FOR UPDATE;
+ IF NOT FOUND THEN RAISE EXCEPTION 'publication_attempt_unavailable' USING ERRCODE='P0002'; END IF;
+ IF a.state<>'open' OR a.expires_at<=clock_timestamp() THEN RAISE EXCEPTION 'publication_attempt_closed' USING ERRCODE='55000'; END IF;
+ IF p_service THEN
+  PERFORM set_config('request.jwt.claim.sub',p_user::text,true);
+  PERFORM set_config('request.jwt.claims',jsonb_build_object('sub',p_user)::text,true);
+ END IF;
+ IF listing_publication_private.require_attempt_policies_v1(a.id) IS DISTINCT FROM a.policy_snapshot THEN
+  RAISE EXCEPTION 'publication_policy_changed' USING ERRCODE='42501';
+ END IF;
+ IF p_service THEN
+  PERFORM set_config('request.jwt.claim.sub',coalesce(old_sub,''),true);
+  PERFORM set_config('request.jwt.claims',coalesce(old_claims,''),true);
+ END IF;
+ IF a.expires_at<=clock_timestamp() THEN RAISE EXCEPTION 'publication_attempt_closed' USING ERRCODE='55000'; END IF;
+ RETURN a.id;
+END $f$;
+
+CREATE OR REPLACE FUNCTION listing_publication_private.assert_ordinary_publication_v1(p_attempt uuid)
+RETURNS void LANGUAGE plpgsql SET search_path=pg_catalog,pg_temp AS $f$
+BEGIN
+ PERFORM listing_publication_private.assert_non_horse_attempt_v1(p_attempt);
+ IF EXISTS(SELECT 1 FROM listing_publication_private.managed_image_additions_v1 WHERE attempt_id=p_attempt) THEN
+  RAISE EXCEPTION 'publication_addition_requires_append' USING ERRCODE='55000'; END IF;
+END $f$;
+
+CREATE OR REPLACE FUNCTION public.get_my_listing_publication_v1(p_expected_user_id uuid,p_expected_identity_id uuid,p_request_key uuid)
+RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER
+SET search_path=pg_catalog,public,auth,pg_temp SET lock_timeout='2s' SET timezone='UTC' AS $fn$
+DECLARE active_id uuid; a listing_publication_private.attempts%ROWTYPE;
+BEGIN
+ active_id:=listing_publication_private.require_actor(p_expected_user_id,p_expected_identity_id);
+ SELECT x.* INTO a FROM listing_publication_private.attempts x WHERE x.actor_user_id=p_expected_user_id
+   AND x.identity_id=active_id AND x.request_key=p_request_key FOR SHARE;
+ IF NOT FOUND THEN RAISE EXCEPTION 'publication_attempt_unavailable' USING ERRCODE='P0002'; END IF;
+ PERFORM listing_publication_private.assert_non_horse_attempt_v1(a.id);
+ -- Reading/cancelling a user's private attempt never forces acceptance of changed terms.
+ RETURN listing_publication_private.snapshot(a.id);
+END $fn$;
+
+CREATE OR REPLACE FUNCTION public.cancel_my_listing_publication_v1(p_expected_user_id uuid,p_expected_identity_id uuid,p_request_key uuid)
+RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER
+SET search_path=pg_catalog,public,auth,pg_temp SET lock_timeout='2s' SET timezone='UTC' AS $fn$
+DECLARE active_id uuid; a listing_publication_private.attempts%ROWTYPE; changed boolean;
+BEGIN
+ active_id:=listing_publication_private.require_actor(p_expected_user_id,p_expected_identity_id);
+ SELECT x.* INTO a FROM listing_publication_private.attempts x WHERE x.actor_user_id=p_expected_user_id
+  AND x.identity_id=active_id AND x.request_key=p_request_key FOR UPDATE;
+ IF NOT FOUND THEN RAISE EXCEPTION 'publication_attempt_unavailable' USING ERRCODE='P0002'; END IF;
+ PERFORM listing_publication_private.assert_non_horse_attempt_v1(a.id);
+ changed:=listing_publication_private.close_locked_attempt(a.id,'cancelled');
+ RETURN listing_publication_private.snapshot(a.id)||jsonb_build_object('changed',changed);
+END $fn$;
+
+CREATE OR REPLACE FUNCTION public.get_my_listing_publication_journey_v2(p_expected_user_id uuid,p_expected_identity_id uuid,p_request_key uuid)
+RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,pg_temp AS $f$
+DECLARE a listing_publication_private.attempts; BEGIN
+ PERFORM listing_publication_private.require_actor(p_expected_user_id,p_expected_identity_id);
+ SELECT * INTO a FROM listing_publication_private.attempts
+ WHERE actor_user_id=p_expected_user_id AND identity_id=p_expected_identity_id AND request_key=p_request_key FOR SHARE;
+ IF NOT FOUND THEN RETURN jsonb_build_object('snapshot',NULL,'receipt',NULL,'intent_closed',EXISTS(
+  SELECT 1 FROM listing_publication_private.closed_journey_requests WHERE actor_user_id=p_expected_user_id
+  AND identity_id=p_expected_identity_id AND request_key=p_request_key)); END IF;
+ PERFORM listing_publication_private.assert_non_horse_attempt_v1(a.id);
+ RETURN jsonb_build_object('snapshot',listing_publication_private.snapshot(a.id),
+   'receipt',listing_publication_private.final_receipt(a.id),'intent_closed',a.state IN('cancelled','expired','deleted'));
+END $f$;
+
+-- Browser media commands use their client-file key, not the parent publication
+-- request key. This read authorizes no capability itself; the multipart ledger
+-- repeats actor, expiry, policy and immutable object checks before every write.
+CREATE FUNCTION public.get_my_horse_publication_image_binding_v1(
+ p_expected_user_id uuid,p_expected_identity_id uuid,p_attempt_id uuid,p_slot_id uuid,p_client_file_id uuid)
+RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET lock_timeout='2s' AS $f$
+DECLARE result jsonb;
+BEGIN
+ PERFORM listing_publication_private.require_actor(p_expected_user_id,p_expected_identity_id);
+ SELECT jsonb_build_object('schema_version',1,'content_type','horse_offer','actor_user_id',a.actor_user_id,
+  'identity_id',a.identity_id,'attempt_id',a.id,'slot_id',s.id,'client_file_id',s.client_file_id,
+  'expected_bytes',s.expected_source_bytes,'expected_sha256',encode(s.expected_source_sha256,'hex')) INTO result
+ FROM horse_publication_private.commands c JOIN listing_publication_private.attempts a ON a.id=c.attempt_id
+ JOIN listing_publication_private.slots s ON s.attempt_id=a.id
+ WHERE a.id=p_attempt_id AND a.actor_user_id=p_expected_user_id AND a.identity_id=p_expected_identity_id
+  AND c.actor_user_id=a.actor_user_id AND c.identity_id=a.identity_id AND c.request_key=a.request_key
+  AND c.state='prepared' AND a.state='open' AND a.expires_at>clock_timestamp()
+  AND s.id=p_slot_id AND s.client_file_id=p_client_file_id FOR SHARE OF a;
+ IF result IS NULL THEN RAISE EXCEPTION 'horse_offer_image_unavailable' USING ERRCODE='42501'; END IF;
+ RETURN result;
+END $f$;
+
+-- No storage path is returned by a public API. The service-only public binding
+-- feeds the server's exact-hash WEB reader, which rereads this binding after IO.
+CREATE FUNCTION horse_publication_private.media_binding(p_attempt uuid,p_ordinal integer,p_public boolean,p_identity uuid)
+RETURNS jsonb LANGUAGE sql STABLE SECURITY DEFINER SET search_path=pg_catalog,pg_temp AS $f$
+ SELECT jsonb_build_object('schema_version',1,'attempt_id',a.id,'ordinal',s.ordinal,
+  'bucket_id',o.bucket_id,'object_path',o.object_path,'sha256',encode(g.web_sha256,'hex'),'bytes',g.web_bytes)
+ FROM horse_publication_private.commands c JOIN listing_publication_private.attempts a ON a.id=c.attempt_id
+ JOIN horse_publication_private.gallery g ON g.attempt_id=a.id AND g.horse_offer_id=c.horse_offer_id
+ JOIN public.horse_offers h ON h.id=g.horse_offer_id AND h.identity_id=c.identity_id
+ JOIN public.identities identity_row ON identity_row.id=h.identity_id AND identity_row.status='active'
+ JOIN public.horse_offer_images i ON i.id=g.image_id AND i.horse_offer_id=h.id AND i.identity_id=h.identity_id
+ JOIN public.horse_offer_publication_events e ON e.id=c.publication_event_id AND e.horse_offer_id=h.id
+ JOIN listing_publication_private.slots s ON s.id=g.slot_id AND s.attempt_id=a.id
+ JOIN listing_publication_private.objects o ON o.id=g.object_id AND o.slot_id=s.id AND o.attempt_id=a.id AND o.kind='web'
+ JOIN listing_publication_private.web_images w ON w.slot_id=s.id AND w.attempt_id=a.id
+ WHERE a.id=p_attempt AND s.ordinal=p_ordinal AND a.state='published' AND c.state='published'
+  AND a.actor_user_id=c.actor_user_id AND a.identity_id=c.identity_id AND a.request_key=c.request_key
+  AND e.identity_id=c.identity_id AND e.actor_user_id=c.actor_user_id AND e.submission_key=a.id AND e.decision='published'
+  AND w.state='ready' AND w.ready_id=g.ready_id AND w.ready_at IS NOT NULL
+  AND w.intent->>'web_sha256'=encode(g.web_sha256,'hex') AND w.intent->>'web_bytes'=g.web_bytes::text
+  AND w.intent->>'source_sha256'=encode(s.expected_source_sha256,'hex') AND w.intent->>'source_bytes'=s.expected_source_bytes::text
+  AND o.bucket_id='listing-publication-private' AND o.object_path='v1/'||a.id::text||'/'||s.id::text||'/web-v1.webp'
+  AND i.original_url='/api/v2/horse-media/'||a.id::text||'/'||s.ordinal::text
+  AND i.medium_url=i.original_url AND i.thumb_url=i.original_url AND i.storage_path=o.object_path
+  AND NOT EXISTS(SELECT 1 FROM listing_publication_private.cleanup q WHERE q.object_id=o.id)
+  AND CASE WHEN p_public THEN horse_publication_private.is_public(h.id) ELSE h.identity_id=p_identity END;
+$f$;
+
+CREATE FUNCTION public.get_public_horse_media_binding_v1(p_attempt_id uuid,p_ordinal integer)
+RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,pg_temp AS $f$
+BEGIN
+ PERFORM listing_publication_private.require_upload_service();
+ IF p_ordinal IS NULL OR p_ordinal NOT BETWEEN 0 AND 9 THEN RETURN NULL; END IF;
+ RETURN horse_publication_private.media_binding(p_attempt_id,p_ordinal,true,NULL);
+END $f$;
+
+CREATE FUNCTION public.get_my_horse_media_binding_v1(
+ p_expected_user_id uuid,p_expected_identity_id uuid,p_attempt_id uuid,p_ordinal integer)
+RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,pg_temp AS $f$
+BEGIN
+ PERFORM listing_publication_private.require_actor(p_expected_user_id,p_expected_identity_id);
+ IF p_ordinal IS NULL OR p_ordinal NOT BETWEEN 0 AND 9 THEN RETURN NULL; END IF;
+ RETURN horse_publication_private.media_binding(p_attempt_id,p_ordinal,false,p_expected_identity_id);
+END $f$;
+
+-- An immutable publication event proves that the WEB was previously published.
+-- Current membership is checked independently: a retained image is never eligible.
+CREATE FUNCTION horse_publication_private.retired_web_deleted(p_object uuid)
+RETURNS boolean LANGUAGE sql STABLE SECURITY DEFINER SET search_path=pg_catalog,pg_temp AS $f$
+ SELECT coalesce((SELECT o.kind='web' AND o.dispatch_key IS NULL
+  AND q.reason='published_image_removed' AND q.state='deleted'
+  AND q.bucket_id=o.bucket_id AND q.object_path=o.object_path
+  AND o.bucket_id='listing-publication-private' AND o.object_path='v1/'||a.id::text||'/'||s.id::text||'/web-v1.webp'
+  AND a.state='published' AND c.state='published' AND a.actor_user_id=c.actor_user_id AND a.identity_id=c.identity_id
+  AND e.horse_offer_id=c.horse_offer_id AND e.identity_id=c.identity_id AND e.actor_user_id=c.actor_user_id
+  AND e.submission_key=a.id AND e.decision='published'
+  AND w.state='ready' AND w.ready_id IS NOT NULL AND w.ready_at IS NOT NULL
+  AND w.intent->>'source_sha256'=encode(s.expected_source_sha256,'hex') AND w.intent->>'source_bytes'=s.expected_source_bytes::text
+  AND m.provider_contract='supabase-s3-session-v1' AND m.state='completed'
+  AND m.completed_at IS NOT NULL AND m.verified_at IS NOT NULL AND m.storage_object_id IS NOT NULL AND m.storage_version IS NOT NULL
+  AND m.observed_sha256=w.intent->>'web_sha256' AND m.observed_bytes::text=w.intent->>'web_bytes'
+  AND NOT EXISTS(SELECT 1 FROM horse_publication_private.gallery g WHERE g.object_id=o.id)
+  AND NOT EXISTS(SELECT 1 FROM listing_publication_private.hosted_storage_objects z WHERE z.bucket_id=o.bucket_id AND z.name=o.object_path)
+  AND NOT EXISTS(SELECT 1 FROM listing_publication_private.hosted_s3_multipart_uploads u WHERE u.id=m.upload_id OR (u.bucket_id=o.bucket_id AND u.key=o.object_path))
+  AND NOT EXISTS(SELECT 1 FROM listing_publication_private.hosted_s3_multipart_uploads_parts part WHERE part.upload_id=m.upload_id OR (part.bucket_id=o.bucket_id AND part.key=o.object_path))
+ FROM listing_publication_private.objects o
+ JOIN listing_publication_private.attempts a ON a.id=o.attempt_id
+ JOIN horse_publication_private.commands c ON c.attempt_id=a.id
+ JOIN public.horse_offer_publication_events e ON e.id=c.publication_event_id
+ JOIN listing_publication_private.slots s ON s.id=o.slot_id AND s.attempt_id=a.id
+ JOIN listing_publication_private.multipart_attempts ma ON ma.attempt_id=a.id
+ JOIN listing_publication_private.web_images w ON w.attempt_id=a.id AND w.slot_id=s.id
+ JOIN listing_publication_private.multipart_sessions m ON m.object_id=o.id
+ JOIN listing_publication_private.cleanup q ON q.object_id=o.id WHERE o.id=p_object),false);
+$f$;
+
+-- Preserve all three accepted ordinary alternatives. Completed SOURCE proof is
+-- already domain independent; only horse retired WEB adds a new alternative.
+CREATE OR REPLACE FUNCTION listing_publication_private.multipart_object_fully_deleted(p_id uuid)
+RETURNS boolean LANGUAGE sql SET search_path=pg_catalog,pg_temp AS $f$
+ SELECT horse_publication_private.retired_web_deleted(p_id) OR
+ listing_publication_private.hosted_retired_web_deleted_v1(p_id) OR
+ listing_publication_private.hosted_completed_source_deleted_v1(p_id) OR
+ (coalesce(c.state='deleted',false) AND (m.id IS NULL OR
+  (EXISTS(SELECT 1 FROM listing_publication_private.multipart_auxiliary_receipts r WHERE r.session_id=m.id)
+   AND NOT EXISTS(SELECT 1 FROM listing_publication_private.hosted_storage_objects z WHERE z.bucket_id=o.bucket_id AND z.name=o.object_path))))
+ FROM listing_publication_private.objects o LEFT JOIN listing_publication_private.cleanup c ON c.object_id=o.id
+ LEFT JOIN listing_publication_private.multipart_sessions m ON m.object_id=o.id WHERE o.id=p_id;
+$f$;
+
+-- Scope cleanup to one canonical horse and its immutable publication commands.
+-- It may include earlier commands for that same horse after a later gallery edit.
+CREATE FUNCTION horse_publication_private.lock_cleanup_context(p_user uuid,p_identity uuid,p_attempt uuid,p_request uuid)
+RETURNS uuid LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET lock_timeout='2s' AS $f$
+DECLARE offer_id uuid;
+BEGIN
+ PERFORM listing_publication_private.lock_upload_service_actor(p_user,p_identity);
+ IF current_setting('transaction_isolation')<>'read committed' THEN
+  RAISE EXCEPTION 'publication_read_committed_required' USING ERRCODE='25001'; END IF;
+ SELECT c.horse_offer_id INTO offer_id FROM horse_publication_private.commands c
+ JOIN listing_publication_private.attempts a ON a.id=c.attempt_id
+ WHERE a.id=p_attempt AND a.identity_id=p_identity AND a.request_key=p_request
+  AND c.actor_user_id=a.actor_user_id AND c.identity_id=a.identity_id AND c.request_key=a.request_key
+  AND c.state='published' AND a.state='published' FOR UPDATE OF a;
+ IF NOT FOUND THEN RAISE EXCEPTION 'horse_publication_cleanup_unavailable' USING ERRCODE='42501'; END IF;
+ PERFORM 1 FROM public.horse_offers WHERE id=offer_id AND identity_id=p_identity FOR UPDATE;
+ IF NOT FOUND THEN RAISE EXCEPTION 'horse_publication_cleanup_unavailable' USING ERRCODE='42501'; END IF;
+ RETURN offer_id;
+END $f$;
+
+-- Shared eligibility predicate for claim and result recording. Unknown writes,
+-- conflicting provider versions and live WEB membership always retain quota.
+CREATE FUNCTION horse_publication_private.cleanup_object_eligible(p_object uuid,p_offer uuid)
+RETURNS boolean LANGUAGE sql STABLE SECURITY DEFINER SET search_path=pg_catalog,pg_temp AS $f$
+ SELECT coalesce((SELECT a.state='published' AND c.state='published' AND c.horse_offer_id=p_offer
+  AND a.identity_id=c.identity_id AND a.actor_user_id=c.actor_user_id AND a.request_key=c.request_key
+  AND e.horse_offer_id=p_offer AND e.identity_id=c.identity_id AND e.actor_user_id=c.actor_user_id
+  AND e.submission_key=a.id AND e.decision='published'
+  AND o.dispatch_key IS NULL AND o.bucket_id='listing-publication-private'
+  AND q.bucket_id=o.bucket_id AND q.object_path=o.object_path
+  AND o.object_path='v1/'||a.id::text||'/'||s.id::text||CASE WHEN o.kind='source' THEN '/source.upload' ELSE '/web-v1.webp' END
+  AND ((o.kind='source' AND q.reason='published_source') OR (o.kind='web' AND q.reason='published_image_removed'))
+  AND w.state='ready' AND w.ready_id IS NOT NULL AND w.ready_at IS NOT NULL
+  AND w.intent->>'source_sha256'=encode(s.expected_source_sha256,'hex') AND w.intent->>'source_bytes'=s.expected_source_bytes::text
+  AND m.provider_contract='supabase-s3-session-v1' AND m.state='completed' AND m.completed_at IS NOT NULL
+  AND m.verified_at IS NOT NULL AND m.problem IS NULL AND m.storage_object_id IS NOT NULL AND m.storage_version IS NOT NULL
+  AND m.observed_sha256=CASE WHEN o.kind='source' THEN encode(s.expected_source_sha256,'hex') ELSE w.intent->>'web_sha256' END
+  AND m.observed_bytes=CASE WHEN o.kind='source' THEN s.expected_source_bytes ELSE (w.intent->>'web_bytes')::integer END
+  AND NOT EXISTS(SELECT 1 FROM listing_publication_private.hosted_storage_objects z
+   WHERE z.bucket_id=o.bucket_id AND z.name=o.object_path AND (z.id<>m.storage_object_id OR z.version IS DISTINCT FROM m.storage_version))
+  AND NOT EXISTS(SELECT 1 FROM listing_publication_private.hosted_s3_multipart_uploads u WHERE u.id=m.upload_id OR (u.bucket_id=o.bucket_id AND u.key=o.object_path))
+  AND NOT EXISTS(SELECT 1 FROM listing_publication_private.hosted_s3_multipart_uploads_parts part WHERE part.upload_id=m.upload_id OR (part.bucket_id=o.bucket_id AND part.key=o.object_path))
+  AND CASE WHEN o.kind='web' THEN NOT EXISTS(SELECT 1 FROM horse_publication_private.gallery g WHERE g.object_id=o.id)
+   ELSE EXISTS(SELECT 1 FROM listing_publication_private.objects web
+    JOIN listing_publication_private.multipart_sessions wm ON wm.object_id=web.id
+    WHERE web.slot_id=s.id AND web.attempt_id=a.id AND web.kind='web' AND web.dispatch_key IS NULL
+     AND wm.provider_contract='supabase-s3-session-v1' AND wm.state='completed' AND wm.completed_at IS NOT NULL
+     AND wm.verified_at IS NOT NULL AND wm.problem IS NULL AND wm.storage_object_id IS NOT NULL AND wm.storage_version IS NOT NULL
+     AND wm.observed_sha256=w.intent->>'web_sha256' AND wm.observed_bytes::text=w.intent->>'web_bytes'
+     AND NOT EXISTS(SELECT 1 FROM listing_publication_private.hosted_s3_multipart_uploads u WHERE u.id=wm.upload_id OR (u.bucket_id=web.bucket_id AND u.key=web.object_path))
+     AND NOT EXISTS(SELECT 1 FROM listing_publication_private.hosted_s3_multipart_uploads_parts part WHERE part.upload_id=wm.upload_id OR (part.bucket_id=web.bucket_id AND part.key=web.object_path))
+     AND ((EXISTS(SELECT 1 FROM horse_publication_private.gallery g WHERE g.object_id=web.id AND g.ready_id=w.ready_id)
+       AND NOT EXISTS(SELECT 1 FROM listing_publication_private.cleanup qc WHERE qc.object_id=web.id)
+       AND EXISTS(SELECT 1 FROM listing_publication_private.hosted_storage_objects z WHERE z.id=wm.storage_object_id AND z.version=wm.storage_version AND z.bucket_id=web.bucket_id AND z.name=web.object_path)
+       AND NOT EXISTS(SELECT 1 FROM listing_publication_private.hosted_storage_objects z WHERE z.bucket_id=web.bucket_id AND z.name=web.object_path AND (z.id<>wm.storage_object_id OR z.version IS DISTINCT FROM wm.storage_version)))
+      OR (NOT EXISTS(SELECT 1 FROM horse_publication_private.gallery g WHERE g.object_id=web.id)
+       AND EXISTS(SELECT 1 FROM listing_publication_private.cleanup qc WHERE qc.object_id=web.id AND qc.reason='published_image_removed'
+        AND qc.bucket_id=web.bucket_id AND qc.object_path=web.object_path)))) END
+ FROM listing_publication_private.objects o
+ JOIN listing_publication_private.attempts a ON a.id=o.attempt_id
+ JOIN horse_publication_private.commands c ON c.attempt_id=a.id
+ JOIN public.horse_offer_publication_events e ON e.id=c.publication_event_id
+ JOIN listing_publication_private.slots s ON s.id=o.slot_id AND s.attempt_id=a.id
+ JOIN listing_publication_private.web_images w ON w.slot_id=s.id AND w.attempt_id=a.id
+ JOIN listing_publication_private.multipart_sessions m ON m.object_id=o.id
+ JOIN listing_publication_private.cleanup q ON q.object_id=o.id WHERE o.id=p_object),false);
+$f$;
+
+CREATE FUNCTION public.claim_horse_publication_cleanup_v1(
+ p_expected_user_id uuid,p_expected_identity_id uuid,p_attempt_id uuid,p_request_key uuid)
+RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET lock_timeout='2s' AS $f$
+DECLARE offer_id uuid; c listing_publication_private.cleanup%ROWTYPE; t timestamptz;
+BEGIN
+ offer_id:=horse_publication_private.lock_cleanup_context(p_expected_user_id,p_expected_identity_id,p_attempt_id,p_request_key);
+ t:=clock_timestamp();
+ SELECT q.* INTO c FROM listing_publication_private.cleanup q
+ JOIN listing_publication_private.objects o ON o.id=q.object_id
+ JOIN horse_publication_private.commands cmd ON cmd.attempt_id=o.attempt_id AND cmd.horse_offer_id=offer_id
+ WHERE horse_publication_private.cleanup_object_eligible(o.id,offer_id)
+  AND listing_publication_private.object_cleanup_state(o.id)='pending'
+  AND ((q.state IN('pending','retry_wait') AND (q.not_before IS NULL OR q.not_before<=t)) OR (q.state='in_flight' AND q.lease_until<=t))
+ ORDER BY CASE WHEN o.kind='source' THEN 0 ELSE 1 END,q.enqueued_at,q.object_id LIMIT 1 FOR UPDATE OF q SKIP LOCKED;
+ IF NOT FOUND THEN RETURN NULL; END IF;
+ IF c.try_count>=8 THEN
+  UPDATE listing_publication_private.cleanup SET state='needs_attention',last_error='lease_lost' WHERE object_id=c.object_id;
+  RETURN NULL;
+ END IF;
+ UPDATE listing_publication_private.cleanup SET state='in_flight',work_key=gen_random_uuid(),lease_until=t+interval '60 seconds',
+  try_count=try_count+1,not_before=NULL,last_error=NULL WHERE object_id=c.object_id RETURNING * INTO c;
+ RETURN jsonb_build_object('schema_version',1,'object_id',c.object_id,'work_key',c.work_key,'bucket_id',c.bucket_id,
+  'object_path',c.object_path,'try_count',c.try_count,'lease_until_epoch',floor(extract(epoch FROM c.lease_until))::bigint);
+END $f$;
+
+CREATE FUNCTION public.record_horse_publication_cleanup_v1(
+ p_expected_user_id uuid,p_expected_identity_id uuid,p_attempt_id uuid,p_request_key uuid,
+ p_object_id uuid,p_work_key uuid,p_result text)
+RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET lock_timeout='2s' AS $f$
+DECLARE offer_id uuid; target_kind text; cleanup_state text; result jsonb;
+BEGIN
+ offer_id:=horse_publication_private.lock_cleanup_context(p_expected_user_id,p_expected_identity_id,p_attempt_id,p_request_key);
+ SELECT o.kind,q.state INTO target_kind,cleanup_state FROM listing_publication_private.objects o
+ JOIN listing_publication_private.cleanup q ON q.object_id=o.id
+ JOIN horse_publication_private.commands cmd ON cmd.attempt_id=o.attempt_id AND cmd.horse_offer_id=offer_id
+ WHERE o.id=p_object_id AND q.work_key=p_work_key AND q.bucket_id=o.bucket_id AND q.object_path=o.object_path
+  AND ((o.kind='source' AND q.reason='published_source') OR (o.kind='web' AND q.reason='published_image_removed'))
+ FOR UPDATE OF q;
+ IF NOT FOUND THEN RAISE EXCEPTION 'horse_publication_cleanup_binding' USING ERRCODE='42501'; END IF;
+ IF cleanup_state<>'deleted' AND NOT horse_publication_private.cleanup_object_eligible(p_object_id,offer_id) THEN
+  RAISE EXCEPTION 'horse_publication_cleanup_not_observed' USING ERRCODE='55000'; END IF;
+ IF target_kind='web' AND EXISTS(SELECT 1 FROM horse_publication_private.gallery WHERE object_id=p_object_id) THEN
+  RAISE EXCEPTION 'horse_publication_cleanup_active_image' USING ERRCODE='55000'; END IF;
+ result:=public.record_listing_cleanup_v1(p_object_id,p_work_key,p_result);
+ IF p_result='deleted' AND (CASE WHEN target_kind='source'
+  THEN listing_publication_private.hosted_completed_source_deleted_v1(p_object_id)
+  ELSE horse_publication_private.retired_web_deleted(p_object_id) END) IS DISTINCT FROM true THEN
+  RAISE EXCEPTION 'horse_publication_cleanup_not_observed' USING ERRCODE='55000'; END IF;
+ RETURN result;
+END $f$;
+
+-- Browser rights are closed to their typed owner/public read contracts. Storage
+-- claim/record remain service-only and execute under the retained ledger writer.
+REVOKE ALL ON FUNCTION horse_publication_private.media_binding(uuid,integer,boolean,uuid),
+ horse_publication_private.retired_web_deleted(uuid),horse_publication_private.lock_cleanup_context(uuid,uuid,uuid,uuid),
+ horse_publication_private.cleanup_object_eligible(uuid,uuid),
+ public.get_my_horse_publication_image_binding_v1(uuid,uuid,uuid,uuid,uuid),
+ public.get_public_horse_media_binding_v1(uuid,integer),public.get_my_horse_media_binding_v1(uuid,uuid,uuid,integer),
+ public.claim_horse_publication_cleanup_v1(uuid,uuid,uuid,uuid),
+ public.record_horse_publication_cleanup_v1(uuid,uuid,uuid,uuid,uuid,uuid,text)
+ FROM PUBLIC,anon,authenticated,service_role;
+GRANT EXECUTE ON FUNCTION public.get_my_horse_publication_image_binding_v1(uuid,uuid,uuid,uuid,uuid),
+ public.get_my_horse_media_binding_v1(uuid,uuid,uuid,integer) TO authenticated;
+GRANT EXECUTE ON FUNCTION public.get_public_horse_media_binding_v1(uuid,integer),
+ public.claim_horse_publication_cleanup_v1(uuid,uuid,uuid,uuid),
+ public.record_horse_publication_cleanup_v1(uuid,uuid,uuid,uuid,uuid,uuid,text) TO service_role;
+GRANT EXECUTE ON FUNCTION horse_publication_private.retired_web_deleted(uuid),
+ horse_publication_private.lock_cleanup_context(uuid,uuid,uuid,uuid),
+ horse_publication_private.cleanup_object_eligible(uuid,uuid) TO selqiro_listing_final_writer_v1;
+GRANT CREATE ON SCHEMA public TO selqiro_listing_final_writer_v1;
+ALTER FUNCTION public.claim_horse_publication_cleanup_v1(uuid,uuid,uuid,uuid) OWNER TO selqiro_listing_final_writer_v1;
+ALTER FUNCTION public.record_horse_publication_cleanup_v1(uuid,uuid,uuid,uuid,uuid,uuid,text) OWNER TO selqiro_listing_final_writer_v1;
+REVOKE CREATE ON SCHEMA public FROM selqiro_listing_final_writer_v1;
+
+-- The binding is enforced below HTTP as well. Ordinary image request keys keep
+-- their established semantics; a horse image uses its prepared client-file ID.
+CREATE FUNCTION horse_publication_private.guard_image_request_key()
+RETURNS trigger LANGUAGE plpgsql SET search_path=pg_catalog,pg_temp AS $f$
+DECLARE expected uuid;
+BEGIN
+ IF TG_TABLE_SCHEMA<>'listing_publication_private' OR TG_OP<>'INSERT' THEN
+  RAISE EXCEPTION 'horse_offer_image_binding_invalid' USING ERRCODE='55000'; END IF;
+ IF TG_TABLE_NAME='multipart_sessions' THEN
+  SELECT s.client_file_id INTO expected FROM listing_publication_private.objects o
+  JOIN listing_publication_private.slots s ON s.id=o.slot_id AND s.attempt_id=o.attempt_id
+  JOIN horse_publication_private.commands c ON c.attempt_id=o.attempt_id WHERE o.id=NEW.object_id;
+ ELSIF TG_TABLE_NAME='web_images' THEN
+  SELECT s.client_file_id INTO expected FROM listing_publication_private.slots s
+  JOIN horse_publication_private.commands c ON c.attempt_id=s.attempt_id
+  WHERE s.id=NEW.slot_id AND s.attempt_id=NEW.attempt_id;
+ ELSE RAISE EXCEPTION 'horse_offer_image_binding_invalid' USING ERRCODE='55000'; END IF;
+ IF expected IS NOT NULL AND NEW.request_key IS DISTINCT FROM expected THEN
+  RAISE EXCEPTION 'horse_offer_image_request_conflict' USING ERRCODE='22023'; END IF;
+ RETURN NEW;
+END $f$;
+CREATE TRIGGER guard_horse_multipart_key BEFORE INSERT ON listing_publication_private.multipart_sessions
+ FOR EACH ROW EXECUTE FUNCTION horse_publication_private.guard_image_request_key();
+CREATE TRIGGER guard_horse_web_key BEFORE INSERT ON listing_publication_private.web_images
+ FOR EACH ROW EXECUTE FUNCTION horse_publication_private.guard_image_request_key();
+REVOKE ALL ON FUNCTION horse_publication_private.guard_image_request_key() FROM PUBLIC,anon,authenticated,service_role;
+GRANT EXECUTE ON FUNCTION horse_publication_private.guard_image_request_key() TO selqiro_listing_final_writer_v1;
+
+-- COMPONENT 05_authority.sql
+REVOKE ALL ON ALL TABLES IN SCHEMA horse_publication_private FROM PUBLIC,anon,authenticated,service_role;
+REVOKE ALL ON ALL FUNCTIONS IN SCHEMA horse_publication_private FROM PUBLIC,anon,authenticated,service_role;
+-- Canonical managed gallery membership can move only through the controlled
+-- command transaction; direct owner DML cannot bypass WEB retirement lineage.
+REVOKE INSERT,UPDATE,DELETE,TRUNCATE,REFERENCES,TRIGGER ON public.horse_offer_images FROM PUBLIC,anon,authenticated;
+GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA horse_publication_private TO selqiro_listing_final_writer_v1;
+-- Retained media guards run as the existing isolated writer. Read-only canonical
+-- membership is enough; the horse API functions retain postgres ownership.
+GRANT SELECT ON public.horse_offers,public.horse_offer_images,public.horse_offer_publication_events TO selqiro_listing_final_writer_v1;
+CREATE POLICY horse_writer_read_offers ON public.horse_offers FOR SELECT TO selqiro_listing_final_writer_v1 USING(true);
+CREATE POLICY horse_writer_read_images ON public.horse_offer_images FOR SELECT TO selqiro_listing_final_writer_v1 USING(true);
+CREATE POLICY horse_writer_read_events ON public.horse_offer_publication_events FOR SELECT TO selqiro_listing_final_writer_v1 USING(true);
+GRANT CREATE ON SCHEMA horse_publication_private TO selqiro_listing_final_writer_v1;
+ALTER FUNCTION horse_publication_private.close_published_attempt(uuid,uuid,uuid) OWNER TO selqiro_listing_final_writer_v1;
+REVOKE CREATE ON SCHEMA horse_publication_private FROM selqiro_listing_final_writer_v1;
+
+REVOKE ALL ON FUNCTION public.prepare_my_horse_publication_v1(uuid,uuid,uuid,uuid,text,jsonb,jsonb,jsonb,jsonb),
+ public.get_my_horse_publication_attempt_v1(uuid,uuid,uuid,uuid),
+ public.publish_my_horse_offer_v1(uuid,uuid,uuid,uuid),
+ public.cancel_my_horse_publication_v1(uuid,uuid,uuid,uuid),
+ public.get_my_horse_offer_publication_snapshot_v1(uuid,uuid,uuid)
+ FROM PUBLIC,anon,authenticated,service_role;
+GRANT EXECUTE ON FUNCTION public.prepare_my_horse_publication_v1(uuid,uuid,uuid,uuid,text,jsonb,jsonb,jsonb,jsonb),
+ public.get_my_horse_publication_attempt_v1(uuid,uuid,uuid,uuid),
+ public.publish_my_horse_offer_v1(uuid,uuid,uuid,uuid),
+ public.cancel_my_horse_publication_v1(uuid,uuid,uuid,uuid),
+ public.get_my_horse_offer_publication_snapshot_v1(uuid,uuid,uuid) TO authenticated;
+
+-- COMPONENT 06_contact.sql
+-- Horse contact reuses the existing exact two-account/two-identity channel.
+-- Canonical conversations/messages and their blocking/read/photo mechanisms
+-- remain authoritative. No synthetic numeric listing is created.
+CREATE TABLE horse_publication_private.contact_receipts(
+ actor_user_id uuid NOT NULL,request_key uuid NOT NULL,identity_id uuid NOT NULL,
+ horse_offer_id uuid NOT NULL,conversation_id bigint NOT NULL REFERENCES public.conversations(id) ON DELETE RESTRICT,
+ PRIMARY KEY(actor_user_id,request_key));
+CREATE TABLE horse_publication_private.thread_context(
+ conversation_id bigint PRIMARY KEY REFERENCES public.conversations(id) ON DELETE RESTRICT,
+ horse_offer_id uuid NOT NULL,card jsonb NOT NULL);
+CREATE TABLE horse_publication_private.message_cards(
+ message_id bigint PRIMARY KEY REFERENCES public.messages(id) ON DELETE RESTRICT,
+ conversation_id bigint NOT NULL REFERENCES public.conversations(id) ON DELETE RESTRICT,
+ horse_offer_id uuid NOT NULL,card jsonb NOT NULL);
+ALTER TABLE horse_publication_private.contact_receipts ENABLE ROW LEVEL SECURITY;
+ALTER TABLE horse_publication_private.thread_context ENABLE ROW LEVEL SECURITY;
+ALTER TABLE horse_publication_private.message_cards ENABLE ROW LEVEL SECURITY;
+REVOKE ALL ON horse_publication_private.contact_receipts,horse_publication_private.thread_context,
+ horse_publication_private.message_cards FROM PUBLIC,anon,authenticated,service_role;
+GRANT USAGE ON SCHEMA horse_publication_private TO selqiro_listing_contact_writer_v1;
+GRANT SELECT,INSERT ON horse_publication_private.contact_receipts,horse_publication_private.message_cards TO selqiro_listing_contact_writer_v1;
+GRANT SELECT,INSERT,UPDATE ON horse_publication_private.thread_context TO selqiro_listing_contact_writer_v1;
+CREATE POLICY contact_writer ON horse_publication_private.contact_receipts TO selqiro_listing_contact_writer_v1 USING(true) WITH CHECK(true);
+CREATE POLICY contact_writer ON horse_publication_private.thread_context TO selqiro_listing_contact_writer_v1 USING(true) WITH CHECK(true);
+CREATE POLICY contact_writer ON horse_publication_private.message_cards TO selqiro_listing_contact_writer_v1 USING(true) WITH CHECK(true);
+
+-- Definer reads and locks only the one canonical, publicly eligible horse.
+CREATE FUNCTION horse_publication_private.contact_snapshot(p_offer_id uuid)
+RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,pg_temp AS $f$
+DECLARE h public.horse_offers%ROWTYPE;
+BEGIN
+ SELECT * INTO h FROM public.horse_offers WHERE id=p_offer_id FOR SHARE;
+ IF NOT FOUND OR NOT horse_publication_private.is_public(h.id) OR h.created_by_user_id IS NULL THEN
+  RAISE EXCEPTION 'horse_contact_unavailable' USING ERRCODE='42501'; END IF;
+ RETURN jsonb_build_object('user_id',h.created_by_user_id,'identity_id',h.identity_id,'active_until',h.active_until,
+  'card',jsonb_build_object('content_type','horse_offer','id',h.id,'title',left(h.title,200),
+   'image',(SELECT original_url FROM public.horse_offer_images WHERE horse_offer_id=h.id
+     ORDER BY is_primary DESC,sort_order,created_at,id LIMIT 1),'price',NULL));
+END $f$;
+REVOKE ALL ON FUNCTION horse_publication_private.contact_snapshot(uuid) FROM PUBLIC,anon,authenticated,service_role;
+GRANT EXECUTE ON FUNCTION horse_publication_private.contact_snapshot(uuid) TO selqiro_listing_contact_writer_v1;
+
+CREATE FUNCTION public.contact_my_horse_seller_v1(p_expected_user_id uuid,p_expected_identity_id uuid,p_request_key uuid,p_offer_id uuid)
+RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,public,auth,pg_temp SET lock_timeout='2s' AS $f$
+DECLARE old horse_publication_private.contact_receipts%ROWTYPE;s jsonb;card jsonb;owner_user uuid;owner_identity uuid;
+ cid bigint;candidate bigint;first_u uuid;first_i uuid;second_u uuid;second_i uuid;t timestamptz;
+BEGIN
+ PERFORM listing_contact_private.require_actor_hosted_v1(p_expected_user_id,p_expected_identity_id);
+ PERFORM listing_contact_private.require_key(p_request_key);
+ IF p_offer_id IS NULL THEN RAISE EXCEPTION 'horse_contact_input' USING ERRCODE='22023'; END IF;
+ SELECT * INTO old FROM horse_publication_private.contact_receipts WHERE actor_user_id=p_expected_user_id AND request_key=p_request_key;
+ IF FOUND THEN
+  IF old.identity_id<>p_expected_identity_id OR old.horse_offer_id<>p_offer_id THEN
+   RAISE EXCEPTION 'horse_contact_request_conflict' USING ERRCODE='22023'; END IF;
+  PERFORM listing_contact_private.require_member(old.conversation_id,p_expected_user_id,p_expected_identity_id);
+  RETURN jsonb_build_object('schema_version',1,'actor_user_id',p_expected_user_id,'identity_id',p_expected_identity_id,
+   'request_key',p_request_key,'horse_offer_id',p_offer_id,'conversation_id',old.conversation_id::text,'replayed',true);
+ END IF;
+ s:=horse_publication_private.contact_snapshot(p_offer_id);card:=s->'card';
+ owner_user:=(s->>'user_id')::uuid;owner_identity:=(s->>'identity_id')::uuid;
+ IF owner_user=p_expected_user_id OR owner_identity=p_expected_identity_id THEN
+  RAISE EXCEPTION 'horse_contact_self' USING ERRCODE='42501'; END IF;
+ PERFORM listing_contact_private.require_peer(owner_user,owner_identity);
+ PERFORM listing_contact_private.require_unblocked(p_expected_user_id,owner_user);
+ IF p_expected_user_id<owner_user THEN first_u:=p_expected_user_id;first_i:=p_expected_identity_id;second_u:=owner_user;second_i:=owner_identity;
+ ELSE first_u:=owner_user;first_i:=owner_identity;second_u:=p_expected_user_id;second_i:=p_expected_identity_id; END IF;
+ candidate:=nextval('public.conversations_id_seq');
+ INSERT INTO listing_contact_private.channels(conversation_id,first_user_id,first_identity_id,second_user_id,second_identity_id)
+ VALUES(candidate,first_u,first_i,second_u,second_i) ON CONFLICT(first_user_id,first_identity_id,second_user_id,second_identity_id) DO NOTHING
+ RETURNING conversation_id INTO cid;
+ t:=clock_timestamp();
+ IF cid IS NOT NULL THEN
+  IF (s->>'active_until')::timestamptz<=t THEN RAISE EXCEPTION 'horse_contact_unavailable' USING ERRCODE='42501'; END IF;
+  INSERT INTO public.conversations(id,listing_id,listing_title_snapshot,listing_image_snapshot,listing_price_snapshot,
+   created_by,created_at,updated_at,buyer_id,seller_id,buyer_identity_id,seller_identity_id) OVERRIDING SYSTEM VALUE
+  VALUES(cid,NULL,card->>'title',card->>'image',NULL,p_expected_user_id,t,t,p_expected_user_id,owner_user,p_expected_identity_id,owner_identity);
+  INSERT INTO public.conversation_participants(conversation_id,user_id,identity_id,last_read_at)
+   VALUES(cid,p_expected_user_id,p_expected_identity_id,t),(cid,owner_user,owner_identity,NULL);
+ ELSE
+  SELECT conversation_id INTO cid FROM listing_contact_private.channels WHERE first_user_id=first_u AND first_identity_id=first_i
+   AND second_user_id=second_u AND second_identity_id=second_i;
+  PERFORM 1 FROM public.conversations WHERE id=cid FOR UPDATE;
+  IF NOT FOUND OR (s->>'active_until')::timestamptz<=clock_timestamp() THEN RAISE EXCEPTION 'horse_contact_unavailable' USING ERRCODE='42501'; END IF;
+  PERFORM listing_contact_private.require_member(cid,p_expected_user_id,p_expected_identity_id);
+  UPDATE public.conversations SET listing_id=NULL,listing_title_snapshot=card->>'title',listing_image_snapshot=card->>'image',
+   listing_price_snapshot=NULL,updated_at=clock_timestamp(),archived_at=NULL WHERE id=cid;
+  UPDATE public.conversation_participants SET deleted_at=NULL WHERE conversation_id=cid AND user_id=p_expected_user_id AND identity_id=p_expected_identity_id;
+ END IF;
+ INSERT INTO horse_publication_private.thread_context(conversation_id,horse_offer_id,card) VALUES(cid,p_offer_id,card)
+ ON CONFLICT(conversation_id) DO UPDATE SET horse_offer_id=excluded.horse_offer_id,card=excluded.card;
+ INSERT INTO horse_publication_private.contact_receipts(actor_user_id,request_key,identity_id,horse_offer_id,conversation_id)
+ VALUES(p_expected_user_id,p_request_key,p_expected_identity_id,p_offer_id,cid);
+ RETURN jsonb_build_object('schema_version',1,'actor_user_id',p_expected_user_id,'identity_id',p_expected_identity_id,
+  'request_key',p_request_key,'horse_offer_id',p_offer_id,'conversation_id',cid::text,'replayed',false);
+END $f$;
+GRANT CREATE ON SCHEMA public TO selqiro_listing_contact_writer_v1;
+ALTER FUNCTION public.contact_my_horse_seller_v1(uuid,uuid,uuid,uuid) OWNER TO selqiro_listing_contact_writer_v1;
+REVOKE CREATE ON SCHEMA public FROM selqiro_listing_contact_writer_v1;
+REVOKE ALL ON FUNCTION public.contact_my_horse_seller_v1(uuid,uuid,uuid,uuid) FROM PUBLIC,anon,authenticated,service_role;
+GRANT EXECUTE ON FUNCTION public.contact_my_horse_seller_v1(uuid,uuid,uuid,uuid) TO authenticated;
+
+-- send_my_message_v2 already locks the thread before inserting. Its exact actor,
+-- membership, blocks, idempotency and private-photo checks are reused unchanged.
+-- Store the horse context at send time so later thread switches do not rewrite it.
+CREATE FUNCTION horse_publication_private.capture_message_card()
+RETURNS trigger LANGUAGE plpgsql SET search_path=pg_catalog,pg_temp AS $f$
+BEGIN
+ IF current_user='selqiro_listing_contact_writer_v1' AND NEW.listing_id IS NULL THEN
+  INSERT INTO horse_publication_private.message_cards(message_id,conversation_id,horse_offer_id,card)
+  SELECT NEW.id,NEW.conversation_id,h.horse_offer_id,h.card FROM horse_publication_private.thread_context h
+  JOIN public.conversations c ON c.id=h.conversation_id AND c.listing_id IS NULL
+  WHERE h.conversation_id=NEW.conversation_id;
+ END IF;
+ RETURN NEW;
+END $f$;
+REVOKE ALL ON FUNCTION horse_publication_private.capture_message_card() FROM PUBLIC,anon,authenticated,service_role;
+GRANT EXECUTE ON FUNCTION horse_publication_private.capture_message_card() TO selqiro_listing_contact_writer_v1;
+CREATE TRIGGER horse_message_context AFTER INSERT ON public.messages FOR EACH ROW
+ EXECUTE FUNCTION horse_publication_private.capture_message_card();
+
+-- V2's existing shape gains a typed horse card only when one actually exists.
+-- The old get_my_message_thread_v2 RPC stays byte-for-byte compatible.
+CREATE FUNCTION public.get_my_marketplace_message_thread_v1(p_expected_user_id uuid,p_expected_identity_id uuid,
+ p_conversation_id text,p_before_message_id text DEFAULT NULL,p_attachment_listing_id text DEFAULT NULL)
+RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET lock_timeout='2s' AS $f$
+DECLARE r jsonb;context jsonb;items jsonb;cid bigint;
+BEGIN
+ r:=public.get_my_message_thread_v2(p_expected_user_id,p_expected_identity_id,p_conversation_id,p_before_message_id,p_attachment_listing_id);
+ cid:=listing_contact_private.positive_id(p_conversation_id);
+ IF r->'listing'='null'::jsonb THEN
+  SELECT jsonb_build_object('id',h.horse_offer_id,'title',h.card->>'title','content_type','horse_offer') INTO context
+  FROM horse_publication_private.thread_context h JOIN public.conversations c ON c.id=h.conversation_id AND c.listing_id IS NULL
+  WHERE h.conversation_id=cid;
+  IF context IS NOT NULL THEN r:=jsonb_set(r,'{listing}',context); END IF;
+ END IF;
+ SELECT coalesce(jsonb_agg(CASE WHEN m.item->'listing'='null'::jsonb AND hc.card IS NOT NULL
+  THEN jsonb_set(m.item,'{listing}',hc.card) ELSE m.item END ORDER BY m.ordinal),'[]'::jsonb) INTO items
+ FROM jsonb_array_elements(r->'messages') WITH ORDINALITY m(item,ordinal)
+ LEFT JOIN horse_publication_private.message_cards hc ON hc.message_id=(m.item->>'id')::bigint AND hc.conversation_id=cid;
+ RETURN jsonb_set(r,'{messages}',items);
+END $f$;
+GRANT CREATE ON SCHEMA public TO selqiro_listing_contact_writer_v1;
+ALTER FUNCTION public.get_my_marketplace_message_thread_v1(uuid,uuid,text,text,text) OWNER TO selqiro_listing_contact_writer_v1;
+REVOKE CREATE ON SCHEMA public FROM selqiro_listing_contact_writer_v1;
+REVOKE ALL ON FUNCTION public.get_my_marketplace_message_thread_v1(uuid,uuid,text,text,text) FROM PUBLIC,anon,authenticated,service_role;
+GRANT EXECUTE ON FUNCTION public.get_my_marketplace_message_thread_v1(uuid,uuid,text,text,text) TO authenticated;
+
+-- COMPONENT 07_public.sql
+-- Canonical horse reads. Only reviewed public fields leave this boundary.
+-- Private coordinates, street/location_text, receipts, policy acceptance IDs,
+-- original upload paths and arbitrary JSON are never returned or indexed here.
+CREATE FUNCTION horse_publication_private.public_price(h public.horse_offers)
+RETURNS jsonb LANGUAGE sql STABLE SET search_path=pg_catalog,pg_temp AS $f$
+ SELECT jsonb_build_object('kind',CASE WHEN h.offer_type='wanted' THEN
+   CASE WHEN h.details#>>'{wanted,budget,mode}'='maximum' THEN 'budget' ELSE 'contact' END ELSE h.price_type END,
+  'amount',CASE WHEN h.offer_type='wanted' THEN h.details#>>'{wanted,budget,amount}' ELSE h.price_amount::text END,
+  'currency','EUR','period',CASE WHEN h.offer_type IN('lease','co_rider') THEN h.details#>>'{recurring_fee,period}' ELSE NULL END);
+$f$;
+
+CREATE FUNCTION horse_publication_private.public_fields(h public.horse_offers)
+RETURNS jsonb LANGUAGE sql STABLE SET search_path=pg_catalog,pg_temp AS $f$
+ SELECT CASE WHEN h.offer_type='wanted' THEN jsonb_strip_nulls(jsonb_build_object(
+  'preferred_sex',h.details#>>'{wanted,preferred_sex}',
+  'preferred_breed',h.details#>>'{wanted,preferred_breed}',
+  'preferred_discipline',h.details#>>'{wanted,preferred_discipline}',
+  'preferred_training_level',h.details#>>'{wanted,preferred_training_level}',
+  'intended_use',h.details#>>'{wanted,intended_use}',
+  'health_preferences',h.details#>>'{wanted,health_preferences}',
+  'behavior_preferences',h.details#>>'{wanted,behavior_preferences}'))
+ ELSE jsonb_strip_nulls(jsonb_build_object('horse_name',h.horse_name,'birth_year',h.birth_year::text,
+  'sex',h.sex,'breed',h.breed,'color',h.color,'height_cm',h.height_cm::text,
+  'discipline',h.discipline,'training_level',h.training_level,'suitability',h.suitability,
+  'health_notes',h.health_notes,'behavior_notes',h.behavior_notes)) END;
+$f$;
+
+CREATE FUNCTION public.get_public_horse_offer_v1(p_offer_id uuid)
+RETURNS jsonb LANGUAGE plpgsql STABLE SECURITY DEFINER SET search_path=pg_catalog,pg_temp AS $f$
+DECLARE result jsonb; actor uuid:=public.listing_actor_uid_hosted_v1();
+BEGIN
+ SELECT jsonb_build_object('schema_version',1,'content_type','horse_offer','content_id',h.id,
+  'offer_type',h.offer_type,'title',h.title,'description',h.description,
+  'price',horse_publication_private.public_price(h),'country','EE',
+  'city',CASE WHEN h.offer_type='wanted' THEN h.details#>>'{wanted,search_area,city_or_municipality}' ELSE h.city END,
+  'region',CASE WHEN h.offer_type='wanted' THEN h.details#>>'{wanted,search_area,region}' ELSE h.region END,
+  'fields',horse_publication_private.public_fields(h),
+  'images',coalesce((SELECT jsonb_agg(jsonb_build_object('id',im.id,'url',im.original_url)
+    ORDER BY im.is_primary DESC,im.sort_order,im.created_at,im.id) FROM public.horse_offer_images im WHERE im.horse_offer_id=h.id),'[]'::jsonb),
+  'seller_name',ip.display_name,'seller_slug',ip.slug,'seller_type',i.type,
+  'published_at',h.published_at,'active_until',h.active_until)
+ INTO result FROM public.horse_offers h
+ JOIN public.identities i ON i.id=h.identity_id AND i.status='active'
+ JOIN public.identity_profiles ip ON ip.identity_id=i.id
+ WHERE h.id=p_offer_id AND horse_publication_private.is_public(h.id)
+  AND NOT EXISTS(SELECT 1 FROM public.user_blocks b WHERE actor IS NOT NULL AND
+    ((b.blocker_id=actor AND b.blocked_id=h.created_by_user_id) OR (b.blocked_id=actor AND b.blocker_id=h.created_by_user_id)));
+ RETURN result;
+END $f$;
+
+-- Filtering, counting and pagination operate on one typed set. Numeric listing
+-- IDs and canonical horse UUIDs keep their own deterministic tie-break order.
+CREATE FUNCTION public.search_public_marketplace_v1(p_search_query text DEFAULT '',p_category text DEFAULT NULL,
+ p_subcategory text DEFAULT NULL,p_detail_category text DEFAULT NULL,p_condition text DEFAULT NULL,
+ p_location_query text DEFAULT '',p_result_limit integer DEFAULT 24,p_result_offset integer DEFAULT 0,
+ p_identity_id uuid DEFAULT NULL)
+RETURNS jsonb LANGUAGE plpgsql STABLE SECURITY DEFINER
+SET search_path=pg_catalog,public,auth,pg_temp SET plan_cache_mode='force_custom_plan' AS $f$
+DECLARE q text:=btrim(coalesce(p_search_query,''));loc text:=btrim(coalesce(p_location_query,''));
+ cat text:=nullif(btrim(p_category),'');sub text:=nullif(btrim(p_subcategory),'');
+ detail text:=nullif(btrim(p_detail_category),'');cond text:=nullif(btrim(p_condition),'');
+ actor uuid:=public.listing_actor_uid_hosted_v1();query tsquery;result jsonb;
+BEGIN
+ IF char_length(q)>160 OR char_length(loc)>160 OR p_result_limit IS NULL OR p_result_limit NOT BETWEEN 1 AND 60
+  OR p_result_offset IS NULL OR p_result_offset NOT BETWEEN 0 AND 100000 THEN
+  RAISE EXCEPTION 'marketplace_search_input' USING ERRCODE='22023'; END IF;
+ IF (cat IS NOT NULL AND (length(cat)>120 OR cat!~'^[a-z][a-z0-9_]*$'))
+  OR (sub IS NOT NULL AND (length(sub)>160 OR sub!~'^[a-z][a-z0-9_]*$' OR cat IS NULL))
+  OR (detail IS NOT NULL AND (length(detail)>160 OR detail!~'^[a-z][a-z0-9_]*$' OR sub IS NULL))
+  OR (cond IS NOT NULL AND cond NOT IN('new','used','damaged'))
+  OR (cat='horses' AND (detail IS NOT NULL OR (sub IS NOT NULL AND sub NOT IN('sale','free_transfer','lease','co_rider','wanted')))) THEN
+  RAISE EXCEPTION 'marketplace_search_filters' USING ERRCODE='22023'; END IF;
+ query:=plainto_tsquery('pg_catalog.simple'::regconfig,q);
+ WITH ordinary AS MATERIALIZED(
+  SELECT 'listing'::text content_type,l.id::text content_id,l.id numeric_id,NULL::uuid horse_id,l.created_at,
+   jsonb_build_object('content_type','listing','content_id',l.id::text,'offer_type',NULL,
+    'title',l.title,'description_preview',left(l.description,280),
+    'price',public.listing_price_read_model_v1(l.price_kind,l.price_amount,l.currency,l.price_revision,l.price),
+    'category',l.category,'subcategory',l.subcategory,
+    'detail_category',CASE WHEN jsonb_typeof(l.details->'detailCategory')='string' THEN l.details->>'detailCategory' END,
+    'condition',l.condition,'country',l.country,'city',l.city,
+    'image_url',coalesce(img.thumb_url,img.medium_url,img.original_url,l.image),
+    'seller_name',ip.display_name,'seller_slug',ip.slug,'seller_avatar_url',ip.avatar_url,'seller_type',i.type,'created_at',l.created_at) card
+  FROM public.listings l JOIN public.identities i ON i.id=l.identity_id AND i.status='active'
+  JOIN public.identity_profiles ip ON ip.identity_id=i.id
+  LEFT JOIN LATERAL(SELECT li.thumb_url,li.medium_url,li.original_url FROM public.listing_images li WHERE li.listing_id=l.id
+   ORDER BY li.is_primary DESC NULLS LAST,li.sort_order ASC NULLS LAST,li.created_at ASC NULLS LAST,li.id LIMIT 1) img ON true
+  WHERE l.status='active' AND (l.active_until IS NULL OR l.active_until>now())
+   AND (p_identity_id IS NULL OR l.identity_id=p_identity_id)
+   AND (q='' OR public.public_listing_search_document_v1(l.title,l.description,l.category,l.subcategory,l.details)@@query)
+   AND (cat IS NULL OR l.category=cat) AND (sub IS NULL OR l.subcategory=sub)
+   AND (detail IS NULL OR (jsonb_typeof(l.details->'detailCategory')='string' AND l.details->>'detailCategory'=detail))
+   AND (cond IS NULL OR l.condition=cond)
+   AND (loc='' OR strpos(lower(coalesce(l.city,'')||' '||coalesce(l.country,'')),lower(loc))>0)
+   AND NOT EXISTS(SELECT 1 FROM public.user_blocks b WHERE actor IS NOT NULL AND
+    ((b.blocker_id=actor AND b.blocked_id=l.user_id) OR (b.blocked_id=actor AND b.blocker_id=l.user_id)))
+ ), horses AS MATERIALIZED(
+  SELECT 'horse_offer'::text content_type,h.id::text content_id,NULL::bigint numeric_id,h.id horse_id,h.created_at,
+   jsonb_build_object('content_type','horse_offer','content_id',h.id,'offer_type',h.offer_type,
+    'title',h.title,'description_preview',left(h.description,280),'price',horse_publication_private.public_price(h),
+    'category','horses','subcategory',h.offer_type,'detail_category',NULL,'condition',NULL,'country','EE',
+    'city',CASE WHEN h.offer_type='wanted' THEN h.details#>>'{wanted,search_area,city_or_municipality}' ELSE h.city END,
+    'image_url',img.original_url,'seller_name',ip.display_name,'seller_slug',ip.slug,
+    'seller_avatar_url',ip.avatar_url,'seller_type',i.type,'created_at',h.created_at) card
+  FROM public.horse_offers h JOIN public.identities i ON i.id=h.identity_id AND i.status='active'
+  JOIN public.identity_profiles ip ON ip.identity_id=i.id
+  LEFT JOIN LATERAL(SELECT im.original_url FROM public.horse_offer_images im WHERE im.horse_offer_id=h.id
+   ORDER BY im.is_primary DESC,im.sort_order,im.created_at,im.id LIMIT 1) img ON true
+  WHERE horse_publication_private.is_public(h.id) AND (p_identity_id IS NULL OR h.identity_id=p_identity_id)
+   AND (cat IS NULL OR cat='horses') AND (sub IS NULL OR h.offer_type=sub) AND detail IS NULL AND cond IS NULL
+   AND (q='' OR to_tsvector('pg_catalog.simple'::regconfig,coalesce(h.title,'')||' '||coalesce(h.description,'')||' '||
+    coalesce(h.breed,'')||' '||coalesce(h.discipline,'')||' '||coalesce(h.details#>>'{wanted,preferred_breed}',''))@@query)
+   AND (loc='' OR strpos(lower(CASE WHEN h.offer_type='wanted' THEN coalesce(h.details#>>'{wanted,search_area,city_or_municipality}','')
+     ELSE coalesce(h.city,'') END||' EE'),lower(loc))>0)
+   AND NOT EXISTS(SELECT 1 FROM public.user_blocks b WHERE actor IS NOT NULL AND
+    ((b.blocker_id=actor AND b.blocked_id=h.created_by_user_id) OR (b.blocked_id=actor AND b.blocker_id=h.created_by_user_id)))
+ ), matched AS MATERIALIZED(SELECT * FROM ordinary UNION ALL SELECT * FROM horses),
+ page AS(SELECT * FROM matched ORDER BY created_at DESC,content_type,numeric_id DESC,horse_id DESC LIMIT p_result_limit OFFSET p_result_offset),
+ totals AS(SELECT count(*) n FROM matched)
+ SELECT jsonb_build_object('schema_version',1,'content_scope','marketplace','sort','newest',
+  'items',coalesce((SELECT jsonb_agg(card ORDER BY created_at DESC,content_type,numeric_id DESC,horse_id DESC) FROM page),'[]'::jsonb),
+  'total_count',n::text,'result_limit',p_result_limit,'result_offset',p_result_offset,
+  'has_more',n>p_result_offset::bigint+p_result_limit,
+  'next_offset',CASE WHEN n>p_result_offset::bigint+p_result_limit AND p_result_offset+p_result_limit<=100000 THEN p_result_offset+p_result_limit END,
+  'window_limit_reached',n>p_result_offset::bigint+p_result_limit AND p_result_offset+p_result_limit>100000)
+ INTO result FROM totals;
+ RETURN result;
+END $f$;
+
+REVOKE ALL ON FUNCTION horse_publication_private.public_price(public.horse_offers),
+ horse_publication_private.public_fields(public.horse_offers) FROM PUBLIC,anon,authenticated,service_role;
+REVOKE ALL ON FUNCTION public.get_public_horse_offer_v1(uuid),
+ public.search_public_marketplace_v1(text,text,text,text,text,text,integer,integer,uuid) FROM PUBLIC,anon,authenticated,service_role;
+GRANT EXECUTE ON FUNCTION public.get_public_horse_offer_v1(uuid),
+ public.search_public_marketplace_v1(text,text,text,text,text,text,integer,integer,uuid) TO anon,authenticated;

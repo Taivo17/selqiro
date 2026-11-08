@@ -6,16 +6,19 @@ import Link from "next/link";
 import { useAuth } from "../../../../lib/useAuth";
 import { isHorseDraftUuid } from "../../../entities/horse-offer/model/draftEdit";
 import OwnerHorseOfferEditor from "./OwnerHorseOfferEditor";
+import { useV2Translation } from "../../../shared/i18n/V2LanguageProvider";
+import { horsePublicationMessages } from "../../horse-publication/model/horsePublicationMessages";
 
 export default function OwnerHorseOfferEditPage({ offerId }: { offerId: string }) {
   const { language, r } = useMarketplaceTranslation();
+  const {t} = useV2Translation(horsePublicationMessages);
   const { user, loading } = useAuth();
   const id = offerId.trim().toLowerCase();
   if (loading) return <div className="mx-auto max-w-5xl p-8" role="status">{r(marketplaceMessage("horse.loading_account.9d105e"))}</div>;
   if (!user) return (
     <div className="mx-auto max-w-3xl p-8">
-      <h1 className="text-2xl font-black">{r(marketplaceMessage("horse.sign_in_to_edit_the_draft.1bbdee"))}</h1>
-      <Link href="/auth" className="mt-5 inline-block font-bold underline">{r(marketplaceMessage("horse.sign_in.777709"))}</Link>
+      <h1 className="text-2xl font-black">{t("signIn")}</h1>
+      <Link href={`/auth?next=${encodeURIComponent(`/v2/my-area/horse-offers/${id}/edit`)}`} className="mt-5 inline-block font-bold underline">{t("signInButton")}</Link>
     </div>
   );
   if (!isHorseDraftUuid(id)) return (

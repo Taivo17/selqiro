@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "suite": "horse-publication-contracts",
+  "started_at_utc": "2026-11-08T10:53:08.590Z",
+  "completed_at_utc": "2026-11-08T10:53:25.190Z",
+  "passed": 9,
+  "total": 9,
+  "modules": {
+    "01_policy_schema.sql": "be0654b2469343f66a8003cccc3dc6ca5c6e737a643f75f02abb4ffc51b5f2f6",
+    "02_commands_prepare.sql": "0210ee7479acde04772c2b1639bd78a59393c97d0793f0b13264511222369cd6",
+    "03_finality.sql": "993481b227edddcb8994437b4c30adb47b9312591fa66fda8cc71a265750d33b",
+    "04_media_bridge.sql": "915c959aaec954f88852196e97c9b1c8cb400ebed500ec7f5e3096843994020d",
+    "05_authority.sql": "06c8478d107b7bae5f7d6697171862ed5ce255518a98824fd2e5ac341d97eab5"
+  },
+  "scenarios": [
+    {
+      "case": "five_types_and_replay",
+      "passed": true,
+      "postgres": "PostgreSQL 17.5 on aarch64-unknown-linux-gnu, compiled by emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 3.1.74 (1092ec30a3fb1d46b1782ff1b4db5094d3d06ae5), 32-bit",
+      "provider_io": false,
+      "native_concurrency": false
+    },
+    {
+      "case": "input_and_policy",
+      "passed": true,
+      "postgres": "PostgreSQL 17.5 on aarch64-unknown-linux-gnu, compiled by emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 3.1.74 (1092ec30a3fb1d46b1782ff1b4db5094d3d06ae5), 32-bit",
+      "provider_io": false,
+      "native_concurrency": false
+    },
+    {
+      "case": "cas_and_old_public",
+      "passed": true,
+      "postgres": "PostgreSQL 17.5 on aarch64-unknown-linux-gnu, compiled by emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 3.1.74 (1092ec30a3fb1d46b1782ff1b4db5094d3d06ae5), 32-bit",
+      "provider_io": false,
+      "native_concurrency": false
+    },
+    {
+      "case": "cancel_and_identity",
+      "passed": true,
+      "postgres": "PostgreSQL 17.5 on aarch64-unknown-linux-gnu, compiled by emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 3.1.74 (1092ec30a3fb1d46b1782ff1b4db5094d3d06ae5), 32-bit",
+      "provider_io": false,
+      "native_concurrency": false
+    },
+    {
+      "case": "policy_change_final",
+      "passed": true,
+      "postgres": "PostgreSQL 17.5 on aarch64-unknown-linux-gnu, compiled by emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 3.1.74 (1092ec30a3fb1d46b1782ff1b4db5094d3d06ae5), 32-bit",
+      "provider_io": false,
+      "native_concurrency": false
+    },
+    {
+      "case": "media_lifecycle",
+      "passed": true,
+      "postgres": "PostgreSQL 17.5 on aarch64-unknown-linux-gnu, compiled by emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 3.1.74 (1092ec30a3fb1d46b1782ff1b4db5094d3d06ae5), 32-bit",
+      "provider_io": false,
+      "native_concurrency": false
+    },
+    {
+      "case": "live_media_proof",
+      "passed": true,
+      "postgres": "PostgreSQL 17.5 on aarch64-unknown-linux-gnu, compiled by emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 3.1.74 (1092ec30a3fb1d46b1782ff1b4db5094d3d06ae5), 32-bit",
+      "provider_io": false,
+      "native_concurrency": false
+    },
+    {
+      "case": "business_and_authority",
+      "passed": true,
+      "postgres": "PostgreSQL 17.5 on aarch64-unknown-linux-gnu, compiled by emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 3.1.74 (1092ec30a3fb1d46b1782ff1b4db5094d3d06ae5), 32-bit",
+      "provider_io": false,
+      "native_concurrency": false
+    },
+    {
+      "case": "media_binding_cleanup",
+      "passed": true,
+      "postgres": "PostgreSQL 17.5 on aarch64-unknown-linux-gnu, compiled by emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 3.1.74 (1092ec30a3fb1d46b1782ff1b4db5094d3d06ae5), 32-bit",
+      "provider_io": false,
+      "native_concurrency": false
+    }
+  ],
+  "limitations": [
+    "Disposable PGlite PostgreSQL/WASM; synthetic provider metadata, no live Storage IO.",
+    "Competing CAS requests run serially; native lock scheduling is not proven.",
+    "PGlite pgcrypto SHA-256 compatibility shim uses PostgreSQL core sha256 with exact retained byte input.",
+    "No remote database mutation, Mac installer execution or Vercel deployment is claimed."
+  ]
+}

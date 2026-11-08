@@ -1,0 +1,279 @@
+{
+  "public": [
+    {
+      "city": "Paide",
+      "price": {
+        "kind": "fixed",
+        "amount": "4200.00",
+        "period": null,
+        "currency": "EUR"
+      },
+      "title": "Synthetic horse sale",
+      "fields": {
+        "breed": "Tori",
+        "horse_name": "Synthetic Aster"
+      },
+      "images": [
+        {
+          "id": "15ba61df-870a-4ba5-800e-8c9a10761653",
+          "url": "/api/v2/horse-media/e2a13881-d4b4-4d78-afdc-a15d633a5cfc/1"
+        },
+        {
+          "id": "4633ac3d-04ce-4161-8056-bac7b1fb36ce",
+          "url": "/api/v2/horse-media/e2a13881-d4b4-4d78-afdc-a15d633a5cfc/0"
+        }
+      ],
+      "region": "Järvamaa",
+      "country": "EE",
+      "content_id": "babfe8e5-56a9-496b-b75c-3cafc12dce7e",
+      "offer_type": "sale",
+      "description": "A complete synthetic horse offer description.",
+      "seller_name": "Synthetic owner",
+      "seller_slug": "synthetic-a1000000-0000-0000-0000-000000000001",
+      "seller_type": "private",
+      "active_until": null,
+      "content_type": "horse_offer",
+      "published_at": "2026-11-08T10:53:10.428+00:00",
+      "schema_version": 1
+    },
+    {
+      "city": "Paide",
+      "price": {
+        "kind": "free",
+        "amount": null,
+        "period": null,
+        "currency": "EUR"
+      },
+      "title": "Synthetic horse free_transfer",
+      "fields": {
+        "breed": "Tori",
+        "horse_name": "Synthetic Aster"
+      },
+      "images": [
+        {
+          "id": "ea4f3b80-6ed8-449d-8816-7aaf06a9a5f9",
+          "url": "/api/v2/horse-media/120fcd06-b0d6-4f83-84f0-308416bda531/0"
+        }
+      ],
+      "region": "Järvamaa",
+      "country": "EE",
+      "content_id": "c89f1ede-19ab-4ba2-9ae2-717bcb801668",
+      "offer_type": "free_transfer",
+      "description": "A complete synthetic horse offer description.",
+      "seller_name": "Synthetic owner",
+      "seller_slug": "synthetic-a1000000-0000-0000-0000-000000000001",
+      "seller_type": "private",
+      "active_until": null,
+      "content_type": "horse_offer",
+      "published_at": "2026-11-08T10:53:10.635+00:00",
+      "schema_version": 1
+    },
+    {
+      "city": "Paide",
+      "price": {
+        "kind": "from",
+        "amount": "120.00",
+        "period": "month",
+        "currency": "EUR"
+      },
+      "title": "Synthetic horse lease",
+      "fields": {
+        "breed": "Tori",
+        "horse_name": "Synthetic Aster"
+      },
+      "images": [
+        {
+          "id": "e73911ec-66db-4e36-8f47-7f3328186496",
+          "url": "/api/v2/horse-media/0ca12240-a3fe-4c07-9c12-5396115359fc/0"
+        }
+      ],
+      "region": "Järvamaa",
+      "country": "EE",
+      "content_id": "25d9214c-af6b-4c1e-ac63-192715b6a71c",
+      "offer_type": "lease",
+      "description": "A complete synthetic horse offer description.",
+      "seller_name": "Synthetic owner",
+      "seller_slug": "synthetic-a1000000-0000-0000-0000-000000000001",
+      "seller_type": "private",
+      "active_until": null,
+      "content_type": "horse_offer",
+      "published_at": "2026-11-08T10:53:10.846+00:00",
+      "schema_version": 1
+    },
+    {
+      "city": "Paide",
+      "price": {
+        "kind": "from",
+        "amount": "120.00",
+        "period": "month",
+        "currency": "EUR"
+      },
+      "title": "Synthetic horse co_rider",
+      "fields": {
+        "breed": "Tori",
+        "horse_name": "Synthetic Aster"
+      },
+      "images": [
+        {
+          "id": "dc346fa9-e2e1-4671-9d7b-b80637806e19",
+          "url": "/api/v2/horse-media/42ebcd94-631f-48e7-9a63-fe3c1e246320/0"
+        }
+      ],
+      "region": "Järvamaa",
+      "country": "EE",
+      "content_id": "33b20624-5b79-4fd6-b032-3f761450e5db",
+      "offer_type": "co_rider",
+      "description": "A complete synthetic horse offer description.",
+      "seller_name": "Synthetic owner",
+      "seller_slug": "synthetic-a1000000-0000-0000-0000-000000000001",
+      "seller_type": "private",
+      "active_until": null,
+      "content_type": "horse_offer",
+      "published_at": "2026-11-08T10:53:11.07+00:00",
+      "schema_version": 1
+    },
+    {
+      "city": "Tartu",
+      "price": {
+        "kind": "budget",
+        "amount": "12500",
+        "period": null,
+        "currency": "EUR"
+      },
+      "title": "Synthetic horse wanted",
+      "fields": {
+        "preferred_breed": "Tori"
+      },
+      "images": [
+        {
+          "id": "ad1642f2-09ac-4f81-a30a-fa0128dcc88d",
+          "url": "/api/v2/horse-media/bad238c4-d5dc-4b60-aa85-b9e8f9fbc543/0"
+        }
+      ],
+      "region": null,
+      "country": "EE",
+      "content_id": "7a12c97b-5cd2-491b-a24a-8302b3ba2136",
+      "offer_type": "wanted",
+      "description": "A complete synthetic horse offer description.",
+      "seller_name": "Synthetic owner",
+      "seller_slug": "synthetic-a1000000-0000-0000-0000-000000000001",
+      "seller_type": "private",
+      "active_until": null,
+      "content_type": "horse_offer",
+      "published_at": "2026-11-08T10:53:11.366+00:00",
+      "schema_version": 1
+    }
+  ],
+  "contacts": [
+    {
+      "replayed": false,
+      "identity_id": "b2000000-0000-0000-0000-000000000002",
+      "request_key": "d8cf8570-6b52-4d7c-be0f-b89fe7d7abe5",
+      "actor_user_id": "92000000-0000-0000-0000-000000000002",
+      "horse_offer_id": "babfe8e5-56a9-496b-b75c-3cafc12dce7e",
+      "schema_version": 1,
+      "conversation_id": "1"
+    }
+  ],
+  "threads": [
+    {
+      "peer": {
+        "name": "Synthetic owner",
+        "avatar_url": null,
+        "identity_id": "a1000000-0000-0000-0000-000000000001"
+      },
+      "actor": {
+        "name": "Synthetic peer",
+        "avatar_url": null,
+        "identity_id": "b2000000-0000-0000-0000-000000000002"
+      },
+      "listing": {
+        "id": "babfe8e5-56a9-496b-b75c-3cafc12dce7e",
+        "title": "Synthetic horse sale",
+        "content_type": "horse_offer"
+      },
+      "can_send": true,
+      "messages": [
+        {
+          "id": "1",
+          "mine": true,
+          "text": "Is this horse still available?",
+          "image": null,
+          "listing": {
+            "id": "babfe8e5-56a9-496b-b75c-3cafc12dce7e",
+            "image": "/api/v2/horse-media/e2a13881-d4b4-4d78-afdc-a15d633a5cfc/1",
+            "price": null,
+            "title": "Synthetic horse sale",
+            "content_type": "horse_offer"
+          },
+          "created_at": "2026-11-08T10:53:12.117+00:00",
+          "text_truncated": false
+        }
+      ],
+      "identity_id": "b2000000-0000-0000-0000-000000000002",
+      "actor_user_id": "92000000-0000-0000-0000-000000000002",
+      "blocked_by_me": false,
+      "schema_version": 2,
+      "conversation_id": "1",
+      "attachment_listing": null,
+      "attachment_listing_id": null,
+      "next_before_message_id": null
+    },
+    {
+      "peer": {
+        "name": "Synthetic owner",
+        "avatar_url": null,
+        "identity_id": "a1000000-0000-0000-0000-000000000001"
+      },
+      "actor": {
+        "name": "Synthetic peer",
+        "avatar_url": null,
+        "identity_id": "b2000000-0000-0000-0000-000000000002"
+      },
+      "listing": {
+        "id": "100000",
+        "title": "Synthetic shared marketplace laptop"
+      },
+      "can_send": true,
+      "messages": [
+        {
+          "id": "1",
+          "mine": true,
+          "text": "Is this horse still available?",
+          "image": null,
+          "listing": {
+            "id": "babfe8e5-56a9-496b-b75c-3cafc12dce7e",
+            "image": "/api/v2/horse-media/e2a13881-d4b4-4d78-afdc-a15d633a5cfc/1",
+            "price": null,
+            "title": "Synthetic horse sale",
+            "content_type": "horse_offer"
+          },
+          "created_at": "2026-11-08T10:53:12.117+00:00",
+          "text_truncated": false
+        },
+        {
+          "id": "2",
+          "mine": true,
+          "text": "And the ordinary laptop?",
+          "image": null,
+          "listing": {
+            "id": "100000",
+            "image": "/api/v2/listing-media/f1f63e6c-2254-4c47-875f-c26570861231/0",
+            "price": "15 EUR",
+            "title": "Synthetic shared marketplace laptop"
+          },
+          "created_at": "2026-11-08T10:53:12.145+00:00",
+          "text_truncated": false
+        }
+      ],
+      "identity_id": "b2000000-0000-0000-0000-000000000002",
+      "actor_user_id": "92000000-0000-0000-0000-000000000002",
+      "blocked_by_me": false,
+      "schema_version": 2,
+      "conversation_id": "1",
+      "attachment_listing": null,
+      "attachment_listing_id": null,
+      "next_before_message_id": null
+    }
+  ]
+}

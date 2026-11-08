@@ -48,7 +48,7 @@ export function createMessagingService(config: Readonly<{ projectOrigin: string;
   return Object.freeze({
     async get(token: string, input: unknown, signal?: AbortSignal) {
       const c = copyGetMessageThread(input), rpc = await connect(token, c.expectedUserId, signal);
-      const result = await rpc("get_my_message_thread_v2", { p_expected_user_id: c.expectedUserId,
+      const result = await rpc("get_my_marketplace_message_thread_v1", { p_expected_user_id: c.expectedUserId,
         p_expected_identity_id: c.expectedIdentityId, p_conversation_id: c.conversationId,
         p_before_message_id: c.beforeMessageId, p_attachment_listing_id: c.attachmentListingId });
       return atStage("receipt", signal, () => parseMessageThread(result, c));
