@@ -42,7 +42,9 @@ const normalized = (value: unknown) => typeof value === "string" ? value.trim() 
  * merely a successful HTTP request or an uploaded private object. */
 export function horsePublicationReadbackMatches(command: HorsePrepareCommand, result: HorsePublicationResult,
   snapshot: OwnerHorseOfferEditSnapshot): boolean {
-  if (snapshot.detail.status !== "published" || snapshot.detail.offerId !== result.horse_offer_id
+  const statusMatches = command.offerId === null ? snapshot.detail.status === "published"
+    : ["published", "paused", "closed"].includes(snapshot.detail.status);
+  if (!statusMatches || snapshot.detail.offerId !== result.horse_offer_id
     || snapshot.editRevision !== result.edit_revision || snapshot.detail.offerType !== command.content.offerType) return false;
   const form = prepareOwnerHorseDraftForm(snapshot.detail);
   if (!form) return false;

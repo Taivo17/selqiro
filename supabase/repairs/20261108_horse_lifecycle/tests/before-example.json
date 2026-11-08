@@ -1,0 +1,38 @@
+{
+  "kind": "horse-lifecycle-v1",
+  "state": "absent",
+  "guards": {
+    "functions": true,
+    "installer": true,
+    "actor_roles": true,
+    "core_relations": true,
+    "managed_triggers": true,
+    "required_columns": true,
+    "hosted_context_ready": true,
+    "closed_private_schema": true,
+    "final_writer_policies": true
+  },
+  "invariants": {
+    "existing_authority": "0fd04f00627eb84a4ea01e9e476dc4c82b2c7e42168808e5911b64622cc7518c",
+    "existing_functions": "3adc7e25925629f4e3ec1d006dac2e7c9bea09c96ad0bdb8b771b1d3afc9d355",
+    "immutable_structure": "de6129e851209f01fa82a80c8e4a99b1e771b315b7c4f39c4b7bdf2f3fc5ee39"
+  },
+  "recognized": true,
+  "fingerprints": {
+    "capability": "1f8e47935245ad4d04b0903071bd36c790e3d0716424644351dc8f0b666fe3d9",
+    "dependencies": "269f6679a8267a0b0319e7d71c5c2c5c5c27eb4c8d48b9d748c0d306a7094976"
+  },
+  "hosted_context": {
+    "release_id": "listing-publication-hosted-preview-v1",
+    "instance_id": "2d088814-0900-448a-a9d1-7b05470cb1d2",
+    "project_ref": "vyjletlmwoiwxsnsunlm",
+    "cleanup_mode": "held",
+    "release_ready": true,
+    "storage_authority_version": "source-part-rfc3986-v1"
+  },
+  "ready_to_apply": true,
+  "schema_version": 1,
+  "dependencies_ok": true,
+  "capability_absent": true,
+  "capability_present": false
+}

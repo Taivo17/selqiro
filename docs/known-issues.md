@@ -1,5 +1,27 @@
 # Teadaolevad käsilolevad tööd
 
+Seis: 08.11.2026 Europe/Tallinn. Tänane tööjärg on `continuity/CURRENT_STATE.json`.
+
+## Praegu: hobuse galerii ja Minu ala elutsükli parandus
+
+Kasutaja uus brauseritulemus kinnitab kahe fotoga hobuse avaldamist. Puuduvad
+pildinooled/suur vaade, omaniku pisipilt ja staatus/uuendamine on käesoleva
+kandidaadi ulatus. Uuendaja lähtub eduka ruumiparanduse r2 täpsest lähtekoodist
+ja kontrollib tegelikku receipt’i ning commiti Macis. Vanu ruumipakette ei korrata.
+Uue kandidaadi kohalik testitõend on kontrollraportis; Maci paigaldus, Ready ja
+selle UI vastuvõtt järgnevad. Vt `architecture/horse-owner-lifecycle-v1.md`.
+
+Teenused on järgmine töö: kanooniline services UUID, üks Avalda ja Minu ala
+Muuda/Salvesta, ilma kohustusliku eraldi mustandita. Üldine taustakoristus ja
+kasutuselevõtu sageduskaitsete lõplik tooteotsus jäävad eraldi. Püsivat
+mitmesaja kuulutuse piiri ei kehtestata selle parandusega.
+
+## Varasem checkpoint — allpool ajalooline seis enne uut hobuse brauseritulemust
+
+Allolevad paigalduskäsud ja „ootel” märked ei asenda tänast CURRENT_STATE.json-i.
+
+# Teadaolevad käsilolevad tööd
+
 Seis: 08.11.2026 Europe/Tallinn. Üks praegune tööjärg on
 `continuity/CURRENT_STATE.json`-is; see dokument ei ole teine NEXT-allikas.
 

@@ -115,7 +115,10 @@ export default function MyAreaListingsSection() {
     </div> : null}
     {!loading && !error ? <div className="divide-y divide-black/5 rounded-2xl bg-white">
       {visible.map(listing => listing.contentType === "horse_offer"
-        ? <MyAreaHorseOfferRow key={listing.key} item={listing} />
+        ? <MyAreaHorseOfferRow key={listing.key} item={listing} now={now} busy={state.busyKey === listing.key}
+            disabled={disabled} activeIdentityId={state.actor?.identityId ?? null} ownerActor={state.actor}
+            onRenew={() => session.requestRenewal(listing.key)}
+            onStatus={status => { void session.changeStatus(listing.key, status); }} />
         : <MyAreaListingRow key={listing.key} listing={listing} now={now} busy={state.busyKey === listing.key}
             disabled={disabled} activeIdentityId={state.actor?.identityId ?? null} ownerActor={state.actor}
             onRenew={() => session.requestRenewal(listing.key)}

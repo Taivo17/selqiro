@@ -18,7 +18,9 @@ import { v2IntegrationEnabled } from "../../../shared/config/v2Integration";
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState, type PointerEvent } from "react";
+import { useEffect, useState } from "react";
+import PublicPhotoGallery from "../../../shared/media/PublicPhotoGallery";
+import { listingGalleryPhotos } from "../model/listingGalleryPhotos";
 import { useListingDetail } from "../model/useListingDetail";
 import {
   getListingReturnBackLabel,
@@ -26,21 +28,8 @@ import {
   readListingReturnContext,
 } from "../../listing-navigation/model/listingReturnContext";
 import type {
-  ListingImage,
   ProductListingDetail,
 } from "../../../entities/listing/model/types";
-
-function getLargeImageUrl(image: ListingImage): string | null {
-  return image.medium_url || image.original_url || image.thumb_url || null;
-}
-
-function getThumbImageUrl(image: ListingImage): string | null {
-  return image.thumb_url || image.medium_url || image.original_url || null;
-}
-
-function getFullImageUrl(image: ListingImage): string | null {
-  return image.original_url || image.medium_url || image.thumb_url || null;
-}
 
 function PlaceholderImage({ className = "" }: { className?: string }) {
   return (
@@ -245,68 +234,7 @@ export default function ListingDetailPage({ listingId }: { listingId: string }) 
   const { language: uiLanguage, t } = useV2Translation(publicUiMessages);
 
   const [showMore, setShowMore] = useState(false);
-  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
-  const [lightboxOpen, setLightboxOpen] = useState(false);
-  const [lightboxControlsVisible, setLightboxControlsVisible] = useState(true);
-  const [lightboxControlsPulse, setLightboxControlsPulse] = useState(0);
-  const [galleryControlsVisible, setGalleryControlsVisible] = useState(true);
-  const [galleryControlsPulse, setGalleryControlsPulse] = useState(0);
-
-  const pointerStartXRef = useRef<number | null>(null);
-  const pointerStartYRef = useRef<number | null>(null);
-  const pointerMovedRef = useRef(false);
-  const lightboxPointerStartXRef = useRef<number | null>(null);
-  const lightboxPointerStartYRef = useRef<number | null>(null);
-
   const { listing, loading, error } = useListingDetail(listingId);
-
-  function revealGalleryControls() {
-    if (!listing || listing.images.length <= 1) return;
-
-    setGalleryControlsVisible(true);
-    setGalleryControlsPulse((value) => value + 1);
-  }
-
-  useEffect(() => {
-    if (!listing || listing.images.length <= 1) {
-      setGalleryControlsVisible(false);
-      return;
-    }
-
-    setGalleryControlsVisible(true);
-
-    const timer = window.setTimeout(() => {
-      setGalleryControlsVisible(false);
-    }, 3000);
-
-    return () => window.clearTimeout(timer);
-  }, [
-    listing?.id,
-    listing?.images.length,
-    selectedImageIndex,
-    galleryControlsPulse,
-  ]);
-
-  useEffect(() => {
-    if (!lightboxOpen || !listing || listing.images.length <= 1) {
-      setLightboxControlsVisible(false);
-      return;
-    }
-
-    setLightboxControlsVisible(true);
-
-    const timer = window.setTimeout(() => {
-      setLightboxControlsVisible(false);
-    }, 3000);
-
-    return () => window.clearTimeout(timer);
-  }, [
-    lightboxOpen,
-    listing?.id,
-    listing?.images.length,
-    selectedImageIndex,
-    lightboxControlsPulse,
-  ]);
 
   if (loading) return <LoadingState />;
   if (error) {
@@ -326,153 +254,10 @@ export default function ListingDetailPage({ listingId }: { listingId: string }) 
     );
   }
 
-  const galleryImages = listing.images
-    .map((image, index) => ({
-      index,
-      largeUrl: getLargeImageUrl(image),
-      thumbUrl: getThumbImageUrl(image),
-      fullUrl: getFullImageUrl(image),
-    }))
-    .filter((image) => Boolean(image.largeUrl || image.thumbUrl));
-
-  const normalizedSelectedIndex =
-    galleryImages.length > 0
-      ? Math.min(selectedImageIndex, galleryImages.length - 1)
-      : 0;
-
-  const selectedGalleryImage = galleryImages[normalizedSelectedIndex] || null;
-
-  const mainImageUrl =
-    selectedGalleryImage?.largeUrl ||
-    selectedGalleryImage?.thumbUrl ||
-    listing.imageUrl;
-
-  const lightboxImageUrl =
-    selectedGalleryImage?.fullUrl ||
-    selectedGalleryImage?.largeUrl ||
-    selectedGalleryImage?.thumbUrl ||
-    listing.imageUrl;
+  const galleryPhotos = listingGalleryPhotos(listing.images, listing.imageUrl);
 
   const detailRows = buildDetailRows(listing, uiLanguage);
   const visibleDetails = showMore ? detailRows : detailRows.slice(0, 6);
-
-  function showPreviousImage() {
-    if (galleryImages.length <= 1) return;
-
-    setSelectedImageIndex((current) =>
-      current <= 0 ? galleryImages.length - 1 : current - 1
-    );
-  }
-
-  function showNextImage() {
-    if (galleryImages.length <= 1) return;
-
-    setSelectedImageIndex((current) =>
-      current >= galleryImages.length - 1 ? 0 : current + 1
-    );
-  }
-
-  function handleGalleryPointerDown(event: PointerEvent<HTMLDivElement>) {
-    if (event.pointerType === "mouse") {
-      revealGalleryControls();
-      return;
-    }
-
-    pointerMovedRef.current = false;
-    pointerStartXRef.current = event.clientX;
-    pointerStartYRef.current = event.clientY;
-  }
-
-  function handleGalleryPointerUp(event: PointerEvent<HTMLDivElement>) {
-    const startX = pointerStartXRef.current;
-    const startY = pointerStartYRef.current;
-
-    pointerStartXRef.current = null;
-    pointerStartYRef.current = null;
-
-    if (event.pointerType === "mouse" || startX === null || startY === null) {
-      revealGalleryControls();
-      return;
-    }
-
-    const deltaX = event.clientX - startX;
-    const deltaY = event.clientY - startY;
-    const horizontalMove = Math.abs(deltaX);
-    const verticalMove = Math.abs(deltaY);
-
-    if (horizontalMove >= 55 && horizontalMove > verticalMove * 1.25) {
-      pointerMovedRef.current = true;
-
-      if (deltaX < 0) {
-        showNextImage();
-      } else {
-        showPreviousImage();
-      }
-    }
-
-    revealGalleryControls();
-  }
-
-  function handleGalleryPointerCancel() {
-    pointerStartXRef.current = null;
-    pointerStartYRef.current = null;
-  }
-
-  function revealLightboxControls() {
-    if (!listing || listing.images.length <= 1) return;
-
-    setLightboxControlsVisible(true);
-    setLightboxControlsPulse((value) => value + 1);
-  }
-
-  function handleLightboxPointerDown(event: PointerEvent<HTMLDivElement>) {
-    event.stopPropagation();
-
-    if (event.pointerType === "mouse") {
-      revealLightboxControls();
-      return;
-    }
-
-    lightboxPointerStartXRef.current = event.clientX;
-    lightboxPointerStartYRef.current = event.clientY;
-  }
-
-  function handleLightboxPointerUp(event: PointerEvent<HTMLDivElement>) {
-    event.stopPropagation();
-
-    const startX = lightboxPointerStartXRef.current;
-    const startY = lightboxPointerStartYRef.current;
-
-    lightboxPointerStartXRef.current = null;
-    lightboxPointerStartYRef.current = null;
-
-    if (event.pointerType === "mouse" || startX === null || startY === null) {
-      revealLightboxControls();
-      return;
-    }
-
-    const deltaX = event.clientX - startX;
-    const deltaY = event.clientY - startY;
-    const horizontalMove = Math.abs(deltaX);
-    const verticalMove = Math.abs(deltaY);
-
-    if (horizontalMove >= 55 && horizontalMove > verticalMove * 1.25) {
-      if (deltaX < 0) {
-        showNextImage();
-      } else {
-        showPreviousImage();
-      }
-    }
-
-    revealLightboxControls();
-  }
-
-  function handleLightboxPointerCancel(event: PointerEvent<HTMLDivElement>) {
-    event.stopPropagation();
-
-    lightboxPointerStartXRef.current = null;
-    lightboxPointerStartYRef.current = null;
-  }
 
   return (
     <div className="space-y-8">
@@ -490,121 +275,7 @@ export default function ListingDetailPage({ listingId }: { listingId: string }) 
         </div>
 
         <div className="grid min-w-0 gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(320px,420px)]">
-          <div className="min-w-0">
-            <div
-              className="relative cursor-zoom-in overflow-hidden rounded-[26px]"
-              style={{ touchAction: "pan-y" }}
-              onClick={() => {
-                if (pointerMovedRef.current) {
-                  pointerMovedRef.current = false;
-                  return;
-                }
-
-                if (mainImageUrl) {
-                  setLightboxOpen(true);
-                }
-              }}
-              onMouseMove={revealGalleryControls}
-              onPointerDown={handleGalleryPointerDown}
-              onPointerUp={handleGalleryPointerUp}
-              onPointerCancel={handleGalleryPointerCancel}
-              onFocus={revealGalleryControls}
-            >
-              {mainImageUrl ? (
-                <img
-                  src={mainImageUrl}
-                  alt=""
-                  className="aspect-[4/3] w-full rounded-[26px] bg-neutral-100 object-contain object-center"
-                />
-              ) : (
-                <PlaceholderImage className="aspect-[4/3] w-full" />
-              )}
-
-              {galleryImages.length > 1 && !galleryControlsVisible ? (
-                <div
-                  role="button"
-                  tabIndex={0}
-                  aria-label={t("show_gallery_controls")}
-                  className="absolute inset-0 z-10 cursor-default bg-transparent focus:outline-none"
-                  style={{ touchAction: "pan-y" }}
-                  onMouseMove={revealGalleryControls}
-                  onPointerDown={handleGalleryPointerDown}
-                  onPointerUp={handleGalleryPointerUp}
-                  onPointerCancel={handleGalleryPointerCancel}
-                  onFocus={revealGalleryControls}
-                />
-              ) : null}
-
-              {galleryImages.length > 1 && galleryControlsVisible ? (
-                <div className="absolute inset-x-4 top-1/2 z-20 flex -translate-y-1/2 justify-between transition-opacity duration-300">
-                  <button
-                    type="button"
-                    onClick={(event) => {
-                    event.stopPropagation();
-                    showPreviousImage();
-                  }}
-                    className="flex h-11 w-11 items-center justify-center rounded-full bg-white/90 text-2xl font-black shadow-sm backdrop-blur transition hover:bg-white"
-                    aria-label={t("previous_image")}
-                  >
-                    ‹
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={(event) => {
-                    event.stopPropagation();
-                    showNextImage();
-                  }}
-                    className="flex h-11 w-11 items-center justify-center rounded-full bg-white/90 text-2xl font-black shadow-sm backdrop-blur transition hover:bg-white"
-                    aria-label={t("next_image")}
-                  >
-                    ›
-                  </button>
-                </div>
-              ) : null}
-            </div>
-
-            <div
-              className="mt-4 flex max-w-full gap-3 overflow-x-auto overscroll-x-contain pb-3 pr-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-              style={{ touchAction: "pan-x" }}
-            >
-              {galleryImages.length > 0
-                ? galleryImages.map((image, index) => {
-                    const url = image.thumbUrl || image.largeUrl || "";
-                    const isSelected = index === normalizedSelectedIndex;
-
-                    return (
-                      <button
-                        key={`${url}-${index}`}
-                        type="button"
-                        onClick={() => {
-                          setSelectedImageIndex(index);
-                          revealGalleryControls();
-                        }}
-                        className={[
-                          "h-20 w-24 flex-none rounded-[18px] border p-0.5 transition md:w-28",
-                          isSelected
-                            ? "border-emerald-400 bg-emerald-50"
-                            : "border-transparent hover:border-neutral-200",
-                        ].join(" ")}
-                        aria-label={t("show_image_number", {index: index + 1})}
-                      >
-                        <img
-                          src={url}
-                          alt=""
-                          className="h-full w-full rounded-[15px] object-cover object-[center_40%]"
-                        />
-                      </button>
-                    );
-                  })
-                : Array.from({ length: 4 }).map((_, index) => (
-                    <PlaceholderImage
-                      key={index}
-                      className="h-20 w-24 flex-none rounded-[18px] md:w-28"
-                    />
-                  ))}
-            </div>
-          </div>
+          <PublicPhotoGallery key={listing.id} title={listing.title || t("untitled_listing")} photos={galleryPhotos} />
 
           <aside className="min-w-0 space-y-4">
             <div className="rounded-[28px] border border-black/5 bg-[#fbfbfa] p-6">
@@ -729,76 +400,7 @@ export default function ListingDetailPage({ listingId }: { listingId: string }) 
             {t("show_more_displays_further_listing_information_when_available")} </p>
         </div>
       </section>
-      {lightboxOpen && lightboxImageUrl ? (
-        <div
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 p-4"
-          onClick={() => setLightboxOpen(false)}
-          onMouseMove={revealLightboxControls}
-          role="dialog"
-          aria-modal="true"
-          aria-label={t("full_size_image")}
-        >
-          <button
-            type="button"
-            onClick={(event) => {
-              event.stopPropagation();
-              setLightboxOpen(false);
-            }}
-            className="absolute right-4 top-4 z-30 flex h-11 w-11 items-center justify-center rounded-full bg-white/90 text-2xl font-black shadow-sm transition hover:bg-white"
-            aria-label={t("close_image")}
-          >
-            ×
-          </button>
 
-          <div
-            className="relative max-h-[88vh] max-w-[92vw]"
-            style={{ touchAction: "pan-y" }}
-            onClick={(event) => event.stopPropagation()}
-            onMouseMove={revealLightboxControls}
-            onPointerDown={handleLightboxPointerDown}
-            onPointerUp={handleLightboxPointerUp}
-            onPointerCancel={handleLightboxPointerCancel}
-            onFocus={revealLightboxControls}
-          >
-            <img
-              src={lightboxImageUrl}
-              alt=""
-              draggable={false}
-              className="max-h-[88vh] max-w-[92vw] select-none rounded-[18px] object-contain shadow-2xl"
-            />
-
-            {galleryImages.length > 1 && lightboxControlsVisible ? (
-              <div className="pointer-events-none absolute inset-x-3 top-1/2 z-20 flex -translate-y-1/2 justify-between sm:inset-x-4">
-                <button
-                  type="button"
-                  onClick={(event) => {
-                    event.stopPropagation();
-                    showPreviousImage();
-                    revealLightboxControls();
-                  }}
-                  className="pointer-events-auto flex h-12 w-12 items-center justify-center rounded-full bg-white/90 text-3xl font-black shadow-sm transition hover:bg-white"
-                  aria-label={t("previous_image")}
-                >
-                  ‹
-                </button>
-
-                <button
-                  type="button"
-                  onClick={(event) => {
-                    event.stopPropagation();
-                    showNextImage();
-                    revealLightboxControls();
-                  }}
-                  className="pointer-events-auto flex h-12 w-12 items-center justify-center rounded-full bg-white/90 text-3xl font-black shadow-sm transition hover:bg-white"
-                  aria-label={t("next_image")}
-                >
-                  ›
-                </button>
-              </div>
-            ) : null}
-          </div>
-        </div>
-      ) : null}
     </div>
   );
 }

@@ -16,6 +16,8 @@ import HorseOfferPublicationGate from "../../listing-create/components/HorseOffe
 import HorsePublicationAction from "../../horse-publication/components/HorsePublicationAction";
 import OwnerHorseOfferEditFields from "./OwnerHorseOfferEditFields";
 import OwnerHorseGalleryEditor, {horseEditorGalleryDirty, horseEditorPhotos, type HorseEditorPhoto} from "./OwnerHorseGalleryEditor";
+import { horseActivityDeadline } from "../../../entities/horse-offer/model/horseActivity";
+import { getListingActivity } from "../../../entities/listing/model/listingActivity";
 
 const button = "rounded-full border border-zinc-300 bg-white px-5 py-3 text-sm font-black disabled:opacity-40";
 
@@ -42,7 +44,11 @@ export default function OwnerHorseOfferEditor({userId, offerId}: {userId: string
   const dirty = !!(baseline && form && detail && (ownerHorseDraftDirty(baseline, form) || horseEditorGalleryDirty(detail.images, photos)));
   const working = publication.view.phase === "busy";
   const locked = publication.view.phase !== "editing";
-  const editable = !!(detail && ["draft", "published"].includes(detail.status) && form && context.ready && !locked);
+  const supportedStatus = !!detail && ["draft", "published", "paused", "closed"].includes(detail.status);
+  const editable = !!(supportedStatus && form && context.ready && !locked);
+  const publiclyActive = detail?.status === "published" && getListingActivity("active",
+    horseActivityDeadline(detail.activeUntil, detail.publishedAt)).state === "active"
+    && horseActivityDeadline(detail.activeUntil, detail.publishedAt) !== null;
   useEffect(() => {
     const unload = (event: BeforeUnloadEvent) => { if (dirty) { event.preventDefault(); event.returnValue = ""; } };
     window.addEventListener("beforeunload", unload); return () => window.removeEventListener("beforeunload", unload);
@@ -76,19 +82,20 @@ export default function OwnerHorseOfferEditor({userId, offerId}: {userId: string
       {context.error ? <button type="button" className={`${button} mt-4`} onClick={context.retry}>{t("checkIdentity")}</button> : null}
     </section> : <>
       <p className="rounded-3xl border border-amber-200 bg-amber-50 p-5 text-sm leading-6">
-        {!form ? t("unsupported") : !["draft", "published"].includes(detail.status) ? t("readOnly") : t("editExplanation")}
+        {!form ? t("unsupported") : !supportedStatus ? t("readOnly") : t("editExplanation")}
       </p>
       <div hidden={!context.active} className="space-y-6">
         {form ? <OwnerHorseOfferEditFields form={form} disabled={!editable} locationLocked={hasPrivateHorseLocation(detail)}
           onChange={edit => { if (editable) setForm(current => current ? edit(current) : current); }} /> : null}
-        <OwnerHorseGalleryEditor title={detail.title} photos={photos} disabled={!editable} onChange={next => { if (editable) setPhotos(next); }} />
-        {form && ["draft", "published"].includes(detail.status) ? <fieldset disabled={!editable}>
+        <OwnerHorseGalleryEditor title={detail.title} photos={photos} actor={context.active ? context.actor : null}
+          disabled={!editable} onChange={next => { if (editable) setPhotos(next); }} />
+        {form && supportedStatus ? <fieldset disabled={!editable}>
           <HorseOfferPublicationGate offerType={form.offerType} value={confirmations} onPoliciesChange={setPolicies}
             onConfirmAllChange={checked => { if (editable) setConfirmations(applyHorseOfferPublicationConfirmationGroupChange(form.offerType, checked)); }} />
         </fieldset> : null}
       </div>
-      {form && ["draft", "published"].includes(detail.status) ? <HorsePublicationAction
-        session={publication.session} view={publication.view} editing={detail.status === "published"} ready={context.ready}
+      {form && supportedStatus ? <HorsePublicationAction
+        session={publication.session} view={publication.view} editing={detail.status !== "draft"} ready={context.ready}
         canSubmit={editable && !!policies && (detail.status === "draft" || dirty) && getHorseOfferPublicationConfirmationProgress(form.offerType, confirmations).complete}
         onSubmit={submit} localError={localError} onReset={() => setLocalError("")} /> : null}
       <section className="rounded-3xl border border-zinc-200 bg-white p-5">
@@ -96,7 +103,7 @@ export default function OwnerHorseOfferEditor({userId, offerId}: {userId: string
         <div className="mt-3 flex flex-wrap gap-3">
           <button type="button" className={button} disabled={working || locked || !context.ready} onClick={reload}>{t("reload")}</button>
           <Link href={`/v2/my-area/horse-offers/${offerId}`} onClick={leave} className={button}>{t("ownerView")}</Link>
-          {detail.status === "published" ? <Link href={`/v2/horse-offer/${offerId}`} target="_blank" rel="noreferrer" className={button}>{t("publicView")}</Link> : null}
+          {publiclyActive ? <Link href={`/v2/horse-offer/${offerId}`} target="_blank" rel="noreferrer" className={button}>{t("publicView")}</Link> : null}
         </div>
       </section>
     </>}

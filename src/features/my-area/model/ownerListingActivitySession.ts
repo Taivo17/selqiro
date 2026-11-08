@@ -3,10 +3,14 @@ import { getListingActivity, isRenewableListingId } from "../../../entities/list
 import { ListingRenewalError, listingRenewalError, sameListingActor,
   type ListingActivityActor, type RenewListingActivityInput, type RenewListingActivityResult } from "../../../entities/listing/model/listingRenewal";
 import type { ListingStatus, UpdateListingStatusInput } from "../../../entities/listing/api/updateListingStatus";
-import type { MyAreaMarketplaceItemRow, MyAreaListingMarketplaceItemRow } from "./myAreaMarketplaceItemRow";
+import { horseActivityStatus, type HorseActivityInput, type HorseActivitySnapshot, type HorseStatusInput } from "../../../entities/horse-offer/model/horseActivity";
+import { isUploadUuid } from "../../../entities/listing/model/privatePublicationUpload";
+import type { MyAreaMarketplaceItemRow } from "./myAreaMarketplaceItemRow";
 import { ownerListingsFilterKey, type MyAreaListingsFilters } from "./myAreaListingsFilters";
 
-export type ListingRenewalConfirmation = { key: string; title: string; input: RenewListingActivityInput };
+export type ListingRenewalConfirmation =
+  | { key: string; title: string; contentType?: "listing"; input: RenewListingActivityInput }
+  | { key: string; title: string; contentType: "horse_offer"; input: Omit<HorseActivityInput, "expectedActor"> };
 export type OwnerListingActivityState = {
   listings: MyAreaMarketplaceItemRow[]; loading: boolean; error: string | null;
   actor: ListingActivityActor | null; filterKey: string; confirmation: ListingRenewalConfirmation | null;
@@ -17,6 +21,8 @@ export type OwnerListingActivityDependencies = {
   read: (filters: MyAreaListingsFilters) => Promise<MyAreaMarketplaceItemRow[]>;
   renew: (input: RenewListingActivityInput) => Promise<RenewListingActivityResult>;
   status: (input: UpdateListingStatusInput) => Promise<void>;
+  horseRenew?: (input: HorseActivityInput) => Promise<HorseActivitySnapshot>;
+  horseStatus?: (input: HorseStatusInput) => Promise<HorseActivitySnapshot>;
   now?: () => number;
 };
 const initial = (): OwnerListingActivityState => ({ listings: [], loading: true, error: null,
@@ -24,8 +30,8 @@ const initial = (): OwnerListingActivityState => ({ listings: [], loading: true,
 
 function statusProblem(error: unknown, failure: ListingRenewalError): string {
   if (failure.kind === "forbidden") return failure.message;
-  if (error && typeof error === "object" && "code" in error && "message" in error
-    && error.code === "40001" && error.message === "listing_status_conflict") {
+  if (failure.kind === "conflict" || (error && typeof error === "object" && "code" in error && "message" in error
+    && error.code === "40001" && error.message === "listing_status_conflict")) {
     return uiMessage("the_listing_s_status_has_changed_reload_the_list_and_check_its_current_stat");
   }
   return uiMessage("the_status_change_has_not_been_confirmed_reload_the_list_and_check_the_list");
@@ -92,18 +98,29 @@ export class OwnerListingActivitySession {
     this.set({ listings, actor, loading: false, error: null, confirmation: null,
       problem: null, notice, needsReload: false, filterKey: ownerListingsFilterKey(this.filters) });
   }
-  private ordinary(key: string): MyAreaListingMarketplaceItemRow | null {
+  private actionable(key: string): MyAreaMarketplaceItemRow | null {
     const row = this.state.listings.find(item => item.key === key);
-    return row?.contentType === "listing" ? row : null;
+    return row?.canChangeStatus ? row : null;
+  }
+  private statusOf(row: MyAreaMarketplaceItemRow): string | null {
+    return row.contentType === "horse_offer" ? horseActivityStatus(row.sourceStatus) : row.status;
   }
   private canAct() {
     return this.alive && !this.locked && !this.state.loading && !this.state.needsReload && !!this.state.actor;
   }
   requestRenewal(key: string) {
     if (!this.canAct()) return;
-    const row = this.ordinary(key);
-    if (!row || row.identityId !== this.state.actor?.identityId || !isRenewableListingId(row.id)
-      || !getListingActivity(row.status, row.activeUntil, this.deps.now?.()).canRenew) return;
+    const row = this.actionable(key);
+    if (!row || row.identityId !== this.state.actor?.identityId
+      || !getListingActivity(this.statusOf(row) ?? "unknown", row.activeUntil, this.deps.now?.()).canRenew) return;
+    if (row.contentType === "horse_offer") {
+      if (!this.deps.horseRenew || !isUploadUuid(row.contentId)) return;
+      this.set({ confirmation: { key, title: row.title, contentType: "horse_offer", input: {
+        offerId: row.contentId, expectedStatus: row.sourceStatus, expectedActiveUntil: row.activeUntil,
+      } }, notice: null, problem: null });
+      return;
+    }
+    if (!isRenewableListingId(row.id)) return;
     this.set({ confirmation: { key, title: row.title, input: { listingId: row.id, expectedActiveUntil: row.activeUntil } },
       notice: null, problem: null });
   }
@@ -111,20 +128,36 @@ export class OwnerListingActivitySession {
   async confirmRenewal(expected = this.state.confirmation): Promise<void> {
     const confirmation = this.state.confirmation;
     if (!confirmation || confirmation !== expected || !this.canAct()) return;
-    const row = this.ordinary(confirmation.key);
-    if (!row || row.status !== "active" || row.activeUntil !== confirmation.input.expectedActiveUntil) return;
+    const row = this.actionable(confirmation.key);
+    if (!row || this.statusOf(row) !== "active" || row.activeUntil !== confirmation.input.expectedActiveUntil
+      || row.contentType !== (confirmation.contentType ?? "listing")) return;
+    if (confirmation.contentType === "horse_offer" && (row.contentId !== confirmation.input.offerId
+      || row.sourceStatus !== confirmation.input.expectedStatus || !this.deps.horseRenew)) return;
     await this.mutate(confirmation.key, "renewal", async () => {
-      const result = await this.deps.renew({ ...confirmation.input, expectedActor: this.state.actor ? {...this.state.actor} : undefined });
+      const actor = this.state.actor;
+      if (!actor) throw new ListingRenewalError("forbidden");
+      const result = confirmation.contentType === "horse_offer"
+        ? await this.deps.horseRenew!({ ...confirmation.input, expectedActor: { ...actor } })
+        : await this.deps.renew({ ...confirmation.input, expectedActor: { ...actor } });
       return result.changed ? uiMessage("the_listing_s_expiry_has_been_renewed_its_content_and_position_are_unchange")
         : uiMessage("the_existing_expiry_was_retained_no_extension_was_needed");
     });
   }
   async changeStatus(key: string, status: ListingStatus): Promise<void> {
     if (!this.canAct() || this.state.confirmation || !["active", "paused", "sold"].includes(status)) return;
-    const row = this.ordinary(key);
-    if (!row || !["active", "paused", "sold"].includes(row.status) || row.status === status) return;
+    const row = this.actionable(key);
+    if (!row || !["active", "paused", "sold"].includes(this.statusOf(row) ?? "") || this.statusOf(row) === status) return;
+    if (row.contentType === "horse_offer" && (!this.deps.horseStatus || !isUploadUuid(row.contentId)
+      || row.identityId !== this.state.actor?.identityId)) return;
     await this.mutate(key, "status", async () => {
-      await this.deps.status({ listingId: row.id, status, expectedStatus: row.status, expectedActor: this.state.actor ? {...this.state.actor} : undefined });
+      const actor = this.state.actor;
+      if (!actor) throw new ListingRenewalError("forbidden");
+      if (row.contentType === "horse_offer") {
+        await this.deps.horseStatus!({ offerId: row.contentId, status, expectedStatus: row.sourceStatus,
+          expectedActiveUntil: row.activeUntil, expectedActor: { ...actor } });
+      } else {
+        await this.deps.status({ listingId: row.id, status, expectedStatus: row.status, expectedActor: { ...actor } });
+      }
       return uiMessage("status_changed_the_listing_s_expiry_was_not_extended");
     });
   }

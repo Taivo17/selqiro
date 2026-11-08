@@ -9,8 +9,11 @@ import type { AfterPublicationResponse } from "../listing-publication/journey/co
 import { copyWebCommand } from "../listing-publication/web/webImageContract";
 import { createHorseCleanupPass } from "./settleHorseCleanup";
 import { createAccountSourceCompletion } from "../listing-publication/journey/completeAccountSource";
+import { horseActivityStatus, parseHorseActivitySnapshot } from "../../entities/horse-offer/model/horseActivity";
+import { listingDeadlineMicros } from "../../entities/listing/model/listingActivity";
 
-const actions = new Set(["prepare", "status", "publish", "cancel", "owner-read", "image-prepare", "image-verify"]);
+const actions = new Set(["prepare", "status", "publish", "cancel", "owner-read", "image-prepare", "image-verify",
+  "owner-activity", "owner-set-status", "owner-renew"]);
 const receiptKeys = ["schema_version", "content_type", "state", "actor_user_id", "identity_id", "request_key",
   "attempt_id", "horse_offer_id", "edit_revision", "publication_event_id", "slots"];
 const uuid = (v: unknown): v is string => typeof v === "string" && v.length === 36 && isUploadUuid(v);
@@ -44,10 +47,24 @@ async function readBody(request: Request): Promise<Record<string, unknown>> {
 function bind(action: string, input: Record<string, unknown>): { name: string; args: Record<string, unknown> } {
   const actor = { p_expected_user_id: input.expectedUserId, p_expected_identity_id: input.expectedIdentityId };
   if (!uuid(input.expectedUserId) || !uuid(input.expectedIdentityId)) throw new Error("input");
-  if (action === "owner-read") {
+  if (action === "owner-read" || action === "owner-activity") {
     uploadRecord(input, ["expectedUserId", "expectedIdentityId", "offerId"]);
     if (!uuid(input.offerId)) throw new Error("input");
-    return { name: "get_my_horse_offer_publication_snapshot_v1", args: { ...actor, p_offer_id: input.offerId } };
+    return { name: action === "owner-read" ? "get_my_horse_offer_publication_snapshot_v1" : "get_my_horse_offer_lifecycle_v1",
+      args: { ...actor, p_offer_id: input.offerId } };
+  }
+  if (action === "owner-set-status" || action === "owner-renew") {
+    uploadRecord(input, ["expectedUserId", "expectedIdentityId", "offerId", "expectedRevision", "expectedStatus",
+      "expectedActiveUntil", ...(action === "owner-set-status" ? ["status"] : [])]);
+    if (!uuid(input.offerId) || !revision(input.expectedRevision)
+      || typeof input.expectedStatus !== "string" || !["published", "paused", "closed"].includes(input.expectedStatus)
+      || typeof input.expectedActiveUntil !== "string" || listingDeadlineMicros(input.expectedActiveUntil) === null
+      || (action === "owner-set-status" && (typeof input.status !== "string"
+        || !["active", "paused", "sold"].includes(input.status)))) throw new Error("input");
+    return { name: action === "owner-set-status" ? "set_my_horse_offer_status_v1" : "renew_my_horse_offer_activity_v1",
+      args: { ...actor, p_offer_id: input.offerId, p_expected_revision: input.expectedRevision,
+        p_expected_status: input.expectedStatus, p_expected_active_until: input.expectedActiveUntil,
+        ...(action === "owner-set-status" ? { p_status: input.status } : {}) } };
   }
   if (!uuid(input.requestKey)) throw new Error("input");
   if (action === "prepare") {
@@ -116,6 +133,29 @@ export function boundHorseReceipt(value: unknown, input: Record<string, unknown>
     && input.gallery.filter(v => v && typeof v === "object" && Object.hasOwn(v, "clientFileId")).length !== result.slots.length)
     throw new Error("invalid_response");
   return result;
+}
+
+/** A lifecycle ACK must bind the exact actor, UUID, previous revision and
+ * requested outcome. An HTTP 200 cannot by itself confirm a status/renewal. */
+export function boundHorseLifecycleReceipt(value: unknown, input: Record<string, unknown>, action: string) {
+  const parsed = parseHorseActivitySnapshot(value, { userId: String(input.expectedUserId),
+    identityId: String(input.expectedIdentityId) }, String(input.offerId));
+  if (action === "owner-activity") {
+    if (parsed.changed) throw new Error("invalid_response");
+    return value;
+  }
+  const oldRevision = BigInt(String(input.expectedRevision)), nextRevision = BigInt(parsed.editRevision);
+  const oldDeadline = listingDeadlineMicros(input.expectedActiveUntil), nextDeadline = listingDeadlineMicros(parsed.activeUntil);
+  if (nextRevision !== oldRevision + (parsed.changed ? BigInt(1) : BigInt(0))
+    || oldDeadline === null || nextDeadline === null) throw new Error("invalid_response");
+  if (action === "owner-set-status") {
+    if (parsed.status !== input.status || oldDeadline !== nextDeadline
+      || parsed.changed !== (horseActivityStatus(String(input.expectedStatus)) !== input.status)) throw new Error("invalid_response");
+  } else if (action === "owner-renew") {
+    if (input.expectedStatus !== "published" || parsed.sourceStatus !== "published"
+      || (parsed.changed ? nextDeadline <= oldDeadline : nextDeadline !== oldDeadline)) throw new Error("invalid_response");
+  } else throw new Error("invalid_response");
+  return value;
 }
 
 function safeDatabaseError(value: unknown): { error: string; code?: string; message?: string } | null {
@@ -201,6 +241,9 @@ export function createHorsePublicationRequestHandler(config: PublicationRuntimeC
           || owner.content_id !== input.offerId || owner.identity_id !== input.expectedIdentityId
           || !revision(owner.edit_revision)) throw new Error("invalid_response");
         return reply(owner);
+      }
+      if (["owner-activity", "owner-set-status", "owner-renew"].includes(action)) {
+        return reply(boundHorseLifecycleReceipt(call.json, input, action));
       }
       const saved = boundHorseReceipt(call.json, input, action);
       if (afterResponse && saved.state === "published" && uuid(saved.attempt_id)

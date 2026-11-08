@@ -37,10 +37,10 @@ export type MyAreaListingMarketplaceItemRow =
 export type MyAreaHorseOfferMarketplaceItemRow =
   OwnerHorseOfferMarketplaceItem &
     MyAreaMarketplaceItemCardFields & {
-      detailHref: null;
-      editHref: null;
-      canChangeStatus: false;
-      allowedStatusActions: readonly [];
+      detailHref: string;
+      editHref: string;
+      canChangeStatus: boolean;
+      allowedStatusActions: readonly MyAreaListingStatusAction[];
     };
 
 export type MyAreaMarketplaceItemRow =
@@ -53,7 +53,5 @@ export function isMyAreaHorseOfferMarketplaceItemRow(
   return (
     "contentType" in item
     && item.contentType === "horse_offer"
-    && "canChangeStatus" in item
-    && item.canChangeStatus === false
   );
 }

@@ -26,7 +26,8 @@ function realm(overrides = {}) {
     assert.ok(file.startsWith(root + path.sep));
     const name = path.relative(root, file).split(path.sep).join('/');
     if (Object.hasOwn(overrides,name)) return overrides[name];
-    if (name === 'src/shared/supabase/browserClient.ts') throw Error('Transport requires an explicit fake');
+    if (name === 'src/shared/supabase/browserClient.ts') return {supabaseBrowserClient:{auth:{getSession:()=>assert.fail('unexpected auth'),onAuthStateChange:()=>({data:{subscription:{unsubscribe(){}}}})}}};
+    if (name === 'src/shared/i18n/V2LanguageProvider.tsx') return {useV2Language:()=>({language:'et'}),useV2Translation:catalog=>({language:'et',t:(key,params)=>load('lib/i18n/useTranslation.ts').getCatalogTranslation('et',catalog,key,params)})};
     if (cache.has(file)) return cache.get(file).exports;
     const source = fs.readFileSync(file,'utf8');
     const out = ts.transpileModule(source,{fileName:file,reportDiagnostics:true,compilerOptions:{target:ts.ScriptTarget.ES2017,module:ts.ModuleKind.CommonJS,jsx:ts.JsxEmit.ReactJSX}});
@@ -35,13 +36,13 @@ function realm(overrides = {}) {
     const requireLocal = name => {
       if (name==='react/jsx-runtime') return {jsx:(type,props,key)=>({type,props:props||{},key}),jsxs:(type,props,key)=>({type,props:props||{},key})};
       if (name==='next/link') return {__esModule:true,default:props=>({type:'a',props})};
-      if (name==='react') return overrides.react || {useState:x=>[typeof x==='function'?x():x,()=>{}],useRef:x=>({current:x}),useEffect:()=>{},useMemo:f=>f()};
-      assert.ok(name.startsWith('.'),'Forbidden external dependency '+name);
-      const target=path.resolve(path.dirname(file),name);
+      if (name==='react') return overrides.react || {useState:x=>[typeof x==='function'?x():x,()=>{}],useRef:x=>({current:x}),useEffect:()=>{},useMemo:f=>f(),useCallback:f=>f};
+      assert.ok(name.startsWith('.')||name.startsWith('@/'),'Forbidden external dependency '+name);
+      const target=name.startsWith('@/')?path.resolve(root,name.slice(2)):path.resolve(path.dirname(file),name);
       return load(fs.existsSync(target+'.ts')?target+'.ts':target+'.tsx');
     };
     vm.runInNewContext(out.outputText,{module,exports:module.exports,require:requireLocal,
-      Date,Intl,Number,String,Object,Array,Set,Map,BigInt,JSON,Promise,Error,AbortController,
+      Date,Intl,Number,String,Object,Array,Set,Map,BigInt,JSON,Promise,Error,AbortController,URL,TextEncoder,process:{env:{}},
       setTimeout:overrides.setTimeout||setTimeout,clearTimeout:overrides.clearTimeout||clearTimeout,
       window:overrides.window,document:overrides.document,HTMLElement:overrides.HTMLElement}, {filename:file,timeout:1500});
     return module.exports;
@@ -51,6 +52,7 @@ function realm(overrides = {}) {
 const load=realm();
 const M=load(E+'model/listingActivity.ts');
 const R=load(E+'model/listingRenewal.ts');
+const feedback=value=>load('lib/i18n/interfaceMessage.ts').renderUiMessage('et',value);
 const Session=load(F+'model/ownerListingActivitySession.ts').OwnerListingActivitySession;
 const mapper=load('src/entities/marketplace-item/api/mappers.ts').mapOwnerMarketplaceItemRow;
 const card=load(F+'model/mapMyAreaMarketplaceItemRow.ts').mapMyAreaMarketplaceItemRow;
@@ -83,7 +85,7 @@ test('microsecond after boundary stays active, exact equality is expired',()=>{
 for(const status of ['paused','sold','draft','unknown'])test('status precedes deadline: '+status,()=>{
  const a=M.getListingActivity(status,oldDeadline,now);assert.equal(a.canRenew,false);assert.notEqual(a.state,'expired');
 });
-test('NULL deadline is not inferred expired or silently renewed',()=>{const a=M.getListingActivity('active',null,now);assert.equal(a.label,'Aktiivne');assert.equal(a.canRenew,false);assert.match(a.deadlineLabel,/määramata/);});
+test('NULL deadline is not inferred expired or silently renewed',()=>{const a=M.getListingActivity('active',null,now,'et');assert.equal(a.label,'Aktiivne');assert.equal(a.canRenew,false);assert.match(a.deadlineLabel,/määramata/);});
 test('invalid deadline is never green active',()=>{assert.equal(M.getListingActivity('active','bad',now).state,'unknown');});
 test('90-day and longer periods do not offer shortening',()=>{
  for(const days of [90,91,365]) assert.equal(M.getListingActivity('active',new Date(now+days*86400000).toISOString(),now).canRenew,false);
@@ -156,7 +158,7 @@ test('single confirmation has synchronous double-submit protection and canonical
  const a=h.session.confirmRenewal(),b=h.session.confirmRenewal();await tick();assert.equal(h.calls.renew.length,1);q.resolve();await Promise.all([a,b]);
  const after=plain(h.session.getSnapshot().listings[0]);assert.equal(after.activeUntil,newDeadline);
  delete before.activeUntil;delete after.activeUntil;assert.deepEqual(after,before);
- assert.equal(h.session.getSnapshot().confirmation,null);assert.match(h.session.getSnapshot().notice,/uuendatud/);assert.equal(h.calls.read.length,2);
+ assert.equal(h.session.getSnapshot().confirmation,null);assert.match(feedback(h.session.getSnapshot().notice),/uuendatud/);assert.equal(h.calls.read.length,2);
 });
 test('no hidden write on loading, focus-like invalidation or reload',async()=>{
  const h=harness();await h.session.load({});h.session.invalidate();await h.session.reload();assert.equal(h.calls.renew.length,0);assert.equal(h.calls.status.length,0);
@@ -201,7 +203,7 @@ for(const kind of ['conflict','uncertain','forbidden','status','invalid'])test('
 });
 test('server acknowledgement and failed refresh are not reported as a failed mutation',async()=>{
  const h=harness();await h.session.load({});h.session.requestRenewal(row().key);h.deps.read=async()=>{throw Error('refresh failed');};await h.session.confirmRenewal();
- assert.match(h.session.getSnapshot().problem,/Server kinnitas/);assert.equal(h.session.getSnapshot().needsReload,true);assert.equal(h.calls.renew.length,1);
+ assert.match(feedback(h.session.getSnapshot().problem),/Server kinnitas/);assert.equal(h.session.getSnapshot().needsReload,true);assert.equal(h.calls.renew.length,1);
 });
 test('status and renewal cannot run concurrently or silently reactivate',async()=>{
  const q=deferred();const h=harness({renew:async x=>{h.calls.renew.push(x);await q.promise;return {listingId:x.listingId,status:'active',activeUntil:newDeadline,changed:true};}});
@@ -210,7 +212,7 @@ test('status and renewal cannot run concurrently or silently reactivate',async()
 });
 test('status remains separate and uses fresh read without client expiry write',async()=>{
  const h=harness();await h.session.load({statusFilter:'all'});await h.session.changeStatus(row().key,'paused');
- assert.deepEqual(h.calls.status,[{listingId:input.listingId,status:'paused'}]);assert.equal(h.calls.renew.length,0);
+ assert.deepEqual(h.calls.status,[{listingId:input.listingId,status:'paused',expectedStatus:'active',expectedActor:actorA}]);assert.equal(h.calls.renew.length,0);
  assert.equal(h.session.getSnapshot().listings[0].activeUntil,oldDeadline);assert.equal(h.session.getSnapshot().listings[0].status,'paused');
 });
 test('all/active filters keep expired rows: no false complete page filtering',async()=>{
@@ -257,7 +259,7 @@ test('hook subscribes, invalidates auth synchronously and defers network out of 
  cleanup();assert.equal(unsubscribed,1);assert.equal(deactivated,1);assert.equal(events.size,0);
 });
 test('pure models and session pass strict TypeScript with only existing API transport stubbed',()=>{
- const opts={strict:true,noEmit:true,skipLibCheck:true,target:ts.ScriptTarget.ES2017,module:ts.ModuleKind.CommonJS,moduleResolution:ts.ModuleResolutionKind.Node10,types:[],lib:['lib.esnext.d.ts','lib.dom.d.ts']};
+ const opts={strict:true,noEmit:true,skipLibCheck:true,target:ts.ScriptTarget.ES2017,module:ts.ModuleKind.CommonJS,moduleResolution:ts.ModuleResolutionKind.Node10,types:['node'],lib:['lib.esnext.d.ts','lib.dom.d.ts']};
  const host=ts.createCompilerHost(opts),read=host.readFile;
  host.readFile=f=>path.resolve(f)===path.join(root,'src/shared/supabase/browserClient.ts')?'export declare const supabaseBrowserClient: any;':read(f);
  const files=[E+'model/listingActivity.ts',E+'model/listingRenewal.ts',E+'api/getListingActivityActor.ts',E+'api/renewMyListingActivity.ts',F+'model/ownerListingActivitySession.ts'];
@@ -274,7 +276,7 @@ test('cached snapshots and subscriber cleanup are stable',async()=>{
 });
 test('no-op acknowledgement is not reported as a new 90-day extension',async()=>{
  const h=harness({renew:async x=>({listingId:x.listingId,status:'active',activeUntil:x.expectedActiveUntil,changed:false})});
- await h.session.load({});h.session.requestRenewal(row().key);await h.session.confirmRenewal();assert.match(h.session.getSnapshot().notice,/säilis/);
+ await h.session.load({});h.session.requestRenewal(row().key);await h.session.confirmRenewal();assert.match(feedback(h.session.getSnapshot().notice),/säilis/);
 });
 test('new-filter read queued behind writer waits for settlement and rejects old success',async()=>{
  const q=deferred(),h=harness({renew:async()=>{await q.promise;return {listingId:input.listingId,status:'active',activeUntil:newDeadline,changed:true};}});

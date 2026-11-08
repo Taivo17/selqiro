@@ -9,11 +9,17 @@ import { getOwnerHorsePresentation } from "../../../entities/horse-offer/model/o
 import { useOwnerHorseOfferDetail } from "../model/useOwnerHorseOfferDetail";
 import { OWNER_HORSE_KIND_LABELS, OWNER_HORSE_STATUS_LABELS, formatOwnerHorseDate, getOwnerHorseStatusClassName } from "../model/ownerHorseDetailLabels";
 import { OwnerHorseDetailCard as Card, OwnerHorseDetailValues as Values } from "./OwnerHorseDetailCard";
+import { horseActivityDeadline, horseActivityStatus } from "../../../entities/horse-offer/model/horseActivity";
+import { getListingActivity } from "../../../entities/listing/model/listingActivity";
+import { managedHorseMedia } from "../../../entities/marketplace-item/model/ownerMediaUrl";
+import ManagedOwnerImage from "../../listing-edit/components/ManagedOwnerImage";
+import { useListingActivityClock } from "../../my-area/model/useListingActivityClock";
 
 export default function OwnerHorseOfferDetailPage({ offerId }: { offerId: string }) {
   const { language, r } = useMarketplaceTranslation();
   const {t} = useV2Translation(horsePublicationMessages);
-  const { detail, errorMessage, isLoading, isNotFound, reload } = useOwnerHorseOfferDetail(offerId);
+  const { detail, actor, errorMessage, isLoading, isNotFound, reload } = useOwnerHorseOfferDetail(offerId);
+  const now = useListingActivityClock();
   if (isLoading) return <div className="mx-auto w-full max-w-6xl py-7" role="status">
     <p>{r(marketplaceMessage("horse.loading_horse_listing.92fbfa"))}</p>
     <div aria-hidden="true" className="mt-5 h-96 animate-pulse rounded-[28px] bg-zinc-200" />
@@ -33,8 +39,17 @@ export default function OwnerHorseOfferDetailPage({ offerId }: { offerId: string
   const view = getOwnerHorsePresentation(detail, language);
   const title = detail.title.trim() || (!view.isWanted && detail.horseName?.trim()) || marketplaceMessage("horse.untitled_horse_listing.9905c6");
   const kind = OWNER_HORSE_KIND_LABELS[detail.offerType] || detail.offerType;
-  const status = OWNER_HORSE_STATUS_LABELS[detail.status] || detail.status;
+  const lifecycleStatus = horseActivityStatus(detail.status);
+  const activeUntil = horseActivityDeadline(detail.activeUntil, detail.publishedAt);
+  const activity = getListingActivity(lifecycleStatus ?? "unknown", activeUntil, now, language);
+  const status = lifecycleStatus ? activity.label : OWNER_HORSE_STATUS_LABELS[detail.status] || detail.status;
   const isDraft = detail.status === "draft";
+  const editable = isDraft || lifecycleStatus !== null;
+  const publiclyActive = detail.status === "published" && activeUntil !== null && activity.state === "active";
+  const photo = (source: string, className: string) => managedHorseMedia(source)
+    ? actor ? <ManagedOwnerImage source={source} actor={actor} contentType="horse_offer" className={className} />
+      : <div className={className + " bg-neutral-100"} />
+    : <img src={source} alt={r(title)} className={className + " object-contain"} />;
 
   return (
     <div className="mx-auto w-full min-w-0 max-w-6xl pb-8" data-owner-horse-offer-id={detail.offerId}>
@@ -45,17 +60,17 @@ export default function OwnerHorseOfferDetailPage({ offerId }: { offerId: string
           <h1 className="mt-2 break-words text-3xl font-semibold tracking-tight sm:text-4xl">{r(title)}</h1>
           <p className="mt-3 text-sm text-zinc-600">{r(kind)} · {r(view.isWanted ? `${view.locationHeading}: ` : "")}{r(view.locationLabel)}</p>
         </div>
-        <span className={`inline-flex h-fit w-fit shrink-0 rounded-full border px-4 py-2 text-xs font-semibold ${getOwnerHorseStatusClassName(detail.status)}`}>{r(status)}</span>
+        <span className={`inline-flex h-fit w-fit shrink-0 rounded-full border px-4 py-2 text-xs font-semibold ${activity.state === "expired" ? "border-amber-200 bg-amber-50 text-amber-900" : getOwnerHorseStatusClassName(detail.status)}`}>{r(status)}</span>
       </div>
       <div className="mt-6 rounded-[24px] border border-amber-200 bg-amber-50 px-5 py-4 text-sm leading-6 text-amber-950">
-        {isDraft ? t("explanation") : detail.status === "published" ? t("editExplanation") : t("readOnly")}
+        {isDraft ? t("explanation") : editable ? t("editExplanation") : t("readOnly")}
       </div>
       {r(view.warning ? <p role="alert" className="mt-4 rounded-2xl border border-amber-300 bg-amber-50 p-4 text-sm">{r(view.warning)}</p> : null)}
       <div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,1.25fr)_minmax(300px,0.75fr)]">
         <div className="min-w-0 space-y-6">
           <Card eyebrow={r(marketplaceMessage("horse.horse_listing.f28ecd"))} title={r(marketplaceMessage("horse.basic_information.8824f5"))}>
             <div className="overflow-hidden rounded-[22px] border border-black/8 bg-zinc-100">
-              {r(detail.imageUrl ? <img src={detail.imageUrl} alt={r(title)} className="aspect-[4/3] w-full object-contain" />
+              {r(detail.imageUrl ? photo(detail.imageUrl, "aspect-[4/3] w-full")
                 : <div className="flex aspect-[4/3] items-center justify-center text-sm text-zinc-500">{r(marketplaceMessage("horse.no_image.615289"))}</div>)}
             </div>
             <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
@@ -65,7 +80,7 @@ export default function OwnerHorseOfferDetailPage({ offerId }: { offerId: string
             <p className="mt-5 whitespace-pre-wrap break-words text-sm leading-7 text-zinc-700">{r(detail.description.trim() || marketplaceMessage("horse.no_description_added.25bac7"))}</p>
           </Card>
           {detail.images.length > 1 ? <Card eyebrow={t("photos")} title={t("photos")}>
-            <div className="grid grid-cols-2 gap-3">{detail.images.map(image => <img key={image.id} src={image.url} alt={r(title)} className="aspect-[4/3] w-full rounded-2xl object-contain" />)}</div>
+            <div className="grid grid-cols-2 gap-3">{detail.images.map(image => <div key={image.id}>{photo(image.url, "aspect-[4/3] w-full rounded-2xl")}</div>)}</div>
           </Card> : null}
           <Card eyebrow={r(view.isWanted ? marketplaceMessage("horse.search_preferences.e24496") : marketplaceMessage("horse.horse_details.80a75f"))} title={r(view.isWanted ? marketplaceMessage("horse.wanted_horse.5c7574") : marketplaceMessage("horse.main_characteristics.ca7a3d"))}>
             <Values fields={view.basics} columns empty={r(view.isWanted ? marketplaceMessage("horse.no_preferences_added.d602cc") : marketplaceMessage("horse.no_basic_details_added.8aabfa"))} />
@@ -86,7 +101,7 @@ export default function OwnerHorseOfferDetailPage({ offerId }: { offerId: string
             <Values empty="" fields={[
               { label: marketplaceMessage("horse.listing_type.6ebe7f"), value: kind }, { label: marketplaceMessage("horse.status.e99bbe"), value: status },
               { label: view.priceHeading, value: view.priceLabel }, { label: view.locationHeading, value: view.locationLabel },
-              { label: marketplaceMessage("horse.active_until.7113f3"), value: formatOwnerHorseDate(detail.activeUntil, language) },
+              { label: marketplaceMessage("horse.active_until.7113f3"), value: formatOwnerHorseDate(activeUntil, language) },
             ]} />
           </Card>
           <Card eyebrow={r(marketplaceMessage("horse.owner_metadata.396388"))} title={r(marketplaceMessage("horse.history.b6a836"))}>
@@ -99,13 +114,13 @@ export default function OwnerHorseOfferDetailPage({ offerId }: { offerId: string
           <div className="rounded-[28px] border border-black/10 bg-zinc-950 p-5 text-white shadow-sm sm:p-6">
             <h2 className="text-xl font-semibold">{t("heading")}</h2>
             <p className="mt-3 text-sm leading-6 text-zinc-300">
-              {isDraft ? t("explanation") : detail.status === "published" ? t("editExplanation") : t("readOnly")}
+              {isDraft ? t("explanation") : editable ? t("editExplanation") : t("readOnly")}
             </p>
-            {isDraft || detail.status === "published" ? <Link href={`/v2/my-area/horse-offers/${encodeURIComponent(detail.offerId)}/edit`}
+            {editable ? <Link href={`/v2/my-area/horse-offers/${encodeURIComponent(detail.offerId)}/edit`}
               className="mt-5 inline-flex rounded-full bg-white px-5 py-3 text-sm font-semibold text-zinc-950 hover:bg-zinc-100">
               {t("edit")}
             </Link> : null}
-            {detail.status === "published" ? <Link href={`/v2/horse-offer/${detail.offerId}`} className="mt-4 block text-sm font-bold underline">{t("publicView")}</Link> : null}
+            {publiclyActive ? <Link href={`/v2/horse-offer/${detail.offerId}`} className="mt-4 block text-sm font-bold underline">{t("publicView")}</Link> : null}
           </div>
         </aside>
       </div>

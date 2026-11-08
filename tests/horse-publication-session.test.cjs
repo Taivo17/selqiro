@@ -90,6 +90,29 @@ test('published edit preserves UUID, expected revision, private location and ord
  assert.equal(f.store.result.slots[0].ordinal,1);assert.equal(f.session.getSnapshot().confirmed.detail.images[0].id,OLD);
  assert.equal(f.session.getSnapshot().confirmed.detail.horseLat,58.1);assert.equal(f.session.getSnapshot().confirmed.editRevision,'5');
 });
+for(const status of ['paused','closed'])test(status+' edit confirms saved content without assuming reactivation',async()=>{
+ const f=fixture({edit:true}),value=input('sale',true);
+ value.gallery=[{imageId:OLD,isPrimary:true}];
+ f.hooks.afterPublish=async()=>{f.store.stored.status=status;f.store.stored[status==='paused'?'paused_at':'closed_at']=T;};
+ await f.session.start(value);assert.equal(f.session.getSnapshot().phase,'published');
+ assert.equal(f.session.getSnapshot().confirmed.detail.status,status);assert.equal(f.session.getSnapshot().confirmed.editRevision,'5');
+ assert.equal(f.session.getSnapshot().confirmed.detail.images[0].id,OLD);assert.equal(f.calls.filter(c=>c.action==='publish').length,1);
+});
+for(const status of ['paused','closed'])test('new publication cannot infer success from '+status+' readback',async()=>{
+ const f=fixture();f.hooks.afterPublish=async()=>{f.store.stored.status=status;f.store.stored[status==='paused'?'paused_at':'closed_at']=T;};
+ await f.session.start(input());assert.equal(f.session.getSnapshot().phase,'unknown');assert.equal(f.session.getSnapshot().confirmed,null);
+ assert.equal(f.calls.filter(c=>c.action==='publish').length,1);
+});
+test('paused edit still refuses content mismatch at the acknowledged revision',async()=>{
+ const f=fixture({edit:true});f.hooks.afterPublish=async()=>{f.store.stored.status='paused';f.store.stored.paused_at=T;f.store.stored.title='Other edit';};
+ await f.session.start(input('sale',true));assert.equal(f.session.getSnapshot().phase,'unknown');assert.equal(f.session.getSnapshot().confirmed,null);
+});
+test('a later paused revision uses changed-after-save feedback and adopts actual current state',async()=>{
+ const f=fixture({edit:true});f.hooks.afterPublish=async()=>{f.store.stored.status='paused';f.store.stored.paused_at=T;f.store.stored.edit_revision='6';f.store.stored.title='Other edit';};
+ await f.session.start(input('sale',true));assert.equal(f.session.getSnapshot().phase,'published');assert.equal(f.session.getSnapshot().message,'changedAfterSave');
+ assert.equal(f.session.getSnapshot().confirmed.detail.status,'paused');assert.equal(f.session.getSnapshot().confirmed.detail.title,'Other edit');
+ assert.equal(f.calls.filter(c=>c.action==='publish').length,1);
+});
 test('input is captured before asynchronous lock; duplicate clicks dispatch only once',async()=>{
  const f=fixture(),lock=deferred();f.deps.withLock=async work=>{await lock.promise;return work()};const s=new Session(f.deps),value=input();
  const first=s.start(value),second=s.start(value);value.content.title='Mutated after click';value.confirmations.publisher_confirms_age_18_or_over=false;

@@ -7,11 +7,12 @@ import ListingPrice from "../../../entities/listing/ui/ListingPrice";
 import { horsePublicMessages } from "../../../../lib/i18n/catalogs/horsePublic";
 import { useV2Translation } from "../../../shared/i18n/V2LanguageProvider";
 import HorseContactButton from "./HorseContactButton";
+import PublicPhotoGallery from "../../../shared/media/PublicPhotoGallery";
 
 export default function PublicHorsePage({ offerId }: { offerId: string }) {
  const { t, language } = useV2Translation(horsePublicMessages);
  const [read, setRead] = useState<{ id: string; item: PublicHorse | null; error: boolean } | null>(null);
- const [attempt, setAttempt] = useState(0), [selected, setSelected] = useState<string | null>(null);
+ const [attempt, setAttempt] = useState(0);
  useEffect(() => { const controller = new AbortController();
   void getPublicHorse(offerId, controller.signal).then(item => {
    if (!controller.signal.aborted) setRead({ id: offerId, item, error: false });
@@ -23,17 +24,12 @@ export default function PublicHorsePage({ offerId }: { offerId: string }) {
  if (!state) return <p role="status">{t("loading")}</p>;
  if (!h) return <section className="space-y-5 rounded-[30px] bg-white p-8"><h1 className="text-2xl font-black">{t(state.error ? "error" : "unavailable")}</h1>
   <Link className={button} href="/v2/products">{t("back")}</Link>{state.error && <button type="button" className={button} onClick={() => { setRead(null); setAttempt(a => a + 1); }}>{t("retry")}</button>}</section>;
- const current = h.images.find(i => i.id === selected) || h.images[0];
  return <article className="space-y-6">
   <Link href="/v2/products?category=horses" className="font-semibold underline underline-offset-4">← {t("back")}</Link>
   <div className="grid min-w-0 gap-7 lg:grid-cols-[minmax(0,1fr)_340px]">
    <div className="min-w-0 space-y-6">
-    <section className="overflow-hidden rounded-[30px] border border-amber-200 bg-white p-4" aria-label={t("photos")}>
-     {current ? <img src={current.url} alt={h.title} className="max-h-[620px] w-full rounded-2xl object-contain" /> : <div className="flex aspect-[4/3] items-center justify-center bg-neutral-100">{t("no_photo")}</div>}
-     {h.images.length > 1 && <div className="mt-4 flex gap-3 overflow-x-auto pb-2">{h.images.map((im, index) => <button key={im.id} type="button" aria-label={`${t("photos")} ${index + 1}`}
-      aria-pressed={current?.id === im.id} className={"shrink-0 overflow-hidden rounded-xl border-2 " + (current?.id === im.id ? "border-amber-500" : "border-transparent")}
-      onClick={() => setSelected(im.id)}><img src={im.url} alt="" loading="lazy" className="h-20 w-28 object-cover" /></button>)}</div>}
-    </section>
+    <PublicPhotoGallery key={h.id} title={h.title} photos={h.images.map(image => ({ id: image.id, src: image.url }))}
+     className="overflow-hidden rounded-[30px] border border-amber-200 bg-white p-4" />
     <section className="space-y-4 rounded-[30px] bg-white p-7"><h2 className="text-2xl font-black">{t("description")}</h2><p className="whitespace-pre-wrap break-words leading-7">{h.description}</p></section>
     <section className="space-y-4 rounded-[30px] bg-white p-7"><h2 className="text-2xl font-black">{t(h.offerType === "wanted" ? "wanted_details" : "details")}</h2>
      <dl className="divide-y divide-neutral-100">{HORSE_PUBLIC_FIELDS.filter(k => h.fields[k]).map(k => {

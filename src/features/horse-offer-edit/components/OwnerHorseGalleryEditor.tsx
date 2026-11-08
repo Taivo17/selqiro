@@ -4,6 +4,9 @@ import type { OwnerHorseOfferImage } from "../../../entities/horse-offer/model/t
 import { validateListingCreateImage } from "../../listing-create/model/imageSelection";
 import { useV2Translation } from "../../../shared/i18n/V2LanguageProvider";
 import { horsePublicationMessages } from "../../horse-publication/model/horsePublicationMessages";
+import type { PublicationActor } from "../../../entities/listing/model/publicationJourney";
+import { managedHorseMedia } from "../../../entities/marketplace-item/model/ownerMediaUrl";
+import ManagedOwnerImage from "../../listing-edit/components/ManagedOwnerImage";
 
 export type HorseEditorPhoto = Readonly<{key: string; image: OwnerHorseOfferImage; file?: never; isPrimary: boolean}
   | {key: string; file: File; image?: never; isPrimary: boolean}>;
@@ -12,8 +15,9 @@ export const horseEditorGalleryDirty = (images: readonly OwnerHorseOfferImage[],
   images.length !== photos.length || photos.some((photo, index) => photo.file || photo.image?.id !== images[index]?.id || photo.isPrimary !== images[index]?.isPrimary);
 
 const button = "rounded-full border border-zinc-300 bg-white px-4 py-2 text-sm font-bold disabled:opacity-40";
-export default function OwnerHorseGalleryEditor({photos, disabled, onChange, title}: {
+export default function OwnerHorseGalleryEditor({photos, disabled, onChange, title, actor}: {
   photos: readonly HorseEditorPhoto[]; disabled: boolean; onChange: (photos: HorseEditorPhoto[]) => void; title: string;
+  actor?: PublicationActor | null;
 }) {
   const {t} = useV2Translation(horsePublicationMessages), picker = useRef<HTMLInputElement>(null);
   const [previews, setPreviews] = useState<Record<string, string>>({}), [error, setError] = useState(false);
@@ -39,7 +43,10 @@ export default function OwnerHorseGalleryEditor({photos, disabled, onChange, tit
     <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {photos.map((photo, index) => <article key={photo.key} className={`rounded-2xl border p-3 ${photo.isPrimary ? "border-amber-400 bg-amber-50" : "border-zinc-200"}`}>
         {/* Uploaded photos use the owner-authorized route; new previews stay local. */}
-        <img alt={`${title} ${index + 1}`} src={photo.image?.url || previews[photo.key] || undefined} className="aspect-[4/3] w-full rounded-xl object-cover" />
+        {photo.image && managedHorseMedia(photo.image.url) ? actor ? <ManagedOwnerImage source={photo.image.url}
+          actor={actor} contentType="horse_offer" className="aspect-[4/3] w-full rounded-xl" />
+          : <div className="aspect-[4/3] w-full rounded-xl bg-neutral-100" />
+          : <img alt={`${title} ${index + 1}`} src={photo.image?.url || previews[photo.key] || undefined} className="aspect-[4/3] w-full rounded-xl object-cover" />}
         {photo.file ? <p className="mt-2 text-xs font-bold">{t("newPhoto")}</p> : null}
         <div className="mt-3 flex flex-wrap gap-2">
           <button type="button" className={button} disabled={disabled || photo.isPrimary} onClick={() => onChange(photos.map(item => ({...item, isPrimary: item.key === photo.key})))}>{t(photo.isPrimary ? "primary" : "makePrimary")}</button>

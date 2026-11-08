@@ -1,4 +1,6 @@
 import { getListingPriceDisplay } from "../../../entities/listing/model/priceDisplay";
+import { listingDeadlineMicros } from "../../../entities/listing/model/listingActivity";
+import { horseActivityDeadline, horseActivityStatus } from "../../../entities/horse-offer/model/horseActivity";
 import { getMyAreaWantedSummaryLabels } from "./myAreaWantedSummary";
 import type {
   OwnerMarketplaceItem,
@@ -267,14 +269,19 @@ function mapHorseOfferRow(
     { contentType: "horse_offer" }
   >
 ): MyAreaHorseOfferMarketplaceItemRow {
+  const encodedContentId = encodeContentId(item.contentId);
+  const detailHref = `/v2/horse-offer/${encodedContentId}`;
+  const editHref = `/v2/my-area/horse-offers/${encodedContentId}/edit`;
+  const activeUntil = horseActivityDeadline(item.activeUntil, item.publishedAt);
+  const status = horseActivityStatus(item.sourceStatus);
+  const canChangeStatus = status !== null && listingDeadlineMicros(activeUntil) !== null;
   return {
     ...item,
-    ...buildCardFields(item, "#"),
-    detailHref: null,
-    editHref: null,
-    canChangeStatus: false,
-    allowedStatusActions:
-      NO_MY_AREA_STATUS_ACTIONS,
+    ...buildCardFields({ ...item, activeUntil }, detailHref),
+    detailHref,
+    editHref,
+    canChangeStatus,
+    allowedStatusActions: canChangeStatus ? MY_AREA_LISTING_STATUS_ACTIONS : NO_MY_AREA_STATUS_ACTIONS,
   };
 }
 

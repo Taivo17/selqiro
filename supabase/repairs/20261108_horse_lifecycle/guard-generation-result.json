@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "kind": "horse-lifecycle-guard-generation",
+  "result": "PASS",
+  "generated_at_utc": "2026-11-08T14:30:36.906Z",
+  "dependencies": "269f6679a8267a0b0319e7d71c5c2c5c5c27eb4c8d48b9d748c0d306a7094976",
+  "capability": "98eb672329e78de2ef86285e4ae8021ad734b99ae167a88d8e52176ed2e16249",
+  "functions": 12,
+  "modules": 3,
+  "changed_functions": [
+    "horse_publication_private.attempt_publication_matches",
+    "horse_publication_private.close_published_attempt",
+    "horse_publication_private.is_public",
+    "public.prepare_my_horse_publication_v1",
+    "public.publish_my_horse_offer_v1"
+  ],
+  "new_functions": [
+    "horse_publication_private.effective_active_until",
+    "horse_publication_private.has_current_publication",
+    "horse_publication_private.lifecycle_snapshot",
+    "horse_publication_private.lock_lifecycle",
+    "public.get_my_horse_offer_lifecycle_v1",
+    "public.renew_my_horse_offer_activity_v1",
+    "public.set_my_horse_offer_status_v1"
+  ],
+  "generated_sql_install_and_replay": true,
+  "retained_invariants_unchanged": true,
+  "prior_function_authority_unchanged": true,
+  "live_database": false,
+  "mac_installer": false,
+  "production_storage": false,
+  "files": {
+    "preflight.sql": "24bfd91c1e7138649d85b81d7d035627d0bbf277ced10fbb014e67dac4481f02",
+    "apply.sql": "0a94bfe39245de3309208d98af16ddcf3b98c06e9b518868a1cc97a011ae5967",
+    "verify.sql": "24bfd91c1e7138649d85b81d7d035627d0bbf277ced10fbb014e67dac4481f02",
+    "catalog-pins.json": "ee5a1aafce11da470777d1815ecc96ad92e358100f3743126af63ba1d99f2687",
+    "source-pins.json": "9d36b263d9618709291c2696c83143f00fda7bc9537c7d7614a8cba3f7583b40"
+  }
+}

@@ -33,6 +33,8 @@ function realm({row=detail(),pathname='/v2/my-area/horse-offers/'+ID,detailState
   if(file.endsWith('/src/shared/supabase/browserClient.ts')) return {supabaseBrowserClient:{auth:{signOut:()=>{throw Error('write is not expected');}}}};
   if(file.endsWith('/src/features/horse-offer-detail/model/useOwnerHorseOfferDetail.ts')) return {useOwnerHorseOfferDetail:()=>detailState||{detail:row,isLoading:false,isNotFound:false,errorMessage:null,reload:()=>{}}};
   if(file.endsWith('/src/features/v2-shell/model/useV2IdentitySwitcher.ts')) return {useV2IdentitySwitcher:()=>({activeIdentity:{id:I,type:'private',displayName:'Test identity'},identities:[],loading:false,switchIdentity:()=>{throw Error('not a switch test');}})};
+  if(file.endsWith('/src/features/horse-offer-edit/model/useHorseOwnerContext.ts')) return {useHorseOwnerContext:()=>({actor:null,active:false,ready:false,snapshot:null,error:editorState?.state.context==='blocked'?'identityBlocked':null,retry:()=>{},reload:()=>{},adopt:()=>{},canAct:()=>false})};
+  if(file.endsWith('/src/features/horse-publication/model/useHorsePublication.ts')) return {useHorsePublication:()=>({view:{phase:'editing'},session:null})};
   if(file.endsWith('/src/features/horse-offer-edit/model/useOwnerHorseOfferEditForm.ts')) return {useOwnerHorseOfferEditForm:()=>editorState||{
     state:{context:'checking',work:'idle',snapshot:null,closed:false},session:{canEdit:()=>false,contextMessage:()=> 'Blocked'},reload:()=>{},reset:()=>{},confirmLeave:()=>true}};
   if(cache.has(file)) return cache.get(file).exports;
@@ -117,7 +119,7 @@ for(const kind of ['Detail','Edit'])test(kind+' wrapper composes actual shared s
 test('wanted detail element tree displays nested summary and no future-edit claim',()=>{
  const nodes=tree('components/v2/my-area/V2HorseOfferDetailPage.tsx',{});const words=normal(text(nodes));
  assert.match(words,/Eelarve kuni 5 000 €/);assert.match(words,/Ostueelarve/);assert.match(words,/Otsingupiirkond: Rapla maakond/);
- assert.doesNotMatch(words,/Hind kokkuleppel|Asukoht lisamata|Muutmine, avaldamine/);assert.match(words,/Muuda mustandit/);
+ assert.doesNotMatch(words,/Hind kokkuleppel|Asukoht lisamata|Muutmine, avaldamine/);assert.ok(all(nodes).some(n=>n.type==='a'&&n.props.href==='/v2/my-area/horse-offers/'+ID+'/edit'&&text(n.children)==='Muuda'));
 });
 for(const state of [{detail:null,isLoading:true},{detail:null,isLoading:false,isNotFound:true},{detail:null,isLoading:false,isNotFound:false,errorMessage:'Read failed'}])test('detail loading/not-found/error retains one shared identity button',()=>{
  const nodes=tree('components/v2/my-area/V2HorseOfferDetailPage.tsx',{detailState:{reload:()=>{},...state}});
@@ -126,13 +128,13 @@ for(const state of [{detail:null,isLoading:true},{detail:null,isLoading:false,is
 test('editor blocked identity presentation does not display saved title and fields',()=>{
  const state={context:'blocked',work:'idle',snapshot:{detail:detail()},closed:false};
  const nodes=tree('components/v2/my-area/V2HorseOfferEditPage.tsx',{pathname:'/v2/my-area/horse-offers/'+ID+'/edit',editorState:{state,session:{canEdit:()=>false,contextMessage:()=> 'Õige identiteet vajalik'},confirmLeave:()=>true}});
- assert.doesNotMatch(text(nodes),/Test title|Test description/);assert.match(text(nodes),/Õige identiteet vajalik/);assert.equal(all(nodes).filter(n=>n.type==='main').length,1);
+ assert.doesNotMatch(text(nodes),/Test title|Test description/);assert.match(text(nodes),/Vali enne muutmist identiteet, kellele see kuulutus kuulub/);assert.equal(all(nodes).filter(n=>n.type==='main').length,1);
 });
 test('missing list summary stays detail-only, without inventing budget/location',()=>{
  const mapper=load('src/features/my-area/model/mapMyAreaMarketplaceItemRow.ts').mapMyAreaMarketplaceItemRow;
  const item={contentType:'horse_offer',contentVariant:'wanted',contentId:ID,title:'Wanted',sourceStatus:'draft',lifecycleStatus:'draft',priceAmount:null,priceType:'contact',priceText:null,currency:'EUR',locationLabel:null,city:null,region:null,activeUntil:null};
  const before=plain(item);const row=mapper(item);assert.equal(resolveMessage('et',row.priceLabel),'Eelarve detailvaates');assert.equal(resolveMessage('et',row.locationLabel),'Otsingupiirkond detailvaates');assert.equal(row.priceAmount,null);assert.deepEqual(plain(item),before);
- const nodes=render(load('src/features/my-area/components/MyAreaHorseOfferRow.tsx').default({item:row}));assert.match(text(nodes),/Muutmine detailis/);assert.doesNotMatch(text(nodes),/Ainult vaade|Hind kokkuleppel|Asukoht täpsustamata/);
+ const nodes=render(load('src/features/my-area/components/MyAreaHorseOfferRow.tsx').default({item:row}));assert.ok(all(nodes).some(n=>n.type==='a'&&n.props.href==='/v2/my-area/horse-offers/'+ID+'/edit'&&text(n.children)==='Muuda'));assert.doesNotMatch(text(nodes),/Ainult vaade|Hind kokkuleppel|Asukoht täpsustamata/);
 });
 test('ordinary listing mapping and horse sale mapping retain prices, location and action boundaries',()=>{
  const mapper=load('src/features/my-area/model/mapMyAreaMarketplaceItemRow.ts').mapMyAreaMarketplaceItemRow;
@@ -140,8 +142,10 @@ test('ordinary listing mapping and horse sale mapping retain prices, location an
  const listing=mapper({...base,contentType:'listing'});const horse=mapper({...base,contentId:ID,contentType:'horse_offer',contentVariant:'sale'});
  const expected=normal(new Intl.NumberFormat('et-EE',{maximumFractionDigits:2}).format(1234)+' €');assert.equal(normal(listing.priceLabel),expected);assert.equal(normal(horse.priceLabel),expected);assert.equal(listing.locationLabel,'Tartu');assert.equal(horse.locationLabel,'Tartu');assert.equal(listing.canChangeStatus,true);assert.equal(horse.canChangeStatus,false);
 });
-test('non-draft horse list does not advertise editing',()=>{
- const nodes=render(load('src/features/my-area/components/MyAreaHorseOfferRow.tsx').default({item:{contentId:ID,sourceStatus:'published',lifecycleStatus:'active',title:'Published',priceLabel:'1 €',daysLeft:null}}));assert.match(text(nodes),/Ainult vaade/);assert.doesNotMatch(text(nodes),/Muutmine detailis/);
+for(const status of ['held_for_review','rejected','archived'])test(status+' horse list does not advertise editing',()=>{
+ const item=load('src/features/my-area/model/mapMyAreaMarketplaceItemRow.ts').mapMyAreaMarketplaceItemRow({...detail('sale'),contentType:'horse_offer',contentId:ID,sourceStatus:status,lifecycleStatus:status,priceText:null,priceType:'contact',imageUrl:null,locationLabel:null});
+ const nodes=render(load('src/features/my-area/components/MyAreaHorseOfferRow.tsx').default({item,now:Date.parse('2026-11-08T12:00:00Z'),busy:false,disabled:false,activeIdentityId:I,onRenew(){},onStatus(){}}));
+ assert.equal(all(nodes).some(n=>n.type==='a'&&n.props.href.endsWith('/edit')),false);assert.equal(all(nodes).some(n=>n.type==='select'),false);assert.doesNotMatch(text(nodes),/Muuda|Uuenda kuulutust/);
 });
 test('targeted view modules have no new RPC, mutation, local storage or per-row fetching',()=>{
  for(const file of ['src/entities/horse-offer/model/ownerPresentation.ts','src/features/horse-offer-detail/components/OwnerHorseDetailCard.tsx','src/features/horse-offer-detail/components/OwnerHorseOfferDetailPage.tsx','src/features/my-area/components/MyAreaHorseOfferRow.tsx','src/features/my-area/model/mapMyAreaMarketplaceItemRow.ts']) {

@@ -1,10 +1,11 @@
 # Shared marketplace foundation
 
-Status: implementation checkpoint, 2026-11-08. The EN/ET interface is accepted
-from the user's screenshots. Canonical horse publication is now implemented and
-locally verified; its live installation and acceptance remain pending. Services
-are the next domain. See `horse-publication-v1.md` for the horse protocol and
-`docs/continuity/CURRENT_STATE.json` for final verification/delivery state.
+Status: implementation checkpoint, 2026-11-08. The user's latest screenshots
+confirm canonical horse publication with two photos, public discovery and My
+Area. The new horse parity candidate adds the shared viewer, protected owner
+thumbnail and 90-day owner lifecycle; its local evidence and installation status
+are recorded in `docs/continuity/CURRENT_STATE.json`. Services follow this parity
+acceptance. See `horse-owner-lifecycle-v1.md` and `horse-publication-v1.md`.
 
 ## Decision
 
@@ -30,9 +31,9 @@ framework that hides these differences.
 | Area | Implemented in this source | Remaining boundary |
 | --- | --- | --- |
 | Ordinary listings | Controlled publication, managed images, primary/add/remove, exact readback and cleanup | Existing accepted behavior is retained; general background cleanup remains separate |
-| Horse create and edit | Five types, exact policies, one Publish, private resumable attempt, revision-checked atomic published Save, managed ordered gallery | New live install and user acceptance pending; only draft/published are editable |
-| Horse public and contact | Canonical detail, typed mixed discovery, profile cards, permitted public media, current shared messaging | No new archive/delete/renewal lifecycle actions |
-| Shared owner list | Canonical listing/horse projection, typed ID/status and proper horse edit/public links | Service variant is not yet connected |
+| Horse create and edit | Five types, exact policies, one Publish, private resumable attempt, revision-checked atomic published Save, managed ordered gallery | Publication observed by user; parity candidate preserves paused/sold/expired edits and finite 90-day activity |
+| Horse public and contact | Canonical detail, typed mixed discovery, profile cards, permitted public media, current shared messaging | Parity candidate adds explicit status/renewal; archive/delete remain outside this change |
+| Shared owner list | Canonical listing/horse projection, authenticated thumbnails, shared status/renew/edit controls and image/title links | Service variant is not yet connected |
 | Service owner management | Existing draft create/edit, categories, images, primary image and status actions | Must align user flow, revision/finality and managed media with the confirmed-save foundation |
 | Service public profile | Actual published service reads and profile gallery | `/v2/services` still contains examples; `/v2/service/[id]` is an owner preview |
 | Live service availability | Product blueprint and discovery examples | No complete Quick Update or temporary-location write/read/expiry flow |
@@ -81,9 +82,9 @@ private homes and live worker GPS coordinates are not exposed by default.
 
 ## Ordered next work
 
-1. Install and accept the prepared horse flow once using the focused journey in
-   `docs/continuity/HOSTED_PORTAL.md`. Keep unavailable owner lifecycle actions
-   read-only until their authoritative contracts exist.
+1. Install and accept the new horse gallery/lifecycle parity package once using
+   the focused journey in `docs/continuity/HOSTED_PORTAL.md`. Keep the accepted
+   publication and upload-capacity releases intact; do not replay old installers.
 2. Complete services on the same user workflow: one Publish, later My Area
    Edit/Save, canonical service UUID, revision/operation reconciliation,
    managed images, real discovery, public detail and current contact routing.

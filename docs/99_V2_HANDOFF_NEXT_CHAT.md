@@ -5,54 +5,51 @@ Seisukirje: 2026-11-08 Europe/Tallinn
 
 ## Praegune checkpoint
 
-Hobuse r2 on raportiga edukalt paigaldatud: puhas main 6bb4385 ja täpne 1165-failine alus. Esimene ajutise üleslaadimisruumi pakett peatus DATABASE_PRECONDITIONS_NOT_MATCHED teatega enne SQL-i rakendamist ja lähtefailide uuendamist; build, commit ja push ei alanud. Meie kohalikust kontrollalusest puudusid 17 varasema väljalaske privaatset funktsiooni. Täpsete määratluste ja algsete õiguste/omanike taastamine säilitatud SQL-ist reprodutseerib raporti funktsiooni- ja sõltuvusräsi. Uus selqiro-uleslaadimise-ruum-20261108-r2 parandab kontrollalust ja kaitseid; viis runtime-faili ja kolm SQL-moodulit säilivad. Kahe foto parandatud ajutine reserv on 233 MiB, mitte vana 317 MiB. Kontol mitusada kuulutust on eesmärk; püsiv arvupiir on otsustamata. R2 ruumiparanduse Maci paigaldus, Ready ja sama kahe fotoga hobuse avaldamise edu on veel ootel.
+Kasutaja kinnitas kahe fotoga hobuse avaliku detaili, otsingu ja Minu ala. Hobuse galerii ja Minu ala halduse ühine kandidaat on kohalikult kontrollitud: piltide vahetamine ja suurendamine, omaniku pisipilt, ühised staatusevalikud, 90-päevane tähtaeg ja eraldi uuendamine. Tavakuulutuse pildilink on parandatud. Uue paketi Maci paigaldus, Verceli Ready ning pärisbrauseri vastuvõtt on veel ootel.
 
 ## Lähtekood ja tõendi piir
 
-- **Täpne alus:** Mõlemad tagastatud raportid kinnitavad eduka hobuse r2 main 6bb438519570faa0e42f56e0670e32965cfd62fb, vanema 92408b6 ja 1165 faili. Säilinud hobuse r2 päeviku stage=complete, database=verified, build=passed ja push=verified ei tähenda uut remote'i ega Verceli kontrolli. Esimese capacity-v1 peatuse JSON-i SHA-256 on bd8a76d4e3c3d73763ef8acd669dec2ee9d13af89726962c371baba93e3588da; peatus oli baseline_verified, enne apply-intent'i või lähtefailide uuendust.
-- **Ajutine ruum:** Ühine pending_upload_reserved_bytes_v1 ei loe täpselt kinnitatud avaldatud WEB-galeriid poolelioleva töö hulka. SOURCE jääb arvestusse kuni püsivalt kinnitatud füüsilise puudumiseni. Kahe uue foto kontroll on 175 + 58 = 233 MiB; vanu reserve ega kustutuskviitungeid ümber ei kirjutata. Ilma uute fotodeta jäetakse vahele ainult see baitide kontroll.
-- **Piiratud lõpetamine:** Teenuse RPC-d nõuavad kontrollitud kasutajat ja praegust aktiivset identiteeti. Valitakse ainult sama algse kasutaja avaldatud SOURCE ning kontrollitakse tema säilivat ligipääsu sihtidentiteedile. Aktiivset identiteeti ei vahetata. Üks käik on kuni 20 kinnitatud objekti või 25 s; WEB-i see võime ei kustuta. Füüsiline puudumine ja seotud püsiv kinnitus on mõlemad nõutud.
-- **Täpne kordus:** Ainult täpne publication_retained_bytes_limit keeldumine koos vähemalt ühe kinnitatud SOURCE-lõpetamisega lubab ühe muutmata prepare-käsu korduse. Teadmata vastust ei korrata. Kinnitatud tavakuulutus, foto lisamine ja hobuse avaldamine saavad piiratud vastusejärgse koristuse; avaldamise tulemus ei sõltu taustatöö edust.
-- **Hobuse säiliv voog:** Kõik viis tüüpi kasutavad Avalda ning Minu ala Muuda/Salvesta kogemust, kanoonilist horse_offers UUID-d ja revisjoniga kinnitatud galeriid. Varasem avalik versioon säilib kuni muutmise kinnitamiseni. Päevik seob sama käsu/võtme, fotode räsi, identiteedi ja kasutaja enda nõusoleku.
-- **Tarne:** Parandatud pakett selqiro-uleslaadimise-ruum-20261108-r2 lähtub endiselt eduka hobuse r2 täpsest päevikust ja lähtepuust. Kolm SQL-moodulit ja viis runtime-faili on esimese capacity-kandidaadiga samad. Muutuvad fixture, genereeritud kaitsed, nende tõendid ja üleandmine. Kontrollitud SQL-tehing lisab kaheksa kitsast funktsiooni ning muudab kahte reservikontrolli; järgnevad varukoopia, build, piiratud commit ja tavaline push. Vana pakett, peatunud päevik ja varukoopiad säilivad.
-- **Tooteotsus:** Mitmesaja kuulutuse eesmärki ei piirata 300 MiB püsiva kontokvoodiga. Kolme avatud toimingu ning 20 uue toimingu/24 h eraldi kasutuselevõtukaitsed jäävad praegu alles; tulevane arvupiir ja sageduspoliitika vajavad eraldi otsust.
-- **Kontrollaluse r2:** Kohalik fixture jättis välja 17 retained hosted-release privaatset funktsiooni, mida uus täielik privaatsete skeemide kontroll kaasab. Nende täpne taastamine varasemast SQL-ist koos õiguste ja omanikega annab actual existing_functions=93b95bd4… ning dependencies=bd0d02ea…; before-capability d043db1c… säilib. See on tõendatud kontrollaluse parandus, mitte tootmise räsi pimesi aktsepteerimine ega kaitse ulatuse kitsendamine.
+- **Alus:** Täpselt säilitatud upload-capacity r2 lähtekood: 1193 faili, manifest dbbe2c0266a91514aeb0bdf07ff1ff711b87c7f0a0547c6cbf44864749694ee9. Maci eduraport määrab uue tegeliku commit’i; uuendaja kontrollib selle vanemat 6bb4385, pealkirja, ulatust ning kõiki Giti objekte. Screenshoti põhjal commit’i ei oletata.
+- **Galerii:** Ühine PublicPhotoGallery teenindab hobuse ja tavakuulutuse avalikku vaadet. Nooled, pisipildid, suur vaade, klaviatuur ja puuteliigutus; olemasolevad meedia-URL-id ja õiguskontrollid säilivad.
+- **Minu ala:** Hobuse meediaviide läbib oma tüübi kontrolli ja omaniku pilt laetakse autentitud meediatee kaudu. Pilt ja tekst avavad sama sobiva vaate; parempoolne üleliigne avaliku vaate link eemaldatakse. Staatuse, uuendamise ja muutmise esitlus on ühine.
+- **Elutsükkel:** Hobune jääb horse_offers UUID-kirjeks. published/paused/closed vastavad Aktiivne/Peatatud/Müüdud valikutele. Esmaavaldamine annab 90×24 tundi; vana NULL-tähtaeg tuletatakse algsest avaldamisest. Sisu muutmine ja staatuse valik ei pikenda tähtaega ega tühista teises aknas tehtud elutsüklitoimingut.
+- **Leping:** Uus eraldi horse_lifecycle SQL-parandus kasutab parandatud capacity-r2 kontrollalust. Üks tehing, täpsed sõltuvused ja õigused, eraldi järelkontroll ning sama katse päevik. Vanad rakendatud SQL-failid ja väljastatud paketid jäävad muutmata.
 
 ## Tegelik kohalik katse
 
-- R2 põhjuse kohalik taasesitus taastas 17 funktsiooni täpsetest retained SQL-määratlustest koos omanike ja ACL-idega. See annab samad existing_functions=93b95bd4… ja dependencies=bd0d02ea… nagu kasutaja stopp-raport; vana preflight taastoodab täpselt sama functions=false peatuse, ülejäänud kaheksa kaitset ja absent-capability säilivad. Täiendavat kasutaja diagnostikat selle põhjuse leidmiseks vaja ei ole.
-- Esimese kandidaadi muutmata runtime-baitide säilitatud tõend: 31 SOURCE-lõpetamise + 36 HTTP-käsitleja katset, 198 asjakohast senist regressiooni, tsc ning viie faili ESLint läbisid. Build --webpack läbis 28,29 s sünteetiliste seadetega. Neid ei esitata r2-s uuesti tehtud katsetena; välised vastused olid sünteetilised ja live-toiminguid ei tehtud.
-- Esimese kandidaadi kaheksa SQL-käitumiskatset (sh 300 varasemat kuulutust ja vana SOURCE-kustutustõend), 10 paigalduskaitse juhtu ja 20 uuendaja juhtu säilivad ajaloolise tõendina. Selle fixture'i puudus on nüüd tuvastatud; parandatud kontrollaluse, paigalduskaitsete ning täpse r2 paki värsked tulemused on eraldi tarnearuandes. Kohalik edu ei tõenda Maci paigaldust, päris Storage'it ega native samaaegsust.
-- Uue stopp-raporti täpne paketi seos, kõik 1165 alusfaili/Giti objekti, 41 esialgset failiseisu, 1151 kaitset ja eduka hobuse r2 päeviku seos on kontrollitud. Käik tegi ainult salvestatud eelkontrolli; SQL-i rakendamine, lähteuuendus, build, commit ja push ei alanud.
+- Kliendi/galerii/omanikuvaate/elutsükli koondkatse 254/254 PASS, ilma vahelejäetud või tühistatud katseteta. HTTP uued ja säilitatud avaldamistoimingud 15/15 PASS.
+- SQL elutsükli käitumine 9/9 ning paigalduse, kõrvalekallete ja atomaarse tagasipööramise katsed 12/12 PASS. Sõltumatu ülevaatus kontrollis moodulite, genereeritud SQL-i ja alusfailide räside vastavust ning kordas kahte võtmekatset.
+- Uuendaja taastumise ja peatamise 20/20 katset PASS. Sõltumatu kontroll keeldus veel viiest valest eelmise paigalduse raporti/commiti juhtumist enne andmebaasi või lähtefailide muutmist.
+- Täielik Next.js tootmiskooste koos TypeScriptiga PASS sünteetiliste võtmetega; 506 rakenduse lähtefaili räsi püsis koostamise ajal muutmata. Uusi tootmiskoodi lint-vigu ei ole; viis alusversiooni set-state-in-effect leidu säilivad.
+- PGlite, sünteetilised HTTP/DOM piirid ja ajutine Git ei asenda native samaaegsust, pärisbrauseri galerii/fookuse kontrolli ega kasutaja Maci, Supabase’i ja Verceli paigaldust. Täpse ZIP-i koostatud paigalduskatse ja baitide kontroll lisatakse eraldi väljastusraportisse.
 
 ## Production / kasutajaliides
 
-- Edukas hobuse r2 main 6bb4385 säilib. Capacity-v1 tegelik käik peatus enne muutmist; parandatud capacity-r2 Maci paigaldus, uus commit/Ready ning sama kahe fotoga hobuse avaldamise kasutaja vastuvõtt on veel ootel. Arendustöö ei muutnud live-andmebaasi, Storage'it ega deployment'i.
-- Tavalise kuulutuse foto lisamine, põhipilt, eemaldamine/koristus, kümne foto piir ja avalik nähtavus on varem vastu võetud. Commit 785c359 Ready / Production ning üks kasutaja mõõdetud 9 s lisamine jäävad tõendiks, mitte püsiva keskmise lubaduseks.
-- Frankfurt fra1 ning English/Eesti valik säilivad. Kasutaja on näidanud ingliskeelset avalikku otsingut ja eestikeelset Minu ala; varasemat keelepaigaldust ei korrata.
+- Kasutaja kinnitas ekraanipiltidega hobuse hobutest kaks fotot avalikus detailis ning kirje otsingus ja Minu alas. Uue capacity-r2 commit’i või selle privaatse paigaldusraporti eraldi eksporti ei ole; järgmine uuendaja kontrollib need Macis.
+- Uue galerii/elutsükli kandidaadi paigaldus, Verceli Ready ja kasutaja vastuvõtt on ootel. Arendustöö ei teinud live-andmebaasi, Storage’i ega deployment’i toiminguid.
+- English/Eesti, Frankfurt fra1 ja varasem üks 9-sekundiline fotolisamise kasutajamõõt säilivad varasema tõendina.
 
 ## Üks järgmine töö
 
-Kasuta HOSTED_PORTAL.md parandatud selqiro-uleslaadimise-ruum-20261108-r2/uuenda.py --publish käsku. Pärast selle commit’i Ready / Production tulemust värskenda senist hobusevormi, vajuta Kontrolli salvestatud tulemust, vali vajadusel Vali algfotod kaudu samad kaks fotot ja vajuta Jätka. Olemasolev session.resume kontrollib not_found korral sama säilitatud käsu/võtmega prepare’i; päevikut ei kustutata ega uut duplikaati alustata. Kontrolli avalikus hobusevaates mõlemat fotot. Seejärel ühenda teenused kanoonilise services UUID ja sama Avalda ning Minu ala Muuda/Salvesta vooga; töökuulutused hiljem.
+Paki selqiro-hobuste-haldus-20261108.zip Downloads-kaustas lahti ja järgi HOSTED_PORTAL.md ühte käsku. Seejärel oota selle commit’i Ready/Production tulemust ning kontrolli galeriid, pisipilti, pildilinke, staatust ja eraldi uuendamist. Teenused järgnevad sama Avalda ja Minu ala Muuda/Salvesta loogikaga, töökuulutused hiljem.
 
 **Peatumisel:** PEATATUD korral säilita teade, raport, kasutaja muudatused ja kõik päevikud. Räsikaitset, remote’i ega õiguskontrolli ei nõrgendata erinevuse möödumiseks. Uue konkreetse tõendita ei korrata vanu paigaldusi, diagnostikat ega vastuvõetud kasutuskatseid.
 
 ## Loe ainult vajalikku
 
-- docs/continuity/HOSTED_PORTAL.md — üks praegune capacity-r2 käsk ning sama kahe fotoga toimingu jätkamine.
-- docs/continuity/UPLOAD_CAPACITY_20261108.md — tegelik eelkontrolli peatus, 17 puuduva fixture-funktsiooni tõendatud põhjus ning ajutise reservi arvestus.
-- docs/architecture/upload-capacity-v1.md — ajutine arvestus, SOURCE-õigused, üks kordus ja piiratud taustatöö.
-- docs/architecture/horse-publication-v1.md — kanooniline UUID, revisjon, galerii, nõusolek ning avalik/kontakti leping.
-- docs/architecture/shared-marketplace-foundation.md ja docs/known-issues.md — teenused järgmisena, töö hiljem ning allesjäävad piirid.
+- docs/continuity/HOSTED_PORTAL.md — üks uus käsk ja vastuvõtt.
+- docs/architecture/horse-owner-lifecycle-v1.md — ühine galerii ja 90-päevane haldus.
+- docs/architecture/horse-publication-v1.md — kanooniline UUID, revisjon, nõusolek, galerii ja kontakt.
+- docs/architecture/shared-marketplace-foundation.md ja docs/known-issues.md — teenused järgmisena ja säilivad piirid.
 
 ## Säilivad piirid
 
-- Üks portaal, hoidla, Supabase’i projekt, konto ja keele-eelistus. English on põhikeel/fallback, Eesti teine keel; kasutajasisu ei tõlgita ning kinnitatava poliitika originaali ei asendata tõlkega.
-- Hobune jääb horse_offers ja teenus services kanooniliseks UUID-kirjeks. Ühine lugemine kasutab content_type koos ID-ga; listings tabelisse varikoopiat ei looda. Kuni kümme fotot, üks põhipilt ja null foto lubamine säilivad.
-- Hobuse draft/published on muudetavad; ülejäänud seisud on lugemiseks. Uusi archive/delete/pause/renew toiminguid ei väideta valmis. Kasutaja enda nõusolekut, poliitika versiooni ja revisjoni ei muudeta ajutise ruumi parandamiseks.
-- 300 MiB on ajutise üleslaadimistöö kaitse, mitte kokkulepitud kontomaht ega avaldatud kuulutuste piir. Kolm avatud toimingut ja 20 uut toimingut/24 h on eraldi allesjäävad kasutuselevõtukaitsed.
-- Piiratud avaldatud SOURCE-koristus ei ole püsiv üldine taustateenus. Katkestatud/aegunud/terminalne koristus on järgmine eraldi töö; raportis oli selliseid arvestuses objekte null. Vanad failid, fotod, päevikud, varukoopiad ja dateeritud ajalugu säilivad.
-- Teenuse sisestamine ja muutmine saavad sama lihtsa Avalda ning Minu ala Muuda/Salvesta voo, ilma kohustusliku eraldi mustandita. Teenuse hinnastus/piirkond/saadavus säilivad oma lepingus; töökuulutused tulevad hiljem.
+- Üks portaal, hoidla, Supabase’i projekt, konto ja keele-eelistus. English on põhikeel/fallback, Eesti teine keel; kasutajasisu ei tõlgita.
+- Hobune jääb horse_offers ja teenus services kanooniliseks UUID-kirjeks; listings tabelisse varikoopiat ei looda. Kuni kümme fotot, üks põhipilt ja null foto lubamine säilivad.
+- Staatus ei uuenda tähtaega. 90 päeva pikendamine on eraldi omaniku kinnitus; teise identiteedi või aegunud revisjoni käsk ei tohi tulemust muuta.
+- Püsiv kuulutuste arvupiir on otsustamata. 300 MiB on ajutise töö kaitse, kolm avatud ja 20 uut toimingut/24 h eraldi olemasolevad kasutuselevõtukaitsed.
+- Üldine terminalne taustakoristus jääb eraldi tööks. Uus elutsükkel ei kustuta kuulutusi, pilte, nõusolekuid ega päevikuid.
+- Teenuste sisestamine ja muutmine järgib sama Avalda ning Minu ala Muuda/Salvesta voogu ilma kohustusliku eraldi mustandita. Teenuse eriväljad säilivad; töökuulutused hiljem.
 
 ## Keskkond
 

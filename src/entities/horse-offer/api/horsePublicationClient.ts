@@ -4,7 +4,8 @@ import { privateUploadHttp } from "../../listing/api/privateUploadHttp";
 import type { PublicationActor } from "../../listing/model/publicationJourney";
 import { measurePhotoTask, type PhotoPerformanceStage } from "../../listing/model/photoPerformance";
 
-const actions = new Set(["prepare", "status", "publish", "cancel", "image-prepare", "image-verify", "owner-read"]);
+const actions = new Set(["prepare", "status", "publish", "cancel", "image-prepare", "image-verify", "owner-read",
+  "owner-activity", "owner-set-status", "owner-renew"]);
 const stages: Record<string, PhotoPerformanceStage> = {prepare: "prepare", status: "status", publish: "publish",
   "image-prepare": "image_prepare", "image-verify": "image_verify", "owner-read": "gallery"};
 
@@ -22,11 +23,11 @@ export async function horsePublicationRequest(actor: PublicationActor, action: s
   const failure = result.json && typeof result.json === "object" ? result.json as Record<string, unknown> : null;
   if (failure?.error === "policy_changed") throw new Error("policies_changed");
   if (failure?.error === "capacity") throw new Error(failure.message === "publication_retained_bytes_limit" ? "storage_limited" : "temporarily_limited");
-  if (failure?.error === "refused") throw new Error("details_rejected");
   if (failure && typeof failure.code === "string" && ["40001", "42501", "22023", "23514", "55000"].includes(failure.code)) {
     const e = new Error(failure.code === "40001" ? "revision_conflict" : failure.code === "42501" ? "context_changed" : "details_rejected");
     Object.assign(e, {code: failure.code}); throw e;
   }
+  if (failure?.error === "refused") throw new Error("details_rejected");
   if (result.status === 401 || result.status === 403) throw new Error("context_changed");
   if (result.status === 429) throw new Error("temporarily_limited");
   throw new Error("outcome_unknown");

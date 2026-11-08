@@ -1,5 +1,5 @@
 /** Existing owner list contract, used by the isolated integration. Never an edit payload. */
-import {listingImageUrl} from "../../../listing/model/listingMediaUrl";
+import { ownerImageUrl } from "../ownerMediaUrl";
 import { ensure, record, text, listingId } from "../../../listing/model/publicRead/priceRead";
 import { parseOwnerMoney, uuid, type OwnerMoney } from "./ownerMoney";
 export type OwnerReadContext = { actorId: string; identityId: string };
@@ -51,8 +51,8 @@ function excerpt(value: unknown, truncated: unknown): string {
   ensure(size <= 512 && (!truncated || size === 512));
   return value;
 }
-function image(value: unknown): string | null {
-  return listingImageUrl(text(value));
+function image(value: unknown, contentType: "listing" | "horse_offer"): string | null {
+  return ownerImageUrl(text(value), contentType);
 }
 function parseItem(value: unknown, identity: string): OwnerReadItem {
   const r = record(value, ITEM_FIELDS);
@@ -73,7 +73,7 @@ function parseItem(value: unknown, identity: string): OwnerReadItem {
   return { content_type: type, content_id: id, identity_id: identity, source_status: status, lifecycle_status: lifecycle,
     content_variant: variant, title: excerpt(r.title,r.title_truncated), title_truncated: r.title_truncated as boolean,
     description_excerpt: excerpt(r.description_excerpt,r.description_truncated), description_truncated: r.description_truncated as boolean,
-    image_url: image(r.image_url), category, subcategory, condition, city, region, location_label: location,
+    image_url: image(r.image_url, type), category, subcategory, condition, city, region, location_label: location,
     active_until: date(r.active_until,true), published_at: date(r.published_at,true), created_at: date(r.created_at,false) as string,
     sort_at: date(r.sort_at,false) as string, money: parseOwnerMoney(r.money,type,variant) };
 }

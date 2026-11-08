@@ -1,3 +1,24 @@
+<!-- SELQIRO_HORSE_PARITY_20261108 -->
+## 2026-11-08 — hobuse avaldamine nähtav, galerii ja elutsükli ühtlustamine
+
+Kasutaja ekraanipildid kinnitavad kahe fotoga hobuse avalikku detaili, ühise
+otsingu kaarti ja Minu ala rida. Leitud puudused: galerii nooled/suur vaade,
+omaniku pisipilt ja elutsüklivalikud. Uus kandidaat ühendab ühise pildivaaturi,
+pisipildi autentitud lugemise ning Aktiivne/Peatatud/Müüdud ja 90-päevase
+uuendamise. Pilt ja pealkiri avavad sama sihi, üleliigne parempoolne link kaob.
+Sisu salvestamine säilitab staatuse ja tähtaja; vana vorm ei tohi hilisemat
+peatamist tühistada. Vana NULL-tähtaeg tuleneb algsest avaldamisest, mitte
+uuenduse paigaldusajast. Bulk-aktiveerimist ega uut püsivat kontopiiri ei lisata.
+
+Alus on täpne capacity-r2 1193-failine lähtekood. Maci edukas privaatne raport
+ja kõik Giti objektid kontrollitakse uues uuendajas; uut commit’i ei oletata.
+Värske kohalik tõend ja päris paigalduse piir on CURRENT_STATE.json-is ning
+lõplikus kontrollraportis. Üks järgmine käsk asub continuity/HOSTED_PORTAL.md-s.
+Teenused järgivad pärast vastuvõttu sama lihtsat Avalda / Muuda–Salvesta voogu,
+töökuulutused tulevad hiljem. Varasemad dateeritud seisud on ajalugu.
+
+---
+
 <!-- SELQIRO_UPLOAD_CAPACITY_PREFLIGHT_R2_20261108 -->
 ## 2026-11-08 — üleslaadimisruumi esimene peatus ja kontrollaluse r2
 
