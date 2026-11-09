@@ -8,6 +8,7 @@ import { serviceLocationLabel, servicePriceLabel, type PublicServiceOffer } from
 import { serviceEditorMessages } from "../../service-editor/model/serviceEditorMessages";
 import { useServiceCategories } from "../../service-category-selection/model/useServiceCategories";
 import ServiceContactButton from "./ServiceContactButton";
+import ServiceReturnBackLink from "../../service-navigation/components/ServiceReturnBackLink";
 
 export default function ServiceDetailPage({serviceId}: {serviceId: string}) {
   const {language, t} = useV2Translation(serviceEditorMessages), categories = useServiceCategories();
@@ -24,7 +25,7 @@ export default function ServiceDetailPage({serviceId}: {serviceId: string}) {
   const service = current.service;
   const categoryLabel = (code: string | null) => {const value = categories.categories.find(item => item.code === code); return value ? language === "et" ? value.labelEt : value.labelEn : code;};
   return <div className="min-w-0 space-y-6">
-    <Link href="/v2/services" className="inline-flex min-h-11 items-center font-bold underline">← {t("backServices")}</Link>
+    <ServiceReturnBackLink serviceId={serviceId} />
     {current.loading ? <p role="status" className="rounded-3xl bg-white p-6">{t("loading")}</p>
       : current.error ? <section role="alert" className="rounded-3xl border border-red-200 bg-white p-6"><p>{t("loadError")}</p><button type="button" className="mt-4 rounded-full border px-5 py-3 font-bold" onClick={() => {setState({id: serviceId, service: null, loading: true, error: false}); setRetry(value => value + 1);}}>{t("retry")}</button></section>
       : !service ? <h1 className="rounded-3xl bg-white p-6 text-2xl font-black">{t("unavailable")}</h1>

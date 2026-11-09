@@ -1,57 +1,59 @@
-# Teenuste fotovaliku ja profiililoendite parandus — r2
+# Teenuste tagasitee parandus
 
 Seis: 09.11.2026 Europe/Tallinn. Üks praegune seis on CURRENT_STATE.json-is.
 
-Ainult lugemise kontroll on lõpetatud ja selle raport vastu võetud. Esimese
-paranduspaki peatus tulenes kohaliku kontrollaluse kahest taastamisveast.
-Mõlemad on nüüd algallika ning tegeliku tabelikirjeldusega täpselt seletatud.
-R2 kasutab parandatud kontrollalust ning sama varem kontrollitud rakendusmuudatust.
+Kasutaja on teenuse fotode salvestamise ning uusima teenuse järjestuse Minu alas
+ja profiilil vastu võtnud. Käesolev parandus taastab teenuse detailist naastes
+profiili või avaliku teenuseloendi lähtekoha, filtrid ning avatud vaate.
 
 ## Üks järgmine käsk
 
-Paki **selqiro-teenuste-parandus-20261109-r2.zip** Downloads-kaustas lahti ja käivita:
+Paki **selqiro-teenuste-tagasitee-20261109.zip** Downloads-kaustas lahti ja käivita:
 
 ```bash
-python3 -I -B "$HOME/Downloads/selqiro-teenuste-parandus-20261109-r2/uuenda.py" --publish
+python3 -I -B "$HOME/Downloads/selqiro-teenuste-tagasitee-20261109/uuenda.py" --publish
 ```
 
-Uuendaja kontrollib olemasolevat /Users/taivo/selqiro hoidlat, tegelikku haru,
-HEAD-i, tervet indexit/lähtepuud ja kinnitatud remote’i. Ta kasutab sama olemasolevat
-Supabase’i projekti ja lukustatud CLI-d, kontrollib teadaolevat algseisu, rakendab
-kolme lugemisfunktsiooni muudatuse ning kontrollib tulemust. Alles seejärel
-kirjutatakse varundatud lähtefailid, tehakse build ning piiratud commit ja push.
-Sõltuvuste uut installi ega teenuste uuesti ühendamist pole vaja.
+Uuendaja loeb eelmise r2 täpset lõpetatud privaatset päevikut ning kontrollib
+sellest leitud commit'i sõltumatult Giti parent'i, teema, täieliku puu ja
+muudetud radade järgi. Seejärel kontrollitakse olemasoleva /Users/taivo/selqiro
+hoidla tegelikku haru, HEAD-i, tervet indexit, lähtefaile ja kinnitatud remote'i.
+Muudetavad lähtefailid varundatakse enne rakendamist. Järgnevad build ning ainult
+selle paranduse commit ja tavaline push. SQL-i, Supabase CLI-d, Storage'i
+toiminguid ega sõltuvuste installi selles pakis ei ole.
+
+Eelmise r2 uus commit ja raportiräsi lahendatakse Macis tegeliku tõendi järgi;
+pakki pole kirjutatud oletatud praegust commit'i. Varasemad päevikud, raportid
+ja väljastatud pakid säilivad.
 
 ## Kui töö peatub
 
-Kui raport on olemas ja kontrollitud, on terminalis **SAADA SEE FAIL:** koos
-täpse JSON-faili asukohaga ning Finderis valitakse sama fail. Lisa see vestlusse. Raporti koopia saab unikaalse nime
-Downloads-kaustas; algne päevik ja varasemad failid säilivad. Kui koopiat teha
-või Finderit avada ei õnnestu, annab terminal kontrollitud asukoha. Kui raport
-jäi loomata või selle päritolu ei saanud turvaliselt kontrollida, ütleb terminal
-seda ning palub saata PEATATUD-rea. Viimase säilinud,
-kuid võimalik, et vananenud raporti kohta näidatakse eraldi märkus.
+Terminal näitab **SAADA SEE FAIL:** koos just selle jooksu kontrollitud
+JSON-faili täieliku asukohaga ja valib sama faili Finderis. Lisa valitud fail
+vestlusse. Downloads-koopia saab unikaalse nime. Kui koopiat ei õnnestu luua,
+kasutatakse kontrollitud originaali; Finderi tõrke korral on täpne asukoht
+terminalis. Kui raport puudub või selle päritolu ei saa kinnitada, palub
+terminal saata PEATATUD-rea. Vananenud raport märgitakse eraldi.
 
 ## Pärast edu
 
-Oota Vercelis **terminalis näidatud sama uue commit’i Ready / Production** tulemust
-ning värskenda portaali. Seejärel kontrolli ainult muudetud kasutusteed:
+Oota Vercelis **terminalis näidatud sama uue commit'i Ready / Production**
+tulemust ning värskenda portaali. Kontrolli muudetud kasutusteed:
 
-1. Vali „Lisa teenus” vormis foto: eelvaade ja loendur peavad kohe muutuma.
-   Ühe olemasoleva teenuse „Muuda” vaates lisa foto, salvesta ja kontrolli
-   avalikku pilti. Olemasolevaid fotosid ei ole vaja eemaldada.
-2. Vaata Minu alas ja profiilil, et viimati loodud teenus on ees ning kirjeldus
-   võtab kuni kaks rida. Detailis säilib kogu tekst.
-3. Ava profiili ühises kuulutuste loendis tavakuulutus ja hobune ning tule tagasi.
-   Filter, lehekülg ja kerimiskoht peavad säilima. Üle 24 tulemuse korral vaata
-   ka järgmist lehekülge.
+1. Keri avalikul profiilil teenusteni, ava üks teenus ja vajuta brauseri
+   Tagasi-noolt. Sama kaart peab jääma samasse nähtavasse kohta. Kui avasid
+   enne „Vaata kõiki”, peab laiendatud teenuste vaade samuti säilima.
+2. Ava teenus avaliku teenuseloendi keskelt ning tule brauseri noolega tagasi.
+   Sama koht ning kasutatud otsing/filtrid peavad säilima. Kui olid vajutanud
+   „Näita rohkem”, peab avatud teenus jääma leitavaks ka sellest leheosast.
 
-Varem vastu võetud teenuse teksti/olekute ning hobuse galerii katsed kehtivad.
-Lõpetatud diagnostikat ja vanu paigaldajaid ei käivitata uuesti. R2 uus SQL ei
-muuda kasutajaridu, rubriigitabeleid ega nende õigusi; Storage’i kustutust ei tee.
-Vana paranduspakk, selle peatunud päevik ning diagnostika raport jäävad alles.
+Detaili nähtav tagasilink arvestab samuti lähtekohta. Otse avatud teenuse
+puhul viib see avalikku teenuseloendisse. Kaartidel on lühike kirjeldus; teenuse
+detailis on kogu salvestatud tekst loetav.
 
-Poerubriigi määramine praeguses muutmisvaates, hobuste/teenuste rubriigimudel,
-üldine automaatne koristus ja tehniliste testpaneelide eemaldamine enne avalikku
-avamist jäävad eraldi tööks. Energy, maksete tuum ja piiratud AI järgnevad
-kokkulepitud V2 ulatuse sees.
+Varem vastu võetud fotode, järjestuse, hobuste ning tavakuulutuste kasutuskatseid
+ja lõpetatud diagnostikat ei korrata selle paranduse eeltingimusena.
+
+Üldine automaatne koristus, tehniliste testpaneelide eemaldamine tavakasutaja
+vaatest ning poerubriikide puuduvad seostamise võimalused jäävad eraldi tööks.
+Energy, maksete tuum ja piiratud AI järgnevad kokkulepitud V2 ulatuse sees.

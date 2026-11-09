@@ -1,42 +1,62 @@
 "use client";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { searchPublicServices } from "../../../entities/service/api/getPublicService";
+import { searchPublicServices, SERVICE_SEARCH_PAGE_SIZE } from "../../../entities/service/api/getPublicService";
 import type { PublicServicePage, ServiceSearchInput } from "../../../entities/service/model/publicService";
+import { readPublicServiceWindow } from "./readPublicServiceWindow";
 
-type State = {key: string; page: PublicServicePage | null; loading: boolean; error: boolean};
-export function usePublicServiceSearch(input: ServiceSearchInput) {
+type State = {key: string; page: PublicServicePage | null; firstOffset: number;
+  origins: ReadonlyMap<string, number>; loading: boolean; error: boolean};
+const empty = (key: string): State => ({key, page: null, firstOffset: 0, origins: new Map(), loading: true, error: false});
+const offsetValue = (value: number | undefined) => Number.isInteger(value) && (value ?? 0) >= 0 && (value ?? 0) <= 1_000_000 ? value ?? 0 : 0;
+
+export function usePublicServiceSearch(input: ServiceSearchInput, options: {
+  enabled?: boolean; restoreOffset?: number; targetOffset?: number; restorationKey?: string;
+} = {}) {
+  const enabled = options.enabled !== false, restoreOffset = offsetValue(options.restoreOffset);
+  const targetOffset = Math.min(restoreOffset, offsetValue(options.targetOffset)), restorationKey = options.restorationKey ?? "";
   const key = JSON.stringify(input), version = useRef(0), abort = useRef<AbortController | null>(null), live = useRef(false);
-  const current = useRef<State>({key, page: null, loading: true, error: false});
-  const [state, setState] = useState<State>({key, page: null, loading: true, error: false}), [retryNumber, setRetryNumber] = useState(0);
+  const current = useRef<State>(empty(key));
+  const [state, setState] = useState<State>(() => empty(key)), [retryNumber, setRetryNumber] = useState(0);
   const set = useCallback((value: State) => {current.current = value; setState(value);}, []);
-  const invalidate = useCallback(() => {version.current += 1;}, []);
   useEffect(() => {
+    if (!enabled) return;
     live.current = true;
     const ticket = ++version.current;
     abort.current?.abort(); const controller = new AbortController(); abort.current = controller;
-    // Synchronize a new external query before its debounce fires. Keeping an
-    // old page here could make pagination reuse the previous filter's offset.
+    const isCurrent = () => live.current && ticket === version.current && !controller.signal.aborted;
+    // Hide a previous query before debounce or restoration can issue any read.
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    set({key, page: null, loading: true, error: false});
+    set(empty(key));
     const timer = window.setTimeout(() => {void (async () => {
-      try {const page = await searchPublicServices(JSON.parse(key) as ServiceSearchInput, 0, controller.signal);
-        if (live.current && ticket === version.current && !controller.signal.aborted) set({key, page, loading: false, error: false});
-      } catch {if (live.current && ticket === version.current && !controller.signal.aborted) set({key, page: null, loading: false, error: true});}
+      try {
+        const result = await readPublicServiceWindow(JSON.parse(key) as ServiceSearchInput,
+          restoreOffset, targetOffset, controller.signal, isCurrent);
+        if (isCurrent()) set({key, ...result, loading: false, error: false});
+      } catch {if (isCurrent()) set({...empty(key), loading: false, error: true});}
     })();}, 250);
-    return () => {live.current = false; invalidate(); controller.abort(); window.clearTimeout(timer);};
-  }, [key, retryNumber, set, invalidate]);
-  const loadMore = useCallback(async () => {
-    const before = current.current, offset = before.page?.nextOffset;
-    if (before.key !== key || before.loading || !before.page?.hasMore || offset == null) return;
+    return () => {live.current = false; version.current += 1; controller.abort(); window.clearTimeout(timer);};
+  }, [key, retryNumber, set, enabled, restoreOffset, targetOffset, restorationKey]);
+
+  const loadPage = useCallback(async (direction: "previous" | "next") => {
+    const before = current.current;
+    const offset = direction === "previous" ? Math.max(0, before.firstOffset - SERVICE_SEARCH_PAGE_SIZE) : before.page?.nextOffset;
+    if (!enabled || before.key !== key || before.loading || !before.page || offset == null
+      || (direction === "previous" ? before.firstOffset === 0 : !before.page.hasMore)) return;
     const ticket = ++version.current;
     abort.current?.abort(); const controller = new AbortController(); abort.current = controller;
     set({...before, loading: true, error: false});
     try {
       const page = await searchPublicServices(JSON.parse(key) as ServiceSearchInput, offset, controller.signal);
       if (!live.current || ticket !== version.current || controller.signal.aborted) return;
-      const previous = before.page.items, seen = new Set(previous.map(item => item.id));
-      set({key, page: {...page, items: [...previous, ...page.items.filter(item => !seen.has(item.id))]}, loading: false, error: false});
+      const origins = new Map(before.origins), extra = page.items.filter(item => !origins.has(item.id));
+      for (const item of extra) origins.set(item.id, offset);
+      const items = direction === "previous" ? [...extra, ...before.page.items] : [...before.page.items, ...extra];
+      // Earlier pages prepend rows while preserving the current forward cursor.
+      set({key, page: {...(direction === "previous" ? before.page : page), items}, origins,
+        firstOffset: direction === "previous" ? offset : before.firstOffset, loading: false, error: false});
     } catch {if (live.current && ticket === version.current && !controller.signal.aborted) set({...before, loading: false, error: true});}
-  }, [key, set]);
-  return {...(state.key === key ? state : {key, page: null, loading: true, error: false}), loadMore, retry: () => setRetryNumber(value => value + 1)};
+  }, [key, set, enabled]);
+  const visible = enabled && state.key === key ? state : empty(key);
+  return {...visible, serviceOffset: (id: string) => visible.origins.get(id) ?? visible.firstOffset,
+    loadMore: () => loadPage("next"), loadPrevious: () => loadPage("previous"), retry: () => setRetryNumber(value => value + 1)};
 }

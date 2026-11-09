@@ -99,12 +99,12 @@ export default function PublicProfilePage({ slug }: { slug: string }) {
   const handleShowcasesExpandedChange =
     useCallback(
       (nextExpanded: boolean) => {
-        setExpandedProfileState({
+        setExpandedProfileState(previous => !nextExpanded && (previous.slug !== slug || previous.section !== "showcases") ? previous : ({
           slug,
           section: nextExpanded
             ? "showcases"
             : null,
-        });
+        }));
       },
       [slug]
     );
@@ -112,12 +112,12 @@ export default function PublicProfilePage({ slug }: { slug: string }) {
   const handleServicesExpandedChange =
     useCallback(
       (nextExpanded: boolean) => {
-        setExpandedProfileState({
+        setExpandedProfileState(previous => !nextExpanded && (previous.slug !== slug || previous.section !== "services") ? previous : ({
           slug,
           section: nextExpanded
             ? "services"
             : null,
-        });
+        }));
       },
       [slug]
     );
@@ -125,12 +125,12 @@ export default function PublicProfilePage({ slug }: { slug: string }) {
   const handleListingsShowAllChange =
     useCallback(
       (nextShowAll: boolean) => {
-        setExpandedProfileState({
+        setExpandedProfileState(previous => !nextShowAll && (previous.slug !== slug || previous.section !== "listings") ? previous : ({
           slug,
           section: nextShowAll
             ? "listings"
             : null,
-        });
+        }));
       },
       [slug]
     );

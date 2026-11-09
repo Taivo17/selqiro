@@ -1,3 +1,34 @@
+<!-- SELQIRO_SERVICE_NAVIGATION_ACCEPTANCE_20261109 -->
+## 2026-11-09 — teenuste fotod/järjestus vastu võetud; tagasitee parandus valmis lähtekoodis
+
+Kasutaja kinnitas teenuse piltide salvestamise ning uusima teenuse esimese koha
+Minu alas ja avalikul profiilil. Hobuse profiililt ning tavakuulutuse avalikust
+loendist tagasitee on samuti vastu võetud. Teenuse detailist naastes kadusid
+aga profiili/loendi asukoht, laiendus ja otsinguseis; kaks viga korrati vanas
+r2 allikas päris brauseris.
+
+Valmis eraldi väike service-navigation moodul, ajalookirjega seotud lähtekoht,
+URL-is filtrid, värskete tulemuste piiratud taastamine ja kaardi nähtava koha
+joondamine. Sama lähtepunkt säilib korduva Back–Forward–Back puhul; nähtav
+back-link arvestab profiilist tulekut. Loendi hiline kasv ja profiilis
+teenuse/kuulutuse vahetamine on sihitult kaetud. Pikk kirjeldus jäi detailis
+tervikuna loetavaks; kaartide kahe rea reeglit ei muudetud.
+
+Värske Next tootmiskooste PASS (596 sisendit, drift 0), TypeScript PASS,
+sihitud lint 0 viga, kontekst/filtrid 12/12 ja Chromiumi kasutusteed 13/13 PASS.
+Uuendaja varasema r2 tõendi sidumine ning DB-ta veatee: 8/8 PASS. API/auth ja
+Next Link/router piirid on brauserifixtuuris sünteetilised. Lõppmanifesti
+päris ajutise Giti tarnekäigu tõend on välise paki kontrollid-kaustas.
+
+Uus source-only pakett seob tegeliku r2 commit'i olemasoleva privaatraporti ja
+Giti täieliku puuga; selle uut räsi ei oletata. SQL-i, Storage'i ega teenuste
+uuesti ühendamist selles sammus ei ole. Olemasolevad päevikud ja väljastatud
+r2 pakk säilivad. Maci kirjutus, commit/push, Verceli Ready ja kasutaja kaks
+teenuse tagasiteekatset on veel kinnitamata.
+
+Üks seis: CURRENT_STATE.json. Üks käsk: HOSTED_PORTAL.md. Detailne tõendipiir:
+SERVICE_RETURN_NAVIGATION_20261109.md ja service-return-navigation-v1.md.
+
 <!-- SELQIRO_SERVICE_PROFILE_RECONSTRUCTED_R2_20261109 -->
 ## 2026-11-09 — lugemisraport vastu võetud ja täpne r2 kontrollalus taastatud
 

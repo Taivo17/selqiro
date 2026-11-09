@@ -1,3 +1,16 @@
+<!-- SELQIRO_SERVICE_NAVIGATION_PREPARED_20261109 -->
+## 09.11.2026 — teenuse fotod vastu võetud; tagasitee parandus ette valmistatud
+
+Teenuse fotode salvestamine ja uusima teenuse järjestus on kasutaja poolt vastu
+võetud. Teenuse detailist brauseri Tagasi kaotas profiili ning avaliku loendi
+lähtekoha. Uus kitsas parandus läbis värske build'i, 12 kontekstikontrolli ja
+13 Chromiumi kasutusjuhtu; päris Maci/Ready ning kasutajakatse on veel ootel.
+Kaartidel on lühike kirjeldus; detaili täistekst oli brauserikatses loetav.
+
+Praegune käsk ja tõendipiir on CURRENT_STATE.json-is ning HOSTED_PORTAL.md-s.
+Vt ka continuity/SERVICE_RETURN_NAVIGATION_20261109.md. Allpool olevad vanemad
+ettevalmistuse märked on ajalugu, mitte uued paigaldamiskäsud.
+
 <!-- SELQIRO_PHOTO_PICKER_PREPARED_20261107 -->
 ## 07.11.2026 — fotovalik, piirangute põhjus ja V2 keelekatvus
 

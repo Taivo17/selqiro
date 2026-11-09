@@ -8,7 +8,8 @@ export async function getPublicService(serviceId: string, signal: AbortSignal) {
   return parsePublicService(data, serviceId);
 }
 
-export async function searchPublicServices(input: ServiceSearchInput, offset: number, signal: AbortSignal, limit = 24) {
+export const SERVICE_SEARCH_PAGE_SIZE = 24;
+export async function searchPublicServices(input: ServiceSearchInput, offset: number, signal: AbortSignal, limit = SERVICE_SEARCH_PAGE_SIZE) {
   if (!Number.isSafeInteger(offset) || offset < 0 || !Number.isSafeInteger(limit) || limit < 1 || limit > 100
     || input.query.length > 200 || (input.category?.length ?? 0) > 120 || (input.subcategory?.length ?? 0) > 160
     || (input.country?.length ?? 0) > 120 || (input.city?.length ?? 0) > 160) throw new Error("service_search_invalid");

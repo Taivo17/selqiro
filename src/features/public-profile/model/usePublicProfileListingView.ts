@@ -6,6 +6,7 @@ import { usePublicProfileMarketplace } from "./usePublicProfileMarketplace";
 import { getCurrentRelativeUrl, isListingReturnNavigation, readListingReturnContext,
   saveListingReturnContext } from "../../listing-navigation/model/listingReturnContext";
 import { useListingReturnRestoration } from "../../listing-navigation/model/useListingReturnRestoration";
+import { clearServiceReturnSource } from "../../service-navigation/model/serviceReturnContext";
 
 export const PROFILE_LISTING_PAGE_SIZE = 24;
 export const PROFILE_LISTING_PREVIEW_SIZE = 4;
@@ -72,6 +73,7 @@ export function usePublicProfileListingView(profile: PublicProfile, showAll: boo
     setSelectedCategoryId(id); setExpandedRootId(parentId); setResultOffset(0);
   }
   function openListing(input: {listingId: string; cardViewportTop: number}) {
+    clearServiceReturnSource();
     saveListingReturnContext({source: "public-profile", ...input, publicProfileState: {
       showAll, selectedCategoryId, expandedRootId, resultOffset: offset,
       horizontalScrollLeft: horizontalScrollRef.current?.scrollLeft ?? 0,

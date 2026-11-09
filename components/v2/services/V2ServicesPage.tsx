@@ -1,10 +1,11 @@
 "use client";
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useMemo, type MouseEvent } from "react";
 import V2DiscoveryTypeSwitcher from "../../../src/features/v2-shell/components/V2DiscoveryTypeSwitcher";
 import { useV2Translation } from "../../../src/shared/i18n/V2LanguageProvider";
 import { serviceEditorMessages } from "../../../src/features/service-editor/model/serviceEditorMessages";
-import { usePublicServiceSearch } from "../../../src/features/service-detail/model/usePublicServiceSearch";
+import { useServiceDiscoveryView } from "../../../src/features/service-navigation/model/useServiceDiscoveryView";
+import { isPlainServiceClick } from "../../../src/features/service-navigation/model/serviceReturnContext";
 import { serviceLocationLabel, servicePriceLabel } from "../../../src/entities/service/model/publicService";
 import { useServiceCategories } from "../../../src/features/service-category-selection/model/useServiceCategories";
 import { buildServiceCategoryTree } from "../../../src/entities/service-category/model/types";
@@ -13,11 +14,12 @@ const input = "min-h-12 w-full min-w-0 rounded-full border border-neutral-200 bg
 export default function V2ServicesPage() {
   const {language, t} = useV2Translation(serviceEditorMessages), categories = useServiceCategories();
   const tree = useMemo(() => buildServiceCategoryTree(categories.categories), [categories.categories]);
-  const [query, setQuery] = useState(""), [category, setCategory] = useState(""), [subcategory, setSubcategory] = useState(""), [city, setCity] = useState("");
-  const results = usePublicServiceSearch({query, category: category || null, subcategory: subcategory || null, country: null, city: city || null});
+  const {filters: {query, category, subcategory, city}, results, change, clear, remember} = useServiceDiscoveryView();
   const categoryLabel = (code: string | null) => {const item = categories.categories.find(value => value.code === code); return item ? language === "et" ? item.labelEt : item.labelEn : code;};
   const children = tree.childrenByParent.get(category) ?? [];
-  const clear = () => {setQuery(""); setCategory(""); setSubcategory(""); setCity("");};
+  const rememberCard = (event: MouseEvent<HTMLAnchorElement>, serviceId: string) => {
+    if (isPlainServiceClick(event)) remember(serviceId, event.currentTarget.getBoundingClientRect().top);
+  };
   return <div className="min-w-0 space-y-8">
     <V2DiscoveryTypeSwitcher active="services" />
     <header className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
@@ -26,13 +28,13 @@ export default function V2ServicesPage() {
     </header>
     <section aria-label={t("browse")} className="rounded-[28px] border border-teal-200 bg-white p-4 shadow-sm sm:p-5">
       <div className="grid min-w-0 gap-3 md:grid-cols-2 xl:grid-cols-[2fr_1fr_1fr]">
-        <label className="block min-w-0"><span className="sr-only">{t("search")}</span><input type="search" maxLength={200} value={query} onChange={event => setQuery(event.target.value)} placeholder={t("search")} className={input} /></label>
-        <label className="block min-w-0"><span className="sr-only">{t("category")}</span><select value={category} className={input} disabled={categories.loading || !!categories.error} onChange={event => {setCategory(event.target.value); setSubcategory("");}}>
+        <label className="block min-w-0"><span className="sr-only">{t("search")}</span><input type="search" maxLength={200} value={query} onChange={event => change({query: event.target.value})} placeholder={t("search")} className={input} /></label>
+        <label className="block min-w-0"><span className="sr-only">{t("category")}</span><select value={category} className={input} disabled={categories.loading || !!categories.error} onChange={event => change({category: event.target.value, subcategory: ""})}>
           <option value="">{t("allCategories")}</option>{tree.roots.map(item => <option key={item.code} value={item.code}>{language === "et" ? item.labelEt : item.labelEn}</option>)}
         </select></label>
-        <label className="block min-w-0"><span className="sr-only">{t("city")}</span><input type="search" maxLength={160} value={city} onChange={event => setCity(event.target.value)} placeholder={t("allLocations")} className={input} /></label>
+        <label className="block min-w-0"><span className="sr-only">{t("city")}</span><input type="search" maxLength={160} value={city} onChange={event => change({city: event.target.value})} placeholder={t("allLocations")} className={input} /></label>
       </div>
-      {children.length ? <label className="mt-3 block max-w-lg"><span className="sr-only">{t("subcategory")}</span><select value={subcategory} onChange={event => setSubcategory(event.target.value)} className={input}>
+      {children.length ? <label className="mt-3 block max-w-lg"><span className="sr-only">{t("subcategory")}</span><select value={subcategory} onChange={event => change({subcategory: event.target.value})} className={input}>
         <option value="">{t("noSubcategory")}</option>{children.map(item => <option key={item.code} value={item.code}>{language === "et" ? item.labelEt : item.labelEn}</option>)}
       </select></label> : null}
       {categories.error ? <p role="status" className="mt-3 text-sm text-neutral-600">{t("categoryError")} <button type="button" onClick={() => void categories.refresh()} className="font-bold underline">{t("retry")}</button></p> : null}
@@ -46,8 +48,11 @@ export default function V2ServicesPage() {
         <button type="button" className="mt-3 min-h-11 rounded-full border px-5 font-bold" onClick={results.retry}>{t("retry")}</button></div> : null}
       {results.page?.items.length === 0 && !results.loading ? <div className="rounded-2xl bg-white p-6"><h3 className="text-xl font-bold">{t("emptyPublic")}</h3>
         <p className="mt-2 text-neutral-600">{t("emptyPublicHelp")}</p><button type="button" className="mt-4 min-h-11 rounded-full border px-5 font-bold" onClick={clear}>{t("clearFilters")}</button></div> : null}
+      {results.firstOffset > 0 ? <div className="mb-5"><button type="button" disabled={results.loading}
+        onClick={() => void results.loadPrevious()} className="min-h-12 rounded-full border border-teal-300 bg-white px-6 py-3 font-bold disabled:opacity-50">{t("earlierResults")}</button></div> : null}
       <div className="grid min-w-0 gap-5 sm:grid-cols-2 xl:grid-cols-3">
-        {results.page?.items.map(service => <Link key={service.id} href={`/v2/service/${service.id}`} aria-label={t("openService", {title: service.title})}
+        {results.page?.items.map(service => <Link key={service.id} href={`/v2/service/${service.id}`} prefetch={false}
+          data-service-card-id={service.id} onClick={event => rememberCard(event, service.id)} aria-label={t("openService", {title: service.title})}
           className="group min-w-0 overflow-hidden rounded-[26px] border border-black/5 bg-white p-3 shadow-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-teal-600">
           {/* Already processed public media must retain the endpoint's publication checks. */}
           {/* eslint-disable-next-line @next/next/no-img-element */}

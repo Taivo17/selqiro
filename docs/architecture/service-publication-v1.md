@@ -3,10 +3,15 @@
 Implementation checkpoint: 2026-11-09. This source adds the services adapter to
 the accepted marketplace publication foundation. Local validation and the
 installation boundary are recorded in `docs/continuity/CURRENT_STATE.json`.
-The r2 report verifies the prior Mac database/build/push at b05ed30; the user
-accepted service text and lifecycle behavior. Photo selection still failed.
-The prepared photo/list correction and its deployment boundary are recorded
-separately in `docs/continuity/SERVICE_PROFILE_POLISH_20261109.md`.
+The earlier services r2 report verifies Mac database/build/push at b05ed30.
+On 2026-11-09 the user also accepted photo saving and newest-created service
+ordering in My Area and the public profile after the photo/list correction.
+Its exact later commit and Ready identity were not supplied with that UI
+acceptance. Browser Back from a service still lost the originating profile or
+discovery position. The current source-only correction and evidence boundaries
+are in `docs/continuity/SERVICE_RETURN_NAVIGATION_20261109.md`; the architecture
+is `docs/architecture/service-return-navigation-v1.md`. Earlier photo/list
+preparation remains in `docs/continuity/SERVICE_PROFILE_POLISH_20261109.md`.
 
 ## User flow
 
