@@ -10,6 +10,8 @@ export type PublicProfileListingReturnState = {
   selectedCategoryId: string | null;
   expandedRootId: string | null;
   horizontalScrollLeft: number;
+  /** Absent in earlier saved contexts; the first server page remains the default. */
+  resultOffset?: number;
 };
 
 export type ListingReturnContext = {
@@ -187,10 +189,14 @@ function normalizePublicProfileState(
       value.horizontalScrollLeft
     );
 
+  const resultOffset = value.resultOffset === undefined ? 0 : value.resultOffset;
+
   if (
     selectedCategoryId === undefined ||
     expandedRootId === undefined ||
-    horizontalScrollLeft === null
+    horizontalScrollLeft === null ||
+    typeof resultOffset !== "number" || !Number.isInteger(resultOffset) ||
+    resultOffset < 0 || resultOffset > 100000
   ) {
     return null;
   }
@@ -204,6 +210,7 @@ function normalizePublicProfileState(
         0,
         horizontalScrollLeft
       ),
+    resultOffset,
   };
 }
 

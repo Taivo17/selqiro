@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "kind": "service-profile-behavioral-proof-reuse",
+  "original_release_id": "0cf78dad191f17bdc73876649470ce1d269e2631356f7090f45daa64d9a366ab",
+  "original_review_sha256": "26f198a4b8e6671fe3efa8b529fb52b0947e12b00233e781a43e064bc9733866",
+  "original_runtime_generated_at_utc": "2026-11-09T11:33:26.409Z",
+  "result": "PASS",
+  "runtime_checks": 44,
+  "runtime_rerun": false,
+  "reason": "Both reader modules and combined changes SQL are byte-identical; only synthetic dependency reconstruction and guarded recognition pins change.",
+  "files": {
+    "runtime-result.json": "458560673f441078c6bb66bfa03b080992be167734098ecc47a34b197de75ee8",
+    "tests/runtime-service_creation_order.json": "0eafac9c94b215c3ed428e92019d86febae5fe51ae51f03779d812029015529a",
+    "tests/runtime-unified_profile_pages.json": "a41a24405e6bf079a72d2cdfedfe574a60dcb0f09df40560c9b4bb33b0e01388",
+    "tests/runtime.mjs": "a9eedf63c3c94da9e07183430dced8e3c5369f00fb618579893a9632260963de",
+    "tests/runtime-case.mjs": "a41cc35fd9b8c93df3011533be26fcbd068dd27127a7908035ed2d0d0bb2da77",
+    "01_service_order.sql": "ebe8faf10f65f3f218bcf86ee120c84253e9e335ba262b9e9ff25baec87c3491",
+    "02_profile_marketplace.sql": "3570059d7b57f8d67ed6bd17cad260ba491eb36e45804dc8774f03bb8c9ea612",
+    "changes.sql": "3cfb510dd4d043c3f8bb5dc12c82b4fc79127f8d747b5ea2bb60424686d1be71"
+  }
+}

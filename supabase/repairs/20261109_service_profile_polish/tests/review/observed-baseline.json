@@ -1,0 +1,374 @@
+{
+  "schema_version": 1,
+  "kind": "service-profile-observed-baseline-evidence",
+  "receipts": {
+    "diagnostic_sha256": "8e09ba1c714950e8fc28ce8b1f1d1dc8c65dd0f433d22d96f1131bb7b859b980",
+    "diagnostic_observed_at_utc": "2026-11-09T17:33:53+00:00",
+    "server_version_num": 170006,
+    "stop_sha256": "fde3c3e874bbeabb018c4de66b8746c2b1a35d5d9a68d1f9e21f02c01df0c99a",
+    "prior_success_sha256": "517fb67df34bf21c6cdaa6856b2ad00487821c5f774fec33665a03ecd6f69202"
+  },
+  "issued_release_id": "0cf78dad191f17bdc73876649470ce1d269e2631356f7090f45daa64d9a366ab",
+  "issued_preflight_sha256": "a9246835f1a102e956e02017aada9a3bb3b87a7ad1818f45e29f88d3a3065e9b",
+  "issued_pins": {
+    "before": "3beb454ecc24833cbb15bc87ce9f6664bf4922f66491c28613e33801f8f97ad1",
+    "after": "74cec49be29b0e6feab489b53722ef69ac57065fba8e392a6f01411bc0921cc3",
+    "profile": "bba8034abdc649277e0ce2be5397c637f76ff713524ebd936696475f6ed45ce3",
+    "retainedCapability": "7783a7b59001e5b4c00226d8479e2fc4b609a39f48b2bff46ade265a30306b1c"
+  },
+  "observed_current_preflight": {
+    "capability_absent": true,
+    "capability_present": false,
+    "dependencies_ok": false,
+    "fingerprints": {
+      "capability": "3beb454ecc24833cbb15bc87ce9f6664bf4922f66491c28613e33801f8f97ad1",
+      "dependencies": "d42b8615d634c3c823c2399a8dcc32e88151624635cb90eec20d10262c8f63a6"
+    },
+    "guards": {
+      "actor_roles": true,
+      "closed_private_schema": true,
+      "core_relations": true,
+      "final_writer_policies": true,
+      "functions": true,
+      "hosted_context_ready": true,
+      "installer": true,
+      "managed_triggers": true,
+      "profile_dependencies": false,
+      "required_columns": true
+    },
+    "hosted_context": {
+      "cleanup_mode": "held",
+      "instance_id": "2d088814-0900-448a-a9d1-7b05470cb1d2",
+      "project_ref": "vyjletlmwoiwxsnsunlm",
+      "release_id": "listing-publication-hosted-preview-v1",
+      "release_ready": true,
+      "storage_authority_version": "source-part-rfc3986-v1"
+    },
+    "invariants": {
+      "existing_authority": "5c743a341898260eeee3e3a19923083f2ff99602c458a640e910b14358646761",
+      "existing_functions": "a74d30cbb4cef77b5960e18ffa030675f2a0dd281f3c73cdcd602d002838f8cb",
+      "immutable_structure": "a9662fc851e262c9210c1e99f542fd9b7c40209f47efde275fbfe64b01e36e8f"
+    },
+    "kind": "service-profile-polish-v1",
+    "ready_to_apply": false,
+    "recognized": false,
+    "schema_version": 1,
+    "state": "unknown"
+  },
+  "prior_success_retained_invariants": {
+    "existing_authority": "efa38563bb83faa3061242ef994c72c30f3f9494af9064c75a7dcac314ceeb88",
+    "existing_functions": "babaacbbca672d8a8b951ad46c863e5b4ac9f3bc2d41704f6049d3ef44f546a7",
+    "immutable_structure": "9a264b28ca98e3d2b1ac2523388e45f92fd2b8ee3be29088373b200831116732"
+  },
+  "store_structures": [
+    {
+      "columns": [
+        {
+          "collation": null,
+          "default": null,
+          "generated": "",
+          "identity": "",
+          "name": "listing_id",
+          "not_null": true,
+          "type": "bigint"
+        },
+        {
+          "collation": null,
+          "default": null,
+          "generated": "",
+          "identity": "",
+          "name": "store_category_id",
+          "not_null": true,
+          "type": "uuid"
+        },
+        {
+          "collation": null,
+          "default": "now()",
+          "generated": "",
+          "identity": "",
+          "name": "created_at",
+          "not_null": true,
+          "type": "timestamp with time zone"
+        }
+      ],
+      "constraints": [
+        {
+          "deferrable": false,
+          "deferred": false,
+          "definition": "FOREIGN KEY (listing_id) REFERENCES public.listings(id) ON DELETE CASCADE",
+          "inheritance": 0,
+          "local": true,
+          "name": "listing_store_categories_listing_id_fkey",
+          "no_inherit": true,
+          "type": "f",
+          "validated": true
+        },
+        {
+          "deferrable": false,
+          "deferred": false,
+          "definition": "PRIMARY KEY (listing_id, store_category_id)",
+          "inheritance": 0,
+          "local": true,
+          "name": "listing_store_categories_pkey",
+          "no_inherit": true,
+          "type": "p",
+          "validated": true
+        },
+        {
+          "deferrable": false,
+          "deferred": false,
+          "definition": "FOREIGN KEY (store_category_id) REFERENCES public.store_categories(id) ON DELETE CASCADE",
+          "inheritance": 0,
+          "local": true,
+          "name": "listing_store_categories_store_category_id_fkey",
+          "no_inherit": true,
+          "type": "f",
+          "validated": true
+        }
+      ],
+      "force_rls": false,
+      "indexes": [
+        {
+          "definition": "CREATE INDEX idx_listing_store_categories_category ON public.listing_store_categories USING btree (store_category_id)",
+          "name": "idx_listing_store_categories_category",
+          "ready": true,
+          "valid": true
+        },
+        {
+          "definition": "CREATE INDEX idx_listing_store_categories_category_id ON public.listing_store_categories USING btree (store_category_id)",
+          "name": "idx_listing_store_categories_category_id",
+          "ready": true,
+          "valid": true
+        },
+        {
+          "definition": "CREATE INDEX idx_listing_store_categories_listing ON public.listing_store_categories USING btree (listing_id)",
+          "name": "idx_listing_store_categories_listing",
+          "ready": true,
+          "valid": true
+        },
+        {
+          "definition": "CREATE INDEX idx_listing_store_categories_listing_id ON public.listing_store_categories USING btree (listing_id)",
+          "name": "idx_listing_store_categories_listing_id",
+          "ready": true,
+          "valid": true
+        },
+        {
+          "definition": "CREATE UNIQUE INDEX listing_store_categories_pkey ON public.listing_store_categories USING btree (listing_id, store_category_id)",
+          "name": "listing_store_categories_pkey",
+          "ready": true,
+          "valid": true
+        }
+      ],
+      "inheritance": [],
+      "kind": "r",
+      "name": "public.listing_store_categories",
+      "nonstandard_not_null": 0,
+      "owner": "postgres",
+      "persistence": "p",
+      "rls": true,
+      "triggers": []
+    },
+    {
+      "columns": [
+        {
+          "collation": null,
+          "default": "gen_random_uuid()",
+          "generated": "",
+          "identity": "",
+          "name": "id",
+          "not_null": true,
+          "type": "uuid"
+        },
+        {
+          "collation": null,
+          "default": null,
+          "generated": "",
+          "identity": "",
+          "name": "user_id",
+          "not_null": true,
+          "type": "uuid"
+        },
+        {
+          "collation": "\"default\"",
+          "default": null,
+          "generated": "",
+          "identity": "",
+          "name": "name",
+          "not_null": true,
+          "type": "text"
+        },
+        {
+          "collation": null,
+          "default": "0",
+          "generated": "",
+          "identity": "",
+          "name": "sort_order",
+          "not_null": true,
+          "type": "integer"
+        },
+        {
+          "collation": null,
+          "default": "now()",
+          "generated": "",
+          "identity": "",
+          "name": "created_at",
+          "not_null": true,
+          "type": "timestamp with time zone"
+        },
+        {
+          "collation": null,
+          "default": null,
+          "generated": "",
+          "identity": "",
+          "name": "identity_id",
+          "not_null": true,
+          "type": "uuid"
+        },
+        {
+          "collation": null,
+          "default": null,
+          "generated": "",
+          "identity": "",
+          "name": "parent_id",
+          "not_null": false,
+          "type": "uuid"
+        }
+      ],
+      "constraints": [
+        {
+          "deferrable": false,
+          "deferred": false,
+          "definition": "FOREIGN KEY (identity_id) REFERENCES public.identities(id) ON DELETE CASCADE",
+          "inheritance": 0,
+          "local": true,
+          "name": "store_categories_identity_id_fkey",
+          "no_inherit": true,
+          "type": "f",
+          "validated": true
+        },
+        {
+          "deferrable": false,
+          "deferred": false,
+          "definition": "CHECK ((((char_length(name) >= 1) AND (char_length(name) <= 60)) AND (name = regexp_replace(btrim(name), '[[:space:]]+'::text, ' '::text, 'g'::text))))",
+          "inheritance": 0,
+          "local": true,
+          "name": "store_categories_name_valid_check",
+          "no_inherit": false,
+          "type": "c",
+          "validated": true
+        },
+        {
+          "deferrable": false,
+          "deferred": false,
+          "definition": "FOREIGN KEY (parent_id) REFERENCES public.store_categories(id) ON DELETE RESTRICT",
+          "inheritance": 0,
+          "local": true,
+          "name": "store_categories_parent_id_fkey",
+          "no_inherit": true,
+          "type": "f",
+          "validated": true
+        },
+        {
+          "deferrable": false,
+          "deferred": false,
+          "definition": "PRIMARY KEY (id)",
+          "inheritance": 0,
+          "local": true,
+          "name": "store_categories_pkey",
+          "no_inherit": true,
+          "type": "p",
+          "validated": true
+        },
+        {
+          "deferrable": false,
+          "deferred": false,
+          "definition": "FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE",
+          "inheritance": 0,
+          "local": true,
+          "name": "store_categories_user_id_fkey",
+          "no_inherit": true,
+          "type": "f",
+          "validated": true
+        }
+      ],
+      "force_rls": false,
+      "indexes": [
+        {
+          "definition": "CREATE INDEX idx_store_categories_user ON public.store_categories USING btree (user_id)",
+          "name": "idx_store_categories_user",
+          "ready": true,
+          "valid": true
+        },
+        {
+          "definition": "CREATE INDEX idx_store_categories_user_id ON public.store_categories USING btree (user_id)",
+          "name": "idx_store_categories_user_id",
+          "ready": true,
+          "valid": true
+        },
+        {
+          "definition": "CREATE UNIQUE INDEX store_categories_child_name_unique_idx ON public.store_categories USING btree (identity_id, parent_id, lower(name)) WHERE (parent_id IS NOT NULL)",
+          "name": "store_categories_child_name_unique_idx",
+          "ready": true,
+          "valid": true
+        },
+        {
+          "definition": "CREATE INDEX store_categories_identity_id_idx ON public.store_categories USING btree (identity_id)",
+          "name": "store_categories_identity_id_idx",
+          "ready": true,
+          "valid": true
+        },
+        {
+          "definition": "CREATE INDEX store_categories_identity_parent_sort_idx ON public.store_categories USING btree (identity_id, parent_id, sort_order, created_at)",
+          "name": "store_categories_identity_parent_sort_idx",
+          "ready": true,
+          "valid": true
+        },
+        {
+          "definition": "CREATE INDEX store_categories_identity_sort_idx ON public.store_categories USING btree (identity_id, sort_order, created_at)",
+          "name": "store_categories_identity_sort_idx",
+          "ready": true,
+          "valid": true
+        },
+        {
+          "definition": "CREATE UNIQUE INDEX store_categories_pkey ON public.store_categories USING btree (id)",
+          "name": "store_categories_pkey",
+          "ready": true,
+          "valid": true
+        },
+        {
+          "definition": "CREATE UNIQUE INDEX store_categories_root_name_unique_idx ON public.store_categories USING btree (identity_id, lower(name)) WHERE (parent_id IS NULL)",
+          "name": "store_categories_root_name_unique_idx",
+          "ready": true,
+          "valid": true
+        }
+      ],
+      "inheritance": [],
+      "kind": "r",
+      "name": "public.store_categories",
+      "nonstandard_not_null": 0,
+      "owner": "postgres",
+      "persistence": "p",
+      "rls": true,
+      "triggers": [
+        {
+          "definition": "CREATE TRIGGER prepare_store_category_name_before_write BEFORE INSERT OR UPDATE OF name ON public.store_categories FOR EACH ROW EXECUTE FUNCTION public.prepare_store_category_name()",
+          "enabled": "O",
+          "name": "prepare_store_category_name_before_write"
+        },
+        {
+          "definition": "CREATE TRIGGER validate_store_category_parent_before_write BEFORE INSERT OR UPDATE OF parent_id, identity_id ON public.store_categories FOR EACH ROW EXECUTE FUNCTION public.validate_store_category_parent()",
+          "enabled": "O",
+          "name": "validate_store_category_parent_before_write"
+        }
+      ]
+    }
+  ],
+  "previous_single_structure_difference": {
+    "relation": "public.store_categories",
+    "constraint": "store_categories_name_valid_check",
+    "field": "definition",
+    "previous_replay": "CHECK (((char_length(name) >= 1) AND (char_length(name) <= 60) AND (name = regexp_replace(btrim(name), '[[:space:]]+'::text, ' '::text, 'g'::text))))",
+    "observed": "CHECK ((((char_length(name) >= 1) AND (char_length(name) <= 60)) AND (name = regexp_replace(btrim(name), '[[:space:]]+'::text, ' '::text, 'g'::text))))"
+  },
+  "scope": "Catalog metadata only; no user rows, source index inventory, account data or complete external receipts."
+}

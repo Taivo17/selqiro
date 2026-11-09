@@ -1,10 +1,12 @@
 # Service publication and owner editing
 
-Implementation checkpoint: 2026-11-08. This source adds the services adapter to
+Implementation checkpoint: 2026-11-09. This source adds the services adapter to
 the accepted marketplace publication foundation. Local validation and the
 installation boundary are recorded in `docs/continuity/CURRENT_STATE.json`.
-The user accepted direct horse editing and repeated saves in the same session;
-that behavior is the interaction model for services.
+The r2 report verifies the prior Mac database/build/push at b05ed30; the user
+accepted service text and lifecycle behavior. Photo selection still failed.
+The prepared photo/list correction and its deployment boundary are recorded
+separately in `docs/continuity/SERVICE_PROFILE_POLISH_20261109.md`.
 
 ## User flow
 
@@ -151,3 +153,20 @@ checks one two-photo Publish journey, repeated Edit/Save and pause/edit/resume.
 Quick Update, live availability, temporary service location and a fleet/staff
 model remain separate capabilities under `live_services.md`. Jobs should later
 use the same simple interaction, with their own domain fields and permissions.
+
+## Photo selection and list ordering — 2026-11-09
+
+A native file chooser may restore window focus before its change event.
+A soft owner refresh keeps the established active owner while temporarily
+withholding readiness. This may delay Publish/Save but must not discard a
+local photo selection. The editor checks live `canAct()` on both field and
+gallery callbacks so a hard identity/session change is rejected even before
+React's next render. The input copies its FileList before clearing its value,
+including rejection, allowing the same file to be selected again.
+
+`get_my_service_publications_v1` and `get_public_profile_services_v1` order
+by creation time descending and UUID ascending before pagination and JSON
+aggregation. Editing, manual legacy order and pause/resume do not make an old
+service new. Public listing cards clamp descriptions to two lines; stored
+text and public detail remain complete. These read/UI changes do not alter
+service publication, status, ownership or photo validation contracts.

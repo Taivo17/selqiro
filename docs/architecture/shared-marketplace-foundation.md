@@ -1,10 +1,12 @@
 # Shared marketplace foundation
 
-Status: implementation checkpoint, 2026-11-08. The user accepted horse gallery,
+Status: implementation checkpoint, 2026-11-09. The user accepted horse gallery,
 owner thumbnail and links, pause/edit/resume, explicit 90-day renewal, idle
 arrows, factual-confirmation reuse, immediate edit entry and consecutive saves.
 The current source adds the service adapter and real service discovery/detail.
-Local evidence and the pending service installation are recorded in
+The prior service installation is verified by the b05ed30 r2 report; service
+text and lifecycle behavior are user accepted. The prepared photo-selection
+and profile-list correction has its own pending installation boundary in
 `docs/continuity/CURRENT_STATE.json`. See `service-publication-v1.md`.
 
 ## Decision
@@ -34,7 +36,7 @@ these differences.
 | Ordinary listings | Controlled publication, managed images, primary/add/remove, exact readback and cleanup | Accepted behavior retained; general background cleanup remains separate |
 | Horse create and edit | Five types, exact policies, one Publish, resumable attempt, revision-checked Save, ordered gallery and immediate repeat editing | User accepted direct entry, repeated save and public result |
 | Horse public and owner | Canonical discovery/detail/profile/contact, thumbnail and links, Active/Paused/Sold and explicit 90-day renewal | User accepted; archive/delete remain separate |
-| Service create and edit | Canonical UUID, one Publish, current owner revision, same-form repeat Save, managed new photos and preserved legacy gallery | New local candidate; installation and user acceptance pending |
+| Service create and edit | Canonical UUID, one Publish, current owner revision, same-form repeat Save, managed new photos and preserved legacy gallery | Text/lifecycle accepted; prepared photo-selection correction awaits new installation |
 | Service owner management | Identity-scoped list, thumbnails and links, Edit, Active/Paused, existing draft continuation | No new service expiry policy or permanent count limit |
 | Service public and contact | Real keyword/category/area discovery, canonical detail/profile, common gallery and typed inbox context | No demo cards; local validation does not claim production rollout |
 | Live service availability | Product blueprint | Quick Update and temporary-location write/read/expiry remain separate |
@@ -101,3 +103,12 @@ This release adds no service expiry period and no new account-wide count cap.
 
 For every domain, the owner action, authoritative result and public view must
 agree. A successful transport response is not a confirmed publication.
+
+## One public profile marketplace projection — 2026-11-09
+
+The profile now uses one read-only, paginated projection over canonical
+ordinary listings and horse offers. Each type retains its own ID, route and
+visibility contract. Services stay in the service section. No domain rows are
+copied and a shop-category filter does not imply a horse/service relationship.
+See `profile-marketplace-feed-v1.md` for the server and return-navigation
+contract, and the dated continuity review for the category-integration audit.

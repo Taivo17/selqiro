@@ -33,7 +33,7 @@ export default function MyAreaServicesSection() {
               {image ? <ServiceOwnerImage actor={owner.actor!} source={image.thumbnailUrl} className="h-20 w-28 shrink-0 rounded-xl" />
                 : <span className="flex h-20 w-28 shrink-0 items-center justify-center rounded-xl bg-neutral-100 text-xs text-neutral-500">{t("noImage")}</span>}
               <span className="min-w-0"><span className="block break-words text-base font-black">{service.title}</span>
-                {service.description ? <span className="mt-1 line-clamp-2 block break-words text-sm text-neutral-600">{service.description}</span> : null}
+                {service.description ? <span className="mt-1 line-clamp-2 break-words text-sm leading-6 text-neutral-600">{service.description}</span> : null}
                 <span className="mt-1 block text-sm text-neutral-500">{serviceLocationLabel(service) || t("locationMissing")}</span>
                 <span className="mt-1 block text-sm font-semibold text-neutral-600">{t(status)}</span></span>
             </Link>

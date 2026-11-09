@@ -40,3 +40,16 @@ Do not present two equal choices unless truly necessary.
 - Avoid feature bloat.
 - Protect user privacy.
 - Monetization must come from real user value.
+
+## Terminal error reports — user preference, 2026-11-09
+
+Every new updater/diagnostic should make the exact current sendable report easy
+to provide: create a private, uniquely named copy in Downloads, print
+`SAADA SEE FAIL: <absolute path>`, and reveal that exact file with the bounded
+macOS `/usr/bin/open -R` call. Never choose a report by searching for the newest
+old file. Preserve the original journal and all existing copies. If copying
+fails, reveal the verified original; if Finder fails, print its exact location.
+If the report was never created, say so explicitly and request the STOP line.
+A last durable report after a write failure must be labelled as possibly stale.
+Apply this behavior to future runners; do not silently edit released packages.
+

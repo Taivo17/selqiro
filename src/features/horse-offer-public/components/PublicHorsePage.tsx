@@ -8,6 +8,7 @@ import { horsePublicMessages } from "../../../../lib/i18n/catalogs/horsePublic";
 import { useV2Translation } from "../../../shared/i18n/V2LanguageProvider";
 import HorseContactButton from "./HorseContactButton";
 import PublicPhotoGallery from "../../../shared/media/PublicPhotoGallery";
+import ListingReturnBackButton from "../../listing-navigation/components/ListingReturnBackButton";
 
 export default function PublicHorsePage({ offerId }: { offerId: string }) {
  const { t, language } = useV2Translation(horsePublicMessages);
@@ -23,9 +24,9 @@ export default function PublicHorsePage({ offerId }: { offerId: string }) {
  const button = "rounded-full border border-neutral-300 bg-white px-5 py-3 font-bold";
  if (!state) return <p role="status">{t("loading")}</p>;
  if (!h) return <section className="space-y-5 rounded-[30px] bg-white p-8"><h1 className="text-2xl font-black">{t(state.error ? "error" : "unavailable")}</h1>
-  <Link className={button} href="/v2/products">{t("back")}</Link>{state.error && <button type="button" className={button} onClick={() => { setRead(null); setAttempt(a => a + 1); }}>{t("retry")}</button>}</section>;
+  <ListingReturnBackButton listingId={offerId} className={button} fallbackHref="/v2/products?category=horses" />{state.error && <button type="button" className={button} onClick={() => { setRead(null); setAttempt(a => a + 1); }}>{t("retry")}</button>}</section>;
  return <article className="space-y-6">
-  <Link href="/v2/products?category=horses" className="font-semibold underline underline-offset-4">← {t("back")}</Link>
+  <ListingReturnBackButton listingId={offerId} className="font-semibold underline underline-offset-4" fallbackHref="/v2/products?category=horses" />
   <div className="grid min-w-0 gap-7 lg:grid-cols-[minmax(0,1fr)_340px]">
    <div className="min-w-0 space-y-6">
     <PublicPhotoGallery key={h.id} title={h.title} photos={h.images.map(image => ({ id: image.id, src: image.url }))}

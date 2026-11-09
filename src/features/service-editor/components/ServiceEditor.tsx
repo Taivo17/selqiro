@@ -37,7 +37,9 @@ export default function ServiceEditor({userId, serviceId}: {userId: string; serv
   }, [context.snapshot]);
   const dirty = serviceEditorDirty(baseline, form) || serviceGalleryDirty(context.snapshot?.images ?? [], photos);
   const phase = publication.view.phase, working = phase === "busy", session = publication.session;
-  const editable = context.active && context.ready && !!session && phase === "editing" && !navigating && (!serviceId || !!context.snapshot && formSnapshot === context.snapshot);
+  // Returning from a native file chooser starts a soft actor check before its
+  // change event. Keep local edits available; only server actions wait for ready.
+  const editable = context.active && !!session && phase === "editing" && !navigating && (!serviceId || !!context.snapshot && formSnapshot === context.snapshot);
   const confirmed = publication.view.confirmed, requestKey = publication.view.result?.request_key;
   const {active, canAct, snapshot, adopt} = context;
   useEffect(() => {
@@ -74,7 +76,7 @@ export default function ServiceEditor({userId, serviceId}: {userId: string; serv
   const leave = (event: MouseEvent<HTMLAnchorElement>) => {if ((dirty || !["editing", "published", "closed"].includes(phase)) && !window.confirm(t("leaveConfirm"))) event.preventDefault();};
   const reload = () => {if (dirty && !window.confirm(t("reloadConfirm"))) return; void session?.inspect(); context.reload();};
   const submit = () => {
-    if (!editable || !session || !policy.snapshot || requiresReload) return;
+    if (!editable || !context.ready || !context.canAct() || !session || !policy.snapshot || requiresReload) return;
     setError(null);
     try {const content = buildServiceContent(form, serviceId, context.snapshot?.service);
       void session.start({content, expectedRevision: context.snapshot?.editRevision ?? null,
@@ -91,10 +93,10 @@ export default function ServiceEditor({userId, serviceId}: {userId: string; serv
       <p className="mt-3 leading-7 text-neutral-600">{t(serviceId ? "editHelp" : "createHelp")}</p></header>
     {!context.active || serviceId && !context.snapshot ? <section className="rounded-3xl border border-teal-200 bg-white p-6"><p role={context.error ? "alert" : "status"}>{t(context.error && context.error in serviceEditorMessages.en ? context.error as ServiceMessageKey : "loading")}</p>
       {context.error ? <button type="button" className={`${button} mt-4`} onClick={context.retry}>{t("retry")}</button> : null}</section> : <>
-      <ServiceFields form={form} original={context.snapshot?.service} disabled={!editable} onChange={next => {if (editable) {setForm(next); setError(null);}}} />
-      <ServiceGalleryEditor title={form.title} photos={photos} actor={context.actor} disabled={!editable} onChange={next => {if (editable) {setPhotos(next); setError(null);}}} />
-      <ServicePolicyGate policy={policy} disabled={!editable} />
-      <ServicePublicationActions key={publication.view.intent?.requestKey ?? "form"} session={session} view={view} ready={context.ready} publish={publish} error={error} canSubmit={editable && !requiresReload && !!policy.snapshot && (publish || dirty)} onSubmit={submit} />
+      <ServiceFields form={form} original={context.snapshot?.service} disabled={!editable} onChange={next => {if (editable && context.canAct()) {setForm(next); setError(null);}}} />
+      <ServiceGalleryEditor title={form.title} photos={photos} actor={context.actor} disabled={!editable} onChange={next => {if (editable && context.canAct()) {setPhotos(next); setError(null);}}} />
+      <ServicePolicyGate policy={policy} disabled={!editable || !context.ready} />
+      <ServicePublicationActions key={publication.view.intent?.requestKey ?? "form"} session={session} view={view} ready={context.ready} publish={publish} error={error} canSubmit={editable && context.ready && !requiresReload && !!policy.snapshot && (publish || dirty)} onSubmit={submit} />
       <section className="rounded-3xl border border-neutral-200 bg-white p-5">
         {phase === "editing" ? <p className="text-sm">{t(dirty ? "unsaved" : "noChanges")}</p> : null}
         <div className="mt-3 flex flex-wrap gap-3">

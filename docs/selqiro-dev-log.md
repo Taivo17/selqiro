@@ -1,3 +1,90 @@
+<!-- SELQIRO_SERVICE_PROFILE_RECONSTRUCTED_R2_20261109 -->
+## 2026-11-09 — lugemisraport vastu võetud ja täpne r2 kontrollalus taastatud
+
+- Kell 19:33:50–19:33:54 Europe/Tallinn lõpetatud diagnostika on vastu võetud.
+  Kõik 1326 indexikirjet vastavad b05ed30 alusele; enne/pärast allikas muutumatu.
+  Eelkontroll kattub esimese peatusega. Koguti kahe tabeli tehniline kirjeldus,
+  portaali/andmebaasi/Storage’i ega Git-kirjutusi ei tehtud.
+- Kogu metadata ainus struktuurierinevus oli nime CHECK-i pesastatud AND-kuju.
+  Selle täpne allikas on vana BETWEEN deklaratsioon. Lisaks taastati fixture’is
+  kaks algallikas säilinud PUBLIC EXECUTE õigust. Tootmise piiranguid/õigusi ei muudeta.
+- Parandatud fixture annab tegeliku sõltuvusräsi d42b8615… täpselt. Eelmise
+  tegeliku r2 invariantide sisenditega taastub kogu vana STOP-eelkontroll.
+  Guard’e ei nõrgendata ega tundmatuid räsi ei lubata.
+- Rakenduse 557 build’i sisendit ning kolm runtime-SQL-i lähtefaili on sama
+  testitud parandusega bait-baidilt identsed. Varasemaid laiu kasutusjuhtude
+  teste ei korratud. Täieliku algoleku taastamine PASS; 20 sihitud SQL-kaitse
+  ja 10 raporti-veatee integratsioonikatset PASS, tõendid r2 pakis eraldi.
+- Kasutaja soovitud raportivoog töötas diagnostikas: täpne Downloads-fail jõudis
+  vestlusse, terminalis oli SAADA SEE FAIL ja Finderi valimise käsk. Uue r2
+  uuendaja veatee kasutab sama privaatset unikaalset koopiat ning selget fallback’i.
+- Üks CURRENT_STATE, sellest genereeritud üleandmine ja HOSTED_PORTAL on
+  ajakohastatud. Vana pakett ning päevikud säilivad. Uus r2 Maci paigaldus,
+  commit/push, Verceli Ready ja kitsas foto/profiili vastuvõtt on veel ees.
+  Allpool olevad diagnostikat ootavad ja esimese paki NEXT-kirjed on ajalugu.
+
+---
+
+<!-- SELQIRO_PROFILE_STRUCTURE_DIAGNOSTIC_20261109 -->
+## 2026-11-09 — tegelik peatuse raport ja automaatne raporti leidmine
+
+- Tegelik STOP-raport kinnitas muutmata b05ed30 aluse, 1326 faili ning selle,
+  et andmebaasimuudatused, lähtefailide kirjutused, build ja Git-kirjutused ei alanud.
+- Ainult profiili sõltuvuskontroll erines. Fixture’i kaks ekslikku PUBLIC EXECUTE
+  eemaldamist on algallikaga tõendatud. Kahe tabeli struktuuriräsi erinevus jääb
+  tuvastamiseks; tundmatuid räsi ei lubatud ja tootmise õigusi ei muudeta.
+- Valmis üks ainult lugev kataloogipäring ja piiratud diagnostika; see tagastab
+  ainult vajalikud kaks tabelikirjeldust. Maci tulemus on veel ootel.
+- Kasutaja soovil saab raport arusaadava nime Downloads-kaustas ja sama fail
+  valitakse Finderis. Terminalis on SAADA SEE FAIL täpne tee. Helperi 11 katset
+  läbisid; uue diagnostika 10 integratsioonikatset läbisid samuti. DB/Finder
+  olid selles tarnekatses asendatud; päris Finder kinnitub Maci käigus.
+- Püsiv tööreegel on docs/03_AI_RULES.md-s. Praegune üks käsk on
+  continuity/HOSTED_PORTAL.md-s. Väljastatud vanu pakke ja päevikuid ei muudeta.
+
+---
+
+<!-- SELQIRO_SERVICE_PROFILE_PREFLIGHT_STOP_20261109 -->
+## 2026-11-09 — teenuste fotoparanduse eelkontroll peatus Macis
+
+Kasutaja kuvatõmmis näitab väljalaske `0cf78dad191f17bdc73876649470ce1d269e2631356f7090f45daa64d9a366ab`
+peatust `DATABASE_PRECONDITIONS_NOT_MATCHED`. Täpne uuendaja kontrolliti üle:
+see koht eelneb SQL-i rakendamisele ja portaali lähtefailide/build’i/Giti
+muudatustele. Olemasolev report on salvestatud, kuid selle sisu pole veel
+saadud. Põhjuseks olnud täpset kataloogi/õiguste/konteksti erinevust ei oletata.
+
+Üks järgmine tegevus on olemasoleva result.json koopia saamine; juhis on
+continuity/HOSTED_PORTAL.md-s. Uuendajat ega vanu teste ei korrata. Väljastatud
+ZIP-i, manifesti, payload’i ja päevikuid ei muudeta. See märkus uuendab ainult
+assistendi ettevalmistatud tööseisu dokumente; Maci kirjutust ei tehtud.
+
+---
+
+<!-- SELQIRO_SERVICE_PROFILE_POLISH_20261109 -->
+## 2026-11-09 — teenuste r2 vastu võetud, fotovalik ja profiili loendid
+
+- Kasutaja r2 eduraport kinnitab `b05ed3047a25bc1504403ec70e98ae0ff7757bec`,
+  andmebaasi, build’i ja push’i. Täpne sama commit’i Ready jäi raportis kontrollimata.
+  Teenuste teksti ja olekute kasutuskatse ning varasem hobuse vastuvõtt säilivad.
+- Fotovaliku põhjus taastati: faili valimise akna järel pehme omaniku kontroll
+  keelas ajutiselt vormi ja jättis valitud faili kõrvale. Uus parandus säilitab
+  kohaliku valiku; päris identiteedimuutus ja salvestuse õiguskontroll säilivad.
+- Teenused järjestuvad serveris loomise järgi enne lehekülge. Loendi kirjeldus
+  on kuni kaks rida. Profiil saab ühe kanooniliste hobuse- ja tavakuulutuste
+  loendi, ühise lehekülje ning korrektse detaili- ja tagasitee.
+- Poerubriikide audit leidis praeguses hallatud fotodega muutmisvaates puuduva
+  seostamise kaardi. Olemasolev tavakuulutuste avalik filter säilib; hobuste ja
+  teenuste täielikku rubriigituge ei väideta.
+- Värske build/TypeScript PASS; Reacti 7 + 13 ja SQL-i 44 + 16 kontrolli PASS.
+  Chromiumi 14/14 ja uuendaja isoleeritud 15/15 kontrolli PASS. Tõendid ning
+  kõik piirid on `continuity/SERVICE_PROFILE_POLISH_20261109.md` ja tarnepaki
+  kontrollides; lõplik pakendi räsisidumine on seal eraldi.
+- Uus lähteparandus on ette valmistatud. Maci rakendamine, uus commit/push,
+  sama commit’i Ready ja kitsas fotode/profiili kasutuskatse on ootel.
+  Praegune üks käsk: `continuity/HOSTED_PORTAL.md`. Allpool on ajalugu.
+
+---
+
 <!-- SELQIRO_HORSE_PARITY_20261108 -->
 ## 2026-11-08 — hobuse avaldamine nähtav, galerii ja elutsükli ühtlustamine
 

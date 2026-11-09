@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "kind": "service-profile-polish-guard-generation",
+  "result": "PASS",
+  "generated_at_utc": "2026-11-09T17:54:07.377Z",
+  "readers": 3,
+  "changed_readers": 2,
+  "new_readers": 1,
+  "source_pins": 72,
+  "install_replay_verified": true,
+  "retained_invariants_unchanged": true,
+  "live_database": false,
+  "production_storage": false,
+  "mac_installer": false,
+  "files": {
+    "changes.sql": "3cfb510dd4d043c3f8bb5dc12c82b4fc79127f8d747b5ea2bb60424686d1be71",
+    "preflight.sql": "4f252244d88d328dea9940a420efe9a7d7dbc05ec171b3f613022aad98d6e757",
+    "apply.sql": "eb0b11c7cccebf0d6f453d316301d2b186280ec394c9dbc7a090456c0da38dd9",
+    "verify.sql": "4f252244d88d328dea9940a420efe9a7d7dbc05ec171b3f613022aad98d6e757",
+    "source-pins.json": "5220ce2004e39b12391d8b8ae2538d23e44992d5a1d3e78f3b2165c3b163b34c",
+    "catalog-pins.json": "30afef15d41101c16f68342d5a2c0d02bc46654158cf0294e88c8724a1159103"
+  }
+}

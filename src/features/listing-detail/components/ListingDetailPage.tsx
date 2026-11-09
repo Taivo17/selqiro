@@ -17,16 +17,11 @@ import ListingContactButton from "../../listing-conversation/components/ListingC
 import { v2IntegrationEnabled } from "../../../shared/config/v2Integration";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import PublicPhotoGallery from "../../../shared/media/PublicPhotoGallery";
 import { listingGalleryPhotos } from "../model/listingGalleryPhotos";
 import { useListingDetail } from "../model/useListingDetail";
-import {
-  getListingReturnBackLabel,
-  markListingReturnFallbackNavigation,
-  readListingReturnContext,
-} from "../../listing-navigation/model/listingReturnContext";
+import ListingReturnBackButton from "../../listing-navigation/components/ListingReturnBackButton";
 import type {
   ProductListingDetail,
 } from "../../../entities/listing/model/types";
@@ -124,67 +119,6 @@ function LoadingState() {
         </div>
       </div>
     </section>
-  );
-}
-
-function ListingReturnBackButton({
-  listingId,
-  className,
-}: {
-  listingId: string;
-  className: string;
-}) {
-  const { language: uiLanguage } = useV2Translation(publicUiMessages);
-
-  const router = useRouter();
-
-  const [
-    backContext,
-    setBackContext,
-  ] = useState<ReturnType<typeof readListingReturnContext>>(null);
-  const label = getListingReturnBackLabel(backContext, uiLanguage);
-
-  useEffect(() => {
-    setBackContext(readListingReturnContext(listingId));
-  }, [listingId]);
-
-  function handleBack() {
-    const context =
-      readListingReturnContext(
-        listingId
-      );
-
-    if (!context) {
-      router.push(
-        "/v2/products"
-      );
-      return;
-    }
-
-    if (
-      window.history.length > 1
-    ) {
-      router.back();
-      return;
-    }
-
-    markListingReturnFallbackNavigation(
-      context
-    );
-
-    router.push(
-      context.sourceUrl
-    );
-  }
-
-  return (
-    <button
-      type="button"
-      onClick={handleBack}
-      className={className}
-    >
-      {label}
-    </button>
   );
 }
 

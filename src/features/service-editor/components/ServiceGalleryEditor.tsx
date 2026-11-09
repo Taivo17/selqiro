@@ -54,7 +54,8 @@ export default function ServiceGalleryEditor({photos, disabled, onChange, title,
       </article>)}
     </div>
     <input ref={picker} type="file" hidden accept="image/jpeg,image/png,image/webp" multiple onChange={event => {
-      if (disabled) return; const files = Array.from(event.currentTarget.files ?? []); event.currentTarget.value = "";
+      const files = Array.from(event.currentTarget.files ?? []); event.currentTarget.value = "";
+      if (disabled) return;
       const valid = files.filter(file => file.size > 0 && !validateListingCreateImage(file));
       setError(valid.length !== files.length || valid.length > 10 - photos.length);
       const additions = valid.slice(0, Math.max(0, 10 - photos.length)).map((file, index) => ({key: crypto.randomUUID(), file, isPrimary: photos.length === 0 && index === 0}));

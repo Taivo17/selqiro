@@ -1,0 +1,187 @@
+{
+  "schema_version": 1,
+  "kind": "service-profile-polish-review",
+  "result": "PASS",
+  "generated_at_utc": "2026-11-09T17:58:10.868Z",
+  "scope": "three read functions only; no table, data, writer, Storage, account or policy change",
+  "readers": 3,
+  "changed_readers": 2,
+  "new_readers": 1,
+  "service_changes_are_only_creation_order": true,
+  "source_pins_verified": 72,
+  "retained_supabase_files_compared": 507,
+  "retained_supabase_files_unchanged": true,
+  "runtime_cases": 2,
+  "runtime_checks": 44,
+  "installation_checks": 20,
+  "total_named_checks": 64,
+  "runtime_rerun": false,
+  "runtime_evidence": "reused from the initial release with byte-identical reader modules and changes SQL",
+  "runtime_original_generated_at_utc": "2026-11-09T11:33:26.409Z",
+  "fresh_installation_checks": 20,
+  "total_named_checks_includes_reused_runtime": true,
+  "observed_baseline_reconstruction_verified": true,
+  "runtime_case_summaries": [
+    {
+      "case": "service_creation_order",
+      "checks": 19,
+      "exit_code": 0
+    },
+    {
+      "case": "unified_profile_pages",
+      "checks": 25,
+      "exit_code": 0
+    }
+  ],
+  "installation_case_names": [
+    "retained_r2_reader_baseline_recognized",
+    "owner_reader_definition_drift",
+    "owner_reader_anon_execute_drift",
+    "public_profile_reader_acl_drift",
+    "old_profile_dependency_drift",
+    "retained_prepare_trigger_public_execute_drift",
+    "retained_parent_trigger_public_execute_drift",
+    "store_category_flattened_check_reparse_drift",
+    "store_category_weakened_name_check_drift",
+    "store_category_structure_drift",
+    "store_category_acl_drift",
+    "store_assignment_policy_drift",
+    "retained_service_writer_reopened_drift",
+    "unknown_profile_reader_overload_drift",
+    "partial_two_reader_replacement_rolls_back_atomically",
+    "install_preserves_existing_rows_and_category_assignments",
+    "all_retained_catalog_invariants_unchanged",
+    "applied_reader_replay_is_noop",
+    "applied_new_reader_acl_drift",
+    "applied_service_reader_definition_drift"
+  ],
+  "guard_generation_verified": true,
+  "final_fingerprints": {
+    "dependencies": "d42b8615d634c3c823c2399a8dcc32e88151624635cb90eec20d10262c8f63a6",
+    "before": "3beb454ecc24833cbb15bc87ce9f6664bf4922f66491c28613e33801f8f97ad1",
+    "after": "74cec49be29b0e6feab489b53722ef69ac57065fba8e392a6f01411bc0921cc3"
+  },
+  "live_database": false,
+  "production_storage": false,
+  "mac_installer": false,
+  "github": false,
+  "vercel": false,
+  "limitations": [
+    "Fresh disposable PostgreSQL/WASM; not a native PostgreSQL concurrent-session test.",
+    "Retained SQL restores the exact original BETWEEN check and PUBLIC trigger ACLs; bounded read-only observations verify the reconstruction.",
+    "Exact function/ACL, store-category and retained r2 metadata drift is refused; no normalization, unknown hash allowlist or production ACL/table change.",
+    "The 44 original runtime checks are reused because both reader modules and combined changes SQL are byte-identical; only 20 focused installation checks are fresh.",
+    "Earlier runtime evidence covers 88 owner services, 87 public services and 88 mixed profile results across four pages; those records were synthetic.",
+    "Production installation, PostgREST visibility and user-facing browser acceptance remain separate."
+  ],
+  "files": {
+    "supabase/repairs/20261109_service_profile_polish/01_service_order.sql": {
+      "bytes": 5629,
+      "sha256": "ebe8faf10f65f3f218bcf86ee120c84253e9e335ba262b9e9ff25baec87c3491"
+    },
+    "supabase/repairs/20261109_service_profile_polish/02_profile_marketplace.sql": {
+      "bytes": 6779,
+      "sha256": "3570059d7b57f8d67ed6bd17cad260ba491eb36e45804dc8774f03bb8c9ea612"
+    },
+    "supabase/repairs/20261109_service_profile_polish/apply.sql": {
+      "bytes": 184470,
+      "sha256": "eb0b11c7cccebf0d6f453d316301d2b186280ec394c9dbc7a090456c0da38dd9"
+    },
+    "supabase/repairs/20261109_service_profile_polish/catalog-pins.json": {
+      "bytes": 1204,
+      "sha256": "30afef15d41101c16f68342d5a2c0d02bc46654158cf0294e88c8724a1159103"
+    },
+    "supabase/repairs/20261109_service_profile_polish/changes.sql": {
+      "bytes": 12483,
+      "sha256": "3cfb510dd4d043c3f8bb5dc12c82b4fc79127f8d747b5ea2bb60424686d1be71"
+    },
+    "supabase/repairs/20261109_service_profile_polish/guard-generation-result.json": {
+      "bytes": 938,
+      "sha256": "e489bbe77462df43a09568aa04c766ef47e338ffafbcf17dbbc547847e12b286"
+    },
+    "supabase/repairs/20261109_service_profile_polish/installation-result.json": {
+      "bytes": 1297,
+      "sha256": "583f4bcc791f91ef8f21cfebab527ed1ffbc9513e7973712613c4852e312dd48"
+    },
+    "supabase/repairs/20261109_service_profile_polish/preflight.sql": {
+      "bytes": 85361,
+      "sha256": "4f252244d88d328dea9940a420efe9a7d7dbc05ec171b3f613022aad98d6e757"
+    },
+    "supabase/repairs/20261109_service_profile_polish/runtime-result.json": {
+      "bytes": 3675,
+      "sha256": "458560673f441078c6bb66bfa03b080992be167734098ecc47a34b197de75ee8"
+    },
+    "supabase/repairs/20261109_service_profile_polish/source-pins.json": {
+      "bytes": 10275,
+      "sha256": "5220ce2004e39b12391d8b8ae2538d23e44992d5a1d3e78f3b2165c3b163b34c"
+    },
+    "supabase/repairs/20261109_service_profile_polish/tests/before-example.json": {
+      "bytes": 1340,
+      "sha256": "0baf5170ac7bf186e6ae3d7db69d4a9a296f72a73edbf0ff713d66c50bd25442"
+    },
+    "supabase/repairs/20261109_service_profile_polish/tests/build-guards.mjs": {
+      "bytes": 6377,
+      "sha256": "af06c1fe031ac306e07ceb935f62678d58bc4a95976cf2dafe9be137719cfb10"
+    },
+    "supabase/repairs/20261109_service_profile_polish/tests/catalog.mjs": {
+      "bytes": 5726,
+      "sha256": "22ee6f3923299c4b774ae019ad5267813f338742f1afaa888a6a8c363e49a9e8"
+    },
+    "supabase/repairs/20261109_service_profile_polish/tests/fixture.mjs": {
+      "bytes": 6462,
+      "sha256": "4743438872df1a64c619cfa48b5fbe636a3fa185f6bca28d715cb1e672c62654"
+    },
+    "supabase/repairs/20261109_service_profile_polish/tests/installation.mjs": {
+      "bytes": 6998,
+      "sha256": "9960bb54614b25221d31b36fcd63132253d0c6fe38cd3b6e1547e41f4fa51cb0"
+    },
+    "supabase/repairs/20261109_service_profile_polish/tests/review.mjs": {
+      "bytes": 6637,
+      "sha256": "4ae06616645dcdc0db70bc479143e0b178d198b11db109b4cb212a89fdcf2ebf"
+    },
+    "supabase/repairs/20261109_service_profile_polish/tests/review/baseline-reconstruction-verified.json": {
+      "bytes": 2989,
+      "sha256": "1fb397679736078339656e998ff7361812f4f116c03de3a324824812def5dfc8"
+    },
+    "supabase/repairs/20261109_service_profile_polish/tests/review/observed-baseline.json": {
+      "bytes": 13535,
+      "sha256": "a2c27ddba6ecb5789ce257160dbecd6f40f849e6e5d53d7f339c5679933a6813"
+    },
+    "supabase/repairs/20261109_service_profile_polish/tests/review/root-cause-resolved.md": {
+      "bytes": 4850,
+      "sha256": "3f4ad11438a4bc71033705cae11993029eb84fd4d526ee79ec9fa45ccae41240"
+    },
+    "supabase/repairs/20261109_service_profile_polish/tests/review/runtime-proof-reuse.json": {
+      "bytes": 1383,
+      "sha256": "b38f341ddb2e935390f5d8e7b81ed5703a1f8ed6cc45523dbdc6b223485869c2"
+    },
+    "supabase/repairs/20261109_service_profile_polish/tests/runtime-case.mjs": {
+      "bytes": 14266,
+      "sha256": "a41cc35fd9b8c93df3011533be26fcbd068dd27127a7908035ed2d0d0bb2da77"
+    },
+    "supabase/repairs/20261109_service_profile_polish/tests/runtime-service_creation_order.json": {
+      "bytes": 1192,
+      "sha256": "0eafac9c94b215c3ed428e92019d86febae5fe51ae51f03779d812029015529a"
+    },
+    "supabase/repairs/20261109_service_profile_polish/tests/runtime-unified_profile_pages.json": {
+      "bytes": 1554,
+      "sha256": "a41a24405e6bf079a72d2cdfedfe574a60dcb0f09df40560c9b4bb33b0e01388"
+    },
+    "supabase/repairs/20261109_service_profile_polish/tests/runtime.mjs": {
+      "bytes": 2044,
+      "sha256": "a9eedf63c3c94da9e07183430dced8e3c5369f00fb618579893a9632260963de"
+    },
+    "supabase/repairs/20261109_service_profile_polish/tests/verified-example.json": {
+      "bytes": 1342,
+      "sha256": "9d77ca09e9d6f9e8d1e329221dbd7aebf84f67397d2000f78875a55ed1fd52d4"
+    },
+    "supabase/repairs/20261109_service_profile_polish/tests/verify-baseline-reconstruction.mjs": {
+      "bytes": 5528,
+      "sha256": "913b6ba396eb1ce9f942ae60fd5f300c04e0b5150bd2266e282c86a146959969"
+    },
+    "supabase/repairs/20261109_service_profile_polish/verify.sql": {
+      "bytes": 85361,
+      "sha256": "4f252244d88d328dea9940a420efe9a7d7dbc05ec171b3f613022aad98d6e757"
+    }
+  }
+}

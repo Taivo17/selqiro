@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "scope": "service-profile-polish-v1",
+  "reader_names": [
+    "public.get_my_service_publications_v1",
+    "public.get_public_profile_marketplace_v1",
+    "public.get_public_profile_services_v1"
+  ],
+  "profile_dependency_names": [
+    "public.get_public_profile_listings_v1",
+    "public.prepare_store_category_name",
+    "public.validate_store_category_parent"
+  ],
+  "dependencies_sha256": "d42b8615d634c3c823c2399a8dcc32e88151624635cb90eec20d10262c8f63a6",
+  "readers_before_sha256": "3beb454ecc24833cbb15bc87ce9f6664bf4922f66491c28613e33801f8f97ad1",
+  "readers_after_sha256": "74cec49be29b0e6feab489b53722ef69ac57065fba8e392a6f01411bc0921cc3",
+  "profile_dependencies_sha256": "61b4fe2388231c5545158271b96859195f9e8c56c110e98468f53a370ae94adb",
+  "retained_capability_without_two_readers_sha256": "7783a7b59001e5b4c00226d8479e2fc4b609a39f48b2bff46ade265a30306b1c",
+  "modules_sha256": "3cfb510dd4d043c3f8bb5dc12c82b4fc79127f8d747b5ea2bb60424686d1be71",
+  "modules": {
+    "01_service_order.sql": "ebe8faf10f65f3f218bcf86ee120c84253e9e335ba262b9e9ff25baec87c3491",
+    "02_profile_marketplace.sql": "3570059d7b57f8d67ed6bd17cad260ba491eb36e45804dc8774f03bb8c9ea612"
+  }
+}

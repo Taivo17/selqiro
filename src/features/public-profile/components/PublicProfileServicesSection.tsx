@@ -236,7 +236,7 @@ function ServiceCard({
         </p>
       ) : null}
 
-      {service.description ? <Link href={href} className={`mt-2 block break-words text-sm leading-6 text-neutral-600 hover:text-black ${expanded ? "line-clamp-5" : "line-clamp-3"}`}>{service.description}</Link> : null}
+      {service.description ? <Link href={href} className="mt-2 line-clamp-2 break-words text-sm leading-6 text-neutral-600 hover:text-black">{service.description}</Link> : null}
 
       <p className="mt-3 break-words text-base font-black text-neutral-900">
         {priceLabel(service, uiLanguage)}

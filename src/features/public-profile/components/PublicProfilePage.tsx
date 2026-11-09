@@ -14,7 +14,6 @@ import {
 } from "react";
 import { usePublicProfile } from "../model/usePublicProfile";
 import PublicProfileListingsSection from "./PublicProfileListingsSection";
-import PublicProfileHorsesSection from "./PublicProfileHorsesSection";
 import PublicProfileProductShowcasesSection from "./PublicProfileProductShowcasesSection";
 import PublicProfileServicesSection from "./PublicProfileServicesSection";
 
@@ -256,8 +255,8 @@ export default function PublicProfilePage({ slug }: { slug: string }) {
             }
           />
 
-          {profile.identityId && <PublicProfileHorsesSection key={"horses-" + profile.identityId} identityId={profile.identityId} />}
           <PublicProfileListingsSection
+            key={`listings-${profile.identityId ?? "legacy"}-${profile.slug}`}
             profile={profile}
             showAll={
               expandedSection ===

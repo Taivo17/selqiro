@@ -1,3 +1,44 @@
+<!-- SELQIRO_SERVICE_PROFILE_PREFLIGHT_R2_20261109 -->
+## 09.11.2026 — fotoparanduse eelkontrolli põhjus tuvastatud, r2 valmis
+
+Esimene teenuste/profiili parandus peatus enne muudatusi. Tegelik STOP-raport
+ja 19:33 ainult lugemise diagnostika kinnitavad muutmata b05ed30 aluse.
+Kaks põhjust olid kohalikus kontrollaluses: vana PUBLIC EXECUTE taastus ning
+rubriiginime algse BETWEEN-tingimuse kataloogikuju. Algallikate järgi taastatud
+kontrollalus annab tegeliku sõltuvusräsi ja kogu STOP-eelkontrolli täpselt.
+Tootmise rubriike ega nende õigusi selleks muuta pole vaja.
+
+Eraldi r2-pakis on sama rakendusparandus, uued tuletatud kaitsed ja vea korral
+õige raporti automaatne leidmine. Uus Maci paigaldus/commit/push/Ready ning kitsas
+foto/profiili kasutuskatse on veel ootel. Täpne järgmine käsk on
+continuity/HOSTED_PORTAL.md-s; lõpetatud diagnostikat ei korrata.
+
+---
+
+<!-- SELQIRO_SERVICE_PROFILE_POLISH_20261109 -->
+## 09.11.2026 — r2 edukas; uus kitsas fotovaliku ja profiili parandus
+
+R2 eduraport kinnitab `b05ed3047a25bc1504403ec70e98ae0ff7757bec`, build’i,
+andmebaasi ja push’i. Allpool olev r2 „paigaldus ootel” on ajalooline seis.
+Kasutaja võttis vastu teenuse teksti ja olekute kasutustee; fotovalik jäi
+loomisel ja muutmisel 0/10 juurde. Uus allikas parandab pehme omaniku
+korduskontrolli ja file-change’i võidujooksu, järjestab teenused enne lehekülge,
+piirab kirjeldused kahe reaga ning ühendab profiili hobused ja tavakuulutused.
+Uue paranduse Maci/Ready/kasutuskatse piir on `continuity/CURRENT_STATE.json`.
+
+Poerubriikide tegelik lünk: haldus ja tavakuulutuste avalik filter on olemas,
+kuid `ListingStoreCategoryAssignmentCard` pole ühendatud praeguse
+`IntegratedListingEditPage`-iga. Hobuste/teenuste seostamismudel puudub.
+Need tööd pole selle parandusega valmis. Audit:
+`continuity/SERVICE_PROFILE_POLISH_20261109.md`.
+
+Üldine automaatne fotokoristus, tehniliste paneelide eemaldamine enne avalikku
+avamist, turvaline aktiivse identiteedi RPC ja neli varasemat
+public-profile-offerings veateksti-ootust jäävad eraldi olemasolevateks töödeks.
+Vanade paigaldajate ega vastuvõetud kasutuskatsete kordamine pole eeltingimus.
+
+---
+
 <!-- SELQIRO_SERVICE_PREFLIGHT_R2_20261108 -->
 ## 08.11.2026 — Teenuste esimene paigaldus peatus enne muudatusi
 

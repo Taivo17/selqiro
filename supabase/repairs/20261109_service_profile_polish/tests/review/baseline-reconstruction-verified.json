@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "kind": "service-profile-baseline-reconstruction-verified",
+  "result": "PASS",
+  "generated_at_utc": "2026-11-09T17:55:38.292Z",
+  "receipts": {
+    "diagnostic_sha256": "8e09ba1c714950e8fc28ce8b1f1d1dc8c65dd0f433d22d96f1131bb7b859b980",
+    "diagnostic_observed_at_utc": "2026-11-09T17:33:53+00:00",
+    "server_version_num": 170006,
+    "stop_sha256": "fde3c3e874bbeabb018c4de66b8746c2b1a35d5d9a68d1f9e21f02c01df0c99a",
+    "prior_success_sha256": "517fb67df34bf21c6cdaa6856b2ad00487821c5f774fec33665a03ecd6f69202"
+  },
+  "local_server_version_num": 170005,
+  "source": {
+    "path": "docs/database/legacy-migrations-20260722/20260713152000_add_store_category_name_integrity.sql",
+    "sha256": "082ff73e6d12a87b24a1badbfbac003c7810ffd96aea9699dabe0ec154426000",
+    "original_check_sha256": "d53b2bc609dadb78e58ff2f1f702e5090247952b9756bdbe8d788f9b2695ef4b",
+    "fixture_sha256": "4743438872df1a64c619cfa48b5fbe636a3fa185f6bca28d715cb1e672c62654",
+    "observation_sha256": "a2c27ddba6ecb5789ce257160dbecd6f40f849e6e5d53d7f339c5679933a6813"
+  },
+  "confirmed_causes": [
+    "The fixture removed PUBLIC EXECUTE that the retained trigger functions keep.",
+    "Reparsing expanded AND text flattened the original BETWEEN boolean expression; the retained BETWEEN declaration restores the observed tree."
+  ],
+  "exact_matches": {
+    "both_complete_table_structures": true,
+    "issued_stop_report": true,
+    "capability": true,
+    "dependencies": true,
+    "existing_functions": true,
+    "existing_authority": true,
+    "immutable_structure": true
+  },
+  "source_profile_dependency_sha256": "61b4fe2388231c5545158271b96859195f9e8c56c110e98468f53a370ae94adb",
+  "measured_fingerprints": {
+    "capability": "3beb454ecc24833cbb15bc87ce9f6664bf4922f66491c28613e33801f8f97ad1",
+    "dependencies": "d42b8615d634c3c823c2399a8dcc32e88151624635cb90eec20d10262c8f63a6"
+  },
+  "reconstructed_observed_invariants": {
+    "existing_functions": "a74d30cbb4cef77b5960e18ffa030675f2a0dd281f3c73cdcd602d002838f8cb",
+    "existing_authority": "5c743a341898260eeee3e3a19923083f2ff99602c458a640e910b14358646761",
+    "immutable_structure": "a9662fc851e262c9210c1e99f542fd9b7c40209f47efde275fbfe64b01e36e8f"
+  },
+  "corrected_state": "absent",
+  "corrected_ready_to_apply": true,
+  "changed_recognition_fields": [
+    "state",
+    "recognized",
+    "ready_to_apply",
+    "dependencies_ok",
+    "guards.profile_dependencies"
+  ],
+  "invariant_boundary": "The retained authority/structure invariant inputs are the exact earlier successful r2 receipt values; the new profile facts are independently source-reconstructed. Whole live retained catalogs are not exported or simulated.",
+  "no_unknown_hash_allowlist": true,
+  "no_catalog_normalization": true,
+  "no_production_acl_or_table_change": true,
+  "new_reader_modules_applied": false,
+  "unchanged_runtime_proofs": 44,
+  "runtime_suite_rerun": false,
+  "live_database": false,
+  "storage": false,
+  "mac_installer": false
+}
