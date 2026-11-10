@@ -1,3 +1,22 @@
+<!-- SELQIRO_SERVICE_NAVIGATION_ACCEPTED_20261109 -->
+## 2026-11-09 — teenuste tagasitee tootmises vastu võetud
+
+Kasutaja kinnitas: „korras nüüd läheb mõlemas kohas tagasi samasse kohta”.
+Vastu on võetud teenuse detailist Browser Back nii avalikule profiilile kui
+ka avalikku teenuseloendisse. 21:31:20 nimega Verceli kuvatõmmisel on
+`429ace2` / `Restore service list on browser back` / `main` / Ready / Production.
+Varasem foto/profiiliparandus `26e468e` on samuti Ready / Production nähtav.
+
+Täielikku commit-räsi, Maci eduraportit ega värsket tööpuud/indexit ei antud;
+neid ei oletata. Paigaldajat, build'i, teste ega deployd ei korratud.
+Käesolev eraldi dokumentide üleandmine sisaldab uut seisukirjet ja sellest
+loodud handoff'i; Maci/GitHubi dokumente pole selle salvestusega muudetud.
+Väljastatud ZIP-id ja senised päevikud säilivad muutmata.
+
+## Varasem ettevalmistuse tõend — ajalooline
+
+Allpool säilib väljastatud paki ettevalmistuse kirje. Selle tulevased paigaldamis-/Ready-/kasutajakatse märked on ülaloleva vastuvõtuga asendatud.
+
 # Teenuste tagasitee — 09.11.2026
 
 ## Vastuvõtt ja praegune puudus

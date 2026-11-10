@@ -1,3 +1,39 @@
+<!-- SELQIRO_STORE_CATEGORY_ASSIGNMENT_PREPARED_20261110 -->
+## 10.11.2026 — poerubriigi valik ette valmistatud; haldus on eraldi töö
+
+Praeguse tavakuulutuse muutmisvaate uus kaart seob olemasolevad poe rubriigid
+kuulutusega. Salvestus kasutab olemasolevat rangemat identity-scoped RPC-d;
+teksti, hinna ja fotode seisu see ei muuda. Maci/commit'i/Ready ning tegeliku
+rubriigikatse kinnitust veel ei ole. Build ning 19 SQL-, 13 API/Reacti- ja 4
+brauserikontrolli läbisid edukalt. Kontrollitõendid ja tegeliku kasutuse piir:
+`continuity/STORE_CATEGORIES_20261110.md`.
+
+Integreeritud Minu alas on vana rubriikide CRUD endiselt peidus. Selle avamine
+vajab eraldi kasutaja ja aktiivse identiteediga seotud halduslepingut, sealhulgas
+juurrubriigi turvalist loomist. Olemasolevate rubriikide valik on selle sammu
+ulatus; tühi seis ei paku linki peidetud haldusankrule. Hobuste/teenuste
+rubriigiseost pole lisatud.
+
+SQL audit kinnitas ka säilinud piiri: `listing_store_categories` otsetabeli
+kirjutusreegel kontrollib kuulutuse `user_id`-d, mitte rubriigi identiteeti.
+Uus kaart kasutab rangemat olemasolevat RPC-d; globaalset RLS-kõvendust ei väideta.
+Varasem teenuste `429ace2` / `26e468e` Ready ja kasutaja Tagasi vastuvõtt säilivad.
+
+<!-- SELQIRO_SERVICE_NAVIGATION_ACCEPTED_20261109 -->
+## 2026-11-09 — teenuste tagasitee tootmises vastu võetud
+
+Kasutaja kinnitas: „korras nüüd läheb mõlemas kohas tagasi samasse kohta”.
+Vastu on võetud teenuse detailist Browser Back nii avalikule profiilile kui
+ka avalikku teenuseloendisse. 21:31:20 nimega Verceli kuvatõmmisel on
+`429ace2` / `Restore service list on browser back` / `main` / Ready / Production.
+Varasem foto/profiiliparandus `26e468e` on samuti Ready / Production nähtav.
+
+Täielikku commit-räsi, Maci eduraportit ega värsket tööpuud/indexit ei antud;
+neid ei oletata. Paigaldajat, build'i, teste ega deployd ei korratud.
+Käesolev eraldi dokumentide üleandmine sisaldab uut seisukirjet ja sellest
+loodud handoff'i; Maci/GitHubi dokumente pole selle salvestusega muudetud.
+Väljastatud ZIP-id ja senised päevikud säilivad muutmata.
+
 <!-- SELQIRO_SERVICE_NAVIGATION_PREPARED_20261109 -->
 ## 09.11.2026 — teenuse fotod vastu võetud; tagasitee parandus ette valmistatud
 

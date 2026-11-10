@@ -1,3 +1,43 @@
+<!-- SELQIRO_STORE_CATEGORY_ASSIGNMENT_PREPARED_20261110 -->
+## 2026-11-10 — poerubriikide valik praeguses kuulutuse muutmisvaates
+
+Ette valmistatud on nelja väikese mooduliga, kasutaja/identiteedi/kuulutusega
+seotud kaart. Olemasolev valija ja atomaarne `set_my_listing_store_categories_v2`
+RPC jäävad kasutusse. Päringud kasutavad fikseeritud tokenit; täpne kviitung,
+ühe tegevuse lukk ja vana konteksti tõkked kaitsevad salvestust. Ebaselge tulemuse
+järel nõutakse uut lugemist. Rubriigiseos ei salvesta teksti, hinda ega fotosid.
+
+Olemasolevaid rubriike saab valida; integreeritud Minu ala peidetud CRUD jääb
+selles sammus avamata. Tühi seis ei suuna peidetud ankrule. Avalik alampuufilter
+on olemas; hobuste ja teenuste rubriigiseost ei lisata. Vana otsetabeli RLS-i
+laiemat piiri ei esitata parandatuna.
+
+SQL-fixtuur 19/19 PASS (PGlite/WASM, sünteetiline Auth), API/ReactDOM 13/13 PASS,
+värske Next webpack build PASS (600 muutumatut sisendit) ning Chromium 4/4 PASS
+(English/Eesti, 390/1365 px). Rubriigi salvestamisel säilis sama teksti/hinna
+mustand ja input-DOM; console.error/warning/pageerror/välisvõrgupäringuid 0.
+Brauseri esmane rakise viga lahendati enne päris brauserijooksu. Uuendaja
+esmane helperi proof on 10/10; täpselt väljastatud manifesti helperi ja päris
+ajutise Giti tarne tõendid on pakis `kontrollid`. Täpsed failid ja piirid:
+`continuity/STORE_CATEGORIES_20261110.md`. Uus tarne on ilma SQL/CLI/Storage'i
+toiminguteta. Maci rakendus, uus commit/push, Ready ja rubriigi kasutuskatse on
+eraldi kinnitamata. Varasem `429ace2`/`26e468e` Ready ja Tagasi vastuvõtt säilivad.
+
+<!-- SELQIRO_SERVICE_NAVIGATION_ACCEPTED_20261109 -->
+## 2026-11-09 — teenuste tagasitee tootmises vastu võetud
+
+Kasutaja kinnitas: „korras nüüd läheb mõlemas kohas tagasi samasse kohta”.
+Vastu on võetud teenuse detailist Browser Back nii avalikule profiilile kui
+ka avalikku teenuseloendisse. 21:31:20 nimega Verceli kuvatõmmisel on
+`429ace2` / `Restore service list on browser back` / `main` / Ready / Production.
+Varasem foto/profiiliparandus `26e468e` on samuti Ready / Production nähtav.
+
+Täielikku commit-räsi, Maci eduraportit ega värsket tööpuud/indexit ei antud;
+neid ei oletata. Paigaldajat, build'i, teste ega deployd ei korratud.
+Käesolev eraldi dokumentide üleandmine sisaldab uut seisukirjet ja sellest
+loodud handoff'i; Maci/GitHubi dokumente pole selle salvestusega muudetud.
+Väljastatud ZIP-id ja senised päevikud säilivad muutmata.
+
 <!-- SELQIRO_SERVICE_NAVIGATION_ACCEPTANCE_20261109 -->
 ## 2026-11-09 — teenuste fotod/järjestus vastu võetud; tagasitee parandus valmis lähtekoodis
 

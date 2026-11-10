@@ -1,59 +1,64 @@
-# Teenuste tagasitee parandus
+# Poe rubriigid — järgmine jätkusamm
 
-Seis: 09.11.2026 Europe/Tallinn. Üks praegune seis on CURRENT_STATE.json-is.
+Seis: 10.11.2026 Europe/Tallinn. Üks autoriteetne seis on
+`docs/continuity/CURRENT_STATE.json`. See samm ühendab olemasolevad poe rubriigid
+tavakuulutuse praeguse muutmisvaatega.
 
-Kasutaja on teenuse fotode salvestamise ning uusima teenuse järjestuse Minu alas
-ja profiilil vastu võtnud. Käesolev parandus taastab teenuse detailist naastes
-profiili või avaliku teenuseloendi lähtekoha, filtrid ning avatud vaate.
+## Üks käsk
 
-## Üks järgmine käsk
-
-Paki **selqiro-teenuste-tagasitee-20261109.zip** Downloads-kaustas lahti ja käivita:
+Paki `selqiro-poerubriigid-20261110.zip` Downloads-kausta lahti. Seejärel:
 
 ```bash
-python3 -I -B "$HOME/Downloads/selqiro-teenuste-tagasitee-20261109/uuenda.py" --publish
+python3 -I -B "$HOME/Downloads/selqiro-poerubriigid-20261110/uuenda.py" --publish
 ```
 
-Uuendaja loeb eelmise r2 täpset lõpetatud privaatset päevikut ning kontrollib
-sellest leitud commit'i sõltumatult Giti parent'i, teema, täieliku puu ja
-muudetud radade järgi. Seejärel kontrollitakse olemasoleva /Users/taivo/selqiro
-hoidla tegelikku haru, HEAD-i, tervet indexit, lähtefaile ja kinnitatud remote'i.
-Muudetavad lähtefailid varundatakse enne rakendamist. Järgnevad build ning ainult
-selle paranduse commit ja tavaline push. SQL-i, Supabase CLI-d, Storage'i
-toiminguid ega sõltuvuste installi selles pakis ei ole.
+Uuendaja kontrollib olemasoleva `~/selqiro` hoidla tegelikku main-haru, HEAD-i,
+kogu indexit, tööpuud, lähtefaile ja kinnitatud remote'i. Aluseks on lõpetatud
+teenuste tagasitee jooksu täpne privaatne raport ning sõltumatud Giti puu,
+parent'i ja diffi kontrollid. Kuvatõmmiselt kinnitatud `429ace2` ja `26e468e`
+ei laiendata oletatud täiscommit'ideks; täisväärtused loetakse ja kontrollitakse
+Macis. Esialgset paigaldajat või varasemat diagnostikat ei korrata.
 
-Eelmise r2 uus commit ja raportiräsi lahendatakse Macis tegeliku tõendi järgi;
-pakki pole kirjutatud oletatud praegust commit'i. Varasemad päevikud, raportid
-ja väljastatud pakid säilivad.
+Kontrollitud muudatustest tehakse privaatsed varukoopiad. Uuendaja rakendab
+ainult paki räsikaitsega lähtefailid, käivitab build'i ning teeb ühe commit'i
+ja tavalise push'i. Uue commit'i pealkiri on
+**Connect store categories to listing editor**. Täisräsi ilmub terminalis.
+SQL-i, Supabase CLI-d, Storage'i toiminguid ega sõltuvuste paigaldust ei tehta.
 
-## Kui töö peatub
+## Pärast terminali VALMIS-rida
 
-Terminal näitab **SAADA SEE FAIL:** koos just selle jooksu kontrollitud
-JSON-faili täieliku asukohaga ja valib sama faili Finderis. Lisa valitud fail
-vestlusse. Downloads-koopia saab unikaalse nime. Kui koopiat ei õnnestu luua,
-kasutatakse kontrollitud originaali; Finderi tõrke korral on täpne asukoht
-terminalis. Kui raport puudub või selle päritolu ei saa kinnitada, palub
-terminal saata PEATATUD-rea. Vananenud raport märgitakse eraldi.
+1. Oota Vercelis just terminalis näidatud uue commit'i **Ready / Production** tulemust.
+2. Värskenda portaali. Ava **Minu ala → Kuulutused → Muuda** ühe avalikult nähtava tavakuulutuse juures.
+3. Jaotises **Poe rubriigid** vali selle aktiivse identiteedi olemasolev rubriik
+   või alamrubriik ja vajuta **Salvesta rubriigid**.
+4. Ava oma avalik profiil, vali sama rubriik ja kontrolli kuulutuse nähtavust.
+   Ülemrubriigi tulemused hõlmavad ka alamrubriikidesse seotud kuulutusi.
+5. Muuda valikut või tühjenda ja salvesta. Tühjendamisel kaob rubriigiseos;
+   kuulutus jääb Kõik-vaatesse ning selle tekst, hind ja fotod säilivad.
 
-## Pärast edu
+Rubriikide salvestus on eraldi tegevus. Selles sammus saab valida olemasolevaid
+rubriike. Integreeritud Minu alas loomise, ümbernimetamise ja kustutamise
+halduse avamine vajab eraldi identiteediga seotud lepingut; tühja rubriigiloendit
+näidatakse ausalt. Hobuste ja teenuste rubriigiseosed vajavad oma andmemudelit.
 
-Oota Vercelis **terminalis näidatud sama uue commit'i Ready / Production**
-tulemust ning värskenda portaali. Kontrolli muudetud kasutusteed:
+## Peatumise korral
 
-1. Keri avalikul profiilil teenusteni, ava üks teenus ja vajuta brauseri
-   Tagasi-noolt. Sama kaart peab jääma samasse nähtavasse kohta. Kui avasid
-   enne „Vaata kõiki”, peab laiendatud teenuste vaade samuti säilima.
-2. Ava teenus avaliku teenuseloendi keskelt ning tule brauseri noolega tagasi.
-   Sama koht ning kasutatud otsing/filtrid peavad säilima. Kui olid vajutanud
-   „Näita rohkem”, peab avatud teenus jääma leitavaks ka sellest leheosast.
+Säilita **PEATATUD**-rida ja lisa vestlusse fail, mille täpne tee on real
+**SAADA SEE FAIL:**. Uuendaja loob võimalusel Downloads-kausta privaatse,
+unikaalse JSON-koopia ja valib sama faili Finderis. Koopia või Finderi vea
+korral näidatakse kontrollitud originaali asukoht või täpne juhis.
+Puuduvast või võimalikust vananenud raportist antakse eraldi teada.
+Varasemaid päevikuid, faile ega pakke ei kustutata ega muudeta.
 
-Detaili nähtav tagasilink arvestab samuti lähtekohta. Otse avatud teenuse
-puhul viib see avalikku teenuseloendisse. Kaartidel on lühike kirjeldus; teenuse
-detailis on kogu salvestatud tekst loetav.
+## Säiliv vastuvõtt ja tõendi piir
 
-Varem vastu võetud fotode, järjestuse, hobuste ning tavakuulutuste kasutuskatseid
-ja lõpetatud diagnostikat ei korrata selle paranduse eeltingimusena.
+Teenuste tagasitee on kasutaja poolt vastu võetud nii profiililt kui avalikust
+teenuseloendist. 09.11 kuvatõmmis näitab `429ace2` Ready / Production ja
+varasemat foto/profiiliparandust `26e468e` Ready / Production. Seda vastuvõttu
+pole vaja selle sammu jaoks uuesti korrata.
 
-Üldine automaatne koristus, tehniliste testpaneelide eemaldamine tavakasutaja
-vaatest ning poerubriikide puuduvad seostamise võimalused jäävad eraldi tööks.
-Energy, maksete tuum ja piiratud AI järgnevad kokkulepitud V2 ulatuse sees.
+Uus rubriikide lähtepakett, Macis rakendatud töö, commit/push, Verceli Ready
+ning tegelik rubriigi kasutus on eraldi tõendid. Lähtekood ja kohalik kontroll
+on ettevalmistus; uut Maci/GitHubi/deployment'i tulemust pole veel nähtud.
+Kohaliku kontrolli täpne ulatus on `STORE_CATEGORIES_20261110.md`-s ja
+väljastatud paki `kontrollid` kaustas.

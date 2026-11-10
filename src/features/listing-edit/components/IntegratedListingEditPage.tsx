@@ -15,6 +15,7 @@ import {LISTING_CURRENCIES} from "../../../shared/currency/listingCurrencies.gen
 import ManagedListingImagePicker from "./ManagedListingImagePicker";
 import ManagedListingPhotoAdd from "./ManagedListingPhotoAdd";
 import RetiredListingImageCleanup from "./RetiredListingImageCleanup";
+import ManagedListingStoreCategoryCard from "./ManagedListingStoreCategoryCard";
 
 function BoundEditor({actor, listingId, blocked}: {actor: PublicationActor; listingId: string; blocked: boolean}) {
   const { language, t } = useV2Translation(listingEditMessages);
@@ -113,6 +114,8 @@ export default function IntegratedListingEditPage({listingId}: {listingId: strin
         <ManagedListingPhotoAdd key={confirmationScope} ownerKey={{...owner.actor, listingId, attemptId: owner.receipt.attempt_id}}
           gallery={owner.gallery} blocked={blocked || owner.imageError !== null} runOperation={owner.runPhotoAddition} />
       </ManagedListingImagePicker>
+      <ManagedListingStoreCategoryCard key={`store-categories:${owner.actor.userId}:${owner.actor.identityId}:${listingId}`}
+        actor={owner.actor} listingId={listingId} blocked={blocked} />
       {owner.receipt.files_remaining > 0 ? <section className="space-y-3 rounded-[30px] border bg-white p-6" aria-label={t("sourceCleanup")}>
         <h2 className="text-xl font-black">{t("sourceCleanup")}</h2>
         <p>{t("sourceCleanupPending", { count: owner.receipt.files_remaining })}</p>
