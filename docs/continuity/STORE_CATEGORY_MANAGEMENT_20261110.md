@@ -1,3 +1,58 @@
+<!-- SELQIRO_STORE_CATEGORY_MANAGEMENT_ACCEPTED_20261110 -->
+# Poe rubriikide haldus on rakendatud ja kasutaja poolt vastu võetud
+
+Seis: 10.11.2026 Europe/Tallinn. See kirje täiendab allpool säilinud
+ettevalmistuse ajalugu. Varasemad paigaldus- ja NEXT-juhised ei ole uus käsk.
+
+## Tegelik paigaldusraport
+
+Raport `selqiro-poerubriikide-haldus-20261110-raport-20261110-151733-fa9c72c87ffc.json`:
+216469 baiti, SHA256 `1e181c9533d3caa18b165f3541127241793d764e5f2adc2fd47161cd2f56abc7`.
+Jooks kestis 15:16:58–15:17:33; andmebaasi järelkontroll oli 15:17:09.
+Tulemus: complete, database verified, build passed, push verified.
+Commit `0b2594ad27e8320ab7e71206c8c5cb20edcb5d8a`, vanem
+`71eea82ad83b30b9ddc03641f8f2864b67a85877`.
+
+Võrguühenduseta ülevaatus sidus raporti täpse väljastatud manifestiga,
+kontrollis kõiki 51 algset failiräsi, 1398 algindexi kirjet ja aluspuud,
+varasema väljalaske ahelat ning uue SQL-i rakendamise räsi. Kõik seitse
+andmebaasikaitset läbisid. Seis absent → acknowledged apply → applied/verified,
+olemasoleva autoriteedi/funktsioonide/struktuuri invariantsused säilisid.
+Rakendamise vastus ja eraldi kontrolllugemine on samad. Storage'i toiminguid
+uuendaja ei teinud.
+
+Koostamise null-väljumine ning täpse commit'i/parent'i/pealkirja/51 raja,
+terve oodatud puu/indexi, puhta tööpuu ja lubatud remote main-viida vastavus
+on pinnitud jooksu kontrollid. Täielikku lõppindexit, commit-objekti ja
+build-logi raportis pole; lõppindexist on räsid. Nende baitide sõltumatut
+värsket kogumist ei väideta. Vercel on raportis READY_NOT_CHECKED.
+
+## Kasutaja vastuvõtt
+
+Kasutaja kinnitas ülem- ja alamrubriigi lisamist, mõlema nimevahetust,
+testkuulutuse seostamist uute rubriikidega ning leidmist avalikult profiililt.
+Pärast ülem- ja alamrubriigi eemaldamist jäi kuulutus alles.
+
+Pildid 15:22:42–15:32:04 toetavad käiku: LENNUKID/Gulfstream,
+LENNUKID/Embraer, PRIVATE JETS/Embraer, kuulutusele 202 kahe seose salvestus,
+ülemrubriigi profiilifilter ja pärast kasutaja kinnitatud eemaldamist alles
+olev testkuulutuse kaart Minu alas ning profiilis. Eemaldamise kinnitusekraani,
+kõigi piltide/ridade baitvõrdlust ega eraldi alamrubriigifiltri tulemust
+piltidel pole. Need piirid ei tühista kasutaja enda selget vastuvõttu.
+
+## Säilitatud üleandmine
+
+Algne 1201978-baidine ZIP SHA256
+`060dcb52805da1155cbef0036dd2af763ded0f51063d6c521ef4ad96680a17fa`
+ja kõik selle 89 faili säilivad muutumatult. Uus dokumentide delta sisaldab
+ACCEPTANCE.json-i, raporti ülevaatust ja piltide tekstilist tõendikirjet;
+kuvatõmmiste piksleid ei lisata. Delta ei ole uus rakenduse paigaldaja ega
+Maci/GitHubi commit. Praegune tööjärg on CURRENT_STATE.json-is.
+
+---
+
+## Ettevalmistuse ajalugu
+
 # Poe rubriikide haldus — ettevalmistatud 10.11.2026
 
 Kasutaja kiitis heaks oma rubriikide loomise, ümbernimetamise ja eemaldamise

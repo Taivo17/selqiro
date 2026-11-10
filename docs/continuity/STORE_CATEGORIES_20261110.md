@@ -1,3 +1,14 @@
+## 10.11.2026 — hilisem halduse vastuvõtt
+
+Kuulutuse seostamise varasem vastuvõtt säilib. Hilisema halduse täpne raport
+seob selle aluscommit'iga `71eea82ad83b30b9ddc03641f8f2864b67a85877`.
+Haldus lisandus commit'is `0b2594ad27e8320ab7e71206c8c5cb20edcb5d8a` ning
+kasutaja võttis selle kasutustee vastu. Vt
+`STORE_CATEGORY_MANAGEMENT_20261110.md` ja autoriteetset CURRENT_STATE kirjet.
+Allpool on varasema seostamissammu muutumatu ajalooline tõendikirjeldus.
+
+---
+
 <!-- SELQIRO_STORE_CATEGORY_ASSIGNMENT_ACCEPTED_20261110 -->
 ## 10.11.2026 — poerubriikide seostamine kasutaja poolt vastu võetud
 

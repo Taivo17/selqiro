@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "kind": "store-category-authority-guard-generation",
+  "result": "PASS",
+  "generated_at_utc": "2026-11-10T14:40:01.801Z",
+  "source_inputs": 79,
+  "install_replay_verified": true,
+  "retained_invariants_unchanged": true,
+  "effective_privileges_after_select_only": true,
+  "live_database": false,
+  "production_storage": false,
+  "mac_installer": false,
+  "files": {
+    "01_authority.sql": "1f9a8f3299d13c6a275627375e31f39453f587f9ee7920d74e0436f7c87216ca",
+    "changes.sql": "8044bd08c1a566c5d8655dee9d72b47188c6b5ab067caf57b7ccdae45a06fcee",
+    "preflight.sql": "823bebb5a0f414d4aa0f6a7bacebf28a89d993add74e31dfff6571cf93549199",
+    "apply.sql": "ebe7d6d65dafc498e9b9e97f7ad8b68857c43479c05293216c3ce8f12a0da055",
+    "verify.sql": "823bebb5a0f414d4aa0f6a7bacebf28a89d993add74e31dfff6571cf93549199",
+    "source-pins.json": "15ffd79d9e899e84aebce1440c948f81f27276c86336ae7455d46c818522991b",
+    "catalog-pins.json": "613df3917a141ba59559e5f658fb31c349dfb49df09a1f315e671ad7b7d46f35"
+  }
+}

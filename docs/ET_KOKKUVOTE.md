@@ -1,3 +1,49 @@
+<!-- SELQIRO_STORE_CATEGORY_AUTHORITY_PREPARED_20261110 -->
+## 10.11.2026 — ette valmistatud vana rubriigiseoste otsekirjutuse sulgemine
+
+Rubriikide halduse `0b2594a` paigaldus ja kasutajavastuvõtt jäävad lõpetatuks.
+Uus eraldi tarne viib kaks vana vormi olemasoleva atomaarse, sama lubatud
+identiteeti kontrolliva rubriigiseoste toimingu peale ning sulgeb brauseri
+otsesed muudatused `listing_store_categories` tabelile. Tabeli lugemine,
+olemasolev RPC, kuulutused, rubriigid ja fotod säilivad.
+
+Uus kliendiversioon peab enne veebis olemas olema; õigusteparandus järgneb
+kontrollitud avalikule kliendimärgile. Ooteolekust jätkub sama käsk lõpetatud
+build'i/commit'i/push'i kordamata. Teadmata SQL-i tulemus nõuab lugemist.
+Vana vormi osaline tulemus suunab olemasoleva kuulutuse eraldi rubriigivaatesse,
+mis loeb salvestatud valiku ega eelda avaldamise kviitungit või loo duplikaati.
+
+See on ettevalmistatud lähtekood, mitte uus Maci/SQL-i/commit'i/veebi tõend.
+Üks praegune samm on `docs/continuity/CURRENT_STATE.json`-is, käsk
+`docs/continuity/HOSTED_PORTAL.md`-s ja tõendid
+`docs/continuity/STORE_CATEGORY_AUTHORITY_20261110.md`-s. Leping:
+`docs/architecture/store-category-link-authority-v1.md`.
+Varasemad allolevad CURRENT/NEXT ja käsud säilivad ajaloona.
+
+---
+
+<!-- SELQIRO_STORE_CATEGORY_MANAGEMENT_ACCEPTED_20261110 -->
+## 10.11.2026 — poe rubriikide haldus rakendatud ja vastu võetud
+
+Tegelik uuendaja raport kinnitab commit'i
+`0b2594ad27e8320ab7e71206c8c5cb20edcb5d8a`, andmebaasi järelkontrolli,
+build'i ja push'i. Jooks lõppes 15:17:33 Europe/Tallinn. Kasutaja kinnitas
+ülem- ja alamrubriigi loomist, mõlema nime muutmist, testkuulutuse sidumist
+ja profiilist leidmist ning rubriikide eemaldamisel kuulutuse säilimist.
+See etapp on vastu võetud; paigaldajat ega läbitud kasutuskatset ei korrata.
+
+Verceli täpne Ready/Production rida ja deployment-ID ei ole lisatud;
+veebikasutuse vastuvõtt on eraldi kinnitatud. Vana otsetabeli
+`listing_store_categories` õiguste piir ja fotokoristuse tööd säilivad.
+Praegune tööjärg: `docs/continuity/CURRENT_STATE.json`; raporti täpne piir:
+`docs/continuity/STORE_CATEGORY_MANAGEMENT_20261110.md`.
+
+See vastuvõtu dokumentide delta pole eraldi Maci/GitHubi rakendatud. Järgmine
+sisuline tarne võtab selle kaasa pärast tegeliku seisu kontrolli. Allolevad
+ettevalmistuse kirjed ja vanad NEXT/käivitamisjuhised on ajalugu.
+
+---
+
 <!-- SELQIRO_STORE_CATEGORY_MANAGEMENT_PREPARED_20261110 -->
 ## 10.11.2026 — PREPARED: enda poe rubriikide haldus
 

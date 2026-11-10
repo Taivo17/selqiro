@@ -1,8 +1,22 @@
 # Own shop category management v1
 
-Prepared 2026-11-10. This documents the new integrated My Area source.
-Actual Mac installation, database application and production acceptance are
-separate evidence in `../continuity/CURRENT_STATE.json`.
+## 2026-11-10 prepared direct-write closure
+
+The separately prepared authority release converts both legacy page writers
+to the existing atomic assignment RPC, removes direct browser non-SELECT
+authority on the join table and retains public reads. Its receipt-independent
+category review route supports an identity-owned legacy listing even when the
+integrated publication receipt does not exist. This is prepared source; the
+actual database closure and rollout remain pending in CURRENT_STATE.
+See `store-category-link-authority-v1.md` and
+`../continuity/STORE_CATEGORY_AUTHORITY_20261110.md`. Earlier text about the
+broader retained policy describes the accepted pre-repair database state.
+
+Implemented in commit `0b2594ad27e8320ab7e71206c8c5cb20edcb5d8a`. The 2026-11-10
+Mac report confirms database verification, build and push; the user accepted
+root/child CRUD, listing assignment/profile discovery and retained listing after
+category removal. Exact Vercel deployment identity is separate and not supplied.
+Evidence: `../continuity/CURRENT_STATE.json`.
 
 ## Product boundary
 
@@ -93,7 +107,9 @@ Fresh SQL runtime 17/17, installation/drift 18/18, client/hook 15/15, targeted
 13-file lint, a 610-input production build and four English/Estonian Chromium
 journeys passed. Local SQL uses PGlite; browser Auth/PostgREST and unrelated
 modules are fixtures. Multi-session lock schedules, live provider behavior,
-actual Mac/Git/SQL/Vercel state and the real user journey remain separate.
+actual Mac/Git/SQL/Vercel state and the real user journey are separate evidence.
+The later Mac report and user acceptance are now recorded in the dated
+continuity document; no old local checks were repeated for that review.
 
 The existing direct `listing_store_categories` RLS write path only validates
 the listing owner and does not enforce the category identity. This remains a

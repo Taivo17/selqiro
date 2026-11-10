@@ -5,6 +5,8 @@ import Link from "next/link";
 import { supabase } from "../../lib/supabase";
 import { useLocation } from "./hooks/useLocation";
 import { useAuth } from "../../lib/useAuth";
+import { captureLegacyStoreCategoryIntent, saveLegacyStoreCategorySelection } from "../../src/entities/listing/api/saveLegacyStoreCategorySelection";
+import { legacyStoreCategoryRecovery } from "../../src/features/listing-edit/model/legacyStoreCategoryRecovery";
 import { CATEGORY_TREE } from "../../lib/categories";
 import { getCategoryFields } from "../../lib/categoryFields";
 import { getTranslation } from "../../lib/i18n/useTranslation";
@@ -1152,6 +1154,7 @@ export default function MyPage() {
   const saveEdit = async () => {
     if (savingEdit) return;
     if (!editingId || !userId) return;
+    const storeCategoryIntent = captureLegacyStoreCategoryIntent(userId, profile?.active_identity_id, editStoreCategoryId);
 
     if (!editTitle.trim() || !editDescription.trim() || !editPrice.trim()) {
       alert("Please fill title, description and price.");
@@ -1284,20 +1287,12 @@ export default function MyPage() {
 
       if (error) throw error;
 
-      await supabase
-        .from("listing_store_categories")
-        .delete()
-        .eq("listing_id", editingId);
-
-      if (editStoreCategoryId) {
-        const { error: storeCategoryError } = await supabase
-          .from("listing_store_categories")
-          .insert({
-            listing_id: editingId,
-            store_category_id: editStoreCategoryId,
-          });
-
-        if (storeCategoryError) throw storeCategoryError;
+      const storeCategoryResult = await saveLegacyStoreCategorySelection(storeCategoryIntent, editingId, "edit");
+      const recovery = legacyStoreCategoryRecovery(storeCategoryResult, language, editingId);
+      if (recovery) {
+        alert(recovery.message);
+        window.location.assign(recovery.href);
+        return;
       }
 
       cancelEdit();

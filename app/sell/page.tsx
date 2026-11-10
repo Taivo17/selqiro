@@ -5,6 +5,8 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { supabase } from "../../lib/supabase";
 import { useAuth } from "../../lib/useAuth";
+import { captureLegacyStoreCategoryIntent, saveLegacyStoreCategorySelection } from "../../src/entities/listing/api/saveLegacyStoreCategorySelection";
+import { legacyStoreCategoryRecovery } from "../../src/features/listing-edit/model/legacyStoreCategoryRecovery";
 import {
   CATEGORY_TREE,
   getCategoryLabel,
@@ -677,6 +679,7 @@ export default function SellPage() {
 
   const createListing = async () => {
     if (!user) return;
+    const storeCategoryIntent = captureLegacyStoreCategoryIntent(user.id, activeIdentityId, storeCategoryId);
 
     if (!title.trim() || !description.trim() || !price.trim()) {
       alert("Fill required fields: title, description and price.");
@@ -785,16 +788,7 @@ export default function SellPage() {
         return;
       }
 
-      if (storeCategoryId) {
-        const { error: storeCategoryError } = await supabase
-          .from("listing_store_categories")
-          .insert({
-            listing_id: listingData.id,
-            store_category_id: storeCategoryId,
-          });
-
-        if (storeCategoryError) throw storeCategoryError;
-      }
+      const storeCategoryResult = await saveLegacyStoreCategorySelection(storeCategoryIntent, listingData.id, "create");
 
       fetch("/api/ai/enrich-listing", {
         method: "POST",
@@ -852,7 +846,9 @@ export default function SellPage() {
 
       localStorage.removeItem(DRAFT_STORAGE_KEY);
 
-      router.push("/my-page");
+      const recovery = legacyStoreCategoryRecovery(storeCategoryResult, profileLanguage, listingData.id);
+      if (recovery) alert(recovery.message);
+      router.push(recovery?.href ?? "/my-page");
     } catch (error) {
       console.error(error);
       alert("Unexpected error");

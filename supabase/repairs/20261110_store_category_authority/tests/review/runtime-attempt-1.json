@@ -1,0 +1,1 @@
+{"result":"FAIL","checks":[],"error_code":"42501","message":"new row violates row-level security policy for table \"listing_store_categories\""}

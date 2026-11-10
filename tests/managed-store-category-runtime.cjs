@@ -9,7 +9,7 @@ function recordInput(file) {
   if (inputs.has(relative)) assert.equal(digest, inputs.get(relative), 'No source change during the test run: ' + relative);
   inputs.set(relative, digest);return bytes.toString();
 }
-function runtime(fixture, {language = 'en'} = {}) {
+function runtime(fixture, {language = 'en', modules = {}} = {}) {
   const dom = new JSDOM('<!doctype html><div id="test"></div>', {url: 'https://fixture.invalid/v2/my-area/listings/1001/edit', pretendToBeVisual: true});
   const previous = new Map(), cache = new Map();
   for (const [name, value] of Object.entries({window: dom.window, document: dom.window.document, navigator: dom.window.navigator,
@@ -19,6 +19,7 @@ function runtime(fixture, {language = 'en'} = {}) {
   function load(name) {
     const file = path.resolve(root, name), relative = path.relative(root, file).split(path.sep).join('/');
     assert.ok(file.startsWith(root + path.sep));
+    if (Object.hasOwn(modules, relative)) return modules[relative];
     if (relative === 'src/shared/supabase/browserClient.ts') return {supabaseBrowserClient: fixture.client};
     if (relative === 'src/shared/i18n/V2LanguageProvider.tsx') return {useV2Language: () => ({language}),
       useV2Translation: catalog => ({language, t: (key, params) => load('lib/i18n/useTranslation.ts').getCatalogTranslation(language, catalog, key, params)})};
@@ -29,6 +30,7 @@ function runtime(fixture, {language = 'en'} = {}) {
     }});
     const localRequire = spec => {
       if (spec === 'react') return React;if (spec === 'react/jsx-runtime') return require(spec);
+      if (spec === 'next/link') return function Link({prefetch, scroll, ...props}) {return React.createElement('a', props);};
       assert.ok(spec.startsWith('.') || spec.startsWith('@/'), 'Unexpected dependency: ' + spec);
       const stem = spec.startsWith('@/') ? path.join(root, spec.slice(2)) : path.resolve(path.dirname(file), spec);
       return load(fs.existsSync(stem) ? stem : fs.existsSync(stem + '.ts') ? stem + '.ts' : stem + '.tsx');

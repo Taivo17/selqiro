@@ -1,66 +1,65 @@
-# Poe rubriikide haldus — järgmine kasutuselevõtt
+# Poe rubriigiseoste õiguste parandus — uus ettevalmistatud tarne
 
-Seis: 10.11.2026 Europe/Tallinn. Autoriteetne seis on
+Seis: 10.11.2026 Europe/Tallinn. Üks praegune seis on
 `docs/continuity/CURRENT_STATE.json`; loetav üleandmine genereeritakse sellest.
+Senine rubriikide lisamise, nimevahetuse, seostamise ja eemaldamise etapp on
+kasutaja poolt vastu võetud. Vana paigaldajat ei korrata.
 
-## Valmis ettevalmistus
+## Üks uus käsk
 
-Uus `selqiro-poerubriikide-haldus-20261110.zip` ühendab praeguse Minu alaga
-oma ülem- ja alamrubriikide loomise, ümbernimetamise ning lasteta rubriigi
-kinnitatud eemaldamise. Eemaldamine jätab kuulutused, pildid ja kirjeldused alles.
-Kasutajaliides on inglise ja eesti keeles. Kuulutuse rubriigivalija halduse link
-avaneb uuel vahekaardil, et pooleliolev kuulutuse muutmine säiliks.
-
-## Üks käsk
-
-Paki ZIP lahti Downloads-kaustas. Käivita Terminalis:
+Laadi alla `selqiro-poerubriikide-oigused-20261110.zip` ja paki selle kaust
+Downloads-kausta. Käivita:
 
 ```bash
-python3 -I -B "$HOME/Downloads/selqiro-poerubriikide-haldus-20261110/uuenda.py" --publish
+python3 -I -B "$HOME/Downloads/selqiro-poerubriikide-oigused-20261110/uuenda.py" --publish
 ```
 
-Uuendaja leiab eelmise rubriigiseostamise täpse lõpetatud raporti ning kontrollib
-tegelikku kinnitatud hoidlat `/Users/taivo/selqiro`, main-haru, HEAD-i, tervet
-indexit ja tööpuud, lähtefaile ning remote’i. Varasemaid paigaldajaid ei korrata.
-Seejärel kontrollib see olemasoleva andmebaasi eeldusi, lisab ainult uue halduse
-RPC, kontrollib tulemust, rakendab täpse lähtepaketi ning teeb build’i, commit’i
-ja push’i. Vana töö ja päevikud säilivad. Tuvastamata seisu korral töö peatub.
+Siht on olemasolev `/Users/taivo/selqiro`, `main`, kinnitatud Selqiro remote
+ja täpne vastu võetud `0b2594ad27e8320ab7e71206c8c5cb20edcb5d8a` alus.
+Uuendaja kontrollib edukat privaatset alusraportit, tegelikku haru/HEAD-i,
+indexit, tööpuud ja lähtefaile enne kirjutusi. Paketis olevaid faile ei muudeta.
 
-## Pärast edu
+## Mida uuendaja teeb
 
-Oota Vercelis terminalis näidatud **sama commit’i** `Ready / Production` tulemust.
-Värskenda portaali ning ava **Minu ala → Poe rubriigid**.
+1. Loeb andmebaasi praeguse õiguste seisu ilma seda muutmata.
+2. Rakendab uue kliendi ja dokumendid, teeb build'i ning commit/push'i.
+3. Kontrollib olemasoleval portaalil uue kliendi täpset avalikku märgistusfaili.
+4. Kontrollib uuesti allikat, remote'i ja märgistusfaili ning rakendab alles
+   seejärel rubriigiseoste vana otsekirjutusõiguse sulgemise. Loeb tulemuse eraldi.
 
-Üks lühike kasutuskäik:
+Kuulutusi, rubriike, pilte, kontosid ega päevikuid selle uuendusega ei kustutata.
+Kaks vana vormi kasutavad sama olemasolevat õigusi kontrollivat salvestust.
+Rubriikide vea või teadmata tulemuse järel saab olemasoleva kuulutuse tegeliku
+valiku üle vaadata eraldi rubriigivaates; sama kuulutust uuesti avaldada pole vaja.
 
-1. Loo ajutine ülemrubriik ja selle alla alamrubriik; nimeta alamrubriik ümber.
-2. Seo üks olemasolev tavakuulutus selle alamrubriigiga senises rubriigivalijas
-   ning vaata tulemust avaliku profiili rubriigifiltris.
-3. Eemalda ainult see ajutine alamrubriik halduse eraldi kinnitusega.
-   Kontrolli, et kuulutus, kirjeldus ja pildid on endiselt alles ning kuulutus
-   on profiili **Kõik kuulutused** vaates nähtav.
-4. Eemalda soovi korral nüüd tühjaks jäänud ajutine ülemrubriik.
+## Kui veebiversioon alles valmib
 
-Alamrubriikidega ülemrubriiki korraga eemaldada ei saa. Uue halduse katseks
-pole vaja varasemaid teenuste, galeriide või navigeerimise katseid korrata.
+`OOTEL: WAITING_FOR_CLIENT_DEPLOYMENT` tähendab, et kontrollitud lähtekood
+on commit'itud ja üles lükatud, kuid avalik kliendimärk pole veel kinnitatud.
+Esimesel sellisel ootamisel pole õigusteparandust veel rakendatud.
+Oota veebiversiooni valmimist ja käivita **sama käsk** uuesti.
 
-## Kui terminal peatub
+Jätk kontrollib sama allikat, commit'i, remote'i ja päevikut. Lõpetatud build'i,
+commit'i ega push'i ei korrata. Ajalooline andmebaasi seis säilib raportis ka siis,
+kui katkestus toimus hiljem. Ebaselget SQL-i tulemust ei lahendata kordussaatmisega.
+Muu `PEATATUD` ei ole sama mis tavaline veebiversiooni ooteolek.
 
-Saada **PEATATUD-rida** ja fail, mille täpne asukoht on real **SAADA SEE FAIL:**.
-Uuendaja teeb võimalusel privaatsest päevikust unikaalse koopia Downloads-kausta
-ning valib sama faili Finderis. Koopia või Finderi tõrke korral näidatakse
-kontrollitud originaali/asukohta või öeldakse selgelt, et raportit pole.
-Vanu raporteid ja päevikuid ei kustutata. Ebakindlat SQL-i ega kirjutust ei
-korrata automaatselt ja kaitseid ei nõrgendata peatumisest möödumiseks.
+## Milline fail vestlusse lisada
 
-## Tõendi piir
+Terminal näitab lõpus **`SAADA SEE FAIL:`** ja selle jooksu unikaalse JSON-faili
+täpset teed Downloads-kaustas. Macis valitakse sama fail Finderis.
+Lisa vestlusse see fail; `PEATATUD` korral lisa ka peatamisrida.
+Kui koopia või Finder ebaõnnestub, näitab uuendaja täpset olemasolevat raportit
+või ütleb, et faili ei tekkinud. Vanad päevikud säilivad.
 
-Kohalik kooste, sihitud kliendi/SQL kontrollid ning English/Eesti desktop/mobile
-brauserikäigud on tehtud. Uus halduse SQL, Maci paigaldus, commit/push ja Verceli
-väljalase ei ole selle ettevalmistusega tegelikult tehtud. Varasem kuulutuse
-rubriigiseoste salvestus ja eemaldamisel kuulutuse säilimine on kasutaja poolt
-juba vastu võetud; see eristub rubriigikirjete endi haldusest.
+## Tõendipiir ja järgmine kontroll
 
-Täpsed kontrollid: `STORE_CATEGORY_MANAGEMENT_20261110.md` ja paki `kontrollid/`.
-Pärast tegelikku tulemust uuendatakse seisukirjet, genereeritud üleandmist ja
-arenduspäevikut uue deltana; väljastatud ZIP-i varjatult ei muudeta.
+See pakk on ette valmistatud ja kohalikult kontrollitud; uus tegelik Maci,
+commit/push'i, andmebaasi ja portaali seis tuleb uuendaja raportist.
+Avaliku märgi vaatlus ei ole Verceli Ready/API/deployment-ID kviitung.
+Pärast lõpetatud uuendust värskenda portaali, et avatud vaheleht kasutaks uut koodi.
+Seejärel kontrollitakse vajaduse korral ainult muudetud vana vormi salvestusteed.
+Varasemat halduse kasutuskatset ega selle Verceli kuvatõmmist ei küsita uuesti.
+
+Täpsed kohalikud kontrollid ja piirid:
+`docs/continuity/STORE_CATEGORY_AUTHORITY_20261110.md`.

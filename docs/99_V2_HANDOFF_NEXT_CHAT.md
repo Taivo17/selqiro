@@ -5,45 +5,48 @@ Seisukirje: 2026-11-10 Europe/Tallinn
 
 ## Praegune checkpoint
 
-10.11.2026 poerubriikide seostamise kasutuskatse on vastu võetud. Kasutaja heakskiidetud oma rubriikide haldus praeguses Minu alas on uues kandidaadis valmis ja kohalikult kontrollitud. Uus pakk on selqiro-poerubriikide-haldus-20261110.zip. Macis rakendamine, uus SQL-võimekus, commit/push, Verceli Ready/Production ja halduse tegelik kasutuskatse on veel kinnitamata.
+10.11.2026 poe rubriikide haldus on kasutaja poolt vastu võetud. Järgmine lubatud töö on ette valmistada vana rubriigiseoste otsekirjutustee sulgemine. Kahe vana vormi salvestus kasutab nüüd olemasolevat atomaarset, sama identiteeti kontrollivat toimingut. Uus lähtekood ja õigusteparandus on eraldi ettevalmistatud tarne; Maci rakendamine, selle commit/push, avalik kliendiversioon ja päris SQL-i tulemus on veel kinnitamata.
 
 ## Lähtekood ja tõendi piir
 
-- **Uus ettevalmistatud ulatus:** Minu ala Poe rubriigid: ülemrubriigi ja otsese alamrubriigi loomine, ümbernimetamine ning eraldi kinnitusega lasteta rubriigi eemaldamine. Eemaldatakse ainult rubriik ja selle seosed; kuulutus, pildid ja kirjeldus säilivad. English/Eesti. Kuulutuse rubriigivalijast viib haldusesse eraldi vahekaardi link.
-- **Õiguste ja vastuse leping:** Väikesed andme-, hooki- ja UI moodulid seovad toimingu kinnitatud kasutaja ja aktiivse identiteediga. Uus manage_my_store_category_v1 RPC kontrollib sama konteksti, õigusi ning algset nime/parenti. Katkenud või ebakindla vastuse korral säilib sisestus; automaatset uut kirjutust ei tehta, kasutaja kontrollib seisu lugemisega.
-- **Kontrollitud baas:** Eelmise muutmatu selqiro-poerubriigid-20261110.zip SHA256 64177a91d06febe4a7c70ac3f0655cb0b81b88faf665668476bc585cbce0ab37; manifest b2ed5fa79144982b60f51ab3cc65c08fe5c2b484645f9f36c0da3543d82209d2. 1398-failine lähtepuu b7fca157abd46d1b169664aaabe417920cc055b4 taastati kõigi räside ja režiimide kontrolliga. Need ei ole oletatud Maci commit.
-- **Katkestus ja dokumentide delta:** Katkestuse järel puudunud avaldamata haldus taastati eraldi kandidaadis ja sai uued kontrollid. Kadunud etapi testitulemusi ei kasutata nende baitide tõendina. Kuus varasema vastuvõtu dokumendimuudatust on uue tarne sees. Vanu pakke, lähtekoopiaid ja päevikuid ei muudeta.
-- **Tarne ja üleandmine:** Uus uuendaja kontrollib tegelikku haru, HEAD-i, kogu indexit/tööpuud, lähtefaile, kinnitatud remote’i ja eelmise täpse eduraporti ahelat. Seitse SQL-eelkontrolli kaitsevad uue võimekuse paigaldust. Paketi manifest, kontrollid ja SQL koopiad seovad tarne täpsete failidega. CURRENT_STATE on autoriteetne; 99_V2_HANDOFF_NEXT_CHAT genereeritakse sellest.
-- **Raporti kasutusreegel:** Edul või peatumisel loob uuendaja võimalusel privaatse unikaalse Downloads-raporti, näitab SAADA SEE FAIL täpset teed ja valib sama faili Finderis. Puuduv või võimalik vananenud raport märgitakse ausalt. Juhuslikku uusimat faili ei valita.
+- **Tegelik kinnitatud alus:** Viimane kasutaja raport: main/0b2594ad27e8320ab7e71206c8c5cb20edcb5d8a, Manage own shop categories in My Area; vanem 71eea82ad83b30b9ddc03641f8f2864b67a85877. Jooks lõppes 10.11 kell 15:17:33 Europe/Tallinn: database verified, build passed, push verified. See pole uus live-Giti vaatlus.
+- **Aluse sidumine:** 1436-failine aluspuu 4e8226df26a69aa966a9d809c19fb4df771d034f; eelmise väljalaske manifest 734870e7c68b3e5961077295753d175bcaec566f538e88113e8aeab048d87c28. Täpse privaatse eduraporti SHA256 1e181c9533d3caa18b165f3541127241793d764e5f2adc2fd47161cd2f56abc7. Uuendaja ei otsi suvalist viimast raportit.
+- **Uus ettevalmistatud tarne:** selqiro-poerubriikide-oigused-20261110.zip; commit’i kavandatud pealkiri Close direct store category link writes. Täpne failide ja abiskriptide ulatus ning räsid on selle paki manifest.json-is; uut tegelikku commit’i siin ei oletata.
+- **Kliendi muudatus:** app/sell/page.tsx ja app/my-page/page.tsx kasutavad sama set_my_listing_store_categories_v2 toimingut. Osalise või teadmata tulemuse järel avatakse olemasoleva kuulutuse eraldi rubriigivaade /v2/my-area/listings/[id]/store-categories, mis ei nõua uue avaldamistee kviitungit. Vaade loeb tegeliku salvestatud valiku enne uut käsitsi salvestust.
+- **SQL-i ulatus:** Uus supabase/repairs/20261110_store_category_authority eemaldab anon/authenticated/PUBLIC otsesed mitte-SELECT õigused listing_store_categories tabelilt ja vana FOR ALL poliitika. Olemasolev SELECT, kontrollitud RPC-d, tabelid ja andmeread jäävad alles. Ümbritsev kataloog, rollide tegelikud õigused ja täpsed enne/pärast seisud on kontrollitud.
+- **Dokumentide järjepidevus:** Uude tarneallikasse on kaasa võetud 12 varem eraldi salvestatud vastuvõtudokumendi muudatust. CURRENT_STATE on üks praegune kirje ja 99_V2_HANDOFF_NEXT_CHAT genereeritakse sellest. Vana väljastatud ZIP, selle lähtekoopia ning päevikud on muutumatud.
+- **Raporti kasutusreegel:** Uuendaja näitab SAADA SEE FAIL täpset unikaalse Downloads-raporti teed ja valib sama faili Finderis. Koopia tõrkel näitab olemasolevat privaatraportit või teatab ausalt faili puudumisest. Vanu raporteid ei kirjutata üle.
 
 ## Tegelik kohalik katse
 
-- Värske halduse SQL: guardgen, paigaldus, täpne kordus ja verify PASS; runtime 17/17 ning installi/drifti/rollback’i juhud 18/18 PASS. PGlite/WASM, sünteetilised kasutajad ja andmed. Kuulutuse/piltide säilimine kontrollitud; mitme päris seansi lukustusgraafikut ega live PostgREST-i see ei tõenda.
-- Parser/API/ReactDOM/hook 15/15 PASS; muudetud 13 runtime-faili lint PASS. Fikseeritud actor/token, sisendi säilimine, ebakindla tulemuse lugemiskontroll ja konteksti vahetus on sihitud ulatus.
-- Värske Next.js tootmiskooste PASS 28,661 s, Node v24.22.1, 610 muutumatut runtime-sisendit. Olemasolevad sõltuvused ja sünteetiline konfiguratsioon; package/lock ei muutunud. Maci ega Verceli buildi see ei tõenda.
-- Chromiumi 4/4 käiku PASS: English 1365 px, Eesti 390 px, loomine/muutmine/kinnitusega eemaldamine, filtrite värskendus, fookuse kontrolli ajal sisestuse säilimine, kadunud vastus ja käsitsi readback, kadunud siht ning identiteedivahetus. 44 laaditud runtime-faili klapivad buildiga. Auth/PostgREST ja kõrvalmoodulid on fixture’id. Mõlemad kuvatõmmised vaadati üle; pilte tarnepakki ei lisata.
-- Uuendaja eelmise raporti 18/18 ning SQL-adapteri 13/13 sihitud kontrolli PASS. Päeviku/Giti/Finderi/SQL-vastuse piirid on sünteetilised. Lõplik täpse manifesti ajutise Git/indexi/backup/commit/local-remote’i katse ja selle piirid on paki kontrollid/final-delivery-result.json-is; päris Next buildi ja SQL-i tõendid on eraldi.
-- Varasema vastu võetud kuulutuse-rubriigiseose ja teenuse Tagasi kasutuskatseid ei korratud. Varem väljastatud paki ning vastuvõtudokumentide arhiivid säilivad muutumatuna.
+- SQL-i sihitud PGlite/PostgreSQL-WASM katsed: runtime 18/18 ning paigalduse/erinevuste kontroll 31/31 PASS. Need kasutavad sünteetilisi kasutajaid ja andmeid; päris Supabase’i ei muudetud. Esimene ebaõnnestunud fixture’i jooks säilib koos täpse põhjusega.
+- Lõpliku kliendi katsed: vana adapteri ja tegelike salvestusfunktsioonide 19/19 ning tegeliku eraldi taastesihtkoha/identiteedi/rubriigimoodulite 10/10 PASS. Build'i järel Chromium 153 käigud 7/7 + 9/9 PASS, English/Eesti; 1280/390 px taastetee ekraanivaated on loetavad. Auth/PostgREST, muu kest ja navigeerimise piirid on sünteetilised.
+- Värske lõplik Next webpack build PASS: 79.449 s, 616 muutumatut sisendit; inventari SHA256 8be5072e3cde54cc9f98cc395552008d431e8f9627acd53478c34c2984fe6b51. Olemasolevad lukustatud sõltuvused säilisid. Esimene tüübituvastuse build'i viga ja enne taastetee parandust läbinud revisjon on eraldi säilitatud.
+- Uuendaja sihitud katsed: aluse raport 9/9, SQL-adapter 13/13, avaliku märgi transport/ajalimiit 9/9 ja source-first katkestused/jätk 10/10 PASS. Lõpliku manifesti ajutise Giti/indexi/varukoopiate/commit'i/kohaliku remote'i tarnekäigu tõend on paki kontrollid/final-flow.json-is. Need pole päris Maci või teenuse toimingud.
+- Vana nõrga poliitika tingimuslik reproduktsioon vajab katsekeskkonnas ajaloolist avaliku kuulutuse SELECT-poliitikat. See ei tõenda sama vea praegust tootmises kasutatavust. Paranduse kontrollid kasutavad pärast seda taastatud täpset kataloogialust.
+- Varasem poe rubriikide loomise, nimevahetuse, seostamise, profiilifiltri ning eemaldamise kasutajavastuvõtt säilib. Neid paigaldusi ega laiu kontrolle uue tõendita ei korrata.
 
 ## Production / kasutajaliides
 
-- 10.11 kasutaja võttis vastu olemasolevate oma rubriikide valiku salvestamise tavakuulutusele, tulemuse nähtavuse avaliku profiili rubriigis ning kuulutuse säilimise seoste eemaldamisel. Piltidel jäävad rubriikide definitsioonid alles; seda ei loeta rubriigikirjete CRUD-halduse vastuvõtuks.
-- Varem on kasutaja vastu võtnud teenuse pildid ja uusima teenuse järjestuse ning brauseri Tagasi õige koha nii profiilil kui teenuste loetelus. Kuvatõmmis näitab main / 429ace2 / Restore service list on browser back / Ready / Production ning 26e468e Ready / Production.
-- Poerubriikide seostamise täpset uut Maci commit’i ega deployment-ID-d pole kasutaja kinnitusega esitatud. Uue halduse ettevalmistamisel pole Maci, GitHubi, päris andmebaasi, Storage’i ega Verceli kirjutust tehtud. Neid tõendab alles uus tegelik raport ja sama commit’i deployment.
+- Poe rubriikide halduse etapp 0b2594a on päris Maci raporti ja kasutaja käigu järgi lõpetatud; ülem- ja alamrubriigi eemaldamisel jäi testkuulutus alles. Täpsem raporti ja piltide piir on STORE_CATEGORY_MANAGEMENT_20261110.md-s.
+- Uue õigusteparanduse lähtekoodi, SQL-i ega uut commit/push’i pole käesolevas keskkonnas Macis või pilves rakendatud. Uuendaja teeb kõigepealt read-only eelkontrolli, seejärel kliendi build/commit/push’i, kontrollib avalikku kliendimärki ja alles siis rakendab õigusteparanduse.
+- Avaliku kliendimärgi GET kontrollib täpseid baite samal olemasoleval https://selqiro.vercel.app päritolul. See ei ole Verceli Ready/API/deployment-ID kviitung. Raportis jääb Verceli READY_NOT_CHECKED eraldi välja.
+- Kui kliendimärk kuni 55 sekundi jooksul ei ilmu, salvestub WAITING_FOR_CLIENT_DEPLOYMENT. Sama käsk jätkab kontrollitud commit/push’i juurest lõpetatud build’i, commit’i ja push’i kordamata. Enne SQL-i kontrollitakse allikat, remote’i ja kliendimärki uuesti.
+- Juba avatud brauserivahelehed võivad hoida vana JavaScripti. Pärast lõpetatud uuendust värskenda portaali; avaliku märgi vaatlus ei tõenda kõigi avatud vahelehtede asendamist. Vastu võetud varasemate etappide Verceli kuvatõmmiseid uuesti ei küsita.
 
 ## Üks järgmine töö
 
-Kasuta docs/continuity/HOSTED_PORTAL.md üht uut selqiro-poerubriikide-haldus-20261110 käsku. Seejärel oota raportis näidatud commit’i Verceli Ready/Production tulemust ja tee üks Minu ala rubriikide loomise, ümbernimetamise ning kinnitatud eemaldamise kasutuskäik. Säilita kuulutus ja pildid; vanu paigaldajaid ei korrata.
+Paki uus selqiro-poerubriikide-oigused-20261110 kaust Downloads-kausta ja kasuta HOSTED_PORTAL.md üht käsku: python3 -I -B "$HOME/Downloads/selqiro-poerubriikide-oigused-20261110/uuenda.py" --publish. Kui ilmub OOTEL: WAITING_FOR_CLIENT_DEPLOYMENT, jätka sama käsuga pärast veebiversiooni valmimist. Lõpetamisel või PEATATUD korral saada SAADA SEE FAIL real näidatud täpne JSON; selle põhjal uuendatakse tegelik seis.
 
-**Peatumisel:** PEATATUD korral säilita teade, raport, kasutaja muudatused ja kõik päevikud. Räsikaitset, remote’i ega õiguskontrolli ei nõrgendata erinevuse möödumiseks. Ebakindlat SQL-i, commit’i ega push’i ei korrata automaatselt. Uue konkreetse tõendita ei korrata vanu paigaldusi, diagnostikat ega vastuvõetud kasutuskatseid.
+**Peatumisel:** PEATATUD korral säilita teade, raport, kasutaja muudatused ja kõik päevikud. Tundmatut õiguste- või lähteerinevust ei parandata kaitsete nõrgendamisega. SQL-i saadetakse kõige rohkem üks rakenduskatse; ebaselge tulemus lahendatakse lugemisega, mitte automaatse korduskirjutusega. Automaatne jätk on lubatud ainult uuendaja täpselt kontrollitud seisust; muud peatust ei käsitleta veebiversiooni ootena.
 
 ## Loe ainult vajalikku
 
-- docs/continuity/HOSTED_PORTAL.md — üks uus käsk ja tegeliku kasutuskatse piir.
-- docs/continuity/STORE_CATEGORY_MANAGEMENT_20261110.md — värsked kontrollid, taastamine ja tarne.
-- docs/architecture/store-category-management-v1.md — halduse leping ja alles jäävad piirid.
-- docs/continuity/STORE_CATEGORIES_20261110.md — eelmise seostamissammu kasutajavastuvõtt.
-- docs/continuity/SERVICE_ACCESS.json — olemasolevad sihid ja CLI pin; vanad vaatlused ei ole praegune Maci/Giti seis.
+- docs/continuity/HOSTED_PORTAL.md — üks uus käsk, ooteseisu jätk ja täpne raport.
+- docs/continuity/STORE_CATEGORY_AUTHORITY_20261110.md — praegune ulatus, kontrolltõendid ja paigalduse piir.
+- docs/architecture/store-category-link-authority-v1.md — vana kirjutustee sulgemine, osaline tulemus ja allikas-enne-SQL järjekord.
+- docs/continuity/STORE_CATEGORY_MANAGEMENT_20261110.md — lõpetatud eelmise etapi tegelik vastuvõtt.
+- docs/continuity/SERVICE_ACCESS.json — samad teenusesihid; vanad vaatlused pole värske Maci/Giti seis.
 
 ## Säilivad piirid
 
@@ -55,13 +58,13 @@ Kasuta docs/continuity/HOSTED_PORTAL.md üht uut selqiro-poerubriikide-haldus-20
 - Teenuste Quick Update, live-asukoht/saadavus, töötajad ja autopark on eraldi edasine töö; töökuulutused hiljem. Nende olemasolu ei väideta selle tarnega.
 - Profiili ühine loend ei liida teenuseid toodete hulka. Poerubriigi valimisel kuvatakse olemasoleva skeemi järgi ainult seostatud tavakuulutusi; hobustele ega teenustele seoseid ei oletata.
 - Energy, maksete tuum ja piiratud AI abi jäävad kokkulepitud V2 käivitamise ulatusse pärast käsilolevat kuulutuste/teenuste etappi. Tavaline osalemine ei sõltu Energy ostmisest.
-- Haldus ja kuulutuse rubriigiseoste salvestamine on eraldi toimingud. Vana listing_store_categories otsetabeli RLS-kirjutustee kontrollib listing.user_id-d, mitte category.identity_id-d; selle tugevdamine jääb eraldi avaliku avamise tööks. Uus halduse RPC seda vana kirjutusteed ei kasuta ega laienda.
+- Haldus ja kuulutuse rubriigiseoste salvestamine jäävad eraldi toiminguteks. Ettevalmistatud parandus sulgeb brauseri otsemuudatused ainult seostetabelile. See ei kehtesta universaalset invarianti hilisema listings.identity_id või store_categories.identity_id muutmise ega privilegeeritud kirjutajate suhtes. NULL-identiteediga vana kuulutust ei seota vaikimisi kasutaja ID kaudu ega parandata automaatselt.
 
 ## Keskkond
 
 - Hoidla https://github.com/Taivo17/selqiro.git; portaal https://selqiro.vercel.app; kinnitatud Maci siht /Users/taivo/selqiro. Uut hoidlat, portaali, Supabase’i projekti ega kontosüsteemi ei looda.
-- Olemasolev Supabase vyjletlmwoiwxsnsunlm ja paigalduse UUID 2d088814-0900-448a-a9d1-7b05470cb1d2 säilivad. Uus uuendaja kasutab olemasolevat kuupäevaga kinnitatud CLI-transporti; lisab ainult täpselt kontrollitud halduse RPC-võimekuse. Käsitsi SQL-i ega varasemate installide kordamist pole vaja.
-- Sõltuvuste package/lock ja Node/Sharp fra1 seadistus säilivad. Selle paki Maci paigaldus/build/commit/push ja Verceli deployment on käesoleva kirje järgi ootel. Räsikaitsega väljastatud pakki ei täiendata tagantjärele; uus kasutajavastuvõtt kantakse järgmisse dokumentide deltasse.
+- Olemasolev Supabase vyjletlmwoiwxsnsunlm ja paigalduse UUID 2d088814-0900-448a-a9d1-7b05470cb1d2 säilivad. Uue halduse võimekus on kasutaja raporti järgi paigaldatud ja kontrollitud. Sama SQL-i ega varasemaid paigaldajaid ei käivitata uuesti.
+- Viimane raportiga kinnitatud Maci lõppseis: 10.11.2026 kell 15:17:33 Europe/Tallinn, main/0b2594ad27e8320ab7e71206c8c5cb20edcb5d8a ja push verified. Uus kandidaat on eraldi kohalik ettevalmistus; Maci/GitHubi/Supabase’i/Verceli värsket seisu ei ole sellest tuletatud. Package/lock ja varem väljastatud pakid jäävad muutmata.
 
 ## Ajalugu (mitte praegused käsud)
 

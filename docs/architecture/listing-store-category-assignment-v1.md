@@ -1,5 +1,17 @@
 # Listing store-category assignment v1
 
+## 2026-11-10 prepared direct-write closure
+
+The separately prepared authority release converts both legacy page writers
+to the existing atomic assignment RPC, removes direct browser non-SELECT
+authority on the join table and retains public reads. Its receipt-independent
+category review route supports an identity-owned legacy listing even when the
+integrated publication receipt does not exist. This is prepared source; the
+actual database closure and rollout remain pending in CURRENT_STATE.
+See `store-category-link-authority-v1.md` and
+`../continuity/STORE_CATEGORY_AUTHORITY_20261110.md`. Earlier text about the
+broader retained policy describes the accepted pre-repair database state.
+
 Prepared: 2026-11-10. This describes the source change; Mac installation,
 commit/push, deployment and user acceptance are recorded separately in
 `docs/continuity/CURRENT_STATE.json`.
@@ -89,9 +101,11 @@ or harden the retained direct `listing_store_categories` policy described above.
 See `docs/architecture/store-category-management-v1.md` and
 `docs/continuity/STORE_CATEGORY_MANAGEMENT_20261110.md`.
 
-This management source is PREPARED. Its Mac installation, live SQL application,
-commit/push, Vercel deployment and user acceptance remain separate from the
-already accepted listing-category assignment journey.
+The management Mac report now records database verification, build and pushed
+commit `0b2594ad27e8320ab7e71206c8c5cb20edcb5d8a`. On 2026-11-10 the user accepted
+root/child creation, both renames, assignment/profile discovery and retained
+listing after category removal. This supplements the earlier assignment-only
+acceptance. Exact Vercel deployment identity was not supplied; see CURRENT_STATE.
 
 ## Evidence
 
