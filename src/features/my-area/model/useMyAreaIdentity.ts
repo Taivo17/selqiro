@@ -5,12 +5,14 @@ import { uiMessage } from "../../../../lib/i18n/interfaceMessage";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { getActiveIdentity } from "../../../entities/identity/api/getActiveIdentity";
 import type { IdentitySummary } from "../../../entities/identity/model/types";
+import type { PublicationActor } from "../../../entities/listing/model/publicationJourney";
 import { getListingActivityActor } from "../../../entities/listing/api/getListingActivityActor";
 import { supabaseBrowserClient } from "../../../shared/supabase/browserClient";
 import { ACTIVE_IDENTITY_CHANGED_EVENT } from "../../v2-shell/model/useV2IdentitySwitcher";
 
 type MyAreaIdentityState = {
   identity: IdentitySummary | null;
+  actor: PublicationActor | null;
   loading: boolean;
   anonymous: boolean;
   error: string | null;
@@ -22,14 +24,14 @@ export function useMyAreaIdentity() {
   const live = useRef(false);
   const scheduled = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const [state, setState] = useState<MyAreaIdentityState>({
-    identity: null, loading: true, anonymous: false, error: null,
+    identity: null, actor: null, loading: true, anonymous: false, error: null,
   });
 
   const invalidate = useCallback(() => {
     generation.current += 1;
     clearTimeout(scheduled.current);
     if (live.current) {
-      setState({ identity: null, loading: true, anonymous: false, error: null });
+      setState({ identity: null, actor: null, loading: true, anonymous: false, error: null });
     }
     return generation.current;
   }, []);
@@ -43,7 +45,7 @@ export function useMyAreaIdentity() {
       if (error) throw error;
       const user = data.session?.user;
       if (!user) {
-        setState({ identity: null, loading: false, anonymous: true, error: null });
+        setState({ identity: null, actor: null, loading: false, anonymous: true, error: null });
         return;
       }
 
@@ -55,11 +57,11 @@ export function useMyAreaIdentity() {
       if (!identity || identity.id !== confirmed.identityId || user.id !== confirmed.userId) {
         throw new Error(uiMessage("the_active_account_or_identity_changed"));
       }
-      setState({ identity, loading: false, anonymous: false, error: null });
+      setState({ identity, actor: Object.freeze({ ...confirmed }), loading: false, anonymous: false, error: null });
     } catch {
       if (!current()) return;
       setState({
-        identity: null, loading: false, anonymous: false,
+        identity: null, actor: null, loading: false, anonymous: false,
         error: uiMessage("could_not_verify_the_active_identity_try_again"),
       });
     }
@@ -76,7 +78,7 @@ export function useMyAreaIdentity() {
       // Clear the old name/link synchronously; defer API reads beyond the Supabase auth lock.
       const version = invalidate();
       if (!next?.user) {
-        setState({ identity: null, loading: false, anonymous: true, error: null });
+        setState({ identity: null, actor: null, loading: false, anonymous: true, error: null });
         return;
       }
       scheduled.current = setTimeout(() => { void load(version); }, 0);

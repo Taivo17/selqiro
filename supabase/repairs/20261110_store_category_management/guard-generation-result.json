@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "kind": "store-category-management-guard-generation",
+  "result": "PASS",
+  "generated_at_utc": "2026-11-10T11:56:54.576Z",
+  "new_rpc": 1,
+  "source_inputs": 77,
+  "install_replay_verified": true,
+  "retained_invariants_unchanged": true,
+  "live_database": false,
+  "production_storage": false,
+  "mac_installer": false,
+  "files": {
+    "01_management.sql": "c6ae6e7496ec00c1ef2a87b1bd8da302bfdf19441806abd8f664b42bde52f447",
+    "changes.sql": "45218bb113e6caa8d918c6b71d306254b5e39a1c414dc0be71ab73ef7a761dd2",
+    "preflight.sql": "f108a621a892081818e084ed4625b2e686168aaf3b2d188afa30894d01a850d0",
+    "apply.sql": "d436b1a890ff6670d6c1a5385c17277b2a52bcf83efb5fda75e09a9966a3ab7b",
+    "verify.sql": "f108a621a892081818e084ed4625b2e686168aaf3b2d188afa30894d01a850d0",
+    "source-pins.json": "20fc6506308fc38d7699c5f3f96fee078bd78a8df2af2f387d7c55918755d9b8",
+    "catalog-pins.json": "1a7bd2fd2c251c73484f4bed5b604722c96f7cdd41488c8ed505af96a4a276bc"
+  }
+}

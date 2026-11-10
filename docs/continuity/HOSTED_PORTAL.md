@@ -1,64 +1,66 @@
-# Poe rubriigid — järgmine jätkusamm
+# Poe rubriikide haldus — järgmine kasutuselevõtt
 
-Seis: 10.11.2026 Europe/Tallinn. Üks autoriteetne seis on
-`docs/continuity/CURRENT_STATE.json`. See samm ühendab olemasolevad poe rubriigid
-tavakuulutuse praeguse muutmisvaatega.
+Seis: 10.11.2026 Europe/Tallinn. Autoriteetne seis on
+`docs/continuity/CURRENT_STATE.json`; loetav üleandmine genereeritakse sellest.
+
+## Valmis ettevalmistus
+
+Uus `selqiro-poerubriikide-haldus-20261110.zip` ühendab praeguse Minu alaga
+oma ülem- ja alamrubriikide loomise, ümbernimetamise ning lasteta rubriigi
+kinnitatud eemaldamise. Eemaldamine jätab kuulutused, pildid ja kirjeldused alles.
+Kasutajaliides on inglise ja eesti keeles. Kuulutuse rubriigivalija halduse link
+avaneb uuel vahekaardil, et pooleliolev kuulutuse muutmine säiliks.
 
 ## Üks käsk
 
-Paki `selqiro-poerubriigid-20261110.zip` Downloads-kausta lahti. Seejärel:
+Paki ZIP lahti Downloads-kaustas. Käivita Terminalis:
 
 ```bash
-python3 -I -B "$HOME/Downloads/selqiro-poerubriigid-20261110/uuenda.py" --publish
+python3 -I -B "$HOME/Downloads/selqiro-poerubriikide-haldus-20261110/uuenda.py" --publish
 ```
 
-Uuendaja kontrollib olemasoleva `~/selqiro` hoidla tegelikku main-haru, HEAD-i,
-kogu indexit, tööpuud, lähtefaile ja kinnitatud remote'i. Aluseks on lõpetatud
-teenuste tagasitee jooksu täpne privaatne raport ning sõltumatud Giti puu,
-parent'i ja diffi kontrollid. Kuvatõmmiselt kinnitatud `429ace2` ja `26e468e`
-ei laiendata oletatud täiscommit'ideks; täisväärtused loetakse ja kontrollitakse
-Macis. Esialgset paigaldajat või varasemat diagnostikat ei korrata.
+Uuendaja leiab eelmise rubriigiseostamise täpse lõpetatud raporti ning kontrollib
+tegelikku kinnitatud hoidlat `/Users/taivo/selqiro`, main-haru, HEAD-i, tervet
+indexit ja tööpuud, lähtefaile ning remote’i. Varasemaid paigaldajaid ei korrata.
+Seejärel kontrollib see olemasoleva andmebaasi eeldusi, lisab ainult uue halduse
+RPC, kontrollib tulemust, rakendab täpse lähtepaketi ning teeb build’i, commit’i
+ja push’i. Vana töö ja päevikud säilivad. Tuvastamata seisu korral töö peatub.
 
-Kontrollitud muudatustest tehakse privaatsed varukoopiad. Uuendaja rakendab
-ainult paki räsikaitsega lähtefailid, käivitab build'i ning teeb ühe commit'i
-ja tavalise push'i. Uue commit'i pealkiri on
-**Connect store categories to listing editor**. Täisräsi ilmub terminalis.
-SQL-i, Supabase CLI-d, Storage'i toiminguid ega sõltuvuste paigaldust ei tehta.
+## Pärast edu
 
-## Pärast terminali VALMIS-rida
+Oota Vercelis terminalis näidatud **sama commit’i** `Ready / Production` tulemust.
+Värskenda portaali ning ava **Minu ala → Poe rubriigid**.
 
-1. Oota Vercelis just terminalis näidatud uue commit'i **Ready / Production** tulemust.
-2. Värskenda portaali. Ava **Minu ala → Kuulutused → Muuda** ühe avalikult nähtava tavakuulutuse juures.
-3. Jaotises **Poe rubriigid** vali selle aktiivse identiteedi olemasolev rubriik
-   või alamrubriik ja vajuta **Salvesta rubriigid**.
-4. Ava oma avalik profiil, vali sama rubriik ja kontrolli kuulutuse nähtavust.
-   Ülemrubriigi tulemused hõlmavad ka alamrubriikidesse seotud kuulutusi.
-5. Muuda valikut või tühjenda ja salvesta. Tühjendamisel kaob rubriigiseos;
-   kuulutus jääb Kõik-vaatesse ning selle tekst, hind ja fotod säilivad.
+Üks lühike kasutuskäik:
 
-Rubriikide salvestus on eraldi tegevus. Selles sammus saab valida olemasolevaid
-rubriike. Integreeritud Minu alas loomise, ümbernimetamise ja kustutamise
-halduse avamine vajab eraldi identiteediga seotud lepingut; tühja rubriigiloendit
-näidatakse ausalt. Hobuste ja teenuste rubriigiseosed vajavad oma andmemudelit.
+1. Loo ajutine ülemrubriik ja selle alla alamrubriik; nimeta alamrubriik ümber.
+2. Seo üks olemasolev tavakuulutus selle alamrubriigiga senises rubriigivalijas
+   ning vaata tulemust avaliku profiili rubriigifiltris.
+3. Eemalda ainult see ajutine alamrubriik halduse eraldi kinnitusega.
+   Kontrolli, et kuulutus, kirjeldus ja pildid on endiselt alles ning kuulutus
+   on profiili **Kõik kuulutused** vaates nähtav.
+4. Eemalda soovi korral nüüd tühjaks jäänud ajutine ülemrubriik.
 
-## Peatumise korral
+Alamrubriikidega ülemrubriiki korraga eemaldada ei saa. Uue halduse katseks
+pole vaja varasemaid teenuste, galeriide või navigeerimise katseid korrata.
 
-Säilita **PEATATUD**-rida ja lisa vestlusse fail, mille täpne tee on real
-**SAADA SEE FAIL:**. Uuendaja loob võimalusel Downloads-kausta privaatse,
-unikaalse JSON-koopia ja valib sama faili Finderis. Koopia või Finderi vea
-korral näidatakse kontrollitud originaali asukoht või täpne juhis.
-Puuduvast või võimalikust vananenud raportist antakse eraldi teada.
-Varasemaid päevikuid, faile ega pakke ei kustutata ega muudeta.
+## Kui terminal peatub
 
-## Säiliv vastuvõtt ja tõendi piir
+Saada **PEATATUD-rida** ja fail, mille täpne asukoht on real **SAADA SEE FAIL:**.
+Uuendaja teeb võimalusel privaatsest päevikust unikaalse koopia Downloads-kausta
+ning valib sama faili Finderis. Koopia või Finderi tõrke korral näidatakse
+kontrollitud originaali/asukohta või öeldakse selgelt, et raportit pole.
+Vanu raporteid ja päevikuid ei kustutata. Ebakindlat SQL-i ega kirjutust ei
+korrata automaatselt ja kaitseid ei nõrgendata peatumisest möödumiseks.
 
-Teenuste tagasitee on kasutaja poolt vastu võetud nii profiililt kui avalikust
-teenuseloendist. 09.11 kuvatõmmis näitab `429ace2` Ready / Production ja
-varasemat foto/profiiliparandust `26e468e` Ready / Production. Seda vastuvõttu
-pole vaja selle sammu jaoks uuesti korrata.
+## Tõendi piir
 
-Uus rubriikide lähtepakett, Macis rakendatud töö, commit/push, Verceli Ready
-ning tegelik rubriigi kasutus on eraldi tõendid. Lähtekood ja kohalik kontroll
-on ettevalmistus; uut Maci/GitHubi/deployment'i tulemust pole veel nähtud.
-Kohaliku kontrolli täpne ulatus on `STORE_CATEGORIES_20261110.md`-s ja
-väljastatud paki `kontrollid` kaustas.
+Kohalik kooste, sihitud kliendi/SQL kontrollid ning English/Eesti desktop/mobile
+brauserikäigud on tehtud. Uus halduse SQL, Maci paigaldus, commit/push ja Verceli
+väljalase ei ole selle ettevalmistusega tegelikult tehtud. Varasem kuulutuse
+rubriigiseoste salvestus ja eemaldamisel kuulutuse säilimine on kasutaja poolt
+juba vastu võetud; see eristub rubriigikirjete endi haldusest.
+
+Täpsed kontrollid: `STORE_CATEGORY_MANAGEMENT_20261110.md` ja paki `kontrollid/`.
+Pärast tegelikku tulemust uuendatakse seisukirjet, genereeritud üleandmist ja
+arenduspäevikut uue deltana; väljastatud ZIP-i varjatult ei muudeta.

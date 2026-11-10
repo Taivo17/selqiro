@@ -1,3 +1,27 @@
+<!-- SELQIRO_STORE_CATEGORY_MANAGEMENT_PREPARED_20261110 -->
+## 10.11.2026 — PREPARED: enda poe rubriikide haldus
+
+Praeguse Minu ala uus ettevalmistatud osa lubab lisada poe ülemrubriike ja nende
+alamrubriike, muuta nime ning kinnitusega eemaldada ühe lasteta rubriigi.
+Rubriigi eemaldamisel jäävad kuulutused, pildid ja kirjeldused alles. Haldus on
+inglise ja eesti keeles. Kuulutuse muutmisvaatest avaneb haldus uues vahelehes,
+et salvestamata kuulutuse sisestus säiliks.
+
+Salvestus seotakse kontrollitud kasutaja ja aktiivse identiteediga; õiguse
+otsustab andmebaas. Ebakindla tulemuse korral jääb sisestus alles ja enne järgmist
+kirjutust tuleb salvestatud seis käsitsi üle kontrollida. Vana seostetabeli
+otsekirjutuse RLS-i parandust ega fotode automaatse koristuse lõpetamist sellest
+ei järeldata.
+
+Kohaliku lähtekoodi kontrollid ja päris kasutuse piir on kirjas
+`docs/continuity/STORE_CATEGORY_MANAGEMENT_20261110.md`; arhitektuur on
+`docs/architecture/store-category-management-v1.md`. Selle uue etapi Maci
+rakendamist, päris SQL-i, commit/push'i ega Verceli tulemust pole veel kinnitatud.
+Varasem rubriigivalikute salvestamise ja profiilifiltri kasutajavastuvõtt säilib.
+Üks praegune tööjärg on CURRENT_STATE.json-is; allpool olevad vanad käsud on ajalugu.
+
+---
+
 <!-- SELQIRO_SERVICE_PREFLIGHT_R2_20261108 -->
 ## 08.11.2026 — Teenuste paigalduspaketi r2 parandus
 

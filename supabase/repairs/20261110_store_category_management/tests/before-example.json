@@ -1,0 +1,36 @@
+{
+  "kind": "store-category-management-v1",
+  "state": "absent",
+  "guards": {
+    "installer": true,
+    "actor_roles": true,
+    "retained_release": true,
+    "category_functions": true,
+    "category_relations": true,
+    "hosted_context_ready": true,
+    "category_delete_effects": true
+  },
+  "invariants": {
+    "existing_authority": "daf97f9e83cb4e6a3b8c143302da0dee457016f23707ae795980c3a4c345d52b",
+    "existing_functions": "96d58cf0cb0f06cf91caa6eb39f724000d4396a28453a4f4b976a3898847494d",
+    "immutable_structure": "9c32d9e03522a81843146ed2b5fe562e9f3f7982606000ce558ad22b0b803093"
+  },
+  "recognized": true,
+  "fingerprints": {
+    "capability": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "dependencies": "b3067f8ff6918e4e8499e2efef8296fa04e709056f80cf69ab537f128993a705"
+  },
+  "hosted_context": {
+    "release_id": "listing-publication-hosted-preview-v1",
+    "instance_id": "2d088814-0900-448a-a9d1-7b05470cb1d2",
+    "project_ref": "vyjletlmwoiwxsnsunlm",
+    "cleanup_mode": "held",
+    "release_ready": true,
+    "storage_authority_version": "source-part-rfc3986-v1"
+  },
+  "ready_to_apply": true,
+  "schema_version": 1,
+  "dependencies_ok": true,
+  "capability_absent": true,
+  "capability_present": false
+}

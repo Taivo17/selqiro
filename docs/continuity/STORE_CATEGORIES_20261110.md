@@ -1,3 +1,27 @@
+<!-- SELQIRO_STORE_CATEGORY_ASSIGNMENT_ACCEPTED_20261110 -->
+## 10.11.2026 — poerubriikide seostamine kasutaja poolt vastu võetud
+
+Kasutaja kinnitas olemasolevate oma rubriikide valiku salvestamist ja tulemuse
+nähtavust avaliku profiili rubriigifiltris. Valikute eemaldamise järel jäi
+kuulutus alles. Viis kuvatõmmist toetavad selle kasutustee vastuvõttu.
+Kustutamise kinnitus puudutab siin kuulutuse rubriigiseoseid; rubriigikirjete
+endi kustutamist ega kogu rubriigihaldust sellest ei järeldata.
+
+Selle teatega ei lisandunud uue commit'i räsi, terminali eduraportit ega Verceli
+Ready/deployment'i identiteeti. Kasutaja nähtav vastuvõtt on kinnitatud.
+Väljastatud pakki, selle kontrolltõendeid ja külmutatud lähtekoopiat ei muudeta.
+Build'i, paigaldust, pilvetoiminguid ega vastu võetud katset ei korratud.
+
+Uuendatud seisukiri ja sellest genereeritud üleandmine on eraldi dokumentide
+koopia. Maci/GitHubi neid selle salvestusega ei rakendatud; delta tuleb kaasa
+võtta järgmise sisulise tarnega. Olemasolevate rubriikide loomise, ümbernimetamise
+ja eemaldamise haldus ning vana otsetabeli kirjutusõiguse piir jäävad eraldi
+arenduseks. Järgmine soovitatud haldussamm pole käesolevaga alanud.
+
+Allpool olevad varasemad ettevalmistuse märked ja käsud on ajalugu.
+Praegune seis ja üks järgmine suund on CURRENT_STATE.json-is; vana paigaldaja
+korduskäivitamist ei nõuta. Vastuvõtu täpne tõendipiir on eraldi ACCEPTANCE.json-is.
+
 # Poerubriikide sidumine tavakuulutuse muutmisega — 10.11.2026
 
 Üks praegune seis on `CURRENT_STATE.json`; sellest genereeritakse üleandmine.

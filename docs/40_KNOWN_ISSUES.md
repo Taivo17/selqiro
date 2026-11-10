@@ -1,3 +1,52 @@
+<!-- SELQIRO_STORE_CATEGORY_MANAGEMENT_PREPARED_20261110 -->
+## 10.11.2026 — PREPARED: uus rubriigihaldus; tegelik rakendamine ootel
+
+Integreeritud Minu ala uues lähtekoodis on eraldi aktoriga seotud haldus:
+ülemrubriigi ja otsese alamrubriigi loomine, nime muutmine ning ühe lasteta
+rubriigi kinnitatud eemaldamine. Inglise/eesti kasutajaliides ja kuulutuse
+muutmisvaate uus-vaheleht-viide on ette valmistatud. Eemaldatakse ainult valitud
+rubriik ja selle seosed; kuulutused, fotod ja sisu säilivad. Kinnitatud aktor,
+serveri õiguskontroll, algse nime/parent'i võrdlus ja teadmata tulemuse käsitsi
+lugemiskontroll kuuluvad uude lepingusse.
+
+Maci rakendamine, päris SQL-i lisamine, commit/push, Verceli deployment ning
+omaniku uue halduse kasutuskatse on veel eraldi kinnitada. Varasem rubriigivalikute
+salvestamise/profiilifiltri kasutajavastuvõtt jääb kehtima. Allolev peidetud
+halduse kirjeldus oli assignment-etapi ajalooline piir, mitte uue kandidaadi seis.
+
+`listing_store_categories` vana otsetabeli kirjutusõigus ei seo endiselt rubriigi
+identiteeti piisavalt; selle üldist parandust uus RPC ei väida. Fotode automaatne
+koristus, tehniliste paneelide eemaldamine ja muud avaliku avamise piirid säilivad.
+Vt `docs/architecture/store-category-management-v1.md` ja
+`docs/continuity/STORE_CATEGORY_MANAGEMENT_20261110.md`; praegune järgmine samm
+on `docs/continuity/CURRENT_STATE.json`-is.
+
+---
+
+<!-- SELQIRO_STORE_CATEGORY_ASSIGNMENT_ACCEPTED_20261110 -->
+## 10.11.2026 — poerubriikide seostamine kasutaja poolt vastu võetud
+
+Kasutaja kinnitas olemasolevate oma rubriikide valiku salvestamist ja tulemuse
+nähtavust avaliku profiili rubriigifiltris. Valikute eemaldamise järel jäi
+kuulutus alles. Viis kuvatõmmist toetavad selle kasutustee vastuvõttu.
+Kustutamise kinnitus puudutab siin kuulutuse rubriigiseoseid; rubriigikirjete
+endi kustutamist ega kogu rubriigihaldust sellest ei järeldata.
+
+Selle teatega ei lisandunud uue commit'i räsi, terminali eduraportit ega Verceli
+Ready/deployment'i identiteeti. Kasutaja nähtav vastuvõtt on kinnitatud.
+Väljastatud pakki, selle kontrolltõendeid ja külmutatud lähtekoopiat ei muudeta.
+Build'i, paigaldust, pilvetoiminguid ega vastu võetud katset ei korratud.
+
+Uuendatud seisukiri ja sellest genereeritud üleandmine on eraldi dokumentide
+koopia. Maci/GitHubi neid selle salvestusega ei rakendatud; delta tuleb kaasa
+võtta järgmise sisulise tarnega. Olemasolevate rubriikide loomise, ümbernimetamise
+ja eemaldamise haldus ning vana otsetabeli kirjutusõiguse piir jäävad eraldi
+arenduseks. Järgmine soovitatud haldussamm pole käesolevaga alanud.
+
+Allpool olevad varasemad ettevalmistuse märked ja käsud on ajalugu.
+Praegune seis ja üks järgmine suund on CURRENT_STATE.json-is; vana paigaldaja
+korduskäivitamist ei nõuta. Vastuvõtu täpne tõendipiir on eraldi ACCEPTANCE.json-is.
+
 <!-- SELQIRO_STORE_CATEGORY_ASSIGNMENT_PREPARED_20261110 -->
 ## 10.11.2026 — poerubriigi valik ette valmistatud; haldus on eraldi töö
 

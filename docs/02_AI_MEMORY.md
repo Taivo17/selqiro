@@ -1,3 +1,28 @@
+<!-- SELQIRO_STORE_CATEGORY_MANAGEMENT_PREPARED_20261110 -->
+## 10.11.2026 — PREPARED: poe rubriikide haldus praeguses Minu alas
+
+Uus halduskiht kasutab olemasolevaid identiteedipõhiseid `store_categories`
+rubriike. Need jäävad eraldi Selqiro üldisest kategooriapuust. Kasutajaliides
+loob ülemrubriigi või selle otsese alamrubriigi, muudab nime ja eemaldab kasutaja
+kinnitusel ühe lasteta rubriigi. Eemaldamisel kaovad ainult selle rubriigi seosed;
+kuulutused, fotod ja sisu säilivad. Olemasolevad sügavamad read jäävad nähtavaks.
+English on põhikeel/varukeel ning Eesti teine keel; Energy piirangut ei lisata.
+
+Kliendi püütud ja kinnitatud kasutaja/aktiivse identiteedi ulatust kontrollib
+server uuesti. Loomisel säilib sama UUID, muutmisel ja eemaldamisel kontrollitakse
+algset nime ning parent'i. Teadmata salvestustulemus säilitab sisestuse ja nõuab
+käsitsi lugemiskontrolli enne järgmist kirjutust. Vana otse kirjutatav
+`listing_store_categories` RLS-i piir jääb eraldi avaliku avamise tööks.
+
+See on ette valmistatud lähtekoodi seis, mitte Maci, päris SQL-i, commit/push'i,
+Verceli ega uue halduse kasutajavastuvõtu tõend. Varasem kuulutuse rubriigivaliku
+salvestamine ja avalik filter on kasutaja poolt eraldi vastu võetud.
+Leping: `docs/architecture/store-category-management-v1.md`; tõendipiir:
+`docs/continuity/STORE_CATEGORY_MANAGEMENT_20261110.md`. Praegune tööjärg on
+`docs/continuity/CURRENT_STATE.json`; allpool olevad käsud ja NEXT-kirjed on ajalugu.
+
+---
+
 <!-- SELQIRO_SERVICE_PREFLIGHT_R2_20261108 -->
 ## 08.11.2026 — Teenuste r2: tegeliku eelkontrolli peatuse põhjus
 

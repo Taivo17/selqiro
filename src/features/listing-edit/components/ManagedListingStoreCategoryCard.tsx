@@ -4,11 +4,13 @@ import { useV2Translation } from "../../../shared/i18n/V2LanguageProvider";
 import { listingEditMessages, translateListingEditMessage } from "../model/listingEditMessages";
 import { useManagedListingStoreCategories } from "../model/useManagedListingStoreCategories";
 import ListingStoreCategorySelector from "./ListingStoreCategorySelector";
+import { storeCategoryManagementMessages } from "../../store-category-management/model/storeCategoryManagementMessages";
 
 export default function ManagedListingStoreCategoryCard({ actor, listingId, blocked = false }: {
   actor: PublicationActor; listingId: string; blocked?: boolean;
 }) {
   const { language, t } = useV2Translation(listingEditMessages);
+  const { t: managementText } = useV2Translation(storeCategoryManagementMessages);
   const assignment = useManagedListingStoreCategories({ actor, listingId, blocked });
   const button = "rounded-full border border-neutral-200 bg-white px-4 py-2.5 text-sm font-bold disabled:cursor-not-allowed disabled:opacity-40";
   return <section className="space-y-4 rounded-[30px] border bg-white p-6" aria-label={t("storeSections")}
@@ -17,6 +19,9 @@ export default function ManagedListingStoreCategoryCard({ actor, listingId, bloc
       <h2 className="text-2xl font-black">{t("storeSections")}</h2>
       <p className="mt-2 text-sm leading-6 text-neutral-600">{t("storeSectionsSavedSeparately")}</p>
       <p className="mt-1 text-sm leading-6 text-neutral-500">{t("storeSectionHelp")}</p>
+      <a href="/v2/my-area#my-area-categories" target="_blank" rel="noopener noreferrer"
+        className="mt-3 inline-flex min-h-11 items-center text-sm font-bold underline underline-offset-4">
+        {managementText("manageLink")}</a>
     </div>
     {assignment.loading ? <p role="status">{t("storeAssignmentsLoading")}</p> : null}
     {!assignment.loading && assignment.error ? <p role="alert" className="rounded-2xl bg-amber-50 p-4 text-sm leading-6 text-amber-950">

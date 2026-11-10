@@ -1,3 +1,27 @@
+<!-- SELQIRO_STORE_CATEGORY_ASSIGNMENT_ACCEPTED_20261110 -->
+## 10.11.2026 — poerubriikide seostamine kasutaja poolt vastu võetud
+
+Kasutaja kinnitas olemasolevate oma rubriikide valiku salvestamist ja tulemuse
+nähtavust avaliku profiili rubriigifiltris. Valikute eemaldamise järel jäi
+kuulutus alles. Viis kuvatõmmist toetavad selle kasutustee vastuvõttu.
+Kustutamise kinnitus puudutab siin kuulutuse rubriigiseoseid; rubriigikirjete
+endi kustutamist ega kogu rubriigihaldust sellest ei järeldata.
+
+Selle teatega ei lisandunud uue commit'i räsi, terminali eduraportit ega Verceli
+Ready/deployment'i identiteeti. Kasutaja nähtav vastuvõtt on kinnitatud.
+Väljastatud pakki, selle kontrolltõendeid ja külmutatud lähtekoopiat ei muudeta.
+Build'i, paigaldust, pilvetoiminguid ega vastu võetud katset ei korratud.
+
+Uuendatud seisukiri ja sellest genereeritud üleandmine on eraldi dokumentide
+koopia. Maci/GitHubi neid selle salvestusega ei rakendatud; delta tuleb kaasa
+võtta järgmise sisulise tarnega. Olemasolevate rubriikide loomise, ümbernimetamise
+ja eemaldamise haldus ning vana otsetabeli kirjutusõiguse piir jäävad eraldi
+arenduseks. Järgmine soovitatud haldussamm pole käesolevaga alanud.
+
+Allpool olevad varasemad ettevalmistuse märked ja käsud on ajalugu.
+Praegune seis ja üks järgmine suund on CURRENT_STATE.json-is; vana paigaldaja
+korduskäivitamist ei nõuta. Vastuvõtu täpne tõendipiir on eraldi ACCEPTANCE.json-is.
+
 <!-- SELQIRO_STORE_CATEGORY_ASSIGNMENT_PREPARED_20261110 -->
 ## 2026-11-10 — poerubriikide valik praeguses kuulutuse muutmisvaates
 
@@ -1154,3 +1178,35 @@ ja piirid: `docs/continuity/MESSAGING_MOBILE_FIX_20261030.md` ning tarne
   Ready/Production ning üks Muuda → kohe kirjuta → Salvesta → muuda uuesti
   kasutuskatse ilma eraldi avamisnuputa. Teenused järgnevad sama lihtsa vooga;
   töökuulutused hiljem. Maci rakendamist ega uut deployment’i veel ei väideta.
+
+
+## 10.11.2026 — poerubriikide halduse jätkamine pärast katkestust
+
+Kasutaja heakskiidetud sama töö jätkub. Taastati räsikontrolliga 1398-failine vastuvõetud baas ning kuus vastuvõtudokumendi deltat. Kadunud poolelioleva halduse baidid taastatakse eraldi kandidaadis; need saavad uued sihitud kontrollid. Varasemad väljastatud pakid säilivad. Maci, GitHubi, päris andmebaasi ega Verceli toimingut ei tehtud.
+
+
+## 2026-11-10 — poe rubriikide haldus uues kandidaadis valmis
+
+- Praeguse Minu alaga on ühendatud kinnitatud kasutaja/aktiivse identiteediga
+  ülem- ja alamrubriigi loomine, nime muutmine ning lasteta rubriigi eraldi
+  kinnitusega eemaldamine. Kuulutus, kirjeldus ja pildid säilivad.
+- Uus väike kliendi/hooki/UI kiht ning eraldatud manage_my_store_category_v1
+  RPC; õigused ja algne nimi/parent kontrollitakse serveris. Katkenud vastuse
+  korral säilib sisestus ja kasutaja teeb lugemiskontrolli, automaatset uut
+  kirjutust ei tehta. English/Eesti, mobiilipaigutus ja eraldi vahekaardi
+  halduslink kuulutuse rubriigivalijas.
+- Pärast katkestust taastatud täpne 1398-failine baas sai uue arenduskihi ja
+  värsked tõendid: SQL runtime 17/17 ning install/drift 18/18, kliendi/hooki
+  15/15, 13 muudetud runtime-faili lint, 610-sisendiline Next build 28,661 s
+  ning Chromiumi neli English/Eesti kasutuskäiku PASS. Vanad etapi PASS-id
+  ei asenda neid kontrolle. Täpne ulatus ja fixture'i piir on kuupäevakirjes.
+- Uuendaja eelmise raporti 18/18 ja SQL-adapteri 13/13 sihitud kontrolli PASS.
+  Lõplik manifesti tarnekatse ning inventar säilivad paketi kontrollid kaustas.
+  Väljastatud varasemad pakid ja nende päevikud jäävad muutumatuks.
+- Uuendatud on autoriteetne CURRENT_STATE, sellest genereeritud üleandmine,
+  HOSTED_PORTAL, arhitektuur, teadaolevad piirid ja varasema kasutajavastuvõtu
+  kuus dokumendimuudatust. Edul/peatumisel täpne privaatne Downloads-raport
+  ja sama faili valimine Finderis jäävad iga uue uuendaja nõudeks.
+- Järgmine on uus halduse pakett Macis, raporti sama commit'i Ready/Production
+  ja üks ajutise rubriigi halduse tegelik kasutuskäik. Päris SQL-i, Maci,
+  GitHubi, Storage'i ega Verceli muutust käesolevas ettevalmistuses ei tehtud.

@@ -16,6 +16,7 @@ import MyAreaServicesSection from "../../../src/features/service-editor/componen
 import { serviceEditorMessages } from "../../../src/features/service-editor/model/serviceEditorMessages";
 import ProductShowcaseManagementCard from "../../../src/features/product-showcase-management/components/ProductShowcaseManagementCard";
 import StoreCategoryManagementCard from "../../../src/features/store-category-management/components/StoreCategoryManagementCard";
+import ManagedStoreCategorySection from "../../../src/features/store-category-management/components/ManagedStoreCategorySection";
 import { v2IntegrationEnabled } from "../../../src/shared/config/v2Integration";
 
 const actionClass = "inline-flex min-h-11 items-center justify-center rounded-full border border-neutral-200 bg-white px-5 py-3 text-sm font-bold shadow-sm transition hover:border-neutral-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700";
@@ -46,7 +47,7 @@ export default function V2MyAreaPage() {
   const { language: uiLanguage, t } = useV2Translation(accountUiMessages);
   const {t: serviceText} = useV2Translation(serviceEditorMessages);
 
-  const { identity, loading, anonymous, error, refresh } = useMyAreaIdentity();
+  const { identity, actor, loading, anonymous, error, refresh } = useMyAreaIdentity();
   const integrated = v2IntegrationEnabled();
   const messagesHref = integrated ? "/v2/messages" : "/messages";
   const authHref = integrated ? "/auth?next=%2Fv2%2Fmy-area" : "/auth";
@@ -68,10 +69,10 @@ export default function V2MyAreaPage() {
         <nav aria-label={t("my_area")} className="sticky top-28 space-y-1 rounded-[30px] border border-black/5 bg-white p-4 shadow-sm">
           <a href="#my-area-listings" className={navClass}>{t("listings")}</a>
           <a href="#my-area-services" className={navClass}>{t("services")}</a>
+          <a href="#my-area-categories" className={navClass}>{t("store_categories")}</a>
           <Link href={messagesHref} className={navClass}>{t("messages")}</Link>
           {profileHref ? <Link href={profileHref} className={navClass}>{t("public_profile")}</Link> : null}
           {!integrated ? <>
-            <a href="#my-area-categories" className={navClass}>{t("store_categories")}</a>
             <a href="#my-area-showcase" className={navClass}>{t("product_showcases")}</a>
             <a href="#my-area-energy" className={navClass}>{t("energy")}</a>
           </> : null}
@@ -89,6 +90,7 @@ export default function V2MyAreaPage() {
               <nav aria-label={t("quick_actions")} className="mt-5 flex flex-wrap gap-3">
                 <Link href="/v2/sell" className={actionClass}>{t("add_listing")}</Link>
                 <Link href="/v2/services/new" className={actionClass}>{serviceText("addService")}</Link>
+                <a href="#my-area-categories" className={actionClass}>{t("store_categories")}</a>
                 <Link href={messagesHref} className={actionClass}>{t("open_messages")}</Link>
               </nav>
             </div>
@@ -111,6 +113,8 @@ export default function V2MyAreaPage() {
 
         <div id="my-area-listings" className="min-w-0 scroll-mt-28"><MyAreaListingsSection /></div>
         <div id="my-area-services" className="min-w-0 scroll-mt-28"><MyAreaServicesSection /></div>
+
+        {integrated ? <ManagedStoreCategorySection actor={actor} loading={loading} error={error} /> : null}
 
         {!integrated ? <>
           <div id="my-area-categories" className="min-w-0 scroll-mt-28"><StoreCategoryManagementCard /></div>

@@ -1,3 +1,30 @@
+<!-- SELQIRO_STORE_CATEGORY_MANAGEMENT_PREPARED_20261110 -->
+## 10.11.2026 — PREPARED: identiteediga seotud poe rubriikide haldus
+
+Integreeritud Minu ala ettevalmistatud haldus kasutab väikseid entity-API,
+valideerimise, editori/hook'i ja UI mooduleid ning uut
+`manage_my_store_category_v1` RPC-d. Üks tõeallikas jääb olemasolevaks
+`store_categories` tabeliks; kuulutuse seostamise olemasolev leping jääb eraldi.
+UI toetab ülemrubriigi ja otsese alamrubriigi loomist, ümbernimetamist ning
+kinnitatud lasteta rubriigi eemaldamist. Kuulutuse, foto ja sisu kustutamist see
+ei algata. Inglise põhikeel/varukeel ja eesti keel kasutavad ühist sõnastikku.
+
+Iga päring kannab kinnitatud aktori tokenit; server kontrollib oodatud kasutajat,
+salvestatud aktiivset identiteeti ning eraomaniku või aktiivse äriliikme õigust.
+Stabiilne loomise UUID, nime/parent'i võrdlus ja täpne vastusekuju piiravad vana
+vormi kirjutust. Teadmata tulemus nõuab lugemisel põhinevat kontrolli, automaatset
+korduskirjutust ei tehta. Focus-kontroll säilitab vormi, tegelik identiteedivahetus
+lõpetab vana ulatuse. Vana otsese `listing_store_categories` kirjutuse RLS-i piir
+ja fotode elutsükli avaliku avamise tööd säilivad eraldi.
+
+Leping: `docs/architecture/store-category-management-v1.md`. Kohalikud tõendid ja
+rakendamise piir: `docs/continuity/STORE_CATEGORY_MANAGEMENT_20261110.md`.
+PREPARED ei tõenda Maci, päris SQL-i, commit/push'i ega Verceli uut seisu;
+kuulutuse rubriigiseoste varasem kasutajavastuvõtt ei ole uue halduse vastuvõtt.
+Praegune samm tuleb CURRENT_STATE.json-ist; allolev ajalugu ei ole käivitamisjuhis.
+
+---
+
 <!-- SELQIRO_SERVICE_PREFLIGHT_R2_20261108 -->
 ## 08.11.2026 — Teenuste r2 kontrollalus vastab tegelikule kataloogile
 

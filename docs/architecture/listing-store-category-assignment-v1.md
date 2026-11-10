@@ -74,11 +74,24 @@ policy boundary remains separate work.
 
 ## Category management boundary
 
-Integrated My Area currently hides the legacy category CRUD. This step exposes
-existing-category selection only, with an honest empty state and no link to a
-hidden management anchor. Opening creation/rename/delete requires a separate
-actor-scoped management contract, including safe root-category creation during
-an active-identity change. The existing CRUD is not enabled as a shortcut.
+The separately prepared 2026-11-10 management change exposes an actor-scoped
+category section in integrated My Area. It supports root and direct-child
+creation, rename and explicitly confirmed removal of one childless category.
+Removing a category removes its links while retaining listings, photos and
+content. English is the primary/fallback language and Estonian is also covered.
+The assignment card links to `/v2/my-area#my-area-categories` in a clearly named
+new tab, preserving unsaved listing input in the original tab.
+
+Management has its own captured-actor API, server authorization, expected
+name/parent checks and exact receipt. An unknown write result requires manual
+readback before another action. It does not enable the legacy CRUD as a shortcut
+or harden the retained direct `listing_store_categories` policy described above.
+See `docs/architecture/store-category-management-v1.md` and
+`docs/continuity/STORE_CATEGORY_MANAGEMENT_20261110.md`.
+
+This management source is PREPARED. Its Mac installation, live SQL application,
+commit/push, Vercel deployment and user acceptance remain separate from the
+already accepted listing-category assignment journey.
 
 ## Evidence
 

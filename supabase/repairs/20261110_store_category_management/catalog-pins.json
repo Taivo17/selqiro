@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "kind": "store-category-management-v1",
+  "functions": "8e22cfd2385b9289eb1159c05ad4f0a4c9bd7a7137f33802e09b4050cf9e0fa2",
+  "relations": "290ee77f025e364cf12332614733a07f54b5eed9091d72a498fcbbf69c88645d",
+  "effects": "f98cc99812d85d67edc3e525e30e6c80d1c9b5b03b95e99a62f9bdba93aeabe2",
+  "before": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+  "retainedDependencies": "d42b8615d634c3c823c2399a8dcc32e88151624635cb90eec20d10262c8f63a6",
+  "retainedCapability": "74cec49be29b0e6feab489b53722ef69ac57065fba8e392a6f01411bc0921cc3",
+  "after": "d57b36d13bc424566f22d80643fbb68332cae07e522031d56a2a12890c2379d4",
+  "guard_names": [
+    "installer",
+    "actor_roles",
+    "hosted_context_ready",
+    "retained_release",
+    "category_functions",
+    "category_relations",
+    "category_delete_effects"
+  ],
+  "dependency_names": [
+    "public.create_my_store_child_category_v2",
+    "public.create_my_store_root_category_v2",
+    "public.current_user_has_identity_access",
+    "public.delete_my_store_category_v2",
+    "public.prepare_store_category_name",
+    "public.rename_my_store_category_v2",
+    "public.require_my_active_identity_v2",
+    "public.set_my_listing_store_categories_v2",
+    "public.validate_store_category_parent"
+  ],
+  "dependencies_sha256": "b3067f8ff6918e4e8499e2efef8296fa04e709056f80cf69ab537f128993a705",
+  "modules_sha256": "45218bb113e6caa8d918c6b71d306254b5e39a1c414dc0be71ab73ef7a761dd2",
+  "modules": {
+    "01_management.sql": "c6ae6e7496ec00c1ef2a87b1bd8da302bfdf19441806abd8f664b42bde52f447"
+  }
+}
