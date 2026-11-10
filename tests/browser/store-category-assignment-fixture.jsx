@@ -49,7 +49,7 @@ function publicPage(args) {
     for (const row of fixture.state.categories) if (branch.has(row.parent_id) && row.identity_id === ids.identity) branch.add(row.id);
   }
   const all = ['1001', '1002'].filter(id => args.p_store_category_id === null || (fixture.state.assignments.get(id) ?? []).some(value => branch.has(value)));
-  return {schema_version: 1, content_scope: 'public_profile_marketplace', seller_slug: args.p_seller_slug, profile_available: true,
+  return {schema_version: 2, content_scope: 'public_profile_marketplace', seller_slug: args.p_seller_slug, profile_available: true,
     store_category_id: args.p_store_category_id, sort: 'newest', items: all.slice(args.p_result_offset, args.p_result_offset + args.p_result_limit).map(publicItem),
     total_count: String(all.length), result_limit: args.p_result_limit, result_offset: args.p_result_offset, has_more: false, next_offset: null, window_limit_reached: false};
 }
@@ -58,7 +58,7 @@ fixture.client = {...transport,
   // The shared Supabase browser client supplies its session token to legacy public reads.
   from: name => transport.from(name).setHeader('Authorization', 'Bearer synthetic-token-A'),
   rpc(name, args) {
-    if (name !== 'get_public_profile_marketplace_v1') return transport.rpc(name, args);
+    if (name !== 'get_public_profile_marketplace_v2') return transport.rpc(name, args);
     return {abortSignal(signal) {fixture.publicReads.push({name, args, aborted: signal.aborted});return Promise.resolve({data: publicPage(args), error: null});}};
   },
 };

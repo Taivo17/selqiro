@@ -1274,3 +1274,101 @@ Taastetee 1280/390 px vaated on loetavad. SQL runtime 18/18 ja install/drift
 31/31; uuendaja aluse 9, SQL-adapteri 13, kliendimärgi 9 ning jätku/katkestuse
 10 katset läbisid. Täpsed tõendid ja sünteetilised piirid on etapikirjes;
 käesolev kohalik ettevalmistus ei kirjuta Maci või pilve.
+
+
+---
+
+<!-- SELQIRO_STORE_CATEGORY_AUTHORITY_INSTALLED_20261110 -->
+## 10.11.2026 kell 20.07 — poe rubriigiseoste õigusteparandus on paigaldatud
+
+Kasutaja jätkuraport kinnitab commit'i
+`adfa3ae767712b5f71e9fac2d963a765f61fb444`, `stage: complete`,
+`database: verified`, `build: passed` ja `push: verified`.
+Jooks lõppes 20:07:17 Europe/Tallinn. Üks SQL-i rakenduskatse sai kinnituse;
+eraldi järelkontroll kinnitati 20:07:15. Kõik üheksa kontrollirühma läbisid,
+sõltuvuste ja kolme invariandi räsid säilisid. Storage'i toiminguid ei tehtud.
+
+Avalik 139-baidine kliendimärk vastas täpselt oodatule 20:07:05 ja 20:07:10.
+Varasem 17.35 Verceli kuvatõmmis näitab sama commit'i Ready / Production.
+Need on eraldi tõendid; raporti `READY_NOT_CHECKED` jääb ajalooliseks väljaks.
+Vana ooteolek on lõpetatud. Build'i/commit'i/push'i, paigaldajat ega SQL-i
+ei korrata. Varasem rubriikide halduse kasutajavastuvõtt säilib.
+
+Järgneb üks sihitud kasutuskontroll pärast uut andmebaasi õiguste muutmist:
+värskenda portaal, ava testkuulutuse 202 eraldi rubriigivaade, salvesta üks
+olemasolev enda rubriik ja kontrolli sama kuulutust profiili rubriigifiltris.
+Seda uut käiku pole veel kasutaja poolt kinnitatud. Praegune seis ja üks
+järgmine tegevus on `docs/continuity/CURRENT_STATE.json`-is; täpne tõendipiir
+on `docs/continuity/STORE_CATEGORY_AUTHORITY_20261110.md`-s.
+
+See on eraldi dokumentide jätkupunkt, mitte Maci/Giti dokumendimuudatus.
+Järgmine kontrollitud lähteuuendus võtab selle kaasa. Allpool olevad
+ettevalmistuse kirjed, CURRENT/NEXT-pealkirjad ja käivitamiskäsud on ajalugu.
+
+---
+
+Võrguühenduseta jätkuraporti ülevaatus läbis 26 kontrolli; täpne raporti SHA256 on 07854b1ad2faa249203729e812c0dd03a078ebf20043cd0ee2e58d7d414261b1. Raporti database_last_read/absent on rakenduseelne lugemine; lõppseis on database_after/applied ja database/verified. Uuendaja algne build/logi nimi, commit, push ja indexi räsid säilisid. Ülevaatusel ei käivitatud uut build’i, rakenduse/SQL/brauseri katseid, paigaldajat ega pilvetoiminguid. Dokumendid valmistati eraldi jätkupunkti; Maci lähtekoodi ega varem väljastatud pakki ei muudetud.
+
+
+<!-- SELQIRO_STORE_CATEGORY_AUTHORITY_ACCEPTED_20261110 -->
+## 10.11.2026 — poe rubriikide õigusteparanduse kasutustulemus on vastu võetud
+
+Kasutaja kinnitas pärast lõpetatud õigusteparandust: „poerubriigi lisamine õnnestus ja avalikul profiilil on kuulutus selle rubriigi filtris leitav“.
+Ootel olnud salvestuse ja profiilifiltri kasutuskontroll on selle tulemuse ulatuses läbitud.
+Varasem ülem- ja alamrubriigi loomise, nimevahetuse, seostamise ning eemaldamisel
+kuulutuse säilimise vastuvõtt säilib. Paigaldajat, SQL-i ja läbitud katseid ei korrata.
+
+Viimane raportiga kinnitatud paigaldus on `adfa3ae767712b5f71e9fac2d963a765f61fb444`,
+10.11 kell 20:07:17 Europe/Tallinn, `database: verified`. Verceli sama commit’i
+Ready / Production kuvatõmmis on vastu võetud. Uus kasutajakinnitus ei ole uus
+Giti või SQL-kataloogi vaatlus ega kõigi vanade vormide või kontode katse.
+
+Järgmine soovitus on ühendada hobusekuulutused enda poe rubriikidega, säilitades
+`horse_offers` kanoonilise UUID. Teenused jäävad eraldi järgmiseks sammuks.
+Selle töö koodi pole käesolevas vastuvõtus lisatud. Üks praegune seis ja järgmine
+tegevus on `docs/continuity/CURRENT_STATE.json`-is; ulatus on
+`docs/continuity/HORSE_STORE_CATEGORY_NEXT_20261110.md`-s.
+
+See on eraldi dokumentide jätkupunkt. Selle dokumentide muudatusi pole Maci hoidlas rakendatud, commit’itud ega push’itud; järgmine kontrollitud lähteuuendus võtab need kaasa. Väljastatud lähte- ja paigalduspakid ning algsed raportid ja päevikud säilivad muutmata.
+
+Allpool säilivad varasemad kirjed ja nende tõendipiirid muutmata. Nendes leiduv
+ootel kasutuskatse, NEXT-pealkiri või paigalduskäsk ei ole praegune tööjuhis.
+
+
+
+<!-- SELQIRO_HORSE_STORE_CATEGORIES_PREPARED_20261110 -->
+## 2026-11-10 — hobuste poe rubriikide tervik ette valmistatud
+
+Kasutaja volitatud järgmine samm ühendab olemasoleva hobuse muutmisvaate ja
+avaliku profiili rubriigifiltri. Lisati väikesed UUID-lepingu/API/hook'i/kaardi
+moodulid ning õhuke editori ühendus. Rubriigisalvestus säilitab pooleli oleva
+teksti ja fotovaliku; ebaselge vastus nõuab lugemiskontrolli. Kinnitatud kogu
+vormi reload loeb rubriigid uuesti; tühistamine säilitab töö.
+
+Uus `horse_offer_store_categories` ja owner RPC-d kontrollivad serveris
+salvestatud aktiivset identiteeti, omanikku või aktiivset äriliiget ning kogu
+valikut. Category FK eemaldab ainult seoseid. Hobuse sisu/olek/tähtaeg/fotod
+ja varasem haldus-RPC jäävad muutmata. Profiili uus v2 arvestab kanoonilisi
+hobuseid; v1 leping/parser säilivad avatud vanade klientide jaoks.
+
+SQL runtime 25/25 ning install/drift 34/34 PASS; API/ReactDOM 11/11 PASS.
+Lõplik build 23.405 s / 626 sisendit PASS. Build'i järel Chromium 153 6/6 PASS,
+101 runtime-sisendi räsid sobivad; English/Eesti ja desktop/390 px.
+Auth/PostgREST/avalduse piirid on sünteetilised, välisvõrgupäringuid ja
+konsoolihoiatusi/-vigu 0. Native SQL mitme sessiooni ajastust ei tõendatud.
+
+Uuendaja kontrollib täpset adfa3ae/1475-failist alust ja eelmist lõpetatud
+privaatraportit. SQL-first lisandus → eraldi verify → source/build → commit/push.
+Alusraporti 11, SQL-adapteri 13 ja jätku 10 sihitud kontrolli PASS; lõpliku
+manifesti päris kohaliku Giti/indexi/backup/commit/remote'i käigu tõend on pakis.
+Peatumisel näidatakse unikaalset SAADA SEE FAIL raportit ja valitakse see Finderis.
+
+CURRENT_STATE, genereeritud üleandmine, HOSTED_PORTAL, uus järjepidevuse kirje,
+arhitektuur ning pikkade dokumentide uus ettevalmistuse päis on täiendatud.
+Eelmise etapi vastuvõtu delta kantakse uue pakiga kaasa; vanad kirjed ja pakid
+säilivad muutmata. Vana soovitusfail on tähistatud ajalooliseks kavandiks.
+
+Maci rakendus, uus commit/push, SQL-i paigaldus, deployment ja kasutajavastuvõtt
+on veel kinnitamata. Järgmine tegevus on uue paki üks käsk ja selle järel üks
+olemasoleva avaliku hobuse salvestus/profiilifiltri katse. Teenuseid ega üldist
+fotode taustakoristust selle sammuga lõpetatuks ei märgita.

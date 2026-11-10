@@ -1,3 +1,88 @@
+<!-- SELQIRO_HORSE_STORE_CATEGORIES_PREPARED_20261110 -->
+## 10.11.2026 — hobusekuulutuse poe rubriigid on lähtepaketis ette valmistatud
+
+Kasutaja kinnitatud järgmine hobuste samm on teostatud uues kohalikus kandidaadis:
+olemasolevas hobuse muutmisvaates oma rubriikide eraldi valik/salvestus ning sama
+hobuse leidmine avaliku profiili rubriigifiltris. `horse_offers` UUID jääb
+andmeallikaks; seos ei muuda sisu, fotosid, staatust ega tähtaega.
+
+Lisanduvad õiguskontrolliga owner RPC-d ja profiili v2 lugemisleping. Vana v1 SQL
+ja parser säilivad, et varem avatud klient jätkaks töötamist. Ülemrubriigi filter
+arvestab alampuud; sama hobune ilmub ühe korra. Rubriigi eemaldamine koristab
+seoseid, hobune ja fotod säilivad. Teenuste rubriigid on eraldi hilisem samm.
+
+Sihitud SQL 25/25 + install/drift 34/34, kliendi runtime 11/11, lõplik Next build
+ja build'i järel Chromium 6/6 on lokaalselt läbitud. Need kasutavad sünteetilisi
+andmeid/teenusepiire; **Maci rakendus, uus commit/push, SQL-i paigaldus, Vercel
+ja kasutajavastuvõtt on veel kinnitamata**. Varasem adfa3ae paigaldus ja selle
+tavakuulutuse salvestus/profiilifiltri vastuvõtt säilivad lõpetatuna.
+
+Üks järgmine käsk on `docs/continuity/HOSTED_PORTAL.md`-s. Täpne praegune seis
+on `docs/continuity/CURRENT_STATE.json`, sellest genereeritud üleandmine ja
+`docs/continuity/HORSE_STORE_CATEGORIES_20261110.md`. Uus arhitektuur:
+`docs/architecture/horse-store-category-assignment-v1.md`.
+
+Uus pakk kannab kaasa ka eelmise vastuvõtu dokumentide delta. Allpool säilib
+varasem ajalugu muutmata; vanad NEXT/CURRENT või ootel-käsud ei ole uued
+paigaldusjuhised. Väljastatud pakid ja päevikud jäävad muutmata.
+
+---
+
+<!-- SELQIRO_STORE_CATEGORY_AUTHORITY_ACCEPTED_20261110 -->
+## 10.11.2026 — poe rubriikide õigusteparanduse kasutustulemus on vastu võetud
+
+Kasutaja kinnitas pärast lõpetatud õigusteparandust: „poerubriigi lisamine õnnestus ja avalikul profiilil on kuulutus selle rubriigi filtris leitav“.
+Ootel olnud salvestuse ja profiilifiltri kasutuskontroll on selle tulemuse ulatuses läbitud.
+Varasem ülem- ja alamrubriigi loomise, nimevahetuse, seostamise ning eemaldamisel
+kuulutuse säilimise vastuvõtt säilib. Paigaldajat, SQL-i ja läbitud katseid ei korrata.
+
+Viimane raportiga kinnitatud paigaldus on `adfa3ae767712b5f71e9fac2d963a765f61fb444`,
+10.11 kell 20:07:17 Europe/Tallinn, `database: verified`. Verceli sama commit’i
+Ready / Production kuvatõmmis on vastu võetud. Uus kasutajakinnitus ei ole uus
+Giti või SQL-kataloogi vaatlus ega kõigi vanade vormide või kontode katse.
+
+Järgmine soovitus on ühendada hobusekuulutused enda poe rubriikidega, säilitades
+`horse_offers` kanoonilise UUID. Teenused jäävad eraldi järgmiseks sammuks.
+Selle töö koodi pole käesolevas vastuvõtus lisatud. Üks praegune seis ja järgmine
+tegevus on `docs/continuity/CURRENT_STATE.json`-is; ulatus on
+`docs/continuity/HORSE_STORE_CATEGORY_NEXT_20261110.md`-s.
+
+See on eraldi dokumentide jätkupunkt. Selle dokumentide muudatusi pole Maci hoidlas rakendatud, commit’itud ega push’itud; järgmine kontrollitud lähteuuendus võtab need kaasa. Väljastatud lähte- ja paigalduspakid ning algsed raportid ja päevikud säilivad muutmata.
+
+Allpool säilivad varasemad kirjed ja nende tõendipiirid muutmata. Nendes leiduv
+ootel kasutuskatse, NEXT-pealkiri või paigalduskäsk ei ole praegune tööjuhis.
+
+---
+
+<!-- SELQIRO_STORE_CATEGORY_AUTHORITY_INSTALLED_20261110 -->
+## 10.11.2026 kell 20.07 — poe rubriigiseoste õigusteparandus on paigaldatud
+
+Kasutaja jätkuraport kinnitab commit'i
+`adfa3ae767712b5f71e9fac2d963a765f61fb444`, `stage: complete`,
+`database: verified`, `build: passed` ja `push: verified`.
+Jooks lõppes 20:07:17 Europe/Tallinn. Üks SQL-i rakenduskatse sai kinnituse;
+eraldi järelkontroll kinnitati 20:07:15. Kõik üheksa kontrollirühma läbisid,
+sõltuvuste ja kolme invariandi räsid säilisid. Storage'i toiminguid ei tehtud.
+
+Avalik 139-baidine kliendimärk vastas täpselt oodatule 20:07:05 ja 20:07:10.
+Varasem 17.35 Verceli kuvatõmmis näitab sama commit'i Ready / Production.
+Need on eraldi tõendid; raporti `READY_NOT_CHECKED` jääb ajalooliseks väljaks.
+Vana ooteolek on lõpetatud. Build'i/commit'i/push'i, paigaldajat ega SQL-i
+ei korrata. Varasem rubriikide halduse kasutajavastuvõtt säilib.
+
+Järgneb üks sihitud kasutuskontroll pärast uut andmebaasi õiguste muutmist:
+värskenda portaal, ava testkuulutuse 202 eraldi rubriigivaade, salvesta üks
+olemasolev enda rubriik ja kontrolli sama kuulutust profiili rubriigifiltris.
+Seda uut käiku pole veel kasutaja poolt kinnitatud. Praegune seis ja üks
+järgmine tegevus on `docs/continuity/CURRENT_STATE.json`-is; täpne tõendipiir
+on `docs/continuity/STORE_CATEGORY_AUTHORITY_20261110.md`-s.
+
+See on eraldi dokumentide jätkupunkt, mitte Maci/Giti dokumendimuudatus.
+Järgmine kontrollitud lähteuuendus võtab selle kaasa. Allpool olevad
+ettevalmistuse kirjed, CURRENT/NEXT-pealkirjad ja käivitamiskäsud on ajalugu.
+
+---
+
 <!-- SELQIRO_STORE_CATEGORY_AUTHORITY_PREPARED_20261110 -->
 ## 10.11.2026 — ette valmistatud vana rubriigiseoste otsekirjutuse sulgemine
 

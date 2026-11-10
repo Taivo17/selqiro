@@ -1,70 +1,68 @@
 <!-- GENERATED from docs/continuity/CURRENT_STATE.json; do not edit independently. -->
 # Selqiro — praegune tööüleandmine
 
-Seisukirje: 2026-11-10 Europe/Tallinn
+Seisukirje: 2026-11-10 Europe/Tallinn; hobusekuulutuse poe rubriikide lähtepakett ette valmistatud
 
 ## Praegune checkpoint
 
-10.11.2026 poe rubriikide haldus on kasutaja poolt vastu võetud. Järgmine lubatud töö on ette valmistada vana rubriigiseoste otsekirjutustee sulgemine. Kahe vana vormi salvestus kasutab nüüd olemasolevat atomaarset, sama identiteeti kontrollivat toimingut. Uus lähtekood ja õigusteparandus on eraldi ettevalmistatud tarne; Maci rakendamine, selle commit/push, avalik kliendiversioon ja päris SQL-i tulemus on veel kinnitamata.
+Hobusekuulutuse poe rubriigid on uues lähtepaketis ette valmistatud ja kohalikult kontrollitud: hobuse muutmisvaates on eraldi rubriigivalik/salvestus ning avaliku profiili uus v2 lugemisleping arvestab sama kanoonilise hobuse seoseid. Varasem tavakuulutuse rubriikide haldus ja õigusteparandus on kasutaja poolt vastu võetud. Uut hobuste pakki pole Macis rakendatud; uus commit/push, Supabase’i muudatus, Verceli deployment ja kasutajavastuvõtt on veel kinnitamata.
 
 ## Lähtekood ja tõendi piir
 
-- **Tegelik kinnitatud alus:** Viimane kasutaja raport: main/0b2594ad27e8320ab7e71206c8c5cb20edcb5d8a, Manage own shop categories in My Area; vanem 71eea82ad83b30b9ddc03641f8f2864b67a85877. Jooks lõppes 10.11 kell 15:17:33 Europe/Tallinn: database verified, build passed, push verified. See pole uus live-Giti vaatlus.
-- **Aluse sidumine:** 1436-failine aluspuu 4e8226df26a69aa966a9d809c19fb4df771d034f; eelmise väljalaske manifest 734870e7c68b3e5961077295753d175bcaec566f538e88113e8aeab048d87c28. Täpse privaatse eduraporti SHA256 1e181c9533d3caa18b165f3541127241793d764e5f2adc2fd47161cd2f56abc7. Uuendaja ei otsi suvalist viimast raportit.
-- **Uus ettevalmistatud tarne:** selqiro-poerubriikide-oigused-20261110.zip; commit’i kavandatud pealkiri Close direct store category link writes. Täpne failide ja abiskriptide ulatus ning räsid on selle paki manifest.json-is; uut tegelikku commit’i siin ei oletata.
-- **Kliendi muudatus:** app/sell/page.tsx ja app/my-page/page.tsx kasutavad sama set_my_listing_store_categories_v2 toimingut. Osalise või teadmata tulemuse järel avatakse olemasoleva kuulutuse eraldi rubriigivaade /v2/my-area/listings/[id]/store-categories, mis ei nõua uue avaldamistee kviitungit. Vaade loeb tegeliku salvestatud valiku enne uut käsitsi salvestust.
-- **SQL-i ulatus:** Uus supabase/repairs/20261110_store_category_authority eemaldab anon/authenticated/PUBLIC otsesed mitte-SELECT õigused listing_store_categories tabelilt ja vana FOR ALL poliitika. Olemasolev SELECT, kontrollitud RPC-d, tabelid ja andmeread jäävad alles. Ümbritsev kataloog, rollide tegelikud õigused ja täpsed enne/pärast seisud on kontrollitud.
-- **Dokumentide järjepidevus:** Uude tarneallikasse on kaasa võetud 12 varem eraldi salvestatud vastuvõtudokumendi muudatust. CURRENT_STATE on üks praegune kirje ja 99_V2_HANDOFF_NEXT_CHAT genereeritakse sellest. Vana väljastatud ZIP, selle lähtekoopia ning päevikud on muutumatud.
-- **Raporti kasutusreegel:** Uuendaja näitab SAADA SEE FAIL täpset unikaalse Downloads-raporti teed ja valib sama faili Finderis. Koopia tõrkel näitab olemasolevat privaatraportit või teatab ausalt faili puudumisest. Vanu raporteid ei kirjutata üle.
+- **Uus pakk:** selqiro-hobuse-poerubriigid-20261110.zip; üks kontrollitud uuendaja olemasolevale /Users/taivo/selqiro hoidla main-harule. Alus on täpselt adfa3ae767712b5f71e9fac2d963a765f61fb444 ja 1475 lähtefaili. Täpne muudatusloend ning alg-/lõppräsid on paki manifestis; kohaliku kandidaadi olemasolu ei tõenda Maci kirjutust.
+- **Viimane kinnitatud Maci seis:** 10.11 kell 20:07:17 Europe/Tallinn, main/adfa3ae767712b5f71e9fac2d963a765f61fb444, database verified, build passed ja push verified. Algne raport: selqiro-poerubriikide-oigused-20261110-raport-20261110-200717-a2d280189433.json, 229403 baiti, SHA256 07854b1ad2faa249203729e812c0dd03a078ebf20043cd0ee2e58d7d414261b1. See on varasema jooksu vaatlus, mitte uus live-Giti kontroll.
+- **Andmemudel ja õigused:** Uus horse_offer_store_categories seob horse_offers UUID olemasoleva oma poe rubriigiga. Omaniku get/set RPC kontrollib auth.uid(), salvestatud aktiivset identiteeti, eraisiku omanikku või aktiivset äriliiget ning kogu rubriigivalikut. Tabelil pole otseseid brauseri kirjutus-/lugemisõigusi. Seoste salvestus ei muuda hobuse sisu, fotosid, staatust ega tähtaega.
+- **Ülemineku leping:** Lisandub get_public_profile_marketplace_v2, schema_version 2. Senine v1 SQL ja parser jäävad muutmata, sest vana klient keelab rubriigifiltris hobusekaarte. SQL paigaldatakse enne uut klienti; vana veebiversioon saab seni jätkata v1-ga. Teenuste rubriigiseoseid selles sammus ei lisata.
+- **Kliendi salvestus:** Eraldi hook/API ja olemasolev kahetasandiline rubriigivalija; English/Eesti. Pealkirja ja fotovaliku mustand säilib rubriigisalvestusel ning ajutise focus-kontrolli ajal. Kinnitatud vormi uuestilaadimine loeb ka rubriigid uuesti. Teadmata salvestustulemuse järel nõutakse selget uuesti lugemist; automaatset kordussalvestust pole.
+- **Dokumentide järjepidevus:** Uus pakk kannab kaasa eelmise õigusteparanduse vastuvõtu dokumentide delta, selle seisukirje, genereeritud üleandmise, arenduspäeviku ja hobuste arhitektuuri. Varem väljastatud lähtepakke, raportite algfaile ega päevikuid ei muudeta. Praegune üks järgmine tegevus on allpool ja HOSTED_PORTAL.md-s.
+- **Raporti kasutusreegel:** Uuendaja loob oma jooksust unikaalse privaatse Downloads-raporti, prindib SAADA SEE FAIL täpse tee ja valib sama faili Finderis. Koopia või Finderi tõrkel näidatakse kontrollitud originaali või öeldakse, et raportifaili ei saanud luua. Vanad raportid säilivad.
 
 ## Tegelik kohalik katse
 
-- SQL-i sihitud PGlite/PostgreSQL-WASM katsed: runtime 18/18 ning paigalduse/erinevuste kontroll 31/31 PASS. Need kasutavad sünteetilisi kasutajaid ja andmeid; päris Supabase’i ei muudetud. Esimene ebaõnnestunud fixture’i jooks säilib koos täpse põhjusega.
-- Lõpliku kliendi katsed: vana adapteri ja tegelike salvestusfunktsioonide 19/19 ning tegeliku eraldi taastesihtkoha/identiteedi/rubriigimoodulite 10/10 PASS. Build'i järel Chromium 153 käigud 7/7 + 9/9 PASS, English/Eesti; 1280/390 px taastetee ekraanivaated on loetavad. Auth/PostgREST, muu kest ja navigeerimise piirid on sünteetilised.
-- Värske lõplik Next webpack build PASS: 79.449 s, 616 muutumatut sisendit; inventari SHA256 8be5072e3cde54cc9f98cc395552008d431e8f9627acd53478c34c2984fe6b51. Olemasolevad lukustatud sõltuvused säilisid. Esimene tüübituvastuse build'i viga ja enne taastetee parandust läbinud revisjon on eraldi säilitatud.
-- Uuendaja sihitud katsed: aluse raport 9/9, SQL-adapter 13/13, avaliku märgi transport/ajalimiit 9/9 ja source-first katkestused/jätk 10/10 PASS. Lõpliku manifesti ajutise Giti/indexi/varukoopiate/commit'i/kohaliku remote'i tarnekäigu tõend on paki kontrollid/final-flow.json-is. Need pole päris Maci või teenuse toimingud.
-- Vana nõrga poliitika tingimuslik reproduktsioon vajab katsekeskkonnas ajaloolist avaliku kuulutuse SELECT-poliitikat. See ei tõenda sama vea praegust tootmises kasutatavust. Paranduse kontrollid kasutavad pärast seda taastatud täpset kataloogialust.
-- Varasem poe rubriikide loomise, nimevahetuse, seostamise, profiilifiltri ning eemaldamise kasutajavastuvõtt säilib. Neid paigaldusi ega laiu kontrolle uue tõendita ei korrata.
+- Uue SQL-i PGlite/PostgreSQL-WASM runtime 25/25 ning installi/rollback’i/kataloogierinevuste kontrollid 34/34 PASS. Testid hõlmavad õigusi, äriliiget, võõrast identiteeti, atomaarset komplekti, tühjendamist, parent/child filtrit, ühist koguarvu/lehekülgi, aegumist/blokke, v1 säilimist ning rubriigi eemaldamisel hobuse ja fotode säilimist. Päris Supabase’i ei kasutatud.
+- Kliendi sihitud ReactDOM/API/parseri runtime 11/11 PASS. Build’i järel Chromium 153: 6/6 PASS, English/Eesti ja 390 px/desktop; 101 brauseri sisendit vastavad lõplikule build’ile, drift 0, välisvõrgupäringuid ja konsoolihoiatusi/-vigu 0. Tegelik editor/context/form/gallery/rubriigimoodul ja profiilifilter; Auth/PostgREST ning avaldamiskontrolleri piirid on sünteetilised.
+- Lõplik Next webpack build PASS: 23.405 s, 626 muutumatut sisendit; inventari SHA256 38fd9aabbaaf6a4ab6c79483cdff67eda4fc738fbb34eade4ec42aa6dcd6bfba. Olemasolevad lukustatud sõltuvused säilisid. Enne kinnitatud reload’i täpsustust läbinud esimene build säilib eraldi katsena.
+- Muudetud wrapperi olemasolev profiilitest läbis 13/13 ning vana brauserifixtuuri V2 transpordi kitsas ühilduvustest 1/1. V1 parseri regressioonid ja vana v1 SQL säilisid; kõigi 626 lõpliku build’i sisendi räside kordusvõrdlus näitas drift 0. Need kaks transpordifixtuuri tuli kohandada wrapperi tegeliku versioonivahetuse tõttu.
+- Uuendaja aluse raporti kontroll 11/11, SQL-adapter 13/13 ja katkestuste/jätku töövoog 10/10 PASS. Täpse lõppmanifesti päris ajutise Giti/indexi/varukoopia/commit’i ja kohaliku remote’i tarnekäigu tõend on paki kontrollid/final-flow.json-is; SQL ja build on selles tarnekatses sünteetilised. Päris Maci ega teenuste toiminguid siin ei tehtud.
+- SQL-fixtuuri esimese aegunud kirje katse avaldamise ajatempel parandati vastavaks olemasolevale active_until > published_at piirangule; tootmiskoodi ei muudetud selle tõttu. Esmased ja lõplikud logid säilivad. Native PostgreSQL mitme sessiooni samaaegset lukustamist pole nende lokaalsete katsetega tõendatud.
 
 ## Production / kasutajaliides
 
-- Poe rubriikide halduse etapp 0b2594a on päris Maci raporti ja kasutaja käigu järgi lõpetatud; ülem- ja alamrubriigi eemaldamisel jäi testkuulutus alles. Täpsem raporti ja piltide piir on STORE_CATEGORY_MANAGEMENT_20261110.md-s.
-- Uue õigusteparanduse lähtekoodi, SQL-i ega uut commit/push’i pole käesolevas keskkonnas Macis või pilves rakendatud. Uuendaja teeb kõigepealt read-only eelkontrolli, seejärel kliendi build/commit/push’i, kontrollib avalikku kliendimärki ja alles siis rakendab õigusteparanduse.
-- Avaliku kliendimärgi GET kontrollib täpseid baite samal olemasoleval https://selqiro.vercel.app päritolul. See ei ole Verceli Ready/API/deployment-ID kviitung. Raportis jääb Verceli READY_NOT_CHECKED eraldi välja.
-- Kui kliendimärk kuni 55 sekundi jooksul ei ilmu, salvestub WAITING_FOR_CLIENT_DEPLOYMENT. Sama käsk jätkab kontrollitud commit/push’i juurest lõpetatud build’i, commit’i ja push’i kordamata. Enne SQL-i kontrollitakse allikat, remote’i ja kliendimärki uuesti.
-- Juba avatud brauserivahelehed võivad hoida vana JavaScripti. Pärast lõpetatud uuendust värskenda portaali; avaliku märgi vaatlus ei tõenda kõigi avatud vahelehtede asendamist. Vastu võetud varasemate etappide Verceli kuvatõmmiseid uuesti ei küsita.
+- Varasem tavakuulutuse rubriigihaldus, otsese seostetabeli kirjutustee sulgemine ja sama adfa3ae commit’i Verceli Ready / Production pilt on vastu võetud. Kasutaja kinnitas selle järel rubriigi salvestamist ja kuulutuse leitavust profiili filtris. Neid lõpetatud paigaldusi ega katseid ei korrata.
+- Uue hobuste lähtepaki kohta pole veel Maci rakendusraportit, uut commit’i/push’i, SQL-i järelkviitungit ega Verceli Ready-tulemust. Kohalik sünteetiline katse ei asenda neid. Täieliku deployment-ID/API-kviitungi puudumine ka varasema pildi juures säilib tõendipiirina.
+- Pärast uue paki edukat jooksu: oota terminalis näidatud uue commit’i Ready / Production tulemust, värskenda portaal ning tee üks olemasoleva avaliku hobuse rubriigisalvestuse ja profiilifiltri kasutuskäik. Hobuse eemaldamist, uuesti avaldamist ega fotode kustutamist selleks vaja pole.
 
 ## Üks järgmine töö
 
-Paki uus selqiro-poerubriikide-oigused-20261110 kaust Downloads-kausta ja kasuta HOSTED_PORTAL.md üht käsku: python3 -I -B "$HOME/Downloads/selqiro-poerubriikide-oigused-20261110/uuenda.py" --publish. Kui ilmub OOTEL: WAITING_FOR_CLIENT_DEPLOYMENT, jätka sama käsuga pärast veebiversiooni valmimist. Lõpetamisel või PEATATUD korral saada SAADA SEE FAIL real näidatud täpne JSON; selle põhjal uuendatakse tegelik seis.
+Laadi uus selqiro-hobuse-poerubriigid-20261110.zip alla ja paki Downloads-kausta lahti. Käivita üks käsk: python3 -I -B "$HOME/Downloads/selqiro-hobuse-poerubriigid-20261110/uuenda.py" --publish. Uuendaja kontrollib kinnitatud alust, teeb uue lisanduva SQL-i ja järelkontrolli, rakendab lähtefailid, koostab ning commit’ib/push’ib. Seejärel oota sama uue commit’i Ready / Production tulemust ja kontrolli olemasoleva avaliku hobuse eraldi rubriigisalvestust ning leitavust profiili sama rubriigi filtris. Täpne juhend: docs/continuity/HOSTED_PORTAL.md.
 
-**Peatumisel:** PEATATUD korral säilita teade, raport, kasutaja muudatused ja kõik päevikud. Tundmatut õiguste- või lähteerinevust ei parandata kaitsete nõrgendamisega. SQL-i saadetakse kõige rohkem üks rakenduskatse; ebaselge tulemus lahendatakse lugemisega, mitte automaatse korduskirjutusega. Automaatne jätk on lubatud ainult uuendaja täpselt kontrollitud seisust; muud peatust ei käsitleta veebiversiooni ootena.
+**Peatumisel:** Kui uuendaja peatub, säilita PEATATUD-rida ning saada SAADA SEE FAIL real näidatud ja Finderis valitud täpne JSON. Lähte-/indexi-/remote’i-/andmebaasilepingu erinevust ei normaliseerita automaatselt. Teadmata SQL-i tulemust kontrollitakse lugemisega; rakenduskatset automaatselt ei korrata. Kontode, hobuste, kuulutuste, fotode, sõnumite ega päevikute kustutamisluba puudub.
 
 ## Loe ainult vajalikku
 
-- docs/continuity/HOSTED_PORTAL.md — üks uus käsk, ooteseisu jätk ja täpne raport.
-- docs/continuity/STORE_CATEGORY_AUTHORITY_20261110.md — praegune ulatus, kontrolltõendid ja paigalduse piir.
-- docs/architecture/store-category-link-authority-v1.md — vana kirjutustee sulgemine, osaline tulemus ja allikas-enne-SQL järjekord.
-- docs/continuity/STORE_CATEGORY_MANAGEMENT_20261110.md — lõpetatud eelmise etapi tegelik vastuvõtt.
-- docs/continuity/SERVICE_ACCESS.json — samad teenusesihid; vanad vaatlused pole värske Maci/Giti seis.
+- docs/continuity/HOSTED_PORTAL.md — üks uue hobuste paki käsk ja järgneva kasutuskontrolli piir.
+- docs/continuity/HORSE_STORE_CATEGORIES_20261110.md — uus ettevalmistus, testitõendid ning Maci/pilve kinnitamata sammud.
+- docs/architecture/horse-store-category-assignment-v1.md — kanoonilise UUID seos, eraldi salvestus ja v2 üleminek.
+- supabase/repairs/20261110_horse_store_categories/README.md — SQL-leping, eel-/järelkontroll ja kohalike katsete piir.
+- docs/continuity/STORE_CATEGORY_AUTHORITY_20261110.md — eelmise etapi lõpetatud paigaldus ning kasutajavastuvõtt.
+- docs/continuity/SERVICE_ACCESS.json — muutmata teenusesihid ja CLI pin; saladusi pole.
 
 ## Säilivad piirid
 
-- Üks portaal, hoidla, Supabase’i projekt, konto ja keele-eelistus. English on põhikeel/fallback, Eesti teine keel; kasutajasisu ei tõlgita.
-- Hobune jääb horse_offers ja teenus services kanooniliseks UUID-kirjeks; listings tabelisse varikoopiat ei looda. Kuni kümme fotot, üks põhipilt ja null foto lubamine säilivad.
-- Hobuse ja tavakuulutuse staatuse muutmine ei uuenda tähtaega; 90 päeva pikendamine on eraldi omaniku kinnitus. Teenuste käesolev lahendus ei kehtesta uut tähtajareeglit.
-- Püsiv kuulutuste arvupiir on otsustamata. 300 MiB on ajutise töö kaitse; kolm avatud ja 20 uut toimingut/24 h on eraldi olemasolevad kasutuselevõtukaitsed. Omaniku teenused on lehekülgedega, mitte ühe väikese vaikse kärpega.
-- Üldine terminalne taustakoristus jääb eraldi tööks. Paigaldaja ei kustuta Storage’i objekte; teenuse toimingud koristavad ainult enda kontrollitud algfaile või galeriist eemaldatud hallatud veebifaile.
-- Teenuste Quick Update, live-asukoht/saadavus, töötajad ja autopark on eraldi edasine töö; töökuulutused hiljem. Nende olemasolu ei väideta selle tarnega.
-- Profiili ühine loend ei liida teenuseid toodete hulka. Poerubriigi valimisel kuvatakse olemasoleva skeemi järgi ainult seostatud tavakuulutusi; hobustele ega teenustele seoseid ei oletata.
-- Energy, maksete tuum ja piiratud AI abi jäävad kokkulepitud V2 käivitamise ulatusse pärast käsilolevat kuulutuste/teenuste etappi. Tavaline osalemine ei sõltu Energy ostmisest.
-- Haldus ja kuulutuse rubriigiseoste salvestamine jäävad eraldi toiminguteks. Ettevalmistatud parandus sulgeb brauseri otsemuudatused ainult seostetabelile. See ei kehtesta universaalset invarianti hilisema listings.identity_id või store_categories.identity_id muutmise ega privilegeeritud kirjutajate suhtes. NULL-identiteediga vana kuulutust ei seota vaikimisi kasutaja ID kaudu ega parandata automaatselt.
+- Üks olemasolev portaal, hoidla, Supabase’i projekt, konto ja keele-eelistus. English põhikeel/fallback, Eesti teine keel; kasutajasisu ei tõlgita.
+- Hobune jääb horse_offers ja teenus services kanooniliseks UUID-kirjeks. Listings-varikoopiat ei looda. Hobuse rubriigiseos ei avalda, pikenda, muuda teksti ega tegele piltidega; kuni kümme fotot, üks põhipilt ja null foto lubamine säilivad.
+- Profiili v2 ühine kuulutuste loend sisaldab tavakuulutusi ja hobuseid. Ülemrubriik leiab alampuu seosed; alamrubriik kitsendab. Ülem- ja alamrubriigi salvestus on selge eraldi valik. Sama hobust ei dubleerita. Teenused on oma loendis ja nende rubriigiseoseid pole selle pakiga tehtud.
+- Rubriigi eemaldamisel kaovad seosed; hobune, tavakuulutus ja fotod säilivad. Olemasoleva haldus-RPC removed_listing_links loendab endiselt ainult tavakuulutuse seoseid. See ei ole hobuseseoste koguarv.
+- Õiguskontroll kaitseb neid owner RPC-sid ja tabeli avalikke rolle. Hilisem identiteedi üleandmine ja privilegeeritud kirjutaja ei ole selle sammu universaalse invariandina lahendatud. Varasema aktiivse identiteedi kliendiseadistaja turvapiir ei kao selle lisandusega.
+- Hobuse/tavakuulutuse staatuse muutmine ei uuenda tähtaega; 90 päeva pikendamine on eraldi kinnitus. Teenustele uut tähtajareeglit ei lisata. Varasemad ajutise üleslaadimise kaitsed säilivad; püsiv kuulutuste arvupiir on otsustamata.
+- Üldine terminalne fotode taustakoristus ja tehniliste paneelide eemaldamine tavakasutaja vaatest vajavad enne üldist avalikku avamist lõpetamist. See paigaldaja ei tee Storage’i toiminguid.
+- Teenuste Quick Update, live-asukoht/saadavus, töötajad/autopark ja töökuulutused jäävad eraldi tööks. Energy, maksete tuum ning piiratud AI abi jäävad V2 kokkulepitud ulatusse. Tavaline osalemine ei sõltu Energy ostmisest.
 
 ## Keskkond
 
-- Hoidla https://github.com/Taivo17/selqiro.git; portaal https://selqiro.vercel.app; kinnitatud Maci siht /Users/taivo/selqiro. Uut hoidlat, portaali, Supabase’i projekti ega kontosüsteemi ei looda.
-- Olemasolev Supabase vyjletlmwoiwxsnsunlm ja paigalduse UUID 2d088814-0900-448a-a9d1-7b05470cb1d2 säilivad. Uue halduse võimekus on kasutaja raporti järgi paigaldatud ja kontrollitud. Sama SQL-i ega varasemaid paigaldajaid ei käivitata uuesti.
-- Viimane raportiga kinnitatud Maci lõppseis: 10.11.2026 kell 15:17:33 Europe/Tallinn, main/0b2594ad27e8320ab7e71206c8c5cb20edcb5d8a ja push verified. Uus kandidaat on eraldi kohalik ettevalmistus; Maci/GitHubi/Supabase’i/Verceli värsket seisu ei ole sellest tuletatud. Package/lock ja varem väljastatud pakid jäävad muutmata.
+- Hoidla https://github.com/Taivo17/selqiro.git; portaal https://selqiro.vercel.app; kinnitatud Maci siht /Users/taivo/selqiro. Terminali prompt’i vana töökausta nimi ei muuda uuendaja täpset sihti.
+- Olemasolev Supabase vyjletlmwoiwxsnsunlm ja paigalduse UUID 2d088814-0900-448a-a9d1-7b05470cb1d2 säilivad. Paigaldaja kasutab olemasolevat räsiga kinnitatud CLI-d; uut sisselogimist, projekti ega sõltuvuste paigaldust ei tehta.
+- Uue väljalaske Maci/Giti ja pilve lõppseis tuleb järgmise jooksu raportist ning sama commit’i Verceli vaatlusest. Praegune viimane tegelik paigaldus on adfa3ae, mitte kohalik ettevalmistatud kandidaat.
 
 ## Ajalugu (mitte praegused käsud)
 

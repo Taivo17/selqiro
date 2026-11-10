@@ -1,3 +1,44 @@
+# Store category authority accepted in the user journey
+
+Recorded 2026-11-10, Europe/Tallinn; exact acceptance time was not supplied.
+After the completed authority installation, the user confirmed that saving a shop
+category succeeded and the listing was found in that category on the public profile.
+The requested outcome is accepted. The reply does not independently identify the
+route, listing/category IDs or active identity, or prove every legacy form/account.
+Previous category management acceptance remains valid; do not rerun the installer,
+SQL or completed user tests. The installed application commit remains
+`adfa3ae767712b5f71e9fac2d963a765f61fb444` according to the previous completed report.
+
+Horse and service category assignments remain outside this implementation.
+The next recommended scope is horse offers first, preserving their canonical UUID,
+independent authorized assignment and safe category removal. See
+`../continuity/HORSE_STORE_CATEGORY_NEXT_20261110.md`.
+This is a documentation checkpoint pending the next controlled source update on Mac.
+All earlier records below are retained verbatim as dated history, including their
+now-superseded pending browser test. CURRENT_STATE.json owns the current next action.
+
+---
+
+# Store category authority installed checkpoint
+
+Recorded 2026-11-10, Europe/Tallinn. The user's completed updater report
+confirms commit `adfa3ae767712b5f71e9fac2d963a765f61fb444`, verified database authority,
+the exact public client marker, and the retained successful build/push.
+The earlier matching Vercel Ready / Production screenshot remains accepted.
+One apply was acknowledged and a separate verification passed. All nine
+guard groups and preserved dependency/invariant fingerprints matched.
+
+The implementation contract below is retained unchanged. Its preparation-time
+status and installation instructions are historical. The updater and SQL must
+not be rerun. A single targeted live save through the new existing-listing
+category review route remains to be confirmed after the authority change.
+See `../continuity/CURRENT_STATE.json` and
+`../continuity/STORE_CATEGORY_AUTHORITY_20261110.md` for current evidence.
+This documentation checkpoint has not itself been installed or committed on
+the user's Mac; issued source and installation packages remain immutable.
+
+---
+
 # Store-category link write authority v1
 
 Prepared source, 2026-11-10. This document describes a narrow closure of the

@@ -31,11 +31,13 @@ function runtime({language='et',rows=records(60),rpc,categoryRows=[{id:C,name:'C
  dom.window.scrollTo=()=>{};
  dom.window.document.addEventListener('click',event=>event.preventDefault());
  const calls=[],routes=[],restores=[],cache=new Map(),router={push:url=>routes.push(['push',url]),back:()=>routes.push(['back'])};
- const client={rpc(name,args){assert.equal(name,'get_public_profile_marketplace_v1');return{abortSignal(signal){
+ // Direct V1 parser cases above still use page(). Only the current API's transport serves V2.
+ const transportReply=reply=>({...reply,data:reply.data?{...reply.data,schema_version:2}:reply.data});
+ const client={rpc(name,args){assert.equal(name,'get_public_profile_marketplace_v2');return{abortSignal(signal){
   const req={sellerSlug:args.p_seller_slug,storeCategoryId:args.p_store_category_id,offset:args.p_result_offset,limit:args.p_result_limit};calls.push({name,args,signal});
-  if(rpc)return rpc(req,signal,calls.length);
+  if(rpc)return Promise.resolve(rpc(req,signal,calls.length)).then(transportReply);
   const scoped=(req.storeCategoryId===null?rows:rows.filter(row=>row.content_type==='listing')).map(row=>({...row,seller_slug:req.sellerSlug}));
-  return Promise.resolve({data:page(scoped,req),error:null});
+  return Promise.resolve(transportReply({data:page(scoped,req),error:null}));
  }}}};
  const translate=(catalog,key,params={})=>Object.entries(params).reduce((result,[name,value])=>result.replaceAll(`{${name}}`,String(value)),catalog[language]?.[key]??catalog.en?.[key]??key);
  const Link=React.forwardRef(function MockLink({prefetch:unused,...props},ref){return React.createElement('a',{...props,ref})});

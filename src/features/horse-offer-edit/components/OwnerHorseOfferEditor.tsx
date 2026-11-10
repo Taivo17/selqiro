@@ -15,6 +15,7 @@ import { applyHorseOfferPublicationConfirmationGroupChange, createHorseOfferPubl
 import HorseOfferPublicationGate from "../../listing-create/components/HorseOfferPublicationGate";
 import HorsePublicationAction from "../../horse-publication/components/HorsePublicationAction";
 import OwnerHorseOfferEditFields from "./OwnerHorseOfferEditFields";
+import HorseStoreCategoryCard from "./HorseStoreCategoryCard";
 import OwnerHorseGalleryEditor, {horseEditorGalleryDirty, horseEditorPhotos, type HorseEditorPhoto} from "./OwnerHorseGalleryEditor";
 import { horseActivityDeadline } from "../../../entities/horse-offer/model/horseActivity";
 import { getListingActivity } from "../../../entities/listing/model/listingActivity";
@@ -33,6 +34,8 @@ export default function OwnerHorseOfferEditor({userId, offerId}: {userId: string
   const [confirmations, setConfirmations] = useState(createHorseOfferPublicationConfirmationState);
   const [policies, setPolicies] = useState<readonly HorsePolicySnapshot[] | null>(null);
   const [localError, setLocalError] = useState("");
+  const [categoriesPending, setCategoriesPending] = useState(false);
+  const [categoryReloadVersion, setCategoryReloadVersion] = useState(0);
   const [formSnapshot, setFormSnapshot] = useState<OwnerHorseOfferEditSnapshot | null>(null);
   const submittedRequest = useRef<string | null>(null);
   const completion = useRef<{snapshot: OwnerHorseOfferEditSnapshot; preserveDraft: boolean} | null>(null);
@@ -72,14 +75,15 @@ export default function OwnerHorseOfferEditor({userId, offerId}: {userId: string
     horseActivityDeadline(detail.activeUntil, detail.publishedAt)).state === "active"
     && horseActivityDeadline(detail.activeUntil, detail.publishedAt) !== null;
   useEffect(() => {
-    const unload = (event: BeforeUnloadEvent) => { if (dirty) { event.preventDefault(); event.returnValue = ""; } };
+    const unload = (event: BeforeUnloadEvent) => { if (dirty || categoriesPending) { event.preventDefault(); event.returnValue = ""; } };
     window.addEventListener("beforeunload", unload); return () => window.removeEventListener("beforeunload", unload);
-  }, [dirty]);
+  }, [dirty, categoriesPending]);
   const leave = (event: MouseEvent<HTMLAnchorElement>) => {
-    if ((dirty || !["editing", "published", "closed"].includes(publication.view.phase)) && !window.confirm(t("leaveConfirm"))) event.preventDefault();
+    if ((dirty || categoriesPending || !["editing", "published", "closed"].includes(publication.view.phase)) && !window.confirm(t("leaveConfirm"))) event.preventDefault();
   };
   const reload = () => {
-    if (dirty && !window.confirm(t("reloadConfirm"))) return;
+    if ((dirty || categoriesPending) && !window.confirm(t("reloadConfirm"))) return;
+    setCategoryReloadVersion(version => version + 1);
     context.reload();
   };
   const submit = () => {
@@ -129,6 +133,8 @@ export default function OwnerHorseOfferEditor({userId, offerId}: {userId: string
         canSubmit={editable && !!policies && (detail.status === "draft" || dirty)
           && (!!savedConfirmation || getHorseOfferPublicationConfirmationProgress(form.offerType, confirmations).complete)}
         onSubmit={submit} localError={localError} onReset={() => setLocalError("")} /> : null}
+      {context.actor ? <HorseStoreCategoryCard key={categoryReloadVersion} actor={context.actor} offerId={offerId}
+        blocked={!context.ready || working || locked} onPendingChange={setCategoriesPending} /> : null}
       <section className="rounded-3xl border border-zinc-200 bg-white p-5">
         {publication.view.phase === "editing" ? <p className="text-sm">{t(dirty ? "unsaved" : "noChanges")}</p> : null}
         <div className="mt-3 flex flex-wrap gap-3">

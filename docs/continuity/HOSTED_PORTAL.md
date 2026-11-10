@@ -1,65 +1,52 @@
-# Poe rubriigiseoste õiguste parandus — uus ettevalmistatud tarne
+# Hobusekuulutuse poe rubriigid — üks järgmine käsk
 
-Seis: 10.11.2026 Europe/Tallinn. Üks praegune seis on
-`docs/continuity/CURRENT_STATE.json`; loetav üleandmine genereeritakse sellest.
-Senine rubriikide lisamise, nimevahetuse, seostamise ja eemaldamise etapp on
-kasutaja poolt vastu võetud. Vana paigaldajat ei korrata.
+Seis: 10.11.2026 Europe/Tallinn. Uus lähtepakk on kohalikult kontrollitud;
+Maci rakendus, uus commit/push, andmebaasi paigaldus ja deployment on veel
+kinnitamata. Üks seisukirje on `docs/continuity/CURRENT_STATE.json`.
 
-## Üks uus käsk
+Varasem tavakuulutuse rubriigihaldus ja õigusteparanduse järgne salvestus/profiili
+kasutuskontroll on vastu võetud. Neid paigaldajaid ega läbitud katseid ei korrata.
 
-Laadi alla `selqiro-poerubriikide-oigused-20261110.zip` ja paki selle kaust
-Downloads-kausta. Käivita:
+## Paigaldus
 
-```bash
-python3 -I -B "$HOME/Downloads/selqiro-poerubriikide-oigused-20261110/uuenda.py" --publish
+Laadi `selqiro-hobuse-poerubriigid-20261110.zip` alla ja paki Downloads-kausta
+lahti. Seejärel käivita terminalis üks käsk:
+
+```sh
+python3 -I -B "$HOME/Downloads/selqiro-hobuse-poerubriigid-20261110/uuenda.py" --publish
 ```
 
-Siht on olemasolev `/Users/taivo/selqiro`, `main`, kinnitatud Selqiro remote
-ja täpne vastu võetud `0b2594ad27e8320ab7e71206c8c5cb20edcb5d8a` alus.
-Uuendaja kontrollib edukat privaatset alusraportit, tegelikku haru/HEAD-i,
-indexit, tööpuud ja lähtefaile enne kirjutusi. Paketis olevaid faile ei muudeta.
+Siht on olemasolev `/Users/taivo/selqiro`, haru `main`, alus
+`adfa3ae767712b5f71e9fac2d963a765f61fb444`. Uuendaja kontrollib tegelikku
+HEAD-i, täielikku lähtepuud/indexit, tööpuud, kinnitatud remote'i, eelmise
+lõpetatud jooksu privaatraportit ning vajalikke andmebaasilepinguid enne kirjutusi.
+Uut worktree'd ega algset portaali paigaldajat ei käivitata.
 
-## Mida uuendaja teeb
+Uus lisanduv SQL ja eraldi järelkontroll tulevad enne lähtefailide rakendamist,
+build'i ning commit/push'i. Vana profiili v1 lugemisleping säilib; uus klient
+kasutab v2. Pakk toob kaasa ka viimase vastuvõtu dokumentide delta.
 
-1. Loeb andmebaasi praeguse õiguste seisu ilma seda muutmata.
-2. Rakendab uue kliendi ja dokumendid, teeb build'i ning commit/push'i.
-3. Kontrollib olemasoleval portaalil uue kliendi täpset avalikku märgistusfaili.
-4. Kontrollib uuesti allikat, remote'i ja märgistusfaili ning rakendab alles
-   seejärel rubriigiseoste vana otsekirjutusõiguse sulgemise. Loeb tulemuse eraldi.
+## Pärast edukat jooksu
 
-Kuulutusi, rubriike, pilte, kontosid ega päevikuid selle uuendusega ei kustutata.
-Kaks vana vormi kasutavad sama olemasolevat õigusi kontrollivat salvestust.
-Rubriikide vea või teadmata tulemuse järel saab olemasoleva kuulutuse tegeliku
-valiku üle vaadata eraldi rubriigivaates; sama kuulutust uuesti avaldada pole vaja.
+1. Oota Vercelis terminali näidatud **uue commit'i** `Ready / Production` tulemust.
+2. Värskenda portaali ja ava Minu alas üks olemasolev avalik hobusekuulutus muutmiseks.
+3. Vali kaardil „Poe rubriigid” üks enda olemasolev rubriik või alamrubriik ja
+   vajuta „Salvesta rubriigid”. Hobuse sisu ega avaldamist pole selleks vaja salvestada.
+4. Ava sama kasutaja avalik profiil ja vali sama rubriigi filter. Hobune peab
+   olema leitav ning kaardilt peab avanema sama hobusekuulutus.
 
-## Kui veebiversioon alles valmib
+See on uue hobuste kasutustee vastuvõtt; varasemat tavakuulutuse CRUD-katset ei
+korrata. Katseks ei ole vaja hobust, fotot ega rubriiki kustutada.
 
-`OOTEL: WAITING_FOR_CLIENT_DEPLOYMENT` tähendab, et kontrollitud lähtekood
-on commit'itud ja üles lükatud, kuid avalik kliendimärk pole veel kinnitatud.
-Esimesel sellisel ootamisel pole õigusteparandust veel rakendatud.
-Oota veebiversiooni valmimist ja käivita **sama käsk** uuesti.
+## Kui käsk peatub
 
-Jätk kontrollib sama allikat, commit'i, remote'i ja päevikut. Lõpetatud build'i,
-commit'i ega push'i ei korrata. Ajalooline andmebaasi seis säilib raportis ka siis,
-kui katkestus toimus hiljem. Ebaselget SQL-i tulemust ei lahendata kordussaatmisega.
-Muu `PEATATUD` ei ole sama mis tavaline veebiversiooni ooteolek.
+Saada **PEATATUD-rida ja fail, mille tee on real SAADA SEE FAIL**. Uuendaja
+valib sama unikaalse JSON-faili Finderis. Kui koopia või Finderis valimine ei
+õnnestu, näitab uuendaja alles oleva kontrollitud raporti teed või ütleb, et
+raportit ei loodud. Hoia algsed päevikud alles.
 
-## Milline fail vestlusse lisada
+Teadmata SQL-i tulemust kontrollitakse lugemisega; automaatset teist rakenduskatset
+ei tehta. Edukalt lõpetatud sammu jätk ei korda. Tuvastatud kasutaja muudatused,
+indexi erinevus või võõras remote peatavad uuendaja enne uusi kirjutusi.
 
-Terminal näitab lõpus **`SAADA SEE FAIL:`** ja selle jooksu unikaalse JSON-faili
-täpset teed Downloads-kaustas. Macis valitakse sama fail Finderis.
-Lisa vestlusse see fail; `PEATATUD` korral lisa ka peatamisrida.
-Kui koopia või Finder ebaõnnestub, näitab uuendaja täpset olemasolevat raportit
-või ütleb, et faili ei tekkinud. Vanad päevikud säilivad.
-
-## Tõendipiir ja järgmine kontroll
-
-See pakk on ette valmistatud ja kohalikult kontrollitud; uus tegelik Maci,
-commit/push'i, andmebaasi ja portaali seis tuleb uuendaja raportist.
-Avaliku märgi vaatlus ei ole Verceli Ready/API/deployment-ID kviitung.
-Pärast lõpetatud uuendust värskenda portaali, et avatud vaheleht kasutaks uut koodi.
-Seejärel kontrollitakse vajaduse korral ainult muudetud vana vormi salvestusteed.
-Varasemat halduse kasutuskatset ega selle Verceli kuvatõmmist ei küsita uuesti.
-
-Täpsed kohalikud kontrollid ja piirid:
-`docs/continuity/STORE_CATEGORY_AUTHORITY_20261110.md`.
+Täpne lähte-/testi-/pilvepiir on `HORSE_STORE_CATEGORIES_20261110.md`-s.

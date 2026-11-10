@@ -1,0 +1,180 @@
+{
+  "schema_version": 1,
+  "kind": "horse-store-categories-v1",
+  "retainedDependencies": "9dd1c4ef3f97785a8f164bb5409f9e4788835fd7a280d8b5db326c36c1be2572",
+  "retainedCapability": "7783a7b59001e5b4c00226d8479e2fc4b609a39f48b2bff46ade265a30306b1c",
+  "functions": "e35a9612959d89d4638ca5b3f735616f16cc3363082c6c98302e07120f5f93f7",
+  "structure": "ab43784d467e7a72f2e8e79af3ab6ea47cc48142d2650ba97bcd0ff878bf3c5c",
+  "effects": "f98cc99812d85d67edc3e525e30e6c80d1c9b5b03b95e99a62f9bdba93aeabe2",
+  "categoryAuthority": "1db12d28099908a0d9e7cecedbf242d3fa95eb92c0183c606536769c8ea9cf71",
+  "apiRoles": "a6b12ec9f31ef3e66313f5237759bd8eba9d59e906b4995dac67bbb73d0de1b5",
+  "legacyAuthority": "d03a0054400a33d579e75d323531cde60a36ebef17c7e0478fcf89bd9d7e1983",
+  "before": "efb850c413b6ca598e750f88397e4306e0054571a24283cdb80fa80d6f918a27",
+  "after": "66505e3f48da375c7d929f2732bc6f41a99a6caf468847b9fe911fe327c9e937",
+  "guard_names": [
+    "installer",
+    "actor_roles",
+    "hosted_context_ready",
+    "retained_release",
+    "category_functions",
+    "category_structure",
+    "category_delete_effects",
+    "retained_category_authority",
+    "retained_link_authority",
+    "api_roles_and_entrypoints"
+  ],
+  "dependencies_sha256": "603fb4c457ae6883a05cfcae80d7b015c6ab6095a03cea8f3164de89332a7555",
+  "modules_sha256": "90ba69e888ebce0887590e7184eeb880be42f1310f614d7c27c83af83e5fe5ec",
+  "modules": {
+    "01_assignments.sql": "7884872dac35ee615676b0e6aa4f2f2eab7d9ba35797f159c288301545e6019e",
+    "02_profile_marketplace.sql": "17fcfef0facffcdb0433c42a980b1028b06bdf0f6e3bdd40406c20261cc3cb3e"
+  },
+  "target_effective_privileges_after": {
+    "table": [
+      {
+        "role": "anon",
+        "allowed": false,
+        "grantable": false,
+        "privilege": "DELETE"
+      },
+      {
+        "role": "anon",
+        "allowed": false,
+        "grantable": false,
+        "privilege": "INSERT"
+      },
+      {
+        "role": "anon",
+        "allowed": false,
+        "grantable": false,
+        "privilege": "MAINTAIN"
+      },
+      {
+        "role": "anon",
+        "allowed": false,
+        "grantable": false,
+        "privilege": "REFERENCES"
+      },
+      {
+        "role": "anon",
+        "allowed": false,
+        "grantable": false,
+        "privilege": "SELECT"
+      },
+      {
+        "role": "anon",
+        "allowed": false,
+        "grantable": false,
+        "privilege": "TRIGGER"
+      },
+      {
+        "role": "anon",
+        "allowed": false,
+        "grantable": false,
+        "privilege": "TRUNCATE"
+      },
+      {
+        "role": "anon",
+        "allowed": false,
+        "grantable": false,
+        "privilege": "UPDATE"
+      },
+      {
+        "role": "authenticated",
+        "allowed": false,
+        "grantable": false,
+        "privilege": "DELETE"
+      },
+      {
+        "role": "authenticated",
+        "allowed": false,
+        "grantable": false,
+        "privilege": "INSERT"
+      },
+      {
+        "role": "authenticated",
+        "allowed": false,
+        "grantable": false,
+        "privilege": "MAINTAIN"
+      },
+      {
+        "role": "authenticated",
+        "allowed": false,
+        "grantable": false,
+        "privilege": "REFERENCES"
+      },
+      {
+        "role": "authenticated",
+        "allowed": false,
+        "grantable": false,
+        "privilege": "SELECT"
+      },
+      {
+        "role": "authenticated",
+        "allowed": false,
+        "grantable": false,
+        "privilege": "TRIGGER"
+      },
+      {
+        "role": "authenticated",
+        "allowed": false,
+        "grantable": false,
+        "privilege": "TRUNCATE"
+      },
+      {
+        "role": "authenticated",
+        "allowed": false,
+        "grantable": false,
+        "privilege": "UPDATE"
+      },
+      {
+        "role": "service_role",
+        "allowed": false,
+        "grantable": false,
+        "privilege": "DELETE"
+      },
+      {
+        "role": "service_role",
+        "allowed": false,
+        "grantable": false,
+        "privilege": "INSERT"
+      },
+      {
+        "role": "service_role",
+        "allowed": false,
+        "grantable": false,
+        "privilege": "MAINTAIN"
+      },
+      {
+        "role": "service_role",
+        "allowed": false,
+        "grantable": false,
+        "privilege": "REFERENCES"
+      },
+      {
+        "role": "service_role",
+        "allowed": false,
+        "grantable": false,
+        "privilege": "SELECT"
+      },
+      {
+        "role": "service_role",
+        "allowed": false,
+        "grantable": false,
+        "privilege": "TRIGGER"
+      },
+      {
+        "role": "service_role",
+        "allowed": false,
+        "grantable": false,
+        "privilege": "TRUNCATE"
+      },
+      {
+        "role": "service_role",
+        "allowed": false,
+        "grantable": false,
+        "privilege": "UPDATE"
+      }
+    ]
+  }
+}

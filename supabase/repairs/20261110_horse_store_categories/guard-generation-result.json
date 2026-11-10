@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "kind": "horse-store-categories-guard-generation",
+  "result": "PASS",
+  "generated_at_utc": "2026-11-10T19:12:03.016Z",
+  "source_inputs": 82,
+  "install_replay_verified": true,
+  "retained_invariants_unchanged": true,
+  "new_table_effective_privileges_all_denied": true,
+  "live_database": false,
+  "production_storage": false,
+  "mac_installer": false,
+  "files": {
+    "01_assignments.sql": "7884872dac35ee615676b0e6aa4f2f2eab7d9ba35797f159c288301545e6019e",
+    "02_profile_marketplace.sql": "17fcfef0facffcdb0433c42a980b1028b06bdf0f6e3bdd40406c20261cc3cb3e",
+    "changes.sql": "90ba69e888ebce0887590e7184eeb880be42f1310f614d7c27c83af83e5fe5ec",
+    "preflight.sql": "98a219e3362113573cdedb0bd9e86e225df8ca92d7313fb3036ef1039cb38bb2",
+    "apply.sql": "013695e272b380a2a510e27215e141bc1ced13f93aa723e941fbc7be1ef47add",
+    "verify.sql": "98a219e3362113573cdedb0bd9e86e225df8ca92d7313fb3036ef1039cb38bb2",
+    "source-pins.json": "ef271e9ec6ffbd2a0f31f6d48520120617ae86d458fb1a17b5de564d3a50561d",
+    "catalog-pins.json": "d22352df925b6cf03a76575670c6f8058faaca91ce23d6286475758a3f5ee091"
+  }
+}

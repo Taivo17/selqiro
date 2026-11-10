@@ -1,3 +1,19 @@
+## 2026-11-10 current category checkpoint
+
+Ordinary listing category assignment, root/child management and the later
+join-table authority repair have been installed and accepted in the user
+journey. The matching Vercel Ready / Production evidence is retained. Earlier
+preparation-time pending or broader-policy paragraphs below are dated history.
+
+The next prepared extension is canonical horse-offer shop categories. It adds
+an independent UUID association and versioned public profile reader; it does
+not alter the ordinary listing assignment contract. See
+`horse-store-category-assignment-v1.md` and `../continuity/CURRENT_STATE.json`
+for actual preparation, installation and acceptance boundaries. Services remain
+outside that extension. All older content below is retained unchanged.
+
+---
+
 # Own shop category management v1
 
 ## 2026-11-10 prepared direct-write closure

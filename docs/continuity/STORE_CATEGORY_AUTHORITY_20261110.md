@@ -1,3 +1,88 @@
+<!-- SELQIRO_STORE_CATEGORY_AUTHORITY_ACCEPTED_20261110 -->
+## 10.11.2026 — poe rubriikide õigusteparanduse kasutustulemus on vastu võetud
+
+Kasutaja kinnitas pärast lõpetatud õigusteparandust: „poerubriigi lisamine õnnestus ja avalikul profiilil on kuulutus selle rubriigi filtris leitav“.
+Ootel olnud salvestuse ja profiilifiltri kasutuskontroll on selle tulemuse ulatuses läbitud.
+Varasem ülem- ja alamrubriigi loomise, nimevahetuse, seostamise ning eemaldamisel
+kuulutuse säilimise vastuvõtt säilib. Paigaldajat, SQL-i ja läbitud katseid ei korrata.
+
+Viimane raportiga kinnitatud paigaldus on `adfa3ae767712b5f71e9fac2d963a765f61fb444`,
+10.11 kell 20:07:17 Europe/Tallinn, `database: verified`. Verceli sama commit’i
+Ready / Production kuvatõmmis on vastu võetud. Uus kasutajakinnitus ei ole uus
+Giti või SQL-kataloogi vaatlus ega kõigi vanade vormide või kontode katse.
+
+Järgmine soovitus on ühendada hobusekuulutused enda poe rubriikidega, säilitades
+`horse_offers` kanoonilise UUID. Teenused jäävad eraldi järgmiseks sammuks.
+Selle töö koodi pole käesolevas vastuvõtus lisatud. Üks praegune seis ja järgmine
+tegevus on `docs/continuity/CURRENT_STATE.json`-is; ulatus on
+`docs/continuity/HORSE_STORE_CATEGORY_NEXT_20261110.md`-s.
+
+See on eraldi dokumentide jätkupunkt. Selle dokumentide muudatusi pole Maci hoidlas rakendatud, commit’itud ega push’itud; järgmine kontrollitud lähteuuendus võtab need kaasa. Väljastatud lähte- ja paigalduspakid ning algsed raportid ja päevikud säilivad muutmata.
+
+Allpool säilivad varasemad kirjed ja nende tõendipiirid muutmata. Nendes leiduv
+ootel kasutuskatse, NEXT-pealkiri või paigalduskäsk ei ole praegune tööjuhis.
+
+---
+
+# 10.11.2026 õigusteparanduse lõpetatud paigaldus
+
+Uus seis 20:07:17 Europe/Tallinn asendab allpool säilitatud ettevalmistus- ja
+ooteseisu juhised. **Paigaldus on lõpetatud; sama paigaldajat ega SQL-i ei korrata.**
+
+## Tegelik kasutaja raport
+
+Fail: `selqiro-poerubriikide-oigused-20261110-raport-20261110-200717-a2d280189433.json`.
+Maht 229403 baiti; SHA256 `07854b1ad2faa249203729e812c0dd03a078ebf20043cd0ee2e58d7d414261b1`.
+Tegelik siht `/Users/taivo/selqiro`; commit `adfa3ae767712b5f71e9fac2d963a765f61fb444`.
+`stage: complete`, `database: verified`, `build: passed`, `push: verified`,
+`storage_operations: not_performed`. Manifest vastab väljastatud pakile:
+`9095e459b64807a731fcfbaa32371503f78bfcd134917d203ea46d39a6fa5369`.
+Kinnitamine võrdles 54 algolekut ja täielikku 1436-kirjelist algindexit.
+
+Build, commit, push ning indexi räsid säilivad 17.32 esimesest jooksust.
+Jätk ei tõenda uut build'i ega uut commit'i; push oli kinnitatud 17:32:41.
+Build'i toorlogi, täielikku lõppindexit ja commit-objekti ei lisatud raportisse.
+
+## Kliendimärk ja üks SQL-i rakendus
+
+Enne jätku säilib kuue 404-vaatlusega 17.33 ooteolek. Jätkus vastas kliendimärk
+20:07:05 ja 20:07:10 HTTP 200, täpselt 139 baidiga ja SHA256-ga
+`d79b11e4ed8710ff39a4fbbfa748f5adde55a5c363729cda3711b2037bcc613e`.
+Üks SQL-i rakenduskäsk on `store_category_authority_apply_once`, exit 0;
+`database_apply_outcome: acknowledged`. Selle apply.sql SHA256 on
+`ebe7d6d65dafc498e9b9e97f7ad8b68857c43479c05293216c3ce8f12a0da055`.
+Eraldi `store_category_authority_verify` väljus 0 ning andmebaasi järelkontroll
+kinnitati 20:07:15. `database_after.state: applied`, kõik üheksa kontrollirühma
+on true; sõltuvuste fingerprint ja kolm säilivat invarianti vastavad eelolekule.
+`database_last_read.state: absent` on alles jäetud rakenduseelne vaatlus.
+Kliendimärgi kontroll enne SQL-i on täpse uuendaja juhtvoo ja raporti vaatlustega
+toetatud; üksikute SQL-käskude ajatemplid raportis puuduvad.
+
+## Veeb ja tõendipiir
+
+Kasutaja 17.35.17 Verceli kuvatõmmisel on `adfa3ae`, main, Ready / Production.
+See varem saadetud pilt on aktsepteeritud; uut pilti ei küsita.
+20.09.22 terminalipilt toetab jätku lõppteadet ja sama commit'i.
+Avalik märk, nähtav Verceli staatus ja SQL-i järelkontroll on eraldi tõendid;
+täielik Verceli deployment-ID/API-kviitung ja uus päris brauseri salvestuskatse
+ei kuulu selle raporti tõendisse. Raporti `READY_NOT_CHECKED` välja ei muudeta.
+
+Lõpliku raporti võrguühenduseta ülevaatus läbis 26 kontrolli. Käesolev ülevaatus
+ei käivitanud paigaldajat, build'i, SQL-i, brauserikatseid ega pilvetoiminguid.
+
+## Üks järgmine tegevus
+
+Värskenda portaal ja tee pärast õiguste muutmist üks kitsas kasutuskontroll: ava olemasoleva testkuulutuse 202 rubriigivaade https://selqiro.vercel.app/v2/my-area/listings/202/store-categories, vali üks aktiivse identiteedi olemasolev poe rubriik, salvesta ja kontrolli sama kuulutuse leitavust profiili vastava rubriigi filtris. Teata tulemus. Uut kuulutust või rubriiki ei pea looma ega eemaldama. Paigaldus ja varasem halduse täiskatse on lõpetatud; neid ei korrata.
+
+See dokumentide koopia on eraldi jätkupunkt. Seda dokumentide uuendust pole Maci hoidlas rakendatud, commit’itud ega push’itud; uus koodimuudatus või deployment sellest ei teki. Järgmine kontrollitud lähteuuendus võtab selle delta kaasa. Väljastatud paigalduspakk, selle lähtekoopia ning kõik raportid ja päevikud jäävad muutmata.
+
+## Säilitatud ettevalmistuse ajalugu
+
+Alljärgnev varasem dokument säilib bait-baidilt. Selle ettevalmistusseis ja
+käivitamiskäsud ei ole praegune tööjärg.
+
+---
+
 # Poe rubriigiseoste otsekirjutustee sulgemine
 
 Seis: 10.11.2026 Europe/Tallinn. Ettevalmistatud uus allikas, mitte Macis või
