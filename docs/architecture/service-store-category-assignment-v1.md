@@ -1,3 +1,18 @@
+<!-- SELQIRO_SERVICE_STORE_CATEGORIES_ACCEPTED_20261111 -->
+## Installation and visible acceptance — 2026-11-11
+
+The completed Mac receipt records database verification, build and push at
+commit `1b0c5ba867e5f466e75f63aee78521d37cf8164f`. The user accepted saving ANTIIK on a
+service, finding/opening that service through the public profile filter and
+showing only categories with active content in the public profile sections.
+Exact Vercel Ready/deployment evidence remains READY_NOT_CHECKED. This does
+not add fresh acceptance of expiry, deletion or browser-back behavior.
+See `../continuity/SERVICE_STORE_CATEGORIES_ACCEPTED_20261111.md`.
+The original architecture below is retained unchanged. This acceptance docs
+delta has not yet been applied to the Mac repository.
+
+---
+
 # Service assignment to own-shop categories
 
 Prepared: 2026-11-11 Europe/Tallinn. Installation and user acceptance are

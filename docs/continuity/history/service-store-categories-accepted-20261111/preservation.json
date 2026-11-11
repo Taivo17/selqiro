@@ -1,0 +1,10 @@
+{
+  "format": "selqiro-service-category-accepted-history-v1",
+  "meaning": "Exact accepted checkpoint before preparing service activity; dated history, not current commands.",
+  "sha256": {
+    "docs/continuity/CURRENT_STATE.json": "9e473e90f24df09bc35790336497b8eabc7e65997b601284846b9227ed701f08",
+    "docs/99_V2_HANDOFF_NEXT_CHAT.md": "44cb73a4b1275cc88c655fb2cb8f66802eed04e7cfff5e5014c2dbe52486565d",
+    "docs/continuity/HOSTED_PORTAL.md": "83e179e61a92f20c639e6a1c0e924c035b5d2c3a153bf848def1f0859cc81075"
+  },
+  "mac_changes": false
+}

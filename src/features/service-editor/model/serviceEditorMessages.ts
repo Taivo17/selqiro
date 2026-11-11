@@ -1,7 +1,7 @@
 export const serviceEditorMessages = {
   en: {
     services: "Services", myServices: "Your services", addService: "Add service", editService: "Edit service", myArea: "My Area",
-    createHelp: "Describe your service, add photos and publish it. You can make changes later in My Area.",
+    createHelp: "Describe your service, add photos and publish it for 365 days. Review and renew it in My Area when needed.",
     editHelp: "Make your changes and save them. You can continue editing after each save.",
     textHeading: "Title and description", title: "Title", description: "Description", titlePlaceholder: "What service do you offer?",
     descriptionPlaceholder: "Describe what you offer, where you work and what the customer should know.",
@@ -48,7 +48,7 @@ export const serviceEditorMessages = {
   },
   et: {
     services: "Teenused", myServices: "Sinu teenused", addService: "Lisa teenus", editService: "Muuda teenust", myArea: "Minu ala",
-    createHelp: "Kirjelda teenust, lisa fotod ja avalda. Hiljem saad teenust Minu alas muuta.",
+    createHelp: "Kirjelda teenust, lisa fotod ja avalda 365 päevaks. Vajadusel saad Minu alas andmed üle vaadata ja teenust pikendada.",
     editHelp: "Tee muudatused ja salvesta. Pärast salvestamist saad kohe edasi muuta.",
     textHeading: "Pealkiri ja kirjeldus", title: "Pealkiri", description: "Kirjeldus", titlePlaceholder: "Millist teenust pakud?",
     descriptionPlaceholder: "Kirjelda oma teenust, tööpiirkonda ja seda, mida klient peaks teadma.",

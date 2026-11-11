@@ -2,7 +2,8 @@
 
 Decision date: 2026-11-11 Europe/Tallinn.
 The one current implementation checkpoint is `../continuity/CURRENT_STATE.json`.
-This document distinguishes the current category work from later product work.
+This document preserves the product decisions. Services-to-own-categories is accepted;
+service activity is prepared in a separate release, awaiting Mac and production acceptance.
 
 ## Public own-category filters — accepted requirement
 
@@ -17,8 +18,9 @@ listing does not appear in services, and a service-only category does not appear
 in listings. Public category eligibility, result count and result pagination
 must use the same visibility rules across the whole section, before a page is
 limited. A draft, paused, inaccessible or expired object cannot make a public
-category visible. Service expiry will join eligibility when that separate
-lifecycle is implemented; this category change does not invent a deadline.
+category visible. The separate prepared service activity release adds the
+365-day server deadline to the same eligibility predicate. Installed and
+prepared evidence remain separate in CURRENT_STATE.
 
 My Area category management and owner assignment selectors continue to show all
 categories of the verified active identity, including empty categories. There
@@ -80,12 +82,14 @@ helper also used for direct public-profile or detail access.
   jobs lifecycle implementation; do not silently rewrite the user's month as
   a separately approved fixed 30-day rule.
 
-The old 2026-07-26 policy already recorded 365 days for services. The current
-service publication runtime does not enforce a service activity deadline.
-Policy evidence is not proof of current enforcement. The forthcoming service
-lifecycle needs owner-facing deadline/expired state, public eligibility and
-an explicit information-current confirmation. Its migration must define the
-treatment of existing services from actual evidence rather than guess dates.
+The old 2026-07-26 policy already recorded 365 days for services. The prepared
+2026-11-11 service activity release implements 365 × 24 hours from the database
+clock, owner deadline/expired presentation, shared public eligibility and an
+explicit information-current confirmation. Existing published services and
+archives with a published_at timestamp receive one transition year from activation;
+original content dates stay unchanged and no past user confirmation is invented.
+See `service-activity-v1.md`. This prepared implementation does not establish
+that the hosted database or web deployment has activated it.
 
 The recommended renewal action confirms the information is still current and
 extends eligibility without changing the original creation/publication date,
@@ -136,10 +140,11 @@ and candidate ranking remain outside that first scope.
 
 ## Delivery order and evidence
 
-Continue the approved small-step order: first connect services to own shop
-categories and apply the nonempty public-category rule to both sections.
-Service activity, temporary provider hiding and jobs are separate follow-ups.
-The current source package must not mark those capabilities as implemented.
+The service own-category step and nonempty public filters have been accepted.
+The next service activity release is locally prepared and tested; its Mac,
+database, deployment and user acceptance remain the immediate next action.
+Temporary provider hiding and jobs remain separate later modules. They are not
+implemented by the service activity package.
 
 Energy/payment core and the known public-launch gates keep their agreed
 priority. A jobs discovery opening is not a condition for marketplace launch.

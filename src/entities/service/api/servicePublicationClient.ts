@@ -7,7 +7,8 @@ import { isUploadUuid } from "../../listing/model/privatePublicationUpload";
 import { measurePhotoTask, type PhotoPerformanceStage } from "../../listing/model/photoPerformance";
 import { bindServiceActivityReceipt, bindServiceOwnerPage, bindServiceOwnerSnapshot, isServiceRevision } from "../model/servicePublication";
 
-const actions = new Set(["prepare", "status", "publish", "cancel", "image-prepare", "image-verify", "owner-read", "owner-list", "owner-set-status"]);
+const actions = new Set(["prepare", "status", "publish", "cancel", "image-prepare", "image-verify", "owner-read", "owner-list", "owner-set-status",
+  "owner-activity-read", "owner-activity-list", "activity-read", "activity-renew"]);
 const stages: Record<string, PhotoPerformanceStage> = { prepare: "prepare", status: "status", publish: "publish",
   "image-prepare": "image_prepare", "image-verify": "image_verify", "owner-read": "gallery" };
 async function actorSession(actor: PublicationActor, signal: AbortSignal) {
@@ -21,9 +22,10 @@ async function actorSession(actor: PublicationActor, signal: AbortSignal) {
 export async function servicePublicationRequest(actor: PublicationActor, action: string, body: object, signal: AbortSignal): Promise<unknown> {
   if (!actions.has(action)) throw new Error("context_changed");
   const session = await actorSession(actor, signal);
-  const work = () => (action === "owner-list" ? serviceOwnerPageHttp : privateUploadHttp)(fetch, window.location.origin + "/api/v2/service-publication/" + action, {
+  const page = action === "owner-list" || action === "owner-activity-list";
+  const work = () => (page ? serviceOwnerPageHttp : privateUploadHttp)(fetch, window.location.origin + "/api/v2/service-publication/" + action, {
     method: "POST", headers: { authorization: "Bearer " + session.access_token, "content-type": "application/json" }, body: JSON.stringify(body),
-  }, { signal, timeoutMs: 120000, responseBytes: action === "owner-list" ? 4 * 1024 * 1024 : 65536,
+  }, { signal, timeoutMs: 120000, responseBytes: page ? 4 * 1024 * 1024 : 65536,
     readErrorStatuses: [400, 401, 403, 409, 422, 429, 503] });
   const result = await (stages[action] ? measurePhotoTask(stages[action], work) : work());
   if (result.status === 200) return result.json;

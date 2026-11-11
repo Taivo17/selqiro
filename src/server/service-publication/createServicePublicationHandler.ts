@@ -11,9 +11,10 @@ import { copyWebCommand } from "../listing-publication/web/webImageContract";
 import { createServiceCleanupPass } from "./settleServiceCleanup";
 import { createAccountSourceCompletion } from "../listing-publication/journey/completeAccountSource";
 import { bindServicePrepare, bindServiceOwnerSnapshot, bindServiceOwnerPage, bindServiceActivityReceipt } from "../../entities/service/model/servicePublication";
+import { bindServiceValidityCommand, bindServiceValidityResponse, serviceValidityActions } from "./serviceActivityBindings";
 
 const actions = new Set(["prepare", "status", "publish", "cancel", "owner-read", "image-prepare", "image-verify",
-  "owner-list", "owner-set-status"]);
+  "owner-list", "owner-set-status", ...serviceValidityActions]);
 const receiptKeys = ["schema_version", "content_type", "state", "actor_user_id", "identity_id", "request_key",
   "attempt_id", "service_id", "edit_revision", "publication_event_id", "slots"];
 const uuid = (v: unknown): v is string => typeof v === "string" && v.length === 36 && isUploadUuid(v);
@@ -47,6 +48,8 @@ async function readBody(request: Request): Promise<Record<string, unknown>> {
 function bind(action: string, input: Record<string, unknown>): { name: string; args: Record<string, unknown> } {
   const actor = { p_expected_user_id: input.expectedUserId, p_expected_identity_id: input.expectedIdentityId };
   if (!uuid(input.expectedUserId) || !uuid(input.expectedIdentityId)) throw new Error("input");
+  const validity = bindServiceValidityCommand(action, input);
+  if (validity) return validity;
   if (action === "owner-read") {
     uploadRecord(input, ["expectedUserId", "expectedIdentityId", "serviceId"]);
     if (!uuid(input.serviceId)) throw new Error("input");
@@ -135,7 +138,8 @@ function safeDatabaseError(value: unknown): { error: string; code?: string; mess
   if (!value || typeof value !== "object" || Array.isArray(value)) return null;
   const r = value as Record<string, unknown>;
   if (isPublicationCapacityError(r)) return { error: "capacity", code: r.code, message: r.message };
-  if (r.code === "40001") return { error: "conflict", code: "40001", message: "service_edit_conflict" };
+  if (r.code === "40001") return { error: "conflict", code: "40001",
+    message: r.message === "service_activity_conflict" ? "service_activity_conflict" : "service_edit_conflict" };
   if (r.code === "42501" && r.message === "publication_policy_changed")
     return { error: "policy_changed", code: "42501", message: "publication_policy_changed" };
   if (r.code === "42501") return { error: "context_changed", code: "42501" };
@@ -173,11 +177,12 @@ export function createServicePublicationRequestHandler(config: PublicationRuntim
       const bound = image ? null : bind(action, input);
       await timePublicationStage(timing.record, "gate", () =>
         assertPublicationActor(config, token, input.expectedUserId, request.signal, fetcher));
-      const rpc = async (name: string, args: object) => (action === "owner-list" ? serviceOwnerPageHttp : privateUploadHttp)(fetcher,
+      const ownerPage = action === "owner-list" || action === "owner-activity-list";
+      const rpc = async (name: string, args: object) => (ownerPage ? serviceOwnerPageHttp : privateUploadHttp)(fetcher,
         config.projectOrigin + "/rest/v1/rpc/" + name, {
           method: "POST", headers: { apikey: config.publicKey, authorization, "content-type": "application/json" },
           body: JSON.stringify(args),
-        }, { signal: request.signal, responseBytes: action === "owner-list" ? 4 * 1024 * 1024 : 65536,
+        }, { signal: request.signal, responseBytes: ownerPage ? 4 * 1024 * 1024 : 65536,
           readErrorStatuses: [400, 401, 403, 404, 409, 422, 500, 503] });
       if (image) {
         const auth = await rpc("get_my_service_publication_image_binding_v1", {
@@ -209,6 +214,7 @@ export function createServicePublicationRequestHandler(config: PublicationRuntim
         return reply(error ?? { error: "outcome_unknown" }, error ? error.error === "context_changed" ? 403 : 409 : 503);
       }
       const actor = { userId: String(input.expectedUserId), identityId: String(input.expectedIdentityId) };
+      if (bindServiceValidityResponse(action, call.json, input)) return reply(call.json);
       if (action === "owner-read") {
         bindServiceOwnerSnapshot(call.json, actor, String(input.serviceId));
         return reply(call.json);

@@ -1,3 +1,53 @@
+<!-- SELQIRO_SERVICE_ACTIVITY_PREPARED_20261111 -->
+## 11.11.2026 — teenuse üheaastane kehtivus on uues lähtepaketis valmis
+
+Teenuse 365-päevane tähtaeg ja omaniku teadlik tasuta pikendamine on valmistatud
+paigaldatud `1b0c5ba` allika peale. Minu ala ja muutmisvaade näitavad tähtaega;
+aegunud teenus jääb omanikule alles. Serveri ühine avaliku nähtavuse kontroll
+arvestab kehtivust enne loendeid, koguarve, rubriike ja lehekülgi.
+
+Üleminek annab avaldatud teenusele ja avaldamisajaga peatatud teenusele
+ühe aasta muudatuse rakendamisest. Algseid kuupäevi ei muudeta ega märgita
+üleminekut omaniku tehtud kinnituseks. Mustandi periood algab päris avaldamisel.
+Sisu, fotode, rubriikide või staatuse salvestamine ei pikenda tähtaega.
+Pikendamine säilitab staatuse, sisu, fotod, rubriigid ja otsingujärjestuse aluse.
+
+Kohalikult PASS: SQL runtime 22/22 ja paigaldus 38/38, muudetud transport 25/25,
+kliendi/editori sihitud katsed 25/25, TypeScript, Next build ning build'i järel
+Chromium 5/5 (English/Eesti, 1365/390 px). Sünteetilised teenusepiirid on
+tõendites kirjas. Uue sammu Maci rakendus, SQL-i aktiveerimine, commit/push,
+Verceli Ready ja kasutajavastuvõtt on veel kinnitamata.
+
+Üks järgmine käsk on `docs/continuity/HOSTED_PORTAL.md`-s. Autoriteetne seis on
+`docs/continuity/CURRENT_STATE.json`, sellest genereeritud üleandmine ning
+`docs/continuity/SERVICE_ACTIVITY_20261111.md`. Uus leping on
+`docs/architecture/service-activity-v1.md`.
+
+See pakk kannab kaasa ka eelmise teenuste rubriigivastuvõtu dokumentide delta.
+Allolevad dateeritud NEXT/ootel-kirjed on ajalugu. Väljastatud pakid, kasutajasisu
+ja päevikud säilivad; lõpetatud paigaldusi ega kasutuskatseid ei korrata.
+
+---
+
+<!-- SELQIRO_SERVICE_STORE_CATEGORIES_ACCEPTED_20261111 -->
+## 11.11.2026 — teenuse poe rubriigid on paigaldatud ja vastu võetud
+
+Maci lõppraport kinnitab andmebaasi järelkontrolli, build'i, commit'i
+`1b0c5ba867e5f466e75f63aee78521d37cf8164f` ja push'i; lõpp 16:31:59 Europe/Tallinn.
+Kasutaja salvestas teenusele ANTIIK ning leidis/avas selle profiili filtriga.
+Kinnitatud on aktiivse sisuga rubriikide näitamine avalikus profiilis.
+See kinnitus ei lisa uut Back-, kustutamis- või aegumiskatset.
+Täpne Verceli Ready/deployment-ID on eraldi kinnitamata (`READY_NOT_CHECKED`).
+
+Üks praegune seis on `docs/continuity/CURRENT_STATE.json`; täpne vastuvõtt on
+`docs/continuity/SERVICE_STORE_CATEGORIES_ACCEPTED_20261111.md`-s.
+Järgmine soovitatud töö on teenuse üheaastane kehtivus ja teadlik pikendamine.
+Selle vastuvõtu dokumentide delta ootab järgmist sisulist lähtepakki;
+uut Maci kirjutust, commit'i ega paigaldajat siin ei tehtud.
+Väljastatud teenuste pakki ning allolevat dateeritud ajalugu ei muudeta.
+
+---
+
 <!-- SELQIRO_SERVICE_CATEGORY_POLICY_20261111 -->
 ## 11.11.2026 — teenuste enda rubriigid ning järgmiste võimete kokkulepped
 

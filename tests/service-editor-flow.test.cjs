@@ -48,7 +48,7 @@ function harness({completed=false,staleInitialRead=false,failedRead=false,create
   }
   throw Error('Unexpected action '+action);
  };
- const Fields=()=>null,Gallery=()=>null,Gate=()=>null,Action=()=>null;
+ const Fields=()=>null,Gallery=()=>null,Gate=()=>null,Action=()=>null,Categories=()=>null,Activity=()=>null;
  const policy={snapshot:policies,loading:false,refresh(){}};
  const overrides={
   'src/features/service-editor/model/useServiceOwnerContext.ts':{useServiceOwnerContext:()=>context},
@@ -58,9 +58,11 @@ function harness({completed=false,staleInitialRead=false,failedRead=false,create
   'src/entities/listing/model/listingPhotoPreparation.ts':{prepareListingPhoto(){assert.fail('No new photo in fixture');}},
   'src/shared/config/v2Integration.ts':{publicationUploadOrigin:()=>undefined},
   'src/features/service-editor/components/ServiceFields.tsx':{__esModule:true,default:Fields},
-  'src/features/service-editor/components/ServiceGalleryEditor.tsx':{__esModule:true,default:Gallery,serviceEditorPhotos:()=>[],serviceGalleryDirty:()=>false},
+  'src/features/service-editor/components/ServiceGalleryEditor.tsx':{__esModule:true,default:Gallery,serviceEditorPhotos:()=>[],serviceGalleryDirty:(_original,photos)=>photos.length>0},
   'src/features/service-editor/components/ServicePolicyGate.tsx':{__esModule:true,default:Gate},
   'src/features/service-editor/components/ServicePublicationActions.tsx':{__esModule:true,default:Action},
+  'src/features/service-editor/components/ServiceStoreCategoryCard.tsx':{__esModule:true,default:Categories},
+  'src/features/service-activity/components/ServiceActivityCard.tsx':{__esModule:true,default:Activity},
  };
  const cache=new Map();
  function load(name){
@@ -97,6 +99,7 @@ function harness({completed=false,staleInitialRead=false,failedRead=false,create
  async function flush(){let idle=0;for(let n=0;n<80&&idle<3;n++){render();await tick();if(needsRender)idle=0;else idle++;}render();}
  return {flush,context,requests,adopted,frames,storage,key,routes,
   get action(){return componentNode(Action);},get fields(){return componentNode(Fields);},get row(){return row;},
+  get activity(){return componentNode(Activity);},get gallery(){return componentNode(Gallery);},get categories(){return componentNode(Categories);},
   async change(patch){assert.equal(componentNode(Fields).props.disabled,false);componentNode(Fields).props.onChange({...componentNode(Fields).props.form,...patch});await flush();},
   async save(){componentNode(Action).props.onSubmit();await flush();},
   async foreignSave(title){seedCompleted(title);for(const f of events.get('storage')||[])f({key});await flush();},
@@ -151,4 +154,19 @@ for(const status of ['published','archived'])test(status+': unrelated text edits
  const h=harness({status,legacy:true});await h.flush();assert.equal(h.fields.props.form.category,'');assert.equal(h.fields.props.form.priceAmount,'');
  await h.change({description:'Edited description only'});await h.save();assert.equal(h.row.content.category,null);assert.equal(h.row.content.priceAmount,null);assert.equal(h.row.content.priceType,'hourly');assert.equal(h.row.status,status);
  assert.equal(h.context.snapshot.editRevision,'13');assert.equal(h.fields.props.disabled,false);h.close();
+});
+
+test('independent activity busy/read feedback preserves unsaved title, local photo and category draft',async()=>{
+ const f=harness();await f.flush();await f.change({title:'Unsaved owner title'});
+ const photo={id:'local-photo',file:new Blob(['synthetic photo']),previewUrl:'blob:synthetic-photo',isPrimary:true};
+ f.gallery.props.onChange([photo]);f.categories.props.onPendingChange(true);await f.flush();
+ assert.equal(f.activity.props.blocked,true);assert.equal(f.activity.props.pendingChanges,true);
+ const fields=f.fields.props.form,photos=f.gallery.props.photos;
+ f.activity.props.onBusyChange(true);await f.flush();assert.equal(f.action.props.canSubmit,false);
+ assert.equal(f.fields.props.form,fields);assert.equal(f.gallery.props.photos,photos);
+ f.activity.props.onBusyChange(false);f.activity.props.onCheckRequired(true);await f.flush();
+ f.activity.props.onCheckRequired(false);await f.flush();
+ assert.equal(f.fields.props.form.title,'Unsaved owner title');assert.equal(f.gallery.props.photos[0],photo);
+ assert.equal(f.activity.props.pendingChanges,true);assert.equal(f.adopted.length,0);
+ assert.equal(f.requests.some(call=>call.action==='publish'),false);
 });

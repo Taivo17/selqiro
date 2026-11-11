@@ -1,3 +1,16 @@
+<!-- SELQIRO_SERVICE_STORE_CATEGORIES_ACCEPTED_20261111 -->
+## 11.11.2026 — paigaldus ja kasutajavastuvõtt on lõpetatud
+
+Allpool on muutmata ettevalmistusetapi ajalugu, mitte tänane paigaldusjuhis.
+Uus commit on `1b0c5ba867e5f466e75f63aee78521d37cf8164f`; SQL-i järelkontroll, build ja push
+on lõppraportiga tõendatud. ANTIIK-rubriigi teenusele salvestus, profiilifilter
+ning aktiivse sisuga avalikud rubriigid on kasutaja poolt vastu võetud.
+Täpsed piirid: `SERVICE_STORE_CATEGORIES_ACCEPTED_20261111.md`.
+Praegune järg: `CURRENT_STATE.json`; uus kehtivuse ulatus:
+`SERVICE_ACTIVITY_NEXT_20261111.md`. Uut terminalikäsku praegu pole.
+
+---
+
 <!-- SELQIRO_SERVICE_CATEGORIES_PREPARED_20261111 -->
 # 11.11.2026 — järgmise sammu lähtepakk on ette valmistatud
 

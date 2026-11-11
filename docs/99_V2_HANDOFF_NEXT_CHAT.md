@@ -1,70 +1,68 @@
 <!-- GENERATED from docs/continuity/CURRENT_STATE.json; do not edit independently. -->
 # Selqiro — praegune tööüleandmine
 
-Seisukirje: 2026-11-11 Europe/Tallinn; teenuste poe rubriikide lähtepakk kohalikult kontrollitud, Maci rakendamine ootel
+Seisukirje: 2026-11-11 Europe/Tallinn; teenuse üheaastane kehtivus ja teadlik pikendamine ette valmistatud
 
 ## Praegune checkpoint
 
-Teenuse ühendamine enda poe rubriikidega ning avaliku profiili sisupõhised rubriigifiltrid on ette valmistatud ja kohalikult kontrollitud. Avaliku profiili teenuste ning tava-/hobusekuulutuste filtris on ainult vaatajale nähtava sisuga rubriigid ja vajalikud ülemrubriigid; Minu alas säilivad kõik enda rubriigid. Viimane tõendatud Maci commit on endiselt d5e77e963f80cb4dab33e6e6667c44d4062c4bbc. Uut pakki pole selles keskkonnas Maci rakendatud, pilveandmebaasis käivitatud, commit’itud/push’itud ega Vercelisse juurutatud.
+Teenuse 365-päevane kehtivus ning omaniku teadlik tasuta pikendamine on uues lähtepaketis kohalikult kontrollitud. Minu ala ja muutmisvaade näitavad serveri tähtaega; aegunud teenus jääb omanikule alles. Viimane tegelik Maci commit on teenuste rubriigisammu 1b0c5ba867e5f466e75f63aee78521d37cf8164f, mille kasutuskatse on vastu võetud. Uue kehtivussammu Maci rakendus, SQL-i aktiveerimine, commit/push, Verceli Ready ja kasutajavastuvõtt on veel kinnitamata.
 
 ## Lähtekood ja tõendi piir
 
-- **Uus ettevalmistatud pakk:** selqiro-teenuste-poerubriigid-20261111.zip. Eraldi uus räsikaitsega väljalase; sisaldab teenuse seost/RPC-sid, avaliku profiili v2 lugejaid, väikesi jagatud kliendimooduleid ja dokumente. Väljastatud hobuste pakki ning vanu raporteid ei muudeta. Täpsed manifesti/payload’i räsid on paki manifest.json-is ja kontrollid/ all.
-- **Tegelik paigaldatud alus:** /Users/taivo/selqiro, main, d5e77e963f80cb4dab33e6e6667c44d4062c4bbc; vanem adfa3ae767712b5f71e9fac2d963a765f61fb444, 1515-failine puu 4a71e443012ff0fcccfe883202c2674fa848a8c4. See on 10.11 paigaldusraportiga tõendatud seis, mitte uus live-Giti vaatlus. Uuendaja kontrollib enne kirjutusi tegelikku haru, HEAD-i, tööpuud/indexit, faile ja remote’i.
-- **Aluse paigaldusraport:** selqiro-hobuse-poerubriigid-20261110-raport-20261110-213839-6a4b8cf182de.json, 229019 baiti, SHA256 d4055d78a78aaee0a3f191bfa2c47cde3ad9ea46436b19df2e3605723b9b12c3. Andmebaasi verify, build ja push olid edukad; lõpp 10.11 kell 21:38:37 Europe/Tallinn. Kasutaja võttis hobuse rubriigisalvestuse/profiilist avamise vastu. READY_NOT_CHECKED jääb selle vana sammu täpse Verceli tõendi piiriks.
-- **Lisanduv andmebaasileping:** service_store_categories seob services UUID ja sama identiteedi poe rubriigi. Omaniku get/set RPC-d kontrollivad autentitud kasutajat, salvestatud aktiivset identiteeti, omanikku/aktiivset äriliiget, teenust ja kogu rubriigikomplekti. Uued avalikud lugejad on get_public_profile_services_v2 ning get_public_profile_store_categories_v2. Olemasolev teenuse v1, tava-/hobusekuulutuse v2 ning varasemad kirjutajad säilivad.
-- **Avaliku profiili ulatus:** Rubriigid arvutatakse kogu vaatajale nähtava vastava sisu pealt enne rubriikide lehekülgi; teenuste filter rakendub enne koguarvu ja teenuste lehekülgi. Teenuste ja kuulutuste filtrid on eraldi, rubriikide allikas ühine. 80 teenust ei ole konto piir. Omaniku rubriigivalik näitab ka tühje rubriike.
-- **Kliendi salvestus ja tagasitee:** Teenuse rubriigid salvestatakse põhivormist ja fotodest eraldi. Teadmata tulemus nõuab lugemisega selgitamist, kirjutust ei korrata automaatselt. Ajutine omaniku lugemistõrge säilitab rubriigivaliku; tegelik konto/identiteedi vahetus tühistab vana ulatuse. Tagasi tulles taastuvad rubriik, avatud haru, lehekülg ja kerimiskoht.
-- **Dokumentide jätk:** Pakk võtab kaasa hobuste vastuvõtu 12 dokumendi kontrollitud delta, uue CURRENT_STATE-i, sellest genereeritud üleandmise, arenduspäeviku ja kaks arhitektuurikirjet. Need on praegu selle lähtepaketi ettevalmistatud failid, mitte juba Macis tehtud dokumentide commit.
-- **Järgmised tooteotsused:** Teenusele üks aasta; töökuulutusele üks kuu. Ettevõtte töökuulutus avaldatakse alguses avalikul profiilil ja jagataval otseviitel; portaali üldine tööotsing/discovery jääb serveris suletuks. Vaataja ajutine teenusepakkuja peitmine on soovitus eraldi otsingueelistusena, alguses 7 päeva. Need ei ole selle paki käitumismuudatused.
+- **Tegelik alus:** /Users/taivo/selqiro, main, 1b0c5ba867e5f466e75f63aee78521d37cf8164f; vanem d5e77e963f80cb4dab33e6e6667c44d4062c4bbc. Täpne 1563-failine puu 6808d687e21b96d7e8b25639e00d0a525f97ad6a rekonstrueeriti muutmata raporti, väljastatud paketi ja külmutatud allikate põhjal. See ei ole värske live-Giti vaatlus.
+- **Eelmine lõppraport:** selqiro-teenuste-poerubriigid-20261111-raport-20261111-163201-1847005ab277.json, 237629 baiti, SHA256 024d92a76b33fc5b6e3ea51f3fa0216b47c4bafe122243552d9d43372b7350ff. Lõpp 11.11 kell 16:31:59 Europe/Tallinn; database verified, build passed, push verified, Storage not_performed. Täpne Verceli Ready/deployment-ID on eraldi kinnitamata.
+- **Uus lähtepakk:** selqiro-teenuste-kehtivus-20261111.zip. Uued väikesed activity entity/API/hook/komponendid, eraldi serveribinding ning olemasoleva My Area/editori liidesed. Lõplik failiulatus ja räsid on paki manifest.json-is; pärast väljastamist pakki ei muudeta.
+- **Üks kehtivuse allikas:** services UUID säilib. Privaatne activity-kirje hoiab tähtaega; pikendamine ei muuda teenuse sisu, fotosid, rubriike, staatust, edit_revision-it ega loomise/muutmise/avaldamise aega. Täpse vana tähtaja võrdlus säilitab mikrosekundid. 365 × 24 tundi arvutab server.
+- **Olemasolevate teenuste üleminek:** Tegelikus lähtelepingus ei ole teenuse tähtaega. Praegu avaldatud teenused ja avaldamisajaga (published_at) arhiveeritud teenused saavad ühe aasta SQL-i aktiveerimishetkest; origin=transition ja last_confirmed_at=null. Algseid kuupäevi ei muudeta. Mustand alustab aastat esimesel päris avaldamisel; paigaldaja kordus ei pikenda.
+- **Avalik nähtavus ja vanem klient:** Ühine serveri is_public lisab tähtaja enne avalikke loendeid, koguarve, lehekülgi, teenuste profiilirubriike, detaili, hallatud meediat ja uut kontakti. V1 vastus säilib, V2 lisab activity-ploki; SQL võib eelneda uuele veebikliendile. Omaniku ligipääs ja olemasolevad sõnumid säilivad.
+- **Dokumentide jätk:** Pakk kannab kaasa eelmise teenuste rubriigivastuvõtu 13-failise dokumentide delta. Selle vana CURRENT_STATE/üleandmise/HOSTED täpsed baidid on docs/continuity/history/service-store-categories-accepted-20261111/ all. Praegune seisukirje genereerib üleandmise; eraldi dokumentide paigaldajat pole.
 
 ## Tegelik kohalik katse
 
-- Lisanduva SQL-i PGlite/PostgreSQL-WASM runtime 28/28 ning paigalduse, kataloogierinevuste ja rollback’i kontrollid 41/41 PASS. Sünteetiline andmestik hõlmab 88 teenust ja 105 rubriiki, kogu tulemuse filtrit, õigusi, blokeerimist ning rubriigi eemaldamisel teenuse/fotode säilimist. Päris Supabase’i ega mitme native PostgreSQL sessiooni samaaegsust ei kasutatud.
-- Teenuse sihitud ReactDOM/API/parseri runtime 12/12, muudetud jagatud mooduli hobuseregressioon 11/11 ja tagasitee konteksti katsed 12/12 PASS. Need kontrollivad tegelikke mooduleid sünteetilise Auth/PostgREST-i ja jsdom’i piiril; lõpetatud hobuste kasutuselevõttu ei korratud.
-- Lõplik Next webpack build PASS: 48.235 s, 637 sisendit, drift 0. Sisendinventari SHA256 f83fdc44bda5d8604df186bc7fe909c8b543fd218c0b008333145b955c06f0f7. Kasutati olemasolevaid lukustatud sõltuvusi ja sünteetilist seadistust; uusi sõltuvusi ei paigaldatud.
-- Build’i järel Chromium 153: 6/6 PASS, English/Eesti, desktop/390 px. 83 kasutatud rakendussisendit vastavad lõppbuild’ile, drift 0; konsoolihoiatusi/-vigu, lehevigu ja välisvõrgupäringuid 0. Tegelik editor, omaniku hook, väljad/galerii, rubriigimoodul, profiilifilter/detail ning history; Auth/PostgREST, avaldamiskontroller ja Next-navigeerimise adapter on sünteetilised. Täis Next-serveri ega tootmise katset see ei asenda.
-- Brauseris säilisid põhivormi tekst ja ootel foto; kontrolliti tundmatu salvestuse lugemist, ajutisest omaniku lugemistõrkest taastumist ning identiteedi vahetuse järel hilise vastuse eiramist. 85 teenusega filtris taastus lehekülg ja kerimiskoht nii brauseri Back kui tagasilingiga. Mõlemad kontrollitud laiused ei kerinud horisontaalselt.
-- Uuendaja eelmise raporti kontroll 9/9 ja lõplike SQL-baitidega adapter 13/13 PASS. Täpse lõppmanifesti ajutise Giti/indexi/varukoopia/commit’i ning kohaliku remote’i tarnekäigu eraldi tõend on paki kontrollid/final-flow.json-is; SQL/build on selles tarnekatses sünteetilised. Varasemad build’i ja ainult testifixtuuri parandamist nõudnud brauserikatsed säilivad ajalooliste tõenditena.
+- SQL runtime 22/22 ning paigaldus/drift/rollback 38/38 PASS PostgreSQL/WASM-is. Kaetud on üleminek, esimene avaldamine, aegunud teenuse muutmine/taastamine, täpne tähtajakonflikt, äriliikme õigus ja ühised avalikud filtrid. Päris Supabase’i ega native paralleelsessioone ei kasutatud.
+- Muudetud HTTP-transpordi 25/25 ja kliendi/editori 25/25 sihitud juhtu PASS; TypeScript PASS. Katsed kasutavad tegelikke mooduleid sünteetiliste Auth/RPC/HTTP ja jsdom’i piiridega. Uuendaja eelmise raporti kontroll 9/9 ning lõplike SQL-baitidega adapter 15/15 PASS.
+- Next webpack build PASS: 25.715 s, 647 sisendit, drift 0. Inventari SHA256 3015b717a5c5b15724d35fca9acedd1e8133610858d365531d8205c2dc3e9a1a. Olemasolevad lukustatud sõltuvused ja sünteetiline seadistus; uusi sõltuvusi ei paigaldatud.
+- Build’i järel Chromium 153: 5/5 PASS, English/Eesti, 1365/390 px. 51 rakendussisendit vastavad build’ile, drift 0; konsoolihoiatusi/-vigu, lehevigu ja välisvõrgupäringuid 0. Tegelikud My Area/editor/activity moodulid ja tootmise CSS; Auth/HTTP/avaldamiskontroller/Next-adapter on sünteetilised.
+- Brauseris kontrolliti loobutavat kinnitust, aegunud ja peatatud teenuse pikendamist, mustandi piirangut, tundmatu kirjutuse eraldi lugemist, lugemistõrkest taastumist ning identiteedivahetuse hilist vastust. Pooleli tekst, foto ja rubriigivalik säilisid; horisontaalset ülevoolu polnud. Vaadati üle dialog, omaniku loend ja taastatud tähtajapaneel.
+- Lõpliku manifesti täie payload’i Giti/indexi/varukoopia/commit’i ja kohaliku remote’i tarnekäigu tõend on paki kontrollid/final-flow.json-is. SQL/build on selles tarnekatses sünteetilised; tegelik kohalik build on eespool. See ei ole Maci, GitHubi, tootmis-SQL-i ega Verceli tõend.
 
 ## Production / kasutajaliides
 
-- Uue teenuste rubriigipaki Maci paigaldus, pilve-SQL, uus commit/push, Verceli Ready ja kasutajavastuvõtt on veel kinnitamata. Ettevalmistatud lähtekood ning kohalikud katsed neid ei tõenda.
-- Hobuse rubriigisalvestus ja profiili kaudu avamine on 10.11 kasutaja poolt vastu võetud ning paigaldusraportiga seotud d5e77e9 commit’iga. Selle lõpetatud paigaldaja või kasutuskatse kordamist uue sammu eel ei nõuta.
-- Tavakuulutuse rubriigihaldus, adfa3ae õigusteparandus ning varasemad teenuse fotode ja tagasi-navigeerimise kasutajakatsed jäävad vastu võetuks.
+- 11.11 lõppraport: complete / database verified / build passed / push verified; commit 1b0c5ba867e5f466e75f63aee78521d37cf8164f, siht /Users/taivo/selqiro. Algus 16:31:16, SQL järelkontroll 16:31:32, lõpp 16:31:59 Europe/Tallinn. Toiminguid ei korratud vastuvõtu ülevaatuses.
+- Kasutaja võttis vastu teenusele ANTIIK-rubriigi salvestamise, sama teenuse leidmise/avamise profiili ANTIIK-filtrist ning aktiivse sisuga rubriikide näitamise avalikus profiilis. Piltidel on teenuste ANTIIK-filtris üks Puhastusteenus; kuulutuste filtris AUTODE MÜÜK ja GARAAZI LEID.
+- Raportis vercel=READY_NOT_CHECKED. Selle commit’i täpne Verceli Ready-rida või deployment-ID ei ole esitatud; nähtav kasutajavastuvõtt on eraldi tõend. Varasema teenuste Back-katse ja tava-/hobusekuulutuste rubriigisammude vastuvõtt säilib.
+- Uue teenuse kehtivuse koodi ega SQL-i ei ole selles ettevalmistuses Macis/tootmises rakendatud. Uut commit/push’i, Verceli Ready/deployment-ID-d või teenuse pikendamise kasutajavastuvõttu ei väideta. Lõpetatud rubriigi-/Back-katseid ei korrata.
 
 ## Üks järgmine töö
 
-Kasuta docs/continuity/HOSTED_PORTAL.md üht käsku uue selqiro-teenuste-poerubriigid-20261111 paki rakendamiseks. Pärast edukat raportit oota just selles näidatud uue commit’i Verceli Ready / Production tulemust. Värskenda portaali, salvesta ühe olemasoleva teenuse poe rubriigid ning leia/ava see profiili teenuste filtrist ja liigu tagasi. Kontrolli samas, et teenuste ja kuulutuste avalikus filtris puuduvad tühjad rubriigid, kuid Minu alas on kõik alles. Ära korda lõpetatud hobuste paigaldust ega kustuta kontrolliks sisu.
+Rakenda HOSTED_PORTAL.md üks käsk uue selqiro-teenuste-kehtivus-20261111 pakiga. Uuendaja kontrollib tegelikku Maci haru/HEAD-i, tööpuud/indexit, faile, eelmist raportit ja remote’i, teeb guarded SQL-i/järelkontrolli ning selle sammu build/commit/push’i. Seejärel sama commit’i Verceli Ready / Production, portaali värskendus ja ühe teenuse teadlik pikendamine: tähtaeg Minu alas ning sama teenuse nähtavus avalikul profiilil. Tootmises ei muudeta tähtaega käsitsi aegumise katseks.
 
 **Peatumisel:** Peatumisel säilita PEATATUD-rida ja saada SAADA SEE FAIL real näidatud ning Finderis valitud selle jooksu täpne JSON. Lähte-/indexi-/remote’i-/andmebaasilepingu erinevust ei normaliseerita automaatselt. Teadmata SQL-i tulemus kontrollitakse lugemisega; kirjutust automaatselt ei korrata. Kontode, kuulutuste, teenuste, hobuste, fotode, sõnumite ja päevikute kustutamisluba puudub.
 
 ## Loe ainult vajalikku
 
-- docs/continuity/HOSTED_PORTAL.md — üks praegune rakendamiskäsk ja vajalik kasutuskatse.
-- docs/continuity/SERVICE_STORE_CATEGORIES_20261111.md — uue sammu teostus, kontrollid ja tõendipiirid.
-- docs/architecture/service-store-category-assignment-v1.md — seostetabel, RPC-d, avalik filter ja kliendi eraldi salvestus.
-- docs/architecture/public-discovery-controls-v1.md — avalikud rubriigid, ajutise peitmise soovitus, kehtivus ja profiilist algavad töökuulutused.
-- docs/continuity/HORSE_STORE_CATEGORIES_ACCEPTED_20261110.md — vastu võetud aluse raport ja kasutaja kinnitus.
-- docs/continuity/SERVICE_ACCESS.json — olemasolevad teenusesihid ja CLI pin; vanad kuupäevaga jooksuseisud on ajalugu.
+- docs/continuity/HOSTED_PORTAL.md — üks uus Maci jätkamiskäsk ja kasutajakatse.
+- docs/continuity/SERVICE_ACTIVITY_20261111.md — teostus, kontrollid, üleminek ja tõendipiir.
+- docs/architecture/service-activity-v1.md — tähtaja autoriteet ja RPC/public eligibility leping.
+- docs/continuity/SERVICE_STORE_CATEGORIES_ACCEPTED_20261111.md — eelmine tegelik raport ja vastu võetud rubriigid.
+- docs/architecture/public-discovery-controls-v1.md — säilivad hilisema peitmise/tööpakkumise otsused.
+- docs/continuity/SERVICE_ACCESS.json — olemasolevad sihid ja CLI pin; vanad jooksud on ajalugu.
 
 ## Säilivad piirid
 
-- Üks olemasolev portaal, hoidla, Supabase’i projekt ja keele-eelistus. English põhikeel/fallback, Eesti teine keel. Kasutaja rubriiginimesid ega muud sisu ei tõlgita.
-- Teenuse, hobuse ja tavakuulutuse kanoonilised kirjed säilivad. Rubriikide sidumine ei avalda sisu, muuda põhivormi/pilte, pikenda kehtivust ega tõsta kuulutust uuemaks. Rubriigi eemaldamine eemaldab seosed, sisu ja fotod säilivad.
-- Avaliku profiili V2 filter näitab ainult vastava loendi vaatajale nähtava sisuga rubriike ja vajalikke esivanemaid. Ülemrubriik leiab alampuu seosed; alamrubriik kitsendab. Omaniku haldus/valija näitab kõiki rubriike. Vanu üldisi rubriigilugemise API-sid selleks ümber ei kirjutata.
-- Praegused teenuste avaldamise/vaataja õigused säilivad. Üheaastane teenuse kehtivus on kokkulepitud suund, kuid olemasolev teenuse avalik predicate ei kontrolli veel tähtaega; see vajab eraldi andmemudeli, pikendamise ja nähtavuse etappi.
-- Vaataja ajutine pakkuja peitmine on eraldi kavandatav otsingueelistus. Olemasolev user_blocks mõjutab ka sõnumeid ja vastastikust nähtavust ning seda ei kasutata vaikse 7-päevase filtri asendusena. 80 teenust ei ole põhjendatud konto- ega tasulise paketi piir.
-- Töökuulutuse kinnitatud algsuund on ettevõtte avalik profiil ja otseviide, üks kuu kehtivust ning selge avaldamisteade. Üldise tööotsingu sulgemine peab toimuma ka serveripäringutes. Varasem kinnise piloodi ettepanek ei ole enam praegune tooteotsus. Töökuulutuste koodi selles pakis ei ole.
-- Need RPC-d kaitsevad oma omanikutoiminguid. Universaalne identiteedi üleandmine/privilegeeritud kirjutaja invariant ja varasema aktiivse identiteedi seadistaja turvapiir ei lahene selle lisandusega.
-- Üldine terminalne fotode taustakoristus ning tehniliste paneelide eemaldamine tavakasutaja vaatest on enne üldist avalikku avamist vajalikud. See uuendaja ei tee Storage’i toiminguid.
-- Teenuste Quick Update, live-asukoht/saadavus ja töökuulutused jäävad eraldi mooduliteks. Energy, maksete tuum ning piiratud AI abi on endiselt kokkulepitud V2 ulatuses. Tavaline osalemine ja enda poe rubriigid ei sõltu Energy ostmisest.
+- Üks olemasolev portaal, hoidla, Supabase’i projekt ja keele-eelistus. English põhikeel/fallback, Eesti teine keel. Kasutaja sisu ega rubriiginimesid ei tõlgita. Tavaline osalemine, rubriigid ja pikendamine ei sõltu Energy ostust.
+- Aegumine jätab teenuse ja seosed omanikule alles. Peatatud teenuse pikendamine ei avalda seda. Teksti-, foto-, rubriigi- või staatusemuudatus ei pikenda ega anna kunstlikku uut otsingukohta. Tundmatu pikendus vajab eraldi lugemist, mitte automaatset kirjutuse kordust.
+- Teenuse ja kuulutuste avalik rubriigifilter arvestab eraldi jaotise kogu nähtavat sisu ja esivanemaid enne lehekülge. Omaniku haldus/valija näitab kõiki rubriike. Rubriigi eemaldamine säilitab sisu ja fotod; 80 teenust ei ole konto piir.
+- Tähtaeg kontrollib pakkumise ja hallatud pildi nähtavust. Varem avaliku Storage-URL-iga fotot ei muuda see privaatseks. Uuendaja ei tee Storage’i toiminguid. Üldine fotode taustakoristus ja tehniliste paneelide eemaldamine jäävad avamiseelseks tööks.
+- Ajutine pakkuja peitmine jääb eraldi vaataja otsingueelistuseks; soovitus on 7 päeva ja tagasivõtmine. Olemasolevat sõnumeid mõjutavat user_blocks-i selle asemele ei kasutata. Seda võimet siin ei rakendata.
+- Töökuulutuse kinnitatud algsuund on ettevõtte avalik profiil/otseviide, üks kuu kehtivust ja nähtavuse selge teade. Üldise tööotsingu sulgemine vajab ka serverikontrolli; üks kuu pole vaikimisi fikseeritud 30 päeva. Töökuulutuste koodi siin pole.
+- Uued owner RPC-d kontrollivad oma õigusi. Universaalne identiteedi üleandmine/privilegeeritud kirjutaja invariant ja vana aktiivse identiteedi seadistaja turvapiir vajavad eraldi lahendust. Energy, maksete tuum ja piiratud AI abi jäävad V2 ulatusse.
 
 ## Keskkond
 
 - Hoidla https://github.com/Taivo17/selqiro.git; portaal https://selqiro.vercel.app; kinnitatud Maci siht /Users/taivo/selqiro. Terminali prompt’i vana töökausta nimi ei muuda uuendaja sihti.
 - Olemasolev Supabase vyjletlmwoiwxsnsunlm ja paigalduse UUID 2d088814-0900-448a-a9d1-7b05470cb1d2 säilivad. Kasutatakse olemasolevat räsiga kinnitatud CLI-d; uut projekti, sisselogimist ega sõltuvuste paigaldust ei tehta.
-- Ettevalmistuskeskkonnas rekonstrueeriti raporti ja muutmata algpaki põhjal täpne 1515-failine d5e77e9 alus. Kohalik kandidaat ei ole kasutaja Maci tööpuu ega live-Giti vaatlus. Uuendaja kontrollib tegelikku seisu uuesti enne esimest kirjutust.
+- Uus ettevalmistus kasutas kontrollitud lähtekoopiat, kohalikke sünteetilisi katseid ja olemasolevaid sõltuvusi. Maci, remote’i, Supabase’i ega Vercelit siin ei avatud. Uuendaja peab enne tegelikke kirjutusi kinnitama uue jooksu lähte/indexi/sihtkoha seisud.
 
 ## Ajalugu (mitte praegused käsud)
 
