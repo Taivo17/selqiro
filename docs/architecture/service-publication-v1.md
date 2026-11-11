@@ -175,3 +175,19 @@ aggregation. Editing, manual legacy order and pause/resume do not make an old
 service new. Public listing cards clamp descriptions to two lines; stored
 text and public detail remain complete. These read/UI changes do not alter
 service publication, status, ownership or photo validation contracts.
+
+
+<!-- SELQIRO_SERVICE_CATEGORY_POLICY_20261111 -->
+## 2026-11-11 — separate category save and documented activity gap
+
+Prepared service own-category assignment composes a separate editor card and
+guarded owner RPCs. It preserves the service form, photo workflow, publication
+events/head, status and dates. Profile services use a versioned category-aware
+page reader; the v1 reader is retained. See
+`service-store-category-assignment-v1.md` and CURRENT_STATE for actual evidence.
+
+The 365-day service activity policy exists in earlier architecture and was
+reconfirmed by the user. The current service publication runtime has no such
+deadline gate. Its activation, existing-data transition and explicit owner
+confirmation are a separate follow-up, not an inferred effect of this category
+repair. See `public-discovery-controls-v1.md`.

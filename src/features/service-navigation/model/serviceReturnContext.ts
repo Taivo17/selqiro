@@ -5,7 +5,8 @@ export type ServiceReturnSource = "public-profile" | "services";
 export type ServiceReturnContext = Readonly<{
   version: 1; token: string; source: ServiceReturnSource; sourceUrl: string; serviceId: string;
   scrollY: number; cardViewportTop: number; createdAt: number; loadedOffset: number; targetOffset: number;
-  profile: Readonly<{expanded: boolean; horizontalScrollLeft: number}> | null;
+  profile: Readonly<{expanded: boolean; horizontalScrollLeft: number;
+    selectedCategoryId?: string | null; expandedRootId?: string | null; resultOffset?: number}> | null;
 }>;
 type Entry = {role: "source" | "detail"; context: ServiceReturnContext};
 type Pending = Entry & {targetUrl: string; sentAt: number};
@@ -50,7 +51,13 @@ export function normalizeServiceReturnContext(value: unknown): ServiceReturnCont
   if (value.source === "public-profile") {
     if (!record(value.profile) || typeof value.profile.expanded !== "boolean"
       || !finite(value.profile.horizontalScrollLeft) || value.profile.horizontalScrollLeft < 0 || value.loadedOffset !== 0) return null;
-    profile = {expanded: value.profile.expanded, horizontalScrollLeft: value.profile.horizontalScrollLeft};
+    const selectedCategoryId = value.profile.selectedCategoryId ?? null, expandedRootId = value.profile.expandedRootId ?? null;
+    const resultOffset = value.profile.resultOffset ?? 0;
+    if (selectedCategoryId !== null && !serviceUuid(selectedCategoryId) || expandedRootId !== null && !serviceUuid(expandedRootId)
+      || typeof resultOffset !== "number" || !Number.isInteger(resultOffset) || resultOffset < 0 || resultOffset > 100000
+      || !value.profile.expanded && (selectedCategoryId !== null || expandedRootId !== null || resultOffset !== 0)) return null;
+    profile = {expanded: value.profile.expanded, horizontalScrollLeft: value.profile.horizontalScrollLeft,
+      selectedCategoryId, expandedRootId, resultOffset};
   }
   return {version: 1, token: value.token, source: value.source, sourceUrl: url, serviceId: value.serviceId,
     scrollY: value.scrollY, cardViewportTop: value.cardViewportTop, createdAt: value.createdAt,

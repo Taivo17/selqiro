@@ -502,3 +502,20 @@ Excluded from launch:
 - AI trust scoring
 
 Manual category selection must always work.
+
+
+<!-- SELQIRO_SERVICE_CATEGORY_POLICY_20261111 -->
+## 2026-11-11 — business jobs start on public profiles
+
+The user accepts a bounded employer-side first release: business job posting,
+public company profile/detail, one-month validity, global taxonomy and future
+search metadata from day one. General Selqiro job discovery opens later through
+its own checked capability; hiding the navigation alone is insufficient.
+Publication must explain the current profile-only discovery. The later opening
+uses the same canonical records and must not renew expired offers.
+
+This direction does not add a recruitment platform or supersede Energy/payment
+core and known public-launch gates. The current implementation step is service
+own-shop categories plus nonempty public category filters. See
+`architecture/public-discovery-controls-v1.md` and the single CURRENT_STATE;
+the jobs/lifecycle/temporary-hide discussion is not a completed implementation.

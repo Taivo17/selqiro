@@ -1,3 +1,11 @@
+<!-- SELQIRO_HORSE_STORE_CATEGORIES_ACCEPTED_20261110 -->
+Installation and user acceptance recorded on 2026-11-10: commit
+`d5e77e963f80cb4dab33e6e6667c44d4062c4bbc`, database verified, build passed,
+push verified. The user accepted category saving, finding the horse on their
+profile and opening it through the added category. Exact Vercel Ready/deployment
+identity remains unreported. See `../continuity/HORSE_STORE_CATEGORIES_ACCEPTED_20261110.md`.
+The original design and preparation evidence below is preserved unchanged.
+
 # Horse offer shop category assignment v1
 
 Prepared source, 2026-11-10. This extends the accepted own-shop category flow

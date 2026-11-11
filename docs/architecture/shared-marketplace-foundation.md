@@ -112,3 +112,22 @@ visibility contract. Services stay in the service section. No domain rows are
 copied and a shop-category filter does not imply a horse/service relationship.
 See `profile-marketplace-feed-v1.md` for the server and return-navigation
 contract, and the dated continuity review for the category-integration audit.
+
+
+<!-- SELQIRO_SERVICE_CATEGORY_POLICY_20261111 -->
+## 2026-11-11 — contextual categories and profile-first jobs
+
+The current service own-category step keeps canonical UUID services and the
+shared identity-owned category tree. Public listing/service category choices
+contain eligible content and required ancestors; owner management keeps all
+categories. See `service-store-category-assignment-v1.md` and CURRENT_STATE for
+implementation and installation boundaries.
+
+The user's later jobs direction is a public company-profile/detail first
+release, with general portal job discovery opened later. Collect global job
+taxonomy and future search fields from the start, and use a separate server
+discovery capability rather than treating a hidden menu as authorization.
+The desired activity periods are services 365 days and jobs one month.
+Temporary viewer-only provider hiding remains separate from user_blocks.
+See `public-discovery-controls-v1.md`; these follow-ups are not runtime changes
+in the category package. Energy/payment and public-launch gates retain priority.

@@ -1,3 +1,45 @@
+<!-- SELQIRO_SERVICE_CATEGORIES_PREPARED_20261111 -->
+## 11.11.2026 — teenuste poe rubriigid ja sisuga avalikud filtrid ette valmistatud
+
+Uus samm ühendab olemasoleva teenuse kanoonilise UUID enda poe rubriikidega.
+Eraldi salvestus hoiab põhivormi ja fotode poolelioleva töö alles. Lisanduvad
+omaniku RPC-d kontrollivad salvestatud aktiivset identiteeti ja kogu
+rubriigikomplekti; otsetabeli kirjutust API rollidele ei avata.
+
+Avaliku profiili teenuste ja tava-/hobusekuulutuste filtris on ainult vastava
+vaatajale nähtava sisuga rubriigid ja vajalikud ülemrubriigid. Omanikule
+säilivad kõik rubriigid. Teenuste päris leheküljed asendavad 80-kirje
+tehnilise nähtavuspiiri; uut konto limiiti ei lisata. Tagasitee säilitab
+rubriigi, avatud haru, lehekülje ja kerimiskoha. Ajutise omaniku lugimistõrke
+ning teadmata salvestuse mustand säilib, konto/identiteedi vahetus sulgeb
+vana ulatuse ja hilise vastuse.
+
+Kontrollid: SQL runtime 28/28, paigaldus/drift/rollback 41/41, teenuse
+ReactDOM/API 12/12, jagatud mooduli hobuseregressioon 11/11, tagasitee 12/12,
+lõppbuild 48.235 s / 637 sisendit / drift 0, Chromium 153 pärast build’i
+6/6 English/Eesti desktop/mobiil. Uuendaja aluse raport 9/9 ja SQL-adapter
+13/13. Täpse lõppmanifesti tarnekäik on paki `kontrollid/final-flow.json`-is;
+selle SQL/build on sünteetilised. Brauserifixtuuri varasemad ebaõnnestunud
+eeldused ja logid säilivad; lõppbuild’i järel rakenduskood ei muutunud.
+
+11.11 tooteotsused talletati eraldi: teenus üks aasta, töökuulutus üks kuu,
+ettevõtte töökuulutus alguses avalikul profiilil/otseviitel; üldine tööotsing
+avaneb hiljem. Ajutine 7-päevane vaatajapoolne pakkuja peitmine on soovitus
+eraldi otsingueelistusena. Nende järgmiste etappide koodi see pakk ei lisa.
+
+Viimane tegelik Maci alus on vastu võetud d5e77e9. Uue sammu Maci paigaldus,
+pilve-SQL, commit/push, Vercel ja kasutajavastuvõtt on veel kinnitamata.
+Pakk sisaldab ka eelmise hobuste vastuvõtu dokumentide kontrollitud delta.
+Uuendaja näitab vea korral jooksu täpset `SAADA SEE FAIL` JSON-i ning valib
+selle Finderis. Vanu pakke, raporteid ja kasutajasisu ei muudeta/kustutata.
+
+Täpne jätk: `continuity/CURRENT_STATE.json` → sellest genereeritud üleandmine
+→ `continuity/HOSTED_PORTAL.md`. Teostus ja tõendid:
+`continuity/SERVICE_STORE_CATEGORIES_20261111.md`. Tulevased tooteotsused:
+`architecture/public-discovery-controls-v1.md`.
+
+---
+
 <!-- SELQIRO_STORE_CATEGORY_ASSIGNMENT_ACCEPTED_20261110 -->
 ## 10.11.2026 — poerubriikide seostamine kasutaja poolt vastu võetud
 
@@ -1372,3 +1414,32 @@ Maci rakendus, uus commit/push, SQL-i paigaldus, deployment ja kasutajavastuvõt
 on veel kinnitamata. Järgmine tegevus on uue paki üks käsk ja selle järel üks
 olemasoleva avaliku hobuse salvestus/profiilifiltri katse. Teenuseid ega üldist
 fotode taustakoristust selle sammuga lõpetatuks ei märgita.
+
+<!-- SELQIRO_HORSE_STORE_CATEGORIES_ACCEPTED_20261110 -->
+## 10.11.2026 — hobuse poe rubriigid on paigaldatud ja vastu võetud
+
+Maci lõppraport kinnitab SQL-i järelkontrolli, build'i, commit'i
+`d5e77e963f80cb4dab33e6e6667c44d4062c4bbc` ja push'i; lõpetamine 21:38:37
+Europe/Tallinn. Kasutaja kinnitas hobuse rubriikide salvestamist, profiilil
+leitavust ning lisatud rubriigi kaudu avamist. Neid lõpetatud samme ei korrata.
+Verceli Ready/deployment-ID pole eraldi esitatud (`READY_NOT_CHECKED`).
+
+Praegune seis on `docs/continuity/CURRENT_STATE.json`; täpne vastuvõtt on
+`docs/continuity/HORSE_STORE_CATEGORIES_ACCEPTED_20261110.md`-s.
+Järgmine soovitatud töö on teenuste ühendamine sama poe rubriikidega;
+selle koodi ega SQL-i pole veel koostatud. Muud käivitamise piirid säilivad.
+See dokumentide jätk ootab järgmisse lähtepakki kandmist; eraldi Maci kirjutust
+või uut commit'i selle vastuvõtu vestluses ei tehtud.
+
+Allpool säilivad varasemad kuupäevaga ettevalmistused ja piirid ajaloolise
+tõendina. Nende ootel/NEXT käsud ei tühista eespool kirjeldatud vastuvõttu.
+
+Raporti algfail säilib: 229019 baiti, SHA256
+`d4055d78a78aaee0a3f191bfa2c47cde3ad9ea46436b19df2e3605723b9b12c3`.
+Üks SQL apply sai kinnitatud vastuse, eraldi verify kinnitas applied seisu,
+10 kaitset ning 3 säilinud invarianti. Storage'i toiminguid ei tehtud.
+Paigalduspaki, raporti ja uuendaja kontroll oli ainult lugemine/räsivõrdlus;
+olemasolevat runtime'i, build'i, SQL-i, Git-push'i ega kasutuskatset ei korratud.
+CURRENT_STATE ja sellest genereeritud üleandmine, HOSTED_PORTAL ning käesolev
+päevik on uuendatud uues dokumentide jätkupakis. Varasemad pikad dokumendid,
+päevik ja väljastatud ZIP säilivad bait-baidilt.

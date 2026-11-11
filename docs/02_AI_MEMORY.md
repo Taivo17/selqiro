@@ -1,3 +1,54 @@
+<!-- SELQIRO_SERVICE_CATEGORY_POLICY_20261111 -->
+## 11.11.2026 — avalikud rubriigid, teenuste tähtaeg ja profiilist algavad tööpakkumised
+
+Kasutaja kinnitas: avaliku profiili kuulutuste ja teenuste rubriigifilter näitab
+ainult selle jaotise nähtava sisuga rubriike ning vajalikke ülemrubriike. Minu
+ala halduses ja omaniku valikus säilivad kõik enda rubriigid. Praegune teostus
+ühendab teenuse eraldi rubriigisalvestusega ning kasutab päris lehekülgi;
+vana päringu 80 ei ole kasutajale kehtestatud teenuste arvupiir.
+
+Teenuse soovitud kehtivus on üks aasta (varasem dokumenteeritud 365 päeva),
+tööpakkumisel üks kuu. Uue teenuste avaldamise runtime'is tähtaeg veel ei
+rakendu; selle ühendamine on eraldi töö. Rubriigitoiming tähtaega ei pikenda.
+
+Töökuulutuste uus kinnitatud suund asendab kogu mooduli suletud piloodi
+soovituse: ettevõte avaldab pakkumise esialgu avalikul profiilil ja jagataval
+detaililingil; Selqiro üldine tööotsing ja avastus jäävad algul suletuks.
+Üldine taksonoomia ning hilisema otsingu vajalikud väljad kogutakse kohe.
+Kasutaja näeb enne avaldamist ja halduses nähtavuse selgitust. Sama kanooniline
+kirje saab hiljem üldotsingus osaleda, kui see on endiselt avaldamiskõlblik.
+
+Ajutine pakkuja otsingust peitmine on soovitatud eraldi vaataja eelistus:
+esimene ettepanek on 7 päeva, kohene tagasivõtmine ja Minu ala haldus.
+See ei muuda sõnumeid ega pakkuja avalikku staatust. Kestus ja teostus ei ole
+veel kasutajakatsega kinnitatud. V1 säilinud user_blocks mõjutab ka sõnumeid;
+eraldi aeguvat otsingupeitmist vaadatud allikatest ei leitud.
+
+Püsiv leping: `docs/architecture/public-discovery-controls-v1.md`.
+Praegune allika-/paigalduspiir on ainult CURRENT_STATE-is ja selle genereeritud
+üleandmises. Allpool olevad kuupäevaga järgmised sammud on ajalugu.
+
+---
+
+<!-- SELQIRO_HORSE_STORE_CATEGORIES_ACCEPTED_20261110 -->
+## 10.11.2026 — hobuse poe rubriigid on paigaldatud ja vastu võetud
+
+Maci lõppraport kinnitab SQL-i järelkontrolli, build'i, commit'i
+`d5e77e963f80cb4dab33e6e6667c44d4062c4bbc` ja push'i; lõpetamine 21:38:37
+Europe/Tallinn. Kasutaja kinnitas hobuse rubriikide salvestamist, profiilil
+leitavust ning lisatud rubriigi kaudu avamist. Neid lõpetatud samme ei korrata.
+Verceli Ready/deployment-ID pole eraldi esitatud (`READY_NOT_CHECKED`).
+
+Praegune seis on `docs/continuity/CURRENT_STATE.json`; täpne vastuvõtt on
+`docs/continuity/HORSE_STORE_CATEGORIES_ACCEPTED_20261110.md`-s.
+Järgmine soovitatud töö on teenuste ühendamine sama poe rubriikidega;
+selle koodi ega SQL-i pole veel koostatud. Muud käivitamise piirid säilivad.
+See dokumentide jätk ootab järgmisse lähtepakki kandmist; eraldi Maci kirjutust
+või uut commit'i selle vastuvõtu vestluses ei tehtud.
+
+Allpool säilivad varasemad kuupäevaga ettevalmistused ja piirid ajaloolise
+tõendina. Nende ootel/NEXT käsud ei tühista eespool kirjeldatud vastuvõttu.
+
 <!-- SELQIRO_HORSE_STORE_CATEGORIES_PREPARED_20261110 -->
 ## 10.11.2026 — hobusekuulutuse poe rubriigid on lähtepaketis ette valmistatud
 

@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "kind": "service-store-categories-guard-generation",
+  "result": "PASS",
+  "generated_at_utc": "2026-11-11T11:13:25.657Z",
+  "source_inputs": 85,
+  "install_replay_verified": true,
+  "retained_invariants_unchanged": true,
+  "new_table_effective_privileges_all_denied": true,
+  "live_database": false,
+  "production_storage": false,
+  "mac_installer": false,
+  "files": {
+    "01_assignments.sql": "44c90fd4401975aa42ce4f9ce2855bcc39f954b4bae2eb20c59e48ee851c0be5",
+    "02_profile_services.sql": "ed2c30a70caad5727ea1a66cb50094880399bec098686d91b385294c7bae6455",
+    "03_public_categories.sql": "651ce76b5abeebf2a35a67226128eb11d98727a9eba3c4e3983126206a3ee5c3",
+    "changes.sql": "e4a4542e528e8764075dde1eb3600dbba28e1d85458fa4d70d82a8d25df148e5",
+    "preflight.sql": "f30e6960ce550dcb9ae1eaa694d9b397b2fce23c091ab209725f1c1b077547ae",
+    "apply.sql": "39c6f60205c61b536812d93cf496db4843bf5c9c50f0b5c5e5c1200b0e275e2e",
+    "verify.sql": "f30e6960ce550dcb9ae1eaa694d9b397b2fce23c091ab209725f1c1b077547ae",
+    "source-pins.json": "8ceee2d7c61982ebb4afc1271cd830f5362e8a1eff4c6025a49a33554f53b940",
+    "catalog-pins.json": "b0094eea9097b99e5c4e97bc015b2372c007056efe8fa79f067d4c9e40220415"
+  }
+}

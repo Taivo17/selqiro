@@ -13,6 +13,7 @@ import ServiceFields from "./ServiceFields";
 import ServiceGalleryEditor, {serviceEditorPhotos, serviceGalleryDirty, type ServiceEditorPhoto} from "./ServiceGalleryEditor";
 import ServicePolicyGate from "./ServicePolicyGate";
 import ServicePublicationActions from "./ServicePublicationActions";
+import ServiceStoreCategoryCard from "./ServiceStoreCategoryCard";
 
 const button = "inline-flex min-h-12 items-center justify-center rounded-full border border-neutral-300 bg-white px-5 py-3 text-sm font-bold disabled:opacity-40";
 export default function ServiceEditor({userId, serviceId}: {userId: string; serviceId: string | null}) {
@@ -24,6 +25,7 @@ export default function ServiceEditor({userId, serviceId}: {userId: string; serv
   const [photos, setPhotos] = useState<ServiceEditorPhoto[]>([]), [formSnapshot, setFormSnapshot] = useState<ServiceOwnerSnapshot | null>(null);
   const [error, setError] = useState<ServiceMessageKey | null>(null);
   const [requiresReload, setRequiresReload] = useState(false);
+  const [categoryPending, setCategoryPending] = useState(false);
   const [navigating, setNavigating] = useState(false);
   const submittedRequest = useRef<string | null>(null), completion = useRef<{snapshot: ServiceOwnerSnapshot; preserveDraft: boolean} | null>(null);
   const createHandoff = useRef<string | null>(null), policyRefreshed = useRef<string | null>(null);
@@ -71,9 +73,9 @@ export default function ServiceEditor({userId, serviceId}: {userId: string; serv
   useEffect(() => {
     if (publication.view.message === "policiesChanged" && requestKey !== policyRefreshed.current) {policyRefreshed.current = requestKey ?? "changed"; refreshPolicy();}
   }, [publication.view.message, requestKey, refreshPolicy]);
-  useEffect(() => {const unload = (event: BeforeUnloadEvent) => {if (dirty) {event.preventDefault(); event.returnValue = "";}};
-    window.addEventListener("beforeunload", unload); return () => window.removeEventListener("beforeunload", unload);}, [dirty]);
-  const leave = (event: MouseEvent<HTMLAnchorElement>) => {if ((dirty || !["editing", "published", "closed"].includes(phase)) && !window.confirm(t("leaveConfirm"))) event.preventDefault();};
+  useEffect(() => {const unload = (event: BeforeUnloadEvent) => {if (dirty || categoryPending) {event.preventDefault(); event.returnValue = "";}};
+    window.addEventListener("beforeunload", unload); return () => window.removeEventListener("beforeunload", unload);}, [dirty, categoryPending]);
+  const leave = (event: MouseEvent<HTMLAnchorElement>) => {if ((dirty || categoryPending || !["editing", "published", "closed"].includes(phase)) && !window.confirm(t("leaveConfirm"))) event.preventDefault();};
   const reload = () => {if (dirty && !window.confirm(t("reloadConfirm"))) return; void session?.inspect(); context.reload();};
   const submit = () => {
     if (!editable || !context.ready || !context.canAct() || !session || !policy.snapshot || requiresReload) return;
@@ -97,14 +99,22 @@ export default function ServiceEditor({userId, serviceId}: {userId: string; serv
       <ServiceGalleryEditor title={form.title} photos={photos} actor={context.actor} disabled={!editable} onChange={next => {if (editable && context.canAct()) {setPhotos(next); setError(null);}}} />
       <ServicePolicyGate policy={policy} disabled={!editable || !context.ready} />
       <ServicePublicationActions key={publication.view.intent?.requestKey ?? "form"} session={session} view={view} ready={context.ready} publish={publish} error={error} canSubmit={editable && context.ready && !requiresReload && !!policy.snapshot && (publish || dirty)} onSubmit={submit} />
+    </>}
+    {/* Keep the independent category draft mounted during a same-owner context read failure.
+        Identity/auth events retire its hook; a temporary owner retry only hides and blocks it. */}
+    {serviceId && context.actor && context.snapshot ? <div hidden={!context.active}>
+      <ServiceStoreCategoryCard actor={context.actor} serviceId={serviceId}
+        blocked={!editable || !context.ready || requiresReload} onPendingChange={setCategoryPending} />
+    </div> : null}
+    {context.active && (!serviceId || context.snapshot) ? <>
       <section className="rounded-3xl border border-neutral-200 bg-white p-5">
-        {phase === "editing" ? <p className="text-sm">{t(dirty ? "unsaved" : "noChanges")}</p> : null}
+        {phase === "editing" ? <p className="text-sm">{t(dirty || categoryPending ? "unsaved" : "noChanges")}</p> : null}
         <div className="mt-3 flex flex-wrap gap-3">
           {serviceId ? <button type="button" className={button} disabled={working || phase !== "editing" || !context.ready} onClick={reload}>{t("reload")}</button> : null}
           <Link href="/v2/my-area#my-area-services" onClick={leave} className={button}>{t("myArea")}</Link>
           {context.snapshot?.service.status === "published" ? <Link className={button} href={`/v2/service/${context.snapshot.service.id}`} target="_blank" rel="noreferrer">{t("viewPublic")}</Link> : null}
         </div>
       </section>
-    </>}
+    </> : null}
   </div>;
 }

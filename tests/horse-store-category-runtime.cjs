@@ -9,8 +9,11 @@ function recordInput(file) {
   if (inputs.has(relative)) assert.equal(digest, inputs.get(relative), 'No source change during the test run: ' + relative);
   inputs.set(relative, digest);return bytes.toString();
 }
-function runtime(fixture, {language = 'en', modules = {}} = {}) {
-  const dom = new JSDOM('<!doctype html><div id="test"></div>', {url: 'https://fixture.invalid/v2/my-area/horse-offers/aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa/edit', pretendToBeVisual: true});
+function runtime(fixture, {language = 'en', modules = {},
+  hookPath = 'src/features/horse-offer-edit/model/useHorseStoreCategories.ts', hookName = 'useHorseStoreCategories',
+  apiPath = 'src/entities/horse-offer/api/horseStoreCategoriesClient.ts', apiName = 'horseStoreCategoryApi',
+  url = 'https://fixture.invalid/v2/my-area/horse-offers/aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa/edit'} = {}) {
+  const dom = new JSDOM('<!doctype html><div id="test"></div>', {url, pretendToBeVisual: true});
   const previous = new Map(), cache = new Map();
   for (const [name, value] of Object.entries({window: dom.window, document: dom.window.document, navigator: dom.window.navigator,
     HTMLElement: dom.window.HTMLElement, Event: dom.window.Event, StorageEvent: dom.window.StorageEvent, IS_REACT_ACT_ENVIRONMENT: true})) {
@@ -30,6 +33,7 @@ function runtime(fixture, {language = 'en', modules = {}} = {}) {
     }});
     const localRequire = spec => {
       if (spec === 'react') return React;if (spec === 'react/jsx-runtime') return require(spec);
+      if (spec === 'next/navigation') return {useRouter: () => ({replace() {}})};
       if (spec === 'next/link') return function Link({prefetch, scroll, ...props}) {return React.createElement('a', props);};
       assert.ok(spec.startsWith('.') || spec.startsWith('@/'), 'Unexpected dependency: ' + spec);
       const stem = spec.startsWith('@/') ? path.join(root, spec.slice(2)) : path.resolve(path.dirname(file), spec);
@@ -39,12 +43,12 @@ function runtime(fixture, {language = 'en', modules = {}} = {}) {
     return module.exports;
   }
   const container = dom.window.document.getElementById('test'), reactRoot = require('react-dom/client').createRoot(container);
-  const hook = load('src/features/horse-offer-edit/model/useHorseStoreCategories.ts').useHorseStoreCategories;
+  const hook = load(hookPath)[hookName];
   let current;
   function Observer(props) {current = hook(props);return React.createElement('p', {role: 'status'}, current.error || current.message || 'ready');}
   const render = async (props, Component = Observer) => {await act(async () => {reactRoot.render(React.createElement(Component, props));await tick();});await act(tick);};
   return {fixture, load, container, window: dom.window, render, get state() {return current;},
-    api: load('src/entities/horse-offer/api/horseStoreCategoriesClient.ts').horseStoreCategoryApi,
+    api: load(apiPath)[apiName],
     identity: load('src/features/v2-shell/model/identityEvents.ts'),
     async action(callback) {let returned;await act(async () => {returned = callback();await returned;await tick();});await act(tick);return returned;},
     async flush() {await act(async () => {await tick();await tick();});},

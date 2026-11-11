@@ -1,3 +1,47 @@
+<!-- SELQIRO_SERVICE_CATEGORY_POLICY_20261111 -->
+## 11.11.2026 — teenuste rubriikide samm ja eraldi avaliku avamise tööd
+
+Teenuste oma rubriikide ning kuulutuste/teenuste sisuga avalike rubriikide
+parandus on uues lähtekandidaadis. Täpne kontrolli- ja paigalduspiir on
+`docs/continuity/CURRENT_STATE.json`; ettevalmistus ei ole Maci ega pilve tõend.
+Vana profiilipäringu esimese 80 teenuse piir asendatakse lehekülgedega.
+
+Teenuste 365-päevane kehtivus on varasem ja praegu kinnitatud tooteotsus,
+kuid uues avaldamisvoos puudub veel selle jõustamine. Enne selle lisamist tuleb
+määrata olemasolevate teenuste üleminek, omaniku uuenduskinnitus ja avalikud
+nähtavuskontrollid. Rubriigisalvestus ei uuenda eluiga ega tekita uut avaldust.
+
+Ajutine vaataja otsingupeitmine, korduvate teenuste juhendamine ning profiilist
+algavad ettevõtte tööpakkumised on eraldi tööd. V1 user_blocks ei asenda ajutist
+otsingueelistust, sest see mõjutab ka sõnumeid. Tööotsingu peitmine peab kehtima
+ka serveri üldotsingu/avastuse päringutes. Vt
+`docs/architecture/public-discovery-controls-v1.md`.
+
+Üldine fotode automaatne koristus, tavakasutaja tehniliste paneelide eemaldamine
+ning senised identiteedi- ja avaliku käivitamise piirid säilivad. Varasemad
+allolevad kirjed on dateeritud ajalugu; praegust järgmist käsku loe CURRENT_STATE-ist.
+
+---
+
+<!-- SELQIRO_HORSE_STORE_CATEGORIES_ACCEPTED_20261110 -->
+## 10.11.2026 — hobuse poe rubriigid on paigaldatud ja vastu võetud
+
+Maci lõppraport kinnitab SQL-i järelkontrolli, build'i, commit'i
+`d5e77e963f80cb4dab33e6e6667c44d4062c4bbc` ja push'i; lõpetamine 21:38:37
+Europe/Tallinn. Kasutaja kinnitas hobuse rubriikide salvestamist, profiilil
+leitavust ning lisatud rubriigi kaudu avamist. Neid lõpetatud samme ei korrata.
+Verceli Ready/deployment-ID pole eraldi esitatud (`READY_NOT_CHECKED`).
+
+Praegune seis on `docs/continuity/CURRENT_STATE.json`; täpne vastuvõtt on
+`docs/continuity/HORSE_STORE_CATEGORIES_ACCEPTED_20261110.md`-s.
+Järgmine soovitatud töö on teenuste ühendamine sama poe rubriikidega;
+selle koodi ega SQL-i pole veel koostatud. Muud käivitamise piirid säilivad.
+See dokumentide jätk ootab järgmisse lähtepakki kandmist; eraldi Maci kirjutust
+või uut commit'i selle vastuvõtu vestluses ei tehtud.
+
+Allpool säilivad varasemad kuupäevaga ettevalmistused ja piirid ajaloolise
+tõendina. Nende ootel/NEXT käsud ei tühista eespool kirjeldatud vastuvõttu.
+
 <!-- SELQIRO_HORSE_STORE_CATEGORIES_PREPARED_20261110 -->
 ## 10.11.2026 — hobusekuulutuse poe rubriigid on lähtepaketis ette valmistatud
 

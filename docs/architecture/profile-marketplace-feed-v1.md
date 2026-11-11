@@ -119,3 +119,16 @@ installation cases cover definition/ACL/category drift, atomic rollback,
 existing-data preservation and replay. The environment is disposable
 PostgreSQL/WASM with synthetic records. It does not establish a production
 installation, PostgREST result, native concurrency or browser acceptance.
+
+
+<!-- SELQIRO_SERVICE_CATEGORY_POLICY_20261111 -->
+## 2026-11-11 — public choices reflect visible content
+
+The public profile category hook now uses the contextual v2 category endpoint
+with marketplace scope. It includes only categories linked to visible ordinary
+or horse offers and their same-identity ancestors, across the whole eligible
+set before result paging. The existing marketplace v2 result RPC stays exact.
+Owner management and owner assignment selectors keep their full category tree.
+The service section uses its own contextual scope and paginated service reader.
+See `service-store-category-assignment-v1.md` and CURRENT_STATE for preparation,
+tests and the separate deployment boundary.

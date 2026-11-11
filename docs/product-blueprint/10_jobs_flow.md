@@ -331,3 +331,25 @@ Jobs in Selqiro start as simple employer-side opportunities.
 A business is looking for a worker.
 
 The system should stay simple and grow only if real usage shows the need.
+
+
+<!-- SELQIRO_SERVICE_CATEGORY_POLICY_20261111 -->
+## 2026-11-11 — accepted first-publication direction
+
+A business identity may publish a job opportunity first on its public company
+profile and shareable detail link. Selqiro's general jobs search, discovery and
+main navigation remain closed initially. This supersedes the interim proposal
+to expose the whole jobs module only to pilot accounts. A profile-only offer
+is public; it is not a private posting or a promise of search-engine exclusion.
+
+Capture the global job category and later search fields from the first version.
+The same canonical job becomes eligible when general discovery opens, subject
+to its current status and deadline. Desired validity: one month. Do not silently
+reactivate or renew old jobs at discovery launch. Show a clear publication
+notice before saving and in the owner view. Initial contact uses existing
+messages; applicant management and CV storage remain outside this scope.
+
+Exact visibility, notice and architecture contract:
+`../architecture/public-discovery-controls-v1.md`. This is a product direction;
+jobs have not been implemented by the service category package. Current work
+remains recorded once in `../continuity/CURRENT_STATE.json`.

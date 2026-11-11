@@ -16,7 +16,7 @@ export default function PublicProfileListingsSection({profile, showAll, onShowAl
   const {results, loading, categories} = view;
   if (!loading && !results.error && view.selectedCategoryId === null && results.page?.totalCount === "0") return null;
   const total = results.page?.totalCount ?? "0";
-  const canExpand = showAll || BigInt(total) > BigInt(PROFILE_LISTING_PREVIEW_SIZE) || categories.categories.length > 0;
+  const canExpand = showAll || categories.loading || !!categories.error || BigInt(total) > BigInt(PROFILE_LISTING_PREVIEW_SIZE) || categories.categories.length > 0;
   return <section data-profile-marketplace aria-busy={loading}
     className="relative min-w-0 overflow-hidden rounded-[30px] border border-amber-200 bg-amber-50 p-5 shadow-sm before:pointer-events-none before:absolute before:inset-x-0 before:top-0 before:h-1.5 before:bg-amber-500 before:content-[''] sm:p-6">
     <header className="mb-5 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
@@ -25,13 +25,13 @@ export default function PublicProfileListingsSection({profile, showAll, onShowAl
         <h2 className="mt-2 text-2xl font-black tracking-tight md:text-3xl">{t("this_profile_s_listings")}</h2>
       </div>
       {canExpand ? <button type="button" className={button} aria-expanded={showAll} onClick={() => onShowAllChange(!showAll)}>
-        {showAll ? t("view_less") : t("view_all_count", {count: total})}
+        {showAll ? t("view_less") : results.page ? t("view_all_count", {count: total}) : t("view_details")}
       </button> : null}
     </header>
     {showAll ? <PublicProfileStoreCategoryFilter categories={categories.categories}
       loading={categories.loading} error={categories.error} selectedCategoryId={view.selectedCategoryId}
       expandedRootId={view.expandedRootId} onSelectAll={view.selectAll}
-      onSelectRoot={view.selectRoot} onSelectChild={view.selectChild} /> : null}
+      onSelectRoot={view.selectRoot} onSelectChild={view.selectChild} onRetry={categories.retry} /> : null}
     {loading ? <p role="status" className="py-8 text-sm text-neutral-600">{t("searching")}</p> : null}
     {!loading && results.error ? <div role="alert" className="rounded-[22px] border border-red-100 bg-red-50 p-5">
       <h3 className="font-black text-red-950">{t("could_not_load_listings")}</h3>

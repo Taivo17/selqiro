@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "kind": "service-store-categories-prepared-sql-inventory",
+  "prepared_at_utc": "2026-11-11T11:16:14.252143+00:00",
+  "runtime_checks": 28,
+  "installation_checks": 41,
+  "source_and_proof_inputs_match": true,
+  "live_database": false,
+  "files": {
+    "01_assignments.sql": "44c90fd4401975aa42ce4f9ce2855bcc39f954b4bae2eb20c59e48ee851c0be5",
+    "02_profile_services.sql": "ed2c30a70caad5727ea1a66cb50094880399bec098686d91b385294c7bae6455",
+    "03_public_categories.sql": "651ce76b5abeebf2a35a67226128eb11d98727a9eba3c4e3983126206a3ee5c3",
+    "README.md": "8e6b57a5ca97f6ccffc18c54cc2e90359de129927a6ce6128d3b8cbb53183fe0",
+    "apply.sql": "39c6f60205c61b536812d93cf496db4843bf5c9c50f0b5c5e5c1200b0e275e2e",
+    "catalog-pins.json": "b0094eea9097b99e5c4e97bc015b2372c007056efe8fa79f067d4c9e40220415",
+    "changes.sql": "e4a4542e528e8764075dde1eb3600dbba28e1d85458fa4d70d82a8d25df148e5",
+    "guard-generation-result.json": "20747a3eab1935e615a1ebd55de251a4ab2b7f01985c4eed91cc9a1f76c3fdbf",
+    "installation-result.json": "081668b67816dd9d7abd195d1ad4fb9c2990809b67f63696d9463e32cb50e8c1",
+    "preflight.sql": "f30e6960ce550dcb9ae1eaa694d9b397b2fce23c091ab209725f1c1b077547ae",
+    "runtime-result.json": "2834aec7c1c9ba04ee4cf5375e54d419f92272d329e70adce4e37420c9787f16",
+    "source-pins.json": "8ceee2d7c61982ebb4afc1271cd830f5362e8a1eff4c6025a49a33554f53b940",
+    "tests/before-example.json": "c97ebed1ead90e0e72fdc8a6de4990c5a84ef9ff9039cc911c98b58e754590ed",
+    "tests/build-guards.mjs": "44d6dd5d143699e41dcd3de5fb877f6992f1bed4394e129fa1a53c1a9c0bc5c6",
+    "tests/catalog.mjs": "d7702204b997dd72a394b9a5673697509e39167d750c18ae9872c478f90f22e7",
+    "tests/fixture.mjs": "7731a4f2f74d0a96d89449c7cd5fa679050379dc3d06fb071d20da4723b18ff3",
+    "tests/installation.mjs": "855433c7563f4417ef0f857aba6e09cba5280d4c855362025b4c7bcb582b238f",
+    "tests/runtime.mjs": "4f0c3a8b94b83e99fca9a70e577c35d0940de9d07214e290f2c942ad16bf3f71",
+    "tests/verified-example.json": "8bf6e18eb332e78075f03f14e86316dd236bfaec6cef8a837c8474309b2cdcb8",
+    "verify.sql": "f30e6960ce550dcb9ae1eaa694d9b397b2fce23c091ab209725f1c1b077547ae"
+  }
+}

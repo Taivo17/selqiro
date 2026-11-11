@@ -13,7 +13,12 @@ const copy = value => JSON.parse(JSON.stringify(value));
 export function deferred() {let resolve, reject; const promise = new Promise((yes, no) => {resolve = yes; reject = no;}); return {promise, resolve, reject};}
 const category = (id, name, parent_id = null, identity_id = ids.identity, sort_order = 0) => ({id, identity_id, name, sort_order, parent_id});
 
-export function createHorseStoreFixture() {
+export function createHorseStoreFixture() {return createCanonicalStoreFixture("horse");}
+export function createServiceStoreFixture() {return createCanonicalStoreFixture("service");}
+function createCanonicalStoreFixture(kind) {
+  const readRpc = kind === "service" ? "get_my_service_store_categories_v1" : "get_my_horse_offer_store_categories_v1";
+  const saveRpc = kind === "service" ? "set_my_service_store_categories_v1" : "set_my_horse_offer_store_categories_v1";
+  const idParameter = kind === "service" ? "p_service_id" : "p_offer_id", idField = kind === "service" ? "service_id" : "offer_id";
   const listeners = new Set(), interceptors = [], held = new Set();
   const state = {
     session: {access_token: 'synthetic-token-A', user: {id: ids.user}}, activeIdentity: ids.identity,
@@ -37,19 +42,19 @@ export function createHorseStoreFixture() {
     const user = authorize(call), params = call.params ?? {};
     if (call.kind === 'rpc') {
       if (call.name === 'current_user_has_identity_access') return {data: user === ids.user && state.accessAllowed && params.p_identity_id === state.activeIdentity, error: null};
-      if (['get_my_horse_offer_store_categories_v1', 'set_my_horse_offer_store_categories_v1'].includes(call.name)) {
-        if (!user || params.p_expected_identity_id !== state.activeIdentity) return error('42501', 'horse_store_category_context_changed');
-        const offer = state.offers.find(row => row.id === params.p_offer_id);
-        if (user !== ids.user || !state.accessAllowed || !offer || offer.identity_id !== state.activeIdentity) return error('42501', 'horse_store_category_forbidden');
-        let selected = state.assignments.get(params.p_offer_id) ?? [];
-        const writing = call.name === 'set_my_horse_offer_store_categories_v1';
+      if ([readRpc, saveRpc].includes(call.name)) {
+        if (!user || params.p_expected_identity_id !== state.activeIdentity) return error('42501', kind + '_store_category_context_changed');
+        const offer = state.offers.find(row => row.id === params[idParameter]);
+        if (user !== ids.user || !state.accessAllowed || !offer || offer.identity_id !== state.activeIdentity) return error('42501', kind + '_store_category_forbidden');
+        let selected = state.assignments.get(params[idParameter]) ?? [];
+        const writing = call.name === saveRpc;
         if (writing) {
           if (!params.p_category_ids.every(id => state.categories.some(row => row.id === id && row.identity_id === state.activeIdentity)))
-            return error('22023', 'horse_store_category_invalid_selection');
+            return error('22023', kind + '_store_category_invalid_selection');
           selected = [...new Set(params.p_category_ids)].sort();
-          state.assignments.set(params.p_offer_id, selected);state.writes.push({offerId: params.p_offer_id, selected});
+          state.assignments.set(params[idParameter], selected);state.writes.push({offerId: params[idParameter], selected});
         }
-        return {data: {offer_id: params.p_offer_id, identity_id: params.p_expected_identity_id, category_ids: selected,
+        return {data: {[idField]: params[idParameter], identity_id: params.p_expected_identity_id, category_ids: selected,
           ...(writing ? {assigned_count: selected.length} : {})}, error: null};
       }
       throw Error('Unexpected fixture RPC: ' + call.name);
