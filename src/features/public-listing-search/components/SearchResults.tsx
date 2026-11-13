@@ -44,7 +44,7 @@ export default function SearchResults({page, loading, error, offset, onPage, onR
     </div> : null}
     {!loading && page && page.items.length > 0 ? <>
       <div className="grid items-stretch gap-5 md:grid-cols-2 xl:grid-cols-3">
-        {page.items.map(item => <SearchResultCard key={item.id} item={item} />)}
+        {page.items.map(item => <SearchResultCard key={(item.contentType ?? "listing") + ":" + item.id} item={item} />)}
       </div>
       <nav aria-label={t("search_result_pages")} className="mt-6 flex flex-wrap items-center justify-between gap-3">
         <button type="button" className={button} disabled={!offset} onClick={() => onPage(Math.max(0, offset - PUBLIC_SEARCH_PAGE_SIZE))}>{t("previous")}</button>

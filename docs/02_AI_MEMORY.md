@@ -1,3 +1,65 @@
+<!-- SELQIRO_PROVIDER_CONTROLS_PREPARED_20261113 -->
+## 13.11.2026 — 24 tunni peitmise ja eraldi blokeerimise lähtekood valmis
+
+Uus moodul on ette valmistatud vastuvõetud `955c935` alusele. Pakkuja menüüd,
+Minu ala eraldi haldusloendid, serveri enne-lehekülge filter ja varasema
+`user_blocks` registriga ühendus on lähtekoodis. Konto/vaate vahetus ja
+hilinenud vastused on piiratud; tundmatut kirjutust ei korrata automaatselt.
+
+Build ning 37 kliendikatset on läbitud. SQL-i 24 runtime-, 49 paigaldus- ja
+11 päringuplaani kontrolli on läbitud sünteetilises PostgreSQL/WASM-is.
+Päris brauserikatse peatus keskkonnapiiril ja ootab uue veebiversiooni
+kasutuskäiku. Maci kirjutust, pilve SQL-i, commit/push'i ega uut deployment'i
+siin tehtud ei ole. Paki tarne- ja täpsed sisenditõendid on `kontrollid/` all.
+
+Üks praegune seis on `docs/continuity/CURRENT_STATE.json`, üks jätkamiskäsk
+`docs/continuity/HOSTED_PORTAL.md`. Mooduli arhitektuur:
+`docs/architecture/provider-controls-v1.md`. Allolevad dateeritud otsused ja
+ettevalmistus-/NEXT-kirjed säilivad muutmata ajaloona.
+
+---
+
+<!-- SELQIRO_PROVIDER_CONTROLS_CONFIRMED_20261113 -->
+## 13.11.2026 — peitmine 24 tunniks ja eraldi püsiv blokeerimine
+
+Kasutaja kinnitas ajutise peitmise kestuseks 24 tundi. See asendab varasema
+7 päeva soovituse. Peitmine on vaataja konto otsingueelistus ühe pakkuja
+identiteedi suhtes: automaatne lõpp, kohene tagasivõtmine ja Minu ala haldus.
+Sõnumid ja teadlikult avatud profiil/detail säilivad tavapäraste õigustega.
+
+Püsiv blokeerimine jääb eraldi user_blocks-i toiminguks varasema lepingu
+alusel: nähtavuse piirang, mõlemapoolne saatmiskeeld, vestlusajaloo säilimine
+ja ainult blokeerija eemaldatav blokeering. Peitmise aegumine blokeeringut
+ei tühista. Praeguse runtime'i ja haldusvaate täielik ühendus vajab kontrolli.
+
+Leping: docs/continuity/VIEWER_PROVIDER_CONTROLS_20261113.md.
+Üks praegune seis: docs/continuity/CURRENT_STATE.json ja genereeritud üleandmine.
+Teenuste kehtivuse 955c935 paigaldus/vastuvõtt säilib. Käesolev samm uuendab
+dokumente; uut runtime'i, SQL-i, build'i, Maci kirjutust, commit/push'i ega
+deployment'i ei tehtud. Delta läheb järgmise sisulise lähtepakiga kaasa.
+Allolevad dateeritud 7 päeva soovitused ja NEXT-kirjed on ajalugu.
+
+---
+
+<!-- SELQIRO_SERVICE_ACTIVITY_ACCEPTED_20261111 -->
+## 11.11.2026 — teenuse kehtivus ja pikendamine on paigaldatud ning vastu võetud
+
+Maci lõppraport kinnitab SQL-i järelkontrolli, build'i ja push'i commit'iga
+955c935fa4e901a8b81885e2dcd18d966d651810; lõpp 20:35:24 Europe/Tallinn.
+Sama 955c935 Verceli Ready / Production on kasutaja pildil.
+Kasutaja kinnitas pikendamist ning teenuse ja rubriigiseoste säilimist
+avalikul profiilil. Puhastusteenuse lõpp muutus 11.11.2027 20:34 → 20:46.
+
+Autoriteetne seis: docs/continuity/CURRENT_STATE.json.
+Täpne vastuvõtt: docs/continuity/SERVICE_ACTIVITY_ACCEPTED_20261111.md.
+Lõpetatud paigaldajat, SQL-i, build'i ega kasutuskatset ei korrata.
+See dokumentide delta ootab järgmist sisulist lähtepakki; uut Maci kirjutust
+ega commit'i siin ei tehtud. Järgmine soovitus on ajutine pakkuja peitmine
+otsingust; 7 päeva on ettepanek ja selle mooduli kood on koostamata.
+Allolevad ettevalmistuse ja varasemate NEXT-ide kirjed säilivad ajaloona.
+
+---
+
 <!-- SELQIRO_SERVICE_ACTIVITY_PREPARED_20261111 -->
 ## 11.11.2026 — teenuse üheaastane kehtivus on uues lähtepaketis valmis
 

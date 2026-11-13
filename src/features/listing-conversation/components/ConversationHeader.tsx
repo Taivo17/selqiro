@@ -14,7 +14,7 @@ import { serviceEditorMessages } from "../../service-editor/model/serviceEditorM
 type Props = {
   peer: ConversationIdentity | null;
   listing: Readonly<{ id: string; title: string | null; content_type?: "horse_offer" | "service" }> | null;
-  ready: boolean; blocked: boolean; busy: boolean;
+  ready: boolean; blocked: boolean; blockedByOther?: boolean; blockUnavailable?: boolean; busy: boolean;
   onHide: () => Promise<boolean>; onBlock: (blocked: boolean) => Promise<boolean>;
 };
 export default function ConversationHeader(props: Props) {
@@ -30,6 +30,7 @@ export default function ConversationHeader(props: Props) {
         {props.listing.title || (props.listing.content_type === "service" ? serviceText("viewPublic") : t("view_listing"))}
       </Link> : props.ready && <span className={styles.listingLink}>{t("conversation_messages")}</span>}
     </div>
-    {props.ready && <ThreadActions blocked={props.blocked} disabled={props.busy} onHide={props.onHide} onBlock={props.onBlock} />}
+    {props.ready && <ThreadActions blocked={props.blocked} blockedByOther={props.blockedByOther} blockUnavailable={props.blockUnavailable}
+      disabled={props.busy} onHide={props.onHide} onBlock={props.onBlock} />}
   </header>;
 }

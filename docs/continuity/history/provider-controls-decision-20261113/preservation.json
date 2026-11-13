@@ -1,0 +1,23 @@
+{
+  "format": "selqiro-preserved-checkpoint-v1",
+  "from_zip": "selqiro-seis-20261113-peitmine-24h-ja-blokeerimine.zip",
+  "from_zip_sha256": "e7840e782c59024acc5b2f2c48a973469b0d3aa7f68448426d87e6522addc668",
+  "files": {
+    "docs/continuity/CURRENT_STATE.json": {
+      "bytes": 9889,
+      "sha256": "f0f638bcacba473d28fde7670860a1db64bf1d48ba23e8ee15e040ddfb7a7e26"
+    },
+    "docs/99_V2_HANDOFF_NEXT_CHAT.md": {
+      "bytes": 9977,
+      "sha256": "13fc17c315c1c082c788d121ce39e24a812affd94bf94da78d8bacb1d8a3e1a4"
+    },
+    "docs/continuity/HOSTED_PORTAL.md": {
+      "bytes": 1356,
+      "sha256": "8189dece4005760ea5e860253ea0083cf224d6bbab63112a65b5a316e0a2409d"
+    },
+    "docs/continuity/VIEWER_PROVIDER_CONTROLS_20261113.md": {
+      "bytes": 4971,
+      "sha256": "507e32d1bf8208f7f3bc2d8cc410c9a9761943a3d411288c420c04f62ba228ae"
+    }
+  }
+}

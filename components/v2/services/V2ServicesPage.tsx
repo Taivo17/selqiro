@@ -6,12 +6,16 @@ import { useV2Translation } from "../../../src/shared/i18n/V2LanguageProvider";
 import { serviceEditorMessages } from "../../../src/features/service-editor/model/serviceEditorMessages";
 import { useServiceDiscoveryView } from "../../../src/features/service-navigation/model/useServiceDiscoveryView";
 import { isPlainServiceClick } from "../../../src/features/service-navigation/model/serviceReturnContext";
-import { serviceLocationLabel, servicePriceLabel } from "../../../src/entities/service/model/publicService";
+import ServiceDiscoveryCard from "../../../src/features/service-detail/components/ServiceDiscoveryCard";
+import ProviderControlsBoundary from "../../../src/features/viewer-provider-controls/components/ProviderControlsBoundary";
 import { useServiceCategories } from "../../../src/features/service-category-selection/model/useServiceCategories";
 import { buildServiceCategoryTree } from "../../../src/entities/service-category/model/types";
 
 const input = "min-h-12 w-full min-w-0 rounded-full border border-neutral-200 bg-white px-4 py-3 text-base outline-none focus:border-teal-600 focus:ring-2 focus:ring-teal-600/20";
 export default function V2ServicesPage() {
+  return <ProviderControlsBoundary><ServiceDiscoveryContent /></ProviderControlsBoundary>;
+}
+function ServiceDiscoveryContent() {
   const {language, t} = useV2Translation(serviceEditorMessages), categories = useServiceCategories();
   const tree = useMemo(() => buildServiceCategoryTree(categories.categories), [categories.categories]);
   const {filters: {query, category, subcategory, city}, results, change, clear, remember} = useServiceDiscoveryView();
@@ -51,18 +55,8 @@ export default function V2ServicesPage() {
       {results.firstOffset > 0 ? <div className="mb-5"><button type="button" disabled={results.loading}
         onClick={() => void results.loadPrevious()} className="min-h-12 rounded-full border border-teal-300 bg-white px-6 py-3 font-bold disabled:opacity-50">{t("earlierResults")}</button></div> : null}
       <div className="grid min-w-0 gap-5 sm:grid-cols-2 xl:grid-cols-3">
-        {results.page?.items.map(service => <Link key={service.id} href={`/v2/service/${service.id}`} prefetch={false}
-          data-service-card-id={service.id} onClick={event => rememberCard(event, service.id)} aria-label={t("openService", {title: service.title})}
-          className="group min-w-0 overflow-hidden rounded-[26px] border border-black/5 bg-white p-3 shadow-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-teal-600">
-          {/* Already processed public media must retain the endpoint's publication checks. */}
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          {service.images[0] ? <img src={service.images[0].url} alt="" loading="lazy" className="aspect-[4/3] w-full rounded-[20px] object-cover" referrerPolicy="no-referrer" />
-            : <div className="flex aspect-[4/3] items-center justify-center rounded-[20px] bg-neutral-100 text-neutral-500">{t("noImage")}</div>}
-          <div className="space-y-2 px-1 pb-2 pt-4"><p className="text-xs font-bold text-teal-800">{[categoryLabel(service.category), categoryLabel(service.subcategory)].filter(Boolean).join(" › ")}</p>
-            <h3 className="break-words text-xl font-black group-hover:underline">{service.title}</h3><p className="line-clamp-2 break-words text-sm leading-6 text-neutral-600">{service.description}</p>
-            <p className="text-sm text-neutral-500">{service.sellerName}</p><p className="text-sm text-neutral-500">{serviceLocationLabel(service) || t("locationMissing")}</p>
-            <p className="pt-2 text-xl font-black">{servicePriceLabel(service, language)}</p></div>
-        </Link>)}
+        {results.page?.items.map(service => <ServiceDiscoveryCard key={service.id} service={service}
+          categoryLabel={[categoryLabel(service.category), categoryLabel(service.subcategory)].filter(Boolean).join(" › ")} onRemember={rememberCard} />)}
       </div>
       {results.page?.hasMore ? <div className="mt-6 text-center"><button type="button" disabled={results.loading} onClick={() => void results.loadMore()} className="min-h-12 rounded-full border border-teal-300 bg-white px-6 py-3 font-bold disabled:opacity-50">{t(results.loading ? "loading" : "loadMore")}</button></div> : null}
     </section>

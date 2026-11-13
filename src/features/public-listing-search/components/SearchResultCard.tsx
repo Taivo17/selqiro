@@ -14,6 +14,7 @@ import type { PublicSearchCard } from "../../../entities/listing/model/publicSea
 import { publicCategoryPath } from "../../../entities/listing/model/publicSearch";
 import { saveListingReturnContext } from "../../listing-navigation/model/listingReturnContext";
 import { horsePriceDisplay } from "../../../entities/horse-offer/model/publicHorse";
+import ProviderMenu from "../../viewer-provider-controls/components/ProviderMenu";
 
 export default function SearchResultCard({item}: {item: PublicSearchCard}) {
   const { language: uiLanguage, t } = useV2Translation(publicUiMessages);
@@ -31,7 +32,7 @@ export default function SearchResultCard({item}: {item: PublicSearchCard}) {
     ? uiLanguage === "et" ? "Eesti" : "Estonia" : item.country;
   const place = [...new Set([item.city, country].filter(Boolean))].join(" · ");
   return (
-    <article ref={ref} data-listing-card-id={item.id} className="h-full min-w-0 overflow-hidden rounded-[26px] border border-black/5 bg-white shadow-sm">
+    <article ref={ref} data-listing-card-id={item.id} className="relative h-full min-w-0 rounded-[26px] border border-black/5 bg-white shadow-sm">
       <Link href={(item.contentType === "horse_offer" ? "/v2/horse-offer/" : "/v2/listing/") + encodeURIComponent(item.id)} prefetch={false} onClick={remember}
         className="flex h-full flex-col p-3 outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-amber-500">
         <div className="flex aspect-[4/3] w-full items-center justify-center overflow-hidden rounded-[20px] bg-neutral-100 md:aspect-[16/10]">
@@ -46,6 +47,7 @@ export default function SearchResultCard({item}: {item: PublicSearchCard}) {
           <p className="text-right text-xs text-neutral-500">{place || t("location_unspecified")}</p>
         </div>
       </Link>
+      <div className="absolute right-4 top-4 z-10"><ProviderMenu target={{type: item.contentType === "horse_offer" ? "horse_offer" : "listing", id: item.id}} name={item.sellerName} /></div>
     </article>
   );
 }

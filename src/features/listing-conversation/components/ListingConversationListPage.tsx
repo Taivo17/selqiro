@@ -45,7 +45,7 @@ function ManagedConversationList() {
         </div>
         {item.unread && <span className={styles.unreadDot} role="img" aria-label={t("unread_messages")} />}
       </Link>
-      <ThreadActions disabled={state.acting} onHide={() => state.hide(item.conversation_id)} onBlock={blocked => state.block(item.conversation_id, blocked)} />
+      <ThreadActions disabled={state.acting} onHide={() => state.hide(item.conversation_id)} />
     </div>)}
     {visible && !visible.conversations.length && <p className={styles.rowPreview}>{t("there_are_no_conversations_for_this_identity_yet")}</p>}
     {visible?.next_cursor && <button type="button" disabled={state.reading || state.acting} className={styles.textButton} onClick={state.more}>{t("load_more_conversations")}</button>}

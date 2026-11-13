@@ -1,0 +1,57 @@
+{
+  "format": "selqiro_repo_handoff_v1",
+  "recorded_on": "2026-11-13 Europe/Tallinn; 24 tunni peitmise ja eraldi püsiva blokeerimise otsus",
+  "archive": {
+    "lines": 5573,
+    "path": "docs/archive/99_V2_HANDOFF_NEXT_CHAT.before-price-core-20261004-6df0af9.md",
+    "sha256": "667e47990a7d3cc20ff53709cb861663b4565cf1d3c830eda88e0d18e60fdb8a"
+  },
+  "checkpoint": "Teenuse 365-päevane kehtivus ja teadlik tasuta pikendamine on paigaldatud ning vastu võetud commit’il 955c935; sama commit’i Verceli Ready / Production ning kasutaja kontroll on kinnitatud. 13.11 määras kasutaja järgmise mooduli ajutise peitmise kestuseks 24 tundi ja palus eraldi püsivat blokeerimist varasema lepingu järgi. 7 päeva oli varasem soovitus ja on asendatud. Uus otsus on dokumenteeritud; peitmise/blokeerimise ühendust selles sammus ei rakendatud. Uut terminalikäsku pole.",
+  "source": {
+    "Paigaldatud alus": "/Users/taivo/selqiro, main, 955c935fa4e901a8b81885e2dcd18d966d651810; vanem 1b0c5ba867e5f466e75f63aee78521d37cf8164f. Raport ja muutmata uuendaja lõpukontrollid kinnitavad lõpetatud push'i. See ei ole uus live-Giti päring.",
+    "Täpsed lähtefailid": "Paigaldatud selqiro-teenuste-kehtivus-20261111.zip, SHA256 358a7370090c3d28a9dd9492cd96473769e815d8b6c531ea729ee15d723417f0. Manifest 54c1e7de45a727623c078f48053fd4ca00615026b2ed4e195a5a517527b808ba: 63 teed, 19 asendust ja 44 lisandust. Algindexi ning payload'i põhjal rekonstrueeritud 1607-failine oodatav puu 9fa61dfb5c4f70aac08c63dc59e2de25cafe5d8f; raport ei ekspordi eraldi lõpppuud ega commit-objekti.",
+    "Maci lõppraport": "selqiro-teenuste-kehtivus-20261111-raport-20261111-203526-70e2d5f66e11.json, 244129 baiti, SHA256 652dcf5cab818d257126d98698a350e876d30a0fd6ee452379a7262e6ad73a8c. 11.11 kell 20:34:25–20:35:24; SQL verify 20:34:58 Europe/Tallinn. complete / database verified / build passed / push verified.",
+    "Andmebaasi piir": "Üks acknowledged apply ja eraldi applied verify; 14/14 kaitset, täpsed capability/dependency pinid, kolm jooksu invarianti ning hosted-kontekst säilisid. Üleminekukokkuvõte 10 published, 0 archived/draft/invalid. Toorkataloogi ega üksikuid activity-ridu raport ei ekspordi. Storage not_performed.",
+    "Veebi ja kasutaja tõend": "20:50:44 Verceli pilt: 955c935, Add one-year service validity and explicit renewal, main, Ready / Production. 20:45:46 ja 20:46:14 piltidel Puhastusteenuse lõpp 11.11.2027 20:34 → 20:46 ning eduteade. Kasutaja kinnitas avaliku profiili ja rubriigiseosed.",
+    "Dokumentide jätk": "Kumulatiivne dokumentide delta jääb paigaldatud 955c935 vastu. Eelmise vastuvõtupaki SHA256 on aa00b75330e6ab4c3ef0f07ad2a14988405c0e326162536a7a1064c0dde22253. Väljastatud ZIP-id ja algne raport on muutmata; varasema vastuvõtu CURRENT_STATE, üleandmine ja HOSTED on säilitatud history/service-activity-accepted-20261111 all. Uut Maci kirjutust, stage’i ega commit’i ei tehtud.",
+    "13.11 tooteotsus": "Kasutaja kinnitas 24 tunni ajutise peitmise ning eraldi püsiva blokeerimise senisel alusel. Juuni vestlusest taastatud leping nõuab mõlemasuunalist sõnumikeeldu, ajaloo säilimist ja ainult blokeerija eemaldatavat blokeeringut. Vestlusmälu ei asenda praeguse koodi ega andmebaasi kontrolli."
+  },
+  "local_test": [
+    "Uus vastuvõtuülevaatus võrdles raportit muutmata manifesti, 63 algse faili räsi, 1563-kirjelise algindexi, SQL-i baitide ja kataloogipinidega; oodatav 1607-failine lõpppuu rekonstrueeriti. Kõrvalekallet ei leitud.",
+    "Salvestatud ettevalmistuse tulemused jäävad samaks: SQL runtime 22/22, paigaldus/drift/rollback 38/38, HTTP 25/25, klient/editor 25/25, TypeScript, Next build 647 sisendiga ja drift 0, Chromium 5/5 (EN/ET, 1365/390 px). Neid ei korratud.",
+    "Varasema SQL-i testimootor oli PostgreSQL/WASM sünteetiliste ridadega; brauseris olid dokumenteeritud Auth/HTTP/PostgREST ja navigatsiooni asendused. Native paralleelsessioone ega koormust see ei tõenda.",
+    "Vastuvõtu ajal ei käivitatud uut installerit, build'i, rakendusteste, SQL-i ega pilvetoiminguid. Dokumentide genereerimine ja räside kontroll ei muuda paigaldatud rakendust.",
+    "13.11 kontrolliti ainult dokumentide genereerimist, kumulatiivse delta alusräsisid ja väljastatud artefaktide säilimist. Uusi rakendusteste, build’i, paigaldajat ega pilvetoiminguid ei tehtud; uus runtime ei ole valmis."
+  ],
+  "production": [
+    "Maci jooks 11.11.2026 20:34:25–20:35:24 Europe/Tallinn lõpetas commit'iga 955c935fa4e901a8b81885e2dcd18d966d651810. Andmebaas verified, build passed, push verified. Puhas/remote-equal lõppseis põhineb raportil ja uuendaja lõpukontrollidel.",
+    "SQL: absent → üks acknowledged apply → eraldi applied verify. Kõigi kolme SQL CLI käsu exit_code=0 ja stderr_bytes=27; stderr'i sisu pole eksporditud ning seda ei nimetata tühjaks. database_after hoiab viimast kontrollitud seisu.",
+    "Raporti algne vercel=READY_NOT_CHECKED säilib. Uus kasutaja kuvatõmmis lisab sama 955c935 Ready / Production visuaalse kinnituse; täis deployment-ID-d ega Verceli API päringut ei ole vaja selle vastuvõtu jaoks uuesti küsida.",
+    "Kasutaja kinnitas pikendamise edu ning teenuse ja rubriigiseoste säilimise avalikul profiilil. Pildil on Puhastusteenuse uus tähtaeg ja eduteade. Eraldi autoremont-dialoogi pilt tõendab kinnituse kuvamist, mitte selle teise teenuse lõpuleviidud pikendamist.",
+    "See on aktiivse teenuse pikendamise, profiilis säilimise ja rubriigiseoste vastuvõtt. Uut eraldi aegumise, peatatud teenuse, negatiivse õiguse, identiteedivahetuse, fotobaitide või koormuse katset kasutaja ei kinnitanud."
+  ],
+  "next_action": "Kinnitatud järgmine moodul: Peida pakkuja 24 tunniks ning eraldi Blokeeri kasutaja senise user_blocks-lepingu järgi. Esmalt vaadata 955c935 täpseid otsingulugejaid, kaarte, koguarve/lehekülgi, konto → pakkuja identiteedi seost ning blokeerimise sõnumi/profiili/serveri õigusi. Seejärel ühendada vaataja kontopõhine 24 tunni eelistus ja olemasolev püsiv blokeerimine väikeste moodulitena. Peitmise aegumine ja kohene tagasivõtmine ei eemalda blokeeringut. Selle mooduli runtime-koodi ega käivitamiskäsku siin veel ei ole.",
+  "stop_rule": "Kehtivuse paigaldus on lõpetatud; vana uuendajat, SQL-i, build'i ega vastuvõetud katset ei korrata. Järgmine kirjutus vajab tegeliku haru/HEAD-i/indexi/tööpuu/lähtefailide ja kinnitatud remote'i värsket kontrolli. Raportid, päevikud ja kasutaja muudatused säilivad. Uue tõrke korral saata selle jooksu PEATATUD-rida ja SAADA SEE FAIL täpne fail.",
+  "read_next": [
+    "docs/continuity/VIEWER_PROVIDER_CONTROLS_20261113.md — 24 tunni otsus ja taastatud blokeerimisleping.",
+    "docs/architecture/public-discovery-controls-v1.md — otsingu ulatus ja serveri piirid.",
+    "docs/continuity/SERVICE_ACTIVITY_ACCEPTED_20261111.md — raport, Verceli pilt, kasutajavastuvõtt ja tõendipiirid.",
+    "docs/continuity/HOSTED_PORTAL.md — lõpetatud paigaldus; uut terminalikäsku pole.",
+    "docs/architecture/service-activity-v1.md — paigaldatud tähtaja ja pikendamise leping.",
+    "docs/continuity/SERVICE_ACCESS.json — olemasolevad teenused ja CLI pin; vanad jooksud on ajalugu."
+  ],
+  "boundaries": [
+    "Üks olemasolev portaal, hoidla, Supabase’i projekt ja keele-eelistus. English põhikeel/fallback, Eesti teine keel. Kasutaja sisu ega rubriiginimesid ei tõlgita. Tavaline osalemine, rubriigid ja pikendamine ei sõltu Energy ostust.",
+    "Aegumine jätab teenuse ja seosed omanikule alles. Peatatud teenuse pikendamine ei avalda seda. Teksti-, foto-, rubriigi- või staatusemuudatus ei pikenda ega anna kunstlikku uut otsingukohta. Tundmatu pikendus vajab eraldi lugemist, mitte automaatset kirjutuse kordust.",
+    "Teenuse ja kuulutuste avalik rubriigifilter arvestab eraldi jaotise kogu nähtavat sisu ja esivanemaid enne lehekülge. Omaniku haldus/valija näitab kõiki rubriike. Rubriigi eemaldamine säilitab sisu ja fotod; 80 teenust ei ole konto piir.",
+    "Tähtaeg kontrollib pakkumise ja hallatud pildi nähtavust. Varem avaliku Storage-URL-iga fotot ei muuda see privaatseks. Uuendaja ei tee Storage’i toiminguid. Üldine fotode taustakoristus ja tehniliste paneelide eemaldamine jäävad avamiseelseks tööks.",
+    "Ajutine peitmine kestab kinnitatud 24 tundi ja sihib pakkuja identiteeti vaataja konto otsingu-/avastuseelistusena; sõnumid ja otseavamised säilivad tavapäraste õigustega. Püsiv konto blokeerimine on eraldi, automaatselt ei aegu ning säilitab varasema sõnumi-/nähtavuslepingu. Peitmine ei asenda ega tühista user_blocks-i. Uus ühendus on veel rakendamata.",
+    "Töökuulutuse kinnitatud algsuund on ettevõtte avalik profiil/otseviide, üks kuu kehtivust ja nähtavuse selge teade. Üldise tööotsingu sulgemine vajab ka serverikontrolli; üks kuu pole vaikimisi fikseeritud 30 päeva. Töökuulutuste koodi siin pole.",
+    "Uued owner RPC-d kontrollivad oma õigusi. Universaalne identiteedi üleandmine/privilegeeritud kirjutaja invariant ja vana aktiivse identiteedi seadistaja turvapiir vajavad eraldi lahendust. Energy, maksete tuum ja piiratud AI abi jäävad V2 ulatusse."
+  ],
+  "environment": [
+    "Olemasolev hoidla https://github.com/Taivo17/selqiro.git, portaal https://selqiro.vercel.app ja Maci siht /Users/taivo/selqiro. Viimane tõendatud commit 955c935fa4e901a8b81885e2dcd18d966d651810.",
+    "Olemasolev Supabase vyjletlmwoiwxsnsunlm ja instants 2d088814-0900-448a-a9d1-7b05470cb1d2 säilivad. SQL-raport: release_ready=true, cleanup_mode=held. Uut projekti ega teenuste ühendamist ei nõuta.",
+    "13.11 otsusepakk on kumulatiivne dokumentide delta, mitte täis Git-hoidla ega paigaldaja. See kannab kaasa varasema vastuvõtu. Dokumente pole Macis rakendatud, stage’itud ega commit’itud; järgmine sisuline lähtepakk kannab need kontrollitult kaasa."
+  ]
+}

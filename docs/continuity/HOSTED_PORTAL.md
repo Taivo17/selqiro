@@ -1,64 +1,81 @@
-# Teenuse üheaastane kehtivus — üks jätkamiskäsk
+# Praegune järgmine samm: kontrollpäringu parandusega paigaldus
 
-Seis: 11.11.2026 Europe/Tallinn. Uus lähtepakk on ette valmistatud ja kohalikult
-kontrollitud. Praegune tegelik Maci/SQL-i/veebi seis on `CURRENT_STATE.json`-is.
-Eelmine teenuste poe rubriikide samm on vastu võetud ning seda ei korrata.
+13.11.2026 Europe/Tallinn. Ainult lugemise kontroll on tehtud: pilves on tugi
+`absent`, kõik 16 kaitset vastavad ning Maci main/HEAD on `955c935`, tööpuu puhas.
+JIT oli juba välja lülitatud. Uus eraldi pakk vähendab kontrollpäringu korduvat
+planeerimist ja nõuab igas tehinguväravas täpselt üht sobivat tulemust.
+Selle uue väljaande Maci/pilve käivitust ega edukat paigaldust veel ei ole.
 
-## Rakenda uus pakk
+## Üks uus käsk
 
-Laadi `selqiro-teenuste-kehtivus-20261111.zip` alla ja paki Downloads-kausta.
-Kausta sees peab olema `uuenda.py`. Käivita terminalis üks käsk:
+Paki `selqiro-pakkuja-peitmine-parandus-20261113.zip` Downloads-kausta lahti:
 
-```sh
-python3 -I -B "$HOME/Downloads/selqiro-teenuste-kehtivus-20261111/uuenda.py" --publish
+```bash
+python3 -I -B "$HOME/Downloads/selqiro-pakkuja-peitmine-parandus-20261113/uuenda.py" --publish
 ```
 
-Uuendaja kontrollib enne kirjutusi olemasolevat `/Users/taivo/selqiro` hoidlat,
-haru, HEAD-i, tööpuud/indexit, kogu kinnitatud lähtepuud, eelmist lõppraportit
-ja remote'i `https://github.com/Taivo17/selqiro.git`. Oodatud alus on
-`1b0c5ba867e5f466e75f63aee78521d37cf8164f`, puu
-`6808d687e21b96d7e8b25639e00d0a525f97ad6a` (1563 faili). Erinevust ei kirjutata
-üle ega normaliseerita automaatselt. Kasutaja muudatused ja päevikud säilivad.
+Uuendaja sihib sama `/Users/taivo/selqiro` hoidlat. Ta kontrollib värskelt
+main-haru, täpset HEAD-i, kogu tööpuud/indexit, lähtefailide baite, kinnitatud
+origin'i ja remote-main'i ning teenuste kehtivuse varasemat edukat receipt'i.
+Probe’i puhas status ei asenda seda täielikku kontrolli.
 
-Järgneb olemasoleva Supabase'i täpne eelkontroll, üks lisanduva SQL-i rakendus,
-eraldi järelkontroll, lähtefailid, build ning selle sammu commit/push. Vana V1
-kliendileping säilib; uut kontot, projekti, sisselogimist või sõltuvuste
-paigaldust pole vaja. Storage'i toiminguid see samm ei tee.
+Kolme varasema jooksu täpsed raportid ja olemasolevad lukud peavad säilima:
+algne 13:33 katse, recovery 14:16:35 ning probe 15:26:39 koos oma pinnitud
+nonce-kaustaga. Kõik kolm lukku avatakse ainult lugemiseks ja hoitakse kogu
+uue töö jooksul. Täielikke baite, räsi, inode’i ja metaandmeid kontrollitakse
+enne, töö käigus ja lõpus. Vanu päevikuid ega nende intente ei muudeta.
 
-## Üleminek
+## Üks piiritletud katse oma uues päevikus
 
-Avaldatud teenus ja avaldamisajaga (`published_at`) peatatud teenus saavad aasta alates
-andmebaasimuudatuse rakendamisest. Algset loomise/avaldamise aega ei muudeta.
-Mustandi esimene päris avaldamine alustab tema aastat. Pikendamine on tasuta
-ning nõuab omaniku kinnitust, et teenuse salvestatud andmed on endiselt õiged.
+- Täpne värske `applied`: paigalduskirjutus jäetakse ära ja nõutakse eraldi verify'd.
+- Täpne värske `absent` ning selle uue väljaande varasem intent/katse puudub:
+  salvestatakse uus intent, tehakse kuni üks optimeeritud SQL-apply ja eraldi verify.
+- `unknown`, muutunud alus või sama väljaande varasem kinnitamata katse:
+  peatumine; absent ei anna automaatset kirjutuse kordamise luba.
 
-## Pärast lõppraportit
+SQL kasutab sama advisory transaction lock'i ja loeb seisu selle all uuesti.
+Vahepeal valmis saanud võimekust ei paigaldata uuesti. Kataloogi räsivalemid,
+kõik 16 kaitset, invariandid, hosted-kontekst ja 12 runtime-mooduli DDL säilivad.
+Kontrollpäringu uus koostamine ja ranges vormis tehinguväravad on uue väljaande
+osad; vana paki SQL-i ei kirjutata ümber.
 
-1. Oota Vercelis raportis oleva uue commit'i **Ready / Production** tulemust.
-2. Värskenda portaali ning ava **Minu ala → Teenused**. Teenusel peab olema
-   kehtivuse lõpp ja toiming **Pikenda teenust**.
-3. Pikenda üht olemasolevat aktiivset teenust kinnitusega. Kontrolli, et
-   kuvatakse salvestatud tähtaeg ja sama teenus avaneb avalikul profiilil
-   seniste andmete, fotode ja poe rubriigiga. Eelmisi rubriigikatseid ei korrata.
+CLI väline piir on lugemisel 90 s ja ühel apply-kutsel 180 s. SQL-i piirid on
+lugemisel 20 s, paigalduslause puhul 45 s ning lukul 3 s. Raport säilitab etapi,
+tegeliku kestuse, kasutatud piiri ja ohutu veakoodi. Kinnitamata protsessi
+lõpetamise järel uut protsessi ei käivitata. Need piirid ei tõenda vana vea põhjust.
 
-Kui samal päeval on juba üleminek, jääb kuupäev pikendamisel samaks või muutub
-vaid kellaaeg; see on üks aasta kinnituse hetkest, mitte lisa-aasta senise lõpu
-otsa. Tootmises ei muudeta käsitsi tähtaega aegumise katsetamiseks.
+Alles eraldi kinnitatud andmebaasiseisu järel varundatakse asendatavad
+lähtefailid, rakendatakse 122 faili delta, tehakse build ning täpne commit/push.
+24 tunni peitmise ja eraldi püsiva blokeerimise rakenduse leping ei muutu.
 
-Uuendaja avaliku raporti väljal olev `READY_NOT_CHECKED` ei kinnita Vercelit.
-Brauseri kasutajavastuvõtt on samuti eraldi tõend, mitte SQL-i või Giti asendus.
+## Saada selle jooksu täpne raport
 
-## Kui toiming peatub
+Lõpus kuvatakse `VALMIS` või `PEATATUD` ja:
 
-Terminal näitab `PEATATUD`-põhjust ning `SAADA SEE FAIL` real just selle jooksu
-unikaalset JSON-faili Downloads-kaustas ja valib sama faili Finderis. Lisa see
-fail vestlusse. Kui Finder ei avane, kasuta terminalis kuvatud täpset failiteed.
-Kui tõrge tekib enne raporti loomist, ütleb terminal seda ja palub saata
-`PEATATUD`-rea; mõne varasema jooksu raportit ei pakuta selle asemel.
-Päevikuid, varukoopiaid ja varasemaid raporteid ei kustutata.
+```text
+SAADA SEE FAIL: <selle jooksu täpne absoluutne JSON-tee>
+```
 
-Teadmata SQL-i tulemus kontrollitakse lugemisega; kirjutust automaatselt ei
-korrata. Jätkamise otsus tehakse selle jooksu raporti põhjal.
+Finder valib sama unikaalse privaatse Downloads-koopia. Saada täpselt see fail;
+ära otsi kaustast uusimat vana raportit. Kõik olemasolevad koopiad säilivad.
+Kopeerimisvea korral näidatakse kontrollitud originaali. Kui Finder ei avane,
+kasuta prinditud rada. Kui raportit ei loodud, saada `PEATATUD`-rida. Salvestusvea
+korral võib viimane püsiraport olla aegunud: saada see koos peatumise reaga.
 
-Täielik teostus ja tõendipiir: `SERVICE_ACTIVITY_20261111.md`.
-Eelmine vastuvõtt: `SERVICE_STORE_CATEGORIES_ACCEPTED_20261111.md`.
+Peatumisel ei korrata algset/recovery paigaldajat, seda uut apply-katset ega
+juba lõpetatud probe’i automaatselt. Päevikuid, intente, lock-faile, pakke,
+raporteid, kontosid, kuulutusi, pilte ja sõnumeid ei kustutata.
+
+## Pärast edukat push'i
+
+Oota raporti **uue commit'i Ready / Production** tulemust Vercelis ja värskenda
+portaali. Seejärel kontrollime kahe olemasoleva kontoga kaardi menüüd, 24h
+peitmist, **Võta tagasi**, Minu ala haldust ja eraldi blokeerimist. Blokk keelab
+uued sõnumid mõlemas suunas; olemasolev ajalugu säilib. Oma bloki eemaldamine
+ei eemalda eraldi peitmist ega teise konto blokki.
+
+Samasse kasutuskäiku kuuluvad vana avalehe ja jälgitavate voo päris
+PostgREST-päring, fotod ja tõlked. Tootmise kellaaega või kasutajasisu ei muudeta
+testi jaoks. Täpne 24h piir on kohaliku SQL-tõendi ulatuses; päris aegumise
+vastuvõtt tekib hilisemas tavakasutuses. Tooteleping ja tõendite seosed:
+`VIEWER_PROVIDER_CONTROLS_20261113.md`; üks seis on `CURRENT_STATE.json`-is.

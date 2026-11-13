@@ -1,0 +1,2087 @@
+{
+  "schema_version": 1,
+  "synthetic_rows": true,
+  "cases": [
+    {
+      "operation": "get",
+      "actor_user_id": "92000000-0000-0000-0000-000000000002",
+      "target_type": "listing",
+      "target_id": "61001",
+      "response": {
+        "hidden": false,
+        "block_id": null,
+        "can_hide": true,
+        "provider": {
+          "slug": "synthetic-a1000000-0000-0000-0000-000000000001",
+          "avatar_url": null,
+          "identity_id": "a1000000-0000-0000-0000-000000000001",
+          "display_name": "Synthetic owner"
+        },
+        "can_block": true,
+        "target_id": "61001",
+        "server_now": "2026-11-13T10:25:22.498+00:00",
+        "target_type": "listing",
+        "hidden_until": null,
+        "target_token": "fe070c225dcc87ab7bbba216d987dca4314a37b13d26212d5f07b12aa3f7dfc5",
+        "actor_user_id": "92000000-0000-0000-0000-000000000002",
+        "blocked_by_me": false,
+        "hide_revision": null,
+        "schema_version": 1,
+        "block_created_at": null,
+        "blocked_by_other": false,
+        "target_available": true
+      }
+    },
+    {
+      "operation": "get",
+      "actor_user_id": "92000000-0000-0000-0000-000000000002",
+      "target_type": "horse_offer",
+      "target_id": "56dee179-d809-42cb-a01d-5d7ba410c40d",
+      "response": {
+        "hidden": false,
+        "block_id": null,
+        "can_hide": true,
+        "provider": {
+          "slug": "synthetic-a1000000-0000-0000-0000-000000000001",
+          "avatar_url": null,
+          "identity_id": "a1000000-0000-0000-0000-000000000001",
+          "display_name": "Synthetic owner"
+        },
+        "can_block": true,
+        "target_id": "56dee179-d809-42cb-a01d-5d7ba410c40d",
+        "server_now": "2026-11-13T10:25:22.504+00:00",
+        "target_type": "horse_offer",
+        "hidden_until": null,
+        "target_token": "5095fbe79cd73a3f0231818508eee0a6238040ad91de64010ad6fbb8827308b3",
+        "actor_user_id": "92000000-0000-0000-0000-000000000002",
+        "blocked_by_me": false,
+        "hide_revision": null,
+        "schema_version": 1,
+        "block_created_at": null,
+        "blocked_by_other": false,
+        "target_available": true
+      }
+    },
+    {
+      "operation": "get",
+      "actor_user_id": "92000000-0000-0000-0000-000000000002",
+      "target_type": "service",
+      "target_id": "d1b601bf-d70f-458b-b574-c11f84bb0716",
+      "response": {
+        "hidden": false,
+        "block_id": null,
+        "can_hide": true,
+        "provider": {
+          "slug": "synthetic-a1000000-0000-0000-0000-000000000001",
+          "avatar_url": null,
+          "identity_id": "a1000000-0000-0000-0000-000000000001",
+          "display_name": "Synthetic owner"
+        },
+        "can_block": true,
+        "target_id": "d1b601bf-d70f-458b-b574-c11f84bb0716",
+        "server_now": "2026-11-13T10:25:22.511+00:00",
+        "target_type": "service",
+        "hidden_until": null,
+        "target_token": "aa926b98599d42bb897feae5adcaa6f433b7d864bbc91c95f756780568d701c6",
+        "actor_user_id": "92000000-0000-0000-0000-000000000002",
+        "blocked_by_me": false,
+        "hide_revision": null,
+        "schema_version": 1,
+        "block_created_at": null,
+        "blocked_by_other": false,
+        "target_available": true
+      }
+    },
+    {
+      "operation": "get",
+      "actor_user_id": "92000000-0000-0000-0000-000000000002",
+      "target_type": "profile",
+      "target_id": "a1000000-0000-0000-0000-000000000001",
+      "response": {
+        "hidden": false,
+        "block_id": null,
+        "can_hide": true,
+        "provider": {
+          "slug": "synthetic-a1000000-0000-0000-0000-000000000001",
+          "avatar_url": null,
+          "identity_id": "a1000000-0000-0000-0000-000000000001",
+          "display_name": "Synthetic owner"
+        },
+        "can_block": true,
+        "target_id": "a1000000-0000-0000-0000-000000000001",
+        "server_now": "2026-11-13T10:25:22.519+00:00",
+        "target_type": "profile",
+        "hidden_until": null,
+        "target_token": "0e66d2d66b05e8bb37d5e6efc0db32dd511fa5c84c708e898199dbbf14fa7082",
+        "actor_user_id": "92000000-0000-0000-0000-000000000002",
+        "blocked_by_me": false,
+        "hide_revision": null,
+        "schema_version": 1,
+        "block_created_at": null,
+        "blocked_by_other": false,
+        "target_available": true
+      }
+    },
+    {
+      "operation": "get",
+      "actor_user_id": "92000000-0000-0000-0000-000000000002",
+      "target_type": "listing",
+      "target_id": "61001",
+      "response": {
+        "hidden": false,
+        "block_id": null,
+        "can_hide": true,
+        "provider": {
+          "slug": "synthetic-a1000000-0000-0000-0000-000000000001",
+          "avatar_url": null,
+          "identity_id": "a1000000-0000-0000-0000-000000000001",
+          "display_name": "Synthetic owner"
+        },
+        "can_block": true,
+        "target_id": "61001",
+        "server_now": "2026-11-13T10:25:22.634+00:00",
+        "target_type": "listing",
+        "hidden_until": null,
+        "target_token": "fe070c225dcc87ab7bbba216d987dca4314a37b13d26212d5f07b12aa3f7dfc5",
+        "actor_user_id": "92000000-0000-0000-0000-000000000002",
+        "blocked_by_me": false,
+        "hide_revision": null,
+        "schema_version": 1,
+        "block_created_at": null,
+        "blocked_by_other": false,
+        "target_available": true
+      }
+    },
+    {
+      "operation": "set",
+      "actor_user_id": "92000000-0000-0000-0000-000000000002",
+      "target_type": "listing",
+      "target_id": "61001",
+      "action": "hide",
+      "response": {
+        "action": "hide",
+        "hidden": true,
+        "changed": true,
+        "block_id": null,
+        "can_hide": true,
+        "provider": {
+          "slug": "synthetic-a1000000-0000-0000-0000-000000000001",
+          "avatar_url": null,
+          "identity_id": "a1000000-0000-0000-0000-000000000001",
+          "display_name": "Synthetic owner"
+        },
+        "can_block": true,
+        "target_id": "61001",
+        "server_now": "2026-11-13T10:25:22.641+00:00",
+        "target_type": "listing",
+        "hidden_until": "2026-11-14T10:25:22.641+00:00",
+        "target_token": "fe070c225dcc87ab7bbba216d987dca4314a37b13d26212d5f07b12aa3f7dfc5",
+        "actor_user_id": "92000000-0000-0000-0000-000000000002",
+        "blocked_by_me": false,
+        "hide_revision": "fea823dc-fa8c-46e6-a99b-2b5adeecb25b",
+        "schema_version": 1,
+        "block_created_at": null,
+        "blocked_by_other": false,
+        "target_available": true
+      }
+    },
+    {
+      "operation": "get",
+      "actor_user_id": "92000000-0000-0000-0000-000000000002",
+      "target_type": "profile",
+      "target_id": "a1000000-0000-0000-0000-000000000001",
+      "response": {
+        "hidden": true,
+        "block_id": null,
+        "can_hide": true,
+        "provider": {
+          "slug": "synthetic-a1000000-0000-0000-0000-000000000001",
+          "avatar_url": null,
+          "identity_id": "a1000000-0000-0000-0000-000000000001",
+          "display_name": "Synthetic owner"
+        },
+        "can_block": true,
+        "target_id": "a1000000-0000-0000-0000-000000000001",
+        "server_now": "2026-11-13T10:25:22.856+00:00",
+        "target_type": "profile",
+        "hidden_until": "2026-11-14T10:25:22.641+00:00",
+        "target_token": "0e66d2d66b05e8bb37d5e6efc0db32dd511fa5c84c708e898199dbbf14fa7082",
+        "actor_user_id": "92000000-0000-0000-0000-000000000002",
+        "blocked_by_me": false,
+        "hide_revision": "fea823dc-fa8c-46e6-a99b-2b5adeecb25b",
+        "schema_version": 1,
+        "block_created_at": null,
+        "blocked_by_other": false,
+        "target_available": true
+      }
+    },
+    {
+      "operation": "list",
+      "actor_user_id": "92000000-0000-0000-0000-000000000002",
+      "kind": "hidden",
+      "result_limit": 25,
+      "result_offset": 0,
+      "response": {
+        "kind": "hidden",
+        "items": [
+          {
+            "hidden": true,
+            "block_id": null,
+            "can_hide": false,
+            "provider": {
+              "slug": "synthetic-a1000000-0000-0000-0000-000000000001",
+              "avatar_url": null,
+              "identity_id": "a1000000-0000-0000-0000-000000000001",
+              "display_name": "Synthetic owner"
+            },
+            "can_block": false,
+            "target_id": "a1000000-0000-0000-0000-000000000001",
+            "server_now": "2026-11-13T10:25:22.865+00:00",
+            "target_type": "hidden_provider",
+            "hidden_until": "2026-11-14T10:25:22.641+00:00",
+            "target_token": "4abb9d4ef63161bf9114ad96aba85d76e6196839048726be3ad4359127d8bf3c",
+            "actor_user_id": "92000000-0000-0000-0000-000000000002",
+            "blocked_by_me": false,
+            "hide_revision": "fea823dc-fa8c-46e6-a99b-2b5adeecb25b",
+            "schema_version": 1,
+            "block_created_at": null,
+            "blocked_by_other": false,
+            "target_available": true
+          }
+        ],
+        "has_more": false,
+        "next_offset": null,
+        "total_count": "1",
+        "result_limit": 25,
+        "actor_user_id": "92000000-0000-0000-0000-000000000002",
+        "result_offset": 0,
+        "schema_version": 1
+      }
+    },
+    {
+      "operation": "set",
+      "actor_user_id": "92000000-0000-0000-0000-000000000002",
+      "target_type": "listing",
+      "target_id": "61001",
+      "action": "hide",
+      "response": {
+        "action": "hide",
+        "hidden": true,
+        "changed": false,
+        "block_id": null,
+        "can_hide": true,
+        "provider": {
+          "slug": "synthetic-a1000000-0000-0000-0000-000000000001",
+          "avatar_url": null,
+          "identity_id": "a1000000-0000-0000-0000-000000000001",
+          "display_name": "Synthetic owner"
+        },
+        "can_block": true,
+        "target_id": "61001",
+        "server_now": "2026-11-13T10:25:22.872+00:00",
+        "target_type": "listing",
+        "hidden_until": "2026-11-14T10:25:22.641+00:00",
+        "target_token": "fe070c225dcc87ab7bbba216d987dca4314a37b13d26212d5f07b12aa3f7dfc5",
+        "actor_user_id": "92000000-0000-0000-0000-000000000002",
+        "blocked_by_me": false,
+        "hide_revision": "fea823dc-fa8c-46e6-a99b-2b5adeecb25b",
+        "schema_version": 1,
+        "block_created_at": null,
+        "blocked_by_other": false,
+        "target_available": true
+      }
+    },
+    {
+      "operation": "get",
+      "actor_user_id": "92000000-0000-0000-0000-000000000002",
+      "target_type": "profile",
+      "target_id": "a1000000-0000-0000-0000-000000000001",
+      "response": {
+        "hidden": true,
+        "block_id": null,
+        "can_hide": true,
+        "provider": {
+          "slug": "synthetic-a1000000-0000-0000-0000-000000000001",
+          "avatar_url": null,
+          "identity_id": "a1000000-0000-0000-0000-000000000001",
+          "display_name": "Synthetic owner"
+        },
+        "can_block": true,
+        "target_id": "a1000000-0000-0000-0000-000000000001",
+        "server_now": "2026-11-13T10:25:22.875+00:00",
+        "target_type": "profile",
+        "hidden_until": "2026-11-14T10:25:22.641+00:00",
+        "target_token": "0e66d2d66b05e8bb37d5e6efc0db32dd511fa5c84c708e898199dbbf14fa7082",
+        "actor_user_id": "92000000-0000-0000-0000-000000000002",
+        "blocked_by_me": false,
+        "hide_revision": "fea823dc-fa8c-46e6-a99b-2b5adeecb25b",
+        "schema_version": 1,
+        "block_created_at": null,
+        "blocked_by_other": false,
+        "target_available": true
+      }
+    },
+    {
+      "operation": "set",
+      "actor_user_id": "92000000-0000-0000-0000-000000000002",
+      "target_type": "profile",
+      "target_id": "a1000000-0000-0000-0000-000000000001",
+      "action": "hide",
+      "response": {
+        "action": "hide",
+        "hidden": true,
+        "changed": false,
+        "block_id": null,
+        "can_hide": true,
+        "provider": {
+          "slug": "synthetic-a1000000-0000-0000-0000-000000000001",
+          "avatar_url": null,
+          "identity_id": "a1000000-0000-0000-0000-000000000001",
+          "display_name": "Synthetic owner"
+        },
+        "can_block": true,
+        "target_id": "a1000000-0000-0000-0000-000000000001",
+        "server_now": "2026-11-13T10:25:22.88+00:00",
+        "target_type": "profile",
+        "hidden_until": "2026-11-14T10:25:22.641+00:00",
+        "target_token": "0e66d2d66b05e8bb37d5e6efc0db32dd511fa5c84c708e898199dbbf14fa7082",
+        "actor_user_id": "92000000-0000-0000-0000-000000000002",
+        "blocked_by_me": false,
+        "hide_revision": "fea823dc-fa8c-46e6-a99b-2b5adeecb25b",
+        "schema_version": 1,
+        "block_created_at": null,
+        "blocked_by_other": false,
+        "target_available": true
+      }
+    },
+    {
+      "operation": "list",
+      "actor_user_id": "92000000-0000-0000-0000-000000000002",
+      "kind": "hidden",
+      "result_limit": 25,
+      "result_offset": 0,
+      "response": {
+        "kind": "hidden",
+        "items": [
+          {
+            "hidden": true,
+            "block_id": null,
+            "can_hide": false,
+            "provider": {
+              "slug": "synthetic-a1000000-0000-0000-0000-000000000001",
+              "avatar_url": null,
+              "identity_id": "a1000000-0000-0000-0000-000000000001",
+              "display_name": "Synthetic owner"
+            },
+            "can_block": false,
+            "target_id": "a1000000-0000-0000-0000-000000000001",
+            "server_now": "2026-11-13T10:25:22.884+00:00",
+            "target_type": "hidden_provider",
+            "hidden_until": "2026-11-14T10:25:22.641+00:00",
+            "target_token": "4abb9d4ef63161bf9114ad96aba85d76e6196839048726be3ad4359127d8bf3c",
+            "actor_user_id": "92000000-0000-0000-0000-000000000002",
+            "blocked_by_me": false,
+            "hide_revision": "fea823dc-fa8c-46e6-a99b-2b5adeecb25b",
+            "schema_version": 1,
+            "block_created_at": null,
+            "blocked_by_other": false,
+            "target_available": true
+          }
+        ],
+        "has_more": false,
+        "next_offset": null,
+        "total_count": "1",
+        "result_limit": 25,
+        "actor_user_id": "92000000-0000-0000-0000-000000000002",
+        "result_offset": 0,
+        "schema_version": 1
+      }
+    },
+    {
+      "operation": "set",
+      "actor_user_id": "92000000-0000-0000-0000-000000000002",
+      "target_type": "hidden_provider",
+      "target_id": "a1000000-0000-0000-0000-000000000001",
+      "action": "unhide",
+      "response": {
+        "action": "unhide",
+        "hidden": false,
+        "changed": true,
+        "block_id": null,
+        "can_hide": false,
+        "provider": {
+          "slug": "synthetic-a1000000-0000-0000-0000-000000000001",
+          "avatar_url": null,
+          "identity_id": "a1000000-0000-0000-0000-000000000001",
+          "display_name": "Synthetic owner"
+        },
+        "can_block": false,
+        "target_id": "a1000000-0000-0000-0000-000000000001",
+        "server_now": "2026-11-13T10:25:22.889+00:00",
+        "target_type": "hidden_provider",
+        "hidden_until": null,
+        "target_token": "4abb9d4ef63161bf9114ad96aba85d76e6196839048726be3ad4359127d8bf3c",
+        "actor_user_id": "92000000-0000-0000-0000-000000000002",
+        "blocked_by_me": false,
+        "hide_revision": "973faad4-dc40-4ac1-959d-6d1ebf265d86",
+        "schema_version": 1,
+        "block_created_at": null,
+        "blocked_by_other": false,
+        "target_available": true
+      }
+    },
+    {
+      "operation": "list",
+      "actor_user_id": "92000000-0000-0000-0000-000000000002",
+      "kind": "hidden",
+      "result_limit": 25,
+      "result_offset": 0,
+      "response": {
+        "kind": "hidden",
+        "items": [],
+        "has_more": false,
+        "next_offset": null,
+        "total_count": "0",
+        "result_limit": 25,
+        "actor_user_id": "92000000-0000-0000-0000-000000000002",
+        "result_offset": 0,
+        "schema_version": 1
+      }
+    },
+    {
+      "operation": "get",
+      "actor_user_id": "92000000-0000-0000-0000-000000000002",
+      "target_type": "profile",
+      "target_id": "a1000000-0000-0000-0000-000000000001",
+      "response": {
+        "hidden": false,
+        "block_id": null,
+        "can_hide": true,
+        "provider": {
+          "slug": "synthetic-a1000000-0000-0000-0000-000000000001",
+          "avatar_url": null,
+          "identity_id": "a1000000-0000-0000-0000-000000000001",
+          "display_name": "Synthetic owner"
+        },
+        "can_block": true,
+        "target_id": "a1000000-0000-0000-0000-000000000001",
+        "server_now": "2026-11-13T10:25:22.894+00:00",
+        "target_type": "profile",
+        "hidden_until": null,
+        "target_token": "0e66d2d66b05e8bb37d5e6efc0db32dd511fa5c84c708e898199dbbf14fa7082",
+        "actor_user_id": "92000000-0000-0000-0000-000000000002",
+        "blocked_by_me": false,
+        "hide_revision": "973faad4-dc40-4ac1-959d-6d1ebf265d86",
+        "schema_version": 1,
+        "block_created_at": null,
+        "blocked_by_other": false,
+        "target_available": true
+      }
+    },
+    {
+      "operation": "set",
+      "actor_user_id": "92000000-0000-0000-0000-000000000002",
+      "target_type": "profile",
+      "target_id": "a1000000-0000-0000-0000-000000000001",
+      "action": "hide",
+      "response": {
+        "action": "hide",
+        "hidden": true,
+        "changed": true,
+        "block_id": null,
+        "can_hide": true,
+        "provider": {
+          "slug": "synthetic-a1000000-0000-0000-0000-000000000001",
+          "avatar_url": null,
+          "identity_id": "a1000000-0000-0000-0000-000000000001",
+          "display_name": "Synthetic owner"
+        },
+        "can_block": true,
+        "target_id": "a1000000-0000-0000-0000-000000000001",
+        "server_now": "2026-11-13T10:25:22.898+00:00",
+        "target_type": "profile",
+        "hidden_until": "2026-11-14T10:25:22.898+00:00",
+        "target_token": "0e66d2d66b05e8bb37d5e6efc0db32dd511fa5c84c708e898199dbbf14fa7082",
+        "actor_user_id": "92000000-0000-0000-0000-000000000002",
+        "blocked_by_me": false,
+        "hide_revision": "23c980d0-3594-4600-94ab-e21c68ea3592",
+        "schema_version": 1,
+        "block_created_at": null,
+        "blocked_by_other": false,
+        "target_available": true
+      }
+    },
+    {
+      "operation": "get",
+      "actor_user_id": "92000000-0000-0000-0000-000000000002",
+      "target_type": "hidden_provider",
+      "target_id": "a1000000-0000-0000-0000-000000000001",
+      "response": {
+        "hidden": true,
+        "block_id": null,
+        "can_hide": false,
+        "provider": {
+          "slug": "synthetic-a1000000-0000-0000-0000-000000000001",
+          "avatar_url": null,
+          "identity_id": "a1000000-0000-0000-0000-000000000001",
+          "display_name": "Synthetic owner"
+        },
+        "can_block": false,
+        "target_id": "a1000000-0000-0000-0000-000000000001",
+        "server_now": "2026-11-13T10:25:22.905+00:00",
+        "target_type": "hidden_provider",
+        "hidden_until": "2026-11-14T10:25:22.898+00:00",
+        "target_token": "4abb9d4ef63161bf9114ad96aba85d76e6196839048726be3ad4359127d8bf3c",
+        "actor_user_id": "92000000-0000-0000-0000-000000000002",
+        "blocked_by_me": false,
+        "hide_revision": "23c980d0-3594-4600-94ab-e21c68ea3592",
+        "schema_version": 1,
+        "block_created_at": null,
+        "blocked_by_other": false,
+        "target_available": true
+      }
+    },
+    {
+      "operation": "get",
+      "actor_user_id": "92000000-0000-0000-0000-000000000002",
+      "target_type": "profile",
+      "target_id": "a1000000-0000-0000-0000-000000000001",
+      "response": {
+        "hidden": false,
+        "block_id": null,
+        "can_hide": true,
+        "provider": {
+          "slug": "synthetic-a1000000-0000-0000-0000-000000000001",
+          "avatar_url": null,
+          "identity_id": "a1000000-0000-0000-0000-000000000001",
+          "display_name": "Synthetic owner"
+        },
+        "can_block": true,
+        "target_id": "a1000000-0000-0000-0000-000000000001",
+        "server_now": "2026-11-13T10:25:22.91+00:00",
+        "target_type": "profile",
+        "hidden_until": "2026-11-13T10:25:22.907999+00:00",
+        "target_token": "0e66d2d66b05e8bb37d5e6efc0db32dd511fa5c84c708e898199dbbf14fa7082",
+        "actor_user_id": "92000000-0000-0000-0000-000000000002",
+        "blocked_by_me": false,
+        "hide_revision": "23c980d0-3594-4600-94ab-e21c68ea3592",
+        "schema_version": 1,
+        "block_created_at": null,
+        "blocked_by_other": false,
+        "target_available": true
+      }
+    },
+    {
+      "operation": "list",
+      "actor_user_id": "92000000-0000-0000-0000-000000000002",
+      "kind": "hidden",
+      "result_limit": 25,
+      "result_offset": 0,
+      "response": {
+        "kind": "hidden",
+        "items": [],
+        "has_more": false,
+        "next_offset": null,
+        "total_count": "0",
+        "result_limit": 25,
+        "actor_user_id": "92000000-0000-0000-0000-000000000002",
+        "result_offset": 0,
+        "schema_version": 1
+      }
+    },
+    {
+      "operation": "set",
+      "actor_user_id": "92000000-0000-0000-0000-000000000002",
+      "target_type": "profile",
+      "target_id": "a1000000-0000-0000-0000-000000000001",
+      "action": "hide",
+      "response": {
+        "action": "hide",
+        "hidden": true,
+        "changed": true,
+        "block_id": null,
+        "can_hide": true,
+        "provider": {
+          "slug": "synthetic-a1000000-0000-0000-0000-000000000001",
+          "avatar_url": null,
+          "identity_id": "a1000000-0000-0000-0000-000000000001",
+          "display_name": "Synthetic owner"
+        },
+        "can_block": true,
+        "target_id": "a1000000-0000-0000-0000-000000000001",
+        "server_now": "2026-11-13T10:25:22.925+00:00",
+        "target_type": "profile",
+        "hidden_until": "2026-11-14T10:25:22.925+00:00",
+        "target_token": "0e66d2d66b05e8bb37d5e6efc0db32dd511fa5c84c708e898199dbbf14fa7082",
+        "actor_user_id": "92000000-0000-0000-0000-000000000002",
+        "blocked_by_me": false,
+        "hide_revision": "0f8341d4-5cfe-4377-b48c-a5bf9d8f4fbd",
+        "schema_version": 1,
+        "block_created_at": null,
+        "blocked_by_other": false,
+        "target_available": true
+      }
+    },
+    {
+      "operation": "get",
+      "actor_user_id": "94000000-0000-0000-0000-000000000004",
+      "target_type": "hidden_provider",
+      "target_id": "a1000000-0000-0000-0000-000000000001",
+      "response": {
+        "hidden": false,
+        "block_id": null,
+        "can_hide": false,
+        "provider": {
+          "slug": null,
+          "avatar_url": null,
+          "identity_id": null,
+          "display_name": "Selqiro"
+        },
+        "can_block": false,
+        "target_id": "a1000000-0000-0000-0000-000000000001",
+        "server_now": "2026-11-13T10:25:22.931+00:00",
+        "target_type": "hidden_provider",
+        "hidden_until": null,
+        "target_token": null,
+        "actor_user_id": "94000000-0000-0000-0000-000000000004",
+        "blocked_by_me": false,
+        "hide_revision": null,
+        "schema_version": 1,
+        "block_created_at": null,
+        "blocked_by_other": false,
+        "target_available": false
+      }
+    },
+    {
+      "operation": "get",
+      "actor_user_id": "94000000-0000-0000-0000-000000000004",
+      "target_type": "hidden_provider",
+      "target_id": "9c54fe02-54f1-40bf-ae48-a57007e38694",
+      "response": {
+        "hidden": false,
+        "block_id": null,
+        "can_hide": false,
+        "provider": {
+          "slug": null,
+          "avatar_url": null,
+          "identity_id": null,
+          "display_name": "Selqiro"
+        },
+        "can_block": false,
+        "target_id": "9c54fe02-54f1-40bf-ae48-a57007e38694",
+        "server_now": "2026-11-13T10:25:22.934+00:00",
+        "target_type": "hidden_provider",
+        "hidden_until": null,
+        "target_token": null,
+        "actor_user_id": "94000000-0000-0000-0000-000000000004",
+        "blocked_by_me": false,
+        "hide_revision": null,
+        "schema_version": 1,
+        "block_created_at": null,
+        "blocked_by_other": false,
+        "target_available": false
+      }
+    },
+    {
+      "operation": "get",
+      "actor_user_id": "91000000-0000-0000-0000-000000000001",
+      "target_type": "profile",
+      "target_id": "a1000000-0000-0000-0000-000000000001",
+      "response": {
+        "hidden": false,
+        "block_id": null,
+        "can_hide": false,
+        "provider": {
+          "slug": "synthetic-a1000000-0000-0000-0000-000000000001",
+          "avatar_url": null,
+          "identity_id": "a1000000-0000-0000-0000-000000000001",
+          "display_name": "Synthetic owner"
+        },
+        "can_block": false,
+        "target_id": "a1000000-0000-0000-0000-000000000001",
+        "server_now": "2026-11-13T10:25:22.948+00:00",
+        "target_type": "profile",
+        "hidden_until": null,
+        "target_token": "4306032cf4e193940564e6a272bd6a792b36fa5e15225c547f41057789b06115",
+        "actor_user_id": "91000000-0000-0000-0000-000000000001",
+        "blocked_by_me": false,
+        "hide_revision": null,
+        "schema_version": 1,
+        "block_created_at": null,
+        "blocked_by_other": false,
+        "target_available": true
+      }
+    },
+    {
+      "operation": "get",
+      "actor_user_id": "91000000-0000-0000-0000-000000000001",
+      "target_type": "profile",
+      "target_id": "e2000000-0000-0000-0000-000000000002",
+      "response": {
+        "hidden": false,
+        "block_id": null,
+        "can_hide": false,
+        "provider": {
+          "slug": "synthetic-e2000000-0000-0000-0000-000000000002",
+          "avatar_url": null,
+          "identity_id": "e2000000-0000-0000-0000-000000000002",
+          "display_name": "Synthetic business"
+        },
+        "can_block": false,
+        "target_id": "e2000000-0000-0000-0000-000000000002",
+        "server_now": "2026-11-13T10:25:22.958+00:00",
+        "target_type": "profile",
+        "hidden_until": null,
+        "target_token": "15bd58b0ffe25fcfeead356cfb3b6bcc6fbd08b538fd7c0b1538253089b514b7",
+        "actor_user_id": "91000000-0000-0000-0000-000000000001",
+        "blocked_by_me": false,
+        "hide_revision": null,
+        "schema_version": 1,
+        "block_created_at": null,
+        "blocked_by_other": false,
+        "target_available": true
+      }
+    },
+    {
+      "operation": "get",
+      "actor_user_id": "93000000-0000-0000-0000-000000000003",
+      "target_type": "profile",
+      "target_id": "e2000000-0000-0000-0000-000000000002",
+      "response": {
+        "hidden": false,
+        "block_id": null,
+        "can_hide": false,
+        "provider": {
+          "slug": "synthetic-e2000000-0000-0000-0000-000000000002",
+          "avatar_url": null,
+          "identity_id": "e2000000-0000-0000-0000-000000000002",
+          "display_name": "Synthetic business"
+        },
+        "can_block": false,
+        "target_id": "e2000000-0000-0000-0000-000000000002",
+        "server_now": "2026-11-13T10:25:22.967+00:00",
+        "target_type": "profile",
+        "hidden_until": null,
+        "target_token": "2057162dc8c2aeb90ebc5316cef707bfca2377ce410b76632e834fcafbdd0cd9",
+        "actor_user_id": "93000000-0000-0000-0000-000000000003",
+        "blocked_by_me": false,
+        "hide_revision": null,
+        "schema_version": 1,
+        "block_created_at": null,
+        "blocked_by_other": false,
+        "target_available": true
+      }
+    },
+    {
+      "operation": "get",
+      "actor_user_id": "92000000-0000-0000-0000-000000000002",
+      "target_type": "listing",
+      "target_id": "61006",
+      "response": {
+        "hidden": false,
+        "block_id": null,
+        "can_hide": true,
+        "provider": {
+          "slug": "synthetic-a1100000-0000-0000-0000-000000000001",
+          "avatar_url": null,
+          "identity_id": "a1100000-0000-0000-0000-000000000001",
+          "display_name": "Synthetic other identity"
+        },
+        "can_block": true,
+        "target_id": "61006",
+        "server_now": "2026-11-13T10:25:22.977+00:00",
+        "target_type": "listing",
+        "hidden_until": null,
+        "target_token": "5d708191e5afa419aeeb360250c5144a0e5c013841876403ef7d887256cba86b",
+        "actor_user_id": "92000000-0000-0000-0000-000000000002",
+        "blocked_by_me": false,
+        "hide_revision": null,
+        "schema_version": 1,
+        "block_created_at": null,
+        "blocked_by_other": false,
+        "target_available": true
+      }
+    },
+    {
+      "operation": "get",
+      "actor_user_id": "92000000-0000-0000-0000-000000000002",
+      "target_type": "service",
+      "target_id": "d1b601bf-d70f-458b-b574-c11f84bb0716",
+      "response": {
+        "hidden": true,
+        "block_id": null,
+        "can_hide": true,
+        "provider": {
+          "slug": "synthetic-a1000000-0000-0000-0000-000000000001",
+          "avatar_url": null,
+          "identity_id": "a1000000-0000-0000-0000-000000000001",
+          "display_name": "Synthetic owner"
+        },
+        "can_block": true,
+        "target_id": "d1b601bf-d70f-458b-b574-c11f84bb0716",
+        "server_now": "2026-11-13T10:25:23.013+00:00",
+        "target_type": "service",
+        "hidden_until": "2026-11-14T10:25:22.925+00:00",
+        "target_token": "aa926b98599d42bb897feae5adcaa6f433b7d864bbc91c95f756780568d701c6",
+        "actor_user_id": "92000000-0000-0000-0000-000000000002",
+        "blocked_by_me": false,
+        "hide_revision": "0f8341d4-5cfe-4377-b48c-a5bf9d8f4fbd",
+        "schema_version": 1,
+        "block_created_at": null,
+        "blocked_by_other": false,
+        "target_available": true
+      }
+    },
+    {
+      "operation": "set",
+      "actor_user_id": "92000000-0000-0000-0000-000000000002",
+      "target_type": "service",
+      "target_id": "d1b601bf-d70f-458b-b574-c11f84bb0716",
+      "action": "block",
+      "response": {
+        "action": "block",
+        "hidden": true,
+        "changed": true,
+        "block_id": "1",
+        "can_hide": false,
+        "provider": {
+          "slug": "synthetic-a1000000-0000-0000-0000-000000000001",
+          "avatar_url": null,
+          "identity_id": "a1000000-0000-0000-0000-000000000001",
+          "display_name": "Synthetic owner"
+        },
+        "can_block": true,
+        "target_id": "d1b601bf-d70f-458b-b574-c11f84bb0716",
+        "server_now": "2026-11-13T10:25:23.022+00:00",
+        "target_type": "service",
+        "hidden_until": "2026-11-14T10:25:22.925+00:00",
+        "target_token": "aa926b98599d42bb897feae5adcaa6f433b7d864bbc91c95f756780568d701c6",
+        "actor_user_id": "92000000-0000-0000-0000-000000000002",
+        "blocked_by_me": true,
+        "hide_revision": "0f8341d4-5cfe-4377-b48c-a5bf9d8f4fbd",
+        "schema_version": 1,
+        "block_created_at": "2026-11-13T10:25:23.022+00:00",
+        "blocked_by_other": false,
+        "target_available": true
+      }
+    },
+    {
+      "operation": "get",
+      "actor_user_id": "92000000-0000-0000-0000-000000000002",
+      "target_type": "service",
+      "target_id": "d1b601bf-d70f-458b-b574-c11f84bb0716",
+      "response": {
+        "hidden": true,
+        "block_id": "1",
+        "can_hide": false,
+        "provider": {
+          "slug": "synthetic-a1000000-0000-0000-0000-000000000001",
+          "avatar_url": null,
+          "identity_id": "a1000000-0000-0000-0000-000000000001",
+          "display_name": "Synthetic owner"
+        },
+        "can_block": true,
+        "target_id": "d1b601bf-d70f-458b-b574-c11f84bb0716",
+        "server_now": "2026-11-13T10:25:23.054+00:00",
+        "target_type": "service",
+        "hidden_until": "2026-11-14T10:25:22.925+00:00",
+        "target_token": "aa926b98599d42bb897feae5adcaa6f433b7d864bbc91c95f756780568d701c6",
+        "actor_user_id": "92000000-0000-0000-0000-000000000002",
+        "blocked_by_me": true,
+        "hide_revision": "0f8341d4-5cfe-4377-b48c-a5bf9d8f4fbd",
+        "schema_version": 1,
+        "block_created_at": "2026-11-13T10:25:23.022+00:00",
+        "blocked_by_other": false,
+        "target_available": true
+      }
+    },
+    {
+      "operation": "set",
+      "actor_user_id": "92000000-0000-0000-0000-000000000002",
+      "target_type": "service",
+      "target_id": "d1b601bf-d70f-458b-b574-c11f84bb0716",
+      "action": "block",
+      "response": {
+        "action": "block",
+        "hidden": true,
+        "changed": false,
+        "block_id": "1",
+        "can_hide": false,
+        "provider": {
+          "slug": "synthetic-a1000000-0000-0000-0000-000000000001",
+          "avatar_url": null,
+          "identity_id": "a1000000-0000-0000-0000-000000000001",
+          "display_name": "Synthetic owner"
+        },
+        "can_block": true,
+        "target_id": "d1b601bf-d70f-458b-b574-c11f84bb0716",
+        "server_now": "2026-11-13T10:25:23.065+00:00",
+        "target_type": "service",
+        "hidden_until": "2026-11-14T10:25:22.925+00:00",
+        "target_token": "aa926b98599d42bb897feae5adcaa6f433b7d864bbc91c95f756780568d701c6",
+        "actor_user_id": "92000000-0000-0000-0000-000000000002",
+        "blocked_by_me": true,
+        "hide_revision": "0f8341d4-5cfe-4377-b48c-a5bf9d8f4fbd",
+        "schema_version": 1,
+        "block_created_at": "2026-11-13T10:25:23.022+00:00",
+        "blocked_by_other": false,
+        "target_available": true
+      }
+    },
+    {
+      "operation": "list",
+      "actor_user_id": "92000000-0000-0000-0000-000000000002",
+      "kind": "hidden",
+      "result_limit": 25,
+      "result_offset": 0,
+      "response": {
+        "kind": "hidden",
+        "items": [
+          {
+            "hidden": true,
+            "block_id": "1",
+            "can_hide": false,
+            "provider": {
+              "slug": "synthetic-a1000000-0000-0000-0000-000000000001",
+              "avatar_url": null,
+              "identity_id": "a1000000-0000-0000-0000-000000000001",
+              "display_name": "Synthetic owner"
+            },
+            "can_block": false,
+            "target_id": "a1000000-0000-0000-0000-000000000001",
+            "server_now": "2026-11-13T10:25:23.069+00:00",
+            "target_type": "hidden_provider",
+            "hidden_until": "2026-11-14T10:25:22.925+00:00",
+            "target_token": "4abb9d4ef63161bf9114ad96aba85d76e6196839048726be3ad4359127d8bf3c",
+            "actor_user_id": "92000000-0000-0000-0000-000000000002",
+            "blocked_by_me": true,
+            "hide_revision": "0f8341d4-5cfe-4377-b48c-a5bf9d8f4fbd",
+            "schema_version": 1,
+            "block_created_at": "2026-11-13T10:25:23.022+00:00",
+            "blocked_by_other": false,
+            "target_available": true
+          }
+        ],
+        "has_more": false,
+        "next_offset": null,
+        "total_count": "1",
+        "result_limit": 25,
+        "actor_user_id": "92000000-0000-0000-0000-000000000002",
+        "result_offset": 0,
+        "schema_version": 1
+      }
+    },
+    {
+      "operation": "set",
+      "actor_user_id": "92000000-0000-0000-0000-000000000002",
+      "target_type": "hidden_provider",
+      "target_id": "a1000000-0000-0000-0000-000000000001",
+      "action": "unhide",
+      "response": {
+        "action": "unhide",
+        "hidden": false,
+        "changed": true,
+        "block_id": "1",
+        "can_hide": false,
+        "provider": {
+          "slug": "synthetic-a1000000-0000-0000-0000-000000000001",
+          "avatar_url": null,
+          "identity_id": "a1000000-0000-0000-0000-000000000001",
+          "display_name": "Synthetic owner"
+        },
+        "can_block": false,
+        "target_id": "a1000000-0000-0000-0000-000000000001",
+        "server_now": "2026-11-13T10:25:23.075+00:00",
+        "target_type": "hidden_provider",
+        "hidden_until": null,
+        "target_token": "4abb9d4ef63161bf9114ad96aba85d76e6196839048726be3ad4359127d8bf3c",
+        "actor_user_id": "92000000-0000-0000-0000-000000000002",
+        "blocked_by_me": true,
+        "hide_revision": "8d66ee75-24a1-42ef-8744-6b5665017fa4",
+        "schema_version": 1,
+        "block_created_at": "2026-11-13T10:25:23.022+00:00",
+        "blocked_by_other": false,
+        "target_available": true
+      }
+    },
+    {
+      "operation": "get",
+      "actor_user_id": "92000000-0000-0000-0000-000000000002",
+      "target_type": "conversation",
+      "target_id": "1",
+      "response": {
+        "hidden": false,
+        "block_id": "1",
+        "can_hide": false,
+        "provider": {
+          "slug": "synthetic-a1000000-0000-0000-0000-000000000001",
+          "avatar_url": null,
+          "identity_id": "a1000000-0000-0000-0000-000000000001",
+          "display_name": "Synthetic owner"
+        },
+        "can_block": false,
+        "target_id": "1",
+        "server_now": "2026-11-13T10:25:23.137+00:00",
+        "target_type": "conversation",
+        "hidden_until": null,
+        "target_token": "25c3cfa098051328ea2c414ba96e7fe1fb7c2db3d97bf59719815f292137bca3",
+        "actor_user_id": "92000000-0000-0000-0000-000000000002",
+        "blocked_by_me": true,
+        "hide_revision": "8d66ee75-24a1-42ef-8744-6b5665017fa4",
+        "schema_version": 1,
+        "block_created_at": "2026-11-13T10:25:23.022+00:00",
+        "blocked_by_other": false,
+        "target_available": true
+      }
+    },
+    {
+      "operation": "get",
+      "actor_user_id": "91000000-0000-0000-0000-000000000001",
+      "target_type": "conversation",
+      "target_id": "1",
+      "response": {
+        "hidden": false,
+        "block_id": null,
+        "can_hide": false,
+        "provider": {
+          "slug": "synthetic-b2000000-0000-0000-0000-000000000002",
+          "avatar_url": null,
+          "identity_id": "b2000000-0000-0000-0000-000000000002",
+          "display_name": "Synthetic peer"
+        },
+        "can_block": false,
+        "target_id": "1",
+        "server_now": "2026-11-13T10:25:23.141+00:00",
+        "target_type": "conversation",
+        "hidden_until": null,
+        "target_token": "708bc7e05114847b379c2b84b75e1f0b38f6f5dc914be61b41eb4498629cf6d5",
+        "actor_user_id": "91000000-0000-0000-0000-000000000001",
+        "blocked_by_me": false,
+        "hide_revision": null,
+        "schema_version": 1,
+        "block_created_at": null,
+        "blocked_by_other": true,
+        "target_available": true
+      }
+    },
+    {
+      "operation": "get",
+      "actor_user_id": "94000000-0000-0000-0000-000000000004",
+      "target_type": "conversation",
+      "target_id": "1",
+      "response": {
+        "hidden": false,
+        "block_id": null,
+        "can_hide": false,
+        "provider": {
+          "slug": null,
+          "avatar_url": null,
+          "identity_id": null,
+          "display_name": "Selqiro"
+        },
+        "can_block": false,
+        "target_id": "1",
+        "server_now": "2026-11-13T10:25:23.145+00:00",
+        "target_type": "conversation",
+        "hidden_until": null,
+        "target_token": null,
+        "actor_user_id": "94000000-0000-0000-0000-000000000004",
+        "blocked_by_me": false,
+        "hide_revision": null,
+        "schema_version": 1,
+        "block_created_at": null,
+        "blocked_by_other": false,
+        "target_available": false
+      }
+    },
+    {
+      "operation": "list",
+      "actor_user_id": "92000000-0000-0000-0000-000000000002",
+      "kind": "blocked",
+      "result_limit": 25,
+      "result_offset": 0,
+      "response": {
+        "kind": "blocked",
+        "items": [
+          {
+            "hidden": false,
+            "block_id": "1",
+            "can_hide": false,
+            "provider": {
+              "slug": "synthetic-a1000000-0000-0000-0000-000000000001",
+              "avatar_url": null,
+              "identity_id": "a1000000-0000-0000-0000-000000000001",
+              "display_name": "Synthetic owner"
+            },
+            "can_block": true,
+            "target_id": "1",
+            "server_now": "2026-11-13T10:25:23.149+00:00",
+            "target_type": "blocked_account",
+            "hidden_until": null,
+            "target_token": "cb009b91520e94937a41f55bd1f5dfd7b0d2f00a3ae2e77148b502bad002d2b4",
+            "actor_user_id": "92000000-0000-0000-0000-000000000002",
+            "blocked_by_me": true,
+            "hide_revision": "8d66ee75-24a1-42ef-8744-6b5665017fa4",
+            "schema_version": 1,
+            "block_created_at": "2026-11-13T10:25:23.022+00:00",
+            "blocked_by_other": false,
+            "target_available": true
+          }
+        ],
+        "has_more": false,
+        "next_offset": null,
+        "total_count": "1",
+        "result_limit": 25,
+        "actor_user_id": "92000000-0000-0000-0000-000000000002",
+        "result_offset": 0,
+        "schema_version": 1
+      }
+    },
+    {
+      "operation": "set",
+      "actor_user_id": "92000000-0000-0000-0000-000000000002",
+      "target_type": "blocked_account",
+      "target_id": "1",
+      "action": "unblock",
+      "response": {
+        "action": "unblock",
+        "hidden": false,
+        "changed": true,
+        "block_id": null,
+        "can_hide": false,
+        "provider": {
+          "slug": "synthetic-a1000000-0000-0000-0000-000000000001",
+          "avatar_url": null,
+          "identity_id": "a1000000-0000-0000-0000-000000000001",
+          "display_name": "Synthetic owner"
+        },
+        "can_block": true,
+        "target_id": "1",
+        "server_now": "2026-11-13T10:25:23.154+00:00",
+        "target_type": "blocked_account",
+        "hidden_until": null,
+        "target_token": "cb009b91520e94937a41f55bd1f5dfd7b0d2f00a3ae2e77148b502bad002d2b4",
+        "actor_user_id": "92000000-0000-0000-0000-000000000002",
+        "blocked_by_me": false,
+        "hide_revision": "8d66ee75-24a1-42ef-8744-6b5665017fa4",
+        "schema_version": 1,
+        "block_created_at": null,
+        "blocked_by_other": false,
+        "target_available": true
+      }
+    },
+    {
+      "operation": "get",
+      "actor_user_id": "92000000-0000-0000-0000-000000000002",
+      "target_type": "blocked_account",
+      "target_id": "1",
+      "response": {
+        "hidden": false,
+        "block_id": null,
+        "can_hide": false,
+        "provider": {
+          "slug": null,
+          "avatar_url": null,
+          "identity_id": null,
+          "display_name": "Selqiro"
+        },
+        "can_block": false,
+        "target_id": "1",
+        "server_now": "2026-11-13T10:25:23.159+00:00",
+        "target_type": "blocked_account",
+        "hidden_until": null,
+        "target_token": null,
+        "actor_user_id": "92000000-0000-0000-0000-000000000002",
+        "blocked_by_me": false,
+        "hide_revision": null,
+        "schema_version": 1,
+        "block_created_at": null,
+        "blocked_by_other": false,
+        "target_available": false
+      }
+    },
+    {
+      "operation": "get",
+      "actor_user_id": "92000000-0000-0000-0000-000000000002",
+      "target_type": "profile",
+      "target_id": "a1000000-0000-0000-0000-000000000001",
+      "response": {
+        "hidden": false,
+        "block_id": null,
+        "can_hide": true,
+        "provider": {
+          "slug": "synthetic-a1000000-0000-0000-0000-000000000001",
+          "avatar_url": null,
+          "identity_id": "a1000000-0000-0000-0000-000000000001",
+          "display_name": "Synthetic owner"
+        },
+        "can_block": true,
+        "target_id": "a1000000-0000-0000-0000-000000000001",
+        "server_now": "2026-11-13T10:25:23.162+00:00",
+        "target_type": "profile",
+        "hidden_until": null,
+        "target_token": "0e66d2d66b05e8bb37d5e6efc0db32dd511fa5c84c708e898199dbbf14fa7082",
+        "actor_user_id": "92000000-0000-0000-0000-000000000002",
+        "blocked_by_me": false,
+        "hide_revision": "8d66ee75-24a1-42ef-8744-6b5665017fa4",
+        "schema_version": 1,
+        "block_created_at": null,
+        "blocked_by_other": false,
+        "target_available": true
+      }
+    },
+    {
+      "operation": "set",
+      "actor_user_id": "92000000-0000-0000-0000-000000000002",
+      "target_type": "profile",
+      "target_id": "a1000000-0000-0000-0000-000000000001",
+      "action": "block",
+      "response": {
+        "action": "block",
+        "hidden": false,
+        "changed": true,
+        "block_id": "2",
+        "can_hide": false,
+        "provider": {
+          "slug": "synthetic-a1000000-0000-0000-0000-000000000001",
+          "avatar_url": null,
+          "identity_id": "a1000000-0000-0000-0000-000000000001",
+          "display_name": "Synthetic owner"
+        },
+        "can_block": true,
+        "target_id": "a1000000-0000-0000-0000-000000000001",
+        "server_now": "2026-11-13T10:25:23.165+00:00",
+        "target_type": "profile",
+        "hidden_until": null,
+        "target_token": "0e66d2d66b05e8bb37d5e6efc0db32dd511fa5c84c708e898199dbbf14fa7082",
+        "actor_user_id": "92000000-0000-0000-0000-000000000002",
+        "blocked_by_me": true,
+        "hide_revision": "8d66ee75-24a1-42ef-8744-6b5665017fa4",
+        "schema_version": 1,
+        "block_created_at": "2026-11-13T10:25:23.165+00:00",
+        "blocked_by_other": false,
+        "target_available": true
+      }
+    },
+    {
+      "operation": "get",
+      "actor_user_id": "92000000-0000-0000-0000-000000000002",
+      "target_type": "profile",
+      "target_id": "a1000000-0000-0000-0000-000000000001",
+      "response": {
+        "hidden": false,
+        "block_id": "2",
+        "can_hide": false,
+        "provider": {
+          "slug": "synthetic-a1000000-0000-0000-0000-000000000001",
+          "avatar_url": null,
+          "identity_id": "a1000000-0000-0000-0000-000000000001",
+          "display_name": "Synthetic owner"
+        },
+        "can_block": true,
+        "target_id": "a1000000-0000-0000-0000-000000000001",
+        "server_now": "2026-11-13T10:25:23.172+00:00",
+        "target_type": "profile",
+        "hidden_until": null,
+        "target_token": "0e66d2d66b05e8bb37d5e6efc0db32dd511fa5c84c708e898199dbbf14fa7082",
+        "actor_user_id": "92000000-0000-0000-0000-000000000002",
+        "blocked_by_me": true,
+        "hide_revision": "8d66ee75-24a1-42ef-8744-6b5665017fa4",
+        "schema_version": 1,
+        "block_created_at": "2026-11-13T10:25:23.165+00:00",
+        "blocked_by_other": false,
+        "target_available": true
+      }
+    },
+    {
+      "operation": "list",
+      "actor_user_id": "92000000-0000-0000-0000-000000000002",
+      "kind": "blocked",
+      "result_limit": 25,
+      "result_offset": 0,
+      "response": {
+        "kind": "blocked",
+        "items": [
+          {
+            "hidden": false,
+            "block_id": "2",
+            "can_hide": false,
+            "provider": {
+              "slug": "synthetic-a1000000-0000-0000-0000-000000000001",
+              "avatar_url": null,
+              "identity_id": "a1000000-0000-0000-0000-000000000001",
+              "display_name": "Synthetic owner"
+            },
+            "can_block": true,
+            "target_id": "2",
+            "server_now": "2026-11-13T10:25:23.174+00:00",
+            "target_type": "blocked_account",
+            "hidden_until": null,
+            "target_token": "15f0cdc07e5953066d5c84ffe782f3b9afc240d7b89dec248dba89d1ddfd956f",
+            "actor_user_id": "92000000-0000-0000-0000-000000000002",
+            "blocked_by_me": true,
+            "hide_revision": "8d66ee75-24a1-42ef-8744-6b5665017fa4",
+            "schema_version": 1,
+            "block_created_at": "2026-11-13T10:25:23.165+00:00",
+            "blocked_by_other": false,
+            "target_available": true
+          }
+        ],
+        "has_more": false,
+        "next_offset": null,
+        "total_count": "1",
+        "result_limit": 25,
+        "actor_user_id": "92000000-0000-0000-0000-000000000002",
+        "result_offset": 0,
+        "schema_version": 1
+      }
+    },
+    {
+      "operation": "set",
+      "actor_user_id": "92000000-0000-0000-0000-000000000002",
+      "target_type": "blocked_account",
+      "target_id": "2",
+      "action": "unblock",
+      "response": {
+        "action": "unblock",
+        "hidden": false,
+        "changed": true,
+        "block_id": null,
+        "can_hide": false,
+        "provider": {
+          "slug": "synthetic-a1000000-0000-0000-0000-000000000001",
+          "avatar_url": null,
+          "identity_id": "a1000000-0000-0000-0000-000000000001",
+          "display_name": "Synthetic owner"
+        },
+        "can_block": true,
+        "target_id": "2",
+        "server_now": "2026-11-13T10:25:23.179+00:00",
+        "target_type": "blocked_account",
+        "hidden_until": null,
+        "target_token": "15f0cdc07e5953066d5c84ffe782f3b9afc240d7b89dec248dba89d1ddfd956f",
+        "actor_user_id": "92000000-0000-0000-0000-000000000002",
+        "blocked_by_me": false,
+        "hide_revision": "8d66ee75-24a1-42ef-8744-6b5665017fa4",
+        "schema_version": 1,
+        "block_created_at": null,
+        "blocked_by_other": false,
+        "target_available": true
+      }
+    },
+    {
+      "operation": "get",
+      "actor_user_id": "92000000-0000-0000-0000-000000000002",
+      "target_type": "profile",
+      "target_id": "a1000000-0000-0000-0000-000000000001",
+      "response": {
+        "hidden": false,
+        "block_id": null,
+        "can_hide": true,
+        "provider": {
+          "slug": "synthetic-a1000000-0000-0000-0000-000000000001",
+          "avatar_url": null,
+          "identity_id": "a1000000-0000-0000-0000-000000000001",
+          "display_name": "Synthetic owner"
+        },
+        "can_block": true,
+        "target_id": "a1000000-0000-0000-0000-000000000001",
+        "server_now": "2026-11-13T10:25:23.19+00:00",
+        "target_type": "profile",
+        "hidden_until": null,
+        "target_token": "0e66d2d66b05e8bb37d5e6efc0db32dd511fa5c84c708e898199dbbf14fa7082",
+        "actor_user_id": "92000000-0000-0000-0000-000000000002",
+        "blocked_by_me": false,
+        "hide_revision": "8d66ee75-24a1-42ef-8744-6b5665017fa4",
+        "schema_version": 1,
+        "block_created_at": null,
+        "blocked_by_other": false,
+        "target_available": true
+      }
+    },
+    {
+      "operation": "set",
+      "actor_user_id": "92000000-0000-0000-0000-000000000002",
+      "target_type": "profile",
+      "target_id": "a1000000-0000-0000-0000-000000000001",
+      "action": "block",
+      "response": {
+        "action": "block",
+        "hidden": false,
+        "changed": true,
+        "block_id": "3",
+        "can_hide": false,
+        "provider": {
+          "slug": "synthetic-a1000000-0000-0000-0000-000000000001",
+          "avatar_url": null,
+          "identity_id": "a1000000-0000-0000-0000-000000000001",
+          "display_name": "Synthetic owner"
+        },
+        "can_block": true,
+        "target_id": "a1000000-0000-0000-0000-000000000001",
+        "server_now": "2026-11-13T10:25:23.193+00:00",
+        "target_type": "profile",
+        "hidden_until": null,
+        "target_token": "0e66d2d66b05e8bb37d5e6efc0db32dd511fa5c84c708e898199dbbf14fa7082",
+        "actor_user_id": "92000000-0000-0000-0000-000000000002",
+        "blocked_by_me": true,
+        "hide_revision": "8d66ee75-24a1-42ef-8744-6b5665017fa4",
+        "schema_version": 1,
+        "block_created_at": "2026-11-13T10:25:23.193+00:00",
+        "blocked_by_other": false,
+        "target_available": true
+      }
+    },
+    {
+      "operation": "list",
+      "actor_user_id": "92000000-0000-0000-0000-000000000002",
+      "kind": "blocked",
+      "result_limit": 25,
+      "result_offset": 0,
+      "response": {
+        "kind": "blocked",
+        "items": [
+          {
+            "hidden": false,
+            "block_id": "3",
+            "can_hide": false,
+            "provider": {
+              "slug": "synthetic-a1000000-0000-0000-0000-000000000001",
+              "avatar_url": null,
+              "identity_id": "a1000000-0000-0000-0000-000000000001",
+              "display_name": "Synthetic owner"
+            },
+            "can_block": true,
+            "target_id": "3",
+            "server_now": "2026-11-13T10:25:23.2+00:00",
+            "target_type": "blocked_account",
+            "hidden_until": null,
+            "target_token": "4727bc4f16a66d179cb1db3c69b31fb1268949d56942dd32f708ce132e71f614",
+            "actor_user_id": "92000000-0000-0000-0000-000000000002",
+            "blocked_by_me": true,
+            "hide_revision": "8d66ee75-24a1-42ef-8744-6b5665017fa4",
+            "schema_version": 1,
+            "block_created_at": "2026-11-13T10:25:23.193+00:00",
+            "blocked_by_other": false,
+            "target_available": true
+          }
+        ],
+        "has_more": false,
+        "next_offset": null,
+        "total_count": "1",
+        "result_limit": 25,
+        "actor_user_id": "92000000-0000-0000-0000-000000000002",
+        "result_offset": 0,
+        "schema_version": 1
+      }
+    },
+    {
+      "operation": "set",
+      "actor_user_id": "92000000-0000-0000-0000-000000000002",
+      "target_type": "blocked_account",
+      "target_id": "3",
+      "action": "unblock",
+      "response": {
+        "action": "unblock",
+        "hidden": false,
+        "changed": true,
+        "block_id": null,
+        "can_hide": false,
+        "provider": {
+          "slug": "synthetic-a1000000-0000-0000-0000-000000000001",
+          "avatar_url": null,
+          "identity_id": "a1000000-0000-0000-0000-000000000001",
+          "display_name": "Synthetic owner"
+        },
+        "can_block": true,
+        "target_id": "3",
+        "server_now": "2026-11-13T10:25:23.204+00:00",
+        "target_type": "blocked_account",
+        "hidden_until": null,
+        "target_token": "4727bc4f16a66d179cb1db3c69b31fb1268949d56942dd32f708ce132e71f614",
+        "actor_user_id": "92000000-0000-0000-0000-000000000002",
+        "blocked_by_me": false,
+        "hide_revision": "8d66ee75-24a1-42ef-8744-6b5665017fa4",
+        "schema_version": 1,
+        "block_created_at": null,
+        "blocked_by_other": false,
+        "target_available": true
+      }
+    },
+    {
+      "operation": "get",
+      "actor_user_id": "92000000-0000-0000-0000-000000000002",
+      "target_type": "conversation",
+      "target_id": "2",
+      "response": {
+        "hidden": false,
+        "block_id": null,
+        "can_hide": false,
+        "provider": {
+          "slug": "synthetic-e2000000-0000-0000-0000-000000000002",
+          "avatar_url": null,
+          "identity_id": "e2000000-0000-0000-0000-000000000002",
+          "display_name": "Synthetic business"
+        },
+        "can_block": false,
+        "target_id": "2",
+        "server_now": "2026-11-13T10:25:23.26+00:00",
+        "target_type": "conversation",
+        "hidden_until": null,
+        "target_token": "7df3c83ee6feaead00093f355449ade6990312f72d2129d42fb398716ecf6146",
+        "actor_user_id": "92000000-0000-0000-0000-000000000002",
+        "blocked_by_me": false,
+        "hide_revision": null,
+        "schema_version": 1,
+        "block_created_at": null,
+        "blocked_by_other": true,
+        "target_available": true
+      }
+    },
+    {
+      "operation": "get",
+      "actor_user_id": "92000000-0000-0000-0000-000000000002",
+      "target_type": "profile",
+      "target_id": "e2000000-0000-0000-0000-000000000002",
+      "response": {
+        "hidden": false,
+        "block_id": null,
+        "can_hide": true,
+        "provider": {
+          "slug": "synthetic-e2000000-0000-0000-0000-000000000002",
+          "avatar_url": null,
+          "identity_id": "e2000000-0000-0000-0000-000000000002",
+          "display_name": "Synthetic business"
+        },
+        "can_block": true,
+        "target_id": "e2000000-0000-0000-0000-000000000002",
+        "server_now": "2026-11-13T10:25:23.264+00:00",
+        "target_type": "profile",
+        "hidden_until": null,
+        "target_token": "a87753772c62722ca8103b5deadaa9faac12a2829834e19696ca5ca8dcf7e9ec",
+        "actor_user_id": "92000000-0000-0000-0000-000000000002",
+        "blocked_by_me": false,
+        "hide_revision": null,
+        "schema_version": 1,
+        "block_created_at": null,
+        "blocked_by_other": false,
+        "target_available": true
+      }
+    },
+    {
+      "operation": "get",
+      "actor_user_id": "92000000-0000-0000-0000-000000000002",
+      "target_type": "conversation",
+      "target_id": "2",
+      "response": {
+        "hidden": false,
+        "block_id": null,
+        "can_hide": false,
+        "provider": {
+          "slug": "synthetic-e2000000-0000-0000-0000-000000000002",
+          "avatar_url": null,
+          "identity_id": "e2000000-0000-0000-0000-000000000002",
+          "display_name": "Synthetic business"
+        },
+        "can_block": false,
+        "target_id": "2",
+        "server_now": "2026-11-13T10:25:23.271+00:00",
+        "target_type": "conversation",
+        "hidden_until": null,
+        "target_token": "7df3c83ee6feaead00093f355449ade6990312f72d2129d42fb398716ecf6146",
+        "actor_user_id": "92000000-0000-0000-0000-000000000002",
+        "blocked_by_me": false,
+        "hide_revision": null,
+        "schema_version": 1,
+        "block_created_at": null,
+        "blocked_by_other": false,
+        "target_available": true
+      }
+    },
+    {
+      "operation": "get",
+      "actor_user_id": "92000000-0000-0000-0000-000000000002",
+      "target_type": "profile",
+      "target_id": "a1000000-0000-0000-0000-000000000001",
+      "response": {
+        "hidden": false,
+        "block_id": null,
+        "can_hide": true,
+        "provider": {
+          "slug": "synthetic-a1000000-0000-0000-0000-000000000001",
+          "avatar_url": null,
+          "identity_id": "a1000000-0000-0000-0000-000000000001",
+          "display_name": "Synthetic owner"
+        },
+        "can_block": true,
+        "target_id": "a1000000-0000-0000-0000-000000000001",
+        "server_now": "2026-11-13T10:25:23.281+00:00",
+        "target_type": "profile",
+        "hidden_until": null,
+        "target_token": "0e66d2d66b05e8bb37d5e6efc0db32dd511fa5c84c708e898199dbbf14fa7082",
+        "actor_user_id": "92000000-0000-0000-0000-000000000002",
+        "blocked_by_me": false,
+        "hide_revision": "8d66ee75-24a1-42ef-8744-6b5665017fa4",
+        "schema_version": 1,
+        "block_created_at": null,
+        "blocked_by_other": false,
+        "target_available": true
+      }
+    },
+    {
+      "operation": "set",
+      "actor_user_id": "92000000-0000-0000-0000-000000000002",
+      "target_type": "profile",
+      "target_id": "a1000000-0000-0000-0000-000000000001",
+      "action": "hide",
+      "response": {
+        "action": "hide",
+        "hidden": true,
+        "changed": true,
+        "block_id": null,
+        "can_hide": true,
+        "provider": {
+          "slug": "synthetic-a1000000-0000-0000-0000-000000000001",
+          "avatar_url": null,
+          "identity_id": "a1000000-0000-0000-0000-000000000001",
+          "display_name": "Synthetic owner"
+        },
+        "can_block": true,
+        "target_id": "a1000000-0000-0000-0000-000000000001",
+        "server_now": "2026-11-13T10:25:23.285+00:00",
+        "target_type": "profile",
+        "hidden_until": "2026-11-14T10:25:23.285+00:00",
+        "target_token": "0e66d2d66b05e8bb37d5e6efc0db32dd511fa5c84c708e898199dbbf14fa7082",
+        "actor_user_id": "92000000-0000-0000-0000-000000000002",
+        "blocked_by_me": false,
+        "hide_revision": "777921e4-9eb7-4ed0-a1f5-ebc3096b42c5",
+        "schema_version": 1,
+        "block_created_at": null,
+        "blocked_by_other": false,
+        "target_available": true
+      }
+    },
+    {
+      "operation": "get",
+      "actor_user_id": "92000000-0000-0000-0000-000000000002",
+      "target_type": "profile",
+      "target_id": "a1100000-0000-0000-0000-000000000001",
+      "response": {
+        "hidden": false,
+        "block_id": null,
+        "can_hide": true,
+        "provider": {
+          "slug": "synthetic-a1100000-0000-0000-0000-000000000001",
+          "avatar_url": null,
+          "identity_id": "a1100000-0000-0000-0000-000000000001",
+          "display_name": "Synthetic other identity"
+        },
+        "can_block": true,
+        "target_id": "a1100000-0000-0000-0000-000000000001",
+        "server_now": "2026-11-13T10:25:23.288+00:00",
+        "target_type": "profile",
+        "hidden_until": null,
+        "target_token": "bdf1fe164106f6ad4be3360fb81d0f6dad5eba250536c891b9b911be7002e8f6",
+        "actor_user_id": "92000000-0000-0000-0000-000000000002",
+        "blocked_by_me": false,
+        "hide_revision": null,
+        "schema_version": 1,
+        "block_created_at": null,
+        "blocked_by_other": false,
+        "target_available": true
+      }
+    },
+    {
+      "operation": "set",
+      "actor_user_id": "92000000-0000-0000-0000-000000000002",
+      "target_type": "profile",
+      "target_id": "a1100000-0000-0000-0000-000000000001",
+      "action": "hide",
+      "response": {
+        "action": "hide",
+        "hidden": true,
+        "changed": true,
+        "block_id": null,
+        "can_hide": true,
+        "provider": {
+          "slug": "synthetic-a1100000-0000-0000-0000-000000000001",
+          "avatar_url": null,
+          "identity_id": "a1100000-0000-0000-0000-000000000001",
+          "display_name": "Synthetic other identity"
+        },
+        "can_block": true,
+        "target_id": "a1100000-0000-0000-0000-000000000001",
+        "server_now": "2026-11-13T10:25:23.291+00:00",
+        "target_type": "profile",
+        "hidden_until": "2026-11-14T10:25:23.291+00:00",
+        "target_token": "bdf1fe164106f6ad4be3360fb81d0f6dad5eba250536c891b9b911be7002e8f6",
+        "actor_user_id": "92000000-0000-0000-0000-000000000002",
+        "blocked_by_me": false,
+        "hide_revision": "30be2c9a-80eb-43e8-985b-8c8d849288f6",
+        "schema_version": 1,
+        "block_created_at": null,
+        "blocked_by_other": false,
+        "target_available": true
+      }
+    },
+    {
+      "operation": "get",
+      "actor_user_id": "92000000-0000-0000-0000-000000000002",
+      "target_type": "profile",
+      "target_id": "d4000000-0000-0000-0000-000000000004",
+      "response": {
+        "hidden": false,
+        "block_id": null,
+        "can_hide": true,
+        "provider": {
+          "slug": "synthetic-d4000000-0000-0000-0000-000000000004",
+          "avatar_url": null,
+          "identity_id": "d4000000-0000-0000-0000-000000000004",
+          "display_name": "Synthetic outsider"
+        },
+        "can_block": true,
+        "target_id": "d4000000-0000-0000-0000-000000000004",
+        "server_now": "2026-11-13T10:25:23.294+00:00",
+        "target_type": "profile",
+        "hidden_until": null,
+        "target_token": "c11882f9bd32fe259becc2121a95f9a20fd94ec12f0d617a8abd94c6a228206d",
+        "actor_user_id": "92000000-0000-0000-0000-000000000002",
+        "blocked_by_me": false,
+        "hide_revision": null,
+        "schema_version": 1,
+        "block_created_at": null,
+        "blocked_by_other": false,
+        "target_available": true
+      }
+    },
+    {
+      "operation": "set",
+      "actor_user_id": "92000000-0000-0000-0000-000000000002",
+      "target_type": "profile",
+      "target_id": "d4000000-0000-0000-0000-000000000004",
+      "action": "hide",
+      "response": {
+        "action": "hide",
+        "hidden": true,
+        "changed": true,
+        "block_id": null,
+        "can_hide": true,
+        "provider": {
+          "slug": "synthetic-d4000000-0000-0000-0000-000000000004",
+          "avatar_url": null,
+          "identity_id": "d4000000-0000-0000-0000-000000000004",
+          "display_name": "Synthetic outsider"
+        },
+        "can_block": true,
+        "target_id": "d4000000-0000-0000-0000-000000000004",
+        "server_now": "2026-11-13T10:25:23.298+00:00",
+        "target_type": "profile",
+        "hidden_until": "2026-11-14T10:25:23.298+00:00",
+        "target_token": "c11882f9bd32fe259becc2121a95f9a20fd94ec12f0d617a8abd94c6a228206d",
+        "actor_user_id": "92000000-0000-0000-0000-000000000002",
+        "blocked_by_me": false,
+        "hide_revision": "26f20793-ddb7-48ca-8485-7793bc0d76c6",
+        "schema_version": 1,
+        "block_created_at": null,
+        "blocked_by_other": false,
+        "target_available": true
+      }
+    },
+    {
+      "operation": "list",
+      "actor_user_id": "92000000-0000-0000-0000-000000000002",
+      "kind": "hidden",
+      "result_limit": 2,
+      "result_offset": 0,
+      "response": {
+        "kind": "hidden",
+        "items": [
+          {
+            "hidden": true,
+            "block_id": null,
+            "can_hide": false,
+            "provider": {
+              "slug": "synthetic-d4000000-0000-0000-0000-000000000004",
+              "avatar_url": null,
+              "identity_id": "d4000000-0000-0000-0000-000000000004",
+              "display_name": "Synthetic outsider"
+            },
+            "can_block": false,
+            "target_id": "d4000000-0000-0000-0000-000000000004",
+            "server_now": "2026-11-13T10:25:23.301+00:00",
+            "target_type": "hidden_provider",
+            "hidden_until": "2026-11-14T10:25:23.298+00:00",
+            "target_token": "8e55764d84f00f5ae57327d6ed9dcc2bfd5bab025c39089e05d0163ca0004217",
+            "actor_user_id": "92000000-0000-0000-0000-000000000002",
+            "blocked_by_me": false,
+            "hide_revision": "26f20793-ddb7-48ca-8485-7793bc0d76c6",
+            "schema_version": 1,
+            "block_created_at": null,
+            "blocked_by_other": false,
+            "target_available": true
+          },
+          {
+            "hidden": true,
+            "block_id": null,
+            "can_hide": false,
+            "provider": {
+              "slug": "synthetic-a1100000-0000-0000-0000-000000000001",
+              "avatar_url": null,
+              "identity_id": "a1100000-0000-0000-0000-000000000001",
+              "display_name": "Synthetic other identity"
+            },
+            "can_block": false,
+            "target_id": "a1100000-0000-0000-0000-000000000001",
+            "server_now": "2026-11-13T10:25:23.301+00:00",
+            "target_type": "hidden_provider",
+            "hidden_until": "2026-11-14T10:25:23.291+00:00",
+            "target_token": "758e97da955819be9194365a4288476eb3c2968dfe5e19ac93c09f219b402624",
+            "actor_user_id": "92000000-0000-0000-0000-000000000002",
+            "blocked_by_me": false,
+            "hide_revision": "30be2c9a-80eb-43e8-985b-8c8d849288f6",
+            "schema_version": 1,
+            "block_created_at": null,
+            "blocked_by_other": false,
+            "target_available": true
+          }
+        ],
+        "has_more": true,
+        "next_offset": 2,
+        "total_count": "3",
+        "result_limit": 2,
+        "actor_user_id": "92000000-0000-0000-0000-000000000002",
+        "result_offset": 0,
+        "schema_version": 1
+      }
+    },
+    {
+      "operation": "list",
+      "actor_user_id": "92000000-0000-0000-0000-000000000002",
+      "kind": "hidden",
+      "result_limit": 2,
+      "result_offset": 2,
+      "response": {
+        "kind": "hidden",
+        "items": [
+          {
+            "hidden": true,
+            "block_id": null,
+            "can_hide": false,
+            "provider": {
+              "slug": "synthetic-a1000000-0000-0000-0000-000000000001",
+              "avatar_url": null,
+              "identity_id": "a1000000-0000-0000-0000-000000000001",
+              "display_name": "Synthetic owner"
+            },
+            "can_block": false,
+            "target_id": "a1000000-0000-0000-0000-000000000001",
+            "server_now": "2026-11-13T10:25:23.305+00:00",
+            "target_type": "hidden_provider",
+            "hidden_until": "2026-11-14T10:25:23.285+00:00",
+            "target_token": "4abb9d4ef63161bf9114ad96aba85d76e6196839048726be3ad4359127d8bf3c",
+            "actor_user_id": "92000000-0000-0000-0000-000000000002",
+            "blocked_by_me": false,
+            "hide_revision": "777921e4-9eb7-4ed0-a1f5-ebc3096b42c5",
+            "schema_version": 1,
+            "block_created_at": null,
+            "blocked_by_other": false,
+            "target_available": true
+          }
+        ],
+        "has_more": false,
+        "next_offset": null,
+        "total_count": "3",
+        "result_limit": 2,
+        "actor_user_id": "92000000-0000-0000-0000-000000000002",
+        "result_offset": 2,
+        "schema_version": 1
+      }
+    },
+    {
+      "operation": "list",
+      "actor_user_id": "92000000-0000-0000-0000-000000000002",
+      "kind": "hidden",
+      "result_limit": 2,
+      "result_offset": 4,
+      "response": {
+        "kind": "hidden",
+        "items": [],
+        "has_more": false,
+        "next_offset": null,
+        "total_count": "3",
+        "result_limit": 2,
+        "actor_user_id": "92000000-0000-0000-0000-000000000002",
+        "result_offset": 4,
+        "schema_version": 1
+      }
+    },
+    {
+      "operation": "list",
+      "actor_user_id": "94000000-0000-0000-0000-000000000004",
+      "kind": "hidden",
+      "result_limit": 25,
+      "result_offset": 0,
+      "response": {
+        "kind": "hidden",
+        "items": [],
+        "has_more": false,
+        "next_offset": null,
+        "total_count": "0",
+        "result_limit": 25,
+        "actor_user_id": "94000000-0000-0000-0000-000000000004",
+        "result_offset": 0,
+        "schema_version": 1
+      }
+    },
+    {
+      "operation": "get",
+      "actor_user_id": "92000000-0000-0000-0000-000000000002",
+      "target_type": "listing",
+      "target_id": "0",
+      "response": {
+        "hidden": false,
+        "block_id": null,
+        "can_hide": false,
+        "provider": {
+          "slug": null,
+          "avatar_url": null,
+          "identity_id": null,
+          "display_name": "Selqiro"
+        },
+        "can_block": false,
+        "target_id": "0",
+        "server_now": "2026-11-13T10:25:23.326+00:00",
+        "target_type": "listing",
+        "hidden_until": null,
+        "target_token": null,
+        "actor_user_id": "92000000-0000-0000-0000-000000000002",
+        "blocked_by_me": false,
+        "hide_revision": null,
+        "schema_version": 1,
+        "block_created_at": null,
+        "blocked_by_other": false,
+        "target_available": false
+      }
+    },
+    {
+      "operation": "get",
+      "actor_user_id": "92000000-0000-0000-0000-000000000002",
+      "target_type": "listing",
+      "target_id": "-1",
+      "response": {
+        "hidden": false,
+        "block_id": null,
+        "can_hide": false,
+        "provider": {
+          "slug": null,
+          "avatar_url": null,
+          "identity_id": null,
+          "display_name": "Selqiro"
+        },
+        "can_block": false,
+        "target_id": "-1",
+        "server_now": "2026-11-13T10:25:23.328+00:00",
+        "target_type": "listing",
+        "hidden_until": null,
+        "target_token": null,
+        "actor_user_id": "92000000-0000-0000-0000-000000000002",
+        "blocked_by_me": false,
+        "hide_revision": null,
+        "schema_version": 1,
+        "block_created_at": null,
+        "blocked_by_other": false,
+        "target_available": false
+      }
+    },
+    {
+      "operation": "get",
+      "actor_user_id": "92000000-0000-0000-0000-000000000002",
+      "target_type": "listing",
+      "target_id": "-9223372036854775808",
+      "response": {
+        "hidden": false,
+        "block_id": null,
+        "can_hide": false,
+        "provider": {
+          "slug": null,
+          "avatar_url": null,
+          "identity_id": null,
+          "display_name": "Selqiro"
+        },
+        "can_block": false,
+        "target_id": "-9223372036854775808",
+        "server_now": "2026-11-13T10:25:23.33+00:00",
+        "target_type": "listing",
+        "hidden_until": null,
+        "target_token": null,
+        "actor_user_id": "92000000-0000-0000-0000-000000000002",
+        "blocked_by_me": false,
+        "hide_revision": null,
+        "schema_version": 1,
+        "block_created_at": null,
+        "blocked_by_other": false,
+        "target_available": false
+      }
+    },
+    {
+      "operation": "get",
+      "actor_user_id": "92000000-0000-0000-0000-000000000002",
+      "target_type": "profile",
+      "target_id": "a1000000-0000-0000-0000-000000000001",
+      "response": {
+        "hidden": true,
+        "block_id": null,
+        "can_hide": true,
+        "provider": {
+          "slug": "synthetic-a1000000-0000-0000-0000-000000000001",
+          "avatar_url": null,
+          "identity_id": "a1000000-0000-0000-0000-000000000001",
+          "display_name": "Synthetic owner"
+        },
+        "can_block": true,
+        "target_id": "a1000000-0000-0000-0000-000000000001",
+        "server_now": "2026-11-13T10:25:23.34+00:00",
+        "target_type": "profile",
+        "hidden_until": "2026-11-14T10:25:23.285+00:00",
+        "target_token": "0e66d2d66b05e8bb37d5e6efc0db32dd511fa5c84c708e898199dbbf14fa7082",
+        "actor_user_id": "92000000-0000-0000-0000-000000000002",
+        "blocked_by_me": false,
+        "hide_revision": "777921e4-9eb7-4ed0-a1f5-ebc3096b42c5",
+        "schema_version": 1,
+        "block_created_at": null,
+        "blocked_by_other": false,
+        "target_available": true
+      }
+    },
+    {
+      "operation": "get",
+      "actor_user_id": "92000000-0000-0000-0000-000000000002",
+      "target_type": "profile",
+      "target_id": "a1000000-0000-0000-0000-000000000001",
+      "response": {
+        "hidden": true,
+        "block_id": null,
+        "can_hide": true,
+        "provider": {
+          "slug": "synthetic-a1000000-0000-0000-0000-000000000001",
+          "avatar_url": null,
+          "identity_id": "a1000000-0000-0000-0000-000000000001",
+          "display_name": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+        },
+        "can_block": true,
+        "target_id": "a1000000-0000-0000-0000-000000000001",
+        "server_now": "2026-11-13T10:25:23.35+00:00",
+        "target_type": "profile",
+        "hidden_until": "2026-11-14T10:25:23.285+00:00",
+        "target_token": "0e66d2d66b05e8bb37d5e6efc0db32dd511fa5c84c708e898199dbbf14fa7082",
+        "actor_user_id": "92000000-0000-0000-0000-000000000002",
+        "blocked_by_me": false,
+        "hide_revision": "777921e4-9eb7-4ed0-a1f5-ebc3096b42c5",
+        "schema_version": 1,
+        "block_created_at": null,
+        "blocked_by_other": false,
+        "target_available": true
+      }
+    }
+  ]
+}

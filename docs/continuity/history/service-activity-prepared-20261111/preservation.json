@@ -1,0 +1,18 @@
+{
+  "format": "selqiro-service-activity-preparation-preserved-v1",
+  "release_manifest_sha256": "54c1e7de45a727623c078f48053fd4ca00615026b2ed4e195a5a517527b808ba",
+  "files": {
+    "docs/continuity/CURRENT_STATE.json": {
+      "bytes": 10258,
+      "sha256": "1a77f6a8946f1d426cf641df91d615111d93057bfc4f0cc1164e247911c0419a"
+    },
+    "docs/99_V2_HANDOFF_NEXT_CHAT.md": {
+      "bytes": 10346,
+      "sha256": "65da0e14af92ef959388461cd50c8d555d8fe743bc5965a2880951fcdeb93f32"
+    },
+    "docs/continuity/HOSTED_PORTAL.md": {
+      "bytes": 3266,
+      "sha256": "2e98b1a6805ecc55002595bbf257ec33bed0b54fc673311f674700f2974c6b47"
+    }
+  }
+}

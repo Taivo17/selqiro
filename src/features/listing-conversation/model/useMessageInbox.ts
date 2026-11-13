@@ -6,9 +6,12 @@ import { hideThread, listMessageThreads, setThreadBlocked } from "../../../entit
 import type { MessageThreadCursor, MessageThreadList } from "../../../entities/conversation/model/messaging";
 import { useConversationActor, type ConversationActorContext } from "./useConversationActor";
 import { useConversationAutoRefresh } from "./useConversationAutoRefresh";
+import { notifyProviderControlsChanged } from "../../../shared/provider-controls/providerControlEvents";
+import { useProviderControlRevision } from "../../../shared/provider-controls/useViewerReadScope";
 
 export function useMessageInbox() {
   const context = useConversationActor(), version = useRef(0), working = useRef(false), paginated = useRef(false);
+  const controlRevision = useProviderControlRevision("visibility"), seenControlRevision = useRef(controlRevision);
   const mutation = useRef<symbol | null>(null);
   const [list, setList] = useState<MessageThreadList | null>(null), [reading, setReading] = useState(false);
   const [acting, setActing] = useState(false), [problem, setProblem] = useState<string | null>(null);
@@ -37,6 +40,12 @@ export function useMessageInbox() {
     // splice a live first page across a potentially unseen pagination interval.
     if (context.actor && !paginated.current && !acting) void load(context.actor, null, true);
   }, 7000);
+  useEffect(() => {
+    if (seenControlRevision.current === controlRevision) return;
+    seenControlRevision.current = controlRevision;
+    if (context.actor && !acting) void load(context.actor);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [controlRevision, context.actor]);
   async function action(conversationId: string, blocked: boolean | null) {
     const actor = context.actor;
     if (!actor || !context.isCurrent(actor) || mutation.current) return false;
@@ -51,7 +60,7 @@ export function useMessageInbox() {
       if (!context.isCurrent(actor)) return false;
       if (blocked === null) setList(current => current ? Object.freeze({ ...current,
         conversations: Object.freeze(current.conversations.filter(row => row.conversation_id !== conversationId)) }) : null);
-      else await load(actor);
+      else {notifyProviderControlsChanged("blocked"); await load(actor);}
       return true;
     } catch { if (context.isCurrent(actor)) setProblem(uiMessage("the_change_could_not_be_confirmed_try_again")); return false; }
     finally { if (mutation.current === operation) { mutation.current = null; setActing(false); } }

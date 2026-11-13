@@ -1,0 +1,383 @@
+{
+  "schema_version": 1,
+  "kind": "provider-controls-v1",
+  "retainedFingerprints": {
+    "capability": "1626569c5e4407df7c40bb70261350c2e1e95a1ab490aff065da49d198a2f632",
+    "dependencies": "2efa9618fa872ff8cdfdca6fd1100fed477e464d8e7ef5f453af20cb63374578"
+  },
+  "normalized_retained_function_facts": [
+    {
+      "name": "public.search_public_marketplace_v1",
+      "signature": "public.search_public_marketplace_v1(text, text, text, text, text, text, integer, integer, uuid)",
+      "facts": {
+        "kind": "f",
+        "owner": "postgres",
+        "language": "plpgsql",
+        "parallel": "u",
+        "leakproof": false,
+        "definition": "CREATE OR REPLACE FUNCTION public.search_public_marketplace_v1(p_search_query text DEFAULT ''::text, p_category text DEFAULT NULL::text, p_subcategory text DEFAULT NULL::text, p_detail_category text DEFAULT NULL::text, p_condition text DEFAULT NULL::text, p_location_query text DEFAULT ''::text, p_result_limit integer DEFAULT 24, p_result_offset integer DEFAULT 0, p_identity_id uuid DEFAULT NULL::uuid)\n RETURNS jsonb\n LANGUAGE plpgsql\n STABLE SECURITY DEFINER\n SET search_path TO 'pg_catalog', 'public', 'auth', 'pg_temp'\n SET plan_cache_mode TO 'force_custom_plan'\nAS $function$\nDECLARE q text:=btrim(coalesce(p_search_query,''));loc text:=btrim(coalesce(p_location_query,''));\n cat text:=nullif(btrim(p_category),'');sub text:=nullif(btrim(p_subcategory),'');\n detail text:=nullif(btrim(p_detail_category),'');cond text:=nullif(btrim(p_condition),'');\n actor uuid:=public.listing_actor_uid_hosted_v1();query tsquery;result jsonb;\nBEGIN\n IF char_length(q)>160 OR char_length(loc)>160 OR p_result_limit IS NULL OR p_result_limit NOT BETWEEN 1 AND 60\n  OR p_result_offset IS NULL OR p_result_offset NOT BETWEEN 0 AND 100000 THEN\n  RAISE EXCEPTION 'marketplace_search_input' USING ERRCODE='22023'; END IF;\n IF (cat IS NOT NULL AND (length(cat)>120 OR cat!~'^[a-z][a-z0-9_]*$'))\n  OR (sub IS NOT NULL AND (length(sub)>160 OR sub!~'^[a-z][a-z0-9_]*$' OR cat IS NULL))\n  OR (detail IS NOT NULL AND (length(detail)>160 OR detail!~'^[a-z][a-z0-9_]*$' OR sub IS NULL))\n  OR (cond IS NOT NULL AND cond NOT IN('new','used','damaged'))\n  OR (cat='horses' AND (detail IS NOT NULL OR (sub IS NOT NULL AND sub NOT IN('sale','free_transfer','lease','co_rider','wanted')))) THEN\n  RAISE EXCEPTION 'marketplace_search_filters' USING ERRCODE='22023'; END IF;\n query:=plainto_tsquery('pg_catalog.simple'::regconfig,q);\n WITH ordinary AS MATERIALIZED(\n  SELECT 'listing'::text content_type,l.id::text content_id,l.id numeric_id,NULL::uuid horse_id,l.created_at,\n   jsonb_build_object('content_type','listing','content_id',l.id::text,'offer_type',NULL,\n    'title',l.title,'description_preview',left(l.description,280),\n    'price',public.listing_price_read_model_v1(l.price_kind,l.price_amount,l.currency,l.price_revision,l.price),\n    'category',l.category,'subcategory',l.subcategory,\n    'detail_category',CASE WHEN jsonb_typeof(l.details->'detailCategory')='string' THEN l.details->>'detailCategory' END,\n    'condition',l.condition,'country',l.country,'city',l.city,\n    'image_url',coalesce(img.thumb_url,img.medium_url,img.original_url,l.image),\n    'seller_name',ip.display_name,'seller_slug',ip.slug,'seller_avatar_url',ip.avatar_url,'seller_type',i.type,'created_at',l.created_at) card\n  FROM public.listings l JOIN public.identities i ON i.id=l.identity_id AND i.status='active'\n  JOIN public.identity_profiles ip ON ip.identity_id=i.id\n  LEFT JOIN LATERAL(SELECT li.thumb_url,li.medium_url,li.original_url FROM public.listing_images li WHERE li.listing_id=l.id\n   ORDER BY li.is_primary DESC NULLS LAST,li.sort_order ASC NULLS LAST,li.created_at ASC NULLS LAST,li.id LIMIT 1) img ON true\n  WHERE l.status='active' AND (l.active_until IS NULL OR l.active_until>now())\n   AND (p_identity_id IS NULL OR l.identity_id=p_identity_id)\n   AND (q='' OR public.public_listing_search_document_v1(l.title,l.description,l.category,l.subcategory,l.details)@@query)\n   AND (cat IS NULL OR l.category=cat) AND (sub IS NULL OR l.subcategory=sub)\n   AND (detail IS NULL OR (jsonb_typeof(l.details->'detailCategory')='string' AND l.details->>'detailCategory'=detail))\n   AND (cond IS NULL OR l.condition=cond)\n   AND (loc='' OR strpos(lower(coalesce(l.city,'')||' '||coalesce(l.country,'')),lower(loc))>0)\n   AND NOT EXISTS(SELECT 1 FROM public.user_blocks b WHERE actor IS NOT NULL AND\n    ((b.blocker_id=actor AND b.blocked_id=l.user_id) OR (b.blocked_id=actor AND b.blocker_id=l.user_id)))\n ), horses AS MATERIALIZED(\n  SELECT 'horse_offer'::text content_type,h.id::text content_id,NULL::bigint numeric_id,h.id horse_id,h.created_at,\n   jsonb_build_object('content_type','horse_offer','content_id',h.id,'offer_type',h.offer_type,\n    'title',h.title,'description_preview',left(h.description,280),'price',horse_publication_private.public_price(h),\n    'category','horses','subcategory',h.offer_type,'detail_category',NULL,'condition',NULL,'country','EE',\n    'city',CASE WHEN h.offer_type='wanted' THEN h.details#>>'{wanted,search_area,city_or_municipality}' ELSE h.city END,\n    'image_url',img.original_url,'seller_name',ip.display_name,'seller_slug',ip.slug,\n    'seller_avatar_url',ip.avatar_url,'seller_type',i.type,'created_at',h.created_at) card\n  FROM public.horse_offers h JOIN public.identities i ON i.id=h.identity_id AND i.status='active'\n  JOIN public.identity_profiles ip ON ip.identity_id=i.id\n  LEFT JOIN LATERAL(SELECT im.original_url FROM public.horse_offer_images im WHERE im.horse_offer_id=h.id\n   ORDER BY im.is_primary DESC,im.sort_order,im.created_at,im.id LIMIT 1) img ON true\n  WHERE horse_publication_private.is_public(h.id) AND (p_identity_id IS NULL OR h.identity_id=p_identity_id)\n   AND (cat IS NULL OR cat='horses') AND (sub IS NULL OR h.offer_type=sub) AND detail IS NULL AND cond IS NULL\n   AND (q='' OR to_tsvector('pg_catalog.simple'::regconfig,coalesce(h.title,'')||' '||coalesce(h.description,'')||' '||\n    coalesce(h.breed,'')||' '||coalesce(h.discipline,'')||' '||coalesce(h.details#>>'{wanted,preferred_breed}',''))@@query)\n   AND (loc='' OR strpos(lower(CASE WHEN h.offer_type='wanted' THEN coalesce(h.details#>>'{wanted,search_area,city_or_municipality}','')\n     ELSE coalesce(h.city,'') END||' EE'),lower(loc))>0)\n   AND NOT EXISTS(SELECT 1 FROM public.user_blocks b WHERE actor IS NOT NULL AND\n    ((b.blocker_id=actor AND b.blocked_id=h.created_by_user_id) OR (b.blocked_id=actor AND b.blocker_id=h.created_by_user_id)))\n ), matched AS MATERIALIZED(SELECT * FROM ordinary UNION ALL SELECT * FROM horses),\n page AS(SELECT * FROM matched ORDER BY created_at DESC,content_type,numeric_id DESC,horse_id DESC LIMIT p_result_limit OFFSET p_result_offset),\n totals AS(SELECT count(*) n FROM matched)\n SELECT jsonb_build_object('schema_version',1,'content_scope','marketplace','sort','newest',\n  'items',coalesce((SELECT jsonb_agg(card ORDER BY created_at DESC,content_type,numeric_id DESC,horse_id DESC) FROM page),'[]'::jsonb),\n  'total_count',n::text,'result_limit',p_result_limit,'result_offset',p_result_offset,\n  'has_more',n>p_result_offset::bigint+p_result_limit,\n  'next_offset',CASE WHEN n>p_result_offset::bigint+p_result_limit AND p_result_offset+p_result_limit<=100000 THEN p_result_offset+p_result_limit END,\n  'window_limit_reached',n>p_result_offset::bigint+p_result_limit AND p_result_offset+p_result_limit>100000)\n INTO result FROM totals;\n RETURN result;\nEND $function$\n"
+      },
+      "acl": [
+        {
+          "grantee": "anon",
+          "grantor": "postgres",
+          "grantable": false,
+          "privilege": "EXECUTE"
+        },
+        {
+          "grantee": "authenticated",
+          "grantor": "postgres",
+          "grantable": false,
+          "privilege": "EXECUTE"
+        },
+        {
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "grantable": false,
+          "privilege": "EXECUTE"
+        }
+      ]
+    },
+    {
+      "name": "public.search_public_services_v1",
+      "signature": "public.search_public_services_v1(text, text, text, text, text, integer, integer)",
+      "facts": {
+        "kind": "f",
+        "owner": "postgres",
+        "language": "plpgsql",
+        "parallel": "u",
+        "leakproof": false,
+        "definition": "CREATE OR REPLACE FUNCTION public.search_public_services_v1(p_query text DEFAULT ''::text, p_category text DEFAULT NULL::text, p_subcategory text DEFAULT NULL::text, p_country text DEFAULT NULL::text, p_city text DEFAULT NULL::text, p_result_limit integer DEFAULT 24, p_result_offset integer DEFAULT 0)\n RETURNS jsonb\n LANGUAGE plpgsql\n STABLE SECURITY DEFINER\n SET search_path TO 'pg_catalog', 'pg_temp'\nAS $function$\nDECLARE items jsonb;total bigint;query text:=lower(btrim(coalesce(p_query,'')));\nBEGIN\n IF length(query)>300 OR p_result_limit IS NULL OR p_result_limit NOT BETWEEN 1 AND 100 OR p_result_offset IS NULL\n OR p_result_offset<0 OR p_result_offset>1000000 OR length(p_category)>120 OR length(p_subcategory)>160\n OR length(p_country)>120 OR length(p_city)>160 THEN RAISE EXCEPTION 'service_search_invalid' USING ERRCODE='22023';END IF;\n WITH candidates AS MATERIALIZED(SELECT s.* FROM public.services s WHERE service_publication_private.is_public(s.id) AND service_publication_private.visible_to_viewer(s.id)\n AND (nullif(btrim(p_category),'') IS NULL OR s.category=btrim(p_category))\n AND (nullif(btrim(p_subcategory),'') IS NULL OR s.subcategory=btrim(p_subcategory))\n AND (nullif(btrim(p_country),'') IS NULL OR lower(s.country)=lower(btrim(p_country)))\n AND (nullif(btrim(p_city),'') IS NULL OR lower(s.city)=lower(btrim(p_city)))\n AND (query='' OR NOT EXISTS(SELECT 1 FROM regexp_split_to_table(query,'\\s+') token\n WHERE token<>'' AND position(token IN lower(concat_ws(' ',s.title,s.description,s.category,s.subcategory,s.country,s.city,s.location)))=0))),\n page AS(SELECT * FROM candidates ORDER BY published_at DESC,created_at DESC,id LIMIT p_result_limit OFFSET p_result_offset)\n SELECT (SELECT count(*) FROM candidates),coalesce((SELECT jsonb_agg(service_publication_private.public_fields(p)\n ORDER BY p.published_at DESC,p.created_at DESC,p.id) FROM page p),'[]'::jsonb) INTO total,items;\n RETURN jsonb_build_object('schema_version',1,'items',items,'total_count',total::text,'result_limit',p_result_limit,\n 'result_offset',p_result_offset,'has_more',p_result_offset+jsonb_array_length(items)<total,\n 'next_offset',CASE WHEN p_result_offset+jsonb_array_length(items)<total THEN p_result_offset+jsonb_array_length(items) ELSE NULL END);\nEND $function$\n"
+      },
+      "acl": [
+        {
+          "grantee": "anon",
+          "grantor": "postgres",
+          "grantable": false,
+          "privilege": "EXECUTE"
+        },
+        {
+          "grantee": "authenticated",
+          "grantor": "postgres",
+          "grantable": false,
+          "privilege": "EXECUTE"
+        },
+        {
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "grantable": false,
+          "privilege": "EXECUTE"
+        }
+      ]
+    }
+  ],
+  "before": "f62e31856c664d3d5ac92506b1d652cd30f499a9ce661ed5a26b5b729aaed281",
+  "blockAuthority": "a7533e3bf5a49fa6d3ccbbd793746bdf4cf1565c4a6d7d024c29fdd9db8a4264",
+  "account_block_authority_facts": {
+    "rls": true,
+    "owner": "postgres",
+    "rules": [],
+    "incoming": [],
+    "policies": [
+      {
+        "name": "Users can create own blocks",
+        "check": "(blocker_id = auth.uid())",
+        "roles": [
+          "authenticated"
+        ],
+        "using": null,
+        "command": "a",
+        "permissive": true
+      },
+      {
+        "name": "Users can delete own blocks",
+        "check": null,
+        "roles": [
+          "authenticated"
+        ],
+        "using": "(blocker_id = auth.uid())",
+        "command": "d",
+        "permissive": true
+      },
+      {
+        "name": "Users can view own blocks",
+        "check": null,
+        "roles": [
+          "authenticated"
+        ],
+        "using": "((blocker_id = auth.uid()) OR (blocked_id = auth.uid()))",
+        "command": "r",
+        "permissive": true
+      },
+      {
+        "name": "contact_writer_lock",
+        "check": "false",
+        "roles": [
+          "selqiro_listing_contact_writer_v1"
+        ],
+        "using": "true",
+        "command": "w",
+        "permissive": true
+      },
+      {
+        "name": "contact_writer_read",
+        "check": null,
+        "roles": [
+          "selqiro_listing_contact_writer_v1"
+        ],
+        "using": "true",
+        "command": "r",
+        "permissive": true
+      }
+    ],
+    "triggers": [],
+    "pair_index_ready": true,
+    "primary_id_ready": true
+  },
+  "after": "d3c84d6f27b060190000dcf0463582c269534e8eda399c22a7c25c89386ec65e",
+  "guard_names": [
+    "installer",
+    "actor_roles",
+    "hosted_context_ready",
+    "retained_release",
+    "category_functions",
+    "category_structure",
+    "category_delete_effects",
+    "service_delete_effects",
+    "retained_category_authority",
+    "retained_link_authority",
+    "retained_horse_categories",
+    "retained_service_categories",
+    "api_roles_and_entrypoints",
+    "service_dates",
+    "retained_activity",
+    "account_block_authority"
+  ],
+  "dependencies_sha256": "b8bad4c1a5ee330ddf972ba6badd4588e5dd5bed948f6f4d699ff50829fa9403",
+  "modules_sha256": "1c2fab3754c4b9127646ad981934f86ad0931eafdc4cfabaed165244a9fed43d",
+  "modules": {
+    "01_state.sql": "f695f126312d1c47e5c0a19aaa92a071afe37c0c2c8e4614cb98e1eb62e13feb",
+    "02_target.sql": "83cd2c06b3476c08e2ddc394a81e1ec5dc25e602b5b7841866feae3456733278",
+    "03_reads.sql": "234e86680639cca9a74259fecb392709aff83dc8eb6d2bc5e0eb36273143c55c",
+    "04_actions.sql": "f4ac5a672a3713d8e4f96743fac1fff7da8262ece52ed70e20eb5d289d7d60c5",
+    "05_search_ordinary_v1.sql": "950cb9e7b01b9105858b2c349af91b04f6a70a72fb695f19edc180fdfcdbe8e3",
+    "06_search_ordinary_v2.sql": "4334bab350c706a8e34741203f72df9354763f87ffb6031d65bb23e0fc23bd9c",
+    "07_search_marketplace.sql": "a647b49b49d11c3c75a12582012438b651fd687e48dc9e5201dae9590c774c4b",
+    "08_search_services.sql": "4a5a6917751d13166bde9be1f026fb44afa9ab0292c8a7455cff58e7a64f7337",
+    "09_public_profile.sql": "3ab2b9fe27269ecdedb84660902275adaa38f4adf9d5cdbd61aae7a61e5f53c5",
+    "10_legacy_search.sql": "0665925fb5b4e5ac322bf2d4e5d9d72332d4b2cb04fe3b0efde63510f991fea2",
+    "11_legacy_feed.sql": "f1d99ed0dcc738aa60c90916d18841a925d849d6afea9d245d0f32d433737138",
+    "12_block_lookup_index.sql": "8d7fd10278fe5d0646e2afb57350081e3028723de06607b325e05811303599bd"
+  },
+  "target_effective_privileges_after": [
+    {
+      "role": "anon",
+      "allowed": false,
+      "grantable": false,
+      "privilege": "DELETE"
+    },
+    {
+      "role": "anon",
+      "allowed": false,
+      "grantable": false,
+      "privilege": "INSERT"
+    },
+    {
+      "role": "anon",
+      "allowed": false,
+      "grantable": false,
+      "privilege": "MAINTAIN"
+    },
+    {
+      "role": "anon",
+      "allowed": false,
+      "grantable": false,
+      "privilege": "REFERENCES"
+    },
+    {
+      "role": "anon",
+      "allowed": false,
+      "grantable": false,
+      "privilege": "SELECT"
+    },
+    {
+      "role": "anon",
+      "allowed": false,
+      "grantable": false,
+      "privilege": "TRIGGER"
+    },
+    {
+      "role": "anon",
+      "allowed": false,
+      "grantable": false,
+      "privilege": "TRUNCATE"
+    },
+    {
+      "role": "anon",
+      "allowed": false,
+      "grantable": false,
+      "privilege": "UPDATE"
+    },
+    {
+      "role": "authenticated",
+      "allowed": false,
+      "grantable": false,
+      "privilege": "DELETE"
+    },
+    {
+      "role": "authenticated",
+      "allowed": false,
+      "grantable": false,
+      "privilege": "INSERT"
+    },
+    {
+      "role": "authenticated",
+      "allowed": false,
+      "grantable": false,
+      "privilege": "MAINTAIN"
+    },
+    {
+      "role": "authenticated",
+      "allowed": false,
+      "grantable": false,
+      "privilege": "REFERENCES"
+    },
+    {
+      "role": "authenticated",
+      "allowed": false,
+      "grantable": false,
+      "privilege": "SELECT"
+    },
+    {
+      "role": "authenticated",
+      "allowed": false,
+      "grantable": false,
+      "privilege": "TRIGGER"
+    },
+    {
+      "role": "authenticated",
+      "allowed": false,
+      "grantable": false,
+      "privilege": "TRUNCATE"
+    },
+    {
+      "role": "authenticated",
+      "allowed": false,
+      "grantable": false,
+      "privilege": "UPDATE"
+    },
+    {
+      "role": "service_role",
+      "allowed": false,
+      "grantable": false,
+      "privilege": "DELETE"
+    },
+    {
+      "role": "service_role",
+      "allowed": false,
+      "grantable": false,
+      "privilege": "INSERT"
+    },
+    {
+      "role": "service_role",
+      "allowed": false,
+      "grantable": false,
+      "privilege": "MAINTAIN"
+    },
+    {
+      "role": "service_role",
+      "allowed": false,
+      "grantable": false,
+      "privilege": "REFERENCES"
+    },
+    {
+      "role": "service_role",
+      "allowed": false,
+      "grantable": false,
+      "privilege": "SELECT"
+    },
+    {
+      "role": "service_role",
+      "allowed": false,
+      "grantable": false,
+      "privilege": "TRIGGER"
+    },
+    {
+      "role": "service_role",
+      "allowed": false,
+      "grantable": false,
+      "privilege": "TRUNCATE"
+    },
+    {
+      "role": "service_role",
+      "allowed": false,
+      "grantable": false,
+      "privilege": "UPDATE"
+    }
+  ],
+  "guard_report_optimization": {
+    "kind": "materialized-single-row-guards-v1",
+    "original_query_sha256": "13c125a290f045dadb9f5397cc557bb7834ceb6b6e39ba623f738cec49ead7dc",
+    "optimized_query_sha256": "c0bcf5e4019a7b9c4d7de2c4611c3a41f8ee9b1da6928a72dcc24bc240c164e5",
+    "original_query_bytes": 175713,
+    "optimized_query_bytes": 175856,
+    "materialized_stages": [
+      {
+        "name": "retained",
+        "insert_at": 16
+      },
+      {
+        "name": "retained",
+        "insert_at": 34
+      },
+      {
+        "name": "measured",
+        "insert_at": 32965
+      },
+      {
+        "name": "checks",
+        "insert_at": 49650
+      },
+      {
+        "name": "assessed",
+        "insert_at": 85829
+      },
+      {
+        "name": "measured",
+        "insert_at": 113446
+      },
+      {
+        "name": "checks",
+        "insert_at": 156677
+      },
+      {
+        "name": "assessed",
+        "insert_at": 158968
+      },
+      {
+        "name": "measured",
+        "insert_at": 166263
+      },
+      {
+        "name": "checks",
+        "insert_at": 173968
+      },
+      {
+        "name": "assessed",
+        "insert_at": 174714
+      }
+    ],
+    "strict_one_row_gates": [
+      "before",
+      "apply",
+      "after"
+    ],
+    "null_predicates_fail_closed": true,
+    "module_ddl_sha256": "1c2fab3754c4b9127646ad981934f86ad0931eafdc4cfabaed165244a9fed43d",
+    "sql_sha256": {
+      "preflight": "e815e7dc3b9909af2e3f49751850bbffa93dcce2c4f694479aa70302154e390c",
+      "apply": "cbbdadecbc611c9af2b2f828871436fc27fea10ade9f8cd5c4ad2b8f71c3787a",
+      "verify": "e815e7dc3b9909af2e3f49751850bbffa93dcce2c4f694479aa70302154e390c"
+    }
+  }
+}

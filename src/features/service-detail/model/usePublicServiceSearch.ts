@@ -10,11 +10,12 @@ const empty = (key: string): State => ({key, page: null, firstOffset: 0, origins
 const offsetValue = (value: number | undefined) => Number.isInteger(value) && (value ?? 0) >= 0 && (value ?? 0) <= 1_000_000 ? value ?? 0 : 0;
 
 export function usePublicServiceSearch(input: ServiceSearchInput, options: {
-  enabled?: boolean; restoreOffset?: number; targetOffset?: number; restorationKey?: string;
+  enabled?: boolean; restoreOffset?: number; targetOffset?: number; restorationKey?: string; audience?: string;
 } = {}) {
   const enabled = options.enabled !== false, restoreOffset = offsetValue(options.restoreOffset);
   const targetOffset = Math.min(restoreOffset, offsetValue(options.targetOffset)), restorationKey = options.restorationKey ?? "";
-  const key = JSON.stringify(input), version = useRef(0), abort = useRef<AbortController | null>(null), live = useRef(false);
+  const inputKey = JSON.stringify(input), key = `${options.audience ?? "public"}|${inputKey}`;
+  const version = useRef(0), abort = useRef<AbortController | null>(null), live = useRef(false);
   const current = useRef<State>(empty(key));
   const [state, setState] = useState<State>(() => empty(key)), [retryNumber, setRetryNumber] = useState(0);
   const set = useCallback((value: State) => {current.current = value; setState(value);}, []);
@@ -29,13 +30,13 @@ export function usePublicServiceSearch(input: ServiceSearchInput, options: {
     set(empty(key));
     const timer = window.setTimeout(() => {void (async () => {
       try {
-        const result = await readPublicServiceWindow(JSON.parse(key) as ServiceSearchInput,
+        const result = await readPublicServiceWindow(JSON.parse(inputKey) as ServiceSearchInput,
           restoreOffset, targetOffset, controller.signal, isCurrent);
         if (isCurrent()) set({key, ...result, loading: false, error: false});
       } catch {if (isCurrent()) set({...empty(key), loading: false, error: true});}
     })();}, 250);
     return () => {live.current = false; version.current += 1; controller.abort(); window.clearTimeout(timer);};
-  }, [key, retryNumber, set, enabled, restoreOffset, targetOffset, restorationKey]);
+  }, [key, inputKey, retryNumber, set, enabled, restoreOffset, targetOffset, restorationKey]);
 
   const loadPage = useCallback(async (direction: "previous" | "next") => {
     const before = current.current;
@@ -46,7 +47,7 @@ export function usePublicServiceSearch(input: ServiceSearchInput, options: {
     abort.current?.abort(); const controller = new AbortController(); abort.current = controller;
     set({...before, loading: true, error: false});
     try {
-      const page = await searchPublicServices(JSON.parse(key) as ServiceSearchInput, offset, controller.signal);
+      const page = await searchPublicServices(JSON.parse(inputKey) as ServiceSearchInput, offset, controller.signal);
       if (!live.current || ticket !== version.current || controller.signal.aborted) return;
       const origins = new Map(before.origins), extra = page.items.filter(item => !origins.has(item.id));
       for (const item of extra) origins.set(item.id, offset);
@@ -55,7 +56,7 @@ export function usePublicServiceSearch(input: ServiceSearchInput, options: {
       set({key, page: {...(direction === "previous" ? before.page : page), items}, origins,
         firstOffset: direction === "previous" ? offset : before.firstOffset, loading: false, error: false});
     } catch {if (live.current && ticket === version.current && !controller.signal.aborted) set({...before, loading: false, error: true});}
-  }, [key, set, enabled]);
+  }, [key, inputKey, set, enabled]);
   const visible = enabled && state.key === key ? state : empty(key);
   return {...visible, serviceOffset: (id: string) => visible.origins.get(id) ?? visible.firstOffset,
     loadMore: () => loadPage("next"), loadPrevious: () => loadPage("previous"), retry: () => setRetryNumber(value => value + 1)};

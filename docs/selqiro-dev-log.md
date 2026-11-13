@@ -1,3 +1,109 @@
+# 13.11.2026 — taastaja 14:16 raporti ülevaatus
+
+Ülevaatus on eraldi failipakis, mitte Maci hoidlasse kantud muudatus.
+Uus raport fe924a… seob e0b755… manifesti ja vana 4df… katse.
+Kõik 122 preimage'i ning 1607 indexikirjet vastavad 955c935 alusele.
+Apply lõpetas 80,614 sekundil exit 1; 180 s piir ei täitunud. Eraldi verify
+õnnestus 18,934 sekundiga ja andis absent, 16/16 true ning muutmata invariandid.
+Source/build/commit/push etapini ei jõutud. Kadunud 207 B stdout'i tõttu
+puudub täpne veapõhjus; stderr-only SQLSTATE lugeja ei säilitanud stdout-viga.
+Järgmine samm on olemasoleva Postgres-veakirje lugemine täpse ajavahemikuga.
+Väljastatud pakke, allikaid, SQL-i ega kasutaja päevikuid ei muudetud.
+
+## Varasem päevik säilib allpool bait-baidilt
+
+<!-- SELQIRO_PROVIDER_CONTROLS_RECOVERY_PREPARED_20261113 -->
+## 13.11.2026 — värske absent-tõend ja eraldi kontrollitud jätk
+
+Taastaja sihitud kontrollid: 14 transpordi + 18 päeviku/olekumasina + 8 töövoo/katkestuse katset, kokku 40/40 PASS. Uuendaja lõpliku manifesti tarnevoo tõend väljastatakse paki kontrollid/ kaustas; Maci/pilve tulemust see ei asenda.
+
+Maci teise raporti SHA256 on
+4df69e2947e853371aaed548c70571c254e28b226552d9eb2d49e80139ad4a5a.
+Vana päevik säilitas esimesed viis käsku ja lisas kaks repository_read'i
+ning ühe eduka preflight'i: absent, kõik 16 kaitset olid tõesed, samad invariandid.
+Peatumine SQL_PREVIOUS_ATTEMPT_NEEDS_REVIEW oli oodatud korduskatse tõke.
+Portaali lähtefailid, build, staging, commit ja push ei alanud.
+
+Uus eraldi jätkupakk kasutab oma format/release/päevikut ning täpset seost
+selle vana raportiga. Algne journal/intent jääb baitide kaupa muutmata ja
+selle olemasolevat lukku hoitakse kogu uue jooksu jooksul. Värske kontroll
+lubab kuni ühe uue apply-katse; tundmatut tulemust automaatselt ei korrata.
+
+Runtime, 24h leping, SQL, õigused ja testiallikad ei muutu. Muutmata SQL-i
+luku all tehtav lugemine katab vahepeal valmis saanud vana katse. CLI väline
+read/apply piir on eksplitsiitselt 90 s / 180 s; serveri 20 s / 45 s / luku 3 s jäävad.
+Uus transport lisab kestuse, etapi ja ohutu veakoodi. See ei väida algpõhjuse
+lõplikku tuvastamist. Sihitud uued kontrollid on paki kontrollid/ kaustas;
+varasemaid lõppenud rakenduse/SQL-teste ei korrata.
+
+Üks järgmine käsk on docs/continuity/HOSTED_PORTAL.md-s. Jätkupakk on siin
+ette valmistatud; Maci käivitust, uut DB tulemust, commit/push'i ega uut
+Verceli valmimist veel ei ole. Allolev algne ettevalmistus säilib ajaloona.
+
+---
+
+<!-- SELQIRO_PROVIDER_CONTROLS_PREPARED_20261113 -->
+## 13.11.2026 — 24 tunni peitmise ja eraldi blokeerimise lähtekood valmis
+
+Uus moodul on ette valmistatud vastuvõetud `955c935` alusele. Pakkuja menüüd,
+Minu ala eraldi haldusloendid, serveri enne-lehekülge filter ja varasema
+`user_blocks` registriga ühendus on lähtekoodis. Konto/vaate vahetus ja
+hilinenud vastused on piiratud; tundmatut kirjutust ei korrata automaatselt.
+
+Build ning 37 kliendikatset on läbitud. SQL-i 24 runtime-, 49 paigaldus- ja
+11 päringuplaani kontrolli on läbitud sünteetilises PostgreSQL/WASM-is.
+Päris brauserikatse peatus keskkonnapiiril ja ootab uue veebiversiooni
+kasutuskäiku. Maci kirjutust, pilve SQL-i, commit/push'i ega uut deployment'i
+siin tehtud ei ole. Paki tarne- ja täpsed sisenditõendid on `kontrollid/` all.
+
+Üks praegune seis on `docs/continuity/CURRENT_STATE.json`, üks jätkamiskäsk
+`docs/continuity/HOSTED_PORTAL.md`. Mooduli arhitektuur:
+`docs/architecture/provider-controls-v1.md`. Allolevad dateeritud otsused ja
+ettevalmistus-/NEXT-kirjed säilivad muutmata ajaloona.
+
+---
+
+<!-- SELQIRO_PROVIDER_CONTROLS_CONFIRMED_20261113 -->
+## 13.11.2026 — peitmine 24 tunniks ja eraldi püsiv blokeerimine
+
+Kasutaja kinnitas ajutise peitmise kestuseks 24 tundi. See asendab varasema
+7 päeva soovituse. Peitmine on vaataja konto otsingueelistus ühe pakkuja
+identiteedi suhtes: automaatne lõpp, kohene tagasivõtmine ja Minu ala haldus.
+Sõnumid ja teadlikult avatud profiil/detail säilivad tavapäraste õigustega.
+
+Püsiv blokeerimine jääb eraldi user_blocks-i toiminguks varasema lepingu
+alusel: nähtavuse piirang, mõlemapoolne saatmiskeeld, vestlusajaloo säilimine
+ja ainult blokeerija eemaldatav blokeering. Peitmise aegumine blokeeringut
+ei tühista. Praeguse runtime'i ja haldusvaate täielik ühendus vajab kontrolli.
+
+Leping: docs/continuity/VIEWER_PROVIDER_CONTROLS_20261113.md.
+Üks praegune seis: docs/continuity/CURRENT_STATE.json ja genereeritud üleandmine.
+Teenuste kehtivuse 955c935 paigaldus/vastuvõtt säilib. Käesolev samm uuendab
+dokumente; uut runtime'i, SQL-i, build'i, Maci kirjutust, commit/push'i ega
+deployment'i ei tehtud. Delta läheb järgmise sisulise lähtepakiga kaasa.
+Allolevad dateeritud 7 päeva soovitused ja NEXT-kirjed on ajalugu.
+
+---
+
+<!-- SELQIRO_SERVICE_ACTIVITY_ACCEPTED_20261111 -->
+## 11.11.2026 — teenuse kehtivus ja pikendamine on paigaldatud ning vastu võetud
+
+Maci lõppraport kinnitab SQL-i järelkontrolli, build'i ja push'i commit'iga
+955c935fa4e901a8b81885e2dcd18d966d651810; lõpp 20:35:24 Europe/Tallinn.
+Sama 955c935 Verceli Ready / Production on kasutaja pildil.
+Kasutaja kinnitas pikendamist ning teenuse ja rubriigiseoste säilimist
+avalikul profiilil. Puhastusteenuse lõpp muutus 11.11.2027 20:34 → 20:46.
+
+Autoriteetne seis: docs/continuity/CURRENT_STATE.json.
+Täpne vastuvõtt: docs/continuity/SERVICE_ACTIVITY_ACCEPTED_20261111.md.
+Lõpetatud paigaldajat, SQL-i, build'i ega kasutuskatset ei korrata.
+See dokumentide delta ootab järgmist sisulist lähtepakki; uut Maci kirjutust
+ega commit'i siin ei tehtud. Järgmine soovitus on ajutine pakkuja peitmine
+otsingust; 7 päeva on ettepanek ja selle mooduli kood on koostamata.
+Allolevad ettevalmistuse ja varasemate NEXT-ide kirjed säilivad ajaloona.
+
+---
+
 <!-- SELQIRO_SERVICE_ACTIVITY_PREPARED_20261111 -->
 ## 11.11.2026 — teenuse üheaastane kehtivus on uues lähtepaketis valmis
 
@@ -1493,3 +1599,104 @@ olemasolevat runtime'i, build'i, SQL-i, Git-push'i ega kasutuskatset ei korratud
 CURRENT_STATE ja sellest genereeritud üleandmine, HOSTED_PORTAL ning käesolev
 päevik on uuendatud uues dokumentide jätkupakis. Varasemad pikad dokumendid,
 päevik ja väljastatud ZIP säilivad bait-baidilt.
+
+
+<!-- SELQIRO_PROVIDER_CONTROLS_READONLY_PROBE_PREPARED_20261113 -->
+## 13.11.2026 — logi katkestussündmus ja eraldi ainult lugemise kontroll
+
+Uus olemasoleva Supabase logi eksport `supabase_logs.json` on 251119 baiti,
+SHA256 `51ada5cd565387c6ea73cd50366ee0cc70fd39a93da1d152b8075af4e6c9bbed`.
+Kõik 11 rida vaadati läbi. PostgreSQL 57014 `canceling statement due to user request`
+on 14:16:15.901 Europe/Tallinn, 0,143 s enne recovery CLI exit 1 lõpu ajatemplit.
+Algatajat ega otsest sessiooni seost eksport ei sisalda; inimese tegevust sellest
+ei järeldata. Kohalik 180 s piir ei täitunud. Kaks plan-päist säilitavad kestused,
+kuid kolm pikka event_message välja on 80003 märki ning lõpevad kärpemärgiga.
+Kogu nähtav SQL vastab muutmata apply algusele; tegelik plaan ja JIT-andmed puuduvad.
+
+Recovery 14:16:35 raport fe924a… jääb viimaseks esitatud Maci tõendiks:
+verify absent, kõik 16 kaitset tõesed, samad invariandid; selle uuendaja
+source/build/commit/push etapid ei alanud. Algne 955c935 teenuste kehtivuse
+vastuvõtt säilib. Uut peitmise/blokeerimise paigaldust ega veebikasutust ei väideta.
+
+Ette on valmistatud eraldi `selqiro-pakkuja-peitmine-kontroll-20261113` pakk.
+See teeb kolm READ ONLY päringut: praegune metaandmestik ja advisory-luku kokkuvõte,
+muutmata kontrolli SELECT-i EXPLAIN ANALYZE FALSE plaan ning sama SELECT-i
+lugemine SET LOCAL jit=off seadega. Kõik 16 kaitset, räsivalemid, invariandid ja
+hosted-konteksti leping säilivad. SQL statement_timeout on 20 s, CLI piir 90 s;
+globaalseid seadeid, paigaldusskeemi, portaali lähtekoodi ega Giti ei muudeta.
+JIT-i mõju jääb hüpoteesiks, mida uus vaatlus aitab uurida.
+
+Skript peab alles kontrollima mõlema varasema päeviku täpseid baite, räsi,
+inode'i ja metaandmeid ning hoidma olemasolevad lukud ainult lugemiseks avatuna.
+Maci järelmõõtmist pole veel tehtud. Iga jooks saab oma uue privaatse nonce-kausta,
+aruande unikaalse Downloads-koopia ja täpse `SAADA SEE FAIL` rea/Finderi valiku.
+Viimase salvestuse vea korral märgitakse säilinud raport võimaliku varasema etapina.
+
+Sihitud kohalike kontrollide täpsed tulemused ja sisendräsid: vt checks.
+Vanu rakenduse build'e, äriteste, paigaldajaid ega teenuseühendusi ei korratud.
+See diagnostika ei muuda rakenduse lähtekoodi ega vaja uut rakenduse buildi.
+Uut skripti pole Macis ega pilves käivitatud. Järgmine üks käsk on uues
+`docs/continuity/HOSTED_PORTAL.md` failis; saadetakse täpselt selle jooksu raport.
+Algset ega recovery `--publish` käsku praegu ei korrata ning vanu faile ei kustutata.
+
+Need on uue eraldi kontrollpaki dokumendid, mitte Maci/Giti dokumentatsioonimuudatus.
+CURRENT_STATE uuendati ja üleandmine genereeritakse üksnes sellest seisukirjest.
+Kõik selle sissekande eelnevad 119426 päevikubaiti säilivad muutmata; senised
+NEXT-, oote- ja avaldamisjuhised on ajalugu. Väljastatud varasemaid pakke ei muudeta.
+
+
+<!-- SELQIRO_PROVIDER_CONTROLS_OPTIMIZED_PREPARED_20261113 -->
+## 13.11.2026 — lugemiskontroll vastu võetud, kontrollpäringu parandus ette valmistatud
+
+Maci 15:26:39 raport (29868 B, SHA256
+`3415a99e13217300291e09bce19cdcc583f92f4f373601b8decc8e0bc8857f0f`)
+lõppes complete_readonly olekus. Kõik kuus lugemiskutset õnnestusid.
+Pilve seis on endiselt absent ja kõik 16 kaitset tõesed; vastus võrdub
+varasemate raportite kontrolliga. Algse ja recovery-päeviku täielikud baidid,
+räsid, inode ja metaandmed säilisid mõlema hoitud lugemisluku all. See on
+Maci jooksu saadud tulemus, mitte enam üksnes paigaldaja koodi lubadus.
+
+Maci main/HEAD on 955c935 ja git status puhas. Origin-konfiguratsioon vastab
+kinnitatud sihile; probe ei teinud uut täielikku 1607 faili/indexi räsikontrolli
+ega GitHubi remote-main võrdlust. DB/source/Storage kirjutusi, buildi,
+commit/push’i, deployment’i ega paigalduse jätkamist ei toimunud.
+Viimane vastu võetud veebiversioon on teenuste aastase kehtivuse 955c935.
+
+Metadata, plaani ja kontrolllugemise CLI kestused olid 7,257 / 14,471 / 13,363 s.
+JIT oli juba konfiguratsioonis off. ANALYZE FALSE plaanil oli 4355 sõlme,
+733 initplan’i, 457 subplan’i ja planeerimisaeg 445,744 ms; päringut see ei
+täitnud. 63 veeru struktuurikuju vastas fixture’ile, kuid kolme veeru ACL-i
+olemasolu erines. Kogu skeemi/õiguste võrdsust ega JIT-ist tingitud varasemat
+katkestust ei väideta. Varasema logi 57014 sündmus on recovery tõrkega ajaliselt
+kooskõlas; katkestaja päritolu jäi ekspordis määramata.
+
+Uus eraldi parandus kasutab sama 122 tee delta ja kõigi 12 SQL-runtime-mooduli
+muutmata baite. Muutuvad kontrollpäringu koostamine (11 CTE materialiseerimine),
+range ühe rea / true tulemust nõudev kolm tehinguväravat, tarne kaitsed ja
+viis jooksvat dokumenti. Kataloogi faktid, räsivalemid, 16 kaitset ning
+24 tunni peitmise ja eraldi blokeerimise tooteleping säilivad.
+Uue SQL-i 11/11 sihitud kontrolli (14 range värava alajuhtu) on PASS; sama
+disposable keskkonna plaan vähenes 4623 sõlmelt 1075-le. See ei ole tootmise
+plaani uus mõõtmine ega täitmisaja võit. Täpsed kontrollid, sisendräsid ja piirid on
+uue paki kontrollid/ kaustas; vanu rakenduse teste ega paigaldajaid ei korrata.
+
+Uue väljaande oma päevik seob ühe uue katse kõigi kolme täpselt läbi vaadatud
+raportiga. Kõiki kolme varasemat päevikut hoitakse kogu jooksu jooksul
+O_RDONLY lukuga ning nende baite kontrollitakse uuesti. Täpse värske absent'i
+ja oma varasema kirjutuseta seis lubab ühe apply-katse; oma intent'i ei
+taasesitata. Applied nõuab eraldi verify'd. Alles verified-tulemusest võivad
+alata source/build/commit/push; sama advisory-lukk ja värske täielik Git-kontroll
+kaitsevad vahepeal muutunud seisu eest. Raport on privaatne unikaalne Downloads-
+koopia, mille täpne tee kuvatakse SAADA SEE FAIL real ja valitakse Finderis.
+
+See uus parandus on ette valmistatud, Macis/pilves käivitamata. Üks järgmine
+käsk on uues HOSTED_PORTAL.md-s: parandus-paki uuenda.py --publish. Peatumisel
+saadetakse selle jooksu täpne raport; vanu originaal-/recovery-käske ega
+lõpetatud probe’i automaatselt ei korrata. Kontosid, sisu, fotosid, sõnumeid,
+päevikuid, intente ja varasemaid raportikoopiaid ei kustutata.
+
+CURRENT_STATE on uuendatud, üleandmine genereeritakse olemasoleva
+render_current_handoff.py abil ainult sellest seisukirjest. Kõik selle
+sissekande eelnevad 122339 väljastatud probe-paki päevikubaiti säilivad muutmata.
+Väljastatud pakid ja raportid ning ajaloodokumentide baidid säilivad; nende
+vanad ootel-, NEXT- ja käivitusjuhised ei ole praegune tööjärg.

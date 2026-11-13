@@ -5,8 +5,10 @@ import { currentServiceUrl, saveServiceReturnContext, type ServiceReturnContext 
 import { useServiceReturnSnapshot } from "./useServiceReturnSnapshot";
 import { useServiceReturnRestoration } from "./useServiceReturnRestoration";
 import { emptyServiceFilters, readServiceFilters, serviceFiltersUrl, serviceSearchInput, type ServiceDiscoveryFilters } from "./serviceDiscoveryLocation";
+import { useViewerReadScope } from "../../../shared/provider-controls/useViewerReadScope";
 
 export function useServiceDiscoveryView() {
+  const audience = useViewerReadScope("discovery");
   const snapshot = useServiceReturnSnapshot("services", "/v2/services");
   const [view, setView] = useState<{filters: ServiceDiscoveryFilters; visit: number; context: ServiceReturnContext | null}>(
     {filters: emptyServiceFilters(), visit: -1, context: null});
@@ -19,10 +21,10 @@ export function useServiceDiscoveryView() {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setView({filters, visit: snapshot.visit, context: snapshot.context});
   }, [snapshot.ready, snapshot.visit, snapshot.context]);
-  const ready = snapshot.ready && view.visit === snapshot.visit;
+  const ready = snapshot.ready && view.visit === snapshot.visit && audience.ready;
   const results = usePublicServiceSearch(serviceSearchInput(view.filters), {
     enabled: ready, restoreOffset: view.context?.loadedOffset ?? 0, targetOffset: view.context?.targetOffset ?? 0,
-    restorationKey: String(view.visit),
+    restorationKey: String(view.visit), audience: audience.key,
   });
   useServiceReturnRestoration({context: view.context, visit: view.visit,
     ready: ready && !results.loading && !results.error && results.page !== null,
@@ -46,5 +48,7 @@ export function useServiceDiscoveryView() {
     saveServiceReturnContext({source: "services", serviceId, cardViewportTop,
       loadedOffset: results.page.offset ?? 0, targetOffset: results.serviceOffset?.(serviceId) ?? 0});
   }
-  return {filters: view.filters, results, change, remember, clear: () => change(emptyServiceFilters())};
+  return {filters: view.filters, results: {...results, error: audience.error || results.error,
+    loading: audience.error ? false : results.loading, retry: audience.error ? audience.refresh : results.retry},
+    change, remember, clear: () => change(emptyServiceFilters())};
 }

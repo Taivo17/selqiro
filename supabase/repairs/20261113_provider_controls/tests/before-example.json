@@ -1,0 +1,45 @@
+{
+  "kind": "provider-controls-v1",
+  "state": "absent",
+  "guards": {
+    "installer": true,
+    "actor_roles": true,
+    "service_dates": true,
+    "retained_release": true,
+    "retained_activity": true,
+    "category_functions": true,
+    "category_structure": true,
+    "hosted_context_ready": true,
+    "service_delete_effects": true,
+    "account_block_authority": true,
+    "category_delete_effects": true,
+    "retained_link_authority": true,
+    "api_roles_and_entrypoints": true,
+    "retained_horse_categories": true,
+    "retained_category_authority": true,
+    "retained_service_categories": true
+  },
+  "invariants": {
+    "existing_authority": "4268db066a095aa65cd14e99578970e3ac02437e63462ca9caa9bea9fbe3cd30",
+    "existing_functions": "b766d7096112c331564cc73ce1c48a0b121637695312d0f98cde32dbe164016f",
+    "immutable_structure": "b4a4b3d409c65f0e088dab186db11c0fc4639387c5ba58c3ae4322a6dd99e559"
+  },
+  "recognized": true,
+  "fingerprints": {
+    "capability": "f62e31856c664d3d5ac92506b1d652cd30f499a9ce661ed5a26b5b729aaed281",
+    "dependencies": "b8bad4c1a5ee330ddf972ba6badd4588e5dd5bed948f6f4d699ff50829fa9403"
+  },
+  "hosted_context": {
+    "release_id": "listing-publication-hosted-preview-v1",
+    "instance_id": "2d088814-0900-448a-a9d1-7b05470cb1d2",
+    "project_ref": "vyjletlmwoiwxsnsunlm",
+    "cleanup_mode": "held",
+    "release_ready": true,
+    "storage_authority_version": "source-part-rfc3986-v1"
+  },
+  "ready_to_apply": true,
+  "schema_version": 1,
+  "dependencies_ok": true,
+  "capability_absent": true,
+  "capability_present": false
+}

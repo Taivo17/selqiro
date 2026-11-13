@@ -16,6 +16,8 @@ import { usePublicProfile } from "../model/usePublicProfile";
 import PublicProfileListingsSection from "./PublicProfileListingsSection";
 import PublicProfileProductShowcasesSection from "./PublicProfileProductShowcasesSection";
 import PublicProfileServicesSection from "./PublicProfileServicesSection";
+import ProviderControlsBoundary from "../../viewer-provider-controls/components/ProviderControlsBoundary";
+import ProviderMenu from "../../viewer-provider-controls/components/ProviderMenu";
 
 const updates = (uiLanguage: Language) => { const t = (key: keyof typeof publicUiMessages.en, params?: TranslationParams) => getCatalogTranslation(uiLanguage, publicUiMessages, key, params); return [
   {
@@ -78,6 +80,9 @@ function EmptyState() {
 }
 
 export default function PublicProfilePage({ slug }: { slug: string }) {
+  return <ProviderControlsBoundary><PublicProfileContent slug={slug} /></ProviderControlsBoundary>;
+}
+function PublicProfileContent({slug}: {slug: string}) {
   const { language: uiLanguage, t } = useV2Translation(publicUiMessages);
 
   const { profile, loading, error } = usePublicProfile(slug);
@@ -205,6 +210,7 @@ export default function PublicProfilePage({ slug }: { slug: string }) {
             </div>
 
             <div className="flex flex-wrap gap-3 pt-0 md:pt-8">
+              {profile.identityId ? <ProviderMenu target={{type: "profile", id: profile.identityId}} name={profile.displayName} allowHide={false} /> : null}
               <button className="rounded-full bg-black px-6 py-3 text-sm font-black text-white shadow-sm">
                 {t("message")} </button>
               <button className="rounded-full border border-neutral-200 bg-white px-6 py-3 text-sm font-black shadow-sm">

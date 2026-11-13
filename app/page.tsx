@@ -2,83 +2,13 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
-import { supabase } from "../lib/supabase";
+import { useLegacyMarketplace } from "../src/features/legacy-discovery/model/useLegacyMarketplace";
+import type { LegacyListing as Listing } from "../src/entities/listing/model/legacyDiscoveryTypes";
 import {
   CATEGORY_TREE,
   getCategoryLabel,
 } from "../lib/categories";
 import { getTranslation } from "../lib/i18n/useTranslation";
-
-const PAGE_SIZE = 30;
-
-type ListingImage = {
-  id: string;
-  thumb_url?: string | null;
-  medium_url?: string | null;
-  original_url?: string | null;
-  is_primary?: boolean | null;
-  sort_order?: number | null;
-};
-
-type Listing = {
-  id: number;
-  user_id?: string | null;
-  identity_id?: string | null;
-  seller_name?: string | null;
-  seller_slug?: string | null;
-  seller_type?: string | null;
-  is_premium?: boolean | null;
-  distance_km?: number | null;
-  created_at?: string;
-  title: string;
-  description: string;
-  price: string;
-  price_amount?: number | null;
-  image?: string | null;
-  status?: "active" | "paused" | "sold";
-  active_until?: string | null;
-  category?: string | null;
-  condition?: string | null;
-  location?: string | null;
-  country?: string | null;
-  city?: string | null;
-  listing_lat?: number | null;
-  listing_lng?: number | null;
-  subcategory?: string | null;
-  search_text?: string | null;
-  details?: Record<string, unknown> | null;
-  listing_images?: ListingImage[];
-  listing_translations?: ListingTranslation[];
-};
-
-type ListingTranslation = {
-  language: string;
-  title: string;
-  description?: string | null;
-  ai_summary?: string | null;
-  status?: string | null;
-};
-
-type ProfileRow = {
-  id: string;
-  store_slug?: string | null;
-  store_name?: string | null;
-  is_premium?: boolean | null;
-  home_country?: string | null;
-  home_city?: string | null;
-  home_lat?: number | null;
-  home_lng?: number | null;
-  language?: string | null;
-};
-
-function parsePriceAmount(value: string) {
-  const normalized = value
-    .replace(",", ".")
-    .replace(/[^0-9.]/g, "");
-
-  const parsed = Number(normalized);
-  return Number.isFinite(parsed) ? parsed : null;
-}
 
 function parsePrice(value?: string | null) {
   if (!value) return null;
@@ -111,30 +41,6 @@ function calculateDistanceKm(
       Math.sin(dLng / 2);
 
   return earthRadiusKm * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-}
-
-async function geocodeCity(country: string, city: string) {
-  const response = await fetch("/api/location/geocode", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      country,
-      city,
-    }),
-  });
-
-  const data = await response.json();
-
-  if (!data.success) {
-    return null;
-  }
-
-  return {
-    lat: data.lat,
-    lng: data.lng,
-  };
 }
 
 function getTranslatedListingText(
@@ -175,12 +81,6 @@ function getListingImage(item: Listing) {
 }
 
 export default function MarketplacePage() {
-  const [listings, setListings] = useState<Listing[]>([]);
-  const [profilesByUserId, setProfilesByUserId] = useState<
-    Record<string, ProfileRow>
-  >({});
-  const [currentProfile, setCurrentProfile] = useState<ProfileRow | null>(null);
-  const [blockedUserIds, setBlockedUserIds] = useState<Set<string>>(new Set());
   const [search, setSearch] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("all");
   const [subcategoryFilter, setSubcategoryFilter] = useState("all");
@@ -190,15 +90,12 @@ export default function MarketplacePage() {
   const [priceMax, setPriceMax] = useState("");
   const [locationFilter, setLocationFilter] = useState("");
   const [searchNearCity, setSearchNearCity] = useState("");
-  const [searchNearCoords, setSearchNearCoords] = useState<{
-    lat: number;
-    lng: number;
-  } | null>(null);
   const [nearOnly, setNearOnly] = useState(false);
   const [showMoreFilters, setShowMoreFilters] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const [loadingMore, setLoadingMore] = useState(false);
-  const [hasMore, setHasMore] = useState(true);
+  const { listings, currentProfile, searchNearCoords, loading, loadingMore, hasMore, loadMore } = useLegacyMarketplace({
+    nearOnly, searchNearCity, filterKey: JSON.stringify([search, categoryFilter, subcategoryFilter,
+      detailCategoryFilter, conditionFilter, priceMin, priceMax, locationFilter]),
+  });
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
 
   const resetFilters = () => {
@@ -213,294 +110,6 @@ export default function MarketplacePage() {
     setNearOnly(false);
     setShowMoreFilters(false);
   };
-
-  const loadCurrentProfile = async () => {
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-
-    if (!user?.id) {
-      setCurrentProfile(null);
-      return;
-    }
-
-    const { data, error } = await supabase
-      .from("profiles")
-      .select("id, language")
-      .eq("id", user.id)
-      .maybeSingle();
-
-    const { data: locationRows, error: locationError } = await supabase.rpc(
-      "get_marketplace_identity_location"
-    );
-
-    const identityLocation = Array.isArray(locationRows)
-      ? locationRows[0]
-      : locationRows;
-
-    const { data: blockRows } = await supabase
-      .from("user_blocks")
-      .select("blocker_id, blocked_id")
-      .or(`blocker_id.eq.${user.id},blocked_id.eq.${user.id}`);
-
-    const blockedIds = new Set<string>();
-
-    (blockRows || []).forEach((row: any) => {
-      if (row.blocker_id === user.id && row.blocked_id) blockedIds.add(row.blocked_id);
-      if (row.blocked_id === user.id && row.blocker_id) blockedIds.add(row.blocker_id);
-    });
-
-    setBlockedUserIds(blockedIds);
-
-    if (error) {
-      console.error("Error loading current profile:", error);
-      return;
-    }
-
-    if (locationError) {
-      console.error("Error loading marketplace identity location:", locationError);
-    }
-
-    setCurrentProfile({
-      ...((data || {}) as ProfileRow),
-      home_country: identityLocation?.country || null,
-      home_city: identityLocation?.city || null,
-      home_lat: identityLocation?.lat || null,
-      home_lng: identityLocation?.lng || null,
-    } as ProfileRow);
-  };
-
-  const loadProfiles = async (items: Listing[]) => {
-    const userIds = Array.from(
-      new Set(
-        items
-          .map((item) => item.user_id)
-          .filter((value): value is string => Boolean(value))
-      )
-    ).filter((id) => !profilesByUserId[id]);
-
-    if (userIds.length === 0) return;
-
-    const { data: profileData, error: profileError } = await supabase
-      .from("profiles")
-      .select("id, store_slug, store_name, is_premium")
-      .in("id", userIds);
-
-    if (profileError) {
-      console.error("Error loading store profiles:", profileError);
-      return;
-    }
-
-    const profileMap: Record<string, ProfileRow> = {};
-    ((profileData || []) as ProfileRow[]).forEach((profile) => {
-      profileMap[profile.id] = profile;
-    });
-
-    setProfilesByUserId((prev) => ({ ...prev, ...profileMap }));
-  };
-
-  const loadMarketplace = async (from = 0) => {
-    const to = from + PAGE_SIZE - 1;
-
-    let query = supabase
-      .from("listings")
-      .select(
-        "*, listing_images(id, thumb_url, medium_url, original_url, is_primary, sort_order), listing_translations(language, title, description, ai_summary, status)"
-      )
-      .eq("status", "active")
-      .gt("active_until", new Date().toISOString())
-      .order("created_at", { ascending: false })
-      .range(from, to);
-
-    if (categoryFilter !== "all") {
-      query = query.eq("category", categoryFilter);
-    }
-
-    if (subcategoryFilter !== "all") {
-      query = query.eq("subcategory", subcategoryFilter);
-    }
-
-    if (conditionFilter !== "all") {
-      query = query.eq("condition", conditionFilter);
-    }
-
-    const minPrice = priceMin.trim() ? Number(priceMin.trim()) : null;
-    const maxPrice = priceMax.trim() ? Number(priceMax.trim()) : null;
-
-    if (minPrice !== null && Number.isFinite(minPrice)) {
-      query = query.gte("price_amount", minPrice);
-    }
-
-    if (maxPrice !== null && Number.isFinite(maxPrice)) {
-      query = query.lte("price_amount", maxPrice);
-    }
-
-    // detail category still filtered client-side for now
-
-    const searchNeedle = search.trim();
-
-    if (searchNeedle) {
-      const searchTokens = searchNeedle
-        .toLowerCase()
-        .replace(/[^\p{L}\p{N}]+/gu, " ")
-        .trim()
-        .split(/\s+/)
-        .filter(Boolean);
-
-      if (searchTokens.length > 0) {
-        const prefixQuery = searchTokens
-          .map((token) => `${token}:*`)
-          .join(" & ");
-
-        query = query.filter("search_vector", "fts(simple)", prefixQuery);
-      }
-    }
-
-    const locationNeedle = nearOnly ? "" : locationFilter.trim();
-
-    if (nearOnly && currentProfile?.home_country) {
-      query = query.eq("country", currentProfile.home_country);
-    } else if (locationNeedle) {
-      query = query.or(
-        `country.ilike.%${locationNeedle}%,city.ilike.%${locationNeedle}%,location.ilike.%${locationNeedle}%`
-      );
-    }
-
-    const nearbyCenterLat =
-      nearOnly
-        ? searchNearCoords?.lat ?? currentProfile?.home_lat ?? null
-        : null;
-
-    const nearbyCenterLng =
-      nearOnly
-        ? searchNearCoords?.lng ?? currentProfile?.home_lng ?? null
-        : null;
-
-    const useNearbyRpc =
-      typeof nearbyCenterLat === "number" &&
-      typeof nearbyCenterLng === "number";
-
-    const { data, error } = useNearbyRpc
-      ? await supabase.rpc("get_marketplace_listings_nearby", {
-          center_lat: nearbyCenterLat,
-          center_lng: nearbyCenterLng,
-          result_limit: PAGE_SIZE,
-          result_offset: from,
-        })
-      : await supabase.rpc("get_marketplace_listings", {
-          result_limit: PAGE_SIZE,
-          result_offset: from,
-        });
-
-    if (error) {
-      console.error("Error loading marketplace listings:", error);
-      if (from === 0) setListings([]);
-      return;
-    }
-
-    const loaded = ((data || []) as any[]).map((row) => ({
-      id: row.listing_id,
-      user_id: row.user_id,
-      identity_id: row.identity_id,
-      seller_name: row.seller_name,
-      seller_slug: row.seller_slug,
-      seller_type: row.seller_type,
-      is_premium: row.is_premium,
-      distance_km: row.distance_km ?? null,
-
-      title: row.title,
-      description: row.description,
-      price: row.price,
-      price_amount: row.price_amount,
-      image: row.image,
-
-      category: row.category,
-      subcategory: row.subcategory,
-      condition: row.condition,
-
-      country: row.country,
-      city: row.city,
-      location: row.location,
-      listing_lat: row.listing_lat,
-      listing_lng: row.listing_lng,
-
-      search_text: row.search_text,
-      details: row.details,
-
-      active_until: row.active_until,
-      created_at: row.created_at,
-      listing_images: [],
-      listing_translations: [],
-    })) as Listing[];
-
-    const visible = loaded.filter(
-      (item) => !item.user_id || !blockedUserIds.has(item.user_id)
-    );
-
-    if (from === 0) {
-      setListings(visible);
-    } else {
-      setListings((prev) => [...prev, ...visible]);
-    }
-
-    setHasMore(visible.length === PAGE_SIZE);
-  };
-
-
-  useEffect(() => {
-    const loadSearchNearCoords = async () => {
-      if (!searchNearCity.trim()) {
-        setSearchNearCoords(null);
-        return;
-      }
-
-      const country =
-        currentProfile?.home_country || "Estonia";
-
-      const coords = await geocodeCity(
-        country,
-        searchNearCity.trim()
-      );
-
-      setSearchNearCoords(coords);
-    };
-
-    loadSearchNearCoords();
-  }, [searchNearCity, currentProfile?.home_country]);
-
-  useEffect(() => {
-    const initialLoad = async () => {
-      setLoading(true);
-      await loadMarketplace(0);
-      setLoading(false);
-    };
-
-    loadCurrentProfile();
-    initialLoad();
-  }, [
-    search,
-    categoryFilter,
-    subcategoryFilter,
-    detailCategoryFilter,
-    conditionFilter,
-    locationFilter,
-    nearOnly,
-    currentProfile?.home_country,
-    currentProfile?.home_city,
-    currentProfile?.home_lat,
-    currentProfile?.home_lng,
-    priceMin,
-    priceMax,
-  ]);
-
-  const loadMore = async () => {
-    if (loadingMore || !hasMore) return;
-
-    setLoadingMore(true);
-    await loadMarketplace(listings.length);
-    setLoadingMore(false);
-  };
-
 
   useEffect(() => {
     const target = loadMoreRef.current;

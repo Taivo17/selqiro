@@ -13,6 +13,8 @@ import { useConversationAutoRefresh } from "./useConversationAutoRefresh";
 import { useMessagePhoto } from "./useMessagePhoto";
 import { useThreadReadWatermark } from "./useThreadReadWatermark";
 import { hasThreadGap, mergeThreadMessages } from "./threadMessages";
+import { notifyProviderControlsChanged } from "../../../shared/provider-controls/providerControlEvents";
+import { useProviderControlRevision } from "../../../shared/provider-controls/useViewerReadScope";
 
 type Draft = Readonly<{ owner: string | null; text: string; listingId: string | null; listing: ListingMessageCard | null; revision: number }>;
 type Attempt = Readonly<{ command: SendMessageCommand; revision: number }>;
@@ -20,6 +22,7 @@ const actorKey = (a: Pick<ConversationActorContext, "expectedUserId" | "expected
 
 export function useListingConversation(conversationId: string, originListingId: string | null) {
   const context = useConversationActor();
+  const controlRevision = useProviderControlRevision("visibility"), seenControlRevision = useRef(controlRevision);
   const [view, setView] = useState<MessageThread | null>(null), viewRef = useRef(view);
   const [latestPage, setLatestPage] = useState<MessageThread | null>(null);
   const [draft, setDraft] = useState<Draft>({ owner: null, text: "", listingId: originListingId, listing: null, revision: 0 });
@@ -84,6 +87,13 @@ export function useListingConversation(conversationId: string, originListingId: 
   useConversationAutoRefresh(!!context.actor, () => {
     if (context.actor && !readingNow.current && !sending.current && !actingNow.current) void load(context.actor, null, true);
   });
+  useEffect(() => {
+    if (seenControlRevision.current === controlRevision) return;
+    seenControlRevision.current = controlRevision;
+    if (context.actor && !sending.current && !actingNow.current) void load(context.actor, null, true);
+    // A preference event refreshes permissions without clearing the text/photo draft.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [controlRevision, context.actor]);
   function adoptOrigin(listingId: string) {
     const actor = context.actor, current = draftRef.current;
     replaceDraft({ owner: actor ? actorKey(actor) : null, text: "", listingId, listing: null, revision: current.revision + 1 });
@@ -174,7 +184,7 @@ export function useListingConversation(conversationId: string, originListingId: 
       if (blocked === null) await hideThread(actor.accessToken, command, actor.signal);
       else await setThreadBlocked(actor.accessToken, { ...command, blocked }, actor.signal);
       if (!context.isCurrent(actor)) return false;
-      if (blocked !== null) await load(actor);
+      if (blocked !== null) {notifyProviderControlsChanged("blocked"); await load(actor);}
       return true;
     } catch { if (context.isCurrent(actor)) setProblem(uiMessage("the_change_could_not_be_confirmed_try_again")); return false; }
     finally { actingNow.current = false; setActing(false); }

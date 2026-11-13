@@ -1,55 +1,11 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import Link from "next/link";
-import { supabase } from "../../lib/supabase";
-import { useAuth } from "../../lib/useAuth";
+import { useLegacyFeed } from "../../src/features/legacy-discovery/model/useLegacyFeed";
+import type { LegacyListing as FeedListing } from "../../src/entities/listing/model/legacyDiscoveryTypes";
 import { getTranslation } from "../../lib/i18n/useTranslation";
 import { getCategoryLabel } from "../../lib/categories";
-
-type ListingImage = {
-  thumb_url?: string | null;
-  medium_url?: string | null;
-  original_url?: string | null;
-  is_primary?: boolean | null;
-  sort_order?: number | null;
-};
-
-type ListingTranslation = {
-  language: string;
-  title: string;
-  description?: string | null;
-  ai_summary?: string | null;
-  status?: string | null;
-};
-
-type CurrentProfile = {
-  id: string;
-  language?: string | null;
-  active_identity_id?: string | null;
-};
-
-type FeedListing = {
-  id: number;
-  user_id: string;
-  identity_id?: string | null;
-  created_at?: string | null;
-  title: string;
-  description: string;
-  price: string;
-  category?: string | null;
-  condition?: string | null;
-  country?: string | null;
-  city?: string | null;
-  image?: string | null;
-  listing_images?: ListingImage[];
-  listing_translations?: ListingTranslation[];
-  seller_profile?: {
-    store_name?: string | null;
-    store_slug?: string | null;
-    avatar_url?: string | null;
-  } | null;
-};
 
 function getTranslatedListingText(
   item: FeedListing,
@@ -105,183 +61,9 @@ function timeAgo(value?: string | null) {
   return new Date(value).toLocaleDateString();
 }
 
-const PAGE_SIZE = 30;
-
 export default function FeedPage() {
-  const { user, loading: authLoading } = useAuth();
-
-  const [items, setItems] = useState<FeedListing[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [loadingMore, setLoadingMore] = useState(false);
-  const [hasMore, setHasMore] = useState(true);
-  const [currentProfile, setCurrentProfile] = useState<CurrentProfile | null>(null);
-
+  const { user, authLoading, items, loading, loadingMore, hasMore, currentProfile, loadMore, refresh } = useLegacyFeed();
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
-
-  const loadFeed = async (from = 0) => {
-      if (authLoading) return;
-
-      if (!user?.id) {
-        setItems([]);
-        setLoading(false);
-        return;
-      }
-
-      if (from === 0) {
-        setLoading(true);
-      }
-
-      const { data: currentProfileData } = await supabase
-        .from("profiles")
-        .select("id, language, active_identity_id")
-        .eq("id", user.id)
-        .maybeSingle();
-
-      setCurrentProfile((currentProfileData || null) as CurrentProfile | null);
-
-      const activeIdentityId =
-        (currentProfileData as any)?.active_identity_id;
-
-      const { data: follows, error: followsError } = await supabase
-        .from("store_follows")
-        .select("store_identity_id")
-        .eq("follower_identity_id", activeIdentityId);
-
-      if (followsError) {
-        console.error("Error loading follows:", followsError);
-        setItems([]);
-        setLoading(false);
-        return;
-      }
-
-      const { data: blockRows } = await supabase
-        .from("user_blocks")
-        .select("blocker_id, blocked_id")
-        .or(`blocker_id.eq.${user.id},blocked_id.eq.${user.id}`);
-
-      const blockedIds = new Set<string>();
-
-      (blockRows || []).forEach((row: any) => {
-        if (row.blocker_id === user.id && row.blocked_id) blockedIds.add(row.blocked_id);
-        if (row.blocked_id === user.id && row.blocker_id) blockedIds.add(row.blocker_id);
-      });
-
-      const followedIds = (follows || [])
-        .map((row) => row.store_identity_id)
-        .filter(Boolean)
-        .filter((id) => !blockedIds.has(id));
-
-      if (followedIds.length === 0) {
-        setItems([]);
-        setLoading(false);
-        return;
-      }
-
-      const { data, error } = await supabase
-        .from("listings")
-        .select(
-          "id, user_id, identity_id, created_at, title, description, price, category, condition, country, city, image, listing_images(thumb_url, medium_url, original_url, is_primary, sort_order), listing_translations(language, title, description, ai_summary, status)"
-        )
-        .in("identity_id", followedIds)
-        .eq("status", "active")
-        .gt("active_until", new Date().toISOString())
-        .order("created_at", { ascending: false })
-        .range(from, from + PAGE_SIZE - 1);
-
-      if (error) {
-        console.error("Error loading feed:", error);
-        setItems([]);
-        setLoading(false);
-        return;
-      }
-
-      const loadedListings = (data || []) as FeedListing[];
-
-      let visibleListings = loadedListings;
-
-      if (user?.id) {
-        const { data: blockRows, error: blockError } = await supabase
-          .from("user_blocks")
-          .select("blocker_id, blocked_id")
-          .or(
-            `blocker_id.eq.${user.id},blocked_id.eq.${user.id}`
-          );
-
-        if (blockError) {
-          console.error("Error loading feed blocks:", blockError);
-        }
-
-        const blockedUserIds = new Set(
-          (blockRows || []).map((row: any) =>
-            row.blocker_id === user.id ? row.blocked_id : row.blocker_id
-          )
-        );
-
-        visibleListings = loadedListings.filter(
-          (item) => !blockedUserIds.has(item.user_id)
-        );
-      }
-
-      const identityIds = Array.from(
-        new Set(
-          visibleListings
-            .map((item) => item.identity_id)
-            .filter(Boolean)
-        )
-      ) as string[];
-
-      const { data: identityRows, error: identityError } = await supabase.rpc(
-        "get_feed_identity_profiles",
-        {
-          p_identity_ids: identityIds,
-        }
-      );
-
-      if (identityError) {
-        console.error("Error loading feed identity profiles:", identityError);
-      }
-
-      const identityMap = new Map(
-        (identityRows || []).map((identity: any) => [
-          identity.identity_id,
-          {
-            store_name: identity.display_name,
-            store_slug: identity.slug,
-            avatar_url: identity.avatar_url,
-          },
-        ])
-      );
-
-      const enrichedListings = visibleListings.map((item) => ({
-        ...item,
-        seller_profile: item.identity_id
-          ? identityMap.get(item.identity_id) || null
-          : null,
-      }));
-
-      if (from === 0) {
-        setItems(enrichedListings);
-      } else {
-        setItems((prev) => [...prev, ...enrichedListings]);
-      }
-
-      setHasMore(loadedListings.length === PAGE_SIZE);
-
-      setLoading(false);
-      setLoadingMore(false);
-    };
-
-  useEffect(() => {
-    loadFeed(0);
-  }, [user?.id, authLoading]);
-
-
-  const loadMore = async () => {
-    if (loadingMore || !hasMore) return;
-
-    setLoadingMore(true);
-    await loadFeed(items.length);
-  };
 
   useEffect(() => {
     const target = loadMoreRef.current;
@@ -374,7 +156,7 @@ export default function FeedPage() {
             <div className="flex flex-wrap gap-2">
               <button
                 type="button"
-                onClick={() => loadFeed(0)}
+                onClick={refresh}
                 disabled={loading}
                 className="w-fit rounded-2xl bg-black px-5 py-3 text-sm font-medium text-white disabled:opacity-60"
               >

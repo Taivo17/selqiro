@@ -5,6 +5,8 @@ import { useEffect, useRef, useState } from "react";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { supabase } from "../../../lib/supabase";
 import { useAuth } from "../../../lib/useAuth";
+import { readLegacyAccountBlocks } from "../../../src/shared/provider-controls/readLegacyAccountBlocks";
+import { notifyProviderControlsChanged } from "../../../src/shared/provider-controls/providerControlEvents";
 
 type Conversation = {
   id: number;
@@ -100,6 +102,7 @@ export default function ConversationPage() {
   const [otherIdentityId, setOtherIdentityId] = useState<string | null>(null);
   const [isBlocked, setIsBlocked] = useState(false);
   const [blockedByMe, setBlockedByMe] = useState(false);
+  const [blockReadError, setBlockReadError] = useState(false);
   const [text, setText] = useState("");
 
   const attachmentRemovedRef = useRef(false);
@@ -213,17 +216,10 @@ export default function ConversationPage() {
     setOtherUserId(otherUserId || null);
 
     if (otherUserId) {
-      const { data: blockRows } = await supabase
-        .from("user_blocks")
-        .select("id, blocker_id")
-        .or(
-          `and(blocker_id.eq.${user.id},blocked_id.eq.${otherUserId}),and(blocker_id.eq.${otherUserId},blocked_id.eq.${user.id})`
-        )
-        .limit(1);
-
-      const blocks = blockRows || [];
-      setIsBlocked(blocks.length > 0);
-      setBlockedByMe(blocks.some((block: any) => block.blocker_id === user.id));
+      try {
+        const blockState = await readLegacyAccountBlocks(user.id, otherUserId);
+        setIsBlocked(blockState.blocked); setBlockedByMe(blockState.blockedByMe); setBlockReadError(false);
+      } catch {setBlockReadError(true); setIsBlocked(true); setBlockedByMe(false);}
     }
 
     if (otherIdentity) {
@@ -441,6 +437,8 @@ export default function ConversationPage() {
 
     setIsBlocked(true);
     setBlockedByMe(true);
+    setBlockReadError(false);
+    notifyProviderControlsChanged("blocked");
     setConversationMenuOpen(false);
   };
 
@@ -459,8 +457,11 @@ export default function ConversationPage() {
       return;
     }
 
-    setIsBlocked(false);
-    setBlockedByMe(false);
+    notifyProviderControlsChanged("blocked");
+    try {
+      const blockState = await readLegacyAccountBlocks(user.id, otherUserId);
+      setIsBlocked(blockState.blocked); setBlockedByMe(blockState.blockedByMe); setBlockReadError(false);
+    } catch {setBlockReadError(true); setIsBlocked(true); setBlockedByMe(false);}
     setConversationMenuOpen(false);
   };
 
@@ -468,7 +469,7 @@ export default function ConversationPage() {
     const cleanText = text.trim();
 
     if (isBlocked) {
-      alert("Messaging is disabled because one of you has blocked the other user.");
+      alert(blockReadError ? "Could not check messaging availability. Please refresh." : "Messaging is disabled because one of you has blocked the other user.");
       return;
     }
 
@@ -645,7 +646,7 @@ export default function ConversationPage() {
                       disabled
                       className="w-full rounded-xl px-3 py-2 text-left text-sm font-medium text-black/45"
                     >
-                      User blocked
+                      {blockReadError ? "Sending unavailable" : "User blocked"}
                     </button>
                   ) : (
                     <button
@@ -860,7 +861,7 @@ export default function ConversationPage() {
 
           {isBlocked && (
             <div className="mb-3 rounded-2xl border border-red-200 bg-red-50 p-3 text-sm text-red-800">
-              Messaging is disabled because one of you has blocked the other user.
+              {blockReadError ? "Could not check messaging availability. Please refresh." : "Messaging is disabled because one of you has blocked the other user."}
             </div>
           )}
 

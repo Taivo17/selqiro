@@ -1,3 +1,22 @@
+<!-- SELQIRO_SERVICE_ACTIVITY_ACCEPTED_20261111 -->
+## 11.11.2026 — teenuse kehtivus ja pikendamine on paigaldatud ning vastu võetud
+
+Maci lõppraport kinnitab SQL-i järelkontrolli, build'i ja push'i commit'iga
+955c935fa4e901a8b81885e2dcd18d966d651810; lõpp 20:35:24 Europe/Tallinn.
+Sama 955c935 Verceli Ready / Production on kasutaja pildil.
+Kasutaja kinnitas pikendamist ning teenuse ja rubriigiseoste säilimist
+avalikul profiilil. Puhastusteenuse lõpp muutus 11.11.2027 20:34 → 20:46.
+
+Autoriteetne seis: docs/continuity/CURRENT_STATE.json.
+Täpne vastuvõtt: docs/continuity/SERVICE_ACTIVITY_ACCEPTED_20261111.md.
+Lõpetatud paigaldajat, SQL-i, build'i ega kasutuskatset ei korrata.
+See dokumentide delta ootab järgmist sisulist lähtepakki; uut Maci kirjutust
+ega commit'i siin ei tehtud. Järgmine soovitus on ajutine pakkuja peitmine
+otsingust; 7 päeva on ettepanek ja selle mooduli kood on koostamata.
+Allolevad ettevalmistuse ja varasemate NEXT-ide kirjed säilivad ajaloona.
+
+---
+
 > Ajalooline ulatus enne teostust. 11.11.2026 on see samm uues lähtepaketis
 > ette valmistatud ja kohalikult kontrollitud. Käesolev fail ei ole enam uus
 > alustamiskäsk. Praegune seis: `CURRENT_STATE.json`; teostus ja tõendid:

@@ -1,9 +1,9 @@
 # Public discovery, own categories and publication periods
 
-Decision date: 2026-11-11 Europe/Tallinn.
+Decisions: 2026-11-11; provider controls confirmed 2026-11-13 Europe/Tallinn.
 The one current implementation checkpoint is `../continuity/CURRENT_STATE.json`.
 This document preserves the product decisions. Services-to-own-categories is accepted;
-service activity is prepared in a separate release, awaiting Mac and production acceptance.
+service activity is installed at 955c935, with matching Vercel Ready and user acceptance.
 
 ## Public own-category filters — accepted requirement
 
@@ -18,9 +18,9 @@ listing does not appear in services, and a service-only category does not appear
 in listings. Public category eligibility, result count and result pagination
 must use the same visibility rules across the whole section, before a page is
 limited. A draft, paused, inaccessible or expired object cannot make a public
-category visible. The separate prepared service activity release adds the
-365-day server deadline to the same eligibility predicate. Installed and
-prepared evidence remain separate in CURRENT_STATE.
+category visible. The installed activity release adds the 365-day server
+deadline to that same predicate. Exact installation and acceptance evidence
+are recorded in CURRENT_STATE.
 
 My Area category management and owner assignment selectors continue to show all
 categories of the verified active identity, including empty categories. There
@@ -51,28 +51,60 @@ editing. Do not introduce automatic AI calls on every form edit or silent
 account penalties. Duplicate guidance and ranking diversity are separate work;
 they are not delivered by the category package.
 
-## Temporary provider hiding — recommended follow-up
+## Temporary provider hiding — confirmed 24 hours
 
-The retained V1 code has `user_blocks`: a permanent account-to-account block
-that also affects messages and mutual visibility. The inspected source does
-not establish a separate expiring, viewer-only search-hiding feature. Do not
-claim that the user never had such a feature, or relabel the existing block.
+On 2026-11-13 the user selected **24 hours**, replacing the earlier seven-day
+recommendation. The user also requested separate persistent blocking with the
+previously agreed behavior. These decisions are not a deployed implementation.
 
-Recommended first action: **Peida see pakkuja 7 päevaks / Hide this provider for
-7 days**, with immediate undo and a My Area list offering **Näita uuesti / Show
-again**. Seven days is the current recommendation, not a deployed setting.
+Action: **Peida pakkuja 24 tunniks / Hide provider for 24 hours**. Offer
+immediate **Võta tagasi / Undo** and a My Area hidden-provider list with name,
+avatar/logo, expiry and **Näita uuesti / Show again**.
 
 The preference belongs to the authenticated viewer account and targets a
-provider identity. It survives the viewer's identity switch, while hiding one
-business does not silently hide the owner's unrelated businesses or private
-identity. Only that viewer's search and discovery results change. The provider
-receives no notification or reputation penalty. Messages and deliberately
-opened public profiles/detail links remain available under their normal rules.
+provider identity. It survives the viewer's identity switch while leaving
+the provider's unrelated identities alone. Only that viewer's search and
+discovery results change. The provider receives no notification or reputation
+penalty. Messages and deliberately opened profiles/detail links retain their
+normal permissions. The action is free of an Energy purchase requirement.
 
-Expiry uses server time. Search candidates, counts and pagination apply the
-preference before limit/offset. Featured results and ads respect the same
-preference. The preference must not be inserted into a general visibility
-helper also used for direct public-profile or detail access.
+The deadline is 24 elapsed hours from the accepted server action. Viewing or
+refreshing does not extend it. Expiry follows server time and must work even
+if background cleanup has not run. Search candidates, counts and pagination
+apply the preference before limit/offset using an indexed, viewer-scoped
+exclusion. Avoid a request per result or downloading the entire result set.
+Featured results and existing ads follow the same preference. Do not insert
+temporary hiding into a visibility helper also used for direct profile/detail
+access. Review changed query plans without claiming a production load test.
+
+## Persistent user blocking — preserve the previous contract
+
+The retained V1 source audit describes account-to-account user_blocks, which
+affects messaging and mutual visibility. Locally available public-category
+SQL checks both account directions. That limited source does not establish
+that every current discovery, messaging and profile route is fully protected.
+
+The recovered 2026-06-02/03 user agreement requires a bidirectional sending
+ban while retaining existing conversations and history. The blocked account
+cannot access the blocker's shop/profile. Only the blocker can remove their
+own block; the other party sees the blocked state. My Area needs a blocked
+users list with name and avatar/logo. Historical mention of deleting one's
+own inbox entry is not authorization to delete messages in this work.
+
+Action: **Blokeeri kasutaja / Block user**, separate from temporary hiding,
+with a confirmation that explains the effect on visibility and messages.
+It does not expire automatically. **Eemalda blokeering / Unblock user**
+removes only the actor's own block. Reuse the existing authoritative
+user_blocks record and permissions; do not create a second blocking registry.
+Verify the current provider-identity-to-account mapping and server/RLS checks
+before connecting the action. Empty BlockedUsersCard.tsx/useBlockedUsers.ts
+inventory entries do not establish a working management screen.
+
+The controls remain independent: hiding expiry/undo cannot remove a block;
+unblocking cannot remove a separate active hide or the other account's block.
+Existing conversations and user content are preserved. The current source
+integration and actual user path still require implementation and verification.
+See ../continuity/VIEWER_PROVIDER_CONTROLS_20261113.md for the bounded next step.
 
 ## Publication periods — user direction; separate implementation
 
@@ -82,16 +114,16 @@ helper also used for direct public-profile or detail access.
   jobs lifecycle implementation; do not silently rewrite the user's month as
   a separately approved fixed 30-day rule.
 
-The old 2026-07-26 policy already recorded 365 days for services. The prepared
+The old 2026-07-26 policy already recorded 365 days for services. The installed
 2026-11-11 service activity release implements 365 × 24 hours from the database
 clock, owner deadline/expired presentation, shared public eligibility and an
 explicit information-current confirmation. Existing published services and
 archives with a published_at timestamp receive one transition year from activation;
 original content dates stay unchanged and no past user confirmation is invented.
-See `service-activity-v1.md`. This prepared implementation does not establish
-that the hosted database or web deployment has activated it.
+See service-activity-v1.md and ../continuity/SERVICE_ACTIVITY_ACCEPTED_20261111.md.
+Mac activation, matching Vercel Ready and user acceptance are now recorded separately.
 
-The recommended renewal action confirms the information is still current and
+The installed renewal action confirms the information is still current and
 extends eligibility without changing the original creation/publication date,
 claiming a fresh search position, or charging Energy. Category assignment,
 status toggling and opening the editor do not renew an offer. Expiry preserves
@@ -141,9 +173,10 @@ and candidate ranking remain outside that first scope.
 ## Delivery order and evidence
 
 The service own-category step and nonempty public filters have been accepted.
-The next service activity release is locally prepared and tested; its Mac,
-database, deployment and user acceptance remain the immediate next action.
-Temporary provider hiding and jobs remain separate later modules. They are not
+The activity release is installed and user-accepted at 955c935, with matching
+Vercel Ready / Production. Do not repeat its installation. Temporary provider
+hiding for 24 hours and separate persistent blocking are now user-confirmed
+next work. Their integration and jobs remain separate later modules. They are not
 implemented by the service activity package.
 
 Energy/payment core and the known public-launch gates keep their agreed

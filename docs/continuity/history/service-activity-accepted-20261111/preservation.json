@@ -1,0 +1,18 @@
+{
+  "format": "selqiro-previous-acceptance-preserved-v1",
+  "checkpoint_zip_sha256": "aa00b75330e6ab4c3ef0f07ad2a14988405c0e326162536a7a1064c0dde22253",
+  "files": {
+    "docs/continuity/CURRENT_STATE.json": {
+      "bytes": 9086,
+      "sha256": "ba1d156771440c77afd45ea97b8d7b666b1a8402e7dba548b57fe21c41c17bdb"
+    },
+    "docs/99_V2_HANDOFF_NEXT_CHAT.md": {
+      "bytes": 9182,
+      "sha256": "707ae92f3a2461d097e307ed2f10af6c448d81349062a43caffa57c869698e87"
+    },
+    "docs/continuity/HOSTED_PORTAL.md": {
+      "bytes": 1240,
+      "sha256": "fac9dc27eae69f0877359c8d9c21de56ddbc47bb3c8856e212c1b5a36a462af5"
+    }
+  }
+}

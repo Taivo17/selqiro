@@ -7,7 +7,9 @@ import { publicUiMessages } from "@/lib/i18n/catalogs/publicUi";
 
 
 import { useEffect, useRef, useState } from "react";
-import { useAuth } from "../../../../lib/useAuth";
+import { uiMessage } from "../../../../lib/i18n/interfaceMessage";
+import { useViewerReadScope } from "../../../shared/provider-controls/useViewerReadScope";
+import ProviderControlsBoundary from "../../viewer-provider-controls/components/ProviderControlsBoundary";
 import { EMPTY_PUBLIC_SEARCH, publicCategoryPath, publicFilterCount, publicSearchKey, searchConditionLabel,
   type PublicSearchFields } from "../../../entities/listing/model/publicSearch";
 import V2DiscoveryTypeSwitcher from "../../v2-shell/components/V2DiscoveryTypeSwitcher";
@@ -18,16 +20,20 @@ import SearchFilters from "./SearchFilters";
 import SearchResults from "./SearchResults";
 
 export default function ListingSearchPage() {
+  return <ProviderControlsBoundary><ListingSearchContent /></ProviderControlsBoundary>;
+}
+function ListingSearchContent() {
   const { language: uiLanguage, t } = useV2Translation(publicUiMessages);
 
   const url = usePublicSearchUrl();
-  const auth = useAuth();
+  const audience = useViewerReadScope("discovery");
   const [open, setOpen] = useState(false);
   const [headerHeight, setHeaderHeight] = useState(80);
   const resultRef = useRef<HTMLElement>(null);
   const moveToResults = useRef(false);
-  const data = usePublicListingSearch(url.input, auth.user?.id || "anonymous", !auth.loading && !url.error);
-  const loading = auth.loading || data.loading;
+  const data = usePublicListingSearch(url.input, audience.key, audience.ready && !url.error);
+  const loading = (!audience.ready && !audience.error) || data.loading;
+  const error = audience.error ? uiMessage("could_not_load_listings_check_your_connection_and_try_again") : data.error;
   const count = publicFilterCount(url.input);
   const searchKey = publicSearchKey(url.input);
   usePublicSearchReturn(!loading && !data.error && !url.error && !!data.page && !open,
@@ -83,8 +89,8 @@ export default function ListingSearchPage() {
       <span className="ml-auto text-neutral-500">{t("newest_first")}</span>
     </div>
     <section ref={resultRef} className="relative min-w-0 overflow-hidden rounded-[30px] border border-amber-200 bg-amber-50 p-3 pt-5 shadow-sm before:pointer-events-none before:absolute before:inset-x-0 before:top-0 before:h-1.5 before:bg-amber-500 before:content-[''] sm:p-6" style={{scrollMarginTop: headerHeight + 88}}>
-      <SearchResults page={url.error ? null : data.page} loading={loading && !url.error} error={url.error || data.error}
-        offset={url.input.offset} onRetry={data.retry}
+      <SearchResults page={url.error ? null : data.page} loading={loading && !url.error} error={url.error || error}
+        offset={url.input.offset} onRetry={audience.error ? audience.refresh : data.retry}
         onReset={() => {moveToResults.current = true; url.replace({...EMPTY_PUBLIC_SEARCH});}}
         onPage={offset => {moveToResults.current = true; url.goToOffset(offset);}} />
     </section>

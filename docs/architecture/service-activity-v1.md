@@ -1,8 +1,9 @@
 # Service activity — one year and explicit owner review
 
-Prepared 2026-11-11. This document describes the new source and SQL contract;
-it does not establish that the Mac, hosted database or Vercel has applied it.
-The current evidence and next action remain in `continuity/CURRENT_STATE.json`.
+Installed and user-accepted 2026-11-11 at commit 955c935fa4e901a8b81885e2dcd18d966d651810.
+The Mac receipt confirms database verification, build and push. Matching Vercel
+Ready / Production and user acceptance are separate evidence. See
+../continuity/SERVICE_ACTIVITY_ACCEPTED_20261111.md and ../continuity/CURRENT_STATE.json.
 
 ## Product rule
 

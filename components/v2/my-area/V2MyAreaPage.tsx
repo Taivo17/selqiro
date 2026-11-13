@@ -18,6 +18,8 @@ import ProductShowcaseManagementCard from "../../../src/features/product-showcas
 import StoreCategoryManagementCard from "../../../src/features/store-category-management/components/StoreCategoryManagementCard";
 import ManagedStoreCategorySection from "../../../src/features/store-category-management/components/ManagedStoreCategorySection";
 import { v2IntegrationEnabled } from "../../../src/shared/config/v2Integration";
+import ProviderManagementSection from "../../../src/features/viewer-provider-controls/components/ProviderManagementSection";
+import { providerControlMessages } from "../../../src/features/viewer-provider-controls/model/providerControlMessages";
 
 const actionClass = "inline-flex min-h-11 items-center justify-center rounded-full border border-neutral-200 bg-white px-5 py-3 text-sm font-bold shadow-sm transition hover:border-neutral-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700";
 const navClass = "flex min-h-11 items-center rounded-2xl px-4 py-3 text-sm font-bold text-neutral-700 hover:bg-neutral-100 hover:text-black focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700";
@@ -46,6 +48,7 @@ function EnergyOverview() {
 export default function V2MyAreaPage() {
   const { language: uiLanguage, t } = useV2Translation(accountUiMessages);
   const {t: serviceText} = useV2Translation(serviceEditorMessages);
+  const {t: providerText} = useV2Translation(providerControlMessages);
 
   const { identity, actor, loading, anonymous, error, refresh } = useMyAreaIdentity();
   const integrated = v2IntegrationEnabled();
@@ -70,6 +73,7 @@ export default function V2MyAreaPage() {
           <a href="#my-area-listings" className={navClass}>{t("listings")}</a>
           <a href="#my-area-services" className={navClass}>{t("services")}</a>
           <a href="#my-area-categories" className={navClass}>{t("store_categories")}</a>
+          <a href="#my-area-provider-controls" className={navClass}>{providerText("management")}</a>
           <Link href={messagesHref} className={navClass}>{t("messages")}</Link>
           {profileHref ? <Link href={profileHref} className={navClass}>{t("public_profile")}</Link> : null}
           {!integrated ? <>
@@ -91,6 +95,7 @@ export default function V2MyAreaPage() {
                 <Link href="/v2/sell" className={actionClass}>{t("add_listing")}</Link>
                 <Link href="/v2/services/new" className={actionClass}>{serviceText("addService")}</Link>
                 <a href="#my-area-categories" className={actionClass}>{t("store_categories")}</a>
+                <a href="#my-area-provider-controls" className={actionClass}>{providerText("management")}</a>
                 <Link href={messagesHref} className={actionClass}>{t("open_messages")}</Link>
               </nav>
             </div>
@@ -115,6 +120,7 @@ export default function V2MyAreaPage() {
         <div id="my-area-services" className="min-w-0 scroll-mt-28"><MyAreaServicesSection /></div>
 
         {integrated ? <ManagedStoreCategorySection actor={actor} loading={loading} error={error} /> : null}
+        <ProviderManagementSection />
 
         {!integrated ? <>
           <div id="my-area-categories" className="min-w-0 scroll-mt-28"><StoreCategoryManagementCard /></div>
