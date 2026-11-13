@@ -12,7 +12,7 @@ const people=new Map([[ids.provider,{identityId:ids.provider,account:ids.other,d
 const targets=new Map([['listing:101',ids.provider],['horse_offer:'+ids.horse,ids.provider],['listing:102',ids.second],
   ['service:'+ids.service,ids.provider],['service:'+ids.secondService,ids.provider],['service:'+ids.thirdService,ids.second]]);
 const preferences=new Map(), blocks=new Map(), calls=[], callbacks=new Set();
-let account=ids.user, identity='initial', serial=0, revisionSerial=0, timeOffset=0, lost=false, heldWrite=null, heldSearch=null, heldSearchDone=null, lastProductFocus='none';
+let account=query.get('scenario')==='own-profile'?ids.other:ids.user, identity='initial', serial=0, revisionSerial=0, timeOffset=0, lost=false, heldWrite=null, heldSearch=null, heldSearchDone=null, lastProductFocus='none';
 document.addEventListener('focusin',event=>{const element=event.target;if(!(element instanceof HTMLElement)||element.closest('[data-test-fixture-controls]'))return;
   lastProductFocus=element.hasAttribute('data-provider-notice')?'provider notice':element.hasAttribute('data-provider-controls-surface')?'provider surface':
     element.tagName.toLowerCase()+' '+(element.getAttribute('aria-label')||element.textContent?.trim().slice(0,90)||'');});
@@ -81,7 +81,8 @@ export async function searchServices(input,offset=0){const viewer=account;calls.
   return finishSearch({items:clone(items),totalCount:all.length,limit:24,offset,hasMore:all.length>offset+24,nextOffset:null});}
 export async function readProfile(slug){calls.push({method:'profile',user:account,slug});const person=[...people.values()].find(p=>p.slug===slug);
   if(!person||account&&(blocks.has(pair(account,person.account))||blocks.has(pair(person.account,account))))return null;
-  return{...person,identityType:'business',legacyUserId:null,bio:'Public business profile',bannerUrl:null,bannerDominantColor:null,country:'Estonia',city:'Paide',locationLabel:'Paide'};}
+  const privateProfile=query.get('scenario')==='own-profile';
+  return{...person,identityType:privateProfile?'private':'business',legacyUserId:privateProfile?person.account:null,bio:'Public provider profile',bannerUrl:null,bannerDominantColor:null,country:'Estonia',city:'Paide',locationLabel:'Paide'};}
 export function navigate(href,replace=false){history[replace?'replaceState':'pushState'](null,'',href);window.dispatchEvent(new PopStateEvent('popstate'));}
 function changeAccount(value){account=value;for(const callback of callbacks)callback(value?'SIGNED_IN':'SIGNED_OUT',authSession());window.dispatchEvent(new Event('fixture-change'));}
 function defer(){let resolve;const promise=new Promise(r=>resolve=r);return{promise,resolve};}

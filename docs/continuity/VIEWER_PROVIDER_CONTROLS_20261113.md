@@ -240,3 +240,87 @@ või kasutajavastuvõtu edu nendest ei järeldata.
 uue `parandus`-paki käsuga. Kõik eelmised päevikud, raportid ja pakid säilivad.
 Vanad peatumised ning lõpetatud diagnostika on ajalugu; neid ei käivitata
 automaatselt uuesti. Üks praegune seis on `CURRENT_STATE.json`.
+
+
+<!-- SELQIRO_PROVIDER_CONTROLS_PROFILE_PLACEMENT_20261113 -->
+## 13.11.2026 — paigaldus kinnitatud; uus ühine menüü ainult avalikule profiilile
+
+See on dokumendi praegune jätk. Eespool kirjeldatud kaardimenüü asukoht ja
+varasemate paigalduste ootel-seisud säilivad ajaloona. Kasutaja uus otsus on
+koondada **Peida pakkuja 24 tunniks** ning **Blokeeri kasutaja** avaliku profiili
+ühisesse menüüsse. Tava-, hobuse- ja teenusekaartidelt eemaldatakse need
+juhtnupud. Olemasolev sõnumivestluse blokeerimine ning Minu ala tagasivõtmine
+ja eraldi haldusloendid säilivad. Vaatamiste arvu või külastuste lävendit,
+uut jälgimist ega uut andmeallikat selleks ei lisata.
+
+### Mis on nüüd tegelikult paigaldatud
+
+Maci raport `selqiro-pakkuja-peitmine-parandus-20261113-raport-20261113-160527-1a8b4c249a2e.json`
+on 262247 baiti, SHA256
+`dfefda11c1ff922c397647eaf24afb95968729a465c182d02a415f67753e433e`.
+See seob manifesti
+`1f85c82b5440ad8b4636ef53a08478370d69110bb0e45a4db605d60775b18ba2`.
+Tulemus on `complete`, `database=verified`, `build=passed`, `push=verified`.
+Commit on `40ceac78deb255d8006244ae232652956b92bea0`, selle ainus parent
+`955c935fa4e901a8b81885e2dcd18d966d651810`. Lõpetamine oli 16:05:25 Tallinn,
+kolme vana päeviku viimane säilimiskontroll 16:05:27.
+
+Raporti viis logitud transpordikäsku on kaks repository_read’i ja kolm
+SQL-kutset. Värske preflight sai 7,453 s-ga absent; üks apply sai 7,207 s-ga
+acknowledged applied; eraldi verify sai 7,272 s-ga sama applied-raporti.
+Kõik 16 kaitset olid tõesed ning varasemad päris pilve invariandid,
+sõltuvused ja hosted-kontekst säilisid. Need on CLI väliskutsete kestused,
+mitte päringu täitmisaja võrdlus. Raport ei erista apply sees tehtud DDL-i
+võimalikust luku all avastatud applied-seisu vahelejätmisest.
+
+122 algset failiräsi ja täielik 1607 kirje algindex vastasid täpsele 955c935
+alusele. Lõpuks kontrollitud 1696 faili puu on
+`44f8042ccefbd78bd80a212398504cc5b4ef6c8a` (33 asendust, 89 lisandust, kustutusi 0).
+Räsiga seotud runner kontrollis lõpus puhast main-haru, kogu lähteosa/indexit,
+täpset commit’i ulatust ja remote-main’i võrdsust. Audit arvutas oodatud Git-puu
+failidest eraldi; auditi ajal uut live-Maci/GitHubi lugemist ei tehtud.
+Kolm varasemat päevikut säilisid hoitud O_RDONLY lukkude all. Storage’i
+toiminguid ei tehtud. Väljastatud pakid ja raportid jäävad muutmata.
+
+16:07:49 Verceli pilt näitab sama 40ceac7 commit’i **Ready / Production**,
+main-haru ja sama pealkirja. Raporti enda `READY_NOT_CHECKED` piir jääb
+ajalooliselt õigeks; pilti käsitletakse eraldi deployment’i tõendina.
+Deployment-ID pole pildil. 18:14:47 näitab kaarte, 18:15:01 avatud
+peitmise/blokeerimise kaardimenüüd ja 18:16:16 profiili vana blokeerimismenüüd.
+Kasutaja ütles, et toiminguid pole veel katsetatud. Seetõttu ei märgita
+peitmist, Undo’t, blokki, sõnumikeeldu, haldust ega aegumist kasutuses läbituks.
+
+### Uue profiilipaigutuse teostuse piir
+
+Uus `selqiro-peitmine-profiilile-20261113` on ainult lähtekoodi ja dokumentide
+muudatus selle vastuvõetud 40ceac78 aluse peal. Avaliku profiili olemasolev
+serveri `profile` siht toetab peitmist; sama kontrolli vastuse `canHide` ja
+blokeerimise õigused määravad lubatud toimingud. Üks ühine UI kasutab senist
+serveri/API lepingut. Oma pakkuja ja võõra pakkuja õigusi kliendis ümber ei looda.
+
+Üks vaatajakonto, üks pakkuja identiteet, serveri 24 möödunud tunni tähtaeg,
+revision’iga kaitstud Undo, eraldi püsiv blokk ja tundmatu vastuse korral
+kirjutuse kordamise tõke säilivad. Konto/sihtmärgi vahetus peab sulgema vana
+menüü ja jätma hilise vastuse uue konto UI-st välja. Discovery loeb endiselt
+serveris filtreeritud tulemust enne koguarvu ja lehekülge. Otsinguloogikat,
+andmebaasi, RPC-sid, õigusi ega Storage’it selle sammuga ei muudeta.
+
+Runner peab enne kirjutusi värskelt kontrollima 1696 faili alust, tervet
+indexit/tööpuud, main/HEAD-i ning kinnitatud remote’i. Viimase eduka
+paigalduse täpne privaatpäevik hoitakse läbi lähte/build/commit/push’i ainult
+lugemiseks lukustatuna. Uus jooks saab oma raporti; vana raportit ei kirjutata
+ümber. SQL- ja Supabase CLI-kutseid on **0**. Varasema applied-seisu tõend
+päritakse täpsest edukast raportist; uut SQL-i hetkeseisu ei väideta.
+
+Kohalik uue UI production build on PASS; sihitud DOM-i, tarne ja täpse
+raportifaili kontrollide tulemused ning piirid on paki `kontrollid/` kaustas.
+Need ei asenda uut Maci raportit, Verceli Ready tulemust ega kahe konto päris
+kasutuskäiku. Uus profiilipaigutus on praegu ette valmistatud, mitte Macis
+rakendatud. Täpne üks käsk on `HOSTED_PORTAL.md`-s ning üks seis
+`CURRENT_STATE.json`-is.
+
+Eelmise lähteversiooni CURRENT_STATE, genereeritud handoff ja HOSTED_PORTAL
+säilivad bait-baidilt `history/provider-controls-accepted-20261113/` all.
+Need algsed dokumendid kirjeldavad ettevalmistuse hetke; nende vana SQL-apply
+käsku ei korrata. Varasema katkestuse päritolu ja JIT-i mõju jäävad samasse
+tõendipiiri; edukas uus paigaldus ei tõesta neid tagantjärele.

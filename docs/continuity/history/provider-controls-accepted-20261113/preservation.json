@@ -1,0 +1,28 @@
+{
+  "format": "selqiro-provider-controls-accepted-history-v1",
+  "accepted_commit": "40ceac78deb255d8006244ae232652956b92bea0",
+  "accepted_tree_oid": "44f8042ccefbd78bd80a212398504cc5b4ef6c8a",
+  "issued_manifest_sha256": "1f85c82b5440ad8b4636ef53a08478370d69110bb0e45a4db605d60775b18ba2",
+  "accepted_report_sha256": "dfefda11c1ff922c397647eaf24afb95968729a465c182d02a415f67753e433e",
+  "meaning": "Exact previous source documents preserved. They describe preparation before the now accepted deployment; their commands are historical, not current instructions. Runtime actions remain untested by user.",
+  "files": [
+    {
+      "source_path": "docs/continuity/CURRENT_STATE.json",
+      "preserved_path": "docs/continuity/history/provider-controls-accepted-20261113/docs/continuity/CURRENT_STATE.json",
+      "bytes": 10740,
+      "sha256": "f50a3d6914071ece064743abb629f9510e17978bdefc3da6253b1f5103c984eb"
+    },
+    {
+      "source_path": "docs/99_V2_HANDOFF_NEXT_CHAT.md",
+      "preserved_path": "docs/continuity/history/provider-controls-accepted-20261113/docs/99_V2_HANDOFF_NEXT_CHAT.md",
+      "bytes": 10836,
+      "sha256": "1641353c4276c246ca72477bcafb1972ae5aeb0167d4badf722a9219bbc3b914"
+    },
+    {
+      "source_path": "docs/continuity/HOSTED_PORTAL.md",
+      "preserved_path": "docs/continuity/history/provider-controls-accepted-20261113/docs/continuity/HOSTED_PORTAL.md",
+      "bytes": 4310,
+      "sha256": "09ec95a72deacdd4c96531ff8846cc13e73b466e88beb241baf82e114c3cf4c4"
+    }
+  ]
+}

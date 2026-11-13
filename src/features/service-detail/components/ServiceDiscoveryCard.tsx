@@ -4,7 +4,6 @@ import type { MouseEvent } from "react";
 import { useV2Translation } from "../../../shared/i18n/V2LanguageProvider";
 import { serviceEditorMessages } from "../../service-editor/model/serviceEditorMessages";
 import { serviceLocationLabel, servicePriceLabel, type PublicServiceOffer } from "../../../entities/service/model/publicService";
-import ProviderMenu from "../../viewer-provider-controls/components/ProviderMenu";
 
 export default function ServiceDiscoveryCard({service, categoryLabel, onRemember}: {
   service: PublicServiceOffer; categoryLabel: string;
@@ -23,6 +22,5 @@ export default function ServiceDiscoveryCard({service, categoryLabel, onRemember
         <p className="text-sm text-neutral-500">{service.sellerName}</p><p className="text-sm text-neutral-500">{serviceLocationLabel(service) || t("locationMissing")}</p>
         <p className="pt-2 text-xl font-black">{servicePriceLabel(service, language)}</p></div>
     </Link>
-    <div className="absolute right-4 top-4 z-10"><ProviderMenu target={{type: "service", id: service.id}} name={service.sellerName} /></div>
   </article>;
 }

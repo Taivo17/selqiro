@@ -7,15 +7,11 @@ import { serviceEditorMessages } from "../../../src/features/service-editor/mode
 import { useServiceDiscoveryView } from "../../../src/features/service-navigation/model/useServiceDiscoveryView";
 import { isPlainServiceClick } from "../../../src/features/service-navigation/model/serviceReturnContext";
 import ServiceDiscoveryCard from "../../../src/features/service-detail/components/ServiceDiscoveryCard";
-import ProviderControlsBoundary from "../../../src/features/viewer-provider-controls/components/ProviderControlsBoundary";
 import { useServiceCategories } from "../../../src/features/service-category-selection/model/useServiceCategories";
 import { buildServiceCategoryTree } from "../../../src/entities/service-category/model/types";
 
 const input = "min-h-12 w-full min-w-0 rounded-full border border-neutral-200 bg-white px-4 py-3 text-base outline-none focus:border-teal-600 focus:ring-2 focus:ring-teal-600/20";
 export default function V2ServicesPage() {
-  return <ProviderControlsBoundary><ServiceDiscoveryContent /></ProviderControlsBoundary>;
-}
-function ServiceDiscoveryContent() {
   const {language, t} = useV2Translation(serviceEditorMessages), categories = useServiceCategories();
   const tree = useMemo(() => buildServiceCategoryTree(categories.categories), [categories.categories]);
   const {filters: {query, category, subcategory, city}, results, change, clear, remember} = useServiceDiscoveryView();

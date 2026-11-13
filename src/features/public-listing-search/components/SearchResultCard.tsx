@@ -14,7 +14,6 @@ import type { PublicSearchCard } from "../../../entities/listing/model/publicSea
 import { publicCategoryPath } from "../../../entities/listing/model/publicSearch";
 import { saveListingReturnContext } from "../../listing-navigation/model/listingReturnContext";
 import { horsePriceDisplay } from "../../../entities/horse-offer/model/publicHorse";
-import ProviderMenu from "../../viewer-provider-controls/components/ProviderMenu";
 
 export default function SearchResultCard({item}: {item: PublicSearchCard}) {
   const { language: uiLanguage, t } = useV2Translation(publicUiMessages);
@@ -47,7 +46,6 @@ export default function SearchResultCard({item}: {item: PublicSearchCard}) {
           <p className="text-right text-xs text-neutral-500">{place || t("location_unspecified")}</p>
         </div>
       </Link>
-      <div className="absolute right-4 top-4 z-10"><ProviderMenu target={{type: item.contentType === "horse_offer" ? "horse_offer" : "listing", id: item.id}} name={item.sellerName} /></div>
     </article>
   );
 }

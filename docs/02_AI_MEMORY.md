@@ -7837,3 +7837,25 @@ Värske kohalik tõend ja päris paigalduse piir on CURRENT_STATE.json-is ning
 lõplikus kontrollraportis. Üks järgmine käsk asub continuity/HOSTED_PORTAL.md-s.
 Teenused järgivad pärast vastuvõttu sama lihtsat Avalda / Muuda–Salvesta voogu,
 töökuulutused tulevad hiljem. Varasemad dateeritud seisud on ajalugu.
+
+
+<!-- SELQIRO_PROVIDER_CONTROLS_PROFILE_PLACEMENT_20261113 -->
+## 13.11.2026 — pakkuja peitmine ja blokeerimine avalikul profiilil
+
+Kasutaja püsiv paigutusotsus: **Peida pakkuja 24 tunniks** ja eraldi
+**Blokeeri kasutaja** kuuluvad avaliku profiili ühisesse menüüsse. Tava-,
+hobuse- ja teenusekaartidel neid juhtnuppe ei näidata. Olemasolev vestluse
+blokeerimine ning Minu ala Undo/haldus säilivad. Vaatamiste koguse lävendit,
+uut jälgimist või uut andmeallikat ei lisata.
+
+Peitmine jääb vaataja konto ühe pakkuja identiteedi 24 möödunud tunni
+avastuseelistuseks; püsiv kontodevaheline blokk on eraldi. Serveri õigused,
+otsingufiltrid, revision’i võrdlus ja senine profile-siht säilivad. Selle
+paigutuse pärast andmebaasi ega juba lõpetatud SQL-paigaldajat ei muudeta.
+
+Alus on nüüd `40ceac78deb255d8006244ae232652956b92bea0`: Maci database/build/push
+ning sama commit’i Vercel Ready / Production on kinnitatud. Kasutaja pole
+hide/block toiminguid veel katsetanud; menüü nägemine ei võrdu nende eduga.
+Uus profiilipaigutus on eraldi ettevalmistatud source-only parandus ja ootab
+oma rakenduse tõendit. Üks praegune seis/käsk on CURRENT_STATE ja HOSTED_PORTAL.
+Kõik varasemad kaardimenüü asukohad ja ootel-kirjed jäävad dateeritud ajalooks.

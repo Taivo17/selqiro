@@ -24,6 +24,9 @@ const mocks={
   'src/entities/service/api/getPublicService.ts':`export {searchServices as searchPublicServices} from 'provider-fixture';export const SERVICE_SEARCH_PAGE_SIZE=24;`,
   'src/entities/service-category/api/getServiceCategories.ts':`export async function getServiceCategories(){return [];}`,
   'src/entities/profile/api/getPublicProfileBySlug.ts':`export {readProfile as getPublicProfileBySlug} from 'provider-fixture';`,
+  'src/features/public-profile/components/PublicProfileListingsSection.tsx':`export default function Listings(){return null;}`,
+  'src/features/public-profile/components/PublicProfileServicesSection.tsx':`export default function Services(){return null;}`,
+  'src/features/public-profile/components/PublicProfileProductShowcasesSection.tsx':`export default function Showcases(){return null;}`,
   'src/shared/config/v2Integration.ts':`export const v2IntegrationEnabled=()=>true;export const v2NavigationContextEnabled=()=>true;export const localPublicationOrigin=()=>undefined;`,
 };
 const bundle=await esbuild.build({absWorkingDir:root,entryPoints:['tests/browser/viewer-provider-controls.jsx'],outfile:path.join(output,'app.js'),
@@ -39,7 +42,7 @@ for(const name of Object.keys(bundle.metafile.inputs))if(!name.startsWith('mock:
 const harness=[];for(const name of['viewer-provider-controls.jsx','viewer-provider-controls-fixture.jsx','viewer-provider-controls-cases.mjs','viewer-provider-controls.mjs'])
   harness.push({path:'tests/browser/'+name,sha256:sha(await readFile(path.join(root,'tests/browser',name)))});
 const proof={schemaVersion:1,startedAt:new Date().toISOString(),sourceRoot:root,node:process.version,
-  boundary:'Actual Chromium, React DOM in StrictMode, provider controls/session/account store, product and service discovery cards/pages/hooks, management lists, public profile read hook, conversation block-state hook and ThreadActions, EN/ET messages. API/Auth/search/profile responses are synthetic; Link/router are a bounded fixture. No live database, full Next routing, live accounts, content writes or message sends. SQL and authenticated transport are separately tested.',
+  boundary:'Prepared Chromium fixture using React DOM in StrictMode, provider controls/session/account store, product and service discovery cards/pages/hooks, management lists, actual public profile page/header/menu/read hook, conversation block-state hook and ThreadActions, EN/ET messages. API/Auth/search/profile responses, Link/router and the three unrelated profile content sections are synthetic boundaries. No live database, full Next routing, live accounts, content writes or message sends. Browser execution is proved only by completed case results; SQL and authenticated transport are separately tested.',
   mocks:Object.keys(mocks),inputs,harness,cases:[],failures:[],bundleSha256:sha(await readFile(path.join(output,'app.js')))};
 if(process.argv.includes('--prepare')){await writeFile(path.join(output,'prepared.json'),JSON.stringify({...proof,status:'PREPARED_NOT_RUN'},null,2)+'\n');console.log('PREPARED '+output);process.exit(0);}
 const inventoryPath=process.env.SELQIRO_BUILD_INPUTS||path.join(root,'../build-inputs.json'),inventoryBytes=await readFile(inventoryPath),inventory=JSON.parse(inventoryBytes);

@@ -144,3 +144,38 @@ Vercel Ready for the resulting commit and a real two-account usage path are
 required after the Mac report. Reports preserve the original journal and expose
 a uniquely named private Downloads copy. A released package is never silently
 edited; later repairs receive their own package identity and hashes.
+
+
+## UI placement decision — 13 November 2026
+
+This decision supersedes earlier prepared UI placement descriptions. The
+shared **Hide provider for 24 hours / Block user** control belongs on the
+public profile. Ordinary-listing, horse-offer and service cards do not expose
+these provider controls. The existing conversation block remains available
+in messaging; My Area retains Undo/Show again and separate preference management.
+No viewing-count threshold, new tracking or eligibility data source is added.
+
+Reuse the existing `profile` target and server-derived `canHide`/block
+capabilities. The UI must not guess ownership or target accounts. Switching
+the viewer account or profile target retires the old scope; late responses
+must not populate the new menu. The profile remains directly reachable under
+the existing access rules after a temporary hide. Only the relevant discovery
+read scope is invalidated for hiding; permanent blocks retain their existing
+visibility and messaging effects.
+
+This changes entry-point placement, not the account/identity model, 24-hour
+deadline, revision checks, API/RPC contract, SQL, RLS or server-side discovery
+filtering. Existing message and management implementations are reused.
+
+The database capability and source release `40ceac78deb255d8006244ae232652956b92bea0`
+are now installed; the returned Mac report and matching Vercel Ready / Production
+screenshot are accepted. Runtime hide/block actions have not yet been tested by
+the user. The profile-placement revision is newly prepared and still awaits
+its own Mac report, deployment and usage verification. The current state record
+is authoritative over the historical delivery description above.
+
+This follow-up delivery is source-only: fresh exact 1696-file base/index/HEAD/
+remote checks, a read-only held lock on the accepted private receipt, reviewed
+source replacement, build, commit and push. It issues no database or Supabase
+CLI calls and does not rerun the completed SQL installer. Each evidence stage
+remains separate in `../continuity/CURRENT_STATE.json`.

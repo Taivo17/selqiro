@@ -19,9 +19,9 @@ const runtime=prepared.inputs.filter(item=>/^(src|lib|components|app)\//.test(it
 const mismatches=[];
 for(const item of runtime)if(inventory[item.path]!==item.sha256||sha(await readFile(path.join(root,item.path)))!==item.sha256)mismatches.push(item.path);
 assert.deepEqual(mismatches,[]);assert.equal(sha(Buffer.from(bundle)),prepared.bundleSha256);
-const proof={kind:'provider-controls-react-dom-integration-v1',startedAt:new Date().toISOString(),environment:'jsdom '+jsdomVersion,
+const proof={kind:'provider-controls-profile-react-dom-integration-v1',startedAt:new Date().toISOString(),environment:'jsdom '+jsdomVersion,
   actualBrowser:false,nativeDialog:false,visualOrLayoutAssertions:false,networkAllowed:false,
-  boundary:'Actual prepared esbuild React/ReactDOM StrictMode bundle, product/service discovery components and hooks, provider controller/account store, management lists and conversation block read. Synthetic API/Auth and Link/router fixture. showModal/close, click-to-focus, task MessageChannel, ResizeObserver and scrolling are explicit DOM environment substitutes. No Chromium, OS browser, network, live account, database, image or message operation.',
+  boundary:'Actual prepared esbuild React/ReactDOM StrictMode bundle, public profile page/header/menu and read hook, product/service discovery components and hooks, provider controller/account store, management lists and conversation block read. API/Auth, Link/router and the three unrelated profile content sections are synthetic boundaries. showModal/close, click-to-focus, task MessageChannel, ResizeObserver and scrolling are explicit DOM environment substitutes. No Chromium, OS browser, network, live account, database, image or message operation.',
   buildAlignment:{inventoryPath,inventorySha256:sha(inventoryBytes),count:runtime.length,mismatches},runtimeInputs:runtime,
   bundleSha256:sha(Buffer.from(bundle)),harnessInputs:[...prepared.harness,{path:'tests/provider-controls-dom.mjs',sha256:sha(await readFile(fileURLToPath(import.meta.url)))}],cases:[]};
 await mkdir(output,{recursive:true});
@@ -60,29 +60,44 @@ async function context(route){const errors=[],warnings=[],network=[],virtualCons
   return{w,doc,errors,warnings,network,all,button,click,run,settle,openDialog,
     async close(){await act(async()=>{w.__providerUnmount();});w.close();assert.deepEqual(network,[]);assert.deepEqual(errors,[]);assert.deepEqual(warnings,[]);}};
 }
-async function choose(h,card,label){const url=h.w.location.href;await h.click(card.querySelector('summary'));await h.click(h.button(card,label));
-  assert.equal(h.w.location.href,url,'A menu action must not navigate the surrounding card link');const dialog=h.openDialog();assert.ok(dialog);return dialog;}
+async function choose(h,surface,label){const url=h.w.location.href;await h.click(surface.querySelector('[data-provider-menu] summary'));await h.click(h.button(surface,label));
+  assert.equal(h.w.location.href,url,'A profile menu action must keep the current route');const dialog=h.openDialog();assert.ok(dialog);return dialog;}
 const cases=[
-  ['ET product menu, provider-wide hide and independent Undo', '/v2/products?lang=et',async h=>{
-    assert.equal(h.all('[data-listing-card-id]').length,3);assert.equal(h.w.__providerControls.calls.filter(c=>c.method==='get').length,0);
-    let box=await choose(h,h.doc.querySelector('[data-listing-card-id="101"]'),'Peida pakkuja 24 tunniks');
+  ['ET central profile menu, provider-wide hide, Undo and no card menus', '/v2/profile/repair-studio?lang=et',async h=>{
+    const calls=h.w.__providerControls.calls,profile=()=>h.doc.querySelector('[data-test-profile]');
+    assert.equal(h.all('[data-provider-menu]').length,1);assert.equal(calls.filter(c=>c.method==='get'||c.method==='listings'||c.method==='services').length,0);
+    assert.equal(profile().querySelectorAll('[data-provider-menu] button').length,2,'Both actions belong to the one profile menu');
+    assert.match(profile().querySelector('[data-provider-menu]').textContent,/Blokeeri kasutaja/);
+    let box=await choose(h,profile(),'Peida pakkuja 24 tunniks');
+    assert.deepEqual(JSON.parse(JSON.stringify(calls.find(c=>c.method==='get').target)),{type:'profile',id:h.w.__providerControls.ids.provider});
     assert.ok(h.doc.activeElement===h.button(box,'Loobu'),'Cancel receives DOM focus');await h.click(h.button(box,'Loobu'));
-    assert.ok(h.doc.activeElement===h.doc.querySelector('[data-listing-card-id="101"] summary'),'Cancel restores DOM focus');
-    box=await choose(h,h.doc.querySelector('[data-listing-card-id="101"]'),'Peida pakkuja 24 tunniks');await h.click(h.button(box,'Peida pakkuja 24 tunniks'));
-    assert.equal(h.all('[data-listing-card-id]').length,1);assert.equal(h.all('[data-listing-card-id]')[0].dataset.listingCardId,'102');
+    assert.ok(h.doc.activeElement===profile().querySelector('[data-provider-menu] summary'),'Cancel restores the profile menu');
+    box=await choose(h,profile(),'Peida pakkuja 24 tunniks');await h.click(h.button(box,'Peida pakkuja 24 tunniks'));
     const notice=h.doc.querySelector('[data-provider-notice]');assert.match(notice.textContent,/24 tunniks peidetud/);
-    assert.ok(h.doc.activeElement===notice,'Removed card focus moves to notice');await h.click(h.button(notice,'Võta tagasi'));assert.equal(h.all('[data-listing-card-id]').length,3);
-    return{noPerCardRead:true,menuDidNotNavigate:true,ordinaryAndHorseProviderRowsRemoved:true,undoSurvivesCardRemoval:true,DOMFocusRestored:true};
+    assert.equal(profile().querySelector('h1').textContent,'Repair Studio','Temporary hiding keeps a deliberate profile visit available');
+    await h.click(h.button(notice,'Võta tagasi'));
+    await h.run(f=>f.navigate('/v2/products?lang=et'));
+    assert.equal(h.all('[data-listing-card-id]').length,3);assert.equal(h.all('[data-provider-menu]').length,0);
+    assert.deepEqual(h.all('[data-listing-card-id] a').map(link=>link.getAttribute('href')),['/v2/listing/101','/v2/horse-offer/'+h.w.__providerControls.ids.horse,'/v2/listing/102']);
+    await h.run(f=>f.navigate('/v2/profile/repair-studio?lang=et'));box=await choose(h,profile(),'Peida pakkuja 24 tunniks');await h.click(h.button(box,'Peida pakkuja 24 tunniks'));
+    await h.run(f=>f.navigate('/v2/products?lang=et'));
+    assert.equal(h.all('[data-listing-card-id]').length,1);assert.equal(h.all('[data-listing-card-id]')[0].dataset.listingCardId,'102');
+    assert.equal(h.all('[data-provider-menu]').length,0);assert.ok(calls.filter(c=>c.method==='get'||c.method==='set').every(c=>c.target.type==='profile'));
+    return{actualProfilePageAndMenu:true,noViewingPrerequisite:true,profileIdentityTarget:true,twoCentralActions:true,noOrdinaryOrHorseCardMenus:true,listingLinksPreserved:true,ordinaryAndHorseProviderRowsRemoved:true,profileUndoWorks:true,cancelDOMFocusRestored:true};
   }],
-  ['EN service lost acknowledgement, explicit read and Undo','/v2/services?lang=en',async h=>{
-    assert.equal(h.all('[data-service-card-id]').length,3);await h.run(f=>f.loseNextAcknowledgement());
-    const box=await choose(h,h.doc.querySelector('[data-service-card-id="66666666-6666-4666-8666-666666666666"]'),'Hide provider for 24 hours');
+  ['EN service cards have no menu; profile lost acknowledgement, explicit read and Undo','/v2/services?lang=en',async h=>{
+    assert.equal(h.all('[data-service-card-id]').length,3);assert.equal(h.all('[data-provider-menu]').length,0);
+    assert.equal(h.w.__providerControls.calls.filter(c=>c.method==='get').length,0);
+    assert.ok(h.all('[data-service-card-id] a').every(link=>link.getAttribute('href')==='/v2/service/'+link.closest('[data-service-card-id]').dataset.serviceCardId));
+    await h.run(f=>{f.navigate('/v2/profile/repair-studio?lang=en');f.loseNextAcknowledgement();});
+    const box=await choose(h,h.doc.querySelector('[data-test-profile]'),'Hide provider for 24 hours');
     await h.click(h.button(box,'Hide provider for 24 hours'));assert.match(box.textContent,/The change could not be confirmed/);
     assert.ok(!h.button(box,'Hide provider for 24 hours'),'Unknown outcome has no repeat-write button');assert.equal(h.w.__providerControls.calls.filter(c=>c.method==='set').length,1);
-    await h.click(h.button(box,'Check saved state'));assert.equal(h.all('[data-service-card-id]').length,1);
+    await h.click(h.button(box,'Check saved state'));assert.match(h.doc.querySelector('[data-provider-notice]').textContent,/Provider hidden for 24 hours/);
     assert.equal(h.w.__providerControls.calls.filter(c=>c.method==='set').length,1);assert.equal(h.w.__providerControls.calls.filter(c=>c.method==='get').length,2);
-    await h.click(h.button(h.doc.querySelector('[data-provider-notice]'),'Undo'));assert.equal(h.all('[data-service-card-id]').length,3);
-    return{actualServiceSearchHooks:true,lostResponseNotReplayed:true,explicitReadConfirmsRevision:true,undoRestoresProvider:true};
+    await h.click(h.button(h.doc.querySelector('[data-provider-notice]'),'Undo'));
+    await h.run(f=>f.navigate('/v2/services?lang=en'));assert.equal(h.all('[data-service-card-id]').length,3);assert.equal(h.all('[data-provider-menu]').length,0);
+    return{actualServiceSearchHooks:true,noServiceCardMenusOrReads:true,serviceLinksPreserved:true,centralProfileLostResponseNotReplayed:true,explicitReadConfirmsRevision:true,profileUndoRestoresProvider:true};
   }],
   ['ET management server pages 25 + 1 and Show again','/v2/my-area?lang=et',async h=>{
     await h.run(f=>f.seedHidden());const list=h.doc.querySelector('[data-provider-control-list="hidden"]');
@@ -108,9 +123,19 @@ const cases=[
     assert.match(box.textContent,/The change could not be confirmed/);await h.click(h.button(box,'Check saved state'));
     assert.match(box.textContent,/The saved state was read, but this change still cannot be confirmed/);assert.ok(!h.doc.querySelector('[data-provider-notice]'),'No unproved success notice');
     await h.click(h.button(box,'Cancel'));assert.ok(h.doc.activeElement===h.doc.querySelector('[data-provider-controls-surface]'),'Removed row falls back to connected surface');
-    await h.run(f=>f.navigate('/v2/products?lang=en'));box=await choose(h,h.doc.querySelector('[data-listing-card-id="101"]'),'Hide provider for 24 hours');
+    await h.run(f=>f.navigate('/v2/profile/repair-studio?lang=en'));box=await choose(h,h.doc.querySelector('[data-test-profile]'),'Hide provider for 24 hours');
     assert.ok(h.button(box,'Hide provider for 24 hours'));assert.equal(h.w.__providerControls.calls.filter(c=>c.method==='set').length,1);
     return{noFalseSuccessClaim:true,explicitReadReleasesLock:true,removedTriggerDOMFocusFallback:true,newActionNeedsSeparateConfirmation:true};
+  }],
+  ['Known own private profile hides the menu and follows account changes','/v2/profile/repair-studio?lang=en&scenario=own-profile',async h=>{
+    const profile=()=>h.doc.querySelector('[data-test-profile]');assert.equal(profile().querySelector('h1').textContent,'Repair Studio');
+    assert.equal(h.all('[data-provider-menu]').length,0);assert.equal(h.w.__providerControls.calls.filter(c=>c.method==='get').length,0);
+    await h.run(f=>f.switchAccount());assert.equal(h.all('[data-provider-menu]').length,1);
+    const box=await choose(h,profile(),'Hide provider for 24 hours');assert.ok(h.button(box,'Hide provider for 24 hours'));
+    await h.click(h.button(box,'Cancel'));await h.run(f=>f.switchAccount());assert.equal(h.all('[data-provider-menu]').length,0);
+    await h.run(f=>f.switchIdentity());assert.equal(h.all('[data-provider-menu]').length,0);
+    assert.equal(h.w.__providerControls.calls.filter(c=>c.method==='set').length,0);
+    return{privateOwnerComparedToAccount:true,noSelfActionsOrExtraRead:true,otherAccountCanOpenProfileAction:true,identitySwitchDoesNotChangeOwner:true,noWrite:true,businessOwnershipStillServerChecked:true};
   }],
 ];
 for(const [name,route,run] of cases.filter(([name])=>!process.env.SELQIRO_DOM_CASE||name.toLowerCase().includes(process.env.SELQIRO_DOM_CASE.toLowerCase()))){let h;const evidence={name,status:'FAIL'};

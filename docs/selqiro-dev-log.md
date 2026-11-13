@@ -1700,3 +1700,51 @@ render_current_handoff.py abil ainult sellest seisukirjest. Kõik selle
 sissekande eelnevad 122339 väljastatud probe-paki päevikubaiti säilivad muutmata.
 Väljastatud pakid ja raportid ning ajaloodokumentide baidid säilivad; nende
 vanad ootel-, NEXT- ja käivitusjuhised ei ole praegune tööjärg.
+
+
+<!-- SELQIRO_PROVIDER_CONTROLS_PROFILE_PLACEMENT_20261113 -->
+## 13.11.2026 — 40ceac78 paigaldus vastu võetud ja profiilimenüü paigutus täpsustatud
+
+Maci 16:05:27 raport dfefda11c1ff922c397647eaf24afb95968729a465c182d02a415f67753e433e
+(262247 B) seob optimeeritud väljaande manifesti 1f85c82b5440ad8b4636ef53a08478370d69110bb0e45a4db605d60775b18ba2.
+Database verified, build passed, commit/push
+`40ceac78deb255d8006244ae232652956b92bea0` on kinnitatud. 16:07:49 pilt
+näitab sama 40ceac7 Ready / Production seisu. Lähtepuu on
+44f8042ccefbd78bd80a212398504cc5b4ef6c8a, 1696 faili. Uus paigaldus ei
+jätnud allikaid vana 955c935 juurde: see on nüüd ajalooline parent.
+
+Viis transpordikäsku sisaldasid kaht repository_read’i ning preflight/apply/verify
+kutseid kestusega 7,453 / 7,207 / 7,272 s. Eraldi verify andis applied,
+kõik 16 kaitset ning säilinud pilve invariandid. Need ei ole SQL-i benchmark.
+122 preimage’i, täielik algindex ja lõplik lähte/indexi/commit’i/remote’i
+kontroll on seotud täpse runneri baitidega. Kolm vana päevikut säilisid
+lugemislukkude all; Storage’i toiminguid ei tehtud. Vanu pakke ei muudeta.
+
+Kasutaja näitas kaartidel ning profiilil menüüd ja ütles, et pole toiminguid
+veel katsetanud. Seetõttu on kinnitatud deployment ja nähtav UI, kuid
+peitmise, Undo, blokeerimise, sõnumikeelu ja aegumise kasutusvastuvõtt ootab.
+Kasutaja uus püsiv paigutusotsus: ühine 24h peitmise / eraldi blokeerimise
+menüü ainult avalikul profiilil; eemaldada tava-, hobuse- ja teenusekaartidelt.
+Vestluse senine blokk ning Minu ala tagasivõtmine/haldus säilivad. Vaatamiste
+koguse lävendit või uut jälgimist ei lisata.
+
+Uus UI-kandidaat kasutab sama olemasolevat profile-sihti, serveri õigusi,
+24h tähtaega, otsingufiltrit ja revision’iga kaitstud toiminguid. SQL-i,
+RPC-sid, andmebaasi ega Storage’it ei muudeta. Source-only runner kontrollib
+värskelt 1696 faili alust ja viimast edukat privaatraportit, hoiab selle
+lugemislukku ning teeb lähte/build/commit/push’i. Andmebaasi- ja Supabase
+CLI-kutseid on 0; vana SQL-i paigaldajat ei korrata.
+
+Uue kohaliku UI production build: PASS, 25,276 s, 675 sisendit, drift 0;
+sünteetilised teenuseväärtused ja olemasolevad lukustatud sõltuvused.
+Sihitud DOM-i ja tarne täpsed tulemused on paki kontrollid/ kaustas. Uut
+Maci kirjutust, commit/push’i, Vercelit ega kasutuskäiku veel ei väideta.
+Järgmine üks käsk on selqiro-peitmine-profiilile-20261113 paki uuenda.py --publish;
+saadetakse selle jooksu täpne SAADA SEE FAIL raport.
+
+Uuendatud on CURRENT_STATE, sellest olemasoleva generaatoriga handoff,
+HOSTED_PORTAL, VIEWER-jätk, arhitektuuri UI-paigutuse lõik ja AI_MEMORY otsus.
+Eelmised kolm jooksvat dokumenti säilivad history/provider-controls-accepted-20261113/
+all koos preservation.json räsitõendiga. Käesoleva sissekande eelnevad
+125991 päevikubaiti ja muud varasemad ajalookirjed säilivad muutmata.
+Kontosid, sisu, fotosid, sõnumeid, päevikuid ega raportikoopiaid ei kustutata.

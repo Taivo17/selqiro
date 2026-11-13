@@ -9,7 +9,6 @@ import { publicUiMessages } from "@/lib/i18n/catalogs/publicUi";
 import { useEffect, useRef, useState } from "react";
 import { uiMessage } from "../../../../lib/i18n/interfaceMessage";
 import { useViewerReadScope } from "../../../shared/provider-controls/useViewerReadScope";
-import ProviderControlsBoundary from "../../viewer-provider-controls/components/ProviderControlsBoundary";
 import { EMPTY_PUBLIC_SEARCH, publicCategoryPath, publicFilterCount, publicSearchKey, searchConditionLabel,
   type PublicSearchFields } from "../../../entities/listing/model/publicSearch";
 import V2DiscoveryTypeSwitcher from "../../v2-shell/components/V2DiscoveryTypeSwitcher";
@@ -20,9 +19,6 @@ import SearchFilters from "./SearchFilters";
 import SearchResults from "./SearchResults";
 
 export default function ListingSearchPage() {
-  return <ProviderControlsBoundary><ListingSearchContent /></ProviderControlsBoundary>;
-}
-function ListingSearchContent() {
   const { language: uiLanguage, t } = useV2Translation(publicUiMessages);
 
   const url = usePublicSearchUrl();

@@ -17,7 +17,7 @@ import PublicProfileListingsSection from "./PublicProfileListingsSection";
 import PublicProfileProductShowcasesSection from "./PublicProfileProductShowcasesSection";
 import PublicProfileServicesSection from "./PublicProfileServicesSection";
 import ProviderControlsBoundary from "../../viewer-provider-controls/components/ProviderControlsBoundary";
-import ProviderMenu from "../../viewer-provider-controls/components/ProviderMenu";
+import PublicProfileProviderMenu from "./PublicProfileProviderMenu";
 
 const updates = (uiLanguage: Language) => { const t = (key: keyof typeof publicUiMessages.en, params?: TranslationParams) => getCatalogTranslation(uiLanguage, publicUiMessages, key, params); return [
   {
@@ -157,15 +157,15 @@ function PublicProfileContent({slug}: {slug: string}) {
 
   return (
     <div className="space-y-8">
-      <section className="overflow-hidden rounded-[34px] border border-black/5 bg-white shadow-sm">
+      <section className="rounded-[34px] border border-black/5 bg-white shadow-sm">
         {profile.bannerUrl ? (
           <img
             src={profile.bannerUrl}
             alt=""
-            className="h-56 w-full object-cover"
+            className="h-56 w-full rounded-t-[34px] object-cover"
           />
         ) : (
-          <div className="h-56 bg-gradient-to-br from-neutral-900 via-neutral-700 to-emerald-900" />
+          <div className="h-56 rounded-t-[34px] bg-gradient-to-br from-neutral-900 via-neutral-700 to-emerald-900" />
         )}
 
         <div className="px-6 pb-7 md:px-8">
@@ -210,7 +210,7 @@ function PublicProfileContent({slug}: {slug: string}) {
             </div>
 
             <div className="flex flex-wrap gap-3 pt-0 md:pt-8">
-              {profile.identityId ? <ProviderMenu target={{type: "profile", id: profile.identityId}} name={profile.displayName} allowHide={false} /> : null}
+              <PublicProfileProviderMenu profile={profile} />
               <button className="rounded-full bg-black px-6 py-3 text-sm font-black text-white shadow-sm">
                 {t("message")} </button>
               <button className="rounded-full border border-neutral-200 bg-white px-6 py-3 text-sm font-black shadow-sm">

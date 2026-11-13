@@ -3,17 +3,13 @@ import {createRoot} from 'react-dom/client';
 import ListingSearchPage from '../../src/features/public-listing-search/components/ListingSearchPage';
 import V2ServicesPage from '../../components/v2/services/V2ServicesPage';
 import ProviderManagementSection from '../../src/features/viewer-provider-controls/components/ProviderManagementSection';
-import ProviderControlsBoundary from '../../src/features/viewer-provider-controls/components/ProviderControlsBoundary';
-import ProviderMenu from '../../src/features/viewer-provider-controls/components/ProviderMenu';
-import {usePublicProfile} from '../../src/features/public-profile/model/usePublicProfile';
+import PublicProfilePage from '../../src/features/public-profile/components/PublicProfilePage';
 import {useViewerAccount} from '../../src/shared/provider-controls/useViewerAccount';
 import {useConversationBlockState} from '../../src/features/listing-conversation/model/useConversationBlockState';
 import ThreadActions from '../../src/features/listing-conversation/components/ThreadActions';
 import {fixture} from './viewer-provider-controls-fixture';
 
-function Profile(){const {profile,loading,error}=usePublicProfile('repair-studio');
-  return <section data-test-profile className="rounded-2xl border bg-white p-6">{loading?'Loading profile…':error?'Profile unavailable':profile?
-    <><h1>{profile.displayName}</h1><ProviderMenu target={{type:'profile',id:profile.identityId}} name={profile.displayName} allowHide={false}/><p>{profile.bio}</p></>:'Profile unavailable'}</section>;}
+function Profile(){return <div data-test-profile><PublicProfilePage slug="repair-studio"/></div>;}
 function Conversation(){const context=useViewerAccount();
   const actor=useMemo(()=>context.actor?{expectedUserId:context.actor.userId,expectedIdentityId:fixture.ids.second,
     accessToken:context.actor.accessToken,generation:context.actor.generation,signal:context.actor.signal}:null,[context.actor]);
@@ -43,7 +39,7 @@ function App(){const [,setVersion]=useState(0);useEffect(()=>{const changed=()=>
   const route=location.pathname;
   return <main className="mx-auto max-w-6xl px-4 py-6 sm:px-6"><FixtureControls/><div className="mb-6 flex gap-4" data-v2-header><span>Selqiro</span></div>
     {route==='/v2/products'?<ListingSearchPage/>:route==='/v2/services'?<V2ServicesPage/>:route==='/v2/my-area'?<ProviderManagementSection/>:
-      route.startsWith('/v2/profile/')?<ProviderControlsBoundary><Profile/></ProviderControlsBoundary>:route.startsWith('/v2/messages/')?<Conversation/>:<p>Direct destination</p>}
+      route.startsWith('/v2/profile/')?<Profile/>:route.startsWith('/v2/messages/')?<Conversation/>:<p>Direct destination</p>}
   </main>;
 }
 window.__providerReactAct=React.act;
