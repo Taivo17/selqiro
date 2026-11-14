@@ -2,11 +2,10 @@
 import { uiMessage } from "../../../../lib/i18n/interfaceMessage";
 
 import { useEffect, useRef, useState } from "react";
-import { hideThread, listMessageThreads, setThreadBlocked } from "../../../entities/conversation/api/messagingClient";
+import { hideThread, listMessageThreads } from "../../../entities/conversation/api/messagingClient";
 import type { MessageThreadCursor, MessageThreadList } from "../../../entities/conversation/model/messaging";
 import { useConversationActor, type ConversationActorContext } from "./useConversationActor";
 import { useConversationAutoRefresh } from "./useConversationAutoRefresh";
-import { notifyProviderControlsChanged } from "../../../shared/provider-controls/providerControlEvents";
 import { useProviderControlRevision } from "../../../shared/provider-controls/useViewerReadScope";
 
 export function useMessageInbox() {
@@ -46,7 +45,7 @@ export function useMessageInbox() {
     if (context.actor && !acting) void load(context.actor);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [controlRevision, context.actor]);
-  async function action(conversationId: string, blocked: boolean | null) {
+  async function hide(conversationId: string) {
     const actor = context.actor;
     if (!actor || !context.isCurrent(actor) || mutation.current) return false;
     const operation = Symbol("inbox-action"); mutation.current = operation;
@@ -55,18 +54,16 @@ export function useMessageInbox() {
     setActing(true); setProblem(null);
     try {
       const command = { expectedUserId: actor.expectedUserId, expectedIdentityId: actor.expectedIdentityId, conversationId };
-      if (blocked === null) await hideThread(actor.accessToken, command, actor.signal);
-      else await setThreadBlocked(actor.accessToken, { ...command, blocked }, actor.signal);
+      await hideThread(actor.accessToken, command, actor.signal);
       if (!context.isCurrent(actor)) return false;
-      if (blocked === null) setList(current => current ? Object.freeze({ ...current,
+      setList(current => current ? Object.freeze({ ...current,
         conversations: Object.freeze(current.conversations.filter(row => row.conversation_id !== conversationId)) }) : null);
-      else {notifyProviderControlsChanged("blocked"); await load(actor);}
       return true;
     } catch { if (context.isCurrent(actor)) setProblem(uiMessage("the_change_could_not_be_confirmed_try_again")); return false; }
     finally { if (mutation.current === operation) { mutation.current = null; setActing(false); } }
   }
   const visible = context.actor && list?.actor_user_id === context.actor.expectedUserId && list.identity_id === context.actor.expectedIdentityId ? list : null;
-  return { context, visible, reading, acting, problem, hide: (id: string) => action(id, null), block: (id: string, blocked: boolean) => action(id, blocked),
+  return { context, visible, reading, acting, problem, hide,
     refresh: () => context.actor && void load(context.actor),
     more: () => context.actor && visible?.next_cursor && void load(context.actor, visible.next_cursor) };
 }

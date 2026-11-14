@@ -44,7 +44,9 @@ export function createMessagingClient(fetcher: ContactFetch = fetch) {
       const c = copyHideThread(input); return parseHideThreadReceipt(await request("hide", token, c, signal), c);
     },
     async setThreadBlocked(token: string, input: unknown, signal?: AbortSignal) {
-      const c = copySetThreadBlocked(input); return parseSetThreadBlockedReceipt(await request("block", token, c, signal), c);
+      const c = copySetThreadBlocked(input);
+      if (!c.blocked) return contactFail("refused");
+      return parseSetThreadBlockedReceipt(await request("block", token, c, signal), c);
     },
   });
 }

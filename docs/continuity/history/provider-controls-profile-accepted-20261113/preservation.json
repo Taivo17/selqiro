@@ -1,0 +1,27 @@
+{
+  "format": "selqiro-continuity-preservation-v1",
+  "base_commit": "371f4f4cc1ff62ecadb14d19bf5c8004cff256ea",
+  "base_tree_oid": "57dd09fecd9258c05bebc985394532f203449e99",
+  "receipt_sha256": "668d0f1f7c59ae4e684045fce6905df8acbefe7b6b34bbcbe16886d58457de8f",
+  "meaning": "Exact installed source documents are historical. Later user acceptance is incorporated in the new CURRENT_STATE and append-only development log.",
+  "files": [
+    {
+      "source": "docs/continuity/CURRENT_STATE.json",
+      "preserved_path": "docs/continuity/history/provider-controls-profile-accepted-20261113/docs/continuity/CURRENT_STATE.json",
+      "bytes": 10146,
+      "sha256": "9938eb58b2f2e9750acabcf782ec976fa493de0ff0a976183d9b624651637067"
+    },
+    {
+      "source": "docs/continuity/HOSTED_PORTAL.md",
+      "preserved_path": "docs/continuity/history/provider-controls-profile-accepted-20261113/docs/continuity/HOSTED_PORTAL.md",
+      "bytes": 3522,
+      "sha256": "71ebe27c4415578b479456d26019853f2a92e3d2821187b116383f55b779cc71"
+    },
+    {
+      "source": "docs/99_V2_HANDOFF_NEXT_CHAT.md",
+      "preserved_path": "docs/continuity/history/provider-controls-profile-accepted-20261113/docs/99_V2_HANDOFF_NEXT_CHAT.md",
+      "bytes": 10250,
+      "sha256": "f202ce7e7cac56c4ff041d06aca4af85fe781f00169cc3e7dcf7d968302f50d5"
+    }
+  ]
+}

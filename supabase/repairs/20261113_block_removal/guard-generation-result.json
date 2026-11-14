@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "kind": "block-removal-cas-guard-generation",
+  "result": "PASS",
+  "generated_at_utc": "2026-11-13T19:30:25.624Z",
+  "engine": "PGlite PostgreSQL/WASM",
+  "synthetic_fixture": true,
+  "live_database": false,
+  "input_drift": [],
+  "source_inputs": 88,
+  "guards": 9,
+  "setter_original_sha256": "f4ac5a672a3713d8e4f96743fac1fff7da8262ece52ed70e20eb5d289d7d60c5",
+  "setter_delegation_only": true,
+  "retained_rows_unchanged": true,
+  "invariant_equality": true,
+  "independent_read_matches_apply": true,
+  "cleanup_mode_evidence": "derived retained-contract label; no fresh cleanup state observation",
+  "already_applied_path_preserves_catalog_and_rows": true,
+  "sql_sha256": {
+    "changes.sql": "bc803b70dca89030adbb44c6810b261681b2c46ca84666e9da44d5e8c5abea0e",
+    "preflight.sql": "a738b2e9483e1b56d930f8351c649954881c7c519f353e4da05810b5312f7f52",
+    "apply.sql": "be9875629c007fa0407ecca4452beccab601bff2b8e588f9588a5bad412ed4cc",
+    "verify.sql": "a738b2e9483e1b56d930f8351c649954881c7c519f353e4da05810b5312f7f52"
+  }
+}

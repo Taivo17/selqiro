@@ -7859,3 +7859,38 @@ hide/block toiminguid veel katsetanud; menüü nägemine ei võrdu nende eduga.
 Uus profiilipaigutus on eraldi ettevalmistatud source-only parandus ja ootab
 oma rakenduse tõendit. Üks praegune seis/käsk on CURRENT_STATE ja HOSTED_PORTAL.
 Kõik varasemad kaardimenüü asukohad ja ootel-kirjed jäävad dateeritud ajalooks.
+
+
+<!-- SELQIRO_BLOCK_REMOVAL_CAS_20261113 -->
+## 13.11.2026 — blokeeringu eemaldamine nõuab täpset kinnitatud versiooni
+
+Profiilipaigutus on Maci raportiga commit'is `371f4f4` kinnitatud. Kasutaja
+võttis vastu 24 tunni peitmise/tagasivõtmise ja juba avatud telefonivestluses
+kahepoolse sõnumikeelu ning kirjutamise taastumise pärast eemaldamist.
+Varasema ebaselge käigu põhjus ei ole selle korduskatsega tõendatud.
+
+Järgmise autoriseeritud paranduse püsireegel: iga eemaldamisvaade kinnitab
+konkreetse oma blokeeringu `id` ja täpse `created_at` väärtuse. Hilinenud vana
+käsk ei tohi eemaldada vahepeal uut blokeeringut. Kasutame olemasolevat
+`blocked_account` GET/SET CAS-lepingut; kliendile ei lisata konto-ID-ga
+varuteed. Vestlus seob tegeliku salvestatud vestluspartneri konto, mitte
+äriprofiili omaniku oletuse. Üks toiming, üks kirjutuskatse; teadmata tulemuse
+järel ainult seisulugemine ja vajaduse korral uus kasutaja kinnitus.
+
+Kõik vanad eemaldamisteed viiakse samasse moodulisse. Vana boolean-false
+serveritee ning otse-DELETE sulguvad, brauser ei saa bloki `id`/`created_at`
+väärtust ette anda, uuendada ega identifikaatorite sequence'it tagasi seada.
+Paaripõhine INSERT ja idempotentne blokeerimine säilitavad olemasoleva rea.
+Paigaldus sulgeb vana eemaldamiskeha ja õigused; olemasoleva CAS-setteri
+ainus kustutus delegeerib piiratud NOLOGIN rolli helperile. Invoker-tabelikaitse
+keeldub ka varem käivitatud vana JWT-kontekstiga eemaldamiskeha kutsest.
+Paigaldus ei muuda kasutajate plokke ega sisu. Usaldatud hoolduste olemasolevaid
+service-role UPDATE/TRUNCATE/sequence õigusi see brauserikontode sulgemine ei
+laienda ega käsitle üldise keeluna.
+
+Tarne on klient-esimesena: täpne lähtekontroll → uus klient/build/commit/push
+→ selle avaliku kliendimärgi vaatlus → värske kontroll → üks uus kaitstud
+SQL-tehing ja eraldi tulemuse lugemine. Uus kontroll on autoriteetne pärast
+muutunud õigusi; vanu räsitud paigaldajaid ja nende verify-käske ei korrata.
+Selle kirje olemasolu ei tõenda Macis/pilves rakendamist. Praegune tõend ja
+üks järgmine käsk on `CURRENT_STATE.json` ning `HOSTED_PORTAL.md`.

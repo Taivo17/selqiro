@@ -6,6 +6,9 @@ import { useParams } from "next/navigation";
 import { supabase } from "../../../lib/supabase";
 import { useAuth } from "../../../lib/useAuth";
 import { getTranslation } from "../../../lib/i18n/useTranslation";
+import {useLegacyProfileBlocks} from "../../../src/features/viewer-provider-controls/model/useLegacyProfileBlocks";
+import {LegacyProfileBlockButton, LegacyProfileBlockNotice} from "../../../src/features/viewer-provider-controls/components/LegacyProfileBlockControls";
+import ProviderControlFeedback from "../../../src/features/viewer-provider-controls/components/ProviderControlFeedback";
 
 type ListingImage = {
   id: string;
@@ -122,8 +125,7 @@ export default function StorePage() {
   const storeMenuRef = useRef<HTMLDivElement | null>(null);
 
   const [storeMenuOpen, setStoreMenuOpen] = useState(false);
-  const [isBlocked, setIsBlocked] = useState(false);
-  const [blockedByMe, setBlockedByMe] = useState(false);
+  const blockControls = useLegacyProfileBlocks(profile?.identity_id ?? null, user?.id ?? null);
 
   const [reportOpen, setReportOpen] = useState(false);
   const [reportReason, setReportReason] = useState("scam");
@@ -189,8 +191,6 @@ export default function StorePage() {
 
       const storeData = profileData as any;
       const storeIdentityId = storeData.identity_id as string | null;
-      const storeLegacyUserId = storeData.legacy_user_id as string | null;
-      const storeOwnerKey = storeIdentityId || storeLegacyUserId;
 
       setProfile({
         id: storeData.legacy_user_id || storeData.identity_id,
@@ -224,34 +224,6 @@ export default function StorePage() {
 
       setIsFollowing(Boolean((followState as any)?.is_following));
       setFollowersCount(Number((followState as any)?.followers_count || 0));
-
-      if (user?.id && !viewerIsStoreOwner) {
-        const { data: blockRows } = await supabase
-          .from("user_blocks")
-          .select("id, blocker_id")
-          .or(
-            `and(blocker_id.eq.${user?.id || ''},blocked_id.eq.${storeOwnerKey}),and(blocker_id.eq.${storeOwnerKey},blocked_id.eq.${user?.id || ''})`
-          );
-
-        const blocks = blockRows || [];
-
-        setIsBlocked(blocks.length > 0);
-        setBlockedByMe(
-          blocks.some((row: any) => row.blocker_id === user?.id)
-        );
-
-        if (blocks.length > 0) {
-          setProfile(null);
-          setListings([]);
-          setLoading(false);
-          return;
-        }
-
-      } else {
-        setIsBlocked(false);
-        setBlockedByMe(false);
-      }
-
 
       const { data: categoryData, error: categoryError } = await supabase
         .from("store_categories")
@@ -389,63 +361,6 @@ export default function StorePage() {
     alert("Thank you. Your report has been submitted for review.");
   };
 
-const blockUser = async () => {
-    if (!user?.id || !profile?.identity_id) return;
-
-    const confirmed = window.confirm(
-      `Block this user?
-
-You will no longer see this user's listings in your marketplace view.`
-    );
-
-    if (!confirmed) return;
-
-    const { data, error } = await supabase.rpc("block_store_identity_owner", {
-      p_store_identity_id: profile.identity_id,
-    });
-
-    if (error) {
-      console.error(error);
-      alert("Could not block user.");
-      return;
-    }
-
-    if (data === "own_identity") {
-      alert("See identiteet kuulub sinu kontole. Oma identiteete ei saa blokeerida.");
-      setStoreMenuOpen(false);
-      return;
-    }
-
-    if (data !== "blocked") {
-      alert("Could not identify store owner.");
-      return;
-    }
-
-    setIsBlocked(true);
-    setBlockedByMe(true);
-    setStoreMenuOpen(false);
-  };
-
-  const unblockUser = async () => {
-    if (!user?.id || !profile?.id) return;
-
-    const { error } = await supabase
-      .from("user_blocks")
-      .delete()
-      .eq("blocker_id", user.id)
-      .eq("blocked_id", profile.id);
-
-    if (error) {
-      console.error(error);
-      alert("Could not unblock user.");
-      return;
-    }
-
-    setIsBlocked(false);
-    setBlockedByMe(false);
-    setStoreMenuOpen(false);
-  };
-
   const isOwner =
     !!currentProfile?.active_identity_id &&
     !!profile?.identity_id &&
@@ -520,8 +435,13 @@ You will no longer see this user's listings in your marketplace view.`
     return <main className="p-6">{t("storePage.storeNotFound")}</main>;
   }
 
+  if (blockControls.restricted) {
+    return <main className="min-h-screen bg-[#f8f8f6] p-6"><LegacyProfileBlockNotice control={blockControls} language={language} /></main>;
+  }
+
   return (
     <main className="min-h-screen overflow-x-hidden bg-[#f8f8f6] px-4 py-5 text-black sm:px-8 lg:px-10">
+      <ProviderControlFeedback controls={blockControls.controls} language={language} />
       <div className="mx-auto max-w-7xl">
         <section
           className={`relative mb-5 overflow-hidden rounded-[28px] border shadow-sm sm:rounded-[36px] ${
@@ -709,31 +629,7 @@ You will no longer see this user's listings in your marketplace view.`
 
                         <div className="my-1 border-t border-black/10" />
 
-                        {blockedByMe ? (
-                          <button
-                            type="button"
-                            onClick={unblockUser}
-                            className="w-full rounded-xl px-3 py-2 text-left text-sm font-medium text-black/70 hover:bg-black/[0.04]"
-                          >
-                            Unblock user
-                          </button>
-                        ) : isBlocked ? (
-                          <button
-                            type="button"
-                            disabled
-                            className="w-full rounded-xl px-3 py-2 text-left text-sm font-medium text-black/45"
-                          >
-                            User blocked
-                          </button>
-                        ) : (
-                          <button
-                            type="button"
-                            onClick={blockUser}
-                            className="w-full rounded-xl px-3 py-2 text-left text-sm font-medium text-black/70 hover:bg-black/[0.04]"
-                          >
-                            Block user
-                          </button>
-                        )}
+                        <LegacyProfileBlockButton control={blockControls} language={language} onChoose={() => setStoreMenuOpen(false)} />
                       </div>
                     )}
                   </div>

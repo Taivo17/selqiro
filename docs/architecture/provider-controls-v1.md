@@ -1,8 +1,9 @@
 # Provider hiding and account blocking v1
 
-Decision: 13 November 2026, Europe/Tallinn. Implementation is prepared
-against the accepted `955c935` source. Actual execution and validation status
-belong to `../continuity/CURRENT_STATE.json`.
+Decision: 13 November 2026, Europe/Tallinn. Provider controls and profile-only
+placement are installed through the accepted `371f4f4` source. The exact-block
+removal follow-up is prepared separately. Actual execution and validation
+status belong to `../continuity/CURRENT_STATE.json`.
 
 ## Product contract
 
@@ -133,18 +134,27 @@ sessions or the user's Mac. Those remain separate evidence checkpoints.
 
 ## Delivery boundary
 
-The new repair is additive and guarded; historical repairs stay byte-identical.
-The old client remains usable during the interval between SQL activation and
-new deployment. The updater checks the exact previous receipt, repository,
-branch, source/index/worktree and approved remote before writes. It applies
-one journalled SQL transaction, verifies it, then writes the reviewed source,
-builds and commits/pushes. User changes or unresolved writes stop the runner.
+The current follow-up is client-first. Its existing provider CAS contract lets
+the reviewed client be deployed before the old removal paths are closed. The
+updater checks the exact 1701-file base, branch, HEAD, full index/worktree and
+approved remote, while holding the last accepted private receipt unchanged.
+A metadata preflight precedes source writes. After build and exact commit/push,
+a fixed HTTPS marker must match the reviewed runtime bytes before the SQL
+closure. A fresh complete source/remote/marker check precedes its one durable
+SQL intent. An independent catalog read confirms the outcome.
 
-Vercel Ready for the resulting commit and a real two-account usage path are
-required after the Mac report. Reports preserve the original journal and expose
-a uniquely named private Downloads copy. A released package is never silently
-edited; later repairs receive their own package identity and hashes.
+A wait resumes without repeating a verified build, commit or push. Unknown
+writes are never automatically repeated. An applied catalog may reconcile a
+lost acknowledgement; an absent or unknown result after that attempt stops.
+The marker does not attest Vercel Ready, deployment ID or old open browser tabs.
+The matching new commit's Ready and a targeted stale-confirmation usage path
+remain separate evidence. Reports expose a unique private Downloads copy and
+preserve the exact original receipt, journal and prior released packages.
 
+The old provider-controls verifier pins the old block writer and table ACL.
+Its result after this follow-up is historical, not the new contract. Use only
+`supabase/repairs/20261113_block_removal/verify.sql` through the new runner.
+Historical repair bytes are retained unchanged.
 
 ## UI placement decision — 13 November 2026
 
@@ -167,15 +177,50 @@ This changes entry-point placement, not the account/identity model, 24-hour
 deadline, revision checks, API/RPC contract, SQL, RLS or server-side discovery
 filtering. Existing message and management implementations are reused.
 
-The database capability and source release `40ceac78deb255d8006244ae232652956b92bea0`
-are now installed; the returned Mac report and matching Vercel Ready / Production
-screenshot are accepted. Runtime hide/block actions have not yet been tested by
-the user. The profile-placement revision is newly prepared and still awaits
-its own Mac report, deployment and usage verification. The current state record
-is authoritative over the historical delivery description above.
+The accepted Mac report now pins profile-placement commit
+`371f4f4cc1ff62ecadb14d19bf5c8004cff256ea`. The user accepted hide/Show again and
+the controlled two-device block/unblock flow with the phone already in the
+conversation. This does not establish a cause for the earlier ambiguous case
+or transient read errors. Ready for this exact commit was not separately
+provided. The new removal follow-up has its own prepared/executed boundary.
 
-This follow-up delivery is source-only: fresh exact 1696-file base/index/HEAD/
-remote checks, a read-only held lock on the accepted private receipt, reviewed
-source replacement, build, commit and push. It issues no database or Supabase
-CLI calls and does not rerun the completed SQL installer. Each evidence stage
-remains separate in `../continuity/CURRENT_STATE.json`.
+## Exact block removal across all views
+
+Every removal binds the previously displayed block row ID and exact timestamp
+text. The client rereads only that `blocked_account` row. A missing row or new
+version never retargets the confirmation to a replacement block. A lost reply
+permits an explicit read, not an automatic mutation retry or success claim.
+Account/conversation scope changes retire pending confirmations.
+
+V2 and legacy conversations use the actual stored peer account. The legacy
+store page resolves the profile's owner through the existing profile target;
+identity UUIDs are not treated as account UUIDs. The legacy management page
+composes the existing paginated preference list. Three direct legacy DELETE
+handlers and the unused inbox boolean setter are removed. Both the browser
+and server compatibility clients refuse `blocked=false` before the old RPC;
+`true` remains the idempotent creation path.
+
+The SQL closure keeps `user_blocks` as the sole registry. Browser roles cannot
+DELETE, UPDATE, TRUNCATE, create triggers, supply ID/created_at on INSERT, or
+reset its sequence. Pair-only INSERT remains available under existing RLS.
+The old definer's false branch refuses the operation. A BEFORE DELETE invoker
+trigger also rejects a JWT-context old definer that reaches DELETE after the
+closure, rather than relying only on new function bodies or revoked grants.
+
+The reviewed provider setter delegates only its exact DELETE to a private
+helper owned by a dedicated NOLOGIN/NOINHERIT/NOBYPASSRLS role. That helper
+validates auth.uid, both accounts, row ID and timestamp independently. Its
+own-row SELECT/DELETE policies remain narrow; browser roles receive no helper
+EXECUTE or role membership. Installation-only schema CREATE and temporary SET/INHERIT membership
+are removed before commit. PostgreSQL may retain the precisely pinned creator
+ADMIN-only membership for postgres, with inherit=false and set=false; it does
+not authorize runtime SET ROLE. No client-controlled bypass flag is used.
+
+The DELETE guard retains trusted postgres/service_role maintenance only when
+all supported JWT settings (JSON claims, legacy sub and legacy role) are absent.
+Existing privileged service-role UPDATE/TRUNCATE/sequence maintenance is outside
+this browser-account closure and is not broadened or advertised as forbidden.
+The updater changes schema/authority only; it does not alter preference or
+content rows. New role/function/trigger/ACL metadata and retained invariants are
+pinned by the new repair's guards. Its README records local synthetic evidence
+and the remaining hosted execution boundary.

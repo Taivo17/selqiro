@@ -23,6 +23,8 @@ import MessageComposer from "./MessageComposer";
 import styles from "./conversation.module.css";
 import { useConversationBlockState } from "../model/useConversationBlockState";
 import { providerControlMessages } from "../../viewer-provider-controls/model/providerControlMessages";
+import {useConversationBlockRemoval} from "../model/useConversationBlockRemoval";
+import ProviderControlFeedback from "../../viewer-provider-controls/components/ProviderControlFeedback";
 
 type Props = { conversationId: string; originListingId?: string | null };
 const EMPTY_MESSAGES: readonly MessageThreadMessage[] = Object.freeze([]);
@@ -50,6 +52,7 @@ function ManagedConversation({ conversationId, originListingId = null }: Props) 
   const { context, visible } = state;
   const blockState = useConversationBlockState(context.actor, context.isCurrent, conversationId, !!visible,
     !!visible?.blocked_by_me, !!visible?.can_send);
+  const removal = useConversationBlockRemoval(context.actor, context.isCurrent, conversationId, blockState.snapshot);
   const blocked = blockState.blockedByMe || blockState.blockedByOther;
   const root = useConversationViewport();
   const owner = visible ? visible.actor_user_id + "/" + visible.identity_id : null;
@@ -61,7 +64,8 @@ function ManagedConversation({ conversationId, originListingId = null }: Props) 
     <ConversationHeader peer={visible?.peer ?? null} listing={visible?.listing ?? null} ready={!!visible}
       blocked={blockState.blockedByMe} blockedByOther={blockState.blockedByOther}
       blockUnavailable={blockState.loading || (!visible?.can_send && !blockState.verified)}
-      busy={state.busy || state.unresolved || state.acting} onHide={hide} onBlock={state.block} />
+      busy={state.busy || state.unresolved || state.acting || removal.controls.view.phase === "writing"}
+      onHide={hide} onBlock={state.block} onUnblock={removal.available ? removal.open : undefined} />
     <div className={styles.historyWrap}>
       <div ref={historyRef} onScroll={onScroll} className={styles.history} data-conversation-history tabIndex={0} aria-label={t("message_history")}>
         {(context.loading || (state.reading && !visible)) && <p role="status">{t("loading_conversation")}</p>}
@@ -76,6 +80,7 @@ function ManagedConversation({ conversationId, originListingId = null }: Props) 
       <span className={styles.srOnly} role="status">{newMessages || state.pendingLatest ? t("new_messages_received") : ""}</span>
     </div>
     <div className={styles.notices} data-conversation-notices role="region" aria-label={t("conversation_notices")} tabIndex={0}>
+    <ProviderControlFeedback controls={removal.controls} />
     {(state.problem || context.error) && <div role="alert" className={styles.notice}>
       <p>{renderUiMessage(uiLanguage, state.problem || context.error)}</p>
       {!state.unresolved && <button type="button" className={styles.textButton} onClick={context.actor ? state.refresh : context.refresh}>{t("try_again")}</button>}

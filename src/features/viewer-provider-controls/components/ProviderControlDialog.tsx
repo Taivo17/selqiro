@@ -1,9 +1,8 @@
 "use client";
 import Link from "next/link";
 import { useEffect, useId, useRef } from "react";
-import { useV2Translation } from "../../../shared/i18n/V2LanguageProvider";
+import {useProviderControlTranslation} from "../model/providerControlLanguage";
 import type { ProviderControls } from "../model/useProviderControls";
-import { providerControlMessages } from "../model/providerControlMessages";
 import { providerActionAllowed } from "../model/providerControlSession";
 import ProviderPreferenceState from "./ProviderPreferenceState";
 
@@ -13,7 +12,7 @@ const primary = control + " border-teal-800 bg-teal-800 text-white";
 const titles = {hide: "hideTitle", unhide: "unhideTitle", block: "blockTitle", unblock: "unblockTitle"} as const;
 const help = {hide: "hideHelp", unhide: "unhideHelp", block: "blockHelp", unblock: "unblockHelp"} as const;
 export default function ProviderControlDialog({controls}: {controls: ProviderControls}) {
-  const {view, account, session} = controls, {t} = useV2Translation(providerControlMessages);
+  const {view, account, session} = controls, {t} = useProviderControlTranslation();
   const dialog = useRef<HTMLDialogElement>(null), cancel = useRef<HTMLButtonElement>(null), restore = useRef<HTMLElement | null>(null);
   const titleId = useId(), action = view.selection?.action ?? "hide", writing = view.phase === "writing";
   useEffect(() => {

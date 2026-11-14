@@ -11,7 +11,8 @@ export function useConversationBlockState(actor: ConversationActorContext | null
   isCurrent: (actor: ConversationActorContext) => boolean, conversationId: string, ready: boolean,
   blockedByMe: boolean, canSend: boolean) {
   const revision = useProviderControlRevision("visibility");
-  const key = `${actor?.expectedUserId}:${actor?.expectedIdentityId}:${actor?.generation}:${conversationId}:${blockedByMe}:${canSend}:${revision}`;
+  const [retry, setRetry] = useState(0);
+  const key = `${actor?.expectedUserId}:${actor?.expectedIdentityId}:${actor?.generation}:${conversationId}:${blockedByMe}:${canSend}:${revision}:${retry}`;
   const [state, setState] = useState<{key: string; value: ProviderControlState | null}>({key: "", value: null});
   useEffect(() => {
     if (!actor || !ready || !isCurrent(actor)) return;
@@ -24,5 +25,5 @@ export function useConversationBlockState(actor: ConversationActorContext | null
   }, [key, actor, isCurrent, conversationId, ready]);
   const value = ready && state.key === key && state.value?.targetAvailable ? state.value : null;
   return {blockedByMe: value?.blockedByMe ?? blockedByMe, blockedByOther: value?.blockedByOther ?? false,
-    loading: ready && state.key !== key, verified: !!value};
+    loading: ready && state.key !== key, verified: !!value, snapshot: value, refresh: () => setRetry(value => value + 1)};
 }

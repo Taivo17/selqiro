@@ -1,13 +1,12 @@
 "use client";
 import Link from "next/link";
 import { useEffect, useRef } from "react";
-import { useV2Translation } from "../../../shared/i18n/V2LanguageProvider";
+import {useProviderControlTranslation} from "../model/providerControlLanguage";
 import { localeForLanguage } from "../../../../lib/i18n/useTranslation";
-import { providerControlMessages } from "../model/providerControlMessages";
 import type { ProviderControls } from "../model/useProviderControls";
 
 export default function ProviderControlStatus({controls}: {controls: ProviderControls}) {
-  const {view, session} = controls, {language, t} = useV2Translation(providerControlMessages), box = useRef<HTMLDivElement>(null);
+  const {view, session} = controls, {language, t} = useProviderControlTranslation(), box = useRef<HTMLDivElement>(null);
   const unresolved = !view.open && ["uncertain", "error"].includes(view.phase) && !!view.selection;
   useEffect(() => {if (view.notice && !view.open) box.current?.focus({preventScroll: true});}, [view.notice, view.open]);
   if (!view.notice && !unresolved && !(view.phase === "writing" && !view.open)) return null;

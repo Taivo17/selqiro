@@ -5,8 +5,8 @@ import { useEffect, useRef, useState } from "react";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { supabase } from "../../../lib/supabase";
 import { useAuth } from "../../../lib/useAuth";
-import { readLegacyAccountBlocks } from "../../../src/shared/provider-controls/readLegacyAccountBlocks";
-import { notifyProviderControlsChanged } from "../../../src/shared/provider-controls/providerControlEvents";
+import {useLegacyConversationBlocks} from "../../../src/features/listing-conversation/model/useLegacyConversationBlocks";
+import ProviderControlFeedback from "../../../src/features/viewer-provider-controls/components/ProviderControlFeedback";
 
 type Conversation = {
   id: number;
@@ -82,6 +82,7 @@ export default function ConversationPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
+  const conversationTargetId = typeof params?.conversationId === "string" ? params.conversationId : "";
   const conversationId = Number(params?.conversationId);
   const attachListingId = searchParams.get("listing");
 
@@ -100,9 +101,6 @@ export default function ConversationPage() {
   const [otherUserId, setOtherUserId] = useState<string | null>(null);
   const [activeIdentityId, setActiveIdentityId] = useState<string | null>(null);
   const [otherIdentityId, setOtherIdentityId] = useState<string | null>(null);
-  const [isBlocked, setIsBlocked] = useState(false);
-  const [blockedByMe, setBlockedByMe] = useState(false);
-  const [blockReadError, setBlockReadError] = useState(false);
   const [text, setText] = useState("");
 
   const attachmentRemovedRef = useRef(false);
@@ -120,6 +118,9 @@ export default function ConversationPage() {
   const [selectedImagePreview, setSelectedImagePreview] = useState<string | null>(null);
   const [openImageUrl, setOpenImageUrl] = useState<string | null>(null);
   const [conversationMenuOpen, setConversationMenuOpen] = useState(false);
+  const blockControls = useLegacyConversationBlocks(conversationTargetId, user?.id ?? null, activeIdentityId,
+    !!conversation && conversation.id === conversationId);
+  const {blocked: isBlocked, blockedByMe, readError: blockReadError} = blockControls;
 
   const loadConversation = async () => {
     if (!user?.id || !conversationId) return;
@@ -214,13 +215,6 @@ export default function ConversationPage() {
         : (conversationData as any).buyer_id;
 
     setOtherUserId(otherUserId || null);
-
-    if (otherUserId) {
-      try {
-        const blockState = await readLegacyAccountBlocks(user.id, otherUserId);
-        setIsBlocked(blockState.blocked); setBlockedByMe(blockState.blockedByMe); setBlockReadError(false);
-      } catch {setBlockReadError(true); setIsBlocked(true); setBlockedByMe(false);}
-    }
 
     if (otherIdentity) {
       const { data: sellerData } = await supabase
@@ -415,56 +409,6 @@ export default function ConversationPage() {
     setSelectedImagePreview(URL.createObjectURL(file));
   };
 
-  const blockUser = async () => {
-    if (!user?.id || !otherUserId) return;
-
-    const confirmed = window.confirm(
-      "Block this user?\n\nYou will not be able to send messages to each other.\n\nYou will no longer see this user's listings in your marketplace view."
-    );
-
-    if (!confirmed) return;
-
-    const { error } = await supabase.from("user_blocks").upsert({
-      blocker_id: user.id,
-      blocked_id: otherUserId,
-    });
-
-    if (error) {
-      console.error(error);
-      alert("Could not block user.");
-      return;
-    }
-
-    setIsBlocked(true);
-    setBlockedByMe(true);
-    setBlockReadError(false);
-    notifyProviderControlsChanged("blocked");
-    setConversationMenuOpen(false);
-  };
-
-  const unblockUser = async () => {
-    if (!user?.id || !otherUserId) return;
-
-    const { error } = await supabase
-      .from("user_blocks")
-      .delete()
-      .eq("blocker_id", user.id)
-      .eq("blocked_id", otherUserId);
-
-    if (error) {
-      console.error(error);
-      alert("Could not unblock user.");
-      return;
-    }
-
-    notifyProviderControlsChanged("blocked");
-    try {
-      const blockState = await readLegacyAccountBlocks(user.id, otherUserId);
-      setIsBlocked(blockState.blocked); setBlockedByMe(blockState.blockedByMe); setBlockReadError(false);
-    } catch {setBlockReadError(true); setIsBlocked(true); setBlockedByMe(false);}
-    setConversationMenuOpen(false);
-  };
-
   const sendMessage = async () => {
     const cleanText = text.trim();
 
@@ -635,7 +579,8 @@ export default function ConversationPage() {
                   {blockedByMe ? (
                     <button
                       type="button"
-                      onClick={unblockUser}
+                      disabled={!blockControls.canUnblock || blockControls.controls.view.phase === "writing"}
+                      onClick={() => {setConversationMenuOpen(false); blockControls.unblock();}}
                       className="w-full rounded-xl px-3 py-2 text-left text-sm font-medium text-black/70 hover:bg-black/[0.04]"
                     >
                       Unblock user
@@ -651,7 +596,8 @@ export default function ConversationPage() {
                   ) : (
                     <button
                       type="button"
-                      onClick={blockUser}
+                      disabled={blockControls.busy}
+                      onClick={() => {setConversationMenuOpen(false); void blockControls.block();}}
                       className="w-full rounded-xl px-3 py-2 text-left text-sm font-medium text-black/70 hover:bg-black/[0.04]"
                     >
                       Block user
@@ -859,6 +805,8 @@ export default function ConversationPage() {
             }}
           />
 
+          <ProviderControlFeedback controls={blockControls.controls} language="en" />
+          {blockControls.problem && <p role="alert" className="mb-3 text-sm text-amber-900">{blockControls.problem}</p>}
           {isBlocked && (
             <div className="mb-3 rounded-2xl border border-red-200 bg-red-50 p-3 text-sm text-red-800">
               {blockReadError ? "Could not check messaging availability. Please refresh." : "Messaging is disabled because one of you has blocked the other user."}

@@ -1,0 +1,5089 @@
+{
+  "schema_version": 1,
+  "kind": "block-removal-cas-v1",
+  "before": "db5cbe0aca4e7205a85358cc7586f4d974004b036148b43946b02c6c595f4c56",
+  "after": "00d71c2cce40cbf4f918876cb9d25a6a86e6bf7d97b02536be2fc489a9de6118",
+  "guards": {
+    "account_block_structure": "c0ee4dad990aff94373a18b505f6b33a6f284361b571f19f2a704c2344b49a35",
+    "account_block_policies": "2be4f71ef40cb8d289a7905df80330da9e158e6a4534c4db66d9d4c24627ca43",
+    "provider_cas_authority": "2f034e5f727dd2ce33ed4e87dec4b5cdbaa06e763ccf16588e4bbbd1b15aa918",
+    "messaging_guards": "902185951bece19a25534da8b2eeb7a06c14ead8091baa116521954094a46766",
+    "entrypoint_authority": "3ba06e3567651bbd395bb048ee58b94662c1f02a840deeda451f510437ff1b47",
+    "block_writer_inventory": "96b905abf14a60f32b340ac84b6b123168b517360f6f77d601ed44d41e56b590"
+  },
+  "hosted_context": {
+    "release_id": "listing-publication-hosted-preview-v1",
+    "instance_id": "2d088814-0900-448a-a9d1-7b05470cb1d2",
+    "project_ref": "vyjletlmwoiwxsnsunlm",
+    "cleanup_mode": "held",
+    "release_ready": true,
+    "storage_authority_version": "source-part-rfc3986-v1"
+  },
+  "guard_names": [
+    "installer",
+    "hosted_context_ready",
+    "actor_roles",
+    "account_block_structure",
+    "account_block_policies",
+    "provider_cas_authority",
+    "messaging_guards",
+    "entrypoint_authority",
+    "block_writer_inventory"
+  ],
+  "changed_functions": [
+    "messaging_private_v2.set_block",
+    "public.set_my_provider_control_v1"
+  ],
+  "new_functions": [
+    "provider_controls_private.remove_account_block_v1",
+    "provider_controls_private.guard_account_block_delete_v1"
+  ],
+  "intentional_existing_changes": [
+    "messaging_private_v2.set_block body",
+    "public.set_my_provider_control_v1 CAS DELETE delegation",
+    "public.user_blocks table/column browser write ACL",
+    "public.user_blocks_id_seq browser UPDATE ACL"
+  ],
+  "new_objects_and_grants": [
+    "selqiro_block_removal_writer_v1",
+    "two provider_controls_private functions",
+    "two own-row RLS policies",
+    "user_blocks_cas_delete_v1 trigger",
+    "new writer USAGE/SELECT/DELETE/auth.uid EXECUTE grants"
+  ],
+  "invariant_exclusions": [
+    "two changed function bodies/complete capability-pinned facts",
+    "new writer grants/role/functions/policies/trigger",
+    "user_blocks table/column ACL and sequence ACL: complete before/after capability pin"
+  ],
+  "before_facts": {
+    "installer": true,
+    "capability": {
+      "facts": {
+        "role": [],
+        "trigger": [],
+        "policies": [],
+        "effective": [
+          {
+            "kind": "column",
+            "role": "anon",
+            "column": "blocked_id",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "INSERT"
+          },
+          {
+            "kind": "column",
+            "role": "anon",
+            "column": "blocked_id",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "REFERENCES"
+          },
+          {
+            "kind": "column",
+            "role": "anon",
+            "column": "blocked_id",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "SELECT"
+          },
+          {
+            "kind": "column",
+            "role": "anon",
+            "column": "blocked_id",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "UPDATE"
+          },
+          {
+            "kind": "column",
+            "role": "anon",
+            "column": "blocker_id",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "INSERT"
+          },
+          {
+            "kind": "column",
+            "role": "anon",
+            "column": "blocker_id",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "REFERENCES"
+          },
+          {
+            "kind": "column",
+            "role": "anon",
+            "column": "blocker_id",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "SELECT"
+          },
+          {
+            "kind": "column",
+            "role": "anon",
+            "column": "blocker_id",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "UPDATE"
+          },
+          {
+            "kind": "column",
+            "role": "anon",
+            "column": "created_at",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "INSERT"
+          },
+          {
+            "kind": "column",
+            "role": "anon",
+            "column": "created_at",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "REFERENCES"
+          },
+          {
+            "kind": "column",
+            "role": "anon",
+            "column": "created_at",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "SELECT"
+          },
+          {
+            "kind": "column",
+            "role": "anon",
+            "column": "created_at",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "UPDATE"
+          },
+          {
+            "kind": "column",
+            "role": "anon",
+            "column": "id",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "INSERT"
+          },
+          {
+            "kind": "column",
+            "role": "anon",
+            "column": "id",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "REFERENCES"
+          },
+          {
+            "kind": "column",
+            "role": "anon",
+            "column": "id",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "SELECT"
+          },
+          {
+            "kind": "column",
+            "role": "anon",
+            "column": "id",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "UPDATE"
+          },
+          {
+            "kind": "sequence",
+            "role": "anon",
+            "column": "",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "SELECT"
+          },
+          {
+            "kind": "sequence",
+            "role": "anon",
+            "column": "",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "UPDATE"
+          },
+          {
+            "kind": "sequence",
+            "role": "anon",
+            "column": "",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "USAGE"
+          },
+          {
+            "kind": "table",
+            "role": "anon",
+            "column": "",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "DELETE"
+          },
+          {
+            "kind": "table",
+            "role": "anon",
+            "column": "",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "INSERT"
+          },
+          {
+            "kind": "table",
+            "role": "anon",
+            "column": "",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "REFERENCES"
+          },
+          {
+            "kind": "table",
+            "role": "anon",
+            "column": "",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "SELECT"
+          },
+          {
+            "kind": "table",
+            "role": "anon",
+            "column": "",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "TRIGGER"
+          },
+          {
+            "kind": "table",
+            "role": "anon",
+            "column": "",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "TRUNCATE"
+          },
+          {
+            "kind": "table",
+            "role": "anon",
+            "column": "",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "UPDATE"
+          },
+          {
+            "kind": "column",
+            "role": "authenticated",
+            "column": "blocked_id",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "INSERT"
+          },
+          {
+            "kind": "column",
+            "role": "authenticated",
+            "column": "blocked_id",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "REFERENCES"
+          },
+          {
+            "kind": "column",
+            "role": "authenticated",
+            "column": "blocked_id",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "SELECT"
+          },
+          {
+            "kind": "column",
+            "role": "authenticated",
+            "column": "blocked_id",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "UPDATE"
+          },
+          {
+            "kind": "column",
+            "role": "authenticated",
+            "column": "blocker_id",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "INSERT"
+          },
+          {
+            "kind": "column",
+            "role": "authenticated",
+            "column": "blocker_id",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "REFERENCES"
+          },
+          {
+            "kind": "column",
+            "role": "authenticated",
+            "column": "blocker_id",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "SELECT"
+          },
+          {
+            "kind": "column",
+            "role": "authenticated",
+            "column": "blocker_id",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "UPDATE"
+          },
+          {
+            "kind": "column",
+            "role": "authenticated",
+            "column": "created_at",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "INSERT"
+          },
+          {
+            "kind": "column",
+            "role": "authenticated",
+            "column": "created_at",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "REFERENCES"
+          },
+          {
+            "kind": "column",
+            "role": "authenticated",
+            "column": "created_at",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "SELECT"
+          },
+          {
+            "kind": "column",
+            "role": "authenticated",
+            "column": "created_at",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "UPDATE"
+          },
+          {
+            "kind": "column",
+            "role": "authenticated",
+            "column": "id",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "INSERT"
+          },
+          {
+            "kind": "column",
+            "role": "authenticated",
+            "column": "id",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "REFERENCES"
+          },
+          {
+            "kind": "column",
+            "role": "authenticated",
+            "column": "id",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "SELECT"
+          },
+          {
+            "kind": "column",
+            "role": "authenticated",
+            "column": "id",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "UPDATE"
+          },
+          {
+            "kind": "sequence",
+            "role": "authenticated",
+            "column": "",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "SELECT"
+          },
+          {
+            "kind": "sequence",
+            "role": "authenticated",
+            "column": "",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "UPDATE"
+          },
+          {
+            "kind": "sequence",
+            "role": "authenticated",
+            "column": "",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "USAGE"
+          },
+          {
+            "kind": "table",
+            "role": "authenticated",
+            "column": "",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "DELETE"
+          },
+          {
+            "kind": "table",
+            "role": "authenticated",
+            "column": "",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "INSERT"
+          },
+          {
+            "kind": "table",
+            "role": "authenticated",
+            "column": "",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "REFERENCES"
+          },
+          {
+            "kind": "table",
+            "role": "authenticated",
+            "column": "",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "SELECT"
+          },
+          {
+            "kind": "table",
+            "role": "authenticated",
+            "column": "",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "TRIGGER"
+          },
+          {
+            "kind": "table",
+            "role": "authenticated",
+            "column": "",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "TRUNCATE"
+          },
+          {
+            "kind": "table",
+            "role": "authenticated",
+            "column": "",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "UPDATE"
+          },
+          {
+            "kind": "column",
+            "role": "selqiro_listing_contact_writer_v1",
+            "column": "blocked_id",
+            "allowed": false,
+            "grantable": false,
+            "privilege": "INSERT"
+          },
+          {
+            "kind": "column",
+            "role": "selqiro_listing_contact_writer_v1",
+            "column": "blocked_id",
+            "allowed": false,
+            "grantable": false,
+            "privilege": "REFERENCES"
+          },
+          {
+            "kind": "column",
+            "role": "selqiro_listing_contact_writer_v1",
+            "column": "blocked_id",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "SELECT"
+          },
+          {
+            "kind": "column",
+            "role": "selqiro_listing_contact_writer_v1",
+            "column": "blocked_id",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "UPDATE"
+          },
+          {
+            "kind": "column",
+            "role": "selqiro_listing_contact_writer_v1",
+            "column": "blocker_id",
+            "allowed": false,
+            "grantable": false,
+            "privilege": "INSERT"
+          },
+          {
+            "kind": "column",
+            "role": "selqiro_listing_contact_writer_v1",
+            "column": "blocker_id",
+            "allowed": false,
+            "grantable": false,
+            "privilege": "REFERENCES"
+          },
+          {
+            "kind": "column",
+            "role": "selqiro_listing_contact_writer_v1",
+            "column": "blocker_id",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "SELECT"
+          },
+          {
+            "kind": "column",
+            "role": "selqiro_listing_contact_writer_v1",
+            "column": "blocker_id",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "UPDATE"
+          },
+          {
+            "kind": "column",
+            "role": "selqiro_listing_contact_writer_v1",
+            "column": "created_at",
+            "allowed": false,
+            "grantable": false,
+            "privilege": "INSERT"
+          },
+          {
+            "kind": "column",
+            "role": "selqiro_listing_contact_writer_v1",
+            "column": "created_at",
+            "allowed": false,
+            "grantable": false,
+            "privilege": "REFERENCES"
+          },
+          {
+            "kind": "column",
+            "role": "selqiro_listing_contact_writer_v1",
+            "column": "created_at",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "SELECT"
+          },
+          {
+            "kind": "column",
+            "role": "selqiro_listing_contact_writer_v1",
+            "column": "created_at",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "UPDATE"
+          },
+          {
+            "kind": "column",
+            "role": "selqiro_listing_contact_writer_v1",
+            "column": "id",
+            "allowed": false,
+            "grantable": false,
+            "privilege": "INSERT"
+          },
+          {
+            "kind": "column",
+            "role": "selqiro_listing_contact_writer_v1",
+            "column": "id",
+            "allowed": false,
+            "grantable": false,
+            "privilege": "REFERENCES"
+          },
+          {
+            "kind": "column",
+            "role": "selqiro_listing_contact_writer_v1",
+            "column": "id",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "SELECT"
+          },
+          {
+            "kind": "column",
+            "role": "selqiro_listing_contact_writer_v1",
+            "column": "id",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "UPDATE"
+          },
+          {
+            "kind": "sequence",
+            "role": "selqiro_listing_contact_writer_v1",
+            "column": "",
+            "allowed": false,
+            "grantable": false,
+            "privilege": "SELECT"
+          },
+          {
+            "kind": "sequence",
+            "role": "selqiro_listing_contact_writer_v1",
+            "column": "",
+            "allowed": false,
+            "grantable": false,
+            "privilege": "UPDATE"
+          },
+          {
+            "kind": "sequence",
+            "role": "selqiro_listing_contact_writer_v1",
+            "column": "",
+            "allowed": false,
+            "grantable": false,
+            "privilege": "USAGE"
+          },
+          {
+            "kind": "table",
+            "role": "selqiro_listing_contact_writer_v1",
+            "column": "",
+            "allowed": false,
+            "grantable": false,
+            "privilege": "DELETE"
+          },
+          {
+            "kind": "table",
+            "role": "selqiro_listing_contact_writer_v1",
+            "column": "",
+            "allowed": false,
+            "grantable": false,
+            "privilege": "INSERT"
+          },
+          {
+            "kind": "table",
+            "role": "selqiro_listing_contact_writer_v1",
+            "column": "",
+            "allowed": false,
+            "grantable": false,
+            "privilege": "REFERENCES"
+          },
+          {
+            "kind": "table",
+            "role": "selqiro_listing_contact_writer_v1",
+            "column": "",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "SELECT"
+          },
+          {
+            "kind": "table",
+            "role": "selqiro_listing_contact_writer_v1",
+            "column": "",
+            "allowed": false,
+            "grantable": false,
+            "privilege": "TRIGGER"
+          },
+          {
+            "kind": "table",
+            "role": "selqiro_listing_contact_writer_v1",
+            "column": "",
+            "allowed": false,
+            "grantable": false,
+            "privilege": "TRUNCATE"
+          },
+          {
+            "kind": "table",
+            "role": "selqiro_listing_contact_writer_v1",
+            "column": "",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "UPDATE"
+          },
+          {
+            "kind": "column",
+            "role": "service_role",
+            "column": "blocked_id",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "INSERT"
+          },
+          {
+            "kind": "column",
+            "role": "service_role",
+            "column": "blocked_id",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "REFERENCES"
+          },
+          {
+            "kind": "column",
+            "role": "service_role",
+            "column": "blocked_id",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "SELECT"
+          },
+          {
+            "kind": "column",
+            "role": "service_role",
+            "column": "blocked_id",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "UPDATE"
+          },
+          {
+            "kind": "column",
+            "role": "service_role",
+            "column": "blocker_id",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "INSERT"
+          },
+          {
+            "kind": "column",
+            "role": "service_role",
+            "column": "blocker_id",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "REFERENCES"
+          },
+          {
+            "kind": "column",
+            "role": "service_role",
+            "column": "blocker_id",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "SELECT"
+          },
+          {
+            "kind": "column",
+            "role": "service_role",
+            "column": "blocker_id",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "UPDATE"
+          },
+          {
+            "kind": "column",
+            "role": "service_role",
+            "column": "created_at",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "INSERT"
+          },
+          {
+            "kind": "column",
+            "role": "service_role",
+            "column": "created_at",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "REFERENCES"
+          },
+          {
+            "kind": "column",
+            "role": "service_role",
+            "column": "created_at",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "SELECT"
+          },
+          {
+            "kind": "column",
+            "role": "service_role",
+            "column": "created_at",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "UPDATE"
+          },
+          {
+            "kind": "column",
+            "role": "service_role",
+            "column": "id",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "INSERT"
+          },
+          {
+            "kind": "column",
+            "role": "service_role",
+            "column": "id",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "REFERENCES"
+          },
+          {
+            "kind": "column",
+            "role": "service_role",
+            "column": "id",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "SELECT"
+          },
+          {
+            "kind": "column",
+            "role": "service_role",
+            "column": "id",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "UPDATE"
+          },
+          {
+            "kind": "sequence",
+            "role": "service_role",
+            "column": "",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "SELECT"
+          },
+          {
+            "kind": "sequence",
+            "role": "service_role",
+            "column": "",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "UPDATE"
+          },
+          {
+            "kind": "sequence",
+            "role": "service_role",
+            "column": "",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "USAGE"
+          },
+          {
+            "kind": "table",
+            "role": "service_role",
+            "column": "",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "DELETE"
+          },
+          {
+            "kind": "table",
+            "role": "service_role",
+            "column": "",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "INSERT"
+          },
+          {
+            "kind": "table",
+            "role": "service_role",
+            "column": "",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "REFERENCES"
+          },
+          {
+            "kind": "table",
+            "role": "service_role",
+            "column": "",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "SELECT"
+          },
+          {
+            "kind": "table",
+            "role": "service_role",
+            "column": "",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "TRIGGER"
+          },
+          {
+            "kind": "table",
+            "role": "service_role",
+            "column": "",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "TRUNCATE"
+          },
+          {
+            "kind": "table",
+            "role": "service_role",
+            "column": "",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "UPDATE"
+          }
+        ],
+        "functions": [
+          {
+            "acl": [
+              {
+                "grantee": "postgres",
+                "grantor": "postgres",
+                "grantable": false,
+                "privilege": "EXECUTE"
+              },
+              {
+                "grantee": "selqiro_listing_contact_writer_v1",
+                "grantor": "postgres",
+                "grantable": false,
+                "privilege": "EXECUTE"
+              }
+            ],
+            "kind": "f",
+            "owner": "postgres",
+            "config": [
+              "search_path=pg_catalog, pg_temp",
+              "lock_timeout=2s"
+            ],
+            "result": "void",
+            "strict": false,
+            "definer": true,
+            "defaults": null,
+            "language": "plpgsql",
+            "parallel": "u",
+            "leakproof": false,
+            "signature": "messaging_private_v2.set_block(uuid,uuid,bigint,boolean)",
+            "volatility": "v",
+            "body_sha256": "6d8edfb3963c7261644fddd9519c715d047b78b5037a0c387ea9b03cdeef08fc",
+            "argument_names": [
+              "p_user",
+              "p_identity",
+              "p_conversation",
+              "p_blocked"
+            ]
+          },
+          {
+            "acl": [
+              {
+                "grantee": "authenticated",
+                "grantor": "postgres",
+                "grantable": false,
+                "privilege": "EXECUTE"
+              },
+              {
+                "grantee": "postgres",
+                "grantor": "postgres",
+                "grantable": false,
+                "privilege": "EXECUTE"
+              }
+            ],
+            "kind": "f",
+            "owner": "postgres",
+            "config": [
+              "search_path=pg_catalog, pg_temp",
+              "TimeZone=UTC",
+              "lock_timeout=2s"
+            ],
+            "result": "jsonb",
+            "strict": false,
+            "definer": true,
+            "defaults": "NULL::uuid, NULL::uuid, NULL::text, NULL::timestamp with time zone",
+            "language": "plpgsql",
+            "parallel": "u",
+            "leakproof": false,
+            "signature": "public.set_my_provider_control_v1(uuid,text,text,text,text,uuid,uuid,text,timestamp with time zone)",
+            "volatility": "v",
+            "body_sha256": "809fb4fac557b16f137100a3e0c2c0dceeb52f729d074181978005a81019b15f",
+            "argument_names": [
+              "p_expected_user_id",
+              "p_target_type",
+              "p_target_id",
+              "p_action",
+              "p_expected_target_token",
+              "p_expected_revision",
+              "p_next_revision",
+              "p_expected_block_id",
+              "p_expected_block_created_at"
+            ]
+          }
+        ],
+        "table_acl": {
+          "acl": [
+            {
+              "grantee": "anon",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "DELETE"
+            },
+            {
+              "grantee": "anon",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "INSERT"
+            },
+            {
+              "grantee": "anon",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "MAINTAIN"
+            },
+            {
+              "grantee": "anon",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "REFERENCES"
+            },
+            {
+              "grantee": "anon",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "SELECT"
+            },
+            {
+              "grantee": "anon",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "TRIGGER"
+            },
+            {
+              "grantee": "anon",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "TRUNCATE"
+            },
+            {
+              "grantee": "anon",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "UPDATE"
+            },
+            {
+              "grantee": "authenticated",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "DELETE"
+            },
+            {
+              "grantee": "authenticated",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "INSERT"
+            },
+            {
+              "grantee": "authenticated",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "MAINTAIN"
+            },
+            {
+              "grantee": "authenticated",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "REFERENCES"
+            },
+            {
+              "grantee": "authenticated",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "SELECT"
+            },
+            {
+              "grantee": "authenticated",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "TRIGGER"
+            },
+            {
+              "grantee": "authenticated",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "TRUNCATE"
+            },
+            {
+              "grantee": "authenticated",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "UPDATE"
+            },
+            {
+              "grantee": "postgres",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "DELETE"
+            },
+            {
+              "grantee": "postgres",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "INSERT"
+            },
+            {
+              "grantee": "postgres",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "MAINTAIN"
+            },
+            {
+              "grantee": "postgres",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "REFERENCES"
+            },
+            {
+              "grantee": "postgres",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "SELECT"
+            },
+            {
+              "grantee": "postgres",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "TRIGGER"
+            },
+            {
+              "grantee": "postgres",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "TRUNCATE"
+            },
+            {
+              "grantee": "postgres",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "UPDATE"
+            },
+            {
+              "grantee": "selqiro_listing_contact_writer_v1",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "SELECT"
+            },
+            {
+              "grantee": "selqiro_listing_contact_writer_v1",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "UPDATE"
+            },
+            {
+              "grantee": "service_role",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "DELETE"
+            },
+            {
+              "grantee": "service_role",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "INSERT"
+            },
+            {
+              "grantee": "service_role",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "MAINTAIN"
+            },
+            {
+              "grantee": "service_role",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "REFERENCES"
+            },
+            {
+              "grantee": "service_role",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "SELECT"
+            },
+            {
+              "grantee": "service_role",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "TRIGGER"
+            },
+            {
+              "grantee": "service_role",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "TRUNCATE"
+            },
+            {
+              "grantee": "service_role",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "UPDATE"
+            }
+          ],
+          "column_acl": [
+            {
+              "acl": [],
+              "name": "id"
+            },
+            {
+              "acl": [],
+              "name": "blocker_id"
+            },
+            {
+              "acl": [],
+              "name": "blocked_id"
+            },
+            {
+              "acl": [],
+              "name": "created_at"
+            }
+          ]
+        },
+        "sequence_acl": [
+          {
+            "grantee": "anon",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "SELECT"
+          },
+          {
+            "grantee": "anon",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "UPDATE"
+          },
+          {
+            "grantee": "anon",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "USAGE"
+          },
+          {
+            "grantee": "authenticated",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "SELECT"
+          },
+          {
+            "grantee": "authenticated",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "UPDATE"
+          },
+          {
+            "grantee": "authenticated",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "USAGE"
+          },
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "SELECT"
+          },
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "UPDATE"
+          },
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "USAGE"
+          },
+          {
+            "grantee": "service_role",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "SELECT"
+          },
+          {
+            "grantee": "service_role",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "UPDATE"
+          },
+          {
+            "grantee": "service_role",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "USAGE"
+          }
+        ],
+        "new_privileges": {
+          "schemas": [
+            {
+              "acl": [],
+              "schema": "auth"
+            },
+            {
+              "acl": [],
+              "schema": "provider_controls_private"
+            },
+            {
+              "acl": [],
+              "schema": "public"
+            }
+          ],
+          "auth_uid_acl": []
+        }
+      },
+      "sha256": "db5cbe0aca4e7205a85358cc7586f4d974004b036148b43946b02c6c595f4c56"
+    },
+    "invariants": {
+      "existing_authority": "a4290f056d21beb3f99ef869d2193567a47ca6a98a1e41064b063d65854cc8e2",
+      "existing_functions": "d6272a3695fcbaa2c2763b2bcc7976e0195c922c32b05f4ad6545bfe2801475c",
+      "immutable_structure": "67533b7ab65e28b8ab38cb6cee279d055558ee89ee827591d95401f1309cfb2f"
+    },
+    "actor_roles": true,
+    "hosted_context": [
+      {
+        "release_id": "listing-publication-hosted-preview-v1",
+        "instance_id": "2d088814-0900-448a-a9d1-7b05470cb1d2",
+        "project_ref": "vyjletlmwoiwxsnsunlm",
+        "cleanup_mode": "held",
+        "release_ready": true,
+        "storage_authority_version": "source-part-rfc3986-v1"
+      }
+    ],
+    "messaging_guards": {
+      "facts": [
+        {
+          "acl": [
+            {
+              "grantee": "postgres",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            },
+            {
+              "grantee": "selqiro_listing_contact_writer_v1",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            }
+          ],
+          "kind": "f",
+          "owner": "postgres",
+          "config": [
+            "search_path=pg_catalog, public, auth, pg_temp"
+          ],
+          "result": "trigger",
+          "strict": false,
+          "definer": false,
+          "defaults": null,
+          "language": "plpgsql",
+          "parallel": "u",
+          "leakproof": false,
+          "signature": "listing_contact_private.guard_message()",
+          "volatility": "v",
+          "body_sha256": "a2ac16ccb92fb05c5e1ddb2849fbf2c14e5ea00004916f60186f46733de63950",
+          "argument_names": null
+        },
+        {
+          "acl": [
+            {
+              "grantee": "postgres",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            },
+            {
+              "grantee": "selqiro_listing_contact_writer_v1",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            }
+          ],
+          "kind": "f",
+          "owner": "postgres",
+          "config": [
+            "search_path=pg_catalog, pg_temp"
+          ],
+          "result": "uuid",
+          "strict": false,
+          "definer": true,
+          "defaults": null,
+          "language": "plpgsql",
+          "parallel": "u",
+          "leakproof": false,
+          "signature": "listing_contact_private.require_actor_hosted_v1(uuid,uuid)",
+          "volatility": "v",
+          "body_sha256": "d6b6bede7ce642c19c3ebdb0e809abf1ab049c789b2219b9e8454923c88f5518",
+          "argument_names": [
+            "p_expected_user_id",
+            "p_expected_identity_id"
+          ]
+        },
+        {
+          "acl": [
+            {
+              "grantee": "postgres",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            },
+            {
+              "grantee": "selqiro_listing_contact_writer_v1",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            }
+          ],
+          "kind": "f",
+          "owner": "postgres",
+          "config": [
+            "search_path=pg_catalog, public, pg_temp"
+          ],
+          "result": "void",
+          "strict": false,
+          "definer": true,
+          "defaults": null,
+          "language": "plpgsql",
+          "parallel": "u",
+          "leakproof": false,
+          "signature": "listing_contact_private.require_peer(uuid,uuid)",
+          "volatility": "v",
+          "body_sha256": "43f16a23f77900f91a850c3d7d41689b806680f7ffb68796d164d23cccd3f7aa",
+          "argument_names": [
+            "p_user",
+            "p_identity"
+          ]
+        },
+        {
+          "acl": [
+            {
+              "grantee": "postgres",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            },
+            {
+              "grantee": "selqiro_listing_contact_writer_v1",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            }
+          ],
+          "kind": "f",
+          "owner": "postgres",
+          "config": [
+            "search_path=pg_catalog, public, pg_temp"
+          ],
+          "result": "void",
+          "strict": false,
+          "definer": false,
+          "defaults": null,
+          "language": "plpgsql",
+          "parallel": "u",
+          "leakproof": false,
+          "signature": "listing_contact_private.require_unblocked(uuid,uuid)",
+          "volatility": "v",
+          "body_sha256": "aabb21ea89dd484394e31241d5e490551f72935900840946dd286d937dbdae80",
+          "argument_names": [
+            "p_first",
+            "p_second"
+          ]
+        },
+        {
+          "acl": [
+            {
+              "grantee": "postgres",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            },
+            {
+              "grantee": "selqiro_listing_contact_writer_v1",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            }
+          ],
+          "kind": "f",
+          "owner": "postgres",
+          "config": [
+            "search_path=pg_catalog, pg_temp"
+          ],
+          "result": "boolean",
+          "strict": false,
+          "definer": false,
+          "defaults": null,
+          "language": "sql",
+          "parallel": "u",
+          "leakproof": false,
+          "signature": "messaging_private_v2.exact_thread(bigint,uuid,uuid)",
+          "volatility": "s",
+          "body_sha256": "19fd6913a5e44248686e56a0151d7a953c0fbf7b603cfc2e2b65a21ac252fd23",
+          "argument_names": [
+            "p_conversation",
+            "p_user",
+            "p_identity"
+          ]
+        },
+        {
+          "acl": [
+            {
+              "grantee": "postgres",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            },
+            {
+              "grantee": "selqiro_listing_contact_writer_v1",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            }
+          ],
+          "kind": "f",
+          "owner": "postgres",
+          "config": [
+            "search_path=pg_catalog, pg_temp",
+            "lock_timeout=2s"
+          ],
+          "result": "trigger",
+          "strict": false,
+          "definer": true,
+          "defaults": null,
+          "language": "plpgsql",
+          "parallel": "u",
+          "leakproof": false,
+          "signature": "messaging_private_v2.guard_account_block()",
+          "volatility": "v",
+          "body_sha256": "83bd3c50a4d0bb2323e5dee7ed86032d506ea82e276b6127d3238bc96b37773a",
+          "argument_names": null
+        },
+        {
+          "acl": [
+            {
+              "grantee": "postgres",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            },
+            {
+              "grantee": "selqiro_listing_contact_writer_v1",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            }
+          ],
+          "kind": "f",
+          "owner": "postgres",
+          "config": [
+            "search_path=pg_catalog, pg_temp"
+          ],
+          "result": "public.conversations",
+          "strict": false,
+          "definer": false,
+          "defaults": null,
+          "language": "plpgsql",
+          "parallel": "u",
+          "leakproof": false,
+          "signature": "messaging_private_v2.require_thread(bigint,uuid,uuid)",
+          "volatility": "v",
+          "body_sha256": "5f2487f6126fd6a17f67c6ec4b9de340840f8ac3f0585d5750a38c90396fbd36",
+          "argument_names": [
+            "p_conversation",
+            "p_user",
+            "p_identity"
+          ]
+        },
+        {
+          "acl": [
+            {
+              "grantee": "authenticated",
+              "grantor": "selqiro_listing_contact_writer_v1",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            },
+            {
+              "grantee": "selqiro_listing_contact_writer_v1",
+              "grantor": "selqiro_listing_contact_writer_v1",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            }
+          ],
+          "kind": "f",
+          "owner": "selqiro_listing_contact_writer_v1",
+          "config": [
+            "search_path=pg_catalog, public, auth, pg_temp",
+            "lock_timeout=2s"
+          ],
+          "result": "jsonb",
+          "strict": false,
+          "definer": true,
+          "defaults": "NULL::text",
+          "language": "plpgsql",
+          "parallel": "u",
+          "leakproof": false,
+          "signature": "public.send_my_listing_message_v1(uuid,uuid,uuid,text,text,text)",
+          "volatility": "v",
+          "body_sha256": "2b2f38a55bef3b0751ae2ae045f973a9a7032ed322ef6bf5ca1e39b1fe0bd56a",
+          "argument_names": [
+            "p_expected_user_id",
+            "p_expected_identity_id",
+            "p_request_key",
+            "p_conversation_id",
+            "p_message",
+            "p_listing_id"
+          ]
+        },
+        {
+          "acl": [
+            {
+              "grantee": "authenticated",
+              "grantor": "selqiro_listing_contact_writer_v1",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            },
+            {
+              "grantee": "selqiro_listing_contact_writer_v1",
+              "grantor": "selqiro_listing_contact_writer_v1",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            }
+          ],
+          "kind": "f",
+          "owner": "selqiro_listing_contact_writer_v1",
+          "config": [
+            "search_path=pg_catalog, public, auth, pg_temp",
+            "lock_timeout=2s"
+          ],
+          "result": "jsonb",
+          "strict": false,
+          "definer": true,
+          "defaults": "NULL::text, NULL::uuid",
+          "language": "plpgsql",
+          "parallel": "u",
+          "leakproof": false,
+          "signature": "public.send_my_message_v2(uuid,uuid,uuid,text,text,text,uuid)",
+          "volatility": "v",
+          "body_sha256": "22669894a1de3dceac8d608a271ae7c459c16f2957af33b04b24fbf9365e1538",
+          "argument_names": [
+            "p_expected_user_id",
+            "p_expected_identity_id",
+            "p_request_key",
+            "p_conversation_id",
+            "p_message",
+            "p_listing_id",
+            "p_attachment_id"
+          ]
+        }
+      ],
+      "sha256": "902185951bece19a25534da8b2eeb7a06c14ead8091baa116521954094a46766"
+    },
+    "entrypoint_authority": {
+      "facts": [
+        {
+          "acl": [
+            {
+              "grantee": "PUBLIC",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            },
+            {
+              "grantee": "anon",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            },
+            {
+              "grantee": "authenticated",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            },
+            {
+              "grantee": "postgres",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            },
+            {
+              "grantee": "service_role",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            }
+          ],
+          "kind": "f",
+          "owner": "postgres",
+          "config": [
+            "search_path=public"
+          ],
+          "result": "text",
+          "strict": false,
+          "definer": true,
+          "defaults": null,
+          "language": "plpgsql",
+          "parallel": "u",
+          "leakproof": false,
+          "signature": "public.block_store_identity_owner(uuid)",
+          "volatility": "v",
+          "body_sha256": "68f8b39c768c89ce5a696e3ad0c99afd1a3958ee06a5c524a0c828b5de225397",
+          "argument_names": [
+            "p_store_identity_id"
+          ]
+        },
+        {
+          "acl": [
+            {
+              "grantee": "PUBLIC",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            },
+            {
+              "grantee": "anon",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            },
+            {
+              "grantee": "authenticated",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            },
+            {
+              "grantee": "postgres",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            },
+            {
+              "grantee": "service_role",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            }
+          ],
+          "kind": "f",
+          "owner": "postgres",
+          "config": [
+            "search_path=public"
+          ],
+          "result": "void",
+          "strict": false,
+          "definer": true,
+          "defaults": null,
+          "language": "plpgsql",
+          "parallel": "u",
+          "leakproof": false,
+          "signature": "public.restore_conversation_for_participants(bigint)",
+          "volatility": "v",
+          "body_sha256": "b6384bfd4d43e0b45e4c4bd7a07bbf9b79453d8a86208a990e3b91517129a279",
+          "argument_names": [
+            "target_conversation_id"
+          ]
+        },
+        {
+          "acl": [
+            {
+              "grantee": "authenticated",
+              "grantor": "selqiro_listing_contact_writer_v1",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            },
+            {
+              "grantee": "selqiro_listing_contact_writer_v1",
+              "grantor": "selqiro_listing_contact_writer_v1",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            }
+          ],
+          "kind": "f",
+          "owner": "selqiro_listing_contact_writer_v1",
+          "config": [
+            "search_path=pg_catalog, public, auth, pg_temp",
+            "lock_timeout=2s"
+          ],
+          "result": "jsonb",
+          "strict": false,
+          "definer": true,
+          "defaults": null,
+          "language": "plpgsql",
+          "parallel": "u",
+          "leakproof": false,
+          "signature": "public.set_my_thread_block_v2(uuid,uuid,text,boolean)",
+          "volatility": "v",
+          "body_sha256": "2755d8475ddd0c5ee7e61d7e66e96919013202056d8473bb7a81b63ddabb2d81",
+          "argument_names": [
+            "p_expected_user_id",
+            "p_expected_identity_id",
+            "p_conversation_id",
+            "p_blocked"
+          ]
+        }
+      ],
+      "sha256": "3ba06e3567651bbd395bb048ee58b94662c1f02a840deeda451f510437ff1b47"
+    },
+    "account_block_policies": {
+      "facts": [
+        {
+          "name": "Users can create own blocks",
+          "check": "(blocker_id = auth.uid())",
+          "roles": [
+            "authenticated"
+          ],
+          "using": null,
+          "command": "a",
+          "permissive": true
+        },
+        {
+          "name": "Users can delete own blocks",
+          "check": null,
+          "roles": [
+            "authenticated"
+          ],
+          "using": "(blocker_id = auth.uid())",
+          "command": "d",
+          "permissive": true
+        },
+        {
+          "name": "Users can view own blocks",
+          "check": null,
+          "roles": [
+            "authenticated"
+          ],
+          "using": "((blocker_id = auth.uid()) OR (blocked_id = auth.uid()))",
+          "command": "r",
+          "permissive": true
+        },
+        {
+          "name": "contact_writer_lock",
+          "check": "false",
+          "roles": [
+            "selqiro_listing_contact_writer_v1"
+          ],
+          "using": "true",
+          "command": "w",
+          "permissive": true
+        },
+        {
+          "name": "contact_writer_read",
+          "check": null,
+          "roles": [
+            "selqiro_listing_contact_writer_v1"
+          ],
+          "using": "true",
+          "command": "r",
+          "permissive": true
+        }
+      ],
+      "sha256": "2be4f71ef40cb8d289a7905df80330da9e158e6a4534c4db66d9d4c24627ca43"
+    },
+    "block_writer_inventory": {
+      "facts": {
+        "views": [
+          {
+            "acl": [
+              {
+                "grantee": "anon",
+                "grantor": "postgres",
+                "grantable": false,
+                "privilege": "SELECT"
+              },
+              {
+                "grantee": "authenticated",
+                "grantor": "postgres",
+                "grantable": false,
+                "privilege": "SELECT"
+              },
+              {
+                "grantee": "postgres",
+                "grantor": "postgres",
+                "grantable": false,
+                "privilege": "DELETE"
+              },
+              {
+                "grantee": "postgres",
+                "grantor": "postgres",
+                "grantable": false,
+                "privilege": "INSERT"
+              },
+              {
+                "grantee": "postgres",
+                "grantor": "postgres",
+                "grantable": false,
+                "privilege": "MAINTAIN"
+              },
+              {
+                "grantee": "postgres",
+                "grantor": "postgres",
+                "grantable": false,
+                "privilege": "REFERENCES"
+              },
+              {
+                "grantee": "postgres",
+                "grantor": "postgres",
+                "grantable": false,
+                "privilege": "SELECT"
+              },
+              {
+                "grantee": "postgres",
+                "grantor": "postgres",
+                "grantable": false,
+                "privilege": "TRIGGER"
+              },
+              {
+                "grantee": "postgres",
+                "grantor": "postgres",
+                "grantable": false,
+                "privilege": "TRUNCATE"
+              },
+              {
+                "grantee": "postgres",
+                "grantor": "postgres",
+                "grantable": false,
+                "privilege": "UPDATE"
+              }
+            ],
+            "kind": "v",
+            "name": "public.discovery_listings_v1",
+            "owner": "postgres",
+            "options": [
+              "security_invoker=true",
+              "security_barrier=true"
+            ],
+            "definition": " WITH viewer_hidden AS MATERIALIZED (\n         SELECT public.hidden_provider_ids_for_viewer_v1() AS identity_id\n        )\n SELECT id,\n    created_at,\n    title,\n    description,\n    price,\n    image,\n    status,\n    category,\n    condition,\n    country,\n    city,\n    location,\n    user_id,\n    ai_title,\n    ai_description,\n    ai_category,\n    ai_detected_brand,\n    ai_detected_type,\n    ai_confidence,\n    ai_raw,\n    manufacturer,\n    part_number,\n    oem_number,\n    vehicle_brand,\n    vehicle_model,\n    vehicle_year,\n    engine,\n    compatibility,\n    is_featured,\n    featured_until,\n    ai_enriched,\n    ai_level,\n    item_type,\n    subcategory,\n    details,\n    ai_status,\n    ai_review_required,\n    ai_reviewed_by_user,\n    search_text,\n    active_until,\n    is_boosted,\n    boost_until,\n    seo_title,\n    seo_description,\n    description_en,\n    ai_detected_object,\n    ai_suggested_category,\n    ai_suggested_subcategory,\n    ai_suggested_title,\n    ai_suggested_brand,\n    ai_suggested_model,\n    ai_suggestion_json,\n    price_amount,\n    search_vector,\n    listing_lat,\n    listing_lng,\n    listing_language,\n    identity_id,\n    created_by_user_id,\n    updated_by_user_id,\n    price_kind,\n    currency,\n    price_revision\n   FROM public.listings l\n  WHERE NOT (EXISTS ( SELECT 1\n           FROM viewer_hidden h\n          WHERE h.identity_id = l.identity_id)) AND NOT (EXISTS ( SELECT 1\n           FROM public.user_blocks b\n          WHERE auth.uid() IS NOT NULL AND (b.blocker_id = auth.uid() AND b.blocked_id = l.user_id OR b.blocked_id = auth.uid() AND b.blocker_id = l.user_id)));"
+          }
+        ],
+        "writers": [
+          {
+            "acl": [
+              {
+                "grantee": "postgres",
+                "grantor": "postgres",
+                "grantable": false,
+                "privilege": "EXECUTE"
+              },
+              {
+                "grantee": "selqiro_listing_contact_writer_v1",
+                "grantor": "postgres",
+                "grantable": false,
+                "privilege": "EXECUTE"
+              }
+            ],
+            "owner": "postgres",
+            "config": [
+              "search_path=pg_catalog, pg_temp",
+              "lock_timeout=2s"
+            ],
+            "signature": "messaging_private_v2.guard_account_block()",
+            "body_sha256": "83bd3c50a4d0bb2323e5dee7ed86032d506ea82e276b6127d3238bc96b37773a"
+          },
+          {
+            "acl": [
+              {
+                "grantee": "PUBLIC",
+                "grantor": "postgres",
+                "grantable": false,
+                "privilege": "EXECUTE"
+              },
+              {
+                "grantee": "anon",
+                "grantor": "postgres",
+                "grantable": false,
+                "privilege": "EXECUTE"
+              },
+              {
+                "grantee": "authenticated",
+                "grantor": "postgres",
+                "grantable": false,
+                "privilege": "EXECUTE"
+              },
+              {
+                "grantee": "postgres",
+                "grantor": "postgres",
+                "grantable": false,
+                "privilege": "EXECUTE"
+              },
+              {
+                "grantee": "service_role",
+                "grantor": "postgres",
+                "grantable": false,
+                "privilege": "EXECUTE"
+              }
+            ],
+            "owner": "postgres",
+            "config": [
+              "search_path=public"
+            ],
+            "signature": "public.block_store_identity_owner(uuid)",
+            "body_sha256": "68f8b39c768c89ce5a696e3ad0c99afd1a3958ee06a5c524a0c828b5de225397"
+          },
+          {
+            "acl": [
+              {
+                "grantee": "authenticated",
+                "grantor": "selqiro_listing_contact_writer_v1",
+                "grantable": false,
+                "privilege": "EXECUTE"
+              },
+              {
+                "grantee": "selqiro_listing_contact_writer_v1",
+                "grantor": "selqiro_listing_contact_writer_v1",
+                "grantable": false,
+                "privilege": "EXECUTE"
+              }
+            ],
+            "owner": "selqiro_listing_contact_writer_v1",
+            "config": [
+              "search_path=pg_catalog, public, auth, pg_temp",
+              "lock_timeout=2s"
+            ],
+            "signature": "public.set_my_thread_block_v2(uuid,uuid,text,boolean)",
+            "body_sha256": "2755d8475ddd0c5ee7e61d7e66e96919013202056d8473bb7a81b63ddabb2d81"
+          }
+        ]
+      },
+      "sha256": "96b905abf14a60f32b340ac84b6b123168b517360f6f77d601ed44d41e56b590"
+    },
+    "provider_cas_authority": {
+      "facts": [
+        {
+          "acl": [
+            {
+              "grantee": "postgres",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            }
+          ],
+          "kind": "f",
+          "owner": "postgres",
+          "config": [
+            "search_path=pg_catalog, pg_temp"
+          ],
+          "result": "boolean",
+          "strict": false,
+          "definer": true,
+          "defaults": null,
+          "language": "sql",
+          "parallel": "u",
+          "leakproof": false,
+          "signature": "provider_controls_private.is_own_provider(uuid,uuid,uuid)",
+          "volatility": "s",
+          "body_sha256": "f5442544ef493f167b8b02b3e3756796fc9c5015b43e8f2d1af546c35a2307b3",
+          "argument_names": [
+            "p_actor",
+            "p_identity",
+            "p_account"
+          ]
+        },
+        {
+          "acl": [
+            {
+              "grantee": "postgres",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            }
+          ],
+          "kind": "f",
+          "owner": "postgres",
+          "config": [
+            "search_path=pg_catalog, pg_temp"
+          ],
+          "result": "void",
+          "strict": false,
+          "definer": true,
+          "defaults": null,
+          "language": "plpgsql",
+          "parallel": "u",
+          "leakproof": false,
+          "signature": "provider_controls_private.lock_target(uuid,text,text)",
+          "volatility": "v",
+          "body_sha256": "65fedae624189f501e4f058603cdaba4f2afc33408248be53d22c17ad5253df3",
+          "argument_names": [
+            "p_actor",
+            "p_type",
+            "p_id"
+          ]
+        },
+        {
+          "acl": [
+            {
+              "grantee": "postgres",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            }
+          ],
+          "kind": "f",
+          "owner": "postgres",
+          "config": [
+            "search_path=pg_catalog, pg_temp"
+          ],
+          "result": "uuid",
+          "strict": false,
+          "definer": true,
+          "defaults": null,
+          "language": "plpgsql",
+          "parallel": "u",
+          "leakproof": false,
+          "signature": "provider_controls_private.require_actor(uuid)",
+          "volatility": "s",
+          "body_sha256": "bd38963b612289c8e828982e72f6d19a40afdd430fc03e8127fc6b26a666c05c",
+          "argument_names": [
+            "p_expected_user_id"
+          ]
+        },
+        {
+          "acl": [
+            {
+              "grantee": "postgres",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            }
+          ],
+          "kind": "f",
+          "owner": "postgres",
+          "config": [
+            "search_path=pg_catalog, pg_temp"
+          ],
+          "result": "jsonb",
+          "strict": false,
+          "definer": true,
+          "defaults": null,
+          "language": "plpgsql",
+          "parallel": "u",
+          "leakproof": false,
+          "signature": "provider_controls_private.resolve_target(uuid,text,text)",
+          "volatility": "s",
+          "body_sha256": "a1cb25d5e7eb2558d1831e737705136e5b062eddd9e17c36596e062c9b55dfa7",
+          "argument_names": [
+            "p_actor",
+            "p_type",
+            "p_id"
+          ]
+        },
+        {
+          "acl": [
+            {
+              "grantee": "postgres",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            }
+          ],
+          "kind": "f",
+          "owner": "postgres",
+          "config": [
+            "search_path=pg_catalog, pg_temp",
+            "TimeZone=UTC"
+          ],
+          "result": "jsonb",
+          "strict": false,
+          "definer": true,
+          "defaults": null,
+          "language": "plpgsql",
+          "parallel": "u",
+          "leakproof": false,
+          "signature": "provider_controls_private.snapshot(uuid,text,text,jsonb,timestamp with time zone)",
+          "volatility": "s",
+          "body_sha256": "60f1ba11aa6aa5276b19dddc1daaab1edbe4aa911c49cb42384394b1d0d08066",
+          "argument_names": [
+            "p_actor",
+            "p_type",
+            "p_id",
+            "p_target",
+            "p_now"
+          ]
+        },
+        {
+          "acl": [
+            {
+              "grantee": "postgres",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            }
+          ],
+          "kind": "f",
+          "owner": "postgres",
+          "config": [
+            "search_path=pg_catalog, pg_temp"
+          ],
+          "result": "void",
+          "strict": false,
+          "definer": false,
+          "defaults": null,
+          "language": "plpgsql",
+          "parallel": "u",
+          "leakproof": false,
+          "signature": "provider_controls_private.validate_target(text,text)",
+          "volatility": "i",
+          "body_sha256": "e7821fe96fa84c366c63a795877337c4e0e0f3c2121b8f9c709df1995d629e05",
+          "argument_names": [
+            "p_type",
+            "p_id"
+          ]
+        },
+        {
+          "acl": [
+            {
+              "grantee": "authenticated",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            },
+            {
+              "grantee": "postgres",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            }
+          ],
+          "kind": "f",
+          "owner": "postgres",
+          "config": [
+            "search_path=pg_catalog, pg_temp",
+            "TimeZone=UTC"
+          ],
+          "result": "jsonb",
+          "strict": false,
+          "definer": true,
+          "defaults": null,
+          "language": "plpgsql",
+          "parallel": "u",
+          "leakproof": false,
+          "signature": "public.get_my_provider_control_v1(uuid,text,text)",
+          "volatility": "s",
+          "body_sha256": "9179c8cbed49047505279ee0049e7fda7439705363069dfd30e92edbe4c4f009",
+          "argument_names": [
+            "p_expected_user_id",
+            "p_target_type",
+            "p_target_id"
+          ]
+        },
+        {
+          "acl": [
+            {
+              "grantee": "authenticated",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            },
+            {
+              "grantee": "postgres",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            }
+          ],
+          "kind": "f",
+          "owner": "postgres",
+          "config": [
+            "search_path=pg_catalog, pg_temp",
+            "TimeZone=UTC"
+          ],
+          "result": "jsonb",
+          "strict": false,
+          "definer": true,
+          "defaults": "25, 0",
+          "language": "plpgsql",
+          "parallel": "u",
+          "leakproof": false,
+          "signature": "public.list_my_provider_controls_v1(uuid,text,integer,integer)",
+          "volatility": "s",
+          "body_sha256": "5852e29f3fd431c972aaf4ea5e23dca5bb89f6f6177c9a8d75f4d8a402c8be47",
+          "argument_names": [
+            "p_expected_user_id",
+            "p_kind",
+            "p_result_limit",
+            "p_result_offset"
+          ]
+        }
+      ],
+      "sha256": "2f034e5f727dd2ce33ed4e87dec4b5cdbaa06e763ccf16588e4bbbd1b15aa918"
+    },
+    "account_block_structure": {
+      "facts": {
+        "table": {
+          "rls": true,
+          "kind": "r",
+          "name": "public.user_blocks",
+          "owner": "postgres",
+          "rules": [],
+          "forced": false,
+          "columns": [
+            {
+              "name": "id",
+              "type": "bigint",
+              "default": "nextval('public.user_blocks_id_seq'::regclass)",
+              "identity": "",
+              "not_null": true,
+              "position": 1,
+              "generated": ""
+            },
+            {
+              "name": "blocker_id",
+              "type": "uuid",
+              "default": null,
+              "identity": "",
+              "not_null": true,
+              "position": 2,
+              "generated": ""
+            },
+            {
+              "name": "blocked_id",
+              "type": "uuid",
+              "default": null,
+              "identity": "",
+              "not_null": true,
+              "position": 3,
+              "generated": ""
+            },
+            {
+              "name": "created_at",
+              "type": "timestamp with time zone",
+              "default": "now()",
+              "identity": "",
+              "not_null": true,
+              "position": 4,
+              "generated": ""
+            }
+          ],
+          "indexes": [
+            {
+              "name": "public.user_blocks_blocked_blocker_idx_v1",
+              "ready": true,
+              "valid": true,
+              "unique": false,
+              "primary": false,
+              "definition": "CREATE INDEX user_blocks_blocked_blocker_idx_v1 ON public.user_blocks USING btree (blocked_id, blocker_id)"
+            },
+            {
+              "name": "public.user_blocks_blocker_id_blocked_id_key",
+              "ready": true,
+              "valid": true,
+              "unique": true,
+              "primary": false,
+              "definition": "CREATE UNIQUE INDEX user_blocks_blocker_id_blocked_id_key ON public.user_blocks USING btree (blocker_id, blocked_id)"
+            },
+            {
+              "name": "public.user_blocks_pkey",
+              "ready": true,
+              "valid": true,
+              "unique": true,
+              "primary": true,
+              "definition": "CREATE UNIQUE INDEX user_blocks_pkey ON public.user_blocks USING btree (id)"
+            }
+          ],
+          "parents": [],
+          "incoming": [],
+          "triggers": [],
+          "constraints": [
+            {
+              "name": "user_blocks_blocked_id_fkey",
+              "type": "f",
+              "validated": true,
+              "definition": "FOREIGN KEY (blocked_id) REFERENCES public.profiles(id) ON DELETE CASCADE"
+            },
+            {
+              "name": "user_blocks_blocker_id_blocked_id_key",
+              "type": "u",
+              "validated": true,
+              "definition": "UNIQUE (blocker_id, blocked_id)"
+            },
+            {
+              "name": "user_blocks_blocker_id_fkey",
+              "type": "f",
+              "validated": true,
+              "definition": "FOREIGN KEY (blocker_id) REFERENCES public.profiles(id) ON DELETE CASCADE"
+            },
+            {
+              "name": "user_blocks_check",
+              "type": "c",
+              "validated": true,
+              "definition": "CHECK ((blocker_id <> blocked_id))"
+            },
+            {
+              "name": "user_blocks_pkey",
+              "type": "p",
+              "validated": true,
+              "definition": "PRIMARY KEY (id)"
+            }
+          ]
+        },
+        "sequence": {
+          "max": "9223372036854775807",
+          "min": "1",
+          "name": "public.user_blocks_id_seq",
+          "type": "bigint",
+          "cache": "1",
+          "cycle": false,
+          "owner": "postgres",
+          "start": "1",
+          "increment": "1",
+          "ownership": [
+            {
+              "kind": "a",
+              "table": "public.user_blocks",
+              "column": "id"
+            }
+          ]
+        }
+      },
+      "sha256": "c0ee4dad990aff94373a18b505f6b33a6f284361b571f19f2a704c2344b49a35"
+    }
+  },
+  "after_facts": {
+    "installer": true,
+    "capability": {
+      "facts": {
+        "role": [
+          {
+            "name": "selqiro_block_removal_writer_v1",
+            "limit": -1,
+            "login": false,
+            "inherit": false,
+            "createdb": false,
+            "bypassrls": false,
+            "superuser": false,
+            "createrole": false,
+            "memberships": [
+              {
+                "set": false,
+                "role": "selqiro_block_removal_writer_v1",
+                "admin": true,
+                "member": "postgres",
+                "grantor": "supabase_admin",
+                "inherit": false
+              }
+            ],
+            "replication": false,
+            "schema_rights": [
+              {
+                "usage": true,
+                "create": false,
+                "schema": "auth"
+              },
+              {
+                "usage": true,
+                "create": false,
+                "schema": "provider_controls_private"
+              },
+              {
+                "usage": true,
+                "create": false,
+                "schema": "public"
+              }
+            ],
+            "auth_uid_execute": true
+          }
+        ],
+        "trigger": [
+          {
+            "name": "user_blocks_cas_delete_v1",
+            "enabled": "O",
+            "function": "provider_controls_private.guard_account_block_delete_v1()",
+            "definition": "CREATE TRIGGER user_blocks_cas_delete_v1 BEFORE DELETE ON public.user_blocks FOR EACH ROW EXECUTE FUNCTION provider_controls_private.guard_account_block_delete_v1()"
+          }
+        ],
+        "policies": [
+          {
+            "name": "block_removal_own_delete_v1",
+            "check": null,
+            "roles": [
+              "selqiro_block_removal_writer_v1"
+            ],
+            "using": "(blocker_id = auth.uid())",
+            "command": "d",
+            "permissive": true
+          },
+          {
+            "name": "block_removal_own_read_v1",
+            "check": null,
+            "roles": [
+              "selqiro_block_removal_writer_v1"
+            ],
+            "using": "(blocker_id = auth.uid())",
+            "command": "r",
+            "permissive": true
+          }
+        ],
+        "effective": [
+          {
+            "kind": "column",
+            "role": "anon",
+            "column": "blocked_id",
+            "allowed": false,
+            "grantable": false,
+            "privilege": "INSERT"
+          },
+          {
+            "kind": "column",
+            "role": "anon",
+            "column": "blocked_id",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "REFERENCES"
+          },
+          {
+            "kind": "column",
+            "role": "anon",
+            "column": "blocked_id",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "SELECT"
+          },
+          {
+            "kind": "column",
+            "role": "anon",
+            "column": "blocked_id",
+            "allowed": false,
+            "grantable": false,
+            "privilege": "UPDATE"
+          },
+          {
+            "kind": "column",
+            "role": "anon",
+            "column": "blocker_id",
+            "allowed": false,
+            "grantable": false,
+            "privilege": "INSERT"
+          },
+          {
+            "kind": "column",
+            "role": "anon",
+            "column": "blocker_id",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "REFERENCES"
+          },
+          {
+            "kind": "column",
+            "role": "anon",
+            "column": "blocker_id",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "SELECT"
+          },
+          {
+            "kind": "column",
+            "role": "anon",
+            "column": "blocker_id",
+            "allowed": false,
+            "grantable": false,
+            "privilege": "UPDATE"
+          },
+          {
+            "kind": "column",
+            "role": "anon",
+            "column": "created_at",
+            "allowed": false,
+            "grantable": false,
+            "privilege": "INSERT"
+          },
+          {
+            "kind": "column",
+            "role": "anon",
+            "column": "created_at",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "REFERENCES"
+          },
+          {
+            "kind": "column",
+            "role": "anon",
+            "column": "created_at",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "SELECT"
+          },
+          {
+            "kind": "column",
+            "role": "anon",
+            "column": "created_at",
+            "allowed": false,
+            "grantable": false,
+            "privilege": "UPDATE"
+          },
+          {
+            "kind": "column",
+            "role": "anon",
+            "column": "id",
+            "allowed": false,
+            "grantable": false,
+            "privilege": "INSERT"
+          },
+          {
+            "kind": "column",
+            "role": "anon",
+            "column": "id",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "REFERENCES"
+          },
+          {
+            "kind": "column",
+            "role": "anon",
+            "column": "id",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "SELECT"
+          },
+          {
+            "kind": "column",
+            "role": "anon",
+            "column": "id",
+            "allowed": false,
+            "grantable": false,
+            "privilege": "UPDATE"
+          },
+          {
+            "kind": "sequence",
+            "role": "anon",
+            "column": "",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "SELECT"
+          },
+          {
+            "kind": "sequence",
+            "role": "anon",
+            "column": "",
+            "allowed": false,
+            "grantable": false,
+            "privilege": "UPDATE"
+          },
+          {
+            "kind": "sequence",
+            "role": "anon",
+            "column": "",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "USAGE"
+          },
+          {
+            "kind": "table",
+            "role": "anon",
+            "column": "",
+            "allowed": false,
+            "grantable": false,
+            "privilege": "DELETE"
+          },
+          {
+            "kind": "table",
+            "role": "anon",
+            "column": "",
+            "allowed": false,
+            "grantable": false,
+            "privilege": "INSERT"
+          },
+          {
+            "kind": "table",
+            "role": "anon",
+            "column": "",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "REFERENCES"
+          },
+          {
+            "kind": "table",
+            "role": "anon",
+            "column": "",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "SELECT"
+          },
+          {
+            "kind": "table",
+            "role": "anon",
+            "column": "",
+            "allowed": false,
+            "grantable": false,
+            "privilege": "TRIGGER"
+          },
+          {
+            "kind": "table",
+            "role": "anon",
+            "column": "",
+            "allowed": false,
+            "grantable": false,
+            "privilege": "TRUNCATE"
+          },
+          {
+            "kind": "table",
+            "role": "anon",
+            "column": "",
+            "allowed": false,
+            "grantable": false,
+            "privilege": "UPDATE"
+          },
+          {
+            "kind": "column",
+            "role": "authenticated",
+            "column": "blocked_id",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "INSERT"
+          },
+          {
+            "kind": "column",
+            "role": "authenticated",
+            "column": "blocked_id",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "REFERENCES"
+          },
+          {
+            "kind": "column",
+            "role": "authenticated",
+            "column": "blocked_id",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "SELECT"
+          },
+          {
+            "kind": "column",
+            "role": "authenticated",
+            "column": "blocked_id",
+            "allowed": false,
+            "grantable": false,
+            "privilege": "UPDATE"
+          },
+          {
+            "kind": "column",
+            "role": "authenticated",
+            "column": "blocker_id",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "INSERT"
+          },
+          {
+            "kind": "column",
+            "role": "authenticated",
+            "column": "blocker_id",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "REFERENCES"
+          },
+          {
+            "kind": "column",
+            "role": "authenticated",
+            "column": "blocker_id",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "SELECT"
+          },
+          {
+            "kind": "column",
+            "role": "authenticated",
+            "column": "blocker_id",
+            "allowed": false,
+            "grantable": false,
+            "privilege": "UPDATE"
+          },
+          {
+            "kind": "column",
+            "role": "authenticated",
+            "column": "created_at",
+            "allowed": false,
+            "grantable": false,
+            "privilege": "INSERT"
+          },
+          {
+            "kind": "column",
+            "role": "authenticated",
+            "column": "created_at",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "REFERENCES"
+          },
+          {
+            "kind": "column",
+            "role": "authenticated",
+            "column": "created_at",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "SELECT"
+          },
+          {
+            "kind": "column",
+            "role": "authenticated",
+            "column": "created_at",
+            "allowed": false,
+            "grantable": false,
+            "privilege": "UPDATE"
+          },
+          {
+            "kind": "column",
+            "role": "authenticated",
+            "column": "id",
+            "allowed": false,
+            "grantable": false,
+            "privilege": "INSERT"
+          },
+          {
+            "kind": "column",
+            "role": "authenticated",
+            "column": "id",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "REFERENCES"
+          },
+          {
+            "kind": "column",
+            "role": "authenticated",
+            "column": "id",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "SELECT"
+          },
+          {
+            "kind": "column",
+            "role": "authenticated",
+            "column": "id",
+            "allowed": false,
+            "grantable": false,
+            "privilege": "UPDATE"
+          },
+          {
+            "kind": "sequence",
+            "role": "authenticated",
+            "column": "",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "SELECT"
+          },
+          {
+            "kind": "sequence",
+            "role": "authenticated",
+            "column": "",
+            "allowed": false,
+            "grantable": false,
+            "privilege": "UPDATE"
+          },
+          {
+            "kind": "sequence",
+            "role": "authenticated",
+            "column": "",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "USAGE"
+          },
+          {
+            "kind": "table",
+            "role": "authenticated",
+            "column": "",
+            "allowed": false,
+            "grantable": false,
+            "privilege": "DELETE"
+          },
+          {
+            "kind": "table",
+            "role": "authenticated",
+            "column": "",
+            "allowed": false,
+            "grantable": false,
+            "privilege": "INSERT"
+          },
+          {
+            "kind": "table",
+            "role": "authenticated",
+            "column": "",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "REFERENCES"
+          },
+          {
+            "kind": "table",
+            "role": "authenticated",
+            "column": "",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "SELECT"
+          },
+          {
+            "kind": "table",
+            "role": "authenticated",
+            "column": "",
+            "allowed": false,
+            "grantable": false,
+            "privilege": "TRIGGER"
+          },
+          {
+            "kind": "table",
+            "role": "authenticated",
+            "column": "",
+            "allowed": false,
+            "grantable": false,
+            "privilege": "TRUNCATE"
+          },
+          {
+            "kind": "table",
+            "role": "authenticated",
+            "column": "",
+            "allowed": false,
+            "grantable": false,
+            "privilege": "UPDATE"
+          },
+          {
+            "kind": "column",
+            "role": "selqiro_block_removal_writer_v1",
+            "column": "blocked_id",
+            "allowed": false,
+            "grantable": false,
+            "privilege": "INSERT"
+          },
+          {
+            "kind": "column",
+            "role": "selqiro_block_removal_writer_v1",
+            "column": "blocked_id",
+            "allowed": false,
+            "grantable": false,
+            "privilege": "REFERENCES"
+          },
+          {
+            "kind": "column",
+            "role": "selqiro_block_removal_writer_v1",
+            "column": "blocked_id",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "SELECT"
+          },
+          {
+            "kind": "column",
+            "role": "selqiro_block_removal_writer_v1",
+            "column": "blocked_id",
+            "allowed": false,
+            "grantable": false,
+            "privilege": "UPDATE"
+          },
+          {
+            "kind": "column",
+            "role": "selqiro_block_removal_writer_v1",
+            "column": "blocker_id",
+            "allowed": false,
+            "grantable": false,
+            "privilege": "INSERT"
+          },
+          {
+            "kind": "column",
+            "role": "selqiro_block_removal_writer_v1",
+            "column": "blocker_id",
+            "allowed": false,
+            "grantable": false,
+            "privilege": "REFERENCES"
+          },
+          {
+            "kind": "column",
+            "role": "selqiro_block_removal_writer_v1",
+            "column": "blocker_id",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "SELECT"
+          },
+          {
+            "kind": "column",
+            "role": "selqiro_block_removal_writer_v1",
+            "column": "blocker_id",
+            "allowed": false,
+            "grantable": false,
+            "privilege": "UPDATE"
+          },
+          {
+            "kind": "column",
+            "role": "selqiro_block_removal_writer_v1",
+            "column": "created_at",
+            "allowed": false,
+            "grantable": false,
+            "privilege": "INSERT"
+          },
+          {
+            "kind": "column",
+            "role": "selqiro_block_removal_writer_v1",
+            "column": "created_at",
+            "allowed": false,
+            "grantable": false,
+            "privilege": "REFERENCES"
+          },
+          {
+            "kind": "column",
+            "role": "selqiro_block_removal_writer_v1",
+            "column": "created_at",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "SELECT"
+          },
+          {
+            "kind": "column",
+            "role": "selqiro_block_removal_writer_v1",
+            "column": "created_at",
+            "allowed": false,
+            "grantable": false,
+            "privilege": "UPDATE"
+          },
+          {
+            "kind": "column",
+            "role": "selqiro_block_removal_writer_v1",
+            "column": "id",
+            "allowed": false,
+            "grantable": false,
+            "privilege": "INSERT"
+          },
+          {
+            "kind": "column",
+            "role": "selqiro_block_removal_writer_v1",
+            "column": "id",
+            "allowed": false,
+            "grantable": false,
+            "privilege": "REFERENCES"
+          },
+          {
+            "kind": "column",
+            "role": "selqiro_block_removal_writer_v1",
+            "column": "id",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "SELECT"
+          },
+          {
+            "kind": "column",
+            "role": "selqiro_block_removal_writer_v1",
+            "column": "id",
+            "allowed": false,
+            "grantable": false,
+            "privilege": "UPDATE"
+          },
+          {
+            "kind": "sequence",
+            "role": "selqiro_block_removal_writer_v1",
+            "column": "",
+            "allowed": false,
+            "grantable": false,
+            "privilege": "SELECT"
+          },
+          {
+            "kind": "sequence",
+            "role": "selqiro_block_removal_writer_v1",
+            "column": "",
+            "allowed": false,
+            "grantable": false,
+            "privilege": "UPDATE"
+          },
+          {
+            "kind": "sequence",
+            "role": "selqiro_block_removal_writer_v1",
+            "column": "",
+            "allowed": false,
+            "grantable": false,
+            "privilege": "USAGE"
+          },
+          {
+            "kind": "table",
+            "role": "selqiro_block_removal_writer_v1",
+            "column": "",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "DELETE"
+          },
+          {
+            "kind": "table",
+            "role": "selqiro_block_removal_writer_v1",
+            "column": "",
+            "allowed": false,
+            "grantable": false,
+            "privilege": "INSERT"
+          },
+          {
+            "kind": "table",
+            "role": "selqiro_block_removal_writer_v1",
+            "column": "",
+            "allowed": false,
+            "grantable": false,
+            "privilege": "REFERENCES"
+          },
+          {
+            "kind": "table",
+            "role": "selqiro_block_removal_writer_v1",
+            "column": "",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "SELECT"
+          },
+          {
+            "kind": "table",
+            "role": "selqiro_block_removal_writer_v1",
+            "column": "",
+            "allowed": false,
+            "grantable": false,
+            "privilege": "TRIGGER"
+          },
+          {
+            "kind": "table",
+            "role": "selqiro_block_removal_writer_v1",
+            "column": "",
+            "allowed": false,
+            "grantable": false,
+            "privilege": "TRUNCATE"
+          },
+          {
+            "kind": "table",
+            "role": "selqiro_block_removal_writer_v1",
+            "column": "",
+            "allowed": false,
+            "grantable": false,
+            "privilege": "UPDATE"
+          },
+          {
+            "kind": "column",
+            "role": "selqiro_listing_contact_writer_v1",
+            "column": "blocked_id",
+            "allowed": false,
+            "grantable": false,
+            "privilege": "INSERT"
+          },
+          {
+            "kind": "column",
+            "role": "selqiro_listing_contact_writer_v1",
+            "column": "blocked_id",
+            "allowed": false,
+            "grantable": false,
+            "privilege": "REFERENCES"
+          },
+          {
+            "kind": "column",
+            "role": "selqiro_listing_contact_writer_v1",
+            "column": "blocked_id",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "SELECT"
+          },
+          {
+            "kind": "column",
+            "role": "selqiro_listing_contact_writer_v1",
+            "column": "blocked_id",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "UPDATE"
+          },
+          {
+            "kind": "column",
+            "role": "selqiro_listing_contact_writer_v1",
+            "column": "blocker_id",
+            "allowed": false,
+            "grantable": false,
+            "privilege": "INSERT"
+          },
+          {
+            "kind": "column",
+            "role": "selqiro_listing_contact_writer_v1",
+            "column": "blocker_id",
+            "allowed": false,
+            "grantable": false,
+            "privilege": "REFERENCES"
+          },
+          {
+            "kind": "column",
+            "role": "selqiro_listing_contact_writer_v1",
+            "column": "blocker_id",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "SELECT"
+          },
+          {
+            "kind": "column",
+            "role": "selqiro_listing_contact_writer_v1",
+            "column": "blocker_id",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "UPDATE"
+          },
+          {
+            "kind": "column",
+            "role": "selqiro_listing_contact_writer_v1",
+            "column": "created_at",
+            "allowed": false,
+            "grantable": false,
+            "privilege": "INSERT"
+          },
+          {
+            "kind": "column",
+            "role": "selqiro_listing_contact_writer_v1",
+            "column": "created_at",
+            "allowed": false,
+            "grantable": false,
+            "privilege": "REFERENCES"
+          },
+          {
+            "kind": "column",
+            "role": "selqiro_listing_contact_writer_v1",
+            "column": "created_at",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "SELECT"
+          },
+          {
+            "kind": "column",
+            "role": "selqiro_listing_contact_writer_v1",
+            "column": "created_at",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "UPDATE"
+          },
+          {
+            "kind": "column",
+            "role": "selqiro_listing_contact_writer_v1",
+            "column": "id",
+            "allowed": false,
+            "grantable": false,
+            "privilege": "INSERT"
+          },
+          {
+            "kind": "column",
+            "role": "selqiro_listing_contact_writer_v1",
+            "column": "id",
+            "allowed": false,
+            "grantable": false,
+            "privilege": "REFERENCES"
+          },
+          {
+            "kind": "column",
+            "role": "selqiro_listing_contact_writer_v1",
+            "column": "id",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "SELECT"
+          },
+          {
+            "kind": "column",
+            "role": "selqiro_listing_contact_writer_v1",
+            "column": "id",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "UPDATE"
+          },
+          {
+            "kind": "sequence",
+            "role": "selqiro_listing_contact_writer_v1",
+            "column": "",
+            "allowed": false,
+            "grantable": false,
+            "privilege": "SELECT"
+          },
+          {
+            "kind": "sequence",
+            "role": "selqiro_listing_contact_writer_v1",
+            "column": "",
+            "allowed": false,
+            "grantable": false,
+            "privilege": "UPDATE"
+          },
+          {
+            "kind": "sequence",
+            "role": "selqiro_listing_contact_writer_v1",
+            "column": "",
+            "allowed": false,
+            "grantable": false,
+            "privilege": "USAGE"
+          },
+          {
+            "kind": "table",
+            "role": "selqiro_listing_contact_writer_v1",
+            "column": "",
+            "allowed": false,
+            "grantable": false,
+            "privilege": "DELETE"
+          },
+          {
+            "kind": "table",
+            "role": "selqiro_listing_contact_writer_v1",
+            "column": "",
+            "allowed": false,
+            "grantable": false,
+            "privilege": "INSERT"
+          },
+          {
+            "kind": "table",
+            "role": "selqiro_listing_contact_writer_v1",
+            "column": "",
+            "allowed": false,
+            "grantable": false,
+            "privilege": "REFERENCES"
+          },
+          {
+            "kind": "table",
+            "role": "selqiro_listing_contact_writer_v1",
+            "column": "",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "SELECT"
+          },
+          {
+            "kind": "table",
+            "role": "selqiro_listing_contact_writer_v1",
+            "column": "",
+            "allowed": false,
+            "grantable": false,
+            "privilege": "TRIGGER"
+          },
+          {
+            "kind": "table",
+            "role": "selqiro_listing_contact_writer_v1",
+            "column": "",
+            "allowed": false,
+            "grantable": false,
+            "privilege": "TRUNCATE"
+          },
+          {
+            "kind": "table",
+            "role": "selqiro_listing_contact_writer_v1",
+            "column": "",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "UPDATE"
+          },
+          {
+            "kind": "column",
+            "role": "service_role",
+            "column": "blocked_id",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "INSERT"
+          },
+          {
+            "kind": "column",
+            "role": "service_role",
+            "column": "blocked_id",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "REFERENCES"
+          },
+          {
+            "kind": "column",
+            "role": "service_role",
+            "column": "blocked_id",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "SELECT"
+          },
+          {
+            "kind": "column",
+            "role": "service_role",
+            "column": "blocked_id",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "UPDATE"
+          },
+          {
+            "kind": "column",
+            "role": "service_role",
+            "column": "blocker_id",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "INSERT"
+          },
+          {
+            "kind": "column",
+            "role": "service_role",
+            "column": "blocker_id",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "REFERENCES"
+          },
+          {
+            "kind": "column",
+            "role": "service_role",
+            "column": "blocker_id",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "SELECT"
+          },
+          {
+            "kind": "column",
+            "role": "service_role",
+            "column": "blocker_id",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "UPDATE"
+          },
+          {
+            "kind": "column",
+            "role": "service_role",
+            "column": "created_at",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "INSERT"
+          },
+          {
+            "kind": "column",
+            "role": "service_role",
+            "column": "created_at",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "REFERENCES"
+          },
+          {
+            "kind": "column",
+            "role": "service_role",
+            "column": "created_at",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "SELECT"
+          },
+          {
+            "kind": "column",
+            "role": "service_role",
+            "column": "created_at",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "UPDATE"
+          },
+          {
+            "kind": "column",
+            "role": "service_role",
+            "column": "id",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "INSERT"
+          },
+          {
+            "kind": "column",
+            "role": "service_role",
+            "column": "id",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "REFERENCES"
+          },
+          {
+            "kind": "column",
+            "role": "service_role",
+            "column": "id",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "SELECT"
+          },
+          {
+            "kind": "column",
+            "role": "service_role",
+            "column": "id",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "UPDATE"
+          },
+          {
+            "kind": "sequence",
+            "role": "service_role",
+            "column": "",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "SELECT"
+          },
+          {
+            "kind": "sequence",
+            "role": "service_role",
+            "column": "",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "UPDATE"
+          },
+          {
+            "kind": "sequence",
+            "role": "service_role",
+            "column": "",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "USAGE"
+          },
+          {
+            "kind": "table",
+            "role": "service_role",
+            "column": "",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "DELETE"
+          },
+          {
+            "kind": "table",
+            "role": "service_role",
+            "column": "",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "INSERT"
+          },
+          {
+            "kind": "table",
+            "role": "service_role",
+            "column": "",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "REFERENCES"
+          },
+          {
+            "kind": "table",
+            "role": "service_role",
+            "column": "",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "SELECT"
+          },
+          {
+            "kind": "table",
+            "role": "service_role",
+            "column": "",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "TRIGGER"
+          },
+          {
+            "kind": "table",
+            "role": "service_role",
+            "column": "",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "TRUNCATE"
+          },
+          {
+            "kind": "table",
+            "role": "service_role",
+            "column": "",
+            "allowed": true,
+            "grantable": false,
+            "privilege": "UPDATE"
+          }
+        ],
+        "functions": [
+          {
+            "acl": [
+              {
+                "grantee": "postgres",
+                "grantor": "postgres",
+                "grantable": false,
+                "privilege": "EXECUTE"
+              },
+              {
+                "grantee": "selqiro_listing_contact_writer_v1",
+                "grantor": "postgres",
+                "grantable": false,
+                "privilege": "EXECUTE"
+              }
+            ],
+            "kind": "f",
+            "owner": "postgres",
+            "config": [
+              "search_path=pg_catalog, pg_temp",
+              "lock_timeout=2s"
+            ],
+            "result": "void",
+            "strict": false,
+            "definer": true,
+            "defaults": null,
+            "language": "plpgsql",
+            "parallel": "u",
+            "leakproof": false,
+            "signature": "messaging_private_v2.set_block(uuid,uuid,bigint,boolean)",
+            "volatility": "v",
+            "body_sha256": "a2029dccee4a1bbe0643c5d675ec306780752c741f147c48bad48032be8947dd",
+            "argument_names": [
+              "p_user",
+              "p_identity",
+              "p_conversation",
+              "p_blocked"
+            ]
+          },
+          {
+            "acl": [
+              {
+                "grantee": "postgres",
+                "grantor": "postgres",
+                "grantable": false,
+                "privilege": "EXECUTE"
+              },
+              {
+                "grantee": "selqiro_block_removal_writer_v1",
+                "grantor": "postgres",
+                "grantable": false,
+                "privilege": "EXECUTE"
+              }
+            ],
+            "kind": "f",
+            "owner": "postgres",
+            "config": [
+              "search_path=pg_catalog, pg_temp"
+            ],
+            "result": "trigger",
+            "strict": false,
+            "definer": false,
+            "defaults": null,
+            "language": "plpgsql",
+            "parallel": "u",
+            "leakproof": false,
+            "signature": "provider_controls_private.guard_account_block_delete_v1()",
+            "volatility": "v",
+            "body_sha256": "ea873cc677aeb3e996394a147f32d9093c110a1c3f3e833961d9ba3205ff5f04",
+            "argument_names": null
+          },
+          {
+            "acl": [
+              {
+                "grantee": "postgres",
+                "grantor": "selqiro_block_removal_writer_v1",
+                "grantable": false,
+                "privilege": "EXECUTE"
+              },
+              {
+                "grantee": "selqiro_block_removal_writer_v1",
+                "grantor": "selqiro_block_removal_writer_v1",
+                "grantable": false,
+                "privilege": "EXECUTE"
+              }
+            ],
+            "kind": "f",
+            "owner": "selqiro_block_removal_writer_v1",
+            "config": [
+              "search_path=pg_catalog, pg_temp",
+              "lock_timeout=2s"
+            ],
+            "result": "boolean",
+            "strict": false,
+            "definer": true,
+            "defaults": null,
+            "language": "plpgsql",
+            "parallel": "u",
+            "leakproof": false,
+            "signature": "provider_controls_private.remove_account_block_v1(uuid,uuid,bigint,timestamp with time zone)",
+            "volatility": "v",
+            "body_sha256": "75c676440881ad63d2083cabf7cc9020de3f4aca8d7f2984b068a4821aedcfd3",
+            "argument_names": [
+              "p_actor",
+              "p_peer",
+              "p_id",
+              "p_created_at"
+            ]
+          },
+          {
+            "acl": [
+              {
+                "grantee": "authenticated",
+                "grantor": "postgres",
+                "grantable": false,
+                "privilege": "EXECUTE"
+              },
+              {
+                "grantee": "postgres",
+                "grantor": "postgres",
+                "grantable": false,
+                "privilege": "EXECUTE"
+              }
+            ],
+            "kind": "f",
+            "owner": "postgres",
+            "config": [
+              "search_path=pg_catalog, pg_temp",
+              "TimeZone=UTC",
+              "lock_timeout=2s"
+            ],
+            "result": "jsonb",
+            "strict": false,
+            "definer": true,
+            "defaults": "NULL::uuid, NULL::uuid, NULL::text, NULL::timestamp with time zone",
+            "language": "plpgsql",
+            "parallel": "u",
+            "leakproof": false,
+            "signature": "public.set_my_provider_control_v1(uuid,text,text,text,text,uuid,uuid,text,timestamp with time zone)",
+            "volatility": "v",
+            "body_sha256": "d6d1c00bcf4d2e028f578f6104799dcd33b363f432a4e8b75133097ae9001711",
+            "argument_names": [
+              "p_expected_user_id",
+              "p_target_type",
+              "p_target_id",
+              "p_action",
+              "p_expected_target_token",
+              "p_expected_revision",
+              "p_next_revision",
+              "p_expected_block_id",
+              "p_expected_block_created_at"
+            ]
+          }
+        ],
+        "table_acl": {
+          "acl": [
+            {
+              "grantee": "anon",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "MAINTAIN"
+            },
+            {
+              "grantee": "anon",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "REFERENCES"
+            },
+            {
+              "grantee": "anon",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "SELECT"
+            },
+            {
+              "grantee": "authenticated",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "MAINTAIN"
+            },
+            {
+              "grantee": "authenticated",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "REFERENCES"
+            },
+            {
+              "grantee": "authenticated",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "SELECT"
+            },
+            {
+              "grantee": "postgres",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "DELETE"
+            },
+            {
+              "grantee": "postgres",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "INSERT"
+            },
+            {
+              "grantee": "postgres",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "MAINTAIN"
+            },
+            {
+              "grantee": "postgres",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "REFERENCES"
+            },
+            {
+              "grantee": "postgres",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "SELECT"
+            },
+            {
+              "grantee": "postgres",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "TRIGGER"
+            },
+            {
+              "grantee": "postgres",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "TRUNCATE"
+            },
+            {
+              "grantee": "postgres",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "UPDATE"
+            },
+            {
+              "grantee": "selqiro_block_removal_writer_v1",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "DELETE"
+            },
+            {
+              "grantee": "selqiro_block_removal_writer_v1",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "SELECT"
+            },
+            {
+              "grantee": "selqiro_listing_contact_writer_v1",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "SELECT"
+            },
+            {
+              "grantee": "selqiro_listing_contact_writer_v1",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "UPDATE"
+            },
+            {
+              "grantee": "service_role",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "DELETE"
+            },
+            {
+              "grantee": "service_role",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "INSERT"
+            },
+            {
+              "grantee": "service_role",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "MAINTAIN"
+            },
+            {
+              "grantee": "service_role",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "REFERENCES"
+            },
+            {
+              "grantee": "service_role",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "SELECT"
+            },
+            {
+              "grantee": "service_role",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "TRIGGER"
+            },
+            {
+              "grantee": "service_role",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "TRUNCATE"
+            },
+            {
+              "grantee": "service_role",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "UPDATE"
+            }
+          ],
+          "column_acl": [
+            {
+              "acl": [],
+              "name": "id"
+            },
+            {
+              "acl": [
+                {
+                  "grantee": "authenticated",
+                  "grantor": "postgres",
+                  "grantable": false,
+                  "privilege": "INSERT"
+                }
+              ],
+              "name": "blocker_id"
+            },
+            {
+              "acl": [
+                {
+                  "grantee": "authenticated",
+                  "grantor": "postgres",
+                  "grantable": false,
+                  "privilege": "INSERT"
+                }
+              ],
+              "name": "blocked_id"
+            },
+            {
+              "acl": [],
+              "name": "created_at"
+            }
+          ]
+        },
+        "sequence_acl": [
+          {
+            "grantee": "anon",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "SELECT"
+          },
+          {
+            "grantee": "anon",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "USAGE"
+          },
+          {
+            "grantee": "authenticated",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "SELECT"
+          },
+          {
+            "grantee": "authenticated",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "USAGE"
+          },
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "SELECT"
+          },
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "UPDATE"
+          },
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "USAGE"
+          },
+          {
+            "grantee": "service_role",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "SELECT"
+          },
+          {
+            "grantee": "service_role",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "UPDATE"
+          },
+          {
+            "grantee": "service_role",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "USAGE"
+          }
+        ],
+        "new_privileges": {
+          "schemas": [
+            {
+              "acl": [
+                {
+                  "grantee": "selqiro_block_removal_writer_v1",
+                  "grantable": false,
+                  "privilege": "USAGE"
+                }
+              ],
+              "schema": "auth"
+            },
+            {
+              "acl": [
+                {
+                  "grantee": "selqiro_block_removal_writer_v1",
+                  "grantable": false,
+                  "privilege": "USAGE"
+                }
+              ],
+              "schema": "provider_controls_private"
+            },
+            {
+              "acl": [
+                {
+                  "grantee": "selqiro_block_removal_writer_v1",
+                  "grantable": false,
+                  "privilege": "USAGE"
+                }
+              ],
+              "schema": "public"
+            }
+          ],
+          "auth_uid_acl": [
+            {
+              "grantee": "selqiro_block_removal_writer_v1",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            }
+          ]
+        }
+      },
+      "sha256": "00d71c2cce40cbf4f918876cb9d25a6a86e6bf7d97b02536be2fc489a9de6118"
+    },
+    "invariants": {
+      "existing_authority": "a4290f056d21beb3f99ef869d2193567a47ca6a98a1e41064b063d65854cc8e2",
+      "existing_functions": "d6272a3695fcbaa2c2763b2bcc7976e0195c922c32b05f4ad6545bfe2801475c",
+      "immutable_structure": "67533b7ab65e28b8ab38cb6cee279d055558ee89ee827591d95401f1309cfb2f"
+    },
+    "actor_roles": true,
+    "hosted_context": [
+      {
+        "release_id": "listing-publication-hosted-preview-v1",
+        "instance_id": "2d088814-0900-448a-a9d1-7b05470cb1d2",
+        "project_ref": "vyjletlmwoiwxsnsunlm",
+        "cleanup_mode": "held",
+        "release_ready": true,
+        "storage_authority_version": "source-part-rfc3986-v1"
+      }
+    ],
+    "messaging_guards": {
+      "facts": [
+        {
+          "acl": [
+            {
+              "grantee": "postgres",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            },
+            {
+              "grantee": "selqiro_listing_contact_writer_v1",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            }
+          ],
+          "kind": "f",
+          "owner": "postgres",
+          "config": [
+            "search_path=pg_catalog, public, auth, pg_temp"
+          ],
+          "result": "trigger",
+          "strict": false,
+          "definer": false,
+          "defaults": null,
+          "language": "plpgsql",
+          "parallel": "u",
+          "leakproof": false,
+          "signature": "listing_contact_private.guard_message()",
+          "volatility": "v",
+          "body_sha256": "a2ac16ccb92fb05c5e1ddb2849fbf2c14e5ea00004916f60186f46733de63950",
+          "argument_names": null
+        },
+        {
+          "acl": [
+            {
+              "grantee": "postgres",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            },
+            {
+              "grantee": "selqiro_listing_contact_writer_v1",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            }
+          ],
+          "kind": "f",
+          "owner": "postgres",
+          "config": [
+            "search_path=pg_catalog, pg_temp"
+          ],
+          "result": "uuid",
+          "strict": false,
+          "definer": true,
+          "defaults": null,
+          "language": "plpgsql",
+          "parallel": "u",
+          "leakproof": false,
+          "signature": "listing_contact_private.require_actor_hosted_v1(uuid,uuid)",
+          "volatility": "v",
+          "body_sha256": "d6b6bede7ce642c19c3ebdb0e809abf1ab049c789b2219b9e8454923c88f5518",
+          "argument_names": [
+            "p_expected_user_id",
+            "p_expected_identity_id"
+          ]
+        },
+        {
+          "acl": [
+            {
+              "grantee": "postgres",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            },
+            {
+              "grantee": "selqiro_listing_contact_writer_v1",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            }
+          ],
+          "kind": "f",
+          "owner": "postgres",
+          "config": [
+            "search_path=pg_catalog, public, pg_temp"
+          ],
+          "result": "void",
+          "strict": false,
+          "definer": true,
+          "defaults": null,
+          "language": "plpgsql",
+          "parallel": "u",
+          "leakproof": false,
+          "signature": "listing_contact_private.require_peer(uuid,uuid)",
+          "volatility": "v",
+          "body_sha256": "43f16a23f77900f91a850c3d7d41689b806680f7ffb68796d164d23cccd3f7aa",
+          "argument_names": [
+            "p_user",
+            "p_identity"
+          ]
+        },
+        {
+          "acl": [
+            {
+              "grantee": "postgres",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            },
+            {
+              "grantee": "selqiro_listing_contact_writer_v1",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            }
+          ],
+          "kind": "f",
+          "owner": "postgres",
+          "config": [
+            "search_path=pg_catalog, public, pg_temp"
+          ],
+          "result": "void",
+          "strict": false,
+          "definer": false,
+          "defaults": null,
+          "language": "plpgsql",
+          "parallel": "u",
+          "leakproof": false,
+          "signature": "listing_contact_private.require_unblocked(uuid,uuid)",
+          "volatility": "v",
+          "body_sha256": "aabb21ea89dd484394e31241d5e490551f72935900840946dd286d937dbdae80",
+          "argument_names": [
+            "p_first",
+            "p_second"
+          ]
+        },
+        {
+          "acl": [
+            {
+              "grantee": "postgres",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            },
+            {
+              "grantee": "selqiro_listing_contact_writer_v1",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            }
+          ],
+          "kind": "f",
+          "owner": "postgres",
+          "config": [
+            "search_path=pg_catalog, pg_temp"
+          ],
+          "result": "boolean",
+          "strict": false,
+          "definer": false,
+          "defaults": null,
+          "language": "sql",
+          "parallel": "u",
+          "leakproof": false,
+          "signature": "messaging_private_v2.exact_thread(bigint,uuid,uuid)",
+          "volatility": "s",
+          "body_sha256": "19fd6913a5e44248686e56a0151d7a953c0fbf7b603cfc2e2b65a21ac252fd23",
+          "argument_names": [
+            "p_conversation",
+            "p_user",
+            "p_identity"
+          ]
+        },
+        {
+          "acl": [
+            {
+              "grantee": "postgres",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            },
+            {
+              "grantee": "selqiro_listing_contact_writer_v1",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            }
+          ],
+          "kind": "f",
+          "owner": "postgres",
+          "config": [
+            "search_path=pg_catalog, pg_temp",
+            "lock_timeout=2s"
+          ],
+          "result": "trigger",
+          "strict": false,
+          "definer": true,
+          "defaults": null,
+          "language": "plpgsql",
+          "parallel": "u",
+          "leakproof": false,
+          "signature": "messaging_private_v2.guard_account_block()",
+          "volatility": "v",
+          "body_sha256": "83bd3c50a4d0bb2323e5dee7ed86032d506ea82e276b6127d3238bc96b37773a",
+          "argument_names": null
+        },
+        {
+          "acl": [
+            {
+              "grantee": "postgres",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            },
+            {
+              "grantee": "selqiro_listing_contact_writer_v1",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            }
+          ],
+          "kind": "f",
+          "owner": "postgres",
+          "config": [
+            "search_path=pg_catalog, pg_temp"
+          ],
+          "result": "public.conversations",
+          "strict": false,
+          "definer": false,
+          "defaults": null,
+          "language": "plpgsql",
+          "parallel": "u",
+          "leakproof": false,
+          "signature": "messaging_private_v2.require_thread(bigint,uuid,uuid)",
+          "volatility": "v",
+          "body_sha256": "5f2487f6126fd6a17f67c6ec4b9de340840f8ac3f0585d5750a38c90396fbd36",
+          "argument_names": [
+            "p_conversation",
+            "p_user",
+            "p_identity"
+          ]
+        },
+        {
+          "acl": [
+            {
+              "grantee": "authenticated",
+              "grantor": "selqiro_listing_contact_writer_v1",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            },
+            {
+              "grantee": "selqiro_listing_contact_writer_v1",
+              "grantor": "selqiro_listing_contact_writer_v1",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            }
+          ],
+          "kind": "f",
+          "owner": "selqiro_listing_contact_writer_v1",
+          "config": [
+            "search_path=pg_catalog, public, auth, pg_temp",
+            "lock_timeout=2s"
+          ],
+          "result": "jsonb",
+          "strict": false,
+          "definer": true,
+          "defaults": "NULL::text",
+          "language": "plpgsql",
+          "parallel": "u",
+          "leakproof": false,
+          "signature": "public.send_my_listing_message_v1(uuid,uuid,uuid,text,text,text)",
+          "volatility": "v",
+          "body_sha256": "2b2f38a55bef3b0751ae2ae045f973a9a7032ed322ef6bf5ca1e39b1fe0bd56a",
+          "argument_names": [
+            "p_expected_user_id",
+            "p_expected_identity_id",
+            "p_request_key",
+            "p_conversation_id",
+            "p_message",
+            "p_listing_id"
+          ]
+        },
+        {
+          "acl": [
+            {
+              "grantee": "authenticated",
+              "grantor": "selqiro_listing_contact_writer_v1",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            },
+            {
+              "grantee": "selqiro_listing_contact_writer_v1",
+              "grantor": "selqiro_listing_contact_writer_v1",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            }
+          ],
+          "kind": "f",
+          "owner": "selqiro_listing_contact_writer_v1",
+          "config": [
+            "search_path=pg_catalog, public, auth, pg_temp",
+            "lock_timeout=2s"
+          ],
+          "result": "jsonb",
+          "strict": false,
+          "definer": true,
+          "defaults": "NULL::text, NULL::uuid",
+          "language": "plpgsql",
+          "parallel": "u",
+          "leakproof": false,
+          "signature": "public.send_my_message_v2(uuid,uuid,uuid,text,text,text,uuid)",
+          "volatility": "v",
+          "body_sha256": "22669894a1de3dceac8d608a271ae7c459c16f2957af33b04b24fbf9365e1538",
+          "argument_names": [
+            "p_expected_user_id",
+            "p_expected_identity_id",
+            "p_request_key",
+            "p_conversation_id",
+            "p_message",
+            "p_listing_id",
+            "p_attachment_id"
+          ]
+        }
+      ],
+      "sha256": "902185951bece19a25534da8b2eeb7a06c14ead8091baa116521954094a46766"
+    },
+    "entrypoint_authority": {
+      "facts": [
+        {
+          "acl": [
+            {
+              "grantee": "PUBLIC",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            },
+            {
+              "grantee": "anon",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            },
+            {
+              "grantee": "authenticated",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            },
+            {
+              "grantee": "postgres",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            },
+            {
+              "grantee": "service_role",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            }
+          ],
+          "kind": "f",
+          "owner": "postgres",
+          "config": [
+            "search_path=public"
+          ],
+          "result": "text",
+          "strict": false,
+          "definer": true,
+          "defaults": null,
+          "language": "plpgsql",
+          "parallel": "u",
+          "leakproof": false,
+          "signature": "public.block_store_identity_owner(uuid)",
+          "volatility": "v",
+          "body_sha256": "68f8b39c768c89ce5a696e3ad0c99afd1a3958ee06a5c524a0c828b5de225397",
+          "argument_names": [
+            "p_store_identity_id"
+          ]
+        },
+        {
+          "acl": [
+            {
+              "grantee": "PUBLIC",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            },
+            {
+              "grantee": "anon",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            },
+            {
+              "grantee": "authenticated",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            },
+            {
+              "grantee": "postgres",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            },
+            {
+              "grantee": "service_role",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            }
+          ],
+          "kind": "f",
+          "owner": "postgres",
+          "config": [
+            "search_path=public"
+          ],
+          "result": "void",
+          "strict": false,
+          "definer": true,
+          "defaults": null,
+          "language": "plpgsql",
+          "parallel": "u",
+          "leakproof": false,
+          "signature": "public.restore_conversation_for_participants(bigint)",
+          "volatility": "v",
+          "body_sha256": "b6384bfd4d43e0b45e4c4bd7a07bbf9b79453d8a86208a990e3b91517129a279",
+          "argument_names": [
+            "target_conversation_id"
+          ]
+        },
+        {
+          "acl": [
+            {
+              "grantee": "authenticated",
+              "grantor": "selqiro_listing_contact_writer_v1",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            },
+            {
+              "grantee": "selqiro_listing_contact_writer_v1",
+              "grantor": "selqiro_listing_contact_writer_v1",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            }
+          ],
+          "kind": "f",
+          "owner": "selqiro_listing_contact_writer_v1",
+          "config": [
+            "search_path=pg_catalog, public, auth, pg_temp",
+            "lock_timeout=2s"
+          ],
+          "result": "jsonb",
+          "strict": false,
+          "definer": true,
+          "defaults": null,
+          "language": "plpgsql",
+          "parallel": "u",
+          "leakproof": false,
+          "signature": "public.set_my_thread_block_v2(uuid,uuid,text,boolean)",
+          "volatility": "v",
+          "body_sha256": "2755d8475ddd0c5ee7e61d7e66e96919013202056d8473bb7a81b63ddabb2d81",
+          "argument_names": [
+            "p_expected_user_id",
+            "p_expected_identity_id",
+            "p_conversation_id",
+            "p_blocked"
+          ]
+        }
+      ],
+      "sha256": "3ba06e3567651bbd395bb048ee58b94662c1f02a840deeda451f510437ff1b47"
+    },
+    "account_block_policies": {
+      "facts": [
+        {
+          "name": "Users can create own blocks",
+          "check": "(blocker_id = auth.uid())",
+          "roles": [
+            "authenticated"
+          ],
+          "using": null,
+          "command": "a",
+          "permissive": true
+        },
+        {
+          "name": "Users can delete own blocks",
+          "check": null,
+          "roles": [
+            "authenticated"
+          ],
+          "using": "(blocker_id = auth.uid())",
+          "command": "d",
+          "permissive": true
+        },
+        {
+          "name": "Users can view own blocks",
+          "check": null,
+          "roles": [
+            "authenticated"
+          ],
+          "using": "((blocker_id = auth.uid()) OR (blocked_id = auth.uid()))",
+          "command": "r",
+          "permissive": true
+        },
+        {
+          "name": "contact_writer_lock",
+          "check": "false",
+          "roles": [
+            "selqiro_listing_contact_writer_v1"
+          ],
+          "using": "true",
+          "command": "w",
+          "permissive": true
+        },
+        {
+          "name": "contact_writer_read",
+          "check": null,
+          "roles": [
+            "selqiro_listing_contact_writer_v1"
+          ],
+          "using": "true",
+          "command": "r",
+          "permissive": true
+        }
+      ],
+      "sha256": "2be4f71ef40cb8d289a7905df80330da9e158e6a4534c4db66d9d4c24627ca43"
+    },
+    "block_writer_inventory": {
+      "facts": {
+        "views": [
+          {
+            "acl": [
+              {
+                "grantee": "anon",
+                "grantor": "postgres",
+                "grantable": false,
+                "privilege": "SELECT"
+              },
+              {
+                "grantee": "authenticated",
+                "grantor": "postgres",
+                "grantable": false,
+                "privilege": "SELECT"
+              },
+              {
+                "grantee": "postgres",
+                "grantor": "postgres",
+                "grantable": false,
+                "privilege": "DELETE"
+              },
+              {
+                "grantee": "postgres",
+                "grantor": "postgres",
+                "grantable": false,
+                "privilege": "INSERT"
+              },
+              {
+                "grantee": "postgres",
+                "grantor": "postgres",
+                "grantable": false,
+                "privilege": "MAINTAIN"
+              },
+              {
+                "grantee": "postgres",
+                "grantor": "postgres",
+                "grantable": false,
+                "privilege": "REFERENCES"
+              },
+              {
+                "grantee": "postgres",
+                "grantor": "postgres",
+                "grantable": false,
+                "privilege": "SELECT"
+              },
+              {
+                "grantee": "postgres",
+                "grantor": "postgres",
+                "grantable": false,
+                "privilege": "TRIGGER"
+              },
+              {
+                "grantee": "postgres",
+                "grantor": "postgres",
+                "grantable": false,
+                "privilege": "TRUNCATE"
+              },
+              {
+                "grantee": "postgres",
+                "grantor": "postgres",
+                "grantable": false,
+                "privilege": "UPDATE"
+              }
+            ],
+            "kind": "v",
+            "name": "public.discovery_listings_v1",
+            "owner": "postgres",
+            "options": [
+              "security_invoker=true",
+              "security_barrier=true"
+            ],
+            "definition": " WITH viewer_hidden AS MATERIALIZED (\n         SELECT public.hidden_provider_ids_for_viewer_v1() AS identity_id\n        )\n SELECT id,\n    created_at,\n    title,\n    description,\n    price,\n    image,\n    status,\n    category,\n    condition,\n    country,\n    city,\n    location,\n    user_id,\n    ai_title,\n    ai_description,\n    ai_category,\n    ai_detected_brand,\n    ai_detected_type,\n    ai_confidence,\n    ai_raw,\n    manufacturer,\n    part_number,\n    oem_number,\n    vehicle_brand,\n    vehicle_model,\n    vehicle_year,\n    engine,\n    compatibility,\n    is_featured,\n    featured_until,\n    ai_enriched,\n    ai_level,\n    item_type,\n    subcategory,\n    details,\n    ai_status,\n    ai_review_required,\n    ai_reviewed_by_user,\n    search_text,\n    active_until,\n    is_boosted,\n    boost_until,\n    seo_title,\n    seo_description,\n    description_en,\n    ai_detected_object,\n    ai_suggested_category,\n    ai_suggested_subcategory,\n    ai_suggested_title,\n    ai_suggested_brand,\n    ai_suggested_model,\n    ai_suggestion_json,\n    price_amount,\n    search_vector,\n    listing_lat,\n    listing_lng,\n    listing_language,\n    identity_id,\n    created_by_user_id,\n    updated_by_user_id,\n    price_kind,\n    currency,\n    price_revision\n   FROM public.listings l\n  WHERE NOT (EXISTS ( SELECT 1\n           FROM viewer_hidden h\n          WHERE h.identity_id = l.identity_id)) AND NOT (EXISTS ( SELECT 1\n           FROM public.user_blocks b\n          WHERE auth.uid() IS NOT NULL AND (b.blocker_id = auth.uid() AND b.blocked_id = l.user_id OR b.blocked_id = auth.uid() AND b.blocker_id = l.user_id)));"
+          }
+        ],
+        "writers": [
+          {
+            "acl": [
+              {
+                "grantee": "postgres",
+                "grantor": "postgres",
+                "grantable": false,
+                "privilege": "EXECUTE"
+              },
+              {
+                "grantee": "selqiro_listing_contact_writer_v1",
+                "grantor": "postgres",
+                "grantable": false,
+                "privilege": "EXECUTE"
+              }
+            ],
+            "owner": "postgres",
+            "config": [
+              "search_path=pg_catalog, pg_temp",
+              "lock_timeout=2s"
+            ],
+            "signature": "messaging_private_v2.guard_account_block()",
+            "body_sha256": "83bd3c50a4d0bb2323e5dee7ed86032d506ea82e276b6127d3238bc96b37773a"
+          },
+          {
+            "acl": [
+              {
+                "grantee": "PUBLIC",
+                "grantor": "postgres",
+                "grantable": false,
+                "privilege": "EXECUTE"
+              },
+              {
+                "grantee": "anon",
+                "grantor": "postgres",
+                "grantable": false,
+                "privilege": "EXECUTE"
+              },
+              {
+                "grantee": "authenticated",
+                "grantor": "postgres",
+                "grantable": false,
+                "privilege": "EXECUTE"
+              },
+              {
+                "grantee": "postgres",
+                "grantor": "postgres",
+                "grantable": false,
+                "privilege": "EXECUTE"
+              },
+              {
+                "grantee": "service_role",
+                "grantor": "postgres",
+                "grantable": false,
+                "privilege": "EXECUTE"
+              }
+            ],
+            "owner": "postgres",
+            "config": [
+              "search_path=public"
+            ],
+            "signature": "public.block_store_identity_owner(uuid)",
+            "body_sha256": "68f8b39c768c89ce5a696e3ad0c99afd1a3958ee06a5c524a0c828b5de225397"
+          },
+          {
+            "acl": [
+              {
+                "grantee": "authenticated",
+                "grantor": "selqiro_listing_contact_writer_v1",
+                "grantable": false,
+                "privilege": "EXECUTE"
+              },
+              {
+                "grantee": "selqiro_listing_contact_writer_v1",
+                "grantor": "selqiro_listing_contact_writer_v1",
+                "grantable": false,
+                "privilege": "EXECUTE"
+              }
+            ],
+            "owner": "selqiro_listing_contact_writer_v1",
+            "config": [
+              "search_path=pg_catalog, public, auth, pg_temp",
+              "lock_timeout=2s"
+            ],
+            "signature": "public.set_my_thread_block_v2(uuid,uuid,text,boolean)",
+            "body_sha256": "2755d8475ddd0c5ee7e61d7e66e96919013202056d8473bb7a81b63ddabb2d81"
+          }
+        ]
+      },
+      "sha256": "96b905abf14a60f32b340ac84b6b123168b517360f6f77d601ed44d41e56b590"
+    },
+    "provider_cas_authority": {
+      "facts": [
+        {
+          "acl": [
+            {
+              "grantee": "postgres",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            }
+          ],
+          "kind": "f",
+          "owner": "postgres",
+          "config": [
+            "search_path=pg_catalog, pg_temp"
+          ],
+          "result": "boolean",
+          "strict": false,
+          "definer": true,
+          "defaults": null,
+          "language": "sql",
+          "parallel": "u",
+          "leakproof": false,
+          "signature": "provider_controls_private.is_own_provider(uuid,uuid,uuid)",
+          "volatility": "s",
+          "body_sha256": "f5442544ef493f167b8b02b3e3756796fc9c5015b43e8f2d1af546c35a2307b3",
+          "argument_names": [
+            "p_actor",
+            "p_identity",
+            "p_account"
+          ]
+        },
+        {
+          "acl": [
+            {
+              "grantee": "postgres",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            }
+          ],
+          "kind": "f",
+          "owner": "postgres",
+          "config": [
+            "search_path=pg_catalog, pg_temp"
+          ],
+          "result": "void",
+          "strict": false,
+          "definer": true,
+          "defaults": null,
+          "language": "plpgsql",
+          "parallel": "u",
+          "leakproof": false,
+          "signature": "provider_controls_private.lock_target(uuid,text,text)",
+          "volatility": "v",
+          "body_sha256": "65fedae624189f501e4f058603cdaba4f2afc33408248be53d22c17ad5253df3",
+          "argument_names": [
+            "p_actor",
+            "p_type",
+            "p_id"
+          ]
+        },
+        {
+          "acl": [
+            {
+              "grantee": "postgres",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            }
+          ],
+          "kind": "f",
+          "owner": "postgres",
+          "config": [
+            "search_path=pg_catalog, pg_temp"
+          ],
+          "result": "uuid",
+          "strict": false,
+          "definer": true,
+          "defaults": null,
+          "language": "plpgsql",
+          "parallel": "u",
+          "leakproof": false,
+          "signature": "provider_controls_private.require_actor(uuid)",
+          "volatility": "s",
+          "body_sha256": "bd38963b612289c8e828982e72f6d19a40afdd430fc03e8127fc6b26a666c05c",
+          "argument_names": [
+            "p_expected_user_id"
+          ]
+        },
+        {
+          "acl": [
+            {
+              "grantee": "postgres",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            }
+          ],
+          "kind": "f",
+          "owner": "postgres",
+          "config": [
+            "search_path=pg_catalog, pg_temp"
+          ],
+          "result": "jsonb",
+          "strict": false,
+          "definer": true,
+          "defaults": null,
+          "language": "plpgsql",
+          "parallel": "u",
+          "leakproof": false,
+          "signature": "provider_controls_private.resolve_target(uuid,text,text)",
+          "volatility": "s",
+          "body_sha256": "a1cb25d5e7eb2558d1831e737705136e5b062eddd9e17c36596e062c9b55dfa7",
+          "argument_names": [
+            "p_actor",
+            "p_type",
+            "p_id"
+          ]
+        },
+        {
+          "acl": [
+            {
+              "grantee": "postgres",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            }
+          ],
+          "kind": "f",
+          "owner": "postgres",
+          "config": [
+            "search_path=pg_catalog, pg_temp",
+            "TimeZone=UTC"
+          ],
+          "result": "jsonb",
+          "strict": false,
+          "definer": true,
+          "defaults": null,
+          "language": "plpgsql",
+          "parallel": "u",
+          "leakproof": false,
+          "signature": "provider_controls_private.snapshot(uuid,text,text,jsonb,timestamp with time zone)",
+          "volatility": "s",
+          "body_sha256": "60f1ba11aa6aa5276b19dddc1daaab1edbe4aa911c49cb42384394b1d0d08066",
+          "argument_names": [
+            "p_actor",
+            "p_type",
+            "p_id",
+            "p_target",
+            "p_now"
+          ]
+        },
+        {
+          "acl": [
+            {
+              "grantee": "postgres",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            }
+          ],
+          "kind": "f",
+          "owner": "postgres",
+          "config": [
+            "search_path=pg_catalog, pg_temp"
+          ],
+          "result": "void",
+          "strict": false,
+          "definer": false,
+          "defaults": null,
+          "language": "plpgsql",
+          "parallel": "u",
+          "leakproof": false,
+          "signature": "provider_controls_private.validate_target(text,text)",
+          "volatility": "i",
+          "body_sha256": "e7821fe96fa84c366c63a795877337c4e0e0f3c2121b8f9c709df1995d629e05",
+          "argument_names": [
+            "p_type",
+            "p_id"
+          ]
+        },
+        {
+          "acl": [
+            {
+              "grantee": "authenticated",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            },
+            {
+              "grantee": "postgres",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            }
+          ],
+          "kind": "f",
+          "owner": "postgres",
+          "config": [
+            "search_path=pg_catalog, pg_temp",
+            "TimeZone=UTC"
+          ],
+          "result": "jsonb",
+          "strict": false,
+          "definer": true,
+          "defaults": null,
+          "language": "plpgsql",
+          "parallel": "u",
+          "leakproof": false,
+          "signature": "public.get_my_provider_control_v1(uuid,text,text)",
+          "volatility": "s",
+          "body_sha256": "9179c8cbed49047505279ee0049e7fda7439705363069dfd30e92edbe4c4f009",
+          "argument_names": [
+            "p_expected_user_id",
+            "p_target_type",
+            "p_target_id"
+          ]
+        },
+        {
+          "acl": [
+            {
+              "grantee": "authenticated",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            },
+            {
+              "grantee": "postgres",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            }
+          ],
+          "kind": "f",
+          "owner": "postgres",
+          "config": [
+            "search_path=pg_catalog, pg_temp",
+            "TimeZone=UTC"
+          ],
+          "result": "jsonb",
+          "strict": false,
+          "definer": true,
+          "defaults": "25, 0",
+          "language": "plpgsql",
+          "parallel": "u",
+          "leakproof": false,
+          "signature": "public.list_my_provider_controls_v1(uuid,text,integer,integer)",
+          "volatility": "s",
+          "body_sha256": "5852e29f3fd431c972aaf4ea5e23dca5bb89f6f6177c9a8d75f4d8a402c8be47",
+          "argument_names": [
+            "p_expected_user_id",
+            "p_kind",
+            "p_result_limit",
+            "p_result_offset"
+          ]
+        }
+      ],
+      "sha256": "2f034e5f727dd2ce33ed4e87dec4b5cdbaa06e763ccf16588e4bbbd1b15aa918"
+    },
+    "account_block_structure": {
+      "facts": {
+        "table": {
+          "rls": true,
+          "kind": "r",
+          "name": "public.user_blocks",
+          "owner": "postgres",
+          "rules": [],
+          "forced": false,
+          "columns": [
+            {
+              "name": "id",
+              "type": "bigint",
+              "default": "nextval('public.user_blocks_id_seq'::regclass)",
+              "identity": "",
+              "not_null": true,
+              "position": 1,
+              "generated": ""
+            },
+            {
+              "name": "blocker_id",
+              "type": "uuid",
+              "default": null,
+              "identity": "",
+              "not_null": true,
+              "position": 2,
+              "generated": ""
+            },
+            {
+              "name": "blocked_id",
+              "type": "uuid",
+              "default": null,
+              "identity": "",
+              "not_null": true,
+              "position": 3,
+              "generated": ""
+            },
+            {
+              "name": "created_at",
+              "type": "timestamp with time zone",
+              "default": "now()",
+              "identity": "",
+              "not_null": true,
+              "position": 4,
+              "generated": ""
+            }
+          ],
+          "indexes": [
+            {
+              "name": "public.user_blocks_blocked_blocker_idx_v1",
+              "ready": true,
+              "valid": true,
+              "unique": false,
+              "primary": false,
+              "definition": "CREATE INDEX user_blocks_blocked_blocker_idx_v1 ON public.user_blocks USING btree (blocked_id, blocker_id)"
+            },
+            {
+              "name": "public.user_blocks_blocker_id_blocked_id_key",
+              "ready": true,
+              "valid": true,
+              "unique": true,
+              "primary": false,
+              "definition": "CREATE UNIQUE INDEX user_blocks_blocker_id_blocked_id_key ON public.user_blocks USING btree (blocker_id, blocked_id)"
+            },
+            {
+              "name": "public.user_blocks_pkey",
+              "ready": true,
+              "valid": true,
+              "unique": true,
+              "primary": true,
+              "definition": "CREATE UNIQUE INDEX user_blocks_pkey ON public.user_blocks USING btree (id)"
+            }
+          ],
+          "parents": [],
+          "incoming": [],
+          "triggers": [],
+          "constraints": [
+            {
+              "name": "user_blocks_blocked_id_fkey",
+              "type": "f",
+              "validated": true,
+              "definition": "FOREIGN KEY (blocked_id) REFERENCES public.profiles(id) ON DELETE CASCADE"
+            },
+            {
+              "name": "user_blocks_blocker_id_blocked_id_key",
+              "type": "u",
+              "validated": true,
+              "definition": "UNIQUE (blocker_id, blocked_id)"
+            },
+            {
+              "name": "user_blocks_blocker_id_fkey",
+              "type": "f",
+              "validated": true,
+              "definition": "FOREIGN KEY (blocker_id) REFERENCES public.profiles(id) ON DELETE CASCADE"
+            },
+            {
+              "name": "user_blocks_check",
+              "type": "c",
+              "validated": true,
+              "definition": "CHECK ((blocker_id <> blocked_id))"
+            },
+            {
+              "name": "user_blocks_pkey",
+              "type": "p",
+              "validated": true,
+              "definition": "PRIMARY KEY (id)"
+            }
+          ]
+        },
+        "sequence": {
+          "max": "9223372036854775807",
+          "min": "1",
+          "name": "public.user_blocks_id_seq",
+          "type": "bigint",
+          "cache": "1",
+          "cycle": false,
+          "owner": "postgres",
+          "start": "1",
+          "increment": "1",
+          "ownership": [
+            {
+              "kind": "a",
+              "table": "public.user_blocks",
+              "column": "id"
+            }
+          ]
+        }
+      },
+      "sha256": "c0ee4dad990aff94373a18b505f6b33a6f284361b571f19f2a704c2344b49a35"
+    }
+  },
+  "modules": {
+    "01_legacy_block_guard.sql": "0c1ce331ea92aba6436ad13bccde4bd4ba97fc2bf57bf43e8b4eb10c322b60e7",
+    "02_browser_permissions.sql": "4114535afbccadefe92a3dddf83c4a4fec37419f01a1101ef528b5de36de273a",
+    "03_cas_delete_authority.sql": "5c1248c9a304068a75ca222f4f496a3d344c803b000ac8fe39f3bb08b294fcf4",
+    "04_cas_setter.sql": "be404788d85c59096393c3fa2899844eadddce1c35062a8cd8b65ca17618d42a"
+  },
+  "modules_sha256": "bc803b70dca89030adbb44c6810b261681b2c46ca84666e9da44d5e8c5abea0e",
+  "dependencies_sha256": "bf0110bd2cf73197cfd513f4fa03033a465c8d0a37c52062bc0cdca1906e4848"
+}

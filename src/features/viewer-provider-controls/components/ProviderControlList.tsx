@@ -1,14 +1,13 @@
 "use client";
 import type { ProviderControlKind } from "../../../entities/viewer-provider-controls/model/types";
-import { useV2Translation } from "../../../shared/i18n/V2LanguageProvider";
+import {useProviderControlTranslation} from "../model/providerControlLanguage";
 import { localeForLanguage } from "../../../../lib/i18n/useTranslation";
-import { providerControlMessages } from "../model/providerControlMessages";
 import { useProviderControlList } from "../model/useProviderControlList";
 import { useProviderControlsContext } from "./ProviderControlsBoundary";
 
 const button = "min-h-11 rounded-full border border-neutral-300 bg-white px-4 py-2 text-sm font-bold disabled:opacity-50";
 export default function ProviderControlList({kind}: {kind: ProviderControlKind}) {
-  const state = useProviderControlList(kind), controls = useProviderControlsContext(), {language, t} = useV2Translation(providerControlMessages);
+  const state = useProviderControlList(kind), controls = useProviderControlsContext(), {language, t} = useProviderControlTranslation();
   const hidden = kind === "hidden", action = hidden ? "unhide" : "unblock";
   return <section className="min-w-0 space-y-4" aria-busy={state.loading} data-provider-control-list={kind}>
     <div><h3 className="text-xl font-black">{t(hidden ? "hiddenProviders" : "blockedUsers")}</h3>
@@ -28,7 +27,7 @@ export default function ProviderControlList({kind}: {kind: ProviderControlKind})
             <p className="mt-1 text-xs leading-5 text-neutral-600">{hidden && item.hiddenUntil
               ? t("hiddenUntil", {date: new Date(item.hiddenUntil).toLocaleString(localeForLanguage(language))}) : t("noExpiry")}</p></div>
           <button type="button" disabled={!controls || controls.view.phase === "writing"}
-            onClick={() => controls?.session.open(item.target, action, name)} className={button}>{t(action)}</button>
+            onClick={() => hidden ? controls?.session.open(item.target, "unhide", name) : controls?.session.openBlockRemoval(item, name)} className={button}>{t(action)}</button>
         </div>;
       })}
     </div>

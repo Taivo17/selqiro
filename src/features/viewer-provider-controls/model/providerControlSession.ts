@@ -3,7 +3,8 @@ import { ProviderControlsError, type ProviderControlAction, type ProviderControl
 import type { ViewerAccountActor } from "../../../shared/provider-controls/viewerAccountStore";
 import type { ProviderControlMessage } from "./providerControlMessages";
 
-type Selection = Readonly<{target: ProviderControlTarget; name: string; action: ProviderControlAction}>;
+type BlockPin = Readonly<{id: string; createdAt: string}>;
+type Selection = Readonly<{target: ProviderControlTarget; name: string; action: ProviderControlAction; blockPin?: BlockPin}>;
 type Pending = Readonly<{before: ProviderControlState; action: ProviderControlAction; revision?: string; uncertain: boolean}>;
 export type ProviderControlNotice = Readonly<{state: ProviderControlState; action: ProviderControlAction; message: ProviderControlMessage}>;
 export type ProviderControlView = Readonly<{
@@ -57,10 +58,22 @@ export class ProviderControlSession {
     return {signal: controller.signal, done: () => {actor.signal.removeEventListener("abort", abort); this.requests.delete(controller);}};
   }
   open(target: ProviderControlTarget, action: ProviderControlAction, name: string) {
+    this.select({target, action, name});
+  }
+  openBlockRemoval(observed: ProviderControlState, name = observed.provider.displayName) {
+    const actor = this.actor();
+    if (!actor || observed.actorUserId !== actor.userId || !observed.targetAvailable
+      || !observed.blockedByMe || !observed.blockId || !observed.blockCreatedAt) return;
+    // Pin the row the person saw. Reading the management target may obtain its
+    // token, but must never substitute a newer block or a newer row generation.
+    this.select({target: {type: "blocked_account", id: observed.blockId}, action: "unblock", name,
+      blockPin: Object.freeze({id: observed.blockId, createdAt: observed.blockCreatedAt})});
+  }
+  private select(selection: Selection) {
     if (this.retired || this.view.phase === "writing") return;
     if (this.pending?.uncertain) {this.replace({open: true}); return;}
     this.sequence += 1; this.pending = null;
-    this.replace({open: true, selection: {target, action, name}, state: null, phase: "loading", message: null});
+    this.replace({open: true, selection, state: null, phase: "loading", message: null});
     if (this.actor()) void this.check();
   }
   close() {if (this.view.phase !== "writing") this.replace({open: false});}
@@ -74,6 +87,13 @@ export class ProviderControlSession {
     try {
       const state = await this.client.get(actor, selection.target, request.signal);
       if (!this.current(actor, ticket)) return;
+      if (selection.blockPin && state.targetAvailable && (state.blockId !== selection.blockPin.id
+        || state.blockCreatedAt !== selection.blockPin.createdAt)) {
+        this.pending = null;
+        this.replace({state: null, phase: "error", message: "conflict", notice: null});
+        this.options.changed("unblock");
+        return;
+      }
       if (pending?.uncertain) {
         if (providerActionObserved(pending, state)) this.complete(state, pending.action, true);
         else {
@@ -94,6 +114,7 @@ export class ProviderControlSession {
   async confirm() {
     const {selection, state, phase} = this.view;
     if (phase !== "ready" || !selection || !state || this.pending?.uncertain || !providerActionAllowed(state, selection.action)) return;
+    if (selection.blockPin && (state.blockId !== selection.blockPin.id || state.blockCreatedAt !== selection.blockPin.createdAt)) return;
     await this.write(state, selection.action);
   }
   async undo() {

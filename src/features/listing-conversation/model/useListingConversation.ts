@@ -175,16 +175,16 @@ export function useListingConversation(conversationId: string, originListingId: 
       }
     } finally { sending.current = false; setBusy(false); }
   }
-  async function action(blocked: boolean | null): Promise<boolean> {
+  async function action(kind: "hide" | "block"): Promise<boolean> {
     const actor = context.actor;
     if (!actor || !context.isCurrent(actor) || actingNow.current || sending.current || attempt.current) return false;
     actingNow.current = true; setActing(true); setProblem(null);
     try {
       const command = { expectedUserId: actor.expectedUserId, expectedIdentityId: actor.expectedIdentityId, conversationId };
-      if (blocked === null) await hideThread(actor.accessToken, command, actor.signal);
-      else await setThreadBlocked(actor.accessToken, { ...command, blocked }, actor.signal);
+      if (kind === "hide") await hideThread(actor.accessToken, command, actor.signal);
+      else await setThreadBlocked(actor.accessToken, { ...command, blocked: true }, actor.signal);
       if (!context.isCurrent(actor)) return false;
-      if (blocked !== null) {notifyProviderControlsChanged("blocked"); await load(actor);}
+      if (kind === "block") {notifyProviderControlsChanged("blocked"); await load(actor);}
       return true;
     } catch { if (context.isCurrent(actor)) setProblem(uiMessage("the_change_could_not_be_confirmed_try_again")); return false; }
     finally { actingNow.current = false; setActing(false); }
@@ -207,6 +207,6 @@ export function useListingConversation(conversationId: string, originListingId: 
     pendingLatest: !!latestPage, openLatest: () => { if (latestPage && actor && latestPage.identity_id === actor.expectedIdentityId) { replaceView(latestPage); setLatestPage(null); } },
     refresh: () => actor && !readingNow.current && void load(actor),
     loadEarlier: () => actor && visible?.next_before_message_id && !readingNow.current && void load(actor, visible.next_before_message_id),
-    hide: () => action(null), block: (blocked: boolean) => action(blocked),
+    hide: () => action("hide"), block: () => action("block"),
   };
 }

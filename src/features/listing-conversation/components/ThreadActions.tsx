@@ -9,10 +9,10 @@ import { useEffect, useId, useRef, useState } from "react";
 import styles from "./conversation.module.css";
 import { providerControlMessages } from "../../viewer-provider-controls/model/providerControlMessages";
 
-type Action = "hide" | "block" | "unblock";
+type Action = "hide" | "block";
 type Props = { blocked?: boolean; blockedByOther?: boolean; blockUnavailable?: boolean; disabled?: boolean;
-  onHide: () => Promise<boolean>; onBlock?: (blocked: boolean) => Promise<boolean> };
-export default function ThreadActions({ blocked = false, blockedByOther = false, blockUnavailable = false, disabled = false, onHide, onBlock }: Props) {
+  onHide: () => Promise<boolean>; onBlock?: () => Promise<boolean>; onUnblock?: () => void };
+export default function ThreadActions({ blocked = false, blockedByOther = false, blockUnavailable = false, disabled = false, onHide, onBlock, onUnblock }: Props) {
   const { t } = useV2Translation(messagesUiMessages);
   const {t: providerText} = useV2Translation(providerControlMessages);
 
@@ -24,21 +24,21 @@ export default function ThreadActions({ blocked = false, blockedByOther = false,
   async function confirm() {
     if (!action || working) return;
     setWorking(true);
-    try { const ok = action === "hide" ? await onHide() : await onBlock?.(action === "block"); if (ok) setAction(null); }
+    try { const ok = action === "hide" ? await onHide() : await onBlock?.(); if (ok) setAction(null); }
     finally { setWorking(false); }
   }
   const text = action === "hide"
     ? t("the_conversation_will_be_removed_from_your_inbox_the_other_participant_will")
-    : action === "block"
-      ? t("blocking_this_user_applies_to_your_whole_account_including_your_other_ident")
-      : t("this_user_will_be_unblocked_for_your_whole_account_messaging_will_be_possib");
-  const label = action === "hide" ? t("remove_from_my_inbox") : action === "block" ? t("block_user") : t("unblock_user");
+    : t("blocking_this_user_applies_to_your_whole_account_including_your_other_ident");
+  const label = action === "hide" ? t("remove_from_my_inbox") : t("block_user");
   return <>
     <details ref={menu} className={styles.menu}>
       <summary className={styles.iconButton} aria-label={t("conversation_actions")}>•••</summary>
       <div className={styles.menuPanel}>
         <button type="button" disabled={disabled || working} onClick={() => choose("hide")}>{t("remove_from_my_inbox")}</button>
-        {onBlock ? <button type="button" disabled={disabled || working || (!blocked && (blockedByOther || blockUnavailable))} onClick={() => choose(blocked ? "unblock" : "block")}>
+        {onBlock ? <button type="button" disabled={disabled || working || (blocked ? !onUnblock : blockedByOther || blockUnavailable)} onClick={() => {
+          if (blocked) {if (menu.current) menu.current.open = false; onUnblock?.();} else choose("block");
+        }}>
           {blocked ? t("unblock_user") : blockedByOther ? providerText("blockedOther") : blockUnavailable ? t("sending_is_currently_unavailable") : t("block_user")}
         </button> : null}
       </div>

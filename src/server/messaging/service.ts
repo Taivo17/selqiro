@@ -80,7 +80,9 @@ export function createMessagingService(config: Readonly<{ projectOrigin: string;
       return atStage("receipt", signal, () => parseHideThreadReceipt(result, c));
     },
     async block(token: string, input: unknown, signal?: AbortSignal) {
-      const c = copySetThreadBlocked(input), rpc = await connect(token, c.expectedUserId, signal);
+      const c = copySetThreadBlocked(input);
+      if (!c.blocked) return contactFail("refused");
+      const rpc = await connect(token, c.expectedUserId, signal);
       const result = await rpc("set_my_thread_block_v2", { p_expected_user_id: c.expectedUserId,
         p_expected_identity_id: c.expectedIdentityId, p_conversation_id: c.conversationId, p_blocked: c.blocked });
       return atStage("receipt", signal, () => parseSetThreadBlockedReceipt(result, c));

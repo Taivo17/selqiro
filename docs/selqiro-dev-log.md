@@ -1748,3 +1748,195 @@ Eelmised kolm jooksvat dokumenti säilivad history/provider-controls-accepted-20
 all koos preservation.json räsitõendiga. Käesoleva sissekande eelnevad
 125991 päevikubaiti ja muud varasemad ajalookirjed säilivad muutmata.
 Kontosid, sisu, fotosid, sõnumeid, päevikuid ega raportikoopiaid ei kustutata.
+
+<!-- SELQIRO_PROVIDER_CONTROLS_CONSISTENCY_REVIEW_20261113 -->
+## 13.11.2026 — 371f4f4 lähteuuendus vastu võetud, blokeerimiskäigu ajajärg täpsustamisel
+
+Maci 19:07:30 raport (253706 B, SHA256
+`668d0f1f7c59ae4e684045fce6905df8acbefe7b6b34bbcbe16886d58457de8f`)
+seob profiilile koondamise väljaande manifesti
+`2ca5d4a86150f261baed7ddd140b9e09a582e3195a95612e9756d9a745073e2f`.
+Stage complete, build passed ja push verified; commit
+`371f4f4cc1ff62ecadb14d19bf5c8004cff256ea`, ainus parent 40ceac78.
+Lähtepuu `57dd09fecd9258c05bebc985394532f203449e99`, 1701 faili.
+Täielik 1696 kirjega algindex, 23 preimage’i, 18 asendust/5 lisandust/0 kustutust
+ja puu on kontrollitud. Maci lõppkontroll ja remote-main’i võrdsus on seotud
+saadud raporti ning täpse runneriga; uut Maci/GitHubi lugemist audit ei teinud.
+
+See lähteuuendus ei teinud andmebaasi-, Supabase CLI- ega Storage’i toiminguid.
+Eelmise eduka optimized-päeviku täielikud baidid, räsi, inode ja metaandmed
+säilisid läbi uue jooksu hoitud lugemisluku all. Kolme veel vanema päeviku
+säilimine jääb eelmise raporti ajalooliseks tõendiks. SQL applied/16 kaitse
+viimane tõend pärineb 40ceac78 paigaldusest, mitte uuest SQL-lugemisest.
+Uue 371f4f4 commit’i Vercel Ready / Production on eraldi kontrollimata;
+varasema 40ceac7 Ready pilt ei tõenda uut deployment’i.
+
+Kasutaja kinnitas peitmise ja Näita uuesti õnnestumise. 19:10:45 profiili
+õnnestumisteade ning 19:12 Minu ala, tagasivõtmise dialoogi ja taas nähtava
+kuulutuse järjestus toetavad seda vastuvõttu. Tegelikku 24 tunni möödumist
+pole vaadeldud. Kasutaja kirjeldas eraldi mitme seadme blokeerimiskäiku:
+blokeerija ei saanud saata, teine telefon sai enne värskendamist saata,
+kuulutused ilmusid avalehel tagasi ja uuesti blokeerimise/värskendamise
+järel toimis. See ei määra iseenesest serveri mutatsioonide järjekorda.
+
+19:17:40 pilt näitab avatud Eemaldada kasutaja blokeering? dialoogi ja tollast
+aktiivse oma bloki teadet; kinnitamise klikki ega lõpetatud eemaldamist pole
+pildil. 19:21:34 pildil on 19:21 saabunud sõnum. Üks järgmine samm on küsida,
+kas eemaldamine kinnitati ning kas enne seda sõnumit oli uus blokeerimine
+juba kinnitatud. Dialoogi avamine, hilisem lehe värskendamine ega nähtav
+sõnum ei tõenda üksi aktiivsest serveriblokist möödumist. Pildifailide kellaajad
+ei ole sõltumatult kontrollitud serverisündmuste ajatemplid.
+
+19:24:03 pildil on profiili päis/menüü olemas, kuid kuulutuste osa kuvab
+Kuulutusi ei saanud laadida. Tegelik rada kasutab marketplace V2 lugejat,
+mitte vana kasutamata profiilihooki; konto/revision’i võtmed ja katkestamine
+on allikas olemas. Üldteade ei erista transporti, RPC-tõrget ja range vastuse
+parsija tõrget. Selle eraldi lugemisvea konkreetne põhjus on lahtine.
+
+Piiratud allikaudit leidis V2 send’i blokeerimiskontrolli ning mõlemat suunda
+kontrolliva messages BEFORE INSERT kaitse ka legacy insert’i jaoks.
+Värskendus ei ole serveri lubade tõend. Samas puudub vanema vestluse/legacy
+sõnaselgel unblock-kirjutajal oodatava block id/created_at versioonikontroll
+(CAS): hilinenud eemaldamistaotlus võib puudutada vahepeal taas loodud oma
+blokki. Uus profiili/halduse setter kontrollib konkreetset versiooni.
+See on eraldi kinnitatud allikaleid, mitte juhtumi tõestatud põhjus.
+Üle vaadatud lugemis-/saatmisteedel automaatset unblock’i ei leitud;
+pilve hetkeõigusi ega konkreetse juhtumi mutatsioonide ajalugu ei loetud.
+
+Uued tõendid asuvad eraldi töökausta
+work/selqiro-provider-controls-consistency-20261113/checks/ all:
+profile-result-review-20261113-190730.json (28 võrdlust PASS, 51 pinitud
+sisendit, drift 0; SHA256
+275aaed6c829a8791ea9a86a2b9c5703cf14ec7f51a7089da98834e81bd63606),
+root-consistency-review.json, client-consistency-review.json ja
+client-block-writer-addendum.json. Need eristavad paigalduse PASS-i
+lahendamata kasutuskäigust. Uusi teste, buildi, paigaldajaid, sõnumi saatmist,
+blokeerimist või pilvetoiminguid ei käivitatud.
+
+Valmis on ainult eraldi continuity-overlay: uus CURRENT_STATE, sellest
+olemasoleva render_current_handoff.py puhta render-funktsiooniga handoff
+ning see append-only päevik. Macis neid dokumente ei rakendatud ega
+commititud; runtime’i ja SQL-i ei muudetud. Kõik selle sissekande eelnevad
+129008 päevikubaiti säilivad bait-baidilt. Külmutatud profile-kandidaat,
+väljastatud pakid ja raportid jäävad muutmata. Eelmise HOSTED_PORTAL-i
+profile-paigalduskäsk on juba lõpetatud ajalugu, mitte praegune järgmine töö.
+Vanu publish-/SQL-/recovery-/probe-käske ei korrata; sisu, kontosid, pilte,
+sõnumeid, päevikuid, intente ega raportikoopiaid ei kustutata.
+
+<!-- SELQIRO_PROVIDER_CONTROLS_UNCERTAIN_HISTORY_20261113 -->
+## 13.11.2026 — kasutaja täpsustus jätab vana blokeerimiskatse ajajärje lahtiseks
+
+Kasutaja mäletab, et 19:17 eemaldamise dialoogis ei vajutanud kumbagi nuppu,
+jättis toimingu pooleli ja avas postkasti, kuid ei saa seda kindlalt väita.
+Sellest ei järeldata kinnitatud unblock'i, kasutaja eksimust ega serveri
+blokeeringu läbimurret. Sama mälu täpsustust enam ei küsita.
+
+Järgmine samm on üks kitsas kahe olemasoleva testkonto kasutuskatse, millel
+on selge algseis ja kinnitatud tegevuste järjekord. Telefonivestlus avatakse
+enne arvutis kinnitatud blokki. Arvutis kontrollitakse Minu ala värske
+lugemisega bloki säilimist; telefonile käsitsi refresh'i ei tehta. Ühe
+selgelt eristatava testsõnumi puhul eristatakse kirjutamisnuppu, saatmiskatset
+ja tegelikku saaja postkasti saabumist. Ebaõnnestumise korral säilitatakse
+seis ja ajajärg. See ei ole tööriista kaudu sõnumi saatmine ega uus paigaldus.
+
+Peitmise/tagasivõtmise vastuvõtt, 371f4f4 build/push'i tõend, uue commit'i
+Ready-tõendi piir, eraldi vanemate unblock-kirjutajate versioonikontrolli
+puudus ning profiili kuulutuste laadimisviga säilivad eelmise kirjeldatuna.
+Ajalooline katse jääb ebaselgeks ka siis, kui uus kitsas kasutuskatse õnnestub.
+Muudeti ainult eraldi ettevalmistatud järjepidevusdokumendid; Maci lähtefaile,
+runtime'i, SQL-i, pakke ja raporteid ei muudetud. Käesolev kontrollitud
+kasutuskatse on ette valmistatud, mitte veel kasutaja poolt läbi tehtud.
+
+<!-- SELQIRO_PROVIDER_CONTROLS_TWO_DEVICE_ACCEPTED_20261113 -->
+## 13.11.2026 — avatud telefoniga blokeerimise ja taastamise kasutuskäik vastu võetud
+
+Kasutaja korduskatse: Garaazi telefon oli Taivo Garaazi vestluses enne uue
+blokeeringu seadmist. Teise poole blokeeringu ja selle eemaldamatuse teade
+ilmus kasutaja sõnul kohe; kirjutada ei saanud kumbki pool. Blokeeringu
+emaldamise järel taastus telefonis kirjutamisvõimalus. See üks kontrollitud
+kasutuskäik on vastu võetud; varasemat 19:17–19:21 ajajärge ei rekonstrueerita
+uue katse alusel. Peitmise ja tagasivõtmise varasem vastuvõtt säilib.
+
+20:02:30 arvutipilt toetab enda seatud bloki teadet ja mitteaktiivset
+sisestusala ning säilinud sõnumiajalugu. Nähtav 19:21 kirje on varasem ajalugu.
+20:02:48 postkasti veateade kaob ja 20:03:01 loend on taas nähtav; Garaazi
+real on endiselt saatmise keeld. Uus tõend:
+work/selqiro-provider-controls-consistency-20261113/checks/
+two-device-acceptance-20261113-2003.json (3876 B; SHA256
+`a67304fbc3fdbdbaea86f3bdacef7ab49fa26fe7c57712c7e3ff1af8408d740e`).
+Telefoniteade/taastumine tugineb kasutaja kirjeldusele, mitte telefoni
+kuvatõmmisele. Uut otsest INSERT-, DELETE-, pilvekataloogi või Vercel
+Ready kontrolli ei tehtud; sellist tõendit sellest katsest ei järeldata.
+
+Postkasti piiratud allikalugemine leidis, et üldine värskendamisviga tekib
+aktiivse load() tõrke korral. Nähtav esileht loeb iga 7 s järel uuesti,
+edukas vastus kustutab teate; quiet retry ajal eelmine teade säilib.
+See sobib piltidel taastuva loendiga, kuid ei tõenda võrgu/RPC/parsingu
+algset põhjust ega anna alust tõrget lihtsalt peita. 19:24 profiili
+kuulutuste laadimisviga jääb eraldi põhjusega lahtiseks.
+
+Üks järgmine tehniline muudatus on varem tuvastatud vanemate vestluse/legacy
+unblock-kirjutajate versioonikontrolli ühtlustamine: hilinenud eemaldamine
+ei tohi kustutada hiljem taas loodud enda blokki. See lähtekoodileid pole
+kummagi kasutuskatse tõendatud põhjus. Toimiva kahe seadme katse kordust ei
+paluta. Uue kliendi/serveri üleminek vajab oma kitsast kontrolli.
+
+Muudeti ainult eraldi ettevalmistatud CURRENT_STATE-i, sellest genereeritud
+handoff'i ning append-only päevikut. Kõik selle lisandi eelsed päevikubaidid
+säilivad. Macis pole dokumente rakendatud ega uut commit/push'i tehtud;
+väljaantud pakid, allikad, varasemad raportid ja sisu säilivad.
+
+
+<!-- SELQIRO_BLOCK_REMOVAL_CAS_PREPARED_20261113 -->
+## 13.11.2026 — kõigi blokeeringu eemaldamiste täpne versioonikontroll, ettevalmistatud
+
+Kasutaja „teeme järgmise” autoriseerib varem allikast leitud kirjutuspiiri
+paranduse. Alus on Macis vastu võetud 371f4f4, 1701 faili; selle build/push on
+raportis kinnitatud. Peitmine/tagasivõtmine ning juba avatud telefonivestluse
+kahepoolne blokeerimine/taastumine jäävad vastu võetud kasutuskäikudeks.
+Varasema ebaselge katse ja postkasti/profiili mööduvate lugemisvigade põhjust
+see muudatus ei diagnoosi.
+
+25 runtime-failis (18 asendust, 7 uut väikest moodulit) on V2/legacy vestluse,
+poeprofiili ja halduse eemaldamine ühendatud olemasoleva provider CAS-iga.
+Kinnitus seob nähtud bloki ID ja täpse mikrosekunditega ajatempliteksti.
+Muutunud/kadunud rida ei suuna vana kinnitust automaatselt uuele blokile.
+Üks kirjutuskatse; ebaselge vastuse järel ainult selgesõnaline lugemine.
+Vestlus kasutab tegelikku salvestatud peer-kontot, profiil oma serveri resolverit.
+Mustandi/saatmise/lugemise senine prefix ja 12 kaitstud runtime-moodulit säilivad.
+
+Uus eraldi supabase/repairs/20261113_block_removal sulgeb vana boolean-false
+kirjutaja, brauseri otse-DELETE/UPDATE/TRUNCATE ning ID/aja ja sequence UPDATE
+muutmise. Paaripõhine INSERT/idempotentne blokeerimine säilib. CAS-setteri
+ainus kustutus delegeerib piiratud NOLOGIN/NOINHERIT/NOBYPASSRLS helperile;
+invoker-trigger takistab vana JWT-kontekstiga defineri DELETE-t. Ajutine
+schema CREATE ja SET/INHERIT eemaldatakse; täpselt pinitud postgres creator
+ADMIN-only kirje (set=false, inherit=false) võib jääda. Hoolduse DELETE erand
+nõuab postgres/service_role'i ning tühje JSON/sub/role JWT seadeid. Usaldatud
+service-role UPDATE/TRUNCATE/sequence hoolduse üldpiiri siin ei muudeta.
+Paigaldus ei kirjuta kasutajate eelistusi ega sisu. Vanad SQL-allikad on muutmata.
+
+Kliendi 10 sihtkatset, 5 ReactDOM-kasutusjuhtu ning TypeScript 5.9.3 läbisid.
+Next 16.2.1 webpack build läbis 24.062 sekundiga (683 sisendit, drift=0).
+SQL-i 12 runtime- ja 7 installation/tamper-katset läbisid. Vana defineri keha
+kloon jõudis uue triggerini ja keeldus; päris paralleelseid sessioone ei testitud.
+Uued 13 receipt/report- ja 12 marker-transpordi kontrolli läbisid. Lõpliku
+manifesti ajutise Giti tarnevoo ning sõltumatu review PASS on väljaande lõppvärav;
+täpsed tulemused tulevad paki kontrollid/ failidest, mitte selle kirje olemasolust.
+Native-brauseri/CSS-i katset ega live-sõnumite/SQL/Storage/CLI toimingut siin ei olnud.
+
+Tarne järjekord: värske täpne lähte/HEAD/index/remote kontroll ja viimase eduka
+profile-päeviku hoitud lukk → ainult lugemise metadata preflight → uus klient,
+build, commit/push → täpne avalik kliendimärk → värske kontroll → üks SQL-intent
+ja üks tehingukatse → eraldi tulemuse lugemine. 55 s markeriootuse jätk ei korda
+lõpetatud build'i/commit'i/push'i. Teadmata SQL-tulemus ei anna kordusluba.
+Public marker ei ole Verceli Ready/deployment-ID tõend ega uuenda vanu vahelehti.
+Raporti cleanup_mode held on säilitatud lepingu silt, mitte uus koristuse vaatlus.
+
+Uuendatud CURRENT_STATE, sellest genereeritud handoff, HOSTED_PORTAL, arhitektuur
+ja püsireegel. Kolm täpset varasemat continuity-faili säilivad uues history-kaustas;
+kogu varasem dev-log ja lisatud kasutuskatse üleandmine säilivad muutmata prefix'ina.
+Uus pakett selqiro-blokeeringu-kontroll-20261113 on ettevalmistatud. Selle Maci
+rakendamine/build/commit/push, SQL closure ja Ready on veel kinnitamata.
+Järgmine tegevus on HOSTED_PORTAL-i üks uus käsk, täpne jooksuraport ja sama
+commit'i Ready, seejärel ainult uus hilinenud kinnituse kasutuskatse.

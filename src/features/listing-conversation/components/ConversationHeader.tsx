@@ -15,7 +15,7 @@ type Props = {
   peer: ConversationIdentity | null;
   listing: Readonly<{ id: string; title: string | null; content_type?: "horse_offer" | "service" }> | null;
   ready: boolean; blocked: boolean; blockedByOther?: boolean; blockUnavailable?: boolean; busy: boolean;
-  onHide: () => Promise<boolean>; onBlock: (blocked: boolean) => Promise<boolean>;
+  onHide: () => Promise<boolean>; onBlock: () => Promise<boolean>; onUnblock?: () => void;
 };
 export default function ConversationHeader(props: Props) {
   const { t } = useV2Translation(messagesUiMessages);
@@ -31,6 +31,6 @@ export default function ConversationHeader(props: Props) {
       </Link> : props.ready && <span className={styles.listingLink}>{t("conversation_messages")}</span>}
     </div>
     {props.ready && <ThreadActions blocked={props.blocked} blockedByOther={props.blockedByOther} blockUnavailable={props.blockUnavailable}
-      disabled={props.busy} onHide={props.onHide} onBlock={props.onBlock} />}
+      disabled={props.busy} onHide={props.onHide} onBlock={props.onBlock} onUnblock={props.onUnblock} />}
   </header>;
 }
