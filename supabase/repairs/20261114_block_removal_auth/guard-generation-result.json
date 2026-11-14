@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "kind": "block-removal-cas-guard-generation",
+  "result": "PASS",
+  "generated_at_utc": "2026-11-14T14:56:23.516Z",
+  "engine": "PGlite PostgreSQL/WASM",
+  "synthetic_fixture": true,
+  "live_database": false,
+  "input_drift": [],
+  "source_inputs": 91,
+  "guards": 9,
+  "setter_original_sha256": "f4ac5a672a3713d8e4f96743fac1fff7da8262ece52ed70e20eb5d289d7d60c5",
+  "setter_delegation_only": true,
+  "retained_rows_unchanged": true,
+  "constrained_auth_installer": {
+    "actor": "postgres",
+    "rolsuper": false,
+    "rolcreaterole": true,
+    "auth_usage": true,
+    "auth_usage_grantable": false,
+    "auth_uid_execute": true,
+    "auth_uid_execute_grantable": false
+  },
+  "auth_owner_acl_definition_unchanged": true,
+  "writer_has_no_auth_schema_usage": true,
+  "exact_original_failure_reproduced": true,
+  "invariant_equality": true,
+  "independent_read_matches_apply": true,
+  "cleanup_mode_evidence": "derived retained-contract label; no fresh cleanup state observation",
+  "already_applied_path_preserves_catalog_and_rows": true,
+  "sql_sha256": {
+    "changes.sql": "5396eeb57d4e6dd91816301d37d7d6362caf42f0e2789597cf7d0c53deda2905",
+    "preflight.sql": "fac12a87ea032f8a5524ce16713dd602b9854c919e4a236c54482d33fe293b9a",
+    "apply.sql": "c006cb9c095dd2a02b58f93afae5ac42b27067d247796e307105b83348b918f5",
+    "verify.sql": "fac12a87ea032f8a5524ce16713dd602b9854c919e4a236c54482d33fe293b9a"
+  }
+}

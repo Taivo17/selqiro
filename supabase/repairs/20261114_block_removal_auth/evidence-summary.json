@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "kind": "block-removal-auth-correction-prepared-evidence",
+  "result": "PASS",
+  "live_database_modified": false,
+  "client_source_changed": false,
+  "original_repair_files_preserved": 21,
+  "unchanged_runtime_modules": {
+    "01_legacy_block_guard.sql": "0c1ce331ea92aba6436ad13bccde4bd4ba97fc2bf57bf43e8b4eb10c322b60e7",
+    "02_browser_permissions.sql": "4114535afbccadefe92a3dddf83c4a4fec37419f01a1101ef528b5de36de273a",
+    "04_cas_setter.sql": "be404788d85c59096393c3fa2899844eadddce1c35062a8cd8b65ca17618d42a"
+  },
+  "input_drift": [],
+  "test_evidence": {
+    "guard-generation-result.json": {
+      "sha256": "9bb95461a94593b58bb95900bd8ff9935afb11a9b8d3c70d0a3cb62b54e011bd",
+      "result": "PASS"
+    },
+    "runtime-result.json": {
+      "sha256": "e50d3372076478517f198127c99f1b48f7fa083ff4c83fc6f48f66ce8a97c768",
+      "result": "PASS",
+      "tests_run": 13
+    },
+    "installation-result.json": {
+      "sha256": "abfbee9ddbb308147504efa70b21ee317ee5e1ffce6a7ab7d99f13c9d01dec27",
+      "result": "PASS",
+      "tests_run": 7
+    },
+    "original-failure-reproduction.json": {
+      "sha256": "ae7e41918612240e63438938cb3a6412d8f54b030b121ab652b55126fdd8e71f",
+      "result": "PASS"
+    }
+  },
+  "catalog": {
+    "kind": "block-removal-cas-v1",
+    "guards": 9,
+    "before": "db5cbe0aca4e7205a85358cc7586f4d974004b036148b43946b02c6c595f4c56",
+    "after": "38eb0ad0d95edc9b4425da9a615ea8b3305623cb7f7bb5da274c35603d24c854",
+    "dependencies": "bf0110bd2cf73197cfd513f4fa03033a465c8d0a37c52062bc0cdca1906e4848"
+  },
+  "limitations": [
+    "Disposable single-session PostgreSQL/WASM fixture; no hosted SQL execution.",
+    "Old body reaches guard, but actual multi-session cutover was not executed.",
+    "Auth owner/ACL grantability is modeled; auth.uid implementation is inherited synthetic fixture."
+  ],
+  "new_subtree_sha256": {
+    "01_legacy_block_guard.sql": "0c1ce331ea92aba6436ad13bccde4bd4ba97fc2bf57bf43e8b4eb10c322b60e7",
+    "02_browser_permissions.sql": "4114535afbccadefe92a3dddf83c4a4fec37419f01a1101ef528b5de36de273a",
+    "03_cas_delete_authority.sql": "8e723c1149fabfd992e0fde9c174906ad5ded937a582b60308fa55c121e05664",
+    "04_cas_setter.sql": "be404788d85c59096393c3fa2899844eadddce1c35062a8cd8b65ca17618d42a",
+    "README.md": "0ce8f8b758a38004aface95dc640f738b213d8a4be5281e9df94124d6c46a73e",
+    "apply.sql": "c006cb9c095dd2a02b58f93afae5ac42b27067d247796e307105b83348b918f5",
+    "catalog-pins.json": "07d6a0d3566f764e6434a80b1b1d2d0361497cef4c57ad174c9bbe7cfd5564c3",
+    "changes.sql": "5396eeb57d4e6dd91816301d37d7d6362caf42f0e2789597cf7d0c53deda2905",
+    "guard-generation-result.json": "9bb95461a94593b58bb95900bd8ff9935afb11a9b8d3c70d0a3cb62b54e011bd",
+    "installation-result.json": "abfbee9ddbb308147504efa70b21ee317ee5e1ffce6a7ab7d99f13c9d01dec27",
+    "original-failure-reproduction.json": "ae7e41918612240e63438938cb3a6412d8f54b030b121ab652b55126fdd8e71f",
+    "preflight.sql": "fac12a87ea032f8a5524ce16713dd602b9854c919e4a236c54482d33fe293b9a",
+    "runtime-result.json": "e50d3372076478517f198127c99f1b48f7fa083ff4c83fc6f48f66ce8a97c768",
+    "source-pins.json": "d0bd21f0b1b224cf3e8262456aeb272435efd0cd8ff0d30c07416053ae730841",
+    "tests/before-example.json": "a6c93083c1c2163b30300ae086ffb82f47fd933cb738478e353bd22e2cf25fd3",
+    "tests/build-guards.mjs": "1cc5bd9a06990649c613857cabebcdaae0fc7b1705879076c5e22c19cad1ff80",
+    "tests/catalog.mjs": "b4c41bde53077646c3a5276b96616a21deb1238cf35470e2415a85ccdeb0dd6a",
+    "tests/fixture.mjs": "0bc3691b13187c1ff8ac4314c501f5a8e82339f64aac7024eb7a17d58bac0491",
+    "tests/installation.mjs": "247d571ee09aa1ee9698d0ae7e5d383569fa1c345e80ba0e848e8faa760dbc36",
+    "tests/runtime.mjs": "92213c74f539c72bda253597ec2d536f58a887576951e5888b32dded1d9f86a7",
+    "tests/verified-example.json": "293dece164d5214e0921a2e8cca6dbfa44333ceca807728768b5ae8adf32836f",
+    "verify.sql": "fac12a87ea032f8a5524ce16713dd602b9854c919e4a236c54482d33fe293b9a"
+  }
+}

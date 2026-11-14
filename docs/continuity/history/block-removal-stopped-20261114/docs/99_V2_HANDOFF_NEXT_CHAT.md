@@ -1,0 +1,70 @@
+<!-- GENERATED from docs/continuity/CURRENT_STATE.json; do not edit independently. -->
+# Selqiro — praegune tööüleandmine
+
+Seisukirje: 13.11.2026 Europe/Tallinn — 371f4f4 vastu võetud; kõigi eemaldamiste täpne versioonikontroll ettevalmistatud
+
+## Praegune checkpoint
+
+Viimane kinnitatud Maci commit on 371f4f4. Kasutaja võttis vastu peitmise/tagasivõtmise ning juba avatud telefonivestluse kahepoolse blokeerimise ja kirjutamise taastumise. Järgmine autoriseeritud parandus ühtlustab kõik blokeeringu eemaldamisteed täpse rea ID/loomisaja kontrolliga. Uus klient ja serveri õiguste sulgemine on eraldi uues paketis selqiro-blokeeringu-kontroll-20261113. Ettevalmistatud lähtekood ja kohalikud kontrollid ei tõenda selle paketi Maci rakendamist, SQL-i, commit/push’i ega Verceli deployment’i.
+
+## Lähtekood ja tõendi piir
+
+- **Vastu võetud alus:** /Users/taivo/selqiro, main, commit 371f4f4cc1ff62ecadb14d19bf5c8004cff256ea; parent 40ceac78deb255d8006244ae232652956b92bea0, Git-puu 57dd09fecd9258c05bebc985394532f203449e99, 1701 lähtefaili. Raport kinnitab build/push’i ja puhast kontrollitud lõppseisu; see pole selle ettevalmistuse uus live-Maci lugemine.
+- **Täpsed varasemad tõendid:** selqiro-peitmine-profiilile-20261113-raport-20261113-190730-1171fbb45e7c.json, 253706 B, SHA256 668d0f1f7c59ae4e684045fce6905df8acbefe7b6b34bbcbe16886d58457de8f; manifest 2ca5d4a86150f261baed7ddd140b9e09a582e3195a95612e9756d9a745073e2f. Database/Storage not_performed; vercel READY_NOT_CHECKED. Viimase SQL applied/16 kaitse tõend pärineb 40ceac78 paigaldusest, raporti SHA256 dfefda11c1ff922c397647eaf24afb95968729a465c182d02a415f67753e433e.
+- **Paranduse põhjendus:** Allikaaudit leidis vana boolean-false vestluse-RPC ja kolm legacy otse-DELETE teed, mis ei sidunud eemaldamist varem kinnitatud bloki versiooniga. See on eraldi allikaleid, mitte varasema ebaselge 19:17–19:21 kasutusjuhtumi kinnitatud põhjus. Profiili/Minu ala olemasolevat CAS-i kasutatakse ühiselt; uut blokeeringuregistrit ei looda.
+- **Kliendi ulatus:** 25 runtime-faili (18 muutust, 7 uut väikest moodulit) ja kaks sihtkatset. Ühine eemaldamine kinnitab nähtud blockId ning täpse blockCreatedAt teksti, loeb ainult selle blocked_account sihi ja teeb ühe kirjutuskatse. V2/legacy vestlus kasutab tegelikku salvestatud osapoolt; poeprofiil serveri profiiliomanikku. Mustand, foto eelvaade, sõnumite ajalugu ning 12 kaitstud runtime-moodulit säilivad. Täielik uus tarne sisaldab 60 muudetud/lisatud faili: 24 asendust, 36 lisandust, kustutusi 0; 1677 alusfaili on muutmata kaitstud. Ettevalmistatud lähtepuus on 1737 faili.
+- **Serveri ulatus:** Uus supabase/repairs/20261113_block_removal sulgeb vana false-käsu ja browseri otsekustutuse/versiooniveergude muutmise. Täpne CAS-kustutus kasutab piiratud NOLOGIN rolli ja oma rea RLS-i; invoker-trigger keeldub vanast JWT-kontekstiga versioonita kustutajast ka siis, kui vana definer oli juba käivitatud. Avalik provider RPC signatuur säilib. Paigaldus ei kirjuta kasutajate plokke ega sisu.
+- **Tarne ja tõendi piir:** Täpne alus/remote/index → metadata preflight → uus klient/build/commit/push → fikseeritud avalik kliendimärk → värske kontroll → üks SQL-intent ja tehingukatse → sõltumatu järelkontroll. Avalik märk pole Verceli Ready/deployment-ID tõend. Teadmata kirjutust ei korrata; uus kontroll saab ainult kinnitada tegeliku applied-seisu. Täpsed piirid on BLOCK_REMOVAL_20261113.md-s.
+- **Ajaloo säilimine:** Enne asendamist säilitatud kolm Maci-aluse continuity-faili on docs/continuity/history/provider-controls-profile-accepted-20261113/ all. Dev-log sisaldab muutmata varasemat ajalugu ja kasutaja uue katse vastuvõttu. Väljaantud pakid, raportid ja päevikud säilivad; uus runner hoiab just viimase eduka profile-päeviku olemasolevat lugemislukku.
+
+## Tegelik kohalik katse
+
+- Kliendi 10 sihtkatset ja 5 ReactDOM-kasutusjuhtu PASS; TypeScript 5.9.3 PASS. Täpne vana kinnitus, asendatud blokk, kadunud vastus, konto vahetus, tegelik vestluspartner, 25+1 haldusleht ja legacy kohandus on sihitult kontrollitud. HTTP/Auth/Next ja foto transport on sünteetilised; päris sõnumeid ei saadetud.
+- Next 16.2.1 production webpack build PASS, 24.062 s, 683 runtime/config/public sisendit, input_drift=0. Build ei kasuta päris kontosid ega saladusi. 682 sisendi avalik kliendimärk seob selle runtime-versiooni. See pole Maci ega Verceli build.
+- SQL-fixture: 12 runtime-katset ja 7 paigalduse/tamper-katset PASS, input_drift=0; 9 kataloogikaitset. NOSUPERUSER postgres paigaldus ja päris GET→SET CAS töötavad, runtime SET ROLE on keelatud. Täpse vana defineri keha kloon jõudis uue DELETE-triggerini ja keeldus; see on ühe kohaliku sessiooni kontroll, mitte päris paralleelse cutover’i katse. Paigaldus säilitab sünteetilised rakendusread ja ettenähtud invariandid.
+- Raporti/eelmise päeviku 13 ning kliendimärgi piiratud transpordi 12 sihtkontrolli PASS. Lõpliku manifestiga seotud ajutise Giti tarnevoo ja sõltumatu ülevaatuse tõendid on väljastatud paki kontrollid/client-first-flow-final.json ning delivery-review-final.json. Pakett väljastatakse ainult nende PASS-tulemusega; päris CLI/HTTP/build on selles voos sünteetilised, täielik index/source/Git/receipt-lock tee tegelik.
+- Päris brauseri/native-dialoogi/CSS-i kontrolli ei väideta; teadaolev keskkonnapiir ei muutunud. Lokaalne SQL-fixture ei asenda pilvekataloogi ega päris paralleelseid PostgreSQL-sessioone.
+
+## Production / kasutajaliides
+
+- 371f4f4 build/push on kinnitatud; selle commit’i Vercel Ready / Production on eraldi commit’iga seotud tõendina kontrollimata. Varasema 40ceac7 Ready ei tõenda uut deployment’i.
+- Peitmine ja Näita uuesti on kasutaja poolt vastu võetud. Tegelikku 24 tunni möödumist pole vaadeldud. Profiilimenüü asukoht ja Minu ala haldus säilivad.
+- 20:02–20:03 uus kahe seadme katse on vastu võetud kasutaja kirjelduse ulatuses: telefon oli vestluses enne blokeerimist, teade ilmus, mõlemal pool oli kirjutamine mitteaktiivne, eemaldamisel taastus telefonis kirjutamine. Arvutipildid toetavad blokeeritud composer’it ja säilinud ajalugu. See pole lubamatu otsese INSERT/DELETE või pilve ACL-i katse.
+- 20:02:48 postkasti laadimisveateade taastus 20:03:01 loendiks; algne HTTP/RPC/parsingu põhjus puudub. 19:24 profiili kuulutuste laadimisviga ja varasema 19:17–19:21 käigu põhjus on eraldi teadmata. Neid ei parandata oletusliku SQL-iga.
+- Käesoleva uue paketi source-applied, Maci build, commit/push, SQL closure, Ready ja hilinenud kinnituse päris kasutuskatse on kõik veel kinnitamata.
+
+## Üks järgmine töö
+
+Kasuta ainult docs/continuity/HOSTED_PORTAL.md uut selqiro-blokeeringu-kontroll-20261113/uuenda.py --publish käsku. Saada jooksu täpne SAADA SEE FAIL raport. WAITING_FOR_CLIENT_DEPLOYMENT korral sama uue käsu jätk ei korda kinnitatud build’i, commit’i ega push’i. Pärast täieliku raporti ning sama uue commit’i Ready / Production kontrolli tee üks uus kitsas katse: vana avatud eemaldamiskinnitus ei tohi eemaldada teises vahelehes vahepeal uuesti loodud blokki. Lõpetatud laia kahe seadme katset ei korrata.
+
+**Peatumisel:** Tegelik haru/HEAD/index/tööpuu/lähtefailid ja approved remote peavad vastama täpsele alusele või selle väljaande tõendatud jätkule. Tundmatu kataloog, muutunud allikas/remote/päevik, ebaselge protsessi lõpp või SQL kirjutustulemus peatab jätkamise. Intente, päevikuid ja raporteid ei kustutata ega nullita. Vanu paigaldajaid/verify-käske ei korrata uue õigusseisu kontrollimiseks. Teadmata kirjutust ei loeta läbikukkunuks ega saadeta automaatselt uuesti.
+
+## Loe ainult vajalikku
+
+- docs/99_V2_HANDOFF_NEXT_CHAT.md — samast kirjest genereeritud lühike üleandmine.
+- docs/continuity/HOSTED_PORTAL.md — üks praegune käsk, ooteolek, täpne raport ja järgmine kasutuskatse.
+- docs/continuity/BLOCK_REMOVAL_20261113.md ning supabase/repairs/20261113_block_removal/README.md — selle paranduse klient, õigused, paigaldus ja tõendipiirid.
+- docs/architecture/provider-controls-v1.md ja docs/architecture/privacy_messages.md — peitmise, blokeeringu, identiteedi ja sõnumite lepingud.
+- docs/continuity/SERVICE_ACCESS.json, docs/03_AI_RULES.md, docs/02_AI_MEMORY.md ja docs/00_PROJECT_DNA.md. Vanade kuupäevade CURRENT/NEXT on ajalugu.
+
+## Säilivad piirid
+
+- Üks olemasolev portaal, hoidla, Supabase’i projekt ja keele-eelistus. English põhikeel/fallback, Eesti teine keel. Kasutaja sisu/rubriiginimesid ei tõlgita. Tavaline osalemine, rubriigid ja pikendamine ei sõltu Energy ostust.
+- 24 tunni peitmine on konto ühe pakkuja identiteedi avastuseelistus, püsiv blokk eraldi kontodevaheline kirje. Ühine menüü on avalikul profiilil; vestluse blokeerimine ja Minu ala haldus säilivad. Vaatamiskoguse väravat/jälgimist ei lisata. Ühe eelistuse eemaldamine ei eemalda teist ega vastaspoole blokki.
+- Teenuse aegumine säilitab sisu ja rubriigiseosed omanikule. Peatatud teenuse pikendus ei avalda seda. Teksti/foto/rubriigi/staatuse muutus ei pikenda ega anna kunstlikku uut otsingukohta. Tundmatu pikendus vajab lugemist.
+- Avalikud rubriigifiltrid arvestavad nähtavat sisu ja esivanemaid enne lehekülge. Omaniku valija näitab kõiki rubriike; rubriigi eemaldamine säilitab sisu ja fotod. 80 teenust pole konto piir.
+- Avaliku foto-URL-i ligipääsu ei muuda pelgalt kuulutuse aegumine privaatseks. Hosted fotode taustakoristus ja tehniliste paneelide eemaldamine on avamiseelne töö. Sellel updateril pole Storage’i toiminguid.
+- Töökuulutuse kinnitatud algsuund on ettevõtte avalik profiil/otseviide, üks kuu kehtivust ja selge nähtavusteade; üldise tööotsingu sulgemine vajab serverikontrolli. Üks kuu pole fikseeritud 30 päeva. Töökuulutuste koodi selles sammus pole.
+- Universaalne identiteedi üleandmine/privilegeeritud kirjutaja invariant ja vana aktiivse identiteedi seadistaja turvapiir jäävad eraldi. Energy, maksete tuum ja piiratud AI abi säilivad V2 ulatuses. Kontosid, kuulutusi, pilte, sõnumeid ega ajalugu ei kustutata.
+
+## Keskkond
+
+- https://github.com/Taivo17/selqiro.git; https://selqiro.vercel.app; Mac /Users/taivo/selqiro. Uus pakett kontrollib 371f4f4 ja täielikku 1701-failist alust, mitte varasemat kuvatõmmisel olnud kaustanime.
+- Supabase vyjletlmwoiwxsnsunlm, instance 2d088814-0900-448a-a9d1-7b05470cb1d2, hosted-preview release ja cleanup_mode held säilivad. Olemasolev viie failiga pinitud CLI 2.117.0; uut login/link/install/upgrade käiku pole.
+- Uus privaatpäevik asub block-removal-20261113/<manifest-räsi>/ all. Eelmine provider-controls-profile-20261113/2ca5d4a86150f261baed7ddd140b9e09a582e3195a95612e9756d9a745073e2f säilib hoitud lugemisluku all. Downloads-raport on uus unikaalne privaatne koopia; valitakse täpselt see fail.
+
+## Ajalugu (mitte praegused käsud)
+
+Vana sisenemisleht: `docs/archive/99_V2_HANDOFF_NEXT_CHAT.before-price-core-20261004-6df0af9.md`.
+Kõik 5573 algset rida säilivad bait-baidilt; SHA-256 `667e47990a7d3cc20ff53709cb861663b4565cf1d3c830eda88e0d18e60fdb8a`.
+Vanade failide NEXT/CURRENT pealkirjad ei ole tänased käivitamisjuhised.

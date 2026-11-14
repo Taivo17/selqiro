@@ -1940,3 +1940,79 @@ Uus pakett selqiro-blokeeringu-kontroll-20261113 on ettevalmistatud. Selle Maci
 rakendamine/build/commit/push, SQL closure ja Ready on veel kinnitamata.
 Järgmine tegevus on HOSTED_PORTAL-i üks uus käsk, täpne jooksuraport ja sama
 commit'i Ready, seejärel ainult uus hilinenud kinnituse kasutuskatse.
+
+
+<!-- SELQIRO_BLOCK_REMOVAL_AUTH_REPAIR_PREPARED_20261114 -->
+## 14.11.2026 — klient 29b2457 avaldatud; SQL-i õiguste põhjus kinnitatud; eraldi parandus
+
+14.11 15:50 raport kinnitab uue täpse eemaldamise kliendi Maci build’i ja
+commit/push’i 29b2457893d6fa9bab2756533319fdc13b841840. Selle commit’i
+Ready / Production kuvatõmmis on vastu võetud. 16:12:12 ja 16:12:20
+kaks HTTP 200 vaatlust sisaldasid täpset avalikku kliendimärki. Seega vana
+kliendi ooteolek on lahendatud; sama build’i/commit’i/push’i kordust ei tehtud.
+
+16:12 raport: 283347 B, SHA256
+098ab6ba0a1b040a2c8774453500a020dd8aff700a479433f7a281bd08466704.
+Kõik 15 varasemat käsukirjet ning 12 markerivaatlust säilivad prefiksitena.
+Uues raportis on 23 käsku, sh täpselt üks SQL apply. Apply kestis 6.997 s,
+exit 1, stdout 274 B, stderr 27 B; 180 s piiri ei saavutatud. Eraldi verify
+näitas 16:12:33 algset absent-seisu, kõiki üheksat kaitset ning sama kolme
+invarianti/dependency/capability räsi. Vana päevik säilib stopped_preserved,
+database unconfirmed, outcome unknown ja oma püsiva SQL-intent’iga.
+
+Kasutaja logi supabase_logs (1).json (75037 B, 24 kirjet; SHA256
+a26e30134fbbce26bfd6d5aa61fdef8bcaa6fb9ef1e1153d15aa9801ea40f934)
+seob täpse 63729-baidise apply.sql räsiga
+be9875629c007fa0407ecca4452beccab601bff2b8e588f9588a5bad412ed4cc.
+14:12:26.699 UTC hoiatused 01007 kinnitavad, et auth-skeemi ja uid-funktsiooni
+õigusi ei antud. 14:12:26.771 UTC 55000
+BLOCK_REMOVAL_INSTALLED_STATE_NOT_VERIFIED katkestas tehingu. See pole
+kasutaja käsuviga ega tõend CLI timeout’ist. Hilisemad 14:41/14:43 lukuootused
+on eraldi sündmused ning neid ei käsitleta selle tõrke põhjusena.
+
+Eraldi paranduse selqiro-blokeeringu-parandus-20261114 SQL-alamkataloog
+20261114_block_removal_auth jätab kogu vana 20261113 SQL-i muutmata.
+Uus privaatne nullargumendiga postgres-omanikuga funktsioon kasutab olemasolevat
+auth.uid() lahendust ning annab EXECUTE ainult kitsale CAS-kirjutajale ja
+omanikule. RLS, helper ja trigger kasutavad sama silda. Auth ACL-i ega
+require_actor’i lepingut ei muudeta, JWT-parsimist ei dubleerita ning
+püsivat SET/INHERIT-õigust ei laiendata. Täpsed serveri paigalduse kontrollid säilivad.
+
+Uue runneri piir: vana ebaõnnestunud päeviku muutmata hoitud lugemislukk,
+värske 29b2457 Git/index/lähte/remote kontroll, algne DB absent samade
+invariantidega ning olemasolev avalik kliendimärk; piiratud SQL-i ja
+dokumentide rakendamine tööpuusse,
+uus kontroll, üks kaitstud apply-intent ja katse, sõltumatu verify ning
+piiratud Git-staging ja commit/push. Oma uue rakendunud SQL-i järel katkenud allikalõpetus
+võib ainult kontrollida ja lõpetada, mitte SQL-i korrata. Kliendi build’i ega
+läbitud klienditeste ei korrata. SQL/docs delta tõttu ei nõuta uut Ready-pilti.
+
+Kohalikud uued kontrollid: PGlite PostgreSQL/WASM piiratud postgres-paigaldajal
+13 runtime-juhtu ning 7 paigaldusjuhtu koos 11 rikkumiskatsega PASS.
+Auth kasutusõigus on olemas, aga grant-option puudub. Täpne vana SQL
+kordas mõlemad 01007 hoiatused, 55000 järelkaitse ning rollback’i algseisuni.
+Auth owner/ACL/definitsioon, kontrollitud kasutajaread ja kolm enne/pärast
+invarianti säilisid. SQL-tõendite sisendräside erinevusi ei olnud. Runneri
+24 sihitud andmebaasi-, diagnostika- ja protsessijuhtu läbisid.
+Täpsed SQL-tõendid on uue alamkataloogi result-failides; väljaande lõplik
+manifesti/lähte/loaderi/Giti/päeviku kontrollseos ja integratsioonitulemus on
+kontrollid/loplik-kontroll.json-is. Uus apply.sql SHA256 on
+c006cb9c095dd2a02b58f93afae5ac42b27067d247796e307105b83348b918f5.
+Uue applied-võimekuse pin on
+38eb0ad0d95edc9b4425da9a615ea8b3305623cb7f7bb5da274c35603d24c854.
+Delta: 33 teed (23 uut SQL-faili, 10 dokumenti), 5 asendust, 28 lisandust,
+1732 muutmata alusfaili kaitset ning 1765-failine kandidaat.
+
+Need on kohalikud sünteetilised tulemused; native PostgreSQL-i paralleelseansse,
+päris Supabase’i rakendamist, uue paranduse Maci source-applied ega
+commit/push’i need ei tõenda. Üks järgmine käsk on uues HOSTED_PORTAL-is:
+selqiro-blokeeringu-parandus-20261114/uuenda.py --publish. Saadetakse selle
+jooksu täpne SAADA SEE FAIL raport. Vana uuendajat ega intent’i ei korrata/nullita.
+
+CURRENT_STATE on uuendatud; üleandmine genereeritakse olemasoleva pinitud
+render_current_handoff.py puhta render() funktsiooniga. Kolm 29b2457
+continuity-faili säilivad bait-baidilt history/block-removal-stopped-20261114/
+all. Käesoleva lisandi eelnevad 141318 päevikubaiti säilivad muutmata.
+SERVICE_ACCESS ja selle ajaloolised kuupäevad jäävad muutmata; praeguse seisu
+allikas on CURRENT_STATE. Kontosid, sisu, fotosid, sõnumeid, kasutaja
+päevikuid, raporteid ega väljastatud pakke ei kustutata.

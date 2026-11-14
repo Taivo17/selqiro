@@ -224,3 +224,57 @@ The updater changes schema/authority only; it does not alter preference or
 content rows. New role/function/trigger/ACL metadata and retained invariants are
 pinned by the new repair's guards. Its README records local synthetic evidence
 and the remaining hosted execution boundary.
+
+
+## Hosted auth grant correction — 14 November 2026
+
+The deployed client is commit `29b2457893d6fa9bab2756533319fdc13b841840`.
+Its exact public marker was observed twice before the sole original SQL
+attempt. The production log for 14:12:26 UTC records two 01007 warnings:
+no privileges were granted for schema `auth` or function `uid`. The exact
+installed-state guard then raised 55000 and the transaction did not pass.
+The independent 14:12:33 UTC check found the original absent capability,
+all nine guards and unchanged checked authority/structure/function invariants.
+The earlier local non-superuser fixture did not cover this hosted grantor
+boundary. Historical source and its successful local checks remain evidence
+of their original scope, not proof that the closure was installed in production.
+
+The separate `20261114_block_removal_auth` repair removes this dependency on
+granting privileges on platform-owned Auth objects. A small zero-argument
+SECURITY DEFINER function in the existing private schema, owned by postgres,
+returns the existing `auth.uid()` result. Only the owner and the narrow CAS
+writer may execute it. The writer's RLS policies, exact-delete helper and
+invoker-trigger check use this one private identity bridge. No JWT parser is
+duplicated, no Auth schema/function ACL is changed, no `require_actor`
+authority is widened and no persistent inherited or SET authority is expanded.
+The reviewed PostgreSQL creator-admin membership has inherit=false and
+set=false; it does not let the narrow writer be selected at runtime.
+This supersedes the above prepared direct `auth.uid()` calls within the
+narrow writer path; it does not create a new user-block registry or relax
+version matching, browser denials, maintenance boundaries or the final guards.
+
+The entire `20261113_block_removal` subtree remains immutable. The repair
+uses a new SQL subtree, new release and a separate durable journal, while
+holding the failed original journal unchanged. Existing deployed web runtime,
+client build and accepted Ready evidence are reused; a fresh exact marker
+observation remains required before the new SQL transaction. The runner
+checks the original absent catalog and exact 1737-file source base, applies
+only reviewed SQL/docs to the worktree, rechecks source/remote/catalog/marker,
+attempts one bounded transaction, independently verifies it, then stages,
+commits and pushes the scoped source delta. An already-applied outcome may finish an interrupted
+source commit; absent or unknown after its own attempt never authorizes a
+repeat. No application-data or Storage operation belongs to the repair.
+
+At preparation the repair is not yet applied on the Mac or database. Local
+PGlite PostgreSQL/WASM proof passed 13 runtime cases and 7 installation cases
+with 11 tamper cases under the missing Auth grant-option boundary. Replaying
+the exact original SQL reproduced both 01007 warnings, the 55000 guard and
+rollback. Auth ownership/ACL/definition and before/after invariants remained
+unchanged. The runner passed 24 focused database/diagnostic/process cases.
+The delivered package binds the exact final source, loader, Git and receipt
+integration evidence in `kontrollid/loplik-kontroll.json`. These synthetic
+checks do not claim a native multi-session or live hosted result. The final
+Mac report is still required. A second client build or Ready screenshot is
+not a gate for this SQL/docs-only delta. The remaining user acceptance is the focused stale
+confirmation across two tabs after the successful repair report. The prior
+hide/Show again and two-device messaging acceptance remains accepted.

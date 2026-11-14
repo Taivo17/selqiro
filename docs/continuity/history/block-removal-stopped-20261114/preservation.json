@@ -1,0 +1,21 @@
+{
+  "format": "selqiro-continuity-preservation-v1",
+  "source_commit": "29b2457893d6fa9bab2756533319fdc13b841840",
+  "source_tree": "9d693408dcedda48a704693b4ce7aa188c7b15ba",
+  "source_manifest_sha256": "a80ddb6c7cc66b148cff754078316e1ac5fed543cfe91cae34d1d3ef9b4fe0f5",
+  "reason": "Preserve exact committed preparation records before recording the actual deployed client and SQL stop. Historical commands are not current instructions.",
+  "files": {
+    "docs/continuity/CURRENT_STATE.json": {
+      "bytes": 11087,
+      "sha256": "03b2a1900a5eaabb49140a98a9333c9e3efeaa22dfda3018df18775fda1ae97e"
+    },
+    "docs/99_V2_HANDOFF_NEXT_CHAT.md": {
+      "bytes": 11180,
+      "sha256": "e2de5c8a81e6737f5c019a46fd03880d152cf057249273e74ab353bd382217a8"
+    },
+    "docs/continuity/HOSTED_PORTAL.md": {
+      "bytes": 4250,
+      "sha256": "e5253147949c524a3965c62a471937e186f6a4b7e7d482e79258aa6d0bb72524"
+    }
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "result": "PASS",
+  "generated_at_utc": "2026-11-14T14:56:23.170Z",
+  "engine": "PGlite PostgreSQL/WASM",
+  "synthetic_fixture": true,
+  "live_database": false,
+  "installer": {
+    "actor": "postgres",
+    "rolsuper": false,
+    "rolcreaterole": true,
+    "auth_usage": true,
+    "auth_usage_grantable": false,
+    "auth_uid_execute": true,
+    "auth_uid_execute_grantable": false
+  },
+  "original_apply_sha256": "be9875629c007fa0407ecca4452beccab601bff2b8e588f9588a5bad412ed4cc",
+  "error": {
+    "code": "55000",
+    "message": "BLOCK_REMOVAL_INSTALLED_STATE_NOT_VERIFIED"
+  },
+  "warnings": [
+    {
+      "severity": "NOTICE",
+      "code": "00000",
+      "message": "role \"postgres\" has already been granted membership in role \"selqiro_block_removal_writer_v1\" by role \"postgres\""
+    },
+    {
+      "severity": "WARNING",
+      "code": "01007",
+      "message": "no privileges were granted for \"auth\""
+    },
+    {
+      "severity": "WARNING",
+      "code": "01007",
+      "message": "no privileges were granted for \"uid\""
+    }
+  ],
+  "recognized_absent_after_rollback": true,
+  "all_nine_guards_true": true,
+  "auth_owner_acl_definition_unchanged": true,
+  "application_rows_unchanged": true,
+  "new_role_absent": true
+}

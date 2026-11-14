@@ -1,86 +1,87 @@
-# Praegune samm: blokeeringu täpne eemaldamine kõigis vaadetes
+# Praegune samm: blokeeringu serveriõiguste parandus
 
-13.11.2026 Europe/Tallinn. Alus on vastu võetud Maci commit
-`371f4f4cc1ff62ecadb14d19bf5c8004cff256ea`, 1701 faili. Peitmine/tagasivõtmine
-ning juba avatud telefonivestluses blokeerimine/taastumine on kasutaja poolt
-vastu võetud. Neid paigaldajaid ja lõpetatud kasutuskatseid ei korrata.
+14.11.2026 Europe/Tallinn. Klient on juba avaldatud commit’is
+`29b2457893d6fa9bab2756533319fdc13b841840`; selle Maci build/push, Ready /
+Production ja kaks täpset avaliku kliendimärgi vastust on vastu võetud.
+Uus samm muudab ainult SQL-allikaid ja järjepidevusdokumente. Kliendi build’i,
+läbitud klienditeste ning uut Ready-kuvatõmmist selle sammu tõttu ei nõuta.
 
-Uus parandus seob iga eemaldamise kasutajale näidatud blokeeringu täpse
-rea ja loomise ajaga. Vana hilinenud kinnitus ei tohi eemaldada vahepeal uut
-blokki. Praegune pakett on ettevalmistatud; selle Maci/pilve tulemus tuleb
-alloleva jooksu raportist, mitte käesolevast tekstist.
+## Miks on eraldi parandus
+
+Vana uue-õiguse paigaldus tegi ühe SQL-katse ja peatus 14.11 kell 16:12.
+Serverilogi kinnitab, et `auth`-skeemi ja `auth.uid()` õiguste andmine
+kitsale privaatsele kirjutajale ei lisandunud. Täpne paigalduse lõppkontroll
+katkestas tehingu; eraldi kontroll näitas algset `absent`-seisu, kõiki üheksat
+kaitset ja muutmata invariande. Vana katset ega selle väljaannet ei korrata.
+
+Eraldi parandus kasutab olemasoleva kontrollitud `auth.uid()` kutse jaoks
+väikest privaatset, nullargumendiga postgres-omanikuga funktsiooni. Selle
+EXECUTE on ainult kitsal CAS-kirjutajal ja omanikul. RLS, kustutaja ning
+trigger kasutavad sama funktsiooni. Auth-skeemi ega `auth.uid()` õigusi ei
+muudeta, JWT-parsimist ei dubleerita ning püsivat SET/INHERIT-õigust ei laiendata.
+
+## Kohalik kontroll
+
+Piiratud õigustega sünteetilisel SQL-alusel läbisid 13 käitumisjuhtu ja
+7 paigaldusjuhtu koos 11 õiguste/kataloogi rikkumiskatsega. Sama alus
+kordas vana SQL-i täpseid õigusehoiatusi ja tagasipööret. Runneri 24
+sihitud kontrolli läbisid. Väljastatud pakendi täpne kontrollseos on
+`kontrollid/loplik-kontroll.json`. Need tulemused ei tähenda uue paranduse
+rakendamist Macis või päris Supabase’is; seda näitab uue jooksu raport.
 
 ## Üks uus käsk
 
-Paki `selqiro-blokeeringu-kontroll-20261113.zip` Downloads-kausta lahti ja käivita:
+Paki `selqiro-blokeeringu-parandus-20261114.zip` Downloads-kausta lahti:
 
 ```bash
-python3 -I -B "$HOME/Downloads/selqiro-blokeeringu-kontroll-20261113/uuenda.py" --publish
+python3 -I -B "$HOME/Downloads/selqiro-blokeeringu-parandus-20261114/uuenda.py" --publish
 ```
 
-Uuendaja kontrollib tegelikku `/Users/taivo/selqiro` main-haru, täpset alust,
-kogu indexit/tööpuud, lähtefaile ja kinnitatud remote'i. Ta hoiab viimase
-eduka profile-päeviku olemasolevat lukku ning säilitab selle baidid. Kasutaja
-muudatused või teine pooleliolev kirjutus peatavad automaatse jätkamise.
+Käsk kontrollib tegelikku `/Users/taivo/selqiro` main-haru, 29b2457 alust,
+kogu indexit/tööpuud/lähteallikat ja kinnitatud remote’i. Vana ebaõnnestunud
+päeviku täpseid baite hoitakse ainult lugemiseks lukus. Päevikut ei nullita;
+parandusel on eraldi väljaanne, oma päevik ning üks uus kontrollitud intent.
 
-Järjekord on andmebaasi ainult lugemisega eelkontroll → uus lähtekood → build
-→ commit/push → täpse uue kliendimärgi vaatlus avalikul portaalil → värske
-lähte/remote'i/märgi kontroll → üks uus kaitstud SQL-tehing → eraldi tulemuse
-lugemine. Uus klient kasutab juba olemasolevat `blocked_account` CAS-lepingut.
-Vanad eemaldamisteed suletakse pärast uue kliendi märgi kontrolli.
+Järjekord: värske lähte/päeviku/remote’i kontroll → andmebaasi algne `absent`
+seis samade invariantidega → juba avaldatud kliendi täpne avalik märk →
+piiratud uue SQL-i ja dokumentide rakendamine tööpuusse → värske andmebaasi/lähte/märgi
+kontroll → üks kaitstud SQL-tehingukatse → eraldi järelkontroll → täpne
+Git-staging ja commit/push. Kui selle uue katse SQL on rakendunud, kuid commit katkeb,
+kontrollib jätk tegeliku rakendatud seisu ja lõpetab allikad ilma SQL-i kordamata.
 
-SQL muudab ainult blokeeringu eemaldamisega seotud skeemi ja õigusi: vana versioonita eemaldamine
-ja blokeeringu ID/aja otsemuutmine sulguvad, kontrollitud kustutus kasutab
-kitsast privaatset serveri kirjutajat ja tabelikaitset. Ühtegi kasutaja plokki,
-peitmiseelistust, kontot, kuulutust, fotot, sõnumit või ajalugu paigaldus ei muuda.
-Storage'i toiminguid ja uute teenuste ühendamist pole.
-
-## Kui veebiversioon pole veel valmis
-
-Kuni 55-sekundilise kontrolli järel võib tulla:
-
-```text
-OOTEL: WAITING_FOR_CLIENT_DEPLOYMENT
-```
-
-Siis käivita mõne aja pärast **sama uus käsk** uuesti. Kinnitatud build'i,
-commit'i ja push'i ei korrata. Värske kontroll ei kirjuta üle vahepeal muutunud
-remote'i. Ooteolek ise ei anna õigust andmebaasi kirjutamiseks.
-
-Avalik kliendimärk tõendab täpsete avalike baitide kättesaadavust. See pole
-Verceli Ready/API/deployment-ID kviitung ega asenda juba avatud vahelehe koodi.
-Kontrolli raportis antud commit'i Ready / Production tulemust ja värskenda portaali.
+Kogu vana `supabase/repairs/20261113_block_removal` säilib. Uus SQL asub
+`supabase/repairs/20261114_block_removal_auth` all. Paigaldus ei muuda kasutajate
+blokeeringu- või peitmisridu, kontosid, kuulutusi, pilte ega sõnumeid. Storage’i
+ja teenuste ühendamise toiminguid ei lisata. Brauseri täpse versiooni nõue
+ning kitsad serveri õigused säilivad.
 
 ## Saada selle jooksu täpne raport
 
-Lõpus kuvatakse täpne asukoht:
+Terminal näitab ja Finder valib selle jooksu faili:
 
 ```text
 SAADA SEE FAIL: <selle jooksu absoluutne JSON-tee>
 ```
 
-Finder valib sama unikaalse privaatse Downloads-koopia. Saada see fail siia.
-Vana raportit ei otsita kausta uusima faili järgi. Algne päevik ja kõik koopiad
-säilivad. Kui kopeerimine ebaõnnestub, näidatakse kontrollitud originaali;
-Finderi vea korral kasuta prinditud rada. Kui raportit ei loodud, saada
-`PEATATUD`-rida. Võimalikult aegunud viimase püsiraporti puhul lisa ka STOP-rida.
+Saada just see unikaalne privaatne Downloads-koopia. Originaalpäevik, vana
+katse intent ja kõik varasemad raportid säilivad. Kopeerimistõrke korral
+näidatakse kontrollitud originaali; Finderi tõrke korral jääb täpne tee
+terminali. Kui raportit ei loodud, saada `PEATATUD`-rida. Võimalikult aegunud
+püsiraportile lisa ka peatumisrida.
 
-Muud `PEATATUD`-olekud vajavad selle konkreetse raporti ülevaatust. Ebaselge
-SQL-tulemuse järel võib sama uuendaja ainult kontrollida täpset rakendatud seisu;
-kirjutust automaatselt ei korrata. Päevikuid, intente, varukoopiaid, raporteid
-ja väljaantud pakke ei kustutata ega nullita. Vanu provider-controls verify- või
-paigalduskäske ei kasutata uue õigusseisu hindamiseks.
+`PEATATUD`-tulemus vajab konkreetse raporti ülevaatust. Uue SQL-katse järel
+saadud tundmatu või `absent`-seis ei luba uut kirjutust. Ära käivita vana
+`selqiro-blokeeringu-kontroll-20261113` uuendajat, ära kustuta/reset’i
+päevikuid ega intente ning ära käivita SQL-i käsitsi.
 
-## Pärast selle sammu kinnitamist
+## Järgmine kasutuskatse
 
-Uus kitsas kasutuskatse puudutab hilinenud kinnitust: sama konto ühes vahelehes
-avatud eemaldamiskinnitus peab jääma vana blokeeringu juurde, kui teises
-vahelehes eemaldatakse see blokk ja luuakse uus. Vana akna kasutamine ei tohi
-uut blokki eemaldada; muutunud seis vajab uut ülevaatust/kinnitust. Selle katse
-juurde minnakse pärast raporti ja uue deployment'i kontrolli. Lõpetatud laia
-kahe seadme blokeerimis-/saatmiskatset ei korrata põhjuseta.
+Pärast uue paranduse täieliku raporti vastuvõttu jääb üks kitsas kontroll:
+sama konto ühes vahelehes avatud vana eemaldamiskinnitus ei tohi eemaldada
+teises vahelehes vahepeal uuesti loodud blokeeringut. Muutunud seis tuleb
+uuesti üle vaadata ja eraldi kinnitada. Varem vastu võetud peitmise ning
+kahe seadme blokeerimise/saatmiskatse kordust ei nõuta.
 
-Postkasti ja profiili varasemate mööduvate lugemistõrgete põhjus on eraldi
-lahtine tähelepanek; käesolev parandus ei omista neile oletuslikku põhjust.
-Üks praegune seis on `CURRENT_STATE.json`; detailne leping ja tõendipiirid on
-`BLOCK_REMOVAL_20261113.md`.
+Üks praegune seis on `CURRENT_STATE.json`. Täpsed tõendid ja nende piirid on
+`BLOCK_REMOVAL_AUTH_REPAIR_20261114.md`-s. Selle juhendi olemasolu ei tõenda
+uue paranduse Maci rakendamist, SQL-edu ega uut commit/push’i.
