@@ -4,6 +4,7 @@ import { useEffect, useId, useRef } from "react";
 import {useProviderControlTranslation} from "../model/providerControlLanguage";
 import type { ProviderControls } from "../model/useProviderControls";
 import { providerActionAllowed } from "../model/providerControlSession";
+import { providerStatePresentation } from "../model/providerStatePresentation";
 import ProviderPreferenceState from "./ProviderPreferenceState";
 
 const control = "min-h-11 rounded-full border px-5 py-3 text-sm font-bold disabled:opacity-50";
@@ -30,6 +31,7 @@ export default function ProviderControlDialog({controls}: {controls: ProviderCon
   }, [view.open]);
   const signIn = typeof window === "undefined" ? "/auth" : "/auth?next=" + encodeURIComponent(window.location.pathname + window.location.search);
   const allowed = view.phase === "ready" && !!view.state && providerActionAllowed(view.state, action);
+  const presentation = providerStatePresentation(view);
   return <dialog ref={dialog} aria-labelledby={titleId} onCancel={event => {if (writing) event.preventDefault(); else session.close();}}
     onClose={() => {if (view.open && !writing) session.close();}}
     className="m-auto max-h-[90dvh] w-[calc(100%_-_2rem)] max-w-xl overflow-auto rounded-[26px] border border-neutral-200 bg-white p-5 text-neutral-950 shadow-2xl backdrop:bg-black/40 sm:p-7" data-provider-dialog>
@@ -42,7 +44,7 @@ export default function ProviderControlDialog({controls}: {controls: ProviderCon
           <p className="leading-7 text-neutral-600">{t(help[action])}</p>
           {!account.ready || view.phase === "loading" ? <p role="status">{t("loading")}</p> : null}
           {view.message ? <p role="alert" className="rounded-xl border border-amber-200 bg-amber-50 p-3 text-sm leading-6">{t(view.message)}</p> : null}
-          {view.state ? <ProviderPreferenceState state={view.state} /> : null}
+          {presentation ? <ProviderPreferenceState presentation={presentation} /> : null}
           {view.phase === "ready" && !allowed ? <p role="status">{view.state?.blockedByOther && action === "block" ? t("blockedOther") : t("unavailable")}</p> : null}
         </>}
       <div className="flex flex-wrap justify-end gap-3 pt-2">

@@ -278,3 +278,35 @@ Mac report is still required. A second client build or Ready screenshot is
 not a gate for this SQL/docs-only delta. The remaining user acceptance is the focused stale
 confirmation across two tabs after the successful repair report. The prior
 hide/Show again and two-device messaging acceptance remains accepted.
+
+
+<!-- SELQIRO_PROVIDER_STATE_PRESENTATION_20261115 -->
+## 15.11.2026 — vastu võetud serverikaitse ja seisupildi esitamine
+
+14.11 Maci raport kinnitas auth-paranduse andmebaasis ning commit/push
+3aaebc6; sama commit’i Ready / Production on vastu võetud. 15.11 kasutaja
+kahe vahelehe katse kinnitas uue blokeeringu säilimise pärast vana kinnitust.
+Need täpsustavad varasemate ettevalmistuskirjete hetkeseisu. Unknown-teate
+konkreetne HTTP/RPC põhjus jäi tõendamata; serverilepingut selle tõttu ei muudeta.
+
+Jagatud dialoogi kokkuvõte on puhas tuletus olemasolevast `ProviderControlView`
+seisust. `ready` ja `targetAvailable=true` annab „Seis viimase kontrolli ajal”.
+Kirjutuse, poolelioleva või nurjunud lugemise ning ebakindla tulemuse ajal
+alles olev seis kannab pealkirja „Varem loetud seis” ja selgitust, et see ei
+kinnita praegust seisu. Uut muutuvat värskuse lippu ei lisata. Ilma seisuta
+paneeli ei ole. Ingliskeelsed vasted ja olemasolev fallback säilivad.
+
+Kui vana `blocked_account` siht pole enam saadaval, ei kuvata eelistuste
+paneeli. Selle puudumine ei tõenda, et sama konto uus blokk puudub. Olemasolev
+kättesaamatuse teade säilib ning uut blokki ei võeta automaatselt sihiks.
+
+Kuvamuudatus ei muuda `ProviderControlSession`-i, RPC-klienti, kontoseanssi,
+CAS-i, SQL-i, unknown/conflict liigitust ega korduskeeldu. Edukas kirjutuskviitung
+sulgeb senise dialoogi olemasoleval viisil. Ebakindel tulemus vajab kasutaja
+algatatud lugemist; uus kirjutus vajab kehtiva seisu eraldi kinnitamist.
+24 tunni peitmine ja püsiv blokk jäävad eraldi ning vestlusajalugu säilib.
+
+Tõendid ja tarnepiir: `docs/continuity/PROVIDER_STATE_FEEDBACK_20261115.md`.
+Kogu selle lisandi eelneva arhitektuurifaili 17474-baidine prefiks säilib;
+uus kuvaparandus on ette valmistatud, kuid selle Maci/deployment’i tulemus
+vajab uut raportit ja sama commit’i Ready / Production kinnitust.

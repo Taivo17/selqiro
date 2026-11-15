@@ -2016,3 +2016,46 @@ all. Käesoleva lisandi eelnevad 141318 päevikubaiti säilivad muutmata.
 SERVICE_ACCESS ja selle ajaloolised kuupäevad jäävad muutmata; praeguse seisu
 allikas on CURRENT_STATE. Kontosid, sisu, fotosid, sõnumeid, kasutaja
 päevikuid, raporteid ega väljastatud pakke ei kustutata.
+
+
+<!-- SELQIRO_PROVIDER_STATE_FEEDBACK_PREPARED_20261115 -->
+## 15.11.2026 — 3aaebc6 vastu võetud; varasema seisupildi kuvaparandus ette valmistatud
+
+14.11 tegelik raport kinnitas SQL-i auth-paranduse ühe apply ja sõltumatu
+verify, applied-seisu, üheksa kaitset ning kolme invariandi säilimise.
+Commit/push 3aaebc6d663e6d11c02c49bed502b32ed4312852 ja sama commit’i Ready /
+Production on vastu võetud. 15.11 kasutaja „kõik toimis sinu kirjelduse järgi”
+ning viis pilti kinnitasid uue blokeeringu säilimise pärast vana kinnitust.
+Unknown-teade säilib täpse erisusena; selle päringu HTTP/RPC põhjus ei ole teada.
+Varem loetud paneeli tekst polnud värske lugemise tõend. Need lõpetatud
+SQL-i ja blokeeringu kasutuskatse sammud asendavad vanemate päevikukirjete
+ettevalmistamise ja ootel-oleku ainult praeguse seisu mõttes; algkirjed säilivad.
+
+Kasutaja „jätkame” alusel on ette valmistatud väike kuvaparandus. Neli
+runtime-faili tuletavad paneeli olemasolevast seansiseisust: ready/saadaval
+näitab „Seis viimase kontrolli ajal”, muu varasem seis „Varem loetud seis”
+koos selgitusega. Vana sihi puudumisel eelistuste paneel peidetakse, et
+mitte väita uue blokeeringu puudumist. Seansimudel, RPC, SQL, CAS, konto-
+ja vastusekaitsed ning automaatse korduse keeld on baiditäpselt muutmata.
+
+7/7 uut sihttesti PASS; täielik Next 16.2.1 webpack build ja TypeScript PASS,
+675 runtime-/seadistussisendit, drift 0, 28 staatilist lehte. Esimese build’i
+keskkonnast puudus olemasoleva AI-marsruudi muutuja; sama lähtekoodiga teine
+katse läbis inertsete kohalike build-väärtustega. Esimene tõend säilib.
+Tegelik brauserikontroll jäi keskkonna piirangute tõttu tegemata. Kohalik Chromium peatus socket()-õiguse vea tõttu enne ühegi testijuhu käivitumist. Lubatud CDP-brauser ei pääsenud kohaliku HTTP-serverini ning selle file-URL katse keelas brauseri turvapoliitika. Edasised brauserikatsed lõpetati; käesolevat kasutajaliidese tulemust pärisbrauseris ei ole kinnitatud.
+Uuendaja 14 sihitud kontrolli läbisid. Lõpliku loaderi, manifesti ja ajutise
+Giti kontroll on väljaande kontrollid/loplik-kontroll.json-is koos piiridega.
+
+Tarne: selqiro-salvestatud-seisu-teade-20261115, 19 teed, 8 asendust, 11 lisandust,
+0 kustutust; 1757 muutmata alusfaili kaitset, kandidaat 1776 faili.
+Uuendaja kontrollib 3aaebc6 alust ja edukat originaalpäevikut, rakendab
+ainult payloadi, teeb uue sihttesti ja build’i ning täpse commit/push’i.
+SQL-i, Storage’i, teenuste ühendamist ega sõltuvuste paigaldust ei tehta.
+Lõpetatud etappe jätk ei korda; ebaselge protsessi tulemus peatab.
+
+Uuendatud CURRENT_STATE, sellest genereeritud handoff, HOSTED_PORTAL ja
+arhitektuuri lisand. Täpsed kolm baasdokumenti säilivad uues history-kaustas;
+selle lisandi eelnevad 146075 päevikubaiti ning 17474 arhitektuuribaiti säilivad.
+Uus Maci rakendamine, commit/push ja Ready / Production on veel kinnitamata.
+Üks järgmine tegevus on HOSTED_PORTAL-i uus käsk ja selle täpne SAADA SEE FAIL
+raport. Varasemat SQL-paigaldust ja vastu võetud blokeeringukatset ei korrata.

@@ -27,7 +27,9 @@ export const providerControlMessages = {
     blockedListHelp: "Users you have permanently blocked. Only you can remove the blocks you set.", emptyHidden: "You have no active hidden providers.", emptyBlocked: "You have not blocked any users.",
     listLoading: "Loading preferences…", listError: "Preferences could not be loaded. Check again.", previous: "Previous", next: "Next", provider: "Provider", user: "User", manageLink: "Manage hidden and blocked users",
     blockedFromSearch: "This user is blocked. Their offers and profile are unavailable to your account.",
-    currentState: "Current saved state", noExpiry: "No automatic expiry", dismissNotice: "Dismiss notification",
+    lastCheckedState: "State at the last check", previousState: "Previously read state",
+    previousStateHelp: "This earlier information does not confirm the current state.",
+    noExpiry: "No automatic expiry", dismissNotice: "Dismiss notification",
   },
   et: {
     options: "Pakkuja valikud", hide: "Peida pakkuja 24 tunniks", block: "Blokeeri kasutaja", unhide: "Näita uuesti", unblock: "Eemalda blokeering",
@@ -57,7 +59,9 @@ export const providerControlMessages = {
     blockedListHelp: "Kasutajad, kelle oled püsivalt blokeerinud. Ainult sina saad enda seatud blokeeringud eemaldada.", emptyHidden: "Sul pole aktiivselt peidetud pakkujaid.", emptyBlocked: "Sa pole ühtegi kasutajat blokeerinud.",
     listLoading: "Laadin eelistusi…", listError: "Eelistusi ei õnnestunud laadida. Kontrolli uuesti.", previous: "Eelmine", next: "Järgmine", provider: "Pakkuja", user: "Kasutaja", manageLink: "Halda peidetud ja blokeeritud kasutajaid",
     blockedFromSearch: "See kasutaja on blokeeritud. Tema pakkumised ja profiil pole sinu kontole kättesaadavad.",
-    currentState: "Praegune salvestatud seis", noExpiry: "Ei aegu automaatselt", dismissNotice: "Sulge teade",
+    lastCheckedState: "Seis viimase kontrolli ajal", previousState: "Varem loetud seis",
+    previousStateHelp: "See varasem teave ei kinnita praegust seisu.",
+    noExpiry: "Ei aegu automaatselt", dismissNotice: "Sulge teade",
   },
 } as const;
 export type ProviderControlMessage = keyof typeof providerControlMessages.en;

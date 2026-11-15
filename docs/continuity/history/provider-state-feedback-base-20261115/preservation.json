@@ -1,0 +1,38 @@
+{
+  "format": "selqiro-provider-state-feedback-preservation-v1",
+  "source_commit": "3aaebc6d663e6d11c02c49bed502b32ed4312852",
+  "source_tree": "ce11882a16861c7401ac22fd18d96c9b6fa84444",
+  "files": [
+    {
+      "source": "docs/continuity/CURRENT_STATE.json",
+      "archive": "docs/continuity/history/provider-state-feedback-base-20261115/docs/continuity/CURRENT_STATE.json",
+      "bytes": 11439,
+      "sha256": "ac17ec4410d171a238fcdbb9cecd4552e179ff61151b708ac3d9d88308d66f55"
+    },
+    {
+      "source": "docs/99_V2_HANDOFF_NEXT_CHAT.md",
+      "archive": "docs/continuity/history/provider-state-feedback-base-20261115/docs/99_V2_HANDOFF_NEXT_CHAT.md",
+      "bytes": 11535,
+      "sha256": "1c245bbb080167aa222cb90fe4d5b1b4ca6e1c3f51d85913f5f5c092d1f9e924"
+    },
+    {
+      "source": "docs/continuity/HOSTED_PORTAL.md",
+      "archive": "docs/continuity/history/provider-state-feedback-base-20261115/docs/continuity/HOSTED_PORTAL.md",
+      "bytes": 4490,
+      "sha256": "775cafe54903e90841ff7264b8bd1fdec7654f8b1006e9090ee98b1a974957e7"
+    }
+  ],
+  "append_only_prefixes": [
+    {
+      "path": "docs/selqiro-dev-log.md",
+      "preserved_prefix_bytes": 146075,
+      "sha256": "1b551dbf586b29f35d11d1e9009152d13e994cca19f3a6f198b50ceeb3b28cdd"
+    },
+    {
+      "path": "docs/architecture/provider-controls-v1.md",
+      "preserved_prefix_bytes": 17474,
+      "sha256": "02a33ab1d87450d4a1621f8d295f1903f259d556d76c9980173b929487e78aa3"
+    }
+  ],
+  "boundary": "Exact repository bytes at the accepted base, not the later external handoff. Issued packages and original Mac journals are not modified."
+}
