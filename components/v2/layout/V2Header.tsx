@@ -14,7 +14,7 @@ const desktopNavigationItems = (uiLanguage: Language) => { const t = (key: keyof
   { id: "home", label: t("home"), href: "/v2" },
   { id: "listings", label: t("listings"), href: "/v2/products" },
   { id: "services", label: t("services"), href: "/v2/services" },
-  { id: "jobs", label: t("jobs"), href: "/v2" },
+  { id: "jobs", label: t("jobs"), href: "/v2/jobs" },
   { id: "news", label: t("news"), href: "/v2" },
 ]; };
 

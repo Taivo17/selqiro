@@ -8,6 +8,9 @@ import { shellUiMessages } from "@/lib/i18n/catalogs/shellUi";
 
 import Link from "next/link";
 import { v2IntegrationEnabled } from "../../../shared/config/v2Integration";
+import { getOfferTheme,type OfferKind } from "../../../shared/marketplace/offerTheme";
+import { jobMessages } from "../../jobs/model/jobMessages";
+import { serviceEditorMessages } from "../../service-editor/model/serviceEditorMessages";
 
 export type V2MobileNavigationItemId =
   | "home"
@@ -21,6 +24,7 @@ type V2MobileNavigationItem = {
   label: string;
   href: string;
   emphasized?: boolean;
+  accessibleLabel?: string;
 };
 
 const navigationItems = (uiLanguage: Language): V2MobileNavigationItem[] => { const t = (key: keyof typeof shellUiMessages.en, params?: TranslationParams) => getCatalogTranslation(uiLanguage, shellUiMessages, key, params); return [
@@ -68,6 +72,8 @@ export function shouldShowV2MobileNavigation(
     "/v2/listing/",
     "/v2/showcase/",
     "/v2/service/",
+    "/v2/job/",
+    "/v2/my-area/jobs/",
     "/v2/my-area/listings/",
     "/v2/admin",
   ];
@@ -221,18 +227,20 @@ function StandardNavigationItem({
 
 function SellNavigationItem({
   item,
+  kind,
 }: {
   item: V2MobileNavigationItem;
+  kind: OfferKind;
 }) {
   const { t } = useV2Translation(shellUiMessages);
 
   return (
     <Link
       href={item.href}
-      aria-label={t("add_listing")}
+      aria-label={item.accessibleLabel ?? t("add_listing")}
       className="relative -mt-7 flex min-h-[82px] min-w-0 flex-col items-center justify-end gap-1 px-1 text-center"
     >
-      <span className="flex h-14 w-14 items-center justify-center rounded-full bg-emerald-600 text-white shadow-[0_10px_28px_rgba(5,150,105,0.35)] ring-4 ring-white transition active:scale-95">
+      <span className={`flex h-14 w-14 items-center justify-center rounded-full shadow-lg ring-4 ring-white transition active:scale-95 ${getOfferTheme(kind).button}`}>
         <NavigationIcon itemId={item.id} />
       </span>
 
@@ -250,13 +258,17 @@ export default function V2MobileNavigation({
 }) {
   const { language: uiLanguage, t } = useV2Translation(shellUiMessages);
 
-  const items = v2IntegrationEnabled()
+  const {t: jobText} = useV2Translation(jobMessages), {t: serviceText} = useV2Translation(serviceEditorMessages);
+  const kind: OfferKind = pathname.startsWith("/v2/jobs") ? "job" : pathname.startsWith("/v2/services") ? "service" : "listing";
+  const baseItems = v2IntegrationEnabled()
     ? navigationItems(uiLanguage).map((item) => item.id === "sell"
       ? { ...item, href: "/v2/sell" }
       : item.id === "messages"
         ? { ...item, href: "/v2/messages" }
         : item)
     : navigationItems(uiLanguage);
+  const items = baseItems.map(item => item.id !== "sell" || kind === "listing" ? item : {...item,
+    href: kind === "job" ? "/v2/my-area/jobs/new" : "/v2/services/new",accessibleLabel: kind === "job" ? jobText("addJob") : serviceText("addService")});
 
   return (
     <nav
@@ -274,6 +286,7 @@ export default function V2MobileNavigation({
               <SellNavigationItem
                 key={item.id}
                 item={item}
+                kind={kind}
               />
             );
           }

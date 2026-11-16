@@ -18,6 +18,7 @@ import PublicProfileProductShowcasesSection from "./PublicProfileProductShowcase
 import PublicProfileServicesSection from "./PublicProfileServicesSection";
 import ProviderControlsBoundary from "../../viewer-provider-controls/components/ProviderControlsBoundary";
 import PublicProfileProviderMenu from "./PublicProfileProviderMenu";
+import PublicProfileJobsSection from "../../jobs/components/PublicProfileJobsSection";
 
 const updates = (uiLanguage: Language) => { const t = (key: keyof typeof publicUiMessages.en, params?: TranslationParams) => getCatalogTranslation(uiLanguage, publicUiMessages, key, params); return [
   {
@@ -34,6 +35,7 @@ type ExpandedPublicProfileSection =
   | "showcases"
   | "services"
   | "listings"
+  | "jobs"
   | null;
 
 type ExpandedPublicProfileState = {
@@ -272,6 +274,8 @@ function PublicProfileContent({slug}: {slug: string}) {
               handleListingsShowAllChange
             }
           />
+          {profile.identityType === "business" && profile.identityId ? <PublicProfileJobsSection key={`jobs-${profile.identityId}-${profile.slug}`}
+            slug={profile.slug} identityId={profile.identityId} expanded={expandedSection === "jobs"} onExpandedChange={expanded => setExpandedProfileState(previous => !expanded && (previous.slug !== slug || previous.section !== "jobs") ? previous : {slug,section: expanded ? "jobs" : null})}/> : null}
         </div>
 
         <aside className="space-y-5 lg:sticky lg:top-28 lg:self-start">

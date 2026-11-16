@@ -8,6 +8,7 @@ import { serviceLocationLabel, servicePriceLabel, type PublicServiceOffer } from
 import { serviceEditorMessages } from "../../service-editor/model/serviceEditorMessages";
 import { useServiceCategories } from "../../service-category-selection/model/useServiceCategories";
 import ServiceContactButton from "./ServiceContactButton";
+import ShareOfferButton from "../../../shared/sharing/ShareOfferButton";
 import ServiceReturnBackLink from "../../service-navigation/components/ServiceReturnBackLink";
 
 export default function ServiceDetailPage({serviceId}: {serviceId: string}) {
@@ -40,6 +41,7 @@ export default function ServiceDetailPage({serviceId}: {serviceId: string}) {
               <p className="text-sm text-neutral-500">{t(service.sellerType === "business" ? "business" : "privatePerson")}</p>
               {service.sellerSlug ? <Link href={`/v2/profile/${encodeURIComponent(service.sellerSlug)}`} className="inline-flex min-h-10 items-center font-semibold underline">{t("viewProfile")}</Link> : null}</div>
             <ServiceContactButton serviceId={service.id} />
+            <ShareOfferButton kind="service" id={service.id} title={service.title} />
           </aside>
         </div>
         {service.description ? <section className="rounded-[28px] border border-black/5 bg-white p-6 shadow-sm sm:p-8"><h2 className="text-2xl font-black">{t("description")}</h2>

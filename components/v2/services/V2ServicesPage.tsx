@@ -9,6 +9,7 @@ import { isPlainServiceClick } from "../../../src/features/service-navigation/mo
 import ServiceDiscoveryCard from "../../../src/features/service-detail/components/ServiceDiscoveryCard";
 import { useServiceCategories } from "../../../src/features/service-category-selection/model/useServiceCategories";
 import { buildServiceCategoryTree } from "../../../src/entities/service-category/model/types";
+import { getOfferTheme, offerButtonLayout } from "../../../src/shared/marketplace/offerTheme";
 
 const input = "min-h-12 w-full min-w-0 rounded-full border border-neutral-200 bg-white px-4 py-3 text-base outline-none focus:border-teal-600 focus:ring-2 focus:ring-teal-600/20";
 export default function V2ServicesPage() {
@@ -24,7 +25,7 @@ export default function V2ServicesPage() {
     <V2DiscoveryTypeSwitcher active="services" />
     <header className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
       <div><h1 className="text-4xl font-black tracking-tight sm:text-5xl">{t("services")}</h1><p className="mt-3 leading-7 text-neutral-600">{t("discoveryHelp")}</p></div>
-      <Link href="/v2/services/new" className="inline-flex min-h-12 shrink-0 items-center justify-center rounded-full bg-black px-6 py-3 font-bold text-white">{t("addService")}</Link>
+      <Link href="/v2/services/new" className={`${offerButtonLayout} ${getOfferTheme("service").button} shrink-0`}>{t("addService")}</Link>
     </header>
     <section aria-label={t("browse")} className="rounded-[28px] border border-teal-200 bg-white p-4 shadow-sm sm:p-5">
       <div className="grid min-w-0 gap-3 md:grid-cols-2 xl:grid-cols-[2fr_1fr_1fr]">

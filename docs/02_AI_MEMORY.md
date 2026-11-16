@@ -7894,3 +7894,28 @@ SQL-tehing ja eraldi tulemuse lugemine. Uus kontroll on autoriteetne pärast
 muutunud õigusi; vanu räsitud paigaldajaid ja nende verify-käske ei korrata.
 Selle kirje olemasolu ei tõenda Macis/pilves rakendamist. Praegune tõend ja
 üks järgmine käsk on `CURRENT_STATE.json` ning `HOSTED_PORTAL.md`.
+
+
+<!-- SELQIRO_JOBS_PUBLIC_DECISION_20261116 -->
+## 16.11.2026 — avalik tööotsing, jagatav pakkumine ja ühised toonid
+
+Kasutaja kinnitas tööpakkumiste avaliku otsingu esimesest versioonist.
+Töö ilmub ka ettevõtte profiilis ning avaneb otseviitest. See asendab 15.11
+profiili/otseviitega piiratud alguse ettepaneku; varasem plaanipakk säilib.
+Avaldamise alus on ettevõtte identiteedi õigus, mitte tasuline Business-tase.
+Tavaline avaldamine, otsing, jagamine ja pikendamine ei vaja Energy ostu.
+
+Sama jagamistegevus kuulub tavakuulutuse, hobusepakkumise, teenuse ja töö
+avalikku detaili. Puhta kanoonilise lingi jagamise või kopeerimise algatab
+kasutaja; automaatseid sotsiaalmeediapostitusi ei tehta.
+
+Kuulutuste aktsent on merevaigukollane, teenustel türkiisroheline ja tööl
+sinine. Üks ühine värviallikas seob pakkumisliigi lisamis-/avaldamisnupu
+ning vestluse pakkumiskaardi. Tekstisilt säilib. Enda ja teise poole
+sõnumimullide paigutus/eristus jääb sõltumatuks pakkumisliigi värvist.
+
+Töö kehtib ühe UTC kalendrikuu. Teadlik pikendus ei kuhja kuid, lühenda
+kehtivat tähtaega, avalda peatatud/lõpetatud tööd ega muuda otsingujärjestuse
+aluseks olevat avaldamisaega. Täpne leping on
+`docs/architecture/jobs-public-v1.md`; tegelik rakendamise ja vastuvõtu
+seis jääb `docs/continuity/CURRENT_STATE.json`-i.

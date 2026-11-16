@@ -3,6 +3,7 @@ import { useRef, useState } from "react";
 import type { ServicePublicationSession, ServicePublicationView } from "../../../entities/service/model/servicePublicationSession";
 import { useV2Translation } from "../../../shared/i18n/V2LanguageProvider";
 import { serviceEditorMessages, type ServiceMessageKey } from "../model/serviceEditorMessages";
+import { getOfferTheme, offerButtonLayout } from "../../../shared/marketplace/offerTheme";
 
 const button = "min-h-12 rounded-full border border-neutral-300 bg-white px-5 py-3 text-sm font-bold disabled:opacity-40";
 const messages: Record<string, ServiceMessageKey> = {
@@ -33,7 +34,7 @@ export default function ServicePublicationActions({session, view, ready, canSubm
     {resumable ? <div className="mb-4"><input ref={picker} type="file" hidden multiple accept="image/jpeg,image/png,image/webp" onChange={event => {setFiles(Array.from(event.currentTarget.files ?? [])); event.currentTarget.value = "";}} />
       <button type="button" disabled={!ready} className={button} onClick={() => picker.current?.click()}>{t("selectOriginals")}</button>{files.length ? <span className="ml-3 text-sm">{files.length}</span> : null}</div> : null}
     <div className="flex flex-wrap gap-3">
-      {view.phase === "editing" ? <button type="button" disabled={!ready || !session || !canSubmit} className={`${button} !bg-black !text-white`} onClick={onSubmit}>{t(publish ? "publish" : "save")}</button> : null}
+      {view.phase === "editing" ? <button type="button" disabled={!ready || !session || !canSubmit} className={`${offerButtonLayout} ${getOfferTheme("service").button}`} onClick={onSubmit}>{t(publish ? "publish" : "save")}</button> : null}
       {recovery ? <><button type="button" disabled={!ready || !session} className={button} onClick={() => void session?.inspect()}>{t("checkResult")}</button>
         {resumable ? <button type="button" disabled={!ready || !session} className={button} onClick={() => void session?.resume(files)}>{t("continue")}</button> : null}
         <button type="button" disabled={!ready || !session} className={button} onClick={() => void session?.cancel()}>{t("cancel")}</button></> : null}

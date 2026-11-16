@@ -1,0 +1,101 @@
+{
+  "schema_version": 1,
+  "release": "jobs-public-v1",
+  "base_commit": "447d1a46a09f7fb6b907c2526e6164f0c88f2098",
+  "source_root": "supabase/repairs/20261116_jobs_public",
+  "report_kind": "jobs-public-v1",
+  "report_states": [
+    "absent",
+    "applied",
+    "incompatible"
+  ],
+  "sql_sha256": {
+    "preflight.sql": "65d525cd1e6102c46d2f5789d98f3c603a3132da34b071dbaaf1128b52ffc27a",
+    "apply.sql": "26dc4980f947d5efde6edcdd95fc74c757375537c099100a0b43e90b7d50aa42",
+    "verify.sql": "65d525cd1e6102c46d2f5789d98f3c603a3132da34b071dbaaf1128b52ffc27a"
+  },
+  "readable_changes_sha256": "53be53beb1ce250dbdcf211b1c4a846459f4763b7e2e05865d1adc4a592a7c6d",
+  "embedded_changes_sha256": "ec3aca2110ef1299e2b918dbbdb14e86b6c173c502880d5abc00f5a8cfad0191",
+  "catalog_fingerprints": {
+    "before": "85bc46bd56e96e34511592ba050fec3864d9871b389c3c30a826f5964640ac65",
+    "after": "ee2765b24aae2b51578f355de562cbd6af580bc7e2d8bc4bed43d2a3af7ad4cc",
+    "static_function_dependencies": "f2a0d7f86a517e78b0ff123e171593a8ff5c8e5ad5b16e3a8bb6d99f5e8b0f0d"
+  },
+  "runtime_dependency_fingerprint": "Function metadata plus currently effective job policy metadata; observe and compare within this run, never pin to synthetic policy IDs.",
+  "invariant_fields": [
+    "existing_functions",
+    "existing_authority",
+    "existing_structure",
+    "auth_authority"
+  ],
+  "guards": [
+    "installer",
+    "hosted_context",
+    "policy_foundation",
+    "messaging_foundation",
+    "block_removal_current",
+    "publication_foundation",
+    "service_horse_foundation"
+  ],
+  "hosted_context": {
+    "release_id": "listing-publication-hosted-preview-v1",
+    "instance_id": "2d088814-0900-448a-a9d1-7b05470cb1d2",
+    "project_ref": "vyjletlmwoiwxsnsunlm",
+    "cleanup_mode": "held",
+    "release_ready": true,
+    "storage_authority_version": "source-part-rfc3986-v1"
+  },
+  "install": {
+    "sequence": [
+      "read-only preflight",
+      "durable local exact intent",
+      "one additive SQL apply transaction",
+      "independent read-only verify",
+      "new client commit and push",
+      "exact deployment marker",
+      "real-use checks"
+    ],
+    "unknown_reply": "Do not repeat apply automatically. Run exact read-only verify and reconcile against the durable intent.",
+    "limits": {
+      "lock_timeout_seconds": 3,
+      "read_statement_timeout_seconds": 20,
+      "apply_statement_timeout_seconds": 45,
+      "idle_in_transaction_timeout_seconds": 10,
+      "transaction_timeout_seconds": 60
+    },
+    "rollback": "Database statement failure rolls the one transaction back. No automatic DROP/delete rollback is provided for an acknowledged applied release."
+  },
+  "local_validation": {
+    "engine": "PGlite 0.5.13 / real PostgreSQL WASM",
+    "runtime_result": "runtime-result.json",
+    "runtime_result_sha256": "60356700008bc45f0acfbc9c57dd1674722476cf62cc33ed3b11481852734363",
+    "result": "PASS",
+    "checks": 17,
+    "source_drift": 0,
+    "installer": {
+      "actor": "postgres",
+      "rolsuper": false,
+      "rolcreaterole": true,
+      "auth_usage": true,
+      "auth_usage_grantable": false,
+      "auth_uid_execute": true,
+      "auth_uid_execute_grantable": false
+    },
+    "historical_attempts": "tests/test-history.json",
+    "historical_attempts_sha256": "6a43fa8c574b8d2bbbcce5ac3a8c15c7e37e06c93e26dcb7d66e36924bb0d035",
+    "synthetic_report_pair_sha256": "4dd135da4d758c972d99d972d74aac715eb943cfa73cdffa880df82d16f991d4",
+    "native_concurrency": false,
+    "hosted_database": false,
+    "real_user_data": false
+  },
+  "preservation": "No older SQL source changed. Existing catalog authority and structures, user content and Auth grants are compared before/after; only new named triggers and incoming job FKs are inventoried as additions.",
+  "rollout": {
+    "public_search": true,
+    "public_profile": true,
+    "public_detail": true,
+    "business_publication": true,
+    "validity": "one_calendar_month_utc",
+    "owner_mutations": "actor-bound request receipts and CAS",
+    "messaging": "additive get_my_marketplace_message_thread_v2; retained v1 unchanged"
+  }
+}

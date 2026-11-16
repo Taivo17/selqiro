@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "kind": "jobs-public-runtime",
+  "result": "FAIL",
+  "generated_at_utc": "2026-11-16T11:58:35.685Z",
+  "checks": [
+    "guarded_install_nonsuperuser_preserves_old_catalog_data_and_auth",
+    "public_capability_categories_and_empty_keyset_page",
+    "business_authority_direct_tables_and_private_helpers_are_closed",
+    "atomic_create_receipt_replay_unknown_reply_and_actor_binding",
+    "shown_policy_is_exact_and_first_publication_is_one_calendar_month",
+    "content_CAS_uses_shared_currency_rules_without_renewal",
+    "month_end_leap_year_and_session_timezone_are_explicit",
+    "expiry_and_renewal_preserve_paused_state_and_organic_dates",
+    "public_search_profile_owner_use_bounded_stable_keysets",
+    "provider_hide_affects_discovery_only_and_bilateral_block_affects_all_public_reads",
+    "expired_closed_and_inactive_business_are_excluded_before_pagination",
+    "all_job_wire_timestamps_are_UTC_in_nonUTC_session",
+    "job_contact_uses_existing_channel_and_message_local_historical_cards"
+  ],
+  "failure": {
+    "message": "Expected values to be strictly equal:\n\n'3' !== '1'\n",
+    "code": "ERR_ASSERTION"
+  },
+  "installer": {
+    "actor": "postgres",
+    "rolsuper": false,
+    "rolcreaterole": true,
+    "auth_usage": true,
+    "auth_usage_grantable": false,
+    "auth_uid_execute": true,
+    "auth_uid_execute_grantable": false
+  },
+  "test_sources": {
+    "catalog.mjs": "3efa6b0de656df31fef8eb191003cbec925bb5661ed91a67f3c988f7b5674057",
+    "commands.mjs": "2752eac79859d2ce647f06d5694fa186d2cbf0f3ba5ce6d7c498a4807c6095d9",
+    "discovery.mjs": "1de40359ebc3ae09d4446187c29e3f5c56d7f9d493ac9be9e22dce02a59bf669",
+    "fixture.mjs": "cedf609e138c15334262dbb6f25d272ffc128456492eaf39f9ef76c7bb13ac68",
+    "helpers.mjs": "96f50d632bdffe8bc2ff16c176388666d9c30ad990a3d4447664130418354813",
+    "messages.mjs": "007cf5ae172e03699a7c2c2671619e964afd0b64a500409392548c18e2e36b5c",
+    "prepare.mjs": "7100429ec2cd13862fb5e0d25813fe56915ed1c8b689bdd23700caa84c7acff2",
+    "runtime.mjs": "442de6c1979e526704a515f619c2d3672cc12f2d87f898b8ac1e8d5538ed6780"
+  },
+  "source_modules": {
+    "01_state.sql": "7332c77ef21888684e257db5bcccbfb2510524569ad03cf1888a07d22c8b8423",
+    "02_context.sql": "8ee59e7264f1d0c79d6ad167ffdeb6cbfc7893769952c2cb2b377b5ec4d88b12",
+    "03_content.sql": "9d449056030e5af3def0c421c9596ab0a133f98c074ff1967e7623d60658f7ba",
+    "04_reads.sql": "81c46d94b4aaf85b3b951ff36165d79d367a5f95691222c5c0bc95fde68d64af",
+    "05_search.sql": "12a578dd8d977825d63c7bbecf5bf995514a10659f2b0198d11e860128e25ff3",
+    "06_mutations.sql": "4984bc30bfb1f6186e903341d8bfa676e5aed4aa2260dd573327c8f4c1e52619",
+    "07_contact.sql": "335838ac9c47b22e924bf0c698c042e47f595113d39b0dd1c217f38651fc6a79",
+    "08_message_context.sql": "f05704a544840ea0b6c2464bf5c7ae117c3ca7180599ff350e4eddd61f22443d",
+    "09_authority.sql": "9ddd51e6ce55f30f559866183c9080144213c50b481e4434eb219da51cac3da4"
+  },
+  "sql_sha256": {
+    "preflight.sql": "6247735d16cb3b28e1e2fed2f5293038218f9578ab19626cd19e7acc00c21439",
+    "apply.sql": "b088b102b7190b6374d2af341d3c8b4e4be2ac314e38f7e0c657c73d24408eec",
+    "verify.sql": "6247735d16cb3b28e1e2fed2f5293038218f9578ab19626cd19e7acc00c21439"
+  },
+  "live_database": false,
+  "real_user_data": false,
+  "production_storage": false,
+  "native_concurrency": false,
+  "limitations": [
+    "PostgreSQL/WASM executes real PostgreSQL permissions and PL/pgSQL, but serializes sessions. Conflict cases are stale/interleaved commands, not native concurrent sessions.",
+    "The fixture restores accepted declarations and synthetic identities/policy/Storage metadata; it does not contact hosted services or rerun old test suites."
+  ]
+}

@@ -2059,3 +2059,53 @@ selle lisandi eelnevad 146075 päevikubaiti ning 17474 arhitektuuribaiti säiliv
 Uus Maci rakendamine, commit/push ja Ready / Production on veel kinnitamata.
 Üks järgmine tegevus on HOSTED_PORTAL-i uus käsk ja selle täpne SAADA SEE FAIL
 raport. Varasemat SQL-paigaldust ja vastu võetud blokeeringukatset ei korrata.
+
+
+<!-- SELQIRO_JOBS_PUBLIC_PREPARED_20261116 -->
+## 16.11.2026 — avalikud tööpakkumised, jagamine ja ühised värvid ette valmistatud
+
+447d1a4 Maci commit/push, Ready / Production ning kasutaja uue seisukirjelduse
+pilt on vastu võetud. Uus kandidaat tuletati selle täpsest 1776-failisest
+inventuurist. Vana profiili/otseviite-põhise töö alguse plaani asendas kasutaja
+otsus teha tööotsing kohe avalikuks; varasem väljastatud plaan säilib muutmata.
+
+Üks kanooniline jobs domeen ühendab ettevõtte profiili, avaliku otsingu,
+otseviite, Minu ala halduse ja olemasoleva sõnumikanali. Kasutaja avaldab ühe
+tegevusega; serveri mustandi/avaldamise püsivad kviitungid ja revisjonikontroll
+säilitavad katkestusest jätku. Tavaline osalemine ei vaja Energy ostu. Üks
+UTC kalendrikuu ja teadlik pikendus säilitavad staatuse ning orgaanilise
+avaldamiskuupäeva. Optional salary liigub täpse kümnendtekstina.
+
+Ühine jagamine katab tavakuulutuse, hobusepakkumise, teenuse ja töö. Anonüümne
+public-RPC metadata ning puhas kanooniline URL ei kasuta omaniku sessiooni.
+Merevaigukollane/türkiis/sinine on ühises teemas lisamis-/avaldamisnupu ja
+vestluse pakkumiskaardi jaoks. Saatja sõnumimullide eristus ning ajaloolised
+kaardid säilivad. Praegune tööviide puhastatakse teise pakkumise valimisel.
+
+40 kliendijuhtu (22 töö, 10 jagamine/meta, 8 sõnumikontekst), 17 SQL-i
+sihtkontrolli ning täielik Next/TypeScript build läbisid. Build'i 729
+sisendi drift on 0; 31 staatilist lehte. Esimene build väljus 0-ga, kuid
+selle jooksu ajal muutusid kolm veateate moodulit; esimene tõend säilis ja
+lõplik stabiilne build läbis. SQL kasutab mitte-superkasutajast paigaldajaga
+päris PostgreSQL/WASM-i; Auth grant-option puudub. Fixture'i paranduste
+FAIL-raportid ja põhjused säilivad test-history.json-is. Native paralleelseansse,
+hosted andmebaasi, päris kasutajaid ega Storage'i ei kasutatud.
+
+Brauserikatse jäi BLOCKED: CUA andis kohaliku /v2/jobs HTTP-avaja kohta
+ERR_CONNECTION_REFUSED. Paigutust, native share'i ning tegelikku kasutusteed
+ei märgita läbinuks. Uue Maci allika/SQL-i/commit-push'i/Productioni tulemused
+on veel puudu. Need eristatakse kohalikust ettevalmistusest.
+
+Uuendaja kasutab uut eraldi päevikut, täpset eelmist edukat originaalraportit
+ja kogu aluspuu/indexi/lähte/remote'i kontrolli. Build/testid eelnevad ühele
+SQL-tehingule; sõltumatu verify eelneb commit/push'ile. Kadunud vastus ei
+põhjusta automaatset korduskirjutust. 14 protsessi/raporti/Giti ja 8 andmebaasi
+jätkutee sihtkontrolli ning väljaande lõplik päris ajutise Giti tarnekatse
+on paki kontrollid/ all koos sünteetiliste piiridega.
+
+CURRENT_STATE, genereeritud üleandmine, HOSTED_PORTAL ja uus arhitektuur
+on uuendatud. Kolm baasi continuity-faili säilivad history-kaustas täpselt;
+selle lisandi eelnevad 149182 päevikubaiti säilivad. Üks järgmine käsk on
+selqiro-too-ja-jagamine-20261116/uuenda.py --publish ning saadetakse selle
+jooksu täpne SAADA SEE FAIL raport. Väljastatud pakke, kasutaja muudatusi,
+kontosid, sisu, fotosid, sõnumeid ega päevikuid ei kustutata.

@@ -7,6 +7,7 @@ import ListingPrice from "../../../entities/listing/ui/ListingPrice";
 import { horsePublicMessages } from "../../../../lib/i18n/catalogs/horsePublic";
 import { useV2Translation } from "../../../shared/i18n/V2LanguageProvider";
 import HorseContactButton from "./HorseContactButton";
+import ShareOfferButton from "../../../shared/sharing/ShareOfferButton";
 import PublicPhotoGallery from "../../../shared/media/PublicPhotoGallery";
 import ListingReturnBackButton from "../../listing-navigation/components/ListingReturnBackButton";
 
@@ -46,6 +47,7 @@ export default function PublicHorsePage({ offerId }: { offerId: string }) {
     <div className="border-t border-neutral-100 pt-4"><p className="font-bold">{h.sellerName}</p><p className="mt-1 text-sm text-neutral-500">{t(h.sellerType)}</p>
      {h.sellerSlug && <Link className="mt-2 inline-block underline" href={"/v2/profile/" + encodeURIComponent(h.sellerSlug)}>{t("profile")}</Link>}</div>
     <HorseContactButton key={h.id} offerId={h.id} />
+    <ShareOfferButton kind="horse" id={h.id} title={h.title} />
    </aside>
   </div>
  </article>;

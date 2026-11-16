@@ -9,6 +9,7 @@ import type { PublicationPolicyStatus } from "../../../entities/publication-poli
 import { buildOrdinaryListingInput } from "../model/ordinaryListingInput";
 import type { OrdinaryListingFieldState } from "../model/ordinaryListingFields";
 import { awaitPublicationReadiness, type useOrdinaryPublication } from "../model/useOrdinaryPublication";
+import { getOfferTheme, offerButtonLayout } from "../../../shared/marketplace/offerTheme";
 
 type Props = {controller: ReturnType<typeof useOrdinaryPublication>; fields: OrdinaryListingFieldState;
   title: string; description: string; files: readonly File[]; onNew: (requestKey: string) => void;
@@ -177,10 +178,10 @@ export default function OrdinaryPublicationAction({controller: c, fields, title,
       <Link href={`/v2/listing/${c.view.receipt.listing_id}`} className="font-bold underline">{t("viewListing")}</Link>
       <Link href="/v2/my-area" className="font-bold underline">{t("openMyArea")}</Link>
     </div> : null}
-    {terminal ? <button type="button" disabled={busy || !c.contextReady} className="rounded-full border px-5 py-3 font-bold disabled:opacity-50"
+    {terminal ? <button type="button" disabled={busy || !c.contextReady} className={`${offerButtonLayout} ${getOfferTheme("listing").button}`}
       onClick={() => { void startNext(); }}>{t("addNextListing")}</button> : <div className="flex flex-wrap gap-3">
       {c.view.phase !== "needs_attention" ? <button type="button" disabled={busy || !ready || !!c.contextError} onClick={() => { void submit(c.view.phase !== "editing"); }}
-        className="rounded-full bg-black px-6 py-3 font-bold text-white disabled:opacity-50">
+        className={`${offerButtonLayout} ${getOfferTheme("listing").button}`}>
         {busy ? t("pleaseWait") : c.view.phase === "editing" ? t("publishListing") : t("checkContinue")}
       </button> : null}
       {c.view.phase !== "editing" ? <button type="button" disabled={busy || !c.contextReady} className="rounded-full border px-5 py-3 font-bold"

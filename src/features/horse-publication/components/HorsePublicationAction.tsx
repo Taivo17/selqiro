@@ -6,6 +6,7 @@ import { useV2Translation } from "../../../shared/i18n/V2LanguageProvider";
 import { horsePublicationMessages, type HorsePublicationMessageKey } from "../model/horsePublicationMessages";
 import { horsePublicationReviewForm } from "../model/horsePublicationReviewForm";
 import OwnerHorseOfferEditFields from "../../horse-offer-edit/components/OwnerHorseOfferEditFields";
+import { getOfferTheme, offerButtonLayout } from "../../../shared/marketplace/offerTheme";
 
 const button = "rounded-full border border-zinc-300 bg-white px-5 py-3 text-sm font-black disabled:cursor-not-allowed disabled:opacity-40";
 export default function HorsePublicationAction({session, view, editing = false, ownerEdit = false, canSubmit, onSubmit, onReset, ready = true, localError = ""}: {
@@ -34,7 +35,7 @@ export default function HorsePublicationAction({session, view, editing = false, 
       {files.length ? <span className="ml-3 text-sm">{files.length}</span> : null}
     </div> : null}
     <div className="mt-4 flex flex-wrap gap-3">
-      {view.phase === "editing" ? <button type="button" className={`${button} !bg-black !text-white`}
+      {view.phase === "editing" ? <button type="button" className={`${offerButtonLayout} ${getOfferTheme("horse").button}`}
         disabled={!session || !ready || !canSubmit} onClick={onSubmit}>{t(editing ? "save" : "publish")}</button> : null}
       {recoverable ? <>
         <button type="button" className={button} disabled={!session || !ready} onClick={() => { void session?.inspect(); }}>{t("checkResult")}</button>

@@ -1,3 +1,4 @@
+import { generateOfferMetadata } from "../../../../src/server/sharing/offerMetadata";
 import V2Shell from "../../../../components/v2/layout/V2Shell";
 import V2ListingDetailPage from "../../../../components/v2/listing/V2ListingDetailPage";
 
@@ -15,4 +16,9 @@ export default async function V2ListingPage({ params }: V2ListingRouteProps) {
       <V2ListingDetailPage listingId={id} />
     </V2Shell>
   );
+}
+
+export async function generateMetadata({params}: {params: Promise<{id: string}>}) {
+  const {id} = await params;
+  return generateOfferMetadata("listing", id);
 }

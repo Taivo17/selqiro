@@ -1,0 +1,111 @@
+{
+  "schema_version": 1,
+  "kind": "jobs-public-test-history",
+  "preserved_runtime_attempts": [
+    {
+      "report": "runtime-attempt-01.json",
+      "report_sha256": "750ed43e9b442b09431493ebd99c0ec12bf2b106083e5931f8c32a37ca3aaf31",
+      "reported_at_utc": "2026-11-16T11:56:04.891Z",
+      "result": "FAIL",
+      "passed_checks": 8,
+      "failure": {
+        "message": "Expected values to be strictly deep-equal:\n+ actual - expected\n\n  [\n+   'cf587596-a740-4a6a-a141-9dbe65a12130',\n+   'c8e61c27-e777-441c-a5fb-01d0128f5701',\n    'f05090fe-739e-465a-8892-9abb7295520c',\n    'e6236300-cc50-4cc0-8310-ada6f849792f',\n-   'cf587596-a740-4a6a-a141-9dbe65a12130',\n-   'c8e61c27-e777-441c-a5fb-01d0128f5701',\n    '4648aa82-b3a9-460a-9b9a-d6e3e40c9598'\n  ]\n",
+        "code": "ERR_ASSERTION"
+      },
+      "classification": "fixture_expectation",
+      "cause": "The tie-break test used volatile clock_timestamp() separately for each updated row, so the publication timestamps were not actually tied.",
+      "correction": "Use statement_timestamp() for that one synthetic UPDATE so all rows share the same timestamp. Search SQL was unchanged."
+    },
+    {
+      "report": "runtime-attempt-02.json",
+      "report_sha256": "9fb03d40080c783538e9b7cc0b3a8d3afc6677a748314fa0df25ccd3c95cde3c",
+      "reported_at_utc": "2026-11-16T11:56:36.948Z",
+      "result": "FAIL",
+      "passed_checks": 9,
+      "failure": {
+        "message": "provider_control_revision_invalid",
+        "code": "22023",
+        "where": "PL/pgSQL function public.set_my_provider_control_v1(uuid,text,text,text,text,uuid,uuid,text,timestamp with time zone) line 15 at RAISE"
+      },
+      "classification": "fixture_api_call",
+      "cause": "The provider unhide test omitted the required next hide revision UUID and received provider_control_revision_invalid (22023).",
+      "correction": "Supply a fresh UUID in the existing provider-control contract. Provider and job production SQL were unchanged."
+    },
+    {
+      "report": "runtime-attempt-03.json",
+      "report_sha256": "3f4a579d1e7252f36810b3f5dec58afe84f1be2aa4e232c79cdc288d127ee918",
+      "reported_at_utc": "2026-11-16T11:58:35.685Z",
+      "result": "FAIL",
+      "passed_checks": 13,
+      "failure": {
+        "message": "Expected values to be strictly equal:\n\n'3' !== '1'\n",
+        "code": "ERR_ASSERTION"
+      },
+      "classification": "fixture_routing_expectation",
+      "cause": "The test expected a business member-authored horse to share the business owner account channel used by jobs/services. The retained horse contact contract routes to created_by_user_id, correctly producing another channel.",
+      "correction": "Publish the synthetic horse as the business owner while temporarily using the same business identity; restore the owner identity afterward. Retained horse routing and all application SQL were unchanged."
+    },
+    {
+      "report": "runtime-attempt-04.json",
+      "report_sha256": "8b67698949082994cb3efc58b7d467d93d248799500bd3d64a8227768a9c26a7",
+      "reported_at_utc": "2026-11-16T12:01:56.296Z",
+      "result": "FAIL",
+      "passed_checks": 14,
+      "failure": {
+        "message": "Expected values to be strictly equal:\n\n910001 !== null\n",
+        "code": "ERR_ASSERTION",
+        "stack": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n910001 !== null\n\n    at file:///workspace/scratch/25ed8cdd1aef/work/jobs-public-20261116/candidate/supabase/repairs/20261116_jobs_public/tests/messages.mjs:59:10\n    at async check (file:///workspace/scratch/25ed8cdd1aef/work/jobs-public-20261116/candidate/supabase/repairs/20261116_jobs_public/tests/runtime.mjs:13:30)\n    at async messageCases (file:///workspace/scratch/25ed8cdd1aef/work/jobs-public-20261116/candidate/supabase/repairs/20261116_jobs_public/tests/messages.mjs:50:2)\n    at async file:///workspace/scratch/25ed8cdd1aef/work/jobs-public-20261116/candidate/supabase/repairs/20261116_jobs_public/tests/runtime.mjs:47:2"
+      },
+      "classification": "fixture_missing_retained_constraint",
+      "cause": "The inherited public-contact fixture restored conversation columns but omitted the baseline conversations_listing_id_fkey. The real retained deletion RPC removed the listing, but no ON DELETE SET NULL action cleared the synthetic conversation listing_id.",
+      "correction": "Restore the exact baseline FK declaration in the new isolated jobs fixture and assert both the retained deletion receipt and actual row removal. The assertion that the header remains null and historical job cards survive was not weakened."
+    },
+    {
+      "report": "runtime-attempt-05.json",
+      "report_sha256": "35c09cf46de55710107b631fdb95d80fb2e7d42eff4ced00898bcf288a5355f2",
+      "reported_at_utc": "2026-11-16T12:04:20.617Z",
+      "result": "FAIL",
+      "passed_checks": 14,
+      "failure": {
+        "message": "listing_contact_direct_write",
+        "code": "42501",
+        "where": "PL/pgSQL function listing_contact_private.guard_conversation() line 18 at RAISE\nSQL statement \"UPDATE ONLY \"public\".\"conversations\" SET \"listing_id\" = NULL WHERE $1 OPERATOR(pg_catalog.=) \"listing_id\"\"\nSQL statement \"DELETE FROM public.listings WHERE id=p.listing_id AND identity_id=a.identity_id AND created_by_user_id=a.actor_user_id\"\nPL/pgSQL function listing_publication_private.apply_delete(uuid) line 33 at SQL statement\nSQL statement \"SELECT listing_publication_private.apply_delete(aid)\"\nPL/pgSQL function delete_my_published_listing_v1(uuid,uuid,text) line 11 at PERFORM"
+      },
+      "classification": "fixture_missing_retained_RLS_policies",
+      "cause": "After restoring the baseline FK, the inherited fixture still lacked the two retained final_snapshot_scrub policies after enabling conversations/messages RLS. The restricted final writer could not see and scrub the conversation snapshots, so the unchanged guard correctly rejected FK nullification.",
+      "correction": "Restore the exact two final_snapshot_scrub policy declarations from the retained 20_publication_core.sql in the isolated fixture. Do not weaken either guard or the terminal-deletion assertion."
+    }
+  ],
+  "preparation_observations_without_separate_result_file": [
+    {
+      "cause": "Initial catalog observation used a different search_path from the exact production preflight, making metadata names render differently.",
+      "correction": "Use the same explicit pg_catalog,pg_temp search_path, UTC and jit settings before observing. Pins were generated only after the exact existing foundation was recognized.",
+      "evidence": "Observed tool output; no standalone failed prepare report was generated."
+    },
+    {
+      "cause": "One preparation invocation had a JavaScript quote syntax error while adding the UTC session setup.",
+      "correction": "Correct the string literal; that invocation did not execute SQL.",
+      "evidence": "Observed tool output; no standalone failed prepare report was generated."
+    },
+    {
+      "cause": "Pre-seeding an ordinary listing combined with static fixture imports introduced an unresolved top-level-await import cycle.",
+      "correction": "Load the retained service/horse helper fixtures dynamically inside the messaging cases, after the foundation fixture has initialized.",
+      "evidence": "Observed process termination; no runtime-result report was created for the initialization failure."
+    }
+  ],
+  "production_findings_addressed_before_final_test": [
+    "All new job wire functions and fields helpers explicitly use UTC so client timestamp parsers do not depend on database-session timezone.",
+    "Selecting an ordinary listing clears only the current job pointer; later terminal deletion cannot revive a stale job subject. Historical per-message cards survive.",
+    "Read-only preflight checks availability of current required job policy documents; live policy facts are compared within the run rather than pinned to synthetic UUIDs.",
+    "The catalog includes exact retained ordinary contact/delete and current conversation authority dependencies and compares the accepted foundation authority/structure invariants."
+  ],
+  "claims": "These local fixture corrections are not changes to hosted services, user content or older released SQL. A final passing runtime report must separately identify the exact final sources.",
+  "final_runtime": {
+    "path": "../runtime-result.json",
+    "sha256": "60356700008bc45f0acfbc9c57dd1674722476cf62cc33ed3b11481852734363",
+    "result": "PASS",
+    "passed_checks": 17,
+    "generated_at_utc": "2026-11-16T12:06:28.570Z",
+    "source_drift": 0
+  }
+}

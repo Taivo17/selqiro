@@ -1,34 +1,47 @@
-# Praegune samm: varem loetud seisu selge tähistus
+# Praegune samm: avalik töö, jagamine ja pakkumiste värvid
 
-15.11.2026 Europe/Tallinn. Viimane vastu võetud Maci commit on
-`3aaebc6d663e6d11c02c49bed502b32ed4312852`; selle SQL-parandus, push ning
-Ready / Production on kinnitatud. Kasutaja võttis 15.11 vastu kahe vahelehe
-katse: vana kinnituse järel jäi uus blokeering alles. See töö on lõpetatud.
-
-Uus pakett muudab jagatud dialoogi seisukirjeldust. Varasema seisupildi kohal
-on „Varem loetud seis” ja selgitus, et see ei kinnita praegust seisu. Eduka
-lugemise järel on „Seis viimase kontrolli ajal”. Kui vana sihtrida puudub,
-eelistuste kokkuvõtet ei näidata. Unknown ja konflikt jäävad eraldi tulemusteks.
+16.11.2026 Europe/Tallinn. Viimane vastu võetud Maci/Giti ja Ready /
+Production-seis on `447d1a46a09f7fb6b907c2526e6164f0c88f2098`.
+Blokeeringu eemaldamise, õiguste paranduse ja varasema seisupildi sõnastuse
+vastuvõtud säilivad. Käesolev uus väljaanne on eraldi ettevalmistatud muudatus.
 
 ## Üks järgmine käsk
 
-Paki `selqiro-salvestatud-seisu-teade-20261115.zip` Downloads-kausta lahti:
+Paki `selqiro-too-ja-jagamine-20261116.zip` Downloads-kausta lahti. Käivita:
 
 ```bash
-python3 -I -B "$HOME/Downloads/selqiro-salvestatud-seisu-teade-20261115/uuenda.py" --publish
+python3 -I -B "$HOME/Downloads/selqiro-too-ja-jagamine-20261116/uuenda.py" --publish
 ```
 
-Käsk kontrollib tegelikku main-haru, täpset 3aaebc6 alust, kogu indexit,
-tööpuud, lähtefaile ja kinnitatud remote’i. Eelmise eduka SQL-paranduse
-päevikut loetakse hoitud luku all ning säilitatakse baiditäpselt. Rakendatakse
-ainult 19 üle vaadatud faili, käivitatakse üks uus 7-juhuline sihttest ja
-muudetud kliendi build, seejärel luuakse täpse ulatusega commit ning tehakse push.
-Maci olemasolevaid lukustatud sõltuvusi kasutatakse paigaldamise või uuendamiseta.
+Uuendaja kontrollib enne kirjutusi olemasoleva `/Users/taivo/selqiro` projekti
+tegelikku main-haru, täpset 447d1a4 alust, kogu indexit, tööpuud, lähtefaile,
+kinnitatud GitHubi remote'i ja eelmise eduka jooksu privaatset originaalpäevikut.
+Kontroll hõlmab kõiki 1776 alusfaili. Muutunud alust või kasutaja lisatud
+muudatusi ei kirjutata üle. Eelmist päevikut hoitakse lugemisluku all ja
+säilitatakse baiditäpselt. Vana paigaldaja käivitamine pole selle sammu osa.
 
-Uuendajal ei ole SQL-i, Storage’i, teenuste ühendamise ega vana paigalduse
-kordamise sammu. Uus väljaanne kasutab eraldi päevikut. Kui sama jooksu
-lõpetamine katkeb, kontrollitakse tegelikku seisu ning lõpetatud etappe ei
-korrata. Tundmatu protsessi või avaldamise tulemus peatab automaatse jätku.
+Uus pakett rakendab täpse faililoendi, kasutab Maci olemasolevaid lukustatud
+sõltuvusi, käivitab uue kliendi sihtkontrollid ja build'i. Seejärel kontrollib
+ta olemasoleva Supabase'i projekti ja andmebaasilepingut, teeb ühe lisava
+SQL-tehingu ning loeb sõltumatult selle tulemust. Alles kinnitatud tulemuse
+järel tehakse uue allika täpse ulatusega commit ja push.
+
+SQL lisab tööpakkumiste ning nende sõnumikonteksti toe. Olemasolevaid teenuseid,
+kuulutusi, fotosid, sõnumeid või ajalugu ei kustutata. Auth-skeemi hallatud
+õigusi ei jagata ümber. Sõltuvusi ei paigaldata, teenuseid uuesti ei ühendata
+ning Storage'i toiminguid pole. Töö avalik otsing on algusest sisse lülitatud.
+
+## Kui töö katkeb
+
+Sama väljaande jätk kasutab sama käsku ja sama eraldi päevikut. Juba läbitud
+sihtkontrolle, build'i, commit'i või push'i kontrollitakse tegeliku seisuga
+ning lõpetatud etappe ei korrata.
+
+Kadunud SQL-vastusele järgneb ainult sõltumatu lugemine. Kui täpselt sama
+paigaldus on kinnitatult rakendunud, saab lõpetamist jätkata. Kui varem
+alustatud kirjutuse tulemus on endiselt puudu või ebaselge, peatab uuendaja
+automaatse jätku. Sellisel juhul saada raport; ära nulli päevikut ega käivita
+vana SQL-i käsitsi. Eelnev rakendus ja kõik raportid peavad säilima.
 
 ## Saada selle jooksu täpne raport
 
@@ -39,26 +52,52 @@ SAADA SEE FAIL: <selle jooksu absoluutne JSON-tee>
 ```
 
 Saada just see unikaalne privaatne Downloads-koopia. Kui kopeerimine ei
-õnnestu, näidatakse kontrollitud originaali; kui Finder ei avane, on täpne
+õnnestu, näidatakse kontrollitud originaali. Kui Finder ei avane, on täpne
 tee terminalis. Kui raportit ei loodud, saada `PEATATUD`-rida. Võimalikult
-aegunuks märgitud raportiga saada ka peatumisrida. Ära kustuta ega nulli päevikuid.
+aegunuks märgitud raportiga saada ka peatumisrida. Varasemaid päevikuid ja
+raporteid ei kustutata ega asendata.
 
-## Veebiversiooni kontroll
+## Pärast edukat jooksu
 
-Pärast edukat raportit peab Vercelis olema **sama uue commit’i Ready /
-Production**. Seejärel värskenda portaali. Kontrolli ainult, et edukalt loetud
-seisu pealkiri on „Seis viimase kontrolli ajal”. Kui toimingu tulemus jääb
-ebakindlaks, peab varasema info juures olema „Varem loetud seis”; automaatset
-korduskirjutust ei lisandu. Varem vastu võetud blokeeringu ja peitmise katset
-pole vaja uuesti teha.
+Kontrolli Vercelis raportis nimetatud **sama uue commit'i Ready / Production**
+tulemust ja värskenda portaali. Uuendaja ei nimeta build'i, Git push'i ega
+avalikku veebilehte iseseisvalt Verceli deployment'i kviitungiks.
+
+Tee üks uus tegelik kasutustee olemasolevate kontodega:
+
+1. Vali aktiivne ettevõtte identiteet ja ava Minu ala tööpakkumised. Lisa oma
+   tegelikku eesmärki kirjeldav tööpakkumine; kontrolli ametinimetust,
+   asukohta, tööviisi ning vajadusel tasuvahemikku. Avaldamine on üks selge
+   tegevus koos avaldamistingimustega.
+2. Kontrolli sama pakkumist ettevõtte profiilis, avalikus Töö otsingus ja
+   selle detailvaates. Filtriga otsingust detaili minnes ning brauseri
+   Tagasi nupuga naastes peavad otsing ja filtrid säilima.
+3. Vajuta Jaga. Toetatud seadmel avaneb jagamisvalik; mujal saab lingi
+   kopeerida või käsitsi valida. Ava puhas link väljalogitud aknas. Sama
+   Jaga tegevus peab olema olemas tavakuulutusel ja teenusel. Postitamist
+   sotsiaalmeediasse ei nõuta; lingi kopeerimine ei avalda ise postitust.
+4. Ava töö teise olemasoleva kontoga ja vali kontakt. Vestluses peab olema
+   sinine tööpakkumise kontekst koos nimetusega. Enda ja teise poole
+   sõnumite paigutus jääb tuttavaks. Kontaktinupp ise sõnumit ei saada.
+5. Muuda või peata enda pakkumine ning kontrolli uuendatud tulemust.
+   Peatatud pakkumine peab avalikust otsingust kaduma, kuid jääma omanikule
+   ja varasemasse vestlusajalukku. Pikendamine annab ühe kalendrikuu
+   kehtivuse serveri reegli järgi; see ei avalda peatatud pakkumist ega
+   tõsta vana pakkumist kunstlikult otsingu ette.
+
+Tõrke korral saada täpne teade ja selle sammu pilt. Juba vastu võetud
+blokeeringu, teenuste ja kuulutuste laiu katseid ei korrata.
 
 ## Tõendi piir
 
-Kohalik 7-juhuline test ja täielik build läbisid. Tegelik brauserikontroll jäi keskkonna piirangute tõttu tegemata. Kohalik Chromium peatus socket()-õiguse vea tõttu enne ühegi testijuhu käivitumist. Lubatud CDP-brauser ei pääsenud kohaliku HTTP-serverini ning selle file-URL katse keelas brauseri turvapoliitika. Edasised brauserikatsed lõpetati; käesolevat kasutajaliidese tulemust pärisbrauseris ei ole kinnitatud.
-Pakendi lõplikud tõendid on `kontrollid/` all. Need ei ole uue Maci jooksu,
-live-remote’i ega Verceli deployment’i kviitung.
+Ettevalmistuskeskkonna sihtkontrollide, SQL-kontrollide, build'i ja pakendi
+seosed on `JOBS_PUBLIC_20261116.md`-s ning paki `kontrollid/` all. Kohalik
+SQL-katse ei tõenda hosted andmebaasi muudatust. Reacti renderdamise katse
+ei asenda pärisbrauseri kasutust. Sotsiaalse eelvaate metaandmed ei tõenda
+Facebooki või mõne teise teenuse tegelikku eelvaadet; seda saab kontrollida
+pärast uue veebiversiooni avaldamist avaliku lingiga.
 
 Üks autoriteetne seis on `CURRENT_STATE.json`; sellest genereeritakse
-`docs/99_V2_HANDOFF_NEXT_CHAT.md`. Täpne muudatuse ja varasema vastuvõtu piir
-on `PROVIDER_STATE_FEEDBACK_20261115.md`-s. Ajaloolised SQL-juhendid ei ole
-praegused käivitamiskäsud.
+`docs/99_V2_HANDOFF_NEXT_CHAT.md`. Arhitektuuri leping on
+`docs/architecture/jobs-public-v1.md`. Varasema kuupäevaga juhendid ja
+profiilipõhise alguse plaan on ajalugu, mitte tänased käivitamiskäsud.

@@ -20,6 +20,9 @@ import ManagedStoreCategorySection from "../../../src/features/store-category-ma
 import { v2IntegrationEnabled } from "../../../src/shared/config/v2Integration";
 import ProviderManagementSection from "../../../src/features/viewer-provider-controls/components/ProviderManagementSection";
 import { providerControlMessages } from "../../../src/features/viewer-provider-controls/model/providerControlMessages";
+import MyJobsSection from "../../../src/features/jobs/components/MyJobsSection";
+import { jobMessages } from "../../../src/features/jobs/model/jobMessages";
+import { getOfferTheme,offerButtonLayout } from "../../../src/shared/marketplace/offerTheme";
 
 const actionClass = "inline-flex min-h-11 items-center justify-center rounded-full border border-neutral-200 bg-white px-5 py-3 text-sm font-bold shadow-sm transition hover:border-neutral-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700";
 const navClass = "flex min-h-11 items-center rounded-2xl px-4 py-3 text-sm font-bold text-neutral-700 hover:bg-neutral-100 hover:text-black focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700";
@@ -49,6 +52,7 @@ export default function V2MyAreaPage() {
   const { language: uiLanguage, t } = useV2Translation(accountUiMessages);
   const {t: serviceText} = useV2Translation(serviceEditorMessages);
   const {t: providerText} = useV2Translation(providerControlMessages);
+  const {t: jobText} = useV2Translation(jobMessages);
 
   const { identity, actor, loading, anonymous, error, refresh } = useMyAreaIdentity();
   const integrated = v2IntegrationEnabled();
@@ -72,6 +76,7 @@ export default function V2MyAreaPage() {
         <nav aria-label={t("my_area")} className="sticky top-28 space-y-1 rounded-[30px] border border-black/5 bg-white p-4 shadow-sm">
           <a href="#my-area-listings" className={navClass}>{t("listings")}</a>
           <a href="#my-area-services" className={navClass}>{t("services")}</a>
+          <a href="#my-area-jobs" className={navClass}>{jobText("myJobs")}</a>
           <a href="#my-area-categories" className={navClass}>{t("store_categories")}</a>
           <a href="#my-area-provider-controls" className={navClass}>{providerText("management")}</a>
           <Link href={messagesHref} className={navClass}>{t("messages")}</Link>
@@ -92,8 +97,9 @@ export default function V2MyAreaPage() {
               <p className="mt-3 max-w-2xl text-base leading-7 text-neutral-600">
                 {t("manage_listings_for_your_active_identity_and_open_conversations_with_buyers")} </p>
               <nav aria-label={t("quick_actions")} className="mt-5 flex flex-wrap gap-3">
-                <Link href="/v2/sell" className={actionClass}>{t("add_listing")}</Link>
-                <Link href="/v2/services/new" className={actionClass}>{serviceText("addService")}</Link>
+                <Link href="/v2/sell" className={`${offerButtonLayout} ${getOfferTheme("listing").button}`}>{t("add_listing")}</Link>
+                <Link href="/v2/services/new" className={`${offerButtonLayout} ${getOfferTheme("service").button}`}>{serviceText("addService")}</Link>
+                <Link href="/v2/my-area/jobs/new" className={`${offerButtonLayout} ${getOfferTheme("job").button}`}>{jobText("addJob")}</Link>
                 <a href="#my-area-categories" className={actionClass}>{t("store_categories")}</a>
                 <a href="#my-area-provider-controls" className={actionClass}>{providerText("management")}</a>
                 <Link href={messagesHref} className={actionClass}>{t("open_messages")}</Link>
@@ -118,6 +124,7 @@ export default function V2MyAreaPage() {
 
         <div id="my-area-listings" className="min-w-0 scroll-mt-28"><MyAreaListingsSection /></div>
         <div id="my-area-services" className="min-w-0 scroll-mt-28"><MyAreaServicesSection /></div>
+        <MyJobsSection identity={identity} actor={actor} loading={loading} error={error}/>
 
         {integrated ? <ManagedStoreCategorySection actor={actor} loading={loading} error={error} /> : null}
         <ProviderManagementSection />

@@ -445,3 +445,30 @@ By reporting this conversation, you share relevant conversation content with Sel
 Selqiro uses this only to review the case.
 
 This keeps messaging private while allowing support and safety work when needed.
+
+
+<!-- SELQIRO_JOB_MESSAGE_CONTEXT_20261116 -->
+## 16.11.2026 — approved public job contact flow
+
+The approved public-jobs release supersedes the earlier future-only job note
+above. One employer job is visible in public search, its business profile and
+its shareable detail page. Contact opens the existing identity-bound channel;
+it does not send the first message automatically. Application tracking and
+CV storage are outside this release.
+
+The job UUID has an explicit `job` context type. It is not passed as a numeric
+product-listing identifier. A new additive thread-v2 wrapper retains the old
+v1 authorization and schema_version 2 result, adding job cards only in their
+own context positions. Current conversation topic and historical per-message
+cards remain separate. Choosing an ordinary listing clears only the current
+job pointer, so deletion of that listing cannot revive an earlier job topic.
+
+The existing horse-contact recipient remains the publishing user account;
+job/service business contact targets the business owner account. A shared
+business identity alone does not prove the same four-key conversation channel.
+
+The shared offer theme gives listings an amber accent, services teal and jobs
+blue, always accompanied by a text label. Own/incoming message-bubble colours
+and alignment continue to identify the sender. Historical cards retain their
+original context. Full contract: `docs/architecture/jobs-public-v1.md`.
+Deployment and acceptance evidence: `docs/continuity/CURRENT_STATE.json`.

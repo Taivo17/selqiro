@@ -22,6 +22,7 @@ import PublicPhotoGallery from "../../../shared/media/PublicPhotoGallery";
 import { listingGalleryPhotos } from "../model/listingGalleryPhotos";
 import { useListingDetail } from "../model/useListingDetail";
 import ListingReturnBackButton from "../../listing-navigation/components/ListingReturnBackButton";
+import ShareOfferButton from "../../../shared/sharing/ShareOfferButton";
 import type {
   ProductListingDetail,
 } from "../../../entities/listing/model/types";
@@ -244,6 +245,7 @@ export default function ListingDetailPage({ listingId }: { listingId: string }) 
                   {t("contact_seller")} </button>}
                 <button className="rounded-full border border-neutral-200 bg-white px-5 py-3 text-sm font-black">
                   {t("save_listing")} </button>
+                {v2IntegrationEnabled() && <ShareOfferButton kind="listing" id={listing.id} title={listing.title || t("untitled_listing")} />}
               </div>
             </div>
 

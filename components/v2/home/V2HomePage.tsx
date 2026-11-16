@@ -3,6 +3,8 @@
 import { useV2Translation } from "@/src/shared/i18n/V2LanguageProvider";
 import { demoUi, type DemoTranslate } from "@/lib/i18n/catalogs/demoUi";
 import Link from "next/link";
+import { jobMessages,type JobMessageKey } from "../../../src/features/jobs/model/jobMessages";
+import { getOfferTheme } from "../../../src/shared/marketplace/offerTheme";
 
 type DiscoveryItem = {
   id: string;
@@ -13,7 +15,7 @@ type DiscoveryItem = {
   tag?: string;
 };
 
-const getStartCards = (t: DemoTranslate) => [
+const getStartCards = (t: DemoTranslate,jobText: (key: JobMessageKey) => string) => [
   {
     id: "startCards-0",
     title: t("listings"),
@@ -35,11 +37,11 @@ const getStartCards = (t: DemoTranslate) => [
   {
     id: "startCards-2",
     title: t("jobs"),
-    description: t("jobsSoon"),
-    action: t("comingSoon"),
-    href: null,
+    description: jobText("intro"),
+    action: jobText("viewAll"),
+    href: "/v2/jobs",
     actionClassName:
-      "border-neutral-200 bg-neutral-100 text-neutral-400",
+      getOfferTheme("job").button,
   },
 ];
 
@@ -57,13 +59,6 @@ const getTodayDiscoveries = (t: DemoTranslate): DiscoveryItem[] => [
     title: t("towUntil"),
     meta: t("temporaryServiceLocation"),
     tag: "LIVE",
-  },
-  {
-    id: "todayDiscoveries-2",
-    eyebrow: t("job"),
-    title: t("salesConsultant"),
-    meta: t("tartuBusiness"),
-    price: t("monthlySalary"),
   },
   {
     id: "todayDiscoveries-3",
@@ -213,7 +208,8 @@ function HorizontalRow({ items }: { items: DiscoveryItem[] }) {
 
 export default function V2HomePage() {
   const { t } = useV2Translation(demoUi);
-  const startCards = getStartCards(t);
+  const {t: jobText} = useV2Translation(jobMessages);
+  const startCards = getStartCards(t,jobText);
   const todayDiscoveries = getTodayDiscoveries(t);
   const featuredProducts = getFeaturedProducts(t);
   const featuredServices = getFeaturedServices(t);

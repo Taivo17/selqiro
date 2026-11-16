@@ -12,6 +12,8 @@ import {
   getFieldLabel,
 } from "../../../lib/categoryFields";
 import { getTranslation } from "../../../lib/i18n/useTranslation";
+import { shareOfferLink } from "../../../src/shared/sharing/shareOffer";
+import { publicOfferUrl } from "../../../src/shared/sharing/offerLink";
 
 type ListingImage = {
   id: string;
@@ -164,6 +166,15 @@ export default function ListingPage() {
   const [fullImageOpen, setFullImageOpen] = useState(false);
   const [controlsVisible, setControlsVisible] = useState(false);
   const [shareCopied, setShareCopied] = useState(false);
+  const [shareManualUrl, setShareManualUrl] = useState<string | null>(null);
+  const shareRunning = useRef(false);
+  const shareScope = useRef(id), shareSequence = useRef(0);
+  shareScope.current = id;
+  useEffect(() => {
+    shareSequence.current += 1; shareRunning.current = false;
+    setShareCopied(false); setShareManualUrl(null);
+    return () => { shareSequence.current += 1; };
+  }, [id]);
   const [sellerBlocked, setSellerBlocked] = useState(false);
   const [listingMenuOpen, setListingMenuOpen] = useState(false);
   const [reportOpen, setReportOpen] = useState(false);
@@ -368,45 +379,22 @@ export default function ListingPage() {
   };
 
   const shareListing = async () => {
-    if (!listing || typeof window === "undefined") return;
-
-    const shareUrl = window.location.href;
-    const shareTitle = listing.title || "Selqiro listing";
-    const shareText = `${translated.title} - ${listing.price}`;
-
-    setShareCopied(false);
-
+    if (!listing || shareRunning.current || typeof window === "undefined") return;
+    // The route retains bigint precision; the legacy row model uses a JS number.
+    const publicId = typeof id === "string" ? id : "", url = publicOfferUrl("listing", publicId);
+    if (!url) return;
+    const sequence = ++shareSequence.current, routeId = shareScope.current;
+    shareRunning.current = true; setShareCopied(false); setShareManualUrl(null);
     try {
-      if (navigator.share) {
-        await navigator.share({
-          title: shareTitle,
-          text: shareText,
-          url: shareUrl,
-        });
-        return;
+      const result = await shareOfferLink({kind: "listing", id: publicId, title: "Selqiro"}, {
+        share: typeof navigator.share === "function" ? data => navigator.share(data) : undefined,
+        copy: typeof navigator.clipboard?.writeText === "function" ? link => navigator.clipboard.writeText(link) : undefined,
+      });
+      if (shareScope.current === routeId && shareSequence.current === sequence) {
+        if (result === "copied") setShareCopied(true);
+        if (result === "manual") setShareManualUrl(url);
       }
-
-      await navigator.clipboard.writeText(shareUrl);
-      setShareCopied(true);
-
-      setTimeout(() => {
-        setShareCopied(false);
-      }, 2500);
-    } catch (error) {
-      console.error("Share failed:", error);
-
-      try {
-        await navigator.clipboard.writeText(shareUrl);
-        setShareCopied(true);
-
-        setTimeout(() => {
-          setShareCopied(false);
-        }, 2500);
-      } catch (clipboardError) {
-        console.error("Clipboard failed:", clipboardError);
-        alert("Could not share this listing.");
-      }
-    }
+    } finally { if (shareSequence.current === sequence) shareRunning.current = false; }
   };
 
 
@@ -827,6 +815,9 @@ export default function ListingPage() {
             >
               {shareCopied ? t("listingPage.linkCopied") : t("listingPage.shareListing")}
             </button>
+            {shareManualUrl && <input readOnly value={shareManualUrl}
+              aria-label={t("listingPage.shareListing")} onFocus={event => event.currentTarget.select()}
+              className="min-h-11 min-w-0 rounded-xl border border-black/10 bg-white px-3 text-sm" />}
 
             {user?.id && user.id !== listing.user_id && (
               <div ref={listingMenuRef} className="relative">

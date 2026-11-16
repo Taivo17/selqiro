@@ -1,0 +1,22 @@
+{
+  "format": "selqiro-continuity-preservation-v1",
+  "base_commit": "447d1a46a09f7fb6b907c2526e6164f0c88f2098",
+  "files": [
+    {
+      "path": "docs/continuity/CURRENT_STATE.json",
+      "sha256": "6713791e4544d46b4a24f94934d4df05417b63859c0ada8a0a88ab9ba3e6c3e2",
+      "bytes": 9536
+    },
+    {
+      "path": "docs/99_V2_HANDOFF_NEXT_CHAT.md",
+      "sha256": "ac54dc5de361cb67000862a1d06597da37668a8925355a933f5751f49b2f6b45",
+      "bytes": 9635
+    },
+    {
+      "path": "docs/continuity/HOSTED_PORTAL.md",
+      "sha256": "88d25068f7e2bbb3f2df8d8475ca0b70dced411e3f7e966992d3e62a81ed8c02",
+      "bytes": 3426
+    }
+  ],
+  "note": "These are the exact committed base documents. The later accepted receipt and screenshots are separately recorded in the new state; no old package or journal was rewritten."
+}
