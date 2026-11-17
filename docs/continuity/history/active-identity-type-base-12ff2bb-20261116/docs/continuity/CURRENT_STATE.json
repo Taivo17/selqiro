@@ -1,0 +1,56 @@
+{
+  "format": "selqiro_repo_handoff_v1",
+  "recorded_on": "16.11.2026 Europe/Tallinn — tööpakkumiste, jagamise ja pakkumiste värvide lähtepakett",
+  "archive": {
+    "lines": 5573,
+    "path": "docs/archive/99_V2_HANDOFF_NEXT_CHAT.before-price-core-20261004-6df0af9.md",
+    "sha256": "667e47990a7d3cc20ff53709cb861663b4565cf1d3c830eda88e0d18e60fdb8a"
+  },
+  "checkpoint": "Viimane vastu võetud Maci/Giti ja Ready / Production-seis on 447d1a4. Uus avaliku tööotsingu, jagamise ja pakkumiste värvide lähtekood on eraldi kandidaadis valmis ning sihtkontrollide ja täieliku build’iga kontrollitud. See pole veel Macis, GitHubis, hosted andmebaasis ega Vercelis rakendatud. Brauserikontroll on ühenduspiiri tõttu BLOCKED.",
+  "source": {
+    "Vastu võetud lähtealus": "main, 447d1a46a09f7fb6b907c2526e6164f0c88f2098; parent 3aaebc6d663e6d11c02c49bed502b32ed4312852; Git-puu 7e82726f2106f16b042944a925da058513d304a4, 1776 faili. Kõik kandidaadi lähtefailid võrreldi selle SHA256-inventuuriga enne muutusi. See on raportiga seotud tuletatud allikapilt, mitte uus live-Maci eksport.",
+    "Viimane tegelik raport": "selqiro-salvestatud-seisu-teade-20261115-raport-20261115-160125-a6cf1add692a.json, 264629 B, SHA256 ee196c4f11c950198da71dd43c3ff0a34d9ac57b40fdc43d9027d11befc07e6a. Stage complete, sihttest ja build passed, push verified. See väljaanne ei teinud andmebaasi ega Storage’i toiminguid.",
+    "Uus kinnitatud ulatus": "Ettevõtte tööpakkumise lisamine, muutmine, peatamine, lõpetamine ja ühe kalendrikuu pikendamine; profiil, otseviide ja avalik tööotsing esimesest versioonist. Jagamine tavakuulutusel, hobusepakkumisel, teenusel ja tööl. Merevaigukollane/türkiis/sinine seovad pakkumisliigi lisamisnupu ja vestluse kontekstikaardi.",
+    "Varasema plaani täpsustus": "15.11 profiili/otseviite põhisest algusest loobuti kasutaja uue otsusega. Üldine tööotsing on algusest avalik. Varem väljastatud plaanipakk SHA256 f60a8b1f93fe139ce03663cfb7211e89af8be34eb7f16fe49c6a1823d2aeaad4 säilib muutmata ajaloolise dokumendina.",
+    "Järjepidevus": "Kolm baiditäpset 447d1a4 continuity-faili on history/jobs-public-base-447d1a4-20261116/ all. Uus seisuüleandmine genereeritakse sellest JSON-ist. Varasemad SQL-, peitmise-, blokeeringu- ja sõnastusparanduse vastuvõtud säilivad.",
+    "Uus teostus": "Üks kanooniline jobs domeen, ettevõtte õigused ja olemasolev raha/tingimuste/identiteedi/sõnumite alus. Avalik otsing ja profiil kasutavad piiratud stabiilset kursorit. Üks Avalda nupp juhib püsivate päringutunnustega salvestust ja avaldamist. Täpsed moodulid ja uus SQL on samas kandidaadis."
+  },
+  "local_test": [
+    "40/40 uue kliendi sihtkontrolli PASS: 22 töö vormi, parsimise, kviitungi, konto ja otsingufiltri juhtu; 10 jagamise/meta ja 8 sõnumikonteksti juhtu. Tegelikud TS/TSX moodulid ja React SSR, sünteetilised HTTP/Auth/Storage/SQL-vastused; mitte pärisbrauser.",
+    "17 SQL-i käitumis- ja paigalduspiiri kontrolli PASS päris PostgreSQL/WASM-is (PGlite 0.5.13), mitte-superkasutajast postgres paigaldajaga. Auth kasutusõigus on olemas, grant-option puudub. Kehtivus/UTC, CAS/kviitungid, avalikkus, peitmine/blokk, konteksti ajalugu ning kataloogi kaitsed on kaetud. Native paralleelseansse ega pilveteenust ei kasutatud.",
+    "Täielik Next 16.2.1 webpack build ja TypeScript PASS; 729 runtime-/seadistussisendit, drift 0, 31 staatilist lehte. Esimene build väljus 0-ga, aga kolm veateate moodulit muutusid jooksu ajal; see katse säilitati ja lõplik build tehti stabiilsete baitidega uuesti.",
+    "22 uuendaja sihtkontrolli: 14 protsessi/raporti/Giti piiri ning 8 andmebaasi jätkutee juhtu. Väljaande lõplikud helperi pin’id ja suletud pakendi päris ajutise Git-puu/indexi/commit/push’i tõend on kontrollid/ all; SQL-transport on selles tarnekatses sünteetiline.",
+    "Brauserikatse BLOCKED: lubatud CUA brauser andis http://localhost:3216/v2/jobs avamisel net::ERR_CONNECTION_REFUSED. Visuaalset paigutust, native share’i ega tegelikku Auth/SQL kasutusteed ei märgita läbinuks; alternatiivse brauseri või file-URL kaudu ei jätkatud.",
+    "Varasemad SQL-testid, peitmise ja blokeeringu kasutuskatse ning 447d1a4 UI-vastuvõtt säilivad. Uue SQL-i ebaõnnestunud fixture-katsed ja paranduste põhjused on tests/test-history.json-is; neid ei kustutatud ega esitata PASS-ina."
+  ],
+  "production": [
+    "447d1a4 Ready / Production, Maci commit/push ja kasutaja eestikeelse seisukirjelduse pilt on vastu võetud. Eelmiste lõpetatud paigalduste kordamist ei nõuta.",
+    "Uue tööpakkumiste SQL-i, Maci lähtekoodi, commit/push’i ja Ready / Productioni kviitungid puuduvad veel; need saadakse alles uue paki tegelikust jooksust.",
+    "Sotsiaalmeedias jagamine on kasutaja enda algatatud tegevus. Jagamisvaliku avamine või URL-i kopeerimine ei tõenda sotsiaalpostituse avaldamist ega platvormi eelvaadet."
+  ],
+  "next_action": "Paki selqiro-too-ja-jagamine-20261116.zip Downloads-kausta lahti ning käivita HOSTED_PORTAL.md üks uuenda.py --publish käsk. Saada selle jooksu täpne SAADA SEE FAIL raport; siis kontrolli sama uue commit’i Ready / Production ning üht uut tööpakkumise, jagamise ja sõnumikonteksti kasutusteed.",
+  "stop_rule": "Uus uuendaja kontrollib enne kirjutust täpset 447d1a4 haru/HEAD-i, kogu indexit, tööpuud, lähtefaile, kinnitatud remote’i ja eelmist edukat privaatset päevikut. Kasutaja muudatused ning päevikud säilitatakse. SQL-i kadunud vastusele järgneb sõltumatu READ; tõendamata tulemust ei korrata automaatselt. SAADA SEE FAIL näitab alati selle jooksu täpset raportit.",
+  "read_next": [
+    "docs/99_V2_HANDOFF_NEXT_CHAT.md — sellest seisust genereeritud üleandmine.",
+    "docs/continuity/HOSTED_PORTAL.md — käesoleva väljaande rakendamise ja vastuvõtu juhend.",
+    "docs/continuity/JOBS_PUBLIC_20261116.md — ettevalmistuse täpsed tulemused, allikad ja piirid.",
+    "docs/architecture/jobs-public-v1.md — tööpakkumiste, jagamise ning värvide kinnitatud leping.",
+    "docs/continuity/SERVICE_ACCESS.json, docs/03_AI_RULES.md ja docs/00_PROJECT_DNA.md — säilivad sihid ja püsireeglid."
+  ],
+  "boundaries": [
+    "Üks olemasolev portaal, hoidla, Supabase’i projekt ja keele-eelistus. English põhikeel/fallback, Eesti teine keel. Kasutaja sisu/rubriiginimesid ei tõlgita. Tavaline osalemine, rubriigid ja pikendamine ei sõltu Energy ostust.",
+    "Tööpakkumine kuulub aktiivsele ettevõtte identiteedile; see ei tähenda tasulise Business-taseme nõuet. Avaldamine, tavaline otsing, jagamine ja pikendamine ei sõltu Energy ostust. Üks kuu tähendab serveris UTC kalendrikuud, mitte fikseeritud 30 päeva.",
+    "Töö aegumine/peatamine/lõpetamine peidab pakkumise avalikest vaadetest, kuid jätab sisu omanikule ning varasema vestluse alles. Pikendamine ei muuda avaldamiskuupäeva, otsingujärjestust ega peatatud/lõpetatud staatust. CV-hoidlat, värbamise töölauda ega uut fotolaadijat ei lisata.",
+    "24 tunni peitmine on konto ühe pakkuja identiteedi avastuseelistus, püsiv blokk eraldi kontodevaheline kirje. Ühine menüü on avalikul profiilil; vestluse blokeerimine ja Minu ala haldus säilivad. Vaatamiskoguse väravat/jälgimist ei lisata. Ühe eelistuse eemaldamine ei eemalda teist ega vastaspoole blokki.",
+    "Teenuse aegumine säilitab sisu ja rubriigiseosed omanikule. Peatatud teenuse pikendus ei avalda seda. Teksti/foto/rubriigi/staatuse muutus ei pikenda ega anna kunstlikku uut otsingukohta. Tundmatu pikendus vajab lugemist.",
+    "Avalikud rubriigifiltrid arvestavad nähtavat sisu ja esivanemaid enne lehekülge. Omaniku valija näitab kõiki rubriike; rubriigi eemaldamine säilitab sisu ja fotod. 80 teenust pole konto piir.",
+    "Avaliku foto-URL-i ligipääsu ei muuda pelgalt kuulutuse aegumine privaatseks. Hosted fotode taustakoristus ja tehniliste paneelide eemaldamine on avamiseelne töö. Sellel updateril pole Storage’i toiminguid.",
+    "Universaalne identiteedi üleandmine/privilegeeritud kirjutaja invariant ja vana aktiivse identiteedi seadistaja turvapiir jäävad eraldi. Energy, maksete tuum ja piiratud AI abi säilivad V2 ulatuses. Kontosid, kuulutusi, pilte, sõnumeid ega ajalugu ei kustutata."
+  ],
+  "environment": [
+    "Olemasolevad /Users/taivo/selqiro, https://github.com/Taivo17/selqiro.git, https://selqiro.vercel.app ning Supabase vyjletlmwoiwxsnsunlm. Maci tegelik seis kontrollitakse enne uut kirjutust. Uut hoidlat ega portaali ei looda.",
+    "Supabase CLI 2.117.0 olemasolev viie faili pin säilib. Sõltuvusi Macis ei paigaldata ega teenuseid uuesti ei ühendata. Käesoleva uue SQL-i testimiseks kasutatav PGlite 0.5.13 on eraldi ettevalmistuskeskkonnas, mitte projekti uus sõltuvus.",
+    "Uus eraldi jobs-public-20261116 päevik; eelmine edukas provider-state-feedback-20261115 päevik püsib ainult lugemiseks lukus. Build/testid enne ühte lisavat SQL-tehingut, sõltumatu verify enne commit/push’i.",
+    "Iga jooks annab privaatse unikaalse Downloads-raporti ja täpse SAADA SEE FAIL tee, Finderi /usr/bin/open -R kutse kuni 5 sekundit. Originaal, varasemad koopiad ja võimaliku aegunud raporti märge säilivad."
+  ]
+}

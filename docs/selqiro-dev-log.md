@@ -2109,3 +2109,23 @@ selle lisandi eelnevad 149182 päevikubaiti säilivad. Üks järgmine käsk on
 selqiro-too-ja-jagamine-20261116/uuenda.py --publish ning saadetakse selle
 jooksu täpne SAADA SEE FAIL raport. Väljastatud pakke, kasutaja muudatusi,
 kontosid, sisu, fotosid, sõnumeid ega päevikuid ei kustutata.
+
+
+## 16.11.2026 — töö kasutuselevõtt ja aktiivse profiili tüübi parandus
+
+Vastu võetud tegelik jobs-jooks lõpetas 12ff2bb111944c463a6c1797cc3cbf35046de6e1,
+Maci sihtkontrolli/build’i, ühe SQL-tehingu eraldi verify-ga ning kinnitatud push’i.
+Kasutaja pilt kinnitab sama commit’i Ready / Production; töö tühivaade ja
+Minu ala värvinupud on nähtavad. Täpne raport SHA256
+ed91af6c909b5e13e023219fe155f9f6bddf9c12c372e7108b88a08eafdf76c1.
+
+Pildi Eraisik silt viis vana adapteri lähtekoodiveani: profiili RPC ei anna
+tüüpi, kuid lugeja nimetas puuduva tüübi private-iks. Ette valmistatud
+parandus kasutab sama aktiivse ID lubatud identiteedirea tegelikku tüüpi
+ja kontrollib konto/ID seost üle päringute. 17 uue sihtkontrolli ja
+täielik build PASS; brauseriseis BLOCKED. SQL-i ei muudeta ega korrata.
+
+Paranduse Maci rakendus, uus commit/push ja deployment on veel kinnitamata.
+Uus lähtekoodi uuendaja ning selle katsed on eraldi väljaandes; varasemad
+pakid, algsed raportid ja ajaloolised dokumendibaidid säilivad. Üks järgmine
+käsk on HOSTED_PORTAL.md-s; pärast avaldamist kontrollitakse töö lisamise vormi.

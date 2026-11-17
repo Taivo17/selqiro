@@ -1,0 +1,18 @@
+{
+  "base_commit": "12ff2bb111944c463a6c1797cc3cbf35046de6e1",
+  "boundary": "Exact committed preparation-time documents retained. Actual execution was accepted from the later user report and screenshots.",
+  "files": {
+    "docs/continuity/CURRENT_STATE.json": {
+      "bytes": 9199,
+      "sha256": "e5c5112417b0896c40d26407ef2dda0a4d72ca6b8073275fb84214c93b05ee55"
+    },
+    "docs/99_V2_HANDOFF_NEXT_CHAT.md": {
+      "bytes": 9290,
+      "sha256": "9a07021fe51728aa35d46012504dfcb9645ce5b3a53eda690393fae381db77cd"
+    },
+    "docs/continuity/HOSTED_PORTAL.md": {
+      "bytes": 5348,
+      "sha256": "6baabae4ca2501a0af551c5b8c3a73539ec6fb0b55b8afcd65aa13746dec4051"
+    }
+  }
+}

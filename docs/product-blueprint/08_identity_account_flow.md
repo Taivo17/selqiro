@@ -408,3 +408,17 @@ private account ownership behind the scenes.
 One account can own many identities.
 
 But every public action must clearly belong to one identity.
+
+
+## Aktiivse identiteedi lugemine — täpsustus 16.11.2026
+
+Aktiivne ID tuleb profiles.active_identity_id väljast ja peab leiduma sama
+konto get_my_identities vastuses. Identiteedi tüüp tuleb selle täpse rea
+type väljast. Tüübita profiilivastus, nimi ega e-post ei tõenda eraisiku
+või ettevõtte tüüpi. Profiili avalik nimi/pilt võib täiendada ainult sama
+identity_id rida; profiilirea id ei ole identiteedi tunnus.
+
+Konto ja aktiivne ID kontrollitakse lugemise piiril. Puuduva rea või
+muutunud konteksti korral ei valita esimest identiteeti ega luua võltsitud
+fallback-private tulemust. Kliendi tüüp ei asenda serveri omandi või
+ettevõtteliikmesuse kontrolli. Täpne kasutuselevõtu piir on CURRENT_STATE.json-is.
