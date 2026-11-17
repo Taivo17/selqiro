@@ -1,42 +1,41 @@
 {
   "format": "selqiro_repo_handoff_v1",
-  "recorded_on": "16.11.2026 Europe/Tallinn — töö kasutuselevõtt vastu võetud; aktiivse profiili tüübi parandus ette valmistatud",
+  "recorded_on": "17.11.2026 Europe/Tallinn — töö lisamine ja nähtavus vastu võetud; jaotiste kujundus ette valmistatud",
   "archive": {
     "lines": 5573,
     "path": "docs/archive/99_V2_HANDOFF_NEXT_CHAT.before-price-core-20261004-6df0af9.md",
     "sha256": "667e47990a7d3cc20ff53709cb861663b4565cf1d3c830eda88e0d18e60fdb8a"
   },
-  "checkpoint": "Töö, jagamise ja värvide väljaanne on Macis rakendatud ning commit 12ff2bb on üles lükatud. Tegelik raport kinnitab sihtkontrolli, build’i, ühe SQL-tehingu ja eraldi järelkontrolli; kasutajapilt kinnitab sama commit’i Ready / Production. Pildid näitavad tööotsingut ja lisamisnuppe. Leiti vana ühise identiteedilugeja skeemiviga: tüübita profiilivastus muutus eraisikuks. Eraldi lähtekoodiparandus on kontrollitud, kuid veel Macis rakendamata. Töö päris avaldamise kasutustee ootab selle paranduse vastuvõttu.",
+  "checkpoint": "Aktiivse identiteedi tüübi parandus on tegeliku Maci raporti järgi rakendatud ja commit 0e9197e üles lükatud; kasutaja kuvatõmmis kinnitab sama commit’i Ready / Production. Kasutaja kinnitas tööpakkumise lisamise ning nähtavuse tööotsingus ja Minu alas. Need katsed on vastu võetud. Järgmine väike muudatus on teenuste roheka ja töö sinise kogumipaneeli hele taust, piirjoon ning 6 px ülariba, järgides kuulutuste olemasolevat kujundust. Kujundus on eraldi pakina ette valmistatud; selle Maci rakendus ja deployment pole veel kinnitatud.",
   "source": {
-    "Viimane tegelik lähtealus": "main, 12ff2bb111944c463a6c1797cc3cbf35046de6e1; parent 447d1a46a09f7fb6b907c2526e6164f0c88f2098. Raporti täielikud allika/indexi/clean-main/remote kontrollid seovad 1863-faililise puu 254f6b3bf53b3767519218fa33ad2a0b733d127a. Kohalik koopia on selle põhjal tuletatud, mitte uus live-Maci eksport.",
-    "Vastu võetud jooks": "16.11.2026 14:36:52–14:37:51 Europe/Tallinn. selqiro-too-ja-jagamine-20261116-raport-20261116-143751-a5408b43ea69.json, 283459 B, SHA256 ed91af6c909b5e13e023219fe155f9f6bddf9c12c372e7108b88a08eafdf76c1. Complete, tests/build passed, database verified, push verified, eelmine päevik säilis.",
-    "Konkreetne parandus": "get_my_active_identity_profile ei väljasta type välja. Ühine lugeja seob profiili täpse active_identity_id järgi get_my_identities tegeliku tüübiga. Puuduvat/tundmatut tüüpi ei arvata eraisikuks ega valita suvalist esimest identiteeti. Konto ja aktiivne ID peavad lugemise alguses/lõpus klappima.",
-    "Ulatus ja õigused": "Muudatus on kliendi ühises identiteedilugejas ja sihtkontrollides. Olemasolevad jobs RPC-d, serveri ettevõtte/liikmesuse kontroll, avaldamine, jagamine, värvid ning kasutajaandmed säilivad. Uuel parandajal pole andmebaasi, Supabase CLI ega Storage’i toiminguid.",
-    "Tõendi piir": "Pildil olev Eraisik silt pole tõend konto tegeliku identity.type kohta. Me ei lugenud kasutaja identiteediridu ega loonud tööpakkumist. Vana koodi ja hoidla RPC skeemi vastuolu taastoodetakse sihtkontrollis.",
-    "Järjepidevus": "12ff2bb kolm varasemat continuity-faili säilivad history/active-identity-type-base-12ff2bb-20261116 all. Mõlemad välja antud pakid ja algsed raportid säilivad. Uus seisuüleandmine genereeritakse ainult sellest JSON-ist."
+    "Viimane vastu võetud lähtealus": "main, 0e9197e250e19f260a6b92ab4dec96c89ca1a183; parent 12ff2bb111944c463a6c1797cc3cbf35046de6e1. Raporti ja väljastatud paki järgi tuletatud 1869-faililine Git-puu on 67ec9b0b71449be724fca6b133d80ae96ea65e49. See ei ole uus live-Maci eksport.",
+    "Tegelik raport": "17.11.2026 11:20:49–11:21:25 Europe/Tallinn. selqiro-aktiivse-profiili-parandus-20261116-raport-20261117-112125-a3715b406015.json, 277904 B, SHA256 91563403068f36e42046467672e471c52c3978fb14b01589bffd319490a31c13. Complete, tests/build passed, push verified, database/storage not_performed; eelmine jobs-päevik säilis.",
+    "Kasutuse vastuvõtt": "Kasutaja kinnitas tööpakkumise loomise ja nähtavuse avalikus töö rubriigis ning Minu alas. Pildid näitavad ettevõtte identiteeti, avaldatud töö editori, otsingutulemust, avalikku detaili ja omaniku haldust. Valmis katsed säilivad, neid selle kujunduse pärast ei korrata.",
+    "Uue muudatuse ulatus": "Üks ühine esitluse abiline offerTheme.ts-is ning sama taseme kogumid otsingus, Minu alas ja avalikul profiilil. Teenused teal-50/200/500, töö blue-50/200/500; kuulutuste amber-kujundus säilib. Sisekaardid on valged. Vormide ja detailide struktuuri, lugemist/salvestamist ega SQL-i ei muudeta.",
+    "Tõendi piir": "Uue kujunduse lähtekood ja kohalik build on kontrollitud. Selle ettevalmistus ei tõenda uut Maci commit’i, push’i ega Verceli avaldamist. Varasem Jaga-nupu pilt ei tõenda tegelikku jagamist; profiili tööpakkumise ja sõnumikontakti kasutus jääb eraldi vastuvõtuks.",
+    "Järjepidevus": "0e9197e kolm continuity-faili säilivad baiditäpselt history/offer-section-theme-base-0e9197e-20261117 all; arenduslogi täiendatakse lõpus. Varasemaid pakke ja raporteid ei muudeta. Üleandmine genereeritakse ainult sellest JSON-ist."
   },
   "local_test": [
-    "Uue identiteedilugeja 17 sihtkontrolli PASS; tegelikud TypeScripti moodulid ja sünteetiline Auth/RPC transport. Vana tüübita profiili business → private viga taastoodetud eraldi, parandatud tulemus kontrollitud. Konto/aktiivse ID vahetus, puuduv ligipääs ja vigane tüüp on kaetud.",
-    "Uue paranduse täielik Next.js build PASS, 729 kontrollitud runtime-/seadistussisendit, drift 0. Lõplikud sisendräsid ja build’i logi on paki kontrollid/ all.",
-    "Uue lähtekoodi uuendaja täpne ulatus, eelneva raporti lugemislukk, katkestusest jätk ning ajutise kohaliku Giti/indexi/commit/push’i kontrollid on paki kontrollid/ all. Nende katsed ei käivita pilveteenust; simulatsioonid on eraldi märgitud.",
-    "Tegelik 12ff2bb Maci jooks kinnitab eelmiste kliendi sihtkontrollide ja build’i exit 0. Raportis on nende logide mahud/räsid; logifailide sisu ei saadetud ning seda ei nimetata sõltumatult uuesti loetuks.",
-    "Varasemad 40 kliendikatset, 17 SQL-katset ja 22 jobs-uuendaja katset säilivad; neid ei korratud. Jobs SQL-i rakendamine on tegeliku raporti järgi vastu võetud.",
-    "Paranduse brauseriseis: BLOCKED. Täpne põhjus ja piir on kontrollid/browser-result.json-is. Päris tööpakkumise vorm, avaldamine, jagamine ning kontakt vajavad uue veebiversiooni kasutustõendit."
+    "Kujunduse lähtekoodi ülevaatus PASS: täpne 10-faililine runtime-ulatus, ühised staatilised Tailwindi klassid, kogumite toon/ülariba ja valged sisekaardid. Uusi andmepäringuid ega äriloogikat pole.",
+    "Kujunduse täielik Next.js build PASS, 729 fikseeritud sisendit, drift 0. Sisendräsid ja logi on paki kontrollid/ all. Klassimuudatust kordavaid rakendusteste ei lisata; application_tests=not_required_style_only.",
+    "Uue väljaande uuendaja kontrollid ja eraldatud kohaliku Giti commit/push/jätkamise katse on paki kontrollid/ all. Build ise on päriselt tehtud eraldi kandidaadil; uuendaja protsessipiire katsetatakse märgitud simulatsiooniga.",
+    "Tegelik 0e9197e Maci jooks kinnitab identiteedi sihtkontrolli ja build’i edu. Raportis on algsete logide mahud/räsid; neid logifaile siia ei saadetud. Valmis identiteedi- ja jobs-katseid ei korratud.",
+    "Uue kujunduse brauseriseis: BLOCKED. Täpne tulemus ja piir on kontrollid/browser-result.json-is. Pilvepäringuid ega kasutajaandmete muudatusi selle ettevalmistusega ei tehta."
   ],
   "production": [
-    "12ff2bb Ready / Production on kinnitatud kasutaja Screenshot 2026-11-16 at 14.39.09.png pildiga. See on vastava deployment’i staatuse visuaalne tõend; API deployment-ID-d ei küsitud.",
-    "Jobs SQL seis applied on eraldi verify-ga kinnitatud 16.11 kell 14:37:37 Europe/Tallinn. Kõik seitse guard’i ja neli enne/pärast invarianti klapivad; lõppseis tuleb database_after väljast, mitte varasemast database_last_read preflight’ist.",
-    "14.45.29 pilt näitab Minu ala kolme värvinuppu ning Eraisik silti. 14.45.48 pilt näitab sinist tööotsingut ja ausat tühja seisu. Need ei kinnita töö avaldamist, jagamist ega sõnumikonteksti päris kasutust.",
-    "Aktiivse profiili tüübi lähtekoodiparandus on ette valmistatud. Selle Maci rakendamine, uus commit/push, Ready / Production ja tegelik kasutus on veel kinnitamata."
+    "Screenshot 2026-11-17 at 11.22.58.png kinnitab 0e9197e Ready / Production staatust main-harul. See on kasutaja saadetud deployment’i pilt; eraldi API deployment-ID-d ei küsitud.",
+    "Kasutaja 17.11.2026 kinnitus ning kuvatõmmised võtavad vastu tööpakkumise avaldamise, tööotsingus nähtavuse ja Minu ala halduse. Avalik detailvaade on pildil nähtav.",
+    "Jobs SQL-i varasem rakendamine ja eraldi verify on vastu võetud 16.11.2026 tegeliku jobs-raporti alusel. Identiteediparanduses ega selles kujundussammus SQL-i ei korrata.",
+    "Uus jaotiste kujundus on ette valmistatud. Selle Maci rakendus, uus commit/push, Ready / Production ja värvide tegelik visuaalne vastuvõtt on veel kinnitamata."
   ],
-  "next_action": "Paki selqiro-aktiivse-profiili-parandus-20261116.zip Downloads-kausta lahti ja käivita HOSTED_PORTAL.md üks uuenda.py --publish käsk. Saada selle jooksu täpne raport. Pärast sama uue commit’i Ready / Production tulemust ava Minu ala → Lisa tööpakkumine ning kontrolli õiget tööandjat ja vormi avanemist enne esimese pakkumise avaldamist.",
-  "stop_rule": "Parandaja kontrollib enne kirjutust täpset 12ff2bb haru/HEAD-i, kogu indexit, tööpuud, kõiki alusfaile, kinnitatud remote’i ning eelmise jobs-jooksu privaatset originaalraportit. Muutunud alust, kasutaja tööd ega päevikuid ei kirjutata üle. Peatumisel saada selle jooksu SAADA SEE FAIL raport; vana jobs SQL-i või lõpetatud paigaldajat ei korrata.",
+  "next_action": "Paki selqiro-teenuste-ja-too-kujundus-20261117.zip Downloads-kausta lahti ja käivita HOSTED_PORTAL.md üks uuenda.py --publish käsk. Saada selle jooksu raport. Pärast sama uue commit’i Ready / Production tulemust vaata teenuste rohekaid ja töö siniseid kogumeid otsingus, Minu alas ning avalikul profiilil. Uut tööpakkumist pole selle kujunduskontrolli jaoks vaja luua.",
+  "stop_rule": "Uuendaja kontrollib enne kirjutust täpset 0e9197e haru/HEAD-i, kogu indexit, tööpuud, kõiki alusfaile, kinnitatud remote’i ning eelmise identiteediparanduse privaatset originaalraportit. Muutunud alust, kasutaja tööd ega päevikuid ei kirjutata üle. Peatumisel saada selle jooksu SAADA SEE FAIL raport; lõpetatud jobs- või identiteedipaigaldajat ei käivitata uuesti.",
   "read_next": [
     "docs/99_V2_HANDOFF_NEXT_CHAT.md — sellest JSON-ist genereeritud üleandmine.",
-    "docs/continuity/HOSTED_PORTAL.md — üks praegune lähtekoodi parandamise käsk.",
-    "docs/continuity/ACTIVE_IDENTITY_TYPE_20261116.md — vastu võetud jooks, skeemiviga, paranduse ulatus ja tõendipiir.",
-    "docs/product-blueprint/08_identity_account_flow.md — ühise aktiivse identiteedi lugemise leping.",
-    "docs/architecture/jobs-public-v1.md ja docs/continuity/SERVICE_ACCESS.json — säilivad tööpakkumiste reeglid ja teenuste sihid."
+    "docs/continuity/HOSTED_PORTAL.md — üks praegune kujunduse paigaldamise käsk.",
+    "docs/architecture/offer-section-theme.md — kogumite ühine esitluse leping ja täpne ulatus.",
+    "docs/architecture/jobs-public-v1.md — säilivad tööpakkumiste, jagamise ja õiguste reeglid.",
+    "docs/continuity/ACTIVE_IDENTITY_TYPE_20261116.md ning docs/continuity/SERVICE_ACCESS.json — aktsepteeritud paranduse ajalugu ja teenuste sihid."
   ],
   "boundaries": [
     "Üks olemasolev portaal, hoidla, Supabase’i projekt ja keele-eelistus. English põhikeel/fallback, Eesti teine keel. Kasutaja sisu/rubriiginimesid ei tõlgita. Tavaline osalemine, rubriigid ja pikendamine ei sõltu Energy ostust.",
@@ -49,9 +48,9 @@
     "Universaalne identiteedi üleandmine/privilegeeritud kirjutaja invariant ja vana aktiivse identiteedi seadistaja turvapiir jäävad eraldi. Energy, maksete tuum ja piiratud AI abi säilivad V2 ulatuses. Kontosid, kuulutusi, pilte, sõnumeid ega ajalugu ei kustutata."
   ],
   "environment": [
-    "Olemasolevad /Users/taivo/selqiro, kinnitatud Taivo17/selqiro remote ja selqiro.vercel.app. Viimane tegelik raport on 12ff2bb kohta; järgmine Maci kirjutus vajab värskeid kontrolle.",
-    "Uus eraldi active-identity-type-20261116 päevik. Eelmine edukas jobs-public-20261116/ebb819978646105760d1d157cc3b8f666e242e0a3abeeca9bdc24519577d9ffa/result.json säilib baiditäpselt ja lugemisluku all.",
-    "Olemasolevad lukustatud Node-sõltuvused; midagi ei paigaldata ega ühendata uuesti. Ainult uue identiteedilugeja sihtkontroll ja vajalik build enne commit/push’i. SQL-i, Supabase CLI-d ega Storage’it ei käivitata.",
-    "Iga jooks annab privaatse unikaalse Downloads-raporti ning SAADA SEE FAIL täpse tee, Finderi avamine on piiratud viie sekundiga. Originaal ja kõik varasemad koopiad säilivad."
+    "Olemasolevad /Users/taivo/selqiro, kinnitatud Taivo17/selqiro remote ja selqiro.vercel.app. Viimane tegelik raport on 0e9197e kohta; uus Maci kirjutus teeb värsked kontrollid.",
+    "Uus eraldi offer-section-theme-20261117 päevik. Eelmine edukas active-identity-type-20261116/7aa2086d23d200da6043c043ac986913ac11c8d493977853adfca75d35b03422/result.json säilib baiditäpselt ja lugemisluku all.",
+    "Olemasolevad lukustatud sõltuvused; midagi ei paigaldata ega ühendata uuesti. Puhta kujundusmuudatuse järel tehakse vajalik build enne commit/push’i; lõpetatud rakenduse sihtkatseid ei korrata. SQL-i, Supabase CLI-d ega Storage’it ei käivitata.",
+    "Iga jooks annab privaatse unikaalse Downloads-raporti ning SAADA SEE FAIL täpse tee; Finderi avamine on piiratud viie sekundiga. Originaal ja varasemad koopiad säilivad."
   ]
 }

@@ -1,0 +1,18 @@
+{
+  "base_commit": "0e9197e250e19f260a6b92ab4dec96c89ca1a183",
+  "boundary": "Exact preparation-time documents committed by the accepted identity-repair release are preserved. Later execution and user acceptance are recorded separately in the new current state.",
+  "files": {
+    "docs/continuity/CURRENT_STATE.json": {
+      "bytes": 9179,
+      "sha256": "cc06019eaa89a344a44ebf074172509ae1e34da0cee8369791b6882d07daeb39"
+    },
+    "docs/99_V2_HANDOFF_NEXT_CHAT.md": {
+      "bytes": 9265,
+      "sha256": "7dd65466ae4a14ae975ebf845e2767871565a0c8da4efcce2dfd32f24f80718e"
+    },
+    "docs/continuity/HOSTED_PORTAL.md": {
+      "bytes": 2781,
+      "sha256": "7832480fc0b4fdd26cb19e3c00384643fdd354972391ce99c15a56d53bbf7aa0"
+    }
+  }
+}

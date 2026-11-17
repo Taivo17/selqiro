@@ -1,34 +1,35 @@
-# Praegune samm: aktiivse profiili tüübi parandus
+# Praegune samm: teenuste ja töö jaotiste kujundus
 
-Töö, jagamise ja värvide 12ff2bb väljaanne on kasutaja raporti ning
-Ready / Production pildi põhjal vastu võetud. Tööpakkumiste SQL on
-rakendatud ja järelkontrollitud. Seda paigaldust ega SQL-i ei korrata.
+0e9197e identiteediparandus on tegeliku raporti ja Ready / Production pildi
+põhjal vastu võetud. Kasutaja kinnitas ka tööpakkumise lisamise ja nähtavuse
+töö rubriigis ning Minu alas. Need paigaldused ja katsed on lõpetatud.
 
 ## Üks käsk
 
-Paki `selqiro-aktiivse-profiili-parandus-20261116.zip` Downloads-kausta lahti ja käivita:
+Paki `selqiro-teenuste-ja-too-kujundus-20261117.zip` Downloads-kausta lahti ja käivita:
 
 ```bash
-python3 -I -B "$HOME/Downloads/selqiro-aktiivse-profiili-parandus-20261116/uuenda.py" --publish
+python3 -I -B "$HOME/Downloads/selqiro-teenuste-ja-too-kujundus-20261117/uuenda.py" --publish
 ```
 
-Parandaja seob end täpse 12ff2bb main-haru, kõigi 1863 alusfaili, indexi,
-tööpuu, kinnitatud remote’i ning eelmise eduka jobs-jooksu privaatse
-originaalraportiga. Eelmist raportit hoitakse ainult lugemiseks lukus.
-Kasutaja muudatused ja päevikud säilivad. Muutunud alus peatab töö.
+Teenuste kogum saab hele roheka tausta, roheka piirjoone ja 6 px ülariba.
+Töö kogum kasutab sama vormi sinisega. Kuulutuste olemasolev kollane vorm
+on ühine alus; sisemised pakkumiskaardid jäävad valgeks. Muudatus hõlmab
+otsingu, Minu ala ja avaliku profiili kogumeid.
 
-Parandus võtab aktiivse profiili tegeliku tüübi olemasolevast identiteetide
-päringust. Tüübita nime/pildi vastust ei tõlgendata enam eraisikuks.
-Konto ja aktiivne identiteet peavad tulemuse tagastamisel endiselt klappima.
-Andmebaasiõigusi ja konto või profiili tüüpi see parandus ei muuda.
+Uuendaja kontrollib täpset 0e9197e main-haru, kõiki 1869 alusfaili,
+indexit, tööpuud, kinnitatud remote’i ja eelmise identiteediparanduse
+privaatset originaalraportit. Eelmine raport hoitakse ainult lugemiseks
+lukus. Muutunud alus peatab töö ja kasutaja muudatused säilivad.
 
-Uuendaja rakendab ainult täpse lähtekoodi/testi/dokumentide loendi, teeb
-identiteedi sihtkontrolli ning build’i ja seejärel commit/push’i.
-Andmebaasi, Supabase CLI ega Storage’i toiminguid tal pole.
+Rakendatakse ainult manifesti kujundusfailid ja järjepidevuse dokumendid.
+Seejärel tehakse build, commit ja push. Puhta klassimuudatuse pärast ei
+korrata valmis identiteedi- ega tööpakkumise sihtkatseid. Uuendajal pole
+andmebaasi, Supabase CLI ega Storage’i toiminguid.
 
-## Jooksu tulemus
+## Jooksu raport
 
-Terminal näitab ja Finder valib selle jooksu täpse privaatse raporti:
+Terminal näitab ja Finder valib just selle jooksu privaatse raporti:
 
 ```text
 SAADA SEE FAIL: <absoluutne JSON-tee>
@@ -37,23 +38,22 @@ SAADA SEE FAIL: <absoluutne JSON-tee>
 Saada see fail. Kopeerimise tõrke korral näidatakse kontrollitud originaali;
 Finderi tõrke korral jääb täpne tee terminali. Kui raportit ei loodud, saada
 PEATATUD-rida. Võimalikult aegunuks märgitud raportiga saada ka peatumisrida.
+Algne päevik ja kõik varasemad koopiad säilivad.
 
 Sama uue väljaande jätk kasutab sama käsku ja päevikut. Kontrollitult
-lõpetatud sihtkatseid, build’i, commit’i ega push’i ei korrata. Muutunud
-allika, ebaselge commit’i või remote’i korral saada raport, säilita tööseis.
+lõpetatud build’i, commit’i ega push’i ei korrata. Muutunud lähtekoodi või
+remote’i korral saada raport, et jätkata tegelikust seisust.
 
 ## Pärast Ready / Production tulemust
 
-Kontrolli Vercelis raportis nimetatud sama uue commit’i Ready / Production
-tulemust ja värskenda portaali. Ava **Minu ala → Lisa tööpakkumine**.
-Kontrolli vormis tööandja nime ja vormi avanemist. Kui tegelik aktiivne
-identiteet on eraisik, peab rakendus seda ausalt näitama ja paluma valida
-olemasoleva ettevõtte identiteedi; konto tüüpi ei muudeta automaatselt.
+Kontrolli Vercelis raportis nimetatud uue commit’i Ready / Production
+tulemust ja värskenda portaali. Vaata teenuste rohekaid ning töö siniseid
+kogumeid otsingus, Minu alas ja avalikul profiilil: hele taust, õrn raam,
+ülariba ning valged sisekaardid peavad olema eristatavad ka kitsal ekraanil.
 
-Seejärel avalda üks eesmärgipärane tööpakkumine ning kontrolli sama pakkumist
-tööotsingus, ettevõtte profiilis ja otseviitel. Jaga lingi kontroll ning teise
-olemasoleva konto kontakt tulevad pärast edukat avaldamist. Praegu saadetud
-tühja töövaate ja Minu ala pildid ei ole selle kasutustee vastuvõtt.
+Uut tööpakkumist pole vaja luua. Varasem avaldamine ja nähtavus on juba
+vastu võetud. Jagamise ja sõnumikontakti päris kasutus on eraldi kontroll;
+see väike kujundussamm nende käitumist ei muuda.
 
-Täpsed tõendid on paki kontrollid/ all. Üks praegune seis on
-CURRENT_STATE.json; loetav üleandmine genereeritakse ainult sellest.
+Kohaliku build’i ja brauseri täpne tõendipiir on paki kontrollid/ all.
+Üks praegune seis on CURRENT_STATE.json; loetav üleandmine tuleb sellest.

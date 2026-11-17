@@ -5,14 +5,14 @@ import {serviceEditorMessages} from "../model/serviceEditorMessages";
 import {useMyServicePublications} from "../model/useMyServicePublications";
 import {useListingActivityClock} from "../../my-area/model/useListingActivityClock";
 import MyAreaServiceRow from "./MyAreaServiceRow";
-import {getOfferTheme, offerButtonLayout} from "../../../shared/marketplace/offerTheme";
+import {getOfferSectionClass, getOfferTheme, offerButtonLayout} from "../../../shared/marketplace/offerTheme";
 
 const button = "inline-flex min-h-11 items-center justify-center rounded-full border border-teal-200 bg-white px-5 py-3 text-sm font-bold hover:border-teal-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700 disabled:opacity-40";
 export default function MyAreaServicesSection() {
   const {t} = useV2Translation(serviceEditorMessages), owner = useMyServicePublications(), {state, context} = owner;
   const now = useListingActivityClock();
   if (context.anonymous) return null;
-  return <section aria-labelledby="my-services-heading" className="min-w-0 rounded-[32px] border border-teal-200 bg-teal-50/40 p-4 sm:p-6">
+  return <section aria-labelledby="my-services-heading" className={`${getOfferSectionClass("service")} p-4 sm:p-6`}>
     <header className="mb-5 flex flex-wrap items-start justify-between gap-4">
       <div><h2 id="my-services-heading" className="text-2xl font-black">{t("myServices")}</h2><p className="mt-2 text-sm text-neutral-600">{t("manageHelp")}</p></div>
       <Link href="/v2/services/new" className={`${offerButtonLayout} ${getOfferTheme("service").button}`}>{t("addService")}</Link>

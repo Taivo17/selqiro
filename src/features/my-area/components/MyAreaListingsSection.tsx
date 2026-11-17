@@ -11,6 +11,7 @@ import { accountUiMessages } from "@/lib/i18n/catalogs/accountUi";
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import {v2IntegrationEnabled} from "../../../shared/config/v2Integration";
+import { getOfferSectionClass } from "../../../shared/marketplace/offerTheme";
 import { useMyAreaListings, type MyAreaListingsStatusFilter } from "../model/useMyAreaListings";
 import { useMyAreaStoreCategories } from "../model/useMyAreaStoreCategories";
 import { useListingActivityClock } from "../model/useListingActivityClock";
@@ -63,7 +64,7 @@ export default function MyAreaListingsSection() {
   function clearFilters() {
     setSearchInput(""); setDebouncedSearch(""); setStatusFilter("all"); setSelectedCategoryId(ALL_CATEGORIES); setShowAll(false);
   }
-  return <section className="relative min-w-0 overflow-hidden rounded-[30px] border border-amber-200 bg-amber-50 p-4 shadow-sm before:pointer-events-none before:absolute before:inset-x-0 before:top-0 before:h-1.5 before:bg-amber-500 before:content-[''] sm:p-6">
+  return <section className={`${getOfferSectionClass("listing")} p-4 sm:p-6`}>
     <div className="mb-5 flex flex-col items-start gap-3 sm:flex-row sm:items-end sm:justify-between">
       <div><p className="inline-flex rounded-full border border-amber-200 bg-amber-100 px-3 py-1.5 text-xs font-bold uppercase tracking-[0.18em] text-amber-800">{t("listings")}</p>
         <h2 className="mt-2 text-2xl font-black">{t("your_listings")}</h2>

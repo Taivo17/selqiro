@@ -9,6 +9,7 @@ import { publicUiMessages } from "@/lib/i18n/catalogs/publicUi";
 import { useEffect, useRef, useState } from "react";
 import { uiMessage } from "../../../../lib/i18n/interfaceMessage";
 import { useViewerReadScope } from "../../../shared/provider-controls/useViewerReadScope";
+import { getOfferSectionClass } from "../../../shared/marketplace/offerTheme";
 import { EMPTY_PUBLIC_SEARCH, publicCategoryPath, publicFilterCount, publicSearchKey, searchConditionLabel,
   type PublicSearchFields } from "../../../entities/listing/model/publicSearch";
 import V2DiscoveryTypeSwitcher from "../../v2-shell/components/V2DiscoveryTypeSwitcher";
@@ -84,7 +85,7 @@ export default function ListingSearchPage() {
         aria-label={t("remove_location_filter")} onClick={() => change({location: ""})}>{url.input.location} ×</button> : null}
       <span className="ml-auto text-neutral-500">{t("newest_first")}</span>
     </div>
-    <section ref={resultRef} className="relative min-w-0 overflow-hidden rounded-[30px] border border-amber-200 bg-amber-50 p-3 pt-5 shadow-sm before:pointer-events-none before:absolute before:inset-x-0 before:top-0 before:h-1.5 before:bg-amber-500 before:content-[''] sm:p-6" style={{scrollMarginTop: headerHeight + 88}}>
+    <section ref={resultRef} className={`${getOfferSectionClass("listing")} p-3 pt-5 sm:p-6`} style={{scrollMarginTop: headerHeight + 88}}>
       <SearchResults page={url.error ? null : data.page} loading={loading && !url.error} error={url.error || error}
         offset={url.input.offset} onRetry={audience.error ? audience.refresh : data.retry}
         onReset={() => {moveToResults.current = true; url.replace({...EMPTY_PUBLIC_SEARCH});}}

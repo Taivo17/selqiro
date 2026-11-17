@@ -1,6 +1,7 @@
 "use client";
 import { useMemo } from "react";
 import { useV2Translation } from "../../../shared/i18n/V2LanguageProvider";
+import { getOfferSectionClass } from "../../../shared/marketplace/offerTheme";
 import { publicUiMessages } from "../../../../lib/i18n/catalogs/publicUi";
 import type { PublicProfile } from "../../../entities/profile/model/types";
 import { useServiceCategories } from "../../service-category-selection/model/useServiceCategories";
@@ -26,7 +27,7 @@ export default function PublicProfileServicesSection({profile, expanded, onExpan
   const canExpand = expanded || categories.loading || !!categories.error || BigInt(total) > BigInt(PROFILE_SERVICE_PREVIEW_SIZE) || categories.categories.length > 0
     || services.some(service => service.images.length > 1 || service.description.length > 180);
   return <section data-profile-services aria-busy={loading}
-    className="relative min-w-0 overflow-hidden rounded-[30px] border border-teal-200 bg-teal-50 p-5 shadow-sm before:pointer-events-none before:absolute before:inset-x-0 before:top-0 before:h-1.5 before:bg-teal-500 before:content-[''] sm:p-6">
+    className={`${getOfferSectionClass("service")} p-5 sm:p-6`}>
     <header className="mb-5 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
       <div>
         <p className="inline-flex rounded-full border border-teal-200 bg-teal-100 px-3 py-1.5 text-[11px] font-black uppercase tracking-[0.18em] text-teal-700">{t("services")}</p>

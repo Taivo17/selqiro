@@ -9,7 +9,7 @@ import { isPlainServiceClick } from "../../../src/features/service-navigation/mo
 import ServiceDiscoveryCard from "../../../src/features/service-detail/components/ServiceDiscoveryCard";
 import { useServiceCategories } from "../../../src/features/service-category-selection/model/useServiceCategories";
 import { buildServiceCategoryTree } from "../../../src/entities/service-category/model/types";
-import { getOfferTheme, offerButtonLayout } from "../../../src/shared/marketplace/offerTheme";
+import { getOfferSectionClass, getOfferTheme, offerButtonLayout } from "../../../src/shared/marketplace/offerTheme";
 
 const input = "min-h-12 w-full min-w-0 rounded-full border border-neutral-200 bg-white px-4 py-3 text-base outline-none focus:border-teal-600 focus:ring-2 focus:ring-teal-600/20";
 export default function V2ServicesPage() {
@@ -41,7 +41,7 @@ export default function V2ServicesPage() {
       {categories.error ? <p role="status" className="mt-3 text-sm text-neutral-600">{t("categoryError")} <button type="button" onClick={() => void categories.refresh()} className="font-bold underline">{t("retry")}</button></p> : null}
       {query || category || city ? <button type="button" className="mt-3 min-h-10 px-2 text-sm font-bold underline" onClick={clear}>{t("clearFilters")}</button> : null}
     </section>
-    <section aria-busy={results.loading} className="min-w-0 rounded-[30px] border border-teal-200 bg-teal-50/60 p-4 sm:p-6">
+    <section aria-busy={results.loading} className={`${getOfferSectionClass("service")} p-4 sm:p-6`}>
       <header className="mb-5 flex flex-wrap items-center justify-between gap-3"><h2 className="text-2xl font-black">{t("results")}</h2>
         {results.page ? <p className="text-sm text-neutral-600">{t("resultCount", {count: results.page.totalCount})}</p> : null}</header>
       {results.loading && !results.page ? <p role="status" className="py-8">{t("loading")}</p> : null}

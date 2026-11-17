@@ -2129,3 +2129,26 @@ Paranduse Maci rakendus, uus commit/push ja deployment on veel kinnitamata.
 Uus lähtekoodi uuendaja ning selle katsed on eraldi väljaandes; varasemad
 pakid, algsed raportid ja ajaloolised dokumendibaidid säilivad. Üks järgmine
 käsk on HOSTED_PORTAL.md-s; pärast avaldamist kontrollitakse töö lisamise vormi.
+
+
+## 17.11.2026 — töö avaldamine vastu võetud; teenuste ja töö jaotiste kujundus
+
+Vastu võetud tegelik identiteediparanduse jooks lõpetas 0e9197e250e19f260a6b92ab4dec96c89ca1a183,
+Maci sihtkontrolli, build’i ning kinnitatud push’i. Raport 277904 B,
+SHA256 91563403068f36e42046467672e471c52c3978fb14b01589bffd319490a31c13. Kasutaja
+kuvatõmmis kinnitab sama commit’i Ready / Production. Kasutaja kinnitas
+tööpakkumise lisamise ja nähtavuse töö rubriigis ning Minu alas; pildil on
+ka avalik detail. Neid katseid selle kujunduse pärast ei korrata.
+
+Kasutaja soovis teenustele ja tööle kuulutustega sarnast heledat raami ja
+ülaserva. Ette valmistatud esitlusmuudatus kasutab ühist offerTheme
+kogumiabilist: teenused rohekad, töö sinine, 6 px ülariba, valged sisekaardid.
+Ulatus on otsing, Minu ala ja avaliku profiili kogumid; andme- ja
+õiguskontrollid ei muutu. 10 runtime-faili ülevaatus ning täielik build
+PASS; brauseriseis BLOCKED. Rakenduse sihtkatseid ei lisata ega korrata.
+
+Kujunduspakk on eraldi ette valmistatud. Selle Maci rakendus, uus
+commit/push ning deployment on veel kinnitamata. Uuendaja on build-only
+ja lähtekoodipõhine; SQL-i, Supabase CLI-d ega Storage’it ei kasutata.
+Varasemad pakid, aruanded ja kolme continuity-faili täpsed baidid säilivad.
+Üks järgmine käsk on HOSTED_PORTAL.md-s.

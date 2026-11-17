@@ -1,5 +1,6 @@
 "use client";
 import { useV2Translation } from "../../../shared/i18n/V2LanguageProvider";
+import { getOfferSectionClass } from "../../../shared/marketplace/offerTheme";
 import { publicUiMessages } from "../../../../lib/i18n/catalogs/publicUi";
 import type { PublicProfile } from "../../../entities/profile/model/types";
 import { PROFILE_LISTING_PREVIEW_SIZE, usePublicProfileListingView } from "../model/usePublicProfileListingView";
@@ -18,7 +19,7 @@ export default function PublicProfileListingsSection({profile, showAll, onShowAl
   const total = results.page?.totalCount ?? "0";
   const canExpand = showAll || categories.loading || !!categories.error || BigInt(total) > BigInt(PROFILE_LISTING_PREVIEW_SIZE) || categories.categories.length > 0;
   return <section data-profile-marketplace aria-busy={loading}
-    className="relative min-w-0 overflow-hidden rounded-[30px] border border-amber-200 bg-amber-50 p-5 shadow-sm before:pointer-events-none before:absolute before:inset-x-0 before:top-0 before:h-1.5 before:bg-amber-500 before:content-[''] sm:p-6">
+    className={`${getOfferSectionClass("listing")} p-5 sm:p-6`}>
     <header className="mb-5 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
       <div>
         <p className="inline-flex rounded-full border border-amber-200 bg-amber-100 px-3 py-1.5 text-[11px] font-black uppercase tracking-[0.18em] text-amber-800">{t("listings")}</p>
