@@ -17,7 +17,7 @@ export default function ConversationListingCard({ listing }: { listing: ListingM
   const [failedImage, setFailedImage] = useState<string | null>(null);
   if (!href) return null;
   return <Link href={href} prefetch={false}
-    className={"flex min-w-0 items-center gap-3 rounded-xl p-3 text-left focus-visible:outline-2 focus-visible:outline-offset-2 " + theme.card}
+    className={"flex w-full min-w-0 cursor-pointer items-center gap-3 rounded-xl p-3 text-left transition-shadow hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-current motion-reduce:transition-none " + theme.card}
     aria-label={subjectText("view") + ": " + (listing.title || subjectText(kind))}>
     {kind !== "job" && <span className="flex h-16 w-20 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-white/70 text-center text-xs text-neutral-500">
       {src && failedImage !== src

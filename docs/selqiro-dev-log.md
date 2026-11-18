@@ -2152,3 +2152,58 @@ commit/push ning deployment on veel kinnitamata. Uuendaja on build-only
 ja lähtekoodipõhine; SQL-i, Supabase CLI-d ega Storage’it ei kasutata.
 Varasemad pakid, aruanded ja kolme continuity-faili täpsed baidid säilivad.
 Üks järgmine käsk on HOSTED_PORTAL.md-s.
+
+
+## 17.11.2026 — teenuste ja töö kujunduse tegelik vastuvõtt
+
+Vastu võetud tagastatud Maci raport: 279207 B, SHA256
+13c5644cd5ceb14c86b19f6e8eb82690a1d35bd022aa85c20d73b3df85efc753.
+Release a2d6d124cede61be38d06ac7dad419e5e0228732c58cb4a5136868cd221c0ea9,
+commit 8c3c8e49a4dfe30799d125b4d45a61003ba5b911, parent 0e9197e.
+Jooks 17.11.2026 kell 12:45:05–12:45:37 Europe/Tallinn: complete,
+build passed, push verified, tests not_required_style_only,
+database/storage not_performed. Eelmise paigalduse raport säilis.
+
+Täielik alusindex, payload, eelkujutised ja muutumatute failide räsid
+kattuvad väljastatud paketiga. Tuletatud lõpp-puu sisaldab 1874 faili ja on
+7f6ea576188db59d16ee89811521c7a871814730. Väljastatud ZIP säilis muutmata.
+
+Kuus kasutaja töölauapilti kinnitavad teenuste rohekat ja töö sinist
+kogumikujundust avalikus otsingus ning Minu alas; tööpakkumine on nüüd
+nähtavalt ka avalikul profiilil. Ülaribad ja valged sisekaardid on nähtavad,
+kuulutuste kollane vorm säilib. Verceli Ready/Production on raportis
+READY_NOT_CHECKED; kitsas ekraan, tegelik jagamine ja pakkumise kontakt
+jäävad selle saadetise ulatusest välja. Varasemat BLOCKED kohalikku
+brauserikatset ei kirjutata ümber.
+
+Vastuvõtt ei käivitanud uut build’i, testi, paigaldust, sõnumit ega pilvekirjutust.
+Järjepidevuse uuendus on eraldi kaasasolevas vastuvõtupakis; see ei kuulu
+commit’i 8c3c8e4 ega ole kasutaja hoidlasse rakendatud. Kolm ettevalmistusseisu
+faili ja kogu eelnev arenduslogi prefiks on säilitatud baiditäpselt.
+
+
+## 18.11.2026 — selgemad sõnumimullid ja tervikuna avatav töökaart
+
+Kasutaja kaheksa uut pilti kinnitavad töö jagamisakna avanemist ning tegelikku
+kahepoolset vestlust töö ja tavakuulutuse kohta. Välise jagamise lõpuleviimist
+ega anonüümset otseviidet need eraldi ei tõenda. Varasem 17.11 kujunduse
+vastuvõtt on käesolevasse jooksva seisu dokumentatsiooni üle kantud; selle
+algne kirje ning kogu eelnev päevik säilivad.
+
+Ette valmistatud kolm UI-faili muudavad enda mulli #d4ebdc roheliseks ja
+saabuva mulli #f1f3f5 helehalliks; tekst ja kellaaeg säilitavad hea kontrasti.
+JobCard on nüüd tervikuna üks native Link nii otsingus kui avalikul profiilil.
+Sõnumi pakkumiskaart oli juba terviklink, millel on nüüd nähtavam hiire- ja
+klaviatuurifookus. Pakkumiste kollane/rohekas/sinine kontekst säilib.
+
+Täpsete kolme lähtefaili ülevaatus ja üks täielik build PASS; 729 sisendi
+drift 0. Brauseriseis BLOCKED; näidise ulatus ja tõendid on väljaande
+kontrollid/browser-result.json-is. Väikese esitlusmuudatuse pärast ei
+korrata vastuvõetud avaldamis-, identiteedi-, SQL-i ega sõnumitranspordi katseid.
+
+Uus eraldi lähtekoodi uuendaja on selqiro-sonumite-ja-kaartide-parandus-20261118. Senine
+8c3c8e4 lähtepuu ja eelmise eduka jooksu täpne originaalraport on aluseks.
+Kolm alusdokumenti säilivad history/message-card-usability-base-8c3c8e4-20261118
+all baiditäpselt. Maci rakendus, uus commit/push ja deployment on veel
+kinnitamata. Üks järgmine käsk on HOSTED_PORTAL.md-s. SQL-i, Supabase CLI-d,
+Storage’it ega kasutajaandmeid selles sammus ei muudeta.

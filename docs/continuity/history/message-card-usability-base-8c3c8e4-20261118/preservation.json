@@ -1,0 +1,18 @@
+{
+  "base_commit": "8c3c8e49a4dfe30799d125b4d45a61003ba5b911",
+  "boundary": "Exact preparation-time source documents in accepted commit 8c3c8e4 are preserved. The separate 17 November acceptance and 18 November user screenshots inform the new current state; they do not retroactively alter the accepted source.",
+  "files": {
+    "docs/continuity/CURRENT_STATE.json": {
+      "bytes": 8933,
+      "sha256": "20554a73a9d680fe8e4f6fc567bb14ac09ec7c8396bd9a867c66e43df15fcbf6"
+    },
+    "docs/99_V2_HANDOFF_NEXT_CHAT.md": {
+      "bytes": 9024,
+      "sha256": "cd6f3bf61b4f29e17e2783ea1a5e65294abd3ac0625b62afd740ace639de3f2a"
+    },
+    "docs/continuity/HOSTED_PORTAL.md": {
+      "bytes": 2694,
+      "sha256": "450a4846837f6c75c5b58278a68b68d53fb0075da9211b8042dd1095566bdaeb"
+    }
+  }
+}
