@@ -1,0 +1,19 @@
+{
+  "base_commit": "413e8fcb3b94fbd307e2d46645fed991306e9476",
+  "base_tree": "b1430ad427acd1105ccc82e1e3a2b43d8457d529",
+  "boundary": "Exact preparation-time documents in accepted commit 413e8fc are preserved. The returned successful Mac receipt and user Vercel/conversation screenshots inform the new current state without rewriting the accepted source.",
+  "files": {
+    "docs/continuity/CURRENT_STATE.json": {
+      "bytes": 8363,
+      "sha256": "b4a7d7ce570ed8cf699dfb7cd81a4dd7c71f7d3e022c1faca035da5069118957"
+    },
+    "docs/99_V2_HANDOFF_NEXT_CHAT.md": {
+      "bytes": 8457,
+      "sha256": "2370ad85903879f7dac369c7f15afe245d6b4cbb441bd63f4aa7f6dc5405a85a"
+    },
+    "docs/continuity/HOSTED_PORTAL.md": {
+      "bytes": 2501,
+      "sha256": "f44fb5b50f7530f5d2e7d5034d630512f9f63d350734a85602f639f746599db5"
+    }
+  }
+}

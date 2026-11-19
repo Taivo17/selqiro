@@ -2207,3 +2207,13 @@ Kolm alusdokumenti säilivad history/message-card-usability-base-8c3c8e4-2026111
 all baiditäpselt. Maci rakendus, uus commit/push ja deployment on veel
 kinnitamata. Üks järgmine käsk on HOSTED_PORTAL.md-s. SQL-i, Supabase CLI-d,
 Storage’it ega kasutajaandmeid selles sammus ei muudeta.
+
+
+## 18.11.2026 — 413e8fc vastu võetud; tumedam enda sõnumimull
+
+- Tagastatud sõnumite/kaartide raport 279208 B, SHA256 da455ed3d14d6dc2fd6ea48043c50e20af153857479a28078144eba12edfeeb6: complete, build passed (11,071 s), tests not_required_presentation_only, push verified; commit 413e8fcb3b94fbd307e2d46645fed991306e9476, parent 8c3c8e4. Eelmise päeviku säilimine kinnitatud; DB/Storage not_performed.
+- Sõltumatu kontroll sidus 1879-faililise puu b1430ad427acd1105ccc82e1e3a2b43d8457d529 raporti, väljastatud paketi ja säilinud allikaga. See ei ole uus live-Maci eksport. Kasutaja 11.54.52 Verceli pilt näitab sama 413e8fc Ready / Production olekut; 12.02.19 vestluspilt näitab heledat senist paletti. Terviklingi klõpsu või uut tumedat kujundust neist ei järeldata.
+- Kasutaja soov: enda poolel hele kiri tumedamal taustal, vastaspool senise heleda tooniga. Üks runtime CSS-fail muudab enda mulli #176b4b taustale ja valge tekstiga; kellaaeg/laadimisteade #d7ebdf, foto kordusnupp ja fookus heledad. Pakkumiskaartide konteksti värvid, native-terviklingid ning vasak/parem paigutus säilivad.
+- Kohalik ühe faili ülevaatus ja üks täielik Next.js/TypeScript build PASS; 729 sisendit, drift 0. Arvutatud enda teksti kontrast 6,48:1 ja kellaaja kontrast 5,20:1. Rakenduse vanu funktsionaalseid katseid ei korratud.
+- Brauseri visuaalne kontroll BLOCKED: eelmise sammu käivituspiirang ja kohaliku file-URL-i turvakeeld on säilitatud tõend; uut katset ega ümbersõitu ei tehtud. Uut paletti brauseris kontrollituks ei nimetata.
+- Kolm 413e8fc ettevalmistusdokumenti on baiditäpselt arhiivitud outgoing-message-contrast-base-413e8fc-20261118 alla; varasemad arhiivid ja päeviku prefiks säilivad. Uus outgoing-message-contrast-20261118 uuendaja teeb eraldi kontrollitud lähteparanduse. Uue kandidaadi Maci raport, uus Ready / Production ja tegelik välimus on järgmised kinnitused.
