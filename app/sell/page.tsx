@@ -16,7 +16,6 @@ import {
   getCategoryFields,
   getFieldLabel,
 } from "../../lib/categoryFields";
-import { resolveAiCategoryPath } from "../../lib/aiCategoryMapping";
 import { getTranslation } from "../../lib/i18n/useTranslation";
 import LocationAutocomplete from "../components/LocationAutocomplete";
 
@@ -130,24 +129,6 @@ async function resizeImage(file: File, maxWidth = 1600, quality = 0.82) {
   });
 }
 
-function fileToDataUrl(file: File) {
-  return new Promise<string>((resolve, reject) => {
-    const reader = new FileReader();
-
-    reader.onload = () => {
-      if (typeof reader.result === "string") {
-        resolve(reader.result);
-      } else {
-        reject(new Error("Could not read image"));
-      }
-    };
-
-    reader.onerror = () => reject(reader.error);
-    reader.readAsDataURL(file);
-  });
-}
-
-
 async function geocodeCity(country: string, city: string) {
   const response = await fetch("/api/location/geocode", {
     method: "POST",
@@ -213,11 +194,8 @@ export default function SellPage() {
   const [draftRestored, setDraftRestored] = useState(false);
   const [userEditedDraft, setUserEditedDraft] = useState(false);
 
-  const [aiLoading, setAiLoading] = useState(false);
   const [aiResult, setAiResult] = useState<any>(null);
 
-  const [remainingAiUsage, setRemainingAiUsage] = useState<number | null>(null);
-  const [dailyAiLimit, setDailyAiLimit] = useState<number | null>(null);
 
   const [aiSelectedCategory, setAiSelectedCategory] = useState("");
   const [aiSelectedSubcategory, setAiSelectedSubcategory] = useState("");
@@ -502,148 +480,6 @@ export default function SellPage() {
   };
 
 
-  const analyzePhotosWithAI = async () => {
-    if (files.length === 0) {
-      alert("Add photos first.");
-      return;
-    }
-
-    setUserEditedDraft(true);
-    setAiLoading(true);
-
-    try {
-      const resizedFiles = await Promise.all(
-        files.slice(0, 2).map((file) => resizeImage(file, 720, 0.65))
-      );
-
-      const imageUrls = await Promise.all(
-        resizedFiles.map((file) => fileToDataUrl(file))
-      );
-
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
-
-      const response = await fetch("/api/ai/analyze-listing", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${session?.access_token || ""}`,
-        },
-        body: JSON.stringify({
-          imageUrls,
-        }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        alert(
-          data?.error ||
-            "AI could not analyze this time. Please try again."
-        );
-        return;
-      }
-
-      if (!data.success || !data.result) {
-        alert("AI could not analyze this time. Please try again.");
-        return;
-      }
-
-      const result = data.result;
-
-      setRemainingAiUsage(
-        typeof data.remaining === "number"
-          ? data.remaining
-          : null
-      );
-
-      setDailyAiLimit(
-        typeof data.limit === "number"
-          ? data.limit
-          : null
-      );
-
-      setAiResult(result);
-
-      if (result.suggested_title) {
-        setTitle(result.suggested_title);
-      }
-
-      const aiCategoryPath = resolveAiCategoryPath(result);
-
-      const suggestedCategory = aiCategoryPath.category;
-
-      const validCategory = CATEGORY_TREE.find(
-        (item) => item.value === suggestedCategory
-      );
-
-      const suggestedSubcategory = aiCategoryPath.subcategory;
-
-      const validSubcategory = validCategory?.children?.find(
-        (item) => item.value === suggestedSubcategory
-      );
-
-      const confidence =
-        typeof result.confidence === "number"
-          ? result.confidence
-          : 0;
-
-      const suggestedDetailCategory = aiCategoryPath.detailCategory;
-
-      const validDetailCategory = (validSubcategory as any)?.children?.find(
-        (item: { value: string; label: string }) =>
-          item.value === suggestedDetailCategory
-      );
-
-      setAiSelectedCategory(suggestedCategory);
-      setAiSelectedSubcategory(suggestedSubcategory);
-      setAiSelectedDetailCategory(suggestedDetailCategory);
-
-      if (validCategory) {
-        setCategory(validCategory.value);
-      } else {
-        setCategory("general");
-      }
-
-      if (validSubcategory) {
-        setSubcategory(validSubcategory.value);
-      } else {
-        setSubcategory("");
-      }
-
-      if (confidence >= 0.72 && validDetailCategory) {
-        setDetailCategory(validDetailCategory.value);
-      } else {
-        setDetailCategory("");
-      }
-
-      if (result.brand) {
-        setVehicleBrand(result.brand);
-      }
-
-      if (result.model) {
-        setVehicleModel(result.model);
-      }
-
-      if (
-        confidence >= 0.72 &&
-        result.fields &&
-        typeof result.fields === "object"
-      ) {
-        setDynamicFields(result.fields);
-      } else {
-        setDynamicFields({});
-      }
-    } catch (error) {
-      console.error(error);
-      alert("AI analyze failed.");
-    } finally {
-      setAiLoading(false);
-    }
-  };
-
-
   const clearDraft = () => {
     localStorage.removeItem(DRAFT_STORAGE_KEY);
 
@@ -790,17 +626,6 @@ export default function SellPage() {
 
       const storeCategoryResult = await saveLegacyStoreCategorySelection(storeCategoryIntent, listingData.id, "create");
 
-      fetch("/api/ai/enrich-listing", {
-        method: "POST",
-        body: JSON.stringify({
-          listingId: listingData.id,
-          title,
-          description,
-        }),
-      }).catch((error) => {
-        console.error("AI enrich background request failed:", error);
-      });
-
       const primaryImageUrl = await uploadListingImages(listingData.id);
 
       if (primaryImageUrl) {
@@ -809,39 +634,6 @@ export default function SellPage() {
           .update({ image: primaryImageUrl })
           .eq("id", listingData.id)
           .eq("user_id", user.id);
-      }
-
-      const categoryChanged =
-        aiSelectedCategory !== category ||
-        aiSelectedSubcategory !== subcategory ||
-        aiSelectedDetailCategory !== detailCategory;
-
-      if (
-        aiResult &&
-        categoryChanged
-      ) {
-        await supabase
-          .from("ai_category_corrections")
-          .insert({
-            user_id: user.id,
-            listing_id: listingData.id,
-
-            ai_object: aiResult.object || "",
-            ai_suggested_title: aiResult.suggested_title || "",
-
-            ai_category: aiSelectedCategory || "",
-            ai_subcategory: aiSelectedSubcategory || "",
-            ai_detail_category: aiSelectedDetailCategory || "",
-
-            final_category: category || "",
-            final_subcategory: subcategory || "",
-            final_detail_category: detailCategory || "",
-
-            ai_confidence:
-              typeof aiResult.confidence === "number"
-                ? aiResult.confidence
-                : null,
-          });
       }
 
       localStorage.removeItem(DRAFT_STORAGE_KEY);
@@ -1066,32 +858,6 @@ export default function SellPage() {
 
           {previewUrls.length > 0 && (
             <>
-              <button
-                type="button"
-                onClick={analyzePhotosWithAI}
-                disabled={aiLoading}
-                className="w-full rounded-2xl border border-black/10 bg-black px-4 py-4 text-sm font-medium text-white transition hover:opacity-90 disabled:opacity-60"
-              >
-                {aiLoading
-                  ? "AI analyzing photos..."
-                  : "Analyze photos with AI"}
-              </button>
-
-              {remainingAiUsage !== null && dailyAiLimit !== null && (
-                <div className="rounded-2xl border border-black/10 bg-black/[0.02] px-4 py-3 text-sm text-black/65">
-                  AI analyses remaining today:{" "}
-                  <span className="font-semibold text-black">
-                    {remainingAiUsage} / {dailyAiLimit}
-                  </span>
-
-                  {dailyAiLimit === 10 && remainingAiUsage <= 3 && (
-                    <p className="mt-2 text-xs text-black/55">
-                      Upgrade to Premium for 150 AI analyses per day.
-                    </p>
-                  )}
-                </div>
-              )}
-
               {aiResult && (
                 <div
                   className={`rounded-2xl border p-4 text-sm ${

@@ -28,5 +28,9 @@ pealkirjad on ajalugu. Neid ei käsitleta tänaste käivitamiskäskudena.
 
 Väikesed moodulid, üks autoriteetne andmeallikas, õhuke kasutajaliides ning
 serveri/andmebaasi õiguskontroll. Tavaline osalemine ei sõltu Energy ostust.
-Kuulutused on praegune arendusetapp; Energy, maksete tuum ja piiratud AI abi
-jäävad kokkulepitud V2 käivitamise ulatusse.
+20.11.2026 kinnitatud avamissuund: portaal avatakse ilma tasulise AI abita.
+Energy ja maksete vundament säilivad tulevase esiletõstmise ning reklaamide jaoks;
+AI taasavamine vajab eraldi kontrollitud vajadust ja teostust. Praegused otsused
+on `docs/architecture/launch-profile-privacy-plan.md` ning reklaami kavand
+`docs/architecture/advertising-access-plan.md`. Varasem AI käivitamise plaan
+ei ole enam avamise eeltingimus.

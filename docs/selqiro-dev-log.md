@@ -2217,3 +2217,25 @@ Storage’it ega kasutajaandmeid selles sammus ei muudeta.
 - Kohalik ühe faili ülevaatus ja üks täielik Next.js/TypeScript build PASS; 729 sisendit, drift 0. Arvutatud enda teksti kontrast 6,48:1 ja kellaaja kontrast 5,20:1. Rakenduse vanu funktsionaalseid katseid ei korratud.
 - Brauseri visuaalne kontroll BLOCKED: eelmise sammu käivituspiirang ja kohaliku file-URL-i turvakeeld on säilitatud tõend; uut katset ega ümbersõitu ei tehtud. Uut paletti brauseris kontrollituks ei nimetata.
 - Kolm 413e8fc ettevalmistusdokumenti on baiditäpselt arhiivitud outgoing-message-contrast-base-413e8fc-20261118 alla; varasemad arhiivid ja päeviku prefiks säilivad. Uus outgoing-message-contrast-20261118 uuendaja teeb eraldi kontrollitud lähteparanduse. Uue kandidaadi Maci raport, uus Ready / Production ja tegelik välimus on järgmised kinnitused.
+
+
+## 2026-11-20 — AI sulgemine avamiseks; profiili ja reklaami tööpiir
+
+- Kasutaja kinnitas lihtsama konto/profiili ning ilma tasulise AI-ta avamise suuna.
+  7c7bc11 sõnumimull on 19.11 raporti ja Productioni piltidega vastu võetud;
+  varasemat paigaldust ei korratud.
+- Uus isoleeritud kandidaat sulgeb mõlemad AI POST-teed enne kõiki sõltuvusi
+  ning eemaldab vana /sell vormi AI-kutsed ja correction-write'i. Kuulutuse
+  tavaline insert, fotod ja mustandi taastamine säilivad.
+- Tegelike handlerite test 12/12 PASS, täielik Next.js/TypeScript build PASS
+  (730 sisendit, drift 0), sõltumatu runtime-ülevaatus ilma blokeeriva leiuta.
+  Uue Maci runneri simuleeritud tarnekontrollid on paketis eraldi.
+- AI Energy ajaloolised reserveeringud on muutmata ja live-inventeerimata.
+  Profiili õigused, avalike andmete piir ja sõltuvuste riskid jäävad järgmisteks
+  avamiseelseteks töödeks; üldist turvalisuse kinnitust ei anta.
+- Reklaamikavand kasutab üht sisselogimist ja valikulist avalikku profiili.
+  Väline veebireklaam on senise Selqiro objekti esiletõstmise eraldi laiendus;
+  esimene lihtne tee on päring koos käsitsi ülevaatusega. Reklaami/makseid
+  käesolev pakett ei ava.
+- Muudatus on kohalikult ette valmistatud. Maci rakendus, commit/push ja
+  Verceli vastuvõtt on veel kinnitamata. DB, Storage ja kontoandmed muutmata.
