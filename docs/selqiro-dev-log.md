@@ -2239,3 +2239,28 @@ Storage’it ega kasutajaandmeid selles sammus ei muudeta.
   käesolev pakett ei ava.
 - Muudatus on kohalikult ette valmistatud. Maci rakendus, commit/push ja
   Verceli vastuvõtt on veel kinnitamata. DB, Storage ja kontoandmed muutmata.
+
+
+## 20.11.2026 — 5312ea0 ja profiili lugemiskontroll vastu võetud; lugemisprivaatsuse parandus
+
+- AI sulgemise Maci raport, commit 5312ea0 ja sama commit’i Ready / Production pilt vastu võetud; vanad failid ja päevikud säilivad.
+- Kell 15:49 tehtud ühe metadata-päringuga koguja lõpetas edukalt, lähtepuu/indeks/remote muutmata. Kinnitatud avalike profiilitabelite liiga lai SELECT ning eraisiku täpse asukoha tagastamine avalikus RPC-s. Kasutajasisu ridu ei loetud.
+- Uus eraldi ettevalmistatud parandus sulgeb liigse lugemisligipääsu ja kontrollib oma aktiivse profiili lugemise õigust. Kuulutuse müüjakaart, päise profiililink ja „Minu ala” paketiinfo kasutavad kitsaid RPC-sid. Olemasolevate liikmesusreeglite rekursioonist mõjutatud üleliigsed toortabelipäringud eemaldatakse. SQL rollikatsed, rakenduse sihitud test ja build ning uuendaja tõendid on paketis.
+- Uue paranduse Maci rakendus, DB järelkontroll, commit/push ja uus deployment on veel ootel. Uut profiiliredaktorit ega pilditeed ei avata; kirjutusõiguste/versiooni, tasemeväljade kaitse ja kanonilise pildiallika töö järgneb.
+- Kasutaja täpsustatud reklaamisuund: automaatne avalik riigipõhine hinnakiri ja iseteenindus on põhitee; ühine alghind ning erihinna valmidus. Varasem käsitsipäringu soovitus on asendatud. Täpne kavand on advertising-pricing-self-service-plan.md-s.
+
+
+## 20.11.2026 — lugemisprivaatsuse uuendaja kontrollfaili asukoha parandus
+
+- Esimese privaatsuspaketi release `09cc0246f5085b93e02728649f0ed9c8aceb47e33e0384ae678de3f80ea7053b` peatus kell 16:34 `started` etapis veaga `PREVIOUS_RELEASE_RECEIPT_REQUIRED`. Tagastatud 546-baidise raporti SHA256 on `cc2c7d34e4da055faf48b006bc4df3c830bd5b62a87c077b269ef7e1012ca3c9`; database `not_started`, test/build/push `not_run`, commit `null`, commands `[]`. Lähtekoodi, andmebaasi ega avaldamise muutusi ei tehtud.
+- Põhjus leiti uuendaja ja koguja failipaigutuse erinevusest: koguja salvestas `FILE_MANIFEST.json`-i ainult ZIP-i, kuid uuendaja otsis seda kaustast. Vana kohalik kaustatest lõi ise ka selle faili ja ei tuvastanud viga. Algse eksportija taasesitus andis kasutaja tagastatud ZIP-iga baiditäpselt sama faili.
+- Uus eraldi `selqiro-profiili-lugemisprivaatsus-jatk-20261120` jätkupakett kontrollib kaustas algseid result/catalog-faile ja loeb kolme kontrollitud ZIP-liikme sisu mälus. Puuduvat manifesti ei lisata kausta. Peatunud käigu täpne algne raport ja olemasolev lukk hoitakse ainult lugemiseks; varasema käigu muutumine peatab jätkamise.
+- Algne väljastatud ZIP, runner, kõik raportid ja ajaloolised dokumendid säilivad muutmata. Rakenduse lugejate, rakendustesti ja SQL-i baidid jäävad samaks; uuendaja paranduse katsed ja dokumendimuudatused on eraldi. Jätkupaketi Maci rakendus, DB järelkontroll, commit/push ja uus Ready / Production on endiselt ootel. Portaali uut funktsionaalset ulatust ei lisata.
+
+
+## 20.11.2026 — profiili kataloogikontrolli lokaadist sõltuva järjestuse parandus
+
+- Kell 17:16 peatunud jätkukäigu originaalraport 284433 B, SHA256 `522fbb2910f4afc112a2bd444f9b76dbc5ec5ba93a31904adeeb2c6c4536b843`: `baseline_verified`, `DATABASE_PRECONDITIONS_NOT_MATCHED`. Üks edukas read-only preflight; DB `not_started`, test/build/push `not_run`, commit `null`. Varasem väljastus säilis; uut rakendust ei toimunud.
+- Samade kinnitatud metadata väärtuste 11 massiivi lokaadipõhine järjestamine taastoodab täpselt saadud `0fee6aa5265d1213dd0e7be3b841135442affb2dc75fcbfcdc5b9802b50b8eb8` räsi. Ükski õigus, poliitika ega muu väärtus ei muutu. Viga on JSON-teksti vaikimisi kollatsiooni ja kohaliku C-järjestuse erinevus; JavaScripti en-US ning PostgreSQL-i unicode-katse kinnitavad seda sõltumatult.
+- Uus eraldi `selqiro-profiili-kontrolli-parandus-20261120` määrab SQL-i kanoonilise tekstijärjestuse selgelt C-ks. Algne enne/pärast seisuleping, õiguste muutuse tõrjumine, rakenduskood ja sisuline privaatsusparandus säilivad. Tundmatut räsi ei muudeta lubatud seisuks.
+- Väljastatud ZIP-id, originaalraportid, migratsioonid ja ajalooline lähteüleandmine säilivad; päevikule lisatakse ainult see lõik. Uue paketi Maci rakendus, DB järelkontroll, commit/push ja sama commit’i Verceli Ready / Production tulemus on veel ootel. Järgmine üks käsk ja oodatud `VALMIS`/`SAADA SEE FAIL` tulemus on HOSTED_PORTAL.md-s.

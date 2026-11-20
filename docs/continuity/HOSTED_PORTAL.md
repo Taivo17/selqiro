@@ -1,57 +1,35 @@
-# Kuulutuste AI sulgemise parandus
+# Profiili kataloogikontrolli järjestuse parandus
 
-20.11.2026. Alus on vastu võetud commit `7c7bc11`.
-
-Parandus sulgeb kaks serveri AI-otspunkti ning vana kuulutusevormi AI-kutsed.
-Tavaline kuulutuse lisamine, fotod ja mustandid säilivad. Kaasas on järgmise
-profiilitöö otsused ja reklaamikonto kavand; neid funktsioone see pakett ei ava.
+20.11.2026. Viimane vastu võetud tootmiscommit on `5312ea0`. Kell 17:16 peatunud jätkukäik tegi ühe read-only kontrollpäringu ja peatus enne muudatusi. Uus eraldi pakett parandab kontrollsumma sõltuvuse serveri tekstijärjestusest.
 
 ## Üks käsk
 
-Laadi `selqiro-ai-sulgemise-parandus-20261120.zip` alla ning ava ZIP Downloads-kaustas.
-Käivita Terminalis:
+Laadi `selqiro-profiili-kontrolli-parandus-20261120.zip` alla ja ava Downloads-kaustas.
 
 ```bash
-python3 -I -B "$HOME/Downloads/selqiro-ai-sulgemise-parandus-20261120/uuenda.py" --publish
+python3 -I -B "$HOME/Downloads/selqiro-profiili-kontrolli-parandus-20261120/uuenda.py" --publish
 ```
 
-Uuendaja kontrollib värsket tegelikku main-haru, täpset `7c7bc11` lähtepuud,
-indexit, kinnitatud remote'i ja 19.11 eduka jooksu originaalraportit. Varasemad
-paketid ja päevikud säilivad. Andmebaasi, Storage'it ega kontosid ei muudeta.
-Enne commit/push'i peavad läbima uus 12 juhtumiga handleritest ja üks täielik
-build. Olemasolevaid sõltuvusi ei paigaldata ega uuendata.
+Uuendaja kontrollib algseid käiguraporteid, koguja tulemust, lähtepuud, indeksit, värsket remote’i, CLI-d ja andmebaasi kataloogi. Muudatus algab ainult teadaolevast seisust. Rakenduse test ja täielik build peavad läbima enne üht SQL-tehingut. Seejärel kontrollitakse uut andmebaasiseisu ning tehakse täpse muudatuse commit ja push.
 
-## Pärast käsku
+Säilita varasemad paketid, originaalraportid ning `Downloads/selqiro-recovery` all olev koguja tulemuskaust ja ZIP. Uus pakett kasutab olemasolevaid tõendeid. Vanade paigaldajate või koguja korduskäiku ega manifesti käsitsi lisamist pole vaja.
 
-Saada täpselt see uus raport, mille rada on `SAADA SEE FAIL` järel. Finder
-näitab sama faili. Kui raportit ei saanud luua, saada prinditud STOP-rida.
-Tõrke korral ei käivitata varasemaid paigaldajaid ega oletata uut jätkukäsku.
+## Miks eelmine käik peatus
 
-Vercelis kontrolli sama uue commit'i `Ready / Production` olekut. Ava pärast
-värskendamist tavaline kuulutuse lisamise vaade. Vana vorm ei paku enam uut
-AI fotoanalüüsi; praegune V2 vorm töötas juba käsitsi. Kontrollimiseks ei ole
-vaja uut kuulutust või sõnumit avaldada. Varasemast mustandist taastatud
-ajalooline AI-tulemus võib endiselt nähtav olla.
+Esimese katse kell 16:34 lõpetas `PREVIOUS_RELEASE_RECEIPT_REQUIRED`: koguja manifest asus ZIP-is, uuendaja otsis seda kaustast. Jätkupakett parandas selle lugemise tee.
 
-## Mida on kontrollitud
+Kell 17:16 jõudis jätkupakett kataloogikontrollini. Selle raporti SHA256 on `522fbb2910f4afc112a2bd444f9b76dbc5ec5ba93a31904adeeb2c6c4536b843`; `stopped_at: baseline_verified`, `DATABASE_PRECONDITIONS_NOT_MATCHED`, `database: not_started`, `tests/build/push: not_run`, `commit: null`. Raport kinnitab üht edukat read-only preflight’i ja varasema väljastuse säilimist.
 
-- Päris POST-handlerite isoleeritud kontroll: 12/12 läbitud; providerit,
-  andmebaasi, Energyt, võtmeid ega sisendkeha ei loeta.
-- Üks täielik Next.js/TypeScript build läbis; 730 sisendi räsi ei muutunud.
-- Sõltumatu lähteülevaatus ei leidnud selle muudatuse piires blokeerivat viga.
-- Uuendaja kontrollid ja tarnekatse on `kontrollid/` all. Nende simuleeritud
-  rakenduse test/build ei asenda eespool eraldi tehtud tegelikke kontrolle.
+Põhjus on täpselt taastoodetud: samad õiguste kirjed eri tekstijärjestuses andsid erineva kontrollsumma. Uus pakett määrab SQL-is kanoonilise `C`-järjestuse. Kõik õigused ja kontrollitavad väljad ning algsed enne/pärast kontrollsummad jäävad kontrolli alla; tundmatut seisu lubatuks ei märgita.
 
-See on kohalik ettevalmistus, mitte kinnitus Maci rakendusest, Git push'ist
-või uuest Productioni väljastusest. Brauseri teekonda varem tuvastatud
-käivituspiirangu tõttu ei korratud.
+## Oodatud tulemus
 
-Võimalikke varem pooleli jäänud AI Energy reserveeringuid pakett ei tagasta.
-Nende koondseis kuulub järgmisse lugemisinventuuri. Profiili õiguste ja
-andmete privaatsuse ning sõltuvuste turvaparandused jäävad avamiseelseteks
-töödeks. Kõigi portaali riskide lahendamist see pakett ei väida.
+Eduka käigu lõpus prindib uuendaja `VALMIS`, uue commit’i ning `SAADA SEE FAIL` raporti tee. Saada see täpne uus raport. Seejärel oota Vercelis sama commit’i `Ready / Production` tulemust ja värskenda portaali. Kuni neid tulemusi pole, ei ole paranduse tootmisse jõudmine kinnitatud.
 
-Reklaamiplaan: `payload/docs/architecture/advertising-access-plan.md`.
-Järgnev profiili ja privaatsuse töö:
-`payload/docs/architecture/launch-profile-privacy-plan.md`. Koodi täpne muudatus ja kontrollide piirid:
-`payload/docs/architecture/launch-ai-containment.md`.
+Kui käik peatub, saada uus raport või raporti puudumisel prinditud STOP-rida. Ebaselge SQL-vastuse korral ei korrata kirjutust automaatselt.
+
+## Ulatus
+
+Järjestusparandus võimaldab lõpetada varem ette valmistatud konto ja profiili privaatsete väljade lugemise kitsenduse. Rakenduskoodi ja sisulist õigusteparandust ei muudeta. Profiile, pilte, pakkumisi, liikmesusi ega vestlusi ei kustutata või migreerita. Uut profiiliredaktorit see pakett veel ei ava.
+
+Kirjutamisõiguse ja versiooni kontroll, serveri hallatavate tasemeväljade kaitse, ühtne pildiallikas ning sõnumite profiililink on järgmised tööd. See samm ei ole kogu portaali turvalisuse heakskiit.

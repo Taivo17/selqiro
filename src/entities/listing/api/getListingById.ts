@@ -15,9 +15,10 @@ type IdentityProfileRow = {
   avatar_url?: string | null;
 };
 
-type LegacyProfileRow = {
-  store_name?: string | null;
-  store_slug?: string | null;
+type PublicLegacyProfileCardRow = {
+  display_name?: string | null;
+  slug?: string | null;
+  avatar_url?: string | null;
 };
 
 type PublicStoreProfileRow = {
@@ -124,17 +125,6 @@ async function getCurrentViewer(): Promise<CurrentViewer> {
       if (!activeIdentityId && (activeProfileRpcRow as any).identity_id) {
         activeIdentityId = String((activeProfileRpcRow as any).identity_id);
       }
-    }
-
-    if (activeIdentityId && !activeIdentityProfile) {
-      const { data: identityProfileRow } = await supabaseBrowserClient
-        .from("identity_profiles")
-        .select("identity_id, display_name, slug, avatar_url")
-        .eq("identity_id", activeIdentityId)
-        .maybeSingle();
-
-      activeIdentityProfile =
-        (identityProfileRow || null) as IdentityProfileRow | null;
     }
 
     if (!activeIdentityProfile) {
@@ -300,24 +290,6 @@ async function enrichSellerFromStoreSlugRpc(
   row.seller_type = row.seller_type || profile.identity_type || null;
 }
 
-async function enrichSellerFromSlug(row: MutableListingRow): Promise<void> {
-  if (!row.seller_slug) return;
-  if (row.seller_avatar_url && row.seller_name) return;
-
-  const { data, error } = await supabaseBrowserClient
-    .from("identity_profiles")
-    .select("display_name, slug, avatar_url")
-    .eq("slug", row.seller_slug)
-    .maybeSingle();
-
-  if (error || !data) return;
-
-  const profile = data as IdentityProfileRow;
-
-  row.seller_name = row.seller_name || profile.display_name || null;
-  row.seller_avatar_url = row.seller_avatar_url || profile.avatar_url || null;
-}
-
 async function enrichSellerFromIdentityProfile(
   row: MutableListingRow
 ): Promise<void> {
@@ -325,9 +297,7 @@ async function enrichSellerFromIdentityProfile(
   if (row.seller_name && row.seller_slug && row.seller_avatar_url) return;
 
   const { data, error } = await supabaseBrowserClient
-    .from("identity_profiles")
-    .select("display_name, slug, avatar_url")
-    .eq("identity_id", row.identity_id)
+    .rpc("get_identity_profile_public", { p_identity_id: row.identity_id })
     .maybeSingle();
 
   if (error || !data) return;
@@ -347,17 +317,16 @@ async function enrichSellerFromLegacyProfile(
   if (row.seller_name && row.seller_slug) return;
 
   const { data, error } = await supabaseBrowserClient
-    .from("profiles")
-    .select("store_name, store_slug")
-    .eq("id", row.user_id)
+    .rpc("get_public_legacy_profile_card_v1", { p_user_id: row.user_id })
     .maybeSingle();
 
   if (error || !data) return;
 
-  const profile = data as LegacyProfileRow;
+  const profile = data as PublicLegacyProfileCardRow;
 
-  row.seller_name = row.seller_name || profile.store_name || null;
-  row.seller_slug = row.seller_slug || profile.store_slug || null;
+  row.seller_name = row.seller_name || profile.display_name || null;
+  row.seller_slug = row.seller_slug || profile.slug || null;
+  row.seller_avatar_url = row.seller_avatar_url || profile.avatar_url || null;
 }
 
 export async function getListingById(
@@ -405,7 +374,6 @@ export async function getListingById(
   }
 
   await enrichSellerFromStoreSlugRpc(row);
-  await enrichSellerFromSlug(row);
   await enrichSellerFromIdentityProfile(row);
 
   if (!marketplaceSnapshot && viewerIsOwner) {

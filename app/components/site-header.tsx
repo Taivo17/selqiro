@@ -108,24 +108,9 @@ export default function SiteHeader() {
       setLanguage(profile?.language || "en");
 
       const { data: identityRows } = await supabase.rpc("get_my_identities");
-      const identityIds = ((identityRows || []) as IdentityRow[]).map((item) => item.id);
-
-      let profileSlugs: Record<string, string> = {};
-
-      if (identityIds.length > 0) {
-        const { data: profileRows } = await supabase
-          .from("identity_profiles")
-          .select("identity_id, slug")
-          .in("identity_id", identityIds);
-
-        profileSlugs = Object.fromEntries(
-          (profileRows || []).map((row: any) => [row.identity_id, row.slug])
-        );
-      }
-
       const loadedIdentities = ((identityRows || []) as IdentityRow[]).map((item) => ({
         ...item,
-        slug: profileSlugs[item.id] || null,
+        slug: item.slug || null,
       }));
       setIdentities(loadedIdentities);
 

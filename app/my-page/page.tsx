@@ -529,6 +529,7 @@ export default function MyPage() {
   };
 
   const fetchProfile = async (currentUserId: string) => {
+    setIdentityPlan("free");
     const { data, error } = await supabase
       .from("profiles")
       .select("id, active_identity_id, is_premium, premium_until, language")
@@ -549,13 +550,16 @@ export default function MyPage() {
 
     if (data?.active_identity_id) {
       const { data: planData, error: planError } = await supabase
-        .from("identity_profiles")
-        .select("plan")
-        .eq("identity_id", data.active_identity_id)
+        .rpc("get_my_identity_profile_plan_v1", {
+          p_identity_id: data.active_identity_id,
+        })
         .maybeSingle();
 
       if (!planError) {
-        const nextPlan = planData?.plan;
+        const nextPlan =
+          planData !== null && typeof planData === "object" && "plan" in planData
+            ? planData.plan
+            : null;
         setIdentityPlan(
           nextPlan === "premium" || nextPlan === "business" ? nextPlan : "free"
         );
