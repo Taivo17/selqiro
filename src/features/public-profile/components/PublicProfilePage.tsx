@@ -6,6 +6,8 @@ import { useV2Translation } from "@/src/shared/i18n/V2LanguageProvider";
 import { getCatalogTranslation, type TranslationParams } from "@/lib/i18n/useTranslation";
 import type { Language } from "@/lib/i18n/translations";
 import { publicUiMessages } from "@/lib/i18n/catalogs/publicUi";
+import ProfileAvatar from "../../../shared/profile-media/ProfileAvatar";
+import ProfileCover from "../../../shared/profile-media/ProfileCover";
 
 
 import {
@@ -162,31 +164,13 @@ function PublicProfileContent({slug}: {slug: string}) {
   return (
     <div className="space-y-8">
       <section className="rounded-[34px] border border-black/5 bg-white shadow-sm">
-        {profile.bannerUrl ? (
-          <img
-            src={profile.bannerUrl}
-            alt=""
-            className="h-56 w-full rounded-t-[34px] object-cover"
-          />
-        ) : (
-          <div className="h-56 rounded-t-[34px] bg-gradient-to-br from-neutral-900 via-neutral-700 to-emerald-900" />
-        )}
+        <ProfileCover url={profile.bannerUrl} fit={profile.bannerFit} className="h-56 w-full rounded-t-[34px]" />
 
         <div className="px-6 pb-7 md:px-8">
           <div className="flex flex-col gap-5 md:flex-row md:items-start md:justify-between">
             <div className="flex flex-col gap-4 md:flex-row md:items-start">
-              <div className="-mt-16 h-32 w-32 shrink-0 rounded-full border-4 border-white bg-white shadow-lg">
-                {profile.avatarUrl ? (
-                  <img
-                    src={profile.avatarUrl}
-                    alt=""
-                    className="h-full w-full rounded-full object-cover"
-                  />
-                ) : (
-                  <div className="flex h-full w-full items-center justify-center rounded-full bg-gradient-to-br from-neutral-100 to-neutral-300 text-4xl font-black text-neutral-500">
-                    {profile.displayName.slice(0, 1).toUpperCase()}
-                  </div>
-                )}
+              <div className="relative z-10 -mt-16 h-32 w-32 shrink-0 rounded-full border-4 border-white bg-white shadow-lg">
+                <ProfileAvatar url={profile.avatarUrl} name={profile.displayName} className="h-full w-full text-4xl" />
               </div>
 
               <div className="pt-2 md:pt-6">

@@ -2276,3 +2276,8 @@ Storage’it ega kasutajaandmeid selles sammus ei muudeta.
 - Tegelike rakendusmoodulite sihitud katsed 40/40 PASS; täielik Next.js/TypeScript build PASS, 901 sisendit, drift 0. Esimene kontroll peatus vanale asukohavormile toetuva aegunud testi tõttu; testi ootus parandati uue teekonna järgi ja algne ebaõnnestunud tõend säilib. SQL-i käitumise, täpse metadata-lepingu ja uuendaja kohalike katsete eraldi tulemused seotakse paketi kontrolltõendites kontrollsummadega.
 - Kolm senist continuity-faili säilivad baiditäpselt profile-editor-base-d654033-20261120 all. Uue selqiro-minu-profiil-20261120 paketi Maci käik, SQL-i järelkontroll, commit/push ja Verceli vastuvõtt on veel ootel. Üks järgmine käsk on HOSTED_PORTAL.md-s.
 - Järgmine töö pärast vastuvõttu on ühtne profiilipildi/logo lisamise, vähendamise, asendamise ja eemaldamise tee, seejärel sõnumite profiilipilt ja avalik profiililink. Praegune parandus ei muuda pildifaile ega pakkumiste/vestluste sisu. Reklaami automaatse hinnakirja ja riigipõhise erihinna suund säilib eraldi kavandis.
+
+
+## 2026-11-20 — managed profile media (prepared release)
+
+Accepted profile editor `ab5d1d8` and its matching Ready / Production screenshot. The later read-only Storage collection confirms the unchanged 1,917-file tree and actual identity-media policy boundary. Prepared a separate media revision, owner-authorized immutable image pipeline, canonical avatar projections, optional cover fitting and public conversation profile links. The new Mac execution and production deployment remain pending. See `docs/architecture/profile-media-20261120.md` and the current handoff; previous handoff bytes are preserved in `docs/continuity/history/profile-media-base-ab5d1d8-20261120`.

@@ -245,7 +245,7 @@ test('public mapper includes safe website and explicitly public business address
   assert.equal(privateResult.websiteUrl, null); assert.equal(privateResult.businessAddress, null);
 });
 
-test('rendered private form has one Save, read-only profile kind/link and no address or image upload input', () => {
+test('rendered text form keeps one Save and read-only identity fields, with image inputs outside the form', () => {
   for (const identityType of ['private', 'business']) {
     const initial = snapshot({identity_type: identityType});
     const f = sessionFixture({initial});
@@ -262,7 +262,10 @@ test('rendered private form has one Save, read-only profile kind/link and no add
     assert.match(html, /Minu profiil/); assert.match(html, /name="display_name"/);
     assert.equal(html.includes('name="address_text"'), identityType === 'business');
     assert.equal(html.includes('value="exact"'), identityType === 'business');
-    assert.doesNotMatch(html, /name="(?:identity_type|slug|avatar_url|plan)"|type="file"/);
+    assert.doesNotMatch(html, /name="(?:identity_type|slug|avatar_url|plan)"/);
+    const textForm = html.match(/<form\b[^>]*>[\s\S]*?<\/form>/)?.[0];
+    assert.ok(textForm); assert.doesNotMatch(textForm, /type="file"/);
+    assert.equal((html.match(/type="file"/g) || []).length, 2);
     assert.match(html, /href="\/v2\/profile\/minu-profiil"/);
   }
 });

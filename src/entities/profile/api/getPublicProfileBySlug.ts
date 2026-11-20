@@ -1,6 +1,8 @@
 import { supabaseBrowserClient } from "../../../shared/supabase/browserClient";
 import type { PublicProfile } from "../model/types";
 import { publicBusinessAddress, publicProfileWebsite } from "../model/publicProfileFields";
+import { getPublicProfileMedia } from "./getPublicProfileMedia";
+import { DEFAULT_COVER_FIT } from "../../../shared/profile-media/coverFit";
 
 type PublicProfileRpcRow = {
   identity_id?: string | null;
@@ -52,6 +54,9 @@ export function mapPublicProfile(row: PublicProfileRpcRow, fallbackSlug: string)
     avatarUrl: row.avatar_url || null,
     bannerUrl: row.banner_url || null,
     bannerDominantColor: row.banner_dominant_color || null,
+    bannerFit: DEFAULT_COVER_FIT,
+    bannerWidth: null,
+    bannerHeight: null,
     country: row.country || null,
     city: row.city || null,
     locationLabel: formatLocationLabel({
@@ -85,5 +90,17 @@ export async function getPublicProfileBySlug(
     return null;
   }
 
-  return mapPublicProfile(row, slug);
+  const profile = mapPublicProfile(row, slug);
+  if (!profile.identityId) return profile;
+  try {
+    const media = await getPublicProfileMedia(profile.identityId);
+    if (!media) return null;
+    return {...profile, avatarUrl: media.avatar_url, bannerUrl: media.banner_url,
+      bannerFit: {focus_x: media.focus_x, focus_y: media.focus_y, zoom: media.zoom},
+      bannerWidth: media.banner_width, bannerHeight: media.banner_height};
+  } catch {
+    // A failed decorative read must not hide a readable profile. Do not invent
+    // a centered crop for a managed cover whose saved position is unavailable.
+    return {...profile, bannerUrl: profile.bannerUrl?.includes("/managed-profile-v1/") ? null : profile.bannerUrl};
+  }
 }

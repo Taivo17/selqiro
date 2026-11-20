@@ -1,3 +1,4 @@
+import type {CoverFit} from "../../../shared/profile-media/coverFit";
 export type PublicProfile = {
   identityId: string | null;
   identityType: string | null;
@@ -8,6 +9,9 @@ export type PublicProfile = {
   avatarUrl: string | null;
   bannerUrl: string | null;
   bannerDominantColor: string | null;
+  bannerFit?: CoverFit;
+  bannerWidth?: number | null;
+  bannerHeight?: number | null;
   country: string | null;
   city: string | null;
   locationLabel: string;

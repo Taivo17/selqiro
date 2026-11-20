@@ -1,10 +1,12 @@
 "use client";
 import Link from "next/link";
-import { useEffect, useRef, type MouseEvent } from "react";
+import { useEffect, useRef, useState, type MouseEvent } from "react";
 import { useV2Translation } from "../../../shared/i18n/V2LanguageProvider";
 import { profileEditorMessages } from "../i18n/messages";
 import { PROFILE_LIMITS, type ProfileEditorField } from "../model/profileEditor";
 import { useProfileEditor } from "../model/useProfileEditor";
+import { useProfileMediaEditor } from "../../profile-media/model/useProfileMediaEditor";
+import ProfileMediaEditor from "../../profile-media/components/ProfileMediaEditor";
 
 const panel = "rounded-[30px] border border-black/5 bg-white p-5 shadow-sm sm:p-7";
 const input = "mt-2 w-full rounded-2xl border border-neutral-300 bg-white px-4 py-3 text-base text-neutral-950 outline-none focus:border-emerald-700 focus:ring-2 focus:ring-emerald-700/20 disabled:bg-neutral-50 disabled:text-neutral-600 aria-invalid:border-red-600";
@@ -13,9 +15,14 @@ const secondary = "inline-flex min-h-11 items-center justify-center rounded-full
 export default function ProfileEditorPage() {
   const {t} = useV2Translation(profileEditorMessages);
   const editor = useProfileEditor(), {view, session, ready} = editor;
+  const media = useProfileMediaEditor(editor.context), [fittingPicture, setFittingPicture] = useState(false);
+  const mediaLabel = useRef<{identityId: string; name: string; business: boolean} | null>(null);
+  if (view) mediaLabel.current = {identityId: view.saved.identity_id, name: view.saved.display_name, business: view.saved.identity_type === "business"};
+  const knownMediaLabel = mediaLabel.current?.identityId === media.view?.saved.identity_id ? mediaLabel.current : null;
   const formRef = useRef<HTMLFormElement>(null);
   const busy = view?.phase === "saving" || view?.phase === "checking";
-  const protectDraft = !!view && (view.dirty || busy || view.phase === "uncertain");
+  const protectDraft = (!!view && (view.dirty || busy || view.phase === "uncertain")) || fittingPicture || !!media.view?.draft
+    || !!media.view && ["preparing", "uploading", "saving", "checking", "uncertain"].includes(media.view.phase);
   useEffect(() => {
     if (!protectDraft) return;
     const onUnload = (event: BeforeUnloadEvent) => {event.preventDefault(); event.returnValue = "";};
@@ -37,11 +44,14 @@ export default function ProfileEditorPage() {
     <h1 className="text-2xl font-black">{t("signInTitle")}</h1>
     <Link className={`${secondary} mt-5`} href="/auth?next=%2Fv2%2Fmy-area%2Fprofile">{t("signIn")}</Link>
   </section>;
-  if (!view || !session) return <section className={`${panel} mx-auto max-w-3xl`}>
-    {heading}
-    <p role={editor.error ? "alert" : "status"} className="mt-6 text-sm text-neutral-600">{t(editor.error ?? "loading")}</p>
-    {editor.error ? <button type="button" onClick={editor.refresh} className={`${secondary} mt-4`}>{t("retry")}</button> : null}
-  </section>;
+  if (!view || !session) return <div className="mx-auto w-full max-w-3xl space-y-6 pb-8">
+    <section className={panel}>
+      {heading}
+      <p role={editor.error ? "alert" : "status"} className="mt-6 text-sm text-neutral-600">{t(editor.error ?? "loading")}</p>
+      {editor.error ? <button type="button" onClick={editor.refresh} className={`${secondary} mt-4`}>{t("retry")}</button> : null}
+    </section>
+    <ProfileMediaEditor state={media} name={knownMediaLabel?.name ?? ""} business={knownMediaLabel?.business ?? false} onEditingChange={setFittingPicture}/>
+  </div>;
   const disabled = !ready || !view.available || view.phase !== "ready";
   const business = view.saved.identity_type === "business";
   const publicHref = view.saved.slug ? `/v2/profile/${encodeURIComponent(view.saved.slug)}` : null;
@@ -71,6 +81,7 @@ export default function ProfileEditorPage() {
         </dl>
       </div>
     </section>
+    <ProfileMediaEditor state={media} name={view.saved.display_name} business={business} onEditingChange={setFittingPicture}/>
     {notice ? <div role={notice === "saved" || notice === "checked" ? "status" : "alert"}
       className={`rounded-2xl border p-4 text-sm leading-6 ${notice === "saved" || notice === "checked" ? "border-emerald-200 bg-emerald-50 text-emerald-950" : "border-amber-200 bg-amber-50 text-amber-950"}`}>
       <p>{t(notice)}</p>

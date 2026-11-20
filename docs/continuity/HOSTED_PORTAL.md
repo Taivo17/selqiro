@@ -1,29 +1,29 @@
-# „Minu profiil” — teksti- ja asukohaandmete muutmine
+# Profiilipildid, ettevõtte logo ja taustapildi sobitamine
 
-20.11.2026. Vastu võetud alus on `d654033`. Selle lugemisprivaatsuse parandus on lõpetatud. Uus salvestamise kataloog koguti edukalt kell 19:31 Eesti aja järgi ja kinnitab sama lähtebaasi.
+20.11.2026. Praegune vastu võetud lähtecommit on `ab5d1d8`. Selle „Minu profiili” vorm töötab kasutaja raporti ja sama commit’i Ready / Production tõendi järgi. Kell 21:46 kogutud pildihoidla õiguste kataloog on terviklik ja läbi vaadatud.
 
 ## Käivitamine
 
-Ava `selqiro-minu-profiil-20261120.zip` Downloads-kaustas. Käivita:
+Ava `selqiro-profiilipildid-20261120.zip` Downloads-kaustas. Käivita:
 
 ```bash
-python3 -I -B "$HOME/Downloads/selqiro-minu-profiil-20261120/uuenda.py" --publish
+python3 -I -B "$HOME/Downloads/selqiro-profiilipildid-20261120/uuenda.py" --publish
 ```
 
-Pakett kontrollib varasemat edukat privaatsusraportit, viimase koguja algseid faile ja ZIP-i, tervet lähtepuud, indeksit, remote’i, olemasolevat CLI-d ja andmebaasiseisu. Seejärel rakendab ta läbivaadatud failid, käivitab rakenduse testid ja build’i ning teeb ühe piiratud SQL-tehingu. Alles sõltumatu järelkontrolli järel tehakse commit ja push.
+Uuendaja kontrollib kinnitatud lähtekoodi, indeksit, remote’i, eduka profiiliredaktori originaalraportit, viimase pildihoidla koguja originaale ning projekti õiguste seisu. Seejärel paigaldab ta failid, teeb kohalikud katsed ja build’i, rakendab ühe kontrollitud SQL-tehingu ning teeb kinnitatud tulemuse järel commit’i ja push’i.
 
-Säilita varasemad paketid, algsed raportid ning `Downloads/selqiro-recovery` all olev viimane tulemuskaust ja ZIP. Vanu uuendajaid ega kogujat pole vaja uuesti käivitada. Koguja manifest asub ZIP-is; seda ei pea eraldi looma.
+Säilita senised raportid ja `Downloads/selqiro-recovery` viimase koguja tulemus. Vanu programme ei ole vaja uuesti käivitada. Puuduvat manifesti ei pea ise looma.
 
 ## Pärast käiku
 
-Saada terminalis `SAADA SEE FAIL` juures näidatud uus raport. Kui terminal näitab commit’i, oota Vercelis **sama commit’i** `Ready / Production` tulemust ja värskenda portaali.
+Saada terminalis `SAADA SEE FAIL` juures näidatud uus raport. Eduka commit’i järel oota Vercelis **sama commit’i** `Ready / Production` tulemust ja värskenda portaali.
 
-„Minu alas” avaneb uus **Minu profiil**. Seal saab muuta avalikku nime, kirjeldust, veebilehte ning riiki ja linna/piirkonda. Ettevõttel on ka vabatahtlik avalik külastusaadress. Nime muutus peab olema näha avalikul profiilil ja profiilivalikus. Eraisiku vorm ei küsi täpset koduaadressi.
+**Minu ala → Minu profiil** võimaldab valida profiilipildi või ettevõtte logo ning sellest sõltumatu taustapildi. Uus valik ilmub kõigepealt eelvaatesse ja jõuab avalikuks salvestamisel. „Sobita pilti” võimaldab taustapilti nihutada ja mõõdukalt suurendada; loobumine jätab senise pildi alles. Pildi eemaldamine ei too tagasi vana varupilti.
 
-Profiilipiltide ja logode lisamise/asendamise lahendus on järgmine tööetapp. Praegune vorm ei muuda olemasolevaid pilte. Sõnumite profiililink, lihtsam registreerimine, konto sulgemine ja reklaami iseteenindus tulevad eraldi.
+Ühtne pilt peab olema näha avalikul profiilil, ülamenüüs ja sõnumites. Vestluspartneri nimi ning pilt avavad tema avaliku profiili, kui see on avalikult saadaval. Kontrolli nii ettevõtte kui ka eraisiku profiili ning telefonilaiusega taustapildi eelvaadet.
 
 ## Kui käik peatub
 
-Saada uus raport või raporti puudumisel terminali `PEATATUD` rida. Ebaselge SQL-vastuse korral kirjutust automaatselt ei korrata. „Valmis” tähendab ainult raportis kontrollitud samme; Verceli ja brauseri tulemus võetakse eraldi vastu.
+Saada uus raport või raporti puudumisel täpne `PEATATUD` rida. Ebaselget SQL-kirjutust ei korrata automaatselt. „Valmis” tähendab raportis kontrollitud kohalikke ja Git/SQL samme; Verceli ja brauseri tulemus võetakse eraldi vastu.
 
-Uus pakett pole selle juhendi ettevalmistamise ajal kasutaja Macis käivitatud. Varasemate peatunud katsete ajalugu on säilinud, kuid praegune alus on nende järel edukalt vastu võetud `d654033`.
+Uus pakett ei ole selle juhendi koostamise ajal kasutaja Macis käivitatud. Piltide vana hoidla sisu ei kustutata hulgi; konto täieliku kustutamise reeglid on järgmine eraldi töö.

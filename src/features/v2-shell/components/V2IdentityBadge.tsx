@@ -20,7 +20,7 @@ import { profileEditorMessages } from "../../profile-editor/i18n/messages";
 import { shouldReloadIdentityScopedRoute } from "../model/identityRouteReload";
 import type { IdentitySummary } from "../../../entities/identity/model/types";
 import { useV2IdentitySwitcher } from "../model/useV2IdentitySwitcher";
-import { safeMessageAvatar } from "../../../entities/conversation/model/messagingValidation";
+import ProfileAvatar from "../../../shared/profile-media/ProfileAvatar";
 
 function identityTypeLabel(
   identity: IdentitySummary, uiLanguage: Language = "en"
@@ -39,40 +39,7 @@ function IdentityAvatar({
   identity: IdentitySummary | null;
   className: string;
 }) {
-  const avatarUrl = safeMessageAvatar(identity?.avatarUrl ?? null);
-  if (avatarUrl) {
-    return (
-      // The allowlisted public avatar loads directly with no referrer.
-      // eslint-disable-next-line @next/next/no-img-element
-      <img
-        src={avatarUrl}
-        alt=""
-        referrerPolicy="no-referrer"
-        className={[
-          className,
-          "shrink-0 rounded-full object-cover",
-        ].join(" ")}
-      />
-    );
-  }
-
-  const initial =
-    identity?.displayName
-      .trim()
-      .slice(0, 1)
-      .toUpperCase() || "?";
-
-  return (
-    <span
-      className={[
-        className,
-        "flex shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-neutral-100 to-neutral-300 text-xs font-black text-neutral-600",
-      ].join(" ")}
-      aria-hidden="true"
-    >
-      {initial}
-    </span>
-  );
+  return <ProfileAvatar url={identity?.avatarUrl} name={identity?.displayName} className={className} />;
 }
 
 
