@@ -3,16 +3,15 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { supabase } from "../../lib/supabase";
-import { useLocation } from "./hooks/useLocation";
 import { useAuth } from "../../lib/useAuth";
 import { captureLegacyStoreCategoryIntent, saveLegacyStoreCategorySelection } from "../../src/entities/listing/api/saveLegacyStoreCategorySelection";
 import { legacyStoreCategoryRecovery } from "../../src/features/listing-edit/model/legacyStoreCategoryRecovery";
 import { CATEGORY_TREE } from "../../lib/categories";
 import { getCategoryFields } from "../../lib/categoryFields";
-import { getTranslation } from "../../lib/i18n/useTranslation";
+import { getCatalogTranslation, getTranslation } from "../../lib/i18n/useTranslation";
+import { profileEditorMessages } from "../../src/features/profile-editor/i18n/messages";
 import LegacyBlockedAccounts from "../../src/features/viewer-provider-controls/components/LegacyBlockedAccounts";
 
-import LocationCard from "./components/LocationCard";
 import LocationAutocomplete from "../components/LocationAutocomplete";
 
 const PAGE_SIZE = 30;
@@ -38,7 +37,6 @@ function validateSourceImageFile(file: File) {
 }
 
 
-const ADMIN_EMAIL = "taiwo17@gmail.com";
 
 type ListingImage = {
   id: string;
@@ -97,21 +95,6 @@ type StoreCategory = {
   name: string;
   sort_order?: number | null;
 };
-
-type ClaimResponse = {
-  success?: boolean;
-  message?: string;
-  premium_until?: string;
-};
-
-type InviteResponse = {
-  success?: boolean;
-  message?: string;
-  invite_code?: string;
-  premium_days?: number;
-  expires_at?: string;
-};
-
 
 const LONG_TEXT_FIELD_KEYS = new Set([
   "equipment",
@@ -331,22 +314,6 @@ export default function MyPage() {
 
   const [profile, setProfile] = useState<Profile | null>(null);
   const [identityPlan, setIdentityPlan] = useState<"free" | "premium" | "business">("free");
-  const [inviteCode, setInviteCode] = useState("");
-  const [claimingInvite, setClaimingInvite] = useState(false);
-  const [claimMessage, setClaimMessage] = useState("");
-  const [generatedCode, setGeneratedCode] = useState("");
-  const [creatingInvite, setCreatingInvite] = useState(false);
-
-  const {
-    homeCountry,
-    setHomeCountry,
-    homeCity,
-    setHomeCity,
-    selectedHomeLocation,
-    setSelectedHomeLocation,
-    savingHomeLocation,
-    saveHomeLocation,
-  } = useLocation(userId);
   const [language, setLanguage] = useState("en");
   const [savingLanguage, setSavingLanguage] = useState(false);
 
@@ -565,20 +532,7 @@ export default function MyPage() {
         );
       }
 
-      const { data: identityRows, error: identityError } = await supabase.rpc(
-        "get_my_active_identity_profile_details"
-      );
 
-      const identityProfile = Array.isArray(identityRows)
-        ? identityRows[0]
-        : identityRows;
-
-      if (identityError) {
-        console.error("Error loading active identity location:", identityError);
-      }
-
-      setHomeCountry(identityProfile?.country || "Estonia");
-      setHomeCity(identityProfile?.city || "");
     }
   };
 
@@ -650,46 +604,6 @@ export default function MyPage() {
     return () => clearTimeout(timer);
   }, [userId, loading, debouncedSearch, filter, storeSectionFilter]);
 
-  const claimPremiumInvite = async () => {
-    if (!userId) return;
-
-    const cleanCode = inviteCode.trim();
-
-    if (!cleanCode) {
-      setClaimMessage("Enter invite code.");
-      return;
-    }
-
-    setClaimingInvite(true);
-    setClaimMessage("");
-
-    try {
-      const { data, error } = await supabase.rpc("claim_premium_invite", {
-        input_code: cleanCode,
-      });
-
-      if (error) throw error;
-
-      const result = data as ClaimResponse;
-
-      if (!result?.success) {
-        setClaimMessage(result?.message || "Invite could not be claimed.");
-        return;
-      }
-
-      setClaimMessage("Premium activated.");
-      setInviteCode("");
-
-      await fetchProfile(userId);
-    } catch (error) {
-      console.error("Premium invite claim failed:", error);
-      setClaimMessage("Premium invite claim failed.");
-    } finally {
-      setClaimingInvite(false);
-    }
-  };
-
-
   const saveLanguage = async () => {
     if (!userId) return;
 
@@ -709,36 +623,6 @@ export default function MyPage() {
       alert("Failed to save language.");
     } finally {
       setSavingLanguage(false);
-    }
-  };
-
-  const createPremiumInvite = async () => {
-    if (!userId) return;
-
-    setCreatingInvite(true);
-    setGeneratedCode("");
-
-    try {
-      const { data, error } = await supabase.rpc("create_premium_invite", {
-        premium_days_input: 30,
-        expires_in_days_input: 30,
-      });
-
-      if (error) throw error;
-
-      const result = data as InviteResponse;
-
-      if (!result?.success || !result.invite_code) {
-        alert(result?.message || "Failed to create invite.");
-        return;
-      }
-
-      setGeneratedCode(result.invite_code);
-    } catch (error) {
-      console.error("Error creating invite:", error);
-      alert("Failed to create invite.");
-    } finally {
-      setCreatingInvite(false);
     }
   };
 
@@ -1394,6 +1278,7 @@ export default function MyPage() {
   const soldCount = listings.filter((item) => item.status === "sold").length;
 
   const t = (key: any) => getTranslation(language || "en", key);
+  const profileText = (key: keyof typeof profileEditorMessages.en) => getCatalogTranslation(language || "en", profileEditorMessages, key);
 
   if (loading) {
     return (
@@ -1458,7 +1343,7 @@ export default function MyPage() {
                   type="button"
                   onClick={() =>
                     alert(
-                      "Free account limit reached. Pause or sell listings until active listings are under 50, or activate Premium."
+                      "Free account limit reached. Pause or sell listings until active listings are under 50."
                     )
                   }
                   className="rounded-2xl bg-neutral-300 px-5 py-3 text-sm font-medium text-neutral-700"
@@ -1484,18 +1369,13 @@ export default function MyPage() {
           </div>
         </header>
 
-        <LocationCard
-        homeCountry={homeCountry}
-        homeCity={homeCity}
-        selectedHomeLocation={selectedHomeLocation}
-        savingHomeLocation={savingHomeLocation}
-        inputClass={inputClass}
-        onCountryChange={setHomeCountry}
-        onCityChange={setHomeCity}
-        onSelectedHomeLocationChange={setSelectedHomeLocation}
-        onSave={saveHomeLocation}
-        t={t}
-      />
+        <section className="rounded-[28px] bg-white p-5 shadow-sm sm:p-6">
+          <h2 className="text-2xl font-semibold tracking-tight">{profileText("myProfile")}</h2>
+          <p className="mt-2 text-sm text-black/55">{profileText("profileSettingsHelp")}</p>
+          <Link href="/v2/my-area/profile" className="mt-4 inline-flex rounded-2xl bg-black px-5 py-3 text-sm font-medium text-white">
+            {profileText("myProfile")}
+          </Link>
+        </section>
 
       <section className="rounded-[28px] bg-white p-5 shadow-sm sm:p-6">
           <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
@@ -1565,58 +1445,13 @@ export default function MyPage() {
               {!premiumActive && activeListingsCount >= 50 && (
                 <p className="mt-2 text-sm font-medium text-yellow-700">
                   Free listing limit reached. Existing listings stay active until
-                  their 90-day expiry, but new listings need Premium or fewer than
-                  50 active listings.
+                  their 90-day expiry. Reduce the number of active listings below 50
+                  before adding another listing.
                 </p>
               )}
             </div>
 
-            <div className="w-full max-w-md">
-              <label className={labelClass}>{t("myPage.premiumInviteCode")}</label>
 
-              <div className="flex flex-col gap-3 sm:flex-row">
-                <input
-                  value={inviteCode}
-                  onChange={(e) => setInviteCode(e.target.value)}
-                  placeholder={t("myPage.enterInviteCode")}
-                  className={inputClass}
-                />
-
-                <button
-                  type="button"
-                  onClick={claimPremiumInvite}
-                  disabled={claimingInvite}
-                  className="rounded-2xl bg-black px-5 py-3 text-sm font-medium text-white disabled:opacity-60"
-                >
-                  {claimingInvite ? t("myPage.activating") : t("myPage.activate")}
-                </button>
-              </div>
-
-              {claimMessage && (
-                <p className="mt-2 text-sm text-black/55">{claimMessage}</p>
-              )}
-
-              {user?.email === ADMIN_EMAIL && (
-                <div className="mt-4 rounded-2xl border border-black/10 bg-white p-4">
-                  <p className="mb-2 text-sm font-semibold">{t("myPage.admin")}</p>
-
-                  <button
-                    type="button"
-                    onClick={createPremiumInvite}
-                    disabled={creatingInvite}
-                    className="rounded-2xl bg-green-600 px-5 py-3 text-sm font-medium text-white disabled:opacity-60"
-                  >
-                    {creatingInvite ? t("myPage.creating") : t("myPage.generatePremiumInvite")}
-                  </button>
-
-                  {generatedCode && (
-                    <div className="mt-3 rounded-2xl bg-black px-4 py-3 text-sm font-medium text-white">
-                      {t("myPage.code")}: {generatedCode}
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
           </div>
         </section>
 

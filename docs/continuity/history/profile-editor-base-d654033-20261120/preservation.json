@@ -1,0 +1,18 @@
+{
+  "format": "selqiro-continuity-preservation-v1",
+  "base_commit": "d6540333c6a1eace53bfac616c1041a8bd238806",
+  "files": {
+    "docs/continuity/CURRENT_STATE.json": {
+      "bytes": 8995,
+      "sha256": "dc4a93a1be8a55d5678708c1b11a71f2b763652859b3235277baf491fad706e8"
+    },
+    "docs/continuity/HOSTED_PORTAL.md": {
+      "bytes": 2974,
+      "sha256": "2dfd89c234fd69fe904a7f27b43b6e3d2deb4abf310dab7701ddd220981a7472"
+    },
+    "docs/99_V2_HANDOFF_NEXT_CHAT.md": {
+      "bytes": 9112,
+      "sha256": "96f018250272dd25a3567e9eb6febb33f320cfbf701d3883c9037c2edc7de673"
+    }
+  }
+}

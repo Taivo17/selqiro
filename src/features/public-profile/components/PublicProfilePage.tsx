@@ -19,6 +19,7 @@ import PublicProfileServicesSection from "./PublicProfileServicesSection";
 import ProviderControlsBoundary from "../../viewer-provider-controls/components/ProviderControlsBoundary";
 import PublicProfileProviderMenu from "./PublicProfileProviderMenu";
 import PublicProfileJobsSection from "../../jobs/components/PublicProfileJobsSection";
+import { profileEditorMessages } from "../../profile-editor/i18n/messages";
 
 const updates = (uiLanguage: Language) => { const t = (key: keyof typeof publicUiMessages.en, params?: TranslationParams) => getCatalogTranslation(uiLanguage, publicUiMessages, key, params); return [
   {
@@ -86,6 +87,7 @@ export default function PublicProfilePage({ slug }: { slug: string }) {
 }
 function PublicProfileContent({slug}: {slug: string}) {
   const { language: uiLanguage, t } = useV2Translation(publicUiMessages);
+  const {t: profileText} = useV2Translation(profileEditorMessages);
 
   const { profile, loading, error } = usePublicProfile(slug);
 
@@ -284,13 +286,23 @@ function PublicProfileContent({slug}: {slug: string}) {
               {t("about_this_profile")} </p>
 
             <div className="mt-5 space-y-4 text-sm leading-6 text-neutral-700">
-              <p>{description}</p>
+              <p className="whitespace-pre-line break-words">{description}</p>
+
+              {profile.websiteUrl ? <div className="rounded-2xl bg-[#fbfbfa] p-4">
+                <p className="font-black">{profileText("website")}</p>
+                <a href={profile.websiteUrl} target="_blank" rel="noopener noreferrer ugc nofollow" referrerPolicy="no-referrer"
+                  className="mt-1 inline-flex min-h-11 items-center break-all font-semibold text-emerald-800 underline underline-offset-4">
+                  {new URL(profile.websiteUrl).hostname} <span aria-hidden="true" className="ml-2">↗</span>
+                </a>
+                <p className="mt-1 text-xs leading-5 text-neutral-500">{profileText("externalNotice")}</p>
+              </div> : null}
 
               <div className="rounded-2xl bg-[#fbfbfa] p-4">
                 <p className="font-black">{t("location")}</p>
                 <p className="mt-1 text-neutral-500">
                   {profile.locationLabel || t("location_unspecified")}
                 </p>
+                {profile.businessAddress ? <p className="mt-1 whitespace-pre-line break-words text-neutral-600">{profile.businessAddress}</p> : null}
               </div>
 
               <div className="rounded-2xl bg-[#fbfbfa] p-4">

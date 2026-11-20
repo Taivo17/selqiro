@@ -23,6 +23,7 @@ import { providerControlMessages } from "../../../src/features/viewer-provider-c
 import MyJobsSection from "../../../src/features/jobs/components/MyJobsSection";
 import { jobMessages } from "../../../src/features/jobs/model/jobMessages";
 import { getOfferTheme,offerButtonLayout } from "../../../src/shared/marketplace/offerTheme";
+import { profileEditorMessages } from "../../../src/features/profile-editor/i18n/messages";
 
 const actionClass = "inline-flex min-h-11 items-center justify-center rounded-full border border-neutral-200 bg-white px-5 py-3 text-sm font-bold shadow-sm transition hover:border-neutral-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700";
 const navClass = "flex min-h-11 items-center rounded-2xl px-4 py-3 text-sm font-bold text-neutral-700 hover:bg-neutral-100 hover:text-black focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700";
@@ -53,6 +54,7 @@ export default function V2MyAreaPage() {
   const {t: serviceText} = useV2Translation(serviceEditorMessages);
   const {t: providerText} = useV2Translation(providerControlMessages);
   const {t: jobText} = useV2Translation(jobMessages);
+  const {t: profileText} = useV2Translation(profileEditorMessages);
 
   const { identity, actor, loading, anonymous, error, refresh } = useMyAreaIdentity();
   const integrated = v2IntegrationEnabled();
@@ -80,6 +82,7 @@ export default function V2MyAreaPage() {
           <a href="#my-area-categories" className={navClass}>{t("store_categories")}</a>
           <a href="#my-area-provider-controls" className={navClass}>{providerText("management")}</a>
           <Link href={messagesHref} className={navClass}>{t("messages")}</Link>
+          <Link href="/v2/my-area/profile" className={navClass}>{profileText("myProfile")}</Link>
           {profileHref ? <Link href={profileHref} className={navClass}>{t("public_profile")}</Link> : null}
           {!integrated ? <>
             <a href="#my-area-showcase" className={navClass}>{t("product_showcases")}</a>
@@ -118,6 +121,7 @@ export default function V2MyAreaPage() {
               </> : null}
               {profileHref ? <Link href={profileHref} className={`${actionClass} mt-5 w-full text-neutral-950`}>{t("view_public_profile")}</Link>
                 : identity ? <p className="mt-3 text-sm leading-6 text-white/70">{t("this_identity_s_public_profile_is_unavailable")}</p> : null}
+              {identity ? <Link href="/v2/my-area/profile" className={`${actionClass} mt-3 w-full text-neutral-950`}>{profileText("myProfile")}</Link> : null}
             </div>
           </div>
         </section>

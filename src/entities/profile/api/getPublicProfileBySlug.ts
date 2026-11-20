@@ -1,5 +1,6 @@
 import { supabaseBrowserClient } from "../../../shared/supabase/browserClient";
 import type { PublicProfile } from "../model/types";
+import { publicBusinessAddress, publicProfileWebsite } from "../model/publicProfileFields";
 
 type PublicProfileRpcRow = {
   identity_id?: string | null;
@@ -16,6 +17,9 @@ type PublicProfileRpcRow = {
   country?: string | null;
   city?: string | null;
   location?: string | null;
+  website_url?: string | null;
+  address_text?: string | null;
+  location_visibility?: string | null;
 };
 
 function firstRow<T>(value: T | T[] | null | undefined): T | null {
@@ -31,10 +35,10 @@ function formatLocationLabel(input: {
   country?: string | null;
   location?: string | null;
 }): string {
-  return input.city || input.location || input.country || "";
+  return [...new Set([input.city || input.location, input.country].filter(Boolean))].join(", ");
 }
 
-function mapPublicProfile(row: PublicProfileRpcRow, fallbackSlug: string): PublicProfile {
+export function mapPublicProfile(row: PublicProfileRpcRow, fallbackSlug: string): PublicProfile {
   const displayName = row.display_name || row.store_name || "";
   const slug = row.slug || row.store_slug || fallbackSlug;
 
@@ -55,6 +59,8 @@ function mapPublicProfile(row: PublicProfileRpcRow, fallbackSlug: string): Publi
       country: row.country,
       location: row.location,
     }),
+    websiteUrl: publicProfileWebsite(row.website_url),
+    businessAddress: publicBusinessAddress(row),
   };
 }
 

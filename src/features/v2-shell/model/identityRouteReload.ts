@@ -2,6 +2,8 @@ export function shouldReloadIdentityScopedRoute(
   pathname: string | null
 ): boolean {
   if (!pathname) return false;
+  // The profile editor suspends writes and preserves drafts during its own actor checks.
+  if (/^\/v2\/my-area\/profile\/?$/.test(pathname)) return false;
   // Only the revision-checked owner editor owns its unsaved identity context.
   if (/^\/v2\/my-area\/horse-offers\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\/edit\/?$/i.test(pathname)) return false;
 

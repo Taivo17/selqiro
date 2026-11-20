@@ -15,6 +15,8 @@ import {
   useState,
 } from "react";
 import { usePathname } from "next/navigation";
+import Link from "next/link";
+import { profileEditorMessages } from "../../profile-editor/i18n/messages";
 import { shouldReloadIdentityScopedRoute } from "../model/identityRouteReload";
 import type { IdentitySummary } from "../../../entities/identity/model/types";
 import { useV2IdentitySwitcher } from "../model/useV2IdentitySwitcher";
@@ -82,6 +84,7 @@ export default function V2IdentityBadge({
   userEmail?: string | null;
 }) {
   const { language: uiLanguage, t } = useV2Translation(shellUiMessages);
+  const {t: profileText} = useV2Translation(profileEditorMessages);
 
   const pathname = usePathname();
 
@@ -340,6 +343,12 @@ export default function V2IdentityBadge({
               }
             )}
           </div>
+
+          {activeIdentity && !switchingIdentityId ? <Link href="/v2/my-area/profile" role="menuitem"
+            onClick={() => setMenuOpen(false)}
+            className="mt-3 flex min-h-11 items-center rounded-2xl border border-neutral-200 px-4 py-3 text-sm font-bold text-neutral-900 hover:bg-neutral-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700">
+            {profileText("myProfile")}
+          </Link> : null}
 
           {!loading &&
           identities.length === 0 ? (

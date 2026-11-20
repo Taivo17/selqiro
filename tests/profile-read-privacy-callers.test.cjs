@@ -92,8 +92,8 @@ scenario("header keeps canonical slugs from its accessible identity RPC",async()
 scenario("header preserves all accessible identity slugs when active identity is not the first row",async()=>{
  const f=headerFixture({identities:[{id:"33333333-3333-4333-8333-333333333333",type:"private",display_name:"Own private",slug:"private-slug"},{id:I,type:"business",display_name:"Own business",slug:"business-slug"}]});await f.load();assert.equal(f.state.identity.id,I);assert.equal(f.state.slug,"business-slug");assert.deepEqual(JSON.parse(JSON.stringify(f.state.identities.map(row=>row.slug))),["private-slug","business-slug"]);
 });
-scenario("My Area reads the selected identity plan from restricted RPC and keeps own account preferences",async()=>{
- const f=myAreaFixture();await f.load();assert.equal(f.state.plan,"premium");assert.equal(f.state.language,"et");assert.equal(f.state.city,"Paide");assert.deepEqual(JSON.parse(JSON.stringify(f.calls.filter(c=>c.name==="get_my_identity_profile_plan_v1"))),[{name:"get_my_identity_profile_plan_v1",args:{p_identity_id:I}}]);assert.deepEqual(f.calls.filter(c=>c.name==="from").map(c=>c.table),["profiles"]);
+scenario("My Area keeps restricted plan and own preferences without the retired location reader",async()=>{
+ const f=myAreaFixture();await f.load();assert.equal(f.state.plan,"premium");assert.equal(f.state.language,"et");assert.equal(f.state.city,null);assert.equal(f.calls.some(c=>c.name==="get_my_active_identity_profile_details"),false);assert.deepEqual(JSON.parse(JSON.stringify(f.calls.filter(c=>c.name==="get_my_identity_profile_plan_v1"))),[{name:"get_my_identity_profile_plan_v1",args:{p_identity_id:I}}]);assert.deepEqual(f.calls.filter(c=>c.name==="from").map(c=>c.table),["profiles"]);
 });
 scenario("business and free plans keep their existing presentation semantics",async()=>{
  for(const plan of ["business","free"]){const f=myAreaFixture({plan});await f.load();assert.equal(f.state.plan,plan);}

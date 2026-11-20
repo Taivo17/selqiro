@@ -11,4 +11,6 @@ export type PublicProfile = {
   country: string | null;
   city: string | null;
   locationLabel: string;
+  websiteUrl: string | null;
+  businessAddress: string | null;
 };

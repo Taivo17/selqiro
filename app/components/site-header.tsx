@@ -5,7 +5,8 @@ import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { supabase } from "../../lib/supabase";
 import { useAuth } from "../../lib/useAuth";
-import { getTranslation } from "../../lib/i18n/useTranslation";
+import { getCatalogTranslation, getTranslation } from "../../lib/i18n/useTranslation";
+import { profileEditorMessages } from "../../src/features/profile-editor/i18n/messages";
 import { hostedPortalRequested } from "../../src/shared/config/v2Integration";
 
 type ProfileRow = {
@@ -282,7 +283,7 @@ export default function SiteHeader() {
     }
 
     if (pathname.startsWith("/store/")) {
-      window.location.href = targetSlug ? `/store/${targetSlug}` : "/profile";
+      window.location.href = targetSlug ? `/store/${targetSlug}` : "/v2/my-area/profile";
       return;
     }
 
@@ -308,7 +309,7 @@ export default function SiteHeader() {
   const isFeed = pathname.startsWith("/feed");
   const isMyPage = pathname.startsWith("/my-page");
   const isSell = pathname.startsWith("/sell");
-  const isProfile = pathname.startsWith("/profile");
+  const isProfile = pathname.startsWith("/v2/my-area/profile") || pathname === "/profile";
   const isStore = pathname.startsWith("/store");
 
   const activeStoreSlug = activeIdentity?.slug || storeSlug || "";
@@ -327,7 +328,7 @@ export default function SiteHeader() {
       return;
     }
 
-    window.location.href = "/profile";
+    window.location.href = "/v2/my-area/profile";
   };
 
   useEffect(() => {
@@ -342,6 +343,7 @@ export default function SiteHeader() {
   }, [pathname]);
 
   const t = (key: any) => getTranslation(languageLoaded ? language : "en", key);
+  const profileLabel = getCatalogTranslation(languageLoaded ? language : "en", profileEditorMessages, "myProfile");
 
 
   return (
@@ -370,14 +372,14 @@ export default function SiteHeader() {
               <div className="hidden items-center gap-2 sm:flex">
 
                 <Link
-                  href="/profile"
+                  href="/v2/my-area/profile"
                   className={
                     isProfile
                       ? "rounded-2xl bg-black px-4 py-3 text-sm font-medium text-white transition"
                       : "rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm font-medium text-black/70 transition hover:bg-black/[0.03]"
                   }
                 >
-                  Profile
+                  {profileLabel}
                 </Link>
 
                 <div className="rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm text-black/55">
@@ -427,10 +429,10 @@ export default function SiteHeader() {
                         ))}
 
                         <Link
-                          href="/profile"
+                          href="/v2/my-area/profile"
                           className="mt-1 block rounded-2xl border border-black/10 px-3 py-3 text-sm font-medium text-black/70 transition hover:bg-black/[0.03]"
                         >
-                          + Loo ettevõtte profiil
+                          {profileLabel}
                         </Link>
                       </div>
                     )}
@@ -566,14 +568,14 @@ export default function SiteHeader() {
                   </button>
 
                   <Link
-                    href="/profile"
+                    href="/v2/my-area/profile"
                     className={
                       isProfile
                         ? "rounded-2xl bg-black px-4 py-3 text-center text-sm font-medium text-white shadow-sm transition"
                         : "rounded-2xl border border-black/10 bg-white px-4 py-3 text-center text-sm font-medium text-black/70 transition hover:bg-black/[0.03]"
                     }
                   >
-                    Profile
+                    {profileLabel}
                   </Link>
                 </nav>
 
