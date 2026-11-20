@@ -1,0 +1,48 @@
+{
+  "format": "selqiro_repo_handoff_v1",
+  "recorded_on": "20.11.2026 Europe/Tallinn — profiiliredaktor vastu võetud; pildihoidla kontroll vastu võetud; profiilipiltide uuendus ettevalmistamisel",
+  "archive": {
+    "lines": 5573,
+    "path": "docs/archive/99_V2_HANDOFF_NEXT_CHAT.before-price-core-20261004-6df0af9.md",
+    "sha256": "667e47990a7d3cc20ff53709cb861663b4565cf1d3c830eda88e0d18e60fdb8a"
+  },
+  "checkpoint": "Lähtecommit ab5d1d8 on eduka Maci raporti ning sama commit’i Ready / Production ekraanipildi järgi vastu võetud. 20.11 kell 21:46 kogutud read-only Storage kataloog kinnitab sama muutumatu lähtepuu ja profiiliredaktori õigused. Uus eraldi pakett lisab ühtse profiilipildi/logo, sõltumatu taustapildi koos valikulise sobitamisega ning vestluspartneri avaliku profiili lingi. Uue paketi Maci käik, tootmisväljastus ja brauseritulemus on veel kinnitamata.",
+  "source": {
+    "Vastu võetud alus": "main ab5d1d8cbe20499224541e283df9616304673122, puu cbe9d9717b59cdc943f64d00b41088632ef91684, 1917 faili. Eelmine d654033 profiilide lugemisprivaatsus ning ab5d1d8 teksti- ja asukohavorm on lõpetatud.",
+    "Profiiliredaktori raport": "292849 B, SHA256 4bf97c70030b8399882bd012b635bf533a339a10bc30caa3cd82105faf1e71db; release c94d585f1ca69bb10c30125ed666fd12c4fb590b4eb02cd6f30f843d6ce855a9. Algset raportit ei muudeta; Ready / Production tõend on eraldi.",
+    "Pildihoidla kataloog": "TulemusZIP 17854 B, SHA256 87b3611a785fc634434e399b7ab772a5a0a4e9778a6d2de6f13e4fada14f464d. catalog.json 128763 B, SHA256 0bb74e87a08c0814b5ee25351c816f3b67ab710fb372ef89dfb44a1d80bc9d64. Üks päring, 21:46:48–21:46:53 Tallinn, PostgreSQL 17.6; lähtekood, indeks ja remote jäid samaks.",
+    "Pildifailide kirjutuspiir": "Olemasolev identity-media on avalik 5 MiB JPEG/PNG/WebP hoidla. Uued WebP derivaadid saavad muutmatu managed-profile-v1/<identity>/<asset>.webp tee, mis ei vasta vanade kasutaja-UUID-prefiksiga kliendikirjutusreeglitele. Server kontrollib tegelikku pilti, eemaldab metaandmed ning kinnitab üleslaaditud baidid lugemise ja SHA256 abil.",
+    "Profiilide seos": "Uus privaatne meediaseis kasutab eraldi versiooni; teksti- ja asukohavormi snapshot ning revision ei muutu pildi pärast. Valmis faili saab kasutusele võtta ainult uuesti kontrollitud aktiivse profiili omanik, sama kasutaja ning sama meediaversiooniga.",
+    "Ühtne kuvamine": "Olemasolevate lugejate väljakujud säilivad. Profiil, profiilivalik ja vestlused kasutavad ühist kanoonilist pildiviidet. Hallatud pildi eemaldamine ei too tagasi vana avatar_url varuväärtust.",
+    "Taustapilt": "Taustapilt toimib profiilipildist sõltumatult. Eelvaade ja avalik profiil kasutavad sama suhtelise asukoha ja piiratud suurenduse arvutust. Erineva laiusega ekraanidel säilib valitud fookus; nähtav ristkülik võib erineda.",
+    "Ajalugu": "Eelmise väljastuse kolm continuity-faili on baiditäpselt alles history/profile-media-base-ab5d1d8-20261120 all. Varasemaid pakette ei muudeta ega käivitata uuesti."
+  },
+  "local_test": [
+    "Paketi kontrollitõendid seovad kohalikud katsed väljastatavate lähtefailidega. Meedia katsed kontrollivad failide piire, autoriseerimist, vale profiili ja vana vastuse tõrjumist, pildiseisu salvestamist, suumimise/nihutamise arvutust ning puhastuse täpseid faile.",
+    "SQL-i katsed kasutavad eraldatud sünteetilist andmebaasi. Need ei loe kasutajate pilte, vestlusi või profiiliridu. Tegeliku projekti kataloog võrreldakse uuesti enne ja pärast ühte piiratud SQL-tehingut.",
+    "Next/TypeScript build kontrollib koostamist; selle tulemus ei tõesta kasutaja brauserit ega tootmises pildi üleslaadimist. Tegelik Maci käik ja sama commit’i Verceli tulemus võetakse hiljem eraldi vastu."
+  ],
+  "production": [
+    "ab5d1d8 on vastu võetud. Pildihoidla kontroll oli ainult lugemine ega avaldanud midagi.",
+    "Profiilipiltide uus pakett ei ole selle ettevalmistuskirje ajal Macis rakendatud ega Vercelis kinnitatud. Pärast käivitamist tuleb üle vaadata uus raport, sama commit’i Ready / Production ning kasutaja pildi lisamine ja muutmine."
+  ],
+  "next_action": "Ava selqiro-profiilipildid-20261120.zip Downloads-kaustas ja käivita: python3 -I -B \"$HOME/Downloads/selqiro-profiilipildid-20261120/uuenda.py\" --publish. Saada lõpus näidatud täpne raport. Eduka commit’i järel kontrolli Vercelis sama commit’i Ready / Production ja ava Minu ala → Minu profiil.",
+  "stop_rule": "Tundmatu lähtekood, indeks, remote, varasema eduka käigu tõend, koguja originaal, paketifail, CLI või andmebaasiseis peatab uuenduse. Peatunud või ebaselget kirjutust ei korrata automaatselt, puuduvat tõendit ei looda käsitsi ning tundmatu seisu jaoks kontrollsummasid ei lõdvendata. Saada lõpus näidatud uus raport.",
+  "read_next": [
+    "docs/continuity/HOSTED_PORTAL.md — praeguse paketi käivitamine ja tõendipiir.",
+    "docs/architecture/profile-media-20261120.md — pildi lisamine, kanooniline viide, õigused, sobitamine ja koristuse piirid.",
+    "docs/architecture/profile-editor-20261120.md — olemasoleva tekstivormi eraldi versioon ja salvestus.",
+    "docs/architecture/advertising-pricing-self-service-plan.md — reklaami ja riigipõhise hinnakirja kinnitatud suund."
+  ],
+  "boundaries": [
+    "Uuendus ei eemalda hulgi vanu profiilipilte. Vana pilt asendub selle profiili selgesõnalise valikuga; taustakoristus puudutab ainult uue registri täpseid kasutusest eemaldatud või aegunud katsefaile.",
+    "Avaliku viite eemaldamine ja Storage API kustutuse järel praeguse võtme puudumine ei tõesta kõigi ajalooliste versioonide või vahemälukoopiate füüsilist hävitamist. Tegelikke bucket versioning/lifecycle väärtusi esialgne koguja ei lugenud. Konto lõpliku kustutamise kord on eraldi töö.",
+    "Ettevõtte loomine, üleandmine, registreerimise lihtsustamine ja eraisiku/ettevõtte esmavalik jäävad eraldi. Olemasolevate profiilide omanikud ja pakkumised ei muutu.",
+    "Reklaam ning esiletõstmine jäävad oluliseks järgmiseks etapiks: iseteenindus, avalik hinnakiri, ühtne stardihind ja riigi erihinnad, fikseeritud paketid; oksjon ei ole esimese versiooni eeltingimus.",
+    "AI jääb välja lülitatuks. Sõltuvuste turvauuendused, konto sulgemise/kustutamise tähtajad ja laiem avamiseelne turvaülevaatus jäävad eraldi. Profiilipiltide õiguste kontroll ei ole kogu portaali turvasertifikaat."
+  ],
+  "environment": [
+    "Olemasolev /Users/taivo/selqiro ja Taivo17/selqiro remote; lähtecommit ab5d1d8. Uut projekti, hoidlaseost ega kasutajakontot ei looda.",
+    "Olemasolev kinnitatud Supabase CLI ja projekt. Uuendaja ei paigalda sõltuvusi ega vaja võtmete kleepimist. Server kasutab juba seadistatud projekti ja serverivõtit; kliendile serverivõtit ei väljastata."
+  ]
+}
