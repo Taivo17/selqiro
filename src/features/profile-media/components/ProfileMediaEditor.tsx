@@ -3,14 +3,18 @@ import {useEffect, useRef, useState, type PointerEvent, type KeyboardEvent} from
 import {useV2Translation} from "../../../shared/i18n/V2LanguageProvider";
 import ProfileAvatar from "../../../shared/profile-media/ProfileAvatar";
 import ProfileCover from "../../../shared/profile-media/ProfileCover";
+import {clampAvatarFit, type AvatarFit} from "../../../shared/profile-media/avatarFit";
 import {clampCoverFit, DEFAULT_COVER_FIT, dragCoverFit, type CoverFit} from "../../../shared/profile-media/coverFit";
 import type {ProfileMediaSlot} from "../../../entities/profile/model/profileMedia";
+import type {PreparedProfileImage} from "../model/prepareProfileImage";
 import type {ProfileMediaEditorState} from "../model/useProfileMediaEditor";
 import {profileMediaMessages} from "../i18n/messages";
+import AvatarFitEditor from "./AvatarFitEditor";
 
 const secondary = "inline-flex min-h-11 items-center justify-center rounded-full border border-neutral-300 bg-white px-4 py-2.5 text-sm font-bold transition hover:border-neutral-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700 disabled:cursor-default disabled:opacity-50";
 const primary = "inline-flex min-h-11 items-center justify-center rounded-full bg-emerald-700 px-5 py-2.5 text-sm font-bold text-white transition hover:bg-emerald-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700 disabled:cursor-default disabled:opacity-50";
 type FitDraft = {key: string; value: CoverFit};
+type AvatarFitDraft = {key: string; source: PreparedProfileImage; value: AvatarFit};
 
 export default function ProfileMediaEditor({state, name, business, onEditingChange}: {
   state: ProfileMediaEditorState; name: string; business: boolean; onEditingChange?: (editing: boolean) => void;
@@ -19,6 +23,9 @@ export default function ProfileMediaEditor({state, name, business, onEditingChan
   const avatarInput = useRef<HTMLInputElement>(null), coverInput = useRef<HTMLInputElement>(null), frame = useRef<HTMLDivElement>(null);
   const [preview, setPreview] = useState<{blob: Blob; url: string} | null>(null);
   const [fitting, setFitting] = useState<FitDraft | null>(null);
+  const [avatarFitting, setAvatarFitting] = useState<AvatarFitDraft | null>(null);
+  const selectionAttempt = useRef(0), currentSession = useRef(session); currentSession.current = session;
+  useEffect(() => () => {++selectionAttempt.current;}, [session]);
   const drag = useRef<{pointerId: number; x: number; y: number; fit: CoverFit; width: number; height: number; imageWidth: number; imageHeight: number} | null>(null);
   const blob = view?.draft?.prepared?.preview ?? null;
   useEffect(() => {
@@ -28,6 +35,9 @@ export default function ProfileMediaEditor({state, name, business, onEditingChan
   }, [blob]);
   const previewUrl = blob && preview?.blob === blob ? preview.url : null;
   const draft = view?.draft, coverDraft = draft?.slot === "cover" ? draft : null;
+  const avatarDraft = draft?.slot === "avatar" && draft.action === "set" ? draft : null;
+  const avatarKey = `${view?.saved.identity_id ?? ""}:${avatarDraft?.assetId ?? ""}`;
+  const activeAvatarFit = avatarFitting?.key === avatarKey && avatarFitting.source === avatarDraft?.avatarSource ? avatarFitting : null;
   const cover = coverDraft?.action === "remove" ? null : coverDraft?.uploaded ?? view?.saved.cover ?? null;
   const coverWidth = coverDraft?.prepared?.width ?? cover?.width ?? null;
   const coverHeight = coverDraft?.prepared?.height ?? cover?.height ?? null;
@@ -37,7 +47,7 @@ export default function ProfileMediaEditor({state, name, business, onEditingChan
   const canFit = !!coverWidth && !!coverHeight && (!!coverDraft?.prepared || !!cover?.asset_id);
   const locked = !view || !ready || !view.available || view.phase !== "ready";
   const working = !!view && ["preparing", "uploading", "saving", "checking"].includes(view.phase);
-  const protectFit = !!activeFit;
+  const protectFit = !!activeFit || !!activeAvatarFit;
   useEffect(() => {onEditingChange?.(protectFit); return () => {onEditingChange?.(false);};}, [protectFit, onEditingChange]);
   useEffect(() => {
     if (!protectFit) return;
@@ -47,7 +57,32 @@ export default function ProfileMediaEditor({state, name, business, onEditingChan
 
   function choose(slot: ProfileMediaSlot, file: File | undefined) {
     if (!session || !file) return;
-    setFitting(null); void session.choose(file, slot);
+    const attempt = ++selectionAttempt.current, previous = session.getSnapshot().draft;
+    setFitting(null); setAvatarFitting(null); drag.current = null;
+    void session.choose(file, slot, business ? "contain" : "cover").then(() => {
+      if (slot !== "avatar" || selectionAttempt.current !== attempt || currentSession.current !== session) return;
+      const next = session.getSnapshot();
+      const selected = next.draft;
+      if (next.phase === "retired" || !selected || selected === previous || selected.slot !== "avatar"
+        || selected.action !== "set" || !selected.avatarSource || !selected.avatarFit) return;
+      setAvatarFitting({key: `${next.saved.identity_id}:${selected.assetId ?? ""}`, source: selected.avatarSource,
+        value: clampAvatarFit(selected.avatarFit)});
+    });
+  }
+  function clearFitting() {
+    ++selectionAttempt.current; drag.current = null; setFitting(null); setAvatarFitting(null);
+  }
+  function openAvatarFit() {
+    if (!avatarDraft?.avatarSource || !avatarDraft.avatarFit || locked || protectFit) return;
+    setAvatarFitting({key: avatarKey, source: avatarDraft.avatarSource, value: clampAvatarFit(avatarDraft.avatarFit)});
+  }
+  async function applyAvatarFit() {
+    if (!session || !activeAvatarFit || locked) return;
+    const selectedFit = activeAvatarFit;
+    if (await session.fitAvatar(selectedFit.value)) {
+      if (currentSession.current !== session) return;
+      setAvatarFitting(current => current === selectedFit ? null : current);
+    }
   }
   function startDrag(event: PointerEvent<HTMLDivElement>) {
     if (!activeFit || locked || !coverWidth || !coverHeight || event.button !== 0) return;
@@ -81,18 +116,20 @@ export default function ProfileMediaEditor({state, name, business, onEditingChan
     if (!view || !session) return null;
     const selected = draft?.slot === slot, other = !!draft && !selected;
     return <div className="flex flex-wrap gap-2">
-      <button type="button" className={secondary} disabled={locked || other || !!activeFit}
+      <button type="button" className={secondary} disabled={locked || other || protectFit}
         onClick={() => (slot === "avatar" ? avatarInput : coverInput).current?.click()}>
         {t(view.saved[slot] ? "change" : "choose")}
       </button>
-      {view.saved[slot] ? <button type="button" className={secondary} disabled={locked || other || !!activeFit || (selected && draft?.action === "remove")}
-        onClick={() => {setFitting(null); session.remove(slot);}}>{t("remove")}</button> : null}
-      {slot === "cover" && canFit ? <button type="button" className={secondary} disabled={locked || other || !!activeFit}
+      {view.saved[slot] ? <button type="button" className={secondary} disabled={locked || other || protectFit || (selected && draft?.action === "remove")}
+        onClick={() => {clearFitting(); session.remove(slot);}}>{t("remove")}</button> : null}
+      {slot === "avatar" && avatarDraft?.avatarSource && avatarDraft.avatarFit ? <button type="button" className={secondary}
+        disabled={locked || other || protectFit} onClick={openAvatarFit}>{t("fit")}</button> : null}
+      {slot === "cover" && canFit ? <button type="button" className={secondary} disabled={locked || other || protectFit}
         onClick={() => setFitting({key: coverKey, value: clampCoverFit(fit)})}>{t("fit")}</button> : null}
     </div>;
   }
   function draftActions(slot: ProfileMediaSlot) {
-    if (!draft || draft.slot !== slot || !view || !session || activeFit) return null;
+    if (!draft || draft.slot !== slot || !view || !session || protectFit) return null;
     return <div className="mt-4 space-y-3">
       <p className="text-sm leading-6 text-neutral-600">{t(draft.action === "remove" ? "removalPending" : "unsaved")}</p>
       <div className="flex flex-wrap gap-2">
@@ -101,7 +138,7 @@ export default function ProfileMediaEditor({state, name, business, onEditingChan
             : draft.action === "remove" ? "saveRemoval" : slot === "cover" ? "saveCover" : "save")}
         </button>
         <button type="button" className={secondary} disabled={working || view.phase === "uncertain"}
-          onClick={() => {setFitting(null); session.cancel();}}>{t("cancel")}</button>
+          onClick={() => {clearFitting(); session.cancel();}}>{t("cancel")}</button>
       </div>
     </div>;
   }
@@ -121,11 +158,18 @@ export default function ProfileMediaEditor({state, name, business, onEditingChan
     </div> : <>
       <div className="mt-6 rounded-2xl border border-neutral-200 p-4 sm:p-5">
         <h3 className="text-base font-bold">{t(business ? "logo" : "avatar")}</h3>
-        <div className="mt-4 flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-5">
+        <p className="mt-2 text-sm leading-6 text-neutral-600">{t("avatarHelp")}</p>
+        {activeAvatarFit ? <AvatarFitEditor key={avatarKey} source={activeAvatarFit.source} value={activeAvatarFit.value}
+          disabled={locked} busy={view.phase === "preparing"}
+          onChange={value => setAvatarFitting(current => current?.key === activeAvatarFit.key && current.source === activeAvatarFit.source ? {...current, value} : current)}
+          onApply={() => void applyAvatarFit()} onCancel={() => setAvatarFitting(null)}/>
+        : <div className="mt-4 flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-5">
           <ProfileAvatar name={name} url={draft?.slot === "avatar" && draft.action === "remove" ? null : view.saved.avatar?.url}
             localPreview={draft?.slot === "avatar" && draft.action === "set" ? previewUrl : null} className="h-24 w-24 border border-neutral-200 text-3xl" />
-          <div className="min-w-0 flex-1">{controls("avatar")}{draftActions("avatar")}</div>
-        </div>
+          <div className="min-w-0 flex-1">{controls("avatar")}{draftActions("avatar")}
+            {view.saved.avatar && !avatarDraft ? <p className="mt-3 text-xs leading-5 text-neutral-500">{t("avatarSavedHelp")}</p> : null}
+          </div>
+        </div>}
       </div>
       <div className="mt-5 rounded-2xl border border-neutral-200 p-4 sm:p-5">
         <div className="flex flex-wrap items-center gap-2"><h3 className="text-base font-bold">{t("cover")}</h3>
@@ -159,14 +203,14 @@ export default function ProfileMediaEditor({state, name, business, onEditingChan
       {draft ? <p className="mt-4 text-xs leading-5 text-neutral-500">{t("busyOther")}</p> : null}
       {view.phase === "preparing" ? <div className="mt-4 flex flex-wrap items-center gap-3">
         <p role="status" className="text-sm text-neutral-600">{t("preparing")}</p>
-        <button type="button" className={secondary} onClick={() => session.cancel()}>{t("cancel")}</button>
+        <button type="button" className={secondary} onClick={() => {clearFitting(); session.cancel();}}>{t("cancel")}</button>
       </div> : !ready && !state.error ? <p role="status" className="mt-4 text-sm text-neutral-600">{t("loading")}</p> : null}
       {notice ? <div role={notice === "saved" || notice === "removed" ? "status" : "alert"}
         className={`mt-4 rounded-2xl border p-4 text-sm leading-6 ${notice === "saved" || notice === "removed" ? "border-emerald-200 bg-emerald-50 text-emerald-950" : "border-amber-200 bg-amber-50 text-amber-950"}`}>
         <p>{t(notice)}</p>
         {view.phase === "uncertain" ? <button type="button" className={`${secondary} mt-3`} disabled={!ready} onClick={() => void session.check()}>{t("check")}</button> : null}
         {view.phase === "conflict" ? <button type="button" className={`${secondary} mt-3`} disabled={!ready} onClick={() => {
-          if (!view.draft || window.confirm(t("reloadConfirm"))) {setFitting(null); void session.reload();}
+          if (!view.draft || window.confirm(t("reloadConfirm"))) {clearFitting(); void session.reload();}
         }}>{t("reload")}</button> : null}
         {state.error || !view.available ? <button type="button" className={`${secondary} mt-3`} onClick={state.refresh}>{t("retry")}</button> : null}
       </div> : null}

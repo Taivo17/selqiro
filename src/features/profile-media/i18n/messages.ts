@@ -2,6 +2,11 @@ export const profileMediaMessages = {
   en: {
     title: "Profile pictures", intro: "Your profile picture or logo appears on your profile, offers and in conversations.",
     avatar: "Profile picture", logo: "Profile picture or logo", cover: "Cover picture", optional: "Optional",
+    avatarHelp: "Choose a picture, then adjust how it fits in the circle before saving.",
+    avatarSavedHelp: "To adjust a saved picture, choose the same picture again using Change picture.",
+    avatarFitHelp: "Fill the circle with your photo, or show the whole picture for a logo. To reposition a photo, drag it, use the sliders or focus the preview and use the arrow keys.",
+    avatarDisplay: "Picture display", avatarFill: "Fill the circle", avatarWhole: "Show whole picture", avatarPreview: "Profile picture preview",
+    avatarWholeHelp: "Keeps the whole picture visible. Space may remain around a wide or tall picture.",
     coverHelp: "A separate picture at the top of your public profile. You can add it with or without a profile picture.",
     formats: "JPEG, PNG or WebP, up to 32 MB. Large pictures are resized automatically.",
     choose: "Choose picture", change: "Change picture", remove: "Remove picture", cancel: "Cancel", save: "Save picture",
@@ -29,6 +34,11 @@ export const profileMediaMessages = {
   et: {
     title: "Profiili pildid", intro: "Sinu profiilipilt või logo on nähtav profiilil, pakkumistel ja vestlustes.",
     avatar: "Profiilipilt", logo: "Profiilipilt või logo", cover: "Taustapilt", optional: "Valikuline",
+    avatarHelp: "Vali pilt ja sobita see enne salvestamist ringi sisse.",
+    avatarSavedHelp: "Salvestatud pildi sobitamiseks vali sama pilt uuesti nupuga „Muuda pilti”.",
+    avatarFitHelp: "Täida ring fotoga või näita logo tervikuna. Foto nihutamiseks lohista pilti, kasuta liugureid või vali eelvaade ja vajuta nooleklahve.",
+    avatarDisplay: "Pildi kuvamine", avatarFill: "Täida ring", avatarWhole: "Näita tervet pilti", avatarPreview: "Profiilipildi eelvaade",
+    avatarWholeHelp: "Kogu pilt jääb nähtavale. Laia või kõrge pildi ümber võib jääda vaba ruumi.",
     coverHelp: "Eraldi pilt avaliku profiili ülaosas. Taustapildi saad lisada ka ilma profiilipildi või logota.",
     formats: "JPEG, PNG või WebP, kuni 32 MB. Suurem pilt tehakse automaatselt väiksemaks.",
     choose: "Vali pilt", change: "Muuda pilti", remove: "Eemalda pilt", cancel: "Loobu", save: "Salvesta pilt",

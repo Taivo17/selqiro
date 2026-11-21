@@ -1,18 +1,20 @@
 import type {ProfileMediaActor, ProfileMediaAsset, ProfileMediaSlot, ProfileMediaSnapshot, ProfileMediaUpdateCommand} from "../../../entities/profile/model/profileMedia";
 import {DEFAULT_COVER_FIT, clampCoverFit, sameCoverFit, type CoverFit} from "../../../shared/profile-media/coverFit";
+import {clampAvatarFit, sameAvatarFit, type AvatarFit} from "../../../shared/profile-media/avatarFit";
 import type {ConversationActorContext} from "../../listing-conversation/model/useConversationActor";
 import {ProfileMediaClientError, type ProfileMediaClient} from "../api/profileMediaClient";
-import {prepareProfileImage, ProfileImagePreparationError, type PreparedProfileImage} from "./prepareProfileImage";
+import {prepareAvatarImage, prepareProfileImage, ProfileImagePreparationError, type PreparedProfileImage} from "./prepareProfileImage";
 import type {ProfileMediaMessage} from "../i18n/messages";
 
 export type ProfileMediaDraft = Readonly<{slot: ProfileMediaSlot; action: "set" | "remove" | "position";
-  assetId: string | null; prepared: PreparedProfileImage | null; uploaded: ProfileMediaAsset | null; fit: CoverFit; baseRevision: string | null}>;
+  assetId: string | null; prepared: PreparedProfileImage | null; uploaded: ProfileMediaAsset | null; fit: CoverFit; baseRevision: string | null;
+  avatarSource?: PreparedProfileImage; avatarFit?: AvatarFit}>;
 export type ProfileMediaView = Readonly<{saved: ProfileMediaSnapshot; draft: ProfileMediaDraft | null;
   phase: "ready" | "preparing" | "uploading" | "saving" | "checking" | "uncertain" | "conflict" | "retired";
   available: boolean; notice: ProfileMediaMessage | null}>;
 type Options = {actor: ProfileMediaActor; initial: ProfileMediaSnapshot; client: ProfileMediaClient;
   context: () => ConversationActorContext | null; confirmed: () => void;
-  prepare?: typeof prepareProfileImage; uuid?: () => string};
+  prepare?: typeof prepareProfileImage; prepareAvatar?: typeof prepareAvatarImage; uuid?: () => string};
 
 export function mediaUpdateMatches(snapshot: ProfileMediaSnapshot, command: ProfileMediaUpdateCommand): boolean {
   if (snapshot.user_id !== command.expectedUserId || snapshot.identity_id !== command.expectedIdentityId
@@ -47,6 +49,14 @@ export class ProfileMediaSession {
       && context.expectedIdentityId === this.options.actor.expectedIdentityId ? context : null;
   }
   private current(ticket: number, context: ConversationActorContext) {return this.live && this.ticket === ticket && this.context() === context;}
+  private localCurrent(selection: number, signal: AbortSignal) {
+    if (!this.live || selection !== this.selection || signal.aborted) return false;
+    const context = this.options.context();
+    // A same-owner focus refresh can replace or temporarily clear context.
+    // A different owner can never receive a completed local selection.
+    return !context || (context.expectedUserId === this.options.actor.expectedUserId
+      && context.expectedIdentityId === this.options.actor.expectedIdentityId);
+  }
   private adopt(saved: ProfileMediaSnapshot, notice: ProfileMediaMessage | null) {
     this.assertActor(saved); this.pending = null;
     this.emit({saved, draft: null, phase: "ready", available: true, notice});
@@ -63,7 +73,7 @@ export class ProfileMediaSession {
       if (saved.revision !== this.view.saved.revision) this.emit({phase: "conflict", notice: "conflict"});
     } else this.adopt(saved, this.view.notice === "saved" || this.view.notice === "removed" ? this.view.notice : null);
   }
-  async choose(file: File, slot: ProfileMediaSlot) {
+  async choose(file: File, slot: ProfileMediaSlot, avatarMode: AvatarFit["mode"] = "cover") {
     if (!this.live || !["ready", "preparing"].includes(this.view.phase) || this.pending
       || (this.view.draft && this.view.draft.slot !== slot)) return;
     // Selection is local. A file-picker focus refresh can temporarily suspend authorization;
@@ -72,15 +82,47 @@ export class ProfileMediaSession {
     const selection = ++this.selection, previous = this.view.draft;
     this.emit({phase: "preparing", notice: null});
     try {
-      const prepared = await (this.options.prepare ?? prepareProfileImage)(file, slot, controller.signal);
-      if (!this.live || selection !== this.selection || controller.signal.aborted) return;
+      const source = await (this.options.prepare ?? prepareProfileImage)(file, slot, controller.signal);
+      if (!this.localCurrent(selection, controller.signal)) return;
+      const avatarFit = clampAvatarFit({...DEFAULT_COVER_FIT, mode: avatarMode});
+      const prepared = slot === "avatar"
+        ? await (this.options.prepareAvatar ?? prepareAvatarImage)(source, avatarFit, controller.signal) : source;
+      if (!this.localCurrent(selection, controller.signal)) return;
       const draft: ProfileMediaDraft = Object.freeze({slot, action: "set", assetId: (this.options.uuid ?? (() => crypto.randomUUID()))(),
-        prepared, uploaded: null, fit: DEFAULT_COVER_FIT, baseRevision: this.view.saved.revision});
+        prepared, uploaded: null, fit: DEFAULT_COVER_FIT, baseRevision: this.view.saved.revision,
+        ...(slot === "avatar" ? {avatarSource: source, avatarFit} : {})});
       this.emit({draft, phase: this.view.phase === "conflict" ? "conflict" : "ready", notice: this.view.phase === "conflict" ? "conflict" : null});
     } catch (error) {
-      if (!this.live || selection !== this.selection || controller.signal.aborted) return;
+      if (!this.localCurrent(selection, controller.signal)) return;
       this.emit({draft: previous, phase: this.view.phase === "conflict" ? "conflict" : "ready",
         notice: error instanceof ProfileImagePreparationError && error.code !== "aborted" ? error.code : "decodeError"});
+    } finally {if (this.preparing === controller) this.preparing = null;}
+  }
+  async fitAvatar(value: AvatarFit): Promise<boolean> {
+    const previous = this.view.draft;
+    if (!this.canEdit() || previous?.slot !== "avatar" || previous.action !== "set"
+      || !previous.avatarSource || !previous.avatarFit || !previous.prepared) return false;
+    const avatarFit = clampAvatarFit(value);
+    if (sameAvatarFit(avatarFit, previous.avatarFit)) return true;
+    this.preparing?.abort(); const controller = new AbortController(); this.preparing = controller;
+    const selection = ++this.selection;
+    this.emit({phase: "preparing", notice: null});
+    try {
+      const prepared = await (this.options.prepareAvatar ?? prepareAvatarImage)(previous.avatarSource, avatarFit, controller.signal);
+      if (!this.localCurrent(selection, controller.signal)) return false;
+      const changed = prepared.sourceSha256 !== previous.prepared.sourceSha256;
+      const draft: ProfileMediaDraft = Object.freeze({...previous, prepared, avatarFit,
+        ...(changed ? {assetId: (this.options.uuid ?? (() => crypto.randomUUID()))(), uploaded: null} : {})});
+      // An upload may have reached storage even if its response was lost. New
+      // bytes always use a fresh asset ID; a previous receipt is never reused.
+      const conflict = this.view.phase === "conflict";
+      this.emit({draft, phase: conflict ? "conflict" : "ready", notice: conflict ? "conflict" : null});
+      return !conflict;
+    } catch (error) {
+      if (!this.localCurrent(selection, controller.signal)) return false;
+      this.emit({draft: previous, phase: this.view.phase === "conflict" ? "conflict" : "ready",
+        notice: error instanceof ProfileImagePreparationError && error.code !== "aborted" ? error.code : "decodeError"});
+      return false;
     } finally {if (this.preparing === controller) this.preparing = null;}
   }
   remove(slot: ProfileMediaSlot) {

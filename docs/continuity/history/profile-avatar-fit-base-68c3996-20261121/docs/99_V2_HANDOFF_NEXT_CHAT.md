@@ -1,0 +1,62 @@
+<!-- GENERATED from docs/continuity/CURRENT_STATE.json; do not edit independently. -->
+# Selqiro — praegune tööüleandmine
+
+Seisukirje: 20.11.2026 Europe/Tallinn — profiilipiltide väljastus vastu võetud; vana manuspildi põhjustatud laadimisvea parandus ette valmistatud
+
+## Praegune checkpoint
+
+68b6e68 profiilipiltide uuenduse Maci raport ja sama commit’i Ready / Production ekraanipilt on vastu võetud. Kasutaja brauseris ebaõnnestub pildipaneeli esmane päring. Avaliku profiili kitsas lugemine tuvastas vana 117423-baidise data:-pilditeksti; sama SQL-lugeja paneb selle omaniku vastusesse enne rakenduse 65536-baidist piiri. Uus parandus piirab vana pildiviite juba SQL-lugejas, et profiilipildi ja taustapildi valikud saaksid avaneda. Paranduse Maci käik ja kasutuskatse on veel ootel.
+
+## Lähtekood ja tõendi piir
+
+- **Vastu võetud alus:** main 68b6e681f1d3487c6bc9d22708aaa9bac09b4318, puu ff833185319b9fea711b1d5d3a934d610f785a46, 1946 faili. 41 eelmise paketi payload-teed, kogu puu ja raport on sõltumatult kontrollitud.
+- **Profiilipiltide raport:** 295769 B, SHA256 df2b9f37380fc9b4aa8cf9d03d02aa1f11eb3f5ba043d91ad32f48d9c6b13856; release 20167601aba3ac5e1492c8324e1a0a68b268bad66aa4fc2472fcd9f1119a1aec. Maci käik 22:36:45–22:37:33 Tallinn. 424 offline-tõendikontrolli; Storage-operatsioone paigaldaja ei teinud.
+- **Andmebaasi lähtepiir:** Eelmise meediauuenduse järel kontrollitud täielik kataloogijälg on 269efbc018c713d08847758d8dcdcd00e44a05958d23fd643b2af12df22199ee. Uus tehing asendab ainult profile_media_private.slot_asset(uuid,text) funktsiooni sisu; värske eel- ja järelkontroll seob sama projekti.
+- **Vea põhjus:** Taivo Garaazi teadaoleva avaliku profiili anonüümne media-RPC vastas HTTP 200 ja 117816 baidiga. avatar_url oli data:-kujul 117423 baiti; banner_url oli tavaline 180-baidine HTTPS-aadress. Salvestati ainult väljade tüüpide/pikkuste tõend, mitte pilti ega autentimisandmeid. Omaniku päringu põhjuste ahel taastatakse sünteetilise samapika väärtusega.
+- **Paranduse käitumine:** Vana valitud pildiviide peab olema piiratud pikkusega sobiv HTTP(S)-aadress enne vastuse koostamist. Sobimatu vana manuspilt annab tühja pildiviite; teine, sobiv taustapilt jääb loetavaks. Vanu andmevälju ega pildifaile ei kustutata. Hallatud piltide haru, õigused, versioonid ja päringu suuruse piirid säilivad.
+- **Nupu tähendus:** Proovi uuesti kordab salvestatud pildiseisu päringut. Failivaliku avavad Profiilipildi ja Taustapildi eraldi Vali pilt või Muuda pilti nupud pärast eduka päringu tulemust.
+- **Ajalugu:** Eelmise väljastuse kolm jooksva juhise faili säilivad baiditäpselt history/profile-media-accepted-68b6e68-20261120 all. Eelmist väljastatud ZIP-i, SQL-paigaldust ega originaalraportit ei muudeta.
+
+## Tegelik kohalik katse
+
+- Sihitud regressioon taastab 117423-baidise sünteetilise vana pilditekstiga kogu HTTP-serveri vastuse piiri vea ning kontrollib parandatud väikest vastust ja mõlema pildinupu avanemist. Test ei kasuta kasutaja pilti ega konto võtit.
+- Eraldatud PostgreSQL-fixture kontrollib täpset uut SQL-lugejat, omaniku ja avalikku vastust, sobiva taustapildi säilimist, UTF-8 mahupiiri, hallatud piltide olemasolevat käitumist ning andmete puutumatust.
+- Paigaldaja kontrollib täpset eelmist originaalraportit, täielikku lähtepuud/indeksit/remote’i ning värsket SQL-kataloogi. Ühele kirjutamiskatsele järgneb eraldi lugemine. Testid ja build ei asenda kasutaja brauserikatset.
+
+## Production / kasutajaliides
+
+- 68b6e68 Maci lõpetamine ja sama commit’i Verceli Ready / Production on vastu võetud. Kasutaja pildipaneeli laadimisviga jääb selle väljastuse eraldi kinnitatud puuduseks.
+- Tootmise autentimata pildi-POST vastas oodatud 401 unauthorized: serveriliides ja konfiguratsioon laaditi. Avaliku profiili kaks kitsast anonüümset RPC-lugemist kinnitasid liiga pika vana pilditeksti. Sisselogitud kasutaja päringut ega üleslaadimist assistent ei teinud.
+- Uus parandustehing ei ole selle juhendi koostamise ajal Macis käivitatud ega tootmises rakendatud. Pärast uut raportit tuleb kontrollida sama uue commit’i Verceli tulemus ja profiilipildi/taustapildi kasutuskatse.
+
+## Üks järgmine töö
+
+Ava selqiro-profiilipiltide-laadimine-20261120.zip Downloads-kaustas ja käivita: python3 -I -B "$HOME/Downloads/selqiro-profiilipiltide-laadimine-20261120/uuenda.py" --publish. Saada lõpus näidatud uus raport. Uue commit’i Ready / Production järel ava Minu ala → Minu profiil → Profiili pildid ja kontrolli mõlemat pildivalikut.
+
+**Peatumisel:** Tundmatu lähtekood, indeks, remote, eelmise eduka käigu originaalraport, paketifail, CLI või andmebaasiseis peatab uuenduse. Ebaselget SQL-kirjutust ei korrata automaatselt. Saada lõpus näidatud raport; vana paigaldust ega andmekogujat ei pea uuesti käivitama.
+
+## Loe ainult vajalikku
+
+- docs/continuity/HOSTED_PORTAL.md — praeguse paranduse ainus käivitamiskäsk.
+- docs/architecture/profile-media-load-repair-20261120.md — vea põhjus, kitsas parandus ja tõendipiir.
+- docs/architecture/profile-media-20261120.md — olemasolev pildi lisamise, õiguste ja sobitamise leping.
+- docs/architecture/advertising-pricing-self-service-plan.md — hilisema reklaami ja hinnakirja suund.
+
+## Säilivad piirid
+
+- Uuendus ei eemalda hulgi vanu profiilipilte. Vana pilt asendub selle profiili selgesõnalise valikuga; taustakoristus puudutab ainult uue registri täpseid kasutusest eemaldatud või aegunud katsefaile.
+- Avaliku viite eemaldamine ja Storage API kustutuse järel praeguse võtme puudumine ei tõesta kõigi ajalooliste versioonide või vahemälukoopiate füüsilist hävitamist. Tegelikke bucket versioning/lifecycle väärtusi esialgne koguja ei lugenud. Konto lõpliku kustutamise kord on eraldi töö.
+- Ettevõtte loomine, üleandmine, registreerimise lihtsustamine ja eraisiku/ettevõtte esmavalik jäävad eraldi. Olemasolevate profiilide omanikud ja pakkumised ei muutu.
+- Reklaam ning esiletõstmine jäävad oluliseks järgmiseks etapiks: iseteenindus, avalik hinnakiri, ühtne stardihind ja riigi erihinnad, fikseeritud paketid; oksjon ei ole esimese versiooni eeltingimus.
+- AI jääb välja lülitatuks. Sõltuvuste turvauuendused, konto sulgemise/kustutamise tähtajad ja laiem avamiseelne turvaülevaatus jäävad eraldi. Profiilipiltide õiguste kontroll ei ole kogu portaali turvasertifikaat.
+
+## Keskkond
+
+- Olemasolev /Users/taivo/selqiro ja Taivo17/selqiro remote; lähtecommit 68b6e68. Uut projekti ega kontot ei looda.
+- Olemasolev kinnitatud Supabase CLI ja projekt. Uuendaja kasutab senist ühendust, ei paigalda sõltuvusi ega vaja võtmete kleepimist.
+
+## Ajalugu (mitte praegused käsud)
+
+Vana sisenemisleht: `docs/archive/99_V2_HANDOFF_NEXT_CHAT.before-price-core-20261004-6df0af9.md`.
+Kõik 5573 algset rida säilivad bait-baidilt; SHA-256 `667e47990a7d3cc20ff53709cb861663b4565cf1d3c830eda88e0d18e60fdb8a`.
+Vanade failide NEXT/CURRENT pealkirjad ei ole tänased käivitamisjuhised.

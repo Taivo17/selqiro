@@ -1,37 +1,36 @@
 {
   "format": "selqiro_repo_handoff_v1",
-  "recorded_on": "20.11.2026 Europe/Tallinn — profiilipiltide väljastus vastu võetud; vana manuspildi põhjustatud laadimisvea parandus ette valmistatud",
+  "recorded_on": "21.11.2026 Europe/Tallinn — piltide laadimise parandus vastu võetud; profiilipildi sobitamine ja suuremad sõnumite pildid ette valmistatud",
   "archive": {
     "lines": 5573,
     "path": "docs/archive/99_V2_HANDOFF_NEXT_CHAT.before-price-core-20261004-6df0af9.md",
     "sha256": "667e47990a7d3cc20ff53709cb861663b4565cf1d3c830eda88e0d18e60fdb8a"
   },
-  "checkpoint": "68b6e68 profiilipiltide uuenduse Maci raport ja sama commit’i Ready / Production ekraanipilt on vastu võetud. Kasutaja brauseris ebaõnnestub pildipaneeli esmane päring. Avaliku profiili kitsas lugemine tuvastas vana 117423-baidise data:-pilditeksti; sama SQL-lugeja paneb selle omaniku vastusesse enne rakenduse 65536-baidist piiri. Uus parandus piirab vana pildiviite juba SQL-lugejas, et profiilipildi ja taustapildi valikud saaksid avaneda. Paranduse Maci käik ja kasutuskatse on veel ootel.",
+  "checkpoint": "68c3996 paranduse Maci raport, sama commit’i Ready / Production ning kasutaja profiilipildi ja taustapildi lisamise, salvestamise ning avalikul profiilil kuvamise katsed on vastu võetud. 21.11 kinnitas kasutaja ka sõnumi päisest vastaspoole avalikule profiilile liikumist. Uus töö lisab enne profiilipildi salvestamist ringi täitva lõike, suurendamise ja nihutamise ning suurendab vastaspoole pilti sõnumites. Uue töö Maci ja tootmise tulemus on ootel.",
   "source": {
-    "Vastu võetud alus": "main 68b6e681f1d3487c6bc9d22708aaa9bac09b4318, puu ff833185319b9fea711b1d5d3a934d610f785a46, 1946 faili. 41 eelmise paketi payload-teed, kogu puu ja raport on sõltumatult kontrollitud.",
-    "Profiilipiltide raport": "295769 B, SHA256 df2b9f37380fc9b4aa8cf9d03d02aa1f11eb3f5ba043d91ad32f48d9c6b13856; release 20167601aba3ac5e1492c8324e1a0a68b268bad66aa4fc2472fcd9f1119a1aec. Maci käik 22:36:45–22:37:33 Tallinn. 424 offline-tõendikontrolli; Storage-operatsioone paigaldaja ei teinud.",
-    "Andmebaasi lähtepiir": "Eelmise meediauuenduse järel kontrollitud täielik kataloogijälg on 269efbc018c713d08847758d8dcdcd00e44a05958d23fd643b2af12df22199ee. Uus tehing asendab ainult profile_media_private.slot_asset(uuid,text) funktsiooni sisu; värske eel- ja järelkontroll seob sama projekti.",
-    "Vea põhjus": "Taivo Garaazi teadaoleva avaliku profiili anonüümne media-RPC vastas HTTP 200 ja 117816 baidiga. avatar_url oli data:-kujul 117423 baiti; banner_url oli tavaline 180-baidine HTTPS-aadress. Salvestati ainult väljade tüüpide/pikkuste tõend, mitte pilti ega autentimisandmeid. Omaniku päringu põhjuste ahel taastatakse sünteetilise samapika väärtusega.",
-    "Paranduse käitumine": "Vana valitud pildiviide peab olema piiratud pikkusega sobiv HTTP(S)-aadress enne vastuse koostamist. Sobimatu vana manuspilt annab tühja pildiviite; teine, sobiv taustapilt jääb loetavaks. Vanu andmevälju ega pildifaile ei kustutata. Hallatud piltide haru, õigused, versioonid ja päringu suuruse piirid säilivad.",
-    "Nupu tähendus": "Proovi uuesti kordab salvestatud pildiseisu päringut. Failivaliku avavad Profiilipildi ja Taustapildi eraldi Vali pilt või Muuda pilti nupud pärast eduka päringu tulemust.",
-    "Ajalugu": "Eelmise väljastuse kolm jooksva juhise faili säilivad baiditäpselt history/profile-media-accepted-68b6e68-20261120 all. Eelmist väljastatud ZIP-i, SQL-paigaldust ega originaalraportit ei muudeta."
+    "Vastu võetud alus": "main 68c3996215069ba491de5883de3d21653fc0143d, tuletatud puu 480d5602eb87c0cd24b7db1cafa2cec01040543c, 1955 faili. Kogu kandidaat on võrreldud vastu võetud baasinventariga.",
+    "Eelmise käigu raport": "296481 B; SHA256 58ee061d23e793ad17f6d063a87ba717916acae419a49b8d7ba843046389fa02. Release 7c9464a2b9468b34855101abc2e08fe2f387c016b8db070cd4e69d4a7f31e9a7. 297 offline-tõendikontrolli; varasema testi/build’i läbimist kinnitab raport, mitte siia lisatud Maci logide sisu.",
+    "Pildi muudatus": "Uue kohaliku foto eelvaade täidab ringi. Kasutaja saab suurendada ja nihutada, kasutada klaviatuuri või valida terve pildi näitamise. Ettevõtte puhul on terve logo näitamine algvalik. Lõige salvestatakse olemasoleva üleslaadimise kaudu ruudukujulise WebP-failina.",
+    "Andmete piir": "Uus sobitamine kasutab brauseris valitud ja juba mahupiiridesse viidud pilti. Algne ettevalmistatud pilt säilib sama mustandi korduvaks sättimiseks. Varem salvestatud pildi uueks lõikamiseks valib kasutaja originaali uuesti. Väliseid pilte lõikamiseks ei laadita.",
+    "Sõnumite pilt": "Vastaspoole avatar on loendis ja päises 56 px; telefonivaates 48 px. Oma saatja väike tähis jääb 24 px. Olemasolev kontrollitud avaliku profiili link säilib.",
+    "Ajalugu": "Eelmise jooksva juhise kolm faili säilivad baiditäpselt history/profile-avatar-fit-base-68c3996-20261121 all. Varem väljastatud pakette ja raporteid ei muudeta."
   },
   "local_test": [
-    "Sihitud regressioon taastab 117423-baidise sünteetilise vana pilditekstiga kogu HTTP-serveri vastuse piiri vea ning kontrollib parandatud väikest vastust ja mõlema pildinupu avanemist. Test ei kasuta kasutaja pilti ega konto võtit.",
-    "Eraldatud PostgreSQL-fixture kontrollib täpset uut SQL-lugejat, omaniku ja avalikku vastust, sobiva taustapildi säilimist, UTF-8 mahupiiri, hallatud piltide olemasolevat käitumist ning andmete puutumatust.",
-    "Paigaldaja kontrollib täpset eelmist originaalraportit, täielikku lähtepuud/indeksit/remote’i ning värsket SQL-kataloogi. Ühele kirjutamiskatsele järgneb eraldi lugemine. Testid ja build ei asenda kasutaja brauserikatset."
+    "Väljastus seotakse uue lõike geomeetria, mustandi elutsükli ja ekspordi fokuseeritud testide ning sama lähtekoodi Next/TypeScript build’i tõendiga. Olemasoleva meediapaneeli DOM-kontrollid katavad ka taustapildi ja salvestamata tekstiväljade säilimist.",
+    "Brauseri käivitamise katse selles töökeskkonnas ebaõnnestus keskkonna socket-piirangu tõttu. DOM- ja pilditöötluse kontrollid ei ole Safari ega kasutaja tootmiskeskkonna läbimängimine.",
+    "Paigaldaja kontrollib täpset eelmist edukat raportit ning kogu lähtepuud, indeksit ja remote’i. Uus pakett muudab ainult lähtekoodi ja juhiseid; SQL-i ega Supabase CLI toiminguid sellel sammul ei ole."
   ],
   "production": [
-    "68b6e68 Maci lõpetamine ja sama commit’i Verceli Ready / Production on vastu võetud. Kasutaja pildipaneeli laadimisviga jääb selle väljastuse eraldi kinnitatud puuduseks.",
-    "Tootmise autentimata pildi-POST vastas oodatud 401 unauthorized: serveriliides ja konfiguratsioon laaditi. Avaliku profiili kaks kitsast anonüümset RPC-lugemist kinnitasid liiga pika vana pilditeksti. Sisselogitud kasutaja päringut ega üleslaadimist assistent ei teinud.",
-    "Uus parandustehing ei ole selle juhendi koostamise ajal Macis käivitatud ega tootmises rakendatud. Pärast uut raportit tuleb kontrollida sama uue commit’i Verceli tulemus ja profiilipildi/taustapildi kasutuskatse."
+    "68c3996 Verceli Ready / Production ekraanipilt on vastu võetud. Kasutaja piltidel on nii salvestatud taustapilt kui ka profiilipilt avalikul profiilil ja päise menüüs nähtavad.",
+    "21.11 kasutaja sõnumi järgi avaneb sõnumi profiilipildilt õige vastaspoole avalik profiil. Seda olemasolevat toimingut ei käsitleta uuesti puuduva funktsioonina.",
+    "Profiilipildi uus sobitamine ja suurem sõnumite avatar ei ole selle juhendi koostamise ajal kasutaja Macis käivitatud ega tootmises kinnitatud."
   ],
-  "next_action": "Ava selqiro-profiilipiltide-laadimine-20261120.zip Downloads-kaustas ja käivita: python3 -I -B \"$HOME/Downloads/selqiro-profiilipiltide-laadimine-20261120/uuenda.py\" --publish. Saada lõpus näidatud uus raport. Uue commit’i Ready / Production järel ava Minu ala → Minu profiil → Profiili pildid ja kontrolli mõlemat pildivalikut.",
-  "stop_rule": "Tundmatu lähtekood, indeks, remote, eelmise eduka käigu originaalraport, paketifail, CLI või andmebaasiseis peatab uuenduse. Ebaselget SQL-kirjutust ei korrata automaatselt. Saada lõpus näidatud raport; vana paigaldust ega andmekogujat ei pea uuesti käivitama.",
+  "next_action": "Ava selqiro-profiilipildi-sobitamine-20261121.zip Downloads-kaustas ja käivita: python3 -I -B \"$HOME/Downloads/selqiro-profiilipildi-sobitamine-20261121/uuenda.py\" --publish. Saada lõpus näidatud uus raport. Sama uue commit’i Ready / Production järel vali Minu profiilis foto, sobita see, kinnita asend ja salvesta.",
+  "stop_rule": "Tundmatu lähtekood, indeks, remote, eelmise eduka käigu originaalraport või paketifail peatab uuenduse. Saada lõpus näidatud raport või selle puudumisel PEATATUD rida. Eelmisi paigaldusi, andmekogujaid ega SQL-käske ei ole vaja korrata.",
   "read_next": [
-    "docs/continuity/HOSTED_PORTAL.md — praeguse paranduse ainus käivitamiskäsk.",
-    "docs/architecture/profile-media-load-repair-20261120.md — vea põhjus, kitsas parandus ja tõendipiir.",
-    "docs/architecture/profile-media-20261120.md — olemasolev pildi lisamise, õiguste ja sobitamise leping.",
+    "docs/continuity/HOSTED_PORTAL.md — uue paketi ainus käivitamiskäsk ja pildi sobitamise kasutus.",
+    "docs/architecture/profile-avatar-fit-20261121.md — uue kohaliku lõikamise leping ja kontrollide piirid.",
+    "docs/architecture/profile-media-20261120.md — olemasoleva pildisalvestuse õigused ja olekumudel.",
     "docs/architecture/advertising-pricing-self-service-plan.md — hilisema reklaami ja hinnakirja suund."
   ],
   "boundaries": [
@@ -42,7 +41,7 @@
     "AI jääb välja lülitatuks. Sõltuvuste turvauuendused, konto sulgemise/kustutamise tähtajad ja laiem avamiseelne turvaülevaatus jäävad eraldi. Profiilipiltide õiguste kontroll ei ole kogu portaali turvasertifikaat."
   ],
   "environment": [
-    "Olemasolev /Users/taivo/selqiro ja Taivo17/selqiro remote; lähtecommit 68b6e68. Uut projekti ega kontot ei looda.",
-    "Olemasolev kinnitatud Supabase CLI ja projekt. Uuendaja kasutab senist ühendust, ei paigalda sõltuvusi ega vaja võtmete kleepimist."
+    "Olemasolev /Users/taivo/selqiro ja Taivo17/selqiro remote; selle töö lähtecommit on 68c3996.",
+    "Uuendaja kasutab olemasolevaid rakenduse sõltuvusi ja nõuab eelneva lõpetatud käigu originaalraporti säilimist. Uut kontot, projekti, võtit ega pilditöötluse teenust ei lisata."
   ]
 }

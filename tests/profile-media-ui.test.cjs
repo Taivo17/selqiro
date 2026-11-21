@@ -37,7 +37,8 @@ function sessionFixture(extra = {}) {
     ...extra.client,
   };
   const session = new ProfileMediaSession({actor, initial: extra.initial ?? saved, client, context: () => current,
-    confirmed: () => {confirmations++;}, prepare: extra.prepare ?? (async () => prepared()), uuid: () => P});
+    confirmed: () => {confirmations++;}, prepare: extra.prepare ?? (async () => prepared()),
+    prepareAvatar: async source => source, uuid: () => P});
   return {session, client, setContext: value => {current = value;}, setSaved: value => {saved = value;},
     counts: () => ({updates, uploads, confirmations})};
 }
@@ -331,6 +332,7 @@ test('DOM text draft and native file inputs survive media edits and temporary te
       input.dispatchEvent(new h.window.Event('change', {bubbles: true}));});
     assert.ok(media.session.getSnapshot().draft);
     textLoading = false; await h.render(Page); assert.equal(h.container.querySelector('input[type="file"]'), input);
+    await h.click(h.button('Kasuta seda asendit'));
     await h.click(h.button('Salvesta pilt'));
     assert.equal(media.counts().updates, 1); assert.equal(textWrites, 0);
     assert.equal(text.getSnapshot().draft.bio, 'Minu salvestamata kirjeldus'); assert.equal(text.getSnapshot().dirty, true);
