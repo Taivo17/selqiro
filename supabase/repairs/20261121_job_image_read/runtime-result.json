@@ -1,0 +1,65 @@
+{
+  "format": "selqiro-job-image-read-state-20261121-v1",
+  "result": "PASS",
+  "generated_at_utc": "2026-11-21T19:43:37.412Z",
+  "engine": {
+    "runtime": "PGlite",
+    "server_version": "18.6",
+    "build": "PostgreSQL 18.6 (PGlite 0.5.13) on wasm32-unknown-emscripten, compiled by emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 6.0.5 (1db513782be24469589d7cb8a1f1834e9a33f271), 32-bit"
+  },
+  "checks": [
+    "existing_business_job_and_private_task_without_optional_salary_parse_before_image_regression",
+    "one_inline_avatar_reproduces_entire_search_failure_but_business_profile_stays_readable",
+    "guarded_install_changes_one_reader_and_preserves_all_existing_rows_receipts_and_auth_authority",
+    "legacy_inline_avatar_is_safely_omitted_and_both_jobs_parse_in_search_profile_and_detail",
+    "existing_bounded_HTTP_legacy_references_remain_supported_while_unsafe_or_oversize_ones_become_null",
+    "current_managed_avatar_takes_precedence_over_unchanged_legacy_inline_source",
+    "explicitly_removed_managed_avatar_never_resurrects_a_legacy_picture",
+    "managed_asset_of_another_identity_and_retired_assets_do_not_enter_public_job_DTOs",
+    "stable_search_pagination_and_task_filter_remain_valid_for_mixed_publishers",
+    "repeating_exact_apply_only_observes_after_without_writing_rows",
+    "unknown_media_reader_definition_is_refused_before_any_change",
+    "job_and_profile_media_private_tables_and_helpers_stay_closed_for_API_roles"
+  ],
+  "failure": null,
+  "installer": {
+    "actor": "postgres",
+    "rolsuper": false,
+    "rolcreaterole": true,
+    "auth_usage": true,
+    "auth_usage_grantable": false,
+    "auth_uid_execute": true,
+    "auth_uid_execute_grantable": false
+  },
+  "test_sources": {
+    "catalog.mjs": "77e455478d9745a7e2e210c0d91cc8c67e07efd732f41ca0a99ecd8ff4ea4a58",
+    "fixture.mjs": "c53a63a7b2389389c862bbf7096653a42bb03afbdc3fa4d2657351cdfbd7746f",
+    "prepare.mjs": "61651c8325ee3ab185074536543eafb3cec6df52f9888d5ee5578a6de361574d",
+    "runtime.mjs": "59f22851d1de2bfa6533ef624d480005a1533c10c5c937638d0502855c1f5abd"
+  },
+  "client_parser_inputs": {
+    "src/entities/job/model/jobParsers.ts": "6c8b138c17a3daabdc197ef654e0b5a2658765dc209b5b5ccde19a5a2eeb9be8",
+    "src/entities/job/model/jobContent.ts": "0c7d8a829b2945c04a9bbd9c12a5a63eb8b61bad83fa5699529caf6415ecd256",
+    "src/entities/listing/model/listingPriceInput.ts": "6554b08dbcb07d731cf5bc4802ac91a9f5db6f611c4514f35e2b41051d1cb2d2",
+    "src/shared/currency/listingCurrencies.generated.ts": "bbcaf613ee86d4041bce74b829abc45d992fec8ec75000c42ad6da45ff05b581",
+    "src/entities/job/model/types.ts": "1ef3e7212840737bc310a7c27220d624d204de63caa7adcf9e4c1b788b4ca675"
+  },
+  "source_modules": {
+    "01_public_fields.sql": "f77979e3b0f44a8b20c7ad328b2c8f0a1fa2cb2e77f552bf13d2dacd88364c6e"
+  },
+  "sql_sha256": {
+    "preflight.sql": "176f99a036f55730373c328466087c23e9ea7f0e594e9e4b2742ac40ddbc7514",
+    "apply.sql": "d53a2a0b9e5b62f8c1d7e1bdcc74b58faaf55c38fb0f141dab3596925aa27b32",
+    "verify.sql": "176f99a036f55730373c328466087c23e9ea7f0e594e9e4b2742ac40ddbc7514"
+  },
+  "public_fixture_sha256": "692c981717dccb561ecbfe254322387f7ac65f50163e283dcca03e5da2de1e82",
+  "live_database": false,
+  "real_user_data": false,
+  "production_storage": false,
+  "native_concurrency": false,
+  "limitations": [
+    "Real PostgreSQL permissions and PL/pgSQL run in local PGlite with synthetic identities/jobs/media metadata, not hosted Supabase/PostgREST.",
+    "Only accepted media reader declarations and table constraints are restored; no hosted Storage objects or prior historical test suites are invoked.",
+    "Current TypeScript parsers process the actual SQL responses. Saved fixture values are unmodified and callers may freeze time to their read_at for deterministic expiry checks."
+  ]
+}

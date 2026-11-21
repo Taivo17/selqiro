@@ -1,34 +1,34 @@
-# Töökuulutused eraisikule ja ettevõttele
+# Avaliku tööotsingu laadimisvea parandus
 
-21.11.2026. Alus on vastu võetud `cd35d18` turvauuendus. E-posti kinnitamise aktiveerimine jääb kasutaja otsusel `selqiro.com` kasutuselevõtu etappi; praegu kasutab kõiki kolme kontot ainult tema ise.
+21.11.2026. Alus on avaldatud `512fe45`. Olemasolevad kuulutused on oma vaates või avalikul profiilil nähtavad, kuid üldotsing annab laadimisvea. Koodis korrati sama tõrge ühe tulemuse vanas formaadis profiilipildiga.
 
 ## Tulemus
 
-Eraisik ja ettevõte kasutavad sama töökuulutuse vormi. Valida saab „Otsin töö tegijat” või „Otsin töötajat”. Konkreetse töö puhul saab lisada kogu töö tasu; olemasolevad tunni- ja muud tasuperioodid säilivad. Töö ilmub üldises Töö otsingus ja avaldaja profiilis. Kuulutuse juurest saab avada vestluse tegeliku avaldajaga.
+Töökuulutuste avalik vastus hakkab kasutama olemasolevat profiilipiltide lugejat. Nii ei saa ühe avaldaja vana pildiväli kogu tööotsingut katkestada. Uus eraisiku tööots ja vana ettevõtte töökuulutus peavad olema samas loetelus nähtavad, kui nende tavalised nähtavustingimused on täidetud. Kuulutusi ega pilte ei ole vaja uuesti lisada.
 
 ## Käivitamine
 
-Ava `selqiro-eraisiku-tookuulutused-20261121.zip` Downloads-kaustas, salvesta pooleliolev töö ning käivita:
+Laadi alla ja ava `selqiro-too-otsingu-parandus-20261121.zip` Downloads-kaustas. Käivita:
 
 ```bash
-python3 -I -B "$HOME/Downloads/selqiro-eraisiku-tookuulutused-20261121/uuenda.py" --publish
+python3 -I -B "$HOME/Downloads/selqiro-too-otsingu-parandus-20261121/uuenda.py" --publish
 ```
 
-Uuendaja kontrollib olemasolevat lähtekoodi, originaalraportit ja serverilepingut. Seejärel paigaldab piiratud muudatuse, kontrollib kliendi käitumist ja koostab portaali. Üks tehing laiendab töökuulutuste serverilepingut; sõltumatu lugemiskontroll peab tulemuse kinnitama enne piiratud commit/push’i. Tegevuste toored logid jäävad Macile; saadetav raport ei sisalda kasutajate ridu ega võtmeid.
+Uuendaja kontrollib olemasolevat allikat ja eelmise paigalduse raportit, teeb värske andmebaasilepingu lugemiskontrolli, kontrollib ettevalmistatud allikat ning rakendab ühe piiratud SQL-tehingu. Sõltumatu järelkontroll peab õnnestuma enne commit’i ja push’i. Sõltuvusi ei paigaldata. Varasemad andmed, kviitungid ja paigalduspäevikud säilivad.
 
-Saada lõpus **SAADA SEE FAIL** juures näidatud uus raport. Oota Vercelis **sama commit’i Ready / Production** tulemust ja värskenda portaali. Seejärel proovi eraisikuna konkreetse töö kuulutust, kontrolli üldist otsingut ja oma avalikku profiili ning ava teise oma kontoga selle kuulutuse kontakt. Sõnumi saatmine jääb sinu eraldi vajutuseks.
+Saada lõpus **SAADA SEE FAIL** juures näidatud uus raport. Oota Vercelis **sama commit’i Ready / Production** tulemust ja värskenda portaali. Ava **Töö** ilma filtriteta: kontrolli „Otsin lume lükkajat täna” ja „Muruniiduki operaator” nähtavust. Ava olemasolevad kuulutused ning kontrolli ka avaliku profiili tööde jaotist.
 
-Peatumisel saada uus raport või **PEATATUD** rida. Säilita failid ja päevikud. Ebaselget SQL-tulemust ei lahendata sama käsu pimesi kordamisega.
+Kui uuendaja peatub, saada uus raport või **PEATATUD** rida. Säilita failid ja päevikud.
 
 ## Kohalik kontroll
 
-- 53 kliendi ja integratsiooni kontrolli läbisid edukalt.
-- 22 SQL-i kontrollrühma läbisid eraldatud testandmetega edukalt.
-- 3 eraldi vormi käitumise kontrolli ja 46 uuendaja kontrolli läbisid edukalt.
-- Uuendatud portaali build läbis edukalt; lähtekoodi sisendites muutusi ei olnud.
+- 37 kliendi ja jagamise kontrolli läbisid edukalt, nende seas viis uut pildivea kontrolli.
+- 12 SQL-i kontrollrühma läbisid eraldatud testandmetega edukalt.
+- 48 uuendaja kontrolli läbisid edukalt.
+- Portaali tootmisversiooni build läbis edukalt; 764 koostamissisendit jäid muutumatuks ning üheksa nõutud artefakti kontroll õnnestus.
 
-Need on ettevalmistuse kontrollid. Uuendaja käivitab Macis sihitud 53 kliendikontrolli ja build’i uuesti ning kontrollib tegelikku andmebaasilepingut. Uusi teeke ei ole vaja paigaldada.
+Uuendaja käivitab Macis sihitud 37 kliendikontrolli ja build'i uuesti ning kontrollib tegelikku andmebaasilepingut. Uusi teeke ei ole vaja paigaldada. Kohalikud kontrollid ei tähenda, et serveriparandus oleks juba avaldatud.
 
-## Piir
+## Tõendi piir
 
-Pakett ei ole selle juhendi kirjutamise ajal Macis ega hosted-andmebaasis käivitatud. Kohalikud sünteetilised rakendus-/SQL-kontrollid ei asenda kasutaja avaldatud versiooni läbimist. Varem avatud leht tuleb pärast avaldamist värskendada, et laadida uute tööliikide lugeja.
+Uus parandus on enne selle käsu käivitamist ainult ette valmistatud ja lokaalselt kontrollitud. Senine production-versioon ja avaliku otsingu viga on eraldi üle vaadatud. Uut serverimuudatust, Maci käivitamist ega uut Verceli tulemust ei loeta enne raportit tehtuks.

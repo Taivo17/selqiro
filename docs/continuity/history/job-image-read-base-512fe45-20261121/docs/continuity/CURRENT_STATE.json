@@ -1,0 +1,53 @@
+{
+  "format": "selqiro_repo_handoff_v1",
+  "recorded_on": "21.11.2026 Europe/Tallinn — cd35d18 vastu võetud; eraisiku töökuulutuste pakett lokaalselt kontrollitud",
+  "archive": {
+    "lines": 5573,
+    "path": "docs/archive/99_V2_HANDOFF_NEXT_CHAT.before-price-core-20261004-6df0af9.md",
+    "sha256": "667e47990a7d3cc20ff53709cb861663b4565cf1d3c830eda88e0d18e60fdb8a"
+  },
+  "checkpoint": "Turvauuendus cd35d18 on kasutaja Maci raporti ja sama commit’i Verceli Ready / Production ekraanipildi alusel vastu võetud. Kasutaja kinnitas, et kõik kolm kontot on tema loodud ja keegi teine portaali veel ei testi. E-posti kinnitamise aktiveerimine on teadlikult edasi lükatud selqiro.com kasutuselevõtu etappi, enne väliste kasutajate kaasamist. Kasutaja palus jätkata eraisikute töökuulutustega. See pakett laiendab ühtse töövoo eraisikule ja ettevõttele, säilitades õiguste, korduskatse, revisjoni ja blokeerimise kontrollid.",
+  "source": {
+    "Vastu võetud alus": "main cd35d1878157a1730d489241b283881b28740a33, puu 9ad98df916b97fd253e1ffd5f0835a2227105140, 1976 jälgitavat faili. Sõltuvused Next 16.4.6 ja Sharp 0.35.5 jäävad muutmata.",
+    "Aluse tõend": "Turvauuenduse raport selqiro-turvauuendus-20261121-raport-20261121-172730-c6f5ae545876.json, 373817 B, SHA256 2af0a1d7d16924e96c336f804667cb69f5f96f63c05743b4f09be347f8d4cfce; viis edukat kontrollietappi, 140 sihitud testi, build passed, push verified. Toored Maci logid ei olnud üles laaditud. Deployment-status on kasutaja ekraanipildi tõend, mitte uus live-päring.",
+    "Tooteotsus": "Üks Töö jaotis. Mõlemad profiilitüübid võivad otsida kindla töö tegijat või töötajat. Ühekordse töö puhul on lubatud kogu töö tasu. Eraisikult ei küsita väljamõeldud ettevõtte nime ega täpset koduaadressi.",
+    "Lepingu otsus": "Olemasolev 13 väljaga töösisu ja RPC signatuurid säilivad. employmentType=task tähistab konkreetse töö tegija otsimist; salaryPeriod=task tähendab kogu töö tasu. See on toote liigitus, mitte töösuhte õigusliku staatuse tõend. Varasemad tüübid ja päringukviitungite sisendid jäävad muutmata.",
+    "Õigused": "Eraisiku enda aktiivne identiteet; ettevõttel senine aktiivse ettevõtte ja liikmesuse kontroll. Avalik profiil, tööd, kontakt, konto blokeeringud ja ajutine peitmine kasutavad sama tegelikku avaldaja identiteeti. Brauseri tabeli otsekirjutamist ei avata.",
+    "E-posti eraldiseisev ettevalmistus": "selqiro-eposti-ettevalmistus-20261121.zip on ettevalmistatud, mitte avaldatud lähtekoodikoopia. Seda ei lisata sellesse tööskoopi. Hiljem tuleb ainult e-posti delta sobitada siis kehtiva lähtekoodiga, uuendada kanooniline aadress selqiro.com peale ja kontrollida SMTP/Auth; tervet vana koopia puud ei tohi uue tööversiooni peale kopeerida.",
+    "Ajalugu": "Aluse kolm jooksvat juhendit on baiditäpselt säilitatud docs/continuity/history/personal-jobs-base-cd35d18-20261121 all. Vanu väljastatud SQL-faile, raporteid ja pakke ei muudeta."
+  },
+  "local_test": [
+    "53/53 kliendi ja avaliku vaate kontrolli: senine töökuulutuse klient 22, sõnumikontekst 8, uus eraisiku/tööotsa klient 11, profiili ja anonüümse jagamise integratsioon 2, senine pakkumise jagamine 10. Null vahelejäetud, tühistatud või ebaõnnestunud testi. Tegelikud TS/React SSR moodulid, sünteetilised võrguvastused.",
+    "Eraldi ettevalmistuse React DOM kontroll 3/3: eraisiku ja ettevõtte sidumine, sama profiili mustandi säilimine, teisele profiilile vahetamise eraldatus, varem salvestatud või poolelioleva töösuhte sisu eelis ja tööotsa päris vormiesitus. JSDOM on ainult ettevalmistuse tööriist, mitte Maci uus sõltuvus; visuaalset brauserikontrolli ei väideta.",
+    "SQL-i 22/22 kontrollrühma PostgreSQL 18.6 / PGlite 0.5.13 keskkonnas, mitte-superkasutaja paigaldaja ja eraldi API rollidega. Eraisiku ja ettevõtte avaldamine, vana päringu muutumatu kviitung, tasu ja tööaja serverikontroll, revisjonid, blokeeringud, peitmine ja tegeliku omanikuga kontakt. Hosted-kataloog tuleb uuendajal eraldi ära tunda; PGlite ei tõenda paralleelsete pärisseansside käitumist.",
+    "Praeguse lähtekoodi Next.js 16.4.6 build läbis edukalt; koostamise sisendites muutusi ei olnud. Kasutati inertseid lokaalseid aadresse ja kohatäiteid, mitte päris teenuste võtmeid. Kõigi nelja töökuulutuse marsruudi koostatud artefaktid sobivad uuendaja kontrolliga.",
+    "Uuendaja 46/46 kontrolli: päris ajutised Git-hoidlad, indeks ja remote, lähtepuu ning turvauuenduse raporti kontroll, täpne TAP, runtime’i ja build’i tõendid, katkemine, ebakindla SQL-katse lugemisega lahendamine ning commit/push-i piirid. CLI serverivastused ja Maci tööriistad on selles eraldi katses simuleeritud. Maci käivitamist, hosted-SQL-i ega production-push’i ei väideta.",
+    "Väljastatud paketi kontrollid-kaust säilitab valitud täpsed tulemused ja testiallikad. Sõltuvusi ei paigaldata; varasema turvauuenduse 140 pilditesti ei korrata."
+  ],
+  "production": [
+    "cd35d18 Ready / Production ning selle turvauuenduse Maci raport on vastu võetud. Seda väljastust ja 140 vana pilditesti ei ole vaja uuesti korrata.",
+    "Uue töökuulutuste paketi käivitamine, SQL-tehing, commit/push ja Verceli avaldamine on kasutaja ühe käsu käivitamiseni ootel.",
+    "Kasutaja Supabase’i ekraanipiltidel Confirm email ja custom SMTP olid väljas; Site URL on https://selqiro.vercel.app. Selles paketis Authi, SMTP-d ega DNS-i ei muudeta."
+  ],
+  "next_action": "Ava selqiro-eraisiku-tookuulutused-20261121.zip Downloads-kaustas ja käivita python3 -I -B \"$HOME/Downloads/selqiro-eraisiku-tookuulutused-20261121/uuenda.py\" --publish. Saada lõpus SAADA SEE FAIL juures näidatud raport. Oota sama commit’i Ready / Production tulemust ja värskenda portaali. Seejärel kontrolli eraisikuna ühe töö avaldamist, oma/avalikku vaadet ja teise oma kontoga kontaktiteekonda.",
+  "stop_rule": "Tundmatu lähtekood, indeks, remote, varasem raport, runtime, andmebaasileping või test/build tulemus peatab avaldamise. Ebaselget SQL-käsku automaatselt ei korrata; sama päeviku jätk tohib ainult täpset juba rakendatud tulemust lugemisega kinnitada. Saada uus raport või PEATATUD rida ning säilita failid ja päevikud.",
+  "read_next": [
+    "docs/continuity/HOSTED_PORTAL.md — üks käivitamiskäsk ja tulemus.",
+    "docs/architecture/personal-jobs-20261121.md — sisu, õigused, ühilduvus ja kontrollide piir.",
+    "supabase/repairs/20261121_personal_jobs/README.md — piiratud serverimuutus ja preflight/verify leping.",
+    "docs/architecture/registration-email-and-private-employers-plan.md — uuendatud tööjärjekord ja e-posti aktiveerimise tingimus."
+  ],
+  "boundaries": [
+    "Kolm kontot on kasutaja enda omad; väliseid testijaid ei ole. E-posti aktiveerimine lükati edasi domeeni kasutuselevõtuni. Enne väliseid testijaid või avalikku registreerimist tuleb kinnitamine, kirjade saatmine ja parooli taastamine lõpuni kontrollida ka juhul, kui avalik aadress on veel vercel.app.",
+    "Põhidomeeniks valiti selqiro.com. Kasutajale kuuluvad ka selqiro.app, selqiro.io ning selkiro.com/.app/.io. Domeenide ja DNS-i seadistust selles paketis ei tehta.",
+    "Ülesannete ja töökohtade eristus ei otsusta lepingu õiguslikku liiki. Konto tüübi laiendus ei laienda riikide poliitikaid ega möödu senisest country-scoped policy peatumisest.",
+    "Olemasolevaid kasutajaid, profiile, töid, vestlusi, pilte, tingimusi ja kviitungeid ei kustutata ega kirjutata ringi. Üks kalendrikuu kehtivus, tasu täpsed kümnendsummad, poliitika nõusolek, revisjonid ja konto/identiteedi seos säilivad.",
+    "Vanasse avatud brauserilehte jäänud range parser ei pruugi uusi task väärtusi ega avaldaja identity_type välja tunda. Pärast sama versiooni Ready / Production tulemust tuleb leht värskendada. See ei ole nullkatkestusega eri kliendiversioonide leping; senised muutumatud päringusisendid ja kviitungid säilivad.",
+    "AI päringuteed jäävad suletuks. Konto sulgemine/kustutamine, reklaami ja esiletõstmise iseteenindus ning laiem avamiseelne ülevaatus on järgnevad tööd."
+  ],
+  "environment": [
+    "Olemasolev /Users/taivo/selqiro ja Taivo17/selqiro remote. Ainus selle paketi lähtecommit on cd35d1878157a1730d489241b283881b28740a33.",
+    "Sama turvauuenduse sõltuvused ja lukufail säilivad; npm ci ega uusi teeke ei ole selle funktsiooni jaoks vaja.",
+    "Uuendaja kontrollib senist originaalraportit, kogu lähtepuud, tegelikku runtime’i ning olemasoleva seotud Supabase projekti piiratud lepingut. Uut projekti, kontot ega teenusevõtit ei looda."
+  ]
+}
