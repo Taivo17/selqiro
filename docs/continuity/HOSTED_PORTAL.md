@@ -1,33 +1,29 @@
-# Profiilipildi sobitamine ja suuremad pildid sõnumites
+# Suurem oma profiilipilt vestluste loendis
 
-21.11.2026. Vastu võetud alus on `68c3996`: pildi lisamine, taustapildi sobitamine ja piltide kuvamine toimivad kasutaja esitatud katsete järgi. See pakett lisab profiilipildi enda sobitamise ning teeb vastaspoole pildi sõnumite loendis ja päises suuremaks.
+21.11.2026. Vastu võetud alus on `eb29922`: profiilipildi sobitamise uuendus on kasutaja raporti ja sama commit’i Ready / Production ekraanipildi järgi avaldatud. Kasutaja piltidel on näha sobitatud ja salvestatud profiilipilt ning suuremad vastaspoole pildid sõnumites.
+
+## Selle paranduse tulemus
+
+- Vestluste loendi **Postkast** rea oma profiilipilt: **40 × 40 px**.
+- Vastaspoole profiilipilt loendis ja päises: **56 × 56 px**, telefonivaates **48 × 48 px**.
+- Avatud vestluse all **Saadad kui** rea oma profiilipilt: **24 × 24 px**.
+
+Muudatus on üks loendiga piiratud CSS-reegel. Pildifailide, sõnumite ega profiiliandmete muutmist see ei tee.
 
 ## Käivitamine
 
-Ava `selqiro-profiilipildi-sobitamine-20261121.zip` Downloads-kaustas ja käivita:
+Ava `selqiro-postkasti-profiilipilt-20261121.zip` Downloads-kaustas ja käivita:
 
 ```bash
-python3 -I -B "$HOME/Downloads/selqiro-profiilipildi-sobitamine-20261121/uuenda.py" --publish
+python3 -I -B "$HOME/Downloads/selqiro-postkasti-profiilipilt-20261121/uuenda.py" --publish
 ```
 
-Uuendaja kontrollib olemasolevat lähtekoodi, indeksit, remote’i ja eelmise eduka käigu originaalraportit. Seejärel käivitab uued fokuseeritud testid ja build’i ning teeb kontrollitud commit’i ja push’i. Säilita varasemad raportid. Selle muudatuse jaoks puudub eraldi andmebaasisamm.
+Uuendaja kontrollib olemasolevat lähtekoodi, indeksit, remote’i ja eelmise eduka käigu originaalraportit. Seejärel käivitab build’i ning teeb piiratud commit’i ja push’i. Uue commit’i pealkiri on **Enlarge the current profile avatar in the conversation list**.
 
-Saada lõpus **SAADA SEE FAIL** juures näidatud uus raport. Oota Vercelis **sama uue commit’i** `Ready / Production` tulemust ja värskenda portaali.
-
-## Pildi sobitamine
-
-Ava **Minu ala → Minu profiil → Profiili pildid**.
-
-1. Vajuta profiilipildi juures **Vali pilt** või **Muuda pilti** ning vali oma seadmest fail.
-2. Avaneb ringikujuline eelvaade. **Täida ring** täidab raami; suurenduse ja asendi saad valida lohistamise, liugurite või klaviatuuri abil. **Näita tervet pilti** säilitab kogu foto või logo ja võib jätta raami servadesse vaba ala.
-3. Vajuta **Kasuta seda asendit**, seejärel **Salvesta pilt**. Asendi kinnitamine valmistab ette kohaliku pildi; avalik pilt vahetub salvestamise õnnestumisel.
-
-Eraisiku puhul on algvalik **Täida ring**, ettevõtte puhul **Näita tervet pilti**. Valikut saab mõlemal juhul muuta. Enne salvestamist saab sama valitud originaali uuesti sobitada. Juba salvestatud pildi uueks lõikamiseks vali originaalfail uuesti nupuga **Muuda pilti**.
-
-Vastaspoole profiilipilt on sõnumites suurem. Sellelt avaliku profiili avamine jääb samaks, nagu kasutaja on juba kinnitanud. Uuendus ei muuda seniseid fotosid automaatselt.
+Saada lõpus **SAADA SEE FAIL** juures näidatud uus raport. Oota Vercelis **sama uue commit’i** `Ready / Production` tulemust ja värskenda vestluste loendit.
 
 ## Kontrollide piir
 
-Paketi juurde kuuluvad kohalikud testide ja build’i tõendid. Siinne Chromium ei käivitunud keskkonna socket-piirangu tõttu; kasutaja Safari ja tootmiskeskkonna uus pildisobitamise käik võetakse vastu pärast paigaldust. Uue paketi avaldamist ei ole selle juhendi koostamise ajal kasutaja eest tehtud.
+Pakett sisaldab kohaliku build’i, täpse muudatuse ülevaatuse ja uuendaja kontrollide tõendeid. Uusi rakenduse ühikteste väikese CSS-muudatuse jaoks ei lisata. Varasema profiilipildi sobitamise 17/17 testi ja build on vastu võetud eelmise Maci raporti alusel, neid ei esitata uue käigu testidena. Uut päris brauseri kasutuskatset siin ei väideta.
 
-Kui käik peatub, saada näidatud raport või raporti puudumisel täpne **PEATATUD** rida. Ära käivita selle tõttu uuesti varasemaid SQL-paigaldusi.
+Uuendust ei ole selle juhendi koostamise ajal kasutaja eest avaldatud. Peatumisel saada täpne uus raport või raporti puudumisel **PEATATUD** rida. Varasemaid uuendajaid ega SQL-käske pole vaja korrata.

@@ -86,6 +86,7 @@
 .imageDialog img { max-width: 90vw; max-height: calc(100dvh - 100px); object-fit: contain; margin: auto; }
 .imageClose { display: flex; justify-content: flex-end; margin-bottom: 8px; }
 .inbox { max-width: 960px; margin: auto; background: white; border: 1px solid #e5e7e3; border-radius: 24px; padding: 20px; }
+.inbox .sender .avatar { width: 40px; height: 40px; font-size: 16px; }
 .inboxHeader { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
 .inboxHeader h1 { font-size: 24px; font-weight: 700; }
 .threadRow { display: flex; align-items: center; border-bottom: 1px solid #eceeea; padding: 8px 0; gap: 8px; }

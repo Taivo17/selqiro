@@ -1,0 +1,47 @@
+{
+  "format": "selqiro_repo_handoff_v1",
+  "recorded_on": "21.11.2026 Europe/Tallinn — piltide laadimise parandus vastu võetud; profiilipildi sobitamine ja suuremad sõnumite pildid ette valmistatud",
+  "archive": {
+    "lines": 5573,
+    "path": "docs/archive/99_V2_HANDOFF_NEXT_CHAT.before-price-core-20261004-6df0af9.md",
+    "sha256": "667e47990a7d3cc20ff53709cb861663b4565cf1d3c830eda88e0d18e60fdb8a"
+  },
+  "checkpoint": "68c3996 paranduse Maci raport, sama commit’i Ready / Production ning kasutaja profiilipildi ja taustapildi lisamise, salvestamise ning avalikul profiilil kuvamise katsed on vastu võetud. 21.11 kinnitas kasutaja ka sõnumi päisest vastaspoole avalikule profiilile liikumist. Uus töö lisab enne profiilipildi salvestamist ringi täitva lõike, suurendamise ja nihutamise ning suurendab vastaspoole pilti sõnumites. Uue töö Maci ja tootmise tulemus on ootel.",
+  "source": {
+    "Vastu võetud alus": "main 68c3996215069ba491de5883de3d21653fc0143d, tuletatud puu 480d5602eb87c0cd24b7db1cafa2cec01040543c, 1955 faili. Kogu kandidaat on võrreldud vastu võetud baasinventariga.",
+    "Eelmise käigu raport": "296481 B; SHA256 58ee061d23e793ad17f6d063a87ba717916acae419a49b8d7ba843046389fa02. Release 7c9464a2b9468b34855101abc2e08fe2f387c016b8db070cd4e69d4a7f31e9a7. 297 offline-tõendikontrolli; varasema testi/build’i läbimist kinnitab raport, mitte siia lisatud Maci logide sisu.",
+    "Pildi muudatus": "Uue kohaliku foto eelvaade täidab ringi. Kasutaja saab suurendada ja nihutada, kasutada klaviatuuri või valida terve pildi näitamise. Ettevõtte puhul on terve logo näitamine algvalik. Lõige salvestatakse olemasoleva üleslaadimise kaudu ruudukujulise WebP-failina.",
+    "Andmete piir": "Uus sobitamine kasutab brauseris valitud ja juba mahupiiridesse viidud pilti. Algne ettevalmistatud pilt säilib sama mustandi korduvaks sättimiseks. Varem salvestatud pildi uueks lõikamiseks valib kasutaja originaali uuesti. Väliseid pilte lõikamiseks ei laadita.",
+    "Sõnumite pilt": "Vastaspoole avatar on loendis ja päises 56 px; telefonivaates 48 px. Oma saatja väike tähis jääb 24 px. Olemasolev kontrollitud avaliku profiili link säilib.",
+    "Ajalugu": "Eelmise jooksva juhise kolm faili säilivad baiditäpselt history/profile-avatar-fit-base-68c3996-20261121 all. Varem väljastatud pakette ja raporteid ei muudeta."
+  },
+  "local_test": [
+    "Väljastus seotakse uue lõike geomeetria, mustandi elutsükli ja ekspordi fokuseeritud testide ning sama lähtekoodi Next/TypeScript build’i tõendiga. Olemasoleva meediapaneeli DOM-kontrollid katavad ka taustapildi ja salvestamata tekstiväljade säilimist.",
+    "Brauseri käivitamise katse selles töökeskkonnas ebaõnnestus keskkonna socket-piirangu tõttu. DOM- ja pilditöötluse kontrollid ei ole Safari ega kasutaja tootmiskeskkonna läbimängimine.",
+    "Paigaldaja kontrollib täpset eelmist edukat raportit ning kogu lähtepuud, indeksit ja remote’i. Uus pakett muudab ainult lähtekoodi ja juhiseid; SQL-i ega Supabase CLI toiminguid sellel sammul ei ole."
+  ],
+  "production": [
+    "68c3996 Verceli Ready / Production ekraanipilt on vastu võetud. Kasutaja piltidel on nii salvestatud taustapilt kui ka profiilipilt avalikul profiilil ja päise menüüs nähtavad.",
+    "21.11 kasutaja sõnumi järgi avaneb sõnumi profiilipildilt õige vastaspoole avalik profiil. Seda olemasolevat toimingut ei käsitleta uuesti puuduva funktsioonina.",
+    "Profiilipildi uus sobitamine ja suurem sõnumite avatar ei ole selle juhendi koostamise ajal kasutaja Macis käivitatud ega tootmises kinnitatud."
+  ],
+  "next_action": "Ava selqiro-profiilipildi-sobitamine-20261121.zip Downloads-kaustas ja käivita: python3 -I -B \"$HOME/Downloads/selqiro-profiilipildi-sobitamine-20261121/uuenda.py\" --publish. Saada lõpus näidatud uus raport. Sama uue commit’i Ready / Production järel vali Minu profiilis foto, sobita see, kinnita asend ja salvesta.",
+  "stop_rule": "Tundmatu lähtekood, indeks, remote, eelmise eduka käigu originaalraport või paketifail peatab uuenduse. Saada lõpus näidatud raport või selle puudumisel PEATATUD rida. Eelmisi paigaldusi, andmekogujaid ega SQL-käske ei ole vaja korrata.",
+  "read_next": [
+    "docs/continuity/HOSTED_PORTAL.md — uue paketi ainus käivitamiskäsk ja pildi sobitamise kasutus.",
+    "docs/architecture/profile-avatar-fit-20261121.md — uue kohaliku lõikamise leping ja kontrollide piirid.",
+    "docs/architecture/profile-media-20261120.md — olemasoleva pildisalvestuse õigused ja olekumudel.",
+    "docs/architecture/advertising-pricing-self-service-plan.md — hilisema reklaami ja hinnakirja suund."
+  ],
+  "boundaries": [
+    "Uuendus ei eemalda hulgi vanu profiilipilte. Vana pilt asendub selle profiili selgesõnalise valikuga; taustakoristus puudutab ainult uue registri täpseid kasutusest eemaldatud või aegunud katsefaile.",
+    "Avaliku viite eemaldamine ja Storage API kustutuse järel praeguse võtme puudumine ei tõesta kõigi ajalooliste versioonide või vahemälukoopiate füüsilist hävitamist. Tegelikke bucket versioning/lifecycle väärtusi esialgne koguja ei lugenud. Konto lõpliku kustutamise kord on eraldi töö.",
+    "Ettevõtte loomine, üleandmine, registreerimise lihtsustamine ja eraisiku/ettevõtte esmavalik jäävad eraldi. Olemasolevate profiilide omanikud ja pakkumised ei muutu.",
+    "Reklaam ning esiletõstmine jäävad oluliseks järgmiseks etapiks: iseteenindus, avalik hinnakiri, ühtne stardihind ja riigi erihinnad, fikseeritud paketid; oksjon ei ole esimese versiooni eeltingimus.",
+    "AI jääb välja lülitatuks. Sõltuvuste turvauuendused, konto sulgemise/kustutamise tähtajad ja laiem avamiseelne turvaülevaatus jäävad eraldi. Profiilipiltide õiguste kontroll ei ole kogu portaali turvasertifikaat."
+  ],
+  "environment": [
+    "Olemasolev /Users/taivo/selqiro ja Taivo17/selqiro remote; selle töö lähtecommit on 68c3996.",
+    "Uuendaja kasutab olemasolevaid rakenduse sõltuvusi ja nõuab eelneva lõpetatud käigu originaalraporti säilimist. Uut kontot, projekti, võtit ega pilditöötluse teenust ei lisata."
+  ]
+}

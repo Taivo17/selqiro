@@ -1,35 +1,34 @@
 {
   "format": "selqiro_repo_handoff_v1",
-  "recorded_on": "21.11.2026 Europe/Tallinn — piltide laadimise parandus vastu võetud; profiilipildi sobitamine ja suuremad sõnumite pildid ette valmistatud",
+  "recorded_on": "21.11.2026 Europe/Tallinn — profiilipildi sobitamine vastu võetud; postkasti oma pildi väike kujundusparandus ette valmistatud",
   "archive": {
     "lines": 5573,
     "path": "docs/archive/99_V2_HANDOFF_NEXT_CHAT.before-price-core-20261004-6df0af9.md",
     "sha256": "667e47990a7d3cc20ff53709cb861663b4565cf1d3c830eda88e0d18e60fdb8a"
   },
-  "checkpoint": "68c3996 paranduse Maci raport, sama commit’i Ready / Production ning kasutaja profiilipildi ja taustapildi lisamise, salvestamise ning avalikul profiilil kuvamise katsed on vastu võetud. 21.11 kinnitas kasutaja ka sõnumi päisest vastaspoole avalikule profiilile liikumist. Uus töö lisab enne profiilipildi salvestamist ringi täitva lõike, suurendamise ja nihutamise ning suurendab vastaspoole pilti sõnumites. Uue töö Maci ja tootmise tulemus on ootel.",
+  "checkpoint": "eb29922 profiilipildi sobitamise ja suuremate vestluspiltide uuenduse Maci raport, sama commit’i Ready / Production ning kasutaja esitatud sobitamise, salvestamise ja vestluste ekraanipildid on vastu võetud. Järgmine eraldi parandus suurendab ainult vestluste loendi Postkast-real oma profiilipildi 24 pikslilt 40 pikslile. Avatud vestluse all jääb oma pilt 24 px; vastaspoole pildid on endiselt 56 px ja telefonivaates 48 px.",
   "source": {
-    "Vastu võetud alus": "main 68c3996215069ba491de5883de3d21653fc0143d, tuletatud puu 480d5602eb87c0cd24b7db1cafa2cec01040543c, 1955 faili. Kogu kandidaat on võrreldud vastu võetud baasinventariga.",
-    "Eelmise käigu raport": "296481 B; SHA256 58ee061d23e793ad17f6d063a87ba717916acae419a49b8d7ba843046389fa02. Release 7c9464a2b9468b34855101abc2e08fe2f387c016b8db070cd4e69d4a7f31e9a7. 297 offline-tõendikontrolli; varasema testi/build’i läbimist kinnitab raport, mitte siia lisatud Maci logide sisu.",
-    "Pildi muudatus": "Uue kohaliku foto eelvaade täidab ringi. Kasutaja saab suurendada ja nihutada, kasutada klaviatuuri või valida terve pildi näitamise. Ettevõtte puhul on terve logo näitamine algvalik. Lõige salvestatakse olemasoleva üleslaadimise kaudu ruudukujulise WebP-failina.",
-    "Andmete piir": "Uus sobitamine kasutab brauseris valitud ja juba mahupiiridesse viidud pilti. Algne ettevalmistatud pilt säilib sama mustandi korduvaks sättimiseks. Varem salvestatud pildi uueks lõikamiseks valib kasutaja originaali uuesti. Väliseid pilte lõikamiseks ei laadita.",
-    "Sõnumite pilt": "Vastaspoole avatar on loendis ja päises 56 px; telefonivaates 48 px. Oma saatja väike tähis jääb 24 px. Olemasolev kontrollitud avaliku profiili link säilib.",
-    "Ajalugu": "Eelmise jooksva juhise kolm faili säilivad baiditäpselt history/profile-avatar-fit-base-68c3996-20261121 all. Varem väljastatud pakette ja raporteid ei muudeta."
+    "Vastu võetud alus": "main eb29922d6c47e3ff7bc5bbbd2bbdbaf62f59f22a, tuletatud puu 4e61ce1410982c77e835598f036813233cad409e, 1964 faili. Alus taastatakse eelmise väljastuse täpsest inventarist ja 19-faililisest kattest ning võrreldakse kandidaadiga.",
+    "Eelmise käigu raport": "294433 B; SHA256 302393e6fd8d7aa31d771e42fe002b051f63836c135f9e6d6d17824754f99e9b. Release 66ef188b7257ad6b07c0b3b1fdc60735694c8c46dc720d55db47b7db29877c5d. Raportis on 17/17 testi, build passed ja push verified. Maci logide sisu ei olnud üleslaaditud JSON-is; käsutulemused on raporti tõendid.",
+    "Uue paranduse ulatus": "Üks lisatud CSS-reegel .inbox .sender .avatar: width 40px, height 40px ja algustähe font 16px. Loendi Postkast-rida on selle reegli ainus saatjatähis. Rakenduse käitumisloogika, salvestamine ja õigused ei muutu.",
+    "Säiliv pildisobitamine": "Vastu võetud ringi täitev lõige, suurendamine, nihutamine, terve pildi valik ja eraldi asendi kinnitamine/salvestamine jäävad samaks. Varem salvestatud pildi uueks sobitamiseks valitakse kohalik originaal uuesti.",
+    "Ajalugu": "Eelmise jooksva juhise kolm faili säilivad baiditäpselt history/inbox-avatar-base-eb29922-20261121 all. Varem väljastatud pakette, raporteid ega päevikuid ei muudeta."
   },
   "local_test": [
-    "Väljastus seotakse uue lõike geomeetria, mustandi elutsükli ja ekspordi fokuseeritud testide ning sama lähtekoodi Next/TypeScript build’i tõendiga. Olemasoleva meediapaneeli DOM-kontrollid katavad ka taustapildi ja salvestamata tekstiväljade säilimist.",
-    "Brauseri käivitamise katse selles töökeskkonnas ebaõnnestus keskkonna socket-piirangu tõttu. DOM- ja pilditöötluse kontrollid ei ole Safari ega kasutaja tootmiskeskkonna läbimängimine.",
-    "Paigaldaja kontrollib täpset eelmist edukat raportit ning kogu lähtepuud, indeksit ja remote’i. Uus pakett muudab ainult lähtekoodi ja juhiseid; SQL-i ega Supabase CLI toiminguid sellel sammul ei ole."
+    "Uus väljastus seotakse ühe CSS-reegli sõltumatu ulatuse ülevaatuse ja sama lähtekoodi täieliku Next/TypeScript build’i tõendiga. Väikese CSS-muudatuse jaoks uusi rakendusteste ei lisata ega varasemaid pilditöötluse teste korrata.",
+    "Selles töökeskkonnas oli eelmise väljastuse Chromiumi käivitamine socket-piiranguga blokeeritud. Uut päris brauseri läbimängimist ei väideta; kasutaja 21.11 ekraanipildid tõendavad vastu võetud eb29922 töövoogu, mitte veel uue 40 px reegli tulemust.",
+    "Uuendaja säilitab eelmise eduka originaalraporti ainult lugemiseks ning kontrollib enne kirjutamist kogu lähtepuud, indeksit ja remote’i. Käivitatakse build; SQL-i, Supabase CLI ega Storage’i toiminguid ei ole."
   ],
   "production": [
-    "68c3996 Verceli Ready / Production ekraanipilt on vastu võetud. Kasutaja piltidel on nii salvestatud taustapilt kui ka profiilipilt avalikul profiilil ja päise menüüs nähtavad.",
-    "21.11 kasutaja sõnumi järgi avaneb sõnumi profiilipildilt õige vastaspoole avalik profiil. Seda olemasolevat toimingut ei käsitleta uuesti puuduva funktsioonina.",
-    "Profiilipildi uus sobitamine ja suurem sõnumite avatar ei ole selle juhendi koostamise ajal kasutaja Macis käivitatud ega tootmises kinnitatud."
+    "eb29922 Verceli Ready / Production ekraanipilt on vastu võetud. Seda ega varasemate commit’ide avaldamise kinnitusi ei ole vaja uuesti küsida.",
+    "Kasutaja esitas ringi täitva kiivripildi sobitamise ja Pilt salvestatud teate, suuremad vestluste loendi/päise vastaspoole pildid ning väikese saatjapildi avatud vestluse all. Need on kasutaja töölauavaate tõendid.",
+    "Uue postkasti 40 px oma pildi paranduse Maci käik ja uus avaldamine on ootel."
   ],
-  "next_action": "Ava selqiro-profiilipildi-sobitamine-20261121.zip Downloads-kaustas ja käivita: python3 -I -B \"$HOME/Downloads/selqiro-profiilipildi-sobitamine-20261121/uuenda.py\" --publish. Saada lõpus näidatud uus raport. Sama uue commit’i Ready / Production järel vali Minu profiilis foto, sobita see, kinnita asend ja salvesta.",
-  "stop_rule": "Tundmatu lähtekood, indeks, remote, eelmise eduka käigu originaalraport või paketifail peatab uuenduse. Saada lõpus näidatud raport või selle puudumisel PEATATUD rida. Eelmisi paigaldusi, andmekogujaid ega SQL-käske ei ole vaja korrata.",
+  "next_action": "Ava selqiro-postkasti-profiilipilt-20261121.zip Downloads-kaustas ja käivita: python3 -I -B \"$HOME/Downloads/selqiro-postkasti-profiilipilt-20261121/uuenda.py\" --publish. Saada lõpus näidatud uus raport. Oota sama uue commit’i Ready / Production tulemust ja värskenda vestluste loendit.",
+  "stop_rule": "Tundmatu lähtekood, indeks, remote, eelmise eduka käigu originaalraport või paketifail peatab uuenduse. Saada lõpus näidatud raport või selle puudumisel PEATATUD rida. Säilita olemasolevad failid ja raportid; vanu uuendusi ega SQL-käske ei ole vaja korrata.",
   "read_next": [
-    "docs/continuity/HOSTED_PORTAL.md — uue paketi ainus käivitamiskäsk ja pildi sobitamise kasutus.",
-    "docs/architecture/profile-avatar-fit-20261121.md — uue kohaliku lõikamise leping ja kontrollide piirid.",
+    "docs/continuity/HOSTED_PORTAL.md — uue väikese kujundusparanduse ainus käivitamiskäsk.",
+    "docs/architecture/profile-avatar-fit-20261121.md — nüüd vastu võetud pildisobitamise leping; postkasti uue mõõdu kirjeldus on käesolevas jooksvas seisus.",
     "docs/architecture/profile-media-20261120.md — olemasoleva pildisalvestuse õigused ja olekumudel.",
     "docs/architecture/advertising-pricing-self-service-plan.md — hilisema reklaami ja hinnakirja suund."
   ],

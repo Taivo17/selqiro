@@ -1,0 +1,21 @@
+{
+  "format": "selqiro-continuity-preservation-v1",
+  "base_commit": "eb29922d6c47e3ff7bc5bbbd2bbdbaf62f59f22a",
+  "files": {
+    "docs/99_V2_HANDOFF_NEXT_CHAT.md": {
+      "path": "docs/continuity/history/inbox-avatar-base-eb29922-20261121/docs/99_V2_HANDOFF_NEXT_CHAT.md",
+      "bytes": 6305,
+      "sha256": "0f3d46be56a51d8b3f26550e599703c46e7d3a1c9abb57cba3edcf2745827848"
+    },
+    "docs/continuity/CURRENT_STATE.json": {
+      "path": "docs/continuity/history/inbox-avatar-base-eb29922-20261121/docs/continuity/CURRENT_STATE.json",
+      "bytes": 6171,
+      "sha256": "8decad338614f50752319c7a4c9ff6135af51972bc0c8eef8c3b9fa425b792ff"
+    },
+    "docs/continuity/HOSTED_PORTAL.md": {
+      "path": "docs/continuity/history/inbox-avatar-base-eb29922-20261121/docs/continuity/HOSTED_PORTAL.md",
+      "bytes": 2494,
+      "sha256": "e23b251faacef4ed4658616dbcd38b5a5930e786869ea2df08833474430c11f8"
+    }
+  }
+}
