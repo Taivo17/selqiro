@@ -1,6 +1,6 @@
 import "server-only";
 import { createHash } from "node:crypto";
-import sharp from "sharp";
+import sharp, { type SharpOptions } from "sharp";
 import { MESSAGE_IMAGE_LIMITS } from "../../entities/conversation/model/messageImage";
 import { contactFail } from "../../entities/conversation/model/listingContact";
 
@@ -10,7 +10,7 @@ export const messageImageHash = (bytes: Uint8Array) => createHash("sha256").upda
  * private proxy delivery. No input metadata, animation or format is forwarded. */
 export async function canonicalMessageImage(bytes: Uint8Array, legacy = false): Promise<CanonicalMessageImage> {
   if (!bytes.length || bytes.length > (legacy ? MESSAGE_IMAGE_LIMITS.originalBytes : MESSAGE_IMAGE_LIMITS.sourceBytes)) return contactFail("input");
-  const options: sharp.SharpOptions = { failOn: "warning", limitInputPixels: MESSAGE_IMAGE_LIMITS.pixels,
+  const options: SharpOptions = { failOn: "warning", limitInputPixels: MESSAGE_IMAGE_LIMITS.pixels,
     sequentialRead: true, pages: 1 };
   try {
     const metadata = await sharp(bytes, options).metadata();

@@ -1,6 +1,6 @@
 import "server-only";
 import { createHash } from "node:crypto";
-import sharp from "sharp";
+import sharp, { type Sharp, type SharpOptions } from "sharp";
 import { PROFILE_MEDIA_LIMITS, profileMediaFail, type ProfileMediaSlot, type ProfileMediaUploadBody } from "../../entities/profile/model/profileMedia";
 
 export type CanonicalProfileImage = Readonly<{ bytes: Uint8Array; sha256: string; width: number; height: number }>;
@@ -13,9 +13,9 @@ export async function canonicalProfileImage(bytes: Uint8Array, slot: ProfileMedi
   if (!bytes.length || bytes.length > PROFILE_MEDIA_LIMITS.sourceBytes || !["avatar", "cover"].includes(slot)) return profileMediaFail("input");
   const edge = slot === "avatar" ? PROFILE_MEDIA_LIMITS.avatarEdge : PROFILE_MEDIA_LIMITS.coverEdge;
   const maximum = slot === "avatar" ? PROFILE_MEDIA_LIMITS.avatarBytes : PROFILE_MEDIA_LIMITS.coverBytes;
-  const options: sharp.SharpOptions = { failOn: "warning", limitInputPixels: PROFILE_MEDIA_LIMITS.inputPixels,
+  const options: SharpOptions = { failOn: "warning", limitInputPixels: PROFILE_MEDIA_LIMITS.inputPixels,
     sequentialRead: true, pages: 1 };
-  let active: sharp.Sharp | undefined, timer: ReturnType<typeof setTimeout> | undefined;
+  let active: Sharp | undefined, timer: ReturnType<typeof setTimeout> | undefined;
   const operation = async () => {
     active = sharp(bytes, options).timeout({ seconds: 8 });
     const metadata = await active.metadata();
