@@ -1,3 +1,17 @@
+# Uuendatud otsus — 21.11.2026
+
+See sissekanne asendab allpool oleva algse plaani järgmiste tegevuste järjekorra.
+
+- Turvauuendus `cd35d1878157a1730d489241b283881b28740a33` on Maci raporti ja Ready / Production ekraanipildi põhjal vastu võetud.
+- Kasutaja kinnitas, et kõik kolm olemasolevat kontot on tema loodud ja teisi testijaid veel ei ole.
+- E-posti kinnitamise aktiveerimine lükati teadlikult edasi `selqiro.com` kasutuselevõtuni, enne väliste kasutajate kaasamist. Ettevalmistatud registreerimise/kinnitamise/taastamise lahendus säilib eraldi; seda selles paketis ei avaldata. Selle delta tuleb hiljem sobitada siis kehtiva koodiga, mitte asendada portaali vana täieliku koopia abil. Site URL, täpsed tagasipöördumised, mallid ja SMTP tuleb koos seadistada.
+- Kasutajale kuuluvad `selqiro.com/.app/.io` ning `selkiro.com/.app/.io`; põhidomeeniks valiti `selqiro.com`. Eraldi serveri ostmine pole selle otsuse eeltingimus. Domeene selles paketis ei muudeta.
+- Kasutaja kinnitas eraisikute töökuulutuste vajaduse ja palus selle järgmisena teha. Mõlemad profiilitüübid saavad otsida konkreetse töö tegijat või töötajat. Rakenduse ja serveri terviklik muudatus on `docs/architecture/personal-jobs-20261121.md` all.
+
+Allolev varasem uurimus ja algne plaan säilivad ajaloolise alusena. Nende vanad „järgmise töö” või „pole vaadatud” kirjeldused ei tühista ülalolevat uut otsust.
+
+---
+
 # Registreerimine, e-posti kinnitamine ja eraisikust tööandja
 
 21.11.2026. Plaan põhineb kasutaja uuel juhisel ja vastu võetud fb36c3b lähtekoodil. Selles turvauuenduse paketis neid käitumismuudatusi veel ei tehta.

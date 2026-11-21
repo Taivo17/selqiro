@@ -28,6 +28,7 @@ export function parseJobContent(value: unknown): JobContent {
       || !optionalText(r.city, 160) || !optionalText(r.locationLabel, 300)
       || !(r.employmentType === null || JOB_EMPLOYMENT_TYPES.includes(r.employmentType as NonNullable<JobContent["employmentType"]>))
       || !(r.workingTime === null || JOB_WORKING_TIMES.includes(r.workingTime as NonNullable<JobContent["workingTime"]>))) throw new JobError("invalid");
+    if (r.employmentType === "task" && r.workingTime !== null || r.salaryPeriod === "task" && r.employmentType !== "task") throw new JobError("invalid");
     const salary = r.salaryMin !== null || r.salaryMax !== null;
     if (!salary) {if (r.salaryCurrency !== null || r.salaryPeriod !== null) throw new JobError("invalid");}
     else {

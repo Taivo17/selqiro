@@ -1,3 +1,5 @@
+> **Current product decision — 2026-11-21:** Jobs accepts both private and business publishers. Either may seek someone for a specific task or seek an employee. The active profile supplies the real public publisher name/type. A specific task may quote total-task payment. Account type does not determine the legal relationship. This decision supersedes the historical business-only passages below; current implementation and evidence are in `docs/architecture/personal-jobs-20261121.md` and `docs/continuity/CURRENT_STATE.json`.
+
 # Jobs Flow
 
 ## Purpose

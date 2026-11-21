@@ -32,12 +32,13 @@ export default function JobDetailPage({jobId}: {jobId: string}) {
   return <div className="mx-auto min-w-0 max-w-5xl space-y-6">
     <Link href="/v2/jobs" className="inline-flex min-h-11 items-center text-sm font-bold text-blue-800 underline">{t("viewAll")}</Link>
     <header className={`${jobPanel} ${theme.border}`}>
-      <span className={`inline-block rounded-full px-3 py-1 text-xs font-bold ${theme.badge}`}>{t("jobs")}</span>
+      <span className={`inline-block rounded-full px-3 py-1 text-xs font-bold ${theme.badge}`}>{t(content.employmentType === "task" ? "task" : "employmentOffer")}</span>
       <h1 className="mt-4 break-words text-3xl font-black leading-tight sm:text-4xl">{content.title}</h1>
       <Link href={`/v2/profile/${encodeURIComponent(job.employer.slug)}`} className="mt-3 inline-block break-words text-lg font-bold text-blue-800 hover:underline">{job.employer.name}</Link>
+      {job.employer.identity_type ? <span className="ml-3 inline-block rounded-full bg-neutral-100 px-3 py-1 text-xs font-bold text-neutral-600">{t(job.employer.identity_type === "private" ? "privatePublisher" : "businessPublisher")}</span> : null}
       {location ? <p className="mt-3 break-words text-neutral-600">{location}</p> : null}
       <div className="mt-4 flex flex-wrap gap-2 text-sm font-medium"><span className="rounded-full bg-blue-50 px-3 py-1 text-blue-900">{t(content.workplaceType)}</span>
-        {content.employmentType ? <span className="rounded-full bg-neutral-100 px-3 py-1">{t(content.employmentType)}</span> : null}
+        {content.employmentType && content.employmentType !== "task" ? <span className="rounded-full bg-neutral-100 px-3 py-1">{t(content.employmentType)}</span> : null}
         {content.workingTime ? <span className="rounded-full bg-neutral-100 px-3 py-1">{t(content.workingTime)}</span> : null}</div>
       {salary ? <p className="mt-5 break-words text-xl font-bold">{salary}</p> : null}
     </header>

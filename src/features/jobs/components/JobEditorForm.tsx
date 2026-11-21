@@ -5,26 +5,26 @@ import type { JobPolicy } from "../../../entities/job/model/types";
 import { sameJobValue } from "../../../entities/job/model/jobContent";
 import { useV2Translation } from "../../../shared/i18n/V2LanguageProvider";
 import { jobMessages } from "../model/jobMessages";
-import { EMPTY_JOB_FORM, jobFormContent, jobToForm, type JobForm } from "../model/jobForm";
+import { emptyJobForm, changeJobFormField, jobFormContent, jobToForm, type JobForm } from "../model/jobForm";
 import { useJobCategories } from "../model/useJobCategories";
 import type { JobSession, JobSessionView } from "../model/jobSession";
 import JobFields from "./JobFields";
 import JobActionFeedback from "./JobActionFeedback";
 import JobActivityActions from "./JobActivityActions";
 import { jobButton,jobPanel,jobSecondary } from "./jobStyles";
-type Props = {session: JobSession;view: JobSessionView;enabled: boolean;policies: readonly JobPolicy[];reloadPolicies: () => void};
-export default function JobEditorForm({session,view,enabled,policies,reloadPolicies}: Props) {
+type Props = {session: JobSession;view: JobSessionView;enabled: boolean;policies: readonly JobPolicy[];reloadPolicies: () => void;defaultTask?: boolean};
+export default function JobEditorForm({session,view,enabled,policies,reloadPolicies,defaultTask = false}: Props) {
   const {t} = useV2Translation(jobMessages), categories = useJobCategories();
-  const [form,setForm] = useState<JobForm>({...EMPTY_JOB_FORM}), [accepted,setAccepted] = useState(false), [invalid,setInvalid] = useState(false);
+  const [form,setForm] = useState<JobForm>(() => emptyJobForm(defaultTask)), [accepted,setAccepted] = useState(false), [invalid,setInvalid] = useState(false);
   const initialized = useRef(false), completed = useRef(view.completion), signature = JSON.stringify(policies.map(({documentId,version,contentHash}) => ({documentId,version,contentHash})));
   useEffect(() => {setAccepted(false);},[signature]);
   useEffect(() => {
     if (!enabled || initialized.current && completed.current === view.completion) return;
     const content = !initialized.current && view.pending?.operation === "save" ? view.pending.input.content : view.job?.content;
-    setForm(content ? jobToForm(content) : {...EMPTY_JOB_FORM}); initialized.current = true; completed.current = view.completion; setInvalid(false);
-  },[enabled,view.completion,view.job,view.pending]);
+    setForm(content ? jobToForm(content) : emptyJobForm(defaultTask)); initialized.current = true; completed.current = view.completion; setInvalid(false);
+  },[enabled,view.completion,view.job,view.pending,defaultTask]);
   let dirty = form.title !== "" || form.description !== "";
-  try {dirty = !view.job || !sameJobValue(jobFormContent(form),view.job.content);} catch {dirty = Object.keys(form).some(key => form[key as keyof JobForm] !== (view.job ? jobToForm(view.job.content) : EMPTY_JOB_FORM)[key as keyof JobForm]);}
+  try {dirty = !view.job || !sameJobValue(jobFormContent(form),view.job.content);} catch {dirty = Object.keys(form).some(key => form[key as keyof JobForm] !== (view.job ? jobToForm(view.job.content) : emptyJobForm(defaultTask))[key as keyof JobForm]);}
   useEffect(() => {if (!dirty && !view.pending) return; const warn = (event: BeforeUnloadEvent) => {event.preventDefault(); event.returnValue = "";};
     window.addEventListener("beforeunload",warn); return () => window.removeEventListener("beforeunload",warn);
   },[dirty,view.pending]);
@@ -41,7 +41,7 @@ export default function JobEditorForm({session,view,enabled,policies,reloadPolic
     <JobActionFeedback session={session} view={view} enabled={enabled} onReload={reload}/>
     <form onSubmit={event => void submit(event)} className="min-w-0 space-y-6">
       {categories.error ? <div role="alert" className={jobPanel}><p>{t("loadError")}</p><button type="button" className={`${jobSecondary} mt-4`} onClick={categories.reload}>{t("retry")}</button></div> : null}
-      <JobFields form={form} change={(key,value) => {setForm(previous => ({...previous,[key]: value})); setInvalid(false);}} categories={categories.items} disabled={!editable || categories.loading || categories.error}/>
+      <JobFields form={form} change={(key,value) => {setForm(previous => changeJobFormField(previous,key,value)); setInvalid(false);}} categories={categories.items} disabled={!editable || categories.loading || categories.error}/>
       <section className={jobPanel}>
         <h2 className="text-xl font-black">{t("policyHeading")}</h2>
         {policies.map(policy => <details key={`${policy.documentId}:${policy.contentHash}`} className="mt-4 rounded-2xl border border-neutral-200 p-4"><summary className="cursor-pointer font-bold">{policy.title}</summary><div className="mt-3 max-h-72 overflow-y-auto whitespace-pre-wrap break-words text-sm leading-6">{policy.body}</div></details>)}

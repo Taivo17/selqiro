@@ -5,6 +5,16 @@ import type { JobMessageKey } from "./jobMessages";
 export type JobForm = {[K in keyof JobContent]: string};
 export const EMPTY_JOB_FORM: JobForm = Object.freeze({title: "", description: "", category: "", countryCode: "", city: "", locationLabel: "",
   workplaceType: "on_site", employmentType: "", workingTime: "", salaryMin: "", salaryMax: "", salaryCurrency: "", salaryPeriod: ""});
+export function emptyJobForm(task = false): JobForm {return {...EMPTY_JOB_FORM, employmentType: task ? "task" : ""};}
+/** Changing the task choice clears fields that are no longer shown; it never changes the work or pay amount. */
+export function changeJobFormField(form: JobForm, key: keyof JobForm, value: string): JobForm {
+  const next = {...form, [key]: value};
+  if (key === "employmentType") {
+    if (value === "task") next.workingTime = "";
+    else if (form.employmentType === "task" && next.salaryPeriod === "task") next.salaryPeriod = "";
+  }
+  return next;
+}
 export function jobToForm(content: JobContent): JobForm {return Object.fromEntries(Object.entries(content).map(([key,value]) => [key,value ?? ""])) as JobForm;}
 export function jobFormContent(form: JobForm): JobContent {
   try {
@@ -23,7 +33,7 @@ export function jobSalary(content: JobContent, t: Text): string | null {
   if ((!min && !max) || !currency || !period) return null;
   const amount = min && max ? min === max ? `${min} ${currency}` : `${min}–${max} ${currency}`
     : min ? t("payFromLabel", {amount: `${min} ${currency}`}) : t("salaryUpTo", {amount: `${max} ${currency}`});
-  return `${amount} / ${t(period)}`;
+  return period === "task" ? t("wholeTaskPay", {amount}) : `${amount} / ${t(period)}`;
 }
 export function jobCountryName(code: string, language: string): string {
   try {return new Intl.DisplayNames([language === "et" ? "et" : "en"], {type: "region"}).of(code) ?? code;} catch {return code;}

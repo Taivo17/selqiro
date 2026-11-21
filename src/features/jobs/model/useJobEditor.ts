@@ -37,7 +37,7 @@ export function useJobEditor(scope: string) {
         const identity = await getActiveIdentity({userId: actor.expectedUserId});
         if (!stillCurrent()) return;
         if (!identity || identity.id !== actor.expectedIdentityId) throw new Error("identity_changed");
-        if (identity.type !== "business") {binding.current?.session.retire(); binding.current = null; setBound(null); setResource({key,identity,policies: [],loading: false,error: false}); return;}
+        if (identity.type !== "business" && identity.type !== "private") throw new Error("identity_unavailable");
         const newBinding = binding.current?.key !== key;
         if (newBinding) {
           binding.current?.session.retire();

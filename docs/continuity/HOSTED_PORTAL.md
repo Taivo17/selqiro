@@ -1,31 +1,34 @@
-# Selqiro sõltuvuste turvauuendus
+# Töökuulutused eraisikule ja ettevõttele
 
-21.11.2026. Vastu võetud alus on `fb36c3b`: suurem oma profiilipilt vestluste loendis on kasutaja raporti, sama commit’i Ready / Production ja ekraanipildi järgi avaldatud. Seda varasemat käiku pole vaja korrata.
+21.11.2026. Alus on vastu võetud `cd35d18` turvauuendus. E-posti kinnitamise aktiveerimine jääb kasutaja otsusel `selqiro.com` kasutuselevõtu etappi; praegu kasutab kõiki kolme kontot ainult tema ise.
 
-## Muudatus
+## Tulemus
 
-Uuendatakse Next ja eslint-config-next versioonile **16.4.6** ning Sharp versioonile **0.35.5**. Kolm olemasolevate tarbijate versioonivahemikesse sobivat transitiivset teeki uuendatakse lukus: ws **8.23.0**, source-map-js **1.2.4**, zod **4.6.7**. Uus pilditöötlus kasutab libvips **8.18.7**. Ülejäänud otsesõltuvused säilivad.
-
-Sharpi uue versiooniga sobitamiseks parandati kahes failis tüübiimpordid. Sama olemasolev pilditöötlusfailide kaasamise seadistus rakendub nüüd ka hobuse- ja teenusekuulutuste API-dele. Kohalikud lõppkontrollid läbisid: 140 pilditesti, TypeScript, portaali Turbopacki build, native komponendid ja kõigi viie pilditöötluse API build-failide täielikkus. Kasutajate pildid, andmed, kontod ja õigused jäävad olemasoleva rakenduse hallata. Supabase, andmebaasi ega Storage seadistuse käsku selles paketis ei ole.
+Eraisik ja ettevõte kasutavad sama töökuulutuse vormi. Valida saab „Otsin töö tegijat” või „Otsin töötajat”. Konkreetse töö puhul saab lisada kogu töö tasu; olemasolevad tunni- ja muud tasuperioodid säilivad. Töö ilmub üldises Töö otsingus ja avaldaja profiilis. Kuulutuse juurest saab avada vestluse tegeliku avaldajaga.
 
 ## Käivitamine
 
-Ava `selqiro-turvauuendus-20261121.zip` Downloads-kaustas ja käivita:
+Ava `selqiro-eraisiku-tookuulutused-20261121.zip` Downloads-kaustas, salvesta pooleliolev töö ning käivita:
 
 ```bash
-python3 -I -B "$HOME/Downloads/selqiro-turvauuendus-20261121/uuenda.py" --publish
+python3 -I -B "$HOME/Downloads/selqiro-eraisiku-tookuulutused-20261121/uuenda.py" --publish
 ```
 
-Uuendaja kontrollib kogu lähteseisu ning eelmise eduka uuenduse originaalraportit. Seejärel paigaldab lukustatud sõltuvused, kontrollib native komponente, käivitab 140 olemasolevat pilditöötluse testi, koostab portaali ja kontrollib pilditöötluse failide kaasatust. Eduka kontrolli järel teeb piiratud commit’i ja push’i pealkirjaga **Update Next.js and Sharp security dependencies**.
+Uuendaja kontrollib olemasolevat lähtekoodi, originaalraportit ja serverilepingut. Seejärel paigaldab piiratud muudatuse, kontrollib kliendi käitumist ja koostab portaali. Üks tehing laiendab töökuulutuste serverilepingut; sõltumatu lugemiskontroll peab tulemuse kinnitama enne piiratud commit/push’i. Tegevuste toored logid jäävad Macile; saadetav raport ei sisalda kasutajate ridu ega võtmeid.
 
-Saada lõpus **SAADA SEE FAIL** juures näidatud uus raport. Oota Vercelis **sama uue commit’i** `Ready / Production` tulemust. Seejärel vaata üle avalik profiil, pildi lisamine/muutmine ja sõnumite vaade. Uuendust ei ole selle juhendi koostamise ajal kasutaja eest avaldatud.
+Saada lõpus **SAADA SEE FAIL** juures näidatud uus raport. Oota Vercelis **sama commit’i Ready / Production** tulemust ja värskenda portaali. Seejärel proovi eraisikuna konkreetse töö kuulutust, kontrolli üldist otsingut ja oma avalikku profiili ning ava teise oma kontoga selle kuulutuse kontakt. Sõnumi saatmine jääb sinu eraldi vajutuseks.
 
-## Kontrollide piir
+Peatumisel saada uus raport või **PEATATUD** rida. Säilita failid ja päevikud. Ebaselget SQL-tulemust ei lahendata sama käsu pimesi kordamisega.
 
-Kohalikud testid kasutavad sünteetilisi pilte ning asendatud Auth/RPC/Storage teenuseid. Kohalik Linuxi kontroll ei ole Maci native-kontroll ega live-õiguste audit. Maci uuendaja kontrollib tegelikke seal laaditud komponente. ZIP-i `kontrollid` kaustas on täpsed sisendid, väljundid, ülevaatused ja sõltuvusauditi jääkleiud. Kõigi riskide puudumist see pakett ei väida.
+## Kohalik kontroll
 
-Peatumisel saada uus raport või selle puudumisel **PEATATUD** rida. Säilita olemasolevad failid ja päevikud. Edukat sama sisendiga etappi uuendaja jätkamisel uuesti ei korda.
+- 53 kliendi ja integratsiooni kontrolli läbisid edukalt.
+- 22 SQL-i kontrollrühma läbisid eraldatud testandmetega edukalt.
+- 3 eraldi vormi käitumise kontrolli ja 46 uuendaja kontrolli läbisid edukalt.
+- Uuendatud portaali build läbis edukalt; lähtekoodi sisendites muutusi ei olnud.
 
-## Järgmine töö
+Need on ettevalmistuse kontrollid. Uuendaja käivitab Macis sihitud 53 kliendikontrolli ja build’i uuesti ning kontrollib tegelikku andmebaasilepingut. Uusi teeke ei ole vaja paigaldada.
 
-Kasutaja on palunud lisada e-posti kinnitamise. Järgmine pakett ühendab selle registreerimise ja esmase eraisiku/ettevõtte valikuga. Enne live-kinnitamiskohustuse muutmist tuleb kontrollida Supabase Authi tegelikku seisu, kirjade saatmist, tagasipöördumislinke ning olemasolevate kasutajate üleminekut. Eraisiku töökuulutuste laiendus tuleb eraldi ühtse serveriõiguste muudatusena. Täpne plaan on `docs/architecture/registration-email-and-private-employers-plan.md`.
+## Piir
+
+Pakett ei ole selle juhendi kirjutamise ajal Macis ega hosted-andmebaasis käivitatud. Kohalikud sünteetilised rakendus-/SQL-kontrollid ei asenda kasutaja avaldatud versiooni läbimist. Varem avatud leht tuleb pärast avaldamist värskendada, et laadida uute tööliikide lugeja.

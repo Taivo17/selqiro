@@ -260,7 +260,7 @@ function PublicProfileContent({slug}: {slug: string}) {
               handleListingsShowAllChange
             }
           />
-          {profile.identityType === "business" && profile.identityId ? <PublicProfileJobsSection key={`jobs-${profile.identityId}-${profile.slug}`}
+          {profile.identityId && (profile.identityType === "private" || profile.identityType === "business") ? <PublicProfileJobsSection key={`jobs-${profile.identityId}-${profile.slug}`}
             slug={profile.slug} identityId={profile.identityId} expanded={expandedSection === "jobs"} onExpandedChange={expanded => setExpandedProfileState(previous => !expanded && (previous.slug !== slug || previous.section !== "jobs") ? previous : {slug,section: expanded ? "jobs" : null})}/> : null}
         </div>
 

@@ -5,8 +5,9 @@ export function readJobSearch(search: string): JobSearch {
   const text = (key: string,max: number) => {const value = (params.get(key) ?? "").trim(); return Array.from(value).length <= max && !/[\u0000-\u001f]/.test(value) ? value : "";};
   const choice = <T extends string>(key: string,values: readonly T[]): T | null => {const value = text(key,80); return values.includes(value as T) ? value as T : null;};
   const country = text("country",2).toUpperCase();
+  const employmentType = choice("employment",JOB_EMPLOYMENT_TYPES);
   return {query: text("q",200),category: choice("category",JOB_CATEGORIES),countryCode: /^[A-Z]{2}$/.test(country) ? country : null,city: text("city",160) || null,
-    workplaceType: choice("workplace",JOB_WORKPLACES),employmentType: choice("employment",JOB_EMPLOYMENT_TYPES),workingTime: choice("hours",JOB_WORKING_TIMES)};
+    workplaceType: choice("workplace",JOB_WORKPLACES),employmentType,workingTime: employmentType === "task" ? null : choice("hours",JOB_WORKING_TIMES)};
 }
 export function jobSearchUrl(input: JobSearch): string {
   const params = new URLSearchParams(), mapping = {query: "q",category: "category",countryCode: "country",city: "city",workplaceType: "workplace",employmentType: "employment",workingTime: "hours"};

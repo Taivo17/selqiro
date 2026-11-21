@@ -1,0 +1,21 @@
+{
+  "format": "selqiro-continuity-preservation-v1",
+  "base_commit": "cd35d1878157a1730d489241b283881b28740a33",
+  "files": {
+    "docs/99_V2_HANDOFF_NEXT_CHAT.md": {
+      "path": "docs/continuity/history/personal-jobs-base-cd35d18-20261121/docs/99_V2_HANDOFF_NEXT_CHAT.md",
+      "bytes": 8063,
+      "sha256": "2c69fdeef4ddad138cf9b1e4665ca36f27a4d2042603f4bad9cbff5e888f6a92"
+    },
+    "docs/continuity/CURRENT_STATE.json": {
+      "path": "docs/continuity/history/personal-jobs-base-cd35d18-20261121/docs/continuity/CURRENT_STATE.json",
+      "bytes": 7952,
+      "sha256": "9d84c61c390067ce07c0220e98c6efb3f11924b4a56ee58c4abe83a4090fd697"
+    },
+    "docs/continuity/HOSTED_PORTAL.md": {
+      "path": "docs/continuity/history/personal-jobs-base-cd35d18-20261121/docs/continuity/HOSTED_PORTAL.md",
+      "bytes": 3076,
+      "sha256": "84ef7ff53ef83c0ac1c0bef320c2ba0f7f0071c7ea2f04c1e718a0a5ac3816be"
+    }
+  }
+}

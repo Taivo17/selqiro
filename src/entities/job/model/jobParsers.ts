@@ -12,8 +12,11 @@ export function parsePublicJob(value: unknown, expectedId?: string): PublicJob {
   ensure(r.schema_version === 1 && r.content_type === "job" && r.status === "published" && jobUuid(r.content_id) && jobUuid(r.identity_id)
     && (expectedId === undefined || r.content_id === expectedId) && jobTimestamp(r.created_at) && jobTimestamp(r.updated_at)
     && jobTimestamp(r.published_at) && jobTimestamp(r.active_until) && stampOrder(r.active_until) > stampOrder(r.published_at));
-  const employer = jobRecord(r.employer, ["name", "slug", "logo_url"]);
+  // Older cached records have no profile-type badge. Never infer it from the publisher's name.
+  const employer = jobRecord(r.employer);
+  jobRecord(employer, ["name", "slug", "logo_url", ...(Object.hasOwn(employer, "identity_type") ? ["identity_type"] : [])]);
   ensure(jobText(employer.name, 500, true) && jobText(employer.slug, 160, true) && (employer.logo_url === null || jobText(employer.logo_url, 4096, true)));
+  ensure(!Object.hasOwn(employer, "identity_type") || employer.identity_type === "private" || employer.identity_type === "business");
   let content; try {content = parseJobContent(r.content);} catch {throw new JobError("unknown");}
   return Object.freeze({...r, content, employer: Object.freeze({...employer})}) as PublicJob;
 }

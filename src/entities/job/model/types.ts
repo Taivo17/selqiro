@@ -2,9 +2,10 @@ import type { PublicationActor } from "../../listing/model/publicationJourney";
 export type JobActor = PublicationActor;
 export const JOB_CATEGORIES = ["administration", "agriculture", "construction", "customer_service", "education", "engineering", "finance", "healthcare", "hospitality", "information_technology", "logistics", "manufacturing", "sales_marketing", "other"] as const;
 export const JOB_WORKPLACES = ["on_site", "remote", "hybrid"] as const;
-export const JOB_EMPLOYMENT_TYPES = ["permanent", "fixed_term", "contract", "internship", "other"] as const;
+// A task is a request for a specific piece of work, regardless of the publisher's profile type.
+export const JOB_EMPLOYMENT_TYPES = ["permanent", "fixed_term", "contract", "internship", "other", "task"] as const;
 export const JOB_WORKING_TIMES = ["full_time", "part_time", "flexible", "other"] as const;
-export const JOB_SALARY_PERIODS = ["hour", "day", "week", "month", "year"] as const;
+export const JOB_SALARY_PERIODS = ["hour", "day", "week", "month", "year", "task"] as const;
 export const JOB_STATUSES = ["draft", "published", "paused", "closed"] as const;
 export type JobStatus = (typeof JOB_STATUSES)[number];
 export type JobContent = Readonly<{
@@ -17,7 +18,7 @@ export type JobCategory = Readonly<{code: JobContent["category"]; labels: Readon
 export type PublicJob = Readonly<{
   schema_version: 1; content_type: "job"; content_id: string; identity_id: string; content: JobContent; status: "published";
   created_at: string; updated_at: string; published_at: string; active_until: string;
-  employer: Readonly<{name: string; slug: string; logo_url: string | null}>;
+  employer: Readonly<{name: string; slug: string; logo_url: string | null; identity_type?: "private" | "business"}>;
 }>;
 export type OwnerJob = Readonly<{
   schema_version: 1; content_type: "job"; actor_user_id: string; identity_id: string; job_id: string;

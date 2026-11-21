@@ -1,0 +1,71 @@
+{
+  "format": "selqiro-personal-jobs-state-20261121-v1",
+  "result": "PASS",
+  "generated_at_utc": "2026-11-21T18:41:59.532Z",
+  "engine": {
+    "runtime": "PGlite",
+    "server_version": "18.6",
+    "build": "PostgreSQL 18.6 (PGlite 0.5.13) on wasm32-unknown-emscripten, compiled by emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 6.0.5 (1db513782be24469589d7cb8a1f1834e9a33f271), 32-bit"
+  },
+  "checks": [
+    "old_business_request_and_job_are_preserved_byte_for_byte_during_guarded_install",
+    "repeating_exact_install_observes_after_without_rewriting_existing_data",
+    "closed_job_tables_and_helpers_remain_closed_for_all_api_roles",
+    "personal_actor_can_save_task_without_business_membership_or_payment",
+    "personal_publish_requires_exact_displayed_policy_and_keeps_one_calendar_month",
+    "personal_account_can_offer_employment_and_business_member_can_offer_a_task",
+    "task_total_payment_and_workload_are_validated_server_side",
+    "table_constraints_also_reject_total_pay_for_employment_or_task_employment_workload",
+    "wrong_account_inactive_identity_and_cross_identity_owner_reads_are_denied",
+    "business_membership_and_active_business_remain_required",
+    "personal_update_preserves_id_publication_time_and_duration_and_rejects_stale_revision",
+    "request_key_replay_is_bound_to_exact_content_actor_and_identity",
+    "task_search_and_personal_profile_filter_before_stable_pagination",
+    "personal_provider_hide_changes_discovery_only",
+    "bilateral_account_blocks_filter_personal_detail_search_profile_and_new_contact",
+    "private_job_contact_routes_to_identity_owner_and_sends_no_automatic_message",
+    "business_task_contact_keeps_business_owner_routing_for_member_created_job",
+    "personal_task_keeps_historical_message_context_and_block_send_guard",
+    "paused_expired_and_closed_personal_jobs_leave_public_results_without_erasing_content",
+    "personal_publishing_without_public_profile_slug_fails_without_receipt_or_publication",
+    "guard_refuses_unrecognized_job_authority_and_rolls_back_without_applying",
+    "new_capabilities_and_retained_auth_authority_are_truthful"
+  ],
+  "failure": null,
+  "installer": {
+    "actor": "postgres",
+    "rolsuper": false,
+    "rolcreaterole": true,
+    "auth_usage": true,
+    "auth_usage_grantable": false,
+    "auth_uid_execute": true,
+    "auth_uid_execute_grantable": false
+  },
+  "test_sources": {
+    "catalog.mjs": "1ba56f1760fdcb552a3ef3336fa1f84546d9156cf4152bcae511669671063108",
+    "fixture.mjs": "cdfa6e654cc7b979bd763102e5311ef72ac03f63382036de8e2e634afec34c36",
+    "prepare.mjs": "467b5b1865189bac24572fd9d2c020abf56fa27984e8b1f189d4a6969eba06af",
+    "runtime.mjs": "bb5d7dc271635554302d47c8813fd55b5604c6d0a2322d2e1e9db879050a5571"
+  },
+  "source_modules": {
+    "01_authority.sql": "ab5d432d4516da69ba02c20af2dc83070792b1ec30fa064f8eb5a3a00fe43d9f",
+    "02_content.sql": "79522029ac07260f9d0943a039f75485c1288e54e844a494332c465afb01c898",
+    "03_visibility.sql": "b470831cdb5b526b4e1e913e29c4a53cbe3fa6fe25f542c125b4143012c1538a",
+    "04_reads.sql": "37a955eaa74b5685bde1becf46e0f56081a0fedc8a82b2bc89fc751891975a23",
+    "05_contact.sql": "ff5cb538ebd415adbc4e0d3166b08e2634bb2dae75ea439c1b2cc7520dc0dec3"
+  },
+  "sql_sha256": {
+    "preflight.sql": "93de004d0f342b3ce665f28342a662d8beb4b7b2339dffaa3efdd25553faeb2e",
+    "apply.sql": "8c0e9e1b4e68fe82abea763e55e618d071841f9210483e9fae88bfd4431b32e4",
+    "verify.sql": "93de004d0f342b3ce665f28342a662d8beb4b7b2339dffaa3efdd25553faeb2e"
+  },
+  "live_database": false,
+  "real_user_data": false,
+  "production_storage": false,
+  "native_concurrency": false,
+  "limitations": [
+    "Runs real PostgreSQL permissions and PL/pgSQL in PGlite with synthetic identities and provider metadata, not hosted Supabase/PostgREST.",
+    "PGlite serializes sessions. CAS and identity-switch tests are sequential; no native concurrent-session proof is claimed.",
+    "Historical test suites are not rerun. Their accepted source declarations are restored as a test foundation."
+  ]
+}
