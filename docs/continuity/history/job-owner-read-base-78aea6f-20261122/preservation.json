@@ -1,0 +1,20 @@
+{
+  "base_commit": "78aea6f6d7c57aee47a29cd0e8b29c9c4e862561",
+  "files": {
+    "docs/continuity/CURRENT_STATE.json": {
+      "archived_at": "docs/continuity/history/job-owner-read-base-78aea6f-20261122/CURRENT_STATE.json",
+      "bytes": 7476,
+      "sha256": "dcf79fe292b2e07f9ad5bb55d1ceb3b1a704a9814835cab9ea99dd52b64a8a80"
+    },
+    "docs/99_V2_HANDOFF_NEXT_CHAT.md": {
+      "archived_at": "docs/continuity/history/job-owner-read-base-78aea6f-20261122/99_V2_HANDOFF_NEXT_CHAT.md",
+      "bytes": 7590,
+      "sha256": "1568b8ecc3fe3ee4fcc51eea29ae3c598720e7f78957f394026028699cde6f22"
+    },
+    "docs/continuity/HOSTED_PORTAL.md": {
+      "archived_at": "docs/continuity/history/job-owner-read-base-78aea6f-20261122/HOSTED_PORTAL.md",
+      "bytes": 2140,
+      "sha256": "9752531de53d7127715d503e9302af561e181505ecb225968172f43388a1c9aa"
+    }
+  }
+}

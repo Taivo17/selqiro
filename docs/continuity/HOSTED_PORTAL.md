@@ -1,31 +1,29 @@
-# Tööde laadimise ja kättesaadavuse parandus
+# Minu ala tööloendi lugemisluku parandus
 
-22.11.2026. Vastu võetud alus on `8c2ee5c`. Eraisiku ja ettevõtte töökuulutused on avalikus otsingus nähtavad ning sulgemine säilitab andmed ja vestluse.
-
-## Mida see pakett muudab
-
-- Minu ala tööloendi ajutise lugemisvea järel tehakse automaatselt üks uus lugemiskatse. Profiili või konto vahetus katkestab vana päringu.
-- Avalikult kättesaamatu töö lingil on selgitus sulgemise, peatamise või aegumise võimaluse kohta ning nupp Tagasi vestlustesse.
-- Pakkumise salvestamise, sulgemise ja pikendamise toimingud säilivad.
-
-Algse esmakatse tõrke täpne tehniline põhjus ei ole kinnitatud. Parandus katab testitud ajutiste lugemistõrgete taastumise; korduv või muu püsiv viga jätab nähtavaks Proovi uuesti.
+22.11.2026. Vastu võetud alus on `78aea6f`. Senine kliendi korduskatse ja töö kättesaadavuse selgitus on juba avaldatud. Uus pakett asendab ühe andmebaasifunktsiooni, et oma tööde loend saaks avaneda ka siis, kui muu toiming hoiab profiili kirjutamislukku.
 
 ## Käivitamine
 
-Ava `selqiro-too-laadimise-parandus-20261122.zip` Downloads-kaustas ja käivita:
+Ava `selqiro-too-lugemisluku-parandus-20261122.zip` Downloads-kaustas ja käivita:
 
 ```bash
-python3 -I -B "$HOME/Downloads/selqiro-too-laadimise-parandus-20261122/uuenda.py" --publish
+python3 -I -B "$HOME/Downloads/selqiro-too-lugemisluku-parandus-20261122/uuenda.py" --publish
 ```
 
-Uuendaja kontrollib olemasolevat lähtekoodi, indeksit, remote’i, eelmise eduka käigu originaalraportit ning sõltuvusi. Testide ja build’i järel teeb see commit’i **Recover transient owner job reads and clarify unavailable jobs** ning push’i.
+Uuendaja kontrollib täpset olemasolevat lähtekoodi, tööpuud, indeksit, kinnitatud remote’i, eelmise eduka käigu originaalraportit, sõltuvusi ja SQL-kataloogi. See teeb värske build’i, rakendab ühe piiratud SQL-paranduse ning kinnitab tulemuse uue lugemisega enne commit’i ja push’i. Varasemaid paigaldajaid ega 49 vastuvõetud klienditesti ei korrata.
 
-Saada lõpus **SAADA SEE FAIL** juures näidatud raport. Oota Vercelis sama uue commit’i **Ready / Production** tulemust ja värskenda portaali.
+Saada lõpus **SAADA SEE FAIL** juures näidatud täpne raport. Uuendaja loob sellest privaatse kordumatu koopia Downloads-kausta ja avab selle asukoha Finderis. Algne päevik ja kõik varasemad koopiad säilivad.
+
+Kui käik peatub, säilita failid ja saada näidatud raport. Kui raportit ei tekkinud, saada **PEATATUD** rida. Ebaselget SQL-kirjutust ei korrata automaatselt.
 
 ## Pärast avaldamist
 
-1. Ava Minu ala tööpakkumised ning vaheta oma eraisiku ja ettevõtte profiili vahel. Mõlema profiili loend peaks avanema oma andmetega.
-2. Ava sõnumist olemasolev suletud lume lükkamise pakkumine. Uus selgitus peaks ütlema, et pakkumine ei ole praegu avalikult nähtav, ja pakkuma tagasiteed vestlustesse.
-3. Suletud pakkumine peab jääma Minu alale Suletud olekuga ning puuduma aktiivsest avalikust otsingust. Selle kontrollimiseks ei ole vaja pakkumist uuesti avaldada.
+Oota Vercelis raporti uue commit’i **Ready / Production** tulemust ja värskenda portaali.
 
-Paketi kohalikud API-, React DOM-i ja build’i tõendid on kontrollid-kaustas. Need ei kinnita veel uut Maci käiku ega Verceli tulemust. Kui uuendaja peatub, saada näidatud raport või **PEATATUD** rida; säilita olemasolevad failid ja päevikud.
+1. Ava Minu ala tööde loend oma eraisiku profiiliga. Mine avalehele ja tagasi Minu alasse.
+2. Vaheta oma ettevõtte profiilile ning ava selle tööde loend. Näha peavad olema selle profiili tööd.
+3. Kontrolli, et olemasolev suletud töö on endiselt oma loendis Suletud olekuga ning senine vestlus avaneb.
+
+Selle kontrolli jaoks piisab olemasolevate kirjete lugemisest. Kui loend jälle tõrgub, saada vastava `get_my_jobs_v1` päringu Status ning Response’i `code` ja `message`. Päringu päiseid, tokeneid ega kontode täisandmeid pole vaja saata.
+
+Paketi `proof` kaust kirjeldab kohalikke katseid. Need on ettevalmistuse tõendid; tegeliku Maci ja pilve tulemuse kinnitab uus raport ning Verceli tulemus eraldi.

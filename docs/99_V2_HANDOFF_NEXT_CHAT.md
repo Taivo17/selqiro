@@ -1,47 +1,48 @@
 <!-- GENERATED from docs/continuity/CURRENT_STATE.json; do not edit independently. -->
 # Selqiro — praegune tööüleandmine
 
-Seisukirje: 22.11.2026 Europe/Tallinn — 8c2ee5c vastu võetud; Minu ala lugemise taastumine ja pakkumise kättesaadavuse selgitus ette valmistatud
+Seisukirje: 22.11.2026 Europe/Tallinn — 78aea6f vastu võetud; tööloendi lugemisluku serveriparandus ette valmistatud
 
 ## Praegune checkpoint
 
-Tööotsingu pildivea parandus 8c2ee5c on Maci raporti ja Ready / Production ekraanipildi järgi vastu võetud. Kasutaja kontrollis eraisiku ja ettevõtte tööde otsingut, üksikvaateid, profiile ning kahepoolset sõnumivahetust. 22.11 kontroll kinnitab sulgemist: töö jääb Minu alale Suletud olekuga, eemaldub aktiivsest otsingust ja vestlus säilib. Uus parandus lisab Minu ala ajutisele lugemisveale ühe katkestatava lisakatse ja selgitab, miks avalik töölink ei pruugi enam avaneda.
+78aea6f kliendi korduslugemine ja avalikult kättesaamatu töö selgitus on Maci eduka raporti ning sama commit’i Ready / Production pildi järgi paigaldatud. Hilisem Networki vastus kinnitab get_my_jobs_v1 koodi 55P03: canceling statement due to lock timeout. Uus piiratud SQL-parandus eraldab oma tööde loendi lugemise kirjutamislukkudest; selle Maci ja pilve rakendamine on veel ootel.
 
 ## Lähtekood ja tõendi piir
 
-- **Vastu võetud alus:** main 8c2ee5c1e7caddcc4a6e4efb630458a331c3e31d; puu 0ac538849571489d831fd2125f50be060642ddbd; 2020 jälgitavat faili. Kõik taastatud lähtefailid vastavad aktsepteeritud SHA-256 ja Git blob inventarile.
-- **Aluse tõend:** Raport selqiro-too-otsingu-parandus-20261121-raport-20261121-215836-23170b843f10.json, SHA256 ea2a84183c0db2bb6b87144e65f12345a4716daea96e26a7ddc1d1c449b758ea. Raport kinnitab 37 testi, build’i, varasema ühe SQL-paranduse järelseisu ja push’i. Sama commit’i Ready / Production ning kasutaja töövoo pildid on vastu võetud.
-- **Laadimisvea tõendi piir:** Kasutaja pilt näitab esmast laadimisviga ja korduskatse õnnestumist. Täpne võrgu- või serverivea kood ei ole teada. Koodis on tõendatud automaatse taastumise puudumine; auth-race’i ega konkreetset serveri lukuaegumist ei väideta juhtumi kindla põhjusena.
-- **Lugemise parandus:** Ajutine transpordi või serveri lugemisviga saab eraldi tunnuse. Ainult oma tööde loendi lugemisel tehakse üks lühikese viivitusega lisakatse. Sama konto, profiili ja põlvkonna kehtivus kontrollitakse uuesti; katkestus peatab nii viivituse kui ka poolelioleva päringu. Õiguste, sisendi, aktori ja vigase vastuse vead ei ole korduskatsena käsitletavad.
-- **Suletud pakkumine:** get_public_job_v1 null-vastus ei erista suletud, peatatud, aegunud, puuduvat ega vaatajale piiratud pakkumist. Uus teade ütleb, et pakkumine ei ole praegu avalikult nähtav, nimetab võimalikud põhjused ning pakub linki vestlustesse ja tööotsingusse. Klient ei tuleta null-vastusest kindlat Suletud olekut.
-- **Ulatus:** Muudatus on kliendis ja selle testides. Serveri õigused, SQL, RPC lepingud, ranged vastuseparserid, mutatsioonid, sulgemine, pikendamine, kontakt ja ajaloolised sõnumikaardid säilivad. Eelmised jooksva juhendi failid on baiditäpselt säilitatud history/job-load-base-8c2ee5c-20261122 all.
+- **Vastu võetud alus:** main 78aea6f6d7c57aee47a29cd0e8b29c9c4e862561; puu 1331942ec5b3428c7a7d592837aeaf2ece217232; 2030 jälgitavat faili. Kogu lähtepuu taastati täpsete SHA-256, Git blob’i ja failirežiimi kontrollidega. See ei ole värske Maci tööpuu ega remote’i lugemine.
+- **Aluse tõend:** Raport selqiro-too-laadimise-parandus-20261122-raport-20261122-163401-7a1007d7de00.json, SHA256 3f8466d23f1d89ad74d6fe76bdebaa7240b8424eb2db5176f99ef9ef95f667d3. Raport kinnitab 49 testi, build’i ja push’i; andmebaasi ei muudetud. Sama 78aea6f Ready / Production on eraldi kasutaja pildil. Algset raportit ei muudeta.
+- **Tõendatud viga:** Kasutaja Response-pilt kinnitab SQL-i lukuaegumise. Senine get_my_jobs_v1 kutsub ühist kirjutamise aktorikontrolli, mis lukustab profiles rea FOR UPDATE ning muid õiguste ridu FOR SHARE. Tegelikku blokeerinud tehingut ei ole tuvastatud.
+- **Parandus:** Asendub ainult public.get_my_jobs_v1(uuid,uuid,integer,jsonb). STABLE lugemine kasutab üht päringu alguse andmebaasivaadet ja säilitab konto, aktiivse identiteedi, eraisiku omaniku, ettevõtte liikmesuse ning hosted-juurdepääsu kontrollid. Rea kirjutamis- ega jagatud lukke see lugemine ei võta.
+- **Säiliv leping:** RPC signatuur, õigused, SECURITY DEFINER, fikseeritud search_path, UTC, kahele sekundile seatud lock_timeout, vastuse väljad, summad, revisjonid, järjestus ja cursor säilivad. Muud päringud, kirjutamise abifunktsioonid ja kliendi üks katkestatav lisakatse jäävad samaks.
+- **Tõendi piir:** Tuntud funktsioonide ja tööde kataloog on enne/pärast täpselt räsiga piiratud. Muude õigustabelite tegelik metadata loetakse rakendamise sees ja võrreldakse muutumatust; sünteetilise testi täielikku õigustabeli skeemi ei esitata tõendatud pilvealusena. Kasutajaridu paigaldusraportisse ei loeta.
+- **Ajalugu:** Eelmise jooksva juhendi kolm faili säilivad baiditäpselt docs/continuity/history/job-owner-read-base-78aea6f-20261122 all. Vanu SQL-pakette, käivitajaid ega vastuvõetud päevikuid ei muudeta.
 
 ## Tegelik kohalik katse
 
-- Läbitud sihitud API ja lugemise taastumise testid, olemasolevad töökuulutuse kliendi/pildilugemise/jagamise testid ning päris React DOM-i testid. Täpsed käsud, arvud, logiräsid, sisendid ja runtime-versioonid on paketi kontrollid/proof kaustas.
-- Kontrollid hõlmavad esimese ajutise vea järel õnnestumist, kahe vea järel peatumist, õiguse ja vigase skeemi veal korduse puudumist, profiilivahetusel katkestust ning vana vastuse peitmist. Kirjutamise toiminguid automaatselt ei korrata.
-- Kättesaadavuse vaate testid eristavad laadimist, edukat null-vastust, päringuviga ja aktiivset tööd; selgitus ja tagasitee on kontrollitud eesti ja inglise keeles.
-- Uue lähtekoodi täielik Next.js 16.4.6 / TypeScripti build läbis. Kasutati lukufaili täpseid sõltuvusi ja inertseid lokaalseid koostamisseadeid. Brauseri päris teenustega läbimängimist ega kasutaja Maci käivitamist siin ei väideta.
-- Macis käivitab uuendaja sihitud Node testid ja värske build’i. Ettevalmistuse React DOM-i kontrollid kasutavad eraldi JSDOM-i; seda ei lisata portaali sõltuvuseks ega eeldata kasutaja arvutis.
+- Isoleeritud kohalikus PostgreSQL-is läbitud 44/44 uut sihitud SQL-katset. Algne profiililukk tekitab vanas funktsioonis 55P03; uus loend lõpetab sama luku hoidmise ajal. Kirjutamise varasem lukukontroll säilib.
+- Kontrollitud on READ COMMITTED READ ONLY, eraisiku ja ettevõtte piirid, aktiivne profiil, hosted-väravad, täpne lehekülgede/vastuse leping ning samaaegse õiguste muutmise ühtne päringuvaade. Järgmine päring näeb tühistatud õigust ja keeldub.
+- Täpse SQL-paki katsed hõlmavad lubatud eel- ja järelseisu, puuduva või muudetud funktsiooni tõrjumist ning korduva rakendamise piiri. Uuendaja eraldi kontrollid hõlmavad piiratud SQL-toimingut, katkestust, raportit ja Git-töövoogu. Täpsed juhud ja logid on paketi proof-kaustas.
+- Värske Next.js 16.4.6 / TypeScripti webpack build läbis täpsete lukufaili sõltuvuste ja inertsete kohalike seadetega. Kuue tööde lehe ehitatud väljundid on räsitud; lähtefailide triivi ei olnud.
+- Varem vastu võetud 49 klienditesti ei korrata. Macis kontrollitakse räsiga seotud ettevalmistuse SQL-tõendit ja tehakse uus build. Selles keskkonnas ei tehtud pilve SQL-i, Maci käivitust ega päris kontoga brauserikatset.
 
 ## Production / kasutajaliides
 
-- 8c2ee5c paigaldus ja Ready / Production on vastu võetud. Varasemad uuendajad jäävad ajalooks.
-- Kasutaja 22.11 piltidel on töö sulgemine ja säiliv vestlus kinnitatud. Suletud töö avaliku lingi null-vastus vastab senisele lepingule.
-- Selle uue lähtekoodiparanduse Maci käivitus, commit/push, Verceli avaldamine ja kasutaja kontroll on ootel.
+- 78aea6f on sama commit’i Ready / Production pildi järgi kasutuses. Selle kliendiparanduse korduskäivitamist ei ole vaja.
+- Uue ühefunktsioonilise SQL-paranduse kohalik ettevalmistus ja testid on valmis; Maci rakendus, pilve järelkontroll, uus commit/push ning uus Verceli tulemus on ootel.
+- Viga põhjustanud tegeliku pikema tehingu päritolu jääb teadmata. Parandus eemaldab loendi tõendatud sõltuvuse õigusridade kirjutamislukust, kuid ei luba, et kõik võimalikud tulevased võrgu- või andmebaasitõrked kaovad.
 
 ## Üks järgmine töö
 
-Ava selqiro-too-laadimise-parandus-20261122.zip Downloads-kaustas ja käivita python3 -I -B "$HOME/Downloads/selqiro-too-laadimise-parandus-20261122/uuenda.py" --publish. Saada SAADA SEE FAIL juures näidatud raport; oota sama uue commit’i Ready / Production tulemust ja värskenda portaali. Kontrolli Minu ala tööloendi avanemist ning olemasoleva suletud töö sõnumilingi selgitust ja tagasiteed.
+Ava selqiro-too-lugemisluku-parandus-20261122.zip Downloads-kaustas ja käivita python3 -I -B "$HOME/Downloads/selqiro-too-lugemisluku-parandus-20261122/uuenda.py" --publish. Saada SAADA SEE FAIL juures näidatud raport. Pärast sama uue commit’i Ready / Production tulemust värskenda portaali ning ava Minu ala tööd oma eraisiku ja ettevõtte profiiliga.
 
-**Peatumisel:** Tundmatu lähtekood, indeks, remote, eelmise eduka käigu raport, sõltuvused või kontrolltulemus peatab uuendaja. Säilita raport ja päevik ning saada näidatud raport või selle puudumisel PEATATUD rida. Uuendaja ei tee andmebaasimuudatusi.
+**Peatumisel:** Tundmatu lähtekood, indeks, remote, eelmise eduka käigu raport, sõltuvus või SQL-kataloog peatab uuendaja. Säilita raport ja päevik. SQL-i kirjutuskatse märgitakse püsivalt enne käivitamist; ebaselget kirjutust automaatselt ei korrata. Järelseisu võib kinnitada eraldi lugemisega. Saada täpselt näidatud raport või selle puudumisel PEATATUD rida.
 
 ## Loe ainult vajalikku
 
-- docs/continuity/HOSTED_PORTAL.md — praeguse paranduse käivitamine.
-- docs/architecture/job-load-recovery-20261122.md — korduslugemine, kättesaadavus ja tõendi piir.
-- docs/architecture/job-image-read-20261121.md — varem vastu võetud avaliku pildi lugemise parandus.
-- docs/architecture/personal-jobs-20261121.md — eraisiku ja ettevõtte töökuulutuse leping.
+- docs/continuity/HOSTED_PORTAL.md — selle uue paketi üks käivitamiskäsk ja kasutuskontroll.
+- docs/architecture/job-owner-read-lock-20261122.md — lukuta lugemise õigused, snapshot ja tõendi piir.
+- docs/architecture/job-load-recovery-20261122.md — vastu võetud kliendi korduskatse; dateeritud senine kirjeldus.
+- supabase/repairs/20261122_job_owner_read_lock/README.md — täpse SQL-delta ning ettevalmistuse tõendi leping.
 
 ## Säilivad piirid
 
@@ -54,9 +55,9 @@ Ava selqiro-too-laadimise-parandus-20261122.zip Downloads-kaustas ja käivita py
 
 ## Keskkond
 
-- Olemasolev /Users/taivo/selqiro ning Taivo17/selqiro remote. Selle paketi ainus alus on 8c2ee5c1e7caddcc4a6e4efb630458a331c3e31d.
-- Next 16.4.6, Sharp 0.35.5, package.json ja package-lock.json säilivad. Maci uuendaja kontrollib paigaldatud sõltuvusi; see ei paigalda ega uuenda neid.
-- Uuendaja hoiab eelmise eduka käigu originaalraporti ainult lugemiseks lukus, kontrollib kogu aluspuud ning teeb testide ja build’i järel ainult selle paketi commit’i ja push’i.
+- Olemasolev /Users/taivo/selqiro ning Taivo17/selqiro remote. Selle paketi ainus lähtealus on 78aea6f6d7c57aee47a29cd0e8b29c9c4e862561.
+- Next 16.4.6, Sharp 0.35.5, package.json ja package-lock.json säilivad. Maci olemasolevad sõltuvused ja varem kinnitatud Supabase CLI failid kontrollitakse; uuesti paigaldamist ega versiooni vahetamist ei tehta.
+- Uuendaja hoiab 78aea6f eduka käigu originaalraporti ainult lugemiseks lukus, kontrollib kogu aluspuud ning teeb pärast edukat build’i, piiratud SQL-i ja sõltumatut järelkontrolli ainult selle paketi commit’i ja push’i.
 
 ## Ajalugu (mitte praegused käsud)
 
