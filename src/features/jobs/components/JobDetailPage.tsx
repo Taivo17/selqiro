@@ -26,7 +26,14 @@ export default function JobDetailPage({jobId}: {jobId: string}) {
   const job = !loading && !error ? state.job : null;
   if (error) return <section role="alert" className={jobPanel}><p>{t("loadError")}</p><button type="button" className={`${jobSecondary} mt-4`} onClick={() => {if (viewer.error) viewer.refresh(); else setRevision(value => value + 1);}}>{t("retry")}</button></section>;
   if (loading) return <p role="status" className={jobPanel}>{t("loading")}</p>;
-  if (!job) return <section className={jobPanel}><h1 className="text-2xl font-black">{t("unavailable")}</h1><Link href="/v2/jobs" className={`${jobSecondary} mt-5`}>{t("viewAll")}</Link></section>;
+  if (!job) return <section className={jobPanel}>
+    <h1 className="text-2xl font-black">{t("unavailable")}</h1>
+    <p className="mt-3 text-neutral-600">{t("unavailableHelp")}</p>
+    <div className="mt-5 flex flex-wrap gap-3">
+      <Link href="/v2/messages" className={jobSecondary}>{t("backToConversations")}</Link>
+      <Link href="/v2/jobs" className={jobSecondary}>{t("viewAll")}</Link>
+    </div>
+  </section>;
   const content = job.content, theme = getOfferTheme("job"), location = jobLocation(content,language), salary = jobSalary(content,t);
   const category = categories.items.find(item => item.code === content.category), categoryName = category ? language === "et" ? category.labels.et : category.labels.en : null;
   return <div className="mx-auto min-w-0 max-w-5xl space-y-6">

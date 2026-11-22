@@ -1,34 +1,31 @@
-# Avaliku tööotsingu laadimisvea parandus
+# Tööde laadimise ja kättesaadavuse parandus
 
-21.11.2026. Alus on avaldatud `512fe45`. Olemasolevad kuulutused on oma vaates või avalikul profiilil nähtavad, kuid üldotsing annab laadimisvea. Koodis korrati sama tõrge ühe tulemuse vanas formaadis profiilipildiga.
+22.11.2026. Vastu võetud alus on `8c2ee5c`. Eraisiku ja ettevõtte töökuulutused on avalikus otsingus nähtavad ning sulgemine säilitab andmed ja vestluse.
 
-## Tulemus
+## Mida see pakett muudab
 
-Töökuulutuste avalik vastus hakkab kasutama olemasolevat profiilipiltide lugejat. Nii ei saa ühe avaldaja vana pildiväli kogu tööotsingut katkestada. Uus eraisiku tööots ja vana ettevõtte töökuulutus peavad olema samas loetelus nähtavad, kui nende tavalised nähtavustingimused on täidetud. Kuulutusi ega pilte ei ole vaja uuesti lisada.
+- Minu ala tööloendi ajutise lugemisvea järel tehakse automaatselt üks uus lugemiskatse. Profiili või konto vahetus katkestab vana päringu.
+- Avalikult kättesaamatu töö lingil on selgitus sulgemise, peatamise või aegumise võimaluse kohta ning nupp Tagasi vestlustesse.
+- Pakkumise salvestamise, sulgemise ja pikendamise toimingud säilivad.
+
+Algse esmakatse tõrke täpne tehniline põhjus ei ole kinnitatud. Parandus katab testitud ajutiste lugemistõrgete taastumise; korduv või muu püsiv viga jätab nähtavaks Proovi uuesti.
 
 ## Käivitamine
 
-Laadi alla ja ava `selqiro-too-otsingu-parandus-20261121.zip` Downloads-kaustas. Käivita:
+Ava `selqiro-too-laadimise-parandus-20261122.zip` Downloads-kaustas ja käivita:
 
 ```bash
-python3 -I -B "$HOME/Downloads/selqiro-too-otsingu-parandus-20261121/uuenda.py" --publish
+python3 -I -B "$HOME/Downloads/selqiro-too-laadimise-parandus-20261122/uuenda.py" --publish
 ```
 
-Uuendaja kontrollib olemasolevat allikat ja eelmise paigalduse raportit, teeb värske andmebaasilepingu lugemiskontrolli, kontrollib ettevalmistatud allikat ning rakendab ühe piiratud SQL-tehingu. Sõltumatu järelkontroll peab õnnestuma enne commit’i ja push’i. Sõltuvusi ei paigaldata. Varasemad andmed, kviitungid ja paigalduspäevikud säilivad.
+Uuendaja kontrollib olemasolevat lähtekoodi, indeksit, remote’i, eelmise eduka käigu originaalraportit ning sõltuvusi. Testide ja build’i järel teeb see commit’i **Recover transient owner job reads and clarify unavailable jobs** ning push’i.
 
-Saada lõpus **SAADA SEE FAIL** juures näidatud uus raport. Oota Vercelis **sama commit’i Ready / Production** tulemust ja värskenda portaali. Ava **Töö** ilma filtriteta: kontrolli „Otsin lume lükkajat täna” ja „Muruniiduki operaator” nähtavust. Ava olemasolevad kuulutused ning kontrolli ka avaliku profiili tööde jaotist.
+Saada lõpus **SAADA SEE FAIL** juures näidatud raport. Oota Vercelis sama uue commit’i **Ready / Production** tulemust ja värskenda portaali.
 
-Kui uuendaja peatub, saada uus raport või **PEATATUD** rida. Säilita failid ja päevikud.
+## Pärast avaldamist
 
-## Kohalik kontroll
+1. Ava Minu ala tööpakkumised ning vaheta oma eraisiku ja ettevõtte profiili vahel. Mõlema profiili loend peaks avanema oma andmetega.
+2. Ava sõnumist olemasolev suletud lume lükkamise pakkumine. Uus selgitus peaks ütlema, et pakkumine ei ole praegu avalikult nähtav, ja pakkuma tagasiteed vestlustesse.
+3. Suletud pakkumine peab jääma Minu alale Suletud olekuga ning puuduma aktiivsest avalikust otsingust. Selle kontrollimiseks ei ole vaja pakkumist uuesti avaldada.
 
-- 37 kliendi ja jagamise kontrolli läbisid edukalt, nende seas viis uut pildivea kontrolli.
-- 12 SQL-i kontrollrühma läbisid eraldatud testandmetega edukalt.
-- 48 uuendaja kontrolli läbisid edukalt.
-- Portaali tootmisversiooni build läbis edukalt; 764 koostamissisendit jäid muutumatuks ning üheksa nõutud artefakti kontroll õnnestus.
-
-Uuendaja käivitab Macis sihitud 37 kliendikontrolli ja build'i uuesti ning kontrollib tegelikku andmebaasilepingut. Uusi teeke ei ole vaja paigaldada. Kohalikud kontrollid ei tähenda, et serveriparandus oleks juba avaldatud.
-
-## Tõendi piir
-
-Uus parandus on enne selle käsu käivitamist ainult ette valmistatud ja lokaalselt kontrollitud. Senine production-versioon ja avaliku otsingu viga on eraldi üle vaadatud. Uut serverimuudatust, Maci käivitamist ega uut Verceli tulemust ei loeta enne raportit tehtuks.
+Paketi kohalikud API-, React DOM-i ja build’i tõendid on kontrollid-kaustas. Need ei kinnita veel uut Maci käiku ega Verceli tulemust. Kui uuendaja peatub, saada näidatud raport või **PEATATUD** rida; säilita olemasolevad failid ja päevikud.

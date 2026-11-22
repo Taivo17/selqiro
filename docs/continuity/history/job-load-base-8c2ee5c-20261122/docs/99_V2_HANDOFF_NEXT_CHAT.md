@@ -1,0 +1,67 @@
+<!-- GENERATED from docs/continuity/CURRENT_STATE.json; do not edit independently. -->
+# Selqiro — praegune tööüleandmine
+
+Seisukirje: 21.11.2026 Europe/Tallinn — 512fe45 vastu võetud; tööotsingu laadimisvea parandus lokaalselt kontrollitud
+
+## Praegune checkpoint
+
+Eraisiku töökuulutuste uuendus 512fe45 on Maci raporti ja sama commit’i Ready / Production ekraanipildi alusel avaldatud. Kasutaja lisas aktiivse tööotsa „Otsin lume lükkajat täna”. Oma vaade töötab, avalik üldotsing annab laadimisvea; Milline Vedu vana töökuulutus on endiselt avalikul profiilil. See on avaliku lugemise viga, mille tõttu ei tohi kuulutusi uuesti lisada ega eelmist paigaldajat korrata. Uus parandus muudab ainult töökuulutuse avaldaja pildi allikat serveri avalikus vastuses.
+
+## Lähtekood ja tõendi piir
+
+- **Vastu võetud alus:** main 512fe45b19417b380dac8d8fb6c361c6e8bd043e, puu 3a34847882bf0cdb9a05d309177275f1a331a42b, 2000 jälgitavat faili. Paigaldus on vastu võetud; avaliku tööotsingu käitumine on teadaoleva vea tõttu parandamisel.
+- **Aluse tõend:** Raport selqiro-eraisiku-tookuulutused-20261121-raport-20261121-211328-6dcf86466f5e.json, 330203 B, SHA256 7c2537b16d4b5faec26a680cead9a83c4e4b3d72dda3fb5fd3c4954270be3cfa; release d54a79f7ef1a50189588e0ddae2894a5696391119cffb3645fafed40f2ebaa51. 53 testi, build, üks SQL-tehing, sõltumatu after-kontroll ja push on raportis edukad. Kasutaja sama commit’i Ready / Production pilt on üle vaadatud.
+- **Avalik vaatlus:** Anonüümses brauseris andis /v2/jobs laadimisvea; q=Muruniiduki leidis Milline Vedu „Muruniiduki operaator” kuulutuse; q=lume andis laadimisvea. Sisse ei logitud, kontosid ei muudetud, tegelikku hosted-pildiandmetega API-vastust ei loetud.
+- **Korratud viga:** Tegelik SQL väljastab jobs_private.public_fields kaudu vana ip.avatar_url väärtuse. Pikk inline-pilt ületab kliendi logo_url piiri ning üks selline tulemus katkestab kogu lehe range lugemise. Sama privaatne tööots tühja tasu ja normaalse pildiviitega loetakse õigesti; ettevõtte eraldi profiil jääb loetavaks. See puudus on kohalike sünteetiliste andmetega korratud ja sobib avaliku portaali vaatlusega.
+- **Parandus:** jobs_private.public_fields kasutab profile_media_private.slot_url(j.identity_id, avatar) olemasolevat juhitud pildilugejat. Selle kaudu eelistatakse salvestatud hallatud pilti, austatakse eemaldamist ja välditakse sobimatute vanade pildiandmete lisamist avalikku töövastusesse. Brauseri parserit, tulemuste ridade arvu, järjestust ega juurdepääsuõigusi ei lõdvendata.
+- **Säiliv tooteotsus:** Üks Töö jaotis eraisikule ja ettevõttele. Mõlemad võivad otsida konkreetse töö tegijat või töötajat. Varasem 13 väljaga leping, task-väärtused, perioodid, nõusolekud, kviitungid, revisjonid, kehtivus ja kontaktiteekond säilivad.
+- **Ajalugu:** Vastu võetud aluse kolm jooksvat juhendit säilivad baiditäpselt docs/continuity/history/job-image-read-base-512fe45-20261121 all. Varasemaid väljastatud SQL-faile, raporteid, pilte ega päevikuid ei muudeta.
+
+## Tegelik kohalik katse
+
+- 37/37 tegeliku kliendi ja jagamise kontrolli läbisid: senine töökuulutuse klient, viis uut SQL-vastustel põhinevat pildivea regressioonikontrolli ja senine pakkumise jagamine. Null vahelejäetud, tühistatud või ebaõnnestunud testi. Uued kontrollid kasutavad tegeliku SQL-i sünteetiliste andmetega vastuseid, päris TypeScripti parserit, klienti ja Reacti serveriesitust.
+- SQL-i 12/12 kontrollrühma läbisid PostgreSQL 18.6 / PGlite 0.5.13 keskkonnas, mitte-superkasutaja paigaldaja ja API rollidega. Pikk vana inline-pilt kordab vana lugeja vea; pärast ühe avaliku pildiallika parandust jäävad nii eraisiku tööots kui ka ettevõtte kuulutus alles. Kontrollitud on juhitud pildi eelistust, eemaldamist, sobimatuid vanu pildiviiteid, teise identiteedi pilti, lehekülgede järjestust, task-filtrit, õiguste säilimist ja tundmatu seisundi tagasilükkamist.
+- Next.js 16.4.6 tootmisversiooni build läbis edukalt. Kontrollitud 764 koostamissisendit jäid muutumatuks; uuendaja võttis vastu päris koostamislogi ja üheksa nõutud artefakti räsid. Kasutati inertseid lokaalseid aadresse ja koostamise kohatäiteid, mitte päris teenuste võtmeid.
+- Uuendaja 48/48 kontrolli läbisid päris ajutiste Git-hoidlate ja simuleeritud CLI/Node/npm protsessidega. Kontrollitud on 2000 failiga alus, eelmise paigalduse täpne raport, üks püsivalt päevikusse kantud SQL-katse, ebakindla tulemuse sõltumatu lugemine, tundmatu seisundi peatamine ning commit/push-i eeltingimused. Tegelik 37-testiline TAP ja päris build kinnitati eraldi sama uuendaja kontrollidega.
+- Anonüümses avalikus portaalis kinnitati olemasolev viga: üldotsing ja lume-otsing ei laaditud, kuid Muruniiduki-otsing leidis ettevõtte olemasoleva kuulutuse. Tegelikku hosted-pildiandmetega vastust ei loetud. Koodi puudus on kohalikult tõendatud ja sobib vaadeldud sümptomitega; paranduse hosted-rakendamine ja Maci käivitus on endiselt ootel.
+- Väljastatud paketi kontrollid-kaust sisaldab täpseid tõendeid, nende piire ja allikaräsisid. Sõltuvusi ei paigaldata, vanu andmeid ei kirjutata üle ja varasemaid väljastatud parandusi ei muudeta.
+
+## Production / kasutajaliides
+
+- 512fe45 Ready / Production ja Maci paigaldusraport on vastu võetud. Eelmist eraisiku töökuulutuste paigaldajat ei käivitata uuesti.
+- Tööotsingu laadimisviga kinnitati olemasoleval avalikul lehel; paranduse hosted-SQL, uus commit/push ja Verceli avaldamine on selle paketi käivitamiseni ootel.
+- Kõik kolm kontot on kasutaja loodud. E-posti kinnitamise aktiveerimine jääb kokkuleppe kohaselt selqiro.com seadistamise etappi enne väliste kasutajate kaasamist.
+
+## Üks järgmine töö
+
+Ava selqiro-too-otsingu-parandus-20261121.zip Downloads-kaustas ja käivita python3 -I -B "$HOME/Downloads/selqiro-too-otsingu-parandus-20261121/uuenda.py" --publish. Saada SAADA SEE FAIL juures näidatud raport; oota sama commit’i Ready / Production tulemust ja värskenda tööotsingut. Kontrolli olemasolevate lume lükkamise ja Muruniiduki operaatori kuulutuste nähtavust; uusi koopiaid ei ole vaja lisada.
+
+**Peatumisel:** Tundmatu alus, indeks, remote, varasem raport, runtime, andmebaasileping või kontrolltulemus peatab uuendaja. SQL-katse ebakindlat tulemust lahendatakse sama päeviku lugemiskontrolliga; sama SQL-i automaatselt uuesti ei saadeta. Säilita raport ja päevikud.
+
+## Loe ainult vajalikku
+
+- docs/continuity/HOSTED_PORTAL.md — selle paranduse käivitamine ja kontroll.
+- docs/architecture/job-image-read-20261121.md — veajuht, parandus ja tõendi piir.
+- supabase/repairs/20261121_job_image_read/README.md — üks SQL-funktsioon ja serverilepingu kontroll.
+- docs/architecture/personal-jobs-20261121.md — eelnevalt avaldatud tööotsade ja töökohtade leping.
+
+## Säilivad piirid
+
+- Kolm kontot on kasutaja enda omad; väliseid testijaid ei ole. E-posti aktiveerimine lükati edasi domeeni kasutuselevõtuni. Enne väliseid testijaid või avalikku registreerimist tuleb kinnitamine, kirjade saatmine ja parooli taastamine lõpuni kontrollida ka juhul, kui avalik aadress on veel vercel.app.
+- Põhidomeeniks valiti selqiro.com. Kasutajale kuuluvad ka selqiro.app, selqiro.io ning selkiro.com/.app/.io. Domeenide ja DNS-i seadistust selles paketis ei tehta.
+- Ülesannete ja töökohtade eristus ei otsusta lepingu õiguslikku liiki. Konto tüübi laiendus ei laienda riikide poliitikaid ega möödu senisest country-scoped policy peatumisest.
+- Olemasolevaid kasutajaid, profiile, töid, vestlusi, pilte, tingimusi ja kviitungeid ei kustutata ega kirjutata ringi. Üks kalendrikuu kehtivus, tasu täpsed kümnendsummad, poliitika nõusolek, revisjonid ja konto/identiteedi seos säilivad.
+- Vanasse avatud brauserilehte jäänud range parser ei pruugi uusi task väärtusi ega avaldaja identity_type välja tunda. Pärast sama versiooni Ready / Production tulemust tuleb leht värskendada. See ei ole nullkatkestusega eri kliendiversioonide leping; senised muutumatud päringusisendid ja kviitungid säilivad.
+- AI päringuteed jäävad suletuks. Konto sulgemine/kustutamine, reklaami ja esiletõstmise iseteenindus ning laiem avamiseelne ülevaatus on järgnevad tööd.
+
+## Keskkond
+
+- Olemasolev /Users/taivo/selqiro ja Taivo17/selqiro remote. Ainus selle paranduse lähtecommit on 512fe45b19417b380dac8d8fb6c361c6e8bd043e.
+- Next 16.4.6, Sharp 0.35.5 ja olemasolev lukufail säilivad; sõltuvusi ei paigaldata.
+- Uuendaja hoiab eelmise originaalraporti lugemiseks lukus ning kontrollib kogu 2000-failist aluspuud ja olemasoleva seotud projekti piiratud kataloogi. Uusi kontosid ega võtmeid ei looda.
+
+## Ajalugu (mitte praegused käsud)
+
+Vana sisenemisleht: `docs/archive/99_V2_HANDOFF_NEXT_CHAT.before-price-core-20261004-6df0af9.md`.
+Kõik 5573 algset rida säilivad bait-baidilt; SHA-256 `667e47990a7d3cc20ff53709cb861663b4565cf1d3c830eda88e0d18e60fdb8a`.
+Vanade failide NEXT/CURRENT pealkirjad ei ole tänased käivitamisjuhised.

@@ -11,16 +11,55 @@ function failure(error: unknown): JobError {
   if (code === "55000" && detail?.message === "job_public_profile_required") return new JobError("profile");
   return new JobError(code === "42501" ? "forbidden" : code === "40001" ? "conflict" : code === "22023" || code === "23514" ? "invalid" : code === "55000" ? "policy" : "unknown");
 }
-async function rpc(name: string, args: object, signal: AbortSignal): Promise<unknown> {
+class RetryableOwnerJobReadError extends JobError {
+  constructor() {super("unknown");}
+}
+export function isRetryableOwnerJobReadError(error: unknown): boolean {
+  return error instanceof RetryableOwnerJobReadError;
+}
+function temporaryReadFailure(error: unknown, status: number): boolean {
+  const detail = error as {code?: string;name?: string;message?: string} | null;
+  // The owner read can briefly wait behind an active-identity/account row lock.
+  if (detail?.code === "55P03") return true;
+  // Do not reinterpret a database/auth contract error as a transport failure.
+  if (detail?.code || detail?.name === "AbortError" || detail?.message?.startsWith("AbortError:")) return false;
+  if ([408,429,502,503,504].includes(status)) return true;
+  // PostgREST wraps a failed fetch with status 0 and the original error name.
+  // JSON parsing, manual cancellation and other unknown failures stay terminal.
+  return status === 0 && /^(?:TypeError|NetworkError|FetchError):/.test(detail?.message ?? "");
+}
+function abortedRequest(error: unknown, status?: number): boolean {
+  const detail = error as {code?: string | number;name?: string;message?: string} | null;
+  if (detail?.code && detail.code !== "ABORT_ERR" && detail.code !== 20) return false;
+  return detail?.name === "AbortError" || detail?.code === "ABORT_ERR"
+    || status === 0 && !!detail?.message?.startsWith("AbortError:");
+}
+async function rpc(name: string, args: object, signal: AbortSignal, ownerRead?: (value: unknown) => OwnerJobPage): Promise<unknown> {
   if (signal.aborted) throw new JobError("forbidden");
-  const controller = new AbortController(), abort = () => controller.abort(), timer = setTimeout(abort, 20000);
+  let timedOut = false;
+  const controller = new AbortController(), abort = () => controller.abort();
+  const timer = setTimeout(() => {timedOut = true; abort();},20000);
   signal.addEventListener("abort", abort, {once: true});
   try {
-    const {data, error} = await supabaseBrowserClient.rpc(name, args).abortSignal(controller.signal);
-    if (error) throw failure(error);
-    if (signal.aborted || controller.signal.aborted) throw new JobError("unknown");
-    return data;
-  } catch (error) {throw error instanceof JobError ? error : failure(error);}
+    const {data, error, status} = await supabaseBrowserClient.rpc(name, args).abortSignal(controller.signal);
+    if (error) {
+      if (ownerRead && !signal.aborted && (temporaryReadFailure(error,status) || timedOut && abortedRequest(error,status))) throw new RetryableOwnerJobReadError();
+      throw failure(error);
+    }
+    if (signal.aborted) throw new JobError("unknown");
+    // Validate even a late owner response: malformed data must never be retried.
+    const result = ownerRead ? ownerRead(data) : data;
+    if (controller.signal.aborted) {
+      if (ownerRead && timedOut) throw new RetryableOwnerJobReadError();
+      throw new JobError("unknown");
+    }
+    return result;
+  } catch (error) {
+    // Only an actual internal abort is recoverable here. Authoritative errors,
+    // malformed responses and external page/actor cancellation keep priority.
+    if (!(error instanceof JobError) && ownerRead && timedOut && !signal.aborted && abortedRequest(error)) throw new RetryableOwnerJobReadError();
+    throw error instanceof JobError ? error : failure(error);
+  }
   finally {clearTimeout(timer); signal.removeEventListener("abort", abort);}
 }
 const actorArgs = (actor: JobActor) => {
@@ -35,7 +74,8 @@ export async function getOwnerJob(actor: JobActor, jobId: string, signal: AbortS
 }
 export async function getOwnerJobs(actor: JobActor, cursor: OwnerJobCursor | null, signal: AbortSignal, limit = 24): Promise<OwnerJobPage> {
   parseJobCursor(cursor, true);
-  return parseJobPage(await rpc("get_my_jobs_v1", {...actorArgs(actor), p_result_limit: limit, p_cursor: cursor}, signal), limit, {kind: "owner", actor}, cursor) as OwnerJobPage;
+  return await rpc("get_my_jobs_v1", {...actorArgs(actor), p_result_limit: limit, p_cursor: cursor}, signal,
+    value => parseJobPage(value,limit,{kind: "owner",actor},cursor) as OwnerJobPage) as OwnerJobPage;
 }
 export async function getPublicJob(jobId: string, signal: AbortSignal) {
   if (!jobUuid(jobId)) return null;
