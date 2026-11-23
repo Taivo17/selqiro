@@ -1,0 +1,395 @@
+{
+  "format": "selqiro-next-horse-public-read-source-audit-v1",
+  "recorded_at_utc": "2026-11-23T19:06:38.693113+00:00",
+  "audit_result": "SOURCE_AUDIT_COMPLETE",
+  "implementation_status": "not_started",
+  "base": {
+    "reported_commit": "87bff3f51a01a6953c37096ed32a1017135fd304",
+    "tree": "a6f7b7522cd0e88db25caf88b8dd4e9a48c64d77",
+    "files": 2154,
+    "source_root": "work/account-listing-read-accepted-20261123/source",
+    "reconstruction_sha256": "f1715f66d75cfb81fb8c87f556aa1d7d58684acf996b83179f8b1eb9cd4cc05b",
+    "boundary": "Offline reconstruction from accepted 8dc0b3b base plus the sealed issued ordinary-listing payload. Root separately reviews the new Mac report, Ready/Production and user acceptance; this audit does not establish a fresh cloud or Mac observation."
+  },
+  "recommendation": {
+    "name": "Horse general-discovery and public-detail account fence",
+    "target_functions": [
+      "public.search_public_marketplace_v1(text,text,text,text,text,text,integer,integer,uuid)",
+      "public.get_public_horse_offer_v1(uuid)"
+    ],
+    "combined_change_only": "horses branch; preserve current ordinary branch and shared count/page/order envelope",
+    "unchanged_account_helper": "account_lifecycle_private.account_is_available(uuid)",
+    "no_new_public_API_or_app_contract": true
+  },
+  "actual_paths": [
+    {
+      "path": "/v2/products -> searchPublicListings -> search_public_marketplace_v1",
+      "result": "horses branch lacks account availability; ordinary branch already has accepted candidate-keyed fence"
+    },
+    {
+      "path": "/v2/horse-offer/[id] -> PublicHorsePage -> getPublicHorse -> get_public_horse_offer_v1",
+      "result": "single public detail raw-null contract; no owner fallback"
+    },
+    {
+      "path": "/v2/horse-offer/[id] generateMetadata -> readAnonymousOfferPreview(horse) -> get_public_horse_offer_v1",
+      "result": "fresh anonymous metadata automatically shares detail fence; old previews/URLs remain outside"
+    },
+    {
+      "path": "PublicProfilePage -> PublicProfileListingsSection -> usePublicProfileListingView -> getPublicProfileMarketplace -> get_public_profile_marketplace_v2",
+      "result": "independent profile feed; does not delegate to combined search or canonical profile reader"
+    },
+    {
+      "path": "PublicProfileListingCard -> /v2/horse-offer/[id]",
+      "result": "opened profile horse card shares the same detail reader, but profile-card collection remains a separate gate"
+    }
+  ],
+  "profile_route_findings": {
+    "current_marketplace_RPC": "get_public_profile_marketplace_v2",
+    "direct_legacy_RPC_still_granted": "get_public_profile_marketplace_v1",
+    "contextual_categories_RPC": "get_public_profile_store_categories_v2",
+    "standalone_horse_section_imports": [],
+    "page_gate_is_not_independent_RPC_authorization": true,
+    "profile_module_deferred_not_claimed_covered": true
+  },
+  "ownership": {
+    "horse_identity": "horse_offers.identity_id",
+    "private_account": "identities.user_id",
+    "business_account": "business_accounts.owner_user_id via identities.business_account_id",
+    "not_owner_fallback": "horse_offers.created_by_user_id and business membership",
+    "existing_block_peer": "horse_offers.created_by_user_id",
+    "missing_or_unknown_type": "not eligible"
+  },
+  "retained_function_pins": [
+    {
+      "name": "public.search_public_marketplace_v1(text,text,text,text,text,text,integer,integer,uuid)",
+      "source": "supabase/releases/account-listing-read-fence-v1/search-marketplace.sql",
+      "declaration_sha256": "19725bd1dd4019c9884f989e66733cfecbd0bbc4d3ef950dbfab9712d403f7c0",
+      "declaration_bytes": 7551,
+      "line_start": 2,
+      "line_end": 86,
+      "scope": "Source declaration through its exact closing dollar-quote semicolon; not a pg_get_functiondef/catalog observation."
+    },
+    {
+      "name": "public.get_public_horse_offer_v1(uuid)",
+      "source": "supabase/repairs/20261108_horse_publication/07_public.sql",
+      "declaration_sha256": "1ea0687754b7bcd81e3bba185fb28cdc0d696134d9942168df95881565bcf5a0",
+      "declaration_bytes": 1603,
+      "line_start": 28,
+      "line_end": 49,
+      "scope": "Source declaration through its exact closing dollar-quote semicolon; not a pg_get_functiondef/catalog observation."
+    },
+    {
+      "name": "horse_publication_private.is_public(uuid)",
+      "source": "supabase/repairs/20261108_horse_lifecycle/01_lifecycle_core.sql",
+      "declaration_sha256": "3c522a1452b919629a911cb1b7777c97325cb6fbf5a61d8fc591beaa0199469e",
+      "declaration_bytes": 488,
+      "line_start": 26,
+      "line_end": 33,
+      "scope": "Source declaration through its exact closing dollar-quote semicolon; not a pg_get_functiondef/catalog observation."
+    },
+    {
+      "name": "horse_publication_private.has_current_publication(uuid)",
+      "source": "supabase/repairs/20261108_horse_lifecycle/01_lifecycle_core.sql",
+      "declaration_sha256": "9dbd5de6b5dd1c568f8230191abc47032dc71284fa326c1ee54e0def1e53f88b",
+      "declaration_bytes": 1157,
+      "line_start": 8,
+      "line_end": 22,
+      "scope": "Source declaration through its exact closing dollar-quote semicolon; not a pg_get_functiondef/catalog observation."
+    }
+  ],
+  "combined_preservation_pins": {
+    "before_horses_sha256": "a5e296dbd70c0a68132168d76cd98f26d1b4f8ff20c7b00a51c92451ed6ad9c2",
+    "horses_branch_sha256": "7e3706c1d2869c49f1057ddf2041376035a46212dddf783c8ba24ee0babf7a26",
+    "shared_matched_and_tail_sha256": "b2f4023eac3f5246b6cb7e281138d6ed93529eddb3ab07f5b85fd6d40399593e",
+    "split_contract": "horses branch begins at literal ), horses AS MATERIALIZED(; shared tail begins at ), matched AS MATERIALIZED("
+  },
+  "query_plan_requirements": [
+    "Measure real old/new combined and detail readers on populated valid synthetic horses and mixed ordinary/horse pages. Previous 12000-listing benchmark had an empty horse fixture and is not horse-volume evidence.",
+    "Correlate any new eligibility lookup directly with candidate h.identity_id; reject unrestricted account/identity eligibility scans and all-account caches. Do not assume LATERAL/Memoize from ordinary data transfers without measurement.",
+    "Include 20000 unrelated identities/accounts and selective horse identity, offer-type/keyword and detail cases; count account helper invocations as transaction deltas, not unflushed global counters.",
+    "Observe existing publication-finality/snapshot/gallery cost as well as new account helper cost. Keep is_public/has_current_publication unchanged.",
+    "horse_offers_search_vector_idx indexes search_vector; current public horse search uses a different explicit to_tsvector expression. Do not claim that this GIN supports that predicate or switch expressions in this permission-only module.",
+    "Preserve existing EE/EUR, five-type, wanted location/price, FTS allowlist, hidden-provider, author-block, chronology, exact count and pagination contracts.",
+    "Keep known combined ordinary wide-search cost as a separate required optimization before traffic/content scale; one-client synthetic plans do not prove millions throughput."
+  ],
+  "no_execution": {
+    "application_code_changed": false,
+    "SQL_or_database_execution": false,
+    "tests_or_build": false,
+    "browser_or_services": false,
+    "Mac_or_remote": false,
+    "account_closure_or_deletion": false
+  },
+  "files": {
+    "AGENTS.md": {
+      "sha256": "e3447d84251880fb34cfae09131cb4c57471529bbfe60976a3245793cf621627",
+      "bytes": 327,
+      "git_blob": "8bd0e39085d5260e7f8faffcad2fdc45e10aef33",
+      "role": "repository instructions; source-only audit writes no application code"
+    },
+    "docs/continuity/CURRENT_STATE.json": {
+      "sha256": "7b7b8cb5b1131cb411a1712da95a83372eb1f340283a86ac58127d95529b2b4e",
+      "bytes": 9449,
+      "git_blob": "b23b2977080b863f15848d0519fba805f44d3afa",
+      "role": "issued state record; old prepared wording is not a new command after acceptance"
+    },
+    "docs/continuity/HOSTED_PORTAL.md": {
+      "sha256": "92289910bb69f6eed2406f32f4f57bd46d63101e77a838b4bfd4ddcd66d053b3",
+      "bytes": 2842,
+      "git_blob": "b10f913813a7118b0a89b7d9f5d5f33dab61e5f1",
+      "role": "issued command and scope; root owns accepted checkpoint update"
+    },
+    "docs/architecture/launch-profile-privacy-plan.md": {
+      "sha256": "1551ec9d20233720ec69acd0cd7eebe3524518a0dfffcba85eeb53c7ea2fce24",
+      "bytes": 6484,
+      "git_blob": "b276f181d56d67ea9f10d83c13d9339001a5b6ed",
+      "role": "one chosen profile; account lifecycle direction"
+    },
+    "docs/architecture/account-listing-read-fence-v1.md": {
+      "sha256": "e0b279aee8a95a6c60cac572c613f167f3345784676e4059ada36368410476f7",
+      "bytes": 9034,
+      "git_blob": "6937c8a9efc8a1ec33518a49f99d459d088f5800",
+      "role": "accepted preceding ordinary read boundary and measured combined-search cost"
+    },
+    "docs/architecture/horse-publication-v1.md": {
+      "sha256": "7b3b40128bf5427af7027fc8318106406d02dc305fa51beef640c237be6e2068",
+      "bytes": 10539,
+      "git_blob": "5c3e0c5658afa6c4eb610fc21e2aead9d45c27cb",
+      "role": "canonical horse workflow, EE/EUR and five offer types"
+    },
+    "docs/architecture/profile-marketplace-feed-v1.md": {
+      "sha256": "7c1ab742c386ff8a5b22baa70380a25daf119cc31736cf69355bf124b98cc513",
+      "bytes": 7520,
+      "git_blob": "4d22024496d2d5e55abe8ab0e2eb5e6611f8f46c",
+      "role": "profile list architecture; later v2 SQL/client is the actual current contract"
+    },
+    "supabase/releases/account-listing-read-fence-v1/search-marketplace.sql": {
+      "sha256": "0b5fd2ef554418c4c56230e899ccce4ef56079cee5a5acb0ff191e11d5152d09",
+      "bytes": 7620,
+      "git_blob": "73b07182934ddffc27063f0f4daf44716a5ab455",
+      "role": "current combined reader; next change only horses branch"
+    },
+    "supabase/releases/account-listing-read-fence-v1/expected-contract.json": {
+      "sha256": "4cccc5b51bada73a9329e5398c64d98d458fc5fb3e6c09625ebecd93592a3788",
+      "bytes": 38073,
+      "git_blob": "6d7ec9c4c6cbdbd931ba79f45f573c52b4e80f7f",
+      "role": "accepted preceding scoped catalog contract"
+    },
+    "supabase/releases/account-public-profile-fence-v1/account-availability.sql": {
+      "sha256": "da26cf792b337adf41a77cc2144a4738d1a405dd122ff9e20c47dc1c82e72930",
+      "bytes": 836,
+      "git_blob": "554e04f19281dbace6b90e00fb63ed0b62c8010d",
+      "role": "existing unchanged account availability helper"
+    },
+    "supabase/releases/account-public-profile-fence-v1/public-profile.sql": {
+      "sha256": "2f00234d98c261b97bcfad89df9d247e3cd89f8478b5160ce6764280b771c8ea",
+      "bytes": 3072,
+      "git_blob": "6155df19cf35ac09f9cf6559068a6eb7608fe59f",
+      "role": "existing canonical public profile account fence"
+    },
+    "supabase/repairs/20261108_horse_publication/07_public.sql": {
+      "sha256": "a7561dfc90514af190ce3a246e690a165285fee284b3853efff08849168ac353",
+      "bytes": 10917,
+      "git_blob": "af2b75f4fe1f7faa663216f2ecdcd7a002fe7e48",
+      "role": "current horse detail declaration and public field/price helpers; obsolete combined declaration must not be replayed"
+    },
+    "supabase/repairs/20261108_horse_lifecycle/01_lifecycle_core.sql": {
+      "sha256": "1fb33e3d2d5403ce599f43e96550c523d160e21b2fa2261f52979d971fc3d58b",
+      "bytes": 20546,
+      "git_blob": "8795cff0f59f227d084ef597e454ef3d119d5fbe",
+      "role": "current is_public, current publication and effective deadline; retain unchanged"
+    },
+    "supabase/repairs/20261108_horse_lifecycle/03_authority.sql": {
+      "sha256": "821eaa104a0794d0ffaf64c061605feda840905f8229eecba8be83fcbefa7a72",
+      "bytes": 1856,
+      "git_blob": "8edab0b938133bbe2ee5b0d8602340016cb590d9",
+      "role": "retained helper and owner lifecycle grants"
+    },
+    "supabase/repairs/20261108_horse_publication/04_media_bridge.sql": {
+      "sha256": "915c959aaec954f88852196e97c9b1c8cb400ebed500ec7f5e3096843994020d",
+      "bytes": 36333,
+      "git_blob": "f4682bbbef6fa086bf06881d418d6f90f305f6b0",
+      "role": "separate public/owner media-binding dependency on is_public"
+    },
+    "supabase/repairs/20261108_horse_publication/06_contact.sql": {
+      "sha256": "8bf0dab59f31ccf1d876699278603f242eabedc8d39145e2e2d56240ebb40a95",
+      "bytes": 11972,
+      "git_blob": "5ddd6768e833b121f8d48ed9ed01110b4c5673eb",
+      "role": "separate contact_snapshot and contact writer dependency on is_public"
+    },
+    "supabase/repairs/20261108_horse_publication/05_authority.sql": {
+      "sha256": "06c8478d107b7bae5f7d6697171862ed5ce255518a98824fd2e5ac341d97eab5",
+      "bytes": 2362,
+      "git_blob": "f27fe94ac2311dfcbc73b41e88994a6dc14331f6",
+      "role": "retained writer authority boundary"
+    },
+    "supabase/repairs/20261109_service_profile_polish/02_profile_marketplace.sql": {
+      "sha256": "3570059d7b57f8d67ed6bd17cad260ba491eb36e45804dc8774f03bb8c9ea612",
+      "bytes": 6779,
+      "git_blob": "8a67576daf5e1b4e5fad6ced2be1b25ba8156472",
+      "role": "still granted profile marketplace v1, independent read boundary"
+    },
+    "supabase/repairs/20261110_horse_store_categories/02_profile_marketplace.sql": {
+      "sha256": "17fcfef0facffcdb0433c42a980b1028b06bdf0f6e3bdd40406c20261cc3cb3e",
+      "bytes": 7021,
+      "git_blob": "40beb285b254976c292fbdca48b3e3afd973c526",
+      "role": "actual profile marketplace v2, independent seller slug/category/count boundary"
+    },
+    "supabase/repairs/20261111_service_store_categories/03_public_categories.sql": {
+      "sha256": "651ce76b5abeebf2a35a67226128eb11d98727a9eba3c4e3983126206a3ee5c3",
+      "bytes": 5283,
+      "git_blob": "c4551afbde20c64166279052ed7dc7750e48514a",
+      "role": "actual contextual profile category v2, marketplace and service scopes"
+    },
+    "supabase/migrations/20260830170000_add_ee_horse_offer_foundation.sql": {
+      "sha256": "7ed39b68732c27b5a21173b5ce01e8fa0264f57b6a72a079913539cb6a12fb67",
+      "bytes": 34413,
+      "git_blob": "3979e83109534ebaacbe386201586c41ff8fa1ee",
+      "role": "horse identity/author relation, existing indexes and different search_vector expression"
+    },
+    "src/entities/listing/api/searchPublicListings.ts": {
+      "sha256": "2ca52f2a7aa3e43e663065ccdb6f53c6159df15f03c0f28ef9ecdb88e5fc5694",
+      "bytes": 1605,
+      "git_blob": "de061575a6eb192558cc23a0f0fb414b0a337cf2",
+      "role": "hosted search dispatches to combined marketplace RPC"
+    },
+    "src/entities/listing/model/publicRead/publicMarketplace.ts": {
+      "sha256": "6d729feb69e2538b50e37eec4bfe5e2d42c65a9d3c3b4f8786593b479fc5529c",
+      "bytes": 3502,
+      "git_blob": "282874cfe84a314f20a9441536cf0bc199c8d619",
+      "role": "strict typed mixed-page parser/count semantics"
+    },
+    "src/features/public-listing-search/components/SearchResultCard.tsx": {
+      "sha256": "98333be2814616c8aa0d55da64448ea861cce38be97a3186206a72afd768eb2b",
+      "bytes": 3397,
+      "git_blob": "3deac282aba48435f68ee53a79a424176b2fe148",
+      "role": "horse search card routes to public UUID detail"
+    },
+    "app/v2/horse-offer/[id]/page.tsx": {
+      "sha256": "59884bef6eb5dc20db427d5acd406ab3758238080de67f7c29f98861ca108469",
+      "bytes": 602,
+      "git_blob": "bcba27b4622671f5d75ee32da999c211e24f05f4",
+      "role": "actual horse public page and metadata entry"
+    },
+    "src/features/horse-offer-public/components/PublicHorsePage.tsx": {
+      "sha256": "843bb985eee4c01150aafaefbae544746aa023a9cc674a99f3ddd4ea76d74527",
+      "bytes": 4511,
+      "git_blob": "05a2246ff31abeaf26177929172c063277a99751",
+      "role": "actual effect-driven detail load; loading/null/error without owner fallback"
+    },
+    "src/entities/horse-offer/api/getPublicHorse.ts": {
+      "sha256": "ed2d1555bfe852065bcad15f03dbeab1375a0741db57307beb02f7fb0d464064",
+      "bytes": 502,
+      "git_blob": "ea67d4b97a0333c1f8b43a78baeb768624eda858",
+      "role": "abortable get_public_horse_offer_v1; UUID validation"
+    },
+    "src/entities/horse-offer/model/publicHorse.ts": {
+      "sha256": "4bb9a5abfd0fae5b74f70dbb25e44bc29e5933f72c85327da21f56b5e5a25814",
+      "bytes": 6080,
+      "git_blob": "ada34cbd1b5f54dcc78ef20e4e8b946b118e766c",
+      "role": "raw null detail, UUID, price/field/gallery public contract"
+    },
+    "src/server/sharing/anonymousOfferPreview.ts": {
+      "sha256": "863a228649837056feb86487b3dd46aa425c2ceba15854053abc8bb804de0566",
+      "bytes": 5430,
+      "git_blob": "dcd7f6821bd642499b64e6038f3001dc89978a63",
+      "role": "fresh anonymous horse metadata uses the same public detail RPC"
+    },
+    "src/server/sharing/offerMetadata.ts": {
+      "sha256": "b05331306bb63115b1996384adcbefb5db694e3d91462fc55f91b198b8c64b6a",
+      "bytes": 2099,
+      "git_blob": "1771a89e5f70f918ad37d024da73039c276e827b",
+      "role": "generic metadata fallback and hosted configuration"
+    },
+    "src/features/public-profile/components/PublicProfilePage.tsx": {
+      "sha256": "eb238d8ce63f62fdb71cc933c15bc63fd836e2e8b32d2c65e601bae4a2dc23ea",
+      "bytes": 14069,
+      "git_blob": "54dabeb50fce8a82354fa4aa3d11af3d20ed2c18",
+      "role": "canonical profile gate and actual mounted listing section"
+    },
+    "src/entities/profile/api/getPublicProfileBySlug.ts": {
+      "sha256": "895c37bd560da17f94502a6f32b63cd8a0dc712acd00ed5c6df52afce04d4a3b",
+      "bytes": 3439,
+      "git_blob": "03049fc72d9129da1042f9c10e3f911b429d811d",
+      "role": "canonical profile read; page gating is not security of independent offer RPCs"
+    },
+    "src/features/public-profile/components/PublicProfileListingsSection.tsx": {
+      "sha256": "83abc8d6b45fdc659fffb361da3818236a6852ec1520e4222cf8ee8d6bf07b69",
+      "bytes": 4666,
+      "git_blob": "11f102943cfb8750436c63bb569dd77388600958",
+      "role": "actual current profile marketplace section"
+    },
+    "src/features/public-profile/model/usePublicProfileListingView.ts": {
+      "sha256": "3785ef2191db7af04a4d7da778976fd3fe0a298169270bdd25fd39e62308d9d7",
+      "bytes": 5290,
+      "git_blob": "ecd490c530cb6f0271eefca179424771c82d3caf",
+      "role": "actual profile requests/categories and page state"
+    },
+    "src/features/public-profile/model/usePublicProfileMarketplace.ts": {
+      "sha256": "2febd375ee2382b7de91cae1cb6b124d0dd90c1d0a387908c9f8e40b5ee0cc3a",
+      "bytes": 2203,
+      "git_blob": "c23ede998738f6cdef602dae9c1183900e0e4472",
+      "role": "actual profile read hook with viewer scope/abort fences"
+    },
+    "src/entities/listing/api/getPublicProfileMarketplace.ts": {
+      "sha256": "319f1053bff52457672e980ef59b60557eb19b9ca1524ae835e915102f9a603e",
+      "bytes": 937,
+      "git_blob": "13b40abec43817fe815412b6fe8fa29bf21bc3ad",
+      "role": "actual profile marketplace RPC v2 dispatch"
+    },
+    "src/features/public-profile/components/PublicProfileListingCard.tsx": {
+      "sha256": "9cf0629425dda98bb6edf7d050a6797d72327259e00df19fe02019b318b3a521",
+      "bytes": 3523,
+      "git_blob": "c3da5c9b5596adbb173e3bf16fae1eca36894b9d",
+      "role": "profile horse card routes to same public detail"
+    },
+    "src/features/public-profile/components/PublicProfileHorsesSection.tsx": {
+      "sha256": "4cb126f0793dcbd88afb572f388ee0e10f6d25a7b0c39113657353ba3c795075",
+      "bytes": 3127,
+      "git_blob": "ccdb11f4d9825a02ea530f651cdd311ba111339f",
+      "role": "retained standalone component; no current app/component import found"
+    },
+    "src/features/public-profile/model/usePublicProfileStoreCategories.ts": {
+      "sha256": "67f8a2b46e51671df4bb7246bea4e9e9215f9a7fce2cb2df2bc450a2c1713464",
+      "bytes": 2318,
+      "git_blob": "c8d23708fa68b3b0acff9bedb5fef0c78aed671b",
+      "role": "actual profile marketplace category scope"
+    },
+    "src/entities/store-category/api/getPublicProfileStoreCategories.ts": {
+      "sha256": "35f05cf3d8a8da4c93a24799d4977b36353cccfffefa3fe7412f38fe64f48132",
+      "bytes": 2063,
+      "git_blob": "bef51d99b4f25cdee47cfecdb4e5a01f66bea745",
+      "role": "direct contextual categories RPC v2 dispatch"
+    },
+    "app/api/v2/horse-media/[attemptId]/[ordinal]/route.ts": {
+      "sha256": "c2aab23099ca300488e22362b99ddc54b6944b9948ea044268411d686304bc48",
+      "bytes": 1074,
+      "git_blob": "afa058f9ce24376a1536589de63c52774ddf212b",
+      "role": "separate public managed-media route"
+    },
+    "src/server/horse-publication/serveHorseMedia.ts": {
+      "sha256": "c7c5cf26a4d9e947973f38966cd8e3b527827f368f439ebb5bd4244520ca8a24",
+      "bytes": 731,
+      "git_blob": "29742c95bf77bb097efdb4d87a4b6355a17cedc7",
+      "role": "shared media handler delegation"
+    },
+    "src/server/listing-publication/final/serveListingMedia.ts": {
+      "sha256": "7a314b6422b1f81a9e3b0b376bb15a15900f4d9aa67c6a662eecec9116b8febc",
+      "bytes": 5730,
+      "git_blob": "951829329ef6fa7afc0fd2df6bb328d56c547ee9",
+      "role": "horse public/owner media RPCs and post-read check"
+    },
+    "tests/horse-public-read.test.cjs": {
+      "sha256": "ac6c5adb5c8a3477ca8ab3d324537cfc840979db5caf5056648a2a886421bbe4",
+      "bytes": 8890,
+      "git_blob": "874d4d69e5b1feba020b05a014c9735010866735",
+      "role": "existing parser/typed card tests read as references, not rerun"
+    },
+    "tests/offer-sharing.test.cjs": {
+      "sha256": "544d161a1a95c9d68f0c596ce52fdc4420abccc07ceabca74b5285641ba2e3e0",
+      "bytes": 12023,
+      "git_blob": "963bde58b43c1c3ca089513faf452d1f019ef9e6",
+      "role": "existing horse metadata compatibility reference, not rerun"
+    }
+  }
+}

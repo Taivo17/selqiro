@@ -1,56 +1,56 @@
-# Tavakuulutuste konto-oleku kontroll — üks järgmine käsk
+# Hobusekuulutuste konto-oleku kontroll — üks järgmine käsk
 
-23.11.2026 Europe/Tallinn. Avaliku profiili parandus main 8dc0b3b on vastu võetud.
-Uus pakett seob tavakuulutuste avaliku otsingu ja üksikvaate sama kontoolekuga.
+23.11.2026 Europe/Tallinn. Main **87bff3f** on vastu võetud. Uus pakett seob
+hobuste põhiotsingu ja avaliku üksikvaate sama kontoolekuga.
 
 ## Käivita uus pakett
 
-Paki `selqiro-kuulutuste-konto-olek-20261123.zip` Downloads-kaustas lahti. Kui kohalik Selqiro arendusserver
-on sinu terminalis töös, peata see oma aknas Ctrl+C-ga. Säilita olemasolevad failid,
-päevikud ja varasemad paketid.
+Paki `selqiro-hobuste-konto-olek-20261123.zip` Downloads-kaustas lahti. Kui kohalik Selqiro arendusserver
+on sinu terminalis töös, peata see oma aknas Ctrl+C-ga. Säilita olemasolevad
+failid, päevikud ja varasemad paketid.
 
 ```bash
-python3 -I -B "$HOME/Downloads/selqiro-kuulutuste-konto-olek-20261123/uuenda.py" --publish
+python3 -I -B "$HOME/Downloads/selqiro-hobuste-konto-olek-20261123/uuenda.py" --publish
 ```
 
-Uuendaja kontrollib tegelikku main 8dc0b3b, kõiki 2130 alusfaili, indeksit/tööpuud,
-kinnitatud remote’i, täpseid sõltuvusi ning eelmise eduka profiiliparanduse
-originaalraportit. Seejärel lisab ainult selle paketi failid, käivitab
-13 uut kliendikontrolli ning ühe värske build’i. Värskele SQL
-metaandmete eelseisule järgneb üks piiratud SQL tehing ja eraldi järelkontroll.
-Pärast seda commit’itakse ning push’itakse ainult selle paketi muudatused.
+Uuendaja kontrollib tegelikku main 87bff3f, kõiki 2154 alusfaili, indeksit/tööpuud,
+kinnitatud remote’i, täpseid sõltuvusi ja eelmise tavakuulutuste käigu originaali.
+Ta lisab ainult selle paketi failid, käivitab 12 uut kliendikontrolli
+ja ühe värske build’i. Seejärel kontrollib ta andmebaasi metaandmete eelseisu,
+rakendab ühe piiratud kahe lugeja SQL tehingu ja teeb eraldi järelkontrolli.
+Järgneb ainult selle paketi commit/push.
 
-Commit’i pealkiri: `Respect account availability in ordinary listing reads`.
+Commit’i pealkiri: `Respect account availability in public horse reads`.
 Tegelik räsi kuvatakse `Commit:` real ja raportis; seda ette ei oletata.
-SQL võib olla rakendatud enne hilisemat Giti peatumist. Raport eristab neid etappe;
-ebaselget kirjutust automaatselt ei korrata ega parandata käsitsi vana paigaldajaga.
+SQL võib olla rakendatud enne hilisemat Giti peatumist. Raport eristab etappe;
+ebaselget kirjutust ei korrata automaatselt ega käsitsi vana paigaldajaga.
 
 ## Saada täpne raport
 
-Uus privaatne koopia tehakse Downloads-kausta ja selle absoluutne asukoht
-kuvatakse real `SAADA SEE FAIL:`. Finder valib just selle faili. Koopia vea korral
-näidatakse kontrollitud originaali; Finderi vea korral jääb täpne tee terminali.
-Salvestustõrke järel on viimane säilinud raport märgitud võimalikuks aegunud
+Uus privaatne koopia tehakse Downloads-kausta. Absoluutne tee ilmub real
+`SAADA SEE FAIL:` ja Finder valib just selle faili. Koopia vea korral näidatakse
+kontrollitud originaali; Finderi vea korral jääb täpne tee terminali.
+Salvestustõrke järel märgitakse viimane säilinud raport võimalikuks aegunud
 tõendiks. Kui raportit ei loodud, saada `PEATATUD`-rida.
 
 ## Sama uue commit’i Ready / Production järel
 
 1. Värskenda portaali.
-2. Ava Kuulutused ja vali otsingust üks olemasolev tavakuulutus.
-3. Kontrolli pealkirja, hinda, müüjat ja pilte üksikvaates.
-4. Kontrolli sama lugemisteed eraisiku ja ettevõtte kontoga.
-5. Kontrolli, et olemasolevad avalikud profiilid ja Minu konto jäävad avatavaks.
+2. Ava Kuulutused, vali hobuste kategooria ja ava üks olemasolev avalik pakkumine.
+3. Kontrolli üksikvaate pealkirja, hinda, müüjat ja pilte; ava sama pakkumine ka profiilikaardilt.
+4. Ava üks olemasolev tavakuulutus otsingust.
+5. Kontrolli, et eraisiku ja ettevõtte avalikud profiilid ning Minu konto avanevad.
 
-Need on lugemiskontrollid. Konto sulgemine, kustutamine või uue konto loomine
-ei kuulu sellesse sammu. Kontode puudumise ja Auth-piirangute juhud kateti
-eraldi sünteetilise PostgreSQL-i kontrollidega.
+Need on olemasoleva sisu lugemiskontrollid. Kontode sulgemine/kustutamine ja uue
+konto loomine ei kuulu sellesse sammu. Puuduva ning piiratud konto juhud on
+kaetud eraldatud sünteetilise PostgreSQL-i katsetega.
 
-## Järgmine osa
+## Säiliv tööjärg
 
-Uus piir katab tavakuulutuste neli nimetatud lugejat. Hobuste haru, teenuste,
-tööde, legacy-lugemiste, sõnumite ja kirjutamise teed vajavad oma kontrolli enne
-konto sulgemise/taastamise/kustutamise tegevuse avamist. Varem väljastatud
-pildi-URL-e ega väliste teenuste salvestatud jagamise metadata’t ei tühistata.
-SMTP paus ning konto tervik → kuulutuste esiletõstmine → reklaamid järjekord säilivad.
+Profiili pakkumiste/rubriikide otselugejad, muud sisutüübid, kirjutused, sõnumid
+ja meedia vajavad oma kontrolli enne konto sulgemise/taastamise/kustutamise
+tegevust. Ühendatud laiotsingu kaartide koostamine enne lehekülge jääb eraldi
+optimeerimistööks enne suuremat kasutusmahtu. SMTP paus ning konto tervik
+→ esiletõstmine → reklaamid järjekord säilivad.
 
-Varasemaid lõpetatud paigaldajaid ja kontrollpakke ei korrata.
+Lõpetatud pakette, SQL-i ja laiu teste ei korrata.

@@ -1,0 +1,65 @@
+{
+  "format": "selqiro-account-horse-read-source-pins-v1",
+  "accepted_commit": "87bff3f51a01a6953c37096ed32a1017135fd304",
+  "accepted_tree": "a6f7b7522cd0e88db25caf88b8dd4e9a48c64d77",
+  "source_fragments": {
+    "public.search_public_marketplace_v1": {
+      "path": "supabase/releases/account-listing-read-fence-v1/search-marketplace.sql",
+      "file_sha256": "0b5fd2ef554418c4c56230e899ccce4ef56079cee5a5acb0ff191e11d5152d09",
+      "fragment_sha256": "db5ee9e4ada4d1e1b5b8a548387425ae44a7c0c355869d24696cb1a4e97a256a",
+      "body_sha256": "850e97f5281a05f310725eda36ca659c9df96a1ac5439ff1eeec7b74768f7aeb"
+    },
+    "public.get_public_horse_offer_v1": {
+      "path": "supabase/repairs/20261108_horse_publication/07_public.sql",
+      "file_sha256": "a7561dfc90514af190ce3a246e690a165285fee284b3853efff08849168ac353",
+      "fragment_sha256": "ed85953e901a719947c164011251e71d919c81be844af8cb1ac3d1668aa98561",
+      "body_sha256": "c9e69974c1b61b444506f16ae36552d6725b9f2f736908bde90d2ee30f841161"
+    },
+    "public.build_horse_offer_content_snapshot_v1": {
+      "path": "supabase/migrations/20260830170000_add_ee_horse_offer_foundation.sql",
+      "file_sha256": "7ed39b68732c27b5a21173b5ce01e8fa0264f57b6a72a079913539cb6a12fb67",
+      "fragment_sha256": "eef4b0d63b39aa283165534df361d1ba1c70bc733f17e9f541c92cc3e9fbaf2f",
+      "body_sha256": "1f70dfada3042811ec2b92238979aae30554cbfbac175f25cdc876536b69ab33"
+    },
+    "horse_publication_private.effective_active_until": {
+      "path": "supabase/repairs/20261108_horse_lifecycle/01_lifecycle_core.sql",
+      "file_sha256": "1fb33e3d2d5403ce599f43e96550c523d160e21b2fa2261f52979d971fc3d58b",
+      "fragment_sha256": "0fed5bf8c5c18d90056afaf3be89e0aaada080a2dbfbf753112137be9bfe1c06",
+      "body_sha256": "7de3b8e6b7aba131fa939f6fef01d55a75d54d9703a64bdb05b78586c5dcda88"
+    },
+    "horse_publication_private.has_current_publication": {
+      "path": "supabase/repairs/20261108_horse_lifecycle/01_lifecycle_core.sql",
+      "file_sha256": "1fb33e3d2d5403ce599f43e96550c523d160e21b2fa2261f52979d971fc3d58b",
+      "fragment_sha256": "079decdcf649b9675c9b922280b6309df3c8517c736246b815e49a6e5edb6ca6",
+      "body_sha256": "8a7a3db56f6cb997fd93d7955019e1453947490dcd5d97f324385b50c4c8ee0a"
+    },
+    "horse_publication_private.is_public": {
+      "path": "supabase/repairs/20261108_horse_lifecycle/01_lifecycle_core.sql",
+      "file_sha256": "1fb33e3d2d5403ce599f43e96550c523d160e21b2fa2261f52979d971fc3d58b",
+      "fragment_sha256": "35ab7adab726fa2382f2ae7d1a3b2b4957c91a7223f251b01ca38d4a44a0086c",
+      "body_sha256": "b8b05ff651e10027d069d4d4433dcac8f1482a9fd5ca5045e5b4d887fd717af6"
+    },
+    "horse_publication_private.public_price": {
+      "path": "supabase/repairs/20261108_horse_publication/07_public.sql",
+      "file_sha256": "a7561dfc90514af190ce3a246e690a165285fee284b3853efff08849168ac353",
+      "fragment_sha256": "00146d9bba07fb72f0569cfe0d296ea2b52d6074fb745933a233964b0cfba131",
+      "body_sha256": "7d583f1b8aafc963f2eab0e68140458eb92b74828ea0f871448e727ae6135d6a"
+    },
+    "horse_publication_private.public_fields": {
+      "path": "supabase/repairs/20261108_horse_publication/07_public.sql",
+      "file_sha256": "a7561dfc90514af190ce3a246e690a165285fee284b3853efff08849168ac353",
+      "fragment_sha256": "3f73918c0db1613437968ebfae956500b9c95c6ca026829da84c28d4ef843c3c",
+      "body_sha256": "7ee9930b2efa23c4a170cdf0b6214f6fd134f3a765f9d04dee8fbc9a19ae0462"
+    }
+  },
+  "accepted_listing_contract_sha256": "4cccc5b51bada73a9329e5398c64d98d458fc5fb3e6c09625ebecd93592a3788",
+  "preservation": {
+    "ordinary_and_preamble_sha256": "5285fbc9249adea5bf9e37c55d8e92d163c2bfcc2633ae5e30ff180178027881",
+    "shared_matched_count_page_tail_sha256": "024e67c702ada753bdb3745aa16081337c0ea9bae993876bbf6f7562cf7547c0"
+  },
+  "prior_actual_metadata": "Account/profile/listing base and three ordinary reader metadata equal the accepted before/after contract; combined before metadata equals its accepted after target.",
+  "horse_metadata": "Two horse reader and six dependency properties, owners and ACLs, six relevant relations, selected columns/indexes are source-derived expectations compiled in synthetic PostgreSQL. Fresh exact Mac preflight is required; this is not production installation evidence.",
+  "fixture_boundary": "Real retained is_public, has_current_publication, effective expiry, content snapshot, public price and fields; real horse/event/image/gallery/web schemas. Minimal referenced attempt/policy tables seed consistent read facts only; writer/Storage/HTTP/policy acceptance flows are not simulated.",
+  "metadata_sha256": "6fb943323f7f7cd928ad2503e6f90ac56c3e3d79dcdb7fc55a4f861759f4c600",
+  "no_live_observation": true
+}

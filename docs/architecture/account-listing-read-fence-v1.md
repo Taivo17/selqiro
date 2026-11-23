@@ -1,3 +1,9 @@
+# Rakendatud ja vastu võetud — 23.11.2026
+
+Commit 87bff3f: üks SQL rakendamine, eraldi verify, testid/build ja push. Sama commit’i Ready / Production ning lehtede avanemine on kasutaja kinnitatud. Täpne vastuvõtt: account-listing-read-accepted-20261123.md. Allpool säilib selle mooduli varasem ettevalmistus; selle ootel-kirjed on ajalugu.
+
+---
+
 # Tavakuulutuste avaliku lugemise konto-oleku piir v1
 
 23.11.2026 Europe/Tallinn. Ette valmistatud vastu võetud commit’i `8dc0b3b11777b010c8486b45a3f98f0191d97d80`

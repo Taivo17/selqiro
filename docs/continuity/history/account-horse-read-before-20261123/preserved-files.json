@@ -1,0 +1,20 @@
+{
+  "docs/continuity/CURRENT_STATE.json": {
+    "copy": "docs/continuity/history/account-horse-read-before-20261123/docs/continuity/CURRENT_STATE.json",
+    "bytes": 8375,
+    "sha256": "2d5141eaa968a13dfc2af2956cd871f3d0cb3b5d1c6230e9243ddc2d968a139c",
+    "origin": "Accepted 87bff3f documentation prepared here, not a later Mac write"
+  },
+  "docs/99_V2_HANDOFF_NEXT_CHAT.md": {
+    "copy": "docs/continuity/history/account-horse-read-before-20261123/docs/99_V2_HANDOFF_NEXT_CHAT.md",
+    "bytes": 8496,
+    "sha256": "bf6f8ac7219cc0ebee9242528bdde5eaacb72d22604bf4d24971e050ab04a98a",
+    "origin": "Accepted 87bff3f documentation prepared here, not a later Mac write"
+  },
+  "docs/continuity/HOSTED_PORTAL.md": {
+    "copy": "docs/continuity/history/account-horse-read-before-20261123/docs/continuity/HOSTED_PORTAL.md",
+    "bytes": 1559,
+    "sha256": "e4ca0fb10e70bec3e9e014de4291b0cc15316a61e877b7db1727327d06c96365",
+    "origin": "Accepted 87bff3f documentation prepared here, not a later Mac write"
+  }
+}

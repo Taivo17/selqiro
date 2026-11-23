@@ -1,0 +1,17 @@
+{
+  "docs/continuity/CURRENT_STATE.json": {
+    "copy": "docs/continuity/history/account-listing-read-accepted-base-87bff3f-20261123/docs/continuity/CURRENT_STATE.json",
+    "bytes": 9449,
+    "sha256": "7b7b8cb5b1131cb411a1712da95a83372eb1f340283a86ac58127d95529b2b4e"
+  },
+  "docs/99_V2_HANDOFF_NEXT_CHAT.md": {
+    "copy": "docs/continuity/history/account-listing-read-accepted-base-87bff3f-20261123/docs/99_V2_HANDOFF_NEXT_CHAT.md",
+    "bytes": 9555,
+    "sha256": "c6471ba1655db514eef2440caf737d446db2e68eb4e8389d0491e0c260e5086e"
+  },
+  "docs/continuity/HOSTED_PORTAL.md": {
+    "copy": "docs/continuity/history/account-listing-read-accepted-base-87bff3f-20261123/docs/continuity/HOSTED_PORTAL.md",
+    "bytes": 2842,
+    "sha256": "92289910bb69f6eed2406f32f4f57bd46d63101e77a838b4bfd4ddcd66d053b3"
+  }
+}

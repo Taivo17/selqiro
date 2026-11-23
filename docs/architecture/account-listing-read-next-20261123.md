@@ -1,3 +1,9 @@
+# Rakendatud ja vastu võetud — 23.11.2026
+
+Commit 87bff3f: üks SQL rakendamine, eraldi verify, testid/build ja push. Sama commit’i Ready / Production ning lehtede avanemine on kasutaja kinnitatud. Täpne vastuvõtt: account-listing-read-accepted-20261123.md. Allpool säilib selle mooduli varasem ettevalmistus; selle ootel-kirjed on ajalugu.
+
+---
+
 # Kavandi teostus on ette valmistatud
 
 23.11.2026. Selle nelja lugeja moodul ja sihitud kontrollid on nüüd ette valmistatud. Kehtiv teostusleping on `account-listing-read-fence-v1.md`; Maci/SQL/Verceli sammud on ootel. Allpool säilib varasem kavand.

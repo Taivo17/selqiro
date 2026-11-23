@@ -9804,3 +9804,56 @@ sulgemise/taastamise/kustutamise käsk ootab ülejäänud vajalikke serveriteid.
 SMTP paus ning konto tervik → esiletõstmine → reklaamid järjekord säilivad.
 Täpsed piirid on docs/architecture/account-listing-read-fence-v1.md-s;
 ainus praegune käivituskäsk on CURRENT_STATE.json-st genereeritud juhendis.
+
+## 23.11.2026 — tavakuulutuste konto-oleku kontroll vastu võetud (87bff3f)
+
+Maci raport `selqiro-kuulutuste-konto-olek-20261123-raport-20261123-202738-2e4bf1222037.json`, SHA256 `1771fc501d411e71f45bb63a098a62abe47d6b33612782b6b30b11a7e65e8b95`, kinnitab ühe 13/13 TAP-käigu,
+eduka Next16.4.6 build’i, ühe SQL rakendamise, eraldi verify ning commit/push’i.
+Commit `87bff3f51a01a6953c37096ed32a1017135fd304`, puu `a6f7b7522cd0e88db25caf88b8dd4e9a48c64d77`, 2154 faili. Täpselt 32 paketi rada: 8 muudetud
+ja 24 uut. Viimane remote’i võrdsus 20:27:38.314 Europe/Tallinn; lõpppuu/index puhas.
+Kõik 569 käsukirjet on lõpetatud; varasemad päevikud ja raport säilisid.
+
+Sama commit’i Ready / Production on kasutaja pildil ning kasutaja kinnitas
+„kõik lehed avanevad”. Raporti READY_NOT_CHECKED säilib; pilt on eraldi tõend.
+Kasutajakinnitust ei laiendata eraldi mobiili, anonüümse seansi ega kõigi nuppude
+kontrolliks. TAP/build toorlogid pole eksporditud; parsitud tulemused ja räsid on
+kontrollitud. Kolm SQL kviitungi ümbrist taastati täpse pikkuse/räsiga ning parsiti.
+Terviklikku kataloogi toorväljundit raport ei sisalda. Uusi teste või teenusepäringuid ei tehtud.
+
+Kolme tavakuulutuse otsingulugeja ja üksikvaate kontooleku piir on rakendatud.
+Konto- ega sisuridu paigaldusega ei muudetud. Järgmine väike moodul: ühendatud
+otsingu horses haru ning get_public_horse_offer_v1 sama privaatse helperiga.
+Allikad ja sihitud kontrollid on docs/architecture/account-horse-read-next-20261123.md-s.
+Ühendatud laiotsingu 4,25/4,72 s sünteetiline tulemus jääb eraldi optimeerimistööks
+enne suuremat kasutusmahtu. Konto tervikule järgnevad esiletõstmine ja reklaamid.
+
+Need dokumendilisad on 87bff3f-järgne ettevalmistus järgmise koodipaketi jaoks;
+Maci dokumente pole siit uuesti kirjutatud ega pushitud. Lõpetatud paketti ei korrata.
+
+## 23.11.2026 — hobuste konto-oleku kontroll ette valmistatud (alus 87bff3f)
+
+Tavakuulutuste kontooleku etapp on Maci raporti, sama commit’i Ready / Production
+ning kasutaja „kõik lehed avanevad” kinnitusega vastu võetud. Alus `87bff3f51a01a6953c37096ed32a1017135fd304`,
+puu `a6f7b7522cd0e88db25caf88b8dd4e9a48c64d77`, 2154 faili. Vastu võetud seisu dokumendid kaasatakse sellesse paketti.
+
+Uus moodul lisab sama kontooleku kontrolli search_public_marketplace_v1 horses
+harusse ja get_public_horse_offer_v1 üksikvaatesse. Ordinary haru ja ühine
+lehekülje/count/JSON osa säilivad. Konto helper, avaldamise lõplikkus, hinnad,
+pildid, tähtajad ning omaniku/avaldaja eristus säilivad. Kontode ega sisu ridu ei muudeta.
+
+12/12 uut kliendi, range parseri, anonüümse jagamismetadata ja Reacti serverrenderduse kontrolli läbisid. Kontrolliti päris rakenduskoodi sünteetiliste vastuste ja hook-olekutega; 42 lähte-/abifaili räsi säilisid. Null-vastus, päringuviga, segatud loendi järjekord/leheküljed, hind, pildid ja avalikud lingid on eraldi kaetud. See ei ole brauseri ega päris teenuse kontroll.
+
+56/56 uut native PostgreSQL 17.6 kontrolli läbisid. Tegelikud konto-, avaldamis-, sisu- ja galeriilõplikkuse funktsioonid töötasid sünteetiliste andmetega. Kontroll hõlmab viis pakkumisliiki, omanikuseoseid, puuduvaid/piiratud kontosid, blokeerimist, peitmist, tähtaegu, vigaseid avaldamisfakte, segatud koguarve/lehekülgi, õigusi ning ühe kaitstud SQL rakendamise ja eraldi verify tulemust. Testitud 9 SQL/lepingu sisendi ja 54 toetava sisendi räsid säilivad; oma klaster on peatatud. Live-andmebaasi eelseis tuleb Macis värskelt kinnitada.
+
+Vana/uue päringu võrdlus kasutas 2400 avaldamise lugemiskontrolli läbivat sünteetilist hobust, 1920 pilti ja 600 tavakuulutust: kõik 12 võrdlusjuhtu andsid samad aktiivsete kontode tulemused. Iga versiooni kohta mõõdeti 3 soojendatud päringut. Veel 20 000 kõrvalise konto lisamisel säilisid 5 valitud juhu tulemused ja konto helperi kutsete arvud 5/3/300/1/1. Segatud laiotsingu mediaan oli 2804,52 → 2954,86 ms (+5,36%, mõõtevahemikud kattusid); hobuste laiotsing 2775,87 → 2549,83 ms. Ühe omaniku 1600 vaste puhul oli 1600 kontrolli; ühe korra kontrollimist konto kohta ei lubata. 43 mõõtmise sisendpin’i jäid muutmata; neli setup’i loetud baas-release’i faili kontrolliti lisaks aktsepteeritud inventari vastu, neid ei lisatud tagantjärele mõõtmise pin’ide hulka. 52 811 päris pesastatud plaani säilivad kadudeta gzip’is ning 27 sisemist lugejaplaani eraldi. Need ühe kliendi kohalikud mõõtmised ei tõenda tootmiskoormust: laiotsingu avaldamiskontrollid, kaartide koostamine enne lehekülge ja hobuste FTS vajavad eraldi optimeerimist enne suuremat kasutusmahtu.
+
+Uus täielik Next.js 16.4.6 / TypeScripti build läbis 32,45 sekundiga. Kõik 765 build’i sisendit säilisid; package.json, lukufail, sõltuvused ja rakenduskood on muutmata. Kasutati olemasolevaid täpseid sõltuvusi ja inertseid kohalikke koostamisseadeid. Valmis /v2/products, /v2/horse-offer/[id] ning /v2/profile/[slug] väljundid.
+
+17/17 uut Maci uuendaja sihitud juhtumit läbisid 17,571 sekundiga. Ajutine Git/kohtvõrgu remote ja piiratud alamprotsessid olid tegelikud; runtime-proov, CLI, SQL ning rakenduse build’i tulemused neis runner’i juhtudes sünteetilised. Kontrolliti täpset 2154-failist alust, tundmatu seisu peatumist, ühe SQL kirjutuse ning ebaselge vastuse järel ainult lugemisega taastumise lepingut, täpset commit/push’i ja raporti säilimist. Kõik 17 runtime-faili vastavad testi pin’idele; seitse varasemat helperit säilivad baiditäpselt. See ei ole uus Maci käivitus.
+
+Kasutaja Maci käivitus, üks SQL muudatus, commit/push, sama uue versiooni
+Ready / Production ja tegelik brauseri lugemiskontroll on ootel. Paigaldusjuhis
+on docs/continuity/HOSTED_PORTAL.md-s; põhjalik leping on
+docs/architecture/account-horse-read-fence-v1.md-s. Konto sulgemise tervik,
+profiili pakkumiste otselugejad, muud sisutüübid, kirjutused, sõnumid ja pilditeed
+vajavad lõpetamist. Konto tervik → esiletõstmine → reklaamid ning SMTP paus säilivad.
