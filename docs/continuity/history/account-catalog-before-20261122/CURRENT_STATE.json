@@ -1,0 +1,49 @@
+{
+  "format": "selqiro_repo_handoff_v1",
+  "recorded_on": "22.11.2026 Europe/Tallinn — konto lihtne mudel täpsustatud; registreerimise ettevalmistus taastatud, paigaldus pausil",
+  "archive": {
+    "lines": 5573,
+    "path": "docs/archive/99_V2_HANDOFF_NEXT_CHAT.before-price-core-20261004-6df0af9.md",
+    "sha256": "667e47990a7d3cc20ff53709cb861663b4565cf1d3c830eda88e0d18e60fdb8a"
+  },
+  "checkpoint": "Kasutaja kinnitas ühe konto ja ühe valitud eraisiku või ettevõtte profiili avamismudeli. 21.11 registreerimise ettevalmistus on taastatud ning selle 49-faililine delta võrreldud 034211d alusega. See jääb paigaldamata. Konto loomise, sulgemise ja taastamise ühine leping on täpsustatud; ettevõtte liikmete/omaniku üleandmise ning mitme identiteedi mõju eelvaade ei ole esimene töö. Konto elutsükli runtime'i pole rakendatud.",
+  "source": {
+    "Vastu võetud alus": "main 034211d2ee3dfadd4ba791977c98e310754e4d94, parent 78aea6f6d7c57aee47a29cd0e8b29c9c4e862561. Raporti ja väljastatud täpse 21-faililise delta järgi tuletatud puu 03768a7e12d1aeb4ff7402d3102800071920df0e, 2047 jälgitavat faili. Kõik kohalikult taastatud failid vastavad inventarile.",
+    "Maci tõend": "selqiro-too-lugemisluku-parandus-20261122-raport-20261122-191313-bbadc41bced5.json, 333025 baiti, SHA256 90c85b1426d40e96537af482e802b2cc49c18c618ef568ae9114b20728da8920. Käik 22.11.2026 19:12:07–19:13:13 Europe/Tallinn. stage complete, database verified, build passed, push verified; eelmine originaalraport säilis.",
+    "Brauseri tõend": "Ready / Production on kasutaja kuvatõmmise, mitte Verceli API järgi. Taivo Garaaz vaates on Otsin lume lükkajat täna olekuga Suletud; Milline Vedu vaates Muruniiduki operaator olekuga Aktiivne. Eraisiku/ettevõtte eristus põhineb kasutaja kinnitusel. Uut sõnumite, telefoni ega koormuse läbimängimist ei väideta.",
+    "Piiratud parandus": "Muudetud on ainult get_my_jobs_v1 keha ja STABLE omadus. Tööloendi õiguste kontroll ja sisu kasutavad päringu alguse ühtset andmeseisu. Jagatud kirjutamiskontrollid, nende lukud, kliendi üks lisakatse, vastuse leping ja kasutajaandmed säilivad.",
+    "Registreerimise ettevalmistus": "selqiro-eposti-ettevalmistus-20261121.zip, 7323153 baiti, SHA256 7d54275c1b868e04f220ba0c8bbcc7ca75ce6093fea6de9b51e88bb116bd03bc. Alus cd35d18; 48 uut faili ja app/auth/page.tsx asendus. Uued teed puuduvad 034211d-st ning auth-leht vastab eelseisule. Ühised kontrollitud sõltuvused säilivad.",
+    "Tegelik mudel": "Ettevalmistatud complete_my_first_profile_v1 loob ühe valitud algprofiili konto auth.uid() järgi ning säilitab korduskatsetel olemasoleva. Ettevõtte sisemised omanikuseosed jäävad õiguskontrollide jaoks; nende haldusvaadet ei lisata. Sulgemisoleku kontroll tuleb hiljem siduda sama loomisteega.",
+    "Ulatus ja paus": "Sisselogimise/registreerimise paigaldus ning SMTP/Confirm email jäävad selqiro.com etappi enne väliseid kasutajaid. Konto sulgemise arendus ei eelda selle etapi varasemat avaldamist, kuid peab järgima sama konto/profiili lepingut.",
+    "Varasema auditi kasutus": "Andmeseoste, piltide, sõnumite ja Energy tervikluse leiud säilivad. Ettevõtte rollide ja mitme identiteedi kasutajaeelvaate prioriteet on asendatud lihtsa kontomudeli lepinguga; algsed dokumendid on history-s muutmata.",
+    "Dokumentide seis": "Seisukirje, sellest genereeritud üleandmine, püsiva mälu ja päeviku lisad ning täpsustatud arhitektuur on uus kumulatiivne dokumentide delta. Maci/Giti kirjutust, commit/push'i, SQL-i ega deployment'i pole selles sammus tehtud. Väljastatud pakid jäävad muutmata."
+  },
+  "local_test": [
+    "Loetud täpne ajalooline arhiiv, kontrollitud 49 muudatusfaili räsid, uute teede puudumine, auth-lehe eelseis ning kuue ühise sõltuvusfaili baidid. See on lähte- ja dokumentide võrdlus, mitte ühendatud rakenduse katse.",
+    "Arhiivis olevad 27 rakenduse/kirjamalli testi, 17 eraldatud PGlite juhtu ning Next/TypeScript build on ajaloolised tõendid. Brauser ja päris kirjad jäid tookord kontrollimata; teste siin ei korratud.",
+    "Uue dokumentide delta, append-only mälu/päeviku, ajaloo säilimise ja genereeritud üleandmise kooskõla kontrolliti. Rakenduse runtime'i, SQL-i, build'i või brauserit ei käivitatud."
+  ],
+  "production": [
+    "Vastu võetud Production säilib main 034211d: Maci raport, sama commit'i Ready / Production pilt ning kasutaja eraisiku/ettevõtte tööloendi kontroll on vastu võetud.",
+    "Uue registreerimise, konto sulgemise/taastamise, SMTP või kinnituskirjade paigaldust ei ole. Kasutaja andmed ja teenuseseadistus jäid muutmata; uut pilvevaatlust ei tehtud."
+  ],
+  "next_action": "Valmista ette ühe konto elutsükli ühisele lepingule vastav piiratud ainult kataloogi lugev diagnostika: konto ja algprofiili loomistee, konto/profiili seosed ning nende otsesed õiguste/FK/trigger-sõltuvused. Taastatud registreerimine on lepingu sisend, selle paigaldust ei alustata. Ära tee sellest ettevõtte liikmete või mitme identiteedi haldusmoodulit. Ulatus on account-model-lifecycle-20261122.md-s. Praegune pakk on dokumentide jätkuseis; terminalikäsku pole.",
+  "stop_rule": "034211d valmis parandust ei korrata. Enne uusi Maci kirjutusi vaadatakse värskelt haru, HEAD, tööpuu/index, lähtefailid ja remote. Tundmatu skeem või piiratud katvus on selgesõnaline teadmata tulemus, mitte null ega kustutusluba. Olemasolevate kontode, sisu, piltide, vestluste või päevikute kustutamisluba puudub.",
+  "read_next": [
+    "docs/architecture/account-model-lifecycle-20261122.md — kasutaja täpsustatud kontomudel, taastatud ettevalmistus ja järgmise kontrolli piir.",
+    "evidence/onboarding-comparison.json — täpne arhiiv ja 49-faililise delta võrdlus; ajaloolised tõendid on eraldi märgitud.",
+    "docs/continuity/HOSTED_PORTAL.md — kontoelutsükli uus tööjärg; auth/SMTP paigaldus jääb pausile."
+  ],
+  "boundaries": [
+    "Kolm kontot kuuluvad kasutajale; ainult ühel on kaks identiteeti. Uus konto valib eraisiku VÕI ettevõtte. Mitme identiteedi ning ettevõtte töötajate/rollide/omandi üleandmise iseteenindus ei ole avamisulatus.",
+    "Olemasolevaid kontosid, profiile, pakkumisi, pilte, vestlusi, Energy andmeid, kviitungeid ega päevikuid ei kustutata, liideta ega kirjutata ümber. Sisemised õiguskontrollid ja omandiseosed säilivad.",
+    "E-posti aktiveerimine jääb põhidomeeni selqiro.com kasutuselevõtu juurde. Saatmine, kinnitamine ja parooli taastamine peavad olema lõpuni kontrollitud enne väliseid testijaid või avalikku registreerimist ka vercel.app aadressil.",
+    "Kasutajale kuuluvad ka selqiro.app/.io ja selkiro.com/.app/.io. Domeeni valikut uuesti ei küsita; DNS-i selles sammus ei muudeta.",
+    "AI päringuteed jäävad suletuks. Tavaline osalemine ei sõltu Energy ostust. Riigipõhised töökuulutuse poliitikad ja senised avaldamise/vestluse lepingud säilivad."
+  ],
+  "environment": [
+    "Olemasolev /Users/taivo/selqiro ning Taivo17/selqiro remote. Viimane vastu võetud commit on 034211d2ee3dfadd4ba791977c98e310754e4d94. Raport kinnitab selle käigu puhta ja push’itud lõppseisu; hilisemat värsket Maci vaatlust pole tehtud.",
+    "Next 16.4.6, Sharp 0.35.5 ning package.json/package-lock.json on samad. Olemasolev kinnitatud Supabase CLI kasutati ühe piiratud SQL-paranduse jaoks; uut ühendamist ega paigaldamist pole vaja.",
+    "Lõpetatud originaalpäevik: /Users/taivo/Library/Application Support/Selqiro/job-owner-read-lock-20261122/e723754747c36cef7a62f4d1c7145e3f254a33ae48609f0f192bbd98139127aa/result.json. Hoida muutmata."
+  ]
+}

@@ -1,0 +1,147 @@
+{
+  "report_sha256": "9bd1e79598711cf3f0e6af48239c81dc9d7080922aa184ad64763ae74da691e4",
+  "base": {
+    "actor_functions": [
+      {
+        "signature": "auth.uid()",
+        "body_sha256": "9ab5ea099e74ec09e83b1505c51a3647791195aed7c742dcc3f257dfc7d2f300",
+        "definition_sha256": "7c1ff2ecbe653c9358b3115a2607db9573f88a2944ae4eca9e296a89cc5186a7",
+        "config_sha256": null,
+        "owner": "supabase_auth_admin"
+      },
+      {
+        "signature": "listing_publication_private.require_actor(uuid,uuid)",
+        "body_sha256": "9a86e4ca817793a77420dfc2e74d9e2df18298436638a7bf241428fca2c9a3f0",
+        "definition_sha256": "6ef892a8a4bd1f80224bd61e40b61eaf3e4c014853a72703088922de8dd91a69",
+        "config_sha256": "a983dc37b42030987a873720dfdd7abc6aedb3d4b2f64c7cd5dd68adfc8158d0",
+        "owner": "postgres"
+      },
+      {
+        "signature": "profile_editor_private.touch_revision()",
+        "body_sha256": "7db83fbd1e0cae0d5f997df4470903a7ddefce15177ca2bb8731cc0920fae03a",
+        "definition_sha256": "1fe60ef3851ed8ca9d9859436f4ce8d0aaef7647385c47fadfe513dc5887c1a3",
+        "config_sha256": "0e5c5deb67bdf8a0f1c087edd287aeab8d3ca04e5548a7679dd526aad7d8d491",
+        "owner": "postgres"
+      },
+      {
+        "signature": "public.current_user_has_identity_access(uuid)",
+        "body_sha256": "b708d7abdfac00c7341979f4ff6dfae2ab2bfb55d311f27c7cc2935167224027",
+        "definition_sha256": "7abc16984c11888b82a816d1de9a2fa83edd7e2516c4a906c98a61433777d68d",
+        "config_sha256": "dea4cee856bd28f242d5772a4e469a64836a0e8cbde23a167c7eb9f39f70835b",
+        "owner": "postgres"
+      },
+      {
+        "signature": "public.get_my_identities()",
+        "body_sha256": "958857777e1ef23101200b8425402560f543415cd52be22c2365aa5fceedd058",
+        "definition_sha256": "4dce8ba8ee855a770770a939379f6acecb2ee58b34fa348bcba71d5c46a85505",
+        "config_sha256": "a90d5406c7d8f6b00e8de7e96010c8d845fbd78bf3325ddb6931ef9c21a2dd90",
+        "owner": "postgres"
+      },
+      {
+        "signature": "public.is_business_member(uuid)",
+        "body_sha256": "86edbe18df1d369effc9f2dc62e6990066f6ddd548eae86889ef8a7be9f2905f",
+        "definition_sha256": "19ee8712081060eb5d9b49e24bb902b6f1bc5d3f9817ea382b450d172834f007",
+        "config_sha256": "a90d5406c7d8f6b00e8de7e96010c8d845fbd78bf3325ddb6931ef9c21a2dd90",
+        "owner": "postgres"
+      },
+      {
+        "signature": "public.listing_actor_uid_hosted_v1()",
+        "body_sha256": "ff7f6ce615280095930c983468c5ce5a6c3982bc4f540e4929bb0baf904ce88d",
+        "definition_sha256": "1aced17f656a8fdb366dfe22cbb53ca53f8e281cc3c6fc8aeb6bccb3ad409770",
+        "config_sha256": "8a99ef30e82bf63f97a0f2bb54e5484d1b27779ff3d93cad1079c2934c2485a6",
+        "owner": "postgres"
+      },
+      {
+        "signature": "public.lock_listing_creation_actor_v1(uuid)",
+        "body_sha256": "45c3cd15d8181606e839e83978b114bced5dd5480781a956ed40d96cd62802d8",
+        "definition_sha256": "805a65d73b1d4793e2947085de42f294cc46b13cb1e08c66d3e83c9f6cffa5f3",
+        "config_sha256": "a983dc37b42030987a873720dfdd7abc6aedb3d4b2f64c7cd5dd68adfc8158d0",
+        "owner": "postgres"
+      },
+      {
+        "signature": "public.set_my_active_identity_v2(uuid)",
+        "body_sha256": "9493e0427377720df04ec6c62453cfb0078c1af7da305a300838e62154236f05",
+        "definition_sha256": "97ea3d3313c47b5d810191a7270dc6e9c000d1ca598186aa2448968e70b586d9",
+        "config_sha256": "dea4cee856bd28f242d5772a4e469a64836a0e8cbde23a167c7eb9f39f70835b",
+        "owner": "postgres"
+      },
+      {
+        "signature": "public.user_has_identity_access_v2(uuid,uuid)",
+        "body_sha256": "ca826150be8e420b0863074f2d274087bd91310365219ad034d506de42c00024",
+        "definition_sha256": "6881d050cf6f671cb065d9f4cce9f221ac815c08b9521258bd11697c973aa771",
+        "config_sha256": "dea4cee856bd28f242d5772a4e469a64836a0e8cbde23a167c7eb9f39f70835b",
+        "owner": "postgres"
+      },
+      {
+        "signature": "public.validate_profile_active_identity_v2()",
+        "body_sha256": "70ab65a9506a99fc28229b4a101dfa53b780cde0b517876ca4aaae662b6ca303",
+        "definition_sha256": "6962c783b6dff7625082b0b1f03e07676ecdcf73b2b051ecbb30cb852ecbbb1e",
+        "config_sha256": "dea4cee856bd28f242d5772a4e469a64836a0e8cbde23a167c7eb9f39f70835b",
+        "owner": "postgres"
+      }
+    ],
+    "auth_columns": [
+      {
+        "name": "banned_until",
+        "type": "timestamp with time zone",
+        "not_null": false,
+        "default_sha256": null
+      },
+      {
+        "name": "created_at",
+        "type": "timestamp with time zone",
+        "not_null": false,
+        "default_sha256": null
+      },
+      {
+        "name": "deleted_at",
+        "type": "timestamp with time zone",
+        "not_null": false,
+        "default_sha256": null
+      },
+      {
+        "name": "id",
+        "type": "uuid",
+        "not_null": true,
+        "default_sha256": null
+      }
+    ],
+    "auth_owner": "supabase_auth_admin",
+    "auth_kind": "r",
+    "auth_rls": true,
+    "auth_primary_key": [
+      "id"
+    ],
+    "protected_triggers": [
+      {
+        "argument_count": 0,
+        "arguments_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "definition_sha256": "e8698246ec4f23cf0db0c0e7b6a48eb7942e4e26fe3b38be5060879fbeced005",
+        "enabled": "O",
+        "event_mask": 19,
+        "function": "profile_editor_private.touch_revision()",
+        "name": "profile_editor_revision_before_update",
+        "relation": "public.identity_profiles",
+        "when_sha256": null
+      },
+      {
+        "argument_count": 0,
+        "arguments_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "definition_sha256": "e3048ca4106a608004f51286bec949d08223c574b498da8cd6d00a4065c88e7b",
+        "enabled": "O",
+        "event_mask": 19,
+        "function": "public.validate_profile_active_identity_v2()",
+        "name": "validate_profile_active_identity_before_write",
+        "relation": "public.profiles",
+        "when_sha256": null
+      }
+    ],
+    "roles": [
+      "anon",
+      "authenticated",
+      "service_role"
+    ],
+    "observer": "postgres",
+    "auth_privileges": true
+  }
+}

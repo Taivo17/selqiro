@@ -7919,3 +7919,70 @@ kehtivat tähtaega, avalda peatatud/lõpetatud tööd ega muuda otsingujärjestu
 aluseks olevat avaldamisaega. Täpne leping on
 `docs/architecture/jobs-public-v1.md`; tegelik rakendamise ja vastuvõtu
 seis jääb `docs/continuity/CURRENT_STATE.json`-i.
+
+
+## 2026-11-22 — Konto loomise ja sulgemise lihtne ühine mudel
+
+Kasutaja täpsustab varasemat avamisotsust: uus konto valib eraisiku VÕI ettevõtte
+profiili; mitme identiteedi haldamine ja ettevõtte liikmete/rollide/omaniku üleandmise
+iseteenindus ei ole avamisulatus. Kolm olemasolevat kontot kuuluvad kasutajale;
+ainult ühel on kaks identiteeti. Need andmed ja sisemised õigusseosed säilivad.
+Taastatud 21.11 e-posti/registreerimise ettevalmistus loob ühe algprofiili;
+48 uut faili ja auth-lehe asendus on 034211d aluses endiselt rakendamata.
+Sisselogimise lahenduse paigaldamine ja SMTP/Confirm email jäävad domeenietappi
+enne väliseid kasutajaid. Konto elutsükli arendus järgib sama konto/profiili piiri;
+algprofiili loomine ei tohi hiljem avada sulgemisel kontot või tekitada duplikaati.
+Praegune ühine leping: docs/architecture/account-model-lifecycle-20261122.md.
+Varem kavandatud ettevõtteõiguste/mitme identiteedi eelvaade ei määra järgmist tööd.
+
+
+## 2026-11-22 — Pärast konto elutsüklit esiletõstmine ja reklaamid
+
+Kasutaja palus lihtsa kontomudeli kontoelutsükli tööga jätkata ning soovis
+pärast seda kuulutuste esiletõstmist ja reklaamide lisamist. Järjekord:
+konto sulgemise/taastamise/kustutamise tervik → olemasolevate pakkumiste
+esiletõstmise väike tervik → välisreklaamide esimene teekond varasema
+advertising-access-plan.md järgi. Konto metaandmekontroll on ettevalmistus,
+mitte konto sulgemise funktsiooni valmimine. Reklaamija avalik müüjaprofiil
+on valikuline; sama konto elutsükli haldus peab töötama ka ilma selleta.
+Sisselogimise/SMTP kokkulepitud paus ning avamiseelsed kontrollid säilivad.
+
+## 22.11.2026 — tegelik konto aluse vaatlus ja oleku vundament
+
+Kataloogi raport 20261122-215849-e724cd8c7e46 on vastu võetud: puhas 034211d,
+muutumatu kohalik seis, üks ainult lugemise päring ning kõigi 11 funktsiooni
+lähtekoodi täpne vaste. Lõpetatud diagnostikat ei korrata.
+
+Ette valmistatud on profiilist sõltumatu Minu konto vaade ja privaatne
+aktiivse oleku rida Auth konto kohta. Üks kitsas lugemise RPC; Auth INSERT-trigger
+ja algtäide ühes tehingus; puuduv rida annab vea. Auth konto otsest kustutamist
+takistab olekurea ON DELETE RESTRICT. Active-only vundament ei ole veel
+sulgemise, taastamise ega lõppkustutamise teostus.
+
+Uue paketi allikad ja kumulatiivsed dokumendid lähevad Maci eraldi kontrollitud
+uuendajaga; praegune ettevalmistus ei tõenda selle rakendamist või Productionit.
+Sisselogimise/SMTP paus, üks valitav eraisiku või ettevõtte algprofiil ja
+olemasoleva kolme konto andmete säilitamine jäävad jõusse.
+
+## 23.11.2026 — konto oleku esimese paigalduse STOP ja eraldi jätk
+
+60 v1 faili jõudsid Maci, 20 testi läbisid; build'i käivitusprotsessi exit 0 järel
+peatus protsessi lõppkoristuse kinnitus. Vana raport ega unconfirmed-märge
+ei muutu hiljem vaikimisi PASS-iks. SQL, staging, commit/push ei alanud.
+
+Jätk kasutab uut päevikut ja vana täpset raportit/testilogi ainult lugemiseks.
+Rakenduse/SQL-i allikad säilivad; 20 testi tulemus seotakse sama lähtekoodiga
+ilma korduskäiguta. Salvestamata build'i tõend vajab üht uut kontrollitud build'i.
+Konkreetset errno-t ega PID-d algsest raportist ei tuletata.
+
+## 23.11.2026 — esimese kontooleku jätku UID-STOP ja r2
+
+Esimene jätk kinnitas v1 60 faili, indeksi, originaalraportid ja sõltuvused ning
+kasutas 20 testi tõendit. Enne kirjutusi peatus Maci ps UID-skoobi kontroll.
+-U reaalse UID valikut ei võrrelda efektiivse uid väljaga; r2 loeb mõlemad.
+Vana peatumine säilib ja konkreetset ps-toorväljundis olnud protsessi ei oletata.
+
+R2 on eraldi pakett/päevik, mis hoiab ka esimese jätku STOP-originaali ainult
+lugemiseks. Algallikaks jääb v1 60 faili, mitte esimese jätku rakendamata docs.
+Üks uus build ja seni alustamata SQL-etapp on endiselt ees. Rakendus/SQL,
+e-posti paus ning konto → esiletõstmise → reklaamide tööjärg säilivad.

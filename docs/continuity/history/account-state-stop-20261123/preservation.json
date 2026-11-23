@@ -1,0 +1,24 @@
+{
+  "format": "selqiro-byte-preservation-v1",
+  "source": "Exact issued account-state-20261122 payload, installed by stopped Mac run; not an accepted new Production",
+  "files": [
+    {
+      "original": "docs/continuity/CURRENT_STATE.json",
+      "preserved": "docs/continuity/history/account-state-stop-20261123/continuity/CURRENT_STATE.json",
+      "bytes": 8221,
+      "sha256": "cbdbb74f96a0c7e16c53a179c9a20e597d2c1e922ab9aa5c8812bfaed5d4424f"
+    },
+    {
+      "original": "docs/99_V2_HANDOFF_NEXT_CHAT.md",
+      "preserved": "docs/continuity/history/account-state-stop-20261123/99_V2_HANDOFF_NEXT_CHAT.md",
+      "bytes": 8337,
+      "sha256": "59ad3cb4ca2fd9bc0a33a561cab8ac8ee5522fdabf492fbe5b6dfb7e44ff16a2"
+    },
+    {
+      "original": "docs/continuity/HOSTED_PORTAL.md",
+      "preserved": "docs/continuity/history/account-state-stop-20261123/continuity/HOSTED_PORTAL.md",
+      "bytes": 3623,
+      "sha256": "45c3ce809762599d3061a46ba1174419bb058199285e0ea1eb3e03589a812796"
+    }
+  ]
+}

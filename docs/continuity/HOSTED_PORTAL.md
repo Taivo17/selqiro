@@ -1,29 +1,61 @@
-# Minu ala tööloendi lugemisluku parandus
+# Konto oleku jätk — Maci UID-kontrolli parandus r2
 
-22.11.2026. Vastu võetud alus on `78aea6f`. Senine kliendi korduskatse ja töö kättesaadavuse selgitus on juba avaldatud. Uus pakett asendab ühe andmebaasifunktsiooni, et oma tööde loend saaks avaneda ka siis, kui muu toiming hoiab profiili kirjutamislukku.
+23.11.2026 Europe/Tallinn. Esimene jätk peatus kell 16:54 enne lähtefailide
+kirjutamist, uut build'i ja andmebaasi. Algse kontooleku paigalduse 60 faili
+on tööpuus ja 20 testi PASS säilib. Viga oli Maci protsesside reaalse ning
+efektiivse kasutajatunnuse võrdlemises. Selle jaoks on eraldi r2 pakett.
 
-## Käivitamine
+## Üks praegune käsk
 
-Ava `selqiro-too-lugemisluku-parandus-20261122.zip` Downloads-kaustas ja käivita:
+Paki selqiro-konto-oleku-jatk-20261123-r2.zip Downloads-kaustas lahti.
+Kui Selqiro kohalik arendusserver on sinu terminalis töös, peata see oma
+aknas Ctrl+C-ga. Jäta kõik olemasolevad failid, vanad kaustad ja päevikud alles.
 
 ```bash
-python3 -I -B "$HOME/Downloads/selqiro-too-lugemisluku-parandus-20261122/uuenda.py" --publish
+python3 -I -B "$HOME/Downloads/selqiro-konto-oleku-jatk-20261123-r2/jatka.py" --publish
 ```
 
-Uuendaja kontrollib täpset olemasolevat lähtekoodi, tööpuud, indeksit, kinnitatud remote’i, eelmise eduka käigu originaalraportit, sõltuvusi ja SQL-kataloogi. See teeb värske build’i, rakendab ühe piiratud SQL-paranduse ning kinnitab tulemuse uue lugemisega enne commit’i ja push’i. Varasemaid paigaldajaid ega 49 vastuvõetud klienditesti ei korrata.
+R2 kontrollib täpset v1 60-failist lähtepuud, haru/HEAD-i, indeksit, remote'i,
+sõltuvusi ning nelja varasemat originaalraportit. Esimese jätkupaki dokumente
+Maci eelseisus ei eeldata. Mõlemad varasemad STOP-raportid ja nende lukud
+avatakse ainult lugemiseks; r2 kasutab eraldi uut päevikut.
 
-Saada lõpus **SAADA SEE FAIL** juures näidatud täpne raport. Uuendaja loob sellest privaatse kordumatu koopia Downloads-kausta ja avab selle asukoha Finderis. Algne päevik ja kõik varasemad koopiad säilivad.
+Maci protsessivaatlus eristab nüüd ruid ja uid välju. Sama reaalse kasutaja
+muu efektiivse kasutajatunnusega kõrvaline protsess ei põhjusta enam ekslikku
+UID-skoobi viga. Seotud arendus-/ehitusprotsessi või ebaselge vaatluse korral
+jätk peatub. Olemasolevaid arendus-/ehitusprotsesse jätk ei lõpeta.
 
-Kui käik peatub, säilita failid ja saada näidatud raport. Kui raportit ei tekkinud, saada **PEATATUD** rida. Ebaselget SQL-kirjutust ei korrata automaatselt.
+20 rakendusetesti tulemus kontrollitakse täpsest vanast privaatsest logist;
+testiprotsessi uuesti ei käivitata. Üks uus build on endiselt vajalik,
+sest algse 14:38 käigu täielik build-logi ja artefaktitõend jäid salvestamata.
+Esimene jätk ei jõudnud uut build'i alustada.
 
-## Pärast avaldamist
+Pärast edukat build'i teeb r2 seni alustamata andmebaasi preflight'i, ühe
+lisava SQL-i, järelseisu kontrolli ning ainult paketi failide commit/push'i.
+Commit'i pealkiri on Add private active account state foundation; tegelik
+räsi tuleb uuest Maci raportist. SQL võib olla paigaldatud juba enne hilisemat
+Giti peatumist; päevik eristab neid etappe ja ebaselget kirjutamist ei korrata.
 
-Oota Vercelis raporti uue commit’i **Ready / Production** tulemust ja värskenda portaali.
+## Raport
 
-1. Ava Minu ala tööde loend oma eraisiku profiiliga. Mine avalehele ja tagasi Minu alasse.
-2. Vaheta oma ettevõtte profiilile ning ava selle tööde loend. Näha peavad olema selle profiili tööd.
-3. Kontrolli, et olemasolev suletud töö on endiselt oma loendis Suletud olekuga ning senine vestlus avaneb.
+Saada täpselt SAADA SEE FAIL: juures näidatud uus privaatne raport.
+Finder avatakse selle faili juures. Koopia vea korral näidatakse kontrollitud
+originaali, Finderi vea korral täpset asukohta. Salvestustõrke järel märgitakse
+viimane säilinud raport võimalikuks aegunud tõendiks. Kui raportit ei loodud,
+saada terminali PEATATUD-rida.
 
-Selle kontrolli jaoks piisab olemasolevate kirjete lugemisest. Kui loend jälle tõrgub, saada vastava `get_my_jobs_v1` päringu Status ning Response’i `code` ja `message`. Päringu päiseid, tokeneid ega kontode täisandmeid pole vaja saata.
+Vana kontooleku uuendaja ega esimene jätkaja pole praegused käsud.
+Raporteid, lõppkoristuse märkeid ega indeksit käsitsi ei muudeta.
 
-Paketi `proof` kaust kirjeldab kohalikke katseid. Need on ettevalmistuse tõendid; tegeliku Maci ja pilve tulemuse kinnitab uus raport ning Verceli tulemus eraldi.
+## Sama uue commit'i Ready / Production järel
+
+1. Värskenda portaali ja ava Minu ala → Minu konto.
+2. Kontrolli konto e-posti, Aktiivne olekut ja teadaolevat algset loomiskuupäeva.
+3. Kontrolli sama vaate avamist päise menüüst.
+4. Logi sisse teise olemasoleva kontoga ja kontrolli selle konto andmeid.
+5. Vaata kitsas aknas üle tekst ning tagasitee.
+
+Konto oleku vundament lubab veel ainult active olekut. Konto sulgemise,
+taastamise ja kustutamise toimingud järgnevad eraldi; SMTP, e-posti kinnitamise
+ning registreerimisvaate paigaldus on endiselt pausil. Otsene Auth-konto
+kustutamine on olekurea paigaldamise järel ON DELETE RESTRICT tõttu tõkestatud.

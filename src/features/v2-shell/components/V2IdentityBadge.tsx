@@ -17,6 +17,7 @@ import {
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { profileEditorMessages } from "../../profile-editor/i18n/messages";
+import { accountStateMessages } from "../../account-lifecycle/i18n/messages";
 import { shouldReloadIdentityScopedRoute } from "../model/identityRouteReload";
 import type { IdentitySummary } from "../../../entities/identity/model/types";
 import { useV2IdentitySwitcher } from "../model/useV2IdentitySwitcher";
@@ -52,6 +53,7 @@ export default function V2IdentityBadge({
 }) {
   const { language: uiLanguage, t } = useV2Translation(shellUiMessages);
   const {t: profileText} = useV2Translation(profileEditorMessages);
+  const {t: accountText} = useV2Translation(accountStateMessages);
 
   const pathname = usePathname();
 
@@ -179,7 +181,8 @@ export default function V2IdentityBadge({
         aria-expanded={menuOpen}
         aria-label={activeIdentity ? t("acting_as_change_identity", {name: activeIdentity.displayName || t("identity")}) : t("choose_active_identity")}
         title={label}
-        disabled={loading || Boolean(switchingIdentityId)}
+        aria-busy={loading}
+        disabled={Boolean(switchingIdentityId)}
         onClick={() =>
           setMenuOpen(
             (current) => !current
@@ -310,6 +313,12 @@ export default function V2IdentityBadge({
               }
             )}
           </div>
+
+          {userId ? <Link href="/v2/my-area/account" role="menuitem"
+            onClick={() => setMenuOpen(false)}
+            className="mt-3 flex min-h-11 items-center rounded-2xl border border-neutral-200 px-4 py-3 text-sm font-bold text-neutral-900 hover:bg-neutral-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700">
+            {accountText("myAccount")}
+          </Link> : null}
 
           {activeIdentity && !switchingIdentityId ? <Link href="/v2/my-area/profile" role="menuitem"
             onClick={() => setMenuOpen(false)}

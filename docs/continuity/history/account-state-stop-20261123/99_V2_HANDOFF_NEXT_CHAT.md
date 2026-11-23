@@ -1,0 +1,65 @@
+<!-- GENERATED from docs/continuity/CURRENT_STATE.json; do not edit independently. -->
+# Selqiro — praegune tööüleandmine
+
+Seisukirje: 22.11.2026 Europe/Tallinn — konto aluse raport vastu võetud; Minu konto ja aktiivse oleku vundament ette valmistatud
+
+## Praegune checkpoint
+
+Tegelik ainult lugemise kataloogikontroll lõpetas puhtal main 034211d alusel; kõik 11 funktsiooni on aktsepteeritud lähtekoodiga seotud. Uus Minu konto vaade ning üks privaatne aktiivse oleku rida Auth konto kohta on kohalikult ette valmistatud ja kontrollitud. Selle paketi Maci käik, lisav SQL, commit/push ja deployment on ootel. Konto sulgemise, taastamise ja kustutamise toimingud järgnevad eraldi; pärast kogu konto elutsüklit tulevad esiletõstmine ning reklaamid.
+
+## Lähtekood ja tõendi piir
+
+- **Vastu võetud alus:** main 034211d2ee3dfadd4ba791977c98e310754e4d94; puu 03768a7e12d1aeb4ff7402d3102800071920df0e, 2047 inventariga kontrollitud faili. Varasem edukas Maci SQL/build/push raport SHA256 90c85b1426d40e96537af482e802b2cc49c18c618ef568ae9114b20728da8920 ning sama commit'i Ready / Production ja tööloendi kontroll säilivad.
+- **Värske Maci vaatlus:** Kataloogi raport 20261122-215849-e724cd8c7e46, 324518 baiti, SHA256 9bd1e79598711cf3f0e6af48239c81dc9d7080922aa184ad64763ae74da691e4. Käik 21:58:45–21:58:49 Europe/Tallinn: complete, katvus complete, üks ainult lugemise päring, muutumatu puu/index enne ja pärast. Remote'i võrdsus kontrolliti enne päringut.
+- **Lahendatud eelseis:** Kõik 11 funktsiooni keha/config räsid sobivad vastu võetud lähtekoodiga; mõlemad olemasolevad triggerid on seotud. Kataloogis ei olnud Auth users mitte-sisemisi triggereid ega nelja ettevalmistatud onboarding-funktsiooni. Väliseid Auth hook'e ei inventeeritud.
+- **Uus kasutajavaade:** /v2/my-area/account kuvab ainult enda serverist loetud Active olekut, Auth teenuse kontrollitud e-posti ja teadaolevat algset loomisaega. Profiil/aktiivne identiteet ei ole eeltingimus. Auth vahetus peidab vana konto andmed kohe; viga ega puuduv rida ei muutu oletuslikult aktiivseks.
+- **Lisav SQL:** Privaatne account_states tabel, ainult active olek, üks Auth AFTER INSERT trigger, piiratud olemasolevate kontode algtäide ja STABLE lugemise RPC. Lugemine ei kirjuta ega võta realukke. Otsene Auth DELETE on olekurea olemasolul ON DELETE RESTRICT tõttu tõkestatud; elutsükli kustutamistoimingut pole veel.
+- **Paketi piir:** selqiro-konto-olek-20261122.zip lisab rakenduse, sihitud testi, ühe v1 SQL release'i ja kumulatiivsed dokumentide muudatused. Package/lock ja senised õiguskontrollid säilivad. Eelmised juhendid on baiditäpselt history/account-state-before-20261122 all; väljastatud vanu arhiive ei muudeta.
+- **Registreerimise paus:** 21.11 e-posti/algprofiili ettevalmistus jääb paigaldamata; SMTP/Confirm email ja päris kirjade kontroll on selqiro.com etapis enne väliseid kasutajaid. Uue konto state-rida tekib sõltumata profiili lõpetamisest või e-posti kinnitamise seadest.
+
+## Tegelik kohalik katse
+
+- Rakenduse 20/20 sihitud Node testi läbisid: range parser, tegelik Supabase klient sünteetilise fetch'iga, konto/generatsiooni vahetus, katkestus, ajapiir, puuduva oleku viga ning ET/EN React serverrenderdus. Need ei ole brauseri DOM-katsed.
+- Täielik uus Next.js 16.4.6 / TypeScripti build läbis täpsete lukufaili sõltuvuste ja inertse lokaalse seadistusega; 765 koostamise sisendit jäid muutmata. Uus konto marsruut ja olemasolevad kontrollitavad marsruudid on koostatud.
+- Native PostgreSQL 17.6 15/15 ning SQL receipt'i parseri 23/23 juhtu läbisid: konkurentne Auth loomine, atomaarne algtäide, üle 1000 konto rollback, mitte-superkasutaja trigger, õigused, puuduv olek, otsene kustutuskaitse, mitte-lukustav lugemine ja skeemidrifti peatumine. Eraldatud testklaster on peatatud.
+- Uuendaja 47/47 juhtu läbisid tegeliku ajutise Giti ja kohaliku bare remote'iga; CLI/build/SQL vastused on sünteetilised. Lõpliku SQL-i/parseri sisendräsid vastavad sellele kontrollile. Raporti koopia, osaline rakendus, ebaselge SQL/push ja muutunud sisendi peatumine on kaetud.
+- Brauserikontroll jäi keskkonnas tegemata: Chromium peatus enne lehe avamist ning pilvebrauser ei pääsenud lokaalvaatele ligi. Päris Supabase HTTP, Mac, konto UI ja deployment vajavad alltoodud kasutajakäiku. Täpsed käsud, runtime'id, logid ja sisendräsid on paketi proof-kaustas.
+
+## Production / kasutajaliides
+
+- Viimane vastu võetud Production on main 034211d: Ready / Production ja kasutaja eraisiku/ettevõtte tööloendite avanemine. Suletud töö on Minu alal säilinud.
+- Uus konto oleku lähtekood ja SQL on siin ette valmistatud; kasutaja Maci, päris andmebaasi, SMTP-d ega kontosid selles ettevalmistuses ei muudetud. Uue commit'i nime või deployment'i valmimist ei eeldata.
+
+## Üks järgmine töö
+
+Paki selqiro-konto-olek-20261122.zip Downloads-kaustas lahti ja käivita python3 -I -B "$HOME/Downloads/selqiro-konto-olek-20261122/uuenda.py" --publish. Saada SAADA SEE FAIL juures näidatud täpne raport. Seejärel oota sama uue commit'i Ready / Production tulemust, värskenda portaali ja ava Minu ala → Minu konto. Kontrolli oma konto olekut, e-posti ja teadaolevat loomisaega ning teise olemasoleva kontoga andmete õiget vahetumist.
+
+**Peatumisel:** Säilita päevik, lähtefailid ja kõik raportid ning saada näidatud raport; selle puudumisel saada PEATATUD-rida. Ära muuda faile või indeksit ega käivita vana paigaldajat. Ebaselget SQL-kirjutust ei korrata automaatselt; täpne eraldi lugemine võib kinnitada paigaldatud järelseisu. Tundmatu lähtekood, sõltuvus, sihtkoht, raport või protsessi lõpp peatab käigu.
+
+## Loe ainult vajalikku
+
+- docs/continuity/HOSTED_PORTAL.md — üks praegune paigalduskäsk ja tegeliku kasutustee kontroll.
+- docs/architecture/account-state-foundation-20261122.md — olekurida, lugemise leping, Auth trigger ja tõendi piir.
+- docs/continuity/ACCOUNT_CATALOG_ACCEPTED_20261122.md — vastu võetud tegelik vaatlus.
+- docs/architecture/account-model-lifecycle-20261122.md — lihtne konto/profiili mudel ning registreerimise paus.
+
+## Säilivad piirid
+
+- Kolm kontot kuuluvad kasutajale; ainult ühel on kaks identiteeti. Uus konto valib eraisiku VÕI ettevõtte. Mitme identiteedi ning ettevõtte töötajate/rollide/omandi üleandmise iseteenindus ei ole avamisulatus.
+- Olemasolevaid kontosid, profiile, pakkumisi, pilte, vestlusi, Energy andmeid, kviitungeid ega päevikuid ei kustutata, liideta ega kirjutata ümber. Uus SQL lisab ainult privaatse oleku read/skeemiobjektid. Sisemised omandi- ja õiguskontrollid säilivad.
+- E-posti aktiveerimine jääb põhidomeeni selqiro.com kasutuselevõtu juurde. Saatmine, kinnitamine ja parooli taastamine peavad olema lõpuni kontrollitud enne väliseid testijaid või avalikku registreerimist ka vercel.app aadressil.
+- Kasutajale kuuluvad ka selqiro.app/.io ja selkiro.com/.app/.io. Domeeni valikut uuesti ei küsita; DNS-i selles sammus ei muudeta.
+- AI päringuteed jäävad suletuks. Tavaline osalemine ei sõltu Energy ostust. Riigipõhised töökuulutuse poliitikad ja senised avaldamise/vestluse lepingud säilivad.
+- Pärast konto sulgemise/taastamise/kustutamise tervikut jätkub olemasolevate kuulutuste esiletõstmise ja seejärel välisreklaamide töö. Reklaamija võib kasutada sama kontot ilma avaliku müüjaprofiilita; reklaamimine ei ole kolmas kontotüüp.
+
+## Keskkond
+
+- Olemasolev /Users/taivo/selqiro; main 034211d ning remote https://github.com/Taivo17/selqiro.git. Uuendaja kontrollib uut tegelikku seisu enne kirjutusi.
+- Next 16.4.6, Sharp 0.35.5 ja package/lock säilivad. Uuendaja kasutab juba kinnitatud Supabase CLI 2.117.0 täpseid faile; paigaldust ega teenuste uuesti ühendamist ei tehta.
+- Kataloogi ja varasema eduka paranduse täpsed originaalraportid ning lukufailid säilivad ~/Library/Application Support/Selqiro all. Uus eraldi päevik on account-state-20261122 all; raportil on unikaalne privaatne Downloads-koopia.
+
+## Ajalugu (mitte praegused käsud)
+
+Vana sisenemisleht: `docs/archive/99_V2_HANDOFF_NEXT_CHAT.before-price-core-20261004-6df0af9.md`.
+Kõik 5573 algset rida säilivad bait-baidilt; SHA-256 `667e47990a7d3cc20ff53709cb861663b4565cf1d3c830eda88e0d18e60fdb8a`.
+Vanade failide NEXT/CURRENT pealkirjad ei ole tänased käivitamisjuhised.

@@ -1,0 +1,51 @@
+{
+  "format": "selqiro_repo_handoff_v1",
+  "recorded_on": "22.11.2026 Europe/Tallinn — 034211d paigaldatud ja vastu võetud; mõlema profiili tööloend avaneb",
+  "archive": {
+    "lines": 5573,
+    "path": "docs/archive/99_V2_HANDOFF_NEXT_CHAT.before-price-core-20261004-6df0af9.md",
+    "sha256": "667e47990a7d3cc20ff53709cb861663b4565cf1d3c830eda88e0d18e60fdb8a"
+  },
+  "checkpoint": "Tööloendi lugemisluku parandus on vastu võetud. Maci 19:12–19:13 raport kinnitab värsket build’i, üht SQL-rakendust, eraldi järelkontrolli ja push’i commit’iga 034211d. 19:13 Verceli pilt näitab sama commit’i Ready / Production. Kasutaja kinnitas, et tööpakkumine avaneb eraisiku ja ettevõtte profiiliga; 19:20–19:21 piltidel on mõlema profiili Minu tööpakkumised laaditud.",
+  "source": {
+    "Vastu võetud alus": "main 034211d2ee3dfadd4ba791977c98e310754e4d94, parent 78aea6f6d7c57aee47a29cd0e8b29c9c4e862561. Raporti ja väljastatud täpse 21-faililise delta järgi tuletatud puu 03768a7e12d1aeb4ff7402d3102800071920df0e, 2047 jälgitavat faili. Kõik kohalikult taastatud failid vastavad inventarile.",
+    "Maci tõend": "selqiro-too-lugemisluku-parandus-20261122-raport-20261122-191313-bbadc41bced5.json, 333025 baiti, SHA256 90c85b1426d40e96537af482e802b2cc49c18c618ef568ae9114b20728da8920. Käik 22.11.2026 19:12:07–19:13:13 Europe/Tallinn. stage complete, database verified, build passed, push verified; eelmine originaalraport säilis.",
+    "Andmebaas": "Üks acknowledged apply, seejärel eraldi read-only verify. Enne 683ed8976cafce8aaf59e1169014bf6f1d6ff977c9e45bf04699071ba4369848; pärast 0be7544243260b409badb5a5f09dee9308663d089236acdfdef421b34b1173ef. Viis käsku on järjekorras eelkontroll → build → eelkontroll → üks rakendus → järelkontroll; kõik lõpetasid nullkoodiga ja kinnitatud protsessikoristusega.",
+    "Git ja tõendi piir": "Väljastatud räsiga seotud uuendaja kontrollis sama käigu ajal main-haru, täielikku lähtepuud, indeksit, puhast lõppseisu ja kinnitatud remote’i võrdsust. Siin hinnati raportit ning lähtefaile; uut Maci/GitHubi päringut ei tehtud. Algseid Git- ja build’i logikehasid ega indeksi toorfaile pole manuses.",
+    "Brauseri tõend": "Ready / Production on kasutaja kuvatõmmise, mitte Verceli API järgi. Taivo Garaaz vaates on Otsin lume lükkajat täna olekuga Suletud; Milline Vedu vaates Muruniiduki operaator olekuga Aktiivne. Eraisiku/ettevõtte eristus põhineb kasutaja kinnitusel. Uut sõnumite, telefoni ega koormuse läbimängimist ei väideta.",
+    "Piiratud parandus": "Muudetud on ainult get_my_jobs_v1 keha ja STABLE omadus. Tööloendi õiguste kontroll ja sisu kasutavad päringu alguse ühtset andmeseisu. Jagatud kirjutamiskontrollid, nende lukud, kliendi üks lisakatse, vastuse leping ja kasutajaandmed säilivad.",
+    "Dokumentide seis": "Selle vastuvõtu CURRENT_STATE, sellest renderdatud üleandmine, HOSTED_PORTAL ja päeviku lisa on eraldi ette valmistatud dokumentide delta. Need ei ole veel kasutaja Maci/Giti lisakommit. Kanda järgmise sisulise muudatusega kaasa pärast tegeliku lähtepuu kontrolli. Väljastatud pakki ega originaalraportit ei muudeta."
+  },
+  "local_test": [
+    "Maci selles käigus tehti üks värske Next.js 16.4.6 build. Raport salvestab null-lõpetamiskoodi, eduka koostamise ning 11 väljundräsi, sealhulgas kuue tööde lehe väljundid. Toorest build’i logi eraldi kaasa ei saadetud.",
+    "44 ettevalmistuse PostgreSQL-katset ja varasemad 49 klienditesti jäid taaskasutatud tõendiks: tests preparation_verified_not_rerun. Neid Macis ega käesolevas raporti ülevaatuses uuesti ei käivitatud.",
+    "Ettevalmistuse 31 käitumis- ja 13 rakenduskaitse katset ning 23 uuendaja kontrolli säilivad algses räsiga seotud paketis. Need on eraldi tõendid tegelikust uuest pilve rakendusest.",
+    "Siinne ülevaatus läbis 48 kontrolli: täpne pakk, raporti leping, lähteinventar, uus 2047-faililine tulemipuu ja ajaline järjestus. Nelja SQL-vastuse JSON taastati raporti objektidest; kõik pikkused ja stdout-räsid kattusid. Ühtegi SQL-i, build’i, paigaldajat ega kirjutavat brauseritoimingut siin ei käivitatud."
+  ],
+  "production": [
+    "034211d Ready / Production ja main on 22.11 kell 19:13 kasutaja pildil. Algse Maci raporti vercel READY_NOT_CHECKED välja ei kirjutata ümber; uus visuaalne kinnitus on eraldi lisatud tõend.",
+    "Kasutaja 22.11 kinnitus: hetkel kontrollimisel avaneb tööpakkumine ilusti nii eraisiku kui ettevõtte profiiliga. Kaks Minu ala pilti toetavad tööloendite edukat laadimist ja suletud/aktiivse kirje säilimist.",
+    "Lugemisluku paranduse etapp on lõpetatud. Algse tootmistõrke konkreetne blokeeriv tehing jäi tuvastamata; praegune kinnitus ei tähenda kõigi võimalike tulevaste võrgu- või koormusvigade välistamist."
+  ],
+  "next_action": "Järgmine soovitatud töö: konto sulgemise ja taastamise lepingu kitsas lähtekoodiaudit vastavalt docs/architecture/launch-profile-privacy-plan.md-le. Kaardista konto, identiteedi, ettevõtte liikmesuse, pakkumiste, piltide ja vestluste seosed ning koosta üks väike serverilepingu plaan. See samm on lugemine ja kavandamine; olemasolevate kontode või sisu kustutamisluba puudub. Uut terminalikäsku selle vastuvõtu jaoks ei ole.",
+  "stop_rule": "034211d paigaldaja, SQL-parandus ja lõppenud kontrollid on tehtud; neid ei korrata. Säilita algne pakett, edu- ja varasemad raportid ning päevikud. Enne järgmist Maci kirjutust kontrolli värskelt tegelikku haru, HEAD-i, kogu tööpuud/indexit, lähtefaile ja kinnitatud remote’i. Tundmatu lähte- või õigusseis vajab kitsast uut tõendit.",
+  "read_next": [
+    "docs/continuity/JOB_OWNER_READ_ACCEPTED_20261122.md — selle käigu vastuvõtt ja tõendite piirid.",
+    "docs/continuity/HOSTED_PORTAL.md — paigaldus on lõpetatud; uut käivitamiskäsku pole.",
+    "docs/architecture/launch-profile-privacy-plan.md — järgmise soovitatud konto elutsükli auditipiirid.",
+    "docs/architecture/job-owner-read-lock-20261122.md — vastu võetud SQL-lugemise leping."
+  ],
+  "boundaries": [
+    "Kolm kontot on kasutaja enda omad; väliseid testijaid ei ole. E-posti aktiveerimine lükati edasi domeeni kasutuselevõtuni. Enne väliseid testijaid või avalikku registreerimist tuleb kinnitamine, kirjade saatmine ja parooli taastamine lõpuni kontrollida ka juhul, kui avalik aadress on veel vercel.app.",
+    "Põhidomeeniks valiti selqiro.com. Kasutajale kuuluvad ka selqiro.app, selqiro.io ning selkiro.com/.app/.io. Domeenide ja DNS-i seadistust selles paketis ei tehta.",
+    "Ülesannete ja töökohtade eristus ei otsusta lepingu õiguslikku liiki. Konto tüübi laiendus ei laienda riikide poliitikaid ega möödu senisest country-scoped policy peatumisest.",
+    "Olemasolevaid kasutajaid, profiile, töid, vestlusi, pilte, tingimusi ja kviitungeid ei kustutata ega kirjutata ringi. Üks kalendrikuu kehtivus, tasu täpsed kümnendsummad, poliitika nõusolek, revisjonid ja konto/identiteedi seos säilivad.",
+    "Vanasse avatud brauserilehte jäänud range parser ei pruugi uusi task väärtusi ega avaldaja identity_type välja tunda. Pärast sama versiooni Ready / Production tulemust tuleb leht värskendada. See ei ole nullkatkestusega eri kliendiversioonide leping; senised muutumatud päringusisendid ja kviitungid säilivad.",
+    "AI päringuteed jäävad suletuks. Konto sulgemine/kustutamine, reklaami ja esiletõstmise iseteenindus ning laiem avamiseelne ülevaatus on järgnevad tööd."
+  ],
+  "environment": [
+    "Olemasolev /Users/taivo/selqiro ning Taivo17/selqiro remote. Viimane vastu võetud commit on 034211d2ee3dfadd4ba791977c98e310754e4d94. Raport kinnitab selle käigu puhta ja push’itud lõppseisu; hilisemat värsket Maci vaatlust pole tehtud.",
+    "Next 16.4.6, Sharp 0.35.5 ning package.json/package-lock.json on samad. Olemasolev kinnitatud Supabase CLI kasutati ühe piiratud SQL-paranduse jaoks; uut ühendamist ega paigaldamist pole vaja.",
+    "Lõpetatud originaalpäevik: /Users/taivo/Library/Application Support/Selqiro/job-owner-read-lock-20261122/e723754747c36cef7a62f4d1c7145e3f254a33ae48609f0f192bbd98139127aa/result.json. Hoida muutmata."
+  ]
+}

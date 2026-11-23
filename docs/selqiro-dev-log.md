@@ -2325,3 +2325,181 @@ Prepared one-function SQL replacement for public.get_my_jobs_v1: statement-snaps
 New isolated native PostgreSQL checks passed 44/44, including real two-connection old-lock reproduction, new read during the held lock, unchanged writer lock, READ COMMITTED READ ONLY, coherent concurrent-revocation snapshots, authority failures and exact pagination/response contracts. Guarded SQL installation and runner boundaries have separate sealed evidence. Fresh locked Next16.4.6/TypeScript build passed with inert compilation settings; prior accepted client tests were not replayed.
 
 The guarded updater pins the complete accepted source and successful prior receipt, runs a fresh Mac build, records one SQL write intent before dispatch, independently verifies the after-state and only then commits/pushes its scoped payload. Known RPC/catalog facts are pinned; full actual authority metadata is compared unchanged inside the transaction without inventing a synthetic live baseline. No user data cleanup or content migration is included. The Mac run, hosted SQL result, new commit/push, deployment and real browser acceptance remain pending. Previous current continuity files are preserved byte-for-byte under docs/continuity/history/job-owner-read-base-78aea6f-20261122.
+
+## 2026-11-22 — owner job read lock repair accepted as 034211d
+
+Accepted the actual 19:12:07–19:13:13 Tallinn Mac receipt, SHA256 90c85b1426d40e96537af482e802b2cc49c18c618ef568ae9114b20728da8920.
+It confirms a fresh Next16.4.6 build, exactly one acknowledged SQL apply, an independent
+read-only after-state verification and verified push of 034211d2ee3dfadd4ba791977c98e310754e4d94, parent78aea6f.
+All five commands exited zero with confirmed cleanup; prior receipt preserved.
+44 preparation SQL cases and49 prior client tests are explicitly reused, not replayed.
+
+The user's19:13:59 screenshot confirms the same commit Ready / Production. Their19:20–19:21
+screenshots show loaded owner job lists and retained closed/active jobs; their text confirms
+private and business profile use. Original receipt READY_NOT_CHECKED is preserved, with
+later visual/user acceptance recorded separately. New2047-file tree 03768a7e12d1aeb4ff7402d3102800071920df0e is derived
+from the exact accepted baseline and issued payload, not a fresh Mac Git dump.
+
+Offline receipt/source review only; no new test, build, SQL, installer, remote or Mac action.
+Raw command logs/index bytes are absent, so those execution claims remain receipt-based.
+The actual original blocking transaction remains unidentified. This narrow repair is complete.
+Acceptance documentation is prepared outside the user's Mac and should travel with the next
+scoped source change; it is not an additional committed/deployed update. Next recommendation:
+read-only account closure/restoration dependency audit and bounded server contract design.
+No existing account/content deletion is authorized.
+
+
+## 2026-11-22 — Account lifecycle source audit and preview contract
+
+Accepted production base remains 034211d. Completed a read-only dependency
+audit of account/private identity/business authority, public content, messaging,
+media and Energy/receipt integrity. Source fingerprints match the accepted
+inventory; historical FK definitions are explicitly not a fresh live catalog.
+
+Findings include business-owner cascades, exact conversation membership,
+irreversible profile-media retirement, side-effecting Energy/media reads and
+immutable-ledger/FK interactions. A proposed account lifecycle overlay preserves
+independent content/membership state. The first implementation slice is a pure
+account/identity/business impact preview; other domains remain not_assessed.
+Email confirmation stays deferred to domain launch before external users.
+
+Added architecture audit, bounded server contract and targeted verification
+plan. Next work prepares one metadata-only catalog diagnostic; no user rows or
+personal aggregates belong in that report. No application code, SQL, Auth,
+Storage, DNS, real account/content state, build, deployment or prior installer
+was changed or run. Three specialist read-only design reviews passed after
+clarifying that wallet tests belong to the later Energy adapter.
+
+This documentation delta carries the previous 034211d acceptance forward and
+is prepared outside the Mac. No new commit/push is claimed. Apply together
+with the next scoped source change after fresh Git/source verification.
+
+
+## 2026-11-22 — One chosen account profile; signup preparation recovered
+
+User reaffirmed one account with one chosen private OR business profile at
+launch. Company member/role/ownership-transfer UI and a general multi-identity
+impact preview are outside that scope. All three accounts are the user's;
+only one has two identities, preserved as existing compatibility data.
+
+Recovered the exact 21Nov email/onboarding preparation (SHA256
+7d54275c1b868e04f220ba0c8bbcc7ca75ce6093fea6de9b51e88bb116bd03bc).
+Its 48 new paths remain absent from accepted 034211d, and the existing auth
+page matches its before hash. Six shared dependency files still match.
+Historical tests/build were inspected, not rerun; no new runtime acceptance.
+
+Specified the common creation/closure boundary: verified Auth account,
+idempotent chosen first profile, account controls for incomplete onboarding,
+no closed-account rebootstrap, and restoration of the same account/profile.
+Internal business authorization rows remain implementation details.
+
+Auth/SMTP deployment stays deferred to the agreed domain stage. Next work
+prepares only the narrow lifecycle/account-creation catalog observation.
+Updated continuity, generated handoff, persistent memory and scope document;
+preserved prior issued design/state bytes in history. Prepared docs only:
+no Mac/Git writes, SQL, build, browser, service setting or account mutation.
+
+
+## 2026-11-22 — Bounded account foundation catalog diagnostic prepared
+
+Prepared a separate read-only Mac diagnostic against accepted 034211d.
+The sealed runner verifies actual Git/HEAD/tree/index/source/remote plus the
+existing five-file Supabase CLI pin and linked project before one READ ONLY
+catalog query. It returns bounded validated metadata for six account/profile
+relations, direct keys/grants/triggers and relevant routine fingerprints.
+No application rows, expression literals, secrets, source installation,
+account changes, build, commit/push or deployment operation is included.
+
+Preparation passed 48 runner cases using temporary real Git/processes and
+fake CLI, 11 native PostgreSQL 17.6 synthetic SQL cases and 27 parser cases.
+The own test database was stopped. Mac/Finder/native Supabase/live schema
+are not acceptance claims; the user's exact new report is the next evidence.
+
+Carried forward the simple one chosen private/business profile decision,
+deferred auth/SMTP installation and all preservation rules. Recorded the
+user's requested follow-on order: completed account lifecycle, then existing
+offer promotion and external advertising. Profile-optional advertiser access
+uses the same account model; no separate role/team system is introduced.
+Updated current state/generated handoff/hosted command, memory and architecture.
+These cumulative docs remain prepared, not applied in the Mac repository.
+
+## 22.11.2026 — konto aluse raport vastu võetud; Minu konto ette valmistatud
+
+Kasutaja tegelik kataloogikäik 21:58:45–21:58:49 lõpetas complete/complete.
+Raport SHA256 9bd1e79598711cf3f0e6af48239c81dc9d7080922aa184ad64763ae74da691e4:
+üks ainult lugemise pilvepäring, puhas main 034211d, muutumatu puu/index.
+Kõik 11 vajalikku funktsioonikeha/config'i seoti vastu võetud lähtekoodiga;
+täiendavat diagnostikat polnud selle esimese mooduli jaoks vaja.
+
+Uus /v2/my-area/account näitab oma konto olekut, e-posti ja teadaolevat algset
+loomisaega. Andmejuurdepääs, parser, lugemise elutsükkel, vaade ja tõlked on
+eraldi väikestes moodulites. Konto vahetus peidab vana isikliku info kohe;
+puuduv olekurida ei muutu Active vaikimisi väärtuseks. Profiil pole eeltingimus.
+
+Lisav SQL loob privaatse aktiivsete olekute tabeli, ühe Auth INSERT-triggeri
+ja STABLE lugemise RPC. Olemasolevad Auth/profiili/sisu read säilivad.
+ON DELETE RESTRICT tähendab, et otsene Auth kustutus vajab hiljem teadlikku
+elutsükli teostust. Sulgemis-, taastamis- või kustutamismutatsiooni veel pole.
+
+Kontrollid: 20/20 rakenduse testi, uus täielik Next 16.4.6/TypeScripti build
+(765 muutumatut sisendit), 15/15 native PostgreSQL 17.6 juhtu, 23/23 SQL parseri
+juhtu ja 47/47 uuendaja juhtu. Viimased kasutavad tegelikku ajutist Giti ja
+sünteetilisi CLI/build/SQL vastuseid. Lõplik SQL/parser ja runner tõend on sama
+baiditaseme sisendiga. Eraldatud SQL-server peatati. Brauserikäik jäi enne
+lehe avamist keskkonnapiirangu tõttu tegemata; seda ei märgita läbituks.
+
+Ettevalmistatud pakett selqiro-konto-olek-20261122 sisaldab testitud deltat,
+üht lisavat SQL release'i, räsikaitsega uuendajat, täpseid tõendeid ja kumulatiivset
+dokumentatsiooni. Maci rakendus, päris SQL, commit/push ja uus deployment on
+ootel. Vana diagnostikapaketti ega teisi väljastatud arhiive ei muudetud.
+
+## 23.11.2026 — kontooleku uuendaja peatumise vastuvõtt ja eraldi jätku ettevalmistus
+
+Vastu võetud STOP-raport: selqiro-konto-olek-20261122-raport-20261123-143815-48e5c165fd6e.json,
+SHA256 db041d83bf5163f9b3e5f0540d3a7bd190eda50fefc348839d9fb4332e5472d7.
+Sõltumatu kontroll sidus 60 rakendatud rada, 20 testi ning 189 Giti käsu väljundihashid.
+Viimane täielik kontroll 14:38:08.951 Europe/Tallinn: main 034211d, 2047 alusfaili indeksis,
+staged diff tühi, 51 uut ja 9 muudetud faili ainult tööpuus.
+
+Build'i käivitusprotsess väljus 0 (6.187s), stdout 2570 baiti ja mõlemad EOF, stderr tühi.
+Üldine CLI_TERMINATION_NOT_CONFIRMED tuli lõppkoristusest; konkreetne alamoperatsioon/
+errno/PID ei ole teada. Build-passed.log, parsed proof ja artefaktikinnitus ei
+jõudnud loomisele. Andmebaasi käske, git add/commit/push'i ei olnud.
+Varasemat Productionit see käik ei asendanud.
+
+Valmis eraldi jätkupakk selqiro-konto-oleku-jatk-20261123 uue päeviku ja praeguse
+protsessiseisu piiratud kontrolliga. Vana STOP ja kõik originaallogid säilivad.
+Rakenduse 11 faili ning SQL release’i 9 faili ei muutu; 20 testi PASS võetakse
+täpsest privaatsest logist uuesti kasutusele pärast allikate ja sõltuvuste
+värsket kontrolli. Üks uus build on vajalik salvestamata tulemuse tõendamiseks.
+
+Uue jätkukäivitaja 33/33 ja protsessimooduli 33/33 sihitud kontrolli läbisid.
+Python 3.12.14 / Linux; päris ajutine Git-hoidla, kohalik bare-remote ja
+lapsprotsessid; build/SQL ning Maci käsuvastused olid kontrollandmed.
+Külmutatud sisendiräsid võrdsed enne/pärast kontrolli, vana v1 ZIP muutmata.
+Logid, allikad ja sõltumatu ülevaatus on paketi proof-kaustas. Rakenduse/SQL-i
+varasemaid teste ega päris build’i siin ei korratud. Maci jätk, uus tegelik build,
+pilveseisu kontroll/muudatus, commit/push ja deployment on veel tegemata.
+
+## 23.11.2026 — kontooleku jätk peatus enne kirjutusi; UID-parandus r2
+
+Vastu võetud uus raport: selqiro-konto-oleku-jatk-20261123-raport-20261123-165417-33be329be2cf.json,
+383150 baiti, SHA256 388d10eac2fdc1260ace24c399a56c842510e81d86aac9ffa9cd1b69e935f852.
+Esimese jätku manifest 334f54bb10da6ec0f4dec0917128002e727b9bdb60be8597f6b838cbefa8b251.
+27 Giti kontrollkäsku läbisid; v1 60 faili/2047 indeksikirjet, originaalraportid
+ja sõltuvused kinnitatud. 20 testi oli reused_verified, executed_again=false.
+
+Ps-proov exit0, stdout26496B, stderr0, mõlemad EOF ja cleanup confirmed;
+CURRENT_RUNTIME_UID_SCOPE_FAILED tekkis enne lähte-/dokumendikirjutusi.
+Build not_run, database not_started/apply0, commit null, push not_run.
+See on käivitaja peatumise tõend, mitte praeguse pilveseisu uus vaatlus.
+
+Apple'i ps -U real UID valik ja uid effective UID väljund olid vana kontrolli
+poolt ekslikult võrdsustatud. R2 eristab neid ning säilitab olemasolevate
+protsesside, vanade raportite ja indeksi kaitse. Sama rakendus/SQL/testilogid
+säilivad; uue neljanda originaalraporti kontroll seob täpse viimase STOP-i.
+R2 11/11 UID-regressiooni ja 13/13 raportisidumise/lukustuse/eelseisu kontrolli
+läbisid Python 3.12.14 / Linuxis. Täpsed logid, sisendiräsid ning sõltumatu
+ülevaatus on r2 proof-kaustas. Senine transport/cleanup ning rakenduse/SQL-i
+baidid säilisid. Varasemaid 33+33 kontrolle, 20 rakendusetesti, SQL-kontrolle
+ega päris build'i ei korratud. Uus Maci r2 käik, build, SQL ja avaldamine on ees.

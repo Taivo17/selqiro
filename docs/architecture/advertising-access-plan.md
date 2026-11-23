@@ -164,3 +164,14 @@ Võrdlus ei kinnita teiste teenuste tänast hinnakirja, Selqiro juriidilist
 klassifikatsiooni ega üldist kohustust järgida täpselt nende kontomudeleid.
 Selqiro töövoog ja etapid on ülaltoodud allikatest ning projekti kokkulepetest
 lähtuv tootesoovitus.
+
+
+## 22.11.2026 tööjärje kinnitus
+
+Kasutaja soovis pärast konto elutsükli tööd jätkata kuulutuste esiletõstmise
+ja reklaamide lisamisega. Esmalt valmib konto sulgemise/taastamise/kustutamise
+tervik, siis olemasolevate pakkumiste esiletõstmine ja välisreklaamide esimene
+teekond ülaltoodud ulatuses. Lihtne konto valib eraisiku või ettevõtte;
+reklaamimine jääb kasutusvõimaluseks. Avalik müüjaprofiil pole reklaamija
+sisselogimiskonto eeltingimus ning konto haldus peab arvestama ka profiilita
+olekut. Reklaami ostu, hinnakirja ega maksete uut teostust selles etapis ei lisatud.

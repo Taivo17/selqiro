@@ -1,0 +1,35 @@
+{
+  "issued_package_sha256": "c6a6771c0b911616fa5ec36e9b2468c5cd37e5eae93543c2cfe878806fe27962",
+  "files": [
+    {
+      "path": "docs/continuity/CURRENT_STATE.json",
+      "preserved_as": "docs/continuity/history/account-model-scope-before-20261122/docs/continuity/CURRENT_STATE.json",
+      "sha256": "4455082cdcba24c23b9c8c4868895680fa06dbb4f4067c1326e6104a01ace052"
+    },
+    {
+      "path": "docs/99_V2_HANDOFF_NEXT_CHAT.md",
+      "preserved_as": "docs/continuity/history/account-model-scope-before-20261122/docs/99_V2_HANDOFF_NEXT_CHAT.md",
+      "sha256": "8bd9b36f7842eeda258da22bbc090be537eec8ef13f40db0c804c59766aae344"
+    },
+    {
+      "path": "docs/continuity/HOSTED_PORTAL.md",
+      "preserved_as": "docs/continuity/history/account-model-scope-before-20261122/docs/continuity/HOSTED_PORTAL.md",
+      "sha256": "5381fdc3b9011f8e28cc0547ae4484b11654172a96fe22cc18782401443d5cad"
+    },
+    {
+      "path": "docs/architecture/account-lifecycle-audit-20261122.md",
+      "preserved_as": "docs/continuity/history/account-model-scope-before-20261122/docs/architecture/account-lifecycle-audit-20261122.md",
+      "sha256": "c9da441e49ae3409bf2696b8018d931bc3230e3677e7bbb7d8f02540ef5e5173"
+    },
+    {
+      "path": "docs/architecture/account-lifecycle-server-contract-v1.md",
+      "preserved_as": "docs/continuity/history/account-model-scope-before-20261122/docs/architecture/account-lifecycle-server-contract-v1.md",
+      "sha256": "c422a3030fdd30e775649a2d14aa5fbc18fb3c969dfee70d3981bcc02eb52075"
+    },
+    {
+      "path": "docs/architecture/account-lifecycle-verification-plan-v1.md",
+      "preserved_as": "docs/continuity/history/account-model-scope-before-20261122/docs/architecture/account-lifecycle-verification-plan-v1.md",
+      "sha256": "014c5a070391f884ef19e5f2c624733d7312a09589e167294b4d99b159275023"
+    }
+  ]
+}

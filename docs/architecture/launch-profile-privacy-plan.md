@@ -101,3 +101,14 @@ Detailne varasem ülevaade on 20.11 väljastatud failis
 `selqiro-avamise-ja-privaatsuse-plaan-20261120.zip`. Käesolev dokument ei
 kirjuta seda ajaloolist ülevaadet ümber; kasutaja uus jätkamisjuhis määrab
 tänase töö suuna.
+
+
+## 22.11.2026 täpsustus — üks konto ja üks valitud profiil
+
+Uue kasutaja valik on eraisik VÕI ettevõte. Ettevõtte liikmete, rollide või
+omandi üleandmise haldust esimesse versiooni ei lisata. Ainult ühel kasutaja
+kolmest testkontost on kaks identiteeti; seda säilitatakse varasema erijuhuna.
+Konto loomine, sulgemine ja taastamine järgivad sama autentitud konto piiri.
+E-posti/registreerimise ettevalmistus on taastatud, kuid paigaldus ja SMTP
+jäävad kokkulepitud pausile. Täpne ühine leping ja praegune tööjärg:
+`account-model-lifecycle-20261122.md` ning `docs/continuity/CURRENT_STATE.json`.

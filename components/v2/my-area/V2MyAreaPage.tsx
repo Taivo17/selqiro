@@ -24,6 +24,7 @@ import MyJobsSection from "../../../src/features/jobs/components/MyJobsSection";
 import { jobMessages } from "../../../src/features/jobs/model/jobMessages";
 import { getOfferTheme,offerButtonLayout } from "../../../src/shared/marketplace/offerTheme";
 import { profileEditorMessages } from "../../../src/features/profile-editor/i18n/messages";
+import { accountStateMessages } from "../../../src/features/account-lifecycle/i18n/messages";
 
 const actionClass = "inline-flex min-h-11 items-center justify-center rounded-full border border-neutral-200 bg-white px-5 py-3 text-sm font-bold shadow-sm transition hover:border-neutral-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700";
 const navClass = "flex min-h-11 items-center rounded-2xl px-4 py-3 text-sm font-bold text-neutral-700 hover:bg-neutral-100 hover:text-black focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700";
@@ -55,6 +56,7 @@ export default function V2MyAreaPage() {
   const {t: providerText} = useV2Translation(providerControlMessages);
   const {t: jobText} = useV2Translation(jobMessages);
   const {t: profileText} = useV2Translation(profileEditorMessages);
+  const {t: accountText} = useV2Translation(accountStateMessages);
 
   const { identity, actor, loading, anonymous, error, refresh } = useMyAreaIdentity();
   const integrated = v2IntegrationEnabled();
@@ -83,6 +85,7 @@ export default function V2MyAreaPage() {
           <a href="#my-area-provider-controls" className={navClass}>{providerText("management")}</a>
           <Link href={messagesHref} className={navClass}>{t("messages")}</Link>
           <Link href="/v2/my-area/profile" className={navClass}>{profileText("myProfile")}</Link>
+          <Link href="/v2/my-area/account" className={navClass}>{accountText("myAccount")}</Link>
           {profileHref ? <Link href={profileHref} className={navClass}>{t("public_profile")}</Link> : null}
           {!integrated ? <>
             <a href="#my-area-showcase" className={navClass}>{t("product_showcases")}</a>
@@ -106,6 +109,7 @@ export default function V2MyAreaPage() {
                 <a href="#my-area-categories" className={actionClass}>{t("store_categories")}</a>
                 <a href="#my-area-provider-controls" className={actionClass}>{providerText("management")}</a>
                 <Link href={messagesHref} className={actionClass}>{t("open_messages")}</Link>
+                <Link href="/v2/my-area/account" className={actionClass}>{accountText("myAccount")}</Link>
               </nav>
             </div>
 

@@ -1,0 +1,36 @@
+{
+  "format": "selqiro-byte-preservation-v1",
+  "source": "issued selqiro-konto-aluse-kontroll-20261122 prepared docs, not assumed Mac files",
+  "files": [
+    {
+      "original": "docs/continuity/CURRENT_STATE.json",
+      "preserved": "docs/continuity/history/account-state-before-20261122/continuity/CURRENT_STATE.json",
+      "sha256": "55a64b64fbd73e9baca3b73fa09d3afd42a8b661211ede14e778f63e68970bee",
+      "bytes": 8698
+    },
+    {
+      "original": "docs/99_V2_HANDOFF_NEXT_CHAT.md",
+      "preserved": "docs/continuity/history/account-state-before-20261122/99_V2_HANDOFF_NEXT_CHAT.md",
+      "sha256": "70f8c650f7ca6df2ddbf57d07b817726a8442a4f7dc9c0a6ad66e18854aa9233",
+      "bytes": 8812
+    },
+    {
+      "original": "docs/continuity/HOSTED_PORTAL.md",
+      "preserved": "docs/continuity/history/account-state-before-20261122/continuity/HOSTED_PORTAL.md",
+      "sha256": "10194e04d34da4722a7c5b7c3b1b20d2166d3d9b3f5739bf9d24864cfed7a3dd",
+      "bytes": 1636
+    },
+    {
+      "original": "docs/architecture/account-model-lifecycle-20261122.md",
+      "preserved": "docs/continuity/history/account-state-before-20261122/architecture/account-model-lifecycle-20261122.md",
+      "sha256": "5ff154e0e3930233286baa255b50f84475ec07ca972f7dc4bcb482b1ea878f48",
+      "bytes": 9876
+    },
+    {
+      "original": "docs/architecture/account-foundation-catalog-20261122.md",
+      "preserved": "docs/continuity/history/account-state-before-20261122/architecture/account-foundation-catalog-20261122.md",
+      "sha256": "6d402cc9f6337fd2126f8b3fc1a7725b24c48d486169be1f2436d34f358e6fed",
+      "bytes": 6630
+    }
+  ]
+}

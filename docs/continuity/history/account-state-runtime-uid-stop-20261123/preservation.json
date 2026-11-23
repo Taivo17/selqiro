@@ -1,0 +1,26 @@
+{
+  "format": "selqiro-history-preservation-v1",
+  "reason": "Issued first continuation guides were not applied on Mac; preserve exact issued bytes before the r2 current-state update.",
+  "source_package": "selqiro-konto-oleku-jatk-20261123.zip",
+  "source_zip_sha256": "ea063c82a7ab6484bfa53a4f808b6a316f5f8bb2bf082cd4f822f9dbc3f7c498",
+  "files": [
+    {
+      "issued_source": "docs/continuity/CURRENT_STATE.json",
+      "preserved_as": "docs/continuity/history/account-state-runtime-uid-stop-20261123/continuity/CURRENT_STATE.json",
+      "bytes": 8590,
+      "sha256": "f60e8d35f13c536bfdacd45e17b97b96edca5c531086c2da7263dea245c4d10c"
+    },
+    {
+      "issued_source": "docs/continuity/HOSTED_PORTAL.md",
+      "preserved_as": "docs/continuity/history/account-state-runtime-uid-stop-20261123/continuity/HOSTED_PORTAL.md",
+      "bytes": 3115,
+      "sha256": "6ca6f6d8e43e9855f6594eda7cc162a5d80d6c1d6f62cae109f7f4cedae3785d"
+    },
+    {
+      "issued_source": "docs/99_V2_HANDOFF_NEXT_CHAT.md",
+      "preserved_as": "docs/continuity/history/account-state-runtime-uid-stop-20261123/99_V2_HANDOFF_NEXT_CHAT.md",
+      "bytes": 8706,
+      "sha256": "1e0b88fc2973fa546dfa66f4db6350c389d9e8bdbc9169641c697de09ca0f506"
+    }
+  ]
+}

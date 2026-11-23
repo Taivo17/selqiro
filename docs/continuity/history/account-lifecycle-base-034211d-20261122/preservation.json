@@ -1,0 +1,20 @@
+{
+  "source_checkpoint_sha256": "e56fa68814cbb011b15b1cef0f9b0ad46909658958ef576923583a381cc2d3b3",
+  "files": [
+    {
+      "source": "docs/continuity/CURRENT_STATE.json",
+      "preserved": "docs/continuity/history/account-lifecycle-base-034211d-20261122/CURRENT_STATE.json",
+      "sha256": "836dd7c545f40a152aef15d33af50a749fa9e86de0cf1287cefb1d495305f0e0"
+    },
+    {
+      "source": "docs/99_V2_HANDOFF_NEXT_CHAT.md",
+      "preserved": "docs/continuity/history/account-lifecycle-base-034211d-20261122/99_V2_HANDOFF_NEXT_CHAT.md",
+      "sha256": "ef082b1230a625c0fb1a8ef083da1b41d718044063668c1cef5ade7673484635"
+    },
+    {
+      "source": "docs/continuity/HOSTED_PORTAL.md",
+      "preserved": "docs/continuity/history/account-lifecycle-base-034211d-20261122/HOSTED_PORTAL.md",
+      "sha256": "c9ba5b8f4960f1204867d923bdb96d8abcef47436e7e7bab88b49c0bcbb2cbe9"
+    }
+  ]
+}

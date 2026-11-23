@@ -1,0 +1,20 @@
+{
+  "previous_package_sha256": "86ee91a8f51fbd75804ad3ea159f1759e50b0cb7d4e7f6326a68b5e7c24a837a",
+  "files": [
+    {
+      "source": "docs/continuity/CURRENT_STATE.json",
+      "preserved_as": "docs/continuity/history/account-catalog-before-20261122/CURRENT_STATE.json",
+      "sha256": "de15b263ef62b1e10e8dd3a3215a091f3accabd94b30b20526b6489f9f1a07f8"
+    },
+    {
+      "source": "docs/99_V2_HANDOFF_NEXT_CHAT.md",
+      "preserved_as": "docs/continuity/history/account-catalog-before-20261122/99_V2_HANDOFF_NEXT_CHAT.md",
+      "sha256": "daae998a4c372fb4cafdeafbc6fc0b8426a021a1c75071a2fb6dc642ff1eb8d9"
+    },
+    {
+      "source": "docs/continuity/HOSTED_PORTAL.md",
+      "preserved_as": "docs/continuity/history/account-catalog-before-20261122/HOSTED_PORTAL.md",
+      "sha256": "14acb619658bb3c268bfba87f031d2bc9a50ac0c5dec681ad7534fb41867ffd1"
+    }
+  ]
+}

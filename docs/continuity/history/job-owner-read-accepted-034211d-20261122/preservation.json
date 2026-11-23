@@ -1,0 +1,20 @@
+{
+  "base_commit": "034211d2ee3dfadd4ba791977c98e310754e4d94",
+  "files": {
+    "docs/continuity/CURRENT_STATE.json": {
+      "path": "docs/continuity/history/job-owner-read-accepted-034211d-20261122/CURRENT_STATE.json",
+      "bytes": 8000,
+      "sha256": "c6960b2d5e64185bb93fe6793fb8670f4837bd243237d51fb2dd097136ea2b70"
+    },
+    "docs/99_V2_HANDOFF_NEXT_CHAT.md": {
+      "path": "docs/continuity/history/job-owner-read-accepted-034211d-20261122/99_V2_HANDOFF_NEXT_CHAT.md",
+      "bytes": 8111,
+      "sha256": "84b627afac4a1612f7bea49fbfe7666e127af12aa72f6701bc4060c4bed99a1a"
+    },
+    "docs/continuity/HOSTED_PORTAL.md": {
+      "path": "docs/continuity/history/job-owner-read-accepted-034211d-20261122/HOSTED_PORTAL.md",
+      "bytes": 2103,
+      "sha256": "35a61af1c411264deffa11d600e13db8e3d38b2b6dbba33d6eab974d8e94d510"
+    }
+  }
+}

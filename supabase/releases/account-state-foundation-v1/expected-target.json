@@ -1,0 +1,147 @@
+{
+  "schema_owner": "postgres",
+  "schema_owner_only": true,
+  "schema_app_denied": true,
+  "relation_count": 1,
+  "table_owner": "postgres",
+  "table_kind": "r",
+  "rls": true,
+  "force_rls": false,
+  "owner_grants_only": true,
+  "column_grants_owner_only": true,
+  "table_app_denied": true,
+  "columns": [
+    {
+      "name": "account_user_id",
+      "type": "uuid",
+      "not_null": true,
+      "generated": "",
+      "identity": "",
+      "default_sha256": null
+    },
+    {
+      "name": "state",
+      "type": "text",
+      "not_null": true,
+      "generated": "",
+      "identity": "",
+      "default_sha256": "bc587d16fe04f2dc435392330ab3f1d862259110e3f739541615410e35793930"
+    },
+    {
+      "name": "revision",
+      "type": "bigint",
+      "not_null": true,
+      "generated": "",
+      "identity": "",
+      "default_sha256": "6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b"
+    },
+    {
+      "name": "initialized_at",
+      "type": "timestamp with time zone",
+      "not_null": true,
+      "generated": "",
+      "identity": "",
+      "default_sha256": "02faed0a16c0374c2c44ec86dc055cb70dc1d0b1063a493de9dbaac09f014e75"
+    }
+  ],
+  "constraints": [
+    {
+      "name": "account_states_active_only",
+      "kind": "c",
+      "definition_sha256": "9470057905dfde57de3c0198298b4be1b2e5b715d403d8a546df260f809ea99a",
+      "validated": true,
+      "deferrable": false
+    },
+    {
+      "name": "account_states_auth_user_fkey",
+      "kind": "f",
+      "definition_sha256": "abbd0493bf08fef05f8d7441a784d51dce4e87c50e8e2efe53a33d3da2db8c82",
+      "validated": true,
+      "deferrable": false
+    },
+    {
+      "name": "account_states_pkey",
+      "kind": "p",
+      "definition_sha256": "c7e3043228a979000e3d6ec23fa15074dc70171227373d58f80710eadb3bee0e",
+      "validated": true,
+      "deferrable": false
+    },
+    {
+      "name": "account_states_revision_positive",
+      "kind": "c",
+      "definition_sha256": "7c0ddfd91f9bdc7bd607f558b7220a0d09efdbea0973a07402460329265b9c9f",
+      "validated": true,
+      "deferrable": false
+    }
+  ],
+  "policies": 0,
+  "table_triggers": 0,
+  "indexes": 1,
+  "functions": [
+    {
+      "definition_sha256": "15cce5a9161fde046f5007f49c2ab29bf92037a6e6cabc19c04e4d020bb555e5",
+      "name": "account_lifecycle_private.initialize_account_state",
+      "arguments": [],
+      "result": "trigger",
+      "owner": "postgres",
+      "language": "plpgsql",
+      "definer": true,
+      "volatility": "v",
+      "strict": false,
+      "parallel": "u",
+      "leakproof": false,
+      "config_sha256": "0e5c5deb67bdf8a0f1c087edd287aeab8d3ca04e5548a7679dd526aad7d8d491",
+      "body_sha256": "aa20ef7303951cbd99afcaf91d9563707547d3157777bb0dbf9c9cf7e935cfe5",
+      "defaults": false,
+      "grants": [
+        {
+          "role": "postgres",
+          "privilege": "EXECUTE",
+          "grantable": false
+        }
+      ]
+    },
+    {
+      "definition_sha256": "0a90100b5555c24873eed9f2343682e557b6f7f0034fdc11cf302bf36895c7fd",
+      "name": "public.get_my_account_state_v1",
+      "arguments": [
+        "uuid"
+      ],
+      "result": "jsonb",
+      "owner": "postgres",
+      "language": "plpgsql",
+      "definer": true,
+      "volatility": "s",
+      "strict": false,
+      "parallel": "u",
+      "leakproof": false,
+      "config_sha256": "0e5c5deb67bdf8a0f1c087edd287aeab8d3ca04e5548a7679dd526aad7d8d491",
+      "body_sha256": "a35b65d3336a940b3bd05e51b9412b37f239baa13ae1e69d4eb0ae45c189785d",
+      "defaults": false,
+      "grants": [
+        {
+          "role": "authenticated",
+          "privilege": "EXECUTE",
+          "grantable": false
+        },
+        {
+          "role": "postgres",
+          "privilege": "EXECUTE",
+          "grantable": false
+        }
+      ]
+    }
+  ],
+  "auth_triggers": [
+    {
+      "definition_sha256": "c1eea90f2165098d86c47ab6ae11f224a4b243709c39372f923765341748d964",
+      "name": "initialize_account_state",
+      "function": "account_lifecycle_private.initialize_account_state()",
+      "enabled": "O",
+      "event_mask": 5,
+      "argument_count": 0,
+      "arguments_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "when_sha256": null
+    }
+  ]
+}
