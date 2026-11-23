@@ -1,3 +1,13 @@
+# Rakendatud ja vastu võetud — 23.11.2026
+
+Commit 8dc0b3b: üks kinnitatud SQL paigaldus, eraldi verify, testid/build ja push.
+Sama commit’i Ready / Production ning avalike profiilide ja Minu konto avamine
+on kasutaja poolt kinnitatud. Täpne vastuvõtt: account-public-profile-accepted-20261123.md.
+Allpool säilib algne ettevalmistuse leping; selle ootel-kirjed on nüüd ajalugu.
+Sulgemise toimingud ja muud lugejad jäävad lepingus kirjeldatud järgmisteks osadeks.
+
+---
+
 # Avaliku profiili konto-oleku kontroll
 
 23.11.2026 Europe/Tallinn. Alus `4b607828d0b153b84166ba963fdb4e77337e11f0`.

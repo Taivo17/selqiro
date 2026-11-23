@@ -1,0 +1,50 @@
+{
+  "format": "selqiro_repo_handoff_v1",
+  "recorded_on": "23.11.2026 Europe/Tallinn — avaliku profiili konto-oleku kontroll vastu võetud, main 8dc0b3b",
+  "archive": {
+    "lines": 5573,
+    "path": "docs/archive/99_V2_HANDOFF_NEXT_CHAT.before-price-core-20261004-6df0af9.md",
+    "sha256": "667e47990a7d3cc20ff53709cb861663b4565cf1d3c830eda88e0d18e60fdb8a"
+  },
+  "checkpoint": "Avaliku profiili konto-oleku kontroll on Maci raporti järgi ühe SQL paigalduse ja eraldi järelkontrolliga rakendatud ning commit 8dc0b3b pushitud. Kasutaja Verceli pilt kinnitab sama commit’i Ready / Production tulemust; eraisiku ja ettevõtte avalikud profiilid avanevad koos piltidega ning Minu konto näitab Aktiivne olekut. Kasutaja kinnitas „kõik lehed avanevad”. See kitsas moodul on vastu võetud. Järgmine töö on tavakuulutuste avalike otsingu- ja üksikvaate lugejate sama konto-oleku piir.",
+  "source": {
+    "Vastu võetud alus": "main 8dc0b3b11777b010c8486b45a3f98f0191d97d80; ainus vanem 4b607828d0b153b84166ba963fdb4e77337e11f0; puu fc44ed6ae9e903bbbaef1df2017fdca396a1aa02; 2130 faili. Kõik 30 paketi rada on täpses lõpppuus, neist 8 muudatust ja 22 uut faili. Täieliku lõppindeksi ja ls-tree salvestatud väljundiräsid vastavad taastatud inventarile; tööpuu/index on raporti lõpus puhtad.",
+    "Täpne Maci raport": "selqiro-profiili-konto-olek-20261123-raport-20261123-190200-2ca1275173f0.json, 1341579 baiti, SHA256 62ec79032d68bdb6e453953f639255876bbb000da19d11e70d5584111ebf7ba9. Käik 23.11.2026 19:01:03.924–19:02:00.701 Europe/Tallinn. Stage complete, tests/build passed, database verified, apply_count 1, push verified. Viimane remote’i võrdsus 19:02:00.673.",
+    "Andmebaas": "Üks preflight enne, üks kinnitatud apply ning eraldi ainult lugemise verify pärast kinnitasid täpse kontooleku aluse ja profiilifiltri. Kolme range kviitungi CLI ümbrised taastati pikkuse ja räsi järgi. Varem lähtekoodist taastatud profiililugeja õigused said nüüd selle eelseisu täpse metaandmevõrdluse kinnituse; see pole kõigi rollide või terve skeemi uus audit.",
+    "Rakendatud ulatus": "Üks privaatne ainult lugev account_is_available(uuid) ning get_store_by_slug valitud kandidaadi lõppfilter. Kanooniline valik eelneb sobivusele. Eraisiku omanik tuleb identities.user_id-st, ettevõtte omanik business_accounts.owner_user_id-st. Avalik vastusekuju, asukoha privaatsus, blokeerimine ja olemasolev meedia delegatsioon säilivad.",
+    "Säilimise piir": "Rakendatud SQL lisab abifunktsiooni ja asendab ühe profiililugeja; konto- ega sisuridade DML-i ei ole. Kontooleku active-only alus ja senine Auth-trigger säilivad. Varem väljastatud avalikke pildi-URL-e ei tühistata. Muud otsingu-/pakkumise-/sõnumilugejad ning kirjutused ei saa sellest automaatselt kontooleku kontrolli.",
+    "Dokumentatsiooni piir": "See vastuvõetud seis ja genereeritud üleandmine on eraldi 8dc0b3b-järgne ettevalmistus. Kasutaja Maci/Giti dokumente pole pärast seda commit’i siit kirjutatud ega pushitud. Need lisad lähevad kaasa järgmise sisulise koodipaketiga; eraldi paigalduskäsku ega käsitsi kopeerimist pole vaja."
+  },
+  "local_test": [
+    "Maci 8/8 uut testi läbisid ühe 0,446-sekundise Node käsuga, TAP parser kinnitab null viga/vahelejätmist/katkestust/todo. Raportis on parsitud tulemus ja 1961-baidise logi räsi fadbd5f04c54b82f5ccc102f1b984ee2e29b55794f845fdb17d492b15e5d9ee2. Toorlogi pole raportisse kopeeritud; vastuvõtt ei väida selle uuesti parsimist.",
+    "Üks värske Next.js 16.4.6 / TypeScripti build käsk lõppes edukalt; käsu kestus 2,243 sekundit. 2570-baidise logi räsi on 3c640084ee9e54410d541f646336952b67bf65d5c58ded98cf7fb3084ad57def; seitse ehitusartefaktiräsi on raportis. See ei ole väide tühja vahemäluga build’i kohta.",
+    "Kõik 567 salvestatud käsku lõpetasid kinnitatud protsessilõpuga. Kolm runtime-etappi läbisid; olemasolevate rakenduste protsessidele signaale ei saadetud. Vana peatumisajalugu ning varasem eduka käigu originaalraport säilisid.",
+    "Ettevalmistuse 22 PostgreSQL ja 18 parserijuhtu ning uuendaja 24+1+7 kontrollid jäävad varasemaks tõendiks. Vastuvõtu ajal kontrolliti ainult salvestatud raportit, täpseid faile, räsisid ja kasutajapilte. Uut rakendusetesti, build’i, SQL-i ega teenusepäringut ei käivitatud."
+  ],
+  "production": [
+    "Kasutaja Verceli pilt näitab Respect account availability in public profile reads, main 8dc0b3b, Ready / Production. Raporti READY_NOT_CHECKED väärtus säilib algse raporti osana; pilt on eraldi deployment’i tõend.",
+    "Milline Vedu avalikul ettevõtteprofiilil on nimi, ettevõtte tunnus, avatar, kaanepilt ja nähtavad kuulutused. Taivo Garaaz avalikul eraisikuprofiilil on nimi, eraisiku tunnus, avatar, kaanepilt ja nähtavad tootenäidised. Minu konto pildil on Aktiivne ning tagasilink. Kasutaja kinnitas kõigi küsitud lehtede avanemist.",
+    "Vastu on võetud selle mooduli küsitud kasutustee. Anonüümset seanssi, kõiki kolme kontot, mobiilivaadet, Kirjuta/Jälgi tegevusi või sulgemise käitumist need pildid eraldi ei tõenda. Konto sulgemise, taastamise ja kustutamise toimingud on järgmiste moodulite järel."
+  ],
+  "next_action": "Valmista 8dc0b3b alusel ette tavakuulutuste avaliku otsingu ja üksikvaate konto-oleku kontroll, kasutades olemasolevat privaatset account_is_available helperit. Kaasa tegelik ühendatud otsingu tavakuulutuste haru, säilita sama sobivus enne lehekülgede piirangut ning senine asjakohasus, hinnad, asukoht ja õigused. Täpne piir, allikad ja järgmised sihitud kontrollid on docs/architecture/account-listing-read-next-20261123.md-s. Lõpetatud profiilipaketti ei käivitata uuesti.",
+  "stop_rule": "8dc0b3b profiili paigaldus on lõpetatud; selle uuendajat, SQL apply’t ega valmis teste ei korrata. Säilita kõik paketid, raportid ja päevikud. Enne järgmist Maci kirjutust kontrolli tegelikku haru, HEAD-i, tööpuud/indexit, lähtefaile ja kinnitatud remote’i. Tundmatu lähtekoodi või SQL eelseisu korral peatu; väljastatud räsikaitsega pakke ei muudeta.",
+  "read_next": [
+    "docs/continuity/HOSTED_PORTAL.md — vastu võetud paigaldus ja üks järgmine töö.",
+    "docs/architecture/account-public-profile-accepted-20261123.md — täpsed Mac/Git/SQL/deployment/kasutustee tõendid.",
+    "docs/architecture/account-listing-read-next-20261123.md — järgmise tavakuulutuse lugemismooduli kavand.",
+    "docs/architecture/account-public-profile-fence-v1.md — nüüd rakendatud profiili leping."
+  ],
+  "boundaries": [
+    "Kolm kontot kuuluvad kasutajale; ainult ühel on kaks identiteeti. Uus konto valib eraisiku VÕI ettevõtte. Mitme identiteedi ning ettevõtte töötajate/rollide/omandi üleandmise iseteenindus ei ole avamisulatus.",
+    "Olemasolevaid kontosid, profiile, pakkumisi, pilte, vestlusi, Energy andmeid, kviitungeid ega päevikuid ei kustutata, liideta ega kirjutata ümber. Vastu võetud profiili SQL ei muuda konto- ega sisuridu. Sisemised omandi- ja õiguskontrollid säilivad; sulgemine ning kustutamine vajavad eraldi lõpetatud kasutusteekonda.",
+    "E-posti aktiveerimine jääb põhidomeeni selqiro.com kasutuselevõtu juurde. Saatmine, kinnitamine ja parooli taastamine peavad olema lõpuni kontrollitud enne väliseid testijaid või avalikku registreerimist ka vercel.app aadressil.",
+    "Kasutajale kuuluvad ka selqiro.app/.io ja selkiro.com/.app/.io. Domeeni valikut uuesti ei küsita; DNS-i selles sammus ei muudeta.",
+    "AI päringuteed jäävad suletuks. Tavaline osalemine ei sõltu Energy ostust. Riigipõhised töökuulutuse poliitikad ja senised avaldamise/vestluse lepingud säilivad.",
+    "Pärast konto sulgemise/taastamise/kustutamise tervikut jätkub olemasolevate kuulutuste esiletõstmise ja seejärel välisreklaamide töö. Reklaamija võib kasutada sama kontot ilma avaliku müüjaprofiilita; reklaamimine ei ole kolmas kontotüüp."
+  ],
+  "environment": [
+    "/Users/taivo/selqiro, kinnitatud https://github.com/Taivo17/selqiro.git. Viimane tegelik main 8dc0b3b11777b010c8486b45a3f98f0191d97d80, puhas tööpuu/index ja remote võrdsus on kasutaja 23.11 kell 19:02 raportis; siin tehtud ülevaatus pole uus Maci või remote’i vaatlus.",
+    "Next 16.4.6, Sharp 0.35.5 ning package.json/package-lock.json säilivad. Olemasolev Supabase CLI 2.117.0 ja projekt vyjletlmwoiwxsnsunlm olid täpselt kontrollitud; paigaldust, uut linkimist ega sõltuvuste uuendust ei tehtud.",
+    "Edukas originaalpäevik on ~/Library/Application Support/Selqiro/account-public-profile-20261123/ef66792304f6ea94ed7773954d7773b82fd3e37f28d67fbde22cb935c8228574/result.json. Eelmise r2 eduka originaali df77de0996451e7b8823262294d7edcb128761eaf7e3a0ecbdce4d3bc47e59e6 baidid säilisid. Vana ajalugu ega STOP-e ei muudeta."
+  ]
+}

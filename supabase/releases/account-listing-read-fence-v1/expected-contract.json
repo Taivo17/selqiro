@@ -1,0 +1,1289 @@
+{
+  "base": {
+    "columns": [
+      {
+        "name": "hidden_until",
+        "type": "timestamp with time zone",
+        "identity": "",
+        "not_null": false,
+        "relation": "provider_controls_private.hidden_providers",
+        "generated": ""
+      },
+      {
+        "name": "provider_identity_id",
+        "type": "uuid",
+        "identity": "",
+        "not_null": true,
+        "relation": "provider_controls_private.hidden_providers",
+        "generated": ""
+      },
+      {
+        "name": "viewer_user_id",
+        "type": "uuid",
+        "identity": "",
+        "not_null": true,
+        "relation": "provider_controls_private.hidden_providers",
+        "generated": ""
+      },
+      {
+        "name": "id",
+        "type": "uuid",
+        "identity": "",
+        "not_null": true,
+        "relation": "public.listing_images",
+        "generated": ""
+      },
+      {
+        "name": "listing_id",
+        "type": "bigint",
+        "identity": "",
+        "not_null": false,
+        "relation": "public.listing_images",
+        "generated": ""
+      },
+      {
+        "name": "active_until",
+        "type": "timestamp with time zone",
+        "identity": "",
+        "not_null": false,
+        "relation": "public.listings",
+        "generated": ""
+      },
+      {
+        "name": "id",
+        "type": "bigint",
+        "identity": "d",
+        "not_null": true,
+        "relation": "public.listings",
+        "generated": ""
+      },
+      {
+        "name": "identity_id",
+        "type": "uuid",
+        "identity": "",
+        "not_null": false,
+        "relation": "public.listings",
+        "generated": ""
+      },
+      {
+        "name": "status",
+        "type": "text",
+        "identity": "",
+        "not_null": false,
+        "relation": "public.listings",
+        "generated": ""
+      },
+      {
+        "name": "user_id",
+        "type": "uuid",
+        "identity": "",
+        "not_null": false,
+        "relation": "public.listings",
+        "generated": ""
+      },
+      {
+        "name": "blocked_id",
+        "type": "uuid",
+        "identity": "",
+        "not_null": true,
+        "relation": "public.user_blocks",
+        "generated": ""
+      },
+      {
+        "name": "blocker_id",
+        "type": "uuid",
+        "identity": "",
+        "not_null": true,
+        "relation": "public.user_blocks",
+        "generated": ""
+      }
+    ],
+    "indexes": [
+      {
+        "name": "hidden_providers_active_idx",
+        "ready": true,
+        "valid": true,
+        "unique": false,
+        "primary": false,
+        "relation": "provider_controls_private.hidden_providers",
+        "definition_sha256": "82609b9c602fd47f72222d36779090fac3b44c6d68cf855855b853a07407da19"
+      },
+      {
+        "name": "hidden_providers_pkey",
+        "ready": true,
+        "valid": true,
+        "unique": true,
+        "primary": true,
+        "relation": "provider_controls_private.hidden_providers",
+        "definition_sha256": "115c5ab5c5238e9309d4b4a658c3ac11e69e0f148b336f122329aa3d00cf6fcb"
+      },
+      {
+        "name": "idx_listing_images_listing_id",
+        "ready": true,
+        "valid": true,
+        "unique": false,
+        "primary": false,
+        "relation": "public.listing_images",
+        "definition_sha256": "274f48f9768b450b0462d63b3c230a60d11139b91515a305efc451390d175711"
+      },
+      {
+        "name": "idx_listings_category",
+        "ready": true,
+        "valid": true,
+        "unique": false,
+        "primary": false,
+        "relation": "public.listings",
+        "definition_sha256": "15bb782001b3715c99b40f95df921f5603f4c902b66807a90ba8f6b9801c80b7"
+      },
+      {
+        "name": "listings_identity_id_idx",
+        "ready": true,
+        "valid": true,
+        "unique": false,
+        "primary": false,
+        "relation": "public.listings",
+        "definition_sha256": "59368fb27210b5468ae8056d197e64e57872ec8ad76aa5fd8a277d608b85bd13"
+      },
+      {
+        "name": "listings_pkey",
+        "ready": true,
+        "valid": true,
+        "unique": true,
+        "primary": true,
+        "relation": "public.listings",
+        "definition_sha256": "3a99b94df5259921c3dc6e9ef37ab1d39ebec1b08baa237a45ace5337046e051"
+      },
+      {
+        "name": "listings_public_keywords_v1_gin",
+        "ready": true,
+        "valid": true,
+        "unique": false,
+        "primary": false,
+        "relation": "public.listings",
+        "definition_sha256": "4f1e33c25e79f90159d72eab90535f58d63ce23da2eee6db17f4541ba7f59d55"
+      },
+      {
+        "name": "user_blocks_blocked_blocker_idx_v1",
+        "ready": true,
+        "valid": true,
+        "unique": false,
+        "primary": false,
+        "relation": "public.user_blocks",
+        "definition_sha256": "d8d108e3683b1b1f84c7542fd8a9b458e29dd94abbc9629ad07c885c832c458d"
+      },
+      {
+        "name": "user_blocks_blocker_id_blocked_id_key",
+        "ready": true,
+        "valid": true,
+        "unique": true,
+        "primary": false,
+        "relation": "public.user_blocks",
+        "definition_sha256": "4285baeaa85ca5944ca872cdfd37d551cc7b73ea8cbfaa322e4b00c587825fd7"
+      }
+    ],
+    "relations": [
+      {
+        "rls": true,
+        "kind": "r",
+        "name": "provider_controls_private.hidden_providers",
+        "owner": "postgres",
+        "force_rls": false,
+        "observer_select": true
+      },
+      {
+        "rls": true,
+        "kind": "r",
+        "name": "public.listing_images",
+        "owner": "postgres",
+        "force_rls": false,
+        "observer_select": true
+      },
+      {
+        "rls": true,
+        "kind": "r",
+        "name": "public.listings",
+        "owner": "postgres",
+        "force_rls": false,
+        "observer_select": true
+      },
+      {
+        "rls": true,
+        "kind": "r",
+        "name": "public.user_blocks",
+        "owner": "postgres",
+        "force_rls": false,
+        "observer_select": true
+      }
+    ],
+    "dependencies": [
+      {
+        "name": "public.listing_actor_uid_hosted_v1",
+        "owner": "postgres",
+        "grants": [
+          {
+            "role": "anon",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          },
+          {
+            "role": "authenticated",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          },
+          {
+            "role": "postgres",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          },
+          {
+            "role": "selqiro_listing_contact_writer_v1",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          },
+          {
+            "role": "selqiro_listing_final_writer_v1",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          },
+          {
+            "role": "selqiro_listing_price_writer_v1",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          },
+          {
+            "role": "service_role",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          }
+        ],
+        "result": "uuid",
+        "strict": false,
+        "definer": true,
+        "defaults": false,
+        "language": "sql",
+        "parallel": "u",
+        "arguments": [],
+        "leakproof": false,
+        "volatility": "s",
+        "body_sha256": "ff7f6ce615280095930c983468c5ce5a6c3982bc4f540e4929bb0baf904ce88d",
+        "config_sha256": "8a99ef30e82bf63f97a0f2bb54e5484d1b27779ff3d93cad1079c2934c2485a6",
+        "definition_sha256": "1aced17f656a8fdb366dfe22cbb53ca53f8e281cc3c6fc8aeb6bccb3ad409770"
+      },
+      {
+        "name": "public.public_listing_search_document_v1",
+        "owner": "postgres",
+        "grants": [
+          {
+            "role": "anon",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          },
+          {
+            "role": "authenticated",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          },
+          {
+            "role": "postgres",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          },
+          {
+            "role": "selqiro_listing_final_writer_v1",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          },
+          {
+            "role": "selqiro_listing_price_writer_v1",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          },
+          {
+            "role": "service_role",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          }
+        ],
+        "result": "tsvector",
+        "strict": false,
+        "definer": false,
+        "defaults": false,
+        "language": "plpgsql",
+        "parallel": "s",
+        "arguments": [
+          "text",
+          "text",
+          "text",
+          "text",
+          "jsonb"
+        ],
+        "leakproof": false,
+        "volatility": "i",
+        "body_sha256": "f3bd8b25cb8b29af0dffeb928fc783b9ff08e6e3c64f27f063d80708f1dc4b45",
+        "config_sha256": "8a99ef30e82bf63f97a0f2bb54e5484d1b27779ff3d93cad1079c2934c2485a6",
+        "definition_sha256": "76b8194c6ecf6ee0b287b5541e554105f9affdda3e74786e04138461b702da4e"
+      }
+    ],
+    "accepted_profile_base": {
+      "roles": [
+        "anon",
+        "authenticated",
+        "service_role"
+      ],
+      "columns": [
+        {
+          "name": "banned_until",
+          "type": "timestamp with time zone",
+          "identity": "",
+          "not_null": false,
+          "relation": "auth.users",
+          "generated": ""
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "identity": "",
+          "not_null": false,
+          "relation": "auth.users",
+          "generated": ""
+        },
+        {
+          "name": "deleted_at",
+          "type": "timestamp with time zone",
+          "identity": "",
+          "not_null": false,
+          "relation": "auth.users",
+          "generated": ""
+        },
+        {
+          "name": "id",
+          "type": "uuid",
+          "identity": "",
+          "not_null": true,
+          "relation": "auth.users",
+          "generated": ""
+        },
+        {
+          "name": "id",
+          "type": "uuid",
+          "identity": "",
+          "not_null": true,
+          "relation": "public.business_accounts",
+          "generated": ""
+        },
+        {
+          "name": "owner_user_id",
+          "type": "uuid",
+          "identity": "",
+          "not_null": true,
+          "relation": "public.business_accounts",
+          "generated": ""
+        },
+        {
+          "name": "status",
+          "type": "text",
+          "identity": "",
+          "not_null": true,
+          "relation": "public.business_accounts",
+          "generated": ""
+        },
+        {
+          "name": "business_account_id",
+          "type": "uuid",
+          "identity": "",
+          "not_null": false,
+          "relation": "public.identities",
+          "generated": ""
+        },
+        {
+          "name": "id",
+          "type": "uuid",
+          "identity": "",
+          "not_null": true,
+          "relation": "public.identities",
+          "generated": ""
+        },
+        {
+          "name": "status",
+          "type": "text",
+          "identity": "",
+          "not_null": true,
+          "relation": "public.identities",
+          "generated": ""
+        },
+        {
+          "name": "type",
+          "type": "text",
+          "identity": "",
+          "not_null": true,
+          "relation": "public.identities",
+          "generated": ""
+        },
+        {
+          "name": "user_id",
+          "type": "uuid",
+          "identity": "",
+          "not_null": false,
+          "relation": "public.identities",
+          "generated": ""
+        },
+        {
+          "name": "identity_id",
+          "type": "uuid",
+          "identity": "",
+          "not_null": true,
+          "relation": "public.identity_profiles",
+          "generated": ""
+        },
+        {
+          "name": "slug",
+          "type": "text",
+          "identity": "",
+          "not_null": false,
+          "relation": "public.identity_profiles",
+          "generated": ""
+        },
+        {
+          "name": "id",
+          "type": "uuid",
+          "identity": "",
+          "not_null": true,
+          "relation": "public.profiles",
+          "generated": ""
+        },
+        {
+          "name": "store_slug",
+          "type": "text",
+          "identity": "",
+          "not_null": false,
+          "relation": "public.profiles",
+          "generated": ""
+        }
+      ],
+      "indexes": [
+        {
+          "name": "users_pkey",
+          "ready": true,
+          "valid": true,
+          "unique": true,
+          "primary": true,
+          "relation": "auth.users",
+          "definition_sha256": "ada7099cde26101ecbf2c46509be93c29ba8399604619ffc6b8865aa79ac3326"
+        },
+        {
+          "name": "business_accounts_pkey",
+          "ready": true,
+          "valid": true,
+          "unique": true,
+          "primary": true,
+          "relation": "public.business_accounts",
+          "definition_sha256": "b5b1d13295d7482625fbfc26d0d16e5c1c29b4c76014667aa640f621c42e21fb"
+        },
+        {
+          "name": "identities_pkey",
+          "ready": true,
+          "valid": true,
+          "unique": true,
+          "primary": true,
+          "relation": "public.identities",
+          "definition_sha256": "d0bedd5f044bda88652e61e3b4763ee1110b40c9474136e79a1ffa40ea1aa54f"
+        },
+        {
+          "name": "identity_profiles_identity_id_key",
+          "ready": true,
+          "valid": true,
+          "unique": true,
+          "primary": false,
+          "relation": "public.identity_profiles",
+          "definition_sha256": "3b164f7cc1947884b1e1f2ad2ae562b066757df3308e106eeb095b43d99f23c6"
+        },
+        {
+          "name": "identity_profiles_slug_key",
+          "ready": true,
+          "valid": true,
+          "unique": true,
+          "primary": false,
+          "relation": "public.identity_profiles",
+          "definition_sha256": "6a4557f28f65d55480535a9515d59f82f00adf3d3e900220b1ab5f136da8b2d0"
+        },
+        {
+          "name": "profiles_pkey",
+          "ready": true,
+          "valid": true,
+          "unique": true,
+          "primary": true,
+          "relation": "public.profiles",
+          "definition_sha256": "248eaa8d9ad55df13054ec6dad3a08495c4ae6534cad1099eea8e223f80d8c7d"
+        },
+        {
+          "name": "profiles_store_slug_key",
+          "ready": true,
+          "valid": true,
+          "unique": true,
+          "primary": false,
+          "relation": "public.profiles",
+          "definition_sha256": "1217a464d265ef42290e64049a338a98ce135159eae44ac0be2d843240fd025b"
+        }
+      ],
+      "observer": "postgres",
+      "relations": [
+        {
+          "rls": true,
+          "kind": "r",
+          "name": "auth.users",
+          "owner": "supabase_auth_admin",
+          "force_rls": false,
+          "observer_select": true
+        },
+        {
+          "rls": true,
+          "kind": "r",
+          "name": "public.business_accounts",
+          "owner": "postgres",
+          "force_rls": false,
+          "observer_select": true
+        },
+        {
+          "rls": true,
+          "kind": "r",
+          "name": "public.identities",
+          "owner": "postgres",
+          "force_rls": false,
+          "observer_select": true
+        },
+        {
+          "rls": true,
+          "kind": "r",
+          "name": "public.identity_profiles",
+          "owner": "postgres",
+          "force_rls": false,
+          "observer_select": true
+        },
+        {
+          "rls": true,
+          "kind": "r",
+          "name": "public.profiles",
+          "owner": "postgres",
+          "force_rls": false,
+          "observer_select": true
+        }
+      ],
+      "foundation": {
+        "rls": true,
+        "columns": [
+          {
+            "name": "account_user_id",
+            "type": "uuid",
+            "identity": "",
+            "not_null": true,
+            "generated": "",
+            "default_sha256": null
+          },
+          {
+            "name": "state",
+            "type": "text",
+            "identity": "",
+            "not_null": true,
+            "generated": "",
+            "default_sha256": "bc587d16fe04f2dc435392330ab3f1d862259110e3f739541615410e35793930"
+          },
+          {
+            "name": "revision",
+            "type": "bigint",
+            "identity": "",
+            "not_null": true,
+            "generated": "",
+            "default_sha256": "6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b"
+          },
+          {
+            "name": "initialized_at",
+            "type": "timestamp with time zone",
+            "identity": "",
+            "not_null": true,
+            "generated": "",
+            "default_sha256": "02faed0a16c0374c2c44ec86dc055cb70dc1d0b1063a493de9dbaac09f014e75"
+          }
+        ],
+        "indexes": 1,
+        "policies": 0,
+        "force_rls": false,
+        "functions": [
+          {
+            "name": "account_lifecycle_private.initialize_account_state",
+            "owner": "postgres",
+            "grants": [
+              {
+                "role": "postgres",
+                "grantable": false,
+                "privilege": "EXECUTE"
+              }
+            ],
+            "result": "trigger",
+            "strict": false,
+            "definer": true,
+            "defaults": false,
+            "language": "plpgsql",
+            "parallel": "u",
+            "arguments": [],
+            "leakproof": false,
+            "volatility": "v",
+            "body_sha256": "aa20ef7303951cbd99afcaf91d9563707547d3157777bb0dbf9c9cf7e935cfe5",
+            "config_sha256": "0e5c5deb67bdf8a0f1c087edd287aeab8d3ca04e5548a7679dd526aad7d8d491",
+            "definition_sha256": "15cce5a9161fde046f5007f49c2ab29bf92037a6e6cabc19c04e4d020bb555e5"
+          },
+          {
+            "name": "public.get_my_account_state_v1",
+            "owner": "postgres",
+            "grants": [
+              {
+                "role": "authenticated",
+                "grantable": false,
+                "privilege": "EXECUTE"
+              },
+              {
+                "role": "postgres",
+                "grantable": false,
+                "privilege": "EXECUTE"
+              }
+            ],
+            "result": "jsonb",
+            "strict": false,
+            "definer": true,
+            "defaults": false,
+            "language": "plpgsql",
+            "parallel": "u",
+            "arguments": [
+              "uuid"
+            ],
+            "leakproof": false,
+            "volatility": "s",
+            "body_sha256": "a35b65d3336a940b3bd05e51b9412b37f239baa13ae1e69d4eb0ae45c189785d",
+            "config_sha256": "0e5c5deb67bdf8a0f1c087edd287aeab8d3ca04e5548a7679dd526aad7d8d491",
+            "definition_sha256": "0a90100b5555c24873eed9f2343682e557b6f7f0034fdc11cf302bf36895c7fd"
+          }
+        ],
+        "table_kind": "r",
+        "constraints": [
+          {
+            "kind": "c",
+            "name": "account_states_active_only",
+            "validated": true,
+            "deferrable": false,
+            "definition_sha256": "9470057905dfde57de3c0198298b4be1b2e5b715d403d8a546df260f809ea99a"
+          },
+          {
+            "kind": "f",
+            "name": "account_states_auth_user_fkey",
+            "validated": true,
+            "deferrable": false,
+            "definition_sha256": "abbd0493bf08fef05f8d7441a784d51dce4e87c50e8e2efe53a33d3da2db8c82"
+          },
+          {
+            "kind": "p",
+            "name": "account_states_pkey",
+            "validated": true,
+            "deferrable": false,
+            "definition_sha256": "c7e3043228a979000e3d6ec23fa15074dc70171227373d58f80710eadb3bee0e"
+          },
+          {
+            "kind": "c",
+            "name": "account_states_revision_positive",
+            "validated": true,
+            "deferrable": false,
+            "definition_sha256": "7c0ddfd91f9bdc7bd607f558b7220a0d09efdbea0973a07402460329265b9c9f"
+          }
+        ],
+        "table_owner": "postgres",
+        "schema_owner": "postgres",
+        "auth_triggers": [
+          {
+            "name": "initialize_account_state",
+            "enabled": "O",
+            "function": "account_lifecycle_private.initialize_account_state()",
+            "event_mask": 5,
+            "when_sha256": null,
+            "argument_count": 0,
+            "arguments_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "definition_sha256": "c1eea90f2165098d86c47ab6ae11f224a4b243709c39372f923765341748d964"
+          }
+        ],
+        "relation_count": 1,
+        "table_triggers": 0,
+        "table_app_denied": true,
+        "owner_grants_only": true,
+        "schema_app_denied": true,
+        "schema_owner_only": true,
+        "column_grants_owner_only": true
+      },
+      "dependencies": [
+        {
+          "name": "auth.uid",
+          "owner": "supabase_auth_admin",
+          "grants": [
+            {
+              "role": "PUBLIC",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            },
+            {
+              "role": "dashboard_user",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            },
+            {
+              "role": "supabase_auth_admin",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            }
+          ],
+          "result": "uuid",
+          "strict": false,
+          "definer": false,
+          "defaults": false,
+          "language": "sql",
+          "parallel": "u",
+          "arguments": [],
+          "leakproof": false,
+          "volatility": "s",
+          "body_sha256": "9ab5ea099e74ec09e83b1505c51a3647791195aed7c742dcc3f257dfc7d2f300",
+          "config_sha256": null,
+          "definition_sha256": "7c1ff2ecbe653c9358b3115a2607db9573f88a2944ae4eca9e296a89cc5186a7"
+        },
+        {
+          "name": "profile_media_private.public_url",
+          "owner": "postgres",
+          "grants": [
+            {
+              "role": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            }
+          ],
+          "result": "text",
+          "strict": false,
+          "definer": false,
+          "defaults": false,
+          "language": "sql",
+          "parallel": "u",
+          "arguments": [
+            "text"
+          ],
+          "leakproof": false,
+          "volatility": "i",
+          "body_sha256": "b9b041c5f81bb15c1f114adc88efb0645ed97f2b519fb96624f6fb74534813a9",
+          "config_sha256": "0e5c5deb67bdf8a0f1c087edd287aeab8d3ca04e5548a7679dd526aad7d8d491",
+          "definition_sha256": "3684d4186c316a1a357ed0da0260d80413e04cd698898f66782c6a9e5f8256a7"
+        },
+        {
+          "name": "profile_media_private.slot_asset",
+          "owner": "postgres",
+          "grants": [
+            {
+              "role": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            }
+          ],
+          "result": "jsonb",
+          "strict": false,
+          "definer": false,
+          "defaults": false,
+          "language": "plpgsql",
+          "parallel": "u",
+          "arguments": [
+            "uuid",
+            "text"
+          ],
+          "leakproof": false,
+          "volatility": "s",
+          "body_sha256": "879ab2663f3e1124019b14b804303655fa427e5b90df3a5a46cea606950b9658",
+          "config_sha256": "0e5c5deb67bdf8a0f1c087edd287aeab8d3ca04e5548a7679dd526aad7d8d491",
+          "definition_sha256": "1854ad13b647f7ee040bff34bbdcda5f8ed5d7780a570c12229a541d1a17b29a"
+        },
+        {
+          "name": "profile_media_private.slot_url",
+          "owner": "postgres",
+          "grants": [
+            {
+              "role": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            }
+          ],
+          "result": "text",
+          "strict": false,
+          "definer": false,
+          "defaults": false,
+          "language": "sql",
+          "parallel": "u",
+          "arguments": [
+            "uuid",
+            "text"
+          ],
+          "leakproof": false,
+          "volatility": "s",
+          "body_sha256": "a63bc7282d020f037027fdba44ea984f2a972a9c21e1f5af320548c81d320328",
+          "config_sha256": "0e5c5deb67bdf8a0f1c087edd287aeab8d3ca04e5548a7679dd526aad7d8d491",
+          "definition_sha256": "23e6949c3bc210117f921eedff34bb59f445e9ebe5d0e11b69734cb20acebfc3"
+        },
+        {
+          "name": "public.get_public_profile_media_v1",
+          "owner": "postgres",
+          "grants": [
+            {
+              "role": "anon",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            },
+            {
+              "role": "authenticated",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            },
+            {
+              "role": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            },
+            {
+              "role": "service_role",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            }
+          ],
+          "result": "jsonb",
+          "strict": false,
+          "definer": true,
+          "defaults": false,
+          "language": "plpgsql",
+          "parallel": "u",
+          "arguments": [
+            "uuid"
+          ],
+          "leakproof": false,
+          "volatility": "s",
+          "body_sha256": "b41531f27fe10f4aee7d8353c858aacbd3ba80ee66ddd1bd44fa2f65fe531c85",
+          "config_sha256": "0e5c5deb67bdf8a0f1c087edd287aeab8d3ca04e5548a7679dd526aad7d8d491",
+          "definition_sha256": "ea84d7e5df7bc0920773d7b993706271007dc706eeed05bdcbe861fed0e385e6"
+        }
+      ]
+    },
+    "accepted_profile_target": {
+      "functions": [
+        {
+          "name": "account_lifecycle_private.account_is_available",
+          "owner": "postgres",
+          "grants": [
+            {
+              "role": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            }
+          ],
+          "result": "boolean",
+          "strict": false,
+          "definer": true,
+          "defaults": false,
+          "language": "sql",
+          "parallel": "u",
+          "arguments": [
+            "uuid"
+          ],
+          "leakproof": false,
+          "volatility": "s",
+          "body_sha256": "48cca55f640923a39723e34a1034695f06affb874efde6af1d8bc0103f5d112d",
+          "config_sha256": "0e5c5deb67bdf8a0f1c087edd287aeab8d3ca04e5548a7679dd526aad7d8d491",
+          "definition_sha256": "35b2f752b263935eb8f9b9c9ee5ab4aa20d65cbf3fece7f929eca0faf6c145b1"
+        },
+        {
+          "name": "public.get_store_by_slug",
+          "owner": "postgres",
+          "grants": [
+            {
+              "role": "PUBLIC",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            },
+            {
+              "role": "anon",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            },
+            {
+              "role": "authenticated",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            },
+            {
+              "role": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            },
+            {
+              "role": "service_role",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            }
+          ],
+          "result": "TABLE(identity_profile_id uuid, identity_id uuid, identity_type text, business_account_id uuid, display_name text, slug text, bio text, avatar_url text, banner_url text, banner_dominant_color text, contact_phone text, contact_email text, website_url text, address_text text, city text, country text, lat double precision, lng double precision, location_visibility text, legacy_user_id uuid, is_premium boolean)",
+          "strict": false,
+          "definer": true,
+          "defaults": false,
+          "language": "sql",
+          "parallel": "u",
+          "arguments": [
+            "text"
+          ],
+          "leakproof": false,
+          "volatility": "v",
+          "body_sha256": "6111d8b5d1217436c1ed7f12d8571deb27f866aab0b49788878bebdf1f9dcde1",
+          "config_sha256": "a983dc37b42030987a873720dfdd7abc6aedb3d4b2f64c7cd5dd68adfc8158d0",
+          "definition_sha256": "0cc9f517fa3e013acb86cadbbb0ee8187e93ab1295fe0df974ffccf7c144376d"
+        }
+      ],
+      "helper_app_denied": true
+    }
+  },
+  "before": {
+    "functions": [
+      {
+        "name": "public.get_public_listing_detail_v1",
+        "owner": "postgres",
+        "grants": [
+          {
+            "role": "anon",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          },
+          {
+            "role": "authenticated",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          },
+          {
+            "role": "postgres",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          }
+        ],
+        "result": "jsonb",
+        "strict": false,
+        "definer": true,
+        "defaults": false,
+        "language": "plpgsql",
+        "parallel": "u",
+        "arguments": [
+          "text"
+        ],
+        "leakproof": false,
+        "volatility": "s",
+        "body_sha256": "d7416184dca098d5048216d6d942739c9296d09c7ef9070be7ed947cae631e53",
+        "config_sha256": "4323c0099a8fb65c827af872a0e23a34d3d645bced4ff952ac0384bd79cd5d62",
+        "definition_sha256": "f75dbf09e2062647a2f7c6d91271d295beeac9c0afd80d979bbb1e2781762adc"
+      },
+      {
+        "name": "public.search_public_listings_v1",
+        "owner": "postgres",
+        "grants": [
+          {
+            "role": "anon",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          },
+          {
+            "role": "authenticated",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          },
+          {
+            "role": "postgres",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          },
+          {
+            "role": "service_role",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          }
+        ],
+        "result": "jsonb",
+        "strict": false,
+        "definer": true,
+        "defaults": true,
+        "language": "plpgsql",
+        "parallel": "u",
+        "arguments": [
+          "text",
+          "text",
+          "text",
+          "text",
+          "text",
+          "text",
+          "integer",
+          "integer"
+        ],
+        "leakproof": false,
+        "volatility": "s",
+        "body_sha256": "74aec284d89f45483b230be4304a7d616d2f2dfbf2b86516f4a41208cdc42064",
+        "config_sha256": "4897ce422ad20afaf1f959b531ef5e9273ddf5a7bf27489f71e942122b40ea20",
+        "definition_sha256": "4e6538d9895ed0ed29e8302829679a1d373c2a556c34a51878f553b32738496a"
+      },
+      {
+        "name": "public.search_public_listings_v2",
+        "owner": "postgres",
+        "grants": [
+          {
+            "role": "anon",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          },
+          {
+            "role": "authenticated",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          },
+          {
+            "role": "postgres",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          }
+        ],
+        "result": "jsonb",
+        "strict": false,
+        "definer": true,
+        "defaults": true,
+        "language": "plpgsql",
+        "parallel": "u",
+        "arguments": [
+          "text",
+          "text",
+          "text",
+          "text",
+          "text",
+          "text",
+          "integer",
+          "integer"
+        ],
+        "leakproof": false,
+        "volatility": "s",
+        "body_sha256": "8bb506260dc7168e6ec7d79ae6b3113dd6f0f49c86c7c35949bd62027a5f3248",
+        "config_sha256": "4897ce422ad20afaf1f959b531ef5e9273ddf5a7bf27489f71e942122b40ea20",
+        "definition_sha256": "8436909c1071faf25a8dd4b9eb418c495303a576df326f3075a21d792db9be61"
+      },
+      {
+        "name": "public.search_public_marketplace_v1",
+        "owner": "postgres",
+        "grants": [
+          {
+            "role": "anon",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          },
+          {
+            "role": "authenticated",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          },
+          {
+            "role": "postgres",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          }
+        ],
+        "result": "jsonb",
+        "strict": false,
+        "definer": true,
+        "defaults": true,
+        "language": "plpgsql",
+        "parallel": "u",
+        "arguments": [
+          "text",
+          "text",
+          "text",
+          "text",
+          "text",
+          "text",
+          "integer",
+          "integer",
+          "uuid"
+        ],
+        "leakproof": false,
+        "volatility": "s",
+        "body_sha256": "7815608cabec3eb8eccb7f43bcbc578cc6a0f7c74da9a1412cd4b2182923d43d",
+        "config_sha256": "4897ce422ad20afaf1f959b531ef5e9273ddf5a7bf27489f71e942122b40ea20",
+        "definition_sha256": "be73ddb67b71dd95e3c428adf1c47ba2659c23cd246cddba642eb7c7cd1b313c"
+      }
+    ]
+  },
+  "after": {
+    "functions": [
+      {
+        "name": "public.get_public_listing_detail_v1",
+        "owner": "postgres",
+        "grants": [
+          {
+            "role": "anon",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          },
+          {
+            "role": "authenticated",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          },
+          {
+            "role": "postgres",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          }
+        ],
+        "result": "jsonb",
+        "strict": false,
+        "definer": true,
+        "defaults": false,
+        "language": "plpgsql",
+        "parallel": "u",
+        "arguments": [
+          "text"
+        ],
+        "leakproof": false,
+        "volatility": "s",
+        "body_sha256": "9cc8a99b3671d533331c0784658ae3719dcf5db4f9e37fcd5514ec6b3d6ef06f",
+        "config_sha256": "4323c0099a8fb65c827af872a0e23a34d3d645bced4ff952ac0384bd79cd5d62",
+        "definition_sha256": "8642afd2db29ea98366e05110788c397d106c3bac2c5e714b862dc2f313e1af7"
+      },
+      {
+        "name": "public.search_public_listings_v1",
+        "owner": "postgres",
+        "grants": [
+          {
+            "role": "anon",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          },
+          {
+            "role": "authenticated",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          },
+          {
+            "role": "postgres",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          },
+          {
+            "role": "service_role",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          }
+        ],
+        "result": "jsonb",
+        "strict": false,
+        "definer": true,
+        "defaults": true,
+        "language": "plpgsql",
+        "parallel": "u",
+        "arguments": [
+          "text",
+          "text",
+          "text",
+          "text",
+          "text",
+          "text",
+          "integer",
+          "integer"
+        ],
+        "leakproof": false,
+        "volatility": "s",
+        "body_sha256": "f559889c618c118e7aa3629964aab0cfb100b41fae841093ff85d60cd6f4d188",
+        "config_sha256": "4897ce422ad20afaf1f959b531ef5e9273ddf5a7bf27489f71e942122b40ea20",
+        "definition_sha256": "5f5f9661634ffaa89bd0e7c179d0bcc080c02efc4c60261f75934ced98b9d931"
+      },
+      {
+        "name": "public.search_public_listings_v2",
+        "owner": "postgres",
+        "grants": [
+          {
+            "role": "anon",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          },
+          {
+            "role": "authenticated",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          },
+          {
+            "role": "postgres",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          }
+        ],
+        "result": "jsonb",
+        "strict": false,
+        "definer": true,
+        "defaults": true,
+        "language": "plpgsql",
+        "parallel": "u",
+        "arguments": [
+          "text",
+          "text",
+          "text",
+          "text",
+          "text",
+          "text",
+          "integer",
+          "integer"
+        ],
+        "leakproof": false,
+        "volatility": "s",
+        "body_sha256": "22475d564bf59c0d7e8d7c21fc8bc8d481001086f867574c62d8fffb16797904",
+        "config_sha256": "4897ce422ad20afaf1f959b531ef5e9273ddf5a7bf27489f71e942122b40ea20",
+        "definition_sha256": "7c0a101bc2fd2941c008caea7b5027aa77ae8572cef5ed1dbab7ccb428e791e2"
+      },
+      {
+        "name": "public.search_public_marketplace_v1",
+        "owner": "postgres",
+        "grants": [
+          {
+            "role": "anon",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          },
+          {
+            "role": "authenticated",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          },
+          {
+            "role": "postgres",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          }
+        ],
+        "result": "jsonb",
+        "strict": false,
+        "definer": true,
+        "defaults": true,
+        "language": "plpgsql",
+        "parallel": "u",
+        "arguments": [
+          "text",
+          "text",
+          "text",
+          "text",
+          "text",
+          "text",
+          "integer",
+          "integer",
+          "uuid"
+        ],
+        "leakproof": false,
+        "volatility": "s",
+        "body_sha256": "850e97f5281a05f310725eda36ca659c9df96a1ac5439ff1eeec7b74768f7aeb",
+        "config_sha256": "4897ce422ad20afaf1f959b531ef5e9273ddf5a7bf27489f71e942122b40ea20",
+        "definition_sha256": "e32ba10a682ce51e984923badaa388ee43d7b32e81124c0598cc7336b011c121"
+      }
+    ]
+  }
+}

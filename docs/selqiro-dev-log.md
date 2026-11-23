@@ -2563,3 +2563,59 @@ pakkumiste, sõnumite, kirjutamiste ja välise pilditöö teed vajavad järgmisi
 Uus sisselogimine/SMTP jääb kokkulepitud selqiro.com etappi; konto tervikule
 järgnevad kuulutuste esiletõstmine ja reklaamid. Kehtiv tööjärg on ainult
 CURRENT_STATE.json-s, sellest genereeritud üleandmises ning HOSTED_PORTAL.md-s.
+
+## 23.11.2026 — avaliku profiili konto-oleku kontroll vastu võetud (8dc0b3b)
+
+Maci raport `selqiro-profiili-konto-olek-20261123-raport-20261123-190200-2ca1275173f0.json`, SHA256 `62ec79032d68bdb6e453953f639255876bbb000da19d11e70d5584111ebf7ba9`, kinnitab ühe uue
+8/8 TAP testikäigu, värske build’i, preflight/apply/verify ning commit/push’i.
+Commit `8dc0b3b11777b010c8486b45a3f98f0191d97d80`, puu `fc44ed6ae9e903bbbaef1df2017fdca396a1aa02`, 2130 faili; täpselt 30 paketi rada
+(8 muudetud, 22 uut). Viimane remote’i võrdsus 19:02:00.673 Europe/Tallinn.
+Täielik lõppindeks/tööpuu puhas; kõik 567 käsu protsessilõpud kinnitatud.
+
+Kasutaja Verceli pilt kinnitab sama commit’i Ready / Production. Milline Vedu
+ettevõtteprofiil ja Taivo Garaaz eraisikuprofiil on piltidel avatavad koos piltidega;
+Minu konto on Aktiivne. Kasutaja kinnitas „kõik lehed avanevad”. Vastu võetakse
+küsitud kasutustee, mitte anonüümse, mobiili või kõigi nuppude kontrolli väide.
+
+Kanoonilise profiili kontooleku piir on rakendatud. Täpne SQL ei muuda konto- ega
+sisuridu; konto active-only alus säilib. Vana paketti või apply’t ei korrata.
+Raporti READY_NOT_CHECKED jääb algseks; deployment’i tõend on eraldi kasutajapilt.
+TAP/build toorlogid ei ole raportis; parsitud tulemusi ja räsisid ei nimetata
+toorlogide kordusparsimiseks. Vastuvõtul ei tehtud uut testi, build’i ega pilvepäringut.
+
+Järgmine üks moodul: tavakuulutuste avalik otsing ja üksikvaade sama kontooleku
+kontrolliga, sealhulgas päriselt kasutatava ühendatud otsingu tavakuulutuste haru.
+Sobivus enne lehekülje piiri; senised filtreerimise/järjestuse/hinna/asukoha reeglid
+säilivad. Jõudluse hinnang vajab konkreetse päringuplaani kontrolli.
+Sulgemine/taastamine/kustutamine järgnevad vajalike serveriteede katmise järel;
+siis kuulutuste esiletõstmine ja reklaamid. SMTP paus ja ühe algprofiili suund säilivad.
+Täpne jooksva töö allikas on CURRENT_STATE ja sellest genereeritud üleandmine.
+
+See vastuvõtu dokumenditäiendus on 8dc0b3b-järgne ettevalmistus järgmise paketi jaoks;
+Maci dokumente pole pärast seda commit’i siin muudetud ega pushitud.
+
+## 23.11.2026 — tavakuulutuste konto-oleku kontroll ette valmistatud
+
+Vastu võetud alus on main 8dc0b3b, puu fc44ed6ae9e903bbbaef1df2017fdca396a1aa02, 2130 faili. Eelmise profiiliparanduse
+Maci raport, Ready / Production ning kasutaja eraisiku/ettevõtte profiilide ja Minu
+konto kontroll on vastu võetud. Selle vastuvõtu seni ettevalmistatud dokumendid
+tulevad selle uue koodipaketiga kaasa; eraldi vana paigaldust ei korrata.
+
+Uus moodul katab kolm tavakuulutuste otsingulugejat ja avaliku üksikvaate.
+Tegelik ühendatud marketplace-otsing on kaetud ordinary harus; horses haru on
+baiditäpselt sama. Konto omanik ja olemasolev account_is_available on üks
+autoriteetne allikas; sobivus kehtib enne koguarvu ja lehekülge. Autorikonto
+blokeerimise, hindade, FTS-i, asukoha ning galerii senine leping säilib.
+
+13/13 uut sihitud TypeScripti, anonüümse metadata ja Reacti serverrenderduse kontrolli läbisid; kõik 45 rakenduse sisendräsi säilisid. Kontrollitud on tegelik ühendatud otsingutee, tühja vastuse ja vea eristus ning eesti/inglise vaated. Transport ja vastused olid sünteetilised; see ei ole brauseritest.
+37/37 lõpliku SQL-i PostgreSQL 17.6 käitumise ja metaandmete kontrolli läbisid. Parseri 18 varasemat kontrolljuhtu katavad muutmata loogikat; pärast ainult AFTER-räsi muutmist kontrolliti kolme lõplikku päris kviitungit uuesti. Konto-, õiguste-, omaniku-, blokeerimise-, peitmise-, lehekülje-, galerii- ja hobuste senise haru juhud on eraldi tõendatud.
+12 000 sünteetilise kuulutusega vana/uue lugeja 14 võrdlusjuhtu säilitasid aktiivsete kontode tulemused. Veel 20 000 otsinguga mitteseotud konto lisamine ei suurendanud kuue valiva kontrolli sobivusfunktsiooni kutsete arvu. Esialgne kõiki identiteete läbiv lahendus asendati kuulutuse identiteedi võtmega piiratud lugemisega. Ühendatud otsingu varasem laia tulemushulga aeglus jääb eraldi optimeerimistööks enne suuremat kasutusmahtu.
+Värske täielik Next.js 16.4.6 / TypeScripti build läbis 33,042 sekundiga. Kõik 765 koostamissisendit säilisid. Kasutati täpseid olemasolevaid lukufaili sõltuvusi ja inertseid lokaalseid seadeid; sõltuvusi ei paigaldatud ega uuendatud. Logi SHA256 on 1ac746178e79605831e14522e0247620eb09b91ebb993639600983c1e4de9936.
+Uuendaja 14/14 uut sihitud töövoojuhtu läbisid. Lõpliku SQL-kviitungi järel kontrolliti uuesti ainult kolme olemasolevat asjakohast juhtu; kogu komplekti ei korratud. Uus kviitungi kontroll, kadunud kinnituse järel sõltumatu lugemine ja ebaselge kirjutuse automaatse kordamise keeld läbisid. Seitse varasemat Giti, protsessi, sõltuvuste ja transpordi abimoodulit säilivad baiditäpselt.
+
+Lähtekood on ette valmistatud. Maci rakendus, SQL, commit/push, Vercel ja päris
+brauseri kasutustee on eraldi ootel. Konto- ega sisuridu ei muudeta. Konto
+sulgemise/taastamise/kustutamise käsk ootab ülejäänud vajalikke serveriteid.
+SMTP paus ning konto tervik → esiletõstmine → reklaamid järjekord säilivad.
+Täpsed piirid on docs/architecture/account-listing-read-fence-v1.md-s;
+ainus praegune käivituskäsk on CURRENT_STATE.json-st genereeritud juhendis.

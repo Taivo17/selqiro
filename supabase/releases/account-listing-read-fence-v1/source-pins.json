@@ -1,0 +1,119 @@
+{
+  "format": "selqiro-account-listing-read-source-pins-v1",
+  "accepted_commit": "8dc0b3b11777b010c8486b45a3f98f0191d97d80",
+  "source_fragments": {
+    "public.search_public_listings_v1": {
+      "path": "supabase/repairs/20261113_provider_controls/05_search_ordinary_v1.sql",
+      "file_sha256": "950cb9e7b01b9105858b2c349af91b04f6a70a72fb695f19edc180fdfcdbe8e3",
+      "fragment_sha256": "9853b6e5d56644c86ff56f1158a12eb37804a2872e605edc12a80893c8f427f7",
+      "body_sha256": "74aec284d89f45483b230be4304a7d616d2f2dfbf2b86516f4a41208cdc42064"
+    },
+    "public.search_public_listings_v2": {
+      "path": "supabase/repairs/20261113_provider_controls/06_search_ordinary_v2.sql",
+      "file_sha256": "4334bab350c706a8e34741203f72df9354763f87ffb6031d65bb23e0fc23bd9c",
+      "fragment_sha256": "a9b34d097f342ab10b16219fcd6d825b8e6921012d6d806e6c663ac3c1676c9f",
+      "body_sha256": "8bb506260dc7168e6ec7d79ae6b3113dd6f0f49c86c7c35949bd62027a5f3248"
+    },
+    "public.search_public_marketplace_v1": {
+      "path": "supabase/repairs/20261113_provider_controls/07_search_marketplace.sql",
+      "file_sha256": "a647b49b49d11c3c75a12582012438b651fd687e48dc9e5201dae9590c774c4b",
+      "fragment_sha256": "a647b49b49d11c3c75a12582012438b651fd687e48dc9e5201dae9590c774c4b",
+      "body_sha256": "7815608cabec3eb8eccb7f43bcbc578cc6a0f7c74da9a1412cd4b2182923d43d"
+    },
+    "public.get_public_listing_detail_v1": {
+      "path": "supabase/releases/listing-publication-hosted-preview-v1/40_read_models_and_owner.sql",
+      "file_sha256": "d19bf23e0746e8e6ba6750f4c235135fbaa9cff3b3f184e05a87433c10eaad78",
+      "fragment_sha256": "72f756e3ac8866d295d233ff288dc42168741a8693895615abb61fffda4b07d9",
+      "body_sha256": "d7416184dca098d5048216d6d942739c9296d09c7ef9070be7ed947cae631e53"
+    },
+    "public.listing_actor_uid_hosted_v1": {
+      "path": "supabase/releases/listing-publication-hosted-preview-v1/00_preconditions.sql",
+      "file_sha256": "69c6005ed959afeb22bd1db3e597f23d17e7dfe86c968a35f512f94f34c995c8",
+      "fragment_sha256": "24689fa8e4f7a72de5be6f73120b29ad1d7b6c3cb7db33fac9f1d7a9f3dee9bf",
+      "body_sha256": "ff7f6ce615280095930c983468c5ce5a6c3982bc4f540e4929bb0baf904ce88d"
+    },
+    "public.public_listing_search_document_v1": {
+      "path": "supabase/migrations/20260926180000_add_public_listing_detail_keywords.sql",
+      "file_sha256": "b080a47eb2573a0f292316c10c00cd8dc10c0a5adff0e4c6b2bbc04b855cba8d",
+      "fragment_sha256": "9a867e3591b6b9ab53913e30b90d4e6ba1ecb2c960633ce1cadd44e46776854e",
+      "body_sha256": "f3bd8b25cb8b29af0dffeb928fc783b9ff08e6e3c64f27f063d80708f1dc4b45"
+    },
+    "public.listing_price_currency_scale_v1": {
+      "path": "supabase/releases/listing-publication-hosted-preview-v1/10_price_core.sql",
+      "file_sha256": "9f843033bed721ab73d8cb01d3750e4dacc417dc0ddf84b92c9845745bb75dad",
+      "fragment_sha256": "574db7874b6f6f340b3f40fed5940e051c4d771763c865ddc851ca1a21648aee",
+      "body_sha256": "e19adc44a0b4d6b990ce8c36c1ff19d7b31c4a1255354df5deefbd1c6a8a1750"
+    },
+    "public.normalize_listing_price_v1": {
+      "path": "supabase/releases/listing-publication-hosted-preview-v1/10_price_core.sql",
+      "file_sha256": "9f843033bed721ab73d8cb01d3750e4dacc417dc0ddf84b92c9845745bb75dad",
+      "fragment_sha256": "136aae63034686c00fdefef0f3543589ea2539ccb92c7f59b654a8e2cd5d7d1b",
+      "body_sha256": "17f4cf1a100a375942c0aa9396a4e354e2725e51c83e18c34bdd47cd59539c5a"
+    },
+    "public.listing_price_legacy_label_v1": {
+      "path": "supabase/releases/listing-publication-hosted-preview-v1/10_price_core.sql",
+      "file_sha256": "9f843033bed721ab73d8cb01d3750e4dacc417dc0ddf84b92c9845745bb75dad",
+      "fragment_sha256": "954b2f40fd3d38544cd8e3faa78ac8c331a956ba0708dbf55a219d1253ac82c6",
+      "body_sha256": "51a8fa4a25c6497eef0e83f41f9ec705f61a3434923f47fab1ca91da249cae8b"
+    },
+    "public.listing_price_tuple_valid_v1": {
+      "path": "supabase/releases/listing-publication-hosted-preview-v1/10_price_core.sql",
+      "file_sha256": "9f843033bed721ab73d8cb01d3750e4dacc417dc0ddf84b92c9845745bb75dad",
+      "fragment_sha256": "95c3bd729b7c065b62f6f47db8c5f3ebd8f4cba817261f01e80680673d051b1a",
+      "body_sha256": "3ccd09a9de54f0f09310947265a0285a9de35b380d9a58d2b66fcbfd7e232b4b"
+    },
+    "public.listing_price_read_model_v1": {
+      "path": "supabase/releases/listing-publication-hosted-preview-v1/40_read_models_and_owner.sql",
+      "file_sha256": "d19bf23e0746e8e6ba6750f4c235135fbaa9cff3b3f184e05a87433c10eaad78",
+      "fragment_sha256": "c3db7c64b726287c278246c1b21ca886069da0af70fbd42c659be58c8b67adab",
+      "body_sha256": "60cba9978f27630800fedec8fb3d241ae957f5112baaf186c33397e79e0cc668"
+    },
+    "public.public_listing_detail_field_spec_v1": {
+      "path": "supabase/releases/listing-publication-hosted-preview-v1/40_read_models_and_owner.sql",
+      "file_sha256": "d19bf23e0746e8e6ba6750f4c235135fbaa9cff3b3f184e05a87433c10eaad78",
+      "fragment_sha256": "ca12f1d691852e87e4fae422d43d1b5495892af29ad16cf651d23ff4e641890c",
+      "body_sha256": "487debd57adedd2c778eae2dd15427b96382caaec20e8a65e223d1db348c70b8"
+    },
+    "public.public_listing_detail_values_v1": {
+      "path": "supabase/releases/listing-publication-hosted-preview-v1/40_read_models_and_owner.sql",
+      "file_sha256": "d19bf23e0746e8e6ba6750f4c235135fbaa9cff3b3f184e05a87433c10eaad78",
+      "fragment_sha256": "0c23af9e14fd1177c0c301b71a10a490c43a9e77c8d8ec8e8b52ac23e532bb52",
+      "body_sha256": "70fd1ea231d21c08fac60a27f65602c62e3ae4bde3dadfa31254d8137119f50a"
+    },
+    "public.build_horse_offer_content_snapshot_v1": {
+      "path": "supabase/migrations/20260830170000_add_ee_horse_offer_foundation.sql",
+      "file_sha256": "7ed39b68732c27b5a21173b5ce01e8fa0264f57b6a72a079913539cb6a12fb67",
+      "fragment_sha256": "eef4b0d63b39aa283165534df361d1ba1c70bc733f17e9f541c92cc3e9fbaf2f",
+      "body_sha256": "1f70dfada3042811ec2b92238979aae30554cbfbac175f25cdc876536b69ab33"
+    },
+    "horse_publication_private.effective_active_until": {
+      "path": "supabase/repairs/20261108_horse_lifecycle/01_lifecycle_core.sql",
+      "file_sha256": "1fb33e3d2d5403ce599f43e96550c523d160e21b2fa2261f52979d971fc3d58b",
+      "fragment_sha256": "0fed5bf8c5c18d90056afaf3be89e0aaada080a2dbfbf753112137be9bfe1c06",
+      "body_sha256": "7de3b8e6b7aba131fa939f6fef01d55a75d54d9703a64bdb05b78586c5dcda88"
+    },
+    "horse_publication_private.has_current_publication": {
+      "path": "supabase/repairs/20261108_horse_lifecycle/01_lifecycle_core.sql",
+      "file_sha256": "1fb33e3d2d5403ce599f43e96550c523d160e21b2fa2261f52979d971fc3d58b",
+      "fragment_sha256": "079decdcf649b9675c9b922280b6309df3c8517c736246b815e49a6e5edb6ca6",
+      "body_sha256": "8a7a3db56f6cb997fd93d7955019e1453947490dcd5d97f324385b50c4c8ee0a"
+    },
+    "horse_publication_private.is_public": {
+      "path": "supabase/repairs/20261108_horse_lifecycle/01_lifecycle_core.sql",
+      "file_sha256": "1fb33e3d2d5403ce599f43e96550c523d160e21b2fa2261f52979d971fc3d58b",
+      "fragment_sha256": "35ab7adab726fa2382f2ae7d1a3b2b4957c91a7223f251b01ca38d4a44a0086c",
+      "body_sha256": "b8b05ff651e10027d069d4d4433dcac8f1482a9fd5ca5045e5b4d887fd717af6"
+    },
+    "horse_publication_private.public_price": {
+      "path": "supabase/repairs/20261108_horse_publication/07_public.sql",
+      "file_sha256": "a7561dfc90514af190ce3a246e690a165285fee284b3853efff08849168ac353",
+      "fragment_sha256": "00146d9bba07fb72f0569cfe0d296ea2b52d6074fb745933a233964b0cfba131",
+      "body_sha256": "7d583f1b8aafc963f2eab0e68140458eb92b74828ea0f871448e727ae6135d6a"
+    }
+  },
+  "accepted_profile_contract_sha256": "afaa940fd0a2e39db5e31345fc88a3fc17121d73621bbd8e94fdb0bcc316323d",
+  "prior_actual_metadata": "Accepted profile before/after contract; actor definition/config/owner from accepted 22 November account catalog.",
+  "listing_metadata": "Remaining four reader ACLs, new listing columns/relations/indexes and FTS helper ACL source-derived. Fresh exact production preflight required; synthetic compilation is not actual installation evidence.",
+  "metadata_sha256": "4cccc5b51bada73a9329e5398c64d98d458fc5fb3e6c09625ebecd93592a3788",
+  "no_live_observation": true
+}

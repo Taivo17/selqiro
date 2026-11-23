@@ -1,0 +1,20 @@
+{
+  "docs/continuity/CURRENT_STATE.json": {
+    "copy": "docs/continuity/history/account-listing-read-before-20261123/docs/continuity/CURRENT_STATE.json",
+    "bytes": 8817,
+    "sha256": "837815f316f980c4c47db6a04f89e769a6d4d5be67ea35e456575281bef70004",
+    "origin": "Prepared accepted 8dc0b3b checkpoint; not a later Mac write"
+  },
+  "docs/99_V2_HANDOFF_NEXT_CHAT.md": {
+    "copy": "docs/continuity/history/account-listing-read-before-20261123/docs/99_V2_HANDOFF_NEXT_CHAT.md",
+    "bytes": 8938,
+    "sha256": "2c7a5bc5733003e4cae8b2b58b16539b4112b9b336f7843083247aaca543473d",
+    "origin": "Prepared accepted 8dc0b3b checkpoint; not a later Mac write"
+  },
+  "docs/continuity/HOSTED_PORTAL.md": {
+    "copy": "docs/continuity/history/account-listing-read-before-20261123/docs/continuity/HOSTED_PORTAL.md",
+    "bytes": 1815,
+    "sha256": "05563a875707976788a9324820c2e47705c3ee944d61a7277256b5f6c9ecfe9a",
+    "origin": "Prepared accepted 8dc0b3b checkpoint; not a later Mac write"
+  }
+}
