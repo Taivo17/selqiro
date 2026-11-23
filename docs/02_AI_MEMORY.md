@@ -7986,3 +7986,53 @@ R2 on eraldi pakett/päevik, mis hoiab ka esimese jätku STOP-originaali ainult
 lugemiseks. Algallikaks jääb v1 60 faili, mitte esimese jätku rakendamata docs.
 Üks uus build ja seni alustamata SQL-etapp on endiselt ees. Rakendus/SQL,
 e-posti paus ning konto → esiletõstmise → reklaamide tööjärg säilivad.
+
+## 23.11.2026 — konto olek ja Minu konto vastu võetud, 4b60782
+
+R2 Maci raport kinnitab üht värsket build’i, varasema 20 testi tõendi kontrollitud
+korduskasutust, üht SQL apply’t ja eraldi verify’t ning main 4b60782 commit/push’i.
+Täispuu 8012909c809772c1fd905129cc3643f8614655a3, 2108 faili; lõppseis puhas.
+Kasutaja Verceli pilt kinnitab sama commit’i Ready / Production tulemust;
+Minu konto pildid kinnitavad Aktiivne olekut ja algset loomiskuupäeva.
+E-posti väärtust või kõigi kontode/vaadete läbimist piltidelt ei tuletata.
+
+Kontooleku paigaldus on lõpetatud. Vana uuendajat/jätkajaid/SQL-i ei korrata;
+mõlemad ajaloolised STOP-id ja kõik päevikud jäävad muutmata. Olek on endiselt
+ainult active; sulgemise/taastamise/kustutamise toiminguid ei ole.
+
+Järgmine väike moodul on kanoonilise avaliku profiili ja selle meediaprojektsiooni
+konto-oleku kontroll. Kandidaadi kanooniline valik eelneb sobivuse kontrollile;
+peidetud kanoonilise slugi asemel ei avata teise konto legacy-aliast. See pole
+veel kõigi avalike lugemiste, kirjutuste või pildi-URLide täielik piiramine.
+Konto sulgemise teostus järgneb alles kõigi vajalike serveriteede katmise järel.
+Ühe eraisiku VÕI ettevõtte profiili suund, SMTP paus ja konto → esiletõstmine →
+reklaamid järjekord säilivad. Käesolev vastuvõtutäiendus on 4b60782-järgne
+ettevalmistus; kasutaja Maci pole dokumentide pärast uut kirjutust tehtud.
+
+## 23.11.2026 — avaliku profiili konto-oleku kontroll ette valmistatud
+
+Alus on vastu võetud main 4b60782, puu 8012909c809772c1fd905129cc3643f8614655a3,
+2108 faili. Konto oleku vundament ja Minu konto on Maci raporti, Ready / Production
+ning kasutaja vaate järgi vastu võetud. Selle lõpetatud paigaldust ei korrata.
+
+Uus serverimuudatus lisab privaatse account_is_available(uuid) kontrolli ja seob
+selle get_store_by_slug valitud kandidaadi lõppfiltriga. Kanooniline valik eelneb
+sobivusele; kättesaamatu profiili asemel ei tagastata teise konto legacy-aliast.
+Ettevõtte konto tuletatakse tegelikust business_accounts.owner_user_id seosest.
+Senine asukoha privaatsus, blokeerimine, vastuse kuju ja meedia delegatsioon säilivad.
+
+Kohalikud uued kontrollid: 8 kliendi/React SSR juhtu, 22 eraldatud PostgreSQL 17.6
+juhtu, 18 kviitungiparseri juhtu ning värske Next16.4.6/TypeScripti build PASS.
+Maci uuendaja 24 sihitud Git/aruande/SQL-töövoo kontrolli läbisid; järgnenud
+Commit-rea muudatusel on üks kontroll ja runtime-vaatluse jätkamiskaitsel seitse.
+Algset 24 kontrolli ei korratud. Täpsed räsiseosed ning sõltumatu ülevaatus on
+paketi proof/runner ja proof/reviews all. Varasemaid laiu kontrollipakke ei korratud.
+Päris brauserikäik ootab uut Ready / Production tulemust; SSR ei asenda seda.
+
+See on ettevalmistus, mitte uus Maci paigaldus, SQL rakendus või commit/push.
+Kontoridu ega sisu ei muudeta; active-only vundament säilib. Konto sulgemise,
+taastamise ja kustutamise toimingud ei ole veel avatud. Ülejäänud otsingu,
+pakkumiste, sõnumite, kirjutamiste ja välise pilditöö teed vajavad järgmisi piire.
+Uus sisselogimine/SMTP jääb kokkulepitud selqiro.com etappi; konto tervikule
+järgnevad kuulutuste esiletõstmine ja reklaamid. Kehtiv tööjärg on ainult
+CURRENT_STATE.json-s, sellest genereeritud üleandmises ning HOSTED_PORTAL.md-s.

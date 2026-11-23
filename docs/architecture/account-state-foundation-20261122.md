@@ -1,3 +1,18 @@
+# Vastuvõetud seis — 23.11.2026
+
+Konto oleku vundament on nüüd rakendatud: commit 4b60782, üks kinnitatud SQL
+paigaldus, eraldi verify, värske build ja push. Kasutaja kinnitas sama commit’i
+Ready / Production tulemuse ning Minu konto aktiivse oleku ja algse kuupäeva.
+Täpne vastuvõtt on `account-state-accepted-20261123.md`-s; üks järgmine töö on
+`account-public-profile-next-20261123.md`-s. Siinne täiendus on järgmise paketi
+jaoks ette valmistatud ega tõenda eraldi uut Maci kirjutust.
+
+Allpool säilib algne ettevalmistuse leping. Selle Maci/pilve ootel-kirjed on
+ajaloolised; valmis paigaldust ei korrata. Lubatud olek on endiselt ainult active
+ja konto sulgemise/taastamise/kustutamise toiminguid veel ei ole.
+
+---
+
 # Konto oleku vundament ja „Minu konto“
 
 22.11.2026 Europe/Tallinn. Lähtekoodi alus `034211d`.

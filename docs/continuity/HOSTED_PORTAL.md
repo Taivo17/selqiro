@@ -1,61 +1,54 @@
-# Konto oleku jätk — Maci UID-kontrolli parandus r2
+# Avaliku profiili konto-oleku kontroll — üks järgmine käsk
 
-23.11.2026 Europe/Tallinn. Esimene jätk peatus kell 16:54 enne lähtefailide
-kirjutamist, uut build'i ja andmebaasi. Algse kontooleku paigalduse 60 faili
-on tööpuus ja 20 testi PASS säilib. Viga oli Maci protsesside reaalse ning
-efektiivse kasutajatunnuse võrdlemises. Selle jaoks on eraldi r2 pakett.
+23.11.2026 Europe/Tallinn. Alus main 4b60782 ja Minu konto on vastu võetud.
+Uus pakett lisab ainult kanoonilise avaliku profiili lugemise konto-oleku piiri.
 
-## Üks praegune käsk
+## Käivita uus pakett
 
-Paki selqiro-konto-oleku-jatk-20261123-r2.zip Downloads-kaustas lahti.
-Kui Selqiro kohalik arendusserver on sinu terminalis töös, peata see oma
-aknas Ctrl+C-ga. Jäta kõik olemasolevad failid, vanad kaustad ja päevikud alles.
+Paki `selqiro-profiili-konto-olek-20261123.zip` Downloads-kaustas lahti.
+Kui Selqiro kohalik arendusserver on sinu terminalis töös, peata see oma aknas
+Ctrl+C-ga. Säilita kõik olemasolevad failid, päevikud ja vanad paketid.
 
 ```bash
-python3 -I -B "$HOME/Downloads/selqiro-konto-oleku-jatk-20261123-r2/jatka.py" --publish
+python3 -I -B "$HOME/Downloads/selqiro-profiili-konto-olek-20261123/uuenda.py" --publish
 ```
 
-R2 kontrollib täpset v1 60-failist lähtepuud, haru/HEAD-i, indeksit, remote'i,
-sõltuvusi ning nelja varasemat originaalraportit. Esimese jätkupaki dokumente
-Maci eelseisus ei eeldata. Mõlemad varasemad STOP-raportid ja nende lukud
-avatakse ainult lugemiseks; r2 kasutab eraldi uut päevikut.
+Uuendaja kontrollib tegelikku main 4b60782, 2108 alusfaili, indeksit/tööpuud,
+kinnitatud remote’i, sõltuvusi ning eelmise eduka r2 käigu originaalraportit.
+Seejärel lisab ainult selle paketi failid, käivitab kaheksa uut kliendikontrolli
+ja ühe värske build’i, kontrollib SQL eelseisu, teeb ühe piiratud SQL muudatuse
+ning eraldi järelkontrolli. Pärast seda commit’ib ja push’ib ainult selle paketi.
+Kontode olekuid, sisu, pilte, sõnumeid, SMTP-d ega sisselogimise seadistust ei muudeta.
 
-Maci protsessivaatlus eristab nüüd ruid ja uid välju. Sama reaalse kasutaja
-muu efektiivse kasutajatunnusega kõrvaline protsess ei põhjusta enam ekslikku
-UID-skoobi viga. Seotud arendus-/ehitusprotsessi või ebaselge vaatluse korral
-jätk peatub. Olemasolevaid arendus-/ehitusprotsesse jätk ei lõpeta.
+Uus commit’i pealkiri on `Respect account availability in public profile reads`.
+Tegelik commit’i räsi ilmub terminali ning raportisse; seda ette ei oletata.
+SQL võib olla rakendatud enne hilisemat Giti peatumist. Ebaselget kirjutust ei
+korrata; raport eristab iga etappi. Peatumisel säilita täpne raport ja päevik.
 
-20 rakendusetesti tulemus kontrollitakse täpsest vanast privaatsest logist;
-testiprotsessi uuesti ei käivitata. Üks uus build on endiselt vajalik,
-sest algse 14:38 käigu täielik build-logi ja artefaktitõend jäid salvestamata.
-Esimene jätk ei jõudnud uut build'i alustada.
+## Saada täpne raport
 
-Pärast edukat build'i teeb r2 seni alustamata andmebaasi preflight'i, ühe
-lisava SQL-i, järelseisu kontrolli ning ainult paketi failide commit/push'i.
-Commit'i pealkiri on Add private active account state foundation; tegelik
-räsi tuleb uuest Maci raportist. SQL võib olla paigaldatud juba enne hilisemat
-Giti peatumist; päevik eristab neid etappe ja ebaselget kirjutamist ei korrata.
+Kopeeritud privaatse aruande asukoht kuvatakse real `SAADA SEE FAIL:` ja Finder
+valib just selle faili. Koopia vea korral näidatakse kontrollitud originaali;
+Finderi vea korral täpset asukohta. Salvestustõrke järel märgitakse viimane säilinud
+raport võimalikuks aegunud tõendiks. Raporti puudumisel saada `PEATATUD`-rida.
 
-## Raport
+## Sama uue commit’i Ready / Production järel
 
-Saada täpselt SAADA SEE FAIL: juures näidatud uus privaatne raport.
-Finder avatakse selle faili juures. Koopia vea korral näidatakse kontrollitud
-originaali, Finderi vea korral täpset asukohta. Salvestustõrke järel märgitakse
-viimane säilinud raport võimalikuks aegunud tõendiks. Kui raportit ei loodud,
-saada terminali PEATATUD-rida.
+1. Värskenda portaali.
+2. Ava olemasoleva eraisiku avalik profiil ja kontrolli nime ning pilte.
+3. Ava olemasoleva ettevõtte avalik profiil ja kontrolli nime ning pilte.
+4. Kontrolli, et Minu konto jääb avatavaks.
 
-Vana kontooleku uuendaja ega esimene jätkaja pole praegused käsud.
-Raporteid, lõppkoristuse märkeid ega indeksit käsitsi ei muudeta.
+Ühtegi kontot pole vaja sulgeda, kustutada ega uut kontot luua. Selle mooduli
+puuduva/keelatud konto juhud on läbi kontrollitud eraldatud andmebaasifixtuuridega.
+Päris brauseri kasutustee ootab selle uue versiooni avaldamist.
 
-## Sama uue commit'i Ready / Production järel
+## Piir ja järgmine ulatus
 
-1. Värskenda portaali ja ava Minu ala → Minu konto.
-2. Kontrolli konto e-posti, Aktiivne olekut ja teadaolevat algset loomiskuupäeva.
-3. Kontrolli sama vaate avamist päise menüüst.
-4. Logi sisse teise olemasoleva kontoga ja kontrolli selle konto andmeid.
-5. Vaata kitsas aknas üle tekst ning tagasitee.
+Kanoonilise profiililugeja ning selle meediaprojektsiooni kontroll ei kata veel
+kõiki pakkumiste/otsingu, teiste profiilide või ajalooliste sõnumite päringuid.
+Varem väljastatud avalikke pildi-URL-e see filter ei tühista. Sulgemise tegevus
+lisandub pärast ülejäänud vajalike serveriteede katmist. Sisselogimise/SMTP paus
+ja konto terviku → esiletõstmise → reklaamide järjekord säilivad.
 
-Konto oleku vundament lubab veel ainult active olekut. Konto sulgemise,
-taastamise ja kustutamise toimingud järgnevad eraldi; SMTP, e-posti kinnitamise
-ning registreerimisvaate paigaldus on endiselt pausil. Otsene Auth-konto
-kustutamine on olekurea paigaldamise järel ON DELETE RESTRICT tõttu tõkestatud.
+Vana kontooleku paigaldust, jätkajaid ega lõpetatud kontrolle ei korrata.

@@ -1,0 +1,67 @@
+<!-- GENERATED from docs/continuity/CURRENT_STATE.json; do not edit independently. -->
+# Selqiro — praegune tööüleandmine
+
+Seisukirje: 23.11.2026 Europe/Tallinn — esimene jätk peatus enne kirjutusi; Maci UID-lepingu parandus ja eraldi r2 jätk kontrollitud
+
+## Praegune checkpoint
+
+Kontooleku algne 60 faili on Maci tööpuus ning 20 testi PASS säilib. Esimene jätk kinnitas 23.11 kell 16:54 uuesti aluspuu/indeksi, varasemad originaalraportid ja sõltuvused ning võttis 20 testi tõendi korduskäiguta kasutusele. Esimene protsessivaatlus peatus CURRENT_RUNTIME_UID_SCOPE_FAILED juures enne dokumendikirjutusi, uut build'i ja andmebaasi. R2 parandab Maci protsesside reaalse ja efektiivse kasutajatunnuse eristamise; vana STOP ja kõik päevikud säilivad.
+
+## Lähtekood ja tõendi piir
+
+- **Vastu võetud alus:** main 034211d2ee3dfadd4ba791977c98e310754e4d94; puu 03768a7e12d1aeb4ff7402d3102800071920df0e, 2047 alusfaili. Viimane vastu võetud Ready / Production ja eraisiku/ettevõtte tööloendi kontroll säilivad.
+- **Viimane tegelik STOP:** selqiro-konto-oleku-jatk-20261123-raport-20261123-165417-33be329be2cf.json, 383150 baiti, SHA256 388d10eac2fdc1260ace24c399a56c842510e81d86aac9ffa9cd1b69e935f852. Käik algas 23.11.2026 kell 16:54:15.440 Europe/Tallinn ning protsessivaatlus lõppes 16:54:17.049. Manifest/run_id 334f54bb10da6ec0f4dec0917128002e727b9bdb60be8597f6b838cbefa8b251 vastab väljastatud esimesele jätkupakile.
+- **Maci lähtekood ja indeks:** Esimene jätk kinnitas täpselt algse v1 60 rakendatud faili, main 034211d ning 2047 alusfailiga muutmata indeksi. Kõik 27 Giti käsku läbisid; viimane täielik Giti kontroll lõppes 16:54:16.867. Esimese jätkupaki viie uue dokumendi puudumine ja vanade juhendite v1 baidid kuulusid kinnitatud eelseisu. Jätk peatus enne uute lähtefailide või dokumentide kirjutamist.
+- **Protsessivaatluse tõend:** Esimene ps-proov väljus 0: stdout 26496 baiti, stderr 0, mõlema voo EOF ja proovi lõppkoristus confirmed. Parser andis CURRENT_RUNTIME_UID_SCOPE_FAILED. Toorest protsessiloendit privaatsuse tõttu ei eksporditud, seega konkreetset protsessi või UID väärtust ei väideta teadaolevaks.
+- **Tõendatud käivitaja viga:** Apple'i ps -U valib reaalse kasutajatunnuse järgi, kuid uid väljundiväli tähendab efektiivset kasutajatunnust. Esimene jätk võrdles neid ekslikult samadena. R2 kasutab ruid ja uid eraldi, säilitab täieliku oma reaalse UID protsessikaardi ning kontrollib võimalike arendus-/ehitusprotsesside õigusi ja muutusi eraldi. Vana peatumiskirjet ei muudeta edukaks.
+- **Algne build ja testid:** Algne 23.11 kell 14:38 kontooleku käik läbis 20 testi; build'i käivitusprotsess lõppes exit 0, kuid cleanup jäi kinnitamata ja täielik build-logi/artefaktitõend loomata. Esimene jätk ei käivitanud uut build'i. Sama rakenduse 20 testi PASS võetakse täpsest privaatsest logist kasutusele; üks värske build on endiselt vajalik.
+- **Sama konto moodul:** 11 rakenduse/testifaili ja 9 SQL release'i faili säilivad baiditäpselt. Minu konto vaade ei vaja profiili; aktiivse oleku tabel/getter/Auth INSERT-trigger on valmis allikad, kuid SQL pole selles käigus rakendatud. Konto sulgemise/taastamise/kustutamise toiminguid veel ei ole.
+- **Eraldi r2 jätk:** Uus selqiro-konto-oleku-jatk-20261123-r2 kasutab oma päevikut ning kontrollib nelja varasemat originaalraportit ainult lugemiseks: kataloog, vastu võetud 034211d paigaldus, algne kontooleku STOP ja esimese jätku STOP. Algallikaks jääb v1 täielik 60-failine tööpuu; esimese jätku dokumente ei eeldata Macis rakendatuks.
+- **Kataloog ja registreerimise paus:** 22.11 konto kataloogiraport ning kõigi 11 senise funktsiooni täpsed lähtekoodivasted on vastu võetud. SMTP/Confirm email ning 21.11 registreerimise ettevalmistus jäävad selqiro.com etappi enne väliseid kasutajaid. Uut sama diagnostikat ega paigaldust ei korrata.
+
+## Tegelik kohalik katse
+
+- Kasutaja Maci 20/20 testi PASS pärineb algsest 14:38 käigust. Privaatne tests-passed.log: 5002 baiti, SHA256 6fbb9ad520b0d2cb074c3c1edc2addf7317e552ab2282939a721a1f4df0f350c. Esimene jätk kinnitas tests=reused_verified ja executed_again=false pärast värsket lähtekoodi/sõltuvuste kontrolli.
+- Esimese jätku 27 Giti käsku läbisid ja kõigi käivitusprotsesside lõpp oli kinnitatud. Protsessivaatluse ps-proovi lõpp oli samuti kinnitatud. See ei taasta algse 14:38 build'i ajalooliselt teadmata lõppkoristust.
+- R2 UID-paranduse 11/11 ja jätku raportisidumise/lukustuse/eelseisu 13/13 sihitud kontrolli läbisid Python 3.12.14 / Linuxis. Maci ps-lepingut kontrolliti näidisvastustega. Täpsed logid, sisendiräsid ja sõltumatu ülevaatus on r2 paketi proof/process, proof/runner ning proof/review kaustas. Varasemaid 33+33 jätkukontrolle, 20 rakendusetesti, SQL-teste ega päris build'i ei korratud.
+- Päris Maci r2 käivitust, uut rakenduse build'i, praegust Supabase'i seisu, andmebaasimuudatust, commit/push'i, Verceli deployment'i ega brauseri vastuvõttu siin ei väideta.
+
+## Production / kasutajaliides
+
+- Viimane vastu võetud veebiversioon on 034211d. Kumbki kontooleku käik ei jõudnud commit'i ega push'ini.
+- Esimese jätku build=not_run, database=not_started, database_apply_count=0, commit=null ja push=not_run. Selles käigus kontooleku SQL-i, Storage'i, SMTP/Auth seadeid ega kontode sulgemist/kustutamist ei puudutatud.
+- Minu konto brauserikontroll jääb pärast eduka r2 raportit ning sama uue commit'i Ready / Production tulemust.
+
+## Üks järgmine töö
+
+Paki selqiro-konto-oleku-jatk-20261123-r2.zip Downloads-kaustas lahti ja käivita python3 -I -B "$HOME/Downloads/selqiro-konto-oleku-jatk-20261123-r2/jatka.py" --publish. Saada täpselt SAADA SEE FAIL juures näidatud uus raport. Pärast eduka käigu sama commit’i Ready / Production tulemust värskenda portaali ning kontrolli Minu ala → Minu konto olemasolevate kontodega.
+
+**Peatumisel:** Säilita kõik lähtefailid, indeks, vanad ja uued päevikud ning raportid. Saada näidatud täpne raport või selle puudumisel PEATATUD-rida. Vana kontooleku paigaldajat ega esimest jätkajat uuesti ei käivitata. Tundmatu lähtekood, indeks, sõltuvus, raport, protsessivaatlus või SQL järelseis peatab uue jätku; ebaselget kirjutamist automaatselt ei korrata.
+
+## Loe ainult vajalikku
+
+- docs/continuity/HOSTED_PORTAL.md — ainult uue r2 jätku käivitamine.
+- docs/architecture/account-state-runtime-uid-20261123.md — protsessi UID leping ja uue STOP-i tõendi piir.
+- docs/architecture/account-state-runner-recovery-20261123.md — algse 14:38 build-STOP-i ajalooline põhjus ja testitõendi korduskasutus.
+- docs/architecture/account-state-foundation-20261122.md — muutmata konto UI ja SQL vundament.
+
+## Säilivad piirid
+
+- Kolm kontot kuuluvad kasutajale; ainult ühel on kaks identiteeti. Uus konto valib eraisiku VÕI ettevõtte. Mitme identiteedi ning ettevõtte töötajate/rollide/omandi üleandmise iseteenindus ei ole avamisulatus.
+- Olemasolevaid kontosid, profiile, pakkumisi, pilte, vestlusi, Energy andmeid, kviitungeid ega päevikuid ei kustutata, liideta ega kirjutata ümber. Uus SQL lisab ainult privaatse oleku read/skeemiobjektid. Sisemised omandi- ja õiguskontrollid säilivad.
+- E-posti aktiveerimine jääb põhidomeeni selqiro.com kasutuselevõtu juurde. Saatmine, kinnitamine ja parooli taastamine peavad olema lõpuni kontrollitud enne väliseid testijaid või avalikku registreerimist ka vercel.app aadressil.
+- Kasutajale kuuluvad ka selqiro.app/.io ja selkiro.com/.app/.io. Domeeni valikut uuesti ei küsita; DNS-i selles sammus ei muudeta.
+- AI päringuteed jäävad suletuks. Tavaline osalemine ei sõltu Energy ostust. Riigipõhised töökuulutuse poliitikad ja senised avaldamise/vestluse lepingud säilivad.
+- Pärast konto sulgemise/taastamise/kustutamise tervikut jätkub olemasolevate kuulutuste esiletõstmise ja seejärel välisreklaamide töö. Reklaamija võib kasutada sama kontot ilma avaliku müüjaprofiilita; reklaamimine ei ole kolmas kontotüüp.
+
+## Keskkond
+
+- /Users/taivo/selqiro, haru main 034211d, kinnitatud Taivo17/selqiro remote. V1 60 faili on viimase kontrolli järgi tööpuus, indeksisse lisamata. Esimese jätku juhendid ja r2 täiendused on ette valmistatud, kuid Macis rakendamata.
+- Next 16.4.6, Sharp 0.35.5, package.json/package-lock.json ning paigaldatud sõltuvused kontrolliti esimeses jätkus uuesti. R2 ei paigalda ega uuenda sõltuvusi.
+- Algne STOP on account-state-20261122/97b29fc8a509b3de6e48e5410735f8d6960e489beb7f7f856610f4fc8c6ce62b päevikus; esimese jätku STOP on account-state-continuation-20261123/334f54bb10da6ec0f4dec0917128002e727b9bdb60be8597f6b838cbefa8b251 päevikus. Mõlemad asuvad ~/Library/Application Support/Selqiro all ja säilivad koos lukkude/logidega muutmata.
+
+## Ajalugu (mitte praegused käsud)
+
+Vana sisenemisleht: `docs/archive/99_V2_HANDOFF_NEXT_CHAT.before-price-core-20261004-6df0af9.md`.
+Kõik 5573 algset rida säilivad bait-baidilt; SHA-256 `667e47990a7d3cc20ff53709cb861663b4565cf1d3c830eda88e0d18e60fdb8a`.
+Vanade failide NEXT/CURRENT pealkirjad ei ole tänased käivitamisjuhised.

@@ -1,0 +1,20 @@
+{
+  "docs/continuity/CURRENT_STATE.json": {
+    "copy": "docs/continuity/history/account-public-profile-before-20261123/docs/continuity/CURRENT_STATE.json",
+    "bytes": 7773,
+    "sha256": "ec75490bc5f63633cf32b569ec82681d587e8d5c5bba972501915c8f6a873c75",
+    "origin": "prepared accepted4b60782 checkpoint, not a second Mac write"
+  },
+  "docs/99_V2_HANDOFF_NEXT_CHAT.md": {
+    "copy": "docs/continuity/history/account-public-profile-before-20261123/docs/99_V2_HANDOFF_NEXT_CHAT.md",
+    "bytes": 7894,
+    "sha256": "40ae7513f4109a8816e4b30a5a6de8210e5ba22868cb399afa4be54a8895c8bc",
+    "origin": "prepared accepted4b60782 checkpoint, not a second Mac write"
+  },
+  "docs/continuity/HOSTED_PORTAL.md": {
+    "copy": "docs/continuity/history/account-public-profile-before-20261123/docs/continuity/HOSTED_PORTAL.md",
+    "bytes": 2080,
+    "sha256": "ef6c59e091a230619c9170868a52c9b0041a4b814a60a0cfb8f7de5a2ea40912",
+    "origin": "prepared accepted4b60782 checkpoint, not a second Mac write"
+  }
+}

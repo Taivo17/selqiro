@@ -2503,3 +2503,63 @@ läbisid Python 3.12.14 / Linuxis. Täpsed logid, sisendiräsid ning sõltumatu
 ülevaatus on r2 proof-kaustas. Senine transport/cleanup ning rakenduse/SQL-i
 baidid säilisid. Varasemaid 33+33 kontrolle, 20 rakendusetesti, SQL-kontrolle
 ega päris build'i ei korratud. Uus Maci r2 käik, build, SQL ja avaldamine on ees.
+
+## 23.11.2026 — konto oleku vundament vastu võetud (4b60782)
+
+Vastu võetud raport: selqiro-konto-oleku-jatk-20261123-r2-raport-20261123-173202-f3cf50344df6.json;
+1315892 baiti, SHA256 df77de0996451e7b8823262294d7edcb128761eaf7e3a0ecbdce4d3bc47e59e6.
+Maci käik 17:31:10.507–17:32:02.867 Europe/Tallinn, stage complete.
+Üks värske build; tests=reused_verified, executed_again=false (varasemad 20 testi).
+SQL preflight/apply/verify 1+1+1, database verified. Kõigi kolme CLI vastuse
+salvestatud baidipikkus ja räsi taastati täpselt ning muutmata parser läbis.
+Uut pilvepäringut või paigaldust vastuvõtu käigus ei tehtud.
+
+Commit 4b607828d0b153b84166ba963fdb4e77337e11f0; vanem 034211d2ee3dfadd4ba791977c98e310754e4d94.
+Puu 8012909c809772c1fd905129cc3643f8614655a3, 2108 faili. Kõik 70 paketi rada commit’is;
+r2 kirjutas 15 dokumenti ja säilitas 55 juba õiget faili. Lõppindeks/tööpuu puhtad.
+Remote sama commit’i peal kinnitatud 17:32:02.839 Europe/Tallinn.
+12 runtime-proovi läbisid; olemasolevaid protsesse ei lõpetatud.
+Mõlemad varasemad STOP-id säilivad; vana teadmata cleanup’i ei muudeta PASS-iks.
+
+Verceli kasutajapilt kinnitab 4b60782 Ready / Production. Minu konto pildid ning
+kasutaja kinnitus näitavad Aktiivne olekut ja loomiskuupäeva 15. aprill 2026;
+emaili väärtus, kõik kontod ja kitsas vaade on nende piltide tõendipiirist väljas.
+Andmebaasi täpset kontode arvu ei eksporditud; kolm kontot on kasutaja kontekst.
+
+Vastu võetud on active-only olek ja privaatne lugemine. Sulgemine/taastamine/
+kustutamine, uus registreerimine ja SMTP pole selle sammuga kasutusele võetud.
+Järgmise väikese töö allikad on olemas: konto aktiivsuse helper ning kanoonilise
+avaliku profiili lõppfilter koos media delegatsiooni kontrolliga. See on kavand,
+mitte juba tehtud koodimuudatus. Täpne järg account-public-profile-next-20261123.md.
+
+CURRENT_STATE, genereeritud üleandmine, HOSTED_PORTAL, arhitektuur ning mälu/päeviku
+lisad on valmis järgmise muudatuse jaoks. Selle vastuvõtu ajal Maci/Giti/pilve ei
+kirjutatud; uusi teste ega build’i ei korratud. Väljastatud paketid säilivad.
+
+## 23.11.2026 — avaliku profiili konto-oleku kontroll ette valmistatud
+
+Alus on vastu võetud main 4b60782, puu 8012909c809772c1fd905129cc3643f8614655a3,
+2108 faili. Konto oleku vundament ja Minu konto on Maci raporti, Ready / Production
+ning kasutaja vaate järgi vastu võetud. Selle lõpetatud paigaldust ei korrata.
+
+Uus serverimuudatus lisab privaatse account_is_available(uuid) kontrolli ja seob
+selle get_store_by_slug valitud kandidaadi lõppfiltriga. Kanooniline valik eelneb
+sobivusele; kättesaamatu profiili asemel ei tagastata teise konto legacy-aliast.
+Ettevõtte konto tuletatakse tegelikust business_accounts.owner_user_id seosest.
+Senine asukoha privaatsus, blokeerimine, vastuse kuju ja meedia delegatsioon säilivad.
+
+Kohalikud uued kontrollid: 8 kliendi/React SSR juhtu, 22 eraldatud PostgreSQL 17.6
+juhtu, 18 kviitungiparseri juhtu ning värske Next16.4.6/TypeScripti build PASS.
+Maci uuendaja 24 sihitud Git/aruande/SQL-töövoo kontrolli läbisid; järgnenud
+Commit-rea muudatusel on üks kontroll ja runtime-vaatluse jätkamiskaitsel seitse.
+Algset 24 kontrolli ei korratud. Täpsed räsiseosed ning sõltumatu ülevaatus on
+paketi proof/runner ja proof/reviews all. Varasemaid laiu kontrollipakke ei korratud.
+Päris brauserikäik ootab uut Ready / Production tulemust; SSR ei asenda seda.
+
+See on ettevalmistus, mitte uus Maci paigaldus, SQL rakendus või commit/push.
+Kontoridu ega sisu ei muudeta; active-only vundament säilib. Konto sulgemise,
+taastamise ja kustutamise toimingud ei ole veel avatud. Ülejäänud otsingu,
+pakkumiste, sõnumite, kirjutamiste ja välise pilditöö teed vajavad järgmisi piire.
+Uus sisselogimine/SMTP jääb kokkulepitud selqiro.com etappi; konto tervikule
+järgnevad kuulutuste esiletõstmine ja reklaamid. Kehtiv tööjärg on ainult
+CURRENT_STATE.json-s, sellest genereeritud üleandmises ning HOSTED_PORTAL.md-s.

@@ -9720,3 +9720,31 @@ Värske kohalik tõend ja päris paigalduse piir on CURRENT_STATE.json-is ning
 lõplikus kontrollraportis. Üks järgmine käsk asub continuity/HOSTED_PORTAL.md-s.
 Teenused järgivad pärast vastuvõttu sama lihtsat Avalda / Muuda–Salvesta voogu,
 töökuulutused tulevad hiljem. Varasemad dateeritud seisud on ajalugu.
+
+## 23.11.2026 — avaliku profiili konto-oleku kontroll ette valmistatud
+
+Alus on vastu võetud main 4b60782, puu 8012909c809772c1fd905129cc3643f8614655a3,
+2108 faili. Konto oleku vundament ja Minu konto on Maci raporti, Ready / Production
+ning kasutaja vaate järgi vastu võetud. Selle lõpetatud paigaldust ei korrata.
+
+Uus serverimuudatus lisab privaatse account_is_available(uuid) kontrolli ja seob
+selle get_store_by_slug valitud kandidaadi lõppfiltriga. Kanooniline valik eelneb
+sobivusele; kättesaamatu profiili asemel ei tagastata teise konto legacy-aliast.
+Ettevõtte konto tuletatakse tegelikust business_accounts.owner_user_id seosest.
+Senine asukoha privaatsus, blokeerimine, vastuse kuju ja meedia delegatsioon säilivad.
+
+Kohalikud uued kontrollid: 8 kliendi/React SSR juhtu, 22 eraldatud PostgreSQL 17.6
+juhtu, 18 kviitungiparseri juhtu ning värske Next16.4.6/TypeScripti build PASS.
+Maci uuendaja 24 sihitud Git/aruande/SQL-töövoo kontrolli läbisid; järgnenud
+Commit-rea muudatusel on üks kontroll ja runtime-vaatluse jätkamiskaitsel seitse.
+Algset 24 kontrolli ei korratud. Täpsed räsiseosed ning sõltumatu ülevaatus on
+paketi proof/runner ja proof/reviews all. Varasemaid laiu kontrollipakke ei korratud.
+Päris brauserikäik ootab uut Ready / Production tulemust; SSR ei asenda seda.
+
+See on ettevalmistus, mitte uus Maci paigaldus, SQL rakendus või commit/push.
+Kontoridu ega sisu ei muudeta; active-only vundament säilib. Konto sulgemise,
+taastamise ja kustutamise toimingud ei ole veel avatud. Ülejäänud otsingu,
+pakkumiste, sõnumite, kirjutamiste ja välise pilditöö teed vajavad järgmisi piire.
+Uus sisselogimine/SMTP jääb kokkulepitud selqiro.com etappi; konto tervikule
+järgnevad kuulutuste esiletõstmine ja reklaamid. Kehtiv tööjärg on ainult
+CURRENT_STATE.json-s, sellest genereeritud üleandmises ning HOSTED_PORTAL.md-s.

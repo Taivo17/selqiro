@@ -1,0 +1,50 @@
+{
+  "format": "selqiro_repo_handoff_v1",
+  "recorded_on": "23.11.2026 Europe/Tallinn — konto olek ja Minu konto vastu võetud, main 4b60782",
+  "archive": {
+    "lines": 5573,
+    "path": "docs/archive/99_V2_HANDOFF_NEXT_CHAT.before-price-core-20261004-6df0af9.md",
+    "sha256": "667e47990a7d3cc20ff53709cb861663b4565cf1d3c830eda88e0d18e60fdb8a"
+  },
+  "checkpoint": "Konto oleku vundament on Macis rakendatud, andmebaasis ühe paigalduse järel kontrollitud ning commit 4b60782 on pushitud. Kasutaja Verceli pilt kinnitab sama commit’i Ready / Production tulemust; Minu konto pildid näitavad Aktiivne olekut ja algset loomiskuupäeva. See etapp on vastu võetud. Konto sulgemise, taastamise ja kustutamise toimingud on veel tegemata.",
+  "source": {
+    "Vastu võetud alus": "main 4b607828d0b153b84166ba963fdb4e77337e11f0; puu 8012909c809772c1fd905129cc3643f8614655a3; 2108 jälgitavat faili. Ainus vanem on 034211d2ee3dfadd4ba791977c98e310754e4d94. Viimane tegelik remote’i võrdsus on raportis kinnitatud 23.11 kell 17:32:02.839 Europe/Tallinn.",
+    "Täpne Maci raport": "selqiro-konto-oleku-jatk-20261123-r2-raport-20261123-173202-f3cf50344df6.json, 1315892 baiti, SHA256 df77de0996451e7b8823262294d7edcb128761eaf7e3a0ecbdce4d3bc47e59e6. Käik kestis 17:31:10.507–17:32:02.867 Europe/Tallinn. Stage complete, build passed, database verified, apply_count 1, push verified.",
+    "Failid ja indeks": "Kõik 70 paketi rada on commit’is. R2 kirjutas 15 dokumentatsioonifaili; 55 juba õiget faili säilisid. Neli commit’i järelkontrolli kinnitavad täieliku lõpppuu, indeksi ja puhta tööpuu. Kõik 552 käsku lõpetasid kinnitatud protsessilõpuga.",
+    "Andmebaas": "Üks preflight, üks apply ja eraldi ainult lugemise verify kinnitasid active-only kontooleku lepingu. Täpse külmutatud parseri uus kohalik parsimine kattub kõigi kolme tegeliku CLI vastuse räsi ja pikkusega. Raport tõendab kõikide tollaste Auth kontode olekuridade katvust piirini 1000; täpset kontode arvu ei eksporditud.",
+    "Teostatud ulatus": "Üks privaatne olekurida Auth konto kohta, Auth INSERT-trigger, ainult lugev get_my_account_state_v1 ning profiilist sõltumatu Minu konto vaade. Lubatud olek on active. Otsene Auth kustutamine on FK ON DELETE RESTRICT tõttu tõkestatud. Sulgemis-, taastamis- ja lõppkustutamiskäske ei ole.",
+    "Dokumentatsiooni piir": "See vastuvõetud seis ja sellest genereeritud üleandmine on ette valmistatud eraldi 4b60782-järgse dokumenditäiendusena. Kasutaja Maci/Giti dokumente pole pärast seda commit’i siin kirjutatud ega pushitud. Täiendus tuleb kaasa järgmise sisulise koodipaketiga; eraldi paigalduskäsku selle jaoks pole."
+  },
+  "local_test": [
+    "Maci 20 rakendusetesti PASS kasutati muutumatu lähtekoodi ja kontrollitud sõltuvuste alusel uuesti: tests=reused_verified, executed_again=false. 5002-baidise varasema logi SHA256 on 6fbb9ad520b0d2cb074c3c1edc2addf7317e552ab2282939a721a1f4df0f350c.",
+    "Üks uus Next.js 16.4.6 build lõppes 17:31:22.701 Europe/Tallinn. Raportis on parsitud tulemus ja seitse artefaktiräsi. Uue 2570-baidise logi SHA256 on 1585ea69da5e1aa996c591d7c203747cd25b350b1dcb68b1e03be9f77e9fee75.",
+    "Kolm runtime-etappi ja 12 parandatud real/effective UID vaatlust läbisid. JavaScripti runtime-kandidaate ei leitud; olemasolevaid protsesse ei lõpetatud. Algse 14:38 build’i ajalooline cleanup jääb kinnitamata, mõlemad vanad STOP-id säilivad.",
+    "Vastuvõtu käigus tehti ainult salvestatud tõendite, täpse SQL-i ning failiräside ülevaatus. Uut rakenduse/SQL testi, build’i ega teenusepäringut ei korratud."
+  ],
+  "production": [
+    "Kasutaja Verceli pilt näitab Add private active account state foundation, main 4b60782, Ready / Production. Raporti READY_NOT_CHECKED märge säilib; pilt on eraldi deployment’i tõend.",
+    "Kasutaja kinnitus „minu konto on olemas” ja pildid näitavad Minu konto lehte, Aktiivne olekut, Tagasi minu alasse linki ning loomiskuupäeva 15. aprill 2026. Päises on Milline Vedu. E-posti väärtust, kõiki kolme kontot, kitsast vaadet ega kõiki sisenemisteid need pildid ei kinnita.",
+    "Olemasolevate andmete ümberkirjutamist, Storage’i, SMTP/Auth seadete või sõltuvuste muutmist see kontooleku paigaldus ei teinud. SQL-i säilimise hinnang tugineb täpsele kirjutuse ulatusele; uut globaalset sisu- või saldode auditit ei tehtud."
+  ],
+  "next_action": "Valmista 4b60782 alusel ette kanoonilise avaliku profiilikaardi ja selle meediaprojektsiooni konto-oleku kontroll: üks privaatne ainult lugev account_is_available(uuid) ning get_store_by_slug lõppfilter. Säilita kanoonilise kandidaadi valik enne sobivuse kontrolli ja olemasoleva get_public_profile_media_v1 delegatsioon. Kontrolli sihitud eraldatud juhtumeid ning järgmise uuendaja värsket SQL eelseisu. Konto sulgemine jääb suletuks kuni ülejäänud lugemise/kirjutamise ja sõnumi-/pilditeede katmiseni.",
+  "stop_rule": "Valmis kontooleku uuendajaid, jätkajaid ega SQL apply’t ei korrata. Säilita kõik olemasolevad failid, indeks, raportid ja päevikud. Enne uut Maci kirjutust kontrolli tegelikku haru, HEAD-i, tööpuud/indexit, lähtefaile ja kinnitatud remote’i. Tundmatu lähtekoodi või SQL eelseisu korral peatu ja säilita täpne raport; vana räsikaitsega pakki ei muudeta.",
+  "read_next": [
+    "docs/continuity/HOSTED_PORTAL.md — lõpetatud paigalduse piir ja järgmise sammu juhis.",
+    "docs/architecture/account-state-accepted-20261123.md — vastu võetud Mac/Git/DB/deployment/kasutustee tõendipiirid.",
+    "docs/architecture/account-public-profile-next-20261123.md — üks järgmine väike serveri moodul.",
+    "docs/architecture/account-state-foundation-20261122.md — paigaldatud oleku leping; vana ettevalmistus on ajalugu."
+  ],
+  "boundaries": [
+    "Kolm kontot kuuluvad kasutajale; ainult ühel on kaks identiteeti. Uus konto valib eraisiku VÕI ettevõtte. Mitme identiteedi ning ettevõtte töötajate/rollide/omandi üleandmise iseteenindus ei ole avamisulatus.",
+    "Olemasolevaid kontosid, profiile, pakkumisi, pilte, vestlusi, Energy andmeid, kviitungeid ega päevikuid ei kustutata, liideta ega kirjutata ümber. Uus SQL lisab ainult privaatse oleku read/skeemiobjektid. Sisemised omandi- ja õiguskontrollid säilivad.",
+    "E-posti aktiveerimine jääb põhidomeeni selqiro.com kasutuselevõtu juurde. Saatmine, kinnitamine ja parooli taastamine peavad olema lõpuni kontrollitud enne väliseid testijaid või avalikku registreerimist ka vercel.app aadressil.",
+    "Kasutajale kuuluvad ka selqiro.app/.io ja selkiro.com/.app/.io. Domeeni valikut uuesti ei küsita; DNS-i selles sammus ei muudeta.",
+    "AI päringuteed jäävad suletuks. Tavaline osalemine ei sõltu Energy ostust. Riigipõhised töökuulutuse poliitikad ja senised avaldamise/vestluse lepingud säilivad.",
+    "Pärast konto sulgemise/taastamise/kustutamise tervikut jätkub olemasolevate kuulutuste esiletõstmise ja seejärel välisreklaamide töö. Reklaamija võib kasutada sama kontot ilma avaliku müüjaprofiilita; reklaamimine ei ole kolmas kontotüüp."
+  ],
+  "environment": [
+    "/Users/taivo/selqiro, kinnitatud Taivo17/selqiro remote, viimane tegelik main 4b60782 ning puhas tööpuu/index raporti lõpus. Selle keskkonna ettevalmistatud dokumendid ei ole uus Maci vaatlus.",
+    "Next 16.4.6, Sharp 0.35.5 ning package.json/package-lock.json säilivad. Käigus ei paigaldatud ega uuendatud sõltuvusi.",
+    "Uus edukas päevik on ~/Library/Application Support/Selqiro/account-state-continuation-r2-20261123/19622aaeaf5b1709cc10efaec8bda07e7263bae843962c5bd1f9bb6c10fd3c98/result.json. Vana kataloogi-, tööloendi-, kontooleku-STOP ja esimese jätku STOP raport ning kõik lukud/logid säilivad."
+  ]
+}

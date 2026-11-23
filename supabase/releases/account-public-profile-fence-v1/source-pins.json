@@ -1,0 +1,46 @@
+{
+  "format": "selqiro-account-public-profile-source-pins-v1",
+  "accepted_commit": "4b607828d0b153b84166ba963fdb4e77337e11f0",
+  "source_fragments": {
+    "public.get_store_by_slug": {
+      "path": "supabase/repairs/20261120_profile_media/apply.sql",
+      "file_sha256": "a2f8a16a07956e90c42260b0d40e1494f60d95ba689f7f453854b220b99bc940",
+      "fragment_sha256": "675b62bffdee85a2c0080929f14e4e475b4dd3e0aac0585ddcf30de99902beb0",
+      "body_sha256": "982899ebfd40c0c444438ac34bb78e36e681f788b821dc50a629f94bde7f1548"
+    },
+    "profile_media_private.public_url": {
+      "path": "supabase/repairs/20261120_profile_media/apply.sql",
+      "file_sha256": "a2f8a16a07956e90c42260b0d40e1494f60d95ba689f7f453854b220b99bc940",
+      "fragment_sha256": "fd500a2f856d475a73571b66c252fdb80687a2a0f71bc4a3de0d08c67859f961",
+      "body_sha256": "b9b041c5f81bb15c1f114adc88efb0645ed97f2b519fb96624f6fb74534813a9"
+    },
+    "profile_media_private.slot_asset": {
+      "path": "supabase/repairs/20261120_profile_media_load/apply.sql",
+      "file_sha256": "6bda366d85f47f487f49e8629eb2e0b8d976298c01c5d4ea36d8ebb2bb3dbae9",
+      "fragment_sha256": "ae63dfe85c33b75612ca0a9215604293bc789ffb753586fcedbc2a4961ac55da",
+      "body_sha256": "879ab2663f3e1124019b14b804303655fa427e5b90df3a5a46cea606950b9658"
+    },
+    "profile_media_private.slot_url": {
+      "path": "supabase/repairs/20261120_profile_media/apply.sql",
+      "file_sha256": "a2f8a16a07956e90c42260b0d40e1494f60d95ba689f7f453854b220b99bc940",
+      "fragment_sha256": "f8d33d597ade57c4d82a152961ffec968c4fcdc32ac8316c3a1a4d13ae4dada3",
+      "body_sha256": "a63bc7282d020f037027fdba44ea984f2a972a9c21e1f5af320548c81d320328"
+    },
+    "public.get_public_profile_media_v1": {
+      "path": "supabase/repairs/20261120_profile_media/apply.sql",
+      "file_sha256": "a2f8a16a07956e90c42260b0d40e1494f60d95ba689f7f453854b220b99bc940",
+      "fragment_sha256": "c55292c2f224a420e7b34e0cbf92a05dbca75d10c9f62f97906f6d98f9903155",
+      "body_sha256": "b41531f27fe10f4aee7d8353c858aacbd3ba80ee66ddd1bd44fa2f65fe531c85"
+    },
+    "auth.uid": {
+      "path": "source fragment retained from accepted account-catalog proof",
+      "fragment_sha256": "b47dff83694eee8628716306d28813fab6f78e4a6d5c533f0e9fc2e4344a58e1",
+      "body_sha256": "9ab5ea099e74ec09e83b1505c51a3647791195aed7c742dcc3f257dfc7d2f300"
+    }
+  },
+  "owner_metadata": "Accepted 22 November account catalog; selected relations, columns, indexes and auth.uid grants.",
+  "foundation": "Exact accepted foundation expected-target verified in isolated source compilation.",
+  "public_reader_acl": "Source reconstructed from baseline explicit grants and retained PostgreSQL PUBLIC default; must match fresh actual preflight. No independent fresh production ACL observed here.",
+  "metadata_sha256": "afaa940fd0a2e39db5e31345fc88a3fc17121d73621bbd8e94fdb0bcc316323d",
+  "no_live_observation": true
+}
