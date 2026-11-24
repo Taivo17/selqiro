@@ -1,0 +1,67 @@
+<!-- GENERATED from docs/continuity/CURRENT_STATE.json; do not edit independently. -->
+# Selqiro — praegune tööüleandmine
+
+Seisukirje: 23.11.2026 Europe/Tallinn — 87bff3f vastu võetud; hobuste konto-oleku kontroll ette valmistatud
+
+## Praegune checkpoint
+
+Tavakuulutuste konto-oleku kontroll on 87bff3f-na Maci raporti, sama commit’i Ready / Production pildi ja kasutaja lehtede avanemise kinnituse järgi vastu võetud. Uus väike moodul lisab sama konto kontrolli hobuste üldotsingusse ja avalikku üksikvaatesse. Ettevalmistuse sihitud kontrollid ning uus build on läbitud. Maci rakendus, SQL, commit/push ja sama uue versiooni tegelik veebikontroll on ootel.
+
+## Lähtekood ja tõendi piir
+
+- **Vastu võetud alus:** main 87bff3f51a01a6953c37096ed32a1017135fd304, puu a6f7b7522cd0e88db25caf88b8dd4e9a48c64d77, 2154 faili. Taastatud allikad vastavad vastu võetud SHA-256 ja Git blob inventarile. See pole uus Maci ega remote’i vaatlus.
+- **Aluse tõend:** selqiro-kuulutuste-konto-olek-20261123-raport-20261123-202738-2e4bf1222037.json; 1350011 baiti, SHA256 1771fc501d411e71f45bb63a098a62abe47d6b33612782b6b30b11a7e65e8b95. Maci ühe SQL muudatuse, eraldi verify, 13 testi, build’i ja commit/push’i tulemus on vastu võetud. Sama commit’i Ready / Production ja kasutaja kinnitus on eraldi tõendid.
+- **Uus piir:** search_public_marketplace_v1 ainult horses haru ning get_public_horse_offer_v1(uuid). Ühendatud otsingu ordinary haru ja ühine count/page/JSON lõpposa säilivad baiditäpselt. Vana horse publication 07_public.sql faili ei rakendata tervikuna.
+- **Üks kontooleku allikas:** account_lifecycle_private.account_is_available(uuid) säilib muutmata. Kontroll seotakse kandidaadi h.identity_id võtmega. Eraisiku konto tuleb identities.user_id-st, ettevõttel business_accounts.owner_user_id-st. Autor ega liige ei ole varuomanik.
+- **Säiliv leping:** Avaldaja kahepoolne blokeerimine, otsingu peitmise eelistus, avaldamise sündmuse ja sisuräsi ning galerii lõplikkus, tähtajad, viis pakkumisliiki, EE/EUR, hinnad ja avalikud väljad säilivad. Jagamise värske metadata kasutab sama detaililugejat. Edukas puuduv üksikvaade jääb tooreks null-vastuseks. Omaniku möödapääsu ei lisata.
+- **SQL tõendi piir:** Uute hobuste metaandmete ootused on lähtekoodist ja eraldatud PostgreSQL-i koostamisest. Uuendaja peab tegeliku andmebaasi täpse eelseisu värskelt kinnitama. Varasem tavakuulutuste/profiili/konto leping jääb samuti kontrolli alla.
+- **Jätku piir:** Konto sulgemine, taastamine ja kustutamine pole avatud. Profiili pakkumiste ning rubriikide eraldi RPC-d, teised sisutüübid, kirjutused, sõnumid ja pilditeed vajavad oma lõpetamist. Avalikke pildi-URL-e ega varem salvestatud metadata’t see samm ei tühista.
+
+## Tegelik kohalik katse
+
+- 12/12 uut kliendi, range parseri, anonüümse jagamismetadata ja Reacti serverrenderduse kontrolli läbisid. Kontrolliti päris rakenduskoodi sünteetiliste vastuste ja hook-olekutega; 42 lähte-/abifaili räsi säilisid. Null-vastus, päringuviga, segatud loendi järjekord/leheküljed, hind, pildid ja avalikud lingid on eraldi kaetud. See ei ole brauseri ega päris teenuse kontroll.
+- 56/56 uut native PostgreSQL 17.6 kontrolli läbisid. Tegelikud konto-, avaldamis-, sisu- ja galeriilõplikkuse funktsioonid töötasid sünteetiliste andmetega. Kontroll hõlmab viis pakkumisliiki, omanikuseoseid, puuduvaid/piiratud kontosid, blokeerimist, peitmist, tähtaegu, vigaseid avaldamisfakte, segatud koguarve/lehekülgi, õigusi ning ühe kaitstud SQL rakendamise ja eraldi verify tulemust. Testitud 9 SQL/lepingu sisendi ja 54 toetava sisendi räsid säilivad; oma klaster on peatatud. Live-andmebaasi eelseis tuleb Macis värskelt kinnitada.
+- Vana/uue päringu võrdlus kasutas 2400 avaldamise lugemiskontrolli läbivat sünteetilist hobust, 1920 pilti ja 600 tavakuulutust: kõik 12 võrdlusjuhtu andsid samad aktiivsete kontode tulemused. Iga versiooni kohta mõõdeti 3 soojendatud päringut. Veel 20 000 kõrvalise konto lisamisel säilisid 5 valitud juhu tulemused ja konto helperi kutsete arvud 5/3/300/1/1. Segatud laiotsingu mediaan oli 2804,52 → 2954,86 ms (+5,36%, mõõtevahemikud kattusid); hobuste laiotsing 2775,87 → 2549,83 ms. Ühe omaniku 1600 vaste puhul oli 1600 kontrolli; ühe korra kontrollimist konto kohta ei lubata. 43 mõõtmise sisendpin’i jäid muutmata; neli setup’i loetud baas-release’i faili kontrolliti lisaks aktsepteeritud inventari vastu, neid ei lisatud tagantjärele mõõtmise pin’ide hulka. 52 811 päris pesastatud plaani säilivad kadudeta gzip’is ning 27 sisemist lugejaplaani eraldi. Need ühe kliendi kohalikud mõõtmised ei tõenda tootmiskoormust: laiotsingu avaldamiskontrollid, kaartide koostamine enne lehekülge ja hobuste FTS vajavad eraldi optimeerimist enne suuremat kasutusmahtu.
+- Uus täielik Next.js 16.4.6 / TypeScripti build läbis 32,45 sekundiga. Kõik 765 build’i sisendit säilisid; package.json, lukufail, sõltuvused ja rakenduskood on muutmata. Kasutati olemasolevaid täpseid sõltuvusi ja inertseid kohalikke koostamisseadeid. Valmis /v2/products, /v2/horse-offer/[id] ning /v2/profile/[slug] väljundid.
+- 17/17 uut Maci uuendaja sihitud juhtumit läbisid 17,571 sekundiga. Ajutine Git/kohtvõrgu remote ja piiratud alamprotsessid olid tegelikud; runtime-proov, CLI, SQL ning rakenduse build’i tulemused neis runner’i juhtudes sünteetilised. Kontrolliti täpset 2154-failist alust, tundmatu seisu peatumist, ühe SQL kirjutuse ning ebaselge vastuse järel ainult lugemisega taastumise lepingut, täpset commit/push’i ja raporti säilimist. Kõik 17 runtime-faili vastavad testi pin’idele; seitse varasemat helperit säilivad baiditäpselt. See ei ole uus Maci käivitus.
+- Päris brauseri kasutuskontroll on ootel. Varasema dokumenteeritud kohaliku Chromiumi socket-keelu ja pilvebrauseri loopback-piiri muutumisest uut tõendit ei ole; sama ebaõnnestunud käivitust ei korratud. Reacti serverrenderdus ja sünteetiline transport ei ole brauseri ega päris teenuse tõend.
+
+## Production / kasutajaliides
+
+- 87bff3f tavakuulutuste ning varasemad profiili ja Minu konto muudatused on vastu võetud. Uue hobuste paketi Maci käivitust ega andmebaasimuudatust ei ole tehtud.
+- Uuendaja kontrollib kogu tegelikku lähtepuud, indeksit/tööpuud, remote’i, sõltuvusi ja eelmise eduka käigu originaali. Ta lisab ainult paketi failid, käivitab uued sihitud testid ja värske build’i, kontrollib SQL eelseisu ning teeb ühe piiratud SQL rakendamise ja eraldi verify. Seejärel teeb ainult selle paketi commit/push’i.
+- Kontode ja sisu ridu, registreerimist, SMTP-d, Storage’i ega sõltuvusi ei muudeta. Ettevalmistus, Maci lähtekood, SQL, commit/push ja Vercel on eraldi tõendid.
+
+## Üks järgmine töö
+
+Paki selqiro-hobuste-konto-olek-20261123.zip Downloads-kaustas lahti ja käivita python3 -I -B "$HOME/Downloads/selqiro-hobuste-konto-olek-20261123/uuenda.py" --publish. Saada täpselt SAADA SEE FAIL real näidatud raport. Pärast sama uue commit’i Ready / Production tulemust värskenda portaali ja ava olemasolev hobusekuulutus otsingust ning profiilikaardilt. Kontrolli hinda, müüjat ja pilte; tavakuulutuste otsing, üksikvaade, olemasolevad profiilid ja Minu konto peavad avanema.
+
+**Peatumisel:** Säilita lähtekood, indeks, kontod, sisu, paketid, raportid ja päevikud. Tundmatu lähtepuu, originaalraport, protsessiseis, sõltuvus või SQL eelseis peatab uuendaja. Ebaselget SQL kirjutust automaatselt ei korrata. Saada täpne raport või selle puudumisel PEATATUD-rida. Vanu paigaldajaid ega käsitsi SQL-i ei käivitata.
+
+## Loe ainult vajalikku
+
+- docs/continuity/HOSTED_PORTAL.md — üks selle paketi käsk ja päris lugemiskontroll.
+- docs/architecture/account-horse-read-fence-v1.md — kahe lugeja leping ja tõendi piir.
+- docs/architecture/account-listing-read-accepted-20261123.md — vastu võetud 87bff3f alus.
+- supabase/releases/account-horse-read-fence-v1/README.md — SQL eelseis ja tehing.
+
+## Säilivad piirid
+
+- Kolm kontot kuuluvad kasutajale; ainult ühel on kaks identiteeti. Uus konto valib eraisiku VÕI ettevõtte. Mitme identiteedi ning ettevõtte töötajate/rollide/omandi üleandmise iseteenindus ei ole avamisulatus.
+- Olemasolevaid kontosid, profiile, kuulutusi, pilte, vestlusi, Energy andmeid, kviitungeid ega päevikuid ei kustutata ega kirjutata ümber. Uus SQL asendab ainult kahe nimetatud hobuselugeja definitsioonid. Konto active-only alus ja olemasolev sobivusfunktsioon säilivad. Konto sulgemise tegevus vajab ülejäänud serveriteede lõpetamist.
+- E-posti aktiveerimine jääb põhidomeeni selqiro.com kasutuselevõtu juurde. Saatmine, kinnitamine ja parooli taastamine peavad olema lõpuni kontrollitud enne väliseid testijaid või avalikku registreerimist ka vercel.app aadressil.
+- Kasutajale kuuluvad ka selqiro.app/.io ja selkiro.com/.app/.io. Domeeni valikut uuesti ei küsita; DNS-i selles sammus ei muudeta.
+- AI päringuteed jäävad suletuks. Tavaline osalemine ei sõltu Energy ostust. Riigipõhised töökuulutuse poliitikad ja senised avaldamise/vestluse lepingud säilivad.
+- Pärast konto sulgemise/taastamise/kustutamise tervikut jätkub olemasolevate kuulutuste esiletõstmise ja seejärel välisreklaamide töö. Reklaamija võib kasutada sama kontot ilma avaliku müüjaprofiilita; reklaamimine ei ole kolmas kontotüüp.
+
+## Keskkond
+
+- /Users/taivo/selqiro; kinnitatud https://github.com/Taivo17/selqiro.git. Ainus lähtealus 87bff3f51a01a6953c37096ed32a1017135fd304, a6f7b7522cd0e88db25caf88b8dd4e9a48c64d77, 2154 faili. Viimane vastu võetud Maci/remote’i vaatlus on 23.11 kell 20:27:38.314 Europe/Tallinn; enne uut kirjutust tehakse uus kontroll.
+- Next 16.4.6, Sharp 0.35.5, package.json ja package-lock.json säilivad. Kontrollitakse olemasolevat Supabase CLI 2.117.0, projekti vyjletlmwoiwxsnsunlm ja sõltuvusi. Paigaldusi ega uuendusi ei tehta.
+- Uus päevik: ~/Library/Application Support/Selqiro/account-horse-read-20261123/<manifest-sha256>. Eelmise account-listing-read-20261123/f8619bf143a47d7f373aeaebacfebb42d7e1752b0470ab3aa84233afd42c976f/result.json täpsed baidid hoitakse ainult lugemiseks lukus ja säilitatakse.
+
+## Ajalugu (mitte praegused käsud)
+
+Vana sisenemisleht: `docs/archive/99_V2_HANDOFF_NEXT_CHAT.before-price-core-20261004-6df0af9.md`.
+Kõik 5573 algset rida säilivad bait-baidilt; SHA-256 `667e47990a7d3cc20ff53709cb861663b4565cf1d3c830eda88e0d18e60fdb8a`.
+Vanade failide NEXT/CURRENT pealkirjad ei ole tänased käivitamisjuhised.

@@ -11652,3 +11652,57 @@ on docs/continuity/HOSTED_PORTAL.md-s; põhjalik leping on
 docs/architecture/account-horse-read-fence-v1.md-s. Konto sulgemise tervik,
 profiili pakkumiste otselugejad, muud sisutüübid, kirjutused, sõnumid ja pilditeed
 vajavad lõpetamist. Konto tervik → esiletõstmine → reklaamid ning SMTP paus säilivad.
+
+## 24.11.2026 — hobusekuulutuste konto-oleku kontroll vastu võetud (ac5521a)
+
+Maci raport `selqiro-hobuste-konto-olek-20261123-raport-20261123-222207-586571aebed0.json`, SHA256 `e419d6395a85b8d9a8c213bc6aad58d74878e3a5bd311230401fb38b5986c5c1`, kinnitab ühe 12/12 TAP-käigu,
+eduka Next 16.4.6 build’i, ühe kahe lugeja SQL rakendamise, eraldi verify ja puhta
+commit/push’i. Sama commit on Verceli pildil Ready / Production. Kasutaja
+kinnitas „kuulutused avanevad” ning näitas hobuse- ja tavakuulutust, otsingut,
+Minu ala loendit ja eraisiku/ettevõtte avalikke profiile. See moodul on vastu võetud.
+
+Täpne alus `ac5521a7e944ebfb3710ea97b9913cc91b9130ee`, puu `3466f08a7134bd6fb8b334b7520924f85cfad394`, 2177 faili. Raport ja väljastatud pakett
+säilivad; kontrollitud allikad, kviitungid ja räsiseosed on vastuvõtupakis.
+Vastuvõtt ei korranud rakenduseteste, build’i, SQL-i ega teenusepäringuid.
+Nuppude toiminguid ja kogu konto sulgemise valmimist neist piltidest ei tuletata.
+
+Järgmine üks moodul: `get_public_profile_marketplace_v1/v2` ning
+`get_public_profile_store_categories_v2` konto-oleku kontroll, üheselt lahendatud
+profiili omanikule ja olemasolevale helperile toetudes. Ühise rubriigilugeja
+kontroll kehtib nii marketplace kui services ulatuses; teenuste sobivusloogika
+säilib. Ülejäänud domeenid, kirjutused, sõnumid ja meedia tulevad oma ulatuses.
+Laiotsingu jõudlustöö jääb enne suuremat kasutusmahtu kohustuslikuks.
+
+Üksikasjad: `docs/architecture/account-horse-read-accepted-20261124.md` ja `docs/architecture/account-profile-marketplace-read-next-20261124.md`. Need vastuvõtulisad on ette valmistatud
+järgmise koodipaketi jaoks; Maci/Giti dokumente pärast ac5521a siit ei kirjutatud.
+SMTP paus, ühe eraisiku VÕI ettevõtte konto suund, AI sulgemine ning konto tervik
+→ esiletõstmine → reklaamid järjekord säilivad.
+
+## 24.11.2026 — profiili kuulutuste ja rubriikide konto kontroll ette valmistatud
+
+Alus main `ac5521a7e944ebfb3710ea97b9913cc91b9130ee`, puu `3466f08a7134bd6fb8b334b7520924f85cfad394`, 2177 faili. Hobuste etapp on Maci raporti,
+sama commit'i Ready / Production ning kasutaja „kuulutused avanevad” järgi
+vastu võetud. Selle vastuvõtu dokumendid kaasatakse uude paketti.
+
+Uus moodul lisab ühekordse profiilikonto kontrolli get_public_profile_marketplace_v1/v2
+ja get_public_profile_store_categories_v2 lugejatele. Sisendi/slugi, sisu,
+rubriikide, koguarvu ja lehekülgede senised lepingud säilivad. Ühine rubriigilugeja
+katab marketplace ja services; teenuste sobivusfunktsioonid jäävad muutmata.
+Kontode ja sisu ridu ei muudeta, sulgemise/kustutamise tegevust veel ei avata.
+
+17/17 uut sihitud kliendikontrolli läbisid päris TypeScripti parserite ja API-dega; 23 allikapinni säilisid. Lisaks läbis 7 hook’i juhtumit juhitud sünteetilise efekti/renderduse harness’iga ning 12 native PostgreSQL-i vastust tegelike parseritega. Hook’i katse pole React DOM ega brauser; native-wire’i unavailable-rühm on puuduv slug, olemasoleva sobimatu konto juhtumid on SQL-katsetes. Rakenduse kliendikood ja sõltuvused jäid muutmata.
+
+58/58 native PostgreSQL 17.6 kontrolli läbisid. Tegelikud konto-, hobuse- ja teenuse nähtavuse/finality helperid töötasid sünteetiliste andmetega. Kontrolliti era-/ettevõttekontot, omanikku ja avaldajat, puuduvaid/piiratud kontosid, kolme lugeja õigusi, mõlemat rubriigiulatust, v1/v2 erinevusi, rubriigipuud, aegumist, avaldamise lõplikkust ning lehekülgi. Üks tegelik preflight → kaitstud apply → COMMIT-järgne kinnitus → eraldi verify läbis; triivi ja katkise tehingu juhud peatusid. 75 katse-/SQL-sisendi räsid säilisid ja oma klaster on peatatud. Täiendav live-kataloogileping on allikast koostatud ning vajab Macis värsket kinnitamist. Attempt/slot/object/policy viited on sünteetilised FK-toed, mitte kogu avaldamise või Storage’i katse.
+
+Päris vanade/uute lugejate 14 võrdlusjuhus (13 aktiivset profiili ja üks puuduv) säilis JSON täpselt. Andmestik: 801 tavakuulutust, 801 avaldamiskontrolli läbivat hobust, 151 kehtivat teenust ja 153 rubriiki; suurel profiilil 1600 pakkumist. Üks konto helperi kutse leitud profiili kohta, puuduval profiilil null. Veel 20 000 kõrvalise konto, identiteedi, profiili, tavakuulutuse, rubriigi, teenuse ja vastavate rubriigiseoste lisamisel säilisid 8 valitud juhu tulemused ning kutsete arvud. Suure profiili v2 loendi mediaan 966,67 → 981,87 ms; mõõtmine on ühe kliendi sünteetiline katse, mitte tootmiskoormuse tõend. Eraldi piiratud plaanide järelvaatlus täiendab algse salvestusfiltri välja jäetud slugi/omaniku päringuid. Järelvaatluse 152 plaanis kasutavad slugi, omaniku ja konto kontrollid indekseid; need ei käi kõiki kontosid läbi. Senine marketplace-rubriigiharu luges mõõtmisel kõiki 20 801 tavakuulutuse-rubriigi seoseid (järelvaatluses lisandus algse katse viimane fixture-rida: vana ja uus lugesid mõlemad 20 802). Suure profiili kaartide/finality koostamine enne lehekülge jäi alles. Need on eraldi optimeerimistööd enne suuremat mahtu.
+
+Üks uus täielik Next.js 16.4.6 / TypeScripti build läbis 33.481 sekundiga. Kõik 765 build’i sisendit säilisid; package.json, lukufail ja rakenduskood on muutmata. Kasutati olemasolevaid täpseid sõltuvusi ning inertseid kohalikke koostamisseadeid. Valmis profile, my-area ja products lehtede väljundid. Maci build ja deployment on eraldi järgmine tõend.
+
+20/20 uut Maci uuendaja sihitud juhtumit läbisid 19.963 sekundiga. Kõik 43 sisendit säilisid. Päris ajutine Git-hoidla, kohalik bare-remote ja piiratud alamprotsessid kontrollisid järjestust ning peatumist; runtime-proov, CLI, SQL ja build’i tulemused olid selles runner’i katses sünteetilised. Seitse senist transporti/protsesse/Giti/sõltuvusi kaitsvat helperit säilivad baiditäpselt. See pole Maci ega pilveteenuse käivitus.
+
+Uue versiooni päris brauserikontroll on ootel sama uue commit’i Ready / Production järel. Siin ei käivitatud uut brauserikatset ega kasutatud päris kontosid. Eelmine dokumenteeritud kohaliku brauseri socket-piir jääb ajalooliseks tõendiks; tänast brauseri tööd ega selle tõrget ei väideta. Kliendi, juhitud hook’i ja SQL vastuste kontrollid ei tõenda klikke, hydration’it või päris teenuse kasutusteed.
+
+Maci rakendus, üks SQL tehing, commit/push ja sama uue versiooni Ready / Production
+ning tegelik kasutuskontroll on ootel. Juhis: docs/continuity/HOSTED_PORTAL.md.
+Arhitektuur: docs/architecture/account-profile-marketplace-read-fence-v1.md.
+SMTP paus ja konto tervik → esiletõstmine → reklaamid säilivad.

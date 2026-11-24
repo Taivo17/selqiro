@@ -1,0 +1,17 @@
+{
+  "docs/continuity/CURRENT_STATE.json": {
+    "copy": "docs/continuity/history/account-horse-read-accepted-base-ac5521a-20261124/docs/continuity/CURRENT_STATE.json",
+    "bytes": 10461,
+    "sha256": "37397eca97cdf215348b14e87bf239c5c539a1610590b8ecaf57d69658290ab5"
+  },
+  "docs/99_V2_HANDOFF_NEXT_CHAT.md": {
+    "copy": "docs/continuity/history/account-horse-read-accepted-base-ac5521a-20261124/docs/99_V2_HANDOFF_NEXT_CHAT.md",
+    "bytes": 10567,
+    "sha256": "623c6bbfed72b0d54eb95d07031970385023bcd10150819187e396129bbed9ff"
+  },
+  "docs/continuity/HOSTED_PORTAL.md": {
+    "copy": "docs/continuity/history/account-horse-read-accepted-base-ac5521a-20261124/docs/continuity/HOSTED_PORTAL.md",
+    "bytes": 2765,
+    "sha256": "271f9af2881bf2dbe32852fef3d1922c0917957a4acc2449f2efb3a1c714a00b"
+  }
+}

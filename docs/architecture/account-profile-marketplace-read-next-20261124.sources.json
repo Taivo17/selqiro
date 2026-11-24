@@ -1,0 +1,503 @@
+{
+  "format": "selqiro-next-profile-marketplace-account-read-source-audit-v1",
+  "recorded_at_utc": "2026-11-24T08:54:35.622500+00:00",
+  "audit_result": "SOURCE_AUDIT_COMPLETE",
+  "implementation_status": "not_started",
+  "base": {
+    "reported_commit": "ac5521a7e944ebfb3710ea97b9913cc91b9130ee",
+    "tree": "3466f08a7134bd6fb8b334b7520924f85cfad394",
+    "files": 2177,
+    "source_root": "/workspace/scratch/de90fa9e1734/work/account-horse-read-accepted-20261124/source",
+    "accepted_inventory": "/workspace/scratch/de90fa9e1734/work/account-horse-read-accepted-20261124/review/runner/accepted-inventory.json",
+    "accepted_inventory_sha256": "e9ad1ee4ed6299f6abb247e2d6b40eb9297143ce721dcc0bceeba16904e8cb35",
+    "boundary": "All audited files match independently reconstructed accepted inventory. No fresh Mac, remote, browser or database observation by this audit."
+  },
+  "recommendation": {
+    "name": "Profile marketplace and contextual shop-category account availability",
+    "target_functions": [
+      {
+        "name": "public.get_public_profile_marketplace_v1",
+        "signature": "text,uuid,integer,integer",
+        "source": "supabase/repairs/20261109_service_profile_polish/02_profile_marketplace.sql",
+        "schema_version": 1,
+        "definition_sha256": "b28db7dcd2415df83bd9fb7c83e1126b5a89703e50ac4091a8c7e5dd35c9672b",
+        "definition_bytes": 5979,
+        "retained_cte_through_return_sha256": "99039b0369b0acaefc59a657c0a8b811b36082edb476e6e7df83ed598b898e9e",
+        "retained_cte_through_return_bytes": 4556,
+        "historical_assembled_copies_exact": {
+          "supabase/repairs/20261109_service_profile_polish/changes.sql": true,
+          "supabase/repairs/20261109_service_profile_polish/apply.sql": true
+        },
+        "existing_account_gate": false,
+        "language": "plpgsql",
+        "volatility": "STABLE",
+        "security": "DEFINER",
+        "settings_from_source": [
+          "search_path=pg_catalog,public,auth,pg_temp",
+          "plan_cache_mode=force_custom_plan",
+          "timezone='UTC'"
+        ],
+        "owner_from_source": "postgres",
+        "execute_from_source": [
+          "anon",
+          "authenticated"
+        ],
+        "no_public_or_service_role_execute_from_source": true,
+        "proposed_change": "After existing unique active-slug resolution, evaluate the resolved identity owner account through the unchanged helper; unavailable identity becomes NULL. Preserve existing CTE/result body."
+      },
+      {
+        "name": "public.get_public_profile_marketplace_v2",
+        "signature": "text,uuid,integer,integer",
+        "source": "supabase/repairs/20261110_horse_store_categories/02_profile_marketplace.sql",
+        "schema_version": 2,
+        "definition_sha256": "c4521fbb629b01bd6fb9481d408220cf4c1ba55939646c4fbec7e51522ef6988",
+        "definition_bytes": 6135,
+        "retained_cte_through_return_sha256": "4d07cb14515234ce017288f38cdbc5e90e7451a692108743d67659a31d8c9056",
+        "retained_cte_through_return_bytes": 4712,
+        "historical_assembled_copies_exact": {
+          "supabase/repairs/20261110_horse_store_categories/changes.sql": true,
+          "supabase/repairs/20261110_horse_store_categories/apply.sql": true
+        },
+        "existing_account_gate": false,
+        "language": "plpgsql",
+        "volatility": "STABLE",
+        "security": "DEFINER",
+        "settings_from_source": [
+          "search_path=pg_catalog,public,auth,pg_temp",
+          "plan_cache_mode=force_custom_plan",
+          "timezone='UTC'"
+        ],
+        "owner_from_source": "postgres",
+        "execute_from_source": [
+          "anon",
+          "authenticated"
+        ],
+        "no_public_or_service_role_execute_from_source": true,
+        "proposed_change": "After existing unique active-slug resolution, evaluate the resolved identity owner account through the unchanged helper; unavailable identity becomes NULL. Preserve existing CTE/result body."
+      },
+      {
+        "name": "public.get_public_profile_store_categories_v2",
+        "signature": "text,text,integer,integer",
+        "source": "supabase/repairs/20261111_service_store_categories/03_public_categories.sql",
+        "schema_version": 2,
+        "definition_sha256": "bfa70ff42302ce5a61d04c936572b333319151ae8b16797f8ec225319315322f",
+        "definition_bytes": 4408,
+        "retained_cte_through_return_sha256": "576f7524797307d4ad13b7ccd337aba595651cf57014127d270db3c9d1960480",
+        "retained_cte_through_return_bytes": 2982,
+        "historical_assembled_copies_exact": {
+          "supabase/repairs/20261111_service_store_categories/changes.sql": true,
+          "supabase/repairs/20261111_service_store_categories/apply.sql": true
+        },
+        "existing_account_gate": false,
+        "language": "plpgsql",
+        "volatility": "STABLE",
+        "security": "DEFINER",
+        "settings_from_source": [
+          "search_path=pg_catalog,public,auth,pg_temp",
+          "plan_cache_mode=force_custom_plan",
+          "timezone='UTC'"
+        ],
+        "owner_from_source": "postgres",
+        "execute_from_source": [
+          "anon",
+          "authenticated"
+        ],
+        "no_public_or_service_role_execute_from_source": true,
+        "proposed_change": "After existing unique active-slug resolution, evaluate the resolved identity owner account through the unchanged helper; unavailable identity becomes NULL. Preserve existing CTE/result body."
+      }
+    ],
+    "release_proposal": "supabase/releases/account-profile-marketplace-read-fence-v1/",
+    "new_RPC_or_UI_required": false,
+    "new_account_system_required": false,
+    "account_helper_unchanged": "account_lifecycle_private.account_is_available(uuid)",
+    "implementation_shape": "Three bounded replacements only. Keep old released source files untouched; create a new guarded release."
+  },
+  "resolution_contract": [
+    "Validate input and preserve existing unique active identity slug resolution before checking availability; a duplicate slug must not fall back to a remaining available identity.",
+    "Resolve owner from the single chosen identity: private -> identities.user_id; business -> business_accounts.owner_user_id; unknown type or missing owner/state denies availability.",
+    "Use one indexed identity/business owner lookup and one account helper check per uniquely resolved profile request, before the content/category CTEs; measure the actual implementation to confirm this bound.",
+    "Unavailable account clears identity_value and uses the existing unavailable empty envelope, including profile_available false; categories identity_id null. Do not return raw null or a new error envelope.",
+    "No active-viewer identity authority, author/member fallback, owner bypass, account-state repair or row locking.",
+    "Do not silently import canonical profile header alias/fallback, business-status or owner-block semantics into these feeds; the bounded change is account availability, preserving each reader existing visibility rules."
+  ],
+  "actual_paths": [
+    "PublicProfilePage -> get_store_by_slug through usePublicProfile/getPublicProfileBySlug; section rendering waits for profile.",
+    "PublicProfileListingsSection -> usePublicProfileListingView -> usePublicProfileMarketplace -> getPublicProfileMarketplace -> get_public_profile_marketplace_v2.",
+    "usePublicProfileListingView -> usePublicProfileStoreCategories(default marketplace) -> getPublicProfileStoreCategories -> get_public_profile_store_categories_v2.",
+    "usePublicProfileServiceView -> usePublicProfileStoreCategories(services) -> same category RPC; this RPC scope is in the profile gate, not a claim that standalone service content readers are finished.",
+    "PublicProfileListingCard routes typed ordinary IDs to /v2/listing/[id], horse IDs to /v2/horse-offer/[id].",
+    "Legacy marketplace_v1 remains directly granted to anon/authenticated and must be fenced despite no current app caller.",
+    "PublicProfileHorsesSection has no current app/src/components importing caller; it is not the current profile feed."
+  ],
+  "retained_semantics": {
+    "profile_gate_not_RPC_authority": true,
+    "ordinary": "status active AND active_until>now(); NULL expiry stays excluded; bilateral block peer stays listings.user_id",
+    "horse": "Unchanged is_public/current publication/content snapshot/gallery/effective expiry; block peer stays horse_offers.created_by_user_id; five offer types and exact price/media grammar preserved.",
+    "temporary_hide": "These direct profile readers have no temporary hidden-provider filter. Preserve deliberate visit behavior; do not import discovery hiding.",
+    "v1_category": "Horses only when category is null; category-selected v1 remains ordinary only.",
+    "v2_category": "Ordinary and horse membership comes from their separate canonical same-seller category links and same-identity descendants.",
+    "contextual_category": "Whole visible marketplace/services section before result filter/page; visible linked categories plus same-identity ancestors, recursive UNION; no unrelated seller branches.",
+    "service_category_gate": "Same profile/account gate applies to both marketplace/services because both return public profile metadata; service is_public and visible_to_viewer bodies remain byte exact.",
+    "pagination": "Market pages1..60, category pages1..100; offset0..100000; exact string total_count, items length, has_more, next_offset/window flag and original sort preserved.",
+    "strict_clients": "V1/V2 parsers reject unknown keys/version/seller and malformed pagination; category parser binds returned identity. Preserve exact empty envelope; RPC error remains error; no owner fallback.",
+    "client_state": "Existing audience/profile/filter/page request keys and AbortController hide prior scope; category API detects duplicate IDs/count changes/incomplete trees."
+  },
+  "metadata_boundary": {
+    "not_covered_by_current_horse_contract": [
+      "public.get_public_profile_marketplace_v1",
+      "public.get_public_profile_marketplace_v2",
+      "public.get_public_profile_store_categories_v2",
+      "public.store_categories",
+      "public.listing_store_categories",
+      "public.horse_offer_store_categories",
+      "public.service_store_categories",
+      "service_publication_private.is_public",
+      "service_publication_private.visible_to_viewer"
+    ],
+    "next_preflight": "Fresh narrow catalog check of these three definitions/overloads/signatures/defaults/properties/owners/ACL/settings plus relevant category links/keys/indexes and service-read dependencies; preserve accepted account/profile/ordinary/horse contracts. Unknown metadata stops before write.",
+    "provenance": "Definition expectations are source-derived from the pinned latest declarations and byte-equal historical assembly copies. This audit does not certify current database bodies.",
+    "no_account_rows_required": true,
+    "operation_contract": "One guarded three-function transaction, after-COMMIT receipt then independent read-only verify; never retry ambiguous apply blindly."
+  },
+  "query_plan_requirements": [
+    "Measure old/new actual profile readers with populated valid ordinary and horse publication records plus service-category cases; equal active-account JSON response hashes.",
+    "Confirm account check bound per unique profile request rather than per content row, including category pagination; no unrestricted account scan or per-card client network request.",
+    "Use actual nested plans and same-transaction helper counters, including empty/missing/unavailable slug, many listings/horses under one seller, category roots/children, later pages, anon/authenticated and blocking.",
+    "Add20000 unrelated accounts/identities/content/category links and confirm lookup remains tied to requested slug/identity.",
+    "Existing materialized profile branches build cards and horse finality before pagination; category listing reads whole eligible contextual tree. Do not label this million-scale ready from the new gate or existing horse benchmark.",
+    "Preserve same-seller category ancestry and v1/v2 membership meaning while measuring; redesign broad search/category pagination only as separately validated work."
+  ],
+  "targeted_checks_needed": [
+    "Unavailable, missing state, banned/deleted Auth, unknown identity type, missing business owner; positive private/business owners; author/member difference in both directions.",
+    "Direct anon/authenticated/owner calls to all three functions; missing/ambiguous slug, validation errors, exact empty unavailable envelopes and both category scopes.",
+    "V1 still excludes category-filtered horses; V2 includes canonical same-identity links; foreign/corrupt links, recursive ancestry/cycle termination, empty category and correct counts/pages.",
+    "Preserve strict ordinary expiry including NULL; horse content/publication/gallery validity; publisher blocks and discovery-only hide distinction; active service categories use unchanged expiry and viewer functions.",
+    "Actual strict V1/V2/category parsers accept denied envelopes, reject leaked fields/count/identity errors; existing API abort/no fallback, categories multi-page mismatch, view scope-change stale responses.",
+    "Catalog drift refusal, exact three-function delta, unrelated object/row preservation, atomic failure and after-COMMIT receipt/verify; one fresh build after implementation.",
+    "After exact new commit Ready/Production: existing private/business profile marketplace preview, expand/category/page, typed card to detail and return; narrow service-category smoke because same RPC supports that scope."
+  ],
+  "remaining_boundaries": [
+    "Standalone service/job/showcase readers, legacy ordinary-profile APIs, direct table reads, writers, contacts/messages/history, media and final publish checks remain separate lifecycle work.",
+    "Pinned legacy category authority explicitly retains anon/authenticated SELECT on listing_store_categories; baseline also contains public store_categories read policy. This source fact requires a later current-RLS/ACL audit; three RPC replacements cannot certify all public metadata hidden.",
+    "No closure/restore/erase UI becomes active from this slice. Existing accounts/content/logs remain; one account person OR business launch model and legacy two-identity account preservation remain.",
+    "SMTP activation stays with selqiro.com and before outsiders; account lifecycle -> listing highlights -> advertising order remains."
+  ],
+  "no_execution": {
+    "application_code_changed": false,
+    "SQL_or_database_execution": false,
+    "tests_or_build": false,
+    "browser_or_services": false,
+    "Mac_or_remote": false,
+    "account_closure_or_deletion": false
+  },
+  "files": {
+    "AGENTS.md": {
+      "bytes": 327,
+      "sha256": "e3447d84251880fb34cfae09131cb4c57471529bbfe60976a3245793cf621627",
+      "git_blob": "8bd0e39085d5260e7f8faffcad2fdc45e10aef33",
+      "git_mode": "100644",
+      "accepted_inventory_match": true
+    },
+    "docs/continuity/CURRENT_STATE.json": {
+      "bytes": 10461,
+      "sha256": "37397eca97cdf215348b14e87bf239c5c539a1610590b8ecaf57d69658290ab5",
+      "git_blob": "9a0ff8bba0ad301670d27ab5075520c816f674ad",
+      "git_mode": "100644",
+      "accepted_inventory_match": true
+    },
+    "docs/architecture/account-model-lifecycle-20261122.md": {
+      "bytes": 10511,
+      "sha256": "e93bf3bccfb4d8bc50ef3ca7a9ababaa2912b1a0125ba3501164fca18df7c596",
+      "git_blob": "ae07b2cd3f75776f2ac0bdd0f57231c96a329c1e",
+      "git_mode": "100644",
+      "accepted_inventory_match": true
+    },
+    "docs/architecture/account-horse-read-fence-v1.md": {
+      "bytes": 8538,
+      "sha256": "be4fcb5dff1883051c92826ccfc515d57df38979fc9e801b09fb3ca955b7ed60",
+      "git_blob": "bdcb84999d6481b568e147e236731e2c2dcb8188",
+      "git_mode": "100644",
+      "accepted_inventory_match": true
+    },
+    "docs/architecture/account-horse-read-next-20261123.md": {
+      "bytes": 10011,
+      "sha256": "30516a36fc8240c7c4fb318f382e478221e06566d9646f60299b9d405b8f8f1c",
+      "git_blob": "28dae13f9e7ad4501668d517d223c3900d43fd56",
+      "git_mode": "100644",
+      "accepted_inventory_match": true
+    },
+    "docs/architecture/profile-marketplace-feed-v1.md": {
+      "bytes": 7520,
+      "sha256": "7c1ab742c386ff8a5b22baa70380a25daf119cc31736cf69355bf124b98cc513",
+      "git_blob": "4d22024496d2d5e55abe8ab0e2eb5e6611f8f46c",
+      "git_mode": "100644",
+      "accepted_inventory_match": true
+    },
+    "supabase/releases/account-public-profile-fence-v1/account-availability.sql": {
+      "bytes": 836,
+      "sha256": "da26cf792b337adf41a77cc2144a4738d1a405dd122ff9e20c47dc1c82e72930",
+      "git_blob": "554e04f19281dbace6b90e00fb63ed0b62c8010d",
+      "git_mode": "100644",
+      "accepted_inventory_match": true
+    },
+    "supabase/releases/account-public-profile-fence-v1/public-profile.sql": {
+      "bytes": 3072,
+      "sha256": "2f00234d98c261b97bcfad89df9d247e3cd89f8478b5160ce6764280b771c8ea",
+      "git_blob": "6155df19cf35ac09f9cf6559068a6eb7608fe59f",
+      "git_mode": "100644",
+      "accepted_inventory_match": true
+    },
+    "supabase/releases/account-horse-read-fence-v1/search-marketplace.sql": {
+      "bytes": 8115,
+      "sha256": "bf96099c162ba59964f2054b5ce042c2fe5d2cb9a1540aacf89f8afee3177054",
+      "git_blob": "fdc17b65148c0531605c1814f7afe991a7a8e489",
+      "git_mode": "100644",
+      "accepted_inventory_match": true
+    },
+    "supabase/releases/account-horse-read-fence-v1/expected-contract.json": {
+      "bytes": 61019,
+      "sha256": "6fb943323f7f7cd928ad2503e6f90ac56c3e3d79dcdb7fc55a4f861759f4c600",
+      "git_blob": "363ab3da0ef98110fec3a9f91a2fd2ee6d535c11",
+      "git_mode": "100644",
+      "accepted_inventory_match": true
+    },
+    "supabase/repairs/20261109_service_profile_polish/02_profile_marketplace.sql": {
+      "bytes": 6779,
+      "sha256": "3570059d7b57f8d67ed6bd17cad260ba491eb36e45804dc8774f03bb8c9ea612",
+      "git_blob": "8a67576daf5e1b4e5fad6ced2be1b25ba8156472",
+      "git_mode": "100644",
+      "accepted_inventory_match": true
+    },
+    "supabase/repairs/20261109_service_profile_polish/changes.sql": {
+      "bytes": 12483,
+      "sha256": "3cfb510dd4d043c3f8bb5dc12c82b4fc79127f8d747b5ea2bb60424686d1be71",
+      "git_blob": "da9165843e30c830d7e45e5b003c5ec35d91dff5",
+      "git_mode": "100644",
+      "accepted_inventory_match": true
+    },
+    "supabase/repairs/20261109_service_profile_polish/apply.sql": {
+      "bytes": 184470,
+      "sha256": "eb0b11c7cccebf0d6f453d316301d2b186280ec394c9dbc7a090456c0da38dd9",
+      "git_blob": "cc38981f6c95272d278278a2334a8f3edcabb40e",
+      "git_mode": "100644",
+      "accepted_inventory_match": true
+    },
+    "supabase/repairs/20261110_horse_store_categories/02_profile_marketplace.sql": {
+      "bytes": 7021,
+      "sha256": "17fcfef0facffcdb0433c42a980b1028b06bdf0f6e3bdd40406c20261cc3cb3e",
+      "git_blob": "40beb285b254976c292fbdca48b3e3afd973c526",
+      "git_mode": "100644",
+      "accepted_inventory_match": true
+    },
+    "supabase/repairs/20261110_horse_store_categories/changes.sql": {
+      "bytes": 13697,
+      "sha256": "90ba69e888ebce0887590e7184eeb880be42f1310f614d7c27c83af83e5fe5ec",
+      "git_blob": "e31c0690a09b9c066fe68308dec5ecc8a726a637",
+      "git_mode": "100644",
+      "accepted_inventory_match": true
+    },
+    "supabase/repairs/20261110_horse_store_categories/apply.sql": {
+      "bytes": 227803,
+      "sha256": "013695e272b380a2a510e27215e141bc1ced13f93aa723e941fbc7be1ef47add",
+      "git_blob": "c3a4cc69d27ea30176510b8e12885ed5e7e0c35f",
+      "git_mode": "100644",
+      "accepted_inventory_match": true
+    },
+    "supabase/repairs/20261111_service_store_categories/03_public_categories.sql": {
+      "bytes": 5283,
+      "sha256": "651ce76b5abeebf2a35a67226128eb11d98727a9eba3c4e3983126206a3ee5c3",
+      "git_blob": "c4551afbde20c64166279052ed7dc7750e48514a",
+      "git_mode": "100644",
+      "accepted_inventory_match": true
+    },
+    "supabase/repairs/20261111_service_store_categories/changes.sql": {
+      "bytes": 17922,
+      "sha256": "e4a4542e528e8764075dde1eb3600dbba28e1d85458fa4d70d82a8d25df148e5",
+      "git_blob": "27ea13522ce000256811bc062264920f7d1266ce",
+      "git_mode": "100644",
+      "accepted_inventory_match": true
+    },
+    "supabase/repairs/20261111_service_store_categories/apply.sql": {
+      "bytes": 275396,
+      "sha256": "39c6f60205c61b536812d93cf496db4843bf5c9c50f0b5c5e5c1200b0e275e2e",
+      "git_blob": "306806d6805c02f5ad11c8c5e5c54321b0bd493a",
+      "git_mode": "100644",
+      "accepted_inventory_match": true
+    },
+    "supabase/repairs/20261110_horse_store_categories/01_assignments.sql": {
+      "bytes": 6603,
+      "sha256": "7884872dac35ee615676b0e6aa4f2f2eab7d9ba35797f159c288301545e6019e",
+      "git_blob": "033ef67432986d72271f2b580f5ac50496be873e",
+      "git_mode": "100644",
+      "accepted_inventory_match": true
+    },
+    "supabase/repairs/20261111_service_store_categories/01_assignments.sql": {
+      "bytes": 6547,
+      "sha256": "44c90fd4401975aa42ce4f9ce2855bcc39f954b4bae2eb20c59e48ee851c0be5",
+      "git_blob": "1e6b032ff9d34e5b1e379f180ad05f719ff91026",
+      "git_mode": "100644",
+      "accepted_inventory_match": true
+    },
+    "supabase/repairs/20261110_store_category_authority/changes.sql": {
+      "bytes": 465,
+      "sha256": "8044bd08c1a566c5d8655dee9d72b47188c6b5ab067caf57b7ccdae45a06fcee",
+      "git_blob": "fe8eb3606d7e12f1d70ec41691d0af828e338919",
+      "git_mode": "100644",
+      "accepted_inventory_match": true
+    },
+    "supabase/repairs/20261108_horse_lifecycle/01_lifecycle_core.sql": {
+      "bytes": 20546,
+      "sha256": "1fb33e3d2d5403ce599f43e96550c523d160e21b2fa2261f52979d971fc3d58b",
+      "git_blob": "8795cff0f59f227d084ef597e454ef3d119d5fbe",
+      "git_mode": "100644",
+      "accepted_inventory_match": true
+    },
+    "supabase/repairs/20261111_service_activity/01_state.sql": {
+      "bytes": 3969,
+      "sha256": "bd8ddfd7b9844bbb52abd2eac60f1017f826df7c31862b0eb1206c15b4b6c061",
+      "git_blob": "ec65950988f51126652bb03dd96aee70ae8d0241",
+      "git_mode": "100644",
+      "accepted_inventory_match": true
+    },
+    "supabase/repairs/20261108_service_publication/06_reads_status.sql": {
+      "bytes": 13324,
+      "sha256": "a41834df2927f690e193b546539390afb72100e292ab617ef8e47aa6a425e95d",
+      "git_blob": "59332f71d416b9402afa46a25491dc4da51c2f11",
+      "git_mode": "100644",
+      "accepted_inventory_match": true
+    },
+    "supabase/migrations/20260722173530_baseline_20260722.sql": {
+      "bytes": 221677,
+      "sha256": "7ca065f92f01c0f38ada5f5a50d2a0fc5b716f5291d1525d398023b7db59da3f",
+      "git_blob": "26a83e126ae59783b5cdc39c7df90078a767bf01",
+      "git_mode": "100644",
+      "accepted_inventory_match": true
+    },
+    "src/entities/profile/api/getPublicProfileBySlug.ts": {
+      "bytes": 3439,
+      "sha256": "895c37bd560da17f94502a6f32b63cd8a0dc712acd00ed5c6df52afce04d4a3b",
+      "git_blob": "03049fc72d9129da1042f9c10e3f911b429d811d",
+      "git_mode": "100644",
+      "accepted_inventory_match": true
+    },
+    "src/features/public-profile/components/PublicProfilePage.tsx": {
+      "bytes": 14069,
+      "sha256": "eb238d8ce63f62fdb71cc933c15bc63fd836e2e8b32d2c65e601bae4a2dc23ea",
+      "git_blob": "54dabeb50fce8a82354fa4aa3d11af3d20ed2c18",
+      "git_mode": "100644",
+      "accepted_inventory_match": true
+    },
+    "src/features/public-profile/components/PublicProfileListingsSection.tsx": {
+      "bytes": 4666,
+      "sha256": "83abc8d6b45fdc659fffb361da3818236a6852ec1520e4222cf8ee8d6bf07b69",
+      "git_blob": "11f102943cfb8750436c63bb569dd77388600958",
+      "git_mode": "100644",
+      "accepted_inventory_match": true
+    },
+    "src/features/public-profile/components/PublicProfileListingCard.tsx": {
+      "bytes": 3523,
+      "sha256": "9cf0629425dda98bb6edf7d050a6797d72327259e00df19fe02019b318b3a521",
+      "git_blob": "c3da5c9b5596adbb173e3bf16fae1eca36894b9d",
+      "git_mode": "100644",
+      "accepted_inventory_match": true
+    },
+    "src/features/public-profile/components/PublicProfileHorsesSection.tsx": {
+      "bytes": 3127,
+      "sha256": "4cb126f0793dcbd88afb572f388ee0e10f6d25a7b0c39113657353ba3c795075",
+      "git_blob": "ccdb11f4d9825a02ea530f651cdd311ba111339f",
+      "git_mode": "100644",
+      "accepted_inventory_match": true
+    },
+    "src/features/public-profile/model/usePublicProfile.ts": {
+      "bytes": 1661,
+      "sha256": "3d46ded73fb30fd5482152b4f93f15015bdf6ff123bfcbc9555805f6e30f7356",
+      "git_blob": "3a469f31ced83b707e3f0c361f79e4a06e9f0a54",
+      "git_mode": "100644",
+      "accepted_inventory_match": true
+    },
+    "src/features/public-profile/model/usePublicProfileListingView.ts": {
+      "bytes": 5290,
+      "sha256": "3785ef2191db7af04a4d7da778976fd3fe0a298169270bdd25fd39e62308d9d7",
+      "git_blob": "ecd490c530cb6f0271eefca179424771c82d3caf",
+      "git_mode": "100644",
+      "accepted_inventory_match": true
+    },
+    "src/features/public-profile/model/usePublicProfileMarketplace.ts": {
+      "bytes": 2203,
+      "sha256": "2febd375ee2382b7de91cae1cb6b124d0dd90c1d0a387908c9f8e40b5ee0cc3a",
+      "git_blob": "c23ede998738f6cdef602dae9c1183900e0e4472",
+      "git_mode": "100644",
+      "accepted_inventory_match": true
+    },
+    "src/features/public-profile/model/usePublicProfileStoreCategories.ts": {
+      "bytes": 2318,
+      "sha256": "67f8a2b46e51671df4bb7246bea4e9e9215f9a7fce2cb2df2bc450a2c1713464",
+      "git_blob": "c8d23708fa68b3b0acff9bedb5fef0c78aed671b",
+      "git_mode": "100644",
+      "accepted_inventory_match": true
+    },
+    "src/features/public-profile/model/usePublicProfileServiceView.ts": {
+      "bytes": 5995,
+      "sha256": "e5049b0ac7e0c741f5c56f25bf368a91b513b74b88fe00e9c43a99216a8ef3bd",
+      "git_blob": "dc654811ccd63c1f02d072a659efedba4e57525f",
+      "git_mode": "100644",
+      "accepted_inventory_match": true
+    },
+    "src/entities/listing/api/getPublicProfileMarketplace.ts": {
+      "bytes": 937,
+      "sha256": "319f1053bff52457672e980ef59b60557eb19b9ca1524ae835e915102f9a603e",
+      "git_blob": "13b40abec43817fe815412b6fe8fa29bf21bc3ad",
+      "git_mode": "100644",
+      "accepted_inventory_match": true
+    },
+    "src/entities/store-category/api/getPublicProfileStoreCategories.ts": {
+      "bytes": 2063,
+      "sha256": "35f05cf3d8a8da4c93a24799d4977b36353cccfffefa3fe7412f38fe64f48132",
+      "git_blob": "bef51d99b4f25cdee47cfecdb4e5a01f66bea745",
+      "git_mode": "100644",
+      "accepted_inventory_match": true
+    },
+    "src/entities/listing/model/publicRead/publicProfileMarketplaceV1.ts": {
+      "bytes": 2602,
+      "sha256": "f99e12839fc49df1c86d98fd5b789237140f6efdef5d9c80644574cddc48fe08",
+      "git_blob": "5a9a546eff04e297221a5246effe2ad91977a6fe",
+      "git_mode": "100644",
+      "accepted_inventory_match": true
+    },
+    "src/entities/listing/model/publicRead/publicProfileMarketplaceV2.ts": {
+      "bytes": 1956,
+      "sha256": "ccb8338babb70af4ad725b1585e56cf2902ee02b73e2538a34132b902a42e698",
+      "git_blob": "82302be06461ff39be91236c61367f6bcf70d078",
+      "git_mode": "100644",
+      "accepted_inventory_match": true
+    },
+    "src/entities/listing/model/publicRead/publicMarketplace.ts": {
+      "bytes": 3502,
+      "sha256": "6d729feb69e2538b50e37eec4bfe5e2d42c65a9d3c3b4f8786593b479fc5529c",
+      "git_blob": "282874cfe84a314f20a9441536cf0bc199c8d619",
+      "git_mode": "100644",
+      "accepted_inventory_match": true
+    },
+    "src/entities/store-category/model/publicProfileCategoriesV2.ts": {
+      "bytes": 1780,
+      "sha256": "90eef661e58542edd69af41374717ec7c93c2073514f5cc90e6642448ff5bff0",
+      "git_blob": "ae856eb7286426792c1195e8f67a3341f51d31fa",
+      "git_mode": "100644",
+      "accepted_inventory_match": true
+    },
+    "src/entities/profile/model/publicProfilePage.ts": {
+      "bytes": 2398,
+      "sha256": "9d64c7622d5143d114f067666960a154bb8b892771c6304e1efc60e78d1588b7",
+      "git_blob": "44ab4e2bd7e0ea52dde2f959eafce8399f0e05f9",
+      "git_mode": "100644",
+      "accepted_inventory_match": true
+    },
+    "src/entities/store-category/model/contentCategories.ts": {
+      "bytes": 4363,
+      "sha256": "0db90dc650af6af8078d738ac7a54363c2d72f20ceb732e8d11430baf08e038c",
+      "git_blob": "902c5f06ab12055e4d0fec3a8fc4b00f7d4eca5e",
+      "git_mode": "100644",
+      "accepted_inventory_match": true
+    }
+  }
+}

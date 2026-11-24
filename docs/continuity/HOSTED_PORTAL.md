@@ -1,56 +1,54 @@
-# Hobusekuulutuste konto-oleku kontroll — üks järgmine käsk
+# Profiili kuulutuste ja rubriikide konto kontroll — üks järgmine käsk
 
-23.11.2026 Europe/Tallinn. Main **87bff3f** on vastu võetud. Uus pakett seob
-hobuste põhiotsingu ja avaliku üksikvaate sama kontoolekuga.
+24.11.2026 Europe/Tallinn. Main **ac5521a** on vastu võetud. Uus pakett lisab sama
+konto kättesaadavuse kontrolli profiili kuulutuste ja avalike poerubriikide lugejatele.
 
 ## Käivita uus pakett
 
-Paki `selqiro-hobuste-konto-olek-20261123.zip` Downloads-kaustas lahti. Kui kohalik Selqiro arendusserver
-on sinu terminalis töös, peata see oma aknas Ctrl+C-ga. Säilita olemasolevad
-failid, päevikud ja varasemad paketid.
+Paki `selqiro-profiili-kuulutuste-konto-olek-20261124.zip` Downloads-kaustas lahti. Kui sinu terminalis töötab kohalik
+Selqiro arendusserver, peata see oma aknas Ctrl+C-ga. Säilita olemasolevad paketid ja päevikud.
 
 ```bash
-python3 -I -B "$HOME/Downloads/selqiro-hobuste-konto-olek-20261123/uuenda.py" --publish
+python3 -I -B "$HOME/Downloads/selqiro-profiili-kuulutuste-konto-olek-20261124/uuenda.py" --publish
 ```
 
-Uuendaja kontrollib tegelikku main 87bff3f, kõiki 2154 alusfaili, indeksit/tööpuud,
-kinnitatud remote’i, täpseid sõltuvusi ja eelmise tavakuulutuste käigu originaali.
-Ta lisab ainult selle paketi failid, käivitab 12 uut kliendikontrolli
-ja ühe värske build’i. Seejärel kontrollib ta andmebaasi metaandmete eelseisu,
-rakendab ühe piiratud kahe lugeja SQL tehingu ja teeb eraldi järelkontrolli.
-Järgneb ainult selle paketi commit/push.
+Uuendaja kontrollib tegelikku main ac5521a, kõiki 2177 alusfaili, indeksit/tööpuud,
+kinnitatud remote'i, olemasolevaid täpseid sõltuvusi ja eelmise hobuste käigu
+originaalraportit. Ta lisab ainult selle paketi failid, teeb 17
+sihitud kliendikontrolli ja värske build'i. Seejärel kinnitab SQL eelseisu,
+asendab ühes kaitstud tehingus kolm lugejat ning teeb eraldi järelkontrolli.
+Järgneb ainult paketi commit/push.
 
-Commit’i pealkiri: `Respect account availability in public horse reads`.
-Tegelik räsi kuvatakse `Commit:` real ja raportis; seda ette ei oletata.
-SQL võib olla rakendatud enne hilisemat Giti peatumist. Raport eristab etappe;
-ebaselget kirjutust ei korrata automaatselt ega käsitsi vana paigaldajaga.
+Commit'i pealkiri: `Respect account availability in public profile marketplace reads`.
+Tegelik uus räsi ilmub `Commit:` reale ja raportisse. SQL võib olla rakendatud
+enne hilisemat Giti peatumist; raport eristab etappe. Ebaselget kirjutust ei
+korrata automaatselt ega vana paigaldajaga.
 
 ## Saada täpne raport
 
-Uus privaatne koopia tehakse Downloads-kausta. Absoluutne tee ilmub real
-`SAADA SEE FAIL:` ja Finder valib just selle faili. Koopia vea korral näidatakse
-kontrollitud originaali; Finderi vea korral jääb täpne tee terminali.
-Salvestustõrke järel märgitakse viimane säilinud raport võimalikuks aegunud
-tõendiks. Kui raportit ei loodud, saada `PEATATUD`-rida.
+Uus privaatne koopia tehakse Downloads-kausta. Absoluutne tee kuvatakse real
+`SAADA SEE FAIL:` ning Finder valib just selle faili. Koopia vea korral
+näidatakse kontrollitud originaali; Finderi vea korral prinditakse täpne tee.
+Salvestustõrke järel märgitakse viimane säilinud raport võimaliku aegunud
+tõendina. Kui raportit ei loodud, saada `PEATATUD`-rida.
 
-## Sama uue commit’i Ready / Production järel
+## Sama uue commit'i Ready / Production järel
 
-1. Värskenda portaali.
-2. Ava Kuulutused, vali hobuste kategooria ja ava üks olemasolev avalik pakkumine.
-3. Kontrolli üksikvaate pealkirja, hinda, müüjat ja pilte; ava sama pakkumine ka profiilikaardilt.
-4. Ava üks olemasolev tavakuulutus otsingust.
-5. Kontrolli, et eraisiku ja ettevõtte avalikud profiilid ning Minu konto avanevad.
+1. Värskenda portaali ja ava eraisiku avalik profiil.
+2. Ava selle kuulutuste loend ning mõni olemasolev poerubriik. Kui on järgmine leht, ava see.
+3. Ava profiililt olemasolev tava- ja hobusekuulutus ning mine tagasi profiilile.
+4. Ava ettevõtte avalik profiil ja selle olemasolevad kuulutused/rubriigid.
+5. Ava teenuste osa ja olemasolevad teenuserubriigid — nende valikud kasutavad sama rubriigilugejat.
 
-Need on olemasoleva sisu lugemiskontrollid. Kontode sulgemine/kustutamine ja uue
-konto loomine ei kuulu sellesse sammu. Puuduva ning piiratud konto juhud on
-kaetud eraldatud sünteetilise PostgreSQL-i katsetega.
+Puuduva rubriigi või järgmise lehe jaoks pole vaja testandmeid juurde luua.
+Need on olemasoleva sisu lugemiskontrollid. Konto sulgemist/kustutamist ei katsetata.
+Puuduva/piiratud konto, rubriikide ja lehekülgede erijuhud on eraldatud
+sünteetilise andmebaasi ning kliendi kontrollides.
 
 ## Säiliv tööjärg
 
-Profiili pakkumiste/rubriikide otselugejad, muud sisutüübid, kirjutused, sõnumid
-ja meedia vajavad oma kontrolli enne konto sulgemise/taastamise/kustutamise
-tegevust. Ühendatud laiotsingu kaartide koostamine enne lehekülge jääb eraldi
-optimeerimistööks enne suuremat kasutusmahtu. SMTP paus ning konto tervik
-→ esiletõstmine → reklaamid järjekord säilivad.
-
-Lõpetatud pakette, SQL-i ja laiu teste ei korrata.
+Teenuste/tööde eraldi lugejad, showcase, legacy-teed, tabelite otseõigused,
+kirjutused, kontakt/sõnumid ja meedia vajavad oma lõpetamist enne konto
+sulgemise/taastamise/kustutamise tervikut. Suure mahu otsingu/profiililoendite
+optimeerimine jääb eraldi tööks. SMTP paus ning konto tervik → esiletõstmine →
+reklaamid järjekord säilivad. Lõpetatud pakette ja laiu teste ei korrata.

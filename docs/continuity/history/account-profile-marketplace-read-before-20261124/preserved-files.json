@@ -1,0 +1,20 @@
+{
+  "docs/continuity/CURRENT_STATE.json": {
+    "copy": "docs/continuity/history/account-profile-marketplace-read-before-20261124/docs/continuity/CURRENT_STATE.json",
+    "bytes": 9758,
+    "sha256": "fab53afa927857f0ef58d66ae84b195d2f3b5d5f0c7ed6987de26a0104e61fed",
+    "origin": "Accepted ac5521a documentation prepared here after supplied Mac report and screenshots; not a later Mac write."
+  },
+  "docs/99_V2_HANDOFF_NEXT_CHAT.md": {
+    "copy": "docs/continuity/history/account-profile-marketplace-read-before-20261124/docs/99_V2_HANDOFF_NEXT_CHAT.md",
+    "bytes": 9876,
+    "sha256": "9f7e1aec6ecd09994759311d56d690f92cc994c5496859d0380d28b11f1bbbc6",
+    "origin": "Accepted ac5521a documentation prepared here after supplied Mac report and screenshots; not a later Mac write."
+  },
+  "docs/continuity/HOSTED_PORTAL.md": {
+    "copy": "docs/continuity/history/account-profile-marketplace-read-before-20261124/docs/continuity/HOSTED_PORTAL.md",
+    "bytes": 1863,
+    "sha256": "da9801cbc8f49a2bb6924a7df1f299dfd8fc6e756d75beeb930908b2955231d2",
+    "origin": "Accepted ac5521a documentation prepared here after supplied Mac report and screenshots; not a later Mac write."
+  }
+}
