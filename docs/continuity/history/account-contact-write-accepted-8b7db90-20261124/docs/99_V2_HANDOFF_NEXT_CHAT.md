@@ -1,0 +1,74 @@
+<!-- GENERATED from docs/continuity/CURRENT_STATE.json; do not edit independently. -->
+# Selqiro — praegune tööüleandmine
+
+Seisukirje: 24.11.2026 Europe/Tallinn — suhtluse kataloog vastu võetud; konto kirjutuspiir ette valmistatud
+
+## Praegune checkpoint
+
+Parandatud ainult lugemise suhtluse kontroll lõppes 24.11 kell 18:45:39.383 edukalt. Kõik 20 funktsioonikeha, seaded ja õigused sobitati täpse e336 lähtekoodiga. Järgmine seitsme olemasoleva funktsiooni muudatus ning üks uus privaatne abifunktsioon on eraldatud katses kontrollitud. Uue kontakti ja saatmise mõlema osapoole konto kättesaadavuse piir on ette valmistatud, kuid Maci rakendamine, uus commit/push ja Verceli tulemus on veel ootel. Tootmise viimane vastu võetud alus on e336a5b.
+
+## Lähtekood ja tõendi piir
+
+- **Vastu võetud lähtealus:** e336a5b9d02845c688def778babeac0f1e3fec95; puu 7734a70aa174b25b2ce5cc85aca3c0fa4e628624; 2253 faili. Uus pakett kontrollib sama täpset main-i, allikat, indeksit ja remote-i.
+- **Uus vastu võetud diagnostika:** Raport 235442 baiti, SHA256 47e91a2cfdd8549f4e917a070ba3180436bc70e1cadb821c20b88a12a474b1e4; run a2866001d5b24fefa4d07b411bc9d5ace72da756ccbe4a6d992be0f1e3c3d682. Üks päring exit 0, 29 lõpetatud käsku, kõik protsessilõpud kinnitatud. Before ja after võrdsed; e336 allika ja indeksi muutumatus kontrollitud.
+- **Tegelikud metaandmed:** 11 nimetatud signatuuri ja 9 otsest triggerifunktsiooni: 20 funktsiooni, 9 triggerit, 19 poliitikat, 3 relatsiooni. Katvus täielik ainult selles piiratud ulatuses. Andmebaasist ei loetud kontode ega sõnumite andmeridu. Kataloog ei ole kogu andmebaasi ega kõigi transitiivsete sõltuvuste audit.
+- **Lähtekehade võrdlus:** 20 prosrc keha sobivad baiditäpselt. 15 allikafaili pinid, funktsioonide konfiguratsiooni ja ACL-i räsid ning neli efektiivset käivitusrolli kontrollitud. Täiskehade uut live-lugemist ei olnud vaja.
+- **Uue mooduli ulatus:** 4 kontaktikäsku (tavaline kuulutus, hobune, teenus, töö), 2 saatmiskäsku ning vanema otse-sõnumi INSERT-i olemasolev kaitse. Uus privaatne require_available_accounts_v1 kontrollib mõlemat täpset kontot ning võtab lühikesed Auth/kontooleku realukud kindlas järjekorras. Ainult uue toimingu haru; varasem kviitung ja konfliktikontroll jäävad ette.
+- **Säilivad osad:** Jagatud actor/peer/unblocked, ajaloo osalusreegel ja foto reserveerimine jäävad samaks. Vanad vestlused, sõnumid, failid, kontod ja kviitungid ei ole selle paigalduse andmekirjutuse siht. RPC vastusekujud, parameetrid, õigused ja omanikud säilivad.
+- **Värske rakendamise piir:** Maci käivitaja säilitab täpse job-read originaalraporti ning uue diagnostika originaalraporti ainult lugemiseks. See kontrollib uut andmebaasi eelseisu, teeb ühe kaitstud skeemitehingu, nõuab COMMIT-järgset vastust ja eraldi kontrolli enne commit/push-i. Ettevalmistuse edu ei asenda neid tõendeid.
+- **Uudiste jätk:** Ühe jälgitava avaldaja valitud perioodi plokk kuni nelja eelvaatega, sama perioodi Vaata kõiki ning eraldi teade on säilitatud kavand. Uudiste voog ja V2 Jälgi ühendus pole selle mooduli muudatused.
+- **Varasema vea staatus:** V1 CLI_EXECUTION_FAILED raport ja parandatud v2 pakett säilivad muutmata. V2 on nüüd edukalt käivitatud; neid diagnostikaid enam järgmise sammu asemel ei korrata.
+- **Dokumentatsioon:** Varasem pending dokumentatsioon koos uue vastuvõtu ja mooduli seisuga kuulub selle uue kirjutava paketi kumulatiivsesse payload-i. Ajaloolised käsud säilivad ainult ajaloona.
+
+## Tegelik kohalik katse
+
+- Eraldatud PostgreSQL 17.6: 48/48 sihitud kontrolli läbitud. Tegelikud paigaldusfailid, 20 funktsiooni, 19 poliitikat ja 9 triggerit on seotud kontrollsummadega; 25 olemasolevat sünteetilist andmerida säilis. Kontrollitud on päris lukuooted ja värske realugemine ning omaniku tegelik lukustusõigus. Välised Auth/avaldamise abistajad on katses osaliselt asendatud; täielikku hostitud ahelat ega foto/manuse teekonda ei kinnitata.
+- Uue käivitaja 25/25 sihitud kontrolli läbitud lõplike SQL-failidega. Sama piiratud kontrollkomplekt; sünteetiline CLI/build ja päris ajutine Git. Kõik 37 sisendit jäid muutmata. Katkestatud SQL kinnituse järel ei korrata kirjutust ega lubata commit/push-i.
+- Üks värske eraldatud webpack/TypeScript build läbitud (30,58 s); kõik 765 rakenduse sisendit ja kolme sõnumi/konto lehe artefaktid kontrollitud. Rakenduse kood jäi samaks; SQL ja dokumendid ei muuda kompileeritud sisendeid. Maci ja Verceli buildi ei ole sellega asendatud.
+- Sõltumatu SQL- ja käivitajaülevaatus on PASS ning seotud lõplike tõendifailide kontrollsummadega. Paketi väljastamine nõuab lisaks täpse komplekti lõppülevaatust ja pitseerimist.
+- Varasemad klienditestid jäid vastu võetuks; selle SQL-only mooduli jaoks ei kirjutatud samaväärseid näilisi klienditeste ega korratud vana testikomplekti. Uus Maci käivitaja teeb ühe värske buildi, kuid ei nimeta kohalikku SQL ettevalmistuskatset Maci SQL testiks.
+
+## Production / kasutajaliides
+
+- Viimane kasutaja Verceli tõend: e336a5b main Ready / Production. Olemasolev ettevõtte töö avanes otsingus, detailis ja profiilil; kasutaja teatel eraisiku aktiivset töökuulutust hetkel ei ole.
+- 24.11 kell 18:45:35.666–18:45:39.383 tehtud parandatud ainult lugemise kontroll on vastu võetud. Remote main e336 vaatlus kell 18:45:37.004. See ei tekitanud uut commit-i ega deploymenti.
+- Uue suhtluse konto-oleku paketi Maci raport, üks SQL rakendamine, uus commit/push, Verceli Ready / Production ja kasutaja suhtluse kontroll on ootel.
+
+## Üks järgmine töö
+
+Käivita ainult selqiro-suhtluse-konto-olek-20261124/uuenda.py --publish. Tagasta selle käigu SAADA SEE FAIL JSON. Edu järel võrdle sama uue commit-i Verceli Ready / Production tulemust ning kontrolli olemasolevate kontode vestluste avamist ja uue kontakti/sõnumi saatmist. Seejärel jätka ülejäänud kontoelutsükli piiridega; konto → Uudised → esiletõstmine → reklaamid.
+
+**Peatumisel:** Peatumisel saada täpselt uue käigu raport. Ära korda lõpetatud diagnostikaid ega vanu uuendajaid. Tundmatu allikas, indeks, originaalraport või andmebaasi eelseis peatab uue paketi. Kinnitamata SQL rakenduse vastus ei luba uut kirjutust ega commit/push-i; tegelik järelseis selgitatakse ainult lugemise kontrolliga.
+
+## Loe ainult vajalikku
+
+- docs/continuity/HOSTED_PORTAL.md — ainus praegune paigalduskäsk.
+- docs/architecture/account-contact-write-fence-v1.md — täpne kirjutuste ulatus, võistluse ja säilitamise piirid.
+- docs/architecture/account-contact-catalog-accepted-20261124.md — vastu võetud diagnostika ja kehade võrdlus.
+- supabase/releases/account-contact-write-fence-v1/README.md — SQL leping ja katsete piirid.
+- docs/architecture/account-lifecycle-verification-plan-v1.md — sulgemise ees olevad ülejäänud väravad.
+- docs/architecture/followed-news-grouping-20261124.md — nelja eelvaate ja sama perioodi kogu ettepanek.
+
+## Säilivad piirid
+
+- Kolm kontot kuuluvad kasutajale; ainult ühel on kaks identiteeti. Uus konto valib eraisiku VÕI ettevõtte. Mitme identiteedi ning ettevõtte töötajate/rollide/omandi üleandmise iseteenindus ei ole avamisulatus.
+- Olemasolevaid kontosid, profiile, kuulutusi, pilte, vestlusi, Energy andmeid, kviitungeid ega päevikuid ei kustutata ega kirjutata ümber. Konto active-only alus säilib. Sulgemine, taastamine ja lõppkustutamine vajavad ülejäänud lugemiste, otseõiguste, kirjutuste, sõnumite ja meedia tervikut.
+- E-posti aktiveerimine jääb põhidomeeni selqiro.com kasutuselevõtu juurde. Saatmine, kinnitamine ja parooli taastamine peavad olema lõpuni kontrollitud enne väliseid testijaid või avalikku registreerimist ka vercel.app aadressil.
+- Kasutajale kuuluvad ka selqiro.app/.io ja selkiro.com/.app/.io. Domeeni valikut uuesti ei küsita; DNS-i selles sammus ei muudeta.
+- AI päringuteed jäävad suletuks. Tavaline osalemine ei sõltu Energy ostust. Riigipõhised töökuulutuse poliitikad ja senised avaldamise/vestluse lepingud säilivad.
+- Konto sulgemise/taastamise/kustutamise tervik → jälgitavate poodide ja profiilide Uudised → kuulutuste esiletõstmine → reklaamid. Reklaamija võib kasutada sama kontot ilma avaliku müüjaprofiilita; reklaamimine ei ole kolmas kontotüüp.
+- Uudised koondab ainult kasutaja valitud jälgitavate poodide/profiilide sisu. Eraisiku ja ettevõtte tavapärane osalemine säilib. Uue kuulutuse avaldamist, olemasoleva muutmist/pikendamist ja eraldi teadet ei käsitleta automaatselt ühe ja sama uue sündmusena.
+- Uudiste lahendus peab olema serveris piiratud ja indekseeritud lehekülgedega. Kogu jälgimisnimekirja või kogu voo brauserisse laadimine ei ole uue V2 lahenduse alus. Suurt samaaegsust ei loeta tõendatuks väikese kasutustee ega ühe kliendi sünteetilise katse põhjal.
+- Uudiste 4 eelvaadet ja pakutud 7 päeva algvaade on teostusettepanekud. Vanemad perioodid jäävad kättesaadavaks. Nelja eelvaate nägemine ei märgi kõiki teisi kuulutusi loetuks; suur lisamiskogus ei tõrju poe eraldi teadet välja. Näidiskujunduses olevad poed, hinnad ja kogused on kujuteldavad.
+
+## Keskkond
+
+- /Users/taivo/selqiro; https://github.com/Taivo17/selqiro.git. Viimane vastu võetud alus e336a5b9d02845c688def778babeac0f1e3fec95; puu 7734a70aa174b25b2ce5cc85aca3c0fa4e628624; 2253 faili. Uus allika/remote vaatlus kasutaja raportis: 24.11.2026 kell 18:45:37.004 Europe/Tallinn.
+- Next 16.4.6, Sharp 0.35.5, package.json ja lukufail säilisid. Raportis on olemasolev Supabase CLI 2.117.0 ja projekt vyjletlmwoiwxsnsunlm. Sõltuvusi, SMTP-d, Authi ega DNS-i ei seadistatud.
+- Säilivad kaks täpset originaalraportit: account-job-read-20261124/29afa6977d0e5097b1082bee9bb16dd9218c89816c5de1b93f3f2b54c23a250d/result.json ning account-contact-catalog-fix-20261124/a2866001d5b24fefa4d07b411bc9d5ace72da756ccbe4a6d992be0f1e3c3d682/result.json. Uue updateri jooks on neist eraldi.
+
+## Ajalugu (mitte praegused käsud)
+
+Vana sisenemisleht: `docs/archive/99_V2_HANDOFF_NEXT_CHAT.before-price-core-20261004-6df0af9.md`.
+Kõik 5573 algset rida säilivad bait-baidilt; SHA-256 `667e47990a7d3cc20ff53709cb861663b4565cf1d3c830eda88e0d18e60fdb8a`.
+Vanade failide NEXT/CURRENT pealkirjad ei ole tänased käivitamisjuhised.

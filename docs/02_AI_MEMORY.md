@@ -8382,3 +8382,13 @@ pole neid Maci kirjutatud ega commit/push tehtud. Vanu pakette ei muudeta.
 - Konto active-only mudel säilib. Sulgemist, taastamist, lõppkustutamist ega e-posti aktiveerimist ei tehta.
 - Ettevalmistuse kontrollid läbitud; Maci kirjutus/commit/push, Verceli tulemus ja kasutaja veebikontroll on ootel.
 - Ainus järgmine pakett: selqiro-suhtluse-konto-olek-20261124. Uudiste nelja eelvaate kavand ja tööjärg konto → Uudised → esiletõstmine → reklaamid säilivad.
+
+
+## 24.11.2026 — sõnumite uuendus vastu võetud; vestluste ja manuste piir ette valmistatud
+
+- Vastu võetud commit 8b7db90, 2305 faili: üks SQL rakendamine ja eraldi järelkontroll, üks värske Maci build, commit/push kontrollitud.
+- Verceli kasutajapilt: Ready / Production. Kasutaja: „sõnumid on testimisel korras”. Täpsemaid testisamme sellest ei tuletata.
+- Järgmine koondatud moodul: vanema vestluse/osalise struktuurikirjutus ning foto reserveerimine, üleslaadimisloa kordus, valmisoleku kinnitus ja messages-bucketi uute kirjutuste piir.
+- Enne DDL-i kontrollitakse värskelt täpseid vajalikke metaandmeid; eraldi diagnostika kordamist ei paluta. Konto active-only alus ja olemasolev ajalugu säilivad.
+- Ettevalmistuse sihitud kontrollid on tehtud; uue paketi Maci rakendamine, Verceli tulemus ja pildiga sõnumi kasutuskontroll on ootel.
+- Uus pakett: selqiro-vestluste-ja-manuste-konto-olek-20261124. E-posti töö jääb selqiro.com kasutuselevõtu juurde; konto → Uudised → esiletõstmine → reklaamid.

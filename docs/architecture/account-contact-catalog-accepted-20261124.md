@@ -1,3 +1,9 @@
+> **Tootmises vastu võetud 24.11.2026.**
+>
+> Suhtluse konto kirjutuspiir on commit'is `8b7db90d08682b512d76e64c699af56fc8cae6a3`. Raport kinnitab ühe SQL rakendamise, eraldi järelkontrolli ja avaldamise. Kasutaja Verceli pilt näitab sama commit'i Ready / Production olekut ning kasutaja kinnitas sõnumite toimimist. Allolev ettevalmistuse kirjeldus säilib ajaloolise tõendina; selles nimetatud ootel rakendamine on tehtud.
+>
+> Vastuvõtt: [saatmise uuenduse kinnitus](account-contact-write-accepted-20261124.md). Praegune järgmine juhend: [HOSTED_PORTAL.md](../continuity/HOSTED_PORTAL.md).
+
 # Suhtluse kataloog on vastu võetud ja lähtekoodiga võrreldud
 
 24.11.2026. **Metaandmete vastuvõtt ja kõigi 20 funktsioonikeha võrdlus on lõpetatud.** Kehad on sobitatud baiditäpse `prosrc` kontrollsummaga. Kontrollitud on 15 allikafaili SHA-256/Git blob/režiim, funktsioonide seaded, ACL-i rekonstruktsioon ja efektiivsed käivitusõigused. Uue mooduli PostgreSQL 17.6 katse kinnitab ka deklaratsioonide ja täielike definitsioonide säilimist.

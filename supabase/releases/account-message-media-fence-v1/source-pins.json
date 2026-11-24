@@ -1,0 +1,567 @@
+{
+  "format": "selqiro-next-message-write-source-audit-v1",
+  "commit": "8b7db90d08682b512d76e64c699af56fc8cae6a3",
+  "tree": "6f8e9b6e7b8e3e5ab2add913247a424908f91630",
+  "source_count": 2305,
+  "accepted_inventory_sha256": "c3da8c22a98fdf24a7ec1252ef2b8b05143f5ddacdfcb8cb373f30ae6a398b0e",
+  "files": {
+    "AGENTS.md": {
+      "blob": "8bd0e39085d5260e7f8faffcad2fdc45e10aef33",
+      "mode": "100644",
+      "sha256": "e3447d84251880fb34cfae09131cb4c57471529bbfe60976a3245793cf621627",
+      "bytes": 327
+    },
+    "next.config.ts": {
+      "blob": "ff68600ed226f082703702b773887dad57724af7",
+      "mode": "100644",
+      "sha256": "849accee6b2040f79761d9cd280e39f04682e631550330698eb863cd28988972",
+      "bytes": 957
+    },
+    "app/layout.tsx": {
+      "blob": "2d203cb8b6992b627500dc9069ba29623d286fab",
+      "mode": "100644",
+      "sha256": "cc88f8ab6cec02260af1e1dfa2ac57448006c780b2656d9b4048bca437c7494e",
+      "bytes": 505
+    },
+    "app/listing/[id]/page.tsx": {
+      "blob": "71eb80aa9ac371cd0039ebe4c4bd55d8a11924fc",
+      "mode": "100644",
+      "sha256": "ba8a19d91e8176a2e0227e88c1b00a2eeb6a71a91a23b930b0621fa39109cf14",
+      "bytes": 34871
+    },
+    "app/messages/[conversationId]/page.tsx": {
+      "blob": "6f5b73620ab31b83d7bfd06488e2ae43022371db",
+      "mode": "100644",
+      "sha256": "71386ec3d7519c7708fac18fecec5a1d7d96d4db1e7433e47829c6c29e2073e9",
+      "bytes": 29577
+    },
+    "app/v2/messages/[conversationId]/page.tsx": {
+      "blob": "88e08d23769c112b5765632b899dc55dbe3d7993",
+      "mode": "100644",
+      "sha256": "6c46025ad69336729b3a35a6330bd931e71fc43e02b62e3a714d926d1387a337",
+      "bytes": 763
+    },
+    "app/api/v2/message-images/[action]/route.ts": {
+      "blob": "0f6f9c9a42f97f6c6df0f91609a9d49a9d775e23",
+      "mode": "100644",
+      "sha256": "2cf4b2c55b74dae31458796dcb6c20399ab8409d8e80775c48b0cbb24e5ddaaf",
+      "bytes": 524
+    },
+    "src/server/messaging-media/service.ts": {
+      "blob": "1b721b2d479b90302aebbbeee1c01be7045d9da8",
+      "mode": "100644",
+      "sha256": "2559595faa68a606ef79ac391b5cb8698204358ef47324fd742e2fe00af660a5",
+      "bytes": 9211
+    },
+    "src/server/messaging-media/transport.ts": {
+      "blob": "ac4a3f21204f72537987a652d06a54f58fc063bd",
+      "mode": "100644",
+      "sha256": "bbfd3df1475eee56b11ba60fa419024218f1584a2cbee97fee84ec9845ff3033",
+      "bytes": 5682
+    },
+    "src/server/messaging-media/handler.ts": {
+      "blob": "0ce38d2985f00e76eca8d1713f2fb6d65e2deb11",
+      "mode": "100644",
+      "sha256": "27ba986275ce96f11f9c5441e7a7097deaf1838eb7380a461b16239b45fb7938",
+      "bytes": 4605
+    },
+    "src/server/messaging-media/maintenance.ts": {
+      "blob": "3bad99386537330c506b3887c8567f4f1a03faa7",
+      "mode": "100644",
+      "sha256": "d5ddab32f9063a0d0c1fb0a09591678d2a0a7f4d7cd1d98fbfbdbea04de17f39",
+      "bytes": 2696
+    },
+    "src/entities/conversation/model/messageImage.ts": {
+      "blob": "f1a473888a2efb4339067ed0e85d5b1e9e40b5e7",
+      "mode": "100644",
+      "sha256": "8ab1ac33e4fee02b891816476f2f930651b6a5f6a1f405c10a18e5df7708306f",
+      "bytes": 5147
+    },
+    "supabase/repairs/20261030_messaging_restore/function-pins.json": {
+      "blob": "8aba136a253e9e90b8ac1b1dcd142cce712702db",
+      "mode": "100644",
+      "sha256": "eb9ee3cb889e1d7a8ead66dc957c92b87c34032067499f0aa152af1946d6662f",
+      "bytes": 16053
+    },
+    "supabase/repairs/20261030_messaging_restore/structure-pins.json": {
+      "blob": "656d0f7f52d98320bed39439eb938eb9faf7da49",
+      "mode": "100644",
+      "sha256": "8e55df1b88c512aee88f77af184b1e4cbdda6d2b4653a6ad2a512b8492e44043",
+      "bytes": 23166
+    },
+    "supabase/migrations/20260722173530_baseline_20260722.sql": {
+      "blob": "26a83e126ae59783b5cdc39c7df90078a767bf01",
+      "mode": "100644",
+      "sha256": "7ca065f92f01c0f38ada5f5a50d2a0fc5b716f5291d1525d398023b7db59da3f",
+      "bytes": 221677
+    },
+    "supabase/releases/account-contact-write-fence-v1/expected-contract.json": {
+      "mode": "100644",
+      "blob": "ba64aa7e1c06b53d17c3e8743e3a3c4a5b00bef8",
+      "sha256": "4080bb535987ecd10e38ce6fa0159c98917f1b798a055b1d547e4e1b793881ba",
+      "bytes": 212206
+    },
+    "supabase/releases/account-contact-write-fence-v1/account-write-availability.sql": {
+      "mode": "100644",
+      "blob": "86aabdacd447793b510b7c8a3c21ad5c8d647a5b",
+      "sha256": "ea51051f0dc00a0f6d3dbb7146bb26f2c0c243d9cf2f973bdc5dd8859ec1f435",
+      "bytes": 2276
+    },
+    "supabase/releases/account-contact-write-fence-v1/public-send_my_message_v2.sql": {
+      "mode": "100644",
+      "blob": "9accd5fc729e7b81c56dca765a41f97857c39ca2",
+      "sha256": "7e7deb4778b5144a3397f7e23167fa96ae0a7e94c33d7c018c81c1b8242d1ebe",
+      "bytes": 5302
+    },
+    "supabase/releases/account-contact-write-fence-v1/messaging_private_v2-guard_account_block.sql": {
+      "mode": "100644",
+      "blob": "779f3dcd8cff929f4326e45fed6a104a9931c3ec",
+      "sha256": "11da40f99bd8b61c4404845eb3b2acb8ff1ca8dbac16afc62191113d9791a968",
+      "bytes": 2977
+    },
+    "docs/architecture/account-contact-write-fence-v1.md": {
+      "mode": "100644",
+      "blob": "2c5c620c69030d2042401bedb5e0ea81f1f516d5",
+      "sha256": "5d2180359636578145fa884d5fa33294cf964e9f35d123cdb2fc8fb18439cf69",
+      "bytes": 9381
+    },
+    "docs/architecture/account-lifecycle-server-contract-v1.md": {
+      "blob": "50b3453913df677965b78111f1b826b90285c107",
+      "mode": "100644",
+      "sha256": "d4637a290364c160208ff44d7c337e165b28ae78d916d7d0798339b4938d60dd",
+      "bytes": 14398
+    },
+    "docs/architecture/account-model-lifecycle-20261122.md": {
+      "blob": "ae07b2cd3f75776f2ac0bdd0f57231c96a329c1e",
+      "mode": "100644",
+      "sha256": "e93bf3bccfb4d8bc50ef3ca7a9ababaa2912b1a0125ba3501164fca18df7c596",
+      "bytes": 10511
+    },
+    "supabase/repairs/20261030_messaging_restore/changes.sql": {
+      "blob": "1bbf603017f48e3d67a443223fa88e73ab0c56a8",
+      "mode": "100644",
+      "sha256": "eaa813d5cee8ad9514f3e1de9bafb6a4c5f9cacebb1a96ef957fc08951dac883",
+      "bytes": 51805
+    },
+    "supabase/labs/listing-contact-integration-v1/01_contact.sql": {
+      "blob": "0cbc8979c6d07cef05105d7a319c82a6dab7e766",
+      "mode": "100644",
+      "sha256": "6b24aa74ff6b60d9ca3b677a74740a5e043043908e1fa0818b4af6910742c08c",
+      "bytes": 25990
+    }
+  },
+  "functions": [
+    {
+      "name": "public.reserve_my_message_photo_v2",
+      "source": "supabase/repairs/20261030_messaging_restore/changes.sql",
+      "line": 322,
+      "body_bytes": 3331,
+      "body_sha256": "07f4ecb16970ca276efb8d191523eaa72a1b670c9c3aa4f208e49f12955ac3ec",
+      "source_contract": {
+        "signature": "public.reserve_my_message_photo_v2(uuid, uuid, uuid, text, text, bigint, text)",
+        "name": "reserve_my_message_photo_v2",
+        "schema": "public",
+        "owner": "selqiro_listing_contact_writer_v1",
+        "language": "plpgsql",
+        "secdef": true,
+        "volatility": "v",
+        "args": [
+          "p_expected_user_id",
+          "p_expected_identity_id",
+          "p_request_key",
+          "p_conversation_id",
+          "p_source_sha256",
+          "p_source_bytes",
+          "p_source_mime"
+        ],
+        "defaults": 0,
+        "default_expression": null,
+        "result": "jsonb",
+        "config": [
+          "search_path=pg_catalog, public, auth, pg_temp",
+          "lock_timeout=2s"
+        ],
+        "body_sha256": "07f4ecb16970ca276efb8d191523eaa72a1b670c9c3aa4f208e49f12955ac3ec",
+        "acl_roles": [
+          "authenticated",
+          "selqiro_listing_contact_writer_v1"
+        ]
+      },
+      "current_observation": "not included in current contact catalog; require exact source-derived fresh preflight match",
+      "extracted": "public-reserve_my_message_photo_v2.sql"
+    },
+    {
+      "name": "public.claim_message_photo_upload_v2",
+      "source": "supabase/repairs/20261030_messaging_restore/changes.sql",
+      "line": 360,
+      "body_bytes": 1948,
+      "body_sha256": "4b5eb65ca6095b5db082c83b182d639bf7c071a97ed6fbcb0aeec6494e25a54a",
+      "source_contract": {
+        "signature": "public.claim_message_photo_upload_v2(uuid, uuid, uuid, text, uuid, text, bigint, integer, integer)",
+        "name": "claim_message_photo_upload_v2",
+        "schema": "public",
+        "owner": "postgres",
+        "language": "plpgsql",
+        "secdef": true,
+        "volatility": "v",
+        "args": [
+          "p_attachment_id",
+          "p_expected_user_id",
+          "p_expected_identity_id",
+          "p_source_sha256",
+          "p_claim_key",
+          "p_web_sha256",
+          "p_web_bytes",
+          "p_width",
+          "p_height"
+        ],
+        "defaults": 0,
+        "default_expression": null,
+        "result": "jsonb",
+        "config": [
+          "search_path=pg_catalog, pg_temp",
+          "lock_timeout=2s"
+        ],
+        "body_sha256": "4b5eb65ca6095b5db082c83b182d639bf7c071a97ed6fbcb0aeec6494e25a54a",
+        "acl_roles": [
+          "postgres",
+          "service_role"
+        ]
+      },
+      "current_observation": "not included in current contact catalog; require exact source-derived fresh preflight match",
+      "extracted": "public-claim_message_photo_upload_v2.sql"
+    },
+    {
+      "name": "public.finish_message_photo_upload_v2",
+      "source": "supabase/repairs/20261030_messaging_restore/changes.sql",
+      "line": 386,
+      "body_bytes": 1531,
+      "body_sha256": "f49f44e5d5dfa3ceb768c4bfeb9da6105efb4458d751bc7e0c3e2e83922dadca",
+      "source_contract": {
+        "signature": "public.finish_message_photo_upload_v2(uuid, uuid, text, text, bigint, integer, integer, text)",
+        "name": "finish_message_photo_upload_v2",
+        "schema": "public",
+        "owner": "postgres",
+        "language": "plpgsql",
+        "secdef": true,
+        "volatility": "v",
+        "args": [
+          "p_attachment_id",
+          "p_claim_key",
+          "p_outcome",
+          "p_web_sha256",
+          "p_web_bytes",
+          "p_width",
+          "p_height",
+          "p_failure_code"
+        ],
+        "defaults": 1,
+        "default_expression": "NULL::text",
+        "result": "jsonb",
+        "config": [
+          "search_path=pg_catalog, pg_temp",
+          "lock_timeout=2s"
+        ],
+        "body_sha256": "f49f44e5d5dfa3ceb768c4bfeb9da6105efb4458d751bc7e0c3e2e83922dadca",
+        "acl_roles": [
+          "postgres",
+          "service_role"
+        ]
+      },
+      "current_observation": "not included in current contact catalog; require exact source-derived fresh preflight match",
+      "extracted": "public-finish_message_photo_upload_v2.sql"
+    },
+    {
+      "name": "public.cancel_my_message_photo_v2",
+      "source": "supabase/repairs/20261030_messaging_restore/changes.sql",
+      "line": 408,
+      "body_bytes": 1051,
+      "body_sha256": "55a1216fe599b8a047bd299bcb24c153a51de0f764dbf8ede7912442b764c5d8",
+      "source_contract": {
+        "signature": "public.cancel_my_message_photo_v2(uuid, uuid, text, uuid)",
+        "name": "cancel_my_message_photo_v2",
+        "schema": "public",
+        "owner": "selqiro_listing_contact_writer_v1",
+        "language": "plpgsql",
+        "secdef": true,
+        "volatility": "v",
+        "args": [
+          "p_expected_user_id",
+          "p_expected_identity_id",
+          "p_conversation_id",
+          "p_attachment_id"
+        ],
+        "defaults": 0,
+        "default_expression": null,
+        "result": "jsonb",
+        "config": [
+          "search_path=pg_catalog, public, auth, pg_temp",
+          "lock_timeout=2s"
+        ],
+        "body_sha256": "55a1216fe599b8a047bd299bcb24c153a51de0f764dbf8ede7912442b764c5d8",
+        "acl_roles": [
+          "authenticated",
+          "selqiro_listing_contact_writer_v1"
+        ]
+      },
+      "current_observation": "not included in current contact catalog; require exact source-derived fresh preflight match",
+      "extracted": "public-cancel_my_message_photo_v2.sql"
+    },
+    {
+      "name": "public.get_my_message_photo_binding_v2",
+      "source": "supabase/repairs/20261030_messaging_restore/changes.sql",
+      "line": 423,
+      "body_bytes": 1691,
+      "body_sha256": "fd00f01e0042ca0d8bae144047aaaed01f3af76e8c45a9814986a72bc24048e9",
+      "source_contract": {
+        "signature": "public.get_my_message_photo_binding_v2(uuid, uuid, text, text)",
+        "name": "get_my_message_photo_binding_v2",
+        "schema": "public",
+        "owner": "selqiro_listing_contact_writer_v1",
+        "language": "plpgsql",
+        "secdef": true,
+        "volatility": "v",
+        "args": [
+          "p_expected_user_id",
+          "p_expected_identity_id",
+          "p_conversation_id",
+          "p_message_id"
+        ],
+        "defaults": 0,
+        "default_expression": null,
+        "result": "jsonb",
+        "config": [
+          "search_path=pg_catalog, public, auth, pg_temp",
+          "lock_timeout=2s"
+        ],
+        "body_sha256": "fd00f01e0042ca0d8bae144047aaaed01f3af76e8c45a9814986a72bc24048e9",
+        "acl_roles": [
+          "authenticated",
+          "selqiro_listing_contact_writer_v1"
+        ]
+      },
+      "current_observation": "not included in current contact catalog; require exact source-derived fresh preflight match",
+      "extracted": "public-get_my_message_photo_binding_v2.sql"
+    },
+    {
+      "name": "public.claim_message_photo_cleanup_v2",
+      "source": "supabase/repairs/20261030_messaging_restore/changes.sql",
+      "line": 445,
+      "body_bytes": 1263,
+      "body_sha256": "21059a776ef44ea56bee5c1a15ec2ca229cab8d23064e56b73b1c3d91691f9f2",
+      "source_contract": {
+        "signature": "public.claim_message_photo_cleanup_v2(uuid, integer)",
+        "name": "claim_message_photo_cleanup_v2",
+        "schema": "public",
+        "owner": "postgres",
+        "language": "plpgsql",
+        "secdef": true,
+        "volatility": "v",
+        "args": [
+          "p_claim_key",
+          "p_limit"
+        ],
+        "defaults": 1,
+        "default_expression": "3",
+        "result": "jsonb",
+        "config": [
+          "search_path=pg_catalog, pg_temp",
+          "lock_timeout=2s"
+        ],
+        "body_sha256": "21059a776ef44ea56bee5c1a15ec2ca229cab8d23064e56b73b1c3d91691f9f2",
+        "acl_roles": [
+          "postgres",
+          "service_role"
+        ]
+      },
+      "current_observation": "not included in current contact catalog; require exact source-derived fresh preflight match",
+      "extracted": "public-claim_message_photo_cleanup_v2.sql"
+    },
+    {
+      "name": "public.finish_message_photo_cleanup_v2",
+      "source": "supabase/repairs/20261030_messaging_restore/changes.sql",
+      "line": 465,
+      "body_bytes": 1272,
+      "body_sha256": "4780e8a3a1437763ad97d4dc72d40175b9e3e2ddf3da0f36bb41d83c667ffe4a",
+      "source_contract": {
+        "signature": "public.finish_message_photo_cleanup_v2(uuid, uuid, boolean, text)",
+        "name": "finish_message_photo_cleanup_v2",
+        "schema": "public",
+        "owner": "postgres",
+        "language": "plpgsql",
+        "secdef": true,
+        "volatility": "v",
+        "args": [
+          "p_attachment_id",
+          "p_claim_key",
+          "p_removed",
+          "p_failure_code"
+        ],
+        "defaults": 1,
+        "default_expression": "NULL::text",
+        "result": "jsonb",
+        "config": [
+          "search_path=pg_catalog, pg_temp",
+          "lock_timeout=2s"
+        ],
+        "body_sha256": "4780e8a3a1437763ad97d4dc72d40175b9e3e2ddf3da0f36bb41d83c667ffe4a",
+        "acl_roles": [
+          "postgres",
+          "service_role"
+        ]
+      },
+      "current_observation": "not included in current contact catalog; require exact source-derived fresh preflight match",
+      "extracted": "public-finish_message_photo_cleanup_v2.sql"
+    },
+    {
+      "name": "messaging_private_v2.photo_receipt",
+      "source": "supabase/repairs/20261030_messaging_restore/changes.sql",
+      "line": 104,
+      "body_bytes": 567,
+      "body_sha256": "2530b94b02c3184d7297700808498d471b0df80d03d918260021d95b563aefc2",
+      "source_contract": {
+        "signature": "messaging_private_v2.photo_receipt(messaging_private_v2.photos)",
+        "name": "photo_receipt",
+        "schema": "messaging_private_v2",
+        "owner": "postgres",
+        "language": "sql",
+        "secdef": false,
+        "volatility": "s",
+        "args": [
+          "p"
+        ],
+        "defaults": 0,
+        "default_expression": null,
+        "result": "jsonb",
+        "config": [
+          "search_path=pg_catalog, pg_temp"
+        ],
+        "body_sha256": "2530b94b02c3184d7297700808498d471b0df80d03d918260021d95b563aefc2",
+        "acl_roles": [
+          "postgres",
+          "selqiro_listing_contact_writer_v1"
+        ]
+      },
+      "current_observation": "not included in current contact catalog; require exact source-derived fresh preflight match",
+      "extracted": "messaging_private_v2-photo_receipt.sql"
+    },
+    {
+      "name": "messaging_private_v2.bucket_ready",
+      "source": "supabase/repairs/20261030_messaging_restore/changes.sql",
+      "line": 112,
+      "body_bytes": 180,
+      "body_sha256": "bbff113436e34f7e251903262749066fab152206ad5470982ad77cb3201f8302",
+      "source_contract": {
+        "signature": "messaging_private_v2.bucket_ready()",
+        "name": "bucket_ready",
+        "schema": "messaging_private_v2",
+        "owner": "postgres",
+        "language": "sql",
+        "secdef": true,
+        "volatility": "s",
+        "args": null,
+        "defaults": 0,
+        "default_expression": null,
+        "result": "boolean",
+        "config": [
+          "search_path=pg_catalog, pg_temp"
+        ],
+        "body_sha256": "bbff113436e34f7e251903262749066fab152206ad5470982ad77cb3201f8302",
+        "acl_roles": [
+          "postgres",
+          "selqiro_listing_contact_writer_v1"
+        ]
+      },
+      "current_observation": "not included in current contact catalog; require exact source-derived fresh preflight match",
+      "extracted": "messaging_private_v2-bucket_ready.sql"
+    },
+    {
+      "name": "messaging_private_v2.exact_thread",
+      "source": "supabase/repairs/20261030_messaging_restore/changes.sql",
+      "line": 70,
+      "body_bytes": 1268,
+      "body_sha256": "19fd6913a5e44248686e56a0151d7a953c0fbf7b603cfc2e2b65a21ac252fd23",
+      "source_contract": {
+        "signature": "messaging_private_v2.exact_thread(bigint, uuid, uuid)",
+        "name": "exact_thread",
+        "schema": "messaging_private_v2",
+        "owner": "postgres",
+        "language": "sql",
+        "secdef": false,
+        "volatility": "s",
+        "args": [
+          "p_conversation",
+          "p_user",
+          "p_identity"
+        ],
+        "defaults": 0,
+        "default_expression": null,
+        "result": "boolean",
+        "config": [
+          "search_path=pg_catalog, pg_temp"
+        ],
+        "body_sha256": "19fd6913a5e44248686e56a0151d7a953c0fbf7b603cfc2e2b65a21ac252fd23",
+        "acl_roles": [
+          "postgres",
+          "selqiro_listing_contact_writer_v1"
+        ]
+      },
+      "current_observation": "accepted contact catalog",
+      "extracted": "messaging_private_v2-exact_thread.sql"
+    },
+    {
+      "name": "messaging_private_v2.require_thread",
+      "source": "supabase/repairs/20261030_messaging_restore/changes.sql",
+      "line": 84,
+      "body_bytes": 289,
+      "body_sha256": "5f2487f6126fd6a17f67c6ec4b9de340840f8ac3f0585d5750a38c90396fbd36",
+      "source_contract": {
+        "signature": "messaging_private_v2.require_thread(bigint, uuid, uuid)",
+        "name": "require_thread",
+        "schema": "messaging_private_v2",
+        "owner": "postgres",
+        "language": "plpgsql",
+        "secdef": false,
+        "volatility": "v",
+        "args": [
+          "p_conversation",
+          "p_user",
+          "p_identity"
+        ],
+        "defaults": 0,
+        "default_expression": null,
+        "result": "conversations",
+        "config": [
+          "search_path=pg_catalog, pg_temp"
+        ],
+        "body_sha256": "5f2487f6126fd6a17f67c6ec4b9de340840f8ac3f0585d5750a38c90396fbd36",
+        "acl_roles": [
+          "postgres",
+          "selqiro_listing_contact_writer_v1"
+        ]
+      },
+      "current_observation": "accepted contact catalog",
+      "extracted": "messaging_private_v2-require_thread.sql"
+    },
+    {
+      "name": "listing_contact_private.guard_conversation",
+      "source": "supabase/labs/listing-contact-integration-v1/01_contact.sql",
+      "line": 135,
+      "body_bytes": 1707,
+      "body_sha256": "7c86041baee326a66504c329d89be942cf5af0c62ca5f58b027b9b72bb349207",
+      "current_observation": "exact accepted contact-catalog body/config/ACL and attached trigger",
+      "extracted": "listing_contact_private-guard_conversation.sql"
+    },
+    {
+      "name": "listing_contact_private.guard_participant",
+      "source": "supabase/labs/listing-contact-integration-v1/01_contact.sql",
+      "line": 172,
+      "body_bytes": 958,
+      "body_sha256": "bdadea39aa4cf82c9472ec86f345e26a2835571d153785e4fc82837f7b49fe81",
+      "current_observation": "exact accepted contact-catalog body/config/ACL and attached trigger",
+      "extracted": "listing_contact_private-guard_participant.sql"
+    }
+  ],
+  "live_calls": 0,
+  "source_mutations": 0
+}

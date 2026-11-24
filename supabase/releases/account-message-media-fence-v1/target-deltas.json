@@ -1,0 +1,565 @@
+{
+  "format": "selqiro-message-media-target-deltas-v1",
+  "targets": [
+    {
+      "name": "public.reserve_my_message_photo_v2",
+      "path": "public-reserve_my_message_photo_v2.sql",
+      "before_sha256": "07f4ecb16970ca276efb8d191523eaa72a1b670c9c3aa4f208e49f12955ac3ec",
+      "after_sha256": "3bbd4c1a0f8c6ab05a2417d4701b2c761f752abaecf9bfb6e6ca914bedb9a6c8",
+      "before_bytes": 3331,
+      "after_bytes": 3431,
+      "source_contract": {
+        "signature": "public.reserve_my_message_photo_v2(uuid, uuid, uuid, text, text, bigint, text)",
+        "name": "reserve_my_message_photo_v2",
+        "schema": "public",
+        "owner": "selqiro_listing_contact_writer_v1",
+        "language": "plpgsql",
+        "secdef": true,
+        "volatility": "v",
+        "args": [
+          "p_expected_user_id",
+          "p_expected_identity_id",
+          "p_request_key",
+          "p_conversation_id",
+          "p_source_sha256",
+          "p_source_bytes",
+          "p_source_mime"
+        ],
+        "defaults": 0,
+        "default_expression": null,
+        "result": "jsonb",
+        "config": [
+          "search_path=pg_catalog, public, auth, pg_temp",
+          "lock_timeout=2s"
+        ],
+        "body_sha256": "07f4ecb16970ca276efb8d191523eaa72a1b670c9c3aa4f208e49f12955ac3ec",
+        "acl_roles": [
+          "authenticated",
+          "selqiro_listing_contact_writer_v1"
+        ]
+      },
+      "baseline_evidence": "exact accepted source-derived expectation; fresh hosted preflight required",
+      "metadata_before": {
+        "acl": [
+          {
+            "grantee": "authenticated",
+            "grantor": "selqiro_listing_contact_writer_v1",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          },
+          {
+            "grantee": "selqiro_listing_contact_writer_v1",
+            "grantor": "selqiro_listing_contact_writer_v1",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          }
+        ],
+        "kind": "f",
+        "owner": "selqiro_listing_contact_writer_v1",
+        "config": [
+          "search_path=pg_catalog, public, auth, pg_temp",
+          "lock_timeout=2s"
+        ],
+        "result": "jsonb",
+        "strict": false,
+        "definer": true,
+        "defaults": null,
+        "language": "plpgsql",
+        "parallel": "u",
+        "arguments": [
+          "p_expected_user_id",
+          "p_expected_identity_id",
+          "p_request_key",
+          "p_conversation_id",
+          "p_source_sha256",
+          "p_source_bytes",
+          "p_source_mime"
+        ],
+        "effective": [
+          {
+            "role": "anon",
+            "execute": false
+          },
+          {
+            "role": "authenticated",
+            "execute": true
+          },
+          {
+            "role": "selqiro_listing_contact_writer_v1",
+            "execute": true
+          },
+          {
+            "role": "service_role",
+            "execute": false
+          }
+        ],
+        "leakproof": false,
+        "signature": "public.reserve_my_message_photo_v2(uuid,uuid,uuid,text,text,bigint,text)",
+        "body_bytes": 3331,
+        "volatility": "v",
+        "body_sha256": "07f4ecb16970ca276efb8d191523eaa72a1b670c9c3aa4f208e49f12955ac3ec",
+        "returns_set": false,
+        "argument_types": [
+          "uuid",
+          "uuid",
+          "uuid",
+          "text",
+          "text",
+          "bigint",
+          "text"
+        ],
+        "definition_sha256": "3537190ba5465cc650bc7ca16b6f8532725f38d78f5afd7adc766badf9e4eba1"
+      },
+      "metadata_after": {
+        "acl": [
+          {
+            "grantee": "authenticated",
+            "grantor": "selqiro_listing_contact_writer_v1",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          },
+          {
+            "grantee": "selqiro_listing_contact_writer_v1",
+            "grantor": "selqiro_listing_contact_writer_v1",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          }
+        ],
+        "kind": "f",
+        "owner": "selqiro_listing_contact_writer_v1",
+        "config": [
+          "search_path=pg_catalog, public, auth, pg_temp",
+          "lock_timeout=2s"
+        ],
+        "result": "jsonb",
+        "strict": false,
+        "definer": true,
+        "defaults": null,
+        "language": "plpgsql",
+        "parallel": "u",
+        "arguments": [
+          "p_expected_user_id",
+          "p_expected_identity_id",
+          "p_request_key",
+          "p_conversation_id",
+          "p_source_sha256",
+          "p_source_bytes",
+          "p_source_mime"
+        ],
+        "effective": [
+          {
+            "role": "anon",
+            "execute": false
+          },
+          {
+            "role": "authenticated",
+            "execute": true
+          },
+          {
+            "role": "selqiro_listing_contact_writer_v1",
+            "execute": true
+          },
+          {
+            "role": "service_role",
+            "execute": false
+          }
+        ],
+        "leakproof": false,
+        "signature": "public.reserve_my_message_photo_v2(uuid,uuid,uuid,text,text,bigint,text)",
+        "body_bytes": 3431,
+        "volatility": "v",
+        "body_sha256": "3bbd4c1a0f8c6ab05a2417d4701b2c761f752abaecf9bfb6e6ca914bedb9a6c8",
+        "returns_set": false,
+        "argument_types": [
+          "uuid",
+          "uuid",
+          "uuid",
+          "text",
+          "text",
+          "bigint",
+          "text"
+        ],
+        "definition_sha256": "c0b99ead37fd92ecb55ed3523fc90cc437f3d25b696c6cfb51b5fcf46c226e25"
+      }
+    },
+    {
+      "name": "public.claim_message_photo_upload_v2",
+      "path": "public-claim_message_photo_upload_v2.sql",
+      "before_sha256": "4b5eb65ca6095b5db082c83b182d639bf7c071a97ed6fbcb0aeec6494e25a54a",
+      "after_sha256": "84f9c11d0de9b5ff9d7b5e50d4148e024b08e14b849ed37313f77cdae7315130",
+      "before_bytes": 1948,
+      "after_bytes": 3023,
+      "source_contract": {
+        "signature": "public.claim_message_photo_upload_v2(uuid, uuid, uuid, text, uuid, text, bigint, integer, integer)",
+        "name": "claim_message_photo_upload_v2",
+        "schema": "public",
+        "owner": "postgres",
+        "language": "plpgsql",
+        "secdef": true,
+        "volatility": "v",
+        "args": [
+          "p_attachment_id",
+          "p_expected_user_id",
+          "p_expected_identity_id",
+          "p_source_sha256",
+          "p_claim_key",
+          "p_web_sha256",
+          "p_web_bytes",
+          "p_width",
+          "p_height"
+        ],
+        "defaults": 0,
+        "default_expression": null,
+        "result": "jsonb",
+        "config": [
+          "search_path=pg_catalog, pg_temp",
+          "lock_timeout=2s"
+        ],
+        "body_sha256": "4b5eb65ca6095b5db082c83b182d639bf7c071a97ed6fbcb0aeec6494e25a54a",
+        "acl_roles": [
+          "postgres",
+          "service_role"
+        ]
+      },
+      "baseline_evidence": "exact accepted source-derived expectation; fresh hosted preflight required",
+      "metadata_before": {
+        "acl": [
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          },
+          {
+            "grantee": "service_role",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          }
+        ],
+        "kind": "f",
+        "owner": "postgres",
+        "config": [
+          "search_path=pg_catalog, pg_temp",
+          "lock_timeout=2s"
+        ],
+        "result": "jsonb",
+        "strict": false,
+        "definer": true,
+        "defaults": null,
+        "language": "plpgsql",
+        "parallel": "u",
+        "arguments": [
+          "p_attachment_id",
+          "p_expected_user_id",
+          "p_expected_identity_id",
+          "p_source_sha256",
+          "p_claim_key",
+          "p_web_sha256",
+          "p_web_bytes",
+          "p_width",
+          "p_height"
+        ],
+        "effective": [
+          {
+            "role": "anon",
+            "execute": false
+          },
+          {
+            "role": "authenticated",
+            "execute": false
+          },
+          {
+            "role": "selqiro_listing_contact_writer_v1",
+            "execute": false
+          },
+          {
+            "role": "service_role",
+            "execute": true
+          }
+        ],
+        "leakproof": false,
+        "signature": "public.claim_message_photo_upload_v2(uuid,uuid,uuid,text,uuid,text,bigint,integer,integer)",
+        "body_bytes": 1948,
+        "volatility": "v",
+        "body_sha256": "4b5eb65ca6095b5db082c83b182d639bf7c071a97ed6fbcb0aeec6494e25a54a",
+        "returns_set": false,
+        "argument_types": [
+          "uuid",
+          "uuid",
+          "uuid",
+          "text",
+          "uuid",
+          "text",
+          "bigint",
+          "integer",
+          "integer"
+        ],
+        "definition_sha256": "133bb4b9cf64fe32af286d2bc2d4b28a19aff91ac7a819f8481c9c40ca4fc722"
+      },
+      "metadata_after": {
+        "acl": [
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          },
+          {
+            "grantee": "service_role",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          }
+        ],
+        "kind": "f",
+        "owner": "postgres",
+        "config": [
+          "search_path=pg_catalog, pg_temp",
+          "lock_timeout=2s"
+        ],
+        "result": "jsonb",
+        "strict": false,
+        "definer": true,
+        "defaults": null,
+        "language": "plpgsql",
+        "parallel": "u",
+        "arguments": [
+          "p_attachment_id",
+          "p_expected_user_id",
+          "p_expected_identity_id",
+          "p_source_sha256",
+          "p_claim_key",
+          "p_web_sha256",
+          "p_web_bytes",
+          "p_width",
+          "p_height"
+        ],
+        "effective": [
+          {
+            "role": "anon",
+            "execute": false
+          },
+          {
+            "role": "authenticated",
+            "execute": false
+          },
+          {
+            "role": "selqiro_listing_contact_writer_v1",
+            "execute": false
+          },
+          {
+            "role": "service_role",
+            "execute": true
+          }
+        ],
+        "leakproof": false,
+        "signature": "public.claim_message_photo_upload_v2(uuid,uuid,uuid,text,uuid,text,bigint,integer,integer)",
+        "body_bytes": 3023,
+        "volatility": "v",
+        "body_sha256": "84f9c11d0de9b5ff9d7b5e50d4148e024b08e14b849ed37313f77cdae7315130",
+        "returns_set": false,
+        "argument_types": [
+          "uuid",
+          "uuid",
+          "uuid",
+          "text",
+          "uuid",
+          "text",
+          "bigint",
+          "integer",
+          "integer"
+        ],
+        "definition_sha256": "7e2f4c6d0ba31d2d1af7db1efac6f85ff0627be5ab8cc515bcff8e493f46dbc8"
+      }
+    },
+    {
+      "name": "public.finish_message_photo_upload_v2",
+      "path": "public-finish_message_photo_upload_v2.sql",
+      "before_sha256": "f49f44e5d5dfa3ceb768c4bfeb9da6105efb4458d751bc7e0c3e2e83922dadca",
+      "after_sha256": "db4baa042a4ef0bc578fe54dbb6eb9adeef431f0a8224ac8f9dea7ec0fe0fff5",
+      "before_bytes": 1531,
+      "after_bytes": 2505,
+      "source_contract": {
+        "signature": "public.finish_message_photo_upload_v2(uuid, uuid, text, text, bigint, integer, integer, text)",
+        "name": "finish_message_photo_upload_v2",
+        "schema": "public",
+        "owner": "postgres",
+        "language": "plpgsql",
+        "secdef": true,
+        "volatility": "v",
+        "args": [
+          "p_attachment_id",
+          "p_claim_key",
+          "p_outcome",
+          "p_web_sha256",
+          "p_web_bytes",
+          "p_width",
+          "p_height",
+          "p_failure_code"
+        ],
+        "defaults": 1,
+        "default_expression": "NULL::text",
+        "result": "jsonb",
+        "config": [
+          "search_path=pg_catalog, pg_temp",
+          "lock_timeout=2s"
+        ],
+        "body_sha256": "f49f44e5d5dfa3ceb768c4bfeb9da6105efb4458d751bc7e0c3e2e83922dadca",
+        "acl_roles": [
+          "postgres",
+          "service_role"
+        ]
+      },
+      "baseline_evidence": "exact accepted source-derived expectation; fresh hosted preflight required",
+      "metadata_before": {
+        "acl": [
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          },
+          {
+            "grantee": "service_role",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          }
+        ],
+        "kind": "f",
+        "owner": "postgres",
+        "config": [
+          "search_path=pg_catalog, pg_temp",
+          "lock_timeout=2s"
+        ],
+        "result": "jsonb",
+        "strict": false,
+        "definer": true,
+        "defaults": "NULL::text",
+        "language": "plpgsql",
+        "parallel": "u",
+        "arguments": [
+          "p_attachment_id",
+          "p_claim_key",
+          "p_outcome",
+          "p_web_sha256",
+          "p_web_bytes",
+          "p_width",
+          "p_height",
+          "p_failure_code"
+        ],
+        "effective": [
+          {
+            "role": "anon",
+            "execute": false
+          },
+          {
+            "role": "authenticated",
+            "execute": false
+          },
+          {
+            "role": "selqiro_listing_contact_writer_v1",
+            "execute": false
+          },
+          {
+            "role": "service_role",
+            "execute": true
+          }
+        ],
+        "leakproof": false,
+        "signature": "public.finish_message_photo_upload_v2(uuid,uuid,text,text,bigint,integer,integer,text)",
+        "body_bytes": 1531,
+        "volatility": "v",
+        "body_sha256": "f49f44e5d5dfa3ceb768c4bfeb9da6105efb4458d751bc7e0c3e2e83922dadca",
+        "returns_set": false,
+        "argument_types": [
+          "uuid",
+          "uuid",
+          "text",
+          "text",
+          "bigint",
+          "integer",
+          "integer",
+          "text"
+        ],
+        "definition_sha256": "adb9e79860325bcb1b0b289819cf370a691c1996dc31ebfff22200f80cffd961"
+      },
+      "metadata_after": {
+        "acl": [
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          },
+          {
+            "grantee": "service_role",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          }
+        ],
+        "kind": "f",
+        "owner": "postgres",
+        "config": [
+          "search_path=pg_catalog, pg_temp",
+          "lock_timeout=2s"
+        ],
+        "result": "jsonb",
+        "strict": false,
+        "definer": true,
+        "defaults": "NULL::text",
+        "language": "plpgsql",
+        "parallel": "u",
+        "arguments": [
+          "p_attachment_id",
+          "p_claim_key",
+          "p_outcome",
+          "p_web_sha256",
+          "p_web_bytes",
+          "p_width",
+          "p_height",
+          "p_failure_code"
+        ],
+        "effective": [
+          {
+            "role": "anon",
+            "execute": false
+          },
+          {
+            "role": "authenticated",
+            "execute": false
+          },
+          {
+            "role": "selqiro_listing_contact_writer_v1",
+            "execute": false
+          },
+          {
+            "role": "service_role",
+            "execute": true
+          }
+        ],
+        "leakproof": false,
+        "signature": "public.finish_message_photo_upload_v2(uuid,uuid,text,text,bigint,integer,integer,text)",
+        "body_bytes": 2505,
+        "volatility": "v",
+        "body_sha256": "db4baa042a4ef0bc578fe54dbb6eb9adeef431f0a8224ac8f9dea7ec0fe0fff5",
+        "returns_set": false,
+        "argument_types": [
+          "uuid",
+          "uuid",
+          "text",
+          "text",
+          "bigint",
+          "integer",
+          "integer",
+          "text"
+        ],
+        "definition_sha256": "6f6deadd317bf56f2f05456b81edd9de621f53f70ec1e0cb4dfec08f503c769d"
+      }
+    }
+  ],
+  "new_objects_file": "write-helpers.sql",
+  "preserved": "existing account pair helper, INVOKER guards, sends/contacts, history, cancel and cleanup"
+}

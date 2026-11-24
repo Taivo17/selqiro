@@ -1,0 +1,90 @@
+{
+  "format": "selqiro-account-message-media-sql-files-v1",
+  "fingerprints": {
+    "base": "f82446e2b2b6afbc6faead421786a86cee06a668060f2b2ff0d564b4e2012a1e",
+    "before": "a991e5f0b4645d002a50a6f92a740a0184069c353eda524fdfb4e663ae1f8bf2",
+    "after": "b5c7913ee90e02f291ef55f6d75524b33bba161a36947b52fb5289badc5e09bb"
+  },
+  "files": {
+    "accepted-query.sql": {
+      "bytes": 34297,
+      "sha256": "ee75c979a3784dc0d90e84b909c8ecb1dd841c5de23b151e162755fed9c44ab8"
+    },
+    "photo-functions-query.sql": {
+      "bytes": 2095,
+      "sha256": "57f4ce753bc26f204a5f69a8b74ec853a99f741976cfb77d25f9f2f162fbcef5"
+    },
+    "photo-structure-query.sql": {
+      "bytes": 3659,
+      "sha256": "f2adc6fffde0986f36cb98dd1b928be4fcfefca1688238f7ed80ab8168b4cb37"
+    },
+    "new-objects-query.sql": {
+      "bytes": 2938,
+      "sha256": "f6d407fb5b5bfab2561d4808c1e604cb53a8d2bc9d9c13a26b98db532ccf0228"
+    },
+    "managed-marker-query.sql": {
+      "bytes": 1787,
+      "sha256": "7fbe6d183051642a1f80e17fb221eeea7d5cde277bade0a43dbee5f3daa30d8b"
+    },
+    "storage-required-policies-query.sql": {
+      "bytes": 558,
+      "sha256": "f05171f81508ea35597576ef7ba1c04efa7340fda869f2c5b62727d7a81e6fec"
+    },
+    "storage-preservation-query.sql": {
+      "bytes": 1836,
+      "sha256": "f8a43867c7d70f8e74991930f4319107510fec2ccc4cdf69bbb4d9b1a2f578d4"
+    },
+    "catalog-query.sql": {
+      "bytes": 46547,
+      "sha256": "d95e37288e2d7799937104474d7d09eb44d9e8bea555b4b1168dd00de2b7020d"
+    },
+    "execution-prerequisite.sql": {
+      "bytes": 4615,
+      "sha256": "a426414e3ba5f71ce3615503bd65ea7d4544d675a8a1e4234eaa2c5556960cd3"
+    },
+    "write-helpers.sql": {
+      "bytes": 10045,
+      "sha256": "b29e96901f7c92e775f742778a080f6a2c77d1c6bc356a537f4aa231fe8594cc"
+    },
+    "preflight.sql": {
+      "bytes": 52397,
+      "sha256": "18593b1fead37b6e6debc913840d7881945d96be3444692ea6b93fe6559a07f4"
+    },
+    "apply.sql": {
+      "bytes": 177123,
+      "sha256": "bdaf4ed9a955434eab06fc6ee93ec0d2307813d23da4da5d182dafa22bc23f27"
+    },
+    "verify.sql": {
+      "bytes": 52365,
+      "sha256": "7897a0350b9b8f838d641a8cf8d55a7d09a910f31adb83d7dc2b92a7eb4fb5ea"
+    },
+    "sql_contract.py": {
+      "bytes": 3535,
+      "sha256": "6cc9a83f1769842328853af8598a73c2725aed877a8bc3d68e86162aaf4a9af1"
+    },
+    "expected-contract.json": {
+      "bytes": 276549,
+      "sha256": "0ad0c33b02011062ddece8a19ac724de5af779a28b047c34507a1234884ff09e"
+    },
+    "target-deltas.json": {
+      "bytes": 16510,
+      "sha256": "2751f301467a42ad3c792a83dddad32104e43f88ec789019c2d59e9da29460cb"
+    },
+    "source-pins.json": {
+      "bytes": 21362,
+      "sha256": "1b9acf1aa3321f47b246116a1bd3463143f06768705708c1ad5e7af53ed8b9a0"
+    },
+    "public-reserve_my_message_photo_v2.sql": {
+      "bytes": 3780,
+      "sha256": "a344e95380047e2bc08a3e0a436aefc7454fbc6e9ef6c6469614569e5c158ac4"
+    },
+    "public-claim_message_photo_upload_v2.sql": {
+      "bytes": 3387,
+      "sha256": "3caac700c8d03b34cba138a5e2b9cbc2f4f6610995e39ac65ebb256a8a91e7ab"
+    },
+    "public-finish_message_photo_upload_v2.sql": {
+      "bytes": 2845,
+      "sha256": "50d3a05bc07a1632baec64cd6fbc47fb976a447a09d629efe2b8c671d0334ebd"
+    }
+  }
+}

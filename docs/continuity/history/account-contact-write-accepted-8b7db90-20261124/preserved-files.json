@@ -1,0 +1,27 @@
+{
+  "docs/continuity/CURRENT_STATE.json": {
+    "path": "docs/continuity/history/account-contact-write-accepted-8b7db90-20261124/docs/continuity/CURRENT_STATE.json",
+    "bytes": 10219,
+    "sha256": "8d36d84a3260063ebb6752260e65da27a7e6a7d729a6d0c7136e5b2faaf3ac31"
+  },
+  "docs/99_V2_HANDOFF_NEXT_CHAT.md": {
+    "path": "docs/continuity/history/account-contact-write-accepted-8b7db90-20261124/docs/99_V2_HANDOFF_NEXT_CHAT.md",
+    "bytes": 10298,
+    "sha256": "98e14f85d5ba66dcc7e1b4566c61d80895337b2170aa55bbfe374d601fc3c329"
+  },
+  "docs/continuity/HOSTED_PORTAL.md": {
+    "path": "docs/continuity/history/account-contact-write-accepted-8b7db90-20261124/docs/continuity/HOSTED_PORTAL.md",
+    "bytes": 1423,
+    "sha256": "d53876f1dd6e78679e9c1f6f54269e5dc3a884f3bf9937c6a7e6b9f659e1a113"
+  },
+  "docs/architecture/account-contact-write-fence-v1.md": {
+    "path": "docs/continuity/history/account-contact-write-accepted-8b7db90-20261124/docs/architecture/account-contact-write-fence-v1.md",
+    "bytes": 9381,
+    "sha256": "5d2180359636578145fa884d5fa33294cf964e9f35d123cdb2fc8fb18439cf69"
+  },
+  "docs/architecture/account-contact-catalog-accepted-20261124.md": {
+    "path": "docs/continuity/history/account-contact-write-accepted-8b7db90-20261124/docs/architecture/account-contact-catalog-accepted-20261124.md",
+    "bytes": 3499,
+    "sha256": "c63c0d18d337ed772573812e5e83a869e7416617882d0bde333ee14b46c46f72"
+  }
+}

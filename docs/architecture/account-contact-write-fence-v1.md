@@ -1,3 +1,9 @@
+> **Tootmises vastu võetud 24.11.2026.**
+>
+> Suhtluse konto kirjutuspiir on commit'is `8b7db90d08682b512d76e64c699af56fc8cae6a3`. Raport kinnitab ühe SQL rakendamise, eraldi järelkontrolli ja avaldamise. Kasutaja Verceli pilt näitab sama commit'i Ready / Production olekut ning kasutaja kinnitas sõnumite toimimist. Allolev ettevalmistuse kirjeldus säilib ajaloolise tõendina; selles nimetatud ootel rakendamine on tehtud.
+>
+> Vastuvõtt: [saatmise uuenduse kinnitus](account-contact-write-accepted-20261124.md). Praegune järgmine juhend: [HOSTED_PORTAL.md](../continuity/HOSTED_PORTAL.md).
+
 # Konto kättesaadavus uute kontaktide ja sõnumite kirjutamisel
 
 24.11.2026. **Ette valmistatud; kasutaja Maci rakendamine ja uue commit'i tootmiskontroll on ootel.** Viimane vastu võetud tootmise lähtealus on `e336a5b9d02845c688def778babeac0f1e3fec95`, puu `7734a70aa174b25b2ce5cc85aca3c0fa4e628624`, 2253 faili.
