@@ -1,0 +1,32 @@
+{
+  "docs/continuity/CURRENT_STATE.json": {
+    "path": "docs/continuity/history/account-contact-catalog-accepted-20261124/docs/continuity/CURRENT_STATE.json",
+    "bytes": 10201,
+    "sha256": "204885a43dda5ca3b6d4138d30f826df2ab6c1cdb75380f6daaaf2523a412f89"
+  },
+  "docs/99_V2_HANDOFF_NEXT_CHAT.md": {
+    "path": "docs/continuity/history/account-contact-catalog-accepted-20261124/docs/99_V2_HANDOFF_NEXT_CHAT.md",
+    "bytes": 10280,
+    "sha256": "b213ed3cf00c5d8d2207441b358317abfc9eb90bc6b0314966bd401a91dfc3ca"
+  },
+  "docs/continuity/HOSTED_PORTAL.md": {
+    "path": "docs/continuity/history/account-contact-catalog-accepted-20261124/docs/continuity/HOSTED_PORTAL.md",
+    "bytes": 925,
+    "sha256": "a88c4bf81c1f747399986d1c20c23a0df9368099e8eba4ae90c9bcb16e036537"
+  },
+  "docs/architecture/account-contact-catalog-fix-20261124.md": {
+    "path": "docs/continuity/history/account-contact-catalog-accepted-20261124/docs/architecture/account-contact-catalog-fix-20261124.md",
+    "bytes": 5180,
+    "sha256": "15e8cbcad6ec3e83d2e20deec046a70805ba82dc491945ca0e8d21544cf6dbae"
+  },
+  "docs/architecture/account-contact-catalog-20261124.md": {
+    "path": "docs/continuity/history/account-contact-catalog-accepted-20261124/docs/architecture/account-contact-catalog-20261124.md",
+    "bytes": 3723,
+    "sha256": "e4e67df1e6e7ee873fc5934cb0c3bc41006f2676862f12914e0d6d81d5da96f9"
+  },
+  "docs/architecture/account-next-after-job-read-20261124.md": {
+    "path": "docs/continuity/history/account-contact-catalog-accepted-20261124/docs/architecture/account-next-after-job-read-20261124.md",
+    "bytes": 6490,
+    "sha256": "f7432d8de8f4c799f77a33681587c908b4516ed00b6e8c888a38102b7f18d554"
+  }
+}

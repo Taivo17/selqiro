@@ -1,0 +1,90 @@
+{
+  "format": "selqiro-account-contact-write-sql-files-v1",
+  "fingerprints": {
+    "base": "fb4fd27d31d456f2ea5c6dcb4c3b4bd6d71be0a5910dfc0dbe4d09d18bd28d00",
+    "before": "002a7544e7c060d70562c3ceca2ac94ef4f6cdc0a57c98526f6fa75d6a7a0487",
+    "after": "96e50aaaeb1afed0c66b5f8bfe8e3fb2ff5b89a8e942152e59a706e49237fb3c"
+  },
+  "files": {
+    "execution-prerequisite.sql": {
+      "bytes": 1117,
+      "sha256": "ec62e4ec6e7b3ff03aec70bd56a08d04a0eb09fbd5bc214d7900a74889da8538"
+    },
+    "catalog-query.sql": {
+      "bytes": 34192,
+      "sha256": "418b064ec357ded51bd99e1ba6e8d1f4a105f70357b36659fd85f86124a4b33f"
+    },
+    "account-query.sql": {
+      "bytes": 9593,
+      "sha256": "fad845d584ad3e1a7274928be4b0790dfd7b160722fa83270345cd1500dae636"
+    },
+    "job-query.sql": {
+      "bytes": 1238,
+      "sha256": "a629daffbf80e74096b3cd0f0cb472e321adc1ef2abdb9e5e9c418044c2b4037"
+    },
+    "helper-query.sql": {
+      "bytes": 1799,
+      "sha256": "7f3e3f4ca1ee18fd57aa79c5beb6a5f896c285dd22cd951f19bf312230866f6e"
+    },
+    "account-write-availability.sql": {
+      "bytes": 2276,
+      "sha256": "ea51051f0dc00a0f6d3dbb7146bb26f2c0c243d9cf2f973bdc5dd8859ec1f435"
+    },
+    "preflight.sql": {
+      "bytes": 36535,
+      "sha256": "75faba91734363f2d86dd6d3658e13e0def43d3893f70412df37bda030c14402"
+    },
+    "apply.sql": {
+      "bytes": 142452,
+      "sha256": "61b23b94fc9b4d8b200dddc6d6de7f4ed87170d80eb1d57a72c1eaac4e728890"
+    },
+    "verify.sql": {
+      "bytes": 36533,
+      "sha256": "99c49c6dac07102657133113c2ae6c6a26ae30cd25fe16d9bcb8b41cf034823f"
+    },
+    "sql_contract.py": {
+      "bytes": 3535,
+      "sha256": "ba7deb28606f8f91434d28a2dd168c07cc72f8008de00e066674b502375ec7c2"
+    },
+    "expected-contract.json": {
+      "bytes": 212206,
+      "sha256": "4080bb535987ecd10e38ce6fa0159c98917f1b798a055b1d547e4e1b793881ba"
+    },
+    "target-deltas.json": {
+      "bytes": 12958,
+      "sha256": "0b643cd15db55f573e701df6240ff59106859f71956e40fdabda4d698d9074c4"
+    },
+    "source-pins.json": {
+      "bytes": 2136,
+      "sha256": "6ff1ab8131276286292fcc54d4f68cf2138a3f7792fdfe4fba957df7df0528fd"
+    },
+    "messaging_private_v2-guard_account_block.sql": {
+      "bytes": 2977,
+      "sha256": "11da40f99bd8b61c4404845eb3b2acb8ff1ca8dbac16afc62191113d9791a968"
+    },
+    "public-contact_my_horse_seller_v1.sql": {
+      "bytes": 4926,
+      "sha256": "25e120533b6cbd680798b2426cad25d2a82406058fcc8cec42c65d8835443164"
+    },
+    "public-contact_my_listing_seller_v1.sql": {
+      "bytes": 4945,
+      "sha256": "23072df37eb51363e071de3376ac240a15e719c50450f4ca17d18310ff37e200"
+    },
+    "public-contact_my_service_provider_v1.sql": {
+      "bytes": 4758,
+      "sha256": "720e2533f84a60261d4b857aee13d7e829ffd2587e123724479757a86a1ccde9"
+    },
+    "public-send_my_listing_message_v1.sql": {
+      "bytes": 3950,
+      "sha256": "04acb54b4983a81edd7a447551daa43011df9319cd898bcfd03210005e628273"
+    },
+    "public-send_my_message_v2.sql": {
+      "bytes": 5302,
+      "sha256": "7e7deb4778b5144a3397f7e23167fa96ae0a7e94c33d7c018c81c1b8242d1ebe"
+    },
+    "public-contact_my_job_provider_v1.sql": {
+      "bytes": 4564,
+      "sha256": "ad2c314672d547551391b23ec32bd5c1efbf7eea4c59ca1e29d0222ef647610b"
+    }
+  }
+}

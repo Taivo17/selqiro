@@ -1,0 +1,304 @@
+{
+  "source_commit": "e336a5b9d02845c688def778babeac0f1e3fec95",
+  "targets": [
+    {
+      "name": "messaging_private_v2.guard_account_block",
+      "path": "messaging_private_v2-guard_account_block.sql",
+      "source": "supabase/repairs/20261030_messaging_restore/changes.sql",
+      "before_sha256": "83bd3c50a4d0bb2323e5dee7ed86032d506ea82e276b6127d3238bc96b37773a",
+      "after_sha256": "4b9ab33240166ea588ee45ad3981ca7ae958e0e5379b07570d44b65397143268",
+      "before_bytes": 2627,
+      "after_bytes": 2789,
+      "prefix_bytes_unchanged": 1646,
+      "prefix_sha256": "c62dc1752fd3713d41ae4115db1e05cc402d1afdbdd5fa3ba8cf33a0b58291ba",
+      "only_inserted_bytes": " -- Both participants come from the locked, exact two-party conversation.\n PERFORM listing_contact_private.require_available_accounts_v1(c.buyer_id,c.seller_id);\n",
+      "metadata_before": {
+        "acl_sha256": "47aa9fadac3b87c347e31064059d93d1f38bfee59a4cb39687bbd7be918a7b3b",
+        "argument_types": [],
+        "body_bytes": 2627,
+        "body_sha256": "83bd3c50a4d0bb2323e5dee7ed86032d506ea82e276b6127d3238bc96b37773a",
+        "config_sha256": "dfa65c40f7ffce1ddf5d7eec9afb7ca879fc3c28b75d30c3bd31d04dfac4a39a",
+        "default_arguments_sha256": null,
+        "definer": true,
+        "definition_sha256": "387931ae9f7dc1fb0d19dabf2fe04ab1e366ba8ebd6cbe5c636891762ea0db35",
+        "kind": "f",
+        "language": "plpgsql",
+        "leakproof": false,
+        "name": "messaging_private_v2.guard_account_block",
+        "origins": [
+          "trigger"
+        ],
+        "owner": "postgres",
+        "parallel": "u",
+        "result_type": "trigger",
+        "returns_set": false,
+        "signature": "messaging_private_v2.guard_account_block()",
+        "strict": false,
+        "volatility": "v"
+      }
+    },
+    {
+      "name": "public.contact_my_horse_seller_v1",
+      "path": "public-contact_my_horse_seller_v1.sql",
+      "source": "supabase/repairs/20261108_horse_publication/06_contact.sql",
+      "before_sha256": "56b4dce82f99a7e3429947009a730d1e5974717780f20a85d55218e85a3634de",
+      "after_sha256": "e3a2435a5dd906935c4c642bad63f485be7630611ca623d2b56e7d552454f38a",
+      "before_bytes": 4554,
+      "after_bytes": 4649,
+      "prefix_bytes_unchanged": 1543,
+      "prefix_sha256": "2effe432de9be50755af012199f0b92b484915b377309f7ad46374ba3986e2d2",
+      "only_inserted_bytes": " PERFORM listing_contact_private.require_available_accounts_v1(p_expected_user_id,owner_user);\n",
+      "metadata_before": {
+        "acl_sha256": "8cd2081b2be230c8d15a9773b86ef691ed09291735d513135dddaa0665ba1a08",
+        "argument_types": [
+          "uuid",
+          "uuid",
+          "uuid",
+          "uuid"
+        ],
+        "body_bytes": 4554,
+        "body_sha256": "56b4dce82f99a7e3429947009a730d1e5974717780f20a85d55218e85a3634de",
+        "config_sha256": "d6baf9d45cfe7bf1da24439499bba0d30763639b975b089044f6fb8b70c6b16f",
+        "default_arguments_sha256": null,
+        "definer": true,
+        "definition_sha256": "68092abeb020d23d593430d5a73b1521cbb9333356da8c8aa9bdeaa25b09214f",
+        "kind": "f",
+        "language": "plpgsql",
+        "leakproof": false,
+        "name": "public.contact_my_horse_seller_v1",
+        "origins": [
+          "fixed"
+        ],
+        "owner": "selqiro_listing_contact_writer_v1",
+        "parallel": "u",
+        "result_type": "jsonb",
+        "returns_set": false,
+        "signature": "public.contact_my_horse_seller_v1(uuid,uuid,uuid,uuid)",
+        "strict": false,
+        "volatility": "v"
+      }
+    },
+    {
+      "name": "public.contact_my_listing_seller_v1",
+      "path": "public-contact_my_listing_seller_v1.sql",
+      "source": "supabase/repairs/20261029_listing_message_cards/tests/fixtures/accepted-contact-fix.sql",
+      "before_sha256": "45b13119d7f8c75c4efeb0996ad14cfa60b02cd031015b64b5ab5655e1577710",
+      "after_sha256": "5b4ebf03f626899c041088a59aacc012b2d65b9ac01507a31ec5fd45245b8aef",
+      "before_bytes": 4570,
+      "after_bytes": 4664,
+      "prefix_bytes_unchanged": 1867,
+      "prefix_sha256": "53e026f57bf59250e9e5f84c7c13efd922ed52324b89761c0b84aa4b3c0f4f3d",
+      "only_inserted_bytes": " PERFORM listing_contact_private.require_available_accounts_v1(p_expected_user_id,l.user_id);\n",
+      "metadata_before": {
+        "acl_sha256": "8cd2081b2be230c8d15a9773b86ef691ed09291735d513135dddaa0665ba1a08",
+        "argument_types": [
+          "uuid",
+          "uuid",
+          "uuid",
+          "text"
+        ],
+        "body_bytes": 4570,
+        "body_sha256": "45b13119d7f8c75c4efeb0996ad14cfa60b02cd031015b64b5ab5655e1577710",
+        "config_sha256": "d6baf9d45cfe7bf1da24439499bba0d30763639b975b089044f6fb8b70c6b16f",
+        "default_arguments_sha256": null,
+        "definer": true,
+        "definition_sha256": "e7b4c4aa0b1ee483e80498b3b6a32dee219189432dc5352192d4a72faa4707cd",
+        "kind": "f",
+        "language": "plpgsql",
+        "leakproof": false,
+        "name": "public.contact_my_listing_seller_v1",
+        "origins": [
+          "fixed"
+        ],
+        "owner": "selqiro_listing_contact_writer_v1",
+        "parallel": "u",
+        "result_type": "jsonb",
+        "returns_set": false,
+        "signature": "public.contact_my_listing_seller_v1(uuid,uuid,uuid,text)",
+        "strict": false,
+        "volatility": "v"
+      }
+    },
+    {
+      "name": "public.contact_my_service_provider_v1",
+      "path": "public-contact_my_service_provider_v1.sql",
+      "source": "supabase/repairs/20261108_service_publication/07_contact.sql",
+      "before_sha256": "c4818b9d93f77c56902986b1d90280f64e5425ca022081b69cd462008b1e125f",
+      "after_sha256": "0db94be7ec7ca70f04178aeb3d1bc97a95d51c27f6d4dd430ce6d74803fad2e9",
+      "before_bytes": 4380,
+      "after_bytes": 4475,
+      "prefix_bytes_unchanged": 1555,
+      "prefix_sha256": "cb28c826203024dc34a1794199dc90e6bf2faff17f31955fe010e4e5219fa611",
+      "only_inserted_bytes": " PERFORM listing_contact_private.require_available_accounts_v1(p_expected_user_id,owner_user);\n",
+      "metadata_before": {
+        "acl_sha256": "8cd2081b2be230c8d15a9773b86ef691ed09291735d513135dddaa0665ba1a08",
+        "argument_types": [
+          "uuid",
+          "uuid",
+          "uuid",
+          "uuid"
+        ],
+        "body_bytes": 4380,
+        "body_sha256": "c4818b9d93f77c56902986b1d90280f64e5425ca022081b69cd462008b1e125f",
+        "config_sha256": "d6baf9d45cfe7bf1da24439499bba0d30763639b975b089044f6fb8b70c6b16f",
+        "default_arguments_sha256": null,
+        "definer": true,
+        "definition_sha256": "51adf672a633759c81d700eb415aa4dc0b367161e660d55ce105c056b6cd48f5",
+        "kind": "f",
+        "language": "plpgsql",
+        "leakproof": false,
+        "name": "public.contact_my_service_provider_v1",
+        "origins": [
+          "fixed"
+        ],
+        "owner": "selqiro_listing_contact_writer_v1",
+        "parallel": "u",
+        "result_type": "jsonb",
+        "returns_set": false,
+        "signature": "public.contact_my_service_provider_v1(uuid,uuid,uuid,uuid)",
+        "strict": false,
+        "volatility": "v"
+      }
+    },
+    {
+      "name": "public.send_my_listing_message_v1",
+      "path": "public-send_my_listing_message_v1.sql",
+      "source": "supabase/repairs/20261029_listing_message_cards/tests/fixtures/accepted-contact-fix.sql",
+      "before_sha256": "2b2f38a55bef3b0751ae2ae045f973a9a7032ed322ef6bf5ca1e39b1fe0bd56a",
+      "after_sha256": "c2c22731596b39481185ecb4e50d2a6d047c49dc10cec2cb430afca37363c60e",
+      "before_bytes": 3527,
+      "after_bytes": 3618,
+      "prefix_bytes_unchanged": 1797,
+      "prefix_sha256": "0031d72930c322224288d569456176978e49696a5e4fcdbb04fdd7aaa2e56006",
+      "only_inserted_bytes": " PERFORM listing_contact_private.require_available_accounts_v1(p_expected_user_id,peer_u);\n",
+      "metadata_before": {
+        "acl_sha256": "8cd2081b2be230c8d15a9773b86ef691ed09291735d513135dddaa0665ba1a08",
+        "argument_types": [
+          "uuid",
+          "uuid",
+          "uuid",
+          "text",
+          "text",
+          "text"
+        ],
+        "body_bytes": 3527,
+        "body_sha256": "2b2f38a55bef3b0751ae2ae045f973a9a7032ed322ef6bf5ca1e39b1fe0bd56a",
+        "config_sha256": "d6baf9d45cfe7bf1da24439499bba0d30763639b975b089044f6fb8b70c6b16f",
+        "default_arguments_sha256": "79d73f5cebbe6c19dca63a8c137158712c447b59ea705adb7b189c0d80ecc6cf",
+        "definer": true,
+        "definition_sha256": "8168fc2c9ba214973c2f74ace3a9b86c9d24162be83b730f3dbac37642aac83d",
+        "kind": "f",
+        "language": "plpgsql",
+        "leakproof": false,
+        "name": "public.send_my_listing_message_v1",
+        "origins": [
+          "fixed"
+        ],
+        "owner": "selqiro_listing_contact_writer_v1",
+        "parallel": "u",
+        "result_type": "jsonb",
+        "returns_set": false,
+        "signature": "public.send_my_listing_message_v1(uuid,uuid,uuid,text,text,text)",
+        "strict": false,
+        "volatility": "v"
+      }
+    },
+    {
+      "name": "public.send_my_message_v2",
+      "path": "public-send_my_message_v2.sql",
+      "source": "supabase/repairs/20261030_messaging_restore/changes.sql",
+      "before_sha256": "22669894a1de3dceac8d608a271ae7c459c16f2957af33b04b24fbf9365e1538",
+      "after_sha256": "51f605631130bcebb6b0349082eb901ff4158b68eb677491f4a9b88a28c50a89",
+      "before_bytes": 4853,
+      "after_bytes": 4944,
+      "prefix_bytes_unchanged": 1853,
+      "prefix_sha256": "b50372fcd2cbf8c275fa25ca86b2f0fa087a81bb20c51f266a362fd848973723",
+      "only_inserted_bytes": " PERFORM listing_contact_private.require_available_accounts_v1(p_expected_user_id,peer_u);\n",
+      "metadata_before": {
+        "acl_sha256": "8cd2081b2be230c8d15a9773b86ef691ed09291735d513135dddaa0665ba1a08",
+        "argument_types": [
+          "uuid",
+          "uuid",
+          "uuid",
+          "text",
+          "text",
+          "text",
+          "uuid"
+        ],
+        "body_bytes": 4853,
+        "body_sha256": "22669894a1de3dceac8d608a271ae7c459c16f2957af33b04b24fbf9365e1538",
+        "config_sha256": "d6baf9d45cfe7bf1da24439499bba0d30763639b975b089044f6fb8b70c6b16f",
+        "default_arguments_sha256": "492033b91f35761d8a3f8ad5409d513b4092d376653b915e481c683e6a89cce7",
+        "definer": true,
+        "definition_sha256": "e96dd5224693e77024e0934355ec5f842dd703ca97fa770b0b9aa93573b69008",
+        "kind": "f",
+        "language": "plpgsql",
+        "leakproof": false,
+        "name": "public.send_my_message_v2",
+        "origins": [
+          "fixed"
+        ],
+        "owner": "selqiro_listing_contact_writer_v1",
+        "parallel": "u",
+        "result_type": "jsonb",
+        "returns_set": false,
+        "signature": "public.send_my_message_v2(uuid,uuid,uuid,text,text,text,uuid)",
+        "strict": false,
+        "volatility": "v"
+      }
+    },
+    {
+      "name": "public.contact_my_job_provider_v1",
+      "path": "public-contact_my_job_provider_v1.sql",
+      "source": "supabase/repairs/20261116_jobs_public/07_contact.sql",
+      "before_sha256": "2df424b0a40077caa36945bf7edae813bff15edfd3f6cd0b976dff58a1b8fadb",
+      "after_sha256": "cb274f6aa96b2d827be6d05c0ebd555feed5112b28d3a4388be04a4710e2dcb8",
+      "before_bytes": 4187,
+      "after_bytes": 4282,
+      "prefix_bytes_unchanged": 1469,
+      "prefix_sha256": "4e30488bcbadb425eda4ab7f321c5c585e1227d0a46b56fad57ec34eae8ad795",
+      "only_inserted_bytes": " PERFORM listing_contact_private.require_available_accounts_v1(p_expected_user_id,owner_user);\n",
+      "metadata_before": {
+        "acl": [
+          {
+            "grantee": "authenticated",
+            "grantor": "selqiro_listing_contact_writer_v1",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          },
+          {
+            "grantee": "selqiro_listing_contact_writer_v1",
+            "grantor": "selqiro_listing_contact_writer_v1",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          }
+        ],
+        "body": "2df424b0a40077caa36945bf7edae813bff15edfd3f6cd0b976dff58a1b8fadb",
+        "owner": "selqiro_listing_contact_writer_v1",
+        "config": [
+          "search_path=pg_catalog, pg_temp",
+          "TimeZone=UTC",
+          "lock_timeout=2s"
+        ],
+        "result": "jsonb",
+        "strict": false,
+        "definer": true,
+        "defaults": null,
+        "language": "plpgsql",
+        "parallel": "u",
+        "arguments": [
+          "p_expected_user_id",
+          "p_expected_identity_id",
+          "p_request_key",
+          "p_job_id"
+        ],
+        "leakproof": false,
+        "signature": "public.contact_my_job_provider_v1(uuid,uuid,uuid,uuid)",
+        "volatility": "v"
+      },
+      "metadata_before_source": "accepted account-job-read-fence-v1 expected contract (e336a5b source)"
+    }
+  ],
+  "new_helper": "listing_contact_private.require_available_accounts_v1(uuid,uuid)",
+  "shared_helpers_changed": false
+}

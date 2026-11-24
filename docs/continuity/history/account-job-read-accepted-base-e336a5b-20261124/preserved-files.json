@@ -1,0 +1,17 @@
+{
+  "docs/continuity/CURRENT_STATE.json": {
+    "copy": "docs/continuity/history/account-job-read-accepted-base-e336a5b-20261124/docs/continuity/CURRENT_STATE.json",
+    "bytes": 10372,
+    "sha256": "ce96d62e2383e46800d259b9b6cb5b22c0c01450867e478b99acb3c173558a4c"
+  },
+  "docs/99_V2_HANDOFF_NEXT_CHAT.md": {
+    "copy": "docs/continuity/history/account-job-read-accepted-base-e336a5b-20261124/docs/99_V2_HANDOFF_NEXT_CHAT.md",
+    "bytes": 10475,
+    "sha256": "792b42911d0022764362869599133fc14154e9bd50871b7d5a8f892655aaf717"
+  },
+  "docs/continuity/HOSTED_PORTAL.md": {
+    "copy": "docs/continuity/history/account-job-read-accepted-base-e336a5b-20261124/docs/continuity/HOSTED_PORTAL.md",
+    "bytes": 2894,
+    "sha256": "46927165ee8caa15837644f868fa0ee816111cb955e08f8a398103503202c2c9"
+  }
+}

@@ -1,55 +1,25 @@
-# Töökuulutuste kontooleku kontroll — üks järgmine käsk
+# Selqiro praegune tööjärg
 
-24.11.2026 Europe/Tallinn. Main **a9d86e6** on vastu võetud. Uus pakett lisab
-sama konto kättesaadavuse kontrolli töökuulutuste avalikele lugemistele.
+24.11.2026 Europe/Tallinn. Vastu võetud tootmise alus: **e336a5b**.
 
-## Käivita uus pakett
+## Üks järgmine samm
 
-Paki `selqiro-too-konto-olek-20261124.zip` Downloads-kaustas lahti. Kui sinu terminalis töötab kohalik
-Selqiro arendusserver, peata see oma aknas Ctrl+C-ga. Säilita olemasolevad paketid ja päevikud.
+Parandatud suhtluse metaandmete kontroll on edukalt lõpetatud. Uus kirjutav pakett lisab konto kättesaadavuse kontrolli uutele kontaktidele ja sõnumitele.
+
+Paki **selqiro-suhtluse-konto-olek-20261124.zip** Downloads-kaustas lahti ja käivita:
 
 ```bash
-python3 -I -B "$HOME/Downloads/selqiro-too-konto-olek-20261124/uuenda.py" --publish
+python3 -I -B "$HOME/Downloads/selqiro-suhtluse-konto-olek-20261124/uuenda.py" --publish
 ```
 
-Uuendaja kontrollib tegelikku main a9d86e6, kõiki 2227 alusfaili, indeksit/tööpuud,
-kinnitatud remote'i, olemasolevaid täpseid sõltuvusi ning eelmise teenuste
-käigu originaalraportit. Ta lisab ainult paketi failid, teeb 12 sihitud
-kliendikontrolli ja värske build'i. Seejärel kinnitab SQL eelseisu, asendab
-ühes kaitstud tehingus kaks funktsioonikeha ja teeb eraldi verify.
-Järgneb ainult selle paketi commit/push.
+Saada selle käigu **SAADA SEE FAIL** real nimetatud JSON-fail. Peatumisel saada sama raport; ära käivita vanu pakette ega korda ebaõnnestunud andmebaasikirjutust.
 
-Commit'i pealkiri: `Respect account availability in public job reads`.
-Tegelik uus räsi ilmub `Commit:` reale ja raportisse. SQL võib olla rakendatud
-enne hilisemat Giti peatumist; raport eristab etappe. Kui SQL kirjutuse kinnitus
-kaob, võib uuendaja järelseisu ainult lugemisega kontrollida, kuid ta peatub
-enne commit/push'i. Ta ei korda kirjutust automaatselt ega vana paketiga.
+Edu korral peab raportis olema üks kinnitatud SQL rakendamine, eraldi järelkontroll ning uus commit/push. Oota Vercelis selle sama commit-i **Ready / Production** tulemust.
 
-## Saada täpne raport
+Uue commit-i pealkiri: **Respect account availability in contact and message writes**.
 
-Uus privaatne koopia tehakse Downloads-kausta. Absoluutne tee kuvatakse real
-`SAADA SEE FAIL:` ning Finder valib just selle faili. Koopia vea korral
-näidatakse kontrollitud originaali; Finderi vea korral prinditakse täpne tee.
-Salvestustõrke järel märgitakse viimane säilinud raport võimaliku aegunud
-tõendina. Kui raportit ei loodud, saada `PEATATUD`-rida.
+Seejärel kontrolli olemasolevate testkontodega vana vestluse avamist, aktiivse avaldajaga kontakti loomist ning ühe uue sõnumi saatmist. Uut eraisiku töökuulutust ei ole selleks vaja luua. Konto sulgemise nuppu see pakett ei lisa.
 
-## Sama uue commit'i Ready / Production järel
+Ettevalmistuse SQL katsed, Maci rakendamine, Verceli deployment ja tegelik veebikontroll on eraldi tõendid. Loe `docs/architecture/account-contact-write-fence-v1.md`.
 
-1. Värskenda portaali ja ava menüüst Töö. Otsi olemasolev aktiivne pakkumine.
-2. Ava pakkumise üksikvaade, seejärel avaldaja avalik profiil ja selle tööpakkumised.
-3. Kui loendil on järgmine leht, ava see ning mine tagasi otsingusse.
-4. Kontrolli olemasolevat eraisiku ja ettevõtte pakkumist.
-5. Ava olemasolev avalik jagamislink ka välja logitud vaates, kui sul on see käepärast.
-
-Puuduva järgmise lehe või teise profiilitüübi aktiivse pakkumise jaoks pole vaja
-uut sisu luua. Kontode sulgemist ega kustutamist siin ei katsetata. Puuduva või
-piiratud konto ja muud erijuhud kontrolliti ettevalmistuse eraldatud sünteetilises
-andmebaasis ning tegeliku kliendikoodi kontrollides.
-
-## Säiliv tööjärg
-
-Ülejäänud lugemised, otseõigused, kirjutused, kontakt/sõnumid ning meedia vajavad
-lõpetamist enne konto sulgemise, taastamise ja kustutamise tervikut. Teenuste
-varasem suurmahu piir säilib; selle paketi tööde mõõtmised on eraldi.
-SMTP paus ning konto tervik → esiletõstmine → reklaamid järjekord säilivad.
-Lõpetatud paigaldajaid ja laiu teste ei korrata.
+Järjekord: **kontoelutsükkel → jälgitavate poodide/profiilide Uudised → esiletõstmine → reklaamid**.

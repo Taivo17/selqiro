@@ -1,0 +1,389 @@
+{
+  "schema_version": 1,
+  "audit_kind": "scoped_read_only_source_audit",
+  "date": "2026-11-24",
+  "language": "et",
+  "source_commit": "e336a5b9d02845c688def778babeac0f1e3fec95",
+  "source_tree": "7734a70aa174b25b2ce5cc85aca3c0fa4e628624",
+  "source_file_count": 2253,
+  "source_identity_provenance": "Parent task supplied source identity; separate acceptance runner verifies the prepared source against the returned report. This audit pins only its inspected files.",
+  "scope_limits": {
+    "product_modified": false,
+    "source_modified": false,
+    "tests_run": false,
+    "build_run": false,
+    "database_accessed": false,
+    "browser_used": false,
+    "live_catalog_verified": false,
+    "production_verified_by_this_audit": false
+  },
+  "files": [
+    {
+      "path": "AGENTS.md",
+      "bytes": 327,
+      "sha256": "e3447d84251880fb34cfae09131cb4c57471529bbfe60976a3245793cf621627"
+    },
+    {
+      "path": "components/v2/layout/V2Header.tsx",
+      "bytes": 2484,
+      "sha256": "b91d571ee59a40c5ae1b9d89d78b28438bc9dccba9bf0298f4e601c17c8bf0f4"
+    },
+    {
+      "path": "src/features/public-profile/components/PublicProfilePage.tsx",
+      "bytes": 14069,
+      "sha256": "eb238d8ce63f62fdb71cc933c15bc63fd836e2e8b32d2c65e601bae4a2dc23ea"
+    },
+    {
+      "path": "app/feed/page.tsx",
+      "bytes": 10517,
+      "sha256": "de222b71d012eebab8e40b2d978a44a343253854305d68ec9e33448c6b85d6f6"
+    },
+    {
+      "path": "app/store/[slug]/page.tsx",
+      "bytes": 32098,
+      "sha256": "e4115ef9ce4b142c2a3e61fbc27f8c1a2e1284dde034e7424e335fcd05d8714b"
+    },
+    {
+      "path": "app/components/site-header.tsx",
+      "bytes": 22301,
+      "sha256": "70a673396faf64beab59f7daf8ac7a52a02beb2f5418ed375ddcd87fd372254e"
+    },
+    {
+      "path": "src/entities/listing/api/legacyDiscoveryFeed.ts",
+      "bytes": 3326,
+      "sha256": "2925b124ed4c8521bb1f55f38a2b322b61ebb45b55ed200a4b5cabeb094284a5"
+    },
+    {
+      "path": "src/entities/listing/api/legacyDiscoveryRead.ts",
+      "bytes": 1291,
+      "sha256": "6c8b365803d788124b7f2d746da4ea71dd0a2af580fb816c3619ed7602c9c213"
+    },
+    {
+      "path": "src/entities/listing/model/legacyDiscoveryTypes.ts",
+      "bytes": 1977,
+      "sha256": "5cccfd4e2efaef9f9f9e2c0cb39051e770af65edcf8c7f5c886031edd56bb911"
+    },
+    {
+      "path": "src/features/legacy-discovery/model/useLegacyFeed.ts",
+      "bytes": 921,
+      "sha256": "4512b6af5ae40597901e5c1346ee6682a4e1d95142092936aea557efe3e0627c"
+    },
+    {
+      "path": "src/features/legacy-discovery/model/useLegacyDiscoveryScope.ts",
+      "bytes": 2314,
+      "sha256": "32fafc39340562a7489134342e6af44a3b0f98348244ff8cbf91838a03dc5e1f"
+    },
+    {
+      "path": "src/features/legacy-discovery/model/useLegacyDiscoveryPager.ts",
+      "bytes": 1375,
+      "sha256": "a518fb382bfa97d18ac6b2e4a42a1d92f6e62a12d385983e24ded6f294b740a6"
+    },
+    {
+      "path": "src/features/legacy-discovery/model/legacyDiscoveryPager.ts",
+      "bytes": 3871,
+      "sha256": "851f0f2f067795fa68e193b95fcbaaa1e580b16a3141ec3d76557d66e2275289"
+    },
+    {
+      "path": "supabase/migrations/20260722173530_baseline_20260722.sql",
+      "bytes": 221677,
+      "sha256": "7ca065f92f01c0f38ada5f5a50d2a0fc5b716f5291d1525d398023b7db59da3f"
+    },
+    {
+      "path": "supabase/repairs/20261113_provider_controls/11_legacy_feed.sql",
+      "bytes": 2606,
+      "sha256": "f1d99ed0dcc738aa60c90916d18841a925d849d6afea9d245d0f32d433737138"
+    },
+    {
+      "path": "supabase/releases/account-public-profile-fence-v1/public-profile.sql",
+      "bytes": 3072,
+      "sha256": "2f00234d98c261b97bcfad89df9d247e3cd89f8478b5160ce6764280b771c8ea"
+    },
+    {
+      "path": "supabase/releases/account-public-profile-fence-v1/account-availability.sql",
+      "bytes": 836,
+      "sha256": "da26cf792b337adf41a77cc2144a4738d1a405dd122ff9e20c47dc1c82e72930"
+    },
+    {
+      "path": "supabase/releases/account-profile-marketplace-read-fence-v1/profile-marketplace-v2.sql",
+      "bytes": 6947,
+      "sha256": "3847e6c0c2cc4bbd9d02a79e3c54174c1e0bb48765eff752ec7253398e89534f"
+    },
+    {
+      "path": "supabase/releases/listing-publication-hosted-preview-v1/20_publication_core.sql",
+      "bytes": 180832,
+      "sha256": "f1c56c6ba381ceb5ab1d120092f676964762829ad63c5201a6c6b809c419f062"
+    },
+    {
+      "path": "supabase/releases/listing-publication-hosted-preview-v1/40_read_models_and_owner.sql",
+      "bytes": 167562,
+      "sha256": "d19bf23e0746e8e6ba6750f4c235135fbaa9cff3b3f184e05a87433c10eaad78"
+    },
+    {
+      "path": "supabase/migrations/20260928160000_add_owner_listing_activity_renewal.sql",
+      "bytes": 4883,
+      "sha256": "0bfc32ce5a3eb9dfa7ac9d3a1328a9567ad9ff3c1c6b35eec04e12e92f1fec61"
+    },
+    {
+      "path": "supabase/repairs/20261108_horse_publication/03_finality.sql",
+      "bytes": 14971,
+      "sha256": "993481b227edddcb8994437b4c30adb47b9312591fa66fda8cc71a265750d33b"
+    },
+    {
+      "path": "docs/continuity/LISTINGS_DESIGN_NEWS_20261101.md",
+      "bytes": 10431,
+      "sha256": "f16f581ddeb3fded89a1bb1dff5cc1fc3fbad4b5cacb93b9bc9c27a089cbc1aa"
+    },
+    {
+      "path": "docs/02_AI_MEMORY.md",
+      "bytes": 448136,
+      "sha256": "477c9e54c82c4eca6c7ad8cf7c7723bb131d85e3bfe17ab25c337c8e211fddf9"
+    },
+    {
+      "path": "docs/architecture/live_services.md",
+      "bytes": 6692,
+      "sha256": "4030207f18329124d64113d98969ae688cc80217abbc508176ae63d26c0d3a7e"
+    },
+    {
+      "path": "docs/architecture/profile-marketplace-feed-v1.md",
+      "bytes": 7520,
+      "sha256": "7c1ab742c386ff8a5b22baa70380a25daf119cc31736cf69355bf124b98cc513"
+    }
+  ],
+  "facts": [
+    {
+      "id": "news-navigation",
+      "status": "source_fact",
+      "text_et": "V2 päise Uudised viib /v2 avalehele; app/v2 all puudub eraldi news teekond.",
+      "evidence": [
+        {
+          "path": "components/v2/layout/V2Header.tsx",
+          "lines": "13–19"
+        }
+      ],
+      "negative_search_scope": "rg --files app/v2"
+    },
+    {
+      "id": "v2-follow-placeholder",
+      "status": "source_fact",
+      "text_et": "V2 avaliku profiili Jälgi on sündmusekäsitlejata nupp; sama komponendi viimased teated on kahe kõvakodeeritud näite massiiv. Quick Update on kohatäitja.",
+      "evidence": [
+        {
+          "path": "src/features/public-profile/components/PublicProfilePage.tsx",
+          "lines": "26–35; 200–227; 316–341"
+        }
+      ]
+    },
+    {
+      "id": "legacy-feed",
+      "status": "source_fact",
+      "text_et": "V1 /feed on tavaliste kuulutuste voog. Loader loeb oma profiles.active_identity_id, seejärel kõik selle profiili store_follows siht-IDd brauserisse ning discovery_listings_v1 kaudu 30 rida, created_at kahanevalt, offsetiga. Võrdse aja ID järjestust pole.",
+      "evidence": [
+        {
+          "path": "app/feed/page.tsx"
+        },
+        {
+          "path": "src/entities/listing/api/legacyDiscoveryFeed.ts"
+        },
+        {
+          "path": "src/entities/listing/model/legacyDiscoveryTypes.ts"
+        }
+      ]
+    },
+    {
+      "id": "legacy-errors-and-scopes",
+      "status": "source_fact",
+      "text_et": "Olemasolev legacy scope/pager tühistab vana kontoeesmärgi/profiilivahetuse päringuid ning hoiab ühe lehe laadimise korraga. /feed ei kuva hooki error olekut ega erista null jälgimist ja null sobivat sisu. Eraldi jälgimismuudatuse invalideerimist loetud failides pole.",
+      "evidence": [
+        {
+          "path": "app/feed/page.tsx",
+          "lines": "65–75; 151–174"
+        },
+        {
+          "path": "src/features/legacy-discovery/model/useLegacyFeed.ts"
+        },
+        {
+          "path": "src/features/legacy-discovery/model/useLegacyDiscoveryScope.ts"
+        },
+        {
+          "path": "src/features/legacy-discovery/model/useLegacyDiscoveryPager.ts"
+        },
+        {
+          "path": "src/features/legacy-discovery/model/legacyDiscoveryPager.ts"
+        }
+      ]
+    },
+    {
+      "id": "existing-follow-model",
+      "status": "source_fact",
+      "text_et": "store_follows on olemas: konto-IDd, profiili-IDde paar, loomisaeg, paari unikaalsed indeksid ning oma konto lugemis-/kirjutuspoliitikad. V1 poe leht kasutab staatuse RPC-d ja toggle_store_follow_identity kirjutust.",
+      "evidence": [
+        {
+          "path": "app/store/[slug]/page.tsx",
+          "lines": "218–229; 312–340; 584–596"
+        },
+        {
+          "path": "supabase/migrations/20260722173530_baseline_20260722.sql",
+          "lines": "4674–4681; 5274–5286; 5720–5880"
+        }
+      ]
+    },
+    {
+      "id": "follow-contract-review",
+      "status": "source_fact_with_live_limit",
+      "text_et": "Säilitatud baseline SQL-i staatuse SECURITY DEFINER funktsioon võtab vabalt antud jälgiva profiili ID ilma oma-konto kontrollita; toggle tuletab jälgija aktiivse profiili, kuid sihtkonto identity_profiles.created_by_user_id kaudu ning pöörab oleku. Need kehad ei kutsu account_is_available abifunktsiooni. Uus leping ei tohiks neid kontrollimata korduskasutada.",
+      "evidence": [
+        {
+          "path": "supabase/migrations/20260722173530_baseline_20260722.sql",
+          "lines": "1223–1242; 3368–3431"
+        }
+      ],
+      "live_catalog_verified": false
+    },
+    {
+      "id": "feed-profile-and-account-fence",
+      "status": "source_fact_with_live_limit",
+      "text_et": "Loetud legacy discovery view arvestab peidetud pakkujaid ja mõlemapoolset kasutajablokeeringut, kuid ei kutsu konto saadavuse abifunktsiooni. Baseline get_feed_identity_profiles loeb profiilide nimed/slug/avatar otse antud IDde järgi. Eraldi avaliku profiili ja turuplatsi RPC-d rakendavad kanoonilise konto saadavuse piiri; see ei tõenda legacy feedi katvust.",
+      "evidence": [
+        {
+          "path": "supabase/repairs/20261113_provider_controls/11_legacy_feed.sql"
+        },
+        {
+          "path": "supabase/migrations/20260722173530_baseline_20260722.sql",
+          "lines": "1175–1189"
+        },
+        {
+          "path": "supabase/releases/account-public-profile-fence-v1/public-profile.sql"
+        },
+        {
+          "path": "supabase/releases/account-public-profile-fence-v1/account-availability.sql"
+        },
+        {
+          "path": "supabase/releases/account-profile-marketplace-read-fence-v1/profile-marketplace-v2.sql"
+        }
+      ],
+      "live_catalog_verified": false
+    },
+    {
+      "id": "canonical-owner",
+      "status": "source_fact",
+      "text_et": "Praeguse avaliku profiili / konto kättesaadavuse lepingu omanik on eraisikul identities.user_id ja ettevõttel business_accounts.owner_user_id. Konto looja või liikme ID ei asenda ettevõtte kanoonilist omanikku.",
+      "evidence": [
+        {
+          "path": "supabase/releases/account-public-profile-fence-v1/public-profile.sql",
+          "lines": "8–35"
+        },
+        {
+          "path": "supabase/releases/account-profile-marketplace-read-fence-v1/profile-marketplace-v2.sql",
+          "lines": "27–37"
+        }
+      ]
+    },
+    {
+      "id": "badge-is-not-v2-contract",
+      "status": "source_fact",
+      "text_et": "Vana päis pärib konto owner-IDde kaupa ning kasutab globaalset localStorage feed_last_viewed_at võtit. See ei ole V2 profiili ulatusega lugemismärgi valmislahendus.",
+      "evidence": [
+        {
+          "path": "app/components/site-header.tsx",
+          "lines": "147–196; 334–343"
+        }
+      ]
+    },
+    {
+      "id": "publication-order-evidence",
+      "status": "source_fact",
+      "text_et": "V2 tavalise kuulutuse avaldamine loob listings rea ja private publications kviitungi sama at_time ajaga. Näidatud basics-muutmine ei kirjuta created_at; pikendamine kirjutab active_until. Hobuse avaldamine säilitab published_at coalesce(published_at,t) abil. Kõigi ajalooliste kirjutajate ja andmete täielikku lepinguauditit ei tehtud.",
+      "evidence": [
+        {
+          "path": "supabase/releases/listing-publication-hosted-preview-v1/20_publication_core.sql",
+          "lines": "1154–1170"
+        },
+        {
+          "path": "supabase/releases/listing-publication-hosted-preview-v1/40_read_models_and_owner.sql",
+          "lines": "894–914"
+        },
+        {
+          "path": "supabase/migrations/20260928160000_add_owner_listing_activity_renewal.sql",
+          "lines": "98–101"
+        },
+        {
+          "path": "supabase/repairs/20261108_horse_publication/03_finality.sql",
+          "lines": "166–167"
+        }
+      ]
+    },
+    {
+      "id": "documented-product-intent",
+      "status": "source_fact",
+      "text_et": "Säilitatud disainiotsused seovad Uudised jälgitud profiilide värskete avalike postitustega; Updates on ajalugu ja Quick Update sama süsteemi aktiivne esiletõste, mille puudumisel plokk peidetakse.",
+      "evidence": [
+        {
+          "path": "docs/continuity/LISTINGS_DESIGN_NEWS_20261101.md",
+          "lines": "72–83; 120–123"
+        },
+        {
+          "path": "docs/02_AI_MEMORY.md",
+          "lines": "3144–3147"
+        },
+        {
+          "path": "docs/architecture/live_services.md",
+          "lines": "321–337"
+        }
+      ]
+    },
+    {
+      "id": "typed-marketplace-reuse",
+      "status": "source_fact",
+      "text_et": "Olemas on tavalise listings ja horse_offers sisu ühine tüübistatud avalik projektsioon, millel säilivad kanoonilised kirjed ja detailsed lugemisreeglid. See on uue voo semantika lähtekoht, mitte luba kutsuda ühe profiili RPC-d iga jälgitava kohta.",
+      "evidence": [
+        {
+          "path": "supabase/releases/account-profile-marketplace-read-fence-v1/profile-marketplace-v2.sql"
+        },
+        {
+          "path": "docs/architecture/profile-marketplace-feed-v1.md"
+        }
+      ]
+    },
+    {
+      "id": "announcement-search-boundary",
+      "status": "scoped_negative_finding",
+      "text_et": "Loetud V2 profiil ei loe salvestatud teateid. Suunatud route/entity/feature ja SQL nimeotsingud ei leidnud valmis profiili teadete avaldamise moodulit; see ei kinnita kogu live-andmebaasi objektide puudumist.",
+      "evidence": [
+        {
+          "path": "src/features/public-profile/components/PublicProfilePage.tsx"
+        }
+      ],
+      "live_catalog_verified": false
+    }
+  ],
+  "proposed_mvp": {
+    "status": "proposal_not_implemented",
+    "priority_et": "Lõpetada käimasolev konto elutsükli töö; seejärel jälgitavate uudiste põhifunktsioon; seejärel esiletõstmine ja reklaamid.",
+    "one_next_implementation_step_et": "Uudiste esimene väike teostusetapp: kontrollitud oma jälgimise lugemis-/soovitud-oleku kirjutusleping olemasoleval store_follows mudelil ja töötav V2 Jälgi/Jälgin komponent.",
+    "reuse": [
+      "store_follows",
+      "identities and canonical business owner",
+      "existing account availability and provider-control boundaries",
+      "existing read scope retirement/abort pattern",
+      "typed listing/horse public cards and media contracts"
+    ],
+    "follow_contract_et": [
+      "Server kontrollib autentitud konto, oodatava profiili ja selle ligipääsu; brauser ei määra jälgija omanikku.",
+      "Sihtprofiili kanooniline konto/profiil peab olema lubatud ja kättesaadav; blokeerimisreeglid kehtivad mõlemas suunas.",
+      "Soovitud boolean olek koos kontrollitud korduskatse/konflikti lepinguga; olemasolevat toggle RPC-d ei korrata automaatselt.",
+      "Seos jääb sisemiselt profiili ulatusega; eraisiku ja ettevõtte profiile saab jälgida. Uuele kasutajale ühe valitud profiiliga lihtne kasutus."
+    ],
+    "mvp_et": [
+      "Eraldi õhuke /v2/news teekond ja päriselt ühendatud päiselink. Funktsionaalsus entities/api+model, feature hook ja väikesed vaatekomponendid.",
+      "Server liidab enda lubatud jälgimised kanooniliste avalike tavaliste ja hobusekuulutustega ning hiljem samas MVP tervikus profiili avaldatud teadetega; brauser ei laadi kõiki jälgitavaid IDsid.",
+      "Tüübitud võti (sisu liik, kanooniline ID), muutumatu esimese avaldamise aeg, stabiilne kahanev ajakursor koos üheselt määrava ID/tüübi viigimurdjaga; näiteks 30 rida ja üks lisarida järgmise lehe tuvastamiseks.",
+      "Muutmine, hinnamuutus, pikendamine, aktiveerimine ega esiletõstmine ei lisa samast kuulutusest uut uudist. Ajaloolise avaldamisaja allikas tuleb enne lepingut üheselt kinnitada; created_at ja published_at ei ole vaikimisi kõigis tüüpides samaväärsed.",
+      "Üks salvestatud profiili teadete moodul: ajalugu ja sama teate aktiivne Quick Update; nähtavaks alles omaniku avaldamisel. Näidispostitusi ei esitata päris tegevusena.",
+      "Uue konto / jälgimisteta / jälgitavaid on, kuid sobiv sisu puudub / laadimisviga olekud eraldi. Jälgimise, konto, profiili või pakkujakontrolli muutus pensioneerib vana voo.",
+      "Sisu ja autori avalikkus, konto saadavus, blokeeringud ja peitmised rakenduvad enne lehe piiramist; ka detail ning meedia säilitavad oma kontrollid.",
+      "Esimeses tarnes puuduvad meili- või push-teavitused, üldine sotsiaalvõrk, tiimirollid, AI ja maksed. Uute teenuse-/töö-/tootenäidise sündmuste lisamine vajab eraldi tüübilepingut."
+    ],
+    "definition_of_done_et": "Uudiste tuum peab enne esiletõstmist ja reklaame hõlmama jälgimist, päris uusi kuulutusi ning omaniku avaldatud teateid. Ainult vana /feed lingi avamine või ainult Jälgi nupp ei lõpeta kasutaja eesmärki.",
+    "before_mutation_et": "Värske piiratud ainult lugemise kataloog peab kinnitama follow tabeli/poliitikad/indeksid ja tegelikud RPC kehad ning avaldamise ajaväljad. Praegune audit ei kinnita live-andmebaasi muutmiseelset seisu."
+  }
+}

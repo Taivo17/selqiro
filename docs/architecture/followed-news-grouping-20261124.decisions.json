@@ -1,0 +1,199 @@
+{
+  "schema_version": 1,
+  "date": "2026-11-24",
+  "status": "proposal_not_implemented",
+  "product_changes_made": false,
+  "database_accessed": false,
+  "browser_used": false,
+  "tests_run": false,
+  "user_direction_et": "Suure lisamise korral 3–4 eelvaadet ning võimalus avada kõik sama avaldaja lisamised.",
+  "proposal_defaults_not_previous_decisions": {
+    "preview_count_desktop": 4,
+    "preview_count_mobile": 4,
+    "mobile_grid": [
+      2,
+      2
+    ],
+    "desktop_columns": 4,
+    "window_hours": 168,
+    "feed_groups_per_page": 10,
+    "expanded_items_per_page": 24
+  },
+  "source_context": {
+    "source_commit": "e336a5b9d02845c688def778babeac0f1e3fec95",
+    "source_tree": "7734a70aa174b25b2ce5cc85aca3c0fa4e628624",
+    "audit_file": "/workspace/scratch/de90fa9e1734/work/account-job-read-accepted-20261124/review/news/audit.json",
+    "audit_sha256": "91714cf6ba015c7ff0bf3adcdb416862bdc38bb5a3b68adacdee612b43698f89"
+  },
+  "priority": [
+    "account_lifecycle",
+    "followed_news",
+    "listing_highlighting",
+    "advertising"
+  ],
+  "group_identity": [
+    "snapshot_id",
+    "publisher_identity_id",
+    "window_start",
+    "window_end"
+  ],
+  "publisher_occurrence_rule": "At most one publisher block per snapshot/window, including the publisher announcement excerpt. A separately selected earlier window may show the publisher again.",
+  "content_family": "ordinary_and_horse_listings_with_separate_announcement_section_in_same_publisher_block",
+  "window": {
+    "kind": "rolling_fixed_window",
+    "duration_hours": 168,
+    "bounds": "(snapshot_time - 168h, snapshot_time]",
+    "storage_timezone": "UTC",
+    "display_timezone": "viewer_preference",
+    "older_content": "Explicit previous-window or date-period navigation remains available after a long absence; seven days is a proposed initial viewport, not history deletion or a hard visibility ceiling.",
+    "history_retention_limit": false
+  },
+  "snapshot_contract": {
+    "server_issued": true,
+    "scope": [
+      "authenticated_account",
+      "expected_active_profile",
+      "follow_revision",
+      "visibility_revision"
+    ],
+    "ordering_frozen": true,
+    "membership_ceiling": "closed committed initial-publication frontier",
+    "group_cursor": [
+      "frozen_group_anchor_desc",
+      "publisher_identity_id_tiebreak"
+    ],
+    "detail_cursor": [
+      "initial_publication_order_desc",
+      "content_type_tiebreak",
+      "canonical_id_tiebreak"
+    ],
+    "late_commits": "Must belong to a later snapshot; a created_at filter alone is insufficient proof.",
+    "implementation_status": "Contract requirement only; concrete closed frontier/snapshot storage must be checked against source before implementation.",
+    "immutable_content_copy": false,
+    "current_permissions_rechecked": true
+  },
+  "expand": {
+    "button_et": "Vaata kõiki selle perioodi kuulutusi",
+    "target": "exact_publisher_and_snapshot_window_listing_collection",
+    "whole_shop_catalogue": false,
+    "preserve_snapshot": true,
+    "page_size": 24,
+    "lookahead": 1,
+    "return_restores": [
+      "snapshot_id",
+      "loaded_group_state",
+      "group_scroll_anchor"
+    ],
+    "unavailable_snapshot_behavior": "Show explicit refresh state, never silently open another collection."
+  },
+  "counts": {
+    "default": "omit_exact_total",
+    "more_flag": "fifth_currently_eligible_record",
+    "global_count_required": false,
+    "optional_bounded_total": {
+      "fetch_eligible_limit": 101,
+      "exact_through": 100,
+      "above_label": "100+",
+      "scope": "same publisher/window/snapshot and currently authorized public rows",
+      "status": "optional_future_choice"
+    },
+    "never_use_pre_visibility_count": true
+  },
+  "newness": {
+    "indicator_et": "Uusi postitusi on lisandunud",
+    "refresh_button_et": "Näita uusi",
+    "means": "Currently visible initial-publication events newer than the current snapshot frontier.",
+    "means_unread_count": false,
+    "auto_refresh_or_insert": false,
+    "preview_marks_group_read": false,
+    "opening_collection_marks_all_read": false,
+    "persistent_seen_tracking": "If implemented, record only individually observed/opened typed canonical item keys under an explicit criterion. Do not advance a global all-read watermark from four newest previews.",
+    "scope": "own viewer account/profile; no shared browser-wide feed_last_viewed_at",
+    "new_is_not_age_less_than_7_days": true,
+    "changing_period_does_not_mark_older_items_seen": true,
+    "persistent_read_state_status": "Separate proposed contract, not an established user decision or implemented feature."
+  },
+  "volume_scenario": {
+    "initial_listing_count": 100,
+    "visible_previews": 4,
+    "additional_publications": 5,
+    "while_browsing": "Original group and expansion remain at original publication frontier; show a non-intrusive availability banner.",
+    "after_explicit_refresh": "One refreshed publisher block can contain all 105 still eligible period publications; four newest previews.",
+    "same_store_block_count": 1,
+    "read_ack_from_preview": 0,
+    "example_counts_are_hypothetical": true
+  },
+  "changes": {
+    "edit_or_price_change": "Update allowed displayed fields; preserve first-publication event and order.",
+    "renewal_or_reactivation_or_paid_highlight": "No new news event for the same original listing.",
+    "expiry_or_hidden_content": "Exclude currently ineligible rows and replace preview only from same cohort.",
+    "block_or_unavailable_account": "Remove affected group/content immediately; recheck detail/media.",
+    "empty_group": "Omit group without leaking removed counts.",
+    "follow_or_account_or_profile_change": "Retire old snapshot and load the new authorized scope."
+  },
+  "bounded_reads": {
+    "server_join_follows": true,
+    "client_fetch_all_follow_ids": false,
+    "client_fetch_all_group_items": false,
+    "browser_n_plus_one": false,
+    "feed_page_max_groups": 10,
+    "previews_per_group": 4,
+    "one_lookahead_item_per_group": true,
+    "query_plan_required_before_performance_claims": true
+  },
+  "visual_layout_spec": {
+    "purpose": "Optional inline illustration only, not a product implementation.",
+    "sample_data_label_et": "Kujuteldavate andmetega paigutusnäide",
+    "page_title_et": "Uudised",
+    "subtitle_et": "Jälgitavate uued kuulutused ja teated",
+    "period_control_et": "Viimased 7 päeva",
+    "content_max_width_px": 1120,
+    "publisher_card": {
+      "padding_px": 24,
+      "radius_px": 24,
+      "avatar_px": 40,
+      "header": [
+        "avatar",
+        "publisher_name_link",
+        "period_label"
+      ],
+      "optional_notice": "At most one short excerpt in same publisher block; separate exact-window notices action.",
+      "listing_grid": {
+        "desktop_columns": 4,
+        "mobile_columns": 2,
+        "total_preview_cards": 4,
+        "card_fields": [
+          "image",
+          "two_line_title",
+          "price"
+        ],
+        "image_ratio": "4:3",
+        "no_horizontal_carousel": true
+      },
+      "footer_action_et": "Vaata kõiki selle perioodi kuulutusi"
+    },
+    "sample_groups": [
+      {
+        "publisher": "Tehnikapood",
+        "listing_previews": 4,
+        "has_more": true
+      },
+      {
+        "publisher": "Kohalik aednik",
+        "listing_previews": 2,
+        "has_more": false
+      }
+    ],
+    "sample_groups_are_hypothetical": true,
+    "no_auto_expansion": true
+  },
+  "announcements": {
+    "same_publisher_block": true,
+    "separate_content_type": true,
+    "preview_slots_separate_from_listing_four": true,
+    "minimum_visible_when_present": 1,
+    "listing_flood_cannot_displace_notice": true,
+    "expand_exact_same_period": true,
+    "has_more_notices_action_et": "Vaata selle perioodi teateid"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "docs/continuity/CURRENT_STATE.json": {
+    "path": "docs/continuity/history/account-contact-catalog-before-20261124/docs/continuity/CURRENT_STATE.json",
+    "bytes": 10576,
+    "sha256": "a6ff97fc1d2f291c2827ce2b22b77836357bf536b7216e15945a3e3f940c9f17"
+  },
+  "docs/99_V2_HANDOFF_NEXT_CHAT.md": {
+    "path": "docs/continuity/history/account-contact-catalog-before-20261124/docs/99_V2_HANDOFF_NEXT_CHAT.md",
+    "bytes": 10658,
+    "sha256": "2a5e06cecb03af46522ae4ed336029f71d0d536316ca2ec15e655406b8683d2e"
+  },
+  "docs/continuity/HOSTED_PORTAL.md": {
+    "path": "docs/continuity/history/account-contact-catalog-before-20261124/docs/continuity/HOSTED_PORTAL.md",
+    "bytes": 1856,
+    "sha256": "090ee1621a396f2b9488ddc3a56a02ab321da4f0e85207b93a0084ad3f3f6378"
+  }
+}

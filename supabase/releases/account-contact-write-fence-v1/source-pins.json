@@ -1,0 +1,47 @@
+{
+  "supabase/repairs/20261108_horse_publication/06_contact.sql": {
+    "bytes": 11972,
+    "sha256": "8bf0dab59f31ccf1d876699278603f242eabedc8d39145e2e2d56240ebb40a95",
+    "git_blob": "5ddd6768e833b121f8d48ed9ed01110b4c5673eb"
+  },
+  "supabase/repairs/20261116_jobs_public/08_message_context.sql": {
+    "bytes": 4056,
+    "sha256": "f05704a544840ea0b6c2464bf5c7ae117c3ca7180599ff350e4eddd61f22443d",
+    "git_blob": "b675c3c9e383736c30d4a62df4ea35b79c56d625"
+  },
+  "supabase/labs/listing-contact-integration-v1/01_contact.sql": {
+    "bytes": 25990,
+    "sha256": "6b24aa74ff6b60d9ca3b677a74740a5e043043908e1fa0818b4af6910742c08c",
+    "git_blob": "0cbc8979c6d07cef05105d7a319c82a6dab7e766"
+  },
+  "supabase/repairs/20261030_messaging_restore/changes.sql": {
+    "bytes": 51805,
+    "sha256": "eaa813d5cee8ad9514f3e1de9bafb6a4c5f9cacebb1a96ef957fc08951dac883",
+    "git_blob": "1bbf603017f48e3d67a443223fa88e73ab0c56a8"
+  },
+  "supabase/releases/listing-publication-hosted-preview-v1/40_read_models_and_owner.sql": {
+    "bytes": 167562,
+    "sha256": "d19bf23e0746e8e6ba6750f4c235135fbaa9cff3b3f184e05a87433c10eaad78",
+    "git_blob": "ef3cb9b4226eb674719d18cc4cbf822dc8381f0f"
+  },
+  "supabase/repairs/20261029_listing_message_cards/tests/fixtures/accepted-contact-fix.sql": {
+    "bytes": 14477,
+    "sha256": "aaed21297cb61c9e9d76d74e19b973bfd745d401ca431bfd31ec095c13d3bd7b",
+    "git_blob": "ad3a951202119c735161f694daff5daf180adc8f"
+  },
+  "supabase/repairs/20261108_service_publication/07_contact.sql": {
+    "bytes": 11754,
+    "sha256": "dc13f1215ca767887fc6cd4abafaf21b54ca1a629319b96fc031dc5e64ccdd64",
+    "git_blob": "a751c9db3423917a38b64de76392becf8287ba22"
+  },
+  "supabase/repairs/20261116_jobs_public/07_contact.sql": {
+    "bytes": 7283,
+    "sha256": "335838ac9c47b22e924bf0c698c042e47f595113d39b0dd1c217f38651fc6a79",
+    "git_blob": "30986bfc0732813359818dd8d056c4b6ddcf9b81"
+  },
+  "supabase/repairs/20261121_personal_jobs/05_contact.sql": {
+    "bytes": 1415,
+    "sha256": "ff5cb538ebd415adbc4e0d3166b08e2634bb2dae75ea439c1b2cc7520dc0dec3",
+    "git_blob": "c706230b15d82534149f355c2507c28b6e33778e"
+  }
+}

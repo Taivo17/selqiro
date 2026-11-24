@@ -1,0 +1,174 @@
+{
+  "format": "selqiro-account-next-source-audit-v1",
+  "review_date": "2026-11-24",
+  "timezone": "Europe/Tallinn",
+  "source_commit": "e336a5b9d02845c688def778babeac0f1e3fec95",
+  "source_tree": "7734a70aa174b25b2ce5cc85aca3c0fa4e628624",
+  "source_inventory_sha256": "1a5b9ae1ba4f7adb69ec6d06a9b97ff83de0bf2e88d66f558819daa58b91242a",
+  "report_sha256": "76ee0b1d3dc42838b7ddcafec65c4903638da50adb43a90cff1a271f6f97c629",
+  "recommended_next_action": "Järgmine kontoelutsükli alametapp on uue kontakti ja sõnumi kontoõiguse ühine piir: tegutseja ning saaja konto kättesaadavus serveris/andmebaasis, aktiivse teise osapoole senise ajaloo ja korduskviitungite säilitamine. Enne SQL-paketi koostamist täpsustada ainult selle piiri puuduva live-eelseisu funktsiooni- ja õigusepinnid; konto sulgemist veel ei aktiveerita.",
+  "suggested_module": "account-contact-send-availability-v1",
+  "priority_order": [
+    "kontoelutsükli tervik",
+    "jälgitavate poodide/profiilide Uudised",
+    "kuulutuste esiletõstmine",
+    "reklaamid"
+  ],
+  "user_priority_source": "Kasutaja jooksva vestluse 24.11.2026 täpsustus: Uudised koondab jälgimisnimekirja poodide uusi kuulutusi ja teateid ning on oluline tagasituleku põhjus. See prioriteeditäpsustus ei ole veel e336a5b lähtepuus.",
+  "already_present": [
+    "Vastu võetud active-only kontooleku vundament ja Minu konto lugemine.",
+    "Kanooniline konto kättesaadavuse helper ning nimetatud avalike profiili-, tavakuulutuse-, hobuse-, profiili turuploki-, teenuse- ja töölugejate etappide kaupa lisatud kontrollid. See ei tõenda kõigi vanade otseteede täielikku katvust.",
+    "Kontakti ja sõnumi olemasolevad konto/identiteedi, liikmesuse, blokeeringu ja korduskviitungi lepingud.",
+    "Tööde värske raport kaitseb muu hulgas jobs_private.contact_snapshot ja public.contact_my_job_provider_v1 keha; shared contact-helperite tervik sellest ei järeldu."
+  ],
+  "source_gaps": [
+    "Vaadatud require_peer lähtekehas puudub account_lifecycle_private.account_is_available kontroll; hosted actor fixture suunab publication actor helperisse. See on lähtekoodileid, mitte värske täielik live-assertsioon.",
+    "Uue kontakti/saatmise lubatavus tuleb eristada ajaloo exact_thread liikmesusest. Saaja konto piirang ei tohi eemaldada mõlema osapoole seoseid ega blokeerida aktiivse osapoole senise ajaloo lugemist.",
+    "Shared actor helperit kasutavad ka ajaloo lugemise ja pilditoimingute teed. Enne ühise helperi muutmist tuleb liigitada ainult selle mõjuala kutsujad; helperi pime asendamine ei ole kavand.",
+    "Olemasoleva request_key korduskviitungi lugemine tuleb eristada uuest kirjutusest. Saaja hilisem piirang ei tohi põhjustada uut sõnumit ega kviitungi kaotamist."
+  ],
+  "missing_live_evidence": [
+    {
+      "scope": "listing_contact_private.require_actor_hosted_v1(uuid,uuid) ja listing_contact_private.require_peer(uuid,uuid)",
+      "needed": "Praegused keharäsid, signatuurid, omanik, SECURITY DEFINER, search_path/config, ACL ja kutsumise õigused; vajadusel ainult täpse mittevastava keha eraldi lugemine.",
+      "reason": "22.11 põhikataloogi 11 funktsiooni ega 24.11 job-read kataloogi fikseeritud funktsiooniloend ei kata neid shared-helper-eid. Vana lähtefail/fixture ei tõenda tänast live-seisu."
+    },
+    {
+      "scope": "Valitud contact/send piiri otsesed kutsujad ja kirjutuskaitsed",
+      "needed": "Ainult selle muudatuse eelseisu sobivus: contact/send RPC-de definitsioonipinnid ja seotud otsesed triggeri/RLS/ACL väravad. Kasutada juba vastu võetud job-contact pinne; juurde küsida ainult nende puuduvaid sõltuvusi.",
+      "reason": "Public-read raport ja edukas avalik leht ei tõenda otsese suhtluse kirjutuse konto piiri ega shared-helperi muutuse mõju ajaloo õigustele."
+    }
+  ],
+  "manual_evidence_limit": "Kasutaja kontrollis olemasolevat ettevõtte aktiivset töökuulutust ja teatas aktiivse eraisiku töökuulutuse puudumisest. Selles käigus puudub aktiivse eraisiku töö päris brauseritee tõend; uut sisu ega kontot selleks ei nõuta. See ei ole shared contact-helperite live-tõendi asendus ega vastuvõetud public-job mooduli uus blokeering.",
+  "closure_activation_allowed": false,
+  "remaining_closure_gates": [
+    "ülejäänud kirjutused ja välise töö lõplik sidumine/avaldamine",
+    "sõnumimanused ja meedia tegelik kättesaadavus, sh varasemad avalikud URL-id",
+    "kehtivad ja vanad sessioonid ning värske sama konto autentimistõend",
+    "sulgemise/taastamise võistlused ja lõpetamata toimingute kviitungid",
+    "registreerimise/profiili algloomise ühine kontooleku piir"
+  ],
+  "evidence_boundary": "Ainult vastu võetud lähtefailide ning olemasolevate dokumentide/raporti offline audit. Ei uut liveDB-kataloogi, teste, buildi, rakenduse RPC-sid, SQL-i, kontomuutusi, remote-i ega brauserikäiku. Kirjutatud ainult auditiväljundid; valminud runnerreview jäi muutmata.",
+  "files": [
+    {
+      "path": "docs/architecture/account-model-lifecycle-20261122.md",
+      "bytes": 10511,
+      "sha256": "e93bf3bccfb4d8bc50ef3ca7a9ababaa2912b1a0125ba3501164fca18df7c596",
+      "git_blob": "ae07b2cd3f75776f2ac0bdd0f57231c96a329c1e",
+      "git_mode": "100644",
+      "purpose": "Ühe valitud profiili ulatus, lõpetatud põhikataloog ja e-posti paus."
+    },
+    {
+      "path": "docs/continuity/ACCOUNT_CATALOG_ACCEPTED_20261122.md",
+      "bytes": 1881,
+      "sha256": "583328099cbe99b851ee7dad9379240922e2e6060bde3dbca45715cc7cf4ee84",
+      "git_blob": "2a9d443f2ec338956cc8ea65f19b78b40ac904c1",
+      "git_mode": "100644",
+      "purpose": "22.11 põhikataloogi tegelik ulatus; sama kontrolli ei korrata."
+    },
+    {
+      "path": "docs/architecture/account-state-accepted-20261123.md",
+      "bytes": 4823,
+      "sha256": "68204482a9b1b559c45b21d978a742a2a8d1b0970a1185f08d9235b6ef679f91",
+      "git_blob": "1ac8b1cb2346056cceb32a63a2b8ae1c6d240a92",
+      "git_mode": "100644",
+      "purpose": "Vastu võetud active-only kontoolek."
+    },
+    {
+      "path": "docs/architecture/account-lifecycle-audit-20261122.md",
+      "bytes": 12762,
+      "sha256": "06080a8a9f02d1fa86f94990a65d5ad75c78244d74e287645ac1e53c3de7ee3a",
+      "git_blob": "936521c1d634711b7f47167f6e1e3c5e831daf48",
+      "git_mode": "100644",
+      "purpose": "Vestluse mõlema osapoole seoste säilitamine; vana NEXT on aegunud."
+    },
+    {
+      "path": "docs/architecture/account-lifecycle-server-contract-v1.md",
+      "bytes": 14398,
+      "sha256": "d4637a290364c160208ff44d7c337e165b28ae78d916d7d0798339b4938d60dd",
+      "git_blob": "50b3453913df677965b78111f1b826b90285c107",
+      "git_mode": "100644",
+      "purpose": "Uue suhtluse ja senise ajaloo eristus; sulgemise eeltingimused."
+    },
+    {
+      "path": "docs/architecture/account-lifecycle-verification-plan-v1.md",
+      "bytes": 10167,
+      "sha256": "e1e6b59fa69df1c92aa92a0325e904946f25a2a5406a1d013aead86124fc10b3",
+      "git_blob": "a8e4717236a3f882884f3a63d6154c9601649e02",
+      "git_mode": "100644",
+      "purpose": "Sulgemise täiendavad väravad; vana diagnostika käsk on aegunud."
+    },
+    {
+      "path": "docs/architecture/account-job-read-next-20261124.md",
+      "bytes": 9865,
+      "sha256": "1a57709c46b5456e9bf4f09a80023101688cb6814a6a8d59a9a5ef9499517636",
+      "git_blob": "5eb2cab26d83e0045e7110fd91ef56d29e4f7f06",
+      "git_mode": "100644",
+      "purpose": "Tööde lugemise järel katmata kontoelutsükli piirid."
+    },
+    {
+      "path": "docs/architecture/account-job-read-fence-v1.md",
+      "bytes": 8852,
+      "sha256": "ab574d2cb46891cef987ae654e760aa847548e4f3ea107e4e7a641a8ffbab666",
+      "git_blob": "f2540c0c6c1823cd9301ec412ad095ecdff650a0",
+      "git_mode": "100644",
+      "purpose": "Täpne lugemismuudatus; kontakt ja is_public jäid muutmata."
+    },
+    {
+      "path": "supabase/releases/account-public-profile-fence-v1/account-availability.sql",
+      "bytes": 836,
+      "sha256": "da26cf792b337adf41a77cc2144a4738d1a405dd122ff9e20c47dc1c82e72930",
+      "git_blob": "554e04f19281dbace6b90e00fb63ed0b62c8010d",
+      "git_mode": "100644",
+      "purpose": "Olemasolev konto aktiivsuse ja Auth kättesaadavuse lugemisreegel."
+    },
+    {
+      "path": "supabase/repairs/20261116_jobs_public/07_contact.sql",
+      "bytes": 7283,
+      "sha256": "335838ac9c47b22e924bf0c698c042e47f595113d39b0dd1c217f38651fc6a79",
+      "git_blob": "30986bfc0732813359818dd8d056c4b6ddcf9b81",
+      "git_mode": "100644",
+      "purpose": "Job-contact actor/peer kontroll ja eraldi korduskviitungi haru."
+    },
+    {
+      "path": "supabase/repairs/20261121_personal_jobs/05_contact.sql",
+      "bytes": 1415,
+      "sha256": "ff5cb538ebd415adbc4e0d3166b08e2634bb2dae75ea439c1b2cc7520dc0dec3",
+      "git_blob": "c706230b15d82534149f355c2507c28b6e33778e",
+      "git_mode": "100644",
+      "purpose": "Privaatse või ettevõtte töö kanooniline konto/identiteet kontaktiks."
+    },
+    {
+      "path": "supabase/labs/listing-contact-integration-v1/01_contact.sql",
+      "bytes": 25990,
+      "sha256": "6b24aa74ff6b60d9ca3b677a74740a5e043043908e1fa0818b4af6910742c08c",
+      "git_blob": "0cbc8979c6d07cef05105d7a319c82a6dab7e766",
+      "git_mode": "100644",
+      "purpose": "Require_peer lähtekehas pole eraldi kontoelutsükli kontrolli."
+    },
+    {
+      "path": "supabase/repairs/20261029_listing_message_cards/tests/fixtures/accepted-contact-fix.sql",
+      "bytes": 14477,
+      "sha256": "aaed21297cb61c9e9d76d74e19b973bfd745d401ca431bfd31ec095c13d3bd7b",
+      "git_blob": "ad3a951202119c735161f694daff5daf180adc8f",
+      "git_mode": "100644",
+      "purpose": "Ajaloolise aktsepteeritud contact paranduse fixture: hosted actor wrapper ja õigused; pole värske live-vaatlus."
+    },
+    {
+      "path": "supabase/repairs/20261030_messaging_restore/changes.sql",
+      "bytes": 51805,
+      "sha256": "eaa813d5cee8ad9514f3e1de9bafb6a4c5f9cacebb1a96ef957fc08951dac883",
+      "git_blob": "1bbf603017f48e3d67a443223fa88e73ab0c56a8",
+      "git_mode": "100644",
+      "purpose": "Exact_thread liikmesus, send_my_message_v2 actor/peer ja korduskviitung."
+    },
+    {
+      "path": "supabase/releases/account-job-read-fence-v1/catalog-query.sql",
+      "bytes": 44205,
+      "sha256": "41d121bfc8970dab6322f28704d39dcb0ace9ba549cb205d3fc5155acb4b34e8",
+      "git_blob": "9035e260d3fe02d447ccffe771d9e1592bbb8f8d",
+      "git_mode": "100644",
+      "purpose": "Värske job-read kataloogi fikseeritud funktsiooniulatus; shared actor/peer ei kuulu siia."
+    }
+  ]
+}

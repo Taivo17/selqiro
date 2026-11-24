@@ -1,0 +1,73 @@
+<!-- GENERATED from docs/continuity/CURRENT_STATE.json; do not edit independently. -->
+# Selqiro — praegune tööüleandmine
+
+Seisukirje: 24.11.2026 Europe/Tallinn — e336a5b vastu võetud; Uudised on põhifunktsioon enne esiletõstmist ja reklaame
+
+## Praegune checkpoint
+
+Töökuulutuste avaliku lugemise konto kontroll e336a5b on vastu võetud. Maci raporti 12 testi, build, üks kinnitatud SQL rakendamine, eraldi verify ja commit/push vastavad väljastatud paketile. Sama commit on pildil Ready / Production; olemasoleva ettevõtte tööpakkumise otsing, üksikvaade ja profiililoend avanevad. Eraisiku aktiivset pakkumist kasutaja teatel pole ning seda veebijuhtu ei testitud. Uudiste roll ja olemasolev lähtealus on dokumenteeritud; uut uudisvoogu selles vastuvõtus ei paigaldatud.
+
+## Lähtekood ja tõendi piir
+
+- **Vastu võetud alus:** main e336a5b9d02845c688def778babeac0f1e3fec95; puu 7734a70aa174b25b2ce5cc85aca3c0fa4e628624; 2253 jälgitavat faili. Eraldatud lähtekoopia vastab täpsetele SHA-256, Git blob ja režiimi kirjetele. See on raportiga seotud taastatud allikas, mitte uus Maci või remote’i vaatlus.
+- **Aluse tõend:** selqiro-too-konto-olek-20261124-raport-20261124-162634-8fdb9330d5e6.json; 1367929 baiti; SHA256 76ee0b1d3dc42838b7ddcafec65c4903638da50adb43a90cff1a271f6f97c629. Raporti run_id/package_sha256 vastavad manifestile 29afa6977d0e5097b1082bee9bb16dd9218c89816c5de1b93f3f2b54c23a250d. Originaalraport ja väljastatud ZIP säilivad muutmata.
+- **Inventar:** review/runner/accepted-inventory.json; SHA256 1a5b9ae1ba4f7adb69ec6d06a9b97ff83de0bf2e88d66f558819daa58b91242a. Paketi 33 teed: 7 muudetud dokumenti ja 26 uut dokumentatsiooni-, SQL- ning testifaili. Rakenduse senine kliendikood ja sõltuvused säilisid.
+- **Rakendatud piir:** jobs_private.visible_to_viewer(uuid) ja get_public_profile_jobs_v1(text,integer,jsonb) kasutavad sama account_lifecycle_private.account_is_available(uuid) allikat. Eraisiku kanooniline omanik on identities.user_id; ettevõttel business_accounts.owner_user_id.
+- **Säilivad lepingud:** Otsingu ja detaili senised funktsioonikehad, sisendid, cursor, tähtajad, task/job liigid, poliitika, kontakt ja owner-listi lukuvaba lugemine säilivad. Profiili kättesaamatu vastus on null-identiteet ning tühi loend. is_public, kirjutused, otseõigused, kontakt/sõnumid ja meedia vajavad kontoelutsükli ülejäänud tööd.
+- **SQL tõendi piir:** Eelkontroll before, üks acknowledged apply after ja eraldi verify after vastavad väljastatud SQL-ile ning rangele parserile. Taastatud stdout-ümbriste pikkused/räsid kattuvad raportiga; toorlogi, argv või toorkataloogi eksporti ei ole. Uut live-päringut vastuvõtul ei tehtud.
+- **Uudiste tegelik seis:** V2 päise news-link viib /v2 avalehele; V2 avaliku profiili Jälgi nupp on ühendamata; profiili kaks teadet on staatilised näited. Varasem /feed ja store_follows alus on olemas. Nende olemasolu ei tähenda valmis V2 uudisvoogu ega värskelt kontrollitud live-andmebaasi lepingut.
+- **Uudiste eesmärk:** Kasutaja näeb tema enda jälgitud poodide/profiilide uusi avalikke kuulutusi ning nende avaldatud teateid. See on põhiosalus ja naasmise põhjus, mitte esiletõstmise või reklaamide osa. Täpne olemasolev alus, kavand ja allikapinnid on followed-news-plan-20261124 failides.
+- **Dokumentatsioon:** See vastuvõtt, genereeritud üleandmine ja päevikulisad on eraldi valmis järgmise sisulise koodipaketi jaoks. Pärast e336a5b pole neid Maci kirjutatud, commit’itud ega pushitud. Väljastatud pakette ei muudeta.
+
+## Tegelik kohalik katse
+
+- Vastuvõtul kontrolliti olemasolevat raportit, muutmata väljastatud paketti ja lähteinventari. Rakenduse teste, build’i, SQL-i, paigaldajat ega teenuste ühendusi ei korratud.
+- Maci raport: 12/12 nõutud TAP-testi, 0 viga/vahelejäetut; edukas Next.js 16.4.6 build ja 8 koostatud väljundi räsi. Täielikke Maci TAP/build’i tekste ei ole üles laaditud; parsitud tulemused on seotud kontrollitud runner’i, sisendite ning väljundiräsidega.
+- 570 lõpetatud käsukirjet; 564 teadaolevat Giti stdout-väljundit taastati ning pikkused/räsid kattusid. Üks SQL rakendamine oli kinnitatud, sõltumatu verify lõppes enne stage/commit/push’i. Eelmise eduka teenuste käigu originaalraporti read-only lukk ja säilimine on raportis kinnitatud.
+- Ettevalmistuse varasem eraldatud tõend säilib: 12 kliendijuhtumit, 6 juhitud hook’i juhtumit, 22 native-vastuse juhtu, 4 eraldi oodatud tagasilükkamist, 60 PostgreSQL-i kontrolli, 29 uuendaja kontrolli ja värske build. Need ei asenda puuduva eraisiku aktiivse pakkumise päris veebikontrolli.
+- Jõudluse piirid säilivad: sünteetilisel 5500 tööga alusel filtreeritud otsing 500 konto kontrolliga ligikaudu 31,21 → 79,99 ms; 200 tööga profiil 201 kontrolliga 19,75 → 36,00 ms. Varasema 5500 teenuse filtrita otsingu mediaan oli 566,67 → 1105,46 ms. Need on üksikklienti kasutavad sünteetilised katsed, mitte suurmahu või samaaegsuse vastuvõtt.
+
+## Production / kasutajaliides
+
+- Kasutaja Verceli pildil on e336a5b, Ready / praegune Production, main, 24 s. Raporti algne vercel=READY_NOT_CHECKED säilib; deployment’i tõend on eraldi pilt.
+- Kolm sisupilti näitavad Milline Vedu ettevõtte pakkumist „Muruniiduki operaator” otsingus, üksikvaates ja avalikul profiilil. Vaataja aktiivne profiil on Taivo Garaaž. See ei tõenda eraisikust avaldaja aktiivset pakkumist, anonüümset jagamist, kontakti saatmist ega järgmist lehte.
+- Kasutaja: „Eraisiku aktiivset töökuulutust hetkel ei ole.” Seis: not_tested_no_existing_active_content. Selle vastuvõtu jaoks ei nõuta uue testkuulutuse loomist.
+- Viies pilt näitab avalehte ja Uudised menüüpunkti, mitte töötavat personaalset uudisvoogu. Profiili Viimased teated näited pole päris teadete avaldamise tõend.
+- Varasemad a9d86e6 teenuste, 0cb3484 profiili kuulutuste/rubriikide, ac5521a hobuste, 87bff3f tavakuulutuste, 8dc0b3b profiili ja 4b60782 Minu konto etapid säilivad vastu võetuna.
+
+## Üks järgmine töö
+
+Järgmine kontoelutsükli alametapp on uue kontakti ja sõnumi kontoõiguse ühine piir: tegutseja ning saaja konto kättesaadavus serveris/andmebaasis, aktiivse teise osapoole senise ajaloo ja korduskviitungite säilitamine. Enne SQL-paketi koostamist täpsustada ainult selle piiri puuduva live-eelseisu funktsiooni- ja õigusepinnid; konto sulgemist veel ei aktiveerita. Täpne piir ja allikapinnid on docs/architecture/account-next-after-job-read-20261124.md-s. Praeguse vastuvõtu jaoks pole uut käsku ega kordustesti vaja. Konto sulgemise/taastamise/kustutamise tervik → jälgitavate poodide ja profiilide Uudised → kuulutuste esiletõstmine → reklaamid.
+
+**Peatumisel:** Enne järgmist Maci kirjutust kontrolli tegelikku haru, HEAD-i, tööpuud/indexit, allikaid, kinnitatud remote’i, viimast originaalraportit ja muutuse SQL eelseisu värskelt. Tundmatu seis peatab kirjutuse. Lõpetatud uuendajat ei korrata. Kontod, sisu, paketid, kviitungid ja päevikud säilivad.
+
+## Loe ainult vajalikku
+
+- docs/continuity/HOSTED_PORTAL.md — vastuvõtu seis; uut käivituskäsku pole.
+- docs/architecture/account-job-read-accepted-20261124.md — raporti, lähtepuu, SQL-i, deployment’i ja veebipiltide eraldi tõendid.
+- docs/architecture/account-next-after-job-read-20261124.md — kontoelutsükli üks järgmine piir; audit ei ole teostus.
+- docs/architecture/followed-news-plan-20261124.md — kasutaja määratud Uudiste eesmärk, tegelik lähtealus ja rakendamisjärjekord.
+- docs/architecture/account-job-read-fence-v1.md — rakendatud tööde lugemise leping ja jõudluse piirid.
+
+## Säilivad piirid
+
+- Kolm kontot kuuluvad kasutajale; ainult ühel on kaks identiteeti. Uus konto valib eraisiku VÕI ettevõtte. Mitme identiteedi ning ettevõtte töötajate/rollide/omandi üleandmise iseteenindus ei ole avamisulatus.
+- Olemasolevaid kontosid, profiile, kuulutusi, pilte, vestlusi, Energy andmeid, kviitungeid ega päevikuid ei kustutata ega kirjutata ümber. Konto active-only alus säilib. Sulgemine, taastamine ja lõppkustutamine vajavad ülejäänud lugemiste, otseõiguste, kirjutuste, sõnumite ja meedia tervikut.
+- E-posti aktiveerimine jääb põhidomeeni selqiro.com kasutuselevõtu juurde. Saatmine, kinnitamine ja parooli taastamine peavad olema lõpuni kontrollitud enne väliseid testijaid või avalikku registreerimist ka vercel.app aadressil.
+- Kasutajale kuuluvad ka selqiro.app/.io ja selkiro.com/.app/.io. Domeeni valikut uuesti ei küsita; DNS-i selles sammus ei muudeta.
+- AI päringuteed jäävad suletuks. Tavaline osalemine ei sõltu Energy ostust. Riigipõhised töökuulutuse poliitikad ja senised avaldamise/vestluse lepingud säilivad.
+- Konto sulgemise/taastamise/kustutamise tervik → jälgitavate poodide ja profiilide Uudised → kuulutuste esiletõstmine → reklaamid. Reklaamija võib kasutada sama kontot ilma avaliku müüjaprofiilita; reklaamimine ei ole kolmas kontotüüp.
+- Uudised koondab ainult kasutaja valitud jälgitavate poodide/profiilide sisu. Eraisiku ja ettevõtte tavapärane osalemine säilib. Uue kuulutuse avaldamist, olemasoleva muutmist/pikendamist ja eraldi teadet ei käsitleta automaatselt ühe ja sama uue sündmusena.
+- Uudiste lahendus peab olema serveris piiratud ja indekseeritud lehekülgedega. Kogu jälgimisnimekirja või kogu voo brauserisse laadimine ei ole uue V2 lahenduse alus. Suurt samaaegsust ei loeta tõendatuks väikese kasutustee ega ühe kliendi sünteetilise katse põhjal.
+
+## Keskkond
+
+- /Users/taivo/selqiro; https://github.com/Taivo17/selqiro.git. Vastu võetud alus e336a5b9d02845c688def778babeac0f1e3fec95; puu 7734a70aa174b25b2ce5cc85aca3c0fa4e628624; 2253 faili. Viimane raportiga kinnitatud remote’i vaatlus lõppes 24.11.2026 kell 16:26:34.457 Europe/Tallinn. See pole uus Git-päring.
+- Next 16.4.6, Sharp 0.35.5, package.json ja lukufail säilisid. Raportis on olemasolev Supabase CLI 2.117.0 ja projekt vyjletlmwoiwxsnsunlm. Sõltuvusi, SMTP-d, Authi ega DNS-i ei seadistatud.
+- Viimane originaalraport: ~/Library/Application Support/Selqiro/account-job-read-20261124/29afa6977d0e5097b1082bee9bb16dd9218c89816c5de1b93f3f2b54c23a250d/result.json. Säilita originaal ning saadetud Downloads-koopia. Järgmine pakett seotakse just selle kinnitatud alusega.
+
+## Ajalugu (mitte praegused käsud)
+
+Vana sisenemisleht: `docs/archive/99_V2_HANDOFF_NEXT_CHAT.before-price-core-20261004-6df0af9.md`.
+Kõik 5573 algset rida säilivad bait-baidilt; SHA-256 `667e47990a7d3cc20ff53709cb861663b4565cf1d3c830eda88e0d18e60fdb8a`.
+Vanade failide NEXT/CURRENT pealkirjad ei ole tänased käivitamisjuhised.

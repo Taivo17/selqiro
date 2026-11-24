@@ -8299,3 +8299,86 @@ Uus moodul lisab ühise konto kontrolli tööde viewer-helperile ja profiili tö
 Üks selle versiooni kohaliku Chromiumi käivituskatse peatus enne lehe loomist: socket() failed: Operation not permitted. Brauseriväiteid 0; päris kontosid ei kasutatud. Käivitust ei korratud lisalippude või teise ligipääsuteega. Tegelik veebikontroll jääb pärast sama uue commit’i Ready / Production tulemust kasutaja Macis teha.
 
 Maci rakendus, üks SQL tehing, commit/push ning sama versiooni Ready ja tegelik kasutuskontroll on ootel. Kadunud SQL kinnitust ei asenda ainult järelseisu vastavus: uus uuendaja peatub enne commit/push’i. Juhis: docs/continuity/HOSTED_PORTAL.md. Arhitektuur: docs/architecture/account-job-read-fence-v1.md. SMTP paus ning konto tervik → esiletõstmine → reklaamid järjekord säilivad.
+
+
+## 24.11.2026 — töökuulutuste konto kontroll e336a5b vastu võetud; Uudiste prioriteet
+
+Vastu võetud alus on e336a5b9d02845c688def778babeac0f1e3fec95, puu
+7734a70aa174b25b2ce5cc85aca3c0fa4e628624, 2253 jälgitavat faili. Maci
+raport kinnitab 12/12 testi, Next.js 16.4.6 build’i, ühte kahe funktsiooni
+SQL rakendamist koos COMMIT-järgse kinnituse ja eraldi verify-ga ning
+commit/push’i. Sama commit on kasutaja pildil Ready / Production.
+
+Pildid näitavad ettevõtte Milline Vedu tööpakkumist „Muruniiduki operaator”
+otsingus, üksikvaates ja avalikul profiilil. Vaataja on Taivo Garaaž.
+Kasutaja teatel pole praegu aktiivset eraisiku töökuulutust: see veebijuht
+on kontrollimata, selle jaoks uut sisu ei nõuta. Pilte ei laiendata kontakti,
+anonüümse jagamise, järgmise lehe ega konto sulgemise kontrolliks.
+
+jobs_private.visible_to_viewer ja get_public_profile_jobs_v1 arvestavad
+kanoonilise omaniku konto kättesaadavust sama account_is_available allika
+kaudu. Otsingu/detaili/poliitika/kontakti/omaniku halduse lepingud säilivad.
+Konto- ja sisuridu ei muudetud; sulgemist, taastamist ega lõppkustutamist
+ei aktiveeritud. E-posti paus ja senised avamiseelsed tingimused säilivad.
+
+Kasutaja 24.11 täpsustus: Uudised koondab tema jälgimisnimekirja lisatud
+poodide/profiilide uusi kuulutusi ja teateid ning on üks portaali põhilisi
+naasmise põhjuseid. Uuendatud tööjärg on kontoelutsükli tervik → Uudised →
+kuulutuste esiletõstmine → reklaamid. Uudised on tavapärane põhiosalus.
+
+Lähtekoodi audit: V2 news-link viib /v2 avalehele, profiili Jälgi nupp ei
+salvesta jälgimist ja kaks Viimased teated kirjet on staatilised näited.
+V1 /feed ning store_follows alus on olemas, kuid vanad päringud, õigused
+ja konto kättesaadavus vajavad enne taaskasutust eraldi kontrolli. Uus V2
+voog peab olema serveris piiratud, indekseeritud ja cursor-lehitsetav;
+kogu jälgimisnimekirja brauserisse lugemine ei ole selle lähtealus.
+
+Järgmise kontoetapi täpne piir on account-next-after-job-read-20261124.md-s.
+Uudiste allikapõhine kavand ja pinnid on followed-news-plan-20261124 failides.
+Need on auditid ja kavand, mitte uued kasutusele võetud funktsioonid.
+
+Varasemad sünteetiliste töö-/teenusepäringute jõudluse piirid säilivad;
+toimiva väikese kasutustee põhjal ei kinnitata suurt samaaegset koormust.
+Täpsed tõendid ja nende piirid on account-job-read-accepted-20261124.md-s.
+Vastuvõtul teste, build’i, SQL-i ega uuendajat ei korratud. Dokumendid on
+eraldi ette valmistatud järgmise sisulise koodipaketi jaoks; pärast e336a5b
+pole neid Maci kirjutatud ega commit/push tehtud. Vanu pakette ei muudeta.
+
+
+## 24.11.2026 — suhtluse kontoõiguse eelseis ja Uudiste koondplokid
+
+- Tootmise vastu võetud alus jääb e336a5b9d02845c688def778babeac0f1e3fec95.
+- Valmis on eraldi ainult lugemise pakett selqiro-suhtluse-konto-kontroll-20261124;
+  üks kitsas metadata päring, range parser, eelneva originaalraporti read-only lukk,
+  aluspuu/indexi enne-pärast võrdlus ja unikaalne saadetav raport. Live-raport ootel.
+- Kontakti/saatmise õiguste SQL-i veel ei muudeta ega konto sulgemist aktiveerita.
+- Uudiste ettepanek: üks profiil ühe valitud perioodi plokis, kuni 4 kuulutuse
+  eelvaadet ning Vaata kõiki sama perioodi kogu. Uus teade jääb eraldi nähtavale.
+  7 päeva pakutav algvaade ei peida ajalugu jäädavalt; vanemad perioodid avanevad.
+  Uued lisamised ei nihuta vaadet ise ning 4 eelvaadet ei märgi kõiki kirjeid loetuks.
+- Uudiste kood pole paigaldatud. Järjekord: konto elutsükkel → Uudised →
+  esiletõstmine → reklaamid. Varasemad paketid, raportid ja tootmise allikas säilivad.
+
+
+## 24.11.2026 — suhtluse diagnostika peatumine ja v2 parandus
+
+- V1 kontroll peatus kell 18:17:14.685: CLI_EXECUTION_FAILED; üks päring, exit 1.
+- Enne päringut vastasid e336 aluspuu/index/remote ning olemasolev CLI/projekt;
+  eelmise eduka originaalraporti säilimine kinnitati. Kataloogi ega järelkontrolli tulemust ei saadud.
+- Leiti ja korrati eraldatud PostgreSQL-is WHEN NEW tingimuse pg_get_expr viga.
+  V2 kasutab tingimuspuu DB-sisest räsi, piiratud veaklassifikatsiooni ja vea järel allikakontrolli.
+- Uus ainus käivitatav pakett: selqiro-suhtluse-konto-kontrolli-parandus-20261124. Maci/live-tulemus on ootel.
+- Vana vea täpne serveriteade puudub; kohalik reproduktsioon ei asenda puuduvat live-tõendit.
+- Tootmise alus, varasemad paketid ja raportid säilivad. Konto sulgemine ja Uudised pole aktiveeritud.
+- Uudiste nelja eelvaate kavand ning tööjärg konto → Uudised → esiletõstmine → reklaamid säilivad.
+
+
+## 24.11.2026 — suhtluse metaandmed vastu võetud; kirjutuste konto piir ette valmistatud
+
+- Parandatud diagnostika lõppes kell 18:45:39.383 edukalt: üks päring, 29 lõpetatud käsku, sama e336 allikas/index enne ja pärast.
+- 20 täpset funktsioonikeha, konfiguratsioonid ja õigused sobitati olemasoleva koodiga. Varasemad diagnostikad on lõpetatud ajalugu.
+- Uus eraldatud moodul: 4 kontakti + 2 saatmist + vana sõnumi INSERT-kaitse ning üks uus privaatne konto paari kontroll.
+- Olemasolevad korduskviitungid ja ajaloo osalus säilivad; shared actor/peer ja fotoreserveerimine jäävad samaks.
+- Konto active-only mudel säilib. Sulgemist, taastamist, lõppkustutamist ega e-posti aktiveerimist ei tehta.
+- Ettevalmistuse kontrollid läbitud; Maci kirjutus/commit/push, Verceli tulemus ja kasutaja veebikontroll on ootel.
+- Ainus järgmine pakett: selqiro-suhtluse-konto-olek-20261124. Uudiste nelja eelvaate kavand ja tööjärg konto → Uudised → esiletõstmine → reklaamid säilivad.
