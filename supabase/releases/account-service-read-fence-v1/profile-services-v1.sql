@@ -1,0 +1,123 @@
+-- Account gate only; retained visibility, finality, order and output contract.
+CREATE OR REPLACE FUNCTION public.get_public_profile_services_v1(
+  p_seller_slug text,
+  p_result_limit integer DEFAULT 80
+)
+RETURNS jsonb
+LANGUAGE plpgsql STABLE SECURITY DEFINER
+SET search_path=pg_catalog,public,auth,pg_temp
+SET plan_cache_mode=force_custom_plan
+SET timezone='UTC'
+AS $fn$
+DECLARE
+  profile_identities uuid[];
+  identity_value uuid;
+  account_owner uuid;
+  read_time timestamptz := now();
+  result jsonb;
+BEGIN
+  IF p_seller_slug IS NULL OR char_length(p_seller_slug)<1
+     OR char_length(p_seller_slug)>160 OR p_seller_slug<>btrim(p_seller_slug) THEN
+    RAISE EXCEPTION 'public_profile_slug_invalid' USING ERRCODE='22023';
+  END IF;
+  IF p_result_limit IS NULL OR p_result_limit<1 OR p_result_limit>80 THEN
+    RAISE EXCEPTION 'public_profile_limit_invalid' USING ERRCODE='22023';
+  END IF;
+
+  -- Two matches are enough to reject an ambiguous legacy slug. Resolve once in
+  -- this statement snapshot; active-owner state never changes the public scope.
+  SELECT array_agg(candidate.identity_id) INTO profile_identities
+  FROM (
+    SELECT ip.identity_id
+    FROM public.identity_profiles ip
+    JOIN public.identities i ON i.id=ip.identity_id AND i.status='active'
+    WHERE ip.slug=p_seller_slug
+    LIMIT 2
+  ) candidate;
+  IF cardinality(profile_identities)=1 THEN
+    identity_value := profile_identities[1];
+  END IF;
+
+  -- Only the canonical account of the one resolved active profile may expose content.
+  IF identity_value IS NOT NULL THEN
+    SELECT CASE WHEN account_identity.type='private' THEN account_identity.user_id
+      WHEN account_identity.type='business' THEN account_business.owner_user_id END
+    INTO account_owner
+    FROM public.identities account_identity
+    LEFT JOIN public.business_accounts account_business ON account_business.id=account_identity.business_account_id
+    WHERE account_identity.id=identity_value;
+    IF NOT account_lifecycle_private.account_is_available(account_owner) THEN identity_value:=NULL;END IF;
+  END IF;
+
+  WITH page AS MATERIALIZED (
+    SELECT s.id,s.identity_id,s.title,s.description,s.category,s.subcategory,
+      s.image_url,s.price_amount,s.currency,s.price_type,s.country,s.city,
+      s.location,s.status,s.sort_order,s.published_at,s.created_at,s.updated_at
+    FROM public.services s
+    WHERE s.identity_id=identity_value AND service_publication_private.is_public(s.id) AND service_publication_private.visible_to_viewer(s.id)
+    ORDER BY s.created_at DESC,s.id ASC
+    LIMIT p_result_limit
+  ), cards AS (
+    SELECT p.sort_order,p.created_at,p.id,
+      jsonb_build_object(
+        'id',p.id::text,
+        'identity_id',p.identity_id::text,
+        'title',p.title,
+        'description',p.description,
+        'category',p.category,
+        'subcategory',p.subcategory,
+        'image_url',p.image_url,
+        'price_amount',p.price_amount::text,
+        'currency',p.currency,
+        'price_type',p.price_type,
+        'country',p.country,
+        'city',p.city,
+        'location',p.location,
+        'status',p.status,
+        'sort_order',p.sort_order,
+        'published_at',p.published_at,
+        'created_at',p.created_at,
+        'updated_at',p.updated_at,
+        'images',coalesce(gallery.images,'[]'::jsonb)
+      ) AS card
+    FROM page p
+    LEFT JOIN LATERAL (
+      SELECT jsonb_agg(
+        jsonb_build_object(
+          'id',image.id::text,
+          'identity_id',image.identity_id::text,
+          'service_id',image.service_id::text,
+          'original_url',image.original_url,
+          'medium_url',image.medium_url,
+          'thumb_url',image.thumb_url,
+          'sort_order',image.sort_order,
+          'is_primary',image.is_primary,
+          'created_at',image.created_at
+        ) ORDER BY image.is_primary DESC,image.sort_order ASC,
+          image.created_at ASC,image.id ASC
+      ) AS images
+      FROM (
+        SELECT si.id,si.identity_id,si.service_id,si.original_url,si.medium_url,
+          si.thumb_url,si.sort_order,si.is_primary,si.created_at
+        FROM public.service_images si
+        WHERE si.service_id=p.id AND si.identity_id=identity_value
+        ORDER BY si.is_primary DESC,si.sort_order ASC,si.created_at ASC,si.id ASC
+        LIMIT 10
+      ) image
+    ) gallery ON true
+  )
+  SELECT jsonb_build_object(
+    'schema_version',1,
+    'content_scope','public_profile_services',
+    'seller_slug',p_seller_slug,
+    'identity_id',identity_value::text,
+    'profile_available',identity_value IS NOT NULL,
+    'result_limit',p_result_limit,
+    'read_at',read_time,
+    'items',coalesce((
+      SELECT jsonb_agg(c.card ORDER BY c.created_at DESC,c.id ASC)
+      FROM cards c
+    ),'[]'::jsonb)
+  ) INTO result;
+  RETURN result;
+END $fn$;

@@ -2726,3 +2726,52 @@ Maci rakendus, üks SQL tehing, commit/push ja sama uue versiooni Ready / Produc
 ning tegelik kasutuskontroll on ootel. Juhis: docs/continuity/HOSTED_PORTAL.md.
 Arhitektuur: docs/architecture/account-profile-marketplace-read-fence-v1.md.
 SMTP paus ja konto tervik → esiletõstmine → reklaamid säilivad.
+
+
+## 24.11.2026 — profiili kuulutuste/rubriikide konto kontroll 0cb3484 vastu võetud
+
+Maci raport kinnitab 17/17 testi, Next.js 16.4.6 build’i, ühte kolme funktsiooni
+SQL rakendamist koos eraldi verify-ga ning main commit/push’i:
+0cb3484675ac9267a0f9d7f52f6e3dbff5074d1a. Puu
+6d213969675d86eea8e2ff56b99f9a232715b3a8, 2202 faili. Sama commit’i Verceli
+Ready / Production ning kasutaja „testimisel kõik töötab” on eraldi kinnitused.
+
+Konto kättesaadavuse kontroll katab nüüd profiili marketplace v1/v2 ning
+marketplace/services poerubriikide v2 lugeja. Üks kontroll leitud profiili
+kanoonilise omaniku kontole; senised sisu- ja vastuselepingud säilivad.
+Kontosid ja sisu ei kustutatud; konto sulgemine/taastamine/lõppkustutamine pole
+veel aktiveeritud. E-posti kinnitamise ja domeeni varasem järjekord säilib.
+
+Järgmine üks moodul: teenuste avalik lugemine — visible_to_viewer(uuid)
+konto kontroll ning profiiliteenuste v1/v2 varane omaniku kontroll.
+Lähtekoodiaudit on account-service-read-next-20261124.md-s; teostust ega uut
+paigaldajat veel ei ole. Kliendi konto päringuid või uusi ärireegleid ei kavandata.
+Teenuste päringuplaanid ja helperi kutsete arv vajavad sihitud kontrolli;
+seniste laiade kandidaat-/rubriigipäringute mastaapsust ei loeta lahendatuks.
+
+Vastuvõtu tõendipiirid: account-profile-marketplace-read-accepted-20261124.md.
+Raport sisaldab parsitud tulemusi ja väljundiräsisid, mitte kogu käsuargv-d,
+TAP/build’i teksti või toorkataloogi. Uut Maci/pilvekäiku, testi ega build’i ei
+tehtud. Vastuvõtudokumendid on ette valmistatud järgmise sisulise koodipaketi
+jaoks; pärast 0cb3484 pole neid Maci kirjutatud ega commit/push tehtud.
+
+
+## 24.11.2026 — teenuste kontooleku lugemiskontroll ette valmistatud
+
+Alus main `0cb3484675ac9267a0f9d7f52f6e3dbff5074d1a`, puu `6d213969675d86eea8e2ff56b99f9a232715b3a8`, 2202 faili. Eelmine profiili kuulutuste/rubriikide etapp on raporti, Ready / Production pildi ja kasutaja „testimisel kõik töötab” järgi vastu võetud.
+
+Uus moodul lisab konto kontrolli teenuste visible_to_viewer helperile ja profiiliteenuste v1/v2 eellugemisele. Olemasolev kontooleku allikas, vastuselepingud, kontakti/meedia ja kirjutajate reeglid säilivad. Konto sulgemist/kustutamist ei aktiveerita.
+
+15/15 uut sihitud kliendikontrolli läbisid muutmata TypeScripti parserite/API-dega; 41 allikapinni säilisid. Lisaks läbis 8 juhitud hook’i juhtumit (19 pinni) ning 20 eraldatud PostgreSQL-i aktiivse või piiratud omaniku vastuse päris parsimist (12 parseripinni). Kolm puuduva slugi/null-kutsuja identiteedi juhtu lükati sisendiveana õigesti tagasi; neid ei loeta edukaks vastuseparsimiseks. Hook’i katse pole React DOM ega brauser. Rakenduskood ja sõltuvused säilisid.
+
+51/51 uut native PostgreSQL 17.6 kontrolli läbisid: eraisiku/ettevõtte kanooniline omanik, puuduv/keelatud konto või Auth-kirje, detail, otsing, profiili v1/v2, teenuserubriigid, kahepoolne blokeerimine, lõplikkus, aegumine, õigused ja leheküljed. Üks tegelik kaitstud apply koos COMMIT-järgse kviitungi ning eraldi verify-ga läbis; tundmatu eelseis ja katkine tehing peatusid. Sünteetiliste ridade sõrmejäljed säilisid ning katseklaster peatati. Kataloogiootused on allikast ja eraldatud PostgreSQL-ist; Maci live-eelseis vajab värsket vastavust.
+
+Vana/uue lugemise 28 võrdlusjuhtumis ja 168 ajastatud kutses säilis sama tehingu aktiivne JSON-vastus. Katse kasvas 24 teenuselt 500 sobiva teenuseni ning lisas 5000 kõrvalist kontot/teenust. Filtreeritud otsing tegi ka pärast kõrvalist kasvu 500 uut konto kontrolli; 200 teenusega profiil 201 ja üksikvaade 1. Konto ja Auth-kirje kontroll kasutab PK-indekseid. 5500 kandidaadiga filtrita otsingu mediaan 566.67 → 1105.46 ms (5500 uut konto kontrolli): see on mõõdetav lisakulu. Mõlema versiooni senine filtreeritud otsing skaneeris 5500 teenust ja eemaldas 5000; konto kontroll ei tekitanud uut globaalset kontode skanni. 77 valitud plaani on eraldi tõend, mitte ajaproov. Ühe kliendi sünteetiline katse ei kinnita productioni RPC aegumispiiri, samaaegset koormust ega suurt mahtu. Päringu kandidaatide/omanike koondamise optimeerimine jääb eraldi tööks enne suure kasutusmahu kinnitamist.
+
+Üks uus täielik Next.js 16.4.6 / TypeScript 5.9.3 build läbis 33.23 sekundiga. Kõik 765 sisendit säilisid, samuti package.json, lukufail ja rakenduskood. Kasutati olemasolevaid täpseid sõltuvusi ja inertseid kohalikke koostamisseadeid; valmis teenuste otsingu, üksikvaate ja avaliku profiili väljundid. Maci build ja deployment on eraldi järgmised tõendid.
+
+20/20 uut Maci uuendaja juhtumit läbisid 21.094 sekundiga; 43 sisendit säilisid. Ajutine päris Git-hoidla, kohalik bare-remote ja piiratud oma alamprotsessid kontrollisid järjestust ning peatumist. Selle katse runtime-proov, CLI, SQL ja build olid sünteetilised. Seitse senist protsessi/Giti/sõltuvuse helperit jäid baiditäpseks. See pole Maci ega pilveteenuse käivitus; vanu laiu suite’e ei korratud.
+
+Uue versiooni päris brauserikontroll on ootel sama uue commit’i Ready / Production järel. Siin ei käivitatud uut brauserikatset ega kasutatud päris kontosid. Varasem kohaliku brauseri socket-piir on ajalooline tõend, mitte tänane katse. Kliendi/hook’i/SQL kontrollid ei tõenda hydration’it ega päris teenuse kasutusteed.
+
+Maci rakendus, SQL tehing, commit/push ning sama versiooni Ready ja tegelik kasutuskontroll on ootel. Juhis: docs/continuity/HOSTED_PORTAL.md. Arhitektuur: docs/architecture/account-service-read-fence-v1.md. SMTP paus ning konto tervik → esiletõstmine → reklaamid järjekord säilivad.

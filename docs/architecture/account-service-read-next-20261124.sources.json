@@ -1,0 +1,588 @@
+{
+  "format": "selqiro-account-service-read-next-source-audit-v1",
+  "result": "SOURCE_AUDIT_COMPLETE",
+  "recorded_at_utc": "2026-11-24T12:28:21.644929+00:00",
+  "source_root": "/workspace/scratch/de90fa9e1734/work/account-profile-marketplace-read-20261124/source",
+  "expected_accepted_commit": "0cb3484675ac9267a0f9d7f52f6e3dbff5074d1a",
+  "expected_accepted_tree": "6d213969675d86eea8e2ff56b99f9a232715b3a8",
+  "expected_source_count": 2202,
+  "recommendation": {
+    "module": "account-service-public-read-fence-v1",
+    "mutate_only_functions": [
+      "service_publication_private.visible_to_viewer(uuid)",
+      "public.get_public_profile_services_v1(text,integer)",
+      "public.get_public_profile_services_v2(text,uuid,integer,integer)"
+    ],
+    "account_source": "account_lifecycle_private.account_is_available(uuid)",
+    "application_changes_planned": false,
+    "rows_changed": false,
+    "source_only": true
+  },
+  "function_inventory": [
+    {
+      "name": "service_publication_private.visible_to_viewer",
+      "signature": "service_publication_private.visible_to_viewer(uuid)",
+      "role": "planned change: canonical owner account gate with existing bilateral owner block check",
+      "source": "supabase/repairs/20261108_service_publication/06_reads_status.sql",
+      "start_line": 66,
+      "end_line": 74,
+      "source_statement_sha256": "262b24e20536c1335d5022be6b77e14802d662b683df4655ca65a54252e45a36",
+      "body_sha256": "96121dd7db7e3bc416ee16810e15bc3835b3be5cf6825e6e06185f3b7b1c6c57"
+    },
+    {
+      "name": "public.get_public_profile_services_v1",
+      "signature": "public.get_public_profile_services_v1(text,integer)",
+      "role": "planned change: early canonical owner account gate; exact v1 envelope and newest order retained",
+      "source": "supabase/repairs/20261109_service_profile_polish/01_service_order.sql",
+      "start_line": 19,
+      "end_line": 128,
+      "source_statement_sha256": "223292a9a3166c0eabdc946da7fc3f7a4132cd2884a0267522b6dca2b97f97e2",
+      "body_sha256": "07c11ff9cf1d1ed5bf61eefbb35bd1b3a8d51d458e2a2040542ca049ffba5335"
+    },
+    {
+      "name": "public.get_public_profile_services_v2",
+      "signature": "public.get_public_profile_services_v2(text,uuid,integer,integer)",
+      "role": "planned change: early canonical owner account gate; category tree/count/page envelope retained",
+      "source": "supabase/repairs/20261111_service_store_categories/02_profile_services.sql",
+      "start_line": 1,
+      "end_line": 136,
+      "source_statement_sha256": "d50ee4193dc5c84f8a84bf65f677ebc2d78e74afbf2133f1a29ea888da3f20ea",
+      "body_sha256": "f2b495aed7bac1a5167bfe79752a5e76b8e4998e7c5d46b53e6e09575127ead0"
+    },
+    {
+      "name": "public.get_public_service_v1",
+      "signature": "public.get_public_service_v1(uuid)",
+      "role": "unchanged reader inherits visible_to_viewer gate",
+      "source": "supabase/repairs/20261108_service_publication/06_reads_status.sql",
+      "start_line": 75,
+      "end_line": 78,
+      "source_statement_sha256": "7e80073ad8c20c7610811b4150c6ff0214490724898c56bf50c769bee962d5b7",
+      "body_sha256": "3b8b8e318ce910074c5ae95103d2c30b2d29ad203895c5d3d7f93090df44b10b"
+    },
+    {
+      "name": "public.search_public_services_v1",
+      "signature": "public.search_public_services_v1(text,text,text,text,text,integer,integer)",
+      "role": "unchanged latest search includes viewer-hidden-provider exclusion; inherits gate",
+      "source": "supabase/repairs/20261113_provider_controls/08_search_services.sql",
+      "start_line": 1,
+      "end_line": 23,
+      "source_statement_sha256": "1eb81c73eeb44a1522edb0562dc6300275c9303f2f9e62934840f817abb4b7e1",
+      "body_sha256": "d0a518d7e344a8f3aa61f5422897c38d733cd68968dfc838add4f77f2b7b6cf6"
+    },
+    {
+      "name": "public.get_public_profile_store_categories_v2",
+      "signature": "public.get_public_profile_store_categories_v2(text,text,integer,integer)",
+      "role": "unchanged current reader already has early owner account gate; service branch also inherits helper",
+      "source": "supabase/releases/account-profile-marketplace-read-fence-v1/profile-store-categories-v2.sql",
+      "start_line": 2,
+      "end_line": 91,
+      "source_statement_sha256": "95093d49de95c30c560198212dbe3359268bcc4ab8a7daa0bad77805572eb8c8",
+      "body_sha256": "1dda01a878491d43b724b9af6747ce98920dbff43d897820281d243bfcb9a28c"
+    },
+    {
+      "name": "service_publication_private.is_public",
+      "signature": "service_publication_private.is_public(uuid)",
+      "role": "unchanged 365-day activity/publication/finality predicate; also contact/media/provider-target dependency",
+      "source": "supabase/repairs/20261111_service_activity/01_state.sql",
+      "start_line": 54,
+      "end_line": 62,
+      "source_statement_sha256": "475a5af9e0619c810e84ef148471165a819de2eee56b6d3d92e9d86d4513051b",
+      "body_sha256": "91de9608312b7f86448fe66b839bee2758a0dc9aef9b09596295f6d296c1fa91"
+    },
+    {
+      "name": "service_publication_private.public_fields",
+      "signature": "service_publication_private.public_fields(public.services)",
+      "role": "unchanged public card projection",
+      "source": "supabase/repairs/20261108_service_publication/06_reads_status.sql",
+      "start_line": 53,
+      "end_line": 65,
+      "source_statement_sha256": "694af77134309281e8963f9f266fa4ddbe6ef99f1e08d9d846cf94d96d1bbce5",
+      "body_sha256": "6f4709a715ae5cc22b544c4e882c742abaef51689bd0d619f146c361829ad081"
+    },
+    {
+      "name": "account_lifecycle_private.account_is_available",
+      "signature": "account_lifecycle_private.account_is_available(uuid)",
+      "role": "unchanged canonical account availability",
+      "source": "supabase/releases/account-public-profile-fence-v1/account-availability.sql",
+      "start_line": 2,
+      "end_line": 20,
+      "source_statement_sha256": "2a4f547184c3a356c58166ee93536eea28b31efc66dcf3ca651c0e89fe84cc98",
+      "body_sha256": "48cca55f640923a39723e34a1034695f06affb874efde6af1d8bc0103f5d112d"
+    },
+    {
+      "name": "service_publication_private.contact_snapshot",
+      "signature": "service_publication_private.contact_snapshot(uuid)",
+      "role": "unchanged contact writer dependency with is_public and row locks; not visible_to_viewer",
+      "source": "supabase/repairs/20261108_service_publication/07_contact.sql",
+      "start_line": 26,
+      "end_line": 42,
+      "source_statement_sha256": "ee0ce1e22b1948fc1bc68432f2c870c226c93eab67ff9eb4dc840eb912548a6c",
+      "body_sha256": "3f4e78bea70510eb6c7625bbff483c07b6587fdda7fe9056f45653fbb4d794f5"
+    },
+    {
+      "name": "service_publication_private.media_binding",
+      "signature": "service_publication_private.media_binding(uuid,integer,boolean,uuid)",
+      "role": "unchanged media gate uses is_public, separate owner branch",
+      "source": "supabase/repairs/20261108_service_publication/05_media_bridge.sql",
+      "start_line": 53,
+      "end_line": 77,
+      "source_statement_sha256": "e0bd2cacdd8df23bcfa3601c6787f489abf673bbada2ee27310e1abf36bd8520",
+      "body_sha256": "e991655208792f052d314e83feabfe1f4535fdd2dd9ed13b4b02a83406302790"
+    }
+  ],
+  "already_pinned_dependency_metadata": [
+    {
+      "name": "service_publication_private.visible_to_viewer",
+      "owner": "postgres",
+      "grants": [
+        {
+          "role": "postgres",
+          "grantable": false,
+          "privilege": "EXECUTE"
+        },
+        {
+          "role": "selqiro_listing_final_writer_v1",
+          "grantable": false,
+          "privilege": "EXECUTE"
+        }
+      ],
+      "result": "boolean",
+      "strict": false,
+      "definer": true,
+      "defaults": false,
+      "language": "sql",
+      "parallel": "u",
+      "arguments": [
+        "uuid"
+      ],
+      "leakproof": false,
+      "volatility": "s",
+      "body_sha256": "96121dd7db7e3bc416ee16810e15bc3835b3be5cf6825e6e06185f3b7b1c6c57",
+      "config_sha256": "8a99ef30e82bf63f97a0f2bb54e5484d1b27779ff3d93cad1079c2934c2485a6",
+      "definition_sha256": "dc4391bcd27abb653cb3b472fee7a40a38da49fabfb93c0cd7df34a8eca3cd53"
+    },
+    {
+      "name": "service_publication_private.is_public",
+      "owner": "postgres",
+      "grants": [
+        {
+          "role": "postgres",
+          "grantable": false,
+          "privilege": "EXECUTE"
+        },
+        {
+          "role": "selqiro_listing_final_writer_v1",
+          "grantable": false,
+          "privilege": "EXECUTE"
+        }
+      ],
+      "result": "boolean",
+      "strict": false,
+      "definer": true,
+      "defaults": false,
+      "language": "sql",
+      "parallel": "u",
+      "arguments": [
+        "uuid"
+      ],
+      "leakproof": false,
+      "volatility": "s",
+      "body_sha256": "91de9608312b7f86448fe66b839bee2758a0dc9aef9b09596295f6d296c1fa91",
+      "config_sha256": "8a99ef30e82bf63f97a0f2bb54e5484d1b27779ff3d93cad1079c2934c2485a6",
+      "definition_sha256": "3578dc473ce8f4e28e76e9314016abec973cfe51957885b07937897b0186a27e"
+    }
+  ],
+  "call_paths": [
+    {
+      "surface": "V2 search",
+      "chain": [
+        "app/v2/services/page.tsx",
+        "components/v2/services/V2ServicesPage.tsx",
+        "src/features/service-navigation/model/useServiceDiscoveryView.ts",
+        "src/features/service-detail/model/usePublicServiceSearch.ts",
+        "src/entities/service/api/getPublicService.ts"
+      ],
+      "rpc": "public.search_public_services_v1",
+      "account_gate": "planned shared visible_to_viewer"
+    },
+    {
+      "surface": "V2 detail",
+      "chain": [
+        "app/v2/service/[id]/page.tsx",
+        "src/features/service-detail/components/ServiceDetailPage.tsx",
+        "src/entities/service/api/getPublicService.ts"
+      ],
+      "rpc": "public.get_public_service_v1",
+      "account_gate": "planned shared visible_to_viewer"
+    },
+    {
+      "surface": "Anonymous sharing preview / route metadata",
+      "chain": [
+        "app/v2/service/[id]/page.tsx",
+        "src/server/sharing/anonymousOfferPreview.ts"
+      ],
+      "rpc": "public.get_public_service_v1",
+      "account_gate": "planned shared visible_to_viewer; anonymous public key, no service/user credential"
+    },
+    {
+      "surface": "Current public profile services",
+      "chain": [
+        "src/features/public-profile/components/PublicProfilePage.tsx",
+        "src/features/public-profile/components/PublicProfileServicesSection.tsx",
+        "src/features/public-profile/model/usePublicProfileServiceView.ts",
+        "src/features/public-profile/model/usePublicProfileServicePage.ts",
+        "src/entities/service/api/getPublicProfileServices.ts"
+      ],
+      "rpc": "public.get_public_profile_services_v2",
+      "account_gate": "planned early profile-owner gate plus shared per-service viewer gate"
+    },
+    {
+      "surface": "Retained v1 client API",
+      "chain": [
+        "src/features/public-profile/model/usePublicProfileServices.ts",
+        "src/entities/service/api/getPublicServices.ts"
+      ],
+      "rpc": "public.get_public_profile_services_v1",
+      "account_gate": "planned early profile-owner gate; retained hook has no current component import found"
+    },
+    {
+      "surface": "Integration-disabled retained API branch",
+      "chain": [
+        "src/entities/service/api/getPublicServices.ts",
+        "src/shared/config/v2Integration.ts"
+      ],
+      "rpc": null,
+      "account_gate": "direct services/service_images table branch; not fixed by helper; source ACL revokes public/anon/authenticated table access"
+    }
+  ],
+  "notes": [
+    "Scope is a source audit and design proposal only; no service implementation, installer, tests, build, network or live database command executed.",
+    "Expected next accepted baseline is supplied by parent report review: commit 0cb3484675ac9267a0f9d7f52f6e3dbff5074d1a, tree 6d213969675d86eea8e2ff56b99f9a232715b3a8, 2202 files. Parent owns complete acceptance/report verification.",
+    "The audited 0cb3484 source tree CURRENT_STATE contains the package preparation checkpoint; the separate acceptance overlay updates that checkpoint. These source-tree continuity files are pinned as audited history, not a command to rerun the accepted package. SERVICE_ACCESS is dated 2026-10-27 and is not current deployment proof.",
+    "A private helper change alone removes service cards but leaves both service profile envelopes profile_available=true and identity_id populated for an otherwise active identity. Early profile gates are therefore part of the same proposed bounded module.",
+    "Do not modify is_public: it also gates new contacts, media bindings and provider target resolution. These semantics and existing replay/history remain separate work.",
+    "Read fences do not alter service_role direct table privileges, BYPASSRLS, owner writes, existing public Storage URLs, already downloaded content or all account lifecycle paths.",
+    "No million-user readiness claim: service search still builds a materialized eligible candidate set and exact total before pagination; arbitrary token substring filters and lower(city/country) are not proven to use the baseline discovery index.",
+    "Fresh next-package verification must confirm exact new baseline Git/worktree/index/remote/dependencies, previous original receipt and current catalog before writes; released packages and logs remain immutable."
+  ],
+  "files": {
+    "AGENTS.md": {
+      "group": "instructions",
+      "bytes": 327,
+      "sha256": "e3447d84251880fb34cfae09131cb4c57471529bbfe60976a3245793cf621627",
+      "git_blob_sha1": "8bd0e39085d5260e7f8faffcad2fdc45e10aef33"
+    },
+    "docs/continuity/CURRENT_STATE.json": {
+      "group": "instructions",
+      "bytes": 11387,
+      "sha256": "5f0b10a6fabb13948041b8d836de7f5c178f954573c91562ea2411100978ed37",
+      "git_blob_sha1": "b29aa076517ea3ab0c6c85859a5ab3544adbb260"
+    },
+    "docs/99_V2_HANDOFF_NEXT_CHAT.md": {
+      "group": "instructions",
+      "bytes": 11490,
+      "sha256": "c61a0932f2272c1f72254e35a05f607f893e1870bae70e5725bdbbf519ceb68b",
+      "git_blob_sha1": "cdd68aa632e9b3adfdfdcda039413cd3a3b2ee14"
+    },
+    "docs/continuity/HOSTED_PORTAL.md": {
+      "group": "instructions",
+      "bytes": 2887,
+      "sha256": "2246f6368b835a3e615e972817260292069f2ce760ac85e4598e1a3961c61eb3",
+      "git_blob_sha1": "a7772fa9d9f032bc35d5f43c6d5dfb5f9c39cc47"
+    },
+    "docs/continuity/SERVICE_ACCESS.json": {
+      "group": "instructions",
+      "bytes": 17197,
+      "sha256": "c5bbf8f5adea91c4f046a982e3c42eea485fb38fcd253b1f28ebb104bec895eb",
+      "git_blob_sha1": "3db859c2a581250165f723b4a04d515db4cbbb01"
+    },
+    "docs/03_AI_RULES.md": {
+      "group": "instructions",
+      "bytes": 1719,
+      "sha256": "599725bd440a2a3ade4fd283706b7b487c0c0b99c673b5e6e98036dbc1a3e84d",
+      "git_blob_sha1": "03faf3a51d32455f4464accddad5be29e1e5b0cf"
+    },
+    "docs/00_PROJECT_DNA.md": {
+      "group": "instructions",
+      "bytes": 2895,
+      "sha256": "9ab06606f3cf139cb186a8947f352e20245c9188671404921b65241a100dea01",
+      "git_blob_sha1": "0063d59e27f29b01694e7b24aa603b21e05b52b6"
+    },
+    "docs/architecture/account-model-lifecycle-20261122.md": {
+      "group": "architecture",
+      "bytes": 10511,
+      "sha256": "e93bf3bccfb4d8bc50ef3ca7a9ababaa2912b1a0125ba3501164fca18df7c596",
+      "git_blob_sha1": "ae07b2cd3f75776f2ac0bdd0f57231c96a329c1e"
+    },
+    "docs/architecture/account-lifecycle-server-contract-v1.md": {
+      "group": "architecture",
+      "bytes": 14398,
+      "sha256": "d4637a290364c160208ff44d7c337e165b28ae78d916d7d0798339b4938d60dd",
+      "git_blob_sha1": "50b3453913df677965b78111f1b826b90285c107"
+    },
+    "docs/architecture/service-publication-v1.md": {
+      "group": "architecture",
+      "bytes": 10897,
+      "sha256": "ef8774195bf19a7f1232e8d972a38229e126b4f4cec5b6eb55c61cb52ae014de",
+      "git_blob_sha1": "6f8cc9f78caed465939d740441d17940c2ddd81f"
+    },
+    "docs/architecture/service-activity-v1.md": {
+      "group": "architecture",
+      "bytes": 8468,
+      "sha256": "ea6fa4f46c52066cc4466a86beb4ca689c95a06cafdadd57c8c04a14066da26e",
+      "git_blob_sha1": "84cc5b4ef580500fcd56a3d5cdca27eeb02a8a11"
+    },
+    "docs/architecture/service-store-category-assignment-v1.md": {
+      "group": "architecture",
+      "bytes": 8695,
+      "sha256": "83b7fae5f2050eb17a54dcb299e59ebafcd08c595d158868d3b10c615019fd92",
+      "git_blob_sha1": "3e93fbffa093f489ba083c735b5f8e70f979fc4c"
+    },
+    "docs/architecture/account-profile-marketplace-read-fence-v1.md": {
+      "group": "architecture",
+      "bytes": 9988,
+      "sha256": "ed10f8d4a6c1201bee4e4162f7103953da3d43fe7e2e3d6e1cbb35402fa35ec9",
+      "git_blob_sha1": "5675da8425c7d8a98fdb8f3a176f976b8febc62c"
+    },
+    "supabase/repairs/20261108_service_publication/02_content.sql": {
+      "group": "sql",
+      "bytes": 11827,
+      "sha256": "6cd60b1e773ba394574c0c3cbbcca98bb25e09bc47d0e07543ac666c31f305de",
+      "git_blob_sha1": "dccc700fc7c395d001d737371eaffd7835236754"
+    },
+    "supabase/repairs/20261108_service_publication/05_media_bridge.sql": {
+      "group": "sql",
+      "bytes": 38179,
+      "sha256": "bd20070e61ebdfe5990e17213a21351e0fe369780634af0a6355620d263c6532",
+      "git_blob_sha1": "dc08b8f3bbbdbd74cf329b15cf34adeed6608723"
+    },
+    "supabase/repairs/20261108_service_publication/06_reads_status.sql": {
+      "group": "sql",
+      "bytes": 13324,
+      "sha256": "a41834df2927f690e193b546539390afb72100e292ab617ef8e47aa6a425e95d",
+      "git_blob_sha1": "59332f71d416b9402afa46a25491dc4da51c2f11"
+    },
+    "supabase/repairs/20261108_service_publication/07_contact.sql": {
+      "group": "sql",
+      "bytes": 11754,
+      "sha256": "dc13f1215ca767887fc6cd4abafaf21b54ca1a629319b96fc031dc5e64ccdd64",
+      "git_blob_sha1": "a751c9db3423917a38b64de76392becf8287ba22"
+    },
+    "supabase/repairs/20261108_service_publication/08_authority.sql": {
+      "group": "sql",
+      "bytes": 6375,
+      "sha256": "ef12f384aa3923a7bd9617c3e14a5fc6f78dcb5b4e778ac981ff4769962ebf96",
+      "git_blob_sha1": "35ea7bf69f35c41cc7bff07026522ba2cd19200e"
+    },
+    "supabase/repairs/20261109_service_profile_polish/01_service_order.sql": {
+      "group": "sql",
+      "bytes": 5629,
+      "sha256": "ebe8faf10f65f3f218bcf86ee120c84253e9e335ba262b9e9ff25baec87c3491",
+      "git_blob_sha1": "cdf06f921e63ea0b30e0f9c78659abc0a6607308"
+    },
+    "supabase/repairs/20261111_service_activity/01_state.sql": {
+      "group": "sql",
+      "bytes": 3969,
+      "sha256": "bd8ddfd7b9844bbb52abd2eac60f1017f826df7c31862b0eb1206c15b4b6c061",
+      "git_blob_sha1": "ec65950988f51126652bb03dd96aee70ae8d0241"
+    },
+    "supabase/repairs/20261111_service_store_categories/01_assignments.sql": {
+      "group": "sql",
+      "bytes": 6547,
+      "sha256": "44c90fd4401975aa42ce4f9ce2855bcc39f954b4bae2eb20c59e48ee851c0be5",
+      "git_blob_sha1": "1e6b032ff9d34e5b1e379f180ad05f719ff91026"
+    },
+    "supabase/repairs/20261111_service_store_categories/02_profile_services.sql": {
+      "group": "sql",
+      "bytes": 5983,
+      "sha256": "ed2c30a70caad5727ea1a66cb50094880399bec098686d91b385294c7bae6455",
+      "git_blob_sha1": "ee665e0855c6b69437f6964dc31c1f263968809f"
+    },
+    "supabase/repairs/20261113_provider_controls/02_target.sql": {
+      "group": "sql",
+      "bytes": 6244,
+      "sha256": "83cd2c06b3476c08e2ddc394a81e1ec5dc25e602b5b7841866feae3456733278",
+      "git_blob_sha1": "a3e195439e86005c266e7a4c733a094a06a0077b"
+    },
+    "supabase/repairs/20261113_provider_controls/08_search_services.sql": {
+      "group": "sql",
+      "bytes": 2512,
+      "sha256": "4a5a6917751d13166bde9be1f026fb44afa9ab0292c8a7455cff58e7a64f7337",
+      "git_blob_sha1": "0dc737c152f3452776b8743d6e42f28584565ffb"
+    },
+    "supabase/repairs/20261113_provider_controls/12_block_lookup_index.sql": {
+      "group": "sql",
+      "bytes": 332,
+      "sha256": "8d7fd10278fe5d0646e2afb57350081e3028723de06607b325e05811303599bd",
+      "git_blob_sha1": "aa401c6e62be86f7a990167d611181aba8e0483b"
+    },
+    "supabase/releases/account-profile-marketplace-read-fence-v1/profile-store-categories-v2.sql": {
+      "group": "sql",
+      "bytes": 5220,
+      "sha256": "526a0c3ee68366d4a892ee1d35a9d8ddf44acba2c543f7d5cbb502a5cfaf0ff5",
+      "git_blob_sha1": "5287d6e1fab34d55744b0c1948f5068108b864de"
+    },
+    "supabase/releases/account-profile-marketplace-read-fence-v1/profile-marketplace-v2.sql": {
+      "group": "sql",
+      "bytes": 6947,
+      "sha256": "3847e6c0c2cc4bbd9d02a79e3c54174c1e0bb48765eff752ec7253398e89534f",
+      "git_blob_sha1": "b4802f1fda23b1796fe209b0dc8e00f174f665d9"
+    },
+    "supabase/releases/account-profile-marketplace-read-fence-v1/expected-contract.json": {
+      "group": "sql",
+      "bytes": 103488,
+      "sha256": "349a2683d44dd477fad011582a5c6d58d761621a1840ac07562f47ba6fe30286",
+      "git_blob_sha1": "6a93f01d50d8b17fed02233db88a93a5e0216105"
+    },
+    "supabase/releases/account-public-profile-fence-v1/account-availability.sql": {
+      "group": "sql",
+      "bytes": 836,
+      "sha256": "da26cf792b337adf41a77cc2144a4738d1a405dd122ff9e20c47dc1c82e72930",
+      "git_blob_sha1": "554e04f19281dbace6b90e00fb63ed0b62c8010d"
+    },
+    "supabase/releases/account-state-foundation-v1/foundation.sql": {
+      "group": "sql",
+      "bytes": 2119,
+      "sha256": "3c548bc613ede47edc9c2e71bf16a5858d9c99374dc6b7ad59c1ab4d57706e6a",
+      "git_blob_sha1": "8d86b3916b6e6eca263d891e20c3ac6c61362fb9"
+    },
+    "supabase/migrations/20260722173530_baseline_20260722.sql": {
+      "group": "sql",
+      "bytes": 221677,
+      "sha256": "7ca065f92f01c0f38ada5f5a50d2a0fc5b716f5291d1525d398023b7db59da3f",
+      "git_blob_sha1": "26a83e126ae59783b5cdc39c7df90078a767bf01"
+    },
+    "supabase/migrations/20260805123000_add_service_image_foundation.sql": {
+      "group": "sql",
+      "bytes": 7430,
+      "sha256": "f50d58d913c9f4dd9ed8038bb051c15489099a39840236c7e5f2ed2e5cf52fa9",
+      "git_blob_sha1": "9708028bf4155c2abf962bb508207a4df50adc23"
+    },
+    "src/entities/service/api/getPublicService.ts": {
+      "group": "client",
+      "bytes": 1565,
+      "sha256": "c11a3f0f75985d578d303e832a962dba579991c9e596a25f64741f6012a06d43",
+      "git_blob_sha1": "af98a212f2aa4c95fe31ccd73ffa20a11a5c4746"
+    },
+    "src/entities/service/api/getPublicServices.ts": {
+      "group": "client",
+      "bytes": 12128,
+      "sha256": "8e6164a824adf151587909bc49208ea0f542f324457dfa28e65f706560750934",
+      "git_blob_sha1": "e391c2701bc641ef3926f611604d3730fce437bf"
+    },
+    "src/entities/service/api/getPublicProfileServices.ts": {
+      "group": "client",
+      "bytes": 803,
+      "sha256": "4b182f74412982d431b660938472a2bfaf2db424f573b19a0626c27111a3b1b1",
+      "git_blob_sha1": "9d0433c66005e3d5b03697b5d0008aabd2b3230c"
+    },
+    "src/entities/service/model/publicService.ts": {
+      "group": "client",
+      "bytes": 8551,
+      "sha256": "cfb931c863a0a94e8099e89c210cae029711410daf1cfae8333b599d020d70f6",
+      "git_blob_sha1": "afdaef9938507aafff7ae736ad3f462e41f72782"
+    },
+    "src/entities/service/model/publicProfileServicesV2.ts": {
+      "group": "client",
+      "bytes": 2258,
+      "sha256": "27c67118b257a67f730fc142ee1119ef704f7bb4f942d18622ebc023404a331d",
+      "git_blob_sha1": "3044ba2c5fa2bbd0fef649c50101e2dedc61c8c6"
+    },
+    "src/entities/profile/model/publicProfileOfferingsV1.ts": {
+      "group": "client",
+      "bytes": 9311,
+      "sha256": "80f1a978cfb2df853d6f550d5d89504cd9b9ef96f9e8646d1257d941d2abe1b7",
+      "git_blob_sha1": "ef99b2b3da8f1a0b47479f4d12cec25578403197"
+    },
+    "src/entities/profile/model/publicProfilePage.ts": {
+      "group": "client",
+      "bytes": 2398,
+      "sha256": "9d64c7622d5143d114f067666960a154bb8b892771c6304e1efc60e78d1588b7",
+      "git_blob_sha1": "44ab4e2bd7e0ea52dde2f959eafce8399f0e05f9"
+    },
+    "src/features/public-profile/model/usePublicProfileServicePage.ts": {
+      "group": "client",
+      "bytes": 2033,
+      "sha256": "2e7518c4c979b11573bf57fd0bdac3a9a9f63d18ca371c75ed265191637d6bdc",
+      "git_blob_sha1": "75787ce1dc98ac34b0d8af395d420113391175ff"
+    },
+    "src/features/public-profile/model/usePublicProfileServices.ts": {
+      "group": "client",
+      "bytes": 2493,
+      "sha256": "cb7252502f3ab2683f12801918800ef1d114132dcf281ccd49de447e7a66265f",
+      "git_blob_sha1": "2c0724c0e20783d07d12e0cc119cbd01650bbf2c"
+    },
+    "src/features/public-profile/model/usePublicProfileServiceView.ts": {
+      "group": "client",
+      "bytes": 5995,
+      "sha256": "e5049b0ac7e0c741f5c56f25bf368a91b513b74b88fe00e9c43a99216a8ef3bd",
+      "git_blob_sha1": "dc654811ccd63c1f02d072a659efedba4e57525f"
+    },
+    "src/features/public-profile/components/PublicProfileServicesSection.tsx": {
+      "group": "client",
+      "bytes": 5867,
+      "sha256": "aab55aeda8448f1e9fc9858a6fddc7a84e1bf1eadcdd2e114976dfb298590151",
+      "git_blob_sha1": "846d1cc355be7badd4c8be9f6d588e86ce676b08"
+    },
+    "src/features/public-profile/components/PublicProfilePage.tsx": {
+      "group": "client",
+      "bytes": 14069,
+      "sha256": "eb238d8ce63f62fdb71cc933c15bc63fd836e2e8b32d2c65e601bae4a2dc23ea",
+      "git_blob_sha1": "54dabeb50fce8a82354fa4aa3d11af3d20ed2c18"
+    },
+    "src/features/service-detail/model/usePublicServiceSearch.ts": {
+      "group": "client",
+      "bytes": 4642,
+      "sha256": "54d35727fdb336350aa62ecc3a27adbe55356286b120c7a140dd125c06691776",
+      "git_blob_sha1": "03a35107ded2c3ef9f3c17a78677a93b5b2499fb"
+    },
+    "src/features/service-detail/model/readPublicServiceWindow.ts": {
+      "group": "client",
+      "bytes": 1414,
+      "sha256": "c9f4716161e4383258540bab3759dc017a1771ac0d7ba809dacb175abacb5d8d",
+      "git_blob_sha1": "a165341dce4387f25d44da6b665c27183e39498b"
+    },
+    "src/features/service-detail/components/ServiceDetailPage.tsx": {
+      "group": "client",
+      "bytes": 4709,
+      "sha256": "d1ad416a8cb1c3001f95863c7d17b2e57e83c8b58851cca8447cd2da9a9d3c71",
+      "git_blob_sha1": "432b26083f7a7f6bc281d84cd8f7c09f16488f0b"
+    },
+    "src/features/service-navigation/model/useServiceDiscoveryView.ts": {
+      "group": "client",
+      "bytes": 3339,
+      "sha256": "564db0dc40920dfa37e75b56c8b4cb4fd564d324734f331d4bc43b9ba3f02339",
+      "git_blob_sha1": "35f035faf55c524063112227a08641a988baaf4e"
+    },
+    "src/shared/config/v2Integration.ts": {
+      "group": "client",
+      "bytes": 4214,
+      "sha256": "58b35b9dda018031dd0aec1c66c73a62fd151a3d4d3842edef16f8d74bd2d3e8",
+      "git_blob_sha1": "1406485b42b46faff951c5ccb99b5fe4883b0d26"
+    },
+    "src/server/sharing/anonymousOfferPreview.ts": {
+      "group": "client",
+      "bytes": 5430,
+      "sha256": "863a228649837056feb86487b3dd46aa425c2ceba15854053abc8bb804de0566",
+      "git_blob_sha1": "dcd7f6821bd642499b64e6038f3001dc89978a63"
+    },
+    "components/v2/services/V2ServicesPage.tsx": {
+      "group": "client",
+      "bytes": 6736,
+      "sha256": "c89b2435c9f688e96033cde80a60392eb731b1e4fc05dae3dcd510472ecaa612",
+      "git_blob_sha1": "803c938ae134a06f7024e0757a6f46ece2c14e0b"
+    },
+    "app/v2/services/page.tsx": {
+      "group": "client",
+      "bytes": 255,
+      "sha256": "5e162a9420ff6ffc9ec53ac1a0dc89faa484c48f3f06c1800e3bd56e91f3cc1f",
+      "git_blob_sha1": "5034f7a866b70f7a54bb49f6f70304ae45b7d8c6"
+    },
+    "app/v2/service/[id]/page.tsx": {
+      "group": "client",
+      "bytes": 716,
+      "sha256": "727d5e15a405759256acf17af1a7c1b8590b62e3bbf01d1a3fe8bd398e6afb29",
+      "git_blob_sha1": "d0793b2dc1205126005ae4e87ebe2d01cd3eda5f"
+    }
+  }
+}

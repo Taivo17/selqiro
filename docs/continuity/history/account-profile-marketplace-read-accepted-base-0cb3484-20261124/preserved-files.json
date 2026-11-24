@@ -1,0 +1,17 @@
+{
+  "docs/continuity/CURRENT_STATE.json": {
+    "copy": "docs/continuity/history/account-profile-marketplace-read-accepted-base-0cb3484-20261124/docs/continuity/CURRENT_STATE.json",
+    "bytes": 11387,
+    "sha256": "5f0b10a6fabb13948041b8d836de7f5c178f954573c91562ea2411100978ed37"
+  },
+  "docs/99_V2_HANDOFF_NEXT_CHAT.md": {
+    "copy": "docs/continuity/history/account-profile-marketplace-read-accepted-base-0cb3484-20261124/docs/99_V2_HANDOFF_NEXT_CHAT.md",
+    "bytes": 11490,
+    "sha256": "c61a0932f2272c1f72254e35a05f607f893e1870bae70e5725bdbbf519ceb68b"
+  },
+  "docs/continuity/HOSTED_PORTAL.md": {
+    "copy": "docs/continuity/history/account-profile-marketplace-read-accepted-base-0cb3484-20261124/docs/continuity/HOSTED_PORTAL.md",
+    "bytes": 2887,
+    "sha256": "2246f6368b835a3e615e972817260292069f2ce760ac85e4598e1a3961c61eb3"
+  }
+}

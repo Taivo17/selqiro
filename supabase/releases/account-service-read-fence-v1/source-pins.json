@@ -1,0 +1,83 @@
+{
+  "format": "selqiro-account-service-read-source-pins-v1",
+  "accepted_commit": "0cb3484675ac9267a0f9d7f52f6e3dbff5074d1a",
+  "accepted_tree": "6d213969675d86eea8e2ff56b99f9a232715b3a8",
+  "source_fragments": {
+    "service_publication_private.visible_to_viewer": {
+      "path": "supabase/repairs/20261108_service_publication/06_reads_status.sql",
+      "file_sha256": "a41834df2927f690e193b546539390afb72100e292ab617ef8e47aa6a425e95d",
+      "fragment_sha256": "973c2cb062ac3a63fa6b8275bb56ed758ced50bd9f224c4e574720bdaa2dd8c1",
+      "body_sha256": "96121dd7db7e3bc416ee16810e15bc3835b3be5cf6825e6e06185f3b7b1c6c57"
+    },
+    "public.get_public_profile_services_v1": {
+      "path": "supabase/repairs/20261109_service_profile_polish/01_service_order.sql",
+      "file_sha256": "ebe8faf10f65f3f218bcf86ee120c84253e9e335ba262b9e9ff25baec87c3491",
+      "fragment_sha256": "d9c4f4bbf666d6a8c92aaea1815342771e4b1b9bb5788b99c35ec1a728b75bd8",
+      "body_sha256": "07c11ff9cf1d1ed5bf61eefbb35bd1b3a8d51d458e2a2040542ca049ffba5335"
+    },
+    "public.get_public_profile_services_v2": {
+      "path": "supabase/repairs/20261111_service_store_categories/02_profile_services.sql",
+      "file_sha256": "ed2c30a70caad5727ea1a66cb50094880399bec098686d91b385294c7bae6455",
+      "fragment_sha256": "87ec565db9e69608cd7720912515fab9353cd1e9d3f53b604285b262ff1156ea",
+      "body_sha256": "f2b495aed7bac1a5167bfe79752a5e76b8e4998e7c5d46b53e6e09575127ead0"
+    },
+    "service_publication_private.public_fields": {
+      "path": "supabase/repairs/20261108_service_publication/06_reads_status.sql",
+      "file_sha256": "a41834df2927f690e193b546539390afb72100e292ab617ef8e47aa6a425e95d",
+      "fragment_sha256": "769a90c554d355e0b06ed2a2f828339dc848790f3c0294ab9b139cf4f95cdaeb",
+      "body_sha256": "6f4709a715ae5cc22b544c4e882c742abaef51689bd0d619f146c361829ad081"
+    },
+    "public.get_public_service_v1": {
+      "path": "supabase/repairs/20261108_service_publication/06_reads_status.sql",
+      "file_sha256": "a41834df2927f690e193b546539390afb72100e292ab617ef8e47aa6a425e95d",
+      "fragment_sha256": "48fe59d64c75ba8e1b0894d43949a5763c6e88c3852fc1667ec9236819a79ac1",
+      "body_sha256": "3b8b8e318ce910074c5ae95103d2c30b2d29ad203895c5d3d7f93090df44b10b"
+    },
+    "public.search_public_services_v1": {
+      "path": "supabase/repairs/20261113_provider_controls/08_search_services.sql",
+      "file_sha256": "4a5a6917751d13166bde9be1f026fb44afa9ab0292c8a7455cff58e7a64f7337",
+      "fragment_sha256": "4a5a6917751d13166bde9be1f026fb44afa9ab0292c8a7455cff58e7a64f7337",
+      "body_sha256": "d0a518d7e344a8f3aa61f5422897c38d733cd68968dfc838add4f77f2b7b6cf6"
+    },
+    "service_publication_private.contact_snapshot": {
+      "path": "supabase/repairs/20261108_service_publication/07_contact.sql",
+      "file_sha256": "dc13f1215ca767887fc6cd4abafaf21b54ca1a629319b96fc031dc5e64ccdd64",
+      "fragment_sha256": "7f4baff4234a9fc9ed6a10a7026b73607728429b03d713123272e9315224ed73",
+      "body_sha256": "3f4e78bea70510eb6c7625bbff483c07b6587fdda7fe9056f45653fbb4d794f5"
+    },
+    "service_publication_private.media_binding": {
+      "path": "supabase/repairs/20261108_service_publication/05_media_bridge.sql",
+      "file_sha256": "bd20070e61ebdfe5990e17213a21351e0fe369780634af0a6355620d263c6532",
+      "fragment_sha256": "dcf752fa361d3c850b308b1aac90b44fd35b04476390e081c97413c9e47f8488",
+      "body_sha256": "e991655208792f052d314e83feabfe1f4535fdd2dd9ed13b4b02a83406302790"
+    },
+    "service_publication_private.is_public": {
+      "path": "supabase/repairs/20261111_service_activity/01_state.sql",
+      "file_sha256": "bd8ddfd7b9844bbb52abd2eac60f1017f826df7c31862b0eb1206c15b4b6c061",
+      "fragment_sha256": "6e40fa5bf87a6a4740be4e6cd40af6b7675b76441b6999aff3eadd72bcc24155",
+      "body_sha256": "91de9608312b7f86448fe66b839bee2758a0dc9aef9b09596295f6d296c1fa91"
+    }
+  },
+  "preservation": {
+    "service_publication_private.visible_to_viewer": {
+      "existing_block_predicate_sha256": "d5ff83ee19ed701f68e5bbde36f05d88d9e16f07ce8e9708d7649d3c85b63bcc",
+      "only_account_predicate_inserted": true
+    },
+    "public.get_public_profile_services_v1": {
+      "unique_slug_resolution_sha256": "f6c040d18361ee0a3d88db16767f46b103cb925a186e1d6225b16b2256b388ad",
+      "content_and_wire_tail_bytes": 2700,
+      "content_and_wire_tail_sha256": "e39ccb884c21c13c94bcd4fa8739eb11408f405b84c5ab7f022cd16a2379ad17"
+    },
+    "public.get_public_profile_services_v2": {
+      "unique_slug_resolution_sha256": "f6c040d18361ee0a3d88db16767f46b103cb925a186e1d6225b16b2256b388ad",
+      "content_and_wire_tail_bytes": 3879,
+      "content_and_wire_tail_sha256": "8694f739f11437da9bd9347ec6c71bcf50ca018def95b3ce84b83191a2dace19"
+    }
+  },
+  "accepted_prior_contract_sha256": "349a2683d44dd477fad011582a5c6d58d761621a1840ac07562f47ba6fe30286",
+  "metadata_sha256": "2e8d8024ea2a6deedca2041e0eef9ec7ef0aedde8f2d5ec2c78d5e56a0299beb",
+  "prior_state_boundary": "Exact accepted nested account/profile/listing/horse/profile-marketplace metadata retained. Previously invariant visible_to_viewer moves byte-exactly to the new before target set.",
+  "new_metadata_boundary": "New service profile/detail/search/card definitions, six selected columns, one index and browser table privileges are native/source-derived expectations pending fresh exact Mac preflight.",
+  "fixture_boundary": "Native PostgreSQL with actual retained availability, actor, blocks, service publication/finality/card/category functions. Shared publication FK identity stubs and one synthetic identity display_name default support fixture creation; no writer, Storage, HTTP or email simulation.",
+  "live_observation": false
+}
