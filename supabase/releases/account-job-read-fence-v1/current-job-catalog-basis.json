@@ -1,0 +1,1137 @@
+{
+  "path": "supabase/repairs/20261122_job_owner_read_lock/catalog-pins.json",
+  "file_sha256": "3f4d52e201b04916bf4548dc77b16243cd3007d670c649c6cb7271bb5a3b0988",
+  "after_fingerprint": "0be7544243260b409badb5a5f09dee9308663d089236acdfdef421b34b1173ef",
+  "functions": [
+    {
+      "acl": [
+        {
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "grantable": false,
+          "privilege": "EXECUTE"
+        },
+        {
+          "grantee": "selqiro_listing_contact_writer_v1",
+          "grantor": "postgres",
+          "grantable": false,
+          "privilege": "EXECUTE"
+        }
+      ],
+      "body": "8b4d1cf59af748d02e221d848a8b1fcd51db8b88fe5af18faba9cff35f7358c7",
+      "owner": "postgres",
+      "config": [
+        "search_path=pg_catalog, pg_temp",
+        "TimeZone=UTC"
+      ],
+      "result": "jsonb",
+      "strict": false,
+      "definer": true,
+      "defaults": null,
+      "language": "plpgsql",
+      "parallel": "u",
+      "arguments": [
+        "p_job_id"
+      ],
+      "leakproof": false,
+      "signature": "jobs_private.contact_snapshot(uuid)",
+      "volatility": "v"
+    },
+    {
+      "acl": [
+        {
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "grantable": false,
+          "privilege": "EXECUTE"
+        }
+      ],
+      "body": "05ab495ee689757b17eaf995f30b615efa201c3f0a40e78d6be279b7fa79a2de",
+      "owner": "postgres",
+      "config": [
+        "search_path=pg_catalog, pg_temp",
+        "TimeZone=UTC"
+      ],
+      "result": "jsonb",
+      "strict": false,
+      "definer": false,
+      "defaults": null,
+      "language": "sql",
+      "parallel": "u",
+      "arguments": [
+        "j"
+      ],
+      "leakproof": false,
+      "signature": "jobs_private.content(public.jobs)",
+      "volatility": "i"
+    },
+    {
+      "acl": [
+        {
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "grantable": false,
+          "privilege": "EXECUTE"
+        }
+      ],
+      "body": "660313aae39acfa4dd3e24c8cb47e95043b6a51b1ffeafa77195178b9a6a074f",
+      "owner": "postgres",
+      "config": [
+        "search_path=pg_catalog, pg_temp",
+        "TimeZone=UTC"
+      ],
+      "result": "jsonb",
+      "strict": false,
+      "definer": false,
+      "defaults": null,
+      "language": "plpgsql",
+      "parallel": "u",
+      "arguments": [
+        "p_cursor",
+        "p_time_key"
+      ],
+      "leakproof": false,
+      "signature": "jobs_private.cursor(jsonb,text)",
+      "volatility": "v"
+    },
+    {
+      "acl": [
+        {
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "grantable": false,
+          "privilege": "EXECUTE"
+        }
+      ],
+      "body": "78295a2c9e4ffc9c5b837b17c4ad5d577a5e2564285342b8242df175e286a3c1",
+      "owner": "postgres",
+      "config": [
+        "search_path=pg_catalog, pg_temp",
+        "TimeZone=UTC"
+      ],
+      "result": "boolean",
+      "strict": false,
+      "definer": true,
+      "defaults": null,
+      "language": "sql",
+      "parallel": "u",
+      "arguments": [
+        "j"
+      ],
+      "leakproof": false,
+      "signature": "jobs_private.is_public(public.jobs)",
+      "volatility": "s"
+    },
+    {
+      "acl": [
+        {
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "grantable": false,
+          "privilege": "EXECUTE"
+        }
+      ],
+      "body": "6b53b819b6a822df916d8fd0f00abde773a66e63d3d71020a37991efcb70f109",
+      "owner": "postgres",
+      "config": [
+        "search_path=pg_catalog, pg_temp",
+        "TimeZone=UTC"
+      ],
+      "result": "jsonb",
+      "strict": false,
+      "definer": false,
+      "defaults": null,
+      "language": "sql",
+      "parallel": "u",
+      "arguments": [
+        "j",
+        "p_user"
+      ],
+      "leakproof": false,
+      "signature": "jobs_private.owner_fields(public.jobs,uuid)",
+      "volatility": "i"
+    },
+    {
+      "acl": [
+        {
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "grantable": false,
+          "privilege": "EXECUTE"
+        }
+      ],
+      "body": "5ad00d7c27ae5499447c0a94087ddd719e2b1c4a3e3f2b91dbac04adfba8b377",
+      "owner": "postgres",
+      "config": [
+        "search_path=pg_catalog, pg_temp",
+        "TimeZone=UTC"
+      ],
+      "result": "jsonb",
+      "strict": false,
+      "definer": true,
+      "defaults": null,
+      "language": "sql",
+      "parallel": "u",
+      "arguments": [
+        "j"
+      ],
+      "leakproof": false,
+      "signature": "jobs_private.public_fields(public.jobs)",
+      "volatility": "s"
+    },
+    {
+      "acl": [
+        {
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "grantable": false,
+          "privilege": "EXECUTE"
+        }
+      ],
+      "body": "88114de75eaa42b8ef1d30fc90a3a0e6552941178cd39e462e12d40a8f1fc30b",
+      "owner": "postgres",
+      "config": [
+        "search_path=pg_catalog, pg_temp",
+        "TimeZone=UTC"
+      ],
+      "result": "void",
+      "strict": false,
+      "definer": true,
+      "defaults": null,
+      "language": "plpgsql",
+      "parallel": "u",
+      "arguments": [
+        "p_user",
+        "p_identity"
+      ],
+      "leakproof": false,
+      "signature": "jobs_private.require_actor(uuid,uuid)",
+      "volatility": "v"
+    },
+    {
+      "acl": [
+        {
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "grantable": false,
+          "privilege": "EXECUTE"
+        }
+      ],
+      "body": "7a59fc0e5cacd87e1639037ca779808af98e0e6215dcaa68bafd584ff5403fe1",
+      "owner": "postgres",
+      "config": [
+        "search_path=pg_catalog, pg_temp",
+        "TimeZone=UTC"
+      ],
+      "result": "tsvector",
+      "strict": false,
+      "definer": false,
+      "defaults": null,
+      "language": "sql",
+      "parallel": "s",
+      "arguments": [
+        "p_title",
+        "p_description",
+        "p_category",
+        "p_city",
+        "p_country"
+      ],
+      "leakproof": false,
+      "signature": "jobs_private.search_document(text,text,text,text,text)",
+      "volatility": "i"
+    },
+    {
+      "acl": [
+        {
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "grantable": false,
+          "privilege": "EXECUTE"
+        }
+      ],
+      "body": "2bc37565f1d2c8c536d81e9db15acd62d23401e558dbead351c30a0f858731a1",
+      "owner": "postgres",
+      "config": [
+        "search_path=pg_catalog, pg_temp",
+        "TimeZone=UTC"
+      ],
+      "result": "boolean",
+      "strict": false,
+      "definer": true,
+      "defaults": null,
+      "language": "sql",
+      "parallel": "u",
+      "arguments": [
+        "p_identity"
+      ],
+      "leakproof": false,
+      "signature": "jobs_private.visible_to_viewer(uuid)",
+      "volatility": "s"
+    },
+    {
+      "acl": [
+        {
+          "grantee": "authenticated",
+          "grantor": "selqiro_listing_contact_writer_v1",
+          "grantable": false,
+          "privilege": "EXECUTE"
+        },
+        {
+          "grantee": "selqiro_listing_contact_writer_v1",
+          "grantor": "selqiro_listing_contact_writer_v1",
+          "grantable": false,
+          "privilege": "EXECUTE"
+        }
+      ],
+      "body": "2df424b0a40077caa36945bf7edae813bff15edfd3f6cd0b976dff58a1b8fadb",
+      "owner": "selqiro_listing_contact_writer_v1",
+      "config": [
+        "search_path=pg_catalog, pg_temp",
+        "TimeZone=UTC",
+        "lock_timeout=2s"
+      ],
+      "result": "jsonb",
+      "strict": false,
+      "definer": true,
+      "defaults": null,
+      "language": "plpgsql",
+      "parallel": "u",
+      "arguments": [
+        "p_expected_user_id",
+        "p_expected_identity_id",
+        "p_request_key",
+        "p_job_id"
+      ],
+      "leakproof": false,
+      "signature": "public.contact_my_job_provider_v1(uuid,uuid,uuid,uuid)",
+      "volatility": "v"
+    },
+    {
+      "acl": [
+        {
+          "grantee": "anon",
+          "grantor": "postgres",
+          "grantable": false,
+          "privilege": "EXECUTE"
+        },
+        {
+          "grantee": "authenticated",
+          "grantor": "postgres",
+          "grantable": false,
+          "privilege": "EXECUTE"
+        },
+        {
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "grantable": false,
+          "privilege": "EXECUTE"
+        }
+      ],
+      "body": "7ebb02b79e95c0bbca664401d3e21626eaf4322cf37dc605b0b0eada0d8c75b6",
+      "owner": "postgres",
+      "config": [
+        "search_path=pg_catalog, pg_temp",
+        "TimeZone=UTC"
+      ],
+      "result": "jsonb",
+      "strict": false,
+      "definer": true,
+      "defaults": null,
+      "language": "sql",
+      "parallel": "u",
+      "arguments": null,
+      "leakproof": false,
+      "signature": "public.get_job_categories_v1()",
+      "volatility": "s"
+    },
+    {
+      "acl": [
+        {
+          "grantee": "authenticated",
+          "grantor": "postgres",
+          "grantable": false,
+          "privilege": "EXECUTE"
+        },
+        {
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "grantable": false,
+          "privilege": "EXECUTE"
+        }
+      ],
+      "body": "465771b4a363d023dcd96f175d9a7ef6f0b9196306b985277935a5c2e9746d88",
+      "owner": "postgres",
+      "config": [
+        "search_path=pg_catalog, pg_temp",
+        "TimeZone=UTC",
+        "lock_timeout=2s"
+      ],
+      "result": "jsonb",
+      "strict": false,
+      "definer": true,
+      "defaults": "24, NULL::jsonb",
+      "language": "plpgsql",
+      "parallel": "u",
+      "arguments": [
+        "p_expected_user_id",
+        "p_expected_identity_id",
+        "p_result_limit",
+        "p_cursor"
+      ],
+      "leakproof": false,
+      "signature": "public.get_my_jobs_v1(uuid,uuid,integer,jsonb)",
+      "volatility": "s"
+    },
+    {
+      "acl": [
+        {
+          "grantee": "anon",
+          "grantor": "postgres",
+          "grantable": false,
+          "privilege": "EXECUTE"
+        },
+        {
+          "grantee": "authenticated",
+          "grantor": "postgres",
+          "grantable": false,
+          "privilege": "EXECUTE"
+        },
+        {
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "grantable": false,
+          "privilege": "EXECUTE"
+        }
+      ],
+      "body": "1ddb3ffada58508462c32b63a0cb566a5582cd22682fa8c6b1ed86053f3020df",
+      "owner": "postgres",
+      "config": [
+        "search_path=pg_catalog, pg_temp",
+        "TimeZone=UTC"
+      ],
+      "result": "jsonb",
+      "strict": false,
+      "definer": true,
+      "defaults": null,
+      "language": "sql",
+      "parallel": "u",
+      "arguments": [
+        "p_job_id"
+      ],
+      "leakproof": false,
+      "signature": "public.get_public_job_v1(uuid)",
+      "volatility": "s"
+    },
+    {
+      "acl": [
+        {
+          "grantee": "anon",
+          "grantor": "postgres",
+          "grantable": false,
+          "privilege": "EXECUTE"
+        },
+        {
+          "grantee": "authenticated",
+          "grantor": "postgres",
+          "grantable": false,
+          "privilege": "EXECUTE"
+        },
+        {
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "grantable": false,
+          "privilege": "EXECUTE"
+        }
+      ],
+      "body": "390f8a41223be4f848205d0ffc0a8ff93edfebd429deb89ef5293bfb43568853",
+      "owner": "postgres",
+      "config": [
+        "search_path=pg_catalog, pg_temp",
+        "TimeZone=UTC"
+      ],
+      "result": "jsonb",
+      "strict": false,
+      "definer": true,
+      "defaults": "24, NULL::jsonb",
+      "language": "plpgsql",
+      "parallel": "u",
+      "arguments": [
+        "p_seller_slug",
+        "p_result_limit",
+        "p_cursor"
+      ],
+      "leakproof": false,
+      "signature": "public.get_public_profile_jobs_v1(text,integer,jsonb)",
+      "volatility": "s"
+    },
+    {
+      "acl": [
+        {
+          "grantee": "anon",
+          "grantor": "postgres",
+          "grantable": false,
+          "privilege": "EXECUTE"
+        },
+        {
+          "grantee": "authenticated",
+          "grantor": "postgres",
+          "grantable": false,
+          "privilege": "EXECUTE"
+        },
+        {
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "grantable": false,
+          "privilege": "EXECUTE"
+        }
+      ],
+      "body": "ec3d96fe4dc460cef8bd646d8ae376e06e8a0f7320508451d83f711879495fc3",
+      "owner": "postgres",
+      "config": [
+        "search_path=pg_catalog, pg_temp",
+        "TimeZone=UTC",
+        "plan_cache_mode=force_custom_plan"
+      ],
+      "result": "jsonb",
+      "strict": false,
+      "definer": true,
+      "defaults": "''::text, NULL::text, NULL::text, NULL::text, NULL::text, NULL::text, NULL::text, 24, NULL::jsonb",
+      "language": "plpgsql",
+      "parallel": "u",
+      "arguments": [
+        "p_query",
+        "p_category",
+        "p_country_code",
+        "p_city",
+        "p_workplace_type",
+        "p_employment_type",
+        "p_working_time",
+        "p_result_limit",
+        "p_cursor"
+      ],
+      "leakproof": false,
+      "signature": "public.search_public_jobs_v1(text,text,text,text,text,text,text,integer,jsonb)",
+      "volatility": "s"
+    }
+  ],
+  "tables": [
+    {
+      "acl": [
+        {
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "grantable": false,
+          "privilege": "DELETE"
+        },
+        {
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "grantable": false,
+          "privilege": "INSERT"
+        },
+        {
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "grantable": false,
+          "privilege": "MAINTAIN"
+        },
+        {
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "grantable": false,
+          "privilege": "REFERENCES"
+        },
+        {
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "grantable": false,
+          "privilege": "SELECT"
+        },
+        {
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "grantable": false,
+          "privilege": "TRIGGER"
+        },
+        {
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "grantable": false,
+          "privilege": "TRUNCATE"
+        },
+        {
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "grantable": false,
+          "privilege": "UPDATE"
+        }
+      ],
+      "rls": true,
+      "kind": "r",
+      "name": "jobs_private.categories",
+      "owner": "postgres",
+      "forced": false,
+      "columns": [
+        {
+          "acl": [],
+          "name": "code",
+          "type": "text",
+          "default": null,
+          "notnull": true,
+          "identity": "",
+          "position": 1,
+          "generated": ""
+        },
+        {
+          "acl": [],
+          "name": "label_et",
+          "type": "text",
+          "default": null,
+          "notnull": true,
+          "identity": "",
+          "position": 2,
+          "generated": ""
+        },
+        {
+          "acl": [],
+          "name": "label_en",
+          "type": "text",
+          "default": null,
+          "notnull": true,
+          "identity": "",
+          "position": 3,
+          "generated": ""
+        },
+        {
+          "acl": [],
+          "name": "sort_order",
+          "type": "integer",
+          "default": null,
+          "notnull": true,
+          "identity": "",
+          "position": 4,
+          "generated": ""
+        }
+      ],
+      "indexes": [
+        {
+          "name": "jobs_private.categories_pkey",
+          "ready": true,
+          "valid": true,
+          "unique": true,
+          "definition": "CREATE UNIQUE INDEX categories_pkey ON jobs_private.categories USING btree (code)"
+        },
+        {
+          "name": "jobs_private.categories_sort_order_key",
+          "ready": true,
+          "valid": true,
+          "unique": true,
+          "definition": "CREATE UNIQUE INDEX categories_sort_order_key ON jobs_private.categories USING btree (sort_order)"
+        }
+      ],
+      "policies": [],
+      "triggers": [],
+      "constraints": [
+        {
+          "name": "categories_code_check",
+          "type": "c",
+          "validated": true,
+          "definition": "CHECK ((code ~ '^[a-z_]{2,64}$'::text))"
+        },
+        {
+          "name": "categories_pkey",
+          "type": "p",
+          "validated": true,
+          "definition": "PRIMARY KEY (code)"
+        },
+        {
+          "name": "categories_sort_order_key",
+          "type": "u",
+          "validated": true,
+          "definition": "UNIQUE (sort_order)"
+        }
+      ]
+    },
+    {
+      "acl": [
+        {
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "grantable": false,
+          "privilege": "DELETE"
+        },
+        {
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "grantable": false,
+          "privilege": "INSERT"
+        },
+        {
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "grantable": false,
+          "privilege": "MAINTAIN"
+        },
+        {
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "grantable": false,
+          "privilege": "REFERENCES"
+        },
+        {
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "grantable": false,
+          "privilege": "SELECT"
+        },
+        {
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "grantable": false,
+          "privilege": "TRIGGER"
+        },
+        {
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "grantable": false,
+          "privilege": "TRUNCATE"
+        },
+        {
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "grantable": false,
+          "privilege": "UPDATE"
+        }
+      ],
+      "rls": true,
+      "kind": "r",
+      "name": "public.jobs",
+      "owner": "postgres",
+      "forced": false,
+      "columns": [
+        {
+          "acl": [],
+          "name": "id",
+          "type": "uuid",
+          "default": "gen_random_uuid()",
+          "notnull": true,
+          "identity": "",
+          "position": 1,
+          "generated": ""
+        },
+        {
+          "acl": [],
+          "name": "identity_id",
+          "type": "uuid",
+          "default": null,
+          "notnull": true,
+          "identity": "",
+          "position": 2,
+          "generated": ""
+        },
+        {
+          "acl": [],
+          "name": "created_by_user_id",
+          "type": "uuid",
+          "default": null,
+          "notnull": true,
+          "identity": "",
+          "position": 3,
+          "generated": ""
+        },
+        {
+          "acl": [],
+          "name": "title",
+          "type": "text",
+          "default": null,
+          "notnull": true,
+          "identity": "",
+          "position": 4,
+          "generated": ""
+        },
+        {
+          "acl": [],
+          "name": "description",
+          "type": "text",
+          "default": null,
+          "notnull": true,
+          "identity": "",
+          "position": 5,
+          "generated": ""
+        },
+        {
+          "acl": [],
+          "name": "category",
+          "type": "text",
+          "default": null,
+          "notnull": true,
+          "identity": "",
+          "position": 6,
+          "generated": ""
+        },
+        {
+          "acl": [],
+          "name": "country_code",
+          "type": "text",
+          "default": null,
+          "notnull": false,
+          "identity": "",
+          "position": 7,
+          "generated": ""
+        },
+        {
+          "acl": [],
+          "name": "city",
+          "type": "text",
+          "default": null,
+          "notnull": false,
+          "identity": "",
+          "position": 8,
+          "generated": ""
+        },
+        {
+          "acl": [],
+          "name": "location_label",
+          "type": "text",
+          "default": null,
+          "notnull": false,
+          "identity": "",
+          "position": 9,
+          "generated": ""
+        },
+        {
+          "acl": [],
+          "name": "workplace_type",
+          "type": "text",
+          "default": null,
+          "notnull": true,
+          "identity": "",
+          "position": 10,
+          "generated": ""
+        },
+        {
+          "acl": [],
+          "name": "employment_type",
+          "type": "text",
+          "default": null,
+          "notnull": false,
+          "identity": "",
+          "position": 11,
+          "generated": ""
+        },
+        {
+          "acl": [],
+          "name": "working_time",
+          "type": "text",
+          "default": null,
+          "notnull": false,
+          "identity": "",
+          "position": 12,
+          "generated": ""
+        },
+        {
+          "acl": [],
+          "name": "salary_min",
+          "type": "numeric",
+          "default": null,
+          "notnull": false,
+          "identity": "",
+          "position": 13,
+          "generated": ""
+        },
+        {
+          "acl": [],
+          "name": "salary_max",
+          "type": "numeric",
+          "default": null,
+          "notnull": false,
+          "identity": "",
+          "position": 14,
+          "generated": ""
+        },
+        {
+          "acl": [],
+          "name": "salary_currency",
+          "type": "text",
+          "default": null,
+          "notnull": false,
+          "identity": "",
+          "position": 15,
+          "generated": ""
+        },
+        {
+          "acl": [],
+          "name": "salary_period",
+          "type": "text",
+          "default": null,
+          "notnull": false,
+          "identity": "",
+          "position": 16,
+          "generated": ""
+        },
+        {
+          "acl": [],
+          "name": "status",
+          "type": "text",
+          "default": "'draft'::text",
+          "notnull": true,
+          "identity": "",
+          "position": 17,
+          "generated": ""
+        },
+        {
+          "acl": [],
+          "name": "edit_revision",
+          "type": "bigint",
+          "default": "1",
+          "notnull": true,
+          "identity": "",
+          "position": 18,
+          "generated": ""
+        },
+        {
+          "acl": [],
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "default": "clock_timestamp()",
+          "notnull": true,
+          "identity": "",
+          "position": 19,
+          "generated": ""
+        },
+        {
+          "acl": [],
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "default": "clock_timestamp()",
+          "notnull": true,
+          "identity": "",
+          "position": 20,
+          "generated": ""
+        },
+        {
+          "acl": [],
+          "name": "published_at",
+          "type": "timestamp with time zone",
+          "default": null,
+          "notnull": false,
+          "identity": "",
+          "position": 21,
+          "generated": ""
+        },
+        {
+          "acl": [],
+          "name": "active_until",
+          "type": "timestamp with time zone",
+          "default": null,
+          "notnull": false,
+          "identity": "",
+          "position": 22,
+          "generated": ""
+        },
+        {
+          "acl": [],
+          "name": "last_confirmed_at",
+          "type": "timestamp with time zone",
+          "default": null,
+          "notnull": false,
+          "identity": "",
+          "position": 23,
+          "generated": ""
+        }
+      ],
+      "indexes": [
+        {
+          "name": "public.jobs_owner_cursor_idx",
+          "ready": true,
+          "valid": true,
+          "unique": false,
+          "definition": "CREATE INDEX jobs_owner_cursor_idx ON public.jobs USING btree (identity_id, created_at DESC, id DESC)"
+        },
+        {
+          "name": "public.jobs_pkey",
+          "ready": true,
+          "valid": true,
+          "unique": true,
+          "definition": "CREATE UNIQUE INDEX jobs_pkey ON public.jobs USING btree (id)"
+        },
+        {
+          "name": "public.jobs_profile_cursor_idx",
+          "ready": true,
+          "valid": true,
+          "unique": false,
+          "definition": "CREATE INDEX jobs_profile_cursor_idx ON public.jobs USING btree (identity_id, published_at DESC, id DESC) WHERE (status = 'published'::text)"
+        },
+        {
+          "name": "public.jobs_public_cursor_idx",
+          "ready": true,
+          "valid": true,
+          "unique": false,
+          "definition": "CREATE INDEX jobs_public_cursor_idx ON public.jobs USING btree (published_at DESC, id DESC) WHERE (status = 'published'::text)"
+        },
+        {
+          "name": "public.jobs_public_keywords_idx",
+          "ready": true,
+          "valid": true,
+          "unique": false,
+          "definition": "CREATE INDEX jobs_public_keywords_idx ON public.jobs USING gin (jobs_private.search_document(title, description, category, city, country_code)) WHERE (status = 'published'::text)"
+        }
+      ],
+      "policies": [],
+      "triggers": [],
+      "constraints": [
+        {
+          "name": "jobs_active_until_check",
+          "type": "c",
+          "validated": true,
+          "definition": "CHECK (isfinite(active_until))"
+        },
+        {
+          "name": "jobs_category_fkey",
+          "type": "f",
+          "validated": true,
+          "definition": "FOREIGN KEY (category) REFERENCES jobs_private.categories(code) ON DELETE RESTRICT"
+        },
+        {
+          "name": "jobs_check",
+          "type": "c",
+          "validated": true,
+          "definition": "CHECK (((salary_min IS NULL) OR (salary_max IS NULL) OR (salary_min <= salary_max)))"
+        },
+        {
+          "name": "jobs_check1",
+          "type": "c",
+          "validated": true,
+          "definition": "CHECK (((((salary_min IS NOT NULL) OR (salary_max IS NOT NULL)) AND (salary_currency IS NOT NULL) AND (salary_period IS NOT NULL)) OR ((salary_min IS NULL) AND (salary_max IS NULL) AND (salary_currency IS NULL) AND (salary_period IS NULL))))"
+        },
+        {
+          "name": "jobs_check2",
+          "type": "c",
+          "validated": true,
+          "definition": "CHECK ((((status = 'draft'::text) AND (published_at IS NULL) AND (active_until IS NULL) AND (last_confirmed_at IS NULL)) OR ((status <> 'draft'::text) AND (published_at IS NOT NULL) AND (active_until > published_at) AND ((last_confirmed_at IS NULL) OR (last_confirmed_at >= published_at)))))"
+        },
+        {
+          "name": "jobs_city_check",
+          "type": "c",
+          "validated": true,
+          "definition": "CHECK (((char_length(city) >= 1) AND (char_length(city) <= 160)))"
+        },
+        {
+          "name": "jobs_country_code_check",
+          "type": "c",
+          "validated": true,
+          "definition": "CHECK ((country_code ~ '^[A-Z]{2}$'::text))"
+        },
+        {
+          "name": "jobs_created_at_check",
+          "type": "c",
+          "validated": true,
+          "definition": "CHECK (isfinite(created_at))"
+        },
+        {
+          "name": "jobs_description_check",
+          "type": "c",
+          "validated": true,
+          "definition": "CHECK (((char_length(description) >= 1) AND (char_length(description) <= 10000)))"
+        },
+        {
+          "name": "jobs_edit_revision_check",
+          "type": "c",
+          "validated": true,
+          "definition": "CHECK ((edit_revision > 0))"
+        },
+        {
+          "name": "jobs_employment_type_check",
+          "type": "c",
+          "validated": true,
+          "definition": "CHECK ((employment_type = ANY (ARRAY['permanent'::text, 'fixed_term'::text, 'contract'::text, 'internship'::text, 'other'::text, 'task'::text])))"
+        },
+        {
+          "name": "jobs_identity_id_fkey",
+          "type": "f",
+          "validated": true,
+          "definition": "FOREIGN KEY (identity_id) REFERENCES public.identities(id) ON DELETE RESTRICT"
+        },
+        {
+          "name": "jobs_last_confirmed_at_check",
+          "type": "c",
+          "validated": true,
+          "definition": "CHECK (isfinite(last_confirmed_at))"
+        },
+        {
+          "name": "jobs_location_label_check",
+          "type": "c",
+          "validated": true,
+          "definition": "CHECK (((char_length(location_label) >= 1) AND (char_length(location_label) <= 300)))"
+        },
+        {
+          "name": "jobs_pkey",
+          "type": "p",
+          "validated": true,
+          "definition": "PRIMARY KEY (id)"
+        },
+        {
+          "name": "jobs_published_at_check",
+          "type": "c",
+          "validated": true,
+          "definition": "CHECK (isfinite(published_at))"
+        },
+        {
+          "name": "jobs_salary_max_check",
+          "type": "c",
+          "validated": true,
+          "definition": "CHECK (((salary_max >= (0)::numeric) AND (salary_max < ('1000000000000000000'::bigint)::numeric)))"
+        },
+        {
+          "name": "jobs_salary_min_check",
+          "type": "c",
+          "validated": true,
+          "definition": "CHECK (((salary_min >= (0)::numeric) AND (salary_min < ('1000000000000000000'::bigint)::numeric)))"
+        },
+        {
+          "name": "jobs_salary_period_check",
+          "type": "c",
+          "validated": true,
+          "definition": "CHECK ((salary_period = ANY (ARRAY['hour'::text, 'day'::text, 'week'::text, 'month'::text, 'year'::text, 'task'::text])))"
+        },
+        {
+          "name": "jobs_status_check",
+          "type": "c",
+          "validated": true,
+          "definition": "CHECK ((status = ANY (ARRAY['draft'::text, 'published'::text, 'paused'::text, 'closed'::text])))"
+        },
+        {
+          "name": "jobs_task_content_check",
+          "type": "c",
+          "validated": true,
+          "definition": "CHECK ((((employment_type IS DISTINCT FROM 'task'::text) OR (working_time IS NULL)) AND ((salary_period IS DISTINCT FROM 'task'::text) OR (NOT (employment_type IS DISTINCT FROM 'task'::text)))))"
+        },
+        {
+          "name": "jobs_title_check",
+          "type": "c",
+          "validated": true,
+          "definition": "CHECK (((char_length(title) >= 2) AND (char_length(title) <= 140)))"
+        },
+        {
+          "name": "jobs_updated_at_check",
+          "type": "c",
+          "validated": true,
+          "definition": "CHECK (isfinite(updated_at))"
+        },
+        {
+          "name": "jobs_working_time_check",
+          "type": "c",
+          "validated": true,
+          "definition": "CHECK ((working_time = ANY (ARRAY['full_time'::text, 'part_time'::text, 'flexible'::text, 'other'::text])))"
+        },
+        {
+          "name": "jobs_workplace_type_check",
+          "type": "c",
+          "validated": true,
+          "definition": "CHECK ((workplace_type = ANY (ARRAY['on_site'::text, 'remote'::text, 'hybrid'::text])))"
+        }
+      ]
+    }
+  ],
+  "boundary": "Source basis only. No current live job catalog observation; fresh Mac preflight required."
+}

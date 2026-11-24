@@ -1,0 +1,17 @@
+{
+  "docs/continuity/CURRENT_STATE.json": {
+    "copy": "docs/continuity/history/account-service-read-accepted-base-a9d86e6-20261124/docs/continuity/CURRENT_STATE.json",
+    "bytes": 10391,
+    "sha256": "233f255c1cff2450b3d1a32a5b31210da95819eb905b3772d296aac34293c422"
+  },
+  "docs/99_V2_HANDOFF_NEXT_CHAT.md": {
+    "copy": "docs/continuity/history/account-service-read-accepted-base-a9d86e6-20261124/docs/99_V2_HANDOFF_NEXT_CHAT.md",
+    "bytes": 10494,
+    "sha256": "ec56046509e2914801b81c9ca8e293d1692c189c4d3f8ba8da6f216d1f9c3af2"
+  },
+  "docs/continuity/HOSTED_PORTAL.md": {
+    "copy": "docs/continuity/history/account-service-read-accepted-base-a9d86e6-20261124/docs/continuity/HOSTED_PORTAL.md",
+    "bytes": 2827,
+    "sha256": "2c099383ba8c24421b00cfa741a89087a4a63f970135f3b6173354bc2edfffc4"
+  }
+}

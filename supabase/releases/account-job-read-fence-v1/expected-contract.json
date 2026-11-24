@@ -1,0 +1,4737 @@
+{
+  "base": {
+    "job_schema": {
+      "acl": [
+        {
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "grantable": false,
+          "privilege": "CREATE"
+        },
+        {
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "grantable": false,
+          "privilege": "USAGE"
+        },
+        {
+          "grantee": "selqiro_listing_contact_writer_v1",
+          "grantor": "postgres",
+          "grantable": false,
+          "privilege": "USAGE"
+        }
+      ],
+      "name": "jobs_private",
+      "owner": "postgres"
+    },
+    "job_tables": [
+      {
+        "acl": [
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "DELETE"
+          },
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "INSERT"
+          },
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "MAINTAIN"
+          },
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "REFERENCES"
+          },
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "SELECT"
+          },
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "TRIGGER"
+          },
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "TRUNCATE"
+          },
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "UPDATE"
+          }
+        ],
+        "rls": true,
+        "kind": "r",
+        "name": "jobs_private.categories",
+        "owner": "postgres",
+        "forced": false,
+        "columns": [
+          {
+            "acl": [],
+            "name": "code",
+            "type": "text",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "position": 1,
+            "generated": ""
+          },
+          {
+            "acl": [],
+            "name": "label_et",
+            "type": "text",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "position": 2,
+            "generated": ""
+          },
+          {
+            "acl": [],
+            "name": "label_en",
+            "type": "text",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "position": 3,
+            "generated": ""
+          },
+          {
+            "acl": [],
+            "name": "sort_order",
+            "type": "integer",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "position": 4,
+            "generated": ""
+          }
+        ],
+        "indexes": [
+          {
+            "name": "jobs_private.categories_pkey",
+            "ready": true,
+            "valid": true,
+            "unique": true,
+            "definition": "CREATE UNIQUE INDEX categories_pkey ON jobs_private.categories USING btree (code)"
+          },
+          {
+            "name": "jobs_private.categories_sort_order_key",
+            "ready": true,
+            "valid": true,
+            "unique": true,
+            "definition": "CREATE UNIQUE INDEX categories_sort_order_key ON jobs_private.categories USING btree (sort_order)"
+          }
+        ],
+        "policies": [],
+        "triggers": [],
+        "constraints": [
+          {
+            "name": "categories_code_check",
+            "type": "c",
+            "validated": true,
+            "definition": "CHECK ((code ~ '^[a-z_]{2,64}$'::text))"
+          },
+          {
+            "name": "categories_pkey",
+            "type": "p",
+            "validated": true,
+            "definition": "PRIMARY KEY (code)"
+          },
+          {
+            "name": "categories_sort_order_key",
+            "type": "u",
+            "validated": true,
+            "definition": "UNIQUE (sort_order)"
+          }
+        ]
+      },
+      {
+        "acl": [
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "DELETE"
+          },
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "INSERT"
+          },
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "MAINTAIN"
+          },
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "REFERENCES"
+          },
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "SELECT"
+          },
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "TRIGGER"
+          },
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "TRUNCATE"
+          },
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "UPDATE"
+          }
+        ],
+        "rls": true,
+        "kind": "r",
+        "name": "public.jobs",
+        "owner": "postgres",
+        "forced": false,
+        "columns": [
+          {
+            "acl": [],
+            "name": "id",
+            "type": "uuid",
+            "default": "gen_random_uuid()",
+            "notnull": true,
+            "identity": "",
+            "position": 1,
+            "generated": ""
+          },
+          {
+            "acl": [],
+            "name": "identity_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "position": 2,
+            "generated": ""
+          },
+          {
+            "acl": [],
+            "name": "created_by_user_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "position": 3,
+            "generated": ""
+          },
+          {
+            "acl": [],
+            "name": "title",
+            "type": "text",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "position": 4,
+            "generated": ""
+          },
+          {
+            "acl": [],
+            "name": "description",
+            "type": "text",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "position": 5,
+            "generated": ""
+          },
+          {
+            "acl": [],
+            "name": "category",
+            "type": "text",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "position": 6,
+            "generated": ""
+          },
+          {
+            "acl": [],
+            "name": "country_code",
+            "type": "text",
+            "default": null,
+            "notnull": false,
+            "identity": "",
+            "position": 7,
+            "generated": ""
+          },
+          {
+            "acl": [],
+            "name": "city",
+            "type": "text",
+            "default": null,
+            "notnull": false,
+            "identity": "",
+            "position": 8,
+            "generated": ""
+          },
+          {
+            "acl": [],
+            "name": "location_label",
+            "type": "text",
+            "default": null,
+            "notnull": false,
+            "identity": "",
+            "position": 9,
+            "generated": ""
+          },
+          {
+            "acl": [],
+            "name": "workplace_type",
+            "type": "text",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "position": 10,
+            "generated": ""
+          },
+          {
+            "acl": [],
+            "name": "employment_type",
+            "type": "text",
+            "default": null,
+            "notnull": false,
+            "identity": "",
+            "position": 11,
+            "generated": ""
+          },
+          {
+            "acl": [],
+            "name": "working_time",
+            "type": "text",
+            "default": null,
+            "notnull": false,
+            "identity": "",
+            "position": 12,
+            "generated": ""
+          },
+          {
+            "acl": [],
+            "name": "salary_min",
+            "type": "numeric",
+            "default": null,
+            "notnull": false,
+            "identity": "",
+            "position": 13,
+            "generated": ""
+          },
+          {
+            "acl": [],
+            "name": "salary_max",
+            "type": "numeric",
+            "default": null,
+            "notnull": false,
+            "identity": "",
+            "position": 14,
+            "generated": ""
+          },
+          {
+            "acl": [],
+            "name": "salary_currency",
+            "type": "text",
+            "default": null,
+            "notnull": false,
+            "identity": "",
+            "position": 15,
+            "generated": ""
+          },
+          {
+            "acl": [],
+            "name": "salary_period",
+            "type": "text",
+            "default": null,
+            "notnull": false,
+            "identity": "",
+            "position": 16,
+            "generated": ""
+          },
+          {
+            "acl": [],
+            "name": "status",
+            "type": "text",
+            "default": "'draft'::text",
+            "notnull": true,
+            "identity": "",
+            "position": 17,
+            "generated": ""
+          },
+          {
+            "acl": [],
+            "name": "edit_revision",
+            "type": "bigint",
+            "default": "1",
+            "notnull": true,
+            "identity": "",
+            "position": 18,
+            "generated": ""
+          },
+          {
+            "acl": [],
+            "name": "created_at",
+            "type": "timestamp with time zone",
+            "default": "clock_timestamp()",
+            "notnull": true,
+            "identity": "",
+            "position": 19,
+            "generated": ""
+          },
+          {
+            "acl": [],
+            "name": "updated_at",
+            "type": "timestamp with time zone",
+            "default": "clock_timestamp()",
+            "notnull": true,
+            "identity": "",
+            "position": 20,
+            "generated": ""
+          },
+          {
+            "acl": [],
+            "name": "published_at",
+            "type": "timestamp with time zone",
+            "default": null,
+            "notnull": false,
+            "identity": "",
+            "position": 21,
+            "generated": ""
+          },
+          {
+            "acl": [],
+            "name": "active_until",
+            "type": "timestamp with time zone",
+            "default": null,
+            "notnull": false,
+            "identity": "",
+            "position": 22,
+            "generated": ""
+          },
+          {
+            "acl": [],
+            "name": "last_confirmed_at",
+            "type": "timestamp with time zone",
+            "default": null,
+            "notnull": false,
+            "identity": "",
+            "position": 23,
+            "generated": ""
+          }
+        ],
+        "indexes": [
+          {
+            "name": "public.jobs_owner_cursor_idx",
+            "ready": true,
+            "valid": true,
+            "unique": false,
+            "definition": "CREATE INDEX jobs_owner_cursor_idx ON public.jobs USING btree (identity_id, created_at DESC, id DESC)"
+          },
+          {
+            "name": "public.jobs_pkey",
+            "ready": true,
+            "valid": true,
+            "unique": true,
+            "definition": "CREATE UNIQUE INDEX jobs_pkey ON public.jobs USING btree (id)"
+          },
+          {
+            "name": "public.jobs_profile_cursor_idx",
+            "ready": true,
+            "valid": true,
+            "unique": false,
+            "definition": "CREATE INDEX jobs_profile_cursor_idx ON public.jobs USING btree (identity_id, published_at DESC, id DESC) WHERE (status = 'published'::text)"
+          },
+          {
+            "name": "public.jobs_public_cursor_idx",
+            "ready": true,
+            "valid": true,
+            "unique": false,
+            "definition": "CREATE INDEX jobs_public_cursor_idx ON public.jobs USING btree (published_at DESC, id DESC) WHERE (status = 'published'::text)"
+          },
+          {
+            "name": "public.jobs_public_keywords_idx",
+            "ready": true,
+            "valid": true,
+            "unique": false,
+            "definition": "CREATE INDEX jobs_public_keywords_idx ON public.jobs USING gin (jobs_private.search_document(title, description, category, city, country_code)) WHERE (status = 'published'::text)"
+          }
+        ],
+        "policies": [],
+        "triggers": [],
+        "constraints": [
+          {
+            "name": "jobs_active_until_check",
+            "type": "c",
+            "validated": true,
+            "definition": "CHECK (isfinite(active_until))"
+          },
+          {
+            "name": "jobs_category_fkey",
+            "type": "f",
+            "validated": true,
+            "definition": "FOREIGN KEY (category) REFERENCES jobs_private.categories(code) ON DELETE RESTRICT"
+          },
+          {
+            "name": "jobs_check",
+            "type": "c",
+            "validated": true,
+            "definition": "CHECK (((salary_min IS NULL) OR (salary_max IS NULL) OR (salary_min <= salary_max)))"
+          },
+          {
+            "name": "jobs_check1",
+            "type": "c",
+            "validated": true,
+            "definition": "CHECK (((((salary_min IS NOT NULL) OR (salary_max IS NOT NULL)) AND (salary_currency IS NOT NULL) AND (salary_period IS NOT NULL)) OR ((salary_min IS NULL) AND (salary_max IS NULL) AND (salary_currency IS NULL) AND (salary_period IS NULL))))"
+          },
+          {
+            "name": "jobs_check2",
+            "type": "c",
+            "validated": true,
+            "definition": "CHECK ((((status = 'draft'::text) AND (published_at IS NULL) AND (active_until IS NULL) AND (last_confirmed_at IS NULL)) OR ((status <> 'draft'::text) AND (published_at IS NOT NULL) AND (active_until > published_at) AND ((last_confirmed_at IS NULL) OR (last_confirmed_at >= published_at)))))"
+          },
+          {
+            "name": "jobs_city_check",
+            "type": "c",
+            "validated": true,
+            "definition": "CHECK (((char_length(city) >= 1) AND (char_length(city) <= 160)))"
+          },
+          {
+            "name": "jobs_country_code_check",
+            "type": "c",
+            "validated": true,
+            "definition": "CHECK ((country_code ~ '^[A-Z]{2}$'::text))"
+          },
+          {
+            "name": "jobs_created_at_check",
+            "type": "c",
+            "validated": true,
+            "definition": "CHECK (isfinite(created_at))"
+          },
+          {
+            "name": "jobs_description_check",
+            "type": "c",
+            "validated": true,
+            "definition": "CHECK (((char_length(description) >= 1) AND (char_length(description) <= 10000)))"
+          },
+          {
+            "name": "jobs_edit_revision_check",
+            "type": "c",
+            "validated": true,
+            "definition": "CHECK ((edit_revision > 0))"
+          },
+          {
+            "name": "jobs_employment_type_check",
+            "type": "c",
+            "validated": true,
+            "definition": "CHECK ((employment_type = ANY (ARRAY['permanent'::text, 'fixed_term'::text, 'contract'::text, 'internship'::text, 'other'::text, 'task'::text])))"
+          },
+          {
+            "name": "jobs_identity_id_fkey",
+            "type": "f",
+            "validated": true,
+            "definition": "FOREIGN KEY (identity_id) REFERENCES public.identities(id) ON DELETE RESTRICT"
+          },
+          {
+            "name": "jobs_last_confirmed_at_check",
+            "type": "c",
+            "validated": true,
+            "definition": "CHECK (isfinite(last_confirmed_at))"
+          },
+          {
+            "name": "jobs_location_label_check",
+            "type": "c",
+            "validated": true,
+            "definition": "CHECK (((char_length(location_label) >= 1) AND (char_length(location_label) <= 300)))"
+          },
+          {
+            "name": "jobs_pkey",
+            "type": "p",
+            "validated": true,
+            "definition": "PRIMARY KEY (id)"
+          },
+          {
+            "name": "jobs_published_at_check",
+            "type": "c",
+            "validated": true,
+            "definition": "CHECK (isfinite(published_at))"
+          },
+          {
+            "name": "jobs_salary_max_check",
+            "type": "c",
+            "validated": true,
+            "definition": "CHECK (((salary_max >= (0)::numeric) AND (salary_max < ('1000000000000000000'::bigint)::numeric)))"
+          },
+          {
+            "name": "jobs_salary_min_check",
+            "type": "c",
+            "validated": true,
+            "definition": "CHECK (((salary_min >= (0)::numeric) AND (salary_min < ('1000000000000000000'::bigint)::numeric)))"
+          },
+          {
+            "name": "jobs_salary_period_check",
+            "type": "c",
+            "validated": true,
+            "definition": "CHECK ((salary_period = ANY (ARRAY['hour'::text, 'day'::text, 'week'::text, 'month'::text, 'year'::text, 'task'::text])))"
+          },
+          {
+            "name": "jobs_status_check",
+            "type": "c",
+            "validated": true,
+            "definition": "CHECK ((status = ANY (ARRAY['draft'::text, 'published'::text, 'paused'::text, 'closed'::text])))"
+          },
+          {
+            "name": "jobs_task_content_check",
+            "type": "c",
+            "validated": true,
+            "definition": "CHECK ((((employment_type IS DISTINCT FROM 'task'::text) OR (working_time IS NULL)) AND ((salary_period IS DISTINCT FROM 'task'::text) OR (NOT (employment_type IS DISTINCT FROM 'task'::text)))))"
+          },
+          {
+            "name": "jobs_title_check",
+            "type": "c",
+            "validated": true,
+            "definition": "CHECK (((char_length(title) >= 2) AND (char_length(title) <= 140)))"
+          },
+          {
+            "name": "jobs_updated_at_check",
+            "type": "c",
+            "validated": true,
+            "definition": "CHECK (isfinite(updated_at))"
+          },
+          {
+            "name": "jobs_working_time_check",
+            "type": "c",
+            "validated": true,
+            "definition": "CHECK ((working_time = ANY (ARRAY['full_time'::text, 'part_time'::text, 'flexible'::text, 'other'::text])))"
+          },
+          {
+            "name": "jobs_workplace_type_check",
+            "type": "c",
+            "validated": true,
+            "definition": "CHECK ((workplace_type = ANY (ARRAY['on_site'::text, 'remote'::text, 'hybrid'::text])))"
+          }
+        ]
+      }
+    ],
+    "job_dependencies": [
+      {
+        "acl": [
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          },
+          {
+            "grantee": "selqiro_listing_contact_writer_v1",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          }
+        ],
+        "body": "8b4d1cf59af748d02e221d848a8b1fcd51db8b88fe5af18faba9cff35f7358c7",
+        "owner": "postgres",
+        "config": [
+          "search_path=pg_catalog, pg_temp",
+          "TimeZone=UTC"
+        ],
+        "result": "jsonb",
+        "strict": false,
+        "definer": true,
+        "defaults": null,
+        "language": "plpgsql",
+        "parallel": "u",
+        "arguments": [
+          "p_job_id"
+        ],
+        "leakproof": false,
+        "signature": "jobs_private.contact_snapshot(uuid)",
+        "volatility": "v"
+      },
+      {
+        "acl": [
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          }
+        ],
+        "body": "05ab495ee689757b17eaf995f30b615efa201c3f0a40e78d6be279b7fa79a2de",
+        "owner": "postgres",
+        "config": [
+          "search_path=pg_catalog, pg_temp",
+          "TimeZone=UTC"
+        ],
+        "result": "jsonb",
+        "strict": false,
+        "definer": false,
+        "defaults": null,
+        "language": "sql",
+        "parallel": "u",
+        "arguments": [
+          "j"
+        ],
+        "leakproof": false,
+        "signature": "jobs_private.content(public.jobs)",
+        "volatility": "i"
+      },
+      {
+        "acl": [
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          }
+        ],
+        "body": "660313aae39acfa4dd3e24c8cb47e95043b6a51b1ffeafa77195178b9a6a074f",
+        "owner": "postgres",
+        "config": [
+          "search_path=pg_catalog, pg_temp",
+          "TimeZone=UTC"
+        ],
+        "result": "jsonb",
+        "strict": false,
+        "definer": false,
+        "defaults": null,
+        "language": "plpgsql",
+        "parallel": "u",
+        "arguments": [
+          "p_cursor",
+          "p_time_key"
+        ],
+        "leakproof": false,
+        "signature": "jobs_private.cursor(jsonb,text)",
+        "volatility": "v"
+      },
+      {
+        "acl": [
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          }
+        ],
+        "body": "78295a2c9e4ffc9c5b837b17c4ad5d577a5e2564285342b8242df175e286a3c1",
+        "owner": "postgres",
+        "config": [
+          "search_path=pg_catalog, pg_temp",
+          "TimeZone=UTC"
+        ],
+        "result": "boolean",
+        "strict": false,
+        "definer": true,
+        "defaults": null,
+        "language": "sql",
+        "parallel": "u",
+        "arguments": [
+          "j"
+        ],
+        "leakproof": false,
+        "signature": "jobs_private.is_public(public.jobs)",
+        "volatility": "s"
+      },
+      {
+        "acl": [
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          }
+        ],
+        "body": "6b53b819b6a822df916d8fd0f00abde773a66e63d3d71020a37991efcb70f109",
+        "owner": "postgres",
+        "config": [
+          "search_path=pg_catalog, pg_temp",
+          "TimeZone=UTC"
+        ],
+        "result": "jsonb",
+        "strict": false,
+        "definer": false,
+        "defaults": null,
+        "language": "sql",
+        "parallel": "u",
+        "arguments": [
+          "j",
+          "p_user"
+        ],
+        "leakproof": false,
+        "signature": "jobs_private.owner_fields(public.jobs,uuid)",
+        "volatility": "i"
+      },
+      {
+        "acl": [
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          }
+        ],
+        "body": "5ad00d7c27ae5499447c0a94087ddd719e2b1c4a3e3f2b91dbac04adfba8b377",
+        "owner": "postgres",
+        "config": [
+          "search_path=pg_catalog, pg_temp",
+          "TimeZone=UTC"
+        ],
+        "result": "jsonb",
+        "strict": false,
+        "definer": true,
+        "defaults": null,
+        "language": "sql",
+        "parallel": "u",
+        "arguments": [
+          "j"
+        ],
+        "leakproof": false,
+        "signature": "jobs_private.public_fields(public.jobs)",
+        "volatility": "s"
+      },
+      {
+        "acl": [
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          }
+        ],
+        "body": "88114de75eaa42b8ef1d30fc90a3a0e6552941178cd39e462e12d40a8f1fc30b",
+        "owner": "postgres",
+        "config": [
+          "search_path=pg_catalog, pg_temp",
+          "TimeZone=UTC"
+        ],
+        "result": "void",
+        "strict": false,
+        "definer": true,
+        "defaults": null,
+        "language": "plpgsql",
+        "parallel": "u",
+        "arguments": [
+          "p_user",
+          "p_identity"
+        ],
+        "leakproof": false,
+        "signature": "jobs_private.require_actor(uuid,uuid)",
+        "volatility": "v"
+      },
+      {
+        "acl": [
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          }
+        ],
+        "body": "7a59fc0e5cacd87e1639037ca779808af98e0e6215dcaa68bafd584ff5403fe1",
+        "owner": "postgres",
+        "config": [
+          "search_path=pg_catalog, pg_temp",
+          "TimeZone=UTC"
+        ],
+        "result": "tsvector",
+        "strict": false,
+        "definer": false,
+        "defaults": null,
+        "language": "sql",
+        "parallel": "s",
+        "arguments": [
+          "p_title",
+          "p_description",
+          "p_category",
+          "p_city",
+          "p_country"
+        ],
+        "leakproof": false,
+        "signature": "jobs_private.search_document(text,text,text,text,text)",
+        "volatility": "i"
+      },
+      {
+        "acl": [
+          {
+            "grantee": "authenticated",
+            "grantor": "selqiro_listing_contact_writer_v1",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          },
+          {
+            "grantee": "selqiro_listing_contact_writer_v1",
+            "grantor": "selqiro_listing_contact_writer_v1",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          }
+        ],
+        "body": "2df424b0a40077caa36945bf7edae813bff15edfd3f6cd0b976dff58a1b8fadb",
+        "owner": "selqiro_listing_contact_writer_v1",
+        "config": [
+          "search_path=pg_catalog, pg_temp",
+          "TimeZone=UTC",
+          "lock_timeout=2s"
+        ],
+        "result": "jsonb",
+        "strict": false,
+        "definer": true,
+        "defaults": null,
+        "language": "plpgsql",
+        "parallel": "u",
+        "arguments": [
+          "p_expected_user_id",
+          "p_expected_identity_id",
+          "p_request_key",
+          "p_job_id"
+        ],
+        "leakproof": false,
+        "signature": "public.contact_my_job_provider_v1(uuid,uuid,uuid,uuid)",
+        "volatility": "v"
+      },
+      {
+        "acl": [
+          {
+            "grantee": "anon",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          },
+          {
+            "grantee": "authenticated",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          },
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          }
+        ],
+        "body": "7ebb02b79e95c0bbca664401d3e21626eaf4322cf37dc605b0b0eada0d8c75b6",
+        "owner": "postgres",
+        "config": [
+          "search_path=pg_catalog, pg_temp",
+          "TimeZone=UTC"
+        ],
+        "result": "jsonb",
+        "strict": false,
+        "definer": true,
+        "defaults": null,
+        "language": "sql",
+        "parallel": "u",
+        "arguments": null,
+        "leakproof": false,
+        "signature": "public.get_job_categories_v1()",
+        "volatility": "s"
+      },
+      {
+        "acl": [
+          {
+            "grantee": "authenticated",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          },
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          }
+        ],
+        "body": "465771b4a363d023dcd96f175d9a7ef6f0b9196306b985277935a5c2e9746d88",
+        "owner": "postgres",
+        "config": [
+          "search_path=pg_catalog, pg_temp",
+          "TimeZone=UTC",
+          "lock_timeout=2s"
+        ],
+        "result": "jsonb",
+        "strict": false,
+        "definer": true,
+        "defaults": "24, NULL::jsonb",
+        "language": "plpgsql",
+        "parallel": "u",
+        "arguments": [
+          "p_expected_user_id",
+          "p_expected_identity_id",
+          "p_result_limit",
+          "p_cursor"
+        ],
+        "leakproof": false,
+        "signature": "public.get_my_jobs_v1(uuid,uuid,integer,jsonb)",
+        "volatility": "s"
+      },
+      {
+        "acl": [
+          {
+            "grantee": "anon",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          },
+          {
+            "grantee": "authenticated",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          },
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          }
+        ],
+        "body": "1ddb3ffada58508462c32b63a0cb566a5582cd22682fa8c6b1ed86053f3020df",
+        "owner": "postgres",
+        "config": [
+          "search_path=pg_catalog, pg_temp",
+          "TimeZone=UTC"
+        ],
+        "result": "jsonb",
+        "strict": false,
+        "definer": true,
+        "defaults": null,
+        "language": "sql",
+        "parallel": "u",
+        "arguments": [
+          "p_job_id"
+        ],
+        "leakproof": false,
+        "signature": "public.get_public_job_v1(uuid)",
+        "volatility": "s"
+      },
+      {
+        "acl": [
+          {
+            "grantee": "anon",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          },
+          {
+            "grantee": "authenticated",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          },
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          }
+        ],
+        "body": "ec3d96fe4dc460cef8bd646d8ae376e06e8a0f7320508451d83f711879495fc3",
+        "owner": "postgres",
+        "config": [
+          "search_path=pg_catalog, pg_temp",
+          "TimeZone=UTC",
+          "plan_cache_mode=force_custom_plan"
+        ],
+        "result": "jsonb",
+        "strict": false,
+        "definer": true,
+        "defaults": "''::text, NULL::text, NULL::text, NULL::text, NULL::text, NULL::text, NULL::text, 24, NULL::jsonb",
+        "language": "plpgsql",
+        "parallel": "u",
+        "arguments": [
+          "p_query",
+          "p_category",
+          "p_country_code",
+          "p_city",
+          "p_workplace_type",
+          "p_employment_type",
+          "p_working_time",
+          "p_result_limit",
+          "p_cursor"
+        ],
+        "leakproof": false,
+        "signature": "public.search_public_jobs_v1(text,text,text,text,text,text,text,integer,jsonb)",
+        "volatility": "s"
+      }
+    ],
+    "accepted_service_base": {
+      "columns": [
+        {
+          "name": "display_name",
+          "type": "text",
+          "identity": "",
+          "not_null": true,
+          "relation": "public.identities",
+          "generated": ""
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "identity": "",
+          "not_null": true,
+          "relation": "public.services",
+          "generated": ""
+        },
+        {
+          "name": "edit_revision",
+          "type": "bigint",
+          "identity": "",
+          "not_null": true,
+          "relation": "public.services",
+          "generated": ""
+        },
+        {
+          "name": "published_at",
+          "type": "timestamp with time zone",
+          "identity": "",
+          "not_null": false,
+          "relation": "public.services",
+          "generated": ""
+        },
+        {
+          "name": "sort_order",
+          "type": "integer",
+          "identity": "",
+          "not_null": true,
+          "relation": "public.services",
+          "generated": ""
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "identity": "",
+          "not_null": true,
+          "relation": "public.services",
+          "generated": ""
+        }
+      ],
+      "indexes": [
+        {
+          "name": "services_public_discovery_idx",
+          "ready": true,
+          "valid": true,
+          "unique": false,
+          "primary": false,
+          "relation": "public.services",
+          "definition_sha256": "15c64fe7f46c2d957ba8f4d0b7cdc439ec9a6817b6a754e21c53c604fa165ff5"
+        }
+      ],
+      "dependencies": [
+        {
+          "name": "public.get_public_service_v1",
+          "owner": "postgres",
+          "grants": [
+            {
+              "role": "anon",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            },
+            {
+              "role": "authenticated",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            },
+            {
+              "role": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            }
+          ],
+          "result": "jsonb",
+          "strict": false,
+          "definer": true,
+          "defaults": false,
+          "language": "sql",
+          "parallel": "u",
+          "arguments": [
+            "uuid"
+          ],
+          "leakproof": false,
+          "volatility": "s",
+          "body_sha256": "3b8b8e318ce910074c5ae95103d2c30b2d29ad203895c5d3d7f93090df44b10b",
+          "config_sha256": "8a99ef30e82bf63f97a0f2bb54e5484d1b27779ff3d93cad1079c2934c2485a6",
+          "definition_sha256": "25d0a92ec3de7e72902f17bb225d94b2b5d4089d5780f9ed5b7b40c6c96a6636"
+        },
+        {
+          "name": "public.search_public_services_v1",
+          "owner": "postgres",
+          "grants": [
+            {
+              "role": "anon",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            },
+            {
+              "role": "authenticated",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            },
+            {
+              "role": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            }
+          ],
+          "result": "jsonb",
+          "strict": false,
+          "definer": true,
+          "defaults": true,
+          "language": "plpgsql",
+          "parallel": "u",
+          "arguments": [
+            "text",
+            "text",
+            "text",
+            "text",
+            "text",
+            "integer",
+            "integer"
+          ],
+          "leakproof": false,
+          "volatility": "s",
+          "body_sha256": "d0a518d7e344a8f3aa61f5422897c38d733cd68968dfc838add4f77f2b7b6cf6",
+          "config_sha256": "8a99ef30e82bf63f97a0f2bb54e5484d1b27779ff3d93cad1079c2934c2485a6",
+          "definition_sha256": "6d83499f3022348bcab0e349190775f309462c6785a74712582b7e1c1828d3ed"
+        },
+        {
+          "name": "service_publication_private.public_fields",
+          "owner": "postgres",
+          "grants": [
+            {
+              "role": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            },
+            {
+              "role": "selqiro_listing_final_writer_v1",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            }
+          ],
+          "result": "jsonb",
+          "strict": false,
+          "definer": true,
+          "defaults": false,
+          "language": "sql",
+          "parallel": "u",
+          "arguments": [
+            "public.services"
+          ],
+          "leakproof": false,
+          "volatility": "s",
+          "body_sha256": "6f4709a715ae5cc22b544c4e882c742abaef51689bd0d619f146c361829ad081",
+          "config_sha256": "8a99ef30e82bf63f97a0f2bb54e5484d1b27779ff3d93cad1079c2934c2485a6",
+          "definition_sha256": "929445ad2ef2c758629fcda21079e1a88d65c8b46d94c59924e415009f7e3606"
+        }
+      ],
+      "browser_privileges": [
+        {
+          "role": "anon",
+          "delete": false,
+          "insert": false,
+          "select": false,
+          "update": false,
+          "relation": "public.service_images"
+        },
+        {
+          "role": "authenticated",
+          "delete": false,
+          "insert": false,
+          "select": false,
+          "update": false,
+          "relation": "public.service_images"
+        },
+        {
+          "role": "anon",
+          "delete": false,
+          "insert": false,
+          "select": false,
+          "update": false,
+          "relation": "public.services"
+        },
+        {
+          "role": "authenticated",
+          "delete": false,
+          "insert": false,
+          "select": false,
+          "update": false,
+          "relation": "public.services"
+        }
+      ],
+      "accepted_profile_marketplace_base": {
+        "keys": [
+          {
+            "name": "horse_offer_store_categories_horse_offer_id_fkey",
+            "type": "f",
+            "relation": "public.horse_offer_store_categories",
+            "validated": true,
+            "definition_sha256": "dc17c6e587a9afc99404627cf2d1bc2e346b1b69c6f21a684d8e88167eca0444"
+          },
+          {
+            "name": "horse_offer_store_categories_pkey",
+            "type": "p",
+            "relation": "public.horse_offer_store_categories",
+            "validated": true,
+            "definition_sha256": "8ea49f5e4d8f1c8505ee1b1fa26707a38de73b06405060f3a5550662ea54eddd"
+          },
+          {
+            "name": "horse_offer_store_categories_store_category_id_fkey",
+            "type": "f",
+            "relation": "public.horse_offer_store_categories",
+            "validated": true,
+            "definition_sha256": "943a2b480638fe473572d8782de90aac0a4799305d8a32fac32967c61984bb91"
+          },
+          {
+            "name": "listing_store_categories_listing_id_fkey",
+            "type": "f",
+            "relation": "public.listing_store_categories",
+            "validated": true,
+            "definition_sha256": "cf1ab556cf528be5ca4e306d260023620ee5474deb9edcf9089e021312942d4d"
+          },
+          {
+            "name": "listing_store_categories_pkey",
+            "type": "p",
+            "relation": "public.listing_store_categories",
+            "validated": true,
+            "definition_sha256": "f034a9131aae66da43cc212fcfbe84a217cd8a671b8535bd29b7d324afbf6a4a"
+          },
+          {
+            "name": "listing_store_categories_store_category_id_fkey",
+            "type": "f",
+            "relation": "public.listing_store_categories",
+            "validated": true,
+            "definition_sha256": "943a2b480638fe473572d8782de90aac0a4799305d8a32fac32967c61984bb91"
+          },
+          {
+            "name": "service_images_identity_id_fkey",
+            "type": "f",
+            "relation": "public.service_images",
+            "validated": true,
+            "definition_sha256": "9153a04d588f6f82244dcd5d7b989bb6f793f820495a078387f433b78e0564e7"
+          },
+          {
+            "name": "service_images_pkey",
+            "type": "p",
+            "relation": "public.service_images",
+            "validated": true,
+            "definition_sha256": "8c8464f42472e42ee190fc91ca8db79b5351d3a4609040516578d229c56f6fa5"
+          },
+          {
+            "name": "service_images_service_id_fkey",
+            "type": "f",
+            "relation": "public.service_images",
+            "validated": true,
+            "definition_sha256": "cb1b6f4b22d50ab38df8935f7ad528bb20ea54f509d443748f76a5d297ea1334"
+          },
+          {
+            "name": "service_images_service_path_key",
+            "type": "u",
+            "relation": "public.service_images",
+            "validated": true,
+            "definition_sha256": "29eeb3095e1b6104f4f4216863b02f7bd50aca8b310ccfe09ed66d47d7887f97"
+          },
+          {
+            "name": "service_images_uploaded_by_user_id_fkey",
+            "type": "f",
+            "relation": "public.service_images",
+            "validated": true,
+            "definition_sha256": "fcf28862fa886ccfa4bdf1f698c00e0e0df486796a4327e2b6a71ac42d6cf745"
+          },
+          {
+            "name": "service_store_categories_pkey",
+            "type": "p",
+            "relation": "public.service_store_categories",
+            "validated": true,
+            "definition_sha256": "8be32f24d882fb1e3367bedc217354261376cfae719ecaab4958fb60e1e80e2c"
+          },
+          {
+            "name": "service_store_categories_service_id_fkey",
+            "type": "f",
+            "relation": "public.service_store_categories",
+            "validated": true,
+            "definition_sha256": "cb1b6f4b22d50ab38df8935f7ad528bb20ea54f509d443748f76a5d297ea1334"
+          },
+          {
+            "name": "service_store_categories_store_category_id_fkey",
+            "type": "f",
+            "relation": "public.service_store_categories",
+            "validated": true,
+            "definition_sha256": "943a2b480638fe473572d8782de90aac0a4799305d8a32fac32967c61984bb91"
+          },
+          {
+            "name": "services_identity_id_fkey",
+            "type": "f",
+            "relation": "public.services",
+            "validated": true,
+            "definition_sha256": "9153a04d588f6f82244dcd5d7b989bb6f793f820495a078387f433b78e0564e7"
+          },
+          {
+            "name": "services_pkey",
+            "type": "p",
+            "relation": "public.services",
+            "validated": true,
+            "definition_sha256": "8c8464f42472e42ee190fc91ca8db79b5351d3a4609040516578d229c56f6fa5"
+          },
+          {
+            "name": "store_categories_identity_id_fkey",
+            "type": "f",
+            "relation": "public.store_categories",
+            "validated": true,
+            "definition_sha256": "9153a04d588f6f82244dcd5d7b989bb6f793f820495a078387f433b78e0564e7"
+          },
+          {
+            "name": "store_categories_parent_id_fkey",
+            "type": "f",
+            "relation": "public.store_categories",
+            "validated": true,
+            "definition_sha256": "b875d7c5214c5ac9ce1b5b769d44609677b9bc522b6d9ace6074c36e3466ae42"
+          },
+          {
+            "name": "store_categories_pkey",
+            "type": "p",
+            "relation": "public.store_categories",
+            "validated": true,
+            "definition_sha256": "8c8464f42472e42ee190fc91ca8db79b5351d3a4609040516578d229c56f6fa5"
+          },
+          {
+            "name": "store_categories_user_id_fkey",
+            "type": "f",
+            "relation": "public.store_categories",
+            "validated": true,
+            "definition_sha256": "7dffc1fe5c72443147ef9227e966626cdc6e5997f36e90bcc553577512766d2a"
+          },
+          {
+            "name": "activity_pkey",
+            "type": "p",
+            "relation": "service_publication_private.activity",
+            "validated": true,
+            "definition_sha256": "3da538dd77df8254296dbdbd6533fbef1549fb5bb00a0b376784527f4270ef58"
+          },
+          {
+            "name": "activity_service_id_fkey",
+            "type": "f",
+            "relation": "service_publication_private.activity",
+            "validated": true,
+            "definition_sha256": "7ad545595c2121d304821cbf36d04874345be7d3dfcfd60a2d92de25dc2d8aba"
+          },
+          {
+            "name": "events_actor_user_id_fkey",
+            "type": "f",
+            "relation": "service_publication_private.events",
+            "validated": true,
+            "definition_sha256": "4e0ec5fe9848d090a22e81b64e25bdd745b3d7a0ecc3cb07c35c4b34c3ae2f2f"
+          },
+          {
+            "name": "events_identity_id_fkey",
+            "type": "f",
+            "relation": "service_publication_private.events",
+            "validated": true,
+            "definition_sha256": "708a634c89dcbe7159324090ed53998e8978c8b49f1abd968cb95f10b9139d94"
+          },
+          {
+            "name": "events_pkey",
+            "type": "p",
+            "relation": "service_publication_private.events",
+            "validated": true,
+            "definition_sha256": "8c8464f42472e42ee190fc91ca8db79b5351d3a4609040516578d229c56f6fa5"
+          },
+          {
+            "name": "events_service_id_fkey",
+            "type": "f",
+            "relation": "service_publication_private.events",
+            "validated": true,
+            "definition_sha256": "7ad545595c2121d304821cbf36d04874345be7d3dfcfd60a2d92de25dc2d8aba"
+          },
+          {
+            "name": "events_submission_key_fkey",
+            "type": "f",
+            "relation": "service_publication_private.events",
+            "validated": true,
+            "definition_sha256": "e395c433b4557a98e34f383c9a1ed577c76c0a8be65d0f1b5aef010f19b6d2b9"
+          },
+          {
+            "name": "events_submission_key_key",
+            "type": "u",
+            "relation": "service_publication_private.events",
+            "validated": true,
+            "definition_sha256": "f3199eeac36631c08d4dcc542ba276478ff120412838a067b41dcca5ac7df8ec"
+          },
+          {
+            "name": "gallery_attempt_id_fkey",
+            "type": "f",
+            "relation": "service_publication_private.gallery",
+            "validated": true,
+            "definition_sha256": "f0b91587a1a62d7fdb6298b625df047a3c213a4ee041a5d08c150847ab3a0b78"
+          },
+          {
+            "name": "gallery_attempt_id_slot_id_key",
+            "type": "u",
+            "relation": "service_publication_private.gallery",
+            "validated": true,
+            "definition_sha256": "4c6bb9176c924bcd8b43249ddc689f1b49d2b6130cf7405975977e6bf953ced5"
+          },
+          {
+            "name": "gallery_image_id_fkey",
+            "type": "f",
+            "relation": "service_publication_private.gallery",
+            "validated": true,
+            "definition_sha256": "0d98b37bf4c07551278f9e1ceaba4f3add81720044356b366dc7a191713d99e3"
+          },
+          {
+            "name": "gallery_object_id_fkey",
+            "type": "f",
+            "relation": "service_publication_private.gallery",
+            "validated": true,
+            "definition_sha256": "54aedb8eb608a36f0bbccc9bad994d1b07e93fafd145e6981e048a39bf6994a8"
+          },
+          {
+            "name": "gallery_pkey",
+            "type": "p",
+            "relation": "service_publication_private.gallery",
+            "validated": true,
+            "definition_sha256": "6ad150eb8439d5939f652817db2eee6706506c90ff32ffb163ddac3b89f51d18"
+          },
+          {
+            "name": "gallery_service_id_fkey",
+            "type": "f",
+            "relation": "service_publication_private.gallery",
+            "validated": true,
+            "definition_sha256": "f29091f2fbe98d62f6ca95a56bdadf8665dc0d17228cdf496ec7b168b9790184"
+          },
+          {
+            "name": "gallery_slot_id_fkey",
+            "type": "f",
+            "relation": "service_publication_private.gallery",
+            "validated": true,
+            "definition_sha256": "00ddb23f5d01907ca768571e38ccf46e94b4ab38bd8911df82253bb5ed1f0536"
+          },
+          {
+            "name": "heads_event_id_fkey",
+            "type": "f",
+            "relation": "service_publication_private.heads",
+            "validated": true,
+            "definition_sha256": "7a1be6d3fb5836c8982ee80b5d06677f99efebcbddcc025a8ca2fba92dca92ce"
+          },
+          {
+            "name": "heads_event_id_key",
+            "type": "u",
+            "relation": "service_publication_private.heads",
+            "validated": true,
+            "definition_sha256": "662175eef6ce9198a68013dbdad3dbe097ce5853f3c3d63e9ab3dc7686e05e08"
+          },
+          {
+            "name": "heads_pkey",
+            "type": "p",
+            "relation": "service_publication_private.heads",
+            "validated": true,
+            "definition_sha256": "3da538dd77df8254296dbdbd6533fbef1549fb5bb00a0b376784527f4270ef58"
+          },
+          {
+            "name": "heads_service_id_fkey",
+            "type": "f",
+            "relation": "service_publication_private.heads",
+            "validated": true,
+            "definition_sha256": "7ad545595c2121d304821cbf36d04874345be7d3dfcfd60a2d92de25dc2d8aba"
+          }
+        ],
+        "columns": [
+          {
+            "name": "horse_offer_id",
+            "type": "uuid",
+            "identity": "",
+            "not_null": true,
+            "relation": "public.horse_offer_store_categories",
+            "generated": ""
+          },
+          {
+            "name": "store_category_id",
+            "type": "uuid",
+            "identity": "",
+            "not_null": true,
+            "relation": "public.horse_offer_store_categories",
+            "generated": ""
+          },
+          {
+            "name": "listing_id",
+            "type": "bigint",
+            "identity": "",
+            "not_null": true,
+            "relation": "public.listing_store_categories",
+            "generated": ""
+          },
+          {
+            "name": "store_category_id",
+            "type": "uuid",
+            "identity": "",
+            "not_null": true,
+            "relation": "public.listing_store_categories",
+            "generated": ""
+          },
+          {
+            "name": "created_at",
+            "type": "timestamp with time zone",
+            "identity": "",
+            "not_null": true,
+            "relation": "public.service_images",
+            "generated": ""
+          },
+          {
+            "name": "id",
+            "type": "uuid",
+            "identity": "",
+            "not_null": true,
+            "relation": "public.service_images",
+            "generated": ""
+          },
+          {
+            "name": "identity_id",
+            "type": "uuid",
+            "identity": "",
+            "not_null": true,
+            "relation": "public.service_images",
+            "generated": ""
+          },
+          {
+            "name": "is_primary",
+            "type": "boolean",
+            "identity": "",
+            "not_null": true,
+            "relation": "public.service_images",
+            "generated": ""
+          },
+          {
+            "name": "medium_url",
+            "type": "text",
+            "identity": "",
+            "not_null": false,
+            "relation": "public.service_images",
+            "generated": ""
+          },
+          {
+            "name": "original_url",
+            "type": "text",
+            "identity": "",
+            "not_null": true,
+            "relation": "public.service_images",
+            "generated": ""
+          },
+          {
+            "name": "service_id",
+            "type": "uuid",
+            "identity": "",
+            "not_null": true,
+            "relation": "public.service_images",
+            "generated": ""
+          },
+          {
+            "name": "sort_order",
+            "type": "integer",
+            "identity": "",
+            "not_null": true,
+            "relation": "public.service_images",
+            "generated": ""
+          },
+          {
+            "name": "thumb_url",
+            "type": "text",
+            "identity": "",
+            "not_null": false,
+            "relation": "public.service_images",
+            "generated": ""
+          },
+          {
+            "name": "service_id",
+            "type": "uuid",
+            "identity": "",
+            "not_null": true,
+            "relation": "public.service_store_categories",
+            "generated": ""
+          },
+          {
+            "name": "store_category_id",
+            "type": "uuid",
+            "identity": "",
+            "not_null": true,
+            "relation": "public.service_store_categories",
+            "generated": ""
+          },
+          {
+            "name": "category",
+            "type": "text",
+            "identity": "",
+            "not_null": false,
+            "relation": "public.services",
+            "generated": ""
+          },
+          {
+            "name": "city",
+            "type": "text",
+            "identity": "",
+            "not_null": false,
+            "relation": "public.services",
+            "generated": ""
+          },
+          {
+            "name": "country",
+            "type": "text",
+            "identity": "",
+            "not_null": false,
+            "relation": "public.services",
+            "generated": ""
+          },
+          {
+            "name": "currency",
+            "type": "text",
+            "identity": "",
+            "not_null": true,
+            "relation": "public.services",
+            "generated": ""
+          },
+          {
+            "name": "description",
+            "type": "text",
+            "identity": "",
+            "not_null": true,
+            "relation": "public.services",
+            "generated": ""
+          },
+          {
+            "name": "id",
+            "type": "uuid",
+            "identity": "",
+            "not_null": true,
+            "relation": "public.services",
+            "generated": ""
+          },
+          {
+            "name": "identity_id",
+            "type": "uuid",
+            "identity": "",
+            "not_null": true,
+            "relation": "public.services",
+            "generated": ""
+          },
+          {
+            "name": "image_url",
+            "type": "text",
+            "identity": "",
+            "not_null": false,
+            "relation": "public.services",
+            "generated": ""
+          },
+          {
+            "name": "location",
+            "type": "text",
+            "identity": "",
+            "not_null": false,
+            "relation": "public.services",
+            "generated": ""
+          },
+          {
+            "name": "price_amount",
+            "type": "numeric(12,2)",
+            "identity": "",
+            "not_null": false,
+            "relation": "public.services",
+            "generated": ""
+          },
+          {
+            "name": "price_type",
+            "type": "text",
+            "identity": "",
+            "not_null": true,
+            "relation": "public.services",
+            "generated": ""
+          },
+          {
+            "name": "status",
+            "type": "text",
+            "identity": "",
+            "not_null": true,
+            "relation": "public.services",
+            "generated": ""
+          },
+          {
+            "name": "subcategory",
+            "type": "text",
+            "identity": "",
+            "not_null": false,
+            "relation": "public.services",
+            "generated": ""
+          },
+          {
+            "name": "title",
+            "type": "text",
+            "identity": "",
+            "not_null": true,
+            "relation": "public.services",
+            "generated": ""
+          },
+          {
+            "name": "created_at",
+            "type": "timestamp with time zone",
+            "identity": "",
+            "not_null": true,
+            "relation": "public.store_categories",
+            "generated": ""
+          },
+          {
+            "name": "id",
+            "type": "uuid",
+            "identity": "",
+            "not_null": true,
+            "relation": "public.store_categories",
+            "generated": ""
+          },
+          {
+            "name": "identity_id",
+            "type": "uuid",
+            "identity": "",
+            "not_null": true,
+            "relation": "public.store_categories",
+            "generated": ""
+          },
+          {
+            "name": "name",
+            "type": "text",
+            "identity": "",
+            "not_null": true,
+            "relation": "public.store_categories",
+            "generated": ""
+          },
+          {
+            "name": "parent_id",
+            "type": "uuid",
+            "identity": "",
+            "not_null": false,
+            "relation": "public.store_categories",
+            "generated": ""
+          },
+          {
+            "name": "sort_order",
+            "type": "integer",
+            "identity": "",
+            "not_null": true,
+            "relation": "public.store_categories",
+            "generated": ""
+          },
+          {
+            "name": "active_until",
+            "type": "timestamp with time zone",
+            "identity": "",
+            "not_null": true,
+            "relation": "service_publication_private.activity",
+            "generated": ""
+          },
+          {
+            "name": "service_id",
+            "type": "uuid",
+            "identity": "",
+            "not_null": true,
+            "relation": "service_publication_private.activity",
+            "generated": ""
+          },
+          {
+            "name": "content_hash",
+            "type": "text",
+            "identity": "",
+            "not_null": true,
+            "relation": "service_publication_private.events",
+            "generated": ""
+          },
+          {
+            "name": "content_snapshot",
+            "type": "jsonb",
+            "identity": "",
+            "not_null": true,
+            "relation": "service_publication_private.events",
+            "generated": ""
+          },
+          {
+            "name": "id",
+            "type": "uuid",
+            "identity": "",
+            "not_null": true,
+            "relation": "service_publication_private.events",
+            "generated": ""
+          },
+          {
+            "name": "identity_id",
+            "type": "uuid",
+            "identity": "",
+            "not_null": true,
+            "relation": "service_publication_private.events",
+            "generated": ""
+          },
+          {
+            "name": "service_id",
+            "type": "uuid",
+            "identity": "",
+            "not_null": true,
+            "relation": "service_publication_private.events",
+            "generated": ""
+          },
+          {
+            "name": "attempt_id",
+            "type": "uuid",
+            "identity": "",
+            "not_null": true,
+            "relation": "service_publication_private.gallery",
+            "generated": ""
+          },
+          {
+            "name": "image_id",
+            "type": "uuid",
+            "identity": "",
+            "not_null": true,
+            "relation": "service_publication_private.gallery",
+            "generated": ""
+          },
+          {
+            "name": "object_id",
+            "type": "uuid",
+            "identity": "",
+            "not_null": true,
+            "relation": "service_publication_private.gallery",
+            "generated": ""
+          },
+          {
+            "name": "ready_id",
+            "type": "uuid",
+            "identity": "",
+            "not_null": true,
+            "relation": "service_publication_private.gallery",
+            "generated": ""
+          },
+          {
+            "name": "service_id",
+            "type": "uuid",
+            "identity": "",
+            "not_null": true,
+            "relation": "service_publication_private.gallery",
+            "generated": ""
+          },
+          {
+            "name": "slot_id",
+            "type": "uuid",
+            "identity": "",
+            "not_null": true,
+            "relation": "service_publication_private.gallery",
+            "generated": ""
+          },
+          {
+            "name": "event_id",
+            "type": "uuid",
+            "identity": "",
+            "not_null": true,
+            "relation": "service_publication_private.heads",
+            "generated": ""
+          },
+          {
+            "name": "service_id",
+            "type": "uuid",
+            "identity": "",
+            "not_null": true,
+            "relation": "service_publication_private.heads",
+            "generated": ""
+          }
+        ],
+        "indexes": [
+          {
+            "name": "horse_offer_store_categories_category_idx",
+            "ready": true,
+            "valid": true,
+            "unique": false,
+            "primary": false,
+            "relation": "public.horse_offer_store_categories",
+            "definition_sha256": "0c04fd6440e267be1c2f7fa34d9e7a3e88acb228a2fd03554d3d505d8af076ae"
+          },
+          {
+            "name": "horse_offer_store_categories_pkey",
+            "ready": true,
+            "valid": true,
+            "unique": true,
+            "primary": true,
+            "relation": "public.horse_offer_store_categories",
+            "definition_sha256": "8b5b147b8bf556d13ca3be2462c94b7a214681e7e26a3ea046790057b9447abf"
+          },
+          {
+            "name": "idx_listing_store_categories_category",
+            "ready": true,
+            "valid": true,
+            "unique": false,
+            "primary": false,
+            "relation": "public.listing_store_categories",
+            "definition_sha256": "c10f3d477f6531065dbe7b8f8f4e7febe307af050ff54aa500513566f46119a3"
+          },
+          {
+            "name": "idx_listing_store_categories_listing",
+            "ready": true,
+            "valid": true,
+            "unique": false,
+            "primary": false,
+            "relation": "public.listing_store_categories",
+            "definition_sha256": "b3769c69b254c0871417ae726d048dcccbf6b7ebe16b0d836a5b23ace821ed39"
+          },
+          {
+            "name": "listing_store_categories_pkey",
+            "ready": true,
+            "valid": true,
+            "unique": true,
+            "primary": true,
+            "relation": "public.listing_store_categories",
+            "definition_sha256": "83079d5483325244fe55de04099eca3d6c23085ce22d3413598c02a785e07da7"
+          },
+          {
+            "name": "service_images_pkey",
+            "ready": true,
+            "valid": true,
+            "unique": true,
+            "primary": true,
+            "relation": "public.service_images",
+            "definition_sha256": "b8fb76d19d2bfdc3a4a7f2e59144c3dd8475dd006d624ed52c30b9179ab15789"
+          },
+          {
+            "name": "service_images_service_order_idx",
+            "ready": true,
+            "valid": true,
+            "unique": false,
+            "primary": false,
+            "relation": "public.service_images",
+            "definition_sha256": "2dd5ea2bdd45de4f4674583a10431b1395c6c3189c88e15931931a320f0da517"
+          },
+          {
+            "name": "service_store_categories_category_idx",
+            "ready": true,
+            "valid": true,
+            "unique": false,
+            "primary": false,
+            "relation": "public.service_store_categories",
+            "definition_sha256": "0bc7ac06f70198d10746ddc1da2553d5d1d8f200b3d7f87ae8363e858d24ec95"
+          },
+          {
+            "name": "service_store_categories_pkey",
+            "ready": true,
+            "valid": true,
+            "unique": true,
+            "primary": true,
+            "relation": "public.service_store_categories",
+            "definition_sha256": "5dfc92d313dd42cd03dabcc3145d0ffe7bbc654978f30b6e0aa14883bbb7b8b0"
+          },
+          {
+            "name": "services_identity_status_order_idx",
+            "ready": true,
+            "valid": true,
+            "unique": false,
+            "primary": false,
+            "relation": "public.services",
+            "definition_sha256": "c0d00c6f68604fbb6586972a46bb3636e5157f76455a664c3c33c8634a3a2908"
+          },
+          {
+            "name": "services_pkey",
+            "ready": true,
+            "valid": true,
+            "unique": true,
+            "primary": true,
+            "relation": "public.services",
+            "definition_sha256": "ef492f7e1a862ce058825a8bf4ab9ef202e2efd7ab708ef721379d46d949a874"
+          },
+          {
+            "name": "store_categories_identity_id_idx",
+            "ready": true,
+            "valid": true,
+            "unique": false,
+            "primary": false,
+            "relation": "public.store_categories",
+            "definition_sha256": "7b4adc981fd1ccfed659080c154dfe9b6213d969ca3a41bd024b91d451303e55"
+          },
+          {
+            "name": "store_categories_identity_parent_sort_idx",
+            "ready": true,
+            "valid": true,
+            "unique": false,
+            "primary": false,
+            "relation": "public.store_categories",
+            "definition_sha256": "f17d940f12d753780f96c1c8baf7f126cba6e4bda8a813628a567970d30694a2"
+          },
+          {
+            "name": "store_categories_identity_sort_idx",
+            "ready": true,
+            "valid": true,
+            "unique": false,
+            "primary": false,
+            "relation": "public.store_categories",
+            "definition_sha256": "2eef92cbdd2e2ad59970585abbf340ad35d45cc5276075a53a44354867a53561"
+          },
+          {
+            "name": "store_categories_pkey",
+            "ready": true,
+            "valid": true,
+            "unique": true,
+            "primary": true,
+            "relation": "public.store_categories",
+            "definition_sha256": "f69d574666b02e81c52f2d888595c8c9d62b9572cf2fb27e73f027b31002ad4d"
+          },
+          {
+            "name": "activity_pkey",
+            "ready": true,
+            "valid": true,
+            "unique": true,
+            "primary": true,
+            "relation": "service_publication_private.activity",
+            "definition_sha256": "24e6552835e8c7ddd778b26e56bdc249c46e6932888d65a994abe3848a71bdc4"
+          },
+          {
+            "name": "service_activity_until_idx",
+            "ready": true,
+            "valid": true,
+            "unique": false,
+            "primary": false,
+            "relation": "service_publication_private.activity",
+            "definition_sha256": "7f3859d03673e7a14476a8d9a4e54e74f9eb04991b349792cbf09f7b6c8ddfb2"
+          },
+          {
+            "name": "events_pkey",
+            "ready": true,
+            "valid": true,
+            "unique": true,
+            "primary": true,
+            "relation": "service_publication_private.events",
+            "definition_sha256": "723773cc0202313ce5d882c4fe4baf43dafef1bcfbbb916557d1884e58332d4f"
+          },
+          {
+            "name": "gallery_pkey",
+            "ready": true,
+            "valid": true,
+            "unique": true,
+            "primary": true,
+            "relation": "service_publication_private.gallery",
+            "definition_sha256": "cef81671dfd6fd5869fdaa8fa75b4a8f7b79a93cc242b5809c76c0e178531655"
+          },
+          {
+            "name": "heads_pkey",
+            "ready": true,
+            "valid": true,
+            "unique": true,
+            "primary": true,
+            "relation": "service_publication_private.heads",
+            "definition_sha256": "39a6592cca1dac4bbd78951f4ce6c65a4418c0bf6183c975b6ad3b24716b31ec"
+          }
+        ],
+        "relations": [
+          {
+            "rls": true,
+            "kind": "r",
+            "name": "public.horse_offer_store_categories",
+            "owner": "postgres",
+            "force_rls": false,
+            "observer_select": true
+          },
+          {
+            "rls": true,
+            "kind": "r",
+            "name": "public.listing_store_categories",
+            "owner": "postgres",
+            "force_rls": false,
+            "observer_select": true
+          },
+          {
+            "rls": true,
+            "kind": "r",
+            "name": "public.service_images",
+            "owner": "postgres",
+            "force_rls": false,
+            "observer_select": true
+          },
+          {
+            "rls": true,
+            "kind": "r",
+            "name": "public.service_store_categories",
+            "owner": "postgres",
+            "force_rls": false,
+            "observer_select": true
+          },
+          {
+            "rls": true,
+            "kind": "r",
+            "name": "public.services",
+            "owner": "postgres",
+            "force_rls": false,
+            "observer_select": true
+          },
+          {
+            "rls": true,
+            "kind": "r",
+            "name": "public.store_categories",
+            "owner": "postgres",
+            "force_rls": false,
+            "observer_select": true
+          },
+          {
+            "rls": true,
+            "kind": "r",
+            "name": "service_publication_private.activity",
+            "owner": "postgres",
+            "force_rls": false,
+            "observer_select": true
+          },
+          {
+            "rls": true,
+            "kind": "r",
+            "name": "service_publication_private.events",
+            "owner": "postgres",
+            "force_rls": false,
+            "observer_select": true
+          },
+          {
+            "rls": true,
+            "kind": "r",
+            "name": "service_publication_private.gallery",
+            "owner": "postgres",
+            "force_rls": false,
+            "observer_select": true
+          },
+          {
+            "rls": true,
+            "kind": "r",
+            "name": "service_publication_private.heads",
+            "owner": "postgres",
+            "force_rls": false,
+            "observer_select": true
+          }
+        ],
+        "dependencies": [
+          {
+            "name": "service_publication_private.content",
+            "owner": "postgres",
+            "grants": [
+              {
+                "role": "postgres",
+                "grantable": false,
+                "privilege": "EXECUTE"
+              },
+              {
+                "role": "selqiro_listing_final_writer_v1",
+                "grantable": false,
+                "privilege": "EXECUTE"
+              }
+            ],
+            "result": "jsonb",
+            "strict": false,
+            "definer": false,
+            "defaults": false,
+            "language": "sql",
+            "parallel": "u",
+            "arguments": [
+              "public.services"
+            ],
+            "leakproof": false,
+            "volatility": "i",
+            "body_sha256": "c8488bebea5e1358041a68351fba712025e3a755b90dca9bd7f060d325b5b198",
+            "config_sha256": "8a99ef30e82bf63f97a0f2bb54e5484d1b27779ff3d93cad1079c2934c2485a6",
+            "definition_sha256": "bea8661666ef3de850d23066956bc8d0b464cad1e1f2b7af3515b0ec921bd228"
+          },
+          {
+            "name": "service_publication_private.content_snapshot",
+            "owner": "postgres",
+            "grants": [
+              {
+                "role": "postgres",
+                "grantable": false,
+                "privilege": "EXECUTE"
+              },
+              {
+                "role": "selqiro_listing_final_writer_v1",
+                "grantable": false,
+                "privilege": "EXECUTE"
+              }
+            ],
+            "result": "jsonb",
+            "strict": false,
+            "definer": true,
+            "defaults": false,
+            "language": "sql",
+            "parallel": "u",
+            "arguments": [
+              "uuid"
+            ],
+            "leakproof": false,
+            "volatility": "s",
+            "body_sha256": "a803653dcc427f849449c5280d71443760072d48cc137759a9b31f618e01d16f",
+            "config_sha256": "8a99ef30e82bf63f97a0f2bb54e5484d1b27779ff3d93cad1079c2934c2485a6",
+            "definition_sha256": "11484b85463e402c84c2ea3abcd6d95c5def62782a4c796b8cdd16042deeb49d"
+          },
+          {
+            "name": "service_publication_private.has_current_publication",
+            "owner": "postgres",
+            "grants": [
+              {
+                "role": "postgres",
+                "grantable": false,
+                "privilege": "EXECUTE"
+              },
+              {
+                "role": "selqiro_listing_final_writer_v1",
+                "grantable": false,
+                "privilege": "EXECUTE"
+              }
+            ],
+            "result": "boolean",
+            "strict": false,
+            "definer": true,
+            "defaults": false,
+            "language": "sql",
+            "parallel": "u",
+            "arguments": [
+              "uuid"
+            ],
+            "leakproof": false,
+            "volatility": "s",
+            "body_sha256": "266760b6d552c260445956311cd0d85304530a9c6a32e57592268da978cfa423",
+            "config_sha256": "8a99ef30e82bf63f97a0f2bb54e5484d1b27779ff3d93cad1079c2934c2485a6",
+            "definition_sha256": "ccfbe03f937d9efa9ce17dddbd42fceb3d240e09703313b22f0d302e7154800d"
+          },
+          {
+            "name": "service_publication_private.image_projection",
+            "owner": "postgres",
+            "grants": [
+              {
+                "role": "postgres",
+                "grantable": false,
+                "privilege": "EXECUTE"
+              },
+              {
+                "role": "selqiro_listing_final_writer_v1",
+                "grantable": false,
+                "privilege": "EXECUTE"
+              }
+            ],
+            "result": "jsonb",
+            "strict": false,
+            "definer": true,
+            "defaults": false,
+            "language": "sql",
+            "parallel": "u",
+            "arguments": [
+              "uuid",
+              "boolean"
+            ],
+            "leakproof": false,
+            "volatility": "s",
+            "body_sha256": "5d5b9f28dec578dc61786553d2c8e07af8cdd4763fe53cdfbc3b70df0f591c1b",
+            "config_sha256": "8a99ef30e82bf63f97a0f2bb54e5484d1b27779ff3d93cad1079c2934c2485a6",
+            "definition_sha256": "89cc48dab2354b0ef3ef1eb385ec863be4e84a60844145144c18b2aab6f2b31b"
+          },
+          {
+            "name": "service_publication_private.is_public",
+            "owner": "postgres",
+            "grants": [
+              {
+                "role": "postgres",
+                "grantable": false,
+                "privilege": "EXECUTE"
+              },
+              {
+                "role": "selqiro_listing_final_writer_v1",
+                "grantable": false,
+                "privilege": "EXECUTE"
+              }
+            ],
+            "result": "boolean",
+            "strict": false,
+            "definer": true,
+            "defaults": false,
+            "language": "sql",
+            "parallel": "u",
+            "arguments": [
+              "uuid"
+            ],
+            "leakproof": false,
+            "volatility": "s",
+            "body_sha256": "91de9608312b7f86448fe66b839bee2758a0dc9aef9b09596295f6d296c1fa91",
+            "config_sha256": "8a99ef30e82bf63f97a0f2bb54e5484d1b27779ff3d93cad1079c2934c2485a6",
+            "definition_sha256": "3578dc473ce8f4e28e76e9314016abec973cfe51957885b07937897b0186a27e"
+          }
+        ],
+        "accepted_horse_base": {
+          "columns": [
+            {
+              "name": "attempt_id",
+              "type": "uuid",
+              "identity": "",
+              "not_null": true,
+              "relation": "horse_publication_private.gallery",
+              "generated": ""
+            },
+            {
+              "name": "horse_offer_id",
+              "type": "uuid",
+              "identity": "",
+              "not_null": true,
+              "relation": "horse_publication_private.gallery",
+              "generated": ""
+            },
+            {
+              "name": "image_id",
+              "type": "uuid",
+              "identity": "",
+              "not_null": true,
+              "relation": "horse_publication_private.gallery",
+              "generated": ""
+            },
+            {
+              "name": "object_id",
+              "type": "uuid",
+              "identity": "",
+              "not_null": true,
+              "relation": "horse_publication_private.gallery",
+              "generated": ""
+            },
+            {
+              "name": "ready_id",
+              "type": "uuid",
+              "identity": "",
+              "not_null": true,
+              "relation": "horse_publication_private.gallery",
+              "generated": ""
+            },
+            {
+              "name": "slot_id",
+              "type": "uuid",
+              "identity": "",
+              "not_null": true,
+              "relation": "horse_publication_private.gallery",
+              "generated": ""
+            },
+            {
+              "name": "object_id",
+              "type": "uuid",
+              "identity": "",
+              "not_null": true,
+              "relation": "listing_publication_private.cleanup",
+              "generated": ""
+            },
+            {
+              "name": "attempt_id",
+              "type": "uuid",
+              "identity": "",
+              "not_null": true,
+              "relation": "listing_publication_private.web_images",
+              "generated": ""
+            },
+            {
+              "name": "ready_id",
+              "type": "uuid",
+              "identity": "",
+              "not_null": false,
+              "relation": "listing_publication_private.web_images",
+              "generated": ""
+            },
+            {
+              "name": "slot_id",
+              "type": "uuid",
+              "identity": "",
+              "not_null": true,
+              "relation": "listing_publication_private.web_images",
+              "generated": ""
+            },
+            {
+              "name": "state",
+              "type": "text",
+              "identity": "",
+              "not_null": true,
+              "relation": "listing_publication_private.web_images",
+              "generated": ""
+            },
+            {
+              "name": "created_at",
+              "type": "timestamp with time zone",
+              "identity": "",
+              "not_null": true,
+              "relation": "public.horse_offer_images",
+              "generated": ""
+            },
+            {
+              "name": "horse_offer_id",
+              "type": "uuid",
+              "identity": "",
+              "not_null": true,
+              "relation": "public.horse_offer_images",
+              "generated": ""
+            },
+            {
+              "name": "id",
+              "type": "uuid",
+              "identity": "",
+              "not_null": true,
+              "relation": "public.horse_offer_images",
+              "generated": ""
+            },
+            {
+              "name": "identity_id",
+              "type": "uuid",
+              "identity": "",
+              "not_null": true,
+              "relation": "public.horse_offer_images",
+              "generated": ""
+            },
+            {
+              "name": "is_primary",
+              "type": "boolean",
+              "identity": "",
+              "not_null": true,
+              "relation": "public.horse_offer_images",
+              "generated": ""
+            },
+            {
+              "name": "medium_url",
+              "type": "text",
+              "identity": "",
+              "not_null": false,
+              "relation": "public.horse_offer_images",
+              "generated": ""
+            },
+            {
+              "name": "original_url",
+              "type": "text",
+              "identity": "",
+              "not_null": true,
+              "relation": "public.horse_offer_images",
+              "generated": ""
+            },
+            {
+              "name": "sort_order",
+              "type": "integer",
+              "identity": "",
+              "not_null": true,
+              "relation": "public.horse_offer_images",
+              "generated": ""
+            },
+            {
+              "name": "storage_path",
+              "type": "text",
+              "identity": "",
+              "not_null": true,
+              "relation": "public.horse_offer_images",
+              "generated": ""
+            },
+            {
+              "name": "thumb_url",
+              "type": "text",
+              "identity": "",
+              "not_null": false,
+              "relation": "public.horse_offer_images",
+              "generated": ""
+            },
+            {
+              "name": "content_hash",
+              "type": "text",
+              "identity": "",
+              "not_null": true,
+              "relation": "public.horse_offer_publication_events",
+              "generated": ""
+            },
+            {
+              "name": "content_snapshot",
+              "type": "jsonb",
+              "identity": "",
+              "not_null": true,
+              "relation": "public.horse_offer_publication_events",
+              "generated": ""
+            },
+            {
+              "name": "decision",
+              "type": "text",
+              "identity": "",
+              "not_null": true,
+              "relation": "public.horse_offer_publication_events",
+              "generated": ""
+            },
+            {
+              "name": "horse_offer_id",
+              "type": "uuid",
+              "identity": "",
+              "not_null": true,
+              "relation": "public.horse_offer_publication_events",
+              "generated": ""
+            },
+            {
+              "name": "id",
+              "type": "uuid",
+              "identity": "",
+              "not_null": true,
+              "relation": "public.horse_offer_publication_events",
+              "generated": ""
+            },
+            {
+              "name": "identity_id",
+              "type": "uuid",
+              "identity": "",
+              "not_null": true,
+              "relation": "public.horse_offer_publication_events",
+              "generated": ""
+            },
+            {
+              "name": "active_until",
+              "type": "timestamp with time zone",
+              "identity": "",
+              "not_null": false,
+              "relation": "public.horse_offers",
+              "generated": ""
+            },
+            {
+              "name": "behavior_notes",
+              "type": "text",
+              "identity": "",
+              "not_null": false,
+              "relation": "public.horse_offers",
+              "generated": ""
+            },
+            {
+              "name": "birth_year",
+              "type": "integer",
+              "identity": "",
+              "not_null": false,
+              "relation": "public.horse_offers",
+              "generated": ""
+            },
+            {
+              "name": "breed",
+              "type": "text",
+              "identity": "",
+              "not_null": false,
+              "relation": "public.horse_offers",
+              "generated": ""
+            },
+            {
+              "name": "city",
+              "type": "text",
+              "identity": "",
+              "not_null": false,
+              "relation": "public.horse_offers",
+              "generated": ""
+            },
+            {
+              "name": "color",
+              "type": "text",
+              "identity": "",
+              "not_null": false,
+              "relation": "public.horse_offers",
+              "generated": ""
+            },
+            {
+              "name": "created_at",
+              "type": "timestamp with time zone",
+              "identity": "",
+              "not_null": true,
+              "relation": "public.horse_offers",
+              "generated": ""
+            },
+            {
+              "name": "created_by_user_id",
+              "type": "uuid",
+              "identity": "",
+              "not_null": false,
+              "relation": "public.horse_offers",
+              "generated": ""
+            },
+            {
+              "name": "currency",
+              "type": "text",
+              "identity": "",
+              "not_null": true,
+              "relation": "public.horse_offers",
+              "generated": ""
+            },
+            {
+              "name": "current_publication_event_id",
+              "type": "uuid",
+              "identity": "",
+              "not_null": false,
+              "relation": "public.horse_offers",
+              "generated": ""
+            },
+            {
+              "name": "description",
+              "type": "text",
+              "identity": "",
+              "not_null": true,
+              "relation": "public.horse_offers",
+              "generated": ""
+            },
+            {
+              "name": "details",
+              "type": "jsonb",
+              "identity": "",
+              "not_null": true,
+              "relation": "public.horse_offers",
+              "generated": ""
+            },
+            {
+              "name": "discipline",
+              "type": "text",
+              "identity": "",
+              "not_null": false,
+              "relation": "public.horse_offers",
+              "generated": ""
+            },
+            {
+              "name": "health_notes",
+              "type": "text",
+              "identity": "",
+              "not_null": false,
+              "relation": "public.horse_offers",
+              "generated": ""
+            },
+            {
+              "name": "height_cm",
+              "type": "numeric(6,1)",
+              "identity": "",
+              "not_null": false,
+              "relation": "public.horse_offers",
+              "generated": ""
+            },
+            {
+              "name": "horse_lat",
+              "type": "double precision",
+              "identity": "",
+              "not_null": false,
+              "relation": "public.horse_offers",
+              "generated": ""
+            },
+            {
+              "name": "horse_lng",
+              "type": "double precision",
+              "identity": "",
+              "not_null": false,
+              "relation": "public.horse_offers",
+              "generated": ""
+            },
+            {
+              "name": "horse_location_country_code",
+              "type": "text",
+              "identity": "",
+              "not_null": true,
+              "relation": "public.horse_offers",
+              "generated": ""
+            },
+            {
+              "name": "horse_name",
+              "type": "text",
+              "identity": "",
+              "not_null": false,
+              "relation": "public.horse_offers",
+              "generated": ""
+            },
+            {
+              "name": "id",
+              "type": "uuid",
+              "identity": "",
+              "not_null": true,
+              "relation": "public.horse_offers",
+              "generated": ""
+            },
+            {
+              "name": "identity_id",
+              "type": "uuid",
+              "identity": "",
+              "not_null": true,
+              "relation": "public.horse_offers",
+              "generated": ""
+            },
+            {
+              "name": "image_url",
+              "type": "text",
+              "identity": "",
+              "not_null": false,
+              "relation": "public.horse_offers",
+              "generated": ""
+            },
+            {
+              "name": "location_text",
+              "type": "text",
+              "identity": "",
+              "not_null": false,
+              "relation": "public.horse_offers",
+              "generated": ""
+            },
+            {
+              "name": "market_country_code",
+              "type": "text",
+              "identity": "",
+              "not_null": true,
+              "relation": "public.horse_offers",
+              "generated": ""
+            },
+            {
+              "name": "offer_type",
+              "type": "text",
+              "identity": "",
+              "not_null": true,
+              "relation": "public.horse_offers",
+              "generated": ""
+            },
+            {
+              "name": "price_amount",
+              "type": "numeric(12,2)",
+              "identity": "",
+              "not_null": false,
+              "relation": "public.horse_offers",
+              "generated": ""
+            },
+            {
+              "name": "price_type",
+              "type": "text",
+              "identity": "",
+              "not_null": true,
+              "relation": "public.horse_offers",
+              "generated": ""
+            },
+            {
+              "name": "published_at",
+              "type": "timestamp with time zone",
+              "identity": "",
+              "not_null": false,
+              "relation": "public.horse_offers",
+              "generated": ""
+            },
+            {
+              "name": "region",
+              "type": "text",
+              "identity": "",
+              "not_null": false,
+              "relation": "public.horse_offers",
+              "generated": ""
+            },
+            {
+              "name": "search_vector",
+              "type": "tsvector",
+              "identity": "",
+              "not_null": true,
+              "relation": "public.horse_offers",
+              "generated": ""
+            },
+            {
+              "name": "sex",
+              "type": "text",
+              "identity": "",
+              "not_null": false,
+              "relation": "public.horse_offers",
+              "generated": ""
+            },
+            {
+              "name": "status",
+              "type": "text",
+              "identity": "",
+              "not_null": true,
+              "relation": "public.horse_offers",
+              "generated": ""
+            },
+            {
+              "name": "suitability",
+              "type": "text",
+              "identity": "",
+              "not_null": false,
+              "relation": "public.horse_offers",
+              "generated": ""
+            },
+            {
+              "name": "title",
+              "type": "text",
+              "identity": "",
+              "not_null": true,
+              "relation": "public.horse_offers",
+              "generated": ""
+            },
+            {
+              "name": "training_level",
+              "type": "text",
+              "identity": "",
+              "not_null": false,
+              "relation": "public.horse_offers",
+              "generated": ""
+            }
+          ],
+          "indexes": [
+            {
+              "name": "gallery_pkey",
+              "ready": true,
+              "valid": true,
+              "unique": true,
+              "primary": true,
+              "relation": "horse_publication_private.gallery",
+              "definition_sha256": "e0c35ebd26ab47cd0b9e55c4bbd0f621c212b9f2e07f5c6bd07b9a975432d843"
+            },
+            {
+              "name": "cleanup_pkey",
+              "ready": true,
+              "valid": true,
+              "unique": true,
+              "primary": true,
+              "relation": "listing_publication_private.cleanup",
+              "definition_sha256": "036ffc87be170268311f3ae3961896d5644debeff31d0578d9714155b405d24d"
+            },
+            {
+              "name": "web_images_slot_id_key",
+              "ready": true,
+              "valid": true,
+              "unique": true,
+              "primary": false,
+              "relation": "listing_publication_private.web_images",
+              "definition_sha256": "7aef41a1d86e719c64ea722a056a8d03837749eb37b053c47550f18b9644349d"
+            },
+            {
+              "name": "horse_offer_images_offer_order_idx",
+              "ready": true,
+              "valid": true,
+              "unique": false,
+              "primary": false,
+              "relation": "public.horse_offer_images",
+              "definition_sha256": "05100f0718b043bdb09ec3b79a07a76c912be55817f7b4fe7211f863afaec235"
+            },
+            {
+              "name": "horse_offer_images_pkey",
+              "ready": true,
+              "valid": true,
+              "unique": true,
+              "primary": true,
+              "relation": "public.horse_offer_images",
+              "definition_sha256": "4dcd307064e7bffe05a7fa69f61b9af5655759378033b37641f5070c3d1c0878"
+            },
+            {
+              "name": "horse_offer_publication_events_pkey",
+              "ready": true,
+              "valid": true,
+              "unique": true,
+              "primary": true,
+              "relation": "public.horse_offer_publication_events",
+              "definition_sha256": "162855e02a433e16c8c951caab4b41f7509653b67f6619fda9abaa887cecee68"
+            },
+            {
+              "name": "horse_offers_active_until_idx",
+              "ready": true,
+              "valid": true,
+              "unique": false,
+              "primary": false,
+              "relation": "public.horse_offers",
+              "definition_sha256": "0bc062e4864b27bdc74357e5826425dff12ddf9c0c7983db468ef0f2a54550a2"
+            },
+            {
+              "name": "horse_offers_identity_status_updated_idx",
+              "ready": true,
+              "valid": true,
+              "unique": false,
+              "primary": false,
+              "relation": "public.horse_offers",
+              "definition_sha256": "fe70b6a51a137f2ee1600621b2229a5956d8c543bd6f49b7961dbf6f46f3de8c"
+            },
+            {
+              "name": "horse_offers_pkey",
+              "ready": true,
+              "valid": true,
+              "unique": true,
+              "primary": true,
+              "relation": "public.horse_offers",
+              "definition_sha256": "98c892dfbbd6bb760549e839fc0b48f9552cd0702bca0778d6318f3257fe632d"
+            },
+            {
+              "name": "horse_offers_public_market_type_idx",
+              "ready": true,
+              "valid": true,
+              "unique": false,
+              "primary": false,
+              "relation": "public.horse_offers",
+              "definition_sha256": "a38ec9b9709693dc29c6f7c7c831c0c007bef4e4e609a7440410d424d48c455e"
+            },
+            {
+              "name": "horse_offers_search_vector_idx",
+              "ready": true,
+              "valid": true,
+              "unique": false,
+              "primary": false,
+              "relation": "public.horse_offers",
+              "definition_sha256": "a8e161e8374511f699cdb1a65782eeb41d69ce624fe5c9167cf7a21960859b91"
+            }
+          ],
+          "relations": [
+            {
+              "rls": true,
+              "kind": "r",
+              "name": "horse_publication_private.gallery",
+              "owner": "postgres",
+              "force_rls": false,
+              "observer_select": true
+            },
+            {
+              "rls": true,
+              "kind": "r",
+              "name": "listing_publication_private.cleanup",
+              "owner": "postgres",
+              "force_rls": false,
+              "observer_select": true
+            },
+            {
+              "rls": true,
+              "kind": "r",
+              "name": "listing_publication_private.web_images",
+              "owner": "postgres",
+              "force_rls": false,
+              "observer_select": true
+            },
+            {
+              "rls": true,
+              "kind": "r",
+              "name": "public.horse_offer_images",
+              "owner": "postgres",
+              "force_rls": false,
+              "observer_select": true
+            },
+            {
+              "rls": true,
+              "kind": "r",
+              "name": "public.horse_offer_publication_events",
+              "owner": "postgres",
+              "force_rls": false,
+              "observer_select": true
+            },
+            {
+              "rls": true,
+              "kind": "r",
+              "name": "public.horse_offers",
+              "owner": "postgres",
+              "force_rls": false,
+              "observer_select": true
+            }
+          ],
+          "dependencies": [
+            {
+              "name": "horse_publication_private.effective_active_until",
+              "owner": "postgres",
+              "grants": [
+                {
+                  "role": "postgres",
+                  "grantable": false,
+                  "privilege": "EXECUTE"
+                }
+              ],
+              "result": "timestamp with time zone",
+              "strict": false,
+              "definer": false,
+              "defaults": false,
+              "language": "sql",
+              "parallel": "u",
+              "arguments": [
+                "public.horse_offers"
+              ],
+              "leakproof": false,
+              "volatility": "i",
+              "body_sha256": "7de3b8e6b7aba131fa939f6fef01d55a75d54d9703a64bdb05b78586c5dcda88",
+              "config_sha256": "8a99ef30e82bf63f97a0f2bb54e5484d1b27779ff3d93cad1079c2934c2485a6",
+              "definition_sha256": "093623703ceb943dd3dbcae80589158a75902f2a62c7b0df9295da3c5b64260f"
+            },
+            {
+              "name": "horse_publication_private.has_current_publication",
+              "owner": "postgres",
+              "grants": [
+                {
+                  "role": "postgres",
+                  "grantable": false,
+                  "privilege": "EXECUTE"
+                },
+                {
+                  "role": "selqiro_listing_final_writer_v1",
+                  "grantable": false,
+                  "privilege": "EXECUTE"
+                }
+              ],
+              "result": "boolean",
+              "strict": false,
+              "definer": true,
+              "defaults": false,
+              "language": "sql",
+              "parallel": "u",
+              "arguments": [
+                "uuid"
+              ],
+              "leakproof": false,
+              "volatility": "s",
+              "body_sha256": "8a7a3db56f6cb997fd93d7955019e1453947490dcd5d97f324385b50c4c8ee0a",
+              "config_sha256": "8a99ef30e82bf63f97a0f2bb54e5484d1b27779ff3d93cad1079c2934c2485a6",
+              "definition_sha256": "4c1778ce8118481219a7ac8e9584da25f7c1198792bf88366f490c0d46709698"
+            },
+            {
+              "name": "horse_publication_private.is_public",
+              "owner": "postgres",
+              "grants": [
+                {
+                  "role": "postgres",
+                  "grantable": false,
+                  "privilege": "EXECUTE"
+                },
+                {
+                  "role": "selqiro_listing_final_writer_v1",
+                  "grantable": false,
+                  "privilege": "EXECUTE"
+                }
+              ],
+              "result": "boolean",
+              "strict": false,
+              "definer": true,
+              "defaults": false,
+              "language": "sql",
+              "parallel": "u",
+              "arguments": [
+                "uuid"
+              ],
+              "leakproof": false,
+              "volatility": "s",
+              "body_sha256": "b8b05ff651e10027d069d4d4433dcac8f1482a9fd5ca5045e5b4d887fd717af6",
+              "config_sha256": "8a99ef30e82bf63f97a0f2bb54e5484d1b27779ff3d93cad1079c2934c2485a6",
+              "definition_sha256": "fd61e3a546b22237ae582379e284d91e8e0cefb633a33add27db9f139c9f4976"
+            },
+            {
+              "name": "horse_publication_private.public_fields",
+              "owner": "postgres",
+              "grants": [
+                {
+                  "role": "postgres",
+                  "grantable": false,
+                  "privilege": "EXECUTE"
+                }
+              ],
+              "result": "jsonb",
+              "strict": false,
+              "definer": false,
+              "defaults": false,
+              "language": "sql",
+              "parallel": "u",
+              "arguments": [
+                "public.horse_offers"
+              ],
+              "leakproof": false,
+              "volatility": "s",
+              "body_sha256": "7ee9930b2efa23c4a170cdf0b6214f6fd134f3a765f9d04dee8fbc9a19ae0462",
+              "config_sha256": "8a99ef30e82bf63f97a0f2bb54e5484d1b27779ff3d93cad1079c2934c2485a6",
+              "definition_sha256": "510e68246eced2e9d1b068da355211c08fd8e663249950464fd065101d9c87b5"
+            },
+            {
+              "name": "horse_publication_private.public_price",
+              "owner": "postgres",
+              "grants": [
+                {
+                  "role": "postgres",
+                  "grantable": false,
+                  "privilege": "EXECUTE"
+                }
+              ],
+              "result": "jsonb",
+              "strict": false,
+              "definer": false,
+              "defaults": false,
+              "language": "sql",
+              "parallel": "u",
+              "arguments": [
+                "public.horse_offers"
+              ],
+              "leakproof": false,
+              "volatility": "s",
+              "body_sha256": "7d583f1b8aafc963f2eab0e68140458eb92b74828ea0f871448e727ae6135d6a",
+              "config_sha256": "8a99ef30e82bf63f97a0f2bb54e5484d1b27779ff3d93cad1079c2934c2485a6",
+              "definition_sha256": "5c4524ba07dd85c331afff7d61f5cbd1bc1083a552c2224124e160f7c3c644f0"
+            },
+            {
+              "name": "public.build_horse_offer_content_snapshot_v1",
+              "owner": "postgres",
+              "grants": [
+                {
+                  "role": "postgres",
+                  "grantable": false,
+                  "privilege": "EXECUTE"
+                },
+                {
+                  "role": "service_role",
+                  "grantable": false,
+                  "privilege": "EXECUTE"
+                }
+              ],
+              "result": "jsonb",
+              "strict": false,
+              "definer": true,
+              "defaults": false,
+              "language": "sql",
+              "parallel": "u",
+              "arguments": [
+                "uuid"
+              ],
+              "leakproof": false,
+              "volatility": "s",
+              "body_sha256": "1f70dfada3042811ec2b92238979aae30554cbfbac175f25cdc876536b69ab33",
+              "config_sha256": "8a99a028247dc2f9ba6a2dad007920a9e88dc640cab71800ebd92d401c25d7c9",
+              "definition_sha256": "bceccfddf5079bb8e0b25bbbe25483b323aa13977b2e7bf430ce5355a629c240"
+            }
+          ],
+          "accepted_listing_base": {
+            "columns": [
+              {
+                "name": "hidden_until",
+                "type": "timestamp with time zone",
+                "identity": "",
+                "not_null": false,
+                "relation": "provider_controls_private.hidden_providers",
+                "generated": ""
+              },
+              {
+                "name": "provider_identity_id",
+                "type": "uuid",
+                "identity": "",
+                "not_null": true,
+                "relation": "provider_controls_private.hidden_providers",
+                "generated": ""
+              },
+              {
+                "name": "viewer_user_id",
+                "type": "uuid",
+                "identity": "",
+                "not_null": true,
+                "relation": "provider_controls_private.hidden_providers",
+                "generated": ""
+              },
+              {
+                "name": "id",
+                "type": "uuid",
+                "identity": "",
+                "not_null": true,
+                "relation": "public.listing_images",
+                "generated": ""
+              },
+              {
+                "name": "listing_id",
+                "type": "bigint",
+                "identity": "",
+                "not_null": false,
+                "relation": "public.listing_images",
+                "generated": ""
+              },
+              {
+                "name": "active_until",
+                "type": "timestamp with time zone",
+                "identity": "",
+                "not_null": false,
+                "relation": "public.listings",
+                "generated": ""
+              },
+              {
+                "name": "id",
+                "type": "bigint",
+                "identity": "d",
+                "not_null": true,
+                "relation": "public.listings",
+                "generated": ""
+              },
+              {
+                "name": "identity_id",
+                "type": "uuid",
+                "identity": "",
+                "not_null": false,
+                "relation": "public.listings",
+                "generated": ""
+              },
+              {
+                "name": "status",
+                "type": "text",
+                "identity": "",
+                "not_null": false,
+                "relation": "public.listings",
+                "generated": ""
+              },
+              {
+                "name": "user_id",
+                "type": "uuid",
+                "identity": "",
+                "not_null": false,
+                "relation": "public.listings",
+                "generated": ""
+              },
+              {
+                "name": "blocked_id",
+                "type": "uuid",
+                "identity": "",
+                "not_null": true,
+                "relation": "public.user_blocks",
+                "generated": ""
+              },
+              {
+                "name": "blocker_id",
+                "type": "uuid",
+                "identity": "",
+                "not_null": true,
+                "relation": "public.user_blocks",
+                "generated": ""
+              }
+            ],
+            "indexes": [
+              {
+                "name": "hidden_providers_active_idx",
+                "ready": true,
+                "valid": true,
+                "unique": false,
+                "primary": false,
+                "relation": "provider_controls_private.hidden_providers",
+                "definition_sha256": "82609b9c602fd47f72222d36779090fac3b44c6d68cf855855b853a07407da19"
+              },
+              {
+                "name": "hidden_providers_pkey",
+                "ready": true,
+                "valid": true,
+                "unique": true,
+                "primary": true,
+                "relation": "provider_controls_private.hidden_providers",
+                "definition_sha256": "115c5ab5c5238e9309d4b4a658c3ac11e69e0f148b336f122329aa3d00cf6fcb"
+              },
+              {
+                "name": "idx_listing_images_listing_id",
+                "ready": true,
+                "valid": true,
+                "unique": false,
+                "primary": false,
+                "relation": "public.listing_images",
+                "definition_sha256": "274f48f9768b450b0462d63b3c230a60d11139b91515a305efc451390d175711"
+              },
+              {
+                "name": "idx_listings_category",
+                "ready": true,
+                "valid": true,
+                "unique": false,
+                "primary": false,
+                "relation": "public.listings",
+                "definition_sha256": "15bb782001b3715c99b40f95df921f5603f4c902b66807a90ba8f6b9801c80b7"
+              },
+              {
+                "name": "listings_identity_id_idx",
+                "ready": true,
+                "valid": true,
+                "unique": false,
+                "primary": false,
+                "relation": "public.listings",
+                "definition_sha256": "59368fb27210b5468ae8056d197e64e57872ec8ad76aa5fd8a277d608b85bd13"
+              },
+              {
+                "name": "listings_pkey",
+                "ready": true,
+                "valid": true,
+                "unique": true,
+                "primary": true,
+                "relation": "public.listings",
+                "definition_sha256": "3a99b94df5259921c3dc6e9ef37ab1d39ebec1b08baa237a45ace5337046e051"
+              },
+              {
+                "name": "listings_public_keywords_v1_gin",
+                "ready": true,
+                "valid": true,
+                "unique": false,
+                "primary": false,
+                "relation": "public.listings",
+                "definition_sha256": "4f1e33c25e79f90159d72eab90535f58d63ce23da2eee6db17f4541ba7f59d55"
+              },
+              {
+                "name": "user_blocks_blocked_blocker_idx_v1",
+                "ready": true,
+                "valid": true,
+                "unique": false,
+                "primary": false,
+                "relation": "public.user_blocks",
+                "definition_sha256": "d8d108e3683b1b1f84c7542fd8a9b458e29dd94abbc9629ad07c885c832c458d"
+              },
+              {
+                "name": "user_blocks_blocker_id_blocked_id_key",
+                "ready": true,
+                "valid": true,
+                "unique": true,
+                "primary": false,
+                "relation": "public.user_blocks",
+                "definition_sha256": "4285baeaa85ca5944ca872cdfd37d551cc7b73ea8cbfaa322e4b00c587825fd7"
+              }
+            ],
+            "relations": [
+              {
+                "rls": true,
+                "kind": "r",
+                "name": "provider_controls_private.hidden_providers",
+                "owner": "postgres",
+                "force_rls": false,
+                "observer_select": true
+              },
+              {
+                "rls": true,
+                "kind": "r",
+                "name": "public.listing_images",
+                "owner": "postgres",
+                "force_rls": false,
+                "observer_select": true
+              },
+              {
+                "rls": true,
+                "kind": "r",
+                "name": "public.listings",
+                "owner": "postgres",
+                "force_rls": false,
+                "observer_select": true
+              },
+              {
+                "rls": true,
+                "kind": "r",
+                "name": "public.user_blocks",
+                "owner": "postgres",
+                "force_rls": false,
+                "observer_select": true
+              }
+            ],
+            "dependencies": [
+              {
+                "name": "public.listing_actor_uid_hosted_v1",
+                "owner": "postgres",
+                "grants": [
+                  {
+                    "role": "anon",
+                    "grantable": false,
+                    "privilege": "EXECUTE"
+                  },
+                  {
+                    "role": "authenticated",
+                    "grantable": false,
+                    "privilege": "EXECUTE"
+                  },
+                  {
+                    "role": "postgres",
+                    "grantable": false,
+                    "privilege": "EXECUTE"
+                  },
+                  {
+                    "role": "selqiro_listing_contact_writer_v1",
+                    "grantable": false,
+                    "privilege": "EXECUTE"
+                  },
+                  {
+                    "role": "selqiro_listing_final_writer_v1",
+                    "grantable": false,
+                    "privilege": "EXECUTE"
+                  },
+                  {
+                    "role": "selqiro_listing_price_writer_v1",
+                    "grantable": false,
+                    "privilege": "EXECUTE"
+                  },
+                  {
+                    "role": "service_role",
+                    "grantable": false,
+                    "privilege": "EXECUTE"
+                  }
+                ],
+                "result": "uuid",
+                "strict": false,
+                "definer": true,
+                "defaults": false,
+                "language": "sql",
+                "parallel": "u",
+                "arguments": [],
+                "leakproof": false,
+                "volatility": "s",
+                "body_sha256": "ff7f6ce615280095930c983468c5ce5a6c3982bc4f540e4929bb0baf904ce88d",
+                "config_sha256": "8a99ef30e82bf63f97a0f2bb54e5484d1b27779ff3d93cad1079c2934c2485a6",
+                "definition_sha256": "1aced17f656a8fdb366dfe22cbb53ca53f8e281cc3c6fc8aeb6bccb3ad409770"
+              },
+              {
+                "name": "public.public_listing_search_document_v1",
+                "owner": "postgres",
+                "grants": [
+                  {
+                    "role": "anon",
+                    "grantable": false,
+                    "privilege": "EXECUTE"
+                  },
+                  {
+                    "role": "authenticated",
+                    "grantable": false,
+                    "privilege": "EXECUTE"
+                  },
+                  {
+                    "role": "postgres",
+                    "grantable": false,
+                    "privilege": "EXECUTE"
+                  },
+                  {
+                    "role": "selqiro_listing_final_writer_v1",
+                    "grantable": false,
+                    "privilege": "EXECUTE"
+                  },
+                  {
+                    "role": "selqiro_listing_price_writer_v1",
+                    "grantable": false,
+                    "privilege": "EXECUTE"
+                  },
+                  {
+                    "role": "service_role",
+                    "grantable": false,
+                    "privilege": "EXECUTE"
+                  }
+                ],
+                "result": "tsvector",
+                "strict": false,
+                "definer": false,
+                "defaults": false,
+                "language": "plpgsql",
+                "parallel": "s",
+                "arguments": [
+                  "text",
+                  "text",
+                  "text",
+                  "text",
+                  "jsonb"
+                ],
+                "leakproof": false,
+                "volatility": "i",
+                "body_sha256": "f3bd8b25cb8b29af0dffeb928fc783b9ff08e6e3c64f27f063d80708f1dc4b45",
+                "config_sha256": "8a99ef30e82bf63f97a0f2bb54e5484d1b27779ff3d93cad1079c2934c2485a6",
+                "definition_sha256": "76b8194c6ecf6ee0b287b5541e554105f9affdda3e74786e04138461b702da4e"
+              }
+            ],
+            "accepted_profile_base": {
+              "roles": [
+                "anon",
+                "authenticated",
+                "service_role"
+              ],
+              "columns": [
+                {
+                  "name": "banned_until",
+                  "type": "timestamp with time zone",
+                  "identity": "",
+                  "not_null": false,
+                  "relation": "auth.users",
+                  "generated": ""
+                },
+                {
+                  "name": "created_at",
+                  "type": "timestamp with time zone",
+                  "identity": "",
+                  "not_null": false,
+                  "relation": "auth.users",
+                  "generated": ""
+                },
+                {
+                  "name": "deleted_at",
+                  "type": "timestamp with time zone",
+                  "identity": "",
+                  "not_null": false,
+                  "relation": "auth.users",
+                  "generated": ""
+                },
+                {
+                  "name": "id",
+                  "type": "uuid",
+                  "identity": "",
+                  "not_null": true,
+                  "relation": "auth.users",
+                  "generated": ""
+                },
+                {
+                  "name": "id",
+                  "type": "uuid",
+                  "identity": "",
+                  "not_null": true,
+                  "relation": "public.business_accounts",
+                  "generated": ""
+                },
+                {
+                  "name": "owner_user_id",
+                  "type": "uuid",
+                  "identity": "",
+                  "not_null": true,
+                  "relation": "public.business_accounts",
+                  "generated": ""
+                },
+                {
+                  "name": "status",
+                  "type": "text",
+                  "identity": "",
+                  "not_null": true,
+                  "relation": "public.business_accounts",
+                  "generated": ""
+                },
+                {
+                  "name": "business_account_id",
+                  "type": "uuid",
+                  "identity": "",
+                  "not_null": false,
+                  "relation": "public.identities",
+                  "generated": ""
+                },
+                {
+                  "name": "id",
+                  "type": "uuid",
+                  "identity": "",
+                  "not_null": true,
+                  "relation": "public.identities",
+                  "generated": ""
+                },
+                {
+                  "name": "status",
+                  "type": "text",
+                  "identity": "",
+                  "not_null": true,
+                  "relation": "public.identities",
+                  "generated": ""
+                },
+                {
+                  "name": "type",
+                  "type": "text",
+                  "identity": "",
+                  "not_null": true,
+                  "relation": "public.identities",
+                  "generated": ""
+                },
+                {
+                  "name": "user_id",
+                  "type": "uuid",
+                  "identity": "",
+                  "not_null": false,
+                  "relation": "public.identities",
+                  "generated": ""
+                },
+                {
+                  "name": "identity_id",
+                  "type": "uuid",
+                  "identity": "",
+                  "not_null": true,
+                  "relation": "public.identity_profiles",
+                  "generated": ""
+                },
+                {
+                  "name": "slug",
+                  "type": "text",
+                  "identity": "",
+                  "not_null": false,
+                  "relation": "public.identity_profiles",
+                  "generated": ""
+                },
+                {
+                  "name": "id",
+                  "type": "uuid",
+                  "identity": "",
+                  "not_null": true,
+                  "relation": "public.profiles",
+                  "generated": ""
+                },
+                {
+                  "name": "store_slug",
+                  "type": "text",
+                  "identity": "",
+                  "not_null": false,
+                  "relation": "public.profiles",
+                  "generated": ""
+                }
+              ],
+              "indexes": [
+                {
+                  "name": "users_pkey",
+                  "ready": true,
+                  "valid": true,
+                  "unique": true,
+                  "primary": true,
+                  "relation": "auth.users",
+                  "definition_sha256": "ada7099cde26101ecbf2c46509be93c29ba8399604619ffc6b8865aa79ac3326"
+                },
+                {
+                  "name": "business_accounts_pkey",
+                  "ready": true,
+                  "valid": true,
+                  "unique": true,
+                  "primary": true,
+                  "relation": "public.business_accounts",
+                  "definition_sha256": "b5b1d13295d7482625fbfc26d0d16e5c1c29b4c76014667aa640f621c42e21fb"
+                },
+                {
+                  "name": "identities_pkey",
+                  "ready": true,
+                  "valid": true,
+                  "unique": true,
+                  "primary": true,
+                  "relation": "public.identities",
+                  "definition_sha256": "d0bedd5f044bda88652e61e3b4763ee1110b40c9474136e79a1ffa40ea1aa54f"
+                },
+                {
+                  "name": "identity_profiles_identity_id_key",
+                  "ready": true,
+                  "valid": true,
+                  "unique": true,
+                  "primary": false,
+                  "relation": "public.identity_profiles",
+                  "definition_sha256": "3b164f7cc1947884b1e1f2ad2ae562b066757df3308e106eeb095b43d99f23c6"
+                },
+                {
+                  "name": "identity_profiles_slug_key",
+                  "ready": true,
+                  "valid": true,
+                  "unique": true,
+                  "primary": false,
+                  "relation": "public.identity_profiles",
+                  "definition_sha256": "6a4557f28f65d55480535a9515d59f82f00adf3d3e900220b1ab5f136da8b2d0"
+                },
+                {
+                  "name": "profiles_pkey",
+                  "ready": true,
+                  "valid": true,
+                  "unique": true,
+                  "primary": true,
+                  "relation": "public.profiles",
+                  "definition_sha256": "248eaa8d9ad55df13054ec6dad3a08495c4ae6534cad1099eea8e223f80d8c7d"
+                },
+                {
+                  "name": "profiles_store_slug_key",
+                  "ready": true,
+                  "valid": true,
+                  "unique": true,
+                  "primary": false,
+                  "relation": "public.profiles",
+                  "definition_sha256": "1217a464d265ef42290e64049a338a98ce135159eae44ac0be2d843240fd025b"
+                }
+              ],
+              "observer": "postgres",
+              "relations": [
+                {
+                  "rls": true,
+                  "kind": "r",
+                  "name": "auth.users",
+                  "owner": "supabase_auth_admin",
+                  "force_rls": false,
+                  "observer_select": true
+                },
+                {
+                  "rls": true,
+                  "kind": "r",
+                  "name": "public.business_accounts",
+                  "owner": "postgres",
+                  "force_rls": false,
+                  "observer_select": true
+                },
+                {
+                  "rls": true,
+                  "kind": "r",
+                  "name": "public.identities",
+                  "owner": "postgres",
+                  "force_rls": false,
+                  "observer_select": true
+                },
+                {
+                  "rls": true,
+                  "kind": "r",
+                  "name": "public.identity_profiles",
+                  "owner": "postgres",
+                  "force_rls": false,
+                  "observer_select": true
+                },
+                {
+                  "rls": true,
+                  "kind": "r",
+                  "name": "public.profiles",
+                  "owner": "postgres",
+                  "force_rls": false,
+                  "observer_select": true
+                }
+              ],
+              "foundation": {
+                "rls": true,
+                "columns": [
+                  {
+                    "name": "account_user_id",
+                    "type": "uuid",
+                    "identity": "",
+                    "not_null": true,
+                    "generated": "",
+                    "default_sha256": null
+                  },
+                  {
+                    "name": "state",
+                    "type": "text",
+                    "identity": "",
+                    "not_null": true,
+                    "generated": "",
+                    "default_sha256": "bc587d16fe04f2dc435392330ab3f1d862259110e3f739541615410e35793930"
+                  },
+                  {
+                    "name": "revision",
+                    "type": "bigint",
+                    "identity": "",
+                    "not_null": true,
+                    "generated": "",
+                    "default_sha256": "6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b"
+                  },
+                  {
+                    "name": "initialized_at",
+                    "type": "timestamp with time zone",
+                    "identity": "",
+                    "not_null": true,
+                    "generated": "",
+                    "default_sha256": "02faed0a16c0374c2c44ec86dc055cb70dc1d0b1063a493de9dbaac09f014e75"
+                  }
+                ],
+                "indexes": 1,
+                "policies": 0,
+                "force_rls": false,
+                "functions": [
+                  {
+                    "name": "account_lifecycle_private.initialize_account_state",
+                    "owner": "postgres",
+                    "grants": [
+                      {
+                        "role": "postgres",
+                        "grantable": false,
+                        "privilege": "EXECUTE"
+                      }
+                    ],
+                    "result": "trigger",
+                    "strict": false,
+                    "definer": true,
+                    "defaults": false,
+                    "language": "plpgsql",
+                    "parallel": "u",
+                    "arguments": [],
+                    "leakproof": false,
+                    "volatility": "v",
+                    "body_sha256": "aa20ef7303951cbd99afcaf91d9563707547d3157777bb0dbf9c9cf7e935cfe5",
+                    "config_sha256": "0e5c5deb67bdf8a0f1c087edd287aeab8d3ca04e5548a7679dd526aad7d8d491",
+                    "definition_sha256": "15cce5a9161fde046f5007f49c2ab29bf92037a6e6cabc19c04e4d020bb555e5"
+                  },
+                  {
+                    "name": "public.get_my_account_state_v1",
+                    "owner": "postgres",
+                    "grants": [
+                      {
+                        "role": "authenticated",
+                        "grantable": false,
+                        "privilege": "EXECUTE"
+                      },
+                      {
+                        "role": "postgres",
+                        "grantable": false,
+                        "privilege": "EXECUTE"
+                      }
+                    ],
+                    "result": "jsonb",
+                    "strict": false,
+                    "definer": true,
+                    "defaults": false,
+                    "language": "plpgsql",
+                    "parallel": "u",
+                    "arguments": [
+                      "uuid"
+                    ],
+                    "leakproof": false,
+                    "volatility": "s",
+                    "body_sha256": "a35b65d3336a940b3bd05e51b9412b37f239baa13ae1e69d4eb0ae45c189785d",
+                    "config_sha256": "0e5c5deb67bdf8a0f1c087edd287aeab8d3ca04e5548a7679dd526aad7d8d491",
+                    "definition_sha256": "0a90100b5555c24873eed9f2343682e557b6f7f0034fdc11cf302bf36895c7fd"
+                  }
+                ],
+                "table_kind": "r",
+                "constraints": [
+                  {
+                    "kind": "c",
+                    "name": "account_states_active_only",
+                    "validated": true,
+                    "deferrable": false,
+                    "definition_sha256": "9470057905dfde57de3c0198298b4be1b2e5b715d403d8a546df260f809ea99a"
+                  },
+                  {
+                    "kind": "f",
+                    "name": "account_states_auth_user_fkey",
+                    "validated": true,
+                    "deferrable": false,
+                    "definition_sha256": "abbd0493bf08fef05f8d7441a784d51dce4e87c50e8e2efe53a33d3da2db8c82"
+                  },
+                  {
+                    "kind": "p",
+                    "name": "account_states_pkey",
+                    "validated": true,
+                    "deferrable": false,
+                    "definition_sha256": "c7e3043228a979000e3d6ec23fa15074dc70171227373d58f80710eadb3bee0e"
+                  },
+                  {
+                    "kind": "c",
+                    "name": "account_states_revision_positive",
+                    "validated": true,
+                    "deferrable": false,
+                    "definition_sha256": "7c0ddfd91f9bdc7bd607f558b7220a0d09efdbea0973a07402460329265b9c9f"
+                  }
+                ],
+                "table_owner": "postgres",
+                "schema_owner": "postgres",
+                "auth_triggers": [
+                  {
+                    "name": "initialize_account_state",
+                    "enabled": "O",
+                    "function": "account_lifecycle_private.initialize_account_state()",
+                    "event_mask": 5,
+                    "when_sha256": null,
+                    "argument_count": 0,
+                    "arguments_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                    "definition_sha256": "c1eea90f2165098d86c47ab6ae11f224a4b243709c39372f923765341748d964"
+                  }
+                ],
+                "relation_count": 1,
+                "table_triggers": 0,
+                "table_app_denied": true,
+                "owner_grants_only": true,
+                "schema_app_denied": true,
+                "schema_owner_only": true,
+                "column_grants_owner_only": true
+              },
+              "dependencies": [
+                {
+                  "name": "auth.uid",
+                  "owner": "supabase_auth_admin",
+                  "grants": [
+                    {
+                      "role": "PUBLIC",
+                      "grantable": false,
+                      "privilege": "EXECUTE"
+                    },
+                    {
+                      "role": "dashboard_user",
+                      "grantable": false,
+                      "privilege": "EXECUTE"
+                    },
+                    {
+                      "role": "supabase_auth_admin",
+                      "grantable": false,
+                      "privilege": "EXECUTE"
+                    }
+                  ],
+                  "result": "uuid",
+                  "strict": false,
+                  "definer": false,
+                  "defaults": false,
+                  "language": "sql",
+                  "parallel": "u",
+                  "arguments": [],
+                  "leakproof": false,
+                  "volatility": "s",
+                  "body_sha256": "9ab5ea099e74ec09e83b1505c51a3647791195aed7c742dcc3f257dfc7d2f300",
+                  "config_sha256": null,
+                  "definition_sha256": "7c1ff2ecbe653c9358b3115a2607db9573f88a2944ae4eca9e296a89cc5186a7"
+                },
+                {
+                  "name": "profile_media_private.public_url",
+                  "owner": "postgres",
+                  "grants": [
+                    {
+                      "role": "postgres",
+                      "grantable": false,
+                      "privilege": "EXECUTE"
+                    }
+                  ],
+                  "result": "text",
+                  "strict": false,
+                  "definer": false,
+                  "defaults": false,
+                  "language": "sql",
+                  "parallel": "u",
+                  "arguments": [
+                    "text"
+                  ],
+                  "leakproof": false,
+                  "volatility": "i",
+                  "body_sha256": "b9b041c5f81bb15c1f114adc88efb0645ed97f2b519fb96624f6fb74534813a9",
+                  "config_sha256": "0e5c5deb67bdf8a0f1c087edd287aeab8d3ca04e5548a7679dd526aad7d8d491",
+                  "definition_sha256": "3684d4186c316a1a357ed0da0260d80413e04cd698898f66782c6a9e5f8256a7"
+                },
+                {
+                  "name": "profile_media_private.slot_asset",
+                  "owner": "postgres",
+                  "grants": [
+                    {
+                      "role": "postgres",
+                      "grantable": false,
+                      "privilege": "EXECUTE"
+                    }
+                  ],
+                  "result": "jsonb",
+                  "strict": false,
+                  "definer": false,
+                  "defaults": false,
+                  "language": "plpgsql",
+                  "parallel": "u",
+                  "arguments": [
+                    "uuid",
+                    "text"
+                  ],
+                  "leakproof": false,
+                  "volatility": "s",
+                  "body_sha256": "879ab2663f3e1124019b14b804303655fa427e5b90df3a5a46cea606950b9658",
+                  "config_sha256": "0e5c5deb67bdf8a0f1c087edd287aeab8d3ca04e5548a7679dd526aad7d8d491",
+                  "definition_sha256": "1854ad13b647f7ee040bff34bbdcda5f8ed5d7780a570c12229a541d1a17b29a"
+                },
+                {
+                  "name": "profile_media_private.slot_url",
+                  "owner": "postgres",
+                  "grants": [
+                    {
+                      "role": "postgres",
+                      "grantable": false,
+                      "privilege": "EXECUTE"
+                    }
+                  ],
+                  "result": "text",
+                  "strict": false,
+                  "definer": false,
+                  "defaults": false,
+                  "language": "sql",
+                  "parallel": "u",
+                  "arguments": [
+                    "uuid",
+                    "text"
+                  ],
+                  "leakproof": false,
+                  "volatility": "s",
+                  "body_sha256": "a63bc7282d020f037027fdba44ea984f2a972a9c21e1f5af320548c81d320328",
+                  "config_sha256": "0e5c5deb67bdf8a0f1c087edd287aeab8d3ca04e5548a7679dd526aad7d8d491",
+                  "definition_sha256": "23e6949c3bc210117f921eedff34bb59f445e9ebe5d0e11b69734cb20acebfc3"
+                },
+                {
+                  "name": "public.get_public_profile_media_v1",
+                  "owner": "postgres",
+                  "grants": [
+                    {
+                      "role": "anon",
+                      "grantable": false,
+                      "privilege": "EXECUTE"
+                    },
+                    {
+                      "role": "authenticated",
+                      "grantable": false,
+                      "privilege": "EXECUTE"
+                    },
+                    {
+                      "role": "postgres",
+                      "grantable": false,
+                      "privilege": "EXECUTE"
+                    },
+                    {
+                      "role": "service_role",
+                      "grantable": false,
+                      "privilege": "EXECUTE"
+                    }
+                  ],
+                  "result": "jsonb",
+                  "strict": false,
+                  "definer": true,
+                  "defaults": false,
+                  "language": "plpgsql",
+                  "parallel": "u",
+                  "arguments": [
+                    "uuid"
+                  ],
+                  "leakproof": false,
+                  "volatility": "s",
+                  "body_sha256": "b41531f27fe10f4aee7d8353c858aacbd3ba80ee66ddd1bd44fa2f65fe531c85",
+                  "config_sha256": "0e5c5deb67bdf8a0f1c087edd287aeab8d3ca04e5548a7679dd526aad7d8d491",
+                  "definition_sha256": "ea84d7e5df7bc0920773d7b993706271007dc706eeed05bdcbe861fed0e385e6"
+                }
+              ]
+            },
+            "accepted_profile_target": {
+              "functions": [
+                {
+                  "name": "account_lifecycle_private.account_is_available",
+                  "owner": "postgres",
+                  "grants": [
+                    {
+                      "role": "postgres",
+                      "grantable": false,
+                      "privilege": "EXECUTE"
+                    }
+                  ],
+                  "result": "boolean",
+                  "strict": false,
+                  "definer": true,
+                  "defaults": false,
+                  "language": "sql",
+                  "parallel": "u",
+                  "arguments": [
+                    "uuid"
+                  ],
+                  "leakproof": false,
+                  "volatility": "s",
+                  "body_sha256": "48cca55f640923a39723e34a1034695f06affb874efde6af1d8bc0103f5d112d",
+                  "config_sha256": "0e5c5deb67bdf8a0f1c087edd287aeab8d3ca04e5548a7679dd526aad7d8d491",
+                  "definition_sha256": "35b2f752b263935eb8f9b9c9ee5ab4aa20d65cbf3fece7f929eca0faf6c145b1"
+                },
+                {
+                  "name": "public.get_store_by_slug",
+                  "owner": "postgres",
+                  "grants": [
+                    {
+                      "role": "PUBLIC",
+                      "grantable": false,
+                      "privilege": "EXECUTE"
+                    },
+                    {
+                      "role": "anon",
+                      "grantable": false,
+                      "privilege": "EXECUTE"
+                    },
+                    {
+                      "role": "authenticated",
+                      "grantable": false,
+                      "privilege": "EXECUTE"
+                    },
+                    {
+                      "role": "postgres",
+                      "grantable": false,
+                      "privilege": "EXECUTE"
+                    },
+                    {
+                      "role": "service_role",
+                      "grantable": false,
+                      "privilege": "EXECUTE"
+                    }
+                  ],
+                  "result": "TABLE(identity_profile_id uuid, identity_id uuid, identity_type text, business_account_id uuid, display_name text, slug text, bio text, avatar_url text, banner_url text, banner_dominant_color text, contact_phone text, contact_email text, website_url text, address_text text, city text, country text, lat double precision, lng double precision, location_visibility text, legacy_user_id uuid, is_premium boolean)",
+                  "strict": false,
+                  "definer": true,
+                  "defaults": false,
+                  "language": "sql",
+                  "parallel": "u",
+                  "arguments": [
+                    "text"
+                  ],
+                  "leakproof": false,
+                  "volatility": "v",
+                  "body_sha256": "6111d8b5d1217436c1ed7f12d8571deb27f866aab0b49788878bebdf1f9dcde1",
+                  "config_sha256": "a983dc37b42030987a873720dfdd7abc6aedb3d4b2f64c7cd5dd68adfc8158d0",
+                  "definition_sha256": "0cc9f517fa3e013acb86cadbbb0ee8187e93ab1295fe0df974ffccf7c144376d"
+                }
+              ],
+              "helper_app_denied": true
+            }
+          },
+          "accepted_ordinary_readers": {
+            "functions": [
+              {
+                "name": "public.get_public_listing_detail_v1",
+                "owner": "postgres",
+                "grants": [
+                  {
+                    "role": "anon",
+                    "grantable": false,
+                    "privilege": "EXECUTE"
+                  },
+                  {
+                    "role": "authenticated",
+                    "grantable": false,
+                    "privilege": "EXECUTE"
+                  },
+                  {
+                    "role": "postgres",
+                    "grantable": false,
+                    "privilege": "EXECUTE"
+                  }
+                ],
+                "result": "jsonb",
+                "strict": false,
+                "definer": true,
+                "defaults": false,
+                "language": "plpgsql",
+                "parallel": "u",
+                "arguments": [
+                  "text"
+                ],
+                "leakproof": false,
+                "volatility": "s",
+                "body_sha256": "9cc8a99b3671d533331c0784658ae3719dcf5db4f9e37fcd5514ec6b3d6ef06f",
+                "config_sha256": "4323c0099a8fb65c827af872a0e23a34d3d645bced4ff952ac0384bd79cd5d62",
+                "definition_sha256": "8642afd2db29ea98366e05110788c397d106c3bac2c5e714b862dc2f313e1af7"
+              },
+              {
+                "name": "public.search_public_listings_v1",
+                "owner": "postgres",
+                "grants": [
+                  {
+                    "role": "anon",
+                    "grantable": false,
+                    "privilege": "EXECUTE"
+                  },
+                  {
+                    "role": "authenticated",
+                    "grantable": false,
+                    "privilege": "EXECUTE"
+                  },
+                  {
+                    "role": "postgres",
+                    "grantable": false,
+                    "privilege": "EXECUTE"
+                  },
+                  {
+                    "role": "service_role",
+                    "grantable": false,
+                    "privilege": "EXECUTE"
+                  }
+                ],
+                "result": "jsonb",
+                "strict": false,
+                "definer": true,
+                "defaults": true,
+                "language": "plpgsql",
+                "parallel": "u",
+                "arguments": [
+                  "text",
+                  "text",
+                  "text",
+                  "text",
+                  "text",
+                  "text",
+                  "integer",
+                  "integer"
+                ],
+                "leakproof": false,
+                "volatility": "s",
+                "body_sha256": "f559889c618c118e7aa3629964aab0cfb100b41fae841093ff85d60cd6f4d188",
+                "config_sha256": "4897ce422ad20afaf1f959b531ef5e9273ddf5a7bf27489f71e942122b40ea20",
+                "definition_sha256": "5f5f9661634ffaa89bd0e7c179d0bcc080c02efc4c60261f75934ced98b9d931"
+              },
+              {
+                "name": "public.search_public_listings_v2",
+                "owner": "postgres",
+                "grants": [
+                  {
+                    "role": "anon",
+                    "grantable": false,
+                    "privilege": "EXECUTE"
+                  },
+                  {
+                    "role": "authenticated",
+                    "grantable": false,
+                    "privilege": "EXECUTE"
+                  },
+                  {
+                    "role": "postgres",
+                    "grantable": false,
+                    "privilege": "EXECUTE"
+                  }
+                ],
+                "result": "jsonb",
+                "strict": false,
+                "definer": true,
+                "defaults": true,
+                "language": "plpgsql",
+                "parallel": "u",
+                "arguments": [
+                  "text",
+                  "text",
+                  "text",
+                  "text",
+                  "text",
+                  "text",
+                  "integer",
+                  "integer"
+                ],
+                "leakproof": false,
+                "volatility": "s",
+                "body_sha256": "22475d564bf59c0d7e8d7c21fc8bc8d481001086f867574c62d8fffb16797904",
+                "config_sha256": "4897ce422ad20afaf1f959b531ef5e9273ddf5a7bf27489f71e942122b40ea20",
+                "definition_sha256": "7c0a101bc2fd2941c008caea7b5027aa77ae8572cef5ed1dbab7ccb428e791e2"
+              }
+            ]
+          }
+        },
+        "accepted_horse_readers": {
+          "functions": [
+            {
+              "name": "public.get_public_horse_offer_v1",
+              "owner": "postgres",
+              "grants": [
+                {
+                  "role": "anon",
+                  "grantable": false,
+                  "privilege": "EXECUTE"
+                },
+                {
+                  "role": "authenticated",
+                  "grantable": false,
+                  "privilege": "EXECUTE"
+                },
+                {
+                  "role": "postgres",
+                  "grantable": false,
+                  "privilege": "EXECUTE"
+                }
+              ],
+              "result": "jsonb",
+              "strict": false,
+              "definer": true,
+              "defaults": false,
+              "language": "plpgsql",
+              "parallel": "u",
+              "arguments": [
+                "uuid"
+              ],
+              "leakproof": false,
+              "volatility": "s",
+              "body_sha256": "1a31de67d3d1eae5907ff9c5a8a8d08e7666baa629a3e79f5b6cab5b9a67420d",
+              "config_sha256": "8a99ef30e82bf63f97a0f2bb54e5484d1b27779ff3d93cad1079c2934c2485a6",
+              "definition_sha256": "7249a6d7f6faa081c0daba7a6e8ab0a8f190f9c3081573e6d331a702318a47d4"
+            },
+            {
+              "name": "public.search_public_marketplace_v1",
+              "owner": "postgres",
+              "grants": [
+                {
+                  "role": "anon",
+                  "grantable": false,
+                  "privilege": "EXECUTE"
+                },
+                {
+                  "role": "authenticated",
+                  "grantable": false,
+                  "privilege": "EXECUTE"
+                },
+                {
+                  "role": "postgres",
+                  "grantable": false,
+                  "privilege": "EXECUTE"
+                }
+              ],
+              "result": "jsonb",
+              "strict": false,
+              "definer": true,
+              "defaults": true,
+              "language": "plpgsql",
+              "parallel": "u",
+              "arguments": [
+                "text",
+                "text",
+                "text",
+                "text",
+                "text",
+                "text",
+                "integer",
+                "integer",
+                "uuid"
+              ],
+              "leakproof": false,
+              "volatility": "s",
+              "body_sha256": "cca566dbf1dd1113822db23f0853726e2801823477a2d1c969611cff036a93e9",
+              "config_sha256": "4897ce422ad20afaf1f959b531ef5e9273ddf5a7bf27489f71e942122b40ea20",
+              "definition_sha256": "8b7aa982e2abe1c28528043292c2224c3d9c24d196f4581cfab09ae404a12d1c"
+            }
+          ]
+        }
+      },
+      "accepted_profile_marketplace_readers": {
+        "functions": [
+          {
+            "name": "public.get_public_profile_marketplace_v1",
+            "owner": "postgres",
+            "grants": [
+              {
+                "role": "anon",
+                "grantable": false,
+                "privilege": "EXECUTE"
+              },
+              {
+                "role": "authenticated",
+                "grantable": false,
+                "privilege": "EXECUTE"
+              },
+              {
+                "role": "postgres",
+                "grantable": false,
+                "privilege": "EXECUTE"
+              }
+            ],
+            "result": "jsonb",
+            "strict": false,
+            "definer": true,
+            "defaults": true,
+            "language": "plpgsql",
+            "parallel": "u",
+            "arguments": [
+              "text",
+              "uuid",
+              "integer",
+              "integer"
+            ],
+            "leakproof": false,
+            "volatility": "s",
+            "body_sha256": "e99f8afab19fb32460e0029f4b8b77c7650e90e8531213b3b94fef100ec9db72",
+            "config_sha256": "56f683d1f1a12aee863829146cbc2ce4ff7121b587d79b3a07483dc9267a55d2",
+            "definition_sha256": "a07c375d4f9386696beaebfaab5fbbe3204fe90f975e4c7d4eb5418e9b79fa00"
+          },
+          {
+            "name": "public.get_public_profile_marketplace_v2",
+            "owner": "postgres",
+            "grants": [
+              {
+                "role": "anon",
+                "grantable": false,
+                "privilege": "EXECUTE"
+              },
+              {
+                "role": "authenticated",
+                "grantable": false,
+                "privilege": "EXECUTE"
+              },
+              {
+                "role": "postgres",
+                "grantable": false,
+                "privilege": "EXECUTE"
+              }
+            ],
+            "result": "jsonb",
+            "strict": false,
+            "definer": true,
+            "defaults": true,
+            "language": "plpgsql",
+            "parallel": "u",
+            "arguments": [
+              "text",
+              "uuid",
+              "integer",
+              "integer"
+            ],
+            "leakproof": false,
+            "volatility": "s",
+            "body_sha256": "eeaf9ca26ac35e155bffca747a6691d4650a082fe5cef596f21fdccc6cb1265a",
+            "config_sha256": "56f683d1f1a12aee863829146cbc2ce4ff7121b587d79b3a07483dc9267a55d2",
+            "definition_sha256": "f7c2b5f657435ac4857ee956a8621a681bda4a15b3bdc964fc10d70348fbe2f2"
+          },
+          {
+            "name": "public.get_public_profile_store_categories_v2",
+            "owner": "postgres",
+            "grants": [
+              {
+                "role": "anon",
+                "grantable": false,
+                "privilege": "EXECUTE"
+              },
+              {
+                "role": "authenticated",
+                "grantable": false,
+                "privilege": "EXECUTE"
+              },
+              {
+                "role": "postgres",
+                "grantable": false,
+                "privilege": "EXECUTE"
+              }
+            ],
+            "result": "jsonb",
+            "strict": false,
+            "definer": true,
+            "defaults": true,
+            "language": "plpgsql",
+            "parallel": "u",
+            "arguments": [
+              "text",
+              "text",
+              "integer",
+              "integer"
+            ],
+            "leakproof": false,
+            "volatility": "s",
+            "body_sha256": "1dda01a878491d43b724b9af6747ce98920dbff43d897820281d243bfcb9a28c",
+            "config_sha256": "56f683d1f1a12aee863829146cbc2ce4ff7121b587d79b3a07483dc9267a55d2",
+            "definition_sha256": "8e050ca54bf3c1881a0a0063e3930717d575aa39b434cf4c179c5d9e2ab548bf"
+          }
+        ]
+      }
+    },
+    "accepted_service_readers": {
+      "functions": [
+        {
+          "name": "public.get_public_profile_services_v1",
+          "owner": "postgres",
+          "grants": [
+            {
+              "role": "anon",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            },
+            {
+              "role": "authenticated",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            },
+            {
+              "role": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            }
+          ],
+          "result": "jsonb",
+          "strict": false,
+          "definer": true,
+          "defaults": true,
+          "language": "plpgsql",
+          "parallel": "u",
+          "arguments": [
+            "text",
+            "integer"
+          ],
+          "leakproof": false,
+          "volatility": "s",
+          "body_sha256": "9200ca44d1d14fb56a8da962126f46482d82b27e3833b5209453e5d9a74a97ee",
+          "config_sha256": "56f683d1f1a12aee863829146cbc2ce4ff7121b587d79b3a07483dc9267a55d2",
+          "definition_sha256": "85718b22940a87ef31fdd5e37730625b5eeb1b34e0f666f24ef5578e0225681e"
+        },
+        {
+          "name": "public.get_public_profile_services_v2",
+          "owner": "postgres",
+          "grants": [
+            {
+              "role": "anon",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            },
+            {
+              "role": "authenticated",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            },
+            {
+              "role": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            }
+          ],
+          "result": "jsonb",
+          "strict": false,
+          "definer": true,
+          "defaults": true,
+          "language": "plpgsql",
+          "parallel": "u",
+          "arguments": [
+            "text",
+            "uuid",
+            "integer",
+            "integer"
+          ],
+          "leakproof": false,
+          "volatility": "s",
+          "body_sha256": "88419e0e700ac9f805081d8936172329a5cf75903bbc764ce2d62eb620ca8876",
+          "config_sha256": "56f683d1f1a12aee863829146cbc2ce4ff7121b587d79b3a07483dc9267a55d2",
+          "definition_sha256": "681266ba29900df33fb4a0e993ffb2cee7c9771c41566dc91c20c7b4e264d455"
+        },
+        {
+          "name": "service_publication_private.visible_to_viewer",
+          "owner": "postgres",
+          "grants": [
+            {
+              "role": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            },
+            {
+              "role": "selqiro_listing_final_writer_v1",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            }
+          ],
+          "result": "boolean",
+          "strict": false,
+          "definer": true,
+          "defaults": false,
+          "language": "sql",
+          "parallel": "u",
+          "arguments": [
+            "uuid"
+          ],
+          "leakproof": false,
+          "volatility": "s",
+          "body_sha256": "b396c71e7a278a68125dae08361f0992c0f3ad6e7dcb18b609ebbaccaf854b06",
+          "config_sha256": "8a99ef30e82bf63f97a0f2bb54e5484d1b27779ff3d93cad1079c2934c2485a6",
+          "definition_sha256": "346e07c31de3af81ea4e3ec207155c117518c7a17f743add330f3c1583afb8d9"
+        }
+      ]
+    }
+  },
+  "before": {
+    "functions": [
+      {
+        "acl": [
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          }
+        ],
+        "body": "2bc37565f1d2c8c536d81e9db15acd62d23401e558dbead351c30a0f858731a1",
+        "owner": "postgres",
+        "config": [
+          "search_path=pg_catalog, pg_temp",
+          "TimeZone=UTC"
+        ],
+        "result": "boolean",
+        "strict": false,
+        "definer": true,
+        "defaults": null,
+        "language": "sql",
+        "parallel": "u",
+        "arguments": [
+          "p_identity"
+        ],
+        "leakproof": false,
+        "signature": "jobs_private.visible_to_viewer(uuid)",
+        "volatility": "s"
+      },
+      {
+        "acl": [
+          {
+            "grantee": "anon",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          },
+          {
+            "grantee": "authenticated",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          },
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          }
+        ],
+        "body": "390f8a41223be4f848205d0ffc0a8ff93edfebd429deb89ef5293bfb43568853",
+        "owner": "postgres",
+        "config": [
+          "search_path=pg_catalog, pg_temp",
+          "TimeZone=UTC"
+        ],
+        "result": "jsonb",
+        "strict": false,
+        "definer": true,
+        "defaults": "24, NULL::jsonb",
+        "language": "plpgsql",
+        "parallel": "u",
+        "arguments": [
+          "p_seller_slug",
+          "p_result_limit",
+          "p_cursor"
+        ],
+        "leakproof": false,
+        "signature": "public.get_public_profile_jobs_v1(text,integer,jsonb)",
+        "volatility": "s"
+      }
+    ]
+  },
+  "after": {
+    "functions": [
+      {
+        "acl": [
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          }
+        ],
+        "body": "a4835de45c9ded23d2714f62641f04e3acb1b572346732c26ad00be5c97b4e5c",
+        "owner": "postgres",
+        "config": [
+          "search_path=pg_catalog, pg_temp",
+          "TimeZone=UTC"
+        ],
+        "result": "boolean",
+        "strict": false,
+        "definer": true,
+        "defaults": null,
+        "language": "sql",
+        "parallel": "u",
+        "arguments": [
+          "p_identity"
+        ],
+        "leakproof": false,
+        "signature": "jobs_private.visible_to_viewer(uuid)",
+        "volatility": "s"
+      },
+      {
+        "acl": [
+          {
+            "grantee": "anon",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          },
+          {
+            "grantee": "authenticated",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          },
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          }
+        ],
+        "body": "0f3e3433296782c524927af67dd066704f2b8c49c226dcb2150aa24c3ec8d386",
+        "owner": "postgres",
+        "config": [
+          "search_path=pg_catalog, pg_temp",
+          "TimeZone=UTC"
+        ],
+        "result": "jsonb",
+        "strict": false,
+        "definer": true,
+        "defaults": "24, NULL::jsonb",
+        "language": "plpgsql",
+        "parallel": "u",
+        "arguments": [
+          "p_seller_slug",
+          "p_result_limit",
+          "p_cursor"
+        ],
+        "leakproof": false,
+        "signature": "public.get_public_profile_jobs_v1(text,integer,jsonb)",
+        "volatility": "s"
+      }
+    ]
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "jobs_private.visible_to_viewer(uuid)": {
+    "only_existing_account_predicate_inserted": true,
+    "original_source_sha256": "b96450b44accd5d1d69a2479bf56ee2c9f3b1b9a6357603815ade7b33d125400",
+    "block_tail_sha256": "ca148ee6a745e150eeb70738eb80093bcaf02f5474671497300cfe9c42d49b83"
+  },
+  "public.get_public_profile_jobs_v1(text,integer,jsonb)": {
+    "unique_slug_and_validation_prefix_bytes": 1023,
+    "unique_slug_and_validation_prefix_sha256": "00665d3d3e3d87f392fad386b659ca2819e5af9895cdf1200f1860febb0da899",
+    "content_and_wire_tail_bytes": 1066,
+    "content_and_wire_tail_sha256": "e38a86697532facce66d74706959fa15d996780d98050cd1dd9be8ca232be9e6"
+  }
+}

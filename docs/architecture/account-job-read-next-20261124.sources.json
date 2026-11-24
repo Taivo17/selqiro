@@ -1,0 +1,748 @@
+{
+  "format": "selqiro-account-job-read-next-audit-20261124-v1",
+  "date": "2026-11-24",
+  "timezone": "Europe/Tallinn",
+  "kind": "bounded_static_read_only_source_audit",
+  "source_commit": "a9d86e63ab667545598da8e40ee2a2d0c7365df3",
+  "source_tree": "e5e7d7d2253c7c89ff09bbd84d3e501674c2de90",
+  "source_file_count": 2227,
+  "scope": [
+    "public job detail",
+    "public job search",
+    "public profile jobs",
+    "static job category dictionary",
+    "anonymous job share preview",
+    "contact/owner boundaries only"
+  ],
+  "recommendation": "Add the existing canonical account availability predicate to public job reads in one bounded two-function SQL module.",
+  "target_functions": [
+    "jobs_private.visible_to_viewer(uuid)",
+    "public.get_public_profile_jobs_v1(text,integer,jsonb)"
+  ],
+  "canonical_owner": {
+    "private": "public.identities.user_id",
+    "business": "public.business_accounts.owner_user_id",
+    "forbidden_fallbacks": [
+      "job creator",
+      "business member",
+      "viewer active identity",
+      "profile display name"
+    ]
+  },
+  "existing_authority": "account_lifecycle_private.account_is_available(uuid)",
+  "behavior": {
+    "shared_helper": "Preserve bilateral blocking and canonical owner resolution; also require existing account availability. Missing owner/state/Auth does not grant access.",
+    "profile_early_gate": "After unambiguous active slug resolution, check canonical owner account. If unavailable, clear identity_value before candidate query. Keep existing identity_id:null/items:[]/has_more:false/next_cursor:null wire.",
+    "detail": "Unchanged get_public_job_v1 naturally returns null when helper denies.",
+    "search": "Unchanged search_public_jobs_v1 applies helper before cursor/order/limit, retaining hidden-provider discovery filtering and stable cursor.",
+    "categories": "get_job_categories_v1 reads only dictionary categories, not account-specific job counts; no new gate needed.",
+    "share": "anonymousOfferPreview uses get_public_job_v1 with public-only context; fresh preview inherits null denial. This is not a claim of instantaneous external cache or legacy image URL revocation."
+  },
+  "unchanged": [
+    "jobs_private.is_public(public.jobs)",
+    "jobs_private.public_fields(public.jobs)",
+    "public.get_public_job_v1(uuid)",
+    "public.search_public_jobs_v1(text,text,text,text,text,text,text,integer,jsonb)",
+    "public.get_job_categories_v1()",
+    "owner reads and lock repair",
+    "job writes and receipts",
+    "job contact snapshot and writer",
+    "historical message cards",
+    "account helper and active-only state schema",
+    "client parsers and UI",
+    "roles and ACL",
+    "dependencies"
+  ],
+  "source_findings": [
+    {
+      "claim": "Shared helper checks canonical owner and bilateral blocks but lacks account_is_available.",
+      "path": "supabase/repairs/20261121_personal_jobs/03_visibility.sql",
+      "lines": [
+        12,
+        23
+      ]
+    },
+    {
+      "claim": "Job public detail calls is_public and visible_to_viewer.",
+      "path": "supabase/repairs/20261116_jobs_public/04_reads.sql",
+      "lines": [
+        11,
+        15
+      ]
+    },
+    {
+      "claim": "Profile resolves identity before items and currently returns identity even when no items remain; add separate early account gate.",
+      "path": "supabase/repairs/20261121_personal_jobs/04_reads.sql",
+      "lines": [
+        8,
+        25
+      ]
+    },
+    {
+      "claim": "Search checks helper and hidden providers before ordered bounded candidates.",
+      "path": "supabase/repairs/20261121_personal_jobs/04_reads.sql",
+      "lines": [
+        39,
+        62
+      ]
+    },
+    {
+      "claim": "Profile parser already accepts null identity only with empty items; has_more/next_cursor consistency is separately enforced.",
+      "path": "src/entities/job/model/jobParsers.ts",
+      "lines": [
+        42,
+        65
+      ]
+    },
+    {
+      "claim": "Null public detail is accepted and shown as unavailable; errors remain errors and viewer changes invalidate read state.",
+      "path": "src/features/jobs/components/JobDetailPage.tsx",
+      "lines": [
+        16,
+        39
+      ]
+    },
+    {
+      "claim": "Fresh anonymous job preview uses same public RPC and fails closed to null.",
+      "path": "src/server/sharing/anonymousOfferPreview.ts",
+      "lines": [
+        47,
+        76
+      ]
+    },
+    {
+      "claim": "The category RPC exports the static dictionary only.",
+      "path": "supabase/repairs/20261116_jobs_public/04_reads.sql",
+      "lines": [
+        6,
+        10
+      ]
+    },
+    {
+      "claim": "is_public is also used by contact_snapshot; preserve it so this read-only module does not silently change new-contact authority.",
+      "path": "supabase/repairs/20261121_personal_jobs/05_contact.sql",
+      "lines": [
+        3,
+        21
+      ]
+    },
+    {
+      "claim": "Account state schema currently permits only active and contains no close/restore transition.",
+      "path": "supabase/releases/account-state-foundation-v1/foundation.sql",
+      "lines": [
+        5,
+        17
+      ]
+    }
+  ],
+  "current_catalog_basis": {
+    "path": "supabase/repairs/20261122_job_owner_read_lock/catalog-pins.json",
+    "format": "selqiro-job-owner-read-state-20261122-v1",
+    "after_fingerprint": "0be7544243260b409badb5a5f09dee9308663d089236acdfdef421b34b1173ef",
+    "matched_source_function_bodies": 11,
+    "facts": {
+      "jobs_private.visible_to_viewer(uuid)": {
+        "path": "supabase/repairs/20261121_personal_jobs/03_visibility.sql",
+        "line_start": 12,
+        "line_end": 23,
+        "body_sha256": "2bc37565f1d2c8c536d81e9db15acd62d23401e558dbead351c30a0f858731a1",
+        "catalog_match": true,
+        "catalog_fact": {
+          "acl": [
+            {
+              "grantee": "postgres",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            }
+          ],
+          "body": "2bc37565f1d2c8c536d81e9db15acd62d23401e558dbead351c30a0f858731a1",
+          "owner": "postgres",
+          "config": [
+            "search_path=pg_catalog, pg_temp",
+            "TimeZone=UTC"
+          ],
+          "result": "boolean",
+          "strict": false,
+          "definer": true,
+          "defaults": null,
+          "language": "sql",
+          "parallel": "u",
+          "arguments": [
+            "p_identity"
+          ],
+          "leakproof": false,
+          "signature": "jobs_private.visible_to_viewer(uuid)",
+          "volatility": "s"
+        }
+      },
+      "jobs_private.is_public(public.jobs)": {
+        "path": "supabase/repairs/20261121_personal_jobs/03_visibility.sql",
+        "line_start": 1,
+        "line_end": 10,
+        "body_sha256": "78295a2c9e4ffc9c5b837b17c4ad5d577a5e2564285342b8242df175e286a3c1",
+        "catalog_match": true,
+        "catalog_fact": {
+          "acl": [
+            {
+              "grantee": "postgres",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            }
+          ],
+          "body": "78295a2c9e4ffc9c5b837b17c4ad5d577a5e2564285342b8242df175e286a3c1",
+          "owner": "postgres",
+          "config": [
+            "search_path=pg_catalog, pg_temp",
+            "TimeZone=UTC"
+          ],
+          "result": "boolean",
+          "strict": false,
+          "definer": true,
+          "defaults": null,
+          "language": "sql",
+          "parallel": "u",
+          "arguments": [
+            "j"
+          ],
+          "leakproof": false,
+          "signature": "jobs_private.is_public(public.jobs)",
+          "volatility": "s"
+        }
+      },
+      "public.get_public_job_v1(uuid)": {
+        "path": "supabase/repairs/20261116_jobs_public/04_reads.sql",
+        "line_start": 11,
+        "line_end": 15,
+        "body_sha256": "1ddb3ffada58508462c32b63a0cb566a5582cd22682fa8c6b1ed86053f3020df",
+        "catalog_match": true,
+        "catalog_fact": {
+          "acl": [
+            {
+              "grantee": "anon",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            },
+            {
+              "grantee": "authenticated",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            },
+            {
+              "grantee": "postgres",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            }
+          ],
+          "body": "1ddb3ffada58508462c32b63a0cb566a5582cd22682fa8c6b1ed86053f3020df",
+          "owner": "postgres",
+          "config": [
+            "search_path=pg_catalog, pg_temp",
+            "TimeZone=UTC"
+          ],
+          "result": "jsonb",
+          "strict": false,
+          "definer": true,
+          "defaults": null,
+          "language": "sql",
+          "parallel": "u",
+          "arguments": [
+            "p_job_id"
+          ],
+          "leakproof": false,
+          "signature": "public.get_public_job_v1(uuid)",
+          "volatility": "s"
+        }
+      },
+      "public.get_public_profile_jobs_v1(text,integer,jsonb)": {
+        "path": "supabase/repairs/20261121_personal_jobs/04_reads.sql",
+        "line_start": 1,
+        "line_end": 25,
+        "body_sha256": "390f8a41223be4f848205d0ffc0a8ff93edfebd429deb89ef5293bfb43568853",
+        "catalog_match": true,
+        "catalog_fact": {
+          "acl": [
+            {
+              "grantee": "anon",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            },
+            {
+              "grantee": "authenticated",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            },
+            {
+              "grantee": "postgres",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            }
+          ],
+          "body": "390f8a41223be4f848205d0ffc0a8ff93edfebd429deb89ef5293bfb43568853",
+          "owner": "postgres",
+          "config": [
+            "search_path=pg_catalog, pg_temp",
+            "TimeZone=UTC"
+          ],
+          "result": "jsonb",
+          "strict": false,
+          "definer": true,
+          "defaults": "24, NULL::jsonb",
+          "language": "plpgsql",
+          "parallel": "u",
+          "arguments": [
+            "p_seller_slug",
+            "p_result_limit",
+            "p_cursor"
+          ],
+          "leakproof": false,
+          "signature": "public.get_public_profile_jobs_v1(text,integer,jsonb)",
+          "volatility": "s"
+        }
+      },
+      "public.search_public_jobs_v1(text,text,text,text,text,text,text,integer,jsonb)": {
+        "path": "supabase/repairs/20261121_personal_jobs/04_reads.sql",
+        "line_start": 27,
+        "line_end": 62,
+        "body_sha256": "ec3d96fe4dc460cef8bd646d8ae376e06e8a0f7320508451d83f711879495fc3",
+        "catalog_match": true,
+        "catalog_fact": {
+          "acl": [
+            {
+              "grantee": "anon",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            },
+            {
+              "grantee": "authenticated",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            },
+            {
+              "grantee": "postgres",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            }
+          ],
+          "body": "ec3d96fe4dc460cef8bd646d8ae376e06e8a0f7320508451d83f711879495fc3",
+          "owner": "postgres",
+          "config": [
+            "search_path=pg_catalog, pg_temp",
+            "TimeZone=UTC",
+            "plan_cache_mode=force_custom_plan"
+          ],
+          "result": "jsonb",
+          "strict": false,
+          "definer": true,
+          "defaults": "''::text, NULL::text, NULL::text, NULL::text, NULL::text, NULL::text, NULL::text, 24, NULL::jsonb",
+          "language": "plpgsql",
+          "parallel": "u",
+          "arguments": [
+            "p_query",
+            "p_category",
+            "p_country_code",
+            "p_city",
+            "p_workplace_type",
+            "p_employment_type",
+            "p_working_time",
+            "p_result_limit",
+            "p_cursor"
+          ],
+          "leakproof": false,
+          "signature": "public.search_public_jobs_v1(text,text,text,text,text,text,text,integer,jsonb)",
+          "volatility": "s"
+        }
+      },
+      "public.get_job_categories_v1()": {
+        "path": "supabase/repairs/20261116_jobs_public/04_reads.sql",
+        "line_start": 6,
+        "line_end": 10,
+        "body_sha256": "7ebb02b79e95c0bbca664401d3e21626eaf4322cf37dc605b0b0eada0d8c75b6",
+        "catalog_match": true,
+        "catalog_fact": {
+          "acl": [
+            {
+              "grantee": "anon",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            },
+            {
+              "grantee": "authenticated",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            },
+            {
+              "grantee": "postgres",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            }
+          ],
+          "body": "7ebb02b79e95c0bbca664401d3e21626eaf4322cf37dc605b0b0eada0d8c75b6",
+          "owner": "postgres",
+          "config": [
+            "search_path=pg_catalog, pg_temp",
+            "TimeZone=UTC"
+          ],
+          "result": "jsonb",
+          "strict": false,
+          "definer": true,
+          "defaults": null,
+          "language": "sql",
+          "parallel": "u",
+          "arguments": null,
+          "leakproof": false,
+          "signature": "public.get_job_categories_v1()",
+          "volatility": "s"
+        }
+      },
+      "jobs_private.public_fields(public.jobs)": {
+        "path": "supabase/repairs/20261121_job_image_read/01_public_fields.sql",
+        "line_start": 1,
+        "line_end": 11,
+        "body_sha256": "5ad00d7c27ae5499447c0a94087ddd719e2b1c4a3e3f2b91dbac04adfba8b377",
+        "catalog_match": true,
+        "catalog_fact": {
+          "acl": [
+            {
+              "grantee": "postgres",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            }
+          ],
+          "body": "5ad00d7c27ae5499447c0a94087ddd719e2b1c4a3e3f2b91dbac04adfba8b377",
+          "owner": "postgres",
+          "config": [
+            "search_path=pg_catalog, pg_temp",
+            "TimeZone=UTC"
+          ],
+          "result": "jsonb",
+          "strict": false,
+          "definer": true,
+          "defaults": null,
+          "language": "sql",
+          "parallel": "u",
+          "arguments": [
+            "j"
+          ],
+          "leakproof": false,
+          "signature": "jobs_private.public_fields(public.jobs)",
+          "volatility": "s"
+        }
+      },
+      "jobs_private.contact_snapshot(uuid)": {
+        "path": "supabase/repairs/20261121_personal_jobs/05_contact.sql",
+        "line_start": 3,
+        "line_end": 21,
+        "body_sha256": "8b4d1cf59af748d02e221d848a8b1fcd51db8b88fe5af18faba9cff35f7358c7",
+        "catalog_match": true,
+        "catalog_fact": {
+          "acl": [
+            {
+              "grantee": "postgres",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            },
+            {
+              "grantee": "selqiro_listing_contact_writer_v1",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            }
+          ],
+          "body": "8b4d1cf59af748d02e221d848a8b1fcd51db8b88fe5af18faba9cff35f7358c7",
+          "owner": "postgres",
+          "config": [
+            "search_path=pg_catalog, pg_temp",
+            "TimeZone=UTC"
+          ],
+          "result": "jsonb",
+          "strict": false,
+          "definer": true,
+          "defaults": null,
+          "language": "plpgsql",
+          "parallel": "u",
+          "arguments": [
+            "p_job_id"
+          ],
+          "leakproof": false,
+          "signature": "jobs_private.contact_snapshot(uuid)",
+          "volatility": "v"
+        }
+      },
+      "public.contact_my_job_provider_v1(uuid,uuid,uuid,uuid)": {
+        "path": "supabase/repairs/20261116_jobs_public/07_contact.sql",
+        "line_start": 38,
+        "line_end": 90,
+        "body_sha256": "2df424b0a40077caa36945bf7edae813bff15edfd3f6cd0b976dff58a1b8fadb",
+        "catalog_match": true,
+        "catalog_fact": {
+          "acl": [
+            {
+              "grantee": "authenticated",
+              "grantor": "selqiro_listing_contact_writer_v1",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            },
+            {
+              "grantee": "selqiro_listing_contact_writer_v1",
+              "grantor": "selqiro_listing_contact_writer_v1",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            }
+          ],
+          "body": "2df424b0a40077caa36945bf7edae813bff15edfd3f6cd0b976dff58a1b8fadb",
+          "owner": "selqiro_listing_contact_writer_v1",
+          "config": [
+            "search_path=pg_catalog, pg_temp",
+            "TimeZone=UTC",
+            "lock_timeout=2s"
+          ],
+          "result": "jsonb",
+          "strict": false,
+          "definer": true,
+          "defaults": null,
+          "language": "plpgsql",
+          "parallel": "u",
+          "arguments": [
+            "p_expected_user_id",
+            "p_expected_identity_id",
+            "p_request_key",
+            "p_job_id"
+          ],
+          "leakproof": false,
+          "signature": "public.contact_my_job_provider_v1(uuid,uuid,uuid,uuid)",
+          "volatility": "v"
+        }
+      },
+      "public.get_my_jobs_v1(uuid,uuid,integer,jsonb)": {
+        "path": "supabase/repairs/20261122_job_owner_read_lock/01_owner_read.sql",
+        "line_start": 3,
+        "line_end": 95,
+        "body_sha256": "465771b4a363d023dcd96f175d9a7ef6f0b9196306b985277935a5c2e9746d88",
+        "catalog_match": true,
+        "catalog_fact": {
+          "acl": [
+            {
+              "grantee": "authenticated",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            },
+            {
+              "grantee": "postgres",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            }
+          ],
+          "body": "465771b4a363d023dcd96f175d9a7ef6f0b9196306b985277935a5c2e9746d88",
+          "owner": "postgres",
+          "config": [
+            "search_path=pg_catalog, pg_temp",
+            "TimeZone=UTC",
+            "lock_timeout=2s"
+          ],
+          "result": "jsonb",
+          "strict": false,
+          "definer": true,
+          "defaults": "24, NULL::jsonb",
+          "language": "plpgsql",
+          "parallel": "u",
+          "arguments": [
+            "p_expected_user_id",
+            "p_expected_identity_id",
+            "p_result_limit",
+            "p_cursor"
+          ],
+          "leakproof": false,
+          "signature": "public.get_my_jobs_v1(uuid,uuid,integer,jsonb)",
+          "volatility": "s"
+        }
+      },
+      "jobs_private.require_actor(uuid,uuid)": {
+        "path": "supabase/repairs/20261121_personal_jobs/01_authority.sql",
+        "line_start": 3,
+        "line_end": 23,
+        "body_sha256": "88114de75eaa42b8ef1d30fc90a3a0e6552941178cd39e462e12d40a8f1fc30b",
+        "catalog_match": true,
+        "catalog_fact": {
+          "acl": [
+            {
+              "grantee": "postgres",
+              "grantor": "postgres",
+              "grantable": false,
+              "privilege": "EXECUTE"
+            }
+          ],
+          "body": "88114de75eaa42b8ef1d30fc90a3a0e6552941178cd39e462e12d40a8f1fc30b",
+          "owner": "postgres",
+          "config": [
+            "search_path=pg_catalog, pg_temp",
+            "TimeZone=UTC"
+          ],
+          "result": "void",
+          "strict": false,
+          "definer": true,
+          "defaults": null,
+          "language": "plpgsql",
+          "parallel": "u",
+          "arguments": [
+            "p_user",
+            "p_identity"
+          ],
+          "leakproof": false,
+          "signature": "jobs_private.require_actor(uuid,uuid)",
+          "volatility": "v"
+        }
+      }
+    },
+    "fresh_live_job_catalog_observed": false,
+    "limit": "11 function bodies match the last accepted jobs catalog recorded in source. Later service receipts are not fresh observations of this jobs catalog. Reobserve before applying any next module."
+  },
+  "client_contract": "No app change needed by the audited wire contract. Must prove real unchanged parser behavior with planned native responses; this audit did not execute those tests.",
+  "implementation_verification_plan": [
+    "Pin current two target bodies and unchanged dependent catalog/ACL/account helper; stop on unknown live prestate. Protected two-body transaction, post-COMMIT acknowledgement, independent read-only verify.",
+    "Native synthetic active private/business owners preserve JSON; unavailable/missing state or Auth, ban boundaries, missing canonical owner deny. No creator/member fallback.",
+    "Verify anonymous and authenticated detail/search/profile, both block directions, hidden-provider discovery-only rule, active/paused/closed/expired content, empty/unavailable/ambiguous slug, cursor and limits, rollback and exact ACL.",
+    "Run unchanged real job parsers/API against native response envelopes including null profile identity/empty result, null detail and malformed-response rejection. Preserve late-response cancellation and viewer generation behavior.",
+    "Measure bounded old/new job search/profile/detail with candidate and unique-owner counts before asserting performance; inspect actual plans and call counts. A result limit alone does not prove bounded eligibility work.",
+    "Necessary targeted checks and fresh build; after Mac receipt and matching Ready/Production, test existing job search -> detail -> provider profile jobs -> back without creating or deleting content."
+  ],
+  "performance_limit": "Service preparation measured unfiltered 5500-candidate median 566.67 to 1105.46 ms. This is a separate service observation, not a prediction or measurement of job RPCs; it motivates a bounded job-specific check and preserves the separate scalability work.",
+  "remaining_lifecycle_boundary": "Public-read gates alone do not authorize account closure. Writers, final publication/adoption, actor and recipient checks, messaging, media/old public URLs, sessions/fresh authentication, explicit close/restore races and eventual erasure still require separate verified coverage. Existing active-only constraint remains.",
+  "performed": {
+    "source_reads": true,
+    "source_body_hash_comparison": true,
+    "new_code": false,
+    "sql_execution": false,
+    "tests": false,
+    "build": false,
+    "live_services": false,
+    "account_or_content_mutation": false
+  },
+  "files": {
+    "supabase/repairs/20261116_jobs_public/01_state.sql": {
+      "sha256": "7332c77ef21888684e257db5bcccbfb2510524569ad03cf1888a07d22c8b8423",
+      "bytes": 4740
+    },
+    "supabase/repairs/20261116_jobs_public/04_reads.sql": {
+      "sha256": "81c46d94b4aaf85b3b951ff36165d79d367a5f95691222c5c0bc95fde68d64af",
+      "bytes": 6899
+    },
+    "supabase/repairs/20261116_jobs_public/06_mutations.sql": {
+      "sha256": "4984bc30bfb1f6186e903341d8bfa676e5aed4aa2260dd573327c8f4c1e52619",
+      "bytes": 8619
+    },
+    "supabase/repairs/20261116_jobs_public/07_contact.sql": {
+      "sha256": "335838ac9c47b22e924bf0c698c042e47f595113d39b0dd1c217f38651fc6a79",
+      "bytes": 7283
+    },
+    "supabase/repairs/20261116_jobs_public/09_authority.sql": {
+      "sha256": "9ddd51e6ce55f30f559866183c9080144213c50b481e4434eb219da51cac3da4",
+      "bytes": 2332
+    },
+    "supabase/repairs/20261121_personal_jobs/01_authority.sql": {
+      "sha256": "ab5d432d4516da69ba02c20af2dc83070792b1ec30fa064f8eb5a3a00fe43d9f",
+      "bytes": 2331
+    },
+    "supabase/repairs/20261121_personal_jobs/03_visibility.sql": {
+      "sha256": "b470831cdb5b526b4e1e913e29c4a53cbe3fa6fe25f542c125b4143012c1538a",
+      "bytes": 2951
+    },
+    "supabase/repairs/20261121_personal_jobs/04_reads.sql": {
+      "sha256": "37a955eaa74b5685bde1becf46e0f56081a0fedc8a82b2bc89fc751891975a23",
+      "bytes": 5329
+    },
+    "supabase/repairs/20261121_personal_jobs/05_contact.sql": {
+      "sha256": "ff5cb538ebd415adbc4e0d3166b08e2634bb2dae75ea439c1b2cc7520dc0dec3",
+      "bytes": 1415
+    },
+    "supabase/repairs/20261121_job_image_read/01_public_fields.sql": {
+      "sha256": "f77979e3b0f44a8b20c7ad328b2c8f0a1fa2cb2e77f552bf13d2dacd88364c6e",
+      "bytes": 912
+    },
+    "supabase/repairs/20261122_job_owner_read_lock/01_owner_read.sql": {
+      "sha256": "015f4145826670c4cd36b54f3c382c77ccf647672530dcfff61694c1256de50e",
+      "bytes": 5117
+    },
+    "supabase/repairs/20261122_job_owner_read_lock/catalog-pins.json": {
+      "sha256": "3f4d52e201b04916bf4548dc77b16243cd3007d670c649c6cb7271bb5a3b0988",
+      "bytes": 228929
+    },
+    "supabase/releases/account-public-profile-fence-v1/account-availability.sql": {
+      "sha256": "da26cf792b337adf41a77cc2144a4738d1a405dd122ff9e20c47dc1c82e72930",
+      "bytes": 836
+    },
+    "supabase/releases/account-state-foundation-v1/foundation.sql": {
+      "sha256": "3c548bc613ede47edc9c2e71bf16a5858d9c99374dc6b7ad59c1ab4d57706e6a",
+      "bytes": 2119
+    },
+    "supabase/releases/account-service-read-fence-v1/expected-contract.json": {
+      "sha256": "2e8d8024ea2a6deedca2041e0eef9ec7ef0aedde8f2d5ec2c78d5e56a0299beb",
+      "bytes": 117446
+    },
+    "src/entities/job/api/jobClient.ts": {
+      "sha256": "97ca02d88b6fdfbd9d981e1df23ff8f65aa35b727abf6b75ae041692d09ea5bc",
+      "bytes": 8557
+    },
+    "src/entities/job/model/jobParsers.ts": {
+      "sha256": "6c8b138c17a3daabdc197ef654e0b5a2658765dc209b5b5ccde19a5a2eeb9be8",
+      "bytes": 9512
+    },
+    "src/features/jobs/model/usePublicJobs.ts": {
+      "sha256": "81708e333a591232413ad3b8c5e9d1ff1b0d964018310349b7e6214b1329cb16",
+      "bytes": 1241
+    },
+    "src/features/jobs/model/useJobPage.ts": {
+      "sha256": "4ed15e6594f3e5bdb7614475a5aa5926d3fea36c740fa74ddbb54e2ed31ca172",
+      "bytes": 1980
+    },
+    "src/features/jobs/model/useJobCategories.ts": {
+      "sha256": "77961c684fcd075eae68722d2e16e3ebbb4221ddecfd4d0f675617025e1cecea",
+      "bytes": 877
+    },
+    "src/features/jobs/model/jobMessages.ts": {
+      "sha256": "1258647f0361d6d3bc71aa7f37832d038968744e7074c1d09b66a488fe08a62f",
+      "bytes": 15340
+    },
+    "src/features/jobs/components/JobDetailPage.tsx": {
+      "sha256": "f10cacbd0abbcaac5d6135431ce90db57c388b671ff5a4e5a320340df9849fd1",
+      "bytes": 5831
+    },
+    "src/features/jobs/components/PublicProfileJobsSection.tsx": {
+      "sha256": "f17a6644e66e0eda9947768c44b637667e7d872b4fa38ba55f1e5d0e8ef1ba91",
+      "bytes": 1796
+    },
+    "src/features/public-profile/components/PublicProfilePage.tsx": {
+      "sha256": "eb238d8ce63f62fdb71cc933c15bc63fd836e2e8b32d2c65e601bae4a2dc23ea",
+      "bytes": 14069
+    },
+    "src/server/sharing/anonymousOfferPreview.ts": {
+      "sha256": "863a228649837056feb86487b3dd46aa425c2ceba15854053abc8bb804de0566",
+      "bytes": 5430
+    },
+    "docs/architecture/account-lifecycle-verification-plan-v1.md": {
+      "sha256": "e1e6b59fa69df1c92aa92a0325e904946f25a2a5406a1d013aead86124fc10b3",
+      "bytes": 10167
+    },
+    "docs/architecture/account-service-read-fence-v1.md": {
+      "sha256": "79b7286eb2a90c68727839618a393c12e3958ee49024f6a5ca1dba1ef49fe62f",
+      "bytes": 8013
+    }
+  }
+}

@@ -1,28 +1,29 @@
-# Teenuste kontooleku kontroll — üks järgmine käsk
+# Töökuulutuste kontooleku kontroll — üks järgmine käsk
 
-24.11.2026 Europe/Tallinn. Main **0cb3484** on vastu võetud. Uus pakett lisab
-sama konto kättesaadavuse kontrolli teenuste avalikele lugemistele.
+24.11.2026 Europe/Tallinn. Main **a9d86e6** on vastu võetud. Uus pakett lisab
+sama konto kättesaadavuse kontrolli töökuulutuste avalikele lugemistele.
 
 ## Käivita uus pakett
 
-Paki `selqiro-teenuste-konto-olek-20261124.zip` Downloads-kaustas lahti. Kui sinu terminalis töötab kohalik
+Paki `selqiro-too-konto-olek-20261124.zip` Downloads-kaustas lahti. Kui sinu terminalis töötab kohalik
 Selqiro arendusserver, peata see oma aknas Ctrl+C-ga. Säilita olemasolevad paketid ja päevikud.
 
 ```bash
-python3 -I -B "$HOME/Downloads/selqiro-teenuste-konto-olek-20261124/uuenda.py" --publish
+python3 -I -B "$HOME/Downloads/selqiro-too-konto-olek-20261124/uuenda.py" --publish
 ```
 
-Uuendaja kontrollib tegelikku main 0cb3484, kõiki 2202 alusfaili, indeksit/tööpuud,
-kinnitatud remote'i, olemasolevaid täpseid sõltuvusi ning eelmise profiili
-kuulutuste/rubriikide käigu originaalraportit. Ta lisab ainult paketi failid,
-teeb 15 sihitud kliendikontrolli ja värske build'i. Seejärel kinnitab SQL
-eelseisu, asendab ühes kaitstud tehingus kolm funktsioonikeha ja teeb eraldi verify.
+Uuendaja kontrollib tegelikku main a9d86e6, kõiki 2227 alusfaili, indeksit/tööpuud,
+kinnitatud remote'i, olemasolevaid täpseid sõltuvusi ning eelmise teenuste
+käigu originaalraportit. Ta lisab ainult paketi failid, teeb 12 sihitud
+kliendikontrolli ja värske build'i. Seejärel kinnitab SQL eelseisu, asendab
+ühes kaitstud tehingus kaks funktsioonikeha ja teeb eraldi verify.
 Järgneb ainult selle paketi commit/push.
 
-Commit'i pealkiri: `Respect account availability in public service reads`.
+Commit'i pealkiri: `Respect account availability in public job reads`.
 Tegelik uus räsi ilmub `Commit:` reale ja raportisse. SQL võib olla rakendatud
-enne hilisemat Giti peatumist; raport eristab etappe. Ebaselget kirjutust ei
-korrata automaatselt ega vana paketiga.
+enne hilisemat Giti peatumist; raport eristab etappe. Kui SQL kirjutuse kinnitus
+kaob, võib uuendaja järelseisu ainult lugemisega kontrollida, kuid ta peatub
+enne commit/push'i. Ta ei korda kirjutust automaatselt ega vana paketiga.
 
 ## Saada täpne raport
 
@@ -34,21 +35,21 @@ tõendina. Kui raportit ei loodud, saada `PEATATUD`-rida.
 
 ## Sama uue commit'i Ready / Production järel
 
-1. Värskenda portaali ja ava teenuste otsing. Otsi mõni olemasolev teenus.
-2. Ava teenuse üksikvaade, seejärel pakkuja avalik profiil.
-3. Ava profiili teenuste osa ning olemasolev teenuserubriik; kui on järgmine leht, ava see.
-4. Mine tagasi teenuste otsingusse. Kontrolli olemasolevat era- ja ettevõttekonto sisu.
-5. Kui teenusel on juba jagatav avalik link, ava see ka välja logitud vaates.
+1. Värskenda portaali ja ava menüüst Töö. Otsi olemasolev aktiivne pakkumine.
+2. Ava pakkumise üksikvaade, seejärel avaldaja avalik profiil ja selle tööpakkumised.
+3. Kui loendil on järgmine leht, ava see ning mine tagasi otsingusse.
+4. Kontrolli olemasolevat eraisiku ja ettevõtte pakkumist.
+5. Ava olemasolev avalik jagamislink ka välja logitud vaates, kui sul on see käepärast.
 
-Puuduva rubriigi, järgmise lehe või teise profiilitüübi teenuse jaoks pole vaja
-uut sisu luua. Need on olemasoleva sisu lugemiskontrollid. Konto sulgemist või
-kustutamist ei katsetata. Puuduva/piiratud konto ja teised erijuhud kontrolliti
-ettevalmistuse eraldatud sünteetilises andmebaasis ning kliendikatsetes.
+Puuduva järgmise lehe või teise profiilitüübi aktiivse pakkumise jaoks pole vaja
+uut sisu luua. Kontode sulgemist ega kustutamist siin ei katsetata. Puuduva või
+piiratud konto ja muud erijuhud kontrolliti ettevalmistuse eraldatud sünteetilises
+andmebaasis ning tegeliku kliendikoodi kontrollides.
 
 ## Säiliv tööjärg
 
-Ülejäänud lugejad, otseõigused, kirjutused, kontakt/sõnumid ning meedia vajavad
-oma lõpetamist enne konto sulgemise/taastamise/kustutamise tervikut. Teenuste
-otsingu kandidaatide ja täpsete koguarvude suurmahu optimeerimist see pakett ei
-lõpeta. SMTP paus ning konto tervik → esiletõstmine → reklaamid järjekord säilivad.
-Lõpetatud pakette ja laiu teste ei korrata.
+Ülejäänud lugemised, otseõigused, kirjutused, kontakt/sõnumid ning meedia vajavad
+lõpetamist enne konto sulgemise, taastamise ja kustutamise tervikut. Teenuste
+varasem suurmahu piir säilib; selle paketi tööde mõõtmised on eraldi.
+SMTP paus ning konto tervik → esiletõstmine → reklaamid järjekord säilivad.
+Lõpetatud paigaldajaid ja laiu teste ei korrata.

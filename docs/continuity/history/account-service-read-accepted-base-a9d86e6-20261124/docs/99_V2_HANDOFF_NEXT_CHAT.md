@@ -1,0 +1,68 @@
+<!-- GENERATED from docs/continuity/CURRENT_STATE.json; do not edit independently. -->
+# Selqiro — praegune tööüleandmine
+
+Seisukirje: 24.11.2026 Europe/Tallinn — 0cb3484 vastu võetud; teenuste avaliku lugemise konto kontroll ette valmistatud
+
+## Praegune checkpoint
+
+Avaliku profiili kuulutuste ja rubriikide 0cb3484 etapp on Maci raporti, sama commit’i Ready / Production pildi ja kasutaja „testimisel kõik töötab” kinnitusega vastu võetud. Järgmine väike moodul lisab teenuste avaliku lugemise konto kontrolli kolme funktsiooniga. Ettevalmistuse sihitud kontrollid ja värske build on läbitud. Maci rakendus, üks SQL tehing, uus commit/push ja sama versiooni tegelik veebikontroll on ootel.
+
+## Lähtekood ja tõendi piir
+
+- **Vastu võetud alus:** main 0cb3484675ac9267a0f9d7f52f6e3dbff5074d1a; puu 6d213969675d86eea8e2ff56b99f9a232715b3a8; 2202 faili. Eraldatud alus vastab vastuvõtu inventari SHA-256/Git blob/režiimidele. See pole uus Maci või remote’i vaatlus.
+- **Aluse tõend:** selqiro-profiili-kuulutuste-konto-olek-20261124-raport-20261124-135557-9f43f399d25a.json; 1359380 baiti; SHA256 38ceedd0b083d20ca524b96a53ae46713dab6bdf61a390e5e3face223ce9260a. 17 testi, build, üks SQL rakendus ja commit/push on vastu võetud; Ready / Production pilt ning kasutaja kinnitus on eraldi tõendid.
+- **Uus piir:** service_publication_private.visible_to_viewer(uuid) ning get_public_profile_services_v1/v2. Ühine viewer-helper kontrollib teenuse kanoonilise omaniku konto kättesaadavust; profiililugejad kontrollivad konto enne sisu, et ka ümbris oleks kättesaamatu.
+- **Üks kontooleku allikas:** account_lifecycle_private.account_is_available(uuid) säilib muutmata. Eraisikul identities.user_id, ettevõttel business_accounts.owner_user_id. Autor ega liige ei ole asendusomanik; puuduva konto korral pole möödapääsu.
+- **Vastuseleping:** Detaili null, otsingu filtreeritud koguarv/lehekülg ja profiili profile_available=false/null-identiteet/tühjad tulemused säilivad. Päringu- ja sisendivead jäävad vigadeks. Senised filtrid, järjestus, rubriigipuu, avaldamise lõplikkus ja kahepoolne blokeerimine säilivad.
+- **SQL tõendi piir:** Visible_to_viewer liigub muutuvate sihtide lepingusse; varasemate account/profile/listing/horse/profile-marketplace lugejate järelseis jääb muutumatuks. Uued profiiliteenuste kataloogiootused pärinevad lähtekoodist ja eraldatud PostgreSQL-ist ning vajavad Macis värsket täpset eelseisu.
+- **Säilivad teenuste piirid:** is_public, kontakt, meedia, kirjutajad ja otseõigused säilivad. Üksikvaate laadimine sõltub endiselt teenuse ID-st/retry-st, mitte samas lehes vaatajavahetuse võtmest. Juba avatud vaate automaatset tühjenemist siin ei kinnitata.
+- **Dokumentatsioon:** 0cb3484 vastuvõtudokumendid, uus seisukirje ning nelja projektdokumendi lisad kaasatakse uude paketti. Vanad juhendid ja päevikud säilivad. Ettevalmistus ei tõenda Maci/Giti/andmebaasi/deployment’i rakendust.
+
+## Tegelik kohalik katse
+
+- 15/15 uut sihitud kliendikontrolli läbisid muutmata TypeScripti parserite/API-dega; 41 allikapinni säilisid. Lisaks läbis 8 juhitud hook’i juhtumit (19 pinni) ning 20 eraldatud PostgreSQL-i aktiivse või piiratud omaniku vastuse päris parsimist (12 parseripinni). Kolm puuduva slugi/null-kutsuja identiteedi juhtu lükati sisendiveana õigesti tagasi; neid ei loeta edukaks vastuseparsimiseks. Hook’i katse pole React DOM ega brauser. Rakenduskood ja sõltuvused säilisid.
+- 51/51 uut native PostgreSQL 17.6 kontrolli läbisid: eraisiku/ettevõtte kanooniline omanik, puuduv/keelatud konto või Auth-kirje, detail, otsing, profiili v1/v2, teenuserubriigid, kahepoolne blokeerimine, lõplikkus, aegumine, õigused ja leheküljed. Üks tegelik kaitstud apply koos COMMIT-järgse kviitungi ning eraldi verify-ga läbis; tundmatu eelseis ja katkine tehing peatusid. Sünteetiliste ridade sõrmejäljed säilisid ning katseklaster peatati. Kataloogiootused on allikast ja eraldatud PostgreSQL-ist; Maci live-eelseis vajab värsket vastavust.
+- Vana/uue lugemise 28 võrdlusjuhtumis ja 168 ajastatud kutses säilis sama tehingu aktiivne JSON-vastus. Katse kasvas 24 teenuselt 500 sobiva teenuseni ning lisas 5000 kõrvalist kontot/teenust. Filtreeritud otsing tegi ka pärast kõrvalist kasvu 500 uut konto kontrolli; 200 teenusega profiil 201 ja üksikvaade 1. Konto ja Auth-kirje kontroll kasutab PK-indekseid. 5500 kandidaadiga filtrita otsingu mediaan 566.67 → 1105.46 ms (5500 uut konto kontrolli): see on mõõdetav lisakulu. Mõlema versiooni senine filtreeritud otsing skaneeris 5500 teenust ja eemaldas 5000; konto kontroll ei tekitanud uut globaalset kontode skanni. 77 valitud plaani on eraldi tõend, mitte ajaproov. Ühe kliendi sünteetiline katse ei kinnita productioni RPC aegumispiiri, samaaegset koormust ega suurt mahtu. Päringu kandidaatide/omanike koondamise optimeerimine jääb eraldi tööks enne suure kasutusmahu kinnitamist.
+- Üks uus täielik Next.js 16.4.6 / TypeScript 5.9.3 build läbis 33.23 sekundiga. Kõik 765 sisendit säilisid, samuti package.json, lukufail ja rakenduskood. Kasutati olemasolevaid täpseid sõltuvusi ja inertseid kohalikke koostamisseadeid; valmis teenuste otsingu, üksikvaate ja avaliku profiili väljundid. Maci build ja deployment on eraldi järgmised tõendid.
+- 20/20 uut Maci uuendaja juhtumit läbisid 21.094 sekundiga; 43 sisendit säilisid. Ajutine päris Git-hoidla, kohalik bare-remote ja piiratud oma alamprotsessid kontrollisid järjestust ning peatumist. Selle katse runtime-proov, CLI, SQL ja build olid sünteetilised. Seitse senist protsessi/Giti/sõltuvuse helperit jäid baiditäpseks. See pole Maci ega pilveteenuse käivitus; vanu laiu suite’e ei korratud.
+- Uue versiooni päris brauserikontroll on ootel sama uue commit’i Ready / Production järel. Siin ei käivitatud uut brauserikatset ega kasutatud päris kontosid. Varasem kohaliku brauseri socket-piir on ajalooline tõend, mitte tänane katse. Kliendi/hook’i/SQL kontrollid ei tõenda hydration’it ega päris teenuse kasutusteed.
+
+## Production / kasutajaliides
+
+- 0cb3484 ning varasemad ac5521a hobuste, 87bff3f tavakuulutuste, 8dc0b3b profiili ja 4b60782 Minu konto etapid on vastu võetud. Uue teenuste paketi Maci ega live-SQL käivitust pole siin tehtud.
+- Uuendaja kontrollib tegelikku lähtepuud/indexit, remote’i, sõltuvusi ning eelmise eduka käigu originaali. Ta lisab ainult paketi failid, teeb sihitud kliendikontrolli ja build’i, seejärel täpse SQL eelseisu, ühe kolme funktsiooni tehingu, eraldi verify ja paketi commit/push’i.
+- Kontode ja sisu ridu, SMTP/Auth seadeid, Storage’i ega sõltuvusi ei muudeta. Konto sulgemist, taastamist ja kustutamist ei aktiveerita.
+
+## Üks järgmine töö
+
+Paki selqiro-teenuste-konto-olek-20261124.zip Downloads-kaustas lahti ja käivita python3 -I -B "$HOME/Downloads/selqiro-teenuste-konto-olek-20261124/uuenda.py" --publish. Saada täpselt SAADA SEE FAIL real näidatud raport. Pärast sama uue commit’i Ready / Production tulemust värskenda portaali ning kontrolli olemasoleva teenuse otsing → üksikvaade → pakkuja profiili teenused/rubriik → tagasi teekonda. Kasuta olemasolevat era- ja ettevõttekonto sisu; puuduva erijuhu jaoks uut sisu ei looda.
+
+**Peatumisel:** Tundmatu lähtepuu, indeks, originaalraport, protsessiseis, sõltuvus või SQL eelseis peatab uuendaja. Säilita lähtekood, sisu, paketid ja päevikud. Ebaselget SQL kirjutust ei korrata automaatselt ega vana paketiga. Saada täpne raport või selle puudumisel PEATATUD-rida.
+
+## Loe ainult vajalikku
+
+- docs/continuity/HOSTED_PORTAL.md — uue paketi üks käsk ja kasutuskontroll.
+- docs/architecture/account-service-read-fence-v1.md — kolme funktsiooni leping, kontrollid ja piirid.
+- docs/architecture/account-profile-marketplace-read-accepted-20261124.md — vastu võetud 0cb3484 alus.
+- supabase/releases/account-service-read-fence-v1/README.md — SQL eelseis ja üks tehing.
+
+## Säilivad piirid
+
+- Kolm kontot kuuluvad kasutajale; ainult ühel on kaks identiteeti. Uus konto valib eraisiku VÕI ettevõtte. Mitme identiteedi ning ettevõtte töötajate/rollide/omandi üleandmise iseteenindus ei ole avamisulatus.
+- Olemasolevaid kontosid, profiile, kuulutusi, pilte, vestlusi, Energy andmeid, kviitungeid ega päevikuid ei kustutata ega kirjutata ümber. Konto active-only alus säilib. Sulgemine, taastamine ja lõppkustutamine vajavad ülejäänud lugemiste, otseõiguste, kirjutuste, sõnumite ja meedia tervikut.
+- E-posti aktiveerimine jääb põhidomeeni selqiro.com kasutuselevõtu juurde. Saatmine, kinnitamine ja parooli taastamine peavad olema lõpuni kontrollitud enne väliseid testijaid või avalikku registreerimist ka vercel.app aadressil.
+- Kasutajale kuuluvad ka selqiro.app/.io ja selkiro.com/.app/.io. Domeeni valikut uuesti ei küsita; DNS-i selles sammus ei muudeta.
+- AI päringuteed jäävad suletuks. Tavaline osalemine ei sõltu Energy ostust. Riigipõhised töökuulutuse poliitikad ja senised avaldamise/vestluse lepingud säilivad.
+- Pärast konto sulgemise/taastamise/kustutamise tervikut jätkub olemasolevate kuulutuste esiletõstmise ja seejärel välisreklaamide töö. Reklaamija võib kasutada sama kontot ilma avaliku müüjaprofiilita; reklaamimine ei ole kolmas kontotüüp.
+
+## Keskkond
+
+- /Users/taivo/selqiro; kinnitatud https://github.com/Taivo17/selqiro.git. Ainus alus 0cb3484675ac9267a0f9d7f52f6e3dbff5074d1a, puu 6d213969675d86eea8e2ff56b99f9a232715b3a8, 2202 faili. Viimane vastu võetud remote’i võrdsus: 24.11 kell 13:55:56.980 Europe/Tallinn. Enne kirjutust on vajalik värske tegeliku seisu kontroll.
+- Next 16.4.6, Sharp 0.35.5, package.json ja lukufail säilivad. Kontrollitakse olemasolevat Supabase CLI 2.117.0 ning projekti vyjletlmwoiwxsnsunlm; uusi paigaldusi või ühendamisi ei tehta.
+- Uus päevik: ~/Library/Application Support/Selqiro/account-service-read-20261124/<manifest-sha256>. Eelmise account-profile-marketplace-read-20261124/dfcdb83702f876e38b580986f8e241c2df9ef2dcc65be88fb393c1c96824acf9/result.json originaali hoitakse ainult lugemiseks lukus ja säilitatakse.
+
+## Ajalugu (mitte praegused käsud)
+
+Vana sisenemisleht: `docs/archive/99_V2_HANDOFF_NEXT_CHAT.before-price-core-20261004-6df0af9.md`.
+Kõik 5573 algset rida säilivad bait-baidilt; SHA-256 `667e47990a7d3cc20ff53709cb861663b4565cf1d3c830eda88e0d18e60fdb8a`.
+Vanade failide NEXT/CURRENT pealkirjad ei ole tänased käivitamisjuhised.

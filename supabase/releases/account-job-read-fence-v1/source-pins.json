@@ -1,0 +1,651 @@
+{
+  "format": "selqiro-account-job-read-source-pins-v1",
+  "accepted_commit": "a9d86e63ab667545598da8e40ee2a2d0c7365df3",
+  "accepted_tree": "e5e7d7d2253c7c89ff09bbd84d3e501674c2de90",
+  "accepted_file_count": 2227,
+  "targets": [
+    "jobs_private.visible_to_viewer(uuid)",
+    "public.get_public_profile_jobs_v1(text,integer,jsonb)"
+  ],
+  "source_fragments": {
+    "jobs_private.visible_to_viewer(uuid)": {
+      "path": "supabase/repairs/20261121_personal_jobs/03_visibility.sql",
+      "file_sha256": "b470831cdb5b526b4e1e913e29c4a53cbe3fa6fe25f542c125b4143012c1538a",
+      "fragment_sha256": "b96450b44accd5d1d69a2479bf56ee2c9f3b1b9a6357603815ade7b33d125400",
+      "body_sha256": "2bc37565f1d2c8c536d81e9db15acd62d23401e558dbead351c30a0f858731a1",
+      "fixture_file": "tests/jobs_private-visible_to_viewer.sql",
+      "catalog_fact": {
+        "acl": [
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          }
+        ],
+        "body": "2bc37565f1d2c8c536d81e9db15acd62d23401e558dbead351c30a0f858731a1",
+        "owner": "postgres",
+        "config": [
+          "search_path=pg_catalog, pg_temp",
+          "TimeZone=UTC"
+        ],
+        "result": "boolean",
+        "strict": false,
+        "definer": true,
+        "defaults": null,
+        "language": "sql",
+        "parallel": "u",
+        "arguments": [
+          "p_identity"
+        ],
+        "leakproof": false,
+        "signature": "jobs_private.visible_to_viewer(uuid)",
+        "volatility": "s"
+      }
+    },
+    "jobs_private.is_public(public.jobs)": {
+      "path": "supabase/repairs/20261121_personal_jobs/03_visibility.sql",
+      "file_sha256": "b470831cdb5b526b4e1e913e29c4a53cbe3fa6fe25f542c125b4143012c1538a",
+      "fragment_sha256": "5ebaf428e5d48ff5f03695f4880b8221fa6d255277624c0ec4faea9c160cea5e",
+      "body_sha256": "78295a2c9e4ffc9c5b837b17c4ad5d577a5e2564285342b8242df175e286a3c1",
+      "fixture_file": "tests/jobs_private-is_public.sql",
+      "catalog_fact": {
+        "acl": [
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          }
+        ],
+        "body": "78295a2c9e4ffc9c5b837b17c4ad5d577a5e2564285342b8242df175e286a3c1",
+        "owner": "postgres",
+        "config": [
+          "search_path=pg_catalog, pg_temp",
+          "TimeZone=UTC"
+        ],
+        "result": "boolean",
+        "strict": false,
+        "definer": true,
+        "defaults": null,
+        "language": "sql",
+        "parallel": "u",
+        "arguments": [
+          "j"
+        ],
+        "leakproof": false,
+        "signature": "jobs_private.is_public(public.jobs)",
+        "volatility": "s"
+      }
+    },
+    "public.get_public_job_v1(uuid)": {
+      "path": "supabase/repairs/20261116_jobs_public/04_reads.sql",
+      "file_sha256": "81c46d94b4aaf85b3b951ff36165d79d367a5f95691222c5c0bc95fde68d64af",
+      "fragment_sha256": "d41d5d8deda7357517e674adc7b4e4e9ec1d1d0bf3ae98d2b5b9018ac4ee6ff5",
+      "body_sha256": "1ddb3ffada58508462c32b63a0cb566a5582cd22682fa8c6b1ed86053f3020df",
+      "fixture_file": "tests/public-get_public_job_v1.sql",
+      "catalog_fact": {
+        "acl": [
+          {
+            "grantee": "anon",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          },
+          {
+            "grantee": "authenticated",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          },
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          }
+        ],
+        "body": "1ddb3ffada58508462c32b63a0cb566a5582cd22682fa8c6b1ed86053f3020df",
+        "owner": "postgres",
+        "config": [
+          "search_path=pg_catalog, pg_temp",
+          "TimeZone=UTC"
+        ],
+        "result": "jsonb",
+        "strict": false,
+        "definer": true,
+        "defaults": null,
+        "language": "sql",
+        "parallel": "u",
+        "arguments": [
+          "p_job_id"
+        ],
+        "leakproof": false,
+        "signature": "public.get_public_job_v1(uuid)",
+        "volatility": "s"
+      }
+    },
+    "public.get_public_profile_jobs_v1(text,integer,jsonb)": {
+      "path": "supabase/repairs/20261121_personal_jobs/04_reads.sql",
+      "file_sha256": "37a955eaa74b5685bde1becf46e0f56081a0fedc8a82b2bc89fc751891975a23",
+      "fragment_sha256": "aa7557151d99fddbc703d025c04b22b1fdeac3823937f62e9554157601834d09",
+      "body_sha256": "390f8a41223be4f848205d0ffc0a8ff93edfebd429deb89ef5293bfb43568853",
+      "fixture_file": "tests/public-get_public_profile_jobs_v1.sql",
+      "catalog_fact": {
+        "acl": [
+          {
+            "grantee": "anon",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          },
+          {
+            "grantee": "authenticated",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          },
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          }
+        ],
+        "body": "390f8a41223be4f848205d0ffc0a8ff93edfebd429deb89ef5293bfb43568853",
+        "owner": "postgres",
+        "config": [
+          "search_path=pg_catalog, pg_temp",
+          "TimeZone=UTC"
+        ],
+        "result": "jsonb",
+        "strict": false,
+        "definer": true,
+        "defaults": "24, NULL::jsonb",
+        "language": "plpgsql",
+        "parallel": "u",
+        "arguments": [
+          "p_seller_slug",
+          "p_result_limit",
+          "p_cursor"
+        ],
+        "leakproof": false,
+        "signature": "public.get_public_profile_jobs_v1(text,integer,jsonb)",
+        "volatility": "s"
+      }
+    },
+    "public.search_public_jobs_v1(text,text,text,text,text,text,text,integer,jsonb)": {
+      "path": "supabase/repairs/20261121_personal_jobs/04_reads.sql",
+      "file_sha256": "37a955eaa74b5685bde1becf46e0f56081a0fedc8a82b2bc89fc751891975a23",
+      "fragment_sha256": "676d058b14a3996b18af06e4804ac8485f14edb7e54cca9e1d6339516c34c152",
+      "body_sha256": "ec3d96fe4dc460cef8bd646d8ae376e06e8a0f7320508451d83f711879495fc3",
+      "fixture_file": "tests/public-search_public_jobs_v1.sql",
+      "catalog_fact": {
+        "acl": [
+          {
+            "grantee": "anon",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          },
+          {
+            "grantee": "authenticated",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          },
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          }
+        ],
+        "body": "ec3d96fe4dc460cef8bd646d8ae376e06e8a0f7320508451d83f711879495fc3",
+        "owner": "postgres",
+        "config": [
+          "search_path=pg_catalog, pg_temp",
+          "TimeZone=UTC",
+          "plan_cache_mode=force_custom_plan"
+        ],
+        "result": "jsonb",
+        "strict": false,
+        "definer": true,
+        "defaults": "''::text, NULL::text, NULL::text, NULL::text, NULL::text, NULL::text, NULL::text, 24, NULL::jsonb",
+        "language": "plpgsql",
+        "parallel": "u",
+        "arguments": [
+          "p_query",
+          "p_category",
+          "p_country_code",
+          "p_city",
+          "p_workplace_type",
+          "p_employment_type",
+          "p_working_time",
+          "p_result_limit",
+          "p_cursor"
+        ],
+        "leakproof": false,
+        "signature": "public.search_public_jobs_v1(text,text,text,text,text,text,text,integer,jsonb)",
+        "volatility": "s"
+      }
+    },
+    "public.get_job_categories_v1()": {
+      "path": "supabase/repairs/20261116_jobs_public/04_reads.sql",
+      "file_sha256": "81c46d94b4aaf85b3b951ff36165d79d367a5f95691222c5c0bc95fde68d64af",
+      "fragment_sha256": "82f64d888256ddf8435f1392f0fc70da21587b6e88a03ef45ec3f0fe2f15a164",
+      "body_sha256": "7ebb02b79e95c0bbca664401d3e21626eaf4322cf37dc605b0b0eada0d8c75b6",
+      "fixture_file": "tests/public-get_job_categories_v1.sql",
+      "catalog_fact": {
+        "acl": [
+          {
+            "grantee": "anon",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          },
+          {
+            "grantee": "authenticated",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          },
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          }
+        ],
+        "body": "7ebb02b79e95c0bbca664401d3e21626eaf4322cf37dc605b0b0eada0d8c75b6",
+        "owner": "postgres",
+        "config": [
+          "search_path=pg_catalog, pg_temp",
+          "TimeZone=UTC"
+        ],
+        "result": "jsonb",
+        "strict": false,
+        "definer": true,
+        "defaults": null,
+        "language": "sql",
+        "parallel": "u",
+        "arguments": null,
+        "leakproof": false,
+        "signature": "public.get_job_categories_v1()",
+        "volatility": "s"
+      }
+    },
+    "jobs_private.public_fields(public.jobs)": {
+      "path": "supabase/repairs/20261121_job_image_read/01_public_fields.sql",
+      "file_sha256": "f77979e3b0f44a8b20c7ad328b2c8f0a1fa2cb2e77f552bf13d2dacd88364c6e",
+      "fragment_sha256": "f77979e3b0f44a8b20c7ad328b2c8f0a1fa2cb2e77f552bf13d2dacd88364c6e",
+      "body_sha256": "5ad00d7c27ae5499447c0a94087ddd719e2b1c4a3e3f2b91dbac04adfba8b377",
+      "fixture_file": "tests/jobs_private-public_fields.sql",
+      "catalog_fact": {
+        "acl": [
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          }
+        ],
+        "body": "5ad00d7c27ae5499447c0a94087ddd719e2b1c4a3e3f2b91dbac04adfba8b377",
+        "owner": "postgres",
+        "config": [
+          "search_path=pg_catalog, pg_temp",
+          "TimeZone=UTC"
+        ],
+        "result": "jsonb",
+        "strict": false,
+        "definer": true,
+        "defaults": null,
+        "language": "sql",
+        "parallel": "u",
+        "arguments": [
+          "j"
+        ],
+        "leakproof": false,
+        "signature": "jobs_private.public_fields(public.jobs)",
+        "volatility": "s"
+      }
+    },
+    "jobs_private.contact_snapshot(uuid)": {
+      "path": "supabase/repairs/20261121_personal_jobs/05_contact.sql",
+      "file_sha256": "ff5cb538ebd415adbc4e0d3166b08e2634bb2dae75ea439c1b2cc7520dc0dec3",
+      "fragment_sha256": "97296ecdd5aa1c316d17f1d9ce8232a4c764caa8dadd3a7e43e0acee832a585e",
+      "body_sha256": "8b4d1cf59af748d02e221d848a8b1fcd51db8b88fe5af18faba9cff35f7358c7",
+      "fixture_file": "tests/jobs_private-contact_snapshot.sql",
+      "catalog_fact": {
+        "acl": [
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          },
+          {
+            "grantee": "selqiro_listing_contact_writer_v1",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          }
+        ],
+        "body": "8b4d1cf59af748d02e221d848a8b1fcd51db8b88fe5af18faba9cff35f7358c7",
+        "owner": "postgres",
+        "config": [
+          "search_path=pg_catalog, pg_temp",
+          "TimeZone=UTC"
+        ],
+        "result": "jsonb",
+        "strict": false,
+        "definer": true,
+        "defaults": null,
+        "language": "plpgsql",
+        "parallel": "u",
+        "arguments": [
+          "p_job_id"
+        ],
+        "leakproof": false,
+        "signature": "jobs_private.contact_snapshot(uuid)",
+        "volatility": "v"
+      }
+    },
+    "public.contact_my_job_provider_v1(uuid,uuid,uuid,uuid)": {
+      "path": "supabase/repairs/20261116_jobs_public/07_contact.sql",
+      "file_sha256": "335838ac9c47b22e924bf0c698c042e47f595113d39b0dd1c217f38651fc6a79",
+      "fragment_sha256": "d7098ebf3352b4be2c11f283f8c815042c1c659df0d8af237dde6ab5855cdacb",
+      "body_sha256": "2df424b0a40077caa36945bf7edae813bff15edfd3f6cd0b976dff58a1b8fadb",
+      "fixture_file": "tests/public-contact_my_job_provider_v1.sql",
+      "catalog_fact": {
+        "acl": [
+          {
+            "grantee": "authenticated",
+            "grantor": "selqiro_listing_contact_writer_v1",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          },
+          {
+            "grantee": "selqiro_listing_contact_writer_v1",
+            "grantor": "selqiro_listing_contact_writer_v1",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          }
+        ],
+        "body": "2df424b0a40077caa36945bf7edae813bff15edfd3f6cd0b976dff58a1b8fadb",
+        "owner": "selqiro_listing_contact_writer_v1",
+        "config": [
+          "search_path=pg_catalog, pg_temp",
+          "TimeZone=UTC",
+          "lock_timeout=2s"
+        ],
+        "result": "jsonb",
+        "strict": false,
+        "definer": true,
+        "defaults": null,
+        "language": "plpgsql",
+        "parallel": "u",
+        "arguments": [
+          "p_expected_user_id",
+          "p_expected_identity_id",
+          "p_request_key",
+          "p_job_id"
+        ],
+        "leakproof": false,
+        "signature": "public.contact_my_job_provider_v1(uuid,uuid,uuid,uuid)",
+        "volatility": "v"
+      }
+    },
+    "public.get_my_jobs_v1(uuid,uuid,integer,jsonb)": {
+      "path": "supabase/repairs/20261122_job_owner_read_lock/01_owner_read.sql",
+      "file_sha256": "015f4145826670c4cd36b54f3c382c77ccf647672530dcfff61694c1256de50e",
+      "fragment_sha256": "2dd1a662f807803392498b314aae8e7247c49f3e7bbc5c0c1df761642c62fbfd",
+      "body_sha256": "465771b4a363d023dcd96f175d9a7ef6f0b9196306b985277935a5c2e9746d88",
+      "fixture_file": "tests/public-get_my_jobs_v1.sql",
+      "catalog_fact": {
+        "acl": [
+          {
+            "grantee": "authenticated",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          },
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          }
+        ],
+        "body": "465771b4a363d023dcd96f175d9a7ef6f0b9196306b985277935a5c2e9746d88",
+        "owner": "postgres",
+        "config": [
+          "search_path=pg_catalog, pg_temp",
+          "TimeZone=UTC",
+          "lock_timeout=2s"
+        ],
+        "result": "jsonb",
+        "strict": false,
+        "definer": true,
+        "defaults": "24, NULL::jsonb",
+        "language": "plpgsql",
+        "parallel": "u",
+        "arguments": [
+          "p_expected_user_id",
+          "p_expected_identity_id",
+          "p_result_limit",
+          "p_cursor"
+        ],
+        "leakproof": false,
+        "signature": "public.get_my_jobs_v1(uuid,uuid,integer,jsonb)",
+        "volatility": "s"
+      }
+    },
+    "jobs_private.require_actor(uuid,uuid)": {
+      "path": "supabase/repairs/20261121_personal_jobs/01_authority.sql",
+      "file_sha256": "ab5d432d4516da69ba02c20af2dc83070792b1ec30fa064f8eb5a3a00fe43d9f",
+      "fragment_sha256": "ba525558f751d224a86f06cf740c025da3107eeeef34382f3b42d7941c25cf60",
+      "body_sha256": "88114de75eaa42b8ef1d30fc90a3a0e6552941178cd39e462e12d40a8f1fc30b",
+      "fixture_file": "tests/jobs_private-require_actor.sql",
+      "catalog_fact": {
+        "acl": [
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          }
+        ],
+        "body": "88114de75eaa42b8ef1d30fc90a3a0e6552941178cd39e462e12d40a8f1fc30b",
+        "owner": "postgres",
+        "config": [
+          "search_path=pg_catalog, pg_temp",
+          "TimeZone=UTC"
+        ],
+        "result": "void",
+        "strict": false,
+        "definer": true,
+        "defaults": null,
+        "language": "plpgsql",
+        "parallel": "u",
+        "arguments": [
+          "p_user",
+          "p_identity"
+        ],
+        "leakproof": false,
+        "signature": "jobs_private.require_actor(uuid,uuid)",
+        "volatility": "v"
+      }
+    },
+    "jobs_private.content(public.jobs)": {
+      "path": "supabase/repairs/20261116_jobs_public/03_content.sql",
+      "file_sha256": "9d449056030e5af3def0c421c9596ab0a133f98c074ff1967e7623d60658f7ba",
+      "fragment_sha256": "374099d7696896e451f3506b9ba12b77b330127c88c24d4723e7fa1674d0ca11",
+      "body_sha256": "05ab495ee689757b17eaf995f30b615efa201c3f0a40e78d6be279b7fa79a2de",
+      "fixture_file": "tests/jobs_private-content.sql",
+      "catalog_fact": {
+        "acl": [
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          }
+        ],
+        "body": "05ab495ee689757b17eaf995f30b615efa201c3f0a40e78d6be279b7fa79a2de",
+        "owner": "postgres",
+        "config": [
+          "search_path=pg_catalog, pg_temp",
+          "TimeZone=UTC"
+        ],
+        "result": "jsonb",
+        "strict": false,
+        "definer": false,
+        "defaults": null,
+        "language": "sql",
+        "parallel": "u",
+        "arguments": [
+          "j"
+        ],
+        "leakproof": false,
+        "signature": "jobs_private.content(public.jobs)",
+        "volatility": "i"
+      }
+    },
+    "jobs_private.owner_fields(public.jobs,uuid)": {
+      "path": "supabase/repairs/20261116_jobs_public/03_content.sql",
+      "file_sha256": "9d449056030e5af3def0c421c9596ab0a133f98c074ff1967e7623d60658f7ba",
+      "fragment_sha256": "9e1028dd3bba0f3fb0122160047bc2c9a8c4390315a2262ab5a18da60de0f4c5",
+      "body_sha256": "6b53b819b6a822df916d8fd0f00abde773a66e63d3d71020a37991efcb70f109",
+      "fixture_file": "tests/jobs_private-owner_fields.sql",
+      "catalog_fact": {
+        "acl": [
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          }
+        ],
+        "body": "6b53b819b6a822df916d8fd0f00abde773a66e63d3d71020a37991efcb70f109",
+        "owner": "postgres",
+        "config": [
+          "search_path=pg_catalog, pg_temp",
+          "TimeZone=UTC"
+        ],
+        "result": "jsonb",
+        "strict": false,
+        "definer": false,
+        "defaults": null,
+        "language": "sql",
+        "parallel": "u",
+        "arguments": [
+          "j",
+          "p_user"
+        ],
+        "leakproof": false,
+        "signature": "jobs_private.owner_fields(public.jobs,uuid)",
+        "volatility": "i"
+      }
+    },
+    "jobs_private.search_document(text,text,text,text,text)": {
+      "path": "supabase/repairs/20261116_jobs_public/03_content.sql",
+      "file_sha256": "9d449056030e5af3def0c421c9596ab0a133f98c074ff1967e7623d60658f7ba",
+      "fragment_sha256": "e8266597af2449e7f2f9846fe095ce33fab3713d2714cf102575b5cc51eb058e",
+      "body_sha256": "7a59fc0e5cacd87e1639037ca779808af98e0e6215dcaa68bafd584ff5403fe1",
+      "fixture_file": "tests/jobs_private-search_document.sql",
+      "catalog_fact": {
+        "acl": [
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          }
+        ],
+        "body": "7a59fc0e5cacd87e1639037ca779808af98e0e6215dcaa68bafd584ff5403fe1",
+        "owner": "postgres",
+        "config": [
+          "search_path=pg_catalog, pg_temp",
+          "TimeZone=UTC"
+        ],
+        "result": "tsvector",
+        "strict": false,
+        "definer": false,
+        "defaults": null,
+        "language": "sql",
+        "parallel": "s",
+        "arguments": [
+          "p_title",
+          "p_description",
+          "p_category",
+          "p_city",
+          "p_country"
+        ],
+        "leakproof": false,
+        "signature": "jobs_private.search_document(text,text,text,text,text)",
+        "volatility": "i"
+      }
+    },
+    "jobs_private.cursor(jsonb,text)": {
+      "path": "supabase/repairs/20261116_jobs_public/02_context.sql",
+      "file_sha256": "8ee59e7264f1d0c79d6ad167ffdeb6cbfc7893769952c2cb2b377b5ec4d88b12",
+      "fragment_sha256": "05425cebe9122078800eb9963c0d5af4018db2f677f3f6f0ba4192f60698ec93",
+      "body_sha256": "660313aae39acfa4dd3e24c8cb47e95043b6a51b1ffeafa77195178b9a6a074f",
+      "fixture_file": "tests/jobs_private-cursor.sql",
+      "catalog_fact": {
+        "acl": [
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          }
+        ],
+        "body": "660313aae39acfa4dd3e24c8cb47e95043b6a51b1ffeafa77195178b9a6a074f",
+        "owner": "postgres",
+        "config": [
+          "search_path=pg_catalog, pg_temp",
+          "TimeZone=UTC"
+        ],
+        "result": "jsonb",
+        "strict": false,
+        "definer": false,
+        "defaults": null,
+        "language": "plpgsql",
+        "parallel": "u",
+        "arguments": [
+          "p_cursor",
+          "p_time_key"
+        ],
+        "leakproof": false,
+        "signature": "jobs_private.cursor(jsonb,text)",
+        "volatility": "v"
+      }
+    }
+  },
+  "preservation": {
+    "jobs_private.visible_to_viewer(uuid)": {
+      "only_existing_account_predicate_inserted": true,
+      "original_source_sha256": "b96450b44accd5d1d69a2479bf56ee2c9f3b1b9a6357603815ade7b33d125400",
+      "block_tail_sha256": "ca148ee6a745e150eeb70738eb80093bcaf02f5474671497300cfe9c42d49b83"
+    },
+    "public.get_public_profile_jobs_v1(text,integer,jsonb)": {
+      "unique_slug_and_validation_prefix_bytes": 1023,
+      "unique_slug_and_validation_prefix_sha256": "00665d3d3e3d87f392fad386b659ca2819e5af9895cdf1200f1860febb0da899",
+      "content_and_wire_tail_bytes": 1066,
+      "content_and_wire_tail_sha256": "e38a86697532facce66d74706959fa15d996780d98050cd1dd9be8ca232be9e6"
+    }
+  },
+  "accepted_prior_contract_sha256": "2e8d8024ea2a6deedca2041e0eef9ec7ef0aedde8f2d5ec2c78d5e56a0299beb",
+  "current_job_catalog_basis_sha256": "c701177e56b92493ea693bd21cb8b93b1eda3aa49c00b77fed557bc5a16bcdf2",
+  "expected_contract_sha256": "afb9db46454fe43c6b1995d7d6832b7f4caf2410c50151680cb5d04f4211f394",
+  "runtime_report_sha256": "e119d6c871cf5e30b625e881e66ee9ac650186f976d4d6263c82e75876469b69",
+  "native_input_pin_map_sha256": "29028da0c0c63868082610f67af5738f4f065cd6a91c791e86833cb4ee0d3c58",
+  "inherited_input_pins_sha256": "dd4405676a96d81c56eecec102e20dc1b77b730a69ebc3d5b7b2a2a5c464e017",
+  "fixture_boundary": "Real retained public read/account/blocking predicates; minimal nonexecuted writer/member/contact support and synthetic business-name default. Invalid state fixtures are rollback-only, no production constraint changes.",
+  "evidence_boundary": "Source-derived expected job facts match latest job-repair source pins; prior service observation is not current live job evidence. Fresh exact Mac preflight required.",
+  "account_content_rows_changed": false,
+  "live_observation": false,
+  "mac_run": false
+}

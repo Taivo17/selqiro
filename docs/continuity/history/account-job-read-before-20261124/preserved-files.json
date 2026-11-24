@@ -1,0 +1,20 @@
+{
+  "docs/continuity/CURRENT_STATE.json": {
+    "copy": "docs/continuity/history/account-job-read-before-20261124/docs/continuity/CURRENT_STATE.json",
+    "bytes": 9478,
+    "sha256": "b31ee536a30904d50529b8820936d0f28b83c0d30be11a44c0dc3cd0e3f36553",
+    "origin": "Accepted a9d86e6 documentation prepared from Mac report, matching Ready screenshot and user acceptance; not a new Mac write."
+  },
+  "docs/99_V2_HANDOFF_NEXT_CHAT.md": {
+    "copy": "docs/continuity/history/account-job-read-before-20261124/docs/99_V2_HANDOFF_NEXT_CHAT.md",
+    "bytes": 9585,
+    "sha256": "17d1c055ee509dcdc5d67b15cc3661eb5fab55baf28b65c9f84ddc6f2ae47ee4",
+    "origin": "Accepted a9d86e6 documentation prepared from Mac report, matching Ready screenshot and user acceptance; not a new Mac write."
+  },
+  "docs/continuity/HOSTED_PORTAL.md": {
+    "copy": "docs/continuity/history/account-job-read-before-20261124/docs/continuity/HOSTED_PORTAL.md",
+    "bytes": 1174,
+    "sha256": "31e469b5b502de4e914e52d3b64d4776a96f59e6d53113a99d607bfca8f7b8bd",
+    "origin": "Accepted a9d86e6 documentation prepared from Mac report, matching Ready screenshot and user acceptance; not a new Mac write."
+  }
+}

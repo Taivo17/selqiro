@@ -8248,3 +8248,54 @@ Vana/uue lugemise 28 võrdlusjuhtumis ja 168 ajastatud kutses säilis sama tehin
 Uue versiooni päris brauserikontroll on ootel sama uue commit’i Ready / Production järel. Siin ei käivitatud uut brauserikatset ega kasutatud päris kontosid. Varasem kohaliku brauseri socket-piir on ajalooline tõend, mitte tänane katse. Kliendi/hook’i/SQL kontrollid ei tõenda hydration’it ega päris teenuse kasutusteed.
 
 Maci rakendus, SQL tehing, commit/push ning sama versiooni Ready ja tegelik kasutuskontroll on ootel. Juhis: docs/continuity/HOSTED_PORTAL.md. Arhitektuur: docs/architecture/account-service-read-fence-v1.md. SMTP paus ning konto tervik → esiletõstmine → reklaamid järjekord säilivad.
+
+
+## 24.11.2026 — teenuste avaliku lugemise konto kontroll a9d86e6 vastu võetud
+
+Maci raport kinnitab 15/15 testi, Next.js 16.4.6 build’i, ühte kolme funktsiooni
+SQL rakendamist koos COMMIT-järgse kinnituse ja eraldi verify-ga ning main
+commit/push’i a9d86e63ab667545598da8e40ee2a2d0c7365df3. Puu on
+e5e7d7d2253c7c89ff09bbd84d3e501674c2de90, 2227 faili. Sama commit’i Verceli
+Ready / Production ning kasutaja „Testides kõik töötab” on eraldi tõendid.
+
+Teenuste visible_to_viewer ning profiiliteenuste v1/v2 arvestavad kanoonilise
+omaniku kontot sama account_is_available allika kaudu. Detaili, otsingu ja
+profiili vastuselepingud säilivad. Konto- ja sisuridu ei muudetud. Sulgemine,
+taastamine ja lõppkustutamine pole aktiveeritud. E-posti paus säilib.
+
+Üks järgmine moodul on tööpakkumiste avaliku lugemise konto kontroll:
+jobs_private.visible_to_viewer ning profiili tööloendi varane omaniku kontroll.
+Täpne allikapõhine kavand on account-job-read-next-20261124.md-s. Selle teostust
+ega uut paigaldajat selles vastuvõtus ei koostatud. Kontoelutsükli järel
+jätkuvad kuulutuste esiletõstmine ning reklaamid.
+
+Teenuste mõõdetud jõudluse piir säilib: 5500 kandidaadiga filtrita otsingu
+mediaan 566,67 → 1105,46 ms; konto kontrolle tehakse hinnatud teenuse kohta.
+Kandidaatide/omanike koondamine ja olemasoleva loendustöö optimeerimine jäävad
+eraldi tööks enne suure mahu kinnitamist. Kasutaja toimiv kontroll ei asenda
+koormuskatset. Täpsed tõendipiirid on account-service-read-accepted-20261124.md-s.
+
+Vastuvõtul teste, build’i, SQL-i ega paigaldajat ei korratud. Uus seisukirje,
+genereeritud üleandmine ning need lisad on ette valmistatud järgmise sisulise
+koodipaketi jaoks; pärast a9d86e6 pole neid Maci kirjutatud ega commit/push tehtud.
+
+
+## 24.11.2026 — tööpakkumiste avaliku lugemise konto kontroll ette valmistatud
+
+Alus main `a9d86e63ab667545598da8e40ee2a2d0c7365df3`, puu `e5e7d7d2253c7c89ff09bbd84d3e501674c2de90`, 2227 faili. Eelmine teenuste etapp on raporti, sama versiooni Ready / Production pildi ja kasutaja kinnitusega vastu võetud.
+
+Uus moodul lisab ühise konto kontrolli tööde viewer-helperile ja profiili tööde varasele lugemisele. Avalikud vastused ja kursorid, senine kontooleku allikas ning kontakt/kirjutused säilivad. Konto sulgemist ega kustutamist ei aktiveerita.
+
+12/12 uut sihitud kliendikontrolli läbisid muutmata API-de/parseritega; 25 lähte-/lukufaili pinni säilisid. Lisaks läbis 6 päris hook’i juhitud kontrolli: vaataja/profiili vahetus, katkestus, vana edu/vea peitmine ja pooleliolev kursorileht. Hook’i katse pole React DOM ega brauser. Värske native PostgreSQL-i 22 vastusest läbis 20 päris parsingu ja 2 olid korrektsed null-detailid; 4 eraldi vigase konteksti/vastuse kontrolli lükati tagasi. Esimese katse otse sisestatud mittekanooniline sünteetiline palgasumma parandati tegeliku normaliseerija järgi; algne katse säilib. Portaali koodi, parsereid ega sõltuvusi selleks ei muudetud.
+
+60/60 native PostgreSQL 17.6 kontrolli läbisid parandatud sünteetiliste sisenditega: kanooniline era-/ettevõtte omanik, puuduv või piiratud konto/Auth, detail, profiili null-ümbris, otsing, filtrid, kursorid, blokeerimine/peitmine, aegumine, õigused ja kataloogitriiv. Tegelik kaitstud apply, COMMIT-järgne kviitung ning eraldi verify läbisid; katkine tehing ja vale eelseis peatusid. 19 sünteetilise relatsiooni sõrmejälg säilis ja klaster peatati. Kõik 180 sisendit säilisid katse ajal; kaks genereeritud metaandmefaili finaliseeriti hiljem ning käiguaegsed koopiad on alles. Maci live-kataloog vajab eraldi värsket vastavust.
+
+33 vana/uue võrdlusjuhtu, 198 ajastatud RPC-kutset ja 75 eraldi valitud päringuplaani. Katses kasvas 24 tööd 500 sobiva tööni ning lisati 5000 kõrvalist kontot/tööd, sh 2500 ettevõtet. Ühe kliendi muutumatutel katseandmetel olid kõik vastuseväljad võrdsed peale iga päringu read_at aja; see ei olnud üks jagatud MVCC snapshot. 5500 tööga filtrita otsing tegi 25 konto kontrolli (mediaan 13.41 → 15.57 ms), filtreeritud otsing 500 (31.21 → 79.99 ms) ja 200 tööga profiil 201 (19.75 → 36.00 ms); profiili limit=1 tegi samuti 201 kontrolli. Konto/Auth ning ettevõtte omaniku lugemine kasutas PK-indekseid. Filtrita otsing kasutas avaldamise kursoriindeksit; filtreeritud/profiili kandidaatide töö vajab eraldi optimeerimist. Kolm kordust, üks klient ja sünteetiline andmestik ei kinnita Productioni latentsust, RPC eelarvet ega samaaegset suurt mahtu. Varasem teenuste mahu piir säilib.
+
+Üks uus täielik Next.js 16.4.6 / TypeScript 5.9.3 build läbis 34.77 sekundiga eraldi tühja build-kaustaga. Kõik 765 sisendit säilisid; valmis tööotsingu, töö üksikvaate ja avaliku profiili väljundid. Kasutati lukufaili täpseid olemasolevaid sõltuvusi ja inertseid lokaalseid seadeid. Maci build ning Verceli avaldamine on järgmised eraldi tõendid.
+
+29/29 uut uuendaja kontrolljuhtu läbisid 36.672 sekundiga; 46 külmutatud sisendit säilisid. Päris ajutine Git-hoidla/bare-remote ning piiratud oma alamprotsessid kontrollisid järjestust ja peatumist. Runtime-proov, CLI, SQL- ja build-vastused olid selles runneri katses sünteetilised. Seitse jagatud helperit jäid baiditäpseks. Kadunud SQL kinnituse järel tuvastatud järelseis ei luba commit/push’i ega automaatset korduskirjutust.
+
+Üks selle versiooni kohaliku Chromiumi käivituskatse peatus enne lehe loomist: socket() failed: Operation not permitted. Brauseriväiteid 0; päris kontosid ei kasutatud. Käivitust ei korratud lisalippude või teise ligipääsuteega. Tegelik veebikontroll jääb pärast sama uue commit’i Ready / Production tulemust kasutaja Macis teha.
+
+Maci rakendus, üks SQL tehing, commit/push ning sama versiooni Ready ja tegelik kasutuskontroll on ootel. Kadunud SQL kinnitust ei asenda ainult järelseisu vastavus: uus uuendaja peatub enne commit/push’i. Juhis: docs/continuity/HOSTED_PORTAL.md. Arhitektuur: docs/architecture/account-job-read-fence-v1.md. SMTP paus ning konto tervik → esiletõstmine → reklaamid järjekord säilivad.
