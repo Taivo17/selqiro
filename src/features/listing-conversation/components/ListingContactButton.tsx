@@ -15,7 +15,7 @@ import { contactListingSeller } from "../../../entities/conversation/api/managed
 import { isConversationId, ListingContactError, type ListingContactCommand } from "../../../entities/conversation/model/listingContact";
 import { contactDiagnostic, formatContactDiagnostic } from "../../../entities/conversation/model/contactDiagnostic";
 import { useConversationActor } from "../model/useConversationActor";
-import { listingConversationHref } from "../model/listingConversationNavigation";
+import { offerConversationHref } from "../model/listingConversationNavigation";
 
 export default function ListingContactButton(props: { listingId: string; className?: string }) {
   return v2IntegrationEnabled() ? <EnabledListingContactButton {...props} /> : null;
@@ -24,7 +24,7 @@ function EnabledListingContactButton({ listingId, className }: { listingId: stri
   const { language: uiLanguage, t } = useV2Translation(messagesUiMessages);
 
   const router = useRouter(), context = useConversationActor();
-  const pending = useRef<ListingContactCommand | null>(null), inFlight = useRef(false);
+  const pending = useRef<ListingContactCommand | null>(null), inFlight = useRef(false), target = useRef(listingId); target.current = listingId;
   const [busy, setBusy] = useState(false), [problem, setProblem] = useState<{ generation: number; text: string } | null>(null);
   async function contact() {
     const actor = context.actor;
@@ -37,12 +37,12 @@ function EnabledListingContactButton({ listingId, className }: { listingId: stri
     pending.current = command;
     try {
       const receipt = await contactListingSeller(actor.accessToken, command, actor.signal);
-      if (context.isCurrent(actor)) router.push(listingConversationHref(receipt.conversation_id, receipt.listing_id));
+      if (context.isCurrent(actor) && target.current === command.listingId) router.push(offerConversationHref(receipt.conversation_id, { type: "listing", id: receipt.listing_id, entryKey: crypto.randomUUID() }));
     } catch (error) {
       const diagnostic = error instanceof ListingContactError ? error.diagnostic
         ?? contactDiagnostic(error.code === "response" ? "browser_response" : "browser_request", error.code)
         : contactDiagnostic("browser_request", "outcome_unknown");
-      if (context.isCurrent(actor)) setProblem({ generation: actor.generation,
+      if (context.isCurrent(actor) && target.current === command.listingId) setProblem({ generation: actor.generation,
         text: uiMessage("contact_failure", { code: formatContactDiagnostic(diagnostic) }) });
     } finally { inFlight.current = false; setBusy(false); }
   }

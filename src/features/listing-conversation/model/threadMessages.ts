@@ -8,7 +8,7 @@ export function mergeThreadMessages(older: readonly MessageThreadMessage[], newe
 
 /** A bounded latest-page response cannot fill an unobserved gap. Keep the old
  * visible history until the user explicitly opens the separate latest page. */
-export function hasThreadGap(current: MessageThread, latest: MessageThread): boolean {
+export function hasThreadGap(current: Pick<MessageThread, "messages">, latest: Pick<MessageThread, "messages">): boolean {
   if (!current.messages.length || !latest.messages.length) return false;
   const known = new Set(current.messages.map(message => message.id));
   return !latest.messages.some(message => known.has(message.id))

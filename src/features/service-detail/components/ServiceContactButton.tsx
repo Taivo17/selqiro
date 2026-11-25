@@ -3,13 +3,14 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 import { useConversationActor } from "../../listing-conversation/model/useConversationActor";
+import { offerConversationHref } from "../../listing-conversation/model/listingConversationNavigation";
 import { contactServiceProvider, type ServiceContactCommand } from "../../../entities/service/api/contactServiceProvider";
 import { useV2Translation } from "../../../shared/i18n/V2LanguageProvider";
 import { serviceEditorMessages } from "../../service-editor/model/serviceEditorMessages";
 
 export default function ServiceContactButton({serviceId}: {serviceId: string}) {
   const context = useConversationActor(), router = useRouter(), {t} = useV2Translation(serviceEditorMessages);
-  const pending = useRef<ServiceContactCommand | null>(null), running = useRef(false);
+  const pending = useRef<ServiceContactCommand | null>(null), running = useRef(false), target = useRef(serviceId); target.current = serviceId;
   const [busy, setBusy] = useState(false), [problem, setProblem] = useState<number | null>(null);
   async function contact() {
     const actor = context.actor;
@@ -19,8 +20,8 @@ export default function ServiceContactButton({serviceId}: {serviceId: string}) {
     const command = previous && previous.expectedUserId === actor.expectedUserId && previous.expectedIdentityId === actor.expectedIdentityId && previous.serviceId === serviceId
       ? previous : Object.freeze({expectedUserId: actor.expectedUserId, expectedIdentityId: actor.expectedIdentityId, requestKey: crypto.randomUUID(), serviceId});
     pending.current = command;
-    try {const id = await contactServiceProvider(command, actor.signal); if (context.isCurrent(actor)) router.push(`/v2/messages/${id}`);}
-    catch {if (context.isCurrent(actor)) setProblem(actor.generation);}
+    try {const id = await contactServiceProvider(command, actor.signal); if (context.isCurrent(actor) && target.current === command.serviceId) router.push(offerConversationHref(id, { type: "service", id: command.serviceId, entryKey: crypto.randomUUID() }));}
+    catch {if (context.isCurrent(actor) && target.current === command.serviceId) setProblem(actor.generation);}
     finally {running.current = false; setBusy(false);}
   }
   const button = "block min-h-12 w-full rounded-full bg-black px-5 py-4 text-center font-bold text-white disabled:opacity-50";

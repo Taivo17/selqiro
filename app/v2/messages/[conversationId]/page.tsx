@@ -1,16 +1,16 @@
 import V2Shell from "../../../../components/v2/layout/V2Shell";
 import ListingConversationPage from "../../../../src/features/listing-conversation/components/ListingConversationPage";
-import { isConversationId } from "../../../../src/entities/conversation/model/listingContact";
+import { messageOfferOrigin } from "../../../../src/features/listing-conversation/model/listingConversationNavigation";
 
 export default async function Page({ params, searchParams }: {
   params: Promise<{ conversationId: string }>;
-  searchParams: Promise<{ listing?: string | string[] }>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
   const [{ conversationId }, query] = await Promise.all([params, searchParams]);
-  const originListingId = isConversationId(query.listing) ? query.listing : null;
+  const originOffer = messageOfferOrigin(query);
   return (
     <V2Shell>
-      <ListingConversationPage conversationId={conversationId} originListingId={originListingId} />
+      <ListingConversationPage conversationId={conversationId} originOffer={originOffer} />
     </V2Shell>
   );
 }

@@ -1,0 +1,58 @@
+{
+  "format": "selqiro_repo_handoff_v1",
+  "recorded_on": "24.11.2026 Europe/Tallinn — sõnumite uuendus vastu võetud; vestluste ja manuste järg ette valmistatud",
+  "archive": {
+    "lines": 5573,
+    "path": "docs/archive/99_V2_HANDOFF_NEXT_CHAT.before-price-core-20261004-6df0af9.md",
+    "sha256": "667e47990a7d3cc20ff53709cb861663b4565cf1d3c830eda88e0d18e60fdb8a"
+  },
+  "checkpoint": "Commit 8b7db90 on vastu võetud: üks kinnitatud andmebaasimuudatus, eraldi järelkontroll, üks värske Maci build ja kontrollitud commit/push. Verceli pilt näitab Ready / Production ning kasutaja kinnitas sõnumite toimimist. Järgmine koondatud moodul katab vestluse/osalise vanema kirjutustee ning pildimanuse reserveerimise, üleslaadimisloa ja lõpetamise. See uus moodul on ette valmistatud; selle Maci rakendamine ja kasutuskontroll on veel ootel.",
+  "source": {
+    "Vastu võetud alus": "8b7db90d08682b512d76e64c699af56fc8cae6a3; puu 6f8e9b6e7b8e3e5ab2add913247a424908f91630; 2305 faili. Täpsed lähte-, indeksi- ja remote-kontrollid on uue käivitaja alus.",
+    "Raporti vastuvõtt": "24.11.2026 kell 20:06:17.667–20:07:14.861 Europe/Tallinn. 541 käsu teekond kontrollitud; 539 väljundit taastatud. Raport 1324727 baiti, SHA256 d3e36ffb68a5f01cb5f991d9d68fab47c213aacf0d542e5bb32385486bbdf2a6. Üks SQL rakendamine, COMMIT-järgne kinnitus ja eraldi täpne järelkontroll; kõik protsessid lõpetatud.",
+    "Tootmise kinnitus": "8b7db90 main Ready / Production, 22 s, kasutaja ekraanipildilt. Kasutaja: „sõnumid on testimisel korras”. Seda ei laiendata konto sulgemise, pildimanuse ega kirjeldamata alamtegevuste testitõendiks.",
+    "Järgmine tervik": "Üks vestluste ja manuste konto-oleku moodul. Uued struktuurimuudatused kontrollivad tegelikku osalust ja mõlemat kontot. Pildi reserveerimise, üleslaadimisloa ja valmisoleku kirjutus kontrollitakse õiges etapis; vana messages-bucketi uued kirjutused saavad kitsendava poliitika.",
+    "Säilitatav käitumine": "Ajaloo lugemine, lubatud peitmine/pealkiri/lugemismärge ning lõpetatud toimingu kviitung jäävad oma lepingusse. Üleslaadimist jätkata lubav uploading-kordus ei ole pelk ajaloolise kviitungi lugemine ning nõuab uut kontrolli. Koristamine ei anna uut saatmisõigust.",
+    "Metaandmete piir": "Varem tegelikult vaadeldud suhtlusobjektid ja uuenduse järelseis on seotud tõenditega. Fototee täpsed eeldused on tuletatud vastu võetud lähtekoodist; nende värske vastavus ja Storage vajalikud õigused/reeglid kontrollitakse enne DDL-i. Tundmatut seisu ei loeta sobivaks ning eraldi diagnostikat kasutajalt ette ei küsita.",
+    "Rakenduse koostamine": "Kõik 765 kompileerimise sisendit ja sõltuvusfailid on samad mis vastu võetud 8b7db90 värske Maci build'i puhul. Kohalikku rakenduse build'i ega vanu klienditeste ei korratud. Uus käivitaja nõuab siiski üht värsket Maci build'i enne DDL-i ja avaldamist.",
+    "Uudised": "Jälgitavate poodide ja profiilide päris kuulutuste/teadete voog jääb kontoelutsükli järel järgmiseks tootetööks. Kuni neli eelvaadet avaldaja ja perioodi kohta, sama perioodi Vaata kõiki ning eraldi teade on säilitatud kavand."
+  },
+  "local_test": [
+    "Eraldatud PostgreSQL 17.6: 32/32 sihitud kontrolli ning 3/3 täiendavat paigaldusõiguste kontrolli läbitud. Tegelikud paigaldusfailid, säiliv suhtlusleping, foto kirjutusfunktsioonid ja uued kitsendavad poliitikad on seotud kontrollsummadega. Kontrollitud on lubatud kirjutus ja ajaloo haldamine, keelatud uus kirjutus, kordused, õigused, andmete säilimine ning päris lukuootel värske kontroll. Täiendav katse rakendas samad failid nonsuperuser BYPASSRLS rolliga ja olemasolevate omanikuõigustega. Katse kasutab sünteetilisi kontosid ja vähendatud väliste teenuste abistajaid; Storage teenuse päris failikirjutust ega hostitud Supautils hooki ei kinnitata.",
+    "Uue käivitaja 25/25 sihitud kontrolli läbitud lõplike SQL-failidega. Kontroll kasutab sünteetilist CLI/buildi ja päris ajutist Giti; kõik sisendid jäid katse jooksul samaks. Viimane eduka uuenduse originaalraport on täpselt seotud; kinnitamata SQL vastus ei luba korduskirjutust ega commit/push-i.",
+    "Kõik 765 kompileerimise sisendit ja sõltuvusfailid on vastu võetud 8b7db90 lähtekoodi ning selle läbitud värske Maci buildiga identsed. Uut kohalikku rakenduse buildi ega vanu klienditeste ei korratud; uus paigaldaja teeb enne DDL-i ja avaldamist ühe värske Maci buildi.",
+    "Tootmise SQL-i ja käivitaja sõltumatud ülevaatused on PASS ja seotud lõplike tõenditega. SQL ülevaataja koostas katseandmebaasi laienduse; root kontrollis selle lähtekehasid, õigusi, piire ja native-tulemusi eraldi. Lõplik pakett vajab veel täpse komplekti ülevaatust ja pitseerimist."
+  ],
+  "production": [
+    "Vastu võetud tootmine: 8b7db90d08682b512d76e64c699af56fc8cae6a3, main Ready / Production kasutaja pildil. Sõnumid toimivad kasutaja katsetuse järgi.",
+    "Varasemad profiili, kuulutuse, hobusepakkumise, teenuse ja töö avalikud konto-oleku kontrollid on juba vastu võetud. Eraisiku aktiivse töökuulutuse puudumine ei nõua uue töö loomist selle sammu jaoks.",
+    "Uue vestluste/manuste mooduli paigaldusraport, üks DDL-tehing, uus commit/push, Verceli tulemus ja kasutaja pildiga sõnumi kontroll on ootel."
+  ],
+  "next_action": "Käivita ainult selqiro-vestluste-ja-manuste-konto-olek-20261124/uuenda.py --publish. Tagasta selle käigu SAADA SEE FAIL JSON. Edu järel kontrolli sama uue commit'i Verceli Ready / Production tulemust ning olemasoleva vestluse avamist, tekstisõnumit ja pildiga sõnumit teise oma testkontoga. Seejärel jätka allesjäänud omaniku kirjutuste ja konto sulgemise/taastamise tervikuga; konto → Uudised → esiletõstmine → reklaamid.",
+  "stop_rule": "Peatumisel saada täpselt uue käigu raport; ära korda vanu pakette. Tundmatu allikas, indeks, originaalraport, funktsioon või vajalik Storage eelseis peatab töö enne andmebaasimuudatust ja avaldamist. Juba paigaldatud kohalikud lähtefailid säilivad kontrollimiseks. Kinnitamata SQL vastus ei luba uut kirjutust ega commit/push-i. Uue andmebaasikirjutuse asemel selgitatakse selline seis ainult lugemisega.",
+  "read_next": [
+    "docs/continuity/HOSTED_PORTAL.md — ainus praegune paigalduskäsk.",
+    "docs/architecture/account-contact-write-accepted-20261124.md — viimase avaldamise kinnitus.",
+    "docs/architecture/account-message-media-fence-v1.md — uue koondatud mooduli ulatus ja piirid.",
+    "supabase/releases/account-message-media-fence-v1/README.md — SQL eeldused, kordused, lukud ja kontrollid.",
+    "docs/architecture/account-model-lifecycle-20261122.md — lihtne konto mudel ja peatatud e-postitöö.",
+    "docs/architecture/followed-news-grouping-20261124.md — nelja eelvaate kavand."
+  ],
+  "boundaries": [
+    "Kolm kontot kuuluvad kasutajale; ainult ühel on kaks identiteeti. Uus konto valib eraisiku VÕI ettevõtte. Mitme identiteedi ning ettevõtte töötajate/rollide/omandi üleandmise iseteenindus ei ole avamisulatus.",
+    "Kolm olemasolevat kontot ja nende sisu säilivad. Konto active-only alus jääb kehtima. Vestluste/manuste kontroll ei aktiveeri sulgemist ega kustutamist; enne seda tuleb lõpetada muud tegelikud omaniku kirjutused ja meedia lõppkinnitused ning värske autentimise, vana sessiooni tõkestamise ja selge sulgemis-/taastamisvaate tervik.",
+    "E-posti aktiveerimine jääb põhidomeeni selqiro.com kasutuselevõtu juurde. Saatmine, kinnitamine ja parooli taastamine peavad olema lõpuni kontrollitud enne väliseid testijaid või avalikku registreerimist ka vercel.app aadressil.",
+    "Kasutajale kuuluvad ka selqiro.app/.io ja selkiro.com/.app/.io. Domeeni valikut uuesti ei küsita; DNS-i selles sammus ei muudeta.",
+    "AI päringuteed jäävad suletuks. Tavaline osalemine ei sõltu Energy ostust. Riigipõhised töökuulutuse poliitikad ja senised avaldamise/vestluse lepingud säilivad.",
+    "Konto sulgemise/taastamise/kustutamise tervik → jälgitavate poodide ja profiilide Uudised → kuulutuste esiletõstmine → reklaamid. Reklaamija võib kasutada sama kontot ilma avaliku müüjaprofiilita; reklaamimine ei ole kolmas kontotüüp.",
+    "Uudised koondab ainult kasutaja valitud jälgitavate poodide/profiilide sisu. Eraisiku ja ettevõtte tavapärane osalemine säilib. Uue kuulutuse avaldamist, olemasoleva muutmist/pikendamist ja eraldi teadet ei käsitleta automaatselt ühe ja sama uue sündmusena.",
+    "Uudiste lahendus peab olema serveris piiratud ja indekseeritud lehekülgedega. Kogu jälgimisnimekirja või kogu voo brauserisse laadimine ei ole uue V2 lahenduse alus. Suurt samaaegsust ei loeta tõendatuks väikese kasutustee ega ühe kliendi sünteetilise katse põhjal.",
+    "Uudiste 4 eelvaadet ja pakutud 7 päeva algvaade on teostusettepanekud. Vanemad perioodid jäävad kättesaadavaks. Nelja eelvaate nägemine ei märgi kõiki teisi kuulutusi loetuks; suur lisamiskogus ei tõrju poe eraldi teadet välja. Näidiskujunduses olevad poed, hinnad ja kogused on kujuteldavad.",
+    "Fotobaitide välissalvestus ja andmebaasi tehing ei ole ühine tehing. Uus valmisoleku ja sõnumisse kinnitamise kontroll tõkestab hilinenud omaksvõtu; poolelioleva välise kirjutuse lõppu ega vana avaliku faili URL-i kohest kadumist sellega ei lubata. Koristamise ja lõppkustutamise töö jääb eraldi."
+  ],
+  "environment": [
+    "/Users/taivo/selqiro; https://github.com/Taivo17/selqiro.git. Viimane vastu võetud alus 8b7db90d08682b512d76e64c699af56fc8cae6a3; puu 6f8e9b6e7b8e3e5ab2add913247a424908f91630; 2305 faili. Värske avaldamistõend 24.11.2026 kell 20:07 Europe/Tallinn.",
+    "Next 16.4.6, Sharp 0.35.5, package.json ja lukufail säilisid. Raportis on olemasolev Supabase CLI 2.117.0 ja projekt vyjletlmwoiwxsnsunlm. Sõltuvusi, SMTP-d, Authi ega DNS-i ei seadistatud.",
+    "Uus käivitaja säilitab viimase eduka account-contact-write-20261124/e3b04c4753f60508ef4137abf686684d9c58ff1dafb86b822d19c788eb465870/result.json originaali ainult lugemiseks. See täpne vastu võetud raport seob ka eelmiste job-read ja suhtluskataloogi raportite säilimise. Uue mooduli päevik on eraldi."
+  ]
+}

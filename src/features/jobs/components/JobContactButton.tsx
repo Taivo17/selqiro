@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useRef,useState } from "react";
 import { contactJob,type JobContactCommand } from "../../../entities/job/api/jobClient";
 import { useConversationActor } from "../../listing-conversation/model/useConversationActor";
+import { offerConversationHref } from "../../listing-conversation/model/listingConversationNavigation";
 import { useV2Translation } from "../../../shared/i18n/V2LanguageProvider";
 import { jobMessages } from "../model/jobMessages";
 import { jobButton } from "./jobStyles";
@@ -18,7 +19,7 @@ export default function JobContactButton({jobId,identityId}: {jobId: string;iden
     const command = previous && previous.actor.userId === actor.expectedUserId && previous.actor.identityId === actor.expectedIdentityId && previous.jobId === jobId
       ? previous : Object.freeze({actor: {userId: actor.expectedUserId,identityId: actor.expectedIdentityId},requestKey: crypto.randomUUID(),jobId});
     pending.current = command;
-    try {const id = await contactJob(command,actor.signal); if (context.isCurrent(actor) && target.current === command.jobId) router.push(`/v2/messages/${id}`);}
+    try {const id = await contactJob(command,actor.signal); if (context.isCurrent(actor) && target.current === command.jobId) router.push(offerConversationHref(id, { type: "job", id: command.jobId, entryKey: crypto.randomUUID() }));}
     catch {if (context.isCurrent(actor) && target.current === command.jobId) setProblem(actor.generation);}
     finally {running.current = false; setBusy(false);}
   }

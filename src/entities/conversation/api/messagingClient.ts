@@ -6,6 +6,7 @@ import { copyGetMessageThread, copyListMessageThreads, copySendMessage, copyMark
   copyHideThread, copySetThreadBlocked } from "../model/messagingCommands";
 import { parseMessageThread, parseMessageThreadList, parseSendMessageReceipt, parseMarkThreadReadReceipt,
   parseHideThreadReceipt, parseSetThreadBlockedReceipt } from "../model/messagingParsers";
+import { copyGetOfferMessageThread, copySendOfferMessage, parseOfferMessageThread, parseSendOfferMessageReceipt } from "../model/offerMessaging";
 
 export function createMessagingClient(fetcher: ContactFetch = fetch) {
   async function request(action: string, token: string, command: object, signal?: AbortSignal) {
@@ -28,6 +29,12 @@ export function createMessagingClient(fetcher: ContactFetch = fetch) {
     return result.json;
   }
   return Object.freeze({
+    async getOfferMessageThread(token: string, input: unknown, signal?: AbortSignal) {
+      const c = copyGetOfferMessageThread(input); return parseOfferMessageThread(await request("getOffer", token, c, signal), c);
+    },
+    async sendOfferMessage(token: string, input: unknown, signal?: AbortSignal) {
+      const c = copySendOfferMessage(input); return parseSendOfferMessageReceipt(await request("sendOffer", token, c, signal), c);
+    },
     async getMessageThread(token: string, input: unknown, signal?: AbortSignal) {
       const c = copyGetMessageThread(input); return parseMessageThread(await request("get", token, c, signal), c);
     },
@@ -50,4 +57,4 @@ export function createMessagingClient(fetcher: ContactFetch = fetch) {
     },
   });
 }
-export const { getMessageThread, listMessageThreads, sendMessage, markThreadRead, hideThread, setThreadBlocked } = createMessagingClient();
+export const { getMessageThread, getOfferMessageThread, listMessageThreads, sendMessage, sendOfferMessage, markThreadRead, hideThread, setThreadBlocked } = createMessagingClient();

@@ -1,0 +1,32 @@
+{
+  "format": "selqiro-offer-message-intent-sql-preparation-v1",
+  "accepted_commit": "908a45717c6c66e717ab46c2ec0aa7bb5dd44954",
+  "fingerprints": {
+    "base": "4d0ca607396f916dbfe6ac92f354d552f395e6bb40ec56104dc0273076b74863",
+    "before": "34801e60a6a85f5b959d0910adbb9561ccb9e9fb300be6128359f25c100ff75c",
+    "after": "f5979d5e54267630239eb40d1ca61080a0a62f8f9bfc24e7333c72682e8e7a94"
+  },
+  "native": {
+    "path": "proof/sql/native-report.json",
+    "bytes": 10413,
+    "sha256": "209d8b92182c77a76a2f2799d8b32c67efd510f6163746fb54ac82869d2b03ff",
+    "checks": 33,
+    "inputs_unchanged": true
+  },
+  "metadata": {
+    "path": "proof/sql/metadata/metadata-proof.json",
+    "bytes": 363,
+    "sha256": "610441270662efbb33e249867b49f33991b7c5559598dbe8954ae702db9dde73"
+  },
+  "live_database_used": false,
+  "historical_content_mutation": false,
+  "source_pins": {
+    "bytes": 5838,
+    "sha256": "fe49cdbccb2b927ad784f7c6bc323936818dedfef578c30d2206aca610cd105a"
+  },
+  "known_limits": [
+    "Synthetic Auth/JWT and publication/gallery leaf models; no hosted Auth or Storage network calls.",
+    "Real accepted send/read/contact/account/photo guards and private table RLS run on isolated native PostgreSQL.",
+    "Photo ready metadata is seeded; provider bytes and browser selection are verified separately."
+  ]
+}

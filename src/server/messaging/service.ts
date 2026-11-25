@@ -8,6 +8,7 @@ import { copyGetMessageThread, copyListMessageThreads, copySendMessage, copyMark
   copyHideThread, copySetThreadBlocked } from "../../entities/conversation/model/messagingCommands";
 import { parseMessageThread, parseMessageThreadList, parseSendMessageReceipt, parseMarkThreadReadReceipt,
   parseHideThreadReceipt, parseSetThreadBlockedReceipt } from "../../entities/conversation/model/messagingParsers";
+import { copyGetOfferMessageThread, copySendOfferMessage, parseOfferMessageThread, parseSendOfferMessageReceipt } from "../../entities/conversation/model/offerMessaging";
 
 async function atStage<T>(stage: ListingContactStage, signal: AbortSignal | undefined, operation: () => T | Promise<T>) {
   try { return await operation(); }
@@ -46,6 +47,20 @@ export function createMessagingService(config: Readonly<{ projectOrigin: string;
     });
   }
   return Object.freeze({
+    async getOffer(token: string, input: unknown, signal?: AbortSignal) {
+      const c = copyGetOfferMessageThread(input), rpc = await connect(token, c.expectedUserId, signal);
+      const result = await rpc("get_my_offer_message_thread_v1", { p_expected_user_id: c.expectedUserId,
+        p_expected_identity_id: c.expectedIdentityId, p_conversation_id: c.conversationId,
+        p_before_message_id: c.beforeMessageId, p_attachment_offer_type: c.attachmentOfferType, p_attachment_offer_id: c.attachmentOfferId });
+      return atStage("receipt", signal, () => parseOfferMessageThread(result, c));
+    },
+    async sendOffer(token: string, input: unknown, signal?: AbortSignal) {
+      const c = copySendOfferMessage(input), rpc = await connect(token, c.expectedUserId, signal);
+      const result = await rpc("send_my_offer_message_v1", { p_expected_user_id: c.expectedUserId,
+        p_expected_identity_id: c.expectedIdentityId, p_request_key: c.requestKey, p_conversation_id: c.conversationId,
+        p_message: c.message, p_offer_type: c.offerType, p_offer_id: c.offerId, p_attachment_id: c.attachmentId });
+      return atStage("receipt", signal, () => parseSendOfferMessageReceipt(result, c));
+    },
     async get(token: string, input: unknown, signal?: AbortSignal) {
       const c = copyGetMessageThread(input), rpc = await connect(token, c.expectedUserId, signal);
       const result = await rpc("get_my_marketplace_message_thread_v2", { p_expected_user_id: c.expectedUserId,

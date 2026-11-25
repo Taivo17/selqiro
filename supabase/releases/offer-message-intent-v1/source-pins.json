@@ -1,0 +1,130 @@
+{
+  "format": "selqiro-offer-message-intent-source-pins-v1",
+  "base_commit": "908a45717c6c66e717ab46c2ec0aa7bb5dd44954",
+  "base_tree": "ed872b82a9ac67fe9f0073716492e2fb7b90b893",
+  "files": {
+    "accepted-media-contract": {
+      "path": "supabase/releases/account-message-media-fence-v1/expected-contract.json",
+      "bytes": 276549,
+      "sha256": "0ad0c33b02011062ddece8a19ac724de5af779a28b047c34507a1234884ff09e"
+    },
+    "accepted-media-catalog": {
+      "path": "supabase/releases/account-message-media-fence-v1/catalog-query.sql",
+      "bytes": 46547,
+      "sha256": "d95e37288e2d7799937104474d7d09eb44d9e8bea555b4b1168dd00de2b7020d"
+    },
+    "accepted-media-apply": {
+      "path": "supabase/releases/account-message-media-fence-v1/apply.sql",
+      "bytes": 177123,
+      "sha256": "bdaf4ed9a955434eab06fc6ee93ec0d2307813d23da4da5d182dafa22bc23f27"
+    },
+    "accepted-sender": {
+      "path": "supabase/releases/account-contact-write-fence-v1/public-send_my_message_v2.sql",
+      "bytes": 5302,
+      "sha256": "7e7deb4778b5144a3397f7e23167fa96ae0a7e94c33d7c018c81c1b8242d1ebe"
+    },
+    "accepted-account-helper": {
+      "path": "supabase/releases/account-contact-write-fence-v1/account-write-availability.sql",
+      "bytes": 2276,
+      "sha256": "ea51051f0dc00a0f6d3dbb7146bb26f2c0c243d9cf2f973bdc5dd8859ec1f435"
+    },
+    "accepted-message-guard": {
+      "path": "supabase/releases/account-contact-write-fence-v1/messaging_private_v2-guard_account_block.sql",
+      "bytes": 2977,
+      "sha256": "11da40f99bd8b61c4404845eb3b2acb8ff1ca8dbac16afc62191113d9791a968"
+    },
+    "catalog-helper": {
+      "path": "supabase/releases/account-contact-write-fence-v1/helper-query.sql",
+      "bytes": 1799,
+      "sha256": "7f3e3f4ca1ee18fd57aa79c5beb6a5f896c285dd22cd951f19bf312230866f6e"
+    },
+    "horse-contact": {
+      "path": "supabase/repairs/20261108_horse_publication/06_contact.sql",
+      "bytes": 11972,
+      "sha256": "8bf0dab59f31ccf1d876699278603f242eabedc8d39145e2e2d56240ebb40a95"
+    },
+    "horse-authority-order": {
+      "path": "supabase/repairs/20261108_horse_publication/05_authority.sql",
+      "bytes": 2362,
+      "sha256": "06c8478d107b7bae5f7d6697171862ed5ce255518a98824fd2e5ac341d97eab5"
+    },
+    "service-contact": {
+      "path": "supabase/repairs/20261108_service_publication/07_contact.sql",
+      "bytes": 11754,
+      "sha256": "dc13f1215ca767887fc6cd4abafaf21b54ca1a629319b96fc031dc5e64ccdd64"
+    },
+    "service-authority": {
+      "path": "supabase/repairs/20261108_service_publication/08_authority.sql",
+      "bytes": 6375,
+      "sha256": "ef12f384aa3923a7bd9617c3e14a5fc6f78dcb5b4e778ac981ff4769962ebf96"
+    },
+    "service-activity": {
+      "path": "supabase/repairs/20261111_service_activity/01_state.sql",
+      "bytes": 3969,
+      "sha256": "bd8ddfd7b9844bbb52abd2eac60f1017f826df7c31862b0eb1206c15b4b6c061"
+    },
+    "jobs-schema": {
+      "path": "supabase/repairs/20261116_jobs_public/changes.sql",
+      "bytes": 50784,
+      "sha256": "53be53beb1ce250dbdcf211b1c4a846459f4763b7e2e05865d1adc4a592a7c6d"
+    },
+    "jobs-contact-tables": {
+      "path": "supabase/repairs/20261116_jobs_public/07_contact.sql",
+      "bytes": 7283,
+      "sha256": "335838ac9c47b22e924bf0c698c042e47f595113d39b0dd1c217f38651fc6a79"
+    },
+    "jobs-context-reader": {
+      "path": "supabase/repairs/20261116_jobs_public/08_message_context.sql",
+      "bytes": 4056,
+      "sha256": "f05704a544840ea0b6c2464bf5c7ae117c3ca7180599ff350e4eddd61f22443d"
+    },
+    "jobs-authority": {
+      "path": "supabase/repairs/20261116_jobs_public/09_authority.sql",
+      "bytes": 2332,
+      "sha256": "9ddd51e6ce55f30f559866183c9080144213c50b481e4434eb219da51cac3da4"
+    },
+    "personal-job-snapshot": {
+      "path": "supabase/repairs/20261121_personal_jobs/05_contact.sql",
+      "bytes": 1415,
+      "sha256": "ff5cb538ebd415adbc4e0d3166b08e2634bb2dae75ea439c1b2cc7520dc0dec3"
+    }
+  },
+  "dependency_bodies": [
+    {
+      "signature": "horse_publication_private.contact_snapshot(uuid)",
+      "source": "supabase/repairs/20261108_horse_publication/06_contact.sql",
+      "body_sha256": "f9778244613cc6d2a2534742328f54f7f8f167f2281df645cf57a1d49cf8fecb",
+      "exact": true
+    },
+    {
+      "signature": "service_publication_private.contact_snapshot(uuid)",
+      "source": "supabase/repairs/20261108_service_publication/07_contact.sql",
+      "body_sha256": "3f4e78bea70510eb6c7625bbff483c07b6587fdda7fe9056f45653fbb4d794f5",
+      "exact": true
+    },
+    {
+      "signature": "jobs_private.contact_snapshot(uuid)",
+      "source": "supabase/repairs/20261121_personal_jobs/05_contact.sql",
+      "body_sha256": "8b4d1cf59af748d02e221d848a8b1fcd51db8b88fe5af18faba9cff35f7358c7",
+      "exact": true
+    },
+    {
+      "signature": "public.get_my_marketplace_message_thread_v1(uuid,uuid,text,text,text)",
+      "source": "supabase/repairs/20261108_service_publication/07_contact.sql",
+      "body_sha256": "dc67ecc862717e1427685562141622b31a9a08bfc611c78df005564224a28384",
+      "exact": true
+    },
+    {
+      "signature": "public.get_my_marketplace_message_thread_v2(uuid,uuid,text,text,text)",
+      "source": "supabase/repairs/20261116_jobs_public/08_message_context.sql",
+      "body_sha256": "0935974d21bdd5487795035d29ea4fe8af3abc1b2ba22cdce9aa8ad0747ed72d",
+      "exact": true
+    }
+  ],
+  "dependency_acl_basis": {
+    "horse_snapshot": "06_contact created after 05_authority; postgres plus controlled contact writer",
+    "service_snapshot": "08_authority revokes PUBLIC/API execution and grants existing final writer plus contact writer",
+    "job_snapshot": "09_authority and personal job replacement retain postgres plus contact writer",
+    "card_tables": "original contact tables retain RLS; contact writer SELECT/INSERT only; no API table grants"
+  }
+}

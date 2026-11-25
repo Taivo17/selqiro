@@ -7,9 +7,10 @@ import { ListingContactError } from "../../entities/conversation/model/listingCo
 import { contactDiagnostic, type ListingContactDiagnosticCode, type ListingContactStage } from "../../entities/conversation/model/contactDiagnostic";
 import { copyGetMessageThread, copyListMessageThreads, copySendMessage, copyMarkThreadRead,
   copyHideThread, copySetThreadBlocked } from "../../entities/conversation/model/messagingCommands";
+import { copyGetOfferMessageThread, copySendOfferMessage } from "../../entities/conversation/model/offerMessaging";
 import type { UploadFetch } from "../../entities/listing/api/privateUploadHttp";
 
-const commands = { get: copyGetMessageThread, list: copyListMessageThreads, send: copySendMessage,
+const commands = { get: copyGetMessageThread, getOffer: copyGetOfferMessageThread, sendOffer: copySendOfferMessage, list: copyListMessageThreads, send: copySendMessage,
   read: copyMarkThreadRead, hide: copyHideThread, block: copySetThreadBlocked };
 type Action = keyof typeof commands;
 const headers = { "Cache-Control": "private, no-store", "X-Content-Type-Options": "nosniff", "Referrer-Policy": "no-referrer" };

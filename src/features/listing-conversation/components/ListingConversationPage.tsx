@@ -13,7 +13,8 @@ import { Suspense } from "react";
 import { v2IntegrationEnabled } from "../../../shared/config/v2Integration";
 import { isConversationId } from "../../../entities/conversation/model/listingContact";
 import type { MessageThreadMessage } from "../../../entities/conversation/model/messaging";
-import { listingConversationHref } from "../model/listingConversationNavigation";
+import { isMessageOffer, type MessageOfferIntent } from "../../../entities/conversation/model/offerMessaging";
+import { messageOfferOrigin, offerConversationHref } from "../model/listingConversationNavigation";
 import { useListingConversation } from "../model/useListingConversation";
 import { useConversationScroll } from "../model/useConversationScroll";
 import { useConversationViewport } from "../model/useConversationViewport";
@@ -26,29 +27,27 @@ import { providerControlMessages } from "../../viewer-provider-controls/model/pr
 import {useConversationBlockRemoval} from "../model/useConversationBlockRemoval";
 import ProviderControlFeedback from "../../viewer-provider-controls/components/ProviderControlFeedback";
 
-type Props = { conversationId: string; originListingId?: string | null };
+type Props = { conversationId: string; originOffer?: MessageOfferIntent | null };
 const EMPTY_MESSAGES: readonly MessageThreadMessage[] = Object.freeze([]);
-export default function ListingConversationPage({ conversationId, originListingId = null }: Props) {
+export default function ListingConversationPage({ conversationId, originOffer = null }: Props) {
   const { t } = useV2Translation(messagesUiMessages);
 
   if (!v2IntegrationEnabled() || !isConversationId(conversationId)
-    || (originListingId !== null && !isConversationId(originListingId))) return <p>{t("this_conversation_is_unavailable")}</p>;
+    || (originOffer !== null && !isMessageOffer(originOffer.type, originOffer.id))) return <p>{t("this_conversation_is_unavailable")}</p>;
   return <Suspense fallback={<p role="status">{t("loading_conversation")}</p>}>
-    <ConversationLocation conversationId={conversationId} originListingId={originListingId} />
+    <ConversationLocation conversationId={conversationId} originOffer={originOffer} />
   </Suspense>;
 }
-function ConversationLocation({ conversationId, originListingId = null }: Props) {
-  const params = useSearchParams(), listingIds = params?.getAll("listing");
-  const currentOrigin = listingIds
-    ? listingIds.length === 1 && isConversationId(listingIds[0]) ? listingIds[0] : null
-    : originListingId;
-  return <ManagedConversation key={conversationId} conversationId={conversationId} originListingId={currentOrigin} />;
+function ConversationLocation({ conversationId, originOffer = null }: Props) {
+  const params = useSearchParams();
+  const currentOrigin = params ? messageOfferOrigin(params) : originOffer;
+  return <ManagedConversation key={conversationId} conversationId={conversationId} originOffer={currentOrigin} />;
 }
-function ManagedConversation({ conversationId, originListingId = null }: Props) {
+function ManagedConversation({ conversationId, originOffer = null }: Props) {
   const { language: uiLanguage, t } = useV2Translation(messagesUiMessages);
   const {t: providerText} = useV2Translation(providerControlMessages);
 
-  const state = useListingConversation(conversationId, originListingId), router = useRouter();
+  const state = useListingConversation(conversationId, originOffer), router = useRouter();
   const { context, visible } = state;
   const blockState = useConversationBlockState(context.actor, context.isCurrent, conversationId, !!visible,
     !!visible?.blocked_by_me, !!visible?.can_send);
@@ -69,7 +68,7 @@ function ManagedConversation({ conversationId, originListingId = null }: Props) 
     <div className={styles.historyWrap}>
       <div ref={historyRef} onScroll={onScroll} className={styles.history} data-conversation-history tabIndex={0} aria-label={t("message_history")}>
         {(context.loading || (state.reading && !visible)) && <p role="status">{t("loading_conversation")}</p>}
-        {context.anonymous && <Link className={styles.textButton} href={"/auth?next=" + encodeURIComponent(listingConversationHref(conversationId, originListingId))}>{t("sign_in_to_read_this_conversation")}</Link>}
+        {context.anonymous && <Link className={styles.textButton} href={"/auth?next=" + encodeURIComponent(offerConversationHref(conversationId, originOffer))}>{t("sign_in_to_read_this_conversation")}</Link>}
         {visible?.next_before_message_id && <button type="button" disabled={state.reading} className={styles.textButton}
           onClick={() => { prepareEarlier(); state.loadEarlier(); }}>{state.reading ? t("loading") : t("load_earlier_messages")}</button>}
         {visible && context.actor && <ConversationMessages conversationId={conversationId} messages={visible.messages}
@@ -97,9 +96,9 @@ function ManagedConversation({ conversationId, originListingId = null }: Props) 
       <button type="button" className={styles.textButton} onClick={state.photo.cancelPending}>{t("remove_selected_photo")}</button>
     </div>}
     {state.photo.selectionProblem && <p className={styles.notice} role="status">{renderUiMessage(uiLanguage, state.photo.selectionProblem)}</p>}
-    {state.incomingListingId && !state.changed && <div className={styles.notice} role="status">
+    {state.incomingOffer && !state.changed && <div className={styles.notice} role="status">
       <p>{t("another_listing_is_open_your_pending_message_and_its_listing_card_are_retai")}</p>
-      <button type="button" className={styles.textButton} disabled={!state.canAcceptIncoming} onClick={state.acceptIncomingListing}>{t("clear_text_and_add_the_new_listing")}</button>
+      <button type="button" className={styles.textButton} disabled={!state.canAcceptIncoming} onClick={state.acceptIncomingOffer}>{t("clear_text_and_add_the_new_listing")}</button>
       {!!state.photo.photo && <p>{t("remove_the_pending_photo_before_choosing_a_new_listing")}</p>}
     </div>}
     </div>

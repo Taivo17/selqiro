@@ -3,13 +3,14 @@ import { useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useConversationActor } from "../../listing-conversation/model/useConversationActor";
+import { offerConversationHref } from "../../listing-conversation/model/listingConversationNavigation";
 import { contactHorseSeller, type HorseContactCommand } from "../../../entities/horse-offer/api/contactHorseSeller";
 import { useV2Translation } from "../../../shared/i18n/V2LanguageProvider";
 import { horsePublicMessages } from "../../../../lib/i18n/catalogs/horsePublic";
 
 export default function HorseContactButton({ offerId }: { offerId: string }) {
  const { t } = useV2Translation(horsePublicMessages), context = useConversationActor(), router = useRouter();
- const pending = useRef<HorseContactCommand | null>(null), running = useRef(false);
+ const pending = useRef<HorseContactCommand | null>(null), running = useRef(false), target = useRef(offerId); target.current = offerId;
  const [busy, setBusy] = useState(false), [problem, setProblem] = useState<number | null>(null);
  const style = "block w-full rounded-full bg-black px-6 py-4 text-center font-bold text-white disabled:opacity-50";
  async function contact() {
@@ -21,8 +22,8 @@ export default function HorseContactButton({ offerId }: { offerId: string }) {
    ? old : Object.freeze({ expectedUserId: actor.expectedUserId, expectedIdentityId: actor.expectedIdentityId, requestKey: crypto.randomUUID(), offerId });
   pending.current = command;
   try { const id = await contactHorseSeller(command, actor.signal);
-   if (context.isCurrent(actor)) router.push("/v2/messages/" + id);
-  } catch { if (context.isCurrent(actor)) setProblem(actor.generation); }
+   if (context.isCurrent(actor) && target.current === command.offerId) router.push(offerConversationHref(id, { type: "horse_offer", id: command.offerId, entryKey: crypto.randomUUID() }));
+  } catch { if (context.isCurrent(actor) && target.current === command.offerId) setProblem(actor.generation); }
   finally { running.current = false; setBusy(false); }
  }
  return <div className="space-y-3">

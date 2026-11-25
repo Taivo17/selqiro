@@ -23,7 +23,7 @@ function identity(value: unknown): MessageIdentity {
   if (!uuid(r.identity_id) || !label(r.name, 200) || !label(r.avatar_url, 4096)) return contactFail("response");
   return Object.freeze({ ...r }) as MessageIdentity;
 }
-function card(value: unknown): ListingMessageCard | null {
+export function parseMessageCard(value: unknown): ListingMessageCard | null {
   if (value === null) return null;
   const kind = cardKind(value);
   if (kind) {
@@ -70,11 +70,11 @@ export function parseMessageThread(value: unknown, c: GetMessageThreadCommand): 
       || typeof m.mine !== "boolean" || !messageText(m.text, 20000) || typeof m.text_truncated !== "boolean"
       || instant(m.created_at) === null) return contactFail("response");
     last = BigInt(m.id);
-    return Object.freeze({ ...m, listing: card(m.listing), image: photo(m.image) }) as MessageThreadMessage;
+    return Object.freeze({ ...m, listing: parseMessageCard(m.listing), image: photo(m.image) }) as MessageThreadMessage;
   });
   if (r.next_before_message_id !== null && (!id(r.next_before_message_id) || !messages.length
     || r.next_before_message_id !== messages[0].id)) return contactFail("response");
-  const attachment = card(r.attachment_listing);
+  const attachment = parseMessageCard(r.attachment_listing);
   if (attachment && attachment.id !== c.attachmentListingId) return contactFail("response");
   return Object.freeze({ ...r, actor: own, peer, listing, messages: Object.freeze(messages), attachment_listing: attachment }) as MessageThread;
 }

@@ -1,3 +1,11 @@
+> **Tootmises vastu võetud 24.11.2026.**
+>
+> Vestluste ja pildimanuste konto-oleku kontroll on commit'is `908a45717c6c66e717ab46c2ec0aa7bb5dd44954`. Tagastatud raporti sõltumatu kontroll kinnitab ühe värske Maci build'i, ühe SQL rakendamise, COMMIT-järgse kinnituse, eraldi järelkontrolli ja kontrollitud commit/push-i. Kasutaja ekraanipildil on sama commit Ready / Production ning kasutaja kinnitas teksti ja piltide kohaletoimetamist.
+>
+> Kasutaja märkas eraldi pakkumiskaardi kordumist hobuse- ja töövestlustes. See tähelepanek on järgmise, teadlikku pakkumise jagamist ühtlustava muudatuse alus. Allolev ettevalmistus säilib varasema tõendina.
+>
+> Vastuvõtt: [vestluste ja manuste uuenduse kinnitus](account-message-media-accepted-20261124.md). Praegune juhend: [HOSTED_PORTAL.md](../continuity/HOSTED_PORTAL.md).
+
 # Vestluste ja pildimanuste konto-oleku kontroll
 
 24.11.2026. **Järgmise uuenduse ettevalmistus.** Tootmise vastu võetud alus on commit `8b7db90d08682b512d76e64c699af56fc8cae6a3`, puu `6f8e9b6e7b8e3e5ab2add913247a424908f91630`, 2305 faili. Uue paketi Maci raport ja sellele vastav veebikontroll on eraldi järgmised tõendid.

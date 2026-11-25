@@ -2,12 +2,12 @@
 import { uiMessage } from "../../../../lib/i18n/interfaceMessage";
 
 import { useEffect, useRef, useState } from "react";
-import { getMessageThread, hideThread, sendMessage, setThreadBlocked } from "../../../entities/conversation/api/messagingClient";
-import { copySendMessage } from "../../../entities/conversation/model/messagingCommands";
+import { getOfferMessageThread, hideThread, sendOfferMessage, setThreadBlocked } from "../../../entities/conversation/api/messagingClient";
+import { copySendOfferMessage, sameOfferOrigin, messageOfferMatchesCard,
+  type MessageOfferIntent, type OfferMessageThread, type SendOfferMessageCommand } from "../../../entities/conversation/model/offerMessaging";
 import { ListingContactError } from "../../../entities/conversation/model/listingContact";
-import type { MessageThread, SendMessageCommand } from "../../../entities/conversation/model/messaging";
 import type { ListingMessageCard } from "../../../entities/conversation/model/listingMessageCards";
-import { consumeListingOrigin } from "./listingConversationNavigation";
+import { consumeOfferOrigin } from "./listingConversationNavigation";
 import { useConversationActor, type ConversationActorContext } from "./useConversationActor";
 import { useConversationAutoRefresh } from "./useConversationAutoRefresh";
 import { useMessagePhoto } from "./useMessagePhoto";
@@ -16,37 +16,38 @@ import { hasThreadGap, mergeThreadMessages } from "./threadMessages";
 import { notifyProviderControlsChanged } from "../../../shared/provider-controls/providerControlEvents";
 import { useProviderControlRevision } from "../../../shared/provider-controls/useViewerReadScope";
 
-type Draft = Readonly<{ owner: string | null; text: string; listingId: string | null; listing: ListingMessageCard | null; revision: number }>;
-type Attempt = Readonly<{ command: SendMessageCommand; revision: number }>;
+type Draft = Readonly<{ owner: string | null; text: string; offer: MessageOfferIntent | null; listing: ListingMessageCard | null; revision: number }>;
+type Attempt = Readonly<{ command: SendOfferMessageCommand; origin: MessageOfferIntent | null; revision: number }>;
 const actorKey = (a: Pick<ConversationActorContext, "expectedUserId" | "expectedIdentityId">) => a.expectedUserId + "/" + a.expectedIdentityId;
 
-export function useListingConversation(conversationId: string, originListingId: string | null) {
+export function useListingConversation(conversationId: string, originOffer: MessageOfferIntent | null) {
   const context = useConversationActor();
   const controlRevision = useProviderControlRevision("visibility"), seenControlRevision = useRef(controlRevision);
-  const [view, setView] = useState<MessageThread | null>(null), viewRef = useRef(view);
-  const [latestPage, setLatestPage] = useState<MessageThread | null>(null);
-  const [draft, setDraft] = useState<Draft>({ owner: null, text: "", listingId: originListingId, listing: null, revision: 0 });
+  const [view, setView] = useState<OfferMessageThread | null>(null), viewRef = useRef(view);
+  const [latestPage, setLatestPage] = useState<OfferMessageThread | null>(null);
+  const [draft, setDraft] = useState<Draft>({ owner: null, text: "", offer: originOffer, listing: null, revision: 0 });
   const draftRef = useRef(draft), attempt = useRef<Attempt | null>(null);
   const [busy, setBusy] = useState(false), [reading, setReading] = useState(false), [acting, setActing] = useState(false);
   const [problem, setProblem] = useState<string | null>(null), [unresolved, setUnresolved] = useState(false);
-  const [incomingListingId, setIncomingListingId] = useState<string | null>(null), [sentMessageId, setSentMessageId] = useState<string | null>(null);
-  const incoming = useRef<string | null>(null), observedOrigin = useRef(originListingId);
+  const [incomingOffer, setIncomingOffer] = useState<MessageOfferIntent | null>(null), [sentMessageId, setSentMessageId] = useState<string | null>(null);
+  const incoming = useRef<MessageOfferIntent | null>(null), observedOrigin = useRef(originOffer);
   const sending = useRef(false), readVersion = useRef(0), readingNow = useRef(false), actingNow = useRef(false);
   const photo = useMessagePhoto(conversationId, context.actor, context.isCurrent, busy || unresolved, context.refresh, context.anonymous);
   const markRead = useThreadReadWatermark(conversationId, context.actor, context.isCurrent);
 
-  function replaceView(value: MessageThread | null) { viewRef.current = value; setView(value); }
+  function replaceView(value: OfferMessageThread | null) { viewRef.current = value; setView(value); }
   function replaceDraft(value: Draft) { draftRef.current = value; setDraft(value); }
-  function queueOrigin(value: string | null) { incoming.current = value; setIncomingListingId(value); }
+  function queueOrigin(value: MessageOfferIntent | null) { incoming.current = value; setIncomingOffer(value); }
   async function load(actor: ConversationActorContext, before: string | null = null, quiet = false) {
     if (!context.isCurrent(actor)) return;
     const version = ++readVersion.current; readingNow.current = true;
     if (!quiet) setReading(true);
     const currentDraft = draftRef.current;
-    const attachmentListingId = currentDraft.owner === null || currentDraft.owner === actorKey(actor) ? currentDraft.listingId : null;
+    const offer = currentDraft.owner === null || currentDraft.owner === actorKey(actor) ? currentDraft.offer : null;
     try {
-      const result = await getMessageThread(actor.accessToken, { expectedUserId: actor.expectedUserId,
-        expectedIdentityId: actor.expectedIdentityId, conversationId, beforeMessageId: before, attachmentListingId }, actor.signal);
+      const result = await getOfferMessageThread(actor.accessToken, { expectedUserId: actor.expectedUserId,
+        expectedIdentityId: actor.expectedIdentityId, conversationId, beforeMessageId: before,
+        attachmentOfferType: offer?.type ?? null, attachmentOfferId: offer?.id ?? null }, actor.signal);
       if (!context.isCurrent(actor) || version !== readVersion.current) return;
       const current = viewRef.current;
       const same = current?.actor_user_id === result.actor_user_id && current.identity_id === result.identity_id;
@@ -61,8 +62,9 @@ export function useListingConversation(conversationId: string, originListingId: 
         setLatestPage(null);
       } else { replaceView(result); setLatestPage(null); }
       const latestDraft = draftRef.current;
-      if ((!attempt.current || result.attachment_listing === null) && latestDraft.owner === actorKey(actor)
-        && latestDraft.listingId === result.attachment_listing_id) replaceDraft({ ...latestDraft, listing: result.attachment_listing });
+      if ((!attempt.current || result.attachment_offer === null) && latestDraft.owner === actorKey(actor)
+        && (latestDraft.offer?.type ?? null) === result.attachment_offer_type
+        && (latestDraft.offer?.id ?? null) === result.attachment_offer_id) replaceDraft({ ...latestDraft, listing: result.attachment_offer });
       if (!unresolved) setProblem(null);
     } catch {
       if (context.isCurrent(actor) && version === readVersion.current) setProblem(viewRef.current
@@ -78,7 +80,7 @@ export function useListingConversation(conversationId: string, originListingId: 
     const actor = context.actor;
     if (actor) {
       const current = draftRef.current;
-      if (current.owner === null && current.listingId !== null) replaceDraft({ ...current, owner: actorKey(actor) });
+      if (current.owner === null && current.offer !== null) replaceDraft({ ...current, owner: actorKey(actor) });
       void load(actor);
     }
     // Immutable generation and AbortSignal belong to the actor hook.
@@ -94,36 +96,36 @@ export function useListingConversation(conversationId: string, originListingId: 
     // A preference event refreshes permissions without clearing the text/photo draft.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [controlRevision, context.actor]);
-  function adoptOrigin(listingId: string) {
+  function adoptOrigin(offer: MessageOfferIntent) {
     const actor = context.actor, current = draftRef.current;
-    replaceDraft({ owner: actor ? actorKey(actor) : null, text: "", listingId, listing: null, revision: current.revision + 1 });
+    replaceDraft({ owner: actor ? actorKey(actor) : null, text: "", offer, listing: null, revision: current.revision + 1 });
     queueOrigin(null); setProblem(null);
     if (actor && context.isCurrent(actor)) void load(actor);
   }
   useEffect(() => {
-    if (originListingId === observedOrigin.current) return;
-    observedOrigin.current = originListingId;
-    if (originListingId === null || originListingId === draftRef.current.listingId) return;
-    if (!draftRef.current.text && !photo.current.current && !attempt.current && !sending.current) adoptOrigin(originListingId);
-    else queueOrigin(originListingId);
-    // A different incoming listing never silently relabels an existing draft.
+    if (sameOfferOrigin(originOffer, observedOrigin.current)) return;
+    observedOrigin.current = originOffer;
+    if (originOffer === null || sameOfferOrigin(originOffer, draftRef.current.offer)) return;
+    if (!draftRef.current.text && !photo.current.current && !attempt.current && !sending.current) adoptOrigin(originOffer);
+    else queueOrigin(originOffer);
+    // A different incoming offer never silently relabels an existing draft.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [originListingId]);
+  }, [originOffer]);
   function changeBody(text: string) {
     const actor = context.actor, current = draftRef.current;
     if (!actor || !context.isCurrent(actor) || unresolved || photo.changed
       || (current.owner !== null && current.owner !== actorKey(actor))) return;
     replaceDraft({ ...current, text, revision: current.revision + 1,
-      owner: text || current.listingId || photo.current.current ? actorKey(actor) : null });
+      owner: text || current.offer || photo.current.current ? actorKey(actor) : null });
   }
   function removeAttachment() {
     const actor = context.actor, current = draftRef.current;
     if (!actor || !context.isCurrent(actor) || sending.current || attempt.current || current.owner !== actorKey(actor)) return;
-    consumeListingOrigin(conversationId, current.listingId);
-    replaceDraft({ ...current, listingId: null, listing: null, revision: current.revision + 1,
+    consumeOfferOrigin(conversationId, current.offer);
+    replaceDraft({ ...current, offer: null, listing: null, revision: current.revision + 1,
       owner: current.text || photo.current.current ? actorKey(actor) : null });
   }
-  function acceptIncomingListing() {
+  function acceptIncomingOffer() {
     const actor = context.actor;
     if (!incoming.current || !actor || !context.isCurrent(actor) || sending.current || attempt.current || photo.current.current
       || (draftRef.current.owner !== null && draftRef.current.owner !== actorKey(actor))) return;
@@ -139,28 +141,28 @@ export function useListingConversation(conversationId: string, originListingId: 
     try {
       if (frozen && actorKey(frozen.command) !== actorKey(actor)) return;
       if (!frozen) {
-        if (current.listingId !== null && current.listing?.id !== current.listingId) return;
+        if (current.offer !== null && !messageOfferMatchesCard(current.offer, current.listing)) return;
         if (image && (image.owner !== actorKey(actor) || image.state !== "ready" || !image.attachmentId)) return;
-        frozen = Object.freeze({ command: copySendMessage({ expectedUserId: actor.expectedUserId, expectedIdentityId: actor.expectedIdentityId,
-          requestKey: crypto.randomUUID(), conversationId, message: current.text, listingId: current.listingId,
-          attachmentId: image?.attachmentId ?? null }), revision: current.revision });
+        frozen = Object.freeze({ command: copySendOfferMessage({ expectedUserId: actor.expectedUserId, expectedIdentityId: actor.expectedIdentityId,
+          requestKey: crypto.randomUUID(), conversationId, message: current.text, offerType: current.offer?.type ?? null, offerId: current.offer?.id ?? null,
+          attachmentId: image?.attachmentId ?? null }), origin: current.offer, revision: current.revision });
       }
     } catch { setProblem(uiMessage("enter_a_message_of_up_to_5000_characters_or_add_a_photo")); return; }
     attempt.current = frozen; sending.current = true; setBusy(true); setProblem(null);
     try {
-      const receipt = await sendMessage(actor.accessToken, frozen.command, actor.signal);
+      const receipt = await sendOfferMessage(actor.accessToken, frozen.command, actor.signal);
       if (!context.isCurrent(actor)) { setUnresolved(true); return; }
       attempt.current = null; setUnresolved(false); setSentMessageId(receipt.message_id);
-      consumeListingOrigin(conversationId, frozen.command.listingId);
+      consumeOfferOrigin(conversationId, frozen.origin);
       photo.committed(frozen.command.attachmentId);
-      const latestDraft = draftRef.current, nextListing = incoming.current;
+      const latestDraft = draftRef.current, nextOffer = incoming.current;
       if (latestDraft.revision === frozen.revision) {
-        replaceDraft({ owner: nextListing ? actorKey(actor) : null, text: "", listingId: nextListing, listing: null, revision: latestDraft.revision + 1 });
+        replaceDraft({ owner: nextOffer ? actorKey(actor) : null, text: "", offer: nextOffer, listing: null, revision: latestDraft.revision + 1 });
         queueOrigin(null);
       } else if (latestDraft.owner === actorKey(actor) || latestDraft.owner === null) {
-        // A later draft survives a slow receipt. The listing intent belongs to
+        // A later draft survives a slow receipt. The offer intent belongs to
         // the earlier confirmed message and must not silently repeat.
-        replaceDraft({ ...latestDraft, listingId: null, listing: null, owner: latestDraft.text ? actorKey(actor) : null });
+        replaceDraft({ ...latestDraft, offer: null, listing: null, owner: latestDraft.text ? actorKey(actor) : null });
       }
       await load(actor);
     } catch (error) {
@@ -193,7 +195,7 @@ export function useListingConversation(conversationId: string, originListingId: 
   const changed = photo.changed || (draft.owner !== null && (!actor || draft.owner !== actorKey(actor)))
     || (!!attempt.current && (!actor || actorKey(attempt.current.command) !== actorKey(actor)));
   const visible = actor && view?.actor_user_id === actor.expectedUserId && view.identity_id === actor.expectedIdentityId ? view : null;
-  const attachmentRequested = !changed && draft.listingId !== null;
+  const attachmentRequested = !changed && draft.offer !== null;
   const attachment = attachmentRequested && visible ? draft.listing : null;
   const image = photo.visiblePhoto;
   const canSend = !busy && !acting && !changed && !!visible?.can_send
@@ -201,8 +203,8 @@ export function useListingConversation(conversationId: string, originListingId: 
       && (!image || image.state === "ready") && (!attachmentRequested || !!attachment)));
   return { context, visible, body: changed ? "" : draft.text, busy, reading, acting, problem, unresolved, changed, photo,
     attachmentRequested, attachment, attachmentUnavailable: attachmentRequested && !!visible && !reading && !attachment,
-    incomingListingId, canAcceptIncoming: !photo.photo && !busy && !unresolved && !changed,
-    canSend, send, changeBody, removeAttachment, acceptIncomingListing, sentMessageId, markRead,
+    incomingOffer, canAcceptIncoming: !photo.photo && !busy && !unresolved && !changed,
+    canSend, send, changeBody, removeAttachment, acceptIncomingOffer, sentMessageId, markRead,
     pendingText: unresolved && !changed && attempt.current ? attempt.current.command.message : null,
     pendingLatest: !!latestPage, openLatest: () => { if (latestPage && actor && latestPage.identity_id === actor.expectedIdentityId) { replaceView(latestPage); setLatestPage(null); } },
     refresh: () => actor && !readingNow.current && void load(actor),

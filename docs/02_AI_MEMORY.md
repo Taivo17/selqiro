@@ -8392,3 +8392,13 @@ pole neid Maci kirjutatud ega commit/push tehtud. Vanu pakette ei muudeta.
 - Enne DDL-i kontrollitakse värskelt täpseid vajalikke metaandmeid; eraldi diagnostika kordamist ei paluta. Konto active-only alus ja olemasolev ajalugu säilivad.
 - Ettevalmistuse sihitud kontrollid on tehtud; uue paketi Maci rakendamine, Verceli tulemus ja pildiga sõnumi kasutuskontroll on ootel.
 - Uus pakett: selqiro-vestluste-ja-manuste-konto-olek-20261124. E-posti töö jääb selqiro.com kasutuselevõtu juurde; konto → Uudised → esiletõstmine → reklaamid.
+
+
+## 24.11.2026 — vestlused ja pildimanused vastu võetud; pakkumise teadlik jagamine
+
+- Vastu võetud commit 908a457, 2335 faili. Tagastatud raport kinnitab ühe värske Maci buildi, ühe SQL rakendamise, eraldi järelkontrolli ja kontrollitud commit/push-i.
+- Kasutaja Verceli pilt: sama commit Ready / Production. Kasutaja kinnitas teksti ja piltide kohaletoimetamist.
+- Kasutaja lõplik otsus: iga teadlik pakkumise juurest kontakti avamine lisab eemaldatava kaardi järgmisele sõnumile, ka sama pakkumise uuesti avamisel. Tavakuulutus, hobusekuulutus, teenus ja töö kasutavad sama loogikat.
+- Pärast kinnitatud saatmist järgmised tekstid, pildid ja vastused kaarti automaatselt ei korda. Päis tuleb viimati tegelikult jagatud kaardist. Eraldi Lisa link uuesti valikut ei lisata.
+- Uue muudatuse sihitud kohalikud kontrollid on seotud ettevalmistustõenditega. Uue paketi Maci rakendamine, Verceli tulemus ja tegelik nelja pakkumisliigi kontroll on ootel.
+- Pakett: selqiro-sonumite-pakkumise-link-20261124. Konto active-only alus ja varasem ajalugu säilivad. Kontoelutsükkel → Uudised → esiletõstmine → reklaamid.

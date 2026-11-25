@@ -1,0 +1,22 @@
+{
+  "docs/continuity/CURRENT_STATE.json": {
+    "path": "docs/continuity/history/account-message-media-accepted-908a457-20261124/docs/continuity/CURRENT_STATE.json",
+    "bytes": 10205,
+    "sha256": "f37d4befeb6e8c81524e525d7b5399cbcb9599bb93e6c4d6d114561a3367a4dc"
+  },
+  "docs/99_V2_HANDOFF_NEXT_CHAT.md": {
+    "path": "docs/continuity/history/account-message-media-accepted-908a457-20261124/docs/99_V2_HANDOFF_NEXT_CHAT.md",
+    "bytes": 10290,
+    "sha256": "3afe8393662e2af333218851fbdf8db4b68820fb44725acef20223877f7af103"
+  },
+  "docs/continuity/HOSTED_PORTAL.md": {
+    "path": "docs/continuity/history/account-message-media-accepted-908a457-20261124/docs/continuity/HOSTED_PORTAL.md",
+    "bytes": 1673,
+    "sha256": "3ea50fd357e3a005b8558db7fa7f91b37f172e0788605dca3ceadffba7d946c6"
+  },
+  "docs/architecture/account-message-media-fence-v1.md": {
+    "path": "docs/continuity/history/account-message-media-accepted-908a457-20261124/docs/architecture/account-message-media-fence-v1.md",
+    "bytes": 7407,
+    "sha256": "661ce804f14f393d3ce51c33f7060d85bc12c12331c0ad09e5c82887f478186d"
+  }
+}

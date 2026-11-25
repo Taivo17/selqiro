@@ -1,0 +1,82 @@
+{
+  "format": "selqiro-offer-message-intent-sql-files-v1",
+  "fingerprints": {
+    "base": "4d0ca607396f916dbfe6ac92f354d552f395e6bb40ec56104dc0273076b74863",
+    "before": "34801e60a6a85f5b959d0910adbb9561ccb9e9fb300be6128359f25c100ff75c",
+    "after": "f5979d5e54267630239eb40d1ca61080a0a62f8f9bfc24e7333c72682e8e7a94"
+  },
+  "files": {
+    "accepted-query.sql": {
+      "bytes": 46547,
+      "sha256": "d95e37288e2d7799937104474d7d09eb44d9e8bea555b4b1168dd00de2b7020d"
+    },
+    "card-tables-query.sql": {
+      "bytes": 2456,
+      "sha256": "e890e6870a179a3d6205affd8e1727b55d06faa5a217ab0dab93fabb3d87769b"
+    },
+    "indexes-query.sql": {
+      "bytes": 566,
+      "sha256": "76a5d1a4d0b23b291b83c538a41d13c34f40f3c7f9b9f8fd3f1d086c83d37459"
+    },
+    "dependency-columns-query.sql": {
+      "bytes": 561,
+      "sha256": "dd6e06d00f59c2ae7089a8352932840bf8158f1a3a19eaebb180390514a03d48"
+    },
+    "dependency-functions-query.sql": {
+      "bytes": 1964,
+      "sha256": "ded83abb03f7ff924256238593942490f8de4f19809fda5c30f4befa191a2566"
+    },
+    "target-functions-query.sql": {
+      "bytes": 2091,
+      "sha256": "66c6fa15b83303f9f25299952e889f9269ff88e468f8823bb8f347dc724a50d2"
+    },
+    "catalog-query.sql": {
+      "bytes": 55138,
+      "sha256": "058fbb46ab521a10615017598a0ceff2fce8213219823e639604cf8b443511dd"
+    },
+    "execution-prerequisite.sql": {
+      "bytes": 1580,
+      "sha256": "a887cadca50a62354d10f3a595cdc270694ef4d002037070b9677b15c56db780"
+    },
+    "changes.sql": {
+      "bytes": 15806,
+      "sha256": "9ade8bd7a53cc0b1c4b9960554c165f28e9d1f32d83af08fa6e71625ab289e34"
+    },
+    "preflight.sql": {
+      "bytes": 57929,
+      "sha256": "27069422194266096eee397d27dc30b23cf7d317da74f0a2a4204e601c47ee52"
+    },
+    "apply.sql": {
+      "bytes": 188487,
+      "sha256": "9dad8262db72a75c978bc3fb689011d84d1050b90f1c02997b9ca14974ce26a1"
+    },
+    "verify.sql": {
+      "bytes": 57898,
+      "sha256": "56e4a2b970f16ee027c9033f6134155ef7501b199d294a429a2514d35d9c602a"
+    },
+    "sql_contract.py": {
+      "bytes": 3528,
+      "sha256": "366a862025823a7353b16f757b312f0c1a6369c57946141ba97ff51783560a1c"
+    },
+    "expected-contract.json": {
+      "bytes": 326466,
+      "sha256": "59e8278f7328ca97addd25d686ca549a070a975bec7b7c87d8d47b68eed6ad06"
+    },
+    "offer-helpers.sql": {
+      "bytes": 6175,
+      "sha256": "599e1b66a8502971ddd3317443cb951af8d5b597f57891dd82860ca5f1b2efaf"
+    },
+    "disable-implicit-cards.sql": {
+      "bytes": 704,
+      "sha256": "e21710a3ba0211c2dd0a917f5e7ff43d593f67a7c83eaf01e3a76e163ece2ab7"
+    },
+    "public-get_my_offer_message_thread_v1.sql": {
+      "bytes": 1983,
+      "sha256": "89c378bfe04dc26fdf640dea779ede7307853232c82d006065c92ebb4119cefe"
+    },
+    "public-send_my_offer_message_v1.sql": {
+      "bytes": 6941,
+      "sha256": "58f136a1ff06d8b0e47900266f679de3ee592f6232a2299b413f23f140f0e97f"
+    }
+  }
+}
