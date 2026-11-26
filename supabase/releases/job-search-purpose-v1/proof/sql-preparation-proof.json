@@ -1,0 +1,22 @@
+{
+  "format": "selqiro-job-search-purpose-sql-preparation-v1",
+  "result": "PASS",
+  "execution": "isolated_preparation_only",
+  "engine": {
+    "name": "PostgreSQL",
+    "version": "17.6"
+  },
+  "cases": {
+    "passed": 58,
+    "failed": 0
+  },
+  "sql_sha256": {
+    "preflight.sql": "40a830df6425a9a9e10d8ec4a73443f5d1d2b6ada163d3fbc3ea618ee8474523",
+    "apply.sql": "ab587f6b544b9b95bc65f802a3acdb7454b51d0160d236d361b1dd8cf00f0bd3",
+    "verify.sql": "8ebe872644970d3388cb682c07246f7a7b96629f670f7c2496fcc176d99ce4c9"
+  },
+  "evidence_sha256": {
+    "native-report.json": "f8cdefcadb5510efbc33eb3264e17303d851c5827af2b613fbaed6a6b8e12b12",
+    "sql-review.json": "0cd9450b5fc1c36a386e6f5e05f0508f3bb787f000444a015803c6ccbc7df1bf"
+  }
+}

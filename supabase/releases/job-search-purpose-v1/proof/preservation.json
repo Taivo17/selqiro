@@ -1,0 +1,10 @@
+{
+  "changed_functions": [
+    "public.search_public_jobs_v1(text,text,text,text,text,text,text,integer,jsonb)"
+  ],
+  "all_other_functions_equal": true,
+  "function_count": 39,
+  "rows_before_sha256": "eaf01de2f349128378153b191251c9b046f57ccd2e16dcdf83320f2c76ff1711",
+  "rows_after_sha256": "eaf01de2f349128378153b191251c9b046f57ccd2e16dcdf83320f2c76ff1711",
+  "relation_count": 13
+}

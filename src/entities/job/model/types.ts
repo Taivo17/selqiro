@@ -4,6 +4,8 @@ export const JOB_CATEGORIES = ["administration", "agriculture", "construction", 
 export const JOB_WORKPLACES = ["on_site", "remote", "hybrid"] as const;
 // A task is a request for a specific piece of work, regardless of the publisher's profile type.
 export const JOB_EMPLOYMENT_TYPES = ["permanent", "fixed_term", "contract", "internship", "other", "task"] as const;
+// Search-only aggregate. This is never a valid saved employment subtype.
+export const JOB_SEARCH_EMPLOYMENT_TYPES = ["employment", ...JOB_EMPLOYMENT_TYPES] as const;
 export const JOB_WORKING_TIMES = ["full_time", "part_time", "flexible", "other"] as const;
 export const JOB_SALARY_PERIODS = ["hour", "day", "week", "month", "year", "task"] as const;
 export const JOB_STATUSES = ["draft", "published", "paused", "closed"] as const;
@@ -34,7 +36,7 @@ export type ProfileJobPage = PublicJobPage & Readonly<{seller_slug: string; iden
 export type OwnerJobPage = JobPage<OwnerJob, OwnerJobCursor> & Readonly<{actor_user_id: string; identity_id: string}>;
 export type JobSearch = Readonly<{query: string; category: JobContent["category"] | null; countryCode: string | null;
   city: string | null; workplaceType: JobContent["workplaceType"] | null;
-  employmentType: JobContent["employmentType"]; workingTime: JobContent["workingTime"]}>;
+  employmentType: (typeof JOB_SEARCH_EMPLOYMENT_TYPES)[number] | null; workingTime: JobContent["workingTime"]}>;
 export const EMPTY_JOB_SEARCH: JobSearch = Object.freeze({query: "", category: null, countryCode: null, city: null,
   workplaceType: null, employmentType: null, workingTime: null});
 export type JobPolicy = Readonly<{documentId: string; version: string; contentHash: string; title: string; body: string; locale: string}>;

@@ -1,0 +1,170 @@
+{
+  "format": "selqiro-job-search-purpose-independent-sql-review-v1",
+  "result": "PASS",
+  "blocking_findings": [],
+  "boundary": "Independent static source/metadata-delta/hash and synthetic receipt-parser review only. No SQL or production operation executed by this reviewer. Native PostgreSQL evidence below was produced by the separate SQL agent with synthetic data and an explicit fixture-only BASE adaptation.",
+  "native_execution": false,
+  "checks": [
+    {
+      "name": "exact_body_delta",
+      "result": "PASS",
+      "detail": "Only the search allowlist and employment predicate differ from the accepted search definition; inverse replacement restores every byte."
+    },
+    {
+      "name": "search_only_before_pagination",
+      "result": "PASS",
+      "detail": "employment excludes task and includes NULL; all/task/exact-subtype branches retain prior behavior; predicate precedes cursor and limit."
+    },
+    {
+      "name": "target_metadata_preserved",
+      "result": "PASS",
+      "detail": "Owner, direct ACL, security-definer, language, stability, strictness, parallel/leakproof flags, return type, argument names/defaults and config are identical; only body hash changes."
+    },
+    {
+      "name": "accepted_input_pins",
+      "result": "PASS",
+      "detail": "All five accepted source/catalog input hashes match; accepted commit/tree/file-count are explicit pins, not a claim of freshly read production state."
+    },
+    {
+      "name": "sql_files_manifest",
+      "result": "PASS",
+      "detail": "Every listed SQL file matches sql-files.json."
+    },
+    {
+      "name": "receipt_fingerprints",
+      "result": "PASS",
+      "detail": "Independent local JSONB-style serialization reproduces the three published SHA256 fingerprints."
+    },
+    {
+      "name": "preflight.sql_catalog_identity",
+      "result": "PASS",
+      "detail": "Every embedded catalog recognition block is byte-identical to catalog-query.sql."
+    },
+    {
+      "name": "apply.sql_catalog_identity",
+      "result": "PASS",
+      "detail": "Every embedded catalog recognition block is byte-identical to catalog-query.sql."
+    },
+    {
+      "name": "verify.sql_catalog_identity",
+      "result": "PASS",
+      "detail": "Every embedded catalog recognition block is byte-identical to catalog-query.sql."
+    },
+    {
+      "name": "transaction_and_acknowledgement",
+      "result": "PASS",
+      "detail": "One guarded replacement is checked within the write transaction; COMMIT occurs before a new read-only snapshot checks afterstate and emits acknowledgement."
+    },
+    {
+      "name": "independent_verify",
+      "result": "PASS",
+      "detail": "Separate verification requires exact afterstate in a read-only transaction; preflight also uses read-only/ROLLBACK and unknown is not trusted."
+    },
+    {
+      "name": "only_one_function_replacement",
+      "result": "PASS",
+      "detail": "Only search_public_jobs_v1 is replaced; no row DML, table/policy/role/ACL changes or extra function creation is present. Transactional/advisory locks and SET LOCAL bounds are intentional."
+    },
+    {
+      "name": "visibility_and_write_gates_pinned",
+      "result": "PASS",
+      "detail": "Accepted publication/account-availability/block/hide gates and projection/cursor remain in search; current writer/account dependencies are additionally pinned and unchanged."
+    },
+    {
+      "name": "metadata_only_recognition",
+      "result": "PASS",
+      "detail": "Catalog recognition queries pg_catalog metadata and privilege expressions; no application/Auth/account/Storage rows are selected or exported."
+    },
+    {
+      "name": "receipt_parser_strictness",
+      "result": "PASS",
+      "detail": "Independently exercised four valid and five invalid synthetic receipt envelopes. Rejects uncommitted/before apply and verify, wrong read-only flag, drifted fingerprint and non-boolean recognition. This is not SQL execution."
+    }
+  ],
+  "reviewed_files": {
+    "sql/release/README.md": {
+      "bytes": 7064,
+      "sha256": "83743cd6b6186c1ace632c8528bd8f91f8bdea7724db0777eb9f00400fb8196f"
+    },
+    "sql/release/apply.sql": {
+      "bytes": 293523,
+      "sha256": "ab587f6b544b9b95bc65f802a3acdb7454b51d0160d236d361b1dd8cf00f0bd3"
+    },
+    "sql/release/catalog-query.sql": {
+      "bytes": 24728,
+      "sha256": "c46d0e28821cdb5669a73650620f2365a8dbfa136f1a06b8da952d131860c7cb"
+    },
+    "sql/release/execution-prerequisite.sql": {
+      "bytes": 269,
+      "sha256": "feb22d43e71edd774b9478b6dbca3b97ab3a6c7f8f399b1abcc62a33938ab4f4"
+    },
+    "sql/release/expected-contract.json": {
+      "bytes": 78837,
+      "sha256": "f9f9436474bd0e41ad8a94d8c26e4f180344d589825417a820b4c5e37096196d"
+    },
+    "sql/release/preflight.sql": {
+      "bytes": 72831,
+      "sha256": "40a830df6425a9a9e10d8ec4a73443f5d1d2b6ada163d3fbc3ea618ee8474523"
+    },
+    "sql/release/receipt-pins.json": {
+      "bytes": 330,
+      "sha256": "06ffb736c2992fae0af40e5f0674ed4ea1f5ce289e889ac2ed00407b0b4565ad"
+    },
+    "sql/release/search-public-jobs.sql": {
+      "bytes": 3421,
+      "sha256": "a0796b243026b4ec53a3e0a50c2d9e435d06a23cc19de58d279a34f846f84daa"
+    },
+    "sql/release/source-pins.json": {
+      "bytes": 1248,
+      "sha256": "600c5d55972980c35578e0ad41c53be0b6e74902ca40cb82b5ccf4714360b7cd"
+    },
+    "sql/release/sql-files.json": {
+      "bytes": 627,
+      "sha256": "b3f18d1861d408a81951fb809a50a085fb871fcfc57d314b063186b6522bb366"
+    },
+    "sql/release/sql_contract.py": {
+      "bytes": 3522,
+      "sha256": "8e7f80a4abbce991983e2552725f6b1eec99cce9e0e43319720e875222a24682"
+    },
+    "sql/release/target-deltas.json": {
+      "bytes": 2242,
+      "sha256": "c59ec655145fccfb23a857ed0aa459fd9bfd6b6f378354bf9f304b0e3751826f"
+    },
+    "sql/release/verify.sql": {
+      "bytes": 144952,
+      "sha256": "8ebe872644970d3388cb682c07246f7a7b96629f670f7c2496fcc176d99ce4c9"
+    },
+    "sql/generator/build.py": {
+      "bytes": 15073,
+      "sha256": "c8b8312ec8f10a0f0d15d64cc347ae645a494a2f15fe2d9aa459f7e26143fc91"
+    },
+    "sql/proof/native-report.json": {
+      "bytes": 7066,
+      "sha256": "f8cdefcadb5510efbc33eb3264e17303d851c5827af2b613fbaed6a6b8e12b12"
+    },
+    "sql/proof/fixture-provenance.json": {
+      "bytes": 3312,
+      "sha256": "fbd8096a8dea5f44a556fd7e5f1c927a0ab12016851ea4d143e46c3ecfde8704"
+    },
+    "sql/proof/preservation.json": {
+      "bytes": 386,
+      "sha256": "b6032132e4debb37e3048147920318da5cd6210119e5d5fb0e5de48566e2089c"
+    }
+  },
+  "native_report_other_agent": {
+    "path": "sql/proof/native-report.json",
+    "postgres": "17.6",
+    "counts": {
+      "passed": 58,
+      "failed": 0
+    },
+    "production_executed": false,
+    "test_only_base_adaptation": true,
+    "target_metadata_exact": true
+  },
+  "limitations": [
+    "The live catalog must still match exact production BASE and BEFORE pins at install time. No fresh production observation was made here.",
+    "The native fixture substitutes hosted Auth/Storage/avatar boundaries and adapts only test BASE; production target BEFORE/AFTER metadata remains exact.",
+    "This review does not claim browser layout or live deployment verification."
+  ]
+}

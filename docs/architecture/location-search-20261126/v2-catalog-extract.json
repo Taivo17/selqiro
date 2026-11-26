@@ -1,0 +1,308 @@
+{
+  "read_only": true,
+  "source_commit": "2b3407fee17f4d19594ce45647a1739b26249835",
+  "production_queried": false,
+  "saved_evidence_only": true,
+  "historical_catalog_source": "supabase/repairs/20261116_jobs_public/catalog-pins.json#/after_facts/existing_relations",
+  "relations": [
+    {
+      "name": "public.horse_offers",
+      "indexes": [
+        {
+          "name": "public.horse_offers_active_until_idx",
+          "ready": true,
+          "valid": true,
+          "unique": false,
+          "definition": "CREATE INDEX horse_offers_active_until_idx ON public.horse_offers USING btree (active_until) WHERE (status = 'published'::text)"
+        },
+        {
+          "name": "public.horse_offers_identity_status_updated_idx",
+          "ready": true,
+          "valid": true,
+          "unique": false,
+          "definition": "CREATE INDEX horse_offers_identity_status_updated_idx ON public.horse_offers USING btree (identity_id, status, updated_at DESC, id DESC)"
+        },
+        {
+          "name": "public.horse_offers_pkey",
+          "ready": true,
+          "valid": true,
+          "unique": true,
+          "definition": "CREATE UNIQUE INDEX horse_offers_pkey ON public.horse_offers USING btree (id)"
+        },
+        {
+          "name": "public.horse_offers_public_city_idx",
+          "ready": true,
+          "valid": true,
+          "unique": false,
+          "definition": "CREATE INDEX horse_offers_public_city_idx ON public.horse_offers USING btree (market_country_code, lower(city), published_at DESC, id DESC) WHERE (status = 'published'::text)"
+        },
+        {
+          "name": "public.horse_offers_public_market_type_idx",
+          "ready": true,
+          "valid": true,
+          "unique": false,
+          "definition": "CREATE INDEX horse_offers_public_market_type_idx ON public.horse_offers USING btree (market_country_code, offer_type, published_at DESC, id DESC) WHERE (status = 'published'::text)"
+        },
+        {
+          "name": "public.horse_offers_search_vector_idx",
+          "ready": true,
+          "valid": true,
+          "unique": false,
+          "definition": "CREATE INDEX horse_offers_search_vector_idx ON public.horse_offers USING gin (search_vector)"
+        }
+      ],
+      "location_columns": [
+        {
+          "acl": [],
+          "name": "market_country_code",
+          "type": "text",
+          "default": "'EE'::text",
+          "notnull": true,
+          "identity": "",
+          "position": 7,
+          "generated": ""
+        },
+        {
+          "acl": [],
+          "name": "horse_location_country_code",
+          "type": "text",
+          "default": "'EE'::text",
+          "notnull": true,
+          "identity": "",
+          "position": 8,
+          "generated": ""
+        },
+        {
+          "acl": [],
+          "name": "city",
+          "type": "text",
+          "default": null,
+          "notnull": false,
+          "identity": "",
+          "position": 26,
+          "generated": ""
+        },
+        {
+          "acl": [],
+          "name": "region",
+          "type": "text",
+          "default": null,
+          "notnull": false,
+          "identity": "",
+          "position": 27,
+          "generated": ""
+        },
+        {
+          "acl": [],
+          "name": "location_text",
+          "type": "text",
+          "default": null,
+          "notnull": false,
+          "identity": "",
+          "position": 28,
+          "generated": ""
+        },
+        {
+          "acl": [],
+          "name": "horse_lat",
+          "type": "double precision",
+          "default": null,
+          "notnull": false,
+          "identity": "",
+          "position": 29,
+          "generated": ""
+        },
+        {
+          "acl": [],
+          "name": "horse_lng",
+          "type": "double precision",
+          "default": null,
+          "notnull": false,
+          "identity": "",
+          "position": 30,
+          "generated": ""
+        }
+      ]
+    },
+    {
+      "name": "public.listings",
+      "indexes": [
+        {
+          "name": "public.listings_pkey",
+          "ready": true,
+          "valid": true,
+          "unique": true,
+          "definition": "CREATE UNIQUE INDEX listings_pkey ON public.listings USING btree (id)"
+        }
+      ],
+      "location_columns": [
+        {
+          "acl": [],
+          "name": "country",
+          "type": "text",
+          "default": null,
+          "notnull": false,
+          "identity": "",
+          "position": 10,
+          "generated": ""
+        },
+        {
+          "acl": [],
+          "name": "city",
+          "type": "text",
+          "default": null,
+          "notnull": false,
+          "identity": "",
+          "position": 11,
+          "generated": ""
+        },
+        {
+          "acl": [],
+          "name": "location",
+          "type": "text",
+          "default": null,
+          "notnull": false,
+          "identity": "",
+          "position": 12,
+          "generated": ""
+        },
+        {
+          "acl": [],
+          "name": "listing_lat",
+          "type": "double precision",
+          "default": null,
+          "notnull": false,
+          "identity": "",
+          "position": 55,
+          "generated": ""
+        },
+        {
+          "acl": [],
+          "name": "listing_lng",
+          "type": "double precision",
+          "default": null,
+          "notnull": false,
+          "identity": "",
+          "position": 56,
+          "generated": ""
+        }
+      ]
+    },
+    {
+      "name": "public.services",
+      "indexes": [
+        {
+          "name": "public.services_identity_status_order_idx",
+          "ready": true,
+          "valid": true,
+          "unique": false,
+          "definition": "CREATE INDEX services_identity_status_order_idx ON public.services USING btree (identity_id, status, sort_order, created_at DESC)"
+        },
+        {
+          "name": "public.services_pkey",
+          "ready": true,
+          "valid": true,
+          "unique": true,
+          "definition": "CREATE UNIQUE INDEX services_pkey ON public.services USING btree (id)"
+        },
+        {
+          "name": "public.services_public_discovery_idx",
+          "ready": true,
+          "valid": true,
+          "unique": false,
+          "definition": "CREATE INDEX services_public_discovery_idx ON public.services USING btree (country, city, category, subcategory, created_at DESC) WHERE (status = 'published'::text)"
+        }
+      ],
+      "location_columns": [
+        {
+          "acl": [],
+          "name": "country",
+          "type": "text",
+          "default": null,
+          "notnull": false,
+          "identity": "",
+          "position": 11,
+          "generated": ""
+        },
+        {
+          "acl": [],
+          "name": "city",
+          "type": "text",
+          "default": null,
+          "notnull": false,
+          "identity": "",
+          "position": 12,
+          "generated": ""
+        },
+        {
+          "acl": [],
+          "name": "location",
+          "type": "text",
+          "default": null,
+          "notnull": false,
+          "identity": "",
+          "position": 13,
+          "generated": ""
+        },
+        {
+          "acl": [],
+          "name": "service_lat",
+          "type": "double precision",
+          "default": null,
+          "notnull": false,
+          "identity": "",
+          "position": 14,
+          "generated": ""
+        },
+        {
+          "acl": [],
+          "name": "service_lng",
+          "type": "double precision",
+          "default": null,
+          "notnull": false,
+          "identity": "",
+          "position": 15,
+          "generated": ""
+        }
+      ]
+    }
+  ],
+  "accepted_job_contract_source": "supabase/releases/account-job-write-fence-v1/expected-contract.json#/base/tables/2",
+  "job_indexes": [
+    {
+      "name": "public.jobs_owner_cursor_idx",
+      "ready": true,
+      "valid": true,
+      "unique": false,
+      "definition": "CREATE INDEX jobs_owner_cursor_idx ON public.jobs USING btree (identity_id, created_at DESC, id DESC)"
+    },
+    {
+      "name": "public.jobs_pkey",
+      "ready": true,
+      "valid": true,
+      "unique": true,
+      "definition": "CREATE UNIQUE INDEX jobs_pkey ON public.jobs USING btree (id)"
+    },
+    {
+      "name": "public.jobs_profile_cursor_idx",
+      "ready": true,
+      "valid": true,
+      "unique": false,
+      "definition": "CREATE INDEX jobs_profile_cursor_idx ON public.jobs USING btree (identity_id, published_at DESC, id DESC) WHERE (status = 'published'::text)"
+    },
+    {
+      "name": "public.jobs_public_cursor_idx",
+      "ready": true,
+      "valid": true,
+      "unique": false,
+      "definition": "CREATE INDEX jobs_public_cursor_idx ON public.jobs USING btree (published_at DESC, id DESC) WHERE (status = 'published'::text)"
+    },
+    {
+      "name": "public.jobs_public_keywords_idx",
+      "ready": true,
+      "valid": true,
+      "unique": false,
+      "definition": "CREATE INDEX jobs_public_keywords_idx ON public.jobs USING gin (jobs_private.search_document(title, description, category, city, country_code)) WHERE (status = 'published'::text)"
+    }
+  ]
+}

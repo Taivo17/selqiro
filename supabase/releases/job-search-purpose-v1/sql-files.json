@@ -1,0 +1,11 @@
+{
+  "format": "selqiro-job-search-purpose-20261126-v1",
+  "files": {
+    "apply.sql": "ab587f6b544b9b95bc65f802a3acdb7454b51d0160d236d361b1dd8cf00f0bd3",
+    "catalog-query.sql": "c46d0e28821cdb5669a73650620f2365a8dbfa136f1a06b8da952d131860c7cb",
+    "execution-prerequisite.sql": "feb22d43e71edd774b9478b6dbca3b97ab3a6c7f8f399b1abcc62a33938ab4f4",
+    "preflight.sql": "40a830df6425a9a9e10d8ec4a73443f5d1d2b6ada163d3fbc3ea618ee8474523",
+    "search-public-jobs.sql": "a0796b243026b4ec53a3e0a50c2d9e435d06a23cc19de58d279a34f846f84daa",
+    "verify.sql": "8ebe872644970d3388cb682c07246f7a7b96629f670f7c2496fcc176d99ce4c9"
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "format": "selqiro-job-search-purpose-fixture-v1",
+  "postgres_required": "17.6",
+  "accepted_fixture": {
+    "path": "supabase/releases/account-job-write-fence-v1/tests/fixture.sql",
+    "sha256": "b9385b7bcc6976cbc6f0e52d8d51497898c69f58ae526071537611c5c89175cc"
+  },
+  "accepted_writer_overlay": {
+    "supabase/releases/account-job-write-fence-v1/account-availability.sql": "414146879ef910d1c59b1eac3e11d0ae95a59208d62ec6a1c6955de497d11f5d",
+    "supabase/releases/account-job-write-fence-v1/mutate.sql": "8ff15ac856b39f631efc1932360d3712f2642d73a58d945a9f13bd11300b3561"
+  },
+  "reader_sources": [
+    {
+      "function": "jobs_private.is_public",
+      "source": "supabase/repairs/20261121_personal_jobs/03_visibility.sql",
+      "source_sha256": "b470831cdb5b526b4e1e913e29c4a53cbe3fa6fe25f542c125b4143012c1538a",
+      "body_sha256": "78295a2c9e4ffc9c5b837b17c4ad5d577a5e2564285342b8242df175e286a3c1"
+    },
+    {
+      "function": "jobs_private.public_fields",
+      "source": "supabase/repairs/20261121_job_image_read/01_public_fields.sql",
+      "source_sha256": "f77979e3b0f44a8b20c7ad328b2c8f0a1fa2cb2e77f552bf13d2dacd88364c6e",
+      "body_sha256": "5ad00d7c27ae5499447c0a94087ddd719e2b1c4a3e3f2b91dbac04adfba8b377"
+    },
+    {
+      "function": "jobs_private.visible_to_viewer",
+      "source": "supabase/releases/account-job-read-fence-v1/visible-to-viewer.sql",
+      "source_sha256": "cbf49ba81d4aeeea527c8e86b6c0111f3c33a668f7ec129d5f51d6021f7feb8a",
+      "body_sha256": "a4835de45c9ded23d2714f62641f04e3acb1b572346732c26ad00be5c97b4e5c"
+    },
+    {
+      "function": "public.search_public_jobs_v1",
+      "source": "supabase/repairs/20261121_personal_jobs/04_reads.sql",
+      "source_sha256": "37a955eaa74b5685bde1becf46e0f56081a0fedc8a82b2bc89fc751891975a23",
+      "body_sha256": "ec3d96fe4dc460cef8bd646d8ae376e06e8a0f7320508451d83f711879495fc3"
+    }
+  ],
+  "inherited_substitutions": [
+    {
+      "object": "auth.uid()",
+      "reason": "Synthetic JWT GUC reader; no hosted Auth service. Production body and definition remain independently pinned."
+    },
+    {
+      "object": "listing_publication_private.hosted_storage_contract_ready()",
+      "reason": "Unrelated managed storage catalog gate returns true; actual actor gate/authority/locking and all job writes are executed."
+    },
+    {
+      "object": "identity/auth/policy relations",
+      "reason": "Synthetic minimal rows/columns for actual job functions, not a hosted data clone; production catalog remains separately exact-pinned."
+    }
+  ],
+  "additional_substitutions": [
+    {
+      "object": "profile_media_private.slot_url(uuid,text)",
+      "reason": "Unrelated avatar-media boundary returns NULL; real public_fields and all search/visibility/account functions execute."
+    },
+    {
+      "object": "provider controls / block relations",
+      "reason": "Minimal synthetic relations and rows for real hidden-provider/bilateral-block predicates. Production metadata remains independently exact-pinned."
+    }
+  ],
+  "target_metadata_exact": true,
+  "test_only_base_adaptation": "Only BASE metadata is adapted to synthetic fixture facts for transaction tests. Production target BEFORE/AFTER metadata is unchanged. Unmodified production preflight must reject fixture BASE.",
+  "production_data_used": false
+}

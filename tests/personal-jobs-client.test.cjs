@@ -110,7 +110,7 @@ scenario('task search round-trips the existing employment filter and sends no in
 scenario('task search form restores a visible task filter and does not retain a hidden workload selector',()=>{
   const l=load({[F+'model/useJobCategories.ts']:categories});
   const html=renderToStaticMarkup(React.createElement(l(F+'components/JobSearchForm.tsx').default,{value:{...EMPTY_JOB_SEARCH,employmentType:'task'},onSearch(){}}));
-  assert.match(html,/value="task" selected=""/);assert.match(html,/>Tööots<\/option>/);assert.doesNotMatch(html,/value="full_time"/);
+  assert.match(html,/name="job-search-purpose" checked="" value="task"/);assert.match(html,/Otsin tööotsi/);assert.doesNotMatch(html,/value="full_time"/);
 });
 
 scenario('a lost task save response restores the exact same thirteen-key request before any retry or publication',async()=>{

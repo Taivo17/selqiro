@@ -1,0 +1,16 @@
+{
+  "format": "selqiro-job-search-purpose-20261126-v1",
+  "accepted_commit": "2b3407fee17f4d19594ce45647a1739b26249835",
+  "accepted_tree": "b6543039421cd86f4227d18f65edde1ca06e8a05",
+  "accepted_file_count": 2398,
+  "inputs": {
+    "supabase/releases/account-job-read-fence-v1/expected-contract.json": "afb9db46454fe43c6b1995d7d6832b7f4caf2410c50151680cb5d04f4211f394",
+    "supabase/releases/account-job-write-fence-v1/expected-contract.json": "195d742cf44245a4a417e8912a59d5dee8e737ac8d48e2fd93ee6ca10c8c6f30",
+    "supabase/repairs/20261121_personal_jobs/04_reads.sql": "37a955eaa74b5685bde1becf46e0f56081a0fedc8a82b2bc89fc751891975a23",
+    "supabase/releases/account-job-write-fence-v1/catalog-query.sql": "86609dfa791bc36d45fa1d2e6ecbb78b10e526bac59ae1d21b2b5b79ead5e629",
+    "supabase/releases/account-job-write-fence-v1/sql_contract.py": "b4a4d2146a7deeecbbf1e67ee8a63ab51fb1790926a8560585a30c8ea4902543"
+  },
+  "old_search_body_sha256": "ec3d96fe4dc460cef8bd646d8ae376e06e8a0f7320508451d83f711879495fc3",
+  "new_search_body_sha256": "667ca303d06f4c6b2679bf635dd0b6c680c0f31a39bdf41355c8633b03cbce8e",
+  "boundary": "Pins derive from accepted source/catalog facts only. Fresh exact metadata recognition is mandatory before live apply."
+}

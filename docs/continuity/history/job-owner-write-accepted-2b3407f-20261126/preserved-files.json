@@ -1,0 +1,19 @@
+{
+  "format": "selqiro-preserved-handoff-v1",
+  "accepted_commit": "2b3407fee17f4d19594ce45647a1739b26249835",
+  "boundary": "Historical preparation wording is retained exactly. Current state records later acceptance and user priority.",
+  "files": {
+    "docs/99_V2_HANDOFF_NEXT_CHAT.md": {
+      "bytes": 8204,
+      "sha256": "c39c2e428ced38d422b19c6f39a8885d82ce1082af937e707973911c749ac5cc"
+    },
+    "docs/continuity/CURRENT_STATE.json": {
+      "bytes": 8121,
+      "sha256": "8edad996c6b7c83956262b1855c8b0788cdbf97764b0392995d7379c804d2c46"
+    },
+    "docs/continuity/HOSTED_PORTAL.md": {
+      "bytes": 1660,
+      "sha256": "5fd9ed2cd22647972917e28f2517bbcc2fb1e244015a347da656fc1803aa8b33"
+    }
+  }
+}

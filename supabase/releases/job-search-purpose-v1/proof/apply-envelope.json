@@ -1,0 +1,16 @@
+[
+  {
+    "result": {
+      "stage": "apply",
+      "state": "after",
+      "format": "selqiro-job-search-purpose-20261126-v1",
+      "read_only": false,
+      "recognized": true,
+      "fence_verified": true,
+      "base_fingerprint": "cc78cd7c71e1bb7d112185eb491418fd683a9032425c355afb23d7a348e275f9",
+      "account_rows_read": false,
+      "target_fingerprint": "aea906efbfb99b2c4443d7d173f312c2e3c1f3f03b4aa06d841693a0f1204690",
+      "account_rows_exported": false
+    }
+  }
+]

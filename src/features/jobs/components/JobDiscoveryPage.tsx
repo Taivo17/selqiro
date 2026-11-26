@@ -18,7 +18,7 @@ export default function JobDiscoveryPage() {
     <V2DiscoveryTypeSwitcher active="jobs"/>
     <section className={jobPanel}>
       <div className="flex min-w-0 flex-wrap items-start justify-between gap-4"><div><h1 className="text-3xl font-black">{t("jobs")}</h1><p className="mt-2 text-sm text-neutral-600">{t("intro")}</p></div><Link href="/v2/my-area/jobs/new" className={jobButton}>{t("addJob")}</Link></div>
-      <JobSearchForm key={JSON.stringify(search)} value={search} onSearch={value => {change(value); result.reset();}}/>
+      <JobSearchForm value={search} onSearch={value => {change(value); result.reset();}}/>
     </section>
     <section aria-busy={result.loading} aria-label={t("jobs")} className={`${getOfferSectionClass("job")} p-4 sm:p-6`}>
       {result.error ? <div role="alert" className={jobPanel}><p>{t("loadError")}</p><button type="button" className={`${jobSecondary} mt-4`} onClick={result.reload}>{t("retry")}</button></div>

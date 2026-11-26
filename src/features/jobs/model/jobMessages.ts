@@ -2,6 +2,11 @@ export const jobMessages = {
   en: {
     jobs: "Jobs", addJob: "Add a job", editJob: "Edit job", myJobs: "My jobs", myArea: "My Area",
     intro: "Find a job or a specific task and contact the person or business offering the work.",
+    searchPurpose: "What would you like to find?", lookForEmployment: "Find a job position", lookForTasks: "Find tasks and work",
+    lookForEmploymentHelp: "Permanent and fixed-term positions.", lookForTasksHelp: "Work and assignments for you or your business.",
+    allOffers: "All opportunities", allPositions: "All position types",
+    employmentSearchPlaceholder: "For example: gardener or truck driver", taskSearchPlaceholder: "For example: snow clearing, fence repair or hauling",
+    anySearchPlaceholder: "For example: truck driver, snow clearing or hauling", exactCityFilterHelp: "Currently matches the named city or area. Nearby places are not included automatically.",
     createHelp: "Describe the work and publish it as a private person or a business.",
     publishNotice: "Your job will appear in Selqiro's job search and on your public profile. Publishing is free. It stays active for one calendar month.",
     ownerNotice: "This job uses the same link in search and on your profile. Editing does not extend its deadline.",
@@ -66,6 +71,11 @@ export const jobMessages = {
   et: {
     jobs: "Töö", addJob: "Lisa tööpakkumine", editJob: "Muuda tööpakkumist", myJobs: "Minu tööpakkumised", myArea: "Minu ala",
     intro: "Leia töökoht või tööots ja võta töö pakkujaga otse ühendust.",
+    searchPurpose: "Mida soovid leida?", lookForEmployment: "Otsin töökohta", lookForTasks: "Otsin tööotsi",
+    lookForEmploymentHelp: "Püsivad ja tähtajalised töökohad.", lookForTasksHelp: "Tööd ja tellimused sulle või sinu ettevõttele.",
+    allOffers: "Kõik pakkumised", allPositions: "Kõik töösuhte tüübid",
+    employmentSearchPlaceholder: "Näiteks haljastaja või veoautojuht", taskSearchPlaceholder: "Näiteks lumekoristus, aia parandamine või vedu",
+    anySearchPlaceholder: "Näiteks autojuht, lumekoristus või vedu", exactCityFilterHelp: "Praegu otsib sisestatud linna või piirkonna järgi. Lähedasi kohti automaatselt ei kaasata.",
     createHelp: "Kirjelda tööd ja avalda pakkumine eraisiku või ettevõtte nimel.",
     publishNotice: "Tööpakkumine ilmub Selqiro tööotsingus ja sinu avalikul profiilil. Avaldamine on tasuta. Pakkumine kehtib ühe kalendrikuu.",
     ownerNotice: "Tööotsing ja profiil kasutavad sama tööpakkumise linki. Muutmine ei pikenda kehtivusaega.",

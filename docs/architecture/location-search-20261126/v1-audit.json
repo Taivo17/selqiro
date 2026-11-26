@@ -1,0 +1,429 @@
+{
+  "audit_date": "2026-11-26",
+  "source_root": "/workspace/scratch/de90fa9e1734/work/account-job-write-20261125/source",
+  "accepted_commit": "2b3407fee17f4d19594ce45647a1739b26249835",
+  "scope": "Read-only V1 location discovery and source-defined storage/geocoding/paging paths; no live state or production data inspected.",
+  "source_state_note": "Accepted bytes identified by parent. Source handoff prose may predate acceptance of the current release.",
+  "instructions_read": "AGENTS.md",
+  "answer_to_user_recollection": "Yes at SQL level: globally nearest eligible rows, 30 at a time, with no radius/country cutoff. Not fully guaranteed by the complete V1 UI path because of country-biased center geocoding, silent fallback and subsequent same-city reordering.",
+  "findings": [
+    {
+      "id": "V1-01",
+      "title": "Nearest-first SQL implements the effective expanding circle",
+      "assessment": "reusable_concept",
+      "details": "get_marketplace_listings_nearby calculates spherical distance from a supplied point, orders known-coordinate listings by distance then created_at, places unknown-coordinate rows last, and applies LIMIT/OFFSET. There is no radius cutoff, country filter or city filter. The next page therefore draws the next nearest eligible rows globally, rather than expanding a literal radius in steps.",
+      "evidence": [
+        {
+          "path": "supabase/repairs/20261113_provider_controls/10_legacy_search.sql",
+          "line_start": 96,
+          "line_end": 110,
+          "note": "Haversine distance in kilometres"
+        },
+        {
+          "path": "supabase/repairs/20261113_provider_controls/10_legacy_search.sql",
+          "line_start": 124,
+          "line_end": 139,
+          "note": "Visibility/status filters followed by distance ordering and offset paging"
+        },
+        {
+          "path": "src/entities/listing/model/legacyDiscoveryTypes.ts",
+          "line_start": 30,
+          "line_end": 30,
+          "note": "Page size 30"
+        }
+      ]
+    },
+    {
+      "id": "V1-02",
+      "title": "The effective center can silently differ from the displayed city",
+      "assessment": "defect",
+      "details": "The marketplace has a plain city text field, not a structured place selector. The request geocodes it with the active profile country, falling back to Estonia. Failed geocoding silently falls back to profile coordinates while the UI continues to show the typed city. Tokyo with an Estonia profile is therefore not a verified global search path.",
+      "evidence": [
+        {
+          "path": "app/page.tsx",
+          "line_start": 458,
+          "line_end": 484,
+          "note": "Free text center and label"
+        },
+        {
+          "path": "src/entities/listing/api/legacyDiscoveryMarketplace.ts",
+          "line_start": 36,
+          "line_end": 47,
+          "note": "Profile country bias and coordinate fallback"
+        },
+        {
+          "path": "app/api/location/geocode/route.ts",
+          "line_start": 37,
+          "line_end": 48,
+          "note": "Structured city/country Nominatim request and Estonia countrycodes restriction"
+        }
+      ]
+    },
+    {
+      "id": "V1-03",
+      "title": "Client same-city priority overrides nearest-first order",
+      "assessment": "defect",
+      "details": "After server pagination, the page re-sorts all loaded rows: known coordinates first, same city name next, physical distance last. A same-name city may outrank a nearer listing outside its boundary. This can also move earlier cards when another page arrives. Use one authoritative geographic ordering and a stable tie-breaker.",
+      "evidence": [
+        {
+          "path": "app/page.tsx",
+          "line_start": 334,
+          "line_end": 378,
+          "note": "Same-city priority before Haversine distance"
+        }
+      ]
+    },
+    {
+      "id": "V1-04",
+      "title": "Search facets and filters apply after server pagination",
+      "assessment": "defect",
+      "details": "Keyword, categories, condition, prices and location text filter only the already-loaded rows; they are not parameters to the nearby RPC. Facet choices are likewise derived from loaded rows. Matching listings can be omitted from a visible page even though relevant results exist farther into the unfiltered database result set. Filters must precede distance ordering and pagination in a replacement reader.",
+      "evidence": [
+        {
+          "path": "app/page.tsx",
+          "line_start": 136,
+          "line_end": 200,
+          "note": "Facet choices from loaded rows"
+        },
+        {
+          "path": "app/page.tsx",
+          "line_start": 247,
+          "line_end": 327,
+          "note": "Client display filters"
+        },
+        {
+          "path": "src/entities/listing/api/legacyDiscoveryMarketplace.ts",
+          "line_start": 44,
+          "line_end": 47,
+          "note": "RPC receives center and pagination only"
+        }
+      ]
+    },
+    {
+      "id": "V1-05",
+      "title": "Valid zero coordinates are lost or mishandled",
+      "assessment": "defect",
+      "details": "Legacy listing and identity-location writers use value || null, dropping valid latitude 0 or longitude 0. The geocode cache-hit check and a marketplace coordinate check also use truthiness. This is a concrete worldwide correctness defect around the equator and prime meridian.",
+      "evidence": [
+        {
+          "path": "app/sell/page.tsx",
+          "line_start": 565,
+          "line_end": 570,
+          "note": "Listing latitude/longitude use || null"
+        },
+        {
+          "path": "app/my-page/hooks/useLocation.ts",
+          "line_start": 64,
+          "line_end": 71,
+          "note": "Active identity location write uses || null"
+        },
+        {
+          "path": "app/api/location/geocode/route.ts",
+          "line_start": 21,
+          "line_end": 28,
+          "note": "Cache coordinates checked by truthiness"
+        },
+        {
+          "path": "app/page.tsx",
+          "line_start": 312,
+          "line_end": 326,
+          "note": "Coordinate gate uses truthiness"
+        }
+      ]
+    },
+    {
+      "id": "V1-06",
+      "title": "Offset paging is not stable under concurrent catalogue changes",
+      "assessment": "gap",
+      "details": "SQL orders by distance and created_at without a unique final tie-breaker. The shared pager appends rows without deduplicating and uses result_offset. This permits duplicate/skipped rows when catalogue contents change between pages and non-deterministic ties. No live reproduction or performance benchmark was run.",
+      "evidence": [
+        {
+          "path": "supabase/repairs/20261113_provider_controls/10_legacy_search.sql",
+          "line_start": 129,
+          "line_end": 139,
+          "note": "Distance/time order then offset"
+        },
+        {
+          "path": "src/features/legacy-discovery/model/legacyDiscoveryPager.ts",
+          "line_start": 32,
+          "line_end": 40,
+          "note": "Pagination append"
+        },
+        {
+          "path": "src/entities/listing/api/legacyDiscoveryMarketplace.ts",
+          "line_start": 52,
+          "line_end": 53,
+          "note": "Offset advances by returned row count"
+        }
+      ]
+    },
+    {
+      "id": "V1-07",
+      "title": "A structured place selector exists but needs international fixes",
+      "assessment": "partly_reusable",
+      "details": "LocationAutocomplete returns country, city, region, provider/id and coordinates and displays disambiguating display names. It debounces 350 ms and aborts stale suggestions. However it defaults to Estonia, and locality normalization retains only a-z and 0-9, stripping Japanese and other non-Latin scripts. Locality deduplication does not include country/provider identity. The V1 marketplace search itself does not use this selector.",
+      "evidence": [
+        {
+          "path": "app/components/LocationAutocomplete.tsx",
+          "line_start": 20,
+          "line_end": 41,
+          "note": "Structured selected place and props"
+        },
+        {
+          "path": "app/components/LocationAutocomplete.tsx",
+          "line_start": 56,
+          "line_end": 112,
+          "note": "ASCII normalization and locality ranking/dedup"
+        },
+        {
+          "path": "app/components/LocationAutocomplete.tsx",
+          "line_start": 119,
+          "line_end": 127,
+          "note": "Default country Estonia"
+        },
+        {
+          "path": "app/components/LocationAutocomplete.tsx",
+          "line_start": 143,
+          "line_end": 242,
+          "note": "Debounce, abort, stale guard and selection"
+        },
+        {
+          "path": "app/components/LocationAutocomplete.tsx",
+          "line_start": 280,
+          "line_end": 282,
+          "note": "Visible disambiguating labels"
+        }
+      ]
+    },
+    {
+      "id": "V1-08",
+      "title": "Geocoding paths need reliable caching, ambiguity handling and provider controls",
+      "assessment": "gap",
+      "details": "The geocode route looks up city_geocache by free-text country/city and selects the first matching provider result or rows[0]; same-named localities in one country cannot be distinguished by that key. The search route calls Nominatim for every request and only writes location_search_cache; it does not read that table. The routes have no explicit request timeout/rate limiter, and cache write errors are not handled. Cache schema/ACL effectiveness and current provider policy were not checked live.",
+      "evidence": [
+        {
+          "path": "app/api/location/geocode/route.ts",
+          "line_start": 21,
+          "line_end": 28,
+          "note": "City cache read"
+        },
+        {
+          "path": "app/api/location/geocode/route.ts",
+          "line_start": 60,
+          "line_end": 105,
+          "note": "First-match/first-row choice and ignored cache upsert result"
+        },
+        {
+          "path": "app/api/location/search/route.ts",
+          "line_start": 23,
+          "line_end": 37,
+          "note": "External search request"
+        },
+        {
+          "path": "app/api/location/search/route.ts",
+          "line_start": 84,
+          "line_end": 104,
+          "note": "Write-only search cache flow"
+        },
+        {
+          "path": "lib/supabase.ts",
+          "line_start": 1,
+          "line_end": 6,
+          "note": "Routes use anonymous public Supabase client"
+        }
+      ]
+    },
+    {
+      "id": "V1-09",
+      "title": "Public coordinates require a precision-aware contract",
+      "assessment": "gap",
+      "details": "The nearby SQL returns raw listing latitude/longitude and derives exact-looking distance from them, without a precision policy in that function. The architecture document already specifies approximate private locations, business/service areas, and approximate distance wording. The audit does not establish that any stored production point is private or exposed improperly. A new public reader should use deliberately public coordinates and declare distance precision.",
+      "evidence": [
+        {
+          "path": "supabase/repairs/20261113_provider_controls/10_legacy_search.sql",
+          "line_start": 89,
+          "line_end": 110,
+          "note": "Raw location fields and distance"
+        },
+        {
+          "path": "docs/architecture/location_privacy.md",
+          "line_start": 1,
+          "line_end": 200,
+          "note": "Existing location privacy guidance; inspect full short document"
+        }
+      ]
+    },
+    {
+      "id": "V1-10",
+      "title": "Scope cancellation and server visibility filtering are useful existing foundations",
+      "assessment": "reusable_pattern",
+      "details": "Legacy discovery already uses active identity/account read scope, aborts or rejects stale requests, and resets pagination on filter/scope changes. November 13 legacy readers filter hidden providers and user blocks before pagination. New work must preserve the latest accepted account-availability contracts rather than copy this older reader body wholesale.",
+      "evidence": [
+        {
+          "path": "src/features/legacy-discovery/model/legacyDiscoveryPager.ts",
+          "line_start": 12,
+          "line_end": 58,
+          "note": "Retirement, abort, timeout and reset"
+        },
+        {
+          "path": "src/features/legacy-discovery/model/useLegacyDiscoveryPager.ts",
+          "line_start": 12,
+          "line_end": 21,
+          "note": "Scope/key gating"
+        },
+        {
+          "path": "supabase/repairs/20261113_provider_controls/10_legacy_search.sql",
+          "line_start": 71,
+          "line_end": 72,
+          "note": "Viewer hidden provider scope"
+        },
+        {
+          "path": "supabase/repairs/20261113_provider_controls/10_legacy_search.sql",
+          "line_start": 124,
+          "line_end": 128,
+          "note": "Visibility and active-status gates"
+        }
+      ]
+    },
+    {
+      "id": "V1-11",
+      "title": "V2 product bridge does not forward coordinates",
+      "assessment": "integration_gap",
+      "details": "getProductListings accepts centerLat/centerLng, but when V2 integration is enabled it calls search_public_listings_v2 with only limit/offset. Its legacy branch does forward coordinates. The current product-discovery hook call supplies only limit 30 and offset 0. This belongs to the parallel V2 audit but explains why V1 capability is not automatically available in V2.",
+      "evidence": [
+        {
+          "path": "src/entities/listing/api/getProductListings.ts",
+          "line_start": 20,
+          "line_end": 43,
+          "note": "V2 and legacy branches"
+        },
+        {
+          "path": "src/features/product-discovery/model/useProductDiscoveryListings.ts",
+          "line_start": 31,
+          "line_end": 31,
+          "note": "Current caller arguments"
+        }
+      ]
+    }
+  ],
+  "additional_observations": [
+    "No automatic navigator.geolocation request was found in the inspected V1 marketplace discovery path.",
+    "The marketplace center and filters are React state; no URL/local-storage persistence was found in that path.",
+    "V1 root cards show city/country but do not render the returned distance_km value.",
+    "Baseline idx_listings_coords is a btree(listing_lat, listing_lng); the audited function calculates and sorts distances rather than expressing indexed nearest-neighbor ordering. No query plan or scale test was run.",
+    "No equivalent V1 service-coverage or jobs nearest-first search implementation was found. Coordinates existing on service rows alone do not implement service-area eligibility.",
+    "No valid-worldwide distance claim should imply travel time or road distance; the audited expression is spherical straight-line distance."
+  ],
+  "validation": {
+    "method": "Static source inspection with bounded line extracts and exact source-file hashes",
+    "source_edits": false,
+    "live_writes": false,
+    "live_geocoder_requests": false,
+    "tests_run": false,
+    "production_database_verified": false
+  },
+  "files": [
+    {
+      "path": "AGENTS.md",
+      "sha256": "e3447d84251880fb34cfae09131cb4c57471529bbfe60976a3245793cf621627",
+      "bytes": 327,
+      "lines": 5
+    },
+    {
+      "path": "app/api/location/geocode/route.ts",
+      "sha256": "5105b13d137f04af6a5991e81eee3eee5ff75f258b0aa8f110b9b8fdaa614861",
+      "bytes": 3104,
+      "lines": 121
+    },
+    {
+      "path": "app/api/location/search/route.ts",
+      "sha256": "8ef10715814bad2ca05fd8c8ce59b2ae3c8ec7aeeab57330f4777803f6416edd",
+      "bytes": 3230,
+      "lines": 113
+    },
+    {
+      "path": "app/components/LocationAutocomplete.tsx",
+      "sha256": "4e6e449fbf0cb20b8df82b9caddf031351518b06354cae52d3cf3625f8801330",
+      "bytes": 8082,
+      "lines": 289
+    },
+    {
+      "path": "app/my-page/hooks/useLocation.ts",
+      "sha256": "9384a015bb8d156868c3afaf2aa0580225f792418c286a590a3addd2fdebeef3",
+      "bytes": 2178,
+      "lines": 93
+    },
+    {
+      "path": "app/page.tsx",
+      "sha256": "cd8b13aa6ff26e1e12167652fb72bacbba1718e792f43e3a2c66005f78026822",
+      "bytes": 25211,
+      "lines": 699
+    },
+    {
+      "path": "app/sell/page.tsx",
+      "sha256": "6b141078f414edb45be46f5049e7578ad49b0f8e02f0d3fffab24d67000140ac",
+      "bytes": 38369,
+      "lines": 1269
+    },
+    {
+      "path": "docs/architecture/location_privacy.md",
+      "sha256": "0dba0b01ac6b91ad2ae85df8fdba123d4d49ea8b5d1931a663885b11706b0ea0",
+      "bytes": 3590,
+      "lines": 217
+    },
+    {
+      "path": "lib/supabase.ts",
+      "sha256": "88b2aacb51d2931820c8529465474678eba8e00fc194724c4903fc681a0a990f",
+      "bytes": 250,
+      "lines": 6
+    },
+    {
+      "path": "src/entities/listing/api/getProductListings.ts",
+      "sha256": "7b17a3976bfbdfb78efd8b085c558168f4d509c405f7b856d3cd831320224076",
+      "bytes": 1919,
+      "lines": 52
+    },
+    {
+      "path": "src/entities/listing/api/legacyDiscoveryMarketplace.ts",
+      "sha256": "b89fa8142d189b4d0531dad419f4660aca321d7f59750530d3b05e17553c3503",
+      "bytes": 3592,
+      "lines": 54
+    },
+    {
+      "path": "src/entities/listing/model/legacyDiscoveryTypes.ts",
+      "sha256": "5cccfd4e2efaef9f9f9e2c0cb39051e770af65edcf8c7f5c886031edd56bb911",
+      "bytes": 1977,
+      "lines": 31
+    },
+    {
+      "path": "src/features/legacy-discovery/model/legacyDiscoveryPager.ts",
+      "sha256": "851f0f2f067795fa68e193b95fcbaaa1e580b16a3141ec3d76557d66e2275289",
+      "bytes": 3871,
+      "lines": 61
+    },
+    {
+      "path": "src/features/legacy-discovery/model/useLegacyDiscoveryPager.ts",
+      "sha256": "a518fb382bfa97d18ac6b2e4a42a1d92f6e62a12d385983e24ded6f294b740a6",
+      "bytes": 1375,
+      "lines": 22
+    },
+    {
+      "path": "src/features/product-discovery/model/useProductDiscoveryListings.ts",
+      "sha256": "1fe5c01415d5d0980ed5a06bdde975d6603073f844c5d0688237eb7a42294aec",
+      "bytes": 1346,
+      "lines": 62
+    },
+    {
+      "path": "supabase/migrations/20260722173530_baseline_20260722.sql",
+      "sha256": "7ca065f92f01c0f38ada5f5a50d2a0fc5b716f5291d1525d398023b7db59da3f",
+      "bytes": 221677,
+      "lines": 7166
+    },
+    {
+      "path": "supabase/repairs/20261113_provider_controls/10_legacy_search.sql",
+      "sha256": "0665925fb5b4e5ac322bf2d4e5d9d72332d4b2cb04fe3b0efde63510f991fea2",
+      "bytes": 5478,
+      "lines": 140
+    }
+  ]
+}

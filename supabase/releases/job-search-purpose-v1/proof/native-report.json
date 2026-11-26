@@ -1,0 +1,309 @@
+{
+  "format": "selqiro-job-search-purpose-native-tests-v1",
+  "postgres": "17.6",
+  "production_executed": false,
+  "production_rows_used": false,
+  "test_only_base_adaptation": true,
+  "target_metadata_exact": true,
+  "counts": {
+    "passed": 58,
+    "failed": 0
+  },
+  "tests": [
+    {
+      "name": "native_PostgreSQL_17_6",
+      "passed": true,
+      "duration_ms": 3
+    },
+    {
+      "name": "production_jsonb_fingerprints_are_canonical",
+      "passed": true,
+      "duration_ms": 4
+    },
+    {
+      "name": "accepted_old_target_body_metadata_and_ACL_are_exact",
+      "passed": true,
+      "duration_ms": 1
+    },
+    {
+      "name": "unmodified_production_preflight_rejects_synthetic_base",
+      "passed": true,
+      "duration_ms": 31
+    },
+    {
+      "name": "adapted_metadata_preflight_is_read_only_before",
+      "passed": true,
+      "duration_ms": 28
+    },
+    {
+      "name": "old_search_rejects_search_only_sentinel",
+      "passed": true,
+      "duration_ms": 1
+    },
+    {
+      "name": "unknown_target_ACL_refuses_before_DDL",
+      "passed": true,
+      "duration_ms": 99
+    },
+    {
+      "name": "injected_after_DDL_failure_rolls_back_without_acknowledgement",
+      "passed": true,
+      "duration_ms": 81
+    },
+    {
+      "name": "one_apply_commits_before_exact_after_acknowledgement",
+      "passed": true,
+      "duration_ms": 128
+    },
+    {
+      "name": "independent_connection_verifies_committed_after",
+      "passed": true,
+      "duration_ms": 130
+    },
+    {
+      "name": "only_search_function_body_changes_and_all_rows_are_preserved",
+      "passed": true,
+      "duration_ms": 14
+    },
+    {
+      "name": "all_and_each_existing_subtype_keep_complete_JSON_results",
+      "passed": true,
+      "duration_ms": 54
+    },
+    {
+      "name": "employment_includes_every_non_task_and_NULL_subtype",
+      "passed": true,
+      "duration_ms": 32
+    },
+    {
+      "name": "interleaved_tied_cursor_pages_employment",
+      "passed": true,
+      "duration_ms": 155
+    },
+    {
+      "name": "interleaved_tied_cursor_pages_task",
+      "passed": true,
+      "duration_ms": 28
+    },
+    {
+      "name": "interleaved_tied_cursor_pages_null",
+      "passed": true,
+      "duration_ms": 170
+    },
+    {
+      "name": "interleaved_tied_cursor_pages_contract",
+      "passed": true,
+      "duration_ms": 28
+    },
+    {
+      "name": "purpose_filter_runs_before_cursor_and_page_limit",
+      "passed": true,
+      "duration_ms": 7
+    },
+    {
+      "name": "common_filters_category",
+      "passed": true,
+      "duration_ms": 18
+    },
+    {
+      "name": "common_filters_country",
+      "passed": true,
+      "duration_ms": 14
+    },
+    {
+      "name": "common_filters_city_case_and_trim",
+      "passed": true,
+      "duration_ms": 16
+    },
+    {
+      "name": "common_filters_workplace",
+      "passed": true,
+      "duration_ms": 14
+    },
+    {
+      "name": "common_filters_working_time",
+      "passed": true,
+      "duration_ms": 21
+    },
+    {
+      "name": "common_filters_keyword",
+      "passed": true,
+      "duration_ms": 44
+    },
+    {
+      "name": "common_filters_combined",
+      "passed": true,
+      "duration_ms": 2
+    },
+    {
+      "name": "unmatched_filters_return_empty_envelope",
+      "passed": true,
+      "duration_ms": 6
+    },
+    {
+      "name": "existing_invalid_input_validation_is_unchanged",
+      "passed": true,
+      "duration_ms": 8
+    },
+    {
+      "name": "publication_gate_paused",
+      "passed": true,
+      "duration_ms": 129
+    },
+    {
+      "name": "publication_gate_closed",
+      "passed": true,
+      "duration_ms": 105
+    },
+    {
+      "name": "publication_gate_draft",
+      "passed": true,
+      "duration_ms": 127
+    },
+    {
+      "name": "publication_gate_expired",
+      "passed": true,
+      "duration_ms": 126
+    },
+    {
+      "name": "publication_gate_inactive_identity",
+      "passed": true,
+      "duration_ms": 33
+    },
+    {
+      "name": "publication_gate_missing_slug",
+      "passed": true,
+      "duration_ms": 32
+    },
+    {
+      "name": "publication_gate_inactive_business",
+      "passed": true,
+      "duration_ms": 70
+    },
+    {
+      "name": "canonical_account_gate_banned",
+      "passed": true,
+      "duration_ms": 45
+    },
+    {
+      "name": "canonical_account_gate_deleted",
+      "passed": true,
+      "duration_ms": 46
+    },
+    {
+      "name": "canonical_account_gate_missing_state",
+      "passed": true,
+      "duration_ms": 42
+    },
+    {
+      "name": "canonical_account_gate_nonfinite_created",
+      "passed": true,
+      "duration_ms": 28
+    },
+    {
+      "name": "nonactive_account_state_remains_fail_closed",
+      "passed": true,
+      "duration_ms": 12
+    },
+    {
+      "name": "banned_creator_does_not_replace_canonical_owner",
+      "passed": true,
+      "duration_ms": 13
+    },
+    {
+      "name": "bilateral_block_outgoing",
+      "passed": true,
+      "duration_ms": 25
+    },
+    {
+      "name": "bilateral_block_incoming",
+      "passed": true,
+      "duration_ms": 25
+    },
+    {
+      "name": "active_hidden_provider_excluded_before_limit",
+      "passed": true,
+      "duration_ms": 18
+    },
+    {
+      "name": "expired_hide_does_not_filter_provider",
+      "passed": true,
+      "duration_ms": 16
+    },
+    {
+      "name": "anon_and_authenticated_RPC_allowed_but_tables_helpers_denied",
+      "passed": true,
+      "duration_ms": 94
+    },
+    {
+      "name": "search_sentinel_still_rejected_by_normalizer_and_storage_constraint",
+      "passed": true,
+      "duration_ms": 2
+    },
+    {
+      "name": "public_save_RPC_rejects_sentinel_without_job_receipt_or_policy_write",
+      "passed": true,
+      "duration_ms": 27
+    },
+    {
+      "name": "search_works_in_read_only_transaction",
+      "passed": true,
+      "duration_ms": 25
+    },
+    {
+      "name": "second_apply_is_refused",
+      "passed": true,
+      "duration_ms": 55
+    },
+    {
+      "name": "drift_target_config_fails_closed",
+      "passed": true,
+      "duration_ms": 117
+    },
+    {
+      "name": "drift_target_ACL_fails_closed",
+      "passed": true,
+      "duration_ms": 85
+    },
+    {
+      "name": "drift_target_overload_fails_closed",
+      "passed": true,
+      "duration_ms": 85
+    },
+    {
+      "name": "drift_visibility_dependency_fails_closed",
+      "passed": true,
+      "duration_ms": 90
+    },
+    {
+      "name": "drift_account_dependency_fails_closed",
+      "passed": true,
+      "duration_ms": 116
+    },
+    {
+      "name": "drift_write_normalizer_fails_closed",
+      "passed": true,
+      "duration_ms": 165
+    },
+    {
+      "name": "drift_job_table_acl_fails_closed",
+      "passed": true,
+      "duration_ms": 143
+    },
+    {
+      "name": "before_apply_dependency_drift_never_replaces_target",
+      "passed": true,
+      "duration_ms": 90
+    },
+    {
+      "name": "final_rows_and_non_target_metadata_remain_equal",
+      "passed": true,
+      "duration_ms": 33
+    }
+  ],
+  "failure": null,
+  "cleanup": {
+    "pg_ctl_status_exit": 3,
+    "postmaster_pid_absent": true
+  }
+}

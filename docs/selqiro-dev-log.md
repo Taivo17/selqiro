@@ -1,4 +1,31 @@
 
+<!-- SELQIRO_JOB_SEARCH_PURPOSE_PREPARED_20261126 -->
+## 26.11.2026 — töökuulutuse muutmine vastu võetud; otsingusuunad ette valmistatud
+
+`2b3407f` on vastu võetud: raporti täpne puu/SQL/commit-push teekond,
+kasutaja Ready / Production pilt ja muudatuse salvestamise kinnitus.
+Kasutaja kiitis heaks tööotsingu valikud „Otsin töökohta” ja „Otsin tööotsi”
+ning palus uurida V1 valitud keskpunktist üle maailma laienevat asukohaotsingut.
+
+Uus pakett lisab otsingusuunad, toob senised asukohafiltrid nähtavale,
+näitab töökaardil alamtüüpi ja lisab ainult otsingusse kõikide mitte-tööotsade
+serverifiltri. 43 kliendikontrolli, TypeScript, värske Next build,
+58 PostgreSQL ja 35 käivitaja kontrolli läbisid.
+Uue paketi Maci ja tootmise tulemus on ootel.
+
+Asukoha audit kinnitab V1 lähimad-enne SQL-i, kuid leiab riigipõhise vaikimisi
+otsingu, sama linna eelistamise, vaikse vale keskpunkti ja V2 andmepuudused.
+Globaalne lähedusotsing on järgmine eraldi andme- ja serveritöö; selles pakis
+on selle kontrollitud kavand, mitte toimiva geo-otsingu väide. Teenuse puhul
+tuleb arvestada teenindusala, töö puhul tegelikku töökohta, kaubal kättesaamiskohta.
+
+Praegune juhis: `docs/continuity/HOSTED_PORTAL.md`. Uus kasutaja prioriteet
+on tööotsing ning ühine asukohaotsing. Varasem konto/Uudiste/esiletõstmise/
+reklaamide tööjärg säilib backlog'is; vanad NEXT pealkirjad ei käivita seda ise.
+
+---
+
+
 <!-- SELQIRO_ACCOUNT_JOB_WRITE_PREPARED_20261125 -->
 ## 25.11.2026 — sõnumite tulemus vastu võetud; töökuulutuste konto kontroll valmis
 

@@ -1,0 +1,57 @@
+{
+  "format": "selqiro-job-search-purpose-packaged-reproduction-v1",
+  "result": "PASS",
+  "boundary": "Packaged file layout regeneration, parser and Node syntax checks only; no repeated database behavior suite.",
+  "release_file_count": 13,
+  "release_sha256": {
+    "target-deltas.json": "c59ec655145fccfb23a857ed0aa459fd9bfd6b6f378354bf9f304b0e3751826f",
+    "sql-files.json": "b3f18d1861d408a81951fb809a50a085fb871fcfc57d314b063186b6522bb366",
+    "verify.sql": "8ebe872644970d3388cb682c07246f7a7b96629f670f7c2496fcc176d99ce4c9",
+    "expected-contract.json": "f9f9436474bd0e41ad8a94d8c26e4f180344d589825417a820b4c5e37096196d",
+    "README.md": "83743cd6b6186c1ace632c8528bd8f91f8bdea7724db0777eb9f00400fb8196f",
+    "catalog-query.sql": "c46d0e28821cdb5669a73650620f2365a8dbfa136f1a06b8da952d131860c7cb",
+    "apply.sql": "ab587f6b544b9b95bc65f802a3acdb7454b51d0160d236d361b1dd8cf00f0bd3",
+    "execution-prerequisite.sql": "feb22d43e71edd774b9478b6dbca3b97ab3a6c7f8f399b1abcc62a33938ab4f4",
+    "preflight.sql": "40a830df6425a9a9e10d8ec4a73443f5d1d2b6ada163d3fbc3ea618ee8474523",
+    "sql_contract.py": "8e7f80a4abbce991983e2552725f6b1eec99cce9e0e43319720e875222a24682",
+    "search-public-jobs.sql": "a0796b243026b4ec53a3e0a50c2d9e435d06a23cc19de58d279a34f846f84daa",
+    "source-pins.json": "600c5d55972980c35578e0ad41c53be0b6e74902ca40cb82b5ccf4714360b7cd",
+    "receipt-pins.json": "06ffb736c2992fae0af40e5f0674ed4ea1f5ce289e889ac2ed00407b0b4565ad"
+  },
+  "fixtures_byte_identical": true,
+  "receipt_proof_byte_identical": true,
+  "checks": [
+    {
+      "command": [
+        "python3",
+        "-I",
+        "-B",
+        "/workspace/scratch/de90fa9e1734/work/job-search-implementation-20261126/sql/tests/packaged-layout/tests/build_fixture.py"
+      ],
+      "exit_code": 0,
+      "stdout": "{\"format\": \"selqiro-job-search-purpose-20261126-v1\", \"target_count\": 1, \"dependency_count\": 32, \"fingerprints\": {\"base\": \"d17571a9adea218ec8239a48ec43661284efe2af9512f46d165152137a29f336\", \"before\": \"108e169172491836fc38eeac3fdc88cb32a346830d0932b4e70212dfa5ce0b21\", \"after\": \"aea906efbfb99b2c4443d7d173f312c2e3c1f3f03b4aa06d841693a0f1204690\"}, \"body_sha256\": \"667ca303d06f4c6b2679bf635dd0b6c680c0f31a39bdf41355c8633b03cbce8e\", \"sql_bytes\": {\"preflight.sql\": 72831, \"apply.sql\": 293523, \"verify.sql\": 144952}}\nfixture_bytes 85717\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "python3",
+        "-I",
+        "-B",
+        "/workspace/scratch/de90fa9e1734/work/job-search-implementation-20261126/sql/tests/packaged-layout/tests/contract.py"
+      ],
+      "exit_code": 0,
+      "stdout": "{\"result\": \"PASS\", \"passed\": 22, \"failed\": 0}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "node",
+        "--check",
+        "/workspace/scratch/de90fa9e1734/work/job-search-implementation-20261126/sql/tests/packaged-layout/tests/native.mjs"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ]
+}

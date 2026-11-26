@@ -1,0 +1,99 @@
+{
+  "format": "selqiro-job-search-purpose-receipt-tests-v1",
+  "result": "PASS",
+  "counts": {
+    "passed": 22,
+    "failed": 0
+  },
+  "cases": [
+    {
+      "name": "preflight_before_trusted",
+      "passed": true
+    },
+    {
+      "name": "preflight_after_trusted",
+      "passed": true
+    },
+    {
+      "name": "apply_after_trusted",
+      "passed": true
+    },
+    {
+      "name": "verify_after_trusted",
+      "passed": true
+    },
+    {
+      "name": "unknown_preflight_never_trusted",
+      "passed": true
+    },
+    {
+      "name": "extra_envelope_row_rejected",
+      "passed": true
+    },
+    {
+      "name": "extra_envelope_key_rejected",
+      "passed": true
+    },
+    {
+      "name": "extra_report_key_rejected",
+      "passed": true
+    },
+    {
+      "name": "duplicate_key_rejected",
+      "passed": true
+    },
+    {
+      "name": "numeric_boolean_rejected",
+      "passed": true
+    },
+    {
+      "name": "wrong_format_rejected",
+      "passed": true
+    },
+    {
+      "name": "stage_mismatch_rejected",
+      "passed": true
+    },
+    {
+      "name": "apply_before_state_rejected",
+      "passed": true
+    },
+    {
+      "name": "verify_unknown_state_rejected",
+      "passed": true
+    },
+    {
+      "name": "forged_after_fingerprint_rejected",
+      "passed": true
+    },
+    {
+      "name": "account_rows_read_rejected",
+      "passed": true
+    },
+    {
+      "name": "account_rows_exported_rejected",
+      "passed": true
+    },
+    {
+      "name": "oversize_rejected",
+      "passed": true
+    },
+    {
+      "name": "empty_rejected",
+      "passed": true
+    },
+    {
+      "name": "invalid_utf8_rejected",
+      "passed": true
+    },
+    {
+      "name": "non_json_constant_rejected",
+      "passed": true
+    },
+    {
+      "name": "unchanged_base_contract_raises_on_drift",
+      "passed": true
+    }
+  ],
+  "production_connection_used": false
+}

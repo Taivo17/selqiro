@@ -14,6 +14,7 @@ export default function JobCard({job}: {job: PublicJob}) {
       {job.employer.identity_type ? <span className="rounded-full bg-neutral-100 px-2 py-1 text-xs font-medium text-neutral-600">{t(job.employer.identity_type === "private" ? "privatePublisher" : "businessPublisher")}</span> : null}</div>
     <h3 className="mt-2 break-words text-xl font-black leading-7 text-neutral-950 group-hover:text-blue-800 group-focus-visible:text-blue-800">{job.content.title}</h3>
     <div className="mt-3 flex flex-wrap gap-2 text-xs font-bold"><span className={`rounded-full px-3 py-1 ${theme.badge}`}>{t(job.content.employmentType === "task" ? "task" : "employmentOffer")}</span>
+      {job.content.employmentType && job.content.employmentType !== "task" ? <span className="rounded-full bg-neutral-100 px-3 py-1 text-neutral-700">{t(job.content.employmentType)}</span> : null}
       <span className="rounded-full bg-neutral-100 px-3 py-1 text-neutral-700">{t(job.content.workplaceType)}</span>
       {job.content.workingTime ? <span className="rounded-full bg-neutral-100 px-3 py-1 text-neutral-700">{t(job.content.workingTime)}</span> : null}</div>
     {location ? <p className="mt-3 break-words text-sm text-neutral-600">{location}</p> : null}
