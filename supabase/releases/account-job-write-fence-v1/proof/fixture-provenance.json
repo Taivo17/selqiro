@@ -1,0 +1,178 @@
+{
+  "format": "selqiro-account-job-write-fixture-v1",
+  "postgres_required": "17.6",
+  "actual_sources": [
+    {
+      "function": "public.current_user_has_identity_access",
+      "source": "supabase/labs/listing-publication-attempt-v1/tests/fixture.generated.sql",
+      "source_sha256": "fab1ab88575192a7ff2f4151b544a383559ea1ea544819e50fe9d1f523e08a3f",
+      "body_sha256": "b708d7abdfac00c7341979f4ff6dfae2ab2bfb55d311f27c7cc2935167224027"
+    },
+    {
+      "function": "public.listing_actor_uid_hosted_v1",
+      "source": "supabase/releases/listing-publication-hosted-preview-v1/00_preconditions.sql",
+      "source_sha256": "69c6005ed959afeb22bd1db3e597f23d17e7dfe86c968a35f512f94f34c995c8",
+      "body_sha256": "ff7f6ce615280095930c983468c5ce5a6c3982bc4f540e4929bb0baf904ce88d"
+    },
+    {
+      "function": "listing_publication_private.assert_hosted_preview_actor",
+      "source": "supabase/releases/listing-publication-hosted-preview-v1/00_preconditions.sql",
+      "source_sha256": "69c6005ed959afeb22bd1db3e597f23d17e7dfe86c968a35f512f94f34c995c8",
+      "body_sha256": "307f98bf3584f0394697bbb1a4d60c54454c69b193f5c2bba0cf68701d7babc2"
+    },
+    {
+      "function": "public.lock_listing_creation_actor_v1",
+      "source": "supabase/releases/listing-publication-hosted-preview-v1/10_price_core.sql",
+      "source_sha256": "9f843033bed721ab73d8cb01d3750e4dacc417dc0ddf84b92c9845745bb75dad",
+      "body_sha256": "45c3cd15d8181606e839e83978b114bced5dd5480781a956ed40d96cd62802d8"
+    },
+    {
+      "function": "public.listing_price_currency_scale_v1",
+      "source": "supabase/releases/listing-publication-hosted-preview-v1/10_price_core.sql",
+      "source_sha256": "9f843033bed721ab73d8cb01d3750e4dacc417dc0ddf84b92c9845745bb75dad",
+      "body_sha256": "e19adc44a0b4d6b990ce8c36c1ff19d7b31c4a1255354df5deefbd1c6a8a1750"
+    },
+    {
+      "function": "public.normalize_listing_price_v1",
+      "source": "supabase/releases/listing-publication-hosted-preview-v1/10_price_core.sql",
+      "source_sha256": "9f843033bed721ab73d8cb01d3750e4dacc417dc0ddf84b92c9845745bb75dad",
+      "body_sha256": "17f4cf1a100a375942c0aa9396a4e354e2725e51c83e18c34bdd47cd59539c5a"
+    },
+    {
+      "function": "listing_publication_private.require_actor",
+      "source": "supabase/releases/listing-publication-hosted-preview-v1/20_publication_core.sql",
+      "source_sha256": "f1c56c6ba381ceb5ab1d120092f676964762829ad63c5201a6c6b809c419f062",
+      "body_sha256": "9a86e4ca817793a77420dfc2e74d9e2df18298436638a7bf241428fca2c9a3f0"
+    },
+    {
+      "function": "jobs_private.require_key",
+      "source": "supabase/repairs/20261116_jobs_public/02_context.sql",
+      "source_sha256": "8ee59e7264f1d0c79d6ad167ffdeb6cbfc7893769952c2cb2b377b5ec4d88b12",
+      "body_sha256": "43c435e2432f9c8784448f122872b8292ceb56c704ddcd29a14002c2c86722dd"
+    },
+    {
+      "function": "jobs_private.require_revision",
+      "source": "supabase/repairs/20261116_jobs_public/02_context.sql",
+      "source_sha256": "8ee59e7264f1d0c79d6ad167ffdeb6cbfc7893769952c2cb2b377b5ec4d88b12",
+      "body_sha256": "ffbd1e6495095f035587bad8ac4c791247991fcd4ed94aa24645b15c2e56a4d2"
+    },
+    {
+      "function": "jobs_private.calendar_month_after",
+      "source": "supabase/repairs/20261116_jobs_public/02_context.sql",
+      "source_sha256": "8ee59e7264f1d0c79d6ad167ffdeb6cbfc7893769952c2cb2b377b5ec4d88b12",
+      "body_sha256": "b61bb5dd38c10006b40f288607d9250c2453a9b1ec2c0414da4089dcb796420c"
+    },
+    {
+      "function": "jobs_private.current_policies",
+      "source": "supabase/repairs/20261116_jobs_public/02_context.sql",
+      "source_sha256": "8ee59e7264f1d0c79d6ad167ffdeb6cbfc7893769952c2cb2b377b5ec4d88b12",
+      "body_sha256": "bdaa26eb07747302c5de5f4907dbcd99ffd5777b990c4f611d5f0a9d673992a2"
+    },
+    {
+      "function": "jobs_private.accept_policies",
+      "source": "supabase/repairs/20261116_jobs_public/02_context.sql",
+      "source_sha256": "8ee59e7264f1d0c79d6ad167ffdeb6cbfc7893769952c2cb2b377b5ec4d88b12",
+      "body_sha256": "b5fd31f59d4c397e5b98df051981ded007792c0a62667f599073df2d57a14461"
+    },
+    {
+      "function": "jobs_private.cursor",
+      "source": "supabase/repairs/20261116_jobs_public/02_context.sql",
+      "source_sha256": "8ee59e7264f1d0c79d6ad167ffdeb6cbfc7893769952c2cb2b377b5ec4d88b12",
+      "body_sha256": "660313aae39acfa4dd3e24c8cb47e95043b6a51b1ffeafa77195178b9a6a074f"
+    },
+    {
+      "function": "jobs_private.require_actor",
+      "source": "supabase/repairs/20261121_personal_jobs/01_authority.sql",
+      "body_sha256": "88114de75eaa42b8ef1d30fc90a3a0e6552941178cd39e462e12d40a8f1fc30b"
+    },
+    {
+      "function": "jobs_private.normalize_content",
+      "source": "supabase/repairs/20261121_personal_jobs/02_content.sql",
+      "source_sha256": "79522029ac07260f9d0943a039f75485c1288e54e844a494332c465afb01c898",
+      "body_sha256": "e62992a046bf9495842f3f442f62446e4258b6b8dbd1f4d23a3161b92224e531"
+    },
+    {
+      "function": "jobs_private.content",
+      "source": "supabase/repairs/20261116_jobs_public/03_content.sql",
+      "source_sha256": "9d449056030e5af3def0c421c9596ab0a133f98c074ff1967e7623d60658f7ba",
+      "body_sha256": "05ab495ee689757b17eaf995f30b615efa201c3f0a40e78d6be279b7fa79a2de"
+    },
+    {
+      "function": "jobs_private.owner_fields",
+      "source": "supabase/repairs/20261116_jobs_public/03_content.sql",
+      "source_sha256": "9d449056030e5af3def0c421c9596ab0a133f98c074ff1967e7623d60658f7ba",
+      "body_sha256": "6b53b819b6a822df916d8fd0f00abde773a66e63d3d71020a37991efcb70f109"
+    },
+    {
+      "function": "jobs_private.search_document",
+      "source": "supabase/repairs/20261116_jobs_public/03_content.sql",
+      "source_sha256": "9d449056030e5af3def0c421c9596ab0a133f98c074ff1967e7623d60658f7ba",
+      "body_sha256": "7a59fc0e5cacd87e1639037ca779808af98e0e6215dcaa68bafd584ff5403fe1"
+    },
+    {
+      "function": "public.get_my_job_v1",
+      "source": "supabase/repairs/20261116_jobs_public/04_reads.sql",
+      "source_sha256": "81c46d94b4aaf85b3b951ff36165d79d367a5f95691222c5c0bc95fde68d64af",
+      "body_sha256": "e7a4b6514a0257de75783cddb21b2cb8a2198f5f8faa9f276e798738828340ef"
+    },
+    {
+      "function": "public.get_my_job_policies_v1",
+      "source": "supabase/repairs/20261116_jobs_public/04_reads.sql",
+      "source_sha256": "81c46d94b4aaf85b3b951ff36165d79d367a5f95691222c5c0bc95fde68d64af",
+      "body_sha256": "f24b497a7d625e17d162578d6601ec1d8ef5a5e665890bef570c4ea80c778260"
+    },
+    {
+      "function": "public.get_my_job_request_v1",
+      "source": "supabase/repairs/20261116_jobs_public/04_reads.sql",
+      "source_sha256": "81c46d94b4aaf85b3b951ff36165d79d367a5f95691222c5c0bc95fde68d64af",
+      "body_sha256": "5197cb4f268903f7d593cc881616e445271291a5ee52a0640b2dbe6b91d09ddd"
+    },
+    {
+      "function": "public.get_my_jobs_v1",
+      "source": "supabase/repairs/20261122_job_owner_read_lock/01_owner_read.sql",
+      "source_sha256": "015f4145826670c4cd36b54f3c382c77ccf647672530dcfff61694c1256de50e",
+      "body_sha256": "465771b4a363d023dcd96f175d9a7ef6f0b9196306b985277935a5c2e9746d88"
+    },
+    {
+      "function": "jobs_private.mutate",
+      "source": "supabase/repairs/20261116_jobs_public/06_mutations.sql",
+      "body_sha256": "c4d0dce614f6a666a6867444b8b7c3a5c61ee1fa9a63a436c47cf40e84b2e4a4"
+    },
+    {
+      "function": "public.save_my_job_v1",
+      "source": "supabase/repairs/20261116_jobs_public/06_mutations.sql",
+      "body_sha256": "d777e8980141fa870c955758445cd6da999c6508f8d16ec0d0601edce62c5580"
+    },
+    {
+      "function": "public.publish_my_job_v1",
+      "source": "supabase/repairs/20261116_jobs_public/06_mutations.sql",
+      "body_sha256": "3d9206c8f8e83dafda03eb12e700f1f5fe9f055a674e4b2cb7b59c9951d9d127"
+    },
+    {
+      "function": "public.set_my_job_status_v1",
+      "source": "supabase/repairs/20261116_jobs_public/06_mutations.sql",
+      "body_sha256": "3769a44aab83f3093e812bca71a5016de8343acfe06289156cc57d08f117e55a"
+    },
+    {
+      "function": "public.renew_my_job_activity_v1",
+      "source": "supabase/repairs/20261116_jobs_public/06_mutations.sql",
+      "body_sha256": "17edcf15d709f2cb9dc2666710e2ee5cb16b6ce605042fa8de079913937aba75"
+    }
+  ],
+  "substitutions": [
+    {
+      "object": "auth.uid()",
+      "reason": "Synthetic JWT GUC reader; no hosted Auth service. Production body and definition remain independently pinned."
+    },
+    {
+      "object": "listing_publication_private.hosted_storage_contract_ready()",
+      "reason": "Unrelated managed storage catalog gate returns true; actual actor gate/authority/locking and all job writes are executed."
+    },
+    {
+      "object": "identity/auth/policy relations",
+      "reason": "Synthetic minimal rows/columns for actual job functions, not a hosted data clone; production catalog remains separately exact-pinned."
+    }
+  ],
+  "target_bodies_are_exact": true,
+  "test_only_catalog_adaptation": "Transaction/control tests replace only expected BASE metadata with the observed synthetic fixture BASE. BEFORE/AFTER target bodies, ACL and checks remain exactly release constants. Unmodified production preflight must reject fixture BASE as unknown."
+}

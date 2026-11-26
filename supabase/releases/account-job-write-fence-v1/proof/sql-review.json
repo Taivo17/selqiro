@@ -1,0 +1,206 @@
+{
+  "format": "selqiro-account-job-write-independent-sql-review-v1",
+  "result": "PASS",
+  "reviewed_on": "2026-11-25",
+  "reviewer": "independent account_next_review agent",
+  "accepted_base_commit": "c66a39b96c8d204382413a7ab652e66898782f18",
+  "scope": "One new private account-availability helper and one surgical jobs_private.mutate body change for save/publish/status/renew.",
+  "execution": "Independent source and evidence review; this reviewer did not execute SQL or contact deployed systems.",
+  "production_executed": false,
+  "blocking_findings": [],
+  "resolved_findings": [
+    {
+      "id": "CATALOG-CAPACITY",
+      "finding": "The inherited job-function catalog serializer limited results to 16, fewer than the 25 preserved dependencies plus up to two target functions. This would safely reject the real before state as unknown.",
+      "resolution": "The bounded limit is now 28: all 27 expected after-state functions plus one extra function to reveal overload drift. The final native transaction suite recognizes before/after with complete dependencies and rejects changed ACLs.",
+      "status": "resolved"
+    },
+    {
+      "id": "FIXTURE-SEARCH-PATH",
+      "finding": "Synthetic baseline catalog initially used a different session search_path from the released metadata queries, changing regclass/type serialization.",
+      "resolution": "Every fixture connection uses search_path=pg_catalog; production SQL pins and privilege conditions were not weakened.",
+      "status": "resolved"
+    },
+    {
+      "id": "VALID-PUBLISH-DENIAL",
+      "finding": "The first all-four-operation negative fixture used a private job with a business identity for publish, adding an unrelated authority failure.",
+      "resolution": "The final case uses a real business draft, so owner availability is the sole changed condition for the publish denial.",
+      "status": "resolved"
+    }
+  ],
+  "semantic_checks": [
+    {
+      "check": "Accepted basis and preserved dependencies",
+      "result": "PASS",
+      "details": "All twelve source-pins inputs match accepted file SHA-256 values. The before mutation and all 25 preserved function metadata records match the accepted 20261122 catalog. Account foundation, current contact availability helper and canonical-owner structure remain bounded exact prerequisites."
+    },
+    {
+      "check": "Surgical mutation diff",
+      "result": "PASS",
+      "details": "Removing only account_owner declaration and the new canonical-owner SELECT/helper call restores the accepted mutation body exactly. All mutation metadata except body digest stays identical. Existing public wrappers and the shared actor/read helpers are unchanged."
+    },
+    {
+      "check": "Admission placement and replay",
+      "result": "PASS",
+      "details": "Existing actor/identity authorization, operation validation and exact request-fingerprint replay remain first. The new gate is after the completed receipt return and before job, policy-acceptance or receipt writes. Replays return the old result without new writes; new keys including no-op saves pass the new gate."
+    },
+    {
+      "check": "Canonical owner and ownership stability",
+      "result": "PASS",
+      "details": "Private identity.user_id and business_accounts.owner_user_id are resolved server-side. Existing exact-pinned require_actor retains identity/business FOR SHARE locks, preventing owner replacement between resolution and account admission. A changed owner committed earlier is checked; creator/member identity is never substituted."
+    },
+    {
+      "check": "Actor and owner availability",
+      "result": "PASS",
+      "details": "Deduplicated sorted actor/owner UUIDs require existing Auth and active account-state rows, positive revision, no Auth deletion, no currently effective ban and no nonfinite creation time. Null/missing/invalid inputs fail with generic SQLSTATE 42501. Actor equal to owner is valid and checked once."
+    },
+    {
+      "check": "Lock order and closure boundary",
+      "result": "PASS",
+      "details": "For each sorted UUID, Auth then account state is locked FOR SHARE until the mutation transaction ends. This matches the accepted contact fence. Existing profile/identity/business locks precede these locks. Future closure must commit an Auth/state-only transition before separate profile/content cleanup; acquiring profile locks while retaining closure Auth/state locks would invert this order and is not enabled here."
+    },
+    {
+      "check": "Function exposure and account authority",
+      "result": "PASS",
+      "details": "New helper is postgres-owned SECURITY DEFINER with pg_catalog search_path and a bounded lock timeout; EXECUTE is revoked from PUBLIC, anon, authenticated and service_role. Exact ACL plus effective app-role denial are checked. Installation separately verifies current postgres visibility and SELECT/UPDATE locking authority on Auth/state without granting privileges or reading account rows."
+    },
+    {
+      "check": "Installation atomicity and drift refusal",
+      "result": "PASS",
+      "details": "Fresh read-only recognition must match the bounded accepted catalog. The same expected before state is checked under the installation transaction before DDL, followed by exact after check. Only two function definitions change. One COMMIT is followed by a fresh receipt snapshot; independent verify is separately required. Unknown state or DDL failure stops/rolls back; another apply is refused."
+    },
+    {
+      "check": "Native evidence binding",
+      "result": "PASS",
+      "details": "Final PostgreSQL 17.6 report has 39/39 passed cases and no production data. Every report source hash matches the reviewed file bytes. Reviewed cases cover valid private/business operations, actor and owner refusals, completed replay, no-op new key, rollback, real two-connection closure serialization, and canonical owner change blocking."
+    },
+    {
+      "check": "No lifecycle activation or data rewrite",
+      "result": "PASS",
+      "details": "The installation changes no account/content rows, tables, policies, existing grants, role memberships, deadlines or current active-only state constraint. The account closure/restore/delete product remains disabled."
+    }
+  ],
+  "native_evidence": {
+    "report": "sql/proof/native-report.json",
+    "report_sha256": "0492755d2b083a9cb73c434dbfd24d465a678a341504b11d3108c8097298f305",
+    "passed": 39,
+    "failed": 0,
+    "engine": "PostgreSQL 17.6",
+    "reviewer_reran_native_suite": false,
+    "substitutions": [
+      {
+        "object": "auth.uid()",
+        "reason": "Synthetic JWT GUC reader; no hosted Auth service. Production body and definition remain independently pinned."
+      },
+      {
+        "object": "listing_publication_private.hosted_storage_contract_ready()",
+        "reason": "Unrelated managed storage catalog gate returns true; actual actor gate/authority/locking and all job writes are executed."
+      },
+      {
+        "object": "identity/auth/policy relations",
+        "reason": "Synthetic minimal rows/columns for actual job functions, not a hosted data clone; production catalog remains separately exact-pinned."
+      }
+    ],
+    "test_only_base_adaptation": "Native transaction/control tests replace only expected BASE metadata with the explicit synthetic fixture BASE. Before/after mutation/helper metadata and released target checks are unchanged; the unmodified production preflight rejects the synthetic fixture."
+  },
+  "production_preflight_requirement": "This review does not certify the current production catalog. The exact released read-only preflight and same-transaction before guard must freshly recognize BASE 69e5acb22bc492672721d3d8af7a5b7f907c4cb7bf9e6d512354e28055592c08 and BEFORE 41ed49b501abf7d8c12187ac23d9424a975aabd22b82628940ed11c3ffc7ea24 before any DDL. Any drift must stop; do not substitute fixture metadata or relax pins.",
+  "future_boundary": "Other content/profile/media writes, follows/provider controls and legacy discovery still need account-lifecycle coverage. This narrow PASS does not authorize account closure/deletion or claim complete lifecycle enforcement.",
+  "fingerprints": {
+    "base": "69e5acb22bc492672721d3d8af7a5b7f907c4cb7bf9e6d512354e28055592c08",
+    "before": "41ed49b501abf7d8c12187ac23d9424a975aabd22b82628940ed11c3ffc7ea24",
+    "after": "4ccabeda9dffa9c6f1b558d30ffb522b03c7c9e9fe61af8ed360904e35680a82"
+  },
+  "reviewed_files": {
+    "sql/generator/build.py": {
+      "bytes": 18559,
+      "sha256": "d6dd7311af0e0e6ee800fe0f337751975a072ad755b0d4170caab32bc789ea3b"
+    },
+    "sql/proof/fixture-provenance.json": {
+      "bytes": 9220,
+      "sha256": "b125e95c77fca4314d267018903beb5b1be13a82b00e3bc16b783a038874e909"
+    },
+    "sql/proof/native-report.json": {
+      "bytes": 7486,
+      "sha256": "0492755d2b083a9cb73c434dbfd24d465a678a341504b11d3108c8097298f305"
+    },
+    "sql/release/README.md": {
+      "bytes": 8337,
+      "sha256": "1e6bafd682e19324d0ac0caa6cf9e024b8df6acf1ab4898ad4f675c43a77fae7"
+    },
+    "sql/release/account-availability.sql": {
+      "bytes": 2116,
+      "sha256": "414146879ef910d1c59b1eac3e11d0ae95a59208d62ec6a1c6955de497d11f5d"
+    },
+    "sql/release/account-query.sql": {
+      "bytes": 9593,
+      "sha256": "fad845d584ad3e1a7274928be4b0790dfd7b160722fa83270345cd1500dae636"
+    },
+    "sql/release/apply.sql": {
+      "bytes": 267783,
+      "sha256": "376f242d36847bba8ac8294402f8d608d243502999171fab72645c411ee46f9a"
+    },
+    "sql/release/catalog-query.sql": {
+      "bytes": 22510,
+      "sha256": "86609dfa791bc36d45fa1d2e6ecbb78b10e526bac59ae1d21b2b5b79ead5e629"
+    },
+    "sql/release/contact-availability-query.sql": {
+      "bytes": 1799,
+      "sha256": "7f3e3f4ca1ee18fd57aa79c5beb6a5f896c285dd22cd951f19bf312230866f6e"
+    },
+    "sql/release/execution-prerequisite.sql": {
+      "bytes": 1105,
+      "sha256": "4a111dd54d5fee098fcf9b569e94994b0cbd6a9fa19c5269175a2992a1a27dda"
+    },
+    "sql/release/expected-contract.json": {
+      "bytes": 69441,
+      "sha256": "195d742cf44245a4a417e8912a59d5dee8e737ac8d48e2fd93ee6ca10c8c6f30"
+    },
+    "sql/release/mutate.sql": {
+      "bytes": 7037,
+      "sha256": "8ff15ac856b39f631efc1932360d3712f2642d73a58d945a9f13bd11300b3561"
+    },
+    "sql/release/preflight.sql": {
+      "bytes": 65411,
+      "sha256": "a5f5d95d9940422510b8267a5d40dd7aca1c80f48580905101668cf7abbbd9e5"
+    },
+    "sql/release/receipt-pins.json": {
+      "bytes": 335,
+      "sha256": "612d1954df5d2b19ee9a078cb316722b0ecde8b28013e9499f25c55e385901b3"
+    },
+    "sql/release/source-pins.json": {
+      "bytes": 2239,
+      "sha256": "0106f4d1747b8f3c8fa6317e35b43e82f5e3ff4586290cab2da79023dc34d5b8"
+    },
+    "sql/release/sql-files.json": {
+      "bytes": 919,
+      "sha256": "19dbb80c6da9108519e7140ac7ddebf6bb1442d8a57671f721aaca3f616a79e3"
+    },
+    "sql/release/sql_contract.py": {
+      "bytes": 3523,
+      "sha256": "b4a4d2146a7deeecbbf1e67ee8a63ab51fb1790926a8560585a30c8ea4902543"
+    },
+    "sql/release/target-deltas.json": {
+      "bytes": 1723,
+      "sha256": "21f447790ba94529a3f750f7497f108654d32c983b777f72a0683a738cee20b6"
+    },
+    "sql/release/verify.sql": {
+      "bytes": 129268,
+      "sha256": "bd5e817e966f166baa7d24a0f353a219b43e46c9730e8804beab4f9c49da8b59"
+    },
+    "sql/tests/build_fixture.py": {
+      "bytes": 9178,
+      "sha256": "2eb21ce43ccdbe0fb537c68a41f3d8b3bf599203d1fc1e6b244a1c88771c0000"
+    },
+    "sql/tests/fixture.sql": {
+      "bytes": 61803,
+      "sha256": "b9385b7bcc6976cbc6f0e52d8d51497898c69f58ae526071537611c5c89175cc"
+    },
+    "sql/tests/native.mjs": {
+      "bytes": 25558,
+      "sha256": "597c6340197a9f930d65108f774b24760cd2d42d44219e6ba91ac47852d44f74"
+    }
+  },
+  "recommendation": "Ready for package assembly with these exact reviewed bytes and existing acknowledged-apply/independent-verify publication gates.",
+  "evidence_revision": 2,
+  "final_reproduction_update": "Reviewed package/repository-relative fixture and generator paths, callback-based expected BASE replacement, and two additional existing authority/parser template source pins. Production SQL, parser and before/after expected fingerprints are unchanged. The same 39-case suite passed again with every final input hash bound to its new report. Release README accurately distinguishes isolated tests from fresh production preflight."
+}

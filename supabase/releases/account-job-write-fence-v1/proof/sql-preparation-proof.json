@@ -1,0 +1,22 @@
+{
+  "format": "selqiro-account-job-write-sql-preparation-v1",
+  "result": "PASS",
+  "execution": "isolated_preparation_only",
+  "engine": {
+    "name": "PostgreSQL",
+    "version": "17.6"
+  },
+  "cases": {
+    "passed": 39,
+    "failed": 0
+  },
+  "sql_sha256": {
+    "preflight.sql": "a5f5d95d9940422510b8267a5d40dd7aca1c80f48580905101668cf7abbbd9e5",
+    "apply.sql": "376f242d36847bba8ac8294402f8d608d243502999171fab72645c411ee46f9a",
+    "verify.sql": "bd5e817e966f166baa7d24a0f353a219b43e46c9730e8804beab4f9c49da8b59"
+  },
+  "evidence_sha256": {
+    "native-report.json": "0492755d2b083a9cb73c434dbfd24d465a678a341504b11d3108c8097298f305",
+    "sql-review.json": "383d606185b8320f6bb613fa1b0923a0c486189a54b8f8c18644f4cb299a0aff"
+  }
+}

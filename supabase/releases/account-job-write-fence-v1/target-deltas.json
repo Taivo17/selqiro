@@ -1,0 +1,41 @@
+{
+  "format": "selqiro-account-job-write-fence-20261125-v1",
+  "added_functions": [
+    "jobs_private.require_available_accounts_v1(uuid,uuid)"
+  ],
+  "changed_functions": [
+    "jobs_private.mutate(uuid,uuid,uuid,text,jsonb)"
+  ],
+  "unchanged": [
+    "jobs_private.accept_policies(uuid,uuid,jsonb)",
+    "jobs_private.calendar_month_after(timestamp with time zone)",
+    "jobs_private.content(public.jobs)",
+    "jobs_private.current_policies()",
+    "jobs_private.normalize_content(jsonb)",
+    "jobs_private.owner_fields(public.jobs,uuid)",
+    "jobs_private.require_actor(uuid,uuid)",
+    "jobs_private.require_key(uuid)",
+    "jobs_private.require_revision(text)",
+    "listing_publication_private.assert_hosted_preview_actor(uuid)",
+    "listing_publication_private.hosted_storage_contract_ready()",
+    "listing_publication_private.require_actor(uuid,uuid)",
+    "public.current_user_has_identity_access(uuid)",
+    "public.listing_actor_uid_hosted_v1()",
+    "public.listing_price_currency_scale_v1(text)",
+    "public.lock_listing_creation_actor_v1(uuid)",
+    "public.normalize_listing_price_v1(jsonb)",
+    "public.get_my_job_policies_v1(uuid,uuid)",
+    "public.get_my_job_request_v1(uuid,uuid,uuid)",
+    "public.get_my_job_v1(uuid,uuid,uuid)",
+    "public.get_my_jobs_v1(uuid,uuid,integer,jsonb)",
+    "public.publish_my_job_v1(uuid,uuid,uuid,uuid,text,jsonb)",
+    "public.renew_my_job_activity_v1(uuid,uuid,uuid,uuid,text,timestamp with time zone)",
+    "public.save_my_job_v1(uuid,uuid,uuid,uuid,text,jsonb,jsonb)",
+    "public.set_my_job_status_v1(uuid,uuid,uuid,uuid,text,text,text)"
+  ],
+  "row_writes": [],
+  "table_ddl": [],
+  "policies": [],
+  "role_memberships": [],
+  "existing_acl_changes": []
+}

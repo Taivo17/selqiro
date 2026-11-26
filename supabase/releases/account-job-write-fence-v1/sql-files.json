@@ -1,0 +1,14 @@
+{
+  "format": "selqiro-account-job-write-fence-20261125-v1",
+  "files": {
+    "account-availability.sql": "414146879ef910d1c59b1eac3e11d0ae95a59208d62ec6a1c6955de497d11f5d",
+    "account-query.sql": "fad845d584ad3e1a7274928be4b0790dfd7b160722fa83270345cd1500dae636",
+    "apply.sql": "376f242d36847bba8ac8294402f8d608d243502999171fab72645c411ee46f9a",
+    "catalog-query.sql": "86609dfa791bc36d45fa1d2e6ecbb78b10e526bac59ae1d21b2b5b79ead5e629",
+    "contact-availability-query.sql": "7f3e3f4ca1ee18fd57aa79c5beb6a5f896c285dd22cd951f19bf312230866f6e",
+    "execution-prerequisite.sql": "4a111dd54d5fee098fcf9b569e94994b0cbd6a9fa19c5269175a2992a1a27dda",
+    "mutate.sql": "8ff15ac856b39f631efc1932360d3712f2642d73a58d945a9f13bd11300b3561",
+    "preflight.sql": "a5f5d95d9940422510b8267a5d40dd7aca1c80f48580905101668cf7abbbd9e5",
+    "verify.sql": "bd5e817e966f166baa7d24a0f353a219b43e46c9730e8804beab4f9c49da8b59"
+  }
+}

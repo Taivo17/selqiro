@@ -1,35 +1,29 @@
-# Selqiro praegune tööjärg
+# Järgmine samm: töökuulutuse omaniku toimingute konto kontroll
 
-24.11.2026 Europe/Tallinn. Vastu võetud tootmise alus: **908a457**.
-
-## Pakkumise link sõnumis
-
-Teksti ja piltide saatmine on kasutaja kontrolli järgi korras. See uuendus ühtlustab pakkumiskaardi käitumise tavakuulutustes, hobusekuulutustes, teenustes ja tööpakkumistes.
-
-Iga pakkumise juurest kontakti avamine lisab kaardi järgmisele sõnumile. Sama pakkumise uuesti avamine lisab selle uuesti. Enne saatmist saab kaardi eemaldada. Pärast edukat saatmist on järgmised tekstid, pildid ja vastused ilma automaatse korduskaardita. Vestluse päises on viimati tegelikult jagatud pakkumise nimi ja klõpsatav link.
-
-Paki **selqiro-sonumite-pakkumise-link-20261124.zip** Downloads-kaustas lahti ja käivita:
+25.11.2026. Sõnumite muudatus `c66a39b` on vastu võetud; seda ei käivitata uuesti.
+Uus pakett on `selqiro-too-muutmise-konto-olek-20261125.zip`. Laadi see alla ja paki Downloads-kaustas lahti.
+Käivita olemasoleva Selqiro projekti terminalis üks käsk:
 
 ```bash
-python3 -I -B "$HOME/Downloads/selqiro-sonumite-pakkumise-link-20261124/uuenda.py" --publish
+python3 -I -B "$HOME/Downloads/selqiro-too-muutmise-konto-olek-20261125/uuenda.py" --publish
 ```
 
-Saada selle käigu **SAADA SEE FAIL** real nimetatud JSON-fail. Kui käivitaja peatub, saada sama raport; ära korda vanu pakette.
+Pakett kontrollib täpset lähtealust, puhast tööpuud/indexit, remote main'i,
+eelmist edukat originaalraportit ning olemasolevat Supabase CLI-d ja projekti.
+Seejärel kontrollib andmebaasi eelseisu, rakendab töökuulutuste kirjutuskontrolli
+ühe tehinguga ning teeb eraldi järelkontrolli. Ainult kinnitatud tulemuse järel
+teeb see täpselt määratud failidest commit'i ja push'i.
+Rakenduse ega sõltuvuste faile ei muudeta; uut Next build'i ei käivitata.
 
-Paigaldaja kontrollib täpset lähteallikat, teeb sihitud klienditestid ja ühe värske build'i. Seejärel kontrollib ta andmebaasi eelseisu, rakendab ühe kaitstud SQL-tehingu, kontrollib tulemust eraldi ning avaldab lähtekoodi.
+Lõpus saada siia uus JSON-raport, mille tee algab terminalis `SAADA SEE FAIL:`.
+Käivitaja valib sama faili Finderis. Kui käik peatub, saada selle käigu raport
+ja ära käivita paketti uuesti; kinnitamata andmebaasitoiming selgitatakse
+vajadusel eraldi ainult lugemisega.
 
-Uue commit'i pealkiri: **Share offer cards only on explicit enquiry**. Oota Vercelis selle sama commit'i **Ready / Production** tulemust ja värskenda avatud portaali vahelehed.
+Pärast edukat käiku kontrolli **sama uut commit'i** Vercelis Ready / Production
+seisus. Seejärel piisab olemasoleva töökuulutuse tavalisest muutmisteekonnast.
+Uut eraisiku testkuulutust pole selle sammu jaoks vaja avaldada.
 
-## Kontroll pärast avaldamist
-
-Kasuta kahte olemasolevat oma testkontot. Tee järgmine kontroll tavakuulutuse, hobusekuulutuse, teenuse ja tööpakkumisega:
-
-1. Ava pakkumine ja vali kontakti võtmine. Kirjutamise juures on õige pakkumise eelvaade ja Eemalda.
-2. Saada üks sõnum. Kaart on selle sõnumi juures ning päises on sama pakkumise klõpsatav nimi.
-3. Saada järgmine tekst ja pilt ning vasta teise konto alt. Automaatselt uut pakkumiskaarti ei lisandu.
-4. Ava sama pakkumine uuesti ja vali kontakti võtmine. Kaart tuleb järgmisele sõnumile uuesti kaasa.
-5. Ava teine pakkumine. Eelvaade üksi päist ei muuda. Kui eemaldad eelvaate ja saadad teksti, jääb päisesse eelmine jagatud pakkumine. Kui saadad teise pakkumise kaardi, näitab päis seda uut pakkumist.
-
-Sama tootmiskoodi avaldamine ja päris brauseri kontroll on eraldi kohalikust koostamisest ning isoleeritud katsetest. Uut eraisiku töökuulutust pole vaja luua, kui olemasolev ettevõtte tööpakkumine sobib katseks.
-
-Järjekord pärast parandust: **kontoelutsükkel → jälgitavate poodide/profiilide Uudised → esiletõstmine → reklaamid**.
+Praegune vastu võetud alus: `c66a39b96c8d204382413a7ab652e66898782f18`; puu `c6e2726a6d97d12731dc2d505a734164523b90e0`.
+Uue muudatuse tootmise käiku pole ettevalmistus tõendanud.
+Konto sulgemise/taastamise tervik jätkub pärast selle mooduli kinnitamist.

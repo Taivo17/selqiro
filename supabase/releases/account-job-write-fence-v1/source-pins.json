@@ -1,0 +1,22 @@
+{
+  "format": "selqiro-account-job-write-fence-20261125-v1",
+  "accepted_commit": "c66a39b96c8d204382413a7ab652e66898782f18",
+  "base_boundary": "Known accepted source only; live preflight independently verifies exact catalog before DDL.",
+  "inputs": {
+    "supabase/repairs/20261122_job_owner_read_lock/catalog-pins.json": "3f4d52e201b04916bf4548dc77b16243cd3007d670c649c6cb7271bb5a3b0988",
+    "supabase/repairs/20261116_jobs_public/06_mutations.sql": "4984bc30bfb1f6186e903341d8bfa676e5aed4aa2260dd573327c8f4c1e52619",
+    "supabase/releases/account-contact-write-fence-v1/expected-contract.json": "4080bb535987ecd10e38ce6fa0159c98917f1b798a055b1d547e4e1b793881ba",
+    "supabase/releases/account-public-profile-fence-v1/expected-contract.json": "afaa940fd0a2e39db5e31345fc88a3fc17121d73621bbd8e94fdb0bcc316323d",
+    "supabase/releases/account-contact-write-fence-v1/account-query.sql": "fad845d584ad3e1a7274928be4b0790dfd7b160722fa83270345cd1500dae636",
+    "supabase/releases/account-contact-write-fence-v1/helper-query.sql": "7f3e3f4ca1ee18fd57aa79c5beb6a5f896c285dd22cd951f19bf312230866f6e",
+    "supabase/releases/account-contact-write-fence-v1/account-write-availability.sql": "ea51051f0dc00a0f6d3dbb7146bb26f2c0c243d9cf2f973bdc5dd8859ec1f435",
+    "supabase/releases/account-contact-write-fence-v1/execution-prerequisite.sql": "ec62e4ec6e7b3ff03aec70bd56a08d04a0eb09fbd5bc214d7900a74889da8538",
+    "supabase/releases/account-contact-write-fence-v1/sql_contract.py": "ba7deb28606f8f91434d28a2dd168c07cc72f8008de00e066674b502375ec7c2",
+    "supabase/releases/account-job-read-fence-v1/catalog-query.sql": "41d121bfc8970dab6322f28704d39dcb0ace9ba549cb205d3fc5155acb4b34e8",
+    "supabase/repairs/20261121_personal_jobs/01_authority.sql": "ab5d432d4516da69ba02c20af2dc83070792b1ec30fa064f8eb5a3a00fe43d9f",
+    "supabase/repairs/20261121_personal_jobs/02_content.sql": "79522029ac07260f9d0943a039f75485c1288e54e844a494332c465afb01c898"
+  },
+  "old_mutate_body_sha256": "c4d0dce614f6a666a6867444b8b7c3a5c61ee1fa9a63a436c47cf40e84b2e4a4",
+  "new_mutate_body_sha256": "326ee6f4270f0032ccc4e80a7e4e2a528b19262b5f04c25bbc8ec801bbb0f678",
+  "new_helper_body_sha256": "95fa4091eade87dd25b39d33f705f52ab38fe618a8bca02227c38f6164b33eb5"
+}

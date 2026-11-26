@@ -1,0 +1,12 @@
+{
+  "format": "selqiro-account-job-write-native-cleanup-v1",
+  "result": "PASS",
+  "production_executed": false,
+  "native_report_sha256": "0492755d2b083a9cb73c434dbfd24d465a678a341504b11d3108c8097298f305",
+  "cluster_status_before_cleanup": "stopped",
+  "pg_ctl_status_exit_code": 3,
+  "postmaster_pid_file_present": false,
+  "runtime_scope": "sql/native-runtime only",
+  "runtime_removed": true,
+  "runtime_or_logs_in_delivery": false
+}

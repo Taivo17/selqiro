@@ -1,0 +1,75 @@
+<!-- GENERATED from docs/continuity/CURRENT_STATE.json; do not edit independently. -->
+# Selqiro — praegune tööüleandmine
+
+Seisukirje: 24.11.2026 Europe/Tallinn — vestlused ja pildimanused vastu võetud; pakkumise teadlik ühekordne jagamine ette valmistatud
+
+## Praegune checkpoint
+
+Commit 908a457 on vastu võetud. Kasutaja kinnitas, et tekst ja pildid jõuavad kohale. Järgmine muudatus ühtlustab tavakuulutuse, hobusepakkumise, teenuse ja tööpakkumise kaardi: iga teadlik pakkumiselt kontakti avamine lisab eemaldatava kaardi järgmisele sõnumile, ka sama pakkumise uuesti avamisel. Pärast kinnitatud saatmist kaart järgmistele tekstidele, piltidele ega vastustele automaatselt ei lisandu. Päis näitab viimati tegelikult jagatud pakkumist. Uue muudatuse Maci rakendamine ja tootmise kontroll on ootel.
+
+## Lähtekood ja tõendi piir
+
+- **Vastu võetud alus:** 908a45717c6c66e717ab46c2ec0aa7bb5dd44954; puu ed872b82a9ac67fe9f0073716492e2fb7b90b893; 2335 faili. Alus on taastatud ja iga fail on seotud vastuvõetud raportiga.
+- **Raporti vastuvõtt:** Tagastatud raporti 521 käsu teekond kontrollitud, 519 väljundit taastatud. Raport 1294898 baiti, SHA256 64301451a3d70411faa35defc74e37f42d0dc7b5210a880a813a298487182ce4. Üks värske Maci build, üks kinnitatud SQL-tehing, eraldi järelkontroll ja kontrollitud commit/push.
+- **Tootmise kinnitus:** 908a457 main Ready / Production, 21 s, kasutaja ekraanipildilt. Kasutaja kinnitas teksti ja piltide kohaletoimetamist. See ei kinnita veel uue pakkumiskaardi loogika toimimist.
+- **Kasutaja lõplik otsus:** Ka sama pakkumise uuesti avamine ja Kirjuta müüjale vajutamine on uus teadlik jagamissoov. Enne saatmist saab kaardi eemaldada. Eraldi Lisa link uuesti valikut ei lisata. Kõik neli pakkumisliiki kasutavad sama loogikat.
+- **Saatmise piir:** Konkreetne pakkumisliik ja ID seotakse poolelioleva sõnumiga. Kinnitamata saatmise kordus hoiab algse sisu ja päringuvõtme; uus pakkumiselt tulemine ei muuda käimasolevat katset. Kaardi eemaldamine ja saatmise õnnestumine tarbivad ainult vastava avamise kavatsuse.
+- **Päise piir:** Viimati jagatud pakkumine tuleb salvestatud sõnumikaardist. Üksnes kontakti avamine, kaardi eelvaade või eemaldamine päist ei muuda. Varasemad sõnumikaardid säilivad.
+- **Teostus:** Uued tüübitud päringu- ja saatmislepingud säilitavad senise kasutaja, identiteedi, osaluse, konto, blokeeringu, foto ja korduspäringu kontrolli. Kolme eripakkumise automaatne sõnumikaardi lisamine lõpetatakse. Vana numbrilise lepinguga ühilduvus säilib.
+- **Koostamine ja kontroll:** Uus täielik kohalik Next.js 16.4.6 webpack/TypeScript build läbitud; 766 koostamise sisendit on seotud kontrollsummadega ja muutumatud. Olemasolevad täpsed sõltuvused säilisid. Käivitaja nõuab lisaks üht värsket Maci buildi. Üks tavaline Chromiumi käivitus peatus enne lehe avamist keskkonna socket-õiguse tõttu; päris brauseri uue muudatuse kontroll on ootel.
+- **Edasine töö:** Pärast seda parandust jätkub kontoelutsükli tervik. Uudiste jälgitavate poodide ja profiilide voog, kuni neli eelvaadet ja sama perioodi Vaata kõiki jäävad säilitatud kavandiks.
+
+## Tegelik kohalik katse
+
+- 18/18 sihitud kliendikontrolli läbitud: neli pakkumisliiki, eemaldamine, sama pakkumise uus avamine, päise ja eelvaate eristamine, korduspäring ning samaaegse mustandi ja identiteedi kaitse. Katsed kasutavad päris hook-koodi deterministliku käivituse, sünteetilise transpordi ja React SSR-iga; see ei ole brauseri kasutuskontroll.
+- Eraldatud PostgreSQL 17.6: 33/33 sihitud kontrolli läbitud lõplike paigaldusfailidega. Kontrollitud on üks kaart teadliku saatmise kohta, kordusavamise uus kaart, eemaldatud kavatsus, tegelikult jagatud päis, tekst/pilt/vastus ilma korduseta, õigused, olemasolevate andmete säilimine, päris lukuootel korduspäringud, aegumine ning ühe DDL-tehingu tagasipööramine. Authi ja avaldamise ääretingimused on osaliselt sünteetilised; tootmise Authi, Storage'i või brauserit see ei kinnita.
+- 30/30 käivitaja sihitud kontrolli läbitud lõpliku SQL-lepinguga. Kasutati päris ajutist Giti ja kohalikku bare-hoidlat ning sünteetilisi CLI/testi/buildi tulemusi. Käivitaja nõuab üht kinnitatud TAP-käiku, üht värsket buildi, ühe SQL rakendamise COMMIT-järgset kinnitust ja eraldi järelkontrolli enne commit/push-i. Kinnitamata tegevust automaatselt ei korrata.
+- Uus täielik kohalik Next.js 16.4.6 webpack/TypeScript build läbitud; 766 koostamise sisendit on seotud kontrollsummadega ja muutumatud. Olemasolevad täpsed sõltuvused säilisid. Käivitaja nõuab lisaks üht värsket Maci buildi. Üks tavaline Chromiumi käivitus peatus enne lehe avamist keskkonna socket-õiguse tõttu; päris brauseri uue muudatuse kontroll on ootel.
+- Tootmise SQL ja käivitaja on sõltumatult üle vaadatud ning lõplike tõenditega seotud. Root kontrollis eraldi kliendi lepingut, mustandi/retry käitumist, andmebaasimuudatusi ja pakkimise piire. Paketi täpne lõppkomplekt kontrollitakse veel enne pitseerimist.
+
+## Production / kasutajaliides
+
+- Vastu võetud tootmise commit: 908a45717c6c66e717ab46c2ec0aa7bb5dd44954. Kasutaja pildil Ready / Production; teksti ja piltide kohaletoimetamine kasutaja poolt kinnitatud.
+- Pakkumiskaardi kordumise tähelepanek on uue muudatuse alus. Kasutaja viimane otsus nõuab uut eemaldatavat kaarti igal teadlikul pakkumiselt kontakti avamisel, ka sama pakkumise puhul.
+- Uue pakkumise jagamise muudatuse paigaldusraport, SQL rakendamine, commit/push, Verceli tulemus ja nelja pakkumisliigi kasutuskontroll on veel ootel.
+
+## Üks järgmine töö
+
+Käivita ainult selqiro-sonumite-pakkumise-link-20261124/uuenda.py --publish. Tagasta selle käigu SAADA SEE FAIL JSON. Edu järel kontrolli sama uue commit'i Verceli Ready / Production tulemust. Kontrolli kõigi nelja pakkumisliigi puhul eelvaadet, esimest saatmist, järgnevat tavalist teksti/pilti, sama pakkumise uut teadlikku avamist, eemaldamist ning päise viimati jagatud linki. Seejärel kontoelutsükkel → Uudised → esiletõstmine → reklaamid.
+
+**Peatumisel:** Peatumisel saada selle käigu raport; ära korda varasemaid pakette. Tundmatu lähteallikas, indeks, originaalraport või andmebaasi eelseis peatab töö enne DDL-i ja avaldamist. Kinnitamata test, build või SQL vastus ei käivita automaatset kordust. Kinnitamata andmebaasikirjutus ei luba uut kirjutust ega commit/push-i; selline seis selgitatakse eraldi ainult lugemisega.
+
+## Loe ainult vajalikku
+
+- docs/continuity/HOSTED_PORTAL.md — ainus praegune paigalduskäsk.
+- docs/architecture/account-message-media-accepted-20261124.md — viimase avaldamise kinnitus.
+- docs/architecture/offer-message-intent-v1.md — kasutaja lõplik jagamisreegel ja teostuse piirid.
+- supabase/releases/offer-message-intent-v1/README.md — tüübitud saatmine, ajalugu, õigused ja kontrollid.
+- docs/architecture/account-model-lifecycle-20261122.md — konto mudel ja e-postitöö piir.
+- docs/architecture/followed-news-grouping-20261124.md — säilitatud nelja eelvaate kavand.
+
+## Säilivad piirid
+
+- Kolm kontot kuuluvad kasutajale; ainult ühel on kaks identiteeti. Uus konto valib eraisiku VÕI ettevõtte. Mitme identiteedi ning ettevõtte töötajate/rollide/omandi üleandmise iseteenindus ei ole avamisulatus.
+- Kolm olemasolevat kontot ja nende sisu säilivad. Konto active-only alus jääb kehtima. Vestluste/manuste kontroll ei aktiveeri sulgemist ega kustutamist; enne seda tuleb lõpetada muud tegelikud omaniku kirjutused ja meedia lõppkinnitused ning värske autentimise, vana sessiooni tõkestamise ja selge sulgemis-/taastamisvaate tervik.
+- E-posti aktiveerimine jääb põhidomeeni selqiro.com kasutuselevõtu juurde. Saatmine, kinnitamine ja parooli taastamine peavad olema lõpuni kontrollitud enne väliseid testijaid või avalikku registreerimist ka vercel.app aadressil.
+- Kasutajale kuuluvad ka selqiro.app/.io ja selkiro.com/.app/.io. Domeeni valikut uuesti ei küsita; DNS-i selles sammus ei muudeta.
+- AI päringuteed jäävad suletuks. Tavaline osalemine ei sõltu Energy ostust. Riigipõhised töökuulutuse poliitikad ja senised avaldamise/vestluse lepingud säilivad.
+- Konto sulgemise/taastamise/kustutamise tervik → jälgitavate poodide ja profiilide Uudised → kuulutuste esiletõstmine → reklaamid. Reklaamija võib kasutada sama kontot ilma avaliku müüjaprofiilita; reklaamimine ei ole kolmas kontotüüp.
+- Uudised koondab ainult kasutaja valitud jälgitavate poodide/profiilide sisu. Eraisiku ja ettevõtte tavapärane osalemine säilib. Uue kuulutuse avaldamist, olemasoleva muutmist/pikendamist ja eraldi teadet ei käsitleta automaatselt ühe ja sama uue sündmusena.
+- Uudiste lahendus peab olema serveris piiratud ja indekseeritud lehekülgedega. Kogu jälgimisnimekirja või kogu voo brauserisse laadimine ei ole uue V2 lahenduse alus. Suurt samaaegsust ei loeta tõendatuks väikese kasutustee ega ühe kliendi sünteetilise katse põhjal.
+- Uudiste 4 eelvaadet ja pakutud 7 päeva algvaade on teostusettepanekud. Vanemad perioodid jäävad kättesaadavaks. Nelja eelvaate nägemine ei märgi kõiki teisi kuulutusi loetuks; suur lisamiskogus ei tõrju poe eraldi teadet välja. Näidiskujunduses olevad poed, hinnad ja kogused on kujuteldavad.
+- Fotobaitide välissalvestus ja andmebaasi tehing ei ole ühine tehing. Uus valmisoleku ja sõnumisse kinnitamise kontroll tõkestab hilinenud omaksvõtu; poolelioleva välise kirjutuse lõppu ega vana avaliku faili URL-i kohest kadumist sellega ei lubata. Koristamise ja lõppkustutamise töö jääb eraldi.
+- Pakkumislink lisatakse ühe teadliku kontaktiavamise kohta järgmisele sõnumile, mitte ainult üks kord kogu vestluse ajal. Sama pakkumise hilisem uus avamine võib selle uuesti lisada. Kaardi automaatne lisamine igale sõnumile ja eraldi Lisa link uuesti tegevus ei kuulu kokkulepitud lahendusse.
+
+## Keskkond
+
+- /Users/taivo/selqiro; https://github.com/Taivo17/selqiro.git. Viimane vastu võetud alus 908a45717c6c66e717ab46c2ec0aa7bb5dd44954; puu ed872b82a9ac67fe9f0073716492e2fb7b90b893; 2335 faili. Raport ja kasutaja Ready / Production pilt on vastu võetud 24.11.2026.
+- Next 16.4.6, Sharp 0.35.5, package.json ja lukufail säilisid. Raportis on olemasolev Supabase CLI 2.117.0 ja projekt vyjletlmwoiwxsnsunlm. Sõltuvusi, SMTP-d, Authi ega DNS-i ei seadistatud.
+- Uus käivitaja säilitab viimase eduka account-message-media-20261124/484105b40683bb971a3ed3a7157a7571825fb951043a8001554410c57dba618d/result.json originaali ainult lugemiseks. Selle SHA256 on 64301451a3d70411faa35defc74e37f42d0dc7b5210a880a813a298487182ce4. Uue muudatuse päevik on offer-message-intent-20261124.
+
+## Ajalugu (mitte praegused käsud)
+
+Vana sisenemisleht: `docs/archive/99_V2_HANDOFF_NEXT_CHAT.before-price-core-20261004-6df0af9.md`.
+Kõik 5573 algset rida säilivad bait-baidilt; SHA-256 `667e47990a7d3cc20ff53709cb861663b4565cf1d3c830eda88e0d18e60fdb8a`.
+Vanade failide NEXT/CURRENT pealkirjad ei ole tänased käivitamisjuhised.

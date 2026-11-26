@@ -1,0 +1,242 @@
+{
+  "format": "selqiro-account-job-write-native-tests-v1",
+  "started_at": "2026-11-25T19:57:30.018Z",
+  "production_executed": false,
+  "production_rows_used": false,
+  "tests": [
+    {
+      "name": "postgres_is_exactly_17_6",
+      "passed": true,
+      "duration_ms": 3
+    },
+    {
+      "name": "jsonb_fingerprints_match_postgres",
+      "passed": true,
+      "duration_ms": 3
+    },
+    {
+      "name": "real_old_mutation_target_matches_accepted_pin",
+      "passed": true,
+      "duration_ms": 1
+    },
+    {
+      "name": "production_preflight_rejects_fixture_substitutions",
+      "passed": true,
+      "duration_ms": 28
+    },
+    {
+      "name": "preflight_is_read_only_and_recognizes_exact_fixture_base",
+      "passed": true,
+      "duration_ms": 30
+    },
+    {
+      "name": "unknown_function_acl_stops_before_any_DDL",
+      "passed": true,
+      "duration_ms": 44
+    },
+    {
+      "name": "DDL_failure_rolls_back_both_target_changes",
+      "passed": true,
+      "duration_ms": 110
+    },
+    {
+      "name": "single_apply_commits_then_emits_verified_receipt",
+      "passed": true,
+      "duration_ms": 117
+    },
+    {
+      "name": "independent_connection_verifies_committed_after_state",
+      "passed": true,
+      "duration_ms": 111
+    },
+    {
+      "name": "second_apply_is_refused_without_changes",
+      "passed": true,
+      "duration_ms": 59
+    },
+    {
+      "name": "helper_and_job_table_are_closed_to_app_roles",
+      "passed": true,
+      "duration_ms": 1
+    },
+    {
+      "name": "private_actor_owner_same_can_save_publish_status_renew",
+      "passed": true,
+      "duration_ms": 20
+    },
+    {
+      "name": "business_owner_can_save_publish_status_renew",
+      "passed": true,
+      "duration_ms": 13
+    },
+    {
+      "name": "business_member_and_canonical_owner_both_active_allows",
+      "passed": true,
+      "duration_ms": 3
+    },
+    {
+      "name": "actor_missing_state_denies_new_write_without_receipt",
+      "passed": true,
+      "duration_ms": 3
+    },
+    {
+      "name": "owner_missing_state_denies_new_write_without_receipt",
+      "passed": true,
+      "duration_ms": 3
+    },
+    {
+      "name": "actor_closed_state_denies_new_write_without_receipt",
+      "passed": true,
+      "duration_ms": 3
+    },
+    {
+      "name": "owner_closed_state_denies_new_write_without_receipt",
+      "passed": true,
+      "duration_ms": 2
+    },
+    {
+      "name": "actor_zero_revision_denies_new_write_without_receipt",
+      "passed": true,
+      "duration_ms": 2
+    },
+    {
+      "name": "owner_zero_revision_denies_new_write_without_receipt",
+      "passed": true,
+      "duration_ms": 2
+    },
+    {
+      "name": "actor_negative_revision_denies_new_write_without_receipt",
+      "passed": true,
+      "duration_ms": 3
+    },
+    {
+      "name": "owner_negative_revision_denies_new_write_without_receipt",
+      "passed": true,
+      "duration_ms": 3
+    },
+    {
+      "name": "actor_banned_denies_new_write_without_receipt",
+      "passed": true,
+      "duration_ms": 9
+    },
+    {
+      "name": "owner_banned_denies_new_write_without_receipt",
+      "passed": true,
+      "duration_ms": 3
+    },
+    {
+      "name": "actor_deleted_denies_new_write_without_receipt",
+      "passed": true,
+      "duration_ms": 2
+    },
+    {
+      "name": "owner_deleted_denies_new_write_without_receipt",
+      "passed": true,
+      "duration_ms": 4
+    },
+    {
+      "name": "actor_nonfinite_created_denies_new_write_without_receipt",
+      "passed": true,
+      "duration_ms": 3
+    },
+    {
+      "name": "owner_nonfinite_created_denies_new_write_without_receipt",
+      "passed": true,
+      "duration_ms": 3
+    },
+    {
+      "name": "missing_auth_actor_or_owner_fails_closed",
+      "passed": true,
+      "duration_ms": 5
+    },
+    {
+      "name": "null_owner_or_account_helper_arguments_fail_closed",
+      "passed": true,
+      "duration_ms": 1
+    },
+    {
+      "name": "all_four_operations_and_new_key_noop_denied_for_closed_owner",
+      "passed": true,
+      "duration_ms": 8
+    },
+    {
+      "name": "exact_receipt_replay_preserved_when_owner_closes",
+      "passed": true,
+      "duration_ms": 9
+    },
+    {
+      "name": "mutations_and_receipts_rollback_together",
+      "passed": true,
+      "duration_ms": 3
+    },
+    {
+      "name": "expired_ban_and_null_created_time_remain_allowed",
+      "passed": true,
+      "duration_ms": 4
+    },
+    {
+      "name": "close_first_state_commit_denies_waiting_new_job",
+      "passed": true,
+      "duration_ms": 33
+    },
+    {
+      "name": "write_first_closure_waits_for_job_and_receipt_commit",
+      "passed": true,
+      "duration_ms": 47
+    },
+    {
+      "name": "changed_canonical_owner_is_checked_instead_of_creator_or_member",
+      "passed": true,
+      "duration_ms": 7
+    },
+    {
+      "name": "business_owner_change_waits_for_existing_actor_lock",
+      "passed": true,
+      "duration_ms": 31
+    },
+    {
+      "name": "final_target_and_preserved_catalog_still_exact",
+      "passed": true,
+      "duration_ms": 55
+    }
+  ],
+  "postgres": "postgres (PostgreSQL) 17.6",
+  "fixture_base_fingerprint": "8f0791369115aae7f7b025f841e5da39dc8ec668292c707aaaca39635cd191f2",
+  "production_pins": {
+    "base": "69e5acb22bc492672721d3d8af7a5b7f907c4cb7bf9e6d512354e28055592c08",
+    "before": "41ed49b501abf7d8c12187ac23d9424a975aabd22b82628940ed11c3ffc7ea24",
+    "after": "4ccabeda9dffa9c6f1b558d30ffb522b03c7c9e9fe61af8ed360904e35680a82"
+  },
+  "substitutions": [
+    {
+      "object": "auth.uid()",
+      "reason": "Synthetic JWT GUC reader; no hosted Auth service. Production body and definition remain independently pinned."
+    },
+    {
+      "object": "listing_publication_private.hosted_storage_contract_ready()",
+      "reason": "Unrelated managed storage catalog gate returns true; actual actor gate/authority/locking and all job writes are executed."
+    },
+    {
+      "object": "identity/auth/policy relations",
+      "reason": "Synthetic minimal rows/columns for actual job functions, not a hosted data clone; production catalog remains separately exact-pinned."
+    }
+  ],
+  "passed": true,
+  "finished_at": "2026-11-25T19:57:31.133Z",
+  "test_count": 39,
+  "source_hashes": {
+    "release/account-availability.sql": "414146879ef910d1c59b1eac3e11d0ae95a59208d62ec6a1c6955de497d11f5d",
+    "release/mutate.sql": "8ff15ac856b39f631efc1932360d3712f2642d73a58d945a9f13bd11300b3561",
+    "release/preflight.sql": "a5f5d95d9940422510b8267a5d40dd7aca1c80f48580905101668cf7abbbd9e5",
+    "release/apply.sql": "376f242d36847bba8ac8294402f8d608d243502999171fab72645c411ee46f9a",
+    "release/verify.sql": "bd5e817e966f166baa7d24a0f353a219b43e46c9730e8804beab4f9c49da8b59",
+    "release/catalog-query.sql": "86609dfa791bc36d45fa1d2e6ecbb78b10e526bac59ae1d21b2b5b79ead5e629",
+    "release/expected-contract.json": "195d742cf44245a4a417e8912a59d5dee8e737ac8d48e2fd93ee6ca10c8c6f30",
+    "release/source-pins.json": "0106f4d1747b8f3c8fa6317e35b43e82f5e3ff4586290cab2da79023dc34d5b8",
+    "release/sql_contract.py": "b4a4d2146a7deeecbbf1e67ee8a63ab51fb1790926a8560585a30c8ea4902543",
+    "generator/build.py": "d6dd7311af0e0e6ee800fe0f337751975a072ad755b0d4170caab32bc789ea3b",
+    "tests/build_fixture.py": "2eb21ce43ccdbe0fb537c68a41f3d8b3bf599203d1fc1e6b244a1c88771c0000",
+    "tests/native.mjs": "597c6340197a9f930d65108f774b24760cd2d42d44219e6ba91ac47852d44f74",
+    "tests/fixture.sql": "b9385b7bcc6976cbc6f0e52d8d51497898c69f58ae526071537611c5c89175cc"
+  }
+}

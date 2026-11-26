@@ -1,3 +1,28 @@
+
+<!-- SELQIRO_ACCOUNT_JOB_WRITE_PREPARED_20261125 -->
+## 25.11.2026 — sõnumite tulemus vastu võetud; töökuulutuste konto kontroll valmis
+
+`c66a39b` pakkumiskaartide muudatus on kasutaja raporti, Ready / Production
+ekraanitõendi ning sõnumite ja piltide kasutuskontrolli põhjal vastu võetud.
+Sama pakkumise uus teadlik avamine lisab uue eemaldatava kaardi; järgnevad
+vastused seda ei korda ning päis näitab viimati tegelikult jagatud pakkumist.
+
+Järgmine kitsas muudatus kontrollib konto kättesaadavust töökuulutuse
+salvestamisel, avaldamisel, staatuse muutmisel ja tähtaja pikendamisel.
+Eraisiku ja ettevõtte tegelik omanik kontrollitakse serveris. Täpsed kordused
+ning olemasolevad õigus-, sisu- ja tingimusreeglid säilivad.
+39 PostgreSQL ja 27 käivitaja sihitud kontrolli läbisid;
+uus Maci rakendus, commit/push ning tootmise tulemus on veel ootel.
+Uut Next build'i pole vaja, sest rakenduse sisendid ei muutu.
+
+Üks praegune juhis on `docs/continuity/HOSTED_PORTAL.md`; tööseis on
+`CURRENT_STATE.json` ja sellest genereeritud 99-leht. Vanu käivitusjuhiseid
+ei korrata. Konto tervik → jälgitavate Uudised → esiletõstmine → reklaamid.
+Detailid: `docs/architecture/account-job-write-fence-v1.md` ja
+`docs/architecture/offer-message-intent-accepted-20261125.md`.
+
+---
+
 <!-- SELQIRO_PROVIDER_CONTROLS_PREPARED_20261113 -->
 ## 13.11.2026 — 24 tunni peitmise ja eraldi blokeerimise lähtekood valmis
 
