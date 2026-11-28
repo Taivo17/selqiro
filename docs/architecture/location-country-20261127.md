@@ -1,13 +1,16 @@
 # Asukohaotsing valitud riigi piires
 
-27.11.2026, Europe/Tallinn. **Tooteleping ja järjestatud rakendusplaan.**
-Asukoha uus teostus ei ole veel tootmisse paigaldatud. Viimane vastu võetud
-rakenduse commit on `7c53643012545c7dfa99ba976e6f2613e3c3a201`.
+28.11.2026, Europe/Tallinn. **Tooteleping ja järjestatud rakendusplaan.**
+ASUKOHT-1 profiili asukohavalik ja salvestamine on vastu võetud. Commit
+`af78c7be2a336da661be838d3577bb51b7ad3b66` on kasutaja raportis ja sama
+versiooni Ready / Production pildil; kasutaja kinnitas salvestamise toimimist.
 
-ASUKOHT-1 metaandmete raport on vastu võetud ja profiili asukohavaliku
-teostus ette valmistatud. Selle lepingu ning tegeliku kontrollipiiri leiab
-[ASUKOHT-1 teostusest](profile-location-v1-20261127.md). Kasutuselevõtu
-juhis on [HOSTED_PORTAL.md](../continuity/HOSTED_PORTAL.md).
+Kasutaja palus enne ASUKOHT-2 avaliku profiili kaardi tööle panna. See
+piiratud **ASUKOHT-1B** on ette valmistatud; vt
+[avaliku profiili kaardi lepingut](public-profile-map-v1-20261128.md).
+ASUKOHT-1 algne leping on [siin](profile-location-v1-20261127.md).
+Praegune üks kasutuselevõtujuhis on
+[HOSTED_PORTAL.md](../continuity/HOSTED_PORTAL.md).
 
 ## 1. Otsused ja nende päritolu
 
@@ -212,6 +215,7 @@ asukoha tooteleping, mitte teine iseseisev staatuste register.
 | Etapp | Tulemus ja lõpetamise tingimus |
 | --- | --- |
 | ASUKOHT-1 — ühine alus | Ühine riigiloend ja kohavalik, serveris kinnitatud koha/riigi/täpsuse leping ning aktiivse profiili salvestatav põhiasukoht. Profiili salvestus, uus lugemine, riigivahetus, identiteedi vahetus ja privaatsus on kontrollitud. |
+| ASUKOHT-1B — avaliku profiili kaart | Kasutaja 28.11 lisapalve: avalik asula/piirkonna kaart ja ettevõtte avaliku aadressi eraldi kaardilink. Vastuvõtuks on uus raport, sama versiooni Ready / Production ning tegeliku kaardi ja nähtavuse kontroll. |
 | ASUKOHT-2 — uued pakkumised | Uus kuulutus, teenus ja töö kasutavad profiili põhiasukoha ühekordset koopiat; muudatus on pakkumisekohane ja salvestub õigesti. Senised avaldamise kviitungid/kehtivus säilivad. |
 | ASUKOHT-3 — otsing | Üks riigipiiriga kaugusjärjestus serveris ning sama kasutuskäitumine kuulutuste, teenuste ja töö otsingus. Valga/Soome/lehekülgede kontrollid läbivad. |
 | ASUKOHT-4 — ajutine teenusekoht | Käsitsi ajutine koht, algus/lõpp/tühistamine, ettevõtte täpsus ja eraisiku ligikaudsus; aegumine ning põhikoha kuvamine on kontrollitud. |
@@ -222,7 +226,7 @@ teise jõudmiseks olemasolevat tõendit arvestatakse. „Build läbis” ei täh
 automaatselt „tootmises kontrollitud”. Valmis etapi käske ei käivitata uuesti
 lihtsalt uude vestlusse kolimise pärast.
 
-ASUKOHT-1 vahetu tehniline ettevalmistus:
+ASUKOHT-1 tehniline ettevalmistus — ajalooline, nüüd lõpetatud etapp:
 
 1. Üks piiratud ainult lugemise kontroll kehtiva profiili/omaniku/revisjoni
    lepingu ja ruumiandmete võimekuse kohta. Kataloog/õigused/funktsioonide
@@ -245,6 +249,8 @@ ASUKOHT-1 vahetu tehniline ettevalmistus:
 | 1 | Tokyo/東京, täpitähed, nullkoordinaat | Nimi säilib; arv 0 ei muutu puuduvaks. Riigi/koha valideerimine kehtib endiselt. |
 | 1 | Eraisiku käsitsi saadetud täpne aadress/punkt | Server keeldub; pelgalt UI peitmisest ei piisa. |
 | 1 | Profiili vahetus ja hiline vastus | Eelmise identiteedi koht ei kirjuta uut profiili üle. |
+| 1B | Avalik kinnitatud asula/piirkond ja peidetud koht | Avalik kaart on liigutatav/suumitav; peidetud koht ei tekita iframe'i ega aadressi kaardilinki. |
+| 1B | Ettevõtte avalik tänavaaadress | Asula kaart ja aadressiotsingu link on eristatavad; asula keskpunkti ei esitata hoone täpse asukohana. |
 | 2 | Profiil Paide, uus pakkumine Tartu | Ainult pakkumise koht muutub; järgmine uus pakkumine kasutab profiili Paidet. |
 | 2 | Muudetud/taastatud mustand + profiili värskendus | Kasutaja tehtud valik ega pooleliolev käsk ei kirjutata üle. |
 | 2 | Vanad pakkumised | Ei täideta, teisendata ega liigutata. |

@@ -16,7 +16,7 @@ const previousProject = process.env.NEXT_PUBLIC_SUPABASE_URL;
 process.env.NEXT_PUBLIC_SUPABASE_URL = project;
 const proof = {format: 'selqiro-account-public-profile-client-tests-v1', started_at: new Date().toISOString(),
   cases: [], limits: ['RPC transport and account eligibility responses are synthetic.',
-    'SQL account eligibility is tested separately; these cases verify actual unchanged client behavior.',
+    'SQL account eligibility is tested separately; these cases verify preserved profile and media behavior with the new guarded map read.',
     'React renderToStaticMarkup is not a browser, DOM, real service or account-closure test.']};
 function remember(load) {
   for (const [name, hash] of load.inputs) {
@@ -47,6 +47,10 @@ function fixture({profile = [card()], profileError = null, decoration = media(),
         assert.ok(signal instanceof AbortSignal); assert.equal(signal.aborted, false);
         return Promise.resolve({data: decoration, error: mediaError});
       }};
+      if (name === 'get_public_profile_location_v1') return {abortSignal(signal) {
+        assert.ok(signal instanceof AbortSignal); assert.equal(signal.aborted, false);
+        return Promise.resolve({data: {identity_id: I, location: null}, error: null});
+      }};
       throw new Error('Unexpected public RPC: ' + name);
     }};
   const load = loader({'src/shared/supabase/browserClient.ts': {supabaseBrowserClient: client}});
@@ -54,7 +58,8 @@ function fixture({profile = [card()], profileError = null, decoration = media(),
   return {calls, async read(slug = SLUG) {try {return await api.getPublicProfileBySlug(slug);} finally {remember(load);}}};
 }
 const expectedReads = [{name: 'get_store_by_slug', args: {store_slug_input: SLUG}},
-  {name: 'get_public_profile_media_v1', args: {p_identity_id: I}}];
+  {name: 'get_public_profile_media_v1', args: {p_identity_id: I}},
+  {name: 'get_public_profile_location_v1', args: {p_identity_id: I}}];
 
 scenario('empty canonical result stops before media, offers, raw tables or private account reads', async () => {
   for (const profile of [[], null]) {

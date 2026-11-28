@@ -22,6 +22,7 @@ import ProviderControlsBoundary from "../../viewer-provider-controls/components/
 import PublicProfileProviderMenu from "./PublicProfileProviderMenu";
 import PublicProfileJobsSection from "../../jobs/components/PublicProfileJobsSection";
 import { profileEditorMessages } from "../../profile-editor/i18n/messages";
+import PublicProfileLocationCard from "./PublicProfileLocationCard";
 
 const updates = (uiLanguage: Language) => { const t = (key: keyof typeof publicUiMessages.en, params?: TranslationParams) => getCatalogTranslation(uiLanguage, publicUiMessages, key, params); return [
   {
@@ -296,22 +297,7 @@ function PublicProfileContent({slug}: {slug: string}) {
             </div>
           </section>
 
-          <section className="rounded-[30px] border border-black/5 bg-white p-6 shadow-sm">
-            <div className="mb-5 flex items-center justify-between gap-4">
-              <div>
-                <p className="text-xs font-bold uppercase tracking-[0.24em] text-neutral-400">
-                  {t("location")} </p>
-                <h2 className="mt-2 text-xl font-black">
-                  {profile.locationLabel || t("location_unspecified")}
-                </h2>
-              </div>
-            </div>
-
-            <div className="h-36 rounded-[22px] bg-gradient-to-br from-neutral-100 to-neutral-200" />
-
-            <p className="mt-4 text-sm leading-6 text-neutral-500">
-              {t("location_precision_depends_on_the_profile_s_privacy_and_business_settings")} </p>
-          </section>
+          <PublicProfileLocationCard key={`location-${profile.identityId ?? "legacy"}-${profile.slug}`} profile={profile} />
 
           <section className="rounded-[30px] border border-black/5 bg-white p-6 shadow-sm">
             <div className="mb-5 flex items-center justify-between gap-4">

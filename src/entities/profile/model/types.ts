@@ -1,4 +1,5 @@
 import type {CoverFit} from "../../../shared/profile-media/coverFit";
+import type {CoarseProfileLocation} from "./publicProfileLocation";
 export type PublicProfile = {
   identityId: string | null;
   identityType: string | null;
@@ -15,6 +16,8 @@ export type PublicProfile = {
   country: string | null;
   city: string | null;
   locationLabel: string;
+  locationVisibility?: "hidden" | "city" | "exact" | null;
+  mapLocation?: CoarseProfileLocation | null;
   websiteUrl: string | null;
   businessAddress: string | null;
 };

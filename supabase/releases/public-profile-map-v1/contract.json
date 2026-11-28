@@ -1,0 +1,24 @@
+{
+  "format": "selqiro-public-profile-map-api-v1",
+  "phase": "ASUKOHT-1B",
+  "function": "public.get_public_profile_location_v1(uuid)",
+  "arguments": {"p_identity_id": "uuid"},
+  "roles": ["anon", "authenticated"],
+  "result": {
+    "unavailable_profile": null,
+    "readable_profile_keys": ["identity_id", "location"],
+    "location": "null or public confirmed locality/region",
+    "location_keys": ["country_code", "country_name", "place_name", "region_name", "latitude", "longitude", "precision"],
+    "precision": ["locality", "region"]
+  },
+  "eligibility_authority": "public.get_store_by_slug(text), canonical slug then exact identity match",
+  "point_authority": "profile_location_private.profile_locations; validated ASUKOHT-1 selection only",
+  "visibility": "city or exact; hidden or unknown returns location:null",
+  "text_consistency": "selected country_name and place_name equal current guarded public country and city",
+  "withheld_fields": ["source", "source_id", "source_kind", "address_text", "legacy lat", "legacy lng"],
+  "content_writes": false,
+  "geocoding": false,
+  "provider_requests": false,
+  "legacy_backfill": false,
+  "exact_business_pin": false
+}

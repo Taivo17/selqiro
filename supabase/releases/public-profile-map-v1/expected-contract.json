@@ -1,0 +1,84 @@
+{
+  "format": "selqiro-public-profile-map-expected-contract-v1",
+  "baseline_sha256": "23dabb9075381f629643b9742bce7d0995e5bd55987f51d7d5f0bb93399e7d8b",
+  "preserved_baseline_facts": {
+    "legacy_sha256": "eb0bcb241ed6d1d0f786dc06a59b91ecbef0b584d594b105b704331a3c08d2c0",
+    "profile_location_sha256": "e9d04dd82630e259571f0ce3ad06704b835266d184dfe740baa59ef3fc32b06a"
+  },
+  "release_sha256": "5bd05bc448a072a67615c22f1fd3004ca740e4ce2fd1fb993d66f1c07b2d8193",
+  "contract_sha256": "a0697562b1f517c838816498556c89e3c8258c8c0dbfbef023c56663ddb35b39",
+  "accepted_report_name": "selqiro-profiili-asukoht-20261127-raport-20261128-131758-d2c97c830f81.json",
+  "accepted_report_sha256": "e8836d6f572ce0310d0ffb8280a666be9c3063af30c59b044dd492be28b92166",
+  "accepted_source_commit": "af78c7be2a336da661be838d3577bb51b7ad3b66",
+  "new_catalog": {
+    "counts": {
+      "roles": 3,
+      "routines": 1
+    },
+    "format": "selqiro-public-profile-map-catalog-v1",
+    "functions": [
+      {
+        "kind": "f",
+        "name": "public.get_public_profile_location_v1(uuid)",
+        "owner": "postgres",
+        "config": [
+          "search_path=pg_catalog"
+        ],
+        "grants": [
+          {
+            "grantee": "anon",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          },
+          {
+            "grantee": "authenticated",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          },
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          }
+        ],
+        "result": "jsonb",
+        "strict": false,
+        "definer": true,
+        "language": "plpgsql",
+        "parallel": "u",
+        "arguments": "p_identity_id uuid",
+        "effective": [
+          {
+            "role": "anon",
+            "execute": true
+          },
+          {
+            "role": "authenticated",
+            "execute": true
+          },
+          {
+            "role": "service_role",
+            "execute": false
+          }
+        ],
+        "leakproof": false,
+        "volatility": "s",
+        "body_sha256": "5f5cdec9b4ad1ea6392ba1767e028b6d83daa79fadfcf09d73f8b38b3477ab71",
+        "definition_sha256": "a133b168186c570ca9399b0ab58b4dbd1960eaa0b7bb9d28badf09541fb2ab55"
+      }
+    ]
+  },
+  "sql_sha256": {
+    "baseline-query.sql": "97e33039be5c52309ea80e5c325ef86b58ad51006c51cb672b42da2dd6095b2e",
+    "new-catalog-query.sql": "0d5c81daaf5755101af6e740bbc26f11ab83a24ae6126720f547695c05775b86",
+    "changes.sql": "5bd05bc448a072a67615c22f1fd3004ca740e4ce2fd1fb993d66f1c07b2d8193",
+    "preflight.sql": "3da63bf74eed4a8cc883280510cd05e2731d39abfec0e38002cd5194897d00c8",
+    "apply.sql": "e152fd945d1471cbf43d63b6f59947d6286e573c3503888915a79d4ba92718da",
+    "verify.sql": "6985604931783b020df5ee4e22498fc7b71d88f0f05136780ab95871ac1b80a8",
+    "execution-prerequisite.sql": "b1b54118dcd8a7dff8cb6a3af82ea0fa86271012f1891d19ce02ec6022ffede3",
+    "sql_contract.py": "74717ed5786d56a2677c177c81d7a9a5911dd573df0b7370c46ea1238da9426b"
+  }
+}

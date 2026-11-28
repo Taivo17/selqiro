@@ -1,5 +1,10 @@
 # Profiili asukohavaliku kasutuselevõtt
 
+> Ajalooline juhend. ASUKOHT-1 võeti 28.11.2026 vastu commitiga `af78c7b`:
+> paigaldusraport, sama versiooni Ready / Production ja kasutaja kinnitus
+> asukoha salvestamise toimimise kohta. Seda paketti uuesti ei käivitata.
+> Praegune järgmine samm on [avaliku profiili kaart](PROFILE_MAP_INSTALL_20261128.et.md).
+
 27.11.2026. Aktiivne töö on ASUKOHT-1. Kõigepealt seadista kohasoovituste
 võti, seejärel käivita uus uuendaja ning kontrolli selle uue versiooni profiilivormi.
 

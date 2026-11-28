@@ -2,6 +2,7 @@ import { supabaseBrowserClient } from "../../../shared/supabase/browserClient";
 import type { PublicProfile } from "../model/types";
 import { publicBusinessAddress, publicProfileWebsite } from "../model/publicProfileFields";
 import { getPublicProfileMedia } from "./getPublicProfileMedia";
+import { getPublicProfileLocation } from "./getPublicProfileLocation";
 import { DEFAULT_COVER_FIT } from "../../../shared/profile-media/coverFit";
 
 type PublicProfileRpcRow = {
@@ -64,6 +65,9 @@ export function mapPublicProfile(row: PublicProfileRpcRow, fallbackSlug: string)
       country: row.country,
       location: row.location,
     }),
+    locationVisibility: row.location_visibility === "hidden" || row.location_visibility === "city" || row.location_visibility === "exact"
+      ? row.location_visibility : null,
+    mapLocation: null,
     websiteUrl: publicProfileWebsite(row.website_url),
     businessAddress: publicBusinessAddress(row),
   };
@@ -92,15 +96,26 @@ export async function getPublicProfileBySlug(
 
   const profile = mapPublicProfile(row, slug);
   if (!profile.identityId) return profile;
-  try {
-    const media = await getPublicProfileMedia(profile.identityId);
-    if (!media) return null;
-    return {...profile, avatarUrl: media.avatar_url, bannerUrl: media.banner_url,
-      bannerFit: {focus_x: media.focus_x, focus_y: media.focus_y, zoom: media.zoom},
-      bannerWidth: media.banner_width, bannerHeight: media.banner_height};
-  } catch {
-    // A failed decorative read must not hide a readable profile. Do not invent
-    // a centered crop for a managed cover whose saved position is unavailable.
-    return {...profile, bannerUrl: profile.bannerUrl?.includes("/managed-profile-v1/") ? null : profile.bannerUrl};
-  }
+  const [mediaResult, locationResult] = await Promise.allSettled([
+    getPublicProfileMedia(profile.identityId), getPublicProfileLocation(profile.identityId),
+  ]);
+  // Either guarded reader can discover that the profile became unavailable
+  // after the initial lookup. A transport failure is a different condition.
+  if ((mediaResult.status === "fulfilled" && mediaResult.value === null)
+    || (locationResult.status === "fulfilled" && locationResult.value === null)) return null;
+  const media = mediaResult.status === "fulfilled" ? mediaResult.value : null;
+  const location = locationResult.status === "fulfilled" ? locationResult.value?.location : null;
+  const visible = profile.locationVisibility === "city"
+    || (profile.identityType === "business" && profile.locationVisibility === "exact");
+  // The two public snapshots must agree; never attach a map from a concurrent
+  // move to an earlier city/country label or use legacy, unconfirmed lat/lng.
+  const mapLocation = visible && location && location.place_name === profile.city
+    && location.country_name === profile.country ? location : null;
+  return {...profile, mapLocation,
+    avatarUrl: media ? media.avatar_url : profile.avatarUrl,
+    bannerUrl: media ? media.banner_url
+      : profile.bannerUrl?.includes("/managed-profile-v1/") ? null : profile.bannerUrl,
+    bannerFit: media ? {focus_x: media.focus_x, focus_y: media.focus_y, zoom: media.zoom} : profile.bannerFit,
+    bannerWidth: media ? media.banner_width : profile.bannerWidth,
+    bannerHeight: media ? media.banner_height : profile.bannerHeight};
 }
