@@ -1,0 +1,710 @@
+{
+  "upload/selqiro-asukoha-aluse-kontroll-20261127-raport-20261127-133852-f5686ad8ac14.json": {
+    "bytes": 310390,
+    "sha256": "cc884c36ae31b5217b69c45e0810f28d5791572f462152225cf67d6fd11c5938"
+  },
+  "deliverables/selqiro-asukoha-aluse-kontroll-20261127/manifest.json": {
+    "bytes": 9146,
+    "sha256": "e16ec81ccc063fc8d057750f260e0367c84f81713fddfce13dfee175e4ddc144"
+  },
+  "work/location-foundation-20261127/runner/package-verification.json": {
+    "bytes": 33429,
+    "sha256": "6166bd983380579457847483bc2242ced045d44b1486962b237855a0e8ee1372"
+  },
+  "deliverables/selqiro-asukoha-aluse-kontroll-20261127/accepted-inventory.json": {
+    "bytes": 590946,
+    "sha256": "22bbd39ef2651b4ad3d0c1cc2b0742250cb176c531dd22debcc19a87122032f2"
+  },
+  "deliverables/selqiro-asukoha-aluse-kontroll-20261127/evidence/catalog/source-pins.json": {
+    "bytes": 9906,
+    "sha256": "2811e6e9a1075af1238dc40de73a402b9c9a4bfabab9530879be0b4309fb916d"
+  },
+  "deliverables/selqiro-asukoha-aluse-kontroll-20261127/evidence/catalog/scope.json": {
+    "bytes": 3084,
+    "sha256": "142bc5320b835ef1bfd4b0d4f35efbb69fae8383a842bdbb7e57e31432dded58"
+  },
+  "deliverables/selqiro-asukoha-aluse-kontroll-20261127/evidence/accepted-report-reference.json": {
+    "bytes": 643,
+    "sha256": "507645ef611fbbbe371e88f21adafdabbbe700def2785fc00b06a7426537f340"
+  },
+  "deliverables/selqiro-asukoha-aluse-kontroll-20261127/kontrolli.py": {
+    "bytes": 8067,
+    "sha256": "4256be1ee638226f72a878d6065e6d2741ff8bd2f3903d0c43035e212757a1a7"
+  },
+  "deliverables/selqiro-asukoha-aluse-kontroll-20261127/catalog_access.py": {
+    "bytes": 4432,
+    "sha256": "117604dafc1b7e2e95ed38f77c6dc2dae918cc9dbccdb6f5bdf41a55b001e92b"
+  },
+  "deliverables/selqiro-asukoha-aluse-kontroll-20261127/catalog_contract.py": {
+    "bytes": 22870,
+    "sha256": "0b3c58e0916b382ce3f147fe5f7c37410022fdfc21a3a5c2b9506595d029a2ec"
+  },
+  "deliverables/selqiro-asukoha-aluse-kontroll-20261127/git_guard.py": {
+    "bytes": 5701,
+    "sha256": "1b04523dadd4e144b08e341fdfbb100126d049f14a26757eb5aac029f6a3997d"
+  },
+  "deliverables/selqiro-asukoha-aluse-kontroll-20261127/journal.py": {
+    "bytes": 4957,
+    "sha256": "bc029d45cbdf44f6e532204de2675f66519a93eaa7791f118ac66471650e9bdc"
+  },
+  "deliverables/selqiro-asukoha-aluse-kontroll-20261127/process_cleanup.py": {
+    "bytes": 3900,
+    "sha256": "69643259634c96f0ac428be2cd8772fb21b1588dc79c4f347d1899b8dcd9179f"
+  },
+  "deliverables/selqiro-asukoha-aluse-kontroll-20261127/process_snapshot.py": {
+    "bytes": 6878,
+    "sha256": "7d8881e815032fdcc1cd6afdb643c9efedd4f201c042bba36e37b9d1402e070b"
+  },
+  "deliverables/selqiro-asukoha-aluse-kontroll-20261127/receipts.py": {
+    "bytes": 5213,
+    "sha256": "1f0a0f3bb7a2c30e0b5431322778ee3f79c3ce820709a627940ea5f941a03484"
+  },
+  "deliverables/selqiro-asukoha-aluse-kontroll-20261127/reporting.py": {
+    "bytes": 8436,
+    "sha256": "4ef7778e00be0433073d058dfc7184ff501b8821dd7a0b54a1b2684bab3b0e02"
+  },
+  "deliverables/selqiro-asukoha-aluse-kontroll-20261127/runtime_check.py": {
+    "bytes": 8799,
+    "sha256": "848c9832fb3d490bd54730e94c96f19df36c141b82a3987eae03d0f44d43db16"
+  },
+  "deliverables/selqiro-asukoha-aluse-kontroll-20261127/support.py": {
+    "bytes": 3872,
+    "sha256": "28e76a1677e1bf7e5d3ff0ff9f78092fb619102e7e579b1255e5193ea5756920"
+  },
+  "deliverables/selqiro-asukoha-aluse-kontroll-20261127/transport.py": {
+    "bytes": 10901,
+    "sha256": "9a76a2630d47bf98bc2b093e22087d529c759718eb92fa3fff22204c7ae1c418"
+  },
+  "deliverables/selqiro-asukoha-aluse-kontroll-20261127/workflow.py": {
+    "bytes": 6783,
+    "sha256": "4a6ef0a35aaefa61f76d6faa0e3d50c91d1f1195ddcf39d4885ec01eaaafff38"
+  },
+  "deliverables/selqiro-asukoha-aluse-kontroll-20261127/ALUSTA_SIIT.md": {
+    "bytes": 3165,
+    "sha256": "603e3eace60a4f836ece918e62c174aa9d4952764651e3ad878cc38a37289435"
+  },
+  "deliverables/selqiro-asukoha-aluse-kontroll-20261127/docs/99_V2_HANDOFF_NEXT_CHAT.md": {
+    "bytes": 12238,
+    "sha256": "57ecce8a55dd78eca2335e5d6526dc89d4a44742c01ff4aa9dbb7966da125ffd"
+  },
+  "deliverables/selqiro-asukoha-aluse-kontroll-20261127/docs/architecture/account-deletion-status-20261127.et.md": {
+    "bytes": 5273,
+    "sha256": "67c59e406c894115720fbe973815cd7db8546b85f821ec7b4151a74aa3251aae"
+  },
+  "deliverables/selqiro-asukoha-aluse-kontroll-20261127/docs/architecture/account-deletion-status-20261127.json": {
+    "bytes": 10362,
+    "sha256": "f2fcc2068f265300e0b2f520b39d1b8c127e2fa99b9e999bd89c982976e71050"
+  },
+  "deliverables/selqiro-asukoha-aluse-kontroll-20261127/docs/architecture/job-search-accepted-20261127.md": {
+    "bytes": 3588,
+    "sha256": "c0373322857866ac97e8c73365d1041f9cfb8a1223a578f61226c9106bc54395"
+  },
+  "deliverables/selqiro-asukoha-aluse-kontroll-20261127/docs/architecture/location-country-20261127.md": {
+    "bytes": 18102,
+    "sha256": "dc032924d388a847380d258abc38bf0e0aec6fbaa951e53bbf218a39173eb753"
+  },
+  "deliverables/selqiro-asukoha-aluse-kontroll-20261127/docs/architecture/location-country-20261127/profile-location-audit.json": {
+    "bytes": 7751,
+    "sha256": "b8ca65c2dc36ffaad8741564b506a062b0e4644ad30ad8272c100ac494f001bc"
+  },
+  "deliverables/selqiro-asukoha-aluse-kontroll-20261127/docs/architecture/location-country-20261127/profile-location-findings.md": {
+    "bytes": 22776,
+    "sha256": "04b218e42360fcd56697f64f0af98e89d268b7ddeef2417b481144281956dde3"
+  },
+  "deliverables/selqiro-asukoha-aluse-kontroll-20261127/docs/architecture/location-foundation-catalog-20261127.md": {
+    "bytes": 2707,
+    "sha256": "413a0b31c4ec63ef5f91387faca8cb802097d0ec4389df4ee5518d5fee30748d"
+  },
+  "deliverables/selqiro-asukoha-aluse-kontroll-20261127/docs/architecture/location-provider-20261127.md": {
+    "bytes": 6332,
+    "sha256": "50e9e820e62a8b0433e5df5cb805d85ac6aab79b76ad02bf7529c762cd568269"
+  },
+  "deliverables/selqiro-asukoha-aluse-kontroll-20261127/docs/architecture/location-search-20261126.md": {
+    "bytes": 10230,
+    "sha256": "341a5e34fe681d8d83f2ebb36b589ae2b9b8344d451814d8a9a137cb40b33b17"
+  },
+  "deliverables/selqiro-asukoha-aluse-kontroll-20261127/docs/continuity/CURRENT_STATE.json": {
+    "bytes": 12198,
+    "sha256": "0c32794a8daacbf0fce9dc05dfd65e7167b40ee3cb4045f41076570e6d5c9b37"
+  },
+  "deliverables/selqiro-asukoha-aluse-kontroll-20261127/docs/continuity/HOSTED_PORTAL.md": {
+    "bytes": 1455,
+    "sha256": "7c8dbbfe73ccb058ff0a5ec1a4b9b922856038bffb3d009a507c9f32190a6830"
+  },
+  "deliverables/selqiro-asukoha-aluse-kontroll-20261127/docs/selqiro-dev-log.md": {
+    "bytes": 238084,
+    "sha256": "a84586cff9f8f74fce720f745a11ca9ffd70e09e208e72e3cc2c9083444e151f"
+  },
+  "deliverables/selqiro-asukoha-aluse-kontroll-20261127/evidence/catalog/README.md": {
+    "bytes": 8372,
+    "sha256": "9d6ee4804a0c4d15b21fcfb47cb373273db8ba2c97b5c7369c911b139843d1f5"
+  },
+  "deliverables/selqiro-asukoha-aluse-kontroll-20261127/evidence/catalog/build_catalog.py": {
+    "bytes": 23090,
+    "sha256": "9f42ee754602569d55c7dcd838228d9edb58fb04ac79bfbd068a604ef3186443"
+  },
+  "deliverables/selqiro-asukoha-aluse-kontroll-20261127/evidence/catalog/catalog.sql": {
+    "bytes": 32238,
+    "sha256": "85111d2673e28db2e4524fa655f3bb1000d38980d171045c9452db3dc39e3b78"
+  },
+  "deliverables/selqiro-asukoha-aluse-kontroll-20261127/evidence/catalog/catalog_contract.py": {
+    "bytes": 22870,
+    "sha256": "0b3c58e0916b382ce3f147fe5f7c37410022fdfc21a3a5c2b9506595d029a2ec"
+  },
+  "deliverables/selqiro-asukoha-aluse-kontroll-20261127/evidence/catalog/package-evidence-allowlist.json": {
+    "bytes": 3782,
+    "sha256": "42b374cfe667f2f922c0c89d33061c217952fac27de8bd427d057e5a71d95408"
+  },
+  "deliverables/selqiro-asukoha-aluse-kontroll-20261127/evidence/catalog/tests/attempt-02/complete-envelope.json": {
+    "bytes": 122455,
+    "sha256": "65abb78939208afb958e8b94483ef4572003368cfc0ed3cdc0121a9b5f81f9fb"
+  },
+  "deliverables/selqiro-asukoha-aluse-kontroll-20261127/evidence/catalog/tests/attempt-02/missing-auth-column-envelope.json": {
+    "bytes": 122420,
+    "sha256": "b578099be8e3ff65098b8af09fca2a1773fc627f55c04e47b686aca41a82aa60"
+  },
+  "deliverables/selqiro-asukoha-aluse-kontroll-20261127/evidence/catalog/tests/attempt-02/missing-composite-envelope.json": {
+    "bytes": 109288,
+    "sha256": "4d81e2c21d7d1a6aeb6c6566c5bdd07f5d6e7cc77bf5ad052e2c857f031d70be"
+  },
+  "deliverables/selqiro-asukoha-aluse-kontroll-20261127/evidence/catalog/tests/attempt-02/missing-function-envelope.json": {
+    "bytes": 119635,
+    "sha256": "b08a93ec2eed03d38cb815c5c0f91fa0c6fb077aec7d376a1a8bcba68981d5a2"
+  },
+  "deliverables/selqiro-asukoha-aluse-kontroll-20261127/evidence/catalog/tests/attempt-02/missing-optional-envelope.json": {
+    "bytes": 119560,
+    "sha256": "11b2261001c5426cb8f751095a5424441d63bf5427200157e15ab434f00de96e"
+  },
+  "deliverables/selqiro-asukoha-aluse-kontroll-20261127/evidence/catalog/tests/attempt-02/missing-relation-envelope.json": {
+    "bytes": 113433,
+    "sha256": "5720e87d448aaed2809b32b368208d9e29e8bcf46aa2ea12542ae544b53216ea"
+  },
+  "deliverables/selqiro-asukoha-aluse-kontroll-20261127/evidence/catalog/tests/attempt-02/native-result.json": {
+    "bytes": 2082,
+    "sha256": "5826fe7ebe5aae117c7e818229feb5643c7ab5d0d6cd194cbe247a27c45e9404"
+  },
+  "deliverables/selqiro-asukoha-aluse-kontroll-20261127/evidence/catalog/tests/attempt-02/output-limited-envelope.json": {
+    "bytes": 6608,
+    "sha256": "ab1374f0bf0e8597cfca2815ead5b45d5c53688d67604405b9e5b1f82d622848"
+  },
+  "deliverables/selqiro-asukoha-aluse-kontroll-20261127/evidence/catalog/tests/attempt-02/parser-result.json": {
+    "bytes": 3711,
+    "sha256": "c223a9bc08a33df0cf978ab8e9e86e38cd33b9b9e8257ddf8eece241fe7cf7a4"
+  },
+  "deliverables/selqiro-asukoha-aluse-kontroll-20261127/evidence/catalog/tests/attempt-02/row-limited-envelope.json": {
+    "bytes": 6636,
+    "sha256": "33376ce16cb91f18af06892b4dd5abf72bea58f34fb650e74ee0834696efc268"
+  },
+  "deliverables/selqiro-asukoha-aluse-kontroll-20261127/evidence/catalog/tests/attempt-02/stopped.json": {
+    "bytes": 76,
+    "sha256": "ebc72bc0eb6b5ddab283e6ffc3063ab618f7da39a9551337fad58a1bf6c49caf"
+  },
+  "deliverables/selqiro-asukoha-aluse-kontroll-20261127/evidence/catalog/tests/attempt-02/unknown-body-envelope.json": {
+    "bytes": 122393,
+    "sha256": "074caf198b44f7b5f211adb7c45b4ab7f65cbf59e8fc1da94b35818f287f4236"
+  },
+  "deliverables/selqiro-asukoha-aluse-kontroll-20261127/evidence/catalog/tests/parser_cases.py": {
+    "bytes": 4951,
+    "sha256": "d96872d92345204bb064928b1a39c1d73cf0825f478378c0f0b7415da9d747c4"
+  },
+  "deliverables/selqiro-asukoha-aluse-kontroll-20261127/evidence/catalog/tests/run_native.py": {
+    "bytes": 2431,
+    "sha256": "59722e497782601f229820df8371ad257592f96b239e2390a42b0b71db359d1b"
+  },
+  "deliverables/selqiro-asukoha-aluse-kontroll-20261127/evidence/catalog/tests/runtime.mjs": {
+    "bytes": 16602,
+    "sha256": "5ff12f7f60ddddbbbdcafa35fcd3c48e7a106852739de85b08c08e63680a0b7c"
+  },
+  "deliverables/selqiro-asukoha-aluse-kontroll-20261127/evidence/catalog/write_source_pins.py": {
+    "bytes": 7523,
+    "sha256": "05cdc4fd883e9f3ca52dcf4a32ab551104190a467ae03d8b4dc0b45521971f96"
+  },
+  "deliverables/selqiro-asukoha-aluse-kontroll-20261127/evidence/job-search-accepted-20261127/REVIEW.md": {
+    "bytes": 4176,
+    "sha256": "e499e8498a8988d69acdc576ed421a0adefb9b1a7903f12d6ba0c1cfc6dcc35e"
+  },
+  "deliverables/selqiro-asukoha-aluse-kontroll-20261127/evidence/job-search-accepted-20261127/accepted-inventory.json": {
+    "bytes": 590946,
+    "sha256": "22bbd39ef2651b4ad3d0c1cc2b0742250cb176c531dd22debcc19a87122032f2"
+  },
+  "deliverables/selqiro-asukoha-aluse-kontroll-20261127/evidence/job-search-accepted-20261127/command-hash-reconciliation.json": {
+    "bytes": 128577,
+    "sha256": "40878dad2b8209829164d96a9f121efbc1f1ac200f36121466984c68a53b4ecf"
+  },
+  "deliverables/selqiro-asukoha-aluse-kontroll-20261127/evidence/job-search-accepted-20261127/receipt-reconciliation.json": {
+    "bytes": 17995,
+    "sha256": "87066d1d889fed95cde0da376cd56463eaf38c9147d0e8261e23269b0f2b6b06"
+  },
+  "deliverables/selqiro-asukoha-aluse-kontroll-20261127/evidence/job-search-accepted-20261127/reconcile_report.py": {
+    "bytes": 34032,
+    "sha256": "355e0bef4ed0e4bfd78f178946ca1488cd014892b21cb718d218f641e54d6226"
+  },
+  "deliverables/selqiro-asukoha-aluse-kontroll-20261127/evidence/job-search-accepted-20261127/review-output-hashes.json": {
+    "bytes": 808,
+    "sha256": "3874f917ff311c8aacab7d9d755747dbe7bd6ac3bba0a3ada5e8bc6122d46749"
+  },
+  "deliverables/selqiro-asukoha-aluse-kontroll-20261127/evidence/prior-location-plan-provenance.json": {
+    "bytes": 1357,
+    "sha256": "0747c2b32579f7a7834d46434241b4d4873631497ec5775f2d6d6f9119a9fdbf"
+  },
+  "deliverables/selqiro-asukoha-aluse-kontroll-20261127/evidence/review/REVIEW.md": {
+    "bytes": 5294,
+    "sha256": "6dffca40a18a612b65310ec061ac9dd40c177fb0964de7ac5e9f88adf1b02b5c"
+  },
+  "deliverables/selqiro-asukoha-aluse-kontroll-20261127/evidence/review/final-consistency.json": {
+    "bytes": 24897,
+    "sha256": "f18acc3430c8934c239fe984274d8b20ef43c3c66e78a1daa7ba97047817a910"
+  },
+  "deliverables/selqiro-asukoha-aluse-kontroll-20261127/evidence/review/package-evidence-allowlist.json": {
+    "bytes": 1284,
+    "sha256": "5b55bf556dab5b127ab160be6f1f8bf10dd13d96ece1c9d998f1d4e72c368a03"
+  },
+  "deliverables/selqiro-asukoha-aluse-kontroll-20261127/evidence/review/parser-replay-cases.json": {
+    "bytes": 3711,
+    "sha256": "c223a9bc08a33df0cf978ab8e9e86e38cd33b9b9e8257ddf8eece241fe7cf7a4"
+  },
+  "deliverables/selqiro-asukoha-aluse-kontroll-20261127/evidence/review/parser-replay.json": {
+    "bytes": 1688,
+    "sha256": "67af3847f3a7f07e79753add8a7082b015624a677f8de09b9d0eda964eff7792"
+  },
+  "deliverables/selqiro-asukoha-aluse-kontroll-20261127/evidence/review/parser-replay.log": {
+    "bytes": 31,
+    "sha256": "3422a39dcd70835583431a019c7bcecae858dafac0006ef0703b11f8244a5448"
+  },
+  "deliverables/selqiro-asukoha-aluse-kontroll-20261127/evidence/review/review.json": {
+    "bytes": 16115,
+    "sha256": "6af896be4cab12e39758176755ea83560d9010f0f441162c915cd180d4f352f6"
+  },
+  "deliverables/selqiro-asukoha-aluse-kontroll-20261127/evidence/review/runner-final-replay.json": {
+    "bytes": 2542,
+    "sha256": "a0606e95281a70bf8c3e0eed428edf8c7c882f074e5a6a4f8dcb439328612a48"
+  },
+  "deliverables/selqiro-asukoha-aluse-kontroll-20261127/evidence/review/runner-final-replay.log": {
+    "bytes": 4825,
+    "sha256": "828b153ef9aaa4583c55291bf5bbf74f15c23e54f369df275b9271741fe9e7f3"
+  },
+  "deliverables/selqiro-asukoha-aluse-kontroll-20261127/evidence/runner/ASSEMBLY.md": {
+    "bytes": 6151,
+    "sha256": "681f08f7011841c76f5b37c7d3cf9186e7a21a4a71d273e38595e22181ccd108"
+  },
+  "deliverables/selqiro-asukoha-aluse-kontroll-20261127/evidence/runner/manifest-template.json": {
+    "bytes": 208,
+    "sha256": "a0ec411b587df8a7c09256e97382aac6fb4b55992f8f651a98f2e874a0bab385"
+  },
+  "deliverables/selqiro-asukoha-aluse-kontroll-20261127/evidence/runner/reuse.json": {
+    "bytes": 5337,
+    "sha256": "244919293749b8b194c24cafc98506f8393b871d4b1c83f6fd379b4601bdfc96"
+  },
+  "deliverables/selqiro-asukoha-aluse-kontroll-20261127/evidence/runner/runner-tests.json": {
+    "bytes": 2327,
+    "sha256": "a0a8ac80bf477042c82e011019730f74eea7552cf8b10d3e955fee7a8b72aad3"
+  },
+  "deliverables/selqiro-asukoha-aluse-kontroll-20261127/evidence/runner/runner-tests.log": {
+    "bytes": 4528,
+    "sha256": "ba1d216d0c5dca56d95070791f3795f478a6fca93175176b53f4d0a9de76c1d7"
+  },
+  "deliverables/selqiro-asukoha-aluse-kontroll-20261127/evidence/runner/seal_package.py": {
+    "bytes": 3149,
+    "sha256": "2a5e199fb5e1e3789c3ed61e27e1619c9b211a0b1aeb7f06ec36c417d43c2155"
+  },
+  "deliverables/selqiro-asukoha-aluse-kontroll-20261127/evidence/runner/tests/fixtures.py": {
+    "bytes": 5835,
+    "sha256": "90320a484eeff6e655c7cbdd0f72caf0e08d14c7d427a8638de7f51f8906f5c0"
+  },
+  "deliverables/selqiro-asukoha-aluse-kontroll-20261127/evidence/runner/tests/run_checks.py": {
+    "bytes": 1901,
+    "sha256": "9f5063b41f4a13c31028b5ba66efb9d6354427822150697b92a305930f1bbd82"
+  },
+  "deliverables/selqiro-asukoha-aluse-kontroll-20261127/evidence/runner/tests/test_runner.py": {
+    "bytes": 28577,
+    "sha256": "af6d9bd13474deaca07bb70be6c4e9031e25ed545c20e0bc2414411acf6c3545"
+  },
+  "deliverables/selqiro-asukoha-aluse-kontroll-20261127/evidence/ui-observations.json": {
+    "bytes": 2010,
+    "sha256": "509bf2264705734454b535d1bbab6eeb369a538ee84fa8c2d98761dfaf6d3d82"
+  },
+  "deliverables/selqiro-asukoha-aluse-kontroll-20261127/repo-overlay.json": {
+    "bytes": 4462,
+    "sha256": "a995c0c73c44b357150e112da66c5df20b2b5bc3f4b4298e5cbd271a69954def"
+  },
+  "deliverables/selqiro-asukoha-aluse-kontroll-20261127/catalog.sql": {
+    "bytes": 32238,
+    "sha256": "85111d2673e28db2e4524fa655f3bb1000d38980d171045c9452db3dc39e3b78"
+  },
+  "deliverables/selqiro-asukoha-aluse-kontroll-20261127.zip": {
+    "bytes": 723766,
+    "sha256": "a84ae34c224ac72240f69bc4c703fffbabbcede55f1d1806ab27de07e3052533"
+  },
+  "work/location-foundation-20261127/runner/support.py": {
+    "bytes": 3872,
+    "sha256": "28e76a1677e1bf7e5d3ff0ff9f78092fb619102e7e579b1255e5193ea5756920"
+  },
+  "work/location-foundation-20261127/runner/reporting.py": {
+    "bytes": 8436,
+    "sha256": "4ef7778e00be0433073d058dfc7184ff501b8821dd7a0b54a1b2684bab3b0e02"
+  },
+  "work/location-foundation-20261127/runner/process_snapshot.py": {
+    "bytes": 6878,
+    "sha256": "7d8881e815032fdcc1cd6afdb643c9efedd4f201c042bba36e37b9d1402e070b"
+  },
+  "work/location-foundation-20261127/runner/process_cleanup.py": {
+    "bytes": 3900,
+    "sha256": "69643259634c96f0ac428be2cd8772fb21b1588dc79c4f347d1899b8dcd9179f"
+  },
+  "work/location-foundation-20261127/runner/transport.py": {
+    "bytes": 10901,
+    "sha256": "9a76a2630d47bf98bc2b093e22087d529c759718eb92fa3fff22204c7ae1c418"
+  },
+  "work/location-foundation-20261127/runner/journal.py": {
+    "bytes": 4957,
+    "sha256": "bc029d45cbdf44f6e532204de2675f66519a93eaa7791f118ac66471650e9bdc"
+  },
+  "work/location-foundation-20261127/runner/git_guard.py": {
+    "bytes": 5701,
+    "sha256": "1b04523dadd4e144b08e341fdfbb100126d049f14a26757eb5aac029f6a3997d"
+  },
+  "work/location-foundation-20261127/runner/runtime_check.py": {
+    "bytes": 8799,
+    "sha256": "848c9832fb3d490bd54730e94c96f19df36c141b82a3987eae03d0f44d43db16"
+  },
+  "work/location-foundation-20261127/runner/receipts.py": {
+    "bytes": 5213,
+    "sha256": "1f0a0f3bb7a2c30e0b5431322778ee3f79c3ce820709a627940ea5f941a03484"
+  },
+  "work/location-foundation-20261127/runner/catalog_access.py": {
+    "bytes": 4432,
+    "sha256": "117604dafc1b7e2e95ed38f77c6dc2dae918cc9dbccdb6f5bdf41a55b001e92b"
+  },
+  "work/location-foundation-20261127/runner/catalog_contract.py": {
+    "bytes": 22870,
+    "sha256": "0b3c58e0916b382ce3f147fe5f7c37410022fdfc21a3a5c2b9506595d029a2ec"
+  },
+  "work/location-foundation-20261127/runner/workflow.py": {
+    "bytes": 6783,
+    "sha256": "4a6ef0a35aaefa61f76d6faa0e3d50c91d1f1195ddcf39d4885ec01eaaafff38"
+  },
+  "work/location-foundation-20261127/runner/kontrolli.py": {
+    "bytes": 8011,
+    "sha256": "30fac4c99891c5727a48fb7101ec846cb3645287741094790da32a3d6c5b20fa"
+  },
+  "work/location-foundation-20261127/runner/catalog.sql": {
+    "bytes": 32238,
+    "sha256": "85111d2673e28db2e4524fa655f3bb1000d38980d171045c9452db3dc39e3b78"
+  },
+  "work/location-foundation-20261127/runner/accepted-inventory.json": {
+    "bytes": 590946,
+    "sha256": "22bbd39ef2651b4ad3d0c1cc2b0742250cb176c531dd22debcc19a87122032f2"
+  },
+  "work/location-foundation-20261127/docs-stage/ALUSTA_SIIT.md": {
+    "bytes": 3165,
+    "sha256": "603e3eace60a4f836ece918e62c174aa9d4952764651e3ad878cc38a37289435"
+  },
+  "work/location-foundation-20261127/docs-stage/docs/99_V2_HANDOFF_NEXT_CHAT.md": {
+    "bytes": 12238,
+    "sha256": "57ecce8a55dd78eca2335e5d6526dc89d4a44742c01ff4aa9dbb7966da125ffd"
+  },
+  "work/location-foundation-20261127/docs-stage/docs/architecture/account-deletion-status-20261127.et.md": {
+    "bytes": 5273,
+    "sha256": "67c59e406c894115720fbe973815cd7db8546b85f821ec7b4151a74aa3251aae"
+  },
+  "work/location-foundation-20261127/docs-stage/docs/architecture/account-deletion-status-20261127.json": {
+    "bytes": 10362,
+    "sha256": "f2fcc2068f265300e0b2f520b39d1b8c127e2fa99b9e999bd89c982976e71050"
+  },
+  "work/location-foundation-20261127/docs-stage/docs/architecture/job-search-accepted-20261127.md": {
+    "bytes": 3588,
+    "sha256": "c0373322857866ac97e8c73365d1041f9cfb8a1223a578f61226c9106bc54395"
+  },
+  "work/location-foundation-20261127/docs-stage/docs/architecture/location-country-20261127/profile-location-audit.json": {
+    "bytes": 7751,
+    "sha256": "b8ca65c2dc36ffaad8741564b506a062b0e4644ad30ad8272c100ac494f001bc"
+  },
+  "work/location-foundation-20261127/docs-stage/docs/architecture/location-country-20261127/profile-location-findings.md": {
+    "bytes": 22776,
+    "sha256": "04b218e42360fcd56697f64f0af98e89d268b7ddeef2417b481144281956dde3"
+  },
+  "work/location-foundation-20261127/docs-stage/docs/architecture/location-country-20261127.md": {
+    "bytes": 18102,
+    "sha256": "dc032924d388a847380d258abc38bf0e0aec6fbaa951e53bbf218a39173eb753"
+  },
+  "work/location-foundation-20261127/docs-stage/docs/architecture/location-foundation-catalog-20261127.md": {
+    "bytes": 2707,
+    "sha256": "413a0b31c4ec63ef5f91387faca8cb802097d0ec4389df4ee5518d5fee30748d"
+  },
+  "work/location-foundation-20261127/docs-stage/docs/architecture/location-provider-20261127.md": {
+    "bytes": 6332,
+    "sha256": "50e9e820e62a8b0433e5df5cb805d85ac6aab79b76ad02bf7529c762cd568269"
+  },
+  "work/location-foundation-20261127/docs-stage/docs/architecture/location-search-20261126.md": {
+    "bytes": 10230,
+    "sha256": "341a5e34fe681d8d83f2ebb36b589ae2b9b8344d451814d8a9a137cb40b33b17"
+  },
+  "work/location-foundation-20261127/docs-stage/docs/continuity/CURRENT_STATE.json": {
+    "bytes": 12198,
+    "sha256": "0c32794a8daacbf0fce9dc05dfd65e7167b40ee3cb4045f41076570e6d5c9b37"
+  },
+  "work/location-foundation-20261127/docs-stage/docs/continuity/HOSTED_PORTAL.md": {
+    "bytes": 1455,
+    "sha256": "7c8dbbfe73ccb058ff0a5ec1a4b9b922856038bffb3d009a507c9f32190a6830"
+  },
+  "work/location-foundation-20261127/docs-stage/docs/selqiro-dev-log.md": {
+    "bytes": 238084,
+    "sha256": "a84586cff9f8f74fce720f745a11ca9ffd70e09e208e72e3cc2c9083444e151f"
+  },
+  "work/location-foundation-20261127/docs-stage/evidence/accepted-report-reference.json": {
+    "bytes": 643,
+    "sha256": "507645ef611fbbbe371e88f21adafdabbbe700def2785fc00b06a7426537f340"
+  },
+  "work/location-foundation-20261127/docs-stage/evidence/job-search-accepted-20261127/REVIEW.md": {
+    "bytes": 4176,
+    "sha256": "e499e8498a8988d69acdc576ed421a0adefb9b1a7903f12d6ba0c1cfc6dcc35e"
+  },
+  "work/location-foundation-20261127/docs-stage/evidence/job-search-accepted-20261127/accepted-inventory.json": {
+    "bytes": 590946,
+    "sha256": "22bbd39ef2651b4ad3d0c1cc2b0742250cb176c531dd22debcc19a87122032f2"
+  },
+  "work/location-foundation-20261127/docs-stage/evidence/job-search-accepted-20261127/command-hash-reconciliation.json": {
+    "bytes": 128577,
+    "sha256": "40878dad2b8209829164d96a9f121efbc1f1ac200f36121466984c68a53b4ecf"
+  },
+  "work/location-foundation-20261127/docs-stage/evidence/job-search-accepted-20261127/receipt-reconciliation.json": {
+    "bytes": 17995,
+    "sha256": "87066d1d889fed95cde0da376cd56463eaf38c9147d0e8261e23269b0f2b6b06"
+  },
+  "work/location-foundation-20261127/docs-stage/evidence/job-search-accepted-20261127/reconcile_report.py": {
+    "bytes": 34032,
+    "sha256": "355e0bef4ed0e4bfd78f178946ca1488cd014892b21cb718d218f641e54d6226"
+  },
+  "work/location-foundation-20261127/docs-stage/evidence/job-search-accepted-20261127/review-output-hashes.json": {
+    "bytes": 808,
+    "sha256": "3874f917ff311c8aacab7d9d755747dbe7bd6ac3bba0a3ada5e8bc6122d46749"
+  },
+  "work/location-foundation-20261127/docs-stage/evidence/prior-location-plan-provenance.json": {
+    "bytes": 1357,
+    "sha256": "0747c2b32579f7a7834d46434241b4d4873631497ec5775f2d6d6f9119a9fdbf"
+  },
+  "work/location-foundation-20261127/docs-stage/evidence/ui-observations.json": {
+    "bytes": 2010,
+    "sha256": "509bf2264705734454b535d1bbab6eeb369a538ee84fa8c2d98761dfaf6d3d82"
+  },
+  "work/location-foundation-20261127/docs-stage/repo-overlay.json": {
+    "bytes": 4462,
+    "sha256": "a995c0c73c44b357150e112da66c5df20b2b5bc3f4b4298e5cbd271a69954def"
+  },
+  "work/location-foundation-20261127/runner/ASSEMBLY.md": {
+    "bytes": 6151,
+    "sha256": "681f08f7011841c76f5b37c7d3cf9186e7a21a4a71d273e38595e22181ccd108"
+  },
+  "work/location-foundation-20261127/runner/reuse.json": {
+    "bytes": 5337,
+    "sha256": "244919293749b8b194c24cafc98506f8393b871d4b1c83f6fd379b4601bdfc96"
+  },
+  "work/location-foundation-20261127/runner/seal_package.py": {
+    "bytes": 3149,
+    "sha256": "2a5e199fb5e1e3789c3ed61e27e1619c9b211a0b1aeb7f06ec36c417d43c2155"
+  },
+  "work/location-foundation-20261127/runner/manifest-template.json": {
+    "bytes": 208,
+    "sha256": "a0ec411b587df8a7c09256e97382aac6fb4b55992f8f651a98f2e874a0bab385"
+  },
+  "work/location-foundation-20261127/runner/runner-tests.json": {
+    "bytes": 2327,
+    "sha256": "a0a8ac80bf477042c82e011019730f74eea7552cf8b10d3e955fee7a8b72aad3"
+  },
+  "work/location-foundation-20261127/runner/runner-tests.log": {
+    "bytes": 4528,
+    "sha256": "ba1d216d0c5dca56d95070791f3795f478a6fca93175176b53f4d0a9de76c1d7"
+  },
+  "work/location-foundation-20261127/runner/tests/fixtures.py": {
+    "bytes": 5835,
+    "sha256": "90320a484eeff6e655c7cbdd0f72caf0e08d14c7d427a8638de7f51f8906f5c0"
+  },
+  "work/location-foundation-20261127/runner/tests/test_runner.py": {
+    "bytes": 28577,
+    "sha256": "af6d9bd13474deaca07bb70be6c4e9031e25ed545c20e0bc2414411acf6c3545"
+  },
+  "work/location-foundation-20261127/runner/tests/run_checks.py": {
+    "bytes": 1901,
+    "sha256": "9f5063b41f4a13c31028b5ba66efb9d6354427822150697b92a305930f1bbd82"
+  },
+  "work/location-foundation-20261127/catalog/catalog.sql": {
+    "bytes": 32238,
+    "sha256": "85111d2673e28db2e4524fa655f3bb1000d38980d171045c9452db3dc39e3b78"
+  },
+  "work/location-foundation-20261127/catalog/catalog_contract.py": {
+    "bytes": 22870,
+    "sha256": "0b3c58e0916b382ce3f147fe5f7c37410022fdfc21a3a5c2b9506595d029a2ec"
+  },
+  "work/location-foundation-20261127/catalog/scope.json": {
+    "bytes": 3084,
+    "sha256": "142bc5320b835ef1bfd4b0d4f35efbb69fae8383a842bdbb7e57e31432dded58"
+  },
+  "work/location-foundation-20261127/catalog/README.md": {
+    "bytes": 8372,
+    "sha256": "9d6ee4804a0c4d15b21fcfb47cb373273db8ba2c97b5c7369c911b139843d1f5"
+  },
+  "work/location-foundation-20261127/catalog/build_catalog.py": {
+    "bytes": 23090,
+    "sha256": "9f42ee754602569d55c7dcd838228d9edb58fb04ac79bfbd068a604ef3186443"
+  },
+  "work/location-foundation-20261127/catalog/write_source_pins.py": {
+    "bytes": 7523,
+    "sha256": "05cdc4fd883e9f3ca52dcf4a32ab551104190a467ae03d8b4dc0b45521971f96"
+  },
+  "work/location-foundation-20261127/catalog/source-pins.json": {
+    "bytes": 9906,
+    "sha256": "2811e6e9a1075af1238dc40de73a402b9c9a4bfabab9530879be0b4309fb916d"
+  },
+  "work/location-foundation-20261127/catalog/tests/run_native.py": {
+    "bytes": 2431,
+    "sha256": "59722e497782601f229820df8371ad257592f96b239e2390a42b0b71db359d1b"
+  },
+  "work/location-foundation-20261127/catalog/tests/runtime.mjs": {
+    "bytes": 16602,
+    "sha256": "5ff12f7f60ddddbbbdcafa35fcd3c48e7a106852739de85b08c08e63680a0b7c"
+  },
+  "work/location-foundation-20261127/catalog/tests/parser_cases.py": {
+    "bytes": 4951,
+    "sha256": "d96872d92345204bb064928b1a39c1d73cf0825f478378c0f0b7415da9d747c4"
+  },
+  "work/location-foundation-20261127/catalog/tests/attempt-02/complete-envelope.json": {
+    "bytes": 122455,
+    "sha256": "65abb78939208afb958e8b94483ef4572003368cfc0ed3cdc0121a9b5f81f9fb"
+  },
+  "work/location-foundation-20261127/catalog/tests/attempt-02/missing-function-envelope.json": {
+    "bytes": 119635,
+    "sha256": "b08a93ec2eed03d38cb815c5c0f91fa0c6fb077aec7d376a1a8bcba68981d5a2"
+  },
+  "work/location-foundation-20261127/catalog/tests/attempt-02/missing-optional-envelope.json": {
+    "bytes": 119560,
+    "sha256": "11b2261001c5426cb8f751095a5424441d63bf5427200157e15ab434f00de96e"
+  },
+  "work/location-foundation-20261127/catalog/tests/attempt-02/missing-relation-envelope.json": {
+    "bytes": 113433,
+    "sha256": "5720e87d448aaed2809b32b368208d9e29e8bcf46aa2ea12542ae544b53216ea"
+  },
+  "work/location-foundation-20261127/catalog/tests/attempt-02/missing-auth-column-envelope.json": {
+    "bytes": 122420,
+    "sha256": "b578099be8e3ff65098b8af09fca2a1773fc627f55c04e47b686aca41a82aa60"
+  },
+  "work/location-foundation-20261127/catalog/tests/attempt-02/missing-composite-envelope.json": {
+    "bytes": 109288,
+    "sha256": "4d81e2c21d7d1a6aeb6c6566c5bdd07f5d6e7cc77bf5ad052e2c857f031d70be"
+  },
+  "work/location-foundation-20261127/catalog/tests/attempt-02/unknown-body-envelope.json": {
+    "bytes": 122393,
+    "sha256": "074caf198b44f7b5f211adb7c45b4ab7f65cbf59e8fc1da94b35818f287f4236"
+  },
+  "work/location-foundation-20261127/catalog/tests/attempt-02/row-limited-envelope.json": {
+    "bytes": 6636,
+    "sha256": "33376ce16cb91f18af06892b4dd5abf72bea58f34fb650e74ee0834696efc268"
+  },
+  "work/location-foundation-20261127/catalog/tests/attempt-02/output-limited-envelope.json": {
+    "bytes": 6608,
+    "sha256": "ab1374f0bf0e8597cfca2815ead5b45d5c53688d67604405b9e5b1f82d622848"
+  },
+  "work/location-foundation-20261127/catalog/tests/attempt-02/native-result.json": {
+    "bytes": 2082,
+    "sha256": "5826fe7ebe5aae117c7e818229feb5643c7ab5d0d6cd194cbe247a27c45e9404"
+  },
+  "work/location-foundation-20261127/catalog/tests/attempt-02/parser-result.json": {
+    "bytes": 3711,
+    "sha256": "c223a9bc08a33df0cf978ab8e9e86e38cd33b9b9e8257ddf8eece241fe7cf7a4"
+  },
+  "work/location-foundation-20261127/catalog/tests/attempt-02/stopped.json": {
+    "bytes": 76,
+    "sha256": "ebc72bc0eb6b5ddab283e6ffc3063ab618f7da39a9551337fad58a1bf6c49caf"
+  },
+  "work/location-foundation-20261127/catalog/package-evidence-allowlist.json": {
+    "bytes": 3782,
+    "sha256": "42b374cfe667f2f922c0c89d33061c217952fac27de8bd427d057e5a71d95408"
+  },
+  "work/location-foundation-20261127/review/REVIEW.md": {
+    "bytes": 5294,
+    "sha256": "6dffca40a18a612b65310ec061ac9dd40c177fb0964de7ac5e9f88adf1b02b5c"
+  },
+  "work/location-foundation-20261127/review/review.json": {
+    "bytes": 16115,
+    "sha256": "6af896be4cab12e39758176755ea83560d9010f0f441162c915cd180d4f352f6"
+  },
+  "work/location-foundation-20261127/review/final-consistency.json": {
+    "bytes": 24897,
+    "sha256": "f18acc3430c8934c239fe984274d8b20ef43c3c66e78a1daa7ba97047817a910"
+  },
+  "work/location-foundation-20261127/review/runner-final-replay.json": {
+    "bytes": 2542,
+    "sha256": "a0606e95281a70bf8c3e0eed428edf8c7c882f074e5a6a4f8dcb439328612a48"
+  },
+  "work/location-foundation-20261127/review/runner-final-replay.log": {
+    "bytes": 4825,
+    "sha256": "828b153ef9aaa4583c55291bf5bbf74f15c23e54f369df275b9271741fe9e7f3"
+  },
+  "work/location-foundation-20261127/review/parser-replay.json": {
+    "bytes": 1688,
+    "sha256": "67af3847f3a7f07e79753add8a7082b015624a677f8de09b9d0eda964eff7792"
+  },
+  "work/location-foundation-20261127/review/parser-replay-cases.json": {
+    "bytes": 3711,
+    "sha256": "c223a9bc08a33df0cf978ab8e9e86e38cd33b9b9e8257ddf8eece241fe7cf7a4"
+  },
+  "work/location-foundation-20261127/review/parser-replay.log": {
+    "bytes": 31,
+    "sha256": "3422a39dcd70835583431a019c7bcecae858dafac0006ef0703b11f8244a5448"
+  },
+  "work/location-foundation-20261127/review/package-evidence-allowlist.json": {
+    "bytes": 1284,
+    "sha256": "5b55bf556dab5b127ab160be6f1f8bf10dd13d96ece1c9d998f1d4e72c368a03"
+  },
+  "work/job-search-implementation-20261126/prepared-final-inventory.json": {
+    "bytes": 590793,
+    "sha256": "147adffcce347da1474ad9de903501ea82e619d590e7754fabb87887922469c8"
+  },
+  "work/job-search-implementation-20261126/source/supabase/repairs/20261120_profile_editor/apply.sql": {
+    "bytes": 120031,
+    "sha256": "45e0cbea37f52b113c7ea3f446ecc2d9887f026a4543c86872076490080bccbe"
+  },
+  "work/job-search-implementation-20261126/source/supabase/repairs/20261120_profile_read_privacy/apply.sql": {
+    "bytes": 48636,
+    "sha256": "5b12da8ef8a294ad5d5762c766502b2a21f3e28e40bbd72336f715c5d375bb63"
+  },
+  "work/job-search-implementation-20261126/source/supabase/releases/account-state-foundation-v1/foundation.sql": {
+    "bytes": 2119,
+    "sha256": "3c548bc613ede47edc9c2e71bf16a5858d9c99374dc6b7ad59c1ab4d57706e6a"
+  },
+  "work/job-search-implementation-20261126/source/supabase/releases/account-state-foundation-v1/source-pins.json": {
+    "bytes": 6227,
+    "sha256": "e3c24a42a9bbc77d42dd2bd7643d98078adf59926e4746a3ca410b70ab3f0094"
+  },
+  "work/job-search-implementation-20261126/source/supabase/releases/account-public-profile-fence-v1/account-availability.sql": {
+    "bytes": 836,
+    "sha256": "da26cf792b337adf41a77cc2144a4738d1a405dd122ff9e20c47dc1c82e72930"
+  },
+  "work/job-search-implementation-20261126/source/supabase/releases/account-public-profile-fence-v1/public-profile.sql": {
+    "bytes": 3072,
+    "sha256": "2f00234d98c261b97bcfad89df9d247e3cd89f8478b5160ce6764280b771c8ea"
+  },
+  "work/job-search-implementation-20261126/source/supabase/releases/account-public-profile-fence-v1/expected-contract.json": {
+    "bytes": 19914,
+    "sha256": "afaa940fd0a2e39db5e31345fc88a3fc17121d73621bbd8e94fdb0bcc316323d"
+  },
+  "work/job-search-implementation-20261126/source/src/features/profile-editor/api/profileEditorClient.ts": {
+    "bytes": 2167,
+    "sha256": "daedfb47e8a4e2ed622101b53ba37ceccfb17ca8054ce5687f70953f4fb4ad75"
+  },
+  "work/job-search-implementation-20261126/source/src/features/profile-editor/model/profileEditor.ts": {
+    "bytes": 7104,
+    "sha256": "de310402ee6fc55bc78c06f4f77168032af3740b0bc71b7bc8f416f3b161baf3"
+  },
+  "work/job-search-implementation-20261126/source/src/features/profile-editor/model/useProfileEditor.ts": {
+    "bytes": 4454,
+    "sha256": "6343d7c31610e6327d2d1d71e11cee9c45c79ce63a5baf46e930f6d32682adec"
+  },
+  "work/job-search-implementation-20261126/source/src/features/profile-editor/components/ProfileEditorPage.tsx": {
+    "bytes": 11097,
+    "sha256": "7b9ad95f9fca84e3d1d73d87000f03f260b76bc788b0f84dae95da011372760c"
+  },
+  "upload/selqiro-too-otsingu-valikud-20261126-raport-20261126-123637-6dbb54449153.json": {
+    "bytes": 1452209,
+    "sha256": "39a9e0d2296e360c4fe3c210b56fca291593ac5965f33368dd3f4de70a38176f"
+  }
+}

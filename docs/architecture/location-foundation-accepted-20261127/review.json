@@ -1,0 +1,2489 @@
+{
+  "format": "selqiro-location-foundation-acceptance-20261127-v1",
+  "result": "ACCEPTED_METADATA_OBSERVATION",
+  "reviewed_at_utc": "2026-11-27T11:49:05.686112+00:00",
+  "report": "upload/selqiro-asukoha-aluse-kontroll-20261127-raport-20261127-133852-f5686ad8ac14.json",
+  "report_sha256": "cc884c36ae31b5217b69c45e0810f28d5791572f462152225cf67d6fd11c5938",
+  "report_bytes": 310390,
+  "observed_at_utc": "2026-11-27T11:38:52.034+00:00",
+  "basis": "User-uploaded unsigned report, reconciled offline against immutable delivered code, catalog contract and accepted source. No independent live observation performed.",
+  "metadata_observation_accepted": true,
+  "implementation_ready": false,
+  "unresolved_metadata_blockers": [],
+  "source_commit": "7c53643012545c7dfa99ba976e6f2613e3c3a201",
+  "source_tree": "98444c7d31e7afac995f195d884700b60c82b6cf",
+  "source_files_verified": 2443,
+  "source_bytes_verified": 40032703,
+  "package": {
+    "manifest_sha256": "e16ec81ccc063fc8d057750f260e0367c84f81713fddfce13dfee175e4ddc144",
+    "archive_sha256": "a84ae34c224ac72240f69bc4c703fffbabbcede55f1d1806ab27de07e3052533",
+    "archive_bytes": 723766,
+    "files": 81
+  },
+  "single_readonly_query": true,
+  "top_level_commands": 29,
+  "catalog_facts_sha256": "eb0bcb241ed6d1d0f786dc06a59b91ecbef0b584d594b105b704331a3c08d2c0",
+  "catalog_counts": {
+    "auth_columns": {
+      "returned": 4,
+      "total": 4
+    },
+    "columns": {
+      "returned": 75,
+      "total": 75
+    },
+    "constraints": {
+      "returned": 33,
+      "total": 33
+    },
+    "default_acl_grants": {
+      "returned": 48,
+      "total": 48
+    },
+    "default_acls": {
+      "returned": 3,
+      "total": 3
+    },
+    "effective_privileges": {
+      "returned": 291,
+      "total": 291
+    },
+    "extension_types": {
+      "returned": 0,
+      "total": 0
+    },
+    "extensions": {
+      "returned": 3,
+      "total": 3
+    },
+    "functions": {
+      "returned": 12,
+      "total": 12
+    },
+    "grants": {
+      "returned": 181,
+      "total": 181
+    },
+    "index_methods": {
+      "returned": 3,
+      "total": 3
+    },
+    "indexes": {
+      "returned": 25,
+      "total": 25
+    },
+    "operator_classes": {
+      "returned": 2,
+      "total": 2
+    },
+    "policies": {
+      "returned": 24,
+      "total": 24
+    },
+    "policy_dependencies": {
+      "returned": 18,
+      "total": 18
+    },
+    "relations": {
+      "returned": 6,
+      "total": 6
+    },
+    "roles": {
+      "returned": 3,
+      "total": 3
+    },
+    "schemas": {
+      "returned": 4,
+      "total": 4
+    },
+    "triggers": {
+      "returned": 2,
+      "total": 2
+    }
+  },
+  "extensions": [
+    {
+      "available": true,
+      "default_version": "1.6",
+      "installed": true,
+      "installed_version": "1.6",
+      "name": "pg_trgm",
+      "owner": "supabase_admin",
+      "relocatable": true,
+      "schema": "public"
+    },
+    {
+      "available": true,
+      "default_version": "3.3.7",
+      "installed": false,
+      "installed_version": null,
+      "name": "postgis",
+      "owner": null,
+      "relocatable": null,
+      "schema": null
+    },
+    {
+      "available": true,
+      "default_version": "1.1",
+      "installed": false,
+      "installed_version": null,
+      "name": "unaccent",
+      "owner": null,
+      "relocatable": null,
+      "schema": null
+    }
+  ],
+  "stream_counts": {
+    "exact_bytes_reconstructed": 119,
+    "opaque_retained_hash_only": 5
+  },
+  "checks_passed": 582,
+  "checks": [
+    {
+      "check": "uploaded_report_exact_bytes",
+      "passed": true
+    },
+    {
+      "check": "uploaded_report_matches_issued_journal_serialization",
+      "passed": true
+    },
+    {
+      "check": "sealed_manifest",
+      "passed": true
+    },
+    {
+      "check": "sealed_entry",
+      "passed": true
+    },
+    {
+      "check": "accepted_inventory",
+      "passed": true
+    },
+    {
+      "check": "manifest_exact_contract",
+      "passed": true
+    },
+    {
+      "check": "manifest_format",
+      "passed": true
+    },
+    {
+      "check": "entry_manifest_literal",
+      "passed": true
+    },
+    {
+      "check": "exact_runtime_module_scope",
+      "passed": true
+    },
+    {
+      "check": "manifest_pin_count",
+      "passed": true
+    },
+    {
+      "check": "all_79_manifest_pins",
+      "passed": true
+    },
+    {
+      "check": "exact_81_package_files",
+      "passed": true
+    },
+    {
+      "check": "all_81_sealed_file_pins",
+      "passed": true
+    },
+    {
+      "check": "package_uncompressed_length",
+      "passed": true
+    },
+    {
+      "check": "archive_exact_bytes",
+      "passed": true
+    },
+    {
+      "check": "archive_no_duplicate_members",
+      "passed": true
+    },
+    {
+      "check": "archive_exact_member_set",
+      "passed": true
+    },
+    {
+      "check": "archive_crc",
+      "passed": true
+    },
+    {
+      "check": "archive_directory_identical",
+      "passed": true
+    },
+    {
+      "check": "all_80_prepared_assembly_inputs_unchanged",
+      "passed": true
+    },
+    {
+      "check": "exact_executed_sql_pin",
+      "passed": true
+    },
+    {
+      "check": "sql_all_source_copies_equal",
+      "passed": true
+    },
+    {
+      "check": "parser_all_source_copies_equal",
+      "passed": true
+    },
+    {
+      "check": "sql_exact_9_statements",
+      "passed": true
+    },
+    {
+      "check": "sql_readonly_transaction_contract",
+      "passed": true
+    },
+    {
+      "check": "sql_no_write_statements_or_dynamic_calls",
+      "passed": true
+    },
+    {
+      "check": "sql_no_application_relation_reads",
+      "passed": true
+    },
+    {
+      "check": "sql_deadlines",
+      "passed": true
+    },
+    {
+      "check": "accepted_source_identity",
+      "passed": true
+    },
+    {
+      "check": "accepted_git_tree_reconstructed_without_git",
+      "passed": true
+    },
+    {
+      "check": "all_2443_local_source_bytes_and_git_blobs",
+      "passed": true,
+      "detail": {
+        "bytes": 40032703
+      }
+    },
+    {
+      "check": "prepared_and_accepted_inventory_same_files",
+      "passed": true
+    },
+    {
+      "check": "catalog_source_commit_tree_pins",
+      "passed": true
+    },
+    {
+      "check": "catalog_source_file:supabase/repairs/20261120_profile_editor/apply.sql",
+      "passed": true
+    },
+    {
+      "check": "catalog_source_file:supabase/repairs/20261120_profile_read_privacy/apply.sql",
+      "passed": true
+    },
+    {
+      "check": "catalog_source_file:supabase/releases/account-state-foundation-v1/foundation.sql",
+      "passed": true
+    },
+    {
+      "check": "catalog_source_file:supabase/releases/account-state-foundation-v1/source-pins.json",
+      "passed": true
+    },
+    {
+      "check": "catalog_source_file:supabase/releases/account-public-profile-fence-v1/account-availability.sql",
+      "passed": true
+    },
+    {
+      "check": "catalog_source_file:supabase/releases/account-public-profile-fence-v1/public-profile.sql",
+      "passed": true
+    },
+    {
+      "check": "catalog_source_file:supabase/releases/account-public-profile-fence-v1/expected-contract.json",
+      "passed": true
+    },
+    {
+      "check": "catalog_source_file:src/features/profile-editor/api/profileEditorClient.ts",
+      "passed": true
+    },
+    {
+      "check": "catalog_source_file:src/features/profile-editor/model/profileEditor.ts",
+      "passed": true
+    },
+    {
+      "check": "catalog_source_file:src/features/profile-editor/model/useProfileEditor.ts",
+      "passed": true
+    },
+    {
+      "check": "catalog_source_file:src/features/profile-editor/components/ProfileEditorPage.tsx",
+      "passed": true
+    },
+    {
+      "check": "report_exact_success_shape",
+      "passed": true
+    },
+    {
+      "check": "report_format_scope_work_item",
+      "passed": true
+    },
+    {
+      "check": "report_manifest_binding_and_run_identity",
+      "passed": true
+    },
+    {
+      "check": "target_and_linked_project",
+      "passed": true
+    },
+    {
+      "check": "observation_not_implementation",
+      "passed": true
+    },
+    {
+      "check": "all_12_out_of_scope_actions_reported_false",
+      "passed": true
+    },
+    {
+      "check": "before_after_exact_equality",
+      "passed": true
+    },
+    {
+      "check": "exact_baseline_after_summary",
+      "passed": true
+    },
+    {
+      "check": "remote_observation_matches_accepted_source",
+      "passed": true
+    },
+    {
+      "check": "reported_cli_pins",
+      "passed": true
+    },
+    {
+      "check": "source_cli_project_and_single_attempt_guards",
+      "passed": true
+    },
+    {
+      "check": "original_prior_receipt_exact_bytes",
+      "passed": true
+    },
+    {
+      "check": "prior_receipt_accepted_state",
+      "passed": true
+    },
+    {
+      "check": "both_prior_receipts_preserved_report",
+      "passed": true
+    },
+    {
+      "check": "embedded_catalog_reparsed_by_delivered_parser",
+      "passed": true
+    },
+    {
+      "check": "catalog_facts_hash_recomputed",
+      "passed": true
+    },
+    {
+      "check": "source_catalog_scope_matches_parser",
+      "passed": true
+    },
+    {
+      "check": "bounded_complete_catalog_capture",
+      "passed": true
+    },
+    {
+      "check": "all_catalog_sets_untruncated",
+      "passed": true
+    },
+    {
+      "check": "exact_29_command_count",
+      "passed": true
+    },
+    {
+      "check": "exactly_one_database_query_record",
+      "passed": true
+    },
+    {
+      "check": "command_exact_stage_and_success:0:before:root",
+      "passed": true
+    },
+    {
+      "check": "command_sequential_timeline:0:before:root",
+      "passed": true
+    },
+    {
+      "check": "command_bounds:0:before:root",
+      "passed": true
+    },
+    {
+      "check": "command_completion:0:before:root",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:0:before:root:stdout",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:0:before:root:stdout",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:0:before:root:stderr",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:0:before:root:stderr",
+      "passed": true
+    },
+    {
+      "check": "one_completion_probe:0:before:root",
+      "passed": true
+    },
+    {
+      "check": "completion_probe_status:0:before:root",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:0:before:root:cleanup_probe:0:stdout",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:0:before:root:cleanup_probe:0:stdout",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:0:before:root:cleanup_probe:0:stderr",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:0:before:root:cleanup_probe:0:stderr",
+      "passed": true
+    },
+    {
+      "check": "command_exact_stage_and_success:1:before:branch",
+      "passed": true
+    },
+    {
+      "check": "command_sequential_timeline:1:before:branch",
+      "passed": true
+    },
+    {
+      "check": "command_bounds:1:before:branch",
+      "passed": true
+    },
+    {
+      "check": "command_completion:1:before:branch",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:1:before:branch:stdout",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:1:before:branch:stdout",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:1:before:branch:stderr",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:1:before:branch:stderr",
+      "passed": true
+    },
+    {
+      "check": "one_completion_probe:1:before:branch",
+      "passed": true
+    },
+    {
+      "check": "completion_probe_status:1:before:branch",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:1:before:branch:cleanup_probe:0:stdout",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:1:before:branch:cleanup_probe:0:stdout",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:1:before:branch:cleanup_probe:0:stderr",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:1:before:branch:cleanup_probe:0:stderr",
+      "passed": true
+    },
+    {
+      "check": "command_exact_stage_and_success:2:before:object_format",
+      "passed": true
+    },
+    {
+      "check": "command_sequential_timeline:2:before:object_format",
+      "passed": true
+    },
+    {
+      "check": "command_bounds:2:before:object_format",
+      "passed": true
+    },
+    {
+      "check": "command_completion:2:before:object_format",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:2:before:object_format:stdout",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:2:before:object_format:stdout",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:2:before:object_format:stderr",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:2:before:object_format:stderr",
+      "passed": true
+    },
+    {
+      "check": "one_completion_probe:2:before:object_format",
+      "passed": true
+    },
+    {
+      "check": "completion_probe_status:2:before:object_format",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:2:before:object_format:cleanup_probe:0:stdout",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:2:before:object_format:cleanup_probe:0:stdout",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:2:before:object_format:cleanup_probe:0:stderr",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:2:before:object_format:cleanup_probe:0:stderr",
+      "passed": true
+    },
+    {
+      "check": "command_exact_stage_and_success:3:before:head",
+      "passed": true
+    },
+    {
+      "check": "command_sequential_timeline:3:before:head",
+      "passed": true
+    },
+    {
+      "check": "command_bounds:3:before:head",
+      "passed": true
+    },
+    {
+      "check": "command_completion:3:before:head",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:3:before:head:stdout",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:3:before:head:stdout",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:3:before:head:stderr",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:3:before:head:stderr",
+      "passed": true
+    },
+    {
+      "check": "one_completion_probe:3:before:head",
+      "passed": true
+    },
+    {
+      "check": "completion_probe_status:3:before:head",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:3:before:head:cleanup_probe:0:stdout",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:3:before:head:cleanup_probe:0:stdout",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:3:before:head:cleanup_probe:0:stderr",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:3:before:head:cleanup_probe:0:stderr",
+      "passed": true
+    },
+    {
+      "check": "command_exact_stage_and_success:4:before:tree",
+      "passed": true
+    },
+    {
+      "check": "command_sequential_timeline:4:before:tree",
+      "passed": true
+    },
+    {
+      "check": "command_bounds:4:before:tree",
+      "passed": true
+    },
+    {
+      "check": "command_completion:4:before:tree",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:4:before:tree:stdout",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:4:before:tree:stdout",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:4:before:tree:stderr",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:4:before:tree:stderr",
+      "passed": true
+    },
+    {
+      "check": "one_completion_probe:4:before:tree",
+      "passed": true
+    },
+    {
+      "check": "completion_probe_status:4:before:tree",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:4:before:tree:cleanup_probe:0:stdout",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:4:before:tree:cleanup_probe:0:stdout",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:4:before:tree:cleanup_probe:0:stderr",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:4:before:tree:cleanup_probe:0:stderr",
+      "passed": true
+    },
+    {
+      "check": "command_exact_stage_and_success:5:before:git_directory",
+      "passed": true
+    },
+    {
+      "check": "command_sequential_timeline:5:before:git_directory",
+      "passed": true
+    },
+    {
+      "check": "command_bounds:5:before:git_directory",
+      "passed": true
+    },
+    {
+      "check": "command_completion:5:before:git_directory",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:5:before:git_directory:stdout",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:5:before:git_directory:stdout",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:5:before:git_directory:stderr",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:5:before:git_directory:stderr",
+      "passed": true
+    },
+    {
+      "check": "one_completion_probe:5:before:git_directory",
+      "passed": true
+    },
+    {
+      "check": "completion_probe_status:5:before:git_directory",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:5:before:git_directory:cleanup_probe:0:stdout",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:5:before:git_directory:cleanup_probe:0:stdout",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:5:before:git_directory:cleanup_probe:0:stderr",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:5:before:git_directory:cleanup_probe:0:stderr",
+      "passed": true
+    },
+    {
+      "check": "command_exact_stage_and_success:6:before:index_path",
+      "passed": true
+    },
+    {
+      "check": "command_sequential_timeline:6:before:index_path",
+      "passed": true
+    },
+    {
+      "check": "command_bounds:6:before:index_path",
+      "passed": true
+    },
+    {
+      "check": "command_completion:6:before:index_path",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:6:before:index_path:stdout",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:6:before:index_path:stdout",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:6:before:index_path:stderr",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:6:before:index_path:stderr",
+      "passed": true
+    },
+    {
+      "check": "one_completion_probe:6:before:index_path",
+      "passed": true
+    },
+    {
+      "check": "completion_probe_status:6:before:index_path",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:6:before:index_path:cleanup_probe:0:stdout",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:6:before:index_path:cleanup_probe:0:stdout",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:6:before:index_path:cleanup_probe:0:stderr",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:6:before:index_path:cleanup_probe:0:stderr",
+      "passed": true
+    },
+    {
+      "check": "command_exact_stage_and_success:7:before:index_entries",
+      "passed": true
+    },
+    {
+      "check": "command_sequential_timeline:7:before:index_entries",
+      "passed": true
+    },
+    {
+      "check": "command_bounds:7:before:index_entries",
+      "passed": true
+    },
+    {
+      "check": "command_completion:7:before:index_entries",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:7:before:index_entries:stdout",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:7:before:index_entries:stdout",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:7:before:index_entries:stderr",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:7:before:index_entries:stderr",
+      "passed": true
+    },
+    {
+      "check": "one_completion_probe:7:before:index_entries",
+      "passed": true
+    },
+    {
+      "check": "completion_probe_status:7:before:index_entries",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:7:before:index_entries:cleanup_probe:0:stdout",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:7:before:index_entries:cleanup_probe:0:stdout",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:7:before:index_entries:cleanup_probe:0:stderr",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:7:before:index_entries:cleanup_probe:0:stderr",
+      "passed": true
+    },
+    {
+      "check": "command_exact_stage_and_success:8:before:index_flags",
+      "passed": true
+    },
+    {
+      "check": "command_sequential_timeline:8:before:index_flags",
+      "passed": true
+    },
+    {
+      "check": "command_bounds:8:before:index_flags",
+      "passed": true
+    },
+    {
+      "check": "command_completion:8:before:index_flags",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:8:before:index_flags:stdout",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:8:before:index_flags:stdout",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:8:before:index_flags:stderr",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:8:before:index_flags:stderr",
+      "passed": true
+    },
+    {
+      "check": "one_completion_probe:8:before:index_flags",
+      "passed": true
+    },
+    {
+      "check": "completion_probe_status:8:before:index_flags",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:8:before:index_flags:cleanup_probe:0:stdout",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:8:before:index_flags:cleanup_probe:0:stdout",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:8:before:index_flags:cleanup_probe:0:stderr",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:8:before:index_flags:cleanup_probe:0:stderr",
+      "passed": true
+    },
+    {
+      "check": "command_exact_stage_and_success:9:before:head_tree",
+      "passed": true
+    },
+    {
+      "check": "command_sequential_timeline:9:before:head_tree",
+      "passed": true
+    },
+    {
+      "check": "command_bounds:9:before:head_tree",
+      "passed": true
+    },
+    {
+      "check": "command_completion:9:before:head_tree",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:9:before:head_tree:stdout",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:9:before:head_tree:stdout",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:9:before:head_tree:stderr",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:9:before:head_tree:stderr",
+      "passed": true
+    },
+    {
+      "check": "one_completion_probe:9:before:head_tree",
+      "passed": true
+    },
+    {
+      "check": "completion_probe_status:9:before:head_tree",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:9:before:head_tree:cleanup_probe:0:stdout",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:9:before:head_tree:cleanup_probe:0:stdout",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:9:before:head_tree:cleanup_probe:0:stderr",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:9:before:head_tree:cleanup_probe:0:stderr",
+      "passed": true
+    },
+    {
+      "check": "command_exact_stage_and_success:10:before:untracked",
+      "passed": true
+    },
+    {
+      "check": "command_sequential_timeline:10:before:untracked",
+      "passed": true
+    },
+    {
+      "check": "command_bounds:10:before:untracked",
+      "passed": true
+    },
+    {
+      "check": "command_completion:10:before:untracked",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:10:before:untracked:stdout",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:10:before:untracked:stdout",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:10:before:untracked:stderr",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:10:before:untracked:stderr",
+      "passed": true
+    },
+    {
+      "check": "one_completion_probe:10:before:untracked",
+      "passed": true
+    },
+    {
+      "check": "completion_probe_status:10:before:untracked",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:10:before:untracked:cleanup_probe:0:stdout",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:10:before:untracked:cleanup_probe:0:stdout",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:10:before:untracked:cleanup_probe:0:stderr",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:10:before:untracked:cleanup_probe:0:stderr",
+      "passed": true
+    },
+    {
+      "check": "command_exact_stage_and_success:11:before:stable_head",
+      "passed": true
+    },
+    {
+      "check": "command_sequential_timeline:11:before:stable_head",
+      "passed": true
+    },
+    {
+      "check": "command_bounds:11:before:stable_head",
+      "passed": true
+    },
+    {
+      "check": "command_completion:11:before:stable_head",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:11:before:stable_head:stdout",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:11:before:stable_head:stdout",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:11:before:stable_head:stderr",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:11:before:stable_head:stderr",
+      "passed": true
+    },
+    {
+      "check": "one_completion_probe:11:before:stable_head",
+      "passed": true
+    },
+    {
+      "check": "completion_probe_status:11:before:stable_head",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:11:before:stable_head:cleanup_probe:0:stdout",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:11:before:stable_head:cleanup_probe:0:stdout",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:11:before:stable_head:cleanup_probe:0:stderr",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:11:before:stable_head:cleanup_probe:0:stderr",
+      "passed": true
+    },
+    {
+      "check": "command_exact_stage_and_success:12:origin_fetch_url",
+      "passed": true
+    },
+    {
+      "check": "command_sequential_timeline:12:origin_fetch_url",
+      "passed": true
+    },
+    {
+      "check": "command_bounds:12:origin_fetch_url",
+      "passed": true
+    },
+    {
+      "check": "command_completion:12:origin_fetch_url",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:12:origin_fetch_url:stdout",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:12:origin_fetch_url:stdout",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:12:origin_fetch_url:stderr",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:12:origin_fetch_url:stderr",
+      "passed": true
+    },
+    {
+      "check": "one_completion_probe:12:origin_fetch_url",
+      "passed": true
+    },
+    {
+      "check": "completion_probe_status:12:origin_fetch_url",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:12:origin_fetch_url:cleanup_probe:0:stdout",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:12:origin_fetch_url:cleanup_probe:0:stdout",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:12:origin_fetch_url:cleanup_probe:0:stderr",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:12:origin_fetch_url:cleanup_probe:0:stderr",
+      "passed": true
+    },
+    {
+      "check": "command_exact_stage_and_success:13:origin_push_url",
+      "passed": true
+    },
+    {
+      "check": "command_sequential_timeline:13:origin_push_url",
+      "passed": true
+    },
+    {
+      "check": "command_bounds:13:origin_push_url",
+      "passed": true
+    },
+    {
+      "check": "command_completion:13:origin_push_url",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:13:origin_push_url:stdout",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:13:origin_push_url:stdout",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:13:origin_push_url:stderr",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:13:origin_push_url:stderr",
+      "passed": true
+    },
+    {
+      "check": "one_completion_probe:13:origin_push_url",
+      "passed": true
+    },
+    {
+      "check": "completion_probe_status:13:origin_push_url",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:13:origin_push_url:cleanup_probe:0:stdout",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:13:origin_push_url:cleanup_probe:0:stdout",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:13:origin_push_url:cleanup_probe:0:stderr",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:13:origin_push_url:cleanup_probe:0:stderr",
+      "passed": true
+    },
+    {
+      "check": "command_exact_stage_and_success:14:origin_not_mirror",
+      "passed": true
+    },
+    {
+      "check": "command_sequential_timeline:14:origin_not_mirror",
+      "passed": true
+    },
+    {
+      "check": "command_bounds:14:origin_not_mirror",
+      "passed": true
+    },
+    {
+      "check": "command_completion:14:origin_not_mirror",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:14:origin_not_mirror:stdout",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:14:origin_not_mirror:stdout",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:14:origin_not_mirror:stderr",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:14:origin_not_mirror:stderr",
+      "passed": true
+    },
+    {
+      "check": "one_completion_probe:14:origin_not_mirror",
+      "passed": true
+    },
+    {
+      "check": "completion_probe_status:14:origin_not_mirror",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:14:origin_not_mirror:cleanup_probe:0:stdout",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:14:origin_not_mirror:cleanup_probe:0:stdout",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:14:origin_not_mirror:cleanup_probe:0:stderr",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:14:origin_not_mirror:cleanup_probe:0:stderr",
+      "passed": true
+    },
+    {
+      "check": "command_exact_stage_and_success:15:remote_main",
+      "passed": true
+    },
+    {
+      "check": "command_sequential_timeline:15:remote_main",
+      "passed": true
+    },
+    {
+      "check": "command_bounds:15:remote_main",
+      "passed": true
+    },
+    {
+      "check": "command_completion:15:remote_main",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:15:remote_main:stdout",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:15:remote_main:stdout",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:15:remote_main:stderr",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:15:remote_main:stderr",
+      "passed": true
+    },
+    {
+      "check": "one_completion_probe:15:remote_main",
+      "passed": true
+    },
+    {
+      "check": "completion_probe_status:15:remote_main",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:15:remote_main:cleanup_probe:0:stdout",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:15:remote_main:cleanup_probe:0:stdout",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:15:remote_main:cleanup_probe:0:stderr",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:15:remote_main:cleanup_probe:0:stderr",
+      "passed": true
+    },
+    {
+      "check": "command_exact_stage_and_success:16:exact_reconstructed_cli_json",
+      "passed": true
+    },
+    {
+      "check": "command_sequential_timeline:16:exact_reconstructed_cli_json",
+      "passed": true
+    },
+    {
+      "check": "command_bounds:16:exact_reconstructed_cli_json",
+      "passed": true
+    },
+    {
+      "check": "command_completion:16:exact_reconstructed_cli_json",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:16:exact_reconstructed_cli_json:stdout",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:16:exact_reconstructed_cli_json:stdout",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:16:exact_reconstructed_cli_json:stderr",
+      "passed": true
+    },
+    {
+      "check": "one_completion_probe:16:exact_reconstructed_cli_json",
+      "passed": true
+    },
+    {
+      "check": "completion_probe_status:16:exact_reconstructed_cli_json",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:16:exact_reconstructed_cli_json:cleanup_probe:0:stdout",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:16:exact_reconstructed_cli_json:cleanup_probe:0:stdout",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:16:exact_reconstructed_cli_json:cleanup_probe:0:stderr",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:16:exact_reconstructed_cli_json:cleanup_probe:0:stderr",
+      "passed": true
+    },
+    {
+      "check": "command_exact_stage_and_success:17:after:root",
+      "passed": true
+    },
+    {
+      "check": "command_sequential_timeline:17:after:root",
+      "passed": true
+    },
+    {
+      "check": "command_bounds:17:after:root",
+      "passed": true
+    },
+    {
+      "check": "command_completion:17:after:root",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:17:after:root:stdout",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:17:after:root:stdout",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:17:after:root:stderr",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:17:after:root:stderr",
+      "passed": true
+    },
+    {
+      "check": "one_completion_probe:17:after:root",
+      "passed": true
+    },
+    {
+      "check": "completion_probe_status:17:after:root",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:17:after:root:cleanup_probe:0:stdout",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:17:after:root:cleanup_probe:0:stdout",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:17:after:root:cleanup_probe:0:stderr",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:17:after:root:cleanup_probe:0:stderr",
+      "passed": true
+    },
+    {
+      "check": "command_exact_stage_and_success:18:after:branch",
+      "passed": true
+    },
+    {
+      "check": "command_sequential_timeline:18:after:branch",
+      "passed": true
+    },
+    {
+      "check": "command_bounds:18:after:branch",
+      "passed": true
+    },
+    {
+      "check": "command_completion:18:after:branch",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:18:after:branch:stdout",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:18:after:branch:stdout",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:18:after:branch:stderr",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:18:after:branch:stderr",
+      "passed": true
+    },
+    {
+      "check": "one_completion_probe:18:after:branch",
+      "passed": true
+    },
+    {
+      "check": "completion_probe_status:18:after:branch",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:18:after:branch:cleanup_probe:0:stdout",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:18:after:branch:cleanup_probe:0:stdout",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:18:after:branch:cleanup_probe:0:stderr",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:18:after:branch:cleanup_probe:0:stderr",
+      "passed": true
+    },
+    {
+      "check": "command_exact_stage_and_success:19:after:object_format",
+      "passed": true
+    },
+    {
+      "check": "command_sequential_timeline:19:after:object_format",
+      "passed": true
+    },
+    {
+      "check": "command_bounds:19:after:object_format",
+      "passed": true
+    },
+    {
+      "check": "command_completion:19:after:object_format",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:19:after:object_format:stdout",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:19:after:object_format:stdout",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:19:after:object_format:stderr",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:19:after:object_format:stderr",
+      "passed": true
+    },
+    {
+      "check": "one_completion_probe:19:after:object_format",
+      "passed": true
+    },
+    {
+      "check": "completion_probe_status:19:after:object_format",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:19:after:object_format:cleanup_probe:0:stdout",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:19:after:object_format:cleanup_probe:0:stdout",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:19:after:object_format:cleanup_probe:0:stderr",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:19:after:object_format:cleanup_probe:0:stderr",
+      "passed": true
+    },
+    {
+      "check": "command_exact_stage_and_success:20:after:head",
+      "passed": true
+    },
+    {
+      "check": "command_sequential_timeline:20:after:head",
+      "passed": true
+    },
+    {
+      "check": "command_bounds:20:after:head",
+      "passed": true
+    },
+    {
+      "check": "command_completion:20:after:head",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:20:after:head:stdout",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:20:after:head:stdout",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:20:after:head:stderr",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:20:after:head:stderr",
+      "passed": true
+    },
+    {
+      "check": "one_completion_probe:20:after:head",
+      "passed": true
+    },
+    {
+      "check": "completion_probe_status:20:after:head",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:20:after:head:cleanup_probe:0:stdout",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:20:after:head:cleanup_probe:0:stdout",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:20:after:head:cleanup_probe:0:stderr",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:20:after:head:cleanup_probe:0:stderr",
+      "passed": true
+    },
+    {
+      "check": "command_exact_stage_and_success:21:after:tree",
+      "passed": true
+    },
+    {
+      "check": "command_sequential_timeline:21:after:tree",
+      "passed": true
+    },
+    {
+      "check": "command_bounds:21:after:tree",
+      "passed": true
+    },
+    {
+      "check": "command_completion:21:after:tree",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:21:after:tree:stdout",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:21:after:tree:stdout",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:21:after:tree:stderr",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:21:after:tree:stderr",
+      "passed": true
+    },
+    {
+      "check": "one_completion_probe:21:after:tree",
+      "passed": true
+    },
+    {
+      "check": "completion_probe_status:21:after:tree",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:21:after:tree:cleanup_probe:0:stdout",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:21:after:tree:cleanup_probe:0:stdout",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:21:after:tree:cleanup_probe:0:stderr",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:21:after:tree:cleanup_probe:0:stderr",
+      "passed": true
+    },
+    {
+      "check": "command_exact_stage_and_success:22:after:git_directory",
+      "passed": true
+    },
+    {
+      "check": "command_sequential_timeline:22:after:git_directory",
+      "passed": true
+    },
+    {
+      "check": "command_bounds:22:after:git_directory",
+      "passed": true
+    },
+    {
+      "check": "command_completion:22:after:git_directory",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:22:after:git_directory:stdout",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:22:after:git_directory:stdout",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:22:after:git_directory:stderr",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:22:after:git_directory:stderr",
+      "passed": true
+    },
+    {
+      "check": "one_completion_probe:22:after:git_directory",
+      "passed": true
+    },
+    {
+      "check": "completion_probe_status:22:after:git_directory",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:22:after:git_directory:cleanup_probe:0:stdout",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:22:after:git_directory:cleanup_probe:0:stdout",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:22:after:git_directory:cleanup_probe:0:stderr",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:22:after:git_directory:cleanup_probe:0:stderr",
+      "passed": true
+    },
+    {
+      "check": "command_exact_stage_and_success:23:after:index_path",
+      "passed": true
+    },
+    {
+      "check": "command_sequential_timeline:23:after:index_path",
+      "passed": true
+    },
+    {
+      "check": "command_bounds:23:after:index_path",
+      "passed": true
+    },
+    {
+      "check": "command_completion:23:after:index_path",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:23:after:index_path:stdout",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:23:after:index_path:stdout",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:23:after:index_path:stderr",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:23:after:index_path:stderr",
+      "passed": true
+    },
+    {
+      "check": "one_completion_probe:23:after:index_path",
+      "passed": true
+    },
+    {
+      "check": "completion_probe_status:23:after:index_path",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:23:after:index_path:cleanup_probe:0:stdout",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:23:after:index_path:cleanup_probe:0:stdout",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:23:after:index_path:cleanup_probe:0:stderr",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:23:after:index_path:cleanup_probe:0:stderr",
+      "passed": true
+    },
+    {
+      "check": "command_exact_stage_and_success:24:after:index_entries",
+      "passed": true
+    },
+    {
+      "check": "command_sequential_timeline:24:after:index_entries",
+      "passed": true
+    },
+    {
+      "check": "command_bounds:24:after:index_entries",
+      "passed": true
+    },
+    {
+      "check": "command_completion:24:after:index_entries",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:24:after:index_entries:stdout",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:24:after:index_entries:stdout",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:24:after:index_entries:stderr",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:24:after:index_entries:stderr",
+      "passed": true
+    },
+    {
+      "check": "one_completion_probe:24:after:index_entries",
+      "passed": true
+    },
+    {
+      "check": "completion_probe_status:24:after:index_entries",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:24:after:index_entries:cleanup_probe:0:stdout",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:24:after:index_entries:cleanup_probe:0:stdout",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:24:after:index_entries:cleanup_probe:0:stderr",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:24:after:index_entries:cleanup_probe:0:stderr",
+      "passed": true
+    },
+    {
+      "check": "command_exact_stage_and_success:25:after:index_flags",
+      "passed": true
+    },
+    {
+      "check": "command_sequential_timeline:25:after:index_flags",
+      "passed": true
+    },
+    {
+      "check": "command_bounds:25:after:index_flags",
+      "passed": true
+    },
+    {
+      "check": "command_completion:25:after:index_flags",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:25:after:index_flags:stdout",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:25:after:index_flags:stdout",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:25:after:index_flags:stderr",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:25:after:index_flags:stderr",
+      "passed": true
+    },
+    {
+      "check": "one_completion_probe:25:after:index_flags",
+      "passed": true
+    },
+    {
+      "check": "completion_probe_status:25:after:index_flags",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:25:after:index_flags:cleanup_probe:0:stdout",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:25:after:index_flags:cleanup_probe:0:stdout",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:25:after:index_flags:cleanup_probe:0:stderr",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:25:after:index_flags:cleanup_probe:0:stderr",
+      "passed": true
+    },
+    {
+      "check": "command_exact_stage_and_success:26:after:head_tree",
+      "passed": true
+    },
+    {
+      "check": "command_sequential_timeline:26:after:head_tree",
+      "passed": true
+    },
+    {
+      "check": "command_bounds:26:after:head_tree",
+      "passed": true
+    },
+    {
+      "check": "command_completion:26:after:head_tree",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:26:after:head_tree:stdout",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:26:after:head_tree:stdout",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:26:after:head_tree:stderr",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:26:after:head_tree:stderr",
+      "passed": true
+    },
+    {
+      "check": "one_completion_probe:26:after:head_tree",
+      "passed": true
+    },
+    {
+      "check": "completion_probe_status:26:after:head_tree",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:26:after:head_tree:cleanup_probe:0:stdout",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:26:after:head_tree:cleanup_probe:0:stdout",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:26:after:head_tree:cleanup_probe:0:stderr",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:26:after:head_tree:cleanup_probe:0:stderr",
+      "passed": true
+    },
+    {
+      "check": "command_exact_stage_and_success:27:after:untracked",
+      "passed": true
+    },
+    {
+      "check": "command_sequential_timeline:27:after:untracked",
+      "passed": true
+    },
+    {
+      "check": "command_bounds:27:after:untracked",
+      "passed": true
+    },
+    {
+      "check": "command_completion:27:after:untracked",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:27:after:untracked:stdout",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:27:after:untracked:stdout",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:27:after:untracked:stderr",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:27:after:untracked:stderr",
+      "passed": true
+    },
+    {
+      "check": "one_completion_probe:27:after:untracked",
+      "passed": true
+    },
+    {
+      "check": "completion_probe_status:27:after:untracked",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:27:after:untracked:cleanup_probe:0:stdout",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:27:after:untracked:cleanup_probe:0:stdout",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:27:after:untracked:cleanup_probe:0:stderr",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:27:after:untracked:cleanup_probe:0:stderr",
+      "passed": true
+    },
+    {
+      "check": "command_exact_stage_and_success:28:after:stable_head",
+      "passed": true
+    },
+    {
+      "check": "command_sequential_timeline:28:after:stable_head",
+      "passed": true
+    },
+    {
+      "check": "command_bounds:28:after:stable_head",
+      "passed": true
+    },
+    {
+      "check": "command_completion:28:after:stable_head",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:28:after:stable_head:stdout",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:28:after:stable_head:stdout",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:28:after:stable_head:stderr",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:28:after:stable_head:stderr",
+      "passed": true
+    },
+    {
+      "check": "one_completion_probe:28:after:stable_head",
+      "passed": true
+    },
+    {
+      "check": "completion_probe_status:28:after:stable_head",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:28:after:stable_head:cleanup_probe:0:stdout",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:28:after:stable_head:cleanup_probe:0:stdout",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:28:after:stable_head:cleanup_probe:0:stderr",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:28:after:stable_head:cleanup_probe:0:stderr",
+      "passed": true
+    },
+    {
+      "check": "remote_time_precedes_single_query",
+      "passed": true
+    },
+    {
+      "check": "one_current_runtime_observation",
+      "passed": true
+    },
+    {
+      "check": "runtime_exact_scope",
+      "passed": true
+    },
+    {
+      "check": "runtime_two_scans_no_related_candidate",
+      "passed": true
+    },
+    {
+      "check": "runtime_probe_status:0",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:runtime_probe:0:stdout",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:runtime_probe:0:stderr",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:runtime_probe:0:stderr",
+      "passed": true
+    },
+    {
+      "check": "runtime_probe_status:1",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:runtime_probe:1:stdout",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:runtime_probe:1:stderr",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:runtime_probe:1:stderr",
+      "passed": true
+    },
+    {
+      "check": "runtime_probe_status:2",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:runtime_probe:2:stdout",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:runtime_probe:2:stderr",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:runtime_probe:2:stderr",
+      "passed": true
+    },
+    {
+      "check": "runtime_probe_status:3",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:runtime_probe:3:stdout",
+      "passed": true
+    },
+    {
+      "check": "complete_stream:runtime_probe:3:stderr",
+      "passed": true
+    },
+    {
+      "check": "stream_hash:runtime_probe:3:stderr",
+      "passed": true
+    },
+    {
+      "check": "single_source_definition:account_lifecycle_private.account_is_available",
+      "passed": true
+    },
+    {
+      "check": "current_function_body:account_lifecycle_private.account_is_available",
+      "passed": true
+    },
+    {
+      "check": "function_security_definer:account_lifecycle_private.account_is_available",
+      "passed": true
+    },
+    {
+      "check": "function_header_contract:account_lifecycle_private.account_is_available",
+      "passed": true
+    },
+    {
+      "check": "historical_uid_pin_matches_current_observation",
+      "passed": true
+    },
+    {
+      "check": "single_source_definition:profile_editor_private.lock_owner",
+      "passed": true
+    },
+    {
+      "check": "current_function_body:profile_editor_private.lock_owner",
+      "passed": true
+    },
+    {
+      "check": "function_security_definer:profile_editor_private.lock_owner",
+      "passed": true
+    },
+    {
+      "check": "function_header_contract:profile_editor_private.lock_owner",
+      "passed": true
+    },
+    {
+      "check": "single_source_definition:profile_editor_private.snapshot",
+      "passed": true
+    },
+    {
+      "check": "current_function_body:profile_editor_private.snapshot",
+      "passed": true
+    },
+    {
+      "check": "function_security_definer:profile_editor_private.snapshot",
+      "passed": true
+    },
+    {
+      "check": "function_header_contract:profile_editor_private.snapshot",
+      "passed": true
+    },
+    {
+      "check": "single_source_definition:profile_editor_private.touch_revision",
+      "passed": true
+    },
+    {
+      "check": "current_function_body:profile_editor_private.touch_revision",
+      "passed": true
+    },
+    {
+      "check": "function_security_definer:profile_editor_private.touch_revision",
+      "passed": true
+    },
+    {
+      "check": "function_header_contract:profile_editor_private.touch_revision",
+      "passed": true
+    },
+    {
+      "check": "single_source_definition:public.get_my_active_identity_profile_details",
+      "passed": true
+    },
+    {
+      "check": "current_function_body:public.get_my_active_identity_profile_details",
+      "passed": true
+    },
+    {
+      "check": "function_security_definer:public.get_my_active_identity_profile_details",
+      "passed": true
+    },
+    {
+      "check": "function_header_contract:public.get_my_active_identity_profile_details",
+      "passed": true
+    },
+    {
+      "check": "single_source_definition:public.get_my_profile_editor_v1",
+      "passed": true
+    },
+    {
+      "check": "current_function_body:public.get_my_profile_editor_v1",
+      "passed": true
+    },
+    {
+      "check": "function_security_definer:public.get_my_profile_editor_v1",
+      "passed": true
+    },
+    {
+      "check": "function_header_contract:public.get_my_profile_editor_v1",
+      "passed": true
+    },
+    {
+      "check": "single_source_definition:public.get_store_by_slug",
+      "passed": true
+    },
+    {
+      "check": "current_function_body:public.get_store_by_slug",
+      "passed": true
+    },
+    {
+      "check": "function_security_definer:public.get_store_by_slug",
+      "passed": true
+    },
+    {
+      "check": "function_header_contract:public.get_store_by_slug",
+      "passed": true
+    },
+    {
+      "check": "legacy_body_not_claimed:public.save_my_active_identity_profile(text,text,text,text,text,text)",
+      "passed": true
+    },
+    {
+      "check": "single_source_definition:public.save_my_profile_editor_v1",
+      "passed": true
+    },
+    {
+      "check": "current_function_body:public.save_my_profile_editor_v1",
+      "passed": true
+    },
+    {
+      "check": "function_security_definer:public.save_my_profile_editor_v1",
+      "passed": true
+    },
+    {
+      "check": "function_header_contract:public.save_my_profile_editor_v1",
+      "passed": true
+    },
+    {
+      "check": "legacy_body_not_claimed:public.update_my_active_identity_location(text,text,double precision,double precision)",
+      "passed": true
+    },
+    {
+      "check": "historical_current_fingerprint:auth.uid()",
+      "passed": true
+    },
+    {
+      "check": "historical_current_fingerprint:profile_editor_private.touch_revision()",
+      "passed": true
+    },
+    {
+      "check": "historical_current_fingerprint:public.validate_profile_active_identity_v2()",
+      "passed": true
+    },
+    {
+      "check": "both_direct_trigger_fingerprints",
+      "passed": true
+    },
+    {
+      "check": "exact_current_function_grants:account_lifecycle_private.account_is_available(uuid)",
+      "passed": true
+    },
+    {
+      "check": "effective_current_function_execute:account_lifecycle_private.account_is_available(uuid)",
+      "passed": true
+    },
+    {
+      "check": "exact_current_function_grants:profile_editor_private.lock_owner(uuid,uuid)",
+      "passed": true
+    },
+    {
+      "check": "effective_current_function_execute:profile_editor_private.lock_owner(uuid,uuid)",
+      "passed": true
+    },
+    {
+      "check": "exact_current_function_grants:profile_editor_private.snapshot(uuid,public.identities,public.identity_profiles)",
+      "passed": true
+    },
+    {
+      "check": "effective_current_function_execute:profile_editor_private.snapshot(uuid,public.identities,public.identity_profiles)",
+      "passed": true
+    },
+    {
+      "check": "exact_current_function_grants:profile_editor_private.touch_revision()",
+      "passed": true
+    },
+    {
+      "check": "effective_current_function_execute:profile_editor_private.touch_revision()",
+      "passed": true
+    },
+    {
+      "check": "exact_current_function_grants:public.get_my_profile_editor_v1(uuid,uuid)",
+      "passed": true
+    },
+    {
+      "check": "effective_current_function_execute:public.get_my_profile_editor_v1(uuid,uuid)",
+      "passed": true
+    },
+    {
+      "check": "exact_current_function_grants:public.save_my_profile_editor_v1(uuid,uuid,uuid,jsonb)",
+      "passed": true
+    },
+    {
+      "check": "effective_current_function_execute:public.save_my_profile_editor_v1(uuid,uuid,uuid,jsonb)",
+      "passed": true
+    },
+    {
+      "check": "legacy_client_revocations:public.save_my_active_identity_profile(text,text,text,text,text,text)",
+      "passed": true
+    },
+    {
+      "check": "legacy_service_role_retained:public.save_my_active_identity_profile(text,text,text,text,text,text)",
+      "passed": true
+    },
+    {
+      "check": "legacy_client_revocations:public.update_my_active_identity_location(text,text,double precision,double precision)",
+      "passed": true
+    },
+    {
+      "check": "legacy_service_role_retained:public.update_my_active_identity_location(text,text,double precision,double precision)",
+      "passed": true
+    },
+    {
+      "check": "private_schema_closed:profile_editor_private",
+      "passed": true
+    },
+    {
+      "check": "private_schema_closed:account_lifecycle_private",
+      "passed": true
+    },
+    {
+      "check": "no_client_whole_table_writes:public.profiles",
+      "passed": true
+    },
+    {
+      "check": "no_client_whole_table_writes:public.identities",
+      "passed": true
+    },
+    {
+      "check": "no_client_whole_table_writes:public.identity_profiles",
+      "passed": true
+    },
+    {
+      "check": "no_client_whole_table_writes:public.business_accounts",
+      "passed": true
+    },
+    {
+      "check": "no_client_whole_table_writes:public.business_members",
+      "passed": true
+    },
+    {
+      "check": "no_client_whole_table_writes:account_lifecycle_private.account_states",
+      "passed": true
+    },
+    {
+      "check": "exact_bootstrap_column_grants:anon:can_insert",
+      "passed": true
+    },
+    {
+      "check": "exact_bootstrap_column_grants:anon:can_update",
+      "passed": true
+    },
+    {
+      "check": "exact_bootstrap_column_grants:authenticated:can_insert",
+      "passed": true
+    },
+    {
+      "check": "exact_bootstrap_column_grants:authenticated:can_update",
+      "passed": true
+    },
+    {
+      "check": "location_columns_no_direct_client_write",
+      "passed": true
+    },
+    {
+      "check": "observed_public_function_default_grants",
+      "passed": true
+    },
+    {
+      "check": "current_public_read_contract:account_lifecycle_private.account_is_available(uuid)",
+      "passed": true
+    },
+    {
+      "check": "current_public_read_grants:account_lifecycle_private.account_is_available(uuid)",
+      "passed": true
+    },
+    {
+      "check": "current_public_read_contract:public.get_store_by_slug(text)",
+      "passed": true
+    },
+    {
+      "check": "current_public_read_grants:public.get_store_by_slug(text)",
+      "passed": true
+    },
+    {
+      "check": "foundation_column:account_user_id",
+      "passed": true
+    },
+    {
+      "check": "foundation_column:state",
+      "passed": true
+    },
+    {
+      "check": "foundation_column:revision",
+      "passed": true
+    },
+    {
+      "check": "foundation_column:initialized_at",
+      "passed": true
+    },
+    {
+      "check": "foundation_constraint_shape:account_states_active_only",
+      "passed": true
+    },
+    {
+      "check": "constraint_pretty_hash_reconciled:account_states_active_only",
+      "passed": true
+    },
+    {
+      "check": "foundation_constraint_shape:account_states_auth_user_fkey",
+      "passed": true
+    },
+    {
+      "check": "foundation_constraint_identical_hash:account_states_auth_user_fkey",
+      "passed": true
+    },
+    {
+      "check": "foundation_constraint_shape:account_states_pkey",
+      "passed": true
+    },
+    {
+      "check": "foundation_constraint_identical_hash:account_states_pkey",
+      "passed": true
+    },
+    {
+      "check": "foundation_constraint_shape:account_states_revision_positive",
+      "passed": true
+    },
+    {
+      "check": "constraint_pretty_hash_reconciled:account_states_revision_positive",
+      "passed": true
+    },
+    {
+      "check": "account_state_table_all_client_roles_closed",
+      "passed": true
+    },
+    {
+      "check": "current_profile_location_storage_shape",
+      "passed": true
+    },
+    {
+      "check": "no_normalized_profile_place_contract_yet",
+      "passed": true
+    },
+    {
+      "check": "current_owner_lock_has_no_account_availability_call",
+      "passed": true
+    },
+    {
+      "check": "postgis_available_not_installed",
+      "passed": true
+    },
+    {
+      "check": "trigram_and_unaccent_observations",
+      "passed": true
+    },
+    {
+      "check": "stream_accounting_complete",
+      "passed": true
+    }
+  ],
+  "implementation_constraints": [
+    "Normalized country/place persistence and shared typeahead are not implemented by this observation.",
+    "Current profile owner lock lacks account_is_available; a future location write needs its own active-account gate.",
+    "Private approximate locality and business explicit exact visibility must remain separate; no hidden private exact point.",
+    "PostGIS is available but not installed; this observation authorizes no installation or distance-search migration.",
+    "Legacy location/profile writers remain denied to PUBLIC/anon/authenticated; service_role execute remains. Do not re-enable client paths.",
+    "Postgres public-schema default function ACL grants EXECUTE to anon/authenticated/service_role; new RPC/helper grants must be explicit.",
+    "Catalog covers fixed signatures/direct attached triggers only, not transitive dependencies, application rows, UI behavior or full account deletion."
+  ],
+  "evidence_limits": [
+    "Raw local Git index bytes, five CLI files, prior Mac file inode/mode/time snapshots and runtime process rows are not exported; report summaries are backed by the sealed guards, not independently re-observed on the Mac.",
+    "The 27-byte CLI stderr and four runtime-probe stdout streams have complete hashes/counts only; no meaning or warning-free state is inferred.",
+    "Two CHECK constraint definition hashes differ from the old catalog only because this catalog uses pretty output; both exact old/new strings and hashes were reconstructed.",
+    "No SQL, app tests/build, CLI, Git, network or database action was run during this review. Existing artifacts were read only."
+  ]
+}

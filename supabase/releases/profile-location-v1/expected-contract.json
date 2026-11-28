@@ -1,0 +1,1087 @@
+{
+  "format": "selqiro-profile-location-expected-contract-v1",
+  "baseline_sha256": "eb0bcb241ed6d1d0f786dc06a59b91ecbef0b584d594b105b704331a3c08d2c0",
+  "release_sha256": "efb63861ed24b046df17cfcf4d634e8fc292fac75514b920a99f4f1eb3b5369d",
+  "contract_sha256": "e9d04dd82630e259571f0ce3ad06704b835266d184dfe740baa59ef3fc32b06a",
+  "accepted_report_sha256": "cc884c36ae31b5217b69c45e0810f28d5791572f462152225cf67d6fd11c5938",
+  "accepted_report_name": "selqiro-asukoha-aluse-kontroll-20261127-raport-20261127-133852-f5686ad8ac14.json",
+  "accepted_source_commit": "7c53643012545c7dfa99ba976e6f2613e3c3a201",
+  "new_catalog": {
+    "counts": {
+      "tables": 4,
+      "columns": 13,
+      "schemas": 1,
+      "policies": 0,
+      "functions": 8,
+      "relations": 9,
+      "constraints": 16,
+      "table_triggers": 0
+    },
+    "format": "selqiro-profile-location-catalog-v1",
+    "schema": {
+      "name": "profile_location_private",
+      "owner": "postgres",
+      "grants": [
+        {
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "grantable": false,
+          "privilege": "CREATE"
+        },
+        {
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "grantable": false,
+          "privilege": "USAGE"
+        }
+      ],
+      "effective": [
+        {
+          "role": "anon",
+          "usage": false,
+          "create": false
+        },
+        {
+          "role": "authenticated",
+          "usage": false,
+          "create": false
+        },
+        {
+          "role": "service_role",
+          "usage": false,
+          "create": false
+        }
+      ]
+    },
+    "tables": [
+      {
+        "rls": true,
+        "kind": "r",
+        "name": "profile_location_private.actor_lookup_budget",
+        "owner": "postgres",
+        "grants": [
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "DELETE"
+          },
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "INSERT"
+          },
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "MAINTAIN"
+          },
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "REFERENCES"
+          },
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "SELECT"
+          },
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "TRIGGER"
+          },
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "TRUNCATE"
+          },
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "UPDATE"
+          }
+        ],
+        "columns": [
+          {
+            "acl": null,
+            "name": "user_id",
+            "type": "uuid",
+            "default": null,
+            "identity": "",
+            "not_null": true,
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "attempts",
+            "type": "timestamp with time zone[]",
+            "default": "ARRAY[]::timestamp with time zone[]",
+            "identity": "",
+            "not_null": true,
+            "generated": ""
+          }
+        ],
+        "indexes": [
+          {
+            "name": "actor_lookup_budget_pkey",
+            "ready": true,
+            "valid": true,
+            "unique": true,
+            "primary": true,
+            "definition": "CREATE UNIQUE INDEX actor_lookup_budget_pkey ON profile_location_private.actor_lookup_budget USING btree (user_id)"
+          }
+        ],
+        "effective": [
+          {
+            "role": "anon",
+            "delete": false,
+            "insert": false,
+            "select": false,
+            "update": false,
+            "trigger": false,
+            "maintain": false,
+            "truncate": false,
+            "references": false
+          },
+          {
+            "role": "authenticated",
+            "delete": false,
+            "insert": false,
+            "select": false,
+            "update": false,
+            "trigger": false,
+            "maintain": false,
+            "truncate": false,
+            "references": false
+          },
+          {
+            "role": "service_role",
+            "delete": false,
+            "insert": false,
+            "select": false,
+            "update": false,
+            "trigger": false,
+            "maintain": false,
+            "truncate": false,
+            "references": false
+          }
+        ],
+        "force_rls": false,
+        "constraints": [
+          {
+            "kind": "c",
+            "name": "actor_lookup_budget_attempts_check",
+            "validated": true,
+            "deferrable": false,
+            "definition": "CHECK (cardinality(attempts) <= 60)"
+          },
+          {
+            "kind": "p",
+            "name": "actor_lookup_budget_pkey",
+            "validated": true,
+            "deferrable": false,
+            "definition": "PRIMARY KEY (user_id)"
+          },
+          {
+            "kind": "f",
+            "name": "actor_lookup_budget_user_id_fkey",
+            "validated": true,
+            "deferrable": false,
+            "definition": "FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE"
+          }
+        ]
+      },
+      {
+        "rls": true,
+        "kind": "r",
+        "name": "profile_location_private.lookup_budget",
+        "owner": "postgres",
+        "grants": [
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "DELETE"
+          },
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "INSERT"
+          },
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "MAINTAIN"
+          },
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "REFERENCES"
+          },
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "SELECT"
+          },
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "TRIGGER"
+          },
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "TRUNCATE"
+          },
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "UPDATE"
+          }
+        ],
+        "columns": [
+          {
+            "acl": null,
+            "name": "singleton",
+            "type": "boolean",
+            "default": "true",
+            "identity": "",
+            "not_null": true,
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "attempts",
+            "type": "timestamp with time zone[]",
+            "default": "ARRAY[]::timestamp with time zone[]",
+            "identity": "",
+            "not_null": true,
+            "generated": ""
+          }
+        ],
+        "indexes": [
+          {
+            "name": "lookup_budget_pkey",
+            "ready": true,
+            "valid": true,
+            "unique": true,
+            "primary": true,
+            "definition": "CREATE UNIQUE INDEX lookup_budget_pkey ON profile_location_private.lookup_budget USING btree (singleton)"
+          }
+        ],
+        "effective": [
+          {
+            "role": "anon",
+            "delete": false,
+            "insert": false,
+            "select": false,
+            "update": false,
+            "trigger": false,
+            "maintain": false,
+            "truncate": false,
+            "references": false
+          },
+          {
+            "role": "authenticated",
+            "delete": false,
+            "insert": false,
+            "select": false,
+            "update": false,
+            "trigger": false,
+            "maintain": false,
+            "truncate": false,
+            "references": false
+          },
+          {
+            "role": "service_role",
+            "delete": false,
+            "insert": false,
+            "select": false,
+            "update": false,
+            "trigger": false,
+            "maintain": false,
+            "truncate": false,
+            "references": false
+          }
+        ],
+        "force_rls": false,
+        "constraints": [
+          {
+            "kind": "c",
+            "name": "lookup_budget_attempts_check",
+            "validated": true,
+            "deferrable": false,
+            "definition": "CHECK (cardinality(attempts) <= 3000)"
+          },
+          {
+            "kind": "p",
+            "name": "lookup_budget_pkey",
+            "validated": true,
+            "deferrable": false,
+            "definition": "PRIMARY KEY (singleton)"
+          },
+          {
+            "kind": "c",
+            "name": "lookup_budget_singleton_check",
+            "validated": true,
+            "deferrable": false,
+            "definition": "CHECK (singleton)"
+          }
+        ]
+      },
+      {
+        "rls": true,
+        "kind": "r",
+        "name": "profile_location_private.profile_locations",
+        "owner": "postgres",
+        "grants": [
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "DELETE"
+          },
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "INSERT"
+          },
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "MAINTAIN"
+          },
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "REFERENCES"
+          },
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "SELECT"
+          },
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "TRIGGER"
+          },
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "TRUNCATE"
+          },
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "UPDATE"
+          }
+        ],
+        "columns": [
+          {
+            "acl": null,
+            "name": "identity_id",
+            "type": "uuid",
+            "default": null,
+            "identity": "",
+            "not_null": true,
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "location",
+            "type": "jsonb",
+            "default": null,
+            "identity": "",
+            "not_null": true,
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "selected_at",
+            "type": "timestamp with time zone",
+            "default": "clock_timestamp()",
+            "identity": "",
+            "not_null": true,
+            "generated": ""
+          }
+        ],
+        "indexes": [
+          {
+            "name": "profile_locations_pkey",
+            "ready": true,
+            "valid": true,
+            "unique": true,
+            "primary": true,
+            "definition": "CREATE UNIQUE INDEX profile_locations_pkey ON profile_location_private.profile_locations USING btree (identity_id)"
+          }
+        ],
+        "effective": [
+          {
+            "role": "anon",
+            "delete": false,
+            "insert": false,
+            "select": false,
+            "update": false,
+            "trigger": false,
+            "maintain": false,
+            "truncate": false,
+            "references": false
+          },
+          {
+            "role": "authenticated",
+            "delete": false,
+            "insert": false,
+            "select": false,
+            "update": false,
+            "trigger": false,
+            "maintain": false,
+            "truncate": false,
+            "references": false
+          },
+          {
+            "role": "service_role",
+            "delete": false,
+            "insert": false,
+            "select": false,
+            "update": false,
+            "trigger": false,
+            "maintain": false,
+            "truncate": false,
+            "references": false
+          }
+        ],
+        "force_rls": false,
+        "constraints": [
+          {
+            "kind": "f",
+            "name": "profile_locations_identity_id_fkey",
+            "validated": true,
+            "deferrable": false,
+            "definition": "FOREIGN KEY (identity_id) REFERENCES public.identities(id) ON DELETE CASCADE"
+          },
+          {
+            "kind": "c",
+            "name": "profile_locations_location_check",
+            "validated": true,
+            "deferrable": false,
+            "definition": "CHECK (profile_location_private.valid_location(location))"
+          },
+          {
+            "kind": "p",
+            "name": "profile_locations_pkey",
+            "validated": true,
+            "deferrable": false,
+            "definition": "PRIMARY KEY (identity_id)"
+          },
+          {
+            "kind": "c",
+            "name": "profile_locations_selected_at_check",
+            "validated": true,
+            "deferrable": false,
+            "definition": "CHECK (isfinite(selected_at))"
+          }
+        ]
+      },
+      {
+        "rls": true,
+        "kind": "r",
+        "name": "profile_location_private.selections",
+        "owner": "postgres",
+        "grants": [
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "DELETE"
+          },
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "INSERT"
+          },
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "MAINTAIN"
+          },
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "REFERENCES"
+          },
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "SELECT"
+          },
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "TRIGGER"
+          },
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "TRUNCATE"
+          },
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "UPDATE"
+          }
+        ],
+        "columns": [
+          {
+            "acl": null,
+            "name": "selection_id",
+            "type": "uuid",
+            "default": "gen_random_uuid()",
+            "identity": "",
+            "not_null": true,
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "user_id",
+            "type": "uuid",
+            "default": null,
+            "identity": "",
+            "not_null": true,
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "identity_id",
+            "type": "uuid",
+            "default": null,
+            "identity": "",
+            "not_null": true,
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "location",
+            "type": "jsonb",
+            "default": null,
+            "identity": "",
+            "not_null": true,
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "created_at",
+            "type": "timestamp with time zone",
+            "default": "clock_timestamp()",
+            "identity": "",
+            "not_null": true,
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "expires_at",
+            "type": "timestamp with time zone",
+            "default": null,
+            "identity": "",
+            "not_null": true,
+            "generated": ""
+          }
+        ],
+        "indexes": [
+          {
+            "name": "profile_location_selections_owner_expiry",
+            "ready": true,
+            "valid": true,
+            "unique": false,
+            "primary": false,
+            "definition": "CREATE INDEX profile_location_selections_owner_expiry ON profile_location_private.selections USING btree (user_id, expires_at)"
+          },
+          {
+            "name": "selections_pkey",
+            "ready": true,
+            "valid": true,
+            "unique": true,
+            "primary": true,
+            "definition": "CREATE UNIQUE INDEX selections_pkey ON profile_location_private.selections USING btree (selection_id)"
+          }
+        ],
+        "effective": [
+          {
+            "role": "anon",
+            "delete": false,
+            "insert": false,
+            "select": false,
+            "update": false,
+            "trigger": false,
+            "maintain": false,
+            "truncate": false,
+            "references": false
+          },
+          {
+            "role": "authenticated",
+            "delete": false,
+            "insert": false,
+            "select": false,
+            "update": false,
+            "trigger": false,
+            "maintain": false,
+            "truncate": false,
+            "references": false
+          },
+          {
+            "role": "service_role",
+            "delete": false,
+            "insert": false,
+            "select": false,
+            "update": false,
+            "trigger": false,
+            "maintain": false,
+            "truncate": false,
+            "references": false
+          }
+        ],
+        "force_rls": false,
+        "constraints": [
+          {
+            "kind": "c",
+            "name": "selections_check",
+            "validated": true,
+            "deferrable": false,
+            "definition": "CHECK (isfinite(expires_at) AND expires_at > created_at AND expires_at <= (created_at + '00:15:00'::interval))"
+          },
+          {
+            "kind": "c",
+            "name": "selections_created_at_check",
+            "validated": true,
+            "deferrable": false,
+            "definition": "CHECK (isfinite(created_at))"
+          },
+          {
+            "kind": "f",
+            "name": "selections_identity_id_fkey",
+            "validated": true,
+            "deferrable": false,
+            "definition": "FOREIGN KEY (identity_id) REFERENCES public.identities(id) ON DELETE CASCADE"
+          },
+          {
+            "kind": "c",
+            "name": "selections_location_check",
+            "validated": true,
+            "deferrable": false,
+            "definition": "CHECK (profile_location_private.valid_location(location))"
+          },
+          {
+            "kind": "p",
+            "name": "selections_pkey",
+            "validated": true,
+            "deferrable": false,
+            "definition": "PRIMARY KEY (selection_id)"
+          },
+          {
+            "kind": "f",
+            "name": "selections_user_id_fkey",
+            "validated": true,
+            "deferrable": false,
+            "definition": "FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE"
+          }
+        ]
+      }
+    ],
+    "functions": [
+      {
+        "kind": "f",
+        "name": "profile_location_private.invalidate_profile_location()",
+        "owner": "postgres",
+        "config": [
+          "search_path=pg_catalog"
+        ],
+        "grants": [
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          }
+        ],
+        "result": "trigger",
+        "strict": false,
+        "definer": true,
+        "language": "plpgsql",
+        "parallel": "u",
+        "arguments": "",
+        "effective": [
+          {
+            "role": "anon",
+            "execute": false
+          },
+          {
+            "role": "authenticated",
+            "execute": false
+          },
+          {
+            "role": "service_role",
+            "execute": false
+          }
+        ],
+        "leakproof": false,
+        "volatility": "v",
+        "body_sha256": "fd40b3292a8ba06764c5c96d2579788f463c1db85399ff1e6f4434d9389710a3",
+        "definition_sha256": "ba5aceb20f856c798589e35783124652cbc81f0dcb89156725d1e8fbd8f8abd2"
+      },
+      {
+        "kind": "f",
+        "name": "profile_location_private.lock_owner(uuid,uuid)",
+        "owner": "postgres",
+        "config": [
+          "search_path=pg_catalog",
+          "lock_timeout=2s"
+        ],
+        "grants": [
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          }
+        ],
+        "result": "public.identities",
+        "strict": false,
+        "definer": true,
+        "language": "plpgsql",
+        "parallel": "u",
+        "arguments": "p_expected_user_id uuid, p_expected_identity_id uuid",
+        "effective": [
+          {
+            "role": "anon",
+            "execute": false
+          },
+          {
+            "role": "authenticated",
+            "execute": false
+          },
+          {
+            "role": "service_role",
+            "execute": false
+          }
+        ],
+        "leakproof": false,
+        "volatility": "v",
+        "body_sha256": "2c3d19e4d5ffdf5795f292e3dbd966eee70cde41608914a27541d0703e97d4c3",
+        "definition_sha256": "7d39a3c29df91691eaa90f4f47744176dc493c177988c4e77ad9256ddf695422"
+      },
+      {
+        "kind": "f",
+        "name": "profile_location_private.require_account(uuid)",
+        "owner": "postgres",
+        "config": [
+          "search_path=pg_catalog",
+          "lock_timeout=2s"
+        ],
+        "grants": [
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          }
+        ],
+        "result": "void",
+        "strict": false,
+        "definer": true,
+        "language": "plpgsql",
+        "parallel": "u",
+        "arguments": "p_user uuid",
+        "effective": [
+          {
+            "role": "anon",
+            "execute": false
+          },
+          {
+            "role": "authenticated",
+            "execute": false
+          },
+          {
+            "role": "service_role",
+            "execute": false
+          }
+        ],
+        "leakproof": false,
+        "volatility": "v",
+        "body_sha256": "03317fdf740621f3ffb917db41fbe60372c30e1cb41dae515db7dbd6f6f2855a",
+        "definition_sha256": "e95d649dadf3a73887108c9d5b9961be4eb02966ed29be2e9e6b40fe837e2dcf"
+      },
+      {
+        "kind": "f",
+        "name": "profile_location_private.valid_location(jsonb)",
+        "owner": "postgres",
+        "config": [
+          "search_path=pg_catalog"
+        ],
+        "grants": [
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          }
+        ],
+        "result": "boolean",
+        "strict": false,
+        "definer": false,
+        "language": "plpgsql",
+        "parallel": "u",
+        "arguments": "p_location jsonb",
+        "effective": [
+          {
+            "role": "anon",
+            "execute": false
+          },
+          {
+            "role": "authenticated",
+            "execute": false
+          },
+          {
+            "role": "service_role",
+            "execute": false
+          }
+        ],
+        "leakproof": false,
+        "volatility": "i",
+        "body_sha256": "e52bedc9bd68d293bc778dc5652ab04e77a913ce5040d2294f6b94d977910480",
+        "definition_sha256": "b507565d60f6bd532f4756807d348077a7fb5fddca1ae9f9ec22de1be361a283"
+      },
+      {
+        "kind": "f",
+        "name": "public.get_my_profile_editor_v2(uuid,uuid)",
+        "owner": "postgres",
+        "config": [
+          "search_path=pg_catalog",
+          "lock_timeout=2s"
+        ],
+        "grants": [
+          {
+            "grantee": "authenticated",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          },
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          }
+        ],
+        "result": "jsonb",
+        "strict": false,
+        "definer": true,
+        "language": "plpgsql",
+        "parallel": "u",
+        "arguments": "p_expected_user_id uuid, p_expected_identity_id uuid",
+        "effective": [
+          {
+            "role": "anon",
+            "execute": false
+          },
+          {
+            "role": "authenticated",
+            "execute": true
+          },
+          {
+            "role": "service_role",
+            "execute": false
+          }
+        ],
+        "leakproof": false,
+        "volatility": "v",
+        "body_sha256": "2900d1b8ab27a41d876b0f2b7d31caacb19151540e50202f1766931f93ac91a1",
+        "definition_sha256": "e5e913ffe2e1811a26579d023f3b84fccb4374d960bd7c20fe700227ba807b6f"
+      },
+      {
+        "kind": "f",
+        "name": "public.prepare_profile_location_v1(uuid,uuid,jsonb)",
+        "owner": "postgres",
+        "config": [
+          "search_path=pg_catalog",
+          "lock_timeout=2s"
+        ],
+        "grants": [
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          },
+          {
+            "grantee": "service_role",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          }
+        ],
+        "result": "jsonb",
+        "strict": false,
+        "definer": true,
+        "language": "plpgsql",
+        "parallel": "u",
+        "arguments": "p_expected_user_id uuid, p_expected_identity_id uuid, p_location jsonb",
+        "effective": [
+          {
+            "role": "anon",
+            "execute": false
+          },
+          {
+            "role": "authenticated",
+            "execute": false
+          },
+          {
+            "role": "service_role",
+            "execute": true
+          }
+        ],
+        "leakproof": false,
+        "volatility": "v",
+        "body_sha256": "9df09d53d0ea4f02d487b16dd5e8226fb54e2802bb45b3c5caf6e0b5be9a1d21",
+        "definition_sha256": "f4a822e9bde5f38bbe7412175abb3d45ae14bb01c24df051e66428be75a77b23"
+      },
+      {
+        "kind": "f",
+        "name": "public.reserve_profile_location_lookup_v1(uuid,uuid)",
+        "owner": "postgres",
+        "config": [
+          "search_path=pg_catalog",
+          "lock_timeout=2s"
+        ],
+        "grants": [
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          },
+          {
+            "grantee": "service_role",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          }
+        ],
+        "result": "jsonb",
+        "strict": false,
+        "definer": true,
+        "language": "plpgsql",
+        "parallel": "u",
+        "arguments": "p_expected_user_id uuid, p_expected_identity_id uuid",
+        "effective": [
+          {
+            "role": "anon",
+            "execute": false
+          },
+          {
+            "role": "authenticated",
+            "execute": false
+          },
+          {
+            "role": "service_role",
+            "execute": true
+          }
+        ],
+        "leakproof": false,
+        "volatility": "v",
+        "body_sha256": "3e87adf85719518bbea3d03be0947277d10e140ebcbdbaaf7dc474f3584be4cb",
+        "definition_sha256": "a07a99e2d12e29a77b4c2ac531d6ab4b9e6715a1be05a120ff2ebd771d99e51a"
+      },
+      {
+        "kind": "f",
+        "name": "public.save_my_profile_editor_v2(uuid,uuid,uuid,jsonb,jsonb)",
+        "owner": "postgres",
+        "config": [
+          "search_path=pg_catalog",
+          "lock_timeout=2s"
+        ],
+        "grants": [
+          {
+            "grantee": "authenticated",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          },
+          {
+            "grantee": "postgres",
+            "grantor": "postgres",
+            "grantable": false,
+            "privilege": "EXECUTE"
+          }
+        ],
+        "result": "jsonb",
+        "strict": false,
+        "definer": true,
+        "language": "plpgsql",
+        "parallel": "u",
+        "arguments": "p_expected_user_id uuid, p_expected_identity_id uuid, p_expected_revision uuid, p_patch jsonb, p_location_command jsonb",
+        "effective": [
+          {
+            "role": "anon",
+            "execute": false
+          },
+          {
+            "role": "authenticated",
+            "execute": true
+          },
+          {
+            "role": "service_role",
+            "execute": false
+          }
+        ],
+        "leakproof": false,
+        "volatility": "v",
+        "body_sha256": "c41baaa10bd9c61fdeb45df0c7f0bc2a420717b1da6511d530a85bbb4655cdf0",
+        "definition_sha256": "c069eb9c7de58ece518103b05db04d8d610387453186110dc3abc9872cb8ebfc"
+      }
+    ],
+    "text_invalidation_trigger": {
+      "name": "profile_location_text_changed_v1",
+      "enabled": "O",
+      "function": "profile_location_private.invalidate_profile_location()",
+      "definition": "CREATE TRIGGER profile_location_text_changed_v1 AFTER UPDATE OF country, city ON public.identity_profiles FOR EACH ROW WHEN (((old.country IS DISTINCT FROM new.country) OR (old.city IS DISTINCT FROM new.city))) EXECUTE FUNCTION profile_location_private.invalidate_profile_location()"
+    }
+  },
+  "sql_sha256": {
+    "baseline-query.sql": "6a0f2d11ef9da41d767330ef109f507621744f16c4e3f62fa08900736af5a5f0",
+    "new-catalog-query.sql": "b149a0381a0718cb3487aa135697d0aa9a4674b6d00e25a17b68335b80c837a2",
+    "changes.sql": "efb63861ed24b046df17cfcf4d634e8fc292fac75514b920a99f4f1eb3b5369d",
+    "preflight.sql": "c94a494f411c502f4463c5bdd27daf096ce75faf8ff491e69282e62cd064d744",
+    "apply.sql": "891d2cead55dc5de8aae8b5bd717c8e36c1b5bcb430fed3b8dffe93d163cb557",
+    "verify.sql": "a97601ab8cc7d2bc0e4df56857a4a2e06114d8b4daa480f05a28aa90ac083535",
+    "execution-prerequisite.sql": "81260c2b45b93f760b54f7d3f8a178baa2c8e5c87ae3047ca6c844596468acb1"
+  }
+}

@@ -2,9 +2,10 @@
 import Link from "next/link";
 import { useEffect, useRef, useState, type MouseEvent } from "react";
 import { useV2Translation } from "../../../shared/i18n/V2LanguageProvider";
-import { profileEditorMessages } from "../i18n/messages";
+import { profileEditorV2Messages } from "../../profile-editor-v2/i18n/messages";
 import { PROFILE_LIMITS, type ProfileEditorField } from "../model/profileEditor";
-import { useProfileEditor } from "../model/useProfileEditor";
+import { useProfileEditorV2 } from "../../profile-editor-v2/model/useProfileEditorV2";
+import CountryPlaceSelector from "../../../shared/location/CountryPlaceSelector";
 import { useProfileMediaEditor } from "../../profile-media/model/useProfileMediaEditor";
 import ProfileMediaEditor from "../../profile-media/components/ProfileMediaEditor";
 
@@ -13,8 +14,8 @@ const input = "mt-2 w-full rounded-2xl border border-neutral-300 bg-white px-4 p
 const secondary = "inline-flex min-h-11 items-center justify-center rounded-full border border-neutral-300 bg-white px-5 py-3 text-sm font-bold transition hover:border-neutral-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700 disabled:cursor-wait disabled:opacity-50";
 
 export default function ProfileEditorPage() {
-  const {t} = useV2Translation(profileEditorMessages);
-  const editor = useProfileEditor(), {view, session, ready} = editor;
+  const {t} = useV2Translation(profileEditorV2Messages);
+  const editor = useProfileEditorV2(), {view, session, ready} = editor;
   const media = useProfileMediaEditor(editor.context), [fittingPicture, setFittingPicture] = useState(false);
   const mediaLabel = useRef<{identityId: string; name: string; business: boolean} | null>(null);
   if (view) mediaLabel.current = {identityId: view.saved.identity_id, name: view.saved.display_name, business: view.saved.identity_type === "business"};
@@ -30,7 +31,7 @@ export default function ProfileEditorPage() {
     return () => {window.removeEventListener("beforeunload", onUnload);};
   }, [protectDraft]);
   useEffect(() => {
-    if (view?.notice === "invalid") formRef.current?.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus();
+    if (view?.notice === "invalid" || view?.notice === "locationIncomplete") formRef.current?.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus();
   }, [view?.errors, view?.notice]);
   const leave = (event: MouseEvent<HTMLAnchorElement>) => {
     if (protectDraft && !window.confirm(t("leaveConfirm"))) event.preventDefault();
@@ -109,10 +110,12 @@ export default function ProfileEditorPage() {
       <section className={`${panel} space-y-5`}>
         <h2 className="text-xl font-black">{t("location")}</h2>
         <p className="text-sm leading-6 text-neutral-600">{t(business ? "businessLocationHelp" : "privateLocationHelp")}</p>
-        <div className="grid gap-5 sm:grid-cols-2">
-          {textField("country", "country", "countryHelp", view.draft.location_visibility === "exact")}
-          {textField("city", "city", "cityHelp", view.draft.location_visibility === "exact")}
-        </div>
+        <CountryPlaceSelector value={view.locationDraft} savedLocation={view.savedLocation} disabled={disabled}
+          actorKey={editor.actorKey} lookup={editor.suggest} addressReset={view.addressReset}
+          invalid={view.notice === "locationIncomplete" || !!view.errors.country || !!view.errors.city}
+          onCountryInput={query => session.inputCountry(query)} onCountrySelect={(code, name) => session.selectCountry(code, name)}
+          onPlaceInput={query => session.inputPlace(query)} onSelect={choice => session.selectLocation(choice)}
+          onClear={() => session.clearLocation()} onRestore={() => session.restoreLocation()}/>
         <div>
           <label htmlFor="profile-visibility" className="text-sm font-bold">{t("visibility")}</label>
           <select id="profile-visibility" name="location_visibility" value={view.draft.location_visibility} disabled={disabled}

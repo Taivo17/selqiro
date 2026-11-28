@@ -1,32 +1,34 @@
-# Järgmine samm: töökoha ja tööotsa otsingu valikud
+# Praegune järgmine samm: ASUKOHT-1 kasutuselevõtt
 
-26.11.2026. Eelmine töökuulutuse muutmise pakett `2b3407f` on vastu võetud.
-Uus pakett on `selqiro-too-otsingu-valikud-20261126.zip`. Laadi alla ja paki Downloads-kaustas lahti.
-Käivita olemasoleva Selqiro projekti terminalis:
+27.11.2026. Metaandmete raport on vastu võetud. Ühine riigi ja koha valik
+ning profiili põhiasukoha salvestus on ette valmistatud ja kohalikult kontrollitud.
+Kasutaja Maci paigaldus ning uue versiooni tootmise kontroll on veel ootel.
+
+1. Seadista Verceli Selqiro projekti Production-keskkonda **GEOAPIFY_API_KEY**.
+   Täpne juhend: [Profiili asukohavaliku kasutuselevõtt](PROFILE_LOCATION_INSTALL_20261127.et.md).
+2. Paki uus `selqiro-profiili-asukoht-20261127.zip` Downloads-kaustas lahti
+   ja käivita üks kord:
 
 ```bash
-python3 -I -B "$HOME/Downloads/selqiro-too-otsingu-valikud-20261126/uuenda.py" --publish
+python3 -I -B "$HOME/Downloads/selqiro-profiili-asukoht-20261127/uuenda.py" --publish
 ```
 
-Pakett kontrollib täpset lähtealust, puhast tööpuud/indexit, remote main'i,
-eelmist originaalraportit, olemasolevaid sõltuvusi ning Supabase CLI/projekti.
-Seejärel rakendab määratud failid, käivitab sihitud klienditestid ja värske
-Next build'i. Andmebaasi eelseisu järel lisab üks tehing ainult tööotsingu
-koondvaliku; COMMIT-järgset kinnitust kontrollitakse eraldi järelpäringuga.
-Ainult kinnitatud tulemuse järel tehakse määratud failidest commit ja push.
+3. Saada lõpus näidatud uus JSON-raport. Pärast raporti kontrolli peab sama
+   uus commit olema Vercelis **Ready / Production** ning profiilis tuleb
+   proovida tegelikku kohavalikut, salvestamist ja lehe värskendamist.
 
-Lõpus saada siia selle käigu JSON-raport realt `SAADA SEE FAIL:`; sama fail
-valitakse Finderis. Kui käik peatub, saada raport ning ära korda käsku enne
-põhjuse selgitamist. Kinnitamata andmebaasikirjutust ei korrata automaatselt.
+Kui võti lisatakse pärast deployment'i loomist, on vaja uut deployment'i.
+Võtit ei saadeta vestlusesse. Uuendaja ei loo teenusekontot ega muuda Verceli seadeid.
 
-Pärast edu kontrolli sama uut commit'i Vercelis Ready / Production seisus.
-Töö lehel kontrolli kahte suunda, „Kõik pakkumised”, lisafiltreid ja tagasi
-otsingusse naasmist. Olemasolev „Muruniiduki operaator, haljastaja” peab
-olema töökohtade hulgas ja tööotsade hulgast puuduma. Kui tööotsi praegu pole,
-on tühi tööotsade tulemus õige; testi pärast pole vaja uut avalikku pakkumist luua.
+See pakett teeb ASUKOHT-1 profiili osa. Järgmine etapp on ASUKOHT-2: uue
+kuulutuse, teenuse ja tööpakkumise asukoht ning algväärtus profiilist.
+Seejärel ASUKOHT-3: lähimad pakkumised valitud riigi piires; viimaks
+ASUKOHT-4: ajutine teenusekoht. Vanade pakkumiste asukohti automaatselt ei täideta.
 
-Asukohaväli kasutab selles sammus veel senist linnavastet ja ütleb seda
-kasutajale. Ülemaailmset lähimad-enne otsingut see pakett ei aktiveeri.
-Selle järgmise töö alus on `docs/architecture/location-search-20261126.md`.
+Konto kustutamise tervik on pooleli ja pausil. Asukoha pakett ei aktiveeri
+konto sulgemist, taastamist ega lõppkustutust.
 
-Vastu võetud alus: `2b3407fee17f4d19594ce45647a1739b26249835`, puu `b6543039421cd86f4227d18f65edde1ca06e8a05`.
+Peatumisel säilib sama töö. Saada selle käigu raport ning lahenda konkreetne
+põhjus. Vanu pakette, kinnitamata kirjutusi ega ajalooliste NEXT/CURRENT
+pealkirjade käske uuesti ei käivitata. Tööseis on CURRENT_STATE.json ja
+sellest genereeritud docs/99_V2_HANDOFF_NEXT_CHAT.md failis.

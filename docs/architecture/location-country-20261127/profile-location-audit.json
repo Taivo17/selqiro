@@ -1,0 +1,219 @@
+{
+  "schema_version": 1,
+  "audit_date": "2026-11-27",
+  "audit_scope": "source_only_country_boundary_identity_defaults_temporary_service_contract",
+  "source_root": "/workspace/scratch/de90fa9e1734/work/job-search-implementation-20261126/source",
+  "source_commit_provenance": "Parent-provided exact prepared source corresponding to newly reported deployment; no independent live deployment check by this audit.",
+  "reported_prepared_commit": "7c53643012545c7dfa99ba976e6f2613e3c3a201",
+  "performed": {
+    "application_source_edits": false,
+    "database_calls": false,
+    "live_geocoding_calls": false,
+    "production_tests": false,
+    "backfill": false,
+    "read_only_source_audit": true
+  },
+  "active_stage_recommendation": "ASUKOHT-1 shared country/place selector plus saved active-identity locality default contract",
+  "phase_1_dependencies": [
+    "bounded current database catalog check",
+    "autocomplete-permitted provider and storage terms",
+    "complete supported-country catalog and additive/versioned profile contract"
+  ],
+  "decisions": [
+    "selected country mandatory hard boundary",
+    "selected center must match country",
+    "worldwide search deferred",
+    "private precise address/point disallowed",
+    "manual temporary service location later with expiry",
+    "no old-listing backfill",
+    "profile default applies only to pristine new drafts",
+    "search center does not change profile default"
+  ],
+  "audited_sources": [
+    {
+      "path": "AGENTS.md",
+      "sha256": "e3447d84251880fb34cfae09131cb4c57471529bbfe60976a3245793cf621627",
+      "bytes": 327,
+      "lines": 5
+    },
+    {
+      "path": "app/my-page/hooks/useLocation.ts",
+      "sha256": "9384a015bb8d156868c3afaf2aa0580225f792418c286a590a3addd2fdebeef3",
+      "bytes": 2178,
+      "lines": 93
+    },
+    {
+      "path": "app/my-page/components/LocationCard.tsx",
+      "sha256": "d4790231156f47f82d52c5b4e2e91aeec3c386b527bd948907a3a88b0b3ca904",
+      "bytes": 2996,
+      "lines": 95
+    },
+    {
+      "path": "app/sell/page.tsx",
+      "sha256": "6b141078f414edb45be46f5049e7578ad49b0f8e02f0d3fffab24d67000140ac",
+      "bytes": 38369,
+      "lines": 1269
+    },
+    {
+      "path": "app/components/LocationAutocomplete.tsx",
+      "sha256": "4e6e449fbf0cb20b8df82b9caddf031351518b06354cae52d3cf3625f8801330",
+      "bytes": 8082,
+      "lines": 289
+    },
+    {
+      "path": "app/api/location/search/route.ts",
+      "sha256": "8ef10715814bad2ca05fd8c8ce59b2ae3c8ec7aeeab57330f4777803f6416edd",
+      "bytes": 3230,
+      "lines": 113
+    },
+    {
+      "path": "lib/geography/countries.ts",
+      "sha256": "072f95986ba33d9d1c520e8da31fee93ea128c874262aff7d17e7b9f661697e2",
+      "bytes": 1255,
+      "lines": 57
+    },
+    {
+      "path": "src/features/profile-editor/model/profileEditor.ts",
+      "sha256": "de310402ee6fc55bc78c06f4f77168032af3740b0bc71b7bc8f416f3b161baf3",
+      "bytes": 7104,
+      "lines": 104
+    },
+    {
+      "path": "src/features/profile-editor/model/useProfileEditor.ts",
+      "sha256": "6343d7c31610e6327d2d1d71e11cee9c45c79ce63a5baf46e930f6d32682adec",
+      "bytes": 4454,
+      "lines": 71
+    },
+    {
+      "path": "src/features/profile-editor/components/ProfileEditorPage.tsx",
+      "sha256": "7b9ad95f9fca84e3d1d73d87000f03f260b76bc788b0f84dae95da011372760c",
+      "bytes": 11097,
+      "lines": 140
+    },
+    {
+      "path": "src/features/profile-editor/api/profileEditorClient.ts",
+      "sha256": "daedfb47e8a4e2ed622101b53ba37ceccfb17ca8054ce5687f70953f4fb4ad75",
+      "bytes": 2167,
+      "lines": 32
+    },
+    {
+      "path": "supabase/repairs/20261120_profile_editor/apply.sql",
+      "sha256": "45e0cbea37f52b113c7ea3f446ecc2d9887f026a4543c86872076490080bccbe",
+      "bytes": 120031,
+      "lines": 1686
+    },
+    {
+      "path": "supabase/repairs/20261120_profile_read_privacy/apply.sql",
+      "sha256": "5b12da8ef8a294ad5d5762c766502b2a21f3e28e40bbd72336f715c5d375bb63",
+      "bytes": 48636,
+      "lines": 782
+    },
+    {
+      "path": "supabase/repairs/20261120_profile_media/apply.sql",
+      "sha256": "a2f8a16a07956e90c42260b0d40e1494f60d95ba689f7f453854b220b99bc940",
+      "bytes": 216636,
+      "lines": 2915
+    },
+    {
+      "path": "src/features/listing-create/model/ordinaryListingFields.ts",
+      "sha256": "49f60ba1c8630a3eeb971a277ded595fabbddf11265a6cf10ac9d05e28fdf96d",
+      "bytes": 3891,
+      "lines": 81
+    },
+    {
+      "path": "src/features/listing-create/model/listingCreateDraft.ts",
+      "sha256": "11d308427e365372c9f5dd228aa8a3002c6f9c7aebaafa9fee777472174af7c2",
+      "bytes": 1751,
+      "lines": 27
+    },
+    {
+      "path": "src/features/listing-create/components/OrdinaryListingLocationFields.tsx",
+      "sha256": "6c306edc72c0c45f8ae71d767c67ea32f5d155b67e5457273be84b6065df9b08",
+      "bytes": 2414,
+      "lines": 30
+    },
+    {
+      "path": "src/features/listing-create/model/horseOfferLocationFields.ts",
+      "sha256": "2ed47c4c9637ff0151d905044990606dceb912be45a1c8cbfebc99b126808120",
+      "bytes": 1954,
+      "lines": 90
+    },
+    {
+      "path": "src/features/service-editor/model/serviceEditorForm.ts",
+      "sha256": "11450039cde83645949d9e1bac67eb11ea77ec7771422bdef7629681e9bc2743",
+      "bytes": 3102,
+      "lines": 39
+    },
+    {
+      "path": "src/features/service-editor/components/ServiceEditor.tsx",
+      "sha256": "5c7e67fd443e42d7f8d515058ae0a9a5d1b3d383b160d7f48bee4a42a4c878ea",
+      "bytes": 10944,
+      "lines": 126
+    },
+    {
+      "path": "src/features/service-editor/components/ServiceFields.tsx",
+      "sha256": "72bafc5ee3beb854527802b497c2015b0b1fbb3ddd83b9d32325cc36d3669b80",
+      "bytes": 7541,
+      "lines": 98
+    },
+    {
+      "path": "src/features/jobs/model/jobForm.ts",
+      "sha256": "e53f413710f2ceed208e25a9e2ccd8cfd2c004c1b7f602b70686742d5f240fd4",
+      "bytes": 3558,
+      "lines": 44
+    },
+    {
+      "path": "src/features/jobs/components/JobEditorForm.tsx",
+      "sha256": "26f365e90471dcf98eef9fead54541ef1b1e2c5b1a0977e11ad18da80f04abf0",
+      "bytes": 5813,
+      "lines": 60
+    },
+    {
+      "path": "src/features/jobs/components/JobCountryField.tsx",
+      "sha256": "f070a387a96c05fe7e9b46ac1d194d08f4dad0ccde6309bb1bc55df3599a9132",
+      "bytes": 1810,
+      "lines": 24
+    },
+    {
+      "path": "src/features/jobs/model/useJobEditor.ts",
+      "sha256": "fe112ce7c6556513b4c4bfd1aaa421b6b1ba2d06308211bb0b695a6186b2d72a",
+      "bytes": 5212,
+      "lines": 67
+    },
+    {
+      "path": "supabase/repairs/20261108_service_publication/02_content.sql",
+      "sha256": "6cd60b1e773ba394574c0c3cbbcca98bb25e09bc47d0e07543ac666c31f305de",
+      "bytes": 11827,
+      "lines": 157
+    },
+    {
+      "path": "supabase/repairs/20261108_service_publication/changes.sql",
+      "sha256": "aa7dc88a5f7752c5f4634fd6a94c14476bc8342959bd6c16b2beb6ccb7ebc8cf",
+      "bytes": 108312,
+      "lines": 1426
+    },
+    {
+      "path": "docs/architecture/live_services.md",
+      "sha256": "4030207f18329124d64113d98969ae688cc80217abbc508176ae63d26c0d3a7e",
+      "bytes": 6692,
+      "lines": 356
+    },
+    {
+      "path": "docs/architecture/location_privacy.md",
+      "sha256": "0dba0b01ac6b91ad2ae85df8fdba123d4d49ea8b5d1931a663885b11706b0ea0",
+      "bytes": 3590,
+      "lines": 217
+    },
+    {
+      "path": "docs/architecture/location-search-20261126/v2-audit.md",
+      "sha256": "503017bc7e25ded4a9a66728c71f4b56613421d8b0ff94041af05b9dacbbe660",
+      "bytes": 17717,
+      "lines": 129
+    }
+  ],
+  "findings_file": {
+    "path": "/workspace/scratch/de90fa9e1734/work/location-country-plan-20261127/audit/profile-location-findings.md",
+    "sha256": "04b218e42360fcd56697f64f0af98e89d268b7ddeef2417b481144281956dde3",
+    "bytes": 22776
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "format": "selqiro-location-foundation-review-output-hashes-20261127-v1",
+  "files": {
+    "reconcile_report.py": {
+      "bytes": 37589,
+      "sha256": "9e963bac069887bb673f1365ef64dfa978cd8b4c29496490b7177cd78c8a2d82"
+    },
+    "REVIEW.md": {
+      "bytes": 12222,
+      "sha256": "eb4ec3c5cbcc1bd94cea5a79de865833195c5a95c5a59b89b69734d5ac2fc984"
+    },
+    "review.json": {
+      "bytes": 62905,
+      "sha256": "b612ecc2c72ebee9d32c431dbdd8885c53bcc1b348135289e1ebcb21af81088d"
+    },
+    "command-hash-reconciliation.json": {
+      "bytes": 52213,
+      "sha256": "7f9e248325fe881d36a9ad282e0796e1eaf27900d7c0fcc7562767e986df6a2a"
+    },
+    "function-and-permission-reconciliation.json": {
+      "bytes": 6596,
+      "sha256": "ff79683dba1529921e79a1edb1fd6192ab007737e2cc244a26e7c12ffb197c54"
+    },
+    "input-hashes.json": {
+      "bytes": 34724,
+      "sha256": "ca21dbb2c60d55194be0abd8a47adc35c7e0b79fc96775bcfd20dfd0722c3d18"
+    }
+  }
+}

@@ -1,3 +1,9 @@
+> **27.11.2026: ajalooline audit, osaliselt asendatud.** Praegune tooteleping on
+> `location-country-20261127.md`: valitud riik on range piir, ülemaailmne
+> laienemine jääb hilisemaks ning vanade pakkumiste asukohti ei täideta.
+> Allpool säiliv 26.11 tekst kirjeldab varasemat ettepanekut ja koodiauditit;
+> selle vanu rakendussamme ei kasutata tänaste käskudena.
+
 # Ühine asukohaotsing: valitud keskpunktist lähimad enne
 
 26.11.2026, Europe/Tallinn. **Kasutaja kinnitatud põhisuund ja lähtekoodi audit;

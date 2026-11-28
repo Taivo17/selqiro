@@ -1,0 +1,211 @@
+{
+  "format": "selqiro-account-status-readonly-20261127-v1",
+  "recorded_on": "2026-11-27",
+  "purpose": "Vastus konto kustutamise valmiduse kohta; ASUKOHT-1 jääb ainsaks aktiivseks etapiks.",
+  "accepted_commit": "7c53643012545c7dfa99ba976e6f2613e3c3a201",
+  "accepted_tree": "98444c7d31e7afac995f195d884700b60c82b6cf",
+  "source_root": "/workspace/scratch/de90fa9e1734/work/job-search-implementation-20261126/source",
+  "conclusion": {
+    "accepted_account_foundation_done": true,
+    "all_deletion_prerequisites_done": false,
+    "account_closure_implemented": false,
+    "account_restoration_implemented": false,
+    "final_erasure_implemented": false,
+    "currently_supported_lifecycle_states": [
+      "active"
+    ],
+    "location_can_continue": true,
+    "active_stage": "ASUKOHT-1",
+    "account_lifecycle_work_state": "paused_open_work"
+  },
+  "completed": [
+    {
+      "scope": "Privaatne aktiivse konto oleku alus ja Minu konto olekuvaade",
+      "sources": [
+        "docs/architecture/account-state-accepted-20261123.md",
+        "src/features/account-lifecycle/components/AccountSettingsPage.tsx",
+        "src/entities/accountLifecycle/model/accountState.ts"
+      ]
+    },
+    {
+      "scope": "Avaliku profiili, tavakuulutuste, hobuste, profiili kuulutuste, teenuste ja töö lugemiste kontooleku kontrollid",
+      "sources": [
+        "docs/architecture/account-public-profile-accepted-20261123.md",
+        "docs/architecture/account-listing-read-accepted-20261123.md",
+        "docs/architecture/account-horse-read-accepted-20261124.md",
+        "docs/architecture/account-profile-marketplace-read-accepted-20261124.md",
+        "docs/architecture/account-service-read-accepted-20261124.md",
+        "docs/architecture/account-job-read-accepted-20261124.md"
+      ]
+    },
+    {
+      "scope": "Kontakti, sõnumite, vestluste ja sõnumipiltide kirjutuste kontooleku kontrollid",
+      "sources": [
+        "docs/architecture/account-contact-write-accepted-20261124.md",
+        "docs/architecture/account-message-media-accepted-20261124.md"
+      ]
+    },
+    {
+      "scope": "Töökuulutuse neli omaniku kirjutustoimingut: salvestamine, avaldamine, seisundi muutmine, aktiivsuse pikendamine",
+      "sources": [
+        "docs/architecture/account-job-write-accepted-20261126.md",
+        "docs/architecture/account-job-write-fence-v1.md"
+      ]
+    }
+  ],
+  "remaining_before_reversible_closure": [
+    "Muud tegelikud kuulutuste, teenuste, hobuste ja profiili muutmisteed ning meedia lõppkinnitused.",
+    "Jälgimise, pakkuja valikute ja vana avastamisvoo allesjäänud teede ülevaatus.",
+    "Serveris kontrollitud värske sama konto autentimine, vana sessiooni tõkestamine ja pooleliolevate/samaaegsete toimingute kooskõla.",
+    "Konto olekuüleminekud, teadlik sulgemisvaade, taastamisvaade, kindel tähtaeg ja korduskatse kviitungite käsitlus.",
+    "Sulgemise ja taastamise tegeliku tervikteekonna tõend; töötav aktiivse konto sõnumitee seda ei asenda."
+  ],
+  "remaining_before_final_erasure": [
+    "Andmeliigipõhine otsus, mida kustutatakse, anonümiseeritakse või põhjendatud ulatuses säilitatakse, sh sõnumid, manused, finants-/Energy-kirjed ja varukoopiad.",
+    "Kustutamise teostus koos Authi, andmebaasi ja failisalvestuse sõltuvustega, pooleliolevate tööde ja korduvkäivituse käsitlusega.",
+    "Selge lõpetamise tõend ja aus ulatus; andmebaasirea kustutamine ei tõenda failide või kõikide varukoopiate kustumist."
+  ],
+  "email_and_auth": {
+    "email_activation_state": "Kokkulepitud paus kuni põhidomeeni selqiro.com kasutuselevõtuni.",
+    "launch_dependency": "Päris saatmine, konto kinnitamine ja parooli taastamine tuleb lõpuni kontrollida enne väliseid testijaid või avalikku registreerimist, ka vercel.app aadressil.",
+    "not_a_location_blocker": true,
+    "closure_design_can_be_prepared_before_smtp": true,
+    "email_confirmation_alone_is_not_deletion_authorization": true,
+    "fresh_auth_still_required_before_closure": true,
+    "source": "docs/architecture/account-model-lifecycle-20261122.md"
+  },
+  "design_not_implemented": {
+    "restoration_window_days": 30,
+    "window_status": "Varasem tootesuuna ettepanek; praeguses active-only olekus ei ole taastamistähtaega käivitatud.",
+    "immediate_erasure_request": "Varasemas plaanis nõutud eraldi käsitlus, mitte praeguses UI-s teostatud funktsioon.",
+    "scope": "Auth konto tervik; ühe aktiivse profiili valik ei tähenda õigust või juhist kustutada teisi identiteete."
+  },
+  "location_boundary": {
+    "continue": "Ühine riigi/kohavalik ja aktiivse profiili põhiasukoht.",
+    "requirement": "Uus profiili asukoha kirjutus peab kontrollima tegelikku omanikku ja aktiivset kontot. Senine profile_editor_private.lock_owner kontrollib omanikku ning profiili/identiteedi olekut, kuid selle vaadatud teostuses puudub konto account_is_available kontroll; seda ei loeta juba tehtud kaitseks. Juba kinnitatud kaitseid ei nõrgestata ja konto sulgemist ei aktiveerita.",
+    "preserve": "Kolm kasutaja kontot ja nende sisu jäävad alles. Konto elutsükli lõpetamata tööd säilivad eraldi tööjärjes."
+  },
+  "evidence_boundary": [
+    "Ainult kohaliku vastu võetud 7c53643 lähtepuu, vastuvõtudokumentide ja ette valmistatud CURRENT_STATE lugemine.",
+    "Kõik 18 viidatud lähtefaili SHA256 võrreldi vastu võetud inventuuriga.",
+    "Vastuvõtudokumendid säilitavad varasemate kasutajaraportite/piltide ja eraldatud kontrollide tõendi; käesolev audit ei ole uus tootmise kontroll.",
+    "Rakenduse teste, buildi, Git-käske, SQL-i, tootmispäringuid ega kustutamist ei käivitatud.",
+    "Vastu võetud lähtekoodi ega kanoonilist üleandmist ei muudetud."
+  ],
+  "prepared_handoff": {
+    "path": "/workspace/scratch/de90fa9e1734/work/location-country-plan-20261127/handoff/docs/continuity/CURRENT_STATE.json",
+    "sha256": "12a36828db73f934b7d0f9e75dce0e2056170528a7917133dd2215242802fefc",
+    "status": "Ette valmistatud jätkamisjuhis; ei kuulu vastu võetud 7c53643 Git-puusse."
+  },
+  "sources": [
+    {
+      "path": "docs/architecture/account-state-accepted-20261123.md",
+      "sha256": "68204482a9b1b559c45b21d978a742a2a8d1b0970a1185f08d9235b6ef679f91",
+      "bytes": 4823,
+      "matches_accepted_inventory": true
+    },
+    {
+      "path": "docs/architecture/account-public-profile-accepted-20261123.md",
+      "sha256": "60ffc94bcca26713252ada784d4d06b9e469b10ba591bead4cc9c44b4c8d665b",
+      "bytes": 4018,
+      "matches_accepted_inventory": true
+    },
+    {
+      "path": "docs/architecture/account-listing-read-accepted-20261123.md",
+      "sha256": "5265693529a771e90bb98b7e7b63360587ec85af33002f3ed858b989e5df9200",
+      "bytes": 4541,
+      "matches_accepted_inventory": true
+    },
+    {
+      "path": "docs/architecture/account-horse-read-accepted-20261124.md",
+      "sha256": "dc6c0ba0c3facc045366eaf2f6c7a53ddb438bb7ffd2eb8c5c34d9b74714553e",
+      "bytes": 6082,
+      "matches_accepted_inventory": true
+    },
+    {
+      "path": "docs/architecture/account-profile-marketplace-read-accepted-20261124.md",
+      "sha256": "443ff8b039d71028d45a5f0bac32933a7409dd82cfbe8163bd99539aed405932",
+      "bytes": 5102,
+      "matches_accepted_inventory": true
+    },
+    {
+      "path": "docs/architecture/account-service-read-accepted-20261124.md",
+      "sha256": "830aef6e12de227e6d754633998397eeca869cdc5101e70c124f1ca6d09b0656",
+      "bytes": 5704,
+      "matches_accepted_inventory": true
+    },
+    {
+      "path": "docs/architecture/account-job-read-accepted-20261124.md",
+      "sha256": "76a8cb512104b539878fd00b0ceb5afde4f87c17eb6ecd1e49f655f3ce6d490e",
+      "bytes": 7019,
+      "matches_accepted_inventory": true
+    },
+    {
+      "path": "docs/architecture/account-contact-write-accepted-20261124.md",
+      "sha256": "56e36777c15259d9b78162177e3b2321fbf8a27631208cae3570c7a65c2523da",
+      "bytes": 3877,
+      "matches_accepted_inventory": true
+    },
+    {
+      "path": "docs/architecture/account-message-media-accepted-20261124.md",
+      "sha256": "9707129c51bcea69476ac22a3264190dff378a6774ea5b33b3ccb24769f18f07",
+      "bytes": 4183,
+      "matches_accepted_inventory": true
+    },
+    {
+      "path": "docs/architecture/account-job-write-accepted-20261126.md",
+      "sha256": "ddd91ba867c25ac7f4bad1d98de462efd620a61722b5dfb9b2b8733787bf6770",
+      "bytes": 1713,
+      "matches_accepted_inventory": true
+    },
+    {
+      "path": "docs/architecture/account-job-write-fence-v1.md",
+      "sha256": "029f809ed2231093d2a39e6d3a8b8444d4422cfeaa79a4b33085684e0c4daa7a",
+      "bytes": 5145,
+      "matches_accepted_inventory": true
+    },
+    {
+      "path": "docs/architecture/account-model-lifecycle-20261122.md",
+      "sha256": "e93bf3bccfb4d8bc50ef3ca7a9ababaa2912b1a0125ba3501164fca18df7c596",
+      "bytes": 10511,
+      "matches_accepted_inventory": true
+    },
+    {
+      "path": "docs/architecture/account-lifecycle-server-contract-v1.md",
+      "sha256": "d4637a290364c160208ff44d7c337e165b28ae78d916d7d0798339b4938d60dd",
+      "bytes": 14398,
+      "matches_accepted_inventory": true
+    },
+    {
+      "path": "docs/architecture/account-lifecycle-verification-plan-v1.md",
+      "sha256": "e1e6b59fa69df1c92aa92a0325e904946f25a2a5406a1d013aead86124fc10b3",
+      "bytes": 10167,
+      "matches_accepted_inventory": true
+    },
+    {
+      "path": "docs/architecture/launch-profile-privacy-plan.md",
+      "sha256": "1551ec9d20233720ec69acd0cd7eebe3524518a0dfffcba85eeb53c7ea2fce24",
+      "bytes": 6484,
+      "matches_accepted_inventory": true
+    },
+    {
+      "path": "src/features/account-lifecycle/components/AccountSettingsPage.tsx",
+      "sha256": "356f2f4475e5842f362a50a26c8c3185013abf978fe2861a11133e909f85222c",
+      "bytes": 3439,
+      "matches_accepted_inventory": true
+    },
+    {
+      "path": "src/entities/accountLifecycle/model/accountState.ts",
+      "sha256": "3566fd3484da16eab40c1a61696fb3dbe2ca6b1144a01bfb8da5db04aff70742",
+      "bytes": 3665,
+      "matches_accepted_inventory": true
+    },
+    {
+      "path": "supabase/repairs/20261120_profile_editor/apply.sql",
+      "sha256": "45e0cbea37f52b113c7ea3f446ecc2d9887f026a4543c86872076490080bccbe",
+      "bytes": 120031,
+      "matches_accepted_inventory": true,
+      "scope_read": "profile_editor_private.lock_owner function only"
+    }
+  ]
+}

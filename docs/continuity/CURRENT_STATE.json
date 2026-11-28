@@ -1,59 +1,65 @@
 {
   "format": "selqiro_repo_handoff_v1",
-  "recorded_on": "26.11.2026 Europe/Tallinn — töökuulutuse muutmine vastu võetud; otsingusuunad ette valmistatud; asukoha audit valmis",
+  "recorded_on": "27.11.2026 Europe/Tallinn — ASUKOHT-1 metaandmete raport vastu võetud; profiili asukohavalik ette valmistatud",
   "archive": {
     "lines": 5573,
     "path": "docs/archive/99_V2_HANDOFF_NEXT_CHAT.before-price-core-20261004-6df0af9.md",
     "sha256": "667e47990a7d3cc20ff53709cb861663b4565cf1d3c830eda88e0d18e60fdb8a"
   },
-  "checkpoint": "Commit 2b3407f on kasutaja raporti, Ready / Production pildi ja salvestamise kontrolliga vastu võetud. Kasutaja kiitis heaks töökoha/tööotsa otsingu ja palus V1 ülemaailmse lähimad-enne asukoha loogika auditit. Otsingusuundade kitsas pakett on ette valmistatud ja lokaalselt kontrollitud; Maci käik ja uus tootmise tulemus on ootel. Globaalne geograafiline otsing vajab asukoha salvestust ja serverilepinguid; selle koodi- ning tooteaudit on valmis.",
+  "checkpoint": "Üks aktiivne etapp on ASUKOHT-1: ühine riigi/kohavalik ja aktiivse profiili põhiasukoht. Metaandmete raport on vastu võetud; rakenduskood, piiratud SQL ja uus uuendaja on eraldatud keskkonnas kontrollitud. Kasutaja Maci paigaldusraport, uue commiti Ready / Production ning päris kohavaliku ja salvestamise kontroll on veel ootel. Viimane vastu võetud tootmise commit on 7c53643. Konto kustutamise tervik jääb pooleli ja pausile.",
   "source": {
-    "Vastu võetud alus": "2b3407fee17f4d19594ce45647a1739b26249835; puu b6543039421cd86f4227d18f65edde1ca06e8a05; 2398 täpselt kontrollitud faili.",
-    "Vastuvõtu tõend": "Kasutaja raport 1294791 baiti, SHA256 89c223c0d700383a47e499b925b6f5fcf53eb037064113dc1d948aafd791a545; 115 pakifaili, 38 lähtefaili muudatust ja 519 käsu teekond. Ready / Production pilt ning salvestamise kinnitus on eraldi kasutaja tõendid.",
-    "Uus teostus": "Kaks nähtavat otsingusuunda, senised riigi/linna filtrid, suunale sobivad töökoha filtrid ja kaardi alamtüüp. Üks search_public_jobs_v1 keha laiendus, avalik signatuur/õigused ja kirjutamise sisutüübid säilivad.",
-    "Serveri piir": "employment on ainult otsingu koondväärtus, mis hõlmab mitte-task ja NULL alamtüüpi. Filter rakendub enne kursorit/LIMIT-i; konto/peitmise/blokeerimise/kehtivuse kontrollid säilivad.",
-    "Asukoha audit": "V1 põhimõte on globaalne kaugusjärjestus. V2 aktiivsed otsingud ei kasuta keskpunkti; uute kuulutuste koordinaadid on keelatud/NULL, teenuse vanad punktid võivad olla aegunud ja töödel puuduvad punktid. Audit ei ole uus tootmise kontroll.",
-    "Tõendipiir": "Ettevalmistuse testid ja build on eraldatud keskkonnas. Uut Maci käiku, tootmise andmebaasimuutust, commit/push-i ega deploy tulemust pole tehtud ega väidetud."
+    "Vastu võetud alus": "7c53643012545c7dfa99ba976e6f2613e3c3a201; puu 98444c7d31e7afac995f195d884700b60c82b6cf; 2443 faili ja 40032703 baiti. Git https://github.com/Taivo17/selqiro.git. Aluse tööotsingu raport: 1452209 baiti, SHA256 39a9e0d2296e360c4fe3c210b56fca291593ac5965f33368dd3f4de70a38176f.",
+    "Metaandmete vastuvõtt": "27.11 raport 13:38:52: 310390 baiti, SHA256 cc884c36ae31b5217b69c45e0810f28d5791572f462152225cf67d6fd11c5938. 582 kooskõlakontrolli läbis; üks ainult lugemise kataloogipäring, lähtepuu ja indeks säilisid. PostgreSQL 17.6; PostGIS pole paigaldatud ega ole ASUKOHT-1 sõltuvus. Täpne ülevaatus: docs/architecture/location-foundation-accepted-20261127/.",
+    "Valmistatud teostus": "Ühine kohavalija, kohalik 249 riigi loend ja Geoapify serveriadapter range riigifiltriga. Üks olemasoleva profiilivormi salvestamine koos revisjoni ning konto/aktiivse omaniku kontrolliga. Uus kaitstud kohakirje säilitab asula/piirkonna punkti. Vana v1 leping ja senised profiilitekstid säilivad.",
+    "Privaatsuse piir": "Eraisiku ja ettevõtte ühine kohavalik on asula/piirkonna tasemel. Ettevõtte senine vabatahtlik aadressitekst säilib; uut täpset geokodeeritud ettevõttepunkti selles etapis ei tehta. Tegelik asulavahetus eemaldab vana aadressi ja täpse nähtavuse valiku.",
+    "Kohaallika kasutuselevõtt": "GEOAPIFY_API_KEY tuleb seadistada Verceli Selqiro projekti Production-keskkonda enne uue deployment’i loomist. Võtit ega teenusekontot pole siin loodud. Riigiloend töötab kohalikult; päris soovituste katvus ning teenusevõtme toimimine vajavad kasutuselevõtukontrolli. Juhend: docs/continuity/PROFILE_LOCATION_INSTALL_20261127.et.md.",
+    "Paketi staatus": "Uus pakett selqiro-profiili-asukoht-20261127; plaanitud commit Add country-bound profile location selection. Valmistatud lähtekood ja docs ei ole veel kasutaja Maci/GitHubi paigaldatud. Uuendaja seob algse tööotsingu raporti/päeviku ja metaandmete raporti/päeviku ning jätab kõik neli muutmata.",
+    "Tõendipiir": "Kohalikud rakenduse ja PostgreSQL katsed kasutavad eraldatud keskkonda; need ei ole tootmise tõend. SQL wrapperite sünteetilise katse kohandus on ainult vana kataloogi hash; muutmata production-eelkontroll tõrjus sünteetilise aluse. Uuendaja kontrollib päris aluse uuesti. Metaandmete implementation_ready=false jääb ajaloolises raportis õigesti muutmata.",
+    "Konto kustutamise seis": "Vastu on võetud active-only alus, avalike lugemiste ning kontakti/sõnumite/manuste ja töö omaniku kirjutuste kontrollid. ASUKOHT-1 uus v2 tee lisab aktiivse konto kontrolli oma lugemisele ja kirjutamisele. Muud omaniku kirjutused, meedia lõppkinnitused, värske autentimine, vanade sessioonide tõke ning sulgemine/taastamine/lõppkustutus jäävad eraldi lõpetamata tööks."
   },
   "local_test": [
-    "43 sihitud TS/modeli/RPC/SSR kontrolli, TypeScript ning värske Next 16.4.6 build läbisid. Brauseri visuaalne kasutuskäik ei ole sellega tõendatud.",
-    "58 eraldatud PostgreSQL 17.6 kontrolli läbisid; koondvalik, NULL alamtüüp, filtrid, leheküljed ja eelseisu kõrvalekalde keeld. Sünteetiliste asenduste piir on tõendis.",
-    "35 käivitaja kontrolli ja sõltumatu SQL ülevaatus läbisid. Värske kohalik build ning üks kinnitatud SQL-tehing on Maci commit/push'i eeltingimused."
+    "70 sihitud testi läbisid: 22 senise profiili, 23 uue kliendi ja 25 serveri kontrolli. Range TypeScript ning värske Next production build läbisid; kontrollitud on /v2/my-area/profile, /profile ja uus /api/v2/profile-location/[action] tee. Sisendfailide räsid on tõendis.",
+    "23 PostgreSQL 17.6 native juhtumit ning 6 range SQL-kinnituse parseri kontrollirühma läbisid; kohalik server peatati. Eraldi SQL ülevaatus kontrollis muutumatuid vanu lepinguid, uusi õigusi, sama tehingu salvestust, paralleelsust ja pärast COMMIT-i kinnitust.",
+    "Uuendaja 45 sünteetilist kontrolli läbisid. Need kasutavad ajutist Git-hoidlat ja võltsitud välispiire, mitte kasutaja Maci või tootmise käivitust. Uuendaja kordab Macis ühte fookustestide jooksu ja teeb värske build’i enne SQL-i.",
+    "Brauseriharness koostus ja kaks renderdatud märgistuse kontrolli läbisid. Päris brauserijuhtumeid 0, ekraanipilte 0: Chromiumi binaar puudus. Klaviatuuri/fookuse/IME visuaalset DOM-käitumist ega päris Geoapify vastust ei märgita testituks."
   ],
   "production": [
-    "Viimane vastu võetud tootmise commit on 2b3407fee17f4d19594ce45647a1739b26249835. Kasutaja kinnitas muudatuse salvestamist.",
-    "Sõnumikaardi teadlik ühekordne lisamine, eemaldamine ja viimati jagatud pakkumise päis jäävad vastu võetud käitumiseks.",
-    "Uue tööotsingu paketi Maci käik, live SQL, commit/push ja sama commiti Verceli kontroll on ootel. Globaalne lähedusotsing ei ole veel teostatud."
+    "Viimane vastu võetud tootmise commit on 7c53643012545c7dfa99ba976e6f2613e3c3a201; kasutaja Verceli pilt näitas Ready / Production / main. Tööotsingu Otsin töökohta / Otsin tööotsi jaotus on vastu võetud.",
+    "ASUKOHT-1 uut Maci raportit, GitHubi push’i ega Ready / Production tõendit veel ei ole. Tootmise asukohaotsing kasutab seni linna/riigi tekstivastet. Pakkumise eeltäide, lähimad-enne otsing ja ajutine teenusekoht ei kuulu sellesse paketti."
   ],
-  "next_action": "Käivita selqiro-too-otsingu-valikud-20261126/uuenda.py --publish ning tagasta sama käigu JSON-raport. Pärast vastuvõttu on kasutaja praegune prioriteet ühine asukohaotsing: piiratud geograafilise valmisoleku kontroll, avaliku otsingukoha salvestus/muutmine ning serveri kaugusjärjestus. Lähtu location-search-20261126.md auditist; ära taaskäivita vanu konto mooduleid.",
-  "stop_rule": "Peatumisel tagasta sama käigu raport. Ära korda kinnitamata kirjutust ega vanu pakette. Vana lähtealuse, kõrvalekalduva metadata või teadmata SQL-tulemuse korral ei tehta commit/push-i; põhjus selgitatakse eraldi ainult lugemisega.",
+  "next_action": "Seadista GEOAPIFY_API_KEY Verceli Production-keskkonda vastavalt docs/continuity/PROFILE_LOCATION_INSTALL_20261127.et.md juhendile. Käivita üks kord uus pakett: python3 -I -B \"$HOME/Downloads/selqiro-profiili-asukoht-20261127/uuenda.py\" --publish. Too tagasi uus JSON-raport; seejärel kontrolli sama uue commiti Ready / Production ja profiilivormis päris riigi/koha valimist, salvestamist ning lehe värskendamist. ASUKOHT-1 lõpetatakse selle vastuvõtuga; alles siis algab ASUKOHT-2 uute pakkumiste eeltäide. Vanu uuendajaid ega metaandmete kontrolli ei korrata.",
+  "stop_rule": "Peatumisel säilib ASUKOHT-1 ja lahendatakse raportis näidatud konkreetne põhjus. Ära korda lõpetatud pakette ega kinnitamata kirjutust. Kaotatud SQL rakendamise kinnitus ei anna õigust uuesti rakendada; eraldi verify ei asenda puuduvat pärast-COMMIT kinnitust. Kui lähtekood on edasi liikunud, võrdle muudatusi ja uuenda alust. Vanad NEXT/CURRENT pealkirjad on ajalugu.",
   "read_next": [
-    "docs/continuity/HOSTED_PORTAL.md — ainus praegune Maci käsk.",
-    "docs/architecture/account-job-write-accepted-20261126.md — 2b3407f vastuvõtt.",
-    "docs/architecture/job-search-purpose-20261126.md — kitsas valmis otsingumuudatus.",
-    "docs/architecture/location-search-20261126.md — kasutaja soov, V1/V2 puudused ja järgmine geograafiline töö.",
-    "supabase/releases/job-search-purpose-v1/README.md — uus SQL, eelseis ja kontroll.",
-    "docs/architecture/followed-news-grouping-20261124.md — säilitatud Uudiste nõuded, mitte tänane käsk."
+    "docs/continuity/HOSTED_PORTAL.md ja PROFILE_LOCATION_INSTALL_20261127.et.md — üks praegune kasutuselevõtu juhis, võti, uus käsk ja raport.",
+    "docs/architecture/profile-location-v1-20261127.md — külmutatud ASUKOHT-1 rakenduse/SQL leping ja selle piirid.",
+    "docs/architecture/location-foundation-accepted-20261127/REVIEW.md — vastu võetud metaandmete raport; location-foundation-catalog-20261127.md on ajalooline kontrolli ulatus.",
+    "docs/architecture/location-country-20261127.md — kehtiv riigipiiri tooteleping ja järjestikused ASUKOHT-1/2/3/4 etapid.",
+    "docs/architecture/location-provider-20261127.md ja docs/third-party/location-country-data/README.md — allikate tingimused, litsentsid ja päritolu.",
+    "docs/architecture/account-deletion-status-20261127.et.md ja sama JSON — konto lõpetatud kaitsed ning allesjäänud töö.",
+    "docs/architecture/job-search-accepted-20261127.md — vastu võetud lähtealus; docs/architecture/followed-news-grouping-20261124.md — säilitatud Uudiste nõuded, mitte aktiivne töö."
   ],
   "boundaries": [
     "Kolm kontot kuuluvad kasutajale; ainult ühel on kaks identiteeti. Uus konto valib eraisiku VÕI ettevõtte. Mitme identiteedi ning ettevõtte töötajate/rollide/omandi üleandmise iseteenindus ei ole avamisulatus.",
-    "Kolm olemasolevat kontot ja nende sisu säilivad. Konto active-only alus jääb kehtima. Vestluste/manuste kontroll ei aktiveeri sulgemist ega kustutamist; enne seda tuleb lõpetada muud tegelikud omaniku kirjutused ja meedia lõppkinnitused ning värske autentimise, vana sessiooni tõkestamise ja selge sulgemis-/taastamisvaate tervik.",
+    "Kolm olemasolevat kontot ja nende sisu säilivad. Konto active-only alus jääb kehtima. Konto kustutamine on pooleli ja praegu pausil; sulgemine, taastamine ega lõppkustutus ei ole aktiveeritud. Kõik omaniku kirjutused ja meedia lõppkinnitused, värske autentimine ning vana sessiooni tõke pole veel valmis. 30-päevane taastamisaken on plaan, mitte töötav konto olek.",
     "E-posti aktiveerimine jääb põhidomeeni selqiro.com kasutuselevõtu juurde. Saatmine, kinnitamine ja parooli taastamine peavad olema lõpuni kontrollitud enne väliseid testijaid või avalikku registreerimist ka vercel.app aadressil.",
     "Kasutajale kuuluvad ka selqiro.app/.io ja selkiro.com/.app/.io. Domeeni valikut uuesti ei küsita; DNS-i selles sammus ei muudeta.",
     "AI päringuteed jäävad suletuks. Tavaline osalemine ei sõltu Energy ostust. Riigipõhised töökuulutuse poliitikad ja senised avaldamise/vestluse lepingud säilivad.",
-    "Kasutaja 26.11 prioriteet on tööotsingu selgus ja ühine kohalik/globaalne asukohaotsing. Varasem konto sulgemise tervik, jälgitavate Uudised, esiletõstmine ja reklaamid säilivad backlog-is. Reklaamija ei ole kolmas kontotüüp.",
+    "Kasutaja 27.11 prioriteet on riigipiiriga asukohaotsing. Üks aktiivne etapp: ASUKOHT-1. Konto sulgemine, Uudised, esiletõstmine ja reklaamid on pausil säilinud tööjärjes. Reklaamija ei ole kolmas kontotüüp.",
     "Uudised koondab ainult kasutaja valitud jälgitavate poodide/profiilide sisu. Eraisiku ja ettevõtte tavapärane osalemine säilib. Uue kuulutuse avaldamist, olemasoleva muutmist/pikendamist ja eraldi teadet ei käsitleta automaatselt ühe ja sama uue sündmusena.",
     "Uudiste lahendus peab olema serveris piiratud ja indekseeritud lehekülgedega. Kogu jälgimisnimekirja või kogu voo brauserisse laadimine ei ole uue V2 lahenduse alus. Suurt samaaegsust ei loeta tõendatuks väikese kasutustee ega ühe kliendi sünteetilise katse põhjal.",
     "Uudiste 4 eelvaadet ja pakutud 7 päeva algvaade on teostusettepanekud. Vanemad perioodid jäävad kättesaadavaks. Nelja eelvaate nägemine ei märgi kõiki teisi kuulutusi loetuks; suur lisamiskogus ei tõrju poe eraldi teadet välja. Näidiskujunduses olevad poed, hinnad ja kogused on kujuteldavad.",
     "Fotobaitide välissalvestus ja andmebaasi tehing ei ole ühine tehing. Uus valmisoleku ja sõnumisse kinnitamise kontroll tõkestab hilinenud omaksvõtu; poolelioleva välise kirjutuse lõppu ega vana avaliku faili URL-i kohest kadumist sellega ei lubata. Koristamise ja lõppkustutamise töö jääb eraldi.",
-    "Pakkumislink lisatakse ühe teadliku kontaktiavamise kohta järgmisele sõnumile, mitte ainult üks kord kogu vestluse ajal. Sama pakkumise hilisem uus avamine võib selle uuesti lisada. Kaardi automaatne lisamine igale sõnumile ja eraldi Lisa link uuesti tegevus ei kuulu kokkulepitud lahendusse.",
+    "Pakkumislink lisatakse ühe teadliku kontaktiavamise kohta järgmisele sõnumile, mitte ainult üks kord kogu vestluse ajal. Sama pakkumise hilisem uus avamine võib selle uuesti lisada. Kaardi automaatne lisamine igale sõnumile ja eraldi Lisa link uuesti tegevus ei kuulu kokkulepitud lahendusse. Kasutaja võib enne saatmist ootel kaardi eemaldada. Vestluse päises on viimati tegelikult jagatud pakkumise nimi ja klõpsatav link; saatmata või eemaldatud kaart päist ei muuda. Sama käitumine kehtib tavakuulutusele, hobusekuulutusele, teenusele ja tööle.",
     "Töökuulutuse konto kontroll ei aktiveeri sulgemist. Tulevane sulgemine teeb Auth/konto-oleku ülemineku ja COMMIT enne profiili/sisu lukkude võtmist eraldi tehingus; vastupidist lukujärjekorda ei lisata.",
-    "Asukoha keskpunkt ei ole automaatne riigi/linnapiirang. Kõik sobivuse/nähtavuse filtrid rakenduvad enne serveri kaugusjärjestust ja lehekülge. Soovi korral valitud maksimumkaugus on range piir.",
-    "Eraisiku avalik asukoht on ligikaudne. Teenuse sobivus arvestab teenindusala, töö asukoht tegelikku töökohta ja kauba asukoht kättesaamiskohta. Puuduvat või aegunud punkti ei asendata salaja profiili või (0,0) punktiga."
+    "Valitud riik on range otsingupiir; keskpunkt peab kuuluma samasse riiki. Kõik sobivuse/nähtavuse filtrid rakenduvad enne serveri kaugusjärjestust ja lehekülge. Tühi tulemus ei laienda otsingut naaberriiki. Ülemaailmne režiim on hilisem töö.",
+    "Eraisiku avalik koht ja kaugus lähtuvad asula/piirkonna punktist. Täpne koht on ainult ettevõttele teadlikul valikul. Teenindusala, teenuse ajutine koht, tegelik töökoht ja kauba kättesaamise koht on eraldi tähendused; puuduvat punkti ei asendata salaja profiili või (0,0) punktiga.",
+    "Vanade pakkumiste asukohti ei geokodeerita, täideta ega teisendata automaatselt. Need säilivad detailis ja senistes vaadetes; uude lähedusotsingusse ei anta neile väljamõeldud kaugust. Profiili uus põhiasukoht ei liiguta olemasolevaid pakkumisi.",
+    "Otsingukoht ei muuda profiili põhiasukohta. Eeltäide on ainult aktiivse profiili puutumata uue mustandi ühekordne koopia; käsitsi valik, taastatud mustand ja pooleliolev avaldamiskäsk on ülimuslikud. Hobuste senine turupiirang säilib.",
+    "Ajutine teenusekoht on hilisem eraldi etapp: üks käsitsi asukoht, algus/lõpp, aegumine ja tühistamine. See ei ole GPS-jälgimine, saadavuse garantii ega teenuse avaldamise pikendamine. Vana sisuhetktõmmise kviitungeid ei muudeta."
   ],
   "environment": [
-    "Kasutaja Maci projekt /Users/taivo/selqiro, https://github.com/Taivo17/selqiro.git. Alus 2b3407fee17f4d19594ce45647a1739b26249835; puu b6543039421cd86f4227d18f65edde1ca06e8a05; 2398 faili.",
-    "Next 16.4.6, React 19.2.4, Sharp 0.35.5, Supabase CLI 2.117.0; projekt vyjletlmwoiwxsnsunlm. Sõltuvused ja teenusekonto seadistused säilivad.",
-    "Eelmine originaalraport säilib ainult lugemiseks, SHA256 89c223c0d700383a47e499b925b6f5fcf53eb037064113dc1d948aafd791a545. Uus eraldi tööotsingu päevik."
+    "Kasutaja Maci projekt /Users/taivo/selqiro. Git https://github.com/Taivo17/selqiro.git, main. Uus uuendaja eeldab täpset 7c53643 lähtealust, olemasolevaid sõltuvusi ja kahte varasemat raportit koos nende privaatsete päevikutega.",
+    "Next 16.4.6, React 19.2.4, Sharp 0.35.5 ja Supabase CLI 2.117.0 jäävad samaks. Sõltuvusi, CLI seost, Auth/SMTP seadeid ega Storage’i ei muudeta. Uus Geoapify võti on ainult serveri seadistus ja seda raportisse ega lähtekoodi ei lisata.",
+    "Uuendaja teeb source → fookustestid → värske build → ainult lugemise SQL eelkontroll → kuni üks kirjutus → pärast COMMIT-i kinnitus → eraldi verify → commit/push. Ebakindel tulemus peatab; varasemaid katseid automaatselt ei korrata."
   ]
 }

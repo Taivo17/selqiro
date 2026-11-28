@@ -1,0 +1,147 @@
+{
+  "functions": [
+    {
+      "signature": "account_lifecycle_private.account_is_available(uuid)",
+      "basis": "exact_dollar_quoted_source_body",
+      "source": "supabase/releases/account-public-profile-fence-v1/account-availability.sql",
+      "matched": true,
+      "body_sha256": "48cca55f640923a39723e34a1034695f06affb874efde6af1d8bc0103f5d112d",
+      "body_bytes": 417,
+      "source_line": 2,
+      "config_sha256": "0e5c5deb67bdf8a0f1c087edd287aeab8d3ca04e5548a7679dd526aad7d8d491"
+    },
+    {
+      "signature": "auth.uid()",
+      "basis": "previously_accepted_catalog_not_new_live_proof",
+      "source": "supabase/releases/account-state-foundation-v1/source-pins.json",
+      "matched": true,
+      "body_sha256": "9ab5ea099e74ec09e83b1505c51a3647791195aed7c742dcc3f257dfc7d2f300",
+      "definition_sha256": "7c1ff2ecbe653c9358b3115a2607db9573f88a2944ae4eca9e296a89cc5186a7"
+    },
+    {
+      "signature": "profile_editor_private.lock_owner(uuid,uuid)",
+      "basis": "exact_dollar_quoted_source_body",
+      "source": "supabase/repairs/20261120_profile_editor/apply.sql",
+      "matched": true,
+      "body_sha256": "7f8e34c69eaa77aebe2d23c13396a631a6645001655ab401adec7d4b81c768c7",
+      "body_bytes": 2027,
+      "source_line": 504,
+      "config_sha256": "0e5c5deb67bdf8a0f1c087edd287aeab8d3ca04e5548a7679dd526aad7d8d491"
+    },
+    {
+      "signature": "profile_editor_private.snapshot(uuid,public.identities,public.identity_profiles)",
+      "basis": "exact_dollar_quoted_source_body",
+      "source": "supabase/repairs/20261120_profile_editor/apply.sql",
+      "matched": true,
+      "body_sha256": "32aaaccdf88e8cba8370d84bede4d364a1d3ead4c7a98236bf36e26a715a53b8",
+      "body_bytes": 1035,
+      "source_line": 549,
+      "config_sha256": "0e5c5deb67bdf8a0f1c087edd287aeab8d3ca04e5548a7679dd526aad7d8d491"
+    },
+    {
+      "signature": "profile_editor_private.touch_revision()",
+      "basis": "exact_dollar_quoted_source_body",
+      "source": "supabase/repairs/20261120_profile_editor/apply.sql",
+      "matched": true,
+      "body_sha256": "7db83fbd1e0cae0d5f997df4470903a7ddefce15177ca2bb8731cc0920fae03a",
+      "body_bytes": 107,
+      "source_line": 491,
+      "config_sha256": "0e5c5deb67bdf8a0f1c087edd287aeab8d3ca04e5548a7679dd526aad7d8d491"
+    },
+    {
+      "signature": "public.get_my_active_identity_profile_details()",
+      "basis": "exact_dollar_quoted_source_body",
+      "source": "supabase/repairs/20261120_profile_read_privacy/apply.sql",
+      "matched": true,
+      "body_sha256": "9fd18233b82eda72a5a42ae0b5160bddb890bc5c59751eb93ace78595d811a30",
+      "body_bytes": 282,
+      "source_line": 298,
+      "config_sha256": "a983dc37b42030987a873720dfdd7abc6aedb3d4b2f64c7cd5dd68adfc8158d0"
+    },
+    {
+      "signature": "public.get_my_profile_editor_v1(uuid,uuid)",
+      "basis": "exact_dollar_quoted_source_body",
+      "source": "supabase/repairs/20261120_profile_editor/apply.sql",
+      "matched": true,
+      "body_sha256": "6a3f983411cf1e6cbea9861b9294e609c41efe1f481398a1e96b996f0290a8d2",
+      "body_bytes": 466,
+      "source_line": 568,
+      "config_sha256": "0e5c5deb67bdf8a0f1c087edd287aeab8d3ca04e5548a7679dd526aad7d8d491"
+    },
+    {
+      "signature": "public.get_store_by_slug(text)",
+      "basis": "exact_dollar_quoted_source_body",
+      "source": "supabase/releases/account-public-profile-fence-v1/public-profile.sql",
+      "matched": true,
+      "body_sha256": "6111d8b5d1217436c1ed7f12d8571deb27f866aab0b49788878bebdf1f9dcde1",
+      "body_bytes": 2406,
+      "source_line": 2,
+      "config_sha256": "a983dc37b42030987a873720dfdd7abc6aedb3d4b2f64c7cd5dd68adfc8158d0"
+    },
+    {
+      "signature": "public.save_my_active_identity_profile(text,text,text,text,text,text)",
+      "basis": "revocation_in_current_source_body_not_needed_or_reenabled",
+      "source": "supabase/repairs/20261120_profile_editor/apply.sql",
+      "matched": true,
+      "body_review": "not asserted; client revocation is the applicable reference"
+    },
+    {
+      "signature": "public.save_my_profile_editor_v1(uuid,uuid,uuid,jsonb)",
+      "basis": "exact_dollar_quoted_source_body",
+      "source": "supabase/repairs/20261120_profile_editor/apply.sql",
+      "matched": true,
+      "body_sha256": "59f8d7eb27817b58aff32e55483ce07106211c2f78c6c8218a04a8bca98410a2",
+      "body_bytes": 5706,
+      "source_line": 583,
+      "config_sha256": "0e5c5deb67bdf8a0f1c087edd287aeab8d3ca04e5548a7679dd526aad7d8d491"
+    },
+    {
+      "signature": "public.update_my_active_identity_location(text,text,double precision,double precision)",
+      "basis": "revocation_in_current_source_body_not_needed_or_reenabled",
+      "source": "supabase/repairs/20261120_profile_editor/apply.sql",
+      "matched": true,
+      "body_review": "not asserted; client revocation is the applicable reference"
+    },
+    {
+      "signature": "public.validate_profile_active_identity_v2()",
+      "basis": "previously_accepted_catalog_pin_matches_current_direct_trigger_observation",
+      "source": "supabase/releases/account-state-foundation-v1/source-pins.json",
+      "matched": true,
+      "body_sha256": "70ab65a9506a99fc28229b4a101dfa53b780cde0b517876ca4aaae662b6ca303"
+    }
+  ],
+  "constraint_hash_variants": [
+    {
+      "name": "account_states_active_only",
+      "previous_definition": "CHECK ((state = 'active'::text))",
+      "current_pretty_definition": "CHECK (state = 'active'::text)",
+      "previous_sha256": "9470057905dfde57de3c0198298b4be1b2e5b715d403d8a546df260f809ea99a",
+      "current_sha256": "aabba6f98661e95d2d3c6e9ef071a0372cd9152b4108662d94a0d5a1c7a311a9",
+      "reason": "earlier pg_get_constraintdef(oid) versus current pg_get_constraintdef(oid,true); exact string hashes reproduced"
+    },
+    {
+      "name": "account_states_revision_positive",
+      "previous_definition": "CHECK ((revision > 0))",
+      "current_pretty_definition": "CHECK (revision > 0)",
+      "previous_sha256": "7c0ddfd91f9bdc7bd607f558b7220a0d09efdbea0973a07402460329265b9c9f",
+      "current_sha256": "6e1b5de774e1e089aaa7ec71bc7230076978638860c68fb8a5ca3d3745130265",
+      "reason": "earlier pg_get_constraintdef(oid) versus current pg_get_constraintdef(oid,true); exact string hashes reproduced"
+    }
+  ],
+  "current_editor_execute": {
+    "anon": false,
+    "authenticated": true,
+    "service_role": false
+  },
+  "legacy_writer_execute": {
+    "anon": false,
+    "authenticated": false,
+    "service_role": true
+  },
+  "public_function_default_execute_grantees": [
+    "anon",
+    "authenticated",
+    "postgres",
+    "service_role"
+  ]
+}

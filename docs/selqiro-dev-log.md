@@ -1,3 +1,34 @@
+<!-- SELQIRO_PROFILE_LOCATION_PREPARED_20261127 -->
+## 27.11.2026 — asukoha metaandmed vastu võetud; profiili kohavalik ette valmistatud
+
+Tööotsingu `7c53643` on vastu võetud. ASUKOHT-1 metaandmete 13:38:52 raport
+läbis 582 kooskõlakontrolli. Üks praegune töö on ühine riigi/kohavalik ja
+aktiivse profiili põhiasukoha salvestamine. Lähimad-enne otsing järgneb hiljem.
+
+Uus teostus kasutab kohalikku 249 riigi loendit, riigiga piiratud Geoapify
+serveripäringut ning ühte olemasoleva profiilivormi salvestamist. Uus v2
+ümbris kontrollib kontot, omanikku, aktiivset profiili ja revisjoni; tekst
+ning kinnitatud asula/piirkonna punkt salvestuvad ühes andmebaasitehingus.
+Vanu pakkumisi ei täideta ja PostGIS-i selles etapis ei paigaldata.
+
+70 rakenduse testi, range TypeScript, värske build, 23 PostgreSQL native
+juhtumit, 6 parserikontrolli ning 45 uuendaja sünteetilist kontrolli läbisid.
+Päris brauserijuhtumeid 0: Chromiumi binaar puudus. Päris Geoapify vastused,
+kasutaja Maci käik ning uue commiti tootmise tulemus on veel kontrollimata.
+
+Kasutuselevõtt: serveri GEOAPIFY_API_KEY Vercelis, uus
+selqiro-profiili-asukoht-20261127 uuendaja, uus JSON-raport ning sama commiti
+Ready / Production ja profiili kasutuskatse. Üks kehtiv juhis on
+`docs/continuity/HOSTED_PORTAL.md`; täpne teostus
+`docs/architecture/profile-location-v1-20261127.md`.
+
+Pärast ASUKOHT-1 vastuvõttu: ASUKOHT-2 uute pakkumiste koht ja eeltäide,
+ASUKOHT-3 riigipiiriga kaugusjärjestus, ASUKOHT-4 ajutine teenusekoht.
+Konto kustutamise tervik on pooleli ja pausil. Allpool säilivad varasemad
+päevikukirjed ajaloona; nende NEXT/CURRENT käske ei korrata.
+
+---
+
 
 <!-- SELQIRO_JOB_SEARCH_PURPOSE_PREPARED_20261126 -->
 ## 26.11.2026 — töökuulutuse muutmine vastu võetud; otsingusuunad ette valmistatud
@@ -2981,3 +3012,36 @@ pole neid Maci kirjutatud ega commit/push tehtud. Vanu pakette ei muudeta.
 - Pärast kinnitatud saatmist järgmised tekstid, pildid ja vastused kaarti automaatselt ei korda. Päis tuleb viimati tegelikult jagatud kaardist. Eraldi Lisa link uuesti valikut ei lisata.
 - Uue muudatuse sihitud kohalikud kontrollid on seotud ettevalmistustõenditega. Uue paketi Maci rakendamine, Verceli tulemus ja tegelik nelja pakkumisliigi kontroll on ootel.
 - Pakett: selqiro-sonumite-pakkumise-link-20261124. Konto active-only alus ja varasem ajalugu säilivad. Kontoelutsükkel → Uudised → esiletõstmine → reklaamid.
+
+
+## 27.11.2026 — tööotsingu jaotus vastu võetud; riigipiiriga asukoha tööjärg
+
+- Vastu võetud commit 7c53643012545c7dfa99ba976e6f2613e3c3a201, puu 98444c7d31e7afac995f195d884700b60c82b6cf, 2443 faili. Kasutaja raport võrreldi muutmatu väljastatud paketi ja säilinud lähtekoodiga; 596 käsukirjet, üks kinnitatud SQL rakendamine ja eraldi järelkontroll. Tests/build/SQL/uuendajat vastuvõtul ei korratud.
+- Kasutaja pilt näitab sama 7c53643 Ready / Production / main tulemust. UI piltidel on üld- ja töökohtade vaates haljastaja töökoht ning tööotsades aus tühi tulemus. Positiivset tööotsa- ega mobiilikatset sellest ei tuletata.
+- Kasutaja uus otsus: valitud riik on range piir. Keskpunkt järjestab lähimast kaugemale ainult selle riigi piires. Eesti/Valga ei liigu Lätti; Soome/Helsingi otsib Soome piires. Ülemaailmne valik on hilisem töö.
+- Riik ja asukoht peavad pakkuma trükkides vasteid. Profiili kord salvestatud põhiasukoht eeltäidab uue pakkumise, mille juures saab seda muuta. Profiili muutmine ei liiguta vanu pakkumisi.
+- Ainult ettevõte võib teadlikult avaldada täpse koha. Eraisik võib teenust pakkuda ligikaudse asukohaga. Ajutine teenusekoht on käsitsi, ajaliselt piiratud ja hilisem eraldi etapp.
+- Kasutaja lubas vanad kuulutused asukoha ümbertöötamisest välja jätta. Automaatne geokodeerimine/backfill ei kuulu esimesse teostusse.
+- V1 profiili eeltäide leiti koodist. Praegune V2 profiil kasutab suletud võtmetega tekstilepingut ja vana V1 kirjutus on tühistatud. Autocomplete piirab kõvasti ainult EE-d ning ASCII-normaliseerimine ei sobi kõigile kohanimedele. Kitsas audit salvestati.
+- Üks aktiivne töö: ASUKOHT-1 ühine riigi/kohavalik ja aktiivse profiili põhiasukoht. Järgnevad ASUKOHT-2 uute pakkumiste asukoht, ASUKOHT-3 riigipiiriga kaugusotsing, ASUKOHT-4 ajutine teenusekoht. Kontoelutsükkel, Uudised, esiletõstmine ja reklaamid on pausil; vanade logikirjete NEXT ei ole tänane tööjärg.
+- Kehtiv leping: docs/architecture/location-country-20261127.md. Ainus seisukirje: docs/continuity/CURRENT_STATE.json, sellest genereeritud docs/99_V2_HANDOFF_NEXT_CHAT.md. Need dokumendimuudatused on ette valmistatud, mitte veel Maci/GitHubi kirjutatud. Uut paigalduskäsku ega asukoha SQL-i pole väljastatud.
+
+
+## 2026-11-27 — ASUKOHT-1 ainult lugemise aluse kontrolli ettevalmistus
+
+Kasutaja kinnitas kokkulepitud järjestuses jätkamise ning küsis konto
+kustutamise valmisolekut. Allikapõhine vastus: kontooleku alus ja mitu
+kaitset on vastu võetud; sulgemise, taastamise ja lõppkustutuse tervik
+ning kõik selle eeltingimused ei ole valmis. Konto töö jääb pausile.
+
+Valmistati ette kitsas metadata-kontrollpakett kehtiva 7c53643 aluse
+profiili/omaniku/revisjoni/õiguste ja ruumivõimekuse kontrollimiseks.
+Maci raportit veel ei ole; rakendust, tootmist ega vanu kuulutusi ei muudeta.
+Kohaallika ettepanek Geoapify põhineb ametlikul dokumentatsioonil;
+teenusekontot ega võtit ei loodud ja päris kohavalikut ei kontrollitud.
+Ettevalmistatud dokumendid jäävad eraldi vastu võetud Git-puust.
+
+Järgmine samm on sama ASUKOHT-1 kontrolli raport. Seejärel valmib ühine
+kohavalik ja aktiivse profiili salvestusleping, sealhulgas vajalik
+aktiivse konto kontroll. Ülejäänud asukohaetappe ega konto tööd paralleelselt
+ei alustata. Täpne jätkamisjuhis on CURRENT_STATE.json-ist genereeritud.

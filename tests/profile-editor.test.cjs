@@ -253,8 +253,10 @@ test('rendered text form keeps one Save and read-only identity fields, with imag
     const viewLoader = loader({
       'src/shared/i18n/V2LanguageProvider.tsx': {useV2Translation: catalog => ({language: 'et', t: (key, values = {}) =>
         Object.entries(values).reduce((text, [name, value]) => text.replaceAll('{'+name+'}', String(value)), catalog.et[key])})},
-      'src/features/profile-editor/model/useProfileEditor.ts': {useProfileEditor: () => ({context: {anonymous: false},
-        session: f.session, view, ready: true, error: null, refresh() {}})},
+      'src/features/profile-editor-v2/model/useProfileEditorV2.ts': {useProfileEditorV2: () => ({context: {anonymous: false},
+        session: f.session, view: {...view, savedLocation: null, addressReset: false,
+          locationDraft: {mode: 'keep', countryCode: null, countryQuery: view.draft.country, placeQuery: view.draft.city, selection: null}},
+        ready: true, error: null, refresh() {}, actorKey: 'render-fixture', suggest: async () => []})},
     });
     const Page = viewLoader('src/features/profile-editor/components/ProfileEditorPage.tsx').default;
     const html = renderToStaticMarkup(React.createElement(Page));
